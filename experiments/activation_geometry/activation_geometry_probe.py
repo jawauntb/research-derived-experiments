@@ -34,6 +34,8 @@ from experiments.concept_geometry.paraphrase_stability_probe import (
 
 DEFAULT_MODEL_ID = "EleutherAI/pythia-70m-deduped"
 DEFAULT_LAYER = -1
+DEFAULT_POOLING = "mean"
+POOLING_OPTIONS = ("mean", "final-token")
 
 
 @dataclass(frozen=True)
@@ -58,6 +60,13 @@ def parse_layers(value: str) -> list[int]:
     return layers
 
 
+def validate_pooling(value: str) -> str:
+    if value not in POOLING_OPTIONS:
+        options = ", ".join(POOLING_OPTIONS)
+        raise ValueError(f"Pooling must be one of: {options}")
+    return value
+
+
 def activation_records(concepts: list[Concept], paraphrase_path: Path) -> list[ActivationRecord]:
     paraphrases = load_paraphrases(paraphrase_path, concepts)
     variants = variant_concepts(concepts, paraphrases)
@@ -74,11 +83,20 @@ def activation_records(concepts: list[Concept], paraphrase_path: Path) -> list[A
     ]
 
 
-def deterministic_activation(text: str, *, layer: int, dimensions: int = 96) -> list[float]:
+def deterministic_activation(
+    text: str,
+    *,
+    layer: int,
+    dimensions: int = 96,
+    pooling: str = DEFAULT_POOLING,
+) -> list[float]:
+    pooling = validate_pooling(pooling)
     values: list[float] = []
     counter = 0
     while len(values) < dimensions:
-        digest = hashlib.sha256(f"{layer}:{counter}:{text}".encode("utf-8")).digest()
+        digest = hashlib.sha256(
+            f"{pooling}:{layer}:{counter}:{text}".encode("utf-8")
+        ).digest()
         for byte in digest:
             values.append((byte / 127.5) - 1.0)
             if len(values) == dimensions:
@@ -92,10 +110,17 @@ def deterministic_layer_activations(
     *,
     layers: list[int],
     dimensions: int = 96,
+    pooling: str = DEFAULT_POOLING,
 ) -> dict[str, list[list[float]]]:
+    pooling = validate_pooling(pooling)
     return {
         str(layer): [
-            deterministic_activation(record.text, layer=layer, dimensions=dimensions)
+            deterministic_activation(
+                record.text,
+                layer=layer,
+                dimensions=dimensions,
+                pooling=pooling,
+            )
             for record in records
         ]
         for layer in layers
@@ -109,7 +134,9 @@ def extract_transformer_activations(
     layer: int,
     batch_size: int,
     max_length: int,
+    pooling: str = DEFAULT_POOLING,
 ) -> list[list[float]]:
+    pooling = validate_pooling(pooling)
     if batch_size < 1:
         raise ValueError("batch_size must be at least 1")
 
@@ -153,14 +180,36 @@ def extract_transformer_activations(
                 f"Layer {layer} is outside hidden-state range "
                 f"[-{len(hidden_states)}, {len(hidden_states) - 1}]"
             )
-        pooled = mean_pool(hidden_states[layer], encoded["attention_mask"])
+        pooled = pool_hidden_states(
+            hidden_states[layer],
+            encoded["attention_mask"],
+            pooling=pooling,
+        )
         activations.extend(pooled.float().cpu().tolist())
     return activations
+
+
+def pool_hidden_states(hidden_states: Any, attention_mask: Any, *, pooling: str) -> Any:
+    pooling = validate_pooling(pooling)
+    if pooling == "mean":
+        return mean_pool(hidden_states, attention_mask)
+    return final_token_pool(hidden_states, attention_mask)
 
 
 def mean_pool(hidden_states: Any, attention_mask: Any) -> Any:
     mask = attention_mask.to(hidden_states.device).unsqueeze(-1).type_as(hidden_states)
     return (hidden_states * mask).sum(dim=1) / mask.sum(dim=1).clamp(min=1)
+
+
+def final_token_pool(hidden_states: Any, attention_mask: Any) -> Any:
+    token_counts = attention_mask.to(hidden_states.device).sum(dim=1).clamp(min=1)
+    final_indices = token_counts.long() - 1
+    gather_indices = final_indices.view(-1, 1, 1).expand(
+        -1,
+        1,
+        hidden_states.shape[-1],
+    )
+    return hidden_states.gather(dim=1, index=gather_indices).squeeze(1)
 
 
 def normalize(vector: list[float]) -> list[float]:
@@ -338,11 +387,14 @@ def payload_from_activations(
     backend: str,
     top_k: int,
     dry_run: bool,
+    pooling: str = DEFAULT_POOLING,
 ) -> dict[str, Any]:
+    pooling = validate_pooling(pooling)
     return {
         "manifest": {
             "model_id": "deterministic-dry-run" if dry_run else model_id,
             "layer": layer,
+            "pooling": pooling,
             "backend": backend,
             "concept_count": len(concepts),
             "record_count": len(records),
@@ -367,7 +419,9 @@ def payload_from_layer_activations(
     backend: str,
     top_k: int,
     dry_run: bool,
+    pooling: str = DEFAULT_POOLING,
 ) -> dict[str, Any]:
+    pooling = validate_pooling(pooling)
     if not layer_activations:
         raise ValueError("layer_activations must include at least one layer")
 
@@ -377,6 +431,7 @@ def payload_from_layer_activations(
             "model_id": "deterministic-dry-run" if dry_run else model_id,
             "layers": layers,
             "layer_count": len(layers),
+            "pooling": pooling,
             "backend": backend,
             "concept_count": len(concepts),
             "record_count": len(records),
@@ -512,6 +567,7 @@ def main() -> int:
     parser.add_argument("--layer", type=int, default=DEFAULT_LAYER)
     parser.add_argument("--batch-size", type=int, default=8)
     parser.add_argument("--max-length", type=int, default=96)
+    parser.add_argument("--pooling", choices=POOLING_OPTIONS, default=DEFAULT_POOLING)
     parser.add_argument("--top-k", type=int, default=3)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--out", type=Path)
@@ -521,7 +577,11 @@ def main() -> int:
     records = activation_records(concepts, args.paraphrases)
     activations = (
         [
-            deterministic_activation(record.text, layer=args.layer)
+            deterministic_activation(
+                record.text,
+                layer=args.layer,
+                pooling=args.pooling,
+            )
             for record in records
         ]
         if args.dry_run
@@ -531,6 +591,7 @@ def main() -> int:
             layer=args.layer,
             batch_size=args.batch_size,
             max_length=args.max_length,
+            pooling=args.pooling,
         )
     )
     payload = payload_from_activations(
@@ -542,6 +603,7 @@ def main() -> int:
         backend="dry-run" if args.dry_run else "local-transformers",
         top_k=args.top_k,
         dry_run=args.dry_run,
+        pooling=args.pooling,
     )
     if args.out:
         write_payload(args.out, payload)

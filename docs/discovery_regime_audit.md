@@ -253,3 +253,39 @@ Residual content:
 - Retractions or supersessions: the Pythia final-layer pass should not be generalized to final layers across models.
 
 Next move: run a pooling ablation, comparing mean pooling against final-token pooling for Pythia and GPT-2 before steering or causal claims.
+
+## Activation Geometry Probe: Pooling Ablation
+
+Question: does centered activation bridge geometry survive a pooling ablation?
+
+Current regime:
+
+- Artifact types: paraphrased concept prompts, pooled hidden-state vectors, model-indexed and layer-indexed raw and centered geometry summaries, pooling-indexed bridge-lift reports, audit cards.
+- Operations: Modal-backed open-model extraction, mean pooling, final-token pooling, global mean-centering, cosine-kernel summary, bridge-lift comparison.
+- Gates/verifiers: pooling perturbation, model replication, layerwise centered category separation, bridge lift, bridge-pair rate, raw anisotropy inspection, publication guard.
+- Known limitations: same prompt set, hand-authored bridge pairs, no causal intervention, no bridge-pair-level stability analysis yet.
+
+Action class:
+
+- Retrieval/search/discovery: verifier upgrade.
+- Why: the run adds pooling as an explicit verifier dimension and revises the accepted activation-geometry claim.
+
+Gate:
+
+- Acceptance rule: each model must have at least two transformer block-output layers with centered category separation at least `0.05`, centered bridge lift at least `0.05`, and bridge-pair above-baseline rate at least `0.75`.
+- Withheld/rejected rule: raw activation JSON stays untracked under `artifacts/`; failed layers remain in the public report.
+
+Results:
+
+- Accepted artifacts: `experiments/activation_geometry/results/pooling_ablation_pythia_gpt2_2026_06_08.md`; pooling-aware manifest and runner updates.
+- Rejected or withheld artifacts: local-only final-token raw activation payloads under `artifacts/activation_geometry/`.
+- Key metrics: Pythia final-token layer `5` bridge lift `0.1811`; GPT-2 final-token layer `12` bridge lift `0.3619`.
+- Variance or ablation: mean pooling emphasizes early block outputs; final-token pooling emphasizes later block outputs.
+
+Residual content:
+
+- Explained by old regime: centered bridge geometry persists across models and pooling rules.
+- New content outside old regime: layer profiles are pooling-dependent; "best layer" is not an intrinsic model property.
+- Retractions or supersessions: previous early-layer claims should be stated as mean-pooling claims, not as pooling-independent activation geometry.
+
+Next move: choose candidate intervention layers separately for mean-pooling-style classifiers and final-token-style generation/steering probes.
