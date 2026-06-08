@@ -7,6 +7,7 @@ from experiments.activation_geometry.label_free_behavior_gate import (
     PATCH_TEXT_REGIMES,
     aggregate_rows,
     behavior_prompt,
+    full_label_prompt,
     gate_summaries,
     neutral_carrier_text,
     source_text_for_regime,
@@ -41,6 +42,18 @@ class LabelFreeBehaviorGateTest(unittest.TestCase):
         )
         self.assertNotIn("Passage:", latent_prompt)
         self.assertIn("current internal state", latent_prompt)
+        label_prompt = full_label_prompt(
+            source_text="attractor: a stable region",
+            prompt_frame="source_passage",
+        )
+        self.assertIn("Passage:", label_prompt)
+        self.assertTrue(label_prompt.endswith("Concept:"))
+        latent_label_prompt = full_label_prompt(
+            source_text="unused",
+            prompt_frame="latent_choice",
+        )
+        self.assertNotIn("unused", latent_label_prompt)
+        self.assertIn("internal state", latent_label_prompt)
         self.assertEqual(
             neutral_carrier_text(label="attractor network"),
             "Concept label: attractor network.",
@@ -130,6 +143,45 @@ class LabelFreeBehaviorGateTest(unittest.TestCase):
             and row["patch_alpha"] == 1.0
         ][0]
         self.assertEqual(definition_summary["specific_pass_count"], 1)
+
+    def test_full_label_single_probe_can_pass_when_specific(self) -> None:
+        rows = []
+        for mode, delta in {
+            "target": 0.3,
+            "distractor": 0.1,
+            "random": -0.1,
+            "source_noop": 0.0,
+        }.items():
+            rows.append(
+                {
+                    "kind": "positive",
+                    "pair": "attractor->attractor_network/d=prototype",
+                    "prompt_frame": "latent_choice",
+                    "scoring_surface": "full_label",
+                    "injection_layer": 6,
+                    "patch_alpha": 1.0,
+                    "patch_vector_surface": "hook_output",
+                    "patch_text_regime": "definition",
+                    "patch_mode": mode,
+                    "option_order": [],
+                    "summary": {
+                        "target_margin_delta": delta,
+                        "target_logprob_delta": delta / 2,
+                    },
+                }
+            )
+
+        aggregates = aggregate_rows(rows)
+        specificity = specificity_rows(aggregates)
+        summaries = gate_summaries(specificity)
+        target = next(row for row in aggregates if row["patch_mode"] == "target")
+        specific = specificity[0]
+
+        self.assertEqual(target["robust_pass_threshold"], 1)
+        self.assertTrue(target["robust_pass"])
+        self.assertEqual(specific["scoring_surface"], "full_label")
+        self.assertTrue(specific["specific_target_pass"])
+        self.assertEqual(summaries[0]["scoring_surface"], "full_label")
 
 
 if __name__ == "__main__":

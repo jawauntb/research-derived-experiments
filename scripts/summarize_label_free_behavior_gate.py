@@ -56,6 +56,7 @@ def manifest_rows(payloads: list[tuple[Path, JsonRow]]) -> list[JsonRow]:
                 "seed": manifest["seed"],
                 "surface": manifest.get("patch_vector_surface", "hook_output"),
                 "prompt_frame": manifest.get("prompt_frame", "source_passage"),
+                "scoring_surface": manifest.get("scoring_surface", "option_token"),
                 "injection_layers": ",".join(map(str, manifest["injection_layers"])),
                 "alphas": ",".join(map(str, manifest["patch_alphas"])),
                 "regimes": ",".join(manifest["patch_text_regimes"]),
@@ -78,12 +79,15 @@ def all_pair_rows(payloads: list[tuple[Path, JsonRow]], regime: str) -> list[Jso
                 label,
                 row["injection_layer"],
                 row.get("prompt_frame", "source_passage"),
+                row.get("scoring_surface", "option_token"),
                 row.get("patch_alpha", 1.0),
             )
             grouped[key].append(row)
 
     rows = []
-    for (label, injection, prompt_frame, alpha), group in sorted(grouped.items()):
+    for (label, injection, prompt_frame, scoring_surface, alpha), group in sorted(
+        grouped.items()
+    ):
         deltas = [float(row["target_mean_target_margin_delta"]) for row in group]
         advantages = [
             float(row["target_advantage_over_best_control"]) for row in group
@@ -94,6 +98,7 @@ def all_pair_rows(payloads: list[tuple[Path, JsonRow]], regime: str) -> list[Jso
                 "artifact": label,
                 "injection_layer": injection,
                 "prompt_frame": prompt_frame,
+                "scoring_surface": scoring_surface,
                 "alpha": alpha,
                 "passes": passes,
                 "total": len(group),
@@ -124,6 +129,7 @@ def render_manifest(rows: list[JsonRow]) -> str:
             "Seed",
             "Surface",
             "Prompt frame",
+            "Scoring",
             "Injection layers",
             "Alphas",
             "Regimes",
@@ -138,6 +144,7 @@ def render_manifest(rows: list[JsonRow]) -> str:
                 str(row["seed"]),
                 row["surface"],
                 row["prompt_frame"],
+                row["scoring_surface"],
                 row["injection_layers"],
                 row["alphas"],
                 row["regimes"],
@@ -156,6 +163,7 @@ def render_all_pair(rows: list[JsonRow]) -> str:
             "Artifact",
             "Layer",
             "Prompt frame",
+            "Scoring",
             "Alpha",
             "Specific passes",
             "Pass rate",
@@ -169,6 +177,7 @@ def render_all_pair(rows: list[JsonRow]) -> str:
                 row["artifact"],
                 str(row["injection_layer"]),
                 row["prompt_frame"],
+                row["scoring_surface"],
                 fmt_number(float(row["alpha"])),
                 f"{row['passes']}/{row['total']}",
                 fmt_rate(row["pass_rate"]),
@@ -188,6 +197,7 @@ def render_gate_summaries(rows: list[JsonRow]) -> str:
             "Artifact",
             "Regime",
             "Prompt frame",
+            "Scoring",
             "Layer",
             "Alpha",
             "Specific passes",
@@ -199,6 +209,7 @@ def render_gate_summaries(rows: list[JsonRow]) -> str:
                 row["artifact"],
                 row["patch_text_regime"],
                 row.get("prompt_frame", "source_passage"),
+                row.get("scoring_surface", "option_token"),
                 str(row["injection_layer"]),
                 fmt_number(float(row["patch_alpha"])),
                 f"{row['specific_pass_count']}/{row['total']}",
