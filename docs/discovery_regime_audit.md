@@ -361,3 +361,39 @@ Residual content:
 - Retractions or supersessions: do not proceed as if the valence controls failed; at least one valence control is now an adversarial positive control.
 
 Next move: run the pair-level control-leakage diagnostic before the first final-token steering pilot.
+
+## Activation Geometry Probe: Pair-Control Diagnostic
+
+Question: which held-out bridge pairs survive pair-level matched and shuffled controls?
+
+Current regime:
+
+- Artifact types: concept prompts, selected activation payloads, held-out vectors, pair-control distributions, promotion tables.
+- Operations: train-variant centering, held-out cosine scoring, exact category-pair matched controls, category-preserving label shuffles.
+- Gates/verifiers: matched-control p95, shuffled-label p95, valence adversarial controls, primary/backup/control layers.
+- Known limitations: same-category pools are small; this is readout-only and mean-pooling-only.
+
+Action class:
+
+- Retrieval/search/discovery: verifier upgrade.
+- Why: the run adds a stronger accepted verifier that the earlier non-bridge baseline could not represent.
+
+Gate:
+
+- Acceptance rule: at least two positive pairs promote in both primary layers and no valence control promotes in either primary layer.
+- Withheld/rejected rule: raw activation and diagnostic payloads stay local-only under `artifacts/`; model-specific or layer-control-positive pairs remain warnings rather than promoted causal claims.
+
+Results:
+
+- Accepted artifacts: `experiments/activation_geometry/results/pair_control_diagnostic_2026_06_08.md`; `experiments/activation_geometry/pair_control_diagnostic.py`.
+- Rejected or withheld artifacts: local-only payloads under `artifacts/activation_geometry/`.
+- Key metrics: Pythia primary layer `2` promotes `3/4` positive pairs and `0/2` valence controls; GPT-2 primary layer `1` promotes `4/4` positive pairs and `0/2` valence controls.
+- Variance or ablation: Pythia backup layer `6` promotes `4/4` positive pairs with clean valence controls; control layers are not inert.
+
+Residual content:
+
+- Explained by old regime: weak cross-category baselines can make valence controls look bridge-like.
+- New content outside old regime: three bridge pairs survive matched and shuffled controls in both primary layers.
+- Retractions or supersessions: `conceptual_space` -> `representation_manifold` is no longer a cross-model primary candidate under strict controls.
+
+Next move: run the first final-token steering pilot using the cross-model promoted pairs, with `conceptual_space` -> `representation_manifold` retained as a backup/model-specific probe.
