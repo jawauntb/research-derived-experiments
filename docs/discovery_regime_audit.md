@@ -620,3 +620,46 @@ Residual content:
 - Retractions or supersessions: supersede the previous "Pythia matched-context pocket" phrasing with the narrower "Pythia layer-5 attractor-network pocket".
 
 Next move: run a focused attractor-pocket diagnostic with distractor sweeps, adversarial near-neighbor controls, and third-model or second-checkpoint replication.
+
+## Activation Geometry Probe: Focused Attractor-Pocket Diagnostic
+
+Question: does the focused attractor-network pocket survive distractor sweeps, adversarial near-neighbor controls, and second-checkpoint replication?
+
+Current regime:
+
+- Artifact types: matched-context patch payloads, specificity rows, focused gate summaries, near-neighbor leakage rows.
+- Operations: distractor/frame sweep, target near-control, source near-control, second-checkpoint replication.
+- Gates/verifiers: exact `source_noop` gate, positive distractor-sweep gate, near-control leakage gate, checkpoint-stability gate.
+- Known limitations: only two Pythia-70M checkpoints, one context variant, answer-choice prompt surface only.
+
+Action class:
+
+- Retrieval/search/discovery: search inside the matched-context patching regime.
+- Why: this run changes prompts, distractors, controls, and checkpoint while preserving the same causal-patching artifact type and verifier family.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/attractor_pocket_diagnostic_2026_06_08.md`; local ignored payloads under `artifacts/activation_geometry/modal_pythia_70m*_attractor_pocket.json`.
+- Positive targets: `attractor` -> `attractor_network` across two prompt frames and four distractors.
+- Negative controls: `attractor` -> `prototype`, `attractor` -> `schema`, `prototype` -> `attractor_network`, `schema` -> `attractor_network`, plus distractor/random/source patch modes.
+- Stress tests: prompt-frame sweep, distractor sweep, near-neighbor source/target swaps, second Pythia-family checkpoint.
+
+Gate:
+
+- Acceptance rule: promote the pocket only if all positive primary rows pass, near-neighbor controls clear, source no-op is exact, and the second checkpoint supports the effect.
+- Withheld/rejected rule: reject a clean bridge claim if near-neighbor controls mimic the same target-specific pattern or if the effect weakens on the second checkpoint.
+
+Results:
+
+- Accepted artifacts: `experiments/activation_geometry/results/attractor_pocket_diagnostic_2026_06_08.md`; `experiments/activation_geometry/attractor_pocket_diagnostic.py`; `experiments/activation_geometry/modal_attractor_pocket_diagnostic.py`.
+- Rejected or withheld artifacts: clean `attractor` -> `attractor_network` bridge claim is rejected.
+- Key metrics: deduped primary positives `6/8`; deduped primary near-controls `4/8`; non-deduped primary positives `4/8`; non-deduped primary near-controls `1/8`; max source-noop delta `0.0`.
+- Variance or ablation: deduped has a stronger but leakier basin; non-deduped has a weaker basin and no positive mean advantage.
+
+Residual content:
+
+- Explained by old regime: matched-context final-token patching can bias answer-choice margins.
+- New content outside old claim: the surviving pattern is broader than one semantic bridge and looks like an attractor-family answer-choice basin.
+- Retractions or supersessions: supersede "Pythia layer-5 attractor-network pocket" with "Pythia-70M-deduped layer-5 attractor-family answer-choice basin."
+
+Next move: implement the answer-surface basin diagnostic to distinguish semantic source/target effects from label/option-surface effects.
