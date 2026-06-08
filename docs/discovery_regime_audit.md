@@ -835,3 +835,46 @@ Residual content:
 - Retractions or supersessions: supersede "maybe a late overwrite" with "strict downstream transfer is strongest from layers 4-5 into layer 6; same-layer cells are invalid under current hook/readout instrumentation."
 
 Next move: replicate the downstream ridge with more baseline rows and a second seed/checkpoint, while separately diagnosing same-layer hook/readout validity.
+
+## Activation Geometry Probe: Same-Layer Hook-Surface Diagnostic
+
+Question: did same-layer label-free patching fail because the intervention is non-identity, or because patch vectors were captured at the wrong surface?
+
+Current regime:
+
+- Artifact types: label-free patch payloads, patch-vector-surface summaries, source-noop sanity tables.
+- Operations: hidden-state vector capture, hook-output vector capture, transformer-block final-token patching, downstream readout scoring.
+- Gates/verifiers: source-noop max absolute delta by patch-vector surface and injection/readout pair.
+- Known limitations: one model checkpoint, one patch alpha, focus pairs only.
+
+Action class:
+
+- Retrieval/search/discovery: verifier refinement.
+- Why: the run adds patch-vector surface as a first-class verifier dimension and fixes an invalid same-layer measurement.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/same_layer_hook_surface_diagnostic_2026_06_08.md`; local ignored payloads under `artifacts/activation_geometry/modal_pythia_70m_same_layer_*_surface.json`.
+- Positive targets: focus rows from the label-free readout diagnostic.
+- Negative controls: distractor/random/source-noop patch modes.
+- Stress tests: compare `hidden_state` against `hook_output` for `5 -> 6` and `6 -> 6`.
+
+Gate:
+
+- Acceptance rule: same-layer cells become interpretable only if `source_noop` is exactly zero at the hook surface.
+- Withheld/rejected rule: withhold any same-layer surface that fails source-noop identity.
+
+Results:
+
+- Accepted artifacts: `experiments/activation_geometry/results/same_layer_hook_surface_diagnostic_2026_06_08.md`; `experiments/activation_geometry/modal_label_free_readout_basin.py`; `experiments/activation_geometry/label_free_readout_basin.py`.
+- Rejected or withheld artifacts: hidden-state same-layer `6 -> 6` remains rejected as an invalid surface.
+- Key metrics: hidden_state `6 -> 6` max source-noop delta `0.247`; hook_output `6 -> 6` max source-noop delta `0.0`; hook_output preserves `5 -> 6` source-noop max delta `0.0`.
+- Variance or ablation: `5 -> 6` is identical across surfaces; final-layer same-layer behavior changes only when surface alignment matters.
+
+Residual content:
+
+- Explained by old regime: PR #24's strict downstream ridge remains valid.
+- New content outside old regime: patch-vector surface must be explicit for same-layer/final-layer patching.
+- Retractions or supersessions: supersede "same-layer cells invalid/unknown" with "same-layer cells are valid under hook-output patch vectors and invalid under post-final-LN hidden-state patch vectors."
+
+Next move: rerun the broader dose-response with `hook_output` and a larger baseline sample.

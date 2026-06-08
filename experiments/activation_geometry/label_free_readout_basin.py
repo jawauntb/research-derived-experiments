@@ -10,6 +10,7 @@ from typing import Any
 
 
 PATCH_TEXT_REGIMES = ("definition", "neutral")
+PATCH_VECTOR_SURFACES = ("hidden_state", "hook_output")
 PAIR_SET_OPTIONS = ("focus", "baseline", "combined")
 SUMMARY_KINDS = (
     "positive",
@@ -279,6 +280,7 @@ def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             row["injection_layer"],
             row["readout_layer"],
             row.get("patch_alpha", 1.0),
+            row.get("patch_vector_surface", "hidden_state"),
             row["patch_text_regime"],
             row["patch_mode"],
         )
@@ -291,6 +293,7 @@ def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         injection_layer,
         readout_layer,
         patch_alpha,
+        patch_vector_surface,
         patch_text_regime,
         patch_mode,
     ), group in grouped.items():
@@ -305,6 +308,7 @@ def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "injection_layer": injection_layer,
                 "readout_layer": readout_layer,
                 "patch_alpha": patch_alpha,
+                "patch_vector_surface": patch_vector_surface,
                 "patch_text_regime": patch_text_regime,
                 "patch_mode": patch_mode,
                 "mean_target_margin_delta": mean_delta,
@@ -325,6 +329,7 @@ def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             int(row["injection_layer"]),
             int(row["readout_layer"]),
             float(row.get("patch_alpha", 1.0)),
+            str(row.get("patch_vector_surface", "hidden_state")),
             str(row["patch_mode"]),
         ),
     )
@@ -340,6 +345,7 @@ def specificity_rows(aggregates: list[dict[str, Any]]) -> list[dict[str, Any]]:
             row["injection_layer"],
             row["readout_layer"],
             row.get("patch_alpha", 1.0),
+            row.get("patch_vector_surface", "hidden_state"),
             row["patch_text_regime"],
         )
         grouped.setdefault(key, {})[str(row["patch_mode"])] = row
@@ -351,6 +357,7 @@ def specificity_rows(aggregates: list[dict[str, Any]]) -> list[dict[str, Any]]:
         injection_layer,
         readout_layer,
         patch_alpha,
+        patch_vector_surface,
         patch_text_regime,
     ), by_mode in grouped.items():
         if "target" not in by_mode:
@@ -373,6 +380,7 @@ def specificity_rows(aggregates: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "injection_layer": injection_layer,
                 "readout_layer": readout_layer,
                 "patch_alpha": patch_alpha,
+                "patch_vector_surface": patch_vector_surface,
                 "patch_text_regime": patch_text_regime,
                 "target_mean_target_margin_delta": target["mean_target_margin_delta"],
                 "target_top3_count": target["top3_count"],
@@ -393,6 +401,7 @@ def specificity_rows(aggregates: list[dict[str, Any]]) -> list[dict[str, Any]]:
             int(row["injection_layer"]),
             int(row["readout_layer"]),
             float(row.get("patch_alpha", 1.0)),
+            str(row.get("patch_vector_surface", "hidden_state")),
         ),
     )
 
@@ -405,30 +414,44 @@ def _mean_or_none(rows: list[dict[str, Any]], key: str) -> float | None:
 
 def gate_summaries(specificity: list[dict[str, Any]]) -> list[dict[str, Any]]:
     summaries = []
-    for patch_text_regime in PATCH_TEXT_REGIMES:
-        selected = [
-            row for row in specificity if row["patch_text_regime"] == patch_text_regime
+    patch_vector_surfaces = sorted(
+        {str(row.get("patch_vector_surface", "hidden_state")) for row in specificity}
+        or {"hidden_state"}
+    )
+    for patch_vector_surface in patch_vector_surfaces:
+        surface_rows = [
+            row
+            for row in specificity
+            if str(row.get("patch_vector_surface", "hidden_state"))
+            == patch_vector_surface
         ]
-        for kind in SUMMARY_KINDS:
-            rows = [row for row in selected if row["kind"] == kind]
-            summaries.append(
-                {
-                    "patch_text_regime": patch_text_regime,
-                    "kind": kind,
-                    "specific_pass_count": sum(
-                        1 for row in rows if row["specific_target_pass"]
-                    ),
-                    "total": len(rows),
-                    "mean_target_margin_delta": _mean_or_none(
-                        rows,
-                        "target_mean_target_margin_delta",
-                    ),
-                    "mean_advantage_over_best_control": _mean_or_none(
-                        rows,
-                        "target_advantage_over_best_control",
-                    ),
-                }
-            )
+        for patch_text_regime in PATCH_TEXT_REGIMES:
+            selected = [
+                row
+                for row in surface_rows
+                if row["patch_text_regime"] == patch_text_regime
+            ]
+            for kind in SUMMARY_KINDS:
+                rows = [row for row in selected if row["kind"] == kind]
+                summaries.append(
+                    {
+                        "patch_vector_surface": patch_vector_surface,
+                        "patch_text_regime": patch_text_regime,
+                        "kind": kind,
+                        "specific_pass_count": sum(
+                            1 for row in rows if row["specific_target_pass"]
+                        ),
+                        "total": len(rows),
+                        "mean_target_margin_delta": _mean_or_none(
+                            rows,
+                            "target_mean_target_margin_delta",
+                        ),
+                        "mean_advantage_over_best_control": _mean_or_none(
+                            rows,
+                            "target_advantage_over_best_control",
+                        ),
+                    }
+                )
     return summaries
 
 
@@ -459,80 +482,95 @@ def transfer_baseline_summaries(
 ) -> list[dict[str, Any]]:
     summaries = []
     comparison_kinds = ("positive", "source_family", "generic_control")
-    for patch_text_regime in PATCH_TEXT_REGIMES:
-        selected = [
-            row for row in specificity if row["patch_text_regime"] == patch_text_regime
+    patch_vector_surfaces = sorted(
+        {str(row.get("patch_vector_surface", "hidden_state")) for row in specificity}
+        or {"hidden_state"}
+    )
+    for patch_vector_surface in patch_vector_surfaces:
+        surface_rows = [
+            row
+            for row in specificity
+            if str(row.get("patch_vector_surface", "hidden_state"))
+            == patch_vector_surface
         ]
-        baseline_rows = [
-            row for row in selected if str(row["kind"]).startswith("baseline_")
-        ]
-        baseline_advantages = [
-            float(row["target_advantage_over_best_control"])
-            for row in baseline_rows
-        ]
-        baseline_deltas = [
-            float(row["target_mean_target_margin_delta"])
-            for row in baseline_rows
-        ]
-        summaries.append(
-            {
-                "patch_text_regime": patch_text_regime,
-                "kind": "baseline_distribution",
-                "count": len(baseline_rows),
-                "specific_pass_count": sum(
-                    1 for row in baseline_rows if row["specific_target_pass"]
-                ),
-                "specific_pass_rate": (
-                    sum(1 for row in baseline_rows if row["specific_target_pass"])
-                    / len(baseline_rows)
-                    if baseline_rows
-                    else None
-                ),
-                "mean_target_margin_delta": mean(baseline_deltas),
-                "median_target_margin_delta": median(baseline_deltas),
-                "mean_advantage_over_best_control": mean(baseline_advantages),
-                "median_advantage_over_best_control": median(baseline_advantages),
-            }
-        )
-        for kind in comparison_kinds:
-            rows = [row for row in selected if row["kind"] == kind]
-            advantages = [
+        for patch_text_regime in PATCH_TEXT_REGIMES:
+            selected = [
+                row
+                for row in surface_rows
+                if row["patch_text_regime"] == patch_text_regime
+            ]
+            baseline_rows = [
+                row for row in selected if str(row["kind"]).startswith("baseline_")
+            ]
+            baseline_advantages = [
                 float(row["target_advantage_over_best_control"])
-                for row in rows
+                for row in baseline_rows
             ]
-            deltas = [
+            baseline_deltas = [
                 float(row["target_mean_target_margin_delta"])
-                for row in rows
+                for row in baseline_rows
             ]
-            mean_advantage = mean(advantages)
             summaries.append(
                 {
+                    "patch_vector_surface": patch_vector_surface,
                     "patch_text_regime": patch_text_regime,
-                    "kind": kind,
-                    "count": len(rows),
+                    "kind": "baseline_distribution",
+                    "count": len(baseline_rows),
                     "specific_pass_count": sum(
-                        1 for row in rows if row["specific_target_pass"]
+                        1 for row in baseline_rows if row["specific_target_pass"]
                     ),
                     "specific_pass_rate": (
-                        sum(1 for row in rows if row["specific_target_pass"])
-                        / len(rows)
-                        if rows
+                        sum(1 for row in baseline_rows if row["specific_target_pass"])
+                        / len(baseline_rows)
+                        if baseline_rows
                         else None
                     ),
-                    "mean_target_margin_delta": mean(deltas),
-                    "mean_advantage_over_best_control": mean_advantage,
-                    "mean_advantage_percentile_vs_baseline": (
-                        empirical_percentile(mean_advantage, baseline_advantages)
-                        if mean_advantage is not None
-                        else None
-                    ),
-                    "max_advantage_percentile_vs_baseline": (
-                        empirical_percentile(max(advantages), baseline_advantages)
-                        if advantages
-                        else None
-                    ),
+                    "mean_target_margin_delta": mean(baseline_deltas),
+                    "median_target_margin_delta": median(baseline_deltas),
+                    "mean_advantage_over_best_control": mean(baseline_advantages),
+                    "median_advantage_over_best_control": median(baseline_advantages),
                 }
             )
+            for kind in comparison_kinds:
+                rows = [row for row in selected if row["kind"] == kind]
+                advantages = [
+                    float(row["target_advantage_over_best_control"])
+                    for row in rows
+                ]
+                deltas = [
+                    float(row["target_mean_target_margin_delta"])
+                    for row in rows
+                ]
+                mean_advantage = mean(advantages)
+                summaries.append(
+                    {
+                        "patch_vector_surface": patch_vector_surface,
+                        "patch_text_regime": patch_text_regime,
+                        "kind": kind,
+                        "count": len(rows),
+                        "specific_pass_count": sum(
+                            1 for row in rows if row["specific_target_pass"]
+                        ),
+                        "specific_pass_rate": (
+                            sum(1 for row in rows if row["specific_target_pass"])
+                            / len(rows)
+                            if rows
+                            else None
+                        ),
+                        "mean_target_margin_delta": mean(deltas),
+                        "mean_advantage_over_best_control": mean_advantage,
+                        "mean_advantage_percentile_vs_baseline": (
+                            empirical_percentile(mean_advantage, baseline_advantages)
+                            if mean_advantage is not None
+                            else None
+                        ),
+                        "max_advantage_percentile_vs_baseline": (
+                            empirical_percentile(max(advantages), baseline_advantages)
+                            if advantages
+                            else None
+                        ),
+                    }
+                )
     return summaries
 
 
@@ -547,6 +585,7 @@ def dose_response_summaries(
             row["injection_layer"],
             row["readout_layer"],
             row.get("patch_alpha", 1.0),
+            row.get("patch_vector_surface", "hidden_state"),
         )
         grouped.setdefault(key, []).append(row)
 
@@ -557,6 +596,7 @@ def dose_response_summaries(
         injection_layer,
         readout_layer,
         patch_alpha,
+        patch_vector_surface,
     ), rows in grouped.items():
         deltas = [
             float(row["target_mean_target_margin_delta"])
@@ -574,6 +614,7 @@ def dose_response_summaries(
                 "injection_layer": injection_layer,
                 "readout_layer": readout_layer,
                 "patch_alpha": patch_alpha,
+                "patch_vector_surface": patch_vector_surface,
                 "count": len(rows),
                 "specific_pass_count": pass_count,
                 "specific_pass_rate": pass_count / len(rows) if rows else None,
@@ -591,6 +632,7 @@ def dose_response_summaries(
             int(row["injection_layer"]),
             int(row["readout_layer"]),
             float(row["patch_alpha"]),
+            str(row["patch_vector_surface"]),
         ),
     )
 

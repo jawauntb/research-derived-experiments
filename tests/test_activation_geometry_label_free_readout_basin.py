@@ -4,6 +4,7 @@ import unittest
 
 from experiments.activation_geometry.label_free_readout_basin import (
     PATCH_TEXT_REGIMES,
+    PATCH_VECTOR_SURFACES,
     aggregate_rows,
     baseline_pair_specs,
     dose_response_summaries,
@@ -157,6 +158,42 @@ class LabelFreeReadoutBasinTest(unittest.TestCase):
         self.assertEqual(set(by_alpha), {0.25, 1.0})
         self.assertFalse(by_alpha[0.25]["specific_target_pass"])
         self.assertTrue(by_alpha[1.0]["specific_target_pass"])
+
+    def test_specificity_keeps_patch_vector_surfaces_separate(self) -> None:
+        rows = []
+        for patch_vector_surface, target_delta in (
+            ("hidden_state", -0.1),
+            ("hook_output", 0.4),
+        ):
+            for patch_mode, delta, rank in (
+                ("target", target_delta, 1),
+                ("distractor", 0.1, 4),
+                ("random", -0.1, 5),
+                ("source_noop", 0.0, 6),
+            ):
+                rows.append(
+                    {
+                        "kind": "positive",
+                        "pair": "attractor->attractor_network/d=prototype",
+                        "injection_layer": 6,
+                        "readout_layer": 6,
+                        "patch_alpha": 1.0,
+                        "patch_vector_surface": patch_vector_surface,
+                        "patch_text_regime": "definition",
+                        "patch_mode": patch_mode,
+                        "summary": {
+                            "target_margin_delta": delta,
+                            "patched_target_top3": rank <= 3,
+                        },
+                    }
+                )
+
+        specificity = specificity_rows(aggregate_rows(rows))
+        by_surface = {row["patch_vector_surface"]: row for row in specificity}
+
+        self.assertEqual(set(by_surface), set(PATCH_VECTOR_SURFACES))
+        self.assertFalse(by_surface["hidden_state"]["specific_target_pass"])
+        self.assertTrue(by_surface["hook_output"]["specific_target_pass"])
 
     def test_transfer_baseline_summary_reports_focus_percentiles(self) -> None:
         specificity = [
