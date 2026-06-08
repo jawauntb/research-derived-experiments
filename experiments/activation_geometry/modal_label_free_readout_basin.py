@@ -53,6 +53,13 @@ def parse_ints(value: str, *, name: str) -> list[int]:
     return values
 
 
+def parse_floats(value: str, *, name: str) -> list[float]:
+    values = [float(part.strip()) for part in value.split(",") if part.strip()]
+    if not values:
+        raise ValueError(f"At least one {name} value must be provided")
+    return values
+
+
 def neutral_carrier_text(*, label: str) -> str:
     return f"Concept label: {label}."
 
@@ -352,7 +359,7 @@ def run_label_free_readout_remote(
     patch_text_regimes: list[str],
     train_variant_indices: list[int],
     eval_variant_index: int,
-    patch_alpha: float,
+    patch_alphas: list[float],
     max_length: int,
 ) -> dict[str, Any]:
     torch = importlib.import_module("torch")
@@ -471,77 +478,84 @@ def run_label_free_readout_remote(
                     )[injection_layer]
                 for mode in patch_modes:
                     patch_concept = patch_concept_for_mode(pair, mode)
-                    patched_vectors = patched_prompt_readout_vectors(
-                        torch=torch,
-                        tokenizer=tokenizer,
-                        model=model,
-                        source_prompt=source_prompt,
-                        injection_layer=injection_layer,
-                        patch_vector=patch_vectors_by_concept[patch_concept],
-                        readout_layers=readout_layers,
-                        patch_alpha=patch_alpha,
-                        max_length=max_length,
-                    )
-                    for readout_layer in readout_layers:
-                        train_mean, centroids_by_concept = readouts[readout_layer]
-                        baseline_vector = centered_normalized(
-                            baseline_vectors[readout_layer],
-                            train_mean,
+                    for patch_alpha in patch_alphas:
+                        patched_vectors = patched_prompt_readout_vectors(
+                            torch=torch,
+                            tokenizer=tokenizer,
+                            model=model,
+                            source_prompt=source_prompt,
+                            injection_layer=injection_layer,
+                            patch_vector=patch_vectors_by_concept[patch_concept],
+                            readout_layers=readout_layers,
+                            patch_alpha=patch_alpha,
+                            max_length=max_length,
                         )
-                        patched_vector = centered_normalized(
-                            patched_vectors[readout_layer],
-                            train_mean,
-                        )
-                        baseline_scores = readout_scores(
-                            baseline_vector,
-                            centroids_by_concept=centroids_by_concept,
-                            left=left,
-                            right=right,
-                            distractor=distractor,
-                        )
-                        patched_scores = readout_scores(
-                            patched_vector,
-                            centroids_by_concept=centroids_by_concept,
-                            left=left,
-                            right=right,
-                            distractor=distractor,
-                        )
-                        rank = target_rank(
-                            patched_vector,
-                            centroids_by_concept=centroids_by_concept,
-                            target=right,
-                        )
-                        rows.append(
-                            {
-                                "pair": str(pair["id"]),
-                                "left": left,
-                                "right": right,
-                                "kind": str(pair["kind"]),
-                                "distractor": distractor,
-                                "random_patch": random_patch,
-                                "random_patch_scope": str(pair["random_patch_scope"]),
-                                "injection_layer": injection_layer,
-                                "readout_layer": readout_layer,
-                                "patch_text_regime": patch_text_regime,
-                                "patch_mode": mode,
-                                "patch_concept": patch_concept,
-                                "patch_concept_label": labels_by_concept[patch_concept],
-                                "patch_context": "label_free_definition_readout",
-                                "train_variant_indices": train_variant_indices,
-                                "eval_variant_index": eval_variant_index,
-                                "patch_alpha": patch_alpha,
-                                "source_prompt": source_prompt,
-                                "scores": {
-                                    "baseline": baseline_scores,
-                                    "patched": patched_scores,
-                                },
-                                "summary": summarize_readout_delta(
-                                    baseline_scores=baseline_scores,
-                                    patched_scores=patched_scores,
-                                    patched_target_rank=rank,
-                                ),
-                            }
-                        )
+                        for readout_layer in readout_layers:
+                            train_mean, centroids_by_concept = readouts[readout_layer]
+                            baseline_vector = centered_normalized(
+                                baseline_vectors[readout_layer],
+                                train_mean,
+                            )
+                            patched_vector = centered_normalized(
+                                patched_vectors[readout_layer],
+                                train_mean,
+                            )
+                            baseline_scores = readout_scores(
+                                baseline_vector,
+                                centroids_by_concept=centroids_by_concept,
+                                left=left,
+                                right=right,
+                                distractor=distractor,
+                            )
+                            patched_scores = readout_scores(
+                                patched_vector,
+                                centroids_by_concept=centroids_by_concept,
+                                left=left,
+                                right=right,
+                                distractor=distractor,
+                            )
+                            rank = target_rank(
+                                patched_vector,
+                                centroids_by_concept=centroids_by_concept,
+                                target=right,
+                            )
+                            rows.append(
+                                {
+                                    "pair": str(pair["id"]),
+                                    "left": left,
+                                    "right": right,
+                                    "kind": str(pair["kind"]),
+                                    "distractor": distractor,
+                                    "random_patch": random_patch,
+                                    "random_patch_scope": str(
+                                        pair["random_patch_scope"],
+                                    ),
+                                    "injection_layer": injection_layer,
+                                    "readout_layer": readout_layer,
+                                    "patch_text_regime": patch_text_regime,
+                                    "patch_mode": mode,
+                                    "patch_concept": patch_concept,
+                                    "patch_concept_label": labels_by_concept[
+                                        patch_concept
+                                    ],
+                                    "patch_context": (
+                                        "label_free_definition_readout"
+                                    ),
+                                    "train_variant_indices": train_variant_indices,
+                                    "eval_variant_index": eval_variant_index,
+                                    "patch_alpha": patch_alpha,
+                                    "source_prompt": source_prompt,
+                                    "scores": {
+                                        "baseline": baseline_scores,
+                                        "patched": patched_scores,
+                                    },
+                                    "summary": summarize_readout_delta(
+                                        baseline_scores=baseline_scores,
+                                        patched_scores=patched_scores,
+                                        patched_target_rank=rank,
+                                    ),
+                                }
+                            )
     return {"rows": rows}
 
 
@@ -556,6 +570,7 @@ def main(
     train_variants: str = "0,1",
     eval_variant: int = 2,
     patch_alpha: float = 1.0,
+    patch_alphas: str = "",
     patch_modes: str = DEFAULT_PATCH_MODES,
     patch_text_regimes: str = DEFAULT_PATCH_TEXT_REGIMES,
     pair_set: str = "focus",
@@ -578,6 +593,7 @@ def main(
     from experiments.activation_geometry.label_free_readout_basin import (
         PATCH_TEXT_REGIMES,
         aggregate_rows,
+        dose_response_summaries,
         gate_summaries,
         pair_specs_for_set,
         public_summary,
@@ -603,6 +619,11 @@ def main(
     parsed_injection_layers = parse_ints(injection_layers, name="injection layer")
     parsed_readout_layers = parse_ints(readout_layers, name="readout layer")
     parsed_train_variants = parse_ints(train_variants, name="train variant")
+    parsed_patch_alphas = (
+        parse_floats(patch_alphas, name="patch alpha")
+        if patch_alphas.strip()
+        else [patch_alpha]
+    )
     parsed_patch_modes = parse_values(
         patch_modes,
         allowed=PATCH_MODES,
@@ -636,7 +657,7 @@ def main(
         parsed_patch_text_regimes,
         parsed_train_variants,
         eval_variant,
-        patch_alpha,
+        parsed_patch_alphas,
         max_length,
     )
     aggregates = aggregate_rows(remote_payload["rows"])
@@ -651,7 +672,8 @@ def main(
             "readout_layers": parsed_readout_layers,
             "train_variant_indices": parsed_train_variants,
             "eval_variant_index": eval_variant,
-            "patch_alpha": patch_alpha,
+            "patch_alpha": parsed_patch_alphas[0] if len(parsed_patch_alphas) == 1 else None,
+            "patch_alphas": parsed_patch_alphas,
             "patch_modes": parsed_patch_modes,
             "patch_text_regimes": parsed_patch_text_regimes,
             "pair_set": pair_set,
@@ -665,6 +687,7 @@ def main(
         "specificity_rows": specificity,
         "gate_summaries": gate_summaries(specificity),
         "transfer_baseline_summaries": transfer_baseline_summaries(specificity),
+        "dose_response_summaries": dose_response_summaries(specificity),
     }
     if out and out.lower() != "none":
         write_payload(Path(out), payload)

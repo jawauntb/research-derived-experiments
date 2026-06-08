@@ -52,7 +52,9 @@
 - [x] Run an answer-surface basin diagnostic to separate semantic source/target effects from label or option-surface effects.
 - [x] Run a label-free readout basin diagnostic to test whether the attractor-family basin exists without visible answer choices.
 - [x] Run a broad label-free target-state transfer baseline and compare attractor-family rows against the null distribution.
-- [ ] Run a layer/alpha dose-response for broad label-free target-state transfer.
+- [x] Run a layer/alpha dose-response for broad label-free target-state transfer.
+- [ ] Replicate the layer-4/5 downstream transfer ridge with a broader baseline and second seed/checkpoint.
+- [ ] Add a hook/readout-surface diagnostic for same-layer label-free patching.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.
 - [ ] Add anisotropy and directional-curvature proxy checks to activation sweeps where feasible.
 

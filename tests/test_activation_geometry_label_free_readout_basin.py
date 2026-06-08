@@ -6,6 +6,7 @@ from experiments.activation_geometry.label_free_readout_basin import (
     PATCH_TEXT_REGIMES,
     aggregate_rows,
     baseline_pair_specs,
+    dose_response_summaries,
     label_free_pair_specs,
     neutral_carrier_text,
     pair_specs_for_set,
@@ -125,6 +126,38 @@ class LabelFreeReadoutBasinTest(unittest.TestCase):
             set(PATCH_TEXT_REGIMES),
         )
 
+    def test_specificity_keeps_patch_alpha_levels_separate(self) -> None:
+        rows = []
+        for patch_alpha, target_delta in ((0.25, 0.1), (1.0, 0.4)):
+            for patch_mode, delta, rank in (
+                ("target", target_delta, 1),
+                ("distractor", 0.2, 4),
+                ("random", -0.1, 5),
+                ("source_noop", 0.0, 6),
+            ):
+                rows.append(
+                    {
+                        "kind": "positive",
+                        "pair": "attractor->attractor_network/d=prototype",
+                        "injection_layer": 5,
+                        "readout_layer": 6,
+                        "patch_alpha": patch_alpha,
+                        "patch_text_regime": "definition",
+                        "patch_mode": patch_mode,
+                        "summary": {
+                            "target_margin_delta": delta,
+                            "patched_target_top3": rank <= 3,
+                        },
+                    }
+                )
+
+        specificity = specificity_rows(aggregate_rows(rows))
+        by_alpha = {row["patch_alpha"]: row for row in specificity}
+
+        self.assertEqual(set(by_alpha), {0.25, 1.0})
+        self.assertFalse(by_alpha[0.25]["specific_target_pass"])
+        self.assertTrue(by_alpha[1.0]["specific_target_pass"])
+
     def test_transfer_baseline_summary_reports_focus_percentiles(self) -> None:
         specificity = [
             {
@@ -165,6 +198,50 @@ class LabelFreeReadoutBasinTest(unittest.TestCase):
         self.assertEqual(baseline["count"], 2)
         self.assertEqual(baseline["specific_pass_count"], 1)
         self.assertEqual(positive["mean_advantage_percentile_vs_baseline"], 1.0)
+
+    def test_dose_response_summaries_report_grid_cells(self) -> None:
+        specificity = [
+            {
+                "patch_text_regime": "definition",
+                "kind": "baseline_cross_category",
+                "injection_layer": 4,
+                "readout_layer": 6,
+                "patch_alpha": 0.5,
+                "specific_target_pass": True,
+                "target_mean_target_margin_delta": 0.2,
+                "target_advantage_over_best_control": 0.1,
+            },
+            {
+                "patch_text_regime": "definition",
+                "kind": "baseline_cross_category",
+                "injection_layer": 4,
+                "readout_layer": 6,
+                "patch_alpha": 0.5,
+                "specific_target_pass": False,
+                "target_mean_target_margin_delta": -0.1,
+                "target_advantage_over_best_control": -0.2,
+            },
+            {
+                "patch_text_regime": "definition",
+                "kind": "baseline_cross_category",
+                "injection_layer": 5,
+                "readout_layer": 6,
+                "patch_alpha": 1.0,
+                "specific_target_pass": True,
+                "target_mean_target_margin_delta": 0.4,
+                "target_advantage_over_best_control": 0.3,
+            },
+        ]
+
+        summaries = dose_response_summaries(specificity)
+        by_grid = {
+            (row["injection_layer"], row["patch_alpha"]): row
+            for row in summaries
+        }
+
+        self.assertEqual(by_grid[(4, 0.5)]["specific_pass_count"], 1)
+        self.assertEqual(by_grid[(4, 0.5)]["specific_pass_rate"], 0.5)
+        self.assertEqual(by_grid[(5, 1.0)]["mean_advantage_over_best_control"], 0.3)
 
 
 if __name__ == "__main__":
