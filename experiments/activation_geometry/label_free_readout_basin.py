@@ -278,6 +278,7 @@ def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             row["pair"],
             row["injection_layer"],
             row["readout_layer"],
+            row.get("patch_alpha", 1.0),
             row["patch_text_regime"],
             row["patch_mode"],
         )
@@ -289,6 +290,7 @@ def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         pair,
         injection_layer,
         readout_layer,
+        patch_alpha,
         patch_text_regime,
         patch_mode,
     ), group in grouped.items():
@@ -302,6 +304,7 @@ def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "pair": pair,
                 "injection_layer": injection_layer,
                 "readout_layer": readout_layer,
+                "patch_alpha": patch_alpha,
                 "patch_text_regime": patch_text_regime,
                 "patch_mode": patch_mode,
                 "mean_target_margin_delta": mean_delta,
@@ -321,6 +324,7 @@ def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             str(row["pair"]),
             int(row["injection_layer"]),
             int(row["readout_layer"]),
+            float(row.get("patch_alpha", 1.0)),
             str(row["patch_mode"]),
         ),
     )
@@ -335,6 +339,7 @@ def specificity_rows(aggregates: list[dict[str, Any]]) -> list[dict[str, Any]]:
             row["pair"],
             row["injection_layer"],
             row["readout_layer"],
+            row.get("patch_alpha", 1.0),
             row["patch_text_regime"],
         )
         grouped.setdefault(key, {})[str(row["patch_mode"])] = row
@@ -345,6 +350,7 @@ def specificity_rows(aggregates: list[dict[str, Any]]) -> list[dict[str, Any]]:
         pair,
         injection_layer,
         readout_layer,
+        patch_alpha,
         patch_text_regime,
     ), by_mode in grouped.items():
         if "target" not in by_mode:
@@ -366,6 +372,7 @@ def specificity_rows(aggregates: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "pair": pair,
                 "injection_layer": injection_layer,
                 "readout_layer": readout_layer,
+                "patch_alpha": patch_alpha,
                 "patch_text_regime": patch_text_regime,
                 "target_mean_target_margin_delta": target["mean_target_margin_delta"],
                 "target_top3_count": target["top3_count"],
@@ -385,6 +392,7 @@ def specificity_rows(aggregates: list[dict[str, Any]]) -> list[dict[str, Any]]:
             str(row["pair"]),
             int(row["injection_layer"]),
             int(row["readout_layer"]),
+            float(row.get("patch_alpha", 1.0)),
         ),
     )
 
@@ -528,11 +536,71 @@ def transfer_baseline_summaries(
     return summaries
 
 
+def dose_response_summaries(
+    specificity: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    grouped: dict[tuple[Any, ...], list[dict[str, Any]]] = {}
+    for row in specificity:
+        key = (
+            row["patch_text_regime"],
+            row["kind"],
+            row["injection_layer"],
+            row["readout_layer"],
+            row.get("patch_alpha", 1.0),
+        )
+        grouped.setdefault(key, []).append(row)
+
+    summaries = []
+    for (
+        patch_text_regime,
+        kind,
+        injection_layer,
+        readout_layer,
+        patch_alpha,
+    ), rows in grouped.items():
+        deltas = [
+            float(row["target_mean_target_margin_delta"])
+            for row in rows
+        ]
+        advantages = [
+            float(row["target_advantage_over_best_control"])
+            for row in rows
+        ]
+        pass_count = sum(1 for row in rows if row["specific_target_pass"])
+        summaries.append(
+            {
+                "patch_text_regime": patch_text_regime,
+                "kind": kind,
+                "injection_layer": injection_layer,
+                "readout_layer": readout_layer,
+                "patch_alpha": patch_alpha,
+                "count": len(rows),
+                "specific_pass_count": pass_count,
+                "specific_pass_rate": pass_count / len(rows) if rows else None,
+                "mean_target_margin_delta": mean(deltas),
+                "median_target_margin_delta": median(deltas),
+                "mean_advantage_over_best_control": mean(advantages),
+                "median_advantage_over_best_control": median(advantages),
+            }
+        )
+    return sorted(
+        summaries,
+        key=lambda row: (
+            str(row["patch_text_regime"]),
+            str(row["kind"]),
+            int(row["injection_layer"]),
+            int(row["readout_layer"]),
+            float(row["patch_alpha"]),
+        ),
+    )
+
+
 def public_summary(payload: dict[str, Any]) -> dict[str, Any]:
     return {
         "manifest": payload["manifest"],
         "gate_summaries": payload["gate_summaries"],
         "transfer_baseline_summaries": payload.get("transfer_baseline_summaries", []),
+        "dose_response_summaries": payload.get("dose_response_summaries", []),
         "specificity_rows": payload["specificity_rows"],
         "aggregate_rows": payload["aggregate_rows"],
     }

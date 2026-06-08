@@ -792,3 +792,46 @@ Residual content:
 - Retractions or supersessions: supersede "generic label-free target-state transfer, attractor-family special case uncertain" with "broad label-free target-state transfer; attractor-specific exceptionality rejected for now."
 
 Next move: run a layer/alpha dose-response to determine whether generic transfer is a late-state overwrite artifact or a propagating intervention.
+
+## Activation Geometry Probe: Label-Free Transfer Dose Response
+
+Question: is broad label-free target-state transfer a late overwrite, or does it have a downstream layer/alpha regime?
+
+Current regime:
+
+- Artifact types: label-free patch payloads, centroid-readout rows, sampled baseline-pair rows, patch-alpha grid summaries.
+- Operations: held-out centroid readout training, activation patching at selected injection layers, downstream layer-6 readout scoring, target-vs-control specificity aggregation.
+- Gates/verifiers: strict downstream source-noop gate, target-over-control specificity gate, neutral-carrier stress test, alpha dose-response.
+- Known limitations: one checkpoint, one readout layer, small baseline sample, unresolved same-layer hook/readout mismatch.
+
+Action class:
+
+- Retrieval/search/discovery: discovery-leaning verifier refinement.
+- Why: the run adds alpha as a first-class grid dimension and exposes a missing artifact type for same-layer hook/readout-surface validity.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/label_free_transfer_dose_response_2026_06_08.md`; local ignored payload under `artifacts/activation_geometry/modal_pythia_70m_deduped_label_free_dose_response.json`.
+- Positive targets: focus rows plus 8 sampled baseline pairs.
+- Negative controls: neutral patch text, distractor/random/source patch modes.
+- Stress tests: injection layers `2,3,4,5,6`; patch alphas `0.25,0.5,0.75,1.0`; strict downstream no-op filtering.
+
+Gate:
+
+- Acceptance rule: accept a downstream transfer ridge only if strict downstream source-noop is exact and definition patches show a layer/alpha increase that neutral carriers do not match.
+- Withheld/rejected rule: withhold same-layer cells if source-noop is nonzero; reject a pure late-overwrite interpretation if earlier strict downstream layers show specific dose-responsive transfer.
+
+Results:
+
+- Accepted artifacts: `experiments/activation_geometry/results/label_free_transfer_dose_response_2026_06_08.md`; `experiments/activation_geometry/label_free_readout_basin.py`; `experiments/activation_geometry/modal_label_free_readout_basin.py`.
+- Rejected or withheld artifacts: same-layer `6 -> 6` interpretation is withheld.
+- Key metrics: strict downstream definition source-noop max delta `0.0`; layer `4 -> 6` definition pass rate reaches `10/15`; layer `5 -> 6` definition pass rate reaches `11/15`; neutral carrier pass rates remain at or below `2/15` in all strict downstream cells.
+- Variance or ablation: baseline-only rows show the same layer/alpha ridge with lower pass rates; source-family rows are stronger but no longer the sole phenomenon.
+
+Residual content:
+
+- Explained by old regime: broad target-state transfer is a generic definition-derived phenomenon, not attractor-specific.
+- New content outside old regime: the transfer has a mid/late downstream ridge and an alpha dose-response.
+- Retractions or supersessions: supersede "maybe a late overwrite" with "strict downstream transfer is strongest from layers 4-5 into layer 6; same-layer cells are invalid under current hook/readout instrumentation."
+
+Next move: replicate the downstream ridge with more baseline rows and a second seed/checkpoint, while separately diagnosing same-layer hook/readout validity.
