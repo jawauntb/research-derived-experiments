@@ -577,3 +577,46 @@ Residual content:
 - Retractions or supersessions: do not say final-token patching is simply dead; do not promote the Pythia pocket until it survives replication and leakage controls.
 
 Next move: replicate the Pythia matched-context pocket across variants, random seeds, and a nearby layer scan before trying free-form generation.
+
+## Activation Geometry Probe: Pythia Matched-Context Replication
+
+Question: does the Pythia matched-context patching pocket survive variants, random-control seeds, and nearby layers?
+
+Current regime:
+
+- Artifact types: matched-context patch payloads, hook-surface no-op controls, specificity rows, replication-grid summaries.
+- Operations: context-variant sweep, random-control seed sweep, nearby-layer sweep, target-vs-control aggregation.
+- Gates/verifiers: exact `source_noop` aggregate gate, target-over-best-control specificity gate, valence-control leakage check, variant/seed/layer stability check.
+- Known limitations: Pythia-only, three layers, three context variants, three random-control seeds, no third-model replication yet.
+
+Action class:
+
+- Retrieval/search/discovery: search inside the matched-context patching regime.
+- Why: the experiment perturbs variants, seeds, and layers without changing the artifact type or verifier.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/pythia_matched_context_replication_2026_06_08.md`; local ignored payloads under `artifacts/activation_geometry/modal_pythia_70m_matched_context_repl_v*_s*_l456.json`.
+- Positive targets: `attractor` -> `attractor_network`, `autopoiesis` -> `homeostasis`, `validity_gate` -> `weak_constraint`.
+- Negative controls: `valence` -> `activation_vector`, `valence` -> `steering_vector`, distractor/random/source patch modes.
+- Stress tests: context variants `0/1/2`, seeds `20260608/20260609/20260610`, layers `4/5/6`.
+
+Gate:
+
+- Acceptance rule: promote only effects that pass across variants and seeds at the target layer and do not look like valence-control leakage.
+- Withheld/rejected rule: broad bridge mechanism is withheld if only one pair survives or controls show similar target-specific passes.
+
+Results:
+
+- Accepted artifacts: `experiments/activation_geometry/results/pythia_matched_context_replication_2026_06_08.md`; `experiments/activation_geometry/matched_context_replication.py`.
+- Rejected or withheld artifacts: broad Pythia matched-context bridge mechanism remains withheld.
+- Key metrics: layer-5 `attractor` -> `attractor_network` specific passes `9/9`; layer-5 `autopoiesis` -> `homeostasis` specific passes `3/9`; layer-5 `validity_gate` -> `weak_constraint` specific passes `0/9`; layer-5 valence controls specific passes `9/18`.
+- Variance or ablation: `attractor` survives all variants and seeds; other candidate pairs are variant-dependent or fail.
+
+Residual content:
+
+- Explained by old regime: context matching can make some final-token patches causal in Pythia.
+- New content outside old regime: the stable residual is not a broad bridge class; it is a narrow attractor-network pocket at layer `5`.
+- Retractions or supersessions: supersede the previous "Pythia matched-context pocket" phrasing with the narrower "Pythia layer-5 attractor-network pocket".
+
+Next move: run a focused attractor-pocket diagnostic with distractor sweeps, adversarial near-neighbor controls, and third-model or second-checkpoint replication.
