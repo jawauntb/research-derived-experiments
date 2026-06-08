@@ -46,6 +46,18 @@ class ActivationRecord:
     text: str
 
 
+def parse_layers(value: str) -> list[int]:
+    layers: list[int] = []
+    for part in value.split(","):
+        token = part.strip()
+        if not token:
+            continue
+        layers.append(int(token))
+    if not layers:
+        raise ValueError("At least one layer must be provided")
+    return layers
+
+
 def activation_records(concepts: list[Concept], paraphrase_path: Path) -> list[ActivationRecord]:
     paraphrases = load_paraphrases(paraphrase_path, concepts)
     variants = variant_concepts(concepts, paraphrases)
@@ -73,6 +85,21 @@ def deterministic_activation(text: str, *, layer: int, dimensions: int = 96) -> 
                 break
         counter += 1
     return values
+
+
+def deterministic_layer_activations(
+    records: list[ActivationRecord],
+    *,
+    layers: list[int],
+    dimensions: int = 96,
+) -> dict[str, list[list[float]]]:
+    return {
+        str(layer): [
+            deterministic_activation(record.text, layer=layer, dimensions=dimensions)
+            for record in records
+        ]
+        for layer in layers
+    }
 
 
 def extract_transformer_activations(
@@ -331,6 +358,50 @@ def payload_from_activations(
     }
 
 
+def payload_from_layer_activations(
+    *,
+    concepts: list[Concept],
+    records: list[ActivationRecord],
+    layer_activations: dict[str, list[list[float]]],
+    model_id: str,
+    backend: str,
+    top_k: int,
+    dry_run: bool,
+) -> dict[str, Any]:
+    if not layer_activations:
+        raise ValueError("layer_activations must include at least one layer")
+
+    layers = list(layer_activations.keys())
+    return {
+        "manifest": {
+            "model_id": "deterministic-dry-run" if dry_run else model_id,
+            "layers": layers,
+            "layer_count": len(layers),
+            "backend": backend,
+            "concept_count": len(concepts),
+            "record_count": len(records),
+            "activation_dims": {
+                layer: len(activations[0]) if activations else 0
+                for layer, activations in layer_activations.items()
+            },
+            "top_k": top_k,
+            "dry_run": dry_run,
+        },
+        "records": [asdict(record) for record in records],
+        "layer_summaries": {
+            layer: summarize_activations(concepts, records, activations, top_k=top_k)
+            for layer, activations in layer_activations.items()
+        },
+        "activations_by_layer": {
+            layer: {
+                record.id: vector
+                for record, vector in zip(records, activations, strict=True)
+            }
+            for layer, activations in layer_activations.items()
+        },
+    }
+
+
 def compact_geometry(summary: dict[str, Any]) -> dict[str, Any]:
     compact = {}
     for name in ("raw", "mean_centered"):
@@ -361,7 +432,67 @@ def compact_geometry(summary: dict[str, Any]) -> dict[str, Any]:
     return compact
 
 
+def compact_layer_metrics(summary: dict[str, Any]) -> dict[str, Any]:
+    raw = summary["raw"]
+    centered = summary["mean_centered"]
+    return {
+        "raw_category_separation": raw["centroid_summary"]["category_separation"],
+        "raw_bridge_lift": raw["bridge_lift"]["bridge_lift"],
+        "raw_bridge_pairs_above_non_bridge_mean_rate": raw["bridge_lift"][
+            "bridge_pairs_above_non_bridge_mean_rate"
+        ],
+        "raw_mean_paraphrase_cohesion": raw["paraphrase_cohesion"][
+            "mean_paraphrase_cohesion"
+        ],
+        "mean_centered_category_separation": centered["centroid_summary"][
+            "category_separation"
+        ],
+        "mean_centered_bridge_lift": centered["bridge_lift"]["bridge_lift"],
+        "mean_centered_bridge_pairs_above_non_bridge_mean_rate": centered[
+            "bridge_lift"
+        ]["bridge_pairs_above_non_bridge_mean_rate"],
+        "mean_centered_mean_top_k_same_category_rate": centered["centroid_summary"][
+            "mean_top_k_same_category_rate"
+        ],
+        "mean_centered_mean_paraphrase_cohesion": centered["paraphrase_cohesion"][
+            "mean_paraphrase_cohesion"
+        ],
+    }
+
+
+def compact_layer_sweep(payload: dict[str, Any]) -> dict[str, Any]:
+    return {
+        layer: compact_layer_metrics(summary)
+        for layer, summary in payload["layer_summaries"].items()
+    }
+
+
+def top_layers_by_centered_bridge_lift(
+    layer_metrics: dict[str, dict[str, Any]],
+    *,
+    limit: int = 3,
+) -> list[dict[str, Any]]:
+    rows = [
+        {"layer": layer, **metrics}
+        for layer, metrics in layer_metrics.items()
+    ]
+    return sorted(
+        rows,
+        key=lambda row: row["mean_centered_bridge_lift"],
+        reverse=True,
+    )[:limit]
+
+
 def public_summary(payload: dict[str, Any]) -> dict[str, Any]:
+    if "layer_summaries" in payload:
+        layer_metrics = compact_layer_sweep(payload)
+        return {
+            "manifest": payload["manifest"],
+            "layer_metrics": layer_metrics,
+            "top_layers_by_centered_bridge_lift": top_layers_by_centered_bridge_lift(
+                layer_metrics
+            ),
+        }
     return {
         "manifest": payload["manifest"],
         "summary": compact_geometry(payload["summary"]),

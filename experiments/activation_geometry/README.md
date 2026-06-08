@@ -21,3 +21,11 @@ Run on Modal through the Doppler-managed Modal token:
 ```bash
 doppler --scope /Users/jawaun/superoptimizers run -- uvx --python 3.12 --from modal modal run experiments/activation_geometry/modal_activation_probe.py --model-id EleutherAI/pythia-70m-deduped --layer -1 --out artifacts/activation_geometry/modal_pythia_70m_layer_last.json
 ```
+
+Run a multi-layer sweep on Modal:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- uvx --python 3.12 --from modal modal run experiments/activation_geometry/modal_layer_sweep.py --model-id EleutherAI/pythia-70m-deduped --layers 0,1,2,3,4,5,6 --batch-size 8 --max-length 96 --out artifacts/activation_geometry/modal_pythia_70m_layer_sweep.json
+```
+
+For Pythia-70M, layer `0` is the embedding hidden state and layers `1..6` are transformer block outputs. Public reports should keep both raw and mean-centered metrics so anisotropy does not get hidden by a single headline score.
