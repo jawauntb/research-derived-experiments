@@ -15,3 +15,15 @@ Dry-run without API access:
 ```bash
 python3 experiments/concept_geometry/openai_embedding_probe.py --concepts experiments/concept_geometry/concept_set.json --dry-run --out artifacts/concept_geometry/dry_run.json
 ```
+
+Run the paraphrase and second-model stability probe:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- python3 experiments/concept_geometry/paraphrase_stability_probe.py --concepts experiments/concept_geometry/concept_set.json --paraphrases experiments/concept_geometry/concept_paraphrases.json --models text-embedding-3-small text-embedding-3-large --out artifacts/concept_geometry/paraphrase_stability_openai.json
+```
+
+Dry-run the stability probe:
+
+```bash
+python3 experiments/concept_geometry/paraphrase_stability_probe.py --concepts experiments/concept_geometry/concept_set.json --paraphrases experiments/concept_geometry/concept_paraphrases.json --dry-run --out artifacts/concept_geometry/paraphrase_stability_dry_run.json
+```

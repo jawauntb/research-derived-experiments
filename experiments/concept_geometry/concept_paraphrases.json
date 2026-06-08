@@ -1,0 +1,194 @@
+[
+  {
+    "id": "attractor",
+    "variants": [
+      "attractor: a stable region or state toward which a dynamical system tends to evolve",
+      "attractor: a state or region that nearby trajectories repeatedly move toward",
+      "attractor: a persistent destination pattern in the evolution of a dynamical system"
+    ]
+  },
+  {
+    "id": "basin_of_attraction",
+    "variants": [
+      "basin of attraction: the set of initial states that flow toward the same attractor",
+      "basin of attraction: the region of starting conditions that end up at one stable pattern",
+      "basin of attraction: all states whose dynamics carry them into a shared attractor"
+    ]
+  },
+  {
+    "id": "phase_space",
+    "variants": [
+      "phase space: a space of possible states and trajectories of a dynamical system",
+      "phase space: the coordinate space that represents every possible state of a system",
+      "phase space: a geometric state space where system trajectories can be traced"
+    ]
+  },
+  {
+    "id": "fixed_point",
+    "variants": [
+      "fixed point: a state that remains unchanged under the system dynamics",
+      "fixed point: a state that maps back to itself when the dynamics are applied",
+      "fixed point: an unchanged equilibrium state of a transformation or flow"
+    ]
+  },
+  {
+    "id": "attractor_network",
+    "variants": [
+      "attractor network: a cognitive or neural network whose activity settles into stable memory or perception states",
+      "attractor network: a neural system where activity patterns converge toward stable representational states",
+      "attractor network: a model of cognition in which recurrent activity falls into learned stable basins"
+    ]
+  },
+  {
+    "id": "prototype",
+    "variants": [
+      "prototype: a central or typical example around which category judgments are organized",
+      "prototype: a representative center that makes some category members feel more typical than others",
+      "prototype: an idealized reference case used to judge similarity within a category"
+    ]
+  },
+  {
+    "id": "schema",
+    "variants": [
+      "schema: an organized cognitive structure for interpreting situations and expectations",
+      "schema: a mental frame that organizes expectations, roles, and likely events",
+      "schema: a structured interpretive pattern used to make sense of experience"
+    ]
+  },
+  {
+    "id": "conceptual_space",
+    "variants": [
+      "conceptual space: a geometric representation of meanings using dimensions, distances, regions, and prototypes",
+      "conceptual space: a metric meaning space where concepts occupy regions along quality dimensions",
+      "conceptual space: a geometry of concepts in which distance and region structure encode similarity"
+    ]
+  },
+  {
+    "id": "semantic_distance",
+    "variants": [
+      "semantic distance: a measure of how far apart meanings or concepts are in a representational space",
+      "semantic distance: the separation between concepts in a meaning representation",
+      "semantic distance: a distance-like quantity that tracks how dissimilar two meanings are"
+    ]
+  },
+  {
+    "id": "family_resemblance",
+    "variants": [
+      "family resemblance: category membership based on overlapping similarities rather than a single essence",
+      "family resemblance: classification by shared patterns of similarity without one necessary feature",
+      "family resemblance: category structure built from crisscrossing similarities among examples"
+    ]
+  },
+  {
+    "id": "embedding",
+    "variants": [
+      "embedding: a vector representation that preserves useful relationships among inputs",
+      "embedding: a learned vector form that places related inputs near one another",
+      "embedding: a numeric representation where geometric relations carry semantic or functional information"
+    ]
+  },
+  {
+    "id": "activation_vector",
+    "variants": [
+      "activation vector: a direction or state in a neural network activation space",
+      "activation vector: a pattern of neural network activity represented as coordinates in feature space",
+      "activation vector: a vector-valued internal state produced by a model layer"
+    ]
+  },
+  {
+    "id": "steering_vector",
+    "variants": [
+      "steering vector: an activation-space direction used to control model behavior",
+      "steering vector: a direction added to model activations to shift outputs in a desired way",
+      "steering vector: an intervention direction in representation space that nudges a neural model"
+    ]
+  },
+  {
+    "id": "representation_manifold",
+    "variants": [
+      "representation manifold: a lower-dimensional geometric structure learned inside a high-dimensional model space",
+      "representation manifold: a curved structured region where a model organizes related internal states",
+      "representation manifold: a geometric surface or subspace that captures regularities in learned representations"
+    ]
+  },
+  {
+    "id": "weak_constraint",
+    "variants": [
+      "weak constraint: a rule that preserves many compatible possibilities while still satisfying evidence",
+      "weak constraint: a restriction that rules out some cases while leaving broad freedom elsewhere",
+      "weak constraint: an underdetermining condition that fits observations without over-specifying the answer"
+    ]
+  },
+  {
+    "id": "simplicity_bias",
+    "variants": [
+      "simplicity bias: a preference for shorter or simpler forms when choosing explanations",
+      "simplicity bias: the tendency to favor compact explanations over more complex alternatives",
+      "simplicity bias: a selection pressure toward minimal descriptions or low-complexity hypotheses"
+    ]
+  },
+  {
+    "id": "validity_gate",
+    "variants": [
+      "validity gate: an explicit verifier that rejects explanations that fit observations for the wrong reason",
+      "validity gate: a test that filters candidate explanations by checking whether their fit is legitimate",
+      "validity gate: a criterion that blocks hypotheses whose apparent success comes from invalid shortcuts"
+    ]
+  },
+  {
+    "id": "regime_transition",
+    "variants": [
+      "regime transition: a change in the types, operations, or verifiers used to represent a scientific problem",
+      "regime transition: a shift to a new representational setup for pursuing discovery",
+      "regime transition: a move from one scientific search grammar to another with different artifacts or tests"
+    ]
+  },
+  {
+    "id": "schema_revision",
+    "variants": [
+      "schema revision: changing the representational vocabulary or artifact types used by a discovery system",
+      "schema revision: altering the concepts and structures used to encode a research problem",
+      "schema revision: updating the framework that decides what kinds of objects and relations can be represented"
+    ]
+  },
+  {
+    "id": "residual_content",
+    "variants": [
+      "residual content: evidence or structure not explained by transporting the old representation into a new regime",
+      "residual content: the part of a result that remains unexplained by the previous schema",
+      "residual content: leftover structure that signals the old representation is missing something"
+    ]
+  },
+  {
+    "id": "self_boundary",
+    "variants": [
+      "self boundary: the modeled distinction between an agent and its environment",
+      "self boundary: the line a system draws between what counts as itself and what counts as outside",
+      "self boundary: an operational separation between an organism, agent, or model and its surroundings"
+    ]
+  },
+  {
+    "id": "autopoiesis",
+    "variants": [
+      "autopoiesis: self-producing organization that maintains its own boundary and persistence",
+      "autopoiesis: a system process that regenerates the components and boundary that keep it alive",
+      "autopoiesis: self-maintaining organization in which a system continually produces its own conditions of existence"
+    ]
+  },
+  {
+    "id": "homeostasis",
+    "variants": [
+      "homeostasis: active regulation that keeps a system within viable bounds",
+      "homeostasis: the maintenance of internal stability through corrective regulation",
+      "homeostasis: feedback-driven control that preserves a system's viable operating range"
+    ]
+  },
+  {
+    "id": "valence",
+    "variants": [
+      "valence: positive or negative value signal that guides action, attention, or adaptation",
+      "valence: the attractive or aversive value assigned to a state, object, or outcome",
+      "valence: a signed value signal that shapes preference, motivation, and behavior"
+    ]
+  }
+]

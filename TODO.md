@@ -30,9 +30,11 @@
 - [x] Run a no-secrets env probe under Doppler.
 - [x] Confirm no-secrets env presence under `superoptimizers` Doppler scope.
 - [x] Produce first concept-neighborhood report.
-- [ ] Run paraphrase perturbation stress test.
-- [ ] Compare with a second embedding model.
+- [x] Run paraphrase perturbation stress test.
+- [x] Compare with a second embedding model.
 - [ ] Extend from embedding-space neighborhoods to activation-space probes.
+- [ ] Add an external semantic negative control for paraphrase geometry.
+- [ ] Replicate concept geometry with a non-OpenAI embedding family.
 
 ## Experiment Track 3: Boundary Priors
 
