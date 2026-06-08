@@ -44,7 +44,8 @@
 - [x] Run pair-level control-leakage diagnostics with shuffled and category-matched random bridge pairs.
 - [x] Run first final-token steering pilot on selected generation layers.
 - [x] Run steering calibration diagnostic with normalized/sign-flipped/random directions and option-order randomization.
-- [ ] Redesign the steering verifier with learned/readout-conditioned directions or causal patching before free-form generation.
+- [x] Redesign the steering verifier with learned/readout-conditioned directions or causal patching before free-form generation.
+- [ ] Run causal patching diagnostic with target, distractor, random, and no-op activation patches.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.
 - [ ] Add anisotropy and directional-curvature proxy checks to activation sweeps where feasible.
 
