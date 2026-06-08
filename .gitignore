@@ -1,0 +1,30 @@
+# Local archives and extracted source text are intentionally not public.
+references/papers/
+references/text/
+references/html/
+
+# Secrets and local runtime state.
+.env
+.env.*
+!.env.example
+.doppler/
+.modal.toml
+
+# Python/runtime artifacts.
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ty/
+.venv/
+venv/
+
+# Experiment outputs: keep reports explicitly when ready.
+data/
+artifacts/
+tmp/
+
+# OS/editor noise.
+.DS_Store
+
