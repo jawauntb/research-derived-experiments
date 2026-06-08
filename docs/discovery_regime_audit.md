@@ -964,3 +964,46 @@ Residual content:
 - Retractions or supersessions: supersede "centroid readout may be producing the ridge" with "centroid is not necessary for the ridge, though readout-space movement still needs behavior-level validation."
 
 Next move: add a behavior-level gate that tests whether readout-space transport predicts answer/logprob changes.
+
+## Activation Geometry Probe: Behavior-Level Gate
+
+Question: does the trained-readout-confirmed hook-output transfer ridge change next-token behavior?
+
+Current regime:
+
+- Artifact types: hook-output patch payloads, centroid/ridge readout summaries, behavior prompt frames, option-order logprob rows, target-vs-control specificity summaries.
+- Operations: label-free definition/neutral patch-vector capture, final-token activation patching, option-token logprob scoring, prompt-frame ablation.
+- Gates/verifiers: target patch must robustly improve target margin across option orders and beat distractor/random/source-noop controls; neutral carriers should not match definition specificity.
+- Known limitations: one checkpoint, option-token answer surface, no learned behavior-aligned direction.
+
+Action class:
+
+- Retrieval/search/discovery: verifier transition with rejected claim.
+- Why: this run adds behavior-level logprob scoring as a new verifier type and tests whether the representational ridge crosses into model choices.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/behavior_level_gate_2026_06_08.md`; local ignored payloads under `artifacts/activation_geometry/modal_pythia_70m_behavior_gate*.json`.
+- Positive targets: focus rows plus 8 sampled baseline pairs.
+- Negative controls: neutral patch text, distractor/random/source-noop patch modes, option-order controls.
+- Stress tests: prompt frames `source_passage` and `latent_choice`; injection layers `4,5,6`; alphas `0.75,1.0`.
+
+Gate:
+
+- Acceptance rule: accept behavior transfer only if definition target patches have positive robust target-margin movement and positive target-over-control advantage.
+- Withheld/rejected rule: withhold behavior-level claims if controls match or exceed target patches.
+
+Results:
+
+- Accepted artifacts: `experiments/activation_geometry/modal_label_free_behavior_gate.py`; `experiments/activation_geometry/label_free_behavior_gate.py`; `scripts/summarize_label_free_behavior_gate.py`; `experiments/activation_geometry/results/behavior_level_gate_2026_06_08.md`.
+- Rejected or withheld artifacts: behavior-level transfer claim is withheld.
+- Key metrics: definition source-passage max pass rate `3/15`; definition latent-choice max pass rate `2/15`; mean target-over-control advantage is non-positive in every definition cell.
+- Variance or ablation: removing source-passage text does not rescue target specificity.
+
+Residual content:
+
+- Explained by old regime: readout-space movement remains real but does not imply behavioral steering.
+- New content outside old regime: the project now has a behavior verifier that can reject overclaims.
+- Retractions or supersessions: supersede "next step may confirm behavior transfer" with "simple behavior transfer fails under option-token gates; behavior alignment needs a stronger intervention or different interface."
+
+Next move: design a behavior-aligned intervention rather than raw state replacement.
