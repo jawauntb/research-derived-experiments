@@ -57,7 +57,8 @@
 - [x] Add a hook/readout-surface diagnostic for same-layer label-free patching.
 - [x] Rerun the label-free dose-response ridge with hook-output patch vectors and a broader baseline.
 - [x] Add a trained hook-output readout gate for the label-free transfer ridge.
-- [ ] Add a behavior-level gate for the trained-readout-confirmed transfer ridge.
+- [x] Add a behavior-level gate for the trained-readout-confirmed transfer ridge.
+- [ ] Design a behavior-aligned intervention after the raw state-replacement behavior gate failed.
 - [ ] Replicate the hook-output transfer ridge on a second checkpoint or open model.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.
 - [ ] Add anisotropy and directional-curvature proxy checks to activation sweeps where feasible.
