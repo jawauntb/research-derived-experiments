@@ -1,0 +1,146 @@
+[
+  {
+    "id": "attractor",
+    "label": "attractor",
+    "category": "dynamics",
+    "prompt": "attractor: a stable region or state toward which a dynamical system tends to evolve"
+  },
+  {
+    "id": "basin_of_attraction",
+    "label": "basin of attraction",
+    "category": "dynamics",
+    "prompt": "basin of attraction: the set of initial states that flow toward the same attractor"
+  },
+  {
+    "id": "phase_space",
+    "label": "phase space",
+    "category": "dynamics",
+    "prompt": "phase space: a space of possible states and trajectories of a dynamical system"
+  },
+  {
+    "id": "fixed_point",
+    "label": "fixed point",
+    "category": "dynamics",
+    "prompt": "fixed point: a state that remains unchanged under the system dynamics"
+  },
+  {
+    "id": "attractor_network",
+    "label": "attractor network",
+    "category": "cognition",
+    "prompt": "attractor network: a cognitive or neural network whose activity settles into stable memory or perception states"
+  },
+  {
+    "id": "prototype",
+    "label": "prototype",
+    "category": "cognition",
+    "prompt": "prototype: a central or typical example around which category judgments are organized"
+  },
+  {
+    "id": "schema",
+    "label": "schema",
+    "category": "cognition",
+    "prompt": "schema: an organized cognitive structure for interpreting situations and expectations"
+  },
+  {
+    "id": "conceptual_space",
+    "label": "conceptual space",
+    "category": "semantics",
+    "prompt": "conceptual space: a geometric representation of meanings using dimensions, distances, regions, and prototypes"
+  },
+  {
+    "id": "semantic_distance",
+    "label": "semantic distance",
+    "category": "semantics",
+    "prompt": "semantic distance: a measure of how far apart meanings or concepts are in a representational space"
+  },
+  {
+    "id": "family_resemblance",
+    "label": "family resemblance",
+    "category": "semantics",
+    "prompt": "family resemblance: category membership based on overlapping similarities rather than a single essence"
+  },
+  {
+    "id": "embedding",
+    "label": "embedding",
+    "category": "ai_geometry",
+    "prompt": "embedding: a vector representation that preserves useful relationships among inputs"
+  },
+  {
+    "id": "activation_vector",
+    "label": "activation vector",
+    "category": "ai_geometry",
+    "prompt": "activation vector: a direction or state in a neural network activation space"
+  },
+  {
+    "id": "steering_vector",
+    "label": "steering vector",
+    "category": "ai_geometry",
+    "prompt": "steering vector: an activation-space direction used to control model behavior"
+  },
+  {
+    "id": "representation_manifold",
+    "label": "representation manifold",
+    "category": "ai_geometry",
+    "prompt": "representation manifold: a lower-dimensional geometric structure learned inside a high-dimensional model space"
+  },
+  {
+    "id": "weak_constraint",
+    "label": "weak constraint",
+    "category": "constraint",
+    "prompt": "weak constraint: a rule that preserves many compatible possibilities while still satisfying evidence"
+  },
+  {
+    "id": "simplicity_bias",
+    "label": "simplicity bias",
+    "category": "constraint",
+    "prompt": "simplicity bias: a preference for shorter or simpler forms when choosing explanations"
+  },
+  {
+    "id": "validity_gate",
+    "label": "validity gate",
+    "category": "constraint",
+    "prompt": "validity gate: an explicit verifier that rejects explanations that fit observations for the wrong reason"
+  },
+  {
+    "id": "regime_transition",
+    "label": "regime transition",
+    "category": "discovery",
+    "prompt": "regime transition: a change in the types, operations, or verifiers used to represent a scientific problem"
+  },
+  {
+    "id": "schema_revision",
+    "label": "schema revision",
+    "category": "discovery",
+    "prompt": "schema revision: changing the representational vocabulary or artifact types used by a discovery system"
+  },
+  {
+    "id": "residual_content",
+    "label": "residual content",
+    "category": "discovery",
+    "prompt": "residual content: evidence or structure not explained by transporting the old representation into a new regime"
+  },
+  {
+    "id": "self_boundary",
+    "label": "self boundary",
+    "category": "agency",
+    "prompt": "self boundary: the modeled distinction between an agent and its environment"
+  },
+  {
+    "id": "autopoiesis",
+    "label": "autopoiesis",
+    "category": "agency",
+    "prompt": "autopoiesis: self-producing organization that maintains its own boundary and persistence"
+  },
+  {
+    "id": "homeostasis",
+    "label": "homeostasis",
+    "category": "agency",
+    "prompt": "homeostasis: active regulation that keeps a system within viable bounds"
+  },
+  {
+    "id": "valence",
+    "label": "valence",
+    "category": "agency",
+    "prompt": "valence: positive or negative value signal that guides action, attention, or adaptation"
+  }
+]
