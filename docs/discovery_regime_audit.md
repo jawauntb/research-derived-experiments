@@ -663,3 +663,46 @@ Residual content:
 - Retractions or supersessions: supersede "Pythia layer-5 attractor-network pocket" with "Pythia-70M-deduped layer-5 attractor-family answer-choice basin."
 
 Next move: implement the answer-surface basin diagnostic to distinguish semantic source/target effects from label/option-surface effects.
+
+## Activation Geometry Probe: Answer-Surface Basin Diagnostic
+
+Question: does the attractor-family basin follow semantic source/target content, visible labels, or the option-choice surface?
+
+Current regime:
+
+- Artifact types: answer-surface patch payloads, label-regime rows, patch-text-regime rows, specificity summaries.
+- Operations: canonical/alias/symbol relabeling, neutral-carrier patch prompts, source-family sweep, layer comparison.
+- Gates/verifiers: exact definition-source no-op gate, neutral-carrier failure gate, symbol-label failure gate, alias-preservation gate.
+- Known limitations: one model checkpoint, one context variant, still uses an answer-choice interface.
+
+Action class:
+
+- Retrieval/search/discovery: discovery-leaning verifier revision.
+- Why: this adds new accepted artifact dimensions, label regimes and patch-text regimes, that the previous matched-context verifier could not represent.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/answer_surface_basin_diagnostic_2026_06_08.md`; local ignored payload under `artifacts/activation_geometry/modal_pythia_70m_deduped_answer_surface_basin.json`.
+- Positive targets: `attractor` -> `attractor_network`.
+- Negative controls: neutral patch text, symbol labels, distractor/random/source patch modes.
+- Stress tests: source-family sweep, canonical/alias/symbol labels, definition/neutral patch text, primary/control layer comparison.
+
+Gate:
+
+- Acceptance rule: call it semantically mediated only if aliases preserve the effect while neutral patch prompts and symbol labels break it.
+- Withheld/rejected rule: reject label-free activation-space claims until a no-answer-choice readout test reproduces the basin.
+
+Results:
+
+- Accepted artifacts: `experiments/activation_geometry/results/answer_surface_basin_diagnostic_2026_06_08.md`; `experiments/activation_geometry/answer_surface_basin_diagnostic.py`; `experiments/activation_geometry/modal_answer_surface_basin.py`.
+- Rejected or withheld artifacts: pure label-only artifact claim is rejected; label-free activation-space basin claim is withheld.
+- Key metrics: primary canonical definitions `3/5`; primary alias definitions `3/5`; primary canonical neutral `0/5`; primary alias neutral `0/5`; primary symbol definitions `0/5`; exact definition-source no-op max delta `0.0`.
+- Variance or ablation: control layer `6` has weak canonical-definition passes, so the basin is not uniquely localized to layer `5`.
+
+Residual content:
+
+- Explained by old regime: the multiple-choice final-token surface can carry target-margin effects.
+- New content outside old claim: the effect requires semantic definitions and meaningful labels, but spreads across nearby source concepts.
+- Retractions or supersessions: supersede "answer-choice label artifact" with "semantically mediated answer-surface basin."
+
+Next move: run a label-free readout basin diagnostic to test whether the basin exists in activation space without visible answer choices.

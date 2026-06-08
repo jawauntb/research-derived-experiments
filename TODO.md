@@ -49,7 +49,8 @@
 - [x] Run matched-context activation patching using activations from the same option-choice prompt template.
 - [x] Replicate the Pythia matched-context patching pocket across variants, random seeds, and nearby layers.
 - [x] Run a focused attractor-pocket diagnostic with distractor sweeps and adversarial near-neighbor controls.
-- [ ] Run an answer-surface basin diagnostic to separate semantic source/target effects from label or option-surface effects.
+- [x] Run an answer-surface basin diagnostic to separate semantic source/target effects from label or option-surface effects.
+- [ ] Run a label-free readout basin diagnostic to test whether the attractor-family basin exists without visible answer choices.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.
 - [ ] Add anisotropy and directional-curvature proxy checks to activation sweeps where feasible.
 
