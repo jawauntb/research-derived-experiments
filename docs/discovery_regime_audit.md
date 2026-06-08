@@ -541,3 +541,39 @@ Residual content:
 - Retractions or supersessions: do not treat direct concept activation patching as accepted causal bridge evidence for this probe.
 
 Next move: run matched-context activation patching before abandoning the final-token multiple-choice interface.
+
+## Activation Geometry Probe: Matched-Context Patching Diagnostic
+
+Question: does matched-context activation patching rescue final-token bridge interventions?
+
+Current regime:
+
+- Artifact types: selected final-token layers, matched option-choice patch prompts, target/distractor/random/source hook-surface activations, option-order randomized target-margin payloads, specificity summaries.
+- Operations: answer-choice prompt construction, hook-surface activation capture, activation replacement hooks, option-order randomized log-probability margin scoring, target-vs-control patch comparison.
+- Gates/verifiers: exact `source_noop` sanity control, primary/backup/control layers, valence controls, distractor/random/source patch controls, robust option-order rule, target-over-best-control specificity rule.
+- Known limitations: one context variant, one random-patch seed, two small causal LMs, and no free-form or downstream behavioral task.
+
+Action class:
+
+- Retrieval/search/discovery: regime refinement.
+- Why: the run revises the intervention artifact from bare concept-state patching to matched answer-choice context-state patching, and the no-op sanity gate exposes the need to capture patch vectors at the hook surface.
+
+Gate:
+
+- Acceptance rule: promote only cross-model primary positive target-specific passes without primary valence-control leakage or control-layer replication.
+- Withheld/rejected rule: model-specific pockets and leaky controls are reported but not promoted to semantic bridge-causality claims.
+
+Results:
+
+- Accepted artifacts: `experiments/activation_geometry/results/matched_context_patching_2026_06_08.md`; `experiments/activation_geometry/modal_matched_context_patching.py`; `experiments/activation_geometry/matched_context_patching.py`.
+- Rejected or withheld artifacts: cross-model semantic bridge claim is rejected; Pythia-specific matched-context pocket is withheld pending replication.
+- Key metrics: Pythia primary positive target-specific passes `2/3` with `1/2` valence-control leakage; GPT-2 primary positive target-specific passes `0/3`; max absolute `source_noop` aggregate delta `0.0` in both models.
+- Variance or ablation: target, distractor, random, and exact source-context patch controls tested across primary, backup, and control layers with three option orders.
+
+Residual content:
+
+- Explained by old regime: readout-selected bridge pairs do not automatically imply cross-model causal steering.
+- New content outside old regime: context matching can turn previously rejected direct patching into a Pythia-specific causal pocket.
+- Retractions or supersessions: do not say final-token patching is simply dead; do not promote the Pythia pocket until it survives replication and leakage controls.
+
+Next move: replicate the Pythia matched-context pocket across variants, random seeds, and a nearby layer scan before trying free-form generation.
