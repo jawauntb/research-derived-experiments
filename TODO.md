@@ -24,12 +24,15 @@
 
 ## Experiment Track 2: Cross-Model Concept Geometry
 
-- [ ] Define concept set: concrete, abstract, values, emotions, agency/boundary terms.
-- [ ] Choose first model pair.
-- [ ] Decide embedding/probing interface.
-- [ ] Run a no-secrets env probe under Doppler.
+- [x] Define concept set: concrete, abstract, values, emotions, agency/boundary terms.
+- [x] Choose first embedding model: `text-embedding-3-small`.
+- [x] Decide embedding/probing interface.
+- [x] Run a no-secrets env probe under Doppler.
 - [x] Confirm no-secrets env presence under `superoptimizers` Doppler scope.
-- [ ] Produce kernel-alignment report.
+- [x] Produce first concept-neighborhood report.
+- [ ] Run paraphrase perturbation stress test.
+- [ ] Compare with a second embedding model.
+- [ ] Extend from embedding-space neighborhoods to activation-space probes.
 
 ## Experiment Track 3: Boundary Priors
 
