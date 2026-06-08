@@ -36,8 +36,9 @@
 - [ ] Add an external semantic negative control for paraphrase geometry.
 - [ ] Replicate concept geometry with a non-OpenAI embedding family.
 - [x] Run activation layer sweep on Pythia-70M.
-- [ ] Replicate activation geometry with a second open model.
+- [x] Replicate activation geometry with a second open model.
 - [ ] Compare mean pooling against final-token pooling for activation sweeps.
+- [ ] Summarize cross-model activation layer profiles across Pythia-70M and GPT-2.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.
 - [ ] Add anisotropy and directional-curvature proxy checks to activation sweeps where feasible.
 
