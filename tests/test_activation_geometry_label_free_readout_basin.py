@@ -5,12 +5,15 @@ import unittest
 from experiments.activation_geometry.label_free_readout_basin import (
     PATCH_TEXT_REGIMES,
     aggregate_rows,
+    baseline_pair_specs,
     label_free_pair_specs,
     neutral_carrier_text,
+    pair_specs_for_set,
     source_text_for_regime,
     specificity_rows,
     summarize_readout_delta,
     target_margin,
+    transfer_baseline_summaries,
 )
 
 
@@ -32,6 +35,29 @@ class LabelFreeReadoutBasinTest(unittest.TestCase):
             by_id["valence->activation_vector/d=steering_vector"].kind,
             "generic_control",
         )
+
+    def test_baseline_pair_specs_sample_same_and_cross_category_pairs(self) -> None:
+        concepts = [
+            {"id": "a1", "category": "a"},
+            {"id": "a2", "category": "a"},
+            {"id": "a3", "category": "a"},
+            {"id": "b1", "category": "b"},
+            {"id": "b2", "category": "b"},
+            {"id": "c1", "category": "c"},
+        ]
+
+        specs = baseline_pair_specs(concepts, sample_count=8, seed=1)
+        combined = pair_specs_for_set(
+            concepts,
+            pair_set="combined",
+            sample_count=8,
+            seed=1,
+        )
+
+        self.assertEqual(len(specs), 8)
+        self.assertTrue(any(row.kind == "baseline_same_category" for row in specs))
+        self.assertTrue(any(row.kind == "baseline_cross_category" for row in specs))
+        self.assertEqual(len(combined), len(label_free_pair_specs()) + len(specs))
 
     def test_source_text_regimes(self) -> None:
         self.assertEqual(neutral_carrier_text(label="attractor network"), "Concept label: attractor network.")
@@ -98,6 +124,47 @@ class LabelFreeReadoutBasinTest(unittest.TestCase):
             {row["patch_text_regime"] for row in specificity},
             set(PATCH_TEXT_REGIMES),
         )
+
+    def test_transfer_baseline_summary_reports_focus_percentiles(self) -> None:
+        specificity = [
+            {
+                "patch_text_regime": "definition",
+                "kind": "baseline_cross_category",
+                "specific_target_pass": False,
+                "target_mean_target_margin_delta": 0.1,
+                "target_advantage_over_best_control": -0.1,
+            },
+            {
+                "patch_text_regime": "definition",
+                "kind": "baseline_same_category",
+                "specific_target_pass": True,
+                "target_mean_target_margin_delta": 0.2,
+                "target_advantage_over_best_control": 0.2,
+            },
+            {
+                "patch_text_regime": "definition",
+                "kind": "positive",
+                "specific_target_pass": True,
+                "target_mean_target_margin_delta": 0.3,
+                "target_advantage_over_best_control": 0.3,
+            },
+        ]
+
+        summaries = transfer_baseline_summaries(specificity)
+        baseline = [
+            row for row in summaries
+            if row["patch_text_regime"] == "definition"
+            and row["kind"] == "baseline_distribution"
+        ][0]
+        positive = [
+            row for row in summaries
+            if row["patch_text_regime"] == "definition"
+            and row["kind"] == "positive"
+        ][0]
+
+        self.assertEqual(baseline["count"], 2)
+        self.assertEqual(baseline["specific_pass_count"], 1)
+        self.assertEqual(positive["mean_advantage_percentile_vs_baseline"], 1.0)
 
 
 if __name__ == "__main__":

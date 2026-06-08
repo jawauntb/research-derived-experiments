@@ -749,3 +749,46 @@ Residual content:
 - Retractions or supersessions: supersede "semantically mediated answer-surface basin" with "generic label-free definition-derived target-state transfer; attractor-family rows are currently a special case only by topic, not by mechanism."
 
 Next move: build a broad label-free target-state transfer baseline across many concept pairs and compare the attractor-family rows against that null distribution.
+
+## Activation Geometry Probe: Label-Free Transfer Baseline
+
+Question: are the attractor-family label-free transfer rows exceptional against a broad null distribution?
+
+Current regime:
+
+- Artifact types: label-free patch payloads, centroid-readout rows, sampled baseline-pair rows, transfer-baseline summaries.
+- Operations: held-out centroid readout training, layer-5 activation patching, layer-6 downstream readout scoring, sampled same-category and cross-category baseline construction.
+- Gates/verifiers: exact definition-source no-op gate, target-over-control readout specificity gate, neutral-carrier stress test, baseline percentile comparison.
+- Known limitations: one checkpoint, one injection/readout layer pair, one alpha, limited concept inventory.
+
+Action class:
+
+- Retrieval/search/discovery: search inside the label-free readout regime.
+- Why: the run extends the null distribution without changing the intervention artifact type.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/label_free_transfer_baseline_2026_06_08.md`; local ignored payload under `artifacts/activation_geometry/modal_pythia_70m_deduped_label_free_transfer_baseline.json`.
+- Positive targets: `attractor` -> `attractor_network`.
+- Negative controls: neutral patch text, distractor/random/source patch modes.
+- Stress tests: 56 sampled baseline pairs split across same-category and cross-category rows.
+
+Gate:
+
+- Acceptance rule: promote attractor exceptionality only if focus/source-family rows sit high in the baseline advantage distribution.
+- Withheld/rejected rule: withhold attractor-specific claims if baseline rows pass at comparable or higher rates.
+
+Results:
+
+- Accepted artifacts: `experiments/activation_geometry/results/label_free_transfer_baseline_2026_06_08.md`; `experiments/activation_geometry/label_free_readout_basin.py`; `experiments/activation_geometry/modal_label_free_readout_basin.py`.
+- Rejected or withheld artifacts: attractor-specific activation basin claim is withheld.
+- Key metrics: definition baseline passes `43/56`; definition positive `1/1`; definition source-family `4/4`; source-family mean advantage percentile `71.4%`; source-family max advantage percentile `85.7%`; neutral baseline passes `7/56`.
+- Variance or ablation: definition content dominates neutral label-carrier transfer; cross-category definition baseline rows are stronger than same-category rows in this sample.
+
+Residual content:
+
+- Explained by old regime: the label-free attractor rows are examples of generic definition-derived target-state transfer.
+- New content outside old regime: the broader mechanism itself is now the residual worth explaining.
+- Retractions or supersessions: supersede "generic label-free target-state transfer, attractor-family special case uncertain" with "broad label-free target-state transfer; attractor-specific exceptionality rejected for now."
+
+Next move: run a layer/alpha dose-response to determine whether generic transfer is a late-state overwrite artifact or a propagating intervention.

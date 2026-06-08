@@ -558,6 +558,8 @@ def main(
     patch_alpha: float = 1.0,
     patch_modes: str = DEFAULT_PATCH_MODES,
     patch_text_regimes: str = DEFAULT_PATCH_TEXT_REGIMES,
+    pair_set: str = "focus",
+    baseline_sample_count: int = 56,
     seed: int = 20260608,
     out: str = "artifacts/activation_geometry/modal_label_free_readout_basin.json",
 ) -> None:
@@ -577,10 +579,11 @@ def main(
         PATCH_TEXT_REGIMES,
         aggregate_rows,
         gate_summaries,
-        label_free_pair_specs,
+        pair_specs_for_set,
         public_summary,
         serializable_pair_specs,
         specificity_rows,
+        transfer_baseline_summaries,
     )
 
     concept_rows = load_concepts(Path(concepts))
@@ -612,7 +615,14 @@ def main(
     )
     pair_specs = attach_random_patch_concepts(
         serializable_concepts,
-        serializable_pair_specs(label_free_pair_specs()),
+        serializable_pair_specs(
+            pair_specs_for_set(
+                serializable_concepts,
+                pair_set=pair_set,
+                sample_count=baseline_sample_count,
+                seed=seed,
+            )
+        ),
         seed=seed,
     )
     remote_payload = run_label_free_readout_remote.remote(
@@ -644,6 +654,8 @@ def main(
             "patch_alpha": patch_alpha,
             "patch_modes": parsed_patch_modes,
             "patch_text_regimes": parsed_patch_text_regimes,
+            "pair_set": pair_set,
+            "baseline_sample_count": baseline_sample_count,
             "max_length": max_length,
             "seed": seed,
             "pairs": pair_specs,
@@ -652,6 +664,7 @@ def main(
         "aggregate_rows": aggregates,
         "specificity_rows": specificity,
         "gate_summaries": gate_summaries(specificity),
+        "transfer_baseline_summaries": transfer_baseline_summaries(specificity),
     }
     if out and out.lower() != "none":
         write_payload(Path(out), payload)
