@@ -73,3 +73,39 @@ Residual content:
 - Retractions or supersessions: this should not be cited as evidence of shared active attractor dynamics.
 
 Next move: run paraphrase perturbations and a second embedding model before moving to activation-space probes.
+
+## Concept Geometry Probe: Paraphrase Stability
+
+Question: does the concept-neighborhood signal survive wording perturbation and a second embedding model?
+
+Current regime:
+
+- Artifact types: concept prompts, paraphrase variants, embedding vectors, concept centroids, bridge-pair scores, cross-model kernel summaries.
+- Operations: paraphrase expansion, OpenAI embedding calls, centroid construction, cosine-kernel comparison, bridge-pair scoring.
+- Gates/verifiers: paraphrase cohesion, centroid category separation, top-k category rate, cross-model kernel correlation, cross-model neighbor overlap, publication guard.
+- Known limitations: evidence remains inside language embedding models; paraphrases and bridge pairs are hand-authored.
+
+Action class:
+
+- Retrieval/search/discovery: search.
+- Why: this stress-tests an existing concept-geometry claim without changing the artifact schema or adding an activation-space verifier.
+
+Gate:
+
+- Acceptance rule: mean paraphrase cohesion at least `0.70`; minimum concept mean cohesion at least `0.60`; centroid category separation at least `0.10`; mean top-3 same-category rate at least `0.40`; cross-model kernel Pearson at least `0.80`; cross-model neighbor overlap at least `0.50`.
+- Withheld/rejected rule: raw embeddings and model payloads stay local-only under `artifacts/`.
+
+Results:
+
+- Accepted artifacts: `experiments/concept_geometry/results/paraphrase_stability_openai_2026_06_08.md`.
+- Rejected or withheld artifacts: `artifacts/concept_geometry/paraphrase_stability_openai.json`.
+- Key metrics: small-model paraphrase cohesion `0.7685`; large-model paraphrase cohesion `0.7835`; small-model category separation `0.1661`; large-model category separation `0.1559`; cross-model kernel Pearson `0.8884`; cross-model neighbor overlap `0.7292`.
+- Variance or ablation: 72 paraphrase variants across two OpenAI embedding models.
+
+Residual content:
+
+- Explained by old regime: language-level semantic similarity can still explain most of the geometry.
+- New content outside old regime: the bridge geometry is paraphrase-invariant and model-stable enough to justify moving into activation-space probes.
+- Retractions or supersessions: single-prompt embedding claims should now be treated as weaker than paraphrase-centroid claims.
+
+Next move: extract activation vectors from open models and test whether the same bridge directions appear outside embedding-only language space.
