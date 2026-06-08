@@ -19,6 +19,8 @@ DEFAULT_PATCH_MODES = "target,distractor,random,source_noop"
 DEFAULT_PATCH_TEXT_REGIMES = "definition,neutral"
 DEFAULT_PATCH_VECTOR_SURFACE = "hook_output"
 DEFAULT_PROMPT_FRAME = "source_passage"
+DEFAULT_SCORING_SURFACE = "option_token"
+DEFAULT_LABEL_SCORE_NORMALIZATION = "mean"
 DEFAULT_OPTION_ORDERS = (
     "source,target,distractor;"
     "target,distractor,source;"
@@ -29,6 +31,8 @@ PATCH_TEXT_REGIMES = ("definition", "neutral")
 PATCH_VECTOR_SURFACES = ("hidden_state", "hook_output")
 OPTION_ROLES = ("source", "target", "distractor")
 PROMPT_FRAMES = ("source_passage", "latent_choice")
+SCORING_SURFACES = ("option_token", "full_label")
+LABEL_SCORE_NORMALIZATIONS = ("mean", "sum")
 IMAGE = modal.Image.debian_slim(python_version="3.12").pip_install(
     "torch>=2.5,<2.8",
     "transformers>=4.46,<5.0",
@@ -142,6 +146,26 @@ def behavior_prompt(
     lines.append("")
     lines.append("Answer:")
     return "\n".join(lines)
+
+
+def full_label_prompt(
+    *,
+    source_text: str,
+    prompt_frame: str,
+) -> str:
+    if prompt_frame == "source_passage":
+        return "\n".join(
+            [
+                "Read the passage and name the concept it points to.",
+                "",
+                f"Passage: {source_text}",
+                "",
+                "Concept:",
+            ]
+        )
+    if prompt_frame == "latent_choice":
+        return "The concept most likely indicated by the model's current internal state is"
+    raise ValueError(f"Unknown prompt frame: {prompt_frame}")
 
 
 def target_margin(scores: dict[str, float]) -> float:
@@ -322,6 +346,34 @@ def prompt_vectors_for_surface(
     raise ValueError(f"Unknown patch vector surface: {patch_vector_surface}")
 
 
+def add_token_index_patch_hook(
+    *,
+    torch: Any,
+    model: Any,
+    layer: int,
+    token_indices: Any,
+    patch_vector: Any,
+    patch_alpha: float,
+) -> Any:
+    block = block_for_hidden_state_layer(model, layer)
+    patch_indices = token_indices.to(patch_vector.device).long()
+
+    def hook(_module: Any, _inputs: tuple[Any, ...], output: Any) -> Any:
+        hidden_states = output[0] if isinstance(output, tuple) else output
+        adjusted = hidden_states.clone()
+        batch_indices = torch.arange(adjusted.shape[0], device=adjusted.device)
+        current = adjusted[batch_indices, patch_indices]
+        replacement = patch_vector.to(device=adjusted.device, dtype=adjusted.dtype)
+        adjusted[batch_indices, patch_indices] = (
+            (1.0 - patch_alpha) * current + patch_alpha * replacement
+        )
+        if isinstance(output, tuple):
+            return (adjusted, *output[1:])
+        return adjusted
+
+    return block.register_forward_hook(hook)
+
+
 def add_final_token_patch_hook(
     *,
     torch: Any,
@@ -331,23 +383,15 @@ def add_final_token_patch_hook(
     patch_vector: Any,
     patch_alpha: float,
 ) -> Any:
-    block = block_for_hidden_state_layer(model, layer)
     final_indices = attention_mask.to(patch_vector.device).sum(dim=1).long() - 1
-
-    def hook(_module: Any, _inputs: tuple[Any, ...], output: Any) -> Any:
-        hidden_states = output[0] if isinstance(output, tuple) else output
-        adjusted = hidden_states.clone()
-        batch_indices = torch.arange(adjusted.shape[0], device=adjusted.device)
-        current = adjusted[batch_indices, final_indices]
-        replacement = patch_vector.to(device=adjusted.device, dtype=adjusted.dtype)
-        adjusted[batch_indices, final_indices] = (
-            (1.0 - patch_alpha) * current + patch_alpha * replacement
-        )
-        if isinstance(output, tuple):
-            return (adjusted, *output[1:])
-        return adjusted
-
-    return block.register_forward_hook(hook)
+    return add_token_index_patch_hook(
+        torch=torch,
+        model=model,
+        layer=layer,
+        token_indices=final_indices,
+        patch_vector=patch_vector,
+        patch_alpha=patch_alpha,
+    )
 
 
 def option_token_ids(tokenizer: Any) -> dict[str, int]:
@@ -420,6 +464,111 @@ def run_behavior_prompt(
     return option_logprobs(torch, logits, token_ids)
 
 
+def label_token_ids(tokenizer: Any, labels_by_role: dict[str, str]) -> dict[str, list[int]]:
+    token_ids = {}
+    for role, label in labels_by_role.items():
+        ids = tokenizer.encode(f" {label}", add_special_tokens=False)
+        if not ids:
+            raise ValueError(f"Could not encode label for {role!r}: {label!r}")
+        token_ids[role] = [int(token_id) for token_id in ids]
+    return token_ids
+
+
+def continuation_logprob(
+    *,
+    torch: Any,
+    logits: Any,
+    prompt_length: int,
+    continuation_ids: list[int],
+    label_score_normalization: str,
+) -> float:
+    token_logprobs = []
+    for offset, token_id in enumerate(continuation_ids):
+        prediction_index = prompt_length - 1 + offset
+        logprobs = torch.nn.functional.log_softmax(
+            logits[0, prediction_index].float(),
+            dim=-1,
+        )
+        token_logprobs.append(float(logprobs[token_id].item()))
+    if label_score_normalization == "sum":
+        return sum(token_logprobs)
+    if label_score_normalization == "mean":
+        return sum(token_logprobs) / len(token_logprobs)
+    raise ValueError(f"Unknown label score normalization: {label_score_normalization}")
+
+
+def run_full_label_prompt(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    prompt: str,
+    labels_by_role: dict[str, str],
+    injection_layer: int,
+    patch_vector: list[float] | None,
+    patch_alpha: float,
+    max_length: int,
+    label_score_normalization: str,
+) -> tuple[dict[str, float], dict[str, int]]:
+    continuation_ids_by_role = label_token_ids(tokenizer, labels_by_role)
+    max_continuation_tokens = max(len(ids) for ids in continuation_ids_by_role.values())
+    prompt_max_length = max(1, max_length - max_continuation_tokens)
+    prompt_ids = tokenizer.encode(
+        prompt,
+        add_special_tokens=False,
+        truncation=True,
+        max_length=prompt_max_length,
+    )
+    if not prompt_ids:
+        raise ValueError("Prompt encoded to zero tokens")
+
+    device = next(model.parameters()).device
+    scores = {}
+    token_counts = {}
+    for role, continuation_ids in continuation_ids_by_role.items():
+        input_ids = torch.tensor(
+            [prompt_ids + continuation_ids],
+            dtype=torch.long,
+            device=device,
+        )
+        attention_mask = torch.ones_like(input_ids)
+        handle = None
+        if patch_vector is not None:
+            patch_tensor = torch.tensor(
+                patch_vector,
+                dtype=next(model.parameters()).dtype,
+                device=device,
+            )
+            token_indices = torch.tensor([len(prompt_ids) - 1], device=device)
+            handle = add_token_index_patch_hook(
+                torch=torch,
+                model=model,
+                layer=injection_layer,
+                token_indices=token_indices,
+                patch_vector=patch_tensor,
+                patch_alpha=patch_alpha,
+            )
+        try:
+            with torch.inference_mode():
+                outputs = model(
+                    input_ids=input_ids,
+                    attention_mask=attention_mask,
+                    use_cache=False,
+                )
+        finally:
+            if handle is not None:
+                handle.remove()
+        scores[role] = continuation_logprob(
+            torch=torch,
+            logits=outputs.logits,
+            prompt_length=len(prompt_ids),
+            continuation_ids=continuation_ids,
+            label_score_normalization=label_score_normalization,
+        )
+        token_counts[role] = len(continuation_ids)
+    return scores, token_counts
+
+
 def heldout_text(
     records: list[dict[str, Any]],
     *,
@@ -453,6 +602,8 @@ def run_label_free_behavior_remote(
     patch_alphas: list[float],
     patch_vector_surface: str,
     prompt_frame: str,
+    scoring_surface: str,
+    label_score_normalization: str,
     option_orders: list[tuple[str, str, str]],
     max_length: int,
 ) -> dict[str, Any]:
@@ -514,18 +665,42 @@ def run_label_free_behavior_remote(
             )
             for concept_id, definition_text in definition_text_by_concept.items()
         }
-        baseline_scores_by_order = {}
-        prompts_by_order = {}
-        for option_order in option_orders:
-            prompt = behavior_prompt(
+        probe_specs = []
+        if scoring_surface == "option_token":
+            for option_order in option_orders:
+                prompt = behavior_prompt(
+                    source_text=source_prompt,
+                    labels_by_role=labels_by_role,
+                    option_order=option_order,
+                    prompt_frame=prompt_frame,
+                )
+                token_ids = role_token_ids(option_order, slot_token_ids)
+                baseline_scores = run_behavior_prompt(
+                    torch=torch,
+                    tokenizer=tokenizer,
+                    model=model,
+                    prompt=prompt,
+                    injection_layer=injection_layers[0],
+                    patch_vector=None,
+                    patch_alpha=0.0,
+                    max_length=max_length,
+                    token_ids=token_ids,
+                )
+                probe_specs.append(
+                    {
+                        "prompt": prompt,
+                        "option_order": option_order,
+                        "token_ids": token_ids,
+                        "baseline_scores": baseline_scores,
+                        "label_token_counts": None,
+                    }
+                )
+        elif scoring_surface == "full_label":
+            prompt = full_label_prompt(
                 source_text=source_prompt,
-                labels_by_role=labels_by_role,
-                option_order=option_order,
                 prompt_frame=prompt_frame,
             )
-            prompts_by_order[option_order] = prompt
-            token_ids = role_token_ids(option_order, slot_token_ids)
-            baseline_scores_by_order[option_order] = run_behavior_prompt(
+            baseline_scores, label_counts = run_full_label_prompt(
                 torch=torch,
                 tokenizer=tokenizer,
                 model=model,
@@ -534,8 +709,20 @@ def run_label_free_behavior_remote(
                 patch_vector=None,
                 patch_alpha=0.0,
                 max_length=max_length,
-                token_ids=token_ids,
+                labels_by_role=labels_by_role,
+                label_score_normalization=label_score_normalization,
             )
+            probe_specs.append(
+                {
+                    "prompt": prompt,
+                    "option_order": None,
+                    "token_ids": None,
+                    "baseline_scores": baseline_scores,
+                    "label_token_counts": label_counts,
+                }
+            )
+        else:
+            raise ValueError(f"Unknown scoring surface: {scoring_surface}")
         for injection_layer in injection_layers:
             for patch_text_regime in patch_text_regimes:
                 patch_vectors_by_concept = {}
@@ -562,21 +749,44 @@ def run_label_free_behavior_remote(
                 for mode in patch_modes:
                     patch_concept = patch_concept_for_mode(pair, mode)
                     for patch_alpha in patch_alphas:
-                        for option_order in option_orders:
-                            prompt = prompts_by_order[option_order]
-                            token_ids = role_token_ids(option_order, slot_token_ids)
-                            baseline_scores = baseline_scores_by_order[option_order]
-                            patched_scores = run_behavior_prompt(
-                                torch=torch,
-                                tokenizer=tokenizer,
-                                model=model,
-                                prompt=prompt,
-                                injection_layer=injection_layer,
-                                patch_vector=patch_vectors_by_concept[patch_concept],
-                                patch_alpha=patch_alpha,
-                                max_length=max_length,
-                                token_ids=token_ids,
-                            )
+                        for probe_spec in probe_specs:
+                            prompt = str(probe_spec["prompt"])
+                            baseline_scores = probe_spec["baseline_scores"]
+                            if scoring_surface == "option_token":
+                                patched_scores = run_behavior_prompt(
+                                    torch=torch,
+                                    tokenizer=tokenizer,
+                                    model=model,
+                                    prompt=prompt,
+                                    injection_layer=injection_layer,
+                                    patch_vector=patch_vectors_by_concept[
+                                        patch_concept
+                                    ],
+                                    patch_alpha=patch_alpha,
+                                    max_length=max_length,
+                                    token_ids=probe_spec["token_ids"],
+                                )
+                                label_token_counts = None
+                            else:
+                                patched_scores, label_token_counts = (
+                                    run_full_label_prompt(
+                                        torch=torch,
+                                        tokenizer=tokenizer,
+                                        model=model,
+                                        prompt=prompt,
+                                        injection_layer=injection_layer,
+                                        patch_vector=patch_vectors_by_concept[
+                                            patch_concept
+                                        ],
+                                        patch_alpha=patch_alpha,
+                                        max_length=max_length,
+                                        labels_by_role=labels_by_role,
+                                        label_score_normalization=(
+                                            label_score_normalization
+                                        ),
+                                    )
+                                )
+                            option_order = probe_spec["option_order"]
                             rows.append(
                                 {
                                     "pair": str(pair["id"]),
@@ -597,12 +807,21 @@ def run_label_free_behavior_remote(
                                     ],
                                     "patch_context": "label_free_behavior_gate",
                                     "prompt_frame": prompt_frame,
+                                    "scoring_surface": scoring_surface,
+                                    "label_score_normalization": (
+                                        label_score_normalization
+                                    ),
                                     "eval_variant_index": eval_variant_index,
                                     "patch_alpha": patch_alpha,
                                     "patch_vector_surface": patch_vector_surface,
                                     "source_prompt": source_prompt,
                                     "behavior_prompt": prompt,
-                                    "option_order": list(option_order),
+                                    "option_order": (
+                                        list(option_order)
+                                        if option_order is not None
+                                        else []
+                                    ),
+                                    "label_token_counts": label_token_counts,
                                     "scores": {
                                         "baseline": baseline_scores,
                                         "patched": patched_scores,
@@ -628,6 +847,8 @@ def main(
     patch_alphas: str = "",
     patch_vector_surface: str = DEFAULT_PATCH_VECTOR_SURFACE,
     prompt_frame: str = DEFAULT_PROMPT_FRAME,
+    scoring_surface: str = DEFAULT_SCORING_SURFACE,
+    label_score_normalization: str = DEFAULT_LABEL_SCORE_NORMALIZATION,
     patch_modes: str = DEFAULT_PATCH_MODES,
     patch_text_regimes: str = DEFAULT_PATCH_TEXT_REGIMES,
     option_orders: str = DEFAULT_OPTION_ORDERS,
@@ -652,6 +873,7 @@ def main(
         PATCH_TEXT_REGIMES,
         PATCH_VECTOR_SURFACES,
         PROMPT_FRAMES,
+        SCORING_SURFACES,
         aggregate_rows,
         gate_summaries,
         public_summary,
@@ -702,6 +924,16 @@ def main(
         allowed=PROMPT_FRAMES,
         name="Prompt frame",
     )[0]
+    parsed_scoring_surface = parse_values(
+        scoring_surface,
+        allowed=SCORING_SURFACES,
+        name="Scoring surface",
+    )[0]
+    parsed_label_score_normalization = parse_values(
+        label_score_normalization,
+        allowed=LABEL_SCORE_NORMALIZATIONS,
+        name="Label score normalization",
+    )[0]
     parsed_option_orders = parse_option_orders(option_orders)
     pair_specs = attach_random_patch_concepts(
         serializable_concepts,
@@ -727,6 +959,8 @@ def main(
         parsed_patch_alphas,
         parsed_patch_vector_surface,
         parsed_prompt_frame,
+        parsed_scoring_surface,
+        parsed_label_score_normalization,
         parsed_option_orders,
         max_length,
     )
@@ -746,6 +980,8 @@ def main(
             "patch_alphas": parsed_patch_alphas,
             "patch_vector_surface": parsed_patch_vector_surface,
             "prompt_frame": parsed_prompt_frame,
+            "scoring_surface": parsed_scoring_surface,
+            "label_score_normalization": parsed_label_score_normalization,
             "patch_modes": parsed_patch_modes,
             "patch_text_regimes": parsed_patch_text_regimes,
             "option_orders": [list(order) for order in parsed_option_orders],

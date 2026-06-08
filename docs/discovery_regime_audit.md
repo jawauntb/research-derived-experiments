@@ -1007,3 +1007,46 @@ Residual content:
 - Retractions or supersessions: supersede "next step may confirm behavior transfer" with "simple behavior transfer fails under option-token gates; behavior alignment needs a stronger intervention or different interface."
 
 Next move: design a behavior-aligned intervention rather than raw state replacement.
+
+## Activation Geometry Probe: Behavior Alignment Breakthrough Path
+
+Question: after the option-token behavior gate failed, can full-label scoring or learned behavior-aligned directions expose behavior-level transfer?
+
+Current regime:
+
+- Artifact types: hook-output patch payloads, option-token behavior rows, full-label continuation rows, learned-gradient direction rows, target-vs-control specificity summaries.
+- Operations: label-free definition/neutral state capture, final-token hook-output replacement, full-label continuation logprob scoring, train-variant gradient averaging, held-out option-token intervention.
+- Gates/verifiers: target must beat distractor/random/source-noop controls; definition should exceed neutral carrier; learned target direction should exceed source/distractor/random directions and avoid valence/control-layer leakage.
+- Known limitations: one seed, one small causal LM, exact-label scoring, neutral carriers are active, learned directions are still option-token based.
+
+Action class:
+
+- Retrieval/search/discovery: verifier transition plus intervention search.
+- Why: full-label scoring creates a new behavior verifier that accepts effects the previous option-token verifier rejected; learned directions add a new behavior-aligned intervention class.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/behavior_alignment_breakthrough_2026_06_08.md`; local ignored payloads under `artifacts/activation_geometry/modal_pythia_70m_full_label_behavior*.json` and `artifacts/activation_geometry/modal_pythia_70m_behavior_aligned_direction_seed20260608.json`.
+- Positive targets: focus rows plus 8 sampled baseline pairs for full-label; promoted steering pairs for learned directions.
+- Negative controls: neutral patch text, distractor/random/source-noop patch modes, source/distractor learned directions, random same-norm direction, valence controls, control layer.
+- Stress tests: prompt frames `latent_choice` and `source_passage`; injection layers `4,5,6`; alphas `0.75,1.0`; learned scales `0.5,1.0,2.0`.
+
+Gate:
+
+- Acceptance rule: accept behavior-surface improvement if definition target patches beat controls and definition carriers exceed neutral carriers on average.
+- Withheld/rejected rule: withhold clean semantic-causality or learned-direction claims if neutral carriers, valence controls, or control-layer directions match too much of the effect.
+
+Results:
+
+- Accepted artifacts: full-label behavior scoring surface; learned behavior-aligned direction pilot; Modal packaging fix for learned-direction runner.
+- Rejected or withheld artifacts: clean semantic-causality claim and learned-direction mechanism claim remain withheld.
+- Key metrics: full-label definition target patches pass up to `12/15`, with mean target-over-control advantage up to `0.881`; definition exceeds neutral mean advantage in every full-label cell; learned target direction passes `3/3` primary positives at all scales but also shows control leakage.
+- Variance or ablation: source-passage and latent-choice frames both show full-label movement; neutral carrier and learned-direction controls expose remaining confounds.
+
+Residual content:
+
+- Explained by old regime: broad definition-derived transfer remains generic and label carriers can move behavior surfaces.
+- New content outside old regime: the behavior-level negative result is surface-dependent; full-label continuation scoring exposes a behavior-visible effect.
+- Retractions or supersessions: supersede "raw state replacement fails behavior-level gates" with "raw state replacement fails option-token gates but passes full-label behavior gates with neutral-carrier caveats."
+
+Next move: replicate full-label behavior gates with stronger carrier/label controls and learn directions against the full-label objective.

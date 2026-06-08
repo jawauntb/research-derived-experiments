@@ -120,6 +120,33 @@ def objective_margin(logprobs: Any, token_ids: dict[str, int], role: str) -> Any
     return logprobs[token_ids[role]] - 0.5 * sum(logprobs[token_ids[name]] for name in others)
 
 
+def target_margin(scores: dict[str, float]) -> float:
+    return scores["target"] - ((scores["source"] + scores["distractor"]) / 2)
+
+
+def summarize_behavior_delta(
+    *,
+    baseline_scores: dict[str, float],
+    steered_scores: dict[str, float],
+) -> dict[str, Any]:
+    baseline_margin = target_margin(baseline_scores)
+    steered_margin = target_margin(steered_scores)
+    return {
+        "baseline_target_margin": baseline_margin,
+        "steered_target_margin": steered_margin,
+        "target_margin_delta": steered_margin - baseline_margin,
+        "target_logprob_delta": steered_scores["target"] - baseline_scores["target"],
+        "target_minus_source_delta": (
+            (steered_scores["target"] - steered_scores["source"])
+            - (baseline_scores["target"] - baseline_scores["source"])
+        ),
+        "target_minus_distractor_delta": (
+            (steered_scores["target"] - steered_scores["distractor"])
+            - (baseline_scores["target"] - baseline_scores["distractor"])
+        ),
+    }
+
+
 def transformer_blocks(model: Any) -> Any:
     if hasattr(model, "transformer") and hasattr(model.transformer, "h"):
         return model.transformer.h
@@ -386,9 +413,6 @@ def run_behavior_aligned_direction_remote(
 ) -> dict[str, Any]:
     torch = importlib.import_module("torch")
     transformers = importlib.import_module("transformers")
-    from experiments.activation_geometry.behavior_aligned_direction import (
-        summarize_behavior_delta,
-    )
 
     token = os.environ.get("HUGGINGFACE_TOKEN") or os.environ.get("HF_TOKEN") or None
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
