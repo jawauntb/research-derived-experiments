@@ -505,3 +505,39 @@ Residual content:
 - Retractions or supersessions: do not use the current multiple-choice gradient as semantic steering evidence; do not expect larger centroid scale alone to solve the causal mismatch.
 
 Next move: test causal patching from target concept activations before searching for larger or more complex additive steering vectors.
+
+## Activation Geometry Probe: Causal Patching Diagnostic
+
+Question: does direct target-concept activation patching rescue final-token bridge interventions?
+
+Current regime:
+
+- Artifact types: selected final-token layers, held-out concept prompts, target/distractor/random/source patch activations, option-order randomized target-margin payloads, specificity summaries.
+- Operations: final-token activation extraction, activation replacement hooks, option-order randomized log-probability margin scoring, target-vs-control patch comparison.
+- Gates/verifiers: primary/backup/control layers, valence controls, distractor/random/source patch controls, robust positive option-order rule, target-over-best-control specificity rule.
+- Known limitations: patch activations are extracted from concept-definition prompts, while the behavioral probe uses an option-choice prompt.
+
+Action class:
+
+- Retrieval/search/discovery: verifier upgrade that rejects the current behavioral interface.
+- Why: the run adds full-state causal patching as a stricter intervention operation than additive centroid steering.
+
+Gate:
+
+- Acceptance rule: positive bridge pairs must show primary-layer target-specific passes that beat distractor, random, and source-concept patch controls without valence-control leakage or control-layer replication.
+- Withheld/rejected rule: raw Modal payloads remain local-only under `artifacts/`; backup-only and control-layer-only target-specific rows are warnings.
+
+Results:
+
+- Accepted artifacts: `experiments/activation_geometry/results/causal_patching_diagnostic_2026_06_08.md`; `experiments/activation_geometry/modal_causal_patching.py`; `experiments/activation_geometry/causal_patching_diagnostic.py`.
+- Rejected or withheld artifacts: local-only Modal causal-patching payloads under `artifacts/activation_geometry/`.
+- Key metrics: Pythia primary positive target-specific passes `0/3`; GPT-2 primary positive target-specific passes `0/3`.
+- Variance or ablation: target, distractor, random, and source-concept patch controls tested across primary, backup, and control layers with three option orders.
+
+Residual content:
+
+- Explained by old regime: readout-selected bridge pairs need not become final-token answer-choice controls.
+- New content outside old regime: full target activation patching fails the same primary-layer target-specific gate, suggesting the answer-choice surface or context mismatch is the likely failure source.
+- Retractions or supersessions: do not treat direct concept activation patching as accepted causal bridge evidence for this probe.
+
+Next move: run matched-context activation patching before abandoning the final-token multiple-choice interface.
