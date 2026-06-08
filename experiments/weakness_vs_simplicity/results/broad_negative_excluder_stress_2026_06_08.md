@@ -74,5 +74,5 @@ Residual content:
 - New content outside old regime: raw weakness needs a validity gate; preserving compatible futures is not enough when a candidate can satisfy observations by refusing to learn the boundary.
 - Retractions or supersessions: weaken the initial informal claim from "weakness wins" to "weakness helps when the candidate class excludes degenerate broad hypotheses or when paired with a verifier."
 
-Next move: implement and test a validity-gated weakness selector.
+Next move: see `validated_weakness_stress_2026_06_08.md` for the validity-gated selector.
 

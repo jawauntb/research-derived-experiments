@@ -31,6 +31,8 @@ class TrialResult:
     selector: str
     train_positives: int
     train_negatives: int
+    validation_positives: int
+    validation_negatives: int
     target: str
     chosen: str
     chosen_form_length: int
@@ -157,6 +159,8 @@ def run_trial(
     selectors: Mapping[str, Callable[[list[Candidate], random.Random], Candidate]],
     train_positives: int,
     train_negatives: int,
+    validation_positives: int,
+    validation_negatives: int,
     include_memorizer: bool,
     include_broad_negative_excluder: bool,
 ) -> list[TrialResult]:
@@ -164,8 +168,12 @@ def run_trial(
     target = rng.choice(one_feature_targets)
     positive_pool = list(target.extension)
     negative_pool = [world for world in worlds if world not in target.extension]
-    positives = rng.sample(positive_pool, train_positives)
-    negatives = rng.sample(negative_pool, train_negatives)
+    positive_sample = rng.sample(positive_pool, train_positives + validation_positives)
+    negative_sample = rng.sample(negative_pool, train_negatives + validation_negatives)
+    positives = positive_sample[:train_positives]
+    negatives = negative_sample[:train_negatives]
+    validation_positive_examples = positive_sample[train_positives:]
+    validation_negative_examples = negative_sample[train_negatives:]
     candidate_pool = base_candidates
     if include_memorizer:
         candidate_pool = add_memorizer(candidate_pool, positives)
@@ -181,6 +189,26 @@ def run_trial(
                 selector=selector_name,
                 train_positives=train_positives,
                 train_negatives=train_negatives,
+                validation_positives=validation_positives,
+                validation_negatives=validation_negatives,
+                target=target.name,
+                chosen=chosen.name,
+                chosen_form_length=chosen.form_length,
+                chosen_weakness=chosen.weakness,
+                jaccard=jaccard(chosen.extension, target.extension),
+                accuracy=accuracy(chosen.extension, target.extension, worlds),
+            )
+        )
+    if validation_positives or validation_negatives:
+        validated_candidates = consistent(candidates, validation_positive_examples, validation_negative_examples)
+        chosen = choose_weakness(validated_candidates or candidates, rng)
+        results.append(
+            TrialResult(
+                selector="validated_weakness",
+                train_positives=train_positives,
+                train_negatives=train_negatives,
+                validation_positives=validation_positives,
+                validation_negatives=validation_negatives,
                 target=target.name,
                 chosen=chosen.name,
                 chosen_form_length=chosen.form_length,
@@ -219,6 +247,8 @@ def main() -> int:
     parser.add_argument("--trials", type=int, default=500)
     parser.add_argument("--train-positives", type=int, default=3)
     parser.add_argument("--train-negatives", type=int, default=3)
+    parser.add_argument("--validation-positives", type=int, default=0)
+    parser.add_argument("--validation-negatives", type=int, default=0)
     parser.add_argument("--seed", type=int, default=7)
     parser.add_argument("--no-memorizer", action="store_true", help="Remove the short memorizer candidate.")
     parser.add_argument(
@@ -248,6 +278,8 @@ def main() -> int:
                 selectors=selectors,
                 train_positives=args.train_positives,
                 train_negatives=args.train_negatives,
+                validation_positives=args.validation_positives,
+                validation_negatives=args.validation_negatives,
                 include_memorizer=not args.no_memorizer,
                 include_broad_negative_excluder=args.include_broad_negative_excluder,
             )
@@ -259,6 +291,8 @@ def main() -> int:
             "trials": args.trials,
             "train_positives": args.train_positives,
             "train_negatives": args.train_negatives,
+            "validation_positives": args.validation_positives,
+            "validation_negatives": args.validation_negatives,
             "seed": args.seed,
             "world_count": len(worlds),
             "base_candidate_count": len(base_candidates),

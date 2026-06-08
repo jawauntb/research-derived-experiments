@@ -10,6 +10,7 @@ from experiments.weakness_vs_simplicity.experiment import (
     choose_simplicity,
     choose_weakness,
     consistent,
+    run_trial,
     reusable_candidates,
 )
 
@@ -70,6 +71,28 @@ class WeaknessVsSimplicityTest(unittest.TestCase):
         self.assertEqual(weakness_choice.name, "exclude_observed_negatives")
         self.assertEqual(simplicity_choice.form_length, 4)
         self.assertNotEqual(simplicity_choice.name, "exclude_observed_negatives")
+
+    def test_validation_gate_recovers_from_broad_excluder(self) -> None:
+        worlds = all_worlds(4)
+        candidates = reusable_candidates(worlds, 4)
+        results = run_trial(
+            rng=random.Random(1),
+            worlds=worlds,
+            base_candidates=candidates,
+            selectors={"weakness": choose_weakness},
+            train_positives=2,
+            train_negatives=2,
+            validation_positives=0,
+            validation_negatives=3,
+            include_memorizer=False,
+            include_broad_negative_excluder=True,
+        )
+
+        by_selector = {result.selector: result for result in results}
+
+        self.assertEqual(by_selector["weakness"].chosen, "exclude_observed_negatives")
+        self.assertNotEqual(by_selector["validated_weakness"].chosen, "exclude_observed_negatives")
+        self.assertGreater(by_selector["validated_weakness"].jaccard, by_selector["weakness"].jaccard)
 
 
 if __name__ == "__main__":

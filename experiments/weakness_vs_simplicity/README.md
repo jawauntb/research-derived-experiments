@@ -29,3 +29,11 @@ python3 experiments/weakness_vs_simplicity/experiment.py --trials 500 --seed 7 -
 ```
 
 The broad-negative-excluder condition adds a candidate that accepts every world except the observed negatives. It is training-consistent and maximally weak, but it should overgeneralize. This stress test checks whether pure weakness needs an additional verifier or validity gate.
+
+Validated weakness:
+
+```bash
+python3 experiments/weakness_vs_simplicity/experiment.py --trials 500 --seed 7 --no-memorizer --include-broad-negative-excluder --validation-negatives 6 --out artifacts/weakness_vs_simplicity/validated_weakness_stress.json
+```
+
+When validation examples are provided, the script adds `validated_weakness`: choose the weakest training-consistent candidate that also survives withheld validation observations.

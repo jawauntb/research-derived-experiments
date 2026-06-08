@@ -17,7 +17,8 @@
 - [x] Run the pilot and record accepted/rejected artifacts.
 - [x] Add a negative control where memorizer hypotheses are removed.
 - [x] Add a stress test where the vocabulary includes overly broad unsafe hypotheses.
-- [ ] Add a validity-gated weakness selector and compare it against pure weakness.
+- [x] Add a validity-gated weakness selector and compare it against pure weakness.
+- [ ] Run seed/feature sweeps for the synthetic benchmark.
 - [ ] Extend from Boolean-rule worlds to text/classification prompts.
 - [ ] Compare against LLM-generated rules or embeddings.
 
