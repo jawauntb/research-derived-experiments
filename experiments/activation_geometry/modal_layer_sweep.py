@@ -15,6 +15,8 @@ modal = importlib.import_module("modal")
 
 DEFAULT_MODEL_ID = "EleutherAI/pythia-70m-deduped"
 DEFAULT_LAYERS = "0,1,2,3,4,5,6"
+DEFAULT_POOLING = "mean"
+POOLING_OPTIONS = ("mean", "final-token")
 IMAGE = modal.Image.debian_slim(python_version="3.12").pip_install(
     "torch>=2.5,<2.8",
     "transformers>=4.46,<5.0",
@@ -25,6 +27,28 @@ IMAGE = modal.Image.debian_slim(python_version="3.12").pip_install(
 app = modal.App(name="research-derived-activation-layer-sweep")
 
 
+def validate_pooling(value: str) -> str:
+    if value not in POOLING_OPTIONS:
+        options = ", ".join(POOLING_OPTIONS)
+        raise ValueError(f"Pooling must be one of: {options}")
+    return value
+
+
+def pool_hidden_states(hidden_states: Any, attention_mask: Any, pooling: str) -> Any:
+    pooling = validate_pooling(pooling)
+    if pooling == "mean":
+        mask = attention_mask.to(hidden_states.device).unsqueeze(-1).type_as(hidden_states)
+        return (hidden_states * mask).sum(dim=1) / mask.sum(dim=1).clamp(min=1)
+    token_counts = attention_mask.to(hidden_states.device).sum(dim=1).clamp(min=1)
+    final_indices = token_counts.long() - 1
+    gather_indices = final_indices.view(-1, 1, 1).expand(
+        -1,
+        1,
+        hidden_states.shape[-1],
+    )
+    return hidden_states.gather(dim=1, index=gather_indices).squeeze(1)
+
+
 @app.function(image=IMAGE, timeout=1800)
 def extract_layer_sweep_remote(
     records: list[dict[str, Any]],
@@ -32,10 +56,12 @@ def extract_layer_sweep_remote(
     layers: list[int],
     batch_size: int,
     max_length: int,
+    pooling: str,
 ) -> dict[str, list[list[float]]]:
     torch = importlib.import_module("torch")
     transformers = importlib.import_module("transformers")
 
+    pooling = validate_pooling(pooling)
     if batch_size < 1:
         raise ValueError("batch_size must be at least 1")
 
@@ -74,9 +100,11 @@ def extract_layer_sweep_remote(
                     f"Layer {layer} is outside hidden-state range "
                     f"[-{len(hidden_states)}, {len(hidden_states) - 1}]"
                 )
-            hidden = hidden_states[layer]
-            mask = encoded["attention_mask"].to(hidden.device).unsqueeze(-1).type_as(hidden)
-            pooled = (hidden * mask).sum(dim=1) / mask.sum(dim=1).clamp(min=1)
+            pooled = pool_hidden_states(
+                hidden_states[layer],
+                encoded["attention_mask"],
+                pooling,
+            )
             activations_by_layer[str(layer)].extend(pooled.float().cpu().tolist())
     return activations_by_layer
 
@@ -89,9 +117,11 @@ def main(
     layers: str = DEFAULT_LAYERS,
     batch_size: int = 8,
     max_length: int = 96,
+    pooling: str = DEFAULT_POOLING,
     top_k: int = 3,
     out: str = "artifacts/activation_geometry/modal_pythia_70m_layer_sweep.json",
 ) -> None:
+    pooling = validate_pooling(pooling)
     resolved_path = Path(__file__).resolve()
     repo_root = resolved_path.parents[2] if len(resolved_path.parents) > 2 else Path.cwd()
     if str(repo_root) not in sys.path:
@@ -126,6 +156,7 @@ def main(
         parsed_layers,
         batch_size,
         max_length,
+        pooling,
     )
     payload = payload_from_layer_activations(
         concepts=concept_rows,
@@ -145,8 +176,10 @@ def main(
         backend="modal-transformers",
         top_k=top_k,
         dry_run=False,
+        pooling=pooling,
     )
-    write_payload(Path(out), payload)
+    if out and out.lower() != "none":
+        write_payload(Path(out), payload)
     print(json.dumps(public_summary(payload), indent=2, sort_keys=True))
 
 

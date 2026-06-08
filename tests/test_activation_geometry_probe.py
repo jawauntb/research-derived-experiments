@@ -13,6 +13,7 @@ from experiments.activation_geometry.activation_geometry_probe import (
     payload_from_activations,
     payload_from_layer_activations,
     public_summary,
+    validate_pooling,
 )
 from experiments.concept_geometry.openai_embedding_probe import Concept
 
@@ -22,6 +23,12 @@ class ActivationGeometryProbeTest(unittest.TestCase):
         self.assertEqual(parse_layers("0, 1,-1"), [0, 1, -1])
         with self.assertRaises(ValueError):
             parse_layers(" , ")
+
+    def test_validate_pooling(self) -> None:
+        self.assertEqual(validate_pooling("mean"), "mean")
+        self.assertEqual(validate_pooling("final-token"), "final-token")
+        with self.assertRaises(ValueError):
+            validate_pooling("first-token")
 
     def test_activation_records_from_paraphrases(self) -> None:
         concepts = [
@@ -82,6 +89,7 @@ class ActivationGeometryProbeTest(unittest.TestCase):
         summary = public_summary(payload)
 
         self.assertEqual(summary["manifest"]["record_count"], 6)
+        self.assertEqual(summary["manifest"]["pooling"], "mean")
         self.assertIn("raw", summary["summary"])
         self.assertIn("mean_centered", summary["summary"])
 
@@ -134,10 +142,12 @@ class ActivationGeometryProbeTest(unittest.TestCase):
             backend="dry-run",
             top_k=2,
             dry_run=True,
+            pooling="final-token",
         )
         summary = public_summary(payload)
 
         self.assertEqual(summary["manifest"]["layers"], ["0", "1"])
+        self.assertEqual(summary["manifest"]["pooling"], "final-token")
         self.assertIn("0", summary["layer_metrics"])
         self.assertIn("mean_centered_bridge_lift", summary["layer_metrics"]["0"])
         self.assertIn(
