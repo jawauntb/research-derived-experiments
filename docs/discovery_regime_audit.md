@@ -878,3 +878,46 @@ Residual content:
 - Retractions or supersessions: supersede "same-layer cells invalid/unknown" with "same-layer cells are valid under hook-output patch vectors and invalid under post-final-LN hidden-state patch vectors."
 
 Next move: rerun the broader dose-response with `hook_output` and a larger baseline sample.
+
+## Activation Geometry Probe: Hook-Output Dose-Response Replication
+
+Question: does the label-free transfer ridge survive hook-output surface correction, a broader baseline, and a second seed?
+
+Current regime:
+
+- Artifact types: label-free patch payloads, hook-output patch-vector manifests, sampled baseline-pair rows, source-noop identity tables, dose-response summaries.
+- Operations: hook-output activation capture, held-out centroid readout training, final-token activation patching at transformer-block outputs, target-vs-control specificity aggregation.
+- Gates/verifiers: exact source-noop identity, definition-vs-neutral stress, alpha dose-response, baseline percentile comparison, two-seed replication.
+- Known limitations: one checkpoint, one readout layer, nearest-centroid readout, no behavior-level task yet.
+
+Action class:
+
+- Retrieval/search/discovery: consolidation search with verifier refinement.
+- Why: the run keeps the existing label-free patch schema but tests the ridge under a corrected surface, larger null, and second seed; the accepted same-layer cell revises a previously withheld artifact class.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/hook_output_dose_response_replication_2026_06_08.md`; local ignored payloads under `artifacts/activation_geometry/modal_pythia_70m_hook_output_dose_response_seed*.json`.
+- Positive targets: focus rows plus 24 sampled baseline pairs per seed.
+- Negative controls: neutral patch text, distractor/random/source-noop patch modes, broad baseline rows.
+- Stress tests: injection layers `3,4,5,6`; alphas `0.5,0.75,1.0`; two seeds; same-layer hook-output identity.
+
+Gate:
+
+- Acceptance rule: accept the replicated ridge only if source-noop is exact, definition patches show a stable layer/alpha specificity ridge across seeds, and neutral carriers do not match it.
+- Withheld/rejected rule: reject attractor-specific revival unless focus/source-family rows are clearly exceptional against baseline and generic controls.
+
+Results:
+
+- Accepted artifacts: `experiments/activation_geometry/results/hook_output_dose_response_replication_2026_06_08.md`; `scripts/summarize_label_free_dose_response.py`.
+- Rejected or withheld artifacts: no hook-output same-layer cells are withheld; attractor-specific revival is rejected.
+- Key metrics: source-noop max delta `0.0` across 744 aggregates; combined definition pass rates reach `38/62` at `4 -> 6`, `46/62` at `5 -> 6`, and `54/62` at `6 -> 6`; neutral at `6 -> 6`, alpha `1.0` reaches only `13/62`.
+- Variance or ablation: two seeds agree on the layer/alpha ridge; baseline-only rows show the same ridge, with `40/48` passes at `6 -> 6`, alpha `1.0`.
+
+Residual content:
+
+- Explained by old regime: broad definition-derived transfer remains generic rather than attractor-specific.
+- New content outside old regime: same-layer `6 -> 6` is now a valid hook-output artifact and is the strongest point on the ridge.
+- Retractions or supersessions: supersede "same-layer cells are invalid/unknown" with "same-layer cells are valid under hook-output patch vectors, but not attractor-specific."
+
+Next move: use trained readouts and behavior-level gates to distinguish representational transport from readout-only movement.
