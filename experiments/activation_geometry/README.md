@@ -29,3 +29,9 @@ doppler --scope /Users/jawaun/superoptimizers run -- uvx --python 3.12 --from mo
 ```
 
 For Pythia-70M, layer `0` is the embedding hidden state and layers `1..6` are transformer block outputs. Public reports should keep both raw and mean-centered metrics so anisotropy does not get hidden by a single headline score.
+
+Run the same sweep on GPT-2 as a second-model replication:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- uvx --python 3.12 --from modal modal run experiments/activation_geometry/modal_layer_sweep.py --model-id gpt2 --layers 0,1,2,3,4,5,6,7,8,9,10,11,12 --batch-size 8 --max-length 96 --out artifacts/activation_geometry/modal_gpt2_layer_sweep.json
+```
