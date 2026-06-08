@@ -94,6 +94,23 @@ def add_memorizer(candidates: list[Candidate], positives: list[World]) -> list[C
     ]
 
 
+def add_broad_negative_excluder(
+    candidates: list[Candidate],
+    worlds: list[World],
+    negatives: list[World],
+) -> list[Candidate]:
+    """Add an over-broad candidate that only excludes observed negatives."""
+    negative_set = set(negatives)
+    return [
+        *candidates,
+        Candidate(
+            name="exclude_observed_negatives",
+            extension=frozenset(world for world in worlds if world not in negative_set),
+            form_length=9,
+        ),
+    ]
+
+
 def consistent(candidates: Iterable[Candidate], positives: list[World], negatives: list[World]) -> list[Candidate]:
     return [
         candidate
@@ -141,6 +158,7 @@ def run_trial(
     train_positives: int,
     train_negatives: int,
     include_memorizer: bool,
+    include_broad_negative_excluder: bool,
 ) -> list[TrialResult]:
     one_feature_targets = [candidate for candidate in base_candidates if " & " not in candidate.name]
     target = rng.choice(one_feature_targets)
@@ -148,7 +166,11 @@ def run_trial(
     negative_pool = [world for world in worlds if world not in target.extension]
     positives = rng.sample(positive_pool, train_positives)
     negatives = rng.sample(negative_pool, train_negatives)
-    candidate_pool = add_memorizer(base_candidates, positives) if include_memorizer else base_candidates
+    candidate_pool = base_candidates
+    if include_memorizer:
+        candidate_pool = add_memorizer(candidate_pool, positives)
+    if include_broad_negative_excluder:
+        candidate_pool = add_broad_negative_excluder(candidate_pool, worlds, negatives)
     candidates = consistent(candidate_pool, positives, negatives)
 
     results: list[TrialResult] = []
@@ -183,6 +205,9 @@ def summarize(results: list[TrialResult]) -> dict[str, object]:
             "mean_form_length": mean(item.chosen_form_length for item in items),
             "mean_weakness": mean(item.chosen_weakness for item in items),
             "memorizer_rate": mean(1.0 if item.chosen == "memorize_observed_positives" else 0.0 for item in items),
+            "broad_negative_excluder_rate": mean(
+                1.0 if item.chosen == "exclude_observed_negatives" else 0.0 for item in items
+            ),
         }
         for selector, items in sorted(by_selector.items())
     }
@@ -196,6 +221,11 @@ def main() -> int:
     parser.add_argument("--train-negatives", type=int, default=3)
     parser.add_argument("--seed", type=int, default=7)
     parser.add_argument("--no-memorizer", action="store_true", help="Remove the short memorizer candidate.")
+    parser.add_argument(
+        "--include-broad-negative-excluder",
+        action="store_true",
+        help="Add an over-broad candidate that excludes only observed negatives.",
+    )
     parser.add_argument("--out", type=Path)
     args = parser.parse_args()
 
@@ -219,6 +249,7 @@ def main() -> int:
                 train_positives=args.train_positives,
                 train_negatives=args.train_negatives,
                 include_memorizer=not args.no_memorizer,
+                include_broad_negative_excluder=args.include_broad_negative_excluder,
             )
         )
 
@@ -232,6 +263,7 @@ def main() -> int:
             "world_count": len(worlds),
             "base_candidate_count": len(base_candidates),
             "include_memorizer": not args.no_memorizer,
+            "include_broad_negative_excluder": args.include_broad_negative_excluder,
         },
         "summary": summarize(results),
         "results": [asdict(result) for result in results],

@@ -21,3 +21,11 @@ Negative control:
 ```bash
 python3 experiments/weakness_vs_simplicity/experiment.py --trials 500 --seed 7 --no-memorizer --out artifacts/weakness_vs_simplicity/no_memorizer_control.json
 ```
+
+Stress test:
+
+```bash
+python3 experiments/weakness_vs_simplicity/experiment.py --trials 500 --seed 7 --no-memorizer --include-broad-negative-excluder --out artifacts/weakness_vs_simplicity/broad_negative_excluder_stress.json
+```
+
+The broad-negative-excluder condition adds a candidate that accepts every world except the observed negatives. It is training-consistent and maximally weak, but it should overgeneralize. This stress test checks whether pure weakness needs an additional verifier or validity gate.

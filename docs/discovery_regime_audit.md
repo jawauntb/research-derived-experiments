@@ -25,8 +25,8 @@ Results:
 
 - Accepted artifacts: `experiments/weakness_vs_simplicity/results/pilot_2026_06_08.md`.
 - Rejected or withheld artifacts: `references/papers/`, `references/text/`, `references/html/`.
-- Key metrics: trap condition weakness mean Jaccard 0.9533; simplicity mean Jaccard 0.0938; random mean Jaccard 0.5061. No-memorizer control weakness mean Jaccard 0.9587; simplicity mean Jaccard 0.9493.
-- Variance or ablation: no-memorizer control added; unsafe broad-hypothesis stress test pending.
+- Key metrics: trap condition weakness mean Jaccard 0.9533; simplicity mean Jaccard 0.0938; random mean Jaccard 0.5061. No-memorizer control weakness mean Jaccard 0.9587; simplicity mean Jaccard 0.9493. Broad-negative-excluder stress weakness mean Jaccard 0.5246; simplicity mean Jaccard 0.9560.
+- Variance or ablation: no-memorizer control and unsafe broad-hypothesis stress test added.
 
 Residual content:
 
@@ -36,4 +36,4 @@ Residual content:
 
 Environment note: `superoptimizers` has Doppler project `cofounder` / config `dev` configured. Presence-only probe found OpenAI, Anthropic, Gemini, Hugging Face, and Modal token variables available. No secret values are recorded here.
 
-Next move: publish via feature branch and PR, then add negative controls for the first benchmark.
+Next move: add a validity-gated weakness selector that rejects overly broad candidates using explicit negative-control coverage rather than raw extension size alone.
