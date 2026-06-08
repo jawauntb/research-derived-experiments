@@ -54,7 +54,8 @@
 - [x] Run a broad label-free target-state transfer baseline and compare attractor-family rows against the null distribution.
 - [x] Run a layer/alpha dose-response for broad label-free target-state transfer.
 - [ ] Replicate the layer-4/5 downstream transfer ridge with a broader baseline and second seed/checkpoint.
-- [ ] Add a hook/readout-surface diagnostic for same-layer label-free patching.
+- [x] Add a hook/readout-surface diagnostic for same-layer label-free patching.
+- [ ] Rerun the label-free dose-response ridge with hook-output patch vectors and a broader baseline.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.
 - [ ] Add anisotropy and directional-curvature proxy checks to activation sweeps where feasible.
 

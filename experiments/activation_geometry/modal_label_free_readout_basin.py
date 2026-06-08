@@ -18,8 +18,10 @@ DEFAULT_INJECTION_LAYER = 5
 DEFAULT_READOUT_LAYER = 6
 DEFAULT_PATCH_MODES = "target,distractor,random,source_noop"
 DEFAULT_PATCH_TEXT_REGIMES = "definition,neutral"
+DEFAULT_PATCH_VECTOR_SURFACE = "hook_output"
 PATCH_MODES = ("target", "distractor", "random", "source_noop")
 PATCH_TEXT_REGIMES = ("definition", "neutral")
+PATCH_VECTOR_SURFACES = ("hidden_state", "hook_output")
 IMAGE = modal.Image.debian_slim(python_version="3.12").pip_install(
     "torch>=2.5,<2.8",
     "transformers>=4.46,<5.0",
@@ -215,6 +217,85 @@ def prompt_layer_vectors(
     )
 
 
+def prompt_hook_output_vectors(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    prompt: str,
+    layers: list[int],
+    max_length: int,
+) -> dict[int, list[float]]:
+    encoded = tokenizer(
+        prompt,
+        return_tensors="pt",
+        truncation=True,
+        max_length=max_length,
+    )
+    device = next(model.parameters()).device
+    encoded = {name: value.to(device) for name, value in encoded.items()}
+    final_indices = encoded["attention_mask"].to(device).sum(dim=1).long() - 1
+    captured: dict[int, list[float]] = {}
+    handles = []
+
+    def make_hook(layer: int) -> Any:
+        def hook(_module: Any, _inputs: tuple[Any, ...], output: Any) -> None:
+            hidden_states = output[0] if isinstance(output, tuple) else output
+            vector = hidden_states[0, final_indices[0]].detach().float().cpu()
+            captured[layer] = vector.tolist()
+
+        return hook
+
+    for layer in sorted(set(layers)):
+        handles.append(
+            block_for_hidden_state_layer(model, layer).register_forward_hook(
+                make_hook(layer),
+            )
+        )
+    try:
+        with torch.inference_mode():
+            model(**encoded, output_hidden_states=False, use_cache=False)
+    finally:
+        for handle in handles:
+            handle.remove()
+
+    missing_layers = sorted(set(layers) - set(captured))
+    if missing_layers:
+        raise ValueError(f"Missing hook outputs for layers: {missing_layers}")
+    return captured
+
+
+def prompt_vectors_for_surface(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    prompt: str,
+    layers: list[int],
+    max_length: int,
+    patch_vector_surface: str,
+) -> dict[int, list[float]]:
+    if patch_vector_surface == "hidden_state":
+        return prompt_layer_vectors(
+            torch=torch,
+            tokenizer=tokenizer,
+            model=model,
+            prompt=prompt,
+            layers=layers,
+            max_length=max_length,
+        )
+    if patch_vector_surface == "hook_output":
+        return prompt_hook_output_vectors(
+            torch=torch,
+            tokenizer=tokenizer,
+            model=model,
+            prompt=prompt,
+            layers=layers,
+            max_length=max_length,
+        )
+    raise ValueError(f"Unknown patch vector surface: {patch_vector_surface}")
+
+
 def patched_prompt_readout_vectors(
     *,
     torch: Any,
@@ -360,6 +441,7 @@ def run_label_free_readout_remote(
     train_variant_indices: list[int],
     eval_variant_index: int,
     patch_alphas: list[float],
+    patch_vector_surface: str,
     max_length: int,
 ) -> dict[str, Any]:
     torch = importlib.import_module("torch")
@@ -444,13 +526,14 @@ def run_label_free_readout_remote(
             max_length=max_length,
         )
         patch_base_vectors = {
-            concept_id: prompt_layer_vectors(
+            concept_id: prompt_vectors_for_surface(
                 torch=torch,
                 tokenizer=tokenizer,
                 model=model,
                 prompt=definition_text,
                 layers=injection_layers,
                 max_length=max_length,
+                patch_vector_surface=patch_vector_surface,
             )
             for concept_id, definition_text in definition_text_by_concept.items()
         }
@@ -468,13 +551,14 @@ def run_label_free_readout_remote(
                         label=labels_by_concept[concept_id],
                         patch_text_regime=patch_text_regime,
                     )
-                    patch_vectors_by_concept[concept_id] = prompt_layer_vectors(
+                    patch_vectors_by_concept[concept_id] = prompt_vectors_for_surface(
                         torch=torch,
                         tokenizer=tokenizer,
                         model=model,
                         prompt=patch_prompt,
                         layers=[injection_layer],
                         max_length=max_length,
+                        patch_vector_surface=patch_vector_surface,
                     )[injection_layer]
                 for mode in patch_modes:
                     patch_concept = patch_concept_for_mode(pair, mode)
@@ -544,6 +628,7 @@ def run_label_free_readout_remote(
                                     "train_variant_indices": train_variant_indices,
                                     "eval_variant_index": eval_variant_index,
                                     "patch_alpha": patch_alpha,
+                                    "patch_vector_surface": patch_vector_surface,
                                     "source_prompt": source_prompt,
                                     "scores": {
                                         "baseline": baseline_scores,
@@ -571,6 +656,7 @@ def main(
     eval_variant: int = 2,
     patch_alpha: float = 1.0,
     patch_alphas: str = "",
+    patch_vector_surface: str = DEFAULT_PATCH_VECTOR_SURFACE,
     patch_modes: str = DEFAULT_PATCH_MODES,
     patch_text_regimes: str = DEFAULT_PATCH_TEXT_REGIMES,
     pair_set: str = "focus",
@@ -592,6 +678,7 @@ def main(
     )
     from experiments.activation_geometry.label_free_readout_basin import (
         PATCH_TEXT_REGIMES,
+        PATCH_VECTOR_SURFACES,
         aggregate_rows,
         dose_response_summaries,
         gate_summaries,
@@ -634,6 +721,11 @@ def main(
         allowed=PATCH_TEXT_REGIMES,
         name="Patch text regimes",
     )
+    parsed_patch_vector_surface = parse_values(
+        patch_vector_surface,
+        allowed=PATCH_VECTOR_SURFACES,
+        name="Patch vector surface",
+    )[0]
     pair_specs = attach_random_patch_concepts(
         serializable_concepts,
         serializable_pair_specs(
@@ -658,6 +750,7 @@ def main(
         parsed_train_variants,
         eval_variant,
         parsed_patch_alphas,
+        parsed_patch_vector_surface,
         max_length,
     )
     aggregates = aggregate_rows(remote_payload["rows"])
@@ -674,6 +767,7 @@ def main(
             "eval_variant_index": eval_variant,
             "patch_alpha": parsed_patch_alphas[0] if len(parsed_patch_alphas) == 1 else None,
             "patch_alphas": parsed_patch_alphas,
+            "patch_vector_surface": parsed_patch_vector_surface,
             "patch_modes": parsed_patch_modes,
             "patch_text_regimes": parsed_patch_text_regimes,
             "pair_set": pair_set,
