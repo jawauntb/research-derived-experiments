@@ -469,3 +469,39 @@ Residual content:
 - Retractions or supersessions: do not treat sign-flipped or unit-normalized centroid directions as accepted steering directions.
 
 Next move: redesign the intervention verifier around learned/readout-conditioned directions or causal patching before any free-form generation run.
+
+## Activation Geometry Probe: Steering Gradient-Alignment Diagnostic
+
+Question: are bridge centroid directions aligned with the local output-margin gradient used by the final-token multiple-choice steering probe?
+
+Current regime:
+
+- Artifact types: selected final-token layers, held-out concept prompts, source-target centroid directions, prompt-local output-margin gradients, option-order randomized intervention payloads, centroid-gradient alignment summaries.
+- Operations: final-token activation extraction, output-margin gradient capture via activation leaf hook, same-norm gradient and random controls, transformer-block forward hooks, option-order randomized log-probability margin scoring.
+- Gates/verifiers: primary/backup/control layers, valence controls, random same-norm controls, option-order robust-pass rule, centroid-gradient cosine, cross-model replication.
+- Known limitations: gradients are prompt-local and option-token-local; this is still a multiple-choice next-token probe, not free-form behavior.
+
+Action class:
+
+- Retrieval/search/discovery: verifier transition.
+- Why: the run adds a new causal-alignment artifact, `centroid-gradient cosine`, and distinguishes representational readout axes from output-control axes.
+
+Gate:
+
+- Acceptance rule: a semantic steering direction would need primary and backup positive passes without primary valence-control passes or control-layer replication, plus materially positive centroid-gradient alignment.
+- Withheld/rejected rule: raw Modal payloads remain local-only under `artifacts/`; gradient directions are treated as nonspecific controls unless they clear specificity gates.
+
+Results:
+
+- Accepted artifacts: `experiments/activation_geometry/results/steering_gradient_alignment_2026_06_08.md`; `experiments/activation_geometry/modal_steering_gradient_alignment.py`; `experiments/activation_geometry/steering_gradient_alignment.py`.
+- Rejected or withheld artifacts: local-only Modal gradient-alignment payloads under `artifacts/activation_geometry/`.
+- Key metrics: primary positive centroid-gradient cosine is `0.004070` for Pythia-70M and `0.000151` for GPT-2; gradient directions pass `3/3` primary positives but also `2/2` primary valence controls and `3/3` control-layer positives in both models.
+- Variance or ablation: centroid, gradient same-norm, gradient unit, random same-norm, and three option orders tested across both models.
+
+Residual content:
+
+- Explained by old regime: readout-selected centroid directions can be stable representational axes without being local causal output-control axes.
+- New content outside old regime: bridge centroids are near-orthogonal to prompt-local target-margin gradients across two models, suggesting a separation between representation geometry and the next-token option-control interface.
+- Retractions or supersessions: do not use the current multiple-choice gradient as semantic steering evidence; do not expect larger centroid scale alone to solve the causal mismatch.
+
+Next move: test causal patching from target concept activations before searching for larger or more complex additive steering vectors.
