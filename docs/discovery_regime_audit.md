@@ -181,3 +181,39 @@ Residual content:
 - Retractions or supersessions: none.
 
 Next move: keep the current activation layer sweep plan, but report anisotropy and consider cheap directional-curvature proxies before any strong mechanistic claim.
+
+## Activation Geometry Probe: Pythia-70M Layer Sweep
+
+Question: does activation-space bridge geometry survive a layer sweep?
+
+Current regime:
+
+- Artifact types: paraphrased concept prompts, pooled hidden-state vectors, layer-indexed raw and centered geometry summaries, bridge-lift reports, audit cards.
+- Operations: Modal-backed open-model extraction, multi-layer hidden-state pooling, global mean-centering, cosine-kernel summary, bridge-lift comparison.
+- Gates/verifiers: layerwise centered category separation, bridge lift, bridge-pair rate, raw anisotropy inspection, publication guard.
+- Known limitations: one small model, one pooling rule, hand-authored bridge pairs, no causal intervention.
+
+Action class:
+
+- Retrieval/search/discovery: search.
+- Why: the run extends the activation-space artifact across layers inside the current schema; it does not yet add a new verifier or causal operation.
+
+Gate:
+
+- Acceptance rule: at least two transformer block-output layers must have centered category separation at least `0.05`, centered bridge lift at least `0.05`, and bridge-pair above-baseline rate at least `0.75`.
+- Withheld/rejected rule: raw activation JSON stays untracked under `artifacts/`; layers that fail the gate remain in the public report.
+
+Results:
+
+- Accepted artifacts: `experiments/activation_geometry/results/modal_pythia_70m_layer_sweep_2026_06_08.md`; `experiments/activation_geometry/modal_layer_sweep.py`; layer-sweep payload helpers in `activation_geometry_probe.py`.
+- Rejected or withheld artifacts: local-only `artifacts/activation_geometry/modal_pythia_70m_layer_sweep.json`.
+- Key metrics: layer `2` centered bridge lift `0.2248`; layer `2` centered category separation `0.1857`; layer `2` centered bridge-pair rate `0.9167`. Layers `1`, `2`, `5`, and `6` clear the block-output gate.
+- Variance or ablation: layer `3` and layer `4` fail the gate; layer `6` reproduces the previous final-layer result.
+
+Residual content:
+
+- Explained by old regime: language-level semantic similarity and embedding geometry may explain layer `0`.
+- New content outside old regime: centered bridge geometry survives multiple transformer block outputs but weakens sharply in the middle layers.
+- Retractions or supersessions: the final-layer result should be treated as one point in a layer-dependent profile, not as the canonical activation geometry of the model.
+
+Next move: replicate the layer sweep on a second open model, then convert the strongest layer-2 bridge pairs into steering or classification interventions.
