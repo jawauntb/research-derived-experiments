@@ -42,7 +42,8 @@
 - [x] Select pooling-aware candidate layers for classifier and steering interventions.
 - [x] Run held-out paraphrase classifier/readout pilot on selected mean-pooling layers.
 - [x] Run pair-level control-leakage diagnostics with shuffled and category-matched random bridge pairs.
-- [ ] Run first final-token steering pilot on selected generation layers.
+- [x] Run first final-token steering pilot on selected generation layers.
+- [ ] Run steering calibration diagnostic with normalized/sign-flipped/random directions and option-order randomization.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.
 - [ ] Add anisotropy and directional-curvature proxy checks to activation sweeps where feasible.
 
