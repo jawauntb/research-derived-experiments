@@ -433,3 +433,39 @@ Residual content:
 - Retractions or supersessions: do not claim the promoted readout pairs are steering directions without calibration.
 
 Next move: implement a steering calibration diagnostic before any free-form generation run.
+
+## Activation Geometry Probe: Steering Calibration Diagnostic
+
+Question: can steering calibration turn promoted bridge readouts into reliable final-token interventions?
+
+Current regime:
+
+- Artifact types: selected final-token layers, held-out concept prompts, source-target activation directions, direction-mode calibration payloads, option-order randomized next-token margin probes.
+- Operations: final-token activation extraction, direction sign/normalization variants, same-norm random direction controls, transformer-block forward hooks, option-order randomized log-probability margin scoring.
+- Gates/verifiers: primary/backup/control layers, valence controls, random direction controls, option-order robust-pass rule, cross-model replication.
+- Known limitations: one fixed intervention scale, centroid directions only, multiple-choice next-token probe rather than free-form generation, no learned direction objective.
+
+Action class:
+
+- Retrieval/search/discovery: verifier upgrade that rejects the current steering operation.
+- Why: this run adds option-order and random-direction controls that the previous steering pilot could not represent, and it clarifies that the current intervention is underidentified.
+
+Gate:
+
+- Acceptance rule: a direction mode must pass at least two of three positive bridge pairs in primary and backup layers, pass no primary valence controls, avoid control-layer replication, and replicate across models.
+- Withheld/rejected rule: raw Modal payloads remain local-only under `artifacts/`; partial primary-layer effects are recorded but not promoted.
+
+Results:
+
+- Accepted artifacts: `experiments/activation_geometry/results/steering_calibration_diagnostic_2026_06_08.md`; `experiments/activation_geometry/modal_steering_calibration.py`; `experiments/activation_geometry/steering_calibration_diagnostic.py`.
+- Rejected or withheld artifacts: local-only Modal calibration payloads under `artifacts/activation_geometry/`.
+- Key metrics: Pythia primary positive pass count never exceeds `1/3`; GPT-2 `raw_target_minus_source` reaches `2/3` primary positives with `0/2` valence controls but fails backup replication; GPT-2 `unit_target_minus_source` reaches `2/3` primary and backup positives but also `2/3` control-layer positives.
+- Variance or ablation: direction sign, unit normalization, same-norm random directions, and three option orders tested.
+
+Residual content:
+
+- Explained by old regime: readout-selected bridge pairs can create plausible but non-specific next-token margin shifts.
+- New content outside old regime: option-order and random-direction controls show that the current final-token additive intervention is too underidentified for causal claims.
+- Retractions or supersessions: do not treat sign-flipped or unit-normalized centroid directions as accepted steering directions.
+
+Next move: redesign the intervention verifier around learned/readout-conditioned directions or causal patching before any free-form generation run.
