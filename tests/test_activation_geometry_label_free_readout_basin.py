@@ -5,6 +5,7 @@ import unittest
 from experiments.activation_geometry.label_free_readout_basin import (
     PATCH_TEXT_REGIMES,
     PATCH_VECTOR_SURFACES,
+    READOUT_MODES,
     aggregate_rows,
     baseline_pair_specs,
     dose_response_summaries,
@@ -194,6 +195,43 @@ class LabelFreeReadoutBasinTest(unittest.TestCase):
         self.assertEqual(set(by_surface), set(PATCH_VECTOR_SURFACES))
         self.assertFalse(by_surface["hidden_state"]["specific_target_pass"])
         self.assertTrue(by_surface["hook_output"]["specific_target_pass"])
+
+    def test_specificity_keeps_readout_modes_separate(self) -> None:
+        rows = []
+        for readout_mode, target_delta in (
+            ("centroid", 0.4),
+            ("ridge", -0.1),
+        ):
+            for patch_mode, delta, rank in (
+                ("target", target_delta, 1),
+                ("distractor", 0.1, 4),
+                ("random", -0.1, 5),
+                ("source_noop", 0.0, 6),
+            ):
+                rows.append(
+                    {
+                        "kind": "positive",
+                        "pair": "attractor->attractor_network/d=prototype",
+                        "injection_layer": 6,
+                        "readout_layer": 6,
+                        "readout_mode": readout_mode,
+                        "patch_alpha": 1.0,
+                        "patch_vector_surface": "hook_output",
+                        "patch_text_regime": "definition",
+                        "patch_mode": patch_mode,
+                        "summary": {
+                            "target_margin_delta": delta,
+                            "patched_target_top3": rank <= 3,
+                        },
+                    }
+                )
+
+        specificity = specificity_rows(aggregate_rows(rows))
+        by_readout = {row["readout_mode"]: row for row in specificity}
+
+        self.assertEqual(set(by_readout), set(READOUT_MODES))
+        self.assertTrue(by_readout["centroid"]["specific_target_pass"])
+        self.assertFalse(by_readout["ridge"]["specific_target_pass"])
 
     def test_transfer_baseline_summary_reports_focus_percentiles(self) -> None:
         specificity = [

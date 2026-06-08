@@ -55,6 +55,7 @@ def manifest_rows(payloads: list[tuple[Path, JsonRow]]) -> list[JsonRow]:
                 "model": manifest["model_id"],
                 "seed": manifest["seed"],
                 "surface": manifest.get("patch_vector_surface", "hidden_state"),
+                "readout_modes": ",".join(manifest.get("readout_modes", ["centroid"])),
                 "injection_layers": ",".join(map(str, manifest["injection_layers"])),
                 "readout_layers": ",".join(map(str, manifest["readout_layers"])),
                 "alphas": ",".join(map(str, manifest["patch_alphas"])),
@@ -82,17 +83,21 @@ def source_noop_rows(payloads: list[tuple[Path, JsonRow]]) -> list[JsonRow]:
                 row.get("patch_vector_surface", "hidden_state"),
                 row["injection_layer"],
                 row["readout_layer"],
+                row.get("readout_mode", "centroid"),
                 row.get("patch_alpha", 1.0),
             )
             grouped[key].append(abs(float(row["mean_target_margin_delta"])))
 
     rows = []
-    for (label, surface, injection, readout, alpha), values in sorted(grouped.items()):
+    for (label, surface, injection, readout, readout_mode, alpha), values in sorted(
+        grouped.items()
+    ):
         rows.append(
             {
                 "artifact": label,
                 "surface": surface,
                 "cell": f"{injection} -> {readout}",
+                "readout_mode": readout_mode,
                 "alpha": alpha,
                 "rows": len(values),
                 "max_abs_delta": max(values),
@@ -114,12 +119,15 @@ def all_pair_rows(payloads: list[tuple[Path, JsonRow]], regime: str) -> list[Jso
                 label,
                 row["injection_layer"],
                 row["readout_layer"],
+                row.get("readout_mode", "centroid"),
                 row.get("patch_alpha", 1.0),
             )
             grouped[key].append(row)
 
     rows = []
-    for (label, injection, readout, alpha), group in sorted(grouped.items()):
+    for (label, injection, readout, readout_mode, alpha), group in sorted(
+        grouped.items()
+    ):
         deltas = [float(row["target_mean_target_margin_delta"]) for row in group]
         advantages = [
             float(row["target_advantage_over_best_control"]) for row in group
@@ -129,6 +137,7 @@ def all_pair_rows(payloads: list[tuple[Path, JsonRow]], regime: str) -> list[Jso
             {
                 "artifact": label,
                 "cell": f"{injection} -> {readout}",
+                "readout_mode": readout_mode,
                 "alpha": alpha,
                 "passes": passes,
                 "total": len(group),
@@ -164,6 +173,7 @@ def by_kind_rows(payloads: list[tuple[Path, JsonRow]], regime: str) -> list[Json
                     "artifact": label,
                     "kind": row["kind"],
                     "cell": f"{row['injection_layer']} -> {row['readout_layer']}",
+                    "readout_mode": row.get("readout_mode", "centroid"),
                     "alpha": row["patch_alpha"],
                     "passes": row["specific_pass_count"],
                     "total": row["count"],
@@ -177,6 +187,7 @@ def by_kind_rows(payloads: list[tuple[Path, JsonRow]], regime: str) -> list[Json
         key=lambda row: (
             row["artifact"],
             row["cell"],
+            row["readout_mode"],
             float(row["alpha"]),
             row["kind"],
         ),
@@ -197,6 +208,7 @@ def baseline_percentile_rows(
             rows.append(
                 {
                     "artifact": label,
+                    "readout_mode": row.get("readout_mode", "centroid"),
                     "kind": row["kind"],
                     "count": row["count"],
                     "passes": row["specific_pass_count"],
@@ -231,6 +243,7 @@ def render_manifest(rows: list[JsonRow]) -> str:
             "Model",
             "Seed",
             "Surface",
+            "Readout modes",
             "Injection layers",
             "Readout",
             "Alphas",
@@ -244,6 +257,7 @@ def render_manifest(rows: list[JsonRow]) -> str:
                 row["model"],
                 str(row["seed"]),
                 row["surface"],
+                row["readout_modes"],
                 row["injection_layers"],
                 row["readout_layers"],
                 row["alphas"],
@@ -262,6 +276,7 @@ def render_source_noop(rows: list[JsonRow]) -> str:
             "Artifact",
             "Surface",
             "Cell",
+            "Readout",
             "Alpha",
             "Rows",
             "Max abs source-noop delta",
@@ -272,6 +287,7 @@ def render_source_noop(rows: list[JsonRow]) -> str:
                 row["artifact"],
                 row["surface"],
                 row["cell"],
+                row["readout_mode"],
                 fmt_number(float(row["alpha"])),
                 str(row["rows"]),
                 fmt_number(row["max_abs_delta"]),
@@ -287,6 +303,7 @@ def render_all_pair(rows: list[JsonRow]) -> str:
         [
             "Artifact",
             "Cell",
+            "Readout",
             "Alpha",
             "Specific passes",
             "Pass rate",
@@ -299,6 +316,7 @@ def render_all_pair(rows: list[JsonRow]) -> str:
             [
                 row["artifact"],
                 row["cell"],
+                row["readout_mode"],
                 fmt_number(float(row["alpha"])),
                 f"{row['passes']}/{row['total']}",
                 fmt_rate(row["pass_rate"]),
@@ -317,6 +335,7 @@ def render_by_kind(rows: list[JsonRow]) -> str:
         [
             "Artifact",
             "Cell",
+            "Readout",
             "Alpha",
             "Kind",
             "Specific passes",
@@ -328,6 +347,7 @@ def render_by_kind(rows: list[JsonRow]) -> str:
             [
                 row["artifact"],
                 row["cell"],
+                row["readout_mode"],
                 fmt_number(float(row["alpha"])),
                 row["kind"],
                 f"{row['passes']}/{row['total']}",
@@ -345,6 +365,7 @@ def render_baseline_percentiles(rows: list[JsonRow]) -> str:
         [
             "Artifact",
             "Kind",
+            "Readout",
             "Count",
             "Specific passes",
             "Pass rate",
@@ -358,6 +379,7 @@ def render_baseline_percentiles(rows: list[JsonRow]) -> str:
             [
                 row["artifact"],
                 row["kind"],
+                row["readout_mode"],
                 str(row["count"]),
                 f"{row['passes']}/{row['count']}",
                 fmt_rate(row["pass_rate"]),

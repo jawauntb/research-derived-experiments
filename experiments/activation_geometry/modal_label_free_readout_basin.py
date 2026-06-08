@@ -19,9 +19,11 @@ DEFAULT_READOUT_LAYER = 6
 DEFAULT_PATCH_MODES = "target,distractor,random,source_noop"
 DEFAULT_PATCH_TEXT_REGIMES = "definition,neutral"
 DEFAULT_PATCH_VECTOR_SURFACE = "hook_output"
+DEFAULT_READOUT_MODES = "centroid"
 PATCH_MODES = ("target", "distractor", "random", "source_noop")
 PATCH_TEXT_REGIMES = ("definition", "neutral")
 PATCH_VECTOR_SURFACES = ("hidden_state", "hook_output")
+READOUT_MODES = ("centroid", "ridge")
 IMAGE = modal.Image.debian_slim(python_version="3.12").pip_install(
     "torch>=2.5,<2.8",
     "transformers>=4.46,<5.0",
@@ -391,6 +393,17 @@ def readout_scores(
     }
 
 
+def all_centroid_scores(
+    vector: list[float],
+    *,
+    centroids_by_concept: dict[str, list[float]],
+) -> dict[str, float]:
+    return {
+        concept_id: cosine(vector, centroid_vector)
+        for concept_id, centroid_vector in centroids_by_concept.items()
+    }
+
+
 def target_rank(
     vector: list[float],
     *,
@@ -398,17 +411,17 @@ def target_rank(
     target: str,
 ) -> int:
     scored = sorted(
-        (
-            (concept_id, cosine(vector, centroid_vector))
-            for concept_id, centroid_vector in centroids_by_concept.items()
-        ),
+        all_centroid_scores(
+            vector,
+            centroids_by_concept=centroids_by_concept,
+        ).items(),
         key=lambda row: row[1],
         reverse=True,
     )
     return [concept_id for concept_id, _score in scored].index(target) + 1
 
 
-def build_readout(
+def build_centroid_readout(
     *,
     concept_ids: list[str],
     train_records: list[dict[str, Any]],
@@ -428,6 +441,82 @@ def build_readout(
     }
 
 
+def build_ridge_readout(
+    *,
+    torch: Any,
+    concept_ids: list[str],
+    train_records: list[dict[str, Any]],
+    train_vectors: dict[str, list[float]],
+    ridge_lambda: float,
+) -> dict[str, Any]:
+    train_mean = vector_mean(list(train_vectors.values()))
+    concept_index = {concept_id: index for index, concept_id in enumerate(concept_ids)}
+    features = []
+    labels = []
+    for record in train_records:
+        features.append(
+            centered_normalized(
+                train_vectors[str(record["id"])],
+                train_mean,
+            )
+        )
+        labels.append(concept_index[str(record["concept_id"])])
+    x = torch.tensor(features, dtype=torch.float32)
+    y = torch.zeros((len(labels), len(concept_ids)), dtype=torch.float32)
+    y[torch.arange(len(labels)), torch.tensor(labels)] = 1.0
+    kernel = x @ x.T
+    regularized = kernel + ridge_lambda * torch.eye(kernel.shape[0])
+    coefficients = torch.linalg.solve(regularized, y)
+    weights = x.T @ coefficients
+    return {
+        "concept_ids": concept_ids,
+        "train_mean": train_mean,
+        "weights": weights.cpu().tolist(),
+    }
+
+
+def ridge_scores_all(
+    vector: list[float],
+    *,
+    ridge_readout: dict[str, Any],
+) -> dict[str, float]:
+    torch = importlib.import_module("torch")
+    centered = centered_normalized(
+        vector,
+        ridge_readout["train_mean"],
+    )
+    feature = torch.tensor(centered, dtype=torch.float32)
+    weights = torch.tensor(ridge_readout["weights"], dtype=torch.float32)
+    scores = feature @ weights
+    return {
+        concept_id: float(scores[index].item())
+        for index, concept_id in enumerate(ridge_readout["concept_ids"])
+    }
+
+
+def scores_for_pair(
+    scores_by_concept: dict[str, float],
+    *,
+    left: str,
+    right: str,
+    distractor: str,
+) -> dict[str, float]:
+    return {
+        "source": scores_by_concept[left],
+        "target": scores_by_concept[right],
+        "distractor": scores_by_concept[distractor],
+    }
+
+
+def rank_from_scores(
+    scores_by_concept: dict[str, float],
+    *,
+    target: str,
+) -> int:
+    scored = sorted(scores_by_concept.items(), key=lambda row: row[1], reverse=True)
+    return [concept_id for concept_id, _score in scored].index(target) + 1
+
+
 @app.function(image=IMAGE, timeout=2400)
 def run_label_free_readout_remote(
     concepts: list[dict[str, Any]],
@@ -442,6 +531,8 @@ def run_label_free_readout_remote(
     eval_variant_index: int,
     patch_alphas: list[float],
     patch_vector_surface: str,
+    readout_modes: list[str],
+    ridge_lambda: float,
     max_length: int,
 ) -> dict[str, Any]:
     torch = importlib.import_module("torch")
@@ -485,14 +576,28 @@ def run_label_free_readout_remote(
         for layer, vector in vectors.items():
             train_vectors_by_layer[layer][str(record["id"])] = vector
 
-    readouts = {
-        layer: build_readout(
-            concept_ids=concept_ids,
-            train_records=train_records,
-            train_vectors=train_vectors_by_layer[layer],
-        )
-        for layer in readout_layers
-    }
+    centroid_readouts: dict[int, tuple[list[float], dict[str, list[float]]]] = {}
+    if "centroid" in readout_modes:
+        centroid_readouts = {
+            layer: build_centroid_readout(
+                concept_ids=concept_ids,
+                train_records=train_records,
+                train_vectors=train_vectors_by_layer[layer],
+            )
+            for layer in readout_layers
+        }
+    ridge_readouts: dict[int, dict[str, Any]] = {}
+    if "ridge" in readout_modes:
+        ridge_readouts = {
+            layer: build_ridge_readout(
+                torch=torch,
+                concept_ids=concept_ids,
+                train_records=train_records,
+                train_vectors=train_vectors_by_layer[layer],
+                ridge_lambda=ridge_lambda,
+            )
+            for layer in readout_layers
+        }
 
     rows = []
     for pair in pair_specs:
@@ -575,72 +680,95 @@ def run_label_free_readout_remote(
                             max_length=max_length,
                         )
                         for readout_layer in readout_layers:
-                            train_mean, centroids_by_concept = readouts[readout_layer]
-                            baseline_vector = centered_normalized(
-                                baseline_vectors[readout_layer],
-                                train_mean,
-                            )
-                            patched_vector = centered_normalized(
-                                patched_vectors[readout_layer],
-                                train_mean,
-                            )
-                            baseline_scores = readout_scores(
-                                baseline_vector,
-                                centroids_by_concept=centroids_by_concept,
-                                left=left,
-                                right=right,
-                                distractor=distractor,
-                            )
-                            patched_scores = readout_scores(
-                                patched_vector,
-                                centroids_by_concept=centroids_by_concept,
-                                left=left,
-                                right=right,
-                                distractor=distractor,
-                            )
-                            rank = target_rank(
-                                patched_vector,
-                                centroids_by_concept=centroids_by_concept,
-                                target=right,
-                            )
-                            rows.append(
-                                {
-                                    "pair": str(pair["id"]),
-                                    "left": left,
-                                    "right": right,
-                                    "kind": str(pair["kind"]),
-                                    "distractor": distractor,
-                                    "random_patch": random_patch,
-                                    "random_patch_scope": str(
-                                        pair["random_patch_scope"],
-                                    ),
-                                    "injection_layer": injection_layer,
-                                    "readout_layer": readout_layer,
-                                    "patch_text_regime": patch_text_regime,
-                                    "patch_mode": mode,
-                                    "patch_concept": patch_concept,
-                                    "patch_concept_label": labels_by_concept[
-                                        patch_concept
-                                    ],
-                                    "patch_context": (
-                                        "label_free_definition_readout"
-                                    ),
-                                    "train_variant_indices": train_variant_indices,
-                                    "eval_variant_index": eval_variant_index,
-                                    "patch_alpha": patch_alpha,
-                                    "patch_vector_surface": patch_vector_surface,
-                                    "source_prompt": source_prompt,
-                                    "scores": {
-                                        "baseline": baseline_scores,
-                                        "patched": patched_scores,
-                                    },
-                                    "summary": summarize_readout_delta(
-                                        baseline_scores=baseline_scores,
-                                        patched_scores=patched_scores,
-                                        patched_target_rank=rank,
-                                    ),
-                                }
-                            )
+                            for readout_mode in readout_modes:
+                                if readout_mode == "centroid":
+                                    train_mean, centroids_by_concept = (
+                                        centroid_readouts[readout_layer]
+                                    )
+                                    baseline_vector = centered_normalized(
+                                        baseline_vectors[readout_layer],
+                                        train_mean,
+                                    )
+                                    patched_vector = centered_normalized(
+                                        patched_vectors[readout_layer],
+                                        train_mean,
+                                    )
+                                    baseline_scores_by_concept = all_centroid_scores(
+                                        baseline_vector,
+                                        centroids_by_concept=centroids_by_concept,
+                                    )
+                                    patched_scores_by_concept = all_centroid_scores(
+                                        patched_vector,
+                                        centroids_by_concept=centroids_by_concept,
+                                    )
+                                elif readout_mode == "ridge":
+                                    baseline_scores_by_concept = ridge_scores_all(
+                                        baseline_vectors[readout_layer],
+                                        ridge_readout=ridge_readouts[readout_layer],
+                                    )
+                                    patched_scores_by_concept = ridge_scores_all(
+                                        patched_vectors[readout_layer],
+                                        ridge_readout=ridge_readouts[readout_layer],
+                                    )
+                                else:
+                                    raise ValueError(
+                                        f"Unknown readout mode: {readout_mode}"
+                                    )
+                                baseline_scores = scores_for_pair(
+                                    baseline_scores_by_concept,
+                                    left=left,
+                                    right=right,
+                                    distractor=distractor,
+                                )
+                                patched_scores = scores_for_pair(
+                                    patched_scores_by_concept,
+                                    left=left,
+                                    right=right,
+                                    distractor=distractor,
+                                )
+                                rank = rank_from_scores(
+                                    patched_scores_by_concept,
+                                    target=right,
+                                )
+                                rows.append(
+                                    {
+                                        "pair": str(pair["id"]),
+                                        "left": left,
+                                        "right": right,
+                                        "kind": str(pair["kind"]),
+                                        "distractor": distractor,
+                                        "random_patch": random_patch,
+                                        "random_patch_scope": str(
+                                            pair["random_patch_scope"],
+                                        ),
+                                        "injection_layer": injection_layer,
+                                        "readout_layer": readout_layer,
+                                        "readout_mode": readout_mode,
+                                        "patch_text_regime": patch_text_regime,
+                                        "patch_mode": mode,
+                                        "patch_concept": patch_concept,
+                                        "patch_concept_label": labels_by_concept[
+                                            patch_concept
+                                        ],
+                                        "patch_context": (
+                                            "label_free_definition_readout"
+                                        ),
+                                        "train_variant_indices": train_variant_indices,
+                                        "eval_variant_index": eval_variant_index,
+                                        "patch_alpha": patch_alpha,
+                                        "patch_vector_surface": patch_vector_surface,
+                                        "source_prompt": source_prompt,
+                                        "scores": {
+                                            "baseline": baseline_scores,
+                                            "patched": patched_scores,
+                                        },
+                                        "summary": summarize_readout_delta(
+                                            baseline_scores=baseline_scores,
+                                            patched_scores=patched_scores,
+                                            patched_target_rank=rank,
+                                        ),
+                                    }
+                                )
     return {"rows": rows}
 
 
@@ -657,6 +785,8 @@ def main(
     patch_alpha: float = 1.0,
     patch_alphas: str = "",
     patch_vector_surface: str = DEFAULT_PATCH_VECTOR_SURFACE,
+    readout_modes: str = DEFAULT_READOUT_MODES,
+    ridge_lambda: float = 1.0,
     patch_modes: str = DEFAULT_PATCH_MODES,
     patch_text_regimes: str = DEFAULT_PATCH_TEXT_REGIMES,
     pair_set: str = "focus",
@@ -679,6 +809,7 @@ def main(
     from experiments.activation_geometry.label_free_readout_basin import (
         PATCH_TEXT_REGIMES,
         PATCH_VECTOR_SURFACES,
+        READOUT_MODES,
         aggregate_rows,
         dose_response_summaries,
         gate_summaries,
@@ -726,6 +857,11 @@ def main(
         allowed=PATCH_VECTOR_SURFACES,
         name="Patch vector surface",
     )[0]
+    parsed_readout_modes = parse_values(
+        readout_modes,
+        allowed=READOUT_MODES,
+        name="Readout modes",
+    )
     pair_specs = attach_random_patch_concepts(
         serializable_concepts,
         serializable_pair_specs(
@@ -751,6 +887,8 @@ def main(
         eval_variant,
         parsed_patch_alphas,
         parsed_patch_vector_surface,
+        parsed_readout_modes,
+        ridge_lambda,
         max_length,
     )
     aggregates = aggregate_rows(remote_payload["rows"])
@@ -768,6 +906,8 @@ def main(
             "patch_alpha": parsed_patch_alphas[0] if len(parsed_patch_alphas) == 1 else None,
             "patch_alphas": parsed_patch_alphas,
             "patch_vector_surface": parsed_patch_vector_surface,
+            "readout_modes": parsed_readout_modes,
+            "ridge_lambda": ridge_lambda,
             "patch_modes": parsed_patch_modes,
             "patch_text_regimes": parsed_patch_text_regimes,
             "pair_set": pair_set,
