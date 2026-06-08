@@ -397,3 +397,39 @@ Residual content:
 - Retractions or supersessions: `conceptual_space` -> `representation_manifold` is no longer a cross-model primary candidate under strict controls.
 
 Next move: run the first final-token steering pilot using the cross-model promoted pairs, with `conceptual_space` -> `representation_manifold` retained as a backup/model-specific probe.
+
+## Activation Geometry Probe: Final-Token Steering Pilot
+
+Question: do promoted final-token bridge directions causally shift target next-token choice margins?
+
+Current regime:
+
+- Artifact types: selected final-token layers, held-out concept prompts, source-target activation directions, signed intervention payloads, next-token option-margin probes.
+- Operations: final-token activation extraction, raw target-minus-source direction construction, transformer-block forward hooks, signed log-probability margin scoring.
+- Gates/verifiers: primary/backup/control layers, valence controls, signed reverse intervention, scale ablation.
+- Known limitations: fixed option order, raw uncentered directions only, next-token multiple-choice probe rather than free-form generation, no random direction controls yet.
+
+Action class:
+
+- Retrieval/search/discovery: discovery attempt that failed gate.
+- Why: this is the first operation that moves from readout geometry to a direct activation intervention, but it does not produce an accepted steering artifact.
+
+Gate:
+
+- Acceptance rule: at scale `1.0`, at least two positive pairs pass in primary and backup layers, no primary valence controls pass, and control layers do not show the same pattern.
+- Withheld/rejected rule: raw steering payloads stay local-only under `artifacts/`; failed steering effects are reported as rejected rather than promoted.
+
+Results:
+
+- Accepted artifacts: `experiments/activation_geometry/results/final_token_steering_pilot_2026_06_08.md`; `experiments/activation_geometry/modal_final_token_steering.py`; `experiments/activation_geometry/final_token_steering_pilot.py`.
+- Rejected or withheld artifacts: local-only Modal steering payloads.
+- Key metrics: Pythia primary layer `5` positive pass `0/3`, valence control pass `2/2`; GPT-2 primary layer `12` positive pass `1/3`, valence control pass `1/2`.
+- Variance or ablation: effects are stable across scales `0.5` and `1.0`; Pythia promoted positive directions are consistently opposite-signed for the next-token probe.
+
+Residual content:
+
+- Explained by old regime: readout geometry can select plausible directions but does not guarantee causal control.
+- New content outside old regime: raw bridge directions can be systematically wrong-signed or non-specific when hooked into final-token generation layers.
+- Retractions or supersessions: do not claim the promoted readout pairs are steering directions without calibration.
+
+Next move: implement a steering calibration diagnostic before any free-form generation run.
