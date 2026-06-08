@@ -325,3 +325,39 @@ Residual content:
 - Retractions or supersessions: do not use a single "best layer" across classifier and generation settings.
 
 Next move: implement the held-out paraphrase classifier/readout pilot before any generative steering claim.
+
+## Activation Geometry Probe: Held-Out Readout Pilot
+
+Question: do selected activation layers preserve bridge structure under held-out paraphrase readout?
+
+Current regime:
+
+- Artifact types: concept prompts, paraphrase-indexed activation payloads, train/holdout centroid readouts, bridge-pair pass tables, control-pair warnings.
+- Operations: train-variant centering, nearest-centroid readout, held-out bridge cosine comparison, control-layer comparison.
+- Gates/verifiers: held-out paraphrases, preselected primary/backup/control layers, positive bridge-pair gate, valence control gate, publication guard.
+- Known limitations: only one holdout variant per concept, hand-authored control pairs, no matched random-pair distribution yet, no causal intervention.
+
+Action class:
+
+- Retrieval/search/discovery: verifier upgrade.
+- Why: the run tests whether the earlier activation geometry survives an unseen paraphrase split and exposes control leakage before steering.
+
+Gate:
+
+- Acceptance rule: pass all preregistered held-out readout gates.
+- Withheld/rejected rule: raw activation/readout payloads stay local-only under `artifacts/`; mixed gates are reported rather than promoted to causal claims.
+
+Results:
+
+- Accepted artifacts: `experiments/activation_geometry/results/heldout_readout_pilot_2026_06_08.md`; `experiments/activation_geometry/heldout_readout_pilot.py`.
+- Rejected or withheld artifacts: local-only raw activation/readout payloads under `artifacts/activation_geometry/`.
+- Key metrics: Pythia layer `2` concept accuracy `1.000`, bridge rate `0.833`, positive pairs `4/4`; GPT-2 layer `1` concept accuracy `1.000`, bridge rate `0.917`, positive pairs `4/4`.
+- Variance or ablation: Pythia layer `6` has cleaner control pairs than layer `2`; GPT-2 layer `1` has strong positive pairs but leaky valence controls.
+
+Residual content:
+
+- Explained by old regime: concept identity readout can be strong even when some control pairs leak.
+- New content outside old regime: held-out bridge structure survives for the four intended pairs, but specificity is not yet adequate for steering claims.
+- Retractions or supersessions: do not proceed as if the valence controls failed; at least one valence control is now an adversarial positive control.
+
+Next move: run the pair-level control-leakage diagnostic before the first final-token steering pilot.

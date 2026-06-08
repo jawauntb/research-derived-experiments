@@ -40,7 +40,8 @@
 - [x] Compare mean pooling against final-token pooling for activation sweeps.
 - [x] Summarize cross-model activation layer profiles across Pythia-70M and GPT-2.
 - [x] Select pooling-aware candidate layers for classifier and steering interventions.
-- [ ] Run held-out paraphrase classifier/readout pilot on selected mean-pooling layers.
+- [x] Run held-out paraphrase classifier/readout pilot on selected mean-pooling layers.
+- [ ] Run pair-level control-leakage diagnostics with shuffled and category-matched random bridge pairs.
 - [ ] Run first final-token steering pilot on selected generation layers.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.
 - [ ] Add anisotropy and directional-curvature proxy checks to activation sweeps where feasible.
