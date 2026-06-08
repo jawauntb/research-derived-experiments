@@ -59,8 +59,9 @@
 - [x] Add a trained hook-output readout gate for the label-free transfer ridge.
 - [x] Add a behavior-level gate for the trained-readout-confirmed transfer ridge.
 - [x] Design a behavior-aligned intervention after the raw state-replacement behavior gate failed.
+- [x] Add label-only, shuffled-label, blank-carrier, and stripped-definition carrier controls for full-label behavior scoring.
 - [ ] Replicate the full-label behavior gate with a second seed and second open model.
-- [ ] Add label-only, shuffled-label, alias, and length-matched carrier controls for full-label behavior scoring.
+- [ ] Add alias, paraphrased-label, and length-matched carrier controls for full-label behavior scoring.
 - [ ] Learn behavior-aligned directions against the full-label objective.
 - [ ] Replicate the hook-output transfer ridge on a second checkpoint or open model.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.
