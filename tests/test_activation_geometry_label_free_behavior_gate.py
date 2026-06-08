@@ -4,11 +4,13 @@ import unittest
 
 from experiments.activation_geometry.label_free_behavior_gate import (
     DEFAULT_OPTION_ORDERS,
-    PATCH_TEXT_REGIMES,
     aggregate_rows,
+    blank_carrier_text,
     behavior_prompt,
+    definition_without_label_text,
     full_label_prompt,
     gate_summaries,
+    label_only_text,
     neutral_carrier_text,
     source_text_for_regime,
     specificity_rows,
@@ -58,6 +60,15 @@ class LabelFreeBehaviorGateTest(unittest.TestCase):
             neutral_carrier_text(label="attractor network"),
             "Concept label: attractor network.",
         )
+        self.assertEqual(label_only_text(label="attractor network"), "attractor network")
+        self.assertEqual(blank_carrier_text(), "Concept label: [omitted].")
+        self.assertEqual(
+            definition_without_label_text(
+                definition_text="attractor: a stable region",
+                label="attractor",
+            ),
+            "a stable region",
+        )
         self.assertEqual(
             source_text_for_regime(
                 definition_text="definition",
@@ -74,6 +85,45 @@ class LabelFreeBehaviorGateTest(unittest.TestCase):
             ),
             "Concept label: label.",
         )
+        self.assertEqual(
+            source_text_for_regime(
+                definition_text="label: definition body",
+                label="label",
+                patch_text_regime="definition_without_label",
+            ),
+            "definition body",
+        )
+        self.assertEqual(
+            source_text_for_regime(
+                definition_text="definition",
+                label="label",
+                patch_text_regime="label_only",
+            ),
+            "label",
+        )
+        self.assertEqual(
+            source_text_for_regime(
+                definition_text="definition",
+                label="label",
+                patch_text_regime="blank_carrier",
+            ),
+            "Concept label: [omitted].",
+        )
+        self.assertEqual(
+            source_text_for_regime(
+                definition_text="definition",
+                label="label",
+                shuffled_label="other",
+                patch_text_regime="shuffled_label",
+            ),
+            "Concept label: other.",
+        )
+        with self.assertRaises(ValueError):
+            source_text_for_regime(
+                definition_text="definition",
+                label="label",
+                patch_text_regime="shuffled_label",
+            )
 
     def test_summarize_behavior_delta_reports_margin_and_logprob_changes(self) -> None:
         summary = summarize_behavior_delta(
@@ -101,7 +151,7 @@ class LabelFreeBehaviorGateTest(unittest.TestCase):
                 "source_noop": (0.0, 0.0, 0.0),
             },
         }
-        for patch_text_regime in PATCH_TEXT_REGIMES:
+        for patch_text_regime in ("definition", "neutral"):
             for mode, deltas in deltas_by_regime_and_mode[patch_text_regime].items():
                 for option_order, delta in zip(
                     DEFAULT_OPTION_ORDERS,

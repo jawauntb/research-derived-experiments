@@ -6,7 +6,14 @@ from __future__ import annotations
 from typing import Any
 
 
-PATCH_TEXT_REGIMES = ("definition", "neutral")
+PATCH_TEXT_REGIMES = (
+    "definition",
+    "definition_without_label",
+    "neutral",
+    "label_only",
+    "blank_carrier",
+    "shuffled_label",
+)
 PATCH_VECTOR_SURFACES = ("hidden_state", "hook_output")
 PATCH_MODES = ("target", "distractor", "random", "source_noop")
 OPTION_ROLES = ("source", "target", "distractor")
@@ -23,16 +30,46 @@ def neutral_carrier_text(*, label: str) -> str:
     return f"Concept label: {label}."
 
 
+def label_only_text(*, label: str) -> str:
+    return label
+
+
+def blank_carrier_text() -> str:
+    return "Concept label: [omitted]."
+
+
+def definition_without_label_text(*, definition_text: str, label: str) -> str:
+    stripped = definition_text.strip()
+    prefix = f"{label}:"
+    if stripped.lower().startswith(prefix.lower()):
+        return stripped[len(prefix) :].strip()
+    return stripped
+
+
 def source_text_for_regime(
     *,
     definition_text: str,
     label: str,
     patch_text_regime: str,
+    shuffled_label: str | None = None,
 ) -> str:
     if patch_text_regime == "definition":
         return definition_text
+    if patch_text_regime == "definition_without_label":
+        return definition_without_label_text(
+            definition_text=definition_text,
+            label=label,
+        )
     if patch_text_regime == "neutral":
         return neutral_carrier_text(label=label)
+    if patch_text_regime == "label_only":
+        return label_only_text(label=label)
+    if patch_text_regime == "blank_carrier":
+        return blank_carrier_text()
+    if patch_text_regime == "shuffled_label":
+        if shuffled_label is None:
+            raise ValueError("Shuffled-label regime requires shuffled_label")
+        return neutral_carrier_text(label=shuffled_label)
     options = ", ".join(PATCH_TEXT_REGIMES)
     raise ValueError(f"Patch text regime must be one of: {options}")
 

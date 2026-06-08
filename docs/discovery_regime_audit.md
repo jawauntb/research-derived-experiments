@@ -1050,3 +1050,46 @@ Residual content:
 - Retractions or supersessions: supersede "raw state replacement fails behavior-level gates" with "raw state replacement fails option-token gates but passes full-label behavior gates with neutral-carrier caveats."
 
 Next move: replicate full-label behavior gates with stronger carrier/label controls and learn directions against the full-label objective.
+
+## Activation Geometry Probe: Full-Label Carrier Controls
+
+Question: does the full-label behavior effect survive stronger carrier controls?
+
+Current regime:
+
+- Artifact types: full-label behavior payloads, patch-text carrier regimes, target-vs-control specificity rows, definition-minus-control contrast summaries.
+- Operations: hook-output state capture from different carrier texts, full-label continuation scoring, source/noop/distractor/random patch controls.
+- Gates/verifiers: full definition should exceed label-only, neutral, blank-carrier, and shuffled-label controls; blank and shuffled controls should fail if the effect is concept/label-specific.
+- Known limitations: one seed, one model, exact-label scoring, no alias target labels yet.
+
+Action class:
+
+- Retrieval/search/discovery: verifier refinement.
+- Why: this run adds new carrier-control artifact classes that distinguish arbitrary carrier movement, wrong-label movement, label-only movement, and definition-context boost.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/full_label_carrier_controls_2026_06_08.md`; local ignored payloads under `artifacts/activation_geometry/modal_pythia_70m_full_label_carrier_controls_*.json`.
+- Positive targets: focus rows plus 8 sampled baseline pairs.
+- Negative controls: `blank_carrier`, `shuffled_label`, distractor/random/source-noop patch modes.
+- Stress tests: prompt frames `latent_choice` and `source_passage`; layers `5,6`; stripped-definition, neutral, and label-only carrier ablations.
+
+Gate:
+
+- Acceptance rule: accept strengthened full-label behavior claim if full definitions beat controls and shuffled/blank carriers fail.
+- Withheld/rejected rule: withhold pure semantic transfer if stripped definitions or label-free carriers match the full definition effect.
+
+Results:
+
+- Accepted artifacts: carrier-control regimes in the full-label behavior gate; `experiments/activation_geometry/results/full_label_carrier_controls_2026_06_08.md`.
+- Rejected or withheld artifacts: pure semantic-transfer claim remains withheld.
+- Key metrics: full definitions pass `9/15` to `12/15`; label-only/neutral are active but weaker; blank carriers pass `0/15`; shuffled-label carriers pass at most `1/15` with negative mean advantage.
+- Variance or ablation: source-passage and latent-choice frames agree on the ordering: `definition` > `neutral/label_only` > `blank_carrier/shuffled_label`.
+
+Residual content:
+
+- Explained by old regime: exact label strings can steer full-label behavior.
+- New content outside old regime: full definitions add a target-specific boost beyond label-only carriers, while wrong labels actively suppress target-specificity.
+- Retractions or supersessions: supersede "neutral carrier activity makes the full-label result uninterpretable" with "the effect is label-anchored and definition-context boosted."
+
+Next move: replicate across seed/model and test alias labels to separate exact-string anchoring from conceptual behavior transfer.

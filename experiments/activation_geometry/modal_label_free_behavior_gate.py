@@ -27,7 +27,14 @@ DEFAULT_OPTION_ORDERS = (
     "distractor,source,target"
 )
 PATCH_MODES = ("target", "distractor", "random", "source_noop")
-PATCH_TEXT_REGIMES = ("definition", "neutral")
+PATCH_TEXT_REGIMES = (
+    "definition",
+    "definition_without_label",
+    "neutral",
+    "label_only",
+    "blank_carrier",
+    "shuffled_label",
+)
 PATCH_VECTOR_SURFACES = ("hidden_state", "hook_output")
 OPTION_ROLES = ("source", "target", "distractor")
 PROMPT_FRAMES = ("source_passage", "latent_choice")
@@ -93,17 +100,57 @@ def neutral_carrier_text(*, label: str) -> str:
     return f"Concept label: {label}."
 
 
+def label_only_text(*, label: str) -> str:
+    return label
+
+
+def blank_carrier_text() -> str:
+    return "Concept label: [omitted]."
+
+
+def definition_without_label_text(*, definition_text: str, label: str) -> str:
+    stripped = definition_text.strip()
+    prefix = f"{label}:"
+    if stripped.lower().startswith(prefix.lower()):
+        return stripped[len(prefix) :].strip()
+    return stripped
+
+
 def source_text_for_regime(
     *,
     definition_text: str,
     label: str,
     patch_text_regime: str,
+    shuffled_label: str | None = None,
 ) -> str:
     if patch_text_regime == "definition":
         return definition_text
+    if patch_text_regime == "definition_without_label":
+        return definition_without_label_text(
+            definition_text=definition_text,
+            label=label,
+        )
     if patch_text_regime == "neutral":
         return neutral_carrier_text(label=label)
+    if patch_text_regime == "label_only":
+        return label_only_text(label=label)
+    if patch_text_regime == "blank_carrier":
+        return blank_carrier_text()
+    if patch_text_regime == "shuffled_label":
+        if shuffled_label is None:
+            raise ValueError("Shuffled-label regime requires shuffled_label")
+        return neutral_carrier_text(label=shuffled_label)
     raise ValueError(f"Unknown patch text regime: {patch_text_regime}")
+
+
+def shuffled_labels_by_concept(labels_by_concept: dict[str, str]) -> dict[str, str]:
+    concept_ids = sorted(labels_by_concept)
+    if len(concept_ids) < 2:
+        raise ValueError("Shuffled-label regime requires at least two concepts")
+    return {
+        concept_id: labels_by_concept[concept_ids[(index + 1) % len(concept_ids)]]
+        for index, concept_id in enumerate(concept_ids)
+    }
 
 
 def patch_concept_for_mode(pair: dict[str, Any], mode: str) -> str:
@@ -640,6 +687,7 @@ def run_label_free_behavior_remote(
             concept_id: str(concept_lookup[concept_id]["label"])
             for concept_id in sorted({left, right, distractor, random_patch})
         }
+        shuffled_labels = shuffled_labels_by_concept(labels_by_concept)
         labels_by_role = {
             "source": labels_by_concept[left],
             "target": labels_by_concept[right],
@@ -736,6 +784,7 @@ def run_label_free_behavior_remote(
                         definition_text=definition_text,
                         label=labels_by_concept[concept_id],
                         patch_text_regime=patch_text_regime,
+                        shuffled_label=shuffled_labels[concept_id],
                     )
                     patch_vectors_by_concept[concept_id] = prompt_vectors_for_surface(
                         torch=torch,
@@ -803,6 +852,9 @@ def run_label_free_behavior_remote(
                                     "patch_mode": mode,
                                     "patch_concept": patch_concept,
                                     "patch_concept_label": labels_by_concept[
+                                        patch_concept
+                                    ],
+                                    "patch_concept_shuffled_label": shuffled_labels[
                                         patch_concept
                                     ],
                                     "patch_context": "label_free_behavior_gate",
