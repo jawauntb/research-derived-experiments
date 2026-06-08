@@ -25,8 +25,8 @@ Results:
 
 - Accepted artifacts: `experiments/weakness_vs_simplicity/results/pilot_2026_06_08.md`.
 - Rejected or withheld artifacts: `references/papers/`, `references/text/`, `references/html/`.
-- Key metrics: weakness mean Jaccard 0.9533; simplicity mean Jaccard 0.0938; random mean Jaccard 0.5061.
-- Variance or ablation: pending.
+- Key metrics: trap condition weakness mean Jaccard 0.9533; simplicity mean Jaccard 0.0938; random mean Jaccard 0.5061. No-memorizer control weakness mean Jaccard 0.9587; simplicity mean Jaccard 0.9493.
+- Variance or ablation: no-memorizer control added; unsafe broad-hypothesis stress test pending.
 
 Residual content:
 

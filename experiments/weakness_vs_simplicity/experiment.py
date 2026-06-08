@@ -140,6 +140,7 @@ def run_trial(
     selectors: Mapping[str, Callable[[list[Candidate], random.Random], Candidate]],
     train_positives: int,
     train_negatives: int,
+    include_memorizer: bool,
 ) -> list[TrialResult]:
     one_feature_targets = [candidate for candidate in base_candidates if " & " not in candidate.name]
     target = rng.choice(one_feature_targets)
@@ -147,7 +148,8 @@ def run_trial(
     negative_pool = [world for world in worlds if world not in target.extension]
     positives = rng.sample(positive_pool, train_positives)
     negatives = rng.sample(negative_pool, train_negatives)
-    candidates = consistent(add_memorizer(base_candidates, positives), positives, negatives)
+    candidate_pool = add_memorizer(base_candidates, positives) if include_memorizer else base_candidates
+    candidates = consistent(candidate_pool, positives, negatives)
 
     results: list[TrialResult] = []
     for selector_name, selector in selectors.items():
@@ -193,6 +195,7 @@ def main() -> int:
     parser.add_argument("--train-positives", type=int, default=3)
     parser.add_argument("--train-negatives", type=int, default=3)
     parser.add_argument("--seed", type=int, default=7)
+    parser.add_argument("--no-memorizer", action="store_true", help="Remove the short memorizer candidate.")
     parser.add_argument("--out", type=Path)
     args = parser.parse_args()
 
@@ -215,6 +218,7 @@ def main() -> int:
                 selectors=selectors,
                 train_positives=args.train_positives,
                 train_negatives=args.train_negatives,
+                include_memorizer=not args.no_memorizer,
             )
         )
 
@@ -227,6 +231,7 @@ def main() -> int:
             "seed": args.seed,
             "world_count": len(worlds),
             "base_candidate_count": len(base_candidates),
+            "include_memorizer": not args.no_memorizer,
         },
         "summary": summarize(results),
         "results": [asdict(result) for result in results],

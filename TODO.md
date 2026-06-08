@@ -15,7 +15,7 @@
 
 - [x] Create a minimal synthetic benchmark.
 - [x] Run the pilot and record accepted/rejected artifacts.
-- [ ] Add a negative control where memorizer hypotheses are removed.
+- [x] Add a negative control where memorizer hypotheses are removed.
 - [ ] Extend from Boolean-rule worlds to text/classification prompts.
 - [ ] Compare against LLM-generated rules or embeddings.
 
