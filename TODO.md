@@ -47,7 +47,8 @@
 - [x] Redesign the steering verifier with learned/readout-conditioned directions or causal patching before free-form generation.
 - [x] Run causal patching diagnostic with target, distractor, random, and no-op activation patches.
 - [x] Run matched-context activation patching using activations from the same option-choice prompt template.
-- [ ] Replicate the Pythia matched-context patching pocket across variants, random seeds, and nearby layers.
+- [x] Replicate the Pythia matched-context patching pocket across variants, random seeds, and nearby layers.
+- [ ] Run a focused attractor-pocket diagnostic with distractor sweeps and adversarial near-neighbor controls.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.
 - [ ] Add anisotropy and directional-curvature proxy checks to activation sweeps where feasible.
 
