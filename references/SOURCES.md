@@ -17,6 +17,7 @@ The downloaded PDFs, HTML snapshots, and extracted full text are intentionally l
 - The Machine Consciousness Hypothesis: https://cimc.ai/cimcHypothesis.pdf
 - Technological Approach to Mind Everywhere: https://www.frontiersin.org/journals/systems-neuroscience/articles/10.3389/fnsys.2022.768201/full
 - On Having No Head: Cognition throughout Biological Systems: https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2016.00902/full
+- Why Muon Outperforms Adam: A Curvature Perspective: https://arxiv.org/abs/2606.04662
 
 ## Local User-Provided Files
 
@@ -25,4 +26,3 @@ These remain local-only:
 - `/Users/jawaun/Downloads/Thesis_Revision_1-9 (1).pdf`
 - `/Users/jawaun/Downloads/autopoietic_theorem.pdf`
 - `/Users/jawaun/Downloads/There_is_no_self_evidence.pdf`
-

@@ -38,6 +38,7 @@
 - [ ] Run activation layer sweep on Pythia-70M.
 - [ ] Replicate activation geometry with a second open model.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.
+- [ ] Add anisotropy and directional-curvature proxy checks to activation sweeps where feasible.
 
 ## Experiment Track 3: Boundary Priors
 

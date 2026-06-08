@@ -145,3 +145,39 @@ Residual content:
 - Retractions or supersessions: raw activation cosine should not be used as evidence without centering or another anisotropy correction.
 
 Next move: run layer sweeps and a second open model, then test whether selected bridge directions can steer generation or classification behavior.
+
+## Source Assimilation: Muon Curvature Paper
+
+Question: should `Why Muon Outperforms Adam: A Curvature Perspective` change the research program or merely join the source list?
+
+Current regime:
+
+- Artifact types: source manifest entries, local-only source PDFs, synthesis notes, experiment TODOs, audit cards.
+- Operations: source triage, relevance assessment, public-safe manifest update, local archive update.
+- Gates/verifiers: source should add an actionable metric/control or clarify an existing experiment risk; it should not blur optimizer curvature with representation geometry.
+- Known limitations: this paper studies optimizer update directions and Hessian curvature, not concept or agency representations directly.
+
+Action class:
+
+- Retrieval/search/discovery: retrieval plus methods calibration.
+- Why: the source is added to the bibliography and used to refine future activation-geometry controls, but it does not create a new experiment regime by itself.
+
+Gate:
+
+- Acceptance rule: use the paper only if it sharpens controls for activation geometry: anisotropy checks, centered-vs-raw comparisons, layerwise decomposition, and possible directional-curvature proxies.
+- Withheld/rejected rule: do not pivot into optimizer benchmarking; do not claim NDS of optimizer updates is equivalent to concept geometry.
+
+Results:
+
+- Accepted artifacts: `references/SOURCES.md` entry; synthesis note under "Later Added Method Source"; TODO item for anisotropy and directional-curvature proxy checks.
+- Rejected or withheld artifacts: local PDF `references/papers/arxiv_2606_04662_muon_curvature.pdf` remains ignored and untracked.
+- Key insight: direction geometry needs curvature/anisotropy controls before it can support mechanistic claims.
+- Variance or ablation: none; this is source triage, not an experiment.
+
+Residual content:
+
+- Explained by old regime: it extends the recurring "geometry as constraint" frame into optimizer update directions.
+- New content outside old regime: it adds NDS as a candidate method-level control for future activation and training experiments.
+- Retractions or supersessions: none.
+
+Next move: keep the current activation layer sweep plan, but report anisotropy and consider cheap directional-curvature proxies before any strong mechanistic claim.

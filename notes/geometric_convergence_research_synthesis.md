@@ -23,6 +23,7 @@ Local archive:
 - `references/papers/frontiers_2016_00902_no_head.pdf`
 - `references/papers/local_there_is_no_self_evidence.pdf`
 - `references/papers/local_thesis_revision_1_9.pdf`
+- `references/papers/arxiv_2606_04662_muon_curvature.pdf`
 
 Original links:
 
@@ -40,8 +41,24 @@ Original links:
 - https://cimc.ai/cimcHypothesis.pdf
 - https://www.frontiersin.org/journals/systems-neuroscience/articles/10.3389/fnsys.2022.768201/full
 - https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2016.00902/full
+- https://arxiv.org/abs/2606.04662
 
 Note: `arxiv.org/abs/2606.01444` appeared twice in the prompt and is summarized once.
+
+## Later Added Method Source
+
+### Why Muon Outperforms Adam: A Curvature Perspective
+
+Core idea: Muon's advantage over Adam is explained locally through update direction geometry. At matched validation loss, Muon and Adam have comparable first-order gains and update norms, but Muon pays a smaller second-order curvature penalty. The paper attributes this to lower Normalized Directional Sharpness (NDS), amplified by data imbalance and partly localized to within-layer Hessian blocks later in training.
+
+Fit to this project:
+
+- Useful: it gives a concrete template for separating direction, scale, curvature, and layer structure.
+- Useful: it reinforces the activation-geometry lesson that raw cosine geometry can be misleading unless anisotropy and directional penalties are checked.
+- Useful: it suggests future experiments should report layerwise structure and, where feasible, finite-difference or Hessian-vector curvature proxies for selected directions.
+- Risk: it can distract if we pivot into optimizer benchmarking. Its best role here is as a methods/motivation source, not a core source about concepts, agency, or autopoiesis.
+
+Decision: include it as a methodological source for curvature-aware experiment design. Do not treat optimizer NDS as the same object as concept geometry; use it to sharpen controls and metrics.
 
 ## Biggest Research-Worthy Question
 
@@ -565,4 +582,3 @@ One-sentence version:
 - Can weakness maximization be measured in activation spaces?
 - Can scientific discovery be detected as a discontinuity in representational geometry?
 - What ethical thresholds follow if self-maintaining geometry appears in artificial systems?
-
