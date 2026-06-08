@@ -39,6 +39,7 @@ class SummarizeLabelFreeDoseResponseTest(unittest.TestCase):
                     "patch_vector_surface": "hook_output",
                     "injection_layer": 6,
                     "readout_layer": 6,
+                    "readout_mode": "ridge",
                     "patch_alpha": 1.0,
                     "mean_target_margin_delta": -0.0,
                 },
@@ -65,6 +66,7 @@ class SummarizeLabelFreeDoseResponseTest(unittest.TestCase):
         self.assertEqual(rows[0]["artifact"], "seed 7")
         self.assertEqual(rows[0]["surface"], "hook_output")
         self.assertEqual(rows[0]["cell"], "6 -> 6")
+        self.assertEqual(rows[0]["readout_mode"], "ridge")
         self.assertEqual(rows[0]["max_abs_delta"], 0.0)
 
     def test_render_manifest_reports_surface_and_pair_count(self) -> None:
@@ -74,6 +76,7 @@ class SummarizeLabelFreeDoseResponseTest(unittest.TestCase):
                 "model": "test-model",
                 "seed": 7,
                 "surface": "hook_output",
+                "readout_modes": "centroid,ridge",
                 "injection_layers": "3,4,5,6",
                 "readout_layers": "6",
                 "alphas": "0.5,0.75,1.0",
@@ -87,6 +90,7 @@ class SummarizeLabelFreeDoseResponseTest(unittest.TestCase):
         markdown = dose_response_summary.render_manifest(rows)
 
         self.assertIn("hook_output", markdown)
+        self.assertIn("centroid,ridge", markdown)
         self.assertIn("31", markdown)
 
 

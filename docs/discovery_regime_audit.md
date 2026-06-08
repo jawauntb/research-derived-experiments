@@ -921,3 +921,46 @@ Residual content:
 - Retractions or supersessions: supersede "same-layer cells are invalid/unknown" with "same-layer cells are valid under hook-output patch vectors, but not attractor-specific."
 
 Next move: use trained readouts and behavior-level gates to distinguish representational transport from readout-only movement.
+
+## Activation Geometry Probe: Trained Readout Gate
+
+Question: does the hook-output label-free transfer ridge survive a trained readout?
+
+Current regime:
+
+- Artifact types: label-free patch payloads, hook-output patch-vector manifests, centroid/ridge readout summaries, source-noop identity tables, baseline percentile summaries.
+- Operations: hook-output activation capture, held-out centroid readout scoring, one-vs-all multiclass ridge fitting, final-token activation patching at transformer-block outputs.
+- Gates/verifiers: exact definition/source-noop identity, definition-vs-neutral stress, centroid-vs-ridge readout agreement, two-seed replication, baseline percentile comparison.
+- Known limitations: one checkpoint, one readout layer, no behavior-level task yet.
+
+Action class:
+
+- Retrieval/search/discovery: verifier refinement.
+- Why: the run adds trained readout mode as a first-class verifier dimension and tests whether the existing ridge survives a different scoring surface.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/trained_readout_gate_2026_06_08.md`; local ignored payloads under `artifacts/activation_geometry/modal_pythia_70m_trained_readout_gate_seed*.json`.
+- Positive targets: focus rows plus 24 sampled baseline pairs per seed.
+- Negative controls: neutral patch text, distractor/random/source-noop patch modes, broad baseline rows.
+- Stress tests: readout modes `centroid,ridge`; injection layers `4,5,6`; alphas `0.75,1.0`; two seeds.
+
+Gate:
+
+- Acceptance rule: accept readout-mode robustness only if ridge readout preserves the definition transfer ridge, definition/source-noop is exact, and neutral carriers do not match definition specificity.
+- Withheld/rejected rule: reject attractor-specific revival unless focus/source-family rows are clearly exceptional against baseline and generic controls.
+
+Results:
+
+- Accepted artifacts: `experiments/activation_geometry/results/trained_readout_gate_2026_06_08.md`; `experiments/activation_geometry/modal_label_free_readout_basin.py`; `experiments/activation_geometry/label_free_readout_basin.py`; `scripts/summarize_label_free_dose_response.py`.
+- Rejected or withheld artifacts: attractor-specific revival remains rejected.
+- Key metrics: definition/source-noop max delta `0.0`; ridge definition pass rates reach `42/62` at `4 -> 6`, `53/62` at `5 -> 6`, and `57/62` at `6 -> 6`; ridge neutral at `6 -> 6`, alpha `1.0` reaches `17/62`.
+- Variance or ablation: both seeds show the same layer ordering; ridge margins shrink relative to centroid while pass rates stay strong or improve.
+
+Residual content:
+
+- Explained by old regime: broad definition-derived transfer remains generic rather than attractor-specific.
+- New content outside old regime: the transfer ridge survives a trained linear readout and is not merely nearest-centroid geometry.
+- Retractions or supersessions: supersede "centroid readout may be producing the ridge" with "centroid is not necessary for the ridge, though readout-space movement still needs behavior-level validation."
+
+Next move: add a behavior-level gate that tests whether readout-space transport predicts answer/logprob changes.
