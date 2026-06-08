@@ -706,3 +706,46 @@ Residual content:
 - Retractions or supersessions: supersede "answer-choice label artifact" with "semantically mediated answer-surface basin."
 
 Next move: run a label-free readout basin diagnostic to test whether the basin exists in activation space without visible answer choices.
+
+## Activation Geometry Probe: Label-Free Readout Basin Diagnostic
+
+Question: does the semantically mediated attractor-family basin exist in activation space without visible answer choices?
+
+Current regime:
+
+- Artifact types: label-free patch payloads, centroid-readout rows, definition/neutral patch-text controls, specificity summaries.
+- Operations: held-out centroid readout training, layer-5 activation patching, layer-6 downstream readout scoring.
+- Gates/verifiers: exact definition-source no-op gate, target-over-control readout specificity gate, neutral-carrier failure gate, generic-transfer control check.
+- Known limitations: one model checkpoint, one injection/readout layer pair, centroid readout rather than a trained linear classifier.
+
+Action class:
+
+- Retrieval/search/discovery: search inside the upgraded label-free readout regime.
+- Why: this run tests the new no-answer-choice verifier but does not yet establish a new attractor-specific artifact class.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/label_free_readout_basin_2026_06_08.md`; local ignored payload under `artifacts/activation_geometry/modal_pythia_70m_deduped_label_free_readout_basin.json`.
+- Positive targets: `attractor` -> `attractor_network`.
+- Negative controls: neutral patch text, distractor/random/source patch modes.
+- Stress tests: source-family sweep into `attractor_network`, generic valence/vector transfer controls.
+
+Gate:
+
+- Acceptance rule: accept label-free transfer if definition target patches pass specificity and neutral label-carrier patches fail.
+- Withheld/rejected rule: withhold attractor-specific basin claims if generic transfer controls also pass.
+
+Results:
+
+- Accepted artifacts: `experiments/activation_geometry/results/label_free_readout_basin_2026_06_08.md`; `experiments/activation_geometry/label_free_readout_basin.py`; `experiments/activation_geometry/modal_label_free_readout_basin.py`.
+- Rejected or withheld artifacts: attractor-specific activation-space basin claim is withheld.
+- Key metrics: definition positive `1/1`; definition source-family `4/4`; definition generic controls `2/2`; neutral rows `0/7`; definition source-noop max delta `0.0`.
+- Variance or ablation: definition patches transfer strongly; neutral label-carrier patches do not pass specificity.
+
+Residual content:
+
+- Explained by old regime: answer-choice target-margin effects can be semantically mediated.
+- New content outside old claim: the target-state transfer survives without visible answer choices, but it appears generic rather than attractor-specific.
+- Retractions or supersessions: supersede "semantically mediated answer-surface basin" with "generic label-free definition-derived target-state transfer; attractor-family rows are currently a special case only by topic, not by mechanism."
+
+Next move: build a broad label-free target-state transfer baseline across many concept pairs and compare the attractor-family rows against that null distribution.
