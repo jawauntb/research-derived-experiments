@@ -32,9 +32,12 @@
 - [x] Produce first concept-neighborhood report.
 - [x] Run paraphrase perturbation stress test.
 - [x] Compare with a second embedding model.
-- [ ] Extend from embedding-space neighborhoods to activation-space probes.
+- [x] Extend from embedding-space neighborhoods to activation-space probes.
 - [ ] Add an external semantic negative control for paraphrase geometry.
 - [ ] Replicate concept geometry with a non-OpenAI embedding family.
+- [ ] Run activation layer sweep on Pythia-70M.
+- [ ] Replicate activation geometry with a second open model.
+- [ ] Convert strongest bridge pairs into steering or classification interventions.
 
 ## Experiment Track 3: Boundary Priors
 
