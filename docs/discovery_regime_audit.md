@@ -109,3 +109,39 @@ Residual content:
 - Retractions or supersessions: single-prompt embedding claims should now be treated as weaker than paraphrase-centroid claims.
 
 Next move: extract activation vectors from open models and test whether the same bridge directions appear outside embedding-only language space.
+
+## Activation Geometry Probe: Modal Pythia-70M
+
+Question: does the embedding-space bridge geometry appear in open-model hidden states?
+
+Current regime:
+
+- Artifact types: paraphrased concept prompts, pooled hidden-state vectors, raw and mean-centered concept centroids, bridge-pair scores, activation-space audit cards.
+- Operations: Modal-backed open-model extraction, attention-mean pooling, global mean-centering, cosine-kernel summary, bridge-lift comparison.
+- Gates/verifiers: deterministic dry-run control, anisotropy inspection, category separation threshold, bridge-lift threshold, bridge-pair rate threshold, publication guard.
+- Known limitations: one small model, one layer, one pooling rule, hand-authored bridge pairs, no causal intervention yet.
+
+Action class:
+
+- Retrieval/search/discovery: discovery-leaning search.
+- Why: this adds activation-space vectors as a new artifact class for the project, but the result still needs layer/model replication before we should call it a stable mechanism.
+
+Gate:
+
+- Acceptance rule: mean-centered category separation at least `0.05`, bridge lift at least `0.05`, and at least `0.75` of bridge pairs above the non-bridge cross-category mean.
+- Withheld/rejected rule: raw activation arrays and full model payloads stay local-only under `artifacts/`.
+
+Results:
+
+- Accepted artifacts: `experiments/activation_geometry/results/modal_pythia_70m_layer_last_2026_06_08.md`.
+- Rejected or withheld artifacts: `artifacts/activation_geometry/modal_pythia_70m_layer_last.json`.
+- Key metrics: raw category separation `0.0002`; raw bridge lift `0.0002`; mean-centered category separation `0.1356`; mean-centered bridge lift `0.1957`; mean-centered bridge-pair above-baseline rate `0.9167`.
+- Variance or ablation: raw-vs-centered comparison and deterministic dry-run only.
+
+Residual content:
+
+- Explained by old regime: language-level concept similarity may still drive the bridge geometry.
+- New content outside old regime: bridge structure appears in open-model hidden states after removing the dominant common activation direction.
+- Retractions or supersessions: raw activation cosine should not be used as evidence without centering or another anisotropy correction.
+
+Next move: run layer sweeps and a second open model, then test whether selected bridge directions can steer generation or classification behavior.

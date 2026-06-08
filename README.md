@@ -41,6 +41,7 @@ Current experiment families:
 
 - [experiments/weakness_vs_simplicity](experiments/weakness_vs_simplicity): synthetic tests for the claim that generalization is driven by weak compatible constraints rather than shortest forms.
 - [experiments/concept_geometry](experiments/concept_geometry): model-backed probes for whether attractors, conceptual spaces, activation geometry, constraints, and agency terms occupy related embedding neighborhoods.
+- [experiments/activation_geometry](experiments/activation_geometry): open-model hidden-state probes for whether the same bridge geometry appears beyond embedding-only language space.
 
 Run the first pilot:
 
