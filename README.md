@@ -46,6 +46,7 @@ Run the first pilot:
 ```bash
 python3 experiments/weakness_vs_simplicity/experiment.py --trials 500 --seed 7 --out artifacts/weakness_vs_simplicity/pilot.json
 python3 experiments/weakness_vs_simplicity/experiment.py --trials 500 --seed 7 --no-memorizer --out artifacts/weakness_vs_simplicity/no_memorizer_control.json
+python3 experiments/weakness_vs_simplicity/experiment.py --trials 500 --seed 7 --no-memorizer --include-broad-negative-excluder --out artifacts/weakness_vs_simplicity/broad_negative_excluder_stress.json
 ```
 
 ## Environment

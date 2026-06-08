@@ -8,14 +8,16 @@
 - [x] Start a discovery-regime audit ledger.
 - [x] Scaffold the first synthetic experiment.
 - [x] Run the first synthetic pilot.
-- [ ] Publish the repo to GitHub.
-- [ ] Push a feature branch and open the first PR.
+- [x] Publish the repo to GitHub.
+- [x] Push a feature branch, open PR #1, and merge it.
 
 ## Experiment Track 1: Weakness vs. Simplicity
 
 - [x] Create a minimal synthetic benchmark.
 - [x] Run the pilot and record accepted/rejected artifacts.
 - [x] Add a negative control where memorizer hypotheses are removed.
+- [x] Add a stress test where the vocabulary includes overly broad unsafe hypotheses.
+- [ ] Add a validity-gated weakness selector and compare it against pure weakness.
 - [ ] Extend from Boolean-rule worlds to text/classification prompts.
 - [ ] Compare against LLM-generated rules or embeddings.
 
