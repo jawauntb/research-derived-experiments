@@ -4,11 +4,20 @@
 from __future__ import annotations
 
 import math
+import random
 from dataclasses import asdict, dataclass
 from typing import Any
 
 
 PATCH_TEXT_REGIMES = ("definition", "neutral")
+PAIR_SET_OPTIONS = ("focus", "baseline", "combined")
+SUMMARY_KINDS = (
+    "positive",
+    "source_family",
+    "generic_control",
+    "baseline_same_category",
+    "baseline_cross_category",
+)
 BASIN_SOURCE_SWEEP = (
     ("attractor", "attractor_network", "prototype", "positive"),
     ("prototype", "attractor_network", "attractor", "source_family"),
@@ -51,6 +60,137 @@ def label_free_pair_specs() -> list[LabelFreeReadoutPair]:
             )
         )
     return rows
+
+
+def focus_pair_ids() -> set[str]:
+    return {row.id for row in label_free_pair_specs()}
+
+
+def concept_id(row: Any) -> str:
+    return str(row["id"] if isinstance(row, dict) else row.id)
+
+
+def concept_category(row: Any) -> str:
+    return str(row["category"] if isinstance(row, dict) else row.category)
+
+
+def choose_baseline_distractor(
+    concepts: list[Any],
+    *,
+    left: str,
+    right: str,
+    rng: random.Random,
+) -> str:
+    category_by_id = {concept_id(row): concept_category(row) for row in concepts}
+    target_category = category_by_id[right]
+    excluded = {left, right}
+    same_target_category = [
+        concept_id(row)
+        for row in concepts
+        if concept_id(row) not in excluded
+        and category_by_id[concept_id(row)] == target_category
+    ]
+    pool = same_target_category or [
+        concept_id(row) for row in concepts if concept_id(row) not in excluded
+    ]
+    if not pool:
+        raise ValueError(f"No distractor candidates available for {left}->{right}")
+    return pool[rng.randrange(len(pool))]
+
+
+def sample_rows(
+    rows: list[tuple[str, str, str]],
+    *,
+    count: int,
+    rng: random.Random,
+) -> list[tuple[str, str, str]]:
+    shuffled = list(rows)
+    rng.shuffle(shuffled)
+    return shuffled[: min(count, len(shuffled))]
+
+
+def baseline_pair_specs(
+    concepts: list[Any],
+    *,
+    sample_count: int,
+    seed: int,
+) -> list[LabelFreeReadoutPair]:
+    if sample_count < 1:
+        raise ValueError("sample_count must be at least 1")
+    concept_ids = sorted(concept_id(row) for row in concepts)
+    category_by_id = {concept_id(row): concept_category(row) for row in concepts}
+    focus_ids = focus_pair_ids()
+    focus_left_right = {
+        (row.left, row.right)
+        for row in label_free_pair_specs()
+    }
+    same_category_pairs = []
+    cross_category_pairs = []
+    distractor_rng = random.Random(seed + 17)
+    for left in concept_ids:
+        for right in concept_ids:
+            if left == right:
+                continue
+            distractor = choose_baseline_distractor(
+                concepts,
+                left=left,
+                right=right,
+                rng=distractor_rng,
+            )
+            row = (left, right, distractor)
+            if pair_id(left=left, right=right, distractor=distractor) in focus_ids:
+                continue
+            if (left, right) in focus_left_right:
+                continue
+            if category_by_id[left] == category_by_id[right]:
+                same_category_pairs.append(row)
+            else:
+                cross_category_pairs.append(row)
+
+    same_count = max(1, sample_count // 4)
+    cross_count = sample_count - same_count
+    sample_rng = random.Random(seed)
+    sampled = [
+        *sample_rows(same_category_pairs, count=same_count, rng=sample_rng),
+        *sample_rows(cross_category_pairs, count=cross_count, rng=sample_rng),
+    ]
+    return [
+        LabelFreeReadoutPair(
+            id=pair_id(left=left, right=right, distractor=distractor),
+            left=left,
+            right=right,
+            kind=(
+                "baseline_same_category"
+                if category_by_id[left] == category_by_id[right]
+                else "baseline_cross_category"
+            ),
+            distractor=distractor,
+        )
+        for left, right, distractor in sampled
+    ]
+
+
+def pair_specs_for_set(
+    concepts: list[Any],
+    *,
+    pair_set: str,
+    sample_count: int,
+    seed: int,
+) -> list[LabelFreeReadoutPair]:
+    if pair_set not in PAIR_SET_OPTIONS:
+        options = ", ".join(PAIR_SET_OPTIONS)
+        raise ValueError(f"pair_set must be one of: {options}")
+    focus_pairs = label_free_pair_specs()
+    baseline_pairs = baseline_pair_specs(
+        concepts,
+        sample_count=sample_count,
+        seed=seed,
+    )
+    if pair_set == "focus":
+        return focus_pairs
+    if pair_set == "baseline":
+        return baseline_pairs
+    return [*focus_pairs, *baseline_pairs]
 
 
 def serializable_pair_specs(pairs: list[LabelFreeReadoutPair]) -> list[dict[str, Any]]:
@@ -261,7 +401,7 @@ def gate_summaries(specificity: list[dict[str, Any]]) -> list[dict[str, Any]]:
         selected = [
             row for row in specificity if row["patch_text_regime"] == patch_text_regime
         ]
-        for kind in ("positive", "source_family", "generic_control"):
+        for kind in SUMMARY_KINDS:
             rows = [row for row in selected if row["kind"] == kind]
             summaries.append(
                 {
@@ -284,10 +424,115 @@ def gate_summaries(specificity: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return summaries
 
 
+def mean(values: list[float]) -> float | None:
+    if not values:
+        return None
+    return sum(values) / len(values)
+
+
+def median(values: list[float]) -> float | None:
+    if not values:
+        return None
+    sorted_values = sorted(values)
+    midpoint = len(sorted_values) // 2
+    if len(sorted_values) % 2:
+        return sorted_values[midpoint]
+    return (sorted_values[midpoint - 1] + sorted_values[midpoint]) / 2
+
+
+def empirical_percentile(value: float, distribution: list[float]) -> float | None:
+    if not distribution:
+        return None
+    return sum(1 for item in distribution if item <= value) / len(distribution)
+
+
+def transfer_baseline_summaries(
+    specificity: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    summaries = []
+    comparison_kinds = ("positive", "source_family", "generic_control")
+    for patch_text_regime in PATCH_TEXT_REGIMES:
+        selected = [
+            row for row in specificity if row["patch_text_regime"] == patch_text_regime
+        ]
+        baseline_rows = [
+            row for row in selected if str(row["kind"]).startswith("baseline_")
+        ]
+        baseline_advantages = [
+            float(row["target_advantage_over_best_control"])
+            for row in baseline_rows
+        ]
+        baseline_deltas = [
+            float(row["target_mean_target_margin_delta"])
+            for row in baseline_rows
+        ]
+        summaries.append(
+            {
+                "patch_text_regime": patch_text_regime,
+                "kind": "baseline_distribution",
+                "count": len(baseline_rows),
+                "specific_pass_count": sum(
+                    1 for row in baseline_rows if row["specific_target_pass"]
+                ),
+                "specific_pass_rate": (
+                    sum(1 for row in baseline_rows if row["specific_target_pass"])
+                    / len(baseline_rows)
+                    if baseline_rows
+                    else None
+                ),
+                "mean_target_margin_delta": mean(baseline_deltas),
+                "median_target_margin_delta": median(baseline_deltas),
+                "mean_advantage_over_best_control": mean(baseline_advantages),
+                "median_advantage_over_best_control": median(baseline_advantages),
+            }
+        )
+        for kind in comparison_kinds:
+            rows = [row for row in selected if row["kind"] == kind]
+            advantages = [
+                float(row["target_advantage_over_best_control"])
+                for row in rows
+            ]
+            deltas = [
+                float(row["target_mean_target_margin_delta"])
+                for row in rows
+            ]
+            mean_advantage = mean(advantages)
+            summaries.append(
+                {
+                    "patch_text_regime": patch_text_regime,
+                    "kind": kind,
+                    "count": len(rows),
+                    "specific_pass_count": sum(
+                        1 for row in rows if row["specific_target_pass"]
+                    ),
+                    "specific_pass_rate": (
+                        sum(1 for row in rows if row["specific_target_pass"])
+                        / len(rows)
+                        if rows
+                        else None
+                    ),
+                    "mean_target_margin_delta": mean(deltas),
+                    "mean_advantage_over_best_control": mean_advantage,
+                    "mean_advantage_percentile_vs_baseline": (
+                        empirical_percentile(mean_advantage, baseline_advantages)
+                        if mean_advantage is not None
+                        else None
+                    ),
+                    "max_advantage_percentile_vs_baseline": (
+                        empirical_percentile(max(advantages), baseline_advantages)
+                        if advantages
+                        else None
+                    ),
+                }
+            )
+    return summaries
+
+
 def public_summary(payload: dict[str, Any]) -> dict[str, Any]:
     return {
         "manifest": payload["manifest"],
         "gate_summaries": payload["gate_summaries"],
+        "transfer_baseline_summaries": payload.get("transfer_baseline_summaries", []),
         "specificity_rows": payload["specificity_rows"],
         "aggregate_rows": payload["aggregate_rows"],
     }
