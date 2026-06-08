@@ -289,3 +289,39 @@ Residual content:
 - Retractions or supersessions: previous early-layer claims should be stated as mean-pooling claims, not as pooling-independent activation geometry.
 
 Next move: choose candidate intervention layers separately for mean-pooling-style classifiers and final-token-style generation/steering probes.
+
+## Activation Geometry Probe: Intervention Layer Candidates
+
+Question: which layers are eligible for the first classifier and steering interventions?
+
+Current regime:
+
+- Artifact types: concept prompts, activation-layer metrics, pooling-indexed layer profiles, bridge-pair candidates, intervention preregistration notes.
+- Operations: layer eligibility filtering, primary/backup/control selection, bridge-pair triage, gate definition.
+- Gates/verifiers: centered activation gate, pooling-specific readout rule, held-out paraphrase gate, control-layer gate, control-pair gate.
+- Known limitations: pair-level stability has not yet been recomputed for every selected layer; no causal patching has been run.
+
+Action class:
+
+- Retrieval/search/discovery: gate-setting search.
+- Why: the run constrains the next causal/search step before outcomes are known.
+
+Gate:
+
+- Acceptance rule: candidate layers must come from accepted model/pooling sweeps and satisfy the role-specific selection rule.
+- Withheld/rejected rule: embedding layer `0` and failed bridge-rate layers cannot be primary intervention targets.
+
+Results:
+
+- Accepted artifacts: `experiments/activation_geometry/results/intervention_layer_candidates_2026_06_08.md`.
+- Rejected or withheld artifacts: no raw activations added; raw payloads remain local-only.
+- Key metrics: mean-pooling primaries Pythia `2` and GPT-2 `1`; final-token primaries Pythia `5` and GPT-2 `12`.
+- Variance or ablation: backup/control layers are preregistered for each model/readout.
+
+Residual content:
+
+- Explained by old regime: layer scores can select candidates.
+- New content outside old regime: intervention targets are now readout-specific, not global layer claims.
+- Retractions or supersessions: do not use a single "best layer" across classifier and generation settings.
+
+Next move: implement the held-out paraphrase classifier/readout pilot before any generative steering claim.
