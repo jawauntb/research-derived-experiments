@@ -177,6 +177,9 @@ def objective_role_for_mode(mode: str) -> str:
         "target_resid_sd",
         "target_resid_control",
         "target_resid_all",
+        "caa_target_contrast",
+        "caa_target_minus_source",
+        "caa_target_minus_distractor",
     } or mode in PENALTY_DIRECTION_MODES:
         return "target"
     if mode == "source_learned":
@@ -758,6 +761,114 @@ def learned_gradient_direction(
     return mean_tensor(torch, gradients)
 
 
+def hidden_state_for_prompt(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    prompt: str,
+    layer: int,
+    max_length: int,
+) -> Any:
+    input_ids = tokenizer.encode(
+        prompt,
+        add_special_tokens=False,
+        truncation=True,
+        max_length=max_length,
+    )
+    if not input_ids:
+        raise ValueError("Prompt encoded to zero tokens")
+
+    device = next(model.parameters()).device
+    input_tensor = torch.tensor([input_ids], dtype=torch.long, device=device)
+    attention_mask = torch.ones_like(input_tensor)
+    block = block_for_hidden_state_layer(model, layer)
+    token_indices = torch.tensor([len(input_ids) - 1], device=device)
+    captured: dict[str, Any] = {}
+
+    def capture_hook(_module: Any, _inputs: tuple[Any, ...], output: Any) -> Any:
+        hidden_states = output[0] if isinstance(output, tuple) else output
+        batch_indices = torch.arange(hidden_states.shape[0], device=hidden_states.device)
+        captured["selected"] = (
+            hidden_states[batch_indices, token_indices].detach().clone()
+        )
+        return output
+
+    handle = block.register_forward_hook(capture_hook)
+    try:
+        with torch.no_grad():
+            model(
+                input_ids=input_tensor,
+                attention_mask=attention_mask,
+                use_cache=False,
+            )
+        selected = captured.get("selected")
+        if selected is None:
+            raise RuntimeError("Could not capture hidden-state activation")
+        return selected[0].float().cpu()
+    finally:
+        handle.remove()
+
+
+def mean_activation_direction(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    source_texts: list[tuple[int, str]],
+    layer: int,
+    max_length: int,
+    prompt_frame: str,
+) -> Any:
+    activations = [
+        hidden_state_for_prompt(
+            torch=torch,
+            tokenizer=tokenizer,
+            model=model,
+            prompt=full_label_prompt(
+                source_text=source_text,
+                prompt_frame=prompt_frame,
+            ),
+            layer=layer,
+            max_length=max_length,
+        )
+        for _variant_index, source_text in source_texts
+    ]
+    return mean_tensor(torch, activations)
+
+
+def learned_activation_directions(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    role_source_texts: dict[str, list[tuple[int, str]]],
+    layer: int,
+    max_length: int,
+    prompt_frame: str,
+) -> dict[str, Any]:
+    role_means = {
+        role: mean_activation_direction(
+            torch=torch,
+            tokenizer=tokenizer,
+            model=model,
+            source_texts=source_texts,
+            layer=layer,
+            max_length=max_length,
+            prompt_frame=prompt_frame,
+        )
+        for role, source_texts in role_source_texts.items()
+    }
+    return {
+        "caa_target_contrast": role_means["target"]
+        - 0.5 * (role_means["source"] + role_means["distractor"]),
+        "caa_target_minus_source": role_means["target"] - role_means["source"],
+        "caa_target_minus_distractor": (
+            role_means["target"] - role_means["distractor"]
+        ),
+    }
+
+
 def random_same_norm(
     *,
     torch: Any,
@@ -844,6 +955,7 @@ def direction_for_mode(
     *,
     torch: Any,
     learned_directions: dict[str, Any],
+    activation_directions: dict[str, Any],
     control_target_direction: Any | None,
     control_target_directions: list[Any],
     hard_control_target_direction: Any | None,
@@ -856,6 +968,12 @@ def direction_for_mode(
             torch=torch,
             direction=target_direction,
             seed=seed,
+        )
+    if mode in activation_directions:
+        return rescale_to_reference_norm(
+            torch,
+            activation_directions[mode],
+            target_direction,
         )
     if mode == "target_resid_sd":
         return rescale_to_reference_norm(
@@ -972,15 +1090,38 @@ def run_behavior_aligned_direction_remote(
             right = str(pair["right"])
             distractor = str(pair["distractor"])
             current_pair_id = pair_id(left, right)
-            source_texts = train_source_texts(
-                records,
-                concept_id=left,
-                train_variant_indices=train_variants,
-            )
+            role_source_texts = {
+                "source": train_source_texts(
+                    records,
+                    concept_id=left,
+                    train_variant_indices=train_variants,
+                ),
+                "target": train_source_texts(
+                    records,
+                    concept_id=right,
+                    train_variant_indices=train_variants,
+                ),
+                "distractor": train_source_texts(
+                    records,
+                    concept_id=distractor,
+                    train_variant_indices=train_variants,
+                ),
+            }
+            source_texts = role_source_texts["source"]
             heldout_text = heldout_source_text(
                 records,
                 concept_id=left,
                 holdout_variant_index=holdout_variant_index,
+            )
+            activation_prompt_frame = "source_passage"
+            activation_directions = learned_activation_directions(
+                torch=torch,
+                tokenizer=tokenizer,
+                model=model,
+                role_source_texts=role_source_texts,
+                layer=layer,
+                max_length=max_length,
+                prompt_frame=activation_prompt_frame,
             )
             for objective_label_scoring_regime in objective_label_scoring_regimes:
                 objective_regime_parts = label_scoring_regime_parts(
@@ -1026,6 +1167,10 @@ def run_behavior_aligned_direction_remote(
                     objective_role: float(torch.linalg.vector_norm(direction).item())
                     for objective_role, direction in learned_directions.items()
                 }
+                activation_norms = {
+                    activation_mode: float(torch.linalg.vector_norm(direction).item())
+                    for activation_mode, direction in activation_directions.items()
+                }
                 learned_alignment = {
                     "target_source_cosine": cosine_or_none(
                         torch,
@@ -1053,7 +1198,10 @@ def run_behavior_aligned_direction_remote(
                         else objective_labels_by_regime
                     ),
                     "learned_directions": learned_directions,
+                    "activation_directions": activation_directions,
                     "norms": norms,
+                    "activation_norms": activation_norms,
+                    "activation_prompt_frame": activation_prompt_frame,
                     "learned_alignment": learned_alignment,
                 }
 
@@ -1123,7 +1271,10 @@ def run_behavior_aligned_direction_remote(
                 objective_labels_by_role = record["objective_labels_by_role"]
                 heldout_text = str(record["heldout_text"])
                 learned_directions = record["learned_directions"]
+                activation_directions = record["activation_directions"]
                 norms = record["norms"]
+                activation_norms = record["activation_norms"]
+                activation_prompt_frame = str(record["activation_prompt_frame"])
                 learned_alignment = dict(record["learned_alignment"])
                 learned_alignment["target_control_cosine"] = cosine_or_none(
                     torch,
@@ -1194,6 +1345,7 @@ def run_behavior_aligned_direction_remote(
                                 direction = direction_for_mode(
                                     torch=torch,
                                     learned_directions=learned_directions,
+                                    activation_directions=activation_directions,
                                     control_target_direction=control_target_direction,
                                     control_target_directions=control_directions,
                                     hard_control_target_direction=(
@@ -1278,6 +1430,10 @@ def run_behavior_aligned_direction_remote(
                                             holdout_variant_index
                                         ),
                                         "norms": norms,
+                                        "activation_norms": activation_norms,
+                                        "activation_prompt_frame": (
+                                            activation_prompt_frame
+                                        ),
                                         "learned_alignment": learned_alignment,
                                         "scores": {
                                             "baseline": baseline_scores,

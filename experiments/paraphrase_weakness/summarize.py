@@ -96,7 +96,7 @@ def main() -> int:
         )
 
     md = [
-        f"# Paraphrase Weakness Summary",
+        "# Paraphrase Weakness Summary",
         "",
         f"Model: `{data.get('model_id')}`",
         f"Layers: {n_layers}",

@@ -22,12 +22,14 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
     def test_parse_direction_modes(self) -> None:
         self.assertEqual(
             parse_direction_modes(
-                "target_learned, target_penalty_controls_1_0, target_penalty_hard_1_0"
+                "target_learned, target_penalty_controls_1_0, "
+                "target_penalty_hard_1_0, caa_target_contrast"
             ),
             [
                 "target_learned",
                 "target_penalty_controls_1_0",
                 "target_penalty_hard_1_0",
+                "caa_target_contrast",
             ],
         )
         with self.assertRaises(ValueError):
