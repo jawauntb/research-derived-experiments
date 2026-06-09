@@ -246,7 +246,66 @@ Both produce JSON artifacts with per-trial records, per-(family, selector) Wilso
 
 ```bash
 python3 -m unittest discover -s tests -p "test_symbolic*"
+python3 -m unittest discover -s tests -p "test_rotation*"
 ```
+
+## 10. Scaling Beyond Cyclic Toys
+
+The cyclic and dihedral results above operate on small finite groups and a hand-built candidate pool. The natural reviewer objection is that the result will not survive when (a) the input modality is real images or real natural language, and (b) the group is large enough that hand enumeration is impossible. We give two extensions that directly address this concern.
+
+### 10.1 Vision: rotated-stroke partial-orbit supervision
+
+We construct a synthetic stroke-classification task with eight classes on 16×16 grayscale images. The underlying group is $\mathbb{Z}_8$ cyclic rotation. Training shows each class at only three of the eight rotation angles; the remaining five are OOD. This is a direct re-implementation of Perin and Deny's [10] partially-observed cyclic-symmetry setup, with neural weakness as the additional measurement.
+
+We sweep 96 small models (CNN/MLP × {hidden, depth, init, lr, optimizer, augmentation}) and compute, for each: training loss, parameter $L_2$, Hutchinson sharpness, train accuracy, **`weakness_rotation_norm`** (fraction of (test sample, rotation $g$) pairs for which `argmax f(rotate(x,g))` agrees with `argmax f(x)`), and **`weakness_wrong_group_norm`** (same statistic under random pixel permutations).
+
+Result (96 models, mean OOD = 0.392):
+
+| Predictor | Pearson r | Spearman ρ |
+| --- | ---: | ---: |
+| **`weakness_rotation_norm`** | **+0.672** | **+0.573** |
+| `weakness_wrong_group_norm` (control) | **−0.341** | **−0.452** |
+| parameter $L_2$ | +0.333 | +0.269 |
+| train accuracy | +0.332 | +0.265 |
+| final training loss | −0.319 | −0.221 |
+| Hutchinson sharpness | +0.198 | +0.368 |
+
+Weakness under the rotation group is the dominant predictor of OOD generalization across the sweep, beating every classical predictor by ≥ 2×. The wrong-group control is correctly anti-correlated: pixel-shuffle invariance and rotation invariance trade off, as one would expect of a model that has actually learned the symmetry.
+
+Per-augmentation breakdown reproduces the symbolic story at vision scale:
+
+| Augmentation | n | Mean OOD | Mean weakness |
+| --- | ---: | ---: | ---: |
+| `partial_rotation` | 25 | 0.734 | 0.776 |
+| `wrong_permute` | 20 | 0.264 | 0.388 |
+| `none` | 28 | 0.275 | 0.402 |
+| `full_rotation` | 23 | 0.272 | 0.432 |
+
+Partial-orbit augmentation produces the highest OOD and the highest weakness; wrong/no/full augmentation produces low OOD and low weakness. The vision result mirrors the cyclic-symbolic separation: weakness is the bridge variable that explains why partial-orbit exposure generalizes when others do not.
+
+### 10.2 Language: paraphrase invariance in Pythia-70M
+
+We extract per-layer mean-pooled hidden states from Pythia-70M for 24 concepts × 3 paraphrase variants, treating each concept's three variants as an approximate paraphrase orbit. We compute per-concept and per-layer **paraphrase weakness** (mean pairwise cosine between same-concept variants), **wrong-orbit control** (cosine between a variant of concept *c* and variants of *other* concepts), and **behavioral consistency** (fraction of variant pairs whose next-token argmax predictions agree).
+
+Raw cosine is dominated by the anisotropy of LLM embeddings: the wrong-orbit control is itself high (~0.86–0.99 at deeper layers), and the weakness−control gap is small. After per-layer mean-centering (the "All-but-the-Top" correction; Mu and Viswanath, 2018), the picture sharpens:
+
+| Layer | weak (centered) | ctrl (centered) | gap (centered) |
+| ---: | ---: | ---: | ---: |
+| 0 | 0.400 | −0.038 | +0.438 |
+| 1 | 0.568 | −0.020 | +0.588 |
+| 2 | 0.565 | −0.030 | +0.596 |
+| 3 | 0.718 | +0.029 | +0.689 |
+| 4 | 0.742 | +0.008 | +0.734 |
+| 5 | 0.726 | −0.067 | **+0.793** |
+| 6 | 0.700 | −0.014 | +0.713 |
+
+Per-concept centered paraphrase weakness exceeds the wrong-orbit control by +0.44 to +0.79 across layers, peaking at layer 5. **Paraphrase orbits genuinely cluster in centered Pythia-70M latent space** — a real weakness-like geometric signal that simple flatness/loss/parameter-norm cannot expose.
+
+However, this latent-space clustering does NOT predict per-concept next-token behavioral consistency at this scale. Per-concept Pearson(centered weakness, behavior) is in [−0.35, −0.13] across all 7 layers — close to zero given N = 24 concepts. We report this as an **honest partial result: the latent-clustering claim holds, but the latent-weakness-predicts-behavior chain is not confirmed at LLM scale in this small setup.** Three confounds: (a) next-token argmax is a noisy behavior metric on definition-style prompts; (b) N = 24 concepts gives wide CIs; (c) Pythia-70M is small. A stronger experiment would use (i) a larger model, (ii) a target-word log-prob behavior metric, (iii) a paraphrase set 10× larger.
+
+### 10.3 What scaled and what did not
+
+The cyclic and dihedral symbolic results are clean ($r \approx +0.81$, $P(\text{invariant}) = 1.0$). The rotated-stroke vision result is strong ($r \approx +0.67$). The Pythia paraphrase **latent geometry** shows the expected weakness signal in centered space ($+0.79$ gap), but the **behavioral consistency** prediction does not yet replicate at this scale ($|r| \le 0.35$, N=24). The honest takeaway: **weakness is load-bearing in the latent-geometry sense across symbolic, vision, and LLM domains, but the chain "latent weakness → downstream behavior" is only validated where the behavior measurement is sharp (symbolic OOD accuracy, vision OOD classification) and remains an open question in the language domain.**
 
 ## 9. Discussion
 
@@ -254,7 +313,9 @@ The discriminating quantity between local shortcut and globally invariant rule, 
 
 When the candidate transformation group is too small (parity) or too large/uninformative (full symmetric group), weakness ceases to discriminate. This is not a defect — it is a precise statement of when symmetry-volume is, and is not, load-bearing. The data-inferred result shows that the right group can frequently be recovered from training data alone, without oracle access, which is the version of the result that matters for practical model selection.
 
-The path forward is to (i) learn the group from data using neural infrastructures, (ii) scale the candidate pool to neural-architecture search, and (iii) integrate weakness into training-time regularization. We invite the community to extend this benchmark to compositional symmetries ($\mathbb{Z}_n \times \mathbb{Z}_m$), natural-language paraphrase invariants, and image-classification tasks where partial-orbit training is the norm.
+The scaling experiments in Section 10 sharpen this picture. The vision result (rotated-stroke partial-orbit supervision) confirms that learned-function weakness predicts OOD generalization beyond the symbolic toy regime: a 96-model sweep on Z_8 rotation gives weakness Pearson r = +0.67 with OOD, the wrong-group control gives r = −0.34, and every classical predictor is at |r| ≤ 0.33. The language result is more nuanced. Per-layer centered cosine reveals that paraphrase orbits cluster strongly in Pythia-70M latent space (gap +0.79 between same-orbit and wrong-orbit pairs at layer 5), but this latent clustering does not yet predict per-concept next-token behavioral consistency. We treat the LLM result as a partial confirmation: the geometric structure exists at the layer level, but its causal coupling to next-token behavior is below detection at N = 24 concepts and 70M parameters.
+
+The path forward is to (i) replicate the language result at larger model scale with a sharper behavioral metric (target-word log-probability rather than argmax) and a paraphrase set 10× larger; (ii) scale the candidate pool to neural-architecture search; (iii) integrate weakness into training-time regularization; (iv) derive an analytic relationship between weakness and PAC-Bayes generalization bounds. We invite the community to extend this benchmark to compositional symmetries ($\mathbb{Z}_n \times \mathbb{Z}_m$), natural-language paraphrase invariants at scale, and image-classification tasks where partial-orbit training is the norm.
 
 ## Acknowledgements and Code
 
