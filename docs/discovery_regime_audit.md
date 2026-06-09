@@ -1308,3 +1308,46 @@ Residual content:
 - Retractions or supersessions: the older Boolean-only weakness benchmark should be treated as preliminary; the flagship track should use symmetry and transformation compatibility as the central operationalization.
 
 Next move: run symbolic sweeps, add non-cyclic task families, add wrong/noisy group controls, then train small neural models and measure latent equivariance as model-level weakness.
+
+## Activation Geometry Probe: Multi-Control Alias Holdout
+
+Question: does the constrained alias-direction frontier survive held-out alias and leave-one-out multi-control stress tests?
+
+Current regime:
+
+- Artifact types: alias-indexed label manifests, full-label gradient directions, constrained direction modes, held-out alias eval rows, leave-one-out control rows.
+- Operations: alias-indexed label scoring, norm-matched multi-control subtraction, held-out full-label continuation scoring.
+- Gates/verifiers: held-out alias positives must remain robust; independent controls must weaken relative to raw target directions; construction-zeroed controls do not count as independent evidence.
+- Known limitations: Pythia-70M only, three positives, two valence controls, one held-out alias per concept.
+
+Action class:
+
+- Retrieval/search/discovery: verifier hardening with a rejected candidate.
+- Why: this adds a held-out alias verifier and falsifies the current constrained frontier as a paper-level mechanism.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/multicontrol_alias_holdout_2026_06_09.md`; local ignored payloads under `artifacts/activation_geometry/modal_pythia_70m_multicontrol_alias_holdout_*.json`.
+- Positive targets: promoted steering pairs.
+- Negative controls: valence controls with leave-one-out control bases; random same-norm controls.
+- Stress tests: `source_passage` and `latent_choice`; eval labels `alias_0`, `alias_1`, and `canonical`; penalty weights `0.5`, `1.0`, `2.0`.
+
+Gate:
+
+- Acceptance rule: promote the constrained frontier only if held-out `alias_1` positives remain `3/3` while independent controls weaken.
+- Withheld/rejected rule: withhold if any positive systematically fails under held-out alias or if controls still pass.
+
+Results:
+
+- Accepted artifacts: `alias_0`/`alias_1` regimes; multi-control penalty modes; `experiments/activation_geometry/results/multicontrol_alias_holdout_2026_06_09.md`.
+- Rejected or withheld artifacts: current constrained alias direction remains non-paper-ready.
+- Key metrics: raw target directions pass `3/3` held-out `alias_1` positives but controls pass `2/2`; constrained modes reduce controls but drop held-out positives to `2/3`, consistently failing `attractor->attractor_network`.
+- Variance or ablation: both prompt frames agree on the held-out alias failure; canonical and `alias_0` remain easier than `alias_1`.
+
+Residual content:
+
+- Explained by old regime: exact-label and first-alias behavior surfaces are easier to control than label-invariant concept behavior.
+- New content outside old regime: held-out alias scoring exposes an alias-specific weakness in the constrained frontier.
+- Retractions or supersessions: supersede "hard-control penalty is close to paper-ready" with "hard-control penalty is a useful frontier but not alias-invariant."
+
+Next move: jointly train over multiple aliases and broaden the concept/control set before scaling models.

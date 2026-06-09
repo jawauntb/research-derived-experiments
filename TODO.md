@@ -87,7 +87,9 @@
 - [x] Build residualized alias directions that subtract source/distractor/control-label components.
 - [x] Build constrained alias behavior directions with explicit valence-control penalties.
 - [x] Treat `valence->steering_vector` as the adversarial leakage control in behavior-direction experiments.
-- [ ] Build a multi-control constrained alias objective and evaluate held-out aliases/controls.
+- [x] Build a multi-control constrained alias objective and evaluate held-out aliases/controls.
+- [ ] Train behavior directions jointly over multiple aliases and evaluate on held-out alias phrases.
+- [ ] Expand positive/control concept sets before larger-model replication.
 - [ ] Track a specificity frontier: positive mean retained vs independent control mean suppressed.
 - [ ] Replicate the hook-output transfer ridge on a second checkpoint or open model.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.

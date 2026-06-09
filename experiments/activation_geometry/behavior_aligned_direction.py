@@ -18,12 +18,15 @@ DIRECTION_MODES = (
     "target_penalty_hard_1_0",
     "target_penalty_hard_2_0",
     "target_penalty_control_mean_1_0",
+    "target_penalty_controls_0_5",
+    "target_penalty_controls_1_0",
+    "target_penalty_controls_2_0",
     "random_same_norm",
 )
 OBJECTIVE_ROLES = ("target", "source", "distractor")
 PROMPT_FRAMES = ("source_passage", "latent_choice")
 SCORING_SURFACES = ("option_token", "full_label")
-LABEL_SCORING_REGIMES = ("canonical", "alias")
+LABEL_SCORING_REGIMES = ("canonical", "alias", "alias_0", "alias_1")
 
 
 def parse_csv(value: str) -> list[str]:
