@@ -60,9 +60,12 @@
 - [x] Add a behavior-level gate for the trained-readout-confirmed transfer ridge.
 - [x] Design a behavior-aligned intervention after the raw state-replacement behavior gate failed.
 - [x] Add label-only, shuffled-label, blank-carrier, and stripped-definition carrier controls for full-label behavior scoring.
+- [x] Add alias-label scoring controls for full-label behavior scoring.
 - [ ] Replicate the full-label behavior gate with a second seed and second open model.
-- [ ] Add alias, paraphrased-label, and length-matched carrier controls for full-label behavior scoring.
+- [ ] Add paraphrased-label and length-matched carrier controls for full-label behavior scoring.
+- [ ] Diagnose alias survivor pockets with multiple aliases and alias-shuffled controls.
 - [ ] Learn behavior-aligned directions against the full-label objective.
+- [ ] Learn behavior-aligned directions against alias-label objectives.
 - [ ] Replicate the hook-output transfer ridge on a second checkpoint or open model.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.
 - [ ] Add anisotropy and directional-curvature proxy checks to activation sweeps where feasible.

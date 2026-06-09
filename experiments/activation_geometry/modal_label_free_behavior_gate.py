@@ -21,6 +21,7 @@ DEFAULT_PATCH_VECTOR_SURFACE = "hook_output"
 DEFAULT_PROMPT_FRAME = "source_passage"
 DEFAULT_SCORING_SURFACE = "option_token"
 DEFAULT_LABEL_SCORE_NORMALIZATION = "mean"
+DEFAULT_LABEL_SCORING_REGIMES = "canonical"
 DEFAULT_OPTION_ORDERS = (
     "source,target,distractor;"
     "target,distractor,source;"
@@ -40,6 +41,7 @@ OPTION_ROLES = ("source", "target", "distractor")
 PROMPT_FRAMES = ("source_passage", "latent_choice")
 SCORING_SURFACES = ("option_token", "full_label")
 LABEL_SCORE_NORMALIZATIONS = ("mean", "sum")
+LABEL_SCORING_REGIMES = ("canonical", "alias")
 IMAGE = modal.Image.debian_slim(python_version="3.12").pip_install(
     "torch>=2.5,<2.8",
     "transformers>=4.46,<5.0",
@@ -94,6 +96,45 @@ def parse_option_orders(value: str) -> list[tuple[str, str, str]]:
     if not orders:
         raise ValueError("At least one option order must be provided")
     return orders
+
+
+def load_aliases(path: Path) -> dict[str, list[str]]:
+    rows = json.loads(path.read_text())
+    aliases_by_concept: dict[str, list[str]] = {}
+    for row in rows:
+        concept_id = str(row["id"])
+        aliases = [
+            str(alias).strip()
+            for alias in row.get("aliases", [])
+            if str(alias).strip()
+        ]
+        if not aliases:
+            raise ValueError(f"Concept {concept_id!r} has no aliases")
+        aliases_by_concept[concept_id] = aliases
+    return aliases_by_concept
+
+
+def scoring_labels_for_regime(
+    *,
+    labels_by_concept: dict[str, str],
+    aliases_by_concept: dict[str, list[str]],
+    label_scoring_regime: str,
+) -> dict[str, str]:
+    if label_scoring_regime == "canonical":
+        return labels_by_concept
+    if label_scoring_regime == "alias":
+        missing = sorted(
+            concept_id
+            for concept_id in labels_by_concept
+            if not aliases_by_concept.get(concept_id)
+        )
+        if missing:
+            raise ValueError(f"Missing aliases for concepts: {missing}")
+        return {
+            concept_id: aliases_by_concept[concept_id][0]
+            for concept_id in labels_by_concept
+        }
+    raise ValueError(f"Unknown label scoring regime: {label_scoring_regime}")
 
 
 def neutral_carrier_text(*, label: str) -> str:
@@ -640,6 +681,7 @@ def heldout_text(
 def run_label_free_behavior_remote(
     concepts: list[dict[str, Any]],
     records: list[dict[str, Any]],
+    aliases_by_concept: dict[str, list[str]],
     pair_specs: list[dict[str, Any]],
     model_id: str,
     injection_layers: list[int],
@@ -651,6 +693,7 @@ def run_label_free_behavior_remote(
     prompt_frame: str,
     scoring_surface: str,
     label_score_normalization: str,
+    label_scoring_regimes: list[str],
     option_orders: list[tuple[str, str, str]],
     max_length: int,
 ) -> dict[str, Any]:
@@ -740,6 +783,8 @@ def run_label_free_behavior_remote(
                         "option_order": option_order,
                         "token_ids": token_ids,
                         "baseline_scores": baseline_scores,
+                        "label_scoring_regime": "canonical",
+                        "labels_by_role": labels_by_role,
                         "label_token_counts": None,
                     }
                 )
@@ -748,27 +793,40 @@ def run_label_free_behavior_remote(
                 source_text=source_prompt,
                 prompt_frame=prompt_frame,
             )
-            baseline_scores, label_counts = run_full_label_prompt(
-                torch=torch,
-                tokenizer=tokenizer,
-                model=model,
-                prompt=prompt,
-                injection_layer=injection_layers[0],
-                patch_vector=None,
-                patch_alpha=0.0,
-                max_length=max_length,
-                labels_by_role=labels_by_role,
-                label_score_normalization=label_score_normalization,
-            )
-            probe_specs.append(
-                {
-                    "prompt": prompt,
-                    "option_order": None,
-                    "token_ids": None,
-                    "baseline_scores": baseline_scores,
-                    "label_token_counts": label_counts,
+            for label_scoring_regime in label_scoring_regimes:
+                scored_labels_by_concept = scoring_labels_for_regime(
+                    labels_by_concept=labels_by_concept,
+                    aliases_by_concept=aliases_by_concept,
+                    label_scoring_regime=label_scoring_regime,
+                )
+                scored_labels_by_role = {
+                    "source": scored_labels_by_concept[left],
+                    "target": scored_labels_by_concept[right],
+                    "distractor": scored_labels_by_concept[distractor],
                 }
-            )
+                baseline_scores, label_counts = run_full_label_prompt(
+                    torch=torch,
+                    tokenizer=tokenizer,
+                    model=model,
+                    prompt=prompt,
+                    injection_layer=injection_layers[0],
+                    patch_vector=None,
+                    patch_alpha=0.0,
+                    max_length=max_length,
+                    labels_by_role=scored_labels_by_role,
+                    label_score_normalization=label_score_normalization,
+                )
+                probe_specs.append(
+                    {
+                        "prompt": prompt,
+                        "option_order": None,
+                        "token_ids": None,
+                        "baseline_scores": baseline_scores,
+                        "label_scoring_regime": label_scoring_regime,
+                        "labels_by_role": scored_labels_by_role,
+                        "label_token_counts": label_counts,
+                    }
+                )
         else:
             raise ValueError(f"Unknown scoring surface: {scoring_surface}")
         for injection_layer in injection_layers:
@@ -801,6 +859,7 @@ def run_label_free_behavior_remote(
                         for probe_spec in probe_specs:
                             prompt = str(probe_spec["prompt"])
                             baseline_scores = probe_spec["baseline_scores"]
+                            scored_labels_by_role = probe_spec["labels_by_role"]
                             if scoring_surface == "option_token":
                                 patched_scores = run_behavior_prompt(
                                     torch=torch,
@@ -829,7 +888,7 @@ def run_label_free_behavior_remote(
                                         ],
                                         patch_alpha=patch_alpha,
                                         max_length=max_length,
-                                        labels_by_role=labels_by_role,
+                                        labels_by_role=scored_labels_by_role,
                                         label_score_normalization=(
                                             label_score_normalization
                                         ),
@@ -860,6 +919,11 @@ def run_label_free_behavior_remote(
                                     "patch_context": "label_free_behavior_gate",
                                     "prompt_frame": prompt_frame,
                                     "scoring_surface": scoring_surface,
+                                    "label_scoring_regime": probe_spec[
+                                        "label_scoring_regime"
+                                    ],
+                                    "canonical_labels_by_role": labels_by_role,
+                                    "scored_labels_by_role": scored_labels_by_role,
                                     "label_score_normalization": (
                                         label_score_normalization
                                     ),
@@ -891,6 +955,7 @@ def run_label_free_behavior_remote(
 def main(
     concepts: str = "experiments/concept_geometry/concept_set.json",
     paraphrases: str = "experiments/concept_geometry/concept_paraphrases.json",
+    aliases: str = "experiments/concept_geometry/concept_aliases.json",
     model_id: str = DEFAULT_MODEL_ID,
     injection_layers: str = str(DEFAULT_INJECTION_LAYER),
     max_length: int = 160,
@@ -901,6 +966,7 @@ def main(
     prompt_frame: str = DEFAULT_PROMPT_FRAME,
     scoring_surface: str = DEFAULT_SCORING_SURFACE,
     label_score_normalization: str = DEFAULT_LABEL_SCORE_NORMALIZATION,
+    label_scoring_regimes: str = DEFAULT_LABEL_SCORING_REGIMES,
     patch_modes: str = DEFAULT_PATCH_MODES,
     patch_text_regimes: str = DEFAULT_PATCH_TEXT_REGIMES,
     option_orders: str = DEFAULT_OPTION_ORDERS,
@@ -926,6 +992,7 @@ def main(
         PATCH_VECTOR_SURFACES,
         PROMPT_FRAMES,
         SCORING_SURFACES,
+        LABEL_SCORING_REGIMES,
         aggregate_rows,
         gate_summaries,
         public_summary,
@@ -937,6 +1004,7 @@ def main(
     )
 
     concept_rows = load_concepts(Path(concepts))
+    aliases_by_concept = load_aliases(Path(aliases))
     records = activation_records(concept_rows, Path(paraphrases))
     serializable_concepts = [concept.__dict__ for concept in concept_rows]
     serializable_records = [
@@ -986,6 +1054,21 @@ def main(
         allowed=LABEL_SCORE_NORMALIZATIONS,
         name="Label score normalization",
     )[0]
+    parsed_label_scoring_regimes = parse_values(
+        label_scoring_regimes,
+        allowed=LABEL_SCORING_REGIMES,
+        name="Label scoring regimes",
+    )
+    if parsed_scoring_surface == "option_token" and parsed_label_scoring_regimes != [
+        "canonical"
+    ]:
+        raise ValueError("Label scoring regimes only apply to full-label scoring")
+    if "alias" in parsed_label_scoring_regimes:
+        missing_aliases = sorted(
+            concept.id for concept in concept_rows if concept.id not in aliases_by_concept
+        )
+        if missing_aliases:
+            raise ValueError(f"Missing aliases for concepts: {missing_aliases}")
     parsed_option_orders = parse_option_orders(option_orders)
     pair_specs = attach_random_patch_concepts(
         serializable_concepts,
@@ -1002,6 +1085,7 @@ def main(
     remote_payload = run_label_free_behavior_remote.remote(
         serializable_concepts,
         serializable_records,
+        aliases_by_concept,
         pair_specs,
         model_id,
         parsed_injection_layers,
@@ -1013,6 +1097,7 @@ def main(
         parsed_prompt_frame,
         parsed_scoring_surface,
         parsed_label_score_normalization,
+        parsed_label_scoring_regimes,
         parsed_option_orders,
         max_length,
     )
@@ -1023,6 +1108,7 @@ def main(
             "model_id": model_id,
             "concept_source": concepts,
             "paraphrase_source": paraphrases,
+            "alias_source": aliases,
             "patch_context": "label_free_behavior_gate",
             "injection_layers": parsed_injection_layers,
             "eval_variant_index": eval_variant,
@@ -1034,6 +1120,7 @@ def main(
             "prompt_frame": parsed_prompt_frame,
             "scoring_surface": parsed_scoring_surface,
             "label_score_normalization": parsed_label_score_normalization,
+            "label_scoring_regimes": parsed_label_scoring_regimes,
             "patch_modes": parsed_patch_modes,
             "patch_text_regimes": parsed_patch_text_regimes,
             "option_orders": [list(order) for order in parsed_option_orders],
