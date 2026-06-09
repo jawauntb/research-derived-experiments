@@ -25,6 +25,9 @@ PENALTY_DIRECTION_MODES = {
     "target_penalty_hard_1_0": ("hard_control", 1.0),
     "target_penalty_hard_2_0": ("hard_control", 2.0),
     "target_penalty_control_mean_1_0": ("control_mean", 1.0),
+    "target_penalty_controls_0_5": ("control_set", 0.5),
+    "target_penalty_controls_1_0": ("control_set", 1.0),
+    "target_penalty_controls_2_0": ("control_set", 2.0),
 }
 IMAGE = modal.Image.debian_slim(python_version="3.12").pip_install(
     "torch>=2.5,<2.8",
@@ -121,7 +124,7 @@ def labels_by_role_for_regime(
             role: str(concept_lookup[concept_id]["label"])
             for role, concept_id in concept_by_role.items()
         }
-    if label_scoring_regime == "alias":
+    if label_scoring_regime in {"alias", "alias_0", "alias_1"}:
         missing = sorted(
             concept_id
             for concept_id in concept_by_role.values()
@@ -129,8 +132,20 @@ def labels_by_role_for_regime(
         )
         if missing:
             raise ValueError(f"Missing aliases for concepts: {missing}")
+        alias_index = 0
+        if label_scoring_regime.startswith("alias_"):
+            alias_index = int(label_scoring_regime.rsplit("_", maxsplit=1)[1])
+        too_short = sorted(
+            concept_id
+            for concept_id in concept_by_role.values()
+            if len(aliases_by_concept[concept_id]) <= alias_index
+        )
+        if too_short:
+            raise ValueError(
+                f"Missing alias index {alias_index} for concepts: {too_short}"
+            )
         return {
-            role: aliases_by_concept[concept_id][0]
+            role: aliases_by_concept[concept_id][alias_index]
             for role, concept_id in concept_by_role.items()
         }
     raise ValueError(f"Unknown label scoring regime: {label_scoring_regime}")
@@ -789,11 +804,28 @@ def penalty_direction(
     return target_direction - float(weight) * norm_matched_penalty
 
 
+def multi_control_penalty_direction(
+    *,
+    torch: Any,
+    target_direction: Any,
+    penalty_bases: list[Any],
+    weight: float,
+) -> Any:
+    if not penalty_bases:
+        return target_direction
+    norm_matched_penalties = [
+        rescale_to_reference_norm(torch, penalty_basis, target_direction)
+        for penalty_basis in penalty_bases
+    ]
+    return target_direction - float(weight) * mean_tensor(torch, norm_matched_penalties)
+
+
 def direction_for_mode(
     *,
     torch: Any,
     learned_directions: dict[str, Any],
     control_target_direction: Any | None,
+    control_target_directions: list[Any],
     hard_control_target_direction: Any | None,
     mode: str,
     seed: int,
@@ -840,6 +872,13 @@ def direction_for_mode(
         )
     if mode in PENALTY_DIRECTION_MODES:
         penalty_kind, weight = PENALTY_DIRECTION_MODES[mode]
+        if penalty_kind == "control_set":
+            return multi_control_penalty_direction(
+                torch=torch,
+                target_direction=target_direction,
+                penalty_bases=control_target_directions,
+                weight=weight,
+            )
         penalty_basis = (
             hard_control_target_direction
             if penalty_kind == "hard_control"
@@ -1019,6 +1058,13 @@ def run_behavior_aligned_direction_remote(
                         ]["learned_directions"]["target"]
                         for control_pair_id in control_pair_ids
                     ]
+                control_basis_pair_ids = [
+                    control_pair_id
+                    for control_pair_id in control_pair_ids
+                    if current_kind != "control" or control_pair_id != current_pair_id
+                ]
+                if not control_basis_pair_ids:
+                    control_basis_pair_ids = list(control_pair_ids)
                 control_target_direction = (
                     mean_tensor(torch, control_directions).to(device)
                     if control_directions
@@ -1110,6 +1156,7 @@ def run_behavior_aligned_direction_remote(
                                     torch=torch,
                                     learned_directions=learned_directions,
                                     control_target_direction=control_target_direction,
+                                    control_target_directions=control_directions,
                                     hard_control_target_direction=(
                                         hard_control_target_direction
                                     ),
@@ -1164,6 +1211,10 @@ def run_behavior_aligned_direction_remote(
                                         "control_basis_pair_count": len(
                                             control_directions
                                         ),
+                                        "control_basis_pair_ids": (
+                                            control_basis_pair_ids
+                                        ),
+                                        "hard_control_pair_id": hard_control_pair_id,
                                         "scoring_surface": scoring_surface,
                                         "prompt_frame": prompt_frame,
                                         "objective_label_scoring_regime": (
@@ -1311,9 +1362,12 @@ def main(
         or parsed_eval_label_scoring_regimes != ["canonical"]
     ):
         raise ValueError("Alias label regimes require full-label scoring")
-    if (
-        "alias" in parsed_objective_label_scoring_regimes
-        or "alias" in parsed_eval_label_scoring_regimes
+    if any(
+        regime.startswith("alias")
+        for regime in (
+            parsed_objective_label_scoring_regimes
+            + parsed_eval_label_scoring_regimes
+        )
     ):
         missing_aliases = sorted(
             concept.id for concept in concept_rows if concept.id not in aliases_by_concept

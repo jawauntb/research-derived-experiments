@@ -3,10 +3,12 @@ from __future__ import annotations
 import unittest
 
 from experiments.activation_geometry.behavior_aligned_direction import (
+    LABEL_SCORING_REGIMES,
     aggregate_rows,
     alignment_summary,
     gate_summaries,
     parse_direction_modes,
+    parse_values,
     role_margin,
     summarize_behavior_delta,
 )
@@ -16,12 +18,26 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
     def test_parse_direction_modes(self) -> None:
         self.assertEqual(
             parse_direction_modes(
-                "target_learned, target_resid_all, target_penalty_hard_1_0"
+                "target_learned, target_penalty_controls_1_0, target_penalty_hard_1_0"
             ),
-            ["target_learned", "target_resid_all", "target_penalty_hard_1_0"],
+            [
+                "target_learned",
+                "target_penalty_controls_1_0",
+                "target_penalty_hard_1_0",
+            ],
         )
         with self.assertRaises(ValueError):
             parse_direction_modes("centroid")
+
+    def test_parse_heldout_alias_regimes(self) -> None:
+        self.assertEqual(
+            parse_values(
+                "alias_0, alias_1",
+                allowed=LABEL_SCORING_REGIMES,
+                name="Label regimes",
+            ),
+            ["alias_0", "alias_1"],
+        )
 
     def test_role_margin_and_behavior_delta_use_target_margin(self) -> None:
         baseline = {"source": -1.0, "target": -2.0, "distractor": -3.0}
