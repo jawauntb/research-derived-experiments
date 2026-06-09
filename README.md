@@ -40,6 +40,7 @@ The current ledger is [TODO.md](TODO.md). Audit cards live in [docs/discovery_re
 Current experiment families:
 
 - [experiments/weakness_vs_simplicity](experiments/weakness_vs_simplicity): synthetic tests for the claim that generalization is driven by weak compatible constraints rather than shortest forms.
+- [experiments/symbolic_weakness](experiments/symbolic_weakness): cyclic-symbol symmetry benchmark where training loss, simplicity, compression, and a flatness proxy tie or fail, while invariant weakness predicts OOD generalization.
 - [experiments/concept_geometry](experiments/concept_geometry): model-backed probes for whether attractors, conceptual spaces, activation geometry, constraints, and agency terms occupy related embedding neighborhoods.
 - [experiments/activation_geometry](experiments/activation_geometry): open-model hidden-state probes for whether the same bridge geometry appears beyond embedding-only language space.
 
@@ -50,6 +51,7 @@ python3 experiments/weakness_vs_simplicity/experiment.py --trials 500 --seed 7 -
 python3 experiments/weakness_vs_simplicity/experiment.py --trials 500 --seed 7 --no-memorizer --out artifacts/weakness_vs_simplicity/no_memorizer_control.json
 python3 experiments/weakness_vs_simplicity/experiment.py --trials 500 --seed 7 --no-memorizer --include-broad-negative-excluder --out artifacts/weakness_vs_simplicity/broad_negative_excluder_stress.json
 python3 experiments/weakness_vs_simplicity/experiment.py --trials 500 --seed 7 --no-memorizer --include-broad-negative-excluder --validation-negatives 6 --out artifacts/weakness_vs_simplicity/validated_weakness_stress.json
+python3 experiments/symbolic_weakness/experiment.py --trials 300 --seed 11 --out artifacts/symbolic_weakness/prefix_shift_pilot.json
 ```
 
 ## Environment

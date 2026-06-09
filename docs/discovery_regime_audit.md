@@ -1265,3 +1265,46 @@ Residual content:
 - Retractions or supersessions: supersede "post-hoc residualization is the best available cleanup" with "constrained direction construction is the more promising path."
 
 Next move: build a multi-control constrained objective and evaluate it against held-out aliases/controls.
+
+## Symbolic Weakness Benchmark: Prefix-Shift Pilot
+
+Question: can weakness or invariance identify the OOD-generalizing rule when several train-perfect symbolic rules fit the data?
+
+Current regime:
+
+- Artifact types: symbolic tasks, candidate rules, selector metrics, OOD splits, markdown result reports, audit cards.
+- Operations: cyclic task generation, candidate enumeration, translation-equivariance scoring, selector comparison, deterministic pilot runs.
+- Gates/verifiers: unit tests, train-perfect selector check, OOD accuracy, invariant-selection rate, local-patch negative controls, publication guard.
+- Known limitations: the admissible transformation group is supplied by the evaluator; neural learners and learned transformation discovery are not included yet.
+
+Action class:
+
+- Retrieval/search/discovery: search.
+- Why: this creates a sharper benchmark inside the existing weakness-vs-simplicity program. It does not yet add a learned weakness verifier.
+
+Experiment:
+
+- Manifest/report paths: `experiments/symbolic_weakness/results/prefix_shift_pilot_2026_06_09.md`.
+- Positive targets: weakness selector should choose the global cyclic shift and generalize OOD.
+- Negative controls: train loss, simplicity, compression, flatness proxy, and random train-consistent selection.
+- Stress tests: pending seed/modulus/train-window sweeps and wrong/noisy transformation-group controls.
+
+Gate:
+
+- Acceptance rule: all reported selectors train-perfect; weakness invariant rate and mean OOD accuracy at least `0.95`; train loss, simplicity, compression, and flatness proxy local-patch rate at least `0.95` and mean OOD accuracy at most `0.15`.
+- Withheld/rejected rule: do not claim neural, learned-rule, learned-symmetry, or strong flatness-baseline evidence from this symbolic oracle pilot.
+
+Results:
+
+- Accepted artifacts: `experiments/symbolic_weakness/experiment.py`, `tests/test_symbolic_weakness.py`, and `experiments/symbolic_weakness/results/prefix_shift_pilot_2026_06_09.md`.
+- Rejected or withheld artifacts: raw JSON under `artifacts/symbolic_weakness/`.
+- Key metrics: weakness mean OOD accuracy `1.000`, invariant rate `1.000`; train loss, simplicity, compression, and flatness proxy mean OOD accuracy `0.000`, local-patch rate `1.000`; all selectors mean train accuracy `1.000`.
+- Variance or ablation: 300 trials over moduli `{7, 11, 13}` with seed `11`; broader sweeps pending.
+
+Residual content:
+
+- Explained by old regime: weak compatible constraints can beat short local descriptions in synthetic settings.
+- New content outside old regime: the paper target now has a concrete symbolic symmetry benchmark where weakness cleanly predicts OOD while loss, simplicity, compression, and a flatness proxy fail.
+- Retractions or supersessions: the older Boolean-only weakness benchmark should be treated as preliminary; the flagship track should use symmetry and transformation compatibility as the central operationalization.
+
+Next move: run symbolic sweeps, add non-cyclic task families, add wrong/noisy group controls, then train small neural models and measure latent equivariance as model-level weakness.

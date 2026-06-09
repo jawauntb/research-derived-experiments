@@ -18,9 +18,27 @@
 - [x] Add a negative control where memorizer hypotheses are removed.
 - [x] Add a stress test where the vocabulary includes overly broad unsafe hypotheses.
 - [x] Add a validity-gated weakness selector and compare it against pure weakness.
+- [x] Add a symbolic symmetry benchmark where several train-perfect rules fit, but only the weak invariant rule generalizes OOD.
+- [x] Run the first symbolic prefix-shift pilot and record the selector gap.
 - [ ] Run seed/feature sweeps for the synthetic benchmark.
+- [ ] Run seed/modulus/train-window sweeps for the symbolic symmetry benchmark.
+- [ ] Add non-cyclic symbolic tasks: parity cosets, color-permutation invariants, and grammar-preserving relabelings.
+- [ ] Replace oracle symmetry labels with learned or induced candidate transformations.
 - [ ] Extend from Boolean-rule worlds to text/classification prompts.
 - [ ] Compare against LLM-generated rules or embeddings.
+- [ ] Train small neural models on symbolic tasks and compare OOD prediction by loss, flatness, compression, and weakness.
+- [ ] Define a model-level weakness metric as compatible transformation volume or latent equivariance under admissible interventions.
+
+## Flagship Paper Track: Weakness Predicts OOD
+
+- [x] Draft the paper target: weakness predicts OOD generalization better than loss, simplicity, flatness, or compression.
+- [x] Create the first symbolic benchmark and pilot result.
+- [ ] Run broad symbolic sweeps with confidence intervals and held-out task families.
+- [ ] Add neural baselines trained on the same symbolic tasks.
+- [ ] Add learned-rule or LLM-rule baselines where the model proposes hypotheses from training examples.
+- [ ] Compare weakness against train loss, validation loss, MDL/compression, description length, flatness/sharpness, and random selection.
+- [ ] Add ablations where the supplied transformation group is wrong, incomplete, or noisy.
+- [ ] Write the first full paper draft with limitations and reviewer-risk mitigations.
 
 ## Experiment Track 2: Cross-Model Concept Geometry
 
