@@ -105,6 +105,26 @@ def load_aliases(path: Path) -> dict[str, list[str]]:
     return aliases_by_concept
 
 
+SINGLE_LABEL_SCORING_REGIMES = ("canonical", "alias", "alias_0", "alias_1", "alias_2")
+
+
+def label_scoring_regime_parts(
+    regime: str,
+    *,
+    allow_groups: bool,
+) -> list[str]:
+    parts = [part.strip() for part in regime.split("+") if part.strip()]
+    if not parts:
+        raise ValueError("Label scoring regime cannot be empty")
+    if len(parts) > 1 and not allow_groups:
+        raise ValueError(f"Grouped label scoring regime is not allowed here: {regime}")
+    invalid = sorted(set(parts) - set(SINGLE_LABEL_SCORING_REGIMES))
+    if invalid:
+        options = ", ".join(SINGLE_LABEL_SCORING_REGIMES)
+        raise ValueError(f"Label scoring regime parts must be chosen from: {options}")
+    return parts
+
+
 def labels_by_role_for_regime(
     *,
     concept_lookup: dict[str, dict[str, Any]],
@@ -124,7 +144,7 @@ def labels_by_role_for_regime(
             role: str(concept_lookup[concept_id]["label"])
             for role, concept_id in concept_by_role.items()
         }
-    if label_scoring_regime in {"alias", "alias_0", "alias_1"}:
+    if label_scoring_regime == "alias" or label_scoring_regime.startswith("alias_"):
         missing = sorted(
             concept_id
             for concept_id in concept_by_role.values()
@@ -963,32 +983,45 @@ def run_behavior_aligned_direction_remote(
                 holdout_variant_index=holdout_variant_index,
             )
             for objective_label_scoring_regime in objective_label_scoring_regimes:
-                objective_labels_by_role = labels_by_role_for_regime(
-                    concept_lookup=concept_lookup,
-                    aliases_by_concept=aliases_by_concept,
-                    left=left,
-                    right=right,
-                    distractor=distractor,
-                    label_scoring_regime=objective_label_scoring_regime,
+                objective_regime_parts = label_scoring_regime_parts(
+                    objective_label_scoring_regime,
+                    allow_groups=True,
                 )
-                learned_directions = {
-                    objective_role: learned_gradient_direction(
-                        torch=torch,
-                        tokenizer=tokenizer,
-                        model=model,
-                        source_texts=source_texts,
-                        labels_by_role=objective_labels_by_role,
-                        option_orders=parsed_orders,
-                        token_ids_by_slot=token_ids_by_slot,
-                        layer=layer,
-                        max_length=max_length,
-                        objective_role=objective_role,
-                        scoring_surface=scoring_surface,
-                        prompt_frame=prompt_frame,
-                        label_score_normalization=label_score_normalization,
-                    ).to(device)
-                    for objective_role in ("target", "source", "distractor")
+                objective_labels_by_regime = {
+                    regime_part: labels_by_role_for_regime(
+                        concept_lookup=concept_lookup,
+                        aliases_by_concept=aliases_by_concept,
+                        left=left,
+                        right=right,
+                        distractor=distractor,
+                        label_scoring_regime=regime_part,
+                    )
+                    for regime_part in objective_regime_parts
                 }
+                learned_directions = {}
+                for objective_role in ("target", "source", "distractor"):
+                    regime_directions = [
+                        learned_gradient_direction(
+                            torch=torch,
+                            tokenizer=tokenizer,
+                            model=model,
+                            source_texts=source_texts,
+                            labels_by_role=labels_by_role,
+                            option_orders=parsed_orders,
+                            token_ids_by_slot=token_ids_by_slot,
+                            layer=layer,
+                            max_length=max_length,
+                            objective_role=objective_role,
+                            scoring_surface=scoring_surface,
+                            prompt_frame=prompt_frame,
+                            label_score_normalization=label_score_normalization,
+                        ).to(device)
+                        for labels_by_role in objective_labels_by_regime.values()
+                    ]
+                    learned_directions[objective_role] = mean_tensor(
+                        torch,
+                        regime_directions,
+                    ).to(device)
                 norms = {
                     objective_role: float(torch.linalg.vector_norm(direction).item())
                     for objective_role, direction in learned_directions.items()
@@ -1012,7 +1045,13 @@ def run_behavior_aligned_direction_remote(
                     "kind": str(pair["kind"]),
                     "distractor": distractor,
                     "heldout_text": heldout_text,
-                    "objective_labels_by_role": objective_labels_by_role,
+                    "objective_label_regime_parts": objective_regime_parts,
+                    "objective_labels_by_regime": objective_labels_by_regime,
+                    "objective_labels_by_role": (
+                        next(iter(objective_labels_by_regime.values()))
+                        if len(objective_labels_by_regime) == 1
+                        else objective_labels_by_regime
+                    ),
                     "learned_directions": learned_directions,
                     "norms": norms,
                     "learned_alignment": learned_alignment,
@@ -1276,6 +1315,7 @@ def main(
     objective_label_scoring_regimes: str = DEFAULT_OBJECTIVE_LABEL_SCORING_REGIMES,
     eval_label_scoring_regimes: str = DEFAULT_EVAL_LABEL_SCORING_REGIMES,
     label_score_normalization: str = DEFAULT_LABEL_SCORE_NORMALIZATION,
+    pair_set: str = "promoted",
     seed: int = 20260608,
     out: str = "artifacts/activation_geometry/modal_behavior_aligned_direction.json",
 ) -> None:
@@ -1289,19 +1329,20 @@ def main(
         parse_layers,
     )
     from experiments.activation_geometry.behavior_aligned_direction import (
-        LABEL_SCORING_REGIMES,
         PROMPT_FRAMES,
         SCORING_SURFACES,
         aggregate_rows,
         alignment_summary,
         gate_summaries,
+        label_scoring_regime_parts as public_label_scoring_regime_parts,
         parse_direction_modes,
+        parse_label_scoring_regimes,
         parse_values,
         public_summary,
         write_payload,
     )
     from experiments.activation_geometry.final_token_steering_pilot import (
-        default_pair_specs,
+        pair_specs_for_set,
         parse_scales,
         serializable_pair_specs,
     )
@@ -1342,15 +1383,15 @@ def main(
         allowed=PROMPT_FRAMES,
         name="Prompt frame",
     )[0]
-    parsed_objective_label_scoring_regimes = parse_values(
+    parsed_objective_label_scoring_regimes = parse_label_scoring_regimes(
         objective_label_scoring_regimes,
-        allowed=LABEL_SCORING_REGIMES,
         name="Objective label scoring regimes",
+        allow_groups=True,
     )
-    parsed_eval_label_scoring_regimes = parse_values(
+    parsed_eval_label_scoring_regimes = parse_label_scoring_regimes(
         eval_label_scoring_regimes,
-        allowed=LABEL_SCORING_REGIMES,
         name="Eval label scoring regimes",
+        allow_groups=False,
     )
     parsed_label_score_normalization = parse_values(
         label_score_normalization,
@@ -1362,19 +1403,21 @@ def main(
         or parsed_eval_label_scoring_regimes != ["canonical"]
     ):
         raise ValueError("Alias label regimes require full-label scoring")
-    if any(
-        regime.startswith("alias")
+    parsed_label_regime_parts = [
+        part
         for regime in (
             parsed_objective_label_scoring_regimes
             + parsed_eval_label_scoring_regimes
         )
-    ):
+        for part in public_label_scoring_regime_parts(regime, allow_groups=True)
+    ]
+    if any(part == "alias" or part.startswith("alias_") for part in parsed_label_regime_parts):
         missing_aliases = sorted(
             concept.id for concept in concept_rows if concept.id not in aliases_by_concept
         )
         if missing_aliases:
             raise ValueError(f"Missing aliases for concepts: {missing_aliases}")
-    pair_specs = default_pair_specs(concept_rows)
+    pair_specs = pair_specs_for_set(concept_rows, pair_set=pair_set)
     remote_payload = run_behavior_aligned_direction_remote.remote(
         [concept.__dict__ for concept in concept_rows],
         serializable_records,
@@ -1415,6 +1458,7 @@ def main(
             ),
             "eval_label_scoring_regimes": parsed_eval_label_scoring_regimes,
             "label_score_normalization": parsed_label_score_normalization,
+            "pair_set": pair_set,
             "option_orders": [
                 "".join(role[0] for role in order)
                 for order in parsed_option_orders
