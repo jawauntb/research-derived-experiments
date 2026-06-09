@@ -1136,3 +1136,46 @@ Residual content:
 - Retractions or supersessions: supersede "full-label behavior transfer may be concept-level" with "full-label behavior transfer is currently canonical-label anchored, with only local alias pockets."
 
 Next move: run multiple-alias and alias-shuffle diagnostics, then try alias-trained behavior-aligned directions.
+
+## Activation Geometry Probe: Alias-Trained Behavior Direction
+
+Question: can alias-label behavior be made addressable by learning behavior-aligned directions directly against alias objectives?
+
+Current regime:
+
+- Artifact types: alias-label manifests, full-label gradient directions, canonical/alias eval rows, direction-control rows, leakage tables.
+- Operations: train-variant full-label gradient averaging, held-out full-label continuation scoring, cross-label evaluation, source/distractor/random direction controls.
+- Gates/verifiers: target-learned direction should beat source/distractor/random controls; alias-trained direction should improve alias labels and transfer to canonical labels; semantic claims require avoiding valence and control-layer leakage.
+- Known limitations: one seed, one model, per-pair learned directions, no residualization, no second alias per concept yet.
+
+Action class:
+
+- Retrieval/search/discovery: intervention search with rejected mechanism claim.
+- Why: this adds alias full-label gradients as an intervention class, but the resulting direction fails semantic-specificity controls.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/alias_trained_behavior_direction_2026_06_08.md`; local ignored payloads under `artifacts/activation_geometry/modal_pythia_70m_alias_trained_direction*.json`.
+- Positive targets: promoted steering pairs.
+- Negative controls: source-learned, distractor-learned, random-same-norm directions; valence-control pairs; control layer.
+- Stress tests: prompt frames `latent_choice` and `source_passage`; eval labels `alias` and `canonical`; scales `0.5,1.0,2.0`.
+
+Gate:
+
+- Acceptance rule: accept alias addressability if target-learned directions reliably improve alias target margins and beat source/distractor/random directions.
+- Withheld/rejected rule: withhold semantic transport if valence controls or control-layer positives pass at comparable strength.
+
+Results:
+
+- Accepted artifacts: full-label alias objective support in the learned-direction runner; `experiments/activation_geometry/results/alias_trained_behavior_direction_2026_06_08.md`.
+- Rejected or withheld artifacts: semantic transport claim remains withheld.
+- Key metrics: target-learned directions pass `3/3` primary positives for both prompt frames, all scales, and both eval label regimes; source/distractor directions are negative on mean; target-learned valence controls pass `2/2` and control-layer positives pass `3/3`.
+- Variance or ablation: source-passage and latent-choice frames agree; alias-trained directions also transfer to canonical scoring.
+
+Residual content:
+
+- Explained by old regime: direct behavior gradients can control label logits.
+- New content outside old regime: alias-label behavior is addressable and cross-label transferable, but only through a leaky output-control direction.
+- Retractions or supersessions: supersede "alias labels may be unreachable behaviorally" with "alias labels are behaviorally reachable, but raw transported states and direct gradients occupy different regimes."
+
+Next move: build residualized alias directions that subtract source/distractor/control components, then rerun the alias gate against leakage controls.

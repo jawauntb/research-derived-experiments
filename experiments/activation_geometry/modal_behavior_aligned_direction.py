@@ -16,6 +16,11 @@ modal = importlib.import_module("modal")
 DEFAULT_MODEL_ID = "EleutherAI/pythia-70m-deduped"
 DEFAULT_OPTION_ORDERS = "std,tds,dst"
 DEFAULT_DIRECTION_MODES = "target_learned,source_learned,distractor_learned,random_same_norm"
+DEFAULT_SCORING_SURFACE = "option_token"
+DEFAULT_PROMPT_FRAME = "source_passage"
+DEFAULT_OBJECTIVE_LABEL_SCORING_REGIMES = "canonical"
+DEFAULT_EVAL_LABEL_SCORING_REGIMES = "canonical"
+DEFAULT_LABEL_SCORE_NORMALIZATION = "mean"
 IMAGE = modal.Image.debian_slim(python_version="3.12").pip_install(
     "torch>=2.5,<2.8",
     "transformers>=4.46,<5.0",
@@ -54,6 +59,76 @@ def calibration_prompt(
         lines.append(f"{slot}. {labels_by_role[role]}")
     lines.append("Answer:")
     return "\n".join(lines)
+
+
+def full_label_prompt(
+    *,
+    source_text: str,
+    prompt_frame: str,
+) -> str:
+    if prompt_frame == "source_passage":
+        return "\n".join(
+            [
+                "Read the passage and name the concept it points to.",
+                "",
+                f"Passage: {source_text}",
+                "",
+                "Concept:",
+            ]
+        )
+    if prompt_frame == "latent_choice":
+        return "The concept most likely indicated by the model's current internal state is"
+    raise ValueError(f"Unknown prompt frame: {prompt_frame}")
+
+
+def load_aliases(path: Path) -> dict[str, list[str]]:
+    rows = json.loads(path.read_text())
+    aliases_by_concept: dict[str, list[str]] = {}
+    for row in rows:
+        concept_id = str(row["id"])
+        aliases = [
+            str(alias).strip()
+            for alias in row.get("aliases", [])
+            if str(alias).strip()
+        ]
+        if not aliases:
+            raise ValueError(f"Concept {concept_id!r} has no aliases")
+        aliases_by_concept[concept_id] = aliases
+    return aliases_by_concept
+
+
+def labels_by_role_for_regime(
+    *,
+    concept_lookup: dict[str, dict[str, Any]],
+    aliases_by_concept: dict[str, list[str]],
+    left: str,
+    right: str,
+    distractor: str,
+    label_scoring_regime: str,
+) -> dict[str, str]:
+    concept_by_role = {
+        "source": left,
+        "target": right,
+        "distractor": distractor,
+    }
+    if label_scoring_regime == "canonical":
+        return {
+            role: str(concept_lookup[concept_id]["label"])
+            for role, concept_id in concept_by_role.items()
+        }
+    if label_scoring_regime == "alias":
+        missing = sorted(
+            concept_id
+            for concept_id in concept_by_role.values()
+            if not aliases_by_concept.get(concept_id)
+        )
+        if missing:
+            raise ValueError(f"Missing aliases for concepts: {missing}")
+        return {
+            role: aliases_by_concept[concept_id][0]
+            for role, concept_id in concept_by_role.items()
+        }
+    raise ValueError(f"Unknown label scoring regime: {label_scoring_regime}")
 
 
 def objective_role_for_mode(mode: str) -> str:
@@ -195,6 +270,39 @@ def option_logprobs(torch: Any, logits: Any, token_ids: dict[str, int]) -> dict[
     return {name: float(logprobs[token_id].item()) for name, token_id in token_ids.items()}
 
 
+def label_token_ids(tokenizer: Any, labels_by_role: dict[str, str]) -> dict[str, list[int]]:
+    token_ids = {}
+    for role, label in labels_by_role.items():
+        ids = tokenizer.encode(f" {label}", add_special_tokens=False)
+        if not ids:
+            raise ValueError(f"Could not encode label for {role!r}: {label!r}")
+        token_ids[role] = [int(token_id) for token_id in ids]
+    return token_ids
+
+
+def continuation_score(
+    *,
+    torch: Any,
+    logits: Any,
+    prompt_length: int,
+    continuation_ids: list[int],
+    label_score_normalization: str,
+) -> Any:
+    token_logprobs = []
+    for offset, token_id in enumerate(continuation_ids):
+        prediction_index = prompt_length - 1 + offset
+        logprobs = torch.nn.functional.log_softmax(
+            logits[0, prediction_index].float(),
+            dim=-1,
+        )
+        token_logprobs.append(logprobs[token_id])
+    if label_score_normalization == "sum":
+        return sum(token_logprobs)
+    if label_score_normalization == "mean":
+        return sum(token_logprobs) / len(token_logprobs)
+    raise ValueError(f"Unknown label score normalization: {label_score_normalization}")
+
+
 def add_final_token_hook(
     *,
     torch: Any,
@@ -259,6 +367,138 @@ def run_prompt(
     return option_logprobs(torch, logits, token_ids)
 
 
+def run_full_label_prompt(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    prompt: str,
+    layer: int,
+    delta: Any | None,
+    max_length: int,
+    labels_by_role: dict[str, str],
+    label_score_normalization: str,
+) -> dict[str, float]:
+    continuation_ids_by_role = label_token_ids(tokenizer, labels_by_role)
+    max_continuation_tokens = max(len(ids) for ids in continuation_ids_by_role.values())
+    prompt_max_length = max(1, max_length - max_continuation_tokens)
+    prompt_ids = tokenizer.encode(
+        prompt,
+        add_special_tokens=False,
+        truncation=True,
+        max_length=prompt_max_length,
+    )
+    if not prompt_ids:
+        raise ValueError("Prompt encoded to zero tokens")
+
+    device = next(model.parameters()).device
+    scores = {}
+    for role, continuation_ids in continuation_ids_by_role.items():
+        input_ids = torch.tensor(
+            [prompt_ids + continuation_ids],
+            dtype=torch.long,
+            device=device,
+        )
+        attention_mask = torch.ones_like(input_ids)
+        handle = None
+        if delta is not None:
+            token_indices = torch.tensor([len(prompt_ids) - 1], device=device)
+            handle = add_token_index_hook(
+                torch=torch,
+                model=model,
+                layer=layer,
+                token_indices=token_indices,
+                delta=delta,
+            )
+        try:
+            with torch.inference_mode():
+                outputs = model(
+                    input_ids=input_ids,
+                    attention_mask=attention_mask,
+                    use_cache=False,
+                )
+        finally:
+            if handle is not None:
+                handle.remove()
+        score = continuation_score(
+            torch=torch,
+            logits=outputs.logits,
+            prompt_length=len(prompt_ids),
+            continuation_ids=continuation_ids,
+            label_score_normalization=label_score_normalization,
+        )
+        scores[role] = float(score.item())
+    return scores
+
+
+def run_scoring_prompt(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    prompt: str,
+    layer: int,
+    delta: Any | None,
+    max_length: int,
+    scoring_surface: str,
+    token_ids: dict[str, int] | None,
+    labels_by_role: dict[str, str],
+    label_score_normalization: str,
+) -> dict[str, float]:
+    if scoring_surface == "option_token":
+        if token_ids is None:
+            raise ValueError("Option-token scoring requires token_ids")
+        return run_prompt(
+            torch=torch,
+            tokenizer=tokenizer,
+            model=model,
+            prompt=prompt,
+            layer=layer,
+            delta=delta,
+            max_length=max_length,
+            token_ids=token_ids,
+        )
+    if scoring_surface == "full_label":
+        return run_full_label_prompt(
+            torch=torch,
+            tokenizer=tokenizer,
+            model=model,
+            prompt=prompt,
+            layer=layer,
+            delta=delta,
+            max_length=max_length,
+            labels_by_role=labels_by_role,
+            label_score_normalization=label_score_normalization,
+        )
+    raise ValueError(f"Unknown scoring surface: {scoring_surface}")
+
+
+def add_token_index_hook(
+    *,
+    torch: Any,
+    model: Any,
+    layer: int,
+    token_indices: Any,
+    delta: Any,
+) -> Any:
+    block = block_for_hidden_state_layer(model, layer)
+    patch_indices = token_indices.to(delta.device).long()
+
+    def hook(_module: Any, _inputs: tuple[Any, ...], output: Any) -> Any:
+        hidden_states = output[0] if isinstance(output, tuple) else output
+        adjusted = hidden_states.clone()
+        batch_indices = torch.arange(adjusted.shape[0], device=adjusted.device)
+        adjusted[batch_indices, patch_indices] = (
+            adjusted[batch_indices, patch_indices]
+            + delta.to(device=adjusted.device, dtype=adjusted.dtype)
+        )
+        if isinstance(output, tuple):
+            return (adjusted, *output[1:])
+        return adjusted
+
+    return block.register_forward_hook(hook)
+
+
 def gradient_direction_for_prompt(
     *,
     torch: Any,
@@ -311,6 +551,107 @@ def gradient_direction_for_prompt(
         model.zero_grad(set_to_none=True)
 
 
+def full_label_score_gradient_for_role(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    prompt: str,
+    layer: int,
+    max_length: int,
+    continuation_ids: list[int],
+    label_score_normalization: str,
+) -> Any:
+    prompt_max_length = max(1, max_length - len(continuation_ids))
+    prompt_ids = tokenizer.encode(
+        prompt,
+        add_special_tokens=False,
+        truncation=True,
+        max_length=prompt_max_length,
+    )
+    if not prompt_ids:
+        raise ValueError("Prompt encoded to zero tokens")
+
+    device = next(model.parameters()).device
+    input_ids = torch.tensor(
+        [prompt_ids + continuation_ids],
+        dtype=torch.long,
+        device=device,
+    )
+    attention_mask = torch.ones_like(input_ids)
+    block = block_for_hidden_state_layer(model, layer)
+    token_indices = torch.tensor([len(prompt_ids) - 1], device=device)
+    captured: dict[str, Any] = {}
+
+    def capture_hook(_module: Any, _inputs: tuple[Any, ...], output: Any) -> Any:
+        hidden_states = output[0] if isinstance(output, tuple) else output
+        batch_indices = torch.arange(hidden_states.shape[0], device=hidden_states.device)
+        selected = hidden_states[batch_indices, token_indices].detach().clone()
+        selected.requires_grad_(True)
+        adjusted = hidden_states.clone()
+        adjusted[batch_indices, token_indices] = selected
+        captured["selected"] = selected
+        if isinstance(output, tuple):
+            return (adjusted, *output[1:])
+        return adjusted
+
+    model.zero_grad(set_to_none=True)
+    handle = block.register_forward_hook(capture_hook)
+    try:
+        outputs = model(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            use_cache=False,
+        )
+        score = continuation_score(
+            torch=torch,
+            logits=outputs.logits,
+            prompt_length=len(prompt_ids),
+            continuation_ids=continuation_ids,
+            label_score_normalization=label_score_normalization,
+        )
+        score.backward()
+        selected = captured.get("selected")
+        if selected is None or selected.grad is None:
+            raise RuntimeError("Could not capture full-label activation gradient")
+        return selected.grad[0].detach().float().cpu()
+    finally:
+        handle.remove()
+        model.zero_grad(set_to_none=True)
+
+
+def full_label_gradient_direction_for_prompt(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    prompt: str,
+    layer: int,
+    max_length: int,
+    labels_by_role: dict[str, str],
+    objective_role: str,
+    label_score_normalization: str,
+) -> Any:
+    continuation_ids_by_role = label_token_ids(tokenizer, labels_by_role)
+    gradients_by_role = {
+        role: full_label_score_gradient_for_role(
+            torch=torch,
+            tokenizer=tokenizer,
+            model=model,
+            prompt=prompt,
+            layer=layer,
+            max_length=max_length,
+            continuation_ids=continuation_ids,
+            label_score_normalization=label_score_normalization,
+        )
+        for role, continuation_ids in continuation_ids_by_role.items()
+    }
+    others = [role for role in ("source", "target", "distractor") if role != objective_role]
+    return gradients_by_role[objective_role] - 0.5 * sum(
+        gradients_by_role[role] for role in others
+    )
+
+
 def learned_gradient_direction(
     *,
     torch: Any,
@@ -323,27 +664,52 @@ def learned_gradient_direction(
     layer: int,
     max_length: int,
     objective_role: str,
+    scoring_surface: str,
+    prompt_frame: str,
+    label_score_normalization: str,
 ) -> Any:
     gradients = []
     for _variant_index, source_text in source_texts:
-        for option_order in option_orders:
-            prompt = calibration_prompt(
+        if scoring_surface == "option_token":
+            for option_order in option_orders:
+                prompt = calibration_prompt(
+                    source_text=source_text,
+                    labels_by_role=labels_by_role,
+                    option_order=option_order,
+                )
+                gradients.append(
+                    gradient_direction_for_prompt(
+                        torch=torch,
+                        tokenizer=tokenizer,
+                        model=model,
+                        prompt=prompt,
+                        layer=layer,
+                        max_length=max_length,
+                        token_ids=role_token_ids(option_order, token_ids_by_slot),
+                        objective_role=objective_role,
+                    )
+                )
+            continue
+        if scoring_surface == "full_label":
+            prompt = full_label_prompt(
                 source_text=source_text,
-                labels_by_role=labels_by_role,
-                option_order=option_order,
+                prompt_frame=prompt_frame,
             )
             gradients.append(
-                gradient_direction_for_prompt(
+                full_label_gradient_direction_for_prompt(
                     torch=torch,
                     tokenizer=tokenizer,
                     model=model,
                     prompt=prompt,
                     layer=layer,
                     max_length=max_length,
-                    token_ids=role_token_ids(option_order, token_ids_by_slot),
+                    labels_by_role=labels_by_role,
                     objective_role=objective_role,
+                    label_score_normalization=label_score_normalization,
                 )
             )
+            continue
+        raise ValueError(f"Unknown scoring surface: {scoring_surface}")
     return mean_tensor(torch, gradients)
 
 
@@ -400,6 +766,7 @@ def parse_remote_option_orders(rows: list[list[str]]) -> list[tuple[str, str, st
 def run_behavior_aligned_direction_remote(
     concepts: list[dict[str, Any]],
     records: list[dict[str, Any]],
+    aliases_by_concept: dict[str, list[str]],
     pair_specs: list[dict[str, Any]],
     model_id: str,
     layer_roles: dict[str, int],
@@ -409,6 +776,11 @@ def run_behavior_aligned_direction_remote(
     train_variant_indices: list[int],
     holdout_variant_index: int,
     max_length: int,
+    scoring_surface: str,
+    prompt_frame: str,
+    objective_label_scoring_regimes: list[str],
+    eval_label_scoring_regimes: list[str],
+    label_score_normalization: str,
     seed: int,
 ) -> dict[str, Any]:
     torch = importlib.import_module("torch")
@@ -438,123 +810,191 @@ def run_behavior_aligned_direction_remote(
             left = str(pair["left"])
             right = str(pair["right"])
             distractor = str(pair["distractor"])
-            labels_by_role = {
-                "source": str(concept_lookup[left]["label"]),
-                "target": str(concept_lookup[right]["label"]),
-                "distractor": str(concept_lookup[distractor]["label"]),
-            }
             source_texts = train_source_texts(
                 records,
                 concept_id=left,
                 train_variant_indices=train_variants,
             )
-            learned_directions = {
-                objective_role: learned_gradient_direction(
-                    torch=torch,
-                    tokenizer=tokenizer,
-                    model=model,
-                    source_texts=source_texts,
-                    labels_by_role=labels_by_role,
-                    option_orders=parsed_orders,
-                    token_ids_by_slot=token_ids_by_slot,
-                    layer=layer,
-                    max_length=max_length,
-                    objective_role=objective_role,
-                ).to(device)
-                for objective_role in ("target", "source", "distractor")
-            }
-            norms = {
-                objective_role: float(torch.linalg.vector_norm(direction).item())
-                for objective_role, direction in learned_directions.items()
-            }
-            learned_alignment = {
-                "target_source_cosine": cosine_or_none(
-                    torch,
-                    learned_directions["target"],
-                    learned_directions["source"],
-                ),
-                "target_distractor_cosine": cosine_or_none(
-                    torch,
-                    learned_directions["target"],
-                    learned_directions["distractor"],
-                ),
-            }
             heldout_text = heldout_source_text(
                 records,
                 concept_id=left,
                 holdout_variant_index=holdout_variant_index,
             )
-            for order_index, option_order in enumerate(parsed_orders):
-                prompt = calibration_prompt(
-                    source_text=heldout_text,
-                    labels_by_role=labels_by_role,
-                    option_order=option_order,
+            for objective_label_scoring_regime in objective_label_scoring_regimes:
+                objective_labels_by_role = labels_by_role_for_regime(
+                    concept_lookup=concept_lookup,
+                    aliases_by_concept=aliases_by_concept,
+                    left=left,
+                    right=right,
+                    distractor=distractor,
+                    label_scoring_regime=objective_label_scoring_regime,
                 )
-                token_ids = role_token_ids(option_order, token_ids_by_slot)
-                baseline_scores = run_prompt(
-                    torch=torch,
-                    tokenizer=tokenizer,
-                    model=model,
-                    prompt=prompt,
-                    layer=layer,
-                    delta=None,
-                    max_length=max_length,
-                    token_ids=token_ids,
-                )
-                for scale_index, scale in enumerate(scales):
-                    for mode_index, mode in enumerate(direction_modes):
-                        direction = direction_for_mode(
-                            torch=torch,
-                            learned_directions=learned_directions,
-                            mode=mode,
-                            seed=(
-                                seed
-                                + layer * 100_003
-                                + pair_index * 1_009
-                                + order_index * 97
-                                + scale_index * 13
-                                + mode_index
-                            ),
+                learned_directions = {
+                    objective_role: learned_gradient_direction(
+                        torch=torch,
+                        tokenizer=tokenizer,
+                        model=model,
+                        source_texts=source_texts,
+                        labels_by_role=objective_labels_by_role,
+                        option_orders=parsed_orders,
+                        token_ids_by_slot=token_ids_by_slot,
+                        layer=layer,
+                        max_length=max_length,
+                        objective_role=objective_role,
+                        scoring_surface=scoring_surface,
+                        prompt_frame=prompt_frame,
+                        label_score_normalization=label_score_normalization,
+                    ).to(device)
+                    for objective_role in ("target", "source", "distractor")
+                }
+                norms = {
+                    objective_role: float(torch.linalg.vector_norm(direction).item())
+                    for objective_role, direction in learned_directions.items()
+                }
+                learned_alignment = {
+                    "target_source_cosine": cosine_or_none(
+                        torch,
+                        learned_directions["target"],
+                        learned_directions["source"],
+                    ),
+                    "target_distractor_cosine": cosine_or_none(
+                        torch,
+                        learned_directions["target"],
+                        learned_directions["distractor"],
+                    ),
+                }
+                for eval_label_scoring_regime in eval_label_scoring_regimes:
+                    eval_labels_by_role = labels_by_role_for_regime(
+                        concept_lookup=concept_lookup,
+                        aliases_by_concept=aliases_by_concept,
+                        left=left,
+                        right=right,
+                        distractor=distractor,
+                        label_scoring_regime=eval_label_scoring_regime,
+                    )
+                    prompt_specs: list[dict[str, Any]] = []
+                    if scoring_surface == "option_token":
+                        for option_order in parsed_orders:
+                            prompt_specs.append(
+                                {
+                                    "prompt": calibration_prompt(
+                                        source_text=heldout_text,
+                                        labels_by_role=eval_labels_by_role,
+                                        option_order=option_order,
+                                    ),
+                                    "option_order": option_order_key(option_order),
+                                    "token_ids": role_token_ids(
+                                        option_order,
+                                        token_ids_by_slot,
+                                    ),
+                                }
+                            )
+                    elif scoring_surface == "full_label":
+                        prompt_specs.append(
+                            {
+                                "prompt": full_label_prompt(
+                                    source_text=heldout_text,
+                                    prompt_frame=prompt_frame,
+                                ),
+                                "option_order": "full_label",
+                                "token_ids": None,
+                            }
                         )
-                        delta = direction * float(scale)
-                        steered_scores = run_prompt(
+                    else:
+                        raise ValueError(f"Unknown scoring surface: {scoring_surface}")
+                    for order_index, prompt_spec in enumerate(prompt_specs):
+                        prompt = str(prompt_spec["prompt"])
+                        baseline_scores = run_scoring_prompt(
                             torch=torch,
                             tokenizer=tokenizer,
                             model=model,
                             prompt=prompt,
                             layer=layer,
-                            delta=delta,
+                            delta=None,
                             max_length=max_length,
-                            token_ids=token_ids,
+                            scoring_surface=scoring_surface,
+                            token_ids=prompt_spec["token_ids"],
+                            labels_by_role=eval_labels_by_role,
+                            label_score_normalization=label_score_normalization,
                         )
-                        rows.append(
-                            {
-                                "pair": pair_id(left, right),
-                                "left": left,
-                                "right": right,
-                                "kind": str(pair["kind"]),
-                                "distractor": distractor,
-                                "role": role,
-                                "layer": layer,
-                                "scale": float(scale),
-                                "direction_mode": mode,
-                                "objective_role": objective_role_for_mode(mode),
-                                "option_order": option_order_key(option_order),
-                                "prompt": prompt,
-                                "train_variant_indices": sorted(train_variants),
-                                "holdout_variant_index": holdout_variant_index,
-                                "norms": norms,
-                                "learned_alignment": learned_alignment,
-                                "scores": {
-                                    "baseline": baseline_scores,
-                                    "steered": steered_scores,
-                                },
-                                "summary": summarize_behavior_delta(
-                                    baseline_scores=baseline_scores,
-                                    steered_scores=steered_scores,
-                                ),
-                            }
-                        )
+                        for scale_index, scale in enumerate(scales):
+                            for mode_index, mode in enumerate(direction_modes):
+                                direction = direction_for_mode(
+                                    torch=torch,
+                                    learned_directions=learned_directions,
+                                    mode=mode,
+                                    seed=(
+                                        seed
+                                        + layer * 100_003
+                                        + pair_index * 1_009
+                                        + order_index * 97
+                                        + scale_index * 13
+                                        + mode_index
+                                    ),
+                                )
+                                delta = direction * float(scale)
+                                steered_scores = run_scoring_prompt(
+                                    torch=torch,
+                                    tokenizer=tokenizer,
+                                    model=model,
+                                    prompt=prompt,
+                                    layer=layer,
+                                    delta=delta,
+                                    max_length=max_length,
+                                    scoring_surface=scoring_surface,
+                                    token_ids=prompt_spec["token_ids"],
+                                    labels_by_role=eval_labels_by_role,
+                                    label_score_normalization=(
+                                        label_score_normalization
+                                    ),
+                                )
+                                rows.append(
+                                    {
+                                        "pair": pair_id(left, right),
+                                        "left": left,
+                                        "right": right,
+                                        "kind": str(pair["kind"]),
+                                        "distractor": distractor,
+                                        "role": role,
+                                        "layer": layer,
+                                        "scale": float(scale),
+                                        "direction_mode": mode,
+                                        "objective_role": objective_role_for_mode(mode),
+                                        "scoring_surface": scoring_surface,
+                                        "prompt_frame": prompt_frame,
+                                        "objective_label_scoring_regime": (
+                                            objective_label_scoring_regime
+                                        ),
+                                        "eval_label_scoring_regime": (
+                                            eval_label_scoring_regime
+                                        ),
+                                        "label_score_normalization": (
+                                            label_score_normalization
+                                        ),
+                                        "option_order": prompt_spec["option_order"],
+                                        "prompt": prompt,
+                                        "objective_labels_by_role": (
+                                            objective_labels_by_role
+                                        ),
+                                        "eval_labels_by_role": eval_labels_by_role,
+                                        "train_variant_indices": sorted(
+                                            train_variants
+                                        ),
+                                        "holdout_variant_index": (
+                                            holdout_variant_index
+                                        ),
+                                        "norms": norms,
+                                        "learned_alignment": learned_alignment,
+                                        "scores": {
+                                            "baseline": baseline_scores,
+                                            "steered": steered_scores,
+                                        },
+                                        "summary": summarize_behavior_delta(
+                                            baseline_scores=baseline_scores,
+                                            steered_scores=steered_scores,
+                                        ),
+                                    }
+                                )
     return {
         "rows": rows,
         "slot_token_ids": token_ids_by_slot,
@@ -565,6 +1005,7 @@ def run_behavior_aligned_direction_remote(
 def main(
     concepts: str = "experiments/concept_geometry/concept_set.json",
     paraphrases: str = "experiments/concept_geometry/concept_paraphrases.json",
+    aliases: str = "experiments/concept_geometry/concept_aliases.json",
     model_id: str = DEFAULT_MODEL_ID,
     primary_layer: int = 5,
     backup_layer: int = 6,
@@ -575,6 +1016,11 @@ def main(
     scales: str = "1.0",
     direction_modes: str = DEFAULT_DIRECTION_MODES,
     option_orders: str = DEFAULT_OPTION_ORDERS,
+    scoring_surface: str = DEFAULT_SCORING_SURFACE,
+    prompt_frame: str = DEFAULT_PROMPT_FRAME,
+    objective_label_scoring_regimes: str = DEFAULT_OBJECTIVE_LABEL_SCORING_REGIMES,
+    eval_label_scoring_regimes: str = DEFAULT_EVAL_LABEL_SCORING_REGIMES,
+    label_score_normalization: str = DEFAULT_LABEL_SCORE_NORMALIZATION,
     seed: int = 20260608,
     out: str = "artifacts/activation_geometry/modal_behavior_aligned_direction.json",
 ) -> None:
@@ -588,10 +1034,14 @@ def main(
         parse_layers,
     )
     from experiments.activation_geometry.behavior_aligned_direction import (
+        LABEL_SCORING_REGIMES,
+        PROMPT_FRAMES,
+        SCORING_SURFACES,
         aggregate_rows,
         alignment_summary,
         gate_summaries,
         parse_direction_modes,
+        parse_values,
         public_summary,
         write_payload,
     )
@@ -605,6 +1055,7 @@ def main(
     )
 
     concept_rows = load_concepts(Path(concepts))
+    aliases_by_concept = load_aliases(Path(aliases))
     records = activation_records(concept_rows, Path(paraphrases))
     serializable_records = [
         {
@@ -626,10 +1077,50 @@ def main(
     parsed_option_orders = parse_option_orders(option_orders)
     parsed_train_variants = parse_layers(train_variants)
     parsed_scales = parse_scales(scales)
+    parsed_scoring_surface = parse_values(
+        scoring_surface,
+        allowed=SCORING_SURFACES,
+        name="Scoring surface",
+    )[0]
+    parsed_prompt_frame = parse_values(
+        prompt_frame,
+        allowed=PROMPT_FRAMES,
+        name="Prompt frame",
+    )[0]
+    parsed_objective_label_scoring_regimes = parse_values(
+        objective_label_scoring_regimes,
+        allowed=LABEL_SCORING_REGIMES,
+        name="Objective label scoring regimes",
+    )
+    parsed_eval_label_scoring_regimes = parse_values(
+        eval_label_scoring_regimes,
+        allowed=LABEL_SCORING_REGIMES,
+        name="Eval label scoring regimes",
+    )
+    parsed_label_score_normalization = parse_values(
+        label_score_normalization,
+        allowed=("mean", "sum"),
+        name="Label score normalization",
+    )[0]
+    if parsed_scoring_surface == "option_token" and (
+        parsed_objective_label_scoring_regimes != ["canonical"]
+        or parsed_eval_label_scoring_regimes != ["canonical"]
+    ):
+        raise ValueError("Alias label regimes require full-label scoring")
+    if (
+        "alias" in parsed_objective_label_scoring_regimes
+        or "alias" in parsed_eval_label_scoring_regimes
+    ):
+        missing_aliases = sorted(
+            concept.id for concept in concept_rows if concept.id not in aliases_by_concept
+        )
+        if missing_aliases:
+            raise ValueError(f"Missing aliases for concepts: {missing_aliases}")
     pair_specs = default_pair_specs(concept_rows)
     remote_payload = run_behavior_aligned_direction_remote.remote(
         [concept.__dict__ for concept in concept_rows],
         serializable_records,
+        aliases_by_concept,
         serializable_pair_specs(pair_specs),
         model_id,
         layer_roles,
@@ -639,6 +1130,11 @@ def main(
         parsed_train_variants,
         holdout_variant,
         max_length,
+        parsed_scoring_surface,
+        parsed_prompt_frame,
+        parsed_objective_label_scoring_regimes,
+        parsed_eval_label_scoring_regimes,
+        parsed_label_score_normalization,
         seed,
     )
     aggregates = aggregate_rows(remote_payload["rows"])
@@ -647,12 +1143,20 @@ def main(
             "model_id": model_id,
             "concept_source": concepts,
             "paraphrase_source": paraphrases,
+            "alias_source": aliases,
             "pooling": "final-token",
             "layer_roles": layer_roles,
             "train_variant_indices": parsed_train_variants,
             "holdout_variant_index": holdout_variant,
             "scales": parsed_scales,
             "direction_modes": parsed_direction_modes,
+            "scoring_surface": parsed_scoring_surface,
+            "prompt_frame": parsed_prompt_frame,
+            "objective_label_scoring_regimes": (
+                parsed_objective_label_scoring_regimes
+            ),
+            "eval_label_scoring_regimes": parsed_eval_label_scoring_regimes,
+            "label_score_normalization": parsed_label_score_normalization,
             "option_orders": [
                 "".join(role[0] for role in order)
                 for order in parsed_option_orders
