@@ -7,11 +7,15 @@ from experiments.activation_geometry.behavior_aligned_direction import (
     aggregate_rows,
     alignment_summary,
     gate_summaries,
+    label_scoring_regime_parts,
+    parse_label_scoring_regimes,
     parse_direction_modes,
     parse_values,
     role_margin,
     summarize_behavior_delta,
 )
+from experiments.activation_geometry.final_token_steering_pilot import pair_specs_for_set
+from experiments.concept_geometry.openai_embedding_probe import Concept
 
 
 class BehaviorAlignedDirectionTest(unittest.TestCase):
@@ -32,12 +36,72 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
     def test_parse_heldout_alias_regimes(self) -> None:
         self.assertEqual(
             parse_values(
-                "alias_0, alias_1",
+                "alias_0, alias_1, alias_2",
                 allowed=LABEL_SCORING_REGIMES,
                 name="Label regimes",
             ),
+            ["alias_0", "alias_1", "alias_2"],
+        )
+
+    def test_parse_grouped_objective_label_regimes(self) -> None:
+        self.assertEqual(
+            parse_label_scoring_regimes(
+                "alias_0+alias_1, canonical",
+                name="Objective label regimes",
+                allow_groups=True,
+            ),
+            ["alias_0+alias_1", "canonical"],
+        )
+        self.assertEqual(
+            label_scoring_regime_parts("alias_0+alias_1", allow_groups=True),
             ["alias_0", "alias_1"],
         )
+        with self.assertRaises(ValueError):
+            parse_label_scoring_regimes(
+                "alias_0+alias_1",
+                name="Eval label regimes",
+                allow_groups=False,
+            )
+
+    def test_expanded_pair_set_includes_more_controls(self) -> None:
+        concept_ids = {
+            "attractor",
+            "attractor_network",
+            "autopoiesis",
+            "homeostasis",
+            "validity_gate",
+            "weak_constraint",
+            "conceptual_space",
+            "representation_manifold",
+            "phase_space",
+            "fixed_point",
+            "prototype",
+            "basin_of_attraction",
+            "schema",
+            "valence",
+            "activation_vector",
+            "steering_vector",
+            "simplicity_bias",
+            "embedding",
+            "semantic_distance",
+            "self_boundary",
+        }
+        concepts = [
+            Concept(
+                id=concept_id,
+                label=concept_id.replace("_", " "),
+                category="test",
+                prompt=concept_id,
+            )
+            for concept_id in sorted(concept_ids)
+        ]
+
+        pairs = pair_specs_for_set(concepts, pair_set="expanded")
+        positive_pairs = [pair for pair in pairs if pair.kind == "positive"]
+        control_pairs = [pair for pair in pairs if pair.kind == "control"]
+
+        self.assertGreater(len(positive_pairs), 3)
+        self.assertGreater(len(control_pairs), 2)
 
     def test_role_margin_and_behavior_delta_use_target_margin(self) -> None:
         baseline = {"source": -1.0, "target": -2.0, "distractor": -3.0}

@@ -26,7 +26,8 @@ DIRECTION_MODES = (
 OBJECTIVE_ROLES = ("target", "source", "distractor")
 PROMPT_FRAMES = ("source_passage", "latent_choice")
 SCORING_SURFACES = ("option_token", "full_label")
-LABEL_SCORING_REGIMES = ("canonical", "alias", "alias_0", "alias_1")
+SINGLE_LABEL_SCORING_REGIMES = ("canonical", "alias", "alias_0", "alias_1", "alias_2")
+LABEL_SCORING_REGIMES = SINGLE_LABEL_SCORING_REGIMES
 
 
 def parse_csv(value: str) -> list[str]:
@@ -52,6 +53,35 @@ def parse_values(value: str, *, allowed: tuple[str, ...], name: str) -> list[str
         options = ", ".join(allowed)
         raise ValueError(f"{name} must be chosen from: {options}")
     return values
+
+
+def label_scoring_regime_parts(
+    regime: str,
+    *,
+    allow_groups: bool,
+) -> list[str]:
+    parts = [part.strip() for part in regime.split("+") if part.strip()]
+    if not parts:
+        raise ValueError("Label scoring regime cannot be empty")
+    if len(parts) > 1 and not allow_groups:
+        raise ValueError(f"Grouped label scoring regime is not allowed here: {regime}")
+    invalid = sorted(set(parts) - set(SINGLE_LABEL_SCORING_REGIMES))
+    if invalid:
+        options = ", ".join(SINGLE_LABEL_SCORING_REGIMES)
+        raise ValueError(f"Label scoring regime parts must be chosen from: {options}")
+    return parts
+
+
+def parse_label_scoring_regimes(
+    value: str,
+    *,
+    name: str,
+    allow_groups: bool = False,
+) -> list[str]:
+    regimes = parse_csv(value)
+    for regime in regimes:
+        label_scoring_regime_parts(regime, allow_groups=allow_groups)
+    return regimes
 
 
 def target_margin(scores: dict[str, float]) -> float:

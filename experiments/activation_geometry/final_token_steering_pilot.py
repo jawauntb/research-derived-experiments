@@ -19,15 +19,33 @@ PROMOTED_STEERING_PAIRS = (
 EXPLORATORY_STEERING_PAIRS = (
     ("conceptual_space", "representation_manifold"),
 )
+EXPANDED_POSITIVE_STEERING_PAIRS = (
+    *PROMOTED_STEERING_PAIRS,
+    *EXPLORATORY_STEERING_PAIRS,
+    ("phase_space", "conceptual_space"),
+    ("fixed_point", "prototype"),
+    ("basin_of_attraction", "schema"),
+)
 VALENCE_CONTROL_PAIRS = (
     ("valence", "activation_vector"),
     ("valence", "steering_vector"),
+)
+EXPANDED_CONTROL_PAIRS = (
+    *VALENCE_CONTROL_PAIRS,
+    ("simplicity_bias", "embedding"),
+    ("semantic_distance", "validity_gate"),
+    ("homeostasis", "representation_manifold"),
 )
 DEFAULT_DISTRACTORS = {
     "attractor_network": "prototype",
     "homeostasis": "self_boundary",
     "weak_constraint": "simplicity_bias",
     "representation_manifold": "embedding",
+    "conceptual_space": "semantic_distance",
+    "prototype": "schema",
+    "schema": "prototype",
+    "embedding": "activation_vector",
+    "validity_gate": "simplicity_bias",
     "activation_vector": "embedding",
     "steering_vector": "embedding",
 }
@@ -62,14 +80,23 @@ def concept_by_id(concepts: list[Concept]) -> dict[str, Concept]:
     return {concept.id: concept for concept in concepts}
 
 
-def default_pair_specs(concepts: list[Concept]) -> list[SteeringPair]:
+def pair_specs_for_set(concepts: list[Concept], *, pair_set: str) -> list[SteeringPair]:
     concept_ids = {concept.id for concept in concepts}
     rows = []
-    for kind, pairs in (
-        ("positive", PROMOTED_STEERING_PAIRS),
-        ("exploratory", EXPLORATORY_STEERING_PAIRS),
-        ("control", VALENCE_CONTROL_PAIRS),
-    ):
+    if pair_set == "promoted":
+        pair_groups = (
+            ("positive", PROMOTED_STEERING_PAIRS),
+            ("exploratory", EXPLORATORY_STEERING_PAIRS),
+            ("control", VALENCE_CONTROL_PAIRS),
+        )
+    elif pair_set == "expanded":
+        pair_groups = (
+            ("positive", EXPANDED_POSITIVE_STEERING_PAIRS),
+            ("control", EXPANDED_CONTROL_PAIRS),
+        )
+    else:
+        raise ValueError("Pair set must be one of: promoted, expanded")
+    for kind, pairs in pair_groups:
         for left, right in pairs:
             distractor = DEFAULT_DISTRACTORS[right]
             if left not in concept_ids or right not in concept_ids or distractor not in concept_ids:
@@ -83,6 +110,10 @@ def default_pair_specs(concepts: list[Concept]) -> list[SteeringPair]:
                 )
             )
     return rows
+
+
+def default_pair_specs(concepts: list[Concept]) -> list[SteeringPair]:
+    return pair_specs_for_set(concepts, pair_set="promoted")
 
 
 def steering_prompt(

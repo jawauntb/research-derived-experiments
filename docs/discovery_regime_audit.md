@@ -1351,3 +1351,46 @@ Residual content:
 - Retractions or supersessions: supersede "hard-control penalty is close to paper-ready" with "hard-control penalty is a useful frontier but not alias-invariant."
 
 Next move: jointly train over multiple aliases and broaden the concept/control set before scaling models.
+
+## Activation Geometry Probe: Multi-Alias Expanded Specificity
+
+Question: does multi-alias objective training plus a larger pair set produce semantic-specific behavior directions?
+
+Current regime:
+
+- Artifact types: alias-indexed label manifests, grouped objective regimes, full-label gradient directions, expanded pair manifests, specificity reports.
+- Operations: multi-alias gradient averaging, held-out alias scoring, norm-matched multi-control penalties, specificity-score comparison.
+- Gates/verifiers: held-out alias positives must transfer and independent controls must remain lower than positives under the same score surface.
+- Known limitations: one model, one seed, no generation scoring yet, expanded controls are hand-picked rather than random-relation nulls.
+
+Action class:
+
+- Retrieval/search/discovery: verifier hardening with a rejected candidate.
+- Why: this creates a stronger gate and falsifies the current multi-alias behavior objective as a paper-ready specificity mechanism.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/multialias_expanded_specificity_2026_06_09.md`; local ignored payloads under `artifacts/activation_geometry/modal_pythia_70m_multialias_expanded_*.json`.
+- Positive targets: expanded steering pairs.
+- Negative controls: expanded control pairs with leave-one-out control bases.
+- Stress tests: `source_passage` and `latent_choice`; held-out `alias_2`; canonical labels; three scales.
+
+Gate:
+
+- Acceptance rule: pass if held-out `alias_2` positives remain high while controls are suppressed enough to make specificity clearly positive.
+- Withheld/rejected rule: withhold if controls pass broadly or specificity is near zero/negative.
+
+Results:
+
+- Accepted artifacts: grouped objective regimes; third aliases; expanded pair set; result report.
+- Rejected or withheld artifacts: multi-alias constrained behavior directions remain non-paper-ready.
+- Key metrics: held-out `alias_2` target-learned reaches `6/7` positives in both prompt frames but controls pass `5/5`; specificity is `0.034` in `source_passage` and `0.002` in `latent_choice`.
+- Variance or ablation: both prompt frames agree; constrained and residual modes do not improve specificity.
+
+Residual content:
+
+- Explained by old regime: behavior gradients can move many held-out target labels.
+- New content outside old regime: the main obstacle is now identifiable as broad control leakage, not just single-alias fragility.
+- Retractions or supersessions: supersede "multi-alias training may be enough" with "multi-alias training improves transfer but not specificity."
+
+Next move: diagnose whether leakage is low-rank or pair-specific.
