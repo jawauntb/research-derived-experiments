@@ -6,6 +6,7 @@ from __future__ import annotations
 import importlib
 import json
 import os
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -21,6 +22,7 @@ DEFAULT_PROMPT_FRAME = "source_passage"
 DEFAULT_OBJECTIVE_LABEL_SCORING_REGIMES = "canonical"
 DEFAULT_EVAL_LABEL_SCORING_REGIMES = "canonical"
 DEFAULT_LABEL_SCORE_NORMALIZATION = "mean"
+GENERATION_MATCH_NEW_TOKENS = 8
 PENALTY_DIRECTION_MODES = {
     "target_penalty_hard_1_0": ("hard_control", 1.0),
     "target_penalty_hard_2_0": ("hard_control", 2.0),
@@ -171,6 +173,69 @@ def labels_by_role_for_regime(
     raise ValueError(f"Unknown label scoring regime: {label_scoring_regime}")
 
 
+def generation_match_labels_by_role(
+    *,
+    concept_lookup: dict[str, dict[str, Any]],
+    aliases_by_concept: dict[str, list[str]],
+    left: str,
+    right: str,
+    distractor: str,
+) -> dict[str, list[str]]:
+    concept_by_role = {
+        "source": left,
+        "target": right,
+        "distractor": distractor,
+    }
+    labels_by_role = {}
+    for role, concept_id in concept_by_role.items():
+        labels = [str(concept_lookup[concept_id]["label"])]
+        labels.extend(str(alias) for alias in aliases_by_concept.get(concept_id, []))
+        deduped = []
+        seen = set()
+        for label in labels:
+            normalized = normalize_generated_text(label)
+            if normalized and normalized not in seen:
+                seen.add(normalized)
+                deduped.append(label)
+        labels_by_role[role] = deduped
+    return labels_by_role
+
+
+def normalize_generated_text(text: str) -> str:
+    normalized = text.lower().replace("_", " ")
+    normalized = re.sub(r"[^a-z0-9]+", " ", normalized)
+    return re.sub(r"\s+", " ", normalized).strip()
+
+
+def generated_text_matches_label(*, generated_text: str, label: str) -> bool:
+    text = normalize_generated_text(generated_text)
+    normalized_label = normalize_generated_text(label)
+    if not text or not normalized_label:
+        return False
+    return re.search(rf"(?<!\w){re.escape(normalized_label)}(?!\w)", text) is not None
+
+
+def generation_match_scores(
+    *,
+    generated_text: str,
+    labels_by_role: dict[str, list[str]],
+) -> dict[str, Any]:
+    scores: dict[str, Any] = {
+        role: 1.0
+        if any(
+            generated_text_matches_label(generated_text=generated_text, label=label)
+            for label in labels
+        )
+        else 0.0
+        for role, labels in labels_by_role.items()
+    }
+    scores["generated_text"] = generated_text
+    scores["matched_roles"] = [
+        role for role in ("source", "target", "distractor") if scores[role] > 0
+    ]
+    return scores
+
+
 def objective_role_for_mode(mode: str) -> str:
     if mode in {
         "target_learned",
@@ -243,14 +308,14 @@ def objective_margin(logprobs: Any, token_ids: dict[str, int], role: str) -> Any
     return logprobs[token_ids[role]] - 0.5 * sum(logprobs[token_ids[name]] for name in others)
 
 
-def target_margin(scores: dict[str, float]) -> float:
+def target_margin(scores: dict[str, Any]) -> float:
     return scores["target"] - ((scores["source"] + scores["distractor"]) / 2)
 
 
 def summarize_behavior_delta(
     *,
-    baseline_scores: dict[str, float],
-    steered_scores: dict[str, float],
+    baseline_scores: dict[str, Any],
+    steered_scores: dict[str, Any],
 ) -> dict[str, Any]:
     baseline_margin = target_margin(baseline_scores)
     steered_margin = target_margin(steered_scores)
@@ -479,6 +544,96 @@ def run_full_label_prompt(
     return scores
 
 
+def generate_continuation(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    prompt: str,
+    layer: int,
+    delta: Any | None,
+    max_length: int,
+    max_new_tokens: int,
+) -> str:
+    prompt_max_length = max(1, max_length - max_new_tokens)
+    prompt_ids = tokenizer.encode(
+        prompt,
+        add_special_tokens=False,
+        truncation=True,
+        max_length=prompt_max_length,
+    )
+    if not prompt_ids:
+        raise ValueError("Prompt encoded to zero tokens")
+
+    device = next(model.parameters()).device
+    generated_ids: list[int] = []
+    input_ids = torch.tensor([prompt_ids], dtype=torch.long, device=device)
+    patch_token_indices = torch.tensor([len(prompt_ids) - 1], device=device)
+    eos_token_id = tokenizer.eos_token_id
+    for _step in range(max_new_tokens):
+        attention_mask = torch.ones_like(input_ids)
+        handle = None
+        if delta is not None:
+            handle = add_token_index_hook(
+                torch=torch,
+                model=model,
+                layer=layer,
+                token_indices=patch_token_indices,
+                delta=delta,
+            )
+        try:
+            with torch.inference_mode():
+                outputs = model(
+                    input_ids=input_ids,
+                    attention_mask=attention_mask,
+                    use_cache=False,
+                )
+        finally:
+            if handle is not None:
+                handle.remove()
+        next_logits = outputs.logits[0, -1].float().clone()
+        for special_token_id in {eos_token_id, tokenizer.pad_token_id}:
+            if special_token_id is not None:
+                next_logits[int(special_token_id)] = -torch.inf
+        next_token_id = int(next_logits.argmax(dim=-1).item())
+        generated_ids.append(next_token_id)
+        input_ids = torch.cat(
+            [
+                input_ids,
+                torch.tensor([[next_token_id]], dtype=torch.long, device=device),
+            ],
+            dim=1,
+        )
+    return tokenizer.decode(generated_ids, skip_special_tokens=True).strip()
+
+
+def run_generation_match_prompt(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    prompt: str,
+    layer: int,
+    delta: Any | None,
+    max_length: int,
+    generation_labels_by_role: dict[str, list[str]],
+) -> dict[str, Any]:
+    generated_text = generate_continuation(
+        torch=torch,
+        tokenizer=tokenizer,
+        model=model,
+        prompt=prompt,
+        layer=layer,
+        delta=delta,
+        max_length=max_length,
+        max_new_tokens=GENERATION_MATCH_NEW_TOKENS,
+    )
+    return generation_match_scores(
+        generated_text=generated_text,
+        labels_by_role=generation_labels_by_role,
+    )
+
+
 def run_scoring_prompt(
     *,
     torch: Any,
@@ -491,8 +646,9 @@ def run_scoring_prompt(
     scoring_surface: str,
     token_ids: dict[str, int] | None,
     labels_by_role: dict[str, str],
+    generation_labels_by_role: dict[str, list[str]] | None,
     label_score_normalization: str,
-) -> dict[str, float]:
+) -> dict[str, Any]:
     if scoring_surface == "option_token":
         if token_ids is None:
             raise ValueError("Option-token scoring requires token_ids")
@@ -517,6 +673,19 @@ def run_scoring_prompt(
             max_length=max_length,
             labels_by_role=labels_by_role,
             label_score_normalization=label_score_normalization,
+        )
+    if scoring_surface == "generation_match":
+        if generation_labels_by_role is None:
+            raise ValueError("Generation-match scoring requires generation labels")
+        return run_generation_match_prompt(
+            torch=torch,
+            tokenizer=tokenizer,
+            model=model,
+            prompt=prompt,
+            layer=layer,
+            delta=delta,
+            max_length=max_length,
+            generation_labels_by_role=generation_labels_by_role,
         )
     raise ValueError(f"Unknown scoring surface: {scoring_surface}")
 
@@ -738,7 +907,7 @@ def learned_gradient_direction(
                     )
                 )
             continue
-        if scoring_surface == "full_label":
+        if scoring_surface in {"full_label", "generation_match"}:
             prompt = full_label_prompt(
                 source_text=source_text,
                 prompt_frame=prompt_frame,
@@ -1153,7 +1322,11 @@ def run_behavior_aligned_direction_remote(
                             layer=layer,
                             max_length=max_length,
                             objective_role=objective_role,
-                            scoring_surface=scoring_surface,
+                    scoring_surface=(
+                        "full_label"
+                        if scoring_surface == "generation_match"
+                        else scoring_surface
+                    ),
                             prompt_frame=prompt_frame,
                             label_score_normalization=label_score_normalization,
                         ).to(device)
@@ -1295,6 +1468,13 @@ def run_behavior_aligned_direction_remote(
                         distractor=distractor,
                         label_scoring_regime=eval_label_scoring_regime,
                     )
+                    generation_labels = generation_match_labels_by_role(
+                        concept_lookup=concept_lookup,
+                        aliases_by_concept=aliases_by_concept,
+                        left=left,
+                        right=right,
+                        distractor=distractor,
+                    )
                     prompt_specs: list[dict[str, Any]] = []
                     if scoring_surface == "option_token":
                         for option_order in parsed_orders:
@@ -1323,6 +1503,17 @@ def run_behavior_aligned_direction_remote(
                                 "token_ids": None,
                             }
                         )
+                    elif scoring_surface == "generation_match":
+                        prompt_specs.append(
+                            {
+                                "prompt": full_label_prompt(
+                                    source_text=heldout_text,
+                                    prompt_frame=prompt_frame,
+                                ),
+                                "option_order": "generation_match",
+                                "token_ids": None,
+                            }
+                        )
                     else:
                         raise ValueError(f"Unknown scoring surface: {scoring_surface}")
                     for order_index, prompt_spec in enumerate(prompt_specs):
@@ -1338,6 +1529,7 @@ def run_behavior_aligned_direction_remote(
                             scoring_surface=scoring_surface,
                             token_ids=prompt_spec["token_ids"],
                             labels_by_role=eval_labels_by_role,
+                            generation_labels_by_role=generation_labels,
                             label_score_normalization=label_score_normalization,
                         )
                         for scale_index, scale in enumerate(scales):
@@ -1376,6 +1568,7 @@ def run_behavior_aligned_direction_remote(
                                     scoring_surface=scoring_surface,
                                     token_ids=prompt_spec["token_ids"],
                                     labels_by_role=eval_labels_by_role,
+                                    generation_labels_by_role=generation_labels,
                                     label_score_normalization=(
                                         label_score_normalization
                                     ),
@@ -1423,6 +1616,9 @@ def run_behavior_aligned_direction_remote(
                                             objective_labels_by_role
                                         ),
                                         "eval_labels_by_role": eval_labels_by_role,
+                                        "generation_match_labels_by_role": (
+                                            generation_labels
+                                        ),
                                         "train_variant_indices": sorted(
                                             train_variants
                                         ),
@@ -1520,11 +1716,11 @@ def main(
         }
         for record in records
     ]
-    layer_roles = {
-        "primary": primary_layer,
-        "backup": backup_layer,
-        "control": control_layer,
-    }
+    layer_roles = {"primary": primary_layer}
+    if backup_layer >= 1:
+        layer_roles["backup"] = backup_layer
+    if control_layer >= 1:
+        layer_roles["control"] = control_layer
     parsed_direction_modes = parse_direction_modes(direction_modes)
     parsed_option_orders = parse_option_orders(option_orders)
     parsed_train_variants = parse_layers(train_variants)

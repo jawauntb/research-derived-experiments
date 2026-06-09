@@ -95,6 +95,71 @@ def pair_failures(
     )
 
 
+def generation_examples(
+    payload: dict[str, Any],
+    *,
+    scale: float,
+    role: str,
+    limit: int = 12,
+) -> list[JsonRow]:
+    rows = [
+        row
+        for row in payload["rows"]
+        if float(row["scale"]) == scale
+        and str(row["role"]) == role
+        and str(row.get("scoring_surface")) == "generation_match"
+    ]
+    rows = sorted(
+        rows,
+        key=lambda row: (
+            0
+            if float(row.get("scores", {}).get("steered", {}).get("target", 0.0)) > 0
+            else 1,
+            0 if str(row.get("kind")) == "positive" else 1,
+            -float(row.get("summary", {}).get("target_margin_delta", 0.0)),
+            str(row.get("direction_mode", "")),
+            str(row.get("pair", "")),
+        ),
+    )
+    examples = []
+    for row in rows:
+        if str(row.get("scoring_surface")) != "generation_match":
+            continue
+        scores = row.get("scores", {})
+        baseline = scores.get("baseline", {})
+        steered = scores.get("steered", {})
+        examples.append(
+            {
+                "prompt_frame": row.get("prompt_frame", ""),
+                "eval_label_scoring_regime": row.get(
+                    "eval_label_scoring_regime",
+                    "",
+                ),
+                "direction_mode": row.get("direction_mode", ""),
+                "kind": row.get("kind", ""),
+                "pair": row.get("pair", ""),
+                "target_margin_delta": float(
+                    row.get("summary", {}).get("target_margin_delta", 0.0)
+                ),
+                "baseline_generated_text": str(
+                    baseline.get("generated_text", "")
+                ).replace("\n", " "),
+                "baseline_matched_roles": ",".join(
+                    str(role) for role in baseline.get("matched_roles", [])
+                ),
+                "steered_generated_text": str(
+                    steered.get("generated_text", "")
+                ).replace("\n", " "),
+                "steered_matched_roles": ",".join(
+                    str(role) for role in steered.get("matched_roles", [])
+                ),
+            }
+        )
+        if len(examples) >= limit:
+            break
+    return examples
+
+
 def markdown_table(headers: list[str], rows: list[list[str]]) -> str:
     lines = [
         "| " + " | ".join(headers) + " |",
@@ -131,6 +196,20 @@ def render_payload(path: Path, payload: dict[str, Any], *, scale: float, role: s
         ]
         for row in pair_failures(payload, scale=scale, role=role, kind="positive")
     ]
+    example_rows = [
+        [
+            str(row["prompt_frame"]),
+            str(row["direction_mode"]),
+            str(row["kind"]),
+            str(row["pair"]),
+            f"{float(row['target_margin_delta']):.3f}",
+            str(row["baseline_matched_roles"]) or "-",
+            str(row["baseline_generated_text"])[:80] or "-",
+            str(row["steered_matched_roles"]) or "-",
+            str(row["steered_generated_text"])[:80] or "-",
+        ]
+        for row in generation_examples(payload, scale=scale, role=role)
+    ]
     sections = [
         f"## {path.name}",
         "",
@@ -154,6 +233,28 @@ def render_payload(path: Path, payload: dict[str, Any], *, scale: float, role: s
             summary_rows,
         ),
     ]
+    if example_rows:
+        sections.extend(
+            [
+                "",
+                "### Generation Examples",
+                "",
+                markdown_table(
+                    [
+                        "Prompt",
+                        "Direction",
+                        "Kind",
+                        "Pair",
+                        "Delta",
+                        "Base roles",
+                        "Base text",
+                        "Steered roles",
+                        "Steered text",
+                    ],
+                    example_rows,
+                ),
+            ]
+        )
     if failure_rows:
         sections.extend(
             [

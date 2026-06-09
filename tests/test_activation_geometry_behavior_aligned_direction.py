@@ -6,8 +6,11 @@ from experiments.activation_geometry.behavior_aligned_direction import (
     LABEL_SCORING_REGIMES,
     aggregate_rows,
     alignment_summary,
+    generation_match_scores,
     gate_summaries,
+    generated_text_matches_label,
     label_scoring_regime_parts,
+    normalize_generated_text,
     parse_label_scoring_regimes,
     parse_direction_modes,
     parse_values,
@@ -44,6 +47,36 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
             ),
             ["alias_0", "alias_1", "alias_2"],
         )
+
+    def test_generation_match_helpers_use_phrase_boundaries(self) -> None:
+        self.assertEqual(
+            normalize_generated_text("Attractor-network!\n"),
+            "attractor network",
+        )
+        self.assertTrue(
+            generated_text_matches_label(
+                generated_text="The answer is attractor network.",
+                label="attractor_network",
+            )
+        )
+        self.assertFalse(
+            generated_text_matches_label(
+                generated_text="This is schematic reasoning.",
+                label="schema",
+            )
+        )
+        scores = generation_match_scores(
+            generated_text="Answer: homeostatic regulation",
+            labels_by_role={
+                "source": ["autopoiesis"],
+                "target": ["homeostatic regulation", "homeostasis"],
+                "distractor": ["self boundary"],
+            },
+        )
+
+        self.assertEqual(scores["source"], 0.0)
+        self.assertEqual(scores["target"], 1.0)
+        self.assertEqual(scores["distractor"], 0.0)
 
     def test_parse_grouped_objective_label_regimes(self) -> None:
         self.assertEqual(
@@ -341,6 +374,61 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
         self.assertEqual(gate["eval_label_scoring_regime"], "canonical")
         self.assertEqual(gate["primary_positive_pass_count"], 1)
         self.assertEqual(alignment["eval_label_scoring_regime"], "canonical")
+
+    def test_generation_match_gate_requires_steered_target_match(self) -> None:
+        shared = {
+            "scoring_surface": "generation_match",
+            "prompt_frame": "source_passage",
+            "objective_label_scoring_regime": "alias_0+alias_1",
+            "eval_label_scoring_regime": "alias_2",
+            "role": "primary",
+            "layer": 5,
+            "kind": "positive",
+            "pair": "attractor->attractor_network",
+            "scale": 1.0,
+            "option_order": "generation_match",
+            "summary": {
+                "target_margin_delta": 0.5,
+                "target_logprob_delta": 0.0,
+            },
+            "learned_alignment": {
+                "target_source_cosine": 0.2,
+                "target_distractor_cosine": -0.1,
+            },
+        }
+        rows = [
+            {
+                **shared,
+                "direction_mode": "target_learned",
+                "scores": {
+                    "baseline": {"source": 1.0, "target": 0.0, "distractor": 0.0},
+                    "steered": {"source": 0.0, "target": 0.0, "distractor": 0.0},
+                },
+            },
+            {
+                **shared,
+                "direction_mode": "caa_target_minus_source",
+                "scores": {
+                    "baseline": {"source": 1.0, "target": 0.0, "distractor": 0.0},
+                    "steered": {"source": 0.0, "target": 1.0, "distractor": 0.0},
+                },
+            },
+        ]
+
+        aggregates = aggregate_rows(rows)
+        source_suppression = next(
+            row for row in aggregates if row["direction_mode"] == "target_learned"
+        )
+        target_match = next(
+            row
+            for row in aggregates
+            if row["direction_mode"] == "caa_target_minus_source"
+        )
+
+        self.assertFalse(source_suppression["robust_pass"])
+        self.assertEqual(source_suppression["score_surface_pass_count"], 0)
+        self.assertTrue(target_match["robust_pass"])
+        self.assertEqual(target_match["score_surface_pass_count"], 1)
 
 
 if __name__ == "__main__":
