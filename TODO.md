@@ -93,6 +93,7 @@
 - [x] Expand positive/control concept sets before larger-model replication.
 - [x] Track a specificity frontier: positive mean retained vs independent control mean suppressed.
 - [x] Diagnose whether behavior-direction leakage channels are low-rank or pair-specific.
+- [x] Add a target-disjoint control family to test whether leakage is only same-target overlap.
 - [ ] Add random relation nulls to the behavior-direction specificity gate.
 - [ ] Stratify behavior controls into target-sharing, source-sharing, and fully target-disjoint classes.
 - [ ] Replicate the hook-output transfer ridge on a second checkpoint or open model.
