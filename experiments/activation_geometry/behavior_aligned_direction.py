@@ -21,6 +21,9 @@ DIRECTION_MODES = (
     "target_penalty_controls_0_5",
     "target_penalty_controls_1_0",
     "target_penalty_controls_2_0",
+    "caa_target_contrast",
+    "caa_target_minus_source",
+    "caa_target_minus_distractor",
     "random_same_norm",
 )
 OBJECTIVE_ROLES = ("target", "source", "distractor")

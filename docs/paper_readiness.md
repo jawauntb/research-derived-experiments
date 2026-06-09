@@ -17,7 +17,7 @@ that distinction, and constrained control penalties trace a specificity frontier
 | More models | Pythia-70M only for alias/constrained runs. | Replicate best frontier on at least one larger open model and one small control model. |
 | More concepts | Expanded behavior gate now has seven positives, five mixed controls, six target-disjoint controls, and ten random relation nulls. | Add bootstrap confidence intervals over pairs and random-null draws once a verifier separates positives from nulls. |
 | Held-out aliases/controls | Added third aliases and a train-on-`alias_0+alias_1` / test-on-`alias_2` gate. | Diagnose why held-out transfer moves controls as much as positives. |
-| Baselines | Random, source/distractor, residual projection, hard/mean-control penalties. | Add CAA/CAV-style activation-vector baselines and, later, SAE/feature-guided baselines if feasible. |
+| Baselines | Random, source/distractor, residual projection, hard/mean-control penalties, and CAA/CAV-style activation-difference baselines. | Add learned behavior-readout/generation baselines and, later, SAE/feature-guided baselines if feasible. |
 | Statistical confidence | Single seed for most behavior runs. | Add seeds, bootstrap CIs over pairs, and random relation nulls. |
 | Claim boundary | `docs/semantic_specificity.md` defines specificity as held-out target transfer minus independent control leakage under matched score surfaces. | Keep the claim boundary in the paper draft and do not promote runs with near-zero specificity. |
 | Generation tests | Mostly label logprob scoring. | Add constrained free-generation or short-answer scoring after logprob gates pass. |
@@ -47,7 +47,8 @@ Current Phase 1 result:
 - Held-out `alias_2` specificity with target-disjoint controls is only `0.066` in `source_passage` and `0.007` in `latent_choice`; canonical specificity is negative.
 - Random relation nulls make the failure decisive: target-learned directions move `6/7` positives but `10/10` random null controls in both prompt frames.
 - Random-null held-out `alias_2` specificity is negative: `-0.101` in `source_passage` and `-0.137` in `latent_choice`; canonical specificity is also negative.
-- Phase 1 is not passed yet. The current full-label logprob gate should be treated as a diagnostic failure mode. The next attempt should add CAA/CAV-style baselines and a non-logprob generation or learned behavior-readout gate before adding model scale.
+- CAA/CAV-style activation-difference baselines are active and sometimes improve mean specificity relative to target-gradient directions, but they still fail random-null specificity. The best source held-out alias CAA row is `7/7` positives, `7/10` controls, specificity `0.066`; the best latent row is `7/7` positives, `10/10` controls, specificity `0.043`.
+- Phase 1 is not passed yet. The current full-label logprob gate should be treated as a diagnostic failure mode. The next attempt should add a non-logprob generation or learned behavior-readout gate before adding model scale.
 
 ## Phase 2 Preview
 
@@ -55,7 +56,7 @@ If Phase 1 survives, expand along three axes:
 
 - Model replication: add GPT-2 and a larger open causal LM if Modal budget allows.
 - Concept expansion: add more positive bridges and random relation nulls.
-- Baselines: add CAA/CAV-style activation differences against the same held-out alias verifier.
+- Baselines: compare generation/readout behavior against the existing target-gradient, residual, random, and CAA/CAV-style activation-difference baselines.
 - Verifier pivot: add generation or learned behavior-readout tests that can separate true relation behavior from broad target-label promotion.
 
 ## Paper Draft Gate

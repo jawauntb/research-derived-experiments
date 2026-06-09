@@ -1557,3 +1557,46 @@ Residual content:
 - Retractions or supersessions: supersede "more controls may rescue this logprob gate" with "the logprob gate is now a diagnostic failure mode unless a new behavior verifier separates positives from random nulls."
 
 Next move: implement CAA/CAV baselines and a non-logprob behavior gate before spending on more seeds or larger models.
+
+## Activation Geometry Probe: CAA/CAV Baseline Random Nulls
+
+Question: do CAA/CAV-style activation-difference directions avoid the random relation null failure that invalidated target-gradient behavior directions?
+
+Current regime:
+
+- Artifact types: alias-indexed behavior-direction manifests, activation-mean CAA/CAV direction vectors, random-relation null pair sets, specificity tables, result reports.
+- Operations: source-passage activation extraction, mean activation differencing, norm matching to target-gradient directions, held-out alias scoring.
+- Gates/verifiers: positives must beat random relation nulls under the same score surface; controls should not broadly pass; canonical controls should not be stronger than positives.
+- Known limitations: one model, one seed, CAA vectors use simple mean differences, no generation/readout scoring yet.
+
+Action class:
+
+- Retrieval/search/discovery: baseline hardening with a rejected rescue.
+- Why: this adds a CAA/CAV-style baseline operation and tests whether the failure was construction-specific rather than verifier-specific.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/caa_cav_baseline_random_nulls_2026_06_09.md`; local ignored payloads under `artifacts/activation_geometry/modal_pythia_70m_caa_baseline_random_nulls_*.json`.
+- Positive targets: expanded steering pairs.
+- Negative controls: ten seeded random relation null controls.
+- Stress tests: `source_passage` and `latent_choice`; held-out `alias_2`; canonical labels; random same-norm baseline.
+
+Gate:
+
+- Acceptance rule: continue toward paper-level semantic specificity only if a CAA/CAV baseline keeps high held-out positive transfer while suppressing random-null controls enough to make specificity clearly positive.
+- Withheld/rejected rule: reject the CAA/CAV rescue if random null controls still broadly pass or canonical specificity is negative.
+
+Results:
+
+- Accepted artifacts: CAA/CAV direction modes and result report.
+- Rejected or withheld artifacts: CAA/CAV as a semantically specific mechanism under the current full-label logprob verifier.
+- Key metrics: best source-passage held-out alias CAA row is `caa_target_minus_source`, with `7/7` positives, `7/10` controls, and specificity `0.066`; best latent held-out alias CAA row is `caa_target_minus_source`, with `7/7` positives, `10/10` controls, and specificity `0.043`.
+- Variance or ablation: source and latent prompt frames agree that CAA moves positives but does not suppress random nulls; canonical specificity is negative for all CAA modes.
+
+Residual content:
+
+- Explained by old regime: both gradient and CAA directions can move held-out target labels.
+- New content outside old regime: a standard activation-difference baseline also fails the random-null specificity gate, strengthening the case that the verifier/objective, not only the direction-construction method, is the current bottleneck.
+- Retractions or supersessions: supersede "CAA may rescue this verifier" with "CAA is a useful baseline but fails the same independent-control gate."
+
+Next move: create a non-logprob generation or learned behavior-readout gate for semantic specificity.

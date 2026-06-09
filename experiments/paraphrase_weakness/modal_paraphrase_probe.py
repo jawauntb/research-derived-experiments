@@ -51,7 +51,6 @@ app = modal.App(name="research-derived-paraphrase-weakness")
 
 @app.function(image=IMAGE, timeout=1800, gpu=None)
 def run_probe(arg: dict[str, Any]) -> dict[str, Any]:
-    import math
     import os
 
     import numpy as np
