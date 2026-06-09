@@ -1093,3 +1093,46 @@ Residual content:
 - Retractions or supersessions: supersede "neutral carrier activity makes the full-label result uninterpretable" with "the effect is label-anchored and definition-context boosted."
 
 Next move: replicate across seed/model and test alias labels to separate exact-string anchoring from conceptual behavior transfer.
+
+## Activation Geometry Probe: Full-Label Alias Gate
+
+Question: does canonical full-label behavior transfer survive non-identical alias scoring?
+
+Current regime:
+
+- Artifact types: alias-label manifests, full-label behavior payloads, canonical-vs-alias specificity rows, alias survivor pocket tables.
+- Operations: hook-output state capture from canonical carriers, full-label continuation scoring over canonical and alias labels, target-vs-control specificity aggregation.
+- Gates/verifiers: canonical definition patches should reproduce the carrier-control result; alias patches must beat distractor/random/source-noop controls to count as label-invariant concept transfer.
+- Known limitations: one seed, one model, one alias per concept, aliases are hand-authored, no alias-trained behavior direction yet.
+
+Action class:
+
+- Retrieval/search/discovery: verifier refinement with a boundary result.
+- Why: this run changes the scored lexical surface and tests whether behavior transfer is label-invariant.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/full_label_alias_gate_2026_06_08.md`; local ignored payloads under `artifacts/activation_geometry/modal_pythia_70m_full_label_alias_*.json`.
+- Positive targets: focus rows plus 8 sampled baseline pairs.
+- Negative controls: alias scoring against distractor/random/source-noop patch modes, `blank_carrier`, `shuffled_label`, `neutral`, `label_only`.
+- Stress tests: prompt frames `latent_choice` and `source_passage`; layers `5,6`; canonical vs alias scoring.
+
+Gate:
+
+- Acceptance rule: accept label-invariant behavior transfer only if alias-scored definition target patches pass robustly and have positive target-over-control advantage.
+- Withheld/rejected rule: withhold concept-level behavior transfer if alias target movement is matched or exceeded by controls.
+
+Results:
+
+- Accepted artifacts: alias label manifest, alias scoring support in the behavior gate, `experiments/activation_geometry/results/full_label_alias_gate_2026_06_08.md`.
+- Rejected or withheld artifacts: broad label-invariant behavior transfer claim remains withheld.
+- Key metrics: canonical definitions pass `9/15` to `12/15` with mean advantage `0.622` to `0.881`; alias definitions pass only `4/15` to `6/15` and have negative mean advantage from `-0.094` to `-0.196`.
+- Variance or ablation: both prompt frames agree: canonical effect replicates; alias specificity collapses globally; a few pair-specific alias pockets remain.
+
+Residual content:
+
+- Explained by old regime: exact canonical labels dominate the behavior-visible effect.
+- New content outside old regime: alias scoring reveals weak, pair-specific synonym pockets that may mark either true concept transfer or alias-surface confounds.
+- Retractions or supersessions: supersede "full-label behavior transfer may be concept-level" with "full-label behavior transfer is currently canonical-label anchored, with only local alias pockets."
+
+Next move: run multiple-alias and alias-shuffle diagnostics, then try alias-trained behavior-aligned directions.

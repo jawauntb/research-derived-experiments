@@ -19,6 +19,7 @@ PATCH_MODES = ("target", "distractor", "random", "source_noop")
 OPTION_ROLES = ("source", "target", "distractor")
 PROMPT_FRAMES = ("source_passage", "latent_choice")
 SCORING_SURFACES = ("option_token", "full_label")
+LABEL_SCORING_REGIMES = ("canonical", "alias")
 DEFAULT_OPTION_ORDERS = (
     ("source", "target", "distractor"),
     ("target", "distractor", "source"),
@@ -165,6 +166,7 @@ def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             row["pair"],
             row.get("prompt_frame", "source_passage"),
             row.get("scoring_surface", "option_token"),
+            row.get("label_scoring_regime", "canonical"),
             row["injection_layer"],
             row.get("patch_alpha", 1.0),
             row.get("patch_vector_surface", "hook_output"),
@@ -179,6 +181,7 @@ def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         pair,
         prompt_frame,
         scoring_surface,
+        label_scoring_regime,
         injection_layer,
         patch_alpha,
         patch_vector_surface,
@@ -198,6 +201,7 @@ def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "pair": pair,
                 "prompt_frame": prompt_frame,
                 "scoring_surface": scoring_surface,
+                "label_scoring_regime": label_scoring_regime,
                 "injection_layer": injection_layer,
                 "patch_alpha": patch_alpha,
                 "patch_vector_surface": patch_vector_surface,
@@ -227,6 +231,7 @@ def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             str(row["pair"]),
             str(row.get("prompt_frame", "source_passage")),
             str(row.get("scoring_surface", "option_token")),
+            str(row.get("label_scoring_regime", "canonical")),
             int(row["injection_layer"]),
             float(row["patch_alpha"]),
             str(row["patch_mode"]),
@@ -243,6 +248,7 @@ def specificity_rows(aggregates: list[dict[str, Any]]) -> list[dict[str, Any]]:
             row["pair"],
             row.get("prompt_frame", "source_passage"),
             row.get("scoring_surface", "option_token"),
+            row.get("label_scoring_regime", "canonical"),
             row["injection_layer"],
             row.get("patch_alpha", 1.0),
             row.get("patch_vector_surface", "hook_output"),
@@ -256,6 +262,7 @@ def specificity_rows(aggregates: list[dict[str, Any]]) -> list[dict[str, Any]]:
         pair,
         prompt_frame,
         scoring_surface,
+        label_scoring_regime,
         injection_layer,
         patch_alpha,
         patch_vector_surface,
@@ -280,6 +287,7 @@ def specificity_rows(aggregates: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "pair": pair,
                 "prompt_frame": prompt_frame,
                 "scoring_surface": scoring_surface,
+                "label_scoring_regime": label_scoring_regime,
                 "injection_layer": injection_layer,
                 "patch_alpha": patch_alpha,
                 "patch_vector_surface": patch_vector_surface,
@@ -318,6 +326,7 @@ def specificity_rows(aggregates: list[dict[str, Any]]) -> list[dict[str, Any]]:
             str(row["pair"]),
             str(row.get("prompt_frame", "source_passage")),
             str(row.get("scoring_surface", "option_token")),
+            str(row.get("label_scoring_regime", "canonical")),
             int(row["injection_layer"]),
             float(row["patch_alpha"]),
         ),
@@ -344,6 +353,10 @@ def gate_summaries(specificity: list[dict[str, Any]]) -> list[dict[str, Any]]:
         {str(row.get("scoring_surface", "option_token")) for row in specificity}
         or {"option_token"}
     )
+    label_scoring_regimes = sorted(
+        {str(row.get("label_scoring_regime", "canonical")) for row in specificity}
+        or {"canonical"}
+    )
     layers = sorted({int(row["injection_layer"]) for row in specificity})
     alphas = sorted({float(row.get("patch_alpha", 1.0)) for row in specificity})
     for patch_vector_surface in surfaces:
@@ -366,48 +379,59 @@ def gate_summaries(specificity: list[dict[str, Any]]) -> list[dict[str, Any]]:
                     if str(row.get("scoring_surface", "option_token"))
                     == scoring_surface
                 ]
-                for patch_text_regime in PATCH_TEXT_REGIMES:
-                    regime_rows = [
+                for label_scoring_regime in label_scoring_regimes:
+                    label_rows = [
                         row
                         for row in score_rows
-                        if row["patch_text_regime"] == patch_text_regime
+                        if str(row.get("label_scoring_regime", "canonical"))
+                        == label_scoring_regime
                     ]
-                    for injection_layer in layers:
-                        layer_rows = [
+                    for patch_text_regime in PATCH_TEXT_REGIMES:
+                        regime_rows = [
                             row
-                            for row in regime_rows
-                            if int(row["injection_layer"]) == injection_layer
+                            for row in label_rows
+                            if row["patch_text_regime"] == patch_text_regime
                         ]
-                        for patch_alpha in alphas:
-                            rows = [
+                        for injection_layer in layers:
+                            layer_rows = [
                                 row
-                                for row in layer_rows
-                                if float(row.get("patch_alpha", 1.0)) == patch_alpha
+                                for row in regime_rows
+                                if int(row["injection_layer"]) == injection_layer
                             ]
-                            summaries.append(
-                                {
-                                    "patch_vector_surface": patch_vector_surface,
-                                    "prompt_frame": prompt_frame,
-                                    "scoring_surface": scoring_surface,
-                                    "patch_text_regime": patch_text_regime,
-                                    "injection_layer": injection_layer,
-                                    "patch_alpha": patch_alpha,
-                                    "specific_pass_count": sum(
-                                        1
-                                        for row in rows
-                                        if row["specific_target_pass"]
-                                    ),
-                                    "total": len(rows),
-                                    "mean_target_margin_delta": _mean_or_none(
-                                        rows,
-                                        "target_mean_target_margin_delta",
-                                    ),
-                                    "mean_advantage_over_best_control": _mean_or_none(
-                                        rows,
-                                        "target_advantage_over_best_control",
-                                    ),
-                                }
-                            )
+                            for patch_alpha in alphas:
+                                rows = [
+                                    row
+                                    for row in layer_rows
+                                    if float(row.get("patch_alpha", 1.0))
+                                    == patch_alpha
+                                ]
+                                summaries.append(
+                                    {
+                                        "patch_vector_surface": patch_vector_surface,
+                                        "prompt_frame": prompt_frame,
+                                        "scoring_surface": scoring_surface,
+                                        "label_scoring_regime": label_scoring_regime,
+                                        "patch_text_regime": patch_text_regime,
+                                        "injection_layer": injection_layer,
+                                        "patch_alpha": patch_alpha,
+                                        "specific_pass_count": sum(
+                                            1
+                                            for row in rows
+                                            if row["specific_target_pass"]
+                                        ),
+                                        "total": len(rows),
+                                        "mean_target_margin_delta": _mean_or_none(
+                                            rows,
+                                            "target_mean_target_margin_delta",
+                                        ),
+                                        "mean_advantage_over_best_control": (
+                                            _mean_or_none(
+                                                rows,
+                                                "target_advantage_over_best_control",
+                                            )
+                                        ),
+                                    }
+                                )
     return summaries
 
 

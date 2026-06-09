@@ -163,6 +163,7 @@ class LabelFreeBehaviorGateTest(unittest.TestCase):
                             "kind": "positive",
                             "pair": "attractor->attractor_network/d=prototype",
                             "prompt_frame": "source_passage",
+                            "label_scoring_regime": "canonical",
                             "injection_layer": 6,
                             "patch_alpha": 1.0,
                             "patch_vector_surface": "hook_output",
@@ -193,6 +194,7 @@ class LabelFreeBehaviorGateTest(unittest.TestCase):
             and row["patch_alpha"] == 1.0
         ][0]
         self.assertEqual(definition_summary["specific_pass_count"], 1)
+        self.assertEqual(definition_summary["label_scoring_regime"], "canonical")
 
     def test_full_label_single_probe_can_pass_when_specific(self) -> None:
         rows = []
@@ -208,6 +210,7 @@ class LabelFreeBehaviorGateTest(unittest.TestCase):
                     "pair": "attractor->attractor_network/d=prototype",
                     "prompt_frame": "latent_choice",
                     "scoring_surface": "full_label",
+                    "label_scoring_regime": "alias",
                     "injection_layer": 6,
                     "patch_alpha": 1.0,
                     "patch_vector_surface": "hook_output",
@@ -229,9 +232,12 @@ class LabelFreeBehaviorGateTest(unittest.TestCase):
 
         self.assertEqual(target["robust_pass_threshold"], 1)
         self.assertTrue(target["robust_pass"])
+        self.assertEqual(target["label_scoring_regime"], "alias")
         self.assertEqual(specific["scoring_surface"], "full_label")
+        self.assertEqual(specific["label_scoring_regime"], "alias")
         self.assertTrue(specific["specific_target_pass"])
         self.assertEqual(summaries[0]["scoring_surface"], "full_label")
+        self.assertEqual(summaries[0]["label_scoring_regime"], "alias")
 
 
 if __name__ == "__main__":

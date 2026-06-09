@@ -1,0 +1,98 @@
+[
+  {
+    "id": "attractor",
+    "aliases": ["stable state", "convergent state"]
+  },
+  {
+    "id": "basin_of_attraction",
+    "aliases": ["attraction basin", "convergence basin"]
+  },
+  {
+    "id": "phase_space",
+    "aliases": ["state space", "dynamical state space"]
+  },
+  {
+    "id": "fixed_point",
+    "aliases": ["equilibrium point", "unchanging state"]
+  },
+  {
+    "id": "attractor_network",
+    "aliases": ["stable-state network", "recurrent memory network"]
+  },
+  {
+    "id": "prototype",
+    "aliases": ["typical example", "category exemplar"]
+  },
+  {
+    "id": "schema",
+    "aliases": ["cognitive frame", "interpretive structure"]
+  },
+  {
+    "id": "conceptual_space",
+    "aliases": ["meaning space", "semantic geometry"]
+  },
+  {
+    "id": "semantic_distance",
+    "aliases": ["meaning distance", "conceptual distance"]
+  },
+  {
+    "id": "family_resemblance",
+    "aliases": ["overlapping similarity", "shared-feature resemblance"]
+  },
+  {
+    "id": "embedding",
+    "aliases": ["vector representation", "representation vector"]
+  },
+  {
+    "id": "activation_vector",
+    "aliases": ["activation direction", "neural activation state"]
+  },
+  {
+    "id": "steering_vector",
+    "aliases": ["control direction", "behavior steering direction"]
+  },
+  {
+    "id": "representation_manifold",
+    "aliases": ["learned manifold", "representation surface"]
+  },
+  {
+    "id": "weak_constraint",
+    "aliases": ["soft constraint", "loose constraint"]
+  },
+  {
+    "id": "simplicity_bias",
+    "aliases": ["parsimony bias", "preference for simple explanations"]
+  },
+  {
+    "id": "validity_gate",
+    "aliases": ["verification filter", "validity check"]
+  },
+  {
+    "id": "regime_transition",
+    "aliases": ["framework shift", "representational transition"]
+  },
+  {
+    "id": "schema_revision",
+    "aliases": ["framework revision", "representational update"]
+  },
+  {
+    "id": "residual_content",
+    "aliases": ["unexplained evidence", "leftover structure"]
+  },
+  {
+    "id": "self_boundary",
+    "aliases": ["agent boundary", "self-environment boundary"]
+  },
+  {
+    "id": "autopoiesis",
+    "aliases": ["self-producing organization", "self-maintaining organization"]
+  },
+  {
+    "id": "homeostasis",
+    "aliases": ["viability regulation", "stable internal regulation"]
+  },
+  {
+    "id": "valence",
+    "aliases": ["value signal", "affective value"]
+  }
+]

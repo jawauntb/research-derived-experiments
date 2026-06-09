@@ -49,6 +49,9 @@ def manifest_rows(payloads: list[tuple[Path, JsonRow]]) -> list[JsonRow]:
     rows = []
     for path, payload in payloads:
         manifest = payload["manifest"]
+        label_scoring_regimes = manifest.get("label_scoring_regimes", ["canonical"])
+        if isinstance(label_scoring_regimes, str):
+            label_scoring_regimes = [label_scoring_regimes]
         rows.append(
             {
                 "artifact": artifact_label(path, manifest),
@@ -57,6 +60,7 @@ def manifest_rows(payloads: list[tuple[Path, JsonRow]]) -> list[JsonRow]:
                 "surface": manifest.get("patch_vector_surface", "hook_output"),
                 "prompt_frame": manifest.get("prompt_frame", "source_passage"),
                 "scoring_surface": manifest.get("scoring_surface", "option_token"),
+                "label_scoring_regimes": ",".join(label_scoring_regimes),
                 "injection_layers": ",".join(map(str, manifest["injection_layers"])),
                 "alphas": ",".join(map(str, manifest["patch_alphas"])),
                 "regimes": ",".join(manifest["patch_text_regimes"]),
@@ -80,12 +84,20 @@ def all_pair_rows(payloads: list[tuple[Path, JsonRow]], regime: str) -> list[Jso
                 row["injection_layer"],
                 row.get("prompt_frame", "source_passage"),
                 row.get("scoring_surface", "option_token"),
+                row.get("label_scoring_regime", "canonical"),
                 row.get("patch_alpha", 1.0),
             )
             grouped[key].append(row)
 
     rows = []
-    for (label, injection, prompt_frame, scoring_surface, alpha), group in sorted(
+    for (
+        label,
+        injection,
+        prompt_frame,
+        scoring_surface,
+        label_scoring_regime,
+        alpha,
+    ), group in sorted(
         grouped.items()
     ):
         deltas = [float(row["target_mean_target_margin_delta"]) for row in group]
@@ -99,6 +111,7 @@ def all_pair_rows(payloads: list[tuple[Path, JsonRow]], regime: str) -> list[Jso
                 "injection_layer": injection,
                 "prompt_frame": prompt_frame,
                 "scoring_surface": scoring_surface,
+                "label_scoring_regime": label_scoring_regime,
                 "alpha": alpha,
                 "passes": passes,
                 "total": len(group),
@@ -130,6 +143,7 @@ def render_manifest(rows: list[JsonRow]) -> str:
             "Surface",
             "Prompt frame",
             "Scoring",
+            "Label scoring",
             "Injection layers",
             "Alphas",
             "Regimes",
@@ -145,6 +159,7 @@ def render_manifest(rows: list[JsonRow]) -> str:
                 row["surface"],
                 row["prompt_frame"],
                 row["scoring_surface"],
+                row["label_scoring_regimes"],
                 row["injection_layers"],
                 row["alphas"],
                 row["regimes"],
@@ -164,6 +179,7 @@ def render_all_pair(rows: list[JsonRow]) -> str:
             "Layer",
             "Prompt frame",
             "Scoring",
+            "Label scoring",
             "Alpha",
             "Specific passes",
             "Pass rate",
@@ -178,6 +194,7 @@ def render_all_pair(rows: list[JsonRow]) -> str:
                 str(row["injection_layer"]),
                 row["prompt_frame"],
                 row["scoring_surface"],
+                row.get("label_scoring_regime", "canonical"),
                 fmt_number(float(row["alpha"])),
                 f"{row['passes']}/{row['total']}",
                 fmt_rate(row["pass_rate"]),
@@ -198,6 +215,7 @@ def render_gate_summaries(rows: list[JsonRow]) -> str:
             "Regime",
             "Prompt frame",
             "Scoring",
+            "Label scoring",
             "Layer",
             "Alpha",
             "Specific passes",
@@ -210,6 +228,7 @@ def render_gate_summaries(rows: list[JsonRow]) -> str:
                 row["patch_text_regime"],
                 row.get("prompt_frame", "source_passage"),
                 row.get("scoring_surface", "option_token"),
+                row.get("label_scoring_regime", "canonical"),
                 str(row["injection_layer"]),
                 fmt_number(float(row["patch_alpha"])),
                 f"{row['specific_pass_count']}/{row['total']}",
