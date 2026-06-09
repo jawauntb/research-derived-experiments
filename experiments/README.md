@@ -10,3 +10,9 @@ Experiments should include:
 
 Raw outputs should stay under `artifacts/` until summarized and intentionally committed.
 
+## Active Tracks
+
+- `weakness_vs_simplicity`: Boolean hypothesis-selection worlds.
+- `symbolic_weakness`: symbolic symmetry worlds where local patches and invariant rules tie on training data but separate OOD.
+- `concept_geometry`: embedding-space concept geometry probes.
+- `activation_geometry`: hidden-state and intervention probes.
