@@ -44,6 +44,18 @@ TARGET_DISJOINT_CONTROL_PAIRS = (
     ("family_resemblance", "regime_transition"),
     ("self_boundary", "residual_content"),
 )
+RANDOM_RELATION_NULL_PAIRS = (
+    ("valence", "steering_vector"),
+    ("schema_revision", "steering_vector"),
+    ("embedding", "residual_content"),
+    ("residual_content", "self_boundary"),
+    ("steering_vector", "semantic_distance"),
+    ("residual_content", "valence"),
+    ("self_boundary", "embedding"),
+    ("regime_transition", "activation_vector"),
+    ("regime_transition", "family_resemblance"),
+    ("simplicity_bias", "residual_content"),
+)
 DEFAULT_DISTRACTORS = {
     "attractor_network": "prototype",
     "homeostasis": "self_boundary",
@@ -59,6 +71,16 @@ DEFAULT_DISTRACTORS = {
     "activation_vector": "embedding",
     "steering_vector": "embedding",
 }
+FALLBACK_DISTRACTOR_PRIORITY = (
+    "prototype",
+    "schema_revision",
+    "embedding",
+    "simplicity_bias",
+    "self_boundary",
+    "semantic_distance",
+    "activation_vector",
+    "homeostasis",
+)
 DEFAULT_SCALES = (0.5, 1.0)
 
 
@@ -91,6 +113,20 @@ def concept_by_id(concepts: list[Concept]) -> dict[str, Concept]:
     return {concept.id: concept for concept in concepts}
 
 
+def distractor_for(*, left: str, right: str, concept_ids: set[str]) -> str:
+    default = DEFAULT_DISTRACTORS.get(right)
+    if default:
+        return default
+    blocked = {left, right}
+    for candidate in FALLBACK_DISTRACTOR_PRIORITY:
+        if candidate in concept_ids and candidate not in blocked:
+            return candidate
+    for candidate in sorted(concept_ids):
+        if candidate not in blocked:
+            return candidate
+    raise ValueError(f"Could not choose distractor for {pair_id(left, right)}")
+
+
 def pair_specs_for_set(concepts: list[Concept], *, pair_set: str) -> list[SteeringPair]:
     concept_ids = {concept.id for concept in concepts}
     rows = []
@@ -110,13 +146,19 @@ def pair_specs_for_set(concepts: list[Concept], *, pair_set: str) -> list[Steeri
             ("positive", EXPANDED_POSITIVE_STEERING_PAIRS, ""),
             ("control", TARGET_DISJOINT_CONTROL_PAIRS, "target_disjoint"),
         )
+    elif pair_set == "expanded_random_nulls":
+        pair_groups = (
+            ("positive", EXPANDED_POSITIVE_STEERING_PAIRS, ""),
+            ("control", RANDOM_RELATION_NULL_PAIRS, "random_relation_null"),
+        )
     else:
         raise ValueError(
-            "Pair set must be one of: promoted, expanded, expanded_target_disjoint"
+            "Pair set must be one of: promoted, expanded, "
+            "expanded_target_disjoint, expanded_random_nulls"
         )
     for kind, pairs, control_class in pair_groups:
         for left, right in pairs:
-            distractor = DEFAULT_DISTRACTORS[right]
+            distractor = distractor_for(left=left, right=right, concept_ids=concept_ids)
             if left not in concept_ids or right not in concept_ids or distractor not in concept_ids:
                 raise ValueError(f"Missing concept for pair {pair_id(left, right)}")
             rows.append(

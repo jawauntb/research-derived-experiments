@@ -18,7 +18,8 @@ from statistics import mean, stdev
 def _pearson(xs: list[float], ys: list[float]) -> float:
     if len(xs) < 2:
         return 0.0
-    mx = mean(xs); my = mean(ys)
+    mx = mean(xs)
+    my = mean(ys)
     num = sum((x - mx) * (y - my) for x, y in zip(xs, ys))
     denom = math.sqrt(sum((x - mx) ** 2 for x in xs) * sum((y - my) ** 2 for y in ys))
     return 0.0 if denom == 0 else num / denom

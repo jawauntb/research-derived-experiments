@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# pyright: reportMissingImports=false
 """Render a markdown paper to PDF using `markdown-pdf` (PyMuPDF-backed).
 
 Run via uvx so we do not need a system pandoc/LaTeX install:

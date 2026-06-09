@@ -1514,3 +1514,46 @@ Residual content:
 - Retractions or supersessions: supersede "target-pocket overlap may be the main issue" with "target-pocket overlap exists, but broad full-label transport also survives target-disjoint controls."
 
 Next move: add randomized relation nulls and CAA/CAV baselines, then shift the main evidence target toward generation/readout behavior rather than relying on full-label logprob gates.
+
+## Activation Geometry Probe: Random Relation Null Controls
+
+Question: do random relation nulls reveal whether the behavior directions are semantic bridges or broad label-surface transport directions?
+
+Current regime:
+
+- Artifact types: alias-indexed behavior-direction manifests, random-relation null pair sets, specificity tables, result reports.
+- Operations: deterministic random-null pair construction, fallback distractor selection, full-label multi-alias target-gradient construction, held-out-alias scoring.
+- Gates/verifiers: positives must beat random relation nulls under the same score surface; controls should not all pass; canonical controls should not be stronger than canonical positives.
+- Known limitations: one model, one seed, random nulls are seeded once, no generation or learned behavior-readout scoring yet.
+
+Action class:
+
+- Retrieval/search/discovery: verifier hardening with a rejected candidate.
+- Why: this adds randomized relation nulls and turns the previous ambiguity into a clear falsification of the current logprob-specificity claim.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/random_relation_null_controls_2026_06_09.md`; local ignored payloads under `artifacts/activation_geometry/modal_pythia_70m_random_relation_nulls_*.json`.
+- Positive targets: expanded steering pairs.
+- Negative controls: ten seeded random relation null controls with targets disjoint from the positive target set.
+- Stress tests: `source_passage` and `latent_choice`; held-out `alias_2`; canonical labels; random same-norm baseline.
+
+Gate:
+
+- Acceptance rule: continue toward paper-level semantic specificity only if positives exceed random relation nulls by a clearly positive specificity margin.
+- Withheld/rejected rule: reject the current logprob gate if random nulls all pass or their means exceed positives.
+
+Results:
+
+- Accepted artifacts: `expanded_random_nulls` pair set and result report.
+- Rejected or withheld artifacts: the current target-gradient/residual/penalty directions as a semantically specific mechanism.
+- Key metrics: target-learned directions move `6/7` positives and `10/10` random null controls in both prompt frames; held-out `alias_2` specificity is `-0.101` in `source_passage` and `-0.137` in `latent_choice`.
+- Variance or ablation: source and latent prompt frames agree; canonical specificity is also negative; random same-norm controls remain weak.
+
+Residual content:
+
+- Explained by old regime: full-label gradients can move labels, and random directions are much weaker.
+- New content outside old regime: random relation nulls move more than intended positives, showing that the verifier itself rewards broad label transport.
+- Retractions or supersessions: supersede "more controls may rescue this logprob gate" with "the logprob gate is now a diagnostic failure mode unless a new behavior verifier separates positives from random nulls."
+
+Next move: implement CAA/CAV baselines and a non-logprob behavior gate before spending on more seeds or larger models.

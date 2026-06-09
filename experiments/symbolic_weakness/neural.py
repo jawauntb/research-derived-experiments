@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# pyright: reportMissingImports=false
 """Neural-model component of the symbolic weakness benchmark.
 
 We train small MLPs on cyclic-prefix-shift tasks and check whether
