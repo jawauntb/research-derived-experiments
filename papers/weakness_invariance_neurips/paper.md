@@ -1,6 +1,6 @@
 # Weakness, Not Compression: Symmetry-Compatible Hypothesis Volume Predicts Out-of-Distribution Generalization in Symbolic and Neural Models
 
-**Authors.** Anonymized for peer review.
+**Author.** Jawaun Brown.
 
 ## Abstract
 
@@ -8,7 +8,7 @@ When training data is consistent with both a local shortcut and a globally invar
 
 ## 1. Introduction
 
-The dominant paradigm for model selection rests on a small set of heuristics: minimize training loss, prefer short descriptions (Solomonoff/MDL), prefer flat minima, minimize parameter norm. Recent work has challenged each. Bennett (2024) shows that function-preserving reparameterization inflates Hessian-based sharpness without changing predictions, so parameter-space flatness cannot be the fundamental cause of generalization. Perin and Deny (2024) prove that conventional networks lack a mechanism to learn symmetries that are not built into the architecture or sufficiently represented in the data. Bennett's stack theory (2024) argues that the relevant quantity is *weakness* — the volume of completions compatible with the learned function — rather than the parameter-space geometry that hosts it.
+The dominant paradigm for model selection rests on a small set of heuristics: minimize training loss, prefer short descriptions (Solomonoff/MDL [11, 12]), prefer flat minima [5, 8], minimize parameter norm. Recent work has challenged each. Dinh et al. [4] first showed that Hessian-based sharpness measures are not reparameterization-invariant. Bennett [1, 2] sharpens this argument: function-preserving reparameterization inflates Hessian-based sharpness without changing predictions, so parameter-space flatness cannot be the fundamental cause of generalization. Perin and Deny [10] prove that conventional networks lack a mechanism to learn symmetries that are not built into the architecture or sufficiently represented in the data. Bennett's stack theory [1] argues that the relevant quantity is *weakness* — the volume of completions compatible with the learned function — rather than the parameter-space geometry that hosts it.
 
 This paper makes the weakness conjecture experimentally concrete. We construct a benchmark where (i) multiple hypotheses fit the training data perfectly, (ii) only the symmetry-equivariant hypothesis generalizes OOD, and (iii) every hypothesis can be scored by its weakness — the number of group elements under which it remains equivariant. We then test:
 
@@ -26,7 +26,7 @@ Headline results:
 
 Let $f: \mathcal{X} \to \mathcal{X}$ be a candidate function on a finite domain $\mathcal{X}$ of size $n$. Let $G$ be a group acting on $\mathcal{X}$.
 
-**With-action equivariance.** We say $f$ is *compatible* with $g \in G$ if there exists $h \in G$ such that $f(g \cdot x) = h \cdot f(x)$ for all $x \in \mathcal{X}$. This generalizes strict equivariance ($h = g$) and is the relevant notion for non-abelian and conjugation-style symmetries.
+**With-action equivariance.** We say $f$ is *compatible* with $g \in G$ if there exists $h \in G$ such that $f(g \cdot x) = h \cdot f(x)$ for all $x \in \mathcal{X}$. This generalizes strict equivariance ($h = g$, in the sense of Cohen and Welling [3] and Kondor and Trivedi [7]) and is the relevant notion for non-abelian and conjugation-style symmetries.
 
 **Weakness.**
 $$ W_G(f) = \big| \{ g \in G : \exists h \in G, \; \forall x, \; f(g \cdot x) = h \cdot f(x) \} \big|. $$
@@ -202,12 +202,13 @@ For color permutation ($S_n$), the data-inferred group reduces to a coarse cycli
 
 ## 6. Related Work
 
-- **Flat minima.** Hochreiter and Schmidhuber (1997), Keskar et al. (2017). Bennett (2024) shows that function-preserving reparameterization makes parameter-space flatness illusory.
-- **Symmetries in deep learning.** Perin and Deny (2024) prove that conventional supervised networks cannot extrapolate partially-observed cyclic symmetries; their NTK theory predicts the failure we observe at the symbolic level.
-- **MDL, Solomonoff induction.** Hutter (2005), Valle-Perez et al. (2019). MDL is closely related to but distinct from weakness — weakness counts compatibilities, not description lengths.
-- **Bennett's weakness.** Bennett (2024), *How to Create Conscious Machines*. Defines weakness as compatible-world volume and argues weakness, not simplicity, is the upper bound on adaptive intelligence.
-- **Implicit bias / grokking.** Power et al. (2022), Liu et al. (2022). The transition from memorization to generalization correlates with the emergence of structure in the learned function — consistent with our observation that weakness rises before OOD accuracy.
-- **Equivariant networks.** Cohen and Welling (2016); Kondor and Trivedi (2018). Architectures that bake in equivariance correspond to upper-bounding weakness by construction; our benchmark provides a measurement framework that does not require architectural priors.
+- **Flat minima.** Hochreiter and Schmidhuber [5] introduced flatness as a generalization predictor. Keskar et al. [8] formalized it for SGD-vs-large-batch training. Dinh et al. [4] showed that strict Hessian sharpness is not reparameterization-invariant. Bennett [2] strengthens this into a formal critique: parameter-space flatness can be inflated arbitrarily by function-preserving reparameterization. Our neural sweep is consistent with this finding; Hutchinson sharpness is a weak predictor of OOD (Pearson r ≤ +0.14) compared with weakness (r = +0.81).
+- **Symmetries in deep learning.** Perin and Deny [10] prove that conventional supervised networks cannot extrapolate partially-observed cyclic symmetries; their NTK theory predicts the symbolic-level failure we observe in the cyclic and dihedral families.
+- **MDL, Solomonoff induction.** Hutter [6] and Valle-Perez et al. [13] argue that simplicity-prior compressors approximate Solomonoff induction. MDL is closely related to but distinct from weakness — weakness counts compatibilities, not description lengths — and our `mdl_program` and `compression` selectors fail the symbolic benchmark while weakness succeeds.
+- **Bennett's weakness.** Bennett [1] defines weakness as compatible-world volume and argues weakness, not simplicity, is the upper bound on adaptive intelligence. Our benchmark operationalizes this conjecture and measures it on symbolic and neural learners.
+- **Implicit bias / grokking.** Power et al. [11] and Liu et al. [9] document the transition from memorization to generalization correlating with the emergence of structure in the learned function. Our observation that weakness rises monotonically with OOD across augmentation regimes is consistent with their framing.
+- **Equivariant networks.** Cohen and Welling [3] and Kondor and Trivedi [7] introduced architectures that bake in equivariance — equivalent to upper-bounding weakness by construction. Our benchmark provides a *measurement* framework that does not require architectural priors and recovers the symmetry-generalization link from data.
+- **Group inference from data.** Van der Ouderaa et al. [14] propose Bayesian model selection for learning data symmetries; our data-inferred-group selector is a simpler enumerative cousin that succeeds when the candidate group is enumerable and fails otherwise.
 
 ## 7. Limitations and Negative Results
 
@@ -258,3 +259,33 @@ The path forward is to (i) learn the group from data using neural infrastructure
 ## Acknowledgements and Code
 
 The benchmark, neural sweep, Modal entrypoint, summarization tools, and 21 unit tests are at <https://github.com/jawauntb/research-derived-experiments> under `experiments/symbolic_weakness/`.
+
+## References
+
+[1] **Bennett, M. T.** *How to Create Conscious Machines.* arXiv:2403.00644 (2024). Develops the stack-theoretic / weakness-maxing framework that motivates this paper. Key chapters: II (weakness as compatible-completion volume), V–VIII (stack of abstraction layers), XI–XII (self-repair and intelligence).
+
+[2] **Bennett, M. T.** *Are Flat Minima an Illusion?* arXiv preprint (2024). Argues that function-preserving reparameterization inflates Hessian-based sharpness without changing predictions, so parameter-space flatness cannot be the fundamental cause of generalization. Introduces "weakness" as a reparameterization-invariant alternative.
+
+[3] **Cohen, T. and Welling, M.** Group Equivariant Convolutional Networks. *ICML* (2016). Architectures that bake in group equivariance — equivalent to upper-bounding weakness by construction.
+
+[4] **Dinh, L., Pascanu, R., Bengio, S., and Bengio, Y.** Sharp Minima Can Generalize for Deep Nets. *ICML* (2017). First explicit demonstration that strict Hessian sharpness is not reparameterization-invariant.
+
+[5] **Hochreiter, S. and Schmidhuber, J.** Flat Minima. *Neural Computation* 9(1):1–42 (1997). Foundational flatness-as-generalization argument.
+
+[6] **Hutter, M.** *Universal Artificial Intelligence: Sequential Decisions Based on Algorithmic Probability.* Springer (2005). Develops the formal Solomonoff–MDL framework that the `mdl_program` and `compression` baselines approximate.
+
+[7] **Kondor, R. and Trivedi, S.** On the Generalization of Equivariance and Convolution in Neural Networks to the Action of Compact Groups. *ICML* (2018). Generalizes equivariance to arbitrary compact groups; the "with-action" formulation we use is a discrete-group special case.
+
+[8] **Keskar, N. S., Mudigere, D., Nocedal, J., Smelyanskiy, M., and Tang, P. T. P.** On Large-Batch Training for Deep Learning: Generalization Gap and Sharp Minima. *ICLR* (2017). Formalized SGD's preference for flat minima.
+
+[9] **Liu, Z., Michaud, E. J., and Tegmark, M.** Omnigrok: Grokking Beyond Algorithmic Data. *ICLR* (2023). Documents grokking as a phase transition from memorization to generalization in trained networks.
+
+[10] **Perin, A. and Deny, S.** A Neural Kernel Theory of Symmetry Learning. arXiv:2412.11521 (2024). Proves that conventional supervised networks cannot extrapolate partially-observed cyclic symmetries; NTK analysis of generalization in symmetric datasets.
+
+[11] **Power, A., Burda, Y., Edwards, H., Babuschkin, I., and Misra, V.** Grokking: Generalization Beyond Overfitting on Small Algorithmic Datasets. *ICLR Workshop* (2022). Documents the memorization → generalization transition on modular arithmetic; consistent with our observation that learned-function weakness rises before OOD accuracy.
+
+[12] **Solomonoff, R. J.** A Formal Theory of Inductive Inference, Parts I and II. *Information and Control* 7(1):1–22, 7(2):224–254 (1964). The original universal-prior framework underlying the `mdl_program` selector.
+
+[13] **Valle-Pérez, G., Camargo, C. Q., and Louis, A. A.** Deep Learning Generalizes Because the Parameter–Function Map is Biased Towards Simple Functions. *ICLR* (2019). Empirical/theoretical argument for a simplicity bias in over-parameterized networks; we show this simplicity bias is insufficient to recover the invariant on cyclic and dihedral families.
+
+[14] **Van der Ouderaa, T. F. A., van der Wilk, M., and Welling, M.** Learning Layer-wise Equivariances Automatically using Gradients. *ICLR* (2024). Proposes neural mechanisms for inferring data symmetries; the natural successor to our enumerative `weakness_data_inferred` selector.
