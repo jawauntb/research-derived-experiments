@@ -1222,3 +1222,46 @@ Residual content:
 - Retractions or supersessions: supersede "subtract a generic control component" with "post-hoc projection is only an attenuation method, not a specificity method."
 
 Next move: replace post-hoc residualization with a constrained behavior objective that penalizes `valence->steering_vector` during direction construction.
+
+## Activation Geometry Probe: Constrained Alias Direction
+
+Question: can a named adversarial-control penalty make alias-trained behavior directions more specific without destroying positive concept movement?
+
+Current regime:
+
+- Artifact types: alias-label manifests, full-label gradient directions, constrained direction modes, canonical/alias eval rows, adversarial-control tables.
+- Operations: train-variant full-label gradient averaging, norm-matched hard-control subtraction, held-out full-label continuation scoring, prompt-frame replication.
+- Gates/verifiers: positives must remain robust; independent valence controls should be suppressed; construction-zeroed controls are sanity checks, not independent successes.
+- Known limitations: one seed, one model, one manually chosen hard-control channel, one alias per concept.
+
+Action class:
+
+- Retrieval/search/discovery: search with a promising new operation.
+- Why: this adds an adversarial-control direction-construction operation and produces a specificity frontier that post-hoc residualization did not expose.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/constrained_alias_direction_2026_06_09.md`; local ignored payloads under `artifacts/activation_geometry/modal_pythia_70m_constrained_alias_direction_*.json`.
+- Positive targets: promoted steering pairs.
+- Negative controls: `valence->activation_vector`, `valence->steering_vector`, mean-control penalty, random same-norm controls, control layer.
+- Stress tests: prompt frames `source_passage` and `latent_choice`; eval labels `alias` and `canonical`; scales `0.5,1.0,2.0`.
+
+Gate:
+
+- Acceptance rule: accept a constrained-direction improvement if positives remain `3/3` while independent valence-control means fall substantially below raw target-learned means.
+- Withheld/rejected rule: withhold full semantic specificity if any independent valence control still passes or if suppression depends on construction-zeroing.
+
+Results:
+
+- Accepted artifacts: hard-control penalty direction modes; `experiments/activation_geometry/results/constrained_alias_direction_2026_06_09.md`.
+- Rejected or withheld artifacts: full semantic specificity remains withheld; mean-control subtraction is rejected as insufficient.
+- Key metrics: at scale `1.0`, `target_penalty_hard_1_0` keeps `3/3` positives in both prompt frames and both eval regimes; it reduces mean valence-control deltas by `69.0%` to `95.6%`; `valence->activation_vector` still passes.
+- Variance or ablation: hard penalty `2.0` suppresses controls more strongly but damages canonical positives; mean-control penalty preserves positives but leaves controls passing.
+
+Residual content:
+
+- Explained by old regime: behavior gradients can move labels and simple projections attenuate leakage.
+- New content outside old regime: a named adversarial-control penalty exposes a tunable specificity/strength frontier.
+- Retractions or supersessions: supersede "post-hoc residualization is the best available cleanup" with "constrained direction construction is the more promising path."
+
+Next move: build a multi-control constrained objective and evaluate it against held-out aliases/controls.
