@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# pyright: reportMissingImports=false
 """Modal entrypoint for the neural symbolic-weakness sweep.
 
 Run with:
@@ -35,8 +36,6 @@ app = modal.App(name="research-derived-symbolic-weakness-neural")
 @app.function(image=IMAGE, timeout=3600, cpu=4)
 def shard_sweep(arg: dict[str, Any]) -> dict[str, Any]:
     models_per_shard = arg["models_per_shard"]
-    modulus = arg["modulus"]
-    train_window = arg["train_window"]
     base_seed = arg["base_seed"]
     epochs = arg["epochs"]
     shard_id = arg["shard_id"]
@@ -69,7 +68,8 @@ def shard_sweep(arg: dict[str, Any]) -> dict[str, Any]:
         if augmentation == "full_cyclic":
             for x in range(modulus):
                 if (x, truth[x]) not in base:
-                    xs.append(x); ys.append(truth[x])
+                    xs.append(x)
+                    ys.append(truth[x])
             return xs, ys
         if augmentation == "none" or count == 0:
             return xs, ys
@@ -77,7 +77,8 @@ def shard_sweep(arg: dict[str, Any]) -> dict[str, Any]:
             cands = [x for x in range(modulus) if (x, truth[x]) not in base]
             rng.shuffle(cands)
             for x in cands[:count]:
-                xs.append(x); ys.append(truth[x])
+                xs.append(x)
+                ys.append(truth[x])
             return xs, ys
         if augmentation == "wrong_reflection":
             cands = [
@@ -86,15 +87,20 @@ def shard_sweep(arg: dict[str, Any]) -> dict[str, Any]:
             ]
             rng.shuffle(cands)
             for x in cands[:count]:
-                xs.append(x); ys.append(x)
+                xs.append(x)
+                ys.append(x)
             return xs, ys
         if augmentation == "wrong_random":
-            attempts = 0; added = 0
+            attempts = 0
+            added = 0
             while added < count and attempts < 200:
                 x = rng.randrange(0, modulus)
                 y = rng.randrange(0, modulus)
                 if (x, y) not in base and x not in xs:
-                    xs.append(x); ys.append(y); added += 1; base.add((x, y))
+                    xs.append(x)
+                    ys.append(y)
+                    added += 1
+                    base.add((x, y))
                 attempts += 1
             return xs, ys
         raise ValueError(augmentation)
@@ -118,7 +124,8 @@ def shard_sweep(arg: dict[str, Any]) -> dict[str, Any]:
             induced = tuple(table[g[x]] for x in range(n))
             for h in group:
                 if all(h[table[x]] == induced[x] for x in range(n)):
-                    cnt += 1; break
+                    cnt += 1
+                    break
         return cnt
 
     def cyclic_group(n):
@@ -130,7 +137,9 @@ def shard_sweep(arg: dict[str, Any]) -> dict[str, Any]:
         cyc = set(cyclic_group(n))
         attempts = 0
         while len(out) < size and attempts < 200:
-            p = list(range(n)); rng.shuffle(p); cand = tuple(p)
+            p = list(range(n))
+            rng.shuffle(p)
+            cand = tuple(p)
             if cand not in cyc and cand not in out:
                 out.append(cand)
             attempts += 1

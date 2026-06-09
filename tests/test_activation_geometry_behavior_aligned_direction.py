@@ -148,6 +148,58 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
         self.assertTrue(all(pair.control_class == "target_disjoint" for pair in controls))
         self.assertTrue(all(pair.right not in positive_targets for pair in controls))
 
+    def test_random_relation_null_pair_set_is_target_disjoint(self) -> None:
+        concept_rows = [
+            ("attractor", "dynamics"),
+            ("basin_of_attraction", "dynamics"),
+            ("phase_space", "dynamics"),
+            ("fixed_point", "dynamics"),
+            ("attractor_network", "cognition"),
+            ("prototype", "cognition"),
+            ("schema", "cognition"),
+            ("conceptual_space", "semantics"),
+            ("semantic_distance", "semantics"),
+            ("family_resemblance", "semantics"),
+            ("embedding", "ai_geometry"),
+            ("activation_vector", "ai_geometry"),
+            ("steering_vector", "ai_geometry"),
+            ("representation_manifold", "ai_geometry"),
+            ("weak_constraint", "constraint"),
+            ("simplicity_bias", "constraint"),
+            ("validity_gate", "constraint"),
+            ("regime_transition", "discovery"),
+            ("schema_revision", "discovery"),
+            ("residual_content", "discovery"),
+            ("self_boundary", "agency"),
+            ("autopoiesis", "agency"),
+            ("homeostasis", "agency"),
+            ("valence", "agency"),
+        ]
+        concepts = [
+            Concept(
+                id=concept_id,
+                label=concept_id.replace("_", " "),
+                category=category,
+                prompt=concept_id,
+            )
+            for concept_id, category in concept_rows
+        ]
+
+        pairs = pair_specs_for_set(concepts, pair_set="expanded_random_nulls")
+        positive_pairs = {(pair.left, pair.right) for pair in pairs if pair.kind == "positive"}
+        positive_targets = {pair.right for pair in pairs if pair.kind == "positive"}
+        controls = [pair for pair in pairs if pair.kind == "control"]
+
+        self.assertEqual(len(controls), 10)
+        self.assertEqual(
+            sum(1 for pair in controls if pair.left == "valence" and pair.right == "steering_vector"),
+            1,
+        )
+        self.assertTrue(all(pair.control_class == "random_relation_null" for pair in controls))
+        self.assertTrue(all((pair.left, pair.right) not in positive_pairs for pair in controls))
+        self.assertTrue(all(pair.right not in positive_targets for pair in controls))
+        self.assertTrue(all(pair.distractor not in {pair.left, pair.right} for pair in controls))
+
     def test_role_margin_and_behavior_delta_use_target_margin(self) -> None:
         baseline = {"source": -1.0, "target": -2.0, "distractor": -3.0}
         steered = {"source": -1.2, "target": -1.4, "distractor": -3.2}
