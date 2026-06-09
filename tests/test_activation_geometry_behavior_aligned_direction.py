@@ -124,6 +124,43 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
         self.assertAlmostEqual(positive_alignment["mean_target_source_cosine"], -0.1)
         self.assertAlmostEqual(positive_alignment["mean_target_distractor_cosine"], -0.2)
 
+    def test_full_label_alias_rows_use_single_score_threshold(self) -> None:
+        rows = [
+            {
+                "scoring_surface": "full_label",
+                "prompt_frame": "latent_choice",
+                "objective_label_scoring_regime": "alias",
+                "eval_label_scoring_regime": "canonical",
+                "role": "primary",
+                "layer": 5,
+                "kind": "positive",
+                "pair": "attractor->attractor_network",
+                "direction_mode": "target_learned",
+                "scale": 1.0,
+                "option_order": "full_label",
+                "summary": {
+                    "target_margin_delta": 0.2,
+                    "target_logprob_delta": 0.1,
+                },
+                "learned_alignment": {
+                    "target_source_cosine": 0.2,
+                    "target_distractor_cosine": -0.1,
+                },
+            }
+        ]
+
+        aggregate = aggregate_rows(rows)[0]
+        gate = gate_summaries([aggregate])[0]
+        alignment = alignment_summary(rows)[0]
+
+        self.assertTrue(aggregate["robust_pass"])
+        self.assertEqual(aggregate["robust_pass_threshold"], 1)
+        self.assertEqual(gate["scoring_surface"], "full_label")
+        self.assertEqual(gate["objective_label_scoring_regime"], "alias")
+        self.assertEqual(gate["eval_label_scoring_regime"], "canonical")
+        self.assertEqual(gate["primary_positive_pass_count"], 1)
+        self.assertEqual(alignment["eval_label_scoring_regime"], "canonical")
+
 
 if __name__ == "__main__":
     unittest.main()

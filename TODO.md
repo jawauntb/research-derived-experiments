@@ -65,7 +65,8 @@
 - [ ] Add paraphrased-label and length-matched carrier controls for full-label behavior scoring.
 - [ ] Diagnose alias survivor pockets with multiple aliases and alias-shuffled controls.
 - [ ] Learn behavior-aligned directions against the full-label objective.
-- [ ] Learn behavior-aligned directions against alias-label objectives.
+- [x] Learn behavior-aligned directions against alias-label objectives.
+- [ ] Build residualized alias directions that subtract source/distractor/control-label components.
 - [ ] Replicate the hook-output transfer ridge on a second checkpoint or open model.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.
 - [ ] Add anisotropy and directional-curvature proxy checks to activation sweeps where feasible.

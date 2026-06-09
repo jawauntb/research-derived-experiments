@@ -15,6 +15,9 @@ DIRECTION_MODES = (
     "random_same_norm",
 )
 OBJECTIVE_ROLES = ("target", "source", "distractor")
+PROMPT_FRAMES = ("source_passage", "latent_choice")
+SCORING_SURFACES = ("option_token", "full_label")
+LABEL_SCORING_REGIMES = ("canonical", "alias")
 
 
 def parse_csv(value: str) -> list[str]:
@@ -31,6 +34,15 @@ def parse_direction_modes(value: str) -> list[str]:
         options = ", ".join(DIRECTION_MODES)
         raise ValueError(f"Direction modes must be chosen from: {options}")
     return modes
+
+
+def parse_values(value: str, *, allowed: tuple[str, ...], name: str) -> list[str]:
+    values = parse_csv(value)
+    invalid = sorted(set(values) - set(allowed))
+    if invalid:
+        options = ", ".join(allowed)
+        raise ValueError(f"{name} must be chosen from: {options}")
+    return values
 
 
 def target_margin(scores: dict[str, float]) -> float:
@@ -72,6 +84,10 @@ def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     grouped: dict[tuple[Any, ...], list[dict[str, Any]]] = {}
     for row in rows:
         key = (
+            row.get("scoring_surface", "option_token"),
+            row.get("prompt_frame", "source_passage"),
+            row.get("objective_label_scoring_regime", "canonical"),
+            row.get("eval_label_scoring_regime", "canonical"),
             row["role"],
             row["layer"],
             row["kind"],
@@ -82,13 +98,29 @@ def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         grouped.setdefault(key, []).append(row)
 
     aggregates = []
-    for (role, layer, kind, pair, direction_mode, scale), group in grouped.items():
+    for (
+        scoring_surface,
+        prompt_frame,
+        objective_label_scoring_regime,
+        eval_label_scoring_regime,
+        role,
+        layer,
+        kind,
+        pair,
+        direction_mode,
+        scale,
+    ), group in grouped.items():
         deltas = [row["summary"]["target_margin_delta"] for row in group]
         target_logprob_deltas = [row["summary"]["target_logprob_delta"] for row in group]
         pass_count = sum(1 for value in deltas if value > 0)
         mean_delta = sum(deltas) / len(deltas)
+        robust_pass_threshold = min(2, len(group))
         aggregates.append(
             {
+                "scoring_surface": scoring_surface,
+                "prompt_frame": prompt_frame,
+                "objective_label_scoring_regime": objective_label_scoring_regime,
+                "eval_label_scoring_regime": eval_label_scoring_regime,
                 "role": role,
                 "layer": layer,
                 "kind": kind,
@@ -103,12 +135,20 @@ def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 ),
                 "option_order_pass_count": pass_count,
                 "option_order_total": len(group),
-                "robust_pass": mean_delta > 0 and pass_count >= 2,
+                "score_surface_pass_count": pass_count,
+                "score_surface_total": len(group),
+                "robust_pass_threshold": robust_pass_threshold,
+                "robust_pass": mean_delta > 0
+                and pass_count >= robust_pass_threshold,
             }
         )
     return sorted(
         aggregates,
         key=lambda row: (
+            str(row.get("scoring_surface", "option_token")),
+            str(row.get("prompt_frame", "source_passage")),
+            str(row.get("objective_label_scoring_regime", "canonical")),
+            str(row.get("eval_label_scoring_regime", "canonical")),
             str(row["role"]),
             str(row["kind"]),
             str(row["pair"]),
@@ -120,58 +160,154 @@ def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 def gate_summaries(aggregates: list[dict[str, Any]]) -> list[dict[str, Any]]:
     summaries = []
-    for scale in sorted({float(row["scale"]) for row in aggregates}):
-        for mode in DIRECTION_MODES:
-            selected = [
+    scoring_surfaces = sorted(
+        {str(row.get("scoring_surface", "option_token")) for row in aggregates}
+        or {"option_token"}
+    )
+    prompt_frames = sorted(
+        {str(row.get("prompt_frame", "source_passage")) for row in aggregates}
+        or {"source_passage"}
+    )
+    objective_label_scoring_regimes = sorted(
+        {
+            str(row.get("objective_label_scoring_regime", "canonical"))
+            for row in aggregates
+        }
+        or {"canonical"}
+    )
+    eval_label_scoring_regimes = sorted(
+        {str(row.get("eval_label_scoring_regime", "canonical")) for row in aggregates}
+        or {"canonical"}
+    )
+    for scoring_surface in scoring_surfaces:
+        surface_rows = [
+            row
+            for row in aggregates
+            if str(row.get("scoring_surface", "option_token")) == scoring_surface
+        ]
+        for prompt_frame in prompt_frames:
+            frame_rows = [
                 row
-                for row in aggregates
-                if float(row["scale"]) == scale and row["direction_mode"] == mode
+                for row in surface_rows
+                if str(row.get("prompt_frame", "source_passage")) == prompt_frame
             ]
-            primary_positive = [
-                row for row in selected if row["role"] == "primary" and row["kind"] == "positive"
-            ]
-            backup_positive = [
-                row for row in selected if row["role"] == "backup" and row["kind"] == "positive"
-            ]
-            primary_controls = [
-                row for row in selected if row["role"] == "primary" and row["kind"] == "control"
-            ]
-            control_layer_positive = [
-                row for row in selected if row["role"] == "control" and row["kind"] == "positive"
-            ]
-            summaries.append(
-                {
-                    "scale": scale,
-                    "direction_mode": mode,
-                    "primary_positive_pass_count": sum(
-                        1 for row in primary_positive if row["robust_pass"]
-                    ),
-                    "primary_positive_total": len(primary_positive),
-                    "backup_positive_pass_count": sum(
-                        1 for row in backup_positive if row["robust_pass"]
-                    ),
-                    "backup_positive_total": len(backup_positive),
-                    "primary_valence_control_pass_count": sum(
-                        1 for row in primary_controls if row["robust_pass"]
-                    ),
-                    "primary_valence_control_total": len(primary_controls),
-                    "control_layer_positive_pass_count": sum(
-                        1 for row in control_layer_positive if row["robust_pass"]
-                    ),
-                    "control_layer_positive_total": len(control_layer_positive),
-                }
-            )
+            for objective_label_scoring_regime in objective_label_scoring_regimes:
+                objective_rows = [
+                    row
+                    for row in frame_rows
+                    if str(row.get("objective_label_scoring_regime", "canonical"))
+                    == objective_label_scoring_regime
+                ]
+                for eval_label_scoring_regime in eval_label_scoring_regimes:
+                    eval_rows = [
+                        row
+                        for row in objective_rows
+                        if str(row.get("eval_label_scoring_regime", "canonical"))
+                        == eval_label_scoring_regime
+                    ]
+                    for scale in sorted({float(row["scale"]) for row in eval_rows}):
+                        for mode in DIRECTION_MODES:
+                            selected = [
+                                row
+                                for row in eval_rows
+                                if float(row["scale"]) == scale
+                                and row["direction_mode"] == mode
+                            ]
+                            primary_positive = [
+                                row
+                                for row in selected
+                                if row["role"] == "primary"
+                                and row["kind"] == "positive"
+                            ]
+                            backup_positive = [
+                                row
+                                for row in selected
+                                if row["role"] == "backup"
+                                and row["kind"] == "positive"
+                            ]
+                            primary_controls = [
+                                row
+                                for row in selected
+                                if row["role"] == "primary"
+                                and row["kind"] == "control"
+                            ]
+                            control_layer_positive = [
+                                row
+                                for row in selected
+                                if row["role"] == "control"
+                                and row["kind"] == "positive"
+                            ]
+                            summaries.append(
+                                {
+                                    "scoring_surface": scoring_surface,
+                                    "prompt_frame": prompt_frame,
+                                    "objective_label_scoring_regime": (
+                                        objective_label_scoring_regime
+                                    ),
+                                    "eval_label_scoring_regime": (
+                                        eval_label_scoring_regime
+                                    ),
+                                    "scale": scale,
+                                    "direction_mode": mode,
+                                    "primary_positive_pass_count": sum(
+                                        1
+                                        for row in primary_positive
+                                        if row["robust_pass"]
+                                    ),
+                                    "primary_positive_total": len(primary_positive),
+                                    "backup_positive_pass_count": sum(
+                                        1
+                                        for row in backup_positive
+                                        if row["robust_pass"]
+                                    ),
+                                    "backup_positive_total": len(backup_positive),
+                                    "primary_valence_control_pass_count": sum(
+                                        1
+                                        for row in primary_controls
+                                        if row["robust_pass"]
+                                    ),
+                                    "primary_valence_control_total": len(
+                                        primary_controls
+                                    ),
+                                    "control_layer_positive_pass_count": sum(
+                                        1
+                                        for row in control_layer_positive
+                                        if row["robust_pass"]
+                                    ),
+                                    "control_layer_positive_total": len(
+                                        control_layer_positive
+                                    ),
+                                }
+                            )
     return summaries
 
 
 def alignment_summary(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     grouped: dict[tuple[Any, ...], list[dict[str, Any]]] = {}
     for row in rows:
-        key = (row["role"], row["layer"], row["kind"], row["pair"])
+        key = (
+            row.get("scoring_surface", "option_token"),
+            row.get("prompt_frame", "source_passage"),
+            row.get("objective_label_scoring_regime", "canonical"),
+            row.get("eval_label_scoring_regime", "canonical"),
+            row["role"],
+            row["layer"],
+            row["kind"],
+            row["pair"],
+        )
         grouped.setdefault(key, []).append(row)
 
     summaries = []
-    for (role, layer, kind, pair), group in grouped.items():
+    for (
+        scoring_surface,
+        prompt_frame,
+        objective_label_scoring_regime,
+        eval_label_scoring_regime,
+        role,
+        layer,
+        kind,
+        pair,
+    ), group in grouped.items():
         alignments = [row.get("learned_alignment", {}) for row in group]
         source_values = [
             alignment["target_source_cosine"]
@@ -186,6 +322,10 @@ def alignment_summary(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         if not source_values and not distractor_values:
             continue
         summary: dict[str, Any] = {
+            "scoring_surface": scoring_surface,
+            "prompt_frame": prompt_frame,
+            "objective_label_scoring_regime": objective_label_scoring_regime,
+            "eval_label_scoring_regime": eval_label_scoring_regime,
             "role": role,
             "layer": layer,
             "kind": kind,
