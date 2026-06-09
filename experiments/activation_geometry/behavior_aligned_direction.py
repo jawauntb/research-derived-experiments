@@ -15,6 +15,9 @@ DIRECTION_MODES = (
     "target_resid_sd",
     "target_resid_control",
     "target_resid_all",
+    "target_penalty_hard_1_0",
+    "target_penalty_hard_2_0",
+    "target_penalty_control_mean_1_0",
     "random_same_norm",
 )
 OBJECTIVE_ROLES = ("target", "source", "distractor")

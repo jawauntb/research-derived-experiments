@@ -15,8 +15,10 @@ from experiments.activation_geometry.behavior_aligned_direction import (
 class BehaviorAlignedDirectionTest(unittest.TestCase):
     def test_parse_direction_modes(self) -> None:
         self.assertEqual(
-            parse_direction_modes("target_learned, target_resid_all, random_same_norm"),
-            ["target_learned", "target_resid_all", "random_same_norm"],
+            parse_direction_modes(
+                "target_learned, target_resid_all, target_penalty_hard_1_0"
+            ),
+            ["target_learned", "target_resid_all", "target_penalty_hard_1_0"],
         )
         with self.assertRaises(ValueError):
             parse_direction_modes("centroid")

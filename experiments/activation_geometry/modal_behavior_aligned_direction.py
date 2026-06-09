@@ -21,6 +21,11 @@ DEFAULT_PROMPT_FRAME = "source_passage"
 DEFAULT_OBJECTIVE_LABEL_SCORING_REGIMES = "canonical"
 DEFAULT_EVAL_LABEL_SCORING_REGIMES = "canonical"
 DEFAULT_LABEL_SCORE_NORMALIZATION = "mean"
+PENALTY_DIRECTION_MODES = {
+    "target_penalty_hard_1_0": ("hard_control", 1.0),
+    "target_penalty_hard_2_0": ("hard_control", 2.0),
+    "target_penalty_control_mean_1_0": ("control_mean", 1.0),
+}
 IMAGE = modal.Image.debian_slim(python_version="3.12").pip_install(
     "torch>=2.5,<2.8",
     "transformers>=4.46,<5.0",
@@ -137,7 +142,7 @@ def objective_role_for_mode(mode: str) -> str:
         "target_resid_sd",
         "target_resid_control",
         "target_resid_all",
-    }:
+    } or mode in PENALTY_DIRECTION_MODES:
         return "target"
     if mode == "source_learned":
         return "source"
@@ -767,11 +772,29 @@ def rescale_to_reference_norm(torch: Any, direction: Any, reference: Any) -> Any
     return direction * (reference_norm / direction_norm)
 
 
+def penalty_direction(
+    *,
+    torch: Any,
+    target_direction: Any,
+    penalty_basis: Any | None,
+    weight: float,
+) -> Any:
+    if penalty_basis is None:
+        return target_direction
+    norm_matched_penalty = rescale_to_reference_norm(
+        torch,
+        penalty_basis,
+        target_direction,
+    )
+    return target_direction - float(weight) * norm_matched_penalty
+
+
 def direction_for_mode(
     *,
     torch: Any,
     learned_directions: dict[str, Any],
     control_target_direction: Any | None,
+    hard_control_target_direction: Any | None,
     mode: str,
     seed: int,
 ) -> Any:
@@ -814,6 +837,19 @@ def direction_for_mode(
                 ],
             ),
             target_direction,
+        )
+    if mode in PENALTY_DIRECTION_MODES:
+        penalty_kind, weight = PENALTY_DIRECTION_MODES[mode]
+        penalty_basis = (
+            hard_control_target_direction
+            if penalty_kind == "hard_control"
+            else control_target_direction
+        )
+        return penalty_direction(
+            torch=torch,
+            target_direction=target_direction,
+            penalty_basis=penalty_basis,
+            weight=weight,
         )
     return learned_directions[objective_role_for_mode(mode)]
 
@@ -948,6 +984,19 @@ def run_behavior_aligned_direction_remote(
             for pair in pair_specs
             if str(pair["kind"]) == "control"
         ]
+        hard_control_pair_ids = [
+            pair_id(str(pair["left"]), str(pair["right"]))
+            for pair in pair_specs
+            if str(pair["kind"]) == "control"
+            and str(pair["left"]) == "valence"
+            and str(pair["right"]) == "steering_vector"
+        ]
+        if len(hard_control_pair_ids) != 1:
+            raise ValueError(
+                "Expected exactly one hard control pair: "
+                f"valence->steering_vector; found {hard_control_pair_ids}"
+            )
+        hard_control_pair_id = hard_control_pair_ids[0]
         for pair in pair_specs:
             left = str(pair["left"])
             right = str(pair["right"])
@@ -980,6 +1029,12 @@ def run_behavior_aligned_direction_remote(
                     if control_target_direction is not None
                     else None
                 )
+                hard_control_target_direction = learned_records[
+                    (hard_control_pair_id, objective_label_scoring_regime)
+                ]["learned_directions"]["target"]
+                hard_control_target_direction_norm = float(
+                    torch.linalg.vector_norm(hard_control_target_direction).item()
+                )
                 objective_labels_by_role = record["objective_labels_by_role"]
                 heldout_text = str(record["heldout_text"])
                 learned_directions = record["learned_directions"]
@@ -989,6 +1044,11 @@ def run_behavior_aligned_direction_remote(
                     torch,
                     learned_directions["target"],
                     control_target_direction,
+                )
+                learned_alignment["target_hard_control_cosine"] = cosine_or_none(
+                    torch,
+                    learned_directions["target"],
+                    hard_control_target_direction,
                 )
                 for eval_label_scoring_regime in eval_label_scoring_regimes:
                     eval_labels_by_role = labels_by_role_for_regime(
@@ -1050,6 +1110,9 @@ def run_behavior_aligned_direction_remote(
                                     torch=torch,
                                     learned_directions=learned_directions,
                                     control_target_direction=control_target_direction,
+                                    hard_control_target_direction=(
+                                        hard_control_target_direction
+                                    ),
                                     mode=mode,
                                     seed=(
                                         seed
@@ -1094,6 +1157,9 @@ def run_behavior_aligned_direction_remote(
                                         "direction_norm": direction_norm,
                                         "control_target_direction_norm": (
                                             control_target_direction_norm
+                                        ),
+                                        "hard_control_target_direction_norm": (
+                                            hard_control_target_direction_norm
                                         ),
                                         "control_basis_pair_count": len(
                                             control_directions
