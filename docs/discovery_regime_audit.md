@@ -1352,6 +1352,40 @@ Residual content:
 
 Next move: jointly train over multiple aliases and broaden the concept/control set before scaling models.
 
+## Weakness Predicts OOD: Multi-Family Symbolic + Neural
+
+Question: does symmetry-compatible-hypothesis weakness predict OOD generalization (a) across symbolic task families that admit local shortcuts, and (b) across trained neural networks with diverse architecture and data-augmentation regimes?
+
+Current regime:
+
+- Artifact types: family registry, selector registry, multi-family benchmark JSON with Wilson 95% CIs, neural sweep JSON with per-model artefacts, correlation summaries, Modal entrypoints.
+- Operations: synthetic candidate generation, with-action equivariance counting, leave-one-out validation, MDL-style compression scoring, Hutchinson sharpness probe, group inference from data, group corruption (wrong/noisy), unit tests.
+- Gates/verifiers: pre-registered acceptance thresholds in `experiments/symbolic_weakness/results/*.md`; Wilson 95% CIs; `compileall`; `unittest`; publication guard.
+- Known limitations: domains are finite and small (n ≤ 13); the parity family is a known negative case (|G|=2 too small to disambiguate); the S_n family is a known partial case (centralizer sizes coincide for many wrong involutions).
+
+Action class:
+
+- Retrieval/search/discovery: discovery + search. The benchmark *discovers* the operating regime in which weakness is and is not load-bearing.
+
+Gate:
+
+- Acceptance: `weakness_oracle` selects the invariant family in ≥95% of cyclic and dihedral trials (Wilson 95% CI lower bound ≥0.95); `weakness_wrong_group` selects the invariant in ≤5% of those trials; on the neural side, `weakness_oracle_norm` Pearson correlation with OOD accuracy exceeds 0.4 across ≥256 models with diverse augmentation/architecture/init/optimizer.
+- Withheld: claims of universal weakness superiority, claims about non-symbolic domains (language/perception), claims about parity/S_n where the benchmark explicitly fails.
+
+Results:
+
+- Accepted artifacts: `experiments/symbolic_weakness/results/multi_family_500_2026_06_09.md`, `experiments/symbolic_weakness/results/neural_sweep_v3_2026_06_09.md`, `experiments/symbolic_weakness/results/modal_neural_sweep_v1_2026_06_09.md`, `papers/weakness_invariance_neurips/paper.md`.
+- Key metrics: cyclic and dihedral weakness invariant-rate 1.000 with CI lower bound ≥0.992; classical baselines invariant-rate 0.000 with CI upper bound ≤0.008; neural weakness_oracle_norm Pearson with OOD = +0.817 (local 256-MLP sweep) / +0.813 (Modal 1024-MLP sweep), wrong-group control Pearson ≤ −0.116 across both runs.
+- Variance or ablation: wrong-group, noisy-group, data-inferred-group, partial-cyclic-group, and random-label controls all show the expected directional behavior (wrong/random → null, noisy/inferred → mostly recover).
+
+Residual content:
+
+- Explained by current regime: simplicity, MDL, training loss, parameter norm, sharpness, and held-out validation are insufficient to disambiguate train-perfect shortcuts from globally invariant rules on the symbolic families where the candidate group is rich enough to separate them.
+- New content outside current regime: parity and S_n require either a richer candidate transformation set or a fundamentally different selector — they delineate the operating boundary of weakness-as-symmetry-volume.
+- Retractions: none.
+
+Next move: add compositional task families (Z_n × Z_m); add a small-transformer variant; investigate whether learned-group inference can extend weakness to S_n where the oracle group is too coarse.
+
 ## Activation Geometry Probe: Multi-Alias Expanded Specificity
 
 Question: does multi-alias objective training plus a larger pair set produce semantic-specific behavior directions?

@@ -1,29 +1,107 @@
 # Symbolic Weakness Benchmark
 
-This benchmark tests a narrower, publishable claim:
+This is the flagship benchmark for the claim:
 
-> Out-of-distribution generalization is better predicted by weak invariant structure
-> than by training loss, short description length, or surface compression.
+> Out-of-distribution generalization is better predicted by *symmetry-compatible-
+> hypothesis weakness* than by training loss, MDL/compression, parameter-space
+> flatness/sharpness, parameter norm, or held-out validation accuracy.
 
-The first task family uses cyclic-symbol transformations. Training examples only cover
-a biased prefix of the cyclic group, so several hypotheses fit the training data:
+The benchmark has two arms.
 
-- a short local patch that applies the observed shift only on the training prefix;
-- exact memorization of the observed examples;
-- a global modular shift that preserves the cyclic symmetry.
+## Arm 1 — Symbolic Multi-Family Benchmark
 
-All of these can reach perfect training accuracy. Only the global shift remains
-equivariant under translations of the cyclic group, and only that rule generalizes
-to the held-out symbols.
+Four task families with biased training support that admit a local shortcut, a
+memorizer, the true invariant rule, and wrong invariants:
+
+- `cyclic_prefix_shift` — Z_n cyclic shift truth, identity-on-suffix shortcut.
+- `dihedral_reflection` — D_n reflection truth, rotation shortcut.
+- `parity_coset` — Z_2 parity-swap truth (negative case: |G|=2 too small).
+- `color_permutation` — S_n permutation truth (partial case).
+
+Eleven selectors are scored, including `train_loss`, `validation`, `simplicity`,
+`compression`, `mdl_program`, `flatness_proxy`, `weakness_oracle`,
+`weakness_wrong_group` (control), `weakness_noisy_group`,
+`weakness_data_inferred`, and `random`.
 
 Run:
 
 ```bash
-python3 experiments/symbolic_weakness/experiment.py --trials 300 --seed 11 --out artifacts/symbolic_weakness/prefix_shift_pilot.json
+python3 -m experiments.symbolic_weakness.benchmark \
+    --trials-per-family 500 --seed 20260609 \
+    --out artifacts/symbolic_weakness/multi_family_500.json
 ```
 
-The report in `results/` records accepted and rejected claims from the pilot.
+Result report:
+[results/multi_family_500_2026_06_09.md](results/multi_family_500_2026_06_09.md).
 
-Current pilot report:
+Headline:
 
-- [results/prefix_shift_pilot_2026_06_09.md](results/prefix_shift_pilot_2026_06_09.md)
+| Family | Selector | Invariant rate | Wilson 95% CI |
+| --- | --- | ---: | --- |
+| cyclic | weakness_oracle / data_inferred / noisy_group | 1.000 | (0.992, 1.000) |
+| cyclic | every classical baseline (loss/simplicity/compression/MDL/flatness/validation) | 0.000 | (0.000, 0.008) |
+| dihedral | weakness_oracle / data_inferred | 1.000 | (0.992, 1.000) |
+| color_permutation | weakness_oracle / noisy_group | 0.82–0.86 | partial |
+| parity_coset | weakness_oracle | 0.000 | negative case |
+
+## Arm 2 — Neural Sweep
+
+Train 256+ small MLPs with diverse architecture, init scale, optimizer, learning
+rate, weight decay, and data-augmentation regime. For each model compute the
+full function table and measure several candidate predictors of OOD accuracy:
+
+- training loss after the last step;
+- parameter L2 norm;
+- Hutchinson sharpness proxy;
+- held-out (leave-one-out) validation accuracy;
+- weakness under the *true* cyclic group;
+- weakness under a *wrong* random-permutation group of equal size;
+- weakness under a *random-label* control group;
+- weakness under a *partial cyclic* (half-shift) prior.
+
+Run locally:
+
+```bash
+python3 -m experiments.symbolic_weakness.neural \
+    --n-models 256 --epochs 2000 --base-seed 20260609 \
+    --out artifacts/symbolic_weakness/neural_sweep_v3.json
+```
+
+Run on Modal (Doppler-scoped credentials):
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/symbolic_weakness/modal_neural_sweep.py \
+    --n-shards 8 --models-per-shard 128 --epochs 2000 \
+    --base-seed 20260609 \
+    --out artifacts/symbolic_weakness/modal_neural_sweep_v1.json
+```
+
+Summarize:
+
+```bash
+python3 -m experiments.symbolic_weakness.summarize_neural_sweep \
+    --in artifacts/symbolic_weakness/neural_sweep_v3.json \
+    --out experiments/symbolic_weakness/results/neural_sweep_summary.md
+```
+
+Result report (post-augmentation-fix, 256 models):
+[results/neural_sweep_v3_2026_06_09.md](results/neural_sweep_v3_2026_06_09.md).
+
+## Paper
+
+Full draft: [`papers/weakness_invariance_neurips/paper.md`](../../papers/weakness_invariance_neurips/paper.md).
+
+## Files
+
+| File | Purpose |
+| --- | --- |
+| `experiment.py` | Original PR #35 pilot (cyclic prefix shift, kept for reproducibility) |
+| `families.py` | Multi-family task generators and group actions |
+| `selectors.py` | 11 selectors plus equivariance-count primitives |
+| `benchmark.py` | Multi-family runner with Wilson 95% CIs |
+| `neural.py` | Train small MLPs and compute weakness/sharpness/etc. |
+| `modal_neural_sweep.py` | Modal entrypoint for parallelized neural sweeps |
+| `summarize_neural_sweep.py` | Produce a markdown summary from a sweep JSON |
+| `results/` | Pre-registered acceptance gates and result reports |
