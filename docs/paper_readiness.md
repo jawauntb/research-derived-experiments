@@ -21,7 +21,7 @@ that distinction, and constrained control penalties trace a specificity frontier
 | Statistical confidence | Single seed for most behavior runs. | Add seeds, bootstrap CIs over pairs, and random relation nulls. |
 | Claim boundary | `docs/semantic_specificity.md` defines specificity as held-out target transfer minus independent control leakage under matched score surfaces. | Keep the claim boundary in the paper draft and do not promote runs with near-zero specificity. |
 | Generation tests | Mostly label logprob scoring. | Add constrained free-generation or short-answer scoring after logprob gates pass. |
-| Mechanistic analysis | Direction cosines and layer controls only. | Estimate control-channel rank/subspace structure and pair-specific residuals. |
+| Mechanistic analysis | Direction-subspace diagnostic shows leakage is not one low-rank control vector; high overlaps are pair/target-pocket specific. | Add target-disjoint random relation nulls and stratify controls by target/source overlap. |
 
 ## Current Phase
 
@@ -41,7 +41,9 @@ Current Phase 1 result:
 - The systematic held-out failure is `attractor->attractor_network`, whose second alias `recurrent memory network` is more mechanistically specific than the training alias `stable-state network`.
 - Multi-alias training over `alias_0+alias_1` improves held-out `alias_2` transfer on an expanded pair set: target-learned directions move `6/7` positives in both prompt frames.
 - The expanded gate still fails semantic specificity: controls pass `5/5`, and held-out `alias_2` specificity is only `0.034` in `source_passage` and `0.002` in `latent_choice`.
-- Phase 1 is not passed yet. The next attempt should diagnose whether leakage is a low-rank subspace or pair-specific before adding model scale.
+- Direction-subspace diagnosis points away from a simple shared low-rank control leak: control effective rank is about `4.2/5`, and the full control subspace captures only `0.159` to `0.194` positive energy on average.
+- The strongest leaks are pair-specific target pockets, especially `conceptual_space->representation_manifold` overlapping with `homeostasis->representation_manifold`.
+- Phase 1 is not passed yet. The next attempt should add target-disjoint random relation nulls before adding model scale.
 
 ## Phase 2 Preview
 

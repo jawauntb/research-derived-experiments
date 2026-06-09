@@ -91,8 +91,9 @@
 - [x] Train behavior directions jointly over multiple aliases and evaluate on held-out alias phrases.
 - [x] Expand positive/control concept sets before larger-model replication.
 - [x] Track a specificity frontier: positive mean retained vs independent control mean suppressed.
-- [ ] Diagnose whether behavior-direction leakage channels are low-rank or pair-specific.
+- [x] Diagnose whether behavior-direction leakage channels are low-rank or pair-specific.
 - [ ] Add random relation nulls to the behavior-direction specificity gate.
+- [ ] Stratify behavior controls into target-sharing, source-sharing, and fully target-disjoint classes.
 - [ ] Replicate the hook-output transfer ridge on a second checkpoint or open model.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.
 - [ ] Add anisotropy and directional-curvature proxy checks to activation sweeps where feasible.
