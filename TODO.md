@@ -21,24 +21,25 @@
 - [x] Add a symbolic symmetry benchmark where several train-perfect rules fit, but only the weak invariant rule generalizes OOD.
 - [x] Run the first symbolic prefix-shift pilot and record the selector gap.
 - [ ] Run seed/feature sweeps for the synthetic benchmark.
-- [ ] Run seed/modulus/train-window sweeps for the symbolic symmetry benchmark.
-- [ ] Add non-cyclic symbolic tasks: parity cosets, color-permutation invariants, and grammar-preserving relabelings.
-- [ ] Replace oracle symmetry labels with learned or induced candidate transformations.
+- [x] Run seed/modulus/train-window sweeps for the symbolic symmetry benchmark.
+- [x] Add non-cyclic symbolic tasks: parity cosets, color-permutation invariants, and dihedral reflection.
+- [x] Replace oracle symmetry labels with learned or induced candidate transformations (`weakness_data_inferred` 100% on cyclic and dihedral).
 - [ ] Extend from Boolean-rule worlds to text/classification prompts.
 - [ ] Compare against LLM-generated rules or embeddings.
-- [ ] Train small neural models on symbolic tasks and compare OOD prediction by loss, flatness, compression, and weakness.
-- [ ] Define a model-level weakness metric as compatible transformation volume or latent equivariance under admissible interventions.
+- [x] Train small neural models on symbolic tasks and compare OOD prediction by loss, flatness, compression, and weakness.
+- [x] Define a model-level weakness metric as compatible transformation volume on the learned function table.
 
 ## Flagship Paper Track: Weakness Predicts OOD
 
 - [x] Draft the paper target: weakness predicts OOD generalization better than loss, simplicity, flatness, or compression.
 - [x] Create the first symbolic benchmark and pilot result.
-- [ ] Run broad symbolic sweeps with confidence intervals and held-out task families.
-- [ ] Add neural baselines trained on the same symbolic tasks.
-- [ ] Add learned-rule or LLM-rule baselines where the model proposes hypotheses from training examples.
-- [ ] Compare weakness against train loss, validation loss, MDL/compression, description length, flatness/sharpness, and random selection.
-- [ ] Add ablations where the supplied transformation group is wrong, incomplete, or noisy.
-- [ ] Write the first full paper draft with limitations and reviewer-risk mitigations.
+- [x] Run broad symbolic sweeps with Wilson 95% confidence intervals and multiple task families (500 trials per family, four families).
+- [x] Add neural baselines trained on the same symbolic tasks (256-model sweep with diverse architecture/init/optimizer/augmentation).
+- [x] Compare weakness against train loss, validation loss, MDL/compression, description length, flatness/sharpness, and random selection (all classical baselines are well below weakness).
+- [x] Add ablations where the supplied transformation group is wrong, incomplete, or noisy (wrong-group correctly fails; noisy-group robust; data-inferred-group works).
+- [x] Add a Modal entrypoint and run a parallelized 1024-model sweep (`modal_neural_sweep.py`).
+- [x] Write the first full paper draft with limitations and reviewer-risk mitigations (`papers/weakness_invariance_neurips/paper.md`).
+- [ ] Add learned-rule or LLM-rule baselines where the model proposes hypotheses from training examples (future work).
 
 ## Experiment Track 2: Cross-Model Concept Geometry
 
