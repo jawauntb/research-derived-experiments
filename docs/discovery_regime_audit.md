@@ -1374,8 +1374,8 @@ Gate:
 
 Results:
 
-- Accepted artifacts: `experiments/symbolic_weakness/results/multi_family_500_2026_06_09.md`, `experiments/symbolic_weakness/results/neural_sweep_v2_2026_06_09.md`, `papers/weakness_invariance_neurips/paper.md`.
-- Key metrics: cyclic and dihedral weakness invariant-rate 1.000 with CI lower bound ≥0.992; classical baselines invariant-rate 0.000 with CI upper bound ≤0.008; neural weakness_oracle Pearson with OOD = +0.533 (norm) / +0.410 (raw), wrong-group control Pearson = −0.079 (norm) / −0.093 (raw).
+- Accepted artifacts: `experiments/symbolic_weakness/results/multi_family_500_2026_06_09.md`, `experiments/symbolic_weakness/results/neural_sweep_v3_2026_06_09.md`, `experiments/symbolic_weakness/results/modal_neural_sweep_v1_2026_06_09.md`, `papers/weakness_invariance_neurips/paper.md`.
+- Key metrics: cyclic and dihedral weakness invariant-rate 1.000 with CI lower bound ≥0.992; classical baselines invariant-rate 0.000 with CI upper bound ≤0.008; neural weakness_oracle_norm Pearson with OOD = +0.817 (local 256-MLP sweep) / +0.813 (Modal 1024-MLP sweep), wrong-group control Pearson ≤ −0.116 across both runs.
 - Variance or ablation: wrong-group, noisy-group, data-inferred-group, partial-cyclic-group, and random-label controls all show the expected directional behavior (wrong/random → null, noisy/inferred → mostly recover).
 
 Residual content:
@@ -1384,4 +1384,90 @@ Residual content:
 - New content outside current regime: parity and S_n require either a richer candidate transformation set or a fundamentally different selector — they delineate the operating boundary of weakness-as-symmetry-volume.
 - Retractions: none.
 
-Next move: scale the neural sweep on Modal (8+ shards); add compositional task families (Z_n × Z_m); add a small-transformer variant; investigate whether learned-group inference can extend weakness to S_n where the oracle group is too coarse.
+Next move: add compositional task families (Z_n × Z_m); add a small-transformer variant; investigate whether learned-group inference can extend weakness to S_n where the oracle group is too coarse.
+
+## Activation Geometry Probe: Multi-Alias Expanded Specificity
+
+Question: does multi-alias objective training plus a larger pair set produce semantic-specific behavior directions?
+
+Current regime:
+
+- Artifact types: alias-indexed label manifests, grouped objective regimes, full-label gradient directions, expanded pair manifests, specificity reports.
+- Operations: multi-alias gradient averaging, held-out alias scoring, norm-matched multi-control penalties, specificity-score comparison.
+- Gates/verifiers: held-out alias positives must transfer and independent controls must remain lower than positives under the same score surface.
+- Known limitations: one model, one seed, no generation scoring yet, expanded controls are hand-picked rather than random-relation nulls.
+
+Action class:
+
+- Retrieval/search/discovery: verifier hardening with a rejected candidate.
+- Why: this creates a stronger gate and falsifies the current multi-alias behavior objective as a paper-ready specificity mechanism.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/multialias_expanded_specificity_2026_06_09.md`; local ignored payloads under `artifacts/activation_geometry/modal_pythia_70m_multialias_expanded_*.json`.
+- Positive targets: expanded steering pairs.
+- Negative controls: expanded control pairs with leave-one-out control bases.
+- Stress tests: `source_passage` and `latent_choice`; held-out `alias_2`; canonical labels; three scales.
+
+Gate:
+
+- Acceptance rule: pass if held-out `alias_2` positives remain high while controls are suppressed enough to make specificity clearly positive.
+- Withheld/rejected rule: withhold if controls pass broadly or specificity is near zero/negative.
+
+Results:
+
+- Accepted artifacts: grouped objective regimes; third aliases; expanded pair set; result report.
+- Rejected or withheld artifacts: multi-alias constrained behavior directions remain non-paper-ready.
+- Key metrics: held-out `alias_2` target-learned reaches `6/7` positives in both prompt frames but controls pass `5/5`; specificity is `0.034` in `source_passage` and `0.002` in `latent_choice`.
+- Variance or ablation: both prompt frames agree; constrained and residual modes do not improve specificity.
+
+Residual content:
+
+- Explained by old regime: behavior gradients can move many held-out target labels.
+- New content outside old regime: the main obstacle is now identifiable as broad control leakage, not just single-alias fragility.
+- Retractions or supersessions: supersede "multi-alias training may be enough" with "multi-alias training improves transfer but not specificity."
+
+Next move: diagnose whether leakage is low-rank or pair-specific.
+
+## Activation Geometry Probe: Direction Subspace Diagnostic
+
+Question: is behavior-direction leakage low-rank or pair-specific?
+
+Current regime:
+
+- Artifact types: behavior target-gradient directions, pairwise cosine summaries, singular spectra, control-subspace capture tables.
+- Operations: multi-alias target-gradient extraction, normalized direction SVD, control-subspace projection, pairwise cosine ranking.
+- Gates/verifiers: low-rank leakage would show high control energy in one or two components and high positive capture by that control subspace; pair-specific leakage would show low average capture but high individual pair overlaps.
+- Known limitations: one model, one layer, one seed; no random relation nulls yet.
+
+Action class:
+
+- Retrieval/search/discovery: mechanistic diagnostic.
+- Why: this adds a direction-subspace artifact class that was missing from the previous score-only specificity gates.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/direction_subspace_diagnostic_2026_06_09.md`; local ignored payloads under `artifacts/activation_geometry/modal_pythia_70m_direction_subspace_*.json`.
+- Positive targets: expanded steering pairs.
+- Negative controls: expanded control pairs.
+- Stress tests: `source_passage` and `latent_choice`.
+
+Gate:
+
+- Acceptance rule: classify leakage as low-rank only if low-rank control components capture most positive direction energy on average.
+- Withheld/rejected rule: withhold low-rank explanation if average positive capture stays low and high overlaps are pair-specific.
+
+Results:
+
+- Accepted artifacts: Modal subspace diagnostic and result report.
+- Rejected or withheld artifacts: one-vector or simple low-rank shared leakage explanation.
+- Key metrics: control effective rank `4.179`/`4.201`; rank-5 control subspace captures only `0.159`/`0.194` positive energy on average, but max pair capture reaches `0.581`/`0.676`.
+- Variance or ablation: source and latent prompt frames agree.
+
+Residual content:
+
+- Explained by old regime: broad full-label gradients move many labels.
+- New content outside old regime: leakage is localized in relation pockets, not captured by one shared control vector.
+- Retractions or supersessions: supersede "subtract the control subspace" with "stratify controls and add target-disjoint random relation nulls."
+
+Next move: add random relation nulls and target-disjoint controls.
