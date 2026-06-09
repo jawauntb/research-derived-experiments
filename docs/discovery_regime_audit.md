@@ -1394,3 +1394,46 @@ Residual content:
 - Retractions or supersessions: supersede "multi-alias training may be enough" with "multi-alias training improves transfer but not specificity."
 
 Next move: diagnose whether leakage is low-rank or pair-specific.
+
+## Activation Geometry Probe: Direction Subspace Diagnostic
+
+Question: is behavior-direction leakage low-rank or pair-specific?
+
+Current regime:
+
+- Artifact types: behavior target-gradient directions, pairwise cosine summaries, singular spectra, control-subspace capture tables.
+- Operations: multi-alias target-gradient extraction, normalized direction SVD, control-subspace projection, pairwise cosine ranking.
+- Gates/verifiers: low-rank leakage would show high control energy in one or two components and high positive capture by that control subspace; pair-specific leakage would show low average capture but high individual pair overlaps.
+- Known limitations: one model, one layer, one seed; no random relation nulls yet.
+
+Action class:
+
+- Retrieval/search/discovery: mechanistic diagnostic.
+- Why: this adds a direction-subspace artifact class that was missing from the previous score-only specificity gates.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/direction_subspace_diagnostic_2026_06_09.md`; local ignored payloads under `artifacts/activation_geometry/modal_pythia_70m_direction_subspace_*.json`.
+- Positive targets: expanded steering pairs.
+- Negative controls: expanded control pairs.
+- Stress tests: `source_passage` and `latent_choice`.
+
+Gate:
+
+- Acceptance rule: classify leakage as low-rank only if low-rank control components capture most positive direction energy on average.
+- Withheld/rejected rule: withhold low-rank explanation if average positive capture stays low and high overlaps are pair-specific.
+
+Results:
+
+- Accepted artifacts: Modal subspace diagnostic and result report.
+- Rejected or withheld artifacts: one-vector or simple low-rank shared leakage explanation.
+- Key metrics: control effective rank `4.179`/`4.201`; rank-5 control subspace captures only `0.159`/`0.194` positive energy on average, but max pair capture reaches `0.581`/`0.676`.
+- Variance or ablation: source and latent prompt frames agree.
+
+Residual content:
+
+- Explained by old regime: broad full-label gradients move many labels.
+- New content outside old regime: leakage is localized in relation pockets, not captured by one shared control vector.
+- Retractions or supersessions: supersede "subtract the control subspace" with "stratify controls and add target-disjoint random relation nulls."
+
+Next move: add random relation nulls and target-disjoint controls.
