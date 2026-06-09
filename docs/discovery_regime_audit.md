@@ -1179,3 +1179,46 @@ Residual content:
 - Retractions or supersessions: supersede "alias labels may be unreachable behaviorally" with "alias labels are behaviorally reachable, but raw transported states and direct gradients occupy different regimes."
 
 Next move: build residualized alias directions that subtract source/distractor/control components, then rerun the alias gate against leakage controls.
+
+## Activation Geometry Probe: Residualized Alias Direction
+
+Question: can simple residualization make alias-trained behavior directions less leaky without losing positive concept movement?
+
+Current regime:
+
+- Artifact types: alias-label manifests, full-label gradient directions, residualized direction modes, canonical/alias eval rows, leakage tables.
+- Operations: train-variant full-label gradient averaging, projection residualization, leave-one-out control-basis construction, held-out full-label continuation scoring.
+- Gates/verifiers: positive pairs must pass in primary/backup layers; valence controls and control-layer positives must not pass at comparable strength; residual modes should improve target-over-control specificity.
+- Known limitations: one seed, one model, one alias per concept, post-hoc linear residuals only.
+
+Action class:
+
+- Retrieval/search/discovery: search with a rejected simplification.
+- Why: this adds residualized direction modes inside the existing behavior-direction schema and tests whether leakage is linearly removable.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/residualized_alias_direction_2026_06_08.md`; local ignored payloads under `artifacts/activation_geometry/modal_pythia_70m_residualized_alias_direction_*.json`.
+- Positive targets: promoted steering pairs.
+- Negative controls: same-norm random directions; valence-control pairs; control layer.
+- Stress tests: prompt frames `latent_choice` and `source_passage`; eval labels `alias` and `canonical`; scales `0.5,1.0,2.0`.
+
+Gate:
+
+- Acceptance rule: promote residualized semantic transport only if positive pairs remain robust while primary valence controls and control-layer positives fail or become much weaker than positives.
+- Withheld/rejected rule: withhold semantic claims if controls still pass, even when their mean deltas are attenuated.
+
+Results:
+
+- Accepted artifacts: residualized direction modes in the learned-direction runner; `experiments/activation_geometry/results/residualized_alias_direction_2026_06_08.md`.
+- Rejected or withheld artifacts: the simple linear-removal explanation is rejected; semantic transport remains withheld.
+- Key metrics: `target_resid_all` keeps `3/3` primary positives in every frame/eval setting at scale `1.0`; it reduces valence-control means by `23.1%` to `49.4%`; controls still pass `2/2` except source-passage canonical, where they drop to `1/2`.
+- Variance or ablation: source/distractor-only and control-only residuals are weaker than the combined residual; source-passage canonical is cleaner than alias scoring.
+
+Residual content:
+
+- Explained by old regime: behavior gradients can move target labels and random directions are much weaker.
+- New content outside old regime: leakage has at least two distinguishable channels; `valence->activation_vector` can be suppressed in one setting, but `valence->steering_vector` remains adversarial.
+- Retractions or supersessions: supersede "subtract a generic control component" with "post-hoc projection is only an attenuation method, not a specificity method."
+
+Next move: replace post-hoc residualization with a constrained behavior objective that penalizes `valence->steering_vector` during direction construction.
