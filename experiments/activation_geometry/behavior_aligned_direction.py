@@ -12,6 +12,9 @@ DIRECTION_MODES = (
     "target_learned",
     "source_learned",
     "distractor_learned",
+    "target_resid_sd",
+    "target_resid_control",
+    "target_resid_all",
     "random_same_norm",
 )
 OBJECTIVE_ROLES = ("target", "source", "distractor")

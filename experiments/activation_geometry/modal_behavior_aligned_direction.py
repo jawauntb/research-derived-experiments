@@ -132,7 +132,12 @@ def labels_by_role_for_regime(
 
 
 def objective_role_for_mode(mode: str) -> str:
-    if mode == "target_learned":
+    if mode in {
+        "target_learned",
+        "target_resid_sd",
+        "target_resid_control",
+        "target_resid_all",
+    }:
         return "target"
     if mode == "source_learned":
         return "source"
@@ -737,18 +742,78 @@ def cosine_or_none(torch: Any, left: Any | None, right: Any | None) -> float | N
     return float(torch.nn.functional.cosine_similarity(left.float(), right.float(), dim=0).item())
 
 
+def remove_projection(torch: Any, direction: Any, basis: Any | None) -> Any:
+    if basis is None:
+        return direction
+    basis_norm_squared = torch.dot(basis.float(), basis.float())
+    if float(basis_norm_squared.item()) == 0.0:
+        return direction
+    coefficient = torch.dot(direction.float(), basis.float()) / basis_norm_squared
+    return direction - coefficient.to(direction.dtype) * basis
+
+
+def projection_residual(torch: Any, direction: Any, basis_vectors: list[Any | None]) -> Any:
+    residual = direction
+    for basis in basis_vectors:
+        residual = remove_projection(torch, residual, basis)
+    return residual
+
+
+def rescale_to_reference_norm(torch: Any, direction: Any, reference: Any) -> Any:
+    direction_norm = torch.linalg.vector_norm(direction)
+    if float(direction_norm.item()) == 0.0:
+        return direction
+    reference_norm = torch.linalg.vector_norm(reference)
+    return direction * (reference_norm / direction_norm)
+
+
 def direction_for_mode(
     *,
     torch: Any,
     learned_directions: dict[str, Any],
+    control_target_direction: Any | None,
     mode: str,
     seed: int,
 ) -> Any:
+    target_direction = learned_directions["target"]
     if mode == "random_same_norm":
         return random_same_norm(
             torch=torch,
-            direction=learned_directions["target"],
+            direction=target_direction,
             seed=seed,
+        )
+    if mode == "target_resid_sd":
+        return rescale_to_reference_norm(
+            torch,
+            projection_residual(
+                torch,
+                target_direction,
+                [
+                    learned_directions["source"],
+                    learned_directions["distractor"],
+                ],
+            ),
+            target_direction,
+        )
+    if mode == "target_resid_control":
+        return rescale_to_reference_norm(
+            torch,
+            projection_residual(torch, target_direction, [control_target_direction]),
+            target_direction,
+        )
+    if mode == "target_resid_all":
+        return rescale_to_reference_norm(
+            torch,
+            projection_residual(
+                torch,
+                target_direction,
+                [
+                    control_target_direction,
+                    learned_directions["source"],
+                    learned_directions["distractor"],
+                ],
+            ),
+            target_direction,
         )
     return learned_directions[objective_role_for_mode(mode)]
 
@@ -806,10 +871,12 @@ def run_behavior_aligned_direction_remote(
 
     rows = []
     for role, layer in layer_roles.items():
+        learned_records: dict[tuple[str, str], dict[str, Any]] = {}
         for pair_index, pair in enumerate(pair_specs):
             left = str(pair["left"])
             right = str(pair["right"])
             distractor = str(pair["distractor"])
+            current_pair_id = pair_id(left, right)
             source_texts = train_source_texts(
                 records,
                 concept_id=left,
@@ -863,6 +930,66 @@ def run_behavior_aligned_direction_remote(
                         learned_directions["distractor"],
                     ),
                 }
+                learned_records[(current_pair_id, objective_label_scoring_regime)] = {
+                    "pair_index": pair_index,
+                    "left": left,
+                    "right": right,
+                    "kind": str(pair["kind"]),
+                    "distractor": distractor,
+                    "heldout_text": heldout_text,
+                    "objective_labels_by_role": objective_labels_by_role,
+                    "learned_directions": learned_directions,
+                    "norms": norms,
+                    "learned_alignment": learned_alignment,
+                }
+
+        control_pair_ids = [
+            pair_id(str(pair["left"]), str(pair["right"]))
+            for pair in pair_specs
+            if str(pair["kind"]) == "control"
+        ]
+        for pair in pair_specs:
+            left = str(pair["left"])
+            right = str(pair["right"])
+            distractor = str(pair["distractor"])
+            current_pair_id = pair_id(left, right)
+            current_kind = str(pair["kind"])
+            for objective_label_scoring_regime in objective_label_scoring_regimes:
+                record = learned_records[(current_pair_id, objective_label_scoring_regime)]
+                control_directions = [
+                    learned_records[
+                        (control_pair_id, objective_label_scoring_regime)
+                    ]["learned_directions"]["target"]
+                    for control_pair_id in control_pair_ids
+                    if current_kind != "control" or control_pair_id != current_pair_id
+                ]
+                if not control_directions:
+                    control_directions = [
+                        learned_records[
+                            (control_pair_id, objective_label_scoring_regime)
+                        ]["learned_directions"]["target"]
+                        for control_pair_id in control_pair_ids
+                    ]
+                control_target_direction = (
+                    mean_tensor(torch, control_directions).to(device)
+                    if control_directions
+                    else None
+                )
+                control_target_direction_norm = (
+                    float(torch.linalg.vector_norm(control_target_direction).item())
+                    if control_target_direction is not None
+                    else None
+                )
+                objective_labels_by_role = record["objective_labels_by_role"]
+                heldout_text = str(record["heldout_text"])
+                learned_directions = record["learned_directions"]
+                norms = record["norms"]
+                learned_alignment = dict(record["learned_alignment"])
+                learned_alignment["target_control_cosine"] = cosine_or_none(
+                    torch,
+                    learned_directions["target"],
+                    control_target_direction,
+                )
                 for eval_label_scoring_regime in eval_label_scoring_regimes:
                     eval_labels_by_role = labels_by_role_for_regime(
                         concept_lookup=concept_lookup,
@@ -922,15 +1049,19 @@ def run_behavior_aligned_direction_remote(
                                 direction = direction_for_mode(
                                     torch=torch,
                                     learned_directions=learned_directions,
+                                    control_target_direction=control_target_direction,
                                     mode=mode,
                                     seed=(
                                         seed
                                         + layer * 100_003
-                                        + pair_index * 1_009
+                                        + int(record["pair_index"]) * 1_009
                                         + order_index * 97
                                         + scale_index * 13
                                         + mode_index
                                     ),
+                                )
+                                direction_norm = float(
+                                    torch.linalg.vector_norm(direction).item()
                                 )
                                 delta = direction * float(scale)
                                 steered_scores = run_scoring_prompt(
@@ -953,13 +1084,20 @@ def run_behavior_aligned_direction_remote(
                                         "pair": pair_id(left, right),
                                         "left": left,
                                         "right": right,
-                                        "kind": str(pair["kind"]),
+                                        "kind": current_kind,
                                         "distractor": distractor,
                                         "role": role,
                                         "layer": layer,
                                         "scale": float(scale),
                                         "direction_mode": mode,
                                         "objective_role": objective_role_for_mode(mode),
+                                        "direction_norm": direction_norm,
+                                        "control_target_direction_norm": (
+                                            control_target_direction_norm
+                                        ),
+                                        "control_basis_pair_count": len(
+                                            control_directions
+                                        ),
                                         "scoring_surface": scoring_surface,
                                         "prompt_frame": prompt_frame,
                                         "objective_label_scoring_regime": (
