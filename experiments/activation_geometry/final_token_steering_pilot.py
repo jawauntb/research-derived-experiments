@@ -36,6 +36,14 @@ EXPANDED_CONTROL_PAIRS = (
     ("semantic_distance", "validity_gate"),
     ("homeostasis", "representation_manifold"),
 )
+TARGET_DISJOINT_CONTROL_PAIRS = (
+    ("valence", "activation_vector"),
+    ("valence", "steering_vector"),
+    ("simplicity_bias", "embedding"),
+    ("semantic_distance", "validity_gate"),
+    ("family_resemblance", "regime_transition"),
+    ("self_boundary", "residual_content"),
+)
 DEFAULT_DISTRACTORS = {
     "attractor_network": "prototype",
     "homeostasis": "self_boundary",
@@ -46,6 +54,8 @@ DEFAULT_DISTRACTORS = {
     "schema": "prototype",
     "embedding": "activation_vector",
     "validity_gate": "simplicity_bias",
+    "regime_transition": "schema_revision",
+    "residual_content": "schema_revision",
     "activation_vector": "embedding",
     "steering_vector": "embedding",
 }
@@ -58,6 +68,7 @@ class SteeringPair:
     right: str
     kind: str
     distractor: str
+    control_class: str = ""
 
 
 def pair_id(left: str, right: str) -> str:
@@ -85,18 +96,25 @@ def pair_specs_for_set(concepts: list[Concept], *, pair_set: str) -> list[Steeri
     rows = []
     if pair_set == "promoted":
         pair_groups = (
-            ("positive", PROMOTED_STEERING_PAIRS),
-            ("exploratory", EXPLORATORY_STEERING_PAIRS),
-            ("control", VALENCE_CONTROL_PAIRS),
+            ("positive", PROMOTED_STEERING_PAIRS, ""),
+            ("exploratory", EXPLORATORY_STEERING_PAIRS, ""),
+            ("control", VALENCE_CONTROL_PAIRS, "valence"),
         )
     elif pair_set == "expanded":
         pair_groups = (
-            ("positive", EXPANDED_POSITIVE_STEERING_PAIRS),
-            ("control", EXPANDED_CONTROL_PAIRS),
+            ("positive", EXPANDED_POSITIVE_STEERING_PAIRS, ""),
+            ("control", EXPANDED_CONTROL_PAIRS, "mixed_handpicked"),
+        )
+    elif pair_set == "expanded_target_disjoint":
+        pair_groups = (
+            ("positive", EXPANDED_POSITIVE_STEERING_PAIRS, ""),
+            ("control", TARGET_DISJOINT_CONTROL_PAIRS, "target_disjoint"),
         )
     else:
-        raise ValueError("Pair set must be one of: promoted, expanded")
-    for kind, pairs in pair_groups:
+        raise ValueError(
+            "Pair set must be one of: promoted, expanded, expanded_target_disjoint"
+        )
+    for kind, pairs, control_class in pair_groups:
         for left, right in pairs:
             distractor = DEFAULT_DISTRACTORS[right]
             if left not in concept_ids or right not in concept_ids or distractor not in concept_ids:
@@ -107,6 +125,7 @@ def pair_specs_for_set(concepts: list[Concept], *, pair_set: str) -> list[Steeri
                     right=right,
                     kind=kind,
                     distractor=distractor,
+                    control_class=control_class,
                 )
             )
     return rows

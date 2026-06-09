@@ -15,7 +15,7 @@ that distinction, and constrained control penalties trace a specificity frontier
 | Requirement | Current state | Next gate |
 | --- | --- | --- |
 | More models | Pythia-70M only for alias/constrained runs. | Replicate best frontier on at least one larger open model and one small control model. |
-| More concepts | Expanded behavior gate now has seven positives and five controls. | Add random relation nulls and bootstrap confidence intervals over pairs. |
+| More concepts | Expanded behavior gate now has seven positives, five mixed controls, and six target-disjoint controls. | Add random relation nulls and bootstrap confidence intervals over pairs. |
 | Held-out aliases/controls | Added third aliases and a train-on-`alias_0+alias_1` / test-on-`alias_2` gate. | Diagnose why held-out transfer moves controls as much as positives. |
 | Baselines | Random, source/distractor, residual projection, hard/mean-control penalties. | Add CAA/CAV-style activation-vector baselines and, later, SAE/feature-guided baselines if feasible. |
 | Statistical confidence | Single seed for most behavior runs. | Add seeds, bootstrap CIs over pairs, and random relation nulls. |
@@ -43,7 +43,9 @@ Current Phase 1 result:
 - The expanded gate still fails semantic specificity: controls pass `5/5`, and held-out `alias_2` specificity is only `0.034` in `source_passage` and `0.002` in `latent_choice`.
 - Direction-subspace diagnosis points away from a simple shared low-rank control leak: control effective rank is about `4.2/5`, and the full control subspace captures only `0.159` to `0.194` positive energy on average.
 - The strongest leaks are pair-specific target pockets, especially `conceptual_space->representation_manifold` overlapping with `homeostasis->representation_manifold`.
-- Phase 1 is not passed yet. The next attempt should add target-disjoint random relation nulls before adding model scale.
+- Target-disjoint controls do not rescue specificity. Target-learned directions move `6/7` positives but also `6/6` target-disjoint controls in both prompt frames.
+- Held-out `alias_2` specificity with target-disjoint controls is only `0.066` in `source_passage` and `0.007` in `latent_choice`; canonical specificity is negative.
+- Phase 1 is not passed yet. The next attempt should add randomized relation nulls and CAA/CAV-style baselines, then shift the main evidence target toward generation/readout behavior before adding model scale.
 
 ## Phase 2 Preview
 

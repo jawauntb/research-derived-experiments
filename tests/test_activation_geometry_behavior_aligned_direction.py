@@ -103,6 +103,51 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
         self.assertGreater(len(positive_pairs), 3)
         self.assertGreater(len(control_pairs), 2)
 
+    def test_target_disjoint_pair_set_controls_avoid_positive_targets(self) -> None:
+        concept_ids = {
+            "activation_vector",
+            "attractor",
+            "attractor_network",
+            "autopoiesis",
+            "basin_of_attraction",
+            "conceptual_space",
+            "embedding",
+            "family_resemblance",
+            "fixed_point",
+            "homeostasis",
+            "phase_space",
+            "prototype",
+            "regime_transition",
+            "representation_manifold",
+            "residual_content",
+            "schema",
+            "schema_revision",
+            "self_boundary",
+            "semantic_distance",
+            "simplicity_bias",
+            "steering_vector",
+            "validity_gate",
+            "valence",
+            "weak_constraint",
+        }
+        concepts = [
+            Concept(
+                id=concept_id,
+                label=concept_id.replace("_", " "),
+                category="test",
+                prompt=concept_id,
+            )
+            for concept_id in sorted(concept_ids)
+        ]
+
+        pairs = pair_specs_for_set(concepts, pair_set="expanded_target_disjoint")
+        positive_targets = {pair.right for pair in pairs if pair.kind == "positive"}
+        controls = [pair for pair in pairs if pair.kind == "control"]
+
+        self.assertGreater(len(controls), 2)
+        self.assertTrue(all(pair.control_class == "target_disjoint" for pair in controls))
+        self.assertTrue(all(pair.right not in positive_targets for pair in controls))
+
     def test_role_margin_and_behavior_delta_use_target_margin(self) -> None:
         baseline = {"source": -1.0, "target": -2.0, "distractor": -3.0}
         steered = {"source": -1.2, "target": -1.4, "distractor": -3.2}

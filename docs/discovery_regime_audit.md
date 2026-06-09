@@ -1437,3 +1437,46 @@ Residual content:
 - Retractions or supersessions: supersede "subtract the control subspace" with "stratify controls and add target-disjoint random relation nulls."
 
 Next move: add random relation nulls and target-disjoint controls.
+
+## Activation Geometry Probe: Target-Disjoint Null Controls
+
+Question: do target-disjoint controls turn the multi-alias behavior direction into a semantically specific intervention?
+
+Current regime:
+
+- Artifact types: alias-indexed behavior-direction manifests, target-disjoint control pair sets, specificity tables, result reports.
+- Operations: full-label multi-alias target-gradient construction, held-out-alias scoring, residual/penalty baselines, random same-norm comparison.
+- Gates/verifiers: positives must transfer on held-out labels; controls with disjoint targets must not move comparably; canonical labels should not make controls stronger than positives.
+- Known limitations: one model, one seed, hand-picked target-disjoint controls, label-logprob scoring only.
+
+Action class:
+
+- Retrieval/search/discovery: verifier hardening with a rejected candidate.
+- Why: this adds a target-disjoint control family and falsifies the explanation that the main failure was only same-target control overlap.
+
+Experiment:
+
+- Manifest/report paths: `experiments/activation_geometry/results/target_disjoint_null_controls_2026_06_09.md`; local ignored payloads under `artifacts/activation_geometry/modal_pythia_70m_target_disjoint_nulls_*.json`.
+- Positive targets: expanded steering pairs.
+- Negative controls: six controls whose targets are disjoint from all positive targets.
+- Stress tests: `source_passage` and `latent_choice`; held-out `alias_2`; canonical labels; random same-norm baseline.
+
+Gate:
+
+- Acceptance rule: move toward Phase 2 only if held-out positives remain high and target-disjoint controls fall enough to make specificity clearly positive.
+- Withheld/rejected rule: withhold semantic specificity if target-disjoint controls still pass broadly or canonical specificity is negative.
+
+Results:
+
+- Accepted artifacts: `expanded_target_disjoint` pair set and result report.
+- Rejected or withheld artifacts: target-disjoint control rescue of the current behavior objective.
+- Key metrics: target-learned directions move `6/7` positives and `6/6` controls in both prompt frames; held-out `alias_2` specificity is `0.066` in `source_passage` and `0.007` in `latent_choice`; canonical specificity is negative.
+- Variance or ablation: source and latent prompt frames agree; residual and control-penalty modes do not improve the gate.
+
+Residual content:
+
+- Explained by old regime: behavior target gradients can move many labels and random directions are much weaker on mean delta.
+- New content outside old regime: target-disjoint controls show that the leakage is broader than same-target-pocket overlap.
+- Retractions or supersessions: supersede "target-pocket overlap may be the main issue" with "target-pocket overlap exists, but broad full-label transport also survives target-disjoint controls."
+
+Next move: add randomized relation nulls and CAA/CAV baselines, then shift the main evidence target toward generation/readout behavior rather than relying on full-label logprob gates.
