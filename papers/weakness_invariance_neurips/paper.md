@@ -19,7 +19,7 @@ This paper makes the weakness conjecture experimentally concrete. We construct a
 Headline results:
 
 - Cyclic and dihedral symbolic families (n=500 trials each): weakness selects the invariant in 100% of trials (Wilson 95% lower bound 0.992); every classical baseline selects the shortcut in 100% of trials (Wilson 95% upper bound 0.008).
-- Neural sweep (256 MLPs, diverse architecture/init/optimizer/augmentation): weakness_oracle_norm Pearson r with OOD = **+0.82** (Spearman ρ = +0.55). Training loss, held-out validation, parameter L_2, and Hutchinson sharpness all have |r| < 0.13.
+- Neural sweep (256 MLPs locally + 1024 MLPs on Modal, diverse architecture/init/optimizer/augmentation): weakness_oracle_norm Pearson r with OOD = **+0.81–0.82** (Spearman ρ = +0.55–0.58) in both runs. Training loss, held-out validation, and Hutchinson sharpness all have |r| ≤ 0.14; parameter L_2 has |r| ≤ 0.27.
 - Wrong-group, random-label, and noisy-group controls behave as expected, ruling out the hypothesis that "any equivariance count works."
 
 ## 2. Definitions
@@ -134,7 +134,7 @@ After 2000 training steps we extract the full function table $\hat f$ by `argmax
 - weakness under a *partial cyclic* (half-shift) prior,
 - OOD accuracy on the held-out suffix.
 
-### 4.2 Results
+### 4.2 Results — local 256-MLP sweep
 
 Across 256 trained MLPs, mean OOD = 0.334 (23.8% with perfect OOD). Pearson and Spearman correlations with OOD accuracy:
 
@@ -152,7 +152,7 @@ Across 256 trained MLPs, mean OOD = 0.334 (23.8% with perfect OOD). Pearson and 
 
 Weakness under the true group is the single strongest predictor of OOD accuracy across the sweep, both in raw and normalized form. The wrong-group and random-label controls are correctly close to zero or negative, ruling out the trivial hypothesis that "any equivariance count works." Training loss, validation accuracy, parameter norm, and sharpness are all weak predictors in this regime.
 
-Per-augmentation breakdown:
+Per-augmentation breakdown (local sweep):
 
 | Augmentation | n | Mean OOD | Mean weakness (norm) |
 | --- | ---: | ---: | ---: |
@@ -163,6 +163,32 @@ Per-augmentation breakdown:
 | `none` | 54 | 0.000 | 0.141 |
 
 This confirms the directional story: augmentations that approximately respect the symmetry produce models with high weakness and high OOD. Wrong/random augmentation neither raises weakness nor OOD.
+
+### 4.3 Modal-parallel replication on 1024 MLPs
+
+We re-run the sweep at 4× scale on Modal (8 shards × 128 models = 1024 MLPs, identical hyperparameter space and seed protocol). The result is consistent with the local run and tightens the correlation estimates:
+
+| Predictor | Pearson r | Spearman ρ |
+| --- | ---: | ---: |
+| **`weakness_oracle_norm`** | **+0.813** | **+0.580** |
+| `weakness_partial_cyclic_norm` | +0.804 | +0.575 |
+| parameter $L_2$ | +0.273 | +0.353 |
+| Hutchinson sharpness proxy | +0.134 | +0.145 |
+| `weakness_wrong_group_norm` (control) | **−0.116** | −0.050 |
+| held-out validation accuracy | +0.089 | +0.043 |
+| training loss | −0.048 | +0.119 |
+
+Per-augmentation OOD/weakness (1024 models):
+
+| Augmentation | n | Mean OOD | Mean weakness (norm) |
+| --- | ---: | ---: | ---: |
+| `full_cyclic` | 218 | 0.967 | 0.963 |
+| `partial_cyclic` | 179 | 0.621 | 0.358 |
+| `wrong_random` | 194 | 0.100 | 0.137 |
+| `wrong_reflection` | 217 | 0.012 | 0.129 |
+| `none` | 216 | 0.000 | 0.118 |
+
+The 1024-model replication confirms the headline: `weakness_oracle_norm` is the dominant predictor (Pearson r = +0.81), wrong-group and validation/loss controls are correctly null or weakly negative, parameter L₂ and sharpness contribute only secondary signal. Across both sweeps the per-augmentation gradient is monotone in mean weakness, with `full_cyclic` saturating at 97% OOD and `none` / `wrong_reflection` at ≤ 1% OOD.
 
 ## 5. Wrong-, Noisy-, and Data-Inferred-Group Ablations
 
