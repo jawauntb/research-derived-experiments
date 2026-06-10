@@ -47,7 +47,8 @@ def main() -> int:
     for i, (pv, av) in enumerate(zip(passive_vals, active_vals)):
         ax.text(i - w/2, pv + 0.02, f"{pv:+.3f}", ha="center", fontsize=10)
         ax.text(i + w/2, av + 0.02, f"{av:+.3f}", ha="center", fontsize=10, fontweight="bold")
-    ax.set_xticks(x); ax.set_xticklabels(metrics, fontsize=11)
+    ax.set_xticks(x)
+    ax.set_xticklabels(metrics, fontsize=11)
     ax.set_ylabel("Centered cosine similarity", fontsize=11)
     ax.set_title("Cluster tightening under action coupling\n"
                  "(Pythia-70m, layer 5, paraphrase orbits)", fontsize=12)
@@ -118,14 +119,14 @@ def main() -> int:
     ax.axhline(0, color="black", linewidth=0.6)
     # Annotate the headline ratio at α=5.0
     ax.annotate(
-        f"+0.486 at α=5.0\n(active)",
+        "+0.486 at α=5.0\n(active)",
         xy=(strengths[-1], active_specific[-1]),
         xytext=(strengths[-1] - 1.5, active_specific[-1] - 0.15),
         fontsize=10, color="#2ca02c", fontweight="bold",
         arrowprops=dict(arrowstyle="->", color="#2ca02c", lw=1.2),
     )
     ax.annotate(
-        f"+0.069 at α=5.0\n(passive)",
+        "+0.069 at α=5.0\n(passive)",
         xy=(strengths[-1], passive_specific[-1]),
         xytext=(strengths[-1] - 1.5, passive_specific[-1] + 0.10),
         fontsize=10, color="#1f77b4",
