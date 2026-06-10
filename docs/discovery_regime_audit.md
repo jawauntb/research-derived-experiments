@@ -2627,3 +2627,75 @@ Residual content:
 
 Next move: run the `alias_1` objective replication first, then train-variant
 `1`, then second model/layer only if the frontier survives.
+
+## Activation Geometry Probe: Positive-Family Robustness
+
+Question: does the positive-family strict-binary frontier survive objective
+alias and train-variant perturbations?
+
+Current regime:
+
+- Artifact types: strict binary-relation rows, stratified gate summaries,
+  positive-family optimized direction summaries, alias/train perturbation
+  reports.
+- Operations: Modal-backed Pythia activation intervention, held-out alias
+  scoring, train-variant perturbation, random same-norm baseline.
+- Gates/verifiers: held-out `alias_2`, strict positive counts, stratified
+  control counts, always-false carrier rejection.
+- Known limitations: Pythia-70M layer 3 only; two positive pairs only; no new
+  intervention class in this run.
+
+Action class:
+
+- Retrieval/search/discovery: search.
+- Why: this perturbs aliases and train variants inside the current
+  positive-family vector schema; it does not add a new artifact type.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/positive_family_replication_2026_06_10.md`;
+  local ignored artifacts
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_positive_family_opt8_stratified_alias1_seed20260610.json`
+  and
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_positive_family_opt8_stratified_trainv1_seed20260610.json`.
+- Positive targets: `attractor->attractor_network` and
+  `fixed_point->prototype`.
+- Negative controls: twelve controls split across `source_sharing`,
+  `target_sharing`, `implausible_random_null`, and `semantic_near_null`.
+- Stress tests: objective `alias_1` with held-out `alias_2`; train variant `1`
+  with held-out variant `2`.
+
+Gate:
+
+- Acceptance rule: preserve at least `1/2` strict positives and `0/12`
+  stratified controls under alias or train-variant perturbation.
+- Withheld/rejected rule: reject the frontier if positives vanish or structured
+  controls revive.
+
+Results:
+
+- Accepted artifacts: the negative replication report and two ignored Modal
+  payloads.
+- Rejected or withheld artifacts: the hypothesis that the current
+  positive-family single-vector direction is a stable paper nucleus.
+- Key metrics: objective `alias_1` gives `0/2` strict positives and `0/12`
+  controls. Train variant `1` gives `1/2` strict positives and `1/12`
+  controls, with a source-sharing leak on `attractor->semantic_distance`.
+  `random_same_norm` remains `0/2`, `0/12` in both runs.
+- Variance or ablation: alias perturbation and train-variant perturbation both
+  fail the pre-registered robustness gate for different reasons.
+
+Residual content:
+
+- Explained by old regime: the strict binary verifier catches answer-surface and
+  structured-overlap leakage.
+- New content outside old regime: the `attractor` movement can be made clean in
+  one narrow setup, but it is not stable under the smallest alias/train changes.
+- Retractions or supersessions: supersede "positive-family vector may be the
+  paper nucleus" with "positive-family vector is a useful rejected frontier;
+  pivot to pair-conditioned nonlinear or readout-guided interventions."
+
+Next move: keep the stratified strict verifier and change intervention class.
+Do not spend the next run on a larger repeat of the same positive-family global
+vector unless a new variant changes the gate.

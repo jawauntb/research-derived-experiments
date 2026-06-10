@@ -119,10 +119,10 @@
 - [x] Build a positive-family binary direction that trains positives against stratified controls.
 - [x] Run the positive-family strict-binary scale sweep on the Pythia-70M layer-3 pocket.
 - [ ] Test a genuinely nonlinear or feature-guided intervention after pair-optimized single vectors still leaked controls.
-- [ ] Replicate the positive-family strict frontier across objective aliases, train variants, and a second model/layer.
-- [ ] Run the positive-family `alias_1` objective / `alias_2` evaluation replication on Pythia-70M layer 3.
-- [ ] Run the positive-family train-variant `1` replication on Pythia-70M layer 3.
-- [ ] Run a positive-family second-model or second-layer replication if alias/train replication survives.
+- [x] Stress-test the positive-family strict frontier across objective aliases and train variants.
+- [x] Run the positive-family `alias_1` objective / `alias_2` evaluation replication on Pythia-70M layer 3.
+- [x] Run the positive-family train-variant `1` replication on Pythia-70M layer 3.
+- [x] Halt positive-family second-model/layer replication after the alias/train gate failed.
 - [ ] Build a pair-conditioned nonlinear/readout-guided intervention if the positive-family frontier fails alias/model replication.
 - [ ] Replicate the hook-output transfer ridge on a second checkpoint or open model.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.

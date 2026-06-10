@@ -73,6 +73,8 @@ Current Phase 1 result:
 - This means the strict verifier is not accepting arbitrary unrelated relations, but single-vector optimization still exploits structured source/target overlap channels. The next intervention should be pair-conditioned, nonlinear, or feature/readout-guided rather than another global final-token vector.
 - A positive-family binary direction gives the strongest specificity frontier so far. It optimizes one shared vector from positives-vs-stratified-controls, then applies that same vector to positives and controls. At Pythia-70M layer 3, objective `alias_0`, eval `alias_2`, scale `1.0`, it gives `1/2` strict positives and `0/12` stratified controls. Pair-specific opt8 under the same gate remains `1/2` positives and `4/12` controls.
 - The frontier is promising but narrow. A scale sweep over `0.5`, `0.75`, `1.0`, `1.25`, and `1.5` never recovers `fixed_point->prototype`; `1.25` revives `1/12` target-sharing controls, and `1.5` fails the always-false carrier on `attractor->attractor_network`.
+- The positive-family frontier fails the first alias/train robustness gate. Training with objective `alias_1` and evaluating on held-out `alias_2` drops to `0/2` strict positives and `0/12` controls. Training on variant `1` with objective `alias_0` keeps `1/2` positives but revives `1/12` source-sharing controls, specifically `attractor->semantic_distance`.
+- This rules out promoting the current positive-family single-vector operation as the paper nucleus. It remains useful as a diagnostic boundary: the strict binary verifier can expose a narrow `attractor` pocket, but that pocket is alias-sensitive and shares movement with structured source-overlap controls.
 - Phase 1 is not passed yet. The current full-label logprob gate should be treated as a diagnostic failure mode, generation gates are negative, and binary relation behavior is nonzero but dominated by answer-polarity control.
 
 ## Phase 2 Preview
@@ -82,7 +84,7 @@ If Phase 1 survives, expand along three axes:
 - Model replication: add GPT-2 and a larger open causal LM if Modal budget allows.
 - Concept expansion: add more positive bridges and random relation nulls.
 - Baselines: compare generation/readout behavior against the existing target-gradient, residual, random, and CAA/CAV-style activation-difference baselines.
-- Verifier pivot: the stratified gate is now the acceptance surface. Replicate the positive-family frontier across aliases, train variants, and a second model/layer before promoting it to the paper nucleus.
+- Verifier pivot: the stratified gate is now the acceptance surface. The positive-family single-vector frontier failed alias/train robustness, so the next paper-relevant intervention class should be pair-conditioned nonlinear or readout-guided rather than a larger repeat of the same global vector.
 
 ## Paper Draft Gate
 
