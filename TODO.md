@@ -96,7 +96,11 @@
 - [x] Add a target-disjoint control family to test whether leakage is only same-target overlap.
 - [x] Add random relation nulls to the behavior-direction specificity gate.
 - [x] Add CAA/CAV-style activation-difference baselines under the held-out alias verifier.
-- [ ] Add a non-logprob generation or learned behavior-readout gate for semantic specificity.
+- [x] Add a non-logprob generation or learned behavior-readout gate for semantic specificity.
+- [x] Add a learned behavior-readout gate after strict generation-match produced zero target hits.
+- [x] Redesign the behavior interface with a constrained short-answer gate after generation-match and generation-readout both produced zero target hits.
+- [x] Build a direct behavior-classification/intervention gate after all generation and short-answer behavior gates produced zero target hits.
+- [ ] Add binary yes-bias controls after the direct relation classifier produced nonzero but confounded target passes.
 - [ ] Stratify behavior controls into target-sharing, source-sharing, and fully target-disjoint classes.
 - [ ] Replicate the hook-output transfer ridge on a second checkpoint or open model.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.

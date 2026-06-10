@@ -1600,3 +1600,275 @@ Residual content:
 - Retractions or supersessions: supersede "CAA may rescue this verifier" with "CAA is a useful baseline but fails the same independent-control gate."
 
 Next move: create a non-logprob generation or learned behavior-readout gate for semantic specificity.
+
+## Activation Geometry Probe: Generation-Match Random Null Gate
+
+Question: does a non-logprob short-generation verifier preserve semantically
+specific behavior effects from alias-trained directions?
+
+Current regime:
+
+- Artifact types: alias-indexed behavior-direction manifests, CAA-style
+  direction vectors, random-relation null pair sets, generated-text examples,
+  target-match generation gates.
+- Operations: full-label alias-gradient construction, CAA activation
+  differencing, greedy continuation with steering hooks, normalized phrase
+  matching over canonical and alias labels.
+- Gates/verifiers: positives must generate target labels; random relation nulls
+  must not; source-label suppression alone is not a pass.
+- Known limitations: one small model, one seed, greedy 8-token continuation,
+  exact phrase matcher rather than learned semantic evaluator.
+
+Action class:
+
+- Retrieval/search/discovery: verifier transition with a rejected candidate.
+- Why: this adds a non-logprob behavior verifier and changes what counts as an
+  accepted behavioral artifact.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/generation_match_random_nulls_2026_06_09.md`;
+  local ignored payloads under
+  `artifacts/activation_geometry/modal_pythia_70m_generation_match_random_nulls_*.json`.
+- Positive targets: expanded steering pairs.
+- Negative controls: ten seeded random relation null controls.
+- Stress tests: `source_passage` and `latent_choice`; target-gradient, CAA, and
+  random same-norm directions.
+
+Gate:
+
+- Acceptance rule: continue toward paper-level semantic specificity only if
+  steered generations actually match held-out target labels for positives more
+  often than for random-null controls.
+- Withheld/rejected rule: withhold behavioral semantic steering if target hits
+  are zero or if gains come from source/distractor suppression.
+
+Results:
+
+- Accepted artifacts: generation-match scoring surface; generation example
+  renderer; target-match-only robust-pass gate.
+- Rejected or withheld artifacts: current target-gradient and CAA directions as
+  behavior-level semantic steering mechanisms.
+- Key metrics: strict target-positive passes are `0/7` for target-gradient, CAA,
+  and random directions in both prompt frames; random-null passes are `0/10`.
+- Variance or ablation: source-passage has two source-suppression rows but no
+  target hits; latent-choice has no target hits and generic repeated
+  continuations.
+
+Residual content:
+
+- Explained by old regime: label-logprob movement does not imply generated
+  target behavior.
+- New content outside old regime: a stricter verifier reveals source-suppression
+  artifacts that margin scoring alone would overcount.
+- Retractions or supersessions: supersede "nonzero generation margin delta may
+  indicate behavior" with "generation behavior requires an explicit steered
+  target-label match under this verifier."
+
+Next move: build a learned behavior-readout gate or redesign the short-answer
+generation interface before running larger models.
+
+## Activation Geometry Probe: Generation-Readout Random Null Gate
+
+Question: can a learned hidden-state readout recover semantic target behavior
+from generated continuations where exact generation matching fails?
+
+Current regime:
+
+- Artifact types: generation-match payloads, generation-readout payloads,
+  train-alias role centroids, generated-text example tables, random-null
+  specificity reports.
+- Operations: full-label alias-gradient construction, CAA activation
+  differencing, greedy generation with steering hooks, hidden-state centroid
+  scoring of generated continuations.
+- Gates/verifiers: positives must improve target margin, increase target score,
+  and be classified as target by the steered readout; controls must remain below
+  positives.
+- Known limitations: one small model, one seed, greedy generation, simple
+  centroid readout rather than a cross-validated classifier.
+
+Action class:
+
+- Retrieval/search/discovery: verifier transition with a rejected candidate.
+- Why: this adds a learned non-logprob behavior readout and tests whether exact
+  label matching was too brittle.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/generation_readout_random_nulls_2026_06_09.md`;
+  local ignored payloads under
+  `artifacts/activation_geometry/modal_pythia_70m_generation_readout_random_nulls_*.json`.
+- Positive targets: expanded steering pairs.
+- Negative controls: ten seeded random relation null controls.
+- Stress tests: `source_passage` and `latent_choice`; target-gradient, CAA, and
+  random same-norm directions.
+
+Gate:
+
+- Acceptance rule: continue toward paper-level semantic specificity only if
+  steered positive continuations are read out as target more often than random
+  null controls.
+- Withheld/rejected rule: reject if target hits are zero or if gains occur while
+  the readout's best role remains source/distractor.
+
+Results:
+
+- Accepted artifacts: generation-readout scoring surface and strict
+  best-target readout gate.
+- Rejected or withheld artifacts: current target-gradient and CAA directions as
+  hidden-readout behavior mechanisms over generated continuations.
+- Key metrics: strict positive passes are `0/7` in both prompt frames for all
+  tested directions; random-null passes are `0/10`.
+- Variance or ablation: source-passage has one tiny CAA target-score increase,
+  but the best role remains source; latent-choice is fully unchanged.
+
+Residual content:
+
+- Explained by old regime: label-score movement can fail to transport into
+  generated behavior.
+- New content outside old regime: exact-match and learned-readout non-logprob
+  gates agree on the negative result.
+- Retractions or supersessions: supersede "a learned readout may recover hidden
+  target behavior from generated text" with "this readout does not recover
+  target behavior from the current generations."
+
+Next move: redesign the behavior interface before scaling models.
+
+## Activation Geometry Probe: Short-Answer Behavior Gate
+
+Question: does a constrained short-answer interface reveal target behavior that
+open-ended generation gates miss?
+
+Current regime:
+
+- Artifact types: generation-match payloads, generation-readout payloads,
+  prompt-frame manifests, random-null specificity reports, generated-text
+  examples.
+- Operations: full-label alias-gradient construction, CAA activation
+  differencing, short-answer greedy generation with steering hooks, exact target
+  phrase matching, learned continuation readout scoring.
+- Gates/verifiers: positives must produce target matches or target-readout
+  classifications more often than random relation null controls.
+- Known limitations: one small model, one seed, greedy short continuation, no
+  larger-model replication because the small non-logprob gate is zero.
+
+Action class:
+
+- Retrieval/search/discovery: verifier search with a rejected interface.
+- Why: this changes the prompting interface inside the existing non-logprob
+  behavior-verifier schema and tests whether the negative result was caused by
+  prompt openness.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/short_answer_behavior_gate_2026_06_09.md`;
+  local ignored payloads under
+  `artifacts/activation_geometry/modal_pythia_70m_short_answer_*_random_nulls_*.json`.
+- Positive targets: expanded steering pairs.
+- Negative controls: ten seeded random relation null controls.
+- Stress tests: source-conditioned and source-free short-answer frames;
+  exact-match and learned-readout behavior surfaces; target-gradient, CAA, and
+  random same-norm directions.
+
+Gate:
+
+- Acceptance rule: continue toward paper-level semantic specificity only if
+  short-answer target behavior is nonzero for positives and exceeds random-null
+  controls.
+- Withheld/rejected rule: reject if target-positive passes are zero or if
+  nonzero deltas come from source suppression, generic completions, or unchanged
+  readout roles.
+
+Results:
+
+- Accepted artifacts: `source_short_answer` and `latent_short_answer` prompt
+  frames.
+- Rejected or withheld artifacts: the short-answer interface as a rescue for
+  current target-gradient and CAA directions.
+- Key metrics: all four surface/prompt combinations show `0/7` target-positive
+  passes and `0/10` random-null passes for target-gradient, CAA, and random
+  directions.
+- Variance or ablation: source-conditioned prompts repeat source text; latent
+  prompts collapse to generic text; learned readout agrees with exact matching.
+
+Residual content:
+
+- Explained by old regime: label-score steering does not automatically
+  transport into generated target behavior.
+- New content outside old regime: the short-answer interface is not sufficient
+  to bridge teacher-forced label movement and behavior.
+- Retractions or supersessions: supersede "short-answer prompting may recover
+  the target behavior" with "current directions remain behavior-inactive under
+  short-answer generation."
+
+Next move: build a direct behavior-classification/intervention gate before
+adding model scale.
+
+## Activation Geometry Probe: Binary-Relation Behavior Gate
+
+Question: can a direct yes/no relation-classification interface reveal behavior
+that generation and short-answer gates miss?
+
+Current regime:
+
+- Artifact types: binary-relation payloads, random-null specificity reports,
+  yes/no continuation-margin tables, direction-alignment diagnostics.
+- Operations: train-alias binary yes/no gradient construction, held-out-alias
+  binary relation scoring, random-null control comparison, CAA/random baselines.
+- Gates/verifiers: positives must increase target Yes-No margin and become
+  target-positive more often than random relation nulls.
+- Known limitations: one small model, one seed, one layer, one scale, no
+  explicit yes-bias controls yet.
+
+Action class:
+
+- Retrieval/search/discovery: verifier transition with residual content.
+- Why: this adds a new behavior artifact class that is neither label generation
+  nor visible option-token choice, and it produces the first nonzero behavior
+  target passes after the stricter generation gates failed.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/binary_relation_behavior_gate_2026_06_09.md`;
+  local ignored payload
+  `artifacts/activation_geometry/modal_pythia_70m_binary_relation_random_nulls_source_seed20260609.json`.
+- Positive targets: expanded steering pairs.
+- Negative controls: ten seeded random relation null controls.
+- Stress tests: target-gradient, CAA, and random same-norm directions under
+  held-out `alias_2`.
+
+Gate:
+
+- Acceptance rule: continue toward paper-level semantic specificity only if
+  positives beat random-null controls and the effect cannot be explained by a
+  broad Yes-bias direction.
+- Withheld/rejected rule: withhold semantic-specific claims if controls pass or
+  target/source/distractor gradients are too collinear to separate.
+
+Results:
+
+- Accepted artifacts: `binary_relation` scoring surface and direct yes/no
+  behavior gate.
+- Rejected or withheld artifacts: binary relation result as a final semantic
+  specificity claim.
+- Key metrics: `target_learned` passes `4/7` positives and `3/10` random nulls;
+  CAA and random pass `0/7` positives and `0/10` random nulls.
+- Variance or ablation: role-gradient cosines are very high, suggesting broad
+  candidate affirmation as a confound.
+
+Residual content:
+
+- Explained by old regime: full-label directions can move text-conditioned
+  label surfaces.
+- New content outside old regime: direct yes/no relation behavior is
+  intervention-sensitive even when generation behavior is zero.
+- Retractions or supersessions: supersede "all behavior gates are zero" with
+  "generation behavior is zero, but direct binary relation behavior has a
+  nonzero, confounded signal."
+
+Next move: separate relation movement from yes-bias with explicit binary
+controls before scaling.

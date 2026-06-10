@@ -20,7 +20,7 @@ that distinction, and constrained control penalties trace a specificity frontier
 | Baselines | Random, source/distractor, residual projection, hard/mean-control penalties, and CAA/CAV-style activation-difference baselines. | Add learned behavior-readout/generation baselines and, later, SAE/feature-guided baselines if feasible. |
 | Statistical confidence | Single seed for most behavior runs. | Add seeds, bootstrap CIs over pairs, and random relation nulls. |
 | Claim boundary | `docs/semantic_specificity.md` defines specificity as held-out target transfer minus independent control leakage under matched score surfaces. | Keep the claim boundary in the paper draft and do not promote runs with near-zero specificity. |
-| Generation tests | Mostly label logprob scoring. | Add constrained free-generation or short-answer scoring after logprob gates pass. |
+| Generation tests | Added strict short-generation match, learned generation-readout, constrained short-answer gates, and a direct binary-relation behavior gate. Generation remains zero, but binary relation classification gives the first nonzero behavior signal: `target_learned` passes `4/7` positives and `3/10` random-null controls. | Add binary yes-bias controls before larger-model generation repeats. |
 | Mechanistic analysis | Direction-subspace diagnostic shows leakage is not one low-rank control vector; high overlaps are pair/target-pocket specific. | Add target-disjoint random relation nulls and stratify controls by target/source overlap. |
 
 ## Current Phase
@@ -48,7 +48,15 @@ Current Phase 1 result:
 - Random relation nulls make the failure decisive: target-learned directions move `6/7` positives but `10/10` random null controls in both prompt frames.
 - Random-null held-out `alias_2` specificity is negative: `-0.101` in `source_passage` and `-0.137` in `latent_choice`; canonical specificity is also negative.
 - CAA/CAV-style activation-difference baselines are active and sometimes improve mean specificity relative to target-gradient directions, but they still fail random-null specificity. The best source held-out alias CAA row is `7/7` positives, `7/10` controls, specificity `0.066`; the best latent row is `7/7` positives, `10/10` controls, specificity `0.043`.
-- Phase 1 is not passed yet. The current full-label logprob gate should be treated as a diagnostic failure mode. The next attempt should add a non-logprob generation or learned behavior-readout gate before adding model scale.
+- A strict non-logprob generation-match gate rejects the current behavior directions as generated semantic steering. After requiring the steered continuation to actually match the target label, source and latent prompt frames both show `0/7` target-positive passes and `0/10` random-null passes for target-gradient, CAA, and random directions.
+- The only nonzero source-passage generation margin deltas come from source-label suppression, not target generation, so they are recorded as failures rather than passes.
+- A learned generation-readout gate agrees with the exact-match gate. After requiring target-margin improvement, target-score increase, and steered `best_role == target`, source and latent prompt frames both show `0/7` positives and `0/10` random-null controls for target-gradient, CAA, and random directions.
+- The only nonzero readout margin pocket is `validity_gate->weak_constraint` under source-passage CAA, but the steered best role remains `source`, so it is explicitly rejected.
+- A constrained short-answer interface also fails to recover target behavior. Exact match and learned readout both show `0/7` positives and `0/10` random-null controls for target-gradient, CAA, and random directions in both `source_short_answer` and `latent_short_answer`.
+- Source-conditioned short-answer prompts mostly repeat the source passage; source-free latent short-answer prompts collapse to generic continuations such as `The term "word" is`.
+- A direct binary-relation classifier produces the first nonzero behavior movement: `target_learned` passes `4/7` positives and `3/10` random relation nulls, with mean specificity `0.118`; CAA and random remain `0/7` positives and `0/10` controls.
+- The binary signal is confounded: target/source/distractor learned directions are highly collinear, usually around `0.97` to `0.99`, and the target direction increases target Yes-No margin on nearly every row. The next gate must separate relation movement from a broad Yes-bias or candidate-affirmation axis.
+- Phase 1 is not passed yet. The current full-label logprob gate should be treated as a diagnostic failure mode, generation gates are negative, and binary relation behavior is nonzero but confounded.
 
 ## Phase 2 Preview
 
@@ -57,7 +65,7 @@ If Phase 1 survives, expand along three axes:
 - Model replication: add GPT-2 and a larger open causal LM if Modal budget allows.
 - Concept expansion: add more positive bridges and random relation nulls.
 - Baselines: compare generation/readout behavior against the existing target-gradient, residual, random, and CAA/CAV-style activation-difference baselines.
-- Verifier pivot: add generation or learned behavior-readout tests that can separate true relation behavior from broad target-label promotion.
+- Verifier pivot: add binary yes-bias controls and relation-specific contrast directions that can separate true relation behavior from broad target-label or Yes-bias promotion.
 
 ## Paper Draft Gate
 
