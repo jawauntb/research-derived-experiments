@@ -60,6 +60,14 @@ BINARY_OPT_DIRECTION_MODES = {
         "temperature": 0.25,
         "scope": "pair",
     },
+    "target_binary_readout_span_opt_8": {
+        "steps": 8,
+        "lr": 0.25,
+        "control_weight": 2.0,
+        "temperature": 0.25,
+        "scope": "pair",
+        "basis": "readout_span",
+    },
     "target_binary_positive_family_opt_8": {
         "steps": 8,
         "lr": 0.25,
@@ -1362,6 +1370,7 @@ def optimize_binary_delta_for_prompt_sets(
     max_length: int,
     reference_direction: Any,
     mode: str,
+    basis_directions: list[tuple[str, Any]] | None = None,
 ) -> tuple[Any, dict[str, Any]]:
     config = BINARY_OPT_DIRECTION_MODES[mode]
     steps = int(config["steps"])
@@ -1371,6 +1380,22 @@ def optimize_binary_delta_for_prompt_sets(
     device = next(model.parameters()).device
     reference = reference_direction.detach().float().to(device)
     reference_norm = torch.linalg.vector_norm(reference).clamp(min=1e-12)
+    basis_vectors: list[Any] = []
+    basis_names: list[str] = []
+    if basis_directions is not None:
+        for basis_name, basis_direction in basis_directions:
+            candidate = basis_direction.detach().float().to(device)
+            for basis_vector in basis_vectors:
+                coefficient = torch.dot(candidate.flatten(), basis_vector.flatten())
+                candidate = candidate - coefficient * basis_vector
+            candidate_norm = torch.linalg.vector_norm(candidate)
+            if float(candidate_norm.item()) <= 1e-8:
+                continue
+            basis_vectors.append(candidate / candidate_norm)
+            basis_names.append(basis_name)
+        if not basis_vectors:
+            raise ValueError(f"{mode} requires at least one nonzero basis vector")
+    basis_stack = torch.stack(basis_vectors, dim=0) if basis_vectors else None
     prompts = target_prompts + control_prompts
     target_count = len(target_prompts)
     if target_count == 0 or not control_prompts:
@@ -1381,13 +1406,44 @@ def optimize_binary_delta_for_prompt_sets(
     for parameter in parameters:
         parameter.requires_grad_(False)
     try:
-        delta = torch.zeros_like(reference, device=device, dtype=torch.float32)
-        delta.requires_grad_(True)
-        optimizer = torch.optim.Adam([delta], lr=lr)
+        coefficients: Any | None = None
+
+        def delta_from_coefficients(current_coefficients: Any) -> Any:
+            if basis_stack is None:
+                raise ValueError("Cannot construct coefficient delta without basis")
+            view_shape = (current_coefficients.shape[0],) + tuple(
+                1 for _dimension in reference.shape
+            )
+            return (current_coefficients.reshape(view_shape) * basis_stack).sum(dim=0)
+
+        if basis_stack is None:
+            delta = torch.zeros_like(reference, device=device, dtype=torch.float32)
+            delta.requires_grad_(True)
+            trainable_parameters = [delta]
+        else:
+            initial_coefficients = [
+                torch.dot(reference.flatten(), basis_vector.flatten()).detach()
+                for basis_vector in basis_vectors
+            ]
+            basis_coefficients = torch.stack(initial_coefficients).to(device)
+            basis_coefficients.requires_grad_(True)
+            trainable_parameters = [basis_coefficients]
+
+            delta = delta_from_coefficients(basis_coefficients)
+            with torch.no_grad():
+                delta_norm = torch.linalg.vector_norm(delta)
+                if delta_norm > reference_norm:
+                    basis_coefficients.mul_(reference_norm / delta_norm)
+            coefficients = basis_coefficients
+        optimizer = torch.optim.Adam(trainable_parameters, lr=lr)
         final_metrics: dict[str, float] = {}
         for _step in range(steps):
             optimizer.zero_grad(set_to_none=True)
             model.zero_grad(set_to_none=True)
+            if basis_stack is not None:
+                if coefficients is None:
+                    raise ValueError("Basis optimization requires coefficients")
+                delta = delta_from_coefficients(coefficients)
             margins = binary_yes_minus_no_margins_for_prompts(
                 torch=torch,
                 tokenizer=tokenizer,
@@ -1415,9 +1471,18 @@ def optimize_binary_delta_for_prompt_sets(
             (-objective).backward()
             optimizer.step()
             with torch.no_grad():
+                if basis_stack is not None:
+                    if coefficients is None:
+                        raise ValueError("Basis optimization requires coefficients")
+                    delta = delta_from_coefficients(coefficients)
                 delta_norm = torch.linalg.vector_norm(delta)
                 if delta_norm > reference_norm:
-                    delta.mul_(reference_norm / delta_norm)
+                    if basis_stack is None:
+                        delta.mul_(reference_norm / delta_norm)
+                    else:
+                        if coefficients is None:
+                            raise ValueError("Basis optimization requires coefficients")
+                        coefficients.mul_(reference_norm / delta_norm)
             final_metrics = {
                 "target_margin_mean": float(target_mean.detach().item()),
                 "target_margin_min": float(target_margins.detach().min().item()),
@@ -1429,7 +1494,12 @@ def optimize_binary_delta_for_prompt_sets(
             }
 
         with torch.no_grad():
-            final_delta = delta.detach()
+            if basis_stack is not None:
+                if coefficients is None:
+                    raise ValueError("Basis optimization requires coefficients")
+                final_delta = delta_from_coefficients(coefficients).detach()
+            else:
+                final_delta = delta.detach()
             pre_rescale_norm = torch.linalg.vector_norm(final_delta)
             if float(pre_rescale_norm.item()) > 0.0:
                 final_delta = final_delta * (reference_norm / pre_rescale_norm)
@@ -1443,6 +1513,13 @@ def optimize_binary_delta_for_prompt_sets(
                 "target_prompt_count": target_count,
                 "control_prompt_count": len(control_prompts),
                 "control_names": sorted(set(control_names)),
+                "parameterization": (
+                    str(config.get("basis"))
+                    if basis_stack is not None
+                    else "free_delta"
+                ),
+                "basis_count": len(basis_names),
+                "basis_names": basis_names,
                 "reference_norm": float(reference_norm.item()),
                 "pre_rescale_norm": float(pre_rescale_norm.item()),
                 "post_rescale_norm": float(torch.linalg.vector_norm(final_delta).item()),
@@ -1472,6 +1549,7 @@ def pair_optimized_binary_direction(
     max_length: int,
     reference_direction: Any,
     mode: str,
+    basis_directions: list[tuple[str, Any]] | None = None,
 ) -> tuple[Any, dict[str, Any]]:
     target_prompts, control_prompts, control_names = optimized_binary_prompt_sets(
         source_texts=source_texts,
@@ -1490,6 +1568,7 @@ def pair_optimized_binary_direction(
         max_length=max_length,
         reference_direction=reference_direction,
         mode=mode,
+        basis_directions=basis_directions,
     )
 
 
@@ -2390,6 +2469,25 @@ def run_behavior_aligned_direction_remote(
                             != "pair"
                         ):
                             continue
+                        basis_directions = None
+                        if (
+                            str(BINARY_OPT_DIRECTION_MODES[mode].get("basis", ""))
+                            == "readout_span"
+                        ):
+                            basis_directions = [
+                                ("target", learned_directions["target"]),
+                                ("source", learned_directions["source"]),
+                                ("distractor", learned_directions["distractor"]),
+                            ]
+                            basis_directions.extend(
+                                (
+                                    f"binary_control_{control_name}",
+                                    control_direction,
+                                )
+                                for control_name, control_direction in (
+                                    binary_control_directions.items()
+                                )
+                            )
                         optimized_direction, optimized_summary = (
                             pair_optimized_binary_direction(
                                 torch=torch,
@@ -2407,6 +2505,7 @@ def run_behavior_aligned_direction_remote(
                                 max_length=max_length,
                                 reference_direction=learned_directions["target"],
                                 mode=mode,
+                                basis_directions=basis_directions,
                             )
                         )
                         binary_optimized_directions[mode] = optimized_direction.to(

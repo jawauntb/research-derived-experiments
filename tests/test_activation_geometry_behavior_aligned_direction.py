@@ -32,6 +32,7 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
                 "target_penalty_hard_1_0, target_binary_controls_1_0, "
                 "target_binary_pc1_resid, target_binary_pc3_whiten, "
                 "target_binary_strict_opt_8, target_binary_strict_opt_16, "
+                "target_binary_readout_span_opt_8, "
                 "target_binary_positive_family_opt_8, "
                 "caa_target_contrast"
             ),
@@ -44,6 +45,7 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
                 "target_binary_pc3_whiten",
                 "target_binary_strict_opt_8",
                 "target_binary_strict_opt_16",
+                "target_binary_readout_span_opt_8",
                 "target_binary_positive_family_opt_8",
                 "caa_target_contrast",
             ],
