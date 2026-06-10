@@ -74,7 +74,7 @@ def main() -> int:
     vmin = min(m.min() for m in f1_matrices.values())
     for ax, (label, _) in zip(axes, methods):
         mat = f1_matrices[label]
-        im = ax.imshow(mat, cmap="viridis", aspect="auto", vmin=vmin, vmax=vmax)
+        ax.imshow(mat, cmap="viridis", aspect="auto", vmin=vmin, vmax=vmax)
         ax.set_xticks(range(len(noises)))
         ax.set_xticklabels([f"σ={n:.2f}" for n in noises])
         ax.set_yticks(range(len(grids)))

@@ -112,8 +112,9 @@
 - [x] Add a focused pair set for the two stable layer-3 strict positives plus random-null controls.
 - [x] Run the focused Pythia-160M layer-3 pocket replication using `layer3_strict_pocket_random_nulls`.
 - [x] Run a focused Pythia-160M scale stress test to rule out simple scale mismatch.
-- [ ] Test a pair-focused nonlinear or feature-guided intervention after the Pythia-70M two-pair pocket failed to replicate in Pythia-160M.
-- [ ] Stratify behavior controls into target-sharing, source-sharing, and fully target-disjoint classes.
+- [x] Test a pair-focused optimized single-vector intervention after the Pythia-70M two-pair pocket failed to replicate in Pythia-160M.
+- [ ] Test a genuinely nonlinear or feature-guided intervention after pair-optimized single vectors still leaked controls.
+- [ ] Stratify behavior controls into source-sharing, target-sharing, implausible random-null, and semantically near-null classes.
 - [ ] Replicate the hook-output transfer ridge on a second checkpoint or open model.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.
 - [ ] Add anisotropy and directional-curvature proxy checks to activation sweeps where feasible.

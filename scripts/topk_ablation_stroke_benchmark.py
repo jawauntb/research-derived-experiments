@@ -20,12 +20,11 @@ from pathlib import Path
 from statistics import mean
 
 import numpy as np
-import torch
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from experiments.rotation_weakness.dataset import (
+from experiments.rotation_weakness.dataset import (  # noqa: E402
     make_partial_rotation_split,
     materialize_split,
     rotate_image,
