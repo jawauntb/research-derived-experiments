@@ -128,6 +128,34 @@ What we did NOT test:
 
 The honest read: **pixel cosine remains the best method we have for partial-orbit symmetry recovery on data where pixel-level rotation geometry is preserved**. Encoder methods will likely win in regimes where it isn't — but we haven't shown that yet.
 
+### 4.3 Cluttered sweep: resolution × Gaussian noise
+
+We test the natural candidate regime for pixel-cosine failure: full 28×28 resolution + Gaussian background noise. We sweep 2 × 4 = 8 cells (`resolution ∈ {16, 28}`, `noise σ ∈ {0.00, 0.10, 0.20, 0.30}`) and score all three methods with a fine threshold grid, reporting best-F1 per cell.
+
+| res | σ | pixel F1 | enc-inv F1 | enc-enum F1 |
+| ---: | ---: | ---: | ---: | ---: |
+| 16×16 | 0.00 | **0.500** | 0.500 | 0.500 |
+| 16×16 | 0.10 | **0.500** | 0.500 | 0.519 |
+| 16×16 | 0.20 | **0.500** | 0.500 | 0.500 |
+| 16×16 | 0.30 | **0.500** | 0.516 | 0.516 |
+| 28×28 | 0.00 | **0.500** | 0.533 | **0.538** |
+| 28×28 | 0.10 | **0.500** | 0.500 | 0.500 |
+| 28×28 | 0.20 | **0.500** | 0.500 | 0.500 |
+| 28×28 | 0.30 | **0.500** | 0.500 | 0.500 |
+
+**Pixel cosine maintains recall = 1.000 across all 8 cells.** The largest encoder gain over pixel cosine is +0.038 F1 (28×28 / σ=0.00, encoder-enumerative). The pre-registered acceptance threshold of ≥ 0.1 F1 advantage is not met anywhere in the sweep.
+
+![Figure 4: resolution × noise sweep. Top row: best-F1 per method × cell. Bottom row: best-F1 recall per method × cell. Pixel cosine recall stays at 1.000 across the entire sweep; encoder methods occasionally drop to 0.875. All methods are recall-saturated at F1 ≈ 0.500 because precision is procedurally bounded — only 8 of 24 candidate angles are true Z_8 angles, capping precision at ≤ 0.333 when recall is perfect.](figures/fig4_cluttered_mnist_sweep.png)
+
+**What this means.** The hypothesis "encoder methods win when nuisance variation is added" is not supported by Gaussian noise on MNIST. Two reasons that emerge from the diagnostic:
+
+1. **Gaussian noise averages out under cosine.** Zero-mean noise on both rotated and reference images largely cancels in the inner product, so the signal (digit shape) still dominates.
+2. **MNIST digits are sparse.** Most pixels are 0; adding noise to those background pixels doesn't move the dot-product score by much.
+
+To find the regime where pixel cosine actually fails, we would need **structured clutter** — distractor patches, partial occlusion, overlaid digit fragments — or much higher noise (σ ≥ 0.5) that destroys digit signal entirely. Both are clean future experiments.
+
+**A separate observation from the sweep.** F1 caps at ~0.5 for all methods because the candidate grid has 24 angles, only 8 of which are true Z_8, so precision is bounded at 1/3 when recall is perfect. The methods are *tied at a procedure ceiling*. This is a methodology lesson: threshold-based selection is the wrong criterion when the candidate grid is much denser than the truth. A top-K selector with K = |Z_8| = 8 would expose the real precision differences.
+
 ## 5. Discussion
 
 The enumerative pixel-cosine procedure works precisely because:
