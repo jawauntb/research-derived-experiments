@@ -3070,3 +3070,76 @@ Residual content:
 Next move: try a learned multi-class gate or shared conditional operation that
 separates target, semantic-near, and carrier-control states as distinct classes,
 or pivot away from pair-specific binary optimization.
+
+## Activation Geometry Probe: Multi-Class State Gate
+
+Question: can a target-vs-control prototype gate incorporate relation-level
+controls without killing the train-variant `attractor` positive?
+
+Current regime:
+
+- Artifact types: strict binary-relation rows, stratified control summaries,
+  optimized gated-intervention summaries, ignored Modal payloads, checkpoint
+  reports.
+- Operations: Modal-backed Pythia-70M layer-3 intervention, hidden-state
+  prototype construction, target-vs-control max-margin gating, held-out alias
+  scoring.
+- Gates/verifiers: held-out `alias_2`, strict positive/control pass counts,
+  always-false carrier, random same-norm baseline.
+- Known limitations: two positive pairs only; Pythia-70M layer 3 only; stress
+  runs beyond the first train-variant check remain unfinished.
+
+Action class:
+
+- Retrieval/search/discovery: discovery.
+- Why: this adds a new accepted intervention object, `multiclass_state_gate`,
+  that the prior scalar gate could not express, and it changes the
+  relation-control tradeoff.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/multiclass_state_gate_2026_06_10.md`;
+  local ignored artifact
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_multiclass_state_gate_trainv1_seed20260610.json`.
+- Positive targets: `attractor->attractor_network` and
+  `fixed_point->prototype`.
+- Negative controls: twelve controls split across `source_sharing`,
+  `target_sharing`, `implausible_random_null`, and `semantic_near_null`.
+- Stress tests: direct comparison against scalar state gate and random baseline
+  under train variant `1`.
+
+Gate:
+
+- Acceptance rule: improve over scalar state gate by preserving at least `1/2`
+  strict positives while reducing semantic-near leaks to `0/12` controls.
+- Withheld/rejected rule: withhold paper-ready claims until alias and scale
+  stress finish.
+
+Results:
+
+- Accepted artifacts: `target_binary_multiclass_state_gate_opt_8`,
+  `target_binary_relation_multiclass_state_gate_opt_8`, checkpoint report, and
+  ignored Modal payload.
+- Rejected or withheld artifacts: paper-ready mechanism claim; alias and scale
+  stress artifacts were started but intentionally stopped before completion.
+- Key metrics: scalar state gate gives `1/2` positives and `1/12` controls;
+  non-relation multi-class gate gives `1/2` positives and `1/12` controls;
+  relation multi-class gate gives `1/2` positives and `0/12` controls;
+  random gives `0/2` positives and `0/12` controls.
+- Variance or ablation: the recovered positive remains
+  `attractor->attractor_network`; `fixed_point->prototype` remains absent.
+
+Residual content:
+
+- Explained by old regime: the narrow `attractor` pocket persists across several
+  conditional variants.
+- New content outside old regime: relation-level controls are not inherently
+  lethal; they become usable when represented as hidden-state control
+  prototypes inside the gate.
+- Retractions or supersessions: supersede "relation controls kill positives"
+  with "relation controls kill positives under scalar gates, but not necessarily
+  under prototype gates."
+
+Next move: finish the saved scale and alias stress commands in the report before
+model, concept, or generation expansion.
