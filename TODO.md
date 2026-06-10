@@ -127,7 +127,9 @@
 - [x] Build and test a sparse feature-mask pair-conditioned intervention after the linear readout/control-span constraint killed positives.
 - [x] Build and test a genuinely conditional state-gated binary intervention after additive free, span-constrained, and sparse-mask vectors all failed strict specificity.
 - [x] Stress-test the state-gated strict frontier across objective alias and train variant.
+- [x] Test relation-level control prompts for state-gate calibration.
 - [ ] Improve state-gate calibration to suppress semantic-near controls before expanding models or concepts.
+- [ ] Try a learned multi-class gate or shared conditional operation after relation-control state gating killed positives.
 - [ ] Replicate the hook-output transfer ridge on a second checkpoint or open model.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.
 - [ ] Add anisotropy and directional-curvature proxy checks to activation sweeps where feasible.

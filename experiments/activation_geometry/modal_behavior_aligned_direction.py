@@ -87,6 +87,16 @@ BINARY_OPT_DIRECTION_MODES = {
         "parameterization": "state_gate",
         "gate_temperature": 0.05,
     },
+    "target_binary_relation_state_gate_opt_8": {
+        "steps": 8,
+        "lr": 0.25,
+        "control_weight": 2.0,
+        "temperature": 0.25,
+        "scope": "pair",
+        "parameterization": "state_gate",
+        "gate_temperature": 0.05,
+        "relation_control_prompts": True,
+    },
     "target_binary_positive_family_opt_8": {
         "steps": 8,
         "lr": 0.25,
@@ -1451,6 +1461,7 @@ def optimized_binary_prompt_sets(
     objective_labels_by_regime: dict[str, dict[str, str]],
     shuffled_labels_by_regime: dict[str, dict[str, str]],
     extra_control_labels_by_regime: dict[str, list[str]],
+    extra_control_prompts_by_regime: dict[str, list[tuple[str, str]]] | None = None,
 ) -> tuple[list[str], list[str], list[str]]:
     target_prompts = []
     control_prompts = []
@@ -1496,6 +1507,11 @@ def optimized_binary_prompt_sets(
                     candidate_label=labels_by_role["target"],
                 )
             )
+        for control_name, control_prompt in (
+            extra_control_prompts_by_regime or {}
+        ).get(regime_part, []):
+            control_names.append(control_name)
+            control_prompts.append(control_prompt)
     return target_prompts, control_prompts, control_names
 
 
@@ -1863,6 +1879,7 @@ def pair_optimized_binary_direction(
     objective_labels_by_regime: dict[str, dict[str, str]],
     shuffled_labels_by_regime: dict[str, dict[str, str]],
     extra_control_labels_by_regime: dict[str, list[str]],
+    extra_control_prompts_by_regime: dict[str, list[tuple[str, str]]] | None = None,
     layer: int,
     max_length: int,
     reference_direction: Any,
@@ -1876,6 +1893,7 @@ def pair_optimized_binary_direction(
         objective_labels_by_regime=objective_labels_by_regime,
         shuffled_labels_by_regime=shuffled_labels_by_regime,
         extra_control_labels_by_regime=extra_control_labels_by_regime,
+        extra_control_prompts_by_regime=extra_control_prompts_by_regime,
     )
     return optimize_binary_delta_for_prompt_sets(
         torch=torch,
@@ -2783,6 +2801,62 @@ def run_behavior_aligned_direction_remote(
                         extra_control_labels_by_regime[regime_part] = (
                             extra_control_labels
                         )
+                    relation_control_prompts_by_regime: dict[
+                        str,
+                        list[tuple[str, str]],
+                    ] = {}
+                    for regime_part in objective_regime_parts:
+                        relation_control_prompts = []
+                        seen_relation_control_prompts = set()
+                        for control_pair in pair_specs:
+                            if str(control_pair["kind"]) != "control":
+                                continue
+                            control_pair_id = pair_id(
+                                str(control_pair["left"]),
+                                str(control_pair["right"]),
+                            )
+                            if control_pair_id == current_pair_id:
+                                continue
+                            control_labels_by_role = labels_by_role_for_regime(
+                                concept_lookup=concept_lookup,
+                                aliases_by_concept=aliases_by_concept,
+                                left=str(control_pair["left"]),
+                                right=str(control_pair["right"]),
+                                distractor=str(control_pair["distractor"]),
+                                label_scoring_regime=regime_part,
+                            )
+                            control_source_texts = train_source_texts(
+                                records,
+                                concept_id=str(control_pair["left"]),
+                                train_variant_indices=train_variants,
+                            )
+                            control_class = str(
+                                control_pair.get("control_class", "control")
+                            )
+                            for variant_index, control_source_text in (
+                                control_source_texts
+                            ):
+                                control_prompt = binary_relation_prompt(
+                                    source_text=control_source_text,
+                                    candidate_label=control_labels_by_role["target"],
+                                )
+                                prompt_key = normalize_generated_text(control_prompt)
+                                if prompt_key in seen_relation_control_prompts:
+                                    continue
+                                seen_relation_control_prompts.add(prompt_key)
+                                relation_control_prompts.append(
+                                    (
+                                        (
+                                            "relation_control:"
+                                            f"{control_class}:{control_pair_id}:"
+                                            f"v{variant_index}"
+                                        ),
+                                        control_prompt,
+                                    )
+                                )
+                        relation_control_prompts_by_regime[regime_part] = (
+                            relation_control_prompts
+                        )
                     for mode in direction_modes:
                         if mode not in BINARY_OPT_DIRECTION_MODES:
                             continue
@@ -2868,6 +2942,14 @@ def run_behavior_aligned_direction_remote(
                                 shuffled_labels_by_regime=shuffled_labels_by_regime,
                                 extra_control_labels_by_regime=(
                                     extra_control_labels_by_regime
+                                ),
+                                extra_control_prompts_by_regime=(
+                                    relation_control_prompts_by_regime
+                                    if BINARY_OPT_DIRECTION_MODES[mode].get(
+                                        "relation_control_prompts",
+                                        False,
+                                    )
+                                    else None
                                 ),
                                 layer=layer,
                                 max_length=max_length,
