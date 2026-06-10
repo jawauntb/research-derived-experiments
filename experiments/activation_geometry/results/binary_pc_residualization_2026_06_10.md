@@ -175,7 +175,8 @@ Residual content:
   Pythia-70M layer 5 unless a nonlinear or feature-guided intervention changes
   the mechanism."
 
-Next move: stop optimizing this binary surface on Pythia-70M layer 5 as a
-linear steering route. For paper-worthiness, either replicate the negative
-mechanism on another model/layer or pivot to a nonlinear/feature-guided
-intervention that is explicitly evaluated by the same strict binary verifier.
+Next move completed in
+`experiments/activation_geometry/results/binary_layer3_replication_2026_06_10.md`:
+the layer-3 replication found a small PC-whitening pocket, so the next live
+question is a focused layer/scale sweep around that pocket rather than further
+layer-5 cleanup.
