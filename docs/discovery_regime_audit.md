@@ -2271,3 +2271,76 @@ Residual content:
 Next move: run the focused Pythia-160M layer-3 pocket replication, then either
 record a second-model pocket report or pivot to a nonlinear/feature-guided
 intervention if the pocket disappears.
+
+## Activation Geometry Probe: Pythia-160M Pocket Replication
+
+Question: does the two-pair Pythia-70M layer-3 strict binary-relation pocket
+survive in a larger open model?
+
+Current regime:
+
+- Artifact types: focused pair-set payloads, strict binary-relation aggregates,
+  random-null control tables, binary gradient geometry summaries, Modal Volume
+  raw-payload artifacts.
+- Operations: PC1-whitened linear steering, random same-norm baseline, focused
+  scale sweep, durable spawned Modal execution with remote volume writes.
+- Gates/verifiers: strict positive pass counts, `0/10` strict random-null
+  controls, target movement over strongest yes-bias control, low-rank binary
+  gradient diagnostics.
+- Known limitations: only layer 3 was tested in Pythia-160M; no nonlinear or
+  feature-guided intervention has been evaluated yet.
+
+Action class:
+
+- Retrieval/search/discovery: search plus falsification.
+- Why: this tests whether an existing pocket transports to a second model; it
+  does not add a new accepted semantic steering mechanism.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/binary_pythia160_pocket_replication_2026_06_10.md`;
+  local ignored artifacts
+  `artifacts/activation_geometry/modal_pythia_160m_layer3_pocket_replication_seed20260610.json`
+  and
+  `artifacts/activation_geometry/modal_pythia_160m_layer3_pocket_scale_sweep_seed20260610.json`.
+- Positive targets: `attractor->attractor_network` and
+  `fixed_point->prototype`.
+- Negative controls: ten random relation nulls, including
+  `valence->steering_vector`.
+- Stress tests: scale `1.0` replication plus focused scale sweep over `0.5`,
+  `0.75`, `1.0`, `1.25`, and `1.5`.
+
+Gate:
+
+- Acceptance rule: preserve the two focused strict positives, or clearly beat
+  `random_same_norm`, while keeping strict random-null controls at `0/10`.
+- Withheld/rejected rule: reject apparent target movement when it fails to beat
+  the strongest yes-bias controls.
+
+Results:
+
+- Accepted artifacts: durable Modal Volume runner support and Pythia-160M
+  negative replication report.
+- Rejected or withheld artifacts: the Pythia-70M layer-3 two-pair pocket as a
+  robust cross-model semantic steering result.
+- Key metrics: `target_binary_pc1_whiten` gives `0/2` strict positives and
+  `0/10` controls at every tested scale from `0.5` to `1.5`; `random_same_norm`
+  also gives `0/2` positives and `0/10` controls. Pythia-160M binary gradients
+  remain low-rank: target PC1 energy `0.877`, target-plus-control PC1 energy
+  `0.715`, always-false PC1 energy `0.913`.
+- Variance or ablation: five-scale stress test rules out simple scale mismatch.
+
+Residual content:
+
+- Explained by old regime: the binary relation interface remains dominated by
+  answer-polarity or carrier-confirmation geometry.
+- New content outside old regime: none accepted; the attempted cross-model
+  pocket collapses under the strict verifier.
+- Retractions or supersessions: supersede "replicate the two stable layer-3
+  strict positives across a second model" with "second-model replication fails;
+  pivot away from bigger linear PC-whitening repeats."
+
+Next move: keep the strict binary verifier, but change intervention class:
+pair-focused nonlinear optimization, feature-guided steering, or another method
+that is not merely a linear direction in the low-rank binary carrier subspace.

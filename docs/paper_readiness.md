@@ -14,7 +14,7 @@ that distinction, and constrained control penalties trace a specificity frontier
 
 | Requirement | Current state | Next gate |
 | --- | --- | --- |
-| More models | Pythia-70M only for alias/constrained runs; a GPT-2 replication attempt was stopped without an artifact. | Replicate best frontier on at least one larger open model and one small control model. |
+| More models | Pythia-70M only for alias/constrained runs; a GPT-2 replication attempt was stopped without an artifact. The focused Pythia-160M layer-3 pocket replication now ran and failed. | Stop treating the Pythia-70M two-pair pocket as robust; test a different intervention class under the same strict verifier. |
 | More concepts | Expanded behavior gate now has seven positives, five mixed controls, six target-disjoint controls, and ten random relation nulls. | Add bootstrap confidence intervals over pairs and random-null draws once a verifier separates positives from nulls. |
 | Held-out aliases/controls | Added third aliases and a train-on-`alias_0+alias_1` / test-on-`alias_2` gate. | Diagnose why held-out transfer moves controls as much as positives. |
 | Baselines | Random, source/distractor, residual projection, hard/mean-control penalties, and CAA/CAV-style activation-difference baselines. | Add learned behavior-readout/generation baselines and, later, SAE/feature-guided baselines if feasible. |
@@ -65,6 +65,8 @@ Current Phase 1 result:
 - A focused layer-3 scale sweep maps the pocket boundary. Scale `1.0` is the cleanest point with `2/7` strict positives and `0/10` controls. Scale `1.25` reaches `3/7` strict positives but revives `1/10` strict controls, so calibration alone does not satisfy Phase 1.
 - The stable strict positives around scale `1.0` are `attractor->attractor_network` and `fixed_point->prototype`.
 - A Pythia-160M full-pair replication attempt was interrupted by a local Modal/DNS client failure and produced no artifact, so it is non-evidence. A focused `layer3_strict_pocket_random_nulls` pair set now captures the exact next replication target.
+- The focused Pythia-160M layer-3 replication is now real evidence and is negative. `target_binary_pc1_whiten` gives `0/2` strict positives and `0/10` controls at scale `1.0`; a focused scale sweep over `0.5`, `0.75`, `1.0`, `1.25`, and `1.5` remains `0/2` positives and `0/10` controls at every scale.
+- Pythia-160M target movement is still low-rank and carrier-dominated: target direction first-PC energy is `0.877`, target-plus-control first-PC energy is `0.715`, and always-false direction first-PC energy is `0.913`.
 - Phase 1 is not passed yet. The current full-label logprob gate should be treated as a diagnostic failure mode, generation gates are negative, and binary relation behavior is nonzero but dominated by answer-polarity control.
 
 ## Phase 2 Preview
@@ -74,7 +76,7 @@ If Phase 1 survives, expand along three axes:
 - Model replication: add GPT-2 and a larger open causal LM if Modal budget allows.
 - Concept expansion: add more positive bridges and random relation nulls.
 - Baselines: compare generation/readout behavior against the existing target-gradient, residual, random, and CAA/CAV-style activation-difference baselines.
-- Verifier pivot: replicate the two stable layer-3 strict positives across seed/model, or use the strict binary-relation verifier to evaluate a nonlinear/feature-guided intervention.
+- Verifier pivot: use the strict binary-relation verifier to evaluate a nonlinear/feature-guided intervention, since the two stable Pythia-70M layer-3 strict positives failed to replicate in Pythia-160M.
 
 ## Paper Draft Gate
 
