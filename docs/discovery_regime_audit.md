@@ -1935,3 +1935,77 @@ Residual content:
 
 Next move: build contrastive binary directions and make yes-bias controls part
 of the acceptance rule.
+
+## Activation Geometry Probe: Contrastive Binary Specificity
+
+Question: can a contrastive binary objective subtract yes-bias while preserving
+relation-specific target movement?
+
+Current regime:
+
+- Artifact types: binary-relation payloads, yes-bias control margins,
+  contrastive binary direction modes, strict binary-specificity aggregates,
+  binary gradient geometry summaries.
+- Operations: target Yes-No gradient construction, binary control-gradient
+  construction, norm-matched multi-control subtraction, held-out alias binary
+  scoring.
+- Gates/verifiers: target movement must beat blank/generic/source/distractor/
+  shuffled-target/always-false controls and must not make the always-false
+  carrier positive.
+- Known limitations: one model, one seed, one layer; low-rank diagnosis is
+  binary-surface-specific and does not contradict earlier full-label alias
+  leakage diagnostics.
+
+Action class:
+
+- Retrieval/search/discovery: verifier hardening plus rejected intervention
+  family.
+- Why: this upgrades yes-bias controls from post-hoc diagnosis to an acceptance
+  rule and tests whether simple linear contrastive subtraction can recover a
+  semantic direction.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/contrastive_binary_specificity_2026_06_09.md`;
+  local ignored artifact
+  `artifacts/activation_geometry/modal_pythia_70m_binary_contrastive_specificity_seed20260609.json`.
+- Positive targets: expanded random-null pair set positives.
+- Negative controls: ten random relation nulls plus per-row yes-bias controls.
+- Stress tests: control-subtraction weights `0.5`, `1.0`, `2.0`, `4.0`.
+
+Gate:
+
+- Acceptance rule: promote only rows that clear the strict binary-specificity
+  rule.
+- Withheld/rejected rule: reject directions that keep loose target movement but
+  fail yes-bias controls, or suppress controls only by also suppressing target.
+
+Results:
+
+- Accepted artifacts: strict binary-specificity gate and contrastive direction
+  modes.
+- Rejected or withheld artifacts: `target_learned` and all tested
+  `target_binary_controls_*` directions as semantic-specific steering.
+- Key metrics: strict passes are `0/7` positives and `0/10` controls for every
+  tested direction. Target + control gradients have first-PC energy `0.895`,
+  with first three PCs explaining `0.930` of normalized-gradient energy.
+- Variance or ablation: weight `0.5` keeps loose target behavior but leaves
+  controls active; weight `1.0+` suppresses controls by collapsing or reversing
+  target movement.
+
+Residual content:
+
+- Explained by old regime: the loose binary surface is answer-polarity
+  steerable.
+- New content outside old regime: yes-bias-aware acceptance rejects the apparent
+  binary pocket; the binary gradient field is low-rank, but simple contrastive
+  subtraction cannot separate target relation movement from control movement.
+- Retractions or supersessions: supersede "build contrastive binary directions
+  next" with "contrastive binary subtraction tested; next need spectrum/low-rank
+  diagnosis or a different nonlinear/feature-guided intervention."
+
+Next move: test top-PC residualization/whitening as a deliberately lossy probe.
+If removing the dominant binary axis kills target movement, the binary surface
+should be treated as a verifier-only diagnostic rather than a route to semantic
+steering in Pythia-70M.
