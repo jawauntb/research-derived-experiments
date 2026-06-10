@@ -2,6 +2,7 @@
 
 ## Now
 
+- [x] Checkpoint the activation-geometry pause state and exact next replication command.
 - [x] Preserve the initial paper set locally.
 - [x] Draft the geometric convergence synthesis.
 - [x] Define public-safe repo policy.
@@ -107,7 +108,9 @@
 - [x] Test top-PC residualized or whitened binary directions to see whether any target movement survives removal of the answer-polarity axis.
 - [x] Replicate the binary low-rank entanglement diagnosis on a second model/layer or pivot to a nonlinear/feature-guided intervention under the same strict binary verifier.
 - [x] Run a focused layer/scale sweep around Pythia-70M layer 3 PC whitening after it produced a small strict pocket (`2/7` positives, `0/10` controls).
+- [x] Add a focused pair set for the two stable layer-3 strict positives plus random-null controls.
 - [ ] Replicate the two stable layer-3 strict positives (`attractor->attractor_network`, `fixed_point->prototype`) across a second seed/model or test a pair-focused nonlinear intervention.
+- [ ] Run the focused Pythia-160M layer-3 pocket replication using `layer3_strict_pocket_random_nulls`.
 - [ ] Stratify behavior controls into target-sharing, source-sharing, and fully target-disjoint classes.
 - [ ] Replicate the hook-output transfer ridge on a second checkpoint or open model.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.

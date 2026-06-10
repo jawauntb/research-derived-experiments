@@ -2210,3 +2210,64 @@ Residual content:
 Next move: either replicate the two stable layer-3 strict positives across a
 second seed/model, or pivot to a pair-focused/nonlinear intervention. A broad
 paper claim still needs more than a two-pair pocket.
+
+## Activation Geometry Checkpoint: Second-Model Pocket Replication Handoff
+
+Question: what must be preserved before pausing so the next session can resume
+the second-model replication without turning an interrupted run into evidence?
+
+Current regime:
+
+- Artifact types: strict binary-relation reports, focused pair sets, random-null
+  controls, failed-run notes, next-command handoffs.
+- Operations: pair-set narrowing, Modal replication, strict aggregate analysis,
+  discovery-ledger checkpointing.
+- Gates/verifiers: strict positive pass count, `0/10` random-null controls,
+  comparison to random same-norm, and artifact existence.
+- Known limitations: the Pythia-160M run has not completed; the Pythia-70M
+  pocket remains only a two-pair signal.
+
+Action class:
+
+- Retrieval/search/discovery: checkpointed search.
+- Why: this adds a smaller pair-set operation and preserves an interrupted
+  attempted replication, but it does not create a new accepted empirical result.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/nightly_checkpoint_2026_06_10.md`.
+- Positive targets: `attractor->attractor_network` and
+  `fixed_point->prototype`.
+- Negative controls: ten random relation nulls, including the hard
+  `valence->steering_vector` leakage row.
+- Stress tests: next run should compare `target_binary_pc1_whiten` against
+  `random_same_norm` on Pythia-160M layer 3.
+
+Gate:
+
+- Acceptance rule: the focused Pythia-160M run must preserve both strict
+  positives, or at least clearly beat `random_same_norm`, with `0/10` strict
+  random-null controls.
+- Withheld/rejected rule: if no artifact is produced, the run remains
+  non-evidence; if controls revive, treat the result as a specificity failure.
+
+Results:
+
+- Accepted artifacts: `layer3_strict_pocket_random_nulls` pair set and the
+  nightly checkpoint report.
+- Rejected or withheld artifacts: the interrupted full-pair Pythia-160M Modal
+  attempt; no JSON artifact was produced.
+- Key metrics: no new experimental metrics.
+- Variance or ablation: none yet.
+
+Residual content:
+
+- Explained by old regime: pair narrowing is a search operation inside the
+  existing strict binary-verifier regime.
+- New content outside old regime: none yet.
+- Retractions or supersessions: none; the scale-sweep conclusion still stands.
+
+Next move: run the focused Pythia-160M layer-3 pocket replication, then either
+record a second-model pocket report or pivot to a nonlinear/feature-guided
+intervention if the pocket disappears.
