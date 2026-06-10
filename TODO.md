@@ -101,7 +101,10 @@
 - [x] Redesign the behavior interface with a constrained short-answer gate after generation-match and generation-readout both produced zero target hits.
 - [x] Build a direct behavior-classification/intervention gate after all generation and short-answer behavior gates produced zero target hits.
 - [x] Add binary yes-bias controls after the direct relation classifier produced nonzero but confounded target passes.
-- [ ] Build contrastive binary directions that penalize blank/generic/source/distractor/shuffled/false-carrier Yes margins.
+- [x] Build contrastive binary directions that penalize blank/generic/source/distractor/shuffled/false-carrier Yes margins.
+- [x] Rerun contrastive binary specificity after checkpoint to populate `binary_gradient_geometry` SVD summaries.
+- [x] Decide whether binary leakage is low-rank enough for projection/whitening or too entangled for linear steering.
+- [ ] Test top-PC residualized or whitened binary directions to see whether any target movement survives removal of the answer-polarity axis.
 - [ ] Stratify behavior controls into target-sharing, source-sharing, and fully target-disjoint classes.
 - [ ] Replicate the hook-output transfer ridge on a second checkpoint or open model.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.

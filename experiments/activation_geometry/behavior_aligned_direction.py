@@ -22,6 +22,10 @@ DIRECTION_MODES = (
     "target_penalty_controls_0_5",
     "target_penalty_controls_1_0",
     "target_penalty_controls_2_0",
+    "target_binary_controls_0_5",
+    "target_binary_controls_1_0",
+    "target_binary_controls_2_0",
+    "target_binary_controls_4_0",
     "caa_target_contrast",
     "caa_target_minus_source",
     "caa_target_minus_distractor",
@@ -164,6 +168,61 @@ def summarize_behavior_delta(
     }
 
 
+def binary_specificity_controls(scores: dict[str, Any]) -> dict[str, float]:
+    controls = {
+        str(name): float(value)
+        for name, value in scores.get("binary_control_margins", {}).items()
+    }
+    carrier_margins = scores.get("binary_carrier_margins", {})
+    if "always_false" in carrier_margins:
+        controls["always_false"] = float(carrier_margins["always_false"])
+    return controls
+
+
+def summarize_binary_specificity(
+    *,
+    baseline_scores: dict[str, Any],
+    steered_scores: dict[str, Any],
+) -> dict[str, Any] | None:
+    baseline_controls = binary_specificity_controls(baseline_scores)
+    steered_controls = binary_specificity_controls(steered_scores)
+    shared_controls = sorted(set(baseline_controls) & set(steered_controls))
+    if not shared_controls:
+        return None
+
+    control_deltas = {
+        control: steered_controls[control] - baseline_controls[control]
+        for control in shared_controls
+    }
+    target_delta = float(steered_scores["target"]) - float(baseline_scores["target"])
+    max_control_delta_name = max(control_deltas, key=control_deltas.__getitem__)
+    max_control_steered_name = max(
+        shared_controls,
+        key=lambda control: steered_controls[control],
+    )
+    always_false_steered = steered_controls.get("always_false")
+    return {
+        "target_delta": target_delta,
+        "target_steered_margin": float(steered_scores["target"]),
+        "max_control_delta_name": max_control_delta_name,
+        "max_control_delta": control_deltas[max_control_delta_name],
+        "max_control_steered_name": max_control_steered_name,
+        "max_control_steered_margin": steered_controls[max_control_steered_name],
+        "target_delta_over_max_control_delta": (
+            target_delta - control_deltas[max_control_delta_name]
+        ),
+        "target_steered_over_max_control_steered": (
+            float(steered_scores["target"])
+            - steered_controls[max_control_steered_name]
+        ),
+        "always_false_steered_margin": always_false_steered,
+        "control_deltas": control_deltas,
+        "steered_control_margins": {
+            control: steered_controls[control] for control in shared_controls
+        },
+    }
+
+
 def row_passes_behavior_gate(row: dict[str, Any]) -> bool:
     if float(row["summary"]["target_margin_delta"]) <= 0:
         return False
@@ -178,10 +237,28 @@ def row_passes_behavior_gate(row: dict[str, Any]) -> bool:
             and str(steered_scores.get("best_role", "")) == "target"
         )
     if scoring_surface == "binary_relation":
-        steered_scores = row.get("scores", {}).get("steered", {})
-        return (
+        scores = row.get("scores", {})
+        baseline_scores = scores.get("baseline", {})
+        steered_scores = scores.get("steered", {})
+        basic_pass = (
             float(row["summary"]["target_logprob_delta"]) > 0
             and float(steered_scores.get("target", 0.0)) > 0
+        )
+        binary_specificity = summarize_binary_specificity(
+            baseline_scores=baseline_scores,
+            steered_scores=steered_scores,
+        )
+        if binary_specificity is None:
+            return basic_pass
+        always_false_steered = binary_specificity.get("always_false_steered_margin")
+        always_false_pass = (
+            always_false_steered is None or float(always_false_steered) <= 0.0
+        )
+        return (
+            basic_pass
+            and float(binary_specificity["target_delta_over_max_control_delta"]) > 0
+            and float(binary_specificity["target_steered_over_max_control_steered"]) > 0
+            and always_false_pass
         )
     return True
 
@@ -218,36 +295,76 @@ def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     ), group in grouped.items():
         deltas = [row["summary"]["target_margin_delta"] for row in group]
         target_logprob_deltas = [row["summary"]["target_logprob_delta"] for row in group]
+        binary_specificity_rows = [
+            summary
+            for row in group
+            if (
+                summary := summarize_binary_specificity(
+                    baseline_scores=row.get("scores", {}).get("baseline", {}),
+                    steered_scores=row.get("scores", {}).get("steered", {}),
+                )
+            )
+            is not None
+        ]
         pass_count = sum(1 for row in group if row_passes_behavior_gate(row))
         mean_delta = sum(deltas) / len(deltas)
         robust_pass_threshold = min(2, len(group))
-        aggregates.append(
-            {
-                "scoring_surface": scoring_surface,
-                "prompt_frame": prompt_frame,
-                "objective_label_scoring_regime": objective_label_scoring_regime,
-                "eval_label_scoring_regime": eval_label_scoring_regime,
-                "role": role,
-                "layer": layer,
-                "kind": kind,
-                "pair": pair,
-                "direction_mode": direction_mode,
-                "scale": scale,
-                "mean_target_margin_delta": mean_delta,
-                "min_target_margin_delta": min(deltas),
-                "max_target_margin_delta": max(deltas),
-                "mean_target_logprob_delta": (
-                    sum(target_logprob_deltas) / len(target_logprob_deltas)
-                ),
-                "option_order_pass_count": pass_count,
-                "option_order_total": len(group),
-                "score_surface_pass_count": pass_count,
-                "score_surface_total": len(group),
-                "robust_pass_threshold": robust_pass_threshold,
-                "robust_pass": mean_delta > 0
-                and pass_count >= robust_pass_threshold,
-            }
-        )
+        aggregate = {
+            "scoring_surface": scoring_surface,
+            "prompt_frame": prompt_frame,
+            "objective_label_scoring_regime": objective_label_scoring_regime,
+            "eval_label_scoring_regime": eval_label_scoring_regime,
+            "role": role,
+            "layer": layer,
+            "kind": kind,
+            "pair": pair,
+            "direction_mode": direction_mode,
+            "scale": scale,
+            "mean_target_margin_delta": mean_delta,
+            "min_target_margin_delta": min(deltas),
+            "max_target_margin_delta": max(deltas),
+            "mean_target_logprob_delta": (
+                sum(target_logprob_deltas) / len(target_logprob_deltas)
+            ),
+            "option_order_pass_count": pass_count,
+            "option_order_total": len(group),
+            "score_surface_pass_count": pass_count,
+            "score_surface_total": len(group),
+            "robust_pass_threshold": robust_pass_threshold,
+            "robust_pass": mean_delta > 0
+            and pass_count >= robust_pass_threshold,
+        }
+        if binary_specificity_rows:
+            aggregate.update(
+                {
+                    "mean_binary_target_delta": (
+                        sum(float(row["target_delta"]) for row in binary_specificity_rows)
+                        / len(binary_specificity_rows)
+                    ),
+                    "mean_binary_target_delta_over_max_control_delta": (
+                        sum(
+                            float(row["target_delta_over_max_control_delta"])
+                            for row in binary_specificity_rows
+                        )
+                        / len(binary_specificity_rows)
+                    ),
+                    "mean_binary_target_steered_over_max_control_steered": (
+                        sum(
+                            float(row["target_steered_over_max_control_steered"])
+                            for row in binary_specificity_rows
+                        )
+                        / len(binary_specificity_rows)
+                    ),
+                    "mean_binary_always_false_steered_margin": (
+                        sum(
+                            float(row.get("always_false_steered_margin") or 0.0)
+                            for row in binary_specificity_rows
+                        )
+                        / len(binary_specificity_rows)
+                    ),
+                }
+            )
+        aggregates.append(aggregate)
     return sorted(
         aggregates,
         key=lambda row: (
@@ -451,12 +568,15 @@ def alignment_summary(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 
 def public_summary(payload: dict[str, Any]) -> dict[str, Any]:
-    return {
+    summary = {
         "manifest": payload["manifest"],
         "gate_summaries": payload["gate_summaries"],
         "alignment_summary": payload["alignment_summary"],
         "aggregate_rows": payload["aggregate_rows"],
     }
+    if "binary_gradient_geometry" in payload:
+        summary["binary_gradient_geometry"] = payload["binary_gradient_geometry"]
+    return summary
 
 
 def write_payload(path: Path, payload: dict[str, Any]) -> None:

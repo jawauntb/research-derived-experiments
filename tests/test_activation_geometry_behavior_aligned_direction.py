@@ -17,6 +17,7 @@ from experiments.activation_geometry.behavior_aligned_direction import (
     parse_direction_modes,
     parse_values,
     role_margin,
+    summarize_binary_specificity,
     summarize_behavior_delta,
 )
 from experiments.activation_geometry.final_token_steering_pilot import pair_specs_for_set
@@ -28,12 +29,14 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
         self.assertEqual(
             parse_direction_modes(
                 "target_learned, target_penalty_controls_1_0, "
-                "target_penalty_hard_1_0, caa_target_contrast"
+                "target_penalty_hard_1_0, target_binary_controls_1_0, "
+                "caa_target_contrast"
             ),
             [
                 "target_learned",
                 "target_penalty_controls_1_0",
                 "target_penalty_hard_1_0",
+                "target_binary_controls_1_0",
                 "caa_target_contrast",
             ],
         )
@@ -599,6 +602,143 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
         self.assertEqual(no_target_increase["score_surface_pass_count"], 0)
         self.assertTrue(target_increase["robust_pass"])
         self.assertEqual(target_increase["score_surface_pass_count"], 1)
+
+    def test_binary_specificity_summarizes_yes_bias_controls(self) -> None:
+        summary = summarize_binary_specificity(
+            baseline_scores={
+                "target": -2.0,
+                "binary_control_margins": {"blank": -1.0, "generic": -0.5},
+                "binary_carrier_margins": {"always_false": -1.2},
+            },
+            steered_scores={
+                "target": 0.3,
+                "binary_control_margins": {"blank": -0.7, "generic": 0.1},
+                "binary_carrier_margins": {"always_false": -0.2},
+            },
+        )
+
+        self.assertIsNotNone(summary)
+        assert summary is not None
+        self.assertAlmostEqual(summary["target_delta"], 2.3)
+        self.assertEqual(summary["max_control_delta_name"], "always_false")
+        self.assertAlmostEqual(summary["max_control_delta"], 1.0)
+        self.assertAlmostEqual(summary["target_delta_over_max_control_delta"], 1.3)
+        self.assertEqual(summary["max_control_steered_name"], "generic")
+        self.assertAlmostEqual(summary["target_steered_over_max_control_steered"], 0.2)
+
+    def test_binary_relation_gate_rejects_yes_bias_control_leakage(self) -> None:
+        shared = {
+            "scoring_surface": "binary_relation",
+            "prompt_frame": "source_passage",
+            "objective_label_scoring_regime": "alias_0+alias_1",
+            "eval_label_scoring_regime": "alias_2",
+            "role": "primary",
+            "layer": 5,
+            "kind": "positive",
+            "pair": "attractor->attractor_network",
+            "scale": 1.0,
+            "option_order": "binary_relation",
+            "learned_alignment": {},
+        }
+        rows = [
+            {
+                **shared,
+                "direction_mode": "target_binary_controls_1_0",
+                "scores": {
+                    "baseline": {
+                        "source": -0.2,
+                        "target": -2.0,
+                        "distractor": -0.1,
+                        "binary_control_margins": {"blank": -1.0, "generic": -1.0},
+                        "binary_carrier_margins": {"always_false": -1.0},
+                    },
+                    "steered": {
+                        "source": -0.1,
+                        "target": 0.3,
+                        "distractor": -0.2,
+                        "binary_control_margins": {"blank": -0.5, "generic": -0.4},
+                        "binary_carrier_margins": {"always_false": -0.2},
+                    },
+                },
+                "summary": {
+                    "target_margin_delta": 2.25,
+                    "target_logprob_delta": 2.3,
+                },
+            },
+            {
+                **shared,
+                "direction_mode": "target_binary_controls_2_0",
+                "scores": {
+                    "baseline": {
+                        "source": -0.2,
+                        "target": -2.0,
+                        "distractor": -0.1,
+                        "binary_control_margins": {"blank": -1.0, "generic": -1.0},
+                        "binary_carrier_margins": {"always_false": -1.0},
+                    },
+                    "steered": {
+                        "source": -0.1,
+                        "target": 0.3,
+                        "distractor": -0.2,
+                        "binary_control_margins": {"blank": 0.4, "generic": -0.4},
+                        "binary_carrier_margins": {"always_false": -0.2},
+                    },
+                },
+                "summary": {
+                    "target_margin_delta": 2.25,
+                    "target_logprob_delta": 2.3,
+                },
+            },
+            {
+                **shared,
+                "direction_mode": "target_binary_controls_4_0",
+                "scores": {
+                    "baseline": {
+                        "source": -0.2,
+                        "target": -2.0,
+                        "distractor": -0.1,
+                        "binary_control_margins": {"blank": -1.0, "generic": -1.0},
+                        "binary_carrier_margins": {"always_false": -1.0},
+                    },
+                    "steered": {
+                        "source": -0.1,
+                        "target": 0.3,
+                        "distractor": -0.2,
+                        "binary_control_margins": {"blank": -0.5, "generic": -0.4},
+                        "binary_carrier_margins": {"always_false": 0.2},
+                    },
+                },
+                "summary": {
+                    "target_margin_delta": 2.25,
+                    "target_logprob_delta": 2.3,
+                },
+            },
+        ]
+
+        aggregates = aggregate_rows(rows)
+        clean = next(
+            row
+            for row in aggregates
+            if row["direction_mode"] == "target_binary_controls_1_0"
+        )
+        control_beats_target = next(
+            row
+            for row in aggregates
+            if row["direction_mode"] == "target_binary_controls_2_0"
+        )
+        false_carrier_positive = next(
+            row
+            for row in aggregates
+            if row["direction_mode"] == "target_binary_controls_4_0"
+        )
+
+        self.assertTrue(clean["robust_pass"])
+        self.assertFalse(control_beats_target["robust_pass"])
+        self.assertFalse(false_carrier_positive["robust_pass"])
+        self.assertAlmostEqual(
+            clean["mean_binary_target_delta_over_max_control_delta"],
+            1.5,
+        )
 
 
 if __name__ == "__main__":

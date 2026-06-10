@@ -31,6 +31,12 @@ PENALTY_DIRECTION_MODES = {
     "target_penalty_controls_1_0": ("control_set", 1.0),
     "target_penalty_controls_2_0": ("control_set", 2.0),
 }
+BINARY_CONTROL_DIRECTION_MODES = {
+    "target_binary_controls_0_5": 0.5,
+    "target_binary_controls_1_0": 1.0,
+    "target_binary_controls_2_0": 2.0,
+    "target_binary_controls_4_0": 4.0,
+}
 IMAGE = modal.Image.debian_slim(python_version="3.12").pip_install(
     "torch>=2.5,<2.8",
     "transformers>=4.46,<5.0",
@@ -324,7 +330,7 @@ def objective_role_for_mode(mode: str) -> str:
         "caa_target_contrast",
         "caa_target_minus_source",
         "caa_target_minus_distractor",
-    } or mode in PENALTY_DIRECTION_MODES:
+    } or mode in PENALTY_DIRECTION_MODES or mode in BINARY_CONTROL_DIRECTION_MODES:
         return "target"
     if mode == "source_learned":
         return "source"
@@ -1104,6 +1110,27 @@ def binary_relation_gradient_direction_for_prompt(
         source_text=source_text,
         candidate_label=candidate_label,
     )
+    return binary_yes_minus_no_gradient_for_prompt(
+        torch=torch,
+        tokenizer=tokenizer,
+        model=model,
+        prompt=prompt,
+        layer=layer,
+        max_length=max_length,
+        label_score_normalization=label_score_normalization,
+    )
+
+
+def binary_yes_minus_no_gradient_for_prompt(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    prompt: str,
+    layer: int,
+    max_length: int,
+    label_score_normalization: str,
+) -> Any:
     yes_ids = label_token_ids(tokenizer, {"yes": "Yes"})["yes"]
     no_ids = label_token_ids(tokenizer, {"no": "No"})["no"]
     yes_gradient = full_label_score_gradient_for_role(
@@ -1127,6 +1154,67 @@ def binary_relation_gradient_direction_for_prompt(
         label_score_normalization=label_score_normalization,
     )
     return yes_gradient - no_gradient
+
+
+def binary_control_gradient_directions(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    source_texts: list[tuple[int, str]],
+    labels_by_role: dict[str, str],
+    shuffled_target_label: str,
+    layer: int,
+    max_length: int,
+    label_score_normalization: str,
+) -> dict[str, Any]:
+    gradients_by_control: dict[str, list[Any]] = {
+        "blank": [],
+        "generic": [],
+        "source": [],
+        "distractor": [],
+        "shuffled_target": [],
+        "always_false": [],
+    }
+    relation_control_labels = {
+        "blank": "",
+        "generic": "a related concept",
+        "source": labels_by_role["source"],
+        "distractor": labels_by_role["distractor"],
+        "shuffled_target": shuffled_target_label,
+    }
+    for _variant_index, source_text in source_texts:
+        for control_name, candidate_label in relation_control_labels.items():
+            gradients_by_control[control_name].append(
+                binary_relation_gradient_direction_for_prompt(
+                    torch=torch,
+                    tokenizer=tokenizer,
+                    model=model,
+                    source_text=source_text,
+                    layer=layer,
+                    max_length=max_length,
+                    candidate_label=candidate_label,
+                    label_score_normalization=label_score_normalization,
+                )
+            )
+        gradients_by_control["always_false"].append(
+            binary_yes_minus_no_gradient_for_prompt(
+                torch=torch,
+                tokenizer=tokenizer,
+                model=model,
+                prompt=binary_carrier_prompt(
+                    carrier="always_false",
+                    candidate_label=labels_by_role["target"],
+                ),
+                layer=layer,
+                max_length=max_length,
+                label_score_normalization=label_score_normalization,
+            )
+        )
+    return {
+        control_name: mean_tensor(torch, gradients)
+        for control_name, gradients in gradients_by_control.items()
+    }
 
 
 def learned_gradient_direction(
@@ -1420,6 +1508,57 @@ def cosine_or_none(torch: Any, left: Any | None, right: Any | None) -> float | N
     return float(torch.nn.functional.cosine_similarity(left.float(), right.float(), dim=0).item())
 
 
+def direction_geometry_summary(
+    *,
+    torch: Any,
+    named_vectors: list[tuple[str, Any]],
+) -> dict[str, Any]:
+    if not named_vectors:
+        return {
+            "count": 0,
+            "names": [],
+            "singular_values": [],
+            "energy_ratios": [],
+            "first_component_energy": None,
+            "first_three_component_energy": None,
+            "mean_pairwise_cosine": None,
+        }
+    names = [name for name, _vector in named_vectors]
+    matrix = torch.stack(
+        [
+            normalize_vector(torch, vector).float()
+            for _name, vector in named_vectors
+        ],
+        dim=0,
+    )
+    gram = matrix @ matrix.T
+    if matrix.shape[0] > 1:
+        off_diag = gram[~torch.eye(matrix.shape[0], dtype=torch.bool, device=gram.device)]
+        mean_pairwise_cosine = float(off_diag.mean().item())
+    else:
+        mean_pairwise_cosine = None
+    singular_values = torch.linalg.svdvals(matrix)
+    energy = singular_values.square()
+    total_energy = energy.sum().clamp(min=1e-12)
+    energy_ratios = energy / total_energy
+    first_three_count = min(3, energy_ratios.shape[0])
+    return {
+        "count": len(named_vectors),
+        "names": names,
+        "singular_values": [
+            float(value.item()) for value in singular_values[:10]
+        ],
+        "energy_ratios": [
+            float(value.item()) for value in energy_ratios[:10]
+        ],
+        "first_component_energy": float(energy_ratios[0].item()),
+        "first_three_component_energy": float(
+            energy_ratios[:first_three_count].sum().item()
+        ),
+        "mean_pairwise_cosine": mean_pairwise_cosine,
+    }
+
+
 def remove_projection(torch: Any, direction: Any, basis: Any | None) -> Any:
     if basis is None:
         return direction
@@ -1486,6 +1625,7 @@ def direction_for_mode(
     control_target_direction: Any | None,
     control_target_directions: list[Any],
     hard_control_target_direction: Any | None,
+    binary_control_directions: dict[str, Any],
     mode: str,
     seed: int,
 ) -> Any:
@@ -1555,6 +1695,17 @@ def direction_for_mode(
             penalty_basis=penalty_basis,
             weight=weight,
         )
+    if mode in BINARY_CONTROL_DIRECTION_MODES:
+        if not binary_control_directions:
+            raise ValueError(
+                f"{mode} requires binary control directions; use binary_relation scoring"
+            )
+        return multi_control_penalty_direction(
+            torch=torch,
+            target_direction=target_direction,
+            penalty_bases=list(binary_control_directions.values()),
+            weight=BINARY_CONTROL_DIRECTION_MODES[mode],
+        )
     return learned_directions[objective_role_for_mode(mode)]
 
 
@@ -1610,6 +1761,7 @@ def run_behavior_aligned_direction_remote(
     concept_lookup = {str(concept["id"]): concept for concept in concepts}
 
     rows = []
+    binary_gradient_geometry = []
     for role, layer in layer_roles.items():
         learned_records: dict[tuple[str, str], dict[str, Any]] = {}
         for pair_index, pair in enumerate(pair_specs):
@@ -1695,10 +1847,57 @@ def run_behavior_aligned_direction_remote(
                         torch,
                         regime_directions,
                     ).to(device)
+                binary_control_directions: dict[str, Any] = {}
+                if scoring_surface == "binary_relation":
+                    control_direction_groups: dict[str, list[Any]] = {}
+                    shuffled_pair = pair_specs[(pair_index + 1) % len(pair_specs)]
+                    for regime_part, labels_by_role in objective_labels_by_regime.items():
+                        shuffled_labels_by_role = labels_by_role_for_regime(
+                            concept_lookup=concept_lookup,
+                            aliases_by_concept=aliases_by_concept,
+                            left=str(shuffled_pair["left"]),
+                            right=str(shuffled_pair["right"]),
+                            distractor=str(shuffled_pair["distractor"]),
+                            label_scoring_regime=regime_part,
+                        )
+                        control_directions_for_regime = binary_control_gradient_directions(
+                            torch=torch,
+                            tokenizer=tokenizer,
+                            model=model,
+                            source_texts=source_texts,
+                            labels_by_role=labels_by_role,
+                            shuffled_target_label=shuffled_labels_by_role["target"],
+                            layer=layer,
+                            max_length=max_length,
+                            label_score_normalization=label_score_normalization,
+                        )
+                        for control_name, control_direction in (
+                            control_directions_for_regime.items()
+                        ):
+                            control_direction_groups.setdefault(
+                                control_name,
+                                [],
+                            ).append(control_direction.to(device))
+                    binary_control_directions = {
+                        control_name: mean_tensor(torch, directions).to(device)
+                        for control_name, directions in control_direction_groups.items()
+                    }
                 norms = {
                     objective_role: float(torch.linalg.vector_norm(direction).item())
                     for objective_role, direction in learned_directions.items()
                 }
+                binary_control_norms = {
+                    control_name: float(torch.linalg.vector_norm(direction).item())
+                    for control_name, direction in binary_control_directions.items()
+                }
+                binary_control_mean_direction = (
+                    mean_tensor(
+                        torch,
+                        list(binary_control_directions.values()),
+                    ).to(device)
+                    if binary_control_directions
+                    else None
+                )
                 activation_norms = {
                     activation_mode: float(torch.linalg.vector_norm(direction).item())
                     for activation_mode, direction in activation_directions.items()
@@ -1715,6 +1914,24 @@ def run_behavior_aligned_direction_remote(
                         learned_directions["distractor"],
                     ),
                 }
+                if binary_control_directions:
+                    learned_alignment["target_binary_control_mean_cosine"] = (
+                        cosine_or_none(
+                            torch,
+                            learned_directions["target"],
+                            binary_control_mean_direction,
+                        )
+                    )
+                    for control_name, control_direction in (
+                        binary_control_directions.items()
+                    ):
+                        learned_alignment[
+                            f"target_binary_control_{control_name}_cosine"
+                        ] = cosine_or_none(
+                            torch,
+                            learned_directions["target"],
+                            control_direction,
+                        )
                 readout_centroids = None
                 readout_training_counts = None
                 if scoring_surface == "generation_readout":
@@ -1745,7 +1962,9 @@ def run_behavior_aligned_direction_remote(
                     ),
                     "learned_directions": learned_directions,
                     "activation_directions": activation_directions,
+                    "binary_control_directions": binary_control_directions,
                     "norms": norms,
+                    "binary_control_norms": binary_control_norms,
                     "activation_norms": activation_norms,
                     "activation_prompt_frame": activation_prompt_frame,
                     "learned_alignment": learned_alignment,
@@ -1820,7 +2039,9 @@ def run_behavior_aligned_direction_remote(
                 heldout_text = str(record["heldout_text"])
                 learned_directions = record["learned_directions"]
                 activation_directions = record["activation_directions"]
+                binary_control_directions = record["binary_control_directions"]
                 norms = record["norms"]
+                binary_control_norms = record["binary_control_norms"]
                 activation_norms = record["activation_norms"]
                 activation_prompt_frame = str(record["activation_prompt_frame"])
                 readout_centroids = record.get("readout_centroids")
@@ -1958,6 +2179,9 @@ def run_behavior_aligned_direction_remote(
                                     hard_control_target_direction=(
                                         hard_control_target_direction
                                     ),
+                                    binary_control_directions=(
+                                        binary_control_directions
+                                    ),
                                     mode=mode,
                                     seed=(
                                         seed
@@ -2011,6 +2235,9 @@ def run_behavior_aligned_direction_remote(
                                         ),
                                         "hard_control_target_direction_norm": (
                                             hard_control_target_direction_norm
+                                        ),
+                                        "binary_control_direction_norms": (
+                                            binary_control_norms
                                         ),
                                         "control_basis_pair_count": len(
                                             control_directions
@@ -2067,8 +2294,73 @@ def run_behavior_aligned_direction_remote(
                                         ),
                                     }
                                 )
+        if scoring_surface == "binary_relation":
+            for objective_label_scoring_regime in objective_label_scoring_regimes:
+                regime_records = [
+                    learned_records[(pair_id(str(pair["left"]), str(pair["right"])), objective_label_scoring_regime)]
+                    for pair in pair_specs
+                ]
+                target_vectors = [
+                    (
+                        f"{record['pair_index']}:{record['left']}->{record['right']}:target",
+                        record["learned_directions"]["target"],
+                    )
+                    for record in regime_records
+                ]
+                control_vectors = [
+                    (
+                        (
+                            f"{record['pair_index']}:{record['left']}->{record['right']}:"
+                            f"{control_name}"
+                        ),
+                        control_direction,
+                    )
+                    for record in regime_records
+                    for control_name, control_direction in (
+                        record["binary_control_directions"].items()
+                    )
+                ]
+                always_false_vectors = [
+                    (
+                        (
+                            f"{record['pair_index']}:{record['left']}->{record['right']}:"
+                            "always_false"
+                        ),
+                        record["binary_control_directions"]["always_false"],
+                    )
+                    for record in regime_records
+                    if "always_false" in record["binary_control_directions"]
+                ]
+                binary_gradient_geometry.append(
+                    {
+                        "role": role,
+                        "layer": layer,
+                        "objective_label_scoring_regime": (
+                            objective_label_scoring_regime
+                        ),
+                        "target_directions": direction_geometry_summary(
+                            torch=torch,
+                            named_vectors=target_vectors,
+                        ),
+                        "control_directions": direction_geometry_summary(
+                            torch=torch,
+                            named_vectors=control_vectors,
+                        ),
+                        "target_plus_control_directions": (
+                            direction_geometry_summary(
+                                torch=torch,
+                                named_vectors=target_vectors + control_vectors,
+                            )
+                        ),
+                        "always_false_directions": direction_geometry_summary(
+                            torch=torch,
+                            named_vectors=always_false_vectors,
+                        ),
+                    }
+                )
     return {
         "rows": rows,
+        "binary_gradient_geometry": binary_gradient_geometry,
         "slot_token_ids": token_ids_by_slot,
     }
 
@@ -2250,6 +2542,7 @@ def main(
         "aggregate_rows": aggregates,
         "gate_summaries": gate_summaries(aggregates),
         "alignment_summary": alignment_summary(remote_payload["rows"]),
+        "binary_gradient_geometry": remote_payload.get("binary_gradient_geometry", []),
     }
     if out and out.lower() != "none":
         write_payload(Path(out), payload)
