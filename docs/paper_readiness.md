@@ -20,7 +20,7 @@ that distinction, and constrained control penalties trace a specificity frontier
 | Baselines | Random, source/distractor, residual projection, hard/mean-control penalties, and CAA/CAV-style activation-difference baselines. | Add learned behavior-readout/generation baselines and, later, SAE/feature-guided baselines if feasible. |
 | Statistical confidence | Single seed for most behavior runs. | Add seeds, bootstrap CIs over pairs, and random relation nulls. |
 | Claim boundary | `docs/semantic_specificity.md` defines specificity as held-out target transfer minus independent control leakage under matched score surfaces. | Keep the claim boundary in the paper draft and do not promote runs with near-zero specificity. |
-| Generation tests | Added strict short-generation match, learned generation-readout, constrained short-answer gates, and a direct binary-relation behavior gate. Generation remains zero, but binary relation classification gives the first nonzero behavior signal: `target_learned` passes `4/7` positives and `3/10` random-null controls. | Add binary yes-bias controls before larger-model generation repeats. |
+| Generation tests | Added strict short-generation match, learned generation-readout, constrained short-answer gates, a direct binary-relation behavior gate, and binary yes-bias controls. Generation remains zero. Binary relation classification moves behavior, but yes-bias controls show the first direction is broad answer-polarity control. | Build contrastive binary directions before larger-model generation repeats. |
 | Mechanistic analysis | Direction-subspace diagnostic shows leakage is not one low-rank control vector; high overlaps are pair/target-pocket specific. | Add target-disjoint random relation nulls and stratify controls by target/source overlap. |
 
 ## Current Phase
@@ -56,7 +56,8 @@ Current Phase 1 result:
 - Source-conditioned short-answer prompts mostly repeat the source passage; source-free latent short-answer prompts collapse to generic continuations such as `The term "word" is`.
 - A direct binary-relation classifier produces the first nonzero behavior movement: `target_learned` passes `4/7` positives and `3/10` random relation nulls, with mean specificity `0.118`; CAA and random remain `0/7` positives and `0/10` controls.
 - The binary signal is confounded: target/source/distractor learned directions are highly collinear, usually around `0.97` to `0.99`, and the target direction increases target Yes-No margin on nearly every row. The next gate must separate relation movement from a broad Yes-bias or candidate-affirmation axis.
-- Phase 1 is not passed yet. The current full-label logprob gate should be treated as a diagnostic failure mode, generation gates are negative, and binary relation behavior is nonzero but confounded.
+- Binary yes-bias controls explain the confound directly. Under `target_learned`, target/source/distractor, blank, generic, shuffled-target, always-true, and always-false Yes-No margins all end positive in `17/17` rows. Mean positive-slice deltas are all about `4.1` to `4.5`.
+- Phase 1 is not passed yet. The current full-label logprob gate should be treated as a diagnostic failure mode, generation gates are negative, and binary relation behavior is nonzero but dominated by answer-polarity control.
 
 ## Phase 2 Preview
 
@@ -65,7 +66,7 @@ If Phase 1 survives, expand along three axes:
 - Model replication: add GPT-2 and a larger open causal LM if Modal budget allows.
 - Concept expansion: add more positive bridges and random relation nulls.
 - Baselines: compare generation/readout behavior against the existing target-gradient, residual, random, and CAA/CAV-style activation-difference baselines.
-- Verifier pivot: add binary yes-bias controls and relation-specific contrast directions that can separate true relation behavior from broad target-label or Yes-bias promotion.
+- Verifier pivot: add relation-specific contrast directions and promote yes-bias controls into the binary robust-pass rule.
 
 ## Paper Draft Gate
 
