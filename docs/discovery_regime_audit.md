@@ -2487,3 +2487,76 @@ Residual content:
 
 Next move: build a pair-conditioned nonlinear or feature/readout-guided
 intervention and use the stratified control gate as its acceptance surface.
+
+## Activation Geometry Probe: Positive-Family Binary Direction
+
+Question: can one shared direction learned from positive bridge pairs suppress
+stratified controls while preserving strict binary target movement?
+
+Current regime:
+
+- Artifact types: strict binary-relation rows, stratified gate summaries,
+  positive-family optimized direction summaries, scale frontiers.
+- Operations: one shared final-token vector optimized on positive target prompts
+  against stratified control relation prompts and positive-carrier controls.
+- Gates/verifiers: held-out alias `alias_2`, per-class strict control counts,
+  always-false carrier rejection, random same-norm and pair-specific opt8
+  baselines.
+- Known limitations: Pythia-70M only, layer 3 only, one objective alias, one
+  train variant, two positive pairs.
+
+Action class:
+
+- Retrieval/search/discovery: discovery candidate.
+- Why: this creates the first accepted specificity frontier where a learned
+  activation direction keeps a strict positive while suppressing all stratified
+  controls under the hardened binary verifier.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/positive_family_binary_direction_2026_06_10.md`;
+  local ignored artifacts
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_positive_family_opt8_stratified_alias0_seed20260610.json`
+  and
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_positive_family_opt8_stratified_scale_seed20260610.json`.
+- Positive targets: `attractor->attractor_network` and
+  `fixed_point->prototype`.
+- Negative controls: twelve controls split evenly across `source_sharing`,
+  `target_sharing`, `implausible_random_null`, and `semantic_near_null`.
+- Stress tests: pair-specific opt8 baseline, random same-norm baseline, and
+  scale sweep over `0.5`, `0.75`, `1.0`, `1.25`, `1.5`.
+
+Gate:
+
+- Acceptance rule: improve the specificity frontier over pair-specific opt8 by
+  preserving positive movement and reducing structured control passes.
+- Withheld/rejected rule: reject any scale whose positive movement depends on
+  positive always-false carrier margins or revived structured controls.
+
+Results:
+
+- Accepted artifacts: `target_binary_positive_family_opt_8` mode and a scale
+  `1.0` frontier with `1/2` strict positives and `0/12` stratified controls.
+- Rejected or withheld artifacts: `2/2` positive semantic steering; scale
+  `1.25` because it revives `1/12` target-sharing controls; scale `1.5`
+  because the positive fails the always-false carrier check.
+- Key metrics: at scale `1.0`, positive-family opt8 improves over pair-specific
+  opt8 (`1/2`, `0/12` versus `1/2`, `4/12`). `random_same_norm` remains `0/2`,
+  `0/12`. `fixed_point->prototype` fails at every tested scale.
+- Variance or ablation: scale stress test identifies a narrow clean band at
+  `1.0`; higher scale increases target movement but breaks controls or carrier
+  checks.
+
+Residual content:
+
+- Explained by old regime: the binary verifier is still strict enough to reject
+  random movement and arbitrary unrelated controls.
+- New content outside old regime: semantic-specific movement may be a
+  family-level activation feature rather than a pair-specific direction.
+- Retractions or supersessions: supersede "single-vector methods are exhausted"
+  with "pair-specific vectors fail, but positive-family vectors merit alias and
+  model replication."
+
+Next move: replicate the positive-family frontier across objective aliases,
+train variants, and a second model/layer before expanding the concept set.

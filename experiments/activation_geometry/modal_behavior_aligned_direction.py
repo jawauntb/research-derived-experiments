@@ -51,12 +51,21 @@ BINARY_OPT_DIRECTION_MODES = {
         "lr": 0.25,
         "control_weight": 2.0,
         "temperature": 0.25,
+        "scope": "pair",
     },
     "target_binary_strict_opt_16": {
         "steps": 16,
         "lr": 0.2,
         "control_weight": 2.0,
         "temperature": 0.25,
+        "scope": "pair",
+    },
+    "target_binary_positive_family_opt_8": {
+        "steps": 8,
+        "lr": 0.25,
+        "control_weight": 2.0,
+        "temperature": 0.25,
+        "scope": "positive_family",
     },
 }
 IMAGE = modal.Image.debian_slim(python_version="3.12").pip_install(
@@ -1341,15 +1350,14 @@ def optimized_binary_prompt_sets(
     return target_prompts, control_prompts, control_names
 
 
-def pair_optimized_binary_direction(
+def optimize_binary_delta_for_prompt_sets(
     *,
     torch: Any,
-    tokenizer: Any,
     model: Any,
-    source_texts: list[tuple[int, str]],
-    objective_labels_by_regime: dict[str, dict[str, str]],
-    shuffled_labels_by_regime: dict[str, dict[str, str]],
-    extra_control_labels_by_regime: dict[str, list[str]],
+    tokenizer: Any,
+    target_prompts: list[str],
+    control_prompts: list[str],
+    control_names: list[str],
     layer: int,
     max_length: int,
     reference_direction: Any,
@@ -1363,12 +1371,6 @@ def pair_optimized_binary_direction(
     device = next(model.parameters()).device
     reference = reference_direction.detach().float().to(device)
     reference_norm = torch.linalg.vector_norm(reference).clamp(min=1e-12)
-    target_prompts, control_prompts, control_names = optimized_binary_prompt_sets(
-        source_texts=source_texts,
-        objective_labels_by_regime=objective_labels_by_regime,
-        shuffled_labels_by_regime=shuffled_labels_by_regime,
-        extra_control_labels_by_regime=extra_control_labels_by_regime,
-    )
     prompts = target_prompts + control_prompts
     target_count = len(target_prompts)
     if target_count == 0 or not control_prompts:
@@ -1437,6 +1439,7 @@ def pair_optimized_binary_direction(
                 "lr": lr,
                 "control_weight": control_weight,
                 "temperature": temperature,
+                "scope": str(config.get("scope", "pair")),
                 "target_prompt_count": target_count,
                 "control_prompt_count": len(control_prompts),
                 "control_names": sorted(set(control_names)),
@@ -1454,6 +1457,135 @@ def pair_optimized_binary_direction(
         ):
             parameter.requires_grad_(requires_grad)
         model.zero_grad(set_to_none=True)
+
+
+def pair_optimized_binary_direction(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    source_texts: list[tuple[int, str]],
+    objective_labels_by_regime: dict[str, dict[str, str]],
+    shuffled_labels_by_regime: dict[str, dict[str, str]],
+    extra_control_labels_by_regime: dict[str, list[str]],
+    layer: int,
+    max_length: int,
+    reference_direction: Any,
+    mode: str,
+) -> tuple[Any, dict[str, Any]]:
+    target_prompts, control_prompts, control_names = optimized_binary_prompt_sets(
+        source_texts=source_texts,
+        objective_labels_by_regime=objective_labels_by_regime,
+        shuffled_labels_by_regime=shuffled_labels_by_regime,
+        extra_control_labels_by_regime=extra_control_labels_by_regime,
+    )
+    return optimize_binary_delta_for_prompt_sets(
+        torch=torch,
+        tokenizer=tokenizer,
+        model=model,
+        target_prompts=target_prompts,
+        control_prompts=control_prompts,
+        control_names=control_names,
+        layer=layer,
+        max_length=max_length,
+        reference_direction=reference_direction,
+        mode=mode,
+    )
+
+
+def positive_family_binary_direction(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    records: list[dict[str, Any]],
+    pair_specs: list[dict[str, Any]],
+    concept_lookup: dict[str, dict[str, Any]],
+    aliases_by_concept: dict[str, list[str]],
+    train_variants: set[int],
+    objective_label_scoring_regime: str,
+    layer: int,
+    max_length: int,
+    reference_direction: Any,
+    mode: str,
+) -> tuple[Any, dict[str, Any]]:
+    target_prompts: list[str] = []
+    control_prompts: list[str] = []
+    control_names: list[str] = []
+    regime_parts = label_scoring_regime_parts(
+        objective_label_scoring_regime,
+        allow_groups=True,
+    )
+    for pair in pair_specs:
+        left = str(pair["left"])
+        right = str(pair["right"])
+        distractor = str(pair["distractor"])
+        current_pair_id = pair_id(left, right)
+        current_kind = str(pair["kind"])
+        control_class = str(pair.get("control_class", "") or "positive")
+        source_texts = train_source_texts(
+            records,
+            concept_id=left,
+            train_variant_indices=train_variants,
+        )
+        for regime_part in regime_parts:
+            labels_by_role = labels_by_role_for_regime(
+                concept_lookup=concept_lookup,
+                aliases_by_concept=aliases_by_concept,
+                left=left,
+                right=right,
+                distractor=distractor,
+                label_scoring_regime=regime_part,
+            )
+            for _variant_index, source_text in source_texts:
+                target_prompt = binary_relation_prompt(
+                    source_text=source_text,
+                    candidate_label=labels_by_role["target"],
+                )
+                if current_kind == "positive":
+                    target_prompts.append(target_prompt)
+                    for control_name, candidate_label in {
+                        "blank": "",
+                        "generic": "a related concept",
+                        "source": labels_by_role["source"],
+                        "distractor": labels_by_role["distractor"],
+                    }.items():
+                        control_names.append(f"positive_{control_name}")
+                        control_prompts.append(
+                            binary_relation_prompt(
+                                source_text=source_text,
+                                candidate_label=candidate_label,
+                            )
+                        )
+                    control_names.append("positive_always_false")
+                    control_prompts.append(
+                        binary_carrier_prompt(
+                            carrier="always_false",
+                            candidate_label=labels_by_role["target"],
+                        )
+                    )
+                elif current_kind == "control":
+                    control_names.append(f"{control_class}:{current_pair_id}")
+                    control_prompts.append(target_prompt)
+    optimized_direction, summary = optimize_binary_delta_for_prompt_sets(
+        torch=torch,
+        tokenizer=tokenizer,
+        model=model,
+        target_prompts=target_prompts,
+        control_prompts=control_prompts,
+        control_names=control_names,
+        layer=layer,
+        max_length=max_length,
+        reference_direction=reference_direction,
+        mode=mode,
+    )
+    summary["positive_pair_count"] = sum(
+        1 for pair in pair_specs if str(pair["kind"]) == "positive"
+    )
+    summary["control_pair_count"] = sum(
+        1 for pair in pair_specs if str(pair["kind"]) == "control"
+    )
+    return optimized_direction, summary
 
 
 def learned_gradient_direction(
@@ -2253,6 +2385,11 @@ def run_behavior_aligned_direction_remote(
                     for mode in direction_modes:
                         if mode not in BINARY_OPT_DIRECTION_MODES:
                             continue
+                        if (
+                            str(BINARY_OPT_DIRECTION_MODES[mode].get("scope", "pair"))
+                            != "pair"
+                        ):
+                            continue
                         optimized_direction, optimized_summary = (
                             pair_optimized_binary_direction(
                                 torch=torch,
@@ -2369,6 +2506,65 @@ def run_behavior_aligned_direction_remote(
                     "readout_centroids": readout_centroids,
                     "readout_training_counts": readout_training_counts,
                 }
+
+        positive_family_modes = [
+            mode
+            for mode in direction_modes
+            if mode in BINARY_OPT_DIRECTION_MODES
+            and str(BINARY_OPT_DIRECTION_MODES[mode].get("scope", "pair"))
+            == "positive_family"
+        ]
+        if scoring_surface == "binary_relation" and positive_family_modes:
+            for objective_label_scoring_regime in objective_label_scoring_regimes:
+                regime_records = [
+                    learned_records[
+                        (
+                            pair_id(str(pair["left"]), str(pair["right"])),
+                            objective_label_scoring_regime,
+                        )
+                    ]
+                    for pair in pair_specs
+                ]
+                positive_reference_directions = [
+                    record["learned_directions"]["target"]
+                    for record in regime_records
+                    if str(record["kind"]) == "positive"
+                ]
+                if not positive_reference_directions:
+                    raise ValueError(
+                        "Positive-family binary optimization requires positives"
+                    )
+                reference_direction = mean_tensor(
+                    torch,
+                    positive_reference_directions,
+                ).to(device)
+                for mode in positive_family_modes:
+                    optimized_direction, optimized_summary = (
+                        positive_family_binary_direction(
+                            torch=torch,
+                            tokenizer=tokenizer,
+                            model=model,
+                            records=records,
+                            pair_specs=pair_specs,
+                            concept_lookup=concept_lookup,
+                            aliases_by_concept=aliases_by_concept,
+                            train_variants=train_variants,
+                            objective_label_scoring_regime=(
+                                objective_label_scoring_regime
+                            ),
+                            layer=layer,
+                            max_length=max_length,
+                            reference_direction=reference_direction,
+                            mode=mode,
+                        )
+                    )
+                    for record in regime_records:
+                        record["binary_optimized_directions"][mode] = (
+                            optimized_direction.to(device)
+                        )
+                        record["binary_optimized_direction_summaries"][mode] = (
+                            optimized_summary
+                        )
 
         binary_pc_component_count = max(
             (
