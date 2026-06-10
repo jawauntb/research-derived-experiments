@@ -37,6 +37,7 @@ PROMPT_FRAMES = (
 SCORING_SURFACES = (
     "option_token",
     "full_label",
+    "binary_relation",
     "generation_match",
     "generation_readout",
 )
@@ -175,6 +176,12 @@ def row_passes_behavior_gate(row: dict[str, Any]) -> bool:
         return (
             float(row["summary"]["target_logprob_delta"]) > 0
             and str(steered_scores.get("best_role", "")) == "target"
+        )
+    if scoring_surface == "binary_relation":
+        steered_scores = row.get("scores", {}).get("steered", {})
+        return (
+            float(row["summary"]["target_logprob_delta"]) > 0
+            and float(steered_scores.get("target", 0.0)) > 0
         )
     return True
 

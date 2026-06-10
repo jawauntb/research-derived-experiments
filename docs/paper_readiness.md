@@ -20,7 +20,7 @@ that distinction, and constrained control penalties trace a specificity frontier
 | Baselines | Random, source/distractor, residual projection, hard/mean-control penalties, and CAA/CAV-style activation-difference baselines. | Add learned behavior-readout/generation baselines and, later, SAE/feature-guided baselines if feasible. |
 | Statistical confidence | Single seed for most behavior runs. | Add seeds, bootstrap CIs over pairs, and random relation nulls. |
 | Claim boundary | `docs/semantic_specificity.md` defines specificity as held-out target transfer minus independent control leakage under matched score surfaces. | Keep the claim boundary in the paper draft and do not promote runs with near-zero specificity. |
-| Generation tests | Added strict short-generation match, learned generation-readout, and constrained short-answer gates. All reject current target-gradient and CAA directions: strict target behavior is `0/7` positives and `0/10` controls in source, latent, and short-answer frames. | Build a direct behavior-classification/intervention gate before larger-model generation repeats. |
+| Generation tests | Added strict short-generation match, learned generation-readout, constrained short-answer gates, and a direct binary-relation behavior gate. Generation remains zero, but binary relation classification gives the first nonzero behavior signal: `target_learned` passes `4/7` positives and `3/10` random-null controls. | Add binary yes-bias controls before larger-model generation repeats. |
 | Mechanistic analysis | Direction-subspace diagnostic shows leakage is not one low-rank control vector; high overlaps are pair/target-pocket specific. | Add target-disjoint random relation nulls and stratify controls by target/source overlap. |
 
 ## Current Phase
@@ -54,7 +54,9 @@ Current Phase 1 result:
 - The only nonzero readout margin pocket is `validity_gate->weak_constraint` under source-passage CAA, but the steered best role remains `source`, so it is explicitly rejected.
 - A constrained short-answer interface also fails to recover target behavior. Exact match and learned readout both show `0/7` positives and `0/10` random-null controls for target-gradient, CAA, and random directions in both `source_short_answer` and `latent_short_answer`.
 - Source-conditioned short-answer prompts mostly repeat the source passage; source-free latent short-answer prompts collapse to generic continuations such as `The term "word" is`.
-- Phase 1 is not passed yet. The current full-label logprob gate should be treated as a diagnostic failure mode, and all current non-logprob generation gates are negative. The next attempt should use a direct behavior-classification/intervention gate before adding model scale.
+- A direct binary-relation classifier produces the first nonzero behavior movement: `target_learned` passes `4/7` positives and `3/10` random relation nulls, with mean specificity `0.118`; CAA and random remain `0/7` positives and `0/10` controls.
+- The binary signal is confounded: target/source/distractor learned directions are highly collinear, usually around `0.97` to `0.99`, and the target direction increases target Yes-No margin on nearly every row. The next gate must separate relation movement from a broad Yes-bias or candidate-affirmation axis.
+- Phase 1 is not passed yet. The current full-label logprob gate should be treated as a diagnostic failure mode, generation gates are negative, and binary relation behavior is nonzero but confounded.
 
 ## Phase 2 Preview
 
@@ -63,7 +65,7 @@ If Phase 1 survives, expand along three axes:
 - Model replication: add GPT-2 and a larger open causal LM if Modal budget allows.
 - Concept expansion: add more positive bridges and random relation nulls.
 - Baselines: compare generation/readout behavior against the existing target-gradient, residual, random, and CAA/CAV-style activation-difference baselines.
-- Verifier pivot: add direct behavior-classification/intervention tests that can separate true relation behavior from broad target-label promotion.
+- Verifier pivot: add binary yes-bias controls and relation-specific contrast directions that can separate true relation behavior from broad target-label or Yes-bias promotion.
 
 ## Paper Draft Gate
 

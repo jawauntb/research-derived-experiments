@@ -5,6 +5,7 @@ import unittest
 from experiments.activation_geometry.behavior_aligned_direction import (
     LABEL_SCORING_REGIMES,
     PROMPT_FRAMES,
+    SCORING_SURFACES,
     aggregate_rows,
     alignment_summary,
     generation_match_scores,
@@ -59,6 +60,17 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
                 name="Prompt frame",
             ),
             ["source_short_answer"],
+        )
+
+    def test_scoring_surfaces_include_binary_relation_interface(self) -> None:
+        self.assertIn("binary_relation", SCORING_SURFACES)
+        self.assertEqual(
+            parse_values(
+                "binary_relation",
+                allowed=SCORING_SURFACES,
+                name="Scoring surface",
+            ),
+            ["binary_relation"],
         )
 
     def test_generation_match_helpers_use_phrase_boundaries(self) -> None:
@@ -512,6 +524,79 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
         self.assertEqual(source_suppression["score_surface_pass_count"], 0)
         self.assertFalse(non_target_best_role["robust_pass"])
         self.assertEqual(non_target_best_role["score_surface_pass_count"], 0)
+        self.assertTrue(target_increase["robust_pass"])
+        self.assertEqual(target_increase["score_surface_pass_count"], 1)
+
+    def test_binary_relation_gate_requires_target_yes_margin_positive(self) -> None:
+        shared = {
+            "scoring_surface": "binary_relation",
+            "prompt_frame": "source_passage",
+            "objective_label_scoring_regime": "alias_0+alias_1",
+            "eval_label_scoring_regime": "alias_2",
+            "role": "primary",
+            "layer": 5,
+            "kind": "positive",
+            "pair": "attractor->attractor_network",
+            "scale": 1.0,
+            "option_order": "binary_relation",
+            "learned_alignment": {
+                "target_source_cosine": 0.2,
+                "target_distractor_cosine": -0.1,
+            },
+        }
+        rows = [
+            {
+                **shared,
+                "direction_mode": "target_learned",
+                "scores": {
+                    "steered": {"target": -0.1},
+                },
+                "summary": {
+                    "target_margin_delta": 0.5,
+                    "target_logprob_delta": 0.1,
+                },
+            },
+            {
+                **shared,
+                "direction_mode": "caa_target_minus_source",
+                "scores": {
+                    "steered": {"target": 0.2},
+                },
+                "summary": {
+                    "target_margin_delta": 0.5,
+                    "target_logprob_delta": 0.1,
+                },
+            },
+            {
+                **shared,
+                "direction_mode": "random_same_norm",
+                "scores": {
+                    "steered": {"target": 0.2},
+                },
+                "summary": {
+                    "target_margin_delta": 0.5,
+                    "target_logprob_delta": 0.0,
+                },
+            },
+        ]
+
+        aggregates = aggregate_rows(rows)
+        negative_target = next(
+            row for row in aggregates if row["direction_mode"] == "target_learned"
+        )
+        target_increase = next(
+            row
+            for row in aggregates
+            if row["direction_mode"] == "caa_target_minus_source"
+        )
+        no_target_increase = next(
+            row for row in aggregates if row["direction_mode"] == "random_same_norm"
+        )
+
+        self.assertFalse(negative_target["robust_pass"])
+        self.assertEqual(negative_target["score_surface_pass_count"], 0)
+        self.assertFalse(no_target_increase["robust_pass"])
+        self.assertEqual(no_target_increase["score_surface_pass_count"], 0)
         self.assertTrue(target_increase["robust_pass"])
         self.assertEqual(target_increase["score_surface_pass_count"], 1)
 
