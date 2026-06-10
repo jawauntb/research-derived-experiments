@@ -104,7 +104,8 @@
 - [x] Build contrastive binary directions that penalize blank/generic/source/distractor/shuffled/false-carrier Yes margins.
 - [x] Rerun contrastive binary specificity after checkpoint to populate `binary_gradient_geometry` SVD summaries.
 - [x] Decide whether binary leakage is low-rank enough for projection/whitening or too entangled for linear steering.
-- [ ] Test top-PC residualized or whitened binary directions to see whether any target movement survives removal of the answer-polarity axis.
+- [x] Test top-PC residualized or whitened binary directions to see whether any target movement survives removal of the answer-polarity axis.
+- [ ] Replicate the binary low-rank entanglement diagnosis on a second model/layer or pivot to a nonlinear/feature-guided intervention under the same strict binary verifier.
 - [ ] Stratify behavior controls into target-sharing, source-sharing, and fully target-disjoint classes.
 - [ ] Replicate the hook-output transfer ridge on a second checkpoint or open model.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.

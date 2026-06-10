@@ -37,6 +37,12 @@ BINARY_CONTROL_DIRECTION_MODES = {
     "target_binary_controls_2_0": 2.0,
     "target_binary_controls_4_0": 4.0,
 }
+BINARY_PC_DIRECTION_MODES = {
+    "target_binary_pc1_resid": ("residualize", 1),
+    "target_binary_pc3_resid": ("residualize", 3),
+    "target_binary_pc1_whiten": ("whiten", 1),
+    "target_binary_pc3_whiten": ("whiten", 3),
+}
 IMAGE = modal.Image.debian_slim(python_version="3.12").pip_install(
     "torch>=2.5,<2.8",
     "transformers>=4.46,<5.0",
@@ -330,7 +336,11 @@ def objective_role_for_mode(mode: str) -> str:
         "caa_target_contrast",
         "caa_target_minus_source",
         "caa_target_minus_distractor",
-    } or mode in PENALTY_DIRECTION_MODES or mode in BINARY_CONTROL_DIRECTION_MODES:
+    } or (
+        mode in PENALTY_DIRECTION_MODES
+        or mode in BINARY_CONTROL_DIRECTION_MODES
+        or mode in BINARY_PC_DIRECTION_MODES
+    ):
         return "target"
     if mode == "source_learned":
         return "source"
@@ -1559,6 +1569,79 @@ def direction_geometry_summary(
     }
 
 
+def control_pc_basis(
+    *,
+    torch: Any,
+    named_vectors: list[tuple[str, Any]],
+    max_components: int,
+) -> dict[str, Any]:
+    if not named_vectors:
+        return {
+            "names": [],
+            "vectors": [],
+            "singular_values": [],
+        }
+    matrix = torch.stack(
+        [
+            normalize_vector(torch, vector).float().flatten()
+            for _name, vector in named_vectors
+        ],
+        dim=0,
+    )
+    _u, singular_values, vh = torch.linalg.svd(matrix, full_matrices=False)
+    component_count = min(max_components, int(vh.shape[0]))
+    example = named_vectors[0][1].float()
+    return {
+        "names": [name for name, _vector in named_vectors],
+        "vectors": [
+            vh[index].reshape_as(example).to(example.device)
+            for index in range(component_count)
+        ],
+        "singular_values": [
+            singular_values[index] for index in range(component_count)
+        ],
+    }
+
+
+def binary_pc_adjusted_direction(
+    *,
+    torch: Any,
+    target_direction: Any,
+    pc_basis: dict[str, Any] | None,
+    adjustment: str,
+    component_count: int,
+) -> Any:
+    if not pc_basis or not pc_basis.get("vectors"):
+        return target_direction
+    vectors = pc_basis["vectors"][:component_count]
+    singular_values = pc_basis.get("singular_values", [])[:component_count]
+    if not vectors:
+        return target_direction
+    adjusted = target_direction.float()
+    for index, basis in enumerate(vectors):
+        basis_direction = normalize_vector(torch, basis).to(
+            device=adjusted.device,
+            dtype=adjusted.dtype,
+        )
+        coefficient = torch.dot(adjusted.flatten(), basis_direction.flatten())
+        if adjustment == "residualize":
+            adjusted = adjusted - coefficient * basis_direction
+        elif adjustment == "whiten":
+            singular_value = singular_values[index].to(
+                device=adjusted.device,
+                dtype=adjusted.dtype,
+            )
+            damped_coefficient = coefficient / singular_value.clamp(min=1e-12)
+            adjusted = (
+                adjusted
+                - coefficient * basis_direction
+                + damped_coefficient * basis_direction
+            )
+        else:
+            raise ValueError(f"Unknown binary PC adjustment: {adjustment}")
+    return rescale_to_reference_norm(torch, adjusted, target_direction)
+
+
 def remove_projection(torch: Any, direction: Any, basis: Any | None) -> Any:
     if basis is None:
         return direction
@@ -1626,6 +1709,7 @@ def direction_for_mode(
     control_target_directions: list[Any],
     hard_control_target_direction: Any | None,
     binary_control_directions: dict[str, Any],
+    binary_control_pc_basis: dict[str, Any] | None,
     mode: str,
     seed: int,
 ) -> Any:
@@ -1705,6 +1789,20 @@ def direction_for_mode(
             target_direction=target_direction,
             penalty_bases=list(binary_control_directions.values()),
             weight=BINARY_CONTROL_DIRECTION_MODES[mode],
+        )
+    if mode in BINARY_PC_DIRECTION_MODES:
+        if not binary_control_pc_basis:
+            raise ValueError(
+                f"{mode} requires a binary control PC basis; "
+                "use binary_relation scoring"
+            )
+        adjustment, component_count = BINARY_PC_DIRECTION_MODES[mode]
+        return binary_pc_adjusted_direction(
+            torch=torch,
+            target_direction=target_direction,
+            pc_basis=binary_control_pc_basis,
+            adjustment=adjustment,
+            component_count=component_count,
         )
     return learned_directions[objective_role_for_mode(mode)]
 
@@ -1972,6 +2070,48 @@ def run_behavior_aligned_direction_remote(
                     "readout_training_counts": readout_training_counts,
                 }
 
+        binary_pc_component_count = max(
+            (
+                component_count
+                for mode in direction_modes
+                if mode in BINARY_PC_DIRECTION_MODES
+                for _adjustment, component_count in [BINARY_PC_DIRECTION_MODES[mode]]
+            ),
+            default=0,
+        )
+        binary_control_pc_bases_by_regime: dict[str, dict[str, Any]] = {}
+        if scoring_surface == "binary_relation" and binary_pc_component_count > 0:
+            for objective_label_scoring_regime in objective_label_scoring_regimes:
+                regime_records = [
+                    learned_records[
+                        (
+                            pair_id(str(pair["left"]), str(pair["right"])),
+                            objective_label_scoring_regime,
+                        )
+                    ]
+                    for pair in pair_specs
+                ]
+                control_vectors = [
+                    (
+                        (
+                            f"{record['pair_index']}:{record['left']}->"
+                            f"{record['right']}:{control_name}"
+                        ),
+                        control_direction,
+                    )
+                    for record in regime_records
+                    for control_name, control_direction in (
+                        record["binary_control_directions"].items()
+                    )
+                ]
+                binary_control_pc_bases_by_regime[objective_label_scoring_regime] = (
+                    control_pc_basis(
+                        torch=torch,
+                        named_vectors=control_vectors,
+                        max_components=binary_pc_component_count,
+                    )
+                )
+
         control_pair_ids = [
             pair_id(str(pair["left"]), str(pair["right"]))
             for pair in pair_specs
@@ -2040,6 +2180,20 @@ def run_behavior_aligned_direction_remote(
                 learned_directions = record["learned_directions"]
                 activation_directions = record["activation_directions"]
                 binary_control_directions = record["binary_control_directions"]
+                binary_control_pc_basis = binary_control_pc_bases_by_regime.get(
+                    objective_label_scoring_regime
+                )
+                binary_control_pc_singular_values = (
+                    [
+                        float(value.item())
+                        for value in binary_control_pc_basis.get(
+                            "singular_values",
+                            [],
+                        )
+                    ]
+                    if binary_control_pc_basis
+                    else []
+                )
                 norms = record["norms"]
                 binary_control_norms = record["binary_control_norms"]
                 activation_norms = record["activation_norms"]
@@ -2057,6 +2211,18 @@ def run_behavior_aligned_direction_remote(
                     learned_directions["target"],
                     hard_control_target_direction,
                 )
+                if binary_control_pc_basis:
+                    for pc_index, pc_vector in enumerate(
+                        binary_control_pc_basis.get("vectors", [])[:3],
+                        start=1,
+                    ):
+                        learned_alignment[
+                            f"target_binary_control_pc{pc_index}_cosine"
+                        ] = cosine_or_none(
+                            torch,
+                            learned_directions["target"],
+                            pc_vector,
+                        )
                 for eval_label_scoring_regime in eval_label_scoring_regimes:
                     eval_labels_by_role = labels_by_role_for_regime(
                         concept_lookup=concept_lookup,
@@ -2182,6 +2348,9 @@ def run_behavior_aligned_direction_remote(
                                     binary_control_directions=(
                                         binary_control_directions
                                     ),
+                                    binary_control_pc_basis=(
+                                        binary_control_pc_basis
+                                    ),
                                     mode=mode,
                                     seed=(
                                         seed
@@ -2238,6 +2407,9 @@ def run_behavior_aligned_direction_remote(
                                         ),
                                         "binary_control_direction_norms": (
                                             binary_control_norms
+                                        ),
+                                        "binary_control_pc_singular_values": (
+                                            binary_control_pc_singular_values
                                         ),
                                         "control_basis_pair_count": len(
                                             control_directions
