@@ -160,6 +160,8 @@ Residual content:
   everywhere" with the narrower "layer 5 is verifier-only; layer 3 has a weak
   strict pocket that needs scale/layer stress before it can matter."
 
-Next move: run a focused layer/scale sweep around layer 3 PC whitening, or
-replicate this exact pocket on a second model. A paper claim still needs a
-stable result across seeds, layers, or models.
+Next move completed in
+`experiments/activation_geometry/results/binary_layer3_scale_sweep_2026_06_10.md`:
+scale calibration maps a real but too-small specificity frontier. The next live
+question is whether the two stable strict positives replicate across seed/model
+or require a pair-focused nonlinear intervention.
