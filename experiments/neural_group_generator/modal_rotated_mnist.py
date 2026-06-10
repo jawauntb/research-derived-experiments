@@ -46,7 +46,6 @@ app = modal.App(name="research-derived-rotated-mnist-extension")
 
 @app.function(image=IMAGE, timeout=3600, cpu=4)
 def run_rotated_mnist(arg: dict[str, Any]) -> dict[str, Any]:
-    import math
     import random
 
     import numpy as np
@@ -66,7 +65,6 @@ def run_rotated_mnist(arg: dict[str, Any]) -> dict[str, Any]:
     seed = arg["seed"]
     grid_size = arg["grid_size"]
 
-    rng = np.random.RandomState(seed)
     py_rng = random.Random(seed)
     torch.manual_seed(seed)
 
@@ -203,7 +201,8 @@ def run_rotated_mnist(arg: dict[str, Any]) -> dict[str, Any]:
         denom = mask_same.sum(dim=1).clamp(min=1)
         mlp = (mask_same * log_prob).sum(dim=1) / denom
         loss = -mlp.mean()
-        loss.backward(); opt.step()
+        loss.backward()
+        opt.step()
 
     # ----- Approach 2: encoder invariance scoring -----
     encoder.eval()
