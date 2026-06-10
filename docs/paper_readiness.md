@@ -81,6 +81,10 @@ Current Phase 1 result:
 - A sparse feature-mask optimizer is now implemented and tested. It keeps the top `15%` coordinates where the target direction dominates source/distractor/binary-control directions, then optimizes only inside that mask.
 - The feature-mask probe also fails: `target_binary_feature_mask_opt_8` gives `0/2` strict positives and `2/12` controls, leaking `steering_vector->semantic_distance` and `attractor->semantic_distance`. `random_same_norm` remains `0/2`, `0/12`.
 - This suggests the remaining target/control separation is not cleanly coordinate-sparse. Additive vector variants are now substantially pruned: free vectors leak, span-constrained vectors suppress positives, and sparse masks leak without recovering positives.
+- A state-gated pair-specific intervention is now implemented and tested. It applies the optimized final-token delta through a hidden-state cosine gate residualized against source, distractor, and binary-control directions.
+- The state gate reopens the clean focused frontier at exactly scale `1.0`: `target_binary_state_gate_opt_8` gives `1/2` strict positives and `0/12` stratified controls, with `random_same_norm` at `0/2`, `0/12`.
+- The state-gated frontier is still narrow and not paper-ready. Scales `0.5` and `0.75` lose positives; scales `1.25` and `1.5` revive structured controls or the always-false carrier; `fixed_point->prototype` never passes.
+- Gate calibration is a caveat rather than a mechanism claim: target hidden-state gate scores are below the max control score for both positive pairs, so the gate is probably soft attenuation rather than a clean target/control hidden-state separator.
 - Phase 1 is not passed yet. The current full-label logprob gate should be treated as a diagnostic failure mode, generation gates are negative, and binary relation behavior is nonzero but dominated by answer-polarity control.
 
 ## Phase 2 Preview
@@ -90,7 +94,7 @@ If Phase 1 survives, expand along three axes:
 - Model replication: add GPT-2 and a larger open causal LM if Modal budget allows.
 - Concept expansion: add more positive bridges and random relation nulls.
 - Baselines: compare generation/readout behavior against the existing target-gradient, residual, random, and CAA/CAV-style activation-difference baselines.
-- Verifier pivot: the stratified gate is now the acceptance surface. The positive-family single-vector frontier failed alias/train robustness, the pair-conditioned linear readout/control span killed positives, and sparse feature masking still leaked controls. The next paper-relevant intervention class should be genuinely conditional or non-additive rather than another final-token additive vector.
+- Verifier pivot: the stratified gate is now the acceptance surface. The positive-family single-vector frontier failed alias/train robustness, the pair-conditioned linear readout/control span killed positives, and sparse feature masking still leaked controls. A first state-gated conditional intervention restores a narrow clean `attractor` pocket, but it must survive alias/train perturbation or improved gate calibration before model/concept expansion.
 
 ## Paper Draft Gate
 

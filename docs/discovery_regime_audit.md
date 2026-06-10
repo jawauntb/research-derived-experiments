@@ -2844,3 +2844,83 @@ Next move: keep the strict stratified verifier, but change the intervention
 operation to something genuinely conditional or non-additive: a learned
 prompt-conditioned gate, a nonlinear behavior readout intervention, or a
 feature-circuit causal patch instead of a single final-token vector.
+
+## Activation Geometry Probe: State-Gated Binary Direction
+
+Question: can a genuinely conditional final-token intervention recover the
+strict focused binary pocket after additive free vectors, readout/control spans,
+and sparse feature masks failed?
+
+Current regime:
+
+- Artifact types: strict binary-relation rows, stratified gate summaries,
+  state-gated optimized direction summaries, scale-frontier reports, rejected
+  and provisional intervention classes.
+- Operations: Modal-backed Pythia activation intervention, pair-local binary
+  objective optimization, residualized hidden-state gate construction, sigmoid
+  attenuation at intervention time, held-out alias scoring.
+- Gates/verifiers: held-out `alias_2`, strict positive counts, stratified
+  control counts, always-false carrier rejection, random same-norm baseline,
+  scale stress, gate-calibration audit.
+- Known limitations: Pythia-70M layer 3 only; two positive pairs only; the gate
+  is hand-calibrated from training prompts and not yet a clean target/control
+  separator.
+
+Action class:
+
+- Retrieval/search/discovery: discovery-leaning search.
+- Why: this changes the intervention operation from unconditional additive
+  vectors to hidden-state-conditioned application, but it produces only a narrow
+  provisional frontier rather than an accepted behavior class.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/state_gate_binary_direction_2026_06_10.md`;
+  local ignored artifacts
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_state_gate_opt8_stratified_seed20260610.json`
+  and
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_state_gate_opt8_stratified_scale_seed20260610.json`.
+- Positive targets: `attractor->attractor_network` and
+  `fixed_point->prototype`.
+- Negative controls: twelve controls split across `source_sharing`,
+  `target_sharing`, `implausible_random_null`, and `semantic_near_null`.
+- Stress tests: random same-norm baseline and scale sweep over `0.5`, `0.75`,
+  `1.0`, `1.25`, `1.5`.
+
+Gate:
+
+- Acceptance rule: recover at least `1/2` strict positives and `0/12`
+  stratified controls at a clean scale, with random same-norm at `0/2`, `0/12`.
+- Withheld/rejected rule: reject a broad mechanism claim if the clean point is
+  scale-fragile or if target hidden-state gate scores do not separate from
+  control scores.
+
+Results:
+
+- Accepted artifacts: `target_binary_state_gate_opt_8` implementation,
+  provisional positive report, and two ignored Modal payloads.
+- Rejected or withheld artifacts: the stronger hypothesis that the current gate
+  is a robust hidden-state target/control classifier.
+- Key metrics: at scale `1.0`, state-gate opt8 gives `1/2` strict positives
+  and `0/12` controls; random same-norm gives `0/2`, `0/12`. The scale sweep
+  gives `0/2` positives at `0.5` and `0.75`, revives `3/12` controls at
+  `1.25`, and revives `1/12` controls at `1.5`.
+- Variance or ablation: scale stress and random same-norm baseline. Gate
+  calibration is weak: target-over-max-control gate scores are negative for
+  both positive pairs (`-0.0046` and `-0.0114`).
+
+Residual content:
+
+- Explained by old regime: the strict verifier still exposes answer-carrier and
+  structured-overlap leakage, and scale tuning alone is not enough.
+- New content outside old regime: conditional attenuation can recover the
+  narrow clean `attractor` pocket that additive vector variants either lost or
+  leaked.
+- Retractions or supersessions: supersede "additive variants are the only
+  tested operation class" with "a conditional operation can reopen the frontier,
+  but the current gate is fragile and not yet a mechanism."
+
+Next move: stress-test the state-gated frontier across objective alias and train
+variant, then improve gate calibration if the conditional operation still shows
+residual target movement.

@@ -125,7 +125,8 @@
 - [x] Halt positive-family second-model/layer replication after the alias/train gate failed.
 - [x] Build and test a pair-conditioned readout/control-span binary intervention after the positive-family frontier failed alias/train replication.
 - [x] Build and test a sparse feature-mask pair-conditioned intervention after the linear readout/control-span constraint killed positives.
-- [ ] Build a genuinely conditional or non-additive intervention after additive free, span-constrained, and sparse-mask vectors all failed strict specificity.
+- [x] Build and test a genuinely conditional state-gated binary intervention after additive free, span-constrained, and sparse-mask vectors all failed strict specificity.
+- [ ] Stress-test the state-gated strict frontier across objective alias and train variant.
 - [ ] Replicate the hook-output transfer ridge on a second checkpoint or open model.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.
 - [ ] Add anisotropy and directional-curvature proxy checks to activation sweeps where feasible.

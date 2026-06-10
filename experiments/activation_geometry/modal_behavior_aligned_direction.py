@@ -78,6 +78,15 @@ BINARY_OPT_DIRECTION_MODES = {
         "mask_fraction": 0.15,
         "mask_control_weight": 1.0,
     },
+    "target_binary_state_gate_opt_8": {
+        "steps": 8,
+        "lr": 0.25,
+        "control_weight": 2.0,
+        "temperature": 0.25,
+        "scope": "pair",
+        "parameterization": "state_gate",
+        "gate_temperature": 0.05,
+    },
     "target_binary_positive_family_opt_8": {
         "steps": 8,
         "lr": 0.25,
@@ -561,6 +570,74 @@ def continuation_score(
     raise ValueError(f"Unknown label score normalization: {label_score_normalization}")
 
 
+def intervention_anchor_tensor(delta: Any) -> Any:
+    if isinstance(delta, dict):
+        if delta.get("kind") == "state_gate":
+            return delta["delta"]
+        raise ValueError(f"Unknown intervention dictionary: {delta.get('kind')}")
+    return delta
+
+
+def intervention_addition(torch: Any, selected_hidden: Any, delta: Any) -> Any:
+    if isinstance(delta, dict):
+        if delta.get("kind") != "state_gate":
+            raise ValueError(f"Unknown intervention dictionary: {delta.get('kind')}")
+        base_delta = delta["delta"].to(
+            device=selected_hidden.device,
+            dtype=selected_hidden.dtype,
+        )
+        gate_direction = delta["gate_direction"].to(
+            device=selected_hidden.device,
+            dtype=torch.float32,
+        )
+        selected_float = selected_hidden.float()
+        gate_direction_norm = torch.linalg.vector_norm(gate_direction).clamp(
+            min=1e-12,
+        )
+        selected_norm = torch.linalg.vector_norm(
+            selected_float,
+            dim=-1,
+        ).clamp(min=1e-12)
+        gate_scores = (selected_float * gate_direction).sum(dim=-1) / (
+            selected_norm * gate_direction_norm
+        )
+        gate_values = torch.sigmoid(
+            (gate_scores - float(delta["gate_threshold"]))
+            / max(float(delta["gate_temperature"]), 1e-6)
+        ).to(dtype=selected_hidden.dtype)
+        return gate_values.unsqueeze(-1) * base_delta
+    return delta.to(device=selected_hidden.device, dtype=selected_hidden.dtype)
+
+
+def direction_norm_value(torch: Any, direction: Any) -> float:
+    return float(torch.linalg.vector_norm(intervention_anchor_tensor(direction)).item())
+
+
+def scale_direction(direction: Any, scale: float) -> Any:
+    if isinstance(direction, dict):
+        if direction.get("kind") != "state_gate":
+            raise ValueError(
+                f"Unknown intervention dictionary: {direction.get('kind')}"
+            )
+        scaled = dict(direction)
+        scaled["delta"] = direction["delta"] * float(scale)
+        return scaled
+    return direction * float(scale)
+
+
+def move_direction_to_device(direction: Any, device: Any) -> Any:
+    if isinstance(direction, dict):
+        if direction.get("kind") != "state_gate":
+            raise ValueError(
+                f"Unknown intervention dictionary: {direction.get('kind')}"
+            )
+        moved = dict(direction)
+        moved["delta"] = direction["delta"].to(device)
+        moved["gate_direction"] = direction["gate_direction"].to(device)
+        return moved
+    return direction.to(device)
+
+
 def add_final_token_hook(
     *,
     torch: Any,
@@ -570,7 +647,8 @@ def add_final_token_hook(
     delta: Any,
 ) -> Any:
     block = block_for_hidden_state_layer(model, layer)
-    final_indices = attention_mask.to(delta.device).sum(dim=1).long() - 1
+    anchor = intervention_anchor_tensor(delta)
+    final_indices = attention_mask.to(anchor.device).sum(dim=1).long() - 1
 
     def hook(_module: Any, _inputs: tuple[Any, ...], output: Any) -> Any:
         hidden_states = output[0] if isinstance(output, tuple) else output
@@ -578,7 +656,11 @@ def add_final_token_hook(
         batch_indices = torch.arange(adjusted.shape[0], device=adjusted.device)
         adjusted[batch_indices, final_indices] = (
             adjusted[batch_indices, final_indices]
-            + delta.to(device=adjusted.device, dtype=adjusted.dtype)
+            + intervention_addition(
+                torch,
+                adjusted[batch_indices, final_indices],
+                delta,
+            )
         )
         if isinstance(output, tuple):
             return (adjusted, *output[1:])
@@ -1022,7 +1104,8 @@ def add_token_index_hook(
     delta: Any,
 ) -> Any:
     block = block_for_hidden_state_layer(model, layer)
-    patch_indices = token_indices.to(delta.device).long()
+    anchor = intervention_anchor_tensor(delta)
+    patch_indices = token_indices.to(anchor.device).long()
 
     def hook(_module: Any, _inputs: tuple[Any, ...], output: Any) -> Any:
         hidden_states = output[0] if isinstance(output, tuple) else output
@@ -1030,13 +1113,61 @@ def add_token_index_hook(
         batch_indices = torch.arange(adjusted.shape[0], device=adjusted.device)
         adjusted[batch_indices, patch_indices] = (
             adjusted[batch_indices, patch_indices]
-            + delta.to(device=adjusted.device, dtype=adjusted.dtype)
+            + intervention_addition(
+                torch,
+                adjusted[batch_indices, patch_indices],
+                delta,
+            )
         )
         if isinstance(output, tuple):
             return (adjusted, *output[1:])
         return adjusted
 
     return block.register_forward_hook(hook)
+
+
+def hidden_states_for_token_prompts(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    prompts: list[str],
+    layer: int,
+    max_length: int,
+) -> Any:
+    if not prompts:
+        raise ValueError("At least one prompt is required")
+    encoded = tokenizer(
+        prompts,
+        return_tensors="pt",
+        truncation=True,
+        max_length=max(1, max_length - 1),
+        padding=True,
+    )
+    device = next(model.parameters()).device
+    encoded = {name: value.to(device) for name, value in encoded.items()}
+    token_indices = encoded["attention_mask"].sum(dim=1).long() - 1
+    block = block_for_hidden_state_layer(model, layer)
+    captured: dict[str, Any] = {}
+
+    def capture_hook(_module: Any, _inputs: tuple[Any, ...], output: Any) -> Any:
+        hidden_states = output[0] if isinstance(output, tuple) else output
+        batch_indices = torch.arange(hidden_states.shape[0], device=hidden_states.device)
+        captured["selected"] = (
+            hidden_states[batch_indices, token_indices].detach().clone().float()
+        )
+        return output
+
+    handle = block.register_forward_hook(capture_hook)
+    try:
+        with torch.no_grad():
+            model(**encoded, use_cache=False)
+        selected = captured.get("selected")
+        if selected is None:
+            raise RuntimeError("Could not capture token hidden states")
+        return selected
+    finally:
+        handle.remove()
 
 
 def gradient_direction_for_prompt(
@@ -1421,6 +1552,69 @@ def feature_selective_binary_mask(
     return mask, summary
 
 
+def state_gate_for_binary_prompts(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    target_prompts: list[str],
+    control_prompts: list[str],
+    layer: int,
+    max_length: int,
+    reference_direction: Any,
+    gate_directions: list[tuple[str, Any]],
+    gate_temperature: float,
+) -> tuple[Any, dict[str, Any]]:
+    nonzero_gate_directions = []
+    gate_direction_names = []
+    for gate_direction_name, gate_direction in gate_directions:
+        candidate = gate_direction.detach().float().to(reference_direction.device)
+        if float(torch.linalg.vector_norm(candidate).item()) <= 1e-12:
+            continue
+        nonzero_gate_directions.append(candidate)
+        gate_direction_names.append(gate_direction_name)
+    gate_direction = projection_residual(
+        torch,
+        reference_direction.detach().float(),
+        nonzero_gate_directions,
+    )
+    gate_direction_norm = torch.linalg.vector_norm(gate_direction)
+    if float(gate_direction_norm.item()) <= 1e-12:
+        gate_direction = reference_direction.detach().float()
+        gate_direction_norm = torch.linalg.vector_norm(gate_direction).clamp(min=1e-12)
+    gate_direction = gate_direction / gate_direction_norm
+    prompts = target_prompts + control_prompts
+    hidden_states = hidden_states_for_token_prompts(
+        torch=torch,
+        tokenizer=tokenizer,
+        model=model,
+        prompts=prompts,
+        layer=layer,
+        max_length=max_length,
+    ).to(reference_direction.device)
+    hidden_norms = torch.linalg.vector_norm(hidden_states, dim=-1).clamp(min=1e-12)
+    gate_scores = (hidden_states * gate_direction).sum(dim=-1) / hidden_norms
+    target_scores = gate_scores[: len(target_prompts)]
+    control_scores = gate_scores[len(target_prompts) :]
+    target_mean = target_scores.mean()
+    target_min = target_scores.min()
+    control_mean = control_scores.mean()
+    control_max = control_scores.max()
+    threshold = (target_mean + control_max) / 2.0
+    summary = {
+        "state_gate_direction_names": gate_direction_names,
+        "state_gate_direction_norm": float(gate_direction_norm.item()),
+        "state_gate_threshold": float(threshold.item()),
+        "state_gate_temperature": float(gate_temperature),
+        "state_gate_target_score_mean": float(target_mean.item()),
+        "state_gate_target_score_min": float(target_min.item()),
+        "state_gate_control_score_mean": float(control_mean.item()),
+        "state_gate_control_score_max": float(control_max.item()),
+        "state_gate_target_over_control_max": float((target_mean - control_max).item()),
+    }
+    return gate_direction.detach(), summary
+
+
 def optimize_binary_delta_for_prompt_sets(
     *,
     torch: Any,
@@ -1435,6 +1629,7 @@ def optimize_binary_delta_for_prompt_sets(
     mode: str,
     basis_directions: list[tuple[str, Any]] | None = None,
     feature_mask_directions: list[tuple[str, Any]] | None = None,
+    state_gate_directions: list[tuple[str, Any]] | None = None,
 ) -> tuple[Any, dict[str, Any]]:
     config = BINARY_OPT_DIRECTION_MODES[mode]
     steps = int(config["steps"])
@@ -1474,6 +1669,21 @@ def optimize_binary_delta_for_prompt_sets(
     target_count = len(target_prompts)
     if target_count == 0 or not control_prompts:
         raise ValueError("Optimized binary direction requires target and control prompts")
+    state_gate_direction = None
+    state_gate_summary: dict[str, Any] = {}
+    if state_gate_directions is not None:
+        state_gate_direction, state_gate_summary = state_gate_for_binary_prompts(
+            torch=torch,
+            tokenizer=tokenizer,
+            model=model,
+            target_prompts=target_prompts,
+            control_prompts=control_prompts,
+            layer=layer,
+            max_length=max_length,
+            reference_direction=reference,
+            gate_directions=state_gate_directions,
+            gate_temperature=float(config.get("gate_temperature", 0.05)),
+        )
 
     parameters = list(model.parameters())
     parameter_requires_grad = [parameter.requires_grad for parameter in parameters]
@@ -1494,6 +1704,18 @@ def optimize_binary_delta_for_prompt_sets(
             if feature_mask is None:
                 return candidate_delta
             return candidate_delta * feature_mask
+
+        def scoring_intervention(candidate_delta: Any) -> Any:
+            patch_delta = active_delta(candidate_delta)
+            if state_gate_direction is None:
+                return patch_delta
+            return {
+                "kind": "state_gate",
+                "delta": patch_delta,
+                "gate_direction": state_gate_direction,
+                "gate_threshold": state_gate_summary["state_gate_threshold"],
+                "gate_temperature": state_gate_summary["state_gate_temperature"],
+            }
 
         if basis_stack is None:
             delta = torch.zeros_like(reference, device=device, dtype=torch.float32)
@@ -1523,14 +1745,13 @@ def optimize_binary_delta_for_prompt_sets(
                 if coefficients is None:
                     raise ValueError("Basis optimization requires coefficients")
                 delta = delta_from_coefficients(coefficients)
-            delta_for_scoring = active_delta(delta)
             margins = binary_yes_minus_no_margins_for_prompts(
                 torch=torch,
                 tokenizer=tokenizer,
                 model=model,
                 prompts=prompts,
                 layer=layer,
-                delta=delta_for_scoring,
+                delta=scoring_intervention(delta),
                 max_length=max_length,
             )
             target_margins = margins[:target_count]
@@ -1587,6 +1808,8 @@ def optimize_binary_delta_for_prompt_sets(
                 final_delta = final_delta * (reference_norm / pre_rescale_norm)
             if basis_stack is not None:
                 parameterization = str(config.get("basis"))
+            elif state_gate_direction is not None:
+                parameterization = str(config.get("parameterization", "state_gate"))
             elif feature_mask is not None:
                 parameterization = str(config.get("parameterization", "feature_mask"))
             else:
@@ -1609,7 +1832,17 @@ def optimize_binary_delta_for_prompt_sets(
                 "post_rescale_norm": float(torch.linalg.vector_norm(final_delta).item()),
             }
             summary.update(feature_mask_summary)
+            summary.update(state_gate_summary)
             summary.update(final_metrics)
+        if state_gate_direction is not None:
+            final_intervention = {
+                "kind": "state_gate",
+                "delta": final_delta.to(device),
+                "gate_direction": state_gate_direction.to(device),
+                "gate_threshold": state_gate_summary["state_gate_threshold"],
+                "gate_temperature": state_gate_summary["state_gate_temperature"],
+            }
+            return final_intervention, summary
         return final_delta.to(device), summary
     finally:
         for parameter, requires_grad in zip(
@@ -1636,6 +1869,7 @@ def pair_optimized_binary_direction(
     mode: str,
     basis_directions: list[tuple[str, Any]] | None = None,
     feature_mask_directions: list[tuple[str, Any]] | None = None,
+    state_gate_directions: list[tuple[str, Any]] | None = None,
 ) -> tuple[Any, dict[str, Any]]:
     target_prompts, control_prompts, control_names = optimized_binary_prompt_sets(
         source_texts=source_texts,
@@ -1656,6 +1890,7 @@ def pair_optimized_binary_direction(
         mode=mode,
         basis_directions=basis_directions,
         feature_mask_directions=feature_mask_directions,
+        state_gate_directions=state_gate_directions,
     )
 
 
@@ -2558,6 +2793,7 @@ def run_behavior_aligned_direction_remote(
                             continue
                         basis_directions = None
                         feature_mask_directions = None
+                        state_gate_directions = None
                         if (
                             str(BINARY_OPT_DIRECTION_MODES[mode].get("basis", ""))
                             == "readout_span"
@@ -2598,6 +2834,28 @@ def run_behavior_aligned_direction_remote(
                                     binary_control_directions.items()
                                 )
                             )
+                        if (
+                            str(
+                                BINARY_OPT_DIRECTION_MODES[mode].get(
+                                    "parameterization",
+                                    "",
+                                )
+                            )
+                            == "state_gate"
+                        ):
+                            state_gate_directions = [
+                                ("source", learned_directions["source"]),
+                                ("distractor", learned_directions["distractor"]),
+                            ]
+                            state_gate_directions.extend(
+                                (
+                                    f"binary_control_{control_name}",
+                                    control_direction,
+                                )
+                                for control_name, control_direction in (
+                                    binary_control_directions.items()
+                                )
+                            )
                         optimized_direction, optimized_summary = (
                             pair_optimized_binary_direction(
                                 torch=torch,
@@ -2617,9 +2875,11 @@ def run_behavior_aligned_direction_remote(
                                 mode=mode,
                                 basis_directions=basis_directions,
                                 feature_mask_directions=feature_mask_directions,
+                                state_gate_directions=state_gate_directions,
                             )
                         )
-                        binary_optimized_directions[mode] = optimized_direction.to(
+                        binary_optimized_directions[mode] = move_direction_to_device(
+                            optimized_direction,
                             device
                         )
                         binary_optimized_direction_summaries[mode] = optimized_summary
@@ -3074,10 +3334,11 @@ def run_behavior_aligned_direction_remote(
                                         + mode_index
                                     ),
                                 )
-                                direction_norm = float(
-                                    torch.linalg.vector_norm(direction).item()
+                                direction_norm = direction_norm_value(
+                                    torch,
+                                    direction,
                                 )
-                                delta = direction * float(scale)
+                                delta = scale_direction(direction, float(scale))
                                 steered_scores = run_scoring_prompt(
                                     torch=torch,
                                     tokenizer=tokenizer,
