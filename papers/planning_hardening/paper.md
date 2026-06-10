@@ -192,7 +192,7 @@ The 10b results force a finer-grained vocabulary for representational claims. We
 | **Causal geometry** | Intervening on the representation predictably changes behavior. | Drop in action accuracy/return when the relevant subspace is perturbed. | Partial. Whole-representation perturbation (e.g., random-axis ablation) hurts; the *causal effect of the reward axis specifically* is not isolated. |
 | **Axis-specific geometry** | A particular named vector/direction is uniquely load-bearing. | Per-axis ablation drop > random-axis ablation drop by a meaningful margin. | **Not established** by this paper. |
 
-Paper [10] established Level 3 in the broad sense: the encoder is causally necessary for planning competence (random encoder + ΔE planning fails on XOR). What this paper shows is that Level 4 — that the reward-cluster-gap axis is the uniquely-load-bearing direction — does *not* follow from Level 1 evidence. Future papers should commit to this taxonomy and avoid sliding from cluster-gap measurements to axis-specific causal claims.
+Paper [10], together with the random/sensory encoder controls, established **broad** causal necessity of the learned encoder geometry for model-planning competence on XOR (random and sensory encoders + ΔE planning fail; the ΔE-aux encoder succeeds). What this paper shows is that Level 4 — that the reward-cluster-gap axis is the *uniquely* load-bearing direction — does *not* follow from Level 1 evidence. Future papers should commit to this taxonomy and avoid sliding from cluster-gap measurements to axis-specific causal claims.
 
 ### 4.2 Five interpretations of the random-axis-equals-reward-axis result
 
@@ -210,15 +210,29 @@ Five hypotheses for why removing a random direction hurts about as much as remov
 
 Companion papers [4–10] used cluster_gap as the primary representational metric. The reward_gap +1.84 in Paper [10] indeed predicted competent action — but the present paper shows that *removing the cluster-gap direction does not break the action policy in proportion to its magnitude*. The cluster_gap is a measurement of structure in the encoder; the *load-bearing structure* is the full action-conditional value function `ΔE(z, E, a)`, which lives in a higher-dimensional submanifold of `z`. We will need additional metrics — perhaps linear-probe-based axes, subspace-rank ablation, or per-direction sensitivity of the ΔE head's argmax — to make causal-load-bearing claims more cleanly in future papers.
 
-### 4.2 Action coverage is a real bottleneck for autonomous agents
+### 4.4 Action coverage is a real bottleneck for autonomous agents
 
 The biased_consume cell (XOR acc 0.491, return 1.97) is the cleanest failure mode discovered in the program so far. A real agent learning in the wild does not get uniform action coverage; its policy biases its own data. The replay-balanced cell (XOR acc 0.629) shows that simple rebalancing helps but does not close the gap to uniform-random (acc 0.996). This is the empirical target for follow-up: can curiosity-driven exploration [3, 4], variational empowerment [5], expected-free-energy minimization [6, 7], or active counterfactual querying recover full competence under biased data without an external experimenter providing uniform action probabilities?
 
 This is now Paper 11 priority (a) in the next-steps list, displacing state-dependent valence — the reviewer of [10] was right to ask for biased exploration as the main hardening test.
 
-### 4.3 Nonlinearity in the readout is necessary on XOR
+### 4.5 Nonlinearity in the readout is necessary on XOR
 
 The linear-head failure on XOR (acc 0.472 despite encoder rg +1.66) is itself a clean program contribution. It shows that the conjunctive (color, label) → reward function is *not linearly readable* from the encoder's 32-dim output, even when the encoder has organized by reward in the cluster-gap sense. The encoder + small nonlinear head together implement the function; neither alone does. This is consistent with general findings on linear-probe limits [8, 9] but is — to our knowledge — a novel demonstration in a homeostatic setting.
+
+### 4.6 Distributed concern resembles superposition
+
+The combination of §4.1–4.5 — visible cluster geometry, accurate readout, distributed causal substrate, nonlinear-only readout — is mechanistically consistent with the "superposed features" picture from the toy-models-of-superposition literature [1, 2]. In small networks with more semantic features than embedding dimensions, features can be stored in *rotated, nonlinearly-decoded* directions; the human-readable cluster-mean axis is then a *visualization of a semantic direction* rather than the network's actual computational basis. Our 32-dim encoder, 16-dim observation space, and 8 distinct (color, label) items make this regime plausible. The conceptual upshot: a distributed-concern reading is a *natural*, not exotic, outcome of training a small nonlinear network on a conjunctive viability task, and the program should expect it as a default rather than a surprise.
+
+### 4.7 The triad: geometry × capacity × coverage
+
+Synthesizing §4.4 (coverage), §4.5 (capacity), and §4.6 (distributed geometry), the program now treats concern-shaped competence as a three-way dependency:
+
+- **Geometry** — the encoder preserves the relevant viability distinctions (Papers [6–10]; refined here to *manifold*, not vector).
+- **Capacity** — the readout (ΔE head) is nonlinear enough to compose them ([10b] §3.3).
+- **Coverage** — the agent samples enough actions to learn counterfactual viability effects ([10b] §3.2).
+
+All three are necessary. Companion paper [9] established the geometry-vs-policy bottleneck; paper [10b] adds the third axis. The natural next paper attacks the weakest of the three under realistic agent conditions, which is *coverage*.
 
 ## 5. Connection to the program
 
