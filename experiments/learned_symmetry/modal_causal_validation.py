@@ -94,7 +94,8 @@ def shard_sweep(arg: dict[str, Any]) -> dict[str, Any]:
                 rotated = rot(base, deg)
                 for _ in range(spcr):
                     noisy = np.clip(rotated + rng_np.normal(0, 0.05, rotated.shape).astype(np.float32), 0, 1)
-                    tx.append(noisy); ty.append(label)
+                    tx.append(noisy)
+                    ty.append(label)
         for label, rs in ood_d.items():
             base = render(label)
             for r in rs:
@@ -102,7 +103,8 @@ def shard_sweep(arg: dict[str, Any]) -> dict[str, Any]:
                 rotated = rot(base, deg)
                 for _ in range(spcr):
                     noisy = np.clip(rotated + rng_np.normal(0, 0.05, rotated.shape).astype(np.float32), 0, 1)
-                    ox.append(noisy); oy.append(label)
+                    ox.append(noisy)
+                    oy.append(label)
         return (
             torch.from_numpy(np.stack(tx)).unsqueeze(1),
             torch.tensor(ty, dtype=torch.long),
@@ -119,11 +121,13 @@ def shard_sweep(arg: dict[str, Any]) -> dict[str, Any]:
         return out
 
     def augment_with(images, labels, angles):
-        chunks_x = [images]; chunks_y = [labels]
+        chunks_x = [images]
+        chunks_y = [labels]
         for deg in angles:
             if deg == 0.0:
                 continue
-            chunks_x.append(rotate_batch(images, deg)); chunks_y.append(labels)
+            chunks_x.append(rotate_batch(images, deg))
+            chunks_y.append(labels)
         return torch.cat(chunks_x, dim=0), torch.cat(chunks_y, dim=0)
 
     def make_model(arch, hidden, depth, init_scale):
@@ -161,7 +165,8 @@ def shard_sweep(arg: dict[str, Any]) -> dict[str, Any]:
 
         def cos(a, b):
             na, nb = float(np.linalg.norm(a)), float(np.linalg.norm(b))
-            if na == 0 or nb == 0: return 0.0
+            if na == 0 or nb == 0:
+                return 0.0
             return float(np.dot(a, b) / (na * nb))
 
         angles = [k * (360.0 / n_cand) for k in range(n_cand)]
@@ -220,9 +225,11 @@ def shard_sweep(arg: dict[str, Any]) -> dict[str, Any]:
             )
             final_loss = math.inf
             for _ in range(epochs):
-                model.train(); opt.zero_grad()
+                model.train()
+                opt.zero_grad()
                 loss = F.cross_entropy(model(ax), ay)
-                loss.backward(); opt.step()
+                loss.backward()
+                opt.step()
                 final_loss = float(loss.item())
 
             with torch.no_grad():

@@ -164,13 +164,17 @@ def _group_recall_precision(
     if not oracle:
         return 0.0, 0.0
     tp = sum(
-        1 for o in oracle if any(_angle_match(o, l, tol) for l in learned_angles)
+        1
+        for o in oracle
+        if any(_angle_match(o, learned, tol) for learned in learned_angles)
     )
     recall = tp / max(1, len(oracle))
     denom = len(learned_angles)
     if denom > 0:
         tp_p = sum(
-            1 for l in learned_angles if any(_angle_match(o, l, tol) for o in oracle)
+            1
+            for learned in learned_angles
+            if any(_angle_match(o, learned, tol) for o in oracle)
         )
         precision = tp_p / denom
     else:
