@@ -103,6 +103,24 @@ def full_label_prompt(
     raise ValueError(f"Unknown prompt frame: {prompt_frame}")
 
 
+def binary_relation_prompt(
+    *,
+    source_text: str,
+    candidate_label: str,
+) -> str:
+    return "\n".join(
+        [
+            "Read the passage and candidate concept.",
+            "Answer Yes only if the candidate names the closest related concept,",
+            "not merely the concept described in the passage.",
+            "",
+            f"Passage: {source_text}",
+            f"Candidate: {candidate_label}",
+            "Answer Yes or No:",
+        ]
+    )
+
+
 def load_aliases(path: Path) -> dict[str, list[str]]:
     rows = json.loads(path.read_text())
     aliases_by_concept: dict[str, list[str]] = {}
@@ -584,6 +602,46 @@ def run_full_label_prompt(
     return scores
 
 
+def run_binary_relation_prompt(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    source_text: str,
+    layer: int,
+    delta: Any | None,
+    max_length: int,
+    labels_by_role: dict[str, str],
+    label_score_normalization: str,
+) -> dict[str, Any]:
+    answer_labels = {"yes": "Yes", "no": "No"}
+    scores: dict[str, Any] = {}
+    answer_scores: dict[str, dict[str, float]] = {}
+    for role, candidate_label in labels_by_role.items():
+        prompt = binary_relation_prompt(
+            source_text=source_text,
+            candidate_label=candidate_label,
+        )
+        role_answer_scores = run_full_label_prompt(
+            torch=torch,
+            tokenizer=tokenizer,
+            model=model,
+            prompt=prompt,
+            layer=layer,
+            delta=delta,
+            max_length=max_length,
+            labels_by_role=answer_labels,
+            label_score_normalization=label_score_normalization,
+        )
+        answer_scores[role] = {
+            "yes": role_answer_scores["yes"],
+            "no": role_answer_scores["no"],
+        }
+        scores[role] = role_answer_scores["yes"] - role_answer_scores["no"]
+    scores["answer_scores_by_role"] = answer_scores
+    return scores
+
+
 def generate_continuation(
     *,
     torch: Any,
@@ -712,6 +770,7 @@ def run_scoring_prompt(
     tokenizer: Any,
     model: Any,
     prompt: str,
+    source_text: str | None,
     layer: int,
     delta: Any | None,
     max_length: int,
@@ -741,6 +800,20 @@ def run_scoring_prompt(
             tokenizer=tokenizer,
             model=model,
             prompt=prompt,
+            layer=layer,
+            delta=delta,
+            max_length=max_length,
+            labels_by_role=labels_by_role,
+            label_score_normalization=label_score_normalization,
+        )
+    if scoring_surface == "binary_relation":
+        if source_text is None:
+            raise ValueError("Binary-relation scoring requires source_text")
+        return run_binary_relation_prompt(
+            torch=torch,
+            tokenizer=tokenizer,
+            model=model,
+            source_text=source_text,
             layer=layer,
             delta=delta,
             max_length=max_length,
@@ -955,6 +1028,46 @@ def full_label_gradient_direction_for_prompt(
     )
 
 
+def binary_relation_gradient_direction_for_prompt(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    source_text: str,
+    layer: int,
+    max_length: int,
+    candidate_label: str,
+    label_score_normalization: str,
+) -> Any:
+    prompt = binary_relation_prompt(
+        source_text=source_text,
+        candidate_label=candidate_label,
+    )
+    yes_ids = label_token_ids(tokenizer, {"yes": "Yes"})["yes"]
+    no_ids = label_token_ids(tokenizer, {"no": "No"})["no"]
+    yes_gradient = full_label_score_gradient_for_role(
+        torch=torch,
+        tokenizer=tokenizer,
+        model=model,
+        prompt=prompt,
+        layer=layer,
+        max_length=max_length,
+        continuation_ids=yes_ids,
+        label_score_normalization=label_score_normalization,
+    )
+    no_gradient = full_label_score_gradient_for_role(
+        torch=torch,
+        tokenizer=tokenizer,
+        model=model,
+        prompt=prompt,
+        layer=layer,
+        max_length=max_length,
+        continuation_ids=no_ids,
+        label_score_normalization=label_score_normalization,
+    )
+    return yes_gradient - no_gradient
+
+
 def learned_gradient_direction(
     *,
     torch: Any,
@@ -1008,6 +1121,20 @@ def learned_gradient_direction(
                     max_length=max_length,
                     labels_by_role=labels_by_role,
                     objective_role=objective_role,
+                    label_score_normalization=label_score_normalization,
+                )
+            )
+            continue
+        if scoring_surface == "binary_relation":
+            gradients.append(
+                binary_relation_gradient_direction_for_prompt(
+                    torch=torch,
+                    tokenizer=tokenizer,
+                    model=model,
+                    source_text=source_text,
+                    layer=layer,
+                    max_length=max_length,
+                    candidate_label=labels_by_role[objective_role],
                     label_score_normalization=label_score_normalization,
                 )
             )
@@ -1690,6 +1817,19 @@ def run_behavior_aligned_direction_remote(
                                 ),
                                 "option_order": "full_label",
                                 "token_ids": None,
+                                "source_text": None,
+                            }
+                        )
+                    elif scoring_surface == "binary_relation":
+                        prompt_specs.append(
+                            {
+                                "prompt": binary_relation_prompt(
+                                    source_text=heldout_text,
+                                    candidate_label=eval_labels_by_role["target"],
+                                ),
+                                "option_order": "binary_relation",
+                                "token_ids": None,
+                                "source_text": heldout_text,
                             }
                         )
                     elif scoring_surface in {"generation_match", "generation_readout"}:
@@ -1701,6 +1841,7 @@ def run_behavior_aligned_direction_remote(
                                 ),
                                 "option_order": scoring_surface,
                                 "token_ids": None,
+                                "source_text": None,
                             }
                         )
                     else:
@@ -1712,6 +1853,7 @@ def run_behavior_aligned_direction_remote(
                             tokenizer=tokenizer,
                             model=model,
                             prompt=prompt,
+                            source_text=prompt_spec.get("source_text"),
                             layer=layer,
                             delta=None,
                             max_length=max_length,
@@ -1752,6 +1894,7 @@ def run_behavior_aligned_direction_remote(
                                     tokenizer=tokenizer,
                                     model=model,
                                     prompt=prompt,
+                                    source_text=prompt_spec.get("source_text"),
                                     layer=layer,
                                     delta=delta,
                                     max_length=max_length,

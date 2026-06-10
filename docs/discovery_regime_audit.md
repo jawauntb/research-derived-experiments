@@ -1806,3 +1806,69 @@ Residual content:
 
 Next move: build a direct behavior-classification/intervention gate before
 adding model scale.
+
+## Activation Geometry Probe: Binary-Relation Behavior Gate
+
+Question: can a direct yes/no relation-classification interface reveal behavior
+that generation and short-answer gates miss?
+
+Current regime:
+
+- Artifact types: binary-relation payloads, random-null specificity reports,
+  yes/no continuation-margin tables, direction-alignment diagnostics.
+- Operations: train-alias binary yes/no gradient construction, held-out-alias
+  binary relation scoring, random-null control comparison, CAA/random baselines.
+- Gates/verifiers: positives must increase target Yes-No margin and become
+  target-positive more often than random relation nulls.
+- Known limitations: one small model, one seed, one layer, one scale, no
+  explicit yes-bias controls yet.
+
+Action class:
+
+- Retrieval/search/discovery: verifier transition with residual content.
+- Why: this adds a new behavior artifact class that is neither label generation
+  nor visible option-token choice, and it produces the first nonzero behavior
+  target passes after the stricter generation gates failed.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/binary_relation_behavior_gate_2026_06_09.md`;
+  local ignored payload
+  `artifacts/activation_geometry/modal_pythia_70m_binary_relation_random_nulls_source_seed20260609.json`.
+- Positive targets: expanded steering pairs.
+- Negative controls: ten seeded random relation null controls.
+- Stress tests: target-gradient, CAA, and random same-norm directions under
+  held-out `alias_2`.
+
+Gate:
+
+- Acceptance rule: continue toward paper-level semantic specificity only if
+  positives beat random-null controls and the effect cannot be explained by a
+  broad Yes-bias direction.
+- Withheld/rejected rule: withhold semantic-specific claims if controls pass or
+  target/source/distractor gradients are too collinear to separate.
+
+Results:
+
+- Accepted artifacts: `binary_relation` scoring surface and direct yes/no
+  behavior gate.
+- Rejected or withheld artifacts: binary relation result as a final semantic
+  specificity claim.
+- Key metrics: `target_learned` passes `4/7` positives and `3/10` random nulls;
+  CAA and random pass `0/7` positives and `0/10` random nulls.
+- Variance or ablation: role-gradient cosines are very high, suggesting broad
+  candidate affirmation as a confound.
+
+Residual content:
+
+- Explained by old regime: full-label directions can move text-conditioned
+  label surfaces.
+- New content outside old regime: direct yes/no relation behavior is
+  intervention-sensitive even when generation behavior is zero.
+- Retractions or supersessions: supersede "all behavior gates are zero" with
+  "generation behavior is zero, but direct binary relation behavior has a
+  nonzero, confounded signal."
+
+Next move: separate relation movement from yes-bias with explicit binary
+controls before scaling.
