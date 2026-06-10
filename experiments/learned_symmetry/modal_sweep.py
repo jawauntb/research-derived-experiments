@@ -105,9 +105,7 @@ def shard_sweep(arg: dict[str, Any]) -> dict[str, Any]:
                 rotated = rotate_img(base, deg)
                 for _ in range(spcr):
                     noisy = np.clip(rotated + rng_np.normal(0, 0.05, rotated.shape).astype(np.float32), 0, 1)
-                    train_x.append(noisy)
-                    train_y.append(label)
-                    train_r.append(r)
+                    train_x.append(noisy); train_y.append(label); train_r.append(r)
         for label, rots in ood_dict.items():
             base = render(label)
             for r in rots:
@@ -115,8 +113,7 @@ def shard_sweep(arg: dict[str, Any]) -> dict[str, Any]:
                 rotated = rotate_img(base, deg)
                 for _ in range(spcr):
                     noisy = np.clip(rotated + rng_np.normal(0, 0.05, rotated.shape).astype(np.float32), 0, 1)
-                    ood_x.append(noisy)
-                    ood_y.append(label)
+                    ood_x.append(noisy); ood_y.append(label)
         tx = torch.from_numpy(np.stack(train_x)).unsqueeze(1)
         ty = torch.tensor(train_y, dtype=torch.long)
         ox = torch.from_numpy(np.stack(ood_x)).unsqueeze(1)
@@ -134,33 +131,27 @@ def shard_sweep(arg: dict[str, Any]) -> dict[str, Any]:
 
     def augment(images, labels, aug, strength, n_rot, rng):
         if aug == "full_rotation":
-            chunks_x = [images]
-            chunks_y = [labels]
+            chunks_x = [images]; chunks_y = [labels]
             for k in range(1, n_rot):
                 deg = k * (360.0 / n_rot)
-                chunks_x.append(rotate_batch(images, deg))
-                chunks_y.append(labels)
+                chunks_x.append(rotate_batch(images, deg)); chunks_y.append(labels)
             return torch.cat(chunks_x, dim=0), torch.cat(chunks_y, dim=0)
         if aug == "none" or strength == 0:
             return images, labels
         if aug == "partial_rotation":
             angles = [k * (360.0 / n_rot) for k in range(1, n_rot)]
             chosen = rng.sample(angles, min(strength, len(angles)))
-            chunks_x = [images]
-            chunks_y = [labels]
+            chunks_x = [images]; chunks_y = [labels]
             for deg in chosen:
-                chunks_x.append(rotate_batch(images, deg))
-                chunks_y.append(labels)
+                chunks_x.append(rotate_batch(images, deg)); chunks_y.append(labels)
             return torch.cat(chunks_x, dim=0), torch.cat(chunks_y, dim=0)
         if aug == "wrong_permute":
-            chunks_x = [images]
-            chunks_y = [labels]
+            chunks_x = [images]; chunks_y = [labels]
             for _ in range(strength):
                 perm = torch.randperm(GRID * GRID)
                 flat = images.flatten(start_dim=2)
                 shuffled = flat[:, :, perm].reshape_as(images)
-                chunks_x.append(shuffled)
-                chunks_y.append(labels)
+                chunks_x.append(shuffled); chunks_y.append(labels)
             return torch.cat(chunks_x, dim=0), torch.cat(chunks_y, dim=0)
         raise ValueError(aug)
 
@@ -203,8 +194,7 @@ def shard_sweep(arg: dict[str, Any]) -> dict[str, Any]:
         model.eval()
         with torch.no_grad():
             base = model(eval_x).argmax(dim=-1)
-        agree = 0
-        total = 0
+        agree = 0; total = 0
         for deg in angles:
             if deg == 0.0:
                 continue
@@ -222,8 +212,7 @@ def shard_sweep(arg: dict[str, Any]) -> dict[str, Any]:
 
         def cos(a, b):
             na, nb = float(np.linalg.norm(a)), float(np.linalg.norm(b))
-            if na == 0 or nb == 0:
-                return 0.0
+            if na == 0 or nb == 0: return 0.0
             return float(np.dot(a, b) / (na * nb))
 
         cand_angles = [k * (360.0 / n_candidates) for k in range(n_candidates)]
@@ -234,8 +223,7 @@ def shard_sweep(arg: dict[str, Any]) -> dict[str, Any]:
                 rot = rotate_img(train_x[i, 0].cpu().numpy(), theta).reshape(-1).astype(np.float32)
                 same = [j for j in range(B) if labels[j] == labels[i]]
                 if not same:
-                    match.append(0.0)
-                    continue
+                    match.append(0.0); continue
                 match.append(max(cos(rot, feats[j]) for j in same))
             scores.append(float(np.mean(match)))
         kept = [(cand_angles[i], scores[i]) for i in range(n_candidates) if scores[i] >= threshold]
@@ -262,8 +250,7 @@ def shard_sweep(arg: dict[str, Any]) -> dict[str, Any]:
         return float(sum((h * vi).sum().item() for h, vi in zip(hv, v)))
 
     def angle_match(a, b, tol=7.5):
-        d = abs(a - b)
-        d = min(d, 360.0 - d)
+        d = abs(a - b); d = min(d, 360.0 - d)
         return d < tol
 
     # ----- sweep -----
@@ -285,17 +272,15 @@ def shard_sweep(arg: dict[str, Any]) -> dict[str, Any]:
             augmentation=aug,
             augmentation_strength=strength,
         )
-        seed = int(cfg["seed"])
-        torch.manual_seed(seed)
-        np.random.seed(seed)
+        torch.manual_seed(cfg["seed"]); np.random.seed(cfg["seed"])
 
         split_seed = rng.randrange(0, 2**31 - 1)
         train_d, ood_d = make_split(random.Random(split_seed))
-        tx, ty, ox, oy = materialize(train_d, ood_d, spcr=8, seed=seed)
+        tx, ty, ox, oy = materialize(train_d, ood_d, spcr=8, seed=cfg["seed"])
 
         ax, ay = augment(
             tx, ty, cfg["augmentation"], cfg["augmentation_strength"],
-            n_rotations, random.Random(seed)
+            n_rotations, random.Random(cfg["seed"])
         )
 
         model = make_model(cfg["architecture"], cfg["hidden_width"], cfg["depth"], cfg["init_scale"])
@@ -306,11 +291,9 @@ def shard_sweep(arg: dict[str, Any]) -> dict[str, Any]:
         )
         final_loss = math.inf
         for _ in range(epochs):
-            model.train()
-            opt.zero_grad()
+            model.train(); opt.zero_grad()
             loss = F.cross_entropy(model(ax), ay)
-            loss.backward()
-            opt.step()
+            loss.backward(); opt.step()
             final_loss = float(loss.item())
 
         train_acc = accuracy(model, tx, ty)
@@ -319,17 +302,17 @@ def shard_sweep(arg: dict[str, Any]) -> dict[str, Any]:
         w_oracle = group_invariance(model, ox, oracle_angles)
         learned_angles, _ = infer_group(tx, ty, candidates, threshold)
         w_learned = group_invariance(model, ox, learned_angles)
-        rng_np = np.random.RandomState(seed)
+        rng_np = np.random.RandomState(cfg["seed"])
         rand_angles = random_group(len(learned_angles), candidates, rng_np)
         w_random = group_invariance(model, ox, rand_angles)
         param_l2 = math.sqrt(sum(float((p.detach() ** 2).sum().item()) for p in model.parameters()))
         sharp = sharpness(model, ax, ay)
 
         oracle_set = set(oracle_angles)
-        tp = sum(1 for o in oracle_set if any(angle_match(o, learned) for learned in learned_angles))
+        tp = sum(1 for o in oracle_set if any(angle_match(o, l) for l in learned_angles))
         recall = tp / max(1, len(oracle_set))
         denom = len(learned_angles)
-        tp_p = sum(1 for learned in learned_angles if any(angle_match(o, learned) for o in oracle_set))
+        tp_p = sum(1 for l in learned_angles if any(angle_match(o, l) for o in oracle_set))
         precision = (tp_p / denom) if denom > 0 else 0.0
 
         out.append(dict(

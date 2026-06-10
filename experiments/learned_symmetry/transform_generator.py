@@ -25,6 +25,7 @@ import torch
 
 from experiments.rotation_weakness.dataset import (
     rotate_image,
+    rotation_group_elements,
 )
 
 

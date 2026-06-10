@@ -29,15 +29,7 @@ class TransformGeneratorTest(unittest.TestCase):
         oracle = set(rotation_group_elements(8))
         learned_set = set(learned.angles())
         # We should recover >= 7 of 8 oracle angles (allow 1 miss for noise).
-        recovered = sum(
-            1
-            for o in oracle
-            if any(
-                abs(o - learned_angle) < 7.6
-                or abs(360.0 - abs(o - learned_angle)) < 7.6
-                for learned_angle in learned_set
-            )
-        )
+        recovered = sum(1 for o in oracle if any(abs(o - l) < 7.6 or abs(360.0 - abs(o - l)) < 7.6 for l in learned_set))
         self.assertGreaterEqual(recovered, 7)
 
     def test_inferred_group_includes_identity(self) -> None:
