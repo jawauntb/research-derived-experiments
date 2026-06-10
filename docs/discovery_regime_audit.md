@@ -2147,3 +2147,66 @@ Residual content:
 Next move: run a focused layer/scale sweep around layer 3 PC whitening, or
 replicate this exact pocket on a second model. A paper claim still needs a
 stable result across seeds, layers, or models.
+
+## Activation Geometry Probe: Binary Layer-3 Scale Sweep
+
+Question: can scale calibration expand the layer-3 PC1-whitening pocket without
+reviving random-null controls?
+
+Current regime:
+
+- Artifact types: scale-specific binary-relation payloads, strict pair curves,
+  geometry summaries, rejected scale frontier.
+- Operations: sweep intervention scale for the best layer-3 PC-whitened mode.
+- Gates/verifiers: strict binary-specificity pass counts for positives and
+  random-null controls.
+- Known limitations: same model, same seed, same layer; no second-model
+  evidence yet.
+
+Action class:
+
+- Retrieval/search/discovery: scale-frontier search inside an already discovered
+  weak pocket.
+- Why: this tests whether the layer-3 pocket can be made broad enough for the
+  Phase 1 paper gate by calibration alone.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/binary_layer3_scale_sweep_2026_06_10.md`;
+  local ignored artifact
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_pc1_whiten_scale_sweep_seed20260610.json`.
+- Positive targets: seven expanded random-null positives.
+- Negative controls: ten random relation nulls plus row-level yes-bias controls.
+- Stress tests: scales `0.5`, `0.75`, `1.0`, `1.25`, and `1.5`.
+
+Gate:
+
+- Acceptance rule: broaden strict positive passes while preserving `0/10`
+  strict random-null controls.
+- Withheld/rejected rule: reject scale settings that gain positives only by
+  admitting random-null controls.
+
+Results:
+
+- Accepted artifacts: scale frontier and strict pair curve.
+- Rejected or withheld artifacts: scale tuning alone as a completed semantic
+  specificity solution.
+- Key metrics: best clean scale is `1.0` with `2/7` strict positives and `0/10`
+  controls. Scale `1.25` reaches `3/7` positives but admits `1/10` controls.
+- Variance or ablation: random same-norm remains `0/7` positives and `0/10`
+  controls at every scale.
+
+Residual content:
+
+- Explained by old regime: the layer-3 pocket is weak and pair-specific.
+- New content outside old regime: `attractor->attractor_network` and
+  `fixed_point->prototype` are stable controlled positives around scale `1.0`;
+  `basin_of_attraction->schema` appears only when controls begin to leak.
+- Retractions or supersessions: supersede "scale sweep may make layer 3
+  paper-ready" with "scale sweep maps a real but too-small specificity
+  frontier."
+
+Next move: either replicate the two stable layer-3 strict positives across a
+second seed/model, or pivot to a pair-focused/nonlinear intervention. A broad
+paper claim still needs more than a two-pair pocket.

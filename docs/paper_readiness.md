@@ -20,8 +20,8 @@ that distinction, and constrained control penalties trace a specificity frontier
 | Baselines | Random, source/distractor, residual projection, hard/mean-control penalties, and CAA/CAV-style activation-difference baselines. | Add learned behavior-readout/generation baselines and, later, SAE/feature-guided baselines if feasible. |
 | Statistical confidence | Single seed for most behavior runs. | Add seeds, bootstrap CIs over pairs, and random relation nulls. |
 | Claim boundary | `docs/semantic_specificity.md` defines specificity as held-out target transfer minus independent control leakage under matched score surfaces. | Keep the claim boundary in the paper draft and do not promote runs with near-zero specificity. |
-| Generation tests | Added strict short-generation match, learned generation-readout, constrained short-answer gates, a direct binary-relation behavior gate, binary yes-bias controls, contrastive binary directions, and binary-PC residualization/whitening. Generation remains zero. Binary relation classification moves behavior, but yes-bias-aware gating rejects most apparent pockets. | Focus on the layer-3 PC-whitening pocket before abandoning binary steering entirely. |
-| Mechanistic analysis | Full-label alias leakage is not explained by one low-rank control vector, but the binary yes/no surface is strongly low-rank. Layer 5 target gradients are almost collinear with control PC1; layer 3 is less collapsed and gives a weak strict whitening pocket. | Run a focused layer/scale sweep around layer 3 PC whitening, then replicate any surviving pocket on another model or seed. |
+| Generation tests | Added strict short-generation match, learned generation-readout, constrained short-answer gates, a direct binary-relation behavior gate, binary yes-bias controls, contrastive binary directions, binary-PC residualization/whitening, and a layer-3 scale sweep. Generation remains zero. Binary relation classification moves behavior, but yes-bias-aware gating rejects most apparent pockets. | Replicate the two stable layer-3 strict positives across seed/model or test a pair-focused nonlinear intervention. |
+| Mechanistic analysis | Full-label alias leakage is not explained by one low-rank control vector, but the binary yes/no surface is strongly low-rank. Layer 5 target gradients are almost collinear with control PC1; layer 3 is less collapsed and gives a weak two-pair strict whitening pocket. | Treat scale tuning as exhausted; stress-test the two-pair pocket for stability. |
 
 ## Current Phase
 
@@ -62,6 +62,8 @@ Current Phase 1 result:
 - Top-PC binary residualization confirms the entanglement. Removing the first binary-control PC makes the false-carrier margin safely negative but also drops loose positive behavior to `0/7`; whitening keeps `5/7` loose positives but still gives `0/7` strict positives because target movement does not beat the strongest yes-bias control.
 - The target binary gradients are almost the same direction as the first control PC: mean cosine `0.962` on positive pairs and `0.954` on random-null controls.
 - A layer-3 replication is less collapsed and produces the first tiny strict pocket after hardening: `target_binary_pc1_whiten` has `2/7` strict positives and `0/10` strict random-null controls; `target_binary_pc3_whiten` has `1/7` strict positives and `0/10` controls. The pocket is not paper-ready because mean steered-over-control remains negative and positives are sparse.
+- A focused layer-3 scale sweep maps the pocket boundary. Scale `1.0` is the cleanest point with `2/7` strict positives and `0/10` controls. Scale `1.25` reaches `3/7` strict positives but revives `1/10` strict controls, so calibration alone does not satisfy Phase 1.
+- The stable strict positives around scale `1.0` are `attractor->attractor_network` and `fixed_point->prototype`.
 - Phase 1 is not passed yet. The current full-label logprob gate should be treated as a diagnostic failure mode, generation gates are negative, and binary relation behavior is nonzero but dominated by answer-polarity control.
 
 ## Phase 2 Preview
@@ -71,7 +73,7 @@ If Phase 1 survives, expand along three axes:
 - Model replication: add GPT-2 and a larger open causal LM if Modal budget allows.
 - Concept expansion: add more positive bridges and random relation nulls.
 - Baselines: compare generation/readout behavior against the existing target-gradient, residual, random, and CAA/CAV-style activation-difference baselines.
-- Verifier pivot: run a focused scale/layer stress test around the layer-3 PC-whitening pocket; if it fails, use the strict binary-relation verifier to evaluate a nonlinear/feature-guided intervention or another model.
+- Verifier pivot: replicate the two stable layer-3 strict positives across seed/model, or use the strict binary-relation verifier to evaluate a nonlinear/feature-guided intervention.
 
 ## Paper Draft Gate
 
