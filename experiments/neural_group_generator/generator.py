@@ -51,6 +51,7 @@ class GeneratorConfig:
     learning_rate: float = 3e-3
     weight_decay: float = 1e-4
     diversity_weight: float = 1.0  # high: encourage spread in z
+    identity_weight: float = 0.0  # reserved for identity-preservation variants
     epochs: int = 300
     n_diversity_pairs: int = 4
 
