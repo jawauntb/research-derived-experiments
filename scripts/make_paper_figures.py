@@ -31,23 +31,19 @@ Figures produced:
 from __future__ import annotations
 
 import json
-import random
 import sys
 from pathlib import Path
 
 import matplotlib
+
 matplotlib.use("Agg")  # headless
 import matplotlib.pyplot as plt
 import numpy as np
-import torch
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from experiments.learned_symmetry.transform_generator import (
-    infer_rotation_group_from_training,
-)
-from experiments.rotation_weakness.dataset import (
+from experiments.rotation_weakness.dataset import (  # noqa: E402
     make_partial_rotation_split,
     materialize_split,
     rotate_image,
@@ -117,7 +113,7 @@ def figure_group_recovery() -> None:
         else:
             colors.append("#1f77b4")  # blue: rejected
 
-    bars = ax.bar(theta_rad, scores, width=width * 0.9, color=colors, edgecolor="white", linewidth=0.5)
+    ax.bar(theta_rad, scores, width=width * 0.9, color=colors, edgecolor="white", linewidth=0.5)
     ax.set_theta_zero_location("N")
     ax.set_theta_direction(-1)
     ax.set_rgrids([0.2, 0.4, 0.5, 0.6, 0.8], angle=90,
@@ -305,12 +301,19 @@ def figure_threshold_sweep() -> None:
              label="Learned substitution group")
     ax1.plot(taus, random_b, "s--", color="#9467bd", linewidth=2, markersize=8,
              label="Random control")
-    for tau, l, r in zip(taus, learned, random_b):
-        ax1.text(tau, l + 0.005, f"{l:.3f}", ha="center", fontsize=9, fontweight="bold")
-        ax1.text(tau, r - 0.012, f"{r:.3f}", ha="center", fontsize=9)
-        ax1.annotate("", xy=(tau, r), xytext=(tau, l),
+    for tau, learned_score, random_score in zip(taus, learned, random_b):
+        ax1.text(
+            tau,
+            learned_score + 0.005,
+            f"{learned_score:.3f}",
+            ha="center",
+            fontsize=9,
+            fontweight="bold",
+        )
+        ax1.text(tau, random_score - 0.012, f"{random_score:.3f}", ha="center", fontsize=9)
+        ax1.annotate("", xy=(tau, random_score), xytext=(tau, learned_score),
                      arrowprops=dict(arrowstyle="<->", color="gray", lw=0.7))
-        ax1.text(tau + 0.02, (l + r) / 2, f"Δ = {l - r:+.3f}",
+        ax1.text(tau + 0.02, (learned_score + random_score) / 2, f"Δ = {learned_score - random_score:+.3f}",
                  fontsize=8.5, color="#444")
     ax1.set_xlabel("Score threshold τ", fontsize=11)
     ax1.set_ylabel("Next-token argmax invariance", fontsize=11)
