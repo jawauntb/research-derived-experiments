@@ -14,14 +14,14 @@ that distinction, and constrained control penalties trace a specificity frontier
 
 | Requirement | Current state | Next gate |
 | --- | --- | --- |
-| More models | Pythia-70M only for alias/constrained runs. | Replicate best frontier on at least one larger open model and one small control model. |
+| More models | Pythia-70M only for alias/constrained runs; a GPT-2 replication attempt was stopped without an artifact. | Replicate best frontier on at least one larger open model and one small control model. |
 | More concepts | Expanded behavior gate now has seven positives, five mixed controls, six target-disjoint controls, and ten random relation nulls. | Add bootstrap confidence intervals over pairs and random-null draws once a verifier separates positives from nulls. |
 | Held-out aliases/controls | Added third aliases and a train-on-`alias_0+alias_1` / test-on-`alias_2` gate. | Diagnose why held-out transfer moves controls as much as positives. |
 | Baselines | Random, source/distractor, residual projection, hard/mean-control penalties, and CAA/CAV-style activation-difference baselines. | Add learned behavior-readout/generation baselines and, later, SAE/feature-guided baselines if feasible. |
 | Statistical confidence | Single seed for most behavior runs. | Add seeds, bootstrap CIs over pairs, and random relation nulls. |
 | Claim boundary | `docs/semantic_specificity.md` defines specificity as held-out target transfer minus independent control leakage under matched score surfaces. | Keep the claim boundary in the paper draft and do not promote runs with near-zero specificity. |
-| Generation tests | Added strict short-generation match, learned generation-readout, constrained short-answer gates, a direct binary-relation behavior gate, binary yes-bias controls, contrastive binary directions, and binary-PC residualization/whitening. Generation remains zero. Binary relation classification moves behavior, but yes-bias-aware gating rejects the apparent pocket. | Treat binary relation as a diagnostic verifier for Pythia-70M layer 5 unless another model/layer or nonlinear intervention changes the result. |
-| Mechanistic analysis | Full-label alias leakage is not explained by one low-rank control vector, but the binary yes/no surface is strongly low-rank. The target gradients are almost collinear with the first binary-control PC: positive mean cosine `0.962`, random-null mean cosine `0.954`. | Replicate the low-rank entanglement diagnosis on another model/layer or test a feature-guided intervention under the same strict verifier. |
+| Generation tests | Added strict short-generation match, learned generation-readout, constrained short-answer gates, a direct binary-relation behavior gate, binary yes-bias controls, contrastive binary directions, and binary-PC residualization/whitening. Generation remains zero. Binary relation classification moves behavior, but yes-bias-aware gating rejects most apparent pockets. | Focus on the layer-3 PC-whitening pocket before abandoning binary steering entirely. |
+| Mechanistic analysis | Full-label alias leakage is not explained by one low-rank control vector, but the binary yes/no surface is strongly low-rank. Layer 5 target gradients are almost collinear with control PC1; layer 3 is less collapsed and gives a weak strict whitening pocket. | Run a focused layer/scale sweep around layer 3 PC whitening, then replicate any surviving pocket on another model or seed. |
 
 ## Current Phase
 
@@ -61,6 +61,7 @@ Current Phase 1 result:
 - Binary gradient geometry shows why: the target/control yes-no gradient field is highly low-rank, with target gradients first-PC energy `0.926`, control gradients first-PC energy `0.891`, and combined target-plus-control first-PC energy `0.895`.
 - Top-PC binary residualization confirms the entanglement. Removing the first binary-control PC makes the false-carrier margin safely negative but also drops loose positive behavior to `0/7`; whitening keeps `5/7` loose positives but still gives `0/7` strict positives because target movement does not beat the strongest yes-bias control.
 - The target binary gradients are almost the same direction as the first control PC: mean cosine `0.962` on positive pairs and `0.954` on random-null controls.
+- A layer-3 replication is less collapsed and produces the first tiny strict pocket after hardening: `target_binary_pc1_whiten` has `2/7` strict positives and `0/10` strict random-null controls; `target_binary_pc3_whiten` has `1/7` strict positives and `0/10` controls. The pocket is not paper-ready because mean steered-over-control remains negative and positives are sparse.
 - Phase 1 is not passed yet. The current full-label logprob gate should be treated as a diagnostic failure mode, generation gates are negative, and binary relation behavior is nonzero but dominated by answer-polarity control.
 
 ## Phase 2 Preview
@@ -70,7 +71,7 @@ If Phase 1 survives, expand along three axes:
 - Model replication: add GPT-2 and a larger open causal LM if Modal budget allows.
 - Concept expansion: add more positive bridges and random relation nulls.
 - Baselines: compare generation/readout behavior against the existing target-gradient, residual, random, and CAA/CAV-style activation-difference baselines.
-- Verifier pivot: use the strict binary-relation verifier to evaluate another model/layer or a nonlinear/feature-guided intervention, not more linear cleanup of Pythia-70M layer 5.
+- Verifier pivot: run a focused scale/layer stress test around the layer-3 PC-whitening pocket; if it fails, use the strict binary-relation verifier to evaluate a nonlinear/feature-guided intervention or another model.
 
 ## Paper Draft Gate
 

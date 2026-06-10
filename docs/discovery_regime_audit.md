@@ -2082,3 +2082,68 @@ Next move: stop optimizing this binary surface on Pythia-70M layer 5 as a
 linear steering route. For paper-worthiness, either replicate the negative
 mechanism on another model/layer or pivot to a nonlinear/feature-guided
 intervention that is explicitly evaluated by the same strict binary verifier.
+
+## Activation Geometry Probe: Binary Layer-3 Replication
+
+Question: does the binary low-rank entanglement diagnosis replicate across
+layers, or does an earlier layer expose a controlled semantic pocket?
+
+Current regime:
+
+- Artifact types: layer-specific binary-relation payloads, strict specificity
+  aggregates, control-PC geometry summaries, strict-pocket pair lists.
+- Operations: run the same PC residualization/whitening verifier at another
+  transformer block output.
+- Gates/verifiers: strict binary-specificity gate, loose behavior retention,
+  random-null control suppression.
+- Known limitations: same model and same seed; GPT-2 replication was attempted
+  but produced no artifact before being stopped, so it is not evidence.
+
+Action class:
+
+- Retrieval/search/discovery: layer replication plus small residual pocket.
+- Why: this tests whether the low-rank binary explanation is layer-specific and
+  identifies a concrete pair-level pocket for follow-up.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/binary_layer3_replication_2026_06_10.md`;
+  local ignored artifact
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_binary_pc_residualization_seed20260610.json`.
+- Positive targets: seven expanded random-null positives.
+- Negative controls: ten random relation nulls plus row-level yes-bias controls.
+- Stress tests: compare raw target, control-mean subtraction, PC residualization,
+  PC whitening, and random directions at layer 3.
+
+Gate:
+
+- Acceptance rule: require enough strict positives to plausibly satisfy Phase 1
+  after scale/layer replication, with `0/10` strict random-null controls.
+- Withheld/rejected rule: do not claim success from isolated pair pockets or
+  positive means when the strict gate remains sparse.
+
+Results:
+
+- Accepted artifacts: layer-3 replication report and strict-pocket pair list.
+- Rejected or withheld artifacts: layer 3 as a completed paper-ready semantic
+  steering result.
+- Key metrics: `target_binary_pc1_whiten` gives `2/7` strict positives and
+  `0/10` strict controls; `target_binary_pc3_whiten` gives `1/7` strict
+  positives and `0/10` strict controls.
+- Variance or ablation: whitening outperforms residualization; residualization
+  still kills loose positives.
+
+Residual content:
+
+- Explained by old regime: binary yes/no gradients remain low-rank and aligned
+  with answer-polarity controls.
+- New content outside old regime: layer 3 has a small controlled whitening
+  pocket absent at layer 5.
+- Retractions or supersessions: supersede "binary surface is only verifier-only
+  everywhere" with the narrower "layer 5 is verifier-only; layer 3 has a weak
+  strict pocket that needs scale/layer stress before it can matter."
+
+Next move: run a focused layer/scale sweep around layer 3 PC whitening, or
+replicate this exact pocket on a second model. A paper claim still needs a
+stable result across seeds, layers, or models.
