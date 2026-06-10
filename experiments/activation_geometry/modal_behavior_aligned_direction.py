@@ -121,6 +121,32 @@ def binary_relation_prompt(
     )
 
 
+def binary_carrier_prompt(
+    *,
+    carrier: str,
+    candidate_label: str,
+) -> str:
+    if carrier == "always_true":
+        return "\n".join(
+            [
+                "Answer the factual identity check.",
+                f"Candidate: {candidate_label}",
+                "Question: Is the candidate exactly the same concept as itself?",
+                "Answer Yes or No:",
+            ]
+        )
+    if carrier == "always_false":
+        return "\n".join(
+            [
+                "Answer the factual identity check.",
+                f"Candidate: {candidate_label}",
+                "Question: Is the candidate exactly the phrase 'not the candidate'?",
+                "Answer Yes or No:",
+            ]
+        )
+    raise ValueError(f"Unknown binary carrier: {carrier}")
+
+
 def load_aliases(path: Path) -> dict[str, list[str]]:
     rows = json.loads(path.read_text())
     aliases_by_concept: dict[str, list[str]] = {}
@@ -613,15 +639,13 @@ def run_binary_relation_prompt(
     max_length: int,
     labels_by_role: dict[str, str],
     label_score_normalization: str,
+    binary_control_labels: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     answer_labels = {"yes": "Yes", "no": "No"}
     scores: dict[str, Any] = {}
     answer_scores: dict[str, dict[str, float]] = {}
-    for role, candidate_label in labels_by_role.items():
-        prompt = binary_relation_prompt(
-            source_text=source_text,
-            candidate_label=candidate_label,
-        )
+
+    def score_prompt(prompt: str) -> dict[str, float]:
         role_answer_scores = run_full_label_prompt(
             torch=torch,
             tokenizer=tokenizer,
@@ -633,12 +657,47 @@ def run_binary_relation_prompt(
             labels_by_role=answer_labels,
             label_score_normalization=label_score_normalization,
         )
-        answer_scores[role] = {
+        return {
             "yes": role_answer_scores["yes"],
             "no": role_answer_scores["no"],
+            "yes_minus_no": role_answer_scores["yes"] - role_answer_scores["no"],
         }
-        scores[role] = role_answer_scores["yes"] - role_answer_scores["no"]
+
+    for role, candidate_label in labels_by_role.items():
+        prompt = binary_relation_prompt(
+            source_text=source_text,
+            candidate_label=candidate_label,
+        )
+        role_answer_scores = score_prompt(prompt)
+        answer_scores[role] = role_answer_scores
+        scores[role] = role_answer_scores["yes_minus_no"]
     scores["answer_scores_by_role"] = answer_scores
+    if binary_control_labels:
+        control_scores = {}
+        for control_name, candidate_label in binary_control_labels.items():
+            prompt = binary_relation_prompt(
+                source_text=source_text,
+                candidate_label=candidate_label,
+            )
+            control_scores[control_name] = score_prompt(prompt)
+        scores["binary_control_answer_scores"] = control_scores
+        scores["binary_control_margins"] = {
+            name: values["yes_minus_no"]
+            for name, values in control_scores.items()
+        }
+    carrier_scores = {}
+    target_label = labels_by_role["target"]
+    for carrier in ("always_true", "always_false"):
+        carrier_scores[carrier] = score_prompt(
+            binary_carrier_prompt(
+                carrier=carrier,
+                candidate_label=target_label,
+            )
+        )
+    scores["binary_carrier_answer_scores"] = carrier_scores
+    scores["binary_carrier_margins"] = {
+        name: values["yes_minus_no"] for name, values in carrier_scores.items()
+    }
     return scores
 
 
@@ -779,6 +838,7 @@ def run_scoring_prompt(
     labels_by_role: dict[str, str],
     generation_labels_by_role: dict[str, list[str]] | None,
     readout_centroids: dict[str, Any] | None,
+    binary_control_labels: dict[str, str] | None,
     label_score_normalization: str,
 ) -> dict[str, Any]:
     if scoring_surface == "option_token":
@@ -819,6 +879,7 @@ def run_scoring_prompt(
             max_length=max_length,
             labels_by_role=labels_by_role,
             label_score_normalization=label_score_normalization,
+            binary_control_labels=binary_control_labels,
         )
     if scoring_surface == "generation_match":
         if generation_labels_by_role is None:
@@ -1784,6 +1845,22 @@ def run_behavior_aligned_direction_remote(
                         distractor=distractor,
                         label_scoring_regime=eval_label_scoring_regime,
                     )
+                    shuffled_pair = pair_specs[(int(record["pair_index"]) + 1) % len(pair_specs)]
+                    shuffled_labels_by_role = labels_by_role_for_regime(
+                        concept_lookup=concept_lookup,
+                        aliases_by_concept=aliases_by_concept,
+                        left=str(shuffled_pair["left"]),
+                        right=str(shuffled_pair["right"]),
+                        distractor=str(shuffled_pair["distractor"]),
+                        label_scoring_regime=eval_label_scoring_regime,
+                    )
+                    binary_control_labels = {
+                        "blank": "",
+                        "generic": "a related concept",
+                        "source": eval_labels_by_role["source"],
+                        "distractor": eval_labels_by_role["distractor"],
+                        "shuffled_target": shuffled_labels_by_role["target"],
+                    }
                     generation_labels = generation_match_labels_by_role(
                         concept_lookup=concept_lookup,
                         aliases_by_concept=aliases_by_concept,
@@ -1818,6 +1895,7 @@ def run_behavior_aligned_direction_remote(
                                 "option_order": "full_label",
                                 "token_ids": None,
                                 "source_text": None,
+                                "binary_control_labels": None,
                             }
                         )
                     elif scoring_surface == "binary_relation":
@@ -1830,6 +1908,7 @@ def run_behavior_aligned_direction_remote(
                                 "option_order": "binary_relation",
                                 "token_ids": None,
                                 "source_text": heldout_text,
+                                "binary_control_labels": binary_control_labels,
                             }
                         )
                     elif scoring_surface in {"generation_match", "generation_readout"}:
@@ -1842,6 +1921,7 @@ def run_behavior_aligned_direction_remote(
                                 "option_order": scoring_surface,
                                 "token_ids": None,
                                 "source_text": None,
+                                "binary_control_labels": None,
                             }
                         )
                     else:
@@ -1862,6 +1942,9 @@ def run_behavior_aligned_direction_remote(
                             labels_by_role=eval_labels_by_role,
                             generation_labels_by_role=generation_labels,
                             readout_centroids=readout_centroids,
+                            binary_control_labels=prompt_spec.get(
+                                "binary_control_labels"
+                            ),
                             label_score_normalization=label_score_normalization,
                         )
                         for scale_index, scale in enumerate(scales):
@@ -1903,6 +1986,9 @@ def run_behavior_aligned_direction_remote(
                                     labels_by_role=eval_labels_by_role,
                                     generation_labels_by_role=generation_labels,
                                     readout_centroids=readout_centroids,
+                                    binary_control_labels=prompt_spec.get(
+                                        "binary_control_labels"
+                                    ),
                                     label_score_normalization=(
                                         label_score_normalization
                                     ),
@@ -1952,6 +2038,9 @@ def run_behavior_aligned_direction_remote(
                                         "eval_labels_by_role": eval_labels_by_role,
                                         "generation_match_labels_by_role": (
                                             generation_labels
+                                        ),
+                                        "binary_control_labels": prompt_spec.get(
+                                            "binary_control_labels"
                                         ),
                                         "train_variant_indices": sorted(
                                             train_variants

@@ -100,7 +100,8 @@
 - [x] Add a learned behavior-readout gate after strict generation-match produced zero target hits.
 - [x] Redesign the behavior interface with a constrained short-answer gate after generation-match and generation-readout both produced zero target hits.
 - [x] Build a direct behavior-classification/intervention gate after all generation and short-answer behavior gates produced zero target hits.
-- [ ] Add binary yes-bias controls after the direct relation classifier produced nonzero but confounded target passes.
+- [x] Add binary yes-bias controls after the direct relation classifier produced nonzero but confounded target passes.
+- [ ] Build contrastive binary directions that penalize blank/generic/source/distractor/shuffled/false-carrier Yes margins.
 - [ ] Stratify behavior controls into target-sharing, source-sharing, and fully target-disjoint classes.
 - [ ] Replicate the hook-output transfer ridge on a second checkpoint or open model.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.

@@ -1872,3 +1872,66 @@ Residual content:
 
 Next move: separate relation movement from yes-bias with explicit binary
 controls before scaling.
+
+## Activation Geometry Probe: Binary Yes-Bias Controls
+
+Question: is the nonzero binary-relation behavior signal relation-specific, or
+is it broad Yes-bias?
+
+Current regime:
+
+- Artifact types: binary-relation payloads, candidate-control margins,
+  carrier-control margins, random-null specificity reports.
+- Operations: held-out binary relation scoring, extra control-candidate scoring,
+  always-true/false carrier scoring, target/source/distractor role-margin
+  comparison.
+- Gates/verifiers: target movement must exceed blank/generic/shuffled/source/
+  distractor/false-carrier movement before semantic specificity can be claimed.
+- Known limitations: one model, one seed, one layer, one scale; controls are
+  diagnostic only and not yet part of robust-pass aggregation.
+
+Action class:
+
+- Retrieval/search/discovery: verifier hardening with a rejected candidate.
+- Why: this adds the missing control artifact type needed to distinguish
+  relation behavior from answer-polarity behavior.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/binary_yes_bias_controls_2026_06_09.md`;
+  local ignored payload
+  `artifacts/activation_geometry/modal_pythia_70m_binary_yes_bias_controls_seed20260609.json`.
+- Positive targets: expanded steering pairs.
+- Negative controls: ten random relation null pairs plus candidate/carrier
+  yes-bias controls.
+- Stress tests: blank, generic, source, distractor, shuffled-target,
+  always-true, and always-false controls under `target_learned`.
+
+Gate:
+
+- Acceptance rule: semantic-specific binary steering requires target movement
+  larger than yes-bias controls, with controls not ending broadly positive.
+- Withheld/rejected rule: reject the candidate mechanism if yes-bias controls
+  move with the target.
+
+Results:
+
+- Accepted artifacts: yes-bias control fields inside binary-relation payloads.
+- Rejected or withheld artifacts: the current `target_learned` binary direction
+  as relation-specific steering.
+- Key metrics: all target/source/distractor/control/carrier Yes-No margins end
+  positive in `17/17` target-learned rows.
+- Variance or ablation: positives and random nulls show the same broad pattern.
+
+Residual content:
+
+- Explained by old regime: behavior can move on a direct binary surface.
+- New content outside old regime: the movement is mainly answer-polarity
+  control, not relation-specific transport.
+- Retractions or supersessions: supersede "binary relation gives a promising
+  semantic pocket" with "binary relation gives a useful behavior surface whose
+  first direction is dominated by Yes-bias."
+
+Next move: build contrastive binary directions and make yes-bias controls part
+of the acceptance rule.
