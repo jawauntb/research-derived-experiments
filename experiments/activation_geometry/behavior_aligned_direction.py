@@ -280,6 +280,7 @@ def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             row["role"],
             row["layer"],
             row["kind"],
+            row.get("control_class", ""),
             row["pair"],
             row["direction_mode"],
             row["scale"],
@@ -295,6 +296,7 @@ def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         role,
         layer,
         kind,
+        control_class,
         pair,
         direction_mode,
         scale,
@@ -323,6 +325,7 @@ def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             "role": role,
             "layer": layer,
             "kind": kind,
+            "control_class": control_class,
             "pair": pair,
             "direction_mode": direction_mode,
             "scale": scale,
@@ -380,11 +383,37 @@ def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
             str(row.get("eval_label_scoring_regime", "canonical")),
             str(row["role"]),
             str(row["kind"]),
+            str(row.get("control_class", "")),
             str(row["pair"]),
             float(row["scale"]),
             str(row["direction_mode"]),
         ),
     )
+
+
+def control_class_label(row: dict[str, Any]) -> str:
+    control_class = str(row.get("control_class", "")).strip()
+    return control_class if control_class else "unclassified"
+
+
+def control_pass_counts_by_class(rows: list[dict[str, Any]]) -> dict[str, int]:
+    return {
+        control_class: sum(
+            1
+            for row in rows
+            if control_class_label(row) == control_class and row["robust_pass"]
+        )
+        for control_class in sorted({control_class_label(row) for row in rows})
+    }
+
+
+def control_totals_by_class(rows: list[dict[str, Any]]) -> dict[str, int]:
+    return {
+        control_class: sum(
+            1 for row in rows if control_class_label(row) == control_class
+        )
+        for control_class in sorted({control_class_label(row) for row in rows})
+    }
 
 
 def gate_summaries(aggregates: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -466,6 +495,12 @@ def gate_summaries(aggregates: list[dict[str, Any]]) -> list[dict[str, Any]]:
                                 if row["role"] == "control"
                                 and row["kind"] == "positive"
                             ]
+                            primary_control_passes_by_class = (
+                                control_pass_counts_by_class(primary_controls)
+                            )
+                            primary_control_totals_by_class = control_totals_by_class(
+                                primary_controls
+                            )
                             summaries.append(
                                 {
                                     "scoring_surface": scoring_surface,
@@ -497,6 +532,12 @@ def gate_summaries(aggregates: list[dict[str, Any]]) -> list[dict[str, Any]]:
                                     ),
                                     "primary_valence_control_total": len(
                                         primary_controls
+                                    ),
+                                    "primary_control_pass_count_by_class": (
+                                        primary_control_passes_by_class
+                                    ),
+                                    "primary_control_total_by_class": (
+                                        primary_control_totals_by_class
                                     ),
                                     "control_layer_positive_pass_count": sum(
                                         1

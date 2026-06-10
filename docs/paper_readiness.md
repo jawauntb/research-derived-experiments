@@ -69,6 +69,8 @@ Current Phase 1 result:
 - Pythia-160M target movement is still low-rank and carrier-dominated: target direction first-PC energy is `0.877`, target-plus-control first-PC energy is `0.715`, and always-false direction first-PC energy is `0.913`.
 - A pair-optimized strict-binary direction is now implemented and tested. It passes a smoke gate on `attractor->attractor_network` with the hard `valence->steering_vector` control rejected, but it fails the full random-null alias0 pilot: `target_binary_strict_opt_8` and `target_binary_strict_opt_16` both reach only `1/2` strict positives and leak `1/10` random-null controls.
 - The optimized direction improves target movement over PC1-whitening in the narrow gate, but still does not establish semantic specificity. The leaked controls differ by optimization depth: `target_binary_strict_opt_8` leaks `regime_transition->family_resemblance`, while `target_binary_strict_opt_16` leaks `steering_vector->semantic_distance`.
+- The first stratified-control run makes the failure more diagnostic. Under `layer3_strict_pocket_stratified_controls`, `target_binary_strict_opt_8` keeps `1/2` strict positives but leaks `4/12` controls: `0/3` implausible random nulls, `1/3` semantic-near nulls, `2/3` source-sharing controls, and `1/3` target-sharing controls. `random_same_norm` remains clean at `0/2` positives and `0/12` controls.
+- This means the strict verifier is not accepting arbitrary unrelated relations, but single-vector optimization still exploits structured source/target overlap channels. The next intervention should be pair-conditioned, nonlinear, or feature/readout-guided rather than another global final-token vector.
 - Phase 1 is not passed yet. The current full-label logprob gate should be treated as a diagnostic failure mode, generation gates are negative, and binary relation behavior is nonzero but dominated by answer-polarity control.
 
 ## Phase 2 Preview
@@ -78,7 +80,7 @@ If Phase 1 survives, expand along three axes:
 - Model replication: add GPT-2 and a larger open causal LM if Modal budget allows.
 - Concept expansion: add more positive bridges and random relation nulls.
 - Baselines: compare generation/readout behavior against the existing target-gradient, residual, random, and CAA/CAV-style activation-difference baselines.
-- Verifier pivot: stratify the random-null controls before interpreting pair-optimized leakage, then evaluate a genuinely nonlinear/feature-guided intervention if single-vector optimization remains control-limited.
+- Verifier pivot: the first stratified random-null gate is in place. Use it as the acceptance surface for a genuinely nonlinear, pair-conditioned, or feature/readout-guided intervention.
 
 ## Paper Draft Gate
 

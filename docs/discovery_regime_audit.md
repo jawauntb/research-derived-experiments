@@ -2421,3 +2421,69 @@ Residual content:
 Next move: stratify controls by semantic plausibility, source overlap, and
 target overlap before interpreting random-null failures as either leaks or bad
 negatives.
+
+## Activation Geometry Probe: Stratified Binary Control Gate
+
+Question: are pair-optimized strict-binary leaks concentrated in semantically
+near-null controls, or do they also arise from source and target overlap?
+
+Current regime:
+
+- Artifact types: strict binary-relation rows, control-class metadata,
+  per-class gate summaries, pair-optimized direction summaries.
+- Operations: layer-3 strict-pocket pair sets, source-sharing/target-sharing/
+  implausible/near-null control strata, Modal strict-binary scoring.
+- Gates/verifiers: held-out alias `alias_2`, always-false carrier rejection,
+  per-class robust pass counts, random same-norm baseline.
+- Known limitations: one seed, one model, one objective alias, and opt8 only.
+
+Action class:
+
+- Retrieval/search/discovery: discovery of a stronger verifier artifact type.
+- Why: this adds a new control taxonomy and summary surface that the previous
+  pooled random-null regime could not represent.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/stratified_binary_control_gate_2026_06_10.md`;
+  local ignored artifact
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_strict_opt8_stratified_alias0_seed20260610.json`.
+- Positive targets: `attractor->attractor_network` and
+  `fixed_point->prototype`.
+- Negative controls: three controls each in `source_sharing`,
+  `target_sharing`, `implausible_random_null`, and `semantic_near_null`.
+- Stress tests: `target_binary_strict_opt_8` against PC1-whitened and random
+  same-norm baselines.
+
+Gate:
+
+- Acceptance rule: preserve positive movement while keeping implausible controls
+  clean and identifying which structured strata leak.
+- Withheld/rejected rule: reject pooled control claims that do not report
+  control stratum.
+
+Results:
+
+- Accepted artifacts: stratified pair sets and per-class gate summary fields.
+- Rejected or withheld artifacts: the hypothesis that pair-optimized leakage is
+  only caused by semantically near-null random controls.
+- Key metrics: `target_binary_strict_opt_8` gives `1/2` strict positives and
+  `4/12` strict controls. The leaks split as `0/3` implausible random nulls,
+  `1/3` semantic-near nulls, `2/3` source-sharing controls, and `1/3`
+  target-sharing controls. `random_same_norm` stays at `0/2` positives and
+  `0/12` controls.
+- Variance or ablation: PC1-whitening also leaks structured controls
+  (`4/12`) while preserving no positives.
+
+Residual content:
+
+- Explained by old regime: arbitrary unrelated controls are rejected, so the
+  verifier is not merely a universal Yes-bias detector.
+- New content outside old regime: leakage is structured by source/target
+  overlap as well as semantic plausibility.
+- Retractions or supersessions: supersede "just stratify bad random nulls" with
+  "single-vector interventions fail on multiple structured control channels."
+
+Next move: build a pair-conditioned nonlinear or feature/readout-guided
+intervention and use the stratified control gate as its acceptance surface.

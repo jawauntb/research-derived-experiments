@@ -63,6 +63,32 @@ RANDOM_RELATION_NULL_PAIRS = (
     ("regime_transition", "family_resemblance"),
     ("simplicity_bias", "residual_content"),
 )
+SOURCE_SHARING_CONTROL_PAIRS = (
+    ("attractor", "semantic_distance"),
+    ("attractor", "activation_vector"),
+    ("fixed_point", "schema_revision"),
+)
+TARGET_SHARING_CONTROL_PAIRS = (
+    ("phase_space", "attractor_network"),
+    ("schema_revision", "prototype"),
+    ("semantic_distance", "prototype"),
+)
+IMPLAUSIBLE_RANDOM_NULL_CONTROL_PAIRS = (
+    ("self_boundary", "embedding"),
+    ("residual_content", "valence"),
+    ("simplicity_bias", "homeostasis"),
+)
+SEMANTIC_NEAR_NULL_CONTROL_PAIRS = (
+    ("valence", "steering_vector"),
+    ("regime_transition", "family_resemblance"),
+    ("steering_vector", "semantic_distance"),
+)
+STRATIFIED_CONTROL_PAIR_GROUPS = (
+    (SOURCE_SHARING_CONTROL_PAIRS, "source_sharing"),
+    (TARGET_SHARING_CONTROL_PAIRS, "target_sharing"),
+    (IMPLAUSIBLE_RANDOM_NULL_CONTROL_PAIRS, "implausible_random_null"),
+    (SEMANTIC_NEAR_NULL_CONTROL_PAIRS, "semantic_near_null"),
+)
 DEFAULT_DISTRACTORS = {
     "attractor_network": "prototype",
     "homeostasis": "self_boundary",
@@ -158,10 +184,26 @@ def pair_specs_for_set(concepts: list[Concept], *, pair_set: str) -> list[Steeri
             ("positive", EXPANDED_POSITIVE_STEERING_PAIRS, ""),
             ("control", RANDOM_RELATION_NULL_PAIRS, "random_relation_null"),
         )
+    elif pair_set == "expanded_stratified_controls":
+        pair_groups = (
+            ("positive", EXPANDED_POSITIVE_STEERING_PAIRS, ""),
+            *(
+                ("control", pairs, control_class)
+                for pairs, control_class in STRATIFIED_CONTROL_PAIR_GROUPS
+            ),
+        )
     elif pair_set == "layer3_strict_pocket_random_nulls":
         pair_groups = (
             ("positive", LAYER3_STRICT_POCKET_POSITIVE_PAIRS, ""),
             ("control", RANDOM_RELATION_NULL_PAIRS, "random_relation_null"),
+        )
+    elif pair_set == "layer3_strict_pocket_stratified_controls":
+        pair_groups = (
+            ("positive", LAYER3_STRICT_POCKET_POSITIVE_PAIRS, ""),
+            *(
+                ("control", pairs, control_class)
+                for pairs, control_class in STRATIFIED_CONTROL_PAIR_GROUPS
+            ),
         )
     elif pair_set == "layer3_strict_pocket_smoke":
         pair_groups = (
@@ -172,7 +214,10 @@ def pair_specs_for_set(concepts: list[Concept], *, pair_set: str) -> list[Steeri
         raise ValueError(
             "Pair set must be one of: promoted, expanded, "
             "expanded_target_disjoint, expanded_random_nulls, "
-            "layer3_strict_pocket_random_nulls, layer3_strict_pocket_smoke"
+            "expanded_stratified_controls, "
+            "layer3_strict_pocket_random_nulls, "
+            "layer3_strict_pocket_stratified_controls, "
+            "layer3_strict_pocket_smoke"
         )
     for kind, pairs, control_class in pair_groups:
         for left, right in pairs:
@@ -259,6 +304,7 @@ def compact_steering_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
         {
             "pair": row["pair"],
             "kind": row["kind"],
+            "control_class": row.get("control_class", ""),
             "role": row["role"],
             "layer": row["layer"],
             "scale": row["scale"],
