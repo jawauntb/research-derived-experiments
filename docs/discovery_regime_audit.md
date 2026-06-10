@@ -2996,3 +2996,77 @@ Residual content:
 
 Next move: build a control-aware state gate that explicitly suppresses
 semantic-near hidden states, then rerun the same alias/train robustness gate.
+
+## Activation Geometry Probe: Relation-Control State Gate
+
+Question: can relation-level control prompts calibrate the state gate enough to
+remove the train-variant semantic-near leak without losing positives?
+
+Current regime:
+
+- Artifact types: strict binary-relation rows, stratified gate summaries,
+  relation-control state-gate optimized summaries, scale-frontier reports,
+  rejected intervention classes.
+- Operations: Modal-backed Pythia activation intervention, relation-level
+  control prompt construction from stratified controls, state-gated final-token
+  deltas, held-out alias scoring, scale stress.
+- Gates/verifiers: held-out `alias_2`, strict positive counts, stratified
+  control counts, always-false carrier rejection, random same-norm baseline.
+- Known limitations: Pythia-70M layer 3 only; two positive pairs only; still a
+  pair-specific additive delta under a gate.
+
+Action class:
+
+- Retrieval/search/discovery: search.
+- Why: this adds relation-level control prompts to an existing state-gated
+  intervention class, but it does not create an accepted behavior class.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/relation_control_state_gate_2026_06_10.md`;
+  local ignored artifacts
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_relation_state_gate_opt8_stratified_trainv1_seed20260610.json`
+  and
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_relation_state_gate_opt8_stratified_trainv1_scale_seed20260610.json`.
+- Positive targets: `attractor->attractor_network` and
+  `fixed_point->prototype`.
+- Negative controls: twelve controls split across `source_sharing`,
+  `target_sharing`, `implausible_random_null`, and `semantic_near_null`.
+- Stress tests: direct comparison against the original state gate under train
+  variant `1`; scale sweep over `1.0`, `1.25`, `1.5`.
+
+Gate:
+
+- Acceptance rule: recover at least `1/2` strict positives and keep `0/12`
+  stratified controls under train variant `1`.
+- Withheld/rejected rule: reject the mechanism if positives vanish, or if scale
+  recovers positives only by reviving the always-false carrier.
+
+Results:
+
+- Accepted artifacts: `target_binary_relation_state_gate_opt_8` implementation,
+  negative report, and two ignored Modal payloads.
+- Rejected or withheld artifacts: the hypothesis that relation-control prompts
+  are sufficient to calibrate the existing pair-specific state gate.
+- Key metrics: the relation-control gate gives `0/2` positives and `0/12`
+  controls at scale `1.0`; the original state gate in the same run gives `1/2`
+  positives and `1/12` controls. The relation-control scale sweep remains
+  `0/2`, `0/12` at scales `1.0`, `1.25`, and `1.5`.
+- Variance or ablation: at higher scales, `attractor->attractor_network`
+  achieves positive steered-over-control margins, but always-false margins turn
+  positive, so strict behavior still fails.
+
+Residual content:
+
+- Explained by old regime: relation-level controls can suppress semantic-near
+  leakage by suppressing target movement or carrier safety.
+- New content outside old regime: the failure is a three-way tradeoff among
+  target movement, semantic-near suppression, and carrier safety.
+- Retractions or supersessions: supersede "add relation controls to the state
+  gate" with "pair-specific additive/gated variants appear exhausted under this
+  strict verifier."
+
+Next move: try a learned multi-class gate or shared conditional operation that
+separates target, semantic-near, and carrier-control states as distinct classes,
+or pivot away from pair-specific binary optimization.
