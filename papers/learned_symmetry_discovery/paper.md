@@ -97,6 +97,19 @@ The monotone relationship is preserved: augmentations that approximately respect
 
 The cleaner null was already in [2]: `weakness_wrong_group_norm` under random *pixel permutations* (not random rotations) had Pearson −0.341, correctly anti-correlated with OOD. The interpretation we offer: rotation-from-a-dense-grid is a *soft* control that bounds learned-group weakness from below; pixel-shuffle is a *hard* control that establishes the floor. Both confirm that the cyclic-rotation structure is what is load-bearing — but only the second one is a strict null.
 
+### 3.5 Robustness check: top-K selection
+
+The companion paper [7] showed that on rotated MNIST, the "v1 pixel cosine" group-recovery procedure has its precision *procedurally capped* under threshold-based selection — a denser-than-truth candidate grid + permissive threshold means "all candidates kept" gives perfect recall but precision = |Z_n| / |candidates|. Switching to **top-K = 8** selection (matching the oracle group size) lifted the cap on MNIST and revealed that encoder methods rank Z_8 angles higher than pixel cosine there.
+
+Does the synthetic-stroke result of this paper hold up under top-K = 8? Yes — substantially, though with a numerical shift:
+
+| Selection rule | Mean kept | Mean recall | Mean precision | Mean F1 |
+| --- | ---: | ---: | ---: | ---: |
+| Threshold τ = 0.5 (original) | 10.69 | **0.898** | 0.689 | 0.780 |
+| Top-K = 8 (robustness) | 8.00 | 0.746 | **0.746** | 0.746 |
+
+Averaged over 64 random partial-orbit splits. Under top-K = 8, the procedure puts on average **6 of 8 true Z_8 angles in its top 8**, with precision rising to 0.746 (vs. 0.689 under threshold). The headline "89.7% recall" is specific to threshold τ = 0.5; under top-K it becomes "74.6% recall, 74.6% precision." The qualitative claim — *the symmetry group is recoverable from training data alone* — survives both selection rules. The cross-domain finding from [7] (synthetic strokes favour pixel-cosine; MNIST favours encoder methods under top-K) is therefore not an artifact of the synthetic-stroke setup but a real property of the data.
+
 ## 4. Limitations and Negative Results
 
 1. The candidate transformation set is hand-specified (we tell the procedure "consider 24 evenly-spaced rotations"). A fully end-to-end version would discover both the parameterization and the parameter range from the data.
@@ -148,6 +161,8 @@ The natural follow-on experiments are: (i) replace pixel-space cosine with a lea
 [5] **Kondor, R. and Trivedi, S.** On the Generalization of Equivariance and Convolution in Neural Networks to the Action of Compact Groups. *ICML* (2018).
 
 [6] **Van der Ouderaa, T. F. A., van der Wilk, M., and Welling, M.** Learning Layer-wise Equivariances Automatically using Gradients. *ICLR* (2024). A neural alternative to enumerative group discovery; natural successor for non-enumerable groups.
+
+[7] **Brown, J.** *When Pixels Beat Embeddings: Three Failed Neural Approaches to Symmetry Group Discovery, with a Selection-Rule Caveat.* Companion paper (2026). Empirical companion that documents how pixel cosine compares to encoder-based alternatives across synthetic strokes, MNIST, and a resolution × noise sweep, and shows the selection rule (threshold vs top-K) materially affects the conclusion on MNIST while leaving the stroke result intact.
 # Addendum (v2): Causal Validation + Language Extension
 
 This addendum extends the v1 paper with two follow-on experiments addressing the two largest reviewer-objection vectors.
