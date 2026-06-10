@@ -4,7 +4,7 @@
 
 ## Abstract
 
-The Learning the Group paper [2] showed that a simple enumerative procedure — for each candidate rotation θ in a 24-angle grid, score by mean pixel-cosine to the nearest same-class training example — recovers the true Z_8 rotation group from partial-orbit training data at **89.7% recall, 71.3% precision**, with no oracle access. That paper's main limitation, raised in its §6, is that the candidate set must be enumerable. The natural follow-on is to replace enumeration with a *neural* generator that proposes continuous-parameter transformations. We test three natural neural approaches on the same benchmark and find that **all three underperform the pixel-cosine baseline**. We diagnose each failure and report this as an honest null result. The take-away: neural sophistication does not automatically improve symmetry discovery — on controlled rotation data, pixel cosine is essentially the right similarity, and learned features over-generalize in distinctive ways.
+The Learning the Group paper [2] showed that a simple enumerative procedure — for each candidate rotation θ in a 24-angle grid, score by mean pixel-cosine to the nearest same-class training example — recovers the true Z_8 rotation group from partial-orbit training data at **89.7% recall, 71.3% precision**, with no oracle access. That paper's main limitation, raised in its §6, is that the candidate set must be enumerable. The natural follow-on is to replace enumeration with a *neural* generator that proposes continuous-parameter transformations. We test three natural neural approaches on synthetic strokes and find that **all three underperform the pixel-cosine baseline** under threshold-based selection. We diagnose each failure. We then test the same methods on rotated MNIST (real digit images, downsampled and full-resolution, with Gaussian background noise). Threshold-based selection makes all methods look tied at F1 ≈ 0.500 — but this is a *procedural artifact* of the candidate grid being denser than the truth. With **top-K=8** selection (matching |Z_8|), encoder methods clearly outperform pixel cosine on MNIST (mean F1 advantage **+0.110 absolute**, with the largest single-cell gap a 2× improvement at 28×28 / σ=0.10). The honest take-away is therefore not "pixels beat embeddings" full stop, but rather: **pixel cosine wins on data where rotation preserves literal pixel patterns (synthetic strokes); encoder methods win on data where natural variation flattens pixel cosine's score ranking (MNIST); the selection procedure must know the group size to expose this**. Selection rule and similarity function are both load-bearing — and conflating them silently is the most common way to get the wrong answer.
 
 ## 1. Introduction
 
@@ -154,7 +154,46 @@ We test the natural candidate regime for pixel-cosine failure: full 28×28 resol
 
 To find the regime where pixel cosine actually fails, we would need **structured clutter** — distractor patches, partial occlusion, overlaid digit fragments — or much higher noise (σ ≥ 0.5) that destroys digit signal entirely. Both are clean future experiments.
 
-**A separate observation from the sweep.** F1 caps at ~0.5 for all methods because the candidate grid has 24 angles, only 8 of which are true Z_8, so precision is bounded at 1/3 when recall is perfect. The methods are *tied at a procedure ceiling*. This is a methodology lesson: threshold-based selection is the wrong criterion when the candidate grid is much denser than the truth. A top-K selector with K = |Z_8| = 8 would expose the real precision differences.
+**A separate observation from the sweep.** F1 caps at ~0.5 for all methods because the candidate grid has 24 angles, only 8 of which are true Z_8, so precision is bounded at 1/3 when recall is perfect. The methods are *tied at a procedure ceiling*. This is a methodology lesson: threshold-based selection is the wrong criterion when the candidate grid is much denser than the truth. A top-K selector with K = |Z_8| = 8 would expose the real precision differences. We test that next.
+
+### 4.4 Top-K=8 ablation: the procedure was hiding the answer
+
+The §4.3 ceiling motivated the same question we posed at the start of this paper, only now to ourselves: was the F1 ≈ 0.5 result *real* or *procedurally hidden*? We re-analyze the same per-angle scores from §4.3, but switch selection rules from "best-threshold" to **top-K = 8** (matching the true group size |Z_8|). No new model training; just a different aggregation of the same scores.
+
+Mean F1 across the 8 cluttered-MNIST cells (per-cell breakdown in `experiments/neural_group_generator/results/topk_ablation_2026_06_10.md`):
+
+| Method | Threshold-best F1 (§4.3) | Top-K=8 F1 (§4.4) | Encoder − pixel |
+| --- | ---: | ---: | ---: |
+| v1 pixel cosine | 0.500 | **0.281** | — |
+| Approach 3: encoder enumerative | 0.509 | **0.375** | **+0.094** |
+| Approach 2: encoder invariance | 0.506 | **0.391** | **+0.110** |
+
+![Figure 5: top-K=8 vs threshold-best F1. Threshold-based selection makes all three methods look equivalent (left/hatched bars). Top-K=8 reveals that encoder methods rank true Z_8 angles higher than pixel cosine on MNIST. Mean F1 advantage of encoder invariance over pixel: +0.110 absolute (+39% relative).](figures/fig6_topk_vs_threshold.png)
+
+**Encoder methods outperform or tie pixel cosine in 7 of 8 cells under top-K=8.** The biggest single-cell advantage: 28×28, σ = 0.10, encoder invariance F1 = 0.500 vs pixel cosine 0.250 — a 2× improvement.
+
+![Figure 6: per-cell top-K=8 heatmap. The lighter cells in the encoder columns reveal where encoder methods clearly outperform pixel cosine — most clearly at 28×28 / σ=0.10.](figures/fig5_topk_heatmap.png)
+
+**What does and does not change.**
+
+What does change:
+- The §4.3 conclusion "all methods tied at F1 = 0.5 on MNIST" was a procedural artifact, not a finding about the methods.
+- Under top-K = 8 — the *appropriate* selection rule when the candidate grid is much denser than the truth — encoder methods consistently rank true Z_8 angles higher than pixel cosine on MNIST.
+
+What does NOT change:
+- The §3 synthetic-stroke result: pixel cosine still recovers Z_8 cleanly. Under top-K = 8 on one stroke split, pixel cosine puts 5 of 8 true Z_8 angles in its top-8 (precision 0.625). On MNIST, it only gets 2–3 of 8 (precision 0.250–0.375). The cross-domain difference is real: synthetic strokes have cleaner rotation geometry; MNIST has natural variation (writing style, stroke thickness, slant) that flattens pixel cosine's ranking.
+- The two truly negative results from §3 (direct rotation generator → mode collapse, encoder invariance → perceptual smoothness only) still stand. Those failed for principled reasons unrelated to selection rule.
+
+**The honest scoreboard.**
+
+| Setting | Procedure | Pixel cosine wins? |
+| --- | --- | --- |
+| Synthetic strokes | Threshold τ = 0.5 | Yes (recall 0.897, precision 0.713) |
+| Synthetic strokes | Top-K = 8 (one split) | Roughly tied (precision 0.625) |
+| MNIST | Threshold (best F1) | Tied (procedurally) |
+| MNIST | Top-K = 8 | **No — encoder methods win** |
+
+The cleanest narrative is no longer "pixels beat embeddings" full stop, but rather: **pixel cosine wins on data where rotation preserves literal pixel patterns; encoder methods win on data where natural variation flattens pixel cosine's score ranking, and the selection procedure has to know the group size to expose this.**
 
 ## 5. Discussion
 
