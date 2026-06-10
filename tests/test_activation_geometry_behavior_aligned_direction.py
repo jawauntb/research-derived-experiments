@@ -30,6 +30,7 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
             parse_direction_modes(
                 "target_learned, target_penalty_controls_1_0, "
                 "target_penalty_hard_1_0, target_binary_controls_1_0, "
+                "target_binary_pc1_resid, target_binary_pc3_whiten, "
                 "caa_target_contrast"
             ),
             [
@@ -37,6 +38,8 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
                 "target_penalty_controls_1_0",
                 "target_penalty_hard_1_0",
                 "target_binary_controls_1_0",
+                "target_binary_pc1_resid",
+                "target_binary_pc3_whiten",
                 "caa_target_contrast",
             ],
         )

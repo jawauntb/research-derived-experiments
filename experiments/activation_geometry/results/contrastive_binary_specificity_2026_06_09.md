@@ -166,7 +166,7 @@ Residual content:
   next" with "contrastive binary subtraction tested; next need spectrum/low-rank
   diagnosis or a different nonlinear/feature-guided intervention."
 
-Next move: test top-PC residualization/whitening as a deliberately lossy probe.
-If removing the dominant binary axis kills target movement, the binary surface
-should be treated as a verifier-only diagnostic rather than a route to semantic
-steering in Pythia-70M.
+Next move completed in
+`experiments/activation_geometry/results/binary_pc_residualization_2026_06_10.md`:
+top-PC residualization/whitening rejects the binary surface as a linear steering
+route for Pythia-70M layer 5.

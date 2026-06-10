@@ -2005,7 +2005,80 @@ Residual content:
   next" with "contrastive binary subtraction tested; next need spectrum/low-rank
   diagnosis or a different nonlinear/feature-guided intervention."
 
-Next move: test top-PC residualization/whitening as a deliberately lossy probe.
-If removing the dominant binary axis kills target movement, the binary surface
-should be treated as a verifier-only diagnostic rather than a route to semantic
-steering in Pythia-70M.
+Next move completed in
+`experiments/activation_geometry/results/binary_pc_residualization_2026_06_10.md`:
+top-PC residualization/whitening rejects the binary surface as a linear steering
+route for Pythia-70M layer 5.
+
+## Activation Geometry Probe: Binary PC Residualization
+
+Question: is the binary yes/no leakage low-rank enough that removing or
+whitening the dominant control PCs reveals relation-specific target movement?
+
+Current regime:
+
+- Artifact types: binary-relation payloads, strict specificity aggregates,
+  binary control-PC bases, PC-residualized and PC-whitened direction modes.
+- Operations: uncentered SVD over normalized binary control gradients,
+  top-PC removal, top-PC damping, target-norm restoration, held-out alias
+  scoring.
+- Gates/verifiers: strict binary-specificity gate plus loose/basic behavior
+  retention.
+- Known limitations: one model, one seed, one layer; this probes linear
+  directions, not nonlinear feature interventions.
+
+Action class:
+
+- Retrieval/search/discovery: mechanistic falsification of the low-rank rescue
+  hypothesis.
+- Why: this directly tests the previous residual content: whether the dominant
+  low-rank binary axis is separable nuisance structure or the same axis that
+  carries target movement.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/binary_pc_residualization_2026_06_10.md`;
+  local ignored artifact
+  `artifacts/activation_geometry/modal_pythia_70m_binary_pc_residualization_seed20260610.json`.
+- Positive targets: seven expanded random-null positives.
+- Negative controls: ten random relation nulls plus row-level yes-bias controls.
+- Stress tests: remove or whiten top `1` and top `3` binary-control PCs.
+
+Gate:
+
+- Acceptance rule: a PC-adjusted direction must retain loose positive behavior
+  and pass the strict yes-bias-aware gate on positives without reviving random
+  null controls.
+- Withheld/rejected rule: reject directions that suppress controls by
+  suppressing target behavior, or keep loose behavior while failing strict
+  control dominance.
+
+Results:
+
+- Accepted artifacts: PC-adjusted direction modes and control-PC diagnostics.
+- Rejected or withheld artifacts: PC residualization/whitening as a semantic
+  steering route for this model/layer.
+- Key metrics: all PC modes have `0/7` strict positives. PC1 residualization
+  has `0/7` loose positives; PC1/PC3 whitening keep `5/7` loose positives but
+  still have negative mean target-over-control margins. Target gradients have
+  mean cosine `0.962` with control PC1 on positives and `0.954` on random-null
+  controls.
+- Variance or ablation: removing PC1 is enough to erase loose target behavior;
+  adding PCs does not restore specificity.
+
+Residual content:
+
+- Explained by old regime: binary yes/no movement is low-rank and steerable.
+- New content outside old regime: the dominant low-rank control axis is also
+  the dominant target movement axis, so linear PC cleanup does not expose a
+  hidden semantic relation direction.
+- Retractions or supersessions: supersede "try projection/whitening before
+  giving up on binary steering" with "binary surface is verifier-only for
+  Pythia-70M layer 5 unless a nonlinear or feature-guided intervention changes
+  the mechanism."
+
+Next move: stop optimizing this binary surface on Pythia-70M layer 5 as a
+linear steering route. For paper-worthiness, either replicate the negative
+mechanism on another model/layer or pivot to a nonlinear/feature-guided
+intervention that is explicitly evaluated by the same strict binary verifier.
