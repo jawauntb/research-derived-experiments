@@ -64,6 +64,7 @@ Current Phase 1 result:
 - A layer-3 replication is less collapsed and produces the first tiny strict pocket after hardening: `target_binary_pc1_whiten` has `2/7` strict positives and `0/10` strict random-null controls; `target_binary_pc3_whiten` has `1/7` strict positives and `0/10` controls. The pocket is not paper-ready because mean steered-over-control remains negative and positives are sparse.
 - A focused layer-3 scale sweep maps the pocket boundary. Scale `1.0` is the cleanest point with `2/7` strict positives and `0/10` controls. Scale `1.25` reaches `3/7` strict positives but revives `1/10` strict controls, so calibration alone does not satisfy Phase 1.
 - The stable strict positives around scale `1.0` are `attractor->attractor_network` and `fixed_point->prototype`.
+- A Pythia-160M full-pair replication attempt was interrupted by a local Modal/DNS client failure and produced no artifact, so it is non-evidence. A focused `layer3_strict_pocket_random_nulls` pair set now captures the exact next replication target.
 - Phase 1 is not passed yet. The current full-label logprob gate should be treated as a diagnostic failure mode, generation gates are negative, and binary relation behavior is nonzero but dominated by answer-polarity control.
 
 ## Phase 2 Preview

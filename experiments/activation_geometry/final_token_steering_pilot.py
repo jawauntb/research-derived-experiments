@@ -26,6 +26,10 @@ EXPANDED_POSITIVE_STEERING_PAIRS = (
     ("fixed_point", "prototype"),
     ("basin_of_attraction", "schema"),
 )
+LAYER3_STRICT_POCKET_POSITIVE_PAIRS = (
+    ("attractor", "attractor_network"),
+    ("fixed_point", "prototype"),
+)
 VALENCE_CONTROL_PAIRS = (
     ("valence", "activation_vector"),
     ("valence", "steering_vector"),
@@ -151,10 +155,16 @@ def pair_specs_for_set(concepts: list[Concept], *, pair_set: str) -> list[Steeri
             ("positive", EXPANDED_POSITIVE_STEERING_PAIRS, ""),
             ("control", RANDOM_RELATION_NULL_PAIRS, "random_relation_null"),
         )
+    elif pair_set == "layer3_strict_pocket_random_nulls":
+        pair_groups = (
+            ("positive", LAYER3_STRICT_POCKET_POSITIVE_PAIRS, ""),
+            ("control", RANDOM_RELATION_NULL_PAIRS, "random_relation_null"),
+        )
     else:
         raise ValueError(
             "Pair set must be one of: promoted, expanded, "
-            "expanded_target_disjoint, expanded_random_nulls"
+            "expanded_target_disjoint, expanded_random_nulls, "
+            "layer3_strict_pocket_random_nulls"
         )
     for kind, pairs, control_class in pair_groups:
         for left, right in pairs:
