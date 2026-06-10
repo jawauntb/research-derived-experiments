@@ -328,6 +328,98 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
         self.assertTrue(all(pair.control_class == "random_relation_null" for pair in controls))
         self.assertTrue(all((pair.left, pair.right) not in positive_pairs for pair in controls))
 
+    def test_layer3_strict_pocket_stratified_controls_are_named(self) -> None:
+        concept_rows = [
+            ("attractor", "dynamics"),
+            ("basin_of_attraction", "dynamics"),
+            ("phase_space", "dynamics"),
+            ("fixed_point", "dynamics"),
+            ("attractor_network", "cognition"),
+            ("prototype", "cognition"),
+            ("schema", "cognition"),
+            ("conceptual_space", "semantics"),
+            ("semantic_distance", "semantics"),
+            ("family_resemblance", "semantics"),
+            ("embedding", "ai_geometry"),
+            ("activation_vector", "ai_geometry"),
+            ("steering_vector", "ai_geometry"),
+            ("representation_manifold", "ai_geometry"),
+            ("weak_constraint", "constraint"),
+            ("simplicity_bias", "constraint"),
+            ("validity_gate", "constraint"),
+            ("regime_transition", "discovery"),
+            ("schema_revision", "discovery"),
+            ("residual_content", "discovery"),
+            ("self_boundary", "agency"),
+            ("autopoiesis", "agency"),
+            ("homeostasis", "agency"),
+            ("valence", "agency"),
+        ]
+        concepts = [
+            Concept(
+                id=concept_id,
+                label=concept_id.replace("_", " "),
+                category=category,
+                prompt=concept_id,
+            )
+            for concept_id, category in concept_rows
+        ]
+
+        pairs = pair_specs_for_set(
+            concepts,
+            pair_set="layer3_strict_pocket_stratified_controls",
+        )
+        positives = [pair for pair in pairs if pair.kind == "positive"]
+        controls = [pair for pair in pairs if pair.kind == "control"]
+        positive_sources = {pair.left for pair in positives}
+        positive_targets = {pair.right for pair in positives}
+        controls_by_class = {
+            control_class: [
+                (pair.left, pair.right)
+                for pair in controls
+                if pair.control_class == control_class
+            ]
+            for control_class in {pair.control_class for pair in controls}
+        }
+
+        self.assertEqual(
+            {(pair.left, pair.right) for pair in positives},
+            {
+                ("attractor", "attractor_network"),
+                ("fixed_point", "prototype"),
+            },
+        )
+        self.assertEqual(
+            set(controls_by_class),
+            {
+                "source_sharing",
+                "target_sharing",
+                "implausible_random_null",
+                "semantic_near_null",
+            },
+        )
+        self.assertEqual(len(controls), 12)
+        self.assertTrue(
+            all(
+                left in positive_sources and right not in positive_targets
+                for left, right in controls_by_class["source_sharing"]
+            )
+        )
+        self.assertTrue(
+            all(
+                right in positive_targets and left not in positive_sources
+                for left, right in controls_by_class["target_sharing"]
+            )
+        )
+        self.assertIn(
+            ("regime_transition", "family_resemblance"),
+            controls_by_class["semantic_near_null"],
+        )
+        self.assertIn(
+            ("steering_vector", "semantic_distance"),
+            controls_by_class["semantic_near_null"],
+        )
+
     def test_layer3_strict_pocket_smoke_pair_set_is_minimal(self) -> None:
         concept_rows = [
             ("attractor", "dynamics"),
@@ -460,6 +552,55 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
         self.assertEqual(target_gate["primary_valence_control_pass_count"], 0)
         self.assertAlmostEqual(positive_alignment["mean_target_source_cosine"], -0.1)
         self.assertAlmostEqual(positive_alignment["mean_target_distractor_cosine"], -0.2)
+
+    def test_gate_summaries_include_control_class_breakdowns(self) -> None:
+        rows = [
+            {
+                "role": "primary",
+                "layer": 3,
+                "kind": "control",
+                "control_class": "source_sharing",
+                "pair": "attractor->semantic_distance",
+                "direction_mode": "target_learned",
+                "scale": 1.0,
+                "option_order": "binary_relation",
+                "summary": {
+                    "target_margin_delta": 0.2,
+                    "target_logprob_delta": 0.2,
+                },
+                "learned_alignment": {},
+            },
+            {
+                "role": "primary",
+                "layer": 3,
+                "kind": "control",
+                "control_class": "target_sharing",
+                "pair": "phase_space->attractor_network",
+                "direction_mode": "target_learned",
+                "scale": 1.0,
+                "option_order": "binary_relation",
+                "summary": {
+                    "target_margin_delta": -0.2,
+                    "target_logprob_delta": -0.2,
+                },
+                "learned_alignment": {},
+            },
+        ]
+
+        aggregates = aggregate_rows(rows)
+        gate = next(
+            row for row in gate_summaries(aggregates)
+            if row["direction_mode"] == "target_learned"
+        )
+
+        self.assertEqual(
+            gate["primary_control_pass_count_by_class"],
+            {"source_sharing": 1, "target_sharing": 0},
+        )
+        self.assertEqual(
+            gate["primary_control_total_by_class"],
+            {"source_sharing": 1, "target_sharing": 1},
+        )
 
     def test_full_label_alias_rows_use_single_score_threshold(self) -> None:
         rows = [

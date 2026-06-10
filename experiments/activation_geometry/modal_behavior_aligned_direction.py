@@ -2700,6 +2700,9 @@ def run_behavior_aligned_direction_remote(
                                         "right": right,
                                         "kind": current_kind,
                                         "distractor": distractor,
+                                        "control_class": str(
+                                            pair.get("control_class", "")
+                                        ),
                                         "role": role,
                                         "layer": layer,
                                         "scale": float(scale),
