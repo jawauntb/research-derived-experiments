@@ -2344,3 +2344,80 @@ Residual content:
 Next move: keep the strict binary verifier, but change intervention class:
 pair-focused nonlinear optimization, feature-guided steering, or another method
 that is not merely a linear direction in the low-rank binary carrier subspace.
+
+## Activation Geometry Probe: Pair-Optimized Binary Direction
+
+Question: can a pair-optimized activation vector recover semantic-specific
+binary behavior after PC-whitened linear directions failed to replicate?
+
+Current regime:
+
+- Artifact types: strict binary-relation rows, optimized direction summaries,
+  random-null control sets, smoke gates, aggregate frontier tables.
+- Operations: batched differentiable Yes/No scoring, pair-specific activation
+  vector optimization, norm matching against the target binary-gradient
+  direction.
+- Gates/verifiers: held-out alias `alias_2`, strict binary specificity,
+  always-false carrier rejection, random same-norm and PC1-whitened baselines.
+- Known limitations: current optimized vectors are slow; the full two-variant,
+  two-alias robustness run was not attempted after the alias0 random-null gate
+  failed.
+
+Action class:
+
+- Retrieval/search/discovery: search with a new operation.
+- Why: this adds a behavior-optimized intervention operation but does not yet
+  produce an accepted semantic-specific mechanism.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/binary_pair_optimized_intervention_2026_06_10.md`;
+  local ignored artifacts
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_strict_opt8_cw2_smoke_seed20260610.json`,
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_strict_opt8_fullnull_alias0_seed20260610.json`,
+  and
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_strict_opt16_fullnull_alias0_seed20260610.json`.
+- Positive targets: `attractor->attractor_network` and
+  `fixed_point->prototype`.
+- Negative controls: hard smoke control `valence->steering_vector`; full pilot
+  controls are the ten random relation nulls.
+- Stress tests: opt8 vs opt16 depth comparison; PC1-whitened and random
+  baselines.
+
+Gate:
+
+- Acceptance rule: `2/2` strict positives and `0/10` strict random-null controls
+  on held-out alias scoring.
+- Withheld/rejected rule: reject rows that only pass by also raising the
+  strongest control or always-false carrier.
+
+Results:
+
+- Accepted artifacts: implementation of `target_binary_strict_opt_8` and
+  `target_binary_strict_opt_16`; smoke-gate pass for
+  `attractor->attractor_network` with hard control rejected.
+- Rejected or withheld artifacts: pair-optimized single-vector steering as a
+  paper-ready semantic specificity mechanism.
+- Key metrics: smoke gate `1/1` positives and `0/1` controls for opt8. Full
+  alias0 random-null pilot: opt8 `1/2` positives and `1/10` controls; opt16
+  `1/2` positives and `1/10` controls; PC1-whiten `0/2` positives and `1/10`
+  controls; random same-norm `0/2` positives and `0/10` controls.
+- Variance or ablation: opt16 increases target movement on
+  `attractor->attractor_network` but does not recover `fixed_point->prototype`
+  or remove random-null leakage.
+
+Residual content:
+
+- Explained by old regime: binary Yes/No behavior remains vulnerable to
+  non-semantic carrier and relation-plausibility leakage.
+- New content outside old regime: direct pair optimization can recover a
+  held-out positive that PC1-whitening misses under the same verifier.
+- Retractions or supersessions: supersede "change intervention class may be
+  enough" with "single-vector behavior optimization improves target movement
+  but still needs better control strata or a genuinely nonlinear/feature-guided
+  mechanism."
+
+Next move: stratify controls by semantic plausibility, source overlap, and
+target overlap before interpreting random-null failures as either leaks or bad
+negatives.

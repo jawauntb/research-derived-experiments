@@ -45,6 +45,20 @@ BINARY_PC_DIRECTION_MODES = {
     "target_binary_pc1_whiten": ("whiten", 1),
     "target_binary_pc3_whiten": ("whiten", 3),
 }
+BINARY_OPT_DIRECTION_MODES = {
+    "target_binary_strict_opt_8": {
+        "steps": 8,
+        "lr": 0.25,
+        "control_weight": 2.0,
+        "temperature": 0.25,
+    },
+    "target_binary_strict_opt_16": {
+        "steps": 16,
+        "lr": 0.2,
+        "control_weight": 2.0,
+        "temperature": 0.25,
+    },
+}
 IMAGE = modal.Image.debian_slim(python_version="3.12").pip_install(
     "torch>=2.5,<2.8",
     "transformers>=4.46,<5.0",
@@ -343,6 +357,7 @@ def objective_role_for_mode(mode: str) -> str:
         mode in PENALTY_DIRECTION_MODES
         or mode in BINARY_CONTROL_DIRECTION_MODES
         or mode in BINARY_PC_DIRECTION_MODES
+        or mode in BINARY_OPT_DIRECTION_MODES
     ):
         return "target"
     if mode == "source_learned":
@@ -718,6 +733,48 @@ def run_binary_relation_prompt(
         name: values["yes_minus_no"] for name, values in carrier_scores.items()
     }
     return scores
+
+
+def binary_yes_minus_no_margins_for_prompts(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    prompts: list[str],
+    layer: int,
+    delta: Any,
+    max_length: int,
+) -> Any:
+    if not prompts:
+        raise ValueError("At least one binary prompt is required")
+    answer_ids = label_token_ids(tokenizer, {"yes": "Yes", "no": "No"})
+    if len(answer_ids["yes"]) != 1 or len(answer_ids["no"]) != 1:
+        raise ValueError("Optimized binary directions require one-token Yes/No labels")
+    encoded = tokenizer(
+        prompts,
+        return_tensors="pt",
+        truncation=True,
+        max_length=max(1, max_length - 1),
+        padding=True,
+    )
+    device = next(model.parameters()).device
+    encoded = {name: value.to(device) for name, value in encoded.items()}
+    token_indices = encoded["attention_mask"].sum(dim=1).long() - 1
+    handle = add_token_index_hook(
+        torch=torch,
+        model=model,
+        layer=layer,
+        token_indices=token_indices,
+        delta=delta,
+    )
+    try:
+        outputs = model(**encoded, use_cache=False)
+    finally:
+        handle.remove()
+    batch_indices = torch.arange(token_indices.shape[0], device=device)
+    logits = outputs.logits[batch_indices, token_indices].float()
+    logprobs = torch.nn.functional.log_softmax(logits, dim=-1)
+    return logprobs[:, answer_ids["yes"][0]] - logprobs[:, answer_ids["no"][0]]
 
 
 def generate_continuation(
@@ -1230,6 +1287,175 @@ def binary_control_gradient_directions(
     }
 
 
+def optimized_binary_prompt_sets(
+    *,
+    source_texts: list[tuple[int, str]],
+    objective_labels_by_regime: dict[str, dict[str, str]],
+    shuffled_labels_by_regime: dict[str, dict[str, str]],
+    extra_control_labels_by_regime: dict[str, list[str]],
+) -> tuple[list[str], list[str], list[str]]:
+    target_prompts = []
+    control_prompts = []
+    control_names = []
+    for regime_part, labels_by_role in objective_labels_by_regime.items():
+        shuffled_target_label = shuffled_labels_by_regime[regime_part]["target"]
+        relation_control_labels = {
+            "blank": "",
+            "generic": "a related concept",
+            "source": labels_by_role["source"],
+            "distractor": labels_by_role["distractor"],
+            "shuffled_target": shuffled_target_label,
+        }
+        for _variant_index, source_text in source_texts:
+            target_prompts.append(
+                binary_relation_prompt(
+                    source_text=source_text,
+                    candidate_label=labels_by_role["target"],
+                )
+            )
+            for control_name, candidate_label in relation_control_labels.items():
+                control_names.append(control_name)
+                control_prompts.append(
+                    binary_relation_prompt(
+                        source_text=source_text,
+                        candidate_label=candidate_label,
+                    )
+                )
+            for extra_index, candidate_label in enumerate(
+                extra_control_labels_by_regime.get(regime_part, [])
+            ):
+                control_names.append(f"random_null_{extra_index}")
+                control_prompts.append(
+                    binary_relation_prompt(
+                        source_text=source_text,
+                        candidate_label=candidate_label,
+                    )
+                )
+            control_names.append("always_false")
+            control_prompts.append(
+                binary_carrier_prompt(
+                    carrier="always_false",
+                    candidate_label=labels_by_role["target"],
+                )
+            )
+    return target_prompts, control_prompts, control_names
+
+
+def pair_optimized_binary_direction(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    source_texts: list[tuple[int, str]],
+    objective_labels_by_regime: dict[str, dict[str, str]],
+    shuffled_labels_by_regime: dict[str, dict[str, str]],
+    extra_control_labels_by_regime: dict[str, list[str]],
+    layer: int,
+    max_length: int,
+    reference_direction: Any,
+    mode: str,
+) -> tuple[Any, dict[str, Any]]:
+    config = BINARY_OPT_DIRECTION_MODES[mode]
+    steps = int(config["steps"])
+    lr = float(config["lr"])
+    control_weight = float(config["control_weight"])
+    temperature = float(config["temperature"])
+    device = next(model.parameters()).device
+    reference = reference_direction.detach().float().to(device)
+    reference_norm = torch.linalg.vector_norm(reference).clamp(min=1e-12)
+    target_prompts, control_prompts, control_names = optimized_binary_prompt_sets(
+        source_texts=source_texts,
+        objective_labels_by_regime=objective_labels_by_regime,
+        shuffled_labels_by_regime=shuffled_labels_by_regime,
+        extra_control_labels_by_regime=extra_control_labels_by_regime,
+    )
+    prompts = target_prompts + control_prompts
+    target_count = len(target_prompts)
+    if target_count == 0 or not control_prompts:
+        raise ValueError("Optimized binary direction requires target and control prompts")
+
+    parameters = list(model.parameters())
+    parameter_requires_grad = [parameter.requires_grad for parameter in parameters]
+    for parameter in parameters:
+        parameter.requires_grad_(False)
+    try:
+        delta = torch.zeros_like(reference, device=device, dtype=torch.float32)
+        delta.requires_grad_(True)
+        optimizer = torch.optim.Adam([delta], lr=lr)
+        final_metrics: dict[str, float] = {}
+        for _step in range(steps):
+            optimizer.zero_grad(set_to_none=True)
+            model.zero_grad(set_to_none=True)
+            margins = binary_yes_minus_no_margins_for_prompts(
+                torch=torch,
+                tokenizer=tokenizer,
+                model=model,
+                prompts=prompts,
+                layer=layer,
+                delta=delta,
+                max_length=max_length,
+            )
+            target_margins = margins[:target_count]
+            control_margins = margins[target_count:]
+            target_mean = target_margins.mean()
+            centered_smooth_max = temperature * (
+                torch.logsumexp(control_margins / temperature, dim=0)
+                - torch.log(
+                    torch.tensor(
+                        float(control_margins.numel()),
+                        device=device,
+                        dtype=control_margins.dtype,
+                    )
+                )
+            )
+            control_penalty = torch.nn.functional.softplus(centered_smooth_max)
+            objective = target_mean - control_weight * control_penalty
+            (-objective).backward()
+            optimizer.step()
+            with torch.no_grad():
+                delta_norm = torch.linalg.vector_norm(delta)
+                if delta_norm > reference_norm:
+                    delta.mul_(reference_norm / delta_norm)
+            final_metrics = {
+                "target_margin_mean": float(target_mean.detach().item()),
+                "target_margin_min": float(target_margins.detach().min().item()),
+                "control_margin_mean": float(control_margins.detach().mean().item()),
+                "control_margin_max": float(control_margins.detach().max().item()),
+                "control_smooth_max": float(centered_smooth_max.detach().item()),
+                "control_penalty": float(control_penalty.detach().item()),
+                "objective": float(objective.detach().item()),
+            }
+
+        with torch.no_grad():
+            final_delta = delta.detach()
+            pre_rescale_norm = torch.linalg.vector_norm(final_delta)
+            if float(pre_rescale_norm.item()) > 0.0:
+                final_delta = final_delta * (reference_norm / pre_rescale_norm)
+            summary: dict[str, Any] = {
+                "mode": mode,
+                "steps": steps,
+                "lr": lr,
+                "control_weight": control_weight,
+                "temperature": temperature,
+                "target_prompt_count": target_count,
+                "control_prompt_count": len(control_prompts),
+                "control_names": sorted(set(control_names)),
+                "reference_norm": float(reference_norm.item()),
+                "pre_rescale_norm": float(pre_rescale_norm.item()),
+                "post_rescale_norm": float(torch.linalg.vector_norm(final_delta).item()),
+            }
+            summary.update(final_metrics)
+        return final_delta.to(device), summary
+    finally:
+        for parameter, requires_grad in zip(
+            parameters,
+            parameter_requires_grad,
+            strict=True,
+        ):
+            parameter.requires_grad_(requires_grad)
+        model.zero_grad(set_to_none=True)
+
+
 def learned_gradient_direction(
     *,
     torch: Any,
@@ -1708,6 +1934,7 @@ def direction_for_mode(
     torch: Any,
     learned_directions: dict[str, Any],
     activation_directions: dict[str, Any],
+    binary_optimized_directions: dict[str, Any],
     control_target_direction: Any | None,
     control_target_directions: list[Any],
     hard_control_target_direction: Any | None,
@@ -1728,6 +1955,12 @@ def direction_for_mode(
             torch,
             activation_directions[mode],
             target_direction,
+        )
+    if mode in binary_optimized_directions:
+        return binary_optimized_directions[mode]
+    if mode in BINARY_OPT_DIRECTION_MODES:
+        raise ValueError(
+            f"{mode} requires optimized binary directions; use binary_relation scoring"
         )
     if mode == "target_resid_sd":
         return rescale_to_reference_norm(
@@ -1949,9 +2182,12 @@ def run_behavior_aligned_direction_remote(
                         regime_directions,
                     ).to(device)
                 binary_control_directions: dict[str, Any] = {}
+                binary_optimized_directions: dict[str, Any] = {}
+                binary_optimized_direction_summaries: dict[str, Any] = {}
                 if scoring_surface == "binary_relation":
                     control_direction_groups: dict[str, list[Any]] = {}
                     shuffled_pair = pair_specs[(pair_index + 1) % len(pair_specs)]
+                    shuffled_labels_by_regime = {}
                     for regime_part, labels_by_role in objective_labels_by_regime.items():
                         shuffled_labels_by_role = labels_by_role_for_regime(
                             concept_lookup=concept_lookup,
@@ -1961,6 +2197,7 @@ def run_behavior_aligned_direction_remote(
                             distractor=str(shuffled_pair["distractor"]),
                             label_scoring_regime=regime_part,
                         )
+                        shuffled_labels_by_regime[regime_part] = shuffled_labels_by_role
                         control_directions_for_regime = binary_control_gradient_directions(
                             torch=torch,
                             tokenizer=tokenizer,
@@ -1983,6 +2220,62 @@ def run_behavior_aligned_direction_remote(
                         control_name: mean_tensor(torch, directions).to(device)
                         for control_name, directions in control_direction_groups.items()
                     }
+                    extra_control_labels_by_regime: dict[str, list[str]] = {}
+                    for regime_part in objective_regime_parts:
+                        extra_control_labels = []
+                        seen_extra_control_labels = set()
+                        for control_pair in pair_specs:
+                            if str(control_pair["kind"]) != "control":
+                                continue
+                            control_pair_id = pair_id(
+                                str(control_pair["left"]),
+                                str(control_pair["right"]),
+                            )
+                            if control_pair_id == current_pair_id:
+                                continue
+                            control_labels_by_role = labels_by_role_for_regime(
+                                concept_lookup=concept_lookup,
+                                aliases_by_concept=aliases_by_concept,
+                                left=str(control_pair["left"]),
+                                right=str(control_pair["right"]),
+                                distractor=str(control_pair["distractor"]),
+                                label_scoring_regime=regime_part,
+                            )
+                            candidate_label = control_labels_by_role["target"]
+                            normalized_label = normalize_generated_text(candidate_label)
+                            if normalized_label in seen_extra_control_labels:
+                                continue
+                            seen_extra_control_labels.add(normalized_label)
+                            extra_control_labels.append(candidate_label)
+                        extra_control_labels_by_regime[regime_part] = (
+                            extra_control_labels
+                        )
+                    for mode in direction_modes:
+                        if mode not in BINARY_OPT_DIRECTION_MODES:
+                            continue
+                        optimized_direction, optimized_summary = (
+                            pair_optimized_binary_direction(
+                                torch=torch,
+                                tokenizer=tokenizer,
+                                model=model,
+                                source_texts=source_texts,
+                                objective_labels_by_regime=(
+                                    objective_labels_by_regime
+                                ),
+                                shuffled_labels_by_regime=shuffled_labels_by_regime,
+                                extra_control_labels_by_regime=(
+                                    extra_control_labels_by_regime
+                                ),
+                                layer=layer,
+                                max_length=max_length,
+                                reference_direction=learned_directions["target"],
+                                mode=mode,
+                            )
+                        )
+                        binary_optimized_directions[mode] = optimized_direction.to(
+                            device
+                        )
+                        binary_optimized_direction_summaries[mode] = optimized_summary
                 norms = {
                     objective_role: float(torch.linalg.vector_norm(direction).item())
                     for objective_role, direction in learned_directions.items()
@@ -2064,6 +2357,10 @@ def run_behavior_aligned_direction_remote(
                     "learned_directions": learned_directions,
                     "activation_directions": activation_directions,
                     "binary_control_directions": binary_control_directions,
+                    "binary_optimized_directions": binary_optimized_directions,
+                    "binary_optimized_direction_summaries": (
+                        binary_optimized_direction_summaries
+                    ),
                     "norms": norms,
                     "binary_control_norms": binary_control_norms,
                     "activation_norms": activation_norms,
@@ -2183,6 +2480,10 @@ def run_behavior_aligned_direction_remote(
                 learned_directions = record["learned_directions"]
                 activation_directions = record["activation_directions"]
                 binary_control_directions = record["binary_control_directions"]
+                binary_optimized_directions = record["binary_optimized_directions"]
+                binary_optimized_direction_summaries = record[
+                    "binary_optimized_direction_summaries"
+                ]
                 binary_control_pc_basis = binary_control_pc_bases_by_regime.get(
                     objective_label_scoring_regime
                 )
@@ -2343,6 +2644,9 @@ def run_behavior_aligned_direction_remote(
                                     torch=torch,
                                     learned_directions=learned_directions,
                                     activation_directions=activation_directions,
+                                    binary_optimized_directions=(
+                                        binary_optimized_directions
+                                    ),
                                     control_target_direction=control_target_direction,
                                     control_target_directions=control_directions,
                                     hard_control_target_direction=(
@@ -2413,6 +2717,9 @@ def run_behavior_aligned_direction_remote(
                                         ),
                                         "binary_control_pc_singular_values": (
                                             binary_control_pc_singular_values
+                                        ),
+                                        "binary_optimized_direction_summaries": (
+                                            binary_optimized_direction_summaries
                                         ),
                                         "control_basis_pair_count": len(
                                             control_directions

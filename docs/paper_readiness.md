@@ -67,6 +67,8 @@ Current Phase 1 result:
 - A Pythia-160M full-pair replication attempt was interrupted by a local Modal/DNS client failure and produced no artifact, so it is non-evidence. A focused `layer3_strict_pocket_random_nulls` pair set now captures the exact next replication target.
 - The focused Pythia-160M layer-3 replication is now real evidence and is negative. `target_binary_pc1_whiten` gives `0/2` strict positives and `0/10` controls at scale `1.0`; a focused scale sweep over `0.5`, `0.75`, `1.0`, `1.25`, and `1.5` remains `0/2` positives and `0/10` controls at every scale.
 - Pythia-160M target movement is still low-rank and carrier-dominated: target direction first-PC energy is `0.877`, target-plus-control first-PC energy is `0.715`, and always-false direction first-PC energy is `0.913`.
+- A pair-optimized strict-binary direction is now implemented and tested. It passes a smoke gate on `attractor->attractor_network` with the hard `valence->steering_vector` control rejected, but it fails the full random-null alias0 pilot: `target_binary_strict_opt_8` and `target_binary_strict_opt_16` both reach only `1/2` strict positives and leak `1/10` random-null controls.
+- The optimized direction improves target movement over PC1-whitening in the narrow gate, but still does not establish semantic specificity. The leaked controls differ by optimization depth: `target_binary_strict_opt_8` leaks `regime_transition->family_resemblance`, while `target_binary_strict_opt_16` leaks `steering_vector->semantic_distance`.
 - Phase 1 is not passed yet. The current full-label logprob gate should be treated as a diagnostic failure mode, generation gates are negative, and binary relation behavior is nonzero but dominated by answer-polarity control.
 
 ## Phase 2 Preview
@@ -76,7 +78,7 @@ If Phase 1 survives, expand along three axes:
 - Model replication: add GPT-2 and a larger open causal LM if Modal budget allows.
 - Concept expansion: add more positive bridges and random relation nulls.
 - Baselines: compare generation/readout behavior against the existing target-gradient, residual, random, and CAA/CAV-style activation-difference baselines.
-- Verifier pivot: use the strict binary-relation verifier to evaluate a nonlinear/feature-guided intervention, since the two stable Pythia-70M layer-3 strict positives failed to replicate in Pythia-160M.
+- Verifier pivot: stratify the random-null controls before interpreting pair-optimized leakage, then evaluate a genuinely nonlinear/feature-guided intervention if single-vector optimization remains control-limited.
 
 ## Paper Draft Gate
 

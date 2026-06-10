@@ -30,6 +30,8 @@ DIRECTION_MODES = (
     "target_binary_pc3_resid",
     "target_binary_pc1_whiten",
     "target_binary_pc3_whiten",
+    "target_binary_strict_opt_8",
+    "target_binary_strict_opt_16",
     "caa_target_contrast",
     "caa_target_minus_source",
     "caa_target_minus_distractor",

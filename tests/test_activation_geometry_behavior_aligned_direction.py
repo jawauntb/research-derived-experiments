@@ -31,6 +31,7 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
                 "target_learned, target_penalty_controls_1_0, "
                 "target_penalty_hard_1_0, target_binary_controls_1_0, "
                 "target_binary_pc1_resid, target_binary_pc3_whiten, "
+                "target_binary_strict_opt_8, target_binary_strict_opt_16, "
                 "caa_target_contrast"
             ),
             [
@@ -40,6 +41,8 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
                 "target_binary_controls_1_0",
                 "target_binary_pc1_resid",
                 "target_binary_pc3_whiten",
+                "target_binary_strict_opt_8",
+                "target_binary_strict_opt_16",
                 "caa_target_contrast",
             ],
         )
@@ -324,6 +327,36 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
         )
         self.assertTrue(all(pair.control_class == "random_relation_null" for pair in controls))
         self.assertTrue(all((pair.left, pair.right) not in positive_pairs for pair in controls))
+
+    def test_layer3_strict_pocket_smoke_pair_set_is_minimal(self) -> None:
+        concept_rows = [
+            ("attractor", "dynamics"),
+            ("attractor_network", "cognition"),
+            ("prototype", "cognition"),
+            ("embedding", "ai_geometry"),
+            ("steering_vector", "ai_geometry"),
+            ("valence", "agency"),
+        ]
+        concepts = [
+            Concept(
+                id=concept_id,
+                label=concept_id.replace("_", " "),
+                category=category,
+                prompt=concept_id,
+            )
+            for concept_id, category in concept_rows
+        ]
+
+        pairs = pair_specs_for_set(concepts, pair_set="layer3_strict_pocket_smoke")
+
+        self.assertEqual(
+            [(pair.kind, pair.left, pair.right) for pair in pairs],
+            [
+                ("positive", "attractor", "attractor_network"),
+                ("control", "valence", "steering_vector"),
+            ],
+        )
+        self.assertEqual(pairs[1].control_class, "random_relation_null")
 
     def test_role_margin_and_behavior_delta_use_target_margin(self) -> None:
         baseline = {"source": -1.0, "target": -2.0, "distractor": -3.0}
