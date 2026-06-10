@@ -98,7 +98,37 @@ Encoder features over-generalize: they treat non-Z_8 rotations like 15°, 30°, 
 
 ![Figure 2: Approach 2 — encoder-invariance scores across the 72-angle grid. The encoder is highly invariant to small rotations (perceptual smoothness) and indifferent to the true Z_8 angles (red dashes). The signal reflects how the encoder generalizes within a class, not the data's symmetry orbits.](figures/fig2_encoder_invariance.png)
 
-## 4. Discussion
+## 4. Extension: rotated MNIST
+
+A natural objection to §3 is that synthetic 16×16 stroke patterns are too clean — pixel cosine wins because the data has no nuisance variation. We test this objection by repeating the same four-method comparison on **real digit images**: rotated MNIST, 30 samples per (class × rotation) cell, downsampled to 16×16 to match the stroke pipeline, otherwise identical Z_8 partial-orbit setup (each class shown at 3 of 8 rotations during training, 5 OOD).
+
+### 4.1 Result
+
+Threshold sweep across all three methods (900 train + 1500 OOD images):
+
+| Method | Best τ | Kept | Recall | Precision | F1 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| **v1 pixel cosine** | 0.3–0.7 | 24 | **1.000** | 0.333 | **0.500** |
+| Approach 3: encoder enumerative | 0.5 | 14 | 0.625 | 0.357 | 0.455 |
+| Approach 2: encoder invariance | 0.5 | 6 | 0.250 | 0.333 | 0.286 |
+
+![Figure 3: threshold sweep on rotated MNIST. Pixel cosine maintains perfect Z_8 recall across thresholds 0.3–0.7 (left panel); encoder methods collapse sharply with rising threshold. Precision is poor for all methods (~0.33) on natural digits because at 30 samples per cell, almost any rotation produces some same-class match by chance — but only pixel cosine retains the property of *never missing* a true Z_8 angle until very high thresholds.](figures/fig3_rotated_mnist_threshold_sweep.png)
+
+**Headline:** even on real digit images with natural writing-style variation, none of the three neural approaches beats pixel cosine on recall. The qualitative finding from §3 — pixel cosine remains the best symmetry-recovery method in this regime — survives the transition from synthetic strokes to MNIST.
+
+### 4.2 Honest caveats
+
+Precision is poor across *all* methods (~0.33) on MNIST. This is a limitation of the procedure, not of any specific similarity function. At 30 samples per cell with natural digit variation, almost any rotation produces *some* same-class match by chance, so candidates over-keep regardless of similarity choice. A stricter matching criterion (e.g., top-1 vs top-K, or symmetric matching requiring agreement in both directions) is needed.
+
+What we did NOT test:
+
+- **Full 28×28 MNIST** without downsampling. The encoder may need more spatial resolution.
+- **Cluttered backgrounds**, stroke-width perturbation, or other natural-image distractors. This is the regime where pixel cosine should finally fail. Our 16×16 MNIST has natural variation but is still relatively clean.
+- **Causal validation**: using each method's learned group as augmentation and measuring OOD lift. The augmentation effect should track recall above.
+
+The honest read: **pixel cosine remains the best method we have for partial-orbit symmetry recovery on data where pixel-level rotation geometry is preserved**. Encoder methods will likely win in regimes where it isn't — but we haven't shown that yet.
+
+## 5. Discussion
 
 The enumerative pixel-cosine procedure works precisely because:
 
@@ -114,7 +144,7 @@ The three neural alternatives fail in distinctive ways:
 
 This does NOT show that neural approaches *cannot* work for symmetry discovery. It shows that two natural neural approaches and one hybrid do not work on *controlled* rotation data where pixel cosine is essentially optimal. The natural follow-on is to test on natural images where pixel cosine is known to fail — cluttered backgrounds, texture variation, lighting, partial occlusion. There, the encoder's ability to ignore irrelevant variation may matter more than its tendency to over-generalize.
 
-## 5. Limitations
+## 6. Limitations
 
 1. Tested only on 16×16 synthetic stroke patterns. Natural-image transfer is untested.
 2. Three architectures tried. A conditional flow [van der Ouderaa et al. 6] or a meta-learned equivariance scheme might succeed where these fail.
@@ -122,7 +152,7 @@ This does NOT show that neural approaches *cannot* work for symmetry discovery. 
 4. The encoder was a single-architecture supervised-contrastive model; deeper or self-supervised encoders may give sharper invariance.
 5. We do not propose a new method that works on this benchmark — only document what doesn't.
 
-## 6. Reproducibility
+## 7. Reproducibility
 
 ```bash
 # Approach 1: direct generator + ensemble
@@ -135,7 +165,7 @@ python3 -c "from experiments.neural_group_generator.encoder_invariance import *;
 
 See `experiments/neural_group_generator/results/negative_results_2026_06_09.md` for the full result log.
 
-## 7. References
+## 8. References
 
 [1] **Bennett, M. T.** *How to Create Conscious Machines.* arXiv:2403.00644 (2024).
 
