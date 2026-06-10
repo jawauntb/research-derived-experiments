@@ -28,7 +28,12 @@ DIRECTION_MODES = (
     "random_same_norm",
 )
 OBJECTIVE_ROLES = ("target", "source", "distractor")
-PROMPT_FRAMES = ("source_passage", "latent_choice")
+PROMPT_FRAMES = (
+    "source_passage",
+    "latent_choice",
+    "source_short_answer",
+    "latent_short_answer",
+)
 SCORING_SURFACES = (
     "option_token",
     "full_label",

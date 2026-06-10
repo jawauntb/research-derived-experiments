@@ -4,6 +4,7 @@ import unittest
 
 from experiments.activation_geometry.behavior_aligned_direction import (
     LABEL_SCORING_REGIMES,
+    PROMPT_FRAMES,
     aggregate_rows,
     alignment_summary,
     generation_match_scores,
@@ -46,6 +47,18 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
                 name="Label regimes",
             ),
             ["alias_0", "alias_1", "alias_2"],
+        )
+
+    def test_prompt_frames_include_short_answer_interfaces(self) -> None:
+        self.assertIn("source_short_answer", PROMPT_FRAMES)
+        self.assertIn("latent_short_answer", PROMPT_FRAMES)
+        self.assertEqual(
+            parse_values(
+                "source_short_answer",
+                allowed=PROMPT_FRAMES,
+                name="Prompt frame",
+            ),
+            ["source_short_answer"],
         )
 
     def test_generation_match_helpers_use_phrase_boundaries(self) -> None:

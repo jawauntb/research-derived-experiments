@@ -20,7 +20,7 @@ that distinction, and constrained control penalties trace a specificity frontier
 | Baselines | Random, source/distractor, residual projection, hard/mean-control penalties, and CAA/CAV-style activation-difference baselines. | Add learned behavior-readout/generation baselines and, later, SAE/feature-guided baselines if feasible. |
 | Statistical confidence | Single seed for most behavior runs. | Add seeds, bootstrap CIs over pairs, and random relation nulls. |
 | Claim boundary | `docs/semantic_specificity.md` defines specificity as held-out target transfer minus independent control leakage under matched score surfaces. | Keep the claim boundary in the paper draft and do not promote runs with near-zero specificity. |
-| Generation tests | Added strict short-generation match and learned generation-readout gates. Both reject current target-gradient and CAA directions: strict target behavior is `0/7` positives and `0/10` controls in source and latent frames. | Redesign the behavior interface with constrained short answers before larger-model generation repeats. |
+| Generation tests | Added strict short-generation match, learned generation-readout, and constrained short-answer gates. All reject current target-gradient and CAA directions: strict target behavior is `0/7` positives and `0/10` controls in source, latent, and short-answer frames. | Build a direct behavior-classification/intervention gate before larger-model generation repeats. |
 | Mechanistic analysis | Direction-subspace diagnostic shows leakage is not one low-rank control vector; high overlaps are pair/target-pocket specific. | Add target-disjoint random relation nulls and stratify controls by target/source overlap. |
 
 ## Current Phase
@@ -52,7 +52,9 @@ Current Phase 1 result:
 - The only nonzero source-passage generation margin deltas come from source-label suppression, not target generation, so they are recorded as failures rather than passes.
 - A learned generation-readout gate agrees with the exact-match gate. After requiring target-margin improvement, target-score increase, and steered `best_role == target`, source and latent prompt frames both show `0/7` positives and `0/10` random-null controls for target-gradient, CAA, and random directions.
 - The only nonzero readout margin pocket is `validity_gate->weak_constraint` under source-passage CAA, but the steered best role remains `source`, so it is explicitly rejected.
-- Phase 1 is not passed yet. The current full-label logprob gate should be treated as a diagnostic failure mode, and the first two non-logprob generation gates are negative. The next attempt should redesign the behavior interface before adding model scale.
+- A constrained short-answer interface also fails to recover target behavior. Exact match and learned readout both show `0/7` positives and `0/10` random-null controls for target-gradient, CAA, and random directions in both `source_short_answer` and `latent_short_answer`.
+- Source-conditioned short-answer prompts mostly repeat the source passage; source-free latent short-answer prompts collapse to generic continuations such as `The term "word" is`.
+- Phase 1 is not passed yet. The current full-label logprob gate should be treated as a diagnostic failure mode, and all current non-logprob generation gates are negative. The next attempt should use a direct behavior-classification/intervention gate before adding model scale.
 
 ## Phase 2 Preview
 
@@ -61,7 +63,7 @@ If Phase 1 survives, expand along three axes:
 - Model replication: add GPT-2 and a larger open causal LM if Modal budget allows.
 - Concept expansion: add more positive bridges and random relation nulls.
 - Baselines: compare generation/readout behavior against the existing target-gradient, residual, random, and CAA/CAV-style activation-difference baselines.
-- Verifier pivot: add generation or learned behavior-readout tests that can separate true relation behavior from broad target-label promotion.
+- Verifier pivot: add direct behavior-classification/intervention tests that can separate true relation behavior from broad target-label promotion.
 
 ## Paper Draft Gate
 

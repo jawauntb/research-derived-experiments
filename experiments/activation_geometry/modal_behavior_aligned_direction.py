@@ -86,8 +86,20 @@ def full_label_prompt(
                 "Concept:",
             ]
         )
+    if prompt_frame == "source_short_answer":
+        return "\n".join(
+            [
+                "Answer with one short related concept phrase only.",
+                "",
+                f"Passage: {source_text}",
+                "",
+                "Related concept:",
+            ]
+        )
     if prompt_frame == "latent_choice":
         return "The concept most likely indicated by the model's current internal state is"
+    if prompt_frame == "latent_short_answer":
+        return "Answer with one short concept phrase only. Related concept:"
     raise ValueError(f"Unknown prompt frame: {prompt_frame}")
 
 

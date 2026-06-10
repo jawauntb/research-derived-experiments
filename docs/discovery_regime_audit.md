@@ -1735,3 +1735,74 @@ Residual content:
   target behavior from the current generations."
 
 Next move: redesign the behavior interface before scaling models.
+
+## Activation Geometry Probe: Short-Answer Behavior Gate
+
+Question: does a constrained short-answer interface reveal target behavior that
+open-ended generation gates miss?
+
+Current regime:
+
+- Artifact types: generation-match payloads, generation-readout payloads,
+  prompt-frame manifests, random-null specificity reports, generated-text
+  examples.
+- Operations: full-label alias-gradient construction, CAA activation
+  differencing, short-answer greedy generation with steering hooks, exact target
+  phrase matching, learned continuation readout scoring.
+- Gates/verifiers: positives must produce target matches or target-readout
+  classifications more often than random relation null controls.
+- Known limitations: one small model, one seed, greedy short continuation, no
+  larger-model replication because the small non-logprob gate is zero.
+
+Action class:
+
+- Retrieval/search/discovery: verifier search with a rejected interface.
+- Why: this changes the prompting interface inside the existing non-logprob
+  behavior-verifier schema and tests whether the negative result was caused by
+  prompt openness.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/short_answer_behavior_gate_2026_06_09.md`;
+  local ignored payloads under
+  `artifacts/activation_geometry/modal_pythia_70m_short_answer_*_random_nulls_*.json`.
+- Positive targets: expanded steering pairs.
+- Negative controls: ten seeded random relation null controls.
+- Stress tests: source-conditioned and source-free short-answer frames;
+  exact-match and learned-readout behavior surfaces; target-gradient, CAA, and
+  random same-norm directions.
+
+Gate:
+
+- Acceptance rule: continue toward paper-level semantic specificity only if
+  short-answer target behavior is nonzero for positives and exceeds random-null
+  controls.
+- Withheld/rejected rule: reject if target-positive passes are zero or if
+  nonzero deltas come from source suppression, generic completions, or unchanged
+  readout roles.
+
+Results:
+
+- Accepted artifacts: `source_short_answer` and `latent_short_answer` prompt
+  frames.
+- Rejected or withheld artifacts: the short-answer interface as a rescue for
+  current target-gradient and CAA directions.
+- Key metrics: all four surface/prompt combinations show `0/7` target-positive
+  passes and `0/10` random-null passes for target-gradient, CAA, and random
+  directions.
+- Variance or ablation: source-conditioned prompts repeat source text; latent
+  prompts collapse to generic text; learned readout agrees with exact matching.
+
+Residual content:
+
+- Explained by old regime: label-score steering does not automatically
+  transport into generated target behavior.
+- New content outside old regime: the short-answer interface is not sufficient
+  to bridge teacher-forced label movement and behavior.
+- Retractions or supersessions: supersede "short-answer prompting may recover
+  the target behavior" with "current directions remain behavior-inactive under
+  short-answer generation."
+
+Next move: build a direct behavior-classification/intervention gate before
+adding model scale.
