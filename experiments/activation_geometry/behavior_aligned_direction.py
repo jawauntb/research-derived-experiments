@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -28,7 +29,7 @@ DIRECTION_MODES = (
 )
 OBJECTIVE_ROLES = ("target", "source", "distractor")
 PROMPT_FRAMES = ("source_passage", "latent_choice")
-SCORING_SURFACES = ("option_token", "full_label")
+SCORING_SURFACES = ("option_token", "full_label", "generation_match")
 SINGLE_LABEL_SCORING_REGIMES = ("canonical", "alias", "alias_0", "alias_1", "alias_2")
 LABEL_SCORING_REGIMES = SINGLE_LABEL_SCORING_REGIMES
 
@@ -91,6 +92,36 @@ def target_margin(scores: dict[str, float]) -> float:
     return scores["target"] - ((scores["source"] + scores["distractor"]) / 2)
 
 
+def normalize_generated_text(text: str) -> str:
+    normalized = text.lower().replace("_", " ")
+    normalized = re.sub(r"[^a-z0-9]+", " ", normalized)
+    return re.sub(r"\s+", " ", normalized).strip()
+
+
+def generated_text_matches_label(*, generated_text: str, label: str) -> bool:
+    text = normalize_generated_text(generated_text)
+    normalized_label = normalize_generated_text(label)
+    if not text or not normalized_label:
+        return False
+    return re.search(rf"(?<!\w){re.escape(normalized_label)}(?!\w)", text) is not None
+
+
+def generation_match_scores(
+    *,
+    generated_text: str,
+    labels_by_role: dict[str, list[str]],
+) -> dict[str, float]:
+    return {
+        role: 1.0
+        if any(
+            generated_text_matches_label(generated_text=generated_text, label=label)
+            for label in labels
+        )
+        else 0.0
+        for role, labels in labels_by_role.items()
+    }
+
+
 def role_margin(scores: dict[str, float], role: str) -> float:
     if role not in OBJECTIVE_ROLES:
         options = ", ".join(OBJECTIVE_ROLES)
@@ -120,6 +151,15 @@ def summarize_behavior_delta(
             - (baseline_scores["target"] - baseline_scores["distractor"])
         ),
     }
+
+
+def row_passes_behavior_gate(row: dict[str, Any]) -> bool:
+    if float(row["summary"]["target_margin_delta"]) <= 0:
+        return False
+    if str(row.get("scoring_surface", "option_token")) != "generation_match":
+        return True
+    steered_scores = row.get("scores", {}).get("steered", {})
+    return float(steered_scores.get("target", 0.0)) > 0
 
 
 def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -154,7 +194,7 @@ def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     ), group in grouped.items():
         deltas = [row["summary"]["target_margin_delta"] for row in group]
         target_logprob_deltas = [row["summary"]["target_logprob_delta"] for row in group]
-        pass_count = sum(1 for value in deltas if value > 0)
+        pass_count = sum(1 for row in group if row_passes_behavior_gate(row))
         mean_delta = sum(deltas) / len(deltas)
         robust_pass_threshold = min(2, len(group))
         aggregates.append(

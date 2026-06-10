@@ -1600,3 +1600,71 @@ Residual content:
 - Retractions or supersessions: supersede "CAA may rescue this verifier" with "CAA is a useful baseline but fails the same independent-control gate."
 
 Next move: create a non-logprob generation or learned behavior-readout gate for semantic specificity.
+
+## Activation Geometry Probe: Generation-Match Random Null Gate
+
+Question: does a non-logprob short-generation verifier preserve semantically
+specific behavior effects from alias-trained directions?
+
+Current regime:
+
+- Artifact types: alias-indexed behavior-direction manifests, CAA-style
+  direction vectors, random-relation null pair sets, generated-text examples,
+  target-match generation gates.
+- Operations: full-label alias-gradient construction, CAA activation
+  differencing, greedy continuation with steering hooks, normalized phrase
+  matching over canonical and alias labels.
+- Gates/verifiers: positives must generate target labels; random relation nulls
+  must not; source-label suppression alone is not a pass.
+- Known limitations: one small model, one seed, greedy 8-token continuation,
+  exact phrase matcher rather than learned semantic evaluator.
+
+Action class:
+
+- Retrieval/search/discovery: verifier transition with a rejected candidate.
+- Why: this adds a non-logprob behavior verifier and changes what counts as an
+  accepted behavioral artifact.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/generation_match_random_nulls_2026_06_09.md`;
+  local ignored payloads under
+  `artifacts/activation_geometry/modal_pythia_70m_generation_match_random_nulls_*.json`.
+- Positive targets: expanded steering pairs.
+- Negative controls: ten seeded random relation null controls.
+- Stress tests: `source_passage` and `latent_choice`; target-gradient, CAA, and
+  random same-norm directions.
+
+Gate:
+
+- Acceptance rule: continue toward paper-level semantic specificity only if
+  steered generations actually match held-out target labels for positives more
+  often than for random-null controls.
+- Withheld/rejected rule: withhold behavioral semantic steering if target hits
+  are zero or if gains come from source/distractor suppression.
+
+Results:
+
+- Accepted artifacts: generation-match scoring surface; generation example
+  renderer; target-match-only robust-pass gate.
+- Rejected or withheld artifacts: current target-gradient and CAA directions as
+  behavior-level semantic steering mechanisms.
+- Key metrics: strict target-positive passes are `0/7` for target-gradient, CAA,
+  and random directions in both prompt frames; random-null passes are `0/10`.
+- Variance or ablation: source-passage has two source-suppression rows but no
+  target hits; latent-choice has no target hits and generic repeated
+  continuations.
+
+Residual content:
+
+- Explained by old regime: label-logprob movement does not imply generated
+  target behavior.
+- New content outside old regime: a stricter verifier reveals source-suppression
+  artifacts that margin scoring alone would overcount.
+- Retractions or supersessions: supersede "nonzero generation margin delta may
+  indicate behavior" with "generation behavior requires an explicit steered
+  target-label match under this verifier."
+
+Next move: build a learned behavior-readout gate or redesign the short-answer
+generation interface before running larger models.
