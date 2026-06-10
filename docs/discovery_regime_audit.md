@@ -1668,3 +1668,70 @@ Residual content:
 
 Next move: build a learned behavior-readout gate or redesign the short-answer
 generation interface before running larger models.
+
+## Activation Geometry Probe: Generation-Readout Random Null Gate
+
+Question: can a learned hidden-state readout recover semantic target behavior
+from generated continuations where exact generation matching fails?
+
+Current regime:
+
+- Artifact types: generation-match payloads, generation-readout payloads,
+  train-alias role centroids, generated-text example tables, random-null
+  specificity reports.
+- Operations: full-label alias-gradient construction, CAA activation
+  differencing, greedy generation with steering hooks, hidden-state centroid
+  scoring of generated continuations.
+- Gates/verifiers: positives must improve target margin, increase target score,
+  and be classified as target by the steered readout; controls must remain below
+  positives.
+- Known limitations: one small model, one seed, greedy generation, simple
+  centroid readout rather than a cross-validated classifier.
+
+Action class:
+
+- Retrieval/search/discovery: verifier transition with a rejected candidate.
+- Why: this adds a learned non-logprob behavior readout and tests whether exact
+  label matching was too brittle.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/generation_readout_random_nulls_2026_06_09.md`;
+  local ignored payloads under
+  `artifacts/activation_geometry/modal_pythia_70m_generation_readout_random_nulls_*.json`.
+- Positive targets: expanded steering pairs.
+- Negative controls: ten seeded random relation null controls.
+- Stress tests: `source_passage` and `latent_choice`; target-gradient, CAA, and
+  random same-norm directions.
+
+Gate:
+
+- Acceptance rule: continue toward paper-level semantic specificity only if
+  steered positive continuations are read out as target more often than random
+  null controls.
+- Withheld/rejected rule: reject if target hits are zero or if gains occur while
+  the readout's best role remains source/distractor.
+
+Results:
+
+- Accepted artifacts: generation-readout scoring surface and strict
+  best-target readout gate.
+- Rejected or withheld artifacts: current target-gradient and CAA directions as
+  hidden-readout behavior mechanisms over generated continuations.
+- Key metrics: strict positive passes are `0/7` in both prompt frames for all
+  tested directions; random-null passes are `0/10`.
+- Variance or ablation: source-passage has one tiny CAA target-score increase,
+  but the best role remains source; latent-choice is fully unchanged.
+
+Residual content:
+
+- Explained by old regime: label-score movement can fail to transport into
+  generated behavior.
+- New content outside old regime: exact-match and learned-readout non-logprob
+  gates agree on the negative result.
+- Retractions or supersessions: supersede "a learned readout may recover hidden
+  target behavior from generated text" with "this readout does not recover
+  target behavior from the current generations."
+
+Next move: redesign the behavior interface before scaling models.

@@ -430,6 +430,78 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
         self.assertTrue(target_match["robust_pass"])
         self.assertEqual(target_match["score_surface_pass_count"], 1)
 
+    def test_generation_readout_gate_requires_target_score_increase(self) -> None:
+        shared = {
+            "scoring_surface": "generation_readout",
+            "prompt_frame": "source_passage",
+            "objective_label_scoring_regime": "alias_0+alias_1",
+            "eval_label_scoring_regime": "alias_2",
+            "role": "primary",
+            "layer": 5,
+            "kind": "positive",
+            "pair": "attractor->attractor_network",
+            "scale": 1.0,
+            "option_order": "generation_readout",
+            "learned_alignment": {
+                "target_source_cosine": 0.2,
+                "target_distractor_cosine": -0.1,
+            },
+        }
+        rows = [
+            {
+                **shared,
+                "direction_mode": "target_learned",
+                "summary": {
+                    "target_margin_delta": 0.5,
+                    "target_logprob_delta": 0.0,
+                },
+            },
+            {
+                **shared,
+                "direction_mode": "caa_target_minus_source",
+                "scores": {
+                    "baseline": {"best_role": "source"},
+                    "steered": {"best_role": "target"},
+                },
+                "summary": {
+                    "target_margin_delta": 0.5,
+                    "target_logprob_delta": 0.1,
+                },
+            },
+            {
+                **shared,
+                "direction_mode": "random_same_norm",
+                "scores": {
+                    "baseline": {"best_role": "source"},
+                    "steered": {"best_role": "source"},
+                },
+                "summary": {
+                    "target_margin_delta": 0.5,
+                    "target_logprob_delta": 0.1,
+                },
+            },
+        ]
+
+        aggregates = aggregate_rows(rows)
+        source_suppression = next(
+            row for row in aggregates if row["direction_mode"] == "target_learned"
+        )
+        target_increase = next(
+            row
+            for row in aggregates
+            if row["direction_mode"] == "caa_target_minus_source"
+        )
+        non_target_best_role = next(
+            row for row in aggregates if row["direction_mode"] == "random_same_norm"
+        )
+
+        self.assertFalse(source_suppression["robust_pass"])
+        self.assertEqual(source_suppression["score_surface_pass_count"], 0)
+        self.assertFalse(non_target_best_role["robust_pass"])
+        self.assertEqual(non_target_best_role["score_surface_pass_count"], 0)
+        self.assertTrue(target_increase["robust_pass"])
+        self.assertEqual(target_increase["score_surface_pass_count"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()

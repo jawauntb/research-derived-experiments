@@ -97,7 +97,8 @@
 - [x] Add random relation nulls to the behavior-direction specificity gate.
 - [x] Add CAA/CAV-style activation-difference baselines under the held-out alias verifier.
 - [x] Add a non-logprob generation or learned behavior-readout gate for semantic specificity.
-- [ ] Add a learned behavior-readout gate after strict generation-match produced zero target hits.
+- [x] Add a learned behavior-readout gate after strict generation-match produced zero target hits.
+- [ ] Redesign the behavior interface with a constrained short-answer gate after generation-match and generation-readout both produced zero target hits.
 - [ ] Stratify behavior controls into target-sharing, source-sharing, and fully target-disjoint classes.
 - [ ] Replicate the hook-output transfer ridge on a second checkpoint or open model.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.

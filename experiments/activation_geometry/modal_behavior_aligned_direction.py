@@ -236,6 +236,29 @@ def generation_match_scores(
     return scores
 
 
+def readout_text_prompt(text: str) -> str:
+    cleaned = text.strip() or "[blank]"
+    return "\n".join(
+        [
+            "Represent the semantic concept expressed by this text.",
+            f"Text: {cleaned}",
+            "Concept state:",
+        ]
+    )
+
+
+def dedupe_texts(texts: list[str]) -> list[str]:
+    deduped = []
+    seen = set()
+    for text in texts:
+        cleaned = text.strip()
+        normalized = normalize_generated_text(cleaned)
+        if cleaned and normalized not in seen:
+            seen.add(normalized)
+            deduped.append(cleaned)
+    return deduped
+
+
 def objective_role_for_mode(mode: str) -> str:
     if mode in {
         "target_learned",
@@ -260,6 +283,11 @@ def mean_tensor(torch: Any, vectors: list[Any]) -> Any:
     if not vectors:
         raise ValueError("Cannot average an empty vector list")
     return torch.stack(vectors, dim=0).mean(dim=0)
+
+
+def normalize_vector(torch: Any, vector: Any) -> Any:
+    norm = torch.linalg.vector_norm(vector.float()).clamp(min=1e-12)
+    return vector.float() / norm
 
 
 def heldout_source_text(
@@ -634,6 +662,38 @@ def run_generation_match_prompt(
     )
 
 
+def run_generation_readout_prompt(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    prompt: str,
+    layer: int,
+    delta: Any | None,
+    max_length: int,
+    readout_centroids: dict[str, Any],
+) -> dict[str, Any]:
+    generated_text = generate_continuation(
+        torch=torch,
+        tokenizer=tokenizer,
+        model=model,
+        prompt=prompt,
+        layer=layer,
+        delta=delta,
+        max_length=max_length,
+        max_new_tokens=GENERATION_MATCH_NEW_TOKENS,
+    )
+    return generation_readout_scores(
+        torch=torch,
+        tokenizer=tokenizer,
+        model=model,
+        generated_text=generated_text,
+        layer=layer,
+        max_length=max_length,
+        readout_centroids=readout_centroids,
+    )
+
+
 def run_scoring_prompt(
     *,
     torch: Any,
@@ -647,6 +707,7 @@ def run_scoring_prompt(
     token_ids: dict[str, int] | None,
     labels_by_role: dict[str, str],
     generation_labels_by_role: dict[str, list[str]] | None,
+    readout_centroids: dict[str, Any] | None,
     label_score_normalization: str,
 ) -> dict[str, Any]:
     if scoring_surface == "option_token":
@@ -686,6 +747,19 @@ def run_scoring_prompt(
             delta=delta,
             max_length=max_length,
             generation_labels_by_role=generation_labels_by_role,
+        )
+    if scoring_surface == "generation_readout":
+        if readout_centroids is None:
+            raise ValueError("Generation-readout scoring requires readout centroids")
+        return run_generation_readout_prompt(
+            torch=torch,
+            tokenizer=tokenizer,
+            model=model,
+            prompt=prompt,
+            layer=layer,
+            delta=delta,
+            max_length=max_length,
+            readout_centroids=readout_centroids,
         )
     raise ValueError(f"Unknown scoring surface: {scoring_surface}")
 
@@ -907,7 +981,7 @@ def learned_gradient_direction(
                     )
                 )
             continue
-        if scoring_surface in {"full_label", "generation_match"}:
+        if scoring_surface in {"full_label", "generation_match", "generation_readout"}:
             prompt = full_label_prompt(
                 source_text=source_text,
                 prompt_frame=prompt_frame,
@@ -977,6 +1051,90 @@ def hidden_state_for_prompt(
         return selected[0].float().cpu()
     finally:
         handle.remove()
+
+
+def role_readout_training_texts(
+    *,
+    role: str,
+    role_source_texts: dict[str, list[tuple[int, str]]],
+    objective_labels_by_regime: dict[str, dict[str, str]],
+) -> list[str]:
+    texts = [
+        labels_by_role[role]
+        for labels_by_role in objective_labels_by_regime.values()
+    ]
+    texts.extend(source_text for _variant_index, source_text in role_source_texts[role])
+    return dedupe_texts(texts)
+
+
+def learned_readout_centroids(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    role_source_texts: dict[str, list[tuple[int, str]]],
+    objective_labels_by_regime: dict[str, dict[str, str]],
+    layer: int,
+    max_length: int,
+) -> tuple[dict[str, Any], dict[str, int]]:
+    centroids = {}
+    counts = {}
+    for role in ("source", "target", "distractor"):
+        training_texts = role_readout_training_texts(
+            role=role,
+            role_source_texts=role_source_texts,
+            objective_labels_by_regime=objective_labels_by_regime,
+        )
+        vectors = [
+            normalize_vector(
+                torch,
+                hidden_state_for_prompt(
+                    torch=torch,
+                    tokenizer=tokenizer,
+                    model=model,
+                    prompt=readout_text_prompt(text),
+                    layer=layer,
+                    max_length=max_length,
+                ),
+            )
+            for text in training_texts
+        ]
+        centroid = normalize_vector(torch, mean_tensor(torch, vectors))
+        centroids[role] = centroid
+        counts[role] = len(training_texts)
+    return centroids, counts
+
+
+def generation_readout_scores(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    generated_text: str,
+    layer: int,
+    max_length: int,
+    readout_centroids: dict[str, Any],
+) -> dict[str, Any]:
+    vector = normalize_vector(
+        torch,
+        hidden_state_for_prompt(
+            torch=torch,
+            tokenizer=tokenizer,
+            model=model,
+            prompt=readout_text_prompt(generated_text),
+            layer=layer,
+            max_length=max_length,
+        ),
+    )
+    scores: dict[str, Any] = {
+        role: float(torch.dot(vector, centroid.float()).item())
+        for role, centroid in readout_centroids.items()
+    }
+    role_scores = {role: float(scores[role]) for role in ("source", "target", "distractor")}
+    scores["generated_text"] = generated_text
+    scores["best_role"] = max(role_scores, key=lambda role: role_scores[role])
+    scores["best_role_score"] = role_scores[str(scores["best_role"])]
+    return scores
 
 
 def mean_activation_direction(
@@ -1322,11 +1480,12 @@ def run_behavior_aligned_direction_remote(
                             layer=layer,
                             max_length=max_length,
                             objective_role=objective_role,
-                    scoring_surface=(
-                        "full_label"
-                        if scoring_surface == "generation_match"
-                        else scoring_surface
-                    ),
+                            scoring_surface=(
+                                "full_label"
+                                if scoring_surface
+                                in {"generation_match", "generation_readout"}
+                                else scoring_surface
+                            ),
                             prompt_frame=prompt_frame,
                             label_score_normalization=label_score_normalization,
                         ).to(device)
@@ -1356,6 +1515,20 @@ def run_behavior_aligned_direction_remote(
                         learned_directions["distractor"],
                     ),
                 }
+                readout_centroids = None
+                readout_training_counts = None
+                if scoring_surface == "generation_readout":
+                    readout_centroids, readout_training_counts = (
+                        learned_readout_centroids(
+                            torch=torch,
+                            tokenizer=tokenizer,
+                            model=model,
+                            role_source_texts=role_source_texts,
+                            objective_labels_by_regime=objective_labels_by_regime,
+                            layer=layer,
+                            max_length=max_length,
+                        )
+                    )
                 learned_records[(current_pair_id, objective_label_scoring_regime)] = {
                     "pair_index": pair_index,
                     "left": left,
@@ -1376,6 +1549,8 @@ def run_behavior_aligned_direction_remote(
                     "activation_norms": activation_norms,
                     "activation_prompt_frame": activation_prompt_frame,
                     "learned_alignment": learned_alignment,
+                    "readout_centroids": readout_centroids,
+                    "readout_training_counts": readout_training_counts,
                 }
 
         control_pair_ids = [
@@ -1448,6 +1623,8 @@ def run_behavior_aligned_direction_remote(
                 norms = record["norms"]
                 activation_norms = record["activation_norms"]
                 activation_prompt_frame = str(record["activation_prompt_frame"])
+                readout_centroids = record.get("readout_centroids")
+                readout_training_counts = record.get("readout_training_counts")
                 learned_alignment = dict(record["learned_alignment"])
                 learned_alignment["target_control_cosine"] = cosine_or_none(
                     torch,
@@ -1503,14 +1680,14 @@ def run_behavior_aligned_direction_remote(
                                 "token_ids": None,
                             }
                         )
-                    elif scoring_surface == "generation_match":
+                    elif scoring_surface in {"generation_match", "generation_readout"}:
                         prompt_specs.append(
                             {
                                 "prompt": full_label_prompt(
                                     source_text=heldout_text,
                                     prompt_frame=prompt_frame,
                                 ),
-                                "option_order": "generation_match",
+                                "option_order": scoring_surface,
                                 "token_ids": None,
                             }
                         )
@@ -1530,6 +1707,7 @@ def run_behavior_aligned_direction_remote(
                             token_ids=prompt_spec["token_ids"],
                             labels_by_role=eval_labels_by_role,
                             generation_labels_by_role=generation_labels,
+                            readout_centroids=readout_centroids,
                             label_score_normalization=label_score_normalization,
                         )
                         for scale_index, scale in enumerate(scales):
@@ -1569,6 +1747,7 @@ def run_behavior_aligned_direction_remote(
                                     token_ids=prompt_spec["token_ids"],
                                     labels_by_role=eval_labels_by_role,
                                     generation_labels_by_role=generation_labels,
+                                    readout_centroids=readout_centroids,
                                     label_score_normalization=(
                                         label_score_normalization
                                     ),
@@ -1629,6 +1808,9 @@ def run_behavior_aligned_direction_remote(
                                         "activation_norms": activation_norms,
                                         "activation_prompt_frame": (
                                             activation_prompt_frame
+                                        ),
+                                        "readout_training_counts": (
+                                            readout_training_counts
                                         ),
                                         "learned_alignment": learned_alignment,
                                         "scores": {

@@ -107,7 +107,8 @@ def generation_examples(
         for row in payload["rows"]
         if float(row["scale"]) == scale
         and str(row["role"]) == role
-        and str(row.get("scoring_surface")) == "generation_match"
+        and str(row.get("scoring_surface"))
+        in {"generation_match", "generation_readout"}
     ]
     rows = sorted(
         rows,
@@ -123,13 +124,31 @@ def generation_examples(
     )
     examples = []
     for row in rows:
-        if str(row.get("scoring_surface")) != "generation_match":
+        if str(row.get("scoring_surface")) not in {
+            "generation_match",
+            "generation_readout",
+        }:
             continue
         scores = row.get("scores", {})
         baseline = scores.get("baseline", {})
         steered = scores.get("steered", {})
+        baseline_roles = ",".join(
+            str(role) for role in baseline.get("matched_roles", [])
+        )
+        steered_roles = ",".join(
+            str(role) for role in steered.get("matched_roles", [])
+        )
+        if not baseline_roles and "best_role" in baseline:
+            baseline_roles = (
+                f"{baseline['best_role']}:{float(baseline['best_role_score']):.3f}"
+            )
+        if not steered_roles and "best_role" in steered:
+            steered_roles = (
+                f"{steered['best_role']}:{float(steered['best_role_score']):.3f}"
+            )
         examples.append(
             {
+                "scoring_surface": row.get("scoring_surface", ""),
                 "prompt_frame": row.get("prompt_frame", ""),
                 "eval_label_scoring_regime": row.get(
                     "eval_label_scoring_regime",
@@ -144,15 +163,11 @@ def generation_examples(
                 "baseline_generated_text": str(
                     baseline.get("generated_text", "")
                 ).replace("\n", " "),
-                "baseline_matched_roles": ",".join(
-                    str(role) for role in baseline.get("matched_roles", [])
-                ),
+                "baseline_matched_roles": baseline_roles,
                 "steered_generated_text": str(
                     steered.get("generated_text", "")
                 ).replace("\n", " "),
-                "steered_matched_roles": ",".join(
-                    str(role) for role in steered.get("matched_roles", [])
-                ),
+                "steered_matched_roles": steered_roles,
             }
         )
         if len(examples) >= limit:
@@ -198,6 +213,7 @@ def render_payload(path: Path, payload: dict[str, Any], *, scale: float, role: s
     ]
     example_rows = [
         [
+            str(row["scoring_surface"]),
             str(row["prompt_frame"]),
             str(row["direction_mode"]),
             str(row["kind"]),
@@ -241,6 +257,7 @@ def render_payload(path: Path, payload: dict[str, Any], *, scale: float, role: s
                 "",
                 markdown_table(
                     [
+                        "Surface",
                         "Prompt",
                         "Direction",
                         "Kind",
