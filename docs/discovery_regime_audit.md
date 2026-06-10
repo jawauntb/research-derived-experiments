@@ -2560,3 +2560,70 @@ Residual content:
 
 Next move: replicate the positive-family frontier across objective aliases,
 train variants, and a second model/layer before expanding the concept set.
+
+## Activation Geometry Handoff: Positive-Family Replication Gate
+
+Question: what is the pause-safe next action after the positive-family binary
+direction produced the cleanest strict frontier so far?
+
+Current regime:
+
+- Artifact types: strict binary-relation rows, stratified gate summaries,
+  positive-family optimized direction summaries, scale frontiers, pause-safe
+  handoff notes.
+- Operations: Modal-backed Pythia activation intervention, objective/eval alias
+  perturbation, train-variant perturbation, second-model/layer replication.
+- Gates/verifiers: held-out `alias_2`, stratified strict control counts,
+  always-false carrier rejection, random same-norm baseline.
+- Known limitations: only `1/2` positives currently pass; the result is
+  Pythia-70M layer 3 only and may be alias-fragile.
+
+Action class:
+
+- Retrieval/search/discovery: search, with discovery potential.
+- Why: the next action perturbs aliases and train variants inside the current
+  verifier schema. It becomes discovery-level only if the positive-family
+  operation survives those stress tests as a stable artifact class.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/nightly_checkpoint_2026_06_10.md`;
+  next recommended report
+  `experiments/activation_geometry/results/positive_family_replication_2026_06_10.md`.
+- Positive targets: `attractor->attractor_network` and
+  `fixed_point->prototype`.
+- Negative controls: twelve controls split across `source_sharing`,
+  `target_sharing`, `implausible_random_null`, and `semantic_near_null`.
+- Stress tests: objective `alias_1` with held-out `alias_2`; train variant `1`
+  with held-out variant `2`; then second model/layer if the first two hold.
+
+Gate:
+
+- Acceptance rule: preserve at least `1/2` strict positives and `0/12`
+  stratified controls under alias or train-variant perturbation.
+- Withheld/rejected rule: if positive movement vanishes or controls revive,
+  record the frontier as fragile and pivot to pair-conditioned nonlinear or
+  readout-guided intervention.
+
+Results:
+
+- Accepted artifacts: pause-safe command and gate checkpoint.
+- Rejected or withheld artifacts: none in this checkpoint; no new experiment was
+  run.
+- Key metrics: inherited frontier is `1/2` strict positives and `0/12`
+  stratified controls at Pythia-70M layer 3, scale `1.0`, objective `alias_0`,
+  eval `alias_2`.
+- Variance or ablation: pending alias and train-variant replication.
+
+Residual content:
+
+- Explained by old regime: pair-specific optimized vectors can exploit
+  structured source/target overlap channels.
+- New content outside old regime: a shared positive-family direction may
+  suppress those structured channels while preserving one semantic bridge.
+- Retractions or supersessions: do not call the frontier paper-ready until it
+  survives alias/train perturbation and at least one broader replication.
+
+Next move: run the `alias_1` objective replication first, then train-variant
+`1`, then second model/layer only if the frontier survives.
