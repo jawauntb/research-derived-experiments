@@ -29,7 +29,12 @@ DIRECTION_MODES = (
 )
 OBJECTIVE_ROLES = ("target", "source", "distractor")
 PROMPT_FRAMES = ("source_passage", "latent_choice")
-SCORING_SURFACES = ("option_token", "full_label", "generation_match")
+SCORING_SURFACES = (
+    "option_token",
+    "full_label",
+    "generation_match",
+    "generation_readout",
+)
 SINGLE_LABEL_SCORING_REGIMES = ("canonical", "alias", "alias_0", "alias_1", "alias_2")
 LABEL_SCORING_REGIMES = SINGLE_LABEL_SCORING_REGIMES
 
@@ -156,10 +161,17 @@ def summarize_behavior_delta(
 def row_passes_behavior_gate(row: dict[str, Any]) -> bool:
     if float(row["summary"]["target_margin_delta"]) <= 0:
         return False
-    if str(row.get("scoring_surface", "option_token")) != "generation_match":
-        return True
-    steered_scores = row.get("scores", {}).get("steered", {})
-    return float(steered_scores.get("target", 0.0)) > 0
+    scoring_surface = str(row.get("scoring_surface", "option_token"))
+    if scoring_surface == "generation_match":
+        steered_scores = row.get("scores", {}).get("steered", {})
+        return float(steered_scores.get("target", 0.0)) > 0
+    if scoring_surface == "generation_readout":
+        steered_scores = row.get("scores", {}).get("steered", {})
+        return (
+            float(row["summary"]["target_logprob_delta"]) > 0
+            and str(steered_scores.get("best_role", "")) == "target"
+        )
+    return True
 
 
 def aggregate_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
