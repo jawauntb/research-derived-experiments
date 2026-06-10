@@ -6,11 +6,12 @@
 
 Three prior empirical papers in this program established that weakness (symmetry-compatible-hypothesis volume) predicts out-of-distribution generalization [1], that the relevant symmetry group can often be recovered from training data alone [2], and that pixel-cosine and learned-encoder methods occupy different operating regimes [3]. Across those papers, the geometry being measured was *passive*: it predicted behavior but was not necessarily *causally responsible* for it. The prior paraphrase-probe result was the clearest example — paraphrase orbits clustered strongly in Pythia-70M layer-5 latent space (centered cosine gap +0.79), but per-concept latent clustering did not predict per-concept next-token behavioral consistency.
 
-This paper tests whether the same latent geometry becomes *causally load-bearing* when a model is coupled to action via supervised fine-tuning on a paraphrase-invariant classification task. We do paired causal interventions on the same model before and after fine-tuning: (a) ablate the paraphrase axis (subtract its projection); (b) push the embedding toward a wrong concept's centroid; (c) ablate a random axis (control). We report three findings:
+This paper tests whether the same latent geometry becomes *causally load-bearing* when a model is coupled to action via supervised fine-tuning on a paraphrase-invariant classification task. We do paired causal interventions on the same model before and after fine-tuning: (a) ablate the paraphrase axis (subtract its projection); (b) push the embedding toward a wrong concept's centroid; (c) ablate a random axis (control). We report four findings:
 
 1. **Cluster tightening.** Within-concept centered cosine grows from 0.726 (passive) to 0.994 (active). Paraphrase variants collapse to nearly the same embedding under action coupling.
 2. **Causal load-bearing.** Ablating the paraphrase axis destroys 100% of the active classifier's accuracy versus 65% of the passive linear-readout's. Controlling for the random-axis background (50–58% in both phases), the *paraphrase-specific* effect grows from +0.07 (passive) to +0.49 (active) — a **7.0× increase**, with a pre-registered acceptance gate of ≥3× cleanly exceeded.
 3. **Wrong-direction robustness (self-maintenance).** Pushing the embedding toward another concept's centroid fools the passive readout 85% of the time but the active classifier 0% of the time. The trained system has learned to defend its own axes against perturbations from other concepts' directions.
+4. **Replication across seeds and models.** Re-running the full 3-phase probe across 3 seeds × {Pythia-70M, GPT-2-small} = 6 cells, the active paraphrase-specific drop is ≥+0.30 in **6 of 6 cells** (range +0.32 to +0.57; mean +0.44), the per-cell passive→active increase Δ is ≥+0.47 in **6 of 6 cells** (range +0.47 to +0.89; mean +0.70), and the passive-phase specific effect is near zero or negative in 4 of 6 cells — i.e., the pre-trained paraphrase axis is *not* specifically load-bearing in most cells, while the post-fine-tune axis robustly is. GPT-2 shows the larger transition (Δ ≈ +0.86) despite a smaller passive cluster gap (+0.36 vs +0.76 for Pythia), arguing the effect is about action coupling rather than baseline cluster geometry.
 
 Together these signatures match what the philosophical framework predicts for the passive→active transition: under action coupling, a passive cluster becomes an active attractor — one that not only encodes the same information but causally controls behavior and resists perturbation.
 
@@ -98,6 +99,39 @@ Subtracting the random-axis background isolates the *specific* paraphrase-axis e
 
 Both signatures match the philosophical framework's prediction. A passive cluster encoding "these are paraphrases of the same concept" becomes an active attractor that *navigates by* that information and *defends* it against perturbation.
 
+### 3.5 Replication: 3 seeds × 2 model families
+
+The §3.1–3.3 result is a single (model, seed) point. To strengthen the claim, we re-ran the full 3-phase probe across 3 seeds × {`EleutherAI/pythia-70m-deduped`, `openai-community/gpt2`} = 6 cells. All other hyperparameters are held constant. The pre-registered gate was tightened to a *signed, additive* form (to avoid the divide-by-near-zero degeneracy of a pure ratio):
+
+- **Gate A — absolute active effect.** Active paraphrase-specific drop ≥ +0.30 in ≥ 5 of 6 cells.
+- **Gate B — per-cell increase.** Active − passive specific drop (Δ) ≥ +0.30 in ≥ 5 of 6 cells.
+- **Gate C — sign.** Δ > 0 (active strictly larger than passive) in all 6 cells.
+
+All three gates are met by a wide margin:
+
+| Cell | Passive specific | Active specific | Δ |
+| --- | ---: | ---: | ---: |
+| Pythia-70M  seed 20260610 | +0.069 | +0.542 | +0.472 |
+| Pythia-70M  seed 1729     | −0.139 | +0.500 | +0.639 |
+| Pythia-70M  seed 4242     | +0.097 | +0.569 | +0.472 |
+| GPT-2       seed 20260610 | −0.569 | +0.319 | +0.889 |
+| GPT-2       seed 1729     | −0.542 | +0.347 | +0.889 |
+| GPT-2       seed 4242     | −0.500 | +0.333 | +0.833 |
+| **mean**                  | **−0.264** | **+0.435** | **+0.699** |
+| **min**                   | −0.569 | **+0.319** | **+0.472** |
+
+![Figure 4: per-cell paraphrase-specific drop, passive vs active. Every cell crosses the +0.30 active-effect gate; passive is near zero or negative in 4 of 6 cells. The transition direction is identical in both model families and all three seeds.](figures/fig4_replication_bars.png)
+
+Three observations follow from this table.
+
+**(i) The passive geometry is not specifically load-bearing.** In 4 of 6 cells, the passive paraphrase-specific drop is ≤ 0 — i.e., ablating the labeled paraphrase axis is no worse (and sometimes better) for the post-hoc linear readout than ablating a random axis. The pre-trained model has the cluster geometry [3] but not yet the causal dependence; the linear readout is exploiting a richer feature soup that includes the paraphrase axis as one of many usable signals, not as the bottleneck.
+
+**(ii) Action coupling makes the paraphrase axis the bottleneck.** In all 6 of 6 cells, the active paraphrase-specific drop jumps to +0.32 or higher (mean +0.44). The minimum per-cell increase Δ is +0.47, well above the +0.30 gate.
+
+**(iii) Bigger transition where the passive cluster gap is *smaller*.** GPT-2 starts with a passive cluster gap of +0.357 (less than half of Pythia's +0.760), yet ends with a *larger* per-cell increase Δ (+0.87 mean vs +0.53 for Pythia). The passive cluster geometry does not determine how much of an active controller the model becomes; what matters is the action coupling itself. Figure 5 shows this directly: in (cluster-gap, specific-drop) space, every cell traces an arrow from "moderate cluster gap, no specific causal effect" to "tight cluster, large specific causal effect", regardless of where it started.
+
+![Figure 5: paired (cluster gap, paraphrase-specific drop) per cell, passive ○ to active ★. All six arrows point up-and-right; GPT-2 cells (red) travel further than Pythia cells (blue) despite starting with smaller passive cluster gaps. The transition is about action coupling, not pre-existing geometry.](figures/fig5_replication_cluster_intervention.png)
+
 ## 4. Discussion
 
 The three prior empirical papers in this program established that weakness predicts generalization (Layer 1) and that symmetry groups can be inferred from data (Layer 2). The natural next claim — that meaning-like or agency-like properties of representation require not just structural invariance but *active coupling to behavior* — was previously only motivated philosophically. This paper gives it a first piece of empirical evidence.
@@ -113,14 +147,17 @@ This is a small empirical step toward Layer 3 of the philosophical framework. Th
 
 ## 5. Limitations
 
-1. Single model (Pythia-70m), single seed, single layer (5). The result needs replication.
+1. Two model families (Pythia-70m, GPT-2-small) at small scale; the §3.5 replication adds 5 cells to the original 1, but Pythia-1.4B / Llama-class scale is still untested.
 2. Small task: 24 concepts × 3 variants × 1 label per concept. Larger tasks may complicate the picture.
 3. The active classifier's wrong-direction robustness (0% drop) is striking but may reflect overfitting on 72 examples — a larger held-out test set should be measured.
 4. The intervention is on a single fixed paraphrase direction per concept, computed as a within-concept centroid. A direction sweep (multiple paraphrase directions per concept) would be more thorough.
-5. Pre-registered gate is binary (3× threshold). A continuous trajectory of "specific paraphrase effect vs fine-tuning epoch" would be more informative.
+5. The pre-registered gate is on the final fine-tuned state. A continuous trajectory of "specific paraphrase effect vs fine-tuning epoch" would be more informative about *when* the transition occurs.
 6. The active classifier is the same linear head we trained end-to-end; the passive classifier is a post-hoc linear probe on frozen features. The procedural difference (joint vs. post-hoc training) is part of what "active coupling" means here, but it's worth acknowledging that we're not holding everything else constant when comparing.
+7. §3.5 keeps the single-layer choice fixed per model (Pythia layer 5, GPT-2 layer 6); a full layer sweep was not run. The robustness of the headline across just these two pre-chosen layers is suggestive, not exhaustive.
 
 ## 6. Reproducibility
+
+Single-cell (§3.1–3.4):
 
 ```bash
 doppler --scope /Users/jawaun/superoptimizers run -- \
@@ -129,7 +166,17 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     --out artifacts/passive_to_active/pythia_70m_v2.json
 ```
 
-Full result report: `experiments/passive_to_active/results/pythia_70m_v2_2026_06_10.md`.
+Replication sweep (§3.5):
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/passive_to_active/modal_replication_sweep.py \
+    --seeds "20260610,1729,4242" \
+    --out artifacts/passive_to_active/replication_v1.json
+```
+
+Full result reports: `experiments/passive_to_active/results/pythia_70m_v2_2026_06_10.md` and `artifacts/passive_to_active/replication_v1.json`.
 
 ## 7. References
 
