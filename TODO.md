@@ -3,6 +3,7 @@
 ## Now
 
 - [x] Checkpoint the activation-geometry pause state and exact next replication command.
+- [x] Checkpoint the post-Pythia-160M pause state and pair-optimized intervention pivot.
 - [x] Preserve the initial paper set locally.
 - [x] Draft the geometric convergence synthesis.
 - [x] Define public-safe repo policy.

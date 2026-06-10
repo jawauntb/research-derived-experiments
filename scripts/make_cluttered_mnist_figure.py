@@ -53,7 +53,7 @@ def main() -> int:
     for col, (label, _, _) in enumerate(methods):
         ax = axes[0, col]
         mat = f1_matrices[label]
-        im = ax.imshow(mat, cmap="viridis", aspect="auto", vmin=0.45, vmax=0.55)
+        ax.imshow(mat, cmap="viridis", aspect="auto", vmin=0.45, vmax=0.55)
         ax.set_xticks(range(len(noises)))
         ax.set_xticklabels([f"σ={n:.2f}" for n in noises])
         ax.set_yticks(range(len(grids)))
@@ -70,7 +70,7 @@ def main() -> int:
     for col, (label, _, _) in enumerate(methods):
         ax = axes[1, col]
         mat = recall_matrices[label]
-        im = ax.imshow(mat, cmap="RdYlGn", aspect="auto", vmin=0.0, vmax=1.0)
+        ax.imshow(mat, cmap="RdYlGn", aspect="auto", vmin=0.0, vmax=1.0)
         ax.set_xticks(range(len(noises)))
         ax.set_xticklabels([f"σ={n:.2f}" for n in noises])
         ax.set_yticks(range(len(grids)))
