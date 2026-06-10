@@ -2924,3 +2924,75 @@ Residual content:
 Next move: stress-test the state-gated frontier across objective alias and train
 variant, then improve gate calibration if the conditional operation still shows
 residual target movement.
+
+## Activation Geometry Probe: State-Gate Robustness
+
+Question: does the state-gated strict-binary frontier survive objective-alias
+and train-variant perturbations?
+
+Current regime:
+
+- Artifact types: strict binary-relation rows, stratified gate summaries,
+  state-gated optimized direction summaries, alias/train perturbation reports.
+- Operations: Modal-backed Pythia activation intervention, held-out alias
+  scoring, train-variant perturbation, state-gated final-token deltas, random
+  same-norm baseline.
+- Gates/verifiers: held-out `alias_2`, strict positive counts, stratified
+  control counts, always-false carrier rejection, random same-norm baseline.
+- Known limitations: Pythia-70M layer 3 only; two positive pairs only; the gate
+  is still hand-calibrated and does not cleanly separate target states from
+  controls.
+
+Action class:
+
+- Retrieval/search/discovery: search.
+- Why: this perturbs aliases and train prompts inside the current state-gated
+  intervention schema.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/state_gate_robustness_2026_06_10.md`;
+  local ignored artifacts
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_state_gate_opt8_stratified_alias1_seed20260610.json`
+  and
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_state_gate_opt8_stratified_trainv1_seed20260610.json`.
+- Positive targets: `attractor->attractor_network` and
+  `fixed_point->prototype`.
+- Negative controls: twelve controls split across `source_sharing`,
+  `target_sharing`, `implausible_random_null`, and `semantic_near_null`.
+- Stress tests: objective `alias_1` with held-out `alias_2`; train variant `1`
+  with held-out variant `2`.
+
+Gate:
+
+- Acceptance rule: preserve at least `1/2` strict positives and `0/12`
+  stratified controls under both perturbations, with random same-norm at
+  `0/2`, `0/12`.
+- Withheld/rejected rule: reject the frontier if positives vanish or structured
+  controls revive.
+
+Results:
+
+- Accepted artifacts: the robustness report and two ignored Modal payloads.
+- Rejected or withheld artifacts: the hypothesis that the current state-gated
+  intervention is robust enough for model/concept expansion.
+- Key metrics: objective `alias_1` gives `1/2` strict positives and `0/12`
+  controls. Train variant `1` gives `1/2` strict positives and `1/12` controls,
+  with the leak in `semantic_near_null` on `steering_vector->semantic_distance`.
+  `random_same_norm` remains `0/2`, `0/12` in both runs.
+- Variance or ablation: alias perturbation survives; train-variant
+  perturbation fails.
+
+Residual content:
+
+- Explained by old regime: the strict verifier still catches structured
+  semantic-near leakage even for conditional interventions.
+- New content outside old regime: the `attractor` state-gated pocket is more
+  alias-stable than the positive-family vector, but not train-variant stable.
+- Retractions or supersessions: supersede "state gate might be ready for
+  expansion" with "state gate needs a better control-aware gate calibration
+  before expansion."
+
+Next move: build a control-aware state gate that explicitly suppresses
+semantic-near hidden states, then rerun the same alias/train robustness gate.
