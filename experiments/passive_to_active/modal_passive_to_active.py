@@ -50,7 +50,6 @@ app = modal.App(name="research-derived-passive-to-active")
 @app.function(image=IMAGE, timeout=3600, cpu=8, gpu=None)
 def run_passive_to_active(arg: dict[str, Any]) -> dict[str, Any]:
     import os
-    import math
     import random
 
     import numpy as np
@@ -139,7 +138,6 @@ def run_passive_to_active(arg: dict[str, Any]) -> dict[str, Any]:
 
     def cluster_metrics(centered, labels):
         """Mean within-orbit cosine, between-orbit cosine, gap."""
-        N = centered.shape[0]
         norms = np.linalg.norm(centered, axis=1, keepdims=True)
         unit = centered / np.clip(norms, 1e-9, None)
         sim = unit @ unit.T
@@ -190,7 +188,8 @@ def run_passive_to_active(arg: dict[str, Any]) -> dict[str, Any]:
             opt.zero_grad()
             logits = head(feats_t)
             loss = F.cross_entropy(logits, labels_t)
-            loss.backward(); opt.step()
+            loss.backward()
+            opt.step()
         with torch.no_grad():
             acc = (head(feats_t).argmax(-1) == labels_t).float().mean().item()
         return head, float(acc)
@@ -280,6 +279,7 @@ def run_passive_to_active(arg: dict[str, Any]) -> dict[str, Any]:
 
     label_tensor = torch.tensor([lbl for _, _, _, lbl in flat], dtype=torch.long, device=device)
     losses = []
+    epoch_correct = 0
     for epoch in range(ft_epochs):
         # Mini-batch over the 72 examples; tiny dataset, batch of 24 is fine.
         order = list(range(n_examples))
@@ -295,7 +295,8 @@ def run_passive_to_active(arg: dict[str, Any]) -> dict[str, Any]:
             pooled = hidden_pool_with_grad(model, batch_texts)
             logits = classifier(pooled)
             loss = F.cross_entropy(logits, batch_labels)
-            loss.backward(); opt.step()
+            loss.backward()
+            opt.step()
             epoch_loss += float(loss.item()) * len(batch)
             epoch_correct += int((logits.argmax(-1) == batch_labels).sum().item())
         losses.append(epoch_loss / n_examples)
@@ -408,15 +409,15 @@ def main(
     print(f"\nPassive→Active Geometry Result (model={result['manifest']['model_id']})")
     print(f"  fine-tuned to train_acc = {result['manifest']['ft_train_acc']:.3f} in {result['manifest']['ft_epochs']} epochs")
     print()
-    print(f"  cluster gap (same-orbit cosine − wrong-orbit cosine):")
+    print("  cluster gap (same-orbit cosine − wrong-orbit cosine):")
     print(f"    passive:  {p['cluster_gap']:+.4f} (same={p['cluster_same_mean']:.4f}, diff={p['cluster_diff_mean']:.4f})")
     print(f"    active:   {a['cluster_gap']:+.4f} (same={a['cluster_same_mean']:.4f}, diff={a['cluster_diff_mean']:.4f})")
     print()
-    print(f"  linear-readout accuracy (with the classifier the interventions hit):")
+    print("  linear-readout accuracy (with the classifier the interventions hit):")
     print(f"    passive (post-hoc linear probe): {p['linear_readout_acc']:.4f}")
     print(f"    active (fine-tuned head + body): {a['ft_train_acc']:.4f}")
     print()
-    print(f"  causal intervention — max drop in accuracy across α:")
+    print("  causal intervention — max drop in accuracy across α:")
     print(f"    passive: ablate paraphrase axis ........ {max(p['paraphrase_ablate']['drop']):.4f}")
     print(f"    passive: push to wrong-concept direction {max(p['paraphrase_wrong_dir']['drop']):.4f}")
     print(f"    passive: ablate random axis (control) .. {max(p['random_ablate']['drop']):.4f}")
