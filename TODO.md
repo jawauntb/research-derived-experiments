@@ -123,7 +123,8 @@
 - [x] Run the positive-family `alias_1` objective / `alias_2` evaluation replication on Pythia-70M layer 3.
 - [x] Run the positive-family train-variant `1` replication on Pythia-70M layer 3.
 - [x] Halt positive-family second-model/layer replication after the alias/train gate failed.
-- [ ] Build a pair-conditioned nonlinear/readout-guided intervention if the positive-family frontier fails alias/model replication.
+- [x] Build and test a pair-conditioned readout/control-span binary intervention after the positive-family frontier failed alias/train replication.
+- [ ] Build a genuinely nonlinear or feature-selective pair-conditioned intervention after the linear readout/control-span constraint killed positives.
 - [ ] Replicate the hook-output transfer ridge on a second checkpoint or open model.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.
 - [ ] Add anisotropy and directional-curvature proxy checks to activation sweeps where feasible.

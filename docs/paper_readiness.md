@@ -75,6 +75,9 @@ Current Phase 1 result:
 - The frontier is promising but narrow. A scale sweep over `0.5`, `0.75`, `1.0`, `1.25`, and `1.5` never recovers `fixed_point->prototype`; `1.25` revives `1/12` target-sharing controls, and `1.5` fails the always-false carrier on `attractor->attractor_network`.
 - The positive-family frontier fails the first alias/train robustness gate. Training with objective `alias_1` and evaluating on held-out `alias_2` drops to `0/2` strict positives and `0/12` controls. Training on variant `1` with objective `alias_0` keeps `1/2` positives but revives `1/12` source-sharing controls, specifically `attractor->semantic_distance`.
 - This rules out promoting the current positive-family single-vector operation as the paper nucleus. It remains useful as a diagnostic boundary: the strict binary verifier can expose a narrow `attractor` pocket, but that pocket is alias-sensitive and shares movement with structured source-overlap controls.
+- A pair-conditioned readout/control-span optimizer is now implemented and tested. It constrains each pair-specific intervention to the orthonormal span of target, source, distractor, and binary-control directions.
+- The constrained span reduces structured leakage relative to free pair optimization at scale `1.0`: `target_binary_readout_span_opt_8` gives `0/2` strict positives and `1/12` controls, while free `target_binary_strict_opt_8` gives `1/2` positives and `4/12` controls. Source-sharing and target-sharing leaks disappear at scale `1.0`, but the positive rows disappear too.
+- A scale sweep over `0.5`, `0.75`, `1.0`, `1.25`, and `1.5` does not recover positives. It remains `0/2` positives at every scale, while controls revive to `2/12` at higher scales. This makes the linear readout/control-span intervention a useful rejected alternative, not a paper nucleus.
 - Phase 1 is not passed yet. The current full-label logprob gate should be treated as a diagnostic failure mode, generation gates are negative, and binary relation behavior is nonzero but dominated by answer-polarity control.
 
 ## Phase 2 Preview
@@ -84,7 +87,7 @@ If Phase 1 survives, expand along three axes:
 - Model replication: add GPT-2 and a larger open causal LM if Modal budget allows.
 - Concept expansion: add more positive bridges and random relation nulls.
 - Baselines: compare generation/readout behavior against the existing target-gradient, residual, random, and CAA/CAV-style activation-difference baselines.
-- Verifier pivot: the stratified gate is now the acceptance surface. The positive-family single-vector frontier failed alias/train robustness, so the next paper-relevant intervention class should be pair-conditioned nonlinear or readout-guided rather than a larger repeat of the same global vector.
+- Verifier pivot: the stratified gate is now the acceptance surface. The positive-family single-vector frontier failed alias/train robustness, and the pair-conditioned linear readout/control span killed positives, so the next paper-relevant intervention class should be genuinely nonlinear or feature-selective rather than a larger repeat of the same global vector or local linear span.
 
 ## Paper Draft Gate
 

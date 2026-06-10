@@ -2699,3 +2699,77 @@ Residual content:
 Next move: keep the stratified strict verifier and change intervention class.
 Do not spend the next run on a larger repeat of the same positive-family global
 vector unless a new variant changes the gate.
+
+## Activation Geometry Probe: Readout-Span Binary Direction
+
+Question: can a pair-conditioned readout/control-span optimizer reduce
+structured leakage while preserving strict binary target movement?
+
+Current regime:
+
+- Artifact types: strict binary-relation rows, stratified gate summaries,
+  pair-specific optimized direction summaries, scale frontiers, rejected
+  intervention classes.
+- Operations: Modal-backed Pythia activation intervention, pair-local basis
+  construction, Gram-Schmidt orthogonalization, coefficient optimization,
+  held-out alias scoring, random same-norm baseline.
+- Gates/verifiers: held-out `alias_2`, strict positive counts, stratified
+  control counts, always-false carrier rejection, scale stress.
+- Known limitations: Pythia-70M layer 3 only; two positive pairs only; the
+  intervention is still linear even though the basis is pair-conditioned.
+
+Action class:
+
+- Retrieval/search/discovery: search.
+- Why: this changes the parameterization of the pair-specific optimizer inside
+  the current strict binary verifier, but does not add a new verifier or
+  accepted behavior class.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/readout_span_binary_direction_2026_06_10.md`;
+  local ignored artifacts
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_readout_span_opt8_stratified_alias0_seed20260610.json`
+  and
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_readout_span_opt8_stratified_scale_seed20260610.json`.
+- Positive targets: `attractor->attractor_network` and
+  `fixed_point->prototype`.
+- Negative controls: twelve controls split across `source_sharing`,
+  `target_sharing`, `implausible_random_null`, and `semantic_near_null`.
+- Stress tests: free pair-specific opt8 baseline, random same-norm baseline,
+  and scale sweep over `0.5`, `0.75`, `1.0`, `1.25`, `1.5`.
+
+Gate:
+
+- Acceptance rule: preserve at least `1/2` strict positives while reducing
+  structured controls relative to free pair-specific opt8.
+- Withheld/rejected rule: reject the intervention class if positives vanish or
+  scale only revives controls.
+
+Results:
+
+- Accepted artifacts: `target_binary_readout_span_opt_8` implementation,
+  negative report, and two ignored Modal payloads.
+- Rejected or withheld artifacts: the hypothesis that a local linear
+  readout/control span is enough to recover semantic-specific behavior.
+- Key metrics: at scale `1.0`, readout-span opt8 gives `0/2` strict positives
+  and `1/12` controls, versus free opt8 at `1/2` positives and `4/12`
+  controls. The scale sweep stays at `0/2` positives across every scale and
+  revives controls to `2/12` by scales `1.25` and `1.5`.
+- Variance or ablation: scale stress and free-pair/random baselines.
+
+Residual content:
+
+- Explained by old regime: linear activation directions can suppress controls
+  by also suppressing target movement.
+- New content outside old regime: the surviving leakage is not merely
+  source/target sharing at scale `1.0`; semantic-near controls remain the
+  easiest false positives for this constrained span.
+- Retractions or supersessions: supersede "readout-guided linear span may be
+  the next intervention class" with "linear readout/control span is a rejected
+  alternative; the next intervention should be nonlinear or feature-selective."
+
+Next move: keep the stratified strict verifier and build a genuinely nonlinear
+or feature-selective pair-conditioned intervention. Do not continue with larger
+linear span sweeps unless a new basis or gate changes the hypothesis.
