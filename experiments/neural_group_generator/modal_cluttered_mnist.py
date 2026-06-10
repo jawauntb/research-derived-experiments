@@ -190,7 +190,8 @@ def run_single(arg: dict[str, Any]) -> dict[str, Any]:
         log_prob = logits - torch.log(exp_logits.sum(dim=1, keepdim=True).clamp(min=1e-9))
         denom = mask_same.sum(dim=1).clamp(min=1)
         loss = -((mask_same * log_prob).sum(dim=1) / denom).mean()
-        loss.backward(); opt.step()
+        loss.backward()
+        opt.step()
 
     encoder.eval()
 
@@ -222,11 +223,11 @@ def run_single(arg: dict[str, Any]) -> dict[str, Any]:
             sims.append(max(cos(rotated_feats[i], train_feats_enc[j]) for j in same))
         enc_scores[theta] = float(np.mean(sims))
 
-    def best_metrics(scores: dict[float, float]) -> tuple[float, float, float, float]:
-        """Return (best_threshold, kept, recall, precision) maximizing F1
+    def best_metrics(scores: dict[float, float]) -> tuple[float, int, float, float, float]:
+        """Return (best_threshold, kept, recall, precision, F1) maximizing F1
         over a fine threshold grid."""
         thr_grid = [round(0.05 * k, 2) for k in range(1, 20)]
-        best = (-1.0, 0.0, 0.0, 0.0, -1.0)  # (thr, kept_size, recall, precision, F1)
+        best = (-1.0, 0, 0.0, 0.0, -1.0)  # (thr, kept_size, recall, precision, F1)
         for thr in thr_grid:
             kept = [a for a, s in scores.items() if s >= thr]
             if 0.0 not in kept:
