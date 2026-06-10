@@ -55,7 +55,8 @@ def main() -> int:
         recalls, precisions = [], []
         for thr in thresholds:
             _, r, p = metrics(scores, thr, oracle)
-            recalls.append(r); precisions.append(p)
+            recalls.append(r)
+            precisions.append(p)
         ax1.plot(thresholds, recalls, "o-", color=color, label=name, linewidth=2, markersize=6)
         ax2.plot(thresholds, precisions, "s-", color=color, label=name, linewidth=2, markersize=6)
 
