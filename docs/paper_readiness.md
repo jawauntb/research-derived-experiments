@@ -89,6 +89,8 @@ Current Phase 1 result:
 - This is a real improvement over the positive-family vector on alias robustness, but it still fails Phase 1. The repeated semantic-near leak points to gate calibration as the next mechanism target, not model/concept expansion.
 - A relation-control state-gate variant now tests whether actual stratified-control source passages can calibrate the gate. It removes the train-variant semantic-near leak but also removes positives: `target_binary_relation_state_gate_opt_8` gives `0/2` positives and `0/12` controls at scales `1.0`, `1.25`, and `1.5`.
 - The scale sweep shows why this is not just under-scaling. At higher scales, `attractor->attractor_network` beats the strongest control but fails the always-false carrier. This rejects "add relation controls to the same gated additive optimizer" as the next paper nucleus.
+- A multi-class prototype state gate changes the frontier. Under train variant `1`, objective `alias_0`, held-out eval `alias_2`, `target_binary_relation_multiclass_state_gate_opt_8` keeps `1/2` positives and `0/12` stratified controls. The scalar state gate in the same run keeps `1/2` positives but leaks `1/12` semantic-near controls, and the non-relation multi-class gate also leaks `1/12` semantic-near controls.
+- This is the first evidence that relation-level controls can be incorporated without killing the `attractor` positive, but it is still not paper-ready: `fixed_point->prototype` remains absent, training-time prototype margins are tiny, and alias/scale stress remains to be finished.
 - Phase 1 is not passed yet. The current full-label logprob gate should be treated as a diagnostic failure mode, generation gates are negative, and binary relation behavior is nonzero but dominated by answer-polarity control.
 
 ## Phase 2 Preview
@@ -98,7 +100,7 @@ If Phase 1 survives, expand along three axes:
 - Model replication: add GPT-2 and a larger open causal LM if Modal budget allows.
 - Concept expansion: add more positive bridges and random relation nulls.
 - Baselines: compare generation/readout behavior against the existing target-gradient, residual, random, and CAA/CAV-style activation-difference baselines.
-- Verifier pivot: the stratified gate is now the acceptance surface. The positive-family single-vector frontier failed alias/train robustness, the pair-conditioned linear readout/control span killed positives, sparse feature masking still leaked controls, and relation-control state gating suppresses controls by killing positives. A first state-gated conditional intervention restores a narrow clean `attractor` pocket and survives objective-alias perturbation, but train-variant perturbation revives semantic-near leakage. The next intervention needs a learned multi-class gate or shared conditional operation, not more pair-specific additive/gated variants.
+- Verifier pivot: the stratified gate is now the acceptance surface. The positive-family single-vector frontier failed alias/train robustness, the pair-conditioned linear readout/control span killed positives, sparse feature masking still leaked controls, and scalar relation-control state gating suppresses controls by killing positives. The relation multi-class prototype gate now restores a narrow clean `attractor` pocket under the train-variant stress that broke the scalar state gate. The next gate is alias and scale robustness for this prototype mechanism, not broad model/concept expansion yet.
 
 ## Paper Draft Gate
 

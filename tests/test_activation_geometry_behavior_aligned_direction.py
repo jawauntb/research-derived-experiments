@@ -36,6 +36,8 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
                 "target_binary_feature_mask_opt_8, "
                 "target_binary_state_gate_opt_8, "
                 "target_binary_relation_state_gate_opt_8, "
+                "target_binary_multiclass_state_gate_opt_8, "
+                "target_binary_relation_multiclass_state_gate_opt_8, "
                 "target_binary_positive_family_opt_8, "
                 "caa_target_contrast"
             ),
@@ -52,6 +54,8 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
                 "target_binary_feature_mask_opt_8",
                 "target_binary_state_gate_opt_8",
                 "target_binary_relation_state_gate_opt_8",
+                "target_binary_multiclass_state_gate_opt_8",
+                "target_binary_relation_multiclass_state_gate_opt_8",
                 "target_binary_positive_family_opt_8",
                 "caa_target_contrast",
             ],

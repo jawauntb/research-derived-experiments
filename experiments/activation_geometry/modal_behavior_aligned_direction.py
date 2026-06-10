@@ -97,6 +97,25 @@ BINARY_OPT_DIRECTION_MODES = {
         "gate_temperature": 0.05,
         "relation_control_prompts": True,
     },
+    "target_binary_multiclass_state_gate_opt_8": {
+        "steps": 8,
+        "lr": 0.25,
+        "control_weight": 2.0,
+        "temperature": 0.25,
+        "scope": "pair",
+        "parameterization": "multiclass_state_gate",
+        "gate_temperature": 0.05,
+    },
+    "target_binary_relation_multiclass_state_gate_opt_8": {
+        "steps": 8,
+        "lr": 0.25,
+        "control_weight": 2.0,
+        "temperature": 0.25,
+        "scope": "pair",
+        "parameterization": "multiclass_state_gate",
+        "gate_temperature": 0.05,
+        "relation_control_prompts": True,
+    },
     "target_binary_positive_family_opt_8": {
         "steps": 8,
         "lr": 0.25,
@@ -582,7 +601,7 @@ def continuation_score(
 
 def intervention_anchor_tensor(delta: Any) -> Any:
     if isinstance(delta, dict):
-        if delta.get("kind") == "state_gate":
+        if delta.get("kind") in {"state_gate", "multiclass_state_gate"}:
             return delta["delta"]
         raise ValueError(f"Unknown intervention dictionary: {delta.get('kind')}")
     return delta
@@ -590,12 +609,45 @@ def intervention_anchor_tensor(delta: Any) -> Any:
 
 def intervention_addition(torch: Any, selected_hidden: Any, delta: Any) -> Any:
     if isinstance(delta, dict):
-        if delta.get("kind") != "state_gate":
-            raise ValueError(f"Unknown intervention dictionary: {delta.get('kind')}")
+        kind = delta.get("kind")
         base_delta = delta["delta"].to(
             device=selected_hidden.device,
             dtype=selected_hidden.dtype,
         )
+        if kind == "multiclass_state_gate":
+            selected_float = selected_hidden.float()
+            selected_norm = torch.linalg.vector_norm(
+                selected_float,
+                dim=-1,
+                keepdim=True,
+            ).clamp(min=1e-12)
+            selected_unit = selected_float / selected_norm
+            target_centroid = delta["target_centroid"].to(
+                device=selected_hidden.device,
+                dtype=torch.float32,
+            )
+            target_centroid = target_centroid / torch.linalg.vector_norm(
+                target_centroid,
+            ).clamp(min=1e-12)
+            control_centroids = delta["control_centroids"].to(
+                device=selected_hidden.device,
+                dtype=torch.float32,
+            )
+            control_centroids = control_centroids / torch.linalg.vector_norm(
+                control_centroids,
+                dim=-1,
+                keepdim=True,
+            ).clamp(min=1e-12)
+            target_scores = (selected_unit * target_centroid).sum(dim=-1)
+            control_scores = selected_unit @ control_centroids.T
+            gate_margins = target_scores - control_scores.max(dim=-1).values
+            gate_values = torch.sigmoid(
+                (gate_margins - float(delta["gate_threshold"]))
+                / max(float(delta["gate_temperature"]), 1e-6)
+            ).to(dtype=selected_hidden.dtype)
+            return gate_values.unsqueeze(-1) * base_delta
+        if kind != "state_gate":
+            raise ValueError(f"Unknown intervention dictionary: {kind}")
         gate_direction = delta["gate_direction"].to(
             device=selected_hidden.device,
             dtype=torch.float32,
@@ -625,7 +677,7 @@ def direction_norm_value(torch: Any, direction: Any) -> float:
 
 def scale_direction(direction: Any, scale: float) -> Any:
     if isinstance(direction, dict):
-        if direction.get("kind") != "state_gate":
+        if direction.get("kind") not in {"state_gate", "multiclass_state_gate"}:
             raise ValueError(
                 f"Unknown intervention dictionary: {direction.get('kind')}"
             )
@@ -637,13 +689,18 @@ def scale_direction(direction: Any, scale: float) -> Any:
 
 def move_direction_to_device(direction: Any, device: Any) -> Any:
     if isinstance(direction, dict):
-        if direction.get("kind") != "state_gate":
+        kind = direction.get("kind")
+        if kind not in {"state_gate", "multiclass_state_gate"}:
             raise ValueError(
-                f"Unknown intervention dictionary: {direction.get('kind')}"
+                f"Unknown intervention dictionary: {kind}"
             )
         moved = dict(direction)
         moved["delta"] = direction["delta"].to(device)
-        moved["gate_direction"] = direction["gate_direction"].to(device)
+        if kind == "state_gate":
+            moved["gate_direction"] = direction["gate_direction"].to(device)
+        if kind == "multiclass_state_gate":
+            moved["target_centroid"] = direction["target_centroid"].to(device)
+            moved["control_centroids"] = direction["control_centroids"].to(device)
         return moved
     return direction.to(device)
 
@@ -1631,6 +1688,102 @@ def state_gate_for_binary_prompts(
     return gate_direction.detach(), summary
 
 
+def multiclass_control_group_name(control_name: str) -> str:
+    if control_name.startswith("relation_control:"):
+        parts = control_name.split(":")
+        if len(parts) >= 2:
+            return f"relation_control:{parts[1]}"
+    if control_name.startswith("random_null_"):
+        return "random_null"
+    return control_name
+
+
+def unit_normalized_rows(torch: Any, values: Any) -> Any:
+    return values / torch.linalg.vector_norm(values, dim=-1, keepdim=True).clamp(
+        min=1e-12,
+    )
+
+
+def unit_centroid(torch: Any, values: Any) -> Any:
+    centroid = values.mean(dim=0)
+    return centroid / torch.linalg.vector_norm(centroid).clamp(min=1e-12)
+
+
+def multiclass_state_gate_for_binary_prompts(
+    *,
+    torch: Any,
+    tokenizer: Any,
+    model: Any,
+    target_prompts: list[str],
+    control_prompts: list[str],
+    control_names: list[str],
+    layer: int,
+    max_length: int,
+    gate_temperature: float,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    if len(control_prompts) != len(control_names):
+        raise ValueError("Control prompts and names must have equal length")
+    prompts = target_prompts + control_prompts
+    hidden_states = hidden_states_for_token_prompts(
+        torch=torch,
+        tokenizer=tokenizer,
+        model=model,
+        prompts=prompts,
+        layer=layer,
+        max_length=max_length,
+    )
+    hidden_states = hidden_states.to(next(model.parameters()).device).float()
+    hidden_units = unit_normalized_rows(torch, hidden_states)
+    target_units = hidden_units[: len(target_prompts)]
+    control_units = hidden_units[len(target_prompts) :]
+    target_centroid = unit_centroid(torch, target_units)
+    grouped_control_units: dict[str, list[Any]] = {}
+    for control_name, control_unit in zip(control_names, control_units, strict=True):
+        grouped_control_units.setdefault(
+            multiclass_control_group_name(control_name),
+            [],
+        ).append(control_unit)
+    control_group_names = sorted(grouped_control_units)
+    control_centroids = torch.stack(
+        [
+            unit_centroid(torch, torch.stack(grouped_control_units[group_name], dim=0))
+            for group_name in control_group_names
+        ],
+        dim=0,
+    )
+    target_scores = target_units @ target_centroid
+    target_control_scores = target_units @ control_centroids.T
+    target_gate_margins = target_scores - target_control_scores.max(dim=-1).values
+    control_scores = control_units @ target_centroid
+    control_control_scores = control_units @ control_centroids.T
+    control_gate_margins = control_scores - control_control_scores.max(dim=-1).values
+    target_mean = target_gate_margins.mean()
+    target_min = target_gate_margins.min()
+    control_mean = control_gate_margins.mean()
+    control_max = control_gate_margins.max()
+    threshold = (target_mean + control_max) / 2.0
+    payload = {
+        "target_centroid": target_centroid.detach(),
+        "control_centroids": control_centroids.detach(),
+        "gate_threshold": float(threshold.item()),
+        "gate_temperature": float(gate_temperature),
+    }
+    summary = {
+        "multiclass_gate_control_group_names": control_group_names,
+        "multiclass_gate_control_group_count": len(control_group_names),
+        "multiclass_gate_threshold": float(threshold.item()),
+        "multiclass_gate_temperature": float(gate_temperature),
+        "multiclass_gate_target_margin_mean": float(target_mean.item()),
+        "multiclass_gate_target_margin_min": float(target_min.item()),
+        "multiclass_gate_control_margin_mean": float(control_mean.item()),
+        "multiclass_gate_control_margin_max": float(control_max.item()),
+        "multiclass_gate_target_over_control_max": float(
+            (target_mean - control_max).item(),
+        ),
+    }
+    return payload, summary
+
+
 def optimize_binary_delta_for_prompt_sets(
     *,
     torch: Any,
@@ -1687,6 +1840,8 @@ def optimize_binary_delta_for_prompt_sets(
         raise ValueError("Optimized binary direction requires target and control prompts")
     state_gate_direction = None
     state_gate_summary: dict[str, Any] = {}
+    multiclass_state_gate_payload = None
+    multiclass_state_gate_summary: dict[str, Any] = {}
     if state_gate_directions is not None:
         state_gate_direction, state_gate_summary = state_gate_for_binary_prompts(
             torch=torch,
@@ -1699,6 +1854,20 @@ def optimize_binary_delta_for_prompt_sets(
             reference_direction=reference,
             gate_directions=state_gate_directions,
             gate_temperature=float(config.get("gate_temperature", 0.05)),
+        )
+    if str(config.get("parameterization", "")) == "multiclass_state_gate":
+        multiclass_state_gate_payload, multiclass_state_gate_summary = (
+            multiclass_state_gate_for_binary_prompts(
+                torch=torch,
+                tokenizer=tokenizer,
+                model=model,
+                target_prompts=target_prompts,
+                control_prompts=control_prompts,
+                control_names=control_names,
+                layer=layer,
+                max_length=max_length,
+                gate_temperature=float(config.get("gate_temperature", 0.05)),
+            )
         )
 
     parameters = list(model.parameters())
@@ -1723,6 +1892,12 @@ def optimize_binary_delta_for_prompt_sets(
 
         def scoring_intervention(candidate_delta: Any) -> Any:
             patch_delta = active_delta(candidate_delta)
+            if multiclass_state_gate_payload is not None:
+                return {
+                    "kind": "multiclass_state_gate",
+                    "delta": patch_delta,
+                    **multiclass_state_gate_payload,
+                }
             if state_gate_direction is None:
                 return patch_delta
             return {
@@ -1824,6 +1999,8 @@ def optimize_binary_delta_for_prompt_sets(
                 final_delta = final_delta * (reference_norm / pre_rescale_norm)
             if basis_stack is not None:
                 parameterization = str(config.get("basis"))
+            elif multiclass_state_gate_payload is not None:
+                parameterization = "multiclass_state_gate"
             elif state_gate_direction is not None:
                 parameterization = str(config.get("parameterization", "state_gate"))
             elif feature_mask is not None:
@@ -1849,7 +2026,18 @@ def optimize_binary_delta_for_prompt_sets(
             }
             summary.update(feature_mask_summary)
             summary.update(state_gate_summary)
+            summary.update(multiclass_state_gate_summary)
             summary.update(final_metrics)
+        if multiclass_state_gate_payload is not None:
+            final_intervention = {
+                "kind": "multiclass_state_gate",
+                "delta": final_delta.to(device),
+                **{
+                    key: value.to(device) if hasattr(value, "to") else value
+                    for key, value in multiclass_state_gate_payload.items()
+                },
+            }
+            return final_intervention, summary
         if state_gate_direction is not None:
             final_intervention = {
                 "kind": "state_gate",
