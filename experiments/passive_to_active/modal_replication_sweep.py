@@ -79,7 +79,8 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
         m = transformers.AutoModelForCausalLM.from_pretrained(
             model_id, torch_dtype=torch.float32, token=token,
         )
-        m.to(device); return m
+        m.to(device)
+        return m
 
     flat = []
     concepts = [e["id"] for e in paraphrases]
@@ -116,7 +117,8 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
         return (hs * mask).sum(dim=1) / mask.sum(dim=1).clamp(min=1e-9)
 
     # ----- Phase 1: passive measurement -----
-    model = fresh_lm(); model.eval()
+    model = fresh_lm()
+    model.eval()
     pooled_passive = hidden_pool_eval(model, texts)
     mean_p = pooled_passive.mean(axis=0, keepdims=True)
     centered_p = pooled_passive - mean_p
@@ -144,20 +146,22 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
 
     para_unit_p = per_concept_dirs(centered_p, labels)
     rng_np = np.random.RandomState(seed)
-    sh = labels.copy(); rng_np.shuffle(sh)
+    sh = labels.copy()
+    rng_np.shuffle(sh)
     rand_unit_p = per_concept_dirs(centered_p, sh)
 
     def fit_linear(features, labels_arr):
         head = nn.Linear(features.shape[1], n_concepts).to(device)
         f = torch.from_numpy(features).float().to(device)
-        l = torch.from_numpy(labels_arr).long().to(device)
+        label_tensor = torch.from_numpy(labels_arr).long().to(device)
         opt = torch.optim.Adam(head.parameters(), lr=1e-2, weight_decay=1e-3)
         for _ in range(400):
             opt.zero_grad()
-            loss = F.cross_entropy(head(f), l)
-            loss.backward(); opt.step()
+            loss = F.cross_entropy(head(f), label_tensor)
+            loss.backward()
+            opt.step()
         with torch.no_grad():
-            acc = (head(f).argmax(-1) == l).float().mean().item()
+            acc = (head(f).argmax(-1) == label_tensor).float().mean().item()
         return head, float(acc)
 
     head_p, acc_p = fit_linear(pooled_passive, labels)
@@ -166,9 +170,11 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
 
     def intervention(features, head_module, unit_per_concept, mode):
         f = torch.from_numpy(features).float().to(device)
-        l = torch.from_numpy(labels).long().to(device)
+        label_tensor = torch.from_numpy(labels).long().to(device)
         with torch.no_grad():
-            base_acc = (head_module(f).argmax(-1) == l).float().mean().item()
+            base_acc = (
+                (head_module(f).argmax(-1) == label_tensor).float().mean().item()
+            )
         dir_per = unit_per_concept[labels]
         d = torch.from_numpy(dir_per).float().to(device)
         if mode == "wrong_dir":
@@ -187,7 +193,12 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
             else:
                 perturbed = f + alpha * d
             with torch.no_grad():
-                acc = (head_module(perturbed).argmax(-1) == l).float().mean().item()
+                acc = (
+                    (head_module(perturbed).argmax(-1) == label_tensor)
+                    .float()
+                    .mean()
+                    .item()
+                )
             drops.append(float(base_acc - acc))
         return float(base_acc), drops
 
@@ -196,14 +207,16 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
     _, passive_rand_ablate = intervention(pooled_passive, head_p, rand_unit_p, "ablate")
 
     # ----- Phase 2: active fine-tune -----
-    model = fresh_lm(); model.train()
+    model = fresh_lm()
+    model.train()
     classifier = nn.Linear(model.config.hidden_size, n_concepts).to(device)
     opt = torch.optim.AdamW(list(model.parameters()) + list(classifier.parameters()),
                             lr=ft_lr, weight_decay=1e-4)
     label_t = torch.tensor([lbl for _, _, _, lbl in flat], dtype=torch.long, device=device)
     ft_train_acc = 0.0
     for _ in range(ft_epochs):
-        order = list(range(n_examples)); random.shuffle(order)
+        order = list(range(n_examples))
+        random.shuffle(order)
         bs = 24
         epoch_correct = 0
         for s in range(0, n_examples, bs):
@@ -212,7 +225,8 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
             pooled = hidden_pool_grad(model, [texts[i] for i in b])
             logits = classifier(pooled)
             loss = F.cross_entropy(logits, label_t[b])
-            loss.backward(); opt.step()
+            loss.backward()
+            opt.step()
             epoch_correct += int((logits.argmax(-1) == label_t[b]).sum().item())
         ft_train_acc = epoch_correct / n_examples
 
@@ -225,7 +239,8 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
 
     para_unit_a = per_concept_dirs(centered_a, labels)
     rng_np2 = np.random.RandomState(seed + 1)
-    sh2 = labels.copy(); rng_np2.shuffle(sh2)
+    sh2 = labels.copy()
+    rng_np2.shuffle(sh2)
     rand_unit_a = per_concept_dirs(centered_a, sh2)
 
     active_base, active_para_ablate = intervention(pooled_active, classifier, para_unit_a, "ablate")
@@ -356,7 +371,7 @@ def main(
     print(f"  mean ratio (active/passive specific) : {mean_ratio:.2f}x")
     print(f"  mean passive specific : {mean_passive_specific:+.4f}")
     print(f"  mean active specific  : {mean_active_specific:+.4f}")
-    print(f"\nPer-cell breakdown:")
+    print("\nPer-cell breakdown:")
     print(f"{'model':<35} {'seed':>10} | {'p_spec':>8} {'a_spec':>8} {'ratio':>7}")
     for r in cell_rows:
         m = r['model_id'].split('/')[-1]
