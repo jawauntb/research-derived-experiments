@@ -115,7 +115,27 @@ def main() -> int:
     parser.add_argument("--author", default="")
     args = parser.parse_args()
 
+    import base64
+    import mimetypes
+
     md_text = _delatex(args.in_path.read_text(encoding="utf-8"))
+    paper_dir = args.in_path.resolve().parent
+
+    # Inline images as data URIs — most reliable across markdown→PDF backends.
+    def _inline_image(match: re.Match) -> str:
+        alt = match.group(1)
+        path = match.group(2)
+        if path.startswith("http://") or path.startswith("https://") or path.startswith("data:"):
+            return match.group(0)
+        candidate = (paper_dir / path).resolve()
+        if not candidate.exists():
+            return match.group(0)
+        mime = mimetypes.guess_type(str(candidate))[0] or "image/png"
+        encoded = base64.b64encode(candidate.read_bytes()).decode("ascii")
+        return f"![{alt}](data:{mime};base64,{encoded})"
+
+    md_text = re.sub(r"!\[([^\]]*)\]\(([^)]+)\)", _inline_image, md_text)
+
     pdf = MarkdownPdf(toc_level=2, optimize=True)
     pdf.meta["title"] = args.title
     if args.author:

@@ -62,6 +62,8 @@ Across 256 trained models with diverse architecture/optimizer/init/augmentation:
 
 The procedure is deterministic given training data, so all 256 trials use the same per-split inference. The numbers above average across splits.
 
+![Figure 1: per-angle consistency scores from the data-inferred group discovery procedure on a representative training split. The 8 true Z_8 angles (red) sit clearly above the τ = 0.5 threshold ring (dashed gray). Two near-identity false positives (orange) at 15° and 345° also exceed the threshold; the remaining 14 angles (blue) are rejected.](figures/fig1_group_recovery.png)
+
 ### 3.2 OOD generalization correlations
 
 | Predictor | Pearson r | Spearman ρ |
@@ -75,6 +77,8 @@ The procedure is deterministic given training data, so all 256 trials use the sa
 | `sharpness_proxy` (Hutchinson) | +0.220 | +0.283 |
 
 **The headline:** learned-group weakness retains **90% of the oracle's predictive signal** without oracle access. Both dominate every classical predictor by 1.5× or more.
+
+![Figure 2: Pearson correlation of each predictor with OOD accuracy across the 256-model Modal sweep. Weakness flavors (blue/green/purple) dominate every classical baseline (gray). `weakness_learned` (no oracle, +0.662) sits between `weakness_oracle` (+0.736) and the soft random-rotation control (+0.551).](figures/fig2_pearson_correlations.png)
 
 ### 3.3 Per-augmentation breakdown
 
@@ -179,6 +183,8 @@ Paired regime comparisons (same model, different aug):
 
 **Headline.** Training with the *data-inferred* group as augmentation produces a per-model OOD lift of **+51.5 pp** — within 5.3 pp of the oracle's +56.8 pp lift, and 7.0 pp above the random-rotation control. The data alone produces **90.7% of the oracle's causal OOD lift**.
 
+![Figure 3: causal validation under paired augmentation. Left: mean OOD by regime across 64 base configs × 4 regimes (stdev error bars; Δ is the per-model lift vs `none`). Right: paired scatter of `oracle_aug` vs `learned_aug` OOD per base config. Points hug the diagonal — the learned group matches the oracle on a model-by-model basis, mean Δ = −0.053.](figures/fig3_causal_validation.png)
+
 This transforms the v1 correlational result into a causal one: the learned group is not merely predictive of generalization — it is *what produces it* under augmentation. The 5.3 pp paired delta with oracle (stdev 7.8) is small enough that some base configs benefit *more* from the learned group than from the oracle (likely cases where the 2 near-identity FPs in the learned set add useful smoothness without hurting target invariance).
 
 ## 5. Language extension (Track v)
@@ -196,6 +202,8 @@ We translate the rotation-group discovery procedure to language. For 24 concepts
 | --- | ---: | ---: | ---: | ---: | ---: |
 | v1 | 0.30 | 8382 / 8392 (99.9%) | 0.861 | 0.861 | **+0.000** |
 | v2 | 0.88 | 98 / 8392 (1.2%) | 0.892 | 0.880 | **+0.012** |
+
+![Figure 4: paraphrase substitution discovery on Pythia-70M. Left: behavioral invariance of the learned set vs random control across the two thresholds run; the gap is +0.000 at τ = 0.30 (degenerate, 99.9% of candidates kept) and +0.012 at τ = 0.88 (1.2% kept). Right: selectivity of the threshold — how aggressively each τ filters candidates. The procedure transfers to language only with high-threshold filtering, and the surviving gap is two orders of magnitude smaller than the vision causal lift.](figures/fig4_threshold_sweep.png)
 
 **Honest read.** At low τ the procedure is degenerate (basically all candidates pass) and gives no discrimination. At high τ the procedure produces a small positive gap (+1.2 percentage points in next-token argmax invariance) — discriminating, but two orders of magnitude smaller than the +51 pp vision causal lift.
 
