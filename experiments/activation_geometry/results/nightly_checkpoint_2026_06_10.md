@@ -13,7 +13,108 @@ sweeps.
 
 This note is the pause-safe handoff for the next work session.
 
-## Current Git State
+## Latest Handoff: Positive-Family Frontier Replication
+
+This section supersedes the earlier "pair-optimized intervention pivot" as the
+next active work item. The pair-optimized vector was implemented and tested; it
+was useful diagnostically, but it leaked structured controls. The current
+frontier is the positive-family binary direction added in PR #73.
+
+Current branch for the next checkpoint:
+
+- Worktree:
+  `/Users/jawaun/Research-Derived-Experiments-worktrees/positive-family-replication`
+- Branch:
+  `codex/positive-family-replication`
+- Base:
+  `2159042 feat: add positive-family binary direction probe (#73)`
+
+What we know now:
+
+- Pair-specific `target_binary_strict_opt_8` can move one strict positive, but
+  it leaks structured controls under the stratified gate.
+- Positive-family `target_binary_positive_family_opt_8` is the cleanest strict
+  binary result so far:
+  - Pythia-70M layer 3
+  - objective labels `alias_0`
+  - evaluation labels `alias_2`
+  - train variant `0`, holdout variant `2`
+  - pair set `layer3_strict_pocket_stratified_controls`
+  - scale `1.0`
+  - result: `1/2` strict positives and `0/12` stratified controls.
+- The surviving positive is `attractor->attractor_network`.
+- `fixed_point->prototype` fails at every tested positive-family scale.
+- Scale tuning is narrow rather than solved:
+  - `1.0` is clean.
+  - `1.25` revives `1/12` target-sharing controls.
+  - `1.5` fails the always-false carrier check on the surviving positive.
+
+Main public report:
+
+`experiments/activation_geometry/results/positive_family_binary_direction_2026_06_10.md`
+
+Local ignored artifacts:
+
+- `artifacts/activation_geometry/modal_pythia_70m_layer3_positive_family_opt8_stratified_alias0_seed20260610.json`
+- `artifacts/activation_geometry/modal_pythia_70m_layer3_positive_family_opt8_stratified_scale_seed20260610.json`
+
+## What Tomorrow Should Do First
+
+Do not expand to more concepts yet. Run the smallest replication that can break
+the positive-family frontier:
+
+- Same model: `EleutherAI/pythia-70m-deduped`
+- Same layer: `3`
+- Same pair set: `layer3_strict_pocket_stratified_controls`
+- Same strict binary verifier and held-out eval alias: `alias_2`
+- Perturb the objective alias or train variant.
+
+First command to run:
+
+```bash
+cd /Users/jawaun/Research-Derived-Experiments-worktrees/positive-family-replication
+doppler --scope /Users/jawaun/superoptimizers run -- uvx --python 3.12 --from modal modal run --name pythia70-positive-family-opt8-alias1-strata experiments/activation_geometry/modal_behavior_aligned_direction.py --model-id EleutherAI/pythia-70m-deduped --primary-layer 3 --backup-layer -1 --control-layer -1 --max-length 128 --train-variants 0 --holdout-variant 2 --scales 1.0 --direction-modes target_binary_positive_family_opt_8,random_same_norm --scoring-surface binary_relation --prompt-frame source_passage --objective-label-scoring-regimes alias_1 --eval-label-scoring-regimes alias_2 --label-score-normalization mean --aliases experiments/concept_geometry/concept_aliases.json --pair-set layer3_strict_pocket_stratified_controls --seed 20260610 --out artifacts/activation_geometry/modal_pythia_70m_layer3_positive_family_opt8_stratified_alias1_seed20260610.json
+```
+
+Second command if the first does not immediately collapse the result:
+
+```bash
+cd /Users/jawaun/Research-Derived-Experiments-worktrees/positive-family-replication
+doppler --scope /Users/jawaun/superoptimizers run -- uvx --python 3.12 --from modal modal run --name pythia70-positive-family-opt8-trainv1-strata experiments/activation_geometry/modal_behavior_aligned_direction.py --model-id EleutherAI/pythia-70m-deduped --primary-layer 3 --backup-layer -1 --control-layer -1 --max-length 128 --train-variants 1 --holdout-variant 2 --scales 1.0 --direction-modes target_binary_positive_family_opt_8,random_same_norm --scoring-surface binary_relation --prompt-frame source_passage --objective-label-scoring-regimes alias_0 --eval-label-scoring-regimes alias_2 --label-score-normalization mean --aliases experiments/concept_geometry/concept_aliases.json --pair-set layer3_strict_pocket_stratified_controls --seed 20260610 --out artifacts/activation_geometry/modal_pythia_70m_layer3_positive_family_opt8_stratified_trainv1_seed20260610.json
+```
+
+Recommended result report:
+
+`experiments/activation_geometry/results/positive_family_replication_2026_06_10.md`
+
+## Pre-Registered Replication Gate
+
+Treat this as search unless it survives perturbation.
+
+Acceptance rule:
+
+- Alias or train-variant replication keeps at least `1/2` strict positives and
+  `0/12` strict stratified controls.
+- Stronger rule: the same positive-family operation eventually recovers `2/2`
+  positives or survives a second model/layer with nonzero strict positives and
+  no stratified controls.
+
+Rejection rule:
+
+- If objective `alias_1` or train variant `1` drops to `0/2` positives, the
+  current frontier is alias/train-fragile.
+- If controls revive, the positive-family vector is another structured
+  answer-surface leak rather than a semantic-specific intervention.
+
+Decision after those runs:
+
+- If alias/train replication holds: test a second model/layer next.
+- If it fails: pivot to a pair-conditioned nonlinear or readout-guided
+  intervention under the same strict binary verifier.
+- In either case, keep all failed artifacts and summarize them explicitly; the
+  negative boundary is part of the paper.
+
+## Earlier Checkpoint Git State (Superseded)
 
 - Main includes PR #65:
   `32134cd Add Pythia-160M pocket replication (#65)`.
@@ -95,7 +196,7 @@ Failure mode:
   - `fc-01KTR5JE7VHVYA484GXC1AJM3B`
   - `fc-01KTRY77544CMWV4VFK7QXK3FH`
 
-## What Tomorrow Should Do
+## Earlier Next Step (Completed By Later PRs)
 
 Next move: keep the strict binary verifier, but change intervention class.
 Implement a pair-focused optimized activation vector that is trained directly
@@ -136,7 +237,7 @@ cd /Users/jawaun/Research-Derived-Experiments-worktrees/pair-optimized-binary-in
 rg "binary_yes_minus_no_gradient_for_prompt|binary_control_gradient_directions|learned_gradient_direction|binary_pc_adjusted_direction|direction_for_mode|strict" -n experiments/activation_geometry/modal_behavior_aligned_direction.py experiments/activation_geometry/behavior_aligned_direction.py
 ```
 
-## Pre-Registered Gate
+## Earlier Pair-Optimized Gate (Completed And Rejected)
 
 Run the smallest experiment that can break the new intervention:
 
@@ -153,7 +254,7 @@ Run the smallest experiment that can break the new intervention:
 - Rejection rule: if the optimized vector only raises broad Yes margins or
   carrier-confirmation controls, record it as another answer-surface failure.
 
-## Discovery-regime status
+## Earlier Discovery-Regime Status
 
 This is still search, not discovery. The negative Pythia-160M result is useful
 because it tightens the claim boundary: the two-pair Pythia-70M pocket is not a
