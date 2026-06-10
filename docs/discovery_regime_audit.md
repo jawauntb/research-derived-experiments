@@ -2773,3 +2773,74 @@ Residual content:
 Next move: keep the stratified strict verifier and build a genuinely nonlinear
 or feature-selective pair-conditioned intervention. Do not continue with larger
 linear span sweeps unless a new basis or gate changes the hypothesis.
+
+## Activation Geometry Probe: Sparse Feature-Mask Binary Direction
+
+Question: can coordinate-sparse feature selection recover strict binary target
+movement after the readout/control span suppressed positives?
+
+Current regime:
+
+- Artifact types: strict binary-relation rows, stratified gate summaries,
+  feature-mask optimized direction summaries, rejected intervention classes.
+- Operations: Modal-backed Pythia activation intervention, pair-local
+  target-vs-control coordinate scoring, sparse mask construction, masked
+  coefficient-free optimization, held-out alias scoring.
+- Gates/verifiers: held-out `alias_2`, strict positive counts, stratified
+  control counts, always-false carrier rejection, random same-norm baseline.
+- Known limitations: Pythia-70M layer 3 only; two positive pairs only; still an
+  additive final-token vector after feature selection.
+
+Action class:
+
+- Retrieval/search/discovery: search.
+- Why: this adds a feature-selection operation inside the existing strict
+  binary verifier, but does not produce an accepted behavior class.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/feature_mask_binary_direction_2026_06_10.md`;
+  local ignored artifact
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_feature_mask_opt8_stratified_smoke_seed20260610.json`.
+- Positive targets: `attractor->attractor_network` and
+  `fixed_point->prototype`.
+- Negative controls: twelve controls split across `source_sharing`,
+  `target_sharing`, `implausible_random_null`, and `semantic_near_null`.
+- Stress tests: random same-norm baseline; comparison against prior free-pair
+  and readout-span reports.
+
+Gate:
+
+- Acceptance rule: recover at least `1/2` strict positives while keeping fewer
+  structured controls than free pair-specific opt8.
+- Withheld/rejected rule: reject the intervention class if positives vanish or
+  sparse coordinates still revive structured controls.
+
+Results:
+
+- Accepted artifacts: `target_binary_feature_mask_opt_8` implementation,
+  negative report, and ignored Modal payload.
+- Rejected or withheld artifacts: the hypothesis that target/control separation
+  is cleanly coordinate-sparse in this layer/surface.
+- Key metrics: feature-mask opt8 gives `0/2` strict positives and `2/12`
+  controls, leaking `steering_vector->semantic_distance` and
+  `attractor->semantic_distance`. The mask keeps `77/512` coordinates; only
+  `75/512` coordinates have positive target-minus-control score.
+- Variance or ablation: random same-norm remains `0/2`, `0/12`; prior
+  readout-span and free-pair results provide the intervention-class comparison.
+
+Residual content:
+
+- Explained by old regime: additive directions can create broad binary-surface
+  movement without semantic specificity.
+- New content outside old regime: the target/control conflict is not solved by
+  sparse coordinate selection; it appears distributed or conditional rather than
+  axis- or coordinate-local.
+- Retractions or supersessions: supersede "feature-selective additive vector may
+  rescue the pocket" with "additive vector variants are substantially pruned."
+
+Next move: keep the strict stratified verifier, but change the intervention
+operation to something genuinely conditional or non-additive: a learned
+prompt-conditioned gate, a nonlinear behavior readout intervention, or a
+feature-circuit causal patch instead of a single final-token vector.

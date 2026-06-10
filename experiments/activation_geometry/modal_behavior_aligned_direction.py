@@ -68,6 +68,16 @@ BINARY_OPT_DIRECTION_MODES = {
         "scope": "pair",
         "basis": "readout_span",
     },
+    "target_binary_feature_mask_opt_8": {
+        "steps": 8,
+        "lr": 0.25,
+        "control_weight": 2.0,
+        "temperature": 0.25,
+        "scope": "pair",
+        "parameterization": "feature_mask",
+        "mask_fraction": 0.15,
+        "mask_control_weight": 1.0,
+    },
     "target_binary_positive_family_opt_8": {
         "steps": 8,
         "lr": 0.25,
@@ -1358,6 +1368,59 @@ def optimized_binary_prompt_sets(
     return target_prompts, control_prompts, control_names
 
 
+def feature_selective_binary_mask(
+    *,
+    torch: Any,
+    reference_direction: Any,
+    control_directions: list[tuple[str, Any]],
+    mask_fraction: float,
+    control_weight: float,
+) -> tuple[Any, dict[str, Any]]:
+    reference = reference_direction.detach().float()
+    reference_norm = torch.linalg.vector_norm(reference).clamp(min=1e-12)
+    target_abs = reference.flatten().abs()
+    control_abs_values = []
+    control_names = []
+    for control_name, control_direction in control_directions:
+        candidate = control_direction.detach().float().to(reference.device)
+        candidate_norm = torch.linalg.vector_norm(candidate)
+        if float(candidate_norm.item()) <= 1e-12:
+            continue
+        norm_matched = candidate * (reference_norm / candidate_norm)
+        control_abs_values.append(norm_matched.flatten().abs())
+        control_names.append(control_name)
+    if control_abs_values:
+        control_max = torch.stack(control_abs_values, dim=0).max(dim=0).values
+    else:
+        control_max = torch.zeros_like(target_abs)
+    scores = target_abs - float(control_weight) * control_max
+    feature_count = max(
+        1,
+        min(
+            int(scores.numel()),
+            int(round(float(mask_fraction) * int(scores.numel()))),
+        ),
+    )
+    selected_scores, selected_indices = torch.topk(scores, k=feature_count)
+    mask_flat = torch.zeros_like(target_abs)
+    mask_flat[selected_indices] = 1.0
+    mask = mask_flat.reshape(reference.shape).to(reference.device)
+    summary = {
+        "feature_mask_control_names": control_names,
+        "feature_mask_count": feature_count,
+        "feature_mask_fraction": float(mask_fraction),
+        "feature_mask_density": float(feature_count / int(scores.numel())),
+        "feature_mask_control_weight": float(control_weight),
+        "feature_mask_score_mean": float(scores.mean().item()),
+        "feature_mask_score_max": float(scores.max().item()),
+        "feature_mask_score_min": float(scores.min().item()),
+        "feature_mask_selected_score_mean": float(selected_scores.mean().item()),
+        "feature_mask_selected_score_min": float(selected_scores.min().item()),
+        "feature_mask_positive_score_count": int((scores > 0).sum().item()),
+    }
+    return mask, summary
+
+
 def optimize_binary_delta_for_prompt_sets(
     *,
     torch: Any,
@@ -1371,6 +1434,7 @@ def optimize_binary_delta_for_prompt_sets(
     reference_direction: Any,
     mode: str,
     basis_directions: list[tuple[str, Any]] | None = None,
+    feature_mask_directions: list[tuple[str, Any]] | None = None,
 ) -> tuple[Any, dict[str, Any]]:
     config = BINARY_OPT_DIRECTION_MODES[mode]
     steps = int(config["steps"])
@@ -1396,6 +1460,16 @@ def optimize_binary_delta_for_prompt_sets(
         if not basis_vectors:
             raise ValueError(f"{mode} requires at least one nonzero basis vector")
     basis_stack = torch.stack(basis_vectors, dim=0) if basis_vectors else None
+    feature_mask = None
+    feature_mask_summary: dict[str, Any] = {}
+    if feature_mask_directions is not None:
+        feature_mask, feature_mask_summary = feature_selective_binary_mask(
+            torch=torch,
+            reference_direction=reference,
+            control_directions=feature_mask_directions,
+            mask_fraction=float(config.get("mask_fraction", 1.0)),
+            control_weight=float(config.get("mask_control_weight", 1.0)),
+        )
     prompts = target_prompts + control_prompts
     target_count = len(target_prompts)
     if target_count == 0 or not control_prompts:
@@ -1415,6 +1489,11 @@ def optimize_binary_delta_for_prompt_sets(
                 1 for _dimension in reference.shape
             )
             return (current_coefficients.reshape(view_shape) * basis_stack).sum(dim=0)
+
+        def active_delta(candidate_delta: Any) -> Any:
+            if feature_mask is None:
+                return candidate_delta
+            return candidate_delta * feature_mask
 
         if basis_stack is None:
             delta = torch.zeros_like(reference, device=device, dtype=torch.float32)
@@ -1444,13 +1523,14 @@ def optimize_binary_delta_for_prompt_sets(
                 if coefficients is None:
                     raise ValueError("Basis optimization requires coefficients")
                 delta = delta_from_coefficients(coefficients)
+            delta_for_scoring = active_delta(delta)
             margins = binary_yes_minus_no_margins_for_prompts(
                 torch=torch,
                 tokenizer=tokenizer,
                 model=model,
                 prompts=prompts,
                 layer=layer,
-                delta=delta,
+                delta=delta_for_scoring,
                 max_length=max_length,
             )
             target_margins = margins[:target_count]
@@ -1475,7 +1555,9 @@ def optimize_binary_delta_for_prompt_sets(
                     if coefficients is None:
                         raise ValueError("Basis optimization requires coefficients")
                     delta = delta_from_coefficients(coefficients)
-                delta_norm = torch.linalg.vector_norm(delta)
+                if feature_mask is not None and basis_stack is None:
+                    delta.mul_(feature_mask)
+                delta_norm = torch.linalg.vector_norm(active_delta(delta))
                 if delta_norm > reference_norm:
                     if basis_stack is None:
                         delta.mul_(reference_norm / delta_norm)
@@ -1497,12 +1579,18 @@ def optimize_binary_delta_for_prompt_sets(
             if basis_stack is not None:
                 if coefficients is None:
                     raise ValueError("Basis optimization requires coefficients")
-                final_delta = delta_from_coefficients(coefficients).detach()
+                final_delta = active_delta(delta_from_coefficients(coefficients)).detach()
             else:
-                final_delta = delta.detach()
+                final_delta = active_delta(delta).detach()
             pre_rescale_norm = torch.linalg.vector_norm(final_delta)
             if float(pre_rescale_norm.item()) > 0.0:
                 final_delta = final_delta * (reference_norm / pre_rescale_norm)
+            if basis_stack is not None:
+                parameterization = str(config.get("basis"))
+            elif feature_mask is not None:
+                parameterization = str(config.get("parameterization", "feature_mask"))
+            else:
+                parameterization = "free_delta"
             summary: dict[str, Any] = {
                 "mode": mode,
                 "steps": steps,
@@ -1513,17 +1601,14 @@ def optimize_binary_delta_for_prompt_sets(
                 "target_prompt_count": target_count,
                 "control_prompt_count": len(control_prompts),
                 "control_names": sorted(set(control_names)),
-                "parameterization": (
-                    str(config.get("basis"))
-                    if basis_stack is not None
-                    else "free_delta"
-                ),
+                "parameterization": parameterization,
                 "basis_count": len(basis_names),
                 "basis_names": basis_names,
                 "reference_norm": float(reference_norm.item()),
                 "pre_rescale_norm": float(pre_rescale_norm.item()),
                 "post_rescale_norm": float(torch.linalg.vector_norm(final_delta).item()),
             }
+            summary.update(feature_mask_summary)
             summary.update(final_metrics)
         return final_delta.to(device), summary
     finally:
@@ -1550,6 +1635,7 @@ def pair_optimized_binary_direction(
     reference_direction: Any,
     mode: str,
     basis_directions: list[tuple[str, Any]] | None = None,
+    feature_mask_directions: list[tuple[str, Any]] | None = None,
 ) -> tuple[Any, dict[str, Any]]:
     target_prompts, control_prompts, control_names = optimized_binary_prompt_sets(
         source_texts=source_texts,
@@ -1569,6 +1655,7 @@ def pair_optimized_binary_direction(
         reference_direction=reference_direction,
         mode=mode,
         basis_directions=basis_directions,
+        feature_mask_directions=feature_mask_directions,
     )
 
 
@@ -2470,6 +2557,7 @@ def run_behavior_aligned_direction_remote(
                         ):
                             continue
                         basis_directions = None
+                        feature_mask_directions = None
                         if (
                             str(BINARY_OPT_DIRECTION_MODES[mode].get("basis", ""))
                             == "readout_span"
@@ -2480,6 +2568,28 @@ def run_behavior_aligned_direction_remote(
                                 ("distractor", learned_directions["distractor"]),
                             ]
                             basis_directions.extend(
+                                (
+                                    f"binary_control_{control_name}",
+                                    control_direction,
+                                )
+                                for control_name, control_direction in (
+                                    binary_control_directions.items()
+                                )
+                            )
+                        if (
+                            str(
+                                BINARY_OPT_DIRECTION_MODES[mode].get(
+                                    "parameterization",
+                                    "",
+                                )
+                            )
+                            == "feature_mask"
+                        ):
+                            feature_mask_directions = [
+                                ("source", learned_directions["source"]),
+                                ("distractor", learned_directions["distractor"]),
+                            ]
+                            feature_mask_directions.extend(
                                 (
                                     f"binary_control_{control_name}",
                                     control_direction,
@@ -2506,6 +2616,7 @@ def run_behavior_aligned_direction_remote(
                                 reference_direction=learned_directions["target"],
                                 mode=mode,
                                 basis_directions=basis_directions,
+                                feature_mask_directions=feature_mask_directions,
                             )
                         )
                         binary_optimized_directions[mode] = optimized_direction.to(

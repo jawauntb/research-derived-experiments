@@ -33,6 +33,7 @@ DIRECTION_MODES = (
     "target_binary_strict_opt_8",
     "target_binary_strict_opt_16",
     "target_binary_readout_span_opt_8",
+    "target_binary_feature_mask_opt_8",
     "target_binary_positive_family_opt_8",
     "caa_target_contrast",
     "caa_target_minus_source",
