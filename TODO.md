@@ -109,8 +109,9 @@
 - [x] Replicate the binary low-rank entanglement diagnosis on a second model/layer or pivot to a nonlinear/feature-guided intervention under the same strict binary verifier.
 - [x] Run a focused layer/scale sweep around Pythia-70M layer 3 PC whitening after it produced a small strict pocket (`2/7` positives, `0/10` controls).
 - [x] Add a focused pair set for the two stable layer-3 strict positives plus random-null controls.
-- [ ] Replicate the two stable layer-3 strict positives (`attractor->attractor_network`, `fixed_point->prototype`) across a second seed/model or test a pair-focused nonlinear intervention.
-- [ ] Run the focused Pythia-160M layer-3 pocket replication using `layer3_strict_pocket_random_nulls`.
+- [x] Run the focused Pythia-160M layer-3 pocket replication using `layer3_strict_pocket_random_nulls`.
+- [x] Run a focused Pythia-160M scale stress test to rule out simple scale mismatch.
+- [ ] Test a pair-focused nonlinear or feature-guided intervention after the Pythia-70M two-pair pocket failed to replicate in Pythia-160M.
 - [ ] Stratify behavior controls into target-sharing, source-sharing, and fully target-disjoint classes.
 - [ ] Replicate the hook-output transfer ridge on a second checkpoint or open model.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.

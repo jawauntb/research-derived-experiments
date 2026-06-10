@@ -23,6 +23,8 @@ DEFAULT_OBJECTIVE_LABEL_SCORING_REGIMES = "canonical"
 DEFAULT_EVAL_LABEL_SCORING_REGIMES = "canonical"
 DEFAULT_LABEL_SCORE_NORMALIZATION = "mean"
 GENERATION_MATCH_NEW_TOKENS = 8
+RESULTS_VOLUME_NAME = "rde-activation-results"
+RESULTS_VOLUME_MOUNT = Path("/results")
 PENALTY_DIRECTION_MODES = {
     "target_penalty_hard_1_0": ("hard_control", 1.0),
     "target_penalty_hard_2_0": ("hard_control", 2.0),
@@ -51,6 +53,7 @@ IMAGE = modal.Image.debian_slim(python_version="3.12").pip_install(
 )
 
 app = modal.App(name="research-derived-behavior-aligned-direction")
+RESULTS_VOLUME = modal.Volume.from_name(RESULTS_VOLUME_NAME, create_if_missing=True)
 
 
 def pair_id(left: str, right: str) -> str:
@@ -2537,6 +2540,76 @@ def run_behavior_aligned_direction_remote(
     }
 
 
+@app.function(
+    image=IMAGE,
+    timeout=3000,
+    volumes={str(RESULTS_VOLUME_MOUNT): RESULTS_VOLUME},
+)
+def run_behavior_aligned_direction_raw_to_volume_remote(
+    concepts: list[dict[str, Any]],
+    records: list[dict[str, Any]],
+    aliases_by_concept: dict[str, list[str]],
+    pair_specs: list[dict[str, Any]],
+    model_id: str,
+    layer_roles: dict[str, int],
+    scales: list[float],
+    direction_modes: list[str],
+    option_orders: list[list[str]],
+    train_variant_indices: list[int],
+    holdout_variant_index: int,
+    max_length: int,
+    scoring_surface: str,
+    prompt_frame: str,
+    objective_label_scoring_regimes: list[str],
+    eval_label_scoring_regimes: list[str],
+    label_score_normalization: str,
+    seed: int,
+    modal_volume_out: str,
+) -> dict[str, Any]:
+    requested_volume_out = modal_volume_out.strip()
+    if not requested_volume_out:
+        raise ValueError("modal_volume_out must be a non-empty relative path")
+    relative_out = requested_volume_out.lstrip("/")
+    if not relative_out or ".." in Path(relative_out).parts:
+        raise ValueError(f"Unsafe modal_volume_out path: {modal_volume_out}")
+
+    remote_payload = run_behavior_aligned_direction_remote.get_raw_f()(
+        concepts,
+        records,
+        aliases_by_concept,
+        pair_specs,
+        model_id,
+        layer_roles,
+        scales,
+        direction_modes,
+        option_orders,
+        train_variant_indices,
+        holdout_variant_index,
+        max_length,
+        scoring_surface,
+        prompt_frame,
+        objective_label_scoring_regimes,
+        eval_label_scoring_regimes,
+        label_score_normalization,
+        seed,
+    )
+    output_path = RESULTS_VOLUME_MOUNT / relative_out
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(
+        json.dumps(remote_payload, indent=2, sort_keys=True),
+        encoding="utf-8",
+    )
+    RESULTS_VOLUME.commit()
+    return {
+        "modal_volume": RESULTS_VOLUME_NAME,
+        "modal_volume_out": relative_out,
+        "row_count": len(remote_payload["rows"]),
+        "binary_gradient_geometry_count": len(
+            remote_payload.get("binary_gradient_geometry", [])
+        ),
+    }
+
+
 @app.local_entrypoint()
 def main(
     concepts: str = "experiments/concept_geometry/concept_set.json",
@@ -2560,6 +2633,7 @@ def main(
     pair_set: str = "promoted",
     seed: int = 20260608,
     out: str = "artifacts/activation_geometry/modal_behavior_aligned_direction.json",
+    modal_volume_out: str = "",
 ) -> None:
     resolved_path = Path(__file__).resolve()
     repo_root = resolved_path.parents[2] if len(resolved_path.parents) > 2 else Path.cwd()
@@ -2660,6 +2734,40 @@ def main(
         if missing_aliases:
             raise ValueError(f"Missing aliases for concepts: {missing_aliases}")
     pair_specs = pair_specs_for_set(concept_rows, pair_set=pair_set)
+    if modal_volume_out.strip():
+        function_call = run_behavior_aligned_direction_raw_to_volume_remote.spawn(
+            [concept.__dict__ for concept in concept_rows],
+            serializable_records,
+            aliases_by_concept,
+            serializable_pair_specs(pair_specs),
+            model_id,
+            layer_roles,
+            parsed_scales,
+            parsed_direction_modes,
+            [list(order) for order in parsed_option_orders],
+            parsed_train_variants,
+            holdout_variant,
+            max_length,
+            parsed_scoring_surface,
+            parsed_prompt_frame,
+            parsed_objective_label_scoring_regimes,
+            parsed_eval_label_scoring_regimes,
+            parsed_label_score_normalization,
+            seed,
+            modal_volume_out,
+        )
+        print(
+            json.dumps(
+                {
+                    "modal_volume": RESULTS_VOLUME_NAME,
+                    "modal_volume_out": modal_volume_out.strip().lstrip("/"),
+                    "function_call_id": function_call.object_id,
+                },
+                indent=2,
+                sort_keys=True,
+            )
+        )
+        return
     remote_payload = run_behavior_aligned_direction_remote.remote(
         [concept.__dict__ for concept in concept_rows],
         serializable_records,
