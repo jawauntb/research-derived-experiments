@@ -322,6 +322,7 @@ def fig_a5_p23b_re_engagement_dynamics():
 
 def fig_a7_alternative_explanations():
     """Table-as-figure: alternative explanations for each main claim."""
+    import textwrap
     rows = [
         ("Maintained-boundary cycle",
          "Just threshold dynamics; no real epistemic loop",
@@ -348,33 +349,60 @@ def fig_a7_alternative_explanations():
          "Post-hoc story imposed on numerical results",
          "Mapped only as correlates, not proof; not claiming consciousness"),
     ]
-    fig, ax = plt.subplots(figsize=(13, 7))
-    ax.set_xlim(0, 14); ax.set_ylim(0, len(rows) + 2)
+    # Column geometry: figure x-units run 0..20, three columns with clear gaps
+    COL_CLAIM_X      = 0.5     # left edge of claim column
+    COL_CLAIM_W      = 4.5
+    COL_ALT_X        = 5.5     # left edge of alt column
+    COL_ALT_W        = 7.0
+    COL_CTRL_X       = 13.0    # left edge of ctrl column
+    COL_CTRL_W       = 6.5
+    CLAIM_WRAP   = 26
+    ALT_WRAP     = 36
+    CTRL_WRAP    = 38
+    ROW_H        = 1.5
+
+    wrapped = [
+        (textwrap.fill(c, CLAIM_WRAP),
+         textwrap.fill(a, ALT_WRAP),
+         textwrap.fill(t, CTRL_WRAP))
+        for c, a, t in rows
+    ]
+    fig, ax = plt.subplots(figsize=(15, 10))
+    total_h = len(rows) * ROW_H + 2.5
+    ax.set_xlim(0, 20); ax.set_ylim(0, total_h)
     ax.axis("off")
     # Header
-    ax.text(2.5, len(rows) + 0.5, "Intended claim", fontsize=11.5,
-            fontweight="bold", ha="center")
-    ax.text(7, len(rows) + 0.5, "Strongest alternative explanation",
-            fontsize=11.5, fontweight="bold", ha="center")
-    ax.text(11.5, len(rows) + 0.5, "Control / acknowledged limit",
-            fontsize=11.5, fontweight="bold", ha="center")
-    # Header rule
-    ax.plot([0.5, 13.5], [len(rows) + 0.2, len(rows) + 0.2],
+    header_y = total_h - 1.0
+    ax.text(COL_CLAIM_X + COL_CLAIM_W / 2, header_y, "Intended claim",
+            fontsize=12, fontweight="bold", ha="center")
+    ax.text(COL_ALT_X + COL_ALT_W / 2, header_y, "Strongest alternative explanation",
+            fontsize=12, fontweight="bold", ha="center")
+    ax.text(COL_CTRL_X + COL_CTRL_W / 2, header_y, "Control / acknowledged limit",
+            fontsize=12, fontweight="bold", ha="center")
+    ax.plot([COL_CLAIM_X, COL_CTRL_X + COL_CTRL_W],
+            [header_y - 0.25, header_y - 0.25],
             color="#444", linewidth=0.8)
-    for i, (claim, alt, ctrl) in enumerate(rows):
-        y = len(rows) - i - 0.5
+    # Body rows
+    body_top = header_y - 0.6
+    for i, (claim, alt, ctrl) in enumerate(wrapped):
+        row_top = body_top - i * ROW_H
+        y_mid = row_top - ROW_H / 2
         row_color = "#f9f7f0" if i % 2 == 0 else "#ffffff"
-        ax.add_patch(plt.Rectangle((0.5, y - 0.45), 13, 0.9,
-                                    facecolor=row_color, edgecolor="none"))
-        ax.text(2.5, y, claim, fontsize=9.5, ha="center", va="center",
-                fontweight="bold")
-        ax.text(7, y, alt, fontsize=9.5, ha="center", va="center",
+        ax.add_patch(plt.Rectangle(
+            (COL_CLAIM_X, row_top - ROW_H),
+            (COL_CTRL_X + COL_CTRL_W) - COL_CLAIM_X,
+            ROW_H,
+            facecolor=row_color, edgecolor="none"))
+        ax.text(COL_CLAIM_X + 0.2, y_mid, claim,
+                fontsize=10, ha="left", va="center", fontweight="bold")
+        ax.text(COL_ALT_X + 0.2, y_mid, alt,
+                fontsize=10, ha="left", va="center",
                 color="#700", style="italic")
-        ax.text(11.5, y, ctrl, fontsize=9, ha="center", va="center",
-                color="#070")
-    ax.text(7, len(rows) + 1.4,
+        ax.text(COL_CTRL_X + 0.2, y_mid, ctrl,
+                fontsize=9.5, ha="left", va="center", color="#070")
+    ax.text((COL_CLAIM_X + COL_CTRL_X + COL_CTRL_W) / 2, total_h - 0.3,
             "Figure A7. Alternative-explanations red-team table",
-            ha="center", fontsize=13, fontweight="bold")
+            ha="center", fontsize=13.5, fontweight="bold")
     fig.tight_layout()
     fig.savefig(FIG_DIR / "fig_a7_alternative_explanations.png",
                 dpi=200, bbox_inches="tight")
