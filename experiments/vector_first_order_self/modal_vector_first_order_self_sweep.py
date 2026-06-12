@@ -495,7 +495,7 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
         E = ENERGY_INIT
         D = DAMAGE_INIT
         steps = 0
-        eps_explore = max(0.05, 0.30 - 0.25 * (episode / max(n_episodes, 1)))
+        eps_explore = max(0.10, 0.50 - 0.40 * (episode / max(n_episodes, 1)))
         while E > 0 and D < 1.0 and steps < T_MAX:
             idx = rng_online.randint(0, len(ITEMS))
             c_, l_ = ITEMS[idx]
@@ -561,6 +561,10 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
                 greedy_action = 0 if scores[0] >= scores[1] else 1
 
             take_null = False
+            # Warmup: first 50 episodes use uniform 33% null for learned-probe
+            # conditions, giving V_probe targets time to converge across all
+            # buckets before the learned probe takes over.
+            in_warmup = (episode < 50)
             if condition == "vector_factorized_no_null":
                 take_null = False
             elif condition in ("vector_passive_null", "vector_scheduled_null_anchor"):
@@ -568,11 +572,17 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
             elif condition == "vector_matched_random_anchor":
                 take_null = (rng_online.rand() < matched_target_rate)
             elif condition == "vector_learned_current_replay_probe":
-                take_null = (max(v_E, v_D) > cost)
+                if in_warmup:
+                    take_null = (rng_online.rand() < 0.33)
+                else:
+                    take_null = (max(v_E, v_D) > cost)
             elif condition == "vector_learned_current_replay_probe_audit":
-                learned_fire = (max(v_E, v_D) > cost)
-                audit_fire = (rng_online.rand() < AUDIT_FLOOR)
-                take_null = learned_fire or audit_fire
+                if in_warmup:
+                    take_null = (rng_online.rand() < 0.33)
+                else:
+                    learned_fire = (max(v_E, v_D) > cost)
+                    audit_fire = (rng_online.rand() < AUDIT_FLOOR)
+                    take_null = learned_fire or audit_fire
             elif condition == "vector_oracle_uncertainty_probe":
                 true_w_E = (TRAINING_SHOCK_E[role_of(c_, l_)] * SHOCK_E_MAG)
                 true_w_D = (TRAINING_SHOCK_D[role_of(c_, l_)] * SHOCK_D_MAG)
@@ -584,11 +594,17 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
             elif condition == "scalar_drive_selfworld":
                 take_null = (rng_online.rand() < 0.33)
             elif condition == "scalar_probe_vector_heads":
-                take_null = (v_E > cost)  # v_E is the scalar probe output here
+                if in_warmup:
+                    take_null = (rng_online.rand() < 0.33)
+                else:
+                    take_null = (v_E > cost)
             elif condition == "priority_weighted_probe":
-                take_null = (w_E_train * v_E + w_D_train * v_D > cost)
+                if in_warmup:
+                    take_null = (rng_online.rand() < 0.33)
+                else:
+                    take_null = (w_E_train * v_E + w_D_train * v_D > cost)
             elif condition == "vector_total_dV":
-                take_null = False  # no null actions in total baseline
+                take_null = False
 
             if take_null and has_null:
                 action = 2
@@ -962,7 +978,7 @@ def _flatten_to_row(r):
 @app.local_entrypoint()
 def main(
     seeds: str = "20260610,1729,4242",
-    n_episodes: int = 250,
+    n_episodes: int = 500,
     batch_size: int = 48,
     eval_episodes: int = 50,
     out: str = "artifacts/vector_first_order_self/sweep_v1.json",
