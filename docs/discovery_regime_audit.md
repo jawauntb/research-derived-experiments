@@ -3087,7 +3087,8 @@ Current regime:
 - Gates/verifiers: held-out `alias_2`, strict positive/control pass counts,
   always-false carrier, random same-norm baseline.
 - Known limitations: two positive pairs only; Pythia-70M layer 3 only; stress
-  runs beyond the first train-variant check remain unfinished.
+  runs beyond the first train-variant check are recorded in the follow-up
+  stress audit below.
 
 Action class:
 
@@ -3114,7 +3115,7 @@ Gate:
 - Acceptance rule: improve over scalar state gate by preserving at least `1/2`
   strict positives while reducing semantic-near leaks to `0/12` controls.
 - Withheld/rejected rule: withhold paper-ready claims until alias and scale
-  stress finish.
+  stress finish; the follow-up stress audit below now records the result.
 
 Results:
 
@@ -3122,7 +3123,7 @@ Results:
   `target_binary_relation_multiclass_state_gate_opt_8`, checkpoint report, and
   ignored Modal payload.
 - Rejected or withheld artifacts: paper-ready mechanism claim; alias and scale
-  stress artifacts were started but intentionally stopped before completion.
+  stress artifacts were completed in the follow-up stress audit below.
 - Key metrics: scalar state gate gives `1/2` positives and `1/12` controls;
   non-relation multi-class gate gives `1/2` positives and `1/12` controls;
   relation multi-class gate gives `1/2` positives and `0/12` controls;
@@ -3141,5 +3142,86 @@ Residual content:
   with "relation controls kill positives under scalar gates, but not necessarily
   under prototype gates."
 
-Next move: finish the saved scale and alias stress commands in the report before
-model, concept, or generation expansion.
+Next move: see the scale and alias stress audit below before model, concept, or
+generation expansion.
+
+## Activation Geometry Probe: Multi-Class State-Gate Stress
+
+Question: does the relation-level multi-class prototype gate remain a clean
+strict-binary semantic-specific intervention under scale and objective-alias
+stress?
+
+Current regime:
+
+- Artifact types: strict binary-relation rows, stratified control summaries,
+  optimized gated-intervention summaries, ignored Modal payloads, stress reports.
+- Operations: Modal-backed Pythia-70M layer-3 intervention, hidden-state
+  prototype construction, target-vs-control max-margin gating, held-out alias
+  scoring, scale stress, objective-alias perturbation.
+- Gates/verifiers: held-out `alias_2`, strict positive/control pass counts,
+  always-false carrier, random same-norm baseline, stratified control classes.
+- Known limitations: two positive pairs only; Pythia-70M layer 3 only; no
+  second seed/model acceptance; strict behavior measured by binary classifier,
+  not generation.
+
+Action class:
+
+- Retrieval/search/discovery: search.
+- Why: this perturbs scale and objective aliases inside the already-created
+  `multiclass_state_gate` schema. It does not add a new accepted mechanism
+  class.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/multiclass_state_gate_stress_2026_06_12.md`;
+  local ignored artifacts
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_relation_multiclass_state_gate_scale_seed20260610.json`
+  and
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_relation_multiclass_state_gate_alias1_seed20260610.json`.
+- Positive targets: `attractor->attractor_network` and
+  `fixed_point->prototype`.
+- Negative controls: twelve controls split across `source_sharing`,
+  `target_sharing`, `implausible_random_null`, and `semantic_near_null`.
+- Stress tests: scale sweep over `0.75`, `1.0`, `1.25`, `1.5`; objective
+  `alias_1` with held-out eval `alias_2`.
+
+Gate:
+
+- Acceptance rule: preserve at least `1/2` strict positives and `0/12`
+  stratified controls across the objective-alias perturbation and a nontrivial
+  scale neighborhood, with random same-norm at `0/2`, `0/12`.
+- Withheld/rejected rule: withhold paper-ready mechanism claims if the effect is
+  a single-scale operating point, if controls revive under alias shift, or if
+  higher scale breaks the always-false carrier.
+
+Results:
+
+- Accepted artifacts: stress report and two ignored Modal payloads.
+- Rejected or withheld artifacts: the hypothesis that the current relation
+  multi-class prototype gate is a stable semantic-specific intervention.
+- Key metrics: scale `1.0` gives `1/2` positives and `0/12` controls; scale
+  `0.75` gives `0/2`, `0/12`; scale `1.25` gives `1/2`, `4/12`; scale `1.5`
+  gives `0/2`, `2/12` and flips the always-false carrier positive on the
+  `attractor` row. Objective `alias_1` gives `1/2` positives and `1/12`
+  controls through target-sharing leakage, while scalar state gating gives
+  `1/2`, `0/12` in the same slice.
+- Variance or ablation: random same-norm remains `0/2`, `0/12` in both stress
+  runs, so the revived controls are structured intervention failures rather
+  than verifier permissiveness.
+
+Residual content:
+
+- Explained by old regime: the narrow `attractor` pocket survives many
+  conditional variants, but its specificity is sensitive to scale and alias.
+- New content outside old regime: relation controls can help under one
+  train-variant slice, but target-sharing leakage under alias stress shows the
+  gate is not separating target identity from target-family overlap.
+- Retractions or supersessions: supersede "relation multi-class prototype gate
+  may be the paper nucleus" with "relation multi-class prototype gate is a
+  diagnostic boundary that motivates held-out-control conditional training."
+
+Next move: train/evaluate a conditional gate with held-out control classes,
+especially source-sharing and target-sharing controls, or pivot to a learned
+classifier/gate that explicitly separates target identity from target-family and
+source-family overlap.

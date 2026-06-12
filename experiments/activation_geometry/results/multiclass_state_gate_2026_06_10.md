@@ -77,15 +77,16 @@ This is not paper-ready yet.
 - It still recovers only `1/2` positives.
 - The hidden-state prototype margins are tiny at training time; the mechanism
   may still be mostly soft attenuation rather than a clean semantic classifier.
-- Alias and scale stress were started but intentionally stopped before artifacts
-  landed so the branch could be checkpointed cleanly.
+- Alias and scale stress were later completed in
+  `experiments/activation_geometry/results/multiclass_state_gate_stress_2026_06_12.md`
+  and withhold the relation multi-class gate as a paper claim.
 
-Interrupted follow-up app ids:
+Original interrupted follow-up app ids:
 
 - scale sweep: `https://modal.com/apps/generalintelligencecompany/main/ap-zkf6l4VL8WSe9F3hujzrEx`
 - alias stress: `https://modal.com/apps/generalintelligencecompany/main/ap-WQYJM9o3WEXfzgB5RU8MxB`
 
-## Resume Commands
+## Completed Follow-Up Commands
 
 Scale stress:
 
@@ -103,6 +104,6 @@ doppler --scope /Users/jawaun/superoptimizers run -- uvx --python 3.12 --from mo
 
 This upgrades the current frontier from "relation controls kill positives" to
 "relation controls can be used if the gate is multi-class/prototype based." The
-current paper nucleus is still narrow, but the mechanism class is no longer
-obviously exhausted. The next session should finish alias and scale stress before
-expanding to more models, concepts, or generation tests.
+stress follow-up downgrades the current paper nucleus from a candidate mechanism
+to a diagnostic boundary: relation-control prototype gating can reopen the
+`attractor` pocket, but the effect is scale-narrow and alias-sensitive.
