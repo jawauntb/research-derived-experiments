@@ -38,6 +38,9 @@ DIRECTION_MODES = (
     "target_binary_relation_state_gate_opt_8",
     "target_binary_multiclass_state_gate_opt_8",
     "target_binary_relation_multiclass_state_gate_opt_8",
+    "target_binary_relation_multiclass_holdout_source_opt_8",
+    "target_binary_relation_multiclass_holdout_target_opt_8",
+    "target_binary_relation_multiclass_holdout_overlap_opt_8",
     "target_binary_positive_family_opt_8",
     "caa_target_contrast",
     "caa_target_minus_source",
@@ -76,6 +79,42 @@ def parse_direction_modes(value: str) -> list[str]:
         options = ", ".join(DIRECTION_MODES)
         raise ValueError(f"Direction modes must be chosen from: {options}")
     return modes
+
+
+def relation_control_class_from_name(control_name: str) -> str | None:
+    """Extract the stratified control class encoded in a relation-control name."""
+    prefix = "relation_control:"
+    if not control_name.startswith(prefix):
+        return None
+    parts = control_name.split(":")
+    if len(parts) < 2 or not parts[1]:
+        return None
+    return parts[1]
+
+
+def filter_relation_control_prompts(
+    prompts_by_regime: dict[str, list[tuple[str, str]]],
+    *,
+    include_classes: tuple[str, ...] = (),
+    exclude_classes: tuple[str, ...] = (),
+) -> dict[str, list[tuple[str, str]]]:
+    """Filter relation-control prompts by their encoded stratified class."""
+    include_set = set(include_classes)
+    exclude_set = set(exclude_classes)
+    filtered: dict[str, list[tuple[str, str]]] = {}
+    for regime, prompts in prompts_by_regime.items():
+        kept = []
+        for control_name, prompt in prompts:
+            control_class = relation_control_class_from_name(control_name)
+            if control_class is None:
+                continue
+            if include_set and control_class not in include_set:
+                continue
+            if control_class in exclude_set:
+                continue
+            kept.append((control_name, prompt))
+        filtered[regime] = kept
+    return filtered
 
 
 def parse_values(value: str, *, allowed: tuple[str, ...], name: str) -> list[str]:
