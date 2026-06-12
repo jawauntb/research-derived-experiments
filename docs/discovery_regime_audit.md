@@ -3225,3 +3225,81 @@ Next move: train/evaluate a conditional gate with held-out control classes,
 especially source-sharing and target-sharing controls, or pivot to a learned
 classifier/gate that explicitly separates target identity from target-family and
 source-family overlap.
+
+## Activation Geometry Probe: Held-Out Control Conditional Gate
+
+Question: does the relation multi-class prototype gate leak target-sharing
+controls because those control classes are present during relation-control
+training?
+
+Current regime:
+
+- Artifact types: strict binary-relation rows, stratified control summaries,
+  optimized gated-intervention summaries, ignored Modal payloads, stress
+  reports, held-out-control filtering reports.
+- Operations: Modal-backed Pythia-70M layer-3 intervention, relation-control
+  prompt construction from stratified controls, relation-control class
+  filtering, hidden-state prototype construction, target-vs-control max-margin
+  gating, held-out alias scoring.
+- Gates/verifiers: held-out `alias_2`, strict positive/control pass counts,
+  always-false carrier, random same-norm baseline, stratified source-sharing and
+  target-sharing controls.
+- Known limitations: two positive pairs only; Pythia-70M layer 3 only; strict
+  behavior measured by binary classifier, not generation.
+
+Action class:
+
+- Retrieval/search/discovery: search.
+- Why: this adds held-out control-class filters inside the existing relation
+  multi-class state-gate schema, but it does not create an accepted intervention
+  class.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/heldout_control_conditional_gate_2026_06_12.md`;
+  local ignored artifacts
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_heldout_control_conditional_gate_alias1_seed20260610.json`
+  and
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_heldout_target_conditional_gate_alias1_seed20260610.json`.
+- Positive targets: `attractor->attractor_network` and
+  `fixed_point->prototype`.
+- Negative controls: twelve controls split across `source_sharing`,
+  `target_sharing`, `implausible_random_null`, and `semantic_near_null`.
+- Stress tests: withhold `source_sharing`, `target_sharing`, or both from
+  relation-control prompt construction; duplicate target-holdout smoke.
+
+Gate:
+
+- Acceptance rule: preserve at least `1/2` strict positives while reducing the
+  objective-alias target-sharing leak to `0/12` controls.
+- Withheld/rejected rule: reject held-out-control filtering if the same
+  target-sharing control passes after its class is withheld from training.
+
+Results:
+
+- Accepted artifacts: three held-out-control direction modes, the negative
+  report, and two ignored Modal payloads.
+- Rejected or withheld artifacts: the hypothesis that source/target control
+  class withholding is sufficient to recover semantic specificity.
+- Key metrics: the full relation multi-class gate gives `1/2` positives and
+  `1/12` controls; source-holdout, target-holdout, and overlap-holdout variants
+  all remain `1/2` positives and `1/12` controls. The shared leaked row is
+  `phase_space->attractor_network`.
+- Variance or ablation: the duplicate target-holdout smoke confirms the same
+  target-sharing leak; `random_same_norm` remains `0/2`, `0/12`.
+
+Residual content:
+
+- Explained by old regime: the narrow `attractor` pocket and target-sharing
+  leakage persist under multiple conditional-gate variants.
+- New content outside old regime: target-sharing leakage is not explained by
+  ordinary exposure to target-sharing controls during optimization; it appears
+  tied to a target-family channel shared by the positive and null rows.
+- Retractions or supersessions: supersede "held-out control classes might solve
+  the relation multi-class leak" with "target-family overlap needs explicit
+  target-identity disambiguation or a different behavior interface."
+
+Next move: run an oracle or learned row-conditioned target-family
+disambiguation gate that tests whether `attractor->attractor_network` can be
+separated from target-sharing nulls such as `phase_space->attractor_network`.

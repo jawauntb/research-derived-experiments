@@ -93,6 +93,8 @@ Current Phase 1 result:
 - This is the first evidence that relation-level controls can be incorporated without killing the `attractor` positive, but it is still not paper-ready: `fixed_point->prototype` remains absent and training-time prototype margins are tiny.
 - Scale and objective-alias stress now withhold the relation multi-class prototype gate as a paper claim. The clean window is narrow: scale `1.0` gives `1/2` positives and `0/12` controls, scale `0.75` loses positives, scale `1.25` revives `4/12` structured controls, and scale `1.5` revives `2/12` controls while failing the always-false carrier on the `attractor` positive.
 - Objective `alias_1` with held-out eval `alias_2` preserves the `attractor` positive but leaks a target-sharing null: `target_binary_relation_multiclass_state_gate_opt_8` gives `1/2` positives and `1/12` controls, while the simpler scalar state gate gives `1/2` positives and `0/12` controls in the same slice. The relation multi-class gate is therefore a useful diagnostic boundary, not a monotonic improvement.
+- Held-out-control conditional training now rejects the simplest fix for that target-sharing leak. Withholding `source_sharing`, `target_sharing`, or both during relation-control prompt construction leaves every relation multi-class variant at `1/2` positives and `1/12` controls, with the same target-sharing leak `phase_space->attractor_network`.
+- This means the failure is not ordinary overfitting to seeing the leaking control class. The current binary relation interface appears to share a target-family channel between the accepted `attractor->attractor_network` positive and target-sharing nulls.
 - Phase 1 is not passed yet. The current full-label logprob gate should be treated as a diagnostic failure mode, generation gates are negative, and binary relation behavior is nonzero but dominated by answer-polarity control.
 
 ## Phase 2 Preview
@@ -102,7 +104,7 @@ If Phase 1 survives, expand along three axes:
 - Model replication: add GPT-2 and a larger open causal LM if Modal budget allows.
 - Concept expansion: add more positive bridges and random relation nulls.
 - Baselines: compare generation/readout behavior against the existing target-gradient, residual, random, and CAA/CAV-style activation-difference baselines.
-- Verifier pivot: the stratified gate is now the acceptance surface. The positive-family single-vector frontier failed alias/train robustness, the pair-conditioned linear readout/control span killed positives, sparse feature masking still leaked controls, scalar relation-control state gating suppresses controls by killing positives, and the relation multi-class prototype gate fails scale/objective-alias stress. The next gate should use held-out control classes during conditional-gate training and evaluation, not broad model/concept expansion yet.
+- Verifier pivot: the stratified gate is now the acceptance surface. The positive-family single-vector frontier failed alias/train robustness, the pair-conditioned linear readout/control span killed positives, sparse feature masking still leaked controls, scalar relation-control state gating suppresses controls by killing positives, the relation multi-class prototype gate fails scale/objective-alias stress, and held-out-control class filtering does not remove the target-sharing leak. The next gate should explicitly separate target identity from target-family overlap with an oracle or learned row-conditioned target-family disambiguation test, not broad model/concept expansion yet.
 
 ## Paper Draft Gate
 

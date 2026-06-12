@@ -131,7 +131,8 @@
 - [ ] Improve state-gate calibration to suppress semantic-near controls before expanding models or concepts.
 - [x] Try a learned multi-class gate or shared conditional operation after relation-control state gating killed positives.
 - [x] Finish scale and alias stress for `target_binary_relation_multiclass_state_gate_opt_8`.
-- [ ] Build a held-out-control conditional gate that trains on disjoint source/target/control families and evaluates on held-out control classes.
+- [x] Build a held-out-control conditional gate that trains on disjoint source/target/control families and evaluates on held-out control classes.
+- [ ] Run an oracle or learned row-conditioned target-family disambiguation gate after held-out-control class filtering failed to remove target-sharing leakage.
 - [ ] Replicate the hook-output transfer ridge on a second checkpoint or open model.
 - [ ] Convert strongest bridge pairs into steering or classification interventions.
 - [ ] Add anisotropy and directional-curvature proxy checks to activation sweeps where feasible.

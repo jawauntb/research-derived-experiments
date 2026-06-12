@@ -11,11 +11,13 @@ from experiments.activation_geometry.behavior_aligned_direction import (
     generation_match_scores,
     gate_summaries,
     generated_text_matches_label,
+    filter_relation_control_prompts,
     label_scoring_regime_parts,
     normalize_generated_text,
     parse_label_scoring_regimes,
     parse_direction_modes,
     parse_values,
+    relation_control_class_from_name,
     role_margin,
     summarize_binary_specificity,
     summarize_behavior_delta,
@@ -38,6 +40,9 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
                 "target_binary_relation_state_gate_opt_8, "
                 "target_binary_multiclass_state_gate_opt_8, "
                 "target_binary_relation_multiclass_state_gate_opt_8, "
+                "target_binary_relation_multiclass_holdout_source_opt_8, "
+                "target_binary_relation_multiclass_holdout_target_opt_8, "
+                "target_binary_relation_multiclass_holdout_overlap_opt_8, "
                 "target_binary_positive_family_opt_8, "
                 "caa_target_contrast"
             ),
@@ -56,12 +61,60 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
                 "target_binary_relation_state_gate_opt_8",
                 "target_binary_multiclass_state_gate_opt_8",
                 "target_binary_relation_multiclass_state_gate_opt_8",
+                "target_binary_relation_multiclass_holdout_source_opt_8",
+                "target_binary_relation_multiclass_holdout_target_opt_8",
+                "target_binary_relation_multiclass_holdout_overlap_opt_8",
                 "target_binary_positive_family_opt_8",
                 "caa_target_contrast",
             ],
         )
         with self.assertRaises(ValueError):
             parse_direction_modes("centroid")
+
+    def test_filter_relation_control_prompts_by_heldout_class(self) -> None:
+        prompts = {
+            "alias_0": [
+                (
+                    "relation_control:source_sharing:attractor->semantic_distance:v0",
+                    "source",
+                ),
+                (
+                    "relation_control:target_sharing:phase_space->attractor_network:v0",
+                    "target",
+                ),
+                (
+                    "relation_control:semantic_near_null:valence->steering_vector:v0",
+                    "near",
+                ),
+                ("blank", "not relation encoded"),
+            ],
+            "alias_1": [
+                (
+                    "relation_control:implausible_random_null:self_boundary->embedding:v1",
+                    "implausible",
+                )
+            ],
+        }
+
+        self.assertEqual(
+            relation_control_class_from_name(
+                "relation_control:target_sharing:phase_space->attractor_network:v0"
+            ),
+            "target_sharing",
+        )
+        filtered = filter_relation_control_prompts(
+            prompts,
+            exclude_classes=("source_sharing", "target_sharing"),
+        )
+
+        self.assertEqual(
+            [name for name, _prompt in filtered["alias_0"]],
+            ["relation_control:semantic_near_null:valence->steering_vector:v0"],
+        )
+        self.assertEqual(
+            [name for name, _prompt in filtered["alias_1"]],
+            ["relation_control:implausible_random_null:self_boundary->embedding:v1"],
+        )
 
     def test_parse_heldout_alias_regimes(self) -> None:
         self.assertEqual(

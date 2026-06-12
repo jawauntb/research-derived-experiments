@@ -116,6 +116,39 @@ BINARY_OPT_DIRECTION_MODES = {
         "gate_temperature": 0.05,
         "relation_control_prompts": True,
     },
+    "target_binary_relation_multiclass_holdout_source_opt_8": {
+        "steps": 8,
+        "lr": 0.25,
+        "control_weight": 2.0,
+        "temperature": 0.25,
+        "scope": "pair",
+        "parameterization": "multiclass_state_gate",
+        "gate_temperature": 0.05,
+        "relation_control_prompts": True,
+        "exclude_relation_control_classes": ("source_sharing",),
+    },
+    "target_binary_relation_multiclass_holdout_target_opt_8": {
+        "steps": 8,
+        "lr": 0.25,
+        "control_weight": 2.0,
+        "temperature": 0.25,
+        "scope": "pair",
+        "parameterization": "multiclass_state_gate",
+        "gate_temperature": 0.05,
+        "relation_control_prompts": True,
+        "exclude_relation_control_classes": ("target_sharing",),
+    },
+    "target_binary_relation_multiclass_holdout_overlap_opt_8": {
+        "steps": 8,
+        "lr": 0.25,
+        "control_weight": 2.0,
+        "temperature": 0.25,
+        "scope": "pair",
+        "parameterization": "multiclass_state_gate",
+        "gate_temperature": 0.05,
+        "relation_control_prompts": True,
+        "exclude_relation_control_classes": ("source_sharing", "target_sharing"),
+    },
     "target_binary_positive_family_opt_8": {
         "steps": 8,
         "lr": 0.25,
@@ -1572,6 +1605,40 @@ def optimized_binary_prompt_sets(
     return target_prompts, control_prompts, control_names
 
 
+def relation_control_class_from_name(control_name: str) -> str | None:
+    prefix = "relation_control:"
+    if not control_name.startswith(prefix):
+        return None
+    parts = control_name.split(":")
+    if len(parts) < 2 or not parts[1]:
+        return None
+    return parts[1]
+
+
+def filter_relation_control_prompts(
+    prompts_by_regime: dict[str, list[tuple[str, str]]],
+    *,
+    include_classes: tuple[str, ...] = (),
+    exclude_classes: tuple[str, ...] = (),
+) -> dict[str, list[tuple[str, str]]]:
+    include_set = set(include_classes)
+    exclude_set = set(exclude_classes)
+    filtered: dict[str, list[tuple[str, str]]] = {}
+    for regime, prompts in prompts_by_regime.items():
+        kept = []
+        for control_name, prompt in prompts:
+            control_class = relation_control_class_from_name(control_name)
+            if control_class is None:
+                continue
+            if include_set and control_class not in include_set:
+                continue
+            if control_class in exclude_set:
+                continue
+            kept.append((control_name, prompt))
+        filtered[regime] = kept
+    return filtered
+
+
 def feature_selective_binary_mask(
     *,
     torch: Any,
@@ -2075,7 +2142,15 @@ def pair_optimized_binary_direction(
     basis_directions: list[tuple[str, Any]] | None = None,
     feature_mask_directions: list[tuple[str, Any]] | None = None,
     state_gate_directions: list[tuple[str, Any]] | None = None,
+    relation_control_include_classes: tuple[str, ...] = (),
+    relation_control_exclude_classes: tuple[str, ...] = (),
 ) -> tuple[Any, dict[str, Any]]:
+    if extra_control_prompts_by_regime is not None:
+        extra_control_prompts_by_regime = filter_relation_control_prompts(
+            extra_control_prompts_by_regime,
+            include_classes=relation_control_include_classes,
+            exclude_classes=relation_control_exclude_classes,
+        )
     target_prompts, control_prompts, control_names = optimized_binary_prompt_sets(
         source_texts=source_texts,
         objective_labels_by_regime=objective_labels_by_regime,
@@ -2083,7 +2158,7 @@ def pair_optimized_binary_direction(
         extra_control_labels_by_regime=extra_control_labels_by_regime,
         extra_control_prompts_by_regime=extra_control_prompts_by_regime,
     )
-    return optimize_binary_delta_for_prompt_sets(
+    direction, summary = optimize_binary_delta_for_prompt_sets(
         torch=torch,
         tokenizer=tokenizer,
         model=model,
@@ -2098,6 +2173,13 @@ def pair_optimized_binary_direction(
         feature_mask_directions=feature_mask_directions,
         state_gate_directions=state_gate_directions,
     )
+    summary["relation_control_include_classes"] = list(
+        relation_control_include_classes
+    )
+    summary["relation_control_exclude_classes"] = list(
+        relation_control_exclude_classes
+    )
+    return direction, summary
 
 
 def positive_family_binary_direction(
@@ -3146,6 +3228,24 @@ def run_behavior_aligned_direction_remote(
                                 basis_directions=basis_directions,
                                 feature_mask_directions=feature_mask_directions,
                                 state_gate_directions=state_gate_directions,
+                                relation_control_include_classes=tuple(
+                                    str(control_class)
+                                    for control_class in (
+                                        BINARY_OPT_DIRECTION_MODES[mode].get(
+                                            "include_relation_control_classes",
+                                            (),
+                                        )
+                                    )
+                                ),
+                                relation_control_exclude_classes=tuple(
+                                    str(control_class)
+                                    for control_class in (
+                                        BINARY_OPT_DIRECTION_MODES[mode].get(
+                                            "exclude_relation_control_classes",
+                                            (),
+                                        )
+                                    )
+                                ),
                             )
                         )
                         binary_optimized_directions[mode] = move_direction_to_device(
