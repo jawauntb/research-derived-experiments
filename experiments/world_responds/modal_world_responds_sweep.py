@@ -296,7 +296,7 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
             Ds = np.array([t[2] for t in current_replay_buf[b]], dtype=np.float32)
             tEs = np.array([t[3] for t in current_replay_buf[b]], dtype=np.float32)
             tDs = np.array([t[4] for t in current_replay_buf[b]], dtype=np.float32)
-            if len(t) > 5 and hist_input_dim > 0:
+            if hist_input_dim > 0 and len(current_replay_buf[b][0]) > 5:
                 hist_arr = np.stack([t[5] for t in current_replay_buf[b]])
             else:
                 hist_arr = None
