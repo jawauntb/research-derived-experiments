@@ -97,13 +97,16 @@ h1 { font-size: 18pt; margin-top: 0; }
 h2 { font-size: 13pt; margin-top: 1.1em; border-bottom: 1px solid #ccc; padding-bottom: 0.1em; }
 h3 { font-size: 11.5pt; margin-top: 1em; }
 p, li { font-size: 10.5pt; }
-code { font-family: "Menlo", "Courier New", monospace; font-size: 9.5pt; background: #f4f4f4; padding: 0 3px; border-radius: 2px; }
+code { font-family: "Menlo", "Courier New", monospace; font-size: 9.5pt; background: transparent; padding: 0; border-radius: 0; }
 pre { background: #f4f4f4; padding: 8px 10px; border-radius: 3px; font-size: 9pt; overflow-x: auto; }
+pre code { background: transparent; padding: 0; font-size: 9pt; }
 table { border-collapse: collapse; margin: 0.5em 0; font-size: 10pt; }
 th, td { border: 1px solid #bbb; padding: 4px 8px; text-align: left; }
 th { background: #eee; }
 blockquote { border-left: 3px solid #999; margin-left: 0; padding-left: 0.8em; color: #555; }
 hr { border: 0; border-top: 1px solid #ccc; margin: 1em 0; }
+img { max-width: 100%; height: auto; display: block; margin: 0.6em auto; }
+figcaption, p > em { font-size: 10pt; color: #444; }
 """
 
 

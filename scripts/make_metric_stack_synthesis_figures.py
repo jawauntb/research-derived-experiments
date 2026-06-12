@@ -40,8 +40,8 @@ def safe_load(path):
         return None
 
 
-def fig1_arc_food_attribution():
-    """Food self_consume attribution across the autonomous-probing arc."""
+def fig6_arc_food_attribution():
+    """Figure 6: Food self_consume attribution across the autonomous-probing arc."""
     # Pull key conditions from saved sweeps
     points = []
 
@@ -128,7 +128,7 @@ def fig1_arc_food_attribution():
                 "std": float(np.std(food_preds)) if len(food_preds) > 1 else 0,
             })
 
-    fig, ax = plt.subplots(figsize=(11, 5.5))
+    fig, ax = plt.subplots(figsize=(10, 5.5))
     x = np.arange(len(points))
     means = [p["mean"] for p in points]
     stds = [p["std"] for p in points]
@@ -146,16 +146,16 @@ def fig1_arc_food_attribution():
     ax.set_xticks(x)
     ax.set_xticklabels([p["label"] for p in points], fontsize=9)
     ax.set_ylabel("Predicted food self_consume (cross-seed mean)", fontsize=11)
-    ax.set_title("Figure 1. Food self attribution across the autonomous-probing arc\n"
-                  "Each milestone closes a specific calibration failure named in §3",
+    ax.set_title("Figure 6. Food self attribution across the autonomous-probing arc\n"
+                  "Each milestone closes a specific calibration failure named in §4",
                   fontsize=12)
     ax.set_ylim(-0.5, 1.4)
     ax.legend(loc="lower right", fontsize=9)
     ax.grid(axis="y", linestyle=":", alpha=0.3)
     fig.tight_layout()
-    fig.savefig(FIG_DIR / "fig1_arc_food_attribution.png", dpi=200, bbox_inches="tight")
+    fig.savefig(FIG_DIR / "fig6_arc_food_attribution.png", dpi=200, bbox_inches="tight")
     plt.close(fig)
-    print(f"wrote {FIG_DIR}/fig1_arc_food_attribution.png")
+    print(f"wrote {FIG_DIR}/fig6_arc_food_attribution.png")
 
 
 def fig2_correction_chain():
@@ -210,8 +210,8 @@ def fig2_correction_chain():
     print(f"wrote {FIG_DIR}/fig2_correction_chain.png")
 
 
-def fig3_maintained_boundary_cycle():
-    """Conceptual: detect → probe → cool → quiet → detect again cycle."""
+def fig5_maintained_boundary_cycle():
+    """Figure 5: detect → probe → cool → quiet → detect again cycle."""
     fig, ax = plt.subplots(figsize=(11, 6.5))
     ax.set_xlim(-0.5, 10.5)
     ax.set_ylim(-1.5, 5.5)
@@ -244,7 +244,7 @@ def fig3_maintained_boundary_cycle():
     for (sx, sy), (ex, ey) in arrows:
         ax.annotate("", xy=(ex, ey), xytext=(sx, sy),
                      arrowprops=dict(arrowstyle="->", color="#444", lw=1.8))
-    ax.text(5, 5.1, "Figure 3. The maintained-boundary mechanism (Paper 23B)",
+    ax.text(5, 5.1, "Figure 5. The maintained-boundary mechanism (Paper 23B)",
             ha="center", fontsize=13, fontweight="bold")
     ax.text(5, -1.1,
              "The agent learns when to ask, when to stop asking, and how to ask again — "
@@ -252,13 +252,13 @@ def fig3_maintained_boundary_cycle():
              "(Vervaeke's relevance realization, operationalized at minimum scale.)",
              ha="center", fontsize=10, style="italic", color="#444")
     fig.tight_layout()
-    fig.savefig(FIG_DIR / "fig3_maintained_boundary_cycle.png", dpi=200, bbox_inches="tight")
+    fig.savefig(FIG_DIR / "fig5_maintained_boundary_cycle.png", dpi=200, bbox_inches="tight")
     plt.close(fig)
-    print(f"wrote {FIG_DIR}/fig3_maintained_boundary_cycle.png")
+    print(f"wrote {FIG_DIR}/fig5_maintained_boundary_cycle.png")
 
 
-def fig4_p23b_goldilocks():
-    """P23B's Goldilocks tradeoff: re-engagement vs anxiety."""
+def fig3_p23b_goldilocks():
+    """Figure 3: P23B's Goldilocks tradeoff: re-engagement vs anxiety."""
     d = safe_load(ROOT / "artifacts/habituated_reengagement/sweep_v1.json")
     if not d:
         print("  no P23B data — skipping fig4"); return
@@ -296,7 +296,7 @@ def fig4_p23b_goldilocks():
     ax.set_xticks(x)
     ax.set_xticklabels([c[1] for c in conds_show], fontsize=8.5)
     ax.set_ylabel("Post-shift-1 AUC (lower = better recovery)", fontsize=11)
-    ax.set_title("Figure 4. The Goldilocks: re-engagement vs anxiety vs false calm (Paper 23B)",
+    ax.set_title("Figure 3. The Goldilocks: re-engagement vs anxiety vs false calm (Paper 23B)",
                   fontsize=12)
     # Legend
     handles = [
@@ -309,13 +309,13 @@ def fig4_p23b_goldilocks():
     ax.legend(handles=handles, loc="upper right", fontsize=9)
     ax.grid(axis="y", linestyle=":", alpha=0.3)
     fig.tight_layout()
-    fig.savefig(FIG_DIR / "fig4_p23b_goldilocks.png", dpi=200, bbox_inches="tight")
+    fig.savefig(FIG_DIR / "fig3_p23b_goldilocks.png", dpi=200, bbox_inches="tight")
     plt.close(fig)
-    print(f"wrote {FIG_DIR}/fig4_p23b_goldilocks.png")
+    print(f"wrote {FIG_DIR}/fig3_p23b_goldilocks.png")
 
 
-def fig5_architectural_ceiling():
-    """P25's structural finding: food vs medicine mediated predictions collapse."""
+def fig4_architectural_ceiling():
+    """Figure 4: P25's structural finding: food vs medicine mediated predictions collapse."""
     d = safe_load(ROOT / "artifacts/role_specific_identifiability/sweep_v1.json")
     if not d:
         print("  no P25 data — skipping fig5"); return
@@ -360,20 +360,20 @@ def fig5_architectural_ceiling():
     ax.set_xticks(x)
     ax.set_xticklabels([c[1] for c in conds_show], fontsize=8.5)
     ax.set_ylabel("Predicted mediated E contrast (high_h - low_h)", fontsize=11)
-    ax.set_title("Figure 5. The architectural ceiling (Paper 25): "
+    ax.set_title("Figure 4. The architectural ceiling (Paper 25): "
                   "shared mediated head produces near-identical predictions for food vs medicine\n"
                   "even under role-specific environment + two-sided gauge anchoring + learned buckets",
                   fontsize=11)
     ax.legend(loc="upper right", fontsize=9)
     ax.grid(axis="y", linestyle=":", alpha=0.3)
     fig.tight_layout()
-    fig.savefig(FIG_DIR / "fig5_architectural_ceiling.png", dpi=200, bbox_inches="tight")
+    fig.savefig(FIG_DIR / "fig4_architectural_ceiling.png", dpi=200, bbox_inches="tight")
     plt.close(fig)
-    print(f"wrote {FIG_DIR}/fig5_architectural_ceiling.png")
+    print(f"wrote {FIG_DIR}/fig4_architectural_ceiling.png")
 
 
-def fig6_metric_stack():
-    """Vertical metric stack diagram."""
+def fig1_metric_stack():
+    """Figure 1: vertical metric stack diagram."""
     layers = [
         ("Architectural ceiling", "shared heads can't disambiguate role-specific (P25)", "#e8b3b3"),
         ("Learned probe abstractions", "K-means over (z, E, D, hist) (P25)", "#d4e4d4"),
@@ -397,31 +397,31 @@ def fig6_metric_stack():
         ("Causal load-bearing", "passive→active (P4)", "#ffd9b3"),
         ("Geometry", "weakness/symmetry/OOD (P1-3)", "#ffd9b3"),
     ]
-    fig, ax = plt.subplots(figsize=(11, 11))
-    ax.set_xlim(0, 12)
+    fig, ax = plt.subplots(figsize=(13, 11))
+    ax.set_xlim(0, 14)
     ax.set_ylim(0, len(layers) + 1)
     ax.axis("off")
     for i, (name, why, color) in enumerate(layers):
         y = i + 0.5
-        box = FancyBboxPatch((0.5, y - 0.35), 11, 0.7,
+        box = FancyBboxPatch((0.5, y - 0.35), 13, 0.7,
                                 boxstyle="round,pad=0.04",
                                 facecolor=color, edgecolor="#666",
                                 linewidth=0.8)
         ax.add_patch(box)
-        ax.text(1, y, name, fontsize=10.5, fontweight="bold",
+        ax.text(1, y, name, fontsize=11, fontweight="bold",
                 ha="left", va="center")
-        ax.text(11, y, why, fontsize=9, ha="right", va="center",
+        ax.text(13, y, why, fontsize=9.5, ha="right", va="center",
                 style="italic", color="#444")
-    ax.text(6, len(layers) + 0.55,
-            "Figure 6. The Metric Stack of Concern (read bottom-up)",
-            ha="center", fontsize=13, fontweight="bold")
-    ax.text(6, len(layers) + 0.1,
+    ax.text(7, len(layers) + 0.55,
+            "Figure 1. The Metric Stack of Concern (read bottom-up)",
+            ha="center", fontsize=14, fontweight="bold")
+    ax.text(7, len(layers) + 0.1,
             "Each layer was added because the previous one had a specific empirical failure",
             ha="center", fontsize=10, style="italic", color="#444")
     fig.tight_layout()
-    fig.savefig(FIG_DIR / "fig6_metric_stack.png", dpi=200, bbox_inches="tight")
+    fig.savefig(FIG_DIR / "fig1_metric_stack.png", dpi=200, bbox_inches="tight")
     plt.close(fig)
-    print(f"wrote {FIG_DIR}/fig6_metric_stack.png")
+    print(f"wrote {FIG_DIR}/fig1_metric_stack.png")
 
 
 def fig7_philosophical_correlates():
@@ -470,12 +470,12 @@ def fig7_philosophical_correlates():
 
 
 def main():
-    fig1_arc_food_attribution()
+    fig1_metric_stack()
     fig2_correction_chain()
-    fig3_maintained_boundary_cycle()
-    fig4_p23b_goldilocks()
-    fig5_architectural_ceiling()
-    fig6_metric_stack()
+    fig3_p23b_goldilocks()
+    fig4_architectural_ceiling()
+    fig5_maintained_boundary_cycle()
+    fig6_arc_food_attribution()
     fig7_philosophical_correlates()
 
 
