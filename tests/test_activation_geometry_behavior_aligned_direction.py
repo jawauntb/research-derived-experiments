@@ -18,6 +18,8 @@ from experiments.activation_geometry.behavior_aligned_direction import (
     parse_direction_modes,
     parse_values,
     relation_control_class_from_name,
+    relation_control_group_name,
+    relation_control_pair_from_name,
     role_margin,
     summarize_binary_specificity,
     summarize_behavior_delta,
@@ -43,6 +45,7 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
                 "target_binary_relation_multiclass_holdout_source_opt_8, "
                 "target_binary_relation_multiclass_holdout_target_opt_8, "
                 "target_binary_relation_multiclass_holdout_overlap_opt_8, "
+                "target_binary_relation_pair_multiclass_state_gate_opt_8, "
                 "target_binary_positive_family_opt_8, "
                 "caa_target_contrast"
             ),
@@ -64,6 +67,7 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
                 "target_binary_relation_multiclass_holdout_source_opt_8",
                 "target_binary_relation_multiclass_holdout_target_opt_8",
                 "target_binary_relation_multiclass_holdout_overlap_opt_8",
+                "target_binary_relation_pair_multiclass_state_gate_opt_8",
                 "target_binary_positive_family_opt_8",
                 "caa_target_contrast",
             ],
@@ -101,6 +105,26 @@ class BehaviorAlignedDirectionTest(unittest.TestCase):
                 "relation_control:target_sharing:phase_space->attractor_network:v0"
             ),
             "target_sharing",
+        )
+        self.assertEqual(
+            relation_control_pair_from_name(
+                "relation_control:target_sharing:phase_space->attractor_network:v0"
+            ),
+            "phase_space->attractor_network",
+        )
+        self.assertEqual(
+            relation_control_group_name(
+                "relation_control:target_sharing:phase_space->attractor_network:v0",
+                relation_grouping="class",
+            ),
+            "relation_control:target_sharing",
+        )
+        self.assertEqual(
+            relation_control_group_name(
+                "relation_control:target_sharing:phase_space->attractor_network:v0",
+                relation_grouping="pair",
+            ),
+            "relation_control:target_sharing:phase_space->attractor_network",
         )
         filtered = filter_relation_control_prompts(
             prompts,

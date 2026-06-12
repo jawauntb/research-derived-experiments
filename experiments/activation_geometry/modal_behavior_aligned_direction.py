@@ -149,6 +149,17 @@ BINARY_OPT_DIRECTION_MODES = {
         "relation_control_prompts": True,
         "exclude_relation_control_classes": ("source_sharing", "target_sharing"),
     },
+    "target_binary_relation_pair_multiclass_state_gate_opt_8": {
+        "steps": 8,
+        "lr": 0.25,
+        "control_weight": 2.0,
+        "temperature": 0.25,
+        "scope": "pair",
+        "parameterization": "multiclass_state_gate",
+        "gate_temperature": 0.05,
+        "relation_control_prompts": True,
+        "relation_control_grouping": "pair",
+    },
     "target_binary_positive_family_opt_8": {
         "steps": 8,
         "lr": 0.25,
@@ -1615,6 +1626,16 @@ def relation_control_class_from_name(control_name: str) -> str | None:
     return parts[1]
 
 
+def relation_control_pair_from_name(control_name: str) -> str | None:
+    prefix = "relation_control:"
+    if not control_name.startswith(prefix):
+        return None
+    parts = control_name.split(":")
+    if len(parts) < 3 or not parts[2]:
+        return None
+    return parts[2]
+
+
 def filter_relation_control_prompts(
     prompts_by_regime: dict[str, list[tuple[str, str]]],
     *,
@@ -1755,11 +1776,25 @@ def state_gate_for_binary_prompts(
     return gate_direction.detach(), summary
 
 
-def multiclass_control_group_name(control_name: str) -> str:
+def multiclass_control_group_name(
+    control_name: str,
+    *,
+    relation_grouping: str,
+) -> str:
     if control_name.startswith("relation_control:"):
-        parts = control_name.split(":")
-        if len(parts) >= 2:
-            return f"relation_control:{parts[1]}"
+        if relation_grouping == "class":
+            control_class = relation_control_class_from_name(control_name)
+            if control_class is not None:
+                return f"relation_control:{control_class}"
+        elif relation_grouping == "pair":
+            control_class = relation_control_class_from_name(control_name)
+            control_pair = relation_control_pair_from_name(control_name)
+            if control_class is not None and control_pair is not None:
+                return f"relation_control:{control_class}:{control_pair}"
+        else:
+            raise ValueError(
+                f"Unknown relation control grouping: {relation_grouping}"
+            )
     if control_name.startswith("random_null_"):
         return "random_null"
     return control_name
@@ -1787,6 +1822,7 @@ def multiclass_state_gate_for_binary_prompts(
     layer: int,
     max_length: int,
     gate_temperature: float,
+    relation_grouping: str,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     if len(control_prompts) != len(control_names):
         raise ValueError("Control prompts and names must have equal length")
@@ -1807,7 +1843,10 @@ def multiclass_state_gate_for_binary_prompts(
     grouped_control_units: dict[str, list[Any]] = {}
     for control_name, control_unit in zip(control_names, control_units, strict=True):
         grouped_control_units.setdefault(
-            multiclass_control_group_name(control_name),
+            multiclass_control_group_name(
+                control_name,
+                relation_grouping=relation_grouping,
+            ),
             [],
         ).append(control_unit)
     control_group_names = sorted(grouped_control_units)
@@ -1838,6 +1877,7 @@ def multiclass_state_gate_for_binary_prompts(
     summary = {
         "multiclass_gate_control_group_names": control_group_names,
         "multiclass_gate_control_group_count": len(control_group_names),
+        "multiclass_gate_relation_grouping": relation_grouping,
         "multiclass_gate_threshold": float(threshold.item()),
         "multiclass_gate_temperature": float(gate_temperature),
         "multiclass_gate_target_margin_mean": float(target_mean.item()),
@@ -1934,6 +1974,7 @@ def optimize_binary_delta_for_prompt_sets(
                 layer=layer,
                 max_length=max_length,
                 gate_temperature=float(config.get("gate_temperature", 0.05)),
+                relation_grouping=str(config.get("relation_control_grouping", "class")),
             )
         )
 

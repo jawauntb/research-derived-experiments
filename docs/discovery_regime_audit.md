@@ -3303,3 +3303,83 @@ Residual content:
 Next move: run an oracle or learned row-conditioned target-family
 disambiguation gate that tests whether `attractor->attractor_network` can be
 separated from target-sharing nulls such as `phase_space->attractor_network`.
+
+## Activation Geometry Probe: Target-Family Pair Gate
+
+Question: can an oracle-style relation-pair prototype gate separate exact target
+identity from target-family overlap?
+
+Current regime:
+
+- Artifact types: strict binary-relation rows, stratified control summaries,
+  optimized gated-intervention summaries, ignored Modal payloads, stress
+  reports, relation-pair prototype reports.
+- Operations: Modal-backed Pythia-70M layer-3 intervention, relation-control
+  prompt construction, exact relation-pair prototype grouping, hidden-state
+  prototype gating, held-out alias scoring, scale stress.
+- Gates/verifiers: held-out `alias_2`, strict positive/control pass counts,
+  always-false carrier, random same-norm baseline, stratified source-sharing and
+  target-sharing controls.
+- Known limitations: two positive pairs only; Pythia-70M layer 3 only; strict
+  behavior measured by binary classifier, not generation.
+
+Action class:
+
+- Retrieval/search/discovery: search.
+- Why: this sharpens the existing multi-class prototype gate from broad
+  relation-control classes to exact relation-pair prototypes, but it does not
+  create an accepted mechanism class.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/activation_geometry/results/target_family_pair_gate_2026_06_12.md`;
+  local ignored artifacts
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_target_family_pair_gate_alias1_seed20260610.json`
+  and
+  `artifacts/activation_geometry/modal_pythia_70m_layer3_target_family_pair_gate_scale_alias1_seed20260610.json`.
+- Positive targets: `attractor->attractor_network` and
+  `fixed_point->prototype`.
+- Negative controls: twelve controls split across `source_sharing`,
+  `target_sharing`, `implausible_random_null`, and `semantic_near_null`.
+- Stress tests: direct comparison against class-level relation multi-class gate;
+  scale sweep over `0.75`, `1.0`, `1.25`, `1.5`.
+
+Gate:
+
+- Acceptance rule: preserve at least `1/2` strict positives while reducing the
+  objective-alias target-sharing leak to `0/12` controls, with random same-norm
+  remaining at `0/2`, `0/12`.
+- Withheld/rejected rule: reject exact relation-pair prototype gating if
+  `phase_space->attractor_network` passes after it has its own prototype class.
+
+Results:
+
+- Accepted artifacts: `target_binary_relation_pair_multiclass_state_gate_opt_8`,
+  negative report, and two ignored Modal payloads.
+- Rejected or withheld artifacts: the hypothesis that exact relation-pair
+  prototypes are sufficient to recover semantic specificity from the relation
+  multi-class gate.
+- Key metrics: at scale `1.0`, class-level and pair-level relation gates both
+  give `1/2` positives and `1/12` controls, leaking the same target-sharing row.
+  The pair gate uses `19` prototype groups for the `attractor` row, including a
+  dedicated `phase_space->attractor_network` prototype, but still leaks it.
+- Variance or ablation: scale `0.75` gives `0/2`, `0/12`; scale `1.0` gives
+  `1/2`, `1/12`; scale `1.25` gives `0/2`, `2/12`; scale `1.5` gives `1/2`,
+  `2/12`. `random_same_norm` remains `0/2`, `0/12`.
+
+Residual content:
+
+- Explained by old regime: the narrow binary-relation pocket remains sensitive
+  to scale and structured source/target overlap.
+- New content outside old regime: even exact relation-pair hidden-state
+  prototypes do not produce a target-identity separator; the training-time
+  target-over-control max margin is near zero for the `attractor` row.
+- Retractions or supersessions: supersede "held-out/row-conditioned prototype
+  gates might solve target-family leakage" with "the prototype-gated
+  binary-relation interface appears under-identified for target-family
+  disambiguation."
+
+Next move: stop optimizing this prototype-gated binary-relation interface. Test
+supervised exact-relation readout identifiability within target families before
+running more steering interventions.

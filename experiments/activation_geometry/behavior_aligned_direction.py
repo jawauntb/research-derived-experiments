@@ -41,6 +41,7 @@ DIRECTION_MODES = (
     "target_binary_relation_multiclass_holdout_source_opt_8",
     "target_binary_relation_multiclass_holdout_target_opt_8",
     "target_binary_relation_multiclass_holdout_overlap_opt_8",
+    "target_binary_relation_pair_multiclass_state_gate_opt_8",
     "target_binary_positive_family_opt_8",
     "caa_target_contrast",
     "caa_target_minus_source",
@@ -90,6 +91,41 @@ def relation_control_class_from_name(control_name: str) -> str | None:
     if len(parts) < 2 or not parts[1]:
         return None
     return parts[1]
+
+
+def relation_control_pair_from_name(control_name: str) -> str | None:
+    """Extract the relation pair encoded in a relation-control name."""
+    prefix = "relation_control:"
+    if not control_name.startswith(prefix):
+        return None
+    parts = control_name.split(":")
+    if len(parts) < 3 or not parts[2]:
+        return None
+    return parts[2]
+
+
+def relation_control_group_name(
+    control_name: str,
+    *,
+    relation_grouping: str = "class",
+) -> str:
+    """Return the prototype group used for relation-control gate classes."""
+    if not control_name.startswith("relation_control:"):
+        if control_name.startswith("random_null_"):
+            return "random_null"
+        return control_name
+    if relation_grouping == "class":
+        control_class = relation_control_class_from_name(control_name)
+        if control_class is not None:
+            return f"relation_control:{control_class}"
+    elif relation_grouping == "pair":
+        control_class = relation_control_class_from_name(control_name)
+        control_pair = relation_control_pair_from_name(control_name)
+        if control_class is not None and control_pair is not None:
+            return f"relation_control:{control_class}:{control_pair}"
+    else:
+        raise ValueError(f"Unknown relation control grouping: {relation_grouping}")
+    return control_name
 
 
 def filter_relation_control_prompts(
