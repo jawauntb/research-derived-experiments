@@ -213,7 +213,7 @@ def fig_a4_p22_world_responds():
     print(f"wrote {FIG_DIR}/fig_a4_p22_world_responds.png")
 
 
-def fig_a5_p24_contrast_anti_cheats():
+def fig_a6_p24_contrast_anti_cheats():
     """P24: contrast loss + anti-cheat result."""
     d = safe_load(ROOT / "artifacts/interventional_contrast/sweep_v1.json")
     if not d:
@@ -248,19 +248,19 @@ def fig_a5_p24_contrast_anti_cheats():
         ax.text(i, m + 0.005, f"{m:.3f}", ha="center", fontsize=9.5, fontweight="bold")
     ax.set_xticks(x); ax.set_xticklabels(labels, fontsize=8.5)
     ax.set_ylabel("Predicted mediated_E contrast (food bucket)", fontsize=11)
-    ax.set_title("Figure A5 (Paper 24). Interventional contrast loss + anti-cheat controls.\n"
+    ax.set_title("Figure A6 (Paper 24). Interventional contrast loss + anti-cheat controls.\n"
                  "Takeaway: contrast helps; shuffled (G6) FAILS as designed (semantic correctness matters); "
                  "wrong-history (G7) STILL HELPS — reveals environment under-constraint (mediated structure is role-invariant).",
                  fontsize=10.5)
     ax.grid(axis="y", linestyle=":", alpha=0.3)
     fig.tight_layout()
-    fig.savefig(FIG_DIR / "fig_a5_p24_contrast_anti_cheats.png",
+    fig.savefig(FIG_DIR / "fig_a6_p24_contrast_anti_cheats.png",
                 dpi=200, bbox_inches="tight")
     plt.close(fig)
-    print(f"wrote {FIG_DIR}/fig_a5_p24_contrast_anti_cheats.png")
+    print(f"wrote {FIG_DIR}/fig_a6_p24_contrast_anti_cheats.png")
 
 
-def fig_a6_p23b_re_engagement_dynamics():
+def fig_a5_p23b_re_engagement_dynamics():
     """P23B: per-phase null density showing re-engagement after second shift."""
     d = safe_load(ROOT / "artifacts/habituated_reengagement/sweep_v1.json")
     if not d:
@@ -306,7 +306,7 @@ def fig_a6_p23b_re_engagement_dynamics():
             color="#d62728", edgecolor="black", linewidth=0.4)
     ax.set_xticks(x); ax.set_xticklabels([c[1] for c in conds_show], fontsize=9.5)
     ax.set_ylabel("Mean affected-bucket null count (food + medicine)", fontsize=11)
-    ax.set_title("Figure A6 (Paper 23B). Re-engagement after the SECOND regime shift — "
+    ax.set_title("Figure A5 (Paper 23B). Re-engagement after the SECOND regime shift — "
                  "the maintained-boundary signature.\n"
                  "Takeaway: P22 baseline self-silences post-shift (red bars ≈ 0); P23A surprise has anxiety "
                  "(post-shift WAY higher than pre); decision-layer cooling re-engages on shift 2 (red bars rise above pre-shift-2 baseline) WITHOUT permanent anxiety.",
@@ -314,10 +314,10 @@ def fig_a6_p23b_re_engagement_dynamics():
     ax.legend(loc="upper left", fontsize=9.5, ncol=2)
     ax.grid(axis="y", linestyle=":", alpha=0.3)
     fig.tight_layout()
-    fig.savefig(FIG_DIR / "fig_a6_p23b_re_engagement_dynamics.png",
+    fig.savefig(FIG_DIR / "fig_a5_p23b_re_engagement_dynamics.png",
                 dpi=200, bbox_inches="tight")
     plt.close(fig)
-    print(f"wrote {FIG_DIR}/fig_a6_p23b_re_engagement_dynamics.png")
+    print(f"wrote {FIG_DIR}/fig_a5_p23b_re_engagement_dynamics.png")
 
 
 def fig_a7_alternative_explanations():
@@ -387,8 +387,8 @@ def main():
     fig_a2_p17a_v_probe_saturation()
     fig_a3_p19_current_replay()
     fig_a4_p22_world_responds()
-    fig_a5_p24_contrast_anti_cheats()
-    fig_a6_p23b_re_engagement_dynamics()
+    fig_a5_p23b_re_engagement_dynamics()
+    fig_a6_p24_contrast_anti_cheats()
     fig_a7_alternative_explanations()
 
 
