@@ -349,6 +349,7 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
         for episode in range(n_episodes):
             E = ENERGY_INIT
             steps = 0
+            eps_explore = max(0.05, 0.30 - 0.25 * (episode / max(n_episodes, 1)))
             while E > 0 and steps < T_MAX:
                 idx = rng_online.randint(0, len(ITEMS))
                 c_, l_ = ITEMS[idx]
@@ -372,43 +373,41 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
                         scores.append(float(self_head(s_inp).item()))
                     greedy_action = 0 if scores[0] >= scores[1] else 1
 
-                action = greedy_action
+                # Decide null vs non-null per condition
+                take_null = False
                 if condition == "factorized_no_null_online":
-                    pass  # only consume/skip
+                    take_null = False  # no null in action space
                 elif condition == "factorized_null_passive_online":
-                    # Random null injection at 33% to populate null buffer
-                    # without anchor loss (matches off-policy passive)
-                    if rng_online.rand() < 0.33:
-                        action = 2
+                    take_null = (rng_online.rand() < 0.33)
                 elif condition == "scheduled_null_anchor_online":
-                    # Experimenter-scheduled at 33%
-                    if rng_online.rand() < 0.33:
-                        action = 2
+                    take_null = (rng_online.rand() < 0.33)
                 elif condition == "matched_random_global_online":
-                    if rng_online.rand() < matched_target_rate:
-                        action = 2
+                    take_null = (rng_online.rand() < matched_target_rate)
                 elif condition in ("learned_raw_vprobe_online",
                                     "learned_debiased_vprobe_online"):
-                    if v_val > cost:
-                        action = 2
+                    take_null = (v_val > cost)
                 elif condition == "oracle_uncertainty_probe_online":
                     true_world = (TRAINING_SHOCK[role_of(c_, l_)]
                                    * SHOCK_MAGNITUDE)
-                    err = abs(w_pred_cur - true_world)
-                    if err > cost:
-                        action = 2
+                    take_null = (abs(w_pred_cur - true_world) > cost)
                 elif condition == "oracle_source_online":
-                    # Random null at 33% to populate buffer (oracle gets explicit
-                    # source labels for training, so null is just data variety)
-                    if rng_online.rand() < 0.33:
-                        action = 2
+                    take_null = (rng_online.rand() < 0.33)
 
-                # Step env
-                self_step = action_self_dE(action, c_, l_)
+                # ε-greedy exploration over consume/skip
+                # (preserves probe decision; prevents pred_self collapse on consume)
+                if take_null:
+                    action = 2
+                else:
+                    if rng_online.rand() < eps_explore:
+                        action = int(rng_online.choice([0, 1]))
+                    else:
+                        action = greedy_action
+
+                # Step env. Decouple cost (viability) from model targets.
+                self_step_base = action_self_dE(action, c_, l_)  # cost-free
                 world_step = sample_world_shock(c_, l_, TRAINING_SHOCK, rng_online)
-                if action == 2:
-                    self_step = self_step - cost
-                total = self_step + world_step
+                total_cost_free = self_step_base + world_step  # model target
+                E_delta = total_cost_free - (cost if action == 2 else 0.0)
 
                 # Record lagged v_target BEFORE EMA update
                 lagged_v_target = 0.0
@@ -416,10 +415,10 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
                     b = bucket_key(c_, l_, E)
                     lagged_v_target = abs(bucket_ema[b])
 
-                # Add to buffer
                 buffer.append(dict(
                     obs=obs_raw, E=float(E), action=int(action),
-                    total=float(total), self_dE=float(self_step + (cost if action==2 else 0)),
+                    total=float(total_cost_free),
+                    self_dE=float(self_step_base),
                     world_dE=float(world_step), c=int(c_), l=int(l_),
                     lagged_v=float(lagged_v_target),
                 ))
@@ -427,7 +426,7 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
                 # Update bucket EMA AFTER recording lagged target
                 if use_debiased and action == 2:
                     b = bucket_key(c_, l_, E)
-                    signed = w_pred_cur - total
+                    signed = w_pred_cur - total_cost_free
                     if bucket_count[b] == 0:
                         bucket_ema[b] = signed
                     else:
@@ -493,14 +492,16 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
                         )
                         opt.zero_grad(); loss.backward(); opt.step()
 
-                E = max(0.0, min(1.0, E + total))
+                E = max(0.0, min(1.0, E + E_delta))
                 steps += 1
 
     encoder.eval(); self_head.eval(); world_head.eval(); v_probe_head.eval()
 
     # ============ Component-recovery diagnostics ============
+    # Average across an E grid to avoid OOD reads when online policies skew E.
     rng_diag = np.random.RandomState(seed + 333)
     n_diag = 128
+    E_GRID = [0.1, 0.25, 0.5, 0.75, 0.9]
     pred_by_role = {}
     for (c, l), info in ITEM_TYPES.items():
         role = info["role"]
@@ -508,20 +509,36 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
         obs_arr = np.stack(obs_list)
         with torch.no_grad():
             z = encoder(torch.from_numpy(obs_arr).to(device))
-            e_t = torch.full((n_diag, 1), 0.5, dtype=torch.float32, device=device)
-            ffE = fourier_E(e_t)
             results = {}
             for action_idx in range(n_actions):
-                a_oh = torch.zeros(n_diag, n_actions, device=device)
-                a_oh[:, action_idx] = 1.0
-                inp = torch.cat([z, ffE, a_oh], dim=-1)
-                pred_s = self_head(inp).squeeze(-1).cpu().numpy()
-                results[f"self_action_{action_idx}"] = float(pred_s.mean())
-            world_input = torch.cat([z, ffE], dim=-1)
-            pred_w = world_head(world_input).squeeze(-1).cpu().numpy()
-            results["world"] = float(pred_w.mean())
-            v_pred = v_probe_head(world_input).squeeze(-1).cpu().numpy()
-            results["v_probe"] = float(v_pred.mean())
+                preds_across_E = []
+                for E_val in E_GRID:
+                    e_t = torch.full((n_diag, 1), E_val,
+                                      dtype=torch.float32, device=device)
+                    ffE = fourier_E(e_t)
+                    a_oh = torch.zeros(n_diag, n_actions, device=device)
+                    a_oh[:, action_idx] = 1.0
+                    inp = torch.cat([z, ffE, a_oh], dim=-1)
+                    pred_s = self_head(inp).squeeze(-1).cpu().numpy()
+                    preds_across_E.append(float(pred_s.mean()))
+                results[f"self_action_{action_idx}"] = float(np.mean(preds_across_E))
+                results[f"self_action_{action_idx}_by_E"] = preds_across_E
+            world_preds = []
+            v_preds = []
+            for E_val in E_GRID:
+                e_t = torch.full((n_diag, 1), E_val,
+                                  dtype=torch.float32, device=device)
+                ffE = fourier_E(e_t)
+                world_input = torch.cat([z, ffE], dim=-1)
+                world_preds.append(
+                    float(world_head(world_input).squeeze(-1).cpu().numpy().mean())
+                )
+                v_preds.append(
+                    float(v_probe_head(world_input).squeeze(-1).cpu().numpy().mean())
+                )
+            results["world"] = float(np.mean(world_preds))
+            results["world_by_E"] = world_preds
+            results["v_probe"] = float(np.mean(v_preds))
         results["true_self_consume"] = consume_self_dE(c, l) - ENERGY_DECAY
         results["true_self_skip_or_null"] = -ENERGY_DECAY
         results["true_world_in_dist"] = true_world_expectation(c, l, TRAINING_SHOCK)
