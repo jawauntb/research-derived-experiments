@@ -17,7 +17,7 @@ import random
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from statistics import mean, pstdev
-from typing import Any
+from typing import Any, Mapping
 
 from experiments.concerned_syntax.benchmark import (
     ShapeTrial,
@@ -35,6 +35,10 @@ from experiments.concerned_syntax.learned_agents import (
     ROLE_VOCAB,
     LinearBinaryModel,
     train_linear_binary,
+)
+from experiments.viable_computational_bodies.haskell_gate import (
+    HaskellVerdict,
+    try_body_verdicts,
 )
 
 VECTOR_AGENTS: tuple[str, ...] = (
@@ -403,40 +407,87 @@ def summarize_results(rows: list[VectorResult]) -> dict[str, dict[str, Any]]:
     return summary
 
 
+def _apply_formal_verdict(
+    stats: dict[str, Any],
+    *,
+    body: str,
+    fallback: dict[str, Any],
+    formal_verdicts: Mapping[str, HaskellVerdict] | None,
+) -> None:
+    verdict = formal_verdicts.get(body) if formal_verdicts is not None else None
+    if verdict is None:
+        stats["formal_source"] = "python_static"
+        stats["formal_valid"] = fallback["formal_valid"]
+        stats["resource_cost"] = fallback["resource_cost"]
+        stats["formal_violations"] = list(fallback["formal_violations"])
+        return
+
+    stats["formal_source"] = verdict.formal_source
+    stats["formal_valid"] = 1.0 if verdict.formal_valid else 0.0
+    stats["resource_cost"] = verdict.resource_cost
+    stats["formal_violations"] = list(verdict.violations)
+
+
 def module_body_summary(
-    summary: dict[str, dict[str, Any]]
+    summary: dict[str, dict[str, Any]],
+    *,
+    formal_verdicts: Mapping[str, HaskellVerdict] | None = None,
 ) -> dict[str, dict[str, Any]]:
-    module_specs = {
+    static_verdicts = {
         "surface_reward_body": {
             "formal_valid": 1.0,
-            "anti_cheat": 0.35,
-            "module_coverage": 0.25,
+            "resource_cost": 4,
+            "formal_violations": (),
         },
         "passive_vector_body": {
             "formal_valid": 1.0,
-            "anti_cheat": 0.55,
-            "module_coverage": 0.45,
+            "resource_cost": 3,
+            "formal_violations": (),
         },
         "restless_vector_body": {
             "formal_valid": 0.0,
-            "anti_cheat": 0.55,
-            "module_coverage": 0.80,
+            "resource_cost": 6,
+            "formal_violations": ("restless_without_calibration_guard",),
         },
         "modular_concerned_body": {
             "formal_valid": 1.0,
-            "anti_cheat": 0.95,
-            "module_coverage": 0.95,
+            "resource_cost": 8,
+            "formal_violations": (),
         },
     }
+    anti_cheat_by_body = {
+        "surface_reward_body": 0.35,
+        "passive_vector_body": 0.55,
+        "restless_vector_body": 0.55,
+        "modular_concerned_body": 0.95,
+    }
+    module_coverage_by_body = {
+        "surface_reward_body": 0.25,
+        "passive_vector_body": 0.45,
+        "restless_vector_body": 0.80,
+        "modular_concerned_body": 0.95,
+    }
+    if formal_verdicts is None:
+        formal_verdicts = try_body_verdicts(BODY_BY_AGENT)
+
     body_summary: dict[str, dict[str, Any]] = {}
     for body, agent in BODY_BY_AGENT.items():
         stats = dict(summary[agent])
-        stats.update(module_specs[body])
+        anti_cheat = anti_cheat_by_body[body]
+        module_coverage = module_coverage_by_body[body]
+        _apply_formal_verdict(
+            stats,
+            body=body,
+            fallback=static_verdicts[body],
+            formal_verdicts=formal_verdicts,
+        )
+        stats["anti_cheat"] = anti_cheat
+        stats["module_coverage"] = module_coverage
         stats["executable_module_gate"] = bool(
             stats["gate_pass"]
             and stats["formal_valid"] >= 1.0
-            and stats["anti_cheat"] >= 0.70
-            and stats["module_coverage"] >= 0.80
+            and anti_cheat >= 0.70
+            and module_coverage >= 0.80
         )
         body_summary[body] = stats
     return body_summary
@@ -577,20 +628,26 @@ def write_body_report(path: Path, payload: dict[str, Any]) -> None:
         "",
         "## Gate Summary",
         "",
-        "| Body | Parse high | Action | High probe | Low probe | Formal | Anti-cheat | Modules | Gate |",
-        "|---|---:|---:|---:|---:|---:|---:|---:|---|",
+        (
+            "| Body | Parse high | Action | High probe | Low probe | Formal | "
+            "Cost | Source | Anti-cheat | Modules | Gate |"
+        ),
+        "|---|---:|---:|---:|---:|---:|---:|---|---:|---:|---|",
     ]
     for body, stats in sorted(summary.items()):
         body_gate = float(stats["executable_module_gate"]) >= 0.999
         lines.append(
             "| {body} | {parse:.3f} | {action:.3f} | {high:.3f} | "
-            "{low:.3f} | {formal:.3f} | {anti:.3f} | {modules:.3f} | {gate} |".format(
+            "{low:.3f} | {formal:.3f} | {cost:.0f} | {source} | "
+            "{anti:.3f} | {modules:.3f} | {gate} |".format(
                 body=body,
                 parse=stats["parse_accuracy_high_concern"],
                 action=stats["action_accuracy"],
                 high=stats["high_concern_probe_rate"],
                 low=stats["low_concern_probe_rate"],
                 formal=stats["formal_valid"],
+                cost=stats["resource_cost"],
+                source=stats["formal_source"],
                 anti=stats["anti_cheat"],
                 modules=stats["module_coverage"],
                 gate="PASS" if body_gate else "fail",
