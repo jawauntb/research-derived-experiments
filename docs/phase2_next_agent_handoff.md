@@ -445,6 +445,10 @@ Done:
 - Learned candidate-parse executable body validation.
 - Vector-observation agents with parse-invariant surfaces.
 - Vector module-body validation.
+- Pixel-rendered observations with connected-component object extraction and
+  local 5-seed gate validation.
+- Python consumption of Haskell JSON verdicts inside learned/vector body
+  summaries when the local Haskell checker is available.
 - Gate-margin charts for 2A and 2B.
 - Haskell typed ontology checker prototype.
 - Updated papers and PDFs for 2A and 2B.
@@ -452,10 +456,10 @@ Done:
 
 Not done:
 
-- Pixel-rendered observations.
-- Learned object/part extraction from images.
+- Learned object/part extraction from images beyond algorithmic connected
+  components.
+- Modal-scale pixel sweep.
 - Intervention invention beyond provided pair probe/calibration.
-- Python consuming Haskell JSON verdicts inside sweeps.
 - Evolved/search-discovered executable module bodies under the vector/pixel
   gate.
 - Real neural module bodies such as object-slot encoders, graph neural nets,
@@ -469,6 +473,16 @@ Not done:
 ### Goal A: Pixel-Rendered Concerned Syntax
 
 Create a pixel-rendered environment from the vector shapes.
+
+Status after PR #125 follow-on branch work: the local version exists at
+`experiments/concerned_syntax/pixel_shapes.py`, with a Modal entrypoint at
+`experiments/concerned_syntax/modal_pixel_shapes_sweep.py` and a tracked local
+report at
+`experiments/concerned_syntax/results/pixel_shapes_local_2026_06_16.md`.
+The local 5-seed result passes for `concerned_pixel_probe` and preserves the
+surface/passive/restless failure taxonomy. The remaining Goal A work is the
+Modal-scale run, a gate-margin figure, and replacing the algorithmic extractor
+with a learned object-slot or CNN baseline.
 
 Proposed files:
 
@@ -519,6 +533,12 @@ Anti-cheat:
 
 Make the Python body evaluator call the Haskell checker or consume its JSON
 output.
+
+Status: completed in PR #125. `ontology-check` supports named body verdicts and
+`--motifs`; Python consumes those verdicts through
+`experiments/viable_computational_bodies/haskell_gate.py` and records
+`formal_source`, `formal_valid`, `resource_cost`, and `formal_violations`.
+Keep this section as the design record, not as an open task.
 
 Proposed files:
 

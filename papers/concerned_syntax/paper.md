@@ -23,20 +23,24 @@ whether to pay for an intervention that reveals the parse, and it must avoid
 probing low-concern ambiguity that does not affect viability.
 
 In a 200-trial deterministic design pilot, a 5,000-trial symbolic Modal sweep,
-a learned 5-seed Modal sweep, and a vector-observation 5-seed Modal sweep, the
-concern-gated syntax agent is the only agent family that passes the full gate.
-The first learned agent receives candidate parses as visible hypotheses but
-never receives the hidden true parse at test time. The vector-observation
-agent then removes those candidate-parse features: the visible coordinate
-surface is invariant under swapping the hidden true and alternate parse. Across
-five Modal seeds, the vector agent reaches high-concern parse accuracy 1.000,
-action accuracy 1.000, subtree accuracy 0.804, low-concern probe rate 0.189,
-and gate pass rate 1.000. Shortcut reward, passive vector inference, no-tree
+a learned 5-seed Modal sweep, a vector-observation 5-seed Modal sweep, and a
+pixel-rendered 5-seed local sweep, the concern-gated syntax agent is the only
+agent family that passes the full gate. The first learned agent receives
+candidate parses as visible hypotheses but never receives the hidden true parse
+at test time. The vector-observation agent then removes those candidate-parse
+features: the visible coordinate surface is invariant under swapping the hidden
+true and alternate parse. The pixel-rendered agent removes vector parts as a
+given representation: it receives 48x48 RGB images, extracts objects by
+connected components, and learns from centroids, colors, areas, and shape
+density. Across five pixel seeds, the concerned pixel agent reaches
+high-concern parse accuracy 0.996, action accuracy 0.999, subtree accuracy
+0.786, object extraction rate 1.000, low-concern probe rate 0.187, and gate
+pass rate 1.000. Shortcut reward, passive perceptual inference, no-tree
 planning, and restless inquiry all fail for different anti-cheat reasons. The
-result is still not a claim about pixel-level perception or human cognition. It
-is an accepted Phase 2A learned-mechanism surface: **reward is not syntax,
-compression is not syntax, and uncertainty reduction is not concerned
-inquiry.**
+result is still not a claim about human cognition or learned unsupervised
+object slots. It is an accepted Phase 2A learned-mechanism surface: **reward is
+not syntax, compression is not syntax, and uncertainty reduction is not
+concerned inquiry.**
 
 ## 1. Why Arc 2A Exists
 
@@ -65,6 +69,18 @@ the Metric Stack needs an analogous gate:
 
 > Performance is not constituency. Compression is not constituency.
 > Uncertainty reduction is not concerned inquiry.
+
+Recent object-centric and neuro-symbolic work also shaped the pixel gate.
+Causal-JEPA uses object-level latent interventions to force interaction-aware
+world-model dependencies rather than letting predictors fall back on
+self-dynamics. Object-centric causal-representation work warns that
+multi-object observations break simple injective vector assumptions, making
+entity factorization part of the causal-learning problem. Neuro-symbolic ARC
+systems similarly separate perception, object abstraction, hypothesis
+proposal, and consistency filtering. The pixel gate below imports the modest
+version of that lesson: before claiming syntax from pixels, first require an
+auditable object extraction layer and show that passive object attributes are
+still insufficient without concern-gated intervention.
 
 ## 2. Benchmark
 
@@ -287,20 +303,62 @@ while failing concern. The accepted agent passes because it learns when the
 hidden binding matters and uses the intervention only under a capped
 calibration guard.
 
-## 10. Limitations
+## 10. Pixel-Rendered Gate
+
+The vector-observation gate still hands the learner explicit generated parts.
+The next gate renders each six-part surface as a 48x48 RGB image. Role
+appearance is expressed through color, size, and shape; no candidate parse or
+hidden binding label is rendered. The extractor computes connected components,
+then records centroids, areas, mean colors, bounding boxes, densities, and
+pairwise distances. This is not an unsupervised slot-attention model, but it is
+a pixel-to-object transition: the learner receives object attributes recovered
+from pixels, not a symbolic role list or candidate parse.
+
+Local 5-seed command:
+
+```bash
+python3 -m experiments.concerned_syntax.pixel_shapes \
+  --train-trials 1200 --test-trials 500 --seed 20260616 --epochs 60 \
+  --out artifacts/concerned_syntax/pixel_shapes_local.json \
+  --agent-report experiments/concerned_syntax/results/pixel_shapes_local_2026_06_16.md
+```
+
+The public local report was produced by the same settings across five seeds:
+`20260616`, `1729`, `4242`, `8675309`, and `314159`.
+
+Summary:
+
+| Agent | Parse high | Action | Subtree | Objects | Low probe | Gate |
+|---|---:|---:|---:|---:|---:|---|
+| concerned pixel | 0.996 | 0.999 | 0.786 | 1.000 | 0.187 | PASS |
+| passive pixel | 0.503 | 0.874 | 0.497 | 1.000 | 0.000 | fail |
+| restless pixel | 1.000 | 0.999 | 1.000 | 1.000 | 1.000 | fail |
+| surface pixel shortcut | 0.503 | 0.882 | 0.497 | 1.000 | 0.000 | fail |
+
+This is the first pixel-level result in Arc 2A. It strengthens the vector
+claim in one specific way: the surface is now a rendered image, and the
+perceptual transition is explicit enough to test. It does not strengthen the
+claim into human-like vision. Passive object extraction still fails because the
+same image can be generated by multiple hidden parses. Restless probing still
+fails because syntax without concern probes low-concern ambiguity. The accepted
+agent passes only when object extraction, concern gating, intervention, and
+binding are composed.
+
+## 11. Limitations
 
 The current benchmark is still synthetic. The newest agent receives generated
-vector surfaces, not pixels. It does not test continuous control or human
-subjects. The intervention language is provided, not invented from raw motor
-primitives. The point of this first paper is to define and pass a minimal
-learned acceptance surface before larger compute.
+pixels with algorithmic connected-component extraction, not natural images,
+learned object slots, continuous control, or human subjects. The intervention
+language is provided, not invented from raw motor primitives. The point of this
+first paper is to define and pass a minimal learned acceptance surface before
+larger compute.
 
 The most important limitation is also the next step: the agent should learn the
 intervention language and parse representation from richer generated shapes
-and ultimately pixels, not merely bind provided probe observations to a
-hand-designed vector surface.
+and then from learned object-slot representations, not merely bind provided
+probe observations to an extracted object surface.
 
-## 11. Conclusion
+## 12. Conclusion
 
 Arc 2A inserts a new layer into the maintained-concern ladder:
 
@@ -312,9 +370,10 @@ difference -> geometry -> syntax -> salience -> valence
 The results support a narrow methodological claim: concerned syntax needs its
 own tests. Reward, compression, uncertainty, action accuracy, and even syntax
 without concern can all dissociate from causal constituency under maintained
-concern. The learned-agent and vector-observation sweeps show that the gate is
-passable without hidden parse access, but only when binding, intervention, and
-formal concern gating are present together.
+concern. The learned-agent, vector-observation, and pixel-rendered sweeps show
+that the gate is passable without hidden parse access, but only when object
+extraction, binding, intervention, and formal concern gating are present
+together.
 
 ## References
 
@@ -329,9 +388,18 @@ Cooper, P., & Velasquez, A. (2026). Active Causal Experimentalist (ACE):
 Learning intervention strategies via direct preference optimization. arXiv:
 2602.02451.
 
+Das, A., Ghugarkar, O., Bhat, V., & Aali, A. (2026). Compositional
+neuro-symbolic reasoning. arXiv:2604.02434.
+
 Le Lidec, Q., Biza, O., Goudet, O., Balestriero, R., & Lajoie, G. (2026).
 Causal-JEPA: Learning World Models through Object-Level Latent Interventions.
 arXiv:2602.11389.
+
+Mansouri, A., Hartford, J., Zhang, Y., & Bengio, Y. (2024). Object centric
+architectures enable efficient causal representation learning. ICLR 2024.
+
+Nishimoto, Y., & Matsubara, T. (2026). Object-centric world models for
+causality-aware reinforcement learning. arXiv:2511.14262.
 
 Revencu, B., Pajot, M., & Dehaene, S. (2026). Representations of geometric
 shapes have syntactic structure. *Journal of Experimental Psychology:

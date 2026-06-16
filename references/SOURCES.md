@@ -29,6 +29,9 @@ The downloaded PDFs, HTML snapshots, and extracted full text are intentionally l
 - Representation Learning of Geometric Trees: https://arxiv.org/abs/2408.08799
 - Compositional Neuro-Symbolic Reasoning: https://arxiv.org/abs/2604.02434
 - Inducing Causal World Models in LLMs for Zero-Shot Physical Reasoning: https://arxiv.org/abs/2507.19855
+- Object centric architectures enable efficient causal representation learning: https://openreview.net/forum?id=r9FsiXZxZt
+- Object-Centric World Models for Causality-Aware Reinforcement Learning: https://arxiv.org/abs/2511.14262
+- CausalARC: Abstract Reasoning with Causal World Models: https://arxiv.org/abs/2509.03636
 
 ## Local User-Provided Files
 

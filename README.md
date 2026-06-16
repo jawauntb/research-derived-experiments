@@ -97,6 +97,16 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     experiments/concerned_syntax/modal_vector_shapes_sweep.py \
     --train-trials 3000 --test-trials 1200 --epochs 90
 
+python3 -m experiments.concerned_syntax.pixel_shapes \
+    --train-trials 1200 --test-trials 500 --seed 20260616 --epochs 60 \
+    --out artifacts/concerned_syntax/pixel_shapes_local.json \
+    --agent-report experiments/concerned_syntax/results/pixel_shapes_local_2026_06_16.md
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/concerned_syntax/modal_pixel_shapes_sweep.py \
+    --train-trials 3000 --test-trials 1200 --epochs 90
+
 # Phase / Arc 2B viable computational bodies benchmark
 python3 -m experiments.viable_computational_bodies.search \
     --seeds 12 --generations 18 --population 18 --base-seed 20260616 \

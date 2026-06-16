@@ -18,6 +18,12 @@ from experiments.concerned_syntax.learned_agents import (
     summarize_seed_payloads,
 )
 from experiments.concerned_syntax.modal_report import summarize_modal_payload
+from experiments.concerned_syntax.pixel_shapes import (
+    extract_components,
+    render_pixel_surface,
+    run_experiment as run_pixel_experiment,
+    summarize_seed_payloads as summarize_pixel_payloads,
+)
 from experiments.concerned_syntax.vector_shapes import (
     run_experiment as run_vector_experiment,
     summarize_seed_payloads as summarize_vector_payloads,
@@ -232,6 +238,83 @@ class ConcernedSyntaxTest(unittest.TestCase):
             0.9,
         )
         self.assertAlmostEqual(summary["concerned_vector_probe"]["gate_pass"], 0.5)
+
+    def test_pixel_surface_does_not_encode_hidden_parse(self) -> None:
+        rng = random.Random(101)
+        trial = make_trial(0, rng)
+        swapped = type(trial)(
+            trial_id=trial.trial_id,
+            kind=trial.kind,
+            roles=trial.roles,
+            true_parse=trial.alternate_parse,
+            alternate_parse=trial.true_parse,
+            causal_pair=trial.causal_pair,
+            concern_weight=trial.concern_weight,
+        )
+
+        self.assertEqual(render_pixel_surface(trial), render_pixel_surface(swapped))
+
+    def test_pixel_component_extractor_recovers_six_visible_parts(self) -> None:
+        trial = make_trial(0, random.Random(20260616))
+
+        components = extract_components(render_pixel_surface(trial))
+
+        self.assertEqual(len(components), 6)
+        self.assertTrue(all(component.area > 20 for component in components))
+
+    def test_pixel_agent_gate_separates_surface_passive_and_restless_failures(self) -> None:
+        payload = run_pixel_experiment(
+            train_trials=650,
+            test_trials=260,
+            seed=20260616,
+            epochs=45,
+        )
+        agents = payload["agent_summary"]
+
+        self.assertTrue(agents["concerned_pixel_probe"]["gate_pass"])
+        self.assertFalse(agents["surface_pixel_shortcut"]["gate_pass"])
+        self.assertFalse(agents["passive_pixel"]["gate_pass"])
+        self.assertFalse(agents["restless_pixel_probe"]["gate_pass"])
+        self.assertEqual(
+            agents["restless_pixel_probe"]["low_concern_probe_rate"],
+            1.0,
+        )
+        self.assertEqual(
+            agents["concerned_pixel_probe"]["object_extraction_rate"],
+            1.0,
+        )
+        self.assertGreater(
+            agents["concerned_pixel_probe"]["parse_accuracy_high_concern"],
+            agents["passive_pixel"]["parse_accuracy_high_concern"],
+        )
+
+    def test_pixel_modal_summary_averages_gate_rates(self) -> None:
+        payloads = [
+            {
+                "agent_summary": {
+                    "concerned_pixel_probe": {
+                        "parse_accuracy_high_concern": 1.0,
+                        "gate_pass": True,
+                    }
+                }
+            },
+            {
+                "agent_summary": {
+                    "concerned_pixel_probe": {
+                        "parse_accuracy_high_concern": 0.8,
+                        "gate_pass": False,
+                    }
+                }
+            },
+        ]
+
+        summary = summarize_pixel_payloads(payloads, "agent_summary")
+
+        self.assertAlmostEqual(
+            summary["concerned_pixel_probe"]["parse_accuracy_high_concern"],
+            0.9,
+        )
+        self.assertAlmostEqual(summary["concerned_pixel_probe"]["gate_pass"], 0.5)
 
 
 if __name__ == "__main__":

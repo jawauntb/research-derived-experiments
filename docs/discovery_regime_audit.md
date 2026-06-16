@@ -3795,3 +3795,81 @@ Residual content:
 
 Next move: define a shared motif JSON schema so body search candidates can be
 checked by Haskell before or during vector/pixel gate evaluation.
+
+## Arc 2A: Pixel-Rendered Concerned Syntax
+
+Question: does the concerned-syntax gate survive when vector parts are replaced
+by rendered pixels and object attributes must be extracted from the image?
+
+Current regime:
+
+- Artifact types: vector-shape examples, learned agent summaries, body
+  summaries, Haskell admissibility verdicts, tracked reports.
+- Operations: vector rendering, linear learned probe/action models,
+  concern-gated pair probing, passive/restless/surface controls.
+- Gates/verifiers: parse-high, action, subtree, high-probe, low-probe, surface
+  ambiguity, targeted Python tests, full quality wrapper.
+- Known limitations: vector parts were previously given as object-level
+  coordinates and roles; no pixel observation or perceptual extraction was
+  required.
+
+Action class:
+
+- Retrieval/search/discovery: discovery-leaning transition.
+- Why: this adds a new observation surface and operation: RGB rendering plus
+  connected-component object extraction. The old vector schema cannot represent
+  the image-to-object step, although the downstream gate is intentionally
+  transported.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/concerned_syntax/pixel_shapes.py`;
+  `experiments/concerned_syntax/results/pixel_shapes_local_2026_06_16.md`;
+  local ignored artifact
+  `artifacts/concerned_syntax/pixel_shapes_local_sweep.json`.
+- Positive targets: `concerned_pixel_probe` should pass the transported 2A
+  gate after object extraction.
+- Negative controls: `surface_pixel_shortcut`, `passive_pixel`, and
+  `restless_pixel_probe`.
+- Stress tests: hidden true/alternate parse swap must leave the RGB image
+  unchanged; connected-component extraction must recover six objects; five
+  local seeds must preserve the failure taxonomy.
+
+Gate:
+
+- Acceptance rule: object extraction rate >= 0.99, parse-high >= 0.75, action
+  >= 0.85, subtree >= 0.75, high-concern probe >= 0.70, and low-concern probe
+  <= 0.25 for the concerned pixel agent, with controls failing for diagnostic
+  reasons.
+- Withheld/rejected rule: withhold human-vision, natural-image, or
+  unsupervised-slot claims; reject the result if passive object features recover
+  hidden binding or if the rendered image leaks the parse.
+
+Results:
+
+- Accepted artifacts: pixel renderer, connected-component extractor,
+  pixel-agent report, Modal sweep entrypoint, tests, and paper update.
+- Rejected or withheld artifacts: no claim of learned object-slot perception;
+  no Modal-scale pixel sweep yet.
+- Key metrics across five local seeds: `concerned_pixel_probe` parse-high
+  `0.996`, action `0.999`, subtree `0.786`, object extraction `1.000`,
+  high-probe `0.993`, low-probe `0.187`, gate pass rate `1.000`.
+  `passive_pixel` parse-high is `0.503`; `surface_pixel_shortcut` parse-high
+  is `0.503`; `restless_pixel_probe` low-probe is `1.000`.
+- Variance or ablation: concerned pixel gate pass SD is `0.000`; parse-high SD
+  is `0.007`; object extraction SD is `0.000`.
+
+Residual content:
+
+- Explained by old regime: the same concern-gated intervention separates
+  passive, shortcut, and restless controls once object features are available.
+- New content outside old regime: the accepted gate now includes an explicit
+  pixel-to-object operation, and passive object extraction is not enough to
+  recover hidden causal constituency.
+- Retractions or supersessions: supersede "Arc 2A has no pixel surface" with
+  "Arc 2A has a pixel-rendered, object-extracted concerned-syntax gate."
+
+Next move: either run the Modal-scale pixel sweep or replace the
+connected-component extractor with a learned object-slot encoder while keeping
+the same hidden-parse invariance and no-restless controls.
