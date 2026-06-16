@@ -19,6 +19,7 @@ __pycache__/
 .ty/
 .venv/
 venv/
+dist-newstyle/
 
 # Experiment outputs: keep reports explicitly when ready.
 data/
@@ -27,4 +28,3 @@ tmp/
 
 # OS/editor noise.
 .DS_Store
-

@@ -23,16 +23,18 @@ whether to pay for an intervention that reveals the parse, and it must avoid
 probing low-concern ambiguity that does not affect viability.
 
 In a 200-trial deterministic design pilot, a 5,000-trial symbolic Modal sweep,
-and a learned 5-seed Modal sweep, the concern-gated syntax agent is the only
-agent family that passes the full gate. The learned agent receives candidate
-parses as visible hypotheses but never receives the hidden true parse at test
-time. It learns a tree-binding parse interpreter, an intervention policy, and
-a capped low-concern calibration guard. Across five Modal seeds, it reaches
-high-concern parse accuracy 1.000, action accuracy 1.000, low-concern probe
-rate 0.202, and gate pass rate 1.000. Shortcut reward, no-tree planning, and
-restless tree inquiry all fail for different anti-cheat reasons. The result is
-still not a claim about pixel-level perception or human cognition. It is an
-accepted Phase 2A learned-mechanism surface: **reward is not syntax,
+a learned 5-seed Modal sweep, and a vector-observation 5-seed Modal sweep, the
+concern-gated syntax agent is the only agent family that passes the full gate.
+The first learned agent receives candidate parses as visible hypotheses but
+never receives the hidden true parse at test time. The vector-observation
+agent then removes those candidate-parse features: the visible coordinate
+surface is invariant under swapping the hidden true and alternate parse. Across
+five Modal seeds, the vector agent reaches high-concern parse accuracy 1.000,
+action accuracy 1.000, subtree accuracy 0.804, low-concern probe rate 0.189,
+and gate pass rate 1.000. Shortcut reward, passive vector inference, no-tree
+planning, and restless inquiry all fail for different anti-cheat reasons. The
+result is still not a claim about pixel-level perception or human cognition. It
+is an accepted Phase 2A learned-mechanism surface: **reward is not syntax,
 compression is not syntax, and uncertainty reduction is not concerned
 inquiry.**
 
@@ -248,20 +250,57 @@ The next version should add richer learned agents:
 - role/parse held-out generalization
 - neural anti-cheat probes for parse, subtree, and intervention usefulness
 
-## 9. Limitations
+## 9. Vector-Observation Gate
 
-The current benchmark is symbolic. The learned agent receives vectorized
-surface roles and candidate parse hypotheses, not pixels. It does not test
-continuous control or human subjects. The intervention language is provided,
-not invented from raw motor primitives. The parser candidates are small and
-known to the evaluator. The point of this first paper is to define and pass a
-minimal learned acceptance surface before larger compute.
+The learned-agent gate still provided candidate parses as visible structural
+hypotheses. The next gate removes that crutch. Each trial is rendered as a
+six-part vector surface: role markers, part coordinates, pair identity, and
+pairwise distances. The surface is deliberately parse-invariant: swapping the
+hidden true and alternate parse leaves the vector observation unchanged. The
+only reliable way to recover the causal binding bit is to pay for the pair
+probe.
+
+Remote command:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_vector_shapes_sweep.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90
+```
+
+Summary:
+
+| Agent | Parse high | Action | Subtree | Low probe | Gate |
+|---|---:|---:|---:|---:|---|
+| concerned vector | 1.000 | 1.000 | 0.804 | 0.189 | PASS |
+| passive vector | 0.492 | 0.873 | 0.500 | 0.000 | fail |
+| restless vector | 1.000 | 1.000 | 1.000 | 1.000 | fail |
+| surface shortcut | 0.492 | 0.876 | 0.500 | 0.000 | fail |
+
+![Figure 1: vector concerned-syntax gate margins. Cell labels show raw metric values; color shows margin to the relevant gate, with low-probe inverted because lower is better.](figures/fig1_vector_gate_margins.png)
+
+This is a stronger anti-cheat surface than the candidate-parse run. Surface
+and passive vector agents can learn action priors, but they cannot identify
+which hidden causal binding is active. Restless vector probing recovers syntax
+while failing concern. The accepted agent passes because it learns when the
+hidden binding matters and uses the intervention only under a capped
+calibration guard.
+
+## 10. Limitations
+
+The current benchmark is still synthetic. The newest agent receives generated
+vector surfaces, not pixels. It does not test continuous control or human
+subjects. The intervention language is provided, not invented from raw motor
+primitives. The point of this first paper is to define and pass a minimal
+learned acceptance surface before larger compute.
 
 The most important limitation is also the next step: the agent should learn the
-intervention language and parse representation from richer generated shapes,
-not merely bind provided candidate parses to provided probe observations.
+intervention language and parse representation from richer generated shapes
+and ultimately pixels, not merely bind provided probe observations to a
+hand-designed vector surface.
 
-## 10. Conclusion
+## 11. Conclusion
 
 Arc 2A inserts a new layer into the maintained-concern ladder:
 
@@ -273,9 +312,9 @@ difference -> geometry -> syntax -> salience -> valence
 The results support a narrow methodological claim: concerned syntax needs its
 own tests. Reward, compression, uncertainty, action accuracy, and even syntax
 without concern can all dissociate from causal constituency under maintained
-concern. The learned-agent sweep shows that the gate is passable without
-hidden parse access, but only when tree binding, intervention, and formal
-concern gating are present together.
+concern. The learned-agent and vector-observation sweeps show that the gate is
+passable without hidden parse access, but only when binding, intervention, and
+formal concern gating are present together.
 
 ## References
 

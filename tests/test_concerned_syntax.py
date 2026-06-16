@@ -18,6 +18,11 @@ from experiments.concerned_syntax.learned_agents import (
     summarize_seed_payloads,
 )
 from experiments.concerned_syntax.modal_report import summarize_modal_payload
+from experiments.concerned_syntax.vector_shapes import (
+    run_experiment as run_vector_experiment,
+    summarize_seed_payloads as summarize_vector_payloads,
+    vector_surface,
+)
 
 
 class ConcernedSyntaxTest(unittest.TestCase):
@@ -159,6 +164,74 @@ class ConcernedSyntaxTest(unittest.TestCase):
             summary["learned_concerned_syntax"]["gate_pass"],
             0.5,
         )
+
+    def test_vector_surface_does_not_encode_hidden_parse(self) -> None:
+        rng = random.Random(99)
+        trial = make_trial(0, rng)
+        swapped = type(trial)(
+            trial_id=trial.trial_id,
+            kind=trial.kind,
+            roles=trial.roles,
+            true_parse=trial.alternate_parse,
+            alternate_parse=trial.true_parse,
+            causal_pair=trial.causal_pair,
+            concern_weight=trial.concern_weight,
+        )
+
+        self.assertEqual(vector_surface(trial), vector_surface(swapped))
+
+    def test_vector_agent_gate_separates_surface_and_restless_failures(self) -> None:
+        payload = run_vector_experiment(
+            train_trials=650,
+            test_trials=260,
+            seed=20260616,
+            epochs=45,
+        )
+        agents = payload["agent_summary"]
+        bodies = payload["body_summary"]
+
+        self.assertTrue(agents["concerned_vector_probe"]["gate_pass"])
+        self.assertFalse(agents["surface_shortcut"]["gate_pass"])
+        self.assertFalse(agents["passive_vector"]["gate_pass"])
+        self.assertFalse(agents["restless_vector_probe"]["gate_pass"])
+        self.assertEqual(
+            agents["restless_vector_probe"]["low_concern_probe_rate"],
+            1.0,
+        )
+        self.assertGreater(
+            agents["concerned_vector_probe"]["parse_accuracy_high_concern"],
+            agents["passive_vector"]["parse_accuracy_high_concern"],
+        )
+        self.assertTrue(bodies["modular_concerned_body"]["executable_module_gate"])
+        self.assertFalse(bodies["restless_vector_body"]["executable_module_gate"])
+
+    def test_vector_modal_summary_averages_gate_rates(self) -> None:
+        payloads = [
+            {
+                "agent_summary": {
+                    "concerned_vector_probe": {
+                        "parse_accuracy_high_concern": 1.0,
+                        "gate_pass": True,
+                    }
+                }
+            },
+            {
+                "agent_summary": {
+                    "concerned_vector_probe": {
+                        "parse_accuracy_high_concern": 0.8,
+                        "gate_pass": False,
+                    }
+                }
+            },
+        ]
+
+        summary = summarize_vector_payloads(payloads, "agent_summary")
+
+        self.assertAlmostEqual(
+            summary["concerned_vector_probe"]["parse_accuracy_high_concern"],
+            0.9,
+        )
+        self.assertAlmostEqual(summary["concerned_vector_probe"]["gate_pass"], 0.5)
 
 
 if __name__ == "__main__":
