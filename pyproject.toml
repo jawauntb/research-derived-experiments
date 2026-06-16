@@ -1,0 +1,39 @@
+[project]
+name = "research-derived-experiments"
+version = "0.0.0"
+requires-python = ">=3.12"
+
+[tool.ruff]
+target-version = "py312"
+
+[tool.ruff.lint]
+# The repository contains many historical Modal sweep scripts written as
+# experiment notebooks in script form. Keep ruff useful for syntax/import
+# hygiene without turning legacy exploratory style into a blocking gate.
+ignore = [
+    "E701",
+    "E702",
+    "E741",
+    "F401",
+    "F541",
+    "F841",
+]
+
+[tool.ty.environment]
+python-version = "3.12"
+
+[tool.ty.src]
+exclude = [
+    "experiments/activation_geometry/**",
+    "experiments/*/modal_*.py",
+    "experiments/neural_group_generator/generator.py",
+    "experiments/rotation_weakness/neural.py",
+    "experiments/symbolic_weakness/neural.py",
+    "scripts/**",
+    "tests/test_activation_geometry_*.py",
+    "tests/test_causal_validation.py",
+    "tests/test_learned_symmetry.py",
+    "tests/test_rotation_weakness.py",
+    "tests/test_symbolic_neural.py",
+]
+

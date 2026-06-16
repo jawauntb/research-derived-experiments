@@ -110,14 +110,17 @@ Expected useful variables include `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, and Mod
 Before committing:
 
 ```bash
-python3 -m unittest discover -s tests
-python3 -m compileall scripts experiments tests
-python3 scripts/publication_guard.py
+python3 scripts/run_quality_checks.py
 ```
 
-When available, also run:
+The wrapper runs the full test suite under Python 3.12 via `uvx` with the
+ephemeral scientific dependencies required by tests, then runs compile checks,
+the publication guard, ruff, and ty. To run the individual checks manually:
 
 ```bash
+uvx --python 3.12 --with torch --with numpy --with scikit-learn python -m unittest discover -s tests
+uvx --python 3.12 python -m compileall scripts experiments tests
+python3 scripts/publication_guard.py
 uvx ruff check .
 uvx ty check scripts experiments tests
 ```
