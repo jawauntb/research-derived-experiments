@@ -9,6 +9,9 @@ from experiments.viable_computational_bodies.search import (
     static_violations,
     summarize,
 )
+from experiments.viable_computational_bodies.modal_report import (
+    summarize_modal_payload,
+)
 
 
 class ViableComputationalBodiesTest(unittest.TestCase):
@@ -63,7 +66,44 @@ class ViableComputationalBodiesTest(unittest.TestCase):
             summary["accuracy_only"]["final_viable_rate"],
         )
 
+    def test_modal_summary_preserves_strategy_gate(self) -> None:
+        payload = {
+            "results": [
+                {
+                    "strategy": "viability_guided",
+                    "final": {
+                        "viable": 1,
+                        "concerned_syntax_score": 0.83,
+                        "train_return": 0.49,
+                        "formal_valid": 1,
+                        "anti_cheat": 0.95,
+                        "resource_cost": 11,
+                        "architecture": "flat_encoder+formal_guard",
+                    },
+                },
+                {
+                    "strategy": "viability_guided",
+                    "final": {
+                        "viable": 1,
+                        "concerned_syntax_score": 0.85,
+                        "train_return": 0.51,
+                        "formal_valid": 1,
+                        "anti_cheat": 0.95,
+                        "resource_cost": 11,
+                        "architecture": "flat_encoder+formal_guard",
+                    },
+                },
+            ]
+        }
+
+        summary = summarize_modal_payload(payload)
+
+        self.assertTrue(summary["viability_guided"]["gate_pass"])
+        self.assertAlmostEqual(
+            summary["viability_guided"]["concerned_syntax_score"],
+            0.84,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
-

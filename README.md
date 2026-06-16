@@ -82,11 +82,21 @@ python3 -m experiments.concerned_syntax.benchmark \
     --out artifacts/concerned_syntax/pilot.json \
     --report experiments/concerned_syntax/results/pilot_2026_06_16.md
 
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/concerned_syntax/modal_concerned_syntax_sweep.py \
+    --trials 1000
+
 # Phase / Arc 2B viable computational bodies benchmark
 python3 -m experiments.viable_computational_bodies.search \
     --seeds 12 --generations 18 --population 18 --base-seed 20260616 \
     --out artifacts/viable_computational_bodies/pilot.json \
     --report experiments/viable_computational_bodies/results/pilot_2026_06_16.md
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/viable_computational_bodies/modal_body_evolution_sweep.py \
+    --generations 32 --population 32
 ```
 
 ## Environment

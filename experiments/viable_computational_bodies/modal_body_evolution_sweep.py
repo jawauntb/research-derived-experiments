@@ -10,7 +10,9 @@ from typing import Any
 
 modal = importlib.import_module("modal")
 
-IMAGE = modal.Image.debian_slim(python_version="3.12")
+IMAGE = modal.Image.debian_slim(python_version="3.12").add_local_python_source(
+    "experiments"
+)
 app = modal.App(name="research-derived-viable-computational-bodies")
 
 
@@ -39,6 +41,8 @@ def run_strategy_seed(
 
 @app.local_entrypoint()
 def main(generations: int = 32, population: int = 32) -> None:
+    from experiments.viable_computational_bodies.modal_report import write_modal_report
+
     strategies = ["accuracy_only", "novelty_only", "viability_guided"]
     seeds = [20260616, 1729, 4242, 8675309, 314159, 271828]
     calls = [(strategy, seed) for strategy in strategies for seed in seeds]
@@ -62,4 +66,8 @@ def main(generations: int = 32, population: int = 32) -> None:
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(f"Wrote {out}")
-
+    report = Path(
+        "experiments/viable_computational_bodies/results/modal_sweep_2026_06_16.md"
+    )
+    write_modal_report(report, payload)
+    print(f"Wrote {report}")
