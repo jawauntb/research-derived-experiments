@@ -15,15 +15,15 @@ reward heads. Static admissibility rules reject malformed bodies, and
 viability gates require the final architecture to pass concerned-syntax,
 self/world, resource, and anti-cheat criteria.
 
-In a 12-seed deterministic design pilot, reward-only search reaches perfect
-train return but zero viable final bodies by exploiting shortcut reward heads.
-Novelty-only search finds interesting syntax-like bodies but fails the full
-formal-guard gate. Viability-guided search discovers viable syntax-bearing
-bodies in 12/12 seeds, with mean concerned-syntax score 0.830 and mean train
-return 0.495. The pilot is not a claim that a learned neural architecture has
-been discovered. It is a Phase 2B acceptance surface: **accuracy is not
-architecture, novelty is not viable morphology, and formal validity alone is
-not concerned syntax.**
+In a 12-seed deterministic design pilot and an 18-cell Modal multi-seed sweep,
+reward-only search reaches perfect train return but fails the viability gate
+by exploiting shortcut reward heads. Novelty-only search finds syntax-like
+bodies, but remains unreliable under the full formal/viability gate.
+Viability-guided search discovers viable syntax-bearing bodies in every Modal
+seed, with mean concerned-syntax score 0.830 and mean train return 0.495. The
+pilot is not a claim that a learned neural architecture has been discovered.
+It is a Phase 2B acceptance surface: **accuracy is not architecture, novelty
+is not viable morphology, and formal validity alone is not concerned syntax.**
 
 ## 1. Why Arc 2B Exists
 
@@ -141,11 +141,14 @@ python3 -m experiments.viable_computational_bodies.search \
 
 Summary:
 
-| Strategy | Viable rate | Syntax score | Train return | Formal valid | Best architecture | Gate |
+| Strategy | Viable rate | Syntax score | Train return | Formal valid | Best body | Gate |
 |---|---:|---:|---:|---:|---|---|
-| accuracy_only | 0.000 | 0.408 | 1.000 | 0.000 | `counterfactual_rollout+flat_encoder+reward_head+shortcut_reward_head+tree_binder+world_model` | fail |
-| novelty_only | 0.000 | 0.836 | 0.480 | 1.000 | `counterfactual_rollout+flat_encoder+intervention_planner+role_specific_heads+syntax_memory+tree_binder+world_model` | fail |
-| viability_guided | 1.000 | 0.830 | 0.495 | 1.000 | `flat_encoder+formal_guard+intervention_planner+role_specific_heads+syntax_memory+tree_binder+world_model` | PASS |
+| accuracy_only | 0.000 | 0.408 | 1.000 | 0.000 | shortcut reward body | fail |
+| novelty_only | 0.000 | 0.836 | 0.480 | 1.000 | counterfactual syntax body | fail |
+| viability_guided | 1.000 | 0.830 | 0.495 | 1.000 | guarded syntax body | PASS |
+
+The full motif strings are recorded in the public result report. The table
+uses short body labels to keep the manuscript legible.
 
 The diagnostic pattern is the contribution:
 
@@ -187,15 +190,38 @@ formal and viability gates.
 The pilot is therefore a discovery-regime transition in methodology, not yet a
 large empirical discovery about neural networks.
 
-## 9. Modal Plan
+## 9. Modal Multi-Seed Sweep
 
-Remote sweep:
+The multi-seed sweep was run remotely through Modal:
 
 ```bash
 doppler --scope /Users/jawaun/superoptimizers run -- \
   uvx --python 3.12 --from modal modal run \
-  experiments/viable_computational_bodies/modal_body_evolution_sweep.py
+  experiments/viable_computational_bodies/modal_body_evolution_sweep.py \
+  --generations 32 --population 32
 ```
+
+The sweep used six seeds per strategy, 32 generations, and population 32.
+Raw JSON remains local under `artifacts/viable_computational_bodies/`; the
+public report is
+`experiments/viable_computational_bodies/results/modal_sweep_2026_06_16.md`.
+
+Summary:
+
+| Strategy | Viable | Syntax | Train | Formal | Anti-cheat | Cost | Best body | Gate |
+|---|---:|---:|---:|---:|---:|---:|---|---|
+| accuracy_only | 0.000 | 0.417 | 1.000 | 0.333 | 0.400 | 8.000 | guarded shortcut body | fail |
+| novelty_only | 0.167 | 0.835 | 0.483 | 1.000 | 0.725 | 11.833 | guarded syntax body | fail |
+| viability_guided | 1.000 | 0.830 | 0.495 | 1.000 | 0.950 | 11.000 | guarded syntax body | PASS |
+
+In the Modal sweep, the accepted body is the same guarded syntax body from the
+design pilot: tree binding, syntax memory, world modeling, intervention
+planning, role-specific heads, and a formal guard under the resource budget.
+
+This sharpens the design pilot. `novelty_only` sometimes finds an acceptable
+body, but it is not reliable enough to pass the strategy-level gate.
+`viability_guided` passes because it couples syntax, intervention, self/world,
+formal validity, anti-cheat resistance, and resource viability.
 
 Next versions should replace symbolic motifs with executable bodies:
 
@@ -243,6 +269,9 @@ survey. *Journal of Machine Learning Research*, 20(55), 1-21.
 Lehman, J., & Stanley, K. O. (2011). Abandoning objectives: Evolution through
 the search for novelty alone. *Evolutionary Computation*, 19(2), 189-223.
 
+Kim, K. W. (2026). Latent State Design for World Models under Sufficiency
+Constraints. arXiv:2605.01694.
+
 Mouret, J.-B., & Clune, J. (2015). Illuminating search spaces by mapping
 elites. arXiv:1504.04909.
 
@@ -260,4 +289,3 @@ interactive causal discovery toward AI scientists. arXiv:2605.26029.
 Zhang, S. et al. (2026). Structuring Open-Ended NAS: Semi-Automated Design
 Knowledge Structuring with LLMs for Efficient Neural Architecture Search.
 arXiv:2605.19247.
-

@@ -22,10 +22,11 @@ only when they are bound inside the same constituent. The agent must decide
 whether to pay for an intervention that reveals the parse, and it must avoid
 probing low-concern ambiguity that does not affect viability.
 
-In a 200-trial deterministic design pilot, the `concerned_syntax` selector is
-the only selector that passes the full gate: high-concern parse accuracy
-1.000, action accuracy 1.000, high-concern probe rate 1.000, low-concern probe
-rate 0.000, and mean regret 0.001. Flat valence, compression-only parsing, and
+In a 200-trial deterministic design pilot and a 5,000-trial Modal multi-seed
+sweep, the `concerned_syntax` selector is the only selector that passes the
+full gate. In the Modal sweep, it reaches high-concern parse accuracy 1.000,
+action accuracy 1.000, high-concern probe rate 1.000, low-concern probe rate
+0.000, and gate pass rate 1.000. Flat valence, compression-only parsing, and
 null policies fail because they do not make constituency knowable. An
 uncertainty-only selector recovers the parse but fails the no-restless-inquiry
 gate by probing every low-concern ambiguity. The result is not a claim about
@@ -162,15 +163,35 @@ does not show that a neural agent has learned syntax. It shows that the repo
 now has a task surface on which syntax, compression, uncertainty, and concern
 can dissociate.
 
-## 7. Modal Plan
+## 7. Modal Multi-Seed Sweep
 
-The heavy sweep is intentionally remote:
+The multi-seed sweep was run remotely through Modal:
 
 ```bash
 doppler --scope /Users/jawaun/superoptimizers run -- \
   uvx --python 3.12 --from modal modal run \
-  experiments/concerned_syntax/modal_concerned_syntax_sweep.py
+  experiments/concerned_syntax/modal_concerned_syntax_sweep.py \
+  --trials 1000
 ```
+
+The sweep used five seeds and 1,000 shape trials per seed. Raw JSON remains
+local under `artifacts/concerned_syntax/`; the public report is
+`experiments/concerned_syntax/results/modal_sweep_2026_06_16.md`.
+
+Summary:
+
+| Selector | Parse high | Action | Subtree | High probe | Low probe | Mean regret | Gate pass rate |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| compression_proxy | 0.560 | 0.891 | 0.583 | 0.000 | 0.000 | 0.048 | 0.000 |
+| concerned_syntax | 1.000 | 1.000 | 0.808 | 1.000 | 0.000 | 0.003 | 1.000 |
+| flat_valence | 0.000 | 0.876 | 0.503 | 0.000 | 0.000 | 0.066 | 0.000 |
+| null_policy | 0.560 | 0.891 | 0.583 | 0.000 | 0.000 | 0.048 | 0.000 |
+| uncertainty_only | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 0.000 | 0.000 |
+
+This replicates the design-pilot pattern across seeds. The key result is not
+that `concerned_syntax` has the best reward; `uncertainty_only` has zero
+regret too. The key result is that only concern-weighted syntax passes both
+the positive inquiry gate and the no-restless-inquiry gate.
 
 The next version should add learned agents:
 
@@ -231,4 +252,3 @@ of the IEEE*, 109(5), 612-634.
 Yang, J., Zhang, D., Song, X., Dai, Q., Liu, X., Chen, Y., Vashishtha, A.,
 Shi, J., Tan, C., & Peng, H. (2026). CausaLab: A scalable environment for
 interactive causal discovery toward AI scientists. arXiv:2605.26029.
-

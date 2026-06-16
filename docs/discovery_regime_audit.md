@@ -223,7 +223,50 @@ Residual content:
 - New content outside old regime: causal constituency and no-restless-inquiry dissociate syntax under concern from reward, compression, and uncertainty reduction.
 - Retractions or supersessions: Phase 2 should not be framed as merely "more probe policy"; it needs parse/intervention constituency gates.
 
-Next move: run the Modal multi-seed sweep, then replace symbolic selectors with learned agents.
+Next move: see the Modal multi-seed sweep below, then replace symbolic selectors with learned agents.
+
+## Phase / Arc 2A: Concerned Syntax Modal Sweep
+
+Question: does the concerned-syntax benchmark retain its anti-cheat separation across remote multi-seed runs?
+
+Current regime:
+
+- Artifact types: Concerned Shape Grammar trials, selector summaries, Modal raw payloads, public markdown reports, paper drafts.
+- Operations: Modal-backed parallel seed sweep, seed-level selector summaries, public report generation.
+- Gates/verifiers: same Phase 2A parse/action/probe/subtree gate; Modal packaging must mount the `experiments` package; unittest coverage for report aggregation.
+- Known limitations: still symbolic selectors; no learned neural perception or intervention-language induction.
+
+Action class:
+
+- Retrieval/search/discovery: search inside the accepted Arc 2A benchmark regime.
+- Why: the sweep replicates the new artifact type across seeds but does not add a new verifier or learned mechanism.
+
+Experiment:
+
+- Manifest/report paths: `experiments/concerned_syntax/results/modal_sweep_2026_06_16.md`; raw JSON withheld under `artifacts/concerned_syntax/modal_sweep.json`.
+- Positive targets: `concerned_syntax`.
+- Negative controls: `null_policy`, `flat_valence`, `compression_proxy`, `uncertainty_only`.
+- Stress tests: low-concern ambiguity and seed variation.
+
+Gate:
+
+- Acceptance rule: concerned syntax passes every seed while controls fail for parse, intervention, or restless-inquiry reasons.
+- Withheld/rejected rule: raw Modal payload remains ignored; controls remain rejected even when action or parse accuracy is high.
+
+Results:
+
+- Accepted artifacts: `experiments/concerned_syntax/results/modal_sweep_2026_06_16.md`; Modal report generator; updated `papers/concerned_syntax/paper.md`.
+- Rejected or withheld artifacts: `artifacts/concerned_syntax/modal_sweep.json`.
+- Key metrics: `concerned_syntax` parse-high 1.000, action 1.000, subtree 0.808, high-probe 1.000, low-probe 0.000, gate pass rate 1.000. `uncertainty_only` has parse/action 1.000 but low-probe 1.000, so it remains rejected.
+- Variance or ablation: 5 seeds x 1,000 trials = 5,000 shape trials.
+
+Residual content:
+
+- Explained by old regime: the design pilot pattern transported cleanly across seeds.
+- New content outside old regime: none beyond replication; this is consolidation, not a new regime transition.
+- Retractions or supersessions: "Modal plan" is superseded by an accepted multi-seed result.
+
+Next move: train learned agents on the same gate without direct parse access.
 
 ## Phase / Arc 2B: Viable Computational Bodies Design Pilot
 
@@ -266,7 +309,50 @@ Residual content:
 - New content outside old regime: viability-guided body evolution separates train return, novelty, formal validity, and syntax-bearing morphology.
 - Retractions or supersessions: Phase 2B should not be presented as generic NAS; its novelty is the formal/viability/concerned-syntax acceptance surface.
 
-Next move: run the Modal multi-seed sweep, then replace symbolic motifs with executable neural modules.
+Next move: see the Modal multi-seed sweep below, then replace symbolic motifs with executable neural modules.
+
+## Phase / Arc 2B: Viable Computational Bodies Modal Sweep
+
+Question: does viability-guided body evolution retain its advantage over reward-only and novelty-only search across remote multi-seed runs?
+
+Current regime:
+
+- Artifact types: architecture motif sets, final strategy/seed evaluations, Modal raw payloads, public markdown reports, paper drafts.
+- Operations: Modal-backed strategy x seed sweep, final-cell aggregation, public report generation.
+- Gates/verifiers: formal validity, resource viability, parse congruity, subtree facilitation, intervention invention, self/world split, anti-cheat, unittest coverage for report aggregation.
+- Known limitations: symbolic motifs and hand-designed scores; no external solver or executable neural modules yet.
+
+Action class:
+
+- Retrieval/search/discovery: search inside the accepted Arc 2B body-grammar regime.
+- Why: the sweep replicates the body-evolution acceptance surface across seeds but does not yet add executable architectures.
+
+Experiment:
+
+- Manifest/report paths: `experiments/viable_computational_bodies/results/modal_sweep_2026_06_16.md`; raw JSON withheld under `artifacts/viable_computational_bodies/modal_sweep.json`.
+- Positive targets: `viability_guided`.
+- Negative controls: `accuracy_only`, `novelty_only`.
+- Stress tests: shortcut reward heads, missing formal guard, strategy-level reliability across seeds.
+
+Gate:
+
+- Acceptance rule: strategy passes if final viable rate >= 0.75, mean concerned-syntax score >= 0.80, and mean formal validity is 1.000.
+- Withheld/rejected rule: raw Modal payload remains ignored; reward-only and novelty-only strategies remain controls unless they clear the full strategy gate.
+
+Results:
+
+- Accepted artifacts: `experiments/viable_computational_bodies/results/modal_sweep_2026_06_16.md`; Modal report generator; updated `papers/viable_computational_bodies/paper.md`.
+- Rejected or withheld artifacts: `artifacts/viable_computational_bodies/modal_sweep.json`.
+- Key metrics: `accuracy_only` viable 0.000, train 1.000, anti-cheat 0.400; `novelty_only` viable 0.167, syntax 0.835; `viability_guided` viable 1.000, syntax 0.830, formal 1.000, anti-cheat 0.950.
+- Variance or ablation: 3 strategies x 6 seeds, with 32 generations and population 32.
+
+Residual content:
+
+- Explained by old regime: viability-guided selection was already positive in the design pilot.
+- New content outside old regime: novelty-only is now recorded as partially but unreliably viable; that clarifies why novelty alone is not enough.
+- Retractions or supersessions: "Modal plan" is superseded by an accepted multi-seed result.
+
+Next move: instantiate the accepted motif grammar as executable modules and route them through Arc 2A tasks.
 
 ## Activation Geometry Probe: Pythia-70M Layer Sweep
 

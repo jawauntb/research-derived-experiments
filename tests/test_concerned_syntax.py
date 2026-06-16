@@ -13,6 +13,7 @@ from experiments.concerned_syntax.benchmark import (
     run_trials,
     summarize,
 )
+from experiments.concerned_syntax.modal_report import summarize_modal_payload
 
 
 class ConcernedSyntaxTest(unittest.TestCase):
@@ -60,7 +61,49 @@ class ConcernedSyntaxTest(unittest.TestCase):
             0.25,
         )
 
+    def test_modal_summary_averages_seed_gates(self) -> None:
+        payload = {
+            "results": [
+                {
+                    "summary": {
+                        "concerned_syntax": {
+                            "parse_accuracy_high_concern": 1.0,
+                            "action_accuracy": 1.0,
+                            "subtree_accuracy": 0.8,
+                            "high_concern_probe_rate": 1.0,
+                            "low_concern_probe_rate": 0.0,
+                            "mean_regret": 0.002,
+                            "gate_pass": True,
+                        }
+                    }
+                },
+                {
+                    "summary": {
+                        "concerned_syntax": {
+                            "parse_accuracy_high_concern": 1.0,
+                            "action_accuracy": 1.0,
+                            "subtree_accuracy": 0.82,
+                            "high_concern_probe_rate": 1.0,
+                            "low_concern_probe_rate": 0.0,
+                            "mean_regret": 0.004,
+                            "gate_pass": True,
+                        }
+                    }
+                },
+            ]
+        }
+
+        summary = summarize_modal_payload(payload)
+
+        self.assertEqual(
+            summary["concerned_syntax"]["gate_pass_rate"],
+            1.0,
+        )
+        self.assertAlmostEqual(
+            summary["concerned_syntax"]["mean_regret"],
+            0.003,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
-
