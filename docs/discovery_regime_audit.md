@@ -3957,3 +3957,86 @@ Residual content:
 Next move: extend the program language to `move(anchor)`, `ablate(role)`, and
 two-step compositions while adding held-out role-pair and parse-family
 transfer.
+
+## Arc 2A/2B: Program-Body Search Against 2A-v1
+
+Question: can Arc 2B search discover formal, resource-bounded bodies whose
+motifs express the current Arc 2A intervention-invention contract?
+
+Current regime:
+
+- Artifact types: 2A-v1 intervention-invention empirical summaries,
+  2B motif bodies, static body contracts, Modal reports.
+- Operations: train/evaluate the 2A-v1 pixel/program gate on Modal, map body
+  motifs to empirical 2A controls, mutate/repair/promote bodies, and score
+  final bodies by both empirical gate and formal/static body validity.
+- Gates/verifiers: empirical 2A gate pass, body formal validity, resource
+  budget, calibration/formal guard requirements, targeted unit tests, Modal
+  five-seed sweep.
+- Known limitations: body motifs still map to existing 2A controls rather than
+  neural modules; Haskell motif checking is compatible but not yet in the
+  inner search loop.
+
+Action class:
+
+- Retrieval/search/discovery: discovery-leaning coupled transition.
+- Why: this freezes the first explicit 2A contract
+  (`2A-v1-pixels-observe_pair`) and makes 2B search consume that empirical
+  contract instead of only optimizing a symbolic proxy.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/viable_computational_bodies/program_body_search.py`;
+  `experiments/viable_computational_bodies/modal_program_body_search.py`;
+  `experiments/viable_computational_bodies/results/program_body_search_modal_2026_06_16.md`;
+  local ignored artifact
+  `artifacts/viable_computational_bodies/program_body_search_modal.json`.
+- Positive target: `viability_guided` should discover a formal concerned
+  program body that maps to `concerned_program_inventor`.
+- Negative controls: `reward_only` should find shortcut reward and fail;
+  `syntax_proxy` should chase target/useful metrics but fail the full formal
+  or concern/calibration contract.
+- Stress tests: 2A role-transfer hook records held-out role-pair performance
+  without making it a required body gate yet; the user explicitly requested
+  Modal rather than local CPU for sweeps.
+
+Gate:
+
+- Acceptance rule: body gate rate >= 0.75 across Modal seeds, empirical gate
+  rate >= 0.75, formal valid rate 1.000, target/useful high-concern rates
+  >= 0.75, low-concern probe <= 0.25, and controls fail for distinct reasons.
+- Withheld/rejected rule: do not claim neural architecture search or Haskell
+  in-loop verification yet. Reject if reward-only or syntax-proxy satisfies the
+  full body gate.
+
+Results:
+
+- Accepted artifacts: program-body search module, Modal entrypoint, Modal
+  report, tests, README command, and remote-first handoff rule.
+- Rejected or withheld artifacts: local diagnostic report not tracked; Haskell
+  motif verdicts not yet consumed inside program-body search; richer 2A
+  program language remains future work.
+- Key metrics across five Modal seeds: `viability_guided` body gate `1.000`,
+  empirical gate `1.000`, formal valid `1.000`, target-high `1.000`,
+  useful-high `1.000`, low-probe `0.156`, best body
+  `calibration_guard+causal_binding_head+concern_policy+formal_guard+intervention_planner+reward_head+vector_surface_encoder+world_model`.
+  `reward_only` body gate `0.000`, target-high `0.000`, shortcut body.
+  `syntax_proxy` target-high `1.000` and useful-high `1.000`, but body gate
+  `0.000` and low-probe `0.830`.
+- Variance or ablation: Modal five-seed body gate rate is stable at `1.000` for
+  `viability_guided`; controls remain rejected.
+
+Residual content:
+
+- Explained by old regime: the 2A-v1 empirical gate still supplies the
+  underlying concerned-program-inventor behavior.
+- New content outside old regime: 2B search now discovers a valid body motif
+  set that expresses the empirical 2A contract, making Arc 2A and 2B coupled
+  rather than parallel artifacts.
+- Retractions or supersessions: supersede "2B has only proxy intervention
+  invention scores" with "2B search can consume the actual 2A-v1 program gate."
+
+Next move: put Haskell motif verdicts inside `program_body_search`, then lift
+the contract to `2A-v2` with `move(anchor)`, `ablate(role)`, two-step programs,
+and held-out role/parse transfer as an actual body gate.

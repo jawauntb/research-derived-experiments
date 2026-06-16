@@ -21,6 +21,7 @@ from typing import Any
 from experiments.concerned_syntax.benchmark import (
     _same_subtree,
     concern_gap,
+    make_trial,
     outcome_for_parse,
     preferred_action,
     utility,
@@ -36,9 +37,11 @@ from experiments.concerned_syntax.pixel_shapes import (
     ExtractedComponent,
     PixelExample,
     action_features,
+    extract_components,
     make_pixel_examples,
     parse_features,
     pixel_surface_features,
+    render_pixel_surface,
     true_bound,
 )
 
@@ -84,6 +87,36 @@ def candidate_programs() -> tuple[ProbeProgram, ...]:
         for a, b in PAIR_INDEX
     )
     return tuple(programs)
+
+
+def make_filtered_pixel_examples(
+    *,
+    trials: int,
+    seed: int,
+    include_kinds: set[str] | None = None,
+    exclude_kinds: set[str] | None = None,
+) -> list[PixelExample]:
+    """Generate pixel examples under role-kind filters for transfer stress tests."""
+
+    rng = random.Random(seed)
+    examples: list[PixelExample] = []
+    attempts = 0
+    while len(examples) < trials:
+        trial = make_trial(attempts, rng)
+        attempts += 1
+        if include_kinds is not None and trial.kind not in include_kinds:
+            continue
+        if exclude_kinds is not None and trial.kind in exclude_kinds:
+            continue
+        image = render_pixel_surface(trial)
+        examples.append(
+            PixelExample(
+                trial=trial,
+                image=image,
+                components=extract_components(image),
+            )
+        )
+    return examples
 
 
 def _blank_component() -> ExtractedComponent:
@@ -560,6 +593,48 @@ def run_experiment(
             "test_trials": test_trials,
             "seed": seed,
             "epochs": epochs,
+            "agents": list(PROGRAM_AGENTS),
+            "programs": [program.name for program in candidate_programs()],
+            "image_size": IMAGE_SIZE,
+            "perception": "connected_components_rgb",
+        },
+        "agent_summary": summarize_results(rows),
+        "results": [asdict(row) for row in rows],
+    }
+
+
+def run_role_transfer_experiment(
+    *,
+    train_trials: int,
+    test_trials: int,
+    seed: int,
+    epochs: int,
+    heldout_kind: str,
+) -> dict[str, Any]:
+    """Train with one role-pair kind held out, then evaluate on that kind."""
+
+    train_examples = make_filtered_pixel_examples(
+        trials=train_trials,
+        seed=seed,
+        exclude_kinds={heldout_kind},
+    )
+    test_examples = make_filtered_pixel_examples(
+        trials=test_trials,
+        seed=seed + 700_000,
+        include_kinds={heldout_kind},
+    )
+    models = train_models(train_examples, seed=seed, epochs=epochs)
+    rows = evaluate_agents(test_examples, models)
+    return {
+        "manifest": {
+            "arc": "2A",
+            "name": "concerned_intervention_invention_role_transfer",
+            "contract": "2A-v1-pixels-observe_pair",
+            "train_trials": train_trials,
+            "test_trials": test_trials,
+            "seed": seed,
+            "epochs": epochs,
+            "heldout_kind": heldout_kind,
             "agents": list(PROGRAM_AGENTS),
             "programs": [program.name for program in candidate_programs()],
             "image_size": IMAGE_SIZE,

@@ -16,19 +16,27 @@ viability gates require the final architecture to pass concerned-syntax,
 self/world, resource, and anti-cheat criteria.
 
 In a 12-seed deterministic design pilot, an 18-cell symbolic Modal sweep, a
-learned executable-body validation, a vector-observation module validation, and
-a Haskell typed-ontology prototype, reward-only search reaches high apparent
-return while failing the viability gate. Novelty-only search finds syntax-like
-bodies, but remains unreliable under the full formal/viability gate. The
-vector module validation instantiates four body variants on the stronger Arc
-2A vector gate. Only the modular concerned body passes: parse-high 1.000,
-action 1.000, low-concern probe rate 0.189, formal validity 1.000,
-anti-cheat 0.950, and module coverage 0.950. The Haskell checker separately
-validates body admissibility constraints and catches missing calibration guards
-as type-layer violations. The result is still not a claim that full neural
-architecture search has been solved. It is a Phase 2B acceptance surface:
-**accuracy is not architecture, novelty is not viable morphology, and formal
-validity alone is not concerned syntax.**
+learned executable-body validation, a vector-observation module validation, a
+Haskell typed-ontology prototype, and a coupled program-body search against the
+Arc 2A intervention-invention gate, reward-only search reaches high apparent
+return while failing the viability gate. Novelty-only or syntax-proxy search
+can find syntax-like bodies, but remains unreliable under the full
+formal/viability gate. The vector module validation instantiates four body
+variants on the stronger Arc 2A vector gate. Only the modular concerned body
+passes: parse-high 1.000, action 1.000, low-concern probe rate 0.189, formal
+validity 1.000, anti-cheat 0.950, and module coverage 0.950. The coupled
+program-body search then freezes the `2A-v1-pixels-observe_pair` contract and
+searches bodies against the actual empirical program gate. Across five Modal
+seeds, viability-guided search reaches body gate 1.000, empirical gate 1.000,
+formal validity 1.000, target/useful high-concern rates 1.000, and low-concern
+probe rate 0.156. Reward-only search collapses to a shortcut body; syntax-proxy
+search reaches target/useful 1.000 but fails the body gate with low-probe
+0.830. The Haskell checker separately validates body admissibility constraints
+and catches missing calibration guards as type-layer violations. The result is
+still not a claim that full neural architecture search has been solved. It is a
+Phase 2B acceptance surface: **accuracy is not architecture, novelty is not
+viable morphology, target selection is not a viable body, and formal validity
+alone is not concerned syntax.**
 
 ## 1. Why Arc 2B Exists
 
@@ -303,7 +311,61 @@ body is the first accepted vector-observation body: surface encoder, concern
 policy, causal binding head, role-conditioned action head, and calibration
 guard.
 
-## 12. Haskell Typed Ontology Gate
+## 12. Program-Body Search Against 2A-v1
+
+The vector module validation still instantiates a small hand-written body set.
+The next coupled test freezes the Arc 2A intervention-invention result as an
+empirical contract:
+
+```text
+2A-v1-pixels-observe_pair
+```
+
+The body search now mutates motif sets and maps each body to the empirical 2A
+control it can express: surface shortcut, random program probe,
+concern-without-target, target-without-concern, or the full
+concerned-program-inventor. A body passes only when the empirical 2A agent
+passes and the body remains formal, resource-bounded, guarded, and calibrated.
+
+Remote command:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/viable_computational_bodies/modal_program_body_search.py \
+  --generations 24 --population 24 \
+  --train-trials 3000 --test-trials 1200 --epochs 90
+```
+
+Summary:
+
+| Strategy | Body gate | Empirical gate | Formal | Target high | Useful high | Low probe | Best agent | Gate |
+|---|---:|---:|---:|---:|---:|---:|---|---|
+| reward only | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | 0.000 | surface shortcut | fail |
+| syntax proxy | 0.000 | 0.200 | 0.400 | 1.000 | 1.000 | 0.830 | concerned program inventor | fail |
+| viability guided | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 0.156 | concerned program inventor | PASS |
+
+The accepted body is:
+
+```text
+calibration_guard
+causal_binding_head
+concern_policy
+formal_guard
+intervention_planner
+reward_head
+vector_surface_encoder
+world_model
+```
+
+This is the first point where Arc 2A and Arc 2B become coupled rather than
+parallel. The body is not rewarded merely for target selection: the
+`syntax_proxy` strategy reaches target/useful high-concern rates of 1.000 but
+fails the body gate because it does not reliably preserve formal validity and
+low-concern discipline. The accepted viability-guided body reconstructs the
+whole motif stack required by the empirical 2A program gate.
+
+## 13. Haskell Typed Ontology Gate
 
 The Python gates are convenient for experiments, but the ontology layer should
 eventually live in a stronger typed formalism. This branch adds a small Haskell
@@ -333,29 +395,32 @@ checker forced two clarifications: concern and calibration guards are formal
 overlays rather than resource-costed morphology, and vector causal binding can
 serve the same binder role that tree binding serves in the symbolic body.
 
-## 13. Limitations
+## 14. Limitations
 
 The current search and executable validation are intentionally small. The
 executable bodies are linear learned components over vectorized symbolic
-features, not full neural architectures trained from pixels. The Haskell gate
-is a small typed ontology prototype, not a complete proof assistant, ASP,
-s(CASP), or SMT integration. The point is to make the acceptance surface
-explicit and behaviorally grounded before expensive architecture evolution
-begins.
+features, not full neural architectures trained from pixels. The coupled
+program-body search maps motif sets to existing 2A empirical controls rather
+than instantiating separate neural modules for every motif. The Haskell gate is
+a small typed ontology prototype, not a complete proof assistant, ASP,
+s(CASP), or SMT integration, and Haskell motif verdicts are not yet inside the
+program-body search loop. The point is to make the acceptance surface explicit
+and behaviorally grounded before expensive architecture evolution begins.
 
-The strongest next test is whether executable bodies discovered under this
-grammar pass the Arc 2A pixel-level concerned-syntax benchmark without direct
-access to the hidden parse.
+The strongest next test is to put Haskell motif verdicts inside the
+program-body search loop and lift the empirical contract from
+`observe_pair(a,b)` to richer `move(anchor)`, `ablate(role)`, and two-step
+programs with held-out transfer gates.
 
-## 14. Conclusion
+## 15. Conclusion
 
 Arc 2B reframes architecture search as viability-guided body evolution. The
-pilot, learned validation, vector module validation, and typed ontology gate
-show why that matters: train return, novelty, formal validity, module coverage,
-binding, and concerned syntax can dissociate. The next phase should not ask
-for merely "better models." It should ask for bodies whose morphology makes
-the world's causal grammar learnable without becoming restless or
-shortcut-driven.
+pilot, learned validation, vector module validation, program-body search, and
+typed ontology gate show why that matters: train return, novelty, target
+selection, formal validity, module coverage, binding, and concerned syntax can
+dissociate. The next phase should not ask for merely "better models." It
+should ask for bodies whose morphology makes the world's causal grammar
+learnable without becoming restless or shortcut-driven.
 
 ## References
 

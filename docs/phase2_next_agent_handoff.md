@@ -697,6 +697,12 @@ separate notes in the main thread.
 ### What to Run Remotely
 
 The user explicitly wants Modal used to avoid cooking the local machine.
+Treat this as a standing execution rule for Phase 2: local work is for code
+inspection, unit tests, type/lint checks, PDF rendering/inspection, and tiny
+harness sanity checks only. Multi-seed sweeps, learned-agent training,
+architecture/body search, larger image experiments, and anything CPU- or
+memory-heavy should run on Modal or another cloud backend by default.
+Do not run local multi-seed "just to see" sweeps when a Modal entrypoint exists.
 
 Run local:
 
@@ -930,6 +936,16 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
   --train-trials 3000 --test-trials 1200 --epochs 90
 ```
 
+Program-body search against 2A-v1:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/viable_computational_bodies/modal_program_body_search.py \
+  --generations 24 --population 24 \
+  --train-trials 3000 --test-trials 1200 --epochs 90
+```
+
 Render PDFs:
 
 ```bash
@@ -990,3 +1006,15 @@ hand-instantiated bodies -> searched/evolved bodies.
 ```
 
 That is how to keep compounding instead of circling.
+
+Latest coupled result after PR #127:
+
+- `experiments/viable_computational_bodies/results/program_body_search_modal_2026_06_16.md`
+  freezes `2A-v1-pixels-observe_pair` and evaluates 2B searched bodies against
+  the real 2A program gate.
+- Across five Modal seeds, `viability_guided` reaches body gate `1.000`,
+  empirical gate `1.000`, formal valid `1.000`, target/useful high `1.000`,
+  low probe `0.156`, and discovers
+  `calibration_guard+causal_binding_head+concern_policy+formal_guard+intervention_planner+reward_head+vector_surface_encoder+world_model`.
+- `reward_only` fails as a shortcut body; `syntax_proxy` reaches target/useful
+  `1.000` but fails body gate with low-probe `0.830`.

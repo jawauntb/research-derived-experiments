@@ -16,6 +16,14 @@ from experiments.viable_computational_bodies.search import (
     static_violations,
     summarize,
 )
+from experiments.viable_computational_bodies.program_body_search import (
+    ProgramBodySpec,
+    empirical_agent_for_body,
+    evaluate_program_body,
+    program_body_violations,
+    run_program_body_search,
+    summarize_program_bodies,
+)
 from experiments.viable_computational_bodies.modal_report import (
     summarize_modal_payload,
 )
@@ -231,6 +239,160 @@ class ViableComputationalBodiesTest(unittest.TestCase):
         self.assertEqual(
             verdicts["restless_vector_body"].violations,
             ("restless_without_calibration_guard",),
+        )
+
+    def test_program_body_mapping_separates_concern_and_target(self) -> None:
+        concern_only = ProgramBodySpec(
+            frozenset(
+                {
+                    "vector_surface_encoder",
+                    "reward_head",
+                    "world_model",
+                    "concern_policy",
+                    "calibration_guard",
+                }
+            )
+        )
+        target_only = ProgramBodySpec(
+            frozenset(
+                {
+                    "vector_surface_encoder",
+                    "reward_head",
+                    "world_model",
+                    "intervention_planner",
+                    "causal_binding_head",
+                }
+            )
+        )
+        full = ProgramBodySpec(
+            frozenset(
+                {
+                    "vector_surface_encoder",
+                    "reward_head",
+                    "world_model",
+                    "intervention_planner",
+                    "concern_policy",
+                    "calibration_guard",
+                    "causal_binding_head",
+                    "formal_guard",
+                }
+            )
+        )
+
+        self.assertEqual(empirical_agent_for_body(concern_only), "concern_without_target")
+        self.assertEqual(empirical_agent_for_body(target_only), "target_without_concern")
+        self.assertEqual(empirical_agent_for_body(full), "concerned_program_inventor")
+
+    def test_program_body_rejects_concern_without_calibration(self) -> None:
+        spec = ProgramBodySpec(
+            frozenset(
+                {
+                    "vector_surface_encoder",
+                    "reward_head",
+                    "world_model",
+                    "concern_policy",
+                }
+            )
+        )
+
+        self.assertIn(
+            "concern_without_calibration_guard",
+            program_body_violations(spec),
+        )
+
+    def test_program_body_search_uses_empirical_2a_contract(self) -> None:
+        summary = {
+            "surface_program_shortcut": {
+                "parse_accuracy_high_concern": 0.50,
+                "action_accuracy": 0.88,
+                "subtree_accuracy": 0.50,
+                "high_concern_probe_rate": 0.0,
+                "low_concern_probe_rate": 0.0,
+                "target_accuracy_high_concern": 0.0,
+                "useful_program_rate_high_concern": 0.0,
+                "object_extraction_rate": 1.0,
+                "gate_pass": False,
+            },
+            "random_program_probe": {
+                "parse_accuracy_high_concern": 0.52,
+                "action_accuracy": 0.87,
+                "subtree_accuracy": 0.53,
+                "high_concern_probe_rate": 1.0,
+                "low_concern_probe_rate": 1.0,
+                "target_accuracy_high_concern": 0.06,
+                "useful_program_rate_high_concern": 0.06,
+                "object_extraction_rate": 1.0,
+                "gate_pass": False,
+            },
+            "concern_without_target": {
+                "parse_accuracy_high_concern": 0.53,
+                "action_accuracy": 0.88,
+                "subtree_accuracy": 0.52,
+                "high_concern_probe_rate": 1.0,
+                "low_concern_probe_rate": 0.16,
+                "target_accuracy_high_concern": 0.09,
+                "useful_program_rate_high_concern": 0.09,
+                "object_extraction_rate": 1.0,
+                "gate_pass": False,
+            },
+            "target_without_concern": {
+                "parse_accuracy_high_concern": 1.0,
+                "action_accuracy": 1.0,
+                "subtree_accuracy": 1.0,
+                "high_concern_probe_rate": 1.0,
+                "low_concern_probe_rate": 1.0,
+                "target_accuracy_high_concern": 1.0,
+                "useful_program_rate_high_concern": 1.0,
+                "object_extraction_rate": 1.0,
+                "gate_pass": False,
+            },
+            "concerned_program_inventor": {
+                "parse_accuracy_high_concern": 1.0,
+                "action_accuracy": 1.0,
+                "subtree_accuracy": 0.80,
+                "high_concern_probe_rate": 1.0,
+                "low_concern_probe_rate": 0.16,
+                "target_accuracy_high_concern": 1.0,
+                "useful_program_rate_high_concern": 1.0,
+                "object_extraction_rate": 1.0,
+                "gate_pass": True,
+            },
+        }
+        full = ProgramBodySpec(
+            frozenset(
+                {
+                    "vector_surface_encoder",
+                    "reward_head",
+                    "world_model",
+                    "intervention_planner",
+                    "concern_policy",
+                    "calibration_guard",
+                    "causal_binding_head",
+                    "formal_guard",
+                }
+            )
+        )
+        evaluation = evaluate_program_body(
+            full,
+            strategy="viability_guided",
+            seed=0,
+            generation=0,
+            agent_summary=summary,
+        )
+        rows = run_program_body_search(
+            strategy="viability_guided",
+            seed=20260616,
+            generations=10,
+            population=12,
+            agent_summary=summary,
+        )
+        search_summary = summarize_program_bodies(rows)
+
+        self.assertEqual(evaluation.body_gate, 1)
+        self.assertTrue(search_summary["viability_guided"]["gate_pass"])
+        self.assertEqual(
+            search_summary["viability_guided"]["best_empirical_agent"],
+            "concerned_program_inventor",
         )
 
 

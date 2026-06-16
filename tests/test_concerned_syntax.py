@@ -19,6 +19,7 @@ from experiments.concerned_syntax.learned_agents import (
 )
 from experiments.concerned_syntax.intervention_invention import (
     run_experiment as run_program_experiment,
+    run_role_transfer_experiment,
     summarize_seed_payloads as summarize_program_payloads,
 )
 from experiments.concerned_syntax.modal_report import summarize_modal_payload
@@ -377,6 +378,24 @@ class ConcernedSyntaxTest(unittest.TestCase):
             summary["concerned_program_inventor"]["gate_pass"],
             0.5,
         )
+
+    def test_intervention_invention_role_transfer_records_heldout_kind(self) -> None:
+        payload = run_role_transfer_experiment(
+            train_trials=300,
+            test_trials=120,
+            seed=20260616,
+            epochs=25,
+            heldout_kind="food_trap",
+        )
+        agents = payload["agent_summary"]
+
+        self.assertEqual(payload["manifest"]["heldout_kind"], "food_trap")
+        self.assertEqual(
+            payload["manifest"]["contract"],
+            "2A-v1-pixels-observe_pair",
+        )
+        self.assertIn("concerned_program_inventor", agents)
+        self.assertIn("target_accuracy_high_concern", agents["concerned_program_inventor"])
 
 
 if __name__ == "__main__":
