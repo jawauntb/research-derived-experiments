@@ -33,7 +33,7 @@ We use the `scientific-discovery-regime-audit` skill as the process wrapper:
 4. Distinguish retrieval, search, and discovery.
 5. Record residual content that the current regime cannot explain.
 
-The current ledger is [TODO.md](TODO.md). Audit cards live in [docs/discovery_regime_audit.md](docs/discovery_regime_audit.md).
+The current ledger is [TODO.md](TODO.md). Audit cards live in [docs/discovery_regime_audit.md](docs/discovery_regime_audit.md). A detailed continuation brief for new agent sessions lives at [docs/phase2_next_agent_handoff.md](docs/phase2_next_agent_handoff.md).
 
 ## Experiments
 
