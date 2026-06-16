@@ -9,6 +9,11 @@ This document is a detailed continuation brief for a new agent session. It is
 written to preserve the current scientific state, the methodological spine, the
 latest artifacts, and the fastest path to the next useful result.
 
+Latest start-here note: `docs/phase2_next_breakthrough_handoff.md`. Use that
+note first for the current #127/#128 frontier, Modal-first compute rules, next
+breakthrough milestones, chart/PDF guidance, and fresh-branch instructions. This
+document remains useful as the longer historical brief.
+
 ## 1. Highest-Level Program Shape
 
 The research program is currently organized like this:
@@ -49,7 +54,19 @@ generated vectors -> rendered pixels -> learned object/part extraction
 
 ## 2. Latest Merged State
 
-The latest major merged PR before this handoff was:
+The latest major merged PRs before the successor handoff were:
+
+- PR #128: `Couple program-body search to the 2A gate`
+- Merge commit: `8a93813f34e4f869461e13719820f3914eedaf99`
+- Scientific delta: freezes `2A-v1-pixels-observe_pair` and makes 2B
+  program-body search consume the empirical 2A intervention-invention gate.
+
+- PR #127: `Add concerned intervention invention gate`
+- Merge commit: `3752c9474b8b5c5edd7d71173cd3426bab457953`
+- Scientific delta: makes target selection part of the 2A pixel/program task,
+  separating target-only, concern-only, random-probe, and surface shortcuts.
+
+Older major merged PR:
 
 - PR #123: `Add vector Phase 2 gates and Haskell ontology`
 - Merge commit: `1757d2a176c45804dff05f069eea8bf46bc6a730`
