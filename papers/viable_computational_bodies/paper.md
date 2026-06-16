@@ -15,15 +15,17 @@ reward heads. Static admissibility rules reject malformed bodies, and
 viability gates require the final architecture to pass concerned-syntax,
 self/world, resource, and anti-cheat criteria.
 
-In a 12-seed deterministic design pilot and an 18-cell Modal multi-seed sweep,
-reward-only search reaches perfect train return but fails the viability gate
-by exploiting shortcut reward heads. Novelty-only search finds syntax-like
-bodies, but remains unreliable under the full formal/viability gate.
-Viability-guided search discovers viable syntax-bearing bodies in every Modal
-seed, with mean concerned-syntax score 0.830 and mean train return 0.495. The
-pilot is not a claim that a learned neural architecture has been discovered.
-It is a Phase 2B acceptance surface: **accuracy is not architecture, novelty
-is not viable morphology, and formal validity alone is not concerned syntax.**
+In a 12-seed deterministic design pilot, an 18-cell symbolic Modal sweep, and
+a learned executable-body validation, reward-only search reaches high apparent
+return while failing the viability gate. Novelty-only search finds syntax-like
+bodies, but remains unreliable under the full formal/viability gate. The first
+executable validation then instantiates four body variants on the Arc 2A
+learned-agent gate. Only the guarded syntax body passes: parse-high 1.000,
+action 1.000, low-concern probe rate 0.202, formal validity 1.000, and
+anti-cheat 0.950. The result is still not a claim that full neural
+architecture search has been solved. It is a Phase 2B acceptance surface:
+**accuracy is not architecture, novelty is not viable morphology, and formal
+validity alone is not concerned syntax.**
 
 ## 1. Why Arc 2B Exists
 
@@ -223,7 +225,44 @@ body, but it is not reliable enough to pass the strategy-level gate.
 `viability_guided` passes because it couples syntax, intervention, self/world,
 formal validity, anti-cheat resistance, and resource viability.
 
-Next versions should replace symbolic motifs with executable bodies:
+## 10. Executable Body Validation
+
+The symbolic body grammar is useful only if its motifs correspond to
+executable mechanisms. The first executable validation maps four bodies onto
+the learned Arc 2A gate:
+
+| Body | Mechanism |
+|---|---|
+| `shortcut_reward_body` | flat reward/action head without parse use |
+| `planner_without_tree_body` | learns when to probe but lacks tree-binding features |
+| `restless_tree_body` | parses perfectly but probes every low-concern ambiguity |
+| `guarded_syntax_body` | tree binding + intervention planning + capped calibration guard |
+
+Remote command:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_learned_agents_sweep.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90
+```
+
+Summary:
+
+| Body | Parse high | Action | High probe | Low probe | Formal | Anti-cheat | Gate |
+|---|---:|---:|---:|---:|---:|---:|---|
+| guarded_syntax_body | 1.000 | 1.000 | 1.000 | 0.202 | 1.000 | 0.950 | PASS |
+| planner_without_tree_body | 0.492 | 0.875 | 1.000 | 0.000 | 0.000 | 0.700 | fail |
+| restless_tree_body | 1.000 | 1.000 | 1.000 | 1.000 | 0.000 | 0.550 | fail |
+| shortcut_reward_body | 0.494 | 0.880 | 0.000 | 0.000 | 1.000 | 0.400 | fail |
+
+This gives the symbolic grammar its first behavioral footing. The tree binder
+is not decorative: without it, intervention observations do not attach to the
+right constituent. The formal guard is also not decorative: without it, a tree
+parser becomes restless and passes parse while failing concern.
+
+Next versions should replace these linear executable bodies with richer
+modules:
 
 - tree binder as a differentiable module or program-induction component
 - role-specific heads as mixture-of-experts or routed factor heads
@@ -232,25 +271,27 @@ Next versions should replace symbolic motifs with executable bodies:
 - quality-diversity archive over syntax, resource, robustness, and proof
   coverage descriptors
 
-## 10. Limitations
+## 11. Limitations
 
-The current search is symbolic and intentionally small. It does not train
-neural networks, prove properties in an external solver, or run on pixel
-observations. The motif scores are hand-designed gates, not learned
-measurements. The point is to make the acceptance surface explicit before
-expensive architecture evolution begins.
+The current search and executable validation are intentionally small. The
+executable bodies are linear learned components over vectorized symbolic
+features, not full neural architectures trained from pixels. The formal guard
+is implemented as Python logic rather than ASP/s(CASP), Z3, or another
+external solver. The point is to make the acceptance surface explicit and
+behaviorally grounded before expensive architecture evolution begins.
 
 The strongest next test is whether executable bodies discovered under this
 grammar pass the Arc 2A concerned-syntax benchmark without direct access to the
 hidden parse.
 
-## 11. Conclusion
+## 12. Conclusion
 
 Arc 2B reframes architecture search as viability-guided body evolution. The
-pilot shows why that matters: train return, novelty, formal validity, and
-concerned syntax can dissociate. The next phase should not ask for merely
-"better models." It should ask for bodies whose morphology makes the world's
-causal grammar learnable.
+pilot and learned validation show why that matters: train return, novelty,
+formal validity, tree parsing, and concerned syntax can dissociate. The next
+phase should not ask for merely "better models." It should ask for bodies
+whose morphology makes the world's causal grammar learnable without becoming
+restless or shortcut-driven.
 
 ## References
 
@@ -271,6 +312,10 @@ the search for novelty alone. *Evolutionary Computation*, 19(2), 189-223.
 
 Kim, K. W. (2026). Latent State Design for World Models under Sufficiency
 Constraints. arXiv:2605.01694.
+
+Le Lidec, Q., Biza, O., Goudet, O., Balestriero, R., & Lajoie, G. (2026).
+Causal-JEPA: Learning World Models through Object-Level Latent Interventions.
+arXiv:2602.11389.
 
 Mouret, J.-B., & Clune, J. (2015). Illuminating search spaces by mapping
 elites. arXiv:1504.04909.
