@@ -13,6 +13,10 @@ from experiments.concerned_syntax.benchmark import (
     run_trials,
     summarize,
 )
+from experiments.concerned_syntax.learned_agents import (
+    run_experiment,
+    summarize_seed_payloads,
+)
 from experiments.concerned_syntax.modal_report import summarize_modal_payload
 
 
@@ -102,6 +106,58 @@ class ConcernedSyntaxTest(unittest.TestCase):
         self.assertAlmostEqual(
             summary["concerned_syntax"]["mean_regret"],
             0.003,
+        )
+
+    def test_learned_agent_gate_separates_body_failures(self) -> None:
+        payload = run_experiment(
+            train_trials=600,
+            test_trials=240,
+            seed=20260616,
+            epochs=40,
+        )
+        agents = payload["agent_summary"]
+        bodies = payload["body_summary"]
+
+        self.assertTrue(agents["learned_concerned_syntax"]["gate_pass"])
+        self.assertFalse(agents["restless_tree"]["gate_pass"])
+        self.assertEqual(agents["restless_tree"]["low_concern_probe_rate"], 1.0)
+        self.assertFalse(agents["planner_no_tree"]["gate_pass"])
+        self.assertLess(
+            agents["planner_no_tree"]["parse_accuracy_high_concern"],
+            agents["learned_concerned_syntax"]["parse_accuracy_high_concern"],
+        )
+        self.assertTrue(bodies["guarded_syntax_body"]["executable_body_gate"])
+        self.assertFalse(bodies["restless_tree_body"]["executable_body_gate"])
+
+    def test_learned_modal_summary_averages_gate_rates(self) -> None:
+        payloads = [
+            {
+                "agent_summary": {
+                    "learned_concerned_syntax": {
+                        "parse_accuracy_high_concern": 1.0,
+                        "gate_pass": True,
+                    }
+                }
+            },
+            {
+                "agent_summary": {
+                    "learned_concerned_syntax": {
+                        "parse_accuracy_high_concern": 0.8,
+                        "gate_pass": False,
+                    }
+                }
+            },
+        ]
+
+        summary = summarize_seed_payloads(payloads, "agent_summary")
+
+        self.assertAlmostEqual(
+            summary["learned_concerned_syntax"]["parse_accuracy_high_concern"],
+            0.9,
+        )
+        self.assertAlmostEqual(
+            summary["learned_concerned_syntax"]["gate_pass"],
+            0.5,
         )
 
 

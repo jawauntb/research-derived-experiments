@@ -268,6 +268,49 @@ Residual content:
 
 Next move: train learned agents on the same gate without direct parse access.
 
+## Phase / Arc 2A: Learned Concerned-Syntax Agents
+
+Question: can learned agents infer causal constituency from intervention observations without direct hidden-parse access?
+
+Current regime:
+
+- Artifact types: vectorized Concerned Shape Grammar examples, learned linear policy/parser/action heads, executable body variants, Modal raw payloads, public reports.
+- Operations: train/test split generation with hidden true parse withheld at test time, SGD binary learners, Modal multi-seed sweep, anti-cheat report generation.
+- Gates/verifiers: same parse/action/probe/subtree gate; shortcut reward, planner-without-tree, and restless-tree controls; unit tests for learned gate separation.
+- Known limitations: vectorized symbolic features and candidate parse hypotheses are provided; no pixel perception or learned motor primitive language yet.
+
+Action class:
+
+- Retrieval/search/discovery: discovery-leaning mechanism transition.
+- Why: moves Arc 2A from hand-coded selector behavior to learned policy/parser components while preserving anti-cheat controls.
+
+Experiment:
+
+- Manifest/report paths: `experiments/concerned_syntax/results/learned_agents_modal_2026_06_16.md`; raw JSON withheld under `artifacts/concerned_syntax/learned_agents_modal_sweep.json`.
+- Positive targets: `learned_concerned_syntax`.
+- Negative controls: `shortcut_reward`, `planner_no_tree`, `restless_tree`.
+- Stress tests: hidden true parse at test time, no-tree features, low-concern restless probing, capped calibration guard.
+
+Gate:
+
+- Acceptance rule: learned concerned syntax passes every seed with high-concern parse >= 0.75, action >= 0.85, high-concern probe >= 0.70, low-concern probe <= 0.25, and subtree >= 0.75.
+- Withheld/rejected rule: raw Modal payload remains ignored; controls remain rejected when they pass action, parse, or probing alone.
+
+Results:
+
+- Accepted artifacts: `experiments/concerned_syntax/learned_agents.py`; `experiments/concerned_syntax/modal_learned_agents_sweep.py`; `experiments/concerned_syntax/results/learned_agents_modal_2026_06_16.md`.
+- Rejected or withheld artifacts: `artifacts/concerned_syntax/learned_agents_modal_sweep.json`; pre-calibration run where guarded syntax reached parse/action 1.000 but aggregate subtree 0.7465 and gate pass rate 0.600.
+- Key metrics: `learned_concerned_syntax` parse-high 1.000, action 1.000, subtree 0.797, high-probe 1.000, low-probe 0.202, gate pass rate 1.000. `restless_tree` parse/action 1.000 but low-probe 1.000 and fails. `planner_no_tree` probes correctly but parse-high 0.492 and fails.
+- Variance or ablation: 5 seeds x 3,000 train trials x 1,200 test trials, 90 SGD epochs per seed.
+
+Residual content:
+
+- Explained by old regime: symbolic concerned syntax already showed the target anti-cheat pattern.
+- New content outside old regime: a learned tree-binding parser plus concern-gated intervention policy can pass without hidden parse access; a small formal calibration budget is needed to keep subtree maintenance robust without restless inquiry.
+- Retractions or supersessions: the "zero low-concern probes is always best" story is too brittle for learned syntax maintenance; the accepted gate is capped calibration, not absolute silence.
+
+Next move: replace vectorized symbolic candidate parses with generated shapes or pixels where parse hypotheses must be inferred.
+
 ## Phase / Arc 2B: Viable Computational Bodies Design Pilot
 
 Question: does viability-guided architecture evolution find syntax-bearing computational bodies more reliably than reward-only or novelty-only selection?
@@ -353,6 +396,49 @@ Residual content:
 - Retractions or supersessions: "Modal plan" is superseded by an accepted multi-seed result.
 
 Next move: instantiate the accepted motif grammar as executable modules and route them through Arc 2A tasks.
+
+## Phase / Arc 2B: Executable Body Validation
+
+Question: do executable body variants validate the symbolic Phase 2B motif grammar on the learned Arc 2A gate?
+
+Current regime:
+
+- Artifact types: learned policy/parser/action heads, executable body variants, formal/anti-cheat annotations, public reports.
+- Operations: map symbolic body motifs onto executable controls, evaluate each body on the learned concerned-syntax sweep, aggregate across Modal seeds.
+- Gates/verifiers: learned Arc 2A gate plus body-side formal validity and anti-cheat thresholds.
+- Known limitations: executable bodies are linear components over vectorized symbolic features; no full NAS, neural module search, or external solver yet.
+
+Action class:
+
+- Retrieval/search/discovery: discovery-leaning validation transition.
+- Why: gives the symbolic body grammar its first behavioral grounding by testing motif commitments as executable mechanisms.
+
+Experiment:
+
+- Manifest/report paths: `experiments/viable_computational_bodies/results/executable_bodies_modal_2026_06_16.md`; raw JSON withheld under `artifacts/concerned_syntax/learned_agents_modal_sweep.json`.
+- Positive targets: `guarded_syntax_body`.
+- Negative controls: `shortcut_reward_body`, `planner_without_tree_body`, `restless_tree_body`.
+- Stress tests: reward shortcut, missing tree binder, missing formal concern guard.
+
+Gate:
+
+- Acceptance rule: body passes only if it clears the learned Arc 2A gate, formal validity is 1.000, and anti-cheat >= 0.70.
+- Withheld/rejected rule: bodies that pass action or parse alone remain rejected controls.
+
+Results:
+
+- Accepted artifacts: `experiments/viable_computational_bodies/results/executable_bodies_modal_2026_06_16.md`; updated Phase 2B paper.
+- Rejected or withheld artifacts: raw learned-agent Modal payload under ignored `artifacts/`.
+- Key metrics: `guarded_syntax_body` parse-high 1.000, action 1.000, high-probe 1.000, low-probe 0.202, formal 1.000, anti-cheat 0.950, body gate pass rate 1.000. `restless_tree_body` parse/action 1.000 but low-probe 1.000 and fails. `shortcut_reward_body` action 0.880 but parse-high 0.494 and fails.
+- Variance or ablation: same 5-seed Modal learned-agent sweep.
+
+Residual content:
+
+- Explained by old regime: symbolic body grammar predicted the guarded syntax body would be favored.
+- New content outside old regime: tree binding and formal concern gating are behaviorally necessary in executable variants; neither planning alone nor tree parsing alone is sufficient.
+- Retractions or supersessions: "replace symbolic motifs with executable modules" is started but not complete; current modules are linear/vectorized proof-of-mechanism components.
+
+Next move: evolve or search over differentiable modules rather than hand-instantiating four body variants.
 
 ## Activation Geometry Probe: Pythia-70M Layer Sweep
 

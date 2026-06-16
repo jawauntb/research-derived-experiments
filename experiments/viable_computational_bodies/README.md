@@ -23,3 +23,11 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
   experiments/viable_computational_bodies/modal_body_evolution_sweep.py
 ```
 
+Executable body validation is produced by the learned Arc 2A sweep:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_learned_agents_sweep.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90
+```

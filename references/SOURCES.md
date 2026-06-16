@@ -23,8 +23,10 @@ The downloaded PDFs, HTML snapshots, and extracted full text are intentionally l
 - Active Causal Experimentalist (ACE): Learning Intervention Strategies via Direct Preference Optimization: https://arxiv.org/abs/2602.02451
 - CausaLab: A Scalable Environment for Interactive Causal Discovery Toward AI Scientists: https://arxiv.org/abs/2605.26029
 - Latent State Design for World Models under Sufficiency Constraints: https://arxiv.org/abs/2605.01694
+- Causal-JEPA: Learning World Models through Object-Level Latent Interventions: https://arxiv.org/abs/2602.11389
 - HCLSM: Hierarchical Causal Latent State Machines for Object-Centric World Modeling: https://arxiv.org/abs/2603.29090
 - Structuring Open-Ended NAS: Semi-Automated Design Knowledge Structuring with LLMs for Efficient Neural Architecture Search: https://arxiv.org/abs/2605.19247
+- Representation Learning of Geometric Trees: https://arxiv.org/abs/2408.08799
 
 ## Local User-Provided Files
 

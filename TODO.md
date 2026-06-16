@@ -24,7 +24,7 @@
 - [x] Run a local design pilot and commit the public result report.
 - [x] Draft preregistration and paper.
 - [x] Run a Modal multi-seed sweep.
-- [ ] Add learned neural agents that infer parse without direct access to hidden syntax.
+- [x] Add learned agents that infer parse without direct access to hidden syntax.
 - [ ] Add pixel or vector observations where parse must be learned from generated shapes.
 
 ## Phase / Arc 2B: Viable Computational Bodies
@@ -35,6 +35,7 @@
 - [x] Run a local design pilot and commit the public result report.
 - [x] Draft preregistration and paper.
 - [x] Run a Modal multi-seed sweep.
+- [x] Add first executable body validation against the learned Arc 2A gate.
 - [ ] Replace symbolic motifs with executable neural modules.
 - [ ] Add ASP/s(CASP), Z3, or equivalent external formal guard integration.
 

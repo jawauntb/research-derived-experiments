@@ -22,17 +22,19 @@ only when they are bound inside the same constituent. The agent must decide
 whether to pay for an intervention that reveals the parse, and it must avoid
 probing low-concern ambiguity that does not affect viability.
 
-In a 200-trial deterministic design pilot and a 5,000-trial Modal multi-seed
-sweep, the `concerned_syntax` selector is the only selector that passes the
-full gate. In the Modal sweep, it reaches high-concern parse accuracy 1.000,
-action accuracy 1.000, high-concern probe rate 1.000, low-concern probe rate
-0.000, and gate pass rate 1.000. Flat valence, compression-only parsing, and
-null policies fail because they do not make constituency knowable. An
-uncertainty-only selector recovers the parse but fails the no-restless-inquiry
-gate by probing every low-concern ambiguity. The result is not a claim about
-neural agents yet. It is an accepted Phase 2A benchmark surface: **reward is
-not syntax, compression is not syntax, and uncertainty reduction is not
-concerned inquiry.**
+In a 200-trial deterministic design pilot, a 5,000-trial symbolic Modal sweep,
+and a learned 5-seed Modal sweep, the concern-gated syntax agent is the only
+agent family that passes the full gate. The learned agent receives candidate
+parses as visible hypotheses but never receives the hidden true parse at test
+time. It learns a tree-binding parse interpreter, an intervention policy, and
+a capped low-concern calibration guard. Across five Modal seeds, it reaches
+high-concern parse accuracy 1.000, action accuracy 1.000, low-concern probe
+rate 0.202, and gate pass rate 1.000. Shortcut reward, no-tree planning, and
+restless tree inquiry all fail for different anti-cheat reasons. The result is
+still not a claim about pixel-level perception or human cognition. It is an
+accepted Phase 2A learned-mechanism surface: **reward is not syntax,
+compression is not syntax, and uncertainty reduction is not concerned
+inquiry.**
 
 ## 1. Why Arc 2A Exists
 
@@ -193,7 +195,51 @@ that `concerned_syntax` has the best reward; `uncertainty_only` has zero
 regret too. The key result is that only concern-weighted syntax passes both
 the positive inquiry gate and the no-restless-inquiry gate.
 
-The next version should add learned agents:
+## 8. Learned-Agent Gate
+
+The next gate removes the hand-coded selector. Candidate parses remain visible
+as hypotheses, as in a structural-ambiguity task, but the true parse is hidden
+at test time. A small learned agent trains three binary components:
+
+- a concern-gated intervention policy;
+- a parse interpreter that binds pair-probe observations to candidate
+  constituents;
+- a shortcut action head used as a reward-only control.
+
+The tree-binding body receives candidate-subtree equality features for the
+probed pair. The no-tree control receives the same surface roles, pair
+identity, concern weight, and probe observation, but not the candidate-binding
+features needed to attach that observation to a constituent. The guarded
+learner also gets a deterministic 20% low-concern calibration budget. This is
+below the 0.25 anti-restless cap and prevents syntax maintenance from failing
+exactly at the subtree threshold.
+
+Remote command:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_learned_agents_sweep.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90
+```
+
+Summary:
+
+| Agent | Parse high | Action | Subtree | High probe | Low probe | Gate |
+|---|---:|---:|---:|---:|---:|---|
+| guarded syntax | 1.000 | 1.000 | 0.797 | 1.000 | 0.202 | PASS |
+| no-tree planner | 0.492 | 0.875 | 0.494 | 1.000 | 0.000 | fail |
+| restless tree | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | fail |
+| shortcut reward | 0.494 | 0.880 | 0.495 | 0.000 | 0.000 | fail |
+
+The full public report also records mean probe cost and regret.
+
+This is the first learned Phase 2A result. It shows that a learner can pass
+the concerned-syntax gate without hidden parse access, but only when it has
+both the tree-binding feature needed for causal constituency and the formal
+guard needed to prevent restless low-concern inquiry.
+
+The next version should add richer learned agents:
 
 - tree-structured model
 - flat MLP baseline
@@ -202,19 +248,20 @@ The next version should add learned agents:
 - role/parse held-out generalization
 - neural anti-cheat probes for parse, subtree, and intervention usefulness
 
-## 8. Limitations
+## 9. Limitations
 
-The current benchmark is symbolic. It does not test pixels, learned perception,
-continuous control, or human subjects. The intervention language is provided,
+The current benchmark is symbolic. The learned agent receives vectorized
+surface roles and candidate parse hypotheses, not pixels. It does not test
+continuous control or human subjects. The intervention language is provided,
 not invented from raw motor primitives. The parser candidates are small and
-known to the evaluator. The point of this first paper is to define the
-acceptance surface before larger compute.
+known to the evaluator. The point of this first paper is to define and pass a
+minimal learned acceptance surface before larger compute.
 
 The most important limitation is also the next step: the agent should learn the
-intervention language and parse representation, not merely select among
-hand-defined probes.
+intervention language and parse representation from richer generated shapes,
+not merely bind provided candidate parses to provided probe observations.
 
-## 9. Conclusion
+## 10. Conclusion
 
 Arc 2A inserts a new layer into the maintained-concern ladder:
 
@@ -223,10 +270,12 @@ difference -> geometry -> syntax -> salience -> valence
           -> action -> attribution -> maintenance
 ```
 
-The pilot supports a narrow methodological claim: concerned syntax needs its
-own tests. Reward, compression, uncertainty, and action accuracy can all
-dissociate from causal constituency. The next experiments can now ask whether
-learned agents and evolved bodies pass those tests without cheating.
+The results support a narrow methodological claim: concerned syntax needs its
+own tests. Reward, compression, uncertainty, action accuracy, and even syntax
+without concern can all dissociate from causal constituency under maintained
+concern. The learned-agent sweep shows that the gate is passable without
+hidden parse access, but only when tree binding, intervention, and formal
+concern gating are present together.
 
 ## References
 
@@ -241,6 +290,10 @@ Cooper, P., & Velasquez, A. (2026). Active Causal Experimentalist (ACE):
 Learning intervention strategies via direct preference optimization. arXiv:
 2602.02451.
 
+Le Lidec, Q., Biza, O., Goudet, O., Balestriero, R., & Lajoie, G. (2026).
+Causal-JEPA: Learning World Models through Object-Level Latent Interventions.
+arXiv:2602.11389.
+
 Revencu, B., Pajot, M., & Dehaene, S. (2026). Representations of geometric
 shapes have syntactic structure. *Journal of Experimental Psychology:
 General*, 155(4), 1081-1102. https://doi.org/10.1037/xge0001890
@@ -252,3 +305,6 @@ of the IEEE*, 109(5), 612-634.
 Yang, J., Zhang, D., Song, X., Dai, Q., Liu, X., Chen, Y., Vashishtha, A.,
 Shi, J., Tan, C., & Peng, H. (2026). CausaLab: A scalable environment for
 interactive causal discovery toward AI scientists. arXiv:2605.26029.
+
+Zhang, J., Meng, F., & Deng, C. (2024). Representation Learning of Geometric
+Trees. arXiv:2408.08799.
