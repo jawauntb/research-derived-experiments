@@ -3873,3 +3873,87 @@ Residual content:
 Next move: either run the Modal-scale pixel sweep or replace the
 connected-component extractor with a learned object-slot encoder while keeping
 the same hidden-parse invariance and no-restless controls.
+
+## Arc 2A: Concerned Intervention Invention
+
+Question: can the pixel-level concerned-syntax agent learn both when to
+intervene and which object-pair probe program makes the viability-relevant
+hidden binding observable?
+
+Current regime:
+
+- Artifact types: pixel-rendered shape examples, extracted object features,
+  learned probe policy, provided pair probe target, tracked reports and tests.
+- Operations: RGB rendering, connected-component extraction, concern-gated
+  pair probing, passive/restless/surface controls.
+- Gates/verifiers: parse-high, action, subtree, high-probe, low-probe,
+  object-extraction rate, hidden-parse-invariant rendering, targeted tests.
+- Known limitations: the previous pixel agent was given the causal probe
+  target; it did not have to choose which pair to observe.
+
+Action class:
+
+- Retrieval/search/discovery: discovery-leaning transition.
+- Why: this adds a probe-program selection operation and target-accuracy gate.
+  The old pixel regime could test probe use, but not intervention-target
+  invention.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/concerned_syntax/intervention_invention.py`;
+  `experiments/concerned_syntax/modal_intervention_invention_sweep.py`;
+  `experiments/concerned_syntax/results/intervention_invention_local_2026_06_16.md`;
+  `experiments/concerned_syntax/results/intervention_invention_modal_2026_06_16.md`;
+  local ignored artifact
+  `artifacts/concerned_syntax/intervention_invention_local.json`.
+- Positive targets: `concerned_program_inventor` should pass the transported
+  2A gate plus target/useful-program gates.
+- Negative controls: `surface_program_shortcut`, `random_program_probe`,
+  `concern_without_target`, and `target_without_concern`.
+- Stress tests: selected object pair must be learned from pixel-object features
+  rather than `trial.causal_pair`; target-only control must fail low-concern
+  discipline; concern-only control must fail target usefulness.
+
+Gate:
+
+- Acceptance rule: object extraction >= 0.99, parse-high >= 0.75, action >=
+  0.85, subtree >= 0.75, high-concern probe >= 0.70, low-concern probe <=
+  0.25, target accuracy high-concern >= 0.75, and useful-program rate
+  high-concern >= 0.70.
+- Withheld/rejected rule: withhold claims of raw motor-program invention,
+  natural-image perception, or open-ended apparatus discovery. Reject the
+  result if target selection succeeds without concern discipline or concern
+  discipline succeeds without useful target selection.
+
+Results:
+
+- Accepted artifacts: intervention-invention module, Modal sweep entrypoint,
+  public local report, tests, Phase 2 trajectory note, paper update, and source
+  manifest update for the A-CBO causal-discovery critique.
+- Rejected or withheld artifacts: no learned object-slot encoder; no raw motor
+  primitive invention; no movement/ablation/two-step program language yet.
+- Key metrics across five Modal seeds: `concerned_program_inventor` parse-high
+  `1.000`, action `1.000`, subtree `0.796`, object extraction `1.000`,
+  high-probe `1.000`, low-probe `0.156`, target-high `1.000`, useful-high
+  `1.000`, gate pass rate `1.000`. `target_without_concern` target-high
+  `1.000` but low-probe `1.000`; `concern_without_target` low-probe `0.156`
+  but target-high `0.088`.
+- Variance or ablation: concerned inventor gate pass SD `0.000`; subtree SD
+  `0.013`; low-probe SD `0.009`; target-high SD `0.000`. The local 1,200/500
+  split also passed and is tracked separately.
+
+Residual content:
+
+- Explained by old regime: concern-gated probing and pixel-object extraction
+  still explain the transported parse/action/subtree gate.
+- New content outside old regime: probe target selection is now learned as a
+  program-selection step, and the gate separates "knows when to ask" from
+  "knows what to ask."
+- Retractions or supersessions: supersede "intervention invention is not done"
+  with "minimal `observe_pair(a,b)` target invention is locally passed; open
+  program invention remains future work."
+
+Next move: extend the program language to `move(anchor)`, `ablate(role)`, and
+two-step compositions while adding held-out role-pair and parse-family
+transfer.

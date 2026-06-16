@@ -22,6 +22,7 @@ The downloaded PDFs, HTML snapshots, and extracted full text are intentionally l
 - Neural Language of Thought Models: https://arxiv.org/abs/2402.01203
 - Active Causal Experimentalist (ACE): Learning Intervention Strategies via Direct Preference Optimization: https://arxiv.org/abs/2602.02451
 - CausaLab: A Scalable Environment for Interactive Causal Discovery Toward AI Scientists: https://arxiv.org/abs/2605.26029
+- Why LLMs Fail at Causal Discovery and How Interventional Agents Escape: https://arxiv.org/abs/2605.27567
 - Latent State Design for World Models under Sufficiency Constraints: https://arxiv.org/abs/2605.01694
 - Causal-JEPA: Learning World Models through Object-Level Latent Interventions: https://arxiv.org/abs/2602.11389
 - HCLSM: Hierarchical Causal Latent State Machines for Object-Centric World Modeling: https://arxiv.org/abs/2603.29090
