@@ -23,9 +23,10 @@ whether to pay for an intervention that reveals the parse, and it must avoid
 probing low-concern ambiguity that does not affect viability.
 
 In a 200-trial deterministic design pilot, a 5,000-trial symbolic Modal sweep,
-a learned 5-seed Modal sweep, a vector-observation 5-seed Modal sweep, and a
-pixel-rendered 5-seed local sweep, the concern-gated syntax agent is the only
-agent family that passes the full gate. The first learned agent receives
+a learned 5-seed Modal sweep, a vector-observation 5-seed Modal sweep, a
+pixel-rendered 5-seed local sweep, and a pixel-level intervention-invention
+5-seed Modal sweep, the concern-gated syntax agent is the only agent family
+that passes the full gate. The first learned agent receives
 candidate parses as visible hypotheses but never receives the hidden true parse
 at test time. The vector-observation agent then removes those candidate-parse
 features: the visible coordinate surface is invariant under swapping the hidden
@@ -35,12 +36,20 @@ connected components, and learns from centroids, colors, areas, and shape
 density. Across five pixel seeds, the concerned pixel agent reaches
 high-concern parse accuracy 0.996, action accuracy 0.999, subtree accuracy
 0.786, object extraction rate 1.000, low-concern probe rate 0.187, and gate
-pass rate 1.000. Shortcut reward, passive perceptual inference, no-tree
-planning, and restless inquiry all fail for different anti-cheat reasons. The
-result is still not a claim about human cognition or learned unsupervised
-object slots. It is an accepted Phase 2A learned-mechanism surface: **reward is
-not syntax, compression is not syntax, and uncertainty reduction is not
-concerned inquiry.**
+pass rate 1.000. The intervention-invention gate then makes the agent choose
+among `observe_pair(a,b)` programs rather than receiving the causal target.
+Across five Modal seeds, the concerned program inventor reaches high-concern
+parse accuracy 1.000, action accuracy 1.000, target accuracy 1.000, useful
+program rate 1.000, low-concern probe rate 0.156, and gate pass rate 1.000. A
+target-only agent identifies the right pair but probes low concern at 1.000; a
+concern-without-target agent probes at the right times but targets only 0.088
+of high-concern cases. Shortcut reward, passive perceptual inference, no-tree
+planning, random program probing, and restless inquiry all fail for different
+anti-cheat reasons. The result is still not a claim about human cognition or
+learned unsupervised object slots. It is an accepted Phase 2A learned-mechanism
+surface: **reward is not syntax, compression is not syntax, probe availability
+is not intervention invention, and uncertainty reduction is not concerned
+inquiry.**
 
 ## 1. Why Arc 2A Exists
 
@@ -344,21 +353,71 @@ fails because syntax without concern probes low-concern ambiguity. The accepted
 agent passes only when object extraction, concern gating, intervention, and
 binding are composed.
 
-## 11. Limitations
+## 11. Intervention-Invention Gate
+
+The pixel-rendered gate still provides the target of the intervention: the
+agent learns when to run a pair probe, but the probe is already aimed at the
+causal role pair. That is probe use, not intervention invention. The next gate
+therefore exposes a tiny program menu:
+
+```text
+null
+observe_pair(a,b) for all 15 object pairs
+```
+
+The agent does not receive `trial.causal_pair` as metadata. It aligns extracted
+pixel components to the six visible object positions, scores object slots and
+candidate pair programs, and composes the selected `observe_pair(a,b)` program
+with the learned concern gate. This is a deliberately minimal form of
+intervention invention. It does not yet discover raw motor primitives, but it
+does force the agent to choose which experiment would make the
+viability-relevant hidden binding observable.
+
+Remote command:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_intervention_invention_sweep.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90
+```
+
+The tracked public report is
+`experiments/concerned_syntax/results/intervention_invention_modal_2026_06_16.md`.
+
+Summary:
+
+| Agent | Parse high | Action | Subtree | Low probe | Target high | Useful high | Gate |
+|---|---:|---:|---:|---:|---:|---:|---|
+| concerned program inventor | 1.000 | 1.000 | 0.796 | 0.156 | 1.000 | 1.000 | PASS |
+| concern without target | 0.534 | 0.883 | 0.522 | 0.156 | 0.088 | 0.088 | fail |
+| random program probe | 0.519 | 0.879 | 0.530 | 1.000 | 0.060 | 0.060 | fail |
+| surface program shortcut | 0.486 | 0.876 | 0.494 | 0.000 | 0.000 | 0.000 | fail |
+| target without concern | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | fail |
+
+This result sharpens the causal-discovery connection. Recent active causal
+discovery work treats experimental design as a policy problem and separates
+prediction from mechanism fidelity. This gate imports the small concern-side
+version of that demand: the agent must not only predict or probe, but select
+the intervention target whose observation changes the admissible causal
+binding under a no-restless constraint.
+
+## 12. Limitations
 
 The current benchmark is still synthetic. The newest agent receives generated
 pixels with algorithmic connected-component extraction, not natural images,
-learned object slots, continuous control, or human subjects. The intervention
-language is provided, not invented from raw motor primitives. The point of this
-first paper is to define and pass a minimal learned acceptance surface before
-larger compute.
+learned object slots, continuous control, or human subjects. The newest
+intervention-invention gate selects among a provided `observe_pair(a,b)`
+program language; it does not invent raw motor primitives or open-ended
+experimental apparatus. The point of this first paper is to define and pass a
+minimal learned acceptance surface before larger compute.
 
 The most important limitation is also the next step: the agent should learn the
-intervention language and parse representation from richer generated shapes
-and then from learned object-slot representations, not merely bind provided
-probe observations to an extracted object surface.
+intervention language, object slots, and parse representation from richer
+generated shapes, not merely select among provided probe tokens and bind
+observations to an extracted object surface.
 
-## 12. Conclusion
+## 13. Conclusion
 
 Arc 2A inserts a new layer into the maintained-concern ladder:
 
@@ -368,11 +427,12 @@ difference -> geometry -> syntax -> salience -> valence
 ```
 
 The results support a narrow methodological claim: concerned syntax needs its
-own tests. Reward, compression, uncertainty, action accuracy, and even syntax
-without concern can all dissociate from causal constituency under maintained
-concern. The learned-agent, vector-observation, and pixel-rendered sweeps show
-that the gate is passable without hidden parse access, but only when object
-extraction, binding, intervention, and formal concern gating are present
+own tests. Reward, compression, uncertainty, action accuracy, target selection
+without concern, and even syntax without concern can all dissociate from causal
+constituency under maintained concern. The learned-agent, vector-observation,
+pixel-rendered, and intervention-invention gates show that the gate is passable
+without hidden parse access, but only when object extraction, useful target
+selection, binding, intervention, and formal concern gating are present
 together.
 
 ## References
@@ -404,6 +464,9 @@ causality-aware reinforcement learning. arXiv:2511.14262.
 Revencu, B., Pajot, M., & Dehaene, S. (2026). Representations of geometric
 shapes have syntactic structure. *Journal of Experimental Psychology:
 General*, 155(4), 1081-1102. https://doi.org/10.1037/xge0001890
+
+Roy, A., & Parbhoo, S. (2026). Why LLMs fail at causal discovery and how
+interventional agents escape. arXiv:2605.27567.
 
 Scholkopf, B., Locatello, F., Bauer, S., Ke, N. R., Kalchbrenner, N., Goyal,
 A., & Bengio, Y. (2021). Toward causal representation learning. *Proceedings

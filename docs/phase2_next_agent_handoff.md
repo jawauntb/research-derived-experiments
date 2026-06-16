@@ -447,6 +447,8 @@ Done:
 - Vector module-body validation.
 - Pixel-rendered observations with connected-component object extraction and
   local 5-seed gate validation.
+- Minimal pixel-level intervention invention with learned `observe_pair(a,b)`
+  target selection and concern gating.
 - Python consumption of Haskell JSON verdicts inside learned/vector body
   summaries when the local Haskell checker is available.
 - Gate-margin charts for 2A and 2B.
@@ -459,7 +461,8 @@ Not done:
 - Learned object/part extraction from images beyond algorithmic connected
   components.
 - Modal-scale pixel sweep.
-- Intervention invention beyond provided pair probe/calibration.
+- Modal-scale intervention-invention sweep and richer program language beyond
+  `observe_pair(a,b)`.
 - Evolved/search-discovered executable module bodies under the vector/pixel
   gate.
 - Real neural module bodies such as object-slot encoders, graph neural nets,
@@ -611,6 +614,18 @@ the four-body comparison set.
 Current agents are given pair probe and calibration. Arc 2A eventually needs
 agents that invent or compose interventions.
 
+Status after PR #126 follow-on branch work: a minimal local version exists at
+`experiments/concerned_syntax/intervention_invention.py`, with a Modal
+entrypoint at `experiments/concerned_syntax/modal_intervention_invention_sweep.py`
+and tracked local/Modal reports at
+`experiments/concerned_syntax/results/intervention_invention_local_2026_06_16.md`
+and
+`experiments/concerned_syntax/results/intervention_invention_modal_2026_06_16.md`.
+The agent sees extracted pixel-object features and a menu of `observe_pair(a,b)`
+programs. It does not receive `trial.causal_pair` at evaluation time. The
+5-seed Modal sweep passes for `concerned_program_inventor` and separates the
+target-only and concern-only controls.
+
 Minimal next version:
 
 ```text
@@ -622,6 +637,10 @@ probe program tokens:
   repeat_probe
   null
 ```
+
+The first line of this goal is now complete for `observe_pair(a,b)` target
+selection. The remaining next version is to add movement, ablation, two-step
+composition, held-out transfer, and Modal-scale replication.
 
 Gate:
 
@@ -893,6 +912,24 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
   --train-trials 3000 --test-trials 1200 --epochs 90
 ```
 
+Intervention-invention local run:
+
+```bash
+python3 -m experiments.concerned_syntax.intervention_invention \
+  --train-trials 1200 --test-trials 500 --seed 20260616 --epochs 60 \
+  --out artifacts/concerned_syntax/intervention_invention_local.json \
+  --agent-report experiments/concerned_syntax/results/intervention_invention_local_2026_06_16.md
+```
+
+Intervention-invention Modal sweep:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_intervention_invention_sweep.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90
+```
+
 Render PDFs:
 
 ```bash
@@ -930,20 +967,24 @@ small local smoke -> Modal full sweep -> audit -> chart -> paper/PDF -> checks
 
 The fastest path to a real next breakthrough is probably:
 
-1. Integrate Haskell verdicts into Python body evaluation.
-2. Build pixel-rendered concerned syntax on top of the vector renderer.
-3. Run a Modal sweep with the same anti-cheat controls.
-4. Update 2A/2B papers and charts.
+1. Run Modal-scale intervention-invention and pixel sweeps.
+2. Extend the program language from `observe_pair(a,b)` to movement, ablation,
+   and two-step compositions.
+3. Add held-out role-pair/parse-family transfer so the target selector cannot
+   be only an i.i.d. color/position reader.
+4. Route searched/evolved bodies through Haskell admissibility before evaluating
+   them on the vector/pixel/program gates.
 
 Why that path:
 
-- It attacks the biggest current limitation: hand-designed vector surfaces.
+- It attacks the biggest current limitation: provided interventions and
+  i.i.d. target selection.
 - It preserves the successful gate structure.
-- It makes the Haskell formal layer operational instead of decorative.
+- It keeps the Haskell formal layer operational instead of decorative.
 - It creates a clean story for the next paper revision:
 
 ```text
-candidate parse -> vector surface -> pixel surface,
+candidate parse -> vector surface -> pixel surface -> program selection,
 Python-only formal guard -> Haskell-in-the-loop admissibility,
 hand-instantiated bodies -> searched/evolved bodies.
 ```

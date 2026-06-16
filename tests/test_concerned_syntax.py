@@ -17,6 +17,10 @@ from experiments.concerned_syntax.learned_agents import (
     run_experiment,
     summarize_seed_payloads,
 )
+from experiments.concerned_syntax.intervention_invention import (
+    run_experiment as run_program_experiment,
+    summarize_seed_payloads as summarize_program_payloads,
+)
 from experiments.concerned_syntax.modal_report import summarize_modal_payload
 from experiments.concerned_syntax.pixel_shapes import (
     extract_components,
@@ -315,6 +319,64 @@ class ConcernedSyntaxTest(unittest.TestCase):
             0.9,
         )
         self.assertAlmostEqual(summary["concerned_pixel_probe"]["gate_pass"], 0.5)
+
+    def test_intervention_invention_gate_requires_concern_and_target(self) -> None:
+        payload = run_program_experiment(
+            train_trials=650,
+            test_trials=260,
+            seed=20260616,
+            epochs=45,
+        )
+        agents = payload["agent_summary"]
+
+        self.assertTrue(agents["concerned_program_inventor"]["gate_pass"])
+        self.assertFalse(agents["surface_program_shortcut"]["gate_pass"])
+        self.assertFalse(agents["random_program_probe"]["gate_pass"])
+        self.assertFalse(agents["concern_without_target"]["gate_pass"])
+        self.assertFalse(agents["target_without_concern"]["gate_pass"])
+        self.assertGreaterEqual(
+            agents["concerned_program_inventor"]["target_accuracy_high_concern"],
+            0.95,
+        )
+        self.assertLess(
+            agents["concern_without_target"]["target_accuracy_high_concern"],
+            0.25,
+        )
+        self.assertEqual(
+            agents["target_without_concern"]["low_concern_probe_rate"],
+            1.0,
+        )
+
+    def test_intervention_invention_modal_summary_averages_gate_rates(self) -> None:
+        payloads = [
+            {
+                "agent_summary": {
+                    "concerned_program_inventor": {
+                        "target_accuracy_high_concern": 1.0,
+                        "gate_pass": True,
+                    }
+                }
+            },
+            {
+                "agent_summary": {
+                    "concerned_program_inventor": {
+                        "target_accuracy_high_concern": 0.5,
+                        "gate_pass": False,
+                    }
+                }
+            },
+        ]
+
+        summary = summarize_program_payloads(payloads, "agent_summary")
+
+        self.assertAlmostEqual(
+            summary["concerned_program_inventor"]["target_accuracy_high_concern"],
+            0.75,
+        )
+        self.assertAlmostEqual(
+            summary["concerned_program_inventor"]["gate_pass"],
+            0.5,
+        )
 
 
 if __name__ == "__main__":

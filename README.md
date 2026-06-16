@@ -33,7 +33,7 @@ We use the `scientific-discovery-regime-audit` skill as the process wrapper:
 4. Distinguish retrieval, search, and discovery.
 5. Record residual content that the current regime cannot explain.
 
-The current ledger is [TODO.md](TODO.md). Audit cards live in [docs/discovery_regime_audit.md](docs/discovery_regime_audit.md). A detailed continuation brief for new agent sessions lives at [docs/phase2_next_agent_handoff.md](docs/phase2_next_agent_handoff.md).
+The current ledger is [TODO.md](TODO.md). Audit cards live in [docs/discovery_regime_audit.md](docs/discovery_regime_audit.md). The Phase 2 breakthrough trajectory is [docs/phase2_breakthrough_trajectory.md](docs/phase2_breakthrough_trajectory.md). A detailed continuation brief for new agent sessions lives at [docs/phase2_next_agent_handoff.md](docs/phase2_next_agent_handoff.md).
 
 ## Experiments
 
@@ -101,6 +101,16 @@ python3 -m experiments.concerned_syntax.pixel_shapes \
     --train-trials 1200 --test-trials 500 --seed 20260616 --epochs 60 \
     --out artifacts/concerned_syntax/pixel_shapes_local.json \
     --agent-report experiments/concerned_syntax/results/pixel_shapes_local_2026_06_16.md
+
+python3 -m experiments.concerned_syntax.intervention_invention \
+    --train-trials 1200 --test-trials 500 --seed 20260616 --epochs 60 \
+    --out artifacts/concerned_syntax/intervention_invention_local.json \
+    --agent-report experiments/concerned_syntax/results/intervention_invention_local_2026_06_16.md
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/concerned_syntax/modal_intervention_invention_sweep.py \
+    --train-trials 3000 --test-trials 1200 --epochs 90
 
 doppler --scope /Users/jawaun/superoptimizers run -- \
     uvx --python 3.12 --from modal modal run \
