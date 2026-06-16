@@ -16,7 +16,7 @@ import random
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from statistics import mean, pstdev
-from typing import Any
+from typing import Any, Mapping
 
 from experiments.concerned_syntax.benchmark import (
     PARSES,
@@ -28,6 +28,10 @@ from experiments.concerned_syntax.benchmark import (
     outcome_for_parse,
     preferred_action,
     utility,
+)
+from experiments.viable_computational_bodies.haskell_gate import (
+    HaskellVerdict,
+    try_body_verdicts,
 )
 
 ROLE_VOCAB: tuple[str, ...] = (
@@ -428,26 +432,82 @@ def summarize_results(rows: list[LearnedResult]) -> dict[str, dict[str, Any]]:
     return summary
 
 
-def body_summary_from_agents(summary: dict[str, dict[str, Any]]) -> dict[str, dict[str, Any]]:
+def _apply_formal_verdict(
+    stats: dict[str, Any],
+    *,
+    body: str,
+    fallback: dict[str, Any],
+    formal_verdicts: Mapping[str, HaskellVerdict] | None,
+) -> None:
+    verdict = formal_verdicts.get(body) if formal_verdicts is not None else None
+    if verdict is None:
+        stats["formal_source"] = "python_static"
+        stats["formal_valid"] = fallback["formal_valid"]
+        stats["resource_cost"] = fallback["resource_cost"]
+        stats["formal_violations"] = list(fallback["formal_violations"])
+        return
+
+    stats["formal_source"] = verdict.formal_source
+    stats["formal_valid"] = 1.0 if verdict.formal_valid else 0.0
+    stats["resource_cost"] = verdict.resource_cost
+    stats["formal_violations"] = list(verdict.violations)
+
+
+def body_summary_from_agents(
+    summary: dict[str, dict[str, Any]],
+    *,
+    formal_verdicts: Mapping[str, HaskellVerdict] | None = None,
+) -> dict[str, dict[str, Any]]:
     mapping = {
         "shortcut_reward_body": "shortcut_reward",
         "planner_without_tree_body": "planner_no_tree",
         "restless_tree_body": "restless_tree",
         "guarded_syntax_body": "learned_concerned_syntax",
     }
+    static_verdicts = {
+        "shortcut_reward_body": {
+            "formal_valid": 1.0,
+            "resource_cost": 4,
+            "formal_violations": (),
+        },
+        "planner_without_tree_body": {
+            "formal_valid": 1.0,
+            "resource_cost": 6,
+            "formal_violations": (),
+        },
+        "restless_tree_body": {
+            "formal_valid": 0.0,
+            "resource_cost": 12,
+            "formal_violations": ("restless_without_calibration_guard",),
+        },
+        "guarded_syntax_body": {
+            "formal_valid": 1.0,
+            "resource_cost": 12,
+            "formal_violations": (),
+        },
+    }
+    if formal_verdicts is None:
+        formal_verdicts = try_body_verdicts(mapping)
+
     body_summary: dict[str, dict[str, Any]] = {}
     for body, agent in mapping.items():
         stats = dict(summary[agent])
-        formal_valid = 1.0 if body in {"guarded_syntax_body", "shortcut_reward_body"} else 0.0
         anti_cheat = 0.95 if body == "guarded_syntax_body" else 0.40
         if body == "restless_tree_body":
             anti_cheat = 0.55
         if body == "planner_without_tree_body":
             anti_cheat = 0.70
-        stats["formal_valid"] = formal_valid
+        _apply_formal_verdict(
+            stats,
+            body=body,
+            fallback=static_verdicts[body],
+            formal_verdicts=formal_verdicts,
+        )
         stats["anti_cheat"] = anti_cheat
         stats["executable_body_gate"] = bool(
-            stats["gate_pass"] and formal_valid >= 1.0 and anti_cheat >= 0.70
+            stats["gate_pass"]
+            and stats["formal_valid"] >= 1.0
+            and anti_cheat >= 0.70
         )
         body_summary[body] = stats
     return body_summary
@@ -586,20 +646,26 @@ def write_body_report(path: Path, payload: dict[str, Any]) -> None:
         "",
         "## Gate Summary",
         "",
-        "| Body | Parse high | Action | High probe | Low probe | Formal | Anti-cheat | Gate |",
-        "|---|---:|---:|---:|---:|---:|---:|---|",
+        (
+            "| Body | Parse high | Action | High probe | Low probe | Formal | "
+            "Cost | Source | Anti-cheat | Gate |"
+        ),
+        "|---|---:|---:|---:|---:|---:|---:|---|---:|---|",
     ]
     for body, stats in sorted(summary.items()):
         body_gate = float(stats["executable_body_gate"]) >= 0.999
         lines.append(
             "| {body} | {parse:.3f} | {action:.3f} | {high:.3f} | "
-            "{low:.3f} | {formal:.3f} | {anti:.3f} | {gate} |".format(
+            "{low:.3f} | {formal:.3f} | {cost:.0f} | {source} | "
+            "{anti:.3f} | {gate} |".format(
                 body=body,
                 parse=stats["parse_accuracy_high_concern"],
                 action=stats["action_accuracy"],
                 high=stats["high_concern_probe_rate"],
                 low=stats["low_concern_probe_rate"],
                 formal=stats["formal_valid"],
+                cost=stats["resource_cost"],
+                source=stats["formal_source"],
                 anti=stats["anti_cheat"],
                 gate="PASS" if body_gate else "fail",
             )

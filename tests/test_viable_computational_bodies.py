@@ -2,6 +2,13 @@ from __future__ import annotations
 
 import unittest
 
+from experiments.concerned_syntax.vector_shapes import module_body_summary
+from experiments.viable_computational_bodies.haskell_gate import (
+    HaskellGateUnavailable,
+    HaskellVerdict,
+    load_body_verdicts,
+    parse_named_verdicts,
+)
 from experiments.viable_computational_bodies.search import (
     ArchitectureSpec,
     evaluate_architecture,
@@ -102,6 +109,128 @@ class ViableComputationalBodiesTest(unittest.TestCase):
         self.assertAlmostEqual(
             summary["viability_guided"]["concerned_syntax_score"],
             0.84,
+        )
+
+    def test_haskell_gate_parses_named_json_verdicts(self) -> None:
+        output = "\n".join(
+            [
+                (
+                    '{"body":"modular_concerned_body","formal_valid":true,'
+                    '"resource_cost":8,"violations":[]}'
+                ),
+                (
+                    '{"body":"restless_vector_body","formal_valid":false,'
+                    '"resource_cost":6,'
+                    '"violations":["restless_without_calibration_guard"]}'
+                ),
+            ]
+        )
+
+        verdicts = parse_named_verdicts(output)
+
+        self.assertTrue(verdicts["modular_concerned_body"].formal_valid)
+        self.assertEqual(verdicts["modular_concerned_body"].resource_cost, 8)
+        self.assertFalse(verdicts["restless_vector_body"].formal_valid)
+        self.assertEqual(
+            verdicts["restless_vector_body"].violations,
+            ("restless_without_calibration_guard",),
+        )
+
+    def test_haskell_gate_runner_batches_body_names(self) -> None:
+        seen: dict[str, tuple[str, ...]] = {}
+
+        def runner(body_names: tuple[str, ...]) -> str:
+            seen["body_names"] = body_names
+            return (
+                '{"body":"modular_concerned_body","formal_valid":true,'
+                '"resource_cost":8,"violations":[]}\n'
+                '{"body":"restless_vector_body","formal_valid":false,'
+                '"resource_cost":6,'
+                '"violations":["restless_without_calibration_guard"]}\n'
+            )
+
+        verdicts = load_body_verdicts(
+            ["restless_vector_body", "modular_concerned_body"],
+            runner=runner,
+        )
+
+        self.assertEqual(
+            seen["body_names"],
+            ("modular_concerned_body", "restless_vector_body"),
+        )
+        self.assertTrue(verdicts["modular_concerned_body"].formal_valid)
+
+    def test_vector_body_summary_records_haskell_verdict_provenance(self) -> None:
+        agent_stats = {
+            agent: {
+                "n": 10,
+                "parse_accuracy_high_concern": 1.0,
+                "action_accuracy": 1.0,
+                "subtree_accuracy": 1.0,
+                "surface_ambiguity_rate": 1.0,
+                "high_concern_probe_rate": 1.0,
+                "low_concern_probe_rate": 0.0,
+                "mean_probe_cost": 0.04,
+                "mean_regret": 0.0,
+                "gate_pass": True,
+            }
+            for agent in (
+                "surface_shortcut",
+                "passive_vector",
+                "restless_vector_probe",
+                "concerned_vector_probe",
+            )
+        }
+        body_summary = module_body_summary(
+            agent_stats,
+            formal_verdicts={
+                "modular_concerned_body": HaskellVerdict(
+                    formal_valid=True,
+                    resource_cost=8,
+                    violations=(),
+                ),
+                "restless_vector_body": HaskellVerdict(
+                    formal_valid=False,
+                    resource_cost=6,
+                    violations=("restless_without_calibration_guard",),
+                ),
+            },
+        )
+
+        self.assertEqual(
+            body_summary["modular_concerned_body"]["formal_source"],
+            "haskell",
+        )
+        self.assertEqual(body_summary["modular_concerned_body"]["resource_cost"], 8)
+        self.assertTrue(
+            body_summary["modular_concerned_body"]["executable_module_gate"],
+        )
+        self.assertEqual(
+            body_summary["restless_vector_body"]["formal_violations"],
+            ["restless_without_calibration_guard"],
+        )
+        self.assertFalse(
+            body_summary["restless_vector_body"]["executable_module_gate"],
+        )
+        self.assertEqual(
+            body_summary["surface_reward_body"]["formal_source"],
+            "python_static",
+        )
+
+    def test_live_haskell_gate_reports_known_bodies_when_available(self) -> None:
+        try:
+            verdicts = load_body_verdicts(
+                ("modular_concerned_body", "restless_vector_body")
+            )
+        except HaskellGateUnavailable as exc:
+            self.skipTest(str(exc))
+
+        self.assertTrue(verdicts["modular_concerned_body"].formal_valid)
+        self.assertEqual(verdicts["modular_concerned_body"].resource_cost, 8)
+        self.assertFalse(verdicts["restless_vector_body"].formal_valid)
+        self.assertEqual(
+            verdicts["restless_vector_body"].violations,
+            ("restless_without_calibration_guard",),
         )
 
 

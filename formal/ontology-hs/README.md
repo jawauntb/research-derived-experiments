@@ -10,10 +10,13 @@ Run:
 ```bash
 cabal test all
 cabal run ontology-check
+cabal run ontology-check -- modular_concerned_body restless_vector_body
+cabal run ontology-check -- --motifs vector_surface_encoder,reward_head,causal_binding_head
 ```
 
 The current checker is intentionally small: it validates dependency, resource,
 input-body, shortcut, and restless-probing rules for the body motifs used in
-the Arc 2A/2B vector experiments. The next step is to make Python consume the
-JSON verdicts directly, then move more ontology constraints from Python into
-this typed layer.
+the Arc 2A/2B vector experiments. Named body and motif invocations emit
+line-delimited JSON verdicts for Python consumption. Python falls back to its
+static verdicts when the local Haskell toolchain is unavailable, but records
+`formal_source = "haskell"` whenever the external checker supplies the gate.

@@ -3727,3 +3727,71 @@ Residual content:
 Next move: stop optimizing this prototype-gated binary-relation interface. Test
 supervised exact-relation readout identifiability within target families before
 running more steering interventions.
+
+## Arc 2B: Haskell Verdicts Consumed by Python Body Gates
+
+Question: can the empirical Arc 2A/2B body summaries consume the external
+Haskell admissibility checker instead of carrying only parallel static verdicts?
+
+Current regime:
+
+- Artifact types: Python agent/body summaries, vector module-body reports,
+  Haskell ontology verdict JSON, fallback static formal verdicts.
+- Operations: Python learned/vector body evaluation, Cabal-backed
+  `ontology-check`, cached subprocess bridge, report table generation.
+- Gates/verifiers: Python unit tests for parser and provenance, live Haskell
+  integration test when Cabal is available, Haskell test suite, full Python
+  quality wrapper.
+- Known limitations: the checker remains a small typed admissibility layer over
+  named motifs, not full program verification or neural architecture proof.
+
+Action class:
+
+- Retrieval/search/discovery: search.
+- Why: this moves an existing verifier into the empirical gate path without
+  adding a new body grammar or accepted mechanism class.
+
+Experiment:
+
+- Manifest/report paths: `experiments/viable_computational_bodies/haskell_gate.py`;
+  `formal/ontology-hs/app/Main.hs`;
+  `tests/test_viable_computational_bodies.py`.
+- Positive targets: `modular_concerned_body` and `guarded_syntax_body` should
+  record `formal_source = "haskell"` and valid formal verdicts when Cabal is
+  available.
+- Negative controls: `restless_vector_body` and `restless_tree_body` should
+  retain the `restless_without_calibration_guard` violation.
+- Stress tests: Cabal/Haskell unavailable path falls back to `python_static`
+  provenance rather than failing Modal or lightweight Python runs.
+
+Gate:
+
+- Acceptance rule: Python body summaries record Haskell source, formal validity,
+  resource cost, and violations when the external checker is present, while
+  preserving executable body gate outcomes.
+- Withheld/rejected rule: do not claim full formal verification; reject the
+  integration if Haskell failures are silently converted into passing verdicts.
+
+Results:
+
+- Accepted artifacts: named Haskell CLI verdicts, Python cached bridge, summary
+  provenance fields, parser/fallback/live integration tests.
+- Rejected or withheld artifacts: full shared JSON schema across search and
+  Haskell motif bodies remains future work.
+- Key metrics: expected Haskell costs are `8` for `modular_concerned_body`,
+  `6` for `restless_vector_body`, and `12` for symbolic guarded/restless tree
+  bodies.
+- Variance or ablation: unavailable Haskell toolchain path preserves old static
+  Python behavior with explicit `python_static` provenance.
+
+Residual content:
+
+- Explained by old regime: the pass/fail body gate shape and four-body vector
+  comparison are unchanged.
+- New content outside old regime: external typed verdicts now participate in
+  the Python empirical summaries and reports.
+- Retractions or supersessions: supersede "Haskell ontology is only a parallel
+  artifact" with "Haskell admissibility can be consumed by Python body gates."
+
+Next move: define a shared motif JSON schema so body search candidates can be
+checked by Haskell before or during vector/pixel gate evaluation.
