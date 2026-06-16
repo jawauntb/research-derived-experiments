@@ -43,6 +43,8 @@ Current experiment families:
 - [experiments/symbolic_weakness](experiments/symbolic_weakness): flagship multi-family symbolic + neural benchmark for the claim that **symmetry-compatible-hypothesis weakness predicts OOD generalization** where simplicity, MDL, compression, sharpness, parameter norm, and held-out validation do not. Paper draft at [papers/weakness_invariance_neurips/paper.md](papers/weakness_invariance_neurips/paper.md).
 - [experiments/concept_geometry](experiments/concept_geometry): model-backed probes for whether attractors, conceptual spaces, activation geometry, constraints, and agency terms occupy related embedding neighborhoods.
 - [experiments/activation_geometry](experiments/activation_geometry): open-model hidden-state probes for whether the same bridge geometry appears beyond embedding-only language space.
+- [experiments/concerned_syntax](experiments/concerned_syntax): Arc 2A benchmark for causal constituency and concern-gated intervention invention. Paper draft at [papers/concerned_syntax/paper.md](papers/concerned_syntax/paper.md).
+- [experiments/viable_computational_bodies](experiments/viable_computational_bodies): Arc 2B typed architecture/body evolution under viability, formal, and concerned-syntax gates. Paper draft at [papers/viable_computational_bodies/paper.md](papers/viable_computational_bodies/paper.md).
 
 Run the first pilot:
 
@@ -73,6 +75,18 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     experiments/symbolic_weakness/modal_neural_sweep.py \
     --n-shards 8 --models-per-shard 64 --epochs 2000 \
     --out artifacts/symbolic_weakness/modal_neural_sweep.json
+
+# Phase / Arc 2A concerned-syntax benchmark
+python3 -m experiments.concerned_syntax.benchmark \
+    --trials 200 --seed 20260616 \
+    --out artifacts/concerned_syntax/pilot.json \
+    --report experiments/concerned_syntax/results/pilot_2026_06_16.md
+
+# Phase / Arc 2B viable computational bodies benchmark
+python3 -m experiments.viable_computational_bodies.search \
+    --seeds 12 --generations 18 --population 18 --base-seed 20260616 \
+    --out artifacts/viable_computational_bodies/pilot.json \
+    --report experiments/viable_computational_bodies/results/pilot_2026_06_16.md
 ```
 
 ## Environment

@@ -18,6 +18,13 @@ The downloaded PDFs, HTML snapshots, and extracted full text are intentionally l
 - Technological Approach to Mind Everywhere: https://www.frontiersin.org/journals/systems-neuroscience/articles/10.3389/fnsys.2022.768201/full
 - On Having No Head: Cognition throughout Biological Systems: https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2016.00902/full
 - Why Muon Outperforms Adam: A Curvature Perspective: https://arxiv.org/abs/2606.04662
+- Representations of Geometric Shapes Have Syntactic Structure: https://doi.org/10.1037/xge0001890
+- Neural Language of Thought Models: https://arxiv.org/abs/2402.01203
+- Active Causal Experimentalist (ACE): Learning Intervention Strategies via Direct Preference Optimization: https://arxiv.org/abs/2602.02451
+- CausaLab: A Scalable Environment for Interactive Causal Discovery Toward AI Scientists: https://arxiv.org/abs/2605.26029
+- Latent State Design for World Models under Sufficiency Constraints: https://arxiv.org/abs/2605.01694
+- HCLSM: Hierarchical Causal Latent State Machines for Object-Centric World Modeling: https://arxiv.org/abs/2603.29090
+- Structuring Open-Ended NAS: Semi-Automated Design Knowledge Structuring with LLMs for Efficient Neural Architecture Search: https://arxiv.org/abs/2605.19247
 
 ## Local User-Provided Files
 
@@ -26,3 +33,6 @@ These remain local-only:
 - `/Users/jawaun/Downloads/Thesis_Revision_1-9 (1).pdf`
 - `/Users/jawaun/Downloads/autopoietic_theorem.pdf`
 - `/Users/jawaun/Downloads/There_is_no_self_evidence.pdf`
+- `/Users/jawaun/Downloads/2027-43747-005.pdf`
+- `/Users/jawaun/Metaphysics of Intelligence/dynamical_ontologies_blueprint.pdf`
+- `/Users/jawaun/Metaphysics of Intelligence/Maintained_Concern_Axioms_for_Meaning_Self_and_Epistemic_Action_fixed.pdf`
