@@ -13,6 +13,30 @@
 - [x] Run the first synthetic pilot.
 - [x] Publish the repo to GitHub.
 - [x] Push a feature branch, open PR #1, and merge it.
+- [x] Start Phase / Arc 2A: Concerned Syntax benchmark and paper scaffold.
+- [x] Start Phase / Arc 2B: Viable Computational Bodies benchmark and paper scaffold.
+
+## Phase / Arc 2A: Concerned Syntax
+
+- [x] Add a symbolic Concerned Shape Grammar benchmark.
+- [x] Add constituency interventions: pair probe, high-constituent move, role ablation, distractor probe, null.
+- [x] Compare null, flat-valence, compression, uncertainty-only, and concern-gated syntax selectors.
+- [x] Run a local design pilot and commit the public result report.
+- [x] Draft preregistration and paper.
+- [ ] Run a Modal multi-seed sweep.
+- [ ] Add learned neural agents that infer parse without direct access to hidden syntax.
+- [ ] Add pixel or vector observations where parse must be learned from generated shapes.
+
+## Phase / Arc 2B: Viable Computational Bodies
+
+- [x] Add a typed architecture/body motif grammar.
+- [x] Add formal/static dependency and resource gates.
+- [x] Compare accuracy-only, novelty-only, and viability-guided search.
+- [x] Run a local design pilot and commit the public result report.
+- [x] Draft preregistration and paper.
+- [ ] Run a Modal multi-seed sweep.
+- [ ] Replace symbolic motifs with executable neural modules.
+- [ ] Add ASP/s(CASP), Z3, or equivalent external formal guard integration.
 
 ## Experiment Track 1: Weakness vs. Simplicity
 

@@ -182,6 +182,92 @@ Residual content:
 
 Next move: keep the current activation layer sweep plan, but report anisotropy and consider cheap directional-curvature proxies before any strong mechanistic claim.
 
+## Phase / Arc 2A: Concerned Syntax Design Pilot
+
+Question: can a selector use costly interventions to reveal causal constituency only when the hidden parse matters for viability?
+
+Current regime:
+
+- Artifact types: minimal-agent viability dynamics, probe policies, attribution heads, activation geometry probes, source manifests, paper drafts, preregistrations.
+- Operations: symbolic task generation, intervention-choice scoring, anti-cheat selectors, local deterministic pilot, Modal-ready sweep.
+- Gates/verifiers: parse congruity, action accuracy, high-concern probe rate, low-concern no-restless-inquiry, subtree accuracy, unittest coverage.
+- Known limitations: symbolic parse candidates are evaluator-known; no learned neural perception yet; intervention language is provided.
+
+Action class:
+
+- Retrieval/search/discovery: discovery-leaning benchmark transition.
+- Why: adds a new accepted artifact type, causal constituency under concern, that Arc 1 could not represent.
+
+Experiment:
+
+- Manifest/report paths: `experiments/concerned_syntax/results/pilot_2026_06_16.md`; raw JSON withheld under `artifacts/concerned_syntax/pilot.json`.
+- Positive targets: `concerned_syntax` selector.
+- Negative controls: `null_policy`, `flat_valence`, `compression_proxy`, `uncertainty_only`.
+- Stress tests: low-concern ambiguity that should not trigger probing.
+
+Gate:
+
+- Acceptance rule: concerned syntax passes high-concern parse >= 0.75, action >= 0.85, high-concern probe >= 0.70, low-concern probe <= 0.25, subtree >= 0.75.
+- Withheld/rejected rule: raw artifacts stay under ignored `artifacts/`; selectors that pass action but fail parse/probe gates remain rejected controls.
+
+Results:
+
+- Accepted artifacts: `experiments/concerned_syntax/results/pilot_2026_06_16.md`; `papers/concerned_syntax/preregistration.md`; `papers/concerned_syntax/paper.md`.
+- Rejected or withheld artifacts: `artifacts/concerned_syntax/pilot.json`.
+- Key metrics: `concerned_syntax` parse-high 1.000, action 1.000, high-probe 1.000, low-probe 0.000, mean regret 0.001. `uncertainty_only` recovers parse but probes low-concern ambiguity at 1.000 and fails.
+- Variance or ablation: deterministic 200-trial design pilot with five selectors.
+
+Residual content:
+
+- Explained by old regime: action accuracy alone can still be achieved by flat or compression-biased policies on many trials.
+- New content outside old regime: causal constituency and no-restless-inquiry dissociate syntax under concern from reward, compression, and uncertainty reduction.
+- Retractions or supersessions: Phase 2 should not be framed as merely "more probe policy"; it needs parse/intervention constituency gates.
+
+Next move: run the Modal multi-seed sweep, then replace symbolic selectors with learned agents.
+
+## Phase / Arc 2B: Viable Computational Bodies Design Pilot
+
+Question: does viability-guided architecture evolution find syntax-bearing computational bodies more reliably than reward-only or novelty-only selection?
+
+Current regime:
+
+- Artifact types: architecture motif sets, static admissibility violations, resource costs, search histories, viability gates, pilot reports.
+- Operations: typed motif mutation, dependency repair, motif promotion, strategy ranking, quality/archive descriptors.
+- Gates/verifiers: formal validity, resource viability, parse congruity, subtree facilitation, intervention invention, self/world split, anti-cheat, formal-guard presence, unittest coverage.
+- Known limitations: symbolic motif grammar only; no executable neural modules or external solver integration yet.
+
+Action class:
+
+- Retrieval/search/discovery: discovery-leaning benchmark transition.
+- Why: makes computational body grammar itself an accepted search artifact, rather than treating architecture as fixed background.
+
+Experiment:
+
+- Manifest/report paths: `experiments/viable_computational_bodies/results/pilot_2026_06_16.md`; raw JSON withheld under `artifacts/viable_computational_bodies/pilot.json`.
+- Positive targets: `viability_guided` search.
+- Negative controls: `accuracy_only`, `novelty_only`.
+- Stress tests: shortcut reward head and missing formal guard.
+
+Gate:
+
+- Acceptance rule: strategy passes if final viable rate >= 0.75 and mean concerned-syntax score >= 0.80.
+- Withheld/rejected rule: raw artifacts stay under ignored `artifacts/`; high-train-return bodies without formal/anti-cheat gates remain rejected.
+
+Results:
+
+- Accepted artifacts: `experiments/viable_computational_bodies/results/pilot_2026_06_16.md`; `papers/viable_computational_bodies/preregistration.md`; `papers/viable_computational_bodies/paper.md`.
+- Rejected or withheld artifacts: `artifacts/viable_computational_bodies/pilot.json`.
+- Key metrics: `accuracy_only` viable 0.000, train 1.000; `novelty_only` viable 0.000, syntax 0.836; `viability_guided` viable 1.000, syntax 0.830.
+- Variance or ablation: 12-seed, 18-generation, 18-population design pilot.
+
+Residual content:
+
+- Explained by old regime: reward-only search can optimize train return while failing the intended representation.
+- New content outside old regime: viability-guided body evolution separates train return, novelty, formal validity, and syntax-bearing morphology.
+- Retractions or supersessions: Phase 2B should not be presented as generic NAS; its novelty is the formal/viability/concerned-syntax acceptance surface.
+
+Next move: run the Modal multi-seed sweep, then replace symbolic motifs with executable neural modules.
+
 ## Activation Geometry Probe: Pythia-70M Layer Sweep
 
 Question: does activation-space bridge geometry survive a layer sweep?

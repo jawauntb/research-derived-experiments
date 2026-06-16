@@ -16,3 +16,5 @@ Raw outputs should stay under `artifacts/` until summarized and intentionally co
 - `symbolic_weakness`: symbolic symmetry worlds where local patches and invariant rules tie on training data but separate OOD.
 - `concept_geometry`: embedding-space concept geometry probes.
 - `activation_geometry`: hidden-state and intervention probes.
+- `concerned_syntax`: Arc 2A causal-constituency and concern-gated intervention benchmark.
+- `viable_computational_bodies`: Arc 2B typed architecture-body evolution under viability and formal gates.
