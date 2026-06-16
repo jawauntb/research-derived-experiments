@@ -440,6 +440,92 @@ Residual content:
 
 Next move: evolve or search over differentiable modules rather than hand-instantiating four body variants.
 
+## Phase / Arc 2A: Vector-Observation Concerned Syntax
+
+Question: can learned agents pass concerned-syntax gates from generated vector surfaces without visible candidate parse features?
+
+Current regime:
+
+- Artifact types: parse-invariant vector shape surfaces, learned surface/action/binding/policy heads, Modal raw payloads, public reports.
+- Operations: generate six-part coordinate surfaces from roles and pair salience, withhold hidden parse identity, train/test SGD heads, evaluate concern-gated pair probing.
+- Gates/verifiers: hidden true parse withheld, vector surface invariant under true/alternate parse swap, surface shortcut and passive-vector controls, restless-vector low-concern control.
+- Known limitations: vector features are hand-designed; pair-probe intervention is provided; no pixel perception or invented motor primitive language yet.
+
+Action class:
+
+- Retrieval/search/discovery: discovery-leaning observation transition.
+- Why: removes candidate-parse descriptors from the learned gate and makes intervention necessary for causal binding.
+
+Experiment:
+
+- Manifest/report paths: `experiments/concerned_syntax/results/vector_shapes_modal_2026_06_16.md`; raw JSON withheld under `artifacts/concerned_syntax/vector_shapes_modal_sweep.json`.
+- Positive targets: `concerned_vector_probe`.
+- Negative controls: `surface_shortcut`, `passive_vector`, `restless_vector_probe`.
+- Stress tests: parse-invariant surface, no-probe passive inference, low-concern restless probing.
+
+Gate:
+
+- Acceptance rule: concerned vector agent passes every seed with high-concern parse >= 0.75, action >= 0.85, high-concern probe >= 0.70, low-concern probe <= 0.25, and subtree >= 0.75.
+- Withheld/rejected rule: raw Modal payload remains ignored; controls remain rejected when they pass action, parse, or probing alone.
+
+Results:
+
+- Accepted artifacts: `experiments/concerned_syntax/vector_shapes.py`; `experiments/concerned_syntax/modal_vector_shapes_sweep.py`; `experiments/concerned_syntax/results/vector_shapes_modal_2026_06_16.md`.
+- Rejected or withheld artifacts: `artifacts/concerned_syntax/vector_shapes_modal_sweep.json`; small Modal smoke where the mean metrics passed but a seed-level gate failed under 300 train / 140 test trials.
+- Key metrics: `concerned_vector_probe` parse-high 1.000, action 1.000, subtree 0.804, high-probe 1.000, low-probe 0.189, gate pass rate 1.000. `restless_vector_probe` parse/action 1.000 but low-probe 1.000 and fails. `passive_vector` action 0.873 but parse-high 0.492 and fails.
+- Variance or ablation: 5 seeds x 3,000 train trials x 1,200 test trials, 90 SGD epochs per seed.
+
+Residual content:
+
+- Explained by old regime: learned candidate-parse agents already showed that binding and concern gating can pass together.
+- New content outside old regime: the visible vector surface no longer exposes candidate parse trees; the accepted agent must use an intervention to recover the hidden binding bit.
+- Retractions or supersessions: candidate-parse features are no longer required for the learned Phase 2A gate, but pixel-level perception remains open.
+
+Next move: replace generated vectors with rendered pixels and require object/part extraction before probing.
+
+## Phase / Arc 2B: Vector Module Bodies and Haskell Typed Ontology
+
+Question: do executable module bodies and a typed ontology gate preserve the Phase 2B distinction under the stronger vector Arc 2A gate?
+
+Current regime:
+
+- Artifact types: vector-observation body summaries, Haskell ADT ontology, Cabal test logs, JSON formal verdicts, public reports.
+- Operations: map vector agents onto module bodies, evaluate learned Arc 2A gates, compile Haskell body ontology, test dependency/resource/calibration rules.
+- Gates/verifiers: vector Arc 2A gate plus body formal validity, anti-cheat, module coverage; Haskell `cabal test all`.
+- Known limitations: module bodies are still hand-instantiated; Haskell verdicts are not yet consumed by Python sweeps; no ASP/s(CASP), Z3, or proof assistant integration.
+
+Action class:
+
+- Retrieval/search/discovery: discovery-leaning formal-methods transition.
+- Why: adds a typed external checker that forced ontology clarifications and validates the body admissibility layer outside Python.
+
+Experiment:
+
+- Manifest/report paths: `experiments/viable_computational_bodies/results/vector_module_bodies_modal_2026_06_16.md`; Haskell package under `formal/ontology-hs`.
+- Positive targets: `modular_concerned_body`, `guarded_syntax_body`.
+- Negative controls: `surface_reward_body`, `passive_vector_body`, `restless_vector_body`, `restless_tree_body`.
+- Stress tests: surface reward shortcut, passive vector binding without active concern, restless vector binding without calibration, Haskell resource/dependency checks.
+
+Gate:
+
+- Acceptance rule: body passes only if it clears the vector Arc 2A gate, formal validity is 1.000, anti-cheat >= 0.70, and module coverage >= 0.80.
+- Haskell acceptance rule: `cabal test all` passes and `ontology-check` emits valid verdicts for guarded syntax and modular concerned bodies while rejecting restless bodies.
+
+Results:
+
+- Accepted artifacts: `experiments/viable_computational_bodies/results/vector_module_bodies_modal_2026_06_16.md`; `formal/ontology-hs`.
+- Rejected or withheld artifacts: raw vector Modal payload under ignored `artifacts/`; Cabal build outputs under ignored `dist-newstyle/`.
+- Key metrics: `modular_concerned_body` parse-high 1.000, action 1.000, high-probe 1.000, low-probe 0.189, formal 1.000, anti-cheat 0.950, module coverage 0.950, gate pass rate 1.000.
+- Formal catches: initial Haskell rules over-costed concern/calibration guards, then rejected vector causal binding because only `tree_binder` counted as a role-head binder; both were corrected explicitly.
+
+Residual content:
+
+- Explained by old regime: body-side controls still fail for shortcut, passive, or restless reasons.
+- New content outside old regime: the typed ontology can catch inconsistencies in the body grammar before the empirical sweep, and vector causal binding is now explicitly admitted as a binder role parallel to symbolic tree binding.
+- Retractions or supersessions: "formal guard" is no longer only Python logic; it now has a Haskell prototype, but Python does not yet call it during sweeps.
+
+Next move: make Python consume Haskell JSON verdicts during body evaluation, then evolve/search over module bodies instead of hand-instantiating them.
+
 ## Activation Geometry Probe: Pythia-70M Layer Sweep
 
 Question: does activation-space bridge geometry survive a layer sweep?

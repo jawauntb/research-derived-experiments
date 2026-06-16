@@ -92,6 +92,11 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     experiments/concerned_syntax/modal_learned_agents_sweep.py \
     --train-trials 3000 --test-trials 1200 --epochs 90
 
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/concerned_syntax/modal_vector_shapes_sweep.py \
+    --train-trials 3000 --test-trials 1200 --epochs 90
+
 # Phase / Arc 2B viable computational bodies benchmark
 python3 -m experiments.viable_computational_bodies.search \
     --seeds 12 --generations 18 --population 18 --base-seed 20260616 \
@@ -105,6 +110,14 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
 
 # Phase / Arc 2B executable body validation is produced by the learned 2A sweep:
 # experiments/viable_computational_bodies/results/executable_bodies_modal_2026_06_16.md
+
+# Phase / Arc 2B vector module validation is produced by the vector 2A sweep:
+# experiments/viable_computational_bodies/results/vector_module_bodies_modal_2026_06_16.md
+
+# Haskell typed ontology gate prototype
+(
+  cd formal/ontology-hs && cabal test all && cabal run ontology-check
+)
 ```
 
 ## Environment

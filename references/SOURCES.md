@@ -27,6 +27,8 @@ The downloaded PDFs, HTML snapshots, and extracted full text are intentionally l
 - HCLSM: Hierarchical Causal Latent State Machines for Object-Centric World Modeling: https://arxiv.org/abs/2603.29090
 - Structuring Open-Ended NAS: Semi-Automated Design Knowledge Structuring with LLMs for Efficient Neural Architecture Search: https://arxiv.org/abs/2605.19247
 - Representation Learning of Geometric Trees: https://arxiv.org/abs/2408.08799
+- Compositional Neuro-Symbolic Reasoning: https://arxiv.org/abs/2604.02434
+- Inducing Causal World Models in LLMs for Zero-Shot Physical Reasoning: https://arxiv.org/abs/2507.19855
 
 ## Local User-Provided Files
 

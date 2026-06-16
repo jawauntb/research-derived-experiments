@@ -15,14 +15,17 @@ reward heads. Static admissibility rules reject malformed bodies, and
 viability gates require the final architecture to pass concerned-syntax,
 self/world, resource, and anti-cheat criteria.
 
-In a 12-seed deterministic design pilot, an 18-cell symbolic Modal sweep, and
-a learned executable-body validation, reward-only search reaches high apparent
+In a 12-seed deterministic design pilot, an 18-cell symbolic Modal sweep, a
+learned executable-body validation, a vector-observation module validation, and
+a Haskell typed-ontology prototype, reward-only search reaches high apparent
 return while failing the viability gate. Novelty-only search finds syntax-like
-bodies, but remains unreliable under the full formal/viability gate. The first
-executable validation then instantiates four body variants on the Arc 2A
-learned-agent gate. Only the guarded syntax body passes: parse-high 1.000,
-action 1.000, low-concern probe rate 0.202, formal validity 1.000, and
-anti-cheat 0.950. The result is still not a claim that full neural
+bodies, but remains unreliable under the full formal/viability gate. The
+vector module validation instantiates four body variants on the stronger Arc
+2A vector gate. Only the modular concerned body passes: parse-high 1.000,
+action 1.000, low-concern probe rate 0.189, formal validity 1.000,
+anti-cheat 0.950, and module coverage 0.950. The Haskell checker separately
+validates body admissibility constraints and catches missing calibration guards
+as type-layer violations. The result is still not a claim that full neural
 architecture search has been solved. It is a Phase 2B acceptance surface:
 **accuracy is not architecture, novelty is not viable morphology, and formal
 validity alone is not concerned syntax.**
@@ -271,27 +274,88 @@ modules:
 - quality-diversity archive over syntax, resource, robustness, and proof
   coverage descriptors
 
-## 11. Limitations
+## 11. Vector Module Validation
+
+The next body validation uses the stronger Arc 2A vector-observation gate.
+Here the surface is generated from coordinates, roles, and pairwise distances,
+but it does not expose candidate parse descriptors. The body must use a
+concern-gated intervention to recover the hidden causal binding bit.
+
+Remote command: `doppler --scope /Users/jawaun/superoptimizers run -- uvx --python 3.12 --from modal modal run experiments/concerned_syntax/modal_vector_shapes_sweep.py --train-trials 3000 --test-trials 1200 --epochs 90`.
+
+Summary:
+
+| Body | Parse high | Action | Low probe | Formal | Modules | Gate |
+|---|---:|---:|---:|---:|---:|---|
+| modular concerned | 1.000 | 1.000 | 0.189 | 1.000 | 0.950 | PASS |
+| passive vector | 0.492 | 0.873 | 0.000 | 1.000 | 0.450 | fail |
+| restless vector | 1.000 | 1.000 | 1.000 | 0.000 | 0.800 | fail |
+| surface reward | 0.492 | 0.876 | 0.000 | 1.000 | 0.250 | fail |
+
+![Figure 1: vector module-body gate margins. Cell labels show raw metric values; color shows margin to the relevant body gate, with low-probe inverted because lower is better.](figures/fig1_vector_module_gate_margins.png)
+
+This is the first validation where the body must solve the Arc 2A gate from a
+parse-invariant generated vector surface. The surface reward and passive
+vector bodies remain formally admissible, but they do not have enough module
+coverage to identify the hidden binding. The restless vector body has the
+binding mechanism but fails the formal concern guard. The modular concerned
+body is the first accepted vector-observation body: surface encoder, concern
+policy, causal binding head, role-conditioned action head, and calibration
+guard.
+
+## 12. Haskell Typed Ontology Gate
+
+The Python gates are convenient for experiments, but the ontology layer should
+eventually live in a stronger typed formalism. This branch adds a small Haskell
+prototype under `formal/ontology-hs`.
+
+Run:
+
+```bash
+(
+  cd formal/ontology-hs && cabal test all && cabal run ontology-check
+)
+```
+
+The Haskell checker defines body motifs as algebraic data types, checks
+dependency and resource rules, and emits JSON verdicts. In the current run:
+
+| Body | Formal | Cost | Violations |
+|---|---:|---:|---|
+| guarded syntax | true | 12 | none |
+| restless tree | false | 12 | missing calibration guard |
+| modular concerned | true | 8 | none |
+
+![Figure 2: Haskell typed-ontology verdicts. The checker keeps resource viability and formal validity separate: the restless tree body is within budget but invalid because it lacks the calibration guard.](figures/fig2_haskell_ontology_verdicts.png)
+
+The useful part is not just the final pass. During development, the typed
+checker forced two clarifications: concern and calibration guards are formal
+overlays rather than resource-costed morphology, and vector causal binding can
+serve the same binder role that tree binding serves in the symbolic body.
+
+## 13. Limitations
 
 The current search and executable validation are intentionally small. The
 executable bodies are linear learned components over vectorized symbolic
-features, not full neural architectures trained from pixels. The formal guard
-is implemented as Python logic rather than ASP/s(CASP), Z3, or another
-external solver. The point is to make the acceptance surface explicit and
-behaviorally grounded before expensive architecture evolution begins.
+features, not full neural architectures trained from pixels. The Haskell gate
+is a small typed ontology prototype, not a complete proof assistant, ASP,
+s(CASP), or SMT integration. The point is to make the acceptance surface
+explicit and behaviorally grounded before expensive architecture evolution
+begins.
 
 The strongest next test is whether executable bodies discovered under this
-grammar pass the Arc 2A concerned-syntax benchmark without direct access to the
-hidden parse.
+grammar pass the Arc 2A pixel-level concerned-syntax benchmark without direct
+access to the hidden parse.
 
-## 12. Conclusion
+## 14. Conclusion
 
 Arc 2B reframes architecture search as viability-guided body evolution. The
-pilot and learned validation show why that matters: train return, novelty,
-formal validity, tree parsing, and concerned syntax can dissociate. The next
-phase should not ask for merely "better models." It should ask for bodies
-whose morphology makes the world's causal grammar learnable without becoming
-restless or shortcut-driven.
+pilot, learned validation, vector module validation, and typed ontology gate
+show why that matters: train return, novelty, formal validity, module coverage,
+binding, and concerned syntax can dissociate. The next phase should not ask
+for merely "better models." It should ask for bodies whose morphology makes
+the world's causal grammar learnable without becoming restless or
+shortcut-driven.
 
 ## References
 
@@ -299,6 +363,9 @@ Aubin, J.-P. (1991). *Viability Theory*. Birkhauser.
 
 Brown, J. (2026). *The Metric Stack of Concern: From Viability Prediction to
 Maintained Self/World Boundaries in Minimal Agents*.
+
+Das, A., Ghugarkar, O., Bhat, V., & Aali, A. (2026). Compositional
+Neuro-Symbolic Reasoning. arXiv:2604.02434.
 
 Cooper, P., & Velasquez, A. (2026). Active Causal Experimentalist (ACE):
 Learning intervention strategies via direct preference optimization. arXiv:
@@ -316,6 +383,10 @@ Constraints. arXiv:2605.01694.
 Le Lidec, Q., Biza, O., Goudet, O., Balestriero, R., & Lajoie, G. (2026).
 Causal-JEPA: Learning World Models through Object-Level Latent Interventions.
 arXiv:2602.11389.
+
+Sharma, A., Nguyen, L., Gupta, A., Wang, C., Adebayo, C., & Kowalski, J.
+(2025). Inducing Causal World Models in LLMs for Zero-Shot Physical
+Reasoning. arXiv:2507.19855.
 
 Mouret, J.-B., & Clune, J. (2015). Illuminating search spaces by mapping
 elites. arXiv:1504.04909.

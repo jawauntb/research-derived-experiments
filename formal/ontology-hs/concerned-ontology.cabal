@@ -1,0 +1,38 @@
+cabal-version: 3.0
+name: concerned-ontology
+version: 0.1.0.0
+license: MIT
+author: Jawaun Brown
+build-type: Simple
+
+common warnings
+  ghc-options: -Wall -Wcompat -Wincomplete-patterns -Wincomplete-record-updates -Wincomplete-uni-patterns -Wredundant-constraints
+
+library
+  import: warnings
+  exposed-modules:
+      ConcernedOntology
+  hs-source-dirs: src
+  build-depends:
+      base >=4.19 && <5,
+      containers
+  default-language: Haskell2010
+
+executable ontology-check
+  import: warnings
+  main-is: Main.hs
+  hs-source-dirs: app
+  build-depends:
+      base >=4.19 && <5,
+      concerned-ontology
+  default-language: Haskell2010
+
+test-suite ontology-check-test
+  import: warnings
+  type: exitcode-stdio-1.0
+  main-is: Main.hs
+  hs-source-dirs: test
+  build-depends:
+      base >=4.19 && <5,
+      concerned-ontology
+  default-language: Haskell2010
