@@ -148,8 +148,16 @@ Current branch result:
 - `concern_without_target` proves concern gating alone is insufficient:
   low-concern probe rate is `0.156`, but high-concern target accuracy is only
   `0.088`.
-- The next breakthrough gate should add held-out transfer and richer program
-  composition, not rerun the same `observe_pair(a,b)` menu.
+- The searched-program-policy follow-up moves from a named positive agent to a
+  searched recipe over probe gate, target selector, binding update, and action
+  rule for the same frozen `observe_pair(a,b)` menu. This is a policy-search
+  transition, not yet richer motor/intervention primitives. Across five Modal
+  seeds, `concerned_program_search` passes with parse/action/target/useful all
+  `1.000`, subtree `0.789`, low-probe `0.156`, and recipe
+  `concern_or_calibration+slot_scores+bind_if_useful_probe+bound_action`;
+  reward-only and syntax-proxy searches fail for distinct reasons.
+- The next breakthrough gate should add held-out transfer and richer movement,
+  ablation, or multi-step composition beyond the same `observe_pair(a,b)` menu.
 
 ## Literature Bearings
 

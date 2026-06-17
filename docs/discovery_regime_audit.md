@@ -3958,6 +3958,92 @@ Next move: extend the program language to `move(anchor)`, `ablate(role)`, and
 two-step compositions while adding held-out role-pair and parse-family
 transfer.
 
+## Arc 2A: Searched Program-Policy Gate
+
+Question: can Arc 2A recover the frozen `2A-v1-pixels-observe_pair` contract
+by searching over program-policy recipes rather than receiving
+`concerned_program_inventor` as a named positive policy?
+
+Current regime:
+
+- Artifact types: pixel-rendered object surfaces, learned concern/target/bound
+  heads, `observe_pair(a,b)` probe programs, and named positive/control agents.
+- Operations: train learned heads, choose whether to probe, select an object
+  pair, bind the observation if useful, and act under viability cost.
+- Gates/verifiers: object extraction, parse/action/subtree accuracy,
+  high-concern probing, low-concern no-restless cap, target accuracy, useful
+  program rate, targeted unit tests, Modal five-seed sweep.
+- Known limitations: the program menu is still frozen to `observe_pair` plus
+  `null`; recipe search is small and typed by hand; no movement, ablation,
+  two-step composition, or natural-image perception.
+
+Action class:
+
+- Retrieval/search/discovery: discovery-leaning policy-search transition.
+- Why: the old regime could represent a positive named policy, but not an
+  explicit search over the policy's compositional pieces: probe gate, target
+  selector, binding update, and action rule.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/concerned_syntax/searched_program_policy.py`;
+  `experiments/concerned_syntax/modal_searched_program_policy_sweep.py`;
+  `experiments/concerned_syntax/results/searched_program_policy_modal_2026_06_17.md`;
+  local ignored artifact
+  `artifacts/concerned_syntax/searched_program_policy_modal_sweep.json`.
+- Positive target: `concerned_program_search` should discover a recipe that
+  combines concern/capped calibration, target selection, useful binding, and
+  bound-conditioned action.
+- Negative controls: `reward_only_program_search` should prefer a cheap
+  no-probe shortcut; `syntax_proxy_program_search` should recover target and
+  binding metrics while violating low-concern discipline.
+- Stress tests: 108 recipes scored on a bounded search split; chosen recipes
+  evaluated on held-out test trials across five Modal seeds.
+
+Gate:
+
+- Acceptance rule: object extraction >= 0.99, parse-high >= 0.75, action >=
+  0.85, subtree >= 0.75, high-concern probe >= 0.70, low-concern probe <=
+  0.25, target accuracy high-concern >= 0.75, useful-program rate high-concern
+  >= 0.70, and gate pass rate 1.000 across Modal seeds.
+- Withheld/rejected rule: reject if reward-only or syntax-proxy search clears
+  the full gate. Withhold claims of open-ended motor-program invention or rich
+  intervention language.
+
+Results:
+
+- Accepted artifacts: searched program-policy module, Modal entrypoint, Modal
+  report, README commands, targeted tests, and this audit entry.
+- Rejected or withheld artifacts: the first uncapped Modal attempt was
+  canceled because redundant recipe scoring was too slow; raw JSON stays under
+  ignored `artifacts/`; richer program primitives remain future work.
+- Key metrics across five Modal seeds: `concerned_program_search` parse-high
+  `1.000`, action `1.000`, subtree `0.789`, object extraction `1.000`,
+  high-probe `1.000`, low-probe `0.156`, target-high `1.000`, useful-high
+  `1.000`, gate pass rate `1.000`, best recipe
+  `concern_or_calibration+slot_scores+bind_if_useful_probe+bound_action`.
+  `reward_only_program_search` never probes, target/useful `0.000`, and fails.
+  `syntax_proxy_program_search` gets target/useful `1.000`, but low-probe
+  `1.000`, so it fails.
+- Variance or ablation: concerned search gate pass SD `0.000`; low-probe SD
+  `0.006`; subtree SD `0.006`; target/useful SD `0.000`.
+
+Residual content:
+
+- Explained by old regime: the underlying learned heads and `observe_pair`
+  environment still supply the available observations.
+- New content outside old regime: the accepted policy is recovered through a
+  search objective over compositional policy pieces, and the controls show why
+  reward-only search and syntax-only search are insufficient.
+- Retractions or supersessions: supersede "2A-v1 depends on a named positive
+  policy" with "2A-v1 can be recovered by searched policy composition over the
+  frozen `observe_pair` menu." Do not upgrade this to open-ended intervention
+  invention.
+
+Next move: add held-out transfer for searched recipes, then extend the program
+language to movement, ablation, and two-step composition.
+
 ## Arc 2A/2B: Program-Body Search Against 2A-v1
 
 Question: can Arc 2B search discover formal, resource-bounded bodies whose

@@ -449,6 +449,8 @@ Done:
   local 5-seed gate validation.
 - Minimal pixel-level intervention invention with learned `observe_pair(a,b)`
   target selection and concern gating.
+- Searched program-policy recipes over the frozen `observe_pair(a,b)` menu:
+  probe gate, target selector, binding update, and action rule.
 - Python consumption of Haskell JSON verdicts inside learned/vector body
   summaries when the local Haskell checker is available.
 - Gate-margin charts for 2A and 2B.
@@ -461,8 +463,10 @@ Not done:
 - Learned object/part extraction from images beyond algorithmic connected
   components.
 - Modal-scale pixel sweep.
-- Modal-scale intervention-invention sweep and richer program language beyond
-  `observe_pair(a,b)`.
+- Richer program language beyond `observe_pair(a,b)`, including movement,
+  ablation, and two-step composition.
+- Held-out transfer for searched program-policy recipes and richer program
+  tokens.
 - Evolved/search-discovered executable module bodies under the vector/pixel
   gate.
 - Real neural module bodies such as object-slot encoders, graph neural nets,
@@ -639,8 +643,11 @@ probe program tokens:
 ```
 
 The first line of this goal is now complete for `observe_pair(a,b)` target
-selection. The remaining next version is to add movement, ablation, two-step
-composition, held-out transfer, and Modal-scale replication.
+selection. A searched-policy follow-up now searches over the frozen menu's
+probe gate, target selector, binding update, and action rule rather than
+receiving `concerned_program_inventor` as a named policy. The remaining next
+version is to add movement, ablation, two-step composition, and held-out
+transfer.
 
 Gate:
 
@@ -1018,3 +1025,15 @@ Latest coupled result after PR #127:
   `calibration_guard+causal_binding_head+concern_policy+formal_guard+intervention_planner+reward_head+vector_surface_encoder+world_model`.
 - `reward_only` fails as a shortcut body; `syntax_proxy` reaches target/useful
   `1.000` but fails body gate with low-probe `0.830`.
+
+Latest searched 2A policy result after this branch:
+
+- `experiments/concerned_syntax/results/searched_program_policy_modal_2026_06_17.md`
+  searches 108 recipes over probe gate, target selector, binding update, and
+  action rule for the frozen `2A-v1-pixels-observe_pair` menu.
+- Across five Modal seeds, `concerned_program_search` reaches parse/action/
+  target/useful `1.000`, subtree `0.789`, low-probe `0.156`, gate pass rate
+  `1.000`, and discovers
+  `concern_or_calibration+slot_scores+bind_if_useful_probe+bound_action`.
+- `reward_only_program_search` fails by never asking useful questions;
+  `syntax_proxy_program_search` fails by probing low-concern cases at `1.000`.

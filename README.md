@@ -112,6 +112,18 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     experiments/concerned_syntax/modal_intervention_invention_sweep.py \
     --train-trials 3000 --test-trials 1200 --epochs 90
 
+python3 -m experiments.concerned_syntax.searched_program_policy \
+    --train-trials 1200 --test-trials 500 --seed 20260617 --epochs 60 \
+    --search-trials 600 \
+    --out artifacts/concerned_syntax/searched_program_policy_local.json \
+    --agent-report experiments/concerned_syntax/results/searched_program_policy_local_2026_06_17.md
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/concerned_syntax/modal_searched_program_policy_sweep.py \
+    --train-trials 3000 --test-trials 1200 --epochs 90 \
+    --search-trials 600
+
 doppler --scope /Users/jawaun/superoptimizers run -- \
     uvx --python 3.12 --from modal modal run \
     experiments/concerned_syntax/modal_pixel_shapes_sweep.py \
