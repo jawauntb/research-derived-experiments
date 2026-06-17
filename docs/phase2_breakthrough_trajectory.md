@@ -148,8 +148,19 @@ Current branch result:
 - `concern_without_target` proves concern gating alone is insufficient:
   low-concern probe rate is `0.156`, but high-concern target accuracy is only
   `0.088`.
-- The next breakthrough gate should add held-out transfer and richer program
-  composition, not rerun the same `observe_pair(a,b)` menu.
+- The next branch lifts the same contract to `2A-v2-pixels-rich_programs`.
+  `concerned_program_composer` chooses among `observe_pair`, `move_anchor`,
+  `ablate_pair`, and `compose_move_observe` families and passes the 5-seed
+  Modal gate with high-concern parse `1.000`, action `1.000`, family `1.000`,
+  target `1.000`, useful-program `1.000`, rich-program `1.000`, low-concern
+  program rate `0.162`, and gate pass rate `1.000`.
+- The richer controls isolate the remaining claim boundary: `target_without_family`
+  gets target accuracy `1.000` but useful-program rate `0.000`;
+  `family_without_target` gets family accuracy `1.000` but target accuracy
+  `0.080`; `rich_without_concern` gets parse/action/family/target all
+  `1.000` but low-concern program rate `1.000`.
+- The next breakthrough gate should add held-out transfer and open-ended or
+  searched program composition, not rerun the same provided rich grammar.
 
 ## Literature Bearings
 

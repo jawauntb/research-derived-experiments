@@ -4040,3 +4040,93 @@ Residual content:
 Next move: put Haskell motif verdicts inside `program_body_search`, then lift
 the contract to `2A-v2` with `move(anchor)`, `ablate(role)`, two-step programs,
 and held-out role/parse transfer as an actual body gate.
+
+## Phase / Arc 2A: Rich Intervention-Program Language
+
+Question: can a pixel-level concerned-syntax agent choose the right family of
+intervention program, not only the right `observe_pair(a,b)` target, while
+preserving low-concern discipline?
+
+Current regime:
+
+- Artifact types: 2A-v1 pixel/program examples, extracted object features,
+  learned concern policy, learned target selector, Modal reports, targeted
+  tests.
+- Operations: choose whether to intervene, select a target pair, and run the
+  provided `observe_pair(a,b)` program.
+- Gates/verifiers: object extraction, parse/action/subtree, high/low probe
+  discipline, target accuracy, useful-program rate, Modal five-seed sweep.
+- Known limitations: `observe_pair(a,b)` was the only useful program family,
+  so target selection could pass without learning a richer intervention
+  grammar.
+
+Action class:
+
+- Retrieval/search/discovery: discovery-leaning intervention-language
+  transition.
+- Why: this changes the program grammar and gate. The accepted agent must
+  select among `observe_pair`, `move_anchor`, `ablate_pair`, and
+  `compose_move_observe` families, not merely decide which pair to observe.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/concerned_syntax/rich_program_language.py`;
+  `experiments/concerned_syntax/modal_rich_program_language_sweep.py`;
+  `experiments/concerned_syntax/results/rich_program_language_local_2026_06_17.md`;
+  `experiments/concerned_syntax/results/rich_program_language_modal_2026_06_17.md`;
+  local ignored artifacts under
+  `artifacts/concerned_syntax/rich_program_language_*.json`.
+- Positive target: `concerned_program_composer` should pass the transported
+  2A gate plus family, target, useful-program, and rich-program gates.
+- Negative controls: `surface_rich_shortcut`, `random_rich_program`,
+  `family_without_target`, `target_without_family`, and
+  `rich_without_concern`.
+- Stress tests: target-only and family-only controls must fail separately;
+  a rich composer without concern must fail low-concern discipline.
+
+Gate:
+
+- Acceptance rule: object extraction >= 0.99, parse-high >= 0.75, action >=
+  0.85, subtree >= 0.75, high-concern program rate >= 0.70, low-concern
+  program rate <= 0.25, target-high >= 0.70, family-high >= 0.70,
+  useful-high >= 0.70, and rich-high >= 0.70.
+- Withheld/rejected rule: do not claim open-ended apparatus discovery,
+  learned object-slot perception, or body-level consumption of the v2 contract.
+  Reject controls that pass target, family, action, or parse alone.
+
+Results:
+
+- Accepted artifacts: rich program-language module, Modal sweep entrypoint,
+  public local and Modal reports, targeted tests, README commands, trajectory
+  and handoff updates.
+- Rejected or withheld artifacts: raw JSON under ignored `artifacts/`; no
+  learned object-slot encoder; no search-discovered grammar; no 2B body search
+  against the v2 contract yet.
+- Key metrics across five Modal seeds: `concerned_program_composer`
+  parse-high `1.000`, action `1.000`, subtree `0.794`, object extraction
+  `1.000`, high-program `1.000`, low-program `0.162`, family-high `1.000`,
+  target-high `1.000`, useful-high `1.000`, rich-high `1.000`, mean regret
+  `0.004`, gate pass rate `1.000`.
+  `target_without_family` gets target-high `1.000` but family-high `0.000`
+  and useful-high `0.000`. `family_without_target` gets family-high `1.000`
+  but target-high `0.080`. `rich_without_concern` gets parse/action/family/
+  target all `1.000` but low-program `1.000`.
+- Variance or ablation: Modal five-seed gate pass is stable at `1.000` for the
+  composer; controls remain rejected for distinct family, target, or concern
+  failures. The local 1,200/500 split also passed.
+
+Residual content:
+
+- Explained by old regime: pixel-object extraction, concern gating, and target
+  selection still explain part of the result.
+- New content outside old regime: useful intervention now depends on program
+  family, so `observe_pair(a,b)` is no longer a universal solution. The gate
+  separates "knows what object pair matters" from "knows which manipulation
+  makes that binding legible."
+- Retractions or supersessions: supersede "richer program language remains
+  future work" with "provided rich program grammar passes; open-ended program
+  discovery and held-out transfer remain future work."
+
+Next move: add held-out role/parse transfer, then make 2B body search and the
+Haskell admissibility layer consume `2A-v2-pixels-rich_programs`.
