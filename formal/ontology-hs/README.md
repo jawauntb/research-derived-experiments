@@ -20,3 +20,5 @@ the Arc 2A/2B vector experiments. Named body and motif invocations emit
 line-delimited JSON verdicts for Python consumption. Python falls back to its
 static verdicts when the local Haskell toolchain is unavailable, but records
 `formal_source = "haskell"` whenever the external checker supplies the gate.
+`syntax_memory` may be backed by either a symbolic `tree_binder` or the
+vector/program-side `causal_binding_head`.

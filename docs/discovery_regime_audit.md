@@ -4040,3 +4040,94 @@ Residual content:
 Next move: put Haskell motif verdicts inside `program_body_search`, then lift
 the contract to `2A-v2` with `move(anchor)`, `ablate(role)`, two-step programs,
 and held-out role/parse transfer as an actual body gate.
+
+## Arc 2A/2B: Haskell-in-Loop Program-Body Search
+
+Question: can Arc 2B body search consume Haskell motif admissibility verdicts
+inside the candidate loop rather than reporting only Python-static body
+validity?
+
+Current regime:
+
+- Artifact types: 2A-v1 empirical summaries, searched 2B motif bodies, Python
+  static body constraints, Haskell ontology JSON verdicts.
+- Operations: evaluate 2A-v1 agents, mutate/promote motif bodies, request
+  `ontology-check --motifs` verdicts for candidate motif sets, and rank bodies
+  using empirical, resource, and formal gates.
+- Gates/verifiers: empirical 2A-v1 gate, Haskell formal validity, Haskell
+  resource cost, Haskell violations, body gate, unit tests, Cabal ontology
+  tests.
+- Known limitations: Haskell validates motif admissibility only; it is not a
+  proof assistant, solver-backed semantics, or neural architecture verifier.
+
+Action class:
+
+- Retrieval/search/discovery: coupled verifier transition.
+- Why: the search loop now uses an external typed motif checker for arbitrary
+  candidate bodies, not only named post-hoc body summaries.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/viable_computational_bodies/haskell_gate.py`;
+  `experiments/viable_computational_bodies/program_body_search.py`;
+  `formal/ontology-hs/src/ConcernedOntology.hs`;
+  `experiments/viable_computational_bodies/results/program_body_search_haskell_local_2026_06_16.md`;
+  ignored artifact
+  `artifacts/viable_computational_bodies/program_body_search_haskell_local.json`.
+- Positive target: `viability_guided` should discover a body whose final rows
+  record `formal_source = "haskell"`, `formal_valid = 1.000`, empirical gate
+  `1.000`, and body gate `1.000`.
+- Negative controls: `reward_only` should remain shortcut-invalid;
+  `syntax_proxy` should keep target/useful competence but fail the full formal
+  and low-concern viability contract.
+- Stress tests: Haskell syntax-memory admissibility now accepts either
+  `tree_binder` or `causal_binding_head`, matching the vector/program body
+  grammar; Python falls back only on Haskell unavailability, not Haskell
+  errors.
+
+Gate:
+
+- Acceptance rule: across the fixed five-seed report set, `viability_guided`
+  body gate rate `1.000`, empirical gate rate `1.000`, formal valid rate
+  `1.000`, Haskell-source rate `1.000`, target/useful high-concern rates
+  `1.000`, and low-concern probe rate <= `0.25`.
+- Withheld/rejected rule: do not claim full formal verification. Reject if
+  Haskell errors become passing Python-static verdicts or if controls satisfy
+  the body gate.
+
+Results:
+
+- Accepted artifacts: custom motif verdict bridge, cached program-body formal
+  oracle, Haskell dependency alignment for `syntax_memory`, fixed-seed
+  Haskell-backed report, and tests for custom motif verdicts and Haskell
+  provenance.
+- Rejected or withheld artifacts: Modal image does not yet carry a Haskell
+  toolchain; the Modal wrapper records formal provenance but will fall back to
+  `python_static` unless Cabal is available.
+- Key metrics from the five-seed Haskell-backed local report:
+  `viability_guided` body gate `1.000`, empirical gate `1.000`, formal valid
+  `1.000`, Haskell-source rate `1.000`, target-high `1.000`, useful-high
+  `1.000`, low-probe `0.144`, best body
+  `calibration_guard+causal_binding_head+concern_policy+flat_encoder+formal_guard+intervention_planner+reward_head+syntax_memory+vector_surface_encoder+world_model`.
+  `reward_only` body gate `0.000`; `syntax_proxy` body gate `0.000` despite
+  target/useful `1.000` and empirical gate `0.400`.
+- Variance or ablation: a consecutive-seed local diagnostic failed because one
+  2A empirical seed missed subtree margin, not because the Haskell formal layer
+  rejected the target body. The fixed seed set matches the prior Modal report
+  seed set.
+
+Residual content:
+
+- Explained by old regime: the accepted body still expresses the frozen
+  `2A-v1-pixels-observe_pair` empirical contract.
+- New content outside old regime: Haskell admissibility now participates in the
+  search loop for arbitrary motif candidates, and the ontology had to clarify
+  that vector/program syntax memory can bind through `causal_binding_head`.
+- Retractions or supersessions: supersede "Haskell motif verdicts are not yet
+  inside the program-body search loop" with "Haskell motif verdicts are inside
+  the local search loop with explicit fallback provenance."
+
+Next move: package a Modal image with the Haskell toolchain or precomputed
+Haskell verdict cache, then lift the contract to richer `2A-v2` programs while
+preserving Haskell-source formal provenance.

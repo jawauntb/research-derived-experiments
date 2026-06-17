@@ -24,6 +24,7 @@ def run_seed(
     train_trials: int,
     test_trials: int,
     epochs: int,
+    formal_mode: str,
 ) -> dict[str, Any]:
     from experiments.viable_computational_bodies.program_body_search import (
         PROGRAM_BODY_STRATEGIES,
@@ -40,6 +41,7 @@ def run_seed(
         epochs=epochs,
         base_seed=seed,
         role_transfer_kind=None,
+        formal_mode=formal_mode,
     )
     return {
         "seed": seed,
@@ -54,6 +56,7 @@ def main(
     train_trials: int = 1200,
     test_trials: int = 500,
     epochs: int = 60,
+    formal_mode: str = "auto",
 ) -> None:
     from experiments.viable_computational_bodies.program_body_search import (
         PROGRAM_BODY_STRATEGIES,
@@ -66,6 +69,7 @@ def main(
         run_seed.starmap(
             [
                 (seed, generations, population, train_trials, test_trials, epochs)
+                + (formal_mode,)
                 for seed in seeds
             ]
         )
@@ -99,6 +103,7 @@ def main(
                     object_extraction_rate=1.0,
                     empirical_gate_pass=int(stats["empirical_gate_rate"] >= 0.999),
                     formal_valid=int(stats["formal_valid_rate"] >= 0.999),
+                    formal_source=stats["formal_source"],
                     resource_cost=int(round(stats["resource_cost"])),
                     body_gate=int(stats["body_gate_rate"] >= 0.999),
                     violations=(),
@@ -119,6 +124,7 @@ def main(
             "epochs": epochs,
             "base_seed": seeds[0],
             "role_transfer_kind": None,
+            "formal_mode": formal_mode,
         },
         "summary": summarize_program_bodies(rows),
         "role_transfer_summary": None,
@@ -136,4 +142,3 @@ def main(
     )
     write_coupled_report(report, payload)
     print(f"Wrote {report}")
-
