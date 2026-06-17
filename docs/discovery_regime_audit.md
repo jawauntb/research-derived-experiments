@@ -4040,3 +4040,81 @@ Residual content:
 Next move: put Haskell motif verdicts inside `program_body_search`, then lift
 the contract to `2A-v2` with `move(anchor)`, `ablate(role)`, two-step programs,
 and held-out role/parse transfer as an actual body gate.
+
+## Arc 2A: Intervention-Invention Transfer Gate
+
+Question: does the frozen `2A-v1-pixels-observe_pair` contract survive
+held-out role-kind and hidden true-parse transfer?
+
+Current regime:
+
+- Artifact types: pixel-rendered object surfaces, connected-component object
+  features, learned `observe_pair(a,b)` target selection, i.i.d. 2A-v1 reports.
+- Operations: train the existing concerned-program-inventor and controls on
+  the original i.i.d. split, then retrain with one role kind or one hidden true
+  parse withheld and evaluate only on that held-out slice.
+- Gates/verifiers: the full transported 2A-v1 gate plus per-slice target,
+  useful-program, high/low probe, subtree, and action metrics.
+- Known limitations: this is a transfer-failure diagnosis, not a transfer fix
+  or richer intervention-language result.
+
+Action class:
+
+- Retrieval/search/discovery: diagnostic regime-boundary result.
+- Why: no new intervention language is introduced, but the verifier changes
+  from i.i.d. seed stability to held-out transfer slices that can falsify the
+  stronger generalization claim.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/concerned_syntax/intervention_invention.py`;
+  `experiments/concerned_syntax/modal_intervention_transfer_sweep.py`;
+  `experiments/concerned_syntax/results/intervention_transfer_local_2026_06_16.md`;
+  `experiments/concerned_syntax/results/intervention_transfer_modal_2026_06_16.md`;
+  local ignored artifact
+  `artifacts/concerned_syntax/intervention_transfer_local.json`; Modal ignored
+  artifact `artifacts/concerned_syntax/intervention_transfer_modal_sweep.json`.
+- Positive target: `concerned_program_inventor` must keep the i.i.d. gate and
+  pass all held-out role-kind and true-parse slices.
+- Negative controls: the existing surface, random-program, concern-only, and
+  target-only controls remain in the i.i.d. summary.
+- Stress tests: held out `shield_poison`, `repair_core`, `food_trap`,
+  `repeat_concat`, `hooked_repeat`, `alternating_bind`, and `edge_core`.
+
+Gate:
+
+- Acceptance rule: i.i.d. gate pass rate 1.000 and every transfer slice pass
+  rate 1.000 for `concerned_program_inventor`.
+- Withheld/rejected rule: do not claim role/parse transfer from the i.i.d.
+  2A-v1 result. Treat a transfer failure as the next bottleneck, not as noise.
+
+Results:
+
+- Accepted artifacts: transfer-suite runner, parallelized Modal transfer
+  entrypoint, local and Modal transfer reports, and tests for parse transfer,
+  transfer-suite axes, and all-slice gate aggregation.
+- Rejected or withheld artifacts: no transfer-passing mechanism yet; no richer
+  `move`/`ablate`/composition program language yet.
+- Key metrics across five Modal seeds: i.i.d. gate pass `1.000`, mean
+  transfer-slice gate pass `0.171`, transfer gate fail. The weakest slice is
+  `role_kind:repair_core` with parse-high `0.000`, target-high `0.000`,
+  useful-high `0.000`, high-probe `0.000`, and low-probe `0.479`.
+- Transfer detail: all three held-out role kinds fail. True-parse slices keep
+  parse/action/target metrics high, but fail seed-level gates at rates
+  `0.200` to `0.400` because subtree accuracy remains below the `0.75` gate.
+
+Residual content:
+
+- Explained by old regime: i.i.d. target invention remains intact, and
+  true-parse transfer often preserves parse/action/target selection.
+- New content outside old regime: role-family transfer exposes that the current
+  learned target/concern policies can be too tied to role-specific pixel
+  surfaces. Parse-family transfer also reveals a subtree-margin weakness that
+  was hidden by parse/action accuracy.
+- Retractions or supersessions: supersede "add transfer next" with "transfer
+  is now a first-class failed gate and claim boundary."
+
+Next move: use the Modal transfer report to train a role-invariant
+object/causal-pair selector, or move to `2A-v2` richer programs while keeping
+held-out transfer as a required gate.
