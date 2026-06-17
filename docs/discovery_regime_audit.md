@@ -3958,6 +3958,93 @@ Next move: extend the program language to `move(anchor)`, `ablate(role)`, and
 two-step compositions while adding held-out role-pair and parse-family
 transfer.
 
+## Arc 2A: Intervention Transfer Repair
+
+Question: can the frozen `2A-v1-pixels-observe_pair` contract survive
+held-out role-kind transfer once target selection is made role-equivariant
+rather than an i.i.d. color/position learner?
+
+Current regime:
+
+- Artifact types: pixel-rendered intervention-invention examples, learned
+  probe/target/action heads, role-kind held-out transfer slices, tracked Modal
+  reports.
+- Operations: train on all but one role kind, evaluate on the held-out kind,
+  compare the old learned target policy to a role-equivariant role-slot decoder
+  and world-model action rule.
+- Gates/verifiers: held-out transfer gate, high-concern parse/action/target
+  metrics, low-concern no-probe discipline, targeted unit tests, Modal
+  five-seed sweep.
+- Known limitations: the repair is an explicit role decoder/world model, not a
+  learned neural slot/semantics module or open-ended apparatus inventor.
+
+Action class:
+
+- Retrieval/search/discovery: discovery-leaning verifier transition.
+- Why: this changes the transfer artifact from an i.i.d. target learner to a
+  held-out role-kind gate with a stronger repaired operation. It preserves the
+  old failure as a rejected baseline rather than hiding it.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/concerned_syntax/intervention_transfer_repair.py`;
+  `experiments/concerned_syntax/modal_intervention_transfer_repair_sweep.py`;
+  `experiments/concerned_syntax/results/intervention_transfer_repair_modal_2026_06_17.md`;
+  local ignored artifact
+  `artifacts/concerned_syntax/intervention_transfer_repair_modal_sweep.json`.
+- Positive target: `role_equivariant_world_model` should pass held-out
+  `shield_poison`, `repair_core`, and `food_trap` transfer slices.
+- Negative controls: `learned_program_inventor` preserves the old learned
+  transfer failure; `world_concern_random_target` has concern but not target;
+  `role_equivariant_target_only` has target but violates low-concern
+  discipline.
+- Stress tests: `repair_core` is treated as a low-gap slice under the existing
+  concern threshold, so it tests no-restless discipline rather than empty
+  high-target accuracy.
+
+Gate:
+
+- Acceptance rule: across held-out slices, object extraction >= 0.99, action
+  >= 0.85, low-concern probe <= 0.25, and nonempty high-concern slices must
+  satisfy parse-high >= 0.75, subtree >= 0.75, high probe >= 0.70, target-high
+  >= 0.75, and useful-high >= 0.70. Transfer pass requires every slice to pass.
+- Withheld/rejected rule: withhold claims of learned semantic transfer,
+  natural-image perception, or raw motor-program discovery. Reject a repair if
+  target-only or random-target controls pass the transfer gate.
+
+Results:
+
+- Accepted artifacts: transfer-repair module, Modal entrypoint, Modal report,
+  tests, README command, trajectory update, and this audit note.
+- Rejected or withheld artifacts: the old learned target policy remains a
+  rejected transfer baseline; neural role semantics and richer program
+  composition remain future work.
+- Key metrics across five Modal seeds: `role_equivariant_world_model` transfer
+  gate `1.000`, parse-high `1.000`, action `1.000`, subtree `0.860`,
+  high-probe `1.000`, low-probe `0.000`, target/useful high `1.000`, regret
+  `0.004`. `learned_program_inventor` transfer gate `0.000`, target/useful high
+  `0.580`, subtree `0.709`. `role_equivariant_target_only` target/useful high
+  `1.000`, but low-probe `0.333` and transfer gate `0.000`.
+- Variance or ablation: Modal five-seed transfer gate is stable at `1.000` for
+  the repaired world model and `0.000` for the old learned baseline.
+
+Residual content:
+
+- Explained by old regime: i.i.d. intervention invention can still be solved by
+  learned color/position target features.
+- New content outside old regime: held-out role transfer requires a
+  role-equivariant target operation plus a concern/world-model gate; target
+  repair alone is rejected by low-concern probing.
+- Retractions or supersessions: supersede "held-out transfer is only an open
+  failure" with "held-out role transfer is repairable by an explicit
+  role-equivariant world-model operation, but not yet by learned neural
+  semantics."
+
+Next move: lift the repaired transfer operation into `2A-v2` rich programs and
+2B body search, then replace the explicit role decoder with a learned slot and
+role-semantics module.
+
 ## Arc 2A/2B: Program-Body Search Against 2A-v1
 
 Question: can Arc 2B search discover formal, resource-bounded bodies whose

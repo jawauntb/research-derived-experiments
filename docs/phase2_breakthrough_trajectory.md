@@ -148,8 +148,18 @@ Current branch result:
 - `concern_without_target` proves concern gating alone is insufficient:
   low-concern probe rate is `0.156`, but high-concern target accuracy is only
   `0.088`.
-- The next breakthrough gate should add held-out transfer and richer program
-  composition, not rerun the same `observe_pair(a,b)` menu.
+- Held-out transfer repair now separates the i.i.d. color/position shortcut
+  from a role-equivariant world-model operation. Across five Modal seeds on
+  held-out `shield_poison`, `repair_core`, and `food_trap` slices,
+  `role_equivariant_world_model` reaches transfer gate `1.000`, parse-high
+  `1.000`, action `1.000`, target/useful high `1.000`, and low-probe `0.000`.
+  The old `learned_program_inventor` remains rejected with transfer gate
+  `0.000`, target/useful high `0.580`, and subtree `0.709`; the
+  target-only repair reaches target/useful `1.000` but fails with low-probe
+  `0.333`.
+- The next breakthrough gate should lift the repaired transfer operation into
+  richer program composition and 2B body search, not rerun the same
+  `observe_pair(a,b)` menu.
 
 ## Literature Bearings
 

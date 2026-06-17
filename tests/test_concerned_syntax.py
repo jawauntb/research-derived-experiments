@@ -22,6 +22,10 @@ from experiments.concerned_syntax.intervention_invention import (
     run_role_transfer_experiment,
     summarize_seed_payloads as summarize_program_payloads,
 )
+from experiments.concerned_syntax.intervention_transfer_repair import (
+    run_experiment as run_transfer_repair_experiment,
+    summarize_seed_payloads as summarize_transfer_repair_payloads,
+)
 from experiments.concerned_syntax.modal_report import summarize_modal_payload
 from experiments.concerned_syntax.pixel_shapes import (
     extract_components,
@@ -396,6 +400,63 @@ class ConcernedSyntaxTest(unittest.TestCase):
         )
         self.assertIn("concerned_program_inventor", agents)
         self.assertIn("target_accuracy_high_concern", agents["concerned_program_inventor"])
+
+    def test_intervention_transfer_repair_separates_transfer_controls(self) -> None:
+        payload = run_transfer_repair_experiment(
+            train_trials=300,
+            test_trials=120,
+            seed=20260617,
+            epochs=25,
+        )
+        agents = payload["agent_summary"]
+
+        self.assertFalse(agents["learned_program_inventor"]["transfer_gate_pass"])
+        self.assertFalse(agents["world_concern_random_target"]["transfer_gate_pass"])
+        self.assertFalse(agents["role_equivariant_target_only"]["transfer_gate_pass"])
+        self.assertTrue(agents["role_equivariant_world_model"]["transfer_gate_pass"])
+        self.assertEqual(
+            agents["role_equivariant_world_model"]["target_accuracy_high_concern"],
+            1.0,
+        )
+        self.assertEqual(
+            agents["role_equivariant_world_model"]["low_concern_probe_rate"],
+            0.0,
+        )
+        self.assertGreater(
+            agents["role_equivariant_world_model"]["target_accuracy_high_concern"],
+            agents["learned_program_inventor"]["target_accuracy_high_concern"],
+        )
+
+    def test_intervention_transfer_repair_summary_averages_gate_rates(self) -> None:
+        payloads = [
+            {
+                "agent_summary": {
+                    "role_equivariant_world_model": {
+                        "target_accuracy_high_concern": 1.0,
+                        "transfer_gate_pass": True,
+                    }
+                }
+            },
+            {
+                "agent_summary": {
+                    "role_equivariant_world_model": {
+                        "target_accuracy_high_concern": 0.5,
+                        "transfer_gate_pass": False,
+                    }
+                }
+            },
+        ]
+
+        summary = summarize_transfer_repair_payloads(payloads, "agent_summary")
+
+        self.assertAlmostEqual(
+            summary["role_equivariant_world_model"]["target_accuracy_high_concern"],
+            0.75,
+        )
+        self.assertAlmostEqual(
+            summary["role_equivariant_world_model"]["transfer_gate_pass"],
+            0.5,
+        )
 
 
 if __name__ == "__main__":

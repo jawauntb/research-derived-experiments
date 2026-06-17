@@ -936,6 +936,15 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
   --train-trials 3000 --test-trials 1200 --epochs 90
 ```
 
+Intervention transfer-repair Modal sweep:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_intervention_transfer_repair_sweep.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90
+```
+
 Program-body search against 2A-v1:
 
 ```bash
@@ -1018,3 +1027,16 @@ Latest coupled result after PR #127:
   `calibration_guard+causal_binding_head+concern_policy+formal_guard+intervention_planner+reward_head+vector_surface_encoder+world_model`.
 - `reward_only` fails as a shortcut body; `syntax_proxy` reaches target/useful
   `1.000` but fails body gate with low-probe `0.830`.
+
+Latest transfer-repair result after this branch:
+
+- `experiments/concerned_syntax/results/intervention_transfer_repair_modal_2026_06_17.md`
+  turns the held-out role-kind failure into an explicit repair gate for the
+  frozen `2A-v1-pixels-observe_pair` contract.
+- Across five Modal seeds, `role_equivariant_world_model` reaches transfer
+  gate `1.000`, parse-high `1.000`, action `1.000`, target/useful high
+  `1.000`, low-probe `0.000`, and regret `0.004`.
+- The old `learned_program_inventor` preserves the shortcut boundary:
+  transfer gate `0.000`, target/useful high `0.580`, subtree `0.709`.
+- `role_equivariant_target_only` proves target repair alone is insufficient:
+  target/useful high `1.000`, but low-probe `0.333` and transfer gate `0.000`.
