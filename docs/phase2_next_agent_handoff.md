@@ -449,6 +449,8 @@ Done:
   local 5-seed gate validation.
 - Minimal pixel-level intervention invention with learned `observe_pair(a,b)`
   target selection and concern gating.
+- Mechanism trace verification for `2A-v1-pixels-observe_pair`, recording
+  program, observation, posterior binding belief, and action.
 - Python consumption of Haskell JSON verdicts inside learned/vector body
   summaries when the local Haskell checker is available.
 - Gate-margin charts for 2A and 2B.
@@ -1018,3 +1020,16 @@ Latest coupled result after PR #127:
   `calibration_guard+causal_binding_head+concern_policy+formal_guard+intervention_planner+reward_head+vector_surface_encoder+world_model`.
 - `reward_only` fails as a shortcut body; `syntax_proxy` reaches target/useful
   `1.000` but fails body gate with low-probe `0.830`.
+
+Latest mechanism-trace verifier after this branch:
+
+- `experiments/concerned_syntax/results/mechanism_trace_modal_2026_06_17.md`
+  records program, selected pair observation, posterior binding belief, action,
+  and trace-completion metrics for the `2A-v1-pixels-observe_pair` agents.
+- Across five Modal seeds, `concerned_program_inventor` reaches high-concern
+  trace completion `1.000`, useful observation `1.000`, posterior correctness
+  `1.000`, action `1.000`, low-concern trace violation `0.151`, and gate pass
+  rate `1.000`.
+- `target_without_concern` has perfect high-concern traces but fails the
+  low-concern trace cap at `1.000`; `concern_without_target` keeps the cap but
+  useful observation is only `0.087`.

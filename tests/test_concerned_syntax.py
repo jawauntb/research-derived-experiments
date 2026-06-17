@@ -22,6 +22,10 @@ from experiments.concerned_syntax.intervention_invention import (
     run_role_transfer_experiment,
     summarize_seed_payloads as summarize_program_payloads,
 )
+from experiments.concerned_syntax.mechanism_trace import (
+    run_experiment as run_trace_experiment,
+    summarize_trace_payloads,
+)
 from experiments.concerned_syntax.modal_report import summarize_modal_payload
 from experiments.concerned_syntax.pixel_shapes import (
     extract_components,
@@ -396,6 +400,63 @@ class ConcernedSyntaxTest(unittest.TestCase):
         )
         self.assertIn("concerned_program_inventor", agents)
         self.assertIn("target_accuracy_high_concern", agents["concerned_program_inventor"])
+
+    def test_mechanism_trace_gate_exposes_shortcut_failures(self) -> None:
+        payload = run_trace_experiment(
+            train_trials=360,
+            test_trials=140,
+            seed=20260617,
+            epochs=28,
+        )
+        traces = payload["trace_summary"]
+
+        self.assertTrue(traces["concerned_program_inventor"]["gate_pass"])
+        self.assertFalse(traces["surface_program_shortcut"]["gate_pass"])
+        self.assertFalse(traces["concern_without_target"]["gate_pass"])
+        self.assertFalse(traces["target_without_concern"]["gate_pass"])
+        self.assertGreaterEqual(
+            traces["concerned_program_inventor"]["high_trace_complete_rate"],
+            0.95,
+        )
+        self.assertLess(
+            traces["concern_without_target"]["high_useful_observation_rate"],
+            0.25,
+        )
+        self.assertEqual(
+            traces["target_without_concern"]["low_concern_trace_violation_rate"],
+            1.0,
+        )
+
+    def test_mechanism_trace_modal_summary_averages_gate_rates(self) -> None:
+        payloads = [
+            {
+                "trace_summary": {
+                    "concerned_program_inventor": {
+                        "high_trace_complete_rate": 1.0,
+                        "gate_pass": True,
+                    }
+                }
+            },
+            {
+                "trace_summary": {
+                    "concerned_program_inventor": {
+                        "high_trace_complete_rate": 0.5,
+                        "gate_pass": False,
+                    }
+                }
+            },
+        ]
+
+        summary = summarize_trace_payloads(payloads, "trace_summary")
+
+        self.assertAlmostEqual(
+            summary["concerned_program_inventor"]["high_trace_complete_rate"],
+            0.75,
+        )
+        self.assertAlmostEqual(
+            summary["concerned_program_inventor"]["gate_pass"],
+            0.5,
+        )
 
 
 if __name__ == "__main__":

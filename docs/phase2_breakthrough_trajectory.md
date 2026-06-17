@@ -148,6 +148,14 @@ Current branch result:
 - `concern_without_target` proves concern gating alone is insufficient:
   low-concern probe rate is `0.156`, but high-concern target accuracy is only
   `0.088`.
+- The mechanism-trace follow-up verifies the full program -> observation ->
+  belief update -> action chain. `concerned_program_inventor` reaches
+  high-concern trace completion `1.000`, useful observation `1.000`,
+  posterior correctness `1.000`, action `1.000`, and low-concern trace
+  violation `0.151` across five Modal seeds. `target_without_concern` gets a
+  perfect high-concern trace but fails the low-concern cap at `1.000`;
+  `concern_without_target` keeps the cap but useful observation is only
+  `0.087`.
 - The next breakthrough gate should add held-out transfer and richer program
   composition, not rerun the same `observe_pair(a,b)` menu.
 
