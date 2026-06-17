@@ -3874,6 +3874,88 @@ Next move: either run the Modal-scale pixel sweep or replace the
 connected-component extractor with a learned object-slot encoder while keeping
 the same hidden-parse invariance and no-restless controls.
 
+## Arc 2A: Learned Pixel Foreground/Slot Extraction
+
+Question: can the pixel-level concerned-syntax gate survive when direct
+connected-component features are replaced by a learned foreground/slot
+extractor?
+
+Current regime:
+
+- Artifact types: pixel-rendered shape examples, connected-component object
+  features, learned probe/action heads, tracked local reports and tests.
+- Operations: algorithmic connected-component extraction followed by the
+  concerned pixel probe gate.
+- Gates/verifiers: object count, parse/action/subtree, high/low probe
+  discipline, passive/surface/restless controls, hidden-parse-invariant RGB
+  rendering.
+- Known limitations: the previous pixel gate still handed the agent direct
+  connected-component features rather than learned pixel-object slots.
+
+Action class:
+
+- Retrieval/search/discovery: discovery-leaning perception transition.
+- Why: this adds a learned foreground model and slot-local center search before
+  the 2A pixel gate. It is not a full object-centric vision model, but it
+  removes direct connected-component extraction from the agent input.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/concerned_syntax/learned_pixel_extractor.py`;
+  `experiments/concerned_syntax/modal_learned_pixel_extractor_sweep.py`;
+  `experiments/concerned_syntax/results/learned_pixel_extractor_local_2026_06_17.md`;
+  `experiments/concerned_syntax/results/learned_pixel_extractor_modal_2026_06_17.md`;
+  local ignored artifacts under
+  `artifacts/concerned_syntax/learned_pixel_extractor_*.json`.
+- Positive target: `concerned_pixel_probe` should pass when consuming learned
+  foreground/slot components.
+- Negative controls: `surface_pixel_shortcut`, `passive_pixel`, and
+  `restless_pixel_probe`.
+- Stress tests: learned extractor must recover six visible slots on held-out
+  images; passive/surface controls must still fail hidden binding; restless
+  control must still violate low-concern discipline.
+
+Gate:
+
+- Acceptance rule: component count, slot recovery, and scene recovery should
+  remain near `1.000`; concerned pixel gate must pass with parse-high >=
+  `0.75`, action >= `0.85`, subtree >= `0.75`, high-probe >= `0.70`, and
+  low-probe <= `0.25`.
+- Withheld/rejected rule: do not claim natural-image perception, full CNN
+  object recognition, or unsupervised slot learning. Reject if learned slots
+  pass extraction but passive inference recovers hidden binding.
+
+Results:
+
+- Accepted artifacts: learned extractor module, Modal sweep entrypoint, local
+  and Modal reports, tests, README commands, and handoff update.
+- Rejected or withheld artifacts: raw Modal payload under ignored `artifacts/`;
+  no CNN/object-slot model; no natural-image transfer.
+- Key metrics across five Modal seeds: learned foreground/slot extractor
+  component count `1.000`, slot recovery `1.000`, scene recovery `1.000`, mean
+  center error `0.018`. `concerned_pixel_probe` parse-high `1.000`, action
+  `1.000`, subtree `0.804`, high-probe `1.000`, low-probe `0.210`, mean regret
+  `0.004`, gate pass rate `1.000`. `passive_pixel` parse-high `0.487`;
+  `surface_pixel_shortcut` parse-high `0.487`; `restless_pixel_probe`
+  low-probe `1.000`.
+- Variance or ablation: every Modal seed preserves extractor recovery and the
+  surface/passive/restless failure taxonomy.
+
+Residual content:
+
+- Explained by old regime: the visible six-slot layout and high-contrast RGB
+  rendering make extraction much easier than natural vision.
+- New content outside old regime: the concerned-syntax gate no longer depends
+  on direct connected-component features; learned foreground slots are
+  sufficient to preserve the anti-cheat separation.
+- Retractions or supersessions: supersede "pixel gate requires algorithmic
+  connected components" with "pixel gate survives a learned foreground/slot
+  extractor, but not yet full object-centric vision."
+
+Next move: replace slot-local foreground extraction with a CNN or unsupervised
+object-slot encoder, then test held-out surface transformations.
+
 ## Arc 2A: Concerned Intervention Invention
 
 Question: can the pixel-level concerned-syntax agent learn both when to

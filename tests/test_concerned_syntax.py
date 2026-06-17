@@ -17,6 +17,10 @@ from experiments.concerned_syntax.learned_agents import (
     run_experiment,
     summarize_seed_payloads,
 )
+from experiments.concerned_syntax.learned_pixel_extractor import (
+    run_experiment as run_learned_pixel_extractor_experiment,
+    summarize_seed_payloads as summarize_learned_pixel_extractor_payloads,
+)
 from experiments.concerned_syntax.intervention_invention import (
     run_experiment as run_program_experiment,
     run_role_transfer_experiment,
@@ -320,6 +324,77 @@ class ConcernedSyntaxTest(unittest.TestCase):
             0.9,
         )
         self.assertAlmostEqual(summary["concerned_pixel_probe"]["gate_pass"], 0.5)
+
+    def test_learned_pixel_extractor_preserves_pixel_gate(self) -> None:
+        payload = run_learned_pixel_extractor_experiment(
+            train_trials=240,
+            test_trials=100,
+            seed=20260617,
+            epochs=24,
+            extractor_samples_per_image=72,
+        )
+        agents = payload["agent_summary"]
+        extractor = payload["extractor_summary"]["learned_foreground_slots"]
+
+        self.assertGreaterEqual(extractor["slot_recovery_rate"], 0.95)
+        self.assertGreaterEqual(extractor["scene_recovery_rate"], 0.90)
+        self.assertTrue(agents["concerned_pixel_probe"]["gate_pass"])
+        self.assertFalse(agents["surface_pixel_shortcut"]["gate_pass"])
+        self.assertFalse(agents["passive_pixel"]["gate_pass"])
+        self.assertFalse(agents["restless_pixel_probe"]["gate_pass"])
+        self.assertEqual(
+            agents["restless_pixel_probe"]["low_concern_probe_rate"],
+            1.0,
+        )
+
+    def test_learned_pixel_extractor_modal_summary_averages_gate_rates(self) -> None:
+        payloads = [
+            {
+                "agent_summary": {
+                    "concerned_pixel_probe": {
+                        "parse_accuracy_high_concern": 1.0,
+                        "gate_pass": True,
+                    }
+                },
+                "extractor_summary": {
+                    "learned_foreground_slots": {
+                        "slot_recovery_rate": 1.0,
+                    }
+                },
+            },
+            {
+                "agent_summary": {
+                    "concerned_pixel_probe": {
+                        "parse_accuracy_high_concern": 0.8,
+                        "gate_pass": False,
+                    }
+                },
+                "extractor_summary": {
+                    "learned_foreground_slots": {
+                        "slot_recovery_rate": 0.9,
+                    }
+                },
+            },
+        ]
+
+        agent_summary = summarize_learned_pixel_extractor_payloads(
+            payloads,
+            "agent_summary",
+        )
+        extractor_summary = summarize_learned_pixel_extractor_payloads(
+            payloads,
+            "extractor_summary",
+        )
+
+        self.assertAlmostEqual(
+            agent_summary["concerned_pixel_probe"]["parse_accuracy_high_concern"],
+            0.9,
+        )
+        self.assertAlmostEqual(agent_summary["concerned_pixel_probe"]["gate_pass"], 0.5)
+        self.assertAlmostEqual(
+            extractor_summary["learned_foreground_slots"]["slot_recovery_rate"],
+            0.95,
+        )
 
     def test_intervention_invention_gate_requires_concern_and_target(self) -> None:
         payload = run_program_experiment(

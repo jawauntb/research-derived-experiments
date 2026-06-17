@@ -447,6 +447,8 @@ Done:
 - Vector module-body validation.
 - Pixel-rendered observations with connected-component object extraction and
   local 5-seed gate validation.
+- Learned foreground/slot pixel extraction with local and Modal 5-seed gate
+  validation.
 - Minimal pixel-level intervention invention with learned `observe_pair(a,b)`
   target selection and concern gating.
 - Python consumption of Haskell JSON verdicts inside learned/vector body
@@ -458,8 +460,8 @@ Done:
 
 Not done:
 
-- Learned object/part extraction from images beyond algorithmic connected
-  components.
+- Full CNN or unsupervised object-slot extraction beyond the learned
+  foreground/slot diagnostic.
 - Modal-scale pixel sweep.
 - Modal-scale intervention-invention sweep and richer program language beyond
   `observe_pair(a,b)`.
@@ -486,6 +488,21 @@ The local 5-seed result passes for `concerned_pixel_probe` and preserves the
 surface/passive/restless failure taxonomy. The remaining Goal A work is the
 Modal-scale run, a gate-margin figure, and replacing the algorithmic extractor
 with a learned object-slot or CNN baseline.
+
+Status after the learned-extractor follow-on branch: a learned foreground/slot
+diagnostic exists at `experiments/concerned_syntax/learned_pixel_extractor.py`,
+with a Modal entrypoint at
+`experiments/concerned_syntax/modal_learned_pixel_extractor_sweep.py` and
+tracked local/Modal reports at
+`experiments/concerned_syntax/results/learned_pixel_extractor_local_2026_06_17.md`
+and
+`experiments/concerned_syntax/results/learned_pixel_extractor_modal_2026_06_17.md`.
+The 5-seed Modal result has slot recovery `1.000`, scene recovery `1.000`,
+mean center error `0.018`, and `concerned_pixel_probe` passes with parse-high
+`1.000`, action `1.000`, subtree `0.804`, low-probe `0.210`, and gate pass
+rate `1.000`. This is not a full CNN or unsupervised object-slot model; it
+removes direct connected-component features while still using the fixed visible
+six-slot layout.
 
 Proposed files:
 
