@@ -723,8 +723,10 @@ gate, target selector, binding update, and action rule rather than receiving
 `concerned_program_inventor` as a named policy. The current branch adds a
 Modal-confirmed v2 transfer repair for the richer grammar and makes 2B consume
 that transfer gate through Modal-confirmed executable module bodies. The
-remaining next versions are open-ended or searched program discovery beyond the
-provided rich grammar and learned neural slot/role semantics.
+searched-rich successor also searches the v2 rich grammar's finite recipe space
+rather than receiving `concerned_program_composer` as a named policy. The
+remaining next versions are open-ended motor/apparatus discovery beyond the
+finite provided DSL and unsupervised neural slot/role semantics.
 
 Gate:
 
@@ -1107,7 +1109,7 @@ small local smoke -> Modal full sweep -> audit -> chart -> paper/PDF -> checks
 The fastest path to the next real breakthrough is now:
 
 1. Replace connected-component extraction with learned object/slot perception.
-2. Move beyond the provided grammar into open-ended or searched program
+2. Move beyond the provided finite grammar into open-ended motor/apparatus
    discovery.
 3. Replace compact hand-instantiated executable module bodies with searched or
    evolved executable modules.
@@ -1209,3 +1211,18 @@ Latest searched 2A policy result after this branch:
   `concern_or_calibration+slot_scores+bind_if_useful_probe+bound_action`.
 - `reward_only_program_search` fails by never asking useful questions;
   `syntax_proxy_program_search` fails by probing low-concern cases at `1.000`.
+
+Latest searched rich-program policy result after this branch:
+
+- `experiments/concerned_syntax/results/searched_rich_program_policy_modal_2026_06_18.md`
+  searches 540 finite recipes over probe rule, program-family selector, target
+  selector, binding update, and action rule for the provided
+  `2A-v2-pixels-rich_programs` grammar.
+- Across five Modal seeds, `concerned_rich_program_search` reaches
+  parse/action/family/target/useful/rich `1.000`, subtree `0.789`, low-program
+  `0.144`, gate pass rate `1.000`, and discovers
+  `concern_or_calibration+learned_family+slot_scores+bind_if_useful_program+bound_action`.
+- `reward_only_rich_program_search` fails by choosing no useful program,
+  `family_proxy_rich_program_search` learns family while missing target/useful,
+  and `syntax_proxy_rich_program_search` recovers syntax while probing
+  low-concern cases at `1.000`.

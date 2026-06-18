@@ -133,6 +133,22 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
   --train-trials 3000 --test-trials 1200 --epochs 90
 ```
 
+Searched rich program-policy sweep:
+
+```bash
+python3 -m experiments.concerned_syntax.searched_rich_program_policy \
+  --train-trials 1200 --test-trials 500 --seed 20260618 --epochs 60 \
+  --search-trials 600 \
+  --out artifacts/concerned_syntax/searched_rich_program_policy_local.json \
+  --agent-report experiments/concerned_syntax/results/searched_rich_program_policy_local_2026_06_18.md
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_searched_rich_program_policy_sweep.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90 \
+  --search-trials 600
+```
+
 Rich intervention-program transfer repair:
 
 ```bash

@@ -52,6 +52,10 @@ from experiments.concerned_syntax.rich_program_language import (
     run_experiment as run_rich_program_experiment,
     summarize_seed_payloads as summarize_rich_program_payloads,
 )
+from experiments.concerned_syntax.searched_rich_program_policy import (
+    run_experiment as run_searched_rich_program_experiment,
+    summarize_search_payloads as summarize_searched_rich_program_payloads,
+)
 from experiments.concerned_syntax.rich_program_transfer_repair import (
     run_experiment as run_rich_transfer_repair_experiment,
     summarize_seed_payloads as summarize_rich_transfer_repair_payloads,
@@ -744,6 +748,78 @@ class ConcernedSyntaxTest(unittest.TestCase):
         self.assertAlmostEqual(
             summary["concerned_program_composer"]["gate_pass"],
             0.5,
+        )
+
+    def test_searched_rich_program_policy_requires_concern_family_and_target(self) -> None:
+        payload = run_searched_rich_program_experiment(
+            train_trials=500,
+            test_trials=200,
+            seed=20260618,
+            epochs=38,
+            search_trials=180,
+        )
+        agents = payload["agent_summary"]
+
+        self.assertTrue(agents["concerned_rich_program_search"]["gate_pass"])
+        self.assertFalse(agents["reward_only_rich_program_search"]["gate_pass"])
+        self.assertFalse(agents["family_proxy_rich_program_search"]["gate_pass"])
+        self.assertFalse(agents["syntax_proxy_rich_program_search"]["gate_pass"])
+        self.assertGreaterEqual(
+            agents["concerned_rich_program_search"]["family_accuracy_high_concern"],
+            0.95,
+        )
+        self.assertGreaterEqual(
+            agents["concerned_rich_program_search"]["target_accuracy_high_concern"],
+            0.95,
+        )
+        self.assertLessEqual(
+            agents["concerned_rich_program_search"]["low_concern_program_rate"],
+            0.25,
+        )
+        self.assertIn(
+            "learned_family",
+            agents["concerned_rich_program_search"]["best_recipe"],
+        )
+        self.assertIn(
+            "bind_if_useful_program",
+            agents["concerned_rich_program_search"]["best_recipe"],
+        )
+
+    def test_searched_rich_program_policy_summary_preserves_recipe_mode(self) -> None:
+        payloads = [
+            {
+                "agent_summary": {
+                    "concerned_rich_program_search": {
+                        "family_accuracy_high_concern": 1.0,
+                        "best_recipe": "concern_or_calibration+learned_family",
+                        "gate_pass": True,
+                    }
+                }
+            },
+            {
+                "agent_summary": {
+                    "concerned_rich_program_search": {
+                        "family_accuracy_high_concern": 0.5,
+                        "best_recipe": "concern_or_calibration+learned_family",
+                        "gate_pass": False,
+                    }
+                }
+            },
+        ]
+
+        summary = summarize_searched_rich_program_payloads(payloads, "agent_summary")
+
+        self.assertAlmostEqual(
+            summary["concerned_rich_program_search"]["family_accuracy_high_concern"],
+            0.75,
+        )
+        self.assertAlmostEqual(
+            summary["concerned_rich_program_search"]["gate_pass"],
+            0.5,
+        )
+        self.assertEqual(
+            summary["concerned_rich_program_search"]["best_recipe"],
+            "concern_or_calibration+learned_family",
         )
 
     def test_intervention_invention_parse_transfer_records_heldout_parse(self) -> None:
