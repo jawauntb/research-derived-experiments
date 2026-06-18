@@ -132,6 +132,18 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     experiments/concerned_syntax/modal_pixel_shapes_sweep.py \
     --train-trials 3000 --test-trials 1200 --epochs 90
 
+python3 -m experiments.concerned_syntax.learned_pixel_extractor \
+    --train-trials 1200 --test-trials 500 --seed 20260617 --epochs 60 \
+    --extractor-samples-per-image 96 \
+    --out artifacts/concerned_syntax/learned_pixel_extractor_local.json \
+    --agent-report experiments/concerned_syntax/results/learned_pixel_extractor_local_2026_06_17.md
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/concerned_syntax/modal_learned_pixel_extractor_sweep.py \
+    --train-trials 3000 --test-trials 1200 --epochs 90 \
+    --extractor-samples-per-image 96
+
 # Phase / Arc 2B viable computational bodies benchmark
 python3 -m experiments.viable_computational_bodies.search \
     --seeds 12 --generations 18 --population 18 --base-seed 20260616 \
