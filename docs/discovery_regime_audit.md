@@ -4997,3 +4997,94 @@ Residual content:
 Next move: replace supervised role-token calibration with unsupervised object
 and role slot discovery, or search program recipes beyond the provided rich
 grammar.
+
+## Arc 2A: Searched Rich Program Recipes
+
+Question: can the `2A-v2-pixels-rich_programs` policy be discovered by bounded
+recipe search rather than supplied as the named positive
+`concerned_program_composer` agent?
+
+Current regime:
+
+- Artifact types: rich 2A-v2 program examples, extracted pixel-object
+  features, learned concern/target/family/action heads, recipe-search records,
+  local and Modal reports.
+- Operations: train the v2 rich-program heads, enumerate finite recipes over
+  probe rule, family rule, target rule, binding update, and action rule, score
+  recipes under reward-only, family-proxy, syntax-proxy, and concerned
+  objectives, then evaluate the selected recipe on held-out examples.
+- Gates/verifiers: object extraction, parse/action/subtree, high/low program
+  rates, family/target/useful/rich high-concern rates, regret, targeted unit
+  tests, local report, and Modal entrypoint.
+- Known limitations: the search grammar is finite and supplied; object
+  extraction is still connected components; this is not open-ended motor or
+  apparatus discovery.
+
+Action class:
+
+- Retrieval/search/discovery: search inside the existing v2 program schema.
+- Why: the accepted policy is no longer named directly; the operation searches
+  a compositional policy recipe space while preserving the existing program
+  primitives and verifiers.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/concerned_syntax/searched_rich_program_policy.py`;
+  `experiments/concerned_syntax/modal_searched_rich_program_policy_sweep.py`;
+  `experiments/concerned_syntax/results/searched_rich_program_policy_local_2026_06_18.md`;
+  `experiments/concerned_syntax/results/searched_rich_program_policy_modal_2026_06_18.md`;
+  local ignored artifact
+  `artifacts/concerned_syntax/searched_rich_program_policy_local.json`;
+  Modal ignored artifact
+  `artifacts/concerned_syntax/searched_rich_program_policy_modal_sweep.json`.
+- Positive target: `concerned_rich_program_search` should discover concern
+  gating, learned family routing, causal target selection, useful binding, and
+  bound-conditioned action.
+- Negative controls: `reward_only_rich_program_search`,
+  `family_proxy_rich_program_search`, and `syntax_proxy_rich_program_search`.
+- Stress tests: five Modal seeds with 540 candidate recipes per seed, 3,000
+  train trials, 1,200 test trials, 600 recipe-search examples, and 90 epochs.
+
+Gate:
+
+- Acceptance rule: object extraction >= 0.99, parse-high >= 0.75, action >=
+  0.85, subtree >= 0.75, high-concern program rate >= 0.70, low-concern program
+  rate <= 0.25, and family/target/useful/rich high-concern rates >= 0.70.
+- Withheld/rejected rule: do not claim unsupervised object slots, raw motor
+  primitive invention, open-ended apparatus discovery, or learned neural module
+  bodies.
+
+Results:
+
+- Accepted artifacts: searched rich-program policy module, Modal entrypoint,
+  local and Modal reports, targeted tests, README commands, handoff update, and
+  paper update.
+- Rejected or withheld artifacts: raw JSON remains under ignored `artifacts/`;
+  open-ended program discovery and unsupervised object slots remain withheld.
+- Key metrics across five Modal seeds:
+  `concerned_rich_program_search` selected
+  `concern_or_calibration+learned_family+slot_scores+bind_if_useful_program+bound_action`
+  and reached parse/action/family/target/useful/rich `1.000`, subtree `0.789`,
+  low-program `0.144`, regret `0.004`, gate PASS.
+  `reward_only_rich_program_search` chose no program and failed hidden syntax;
+  `family_proxy_rich_program_search` reached family `1.000` but target/useful
+  `0.076` and low-program `1.000`; `syntax_proxy_rich_program_search` reached
+  syntax/family/target/useful/rich `1.000` but failed low-program at `1.000`.
+- Variance or ablation: five Modal seeds with pass-rate SD `0.000` for the
+  accepted searched-rich gate.
+
+Residual content:
+
+- Explained by old regime: the v2 rich-program result already showed that the
+  named composer can use concern, family, target, binding, and action heads.
+- New content outside old regime: the policy recipe can be recovered by search
+  over finite compositional pieces, and the control objectives isolate why
+  reward, family, or syntax alone are insufficient.
+- Retractions or supersessions: supersede "searched program recipes beyond the
+  provided rich grammar remain untouched" with "finite searched recipes over
+  the provided rich grammar pass; open-ended motor/apparatus discovery remains
+  open."
+
+Next move: merge finite recipe search into the paper, then pursue unsupervised
+object/role slot discovery or 2B searched/evolved executable modules.

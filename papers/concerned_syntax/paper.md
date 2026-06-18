@@ -49,15 +49,22 @@ of high-concern cases. The rich-program gate then requires choosing among
 families. Across five Modal seeds, the concerned program composer reaches
 family accuracy 1.000, target accuracy 1.000, useful-program rate 1.000,
 rich-program rate 1.000, low-concern program rate 0.162, and gate PASS.
-Finally, a held-out v2 transfer repair makes role-kind and true-parse transfer
-explicit. Across five Modal seeds, an explicit role-equivariant rich world
-model reaches transfer gate 1.000, family/target/useful/rich 1.000,
-low-concern program rate 0.000, and gate PASS, while the learned rich composer
-and partial controls fail distinct slices. A supervised learned slot-semantics
-repair then replaces the explicit RGB role decoder with role-token prototypes
-and preserves the same transfer gate across five Modal confirmation seeds
-with 3,000 train trials, 1,200 test trials, and 90 epochs per seed, with
-semantic kind/pair accuracy 1.000 and low-concern program rate 0.000.
+The searched-rich follow-on removes the named positive composer as a supplied
+agent: across five Modal seeds, bounded recipe search over probe rule, family
+selector, target selector, binding update, and action rule discovers
+`concern_or_calibration+learned_family+slot_scores+bind_if_useful_program+bound_action`
+and passes with parse/action/family/target/useful/rich all 1.000 and
+low-concern program rate 0.144, while reward-only, family-proxy, and syntax-
+proxy searches fail. Finally, a held-out v2 transfer repair makes role-kind and
+true-parse transfer explicit. Across five Modal seeds, an explicit
+role-equivariant rich world model reaches transfer gate 1.000,
+family/target/useful/rich 1.000, low-concern program rate 0.000, and gate PASS,
+while the learned rich composer and partial controls fail distinct slices. A
+supervised learned slot-semantics repair then replaces the explicit RGB role
+decoder with role-token prototypes and preserves the same transfer gate across
+five Modal confirmation seeds with 3,000 train trials, 1,200 test trials, and
+90 epochs per seed, with semantic kind/pair accuracy 1.000 and low-concern
+program rate 0.000.
 Shortcut reward, passive perceptual inference, no-tree planning, random
 program probing, family-only selection, target-only selection, rich programs
 without concern, and restless inquiry all fail for different anti-cheat
@@ -485,13 +492,61 @@ cases restlessly. The accepted agent passes only when concern gating, target
 binding, program-family selection, and rich program composition are all
 present.
 
-## 13. Held-Out Rich Program Transfer Repair
+## 13. Searched Rich Program Policy
 
-The v2 result above is an in-distribution rich program gate. It proves that the
-agent can choose the right family and target across seeds, but not that the
-mechanism survives held-out role-kind and true-parse transfer. The transfer
-repair gate withholds each high-concern role kind and each true parse family,
-then evaluates only on the held-out slice.
+The v2 rich-program result above still names the positive composer directly.
+The searched-rich gate instead enumerates a finite policy recipe grammar over
+probe rule, program-family selector, object-target selector, binding update,
+and action rule. The search objectives deliberately separate cheap reward,
+family recovery, syntax recovery, and the full concerned contract.
+
+Remote command:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_searched_rich_program_policy_sweep.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90 \
+  --search-trials 600
+```
+
+The tracked public report is
+`experiments/concerned_syntax/results/searched_rich_program_policy_modal_2026_06_18.md`.
+
+Gate summary:
+
+| Strategy | Parse | Action | Subtree | Low program | Gate |
+|---|---:|---:|---:|---:|---|
+| concerned rich search | 1.000 | 1.000 | 0.789 | 0.144 | PASS |
+| reward-only search | 0.522 | 0.872 | 0.511 | 0.000 | fail |
+| family-proxy search | 0.522 | 0.873 | 0.511 | 1.000 | fail |
+| syntax-proxy search | 1.000 | 0.873 | 1.000 | 1.000 | fail |
+
+Program metrics:
+
+| Strategy | Family | Target | Useful | Rich |
+|---|---:|---:|---:|---:|
+| concerned rich search | 1.000 | 1.000 | 1.000 | 1.000 |
+| reward-only search | 0.000 | 0.000 | 0.000 | 0.000 |
+| family-proxy search | 1.000 | 0.076 | 0.076 | 1.000 |
+| syntax-proxy search | 1.000 | 1.000 | 1.000 | 1.000 |
+
+The accepted recipe is
+`concern_or_calibration+learned_family+slot_scores+bind_if_useful_program+bound_action`.
+This is a search result inside the provided v2 program grammar, not open-ended
+motor or apparatus discovery. The controls isolate the same anti-cheat
+surface: reward-only search avoids useful programs, family-proxy search learns
+the family without target/binding, and syntax-proxy search recovers the hidden
+syntax while violating the no-restless low-concern cap.
+
+## 14. Held-Out Rich Program Transfer Repair
+
+The v2 results above are in-distribution rich program gates. They prove that a
+named composer can choose the right family and target across seeds, and that a
+bounded search can recover the same finite policy recipe. They do not prove
+that the mechanism survives held-out role-kind and true-parse transfer. The
+transfer repair gate withholds each high-concern role kind and each true parse
+family, then evaluates only on the held-out slice.
 
 Remote command:
 
@@ -528,7 +583,7 @@ This closes the Modal transfer gate for the provided v2 grammar with an
 explicit role decoder. The next gate asks whether that decoder can itself be
 replaced by a learned slot-semantic mapping.
 
-## 14. Learned Slot-Semantics Transfer
+## 15. Learned Slot-Semantics Transfer
 
 The explicit transfer repair above still knows the RGB role table. The learned
 slot-semantics gate replaces that nearest-color decoder with a supervised
@@ -570,23 +625,23 @@ and rich programs without concern all fail despite perfect semantic decoding.
 This is still not natural-image perception, unsupervised role discovery, or
 open-ended program invention.
 
-## 15. Limitations
+## 16. Limitations
 
 The current benchmark is still synthetic. The newest agent receives generated
 pixels with algorithmic connected-component extraction, not natural images,
 learned object slots, continuous control, or human subjects. The newest
-rich-program gate selects among a provided finite program grammar; it does not
-invent raw motor primitives or open-ended experimental apparatus. The point of
-this first paper is to define and pass a minimal learned acceptance surface
-before larger compute.
+rich-program and searched-rich gates select among a provided finite program
+grammar; they do not invent raw motor primitives or open-ended experimental
+apparatus. The point of this first paper is to define and pass a minimal
+learned acceptance surface before larger compute.
 
 The Modal transfer and learned slot-semantics repairs narrow the next
 limitation but do not erase it: the agent should learn object slots without
 supervised role-token calibration, invent or search programs beyond the
-provided grammar, and instantiate program/body components as learned modules
-rather than compact hand-instantiated world-model operations.
+finite provided grammar, and instantiate program/body components as learned
+modules rather than compact hand-instantiated world-model operations.
 
-## 16. Conclusion
+## 17. Conclusion
 
 Arc 2A inserts a new layer into the maintained-concern ladder:
 
@@ -600,14 +655,15 @@ own tests. Reward, compression, uncertainty, action accuracy, target selection
 without concern, rich program use without concern, and even syntax without
 concern can all dissociate from causal constituency under maintained concern.
 The learned-agent, vector-observation, pixel-rendered, intervention-invention,
-and rich-program gates show that the gate is passable without hidden parse
-access, but only when object extraction, useful target selection, program
-family selection, binding, intervention, and formal concern gating are present
-together. The held-out v2 transfer and learned slot-semantics repairs add the
-next boundary: the same grammar can survive role/parse transfer when a
-world-model concern gate consumes either explicit or supervised learned role
-semantics. Unsupervised object slots, program discovery beyond the provided
-grammar, and learned module/body search remain future work.
+rich-program, and searched-rich-program gates show that the gate is passable
+without hidden parse access or a named positive policy, but only when object
+extraction, useful target selection, program family selection, binding,
+intervention, and formal concern gating are present together. The held-out v2
+transfer and learned slot-semantics repairs add the next boundary: the same
+grammar can survive role/parse transfer when a world-model concern gate
+consumes either explicit or supervised learned role semantics. Unsupervised
+object slots, open-ended program discovery beyond the finite provided grammar,
+and learned module/body search remain future work.
 
 ## References
 

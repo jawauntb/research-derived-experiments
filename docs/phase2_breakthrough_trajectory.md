@@ -201,6 +201,19 @@ Current v1 result:
   `family_without_target` gets family accuracy `1.000` but target accuracy
   `0.080`; `rich_without_concern` gets parse/action/family/target all
   `1.000` but low-concern program rate `1.000`.
+- The searched-rich-program follow-up removes the named positive composer as a
+  supplied agent and searches a finite recipe grammar over concern probe rule,
+  program-family selector, target selector, binding update, and action rule.
+  Across five Modal seeds, `concerned_rich_program_search` discovers
+  `concern_or_calibration+learned_family+slot_scores+bind_if_useful_program+bound_action`
+  and passes with parse/action/family/target/useful/rich all `1.000`, subtree
+  `0.789`, low-program `0.144`, and regret `0.004`.
+- The searched-rich controls fail for distinct reasons:
+  `reward_only_rich_program_search` chooses no program and fails hidden syntax;
+  `family_proxy_rich_program_search` learns family but target/useful only
+  `0.076` and probes low concern at `1.000`; `syntax_proxy_rich_program_search`
+  recovers syntax/family/target/useful/rich but fails the low-concern cap at
+  `1.000`.
 - `rich_program_transfer_repair_modal_2026_06_18.md` turns the v2 held-out
   role/parse transfer boundary into an explicit repair gate. Across five Modal
   seeds, `role_equivariant_rich_world_model` reaches transfer gate `1.000`,
@@ -251,11 +264,11 @@ Current coupled 2A/2B results:
 
 This is the first Phase 2 point where Arc 2A and Arc 2B are coupled at the
 rich program-composition contract, not merely at target selection. The frontier
-now also closes the v2 transfer-repair, supervised learned slot-semantics, and
-executable-module-body gates at Modal scale. It is still not the end of Phase
-2: unsupervised object/role slot discovery, open-ended/searched program
-invention beyond the provided grammar, and full architecture search remain
-open.
+now also closes searched rich-program recipes, v2 transfer-repair, supervised
+learned slot-semantics, and executable-module-body gates at Modal scale. It is
+still not the end of Phase 2: unsupervised object/role slot discovery,
+open-ended motor/apparatus discovery beyond the finite program DSL, and full
+architecture search remain open.
 
 ## Literature Bearings
 

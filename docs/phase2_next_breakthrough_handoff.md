@@ -2,8 +2,8 @@
 
 Date: 2026-06-18
 Repo: `jawauntb/research-derived-experiments`
-Current fresh branch for this note: `codex/phase2-learned-slot-semantics`
-Current `origin/main`: `e86e2c8` (`Merge pull request #139 from jawauntb/codex/phase2-publication-wrap-gates`)
+Current fresh branch for this note: `codex/phase2-open-program-search`
+Current `origin/main`: `ac2e834` (`Merge pull request #140 from jawauntb/codex/phase2-learned-slot-semantics`)
 External paper artifact folder: `/Users/jawaun/Metaphysics of Intelligence/Phase_Arc_2`
 
 This is the start-here note for the next agent session. The user is not asking
@@ -49,11 +49,18 @@ calibration trials, and 90 epochs. This closes the supervised slot-semantics
 boundary, but not unsupervised object discovery or open-ended program
 invention.
 
+The searched-rich successor branch then removes the named positive composer as
+a supplied agent. A bounded recipe search over probe rule, program-family
+selector, target selector, binding update, and action rule discovers the same
+useful v2 policy across five Modal seeds. This closes finite DSL program-policy
+search over the provided rich grammar, but not open-ended motor/apparatus
+discovery.
+
 Do not phrase this as "2A is done" or "2B is done." Phrase it this way:
 
 - `2A-v2` is done as a provided-rich-grammar contract with Modal-confirmed
-  transfer repair and supervised learned slot semantics, not as open-ended
-  program invention or unsupervised object/role discovery.
+  searched recipes, transfer repair, and supervised learned slot semantics, not
+  as open-ended motor/apparatus invention or unsupervised object/role discovery.
 - `2B-v2` is done as motif search plus Modal-confirmed compact executable-
   module validation, not as full neural architecture search.
 - 2A and 2B are already combined through the frozen empirical contract and the
@@ -115,6 +122,26 @@ Important rejected controls:
   and low-program `0.714`.
 - `learned_semantic_rich_without_concern`: rich metrics `1.000`, but
   low-program `0.714`.
+
+Current searched rich-program result:
+
+```text
+report: experiments/concerned_syntax/results/searched_rich_program_policy_modal_2026_06_18.md
+positive: concerned_rich_program_search
+best recipe: concern_or_calibration+learned_family+slot_scores+bind_if_useful_program+bound_action
+parse/action/family/target/useful/rich high: 1.000
+subtree: 0.789
+low-program: 0.144
+gate: PASS across 5 Modal seeds at 3000 train / 1200 test / 90 epochs
+```
+
+Important rejected controls:
+
+- `reward_only_rich_program_search`: no programs, hidden syntax fail.
+- `family_proxy_rich_program_search`: family `1.000`, but target/useful
+  `0.076` and low-program `1.000`.
+- `syntax_proxy_rich_program_search`: syntax/family/target/useful/rich
+  `1.000`, but low-program `1.000`.
 
 Current accepted 2B result:
 
@@ -602,15 +629,14 @@ When done:
 
 ## 11. Best Starting Move for the Next Agent
 
-Start with `codex/phase2-open-program-search` or
-`codex/phase2-unsupervised-object-slots`.
+Start with `codex/phase2-unsupervised-object-slots` or a 2B searched/evolved
+module branch.
 
-Reason: the current branch lands Modal-confirmed wrap gates for v2 transfer and
-transfer-consuming executable bodies, plus a supervised learned slot-semantics
-replacement for the explicit role decoder. The next scientific gap is not
-another seed sweep; it is searched program recipes beyond the provided grammar
-or unsupervised object/role slot discovery beyond supervised role-token
-calibration.
+Reason: the current branch lands Modal-confirmed finite recipe search for the
+provided v2 rich grammar. The next scientific gap is not another seed sweep; it
+is unsupervised object/role slot discovery beyond supervised role-token
+calibration, open-ended motor/apparatus discovery beyond the finite DSL, or
+searched/evolved executable modules under 2B.
 
 Then move to searched/evolved executable modules under 2B, keeping the
 Modal-first rule and the same transfer gate as a required contract.
