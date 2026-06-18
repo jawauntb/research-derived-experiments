@@ -18,9 +18,12 @@ from experiments.concerned_syntax.learned_agents import (
     summarize_seed_payloads,
 )
 from experiments.concerned_syntax.intervention_invention import (
+    run_parse_transfer_experiment,
     run_experiment as run_program_experiment,
     run_role_transfer_experiment,
+    run_transfer_suite,
     summarize_seed_payloads as summarize_program_payloads,
+    summarize_transfer_payloads,
 )
 from experiments.concerned_syntax.modal_report import summarize_modal_payload
 from experiments.concerned_syntax.pixel_shapes import (
@@ -396,6 +399,73 @@ class ConcernedSyntaxTest(unittest.TestCase):
         )
         self.assertIn("concerned_program_inventor", agents)
         self.assertIn("target_accuracy_high_concern", agents["concerned_program_inventor"])
+
+    def test_intervention_invention_parse_transfer_records_heldout_parse(self) -> None:
+        payload = run_parse_transfer_experiment(
+            train_trials=300,
+            test_trials=120,
+            seed=20260616,
+            epochs=25,
+            heldout_parse="repeat_concat",
+        )
+        agents = payload["agent_summary"]
+
+        self.assertEqual(payload["manifest"]["heldout_parse"], "repeat_concat")
+        self.assertEqual(
+            payload["manifest"]["contract"],
+            "2A-v1-pixels-observe_pair",
+        )
+        self.assertEqual(payload["manifest"]["heldout_axis"], "true_parse")
+        self.assertIn("concerned_program_inventor", agents)
+
+    def test_intervention_transfer_suite_records_axes(self) -> None:
+        payload = run_transfer_suite(
+            train_trials=180,
+            test_trials=80,
+            seed=20260616,
+            epochs=15,
+            heldout_kinds=("food_trap",),
+            heldout_parses=("repeat_concat",),
+        )
+        summary = payload["summary"]
+
+        self.assertIn("role_kind", summary["slice_summary"])
+        self.assertIn("true_parse", summary["slice_summary"])
+        self.assertEqual(
+            summary["transfer_gate"]["agent"],
+            "concerned_program_inventor",
+        )
+        self.assertIn("weakest_axis", summary["transfer_gate"])
+
+    def test_intervention_transfer_summary_requires_all_slices(self) -> None:
+        payloads = [
+            {
+                "iid_agent_summary": {
+                    "concerned_program_inventor": {
+                        "gate_pass": True,
+                        "target_accuracy_high_concern": 1.0,
+                    }
+                },
+                "transfer_slices": [
+                    {
+                        "axis": "role_kind",
+                        "heldout": "food_trap",
+                        "agent_summary": {
+                            "concerned_program_inventor": {
+                                "gate_pass": False,
+                                "target_accuracy_high_concern": 0.4,
+                            }
+                        },
+                    }
+                ],
+            }
+        ]
+
+        summary = summarize_transfer_payloads(payloads)
+
+        self.assertFalse(summary["transfer_gate"]["gate_pass"])
+        self.assertEqual(summary["transfer_gate"]["weakest_axis"], "role_kind")
+        self.assertEqual(summary["transfer_gate"]["weakest_heldout"], "food_trap")
 
 
 if __name__ == "__main__":
