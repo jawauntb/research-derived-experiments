@@ -79,6 +79,36 @@ def _run_ontology_check(body_names: tuple[str, ...]) -> str:
     return completed.stdout
 
 
+def _run_ontology_check_motifs(motifs: tuple[str, ...]) -> str:
+    ontology_dir = _ontology_dir()
+    if not ontology_dir.exists():
+        raise HaskellGateUnavailable(f"missing Haskell ontology dir: {ontology_dir}")
+    if shutil.which("cabal") is None:
+        raise HaskellGateUnavailable("cabal is not available")
+
+    try:
+        completed = subprocess.run(
+            [
+                "cabal",
+                "run",
+                "ontology-check",
+                "--",
+                "--motifs",
+                ",".join(motifs),
+            ],
+            cwd=ontology_dir,
+            check=True,
+            text=True,
+            capture_output=True,
+        )
+    except FileNotFoundError as exc:
+        raise HaskellGateUnavailable("cabal is not available") from exc
+    except subprocess.CalledProcessError as exc:
+        detail = exc.stderr.strip() or exc.stdout.strip()
+        raise HaskellGateError(f"ontology-check motif verdict failed: {detail}") from exc
+    return completed.stdout
+
+
 def parse_named_verdicts(output: str) -> dict[str, HaskellVerdict]:
     verdicts: dict[str, HaskellVerdict] = {}
     for line in output.splitlines():
@@ -98,6 +128,15 @@ def parse_named_verdicts(output: str) -> dict[str, HaskellVerdict]:
     return verdicts
 
 
+def parse_motif_verdict(output: str) -> HaskellVerdict:
+    verdicts = parse_named_verdicts(output)
+    if "custom_motifs" in verdicts:
+        return verdicts["custom_motifs"]
+    if len(verdicts) == 1:
+        return next(iter(verdicts.values()))
+    raise HaskellGateError("ontology-check emitted multiple motif verdicts")
+
+
 def load_body_verdicts(
     body_names: Iterable[str],
     *,
@@ -109,6 +148,19 @@ def load_body_verdicts(
     if runner is not None:
         return parse_named_verdicts(runner(names))
     return dict(_cached_body_verdicts(names))
+
+
+def load_motif_verdict(
+    motifs: Iterable[str],
+    *,
+    runner: Runner | None = None,
+) -> HaskellVerdict:
+    names = tuple(sorted(set(motifs)))
+    if not names:
+        raise HaskellGateError("motif verdict requires at least one motif")
+    if runner is not None:
+        return parse_motif_verdict(runner(names))
+    return _cached_motif_verdict(names)
 
 
 def try_body_verdicts(body_names: Iterable[str]) -> dict[str, HaskellVerdict] | None:
@@ -126,3 +178,8 @@ def _cached_body_verdicts(names: tuple[str, ...]) -> tuple[tuple[str, HaskellVer
             key=lambda item: item[0],
         )
     )
+
+
+@lru_cache(maxsize=512)
+def _cached_motif_verdict(names: tuple[str, ...]) -> HaskellVerdict:
+    return parse_motif_verdict(_run_ontology_check_motifs(names))
