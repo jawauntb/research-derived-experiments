@@ -18,9 +18,12 @@ from experiments.concerned_syntax.learned_agents import (
     summarize_seed_payloads,
 )
 from experiments.concerned_syntax.intervention_invention import (
+    run_parse_transfer_experiment,
     run_experiment as run_program_experiment,
     run_role_transfer_experiment,
+    run_transfer_suite,
     summarize_seed_payloads as summarize_program_payloads,
+    summarize_transfer_payloads,
 )
 from experiments.concerned_syntax.modal_report import summarize_modal_payload
 from experiments.concerned_syntax.pixel_shapes import (
@@ -28,6 +31,10 @@ from experiments.concerned_syntax.pixel_shapes import (
     render_pixel_surface,
     run_experiment as run_pixel_experiment,
     summarize_seed_payloads as summarize_pixel_payloads,
+)
+from experiments.concerned_syntax.rich_program_language import (
+    run_experiment as run_rich_program_experiment,
+    summarize_seed_payloads as summarize_rich_program_payloads,
 )
 from experiments.concerned_syntax.vector_shapes import (
     run_experiment as run_vector_experiment,
@@ -396,6 +403,140 @@ class ConcernedSyntaxTest(unittest.TestCase):
         )
         self.assertIn("concerned_program_inventor", agents)
         self.assertIn("target_accuracy_high_concern", agents["concerned_program_inventor"])
+
+    def test_rich_program_language_requires_concern_target_and_family(self) -> None:
+        payload = run_rich_program_experiment(
+            train_trials=650,
+            test_trials=260,
+            seed=20260617,
+            epochs=45,
+        )
+        agents = payload["agent_summary"]
+
+        self.assertTrue(agents["concerned_program_composer"]["gate_pass"])
+        self.assertFalse(agents["surface_rich_shortcut"]["gate_pass"])
+        self.assertFalse(agents["random_rich_program"]["gate_pass"])
+        self.assertFalse(agents["family_without_target"]["gate_pass"])
+        self.assertFalse(agents["target_without_family"]["gate_pass"])
+        self.assertFalse(agents["rich_without_concern"]["gate_pass"])
+        self.assertGreaterEqual(
+            agents["concerned_program_composer"]["family_accuracy_high_concern"],
+            0.95,
+        )
+        self.assertGreaterEqual(
+            agents["concerned_program_composer"]["target_accuracy_high_concern"],
+            0.95,
+        )
+        self.assertLess(
+            agents["family_without_target"]["target_accuracy_high_concern"],
+            0.25,
+        )
+        self.assertEqual(
+            agents["target_without_family"]["family_accuracy_high_concern"],
+            0.0,
+        )
+        self.assertEqual(
+            agents["rich_without_concern"]["low_concern_program_rate"],
+            1.0,
+        )
+
+    def test_rich_program_language_modal_summary_averages_gate_rates(self) -> None:
+        payloads = [
+            {
+                "agent_summary": {
+                    "concerned_program_composer": {
+                        "family_accuracy_high_concern": 1.0,
+                        "gate_pass": True,
+                    }
+                }
+            },
+            {
+                "agent_summary": {
+                    "concerned_program_composer": {
+                        "family_accuracy_high_concern": 0.5,
+                        "gate_pass": False,
+                    }
+                }
+            },
+        ]
+
+        summary = summarize_rich_program_payloads(payloads)
+
+        self.assertAlmostEqual(
+            summary["concerned_program_composer"]["family_accuracy_high_concern"],
+            0.75,
+        )
+        self.assertAlmostEqual(
+            summary["concerned_program_composer"]["gate_pass"],
+            0.5,
+        )
+
+    def test_intervention_invention_parse_transfer_records_heldout_parse(self) -> None:
+        payload = run_parse_transfer_experiment(
+            train_trials=300,
+            test_trials=120,
+            seed=20260616,
+            epochs=25,
+            heldout_parse="repeat_concat",
+        )
+        agents = payload["agent_summary"]
+
+        self.assertEqual(payload["manifest"]["heldout_parse"], "repeat_concat")
+        self.assertEqual(
+            payload["manifest"]["contract"],
+            "2A-v1-pixels-observe_pair",
+        )
+        self.assertEqual(payload["manifest"]["heldout_axis"], "true_parse")
+        self.assertIn("concerned_program_inventor", agents)
+
+    def test_intervention_transfer_suite_records_axes(self) -> None:
+        payload = run_transfer_suite(
+            train_trials=180,
+            test_trials=80,
+            seed=20260616,
+            epochs=15,
+            heldout_kinds=("food_trap",),
+            heldout_parses=("repeat_concat",),
+        )
+        summary = payload["summary"]
+
+        self.assertIn("role_kind", summary["slice_summary"])
+        self.assertIn("true_parse", summary["slice_summary"])
+        self.assertEqual(
+            summary["transfer_gate"]["agent"],
+            "concerned_program_inventor",
+        )
+        self.assertIn("weakest_axis", summary["transfer_gate"])
+
+    def test_intervention_transfer_summary_requires_all_slices(self) -> None:
+        payloads = [
+            {
+                "iid_agent_summary": {
+                    "concerned_program_inventor": {
+                        "gate_pass": True,
+                        "target_accuracy_high_concern": 1.0,
+                    }
+                },
+                "transfer_slices": [
+                    {
+                        "axis": "role_kind",
+                        "heldout": "food_trap",
+                        "agent_summary": {
+                            "concerned_program_inventor": {
+                                "gate_pass": False,
+                                "target_accuracy_high_concern": 0.4,
+                            }
+                        },
+                    }
+                ],
+            }
+        ]
+
+        summary = summarize_transfer_payloads(payloads)
+
+        self.assertFalse(summary["transfer_gate"]["gate_pass"])
+        self.assertEqual(summary["transfer_gate"]["weakest_axis"], "role_kind")
+        self.assertEqual(summary["transfer_gate"]["weakest_heldout"], "food_trap")
 
 
 if __name__ == "__main__":
