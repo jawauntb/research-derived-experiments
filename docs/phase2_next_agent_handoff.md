@@ -9,6 +9,11 @@ This document is a detailed continuation brief for a new agent session. It is
 written to preserve the current scientific state, the methodological spine, the
 latest artifacts, and the fastest path to the next useful result.
 
+Latest start-here note: `docs/phase2_next_breakthrough_handoff.md`. Use that
+note first for the current #127/#128 frontier, Modal-first compute rules, next
+breakthrough milestones, chart/PDF guidance, and fresh-branch instructions. This
+document remains useful as the longer historical brief.
+
 ## 1. Highest-Level Program Shape
 
 The research program is currently organized like this:
@@ -49,7 +54,19 @@ generated vectors -> rendered pixels -> learned object/part extraction
 
 ## 2. Latest Merged State
 
-The latest major merged PR before this handoff was:
+The latest major merged PRs before the successor handoff were:
+
+- PR #128: `Couple program-body search to the 2A gate`
+- Merge commit: `8a93813f34e4f869461e13719820f3914eedaf99`
+- Scientific delta: freezes `2A-v1-pixels-observe_pair` and makes 2B
+  program-body search consume the empirical 2A intervention-invention gate.
+
+- PR #127: `Add concerned intervention invention gate`
+- Merge commit: `3752c9474b8b5c5edd7d71173cd3426bab457953`
+- Scientific delta: makes target selection part of the 2A pixel/program task,
+  separating target-only, concern-only, random-probe, and surface shortcuts.
+
+Older major merged PR:
 
 - PR #123: `Add vector Phase 2 gates and Haskell ontology`
 - Merge commit: `1757d2a176c45804dff05f069eea8bf46bc6a730`
@@ -339,8 +356,10 @@ The Haskell checker caught real ontology inconsistencies during development:
 
 Next Haskell step:
 
-Make Python consume Haskell JSON verdicts during body evaluation. This moves
-formal admissibility from "parallel artifact" into the actual sweep gate.
+Package the Haskell toolchain, or a precomputed Haskell motif-verdict cache,
+for Modal-scale body search. Local Python now consumes Haskell JSON verdicts
+for arbitrary motif candidates during `program_body_search`; Modal still falls
+back to `python_static` unless Cabal is available in the image.
 
 ## 6. Research Sources and Citation Practice
 
@@ -548,6 +567,13 @@ Status: completed in PR #125. `ontology-check` supports named body verdicts and
 `formal_source`, `formal_valid`, `resource_cost`, and `formal_violations`.
 Keep this section as the design record, not as an open task.
 
+Follow-on status: local program-body search now calls `ontology-check --motifs`
+for searched candidates and records Haskell-source formal provenance in
+`experiments/viable_computational_bodies/results/program_body_search_haskell_local_2026_06_16.md`.
+Across the fixed five-seed report set, `viability_guided` reaches body gate
+`1.000`, empirical gate `1.000`, formal valid `1.000`, Haskell-source rate
+`1.000`, target/useful high `1.000`, and low-probe `0.144`.
+
 Proposed files:
 
 - Extend `formal/ontology-hs/app/Main.hs` to accept body names or motif JSON.
@@ -656,10 +682,13 @@ probe program tokens:
 ```
 
 The first line of this goal is now complete for `observe_pair(a,b)` target
-selection. Movement, ablation, two-step composition, and Modal-scale
-replication are now complete in a provided grammar. The remaining next version
-is held-out role/parse transfer, open-ended or searched program discovery, and
-2B body consumption of the `2A-v2` contract.
+selection. Held-out transfer is now instrumented and Modal-replicated, but it
+fails: the i.i.d. gate pass rate is `1.000`, while mean held-out transfer-slice
+gate pass is `0.171`, with weakest slice `role_kind:repair_core`. Movement,
+ablation, two-step composition, and Modal-scale replication are now complete in
+a provided grammar. The remaining next version is a mechanism that can pass
+held-out role/parse transfer, open-ended or searched program discovery, and 2B
+body consumption of the `2A-v2` contract.
 
 Gate:
 
@@ -836,24 +865,26 @@ Safe current claims:
   passive inference, and restless uncertainty reduction.
 - Arc 2B now has symbolic search, executable body validation, vector module
   validation, and a typed Haskell admissibility prototype.
-- The current frontier is pixel perception, Haskell-in-the-loop body evaluation,
-  and search-discovered executable modules.
+- The current frontier is pixel perception, Modal-packaged Haskell/cache-backed
+  body search, and search-discovered executable modules.
 
 ## 12. Suggested Immediate Next Branches
 
-### Branch 1: `codex/phase2-haskell-python-gate`
+### Branch 1: `codex/phase2-haskell-modal-cache`
 
 Goal:
 
-Python consumes Haskell ontology verdicts in body evaluation.
+Modal-scale body search consumes Haskell ontology verdicts or a provenance-safe
+precomputed Haskell verdict cache.
 
 Definition of done:
 
-- `ontology-check` accepts body names or motif lists.
-- Python calls/caches it.
-- Tests pass with Haskell installed.
-- Body report records Haskell-sourced formal validity.
-- Papers mention this as integration, not just prototype.
+- Modal image includes the Haskell checker, or the run consumes a tracked
+  Haskell-generated motif verdict cache.
+- Modal report records `formal_source = "haskell"` or
+  `formal_source = "haskell_cache"` for searched bodies.
+- Haskell errors cannot silently become passing Python-static verdicts.
+- Papers mention this as admissibility integration, not full formal proof.
 
 ### Branch 2: `codex/phase2-pixel-syntax`
 
@@ -1011,12 +1042,15 @@ small local smoke -> Modal full sweep -> audit -> chart -> paper/PDF -> checks
 
 The fastest path to a real next breakthrough is probably:
 
-1. Finish the Modal-scale pixel sweep and add transfer gates.
-2. Add held-out role-pair/parse-family transfer so the rich-program composer cannot
-   be only an i.i.d. color/position reader.
-3. Route searched/evolved bodies through Haskell admissibility before evaluating
+1. Treat the Modal-scale `2A-v2-pixels-rich_programs` grammar as available but
+   not final.
+2. Fix the failed held-out role-pair/parse-family transfer gate so the rich
+   composer cannot be only an i.i.d. color/position reader.
+3. Move beyond the provided grammar into open-ended or searched program
+   discovery.
+4. Route searched/evolved bodies through Haskell admissibility before evaluating
    them on the vector/pixel/program gates.
-4. Make 2B consume the `2A-v2-pixels-rich_programs` contract instead of only
+5. Make 2B consume the `2A-v2-pixels-rich_programs` contract instead of only
    the `2A-v1-pixels-observe_pair` contract.
 
 Why that path:
@@ -1044,5 +1078,11 @@ Latest coupled result after PR #127:
   empirical gate `1.000`, formal valid `1.000`, target/useful high `1.000`,
   low probe `0.156`, and discovers
   `calibration_guard+causal_binding_head+concern_policy+formal_guard+intervention_planner+reward_head+vector_surface_encoder+world_model`.
+- The Haskell-backed local follow-up report
+  `experiments/viable_computational_bodies/results/program_body_search_haskell_local_2026_06_16.md`
+  uses the same five report seeds at `1200/500/60`, records
+  `formal_source = "haskell"` for searched bodies, and reaches
+  `viability_guided` body gate `1.000`, empirical gate `1.000`, formal valid
+  `1.000`, target/useful high `1.000`, and low probe `0.144`.
 - `reward_only` fails as a shortcut body; `syntax_proxy` reaches target/useful
   `1.000` but fails body gate with low-probe `0.830`.

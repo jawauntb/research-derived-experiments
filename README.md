@@ -33,7 +33,7 @@ We use the `scientific-discovery-regime-audit` skill as the process wrapper:
 4. Distinguish retrieval, search, and discovery.
 5. Record residual content that the current regime cannot explain.
 
-The current ledger is [TODO.md](TODO.md). Audit cards live in [docs/discovery_regime_audit.md](docs/discovery_regime_audit.md). The Phase 2 breakthrough trajectory is [docs/phase2_breakthrough_trajectory.md](docs/phase2_breakthrough_trajectory.md). A detailed continuation brief for new agent sessions lives at [docs/phase2_next_agent_handoff.md](docs/phase2_next_agent_handoff.md).
+The current ledger is [TODO.md](TODO.md). Audit cards live in [docs/discovery_regime_audit.md](docs/discovery_regime_audit.md). The Phase 2 breakthrough trajectory is [docs/phase2_breakthrough_trajectory.md](docs/phase2_breakthrough_trajectory.md). The latest start-here handoff for next breakthrough work is [docs/phase2_next_breakthrough_handoff.md](docs/phase2_next_breakthrough_handoff.md), with the longer historical continuation brief at [docs/phase2_next_agent_handoff.md](docs/phase2_next_agent_handoff.md).
 
 ## Experiments
 
@@ -124,6 +124,11 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
 
 doppler --scope /Users/jawaun/superoptimizers run -- \
     uvx --python 3.12 --from modal modal run \
+    experiments/concerned_syntax/modal_intervention_transfer_sweep.py \
+    --train-trials 3000 --test-trials 1200 --epochs 90
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
     experiments/concerned_syntax/modal_pixel_shapes_sweep.py \
     --train-trials 3000 --test-trials 1200 --epochs 90
 
@@ -143,6 +148,14 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     experiments/viable_computational_bodies/modal_program_body_search.py \
     --generations 24 --population 24 \
     --train-trials 3000 --test-trials 1200 --epochs 90
+
+python3 -m experiments.viable_computational_bodies.program_body_search \
+    --seed-list 20260616,1729,4242,8675309,314159 \
+    --generations 18 --population 18 \
+    --train-trials 1200 --test-trials 500 --epochs 60 \
+    --formal-mode haskell \
+    --out artifacts/viable_computational_bodies/program_body_search_haskell_local.json \
+    --report experiments/viable_computational_bodies/results/program_body_search_haskell_local_2026_06_16.md
 
 # Phase / Arc 2B executable body validation is produced by the learned 2A sweep:
 # experiments/viable_computational_bodies/results/executable_bodies_modal_2026_06_16.md

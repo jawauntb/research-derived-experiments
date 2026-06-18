@@ -90,8 +90,7 @@ motifCost motif =
 
 dependencies :: [(Motif, [Motif])]
 dependencies =
-  [ (SyntaxMemory, [TreeBinder])
-  , (InterventionPlanner, [WorldModel])
+  [ (InterventionPlanner, [WorldModel])
   , (CounterfactualRollout, [WorldModel, InterventionPlanner])
   , (SelfRepair, [FormalGuard])
   , (CausalBindingHead, [VectorSurfaceEncoder])
@@ -103,6 +102,7 @@ violations :: Body -> [Violation]
 violations candidate =
   dependencyViolations
     <> roleHeadViolation
+    <> syntaxMemoryViolation
     <> shortcutViolation
     <> restlessViolation
     <> budgetViolation
@@ -118,6 +118,12 @@ violations candidate =
     roleHeadViolation =
       [ Missing RoleSpecificHeads TreeBinder
       | has candidate RoleSpecificHeads
+      , not (has candidate TreeBinder)
+      , not (has candidate CausalBindingHead)
+      ]
+    syntaxMemoryViolation =
+      [ Missing SyntaxMemory TreeBinder
+      | has candidate SyntaxMemory
       , not (has candidate TreeBinder)
       , not (has candidate CausalBindingHead)
       ]

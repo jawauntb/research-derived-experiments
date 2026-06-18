@@ -26,3 +26,17 @@ main = do
     verdictFormalValid (verdict passiveVectorBody)
   assert "restless vector body is invalid without calibration" $
     not (verdictFormalValid (verdict restlessVectorBody))
+  assert "syntax memory can bind through causal binding head" $
+    verdictFormalValid $
+      verdict $
+        body
+          [ VectorSurfaceEncoder
+          , RewardHead
+          , CausalBindingHead
+          , SyntaxMemory
+          , WorldModel
+          , InterventionPlanner
+          , ConcernPolicy
+          , CalibrationGuard
+          , FormalGuard
+          ]
