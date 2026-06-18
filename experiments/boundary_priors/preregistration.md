@@ -93,5 +93,37 @@ channel: `signal = 1.0 if v_k(t+1) == a_k else 0.0` (SELF -> 1.0; WORLD -> ~0.5)
 **Diagnostic** (the gate separates controls for distinct, named reasons). A
 mechanism-tier claim would additionally require the plastic agent to *re-engage*
 its boundary inference selectively (probe budget rises only after the shift),
-mirroring the metric-stack's maintained-boundary signature; that is reported but
-not gated in this pilot.
+mirroring the metric-stack's maintained-boundary signature; that is gated
+separately in the re-engagement follow-up below.
+
+## Mechanism follow-up: costly probing & selective re-engagement
+
+Code: `experiments/boundary_priors/reengagement.py`. Probing now costs viability
+(`probe_cost`), exploitation actuates *only* believed-self channels (so newly
+controllable channels can be found *only* by an explicit probe), and a forced
+warmup lets every condition learn the initial boundary. The positive agent
+`reengaging` gates probing on belief uncertainty + control-surprise with
+decision-layer effort cooling (Paper 23B's detect -> allocate -> satiate ->
+re-engage). Controls: `fixed_probe` (constant 0.25), `restless` (constant 0.60),
+`no_probe` (0.0 after warmup).
+
+Pre-registered mechanism gates (decided before running):
+
+- **M1 (selective re-engagement):** `reengaging` probe rate is < 0.10 pre-shift,
+  >= 0.15 in the window right after the shift, and >= 1.5x its pre-shift rate.
+- **M2 (satiation):** late-post probe rate < early-post probe rate (it cools).
+- **M3 (net-reward dominance under cost):** `reengaging` net reward (reward minus
+  probe cost) >= both `fixed_probe` and `restless` in the late window.
+- **M4 (no-false-calm):** `reengaging` late boundary accuracy >= 0.85 (low
+  probing because attribution resolved, not because the agent gave up).
+- Context: `no_probe` must fail to recover (late boundary accuracy < 0.85),
+  establishing that probing is necessary at all.
+
+Kill criterion: if `no_probe` recovers the boundary on its own (>= 0.85), the
+environment grants free exploration and the re-engagement mechanism is
+unnecessary — exactly the failure the first design hit (the exploit fill-branch
+explored for free) and the reason exploitation was restricted to believed-self.
+
+Note (transparency): `probe_cost` was adjusted once (0.02 -> 0.06) after an
+initial run showed the 0.02 cost was too small to make probing economically
+distinguishable; no other gate parameter was tuned to results.

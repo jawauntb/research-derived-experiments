@@ -176,7 +176,8 @@
 - [x] Define perturbation and model-reduction intervention (boundary shift at step 300; removable prior via belief decay toward 0.5).
 - [x] Choose metrics: adaptability (post-shift reward), boundary accuracy, re-track lag, criticality proxy, probe rate.
 - [x] Run a pilot and pre-register gates; commit the public result report (`results/pilot_2026_06_18.md`, all 4 gates pass at diagnostic tier).
-- [ ] Make probing costly and test selective re-engagement after the shift (mechanism tier).
+- [x] Make probing costly and test selective re-engagement after the shift (`reengagement.py`): re-engagement signature M1+M2+M4 pass 3/3 seeds (quiet→spike→satiate, no false calm); M3 net-reward dominance partial at 2/3. Mechanism tier reached on the signature.
+- [ ] Replace uniform-random probing with a coverage-aware probe target; test whether M3 reaches 3/3 without raising probe cost.
 - [ ] Let `num_self` change at the shift (lose effectors), a harder TAME-like boundary move.
 - [ ] Represent the boundary as a navigable embedding coordinate (Levin 2026 remapping/navigation).
 
@@ -186,7 +187,7 @@ Pre-registration: `docs/external_contact_preregistration.md`. Network egress is
 currently blocked (HF/PyPI 403; verified 2026-06-18), so each prediction ships a
 Tier A (offline stdlib) and Tier B (fetch-when-unblocked) test.
 
-- [ ] P3 (concept geometry, GloVe): run the Tier A offline RSA/centering test (fully runnable today; highest leverage × runnability).
+- [x] P3 (concept geometry, GloVe): build the Tier A stdlib harness with math self-test (`experiments/external_contact/p3_glove_probe.py`). BLOCKED on real run: no GloVe vectors locally and Stanford egress is 403; harness is one command away from a real result once vectors are available.
 - [ ] P2 (uncertainty≠error / no-false-calm on published deep-ensemble + BALD curves): transcribe external tables and check the directional prediction.
 - [ ] P1 (weakness→OOD on the Pythia suite): Tier A orbit-coverage surrogate now; Tier B full check when HF egress is available.
 
