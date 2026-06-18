@@ -33,6 +33,20 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
   --train-trials 3000 --test-trials 1200 --epochs 90
 ```
 
+Learned executable module bodies against 2A-v2 transfer:
+
+```bash
+python3 -m experiments.viable_computational_bodies.learned_executable_modules \
+  --train-trials 300 --test-trials 120 --seed 20260618 --epochs 25 \
+  --out artifacts/viable_computational_bodies/learned_executable_modules_local.json \
+  --report experiments/viable_computational_bodies/results/learned_executable_modules_local_2026_06_18.md
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/viable_computational_bodies/modal_learned_executable_modules.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90
+```
+
 Executable body validation is produced by the learned Arc 2A sweep:
 
 ```bash

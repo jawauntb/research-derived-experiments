@@ -4726,3 +4726,182 @@ Next move: add held-out role-pair and parse-family transfer as an actual body
 gate, then replace motif-to-control mapping with learned executable modules
 such as object-slot encoders, graph binders, routed heads, and program
 induction components.
+
+## Arc 2A: Rich Program Transfer Repair
+
+Question: can the `2A-v2-pixels-rich_programs` contract survive held-out
+role-kind and hidden true-parse transfer once target and program-family
+selection are made role-equivariant?
+
+Current regime:
+
+- Artifact types: rich 2A-v2 program examples, connected-component pixel-object
+  features, learned rich composer summaries, v1 transfer-repair operations, and
+  Modal/local rich-program reports.
+- Operations: withhold one role kind or true parse, train on the remaining
+  slices, evaluate only the held-out slice, and compare the learned rich
+  composer with role-equivariant repair controls.
+- Gates/verifiers: transported rich-program gate plus held-out slice pass rate,
+  family/target/useful/rich high-concern rates, low-concern no-program
+  discipline, parse/action/subtree metrics, targeted unit tests, and Modal
+  entrypoint.
+- Known limitations: the accepted repair uses explicit role decoding and a
+  compact world-model rule; this is not learned neural role semantics or
+  open-ended program invention.
+
+Action class:
+
+- Retrieval/search/discovery: transfer-repair regime transition.
+- Why: the verifier changes from i.i.d. v2 seed stability to held-out role/parse
+  transfer, and the accepted mechanism must preserve concern gating, target
+  binding, program-family choice, and rich composition under that transfer.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/concerned_syntax/rich_program_transfer_repair.py`;
+  `experiments/concerned_syntax/modal_rich_program_transfer_repair_sweep.py`;
+  `experiments/concerned_syntax/results/rich_program_transfer_repair_local_2026_06_18.md`;
+  `experiments/concerned_syntax/results/rich_program_transfer_repair_modal_2026_06_18.md`;
+  local ignored artifact
+  `artifacts/concerned_syntax/rich_program_transfer_repair_local.json`;
+  Modal ignored artifact
+  `artifacts/concerned_syntax/rich_program_transfer_repair_modal_sweep.json`.
+- Positive target: `role_equivariant_rich_world_model` should pass every
+  held-out role-kind and true-parse slice.
+- Negative controls: `learned_rich_program_composer`,
+  `role_equivariant_family_only`, `role_equivariant_target_only`, and
+  `role_equivariant_rich_without_concern`.
+- Stress tests: held out `shield_poison`, `repair_core`, `food_trap`,
+  `repeat_concat`, `hooked_repeat`, `alternating_bind`, and `edge_core`.
+
+Gate:
+
+- Acceptance rule: every transfer slice passes, family/target/useful/rich
+  high-concern rates >= 0.70, action >= 0.85, low-concern program rate <= 0.25,
+  and controls fail for diagnostic reasons.
+- Withheld/rejected rule: do not claim learned semantic transfer or
+  open-ended program invention from an explicit role decoder.
+
+Results:
+
+- Accepted artifacts: transfer-repair module, Modal entrypoint, local and Modal
+  reports, targeted tests, README commands, handoff update, and paper update.
+- Rejected or withheld artifacts: raw JSON remains under ignored `artifacts/`;
+  no learned neural role-slot semantics yet.
+- Key metrics across five Modal seeds:
+  `role_equivariant_rich_world_model` transfer gate `1.000`, parse/action/
+  family/target/useful/rich high-concern rates `1.000`, low-program `0.000`,
+  regret `0.004`. `learned_rich_program_composer` transfer gate fails with
+  slice gate `0.571`, family/useful high `0.714`, target high `0.829`, and
+  low-program `0.161`.
+  `role_equivariant_rich_without_concern` reaches rich metrics `1.000` but
+  fails with low-program `0.714`.
+- Variance or ablation: five Modal seeds with 3,000 train trials, 1,200 test
+  trials, and 90 epochs per held-out slice/seed; transfer gate SD is `0.000`
+  for the accepted repair.
+
+Residual content:
+
+- Explained by old regime: i.i.d. rich program composition remains passable,
+  and v1 role-equivariant repair logic transfers to the richer family grammar.
+- New content outside old regime: held-out v2 transfer requires the repair to
+  bind role slots, target pair, program family, and concern gate together; any
+  one missing piece fails a different slice.
+- Retractions or supersessions: supersede "held-out v2 transfer remains open"
+  with "held-out v2 transfer is Modal-repairable by an explicit
+  role-equivariant rich world model."
+
+Next move: replace explicit role decoding with learned neural role/slot
+semantics and make 2B executable modules consume the Modal-confirmed transfer
+gate.
+
+## Arc 2A/2B: Learned Executable Modules Against 2A-v2 Transfer
+
+Question: can Arc 2B executable module bodies consume the repaired held-out
+`2A-v2-pixels-rich_programs` transfer gate rather than only mapping symbolic
+motifs to in-distribution empirical controls?
+
+Current regime:
+
+- Artifact types: rich 2A-v2 transfer summaries, executable module-body specs,
+  required module lists, rich body-search motif reports, and 2B formal/resource
+  gates.
+- Operations: run the v2 transfer-repair gate, map each empirical agent to a
+  concrete executable body spec, require transfer pass plus coverage of
+  `pixel_slot_encoder`, `concern_gate`, `target_binder`,
+  `program_family_router`, `rich_program_composer`, `world_model`, and
+  `formal_guard`.
+- Gates/verifiers: transfer gate, executable module coverage, resource cost,
+  family/target/useful/rich high-concern rates, low-concern program cap,
+  targeted unit tests, and Modal entrypoint.
+- Known limitations: bodies are compact executable contracts over existing
+  transfer agents, not searched/evolved neural architecture modules.
+
+Action class:
+
+- Retrieval/search/discovery: coupled body-contract transition.
+- Why: 2B now consumes the transfer-repaired 2A-v2 gate directly; a body cannot
+  pass by rich program metrics alone if it lacks executable concern, binding,
+  routing, world-model, or formal modules.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/viable_computational_bodies/learned_executable_modules.py`;
+  `experiments/viable_computational_bodies/modal_learned_executable_modules.py`;
+  `experiments/viable_computational_bodies/results/learned_executable_modules_local_2026_06_18.md`;
+  `experiments/viable_computational_bodies/results/learned_executable_modules_modal_2026_06_18.md`;
+  local ignored artifact
+  `artifacts/viable_computational_bodies/learned_executable_modules_local.json`;
+  Modal ignored artifact
+  `artifacts/viable_computational_bodies/learned_executable_modules_modal.json`.
+- Positive target: `transfer_repaired_executable_body` should pass transfer,
+  module coverage, resource, and empirical rich-program metrics.
+- Negative controls: `learned_composer_body`, `family_router_body`,
+  `target_binder_body`, and `ungated_rich_body`.
+- Stress tests: controls must fail for missing modules, transfer failure, or
+  low-concern program violations, not because of bookkeeping artifacts.
+
+Gate:
+
+- Acceptance rule: transfer gate pass, no missing required modules, resource
+  cost <= 18, action >= 0.85, low-concern program rate <= 0.25, and
+  family/target/useful/rich high-concern rates >= 0.70.
+- Withheld/rejected rule: do not claim full neural architecture search,
+  learned object slots, or learned role semantics. Reject if family-only,
+  target-only, ungated-rich, or learned-composer bodies satisfy the full body
+  gate.
+
+Results:
+
+- Accepted artifacts: executable-module gate module, Modal entrypoint, local
+  and Modal reports, targeted tests, README commands, handoff update, and paper
+  update.
+- Rejected or withheld artifacts: raw JSON remains under ignored `artifacts/`;
+  searched/evolved executable modules remain future work.
+- Key metrics across five Modal seeds:
+  `transfer_repaired_executable_body` transfer `1.000`, module coverage
+  `1.000`, family/target/useful/rich `1.000`, low-program `0.000`, cost `16`,
+  gate PASS. `learned_composer_body` has module coverage `0.143` and transfer
+  fail; `family_router_body` misses target/rich/world-model modules;
+  `target_binder_body` misses concern/formal/family/rich modules and violates
+  low-program discipline; `ungated_rich_body` reaches rich metrics but fails
+  transfer and missing concern/formal modules.
+- Variance or ablation: five Modal seeds with 3,000 train trials, 1,200 test
+  trials, and 90 epochs per held-out slice/seed; the accepted body gate SD is
+  `0.000`.
+
+Residual content:
+
+- Explained by old regime: v2 motif search already knew that rich program
+  composition needed concern, target, family, composer, and formal motifs.
+- New content outside old regime: the body must now carry the actual repaired
+  transfer contract, not merely the in-distribution v2 metrics; missing module
+  failures become explicit and auditable.
+- Retractions or supersessions: supersede "learned executable module bodies
+  remain open" with "a compact Modal-confirmed executable-module body gate now
+  consumes v2 transfer, while searched/evolved neural modules remain open."
+
+Next move: replace the compact hand-instantiated bodies with searched/evolved
+neural modules.

@@ -37,8 +37,14 @@ validity 1.000, family/target/useful/rich high-concern rates 1.000, and
 low-concern program rate 0.168. Reward-only search collapses to a shortcut
 body; syntax-proxy search reaches family/target/useful/rich 1.000 but fails
 the v2 body gate with formal validity 0.200 and low-program rate 0.670. The
-Haskell checker validates body admissibility constraints and catches missing
-calibration guards or missing program-family heads as type-layer violations.
+five-seed Modal executable-module wrap gate then requires a body to consume the
+repaired held-out v2 transfer contract. Only the transfer-repaired executable
+body passes with transfer 1.000, module coverage 1.000,
+family/target/useful/rich 1.000, low-program 0.000, and resource cost 16;
+family-router, target-binder, ungated-rich, and learned-composer bodies fail
+different missing-module or transfer slices. The Haskell checker validates body
+admissibility constraints and catches missing calibration guards or missing
+program-family heads as type-layer violations.
 The result is still not a claim that full neural architecture search has been
 solved. It is a Phase 2B acceptance surface: **accuracy is not architecture,
 novelty is not viable morphology, target selection is not a viable body, rich
@@ -449,7 +455,59 @@ still fails the body gate because it does not preserve the formal guard and
 low-concern discipline. The accepted body reconstructs the morphology required
 to express the full 2A-v2 program contract.
 
-## 14. Haskell Typed Ontology Gate
+## 14. Learned Executable Modules Against 2A-v2 Transfer
+
+The rich program-body search still maps symbolic motifs to existing empirical
+controls. The next body gate is smaller but stricter: candidate bodies must
+consume the held-out `2A-v2-pixels-rich_programs` transfer contract and expose
+all required executable modules.
+
+Remote command:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/viable_computational_bodies/modal_learned_executable_modules.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90
+```
+
+The tracked public report is
+`experiments/viable_computational_bodies/results/learned_executable_modules_modal_2026_06_18.md`.
+
+Required modules:
+
+```text
+pixel_slot_encoder
+concern_gate
+target_binder
+program_family_router
+rich_program_composer
+world_model
+formal_guard
+```
+
+Gate summary:
+
+| Body | Transfer | Modules | Family | Target | Useful | Rich | Low program | Gate |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| learned composer | 0.000 | 0.143 | 0.714 | 0.829 | 0.714 | 0.894 | 0.161 | fail |
+| family router | 0.000 | 0.571 | 1.000 | 0.196 | 0.196 | 1.000 | 0.000 | fail |
+| target binder | 0.000 | 0.429 | 0.143 | 1.000 | 0.143 | 0.143 | 0.714 | fail |
+| ungated rich | 0.000 | 0.714 | 1.000 | 1.000 | 1.000 | 1.000 | 0.714 | fail |
+| transfer repaired | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 0.000 | PASS |
+
+This gate prevents a body from passing by target selection, family routing, or
+rich composition alone. The accepted body must carry concern gating, target
+binding, program-family routing, rich program composition, a world model, and a
+formal guard together. The controls fail for interpretable reasons: missing
+target binding, missing family routing, missing concern/formal modules, or
+failure to inherit the repaired transfer gate.
+
+This is not full neural architecture search. It is a compact executable-module
+validation that turns the repaired 2A-v2 transfer contract into a 2B body
+requirement at Modal scale.
+
+## 15. Haskell Typed Ontology Gate
 
 The Python gates are convenient for experiments, but the ontology layer should
 eventually live in a stronger typed formalism. This branch adds a small Haskell
@@ -482,34 +540,37 @@ serve the same binder role that tree binding serves in the symbolic body.
 The rich-program extension adds `program_family_head` and
 `rich_program_composer`; a composer without a family head is formally rejected.
 
-## 15. Limitations
+## 16. Limitations
 
 The current search and executable validation are intentionally small. The
 executable bodies are linear learned components over vectorized symbolic
 features, not full neural architectures trained from pixels. The coupled
 program-body search maps motif sets to existing 2A empirical controls rather
-than instantiating separate neural modules for every motif. The Haskell gate is
-a small typed ontology prototype, not a complete proof assistant, ASP,
-s(CASP), or SMT integration. Modal runs fall back to explicit `python_static`
-formal provenance when Cabal is unavailable, while local runs and tests can use
-the Haskell motif verdict path. The point is to make the acceptance surface
-explicit and behaviorally grounded before expensive architecture evolution
-begins.
+than instantiating separate neural modules for every motif. The Modal-confirmed
+executable-module body gate consumes the repaired transfer contract, but its
+role-slot decoder and module bodies are compact explicit contracts rather than
+searched neural implementations. The Haskell gate is a small typed ontology
+prototype, not a complete proof assistant, ASP, s(CASP), or SMT integration.
+Modal runs fall back to explicit `python_static` formal provenance when Cabal
+is unavailable, while local runs and tests can use the Haskell motif verdict
+path. The point is to make the acceptance surface explicit and behaviorally
+grounded before expensive architecture evolution begins.
 
-The strongest next test is not another v1/v2 seed sweep. It is held-out
-role-pair and parse-family transfer, followed by learned executable modules
-that implement object slots, graph binding, routed role heads, and program
-composition rather than mapping motif sets to existing controls.
+The strongest next test is not another v1/v2 seed sweep. It is searched or
+evolved executable modules that implement object slots, graph binding, routed
+role heads, and program composition rather than mapping motif sets to existing
+controls.
 
-## 16. Conclusion
+## 17. Conclusion
 
 Arc 2B reframes architecture search as viability-guided body evolution. The
 pilot, learned validation, vector module validation, v1/v2 program-body
-searches, and typed ontology gate show why that matters: train return, novelty,
-target selection, rich program selection, formal validity, module coverage,
-binding, and concerned syntax can dissociate. The next phase should not ask for
-merely "better models." It should ask for bodies whose morphology makes the
-world's causal grammar learnable without becoming restless or shortcut-driven.
+searches, transfer-consuming executable body gate, and typed ontology gate show
+why that matters: train return, novelty, target selection, rich program
+selection, formal validity, module coverage, transfer, binding, and concerned
+syntax can dissociate. The next phase should not ask for merely "better
+models." It should ask for bodies whose morphology makes the world's causal
+grammar learnable without becoming restless or shortcut-driven.
 
 ## References
 

@@ -132,3 +132,17 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
   experiments/concerned_syntax/modal_rich_program_language_sweep.py \
   --train-trials 3000 --test-trials 1200 --epochs 90
 ```
+
+Rich intervention-program transfer repair:
+
+```bash
+python3 -m experiments.concerned_syntax.rich_program_transfer_repair \
+  --train-trials 300 --test-trials 120 --seed 20260618 --epochs 25 \
+  --out artifacts/concerned_syntax/rich_program_transfer_repair_local.json \
+  --report experiments/concerned_syntax/results/rich_program_transfer_repair_local_2026_06_18.md
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_rich_program_transfer_repair_sweep.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90
+```

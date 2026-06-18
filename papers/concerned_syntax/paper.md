@@ -49,6 +49,11 @@ of high-concern cases. The rich-program gate then requires choosing among
 families. Across five Modal seeds, the concerned program composer reaches
 family accuracy 1.000, target accuracy 1.000, useful-program rate 1.000,
 rich-program rate 1.000, low-concern program rate 0.162, and gate PASS.
+Finally, a held-out v2 transfer repair makes role-kind and true-parse transfer
+explicit. Across five Modal seeds, an explicit role-equivariant rich world
+model reaches transfer gate 1.000, family/target/useful/rich 1.000,
+low-concern program rate 0.000, and gate PASS, while the learned rich composer
+and partial controls fail distinct slices.
 Shortcut reward, passive perceptual inference, no-tree planning, random
 program probing, family-only selection, target-only selection, rich programs
 without concern, and restless inquiry all fail for different anti-cheat
@@ -475,7 +480,50 @@ cases restlessly. The accepted agent passes only when concern gating, target
 binding, program-family selection, and rich program composition are all
 present.
 
-## 13. Limitations
+## 13. Held-Out Rich Program Transfer Repair
+
+The v2 result above is an in-distribution rich program gate. It proves that the
+agent can choose the right family and target across seeds, but not that the
+mechanism survives held-out role-kind and true-parse transfer. The transfer
+repair gate withholds each high-concern role kind and each true parse family,
+then evaluates only on the held-out slice.
+
+Remote command:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_rich_program_transfer_repair_sweep.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90
+```
+
+The tracked public report is
+`experiments/concerned_syntax/results/rich_program_transfer_repair_modal_2026_06_18.md`.
+
+Gate summary:
+
+| Agent | Transfer | Family | Target | Useful | Rich | Low program | Gate |
+|---|---:|---:|---:|---:|---:|---:|---|
+| learned rich composer | 0.000 | 0.714 | 0.829 | 0.714 | 0.894 | 0.161 | fail |
+| family only | 0.000 | 1.000 | 0.196 | 0.196 | 1.000 | 0.000 | fail |
+| target only | 0.000 | 0.143 | 1.000 | 0.143 | 0.143 | 0.714 | fail |
+| rich no concern | 0.000 | 1.000 | 1.000 | 1.000 | 1.000 | 0.714 | fail |
+| rich world model | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 0.000 | PASS |
+
+The learned rich composer remains the shortcut baseline: it can pass the
+i.i.d. rich-program gate without proving held-out role/parse transfer. The
+family-only and target-only controls show that neither half of the program
+decision is sufficient. The rich-without-concern control shows that even the
+right program family and target become restless without concern gating. The
+accepted repair decodes role slots, selects the role-equivariant target, chooses
+the required rich program family, and spends a program only when the decoded
+world model says the binding matters.
+
+This closes the Modal transfer gate for the provided v2 grammar. It does not
+yet show learned neural role semantics, natural-image object slots, or
+open-ended program invention.
+
+## 14. Limitations
 
 The current benchmark is still synthetic. The newest agent receives generated
 pixels with algorithmic connected-component extraction, not natural images,
@@ -485,12 +533,12 @@ invent raw motor primitives or open-ended experimental apparatus. The point of
 this first paper is to define and pass a minimal learned acceptance surface
 before larger compute.
 
-The most important limitation is also the next step: the agent should learn the
-object slots, transfer across held-out role/parse families, and instantiate
+The Modal transfer repair narrows the next limitation but does not erase it:
+the agent should learn object slots and role semantics, and instantiate
 program/body components as learned modules, not merely select among provided
 program tokens and bind observations to an extracted object surface.
 
-## 14. Conclusion
+## 15. Conclusion
 
 Arc 2A inserts a new layer into the maintained-concern ladder:
 
@@ -507,7 +555,10 @@ The learned-agent, vector-observation, pixel-rendered, intervention-invention,
 and rich-program gates show that the gate is passable without hidden parse
 access, but only when object extraction, useful target selection, program
 family selection, binding, intervention, and formal concern gating are present
-together.
+together. The held-out v2 transfer repair adds the next boundary: the same
+grammar can survive role/parse transfer when explicit role decoding and a
+world-model concern gate are present, while learned neural role semantics
+remain future work.
 
 ## References
 

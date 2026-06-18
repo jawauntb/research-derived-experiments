@@ -36,6 +36,11 @@ from experiments.viable_computational_bodies.rich_program_body_search import (
     run_rich_body_search,
     summarize_rich_bodies,
 )
+from experiments.viable_computational_bodies.learned_executable_modules import (
+    evaluate_executable_bodies,
+    run_body_gate,
+    summarize_body_payloads,
+)
 from experiments.viable_computational_bodies.modal_report import (
     summarize_modal_payload,
 )
@@ -660,6 +665,105 @@ class ViableComputationalBodiesTest(unittest.TestCase):
         self.assertEqual(
             search_summary["viability_guided"]["best_empirical_agent"],
             "concerned_program_composer",
+        )
+
+    def test_learned_executable_module_body_consumes_transfer_gate(self) -> None:
+        payload = run_body_gate(
+            train_trials=90,
+            test_trials=40,
+            seed=20260618,
+            epochs=10,
+        )
+        bodies = payload["body_summary"]
+
+        self.assertEqual(
+            bodies["transfer_repaired_executable_body"]["executable_module_gate"],
+            1,
+        )
+        self.assertEqual(
+            bodies["transfer_repaired_executable_body"]["transfer_gate_pass"],
+            1,
+        )
+        self.assertEqual(
+            bodies["learned_composer_body"]["executable_module_gate"],
+            0,
+        )
+        self.assertEqual(
+            bodies["ungated_rich_body"]["executable_module_gate"],
+            0,
+        )
+
+    def test_executable_body_summary_preserves_module_failures(self) -> None:
+        agent_summary = {
+            "learned_rich_program_composer": {
+                "transfer_gate_pass": False,
+                "parse_accuracy_high_concern": 0.8,
+                "action_accuracy": 0.9,
+                "family_accuracy_high_concern": 0.8,
+                "target_accuracy_high_concern": 0.8,
+                "useful_program_rate_high_concern": 0.8,
+                "rich_program_rate_high_concern": 0.8,
+                "low_concern_program_rate": 0.2,
+            },
+            "role_equivariant_family_only": {
+                "transfer_gate_pass": False,
+                "parse_accuracy_high_concern": 0.7,
+                "action_accuracy": 0.9,
+                "family_accuracy_high_concern": 1.0,
+                "target_accuracy_high_concern": 0.2,
+                "useful_program_rate_high_concern": 0.2,
+                "rich_program_rate_high_concern": 1.0,
+                "low_concern_program_rate": 0.0,
+            },
+            "role_equivariant_target_only": {
+                "transfer_gate_pass": False,
+                "parse_accuracy_high_concern": 0.7,
+                "action_accuracy": 0.9,
+                "family_accuracy_high_concern": 0.2,
+                "target_accuracy_high_concern": 1.0,
+                "useful_program_rate_high_concern": 0.2,
+                "rich_program_rate_high_concern": 0.2,
+                "low_concern_program_rate": 1.0,
+            },
+            "role_equivariant_rich_without_concern": {
+                "transfer_gate_pass": False,
+                "parse_accuracy_high_concern": 1.0,
+                "action_accuracy": 1.0,
+                "family_accuracy_high_concern": 1.0,
+                "target_accuracy_high_concern": 1.0,
+                "useful_program_rate_high_concern": 1.0,
+                "rich_program_rate_high_concern": 1.0,
+                "low_concern_program_rate": 1.0,
+            },
+            "role_equivariant_rich_world_model": {
+                "transfer_gate_pass": True,
+                "parse_accuracy_high_concern": 1.0,
+                "action_accuracy": 1.0,
+                "family_accuracy_high_concern": 1.0,
+                "target_accuracy_high_concern": 1.0,
+                "useful_program_rate_high_concern": 1.0,
+                "rich_program_rate_high_concern": 1.0,
+                "low_concern_program_rate": 0.0,
+            },
+        }
+
+        rows = evaluate_executable_bodies(agent_summary)
+        summary = summarize_body_payloads(
+            [{"body_summary": {row.body: row.__dict__ for row in rows}}],
+            "body_summary",
+        )
+
+        self.assertEqual(
+            summary["transfer_repaired_executable_body"]["executable_module_gate"],
+            1.0,
+        )
+        self.assertEqual(
+            summary["learned_composer_body"]["executable_module_gate"],
+            0.0,
+        )
+        self.assertIn(
+            "concern_gate",
+            summary["learned_composer_body"]["missing_modules"],
         )
 
 

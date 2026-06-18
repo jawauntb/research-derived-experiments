@@ -1,9 +1,9 @@
 # Phase 2 Next Breakthrough Handoff
 
-Date: 2026-06-16
+Date: 2026-06-18
 Repo: `jawauntb/research-derived-experiments`
-Current fresh branch for this note: `codex/phase2-next-handoff`
-Current `origin/main`: `8a93813` (`Merge pull request #128 from jawauntb/codex/phase2-program-body-search`)
+Current fresh branch for this note: `codex/phase2-publication-wrap-gates`
+Current `origin/main`: `ec0f7a5` (`Merge pull request #138 from jawauntb/codex/phase2-v2-body-consumption`)
 External paper artifact folder: `/Users/jawaun/Metaphysics of Intelligence/Phase_Arc_2`
 
 This is the start-here note for the next agent session. The user is not asking
@@ -15,61 +15,87 @@ delivery machinery for the science, not the goal.
 ## 1. The Current Breakthrough
 
 The current real breakthrough is not "another sweep." It is the first coupled
-Arc 2A/2B contract:
+Arc 2A/2B rich-program contract, now with local transfer and executable-module
+wrap gates:
 
 ```text
-2A-v1-pixels-observe_pair
+2A-v2-pixels-rich_programs
+  + held-out role/parse transfer repair
+  + executable module bodies consuming the transfer gate
 ```
 
-Arc 2A now has a minimal intervention-invention result: from pixel-rendered
-object features, an agent learns when to intervene and which `observe_pair(a,b)`
-target makes the viability-relevant hidden binding observable.
+Arc 2A now has a rich intervention-program result: from pixel-rendered object
+features, an agent learns when to act, which object binding matters, and which
+program family among `observe_pair`, `move_anchor`, `ablate_pair`, and
+`compose_move_observe` exposes the hidden concern-relevant parse.
 
-Arc 2B now consumes that empirical 2A-v1 contract: a program-body search finds a
-resource-bounded motif stack that expresses the 2A concerned-program-inventor
-gate while reward-only and syntax-proxy controls fail.
+Arc 2B now consumes that empirical 2A-v2 contract: program-body search finds a
+resource-bounded motif stack that expresses concern gating, target binding,
+program-family routing, rich composition, and formal guard requirements while
+reward-only and syntax-proxy controls fail.
+
+The current branch adds the next publication-wrap gates: v2 held-out role/parse
+transfer is repaired by an explicit role-equivariant rich world model across
+five Modal seeds, and a compact executable-module body gate consumes that
+transfer contract across five Modal seeds. That makes the result stronger, but
+also sharpens the remaining boundary: these modules are explicit rather than
+learned neural role semantics.
 
 Do not phrase this as "2A is done" or "2B is done." Phrase it this way:
 
-- `2A-v1` is done as a frozen minimal contract, not as the final concerned
-  syntax result.
-- `2B-v1` is done as a first coupled body-search result, not as full neural
-  architecture search.
-- 2A and 2B are already combined through the frozen empirical contract.
-- The next combination is Haskell-in-the-loop body search, then `2A-v2` with a
-  richer intervention language consumed by 2B.
+- `2A-v2` is done as a provided-rich-grammar contract with Modal-confirmed
+  transfer repair, not as open-ended program invention or learned neural role
+  semantics.
+- `2B-v2` is done as motif search plus Modal-confirmed compact executable-
+  module validation, not as full neural architecture search.
+- 2A and 2B are already combined through the frozen empirical contract and the
+  new transfer-consuming body gate.
+- The next combination is learned object/role slots, searched/evolved
+  executable module bodies, and program discovery beyond the provided grammar.
 
 Current accepted 2A result:
 
 ```text
-report: experiments/concerned_syntax/results/intervention_invention_modal_2026_06_16.md
-positive: concerned_program_inventor
+report: experiments/concerned_syntax/results/rich_program_language_modal_2026_06_17.md
+positive: concerned_program_composer
 parse-high: 1.000
 action: 1.000
+family-high: 1.000
 target-high: 1.000
-useful-high: 1.000
-low-probe: 0.156
+useful-program-high: 1.000
+rich-program-high: 1.000
+low-program: 0.162
 gate: PASS across 5 Modal seeds
 ```
 
 Important rejected controls:
 
-- `target_without_concern`: target-high `1.000`, but low-probe `1.000`.
-- `concern_without_target`: low-probe `0.156`, but target-high `0.088`.
-- `random_program_probe`: spends budget and asks mostly wrong questions.
-- `surface_program_shortcut`: keeps action prior but fails hidden binding.
+- `target_without_family`: target-high `1.000`, but useful-high `0.000`.
+- `family_without_target`: family-high `1.000`, but target-high `0.080`.
+- `rich_without_concern`: rich-program high `1.000`, but low-program `1.000`.
+- `surface_rich_shortcut`: avoids program use and fails hidden binding.
+
+Current 2A transfer-wrap result:
+
+```text
+report: experiments/concerned_syntax/results/rich_program_transfer_repair_modal_2026_06_18.md
+positive: role_equivariant_rich_world_model
+transfer gate: 1.000
+parse/action/family/target/useful/rich high: 1.000
+low-program: 0.000
+gate: PASS across 5 Modal seeds
+```
 
 Current accepted 2B result:
 
 ```text
-report: experiments/viable_computational_bodies/results/program_body_search_modal_2026_06_16.md
+report: experiments/viable_computational_bodies/results/rich_program_body_search_modal_2026_06_18.md
 positive: viability_guided
 body gate: 1.000
 empirical 2A gate: 1.000
 formal valid: 1.000
-target-high: 1.000
-useful-high: 1.000
-low-probe: 0.156
+family/target/useful/rich high: 1.000
+low-program: 0.168
 gate: PASS across 5 Modal seeds
 ```
 
@@ -81,7 +107,9 @@ causal_binding_head
 concern_policy
 formal_guard
 intervention_planner
+program_family_head
 reward_head
+rich_program_composer
 vector_surface_encoder
 world_model
 ```
@@ -89,8 +117,20 @@ world_model
 Important rejected controls:
 
 - `reward_only`: shortcut body, body gate `0.000`.
-- `syntax_proxy`: target/useful `1.000`, but low-probe `0.830` and body gate
-  `0.000`.
+- `syntax_proxy`: family/target/useful/rich `1.000`, but formal validity
+  `0.200`, low-program `0.670`, and body gate `0.000`.
+
+Current executable-module body result:
+
+```text
+report: experiments/viable_computational_bodies/results/learned_executable_modules_modal_2026_06_18.md
+positive: transfer_repaired_executable_body
+transfer gate: 1.000
+module coverage: 1.000
+family/target/useful/rich high: 1.000
+low-program: 0.000
+gate: PASS across 5 Modal seeds
+```
 
 ## 2. The North Star
 
@@ -145,86 +185,85 @@ diagnostic improvement, not a breakthrough.
 
 ## 4. Best Next Milestones
 
-### Milestone A: Haskell-in-Loop Program-Body Search
+### Milestone A: Modal-Visible Haskell Provenance
 
-Suggested branch: `codex/phase2-haskell-program-body-gate`
+Suggested branch: `codex/phase2-modal-haskell-provenance`
 
-This is the highest-leverage immediate move because it closes the biggest open
-gap in the current coupled result. Python can already consume Haskell verdicts
-for named learned/vector body summaries, and `ontology-check --motifs` exists,
-but `program_body_search` still uses a Python/static body contract inside the
-search loop.
+The local Haskell-in-loop gap is closed for 2A-v1 motif search, and the Haskell
+ontology has been extended for rich v2 motifs. The remaining provenance gap is
+Modal: rich-program body search still records explicit `python_static`
+provenance when Cabal is unavailable in the image.
 
 Definition of done:
 
-- `experiments/viable_computational_bodies/program_body_search.py` asks the
-  Haskell checker for motif verdicts, or consumes cached Haskell verdicts with
-  provenance.
-- Modal body search records `formal_source`, `formal_valid`, `resource_cost`,
-  and `formal_violations` from Haskell where available.
+- Modal body search either includes Cabal/Haskell in its image or consumes a
+  tracked Haskell verdict cache with a manifest.
+- Modal body reports record `formal_source = "haskell"` for accepted bodies,
+  not only local reports.
 - The fallback path is explicit and cannot silently convert Haskell failure
   into a passing body.
 - `viability_guided` still passes, and `reward_only` / `syntax_proxy` still
   fail for distinct reasons.
-- The 2B paper updates its limitation from "Haskell motif verdicts are not yet
-  inside the program-body search loop" to the actual result.
 
 Allowed claim if it passes:
 
 ```text
-The empirical 2A-v1 gate and an external typed motif admissibility checker are
-now coupled inside the body-search loop.
+The empirical 2A-v2 gate and an external typed motif admissibility checker are
+coupled inside the Modal body-search loop with visible provenance.
 ```
 
 Do not claim proof-assistant-level verification.
 
-### Milestone B: 2A-v2 Rich Intervention Language
+### Milestone B: Program Discovery Beyond the Provided Grammar
 
-Suggested branch: `codex/phase2-rich-program-language`
+Suggested branch: `codex/phase2-open-program-search`
 
-The current `observe_pair(a,b)` result is minimal intervention invention. The
-next 2A result should require composing or choosing among richer interventions:
+The provided rich grammar is now passed. The next 2A result should discover or
+search program recipes rather than merely selecting among known families:
 
 ```text
 observe_pair(a,b)
-move(anchor)
-ablate(role)
-compose(two steps)
+move_anchor(anchor)
+ablate_pair(a,b)
+compose_move_observe(anchor,a,b)
+new searched or evolved recipes
 null
 ```
 
 Definition of done:
 
-- The agent chooses a program that makes the hidden binding identifiable under
-  cost.
+- The agent discovers, searches, or evolves a program recipe that makes the
+  hidden binding identifiable under cost.
 - Low-concern probe/program use remains capped.
-- Controls separate target knowledge, concern gating, random composition, and
-  passive reward shortcuts.
-- The report includes a mechanism trace: visible state, selected program,
-  observation, belief update or parse decision, and final action.
+- Controls separate memorized recipe selection, random composition, target
+  knowledge, concern gating, and passive reward shortcuts.
+- The report includes a mechanism trace: visible state, selected/generated
+  program, observation, belief update or parse decision, and final action.
 - Modal, not the local laptop, runs the multi-seed training/sweep.
 
 Allowed claim if it passes:
 
 ```text
-The agent composes concern-gated interventions beyond pair observation, but not
-yet open-ended motor programs or apparatus discovery.
+The agent searches concern-gated intervention programs beyond a fully provided
+grammar, but not yet open-ended continuous motor control or apparatus discovery.
 ```
 
-### Milestone C: Held-Out Transfer Gates
+### Milestone C: Modal Confirmation of Transfer-Consuming Bodies
 
-Suggested branch: `codex/phase2-transfer-gates`
+Suggested branch: `codex/phase2-wrap-gate-modal-confirmation`
 
-Seed stability is not enough. Turn transfer into a required gate:
+Seed stability is not enough. The current branch adds Modal-confirmed v2
+held-out role/parse transfer repair and a Modal-confirmed executable-module
+body gate that consumes it. The next evidence upgrade is learned semantics and
+searched modules:
 
 - held-out role pairs,
 - held-out parse families,
 - held-out colors/textures/positions,
-- held-out program tokens if `2A-v2` exists.
+- transfer-consuming executable module bodies.
 
-There is already a role-transfer hook in the program-body work. Treat it as a
-starting point, not settled evidence. Any old local diagnostic should be treated
-as a hint only; run the required stress on Modal and report failures honestly.
+Treat local diagnostics as real gate-development evidence, not final paper
+evidence. Run the required stress on Modal and report failures honestly.
 
 Definition of done:
 
@@ -232,8 +271,8 @@ Definition of done:
 - Main and transfer metrics are reported side by side.
 - Passing i.i.d. while failing transfer weakens the claim instead of being
   hidden.
-- The body search either consumes the transfer gate or explicitly freezes it as
-  the next contract.
+- The body gate consumes the transfer gate, and partial bodies fail for
+  interpretable missing-module reasons.
 
 ### Milestone D: Learned Object Slots
 
@@ -533,19 +572,16 @@ When done:
 
 ## 11. Best Starting Move for the Next Agent
 
-Start with `codex/phase2-haskell-program-body-gate`.
+Start with `codex/phase2-open-program-search` or
+`codex/phase2-learned-object-slots`.
 
-Reason: it turns the current best result from "2B search uses an empirical 2A
-gate plus Python/static body formalism" into "2B search uses an empirical 2A
-gate plus an external typed Haskell motif verifier." That is a clean,
-paper-relevant regime consolidation, and it prepares the body search to consume
-`2A-v2` once richer intervention programs exist.
+Reason: the current branch lands Modal-confirmed wrap gates for v2 transfer and
+transfer-consuming executable bodies. The next scientific gap is not another
+seed sweep; it is searched program recipes beyond the provided grammar or
+learned neural slot/role semantics that can replace explicit role decoding.
 
-Then run `2A-v2` and transfer gates in parallel if there are available agents or
-clean Modal shards. 2B does not need to wait for 2A-v2; it can consolidate
-against frozen 2A-v1 while 2A-v2 is being invented. The integration checkpoint
-is when 2A-v2 has passed enough controls to become the next frozen empirical
-contract.
+Then move to searched/evolved executable modules under 2B, keeping the
+Modal-first rule and the same transfer gate as a required contract.
 
 The working rhythm:
 
