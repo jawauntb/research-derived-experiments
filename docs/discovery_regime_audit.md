@@ -4044,6 +4044,91 @@ Next move: extend the program language to `move(anchor)`, `ablate(role)`, and
 two-step compositions while adding held-out role-pair and parse-family
 transfer.
 
+## Arc 2A: Intervention Mechanism Trace Gate
+
+Question: does the accepted `2A-v1-pixels-observe_pair` policy expose a
+faithful program -> observation -> belief update -> action trajectory, rather
+than only passing aggregate parse/action/probe metrics?
+
+Current regime:
+
+- Artifact types: pixel-rendered object surfaces, learned intervention
+  policies, selected `observe_pair(a,b)` programs, aggregate agent summaries,
+  Modal reports.
+- Operations: choose whether to probe, select an object pair, observe whether
+  the selected pair is bound in the hidden parse, update the causal-pair
+  binding belief, and choose a viability action.
+- Gates/verifiers: prior 2A-v1 parse/action/subtree/target/useful/low-probe
+  gate, targeted unit tests, Modal five-seed sweep.
+- Known limitations: traces are still over the frozen `observe_pair` menu and
+  connected-component perception; this does not add richer motor programs,
+  natural-image vision, or human validation.
+
+Action class:
+
+- Retrieval/search/discovery: verifier upgrade.
+- Why: the old regime had aggregate metrics but did not preserve the causal
+  trajectory needed to inspect mechanism fidelity. The new artifact records
+  program, observation, posterior belief, and action per trial.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/concerned_syntax/mechanism_trace.py`;
+  `experiments/concerned_syntax/modal_mechanism_trace_sweep.py`;
+  `experiments/concerned_syntax/results/mechanism_trace_modal_2026_06_17.md`;
+  local ignored artifact
+  `artifacts/concerned_syntax/mechanism_trace_modal_sweep.json`.
+- Positive target: `concerned_program_inventor` should complete the
+  high-concern trace and satisfy the low-concern no-restless cap.
+- Negative controls: `target_without_concern` should complete high-concern
+  traces but fail low-concern discipline; `concern_without_target` should keep
+  concern discipline but fail useful observation; surface and random controls
+  should fail before a faithful observation -> belief -> action chain exists.
+- Stress tests: trace examples record roles, prior belief, selected program,
+  selected-pair observation, posterior belief, action rule, and action.
+
+Gate:
+
+- Acceptance rule: high trace completion >= 0.75, useful-observation high >=
+  0.70, posterior correctness high >= 0.75, target accuracy high >= 0.75,
+  action >= 0.85, low-concern trace violation <= 0.25, and gate pass rate
+  1.000 across Modal seeds.
+- Withheld/rejected rule: reject if target-only satisfies the full gate or if
+  concern-only satisfies useful observation. Withhold claims of open-ended
+  causal discovery; this is mechanism-trace fidelity for a frozen program menu.
+
+Results:
+
+- Accepted artifacts: mechanism trace module, Modal entrypoint, Modal report,
+  README commands, tests, and this audit entry.
+- Rejected or withheld artifacts: raw trace JSON remains ignored; richer
+  program-language traces remain future work.
+- Key metrics across five Modal seeds: `concerned_program_inventor` high trace
+  completion `1.000`, useful-observation high `1.000`, posterior correctness
+  high `1.000`, action `1.000`, low-concern trace violation `0.151`, gate pass
+  rate `1.000`. `target_without_concern` has high trace completion `1.000`
+  but low-concern trace violation `1.000`. `concern_without_target` has
+  low-concern trace violation `0.151` but useful-observation high `0.087`.
+- Variance or ablation: concerned trace gate pass SD `0.000`; low-concern
+  violation SD `0.017`; useful-observation SD `0.000`.
+
+Residual content:
+
+- Explained by old regime: aggregate 2A-v1 performance already implied the
+  positive policy often chose useful programs under concern.
+- New content outside old regime: the trace verifier makes the mechanism
+  inspectable and separates high-concern trace fidelity from low-concern
+  discipline; target-only is now visibly insufficient despite perfect
+  high-concern traces.
+- Retractions or supersessions: supersede "2A-v1 has only aggregate metrics"
+  with "2A-v1 has a recorded mechanism trace." Do not upgrade this to
+  open-ended causal discovery or human/neural evidence.
+
+Next move: attach the trace verifier to held-out transfer and richer
+movement/ablation/two-step programs, where the trace may fail even when final
+action metrics look acceptable.
+
 ## Arc 2A: Searched Program-Policy Gate
 
 Question: can Arc 2A recover the frozen `2A-v1-pixels-observe_pair` contract

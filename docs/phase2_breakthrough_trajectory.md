@@ -160,6 +160,14 @@ Current branch result:
   transfer fails: i.i.d. gate pass `1.000`, mean transfer-slice gate pass
   `0.171`, weakest slice `role_kind:repair_core`. This should be treated as a
   real claim boundary, not as an implementation nuisance.
+- The mechanism-trace follow-up verifies the full program -> observation ->
+  belief update -> action chain. `concerned_program_inventor` reaches
+  high-concern trace completion `1.000`, useful observation `1.000`,
+  posterior correctness `1.000`, action `1.000`, and low-concern trace
+  violation `0.151` across five Modal seeds. `target_without_concern` gets a
+  perfect high-concern trace but fails the low-concern cap at `1.000`;
+  `concern_without_target` keeps the cap but useful observation is only
+  `0.087`.
 - The searched-program-policy follow-up moves from a named positive agent to a
   searched recipe over probe gate, target selector, binding update, and action
   rule for the same frozen `observe_pair(a,b)` menu. This is a policy-search

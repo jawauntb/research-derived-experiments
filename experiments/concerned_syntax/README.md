@@ -59,6 +59,20 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
   --train-trials 3000 --test-trials 1200 --epochs 90
 ```
 
+Intervention mechanism trace gate:
+
+```bash
+python3 -m experiments.concerned_syntax.mechanism_trace \
+  --train-trials 1200 --test-trials 500 --seed 20260617 --epochs 60 \
+  --out artifacts/concerned_syntax/mechanism_trace_local.json \
+  --trace-report experiments/concerned_syntax/results/mechanism_trace_local_2026_06_17.md
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_mechanism_trace_sweep.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90
+```
+
 Searched program-policy sweep:
 
 ```bash
