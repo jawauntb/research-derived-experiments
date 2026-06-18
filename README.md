@@ -45,6 +45,7 @@ Current experiment families:
 - [experiments/activation_geometry](experiments/activation_geometry): open-model hidden-state probes for whether the same bridge geometry appears beyond embedding-only language space.
 - [experiments/concerned_syntax](experiments/concerned_syntax): Arc 2A benchmark for causal constituency and concern-gated intervention invention. Paper draft at [papers/concerned_syntax/paper.md](papers/concerned_syntax/paper.md).
 - [experiments/viable_computational_bodies](experiments/viable_computational_bodies): Arc 2B typed architecture/body evolution under viability, formal, and concerned-syntax gates. Paper draft at [papers/viable_computational_bodies/paper.md](papers/viable_computational_bodies/paper.md).
+- [experiments/boundary_priors](experiments/boundary_priors): Track 3 minimal embodied agent where the self/world boundary location is the learned object; tests whether a plastic/removable separation prior is needed for adaptability when the boundary moves. Pre-registration and pilot (all 4 gates pass, diagnostic tier) under that directory.
 
 Run the first pilot:
 

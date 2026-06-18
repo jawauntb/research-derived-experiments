@@ -15,6 +15,9 @@
 - [x] Push a feature branch, open PR #1, and merge it.
 - [x] Start Phase / Arc 2A: Concerned Syntax benchmark and paper scaffold.
 - [x] Start Phase / Arc 2B: Viable Computational Bodies benchmark and paper scaffold.
+- [x] Start Track 3: Boundary Priors embodied agent (pilot passes all 4 pre-registered gates, diagnostic tier).
+- [x] Pre-register External Contact predictions about systems the lab did not build (`docs/external_contact_preregistration.md`).
+- [x] Compile a brief on Michael Levin's three most recent papers for Track 3 bearings (`references/levin_recent_papers_2026_06.md`).
 
 ## Phase / Arc 2A: Concerned Syntax
 
@@ -168,10 +171,24 @@
 
 ## Experiment Track 3: Boundary Priors
 
-- [ ] Specify toy embodied environment.
-- [ ] Define self/environment boundary prior.
-- [ ] Define perturbation and model-reduction intervention.
-- [ ] Choose metrics: adaptability, cooperation, policy entropy, criticality proxy.
+- [x] Specify toy embodied environment (`experiments/boundary_priors`: K channels, each SELF/WORLD, scarce actuation budget, disjoint boundary shift).
+- [x] Define self/environment boundary prior (per-channel self-belief `b_k`; plastic vs. fixed vs. shuffled-attribution conditions).
+- [x] Define perturbation and model-reduction intervention (boundary shift at step 300; removable prior via belief decay toward 0.5).
+- [x] Choose metrics: adaptability (post-shift reward), boundary accuracy, re-track lag, criticality proxy, probe rate.
+- [x] Run a pilot and pre-register gates; commit the public result report (`results/pilot_2026_06_18.md`, all 4 gates pass at diagnostic tier).
+- [ ] Make probing costly and test selective re-engagement after the shift (mechanism tier).
+- [ ] Let `num_self` change at the shift (lose effectors), a harder TAME-like boundary move.
+- [ ] Represent the boundary as a navigable embedding coordinate (Levin 2026 remapping/navigation).
+
+## External Contact (predictions about systems the lab did not build)
+
+Pre-registration: `docs/external_contact_preregistration.md`. Network egress is
+currently blocked (HF/PyPI 403; verified 2026-06-18), so each prediction ships a
+Tier A (offline stdlib) and Tier B (fetch-when-unblocked) test.
+
+- [ ] P3 (concept geometry, GloVe): run the Tier A offline RSA/centering test (fully runnable today; highest leverage × runnability).
+- [ ] P2 (uncertainty≠error / no-false-calm on published deep-ensemble + BALD curves): transcribe external tables and check the directional prediction.
+- [ ] P1 (weakness→OOD on the Pythia suite): Tier A orbit-coverage surrogate now; Tier B full check when HF egress is available.
 
 ## Open Questions Ledger
 

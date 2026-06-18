@@ -18,3 +18,4 @@ Raw outputs should stay under `artifacts/` until summarized and intentionally co
 - `activation_geometry`: hidden-state and intervention probes.
 - `concerned_syntax`: Arc 2A causal-constituency and concern-gated intervention benchmark.
 - `viable_computational_bodies`: Arc 2B typed architecture-body evolution under viability and formal gates.
+- `boundary_priors`: Track 3 minimal embodied agent where the self/world boundary location is the learned object; tests whether a plastic/removable separation prior is needed for adaptability under boundary shift.
