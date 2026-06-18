@@ -3954,9 +3954,9 @@ Residual content:
   with "minimal `observe_pair(a,b)` target invention is locally passed; open
   program invention remains future work."
 
-Next move: extend the program language to `move(anchor)`, `ablate(role)`, and
-two-step compositions while adding held-out role-pair and parse-family
-transfer.
+Next move completed by the rich-program card below: the program language now
+includes `move(anchor)`, `ablate(role)`, and two-step compositions. Held-out
+role-pair and parse-family transfer remain open.
 
 ## Arc 2A/2B: Program-Body Search Against 2A-v1
 
@@ -3974,8 +3974,8 @@ Current regime:
   budget, calibration/formal guard requirements, targeted unit tests, Modal
   five-seed sweep.
 - Known limitations: body motifs still map to existing 2A controls rather than
-  neural modules; Haskell motif checking is compatible but not yet in the
-  inner search loop.
+  neural modules; the Haskell motif checker is integrated when Cabal is
+  available, while Modal falls back to explicit `python_static` verdicts.
 
 Action class:
 
@@ -4014,9 +4014,8 @@ Results:
 
 - Accepted artifacts: program-body search module, Modal entrypoint, Modal
   report, tests, README command, and remote-first handoff rule.
-- Rejected or withheld artifacts: local diagnostic report not tracked; Haskell
-  motif verdicts not yet consumed inside program-body search; richer 2A
-  program language remains future work.
+- Rejected or withheld artifacts: local diagnostic report not tracked; richer
+  2A program language remains future work for the v1 contract.
 - Key metrics across five Modal seeds: `viability_guided` body gate `1.000`,
   empirical gate `1.000`, formal valid `1.000`, target-high `1.000`,
   useful-high `1.000`, low-probe `0.156`, best body
@@ -4037,6 +4036,174 @@ Residual content:
 - Retractions or supersessions: supersede "2B has only proxy intervention
   invention scores" with "2B search can consume the actual 2A-v1 program gate."
 
-Next move: put Haskell motif verdicts inside `program_body_search`, then lift
-the contract to `2A-v2` with `move(anchor)`, `ablate(role)`, two-step programs,
-and held-out role/parse transfer as an actual body gate.
+Next move completed by the following v2 cards: Haskell motif verdicts are now
+inside the body-search oracle path, and the contract has been lifted to a rich
+program language. Held-out role/parse transfer remains the next body gate.
+
+## Arc 2A: Rich Program Language
+
+Question: can the pixel-level concerned-syntax agent choose among multiple
+intervention-program families, rather than relying on `observe_pair(a,b)` as
+the universal useful action?
+
+Current regime:
+
+- Artifact types: pixel-rendered shape examples, extracted object features,
+  learned probe policy, learned target selector, learned program-family heads,
+  tracked Modal reports and tests.
+- Operations: select concern-gated program use, select the relevant target,
+  choose among `observe_pair`, `move_anchor`, `ablate_pair`, and composed
+  move+observe families, then bind the observation to action.
+- Gates/verifiers: parse-high, action, subtree, object extraction,
+  high/low-concern program rates, family accuracy, target accuracy,
+  useful-program rate, rich-program rate, Modal five-seed sweep.
+- Known limitations: the program grammar is still provided; this is not
+  open-ended motor-apparatus discovery, learned object slots, or natural-image
+  perception.
+
+Action class:
+
+- Retrieval/search/discovery: discovery-leaning transition.
+- Why: this adds program-family selection as a new operation that the v1
+  `observe_pair` contract could not represent.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/concerned_syntax/rich_program_language.py`;
+  `experiments/concerned_syntax/modal_rich_program_language_sweep.py`;
+  `experiments/concerned_syntax/results/rich_program_language_modal_2026_06_17.md`.
+- Positive target: `concerned_program_composer`.
+- Negative controls: `surface_rich_shortcut`, `random_rich_program`,
+  `family_without_target`, `target_without_family`, and
+  `rich_without_concern`.
+- Stress tests: family-only and target-only controls fail distinct gates;
+  rich-without-concern selects useful rich programs but probes low-concern
+  cases at the restless rate.
+
+Gate:
+
+- Acceptance rule: object extraction >= 0.99, parse-high >= 0.75, action >=
+  0.85, subtree >= 0.75, high-concern program rate >= 0.70,
+  low-concern program rate <= 0.25, family/target/useful/rich high-concern
+  rates >= 0.70, and controls fail for diagnostic reasons.
+- Withheld/rejected rule: do not claim raw program invention or continuous
+  motor control; reject the result if target-only, family-only, or
+  rich-without-concern controls clear the full gate.
+
+Results:
+
+- Accepted artifacts: rich program-language module, Modal entrypoint, public
+  Modal report, and body-search consumer.
+- Rejected or withheld artifacts: raw Modal JSON stays under ignored
+  `artifacts/concerned_syntax/`.
+- Key metrics across five Modal seeds: `concerned_program_composer`
+  parse-high `1.000`, action `1.000`, subtree `0.794`, object extraction
+  `1.000`, high-program `1.000`, low-program `0.162`, family-high `1.000`,
+  target-high `1.000`, useful-high `1.000`, rich-high `1.000`, gate PASS.
+  `rich_without_concern` reaches family/target/useful/rich `1.000` but
+  low-program `1.000`; `target_without_family` reaches target `1.000` but
+  family/useful/rich `0.000`.
+- Variance or ablation: five Modal seeds with 3,000 train trials, 1,200 test
+  trials, and 90 epochs per seed.
+
+Residual content:
+
+- Explained by old regime: v1 concern gating and target selection remain
+  necessary.
+- New content outside old regime: program-family choice is now part of the
+  empirical contract, so `observe_pair(a,b)` is no longer the only useful
+  intervention.
+- Retractions or supersessions: supersede "rich program composition remains
+  future work" with "2A-v2 rich program composition is passed under a provided
+  grammar."
+
+Next move: couple this 2A-v2 contract to 2B body search, then add held-out
+role/parse-family transfer and learned object-slot perception.
+
+## Arc 2A/2B: Rich Program-Body Search Against 2A-v2
+
+Question: can Arc 2B search discover formal, resource-bounded bodies whose
+motifs express the `2A-v2-pixels-rich_programs` empirical contract?
+
+Current regime:
+
+- Artifact types: 2A-v2 rich-program empirical summaries, searched 2B motif
+  bodies, Haskell-compatible motif verdicts, Modal reports.
+- Operations: train/evaluate the rich 2A program gate, map body motifs to the
+  empirical controls they can express, mutate/repair/promote body motifs, score
+  by empirical gate, family/target/useful/rich metrics, formal admissibility,
+  resource budget, and no-restless discipline.
+- Gates/verifiers: empirical 2A-v2 gate pass, body formal validity, resource
+  budget <= 18, calibration/formal guard requirements, program-family and
+  rich-composer motif requirements, targeted unit tests, Haskell ontology
+  tests, Modal five-seed sweep.
+- Known limitations: searched bodies are still symbolic motif sets mapped to
+  existing empirical controls; Modal uses `python_static` formal provenance
+  when Cabal is unavailable; no learned neural module instantiation yet.
+
+Action class:
+
+- Retrieval/search/discovery: discovery-leaning coupled transition.
+- Why: this makes the richer 2A-v2 empirical contract consumable by 2B body
+  search, so Arc 2A and Arc 2B are no longer merely parallel at the
+  program-composition level.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/viable_computational_bodies/rich_program_body_search.py`;
+  `experiments/viable_computational_bodies/modal_rich_program_body_search.py`;
+  `experiments/viable_computational_bodies/results/rich_program_body_search_modal_2026_06_18.md`;
+  local ignored artifact
+  `artifacts/viable_computational_bodies/rich_program_body_search_modal.json`.
+- Positive target: `viability_guided` should discover a body that maps to
+  `concerned_program_composer`.
+- Negative controls: `reward_only` should find a shortcut body; `syntax_proxy`
+  should chase family/target/useful/rich metrics but fail the full body gate.
+- Stress tests: the accepted body must include `program_family_head`,
+  `rich_program_composer`, `formal_guard`, and `calibration_guard`; composer
+  without family head is rejected by both Python static rules and Haskell tests.
+
+Gate:
+
+- Acceptance rule: body gate rate >= 0.75 across Modal seeds, empirical gate
+  rate >= 0.75, formal valid rate 1.000, family/target/useful/rich
+  high-concern rates >= 0.70, low-concern program rate <= 0.25, resource cost
+  <= 18, and controls fail for distinct reasons.
+- Withheld/rejected rule: do not claim full neural architecture search,
+  learned module bodies, or open-ended program invention. Reject if
+  reward-only or syntax-proxy satisfies the full body gate.
+
+Results:
+
+- Accepted artifacts: rich body-search module, Modal entrypoint, Modal report,
+  Haskell motif extensions, tests, and README commands.
+- Rejected or withheld artifacts: raw Modal JSON remains local under
+  `artifacts/`; no shared motif JSON schema or learned executable modules yet.
+- Key metrics across five Modal seeds: `viability_guided` body gate `1.000`,
+  empirical gate `1.000`, formal valid `1.000`, family-high `1.000`,
+  target-high `1.000`, useful-high `1.000`, rich-high `1.000`, low-program
+  `0.168`, resource cost `16.000`, best body
+  `calibration_guard+causal_binding_head+concern_policy+formal_guard+intervention_planner+program_family_head+reward_head+rich_program_composer+vector_surface_encoder+world_model`.
+  `reward_only` body gate `0.000` and returns a shortcut body. `syntax_proxy`
+  reaches family/target/useful/rich `1.000`, but body gate `0.000`,
+  formal-valid rate `0.200`, and low-program `0.670`.
+- Variance or ablation: five Modal seeds with 18 generations, population 18,
+  3,000 train trials, 1,200 test trials, and 90 epochs per seed; body gate SD
+  is `0.000` for the accepted strategy.
+
+Residual content:
+
+- Explained by old regime: v1 2A/2B coupling already showed body search could
+  consume target selection under `observe_pair(a,b)`.
+- New content outside old regime: 2B search now consumes concern gating,
+  target binding, program-family selection, rich program composition, and
+  formal body admissibility together.
+- Retractions or supersessions: supersede "2A/2B are coupled only at v1 target
+  selection" with "2A/2B are coupled at the 2A-v2 rich-program contract."
+
+Next move: add held-out role-pair and parse-family transfer as an actual body
+gate, then replace motif-to-control mapping with learned executable modules
+such as object-slot encoders, graph binders, routed heads, and program
+induction components.

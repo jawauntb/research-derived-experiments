@@ -114,6 +114,11 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
 
 doppler --scope /Users/jawaun/superoptimizers run -- \
     uvx --python 3.12 --from modal modal run \
+    experiments/concerned_syntax/modal_rich_program_language_sweep.py \
+    --train-trials 3000 --test-trials 1200 --epochs 90
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
     experiments/concerned_syntax/modal_pixel_shapes_sweep.py \
     --train-trials 3000 --test-trials 1200 --epochs 90
 
@@ -132,6 +137,12 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     uvx --python 3.12 --from modal modal run \
     experiments/viable_computational_bodies/modal_program_body_search.py \
     --generations 24 --population 24 \
+    --train-trials 3000 --test-trials 1200 --epochs 90
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/viable_computational_bodies/modal_rich_program_body_search.py \
+    --generations 18 --population 18 \
     --train-trials 3000 --test-trials 1200 --epochs 90
 
 # Phase / Arc 2B executable body validation is produced by the learned 2A sweep:

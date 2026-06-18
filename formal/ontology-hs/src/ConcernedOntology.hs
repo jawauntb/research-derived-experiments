@@ -37,6 +37,8 @@ data Motif
   | CausalBindingHead
   | ConcernPolicy
   | CalibrationGuard
+  | ProgramFamilyHead
+  | RichProgramComposer
   deriving (Bounded, Enum, Eq, Ord, Show)
 
 newtype Body = Body (Set.Set Motif)
@@ -87,22 +89,26 @@ motifCost motif =
     CausalBindingHead -> 1
     ConcernPolicy -> 0
     CalibrationGuard -> 0
+    ProgramFamilyHead -> 1
+    RichProgramComposer -> 1
 
 dependencies :: [(Motif, [Motif])]
 dependencies =
-  [ (SyntaxMemory, [TreeBinder])
-  , (InterventionPlanner, [WorldModel])
+  [ (InterventionPlanner, [WorldModel])
   , (CounterfactualRollout, [WorldModel, InterventionPlanner])
   , (SelfRepair, [FormalGuard])
   , (CausalBindingHead, [VectorSurfaceEncoder])
   , (ConcernPolicy, [WorldModel])
   , (CalibrationGuard, [FormalGuard, ConcernPolicy])
+  , (ProgramFamilyHead, [WorldModel])
+  , (RichProgramComposer, [InterventionPlanner, ProgramFamilyHead])
   ]
 
 violations :: Body -> [Violation]
 violations candidate =
   dependencyViolations
     <> roleHeadViolation
+    <> syntaxMemoryViolation
     <> shortcutViolation
     <> restlessViolation
     <> budgetViolation
@@ -118,6 +124,12 @@ violations candidate =
     roleHeadViolation =
       [ Missing RoleSpecificHeads TreeBinder
       | has candidate RoleSpecificHeads
+      , not (has candidate TreeBinder)
+      , not (has candidate CausalBindingHead)
+      ]
+    syntaxMemoryViolation =
+      [ Missing SyntaxMemory TreeBinder
+      | has candidate SyntaxMemory
       , not (has candidate TreeBinder)
       , not (has candidate CausalBindingHead)
       ]
@@ -259,6 +271,8 @@ motifName motif =
     CausalBindingHead -> "causal_binding_head"
     ConcernPolicy -> "concern_policy"
     CalibrationGuard -> "calibration_guard"
+    ProgramFamilyHead -> "program_family_head"
+    RichProgramComposer -> "rich_program_composer"
 
 violationName :: Violation -> String
 violationName violation =

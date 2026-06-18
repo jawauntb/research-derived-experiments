@@ -1,7 +1,7 @@
 # Viability-Guided Evolution of Syntax-Bearing Computational Bodies
 
 **Jawaun Brown**  
-2026-06-16
+2026-06-18
 
 ## Abstract
 
@@ -17,26 +17,33 @@ self/world, resource, and anti-cheat criteria.
 
 In a 12-seed deterministic design pilot, an 18-cell symbolic Modal sweep, a
 learned executable-body validation, a vector-observation module validation, a
-Haskell typed-ontology prototype, and a coupled program-body search against the
-Arc 2A intervention-invention gate, reward-only search reaches high apparent
-return while failing the viability gate. Novelty-only or syntax-proxy search
-can find syntax-like bodies, but remains unreliable under the full
-formal/viability gate. The vector module validation instantiates four body
-variants on the stronger Arc 2A vector gate. Only the modular concerned body
-passes: parse-high 1.000, action 1.000, low-concern probe rate 0.189, formal
-validity 1.000, anti-cheat 0.950, and module coverage 0.950. The coupled
-program-body search then freezes the `2A-v1-pixels-observe_pair` contract and
+Haskell typed-ontology prototype, and coupled program-body searches against the
+Arc 2A v1 and v2 program gates, reward-only search reaches high apparent return
+while failing the viability gate. Novelty-only or syntax-proxy search can find
+syntax-like bodies, but remains unreliable under the full formal/viability
+gate. The vector module validation instantiates four body variants on the
+stronger Arc 2A vector gate. Only the modular concerned body passes:
+parse-high 1.000, action 1.000, low-concern probe rate 0.189, formal validity
+1.000, anti-cheat 0.950, and module coverage 0.950. The first coupled
+program-body search freezes the `2A-v1-pixels-observe_pair` contract and
 searches bodies against the actual empirical program gate. Across five Modal
 seeds, viability-guided search reaches body gate 1.000, empirical gate 1.000,
 formal validity 1.000, target/useful high-concern rates 1.000, and low-concern
-probe rate 0.156. Reward-only search collapses to a shortcut body; syntax-proxy
-search reaches target/useful 1.000 but fails the body gate with low-probe
-0.830. The Haskell checker separately validates body admissibility constraints
-and catches missing calibration guards as type-layer violations. The result is
-still not a claim that full neural architecture search has been solved. It is a
-Phase 2B acceptance surface: **accuracy is not architecture, novelty is not
-viable morphology, target selection is not a viable body, and formal validity
-alone is not concerned syntax.**
+probe rate 0.156. The second coupled search freezes
+`2A-v2-pixels-rich_programs`: the accepted body now also requires a
+program-family head and rich program composer. Across five Modal seeds,
+viability-guided search reaches body gate 1.000, empirical gate 1.000, formal
+validity 1.000, family/target/useful/rich high-concern rates 1.000, and
+low-concern program rate 0.168. Reward-only search collapses to a shortcut
+body; syntax-proxy search reaches family/target/useful/rich 1.000 but fails
+the v2 body gate with formal validity 0.200 and low-program rate 0.670. The
+Haskell checker validates body admissibility constraints and catches missing
+calibration guards or missing program-family heads as type-layer violations.
+The result is still not a claim that full neural architecture search has been
+solved. It is a Phase 2B acceptance surface: **accuracy is not architecture,
+novelty is not viable morphology, target selection is not a viable body, rich
+program selection is not a viable body, and formal validity alone is not
+concerned syntax.**
 
 ## 1. Why Arc 2B Exists
 
@@ -73,8 +80,14 @@ they are commitments about what distinctions the body can express.
 | `shortcut_reward_head` | high train return with shortcut risk |
 | `tree_binder` | can bind parts into constituents |
 | `syntax_memory` | can preserve parse state over time |
+| `vector_surface_encoder` | can encode generated vector/pixel-object surfaces |
+| `causal_binding_head` | can bind causal object pairs without candidate parse descriptors |
 | `world_model` | predicts consequences of actions/interventions |
 | `intervention_planner` | can select information-gathering actions |
+| `concern_policy` | can gate intervention use by viability relevance |
+| `calibration_guard` | can cap low-concern calibration without restless inquiry |
+| `program_family_head` | can select among rich intervention-program families |
+| `rich_program_composer` | can compose target and family into a rich program |
 | `role_specific_heads` | can separate role-specific causal components |
 | `counterfactual_rollout` | can simulate intervention alternatives |
 | `formal_guard` | checks admissibility and anti-cheat constraints |
@@ -87,16 +100,20 @@ The formal layer rejects bodies that violate dependency rules:
 | Rule | Reason |
 |---|---|
 | `syntax_memory` requires `tree_binder` | syntax memory without bound constituents is ill-typed |
+| `syntax_memory` may instead use `causal_binding_head` in vector/pixel bodies | vector causal binding is a binder role |
 | `intervention_planner` requires `world_model` | planners need consequence models |
-| `role_specific_heads` require `tree_binder` | role heads attach to constituents |
+| `role_specific_heads` require `tree_binder` or `causal_binding_head` | role heads attach to constituents or causal bindings |
+| `program_family_head` requires `world_model` | family choice depends on mechanism consequences |
+| `rich_program_composer` requires `intervention_planner` and `program_family_head` | composition needs both program planning and family selection |
 | `counterfactual_rollout` requires `world_model` and `intervention_planner` | counterfactuals require model and action |
 | `self_repair` requires `formal_guard` | self-modification needs checks |
 | `shortcut_reward_head` without `formal_guard` is rejected | reward shortcuts are anti-cheat risks |
-| resource cost <= 12 | bodies must remain viable |
+| resource cost within the relevant budget | base ontology bodies use <= 12; rich program-body search uses <= 18 |
 
 This is a small stand-in for the s(CASP)/ASP + SMT/static-checking layer
-described in the dynamical-ontology blueprint. The current implementation is
-plain Python so the gate is auditable and easy to test.
+described in the dynamical-ontology blueprint. The current implementation keeps
+auditable Python static rules for Modal fallback and a small Haskell typed
+ontology for local/external formal verdicts.
 
 ## 4. Fitness and Gates
 
@@ -365,7 +382,74 @@ fails the body gate because it does not reliably preserve formal validity and
 low-concern discipline. The accepted viability-guided body reconstructs the
 whole motif stack required by the empirical 2A program gate.
 
-## 13. Haskell Typed Ontology Gate
+## 13. Rich Program-Body Search Against 2A-v2
+
+The v1 contract proves target invention, but it still treats
+`observe_pair(a,b)` as the only useful program family. The next coupled body
+test freezes the richer Arc 2A program-language result:
+
+```text
+2A-v2-pixels-rich_programs
+```
+
+The body search now maps motif sets to richer empirical controls:
+surface-rich shortcut, random rich program, family-without-target,
+target-without-family, rich-without-concern, or the full
+concerned-program-composer. A passing body must express concern gating, target
+binding, program-family selection, rich program composition, formal
+admissibility, and resource viability together.
+
+Remote command:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/viable_computational_bodies/modal_rich_program_body_search.py \
+  --generations 18 --population 18 \
+  --train-trials 3000 --test-trials 1200 --epochs 90
+```
+
+The tracked public report is
+`experiments/viable_computational_bodies/results/rich_program_body_search_modal_2026_06_18.md`.
+
+Gate summary:
+
+| Strategy | Body gate | Empirical | Formal | Low program | Gate |
+|---|---:|---:|---:|---:|---|
+| reward only | 0.000 | 0.000 | 0.000 | 0.000 | fail |
+| syntax proxy | 0.000 | 0.400 | 0.200 | 0.670 | fail |
+| viability guided | 1.000 | 1.000 | 1.000 | 0.168 | PASS |
+
+Program metrics:
+
+| Strategy | Family | Target | Useful | Rich | Best agent |
+|---|---:|---:|---:|---:|---|
+| reward only | 0.000 | 0.000 | 0.000 | 0.000 | surface rich shortcut |
+| syntax proxy | 1.000 | 1.000 | 1.000 | 1.000 | concerned composer |
+| viability guided | 1.000 | 1.000 | 1.000 | 1.000 | concerned composer |
+
+The accepted body is:
+
+```text
+calibration_guard
+causal_binding_head
+concern_policy
+formal_guard
+intervention_planner
+program_family_head
+reward_head
+rich_program_composer
+vector_surface_encoder
+world_model
+```
+
+This is the second and stronger 2A/2B coupling. The `syntax_proxy` strategy can
+reach perfect family, target, useful-program, and rich-program rates, but it
+still fails the body gate because it does not preserve the formal guard and
+low-concern discipline. The accepted body reconstructs the morphology required
+to express the full 2A-v2 program contract.
+
+## 14. Haskell Typed Ontology Gate
 
 The Python gates are convenient for experiments, but the ontology layer should
 eventually live in a stronger typed formalism. This branch adds a small Haskell
@@ -387,6 +471,7 @@ dependency and resource rules, and emits JSON verdicts. In the current run:
 | guarded syntax | true | 12 | none |
 | restless tree | false | 12 | missing calibration guard |
 | modular concerned | true | 8 | none |
+| rich v2 motif body | true | 12 | none |
 
 ![Figure 2: Haskell typed-ontology verdicts. The checker keeps resource viability and formal validity separate: the restless tree body is within budget but invalid because it lacks the calibration guard.](figures/fig2_haskell_ontology_verdicts.png)
 
@@ -394,8 +479,10 @@ The useful part is not just the final pass. During development, the typed
 checker forced two clarifications: concern and calibration guards are formal
 overlays rather than resource-costed morphology, and vector causal binding can
 serve the same binder role that tree binding serves in the symbolic body.
+The rich-program extension adds `program_family_head` and
+`rich_program_composer`; a composer without a family head is formally rejected.
 
-## 14. Limitations
+## 15. Limitations
 
 The current search and executable validation are intentionally small. The
 executable bodies are linear learned components over vectorized symbolic
@@ -403,24 +490,26 @@ features, not full neural architectures trained from pixels. The coupled
 program-body search maps motif sets to existing 2A empirical controls rather
 than instantiating separate neural modules for every motif. The Haskell gate is
 a small typed ontology prototype, not a complete proof assistant, ASP,
-s(CASP), or SMT integration, and Haskell motif verdicts are not yet inside the
-program-body search loop. The point is to make the acceptance surface explicit
-and behaviorally grounded before expensive architecture evolution begins.
+s(CASP), or SMT integration. Modal runs fall back to explicit `python_static`
+formal provenance when Cabal is unavailable, while local runs and tests can use
+the Haskell motif verdict path. The point is to make the acceptance surface
+explicit and behaviorally grounded before expensive architecture evolution
+begins.
 
-The strongest next test is to put Haskell motif verdicts inside the
-program-body search loop and lift the empirical contract from
-`observe_pair(a,b)` to richer `move(anchor)`, `ablate(role)`, and two-step
-programs with held-out transfer gates.
+The strongest next test is not another v1/v2 seed sweep. It is held-out
+role-pair and parse-family transfer, followed by learned executable modules
+that implement object slots, graph binding, routed role heads, and program
+composition rather than mapping motif sets to existing controls.
 
-## 15. Conclusion
+## 16. Conclusion
 
 Arc 2B reframes architecture search as viability-guided body evolution. The
-pilot, learned validation, vector module validation, program-body search, and
-typed ontology gate show why that matters: train return, novelty, target
-selection, formal validity, module coverage, binding, and concerned syntax can
-dissociate. The next phase should not ask for merely "better models." It
-should ask for bodies whose morphology makes the world's causal grammar
-learnable without becoming restless or shortcut-driven.
+pilot, learned validation, vector module validation, v1/v2 program-body
+searches, and typed ontology gate show why that matters: train return, novelty,
+target selection, rich program selection, formal validity, module coverage,
+binding, and concerned syntax can dissociate. The next phase should not ask for
+merely "better models." It should ask for bodies whose morphology makes the
+world's causal grammar learnable without becoming restless or shortcut-driven.
 
 ## References
 

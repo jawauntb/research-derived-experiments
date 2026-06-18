@@ -26,3 +26,46 @@ main = do
     verdictFormalValid (verdict passiveVectorBody)
   assert "restless vector body is invalid without calibration" $
     not (verdictFormalValid (verdict restlessVectorBody))
+  assert "syntax memory can bind through causal binding head" $
+    verdictFormalValid $
+      verdict $
+        body
+          [ VectorSurfaceEncoder
+          , RewardHead
+          , CausalBindingHead
+          , SyntaxMemory
+          , WorldModel
+          , InterventionPlanner
+          , ConcernPolicy
+          , CalibrationGuard
+          , FormalGuard
+          ]
+  assert "rich program composer needs program family head" $
+    not $
+      verdictFormalValid $
+        verdict $
+          body
+            [ VectorSurfaceEncoder
+            , RewardHead
+            , WorldModel
+            , InterventionPlanner
+            , RichProgramComposer
+            , FormalGuard
+            ]
+  assert "rich 2A-v2 body is formally valid" $
+    verdictFormalValid $
+      verdict $
+        body
+          [ VectorSurfaceEncoder
+          , FlatEncoder
+          , RewardHead
+          , WorldModel
+          , InterventionPlanner
+          , CausalBindingHead
+          , SyntaxMemory
+          , ConcernPolicy
+          , CalibrationGuard
+          , FormalGuard
+          , ProgramFamilyHead
+          , RichProgramComposer
+          ]

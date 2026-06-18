@@ -70,6 +70,8 @@ motifByName name =
     , ("causal_binding_head", CausalBindingHead)
     , ("concern_policy", ConcernPolicy)
     , ("calibration_guard", CalibrationGuard)
+    , ("program_family_head", ProgramFamilyHead)
+    , ("rich_program_composer", RichProgramComposer)
     ]
 
 namedVerdictJson :: String -> Verdict -> String

@@ -1,6 +1,6 @@
 # Phase / Arc 2 Handoff for the Next Agent
 
-Date: 2026-06-16  
+Date: 2026-06-18
 Repo: `jawauntb/research-derived-experiments`  
 Local working repo used for this handoff: `/Users/jawaun/.codex/worktrees/122e/Research Derived Experiments`  
 Primary external artifact folder: `/Users/jawaun/Metaphysics of Intelligence/Phase_Arc_2`
@@ -191,7 +191,7 @@ Paper:
 
 External PDF copy:
 
-- `/Users/jawaun/Metaphysics of Intelligence/Phase_Arc_2/2A_Concerned_Syntax_2026_06_16.pdf`
+- `/Users/jawaun/Metaphysics of Intelligence/Phase_Arc_2/2A_Concerned_Syntax_2026_06_18.pdf`
 
 Latest core result:
 
@@ -252,7 +252,7 @@ Paper:
 
 External PDF copy:
 
-- `/Users/jawaun/Metaphysics of Intelligence/Phase_Arc_2/2B_Viable_Computational_Bodies_2026_06_16.pdf`
+- `/Users/jawaun/Metaphysics of Intelligence/Phase_Arc_2/2B_Viable_Computational_Bodies_2026_06_18.pdf`
 
 Latest core result:
 
@@ -449,8 +449,12 @@ Done:
   local 5-seed gate validation.
 - Minimal pixel-level intervention invention with learned `observe_pair(a,b)`
   target selection and concern gating.
-- Python consumption of Haskell JSON verdicts inside learned/vector body
+- Rich pixel-level program-family selection with learned `observe_pair`,
+  `move_anchor`, `ablate_pair`, and composed move+observe programs.
+- Python consumption of Haskell JSON verdicts inside learned/vector/body-search
   summaries when the local Haskell checker is available.
+- Coupled 2A/2B body search against both `2A-v1-pixels-observe_pair` and the
+  richer `2A-v2-pixels-rich_programs` contracts.
 - Gate-margin charts for 2A and 2B.
 - Haskell typed ontology checker prototype.
 - Updated papers and PDFs for 2A and 2B.
@@ -461,10 +465,9 @@ Not done:
 - Learned object/part extraction from images beyond algorithmic connected
   components.
 - Modal-scale pixel sweep.
-- Modal-scale intervention-invention sweep and richer program language beyond
-  `observe_pair(a,b)`.
-- Evolved/search-discovered executable module bodies under the vector/pixel
-  gate.
+- Held-out role-pair and parse-family transfer as required body gates.
+- Search-discovered executable module bodies under the vector/pixel/program
+  gates.
 - Real neural module bodies such as object-slot encoders, graph neural nets,
   differentiable tree binders, mixture-of-experts role heads, or program
   induction components.
@@ -946,6 +949,25 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
   --train-trials 3000 --test-trials 1200 --epochs 90
 ```
 
+Rich program-language Modal sweep:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_rich_program_language_sweep.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90
+```
+
+Rich program-body search against 2A-v2:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/viable_computational_bodies/modal_rich_program_body_search.py \
+  --generations 18 --population 18 \
+  --train-trials 3000 --test-trials 1200 --epochs 90
+```
+
 Render PDFs:
 
 ```bash
@@ -966,10 +988,10 @@ Copy PDFs to external folder:
 
 ```bash
 cp papers/concerned_syntax/paper.pdf \
-  '/Users/jawaun/Metaphysics of Intelligence/Phase_Arc_2/2A_Concerned_Syntax_2026_06_16.pdf'
+  '/Users/jawaun/Metaphysics of Intelligence/Phase_Arc_2/2A_Concerned_Syntax_2026_06_18.pdf'
 
 cp papers/viable_computational_bodies/paper.pdf \
-  '/Users/jawaun/Metaphysics of Intelligence/Phase_Arc_2/2B_Viable_Computational_Bodies_2026_06_16.pdf'
+  '/Users/jawaun/Metaphysics of Intelligence/Phase_Arc_2/2B_Viable_Computational_Bodies_2026_06_18.pdf'
 ```
 
 ## 14. Final Orientation for the Next Agent
@@ -981,40 +1003,40 @@ small local smoke -> Modal full sweep -> audit -> chart -> paper/PDF -> checks
 -> commit -> PR -> merge -> continue
 ```
 
-The fastest path to a real next breakthrough is probably:
+The fastest path to the next real breakthrough is now:
 
-1. Run Modal-scale intervention-invention and pixel sweeps.
-2. Extend the program language from `observe_pair(a,b)` to movement, ablation,
-   and two-step compositions.
-3. Add held-out role-pair/parse-family transfer so the target selector cannot
+1. Add held-out role-pair/parse-family transfer so the target selector cannot
    be only an i.i.d. color/position reader.
-4. Route searched/evolved bodies through Haskell admissibility before evaluating
-   them on the vector/pixel/program gates.
+2. Replace connected-component extraction with learned object/slot perception.
+3. Replace motif-to-control body mapping with searched executable modules.
+4. Keep Haskell admissibility inside body evaluation and move toward a shared
+   motif/program schema.
 
 Why that path:
 
-- It attacks the biggest current limitation: provided interventions and
-  i.i.d. target selection.
+- It attacks the biggest current limitation: i.i.d. target/program selection
+  and symbolic motif-to-control mapping.
 - It preserves the successful gate structure.
 - It keeps the Haskell formal layer operational instead of decorative.
 - It creates a clean story for the next paper revision:
 
 ```text
-candidate parse -> vector surface -> pixel surface -> program selection,
-Python-only formal guard -> Haskell-in-the-loop admissibility,
-hand-instantiated bodies -> searched/evolved bodies.
+candidate parse -> vector surface -> pixel surface -> rich program selection,
+parallel formal guard -> Haskell/Python formal oracle,
+hand-instantiated bodies -> searched motif bodies -> executable module bodies.
 ```
 
 That is how to keep compounding instead of circling.
 
-Latest coupled result after PR #127:
+Latest coupled result after the 2A-v2 body-search branch:
 
-- `experiments/viable_computational_bodies/results/program_body_search_modal_2026_06_16.md`
-  freezes `2A-v1-pixels-observe_pair` and evaluates 2B searched bodies against
-  the real 2A program gate.
+- `experiments/viable_computational_bodies/results/rich_program_body_search_modal_2026_06_18.md`
+  freezes `2A-v2-pixels-rich_programs` and evaluates 2B searched bodies against
+  the real 2A rich-program gate.
 - Across five Modal seeds, `viability_guided` reaches body gate `1.000`,
-  empirical gate `1.000`, formal valid `1.000`, target/useful high `1.000`,
-  low probe `0.156`, and discovers
-  `calibration_guard+causal_binding_head+concern_policy+formal_guard+intervention_planner+reward_head+vector_surface_encoder+world_model`.
-- `reward_only` fails as a shortcut body; `syntax_proxy` reaches target/useful
-  `1.000` but fails body gate with low-probe `0.830`.
+  empirical gate `1.000`, formal valid `1.000`, family/target/useful/rich high
+  `1.000`, low program `0.168`, and discovers
+  `calibration_guard+causal_binding_head+concern_policy+formal_guard+intervention_planner+program_family_head+reward_head+rich_program_composer+vector_surface_encoder+world_model`.
+- `reward_only` fails as a shortcut body; `syntax_proxy` reaches
+  family/target/useful/rich `1.000` but fails body gate with formal validity
+  `0.200` and low program `0.670`.
