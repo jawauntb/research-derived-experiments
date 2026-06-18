@@ -201,6 +201,14 @@ Current v1 result:
   `family_without_target` gets family accuracy `1.000` but target accuracy
   `0.080`; `rich_without_concern` gets parse/action/family/target all
   `1.000` but low-concern program rate `1.000`.
+- `rich_program_transfer_repair_modal_2026_06_18.md` turns the v2 held-out
+  role/parse transfer boundary into an explicit repair gate. Across five Modal
+  seeds, `role_equivariant_rich_world_model` reaches transfer gate `1.000`,
+  parse/action/family/target/useful/rich high-concern rates `1.000`,
+  low-concern program rate `0.000`, and regret `0.004`. The learned rich
+  composer remains rejected with transfer gate fail, slice gate `0.571`,
+  family/useful high `0.714`, target high `0.829`, and low-concern program
+  rate `0.161`.
 
 Current coupled 2A/2B results:
 
@@ -224,12 +232,20 @@ Current coupled 2A/2B results:
   validity `0.200` and low-concern program rate `0.670`.
 - The local Haskell-in-loop gap is closed for `2A-v1`; the v2 Modal body run
   still records `python_static` formal provenance when Cabal is unavailable.
+- `learned_executable_modules_modal_2026_06_18.md` makes 2B executable module
+  bodies consume the v2 transfer gate directly across five Modal seeds. Only
+  `transfer_repaired_executable_body` passes with transfer gate `1.000`,
+  executable-module coverage `1.000`, family/target/useful/rich `1.000`,
+  low-concern program rate `0.000`, and resource cost `16`. Family-only,
+  target-only, ungated-rich, and learned-composer bodies fail different pieces
+  of the contract.
 
 This is the first Phase 2 point where Arc 2A and Arc 2B are coupled at the
-rich program-composition contract, not merely at target selection. It is still
-not the end of Phase 2: held-out role/parse transfer for `2A-v2`, learned
-object slots, open-ended/searched program invention beyond the provided
-grammar, and learned executable module bodies remain open.
+rich program-composition contract, not merely at target selection. The frontier
+now also closes the v2 transfer-repair and executable-module-body gates at
+Modal scale. It is still not the end of Phase 2: learned neural role/slot
+semantics, open-ended/searched program invention beyond the provided grammar,
+and full architecture search remain open.
 
 ## Literature Bearings
 

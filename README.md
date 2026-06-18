@@ -144,6 +144,16 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     experiments/concerned_syntax/modal_rich_program_language_sweep.py \
     --train-trials 3000 --test-trials 1200 --epochs 90
 
+python3 -m experiments.concerned_syntax.rich_program_transfer_repair \
+    --train-trials 300 --test-trials 120 --seed 20260618 --epochs 25 \
+    --out artifacts/concerned_syntax/rich_program_transfer_repair_local.json \
+    --report experiments/concerned_syntax/results/rich_program_transfer_repair_local_2026_06_18.md
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/concerned_syntax/modal_rich_program_transfer_repair_sweep.py \
+    --train-trials 3000 --test-trials 1200 --epochs 90
+
 doppler --scope /Users/jawaun/superoptimizers run -- \
     uvx --python 3.12 --from modal modal run \
     experiments/concerned_syntax/modal_intervention_transfer_sweep.py \
@@ -197,6 +207,16 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     uvx --python 3.12 --from modal modal run \
     experiments/viable_computational_bodies/modal_rich_program_body_search.py \
     --generations 18 --population 18 \
+    --train-trials 3000 --test-trials 1200 --epochs 90
+
+python3 -m experiments.viable_computational_bodies.learned_executable_modules \
+    --train-trials 300 --test-trials 120 --seed 20260618 --epochs 25 \
+    --out artifacts/viable_computational_bodies/learned_executable_modules_local.json \
+    --report experiments/viable_computational_bodies/results/learned_executable_modules_local_2026_06_18.md
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/viable_computational_bodies/modal_learned_executable_modules.py \
     --train-trials 3000 --test-trials 1200 --epochs 90
 
 python3 -m experiments.viable_computational_bodies.program_body_search \

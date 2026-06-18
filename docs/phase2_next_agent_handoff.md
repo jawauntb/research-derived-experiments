@@ -481,6 +481,12 @@ Done:
   summaries when the local Haskell checker is available.
 - Coupled 2A/2B body search against both `2A-v1-pixels-observe_pair` and the
   richer `2A-v2-pixels-rich_programs` contracts.
+- Local held-out role/parse transfer repair for `2A-v2-pixels-rich_programs`,
+  with a role-equivariant rich world model passing where the learned composer
+  and partial controls fail.
+- Modal-confirmed executable-module body validation that consumes the `2A-v2`
+  transfer gate; only the transfer-repaired body exposes all required modules
+  and passes.
 - Gate-margin charts for 2A and 2B.
 - Haskell typed ontology checker prototype.
 - Updated papers and PDFs for 2A and 2B.
@@ -490,7 +496,6 @@ Not done:
 
 - Full CNN or unsupervised object-slot extraction beyond the learned
   foreground/slot diagnostic.
-- Held-out transfer for the richer intervention-program grammar.
 - Open-ended or searched program invention beyond the provided rich grammar.
 - Haskell-source provenance on Modal for the `2A-v2` rich-program body search
   when Cabal is unavailable in the image.
@@ -708,16 +713,18 @@ probe program tokens:
 ```
 
 The first line of this goal is now complete for `observe_pair(a,b)` target
-selection. Held-out transfer is now instrumented and Modal-replicated, but it
-fails: the i.i.d. gate pass rate is `1.000`, while mean held-out transfer-slice
-gate pass is `0.171`, with weakest slice `role_kind:repair_core`. Movement,
-ablation, two-step composition, and Modal-scale replication are now complete in
-a provided grammar. A searched-policy follow-up searches over the frozen
-`observe_pair(a,b)` menu's probe gate, target selector, binding update, and
-action rule rather than receiving `concerned_program_inventor` as a named
-policy. The remaining next version is a mechanism that can pass held-out
-role/parse transfer, open-ended or searched program discovery beyond the
-provided rich grammar, and 2B body consumption of the `2A-v2` contract.
+selection. Held-out transfer for the v1 `observe_pair(a,b)` contract is
+instrumented and Modal-replicated, but it fails: the i.i.d. gate pass rate is
+`1.000`, while mean held-out transfer-slice gate pass is `0.171`, with weakest
+slice `role_kind:repair_core`. Movement, ablation, two-step composition, and
+Modal-scale replication are now complete in a provided grammar. A searched-
+policy follow-up searches over the frozen `observe_pair(a,b)` menu's probe
+gate, target selector, binding update, and action rule rather than receiving
+`concerned_program_inventor` as a named policy. The current branch adds a
+Modal-confirmed v2 transfer repair for the richer grammar and makes 2B consume
+that transfer gate through Modal-confirmed executable module bodies. The
+remaining next versions are open-ended or searched program discovery beyond the
+provided rich grammar and learned neural slot/role semantics.
 
 Gate:
 
@@ -1099,13 +1106,12 @@ small local smoke -> Modal full sweep -> audit -> chart -> paper/PDF -> checks
 
 The fastest path to the next real breakthrough is now:
 
-1. Add held-out role-pair/parse-family transfer so the target selector cannot
-   be only an i.i.d. color/position/program-family reader.
-2. Replace connected-component extraction with learned object/slot perception.
-3. Move beyond the provided grammar into open-ended or searched program
+1. Replace connected-component extraction with learned object/slot perception.
+2. Move beyond the provided grammar into open-ended or searched program
    discovery.
-4. Replace motif-to-control body mapping with searched executable modules.
-5. Keep Haskell admissibility inside body evaluation and move toward a shared
+3. Replace compact hand-instantiated executable module bodies with searched or
+   evolved executable modules.
+4. Keep Haskell admissibility inside body evaluation and move toward a shared
    motif/program schema with Modal-visible provenance.
 
 Why that path:
@@ -1123,6 +1129,27 @@ hand-instantiated bodies -> searched motif bodies -> executable module bodies.
 ```
 
 That is how to keep compounding instead of circling.
+
+Latest wrap-gate result after this branch:
+
+- `experiments/concerned_syntax/results/rich_program_transfer_repair_modal_2026_06_18.md`
+  turns held-out role-kind and true-parse transfer into an explicit v2 repair
+  gate for `2A-v2-pixels-rich_programs`.
+- Across five Modal seeds, `role_equivariant_rich_world_model` reaches
+  transfer gate `1.000`, parse/action/family/target/useful/rich high-concern
+  rates `1.000`, low-concern program rate `0.000`, and regret `0.004`.
+- `learned_rich_program_composer` remains rejected with transfer gate fail,
+  slice gate `0.571`, family/useful high `0.714`, target high `0.829`, and
+  low program `0.161`.
+- `experiments/viable_computational_bodies/results/learned_executable_modules_modal_2026_06_18.md`
+  makes 2B executable module bodies consume that transfer gate.
+- Only `transfer_repaired_executable_body` passes with transfer `1.000`,
+  module coverage `1.000`, family/target/useful/rich `1.000`, low program
+  `0.000`, and cost `16`; family-router, target-binder, ungated-rich, and
+  learned-composer bodies fail different missing-module or transfer slices.
+- Claim boundary: the transfer repair and transfer-consuming body gate are
+  Modal-confirmed but still use explicit role-slot decoding and compact module
+  bodies, not learned neural role semantics or full architecture search.
 
 Latest coupled result after the 2A-v2 body-search branch:
 
