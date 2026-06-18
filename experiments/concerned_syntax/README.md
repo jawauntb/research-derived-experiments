@@ -146,3 +146,19 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
   experiments/concerned_syntax/modal_rich_program_transfer_repair_sweep.py \
   --train-trials 3000 --test-trials 1200 --epochs 90
 ```
+
+Learned slot-semantics transfer repair:
+
+```bash
+python3 -m experiments.concerned_syntax.learned_slot_semantics \
+  --train-trials 300 --test-trials 120 --seed 20260618 --epochs 25 \
+  --semantic-calibration-trials 600 \
+  --out artifacts/concerned_syntax/learned_slot_semantics_local.json \
+  --report experiments/concerned_syntax/results/learned_slot_semantics_local_2026_06_18.md
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_learned_slot_semantics_sweep.py \
+  --train-trials 600 --test-trials 240 --epochs 30 \
+  --semantic-calibration-trials 600
+```

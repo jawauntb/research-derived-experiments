@@ -53,7 +53,11 @@ Finally, a held-out v2 transfer repair makes role-kind and true-parse transfer
 explicit. Across five Modal seeds, an explicit role-equivariant rich world
 model reaches transfer gate 1.000, family/target/useful/rich 1.000,
 low-concern program rate 0.000, and gate PASS, while the learned rich composer
-and partial controls fail distinct slices.
+and partial controls fail distinct slices. A supervised learned slot-semantics
+repair then replaces the explicit RGB role decoder with role-token prototypes
+and preserves the same transfer gate across five Modal confirmation seeds
+(600 train, 240 test, 30 epochs per seed), with semantic kind/pair accuracy
+1.000 and low-concern program rate 0.000.
 Shortcut reward, passive perceptual inference, no-tree planning, random
 program probing, family-only selection, target-only selection, rich programs
 without concern, and restless inquiry all fail for different anti-cheat
@@ -61,7 +65,8 @@ reasons. The result is still not a claim about human cognition or learned
 unsupervised object slots. It is an accepted Phase 2A learned-mechanism
 surface: **reward is not syntax, compression is not syntax, probe availability
 is not intervention invention, target selection is not program composition,
-and uncertainty reduction is not concerned inquiry.**
+explicit role decoding is not required for supervised slot semantics, and
+uncertainty reduction is not concerned inquiry.**
 
 ## 1. Why Arc 2A Exists
 
@@ -519,11 +524,53 @@ accepted repair decodes role slots, selects the role-equivariant target, chooses
 the required rich program family, and spends a program only when the decoded
 world model says the binding matters.
 
-This closes the Modal transfer gate for the provided v2 grammar. It does not
-yet show learned neural role semantics, natural-image object slots, or
+This closes the Modal transfer gate for the provided v2 grammar with an
+explicit role decoder. The next gate asks whether that decoder can itself be
+replaced by a learned slot-semantic mapping.
+
+## 14. Learned Slot-Semantics Transfer
+
+The explicit transfer repair above still knows the RGB role table. The learned
+slot-semantics gate replaces that nearest-color decoder with a supervised
+prototype decoder trained from visible role-token calibration examples. The
+held-out task train/test split is unchanged: each high-concern role kind and
+each true parse family is withheld from the task learner and evaluated as a
+transfer slice. The semantic calibration is deliberately narrower than
+unsupervised object discovery; it learns role-token prototypes from rendered
+components, then the same world-model operation binds kind, target pair,
+program family, concern gate, parse observation, and action.
+
+Remote command:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_learned_slot_semantics_sweep.py \
+  --train-trials 600 --test-trials 240 --epochs 30 \
+  --semantic-calibration-trials 600
+```
+
+The tracked public report is
+`experiments/concerned_syntax/results/learned_slot_semantics_modal_2026_06_18.md`.
+
+Gate summary:
+
+| Agent | Transfer | Sem kind | Sem pair | Family | Target | Useful | Rich | Low program |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| learned slot-semantic world model | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 0.000 |
+| learned rich composer | 0.000 | 0.000 | 0.000 | 0.705 | 0.811 | 0.705 | 0.895 | 0.182 |
+| semantic family only | 0.000 | 1.000 | 1.000 | 1.000 | 0.214 | 0.214 | 1.000 | 0.000 |
+| semantic target only | 0.000 | 1.000 | 1.000 | 0.143 | 1.000 | 0.143 | 0.143 | 0.714 |
+| semantic rich no concern | 0.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 0.714 |
+
+The accepted agent preserves the v2 transfer contract while replacing explicit
+role decoding with learned supervised slot semantics. The controls preserve
+the same anti-cheat separations: family without target, target without family,
+and rich programs without concern all fail despite perfect semantic decoding.
+This is still not natural-image perception, unsupervised role discovery, or
 open-ended program invention.
 
-## 14. Limitations
+## 15. Limitations
 
 The current benchmark is still synthetic. The newest agent receives generated
 pixels with algorithmic connected-component extraction, not natural images,
@@ -533,12 +580,13 @@ invent raw motor primitives or open-ended experimental apparatus. The point of
 this first paper is to define and pass a minimal learned acceptance surface
 before larger compute.
 
-The Modal transfer repair narrows the next limitation but does not erase it:
-the agent should learn object slots and role semantics, and instantiate
-program/body components as learned modules, not merely select among provided
-program tokens and bind observations to an extracted object surface.
+The Modal transfer and learned slot-semantics repairs narrow the next
+limitation but do not erase it: the agent should learn object slots without
+supervised role-token calibration, invent or search programs beyond the
+provided grammar, and instantiate program/body components as learned modules
+rather than compact hand-instantiated world-model operations.
 
-## 15. Conclusion
+## 16. Conclusion
 
 Arc 2A inserts a new layer into the maintained-concern ladder:
 
@@ -555,10 +603,11 @@ The learned-agent, vector-observation, pixel-rendered, intervention-invention,
 and rich-program gates show that the gate is passable without hidden parse
 access, but only when object extraction, useful target selection, program
 family selection, binding, intervention, and formal concern gating are present
-together. The held-out v2 transfer repair adds the next boundary: the same
-grammar can survive role/parse transfer when explicit role decoding and a
-world-model concern gate are present, while learned neural role semantics
-remain future work.
+together. The held-out v2 transfer and learned slot-semantics repairs add the
+next boundary: the same grammar can survive role/parse transfer when a
+world-model concern gate consumes either explicit or supervised learned role
+semantics. Unsupervised object slots, program discovery beyond the provided
+grammar, and learned module/body search remain future work.
 
 ## References
 
