@@ -465,7 +465,7 @@ Done:
 - Vector-observation agents with parse-invariant surfaces.
 - Vector module-body validation.
 - Pixel-rendered observations with connected-component object extraction and
-  local 5-seed gate validation.
+  local and Modal 5-seed gate validation.
 - Minimal pixel-level intervention invention with learned `observe_pair(a,b)`
   target selection and concern gating.
 - Rich pixel-level intervention programs over `observe_pair`, `move_anchor`,
@@ -482,7 +482,6 @@ Not done:
 
 - Learned object/part extraction from images beyond algorithmic connected
   components.
-- Modal-scale pixel sweep.
 - Held-out transfer for the richer intervention-program grammar.
 - Open-ended or searched program invention beyond the provided rich grammar.
 - Body search or Haskell-in-loop validation against the `2A-v2` rich-program
@@ -506,10 +505,14 @@ Status after PR #125 follow-on branch work: the local version exists at
 `experiments/concerned_syntax/modal_pixel_shapes_sweep.py` and a tracked local
 report at
 `experiments/concerned_syntax/results/pixel_shapes_local_2026_06_16.md`.
-The local 5-seed result passes for `concerned_pixel_probe` and preserves the
-surface/passive/restless failure taxonomy. The remaining Goal A work is the
-Modal-scale run, a gate-margin figure, and replacing the algorithmic extractor
-with a learned object-slot or CNN baseline.
+The Modal-scale report now lives at
+`experiments/concerned_syntax/results/pixel_shapes_modal_2026_06_16.md`.
+The 5-seed Modal result passes for `concerned_pixel_probe` with parse-high
+`1.000`, action `1.000`, subtree `0.806`, object extraction `1.000`,
+high-probe `1.000`, low-probe `0.195`, and gate pass rate `1.000`. It
+preserves the surface/passive/restless failure taxonomy. The remaining Goal A
+work is a gate-margin figure and replacing the algorithmic extractor with a
+learned object-slot or CNN baseline.
 
 Proposed files:
 

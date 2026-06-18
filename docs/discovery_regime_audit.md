@@ -3826,15 +3826,16 @@ Experiment:
 - Manifest/report paths:
   `experiments/concerned_syntax/pixel_shapes.py`;
   `experiments/concerned_syntax/results/pixel_shapes_local_2026_06_16.md`;
+  `experiments/concerned_syntax/results/pixel_shapes_modal_2026_06_16.md`;
   local ignored artifact
-  `artifacts/concerned_syntax/pixel_shapes_local_sweep.json`.
+  `artifacts/concerned_syntax/pixel_shapes_modal_sweep.json`.
 - Positive targets: `concerned_pixel_probe` should pass the transported 2A
   gate after object extraction.
 - Negative controls: `surface_pixel_shortcut`, `passive_pixel`, and
   `restless_pixel_probe`.
 - Stress tests: hidden true/alternate parse swap must leave the RGB image
   unchanged; connected-component extraction must recover six objects; five
-  local seeds must preserve the failure taxonomy.
+  Modal seeds must preserve the failure taxonomy.
 
 Gate:
 
@@ -3849,16 +3850,18 @@ Gate:
 Results:
 
 - Accepted artifacts: pixel renderer, connected-component extractor,
-  pixel-agent report, Modal sweep entrypoint, tests, and paper update.
-- Rejected or withheld artifacts: no claim of learned object-slot perception;
-  no Modal-scale pixel sweep yet.
-- Key metrics across five local seeds: `concerned_pixel_probe` parse-high
-  `0.996`, action `0.999`, subtree `0.786`, object extraction `1.000`,
-  high-probe `0.993`, low-probe `0.187`, gate pass rate `1.000`.
-  `passive_pixel` parse-high is `0.503`; `surface_pixel_shortcut` parse-high
-  is `0.503`; `restless_pixel_probe` low-probe is `1.000`.
-- Variance or ablation: concerned pixel gate pass SD is `0.000`; parse-high SD
-  is `0.007`; object extraction SD is `0.000`.
+  pixel-agent reports, Modal sweep entrypoint, tests, and paper update.
+- Rejected or withheld artifacts: no learned object-slot encoder, natural-image
+  perception, or unsupervised-slot claim.
+- Key metrics across five Modal seeds: `concerned_pixel_probe` parse-high
+  `1.000`, action `1.000`, subtree `0.806`, object extraction `1.000`,
+  high-probe `1.000`, low-probe `0.195`, mean regret `0.004`, gate pass rate
+  `1.000`. `passive_pixel` parse-high is `0.499`;
+  `surface_pixel_shortcut` parse-high is `0.499`; `restless_pixel_probe`
+  low-probe is `1.000`.
+- Variance or ablation: concerned pixel gate pass SD is `0.000`; object
+  extraction SD is `0.000`; every Modal seed preserves the surface/passive/
+  restless failure taxonomy.
 
 Residual content:
 
@@ -3867,12 +3870,13 @@ Residual content:
 - New content outside old regime: the accepted gate now includes an explicit
   pixel-to-object operation, and passive object extraction is not enough to
   recover hidden causal constituency.
-- Retractions or supersessions: supersede "Arc 2A has no pixel surface" with
-  "Arc 2A has a pixel-rendered, object-extracted concerned-syntax gate."
+- Retractions or supersessions: supersede "Arc 2A has no Modal-scale pixel
+  surface" with "Arc 2A has a pixel-rendered, object-extracted concerned-syntax
+  gate replicated across Modal seeds."
 
-Next move: either run the Modal-scale pixel sweep or replace the
-connected-component extractor with a learned object-slot encoder while keeping
-the same hidden-parse invariance and no-restless controls.
+Next move: replace the connected-component extractor with a learned object-slot
+encoder or add held-out surface/role transfer while keeping the same
+hidden-parse invariance and no-restless controls.
 
 ## Arc 2A: Concerned Intervention Invention
 
