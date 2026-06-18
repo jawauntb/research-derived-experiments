@@ -468,6 +468,9 @@ Done:
   local 5-seed gate validation.
 - Minimal pixel-level intervention invention with learned `observe_pair(a,b)`
   target selection and concern gating.
+- Rich pixel-level intervention programs over `observe_pair`, `move_anchor`,
+  `ablate_pair`, and `compose_move_observe`, with local and Modal 5-seed
+  gate validation for `2A-v2-pixels-rich_programs`.
 - Python consumption of Haskell JSON verdicts inside learned/vector body
   summaries when the local Haskell checker is available.
 - Gate-margin charts for 2A and 2B.
@@ -480,8 +483,10 @@ Not done:
 - Learned object/part extraction from images beyond algorithmic connected
   components.
 - Modal-scale pixel sweep.
-- Modal-scale intervention-invention sweep and richer program language beyond
-  `observe_pair(a,b)`.
+- Held-out transfer for the richer intervention-program grammar.
+- Open-ended or searched program invention beyond the provided rich grammar.
+- Body search or Haskell-in-loop validation against the `2A-v2` rich-program
+  contract.
 - Evolved/search-discovered executable module bodies under the vector/pixel
   gate.
 - Real neural module bodies such as object-slot encoders, graph neural nets,
@@ -652,25 +657,38 @@ programs. It does not receive `trial.causal_pair` at evaluation time. The
 5-seed Modal sweep passes for `concerned_program_inventor` and separates the
 target-only and concern-only controls.
 
-Minimal next version:
+Status after the `2A-v2-pixels-rich_programs` follow-on branch: the richer
+program-language version exists at
+`experiments/concerned_syntax/rich_program_language.py`, with a Modal
+entrypoint at `experiments/concerned_syntax/modal_rich_program_language_sweep.py`
+and tracked local/Modal reports at
+`experiments/concerned_syntax/results/rich_program_language_local_2026_06_17.md`
+and
+`experiments/concerned_syntax/results/rich_program_language_modal_2026_06_17.md`.
+The 5-seed Modal sweep passes for `concerned_program_composer`: parse-high
+`1.000`, action `1.000`, family-high `1.000`, target-high `1.000`,
+useful-high `1.000`, rich-high `1.000`, low-concern program rate `0.162`,
+and gate pass rate `1.000`.
+
+Completed rich grammar:
 
 ```text
 probe program tokens:
   observe_pair(a,b)
-  isolate(a)
-  ablate(a)
   move(anchor)
-  repeat_probe
+  ablate_pair(a,b)
+  compose_move_observe(anchor,a,b)
   null
 ```
 
 The first line of this goal is now complete for `observe_pair(a,b)` target
 selection. Held-out transfer is now instrumented and Modal-replicated, but it
 fails: the i.i.d. gate pass rate is `1.000`, while mean held-out transfer-slice
-gate pass is `0.171`, with weakest slice `role_kind:repair_core`. The remaining
-next version is to add movement, ablation, two-step composition, and a mechanism
-that can pass held-out role/parse transfer instead of only recording the
-failure.
+gate pass is `0.171`, with weakest slice `role_kind:repair_core`. Movement,
+ablation, two-step composition, and Modal-scale replication are now complete in
+a provided grammar. The remaining next version is a mechanism that can pass
+held-out role/parse transfer, open-ended or searched program discovery, and 2B
+body consumption of the `2A-v2` contract.
 
 Gate:
 
@@ -968,6 +986,15 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
   --train-trials 3000 --test-trials 1200 --epochs 90
 ```
 
+Rich-program Modal sweep:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_rich_program_language_sweep.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90
+```
+
 Program-body search against 2A-v1:
 
 ```bash
@@ -1015,13 +1042,16 @@ small local smoke -> Modal full sweep -> audit -> chart -> paper/PDF -> checks
 
 The fastest path to a real next breakthrough is probably:
 
-1. Run Modal-scale intervention-invention and pixel sweeps.
-2. Extend the program language from `observe_pair(a,b)` to movement, ablation,
-   and two-step compositions.
-3. Fix the failed held-out role-pair/parse-family transfer gate so the target
-   selector cannot be only an i.i.d. color/position reader.
+1. Treat the Modal-scale `2A-v2-pixels-rich_programs` grammar as available but
+   not final.
+2. Fix the failed held-out role-pair/parse-family transfer gate so the rich
+   composer cannot be only an i.i.d. color/position reader.
+3. Move beyond the provided grammar into open-ended or searched program
+   discovery.
 4. Route searched/evolved bodies through Haskell admissibility before evaluating
    them on the vector/pixel/program gates.
+5. Make 2B consume the `2A-v2-pixels-rich_programs` contract instead of only
+   the `2A-v1-pixels-observe_pair` contract.
 
 Why that path:
 

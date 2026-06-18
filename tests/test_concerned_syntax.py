@@ -32,6 +32,10 @@ from experiments.concerned_syntax.pixel_shapes import (
     run_experiment as run_pixel_experiment,
     summarize_seed_payloads as summarize_pixel_payloads,
 )
+from experiments.concerned_syntax.rich_program_language import (
+    run_experiment as run_rich_program_experiment,
+    summarize_seed_payloads as summarize_rich_program_payloads,
+)
 from experiments.concerned_syntax.vector_shapes import (
     run_experiment as run_vector_experiment,
     summarize_seed_payloads as summarize_vector_payloads,
@@ -399,6 +403,73 @@ class ConcernedSyntaxTest(unittest.TestCase):
         )
         self.assertIn("concerned_program_inventor", agents)
         self.assertIn("target_accuracy_high_concern", agents["concerned_program_inventor"])
+
+    def test_rich_program_language_requires_concern_target_and_family(self) -> None:
+        payload = run_rich_program_experiment(
+            train_trials=650,
+            test_trials=260,
+            seed=20260617,
+            epochs=45,
+        )
+        agents = payload["agent_summary"]
+
+        self.assertTrue(agents["concerned_program_composer"]["gate_pass"])
+        self.assertFalse(agents["surface_rich_shortcut"]["gate_pass"])
+        self.assertFalse(agents["random_rich_program"]["gate_pass"])
+        self.assertFalse(agents["family_without_target"]["gate_pass"])
+        self.assertFalse(agents["target_without_family"]["gate_pass"])
+        self.assertFalse(agents["rich_without_concern"]["gate_pass"])
+        self.assertGreaterEqual(
+            agents["concerned_program_composer"]["family_accuracy_high_concern"],
+            0.95,
+        )
+        self.assertGreaterEqual(
+            agents["concerned_program_composer"]["target_accuracy_high_concern"],
+            0.95,
+        )
+        self.assertLess(
+            agents["family_without_target"]["target_accuracy_high_concern"],
+            0.25,
+        )
+        self.assertEqual(
+            agents["target_without_family"]["family_accuracy_high_concern"],
+            0.0,
+        )
+        self.assertEqual(
+            agents["rich_without_concern"]["low_concern_program_rate"],
+            1.0,
+        )
+
+    def test_rich_program_language_modal_summary_averages_gate_rates(self) -> None:
+        payloads = [
+            {
+                "agent_summary": {
+                    "concerned_program_composer": {
+                        "family_accuracy_high_concern": 1.0,
+                        "gate_pass": True,
+                    }
+                }
+            },
+            {
+                "agent_summary": {
+                    "concerned_program_composer": {
+                        "family_accuracy_high_concern": 0.5,
+                        "gate_pass": False,
+                    }
+                }
+            },
+        ]
+
+        summary = summarize_rich_program_payloads(payloads)
+
+        self.assertAlmostEqual(
+            summary["concerned_program_composer"]["family_accuracy_high_concern"],
+            0.75,
+        )
+        self.assertAlmostEqual(
+            summary["concerned_program_composer"]["gate_pass"],
+            0.5,
+        )
 
     def test_intervention_invention_parse_transfer_records_heldout_parse(self) -> None:
         payload = run_parse_transfer_experiment(

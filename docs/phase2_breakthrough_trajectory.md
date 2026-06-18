@@ -155,15 +155,25 @@ Current branch result:
   `reward_only` and `syntax_proxy` fail. This closes the local
   Haskell-in-loop gap for `2A-v1`; Modal still needs either a Haskell-enabled
   image or a precomputed Haskell verdict cache.
-- The next 2A breakthrough gate should add held-out transfer and richer program
-  composition, not rerun the same `observe_pair(a,b)` menu.
-- A Modal transfer sweep now makes that boundary explicit. The i.i.d.
+- A Modal transfer sweep now makes the `2A-v1` boundary explicit. The i.i.d.
   `concerned_program_inventor` gate still passes, but held-out role/parse
   transfer fails: i.i.d. gate pass `1.000`, mean transfer-slice gate pass
   `0.171`, weakest slice `role_kind:repair_core`. This should be treated as a
-  real claim boundary, not as an implementation nuisance. The next transfer
-  branch should either learn role-invariant target selection or move to richer
-  `2A-v2` programs while keeping transfer required.
+  real claim boundary, not as an implementation nuisance.
+- The next branch lifts the same contract to `2A-v2-pixels-rich_programs`.
+  `concerned_program_composer` chooses among `observe_pair`, `move_anchor`,
+  `ablate_pair`, and `compose_move_observe` families and passes the 5-seed
+  Modal gate with high-concern parse `1.000`, action `1.000`, family `1.000`,
+  target `1.000`, useful-program `1.000`, rich-program `1.000`, low-concern
+  program rate `0.162`, and gate pass rate `1.000`.
+- The richer controls isolate the remaining claim boundary: `target_without_family`
+  gets target accuracy `1.000` but useful-program rate `0.000`;
+  `family_without_target` gets family accuracy `1.000` but target accuracy
+  `0.080`; `rich_without_concern` gets parse/action/family/target all
+  `1.000` but low-concern program rate `1.000`.
+- The next breakthrough gate should make the richer `2A-v2` composer pass
+  held-out role/parse transfer and move beyond the provided rich grammar toward
+  open-ended or searched program composition.
 
 Current coupled 2A/2B result:
 
