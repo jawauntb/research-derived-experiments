@@ -148,8 +148,23 @@ Current branch result:
 - `concern_without_target` proves concern gating alone is insufficient:
   low-concern probe rate is `0.156`, but high-concern target accuracy is only
   `0.088`.
-- The next breakthrough gate should add held-out transfer and richer program
+- The next 2A breakthrough gate should add held-out transfer and richer program
   composition, not rerun the same `observe_pair(a,b)` menu.
+
+Current coupled 2A/2B result:
+
+- `program_body_search_modal_2026_06_16.md` freezes
+  `2A-v1-pixels-observe_pair` and makes 2B program-body search consume the
+  actual empirical 2A gate.
+- Across five Modal seeds, `viability_guided` reaches body gate `1.000`,
+  empirical gate `1.000`, formal valid `1.000`, target/useful high `1.000`,
+  low-probe `0.156`, and discovers
+  `calibration_guard+causal_binding_head+concern_policy+formal_guard+intervention_planner+reward_head+vector_surface_encoder+world_model`.
+- `reward_only` fails as a shortcut body; `syntax_proxy` reaches target/useful
+  `1.000` but fails the body gate with low-probe `0.830`.
+- The next 2B breakthrough gate should put Haskell motif verdicts inside
+  `program_body_search`, then consume the future `2A-v2` richer intervention
+  contract.
 
 ## Literature Bearings
 
