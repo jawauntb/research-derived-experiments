@@ -470,6 +470,8 @@ Done:
   validation.
 - Minimal pixel-level intervention invention with learned `observe_pair(a,b)`
   target selection and concern gating.
+- Searched program-policy recipes over the frozen `observe_pair(a,b)` menu:
+  probe gate, target selector, binding update, and action rule.
 - Rich pixel-level intervention programs over `observe_pair`, `move_anchor`,
   `ablate_pair`, and `compose_move_observe`, with local and Modal 5-seed
   gate validation for `2A-v2-pixels-rich_programs`.
@@ -706,9 +708,12 @@ selection. Held-out transfer is now instrumented and Modal-replicated, but it
 fails: the i.i.d. gate pass rate is `1.000`, while mean held-out transfer-slice
 gate pass is `0.171`, with weakest slice `role_kind:repair_core`. Movement,
 ablation, two-step composition, and Modal-scale replication are now complete in
-a provided grammar. The remaining next version is a mechanism that can pass
-held-out role/parse transfer, open-ended or searched program discovery, and 2B
-body consumption of the `2A-v2` contract.
+a provided grammar. A searched-policy follow-up searches over the frozen
+`observe_pair(a,b)` menu's probe gate, target selector, binding update, and
+action rule rather than receiving `concerned_program_inventor` as a named
+policy. The remaining next version is a mechanism that can pass held-out
+role/parse transfer, open-ended or searched program discovery beyond the
+provided rich grammar, and 2B body consumption of the `2A-v2` contract.
 
 Gate:
 
@@ -1106,3 +1111,15 @@ Latest coupled result after PR #127:
   `1.000`, target/useful high `1.000`, and low probe `0.144`.
 - `reward_only` fails as a shortcut body; `syntax_proxy` reaches target/useful
   `1.000` but fails body gate with low-probe `0.830`.
+
+Latest searched 2A policy result after this branch:
+
+- `experiments/concerned_syntax/results/searched_program_policy_modal_2026_06_17.md`
+  searches 108 recipes over probe gate, target selector, binding update, and
+  action rule for the frozen `2A-v1-pixels-observe_pair` menu.
+- Across five Modal seeds, `concerned_program_search` reaches parse/action/
+  target/useful `1.000`, subtree `0.789`, low-probe `0.156`, gate pass rate
+  `1.000`, and discovers
+  `concern_or_calibration+slot_scores+bind_if_useful_probe+bound_action`.
+- `reward_only_program_search` fails by never asking useful questions;
+  `syntax_proxy_program_search` fails by probing low-concern cases at `1.000`.

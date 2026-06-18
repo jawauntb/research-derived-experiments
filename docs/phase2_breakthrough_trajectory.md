@@ -160,6 +160,14 @@ Current branch result:
   transfer fails: i.i.d. gate pass `1.000`, mean transfer-slice gate pass
   `0.171`, weakest slice `role_kind:repair_core`. This should be treated as a
   real claim boundary, not as an implementation nuisance.
+- The searched-program-policy follow-up moves from a named positive agent to a
+  searched recipe over probe gate, target selector, binding update, and action
+  rule for the same frozen `observe_pair(a,b)` menu. This is a policy-search
+  transition, not yet richer motor/intervention primitives. Across five Modal
+  seeds, `concerned_program_search` passes with parse/action/target/useful all
+  `1.000`, subtree `0.789`, low-probe `0.156`, and recipe
+  `concern_or_calibration+slot_scores+bind_if_useful_probe+bound_action`;
+  reward-only and syntax-proxy searches fail for distinct reasons.
 - The next branch lifts the same contract to `2A-v2-pixels-rich_programs`.
   `concerned_program_composer` chooses among `observe_pair`, `move_anchor`,
   `ablate_pair`, and `compose_move_observe` families and passes the 5-seed
