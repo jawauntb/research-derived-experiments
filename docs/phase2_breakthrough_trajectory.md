@@ -148,6 +148,15 @@ Current branch result:
 - `concern_without_target` proves concern gating alone is insufficient:
   low-concern probe rate is `0.156`, but high-concern target accuracy is only
   `0.088`.
+- Held-out transfer repair now separates the i.i.d. color/position shortcut
+  from a role-equivariant world-model operation. Across five Modal seeds on
+  held-out `shield_poison`, `repair_core`, and `food_trap` slices,
+  `role_equivariant_world_model` reaches transfer gate `1.000`, parse-high
+  `1.000`, action `1.000`, target/useful high `1.000`, and low-probe `0.000`.
+  The old `learned_program_inventor` remains rejected with transfer gate
+  `0.000`, target/useful high `0.580`, and subtree `0.709`; the
+  target-only repair reaches target/useful `1.000` but fails with low-probe
+  `0.333`.
 - Haskell motif verdicts now participate in local 2B program-body search.
   Across the fixed five-seed report set, `viability_guided` reaches body gate
   `1.000`, empirical gate `1.000`, formal valid `1.000`, Haskell-source rate
@@ -188,8 +197,9 @@ Current branch result:
   `0.080`; `rich_without_concern` gets parse/action/family/target all
   `1.000` but low-concern program rate `1.000`.
 - The next breakthrough gate should make the richer `2A-v2` composer pass
-  held-out role/parse transfer and move beyond the provided rich grammar toward
-  open-ended or searched program composition.
+  held-out role/parse transfer using the repaired role-equivariant operation,
+  route that richer contract through 2B body search, and move beyond the
+  provided rich grammar toward open-ended or searched program composition.
 
 Current coupled 2A/2B result:
 

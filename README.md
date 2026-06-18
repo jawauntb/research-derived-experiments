@@ -151,6 +151,11 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
 
 doppler --scope /Users/jawaun/superoptimizers run -- \
     uvx --python 3.12 --from modal modal run \
+    experiments/concerned_syntax/modal_intervention_transfer_repair_sweep.py \
+    --train-trials 3000 --test-trials 1200 --epochs 90
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
     experiments/concerned_syntax/modal_pixel_shapes_sweep.py \
     --train-trials 3000 --test-trials 1200 --epochs 90
 
