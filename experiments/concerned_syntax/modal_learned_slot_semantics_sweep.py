@@ -17,27 +17,46 @@ app = modal.App(name="research-derived-learned-slot-semantics")
 
 
 @app.function(image=IMAGE, timeout=3600, cpu=1, memory=1024)
-def run_seed(
-    seed: int,
+def run_slice_seed(
+    base_seed: int,
+    axis: str,
+    heldout: str,
+    slice_seed: int,
     train_trials: int,
     test_trials: int,
     epochs: int,
     semantic_calibration_trials: int,
 ) -> dict[str, Any]:
-    from experiments.concerned_syntax.learned_slot_semantics import run_experiment
+    from experiments.concerned_syntax import rich_program_language as rich
+    from experiments.concerned_syntax.learned_slot_semantics import (
+        run_slice,
+        train_slot_semantic_decoder,
+    )
 
-    payload = run_experiment(
+    calibration_examples = rich.make_filtered_pixel_examples(
+        trials=semantic_calibration_trials,
+        seed=base_seed + 2_700_000,
+    )
+    decoder = train_slot_semantic_decoder(
+        calibration_examples,
+        seed=base_seed + 2_900_000,
+        epochs=max(20, epochs),
+    )
+    payload = run_slice(
+        axis=axis,
+        heldout=heldout,
         train_trials=train_trials,
         test_trials=test_trials,
-        seed=seed,
+        seed=slice_seed,
         epochs=epochs,
-        semantic_calibration_trials=semantic_calibration_trials,
+        decoder=decoder,
     )
+    payload.pop("results", None)
     return {
-        "seed": seed,
-        "agent_summary": payload["agent_summary"],
-        "semantic_summary": payload["semantic_summary"],
-        "slice_results": payload["slice_results"],
+        "seed": base_seed,
+        "axis": axis,
+        "heldout": heldout,
+        "slice": payload,
     }
 
 
@@ -53,25 +72,60 @@ def main(
         HELDOUT_TRUE_PARSES,
         LEARNED_SEMANTIC_AGENTS,
         summarize_modal_slice_results,
+        summarize_slice_payloads,
         summarize_seed_payloads,
         write_semantic_report,
     )
 
     seeds = [20260618, 1729, 4242, 8675309, 314159]
-    results = list(
-        run_seed.starmap(
-            [
+    tasks: list[tuple[int, str, str, int, int, int, int, int]] = []
+    for seed in seeds:
+        for offset, heldout_kind in enumerate(HELDOUT_ROLE_KINDS):
+            tasks.append(
                 (
                     seed,
+                    "role_kind",
+                    heldout_kind,
+                    seed + offset * 10_000,
                     train_trials,
                     test_trials,
                     epochs,
                     semantic_calibration_trials,
                 )
-                for seed in seeds
-            ]
+            )
+        for offset, heldout_parse in enumerate(HELDOUT_TRUE_PARSES):
+            tasks.append(
+                (
+                    seed,
+                    "true_parse",
+                    heldout_parse,
+                    seed + 80_000 + offset * 10_000,
+                    train_trials,
+                    test_trials,
+                    epochs,
+                    semantic_calibration_trials,
+                )
+            )
+
+    slice_rows = list(run_slice_seed.starmap(tasks))
+    results = []
+    for seed in seeds:
+        slice_payloads = [
+            row["slice"]
+            for row in slice_rows
+            if int(row["seed"]) == seed
+        ]
+        results.append(
+            {
+                "seed": seed,
+                "agent_summary": summarize_slice_payloads(slice_payloads),
+                "semantic_summary": summarize_seed_payloads(
+                    slice_payloads,
+                    "semantic_summary",
+                ),
+                "slice_results": slice_payloads,
+            }
         )
-    )
     payload = {
         "manifest": {
             "arc": "2A",

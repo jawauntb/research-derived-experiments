@@ -4968,8 +4968,8 @@ Results:
   and Modal reports, targeted tests, README commands, handoff update, and paper
   update.
 - Rejected or withheld artifacts: raw JSON remains under ignored `artifacts/`;
-  full-size 3,000/1,200 Modal scaling was started but stopped for runtime, so
-  the public Modal confirmation is explicitly the recorded 600/240/30 setting.
+  unsupervised object/role discovery and open-ended program invention remain
+  withheld.
 - Key metrics across five Modal seeds:
   `learned_slot_semantic_world_model` semantic kind/pair `1.000`, transfer gate
   `1.000`, family/target/useful/rich high-concern rates `1.000`, low-program
@@ -4979,9 +4979,9 @@ Results:
   family/useful `0.143` and low-program `0.714`;
   `learned_semantic_rich_without_concern` reaches rich metrics `1.000` but
   fails with low-program `0.714`.
-- Variance or ablation: five Modal seeds with 600 train trials, 240 test trials,
-  600 semantic calibration trials, and 30 epochs per seed; accepted transfer
-  gate SD is `0.000`.
+- Variance or ablation: five Modal seeds with 3,000 train trials, 1,200 test
+  trials, 1,200 semantic calibration trials, and 90 epochs per seed; accepted
+  transfer gate SD is `0.000`.
 
 Residual content:
 

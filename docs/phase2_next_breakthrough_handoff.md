@@ -44,9 +44,10 @@ learned neural role semantics.
 The current successor branch adds a narrower learned-semantics repair: a
 supervised learned role-token prototype decoder replaces the explicit RGB role
 decoder and preserves the same held-out role/parse transfer gate across five
-Modal seeds at the recorded 600/240/30 confirmation setting. This closes the
-supervised slot-semantics boundary, but not unsupervised object discovery or
-open-ended program invention.
+Modal seeds with 3,000 train trials, 1,200 test trials, 1,200 semantic
+calibration trials, and 90 epochs. This closes the supervised slot-semantics
+boundary, but not unsupervised object discovery or open-ended program
+invention.
 
 Do not phrase this as "2A is done" or "2B is done." Phrase it this way:
 
@@ -102,7 +103,7 @@ semantic kind/pair: 1.000
 transfer gate: 1.000
 family/target/useful/rich high: 1.000
 low-program: 0.000
-gate: PASS across 5 Modal seeds at 600 train / 240 test / 30 epochs
+gate: PASS across 5 Modal seeds at 3000 train / 1200 test / 90 epochs
 ```
 
 Important rejected controls:

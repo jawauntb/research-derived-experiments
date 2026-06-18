@@ -56,8 +56,8 @@ low-concern program rate 0.000, and gate PASS, while the learned rich composer
 and partial controls fail distinct slices. A supervised learned slot-semantics
 repair then replaces the explicit RGB role decoder with role-token prototypes
 and preserves the same transfer gate across five Modal confirmation seeds
-(600 train, 240 test, 30 epochs per seed), with semantic kind/pair accuracy
-1.000 and low-concern program rate 0.000.
+with 3,000 train trials, 1,200 test trials, and 90 epochs per seed, with
+semantic kind/pair accuracy 1.000 and low-concern program rate 0.000.
 Shortcut reward, passive perceptual inference, no-tree planning, random
 program probing, family-only selection, target-only selection, rich programs
 without concern, and restless inquiry all fail for different anti-cheat
@@ -546,8 +546,8 @@ Remote command:
 doppler --scope /Users/jawaun/superoptimizers run -- \
   uvx --python 3.12 --from modal modal run \
   experiments/concerned_syntax/modal_learned_slot_semantics_sweep.py \
-  --train-trials 600 --test-trials 240 --epochs 30 \
-  --semantic-calibration-trials 600
+  --train-trials 3000 --test-trials 1200 --epochs 90 \
+  --semantic-calibration-trials 1200
 ```
 
 The tracked public report is
@@ -558,7 +558,7 @@ Gate summary:
 | Agent | Transfer | Sem kind | Sem pair | Family | Target | Useful | Rich | Low program |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
 | learned slot-semantic world model | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 0.000 |
-| learned rich composer | 0.000 | 0.000 | 0.000 | 0.705 | 0.811 | 0.705 | 0.895 | 0.182 |
+| learned rich composer | 0.000 | 0.000 | 0.000 | 0.714 | 0.829 | 0.714 | 0.894 | 0.161 |
 | semantic family only | 0.000 | 1.000 | 1.000 | 1.000 | 0.214 | 0.214 | 1.000 | 0.000 |
 | semantic target only | 0.000 | 1.000 | 1.000 | 0.143 | 1.000 | 0.143 | 0.143 | 0.714 |
 | semantic rich no concern | 0.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 0.714 |

@@ -211,12 +211,13 @@ Current v1 result:
   rate `0.161`.
 - `learned_slot_semantics_modal_2026_06_18.md` replaces the explicit RGB role
   decoder with a supervised learned role-token prototype decoder while keeping
-  the same held-out role/parse transfer gate. Across five Modal seeds at the
-  recorded 600/240/30 confirmation setting, `learned_slot_semantic_world_model`
-  reaches transfer gate `1.000`, semantic kind/pair `1.000`, family/target/
-  useful/rich high-concern rates `1.000`, and low-concern program rate `0.000`.
-  The learned composer, family-only, target-only, and ungated-rich controls
-  remain rejected for distinct reasons.
+  the same held-out role/parse transfer gate. Across five Modal seeds with
+  3,000 train trials, 1,200 test trials, 1,200 semantic calibration trials, and
+  90 epochs, `learned_slot_semantic_world_model` reaches transfer gate `1.000`,
+  semantic kind/pair `1.000`, family/target/useful/rich high-concern rates
+  `1.000`, and low-concern program rate `0.000`. The learned composer,
+  family-only, target-only, and ungated-rich controls remain rejected for
+  distinct reasons.
 
 Current coupled 2A/2B results:
 

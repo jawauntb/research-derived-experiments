@@ -163,8 +163,8 @@ python3 -m experiments.concerned_syntax.learned_slot_semantics \
 doppler --scope /Users/jawaun/superoptimizers run -- \
     uvx --python 3.12 --from modal modal run \
     experiments/concerned_syntax/modal_learned_slot_semantics_sweep.py \
-    --train-trials 600 --test-trials 240 --epochs 30 \
-    --semantic-calibration-trials 600
+    --train-trials 3000 --test-trials 1200 --epochs 90 \
+    --semantic-calibration-trials 1200
 
 doppler --scope /Users/jawaun/superoptimizers run -- \
     uvx --python 3.12 --from modal modal run \
