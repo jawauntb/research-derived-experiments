@@ -656,8 +656,12 @@ probe program tokens:
 ```
 
 The first line of this goal is now complete for `observe_pair(a,b)` target
-selection. The remaining next version is to add movement, ablation, two-step
-composition, held-out transfer, and Modal-scale replication.
+selection. Held-out transfer is now instrumented and Modal-replicated, but it
+fails: the i.i.d. gate pass rate is `1.000`, while mean held-out transfer-slice
+gate pass is `0.171`, with weakest slice `role_kind:repair_core`. The remaining
+next version is to add movement, ablation, two-step composition, and a mechanism
+that can pass held-out role/parse transfer instead of only recording the
+failure.
 
 Gate:
 
@@ -1003,8 +1007,8 @@ The fastest path to a real next breakthrough is probably:
 1. Run Modal-scale intervention-invention and pixel sweeps.
 2. Extend the program language from `observe_pair(a,b)` to movement, ablation,
    and two-step compositions.
-3. Add held-out role-pair/parse-family transfer so the target selector cannot
-   be only an i.i.d. color/position reader.
+3. Fix the failed held-out role-pair/parse-family transfer gate so the target
+   selector cannot be only an i.i.d. color/position reader.
 4. Route searched/evolved bodies through Haskell admissibility before evaluating
    them on the vector/pixel/program gates.
 

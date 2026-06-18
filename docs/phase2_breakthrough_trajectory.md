@@ -150,6 +150,13 @@ Current branch result:
   `0.088`.
 - The next 2A breakthrough gate should add held-out transfer and richer program
   composition, not rerun the same `observe_pair(a,b)` menu.
+- A Modal transfer sweep now makes that boundary explicit. The i.i.d.
+  `concerned_program_inventor` gate still passes, but held-out role/parse
+  transfer fails: i.i.d. gate pass `1.000`, mean transfer-slice gate pass
+  `0.171`, weakest slice `role_kind:repair_core`. This should be treated as a
+  real claim boundary, not as an implementation nuisance. The next transfer
+  branch should either learn role-invariant target selection or move to richer
+  `2A-v2` programs while keeping transfer required.
 
 Current coupled 2A/2B result:
 
