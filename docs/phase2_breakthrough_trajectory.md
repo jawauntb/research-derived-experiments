@@ -152,35 +152,84 @@ Current v1 result:
 - `concern_without_target` proves concern gating alone is insufficient:
   low-concern probe rate is `0.156`, but high-concern target accuracy is only
   `0.088`.
-- That result should not be rerun as the next breakthrough; it is the v1
-  target-selection floor.
+- Held-out transfer repair now separates the i.i.d. color/position shortcut
+  from a role-equivariant world-model operation. Across five Modal seeds on
+  held-out `shield_poison`, `repair_core`, and `food_trap` slices,
+  `role_equivariant_world_model` reaches transfer gate `1.000`, parse-high
+  `1.000`, action `1.000`, target/useful high `1.000`, and low-probe `0.000`.
+  The old `learned_program_inventor` remains rejected with transfer gate
+  `0.000`, target/useful high `0.580`, and subtree `0.709`; the
+  target-only repair reaches target/useful `1.000` but fails with low-probe
+  `0.333`.
+- Haskell motif verdicts now participate in local 2B program-body search.
+  Across the fixed five-seed report set, `viability_guided` reaches body gate
+  `1.000`, empirical gate `1.000`, formal valid `1.000`, Haskell-source rate
+  `1.000`, target/useful high `1.000`, and low-probe `0.144`, while
+  `reward_only` and `syntax_proxy` fail. This closes the local
+  Haskell-in-loop gap for `2A-v1`; Modal still needs either a Haskell-enabled
+  image or a precomputed Haskell verdict cache.
+- A Modal transfer sweep now makes the `2A-v1` boundary explicit. The i.i.d.
+  `concerned_program_inventor` gate still passes, but held-out role/parse
+  transfer fails: i.i.d. gate pass `1.000`, mean transfer-slice gate pass
+  `0.171`, weakest slice `role_kind:repair_core`. This should be treated as a
+  real claim boundary, not as an implementation nuisance.
+- The mechanism-trace follow-up verifies the full program -> observation ->
+  belief update -> action chain. `concerned_program_inventor` reaches
+  high-concern trace completion `1.000`, useful observation `1.000`,
+  posterior correctness `1.000`, action `1.000`, and low-concern trace
+  violation `0.151` across five Modal seeds. `target_without_concern` gets a
+  perfect high-concern trace but fails the low-concern cap at `1.000`;
+  `concern_without_target` keeps the cap but useful observation is only
+  `0.087`.
+- The searched-program-policy follow-up moves from a named positive agent to a
+  searched recipe over probe gate, target selector, binding update, and action
+  rule for the same frozen `observe_pair(a,b)` menu. This is a policy-search
+  transition, not yet richer motor/intervention primitives. Across five Modal
+  seeds, `concerned_program_search` passes with parse/action/target/useful all
+  `1.000`, subtree `0.789`, low-probe `0.156`, and recipe
+  `concern_or_calibration+slot_scores+bind_if_useful_probe+bound_action`;
+  reward-only and syntax-proxy searches fail for distinct reasons.
+- The rich-program follow-up lifts the same contract to
+  `2A-v2-pixels-rich_programs`.
+  `concerned_program_composer` chooses among `observe_pair`, `move_anchor`,
+  `ablate_pair`, and `compose_move_observe` families and passes the 5-seed
+  Modal gate with high-concern parse `1.000`, action `1.000`, family `1.000`,
+  target `1.000`, useful-program `1.000`, rich-program `1.000`, low-concern
+  program rate `0.162`, and gate pass rate `1.000`.
+- The richer controls isolate the remaining claim boundary: `target_without_family`
+  gets target accuracy `1.000` but useful-program rate `0.000`;
+  `family_without_target` gets family accuracy `1.000` but target accuracy
+  `0.080`; `rich_without_concern` gets parse/action/family/target all
+  `1.000` but low-concern program rate `1.000`.
 
-Current v2 result:
+Current coupled 2A/2B results:
 
-- `concerned_program_composer` passes the 5-seed Modal rich-program gate with
-  high-concern parse accuracy `1.000`, action accuracy `1.000`, subtree
-  `0.794`, high-concern program rate `1.000`, low-concern program rate
-  `0.162`, family accuracy `1.000`, target accuracy `1.000`, useful-program
-  rate `1.000`, rich-program rate `1.000`, and gate PASS.
-- `rich_without_concern` proves rich program choice alone is insufficient:
-  family/target/useful/rich rates are `1.000`, but low-concern program rate is
-  `1.000`.
-- `target_without_family` proves target selection alone is insufficient under
-  v2: target accuracy is `1.000`, but family/useful/rich rates are `0.000`.
-- `2B` now consumes this contract in
-  `experiments/viable_computational_bodies/results/rich_program_body_search_modal_2026_06_18.md`.
-  Across five Modal seeds, `viability_guided` reaches body gate `1.000`,
-  empirical gate `1.000`, formal validity `1.000`, family/target/useful/rich
-  high-concern rates `1.000`, low-concern program rate `0.168`, and resource
-  cost `16.000`.
+- `program_body_search_modal_2026_06_16.md` freezes
+  `2A-v1-pixels-observe_pair` and makes 2B program-body search consume the
+  actual empirical 2A gate.
+- Across five Modal seeds, `viability_guided` reaches body gate `1.000`,
+  empirical gate `1.000`, formal valid `1.000`, target/useful high `1.000`,
+  low-probe `0.156`, and discovers
+  `calibration_guard+causal_binding_head+concern_policy+formal_guard+intervention_planner+reward_head+vector_surface_encoder+world_model`.
+- `reward_only` fails as a shortcut body; `syntax_proxy` reaches target/useful
+  `1.000` but fails the body gate with low-probe `0.830`.
+- `rich_program_body_search_modal_2026_06_18.md` freezes
+  `2A-v2-pixels-rich_programs` and makes 2B body search consume the richer
+  empirical contract. Across five Modal seeds, `viability_guided` reaches body
+  gate `1.000`, empirical gate `1.000`, formal validity `1.000`,
+  family/target/useful/rich high-concern rates `1.000`, low-concern program
+  rate `0.168`, and resource cost `16.000`.
 - `reward_only` remains a shortcut body. `syntax_proxy` reaches
   family/target/useful/rich rates of `1.000`, but fails body gate with formal
   validity `0.200` and low-concern program rate `0.670`.
+- The local Haskell-in-loop gap is closed for `2A-v1`; the v2 Modal body run
+  still records `python_static` formal provenance when Cabal is unavailable.
 
 This is the first Phase 2 point where Arc 2A and Arc 2B are coupled at the
 rich program-composition contract, not merely at target selection. It is still
-not the end of Phase 2: held-out role/parse transfer, learned object slots,
-and learned executable module bodies remain open.
+not the end of Phase 2: held-out role/parse transfer for `2A-v2`, learned
+object slots, open-ended/searched program invention beyond the provided
+grammar, and learned executable module bodies remain open.
 
 ## Literature Bearings
 

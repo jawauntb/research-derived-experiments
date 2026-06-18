@@ -9,6 +9,11 @@ This document is a detailed continuation brief for a new agent session. It is
 written to preserve the current scientific state, the methodological spine, the
 latest artifacts, and the fastest path to the next useful result.
 
+Latest start-here note: `docs/phase2_next_breakthrough_handoff.md`. Use that
+note first for the current #127/#128 frontier, Modal-first compute rules, next
+breakthrough milestones, chart/PDF guidance, and fresh-branch instructions. This
+document remains useful as the longer historical brief.
+
 ## 1. Highest-Level Program Shape
 
 The research program is currently organized like this:
@@ -49,7 +54,19 @@ generated vectors -> rendered pixels -> learned object/part extraction
 
 ## 2. Latest Merged State
 
-The latest major merged PR before this handoff was:
+The latest major merged PRs before the successor handoff were:
+
+- PR #128: `Couple program-body search to the 2A gate`
+- Merge commit: `8a93813f34e4f869461e13719820f3914eedaf99`
+- Scientific delta: freezes `2A-v1-pixels-observe_pair` and makes 2B
+  program-body search consume the empirical 2A intervention-invention gate.
+
+- PR #127: `Add concerned intervention invention gate`
+- Merge commit: `3752c9474b8b5c5edd7d71173cd3426bab457953`
+- Scientific delta: makes target selection part of the 2A pixel/program task,
+  separating target-only, concern-only, random-probe, and surface shortcuts.
+
+Older major merged PR:
 
 - PR #123: `Add vector Phase 2 gates and Haskell ontology`
 - Merge commit: `1757d2a176c45804dff05f069eea8bf46bc6a730`
@@ -339,8 +356,10 @@ The Haskell checker caught real ontology inconsistencies during development:
 
 Next Haskell step:
 
-Make Python consume Haskell JSON verdicts during body evaluation. This moves
-formal admissibility from "parallel artifact" into the actual sweep gate.
+Package the Haskell toolchain, or a precomputed Haskell motif-verdict cache,
+for Modal-scale body search. Local Python now consumes Haskell JSON verdicts
+for arbitrary motif candidates during `program_body_search`; Modal still falls
+back to `python_static` unless Cabal is available in the image.
 
 ## 6. Research Sources and Citation Practice
 
@@ -446,11 +465,18 @@ Done:
 - Vector-observation agents with parse-invariant surfaces.
 - Vector module-body validation.
 - Pixel-rendered observations with connected-component object extraction and
-  local 5-seed gate validation.
+  local and Modal 5-seed gate validation.
+- Learned foreground/slot pixel extraction with local and Modal 5-seed gate
+  validation.
 - Minimal pixel-level intervention invention with learned `observe_pair(a,b)`
   target selection and concern gating.
-- Rich pixel-level program-family selection with learned `observe_pair`,
-  `move_anchor`, `ablate_pair`, and composed move+observe programs.
+- Mechanism trace verification for `2A-v1-pixels-observe_pair`, recording
+  program, observation, posterior binding belief, and action.
+- Searched program-policy recipes over the frozen `observe_pair(a,b)` menu:
+  probe gate, target selector, binding update, and action rule.
+- Rich pixel-level intervention programs over `observe_pair`, `move_anchor`,
+  `ablate_pair`, and `compose_move_observe`, with local and Modal 5-seed
+  gate validation for `2A-v2-pixels-rich_programs`.
 - Python consumption of Haskell JSON verdicts inside learned/vector/body-search
   summaries when the local Haskell checker is available.
 - Coupled 2A/2B body search against both `2A-v1-pixels-observe_pair` and the
@@ -462,12 +488,14 @@ Done:
 
 Not done:
 
-- Learned object/part extraction from images beyond algorithmic connected
-  components.
-- Modal-scale pixel sweep.
-- Held-out role-pair and parse-family transfer as required body gates.
-- Search-discovered executable module bodies under the vector/pixel/program
-  gates.
+- Full CNN or unsupervised object-slot extraction beyond the learned
+  foreground/slot diagnostic.
+- Held-out transfer for the richer intervention-program grammar.
+- Open-ended or searched program invention beyond the provided rich grammar.
+- Haskell-source provenance on Modal for the `2A-v2` rich-program body search
+  when Cabal is unavailable in the image.
+- Evolved/search-discovered executable module bodies under the vector/pixel
+  gate.
 - Real neural module bodies such as object-slot encoders, graph neural nets,
   differentiable tree binders, mixture-of-experts role heads, or program
   induction components.
@@ -485,10 +513,29 @@ Status after PR #125 follow-on branch work: the local version exists at
 `experiments/concerned_syntax/modal_pixel_shapes_sweep.py` and a tracked local
 report at
 `experiments/concerned_syntax/results/pixel_shapes_local_2026_06_16.md`.
-The local 5-seed result passes for `concerned_pixel_probe` and preserves the
-surface/passive/restless failure taxonomy. The remaining Goal A work is the
-Modal-scale run, a gate-margin figure, and replacing the algorithmic extractor
-with a learned object-slot or CNN baseline.
+The Modal-scale report now lives at
+`experiments/concerned_syntax/results/pixel_shapes_modal_2026_06_16.md`.
+The 5-seed Modal result passes for `concerned_pixel_probe` with parse-high
+`1.000`, action `1.000`, subtree `0.806`, object extraction `1.000`,
+high-probe `1.000`, low-probe `0.195`, and gate pass rate `1.000`. It
+preserves the surface/passive/restless failure taxonomy. The remaining Goal A
+work is a gate-margin figure and replacing the algorithmic extractor with a
+learned object-slot or CNN baseline.
+
+Status after the learned-extractor follow-on branch: a learned foreground/slot
+diagnostic exists at `experiments/concerned_syntax/learned_pixel_extractor.py`,
+with a Modal entrypoint at
+`experiments/concerned_syntax/modal_learned_pixel_extractor_sweep.py` and
+tracked local/Modal reports at
+`experiments/concerned_syntax/results/learned_pixel_extractor_local_2026_06_17.md`
+and
+`experiments/concerned_syntax/results/learned_pixel_extractor_modal_2026_06_17.md`.
+The 5-seed Modal result has slot recovery `1.000`, scene recovery `1.000`,
+mean center error `0.018`, and `concerned_pixel_probe` passes with parse-high
+`1.000`, action `1.000`, subtree `0.804`, low-probe `0.210`, and gate pass
+rate `1.000`. This is not a full CNN or unsupervised object-slot model; it
+removes direct connected-component features while still using the fixed visible
+six-slot layout.
 
 Proposed files:
 
@@ -545,6 +592,13 @@ Status: completed in PR #125. `ontology-check` supports named body verdicts and
 `experiments/viable_computational_bodies/haskell_gate.py` and records
 `formal_source`, `formal_valid`, `resource_cost`, and `formal_violations`.
 Keep this section as the design record, not as an open task.
+
+Follow-on status: local program-body search now calls `ontology-check --motifs`
+for searched candidates and records Haskell-source formal provenance in
+`experiments/viable_computational_bodies/results/program_body_search_haskell_local_2026_06_16.md`.
+Across the fixed five-seed report set, `viability_guided` reaches body gate
+`1.000`, empirical gate `1.000`, formal valid `1.000`, Haskell-source rate
+`1.000`, target/useful high `1.000`, and low-probe `0.144`.
 
 Proposed files:
 
@@ -629,21 +683,41 @@ programs. It does not receive `trial.causal_pair` at evaluation time. The
 5-seed Modal sweep passes for `concerned_program_inventor` and separates the
 target-only and concern-only controls.
 
-Minimal next version:
+Status after the `2A-v2-pixels-rich_programs` follow-on branch: the richer
+program-language version exists at
+`experiments/concerned_syntax/rich_program_language.py`, with a Modal
+entrypoint at `experiments/concerned_syntax/modal_rich_program_language_sweep.py`
+and tracked local/Modal reports at
+`experiments/concerned_syntax/results/rich_program_language_local_2026_06_17.md`
+and
+`experiments/concerned_syntax/results/rich_program_language_modal_2026_06_17.md`.
+The 5-seed Modal sweep passes for `concerned_program_composer`: parse-high
+`1.000`, action `1.000`, family-high `1.000`, target-high `1.000`,
+useful-high `1.000`, rich-high `1.000`, low-concern program rate `0.162`,
+and gate pass rate `1.000`.
+
+Completed rich grammar:
 
 ```text
 probe program tokens:
   observe_pair(a,b)
-  isolate(a)
-  ablate(a)
   move(anchor)
-  repeat_probe
+  ablate_pair(a,b)
+  compose_move_observe(anchor,a,b)
   null
 ```
 
 The first line of this goal is now complete for `observe_pair(a,b)` target
-selection. The remaining next version is to add movement, ablation, two-step
-composition, held-out transfer, and Modal-scale replication.
+selection. Held-out transfer is now instrumented and Modal-replicated, but it
+fails: the i.i.d. gate pass rate is `1.000`, while mean held-out transfer-slice
+gate pass is `0.171`, with weakest slice `role_kind:repair_core`. Movement,
+ablation, two-step composition, and Modal-scale replication are now complete in
+a provided grammar. A searched-policy follow-up searches over the frozen
+`observe_pair(a,b)` menu's probe gate, target selector, binding update, and
+action rule rather than receiving `concerned_program_inventor` as a named
+policy. The remaining next version is a mechanism that can pass held-out
+role/parse transfer, open-ended or searched program discovery beyond the
+provided rich grammar, and 2B body consumption of the `2A-v2` contract.
 
 Gate:
 
@@ -820,24 +894,26 @@ Safe current claims:
   passive inference, and restless uncertainty reduction.
 - Arc 2B now has symbolic search, executable body validation, vector module
   validation, and a typed Haskell admissibility prototype.
-- The current frontier is pixel perception, Haskell-in-the-loop body evaluation,
-  and search-discovered executable modules.
+- The current frontier is pixel perception, Modal-packaged Haskell/cache-backed
+  body search, and search-discovered executable modules.
 
 ## 12. Suggested Immediate Next Branches
 
-### Branch 1: `codex/phase2-haskell-python-gate`
+### Branch 1: `codex/phase2-haskell-modal-cache`
 
 Goal:
 
-Python consumes Haskell ontology verdicts in body evaluation.
+Modal-scale body search consumes Haskell ontology verdicts or a provenance-safe
+precomputed Haskell verdict cache.
 
 Definition of done:
 
-- `ontology-check` accepts body names or motif lists.
-- Python calls/caches it.
-- Tests pass with Haskell installed.
-- Body report records Haskell-sourced formal validity.
-- Papers mention this as integration, not just prototype.
+- Modal image includes the Haskell checker, or the run consumes a tracked
+  Haskell-generated motif verdict cache.
+- Modal report records `formal_source = "haskell"` or
+  `formal_source = "haskell_cache"` for searched bodies.
+- Haskell errors cannot silently become passing Python-static verdicts.
+- Papers mention this as admissibility integration, not full formal proof.
 
 ### Branch 2: `codex/phase2-pixel-syntax`
 
@@ -939,6 +1015,24 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
   --train-trials 3000 --test-trials 1200 --epochs 90
 ```
 
+Intervention transfer-repair Modal sweep:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_intervention_transfer_repair_sweep.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90
+```
+
+Rich-program Modal sweep:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_rich_program_language_sweep.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90
+```
+
 Program-body search against 2A-v1:
 
 ```bash
@@ -1006,11 +1100,13 @@ small local smoke -> Modal full sweep -> audit -> chart -> paper/PDF -> checks
 The fastest path to the next real breakthrough is now:
 
 1. Add held-out role-pair/parse-family transfer so the target selector cannot
-   be only an i.i.d. color/position reader.
+   be only an i.i.d. color/position/program-family reader.
 2. Replace connected-component extraction with learned object/slot perception.
-3. Replace motif-to-control body mapping with searched executable modules.
-4. Keep Haskell admissibility inside body evaluation and move toward a shared
-   motif/program schema.
+3. Move beyond the provided grammar into open-ended or searched program
+   discovery.
+4. Replace motif-to-control body mapping with searched executable modules.
+5. Keep Haskell admissibility inside body evaluation and move toward a shared
+   motif/program schema with Modal-visible provenance.
 
 Why that path:
 
@@ -1040,3 +1136,49 @@ Latest coupled result after the 2A-v2 body-search branch:
 - `reward_only` fails as a shortcut body; `syntax_proxy` reaches
   family/target/useful/rich `1.000` but fails body gate with formal validity
   `0.200` and low program `0.670`.
+- The Haskell-backed local follow-up report
+  `experiments/viable_computational_bodies/results/program_body_search_haskell_local_2026_06_16.md`
+  uses the same five report seeds at `1200/500/60`, records
+  `formal_source = "haskell"` for searched bodies, and reaches
+  `viability_guided` body gate `1.000`, empirical gate `1.000`, formal valid
+  `1.000`, target/useful high `1.000`, and low probe `0.144`.
+- `reward_only` fails as a shortcut body; `syntax_proxy` reaches target/useful
+  `1.000` but fails body gate with low-probe `0.830`.
+
+Latest transfer-repair result after this branch:
+
+- `experiments/concerned_syntax/results/intervention_transfer_repair_modal_2026_06_17.md`
+  turns the held-out role-kind failure into an explicit repair gate for the
+  frozen `2A-v1-pixels-observe_pair` contract.
+- Across five Modal seeds, `role_equivariant_world_model` reaches transfer
+  gate `1.000`, parse-high `1.000`, action `1.000`, target/useful high
+  `1.000`, low-probe `0.000`, and regret `0.004`.
+- The old `learned_program_inventor` preserves the shortcut boundary:
+  transfer gate `0.000`, target/useful high `0.580`, subtree `0.709`.
+- `role_equivariant_target_only` proves target repair alone is insufficient:
+  target/useful high `1.000`, but low-probe `0.333` and transfer gate `0.000`.
+
+Latest mechanism-trace verifier after this branch:
+
+- `experiments/concerned_syntax/results/mechanism_trace_modal_2026_06_17.md`
+  records program, selected pair observation, posterior binding belief, action,
+  and trace-completion metrics for the `2A-v1-pixels-observe_pair` agents.
+- Across five Modal seeds, `concerned_program_inventor` reaches high-concern
+  trace completion `1.000`, useful observation `1.000`, posterior correctness
+  `1.000`, action `1.000`, low-concern trace violation `0.151`, and gate pass
+  rate `1.000`.
+- `target_without_concern` has perfect high-concern traces but fails the
+  low-concern trace cap at `1.000`; `concern_without_target` keeps the cap but
+  useful observation is only `0.087`.
+
+Latest searched 2A policy result after this branch:
+
+- `experiments/concerned_syntax/results/searched_program_policy_modal_2026_06_17.md`
+  searches 108 recipes over probe gate, target selector, binding update, and
+  action rule for the frozen `2A-v1-pixels-observe_pair` menu.
+- Across five Modal seeds, `concerned_program_search` reaches parse/action/
+  target/useful `1.000`, subtree `0.789`, low-probe `0.156`, gate pass rate
+  `1.000`, and discovers
+  `concern_or_calibration+slot_scores+bind_if_useful_probe+bound_action`.
+- `reward_only_program_search` fails by never asking useful questions;
+  `syntax_proxy_program_search` fails by probing low-concern cases at `1.000`.
