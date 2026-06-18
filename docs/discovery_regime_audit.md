@@ -3826,15 +3826,16 @@ Experiment:
 - Manifest/report paths:
   `experiments/concerned_syntax/pixel_shapes.py`;
   `experiments/concerned_syntax/results/pixel_shapes_local_2026_06_16.md`;
+  `experiments/concerned_syntax/results/pixel_shapes_modal_2026_06_16.md`;
   local ignored artifact
-  `artifacts/concerned_syntax/pixel_shapes_local_sweep.json`.
+  `artifacts/concerned_syntax/pixel_shapes_modal_sweep.json`.
 - Positive targets: `concerned_pixel_probe` should pass the transported 2A
   gate after object extraction.
 - Negative controls: `surface_pixel_shortcut`, `passive_pixel`, and
   `restless_pixel_probe`.
 - Stress tests: hidden true/alternate parse swap must leave the RGB image
   unchanged; connected-component extraction must recover six objects; five
-  local seeds must preserve the failure taxonomy.
+  Modal seeds must preserve the failure taxonomy.
 
 Gate:
 
@@ -3849,16 +3850,18 @@ Gate:
 Results:
 
 - Accepted artifacts: pixel renderer, connected-component extractor,
-  pixel-agent report, Modal sweep entrypoint, tests, and paper update.
-- Rejected or withheld artifacts: no claim of learned object-slot perception;
-  no Modal-scale pixel sweep yet.
-- Key metrics across five local seeds: `concerned_pixel_probe` parse-high
-  `0.996`, action `0.999`, subtree `0.786`, object extraction `1.000`,
-  high-probe `0.993`, low-probe `0.187`, gate pass rate `1.000`.
-  `passive_pixel` parse-high is `0.503`; `surface_pixel_shortcut` parse-high
-  is `0.503`; `restless_pixel_probe` low-probe is `1.000`.
-- Variance or ablation: concerned pixel gate pass SD is `0.000`; parse-high SD
-  is `0.007`; object extraction SD is `0.000`.
+  pixel-agent reports, Modal sweep entrypoint, tests, and paper update.
+- Rejected or withheld artifacts: no learned object-slot encoder, natural-image
+  perception, or unsupervised-slot claim.
+- Key metrics across five Modal seeds: `concerned_pixel_probe` parse-high
+  `1.000`, action `1.000`, subtree `0.806`, object extraction `1.000`,
+  high-probe `1.000`, low-probe `0.195`, mean regret `0.004`, gate pass rate
+  `1.000`. `passive_pixel` parse-high is `0.499`;
+  `surface_pixel_shortcut` parse-high is `0.499`; `restless_pixel_probe`
+  low-probe is `1.000`.
+- Variance or ablation: concerned pixel gate pass SD is `0.000`; object
+  extraction SD is `0.000`; every Modal seed preserves the surface/passive/
+  restless failure taxonomy.
 
 Residual content:
 
@@ -3867,12 +3870,95 @@ Residual content:
 - New content outside old regime: the accepted gate now includes an explicit
   pixel-to-object operation, and passive object extraction is not enough to
   recover hidden causal constituency.
-- Retractions or supersessions: supersede "Arc 2A has no pixel surface" with
-  "Arc 2A has a pixel-rendered, object-extracted concerned-syntax gate."
+- Retractions or supersessions: supersede "Arc 2A has no Modal-scale pixel
+  surface" with "Arc 2A has a pixel-rendered, object-extracted concerned-syntax
+  gate replicated across Modal seeds."
 
-Next move: either run the Modal-scale pixel sweep or replace the
-connected-component extractor with a learned object-slot encoder while keeping
-the same hidden-parse invariance and no-restless controls.
+Next move: replace the connected-component extractor with a learned object-slot
+encoder or add held-out surface/role transfer while keeping the same
+hidden-parse invariance and no-restless controls.
+
+## Arc 2A: Learned Pixel Foreground/Slot Extraction
+
+Question: can the pixel-level concerned-syntax gate survive when direct
+connected-component features are replaced by a learned foreground/slot
+extractor?
+
+Current regime:
+
+- Artifact types: pixel-rendered shape examples, connected-component object
+  features, learned probe/action heads, tracked local reports and tests.
+- Operations: algorithmic connected-component extraction followed by the
+  concerned pixel probe gate.
+- Gates/verifiers: object count, parse/action/subtree, high/low probe
+  discipline, passive/surface/restless controls, hidden-parse-invariant RGB
+  rendering.
+- Known limitations: the previous pixel gate still handed the agent direct
+  connected-component features rather than learned pixel-object slots.
+
+Action class:
+
+- Retrieval/search/discovery: discovery-leaning perception transition.
+- Why: this adds a learned foreground model and slot-local center search before
+  the 2A pixel gate. It is not a full object-centric vision model, but it
+  removes direct connected-component extraction from the agent input.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/concerned_syntax/learned_pixel_extractor.py`;
+  `experiments/concerned_syntax/modal_learned_pixel_extractor_sweep.py`;
+  `experiments/concerned_syntax/results/learned_pixel_extractor_local_2026_06_17.md`;
+  `experiments/concerned_syntax/results/learned_pixel_extractor_modal_2026_06_17.md`;
+  local ignored artifacts under
+  `artifacts/concerned_syntax/learned_pixel_extractor_*.json`.
+- Positive target: `concerned_pixel_probe` should pass when consuming learned
+  foreground/slot components.
+- Negative controls: `surface_pixel_shortcut`, `passive_pixel`, and
+  `restless_pixel_probe`.
+- Stress tests: learned extractor must recover six visible slots on held-out
+  images; passive/surface controls must still fail hidden binding; restless
+  control must still violate low-concern discipline.
+
+Gate:
+
+- Acceptance rule: component count, slot recovery, and scene recovery should
+  remain near `1.000`; concerned pixel gate must pass with parse-high >=
+  `0.75`, action >= `0.85`, subtree >= `0.75`, high-probe >= `0.70`, and
+  low-probe <= `0.25`.
+- Withheld/rejected rule: do not claim natural-image perception, full CNN
+  object recognition, or unsupervised slot learning. Reject if learned slots
+  pass extraction but passive inference recovers hidden binding.
+
+Results:
+
+- Accepted artifacts: learned extractor module, Modal sweep entrypoint, local
+  and Modal reports, tests, README commands, and handoff update.
+- Rejected or withheld artifacts: raw Modal payload under ignored `artifacts/`;
+  no CNN/object-slot model; no natural-image transfer.
+- Key metrics across five Modal seeds: learned foreground/slot extractor
+  component count `1.000`, slot recovery `1.000`, scene recovery `1.000`, mean
+  center error `0.018`. `concerned_pixel_probe` parse-high `1.000`, action
+  `1.000`, subtree `0.804`, high-probe `1.000`, low-probe `0.210`, mean regret
+  `0.004`, gate pass rate `1.000`. `passive_pixel` parse-high `0.487`;
+  `surface_pixel_shortcut` parse-high `0.487`; `restless_pixel_probe`
+  low-probe `1.000`.
+- Variance or ablation: every Modal seed preserves extractor recovery and the
+  surface/passive/restless failure taxonomy.
+
+Residual content:
+
+- Explained by old regime: the visible six-slot layout and high-contrast RGB
+  rendering make extraction much easier than natural vision.
+- New content outside old regime: the concerned-syntax gate no longer depends
+  on direct connected-component features; learned foreground slots are
+  sufficient to preserve the anti-cheat separation.
+- Retractions or supersessions: supersede "pixel gate requires algorithmic
+  connected components" with "pixel gate survives a learned foreground/slot
+  extractor, but not yet full object-centric vision."
+
+Next move: replace slot-local foreground extraction with a CNN or unsupervised
+object-slot encoder, then test held-out surface transformations.
 
 ## Arc 2A: Concerned Intervention Invention
 
@@ -4123,6 +4209,267 @@ Residual content:
 - Retractions or supersessions: supersede "2B has only proxy intervention
   invention scores" with "2B search can consume the actual 2A-v1 program gate."
 
-Next move: put Haskell motif verdicts inside `program_body_search`, then lift
-the contract to `2A-v2` with `move(anchor)`, `ablate(role)`, two-step programs,
-and held-out role/parse transfer as an actual body gate.
+Next move: the Haskell-in-loop card below completes the local `2A-v1` formal
+verdict insertion; richer `2A-v2` programs and held-out transfer are tracked in
+the following 2A cards.
+
+## Arc 2A/2B: Haskell-in-Loop Program-Body Search
+
+Question: can Arc 2B body search consume Haskell motif admissibility verdicts
+inside the candidate loop rather than reporting only Python-static body
+validity?
+
+Current regime:
+
+- Artifact types: 2A-v1 empirical summaries, searched 2B motif bodies, Python
+  static body constraints, Haskell ontology JSON verdicts.
+- Operations: evaluate 2A-v1 agents, mutate/promote motif bodies, request
+  `ontology-check --motifs` verdicts for candidate motif sets, and rank bodies
+  using empirical, resource, and formal gates.
+- Gates/verifiers: empirical 2A-v1 gate, Haskell formal validity, Haskell
+  resource cost, Haskell violations, body gate, unit tests, Cabal ontology
+  tests.
+- Known limitations: Haskell validates motif admissibility only; it is not a
+  proof assistant, solver-backed semantics, or neural architecture verifier.
+
+Action class:
+
+- Retrieval/search/discovery: coupled verifier transition.
+- Why: the search loop now uses an external typed motif checker for arbitrary
+  candidate bodies, not only named post-hoc body summaries.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/viable_computational_bodies/haskell_gate.py`;
+  `experiments/viable_computational_bodies/program_body_search.py`;
+  `formal/ontology-hs/src/ConcernedOntology.hs`;
+  `experiments/viable_computational_bodies/results/program_body_search_haskell_local_2026_06_16.md`;
+  ignored artifact
+  `artifacts/viable_computational_bodies/program_body_search_haskell_local.json`.
+- Positive target: `viability_guided` should discover a body whose final rows
+  record `formal_source = "haskell"`, `formal_valid = 1.000`, empirical gate
+  `1.000`, and body gate `1.000`.
+- Negative controls: `reward_only` should remain shortcut-invalid;
+  `syntax_proxy` should keep target/useful competence but fail the full formal
+  and low-concern viability contract.
+- Stress tests: Haskell syntax-memory admissibility now accepts either
+  `tree_binder` or `causal_binding_head`, matching the vector/program body
+  grammar; Python falls back only on Haskell unavailability, not Haskell
+  errors.
+
+Gate:
+
+- Acceptance rule: across the fixed five-seed report set, `viability_guided`
+  body gate rate `1.000`, empirical gate rate `1.000`, formal valid rate
+  `1.000`, Haskell-source rate `1.000`, target/useful high-concern rates
+  `1.000`, and low-concern probe rate <= `0.25`.
+- Withheld/rejected rule: do not claim full formal verification. Reject if
+  Haskell errors become passing Python-static verdicts or if controls satisfy
+  the body gate.
+
+Results:
+
+- Accepted artifacts: custom motif verdict bridge, cached program-body formal
+  oracle, Haskell dependency alignment for `syntax_memory`, fixed-seed
+  Haskell-backed report, and tests for custom motif verdicts and Haskell
+  provenance.
+- Rejected or withheld artifacts: Modal image does not yet carry a Haskell
+  toolchain; the Modal wrapper records formal provenance but will fall back to
+  `python_static` unless Cabal is available.
+- Key metrics from the five-seed Haskell-backed local report:
+  `viability_guided` body gate `1.000`, empirical gate `1.000`, formal valid
+  `1.000`, Haskell-source rate `1.000`, target-high `1.000`, useful-high
+  `1.000`, low-probe `0.144`, best body
+  `calibration_guard+causal_binding_head+concern_policy+flat_encoder+formal_guard+intervention_planner+reward_head+syntax_memory+vector_surface_encoder+world_model`.
+  `reward_only` body gate `0.000`; `syntax_proxy` body gate `0.000` despite
+  target/useful `1.000` and empirical gate `0.400`.
+- Variance or ablation: a consecutive-seed local diagnostic failed because one
+  2A empirical seed missed subtree margin, not because the Haskell formal layer
+  rejected the target body. The fixed seed set matches the prior Modal report
+  seed set.
+
+Residual content:
+
+- Explained by old regime: the accepted body still expresses the frozen
+  `2A-v1-pixels-observe_pair` empirical contract.
+- New content outside old regime: Haskell admissibility now participates in the
+  search loop for arbitrary motif candidates, and the ontology had to clarify
+  that vector/program syntax memory can bind through `causal_binding_head`.
+- Retractions or supersessions: supersede "Haskell motif verdicts are not yet
+  inside the program-body search loop" with "Haskell motif verdicts are inside
+  the local search loop with explicit fallback provenance."
+
+Next move: package a Modal image with the Haskell toolchain or precomputed
+Haskell verdict cache, then lift the contract to richer `2A-v2` programs while
+preserving Haskell-source formal provenance.
+
+## Arc 2A: Intervention-Invention Transfer Gate
+
+Question: does the frozen `2A-v1-pixels-observe_pair` contract survive
+held-out role-kind and hidden true-parse transfer?
+
+Current regime:
+
+- Artifact types: pixel-rendered object surfaces, connected-component object
+  features, learned `observe_pair(a,b)` target selection, i.i.d. 2A-v1 reports.
+- Operations: train the existing concerned-program-inventor and controls on
+  the original i.i.d. split, then retrain with one role kind or one hidden true
+  parse withheld and evaluate only on that held-out slice.
+- Gates/verifiers: the full transported 2A-v1 gate plus per-slice target,
+  useful-program, high/low probe, subtree, and action metrics.
+- Known limitations: this is a transfer-failure diagnosis, not a transfer fix
+  or richer intervention-language result.
+
+Action class:
+
+- Retrieval/search/discovery: diagnostic regime-boundary result.
+- Why: no new intervention language is introduced, but the verifier changes
+  from i.i.d. seed stability to held-out transfer slices that can falsify the
+  stronger generalization claim.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/concerned_syntax/intervention_invention.py`;
+  `experiments/concerned_syntax/modal_intervention_transfer_sweep.py`;
+  `experiments/concerned_syntax/results/intervention_transfer_local_2026_06_16.md`;
+  `experiments/concerned_syntax/results/intervention_transfer_modal_2026_06_16.md`;
+  local ignored artifact
+  `artifacts/concerned_syntax/intervention_transfer_local.json`; Modal ignored
+  artifact `artifacts/concerned_syntax/intervention_transfer_modal_sweep.json`.
+- Positive target: `concerned_program_inventor` must keep the i.i.d. gate and
+  pass all held-out role-kind and true-parse slices.
+- Negative controls: the existing surface, random-program, concern-only, and
+  target-only controls remain in the i.i.d. summary.
+- Stress tests: held out `shield_poison`, `repair_core`, `food_trap`,
+  `repeat_concat`, `hooked_repeat`, `alternating_bind`, and `edge_core`.
+
+Gate:
+
+- Acceptance rule: i.i.d. gate pass rate 1.000 and every transfer slice pass
+  rate 1.000 for `concerned_program_inventor`.
+- Withheld/rejected rule: do not claim role/parse transfer from the i.i.d.
+  2A-v1 result. Treat a transfer failure as the next bottleneck, not as noise.
+
+Results:
+
+- Accepted artifacts: transfer-suite runner, parallelized Modal transfer
+  entrypoint, local and Modal transfer reports, and tests for parse transfer,
+  transfer-suite axes, and all-slice gate aggregation.
+- Rejected or withheld artifacts: no transfer-passing mechanism yet; no richer
+  `move`/`ablate`/composition program language yet.
+- Key metrics across five Modal seeds: i.i.d. gate pass `1.000`, mean
+  transfer-slice gate pass `0.171`, transfer gate fail. The weakest slice is
+  `role_kind:repair_core` with parse-high `0.000`, target-high `0.000`,
+  useful-high `0.000`, high-probe `0.000`, and low-probe `0.479`.
+- Transfer detail: all three held-out role kinds fail. True-parse slices keep
+  parse/action/target metrics high, but fail seed-level gates at rates
+  `0.200` to `0.400` because subtree accuracy remains below the `0.75` gate.
+
+Residual content:
+
+- Explained by old regime: i.i.d. target invention remains intact, and
+  true-parse transfer often preserves parse/action/target selection.
+- New content outside old regime: role-family transfer exposes that the current
+  learned target/concern policies can be too tied to role-specific pixel
+  surfaces. Parse-family transfer also reveals a subtree-margin weakness that
+  was hidden by parse/action accuracy.
+- Retractions or supersessions: supersede "add transfer next" with "transfer
+  is now a first-class failed gate and claim boundary."
+
+Next move: use the Modal transfer report to train a role-invariant
+object/causal-pair selector, or move to `2A-v2` richer programs while keeping
+held-out transfer as a required gate.
+
+## Phase / Arc 2A: Rich Intervention-Program Language
+
+Question: can a pixel-level concerned-syntax agent choose the right family of
+intervention program, not only the right `observe_pair(a,b)` target, while
+preserving low-concern discipline?
+
+Current regime:
+
+- Artifact types: 2A-v1 pixel/program examples, extracted object features,
+  learned concern policy, learned target selector, Modal reports, targeted
+  tests.
+- Operations: choose whether to intervene, select a target pair, and run the
+  provided `observe_pair(a,b)` program.
+- Gates/verifiers: object extraction, parse/action/subtree, high/low probe
+  discipline, target accuracy, useful-program rate, Modal five-seed sweep.
+- Known limitations: `observe_pair(a,b)` was the only useful program family,
+  so target selection could pass without learning a richer intervention
+  grammar.
+
+Action class:
+
+- Retrieval/search/discovery: discovery-leaning intervention-language
+  transition.
+- Why: this changes the program grammar and gate. The accepted agent must
+  select among `observe_pair`, `move_anchor`, `ablate_pair`, and
+  `compose_move_observe` families, not merely decide which pair to observe.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/concerned_syntax/rich_program_language.py`;
+  `experiments/concerned_syntax/modal_rich_program_language_sweep.py`;
+  `experiments/concerned_syntax/results/rich_program_language_local_2026_06_17.md`;
+  `experiments/concerned_syntax/results/rich_program_language_modal_2026_06_17.md`;
+  local ignored artifacts under
+  `artifacts/concerned_syntax/rich_program_language_*.json`.
+- Positive target: `concerned_program_composer` should pass the transported
+  2A gate plus family, target, useful-program, and rich-program gates.
+- Negative controls: `surface_rich_shortcut`, `random_rich_program`,
+  `family_without_target`, `target_without_family`, and
+  `rich_without_concern`.
+- Stress tests: target-only and family-only controls must fail separately;
+  a rich composer without concern must fail low-concern discipline.
+
+Gate:
+
+- Acceptance rule: object extraction >= 0.99, parse-high >= 0.75, action >=
+  0.85, subtree >= 0.75, high-concern program rate >= 0.70, low-concern
+  program rate <= 0.25, target-high >= 0.70, family-high >= 0.70,
+  useful-high >= 0.70, and rich-high >= 0.70.
+- Withheld/rejected rule: do not claim open-ended apparatus discovery,
+  learned object-slot perception, body-level consumption of the v2 contract, or
+  held-out transfer repair. Reject controls that pass target, family, action,
+  or parse alone.
+
+Results:
+
+- Accepted artifacts: rich program-language module, Modal sweep entrypoint,
+  public local and Modal reports, targeted tests, README commands, trajectory
+  and handoff updates.
+- Rejected or withheld artifacts: raw JSON under ignored `artifacts/`; no
+  learned object-slot encoder; no search-discovered grammar; no transfer-passing
+  mechanism; no 2B body search against the v2 contract yet.
+- Key metrics across five Modal seeds: `concerned_program_composer`
+  parse-high `1.000`, action `1.000`, subtree `0.794`, object extraction
+  `1.000`, high-program `1.000`, low-program `0.162`, family-high `1.000`,
+  target-high `1.000`, useful-high `1.000`, rich-high `1.000`, mean regret
+  `0.004`, gate pass rate `1.000`.
+  `target_without_family` gets target-high `1.000` but family-high `0.000`
+  and useful-high `0.000`. `family_without_target` gets family-high `1.000`
+  but target-high `0.080`. `rich_without_concern` gets parse/action/family/
+  target all `1.000` but low-program `1.000`.
+- Variance or ablation: Modal five-seed gate pass is stable at `1.000` for the
+  composer; controls remain rejected for distinct family, target, or concern
+  failures. The local 1,200/500 split also passed.
+
+Residual content:
+
+- Explained by old regime: pixel-object extraction, concern gating, and target
+  selection still explain part of the result.
+- New content outside old regime: useful intervention now depends on program
+  family, so `observe_pair(a,b)` is no longer a universal solution. The gate
+  separates "knows what object pair matters" from "knows which manipulation
+  makes that binding legible."
+- Retractions or supersessions: supersede "richer program language remains
+  future work" with "provided rich program grammar passes; open-ended program
+  discovery and held-out transfer repair remain future work."
+
+Next move: repair held-out role/parse transfer for `2A-v2`, then make 2B body
+search and the Haskell admissibility layer consume
+`2A-v2-pixels-rich_programs`.

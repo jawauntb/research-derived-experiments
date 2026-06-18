@@ -22,6 +22,12 @@ from experiments.concerned_syntax.intervention_invention import (
     run_experiment,
     run_role_transfer_experiment,
 )
+from experiments.viable_computational_bodies.haskell_gate import (
+    HaskellGateUnavailable,
+    HaskellVerdict,
+    Runner,
+    load_motif_verdict,
+)
 
 PROGRAM_BODY_MOTIFS: tuple[str, ...] = (
     "vector_surface_encoder",
@@ -111,6 +117,7 @@ class ProgramBodyEvaluation:
     object_extraction_rate: float
     empirical_gate_pass: int
     formal_valid: int
+    formal_source: str
     resource_cost: int
     body_gate: int
     violations: tuple[str, ...]
@@ -137,6 +144,53 @@ def program_body_violations(spec: ProgramBodySpec) -> tuple[str, ...]:
     if "vector_surface_encoder" not in motifs and "flat_encoder" not in motifs:
         violations.append("missing_input_body")
     return tuple(violations)
+
+
+def python_static_program_body_verdict(spec: ProgramBodySpec) -> HaskellVerdict:
+    violations = program_body_violations(spec)
+    return HaskellVerdict(
+        formal_valid=not violations,
+        resource_cost=program_body_resource_cost(spec),
+        violations=violations,
+        formal_source="python_static",
+    )
+
+
+class ProgramBodyFormalOracle:
+    """Cached formal verdict source for searched motif bodies."""
+
+    def __init__(
+        self,
+        *,
+        mode: str = "auto",
+        runner: Runner | None = None,
+    ) -> None:
+        if mode not in {"auto", "haskell", "python_static"}:
+            raise ValueError(f"unknown formal mode: {mode}")
+        self.mode = mode
+        self.runner = runner
+        self._haskell_unavailable = False
+        self._cache: dict[str, HaskellVerdict] = {}
+
+    def verdict(self, spec: ProgramBodySpec) -> HaskellVerdict:
+        cached = self._cache.get(spec.key)
+        if cached is not None:
+            return cached
+
+        if self.mode != "python_static" and not self._haskell_unavailable:
+            try:
+                verdict = load_motif_verdict(spec.motifs, runner=self.runner)
+            except HaskellGateUnavailable:
+                if self.mode == "haskell":
+                    raise
+                self._haskell_unavailable = True
+            else:
+                self._cache[spec.key] = verdict
+                return verdict
+
+        verdict = python_static_program_body_verdict(spec)
+        self._cache[spec.key] = verdict
+        return verdict
 
 
 def _has(spec: ProgramBodySpec, *motifs: str) -> bool:
@@ -182,12 +236,13 @@ def evaluate_program_body(
     seed: int,
     generation: int,
     agent_summary: dict[str, dict[str, Any]],
+    formal_verdict: HaskellVerdict | None = None,
 ) -> ProgramBodyEvaluation:
     agent = empirical_agent_for_body(spec)
     stats = agent_summary[agent]
-    violations = program_body_violations(spec)
-    formal_valid = int(not violations)
-    cost = program_body_resource_cost(spec)
+    verdict = formal_verdict or python_static_program_body_verdict(spec)
+    formal_valid = int(verdict.formal_valid)
+    cost = verdict.resource_cost
     empirical_gate = int(bool(stats["gate_pass"]))
     body_gate = int(
         empirical_gate
@@ -213,9 +268,10 @@ def evaluate_program_body(
         object_extraction_rate=float(stats["object_extraction_rate"]),
         empirical_gate_pass=empirical_gate,
         formal_valid=formal_valid,
+        formal_source=verdict.formal_source,
         resource_cost=cost,
         body_gate=body_gate,
-        violations=violations,
+        violations=verdict.violations,
     )
 
 
@@ -325,8 +381,10 @@ def run_program_body_search(
     generations: int,
     population: int,
     agent_summary: dict[str, dict[str, Any]],
+    formal_oracle: ProgramBodyFormalOracle | None = None,
 ) -> list[ProgramBodyEvaluation]:
     rng = random.Random(seed)
+    oracle = formal_oracle or ProgramBodyFormalOracle(mode="auto")
     specs = [
         ProgramBodySpec(frozenset({"vector_surface_encoder", "reward_head"})),
         ProgramBodySpec(
@@ -375,6 +433,7 @@ def run_program_body_search(
                 seed=seed,
                 generation=generation,
                 agent_summary=agent_summary,
+                formal_verdict=oracle.verdict(spec),
             )
             scored.append(
                 (_ranking_score(evaluation, spec, strategy, archive), spec, evaluation)
@@ -400,12 +459,15 @@ def run_coupled_sweep(
     epochs: int,
     base_seed: int,
     role_transfer_kind: str | None = None,
+    formal_mode: str = "auto",
+    seed_values: tuple[int, ...] | None = None,
 ) -> dict[str, Any]:
     rows: list[ProgramBodyEvaluation] = []
     transfer_summary: dict[str, dict[str, Any]] | None = None
     empirical_payloads: list[dict[str, Any]] = []
-    for idx in range(seeds):
-        seed = base_seed + idx
+    formal_oracle = ProgramBodyFormalOracle(mode=formal_mode)
+    run_seeds = seed_values or tuple(base_seed + idx for idx in range(seeds))
+    for seed in run_seeds:
         payload = run_experiment(
             train_trials=train_trials,
             test_trials=test_trials,
@@ -426,6 +488,7 @@ def run_coupled_sweep(
                     generations=generations,
                     population=population,
                     agent_summary=payload["agent_summary"],
+                    formal_oracle=formal_oracle,
                 )
             )
 
@@ -445,7 +508,8 @@ def run_coupled_sweep(
             "name": "program_body_search_against_2a_v1",
             "contract": "2A-v1-pixels-observe_pair",
             "strategies": list(strategies),
-            "seeds": seeds,
+            "seeds": len(run_seeds),
+            "seed_values": list(run_seeds),
             "generations": generations,
             "population": population,
             "train_trials": train_trials,
@@ -453,6 +517,7 @@ def run_coupled_sweep(
             "epochs": epochs,
             "base_seed": base_seed,
             "role_transfer_kind": role_transfer_kind,
+            "formal_mode": formal_mode,
         },
         "summary": summarize_program_bodies(rows),
         "role_transfer_summary": transfer_summary,
@@ -491,6 +556,8 @@ def summarize_program_bodies(
             "body_gate_rate_sd": pstdev(body_gate_values) if len(finals) > 1 else 0.0,
             "empirical_gate_rate": mean(item.empirical_gate_pass for item in finals) if finals else 0.0,
             "formal_valid_rate": mean(item.formal_valid for item in finals) if finals else 0.0,
+            "formal_haskell_rate": mean(item.formal_source == "haskell" for item in finals) if finals else 0.0,
+            "formal_source": "+".join(sorted({item.formal_source for item in finals})),
             "target_accuracy_high_concern": mean(item.target_accuracy_high_concern for item in finals) if finals else 0.0,
             "useful_program_rate_high_concern": mean(item.useful_program_rate_high_concern for item in finals) if finals else 0.0,
             "low_concern_probe_rate": mean(item.low_concern_probe_rate for item in finals) if finals else 0.0,
@@ -526,21 +593,23 @@ def write_coupled_report(path: Path, payload: dict[str, Any]) -> None:
         "## Body Gate Summary",
         "",
         (
-            "| Strategy | Body gate | Empirical gate | Formal valid | "
+            "| Strategy | Body gate | Empirical gate | Formal valid | Haskell | "
             "Target high | Useful high | Low probe | Return | Cost | "
-            "Best body | Agent | Gate |"
+            "Best body | Agent | Formal source | Gate |"
         ),
-        "|---|---:|---:|---:|---:|---:|---:|---:|---:|---|---|---|",
+        "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|---|---|---|",
     ]
     for strategy, stats in sorted(summary.items()):
         lines.append(
             "| {strategy} | {body:.3f} | {empirical:.3f} | {formal:.3f} | "
+            "{haskell:.3f} | "
             "{target:.3f} | {useful:.3f} | {low:.3f} | {ret:.3f} | "
-            "{cost:.3f} | `{best}` | `{agent}` | {gate} |".format(
+            "{cost:.3f} | `{best}` | `{agent}` | `{source}` | {gate} |".format(
                 strategy=strategy,
                 body=stats["body_gate_rate"],
                 empirical=stats["empirical_gate_rate"],
                 formal=stats["formal_valid_rate"],
+                haskell=stats["formal_haskell_rate"],
                 target=stats["target_accuracy_high_concern"],
                 useful=stats["useful_program_rate_high_concern"],
                 low=stats["low_concern_probe_rate"],
@@ -548,6 +617,7 @@ def write_coupled_report(path: Path, payload: dict[str, Any]) -> None:
                 cost=stats["resource_cost"],
                 best=stats["best_architecture"],
                 agent=stats["best_empirical_agent"],
+                source=stats["formal_source"],
                 gate="PASS" if stats["gate_pass"] else "fail",
             )
         )
@@ -593,7 +663,10 @@ def write_coupled_report(path: Path, payload: dict[str, Any]) -> None:
                 "2A-v1 gate is frozen as pixels plus an `observe_pair(a,b)` "
                 "program menu. A searched body passes only if its motif set "
                 "can express the empirical concerned-program-inventor control "
-                "and also satisfies static body constraints."
+                "and also satisfies formal body constraints. When Cabal is "
+                "available, candidate motif sets are checked by the Haskell "
+                "ontology through `ontology-check --motifs`; otherwise the "
+                "report records the explicit `python_static` fallback."
             ),
             "",
             (
@@ -620,7 +693,16 @@ def main() -> int:
     parser.add_argument("--test-trials", type=int, default=260)
     parser.add_argument("--epochs", type=int, default=45)
     parser.add_argument("--base-seed", type=int, default=20260616)
+    parser.add_argument(
+        "--seed-list",
+        help="Comma-separated explicit seed list; overrides --seeds/--base-seed.",
+    )
     parser.add_argument("--role-transfer-kind", default="food_trap")
+    parser.add_argument(
+        "--formal-mode",
+        choices=("auto", "haskell", "python_static"),
+        default="auto",
+    )
     parser.add_argument("--out", type=Path)
     parser.add_argument("--report", type=Path)
     args = parser.parse_args()
@@ -634,6 +716,8 @@ def main() -> int:
         epochs=args.epochs,
         base_seed=args.base_seed,
         role_transfer_kind=args.role_transfer_kind,
+        formal_mode=args.formal_mode,
+        seed_values=_parse_seed_list(args.seed_list),
     )
     if args.out:
         args.out.parent.mkdir(parents=True, exist_ok=True)
@@ -651,6 +735,12 @@ def main() -> int:
             f"gate={stats['gate_pass']}"
         )
     return 0
+
+
+def _parse_seed_list(value: str | None) -> tuple[int, ...] | None:
+    if not value:
+        return None
+    return tuple(int(item.strip()) for item in value.split(",") if item.strip())
 
 
 if __name__ == "__main__":

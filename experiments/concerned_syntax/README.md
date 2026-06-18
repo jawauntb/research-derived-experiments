@@ -74,3 +74,33 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
   --train-trials 3000 --test-trials 1200 --epochs 90 \
   --search-trials 600
 ```
+
+Learned pixel-extractor sweep:
+
+```bash
+python3 -m experiments.concerned_syntax.learned_pixel_extractor \
+  --train-trials 1200 --test-trials 500 --seed 20260617 --epochs 60 \
+  --extractor-samples-per-image 96 \
+  --out artifacts/concerned_syntax/learned_pixel_extractor_local.json \
+  --agent-report experiments/concerned_syntax/results/learned_pixel_extractor_local_2026_06_17.md
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_learned_pixel_extractor_sweep.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90 \
+  --extractor-samples-per-image 96
+```
+
+Rich intervention-program sweep:
+
+```bash
+python3 -m experiments.concerned_syntax.rich_program_language \
+  --train-trials 1200 --test-trials 500 --seed 20260617 --epochs 60 \
+  --out artifacts/concerned_syntax/rich_program_language_local.json \
+  --agent-report experiments/concerned_syntax/results/rich_program_language_local_2026_06_17.md
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_rich_program_language_sweep.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90
+```
