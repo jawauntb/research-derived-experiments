@@ -2,8 +2,8 @@
 
 Date: 2026-06-18
 Repo: `jawauntb/research-derived-experiments`
-Current fresh branch for this note: `codex/phase2-publication-wrap-gates`
-Current `origin/main`: `ec0f7a5` (`Merge pull request #138 from jawauntb/codex/phase2-v2-body-consumption`)
+Current fresh branch for this note: `codex/phase2-learned-slot-semantics`
+Current `origin/main`: `e86e2c8` (`Merge pull request #139 from jawauntb/codex/phase2-publication-wrap-gates`)
 External paper artifact folder: `/Users/jawaun/Metaphysics of Intelligence/Phase_Arc_2`
 
 This is the start-here note for the next agent session. The user is not asking
@@ -41,11 +41,19 @@ transfer contract across five Modal seeds. That makes the result stronger, but
 also sharpens the remaining boundary: these modules are explicit rather than
 learned neural role semantics.
 
+The current successor branch adds a narrower learned-semantics repair: a
+supervised learned role-token prototype decoder replaces the explicit RGB role
+decoder and preserves the same held-out role/parse transfer gate across five
+Modal seeds with 3,000 train trials, 1,200 test trials, 1,200 semantic
+calibration trials, and 90 epochs. This closes the supervised slot-semantics
+boundary, but not unsupervised object discovery or open-ended program
+invention.
+
 Do not phrase this as "2A is done" or "2B is done." Phrase it this way:
 
 - `2A-v2` is done as a provided-rich-grammar contract with Modal-confirmed
-  transfer repair, not as open-ended program invention or learned neural role
-  semantics.
+  transfer repair and supervised learned slot semantics, not as open-ended
+  program invention or unsupervised object/role discovery.
 - `2B-v2` is done as motif search plus Modal-confirmed compact executable-
   module validation, not as full neural architecture search.
 - 2A and 2B are already combined through the frozen empirical contract and the
@@ -85,6 +93,28 @@ parse/action/family/target/useful/rich high: 1.000
 low-program: 0.000
 gate: PASS across 5 Modal seeds
 ```
+
+Current learned slot-semantics result:
+
+```text
+report: experiments/concerned_syntax/results/learned_slot_semantics_modal_2026_06_18.md
+positive: learned_slot_semantic_world_model
+semantic kind/pair: 1.000
+transfer gate: 1.000
+family/target/useful/rich high: 1.000
+low-program: 0.000
+gate: PASS across 5 Modal seeds at 3000 train / 1200 test / 90 epochs
+```
+
+Important rejected controls:
+
+- `learned_rich_program_composer`: transfer gate `0.000`; still fails held-out
+  role/parse transfer.
+- `learned_semantic_family_only`: family `1.000`, but target/useful `0.214`.
+- `learned_semantic_target_only`: target `1.000`, but family/useful `0.143`
+  and low-program `0.714`.
+- `learned_semantic_rich_without_concern`: rich metrics `1.000`, but
+  low-program `0.714`.
 
 Current accepted 2B result:
 
@@ -573,12 +603,14 @@ When done:
 ## 11. Best Starting Move for the Next Agent
 
 Start with `codex/phase2-open-program-search` or
-`codex/phase2-learned-object-slots`.
+`codex/phase2-unsupervised-object-slots`.
 
 Reason: the current branch lands Modal-confirmed wrap gates for v2 transfer and
-transfer-consuming executable bodies. The next scientific gap is not another
-seed sweep; it is searched program recipes beyond the provided grammar or
-learned neural slot/role semantics that can replace explicit role decoding.
+transfer-consuming executable bodies, plus a supervised learned slot-semantics
+replacement for the explicit role decoder. The next scientific gap is not
+another seed sweep; it is searched program recipes beyond the provided grammar
+or unsupervised object/role slot discovery beyond supervised role-token
+calibration.
 
 Then move to searched/evolved executable modules under 2B, keeping the
 Modal-first rule and the same transfer gate as a required contract.

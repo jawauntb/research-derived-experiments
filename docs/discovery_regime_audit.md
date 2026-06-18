@@ -4905,3 +4905,95 @@ Residual content:
 
 Next move: replace the compact hand-instantiated bodies with searched/evolved
 neural modules.
+
+## Arc 2A: Learned Slot Semantics Against 2A-v2 Transfer
+
+Question: can the repaired `2A-v2-pixels-rich_programs` transfer gate replace
+its explicit RGB role decoder with learned supervised role-slot semantics while
+preserving held-out role-kind and true-parse transfer?
+
+Current regime:
+
+- Artifact types: rich 2A-v2 transfer summaries, rendered component slots,
+  supervised role-token calibration examples, learned semantic decoder
+  summaries, and held-out slice reports.
+- Operations: learn role-token prototypes from visible rendered slots, decode
+  semantic kind and active pair from aligned components, run the same v2
+  world-model transfer gate, and compare family-only, target-only, ungated-rich,
+  and learned-composer controls.
+- Gates/verifiers: semantic kind/pair accuracy, transfer gate, family/target/
+  useful/rich high-concern rates, low-concern program cap, targeted unit tests,
+  local report, and Modal entrypoint.
+- Known limitations: semantic calibration is supervised and synthetic; object
+  extraction is still connected components; the program grammar is still
+  provided.
+
+Action class:
+
+- Retrieval/search/discovery: supervised semantic-decoder regime transition.
+- Why: the accepted operation no longer consumes the explicit nearest-color
+  role table; learned semantic prototypes become a first-class artifact in the
+  transfer contract.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/concerned_syntax/learned_slot_semantics.py`;
+  `experiments/concerned_syntax/modal_learned_slot_semantics_sweep.py`;
+  `experiments/concerned_syntax/results/learned_slot_semantics_local_2026_06_18.md`;
+  `experiments/concerned_syntax/results/learned_slot_semantics_modal_2026_06_18.md`;
+  local ignored artifact
+  `artifacts/concerned_syntax/learned_slot_semantics_local.json`;
+  Modal ignored artifact
+  `artifacts/concerned_syntax/learned_slot_semantics_modal_sweep.json`.
+- Positive target: `learned_slot_semantic_world_model` should pass semantic
+  kind/pair recovery and the held-out v2 transfer gate.
+- Negative controls: `learned_rich_program_composer`,
+  `learned_semantic_family_only`, `learned_semantic_target_only`, and
+  `learned_semantic_rich_without_concern`.
+- Stress tests: held-out `shield_poison`, `repair_core`, `food_trap`,
+  `repeat_concat`, `hooked_repeat`, `alternating_bind`, and `edge_core`.
+
+Gate:
+
+- Acceptance rule: semantic kind/pair accuracy >= 0.95, every transfer slice
+  passes, action >= 0.85, low-concern program rate <= 0.25, and family/target/
+  useful/rich high-concern rates >= 0.70.
+- Withheld/rejected rule: do not claim unsupervised object slots, natural-image
+  perception, open-ended program invention, or full neural module discovery.
+
+Results:
+
+- Accepted artifacts: learned slot-semantics module, Modal entrypoint, local
+  and Modal reports, targeted tests, README commands, handoff update, and paper
+  update.
+- Rejected or withheld artifacts: raw JSON remains under ignored `artifacts/`;
+  unsupervised object/role discovery and open-ended program invention remain
+  withheld.
+- Key metrics across five Modal seeds:
+  `learned_slot_semantic_world_model` semantic kind/pair `1.000`, transfer gate
+  `1.000`, family/target/useful/rich high-concern rates `1.000`, low-program
+  `0.000`, regret `0.004`. `learned_rich_program_composer` fails transfer;
+  `learned_semantic_family_only` reaches family `1.000` but target/useful
+  `0.214`; `learned_semantic_target_only` reaches target `1.000` but
+  family/useful `0.143` and low-program `0.714`;
+  `learned_semantic_rich_without_concern` reaches rich metrics `1.000` but
+  fails with low-program `0.714`.
+- Variance or ablation: five Modal seeds with 3,000 train trials, 1,200 test
+  trials, 1,200 semantic calibration trials, and 90 epochs per seed; accepted
+  transfer gate SD is `0.000`.
+
+Residual content:
+
+- Explained by old regime: the explicit role-equivariant world model already
+  showed that role/parse transfer is possible when roles are decoded correctly.
+- New content outside old regime: learned supervised semantic prototypes can
+  replace the explicit RGB role decoder inside the same transfer contract while
+  preserving the control separations.
+- Retractions or supersessions: supersede "learned role semantics remain fully
+  open" with "supervised learned slot semantics pass the v2 transfer gate;
+  unsupervised object/role discovery remains open."
+
+Next move: replace supervised role-token calibration with unsupervised object
+and role slot discovery, or search program recipes beyond the provided rich
+grammar.

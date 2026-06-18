@@ -56,6 +56,10 @@ from experiments.concerned_syntax.rich_program_transfer_repair import (
     run_experiment as run_rich_transfer_repair_experiment,
     summarize_seed_payloads as summarize_rich_transfer_repair_payloads,
 )
+from experiments.concerned_syntax.learned_slot_semantics import (
+    run_experiment as run_learned_slot_semantics_experiment,
+    summarize_seed_payloads as summarize_learned_slot_semantics_payloads,
+)
 from experiments.concerned_syntax.vector_shapes import (
     run_experiment as run_vector_experiment,
     summarize_seed_payloads as summarize_vector_payloads,
@@ -860,6 +864,73 @@ class ConcernedSyntaxTest(unittest.TestCase):
         )
         self.assertAlmostEqual(
             summary["role_equivariant_rich_world_model"]["transfer_gate_pass"],
+            0.5,
+        )
+
+    def test_learned_slot_semantics_replaces_explicit_role_decoder(self) -> None:
+        payload = run_learned_slot_semantics_experiment(
+            train_trials=90,
+            test_trials=40,
+            seed=20260618,
+            epochs=20,
+            semantic_calibration_trials=500,
+        )
+        agents = payload["agent_summary"]
+        semantic = payload["semantic_summary"]["learned_slot_semantic_decoder"]
+
+        self.assertEqual(semantic["semantic_kind_accuracy"], 1.0)
+        self.assertEqual(semantic["semantic_pair_accuracy"], 1.0)
+        self.assertFalse(agents["learned_rich_program_composer"]["transfer_gate_pass"])
+        self.assertFalse(agents["learned_semantic_family_only"]["transfer_gate_pass"])
+        self.assertFalse(agents["learned_semantic_target_only"]["transfer_gate_pass"])
+        self.assertFalse(
+            agents["learned_semantic_rich_without_concern"]["transfer_gate_pass"]
+        )
+        self.assertTrue(
+            agents["learned_slot_semantic_world_model"]["transfer_gate_pass"]
+        )
+        self.assertEqual(
+            agents["learned_slot_semantic_world_model"][
+                "family_accuracy_high_concern"
+            ],
+            1.0,
+        )
+        self.assertEqual(
+            agents["learned_slot_semantic_world_model"]["low_concern_program_rate"],
+            0.0,
+        )
+
+    def test_learned_slot_semantics_modal_summary_averages_transfer_rates(self) -> None:
+        payloads = [
+            {
+                "agent_summary": {
+                    "learned_slot_semantic_world_model": {
+                        "semantic_kind_accuracy": 1.0,
+                        "transfer_gate_pass": True,
+                    }
+                }
+            },
+            {
+                "agent_summary": {
+                    "learned_slot_semantic_world_model": {
+                        "semantic_kind_accuracy": 0.5,
+                        "transfer_gate_pass": False,
+                    }
+                }
+            },
+        ]
+
+        summary = summarize_learned_slot_semantics_payloads(
+            payloads,
+            "agent_summary",
+        )
+
+        self.assertAlmostEqual(
+            summary["learned_slot_semantic_world_model"]["semantic_kind_accuracy"],
+            0.75,
+        )
+        self.assertAlmostEqual(
+            summary["learned_slot_semantic_world_model"]["transfer_gate_pass"],
             0.5,
         )
 

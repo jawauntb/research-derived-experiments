@@ -209,6 +209,15 @@ Current v1 result:
   composer remains rejected with transfer gate fail, slice gate `0.571`,
   family/useful high `0.714`, target high `0.829`, and low-concern program
   rate `0.161`.
+- `learned_slot_semantics_modal_2026_06_18.md` replaces the explicit RGB role
+  decoder with a supervised learned role-token prototype decoder while keeping
+  the same held-out role/parse transfer gate. Across five Modal seeds with
+  3,000 train trials, 1,200 test trials, 1,200 semantic calibration trials, and
+  90 epochs, `learned_slot_semantic_world_model` reaches transfer gate `1.000`,
+  semantic kind/pair `1.000`, family/target/useful/rich high-concern rates
+  `1.000`, and low-concern program rate `0.000`. The learned composer,
+  family-only, target-only, and ungated-rich controls remain rejected for
+  distinct reasons.
 
 Current coupled 2A/2B results:
 
@@ -242,10 +251,11 @@ Current coupled 2A/2B results:
 
 This is the first Phase 2 point where Arc 2A and Arc 2B are coupled at the
 rich program-composition contract, not merely at target selection. The frontier
-now also closes the v2 transfer-repair and executable-module-body gates at
-Modal scale. It is still not the end of Phase 2: learned neural role/slot
-semantics, open-ended/searched program invention beyond the provided grammar,
-and full architecture search remain open.
+now also closes the v2 transfer-repair, supervised learned slot-semantics, and
+executable-module-body gates at Modal scale. It is still not the end of Phase
+2: unsupervised object/role slot discovery, open-ended/searched program
+invention beyond the provided grammar, and full architecture search remain
+open.
 
 ## Literature Bearings
 
