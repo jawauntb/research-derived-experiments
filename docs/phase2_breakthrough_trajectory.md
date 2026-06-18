@@ -1,6 +1,6 @@
 # Phase 2 Breakthrough Trajectory
 
-Date: 2026-06-16
+Date: 2026-06-18
 
 This note is the lab-director critique and trajectory reset for Phase / Arc 2.
 It is intentionally more aggressive than a handoff. The purpose is to make the
@@ -76,17 +76,17 @@ is to push toward regime transition.
 
 The strongest near-term trajectory is **Concerned Intervention Invention**.
 
-Current pixel agents receive a pair probe that already targets the causal role
-pair. That proves concern-gated probe use, but not intervention invention.
-The next gate should expose a small program language and require the agent to
-choose the useful target:
+Earlier pixel agents received a pair probe that already targeted the causal
+role pair. That proved concern-gated probe use, but not intervention
+invention. The v1 gate exposed a small program language and required the agent
+to choose the useful target:
 
 ```text
 observe_pair(a,b)
 null
 ```
 
-Then the ladder expands:
+The v2 gate now expands the ladder:
 
 ```text
 observe_pair(a,b)
@@ -99,11 +99,13 @@ held-out role-pair and parse-family transfer
 learned object slots replace connected components
 ```
 
-The minimal gate is intentionally small: from pixels, choose whether to probe
-and which pair to probe. The target is not given as `trial.causal_pair`. A
-passing agent must learn:
+The minimal v1 gate was intentionally small: from pixels, choose whether to
+probe and which pair to probe. The target is not given as `trial.causal_pair`.
+The v2 gate additionally requires the agent to choose a useful program family.
+A passing agent must learn:
 
 - which object pair is causally relevant from visible role/object features,
+- which intervention family exposes the relevant mechanism,
 - when the ambiguity matters for viability,
 - when not to spend probe budget,
 - how to act after a useful observation.
@@ -120,7 +122,7 @@ Controls should fail in distinct ways:
 
 ## Metrics That Matter Next
 
-The first result on this trajectory should report:
+The v1 result on this trajectory should report:
 
 - high-concern parse accuracy;
 - action accuracy;
@@ -134,10 +136,12 @@ The first result on this trajectory should report:
 - object extraction rate;
 - seed-level gate pass rate.
 
-The new gate should require target accuracy, not merely parse/action accuracy.
-Otherwise the agent can still be described as using a provided experiment.
+The v2 gate should additionally require family accuracy and rich-program
+usefulness, not merely target accuracy. Otherwise the agent can still be
+described as using a richer provided experiment without selecting the correct
+operation family.
 
-Current branch result:
+Current v1 result:
 
 - `concerned_program_inventor` passes the 5-seed Modal gate with high-concern
   parse accuracy `1.000`, action accuracy `1.000`, target accuracy `1.000`,
@@ -185,7 +189,8 @@ Current branch result:
   `1.000`, subtree `0.789`, low-probe `0.156`, and recipe
   `concern_or_calibration+slot_scores+bind_if_useful_probe+bound_action`;
   reward-only and syntax-proxy searches fail for distinct reasons.
-- The next branch lifts the same contract to `2A-v2-pixels-rich_programs`.
+- The rich-program follow-up lifts the same contract to
+  `2A-v2-pixels-rich_programs`.
   `concerned_program_composer` chooses among `observe_pair`, `move_anchor`,
   `ablate_pair`, and `compose_move_observe` families and passes the 5-seed
   Modal gate with high-concern parse `1.000`, action `1.000`, family `1.000`,
@@ -196,12 +201,8 @@ Current branch result:
   `family_without_target` gets family accuracy `1.000` but target accuracy
   `0.080`; `rich_without_concern` gets parse/action/family/target all
   `1.000` but low-concern program rate `1.000`.
-- The next breakthrough gate should make the richer `2A-v2` composer pass
-  held-out role/parse transfer using the repaired role-equivariant operation,
-  route that richer contract through 2B body search, and move beyond the
-  provided rich grammar toward open-ended or searched program composition.
 
-Current coupled 2A/2B result:
+Current coupled 2A/2B results:
 
 - `program_body_search_modal_2026_06_16.md` freezes
   `2A-v1-pixels-observe_pair` and makes 2B program-body search consume the
@@ -212,9 +213,23 @@ Current coupled 2A/2B result:
   `calibration_guard+causal_binding_head+concern_policy+formal_guard+intervention_planner+reward_head+vector_surface_encoder+world_model`.
 - `reward_only` fails as a shortcut body; `syntax_proxy` reaches target/useful
   `1.000` but fails the body gate with low-probe `0.830`.
-- The local Haskell-in-loop gap is now closed for `2A-v1`; the next 2B
-  breakthrough gate should preserve Haskell-source provenance on Modal and
-  consume the future `2A-v2` richer intervention contract.
+- `rich_program_body_search_modal_2026_06_18.md` freezes
+  `2A-v2-pixels-rich_programs` and makes 2B body search consume the richer
+  empirical contract. Across five Modal seeds, `viability_guided` reaches body
+  gate `1.000`, empirical gate `1.000`, formal validity `1.000`,
+  family/target/useful/rich high-concern rates `1.000`, low-concern program
+  rate `0.168`, and resource cost `16.000`.
+- `reward_only` remains a shortcut body. `syntax_proxy` reaches
+  family/target/useful/rich rates of `1.000`, but fails body gate with formal
+  validity `0.200` and low-concern program rate `0.670`.
+- The local Haskell-in-loop gap is closed for `2A-v1`; the v2 Modal body run
+  still records `python_static` formal provenance when Cabal is unavailable.
+
+This is the first Phase 2 point where Arc 2A and Arc 2B are coupled at the
+rich program-composition contract, not merely at target selection. It is still
+not the end of Phase 2: held-out role/parse transfer for `2A-v2`, learned
+object slots, open-ended/searched program invention beyond the provided
+grammar, and learned executable module bodies remain open.
 
 ## Literature Bearings
 

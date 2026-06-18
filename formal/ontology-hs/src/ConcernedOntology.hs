@@ -37,6 +37,8 @@ data Motif
   | CausalBindingHead
   | ConcernPolicy
   | CalibrationGuard
+  | ProgramFamilyHead
+  | RichProgramComposer
   deriving (Bounded, Enum, Eq, Ord, Show)
 
 newtype Body = Body (Set.Set Motif)
@@ -87,6 +89,8 @@ motifCost motif =
     CausalBindingHead -> 1
     ConcernPolicy -> 0
     CalibrationGuard -> 0
+    ProgramFamilyHead -> 1
+    RichProgramComposer -> 1
 
 dependencies :: [(Motif, [Motif])]
 dependencies =
@@ -96,6 +100,8 @@ dependencies =
   , (CausalBindingHead, [VectorSurfaceEncoder])
   , (ConcernPolicy, [WorldModel])
   , (CalibrationGuard, [FormalGuard, ConcernPolicy])
+  , (ProgramFamilyHead, [WorldModel])
+  , (RichProgramComposer, [InterventionPlanner, ProgramFamilyHead])
   ]
 
 violations :: Body -> [Violation]
@@ -265,6 +271,8 @@ motifName motif =
     CausalBindingHead -> "causal_binding_head"
     ConcernPolicy -> "concern_policy"
     CalibrationGuard -> "calibration_guard"
+    ProgramFamilyHead -> "program_family_head"
+    RichProgramComposer -> "rich_program_composer"
 
 violationName :: Violation -> String
 violationName violation =

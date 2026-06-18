@@ -12,6 +12,7 @@ cabal test all
 cabal run ontology-check
 cabal run ontology-check -- modular_concerned_body restless_vector_body
 cabal run ontology-check -- --motifs vector_surface_encoder,reward_head,causal_binding_head
+cabal run ontology-check -- --motifs vector_surface_encoder,reward_head,world_model,intervention_planner,program_family_head,rich_program_composer,formal_guard
 ```
 
 The current checker is intentionally small: it validates dependency, resource,
@@ -22,3 +23,6 @@ static verdicts when the local Haskell toolchain is unavailable, but records
 `formal_source = "haskell"` whenever the external checker supplies the gate.
 `syntax_memory` may be backed by either a symbolic `tree_binder` or the
 vector/program-side `causal_binding_head`.
+The richer 2A-v2 body contract adds `program_family_head` and
+`rich_program_composer`; the composer requires both an intervention planner and
+a program-family head.

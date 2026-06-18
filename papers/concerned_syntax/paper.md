@@ -1,7 +1,7 @@
 # Constituency Tests for Concerned Representation in Minimal Agents
 
 **Jawaun Brown**  
-2026-06-16
+2026-06-18
 
 ## Abstract
 
@@ -24,9 +24,10 @@ probing low-concern ambiguity that does not affect viability.
 
 In a 200-trial deterministic design pilot, a 5,000-trial symbolic Modal sweep,
 a learned 5-seed Modal sweep, a vector-observation 5-seed Modal sweep, a
-pixel-rendered 5-seed local sweep, and a pixel-level intervention-invention
-5-seed Modal sweep, the concern-gated syntax agent is the only agent family
-that passes the full gate. The first learned agent receives
+pixel-rendered 5-seed local sweep, a pixel-level intervention-invention
+5-seed Modal sweep, and a rich intervention-program 5-seed Modal sweep, the
+concern-gated syntax agent is the only agent family that passes the full gate.
+The first learned agent receives
 candidate parses as visible hypotheses but never receives the hidden true parse
 at test time. The vector-observation agent then removes those candidate-parse
 features: the visible coordinate surface is invariant under swapping the hidden
@@ -43,13 +44,19 @@ parse accuracy 1.000, action accuracy 1.000, target accuracy 1.000, useful
 program rate 1.000, low-concern probe rate 0.156, and gate pass rate 1.000. A
 target-only agent identifies the right pair but probes low concern at 1.000; a
 concern-without-target agent probes at the right times but targets only 0.088
-of high-concern cases. Shortcut reward, passive perceptual inference, no-tree
-planning, random program probing, and restless inquiry all fail for different
-anti-cheat reasons. The result is still not a claim about human cognition or
-learned unsupervised object slots. It is an accepted Phase 2A learned-mechanism
+of high-concern cases. The rich-program gate then requires choosing among
+`observe_pair`, `move_anchor`, `ablate_pair`, and composed move+observe
+families. Across five Modal seeds, the concerned program composer reaches
+family accuracy 1.000, target accuracy 1.000, useful-program rate 1.000,
+rich-program rate 1.000, low-concern program rate 0.162, and gate PASS.
+Shortcut reward, passive perceptual inference, no-tree planning, random
+program probing, family-only selection, target-only selection, rich programs
+without concern, and restless inquiry all fail for different anti-cheat
+reasons. The result is still not a claim about human cognition or learned
+unsupervised object slots. It is an accepted Phase 2A learned-mechanism
 surface: **reward is not syntax, compression is not syntax, probe availability
-is not intervention invention, and uncertainty reduction is not concerned
-inquiry.**
+is not intervention invention, target selection is not program composition,
+and uncertainty reduction is not concerned inquiry.**
 
 ## 1. Why Arc 2A Exists
 
@@ -402,22 +409,88 @@ version of that demand: the agent must not only predict or probe, but select
 the intervention target whose observation changes the admissible causal
 binding under a no-restless constraint.
 
-## 12. Limitations
+## 12. Rich Program-Language Gate
+
+The `observe_pair(a,b)` gate still treats one program family as universally
+useful. The richer gate makes program-family choice part of intervention
+invention:
+
+```text
+null
+observe_pair(a,b)
+move_anchor(anchor)
+ablate_pair(a,b)
+compose_move_observe(anchor,a,b)
+```
+
+Different role mechanisms require different families. Shield/poison cases
+require a composed move+observe operation, repair/core cases require
+move-anchor, food/trap cases require ablation, and low-concern ornament/signal
+cases should still choose `null`. The accepted agent must therefore compose
+four decisions: whether concern warrants action, which target matters, which
+family exposes the mechanism, and how the resulting observation changes
+action.
+
+Remote command:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_rich_program_language_sweep.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90
+```
+
+The tracked public report is
+`experiments/concerned_syntax/results/rich_program_language_modal_2026_06_17.md`.
+
+<div style="page-break-before: always;"></div>
+
+Gate summary:
+
+| Agent | Parse | Action | Subtree | Low program | Gate |
+|---|---:|---:|---:|---:|---|
+| concerned composer | 1.000 | 1.000 | 0.794 | 0.162 | PASS |
+| family no target | 0.541 | 0.890 | 0.534 | 0.162 | fail |
+| target no family | 0.503 | 0.881 | 0.633 | 1.000 | fail |
+| rich no concern | 1.000 | 1.000 | 1.000 | 1.000 | fail |
+| random rich | 0.503 | 0.881 | 0.507 | 1.000 | fail |
+| surface shortcut | 0.503 | 0.879 | 0.507 | 0.000 | fail |
+
+Program metrics:
+
+| Agent | Family | Target | Useful | Rich |
+|---|---:|---:|---:|---:|
+| concerned composer | 1.000 | 1.000 | 1.000 | 1.000 |
+| family no target | 1.000 | 0.080 | 0.080 | 1.000 |
+| target no family | 0.000 | 1.000 | 0.000 | 0.000 |
+| rich no concern | 1.000 | 1.000 | 1.000 | 1.000 |
+| random rich | 0.249 | 0.139 | 0.021 | 0.749 |
+| surface shortcut | 0.000 | 0.000 | 0.000 | 0.000 |
+
+This is stronger than the v1 intervention-invention gate because target
+selection is no longer enough. The target-only control identifies the right
+object pair but cannot choose the useful operation family. The
+rich-without-concern control can choose rich programs but probes low-concern
+cases restlessly. The accepted agent passes only when concern gating, target
+binding, program-family selection, and rich program composition are all
+present.
+
+## 13. Limitations
 
 The current benchmark is still synthetic. The newest agent receives generated
 pixels with algorithmic connected-component extraction, not natural images,
 learned object slots, continuous control, or human subjects. The newest
-intervention-invention gate selects among a provided `observe_pair(a,b)`
-program language; it does not invent raw motor primitives or open-ended
-experimental apparatus. The point of this first paper is to define and pass a
-minimal learned acceptance surface before larger compute.
+rich-program gate selects among a provided finite program grammar; it does not
+invent raw motor primitives or open-ended experimental apparatus. The point of
+this first paper is to define and pass a minimal learned acceptance surface
+before larger compute.
 
 The most important limitation is also the next step: the agent should learn the
-intervention language, object slots, and parse representation from richer
-generated shapes, not merely select among provided probe tokens and bind
-observations to an extracted object surface.
+object slots, transfer across held-out role/parse families, and instantiate
+program/body components as learned modules, not merely select among provided
+program tokens and bind observations to an extracted object surface.
 
-## 13. Conclusion
+## 14. Conclusion
 
 Arc 2A inserts a new layer into the maintained-concern ladder:
 
@@ -428,11 +501,12 @@ difference -> geometry -> syntax -> salience -> valence
 
 The results support a narrow methodological claim: concerned syntax needs its
 own tests. Reward, compression, uncertainty, action accuracy, target selection
-without concern, and even syntax without concern can all dissociate from causal
-constituency under maintained concern. The learned-agent, vector-observation,
-pixel-rendered, and intervention-invention gates show that the gate is passable
-without hidden parse access, but only when object extraction, useful target
-selection, binding, intervention, and formal concern gating are present
+without concern, rich program use without concern, and even syntax without
+concern can all dissociate from causal constituency under maintained concern.
+The learned-agent, vector-observation, pixel-rendered, intervention-invention,
+and rich-program gates show that the gate is passable without hidden parse
+access, but only when object extraction, useful target selection, program
+family selection, binding, intervention, and formal concern gating are present
 together.
 
 ## References
