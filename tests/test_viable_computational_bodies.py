@@ -7,6 +7,7 @@ from experiments.viable_computational_bodies.haskell_gate import (
     HaskellGateUnavailable,
     HaskellVerdict,
     load_body_verdicts,
+    load_motif_verdict,
     parse_named_verdicts,
 )
 from experiments.viable_computational_bodies.search import (
@@ -17,6 +18,7 @@ from experiments.viable_computational_bodies.search import (
     summarize,
 )
 from experiments.viable_computational_bodies.program_body_search import (
+    ProgramBodyFormalOracle,
     ProgramBodySpec,
     empirical_agent_for_body,
     evaluate_program_body,
@@ -168,6 +170,25 @@ class ViableComputationalBodiesTest(unittest.TestCase):
         )
         self.assertTrue(verdicts["modular_concerned_body"].formal_valid)
 
+    def test_haskell_gate_runner_checks_custom_motifs(self) -> None:
+        seen: dict[str, tuple[str, ...]] = {}
+
+        def runner(motifs: tuple[str, ...]) -> str:
+            seen["motifs"] = motifs
+            return (
+                '{"body":"custom_motifs","formal_valid":true,'
+                '"resource_cost":8,"violations":[]}\n'
+            )
+
+        verdict = load_motif_verdict(
+            ("reward_head", "vector_surface_encoder", "reward_head"),
+            runner=runner,
+        )
+
+        self.assertEqual(seen["motifs"], ("reward_head", "vector_surface_encoder"))
+        self.assertTrue(verdict.formal_valid)
+        self.assertEqual(verdict.formal_source, "haskell")
+
     def test_vector_body_summary_records_haskell_verdict_provenance(self) -> None:
         agent_stats = {
             agent: {
@@ -300,6 +321,52 @@ class ViableComputationalBodiesTest(unittest.TestCase):
             program_body_violations(spec),
         )
 
+    def test_program_body_evaluation_records_haskell_motif_verdict(self) -> None:
+        summary = {
+            "concerned_program_inventor": {
+                "parse_accuracy_high_concern": 1.0,
+                "action_accuracy": 1.0,
+                "subtree_accuracy": 0.80,
+                "high_concern_probe_rate": 1.0,
+                "low_concern_probe_rate": 0.16,
+                "target_accuracy_high_concern": 1.0,
+                "useful_program_rate_high_concern": 1.0,
+                "object_extraction_rate": 1.0,
+                "gate_pass": True,
+            }
+        }
+        spec = ProgramBodySpec(
+            frozenset(
+                {
+                    "vector_surface_encoder",
+                    "reward_head",
+                    "world_model",
+                    "intervention_planner",
+                    "concern_policy",
+                    "calibration_guard",
+                    "causal_binding_head",
+                    "formal_guard",
+                }
+            )
+        )
+        evaluation = evaluate_program_body(
+            spec,
+            strategy="viability_guided",
+            seed=0,
+            generation=0,
+            agent_summary=summary,
+            formal_verdict=HaskellVerdict(
+                formal_valid=False,
+                resource_cost=8,
+                violations=("haskell_blocked_body",),
+            ),
+        )
+
+        self.assertEqual(evaluation.formal_source, "haskell")
+        self.assertEqual(evaluation.formal_valid, 0)
+        self.assertEqual(evaluation.body_gate, 0)
+        self.assertEqual(evaluation.violations, ("haskell_blocked_body",))
+
     def test_program_body_search_uses_empirical_2a_contract(self) -> None:
         summary = {
             "surface_program_shortcut": {
@@ -385,6 +452,7 @@ class ViableComputationalBodiesTest(unittest.TestCase):
             generations=10,
             population=12,
             agent_summary=summary,
+            formal_oracle=ProgramBodyFormalOracle(mode="python_static"),
         )
         search_summary = summarize_program_bodies(rows)
 

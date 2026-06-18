@@ -356,8 +356,10 @@ The Haskell checker caught real ontology inconsistencies during development:
 
 Next Haskell step:
 
-Make Python consume Haskell JSON verdicts during body evaluation. This moves
-formal admissibility from "parallel artifact" into the actual sweep gate.
+Package the Haskell toolchain, or a precomputed Haskell motif-verdict cache,
+for Modal-scale body search. Local Python now consumes Haskell JSON verdicts
+for arbitrary motif candidates during `program_body_search`; Modal still falls
+back to `python_static` unless Cabal is available in the image.
 
 ## 6. Research Sources and Citation Practice
 
@@ -559,6 +561,13 @@ Status: completed in PR #125. `ontology-check` supports named body verdicts and
 `experiments/viable_computational_bodies/haskell_gate.py` and records
 `formal_source`, `formal_valid`, `resource_cost`, and `formal_violations`.
 Keep this section as the design record, not as an open task.
+
+Follow-on status: local program-body search now calls `ontology-check --motifs`
+for searched candidates and records Haskell-source formal provenance in
+`experiments/viable_computational_bodies/results/program_body_search_haskell_local_2026_06_16.md`.
+Across the fixed five-seed report set, `viability_guided` reaches body gate
+`1.000`, empirical gate `1.000`, formal valid `1.000`, Haskell-source rate
+`1.000`, target/useful high `1.000`, and low-probe `0.144`.
 
 Proposed files:
 
@@ -838,24 +847,26 @@ Safe current claims:
   passive inference, and restless uncertainty reduction.
 - Arc 2B now has symbolic search, executable body validation, vector module
   validation, and a typed Haskell admissibility prototype.
-- The current frontier is pixel perception, Haskell-in-the-loop body evaluation,
-  and search-discovered executable modules.
+- The current frontier is pixel perception, Modal-packaged Haskell/cache-backed
+  body search, and search-discovered executable modules.
 
 ## 12. Suggested Immediate Next Branches
 
-### Branch 1: `codex/phase2-haskell-python-gate`
+### Branch 1: `codex/phase2-haskell-modal-cache`
 
 Goal:
 
-Python consumes Haskell ontology verdicts in body evaluation.
+Modal-scale body search consumes Haskell ontology verdicts or a provenance-safe
+precomputed Haskell verdict cache.
 
 Definition of done:
 
-- `ontology-check` accepts body names or motif lists.
-- Python calls/caches it.
-- Tests pass with Haskell installed.
-- Body report records Haskell-sourced formal validity.
-- Papers mention this as integration, not just prototype.
+- Modal image includes the Haskell checker, or the run consumes a tracked
+  Haskell-generated motif verdict cache.
+- Modal report records `formal_source = "haskell"` or
+  `formal_source = "haskell_cache"` for searched bodies.
+- Haskell errors cannot silently become passing Python-static verdicts.
+- Papers mention this as admissibility integration, not full formal proof.
 
 ### Branch 2: `codex/phase2-pixel-syntax`
 
@@ -1037,5 +1048,11 @@ Latest coupled result after PR #127:
   empirical gate `1.000`, formal valid `1.000`, target/useful high `1.000`,
   low probe `0.156`, and discovers
   `calibration_guard+causal_binding_head+concern_policy+formal_guard+intervention_planner+reward_head+vector_surface_encoder+world_model`.
+- The Haskell-backed local follow-up report
+  `experiments/viable_computational_bodies/results/program_body_search_haskell_local_2026_06_16.md`
+  uses the same five report seeds at `1200/500/60`, records
+  `formal_source = "haskell"` for searched bodies, and reaches
+  `viability_guided` body gate `1.000`, empirical gate `1.000`, formal valid
+  `1.000`, target/useful high `1.000`, and low probe `0.144`.
 - `reward_only` fails as a shortcut body; `syntax_proxy` reaches target/useful
   `1.000` but fails body gate with low-probe `0.830`.

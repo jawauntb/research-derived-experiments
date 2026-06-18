@@ -148,6 +148,13 @@ Current branch result:
 - `concern_without_target` proves concern gating alone is insufficient:
   low-concern probe rate is `0.156`, but high-concern target accuracy is only
   `0.088`.
+- Haskell motif verdicts now participate in local 2B program-body search.
+  Across the fixed five-seed report set, `viability_guided` reaches body gate
+  `1.000`, empirical gate `1.000`, formal valid `1.000`, Haskell-source rate
+  `1.000`, target/useful high `1.000`, and low-probe `0.144`, while
+  `reward_only` and `syntax_proxy` fail. This closes the local
+  Haskell-in-loop gap for `2A-v1`; Modal still needs either a Haskell-enabled
+  image or a precomputed Haskell verdict cache.
 - The next 2A breakthrough gate should add held-out transfer and richer program
   composition, not rerun the same `observe_pair(a,b)` menu.
 - A Modal transfer sweep now makes that boundary explicit. The i.i.d.
@@ -169,9 +176,9 @@ Current coupled 2A/2B result:
   `calibration_guard+causal_binding_head+concern_policy+formal_guard+intervention_planner+reward_head+vector_surface_encoder+world_model`.
 - `reward_only` fails as a shortcut body; `syntax_proxy` reaches target/useful
   `1.000` but fails the body gate with low-probe `0.830`.
-- The next 2B breakthrough gate should put Haskell motif verdicts inside
-  `program_body_search`, then consume the future `2A-v2` richer intervention
-  contract.
+- The local Haskell-in-loop gap is now closed for `2A-v1`; the next 2B
+  breakthrough gate should preserve Haskell-source provenance on Modal and
+  consume the future `2A-v2` richer intervention contract.
 
 ## Literature Bearings
 

@@ -139,6 +139,14 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     --generations 24 --population 24 \
     --train-trials 3000 --test-trials 1200 --epochs 90
 
+python3 -m experiments.viable_computational_bodies.program_body_search \
+    --seed-list 20260616,1729,4242,8675309,314159 \
+    --generations 18 --population 18 \
+    --train-trials 1200 --test-trials 500 --epochs 60 \
+    --formal-mode haskell \
+    --out artifacts/viable_computational_bodies/program_body_search_haskell_local.json \
+    --report experiments/viable_computational_bodies/results/program_body_search_haskell_local_2026_06_16.md
+
 # Phase / Arc 2B executable body validation is produced by the learned 2A sweep:
 # experiments/viable_computational_bodies/results/executable_bodies_modal_2026_06_16.md
 
