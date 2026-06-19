@@ -2,8 +2,8 @@
 
 Date: 2026-06-18
 Repo: `jawauntb/research-derived-experiments`
-Current fresh branch for this note: `codex/phase2-open-program-search`
-Current `origin/main`: `ac2e834` (`Merge pull request #140 from jawauntb/codex/phase2-learned-slot-semantics`)
+Current fresh branch for this note: `codex/phase2-unsupervised-object-slots`
+Current `origin/main`: `735f57d` (`Merge pull request #141 from jawauntb/codex/phase2-open-program-search`)
 External paper artifact folder: `/Users/jawaun/Metaphysics of Intelligence/Phase_Arc_2`
 
 This is the start-here note for the next agent session. The user is not asking
@@ -56,17 +56,25 @@ useful v2 policy across five Modal seeds. This closes finite DSL program-policy
 search over the provided rich grammar, but not open-ended motor/apparatus
 discovery.
 
+The label-free slot-semantics successor branch then removes supervised
+role-token calibration. It clusters connected components without visible role
+labels and grounds active-cluster profiles through synthetic rich-program
+feedback and action consistency. This closes label-free role-token calibration
+under a supplied semantic profile table, but not fully unsupervised semantic-
+profile discovery or natural-image object discovery.
+
 Do not phrase this as "2A is done" or "2B is done." Phrase it this way:
 
 - `2A-v2` is done as a provided-rich-grammar contract with Modal-confirmed
-  searched recipes, transfer repair, and supervised learned slot semantics, not
-  as open-ended motor/apparatus invention or unsupervised object/role discovery.
+  searched recipes, transfer repair, supervised learned slot semantics, and
+  label-free role-token calibration, not as open-ended motor/apparatus
+  invention or fully unsupervised object/role semantic-profile discovery.
 - `2B-v2` is done as motif search plus Modal-confirmed compact executable-
   module validation, not as full neural architecture search.
 - 2A and 2B are already combined through the frozen empirical contract and the
   new transfer-consuming body gate.
 - The next combination is learned object/role slots, searched/evolved
-  executable module bodies, and program discovery beyond the provided grammar.
+  executable module bodies, and program discovery beyond the finite DSL.
 
 Current accepted 2A result:
 
@@ -142,6 +150,31 @@ Important rejected controls:
   `0.076` and low-program `1.000`.
 - `syntax_proxy_rich_program_search`: syntax/family/target/useful/rich
   `1.000`, but low-program `1.000`.
+
+Current label-free slot-semantics result:
+
+```text
+report: experiments/concerned_syntax/results/unsupervised_slot_semantics_modal_2026_06_18.md
+positive: unsupervised_slot_semantic_world_model
+semantic kind/family/pair: 1.000
+transfer gate: 1.000
+family/target/useful/rich high: 1.000
+low-program: 0.000
+gate: PASS across 5 Modal seeds at 3000 train / 1200 test / 90 epochs
+```
+
+Important rejected controls:
+
+- `learned_rich_program_composer`: transfer gate `0.000`; still fails held-out
+  role/parse transfer.
+- `unsupervised_semantic_family_only`: semantic kind/family/pair `1.000`, but
+  target/useful `0.214`.
+- `unsupervised_semantic_target_only`: semantic kind/family/pair `1.000`, but
+  family/useful `0.143` and low-program `0.714`.
+- `unsupervised_semantic_rich_without_concern`: semantic and rich metrics
+  `1.000`, but low-program `0.714`.
+- Boundary: this removes supervised role-token labels, but still uses a
+  supplied semantic profile table and synthetic rich-program feedback.
 
 Current accepted 2B result:
 
@@ -629,14 +662,14 @@ When done:
 
 ## 11. Best Starting Move for the Next Agent
 
-Start with `codex/phase2-unsupervised-object-slots` or a 2B searched/evolved
-module branch.
+Start with a 2B searched/evolved module branch or a stricter semantic-profile
+discovery branch.
 
-Reason: the current branch lands Modal-confirmed finite recipe search for the
-provided v2 rich grammar. The next scientific gap is not another seed sweep; it
-is unsupervised object/role slot discovery beyond supervised role-token
-calibration, open-ended motor/apparatus discovery beyond the finite DSL, or
-searched/evolved executable modules under 2B.
+Reason: the current branch lands Modal-confirmed label-free role-token
+calibration under a supplied semantic profile table. The next scientific gap is
+not another seed sweep; it is fully unsupervised semantic-profile discovery,
+open-ended motor/apparatus discovery beyond the finite DSL, or searched/evolved
+executable modules under 2B.
 
 Then move to searched/evolved executable modules under 2B, keeping the
 Modal-first rule and the same transfer gate as a required contract.
