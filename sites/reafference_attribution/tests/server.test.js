@@ -41,12 +41,12 @@ test("static server serves expected cache headers and methods", async () => {
     assert.equal(index.headers.get("cache-control"), "no-cache, max-age=0");
     assert.match(await index.text(), /Research Mechanism Atlas/);
 
-    const app = await request("/app.js?v=atlas-6", { method: "HEAD" });
+    const app = await request("/app.js?v=atlas-8", { method: "HEAD" });
     assert.equal(app.status, 200);
     assert.equal(app.headers.get("content-type"), "text/javascript; charset=utf-8");
     assert.equal(app.headers.get("cache-control"), "public, max-age=300");
 
-    const styles = await request("/styles.css?v=atlas-6");
+    const styles = await request("/styles.css?v=atlas-8");
     assert.equal(styles.status, 200);
     assert.equal(styles.headers.get("content-type"), "text/css; charset=utf-8");
     assert.equal(styles.headers.get("cache-control"), "public, max-age=300");

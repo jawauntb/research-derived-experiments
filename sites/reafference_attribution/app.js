@@ -14,6 +14,7 @@ const phaseValueEl = document.getElementById("phase-value");
 const phaseFillEl = document.getElementById("phase-fill");
 const cardsEl = document.getElementById("experiment-cards");
 const pauseButton = document.getElementById("pause-button");
+const storyButton = document.getElementById("story-button");
 const labelsButton = document.getElementById("labels-button");
 const speedRange = document.getElementById("speed-range");
 
@@ -54,6 +55,27 @@ const pageList = [
       { label: "metric stack", href: `${repoUrl}/papers/metric_stack_synthesis/paper.md` },
       { label: "phase 2 handoff", href: `${repoUrl}/docs/phase2_next_breakthrough_handoff.md` },
       { label: "specificity frontier", href: `${repoUrl}/docs/semantic_specificity.md` },
+    ],
+  },
+  {
+    route: "phase2",
+    nav: "phase 2",
+    draw: drawPhase2,
+    color: colors.green,
+    kicker: "guided story mode",
+    title: "phase 2: pixels to bodies",
+    subtitle: "A reviewer can watch the current claim unfold: pixel scenes become object slots, slots become intervention programs, transfer repairs the parse, and executable bodies consume the contract.",
+    thesis: "Phase 2 is the bridge from concerned syntax to viable computational bodies. The guided route shows what is already earned, what each control blocks, and where the next frontier begins: learned object slots, trainable modules, and open-ended program discovery.",
+    motions: [
+      "Story mode advances a spotlight through the accepted Phase 2 contract, from pixel observations to bounded executable body search.",
+      "Moving packets are evidence: they only cross the next gate when the current representation preserves concern, target binding, useful programs, and transfer.",
+      "Dim paths are controls and open frontiers, so the viewer sees why reward-only, syntax-proxy, and supplied-label shortcuts are not the claim.",
+    ],
+    sources: [
+      { label: "next breakthrough", href: `${repoUrl}/docs/phase2_next_breakthrough_handoff.md` },
+      { label: "trajectory", href: `${repoUrl}/docs/phase2_breakthrough_trajectory.md` },
+      { label: "concerned syntax", href: `${repoUrl}/experiments/concerned_syntax/README.md` },
+      { label: "body search", href: `${repoUrl}/experiments/viable_computational_bodies/README.md` },
     ],
   },
   {
@@ -165,6 +187,7 @@ const state = {
   route: "overview",
   paused: false,
   showLabels: true,
+  storyMode: true,
   speed: 1,
   elapsed: 0,
   lastFrame: 0,
@@ -228,6 +251,63 @@ const programLayers = [
     value: "scaffolds visible",
     color: colors.blue,
     level: 0.46,
+  },
+];
+
+const phase2Steps = [
+  {
+    label: "pixel scene",
+    short: "pixels",
+    value: "parse-invariant",
+    status: "input",
+    color: colors.cyan,
+    story: "The scene starts as pixels and connected components, not a supplied symbolic answer.",
+    detail: "deterministic pixel surface with hidden parse",
+  },
+  {
+    label: "object slots",
+    short: "slots",
+    value: "label-free",
+    status: "learned",
+    color: colors.blue,
+    story: "Anonymous components become active profiles through rich-program feedback and action consistency.",
+    detail: "role-token calibration removed from the accepted path",
+  },
+  {
+    label: "rich intervention program",
+    short: "programs",
+    value: "1.00 gate",
+    status: "mechanism",
+    color: colors.amber,
+    story: "The agent chooses program families, target bindings, and useful probes only when concern makes them matter.",
+    detail: "observe, move, ablate, and compose families compete",
+  },
+  {
+    label: "transfer repair",
+    short: "transfer",
+    value: "held-out pass",
+    status: "wrap gate",
+    color: colors.green,
+    story: "Held-out role and parse transfer checks that the mechanism is not a surface shortcut.",
+    detail: "repair preserves concern under changed bindings",
+  },
+  {
+    label: "executable body",
+    short: "bodies",
+    value: "searched",
+    status: "2B consumes 2A",
+    color: colors.violet,
+    story: "A bounded module-body search consumes the frozen syntax contract while reward-only and proxy bodies fail.",
+    detail: "candidate bodies must pass viability and formal gates",
+  },
+  {
+    label: "next frontier",
+    short: "frontier",
+    value: "open",
+    status: "not overclaimed",
+    color: colors.rose,
+    story: "The honest next step is learned object-slot perception, trainable neural module bodies, and program discovery beyond the finite DSL.",
+    detail: "natural images and open-ended apparatus remain ahead",
   },
 ];
 
@@ -636,6 +716,223 @@ function drawProgramMobile(w, h, p, focusIndex) {
   const focus = nodes[focusIndex];
   roundedRect(12, h - 50, w - 24, 34, 8, "rgba(8,9,13,0.78)", focus.layer.color);
   text(focus.layer.detail, w * 0.5, h - 33, 10, colors.muted);
+}
+
+function drawPhase2() {
+  clearCanvas();
+  const w = state.width;
+  const h = state.height;
+  const p = cycle(state.storyMode ? 24 : 18);
+  const focusIndex = Math.floor(p * phase2Steps.length) % phase2Steps.length;
+  const focus = phase2Steps[focusIndex];
+
+  if (w < 620) drawPhase2Mobile(w, h, p, focusIndex);
+  else drawPhase2Desktop(w, h, p, focusIndex);
+
+  updatePhase("phase 2 story", `${focus.status}: ${focus.label}`, p);
+  updateMetrics([
+    { label: "accepted 2A contract", value: "rich v2", amount: 1, color: colors.amber },
+    { label: "2B body consumption", value: "searched pass", amount: 0.88, color: colors.violet },
+    { label: "open frontier", value: "object slots", amount: 0.42 + 0.14 * wave(state.elapsed * 0.8), color: colors.rose },
+  ]);
+}
+
+function drawPhase2Field(nodes, focusIndex) {
+  const cell = clamp(Math.floor(state.width / 42), 8, 18);
+  for (let y = 0; y < state.height; y += cell) {
+    for (let x = 0; x < state.width; x += cell) {
+      let strongest = 0;
+      let color = colors.cyan;
+      nodes.forEach((node, index) => {
+        const dx = (x + cell * 0.5 - node.x) / state.width;
+        const dy = (y + cell * 0.5 - node.y) / state.height;
+        const gate = index === focusIndex ? 1.15 : 0.72;
+        const force = Math.exp(-(dx * dx + dy * dy) / 0.018) * gate;
+        if (force > strongest) {
+          strongest = force;
+          color = node.step.color;
+        }
+      });
+      const ripple = 0.04 * wave(x * 0.024 + y * 0.018 + state.elapsed * 1.1);
+      ctx.fillStyle = withAlpha(color, clamp(0.035 + strongest * 0.24 + ripple, 0.03, 0.34));
+      ctx.fillRect(x, y, cell + 0.5, cell + 0.5);
+    }
+  }
+}
+
+function drawPhase2Pixels(x, y, width, height, active) {
+  const cols = 5;
+  const rows = 4;
+  const gap = 3;
+  const cell = Math.min((width - gap * (cols - 1)) / cols, (height - gap * (rows - 1)) / rows);
+  const colorsByRole = [colors.cyan, colors.amber, colors.green, colors.violet, colors.rose];
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const index = (row * cols + col) % colorsByRole.length;
+      const pulse = active ? wave(state.elapsed * 2.2 + row + col) : 0.34;
+      ctx.fillStyle = withAlpha(colorsByRole[index], 0.24 + pulse * 0.46);
+      ctx.fillRect(x + col * (cell + gap), y + row * (cell + gap), cell, cell);
+    }
+  }
+}
+
+function drawPhase2Slots(x, y, active) {
+  const labels = ["anchor", "bound", "target"];
+  labels.forEach((label, index) => {
+    const yy = y + index * 19;
+    const color = phase2Steps[(index + 1) % phase2Steps.length].color;
+    line(x, yy, x + 82 * (active ? 0.72 + 0.20 * wave(state.elapsed + index) : 0.46), yy, color, 7, 0.72);
+    text(label, x + 92, yy, 9, colors.muted, "left", "600");
+  });
+}
+
+function drawPhase2Program(x, y, active) {
+  ["observe", "move", "ablate", "compose"].forEach((label, index) => {
+    const yy = y + index * 17;
+    const selected = active && index === Math.floor(cycle(4, index * 0.03) * 4);
+    text(label, x, yy, selected ? 10 : 9, selected ? colors.amber : colors.muted);
+  });
+}
+
+function drawPhase2Body(x, y, active) {
+  const modules = [
+    [x - 36, y - 20, colors.cyan],
+    [x + 34, y - 20, colors.blue],
+    [x - 22, y + 28, colors.amber],
+    [x + 44, y + 26, colors.green],
+  ];
+  modules.forEach(([mx, my, color], index) => {
+    roundedRect(mx - 20, my - 12, 40, 24, 6, "rgba(12,15,24,0.82)", color);
+    dot(mx, my, active ? 3.8 + wave(state.elapsed + index) * 1.8 : 3.2, color, 0.9);
+  });
+  for (let i = 0; i < modules.length; i++) {
+    const a = modules[i];
+    const b = modules[(i + 1) % modules.length];
+    line(a[0], a[1], b[0], b[1], active ? colors.green : colors.faint, 1.4, active ? 0.62 : 0.32);
+  }
+}
+
+function drawPhase2Glyph(step, x, y, active) {
+  if (step.short === "pixels") {
+    drawPhase2Pixels(x - 42, y - 28, 84, 56, active);
+    return;
+  }
+  if (step.short === "slots") {
+    drawPhase2Slots(x - 54, y - 19, active);
+    return;
+  }
+  if (step.short === "programs") {
+    drawPhase2Program(x, y - 25, active);
+    return;
+  }
+  if (step.short === "transfer") {
+    line(x - 48, y, x + 48, y, active ? colors.green : colors.faint, 7, active ? 0.82 : 0.36);
+    dot(x - 48, y, 6, colors.cyan, 0.8);
+    dot(x + 48, y, 6, colors.green, 0.8);
+    text("held-out", x, y - 22, 9, colors.green);
+    return;
+  }
+  if (step.short === "bodies") {
+    drawPhase2Body(x, y, active);
+    return;
+  }
+  halo(x, y, active ? 60 : 42, colors.rose, active ? 0.22 : 0.10);
+  line(x - 44, y + 20, x + 44, y - 20, colors.rose, 2, active ? 0.72 : 0.36, [4, 8]);
+  line(x - 44, y - 20, x + 44, y + 20, colors.blue, 2, active ? 0.62 : 0.28, [4, 8]);
+  text("open", x, y, 11, colors.rose);
+}
+
+function phase2PathPoint(nodes, progress) {
+  const scaled = clamp(progress, 0, 0.999) * (nodes.length - 1);
+  const index = Math.floor(scaled);
+  const local = scaled - index;
+  const a = nodes[index];
+  const b = nodes[index + 1] || nodes[index];
+  return { x: mix(a.x, b.x, ease(local)), y: mix(a.y, b.y, ease(local)), color: b.step.color };
+}
+
+function drawPhase2Desktop(w, h, p, focusIndex) {
+  const nodes = phase2Steps.map((step, index) => ({
+    step,
+    index,
+    x: mix(w * 0.11, w * 0.89, index / (phase2Steps.length - 1)),
+    y: h * (index % 2 ? 0.57 : 0.37),
+  }));
+  drawPhase2Field(nodes, focusIndex);
+
+  text(state.storyMode ? "story mode follows the proof" : "map mode keeps every gate visible", w * 0.5, h * 0.08, 14, colors.ink);
+  nodes.forEach((node, index) => {
+    const active = state.storyMode ? index === focusIndex : true;
+    const next = nodes[index + 1];
+    if (next) {
+      arrow(node.x + 58, node.y, next.x - 58, next.y, next.step.color, active || index + 1 === focusIndex ? 2.8 : 1.6, active ? 0.72 : 0.34, index % 2 ? -0.05 : 0.05);
+      const packet = (p * phase2Steps.length + index * 0.31) % 1;
+      if (packet < 1) {
+        dot(mix(node.x + 58, next.x - 58, ease(packet)), mix(node.y, next.y, ease(packet)), active ? 5.5 : 3.5, next.step.color, 0.86);
+      }
+    }
+
+    halo(node.x, node.y, active ? 88 : 58, node.step.color, active ? 0.23 : 0.10);
+    roundedRect(node.x - 74, node.y - 62, 148, 124, 8, active ? "rgba(12,15,24,0.92)" : "rgba(12,15,24,0.72)", node.step.color);
+    drawPhase2Glyph(node.step, node.x, node.y - 7, active);
+    text(node.step.short, node.x, node.y + 38, active ? 12 : 11, colors.ink);
+    text(node.step.value, node.x, node.y + 55, 9, node.step.color);
+  });
+
+  const controlY = h * 0.80;
+  const failX = w * 0.13;
+  const frontierX = w * 0.87;
+  roundedRect(failX - 92, controlY - 32, 184, 64, 8, "rgba(255,143,155,0.05)", "rgba(255,143,155,0.36)");
+  text("controls fail", failX, controlY - 8, 12, colors.rose);
+  text("reward-only / proxy / supplied labels", failX, controlY + 13, 9, colors.muted);
+  roundedRect(frontierX - 98, controlY - 32, 196, 64, 8, "rgba(111,168,255,0.05)", "rgba(111,168,255,0.38)");
+  text("frontier remains", frontierX, controlY - 8, 12, colors.blue);
+  text("learned slots + trainable bodies", frontierX, controlY + 13, 9, colors.muted);
+  line(failX + 102, controlY, frontierX - 108, controlY, colors.faint, 1.4, 0.34, [5, 9]);
+
+  if (state.storyMode) {
+    const focus = phase2Steps[focusIndex];
+    const point = phase2PathPoint(nodes, p);
+    halo(point.x, point.y, 44, point.color, 0.24);
+    dot(point.x, point.y, 7, point.color, 0.95);
+    roundedRect(w * 0.25, h * 0.86, w * 0.50, h * 0.10, 8, "rgba(8,9,13,0.80)", focus.color);
+    text(focus.story, w * 0.50, h * 0.91, 12, colors.ink);
+  }
+}
+
+function drawPhase2Mobile(w, h, p, focusIndex) {
+  const top = 52;
+  const bottom = h - 92;
+  const spineX = w * 0.18;
+  const nodes = phase2Steps.map((step, index) => ({
+    step,
+    index,
+    x: spineX,
+    y: mix(top, bottom, index / (phase2Steps.length - 1)),
+  }));
+  drawPhase2Field(nodes, focusIndex);
+  line(spineX, top - 18, spineX, bottom + 18, colors.faint, 2, 0.42, [4, 9]);
+  text("phase 2 story", w * 0.54, 24, 13, colors.ink);
+
+  nodes.forEach((node, index) => {
+    const active = state.storyMode ? index === focusIndex : true;
+    const boxX = w * 0.31;
+    const boxW = w - boxX - 12;
+    halo(node.x, node.y, active ? 44 : 28, node.step.color, active ? 0.22 : 0.10);
+    dot(node.x, node.y, active ? 7 : 5, node.step.color, 0.9);
+    line(node.x + 10, node.y, boxX - 8, node.y, node.step.color, active ? 2.6 : 1.2, active ? 0.72 : 0.30);
+    roundedRect(boxX, node.y - 25, boxW, 50, 8, active ? "rgba(12,15,24,0.92)" : "rgba(12,15,24,0.74)", node.step.color);
+    text(node.step.short, boxX + boxW * 0.40, node.y - 8, active ? 11 : 10, colors.ink);
+    text(node.step.value, boxX + boxW * 0.40, node.y + 10, 9, node.step.color);
+    drawPhase2Glyph(node.step, boxX + boxW - 34, node.y, active);
+  });
+
+  const point = phase2PathPoint(nodes, p);
+  dot(point.x, point.y, 4.5, point.color, 0.9);
+  const focus = phase2Steps[focusIndex];
+  roundedRect(12, h - 76, w - 24, 58, 8, "rgba(8,9,13,0.82)", focus.color);
+  text(focus.story, w * 0.5, h - 48, 10, colors.ink);
+  text(focus.detail, w * 0.5, h - 28, 9, colors.muted);
 }
 
 const agents = [
@@ -1051,6 +1348,11 @@ function updateMotionControls() {
   );
 }
 
+function updateStoryControls() {
+  storyButton.textContent = state.storyMode ? "story on" : "story off";
+  storyButton.setAttribute("aria-label", state.storyMode ? "Turn story mode off" : "Turn story mode on");
+}
+
 function frame(now) {
   frameRequest = 0;
   const seconds = now / 1000;
@@ -1085,6 +1387,11 @@ labelsButton.addEventListener("click", () => {
   labelsButton.textContent = state.showLabels ? "labels on" : "labels off";
   scheduleFrame();
 });
+storyButton.addEventListener("click", () => {
+  state.storyMode = !state.storyMode;
+  updateStoryControls();
+  scheduleFrame();
+});
 speedRange.addEventListener("input", () => {
   state.speed = Number(speedRange.value);
 });
@@ -1095,4 +1402,5 @@ window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change",
   scheduleFrame();
 });
 updateMotionControls();
+updateStoryControls();
 scheduleFrame();
