@@ -155,6 +155,7 @@ function makeContext(options = {}) {
   const canvas = new Element("canvas", document);
   canvas.id = "atlas-canvas";
   canvas.parentElement = stage;
+  const drawnText = [];
   canvas.getContext = () => ({
     arc() {},
     beginPath() {},
@@ -162,7 +163,9 @@ function makeContext(options = {}) {
     createRadialGradient: () => ({ addColorStop() {} }),
     fill() {},
     fillRect() {},
-    fillText() {},
+    fillText(label) {
+      drawnText.push(String(label));
+    },
     lineTo() {},
     measureText: text => ({ width: String(text).length * 8 }),
     moveTo() {},
@@ -210,6 +213,7 @@ function makeContext(options = {}) {
       return 1;
     },
     window,
+    drawnText,
   };
   vm.createContext(context);
   vm.runInContext(appSource, context, { filename: "app.js" });
@@ -274,6 +278,25 @@ test("narrow stages use measured canvas size without overflow", () => {
     assert.equal(canvas.style.width, `${width}px`);
     assert.equal(canvas.width, width);
   }
+});
+
+test("narrow reafference canvas suppresses dense annotation labels", () => {
+  const compact = makeContext({ stageWidth: 390, stageHeight: 430 });
+  compact.drawnText.length = 0;
+  compact.fireHash("#reafference");
+  assert.ok(compact.drawnText.includes("agent A"));
+  assert.ok(!compact.drawnText.includes("world shock"));
+  assert.ok(!compact.drawnText.includes("prediction error updates boundary"));
+  assert.ok(!compact.drawnText.includes("observed dE"));
+  assert.ok(!compact.drawnText.includes("self copy"));
+
+  const desktop = makeContext({ stageWidth: 960, stageHeight: 600 });
+  desktop.drawnText.length = 0;
+  desktop.fireHash("#reafference");
+  assert.ok(desktop.drawnText.includes("world shock"));
+  assert.ok(desktop.drawnText.includes("prediction error updates boundary"));
+  assert.ok(desktop.drawnText.includes("observed dE"));
+  assert.ok(desktop.drawnText.includes("self copy"));
 });
 
 test("reduced motion renders once with truthful controls", () => {
