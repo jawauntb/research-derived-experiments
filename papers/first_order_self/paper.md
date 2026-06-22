@@ -38,6 +38,8 @@ This paper tests that hypothesis directly and finds it empirically false. Archit
 
 ![Figure 4: concept visualization of first-order selves in a reafferent plasma. Agent sources carry self-caused loops and world-caused shocks through the same standing-wave field; the attribution problem is to break the gauge and assign observed ΔE to the right source.](figures/fig4_agents_reafference_plasma.png)
 
+Animated browser view: [fig4_agents_reafference_plasma.html](figures/fig4_agents_reafference_plasma.html).
+
 ## 2. Method
 
 ### 2.1 Environment
