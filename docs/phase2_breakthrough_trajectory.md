@@ -242,6 +242,18 @@ Current v1 result:
   profile table and feedback contract are still supplied, so this is
   label-free role-token calibration, not fully unsupervised semantic-profile or
   natural-image object discovery.
+- `discovered_semantic_profiles_modal_2026_06_22.md` removes the supplied
+  semantic profile table from that accepted path. The inducer still uses
+  connected-component clusters and synthetic feedback, but it fits anonymous
+  per-cluster profiles from candidate-family success, bound/unbound utility
+  gaps, and action templates rather than receiving kind-to-family, role-pair,
+  or concern-weight records. Across five Modal seeds,
+  `discovered_semantic_world_model` reaches transfer gate `1.000`, profile
+  cluster purity/family/pair/action-template metrics `1.000`,
+  family/target/useful/rich high-concern rates `1.000`, low-concern program
+  rate `0.000`, and regret `0.004`. This is semantic-profile induction inside
+  the synthetic connected-component world, not natural-image object discovery
+  or fully open-ended semantics.
 
 Current coupled 2A/2B results:
 
@@ -284,10 +296,11 @@ Current coupled 2A/2B results:
 This is the first Phase 2 point where Arc 2A and Arc 2B are coupled at the
 rich program-composition contract, not merely at target selection. The frontier
 now also closes searched rich-program recipes, v2 transfer-repair, supervised
-learned slot-semantics, label-free role-token calibration, and executable-
-module-body gates at Modal scale, including bounded search over label-free
-executable module contracts. It is still not the end of Phase 2: fully
-unsupervised object/role semantic-profile discovery, open-ended motor/apparatus
+learned slot-semantics, label-free role-token calibration, discovered
+semantic-profile induction, and executable-module-body gates at Modal scale,
+including bounded search over label-free executable module contracts. It is
+still not the end of Phase 2: learned object-slot perception, open-ended
+semantics beyond the synthetic feedback contract, open-ended motor/apparatus
 discovery beyond the finite program DSL, and full neural architecture search
 remain open.
 

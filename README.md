@@ -190,6 +190,18 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     --train-trials 3000 --test-trials 1200 --epochs 90 \
     --induction-calibration-trials 1200
 
+python3 -m experiments.concerned_syntax.discovered_semantic_profiles \
+    --train-trials 90 --test-trials 40 --seed 20260622 --epochs 10 \
+    --induction-calibration-trials 500 \
+    --out artifacts/concerned_syntax/discovered_semantic_profiles_local.json \
+    --report experiments/concerned_syntax/results/discovered_semantic_profiles_local_2026_06_22.md
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/concerned_syntax/modal_discovered_semantic_profiles_sweep.py \
+    --train-trials 3000 --test-trials 1200 --epochs 90 \
+    --induction-calibration-trials 1200
+
 doppler --scope /Users/jawaun/superoptimizers run -- \
     uvx --python 3.12 --from modal modal run \
     experiments/concerned_syntax/modal_intervention_transfer_sweep.py \

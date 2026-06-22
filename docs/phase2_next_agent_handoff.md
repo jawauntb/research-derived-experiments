@@ -9,10 +9,21 @@ This document is a detailed continuation brief for a new agent session. It is
 written to preserve the current scientific state, the methodological spine, the
 latest artifacts, and the fastest path to the next useful result.
 
+Status update from 2026-06-22: the semantic-profile-discovery branch has now
+landed the bounded result as semantic-profile induction. The accepted
+`discovered_semantic_world_model` no longer consumes the supplied profile
+table and passes the Modal held-out transfer gate in
+`experiments/concerned_syntax/results/discovered_semantic_profiles_modal_2026_06_22.md`.
+Use `docs/phase2_clean_context_handoff.md` and
+`docs/phase2_next_breakthrough_handoff.md` for the current frontier; remaining
+next moves are learned object-slot perception, 2B consumption of the
+discovered-profile contract, trainable neural modules, or program discovery
+beyond the finite DSL.
+
 Latest start-here note: `docs/phase2_next_breakthrough_handoff.md`. Use that
-note first for the current #127/#128 frontier, Modal-first compute rules, next
-breakthrough milestones, chart/PDF guidance, and fresh-branch instructions. This
-document remains useful as the longer historical brief.
+note first for the current frontier, Modal-first compute rules, next
+breakthrough milestones, chart/PDF guidance, and fresh-branch instructions.
+This document remains useful as the longer historical brief.
 
 ## 1. Highest-Level Program Shape
 

@@ -3,15 +3,14 @@
 Date: 2026-06-22
 Repo: `jawauntb/research-derived-experiments`
 Start point: freshly fetched `origin/main`
-Reference state when this handoff was prepared: current branch
-`codex/phase2-searched-executable-modules` before PR merge
+Reference state when this handoff was refreshed: branch
+`codex/phase2-semantic-profile-discovery`
 External paper folder: `/Users/jawaun/Metaphysics of Intelligence/Phase_Arc_2`
 
 Use this note to start the next agent session from a clean context window.
 
-If the next session is specifically about removing the supplied semantic
-profile table from label-free slot semantics, start with
-`docs/phase2_semantic_profile_discovery_handoff.md`.
+For historical context on the semantic-profile branch that removed the
+supplied table, see `docs/phase2_semantic_profile_discovery_handoff.md`.
 
 ## Current State
 
@@ -24,6 +23,7 @@ Phase 2A and 2B now share a Modal-confirmed `2A-v2` rich-program contract:
   + supervised learned slot semantics
   + label-free role-token calibration
   + transfer-consuming executable module bodies
+  + discovered semantic-profile induction
   + searched executable-module bodies over the label-free transfer gate
 ```
 
@@ -31,10 +31,11 @@ Do not summarize this as "2A is done" or "2B is done." The honest claim is:
 
 - `2A-v2` is done as a provided finite rich-program grammar with searched
   recipes, transfer repair, supervised learned slot semantics, and label-free
-  role-token calibration.
+  role-token calibration plus discovered semantic-profile induction inside the
+  synthetic connected-component world.
 - It is not done as open-ended motor/apparatus discovery, fully unsupervised
-  semantic-profile discovery, natural-image object discovery, or full neural
-  architecture search.
+  open-world semantics, natural-image/learned object-slot discovery, or full
+  neural architecture search.
 - `2B-v2` has compact motif/body validation, transfer-consuming executable
   bodies, and bounded searched executable-module contracts over the label-free
   transfer gate, but not full neural module or architecture search.
@@ -46,8 +47,11 @@ Do not summarize this as "2A is done" or "2B is done." The honest claim is:
 - PR #140: supervised learned slot-semantics repair.
 - PR #141: searched finite rich-program recipe gate.
 - PR #142: label-free slot-semantics transfer gate.
-- Current branch: searched executable-module bodies against the label-free
-  `2A-v2` transfer gate.
+- PR #147: searched executable-module bodies against the label-free `2A-v2`
+  transfer gate.
+- PR #148: semantic-profile-discovery handoff.
+- Current branch: discovered semantic-profile induction against the same
+  held-out `2A-v2` transfer gate.
 
 ## Accepted Evidence
 
@@ -139,6 +143,37 @@ this removes visible role-token labels, but still uses a supplied semantic
 profile table plus synthetic rich-program feedback. Do not call it fully
 unsupervised semantic discovery.
 
+### Discovered Semantic Profiles
+
+Report:
+`experiments/concerned_syntax/results/discovered_semantic_profiles_modal_2026_06_22.md`
+
+Positive:
+`discovered_semantic_world_model`
+
+Metrics:
+profile cluster purity/family/pair/action-template `1.000`, transfer gate
+`1.000`, family/target/useful/rich high `1.000`, low-program `0.000`, regret
+`0.004`, gate PASS across five Modal seeds at 3,000 train / 1,200 test / 90
+epochs.
+
+Rejected controls:
+
+- `learned_rich_program_composer`: fails transfer.
+- `discovered_semantic_family_only`: family `1.000`, but target/useful
+  `0.214`.
+- `discovered_semantic_target_only`: target `1.000`, but family/useful
+  `0.143` and low-program `0.714`.
+- `discovered_semantic_rich_without_concern`: family/target/useful/rich
+  `1.000`, but low-program `0.714`.
+
+Boundary:
+this removes the supplied kind/profile table from the accepted agent, but the
+world is still synthetic, connected-component perception is still algorithmic,
+and feedback is still contract-shaped. Call it semantic-profile induction
+inside the synthetic 2A-v2 world, not natural-image object discovery or fully
+open-ended semantics.
+
 ### 2B Transfer-Consuming Executable Bodies
 
 Report:
@@ -214,6 +249,7 @@ table, and synthetic rich-program feedback.
   `experiments/concerned_syntax/rich_program_transfer_repair.py`
   `experiments/concerned_syntax/learned_slot_semantics.py`
   `experiments/concerned_syntax/unsupervised_slot_semantics.py`
+  `experiments/concerned_syntax/discovered_semantic_profiles.py`
 - 2B implementation:
   `experiments/viable_computational_bodies/learned_executable_modules.py`
   `experiments/viable_computational_bodies/searched_executable_modules.py`
@@ -226,15 +262,26 @@ Start from a fresh fetch/pull of `main` in a new worktree.
 Recommended branch:
 
 ```text
-codex/phase2-semantic-profile-discovery
+codex/phase2-learned-object-slots
 ```
 
 Best next experiment:
 
-Replace the supplied semantic profile table in
-`unsupervised_slot_semantics.py` with a discovered profile mechanism. Keep the
-same label-free held-out transfer gate and controls. Be strict: if the profile
-table is still supplied, do not claim fully unsupervised semantic discovery.
+Replace algorithmic connected-component perception with a learned object-slot
+or CNN/slot-attention-style extractor while preserving the discovered-profile
+held-out transfer verifier and controls. Be strict: if connected components
+remain the accepted perception path, do not claim learned object discovery.
+
+Alternative strong 2A branch:
+
+```text
+codex/phase2-discovered-profile-2b-consumption
+```
+
+Goal:
+make the current 2B searched executable-module body consume the new
+discovered-profile contract rather than the older label-free supplied-profile
+contract.
 
 Alternative strong 2B branch:
 
@@ -279,9 +326,9 @@ Read `docs/phase2_clean_context_handoff.md`,
 `docs/discovery_regime_audit.md`.
 
 Continue Phase 2 from freshly fetched `origin/main`. The next best move is
-`codex/phase2-semantic-profile-discovery`: replace the supplied semantic
-profile table in label-free 2A-v2 slot semantics with a discovered profile
-mechanism while preserving the held-out transfer gate and controls. Keep the
-claim honest, use Modal for full evidence, avoid heavy local sweeps, update the
+`codex/phase2-learned-object-slots`: replace algorithmic connected-component
+perception with a learned object-slot extractor while preserving the
+discovered-profile held-out transfer gate and controls. Keep the claim honest,
+use Modal for full evidence, avoid heavy local sweeps, update the
 paper/audit/handoff/PDFs, run checks, commit, push, PR, and merge when clean.
 ```

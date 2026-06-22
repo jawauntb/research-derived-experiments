@@ -5007,7 +5007,7 @@ Residual content:
   remain open" with "bounded executable-module search now consumes label-free
   2A-v2 transfer; full neural module search remains open."
 
-Next move: either remove the supplied semantic profile table in 2A, or replace
+Next move: consume the discovered-profile 2A contract in 2B, or replace
 bounded executable contracts with trainable neural object-slot, graph-binding,
 routing, and program-composition modules.
 
@@ -5287,6 +5287,108 @@ Residual content:
   supplied semantic profile table and synthetic feedback; fully unsupervised
   semantic-profile discovery remains open."
 
-Next move: replace the supplied semantic profile table with discovered semantic
-profiles. The bounded 2B searched executable-module branch is now recorded in
-the searched executable-module audit card.
+Next move completed by the discovered semantic-profile card below. The bounded
+2B searched executable-module branch is recorded in the searched executable-
+module audit card.
+
+## Arc 2A: Discovered Semantic Profiles Against 2A-v2 Transfer
+
+Question: can the repaired `2A-v2-pixels-rich_programs` transfer gate replace
+the supplied semantic profile table with profiles induced from
+intervention/outcome and action-consistency traces?
+
+Current regime:
+
+- Artifact types: label-free connected-component slot clusters, supplied
+  semantic kind profiles, synthetic rich-program feedback, held-out transfer
+  reports, and shortcut-control summaries.
+- Operations: cluster rendered components, identify active cluster pairs, score
+  those pairs against a supplied semantic profile table, and evaluate the
+  resulting world model on held-out role-kind and true-parse slices.
+- Gates/verifiers: profile kind/family/pair recovery, held-out transfer gate,
+  family/target/useful/rich high-concern rates, low-concern program cap,
+  targeted unit tests, local smoke report, Modal sweep, publication guard,
+  ruff, and ty.
+- Known limitations: components are still algorithmic connected components;
+  feedback remains synthetic and contract-shaped; this is not natural-image
+  object discovery, fully open-ended semantics, human/neural validation, or
+  open-ended motor/apparatus invention.
+
+Action class:
+
+- Retrieval/search/discovery: semantic-profile induction regime transition.
+- Why: the accepted operation no longer receives `KIND_PROFILES`, kind-to-
+  family, kind-to-role-pair, or kind-to-concern-weight records. It fits one
+  anonymous profile per active cluster pair from candidate-family success,
+  bound/unbound utility gap, and action-template traces.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/concerned_syntax/discovered_semantic_profiles.py`;
+  `experiments/concerned_syntax/modal_discovered_semantic_profiles_sweep.py`;
+  `experiments/concerned_syntax/results/discovered_semantic_profiles_local_2026_06_22.md`;
+  `experiments/concerned_syntax/results/discovered_semantic_profiles_modal_2026_06_22.md`;
+  local ignored artifact
+  `artifacts/concerned_syntax/discovered_semantic_profiles_local.json`;
+  Modal ignored artifact
+  `artifacts/concerned_syntax/discovered_semantic_profiles_modal_sweep.json`.
+- Positive target: `discovered_semantic_world_model` should pass profile
+  purity/family/pair/action-template recovery and the held-out v2 transfer
+  gate without a supplied semantic profile table.
+- Negative controls: `learned_rich_program_composer`,
+  `discovered_semantic_family_only`, `discovered_semantic_target_only`, and
+  `discovered_semantic_rich_without_concern`.
+- Stress tests: held-out `shield_poison`, `repair_core`, `food_trap`,
+  `repeat_concat`, `hooked_repeat`, `alternating_bind`, and `edge_core`
+  across five Modal seeds.
+
+Gate:
+
+- Acceptance rule: profile cluster purity, semantic family accuracy, semantic
+  pair accuracy, and profile action consistency >= 0.95; every transfer slice
+  passes; action >= 0.85; low-concern program rate <= 0.25; and family/target/
+  useful/rich high-concern rates >= 0.70.
+- Withheld/rejected rule: do not claim natural-image object discovery, fully
+  open-ended semantics, human/neural validation, open-ended motor/apparatus
+  invention, or full neural architecture search.
+
+Results:
+
+- Accepted artifacts: discovered semantic-profile module, Modal entrypoint,
+  local and Modal reports, targeted tests, README commands, trajectory update,
+  handoff updates, and paper update.
+- Rejected or withheld artifacts: raw JSON remains under ignored `artifacts/`;
+  natural-image object discovery, learned object slots, trainable neural module
+  search, and open-ended program discovery remain withheld.
+- Key metrics across five Modal seeds:
+  `discovered_semantic_world_model` profile cluster purity/family/pair/action
+  template `1.000`, transfer gate `1.000`, family/target/useful/rich high-
+  concern rates `1.000`, low-program `0.000`, regret `0.004`.
+  `learned_rich_program_composer` fails transfer; `discovered_semantic_family_only`
+  has family `1.000` but target/useful `0.214`;
+  `discovered_semantic_target_only` has target `1.000` but family/useful
+  `0.143` and low-program `0.714`;
+  `discovered_semantic_rich_without_concern` has family/target/useful/rich
+  `1.000` but low-program `0.714`.
+- Variance or ablation: five Modal seeds with 3,000 train trials, 1,200 test
+  trials, 1,200 profile-induction trials, and 90 epochs per seed; accepted
+  transfer gate SD is `0.000`.
+
+Residual content:
+
+- Explained by old regime: label-free slot semantics already showed that
+  connected-component clusters plus supplied profile records could pass the
+  transfer gate without visible role-token labels.
+- New content outside old regime: the profile table is no longer supplied to
+  the accepted agent; family, concern gate, and bound-conditioned action
+  structure are induced from intervention/outcome traces.
+- Retractions or supersessions: supersede "fully unsupervised semantic-profile
+  discovery remains open because the profile table is supplied" with
+  "semantic-profile induction passes inside the synthetic connected-component
+  world; fully open-ended semantics and learned object perception remain
+  open."
+
+Next move: replace connected-component perception with learned object slots,
+make 2B consume the discovered-profile contract, or pursue trainable neural
+module search under the same held-out transfer verifier.
