@@ -239,6 +239,35 @@ canvas {
   background: rgba(255, 255, 255, 0.035);
 }
 
+.tour-status {
+  display: inline-grid;
+  grid-template-columns: auto minmax(78px, 132px);
+  gap: 10px;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.035);
+  font-size: 12px;
+}
+
+.tour-meter {
+  display: block;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(246, 239, 228, 0.13);
+}
+
+.tour-meter span {
+  display: block;
+  width: 0%;
+  height: 100%;
+  background: var(--cyan);
+}
+
 .speed-control input {
   width: 150px;
   accent-color: var(--cyan);
@@ -434,7 +463,8 @@ canvas {
   }
 
   .control-row,
-  .speed-control {
+  .speed-control,
+  .tour-status {
     width: 100%;
   }
 
@@ -444,6 +474,10 @@ canvas {
 
   .speed-control {
     justify-content: space-between;
+  }
+
+  .tour-status {
+    grid-template-columns: minmax(0, 1fr) minmax(96px, 34%);
   }
 
   .speed-control input {
