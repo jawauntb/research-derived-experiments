@@ -24,6 +24,7 @@ Local archive:
 - `references/papers/local_there_is_no_self_evidence.pdf`
 - `references/papers/local_thesis_revision_1_9.pdf`
 - `references/papers/arxiv_2606_04662_muon_curvature.pdf`
+- `references/papers/arxiv_2606_02993_spectral_group_composition.pdf`
 
 Original links:
 
@@ -42,6 +43,7 @@ Original links:
 - https://www.frontiersin.org/journals/systems-neuroscience/articles/10.3389/fnsys.2022.768201/full
 - https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2016.00902/full
 - https://arxiv.org/abs/2606.04662
+- https://arxiv.org/abs/2606.02993
 
 Note: `arxiv.org/abs/2606.01444` appeared twice in the prompt and is summarized once.
 
@@ -59,6 +61,19 @@ Fit to this project:
 - Risk: it can distract if we pivot into optimizer benchmarking. Its best role here is as a methods/motivation source, not a core source about concepts, agency, or autopoiesis.
 
 Decision: include it as a methodological source for curvature-aware experiment design. Do not treat optimizer NDS as the same object as concept geometry; use it to sharpen controls and metrics.
+
+### Neural Networks Provably Learn Spectral Representations for Group Composition
+
+Core idea: when a two-layer network is trained on a finite group composition table, projected gradient flow in the Fourier domain selects irreducible representations. The surviving cross-layer Fourier coefficients become rank-one and align in the rotational order required by the group operation. For Abelian groups, the paper gives a sharper population-level account: random initialization diversifies across nontrivial irreps and produces phase structure that approximates the group-composition indicator.
+
+Fit to this project:
+
+- Useful: it is theory-side support for the claim that neural learning under symmetry pressure can discover low-dimensional spectral geometry rather than arbitrary lookup tables.
+- Useful: it gives a rigorous contrast case for the learned-symmetry work: this paper assumes known finite group composition and full composition-table supervision, while the project asks whether symmetry can be inferred from data and then used to predict or improve OOD generalization.
+- Useful: it is relevant background for future dihedral, product-group, or non-Abelian extensions of the data-inferred group program.
+- Risk: it can distract if treated as a direct competitor to the partial-orbit image-language work. Its strongest role is as mechanism and citation support, not as the central empirical object.
+
+Decision: cite as symmetry-learning theory. Archive locally and mention when framing why group-structured data tends to induce spectral/representation-theoretic internal geometry, but keep the current empirical focus on data-inferred symmetries and weakness/OOD behavior.
 
 ## Biggest Research-Worthy Question
 
