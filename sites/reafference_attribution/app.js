@@ -14,9 +14,12 @@ const phaseValueEl = document.getElementById("phase-value");
 const phaseFillEl = document.getElementById("phase-fill");
 const cardsEl = document.getElementById("experiment-cards");
 const pauseButton = document.getElementById("pause-button");
+const tourButton = document.getElementById("tour-button");
 const storyButton = document.getElementById("story-button");
 const labelsButton = document.getElementById("labels-button");
 const speedRange = document.getElementById("speed-range");
+const tourStatusTextEl = document.getElementById("tour-status-text");
+const tourFillEl = document.getElementById("tour-fill");
 
 const rootStyles = getComputedStyle(document.documentElement);
 const cssColor = (name, fallback) => rootStyles.getPropertyValue(name).trim() || fallback;
@@ -176,6 +179,7 @@ const pageList = [
 ];
 
 const pages = Object.fromEntries(pageList.map(page => [page.route, page]));
+const tourStepSeconds = 10.5;
 const metricNodes = [];
 let metricSignature = "";
 let phaseSignature = "";
@@ -188,6 +192,11 @@ const state = {
   paused: false,
   showLabels: true,
   storyMode: true,
+  tourMode: false,
+  tourRouteIndex: 0,
+  tourRouteStartedAt: 0,
+  tourRouting: false,
+  tourExpectedRoute: "",
   speed: 1,
   elapsed: 0,
   lastFrame: 0,
@@ -327,6 +336,7 @@ const wave = t => 0.5 + 0.5 * Math.sin(t);
 const cycle = (duration, offset = 0) => ((state.elapsed / duration + offset) % 1 + 1) % 1;
 const phaseLabel = (labels, p) => labels[Math.min(labels.length - 1, Math.floor(p * labels.length))];
 const hasPage = route => Object.prototype.hasOwnProperty.call(pages, route);
+const routeIndex = route => Math.max(0, pageList.findIndex(page => page.route === route));
 
 function routeFromHash() {
   const route = window.location.hash.replace("#", "");
@@ -384,6 +394,7 @@ function setRoute(route) {
     if (active) card.setAttribute("aria-current", "page");
     else card.removeAttribute("aria-current");
   });
+  if (tourStatusTextEl) updateTourStatus();
 }
 
 function buildCards() {
@@ -1446,6 +1457,82 @@ function updateStoryControls() {
   storyButton.setAttribute("aria-label", state.storyMode ? "Turn story mode off" : "Turn story mode on");
 }
 
+function tourProgress() {
+  if (!state.tourMode) return 0;
+  return clamp((state.elapsed - state.tourRouteStartedAt) / tourStepSeconds, 0, 1);
+}
+
+function updateTourStatus() {
+  const index = state.tourMode ? state.tourRouteIndex : routeIndex(state.route);
+  const page = pageList[index] || pageList[0];
+  let label = `manual · ${page.nav}`;
+  if (!state.reducedMotion && state.tourMode) {
+    label = `tour ${index + 1}/${pageList.length} · ${page.nav}`;
+  }
+  tourStatusTextEl.textContent = label;
+  tourFillEl.style.width = state.tourMode ? `${tourProgress() * 100}%` : `${((index + 1) / pageList.length) * 100}%`;
+  tourFillEl.style.background = page.color;
+}
+
+function updateTourControls() {
+  if (state.reducedMotion) {
+    state.tourMode = false;
+    state.tourRouting = false;
+    state.tourExpectedRoute = "";
+    tourButton.disabled = true;
+    tourButton.textContent = "tour disabled";
+    tourButton.setAttribute("aria-label", "Reviewer tour disabled by reduced motion preference");
+  } else {
+    tourButton.disabled = false;
+    tourButton.textContent = state.tourMode ? "tour on" : "tour off";
+    tourButton.setAttribute("aria-label", state.tourMode ? "Stop reviewer tour" : "Start reviewer tour");
+  }
+  updateTourStatus();
+}
+
+function activateTourRoute(index) {
+  const nextIndex = (index + pageList.length) % pageList.length;
+  const route = pageList[nextIndex].route;
+  state.tourRouteIndex = nextIndex;
+  if (routeFromHash() !== route) {
+    state.tourRouting = true;
+    state.tourExpectedRoute = route;
+    window.location.hash = route;
+  }
+  setRoute(route);
+}
+
+function startReviewerTour() {
+  if (state.reducedMotion) return;
+  state.tourMode = true;
+  state.paused = false;
+  state.tourRouteIndex = routeIndex(state.route);
+  state.tourRouteStartedAt = state.elapsed;
+  updateMotionControls();
+  updateTourControls();
+  activateTourRoute(state.tourRouteIndex);
+  state.lastFrame = 0;
+  scheduleFrame();
+}
+
+function stopReviewerTour() {
+  state.tourMode = false;
+  state.tourRouting = false;
+  state.tourExpectedRoute = "";
+  updateTourControls();
+}
+
+function advanceReviewerTour() {
+  if (!state.tourMode || state.reducedMotion) return;
+  let nextIndex = state.tourRouteIndex;
+  while (state.elapsed - state.tourRouteStartedAt >= tourStepSeconds) {
+    state.tourRouteStartedAt += tourStepSeconds;
+    nextIndex = (nextIndex + 1) % pageList.length;
+  }
+  if (nextIndex !== state.tourRouteIndex) activateTourRoute(nextIndex);
+  else updateTourStatus();
+}
+
 function frame(now) {
   frameRequest = 0;
   const seconds = now / 1000;
@@ -1454,6 +1541,7 @@ function frame(now) {
   const animating = !state.paused && !state.reducedMotion;
   if (animating) {
     state.elapsed += delta * state.speed;
+    advanceReviewerTour();
   }
   drawCurrentView();
   if (animating) scheduleFrame();
@@ -1465,7 +1553,12 @@ setRoute(normalizeRoute());
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
 window.addEventListener("hashchange", () => {
-  setRoute(normalizeRoute());
+  const route = normalizeRoute();
+  const fromTour = state.tourRouting && route === state.tourExpectedRoute;
+  state.tourRouting = false;
+  state.tourExpectedRoute = "";
+  setRoute(route);
+  if (state.tourMode && !fromTour) stopReviewerTour();
   scheduleFrame();
 });
 pauseButton.addEventListener("click", () => {
@@ -1473,6 +1566,11 @@ pauseButton.addEventListener("click", () => {
   state.paused = !state.paused;
   updateMotionControls();
   state.lastFrame = 0;
+  scheduleFrame();
+});
+tourButton.addEventListener("click", () => {
+  if (state.tourMode) stopReviewerTour();
+  else startReviewerTour();
   scheduleFrame();
 });
 labelsButton.addEventListener("click", () => {
@@ -1492,8 +1590,10 @@ window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change",
   state.reducedMotion = event.matches;
   state.lastFrame = 0;
   updateMotionControls();
+  updateTourControls();
   scheduleFrame();
 });
 updateMotionControls();
 updateStoryControls();
+updateTourControls();
 scheduleFrame();

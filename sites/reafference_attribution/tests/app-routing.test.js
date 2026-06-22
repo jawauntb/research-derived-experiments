@@ -137,9 +137,12 @@ function makeContext(options = {}) {
     "phase-fill",
     "experiment-cards",
     "pause-button",
+    "tour-button",
     "story-button",
     "labels-button",
     "speed-range",
+    "tour-status-text",
+    "tour-fill",
   ];
 
   const body = new Element("body", document);
@@ -282,6 +285,33 @@ test("phase 2 guide exposes story contract and controls", () => {
   assert.equal(storyButton.attributes.get("aria-label"), "Turn story mode on");
 });
 
+test("reviewer tour advances routes and manual navigation stops it", () => {
+  const context = makeContext();
+  const { document, window } = context;
+  const tourButton = document.getElementById("tour-button");
+  const tourStatus = document.getElementById("tour-status-text");
+  const tourFill = document.getElementById("tour-fill");
+
+  assert.equal(tourButton.textContent, "tour off");
+  assert.equal(tourStatus.textContent, "manual · program");
+
+  tourButton.click();
+  assert.equal(tourButton.textContent, "tour on");
+  assert.equal(tourStatus.textContent, "tour 1/7 · program");
+
+  context.lastFrame?.(1000);
+  context.lastFrame?.(11500);
+  assert.equal(document.querySelector(".nav-item[aria-current='page']").textContent, "phase 2");
+  assert.equal(tourStatus.textContent, "tour 2/7 · phase 2");
+  assert.equal(window.location.hash, "phase2");
+  assert.equal(tourFill.style.width, "0%");
+
+  context.fireHash("#syntax");
+  assert.equal(tourButton.textContent, "tour off");
+  assert.equal(tourStatus.textContent, "manual · syntax");
+  assert.equal(document.querySelector(".nav-item[aria-current='page']").textContent, "syntax");
+});
+
 test("clicking generated cards updates the route", () => {
   const context = makeContext();
   const { document, window } = context;
@@ -323,7 +353,11 @@ test("narrow reafference canvas suppresses dense annotation labels", () => {
 test("reduced motion renders once with truthful controls", () => {
   const context = makeContext({ reducedMotion: true });
   const pause = context.document.getElementById("pause-button");
+  const tour = context.document.getElementById("tour-button");
   assert.equal(pause.disabled, true);
   assert.equal(pause.textContent, "reduced motion");
   assert.equal(pause.attributes.get("aria-label"), "Animation disabled by reduced motion preference");
+  assert.equal(tour.disabled, true);
+  assert.equal(tour.textContent, "tour disabled");
+  assert.equal(tour.attributes.get("aria-label"), "Reviewer tour disabled by reduced motion preference");
 });
