@@ -6,9 +6,10 @@ const { test } = require("node:test");
 
 const siteRoot = path.join(__dirname, "..");
 const appSource = fs.readFileSync(path.join(siteRoot, "app.js"), "utf8");
-const routes = ["overview", "reafference", "syntax", "bodies", "symmetry", "activation"];
+const routes = ["overview", "phase2", "reafference", "syntax", "bodies", "symmetry", "activation"];
 const routeLabels = {
   overview: "program",
+  phase2: "phase 2",
   reafference: "reafference",
   syntax: "syntax",
   bodies: "bodies",
@@ -136,6 +137,7 @@ function makeContext(options = {}) {
     "phase-fill",
     "experiment-cards",
     "pause-button",
+    "story-button",
     "labels-button",
     "speed-range",
   ];
@@ -174,6 +176,7 @@ function makeContext(options = {}) {
     rotate() {},
     roundRect() {},
     save() {},
+    setLineDash() {},
     setTransform() {},
     stroke() {},
     strokeText() {},
@@ -259,6 +262,23 @@ test("combined program view exposes corpus and frontier context", () => {
   const metricValues = document.querySelectorAll(".metric-value").map(node => node.textContent);
   assert.deepEqual(metricValues, ["34 papers", "117 reports", "kept visible"]);
   assert.match(document.getElementById("mechanism-thesis").textContent, /34 papers and 117 public result notes/);
+});
+
+test("phase 2 guide exposes story contract and controls", () => {
+  const context = makeContext();
+  const { document } = context;
+  context.fireHash("#phase2");
+  const metricValues = document.querySelectorAll(".metric-value").map(node => node.textContent);
+  assert.deepEqual(metricValues, ["rich v2", "searched pass", "object slots"]);
+  assert.match(document.getElementById("view-title").textContent, /phase 2: pixels to bodies/);
+  assert.match(document.getElementById("mechanism-thesis").textContent, /learned object slots/);
+  assert.ok(context.drawnText.includes("story mode follows the proof"));
+
+  const storyButton = document.getElementById("story-button");
+  assert.equal(storyButton.textContent, "story on");
+  storyButton.click();
+  assert.equal(storyButton.textContent, "story off");
+  assert.equal(storyButton.attributes.get("aria-label"), "Turn story mode on");
 });
 
 test("clicking generated cards updates the route", () => {
