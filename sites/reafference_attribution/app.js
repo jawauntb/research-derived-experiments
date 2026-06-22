@@ -722,6 +722,7 @@ function drawReafference() {
   const w = state.width;
   const h = state.height;
   const p = cycle(7);
+  const compact = Math.min(w, h) < 600;
   const cell = Math.max(8, Math.floor(Math.min(w, h) / 82));
   if (!reafferenceBasis || reafferenceBasis.cell !== cell) {
     reafferenceBasis = buildReafferenceBasis(cell);
@@ -754,7 +755,9 @@ function drawReafference() {
     dot(sx, sy, 5, colors.cyan);
     arrow(x - 48, y + 8, x + 52, y - 8, colors.cyan, 2.2, 0.8, -0.08);
     arrow(x + 48, y - 12, x - 44, y + 14, colors.ink, 1.6, 0.58, -0.05);
-    text(agent.name, index === 0 ? x + 82 : x, index === 0 ? y - 62 : y + 44, 13, colors.ink, index === 0 ? "left" : "center");
+    const labelX = compact || index !== 0 ? x : x + 82;
+    const labelY = compact ? y + (agent.y > 0.50 ? -34 : 34) : (index === 0 ? y - 62 : y + 44);
+    text(agent.name, labelX, labelY, compact ? 11 : 13, colors.ink, compact || index !== 0 ? "center" : "left");
   });
 
   worldSources.forEach((source, index) => {
@@ -763,7 +766,7 @@ function drawReafference() {
     const pulse = (p + index * 0.2) % 1;
     halo(x, y, 38 + 90 * pulse, "rgb(255,192,103)", 0.24 * (1 - pulse * 0.45));
     dot(x, y, 7, colors.amber);
-    text("world shock", x, y - 34, 12, colors.amber);
+    if (!compact) text("world shock", x, y - 34, 12, colors.amber);
     agents.forEach(agent => {
       const ax = agent.x * w;
       const ay = (1 - agent.y) * h;
@@ -773,9 +776,11 @@ function drawReafference() {
   });
 
   arrow(w * 0.36, h * 0.34, w * 0.61, h * 0.52, colors.violet, 3, 0.65 + 0.3 * wave(state.elapsed * 2.1), 0.16);
-  text("prediction error updates boundary", w * 0.48, h * 0.30, 13, colors.violet);
-  text("observed dE", w * 0.67, h * 0.47, 12, colors.ink);
-  text("self copy", w * 0.24, h * 0.51, 12, colors.cyan);
+  if (!compact) {
+    text("prediction error updates boundary", w * 0.48, h * 0.30, 13, colors.violet);
+    text("observed dE", w * 0.67, h * 0.47, 12, colors.ink);
+    text("self copy", w * 0.24, h * 0.51, 12, colors.cyan);
+  }
 
   const phaseNames = ["act", "world shock", "observe dE", "assign source"];
   updatePhase("reafference cycle", phaseLabel(phaseNames, p), p);

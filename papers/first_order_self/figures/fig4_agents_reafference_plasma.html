@@ -32,7 +32,7 @@
       place-items: center;
       min-height: 100vh;
       padding: clamp(14px, 3vw, 34px);
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
     main {
@@ -61,7 +61,7 @@
 
     .stage {
       position: relative;
-      width: min(100%, 1080px);
+      width: min(100%, 1080px, 78vh);
       aspect-ratio: 1 / 1;
       margin-inline: auto;
       border: 1px solid rgba(214, 237, 255, 0.38);
@@ -80,6 +80,30 @@
       margin-bottom: 0;
       font-size: clamp(13px, 1.8vw, 18px);
       color: rgba(244, 238, 227, 0.7);
+    }
+
+    @media (max-width: 640px) {
+      body {
+        place-items: start center;
+      }
+
+      h1 {
+        font-size: clamp(20px, 7vw, 34px);
+        margin-bottom: 6px;
+      }
+
+      p {
+        font-size: clamp(12px, 3.4vw, 15px);
+        margin-bottom: 12px;
+      }
+
+      .stage {
+        width: min(100%, 70vh);
+      }
+
+      .caption {
+        margin-top: 12px;
+      }
     }
   </style>
 </head>
@@ -109,6 +133,7 @@
     ];
 
     let cssSize = 900;
+    let compact = false;
     let dpr = 1;
     let reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -125,6 +150,7 @@
     function resize() {
       const rect = canvas.parentElement.getBoundingClientRect();
       cssSize = Math.max(320, Math.floor(Math.min(rect.width, rect.height)));
+      compact = cssSize < 600;
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = Math.floor(cssSize * dpr);
       canvas.height = Math.floor(cssSize * dpr);
@@ -309,9 +335,10 @@
       drawArrow(x + cssSize * 0.064, y - cssSize * 0.020, x - cssSize * 0.062, y + cssSize * 0.020, "#fff2d4", 0.62, cssSize * 0.0020);
 
       const labelY = agent.y > 0.38 ? y + cssSize * 0.086 : y - cssSize * 0.090;
-      drawText(agent.name, annotate ? x + cssSize * 0.120 : x, annotate ? y - cssSize * 0.108 : labelY, Math.max(14, cssSize * 0.020), "#f4eee3", annotate ? "left" : "center");
+      const nameAnnotated = annotate && !compact;
+      drawText(agent.name, nameAnnotated ? x + cssSize * 0.120 : x, nameAnnotated ? y - cssSize * 0.108 : labelY, Math.max(15, cssSize * 0.020), "#f4eee3", nameAnnotated ? "left" : "center");
 
-      if (annotate) {
+      if (annotate && !compact) {
         drawText("efference copy", x - cssSize * 0.168, y - cssSize * 0.112, Math.max(12, cssSize * 0.017), "#93fbff", "left");
         drawText("self dE", x - cssSize * 0.112, y - cssSize * 0.058, Math.max(12, cssSize * 0.017), "#93fbff", "right");
         drawText("world dE", worldX + cssSize * 0.042, worldY - cssSize * 0.012, Math.max(12, cssSize * 0.017), "#ffc875", "left");
@@ -427,7 +454,9 @@
         ctx.fillStyle = color;
         ctx.fillRect(xx, stripY, segmentW * 0.72, Math.max(2, cssSize * 0.004));
         ctx.restore();
-        drawText(label, xx + segmentW * 0.36, stripY - cssSize * 0.020, Math.max(10, cssSize * 0.013), active ? color : "rgba(244,238,227,0.58)");
+        if (!compact || active) {
+          drawText(label, xx + segmentW * 0.36, stripY - cssSize * 0.020, Math.max(11, cssSize * 0.013), active ? color : "rgba(244,238,227,0.58)");
+        }
       });
     }
 
@@ -441,8 +470,10 @@
       }
       drawCorrection(t);
       agents.forEach((agent, index) => drawLoop(agent, t, index === 0));
-      drawText("observed ΔE", agents[1].x * cssSize + cssSize * 0.060, (1 - agents[1].y) * cssSize + cssSize * 0.030, Math.max(11, cssSize * 0.015), "#fffdf4", "left");
-      drawText("what is mine?", agents[0].x * cssSize - cssSize * 0.100, (1 - agents[0].y) * cssSize + cssSize * 0.075, Math.max(11, cssSize * 0.015), "#fff2d4", "right");
+      if (!compact) {
+        drawText("observed ΔE", agents[1].x * cssSize + cssSize * 0.060, (1 - agents[1].y) * cssSize + cssSize * 0.030, Math.max(11, cssSize * 0.015), "#fffdf4", "left");
+        drawText("what is mine?", agents[0].x * cssSize - cssSize * 0.100, (1 - agents[0].y) * cssSize + cssSize * 0.075, Math.max(11, cssSize * 0.015), "#fff2d4", "right");
+      }
 
       ctx.strokeStyle = "rgba(214, 237, 255, 0.38)";
       ctx.lineWidth = 1;
