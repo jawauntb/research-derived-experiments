@@ -2,7 +2,9 @@
 
 Date: 2026-06-22
 Repo: `jawauntb/research-derived-experiments`
-Current `origin/main`: `017686c` (`Merge pull request #143 from jawauntb/codex/phase2-clean-context-handoff`)
+Start point: freshly fetched `origin/main`
+Reference state when this handoff was prepared: `4398fc0`
+(`Merge pull request #145 from jawauntb/codex/phase2-clean-context-handoff-sha`)
 External paper folder: `/Users/jawaun/Metaphysics of Intelligence/Phase_Arc_2`
 
 Use this note to start the next agent session from a clean context window.
@@ -228,7 +230,7 @@ Read `docs/phase2_clean_context_handoff.md`,
 `docs/phase2_next_breakthrough_handoff.md`, and
 `docs/discovery_regime_audit.md`.
 
-Continue Phase 2 from main commit `017686c`. The next best move is
+Continue Phase 2 from freshly fetched `origin/main`. The next best move is
 `codex/phase2-searched-executable-modules`: search/evolve 2B executable module
 bodies that consume the newest label-free `2A-v2` transfer contract. Keep the
 claim honest, use Modal for full evidence, avoid heavy local sweeps, update the
