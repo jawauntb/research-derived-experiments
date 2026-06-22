@@ -26,5 +26,12 @@ data/
 artifacts/
 tmp/
 
+# External-contact raw artifacts: vendor only the tiny subset, never the full
+# GloVe tables or the download zip (track policy: "raw embeddings stay local").
+# NOTE: scoped to *glove*.txt / *.zip so the committed *.csv public tables
+# (e.g. p2_uncertainty_public.csv) and *.py / *.md stay tracked.
+experiments/external_contact/*glove*.txt
+experiments/external_contact/*.zip
+
 # OS/editor noise.
 .DS_Store
