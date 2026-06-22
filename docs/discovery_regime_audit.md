@@ -5393,6 +5393,94 @@ Next move: replace connected-component perception with learned object slots,
 make 2B consume the discovered-profile contract, or pursue trainable neural
 module search under the same held-out transfer verifier.
 
+## External Contact P1: Pythia LoRA Tier-B Hard Kill
+
+Question: does the lab's weakness-to-OOD law transfer to the public Pythia
+model family when the model is allowed to adapt through LoRA, rather than
+being frozen behind a linear probe?
+
+Current regime:
+
+- Artifact types: public Pythia checkpoints, partial-orbit modular-shift
+  prompts, LoRA adapter weights inside Modal workers, extracted argmax
+  function tables, wrong-group controls, classical predictor correlations,
+  and gitignored JSON artifacts.
+- Operations: fine-tune Pythia with LoRA causal-LM answer-token supervision,
+  score every candidate answer by answer-token NLL, extract the function table
+  on `{0..n-1}`, compute cyclic equivariance weakness and equal-size
+  wrong-group weakness, and compare all predictors against held-out OOD
+  accuracy by Spearman rho.
+- Gates/verifiers: pre-registered P1 threshold (`rho >= +0.5`, margin over
+  classical predictors >= 0.25, wrong-group `|rho| <= 0.15`), hard-kill rule,
+  targeted stdlib scorer tests, Modal 27-cell run, publication guard, ruff,
+  and ty.
+- Known limitations: this is still a small Pythia LoRA operationalization on a
+  one-input modular-shift task, not public grokking checkpoints, full
+  fine-tuning, two-input modular addition, or a broad arithmetic benchmark.
+
+Action class:
+
+- External-contact falsification / regime narrowing.
+- Why: the previous linear-probe Tier-B was degenerate because every OOD cell
+  was exactly 0.0; the LoRA LM run made the OOD column non-constant and
+  therefore made the pre-registered P1 gate evaluable.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/external_contact/modal_p1_pythia_lora.py`;
+  `experiments/external_contact/p1_lora_metrics.py`;
+  `experiments/external_contact/results/p1_pythia_lora_2026_06_22.md`;
+  ignored artifact `artifacts/external_contact/p1_pythia_lora.json`.
+- Positive target: weakness under the true cyclic group should correlate with
+  held-out OOD accuracy at rho >= +0.5, beat all classical predictors by >=
+  0.25 in absolute-rho margin, and preserve the wrong-group null.
+- Negative controls: wrong-group equivariance count, final train loss, OOD
+  NLL, parameter count, parameter L2, and finite-difference LoRA sharpness
+  proxy.
+- Stress tests: Pythia sizes 70m, 160m, 410m; n in {13, 17, 23}; three seeds
+  from base seed 20260618; train fraction 0.5.
+
+Gate:
+
+- Acceptance rule: same as preregistered P1.
+- Withheld/rejected rule: do not say the internal weakness result is false; do
+  not say no external model can show weakness-to-OOD transfer; do not claim
+  Pythia cannot learn modular arithmetic under any fine-tuning regime.
+
+Results:
+
+- Accepted artifacts: LoRA Modal worker, stdlib scorer, result report,
+  external-contact runbook/README updates, and handoff updates.
+- Rejected or withheld artifacts: raw JSON remains under ignored `artifacts/`;
+  broad external falsification of all weakness claims remains withheld.
+- Key metrics: 27 cells; OOD mean `0.0285`, max `0.3333`, five distinct OOD
+  values; train accuracy `1.000` in every cell; `rho(weakness, OOD) =
+  -0.0817`; `rho(wrong_group, OOD) = -0.0817`; best classical `|rho| =
+  0.4550` from OOD NLL; parameter-count rho `+0.3610`; P1 pass `false`;
+  P1 hard kill `true`.
+- Variance or ablation: classifier-head LoRA diagnostics at 70m/n=13 with
+  train fractions 0.5 and 0.75 were all-zero OOD; the accepted headline uses
+  the cleaner causal-LM answer-token objective.
+
+Residual content:
+
+- Explained by old regime: the linear probe already showed that frozen Pythia
+  hidden states plus arbitrary classification heads memorize the train subset
+  without modular extrapolation.
+- New content outside old regime: LoRA makes the external P1 setup evaluable;
+  larger Pythia models get a few held-out points right, but learned-function
+  weakness stays at the identity-only floor and fails to predict behavior.
+- Retractions or supersessions: supersede "P1 is unsettled pending LoRA" with
+  "P1 LoRA Tier-B is evaluable and negative for this setup; the literal P1
+  external-transfer threshold is hard-killed."
+
+Next move: do not rerun ordinary P1 LoRA as the next breakthrough. Either
+materially change the external P1 operationalization (public grokking
+checkpoints, full fine-tuning, two-input modular addition, or a published
+external arithmetic benchmark), or shift effort to trainable neural 2B modules,
+P2 corruption taxonomy, or open-ended intervention/apparatus discovery.
+
 ## Arc 2A: Learned Object Slots For Discovered Profiles
 
 Question: can the repaired `2A-v2-pixels-rich_programs` transfer gate preserve
@@ -5496,7 +5584,7 @@ Residual content:
   natural-image object discovery, full slot attention, and open-ended semantics
   remain open."
 
-Next move: make 2B consume the learned-object-slot/discovered-profile contract,
-run the non-degenerate external P1 LoRA Tier-B test, extend the P2 corruption
-taxonomy, or pursue trainable neural module search under the same transfer
-verifier.
+Next move: make 2B consume the learned-object-slot/discovered-profile contract
+if that branch has not landed, extend the P2 corruption taxonomy, pursue
+trainable neural module search under the same transfer verifier, or reopen P1
+only with a materially stronger external arithmetic setup.
