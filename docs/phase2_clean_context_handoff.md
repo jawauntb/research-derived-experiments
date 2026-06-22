@@ -11,6 +11,8 @@ Use this note to start the next agent session from a clean context window.
 
 For historical context on the semantic-profile branch that removed the
 supplied table, see `docs/phase2_semantic_profile_discovery_handoff.md`.
+For the current integrated internal/external frontier, start with
+`docs/phase2_next_phase_research_handoff.md`.
 
 ## Current State
 
@@ -24,6 +26,7 @@ Phase 2A and 2B now share a Modal-confirmed `2A-v2` rich-program contract:
   + label-free role-token calibration
   + transfer-consuming executable module bodies
   + discovered semantic-profile induction
+  + learned object slots for discovered-profile transfer
   + searched executable-module bodies over the label-free transfer gate
 ```
 
@@ -32,10 +35,11 @@ Do not summarize this as "2A is done" or "2B is done." The honest claim is:
 - `2A-v2` is done as a provided finite rich-program grammar with searched
   recipes, transfer repair, supervised learned slot semantics, and label-free
   role-token calibration plus discovered semantic-profile induction inside the
-  synthetic connected-component world.
+  synthetic connected-component world, plus a learned object-slot bridge in
+  the synthetic fixed-slot world.
 - It is not done as open-ended motor/apparatus discovery, fully unsupervised
-  open-world semantics, natural-image/learned object-slot discovery, or full
-  neural architecture search.
+  open-world semantics, natural-image object discovery, full slot attention,
+  or full neural architecture search.
 - `2B-v2` has compact motif/body validation, transfer-consuming executable
   bodies, and bounded searched executable-module contracts over the label-free
   transfer gate, but not full neural module or architecture search.
@@ -50,8 +54,10 @@ Do not summarize this as "2A is done" or "2B is done." The honest claim is:
 - PR #147: searched executable-module bodies against the label-free `2A-v2`
   transfer gate.
 - PR #148: semantic-profile-discovery handoff.
-- Current branch: discovered semantic-profile induction against the same
-  held-out `2A-v2` transfer gate.
+- PR #151: discovered semantic-profile induction against the same held-out
+  `2A-v2` transfer gate.
+- Current branch: learned object-slot perception for the discovered-profile
+  held-out transfer gate.
 
 ## Accepted Evidence
 
@@ -174,6 +180,36 @@ and feedback is still contract-shaped. Call it semantic-profile induction
 inside the synthetic 2A-v2 world, not natural-image object discovery or fully
 open-ended semantics.
 
+### Learned Object Slots For Discovered Profiles
+
+Report:
+`experiments/concerned_syntax/results/learned_object_slots_modal_2026_06_22.md`
+
+Positive:
+`learned_object_slot_discovered_world_model`
+
+Metrics:
+slot recovery/scene recovery `1.000`, profile cluster
+purity/family/pair/action-template `1.000`, transfer gate `1.000`,
+family/target/useful/rich high `1.000`, low-program `0.000`, gate PASS across
+five Modal seeds at 3,000 train / 1,200 test / 90 policy epochs plus 1,200
+extractor-calibration images and 45 extractor epochs per seed.
+
+Rejected controls:
+
+- `learned_rich_program_composer`: fails held-out transfer.
+- `learned_object_slot_family_only`: has family but not target/useful program.
+- `learned_object_slot_target_only`: has target but not family/rich program
+  and overuses low-concern programs.
+- `learned_object_slot_rich_without_concern`: has family/target/useful/rich
+  structure but fails low-concern discipline.
+
+Boundary:
+this removes algorithmic connected components from the accepted perception
+path. It is still synthetic RGB, fixed six-slot layout, slot-local center
+search, and contract-shaped feedback. Call it a learned object-slot bridge for
+the synthetic 2A-v2 world, not natural-image vision or full slot attention.
+
 ### 2B Transfer-Consuming Executable Bodies
 
 Report:
@@ -250,6 +286,7 @@ table, and synthetic rich-program feedback.
   `experiments/concerned_syntax/learned_slot_semantics.py`
   `experiments/concerned_syntax/unsupervised_slot_semantics.py`
   `experiments/concerned_syntax/discovered_semantic_profiles.py`
+  `experiments/concerned_syntax/learned_object_slots.py`
 - 2B implementation:
   `experiments/viable_computational_bodies/learned_executable_modules.py`
   `experiments/viable_computational_bodies/searched_executable_modules.py`
@@ -262,26 +299,26 @@ Start from a fresh fetch/pull of `main` in a new worktree.
 Recommended branch:
 
 ```text
-codex/phase2-learned-object-slots
+codex/phase2-object-slot-2b-consumption
 ```
 
 Best next experiment:
 
-Replace algorithmic connected-component perception with a learned object-slot
-or CNN/slot-attention-style extractor while preserving the discovered-profile
-held-out transfer verifier and controls. Be strict: if connected components
-remain the accepted perception path, do not claim learned object discovery.
+Make 2B searched/executable bodies consume the learned-object-slot plus
+discovered-profile 2A contract, rather than the older label-free supplied-
+profile contract. Preserve reward-only, family-only, target-only, and
+ungated-rich body controls.
 
 Alternative strong 2A branch:
 
 ```text
-codex/phase2-discovered-profile-2b-consumption
+codex/external-contact-p1-lora-tier-b
 ```
 
 Goal:
-make the current 2B searched executable-module body consume the new
-discovered-profile contract rather than the older label-free supplied-profile
-contract.
+run the non-degenerate external P1 Tier-B follow-up with LoRA or full
+fine-tuning on Pythia modular arithmetic. Do not repeat the frozen linear-
+probe configuration that produced all-zero OOD accuracy.
 
 Alternative strong 2B branch:
 
@@ -325,10 +362,13 @@ Read `docs/phase2_clean_context_handoff.md`,
 `docs/phase2_next_breakthrough_handoff.md`, and
 `docs/discovery_regime_audit.md`.
 
-Continue Phase 2 from freshly fetched `origin/main`. The next best move is
-`codex/phase2-learned-object-slots`: replace algorithmic connected-component
-perception with a learned object-slot extractor while preserving the
-discovered-profile held-out transfer gate and controls. Keep the claim honest,
-use Modal for full evidence, avoid heavy local sweeps, update the
-paper/audit/handoff/PDFs, run checks, commit, push, PR, and merge when clean.
+Continue Phase 2 from freshly fetched `origin/main`. Start with
+`docs/phase2_next_phase_research_handoff.md`. The next best internal move is
+`codex/phase2-object-slot-2b-consumption`: make viable computational bodies
+consume the learned-object-slot plus discovered-profile 2A transfer contract.
+The next best external move is `codex/external-contact-p1-lora-tier-b`: rerun
+P1 on Pythia with LoRA or full fine-tuning, not the degenerate frozen-linear
+probe. Keep claims honest, use Modal for full evidence, avoid heavy local
+sweeps, update paper/audit/handoff/PDFs, run checks, commit, push, PR, and
+merge when clean.
 ```

@@ -254,6 +254,17 @@ Current v1 result:
   rate `0.000`, and regret `0.004`. This is semantic-profile induction inside
   the synthetic connected-component world, not natural-image object discovery
   or fully open-ended semantics.
+- `learned_object_slots_modal_2026_06_22.md` removes algorithmic
+  connected-component perception from the accepted discovered-profile path.
+  The branch trains a foreground pixel model, uses fixed slot-local center
+  search to produce six object slots, induces the same anonymous semantic
+  profiles from those learned slots, and runs the same held-out transfer
+  verifier. Across five Modal seeds, `learned_object_slot_discovered_world_model`
+  reaches slot/scene recovery `1.000`, transfer gate `1.000`, profile
+  cluster purity/family/pair/action-template metrics `1.000`,
+  family/target/useful/rich high-concern rates `1.000`, and low-concern
+  program rate `0.000`. This is a learned object-slot bridge for the synthetic
+  fixed-slot world, not natural-image vision or full slot attention.
 
 Current coupled 2A/2B results:
 
@@ -297,12 +308,13 @@ This is the first Phase 2 point where Arc 2A and Arc 2B are coupled at the
 rich program-composition contract, not merely at target selection. The frontier
 now also closes searched rich-program recipes, v2 transfer-repair, supervised
 learned slot-semantics, label-free role-token calibration, discovered
-semantic-profile induction, and executable-module-body gates at Modal scale,
-including bounded search over label-free executable module contracts. It is
-still not the end of Phase 2: learned object-slot perception, open-ended
-semantics beyond the synthetic feedback contract, open-ended motor/apparatus
-discovery beyond the finite program DSL, and full neural architecture search
-remain open.
+semantic-profile induction, a learned object-slot bridge, and executable-
+module-body gates at Modal scale, including bounded search over label-free
+executable module contracts. It is still not the end of Phase 2: natural-image
+object discovery, open-ended semantics beyond the synthetic feedback contract,
+open-ended motor/apparatus discovery beyond the finite program DSL, 2B
+consumption of the newest learned-object/discovered-profile contract, and full
+neural architecture search remain open.
 
 ## Literature Bearings
 
