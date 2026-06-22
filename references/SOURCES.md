@@ -18,6 +18,7 @@ The downloaded PDFs, HTML snapshots, and extracted full text are intentionally l
 - Technological Approach to Mind Everywhere: https://www.frontiersin.org/journals/systems-neuroscience/articles/10.3389/fnsys.2022.768201/full
 - On Having No Head: Cognition throughout Biological Systems: https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2016.00902/full
 - Why Muon Outperforms Adam: A Curvature Perspective: https://arxiv.org/abs/2606.04662
+- Neural Networks Provably Learn Spectral Representations for Group Composition: https://arxiv.org/abs/2606.02993
 - Representations of Geometric Shapes Have Syntactic Structure: https://doi.org/10.1037/xge0001890
 - Neural Language of Thought Models: https://arxiv.org/abs/2402.01203
 - Active Causal Experimentalist (ACE): Learning Intervention Strategies via Direct Preference Optimization: https://arxiv.org/abs/2602.02451
