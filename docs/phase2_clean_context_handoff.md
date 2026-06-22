@@ -336,29 +336,41 @@ vision, or full slot attention.
 
 Start from a fresh fetch/pull of `main` in a new worktree.
 
-Recommended external branch:
-
-```text
-codex/external-contact-p1-lora-tier-b
-```
-
-Best next experiment:
-
-Run the non-degenerate external P1 Tier-B follow-up with LoRA or full
-fine-tuning on Pythia modular arithmetic. Do not repeat the frozen linear-
-probe configuration that produced all-zero OOD accuracy.
-
-Alternative strong 2B branch:
+Recommended branch:
 
 ```text
 codex/phase2-neural-module-search
 ```
 
-Goal:
-replace bounded searched executable contracts with trainable neural object-slot,
+Best next experiment:
+
+Replace bounded searched executable contracts with trainable neural object-slot,
 graph-binding, routed-head, and program-composition modules. Keep the
 learned-object-slot/discovered-profile transfer verifier and controls; do not
 call motif/contract search full neural architecture search.
+
+External P1 update:
+
+```text
+report: experiments/external_contact/results/p1_pythia_lora_2026_06_22.md
+```
+
+The non-degenerate P1 LoRA Tier-B follow-up has now run. It is evaluable and
+negative: 27 cells, OOD mean 0.0285, OOD max 0.3333,
+`rho(weakness, OOD) = -0.0817`, best classical `|rho| = 0.4550`, P1 hard kill.
+Do not keep listing ordinary P1 LoRA as unresolved.
+
+Alternative strong external branch, only if materially changed:
+
+```text
+codex/external-contact-p1-lora-tier-b
+```
+
+Goal:
+reopen P1 with a materially stronger operationalization: public grokking
+checkpoints, full fine-tuning, richer two-input modular addition, or a published
+external arithmetic benchmark. Do not repeat the frozen linear-probe setup or
+another small LoRA/classifier diagnostic.
 
 ## Modal-First Rule
 
@@ -391,13 +403,12 @@ Read `docs/phase2_clean_context_handoff.md`,
 `docs/discovery_regime_audit.md`.
 
 Continue Phase 2 from freshly fetched `origin/main`. Start with
-`docs/phase2_next_phase_research_handoff.md`. The internal object-slot 2B
-consumption branch is now complete at bounded contract-search scale. The next
-best external move is `codex/external-contact-p1-lora-tier-b`: rerun P1 on
-Pythia with LoRA or full fine-tuning, not the degenerate frozen-linear probe.
-The next best internal move is `codex/phase2-neural-module-search`: replace
-bounded searched executable contracts with trainable neural object-slot,
-graph-binding, routed-head, and program-composition modules. Keep claims
-honest, use Modal for full evidence, avoid heavy local sweeps, update
-paper/audit/handoff/PDFs, run checks, commit, push, PR, and merge when clean.
+`docs/phase2_next_phase_research_handoff.md`. Ordinary P1 LoRA has now been
+run and hard-killed, and object-slot 2B consumption is complete at bounded
+contract-search scale. Prefer `codex/phase2-neural-module-search` or
+`codex/external-contact-p2-corruption-extension`. Reopen P1 only with public
+grokking checkpoints, full fine-tuning, richer two-input modular addition, or a
+published external arithmetic benchmark. Keep claims honest, use Modal for full
+evidence, avoid heavy local sweeps, update paper/audit/handoff/PDFs, run
+checks, commit, push, PR, and merge when clean.
 ```

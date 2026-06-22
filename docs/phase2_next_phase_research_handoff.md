@@ -33,11 +33,10 @@ the older label-free supplied-profile abstraction, while keeping the synthetic
 renderer, fixed six-slot layout, slot-local center search, bounded module
 grammar, and contract-shaped feedback as explicit scaffolds.
 
-The newest external-contact step is the synthesis paper at commit `79206fa`.
-It says the program has one clean external pillar, one narrowed but real
-uncertainty/corruption claim, one substrate-sensitive concept-geometry result
-with a cross-family falsification, and one P1 tooling block that still needs
-LoRA.
+The newest external-contact step is the P1 LoRA Tier-B branch. The earlier
+synthesis paper at commit `79206fa` said P1 was a tooling block that still
+needed LoRA. That is no longer true: LoRA was run, the OOD column became
+non-constant, and the literal P1 external-transfer gate hard-killed.
 
 ## What Just Changed Internally
 
@@ -320,12 +319,13 @@ partially in a second, but the substrate-independent Platonic-convergence
 reading is not supported by the three-family panel.
 ```
 
-### P1: Linear-Probe Tier-B Degenerated
+### P1: Linear-Probe Degenerated; LoRA Tier-B Hard-Killed
 
 Report:
 
 ```text
 experiments/external_contact/results/p1_pythia_2026_06_22.md
+experiments/external_contact/results/p1_pythia_lora_2026_06_22.md
 ```
 
 Result:
@@ -335,12 +335,20 @@ Result:
   and does not extrapolate modular arithmetic.
 - The P1 weakness-to-OOD threshold is not meaningfully evaluable in this
   linear-probe configuration.
+- The LoRA LM follow-up is evaluable: 27 cells, OOD mean 0.0285, OOD max
+  0.3333, five distinct OOD values, train accuracy 1.000 in every cell.
+- LoRA result: `rho(weakness, OOD) = -0.0817`, wrong-group rho `-0.0817`,
+  best classical `|rho| = 0.4550` from OOD NLL, parameter-count rho `+0.3610`,
+  P1 pass `false`, hard kill `true`.
 
 Allowed claim:
 
 ```text
-P1 is unsettled. Linear probing on frozen Pythia is a degenerate
-operationalization; the next real test is LoRA or full fine-tuning.
+P1 is no longer merely unsettled. The frozen linear probe was degenerate, but
+the LoRA LM Tier-B setup is evaluable and negative. In this external Pythia
+configuration, learned-function weakness stays at the identity-only floor and
+does not predict held-out OOD; the literal P1 external-transfer gate is
+hard-killed.
 ```
 
 ## Are We Stuck?
@@ -381,37 +389,7 @@ Definition of done:
 - Clean-context and next-breakthrough handoffs point to this note.
 - Checks pass, commit, push, PR, merge if clean.
 
-### 2. External P1 LoRA Tier-B
-
-Suggested branch:
-
-```text
-codex/external-contact-p1-lora-tier-b
-```
-
-Question:
-
-```text
-Does weakness predict OOD generalization when Pythia is allowed to actually
-learn the modular-shift task through LoRA?
-```
-
-Why this is the highest-ceiling external follow-up:
-
-- P2b is already clean.
-- P2a is already narrowed.
-- P3 has a useful falsification.
-- P1 remains the big unresolved external field-claim candidate.
-
-Guardrails:
-
-- Do not rerun the linear-probe setup and expect new science.
-- Use LoRA or full fine-tuning.
-- Preserve wrong-group controls and classical predictors.
-- Treat degeneration or all-zero OOD as a tooling result, not a claim
-  falsification.
-
-### 3. Internal Neural Module Search
+### 2. Trainable Neural 2B Modules
 
 Suggested branch:
 
@@ -422,22 +400,30 @@ codex/phase2-neural-module-search
 Question:
 
 ```text
-Can 2B replace bounded searched executable contracts with trainable neural
-object-slot, graph-binding, routed-head, and program-composition modules while
-preserving the same held-out transfer and control gates?
+Can trainable neural modules consume the same learned-object-slot /
+discovered-profile transfer contract that bounded executable bodies consume?
 ```
 
-Why this is good:
+Why this is now higher-value than more P1 tuning:
 
-- It attacks the main remaining internal 2B scaffold.
-- It can reuse the object-slot/discovered-profile transfer gate from this
-  branch.
+- P1 LoRA has been evaluated and is negative in the pre-registered shape.
+- The internal 2A/2B stack has a live scaffold-removal path with positive
+  Modal evidence.
+- Neural modules test whether the executable-body result is merely a compact
+  symbolic contract or can be instantiated as learned routed modules.
 
 Guardrails:
 
-- Do not call bounded contract search neural architecture search.
-- Preserve reward-only, family-only, target-only, and ungated-rich controls.
-- Keep formal/module coverage explicit even when modules become trainable.
+- Preserve the held-out transfer verifier and shortcut controls.
+- Keep module coverage and formal validity explicit.
+- Do not call bounded trainable modules full neural architecture search.
+
+### 3. Stronger External P1 Variant, If Reopened
+
+Only reopen P1 if the branch changes the operationalization materially:
+public grokking checkpoints, full fine-tuning, richer two-input modular
+addition, or a published external arithmetic benchmark. Do not treat another
+small LoRA/classifier-head sweep as a new test of the original claim.
 
 ### 4. P2 Tier-B Corruption Extension
 
@@ -494,7 +480,7 @@ Use these phrasings:
 - "P2a narrows to ensemble variance plus blur-class shift."
 - "P3 is substrate-sensitive; cross-family Platonic convergence is not
   supported."
-- "P1 linear-probe degenerated; LoRA remains the real test."
+- "P1 linear-probe degenerated; P1 LoRA Tier-B is evaluable and negative."
 
 Avoid these phrasings:
 
@@ -504,7 +490,7 @@ Avoid these phrasings:
 - "Natural-image object discovery."
 - "Substrate-independent concept convergence."
 - "Uncertainty generally fails under shift."
-- "P1 was falsified."
+- "The internal weakness result is false."
 
 ## Copy-Paste Kickoff Prompt
 
@@ -527,22 +513,20 @@ read:
 
 Then choose one next move:
 
-1. External route:
-   create `codex/external-contact-p1-lora-tier-b` and rerun P1 on Pythia with
-   LoRA or full fine-tuning, not the degenerate frozen-linear setup. Preserve
-   wrong-group controls, classical predictors, and the pre-registered
-   weakness/OOD thresholds.
+1. Neural-module route:
+   create `codex/phase2-neural-module-search` and replace compact executable
+   bodies with trainable modules under the same learned-object-slot /
+   discovered-profile transfer contract.
 
-2. Internal 2B route:
-   create `codex/phase2-neural-module-search` and replace bounded searched
-   executable contracts with trainable neural object-slot, graph-binding,
-   routed-head, and program-composition modules. Preserve the object-slot
-   transfer gate and reward/family/target/ungated controls.
-
-3. External P2 route:
+2. External P2 route:
    create `codex/external-contact-p2-corruption-extension` and extend P2
    Tier-B to the full Hendrycks corruption set, especially blur families, to
    test whether the variance/blur finding generalizes.
+
+3. Stronger P1 route, only if materially changed:
+   use public grokking checkpoints, full fine-tuning, richer two-input modular
+   addition, or a published external arithmetic benchmark. Do not repeat the
+   small LoRA/classifier-head diagnostics as if P1 were still unresolved.
 
 Use local work only for smoke tests. Run full evidence on Modal. Update the
 audit ledger, relevant papers, rendered PDFs, and handoffs. Run `git diff

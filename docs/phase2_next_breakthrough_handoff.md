@@ -798,9 +798,9 @@ When done:
 
 ## 11. Best Starting Move for the Next Agent
 
-Start with P1 LoRA Tier-B external contact, P2 corruption taxonomy extension,
-open-ended intervention/apparatus discovery beyond the finite DSL, or true
-trainable-neural-module search if the 2B route is preferred.
+Start with true trainable-neural-module search, P2 corruption taxonomy, or a
+materially stronger external P1 variant only if it changes the operationalization
+beyond small LoRA. Ordinary P1 LoRA Tier-B has now been run and hard-killed.
 
 Reason: the current stack lands Modal-confirmed searched executable-module
 contracts over both the label-free 2A-v2 transfer gate and the learned-object-
@@ -809,9 +809,9 @@ for 2A, removes algorithmic connected components from the accepted
 discovered-profile path inside the synthetic fixed-slot world, and makes 2B
 consume that newest 2A contract at bounded contract-search scale. The next
 scientific gap is not another seed sweep or another bounded contract search;
-it is the non-degenerate external P1 LoRA test, extending the P2 corruption
+it is trainable neural module search under 2B, extending the P2 corruption
 taxonomy, open-ended motor/apparatus discovery beyond the finite DSL, or
-trainable neural module search under 2B.
+reopening P1 only with a materially stronger external arithmetic setup.
 
 For the recommended internal route, replace bounded executable contracts with
 trainable neural object-slot, graph-binding, routed-head, and program-
