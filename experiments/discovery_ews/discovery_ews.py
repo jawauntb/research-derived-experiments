@@ -50,6 +50,13 @@ from statistics import mean
 
 REPO = Path(__file__).resolve().parents[2]
 
+# Meta-families whose artifacts are ABOUT the program rather than part of it.
+# Excluded from the scanned corpus so the detector does not eat its own scan
+# reports: those reports name every family (inflating `reuse`) and are full of
+# "load_bearing/transfer/external" (tripping the rubric) -- a Goodhart feedback
+# loop that would inflate the conversion rate every time a scan is recorded.
+META_FAMILIES = {"discovery_ews"}
+
 # ---- transparent load-bearing rubric ----
 # NOTE: v1 of this rubric produced apophenia -- it labeled the activation_geometry
 # graveyard "load_bearing" because bare "pythia"/"gpt-2" mentions (the probed
@@ -114,6 +121,8 @@ def collect_artifacts() -> list[Artifact]:
         if not m:
             continue
         fam = p.relative_to(REPO / "experiments").parts[0]
+        if fam in META_FAMILIES:
+            continue  # do not let the detector scan its own scan reports
         arts.append(Artifact(fam, m.group(1).replace("-", "_"), str(p.relative_to(REPO))))
     for p in (REPO / "papers").glob("*/paper.md"):
         fam = "paper:" + p.relative_to(REPO / "papers").parts[0]
