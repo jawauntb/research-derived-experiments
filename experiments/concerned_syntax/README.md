@@ -210,3 +210,25 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
   --train-trials 3000 --test-trials 1200 --epochs 90 \
   --induction-calibration-trials 1200
 ```
+
+Learned object-slot discovered-profile transfer:
+
+```bash
+python3 -m experiments.concerned_syntax.learned_object_slots \
+  --train-trials 90 --test-trials 40 --seed 20260622 --epochs 10 \
+  --induction-calibration-trials 500 \
+  --extractor-calibration-trials 500 \
+  --extractor-epochs 10 \
+  --extractor-samples-per-image 96 \
+  --out artifacts/concerned_syntax/learned_object_slots_local.json \
+  --report experiments/concerned_syntax/results/learned_object_slots_local_2026_06_22.md
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_learned_object_slots_sweep.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90 \
+  --induction-calibration-trials 1200 \
+  --extractor-calibration-trials 1200 \
+  --extractor-epochs 45 \
+  --extractor-samples-per-image 96
+```

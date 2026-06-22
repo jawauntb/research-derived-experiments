@@ -5392,3 +5392,111 @@ Residual content:
 Next move: replace connected-component perception with learned object slots,
 make 2B consume the discovered-profile contract, or pursue trainable neural
 module search under the same held-out transfer verifier.
+
+## Arc 2A: Learned Object Slots For Discovered Profiles
+
+Question: can the repaired `2A-v2-pixels-rich_programs` transfer gate preserve
+discovered semantic profiles when algorithmic connected-component perception is
+replaced by learned foreground object slots?
+
+Current regime:
+
+- Artifact types: synthetic RGB pixel images, algorithmic connected-component
+  slots, discovered semantic profiles, synthetic rich-program feedback,
+  held-out transfer reports, and shortcut-control summaries.
+- Operations: extract connected components, cluster rendered components,
+  induce anonymous semantic profiles from active cluster-pair feedback, and
+  evaluate the resulting world model on held-out role-kind and true-parse
+  slices.
+- Gates/verifiers: object slot recovery, scene recovery, profile purity,
+  semantic family/pair recovery, action-template consistency, held-out transfer
+  gate, family/target/useful/rich high-concern rates, low-concern program cap,
+  targeted unit tests, local smoke report, Modal sweep, publication guard,
+  ruff, and ty.
+- Known limitations: the image renderer, six-slot layout, and slot-local
+  center search remain supplied; feedback remains synthetic and
+  contract-shaped; this is not natural-image object discovery, full slot
+  attention, human/neural validation, open-ended motor/apparatus invention, or
+  full neural architecture search.
+
+Action class:
+
+- Retrieval/search/discovery: learned-perception scaffold removal inside the
+  discovered semantic-profile regime.
+- Why: the accepted operation no longer receives connected-component features.
+  It trains a foreground pixel model, uses fixed slot-local center search to
+  produce six learned object slots, induces profiles from those slots, and
+  runs the same held-out transfer verifier.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/concerned_syntax/learned_object_slots.py`;
+  `experiments/concerned_syntax/modal_learned_object_slots_sweep.py`;
+  `experiments/concerned_syntax/results/learned_object_slots_local_2026_06_22.md`;
+  `experiments/concerned_syntax/results/learned_object_slots_modal_2026_06_22.md`;
+  local ignored artifact
+  `artifacts/concerned_syntax/learned_object_slots_local.json`;
+  Modal ignored artifact
+  `artifacts/concerned_syntax/learned_object_slots_modal_sweep.json`.
+- Positive target: `learned_object_slot_discovered_world_model` should pass
+  learned-slot recovery, profile purity/family/pair/action-template recovery,
+  and the held-out v2 transfer gate without connected-component features in
+  the accepted perception path.
+- Negative controls: `learned_rich_program_composer`,
+  `learned_object_slot_family_only`, `learned_object_slot_target_only`, and
+  `learned_object_slot_rich_without_concern`.
+- Stress tests: held-out `shield_poison`, `repair_core`, `food_trap`,
+  `repeat_concat`, `hooked_repeat`, `alternating_bind`, and `edge_core`
+  across five Modal seeds.
+
+Gate:
+
+- Acceptance rule: slot recovery >= 0.95, scene recovery >= 0.90, profile
+  cluster purity/semantic family/semantic pair/action-template metrics >= 0.95,
+  every transfer slice passes, action >= 0.85, low-concern program rate <= 0.25,
+  and family/target/useful/rich high-concern rates >= 0.70.
+- Withheld/rejected rule: do not claim natural-image object discovery, full
+  slot attention, fully open-ended semantics, human/neural validation,
+  open-ended motor/apparatus invention, or full neural architecture search.
+
+Results:
+
+- Accepted artifacts: learned object-slot module, Modal entrypoint, local and
+  Modal reports, targeted tests, README commands, trajectory update, handoff
+  updates, and paper update.
+- Rejected or withheld artifacts: raw JSON remains under ignored `artifacts/`;
+  natural-image object discovery, full slot attention, trainable neural module
+  search, and open-ended program discovery remain withheld.
+- Key metrics across five Modal seeds:
+  `learned_object_slot_discovered_world_model` slot/scene recovery `1.000`,
+  profile cluster purity/family/pair/action-template `1.000`, transfer gate
+  `1.000`, family/target/useful/rich high-concern rates `1.000`,
+  low-program `0.000`, regret `0.004`. `learned_rich_program_composer` fails
+  transfer; `learned_object_slot_family_only` has family but not target/useful;
+  `learned_object_slot_target_only` has target but not family/useful/rich and
+  overuses low-concern programs; `learned_object_slot_rich_without_concern`
+  has family/target/useful/rich but fails low-concern discipline.
+- Variance or ablation: five Modal seeds with 3,000 train trials, 1,200 test
+  trials, 1,200 profile-induction trials, 1,200 extractor-calibration images,
+  45 extractor epochs, and 90 policy epochs per seed; accepted transfer gate
+  SD is `0.000`.
+
+Residual content:
+
+- Explained by old regime: discovered semantic profiles already showed that
+  connected-component clusters plus synthetic intervention/outcome feedback
+  could remove the supplied profile table and pass the transfer gate.
+- New content outside old regime: connected-component perception is no longer
+  in the accepted path; the profile inducer and transfer verifier consume
+  learned foreground object slots.
+- Retractions or supersessions: supersede "the discovered-profile result still
+  depends on algorithmic connected components" with "learned object slots
+  preserve discovered-profile transfer inside the synthetic fixed-slot world;
+  natural-image object discovery, full slot attention, and open-ended semantics
+  remain open."
+
+Next move: make 2B consume the learned-object-slot/discovered-profile contract,
+run the non-degenerate external P1 LoRA Tier-B test, extend the P2 corruption
+taxonomy, or pursue trainable neural module search under the same transfer
+verifier.

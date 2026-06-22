@@ -72,6 +72,10 @@ from experiments.concerned_syntax.discovered_semantic_profiles import (
     run_experiment as run_discovered_semantic_profiles_experiment,
     summarize_seed_payloads as summarize_discovered_semantic_profiles_payloads,
 )
+from experiments.concerned_syntax.learned_object_slots import (
+    run_experiment as run_learned_object_slots_experiment,
+    summarize_seed_payloads as summarize_learned_object_slots_payloads,
+)
 from experiments.concerned_syntax.vector_shapes import (
     run_experiment as run_vector_experiment,
     summarize_seed_payloads as summarize_vector_payloads,
@@ -1200,6 +1204,121 @@ class ConcernedSyntaxTest(unittest.TestCase):
         )
         self.assertAlmostEqual(
             summary["discovered_semantic_world_model"]["transfer_gate_pass"],
+            0.5,
+        )
+
+    def test_learned_object_slots_feed_discovered_profiles(self) -> None:
+        payload = run_learned_object_slots_experiment(
+            train_trials=60,
+            test_trials=30,
+            seed=20260622,
+            epochs=8,
+            induction_calibration_trials=300,
+            extractor_calibration_trials=240,
+            extractor_epochs=8,
+            extractor_samples_per_image=72,
+        )
+        agents = payload["agent_summary"]
+        extractor = payload["extractor_summary"]["learned_object_slots"]
+        semantic = payload["semantic_summary"]["learned_object_slot_profile_inducer"]
+        manifest = payload["manifest"]
+
+        self.assertEqual(
+            manifest["perception"],
+            "learned_foreground_slots_plus_slot_local_center_search",
+        )
+        self.assertIn(
+            "algorithmic connected-component extractor in accepted path",
+            manifest["removed_perception_priors"],
+        )
+        self.assertIn(
+            "semantic kind profile table",
+            manifest["removed_induction_priors"],
+        )
+        self.assertIn(
+            "connected-component features in accepted path",
+            manifest["forbidden_induction_labels"],
+        )
+        self.assertGreaterEqual(extractor["slot_recovery_rate"], 0.95)
+        self.assertGreaterEqual(extractor["scene_recovery_rate"], 0.90)
+        self.assertEqual(semantic["profile_count"], 4.0)
+        self.assertEqual(semantic["profile_cluster_purity"], 1.0)
+        self.assertEqual(semantic["semantic_family_accuracy"], 1.0)
+        self.assertEqual(semantic["semantic_pair_accuracy"], 1.0)
+        self.assertEqual(semantic["profile_action_consistency"], 1.0)
+        self.assertFalse(
+            agents["learned_rich_program_composer"]["transfer_gate_pass"]
+        )
+        self.assertFalse(
+            agents["learned_object_slot_family_only"]["transfer_gate_pass"]
+        )
+        self.assertFalse(
+            agents["learned_object_slot_target_only"]["transfer_gate_pass"]
+        )
+        self.assertFalse(
+            agents["learned_object_slot_rich_without_concern"][
+                "transfer_gate_pass"
+            ]
+        )
+        self.assertTrue(
+            agents["learned_object_slot_discovered_world_model"][
+                "transfer_gate_pass"
+            ]
+        )
+        self.assertEqual(
+            agents["learned_object_slot_discovered_world_model"][
+                "family_accuracy_high_concern"
+            ],
+            1.0,
+        )
+        self.assertEqual(
+            agents["learned_object_slot_discovered_world_model"][
+                "target_accuracy_high_concern"
+            ],
+            1.0,
+        )
+        self.assertEqual(
+            agents["learned_object_slot_discovered_world_model"][
+                "low_concern_program_rate"
+            ],
+            0.0,
+        )
+
+    def test_learned_object_slots_summary_averages_transfer_rates(self) -> None:
+        payloads = [
+            {
+                "agent_summary": {
+                    "learned_object_slot_discovered_world_model": {
+                        "profile_cluster_purity": 1.0,
+                        "transfer_gate_pass": True,
+                    }
+                }
+            },
+            {
+                "agent_summary": {
+                    "learned_object_slot_discovered_world_model": {
+                        "profile_cluster_purity": 0.5,
+                        "transfer_gate_pass": False,
+                    }
+                }
+            },
+        ]
+
+        summary = summarize_learned_object_slots_payloads(
+            payloads,
+            "agent_summary",
+        )
+
+        self.assertAlmostEqual(
+            summary["learned_object_slot_discovered_world_model"][
+                "profile_cluster_purity"
+            ],
+            0.75,
+        )
+        self.assertAlmostEqual(
+            summary["learned_object_slot_discovered_world_model"][
+                "transfer_gate_pass"
+            ],
             0.5,
         )
 

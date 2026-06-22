@@ -439,9 +439,12 @@ Definition of done:
 
 Suggested branch: `codex/phase2-learned-object-slots`
 
-Connected components are a useful bridge, but not the final perception story.
-The next perception step should replace algorithmic extraction with a learned
-object-slot/CNN/slot-attention-style extractor, trained and swept on Modal.
+Status: completed by
+`experiments/concerned_syntax/results/learned_object_slots_modal_2026_06_22.md`.
+Connected components remain a useful historical bridge, but the accepted
+discovered-profile path now trains a foreground pixel model and uses fixed
+slot-local center search to produce six learned object slots before
+semantic-profile induction.
 
 Definition of done:
 
@@ -449,8 +452,8 @@ Definition of done:
 - The learned extractor has an object recovery metric and a downstream syntax
   metric.
 - Surface and passive baselines still fail hidden binding.
-- Do not claim natural-image vision. This is a learned object extraction gate
-  on a synthetic rendered world.
+- Do not claim natural-image vision or full slot attention. This is a learned
+  object-slot bridge on a synthetic fixed-slot rendered world.
 
 ### Milestone E: Figure Upgrade Pass
 
@@ -735,21 +738,24 @@ When done:
 
 ## 11. Best Starting Move for the Next Agent
 
-Start with learned object-slot perception, with 2B consumption of the
-discovered-profile contract, or with true trainable-neural-module search if the
-2B route is preferred.
+Start with 2B consumption of the learned-object-slot/discovered-profile
+contract, P1 LoRA Tier-B external contact, or true trainable-neural-module
+search if the 2B route is preferred.
 
-Reason: the current branch lands Modal-confirmed searched executable-module
-contracts over the label-free 2A-v2 transfer gate, and the discovered-profile
-branch removes the supplied profile table for 2A. The next scientific gap is
-not another seed sweep or another bounded contract search; it is learned
-object-slot perception, 2B consumption of the discovered-profile contract,
+Reason: the current stack lands Modal-confirmed searched executable-module
+contracts over the label-free 2A-v2 transfer gate, removes the supplied profile
+table for 2A, and now removes algorithmic connected components from the
+accepted discovered-profile path inside the synthetic fixed-slot world. The
+next scientific gap is not another seed sweep or another bounded contract
+search; it is making 2B consume the newest 2A contract, running the
+non-degenerate external P1 LoRA test, extending the P2 corruption taxonomy,
 open-ended motor/apparatus discovery beyond the finite DSL, or trainable neural
 module search under 2B.
 
-For the recommended 2A route, replace algorithmic connected components with a
-learned object-slot extractor while keeping the Modal-first rule and the same
-held-out transfer gate as a required contract.
+For the recommended internal route, make viable computational bodies consume
+the learned-object-slot plus discovered-profile transfer contract while
+keeping the Modal-first rule and the same held-out transfer gate as a required
+contract.
 
 The working rhythm:
 

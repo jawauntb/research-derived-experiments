@@ -75,7 +75,13 @@ accepted path: profiles are induced from candidate-family success,
 bound/unbound utility gaps, and action templates. Across five Modal seeds,
 `discovered_semantic_world_model` reaches profile purity/family/pair/action-
 template metrics 1.000, transfer gate 1.000, family/target/useful/rich 1.000,
-and low-concern program rate 0.000.
+and low-concern program rate 0.000. A learned object-slot follow-on then
+removes algorithmic connected components from the accepted path: one learned
+foreground pixel model plus fixed slot-local center search feeds the same
+discovered-profile transfer gate. Across five Modal seeds, the learned-slot
+world model reaches slot/scene recovery 1.000, profile purity/family/pair/
+action-template metrics 1.000, transfer gate 1.000, family/target/useful/rich
+1.000, and low-concern program rate 0.000.
 Shortcut reward, passive perceptual inference, no-tree planning, random
 program probing, family-only selection, target-only selection, rich programs
 without concern, and restless inquiry all fail for different anti-cheat
@@ -86,8 +92,9 @@ syntax, probe availability is not intervention invention, target selection is
 not program composition, explicit role decoding is not required for supervised
 slot semantics, supervised role-token labels are not required for label-free
 slot calibration, supplied profile tables are not required for bounded
-semantic-profile induction, and uncertainty reduction is not concerned
-inquiry.**
+semantic-profile induction, algorithmic connected components are not required
+inside the synthetic fixed-slot world, and uncertainty reduction is not
+concerned inquiry.**
 
 ## 1. Why Arc 2A Exists
 
@@ -731,26 +738,75 @@ family, target binding, and concern discipline. The remaining caveat is still
 substantial: the world is synthetic, object extraction is connected-component
 based, and the feedback is contract-shaped rather than open-ended.
 
-## 18. Limitations
+## 18. Learned Object Slots For Discovered Profiles
+
+The discovered semantic-profile result above still uses algorithmic connected
+components as its perception path. The learned object-slot gate removes that
+extractor from the accepted agent. It trains a foreground pixel classifier from
+RGB images, uses fixed slot-local center search to recover six object slots,
+feeds those learned slots into the same anonymous profile inducer, and then
+runs the identical held-out role/parse transfer verifier.
+
+Remote command:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_learned_object_slots_sweep.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90 \
+  --induction-calibration-trials 1200 \
+  --extractor-calibration-trials 1200 \
+  --extractor-epochs 45 \
+  --extractor-samples-per-image 96
+```
+
+The tracked public report is
+`experiments/concerned_syntax/results/learned_object_slots_modal_2026_06_22.md`.
+
+Learned slots and induced semantics:
+
+| Slot recovery | Scene recovery | Clusters | Profiles | Cluster purity | Family | Pair | Action template |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 1.000 | 1.000 | 9 | 4 | 1.000 | 1.000 | 1.000 | 1.000 |
+
+Transfer summary:
+
+| Agent | Transfer | Family | Target | Useful | Rich | Low program |
+|---|---:|---:|---:|---:|---:|---:|
+| learned object-slot discovered world model | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 0.000 |
+| learned rich composer | 0.000 | 0.714 | 0.762 | 0.714 | 0.844 | 0.188 |
+| learned object-slot family only | 0.000 | 1.000 | 0.214 | 0.214 | 1.000 | 0.000 |
+| learned object-slot target only | 0.000 | 0.143 | 1.000 | 0.143 | 0.143 | 0.714 |
+| learned object-slot rich no concern | 0.000 | 1.000 | 1.000 | 1.000 | 1.000 | 0.714 |
+
+This is not natural-image vision, open-ended slot attention, or open-world
+semantic discovery. The renderer, six canonical slots, slot-local search, and
+contract-shaped intervention feedback remain scaffolds. The bounded claim is
+instead narrower and useful: the discovered semantic-profile transfer result
+does not depend on algorithmic connected-component features inside this
+synthetic fixed-slot world.
+
+## 19. Limitations
 
 The current benchmark is still synthetic. The newest agent receives generated
-pixels with algorithmic connected-component extraction, not natural images,
-continuous control, or human subjects. The discovered semantic-profile result
-removes the supplied profile table, but still depends on a synthetic
-connected-component world and contract-shaped program/action feedback. The
+pixels with learned foreground object slots, not natural images, continuous
+control, or human subjects. The discovered semantic-profile result removes the
+supplied profile table, and the learned object-slot result removes algorithmic
+connected components from the accepted path, but both still depend on a
+synthetic fixed-slot world and contract-shaped program/action feedback. The
 rich-program and searched-rich gates select among a provided finite program
 grammar; they do not invent raw motor primitives or open-ended experimental
 apparatus. The point of this first paper is to define and pass a minimal
 learned acceptance surface before larger compute.
 
 The Modal transfer, learned slot-semantics, label-free slot-calibration, and
-discovered-profile repairs narrow the next limitation but do not erase it: the
-agent should learn object slots without algorithmic connected components,
-invent or search programs beyond the finite provided grammar, and instantiate
-program/body components as learned modules rather than compact hand-
-instantiated world-model operations.
+discovered-profile/learned-object-slot repairs narrow the next limitation but
+do not erase it: the agent should move beyond fixed canonical slots, discover
+objects in less controlled visual worlds, invent or search programs beyond the
+finite provided grammar, and instantiate program/body components as learned
+modules rather than compact hand-instantiated world-model operations.
 
-## 19. Conclusion
+## 20. Conclusion
 
 Arc 2A inserts a new layer into the maintained-concern ladder:
 
@@ -772,9 +828,12 @@ transfer, learned slot-semantics, and label-free slot-calibration repairs add
 the next boundary: the same grammar can survive role/parse transfer when a
 world-model concern gate consumes explicit, supervised learned, or label-free
 program-feedback grounded role semantics, and the supplied profile table can
-be replaced by bounded semantic-profile induction. Learned object-slot
-perception, open-ended program discovery beyond the finite provided grammar,
-and learned module/body search remain future work.
+be replaced by bounded semantic-profile induction. The learned object-slot
+bridge adds one more boundary: algorithmic connected components are not
+required for the discovered-profile transfer result inside the synthetic
+fixed-slot world. Natural-image object discovery, open-ended program discovery
+beyond the finite provided grammar, 2B consumption of the newest learned-slot
+contract, and learned module/body search remain future work.
 
 ## References
 

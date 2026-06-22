@@ -33,7 +33,7 @@ We use the `scientific-discovery-regime-audit` skill as the process wrapper:
 4. Distinguish retrieval, search, and discovery.
 5. Record residual content that the current regime cannot explain.
 
-The current ledger is [TODO.md](TODO.md). Audit cards live in [docs/discovery_regime_audit.md](docs/discovery_regime_audit.md). The Phase 2 breakthrough trajectory is [docs/phase2_breakthrough_trajectory.md](docs/phase2_breakthrough_trajectory.md). The latest start-here handoff for next breakthrough work is [docs/phase2_next_breakthrough_handoff.md](docs/phase2_next_breakthrough_handoff.md), with the longer historical continuation brief at [docs/phase2_next_agent_handoff.md](docs/phase2_next_agent_handoff.md).
+The current ledger is [TODO.md](TODO.md). Audit cards live in [docs/discovery_regime_audit.md](docs/discovery_regime_audit.md). The Phase 2 breakthrough trajectory is [docs/phase2_breakthrough_trajectory.md](docs/phase2_breakthrough_trajectory.md). The latest integrated start-here handoff is [docs/phase2_next_phase_research_handoff.md](docs/phase2_next_phase_research_handoff.md), with the longer breakthrough brief at [docs/phase2_next_breakthrough_handoff.md](docs/phase2_next_breakthrough_handoff.md) and the historical continuation brief at [docs/phase2_next_agent_handoff.md](docs/phase2_next_agent_handoff.md).
 
 ## Experiments
 
@@ -201,6 +201,24 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     experiments/concerned_syntax/modal_discovered_semantic_profiles_sweep.py \
     --train-trials 3000 --test-trials 1200 --epochs 90 \
     --induction-calibration-trials 1200
+
+python3 -m experiments.concerned_syntax.learned_object_slots \
+    --train-trials 90 --test-trials 40 --seed 20260622 --epochs 10 \
+    --induction-calibration-trials 500 \
+    --extractor-calibration-trials 500 \
+    --extractor-epochs 10 \
+    --extractor-samples-per-image 96 \
+    --out artifacts/concerned_syntax/learned_object_slots_local.json \
+    --report experiments/concerned_syntax/results/learned_object_slots_local_2026_06_22.md
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/concerned_syntax/modal_learned_object_slots_sweep.py \
+    --train-trials 3000 --test-trials 1200 --epochs 90 \
+    --induction-calibration-trials 1200 \
+    --extractor-calibration-trials 1200 \
+    --extractor-epochs 45 \
+    --extractor-samples-per-image 96
 
 doppler --scope /Users/jawaun/superoptimizers run -- \
     uvx --python 3.12 --from modal modal run \
