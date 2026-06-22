@@ -231,6 +231,17 @@ Current v1 result:
   `1.000`, and low-concern program rate `0.000`. The learned composer,
   family-only, target-only, and ungated-rich controls remain rejected for
   distinct reasons.
+- `unsupervised_slot_semantics_modal_2026_06_18.md` removes supervised
+  role-token calibration from that transfer path. It clusters rendered
+  connected components without visible role labels, then grounds active-cluster
+  profiles through synthetic rich-program feedback and action consistency.
+  Across five Modal seeds, `unsupervised_slot_semantic_world_model` reaches
+  transfer gate `1.000`, semantic kind/family/pair `1.000`, family/target/
+  useful/rich high-concern rates `1.000`, low-concern program rate `0.000`,
+  and regret `0.004`. The remaining boundary is important: the semantic
+  profile table and feedback contract are still supplied, so this is
+  label-free role-token calibration, not fully unsupervised semantic-profile or
+  natural-image object discovery.
 
 Current coupled 2A/2B results:
 
@@ -265,10 +276,11 @@ Current coupled 2A/2B results:
 This is the first Phase 2 point where Arc 2A and Arc 2B are coupled at the
 rich program-composition contract, not merely at target selection. The frontier
 now also closes searched rich-program recipes, v2 transfer-repair, supervised
-learned slot-semantics, and executable-module-body gates at Modal scale. It is
-still not the end of Phase 2: unsupervised object/role slot discovery,
-open-ended motor/apparatus discovery beyond the finite program DSL, and full
-architecture search remain open.
+learned slot-semantics, label-free role-token calibration, and executable-
+module-body gates at Modal scale. It is still not the end of Phase 2: fully
+unsupervised object/role semantic-profile discovery, open-ended motor/apparatus
+discovery beyond the finite program DSL, and full architecture search remain
+open.
 
 ## Literature Bearings
 

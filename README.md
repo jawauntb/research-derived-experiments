@@ -178,6 +178,18 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     --train-trials 3000 --test-trials 1200 --epochs 90 \
     --semantic-calibration-trials 1200
 
+python3 -m experiments.concerned_syntax.unsupervised_slot_semantics \
+    --train-trials 90 --test-trials 40 --seed 20260618 --epochs 10 \
+    --induction-calibration-trials 500 \
+    --out artifacts/concerned_syntax/unsupervised_slot_semantics_local.json \
+    --report experiments/concerned_syntax/results/unsupervised_slot_semantics_local_2026_06_18.md
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/concerned_syntax/modal_unsupervised_slot_semantics_sweep.py \
+    --train-trials 3000 --test-trials 1200 --epochs 90 \
+    --induction-calibration-trials 1200
+
 doppler --scope /Users/jawaun/superoptimizers run -- \
     uvx --python 3.12 --from modal modal run \
     experiments/concerned_syntax/modal_intervention_transfer_sweep.py \

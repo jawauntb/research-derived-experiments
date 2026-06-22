@@ -5088,3 +5088,99 @@ Residual content:
 
 Next move: merge finite recipe search into the paper, then pursue unsupervised
 object/role slot discovery or 2B searched/evolved executable modules.
+
+## Arc 2A: Label-Free Slot Semantics Against 2A-v2 Transfer
+
+Question: can the repaired `2A-v2-pixels-rich_programs` transfer gate replace
+supervised visible role-token calibration with label-free connected-component
+slot induction plus downstream rich-program feedback?
+
+Current regime:
+
+- Artifact types: rich 2A-v2 transfer summaries, connected-component slot
+  clusters, supplied semantic kind profiles, synthetic rich-program feedback
+  records, and held-out slice reports.
+- Operations: cluster rendered component appearances without role-token labels,
+  identify the neutral cluster by prevalence, ground active-cluster profile
+  assignments with rich-program feedback and action consistency, then run the
+  same v2 transfer gate against family-only, target-only, ungated-rich, and
+  learned-composer controls.
+- Gates/verifiers: semantic kind/family/pair accuracy, transfer gate,
+  family/target/useful/rich high-concern rates, low-concern program cap,
+  targeted unit tests, local smoke report, and Modal entrypoint.
+- Known limitations: semantic profile table is supplied; feedback is synthetic
+  and contract-shaped; object extraction is still connected components; this is
+  not natural-image perception, fully unsupervised semantic-profile discovery,
+  or open-ended program invention.
+
+Action class:
+
+- Retrieval/search/discovery: label-free role-token-calibration regime
+  transition.
+- Why: the accepted operation no longer consumes visible role-token labels or
+  `example.trial.roles`; it grounds slot semantics through component clustering
+  plus interventional feedback, while keeping supplied semantic profiles.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/concerned_syntax/unsupervised_slot_semantics.py`;
+  `experiments/concerned_syntax/modal_unsupervised_slot_semantics_sweep.py`;
+  `experiments/concerned_syntax/results/unsupervised_slot_semantics_local_2026_06_18.md`;
+  `experiments/concerned_syntax/results/unsupervised_slot_semantics_modal_2026_06_18.md`;
+  local ignored artifact
+  `artifacts/concerned_syntax/unsupervised_slot_semantics_local.json`;
+  Modal ignored artifact
+  `artifacts/concerned_syntax/unsupervised_slot_semantics_modal_sweep.json`.
+- Positive target: `unsupervised_slot_semantic_world_model` should pass
+  semantic kind/family/pair recovery and the held-out v2 transfer gate.
+- Negative controls: `learned_rich_program_composer`,
+  `unsupervised_semantic_family_only`,
+  `unsupervised_semantic_target_only`, and
+  `unsupervised_semantic_rich_without_concern`.
+- Stress tests: held-out `shield_poison`, `repair_core`, `food_trap`,
+  `repeat_concat`, `hooked_repeat`, `alternating_bind`, and `edge_core`.
+
+Gate:
+
+- Acceptance rule: semantic kind/family/pair accuracy >= 0.95, every transfer
+  slice passes, action >= 0.85, low-concern program rate <= 0.25, and
+  family/target/useful/rich high-concern rates >= 0.70.
+- Withheld/rejected rule: do not claim natural-image object discovery, fully
+  unsupervised semantic-profile discovery, open-ended program invention, or
+  full neural module discovery.
+
+Results:
+
+- Accepted artifacts: label-free slot-semantics module, Modal entrypoint,
+  local and Modal reports, targeted tests, README commands, handoff update, and
+  paper update.
+- Rejected or withheld artifacts: raw JSON remains under ignored `artifacts/`;
+  supplied semantic profiles and synthetic feedback remain explicit boundaries.
+- Key metrics across five Modal seeds:
+  `unsupervised_slot_semantic_world_model` semantic kind/family/pair `1.000`,
+  transfer gate `1.000`, family/target/useful/rich high-concern rates `1.000`,
+  low-program `0.000`, regret `0.004`. `learned_rich_program_composer` fails
+  transfer; `unsupervised_semantic_family_only` reaches semantic/family
+  `1.000` but target/useful `0.214`; `unsupervised_semantic_target_only`
+  reaches target `1.000` but family/useful `0.143` and low-program `0.714`;
+  `unsupervised_semantic_rich_without_concern` reaches semantic and rich
+  metrics `1.000` but fails with low-program `0.714`.
+- Variance or ablation: five Modal seeds with 3,000 train trials, 1,200 test
+  trials, 1,200 induction calibration trials, and 90 epochs per seed; accepted
+  transfer gate SD is `0.000`.
+
+Residual content:
+
+- Explained by old regime: supervised learned slot semantics already showed
+  that learned prototypes can replace the explicit RGB role decoder.
+- New content outside old regime: role-token labels are no longer required for
+  the transfer contract; connected-component clusters plus rich-program
+  feedback can ground the semantic profile assignments.
+- Retractions or supersessions: supersede "supervised role-token calibration
+  remains required" with "label-free role-token calibration passes under a
+  supplied semantic profile table and synthetic feedback; fully unsupervised
+  semantic-profile discovery remains open."
+
+Next move: replace the supplied semantic profile table with discovered semantic
+profiles, or move to 2B searched/evolved executable modules.

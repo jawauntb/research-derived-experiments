@@ -726,7 +726,9 @@ that transfer gate through Modal-confirmed executable module bodies. The
 searched-rich successor also searches the v2 rich grammar's finite recipe space
 rather than receiving `concerned_program_composer` as a named policy. The
 remaining next versions are open-ended motor/apparatus discovery beyond the
-finite provided DSL and unsupervised neural slot/role semantics.
+finite provided DSL and fully unsupervised neural slot/role semantics. The
+label-free slot successor removes supervised role-token labels, but keeps a
+supplied semantic profile table and synthetic rich-program feedback.
 
 Gate:
 
@@ -1108,7 +1110,9 @@ small local smoke -> Modal full sweep -> audit -> chart -> paper/PDF -> checks
 
 The fastest path to the next real breakthrough is now:
 
-1. Replace connected-component extraction with learned object/slot perception.
+1. Replace the supplied semantic profile table with discovered semantic
+   profiles, then replace connected-component extraction with learned
+   object/slot perception.
 2. Move beyond the provided finite grammar into open-ended motor/apparatus
    discovery.
 3. Replace compact hand-instantiated executable module bodies with searched or
@@ -1226,3 +1230,20 @@ Latest searched rich-program policy result after this branch:
   `family_proxy_rich_program_search` learns family while missing target/useful,
   and `syntax_proxy_rich_program_search` recovers syntax while probing
   low-concern cases at `1.000`.
+
+Latest label-free slot-semantics result after this branch:
+
+- `experiments/concerned_syntax/results/unsupervised_slot_semantics_modal_2026_06_18.md`
+  clusters rendered connected components without visible role-token labels and
+  grounds active-cluster profiles through synthetic rich-program feedback.
+- Across five Modal seeds, `unsupervised_slot_semantic_world_model` reaches
+  semantic kind/family/pair `1.000`, transfer gate `1.000`,
+  family/target/useful/rich high `1.000`, low-program `0.000`, and regret
+  `0.004`.
+- `unsupervised_semantic_family_only` reaches semantic/family `1.000` but
+  target/useful `0.214`; `unsupervised_semantic_target_only` reaches target
+  `1.000` but family/useful `0.143` and low-program `0.714`;
+  `unsupervised_semantic_rich_without_concern` reaches semantic and rich
+  metrics `1.000` but fails the low-program cap at `0.714`.
+- Boundary: this is label-free role-token calibration under a supplied
+  semantic profile table, not fully unsupervised semantic-profile discovery.

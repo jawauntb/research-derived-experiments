@@ -64,16 +64,22 @@ supervised learned slot-semantics repair then replaces the explicit RGB role
 decoder with role-token prototypes and preserves the same transfer gate across
 five Modal confirmation seeds with 3,000 train trials, 1,200 test trials, and
 90 epochs per seed, with semantic kind/pair accuracy 1.000 and low-concern
-program rate 0.000.
+program rate 0.000. A label-free slot-semantics follow-on removes supervised
+role-token calibration: connected components are clustered without visible
+role labels and grounded through synthetic rich-program feedback. Across five
+Modal seeds it reaches semantic kind/family/pair accuracy 1.000, transfer gate
+1.000, and low-concern program rate 0.000, while preserving the caveat that the
+semantic profile table and feedback contract are still supplied.
 Shortcut reward, passive perceptual inference, no-tree planning, random
 program probing, family-only selection, target-only selection, rich programs
 without concern, and restless inquiry all fail for different anti-cheat
-reasons. The result is still not a claim about human cognition or learned
-unsupervised object slots. It is an accepted Phase 2A learned-mechanism
-surface: **reward is not syntax, compression is not syntax, probe availability
-is not intervention invention, target selection is not program composition,
-explicit role decoding is not required for supervised slot semantics, and
-uncertainty reduction is not concerned inquiry.**
+reasons. The result is still not a claim about human cognition, natural-image
+perception, or fully unsupervised semantic-profile discovery. It is an accepted
+Phase 2A learned-mechanism surface: **reward is not syntax, compression is not
+syntax, probe availability is not intervention invention, target selection is
+not program composition, explicit role decoding is not required for supervised
+slot semantics, supervised role-token labels are not required for label-free
+slot calibration, and uncertainty reduction is not concerned inquiry.**
 
 ## 1. Why Arc 2A Exists
 
@@ -625,23 +631,69 @@ and rich programs without concern all fail despite perfect semantic decoding.
 This is still not natural-image perception, unsupervised role discovery, or
 open-ended program invention.
 
-## 16. Limitations
+## 16. Label-Free Slot-Semantics Transfer
+
+The supervised slot-semantics gate above still receives visible role-token
+calibration examples. The label-free slot-semantics gate removes that training
+signal. It clusters rendered connected components without role labels,
+identifies the neutral cluster by prevalence, and grounds each active-cluster
+profile through synthetic rich-program feedback and action consistency.
+
+Remote command:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_unsupervised_slot_semantics_sweep.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90 \
+  --induction-calibration-trials 1200
+```
+
+The tracked public report is
+`experiments/concerned_syntax/results/unsupervised_slot_semantics_modal_2026_06_18.md`.
+
+Induced semantics:
+
+| Clusters | Profiles | Kind | Family | Pair |
+|---:|---:|---:|---:|---:|
+| 9 | 4 | 1.000 | 1.000 | 1.000 |
+
+Transfer summary:
+
+| Agent | Transfer | Family | Target | Useful | Rich | Low program |
+|---|---:|---:|---:|---:|---:|---:|
+| label-free slot world model | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 0.000 |
+| learned rich composer | 0.000 | 0.714 | 0.829 | 0.714 | 0.894 | 0.161 |
+| label-free family only | 0.000 | 1.000 | 0.214 | 0.214 | 1.000 | 0.000 |
+| label-free target only | 0.000 | 0.143 | 1.000 | 0.143 | 0.143 | 0.714 |
+| label-free rich no concern | 0.000 | 1.000 | 1.000 | 1.000 | 1.000 | 0.714 |
+
+This closes a narrower boundary than full unsupervised object discovery. The
+accepted agent no longer trains on `example.trial.roles` or visible role-token
+labels, but it still uses a supplied semantic profile table and synthetic
+rich-program feedback. The controls preserve the same anti-cheat separations:
+family without target, target without family, and rich programs without concern
+all fail even after the induced kind/family/pair semantics are perfect.
+
+## 17. Limitations
 
 The current benchmark is still synthetic. The newest agent receives generated
 pixels with algorithmic connected-component extraction, not natural images,
-learned object slots, continuous control, or human subjects. The newest
+continuous control, or human subjects. The newest label-free slot result
+removes supervised role-token calibration, but still receives a supplied
+semantic profile table and synthetic program/action feedback. The newest
 rich-program and searched-rich gates select among a provided finite program
 grammar; they do not invent raw motor primitives or open-ended experimental
 apparatus. The point of this first paper is to define and pass a minimal
 learned acceptance surface before larger compute.
 
-The Modal transfer and learned slot-semantics repairs narrow the next
-limitation but do not erase it: the agent should learn object slots without
-supervised role-token calibration, invent or search programs beyond the
-finite provided grammar, and instantiate program/body components as learned
-modules rather than compact hand-instantiated world-model operations.
+The Modal transfer, learned slot-semantics, and label-free slot-calibration
+repairs narrow the next limitation but do not erase it: the agent should
+discover semantic profiles without a supplied table, invent or search programs
+beyond the finite provided grammar, and instantiate program/body components as
+learned modules rather than compact hand-instantiated world-model operations.
 
-## 17. Conclusion
+## 18. Conclusion
 
 Arc 2A inserts a new layer into the maintained-concern ladder:
 
@@ -659,11 +711,12 @@ rich-program, and searched-rich-program gates show that the gate is passable
 without hidden parse access or a named positive policy, but only when object
 extraction, useful target selection, program family selection, binding,
 intervention, and formal concern gating are present together. The held-out v2
-transfer and learned slot-semantics repairs add the next boundary: the same
-grammar can survive role/parse transfer when a world-model concern gate
-consumes either explicit or supervised learned role semantics. Unsupervised
-object slots, open-ended program discovery beyond the finite provided grammar,
-and learned module/body search remain future work.
+transfer, learned slot-semantics, and label-free slot-calibration repairs add
+the next boundary: the same grammar can survive role/parse transfer when a
+world-model concern gate consumes explicit, supervised learned, or label-free
+program-feedback grounded role semantics. Fully unsupervised semantic-profile
+discovery, open-ended program discovery beyond the finite provided grammar, and
+learned module/body search remain future work.
 
 ## References
 
