@@ -166,10 +166,9 @@ def train_and_score(arg: dict[str, Any]) -> dict[str, Any]:
     def load_parquet(path: str) -> tuple[np.ndarray, np.ndarray]:
         df = pd.read_parquet(path)
         # uoft-cs/cifar10 parquet schema: {"img": {"bytes": ..., "path": null}, "label": int}.
-        images = []
-        labels = []
-        for _, row in df.iterrows():
-            img_field = row["img"]
+        images: list[np.ndarray] = []
+        labels: list[int] = []
+        for img_field, lbl_field in zip(df["img"].tolist(), df["label"].tolist()):
             if isinstance(img_field, dict) and "bytes" in img_field:
                 img = Image.open(io.BytesIO(img_field["bytes"])).convert("RGB")
             elif isinstance(img_field, (bytes, bytearray)):
@@ -177,7 +176,7 @@ def train_and_score(arg: dict[str, Any]) -> dict[str, Any]:
             else:
                 raise ValueError(f"unexpected img field type: {type(img_field)}")
             images.append(np.array(img, dtype=np.uint8))
-            labels.append(int(row["label"]))
+            labels.append(int(lbl_field))
         return np.stack(images), np.array(labels, dtype=np.int64)
 
     print("[data] loading CIFAR-10 train parquet ...", flush=True)
@@ -198,7 +197,6 @@ def train_and_score(arg: dict[str, Any]) -> dict[str, Any]:
     train_x_full = to_normalized_tensor(train_imgs)
     train_y_full = torch.from_numpy(train_lbls)
     test_x_full = to_normalized_tensor(test_imgs)
-    test_y_full = torch.from_numpy(test_lbls)
 
     # ----- Train K ensemble members (identical architecture, different seeds) -----
     def make_cnn():
@@ -215,7 +213,6 @@ def train_and_score(arg: dict[str, Any]) -> dict[str, Any]:
     ensemble = []
     member_train_acc = []
     n_train = train_x_full.shape[0]
-    train_idx = torch.arange(n_train)
     for k in range(K):
         torch.manual_seed(base_seed + 100 * k)
         net = make_cnn().to(device)
@@ -225,6 +222,7 @@ def train_and_score(arg: dict[str, Any]) -> dict[str, Any]:
         for ep in range(epochs):
             perm = torch.randperm(n_train)
             correct, total = 0, 0
+            last_loss = float("nan")
             for start in range(0, n_train, batch_size):
                 idx = perm[start:start + batch_size]
                 xb = train_x_full[idx].to(device)
@@ -236,8 +234,9 @@ def train_and_score(arg: dict[str, Any]) -> dict[str, Any]:
                 opt.step()
                 correct += int((logits.argmax(-1) == yb).sum().item())
                 total += yb.numel()
+                last_loss = float(loss.item())
             last_acc = correct / total
-            print(f"[train] K={k} ep={ep} acc={last_acc:.3f} loss={float(loss.item()):.3f}", flush=True)
+            print(f"[train] K={k} ep={ep} acc={last_acc:.3f} loss={last_loss:.3f}", flush=True)
         net.eval()
         ensemble.append(net)
         member_train_acc.append(last_acc)
