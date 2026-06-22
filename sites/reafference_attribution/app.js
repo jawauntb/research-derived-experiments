@@ -37,19 +37,24 @@ const repoUrl = "https://github.com/jawauntb/research-derived-experiments/blob/m
 const pageList = [
   {
     route: "overview",
-    nav: "overview",
+    nav: "program",
     draw: drawOverview,
     color: colors.blue,
-    kicker: "research program map",
-    title: "experiments as mechanisms, not just results",
-    subtitle: "Each page turns an experiment family into a live causal diagram: what changes, what is measured, and what would count as the mechanism actually doing work.",
-    thesis: "The atlas lets a reader build the intuition before the paper: every animation binds visible motion to a variable, gate, or intervention in the research loop.",
+    kicker: "where the research is now",
+    title: "a living map of constraints becoming agency",
+    subtitle: "The whole program is shown as a changing mechanism: symmetry pressure becomes active geometry, active geometry becomes concern, concern allocates interventions, and viable bodies consume the resulting syntax.",
+    thesis: "This page is the wide shot. It binds 34 papers and 117 public result notes into one live field: outer arcs are research tracks, moving packets are evidence passing gates, and the violet frontier marks places where the current mechanism still has to earn stronger claims.",
     motions: [
-      "Experiment families pulse into a shared question: when does geometry become active control?",
-      "Colored paths separate observation, intervention, selection pressure, and evidence.",
-      "The active page preview changes the central mechanism instead of swapping decoration.",
+      "Outer arcs show papers and result families; inner packets show evidence moving from observation to intervention to body design.",
+      "Green/cyan gates are strong mechanisms, amber gates are partial positives, and violet frontier loops mark honest unresolved scaffolds.",
+      "The zoom pages remain the detailed mechanisms; this page shows how they currently feed one research program.",
     ],
-    sources: [{ label: "repo overview", href: `${repoUrl}/README.md` }],
+    sources: [
+      { label: "repo overview", href: `${repoUrl}/README.md` },
+      { label: "metric stack", href: `${repoUrl}/papers/metric_stack_synthesis/paper.md` },
+      { label: "phase 2 handoff", href: `${repoUrl}/docs/phase2_next_breakthrough_handoff.md` },
+      { label: "specificity frontier", href: `${repoUrl}/docs/semantic_specificity.md` },
+    ],
   },
   {
     route: "reafference",
@@ -168,6 +173,63 @@ const state = {
   dpr: 1,
   reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)").matches,
 };
+
+const programLayers = [
+  {
+    label: "weakness selects invariants",
+    short: "weakness",
+    detail: "shortcut and invariant rules tie in-sample; weakness predicts OOD",
+    status: "foundation",
+    value: "0.99+ LB",
+    color: colors.violet,
+    level: 0.70,
+  },
+  {
+    label: "activation geometry frontier",
+    short: "activation frontier",
+    detail: "directions must survive controls before they count as mechanisms",
+    status: "frontier",
+    value: "specificity open",
+    color: colors.rose,
+    level: 0.56,
+  },
+  {
+    label: "self/world attribution",
+    short: "self/world",
+    detail: "null anchors and current replay turn observed dE into source credit",
+    status: "mechanism",
+    value: "12/13 current replay",
+    color: colors.cyan,
+    level: 0.84,
+  },
+  {
+    label: "concerned intervention syntax",
+    short: "intervention syntax",
+    detail: "agents choose useful program families, targets, and low-cost probes",
+    status: "mechanism",
+    value: "rich gate 1.00",
+    color: colors.amber,
+    level: 0.92,
+  },
+  {
+    label: "viable computational bodies",
+    short: "viable bodies",
+    detail: "body search consumes the syntax contract under formal viability gates",
+    status: "mechanism",
+    value: "body gate 1.00",
+    color: colors.green,
+    level: 0.88,
+  },
+  {
+    label: "next combined frontier",
+    short: "next frontier",
+    detail: "learned object slots, neural modules, and open-ended program discovery",
+    status: "open",
+    value: "scaffolds visible",
+    color: colors.blue,
+    level: 0.46,
+  },
+];
 
 const clamp = (value, lo, hi) => Math.max(lo, Math.min(hi, value));
 const mix = (a, b, t) => a + (b - a) * t;
@@ -447,48 +509,133 @@ function drawOverview() {
   clearCanvas();
   const w = state.width;
   const h = state.height;
+  const p = cycle(24);
+  const focusIndex = Math.floor(p * programLayers.length) % programLayers.length;
+  const focus = programLayers[focusIndex];
+
+  if (w < 560) drawProgramMobile(w, h, p, focusIndex);
+  else drawProgramDesktop(w, h, p, focusIndex);
+
+  updatePhase("program synthesis", `${focus.status}: ${focus.label}`, p);
+  updateMetrics([
+    { label: "paper corpus", value: "34 papers", amount: 1, color: colors.green },
+    { label: "public result notes", value: "117 reports", amount: 0.92, color: colors.cyan },
+    { label: "open frontiers", value: "kept visible", amount: 0.46 + 0.12 * wave(state.elapsed * 0.7), color: colors.violet },
+  ]);
+}
+
+function drawProgramField(nodes, p) {
+  const cell = clamp(Math.floor(state.width / 34), 9, 22);
+  for (let y = 0; y < state.height; y += cell) {
+    for (let x = 0; x < state.width; x += cell) {
+      let chosen = nodes[0];
+      let intensity = 0;
+      nodes.forEach((node, index) => {
+        const dx = (x + cell / 2 - node.x) / state.width;
+        const dy = (y + cell / 2 - node.y) / state.height;
+        const ridge = Math.sin(dx * 18 + dy * 22 + state.elapsed * 0.9 + index) * 0.08;
+        const force = Math.exp(-((dx * dx + dy * dy) / (0.018 + node.layer.level * 0.012))) * (0.52 + ridge);
+        if (force > intensity) {
+          intensity = force;
+          chosen = node;
+        }
+      });
+      const alpha = clamp(0.04 + intensity * 0.36 + 0.05 * wave(p * Math.PI * 2 + x * 0.02 + y * 0.018), 0.04, 0.42);
+      ctx.fillStyle = withAlpha(chosen.layer.color, alpha);
+      ctx.fillRect(x, y, cell + 0.5, cell + 0.5);
+    }
+  }
+}
+
+function drawProgramDesktop(w, h, p, focusIndex) {
   const cx = w * 0.5;
-  const cy = h * 0.52;
-  const p = cycle(18);
-  const radius = Math.min(w, h) * 0.31;
-  const nodes = pageList.slice(1).map((page, index) => {
-    const angle = -Math.PI / 2 + index * (Math.PI * 2 / 5) + Math.sin(state.elapsed * 0.15) * 0.08;
+  const cy = h * 0.51;
+  const radius = Math.min(w, h) * 0.34;
+  const nodes = programLayers.map((layer, index) => {
+    const angle = -Math.PI / 2 + index * (Math.PI * 2 / programLayers.length) + Math.sin(state.elapsed * 0.12) * 0.08;
     return {
-      page,
+      layer,
       x: cx + Math.cos(angle) * radius,
-      y: cy + Math.sin(angle) * radius * 0.78,
-      color: page.color,
+      y: cy + Math.sin(angle) * radius * 0.72,
       index,
     };
   });
 
-  roundedRect(cx - w * 0.18, cy - h * 0.12, w * 0.36, h * 0.24, 8, "rgba(246,239,228,0.045)", "rgba(246,239,228,0.22)");
-  text("active geometry", cx, cy - 28, 18, colors.ink);
-  text("observation -> intervention -> evidence", cx, cy + 8, 13, colors.muted);
-  text("mechanism earns the picture", cx, cy + 38, 13, colors.green);
+  drawProgramField(nodes, p);
 
-  nodes.forEach(node => {
-    const pulse = (p + node.index / nodes.length) % 1;
-    arrow(node.x, node.y, cx, cy, node.color, 2.2, 0.42 + 0.35 * Math.sin(pulse * Math.PI), 0.08);
-    dot(mix(node.x, cx, pulse), mix(node.y, cy, pulse), 4.5, node.color, 0.85);
-    halo(node.x, node.y, 62 + 18 * wave(state.elapsed * 1.2 + node.index), node.color, 0.16);
-    roundedRect(node.x - 78, node.y - 28, 156, 56, 8, "rgba(12,15,24,0.82)", node.color);
-    text(node.page.nav, node.x, node.y - 6, 14, colors.ink);
-    text(node.page.route === "reafference" ? "source assignment" : node.page.kicker, node.x, node.y + 14, 10, node.color);
+  [0.36, 0.58, 0.82].forEach((scale, index) => {
+    ctx.save();
+    ctx.strokeStyle = index === 2 ? withAlpha(colors.violet, 0.32) : "rgba(246,239,228,0.14)";
+    ctx.lineWidth = index === 2 ? 2 : 1;
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius * scale, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
   });
 
-  for (let i = 0; i < 18; i++) {
-    const a = i * 0.74 + state.elapsed * 0.24;
-    const rr = radius * (0.32 + (i % 5) * 0.11);
-    dot(cx + Math.cos(a) * rr, cy + Math.sin(a * 1.35) * rr * 0.54, 1.6, colors.faint, 0.5);
-  }
+  roundedRect(cx - w * 0.20, cy - h * 0.14, w * 0.40, h * 0.28, 8, "rgba(8,9,13,0.74)", "rgba(246,239,228,0.22)");
+  text("constraint -> concern -> intervention", cx, cy - 44, 16, colors.ink);
+  text("evidence packets cross gates", cx, cy - 12, 13, colors.cyan);
+  text("frontiers stay visible", cx, cy + 18, 13, colors.violet);
+  text("zoom pages explain each mechanism", cx, cy + 48, 12, colors.muted);
 
-  updatePhase("atlas loop", "families feed one mechanism question", p);
-  updateMetrics([
-    { label: "visualized families", value: "5 live views", amount: 1, color: colors.green },
-    { label: "mechanism binding", value: "labels tied to variables", amount: 0.86, color: colors.cyan },
-    { label: "decorative plasma", value: "kept out", amount: 0.08, color: colors.rose },
-  ]);
+  nodes.forEach(node => {
+    const next = nodes[(node.index + 1) % nodes.length];
+    const pulse = (p * programLayers.length + node.index * 0.28) % 1;
+    const active = node.index === focusIndex;
+    line(node.x, node.y, next.x, next.y, node.layer.color, active ? 3.2 : 1.5, active ? 0.72 : 0.28);
+    arrow(node.x, node.y, cx, cy, node.layer.color, active ? 3 : 1.8, active ? 0.82 : 0.34, 0.07);
+    dot(mix(node.x, cx, pulse), mix(node.y, cy, pulse), active ? 6 : 4, node.layer.color, 0.92);
+    halo(node.x, node.y, (active ? 82 : 54) + 18 * wave(state.elapsed * 1.2 + node.index), node.layer.color, active ? 0.24 : 0.12);
+    roundedRect(node.x - 92, node.y - 34, 184, 68, 8, active ? "rgba(12,15,24,0.92)" : "rgba(12,15,24,0.78)", node.layer.color);
+    text(node.layer.status, node.x, node.y - 18, 10, node.layer.color);
+    text(node.layer.label, node.x, node.y + 2, 12, colors.ink);
+    text(node.layer.value, node.x, node.y + 22, 10, colors.muted);
+  });
+
+  for (let i = 0; i < 28; i++) {
+    const a = i * 0.54 + state.elapsed * 0.22;
+    const rr = radius * (0.24 + (i % 7) * 0.095);
+    const color = programLayers[i % programLayers.length].color;
+    dot(cx + Math.cos(a) * rr, cy + Math.sin(a * 1.28) * rr * 0.62, 1.6 + (i % 3), color, 0.36);
+  }
+}
+
+function drawProgramMobile(w, h, p, focusIndex) {
+  const top = 50;
+  const bottom = h - 66;
+  const spineX = w * 0.18;
+  const boxX = w * 0.34;
+  const boxWidth = Math.max(158, w - boxX - 12);
+  const nodes = programLayers.map((layer, index) => ({
+    layer,
+    index,
+    x: spineX,
+    y: mix(top, bottom, index / (programLayers.length - 1)),
+  }));
+
+  drawProgramField(nodes, p);
+  line(spineX, top - 18, spineX, bottom + 18, colors.faint, 2, 0.4, [4, 10]);
+  text("whole program", w * 0.5, 24, 13, colors.ink);
+
+  nodes.forEach(node => {
+    const active = node.index === focusIndex;
+    const packet = (p * programLayers.length + node.index * 0.23) % 1;
+    const next = nodes[Math.min(nodes.length - 1, node.index + 1)];
+    if (next !== node) {
+      dot(spineX, mix(node.y, next.y, packet), active ? 5 : 3.5, node.layer.color, 0.8);
+    }
+    halo(node.x, node.y, active ? 58 : 38, node.layer.color, active ? 0.22 : 0.10);
+    dot(node.x, node.y, active ? 8 : 5, node.layer.color, 0.9);
+    line(node.x + 10, node.y, boxX - 8, node.y, node.layer.color, active ? 3 : 1.4, active ? 0.72 : 0.32);
+    roundedRect(boxX, node.y - 28, boxWidth, 56, 8, active ? "rgba(12,15,24,0.92)" : "rgba(12,15,24,0.78)", node.layer.color);
+    text(node.layer.short, boxX + boxWidth * 0.5, node.y - 9, active ? 11 : 10, colors.ink);
+    text(node.layer.value, boxX + boxWidth * 0.5, node.y + 10, 9, node.layer.color);
+  });
+
+  const focus = nodes[focusIndex];
+  roundedRect(12, h - 50, w - 24, 34, 8, "rgba(8,9,13,0.78)", focus.layer.color);
+  text(focus.layer.detail, w * 0.5, h - 33, 10, colors.muted);
 }
 
 const agents = [

@@ -7,6 +7,14 @@ const { test } = require("node:test");
 const siteRoot = path.join(__dirname, "..");
 const appSource = fs.readFileSync(path.join(siteRoot, "app.js"), "utf8");
 const routes = ["overview", "reafference", "syntax", "bodies", "symmetry", "activation"];
+const routeLabels = {
+  overview: "program",
+  reafference: "reafference",
+  syntax: "syntax",
+  bodies: "bodies",
+  symmetry: "symmetry",
+  activation: "activation",
+};
 
 class Element {
   constructor(tagName, document) {
@@ -222,8 +230,8 @@ test("atlas routes, cards, and inherited-key hashes stay in sync", () => {
 
   for (const route of routes) {
     context.fireHash(`#${route}`);
-    assert.equal(document.querySelector(".nav-item[aria-current='page']").textContent, route);
-    assert.equal(document.querySelector(".experiment-card[aria-current='page'] strong").textContent, route);
+    assert.equal(document.querySelector(".nav-item[aria-current='page']").textContent, routeLabels[route]);
+    assert.equal(document.querySelector(".experiment-card[aria-current='page'] strong").textContent, routeLabels[route]);
     assert.ok(document.getElementById("view-title").textContent.length > 0);
     assert.equal(document.querySelectorAll(".metric").length, 3);
     for (const value of document.querySelectorAll(".metric-value").map(node => node.textContent)) {
@@ -235,9 +243,18 @@ test("atlas routes, cards, and inherited-key hashes stay in sync", () => {
   for (const badHash of ["#missing", "#constructor", "#toString", "#__proto__"]) {
     context.fireHash(badHash);
     assert.equal(context.window.location.hash, "overview");
-    assert.equal(document.querySelector(".nav-item[aria-current='page']").textContent, "overview");
-    assert.match(document.getElementById("view-title").textContent, /experiments as mechanisms/);
+    assert.equal(document.querySelector(".nav-item[aria-current='page']").textContent, "program");
+    assert.match(document.getElementById("view-title").textContent, /living map/);
   }
+});
+
+test("combined program view exposes corpus and frontier context", () => {
+  const context = makeContext();
+  const { document } = context;
+  context.fireHash("#overview");
+  const metricValues = document.querySelectorAll(".metric-value").map(node => node.textContent);
+  assert.deepEqual(metricValues, ["34 papers", "117 reports", "kept visible"]);
+  assert.match(document.getElementById("mechanism-thesis").textContent, /34 papers and 117 public result notes/);
 });
 
 test("clicking generated cards updates the route", () => {

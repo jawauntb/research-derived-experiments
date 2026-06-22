@@ -404,9 +404,33 @@ canvas {
     padding: 14px;
   }
 
+  h1 {
+    font-size: clamp(25px, 8vw, 34px);
+    line-height: 1.06;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
   .visual-stage {
-    aspect-ratio: 4 / 5;
-    min-height: 420px;
+    height: min(68vh, 430px);
+    min-height: 340px;
+    aspect-ratio: auto;
+  }
+
+  .stage-hud {
+    left: 10px;
+    right: 10px;
+    bottom: 12px;
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+
+  .phase-track {
+    left: 10px;
+    right: 10px;
   }
 
   .control-row,
