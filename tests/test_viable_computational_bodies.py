@@ -41,6 +41,14 @@ from experiments.viable_computational_bodies.learned_executable_modules import (
     run_body_gate,
     summarize_body_payloads,
 )
+from experiments.viable_computational_bodies.searched_executable_modules import (
+    TARGET_SEARCHED_EXECUTABLE_BODY,
+    SearchedExecutableSpec,
+    empirical_agent_for_searched_executable,
+    evaluate_searched_executable,
+    run_searched_executable_search,
+    summarize_searched_executable_rows,
+)
 from experiments.viable_computational_bodies.modal_report import (
     summarize_modal_payload,
 )
@@ -765,6 +773,201 @@ class ViableComputationalBodiesTest(unittest.TestCase):
             "concern_gate",
             summary["learned_composer_body"]["missing_modules"],
         )
+
+    def test_searched_executable_body_consumes_label_free_transfer(self) -> None:
+        agent_summary = {
+            "learned_rich_program_composer": {
+                "semantic_kind_accuracy": 0.0,
+                "semantic_family_accuracy": 0.0,
+                "semantic_pair_accuracy": 0.0,
+                "transfer_gate_pass": False,
+                "parse_accuracy_high_concern": 0.8,
+                "action_accuracy": 0.9,
+                "family_accuracy_high_concern": 0.8,
+                "target_accuracy_high_concern": 0.8,
+                "useful_program_rate_high_concern": 0.8,
+                "rich_program_rate_high_concern": 0.8,
+                "low_concern_program_rate": 0.2,
+            },
+            "unsupervised_semantic_family_only": {
+                "semantic_kind_accuracy": 1.0,
+                "semantic_family_accuracy": 1.0,
+                "semantic_pair_accuracy": 1.0,
+                "transfer_gate_pass": False,
+                "parse_accuracy_high_concern": 0.7,
+                "action_accuracy": 0.9,
+                "family_accuracy_high_concern": 1.0,
+                "target_accuracy_high_concern": 0.2,
+                "useful_program_rate_high_concern": 0.2,
+                "rich_program_rate_high_concern": 1.0,
+                "low_concern_program_rate": 0.0,
+            },
+            "unsupervised_semantic_target_only": {
+                "semantic_kind_accuracy": 1.0,
+                "semantic_family_accuracy": 1.0,
+                "semantic_pair_accuracy": 1.0,
+                "transfer_gate_pass": False,
+                "parse_accuracy_high_concern": 0.7,
+                "action_accuracy": 0.9,
+                "family_accuracy_high_concern": 0.2,
+                "target_accuracy_high_concern": 1.0,
+                "useful_program_rate_high_concern": 0.2,
+                "rich_program_rate_high_concern": 0.2,
+                "low_concern_program_rate": 1.0,
+            },
+            "unsupervised_semantic_rich_without_concern": {
+                "semantic_kind_accuracy": 1.0,
+                "semantic_family_accuracy": 1.0,
+                "semantic_pair_accuracy": 1.0,
+                "transfer_gate_pass": False,
+                "parse_accuracy_high_concern": 1.0,
+                "action_accuracy": 1.0,
+                "family_accuracy_high_concern": 1.0,
+                "target_accuracy_high_concern": 1.0,
+                "useful_program_rate_high_concern": 1.0,
+                "rich_program_rate_high_concern": 1.0,
+                "low_concern_program_rate": 1.0,
+            },
+            "unsupervised_slot_semantic_world_model": {
+                "semantic_kind_accuracy": 1.0,
+                "semantic_family_accuracy": 1.0,
+                "semantic_pair_accuracy": 1.0,
+                "transfer_gate_pass": True,
+                "parse_accuracy_high_concern": 1.0,
+                "action_accuracy": 1.0,
+                "family_accuracy_high_concern": 1.0,
+                "target_accuracy_high_concern": 1.0,
+                "useful_program_rate_high_concern": 1.0,
+                "rich_program_rate_high_concern": 1.0,
+                "low_concern_program_rate": 0.0,
+            },
+        }
+        full = SearchedExecutableSpec(TARGET_SEARCHED_EXECUTABLE_BODY)
+        partial = SearchedExecutableSpec(
+            frozenset(
+                {
+                    "component_slot_encoder",
+                    "label_free_slot_inducer",
+                    "semantic_profile_grounder",
+                    "program_family_router",
+                    "reward_head",
+                }
+            )
+        )
+
+        full_eval = evaluate_searched_executable(
+            full,
+            strategy="viability_guided",
+            seed=0,
+            generation=0,
+            agent_summary=agent_summary,
+        )
+        partial_eval = evaluate_searched_executable(
+            partial,
+            strategy="family_proxy",
+            seed=0,
+            generation=0,
+            agent_summary=agent_summary,
+        )
+
+        self.assertEqual(
+            empirical_agent_for_searched_executable(full),
+            "unsupervised_slot_semantic_world_model",
+        )
+        self.assertEqual(full_eval.executable_module_gate, 1)
+        self.assertEqual(partial_eval.executable_module_gate, 0)
+        self.assertIn("concern_gate", partial_eval.missing_modules)
+
+    def test_viability_guided_search_recovers_searched_executable_body(self) -> None:
+        agent_summary = {
+            "learned_rich_program_composer": {
+                "semantic_kind_accuracy": 0.0,
+                "semantic_family_accuracy": 0.0,
+                "semantic_pair_accuracy": 0.0,
+                "transfer_gate_pass": False,
+                "parse_accuracy_high_concern": 0.856,
+                "action_accuracy": 0.917,
+                "family_accuracy_high_concern": 0.714,
+                "target_accuracy_high_concern": 0.829,
+                "useful_program_rate_high_concern": 0.714,
+                "rich_program_rate_high_concern": 0.894,
+                "low_concern_program_rate": 0.161,
+            },
+            "unsupervised_semantic_family_only": {
+                "semantic_kind_accuracy": 1.0,
+                "semantic_family_accuracy": 1.0,
+                "semantic_pair_accuracy": 1.0,
+                "transfer_gate_pass": False,
+                "parse_accuracy_high_concern": 0.674,
+                "action_accuracy": 0.892,
+                "family_accuracy_high_concern": 1.0,
+                "target_accuracy_high_concern": 0.214,
+                "useful_program_rate_high_concern": 0.214,
+                "rich_program_rate_high_concern": 1.0,
+                "low_concern_program_rate": 0.0,
+            },
+            "unsupervised_semantic_target_only": {
+                "semantic_kind_accuracy": 1.0,
+                "semantic_family_accuracy": 1.0,
+                "semantic_pair_accuracy": 1.0,
+                "transfer_gate_pass": False,
+                "parse_accuracy_high_concern": 0.639,
+                "action_accuracy": 0.880,
+                "family_accuracy_high_concern": 0.143,
+                "target_accuracy_high_concern": 1.0,
+                "useful_program_rate_high_concern": 0.143,
+                "rich_program_rate_high_concern": 0.143,
+                "low_concern_program_rate": 0.714,
+            },
+            "unsupervised_semantic_rich_without_concern": {
+                "semantic_kind_accuracy": 1.0,
+                "semantic_family_accuracy": 1.0,
+                "semantic_pair_accuracy": 1.0,
+                "transfer_gate_pass": False,
+                "parse_accuracy_high_concern": 1.0,
+                "action_accuracy": 1.0,
+                "family_accuracy_high_concern": 1.0,
+                "target_accuracy_high_concern": 1.0,
+                "useful_program_rate_high_concern": 1.0,
+                "rich_program_rate_high_concern": 1.0,
+                "low_concern_program_rate": 0.714,
+            },
+            "unsupervised_slot_semantic_world_model": {
+                "semantic_kind_accuracy": 1.0,
+                "semantic_family_accuracy": 1.0,
+                "semantic_pair_accuracy": 1.0,
+                "transfer_gate_pass": True,
+                "parse_accuracy_high_concern": 1.0,
+                "action_accuracy": 1.0,
+                "family_accuracy_high_concern": 1.0,
+                "target_accuracy_high_concern": 1.0,
+                "useful_program_rate_high_concern": 1.0,
+                "rich_program_rate_high_concern": 1.0,
+                "low_concern_program_rate": 0.0,
+            },
+        }
+
+        rows = []
+        for strategy in ("family_proxy", "target_proxy", "ungated_rich_proxy", "viability_guided"):
+            rows.extend(
+                run_searched_executable_search(
+                    strategy=strategy,
+                    seed=20260622,
+                    generations=8,
+                    population=10,
+                    agent_summary=agent_summary,
+                )
+            )
+        summary = summarize_searched_executable_rows(rows)
+
+        self.assertTrue(summary["viability_guided"]["gate_pass"])
+        self.assertEqual(
+            summary["viability_guided"]["best_empirical_agent"],
+            "unsupervised_slot_semantic_world_model",
+        )
+        self.assertFalse(summary["family_proxy"]["gate_pass"])
+        self.assertFalse(summary["target_proxy"]["gate_pass"])
+        self.assertFalse(summary["ungated_rich_proxy"]["gate_pass"])
 
 
 if __name__ == "__main__":

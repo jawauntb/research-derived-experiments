@@ -3,8 +3,8 @@
 Date: 2026-06-22
 Repo: `jawauntb/research-derived-experiments`
 Start point: freshly fetched `origin/main`
-Reference state when this handoff was prepared: `4398fc0`
-(`Merge pull request #145 from jawauntb/codex/phase2-clean-context-handoff-sha`)
+Reference state when this handoff was prepared: current branch
+`codex/phase2-searched-executable-modules` before PR merge
 External paper folder: `/Users/jawaun/Metaphysics of Intelligence/Phase_Arc_2`
 
 Use this note to start the next agent session from a clean context window.
@@ -20,6 +20,7 @@ Phase 2A and 2B now share a Modal-confirmed `2A-v2` rich-program contract:
   + supervised learned slot semantics
   + label-free role-token calibration
   + transfer-consuming executable module bodies
+  + searched executable-module bodies over the label-free transfer gate
 ```
 
 Do not summarize this as "2A is done" or "2B is done." The honest claim is:
@@ -30,9 +31,9 @@ Do not summarize this as "2A is done" or "2B is done." The honest claim is:
 - It is not done as open-ended motor/apparatus discovery, fully unsupervised
   semantic-profile discovery, natural-image object discovery, or full neural
   architecture search.
-- `2B-v2` has compact motif/body validation and executable-module bodies that
-  consume the v2 transfer contract, but not full searched/evolved neural
-  module discovery.
+- `2B-v2` has compact motif/body validation, transfer-consuming executable
+  bodies, and bounded searched executable-module contracts over the label-free
+  transfer gate, but not full neural module or architecture search.
 
 ## Recent Merged PRs
 
@@ -41,6 +42,8 @@ Do not summarize this as "2A is done" or "2B is done." The honest claim is:
 - PR #140: supervised learned slot-semantics repair.
 - PR #141: searched finite rich-program recipe gate.
 - PR #142: label-free slot-semantics transfer gate.
+- Current branch: searched executable-module bodies against the label-free
+  `2A-v2` transfer gate.
 
 ## Accepted Evidence
 
@@ -148,6 +151,39 @@ gate PASS across five Modal seeds.
 Boundary:
 compact explicit modules, not full searched/evolved neural architecture.
 
+### 2B Searched Executable Modules
+
+Report:
+`experiments/viable_computational_bodies/results/searched_executable_modules_modal_2026_06_22.md`
+
+Positive:
+`viability_guided`
+
+Best searched body:
+`component_slot_encoder+concern_gate+formal_guard+label_free_slot_inducer+program_family_router+reward_head+rich_program_composer+semantic_profile_grounder+target_binder+world_model`
+
+Metrics:
+body gate `1.000`, transfer gate `1.000`, formal validity `1.000`,
+semantic kind/pair `1.000`, module coverage `1.000`,
+family/target/useful/rich high `1.000`, low-program `0.000`, resource cost
+`18`, gate PASS across five Modal seeds.
+
+Rejected controls:
+
+- `reward_only`: shortcut learned-composer body, transfer `0.000`, module
+  coverage `0.111`.
+- `family_proxy`: semantic/family `1.000`, but target/useful `0.214` and
+  module coverage `0.444`.
+- `target_proxy`: target `1.000`, but family/useful/rich `0.143` and
+  low-program `0.714`.
+- `ungated_rich_proxy`: family/target/useful/rich `1.000`, but transfer
+  `0.000` and low-program `0.714`.
+
+Boundary:
+bounded executable-module contract search, not trainable neural architecture
+search; still uses connected-component slots, a supplied semantic profile
+table, and synthetic rich-program feedback.
+
 ## Most Important Files
 
 - Main paper:
@@ -156,6 +192,12 @@ compact explicit modules, not full searched/evolved neural architecture.
   `papers/concerned_syntax/paper.pdf`
 - Public external PDF:
   `/Users/jawaun/Metaphysics of Intelligence/Phase_Arc_2/concerned_syntax.pdf`
+- Public external 2B PDF:
+  `/Users/jawaun/Metaphysics of Intelligence/Phase_Arc_2/2B_Viable_Computational_Bodies_2026_06_22.pdf`
+- 2B paper:
+  `papers/viable_computational_bodies/paper.md`
+- 2B rendered paper:
+  `papers/viable_computational_bodies/paper.pdf`
 - Long handoff:
   `docs/phase2_next_breakthrough_handoff.md`
 - Trajectory:
@@ -170,6 +212,8 @@ compact explicit modules, not full searched/evolved neural architecture.
   `experiments/concerned_syntax/unsupervised_slot_semantics.py`
 - 2B implementation:
   `experiments/viable_computational_bodies/learned_executable_modules.py`
+  `experiments/viable_computational_bodies/searched_executable_modules.py`
+  `experiments/viable_computational_bodies/modal_searched_executable_modules.py`
 
 ## Next Best Move
 
@@ -178,27 +222,27 @@ Start from a fresh fetch/pull of `main` in a new worktree.
 Recommended branch:
 
 ```text
-codex/phase2-searched-executable-modules
+codex/phase2-semantic-profile-discovery
 ```
 
 Best next experiment:
 
-Make 2B search/evolve executable module bodies that consume the newest
-label-free transfer contract. The current body gate has compact explicit
-modules. The next breakthrough is to search/evolve those executable modules
-under the same v2 transfer verifier.
+Replace the supplied semantic profile table in
+`unsupervised_slot_semantics.py` with a discovered profile mechanism. Keep the
+same label-free held-out transfer gate and controls. Be strict: if the profile
+table is still supplied, do not claim fully unsupervised semantic discovery.
 
-Alternative strong 2A branch:
+Alternative strong 2B branch:
 
 ```text
-codex/phase2-semantic-profile-discovery
+codex/phase2-neural-module-search
 ```
 
 Goal:
-replace the supplied semantic profile table in
-`unsupervised_slot_semantics.py` with a discovered profile mechanism. Keep the
-same held-out transfer gate and controls. Be strict: if the profile table is
-still supplied, do not claim fully unsupervised semantic discovery.
+replace bounded searched executable contracts with trainable neural object-slot,
+graph-binding, routed-head, and program-composition modules. Keep the
+label-free transfer verifier and controls; do not call motif/contract search
+full neural architecture search.
 
 ## Modal-First Rule
 
@@ -231,8 +275,9 @@ Read `docs/phase2_clean_context_handoff.md`,
 `docs/discovery_regime_audit.md`.
 
 Continue Phase 2 from freshly fetched `origin/main`. The next best move is
-`codex/phase2-searched-executable-modules`: search/evolve 2B executable module
-bodies that consume the newest label-free `2A-v2` transfer contract. Keep the
+`codex/phase2-semantic-profile-discovery`: replace the supplied semantic
+profile table in label-free 2A-v2 slot semantics with a discovered profile
+mechanism while preserving the held-out transfer gate and controls. Keep the
 claim honest, use Modal for full evidence, avoid heavy local sweeps, update the
 paper/audit/handoff/PDFs, run checks, commit, push, PR, and merge when clean.
 ```

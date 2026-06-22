@@ -47,6 +47,24 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
   --train-trials 3000 --test-trials 1200 --epochs 90
 ```
 
+Searched executable module bodies against the label-free 2A-v2 transfer gate:
+
+```bash
+python3 -m experiments.viable_computational_bodies.searched_executable_modules \
+  --seeds 1 --generations 6 --population 8 \
+  --train-trials 120 --test-trials 50 --epochs 12 \
+  --induction-calibration-trials 80 \
+  --out artifacts/viable_computational_bodies/searched_executable_modules_local.json \
+  --report experiments/viable_computational_bodies/results/searched_executable_modules_local_2026_06_22.md
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/viable_computational_bodies/modal_searched_executable_modules.py \
+  --generations 18 --population 18 \
+  --train-trials 3000 --test-trials 1200 --epochs 90 \
+  --induction-calibration-trials 1200
+```
+
 Executable body validation is produced by the learned Arc 2A sweep:
 
 ```bash

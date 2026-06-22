@@ -246,13 +246,102 @@ def make_haskell_verdicts() -> None:
     plt.close(fig)
 
 
+def make_searched_executable_gate() -> None:
+    rows = [
+        (
+            "reward only",
+            {
+                "transfer": 0.000,
+                "formal": 0.000,
+                "semantic_pair": 0.000,
+                "modules": 0.111,
+                "family": 0.714,
+                "target": 0.829,
+                "low_program": 0.162,
+            },
+        ),
+        (
+            "family proxy",
+            {
+                "transfer": 0.000,
+                "formal": 1.000,
+                "semantic_pair": 1.000,
+                "modules": 0.444,
+                "family": 1.000,
+                "target": 0.214,
+                "low_program": 0.000,
+            },
+        ),
+        (
+            "target proxy",
+            {
+                "transfer": 0.000,
+                "formal": 1.000,
+                "semantic_pair": 1.000,
+                "modules": 0.556,
+                "family": 0.143,
+                "target": 1.000,
+                "low_program": 0.714,
+            },
+        ),
+        (
+            "ungated rich",
+            {
+                "transfer": 0.000,
+                "formal": 1.000,
+                "semantic_pair": 1.000,
+                "modules": 0.778,
+                "family": 1.000,
+                "target": 1.000,
+                "low_program": 0.714,
+            },
+        ),
+        (
+            "viability guided",
+            {
+                "transfer": 1.000,
+                "formal": 1.000,
+                "semantic_pair": 1.000,
+                "modules": 1.000,
+                "family": 1.000,
+                "target": 1.000,
+                "low_program": 0.000,
+            },
+        ),
+    ]
+    metrics = [
+        ("transfer", "transfer", "min", 1.00),
+        ("formal", "formal", "min", 1.00),
+        ("semantic_pair", "sem pair", "min", 0.95),
+        ("modules", "modules", "min", 1.00),
+        ("family", "family", "min", 0.70),
+        ("target", "target", "min", 0.70),
+        ("low_program", "low prog", "max", 0.25),
+    ]
+    _heatmap(
+        rows=rows,
+        metrics=metrics,
+        title="Searched executable-module gate margins",
+        subtitle=(
+            "Only the viability-guided search clears transfer, module coverage, "
+            "and low-concern discipline together."
+        ),
+        out=BODIES_FIG_DIR / "fig3_searched_executable_module_gate_margins.png",
+    )
+
+
 def main() -> int:
     make_concerned_syntax_gate()
     make_module_body_gate()
     make_haskell_verdicts()
+    make_searched_executable_gate()
     print(f"Wrote {CONCERNED_FIG_DIR / 'fig1_vector_gate_margins.png'}")
     print(f"Wrote {BODIES_FIG_DIR / 'fig1_vector_module_gate_margins.png'}")
     print(f"Wrote {BODIES_FIG_DIR / 'fig2_haskell_ontology_verdicts.png'}")
+    print(
+        "Wrote "
+        f"{BODIES_FIG_DIR / 'fig3_searched_executable_module_gate_margins.png'}"
+    )
     return 0
 
 

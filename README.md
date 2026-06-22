@@ -255,6 +255,20 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     experiments/viable_computational_bodies/modal_learned_executable_modules.py \
     --train-trials 3000 --test-trials 1200 --epochs 90
 
+python3 -m experiments.viable_computational_bodies.searched_executable_modules \
+    --seeds 1 --generations 6 --population 8 \
+    --train-trials 120 --test-trials 50 --epochs 12 \
+    --induction-calibration-trials 80 \
+    --out artifacts/viable_computational_bodies/searched_executable_modules_local.json \
+    --report experiments/viable_computational_bodies/results/searched_executable_modules_local_2026_06_22.md
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/viable_computational_bodies/modal_searched_executable_modules.py \
+    --generations 18 --population 18 \
+    --train-trials 3000 --test-trials 1200 --epochs 90 \
+    --induction-calibration-trials 1200
+
 python3 -m experiments.viable_computational_bodies.program_body_search \
     --seed-list 20260616,1729,4242,8675309,314159 \
     --generations 18 --population 18 \

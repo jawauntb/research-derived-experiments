@@ -272,15 +272,24 @@ Current coupled 2A/2B results:
   low-concern program rate `0.000`, and resource cost `16`. Family-only,
   target-only, ungated-rich, and learned-composer bodies fail different pieces
   of the contract.
+- `searched_executable_modules_modal_2026_06_22.md` makes 2B search executable
+  module bodies against the label-free v2 transfer gate. Across five Modal
+  seeds, `viability_guided` reaches executable body gate `1.000`, transfer
+  gate `1.000`, formal validity `1.000`, semantic kind/pair `1.000`, module
+  coverage `1.000`, family/target/useful/rich `1.000`, low-concern program
+  rate `0.000`, and resource cost `18`. Reward-only, family-proxy,
+  target-proxy, and ungated-rich searches fail by shortcut, missing target,
+  missing family/rich, or no-concern discipline.
 
 This is the first Phase 2 point where Arc 2A and Arc 2B are coupled at the
 rich program-composition contract, not merely at target selection. The frontier
 now also closes searched rich-program recipes, v2 transfer-repair, supervised
 learned slot-semantics, label-free role-token calibration, and executable-
-module-body gates at Modal scale. It is still not the end of Phase 2: fully
+module-body gates at Modal scale, including bounded search over label-free
+executable module contracts. It is still not the end of Phase 2: fully
 unsupervised object/role semantic-profile discovery, open-ended motor/apparatus
-discovery beyond the finite program DSL, and full architecture search remain
-open.
+discovery beyond the finite program DSL, and full neural architecture search
+remain open.
 
 ## Literature Bearings
 

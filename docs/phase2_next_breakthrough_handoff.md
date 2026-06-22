@@ -3,8 +3,8 @@
 Date: 2026-06-22
 Repo: `jawauntb/research-derived-experiments`
 Start point: freshly fetched `origin/main`
-Reference state when this handoff was prepared: `4398fc0`
-(`Merge pull request #145 from jawauntb/codex/phase2-clean-context-handoff-sha`)
+Reference state when this handoff was prepared: current branch
+`codex/phase2-searched-executable-modules` before PR merge
 External paper artifact folder: `/Users/jawaun/Metaphysics of Intelligence/Phase_Arc_2`
 
 This is the start-here note for the next agent session. The user is not asking
@@ -23,6 +23,7 @@ wrap gates:
 2A-v2-pixels-rich_programs
   + held-out role/parse transfer repair
   + executable module bodies consuming the transfer gate
+  + searched executable-module bodies consuming label-free slot transfer
 ```
 
 Arc 2A now has a rich intervention-program result: from pixel-rendered object
@@ -64,18 +65,27 @@ feedback and action consistency. This closes label-free role-token calibration
 under a supplied semantic profile table, but not fully unsupervised semantic-
 profile discovery or natural-image object discovery.
 
+The searched-executable successor branch then removes the supplied positive
+body from the compact executable-module gate. A bounded executable-module
+search recovers the body that consumes the label-free slot-semantics transfer
+contract across five Modal seeds, while reward-only, family-proxy,
+target-proxy, and ungated-rich searches fail for distinct reasons. This closes
+bounded executable contract search, but not trainable neural module search or
+full neural architecture search.
+
 Do not phrase this as "2A is done" or "2B is done." Phrase it this way:
 
 - `2A-v2` is done as a provided-rich-grammar contract with Modal-confirmed
   searched recipes, transfer repair, supervised learned slot semantics, and
   label-free role-token calibration, not as open-ended motor/apparatus
   invention or fully unsupervised object/role semantic-profile discovery.
-- `2B-v2` is done as motif search plus Modal-confirmed compact executable-
-  module validation, not as full neural architecture search.
+- `2B-v2` is done as motif search, Modal-confirmed compact executable-module
+  validation, and bounded searched executable-module contracts over the
+  label-free transfer gate, not as full neural architecture search.
 - 2A and 2B are already combined through the frozen empirical contract and the
   new transfer-consuming body gate.
-- The next combination is learned object/role slots, searched/evolved
-  executable module bodies, and program discovery beyond the finite DSL.
+- The next combination is discovered semantic profiles, trainable neural module
+  bodies, and program discovery beyond the finite DSL.
 
 Current accepted 2A result:
 
@@ -223,6 +233,34 @@ low-program: 0.000
 gate: PASS across 5 Modal seeds
 ```
 
+Current searched executable-module result:
+
+```text
+report: experiments/viable_computational_bodies/results/searched_executable_modules_modal_2026_06_22.md
+positive: viability_guided
+best body: component_slot_encoder+concern_gate+formal_guard+label_free_slot_inducer+program_family_router+reward_head+rich_program_composer+semantic_profile_grounder+target_binder+world_model
+body gate: 1.000
+transfer gate: 1.000
+formal valid: 1.000
+semantic kind/pair: 1.000
+module coverage: 1.000
+family/target/useful/rich high: 1.000
+low-program: 0.000
+resource cost: 18
+gate: PASS across 5 Modal seeds
+```
+
+Important rejected controls:
+
+- `reward_only`: shortcut learned-composer body, transfer `0.000`, modules
+  `0.111`.
+- `family_proxy`: family/semantics `1.000`, but target/useful `0.214` and
+  modules `0.444`.
+- `target_proxy`: target `1.000`, but family/useful/rich `0.143` and
+  low-program `0.714`.
+- `ungated_rich_proxy`: family/target/useful/rich `1.000`, but transfer
+  `0.000` and low-program `0.714`.
+
 ## 2. The North Star
 
 The Phase I Metric Stack of Concern showed a measurable correction chain:
@@ -339,31 +377,26 @@ The agent searches concern-gated intervention programs beyond a fully provided
 grammar, but not yet open-ended continuous motor control or apparatus discovery.
 ```
 
-### Milestone C: Modal Confirmation of Transfer-Consuming Bodies
+### Milestone C: Semantic Profile Discovery
 
-Suggested branch: `codex/phase2-wrap-gate-modal-confirmation`
+Suggested branch: `codex/phase2-semantic-profile-discovery`
 
-Seed stability is not enough. The current branch adds Modal-confirmed v2
-held-out role/parse transfer repair and a Modal-confirmed executable-module
-body gate that consumes it. The next evidence upgrade is learned semantics and
-searched modules:
-
-- held-out role pairs,
-- held-out parse families,
-- held-out colors/textures/positions,
-- transfer-consuming executable module bodies.
+The label-free slot-semantics gate still consumes a supplied semantic profile
+table. The next strongest 2A branch should discover or infer those profiles
+from the same component clusters, rich-program feedback, and action
+consistency rather than receiving the kind/profile table directly.
 
 Treat local diagnostics as real gate-development evidence, not final paper
 evidence. Run the required stress on Modal and report failures honestly.
 
 Definition of done:
 
-- A transfer manifest is pre-registered.
-- Main and transfer metrics are reported side by side.
-- Passing i.i.d. while failing transfer weakens the claim instead of being
-  hidden.
-- The body gate consumes the transfer gate, and partial bodies fail for
-  interpretable missing-module reasons.
+- The semantic profile table is not supplied to the accepted agent.
+- Held-out role/parse transfer remains the primary gate.
+- Family-only, target-only, ungated-rich, and learned-composer controls still
+  fail for diagnostic reasons.
+- The report states whether the result is profile discovery, profile
+  selection, or profile calibration; do not collapse those claims.
 
 ### Milestone D: Learned Object Slots
 
@@ -603,8 +636,10 @@ Safe current claims:
   program-selection gates that separate concerned syntax from reward,
   passive prediction, random/restless probing, target-only selection, and
   concern-only probing.
-- Arc 2B has body search that consumes the current empirical 2A-v1 program gate
-  and rejects reward-only and syntax-proxy controls.
+- Arc 2B has body searches that consume the empirical 2A-v1 gate, the 2A-v2
+  rich-program gate, and now the label-free 2A-v2 transfer gate; reward-only,
+  syntax-proxy, family-proxy, target-proxy, and ungated-rich controls fail for
+  distinct reasons.
 - Haskell typed ontology is operational and already consumable by Python in
   named body summaries, but not yet inside the program-body search loop.
 
@@ -663,17 +698,18 @@ When done:
 
 ## 11. Best Starting Move for the Next Agent
 
-Start with a 2B searched/evolved module branch or a stricter semantic-profile
-discovery branch.
+Start with a stricter semantic-profile discovery branch, or with a true
+trainable-neural-module search branch if the 2B route is preferred.
 
-Reason: the current branch lands Modal-confirmed label-free role-token
-calibration under a supplied semantic profile table. The next scientific gap is
-not another seed sweep; it is fully unsupervised semantic-profile discovery,
-open-ended motor/apparatus discovery beyond the finite DSL, or searched/evolved
-executable modules under 2B.
+Reason: the current branch lands Modal-confirmed searched executable-module
+contracts over the label-free 2A-v2 transfer gate. The next scientific gap is
+not another seed sweep or another bounded contract search; it is fully
+unsupervised semantic-profile discovery, open-ended motor/apparatus discovery
+beyond the finite DSL, or trainable neural module search under 2B.
 
-Then move to searched/evolved executable modules under 2B, keeping the
-Modal-first rule and the same transfer gate as a required contract.
+For the recommended 2A route, replace the supplied profile table in
+`unsupervised_slot_semantics.py` while keeping the Modal-first rule and the
+same held-out transfer gate as a required contract.
 
 The working rhythm:
 
