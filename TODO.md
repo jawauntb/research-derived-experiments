@@ -188,7 +188,8 @@ currently blocked (HF/PyPI 403; verified 2026-06-18), so each prediction ships a
 Tier A (offline stdlib) and Tier B (fetch-when-unblocked) test.
 
 - [x] P3 (concept geometry, GloVe): build and run the Tier A stdlib harness with public GloVe vectors (`experiments/external_contact/results/p3_glove_2026_06_22.md`). All three frozen gates pass after centering (P3a margin 0.106, NMI 0.531; P3b gap 0.252; P3c RSA 0.747), with `autopoiesis` missing from GloVe so the run covers 23/24 concepts.
-- [ ] P2 (uncertainty≠error / no-false-calm on published deep-ensemble + BALD curves): transcribe external tables and check the directional prediction.
+- [x] P2 Tier A (uncertainty≠error / no-false-calm on published deep-ensemble + BALD curves): frozen transcription from Ovadia 2019 Table G.1 + Kirsch 2019 Table 1/§4 in `experiments/external_contact/p2_uncertainty_public.csv`; check at `experiments/external_contact/p2_uncertainty_check.py`; result report at `experiments/external_contact/results/p2_uncertainty_2026_06_22.md`. P2b (BatchBALD strictly beats naive BALD on label budget) PASSES 5/5 comparisons. P2a aggregate proxy (ensemble ECE q75/q25 = 3.55× on CIFAR-10-C) PASSES, but P2a literal (per-sample Pearson r) is NOT checkable against published tables — undecided until Tier B. Allowed claim: regime transition / methodology external load-bearing (partial), NOT the field claim the prereg conditionally allowed.
+- [ ] P2 Tier B (Modal): deep ensembles on CIFAR-10-C, per-sample Pearson r per corruption severity to evaluate the literal P2a threshold; optional second active-learning source beyond Kirsch.
 - [ ] P1 (weakness→OOD on the Pythia suite): Tier A orbit-coverage surrogate now; Tier B full check when HF egress is available.
 
 ## Open Questions Ledger
