@@ -267,7 +267,20 @@ def self_test() -> dict:
 
 
 # ----------------------------- real external run -----------------------------
-def run_glove(glove_path: Path, glove2_path: Path | None) -> dict:
+def run_glove(glove_path: Path, extra_paths: list[tuple[str, Path]]) -> dict:
+    """P3 external run.
+
+    `glove_path` carries P3a / P3b (within-across margin, NMI, paraphrase gap).
+    `extra_paths` is a list of (label, path) pairs for additional external
+    embedding families used in the P3c pairwise cross-model RSA. The primary
+    family (`glove_path`) is included in the RSA panel as ``"glove"``.
+
+    P3c-3way amendment (preregistered in the cloud agent's handoff before
+    these vectors were fetched): when >= 3 external families are present, the
+    pass threshold is the MINIMUM pairwise RSA >= 0.6 -- every pair must agree
+    on the relational geometry, not just the original GloVe-300d / GloVe-100d
+    pair. This strictly tightens the original P3c.
+    """
     concepts = json.loads(CONCEPT_SET.read_text())
     paraphrases = {p["id"]: p["variants"] for p in json.loads(PARAPHRASES.read_text())}
 
@@ -323,27 +336,79 @@ def run_glove(glove_path: Path, glove2_path: Path | None) -> dict:
         "P3b_pass": cen_gap >= 0.15,
     }
 
-    if glove2_path is not None:
-        cvecs2, _, _, _ = build(glove2_path)
-        shared = [k for k in cvecs if k in cvecs2]
-        cen1 = all_but_the_top({k: cvecs[k] for k in shared})
-        cen2 = all_but_the_top({k: cvecs2[k] for k in shared})
-        m1, m2 = [], []
-        for i in range(len(shared)):
-            for j in range(i + 1, len(shared)):
-                m1.append(cosine(cen1[shared[i]], cen1[shared[j]]))
-                m2.append(cosine(cen2[shared[i]], cen2[shared[j]]))
-        rsa = spearman(m1, m2)
-        result["P3c_cross_model_rsa"] = rsa
-        result["P3c_pass"] = rsa >= 0.6
+    if extra_paths:
+        # Build the panel of (label, concept-vectors) for the primary + every extra family.
+        family_vecs: list[tuple[str, dict[str, Vector], list[str]]] = [
+            ("glove", cvecs, list(missing))
+        ]
+        for label, p in extra_paths:
+            cv_extra, _, _, m_extra = build(p)
+            family_vecs.append((label, cv_extra, m_extra))
+
+        # Concepts present in EVERY family (intersection over families' keys).
+        shared = list(family_vecs[0][1])
+        for _, cv, _ in family_vecs[1:]:
+            shared = [k for k in shared if k in cv]
+        shared.sort()
+
+        # All-but-the-Top each family on the shared concept set.
+        centered_per_family: list[tuple[str, dict[str, Vector]]] = []
+        for label, cv, _ in family_vecs:
+            centered_per_family.append((label, all_but_the_top({k: cv[k] for k in shared})))
+
+        # Pairwise off-diagonal cosine matrices for every family, then Spearman RSA.
+        def offdiag_cosines(vecs: dict[str, Vector]) -> list[float]:
+            out: list[float] = []
+            for i in range(len(shared)):
+                for j in range(i + 1, len(shared)):
+                    out.append(cosine(vecs[shared[i]], vecs[shared[j]]))
+            return out
+
+        cosines = {label: offdiag_cosines(vv) for label, vv in centered_per_family}
+        pairs = []
+        rsa_values: list[float] = []
+        for i in range(len(centered_per_family)):
+            for j in range(i + 1, len(centered_per_family)):
+                la = centered_per_family[i][0]
+                lb = centered_per_family[j][0]
+                rho = spearman(cosines[la], cosines[lb])
+                pairs.append((la, lb, rho))
+                rsa_values.append(rho)
+
+        n_families = len(centered_per_family)
+        result["P3c_n_families"] = n_families
+        result["P3c_families"] = [label for label, _ in centered_per_family]
+        result["P3c_shared_concepts"] = shared
+        result["P3c_pairwise_rsa"] = [
+            {"a": a, "b": b, "rsa": rho} for a, b, rho in pairs
+        ]
+        result["P3c_missing_per_family"] = {label: m for label, _, m in family_vecs}
+        if n_families == 2:
+            result["P3c_cross_model_rsa"] = rsa_values[0]
+            result["P3c_pass"] = rsa_values[0] >= 0.6
+        else:
+            result["P3c_min_pairwise_rsa"] = min(rsa_values) if rsa_values else None
+            result["P3c_mean_pairwise_rsa"] = sum(rsa_values) / len(rsa_values) if rsa_values else None
+            result["P3c_pass"] = bool(rsa_values) and min(rsa_values) >= 0.6
+            result["P3c_threshold"] = (
+                "P3c-3way: min pairwise RSA across all 3+ external families >= 0.6 (strictly "
+                "tightens the original P3c, which only required GloVe-300d vs GloVe-100d RSA >= 0.6)"
+            )
 
     return result
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--glove", type=Path, help="Path to GloVe text vectors (real external test).")
-    parser.add_argument("--glove2", type=Path, help="Second GloVe family for the P3c cross-model RSA.")
+    parser.add_argument("--glove", type=Path, help="Primary external vectors (P3a/P3b). Plain text 'word v1 ... vd' per line.")
+    parser.add_argument("--glove2", type=Path, help="Second external family for the P3c cross-model RSA.")
+    parser.add_argument(
+        "--glove3", type=Path,
+        help="Third external family for the P3c-3way amendment. Triggers the strict pass rule: "
+        "min pairwise RSA across all three families >= 0.6.",
+    )
+    parser.add_argument("--label2", default="glove2", help="Label for the --glove2 family in the P3c panel (e.g. 'glove-100d').")
+    parser.add_argument("--label3", default="fasttext", help="Label for the --glove3 family in the P3c panel.")
     parser.add_argument("--self-test", action="store_true", help="Validate the math on synthetic vectors.")
     parser.add_argument("--out", type=Path)
     args = parser.parse_args()
@@ -351,16 +416,20 @@ def main() -> int:
     if args.self_test:
         payload = self_test()
     elif args.glove is not None:
-        payload = run_glove(args.glove, args.glove2)
+        extras: list[tuple[str, Path]] = []
+        if args.glove2 is not None:
+            extras.append((args.label2, args.glove2))
+        if args.glove3 is not None:
+            extras.append((args.label3, args.glove3))
+        payload = run_glove(args.glove, extras)
     else:
         payload = {
             "kind": "HARNESS ONLY — no result",
             "message": (
                 "No external vectors supplied. This is infrastructure, not a result. "
                 "Run `--self-test` to validate the math, or `--glove glove.6B.300d.txt "
-                "[--glove2 glove.6B.100d.txt]` to run the real external P3 test once "
-                "GloVe vectors are available (network egress to Stanford was 403-blocked "
-                "as of 2026-06-18)."
+                "[--glove2 glove.6B.100d.txt] [--glove3 fasttext.subset.txt]` to run the "
+                "real external P3 test."
             ),
         }
 
