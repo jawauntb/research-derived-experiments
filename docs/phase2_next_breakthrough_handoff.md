@@ -2,8 +2,9 @@
 
 Date: 2026-06-22
 Repo: `jawauntb/research-derived-experiments`
-Current fresh branch for this note: `codex/phase2-clean-context-handoff`
-Current `origin/main`: `2601452` (`Merge pull request #142 from jawauntb/codex/phase2-unsupervised-object-slots`)
+Start point: freshly fetched `origin/main`
+Reference state when this handoff was prepared: `4398fc0`
+(`Merge pull request #145 from jawauntb/codex/phase2-clean-context-handoff-sha`)
 External paper artifact folder: `/Users/jawaun/Metaphysics of Intelligence/Phase_Arc_2`
 
 This is the start-here note for the next agent session. The user is not asking
