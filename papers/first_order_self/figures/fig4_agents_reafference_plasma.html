@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>First-Order Selves in a Reafferent Plasma</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #f4eee3;
+      --muted: rgba(244, 238, 227, 0.64);
+      --cyan: #62eaf0;
+      --amber: #ffbd61;
+      --bg: #05091f;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "DejaVu Sans Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      padding: clamp(14px, 3vw, 34px);
+      overflow: hidden;
+    }
+
+    main {
+      width: min(100%, 1180px);
+    }
+
+    h1,
+    p {
+      margin: 0;
+      text-align: center;
+      letter-spacing: 0;
+      text-shadow: 0 2px 16px rgba(0, 0, 0, 0.8);
+    }
+
+    h1 {
+      font-size: clamp(24px, 5vw, 56px);
+      line-height: 1.05;
+      margin-bottom: 10px;
+    }
+
+    p {
+      color: var(--muted);
+      font-size: clamp(13px, 1.8vw, 18px);
+      margin-bottom: 18px;
+    }
+
+    .stage {
+      position: relative;
+      width: min(100%, 1080px);
+      aspect-ratio: 1 / 1;
+      margin-inline: auto;
+      border: 1px solid rgba(214, 237, 255, 0.38);
+      background: #020416;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .caption {
+      margin-top: 18px;
+      margin-bottom: 0;
+      font-size: clamp(13px, 1.8vw, 18px);
+      color: rgba(244, 238, 227, 0.7);
+    }
+  </style>
+</head>
+<body>
+  <main aria-label="animated first-order self reafference visualization">
+    <h1>first-order selves in a reafferent plasma</h1>
+    <p>self-caused loops and world-caused shocks occupy the same field</p>
+    <div class="stage">
+      <canvas id="plasma" aria-label="Animated plasma field with reafferent agent loops"></canvas>
+    </div>
+    <p class="caption">waves meet, sources move, attribution has to break the gauge</p>
+  </main>
+
+  <script>
+    const canvas = document.getElementById("plasma");
+    const ctx = canvas.getContext("2d", { alpha: false });
+
+    const agents = [
+      { name: "agent A", x: 0.26, y: 0.31, phase: 0.15 },
+      { name: "agent B", x: 0.64, y: 0.54, phase: 1.95 },
+      { name: "agent C", x: 0.78, y: 0.74, phase: 3.35 },
+    ];
+
+    const worldSources = [
+      { x: 0.18, y: 0.78, weight: 0.95, phase: 2.40 },
+      { x: 0.86, y: 0.23, weight: 0.80, phase: 5.40 },
+    ];
+
+    const colorStops = [
+      { at: 0.00, c: [5, 8, 34] },
+      { at: 0.34, c: [36, 101, 196] },
+      { at: 0.55, c: [72, 218, 226] },
+      { at: 0.78, c: [255, 179, 73] },
+      { at: 1.00, c: [255, 249, 236] },
+    ];
+
+    let cssSize = 900;
+    let dpr = 1;
+    let reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const clamp = (value, lo, hi) => Math.max(lo, Math.min(hi, value));
+    const mix = (a, b, t) => a + (b - a) * t;
+
+    function sampleRamp(v) {
+      const u = clamp((v + 1) * 0.5, 0, 1);
+      for (let i = 0; i < colorStops.length - 1; i++) {
+        const a = colorStops[i];
+        const b = colorStops[i + 1];
+        if (u <= b.at) {
+          const t = (u - a.at) / Math.max(1e-6, b.at - a.at);
+          return [
+            Math.round(mix(a.c[0], b.c[0], t)),
+            Math.round(mix(a.c[1], b.c[1], t)),
+            Math.round(mix(a.c[2], b.c[2], t)),
+          ];
+        }
+      }
+      return colorStops[colorStops.length - 1].c;
+    }
+
+    function resize() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      cssSize = Math.max(320, Math.floor(Math.min(rect.width, rect.height)));
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.floor(cssSize * dpr);
+      canvas.height = Math.floor(cssSize * dpr);
+      canvas.style.width = `${cssSize}px`;
+      canvas.style.height = `${cssSize}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function drawText(text, x, y, size, color = "#f4eee3", align = "center", weight = "700") {
+      ctx.save();
+      ctx.font = `${weight} ${size}px "DejaVu Sans Mono", ui-monospace, monospace`;
+      ctx.textAlign = align;
+      ctx.textBaseline = "middle";
+      ctx.lineJoin = "round";
+      ctx.lineWidth = Math.max(3, size * 0.25);
+      ctx.strokeStyle = "rgba(3, 7, 24, 0.86)";
+      ctx.fillStyle = color;
+      ctx.strokeText(text, x, y);
+      ctx.fillText(text, x, y);
+      ctx.restore();
+    }
+
+    function drawArrow(fromX, fromY, toX, toY, color, alpha, width = 2, dash = null) {
+      const dx = toX - fromX;
+      const dy = toY - fromY;
+      const angle = Math.atan2(dy, dx);
+      const head = 10;
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = width;
+      ctx.lineCap = "round";
+      if (dash) ctx.setLineDash(dash);
+      ctx.beginPath();
+      ctx.moveTo(fromX, fromY);
+      ctx.quadraticCurveTo(fromX + dx * 0.48 - dy * 0.14, fromY + dy * 0.48 + dx * 0.14, toX, toY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.translate(toX, toY);
+      ctx.rotate(angle);
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(-head, -head * 0.48);
+      ctx.lineTo(-head * 0.64, 0);
+      ctx.lineTo(-head, head * 0.48);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawField(t) {
+      const cell = Math.max(8, Math.floor(cssSize / 80));
+      const cols = Math.ceil(cssSize / cell);
+      const rows = Math.ceil(cssSize / cell);
+      const phase = reducedMotion ? 0 : -t * 1.45;
+
+      ctx.fillStyle = "#020416";
+      ctx.fillRect(0, 0, cssSize, cssSize);
+
+      for (let yy = 0; yy < rows; yy++) {
+        for (let xx = 0; xx < cols; xx++) {
+          const nx = (xx * cell + cell * 0.5) / cssSize;
+          const ny = (yy * cell + cell * 0.5) / cssSize;
+          let amp = 0;
+
+          for (const agent of agents) {
+            const wobbleX = Math.sin(t * 0.65 + agent.phase) * 0.010;
+            const wobbleY = Math.cos(t * 0.58 + agent.phase * 1.3) * 0.010;
+            const distance = Math.hypot(nx - agent.x - wobbleX, ny - agent.y - wobbleY);
+            const attenuation = 1 / Math.sqrt(1 + distance * 7.0);
+            amp += 1.05 * Math.sin(distance * 45 + agent.phase + phase) * attenuation;
+          }
+
+          for (const source of worldSources) {
+            const distance = Math.hypot(nx - source.x, ny - source.y);
+            const attenuation = 1 / Math.sqrt(1 + distance * 7.0);
+            amp += source.weight * Math.sin(distance * 45 + source.phase + phase * 1.18) * attenuation;
+          }
+
+          const shear = 0.18 * Math.sin((nx * 1.9 - ny * 1.4) * Math.PI + 0.55 + t * 0.25);
+          const [r, g, b] = sampleRamp(clamp((amp + shear) / 3.6, -1, 1));
+          ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+          ctx.fillRect(xx * cell, yy * cell, cell + 1, cell + 1);
+        }
+      }
+    }
+
+    function drawLoop(agent, t, annotate) {
+      const x = agent.x * cssSize;
+      const y = (1 - agent.y) * cssSize;
+      const pulse = 0.5 + 0.5 * Math.sin(t * 2.4 + agent.phase);
+
+      const halo = ctx.createRadialGradient(x, y, 0, x, y, cssSize * 0.095);
+      halo.addColorStop(0, `rgba(255, 252, 244, ${0.34 + pulse * 0.12})`);
+      halo.addColorStop(0.35, "rgba(127, 242, 247, 0.13)");
+      halo.addColorStop(1, "rgba(255, 252, 244, 0)");
+      ctx.fillStyle = halo;
+      ctx.beginPath();
+      ctx.arc(x, y, cssSize * 0.095, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(t * 0.72 + agent.phase);
+      for (let i = 0; i < 3; i++) {
+        ctx.rotate((Math.PI * 2) / 3);
+        ctx.strokeStyle = i === 1 ? "rgba(255, 202, 118, 0.58)" : "rgba(190, 245, 255, 0.58)";
+        ctx.lineWidth = Math.max(1.6, cssSize * 0.0022);
+        ctx.beginPath();
+        ctx.ellipse(0, 0, cssSize * 0.060, cssSize * 0.026, 0, 0, Math.PI * 1.68);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      const orbit = t * 1.8 + agent.phase;
+      const selfX = x + Math.cos(orbit + Math.PI * 0.74) * cssSize * 0.043;
+      const selfY = y + Math.sin(orbit + Math.PI * 0.74) * cssSize * 0.043;
+      const worldX = x + Math.cos(orbit - Math.PI * 0.14) * cssSize * 0.044;
+      const worldY = y + Math.sin(orbit - Math.PI * 0.14) * cssSize * 0.044;
+
+      ctx.strokeStyle = "rgba(255, 224, 161, 0.42)";
+      ctx.lineWidth = Math.max(1, cssSize * 0.0014);
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.lineTo(worldX, worldY);
+      ctx.moveTo(x, y);
+      ctx.lineTo(selfX, selfY);
+      ctx.stroke();
+
+      ctx.fillStyle = "#fffdf4";
+      ctx.beginPath();
+      ctx.arc(x, y, cssSize * 0.017, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#62eaf0";
+      ctx.beginPath();
+      ctx.arc(selfX, selfY, cssSize * 0.011, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "#ffbd61";
+      ctx.beginPath();
+      ctx.arc(worldX, worldY, cssSize * 0.011, 0, Math.PI * 2);
+      ctx.fill();
+
+      drawArrow(x - cssSize * 0.070, y + cssSize * 0.010, x + cssSize * 0.070, y - cssSize * 0.012, "#66f0f2", 0.76, cssSize * 0.0024);
+      drawArrow(x + cssSize * 0.064, y - cssSize * 0.020, x - cssSize * 0.062, y + cssSize * 0.020, "#fff2d4", 0.62, cssSize * 0.0020);
+
+      const labelY = agent.y > 0.38 ? y + cssSize * 0.086 : y - cssSize * 0.090;
+      drawText(agent.name, annotate ? x + cssSize * 0.120 : x, annotate ? y - cssSize * 0.108 : labelY, Math.max(14, cssSize * 0.020), "#f4eee3", annotate ? "left" : "center");
+
+      if (annotate) {
+        drawText("efference copy", x - cssSize * 0.168, y - cssSize * 0.112, Math.max(12, cssSize * 0.017), "#93fbff", "left");
+        drawText("self dE", x - cssSize * 0.112, y - cssSize * 0.058, Math.max(12, cssSize * 0.017), "#93fbff", "right");
+        drawText("world dE", worldX + cssSize * 0.042, worldY - cssSize * 0.012, Math.max(12, cssSize * 0.017), "#ffc875", "left");
+        drawText("reafference", x + cssSize * 0.070, y + cssSize * 0.100, Math.max(12, cssSize * 0.017), "#fff2d4", "left");
+      }
+    }
+
+    function drawWorldSource(source, t) {
+      const x = source.x * cssSize;
+      const y = (1 - source.y) * cssSize;
+      const pulse = (t * 0.55 + source.phase) % 1;
+      const halo = ctx.createRadialGradient(x, y, 0, x, y, cssSize * (0.040 + pulse * 0.070));
+      halo.addColorStop(0, "rgba(255, 217, 154, 0.42)");
+      halo.addColorStop(1, "rgba(255, 217, 154, 0)");
+      ctx.fillStyle = halo;
+      ctx.beginPath();
+      ctx.arc(x, y, cssSize * (0.050 + pulse * 0.055), 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#ffd99a";
+      ctx.beginPath();
+      ctx.arc(x, y, cssSize * 0.013, 0, Math.PI * 2);
+      ctx.fill();
+      const labelY = source.y > 0.65 ? y + cssSize * 0.060 : y - cssSize * 0.080;
+      drawText("world shock", x, labelY, Math.max(12, cssSize * 0.017), "#ffd99a");
+    }
+
+    function drawTravellingShock(source, agent, t) {
+      const sx = source.x * cssSize;
+      const sy = (1 - source.y) * cssSize;
+      const ax = agent.x * cssSize;
+      const ay = (1 - agent.y) * cssSize;
+      const p = (t * 0.20 + source.phase * 0.17 + agent.phase * 0.09) % 1;
+      const qx = sx + (ax - sx) * 0.48 - (ay - sy) * 0.12;
+      const qy = sy + (ay - sy) * 0.48 + (ax - sx) * 0.12;
+      const bx = (1 - p) * (1 - p) * sx + 2 * (1 - p) * p * qx + p * p * ax;
+      const by = (1 - p) * (1 - p) * sy + 2 * (1 - p) * p * qy + p * p * ay;
+
+      drawArrow(sx, sy, ax, ay, "#ffbd61", 0.22, cssSize * 0.0015, [cssSize * 0.006, cssSize * 0.008]);
+      ctx.save();
+      ctx.globalAlpha = 0.45 + 0.35 * Math.sin(p * Math.PI);
+      ctx.fillStyle = "#fff2d4";
+      ctx.beginPath();
+      ctx.arc(bx, by, cssSize * 0.008, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawCorrection(t) {
+      drawArrow(
+        agents[0].x * cssSize + cssSize * 0.055,
+        (1 - agents[0].y) * cssSize - cssSize * 0.090,
+        agents[1].x * cssSize - cssSize * 0.070,
+        (1 - agents[1].y) * cssSize + cssSize * 0.055,
+        "#e9fff9",
+        0.40 + 0.18 * Math.sin(t * 1.4),
+        cssSize * 0.0022,
+      );
+      drawArrow(
+        agents[1].x * cssSize + cssSize * 0.072,
+        (1 - agents[1].y) * cssSize - cssSize * 0.060,
+        agents[2].x * cssSize - cssSize * 0.065,
+        (1 - agents[2].y) * cssSize + cssSize * 0.065,
+        "#e9fff9",
+        0.36 + 0.16 * Math.cos(t * 1.2),
+        cssSize * 0.0020,
+      );
+      drawText("prediction error", cssSize * 0.52, cssSize * 0.560, Math.max(12, cssSize * 0.018), "#e9fff9");
+      drawText("boundary update", cssSize * 0.50, cssSize * 0.610, Math.max(11, cssSize * 0.015), "#e9fff9", "left");
+    }
+
+    function drawLegend(t) {
+      const x = cssSize * 0.035;
+      const y = cssSize * 0.036;
+      const size = Math.max(11, cssSize * 0.0145);
+      const line = Math.max(20, cssSize * 0.026);
+      const items = [
+        ["#62eaf0", "self/efference copy"],
+        ["#ffbd61", "world-caused shock"],
+        ["#fffdf4", "observed ΔE"],
+        ["#e9fff9", "prediction-error update"],
+      ];
+
+      drawText("attribution cycle", x, y, size + 1, "#f4eee3", "left", "700");
+      items.forEach(([color, label], index) => {
+        const yy = y + line * (index + 1);
+        ctx.save();
+        ctx.globalAlpha = 0.95;
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(x + size * 0.55, yy, size * 0.38, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+        drawText(label, x + size * 1.35, yy, size, color, "left", "600");
+      });
+
+      const phases = [
+        ["action", "#62eaf0"],
+        ["world", "#ffbd61"],
+        ["observed ΔE", "#fffdf4"],
+        ["assign source", "#e9fff9"],
+      ];
+      const phase = ((t * 0.28) % 1) * phases.length;
+      const stripX = cssSize * 0.07;
+      const stripY = cssSize * 0.945;
+      const segmentW = cssSize * 0.205;
+
+      phases.forEach(([label, color], index) => {
+        const active = Math.floor(phase) === index;
+        const xx = stripX + index * segmentW;
+        ctx.save();
+        ctx.globalAlpha = active ? 0.88 : 0.34;
+        ctx.fillStyle = color;
+        ctx.fillRect(xx, stripY, segmentW * 0.72, Math.max(2, cssSize * 0.004));
+        ctx.restore();
+        drawText(label, xx + segmentW * 0.36, stripY - cssSize * 0.020, Math.max(10, cssSize * 0.013), active ? color : "rgba(244,238,227,0.58)");
+      });
+    }
+
+    function frame(now) {
+      const t = reducedMotion ? 0 : now / 1000;
+      drawField(t);
+      drawLegend(t);
+      for (const source of worldSources) drawWorldSource(source, t);
+      for (const source of worldSources) {
+        for (const agent of agents) drawTravellingShock(source, agent, t);
+      }
+      drawCorrection(t);
+      agents.forEach((agent, index) => drawLoop(agent, t, index === 0));
+      drawText("observed ΔE", agents[1].x * cssSize + cssSize * 0.060, (1 - agents[1].y) * cssSize + cssSize * 0.030, Math.max(11, cssSize * 0.015), "#fffdf4", "left");
+      drawText("what is mine?", agents[0].x * cssSize - cssSize * 0.100, (1 - agents[0].y) * cssSize + cssSize * 0.075, Math.max(11, cssSize * 0.015), "#fff2d4", "right");
+
+      ctx.strokeStyle = "rgba(214, 237, 255, 0.38)";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(0.5, 0.5, cssSize - 1, cssSize - 1);
+      requestAnimationFrame(frame);
+    }
+
+    window.addEventListener("resize", resize);
+    window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", event => {
+      reducedMotion = event.matches;
+    });
+    resize();
+    requestAnimationFrame(frame);
+  </script>
+</body>
+</html>
