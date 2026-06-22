@@ -65,6 +65,14 @@ feedback and action consistency. This closes label-free role-token calibration
 under a supplied semantic profile table, but not fully unsupervised semantic-
 profile discovery or natural-image object discovery.
 
+The discovered semantic-profile successor branch then removes that supplied
+profile table from the accepted 2A path. It fits anonymous active-cluster
+profiles from candidate-family success, bound/unbound utility gaps, and action
+templates, preserving the same held-out role/parse transfer gate. This closes
+semantic-profile induction inside the synthetic connected-component world, but
+not learned object-slot perception, natural-image object discovery, or fully
+open-ended semantics.
+
 The searched-executable successor branch then removes the supplied positive
 body from the compact executable-module gate. A bounded executable-module
 search recovers the body that consumes the label-free slot-semantics transfer
@@ -77,15 +85,17 @@ Do not phrase this as "2A is done" or "2B is done." Phrase it this way:
 
 - `2A-v2` is done as a provided-rich-grammar contract with Modal-confirmed
   searched recipes, transfer repair, supervised learned slot semantics, and
-  label-free role-token calibration, not as open-ended motor/apparatus
-  invention or fully unsupervised object/role semantic-profile discovery.
+  label-free role-token calibration plus discovered semantic-profile induction,
+  not as open-ended motor/apparatus invention, learned object-slot perception,
+  or fully open-ended semantics.
 - `2B-v2` is done as motif search, Modal-confirmed compact executable-module
   validation, and bounded searched executable-module contracts over the
   label-free transfer gate, not as full neural architecture search.
 - 2A and 2B are already combined through the frozen empirical contract and the
   new transfer-consuming body gate.
-- The next combination is discovered semantic profiles, trainable neural module
-  bodies, and program discovery beyond the finite DSL.
+- The next combination is learned object slots, trainable neural module bodies,
+  2B consumption of discovered profiles, and program discovery beyond the
+  finite DSL.
 
 Current accepted 2A result:
 
@@ -186,6 +196,32 @@ Important rejected controls:
   `1.000`, but low-program `0.714`.
 - Boundary: this removes supervised role-token labels, but still uses a
   supplied semantic profile table and synthetic rich-program feedback.
+
+Current discovered semantic-profile result:
+
+```text
+report: experiments/concerned_syntax/results/discovered_semantic_profiles_modal_2026_06_22.md
+positive: discovered_semantic_world_model
+profile cluster purity/family/pair/action-template: 1.000
+transfer gate: 1.000
+family/target/useful/rich high: 1.000
+low-program: 0.000
+gate: PASS across 5 Modal seeds at 3000 train / 1200 test / 90 epochs
+```
+
+Important rejected controls:
+
+- `learned_rich_program_composer`: transfer gate `0.000`; still fails held-out
+  role/parse transfer.
+- `discovered_semantic_family_only`: family `1.000`, but target/useful
+  `0.214`.
+- `discovered_semantic_target_only`: target `1.000`, but family/useful
+  `0.143` and low-program `0.714`.
+- `discovered_semantic_rich_without_concern`: family/target/useful/rich
+  `1.000`, but low-program `0.714`.
+- Boundary: this removes the supplied kind/profile table from the accepted
+  agent, but still uses synthetic connected-component worlds and
+  contract-shaped feedback.
 
 Current accepted 2B result:
 
@@ -381,10 +417,11 @@ grammar, but not yet open-ended continuous motor control or apparatus discovery.
 
 Suggested branch: `codex/phase2-semantic-profile-discovery`
 
-The label-free slot-semantics gate still consumes a supplied semantic profile
-table. The next strongest 2A branch should discover or infer those profiles
-from the same component clusters, rich-program feedback, and action
-consistency rather than receiving the kind/profile table directly.
+Status: completed by
+`experiments/concerned_syntax/results/discovered_semantic_profiles_modal_2026_06_22.md`.
+The label-free slot-semantics gate no longer needs the supplied semantic
+profile table for the accepted 2A path; it induces profiles from component
+clusters, rich-program feedback, utility gaps, and action consistency.
 
 Treat local diagnostics as real gate-development evidence, not final paper
 evidence. Run the required stress on Modal and report failures honestly.
@@ -698,18 +735,21 @@ When done:
 
 ## 11. Best Starting Move for the Next Agent
 
-Start with a stricter semantic-profile discovery branch, or with a true
-trainable-neural-module search branch if the 2B route is preferred.
+Start with learned object-slot perception, with 2B consumption of the
+discovered-profile contract, or with true trainable-neural-module search if the
+2B route is preferred.
 
 Reason: the current branch lands Modal-confirmed searched executable-module
-contracts over the label-free 2A-v2 transfer gate. The next scientific gap is
-not another seed sweep or another bounded contract search; it is fully
-unsupervised semantic-profile discovery, open-ended motor/apparatus discovery
-beyond the finite DSL, or trainable neural module search under 2B.
+contracts over the label-free 2A-v2 transfer gate, and the discovered-profile
+branch removes the supplied profile table for 2A. The next scientific gap is
+not another seed sweep or another bounded contract search; it is learned
+object-slot perception, 2B consumption of the discovered-profile contract,
+open-ended motor/apparatus discovery beyond the finite DSL, or trainable neural
+module search under 2B.
 
-For the recommended 2A route, replace the supplied profile table in
-`unsupervised_slot_semantics.py` while keeping the Modal-first rule and the
-same held-out transfer gate as a required contract.
+For the recommended 2A route, replace algorithmic connected components with a
+learned object-slot extractor while keeping the Modal-first rule and the same
+held-out transfer gate as a required contract.
 
 The working rhythm:
 

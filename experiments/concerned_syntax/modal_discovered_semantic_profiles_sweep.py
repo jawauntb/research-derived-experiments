@@ -1,0 +1,184 @@
+#!/usr/bin/env python3
+"""Modal sweep for discovered semantic profiles against label-free 2A-v2."""
+
+from __future__ import annotations
+
+import importlib
+import json
+from pathlib import Path
+from typing import Any
+
+modal = importlib.import_module("modal")
+
+IMAGE = modal.Image.debian_slim(python_version="3.12").add_local_python_source(
+    "experiments"
+)
+app = modal.App(name="research-derived-discovered-semantic-profiles")
+
+
+@app.function(image=IMAGE, timeout=3600, cpu=1, memory=1024)
+def run_slice_seed(
+    base_seed: int,
+    axis: str,
+    heldout: str,
+    slice_seed: int,
+    train_trials: int,
+    test_trials: int,
+    epochs: int,
+    induction_calibration_trials: int,
+) -> dict[str, Any]:
+    from experiments.concerned_syntax import rich_program_language as rich
+    from experiments.concerned_syntax.discovered_semantic_profiles import (
+        induce_discovered_semantic_profiles,
+        run_slice,
+    )
+
+    calibration_examples = rich.make_filtered_pixel_examples(
+        trials=induction_calibration_trials,
+        seed=base_seed + 2_700_000,
+    )
+    inducer = induce_discovered_semantic_profiles(
+        calibration_examples,
+        seed=base_seed + 2_900_000,
+        epochs=max(20, epochs),
+    )
+    payload = run_slice(
+        axis=axis,
+        heldout=heldout,
+        train_trials=train_trials,
+        test_trials=test_trials,
+        seed=slice_seed,
+        epochs=epochs,
+        inducer=inducer,
+    )
+    payload.pop("results", None)
+    return {
+        "seed": base_seed,
+        "axis": axis,
+        "heldout": heldout,
+        "slice": payload,
+    }
+
+
+@app.local_entrypoint()
+def main(
+    train_trials: int = 3000,
+    test_trials: int = 1200,
+    epochs: int = 90,
+    induction_calibration_trials: int = 1200,
+) -> None:
+    from experiments.concerned_syntax.discovered_semantic_profiles import (
+        DISCOVERED_SEMANTIC_AGENTS,
+        HELDOUT_ROLE_KINDS,
+        HELDOUT_TRUE_PARSES,
+        summarize_modal_slice_results,
+        summarize_seed_payloads,
+        summarize_slice_payloads,
+        write_discovered_report,
+    )
+
+    seeds = [20260622, 1729, 4242, 8675309, 314159]
+    tasks: list[tuple[int, str, str, int, int, int, int, int]] = []
+    for seed in seeds:
+        for offset, heldout_kind in enumerate(HELDOUT_ROLE_KINDS):
+            tasks.append(
+                (
+                    seed,
+                    "role_kind",
+                    heldout_kind,
+                    seed + offset * 10_000,
+                    train_trials,
+                    test_trials,
+                    epochs,
+                    induction_calibration_trials,
+                )
+            )
+        for offset, heldout_parse in enumerate(HELDOUT_TRUE_PARSES):
+            tasks.append(
+                (
+                    seed,
+                    "true_parse",
+                    heldout_parse,
+                    seed + 80_000 + offset * 10_000,
+                    train_trials,
+                    test_trials,
+                    epochs,
+                    induction_calibration_trials,
+                )
+            )
+
+    slice_rows = list(run_slice_seed.starmap(tasks))
+    results = []
+    for seed in seeds:
+        slice_payloads = [
+            row["slice"]
+            for row in slice_rows
+            if int(row["seed"]) == seed
+        ]
+        results.append(
+            {
+                "seed": seed,
+                "agent_summary": summarize_slice_payloads(slice_payloads),
+                "semantic_summary": summarize_seed_payloads(
+                    slice_payloads,
+                    "semantic_summary",
+                ),
+                "slice_results": slice_payloads,
+            }
+        )
+    payload = {
+        "manifest": {
+            "arc": "2A",
+            "name": "discovered_semantic_profiles_transfer_modal_sweep",
+            "contract": "2A-v2-pixels-rich_programs-transfer",
+            "seeds": seeds,
+            "train_trials": train_trials,
+            "test_trials": test_trials,
+            "induction_calibration_trials": induction_calibration_trials,
+            "epochs": epochs,
+            "heldout_kinds": list(HELDOUT_ROLE_KINDS),
+            "heldout_parses": list(HELDOUT_TRUE_PARSES),
+            "agents": list(DISCOVERED_SEMANTIC_AGENTS),
+            "perception": "connected_components_rgb_plus_label_free_slot_induction",
+            "semantic_induction": (
+                "profile_induction_from_intervention_family_success_"
+                "utility_gap_and_action_templates"
+            ),
+            "provided_induction_priors": [
+                "generic rich-program family menu",
+                "bound/unbound parse alternatives",
+            ],
+            "removed_induction_priors": [
+                "semantic kind profile table",
+                "kind-to-family mapping",
+                "kind-to-role-pair mapping",
+                "kind-to-concern-weight mapping",
+            ],
+            "allowed_induction_feedback": [
+                "candidate family exposed useful parse evidence",
+                "utility gap across bound/unbound alternatives",
+                "action supported by each bound alternative",
+            ],
+            "forbidden_induction_labels": [
+                "visible role tokens",
+                "example.trial.kind",
+                "example.trial.roles",
+                "supplied semantic profile table",
+            ],
+        },
+        "results": results,
+        "semantic_summary": summarize_seed_payloads(results, "semantic_summary"),
+        "agent_summary": summarize_seed_payloads(results, "agent_summary"),
+        "slice_results": summarize_modal_slice_results(results),
+    }
+    out = Path("artifacts/concerned_syntax/discovered_semantic_profiles_modal_sweep.json")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(f"Wrote {out}")
+
+    report = Path(
+        "experiments/concerned_syntax/results/"
+        "discovered_semantic_profiles_modal_2026_06_22.md"
+    )
+    write_discovered_report(report, payload)
+    print(f"Wrote {report}")

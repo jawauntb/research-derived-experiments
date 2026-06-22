@@ -68,6 +68,10 @@ from experiments.concerned_syntax.unsupervised_slot_semantics import (
     run_experiment as run_unsupervised_slot_semantics_experiment,
     summarize_seed_payloads as summarize_unsupervised_slot_semantics_payloads,
 )
+from experiments.concerned_syntax.discovered_semantic_profiles import (
+    run_experiment as run_discovered_semantic_profiles_experiment,
+    summarize_seed_payloads as summarize_discovered_semantic_profiles_payloads,
+)
 from experiments.concerned_syntax.vector_shapes import (
     run_experiment as run_vector_experiment,
     summarize_seed_payloads as summarize_vector_payloads,
@@ -1100,6 +1104,102 @@ class ConcernedSyntaxTest(unittest.TestCase):
         )
         self.assertAlmostEqual(
             summary["unsupervised_slot_semantic_world_model"]["transfer_gate_pass"],
+            0.5,
+        )
+
+    def test_discovered_semantic_profiles_remove_supplied_profile_table(self) -> None:
+        payload = run_discovered_semantic_profiles_experiment(
+            train_trials=60,
+            test_trials=30,
+            seed=20260622,
+            epochs=8,
+            induction_calibration_trials=300,
+        )
+        agents = payload["agent_summary"]
+        semantic = payload["semantic_summary"]["discovered_semantic_inducer"]
+        manifest = payload["manifest"]
+
+        self.assertEqual(
+            manifest["semantic_induction"],
+            (
+                "profile_induction_from_intervention_family_success_"
+                "utility_gap_and_action_templates"
+            ),
+        )
+        self.assertNotIn(
+            "semantic kind profile table",
+            manifest["provided_induction_priors"],
+        )
+        self.assertIn(
+            "semantic kind profile table",
+            manifest["removed_induction_priors"],
+        )
+        self.assertIn("example.trial.kind", manifest["forbidden_induction_labels"])
+        self.assertIn("example.trial.roles", manifest["forbidden_induction_labels"])
+        self.assertEqual(semantic["profile_count"], 4.0)
+        self.assertEqual(semantic["profile_cluster_purity"], 1.0)
+        self.assertEqual(semantic["semantic_family_accuracy"], 1.0)
+        self.assertEqual(semantic["semantic_pair_accuracy"], 1.0)
+        self.assertEqual(semantic["profile_action_consistency"], 1.0)
+        self.assertFalse(agents["learned_rich_program_composer"]["transfer_gate_pass"])
+        self.assertFalse(
+            agents["discovered_semantic_family_only"]["transfer_gate_pass"]
+        )
+        self.assertFalse(
+            agents["discovered_semantic_target_only"]["transfer_gate_pass"]
+        )
+        self.assertFalse(
+            agents["discovered_semantic_rich_without_concern"]["transfer_gate_pass"]
+        )
+        self.assertTrue(
+            agents["discovered_semantic_world_model"]["transfer_gate_pass"]
+        )
+        self.assertEqual(
+            agents["discovered_semantic_world_model"][
+                "family_accuracy_high_concern"
+            ],
+            1.0,
+        )
+        self.assertEqual(
+            agents["discovered_semantic_world_model"]["target_accuracy_high_concern"],
+            1.0,
+        )
+        self.assertEqual(
+            agents["discovered_semantic_world_model"]["low_concern_program_rate"],
+            0.0,
+        )
+
+    def test_discovered_semantic_profiles_summary_averages_transfer_rates(self) -> None:
+        payloads = [
+            {
+                "agent_summary": {
+                    "discovered_semantic_world_model": {
+                        "profile_cluster_purity": 1.0,
+                        "transfer_gate_pass": True,
+                    }
+                }
+            },
+            {
+                "agent_summary": {
+                    "discovered_semantic_world_model": {
+                        "profile_cluster_purity": 0.5,
+                        "transfer_gate_pass": False,
+                    }
+                }
+            },
+        ]
+
+        summary = summarize_discovered_semantic_profiles_payloads(
+            payloads,
+            "agent_summary",
+        )
+
+        self.assertAlmostEqual(
+            summary["discovered_semantic_world_model"]["profile_cluster_purity"],
+            0.75,
+        )
+        self.assertAlmostEqual(
+            summary["discovered_semantic_world_model"]["transfer_gate_pass"],
             0.5,
         )
 

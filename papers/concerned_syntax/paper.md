@@ -1,7 +1,7 @@
 # Constituency Tests for Concerned Representation in Minimal Agents
 
 **Jawaun Brown**  
-2026-06-18
+2026-06-22
 
 ## Abstract
 
@@ -69,17 +69,25 @@ role-token calibration: connected components are clustered without visible
 role labels and grounded through synthetic rich-program feedback. Across five
 Modal seeds it reaches semantic kind/family/pair accuracy 1.000, transfer gate
 1.000, and low-concern program rate 0.000, while preserving the caveat that the
-semantic profile table and feedback contract are still supplied.
+semantic profile table and feedback contract are still supplied. A discovered
+semantic-profile follow-on then removes that supplied profile table from the
+accepted path: profiles are induced from candidate-family success,
+bound/unbound utility gaps, and action templates. Across five Modal seeds,
+`discovered_semantic_world_model` reaches profile purity/family/pair/action-
+template metrics 1.000, transfer gate 1.000, family/target/useful/rich 1.000,
+and low-concern program rate 0.000.
 Shortcut reward, passive perceptual inference, no-tree planning, random
 program probing, family-only selection, target-only selection, rich programs
 without concern, and restless inquiry all fail for different anti-cheat
 reasons. The result is still not a claim about human cognition, natural-image
-perception, or fully unsupervised semantic-profile discovery. It is an accepted
+perception, or fully open-ended semantic discovery. It is an accepted
 Phase 2A learned-mechanism surface: **reward is not syntax, compression is not
 syntax, probe availability is not intervention invention, target selection is
 not program composition, explicit role decoding is not required for supervised
 slot semantics, supervised role-token labels are not required for label-free
-slot calibration, and uncertainty reduction is not concerned inquiry.**
+slot calibration, supplied profile tables are not required for bounded
+semantic-profile induction, and uncertainty reduction is not concerned
+inquiry.**
 
 ## 1. Why Arc 2A Exists
 
@@ -675,25 +683,74 @@ rich-program feedback. The controls preserve the same anti-cheat separations:
 family without target, target without family, and rich programs without concern
 all fail even after the induced kind/family/pair semantics are perfect.
 
-## 17. Limitations
+## 17. Discovered Semantic Profiles
+
+The label-free gate above still receives the semantic profile table that maps
+active cluster pairs to program family, concern weight, and role-pair
+structure. The discovered semantic-profile gate removes that table from the
+accepted agent. It preserves connected-component perception and the same
+held-out role/parse transfer split, but fits one anonymous profile per active
+cluster pair from three synthetic feedback channels: which candidate program
+family exposes useful parse evidence, how large the bound/unbound utility gap
+is, and which action each bound alternative supports.
+
+Remote command:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/concerned_syntax/modal_discovered_semantic_profiles_sweep.py \
+  --train-trials 3000 --test-trials 1200 --epochs 90 \
+  --induction-calibration-trials 1200
+```
+
+The tracked public report is
+`experiments/concerned_syntax/results/discovered_semantic_profiles_modal_2026_06_22.md`.
+
+Induced semantics:
+
+| Clusters | Profiles | Cluster purity | Family | Pair | Action template |
+|---:|---:|---:|---:|---:|---:|
+| 9 | 4 | 1.000 | 1.000 | 1.000 | 1.000 |
+
+Transfer summary:
+
+| Agent | Transfer | Family | Target | Useful | Rich | Low program |
+|---|---:|---:|---:|---:|---:|---:|
+| discovered semantic world model | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 0.000 |
+| learned rich composer | 0.000 | 0.714 | 0.829 | 0.714 | 0.895 | 0.162 |
+| discovered family only | 0.000 | 1.000 | 0.214 | 0.214 | 1.000 | 0.000 |
+| discovered target only | 0.000 | 0.143 | 1.000 | 0.143 | 0.143 | 0.714 |
+| discovered rich no concern | 0.000 | 1.000 | 1.000 | 1.000 | 1.000 | 0.714 |
+
+This is a bounded semantic-profile induction result. The accepted agent no
+longer receives the supplied kind/profile table, kind-to-family mapping,
+role-pair table, or concern-weight table. The family-only, target-only, and
+rich-without-concern controls show that the induced profile must combine
+family, target binding, and concern discipline. The remaining caveat is still
+substantial: the world is synthetic, object extraction is connected-component
+based, and the feedback is contract-shaped rather than open-ended.
+
+## 18. Limitations
 
 The current benchmark is still synthetic. The newest agent receives generated
 pixels with algorithmic connected-component extraction, not natural images,
-continuous control, or human subjects. The newest label-free slot result
-removes supervised role-token calibration, but still receives a supplied
-semantic profile table and synthetic program/action feedback. The newest
+continuous control, or human subjects. The discovered semantic-profile result
+removes the supplied profile table, but still depends on a synthetic
+connected-component world and contract-shaped program/action feedback. The
 rich-program and searched-rich gates select among a provided finite program
 grammar; they do not invent raw motor primitives or open-ended experimental
 apparatus. The point of this first paper is to define and pass a minimal
 learned acceptance surface before larger compute.
 
-The Modal transfer, learned slot-semantics, and label-free slot-calibration
-repairs narrow the next limitation but do not erase it: the agent should
-discover semantic profiles without a supplied table, invent or search programs
-beyond the finite provided grammar, and instantiate program/body components as
-learned modules rather than compact hand-instantiated world-model operations.
+The Modal transfer, learned slot-semantics, label-free slot-calibration, and
+discovered-profile repairs narrow the next limitation but do not erase it: the
+agent should learn object slots without algorithmic connected components,
+invent or search programs beyond the finite provided grammar, and instantiate
+program/body components as learned modules rather than compact hand-
+instantiated world-model operations.
 
-## 18. Conclusion
+## 19. Conclusion
 
 Arc 2A inserts a new layer into the maintained-concern ladder:
 
@@ -714,9 +771,10 @@ intervention, and formal concern gating are present together. The held-out v2
 transfer, learned slot-semantics, and label-free slot-calibration repairs add
 the next boundary: the same grammar can survive role/parse transfer when a
 world-model concern gate consumes explicit, supervised learned, or label-free
-program-feedback grounded role semantics. Fully unsupervised semantic-profile
-discovery, open-ended program discovery beyond the finite provided grammar, and
-learned module/body search remain future work.
+program-feedback grounded role semantics, and the supplied profile table can
+be replaced by bounded semantic-profile induction. Learned object-slot
+perception, open-ended program discovery beyond the finite provided grammar,
+and learned module/body search remain future work.
 
 ## References
 

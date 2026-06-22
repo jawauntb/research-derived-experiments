@@ -3,14 +3,27 @@
 Date: 2026-06-22
 Repo: `jawauntb/research-derived-experiments`
 Prepared from: freshly fetched `origin/main` after PR #147
-Recommended branch: `codex/phase2-semantic-profile-discovery`
+Historical recommended branch: `codex/phase2-semantic-profile-discovery`
 
-Use this note to start a clean agent session whose job is to attack the next
+Status update: this branch landed the bounded version of the target as
+semantic-profile induction. The accepted
+`discovered_semantic_world_model` no longer consumes the supplied
+`KIND_PROFILES` table; it fits anonymous profiles from intervention family
+success, bound/unbound utility gaps, and action templates. The Modal report is
+`experiments/concerned_syntax/results/discovered_semantic_profiles_modal_2026_06_22.md`.
+The remaining frontier is learned object-slot perception, 2B consumption of the
+discovered-profile contract, trainable neural modules, or open-ended program
+discovery beyond the finite DSL.
+
+This note is retained as the historical clean-start brief for the
 Phase 2C-adjacent bottleneck: removing the supplied semantic profile table from
 the label-free slot-semantics gate while preserving the hard-won 2A/2B
 evidence stack.
 
-## Copy-Paste Kickoff Prompt
+## Historical Copy-Paste Kickoff Prompt
+
+This prompt is preserved for provenance. Do not use it as the current next
+move unless intentionally recreating this completed branch.
 
 ```text
 Start from fresh `origin/main` in `jawauntb/research-derived-experiments`.
