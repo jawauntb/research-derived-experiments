@@ -1,7 +1,7 @@
 # Viability-Guided Evolution of Syntax-Bearing Computational Bodies
 
 **Jawaun Brown**  
-2026-06-18
+2026-06-22
 
 ## Abstract
 
@@ -42,9 +42,15 @@ repaired held-out v2 transfer contract. Only the transfer-repaired executable
 body passes with transfer 1.000, module coverage 1.000,
 family/target/useful/rich 1.000, low-program 0.000, and resource cost 16;
 family-router, target-binder, ungated-rich, and learned-composer bodies fail
-different missing-module or transfer slices. The Haskell checker validates body
-admissibility constraints and catches missing calibration guards or missing
-program-family heads as type-layer violations.
+different missing-module or transfer slices. A final five-seed Modal search
+then evolves executable module bodies against the label-free slot-semantics
+transfer contract. Viability-guided search reaches body gate 1.000, transfer
+1.000, formal validity 1.000, semantic kind/pair 1.000, module coverage 1.000,
+family/target/useful/rich 1.000, low-program 0.000, and resource cost 18.
+Reward-only, family-proxy, target-proxy, and ungated-rich searches all fail the
+full body gate. The Haskell checker validates body admissibility constraints
+and catches missing calibration guards or missing program-family heads as
+type-layer violations.
 The result is still not a claim that full neural architecture search has been
 solved. It is a Phase 2B acceptance surface: **accuracy is not architecture,
 novelty is not viable morphology, target selection is not a viable body, rich
@@ -507,7 +513,79 @@ This is not full neural architecture search. It is a compact executable-module
 validation that turns the repaired 2A-v2 transfer contract into a 2B body
 requirement at Modal scale.
 
-## 15. Haskell Typed Ontology Gate
+## 15. Searched Executable Modules Against Label-Free 2A-v2 Transfer
+
+The compact executable-module gate above still supplies named body variants.
+The next gate searches over executable module sets and forces the selected body
+to consume the newer label-free slot-semantics transfer contract. This changes
+the 2B object from "does this supplied body cover the modules?" to "can search
+recover the module body that covers component slots, label-free induction,
+semantic profile grounding, concern gating, target binding, family routing,
+rich composition, world-model support, and a formal guard?"
+
+Remote command:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/viable_computational_bodies/modal_searched_executable_modules.py \
+  --generations 18 --population 18 \
+  --train-trials 3000 --test-trials 1200 --epochs 90 \
+  --induction-calibration-trials 1200
+```
+
+The tracked public report is
+`experiments/viable_computational_bodies/results/searched_executable_modules_modal_2026_06_22.md`.
+
+Required modules:
+
+```text
+component_slot_encoder
+label_free_slot_inducer
+semantic_profile_grounder
+concern_gate
+target_binder
+program_family_router
+rich_program_composer
+world_model
+formal_guard
+```
+
+Gate summary:
+
+| Strategy | Body gate | Transfer | Modules | Family | Target | Low program | Failure |
+|---|---:|---:|---:|---:|---:|---:|---|
+| reward only | 0.000 | 0.000 | 0.111 | 0.714 | 0.829 | 0.162 | shortcut body |
+| family proxy | 0.000 | 0.000 | 0.444 | 1.000 | 0.214 | 0.000 | misses target/useful modules |
+| target proxy | 0.000 | 0.000 | 0.556 | 0.143 | 1.000 | 0.714 | misses family/rich modules |
+| ungated rich | 0.000 | 0.000 | 0.778 | 1.000 | 1.000 | 0.714 | no concern discipline |
+| viability guided | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 0.000 | PASS |
+
+![Figure 3: Searched executable-module gate margins. Reward-only finds a return shortcut, family-proxy and target-proxy searches each recover one half of the contract, and ungated-rich search recovers rich composition without low-concern discipline; only viability-guided search clears transfer, formal validity, semantic slots, module coverage, and concern-gated rich-program behavior together.](figures/fig3_searched_executable_module_gate_margins.png)
+
+The accepted searched body is:
+
+```text
+component_slot_encoder
+concern_gate
+formal_guard
+label_free_slot_inducer
+program_family_router
+reward_head
+rich_program_composer
+semantic_profile_grounder
+target_binder
+world_model
+```
+
+This closes the immediate gap left by compact executable-module validation:
+the body is no longer a hand-selected positive. The search process has to find
+the module set that inherits the label-free held-out transfer gate. The
+boundary remains explicit: the semantic profile table and feedback contract
+are still supplied by Arc 2A, and the modules are searched contracts rather
+than independently trained neural subarchitectures.
+
+## 16. Haskell Typed Ontology Gate
 
 The Python gates are convenient for experiments, but the ontology layer should
 eventually live in a stronger typed formalism. This branch adds a small Haskell
@@ -540,7 +618,7 @@ serve the same binder role that tree binding serves in the symbolic body.
 The rich-program extension adds `program_family_head` and
 `rich_program_composer`; a composer without a family head is formally rejected.
 
-## 16. Limitations
+## 17. Limitations
 
 The current search and executable validation are intentionally small. The
 executable bodies are linear learned components over vectorized symbolic
@@ -549,28 +627,33 @@ program-body search maps motif sets to existing 2A empirical controls rather
 than instantiating separate neural modules for every motif. The Modal-confirmed
 executable-module body gate consumes the repaired transfer contract, but its
 role-slot decoder and module bodies are compact explicit contracts rather than
-searched neural implementations. The Haskell gate is a small typed ontology
-prototype, not a complete proof assistant, ASP, s(CASP), or SMT integration.
+searched neural implementations. The searched executable-module gate consumes
+the label-free slot-semantics transfer contract and searches executable module
+sets, but those modules are still bounded contracts over connected components
+and supplied semantic profiles, not independently learned neural modules. The
+Haskell gate is a small typed ontology prototype, not a complete proof
+assistant, ASP, s(CASP), or SMT integration.
 Modal runs fall back to explicit `python_static` formal provenance when Cabal
 is unavailable, while local runs and tests can use the Haskell motif verdict
 path. The point is to make the acceptance surface explicit and behaviorally
 grounded before expensive architecture evolution begins.
 
-The strongest next test is not another v1/v2 seed sweep. It is searched or
-evolved executable modules that implement object slots, graph binding, routed
-role heads, and program composition rather than mapping motif sets to existing
-controls.
+The strongest next test is not another v1/v2 seed sweep. It is either a 2A
+semantic-profile discovery gate that removes the supplied profile table, or a
+2B neural-module search that replaces searched executable contracts with
+trainable object-slot, graph-binding, routing, and program-composition modules.
 
-## 17. Conclusion
+## 18. Conclusion
 
 Arc 2B reframes architecture search as viability-guided body evolution. The
 pilot, learned validation, vector module validation, v1/v2 program-body
-searches, transfer-consuming executable body gate, and typed ontology gate show
-why that matters: train return, novelty, target selection, rich program
-selection, formal validity, module coverage, transfer, binding, and concerned
-syntax can dissociate. The next phase should not ask for merely "better
-models." It should ask for bodies whose morphology makes the world's causal
-grammar learnable without becoming restless or shortcut-driven.
+searches, transfer-consuming executable body gate, searched label-free
+executable-module gate, and typed ontology gate show why that matters: train
+return, novelty, target selection, rich program selection, formal validity,
+module coverage, transfer, binding, semantic slots, and concerned syntax can
+dissociate. The next phase should not ask for merely "better models." It
+should ask for bodies whose morphology makes the world's causal grammar
+learnable without becoming restless or shortcut-driven.
 
 ## References
 

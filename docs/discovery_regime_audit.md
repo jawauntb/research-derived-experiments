@@ -4879,7 +4879,9 @@ Results:
   and Modal reports, targeted tests, README commands, handoff update, and paper
   update.
 - Rejected or withheld artifacts: raw JSON remains under ignored `artifacts/`;
-  searched/evolved executable modules remain future work.
+  searched/evolved executable modules remain future work at this point in the
+  ledger; bounded searched contracts are recorded in the later searched
+  executable-module card.
 - Key metrics across five Modal seeds:
   `transfer_repaired_executable_body` transfer `1.000`, module coverage
   `1.000`, family/target/useful/rich `1.000`, low-program `0.000`, cost `16`,
@@ -4904,7 +4906,110 @@ Residual content:
   consumes v2 transfer, while searched/evolved neural modules remain open."
 
 Next move: replace the compact hand-instantiated bodies with searched/evolved
-neural modules.
+executable contracts first, then with trainable neural modules.
+
+## Arc 2A/2B: Searched Executable Modules Against Label-Free 2A-v2 Transfer
+
+Question: can Arc 2B search executable module bodies that consume the newest
+label-free `2A-v2-pixels-rich_programs` transfer contract rather than accepting
+a compact hand-instantiated body?
+
+Current regime:
+
+- Artifact types: label-free 2A-v2 transfer summaries, searched executable
+  module-body specs, required module lists, Python static formal verdicts,
+  local smoke reports, Modal reports, and paper figures.
+- Operations: run the label-free slot-semantics transfer gate, mutate/repair/
+  promote executable module sets, map module coverage to empirical 2A controls,
+  and score reward-only, family-proxy, target-proxy, ungated-rich, and
+  viability-guided searches against transfer, semantics, modules, formal
+  validity, resource cost, and low-concern discipline.
+- Gates/verifiers: held-out label-free transfer gate, semantic kind/family/pair
+  accuracy, executable module coverage, formal validity, resource cost <= 21,
+  family/target/useful/rich high-concern rates, low-concern program cap,
+  targeted unit tests, local smoke report, and Modal five-seed sweep.
+- Known limitations: searched modules are bounded executable contracts over
+  connected-component slots and a supplied semantic profile table, not full
+  neural architecture search, natural-image object discovery, or fully
+  unsupervised semantic-profile discovery.
+
+Action class:
+
+- Retrieval/search/discovery: coupled search transition.
+- Why: 2B no longer receives the positive executable body as a named supplied
+  candidate; viability-guided search must recover the module set that consumes
+  the label-free held-out transfer contract.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/viable_computational_bodies/searched_executable_modules.py`;
+  `experiments/viable_computational_bodies/modal_searched_executable_modules.py`;
+  `experiments/viable_computational_bodies/results/searched_executable_modules_local_2026_06_22.md`;
+  `experiments/viable_computational_bodies/results/searched_executable_modules_modal_2026_06_22.md`;
+  local ignored artifact
+  `artifacts/viable_computational_bodies/searched_executable_modules_local.json`;
+  Modal ignored artifact
+  `artifacts/viable_computational_bodies/searched_executable_modules_modal.json`.
+- Positive target: `viability_guided` should discover a body mapping to
+  `unsupervised_slot_semantic_world_model` and covering component slots,
+  label-free induction, semantic grounding, concern gating, target binding,
+  family routing, rich composition, world-model support, and a formal guard.
+- Negative controls: `reward_only`, `family_proxy`, `target_proxy`, and
+  `ungated_rich_proxy`.
+- Stress tests: reward-only should prefer a shortcut body; family-proxy should
+  miss target/useful modules; target-proxy should miss family/rich modules and
+  violate low-concern discipline; ungated-rich should recover rich composition
+  but fail concern/formal transfer discipline.
+
+Gate:
+
+- Acceptance rule: body gate rate >= 0.75 across Modal seeds, transfer gate
+  rate 1.000, formal validity 1.000, module coverage 1.000, semantic
+  kind/family/pair >= 0.95, family/target/useful/rich high-concern rates >=
+  0.70, low-concern program rate <= 0.25, resource cost <= 21, and controls
+  fail for distinct reasons.
+- Withheld/rejected rule: do not claim full neural architecture search,
+  learned object slots, fully unsupervised semantic-profile discovery,
+  natural-image perception, or open-ended program invention.
+
+Results:
+
+- Accepted artifacts: searched executable-module implementation, Modal
+  entrypoint, local and Modal reports, targeted tests, figure update, README
+  commands, handoff update, and paper update.
+- Rejected or withheld artifacts: raw JSON remains under ignored `artifacts/`;
+  learned neural module implementations and fully unsupervised semantic-profile
+  discovery remain future work.
+- Key metrics across five Modal seeds: `viability_guided` body gate `1.000`,
+  transfer gate `1.000`, formal validity `1.000`, semantic kind/pair `1.000`,
+  module coverage `1.000`, family/target/useful/rich high-concern rates
+  `1.000`, low-program `0.000`, cost `18`, gate PASS. `reward_only` returns
+  a shortcut learned-composer body with module coverage `0.111` and transfer
+  `0.000`; `family_proxy` reaches family and semantic metrics `1.000` but
+  target/useful `0.214` and module coverage `0.444`; `target_proxy` reaches
+  target `1.000` but family/useful/rich `0.143` and low-program `0.714`;
+  `ungated_rich_proxy` reaches family/target/useful/rich `1.000` but
+  low-program `0.714` and transfer `0.000`.
+- Variance or ablation: five Modal seeds with 18 generations, population 18,
+  3,000 train trials, 1,200 test trials, 1,200 label-free induction trials,
+  and 90 epochs per seed; accepted body gate SD is `0.000`.
+
+Residual content:
+
+- Explained by old regime: compact executable body validation already showed
+  that the transfer contract requires concern, target, family, composer,
+  world-model, and formal modules together.
+- New content outside old regime: 2B search can recover that executable module
+  set under the label-free transfer contract rather than being handed the
+  positive body.
+- Retractions or supersessions: supersede "searched/evolved executable modules
+  remain open" with "bounded executable-module search now consumes label-free
+  2A-v2 transfer; full neural module search remains open."
+
+Next move: either remove the supplied semantic profile table in 2A, or replace
+bounded executable contracts with trainable neural object-slot, graph-binding,
+routing, and program-composition modules.
 
 ## Arc 2A: Learned Slot Semantics Against 2A-v2 Transfer
 
@@ -5087,7 +5192,7 @@ Residual content:
   open."
 
 Next move: merge finite recipe search into the paper, then pursue unsupervised
-object/role slot discovery or 2B searched/evolved executable modules.
+object/role slot discovery or the later 2B searched executable-module branch.
 
 ## Arc 2A: Label-Free Slot Semantics Against 2A-v2 Transfer
 
@@ -5183,4 +5288,5 @@ Residual content:
   semantic-profile discovery remains open."
 
 Next move: replace the supplied semantic profile table with discovered semantic
-profiles, or move to 2B searched/evolved executable modules.
+profiles. The bounded 2B searched executable-module branch is now recorded in
+the searched executable-module audit card.
