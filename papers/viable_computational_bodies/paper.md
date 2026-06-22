@@ -48,9 +48,16 @@ transfer contract. Viability-guided search reaches body gate 1.000, transfer
 1.000, formal validity 1.000, semantic kind/pair 1.000, module coverage 1.000,
 family/target/useful/rich 1.000, low-program 0.000, and resource cost 18.
 Reward-only, family-proxy, target-proxy, and ungated-rich searches all fail the
-full body gate. The Haskell checker validates body admissibility constraints
-and catches missing calibration guards or missing program-family heads as
-type-layer violations.
+full body gate. A follow-on five-seed Modal search then upgrades the consumed
+contract again: 2B bodies must now consume learned foreground object slots plus
+discovered semantic-profile transfer rather than the older label-free supplied
+profile path. Viability-guided search reaches object-slot body gate 1.000,
+transfer 1.000, formal validity 1.000, slot/scene recovery 1.000, profile
+purity/action-template 1.000, module coverage 1.000, family/target/useful/rich
+1.000, low-program 0.000, and resource cost 21. Reward-only, family-proxy,
+target-proxy, and ungated-rich searches remain rejected. The Haskell checker
+validates body admissibility constraints and catches missing calibration guards
+or missing program-family heads as type-layer violations.
 The result is still not a claim that full neural architecture search has been
 solved. It is a Phase 2B acceptance surface: **accuracy is not architecture,
 novelty is not viable morphology, target selection is not a viable body, rich
@@ -585,7 +592,79 @@ boundary remains explicit: the semantic profile table and feedback contract
 are still supplied by Arc 2A, and the modules are searched contracts rather
 than independently trained neural subarchitectures.
 
-## 16. Haskell Typed Ontology Gate
+## 16. Object-Slot Executable Modules Against Discovered 2A-v2 Transfer
+
+The label-free searched executable gate still consumes a contract whose
+perception path is connected-component slots and whose semantic profile table
+is supplied. Arc 2A now has a stronger learned-object-slot result: a learned
+foreground pixel model plus fixed slot-local center search feeds discovered
+semantic profiles. The next 2B question is whether executable body search can
+consume that newer contract.
+
+Remote command:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/viable_computational_bodies/modal_object_slot_executable_modules.py \
+  --generations 18 --population 18 \
+  --train-trials 3000 --test-trials 1200 --epochs 90 \
+  --induction-calibration-trials 1200 \
+  --extractor-calibration-trials 1200 --extractor-epochs 45
+```
+
+The tracked public report is
+`experiments/viable_computational_bodies/results/object_slot_executable_modules_modal_2026_06_22.md`.
+
+Required modules:
+
+```text
+learned_foreground_extractor
+object_slot_centerer
+discovered_profile_inducer
+profile_action_template
+concern_gate
+target_binder
+program_family_router
+rich_program_composer
+world_model
+formal_guard
+```
+
+Gate summary:
+
+| Strategy | Body gate | Transfer | Modules | Family | Target | Low program | Failure |
+|---|---:|---:|---:|---:|---:|---:|---|
+| reward only | 0.000 | 0.000 | 0.000 | 0.714 | 0.762 | 0.188 | legacy shortcut body |
+| family proxy | 0.000 | 0.000 | 0.400 | 1.000 | 0.214 | 0.000 | misses target/useful modules |
+| target proxy | 0.000 | 0.000 | 0.500 | 0.143 | 1.000 | 0.714 | misses family/rich modules |
+| ungated rich | 0.000 | 0.000 | 0.800 | 1.000 | 1.000 | 0.714 | no concern discipline |
+| viability guided | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 0.000 | PASS |
+
+The accepted searched body is:
+
+```text
+concern_gate
+discovered_profile_inducer
+formal_guard
+learned_foreground_extractor
+object_slot_centerer
+profile_action_template
+profile_memory
+program_family_router
+reward_head
+rich_program_composer
+target_binder
+world_model
+```
+
+This is the first 2B gate that consumes the latest learned-object-slot and
+discovered-profile 2A path. The result is not a new natural-image vision claim
+and not full neural architecture search. Its contribution is narrower and
+cleaner: the body-side grammar can be forced to track the current 2A scaffold
+removal instead of an older connected-component, supplied-profile abstraction.
+
+## 17. Haskell Typed Ontology Gate
 
 The Python gates are convenient for experiments, but the ontology layer should
 eventually live in a stronger typed formalism. This branch adds a small Haskell
@@ -618,7 +697,7 @@ serve the same binder role that tree binding serves in the symbolic body.
 The rich-program extension adds `program_family_head` and
 `rich_program_composer`; a composer without a family head is formally rejected.
 
-## 17. Limitations
+## 18. Limitations
 
 The current search and executable validation are intentionally small. The
 executable bodies are linear learned components over vectorized symbolic
@@ -631,26 +710,32 @@ searched neural implementations. The searched executable-module gate consumes
 the label-free slot-semantics transfer contract and searches executable module
 sets, but those modules are still bounded contracts over connected components
 and supplied semantic profiles, not independently learned neural modules. The
-Haskell gate is a small typed ontology prototype, not a complete proof
-assistant, ASP, s(CASP), or SMT integration.
+object-slot executable-module gate consumes learned foreground slots and
+discovered profiles, but it still relies on a synthetic renderer, a fixed
+six-slot layout, slot-local center search, bounded module grammar, and
+contract-shaped feedback. The Haskell gate is a small typed ontology
+prototype, not a complete proof assistant, ASP, s(CASP), or SMT integration.
 Modal runs fall back to explicit `python_static` formal provenance when Cabal
 is unavailable, while local runs and tests can use the Haskell motif verdict
 path. The point is to make the acceptance surface explicit and behaviorally
 grounded before expensive architecture evolution begins.
 
-The strongest next test is not another v1/v2 seed sweep. It is either a 2A
-semantic-profile discovery gate that removes the supplied profile table, or a
-2B neural-module search that replaces searched executable contracts with
-trainable object-slot, graph-binding, routing, and program-composition modules.
+The strongest next test is not another v1/v2 seed sweep. It is either a
+field-contact P1 LoRA follow-up, a P2 corruption taxonomy extension,
+open-ended intervention/apparatus discovery beyond the finite rich-program
+DSL, or a 2B neural-module search that replaces searched executable contracts
+with trainable object-slot, graph-binding, routing, and program-composition
+modules.
 
-## 18. Conclusion
+## 19. Conclusion
 
 Arc 2B reframes architecture search as viability-guided body evolution. The
 pilot, learned validation, vector module validation, v1/v2 program-body
 searches, transfer-consuming executable body gate, searched label-free
-executable-module gate, and typed ontology gate show why that matters: train
-return, novelty, target selection, rich program selection, formal validity,
-module coverage, transfer, binding, semantic slots, and concerned syntax can
+executable-module gate, object-slot/discovered-profile executable-module gate,
+and typed ontology gate show why that matters: train return, novelty, target
+selection, rich program selection, formal validity, module coverage, transfer,
+binding, semantic slots, learned object slots, and concerned syntax can
 dissociate. The next phase should not ask for merely "better models." It
 should ask for bodies whose morphology makes the world's causal grammar
 learnable without becoming restless or shortcut-driven.

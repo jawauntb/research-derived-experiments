@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import unittest
+from typing import Any
 
 from experiments.concerned_syntax.vector_shapes import module_body_summary
 from experiments.viable_computational_bodies.haskell_gate import (
@@ -49,12 +50,94 @@ from experiments.viable_computational_bodies.searched_executable_modules import 
     run_searched_executable_search,
     summarize_searched_executable_rows,
 )
+from experiments.viable_computational_bodies.object_slot_executable_modules import (
+    TARGET_OBJECT_SLOT_EXECUTABLE_BODY,
+    ObjectSlotExecutableSpec,
+    empirical_agent_for_object_slot_executable,
+    evaluate_object_slot_executable,
+    run_object_slot_executable_search,
+    summarize_object_slot_rows,
+)
 from experiments.viable_computational_bodies.modal_report import (
     summarize_modal_payload,
 )
 
 
 class ViableComputationalBodiesTest(unittest.TestCase):
+    def _object_slot_agent_summary(self) -> dict[str, dict[str, Any]]:
+        return {
+            "learned_rich_program_composer": {
+                "profile_cluster_purity": 0.0,
+                "semantic_family_accuracy": 0.0,
+                "semantic_pair_accuracy": 0.0,
+                "profile_action_consistency": 0.0,
+                "transfer_gate_pass": False,
+                "parse_accuracy_high_concern": 0.856,
+                "action_accuracy": 0.917,
+                "family_accuracy_high_concern": 0.714,
+                "target_accuracy_high_concern": 0.829,
+                "useful_program_rate_high_concern": 0.714,
+                "rich_program_rate_high_concern": 0.894,
+                "low_concern_program_rate": 0.161,
+            },
+            "learned_object_slot_family_only": {
+                "profile_cluster_purity": 1.0,
+                "semantic_family_accuracy": 1.0,
+                "semantic_pair_accuracy": 1.0,
+                "profile_action_consistency": 1.0,
+                "transfer_gate_pass": False,
+                "parse_accuracy_high_concern": 0.674,
+                "action_accuracy": 0.892,
+                "family_accuracy_high_concern": 1.0,
+                "target_accuracy_high_concern": 0.214,
+                "useful_program_rate_high_concern": 0.214,
+                "rich_program_rate_high_concern": 1.0,
+                "low_concern_program_rate": 0.0,
+            },
+            "learned_object_slot_target_only": {
+                "profile_cluster_purity": 1.0,
+                "semantic_family_accuracy": 1.0,
+                "semantic_pair_accuracy": 1.0,
+                "profile_action_consistency": 1.0,
+                "transfer_gate_pass": False,
+                "parse_accuracy_high_concern": 0.639,
+                "action_accuracy": 0.880,
+                "family_accuracy_high_concern": 0.143,
+                "target_accuracy_high_concern": 1.0,
+                "useful_program_rate_high_concern": 0.143,
+                "rich_program_rate_high_concern": 0.143,
+                "low_concern_program_rate": 0.714,
+            },
+            "learned_object_slot_rich_without_concern": {
+                "profile_cluster_purity": 1.0,
+                "semantic_family_accuracy": 1.0,
+                "semantic_pair_accuracy": 1.0,
+                "profile_action_consistency": 1.0,
+                "transfer_gate_pass": False,
+                "parse_accuracy_high_concern": 1.0,
+                "action_accuracy": 1.0,
+                "family_accuracy_high_concern": 1.0,
+                "target_accuracy_high_concern": 1.0,
+                "useful_program_rate_high_concern": 1.0,
+                "rich_program_rate_high_concern": 1.0,
+                "low_concern_program_rate": 0.714,
+            },
+            "learned_object_slot_discovered_world_model": {
+                "profile_cluster_purity": 1.0,
+                "semantic_family_accuracy": 1.0,
+                "semantic_pair_accuracy": 1.0,
+                "profile_action_consistency": 1.0,
+                "transfer_gate_pass": True,
+                "parse_accuracy_high_concern": 1.0,
+                "action_accuracy": 1.0,
+                "family_accuracy_high_concern": 1.0,
+                "target_accuracy_high_concern": 1.0,
+                "useful_program_rate_high_concern": 1.0,
+                "rich_program_rate_high_concern": 1.0,
+                "low_concern_program_rate": 0.0,
+            },
+        }
+
     def test_static_rules_reject_planner_without_world_model(self) -> None:
         spec = ArchitectureSpec(frozenset({"flat_encoder", "reward_head", "intervention_planner"}))
 
@@ -964,6 +1047,79 @@ class ViableComputationalBodiesTest(unittest.TestCase):
         self.assertEqual(
             summary["viability_guided"]["best_empirical_agent"],
             "unsupervised_slot_semantic_world_model",
+        )
+        self.assertFalse(summary["family_proxy"]["gate_pass"])
+        self.assertFalse(summary["target_proxy"]["gate_pass"])
+        self.assertFalse(summary["ungated_rich_proxy"]["gate_pass"])
+
+    def test_object_slot_executable_body_consumes_discovered_profiles(self) -> None:
+        agent_summary = self._object_slot_agent_summary()
+        extractor_summary = {"slot_recovery_rate": 1.0, "scene_recovery_rate": 1.0}
+        full = ObjectSlotExecutableSpec(TARGET_OBJECT_SLOT_EXECUTABLE_BODY)
+        partial = ObjectSlotExecutableSpec(
+            frozenset(
+                {
+                    "learned_foreground_extractor",
+                    "object_slot_centerer",
+                    "discovered_profile_inducer",
+                    "program_family_router",
+                    "reward_head",
+                }
+            )
+        )
+
+        full_eval = evaluate_object_slot_executable(
+            full,
+            strategy="viability_guided",
+            seed=0,
+            generation=0,
+            agent_summary=agent_summary,
+            extractor_summary=extractor_summary,
+        )
+        partial_eval = evaluate_object_slot_executable(
+            partial,
+            strategy="family_proxy",
+            seed=0,
+            generation=0,
+            agent_summary=agent_summary,
+            extractor_summary=extractor_summary,
+        )
+
+        self.assertEqual(
+            empirical_agent_for_object_slot_executable(full),
+            "learned_object_slot_discovered_world_model",
+        )
+        self.assertEqual(full_eval.object_slot_body_gate, 1)
+        self.assertEqual(partial_eval.object_slot_body_gate, 0)
+        self.assertIn("concern_gate", partial_eval.missing_modules)
+
+    def test_viability_guided_search_recovers_object_slot_body(self) -> None:
+        agent_summary = self._object_slot_agent_summary()
+        extractor_summary = {"slot_recovery_rate": 1.0, "scene_recovery_rate": 1.0}
+
+        rows = []
+        for strategy in (
+            "family_proxy",
+            "target_proxy",
+            "ungated_rich_proxy",
+            "viability_guided",
+        ):
+            rows.extend(
+                run_object_slot_executable_search(
+                    strategy=strategy,
+                    seed=20260622,
+                    generations=8,
+                    population=10,
+                    agent_summary=agent_summary,
+                    extractor_summary=extractor_summary,
+                )
+            )
+        summary = summarize_object_slot_rows(rows)
+
+        self.assertTrue(summary["viability_guided"]["gate_pass"])
+        self.assertEqual(
+            summary["viability_guided"]["best_empirical_agent"],
+            "learned_object_slot_discovered_world_model",
         )
         self.assertFalse(summary["family_proxy"]["gate_pass"])
         self.assertFalse(summary["target_proxy"]["gate_pass"])

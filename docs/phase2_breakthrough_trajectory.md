@@ -303,18 +303,27 @@ Current coupled 2A/2B results:
   rate `0.000`, and resource cost `18`. Reward-only, family-proxy,
   target-proxy, and ungated-rich searches fail by shortcut, missing target,
   missing family/rich, or no-concern discipline.
+- `object_slot_executable_modules_modal_2026_06_22.md` makes 2B search
+  executable module bodies against the learned-object-slot/discovered-profile
+  v2 transfer gate. Across five Modal seeds, `viability_guided` reaches
+  object-slot body gate `1.000`, transfer gate `1.000`, formal validity
+  `1.000`, slot/scene recovery `1.000`, profile purity/semantic pair/action
+  template `1.000`, module coverage `1.000`, family/target/useful/rich
+  `1.000`, low-concern program rate `0.000`, and resource cost `21`.
+  Reward-only, family-proxy, target-proxy, and ungated-rich searches fail by
+  legacy shortcut, missing target, missing family/rich, or no-concern
+  discipline.
 
 This is the first Phase 2 point where Arc 2A and Arc 2B are coupled at the
 rich program-composition contract, not merely at target selection. The frontier
 now also closes searched rich-program recipes, v2 transfer-repair, supervised
 learned slot-semantics, label-free role-token calibration, discovered
 semantic-profile induction, a learned object-slot bridge, and executable-
-module-body gates at Modal scale, including bounded search over label-free
-executable module contracts. It is still not the end of Phase 2: natural-image
-object discovery, open-ended semantics beyond the synthetic feedback contract,
-open-ended motor/apparatus discovery beyond the finite program DSL, 2B
-consumption of the newest learned-object/discovered-profile contract, and full
-neural architecture search remain open.
+module-body gates at Modal scale, including bounded search over label-free and
+learned-object-slot executable module contracts. It is still not the end of
+Phase 2: natural-image object discovery, open-ended semantics beyond the
+synthetic feedback contract, open-ended motor/apparatus discovery beyond the
+finite program DSL, and full neural architecture search remain open.
 
 ## Literature Bearings
 

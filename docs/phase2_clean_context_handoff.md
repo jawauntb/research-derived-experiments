@@ -28,6 +28,7 @@ Phase 2A and 2B now share a Modal-confirmed `2A-v2` rich-program contract:
   + discovered semantic-profile induction
   + learned object slots for discovered-profile transfer
   + searched executable-module bodies over the label-free transfer gate
+  + searched executable-module bodies over the learned-object-slot contract
 ```
 
 Do not summarize this as "2A is done" or "2B is done." The honest claim is:
@@ -42,7 +43,8 @@ Do not summarize this as "2A is done" or "2B is done." The honest claim is:
   or full neural architecture search.
 - `2B-v2` has compact motif/body validation, transfer-consuming executable
   bodies, and bounded searched executable-module contracts over the label-free
-  transfer gate, but not full neural module or architecture search.
+  transfer gate and the learned-object-slot/discovered-profile transfer gate,
+  but not full neural module or architecture search.
 
 ## Recent Merged PRs
 
@@ -56,8 +58,10 @@ Do not summarize this as "2A is done" or "2B is done." The honest claim is:
 - PR #148: semantic-profile-discovery handoff.
 - PR #151: discovered semantic-profile induction against the same held-out
   `2A-v2` transfer gate.
-- Current branch: learned object-slot perception for the discovered-profile
-  held-out transfer gate.
+- PR #158: learned object-slot perception for the discovered-profile held-out
+  transfer gate.
+- Current branch: 2B consumption of the learned-object-slot plus
+  discovered-profile held-out transfer contract.
 
 ## Accepted Evidence
 
@@ -259,6 +263,40 @@ bounded executable-module contract search, not trainable neural architecture
 search; still uses connected-component slots, a supplied semantic profile
 table, and synthetic rich-program feedback.
 
+### 2B Object-Slot Executable Modules
+
+Report:
+`experiments/viable_computational_bodies/results/object_slot_executable_modules_modal_2026_06_22.md`
+
+Positive:
+`viability_guided`
+
+Best searched body:
+`concern_gate+discovered_profile_inducer+formal_guard+learned_foreground_extractor+object_slot_centerer+profile_action_template+profile_memory+program_family_router+reward_head+rich_program_composer+target_binder+world_model`
+
+Metrics:
+object-slot body gate `1.000`, transfer gate `1.000`, formal validity
+`1.000`, slot/scene recovery `1.000`, profile purity/semantic pair/action
+template `1.000`, module coverage `1.000`, family/target/useful/rich high
+`1.000`, low-program `0.000`, resource cost `21`, gate PASS across five Modal
+seeds.
+
+Rejected controls:
+
+- `reward_only`: legacy shortcut body, transfer `0.000`, module coverage
+  `0.000`.
+- `family_proxy`: profile/family `1.000`, but target/useful `0.214` and
+  module coverage `0.400`.
+- `target_proxy`: target `1.000`, but family/useful/rich `0.143`,
+  low-program `0.714`, and module coverage `0.500`.
+- `ungated_rich_proxy`: family/target/useful/rich `1.000`, but transfer
+  `0.000`, low-program `0.714`, and module coverage `0.800`.
+
+Boundary:
+bounded executable-module contract search over learned foreground slots and
+discovered profiles, not trainable neural architecture search, natural-image
+vision, or full slot attention.
+
 ## Most Important Files
 
 - Main paper:
@@ -291,32 +329,22 @@ table, and synthetic rich-program feedback.
   `experiments/viable_computational_bodies/learned_executable_modules.py`
   `experiments/viable_computational_bodies/searched_executable_modules.py`
   `experiments/viable_computational_bodies/modal_searched_executable_modules.py`
+  `experiments/viable_computational_bodies/object_slot_executable_modules.py`
+  `experiments/viable_computational_bodies/modal_object_slot_executable_modules.py`
 
 ## Next Best Move
 
 Start from a fresh fetch/pull of `main` in a new worktree.
 
-Recommended branch:
-
-```text
-codex/phase2-object-slot-2b-consumption
-```
-
-Best next experiment:
-
-Make 2B searched/executable bodies consume the learned-object-slot plus
-discovered-profile 2A contract, rather than the older label-free supplied-
-profile contract. Preserve reward-only, family-only, target-only, and
-ungated-rich body controls.
-
-Alternative strong 2A branch:
+Recommended external branch:
 
 ```text
 codex/external-contact-p1-lora-tier-b
 ```
 
-Goal:
-run the non-degenerate external P1 Tier-B follow-up with LoRA or full
+Best next experiment:
+
+Run the non-degenerate external P1 Tier-B follow-up with LoRA or full
 fine-tuning on Pythia modular arithmetic. Do not repeat the frozen linear-
 probe configuration that produced all-zero OOD accuracy.
 
@@ -329,8 +357,8 @@ codex/phase2-neural-module-search
 Goal:
 replace bounded searched executable contracts with trainable neural object-slot,
 graph-binding, routed-head, and program-composition modules. Keep the
-label-free transfer verifier and controls; do not call motif/contract search
-full neural architecture search.
+learned-object-slot/discovered-profile transfer verifier and controls; do not
+call motif/contract search full neural architecture search.
 
 ## Modal-First Rule
 
@@ -363,12 +391,13 @@ Read `docs/phase2_clean_context_handoff.md`,
 `docs/discovery_regime_audit.md`.
 
 Continue Phase 2 from freshly fetched `origin/main`. Start with
-`docs/phase2_next_phase_research_handoff.md`. The next best internal move is
-`codex/phase2-object-slot-2b-consumption`: make viable computational bodies
-consume the learned-object-slot plus discovered-profile 2A transfer contract.
-The next best external move is `codex/external-contact-p1-lora-tier-b`: rerun
-P1 on Pythia with LoRA or full fine-tuning, not the degenerate frozen-linear
-probe. Keep claims honest, use Modal for full evidence, avoid heavy local
-sweeps, update paper/audit/handoff/PDFs, run checks, commit, push, PR, and
-merge when clean.
+`docs/phase2_next_phase_research_handoff.md`. The internal object-slot 2B
+consumption branch is now complete at bounded contract-search scale. The next
+best external move is `codex/external-contact-p1-lora-tier-b`: rerun P1 on
+Pythia with LoRA or full fine-tuning, not the degenerate frozen-linear probe.
+The next best internal move is `codex/phase2-neural-module-search`: replace
+bounded searched executable contracts with trainable neural object-slot,
+graph-binding, routed-head, and program-composition modules. Keep claims
+honest, use Modal for full evidence, avoid heavy local sweeps, update
+paper/audit/handoff/PDFs, run checks, commit, push, PR, and merge when clean.
 ```
