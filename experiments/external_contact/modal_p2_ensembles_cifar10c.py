@@ -53,14 +53,32 @@ from typing import Any
 modal = importlib.import_module("modal")
 
 
-IMAGE = modal.Image.debian_slim(python_version="3.12").pip_install(
-    "torch>=2.5,<2.8",
-    "torchvision>=0.20,<0.25",
-    "numpy>=1.26,<2.2",
-    "requests>=2.31",
+# CIFAR-10 baked into the image at build time so the per-run download (slow from
+# Modal's egress to www.cs.toronto.edu, observed ~60 KB/s) happens ONCE during
+# image construction and is reused on every subsequent run. CIFAR-10-C
+# corruption files (~150 MB each) are too large to bake; they go on a Modal
+# Volume populated on first run and cached for every run thereafter.
+IMAGE = (
+    modal.Image.debian_slim(python_version="3.12")
+    .apt_install("curl", "ca-certificates")
+    .pip_install(
+        "torch>=2.5,<2.8",
+        "torchvision>=0.20,<0.25",
+        "numpy>=1.26,<2.2",
+        "requests>=2.31",
+    )
+    .run_commands(
+        "mkdir -p /data && cd /data && "
+        "curl -fsSL https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz "
+        "-o cifar-10-python.tar.gz && "
+        "tar -xzf cifar-10-python.tar.gz && rm cifar-10-python.tar.gz"
+    )
 )
 
 app = modal.App(name="research-derived-external-contact-p2")
+# Persistent cache for the CIFAR-10-C corruption .npy files (~50 MB each, 15
+# corruptions x 5 severities encoded one .npy per corruption).
+cifar10c_volume = modal.Volume.from_name("cifar10c-cache", create_if_missing=True)
 
 # CIFAR-10-C download host (Zenodo). 15 corruption types as .npy files (50000x32x32x3
 # for each, labels in labels.npy). Five severities are encoded in row order:
@@ -73,7 +91,8 @@ CORRUPTIONS = [
 ]
 
 
-@app.function(image=IMAGE, gpu="A10G", timeout=3600, memory=8192)
+@app.function(image=IMAGE, gpu="A10G", timeout=7200, memory=8192,
+              volumes={"/cache/cifar10c": cifar10c_volume})
 def train_and_score(arg: dict[str, Any]) -> dict[str, Any]:
     """Train K small CNNs on CIFAR-10 and score per-sample variance-vs-error
     on CIFAR-10 (in-distribution) + sampled CIFAR-10-C slices.
@@ -82,8 +101,8 @@ def train_and_score(arg: dict[str, Any]) -> dict[str, Any]:
     pipeline. K=5 small CNNs is small enough to fit comfortably on one A10G;
     sharding across workers would just inflate cost.
     """
-    import io
     import math
+    import os
     import urllib.request
 
     import numpy as np
@@ -104,10 +123,10 @@ def train_and_score(arg: dict[str, Any]) -> dict[str, Any]:
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-    # ----- CIFAR-10 train / clean test -----
+    # ----- CIFAR-10 train / clean test (baked into the image at /data) -----
     transform = T.Compose([T.ToTensor(), T.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
-    train_set = torchvision.datasets.CIFAR10("/tmp/data", train=True, download=True, transform=transform)
-    test_set = torchvision.datasets.CIFAR10("/tmp/data", train=False, download=True, transform=transform)
+    train_set = torchvision.datasets.CIFAR10("/data", train=True, download=False, transform=transform)
+    test_set = torchvision.datasets.CIFAR10("/data", train=False, download=False, transform=transform)
     train_loader = torch.utils.data.DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=2)
 
     def make_cnn():
@@ -198,23 +217,34 @@ def train_and_score(arg: dict[str, Any]) -> dict[str, Any]:
     slices = {"sev0_in_dist": score_slice(test_x, test_y)}
 
     # ----- CIFAR-10-C slices (per severity, per sampled corruption) -----
+    # Cached on the persistent Modal Volume at /cache/cifar10c so the slow
+    # Zenodo download (~150 MB per corruption) only happens once across runs.
+    cache_dir = "/cache/cifar10c"
+    os.makedirs(cache_dir, exist_ok=True)
     labels_url = f"{CIFAR10C_BASE}/labels.npy"
     rng = np.random.RandomState(base_seed)
     sampled_corruptions = list(rng.choice(np.array(corruptions), size=min(n_corruptions, len(corruptions)), replace=False))
     sampled_corruptions = [str(c) for c in sampled_corruptions]
 
-    def load_npy(url: str) -> np.ndarray:
-        with urllib.request.urlopen(url) as r:
-            data = r.read()
-        return np.load(io.BytesIO(data))
+    def cache_fetch(url: str, basename: str) -> np.ndarray:
+        path = os.path.join(cache_dir, basename)
+        if not os.path.exists(path):
+            print(f"[cifar10c] downloading {url} -> {path}", flush=True)
+            with urllib.request.urlopen(url) as r:
+                data = r.read()
+            with open(path, "wb") as fh:
+                fh.write(data)
+        else:
+            print(f"[cifar10c] cache hit: {path}", flush=True)
+        return np.load(path)
 
     # labels (50000,) -- same labels for every severity row block
-    labels_full = load_npy(labels_url)
+    labels_full = cache_fetch(labels_url, "labels.npy")
 
     norm = T.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
     for corruption in sampled_corruptions:
         url = f"{CIFAR10C_BASE}/{corruption}.npy"
-        arr = load_npy(url)  # (50000, 32, 32, 3) uint8
+        arr = cache_fetch(url, f"{corruption}.npy")  # (50000, 32, 32, 3) uint8
         for sev in severities:
             start = (sev - 1) * 10000
             end = start + 10000
@@ -243,6 +273,9 @@ def train_and_score(arg: dict[str, Any]) -> dict[str, Any]:
     ent_high_sev_mean = mean([v["pearson_entropy_error"] for v in high_sev])
     var_total_in_dist = in_dist["pearson_var_total_error"]
     var_total_high_sev_mean = mean([v["pearson_var_total_error"] for v in high_sev])
+
+    # Persist any newly-cached corruption files so subsequent runs hit the cache.
+    cifar10c_volume.commit()
 
     return dict(
         kind="REAL P2 Tier-B external run on Modal",
