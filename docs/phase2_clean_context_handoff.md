@@ -9,6 +9,10 @@ External paper folder: `/Users/jawaun/Metaphysics of Intelligence/Phase_Arc_2`
 
 Use this note to start the next agent session from a clean context window.
 
+If the next session is specifically about removing the supplied semantic
+profile table from label-free slot semantics, start with
+`docs/phase2_semantic_profile_discovery_handoff.md`.
+
 ## Current State
 
 Phase 2A and 2B now share a Modal-confirmed `2A-v2` rich-program contract:
