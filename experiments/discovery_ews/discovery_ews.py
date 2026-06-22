@@ -146,9 +146,10 @@ def detect_episodes(traj: list[tuple[Artifact, float]], window: int) -> list[Epi
     last_index: dict[str, int] = {}
     for i, (a, s) in enumerate(traj):
         prev = last_index.get(a.family)
-        dormancy = math.inf if prev is None else (i - prev)
-        if dormancy >= window:
-            episodes.append(Episode(a.date, a.family, dormancy if dormancy != math.inf else 10**6, s, "pending"))
+        is_new_family = prev is None
+        dormancy = 10**6 if is_new_family else i - prev
+        if is_new_family or dormancy >= window:
+            episodes.append(Episode(a.date, a.family, dormancy, s, "pending"))
         last_index[a.family] = i
     return episodes
 

@@ -187,7 +187,7 @@ Pre-registration: `docs/external_contact_preregistration.md`. Network egress is
 currently blocked (HF/PyPI 403; verified 2026-06-18), so each prediction ships a
 Tier A (offline stdlib) and Tier B (fetch-when-unblocked) test.
 
-- [x] P3 (concept geometry, GloVe): build the Tier A stdlib harness with math self-test (`experiments/external_contact/p3_glove_probe.py`). BLOCKED on real run: no GloVe vectors locally and Stanford egress is 403; harness is one command away from a real result once vectors are available.
+- [x] P3 (concept geometry, GloVe): build and run the Tier A stdlib harness with public GloVe vectors (`experiments/external_contact/results/p3_glove_2026_06_22.md`). All three frozen gates pass after centering (P3a margin 0.106, NMI 0.531; P3b gap 0.252; P3c RSA 0.747), with `autopoiesis` missing from GloVe so the run covers 23/24 concepts.
 - [ ] P2 (uncertainty≠error / no-false-calm on published deep-ensemble + BALD curves): transcribe external tables and check the directional prediction.
 - [ ] P1 (weakness→OOD on the Pythia suite): Tier A orbit-coverage surrogate now; Tier B full check when HF egress is available.
 
