@@ -1,9 +1,9 @@
 # Phase 2 Next Breakthrough Handoff
 
-Date: 2026-06-18
+Date: 2026-06-22
 Repo: `jawauntb/research-derived-experiments`
-Current fresh branch for this note: `codex/phase2-unsupervised-object-slots`
-Current `origin/main`: `735f57d` (`Merge pull request #141 from jawauntb/codex/phase2-open-program-search`)
+Current fresh branch for this note: `codex/phase2-clean-context-handoff`
+Current `origin/main`: `2601452` (`Merge pull request #142 from jawauntb/codex/phase2-unsupervised-object-slots`)
 External paper artifact folder: `/Users/jawaun/Metaphysics of Intelligence/Phase_Arc_2`
 
 This is the start-here note for the next agent session. The user is not asking
