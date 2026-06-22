@@ -1,0 +1,51 @@
+kind,source,system,dataset,slice_or_target,metric,value,citation,note
+cifar10c_quartile,ovadia_2019,vanilla,cifar10c,q25,Brier,0.243,arXiv:1906.02530 Table G.1,"25th percentile across 80 shifted variants (corruptions x severities); ascending = lower error at the easier-shift end"
+cifar10c_quartile,ovadia_2019,vanilla,cifar10c,q50,Brier,0.425,arXiv:1906.02530 Table G.1,"median across 80 shifted variants"
+cifar10c_quartile,ovadia_2019,vanilla,cifar10c,q75,Brier,0.747,arXiv:1906.02530 Table G.1,"75th percentile = harder-shift slices"
+cifar10c_quartile,ovadia_2019,vanilla,cifar10c,q25,ECE,0.057,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,vanilla,cifar10c,q50,ECE,0.127,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,vanilla,cifar10c,q75,ECE,0.288,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,temp_scaling,cifar10c,q25,Brier,0.227,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,temp_scaling,cifar10c,q50,Brier,0.392,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,temp_scaling,cifar10c,q75,Brier,0.670,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,temp_scaling,cifar10c,q25,ECE,0.022,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,temp_scaling,cifar10c,q50,ECE,0.049,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,temp_scaling,cifar10c,q75,ECE,0.180,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,ensembles,cifar10c,q25,Brier,0.165,arXiv:1906.02530 Table G.1,"Deep Ensembles (Lakshminarayanan et al. 2017)"
+cifar10c_quartile,ovadia_2019,ensembles,cifar10c,q50,Brier,0.299,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,ensembles,cifar10c,q75,Brier,0.572,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,ensembles,cifar10c,q25,ECE,0.031,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,ensembles,cifar10c,q50,ECE,0.037,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,ensembles,cifar10c,q75,ECE,0.110,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,dropout,cifar10c,q25,Brier,0.215,arXiv:1906.02530 Table G.1,"MC dropout"
+cifar10c_quartile,ovadia_2019,dropout,cifar10c,q50,Brier,0.349,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,dropout,cifar10c,q75,Brier,0.633,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,dropout,cifar10c,q25,ECE,0.021,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,dropout,cifar10c,q50,ECE,0.034,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,dropout,cifar10c,q75,ECE,0.174,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,ll_dropout,cifar10c,q25,Brier,0.259,arXiv:1906.02530 Table G.1,"last-layer MC dropout"
+cifar10c_quartile,ovadia_2019,ll_dropout,cifar10c,q50,Brier,0.416,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,ll_dropout,cifar10c,q75,Brier,0.728,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,ll_dropout,cifar10c,q25,ECE,0.069,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,ll_dropout,cifar10c,q50,ECE,0.136,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,ll_dropout,cifar10c,q75,ECE,0.292,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,svi,cifar10c,q25,Brier,0.250,arXiv:1906.02530 Table G.1,"stochastic variational inference"
+cifar10c_quartile,ovadia_2019,svi,cifar10c,q50,Brier,0.363,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,svi,cifar10c,q75,Brier,0.604,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,svi,cifar10c,q25,ECE,0.029,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,svi,cifar10c,q50,ECE,0.064,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,svi,cifar10c,q75,ECE,0.187,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,ll_svi,cifar10c,q25,Brier,0.246,arXiv:1906.02530 Table G.1,"last-layer SVI"
+cifar10c_quartile,ovadia_2019,ll_svi,cifar10c,q50,Brier,0.431,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,ll_svi,cifar10c,q75,Brier,0.732,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,ll_svi,cifar10c,q25,ECE,0.058,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,ll_svi,cifar10c,q50,ECE,0.135,arXiv:1906.02530 Table G.1,
+cifar10c_quartile,ovadia_2019,ll_svi,cifar10c,q75,ECE,0.275,arXiv:1906.02530 Table G.1,
+bald_labels_to_target,kirsch_2019,batchbald,mnist,acc_0.90,labels,90,arXiv:1906.08158 Table 1,"median labels (acquisition size 10) to reach 90% MNIST test accuracy"
+bald_labels_to_target,kirsch_2019,bald_reimpl,mnist,acc_0.90,labels,120,arXiv:1906.08158 Table 1,"median labels for reimplemented BALD (top-k naive); 25th/50th/75th = 120/120/170"
+bald_labels_to_target,kirsch_2019,bald_gal_2017,mnist,acc_0.90,labels,145,arXiv:1906.08158 Table 1,"as reported by Gal et al. 2017 (point estimate)"
+bald_labels_to_target,kirsch_2019,batchbald,mnist,acc_0.95,labels,200,arXiv:1906.08158 Table 1,"median labels to reach 95% MNIST test accuracy; 25th/50th/75th = 190/200/230"
+bald_labels_to_target,kirsch_2019,bald_reimpl,mnist,acc_0.95,labels,250,arXiv:1906.08158 Table 1,"25th/50th = 250/250; 75th = >300"
+bald_labels_to_target,kirsch_2019,bald_gal_2017,mnist,acc_0.95,labels,335,arXiv:1906.08158 Table 1,"as reported by Gal et al. 2017"
+bald_labels_to_target,kirsch_2019,batchbald,cinic10,acc_0.59,labels,1170,arXiv:1906.08158 Section 4,"median labels (transfer-learning setting) to reach 59% CINIC-10 test accuracy"
+bald_labels_to_target,kirsch_2019,bald_median,cinic10,acc_0.59,labels,1330,arXiv:1906.08158 Section 4,"naive BALD median labels to reach the same 59% mark"
