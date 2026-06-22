@@ -64,18 +64,18 @@ const pageList = [
     color: colors.green,
     kicker: "guided story mode",
     title: "phase 2: pixels to bodies",
-    subtitle: "A reviewer can watch the current claim unfold: pixel scenes become object slots, slots become intervention programs, transfer repairs the parse, and executable bodies consume the contract.",
-    thesis: "Phase 2 is the bridge from concerned syntax to viable computational bodies. The guided route shows what is already earned, what each control blocks, and where the next frontier begins: learned object slots, trainable modules, and open-ended program discovery.",
+    subtitle: "A reviewer can watch the current claim unfold: RGB scenes become learned foreground masks, masks become six object slots, slots induce semantic profiles, and transfer gates decide what can become a body contract.",
+    thesis: "Phase 2 is the bridge from concerned syntax to viable computational bodies. The newest evidence removes algorithmic connected components from the accepted 2A path: learned object slots recover scenes at 1.000, induce semantic profiles at 1.000, and preserve the held-out transfer gate. The honest frontier is making 2B consume that newest learned-slot contract.",
     motions: [
-      "Story mode advances a spotlight through the accepted Phase 2 contract, from pixel observations to bounded executable body search.",
-      "Moving packets are evidence: they only cross the next gate when the current representation preserves concern, target binding, useful programs, and transfer.",
-      "Dim paths are controls and open frontiers, so the viewer sees why reward-only, syntax-proxy, and supplied-label shortcuts are not the claim.",
+      "Story mode advances a spotlight from pixels to learned foreground masks to six object slots before semantic-profile induction.",
+      "Moving packets are evidence: they only cross the next gate when slot recovery, profile purity, concern, target binding, useful programs, and transfer all survive.",
+      "Dim paths are controls and open frontiers, so the viewer sees why reward-only, proxy bodies, supplied labels, and connected-component shortcuts are not the final claim.",
     ],
     sources: [
+      { label: "phase 2 start-here", href: `${repoUrl}/docs/phase2_next_phase_research_handoff.md` },
+      { label: "learned slots result", href: `${repoUrl}/experiments/concerned_syntax/results/learned_object_slots_modal_2026_06_22.md` },
       { label: "next breakthrough", href: `${repoUrl}/docs/phase2_next_breakthrough_handoff.md` },
       { label: "trajectory", href: `${repoUrl}/docs/phase2_breakthrough_trajectory.md` },
-      { label: "concerned syntax", href: `${repoUrl}/experiments/concerned_syntax/README.md` },
-      { label: "body search", href: `${repoUrl}/experiments/viable_computational_bodies/README.md` },
     ],
   },
   {
@@ -256,58 +256,67 @@ const programLayers = [
 
 const phase2Steps = [
   {
-    label: "pixel scene",
+    label: "RGB pixel scene",
     short: "pixels",
-    value: "parse-invariant",
+    value: "raw image",
     status: "input",
     color: colors.cyan,
-    story: "The scene starts as pixels and connected components, not a supplied symbolic answer.",
-    detail: "deterministic pixel surface with hidden parse",
+    story: "The scene begins as rendered pixels with a hidden parse; the accepted route does not start from a symbolic answer.",
+    detail: "synthetic RGB surface with hidden binding",
   },
   {
-    label: "object slots",
-    short: "slots",
-    value: "label-free",
+    label: "learned foreground",
+    short: "mask",
+    value: "no CC path",
     status: "learned",
     color: colors.blue,
-    story: "Anonymous components become active profiles through rich-program feedback and action consistency.",
-    detail: "role-token calibration removed from the accepted path",
+    story: "A learned foreground pixel model replaces the old algorithmic connected-component extractor on the accepted path.",
+    detail: "foreground classifier plus slot-local search",
+  },
+  {
+    label: "six learned slots",
+    short: "slots",
+    value: "1.000 recovery",
+    status: "evidence",
+    color: colors.green,
+    story: "The learned mask resolves into six canonical object slots; Modal evidence reports slot and scene recovery at 1.000.",
+    detail: "slot recovery 1.000 / scene recovery 1.000",
+  },
+  {
+    label: "semantic profiles",
+    short: "profiles",
+    value: "purity 1.000",
+    status: "induced",
+    color: colors.violet,
+    story: "Anonymous slots induce semantic profiles from intervention success, bound/unbound utility gaps, and action templates.",
+    detail: "family, pair, action-template metrics 1.000",
   },
   {
     label: "rich intervention program",
     short: "programs",
-    value: "1.00 gate",
+    value: "transfer 1.000",
     status: "mechanism",
     color: colors.amber,
-    story: "The agent chooses program families, target bindings, and useful probes only when concern makes them matter.",
+    story: "The discovered-profile world model preserves the held-out rich-program transfer gate from learned object slots.",
     detail: "observe, move, ablate, and compose families compete",
-  },
-  {
-    label: "transfer repair",
-    short: "transfer",
-    value: "held-out pass",
-    status: "wrap gate",
-    color: colors.green,
-    story: "Held-out role and parse transfer checks that the mechanism is not a surface shortcut.",
-    detail: "repair preserves concern under changed bindings",
   },
   {
     label: "executable body",
     short: "bodies",
-    value: "searched",
-    status: "2B consumes 2A",
-    color: colors.violet,
-    story: "A bounded module-body search consumes the frozen syntax contract while reward-only and proxy bodies fail.",
-    detail: "candidate bodies must pass viability and formal gates",
+    value: "older 2A pass",
+    status: "2B bridge",
+    color: colors.green,
+    story: "Searched executable bodies already consume earlier 2A contracts while reward-only, family-proxy, and target-proxy bodies fail.",
+    detail: "module bodies pass label-free transfer gates",
   },
   {
     label: "next frontier",
     short: "frontier",
-    value: "open",
+    value: "newest 2A -> 2B",
     status: "not overclaimed",
     color: colors.rose,
-    story: "The honest next step is learned object-slot perception, trainable neural module bodies, and program discovery beyond the finite DSL.",
-    detail: "natural images and open-ended apparatus remain ahead",
+    story: "The next honest step is 2B consumption of the learned-object-slot/discovered-profile contract, then trainable modules and less controlled vision.",
+    detail: "not natural-image vision or full slot attention",
   },
 ];
 
@@ -439,6 +448,33 @@ function text(label, x, y, size = 13, color = colors.ink, align = "center", weig
   ctx.fillStyle = color;
   ctx.strokeText(label, safeX, y);
   ctx.fillText(label, safeX, y);
+  ctx.restore();
+}
+
+function wrappedText(label, x, y, maxWidth, lineHeight, size = 12, color = colors.ink, align = "center", weight = "700", maxLines = 2) {
+  if (!state.showLabels) return;
+  ctx.save();
+  ctx.font = `${weight} ${size}px "DejaVu Sans Mono", ui-monospace, monospace`;
+  const words = label.split(/\s+/);
+  const lines = [];
+  let current = "";
+  for (const word of words) {
+    const trial = current ? `${current} ${word}` : word;
+    if (ctx.measureText(trial).width <= maxWidth || !current) {
+      current = trial;
+      continue;
+    }
+    lines.push(current);
+    current = word;
+    if (lines.length === maxLines) break;
+  }
+  if (current && lines.length < maxLines) lines.push(current);
+  if (lines.length === maxLines && words.join(" ").length > lines.join(" ").length) {
+    const last = lines[lines.length - 1];
+    lines[lines.length - 1] = last.length > 4 ? `${last.slice(0, Math.max(1, last.length - 3))}...` : last;
+  }
+  const startY = y - ((lines.length - 1) * lineHeight) / 2;
+  lines.forEach((lineText, index) => text(lineText, x, startY + index * lineHeight, size, color, align, weight));
   ctx.restore();
 }
 
@@ -722,18 +758,18 @@ function drawPhase2() {
   clearCanvas();
   const w = state.width;
   const h = state.height;
-  const p = cycle(state.storyMode ? 24 : 18);
+  const p = cycle(state.storyMode ? 28 : 20);
   const focusIndex = Math.floor(p * phase2Steps.length) % phase2Steps.length;
   const focus = phase2Steps[focusIndex];
 
-  if (w < 620) drawPhase2Mobile(w, h, p, focusIndex);
+  if (w < 760) drawPhase2Mobile(w, h, p, focusIndex);
   else drawPhase2Desktop(w, h, p, focusIndex);
 
-  updatePhase("phase 2 story", `${focus.status}: ${focus.label}`, p);
+  updatePhase("phase 2 bridge", `${focus.status}: ${focus.label}`, p);
   updateMetrics([
-    { label: "accepted 2A contract", value: "rich v2", amount: 1, color: colors.amber },
-    { label: "2B body consumption", value: "searched pass", amount: 0.88, color: colors.violet },
-    { label: "open frontier", value: "object slots", amount: 0.42 + 0.14 * wave(state.elapsed * 0.8), color: colors.rose },
+    { label: "learned slot bridge", value: "1.000 recovery", amount: 1, color: colors.green },
+    { label: "profile transfer gate", value: "1.000 pass", amount: 1, color: colors.amber },
+    { label: "newest 2B link", value: "frontier", amount: 0.42 + 0.14 * wave(state.elapsed * 0.8), color: colors.rose },
   ]);
 }
 
@@ -776,14 +812,55 @@ function drawPhase2Pixels(x, y, width, height, active) {
   }
 }
 
-function drawPhase2Slots(x, y, active) {
-  const labels = ["anchor", "bound", "target"];
+function drawPhase2Mask(x, y, width, height, active) {
+  const cols = 6;
+  const rows = 4;
+  const gap = 2;
+  const cell = Math.min((width - gap * (cols - 1)) / cols, (height - gap * (rows - 1)) / rows);
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const foreground = (row === 1 && col > 0 && col < 5) || (row === 2 && col > 1 && col < 5) || (row === 3 && col === 3);
+      const pulse = active ? wave(state.elapsed * 2.4 + row * 0.8 + col) : 0.30;
+      ctx.fillStyle = foreground ? withAlpha(colors.blue, 0.34 + pulse * 0.48) : "rgba(246,239,228,0.07)";
+      ctx.fillRect(x + col * (cell + gap), y + row * (cell + gap), cell, cell);
+    }
+  }
+  line(x + width * 0.12, y + height + 8, x + width * 0.88, y + height + 8, active ? colors.blue : colors.faint, 4, active ? 0.72 : 0.32);
+}
+
+function drawPhase2Slots(x, y, active, compact = false) {
+  if (compact) {
+    for (let index = 0; index < 6; index++) {
+      const col = index % 3;
+      const row = Math.floor(index / 3);
+      const sx = x - 22 + col * 22;
+      const sy = y - 11 + row * 22;
+      halo(sx, sy, active ? 13 : 9, colors.green, active ? 0.16 : 0.08);
+      dot(sx, sy, active ? 4.4 : 3.2, index % 2 ? colors.green : colors.cyan, 0.88);
+    }
+    return;
+  }
+
+  const labels = ["slot recovery", "scene recovery", "center error"];
   labels.forEach((label, index) => {
     const yy = y + index * 19;
-    const color = phase2Steps[(index + 1) % phase2Steps.length].color;
-    line(x, yy, x + 82 * (active ? 0.72 + 0.20 * wave(state.elapsed + index) : 0.46), yy, color, 7, 0.72);
-    text(label, x + 92, yy, 9, colors.muted, "left", "600");
+    const color = index === 2 ? colors.blue : colors.green;
+    const amount = index === 2 ? 0.42 : 0.96;
+    line(x, yy, x + 88 * (active ? amount + 0.04 * wave(state.elapsed + index) : amount * 0.72), yy, color, 7, 0.72);
+    text(index === 2 ? "err .019" : label.replace(" recovery", " 1.000"), x + 98, yy, 9, colors.muted, "left", "600");
   });
+}
+
+function drawPhase2Profiles(x, y, active, compact = false) {
+  const labels = compact ? ["fam", "pair", "act", "pur"] : ["family", "pair", "action", "purity"];
+  labels.forEach((label, index) => {
+    const angle = -Math.PI / 2 + index * (Math.PI * 2 / labels.length);
+    const px = x + Math.cos(angle) * (compact ? 24 : 32);
+    const py = y + Math.sin(angle) * (compact ? 18 : 24);
+    roundedRect(px - (compact ? 14 : 22), py - 10, compact ? 28 : 44, 20, 6, "rgba(12,15,24,0.86)", active ? colors.violet : "rgba(181,140,255,0.38)");
+    text(label, px, py, compact ? 7 : 8, active ? colors.violet : colors.muted);
+  });
+  dot(x, y, active ? 5 : 3.5, colors.ink, 0.88);
 }
 
 function drawPhase2Program(x, y, active) {
@@ -794,16 +871,27 @@ function drawPhase2Program(x, y, active) {
   });
 }
 
-function drawPhase2Body(x, y, active) {
-  const modules = [
-    [x - 36, y - 20, colors.cyan],
-    [x + 34, y - 20, colors.blue],
-    [x - 22, y + 28, colors.amber],
-    [x + 44, y + 26, colors.green],
-  ];
+function drawPhase2Body(x, y, active, compact = false) {
+  const moduleWidth = compact ? 22 : 40;
+  const moduleHeight = compact ? 15 : 24;
+  const modules = compact
+    ? [
+        [x - 18, y - 11, colors.cyan],
+        [x + 15, y - 11, colors.blue],
+        [x - 10, y + 14, colors.amber],
+        [x + 20, y + 13, colors.green],
+      ]
+    : [
+        [x - 36, y - 20, colors.cyan],
+        [x + 34, y - 20, colors.blue],
+        [x - 22, y + 28, colors.amber],
+        [x + 44, y + 26, colors.green],
+      ];
   modules.forEach(([mx, my, color], index) => {
-    roundedRect(mx - 20, my - 12, 40, 24, 6, "rgba(12,15,24,0.82)", color);
-    dot(mx, my, active ? 3.8 + wave(state.elapsed + index) * 1.8 : 3.2, color, 0.9);
+    const activeRadius = compact ? 2.6 + wave(state.elapsed + index) * 0.9 : 3.8 + wave(state.elapsed + index) * 1.8;
+    const idleRadius = compact ? 2.3 : 3.2;
+    roundedRect(mx - moduleWidth / 2, my - moduleHeight / 2, moduleWidth, moduleHeight, 5, "rgba(12,15,24,0.82)", color);
+    dot(mx, my, active ? activeRadius : idleRadius, color, 0.9);
   });
   for (let i = 0; i < modules.length; i++) {
     const a = modules[i];
@@ -812,28 +900,30 @@ function drawPhase2Body(x, y, active) {
   }
 }
 
-function drawPhase2Glyph(step, x, y, active) {
+function drawPhase2Glyph(step, x, y, active, compact = false) {
   if (step.short === "pixels") {
-    drawPhase2Pixels(x - 42, y - 28, 84, 56, active);
+    drawPhase2Pixels(x - (compact ? 25 : 42), y - (compact ? 18 : 28), compact ? 50 : 84, compact ? 36 : 56, active);
+    return;
+  }
+  if (step.short === "mask") {
+    drawPhase2Mask(x - (compact ? 27 : 42), y - (compact ? 18 : 28), compact ? 54 : 84, compact ? 34 : 54, active);
     return;
   }
   if (step.short === "slots") {
-    drawPhase2Slots(x - 54, y - 19, active);
+    if (compact) drawPhase2Slots(x, y, active, true);
+    else drawPhase2Slots(x - 54, y - 19, active);
+    return;
+  }
+  if (step.short === "profiles") {
+    drawPhase2Profiles(x, y, active, compact);
     return;
   }
   if (step.short === "programs") {
-    drawPhase2Program(x, y - 25, active);
-    return;
-  }
-  if (step.short === "transfer") {
-    line(x - 48, y, x + 48, y, active ? colors.green : colors.faint, 7, active ? 0.82 : 0.36);
-    dot(x - 48, y, 6, colors.cyan, 0.8);
-    dot(x + 48, y, 6, colors.green, 0.8);
-    text("held-out", x, y - 22, 9, colors.green);
+    drawPhase2Program(x, y - (compact ? 20 : 25), active);
     return;
   }
   if (step.short === "bodies") {
-    drawPhase2Body(x, y, active);
+    drawPhase2Body(x, y, active, compact);
     return;
   }
   halo(x, y, active ? 60 : 42, colors.rose, active ? 0.22 : 0.10);
@@ -852,31 +942,33 @@ function phase2PathPoint(nodes, progress) {
 }
 
 function drawPhase2Desktop(w, h, p, focusIndex) {
+  const cardW = clamp(w / (phase2Steps.length + 2.2), 108, 136);
+  const cardH = 112;
   const nodes = phase2Steps.map((step, index) => ({
     step,
     index,
-    x: mix(w * 0.11, w * 0.89, index / (phase2Steps.length - 1)),
+    x: mix(w * 0.08, w * 0.92, index / (phase2Steps.length - 1)),
     y: h * (index % 2 ? 0.57 : 0.37),
   }));
   drawPhase2Field(nodes, focusIndex);
 
-  text(state.storyMode ? "story mode follows the proof" : "map mode keeps every gate visible", w * 0.5, h * 0.08, 14, colors.ink);
+  text(state.storyMode ? "story follows learned slots -> profiles -> transfer" : "map mode keeps every gate visible", w * 0.5, h * 0.08, 14, colors.ink);
   nodes.forEach((node, index) => {
     const active = state.storyMode ? index === focusIndex : true;
     const next = nodes[index + 1];
     if (next) {
-      arrow(node.x + 58, node.y, next.x - 58, next.y, next.step.color, active || index + 1 === focusIndex ? 2.8 : 1.6, active ? 0.72 : 0.34, index % 2 ? -0.05 : 0.05);
+      arrow(node.x + cardW * 0.48, node.y, next.x - cardW * 0.48, next.y, next.step.color, active || index + 1 === focusIndex ? 2.8 : 1.6, active ? 0.72 : 0.34, index % 2 ? -0.05 : 0.05);
       const packet = (p * phase2Steps.length + index * 0.31) % 1;
       if (packet < 1) {
-        dot(mix(node.x + 58, next.x - 58, ease(packet)), mix(node.y, next.y, ease(packet)), active ? 5.5 : 3.5, next.step.color, 0.86);
+        dot(mix(node.x + cardW * 0.48, next.x - cardW * 0.48, ease(packet)), mix(node.y, next.y, ease(packet)), active ? 5.5 : 3.5, next.step.color, 0.86);
       }
     }
 
     halo(node.x, node.y, active ? 88 : 58, node.step.color, active ? 0.23 : 0.10);
-    roundedRect(node.x - 74, node.y - 62, 148, 124, 8, active ? "rgba(12,15,24,0.92)" : "rgba(12,15,24,0.72)", node.step.color);
+    roundedRect(node.x - cardW / 2, node.y - cardH / 2, cardW, cardH, 8, active ? "rgba(12,15,24,0.92)" : "rgba(12,15,24,0.72)", node.step.color);
     drawPhase2Glyph(node.step, node.x, node.y - 7, active);
-    text(node.step.short, node.x, node.y + 38, active ? 12 : 11, colors.ink);
-    text(node.step.value, node.x, node.y + 55, 9, node.step.color);
+    text(node.step.short, node.x, node.y + 34, active ? 11 : 10, colors.ink);
+    text(node.step.value, node.x, node.y + 50, 8, node.step.color);
   });
 
   const controlY = h * 0.80;
@@ -884,10 +976,10 @@ function drawPhase2Desktop(w, h, p, focusIndex) {
   const frontierX = w * 0.87;
   roundedRect(failX - 92, controlY - 32, 184, 64, 8, "rgba(255,143,155,0.05)", "rgba(255,143,155,0.36)");
   text("controls fail", failX, controlY - 8, 12, colors.rose);
-  text("reward-only / proxy / supplied labels", failX, controlY + 13, 9, colors.muted);
+  text("reward / proxy / supplied-label shortcuts", failX, controlY + 13, 9, colors.muted);
   roundedRect(frontierX - 98, controlY - 32, 196, 64, 8, "rgba(111,168,255,0.05)", "rgba(111,168,255,0.38)");
   text("frontier remains", frontierX, controlY - 8, 12, colors.blue);
-  text("learned slots + trainable bodies", frontierX, controlY + 13, 9, colors.muted);
+  text("2B consumes newest slot contract", frontierX, controlY + 13, 9, colors.muted);
   line(failX + 102, controlY, frontierX - 108, controlY, colors.faint, 1.4, 0.34, [5, 9]);
 
   if (state.storyMode) {
@@ -896,14 +988,15 @@ function drawPhase2Desktop(w, h, p, focusIndex) {
     halo(point.x, point.y, 44, point.color, 0.24);
     dot(point.x, point.y, 7, point.color, 0.95);
     roundedRect(w * 0.25, h * 0.86, w * 0.50, h * 0.10, 8, "rgba(8,9,13,0.80)", focus.color);
-    text(focus.story, w * 0.50, h * 0.91, 12, colors.ink);
+    wrappedText(focus.story, w * 0.50, h * 0.91, w * 0.45, 15, 11, colors.ink, "center", "700", 2);
   }
 }
 
 function drawPhase2Mobile(w, h, p, focusIndex) {
-  const top = 52;
+  const top = 44;
   const bottom = h - 92;
   const spineX = w * 0.18;
+  const boxH = h < 380 ? 34 : 40;
   const nodes = phase2Steps.map((step, index) => ({
     step,
     index,
@@ -921,18 +1014,18 @@ function drawPhase2Mobile(w, h, p, focusIndex) {
     halo(node.x, node.y, active ? 44 : 28, node.step.color, active ? 0.22 : 0.10);
     dot(node.x, node.y, active ? 7 : 5, node.step.color, 0.9);
     line(node.x + 10, node.y, boxX - 8, node.y, node.step.color, active ? 2.6 : 1.2, active ? 0.72 : 0.30);
-    roundedRect(boxX, node.y - 25, boxW, 50, 8, active ? "rgba(12,15,24,0.92)" : "rgba(12,15,24,0.74)", node.step.color);
-    text(node.step.short, boxX + boxW * 0.40, node.y - 8, active ? 11 : 10, colors.ink);
-    text(node.step.value, boxX + boxW * 0.40, node.y + 10, 9, node.step.color);
-    drawPhase2Glyph(node.step, boxX + boxW - 34, node.y, active);
+    roundedRect(boxX, node.y - boxH / 2, boxW, boxH, 8, active ? "rgba(12,15,24,0.92)" : "rgba(12,15,24,0.74)", node.step.color);
+    text(node.step.short, boxX + boxW * 0.38, node.y - (boxH > 36 ? 7 : 6), active ? 10 : 9, colors.ink);
+    text(node.step.value, boxX + boxW * 0.38, node.y + (boxH > 36 ? 9 : 7), 8, node.step.color);
+    drawPhase2Glyph(node.step, boxX + boxW - 32, node.y, active, true);
   });
 
   const point = phase2PathPoint(nodes, p);
   dot(point.x, point.y, 4.5, point.color, 0.9);
   const focus = phase2Steps[focusIndex];
-  roundedRect(12, h - 76, w - 24, 58, 8, "rgba(8,9,13,0.82)", focus.color);
-  text(focus.story, w * 0.5, h - 48, 10, colors.ink);
-  text(focus.detail, w * 0.5, h - 28, 9, colors.muted);
+  roundedRect(12, h - 78, w - 24, 60, 8, "rgba(8,9,13,0.82)", focus.color);
+  wrappedText(focus.story, w * 0.5, h - 52, w - 44, 12, 9, colors.ink, "center", "700", 2);
+  text(focus.detail, w * 0.5, h - 32, 8, colors.muted);
 }
 
 const agents = [
