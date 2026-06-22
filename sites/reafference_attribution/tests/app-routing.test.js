@@ -285,6 +285,30 @@ test("phase 2 guide exposes story contract and controls", () => {
   assert.equal(storyButton.attributes.get("aria-label"), "Turn story mode on");
 });
 
+test("story mode changes every visualization route", () => {
+  const expectations = {
+    overview: "weakness",
+    reafference: "efference copy",
+    syntax: "raw scene",
+    bodies: "typed modules",
+    symmetry: "train tie",
+    activation: "read state",
+  };
+
+  for (const [route, storyCue] of Object.entries(expectations)) {
+    const context = makeContext();
+    const { document } = context;
+    context.drawnText.length = 0;
+    context.fireHash(`#${route}`);
+    assert.ok(context.drawnText.includes(storyCue), `${route} should draw its story cue`);
+
+    document.getElementById("story-button").click();
+    context.drawnText.length = 0;
+    context.lastFrame?.(2400);
+    assert.ok(context.drawnText.includes("map mode"), `${route} should draw map mode after story is off`);
+  }
+});
+
 test("reviewer tour advances routes and manual navigation stops it", () => {
   const context = makeContext();
   const { document, window } = context;
