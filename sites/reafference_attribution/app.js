@@ -329,6 +329,46 @@ const phase2Steps = [
   },
 ];
 
+const storyPlans = {
+  overview: programLayers.map(layer => ({
+    label: layer.short,
+    detail: layer.detail,
+    color: layer.color,
+  })),
+  reafference: [
+    { label: "efference copy", detail: "Agents emit self-prediction waves before the field knows what changed.", color: colors.cyan },
+    { label: "world shock", detail: "External causes cross the same sensor field and can masquerade as self-change.", color: colors.amber },
+    { label: "observed dE", detail: "The bright field is the combined observation that must be explained.", color: colors.green },
+    { label: "source credit", detail: "Residual error moves the self/world boundary toward the right cause.", color: colors.violet },
+  ],
+  syntax: [
+    { label: "raw scene", detail: "Observation starts as pixels with many possible compressions.", color: colors.cyan },
+    { label: "semantic slots", detail: "Slots become candidates only after they carry stable structure.", color: colors.cyan },
+    { label: "concern gate", detail: "Concern opens only where a slot changes the target outcome.", color: colors.amber },
+    { label: "program test", detail: "Candidate programs compete by intervention, not by prettier descriptions.", color: colors.violet },
+    { label: "OOD transfer", detail: "The selected syntax counts when it transfers beyond the seen scene.", color: colors.green },
+  ],
+  bodies: [
+    { label: "typed modules", detail: "Sensor, memory, policy, and actuator roles assemble into one organization.", color: colors.cyan },
+    { label: "viability loop", detail: "The module graph becomes body-like only when viability can be read through action.", color: colors.green },
+    { label: "perturbation", detail: "A body claim has to survive damage, not just look organized at rest.", color: colors.rose },
+    { label: "repair gate", detail: "Formal checks decide whether repair closes the loop or merely rewires noise.", color: colors.amber },
+    { label: "recovered body", detail: "The accepted body is the one whose viability recovers after repair.", color: colors.green },
+  ],
+  symmetry: [
+    { label: "train tie", detail: "Shortcut and invariant rules can look equally good on the seen examples.", color: colors.cyan },
+    { label: "transform", detail: "A symmetry transformation exposes which rule carries less arbitrary baggage.", color: colors.violet },
+    { label: "OOD probe", detail: "The out-of-distribution gate separates memorized fit from preserved structure.", color: colors.amber },
+    { label: "weak rule wins", detail: "The weaker compatible rule survives because it respects the transformation.", color: colors.green },
+  ],
+  activation: [
+    { label: "read state", detail: "Layer states supply a geometry, but geometry alone is not yet a mechanism.", color: colors.cyan },
+    { label: "fit probe", detail: "A probe direction becomes interesting only if it is stable across controls.", color: colors.violet },
+    { label: "steer", detail: "Intervention asks whether moving the direction changes behavior.", color: colors.amber },
+    { label: "control check", detail: "Matched nulls must fail before the direction earns causal credit.", color: colors.rose },
+  ],
+};
+
 const clamp = (value, lo, hi) => Math.max(lo, Math.min(hi, value));
 const mix = (a, b, t) => a + (b - a) * t;
 const ease = t => t * t * (3 - 2 * t);
@@ -337,6 +377,14 @@ const cycle = (duration, offset = 0) => ((state.elapsed / duration + offset) % 1
 const phaseLabel = (labels, p) => labels[Math.min(labels.length - 1, Math.floor(p * labels.length))];
 const hasPage = route => Object.prototype.hasOwnProperty.call(pages, route);
 const routeIndex = route => Math.max(0, pageList.findIndex(page => page.route === route));
+const storyActive = (index, focusIndex) => !state.storyMode || index === focusIndex;
+
+function storyState(route, p) {
+  const plan = storyPlans[route] || [];
+  if (!plan.length) return { index: 0, step: null };
+  const index = Math.min(plan.length - 1, Math.floor(clamp(p, 0, 0.999) * plan.length));
+  return { index, step: plan[index] };
+}
 
 function routeFromHash() {
   const route = window.location.hash.replace("#", "");
@@ -489,6 +537,20 @@ function wrappedText(label, x, y, maxWidth, lineHeight, size = 12, color = color
   ctx.restore();
 }
 
+function drawStoryCue(step, x, y, maxWidth, mapDetail) {
+  const compact = state.width < 560;
+  const width = Math.min(maxWidth, state.width - 24);
+  const height = compact ? 58 : 66;
+  const safeY = clamp(y, height / 2 + 12, state.height - height / 2 - 12);
+  const activeStep = state.storyMode && step;
+  const color = activeStep ? step.color : colors.faint;
+  const label = activeStep ? step.label : "map mode";
+  const detail = activeStep ? step.detail : mapDetail;
+  roundedRect(x - width / 2, safeY - height / 2, width, height, 8, "rgba(8,9,13,0.82)", color);
+  text(label, x, safeY - (compact ? 15 : 18), compact ? 10 : 12, activeStep ? color : colors.muted);
+  wrappedText(detail, x, safeY + (compact ? 9 : 12), width - 24, compact ? 11 : 13, compact ? 8 : 10, colors.ink, "center", "700", 2);
+}
+
 function line(fromX, fromY, toX, toY, color, width = 2, alpha = 1, dash = null) {
   ctx.save();
   ctx.globalAlpha = alpha;
@@ -636,14 +698,13 @@ function drawOverview() {
   clearCanvas();
   const w = state.width;
   const h = state.height;
-  const p = cycle(24);
-  const focusIndex = Math.floor(p * programLayers.length) % programLayers.length;
-  const focus = programLayers[focusIndex];
+  const p = cycle(state.storyMode ? 30 : 24);
+  const { index: focusIndex, step } = storyState("overview", p);
 
   if (w < 560) drawProgramMobile(w, h, p, focusIndex);
   else drawProgramDesktop(w, h, p, focusIndex);
 
-  updatePhase("program synthesis", `${focus.status}: ${focus.label}`, p);
+  updatePhase(state.storyMode ? "program story" : "program synthesis", state.storyMode ? step.label : "map mode: all tracks", p);
   updateMetrics([
     { label: "paper corpus", value: "34 papers", amount: 1, color: colors.green },
     { label: "public result notes", value: "117 reports", amount: 0.92, color: colors.cyan },
@@ -709,7 +770,7 @@ function drawProgramDesktop(w, h, p, focusIndex) {
   nodes.forEach(node => {
     const next = nodes[(node.index + 1) % nodes.length];
     const pulse = (p * programLayers.length + node.index * 0.28) % 1;
-    const active = node.index === focusIndex;
+    const active = storyActive(node.index, focusIndex);
     line(node.x, node.y, next.x, next.y, node.layer.color, active ? 3.2 : 1.5, active ? 0.72 : 0.28);
     arrow(node.x, node.y, cx, cy, node.layer.color, active ? 3 : 1.8, active ? 0.82 : 0.34, 0.07);
     dot(mix(node.x, cx, pulse), mix(node.y, cy, pulse), active ? 6 : 4, node.layer.color, 0.92);
@@ -726,6 +787,8 @@ function drawProgramDesktop(w, h, p, focusIndex) {
     const color = programLayers[i % programLayers.length].color;
     dot(cx + Math.cos(a) * rr, cy + Math.sin(a * 1.28) * rr * 0.62, 1.6 + (i % 3), color, 0.36);
   }
+
+  drawStoryCue(storyPlans.overview[focusIndex], cx, h - 96, Math.min(w * 0.72, 680), "All research tracks stay visible so reviewers can compare the program at once.");
 }
 
 function drawProgramMobile(w, h, p, focusIndex) {
@@ -746,7 +809,7 @@ function drawProgramMobile(w, h, p, focusIndex) {
   text("whole program", w * 0.5, 24, 13, colors.ink);
 
   nodes.forEach(node => {
-    const active = node.index === focusIndex;
+    const active = storyActive(node.index, focusIndex);
     const packet = (p * programLayers.length + node.index * 0.23) % 1;
     const next = nodes[Math.min(nodes.length - 1, node.index + 1)];
     if (next !== node) {
@@ -760,9 +823,7 @@ function drawProgramMobile(w, h, p, focusIndex) {
     text(node.layer.value, boxX + boxWidth * 0.5, node.y + 10, 9, node.layer.color);
   });
 
-  const focus = nodes[focusIndex];
-  roundedRect(12, h - 50, w - 24, 34, 8, "rgba(8,9,13,0.78)", focus.layer.color);
-  text(focus.layer.detail, w * 0.5, h - 33, 10, colors.muted);
+  drawStoryCue(storyPlans.overview[focusIndex], w * 0.5, h - 96, w - 24, "All tracks remain live in map mode.");
 }
 
 function drawPhase2() {
@@ -1122,7 +1183,8 @@ function fieldAt(index, basis, p) {
 function drawReafference() {
   const w = state.width;
   const h = state.height;
-  const p = cycle(7);
+  const p = cycle(state.storyMode ? 8.5 : 7);
+  const { index: focusIndex, step } = storyState("reafference", p);
   const compact = Math.min(w, h) < 600;
   const cell = Math.max(8, Math.floor(Math.min(w, h) / 82));
   if (!reafferenceBasis || reafferenceBasis.cell !== cell) {
@@ -1148,9 +1210,10 @@ function drawReafference() {
   agents.forEach((agent, index) => {
     const x = agent.x * w;
     const y = (1 - agent.y) * h;
-    halo(x, y, Math.min(w, h) * (0.08 + 0.035 * wave(state.elapsed * 2 + agent.phase)), "rgb(93,231,239)", 0.22);
+    const active = !state.storyMode || focusIndex === 0 || focusIndex === 2 || focusIndex === 3;
+    halo(x, y, Math.min(w, h) * (0.08 + 0.035 * wave(state.elapsed * 2 + agent.phase)), "rgb(93,231,239)", active ? 0.22 : 0.10);
     dot(x, y, 9, colors.ink);
-    dot(x, y, 4, colors.cyan);
+    dot(x, y, active ? 4 : 3, colors.cyan, active ? 1 : 0.58);
     const sx = x + Math.cos(state.elapsed * 1.8 + agent.phase) * 38;
     const sy = y + Math.sin(state.elapsed * 1.8 + agent.phase) * 26;
     dot(sx, sy, 5, colors.cyan);
@@ -1165,26 +1228,30 @@ function drawReafference() {
     const x = source.x * w;
     const y = (1 - source.y) * h;
     const pulse = (p + index * 0.2) % 1;
-    halo(x, y, 38 + 90 * pulse, "rgb(255,192,103)", 0.24 * (1 - pulse * 0.45));
-    dot(x, y, 7, colors.amber);
+    const active = !state.storyMode || focusIndex === 1 || focusIndex === 2;
+    halo(x, y, 38 + 90 * pulse, "rgb(255,192,103)", (active ? 0.24 : 0.10) * (1 - pulse * 0.45));
+    dot(x, y, active ? 7 : 5, colors.amber, active ? 1 : 0.58);
     if (!compact) text("world shock", x, y - 34, 12, colors.amber);
     agents.forEach(agent => {
       const ax = agent.x * w;
       const ay = (1 - agent.y) * h;
-      arrow(x, y, ax, ay, colors.amber, 1.5, 0.22, 0.08);
-      dot(mix(x, ax, pulse), mix(y, ay, pulse), 4, colors.ink, 0.65);
+      arrow(x, y, ax, ay, colors.amber, 1.5, active ? 0.22 : 0.10, 0.08);
+      dot(mix(x, ax, pulse), mix(y, ay, pulse), 4, colors.ink, active ? 0.65 : 0.30);
     });
   });
 
-  arrow(w * 0.36, h * 0.34, w * 0.61, h * 0.52, colors.violet, 3, 0.65 + 0.3 * wave(state.elapsed * 2.1), 0.16);
+  const errorActive = !state.storyMode || focusIndex === 3;
+  arrow(w * 0.36, h * 0.34, w * 0.61, h * 0.52, colors.violet, 3, (errorActive ? 0.65 : 0.24) + 0.3 * wave(state.elapsed * 2.1), 0.16);
   if (!compact) {
     text("prediction error updates boundary", w * 0.48, h * 0.30, 13, colors.violet);
     text("observed dE", w * 0.67, h * 0.47, 12, colors.ink);
     text("self copy", w * 0.24, h * 0.51, 12, colors.cyan);
   }
 
-  const phaseNames = ["act", "world shock", "observe dE", "assign source"];
-  updatePhase("reafference cycle", phaseLabel(phaseNames, p), p);
+  drawStoryCue(step, w * 0.5, h - 96, compact ? w - 24 : Math.min(w * 0.66, 650), "Self, world, observed energy, and residual error are all visible together.");
+
+  const phaseNames = storyPlans.reafference.map(item => item.label);
+  updatePhase(state.storyMode ? "reafference story" : "reafference cycle", state.storyMode ? step.label : phaseLabel(phaseNames, p), p);
   updateMetrics([
     { label: "self dE", value: `${Math.round((0.46 + wave(p * Math.PI * 2) * 0.46) * 100)}%`, amount: 0.46 + wave(p * Math.PI * 2) * 0.46, color: colors.cyan },
     { label: "world dE", value: `${Math.round((0.24 + wave(p * Math.PI * 2 + 1.5) * 0.58) * 100)}%`, amount: 0.24 + wave(p * Math.PI * 2 + 1.5) * 0.58, color: colors.amber },
@@ -1196,7 +1263,8 @@ function drawSyntax() {
   clearCanvas();
   const w = state.width;
   const h = state.height;
-  const p = cycle(8);
+  const p = cycle(state.storyMode ? 10 : 8);
+  const { index: focusIndex, step } = storyState("syntax", p);
   const left = w * 0.08;
   const top = h * 0.16;
   const grid = Math.min(w, h) * 0.30;
@@ -1217,31 +1285,34 @@ function drawSyntax() {
   const slotYs = [h * 0.24, h * 0.39, h * 0.54, h * 0.69];
   slotYs.forEach((y, index) => {
     const amount = clamp((p - index * 0.08) * 1.7, 0, 1);
-    roundedRect(slotX - 72, y - 22, 144, 44, 8, "rgba(12,15,24,0.86)", index === 1 ? colors.amber : colors.cyan);
-    line(slotX - 58, y + 13, slotX - 58 + 116 * amount, y + 13, index === 1 ? colors.amber : colors.cyan, 5, 0.8);
+    const active = storyActive(index === 1 ? 2 : 1, focusIndex);
+    roundedRect(slotX - 72, y - 22, 144, 44, 8, active ? "rgba(12,15,24,0.88)" : "rgba(12,15,24,0.62)", index === 1 ? colors.amber : colors.cyan);
+    line(slotX - 58, y + 13, slotX - 58 + 116 * amount, y + 13, index === 1 ? colors.amber : colors.cyan, 5, active ? 0.8 : 0.32);
     text(["shape slot", "concern slot", "relation slot", "policy slot"][index], slotX, y - 3, 12, colors.ink);
-    arrow(left + grid + 22, top + grid * (0.24 + index * 0.15), slotX - 76, y, index === 1 ? colors.amber : colors.cyan, 1.7, 0.45, 0.08);
+    arrow(left + grid + 22, top + grid * (0.24 + index * 0.15), slotX - 76, y, index === 1 ? colors.amber : colors.cyan, 1.7, active ? 0.45 : 0.18, 0.08);
   });
 
   const programX = w * 0.70;
   const programY = h * 0.42;
-  roundedRect(programX - 88, programY - 90, 176, 180, 8, "rgba(181,140,255,0.08)", "rgba(181,140,255,0.45)");
+  const programActive = storyActive(3, focusIndex);
+  roundedRect(programX - 88, programY - 90, 176, 180, 8, programActive ? "rgba(181,140,255,0.08)" : "rgba(181,140,255,0.035)", "rgba(181,140,255,0.45)");
   ["if concern", "bind slot", "test cause", "intervene"].forEach((label, index) => {
     const y = programY - 58 + index * 38;
-    text(label, programX, y, 12, index === Math.floor(p * 4) ? colors.violet : colors.muted);
-    if (index < 3) line(programX, y + 12, programX, y + 24, colors.violet, 1.2, 0.42);
+    text(label, programX, y, 12, programActive && index === Math.floor(p * 4) ? colors.violet : colors.muted);
+    if (index < 3) line(programX, y + 12, programX, y + 24, colors.violet, 1.2, programActive ? 0.42 : 0.18);
   });
 
-  slotYs.forEach((y, index) => arrow(slotX + 76, y, programX - 92, programY - 50 + index * 32, index === 1 ? colors.amber : colors.cyan, 1.6, 0.42, -0.05));
+  slotYs.forEach((y, index) => arrow(slotX + 76, y, programX - 92, programY - 50 + index * 32, index === 1 ? colors.amber : colors.cyan, 1.6, programActive ? 0.42 : 0.18, -0.05));
   const targetX = w * 0.88;
   const targetY = h * 0.42;
-  arrow(programX + 92, programY, targetX - 32, targetY, colors.green, 3, 0.72, 0.05);
-  halo(targetX, targetY, 62 + 20 * wave(state.elapsed * 2.5), "rgb(140,226,169)", 0.20);
-  dot(targetX, targetY, 12, colors.green);
+  const transferActive = storyActive(4, focusIndex);
+  arrow(programX + 92, programY, targetX - 32, targetY, colors.green, 3, transferActive ? 0.72 : 0.24, 0.05);
+  halo(targetX, targetY, 62 + 20 * wave(state.elapsed * 2.5), "rgb(140,226,169)", transferActive ? 0.20 : 0.08);
+  dot(targetX, targetY, transferActive ? 12 : 9, colors.green, transferActive ? 1 : 0.58);
   text("OOD transfer", targetX, targetY + 42, 13, colors.green);
-  text("concern gate opens only for causal slots", w * 0.52, h * 0.86, 14, colors.amber);
+  drawStoryCue(step, w * 0.52, h - 96, Math.min(w * 0.76, 720), "Raw scene, slots, gate, program, and transfer remain visible together.");
 
-  updatePhase("syntax loop", phaseLabel(["observe", "slot", "gate", "program", "transfer"], p), p);
+  updatePhase(state.storyMode ? "syntax story" : "syntax loop", state.storyMode ? step.label : phaseLabel(storyPlans.syntax.map(item => item.label), p), p);
   updateMetrics([
     { label: "slot confidence", value: `${Math.round((0.42 + 0.50 * ease(p)) * 100)}%`, amount: 0.42 + 0.50 * ease(p), color: colors.cyan },
     { label: "concern gate", value: p > 0.32 && p < 0.78 ? "open" : "testing", amount: p > 0.32 && p < 0.78 ? 0.86 : 0.36, color: colors.amber },
@@ -1253,7 +1324,8 @@ function drawBodies() {
   clearCanvas();
   const w = state.width;
   const h = state.height;
-  const p = cycle(9);
+  const p = cycle(state.storyMode ? 11 : 9);
+  const { index: focusIndex, step } = storyState("bodies", p);
   const modules = [
     { label: "sensor", color: colors.cyan, x: 0.13, y: 0.22, tx: 0.39, ty: 0.30 },
     { label: "memory", color: colors.blue, x: 0.15, y: 0.47, tx: 0.50, ty: 0.28 },
@@ -1268,9 +1340,10 @@ function drawBodies() {
   text("typed architecture body", w * 0.53, h * 0.15, 14, colors.ink);
 
   modules.forEach(module => {
+    const active = storyActive(0, focusIndex) || storyActive(1, focusIndex) || storyActive(4, focusIndex);
     const x = mix(module.x * w, module.tx * w, dock);
     const y = mix(module.y * h, module.ty * h, dock);
-    roundedRect(x - 54, y - 24, 108, 48, 8, "rgba(12,15,24,0.88)", module.color);
+    roundedRect(x - 54, y - 24, 108, 48, 8, active ? "rgba(12,15,24,0.88)" : "rgba(12,15,24,0.62)", module.color);
     text(module.label, x, y, 12, colors.ink);
   });
 
@@ -1278,14 +1351,15 @@ function drawBodies() {
   for (let i = 0; i < bodyPoints.length; i++) {
     const a = bodyPoints[i];
     const b = bodyPoints[(i + 1) % bodyPoints.length];
-    arrow(a.x, a.y, b.x, b.y, repair > 0.45 ? colors.green : colors.faint, 2.1, 0.5 + repair * 0.35, 0.04);
+    const active = storyActive(1, focusIndex) || storyActive(3, focusIndex) || storyActive(4, focusIndex);
+    arrow(a.x, a.y, b.x, b.y, repair > 0.45 ? colors.green : colors.faint, 2.1, active ? 0.5 + repair * 0.35 : 0.22, 0.04);
   }
 
   if (perturb > 0) {
     for (let i = 0; i < 4; i++) {
       const radius = 40 + i * 34 + perturb * 46;
       ctx.save();
-      ctx.globalAlpha = (1 - i * 0.18) * 0.35;
+      ctx.globalAlpha = (1 - i * 0.18) * (storyActive(2, focusIndex) ? 0.35 : 0.14);
       ctx.strokeStyle = colors.rose;
       ctx.lineWidth = 2;
       ctx.beginPath();
@@ -1293,24 +1367,26 @@ function drawBodies() {
       ctx.stroke();
       ctx.restore();
     }
-    text("perturbation", w * 0.54, h * 0.44, 13, colors.rose);
+    text("perturbation", w * 0.54, h * 0.44, 13, storyActive(2, focusIndex) ? colors.rose : colors.muted);
   }
 
   const gateX = w * 0.82;
   const gateY = h * 0.29;
-  roundedRect(gateX - 72, gateY - 44, 144, 88, 8, "rgba(140,226,169,0.07)", "rgba(140,226,169,0.42)");
+  const gateActive = storyActive(3, focusIndex) || storyActive(4, focusIndex);
+  roundedRect(gateX - 72, gateY - 44, 144, 88, 8, gateActive ? "rgba(140,226,169,0.07)" : "rgba(140,226,169,0.035)", "rgba(140,226,169,0.42)");
   text("formal gate", gateX, gateY - 12, 13, colors.green);
   text(repair > 0.45 ? "passes repair" : "checking types", gateX, gateY + 14, 11, repair > 0.45 ? colors.green : colors.muted);
-  arrow(w * 0.70, h * 0.50, gateX - 76, gateY, colors.green, 2, 0.52, -0.10);
-  arrow(gateX, gateY + 48, w * 0.60, h * 0.70, colors.green, 2.4, repair, -0.18);
+  arrow(w * 0.70, h * 0.50, gateX - 76, gateY, colors.green, 2, gateActive ? 0.52 : 0.18, -0.10);
+  arrow(gateX, gateY + 48, w * 0.60, h * 0.70, colors.green, 2.4, gateActive ? repair : repair * 0.35, -0.18);
 
   const viability = clamp(0.82 - perturb * 0.42 + repair * 0.36, 0, 1);
   roundedRect(w * 0.08, h * 0.84, w * 0.84, 34, 8, "rgba(246,239,228,0.04)", "rgba(246,239,228,0.18)");
   line(w * 0.10, h * 0.84 + 17, w * 0.10 + w * 0.80 * viability, h * 0.84 + 17, viability > 0.70 ? colors.green : colors.amber, 13, 0.9);
   text("viability", w * 0.10, h * 0.81, 13, colors.muted, "left");
   text(`${Math.round(viability * 100)}%`, w * 0.91, h * 0.81, 13, colors.ink, "right");
+  drawStoryCue(step, w * 0.5, h * 0.68, Math.min(w * 0.76, 720), "Modules, perturbation, repair, and viability remain visible together.");
 
-  updatePhase("body loop", phaseLabel(["assemble", "run", "perturb", "repair", "viable"], p), p);
+  updatePhase(state.storyMode ? "body story" : "body loop", state.storyMode ? step.label : phaseLabel(storyPlans.bodies.map(item => item.label), p), p);
   updateMetrics([
     { label: "viability", value: `${Math.round(viability * 100)}%`, amount: viability, color: colors.green },
     { label: "perturbation load", value: `${Math.round(perturb * 100)}%`, amount: perturb, color: colors.rose },
@@ -1322,7 +1398,8 @@ function drawSymmetry() {
   clearCanvas();
   const w = state.width;
   const h = state.height;
-  const p = cycle(8);
+  const p = cycle(state.storyMode ? 10 : 8);
+  const { index: focusIndex, step } = storyState("symmetry", p);
   const cx = w * 0.34;
   const cy = h * 0.50;
   const r = Math.min(w, h) * 0.23;
@@ -1349,31 +1426,35 @@ function drawSymmetry() {
     const trainY = cy + Math.sin(a) * r * scale;
     const testX = cx + Math.cos(a + angle) * r * scale;
     const testY = cy + Math.sin(a + angle) * r * scale;
-    line(trainX, trainY, testX, testY, colors.faint, 1, 0.28);
-    dot(trainX, trainY, 5, colors.cyan, 0.92);
-    dot(testX, testY, 4.5, index % 2 ? colors.amber : colors.green, 0.82);
+    const transformActive = storyActive(1, focusIndex) || storyActive(2, focusIndex);
+    line(trainX, trainY, testX, testY, colors.faint, 1, transformActive ? 0.28 : 0.12);
+    dot(trainX, trainY, 5, colors.cyan, storyActive(0, focusIndex) ? 0.92 : 0.55);
+    dot(testX, testY, 4.5, index % 2 ? colors.amber : colors.green, transformActive ? 0.82 : 0.42);
   });
 
   const ruleX = w * 0.70;
   const weakY = h * 0.34;
   const memY = h * 0.62;
-  roundedRect(ruleX - 104, weakY - 48, 208, 96, 8, "rgba(140,226,169,0.06)", "rgba(140,226,169,0.45)");
-  roundedRect(ruleX - 104, memY - 48, 208, 96, 8, "rgba(255,143,155,0.05)", "rgba(255,143,155,0.42)");
+  const weakActive = storyActive(3, focusIndex) || storyActive(2, focusIndex);
+  const memActive = !state.storyMode || focusIndex < 3;
+  roundedRect(ruleX - 104, weakY - 48, 208, 96, 8, weakActive ? "rgba(140,226,169,0.06)" : "rgba(140,226,169,0.025)", "rgba(140,226,169,0.45)");
+  roundedRect(ruleX - 104, memY - 48, 208, 96, 8, memActive ? "rgba(255,143,155,0.05)" : "rgba(255,143,155,0.025)", "rgba(255,143,155,0.42)");
   text("weak compatible rule", ruleX, weakY - 14, 13, colors.green);
   text("preserves transform", ruleX, weakY + 13, 11, colors.muted);
   text("memorizing rule", ruleX, memY - 14, 13, colors.rose);
   text("fits train only", ruleX, memY + 13, 11, colors.muted);
 
-  arrow(cx + r + 24, cy - 42, ruleX - 108, weakY, colors.green, 2.4, 0.72, -0.06);
-  arrow(cx + r + 24, cy + 42, ruleX - 108, memY, colors.rose, 2.0, 0.46, 0.05);
+  arrow(cx + r + 24, cy - 42, ruleX - 108, weakY, colors.green, 2.4, weakActive ? 0.72 : 0.24, -0.06);
+  arrow(cx + r + 24, cy + 42, ruleX - 108, memY, colors.rose, 2.0, memActive ? 0.46 : 0.18, 0.05);
   const ood = ease(clamp((p - 0.48) / 0.32, 0, 1));
   line(ruleX - 82, weakY + 34, ruleX - 82 + 164 * (0.72 + ood * 0.20), weakY + 34, colors.green, 8, 0.85);
   line(ruleX - 82, memY + 34, ruleX - 82 + 164 * (0.76 - ood * 0.42), memY + 34, colors.rose, 8, 0.85);
   text("OOD gate", ruleX, h * 0.82, 13, colors.amber);
-  arrow(ruleX, memY + 60, ruleX, h * 0.79, colors.amber, 2, 0.46, 0.10);
-  arrow(ruleX, weakY + 60, ruleX, h * 0.79, colors.green, 2.2, 0.62, -0.10);
+  arrow(ruleX, memY + 60, ruleX, h * 0.79, colors.amber, 2, storyActive(2, focusIndex) ? 0.46 : 0.20, 0.10);
+  arrow(ruleX, weakY + 60, ruleX, h * 0.79, colors.green, 2.2, weakActive ? 0.62 : 0.22, -0.10);
+  drawStoryCue(step, w * 0.5, h * 0.68, Math.min(w * 0.74, 690), "Training examples, transformed probes, and competing rules remain visible together.");
 
-  updatePhase("symmetry loop", phaseLabel(["tie on train", "transform", "probe OOD", "weak rule remains"], p), p);
+  updatePhase(state.storyMode ? "symmetry story" : "symmetry loop", state.storyMode ? step.label : phaseLabel(storyPlans.symmetry.map(item => item.label), p), p);
   updateMetrics([
     { label: "invariant preservation", value: `${Math.round((0.70 + ood * 0.22) * 100)}%`, amount: 0.70 + ood * 0.22, color: colors.green },
     { label: "memorizer OOD fit", value: `${Math.round((0.76 - ood * 0.42) * 100)}%`, amount: 0.76 - ood * 0.42, color: colors.rose },
@@ -1385,7 +1466,8 @@ function drawActivation() {
   clearCanvas();
   const w = state.width;
   const h = state.height;
-  const p = cycle(7.5);
+  const p = cycle(state.storyMode ? 9.5 : 7.5);
+  const { index: focusIndex, step } = storyState("activation", p);
   const left = w * 0.10;
   const right = w * 0.78;
   const rows = 7;
@@ -1393,7 +1475,8 @@ function drawActivation() {
   for (let i = 0; i < rows; i++) {
     const y = h * (0.18 + i * 0.10);
     const active = Math.max(0, 1 - Math.abs(i - (1.5 + p * 5)) / 2.2);
-    line(left, y, right, y, active > 0.35 ? colors.cyan : "rgba(246,239,228,0.16)", 4 + active * 7, 0.35 + active * 0.45);
+    const storyAlpha = storyActive(0, focusIndex) || storyActive(1, focusIndex) ? 1 : 0.42;
+    line(left, y, right, y, active > 0.35 ? colors.cyan : "rgba(246,239,228,0.16)", 4 + active * 7, (0.35 + active * 0.45) * storyAlpha);
     text(`layer ${i + 1}`, left - 20, y, 11, colors.muted, "right");
     for (let j = 0; j < 10; j++) {
       const x = mix(left + 22, right - 20, j / 9);
@@ -1405,29 +1488,32 @@ function drawActivation() {
   const probeY = h * 0.48;
   const steerX = w * 0.84;
   const steerY = h * 0.34;
-  roundedRect(probeX - 82, probeY - 46, 164, 92, 8, "rgba(181,140,255,0.07)", "rgba(181,140,255,0.46)");
+  const probeActive = storyActive(1, focusIndex);
+  roundedRect(probeX - 82, probeY - 46, 164, 92, 8, probeActive ? "rgba(181,140,255,0.07)" : "rgba(181,140,255,0.035)", "rgba(181,140,255,0.46)");
   text("probe direction", probeX, probeY - 13, 13, colors.violet);
   text("stable across controls", probeX, probeY + 14, 11, colors.muted);
-  arrow(probeX + 84, probeY, steerX - 46, steerY, colors.amber, 2.8, 0.68, -0.08);
-  roundedRect(steerX - 48, steerY - 42, 96, 84, 8, "rgba(255,192,103,0.08)", "rgba(255,192,103,0.48)");
+  const steerActive = storyActive(2, focusIndex);
+  arrow(probeX + 84, probeY, steerX - 46, steerY, colors.amber, 2.8, steerActive ? 0.68 : 0.26, -0.08);
+  roundedRect(steerX - 48, steerY - 42, 96, 84, 8, steerActive ? "rgba(255,192,103,0.08)" : "rgba(255,192,103,0.035)", "rgba(255,192,103,0.48)");
   text("steer", steerX, steerY - 6, 13, colors.amber);
   text("behavior", steerX, steerY + 19, 11, colors.ink);
 
   const nullX = w * 0.84;
   const nullY = h * 0.68;
-  roundedRect(nullX - 58, nullY - 42, 116, 84, 8, "rgba(255,143,155,0.05)", "rgba(255,143,155,0.42)");
+  const nullActive = storyActive(3, focusIndex);
+  roundedRect(nullX - 58, nullY - 42, 116, 84, 8, nullActive ? "rgba(255,143,155,0.05)" : "rgba(255,143,155,0.025)", "rgba(255,143,155,0.42)");
   text("matched null", nullX, nullY - 8, 13, colors.rose);
   text("should fail", nullX, nullY + 18, 11, colors.muted);
-  arrow(probeX + 84, probeY + 18, nullX - 62, nullY, colors.rose, 2, 0.38, 0.10);
+  arrow(probeX + 84, probeY + 18, nullX - 62, nullY, colors.rose, 2, nullActive ? 0.38 : 0.16, 0.10);
 
   const behaviorProgress = clamp((p - 0.45) / 0.35, 0, 1);
   const behavior = p > 0.45 ? ease(behaviorProgress) : 0.18 + wave(state.elapsed * 1.7) * 0.14;
   const nullScore = 0.22 + wave(state.elapsed * 2.3 + 1.2) * 0.08;
   line(steerX - 30, steerY + 54, steerX - 30 + 62 * behavior, steerY + 54, colors.green, 8, 0.9);
   line(nullX - 35, nullY + 54, nullX - 35 + 70 * nullScore, nullY + 54, colors.rose, 8, 0.85);
-  text("causal only if behavior moves and controls do not", w * 0.50, h * 0.88, 13, colors.green);
+  drawStoryCue(step, w * 0.50, h - 96, Math.min(w * 0.76, 720), "Layer state, probe, steering, and matched null stay visible together.");
 
-  updatePhase("activation loop", phaseLabel(["read state", "fit probe", "steer", "control check"], p), p);
+  updatePhase(state.storyMode ? "activation story" : "activation loop", state.storyMode ? step.label : phaseLabel(storyPlans.activation.map(item => item.label), p), p);
   updateMetrics([
     { label: "probe stability", value: `${Math.round((0.52 + wave(p * Math.PI * 2) * 0.34) * 100)}%`, amount: 0.52 + wave(p * Math.PI * 2) * 0.34, color: colors.violet },
     { label: "behavior shift", value: `${Math.round(behavior * 100)}%`, amount: behavior, color: colors.green },
