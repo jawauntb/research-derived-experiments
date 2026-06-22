@@ -269,10 +269,11 @@ test("phase 2 guide exposes story contract and controls", () => {
   const { document } = context;
   context.fireHash("#phase2");
   const metricValues = document.querySelectorAll(".metric-value").map(node => node.textContent);
-  assert.deepEqual(metricValues, ["rich v2", "searched pass", "object slots"]);
+  assert.deepEqual(metricValues, ["1.000 recovery", "1.000 pass", "frontier"]);
   assert.match(document.getElementById("view-title").textContent, /phase 2: pixels to bodies/);
-  assert.match(document.getElementById("mechanism-thesis").textContent, /learned object slots/);
-  assert.ok(context.drawnText.includes("story mode follows the proof"));
+  assert.match(document.getElementById("mechanism-thesis").textContent, /removes algorithmic connected components/);
+  assert.ok(context.drawnText.includes("story follows learned slots -> profiles -> transfer"));
+  assert.ok(context.drawnText.includes("1.000 recovery"));
 
   const storyButton = document.getElementById("story-button");
   assert.equal(storyButton.textContent, "story on");
