@@ -1,0 +1,946 @@
+const canvas = document.getElementById("atlas-canvas");
+const ctx = canvas.getContext("2d", { alpha: false });
+
+const navEl = document.querySelector(".nav");
+const titleEl = document.getElementById("view-title");
+const kickerEl = document.getElementById("view-kicker");
+const subtitleEl = document.getElementById("view-subtitle");
+const thesisEl = document.getElementById("mechanism-thesis");
+const metricListEl = document.getElementById("metric-list");
+const motionListEl = document.getElementById("motion-list");
+const sourceLinksEl = document.getElementById("source-links");
+const phaseLabelEl = document.getElementById("phase-label");
+const phaseValueEl = document.getElementById("phase-value");
+const phaseFillEl = document.getElementById("phase-fill");
+const cardsEl = document.getElementById("experiment-cards");
+const pauseButton = document.getElementById("pause-button");
+const labelsButton = document.getElementById("labels-button");
+const speedRange = document.getElementById("speed-range");
+
+const rootStyles = getComputedStyle(document.documentElement);
+const cssColor = (name, fallback) => rootStyles.getPropertyValue(name).trim() || fallback;
+const colors = {
+  ink: cssColor("--ink", "#f6efe4"),
+  muted: cssColor("--muted", "rgba(246, 239, 228, 0.66)"),
+  faint: cssColor("--faint", "rgba(246, 239, 228, 0.30)"),
+  cyan: cssColor("--cyan", "#5de7ef"),
+  amber: cssColor("--amber", "#ffc067"),
+  violet: cssColor("--violet", "#b58cff"),
+  green: cssColor("--green", "#8ce2a9"),
+  rose: cssColor("--rose", "#ff8f9b"),
+  blue: cssColor("--blue", "#6fa8ff"),
+  dark: cssColor("--stage", "#070a12"),
+};
+
+const repoUrl = "https://github.com/jawauntb/research-derived-experiments/blob/main";
+
+const pageList = [
+  {
+    route: "overview",
+    nav: "overview",
+    draw: drawOverview,
+    color: colors.blue,
+    kicker: "research program map",
+    title: "experiments as mechanisms, not just results",
+    subtitle: "Each page turns an experiment family into a live causal diagram: what changes, what is measured, and what would count as the mechanism actually doing work.",
+    thesis: "The atlas lets a reader build the intuition before the paper: every animation binds visible motion to a variable, gate, or intervention in the research loop.",
+    motions: [
+      "Experiment families pulse into a shared question: when does geometry become active control?",
+      "Colored paths separate observation, intervention, selection pressure, and evidence.",
+      "The active page preview changes the central mechanism instead of swapping decoration.",
+    ],
+    sources: [{ label: "repo overview", href: `${repoUrl}/README.md` }],
+  },
+  {
+    route: "reafference",
+    nav: "reafference",
+    draw: drawReafference,
+    color: colors.cyan,
+    kicker: "first-order self",
+    title: "self dE plus world dE becomes observed dE",
+    subtitle: "Agents act, world shocks arrive, and the field must assign the same observed energy change to the right source. The violet error path is the attribution update.",
+    thesis: "The first-order self is the part of the sensorimotor field whose changes remain predictable from the agent's own efference copy after world causes are accounted for.",
+    motions: [
+      "Cyan waves are self-caused action copies expanding from agents.",
+      "Amber waves are independent world shocks crossing the same field.",
+      "White brightening marks observed dE, and violet marks the residual prediction error used to update the boundary.",
+    ],
+    sources: [
+      { label: "paper", href: `${repoUrl}/papers/first_order_self/paper.md` },
+      { label: "browser figure", href: `${repoUrl}/papers/first_order_self/figures/fig4_agents_reafference_plasma.html` },
+    ],
+  },
+  {
+    route: "syntax",
+    nav: "syntax",
+    draw: drawSyntax,
+    color: colors.amber,
+    kicker: "concerned syntax",
+    title: "concern selects which structure becomes usable syntax",
+    subtitle: "Raw observations become slots, slots become candidate programs, and concern gates the intervention that actually transfers out of distribution.",
+    thesis: "Syntax is treated as causal constituency under pressure: the useful structure is the one that survives intervention, not the one that merely compresses the scene.",
+    motions: [
+      "Raw pixels stream into semantic slots with confidence bands.",
+      "Concern opens a gate only for slots that alter the target outcome.",
+      "Candidate programs compete; the selected path lights the intervention transfer.",
+    ],
+    sources: [
+      { label: "experiment", href: `${repoUrl}/experiments/concerned_syntax/README.md` },
+      { label: "paper", href: `${repoUrl}/papers/concerned_syntax/paper.md` },
+    ],
+  },
+  {
+    route: "bodies",
+    nav: "bodies",
+    draw: drawBodies,
+    color: colors.green,
+    kicker: "viable computational bodies",
+    title: "modules become a body when viability closes the loop",
+    subtitle: "Typed modules assemble, perturbations hit, and the body repairs itself only when the architecture maintains a viability signal through action.",
+    thesis: "A computational body is not just a graph of modules; it is a typed control organization that keeps enough of itself viable under perturbation.",
+    motions: [
+      "Modules dock into sensor, memory, policy, and actuator roles.",
+      "A perturbation lowers viability and exposes a broken pathway.",
+      "Repair rewires the body through the formal gate, then viability recovers.",
+    ],
+    sources: [
+      { label: "experiment", href: `${repoUrl}/experiments/viable_computational_bodies/README.md` },
+      { label: "paper", href: `${repoUrl}/papers/viable_computational_bodies/paper.md` },
+    ],
+  },
+  {
+    route: "symmetry",
+    nav: "symmetry",
+    draw: drawSymmetry,
+    color: colors.violet,
+    kicker: "weakness and invariance",
+    title: "the weaker symmetry-compatible rule wins out of distribution",
+    subtitle: "Training data underdetermines the answer. The animation shows candidate hypotheses tying in-sample, then separating when a transformation reveals the invariant.",
+    thesis: "Generalization comes from compatible weakness: a rule that respects the symmetry has fewer arbitrary commitments and survives the OOD transformation.",
+    motions: [
+      "Training examples rotate through a latent symmetry group.",
+      "A memorizing rule hugs the seen samples while the weak rule tracks the invariant.",
+      "The OOD probe separates apparent fit from preserved structure.",
+    ],
+    sources: [
+      { label: "experiment", href: `${repoUrl}/experiments/symbolic_weakness/README.md` },
+      { label: "paper", href: `${repoUrl}/papers/weakness_invariance_neurips/paper.md` },
+    ],
+  },
+  {
+    route: "activation",
+    nav: "activation",
+    draw: drawActivation,
+    color: colors.rose,
+    kicker: "activation geometry",
+    title: "interventions test whether a direction is causal or decorative",
+    subtitle: "Layer states form a geometry, probes read candidate directions, and matched controls decide whether steering changes behavior for the right reason.",
+    thesis: "A direction is interesting only when activation-space evidence, behavior, and controls agree that the intervention moves the mechanism rather than a surface correlate.",
+    motions: [
+      "Layer bands carry hidden states toward a candidate direction.",
+      "Probe confidence rises only where the direction is stable across controls.",
+      "Steering arrows either change behavior or fail against matched nulls.",
+    ],
+    sources: [
+      { label: "experiment", href: `${repoUrl}/experiments/activation_geometry/README.md` },
+      { label: "readiness", href: `${repoUrl}/docs/paper_readiness.md` },
+    ],
+  },
+];
+
+const pages = Object.fromEntries(pageList.map(page => [page.route, page]));
+const metricNodes = [];
+let metricSignature = "";
+let phaseSignature = "";
+let frameRequest = 0;
+let routeButtons = [];
+let reafferenceBasis = null;
+
+const state = {
+  route: "overview",
+  paused: false,
+  showLabels: true,
+  speed: 1,
+  elapsed: 0,
+  lastFrame: 0,
+  width: 960,
+  height: 600,
+  dpr: 1,
+  reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+};
+
+const clamp = (value, lo, hi) => Math.max(lo, Math.min(hi, value));
+const mix = (a, b, t) => a + (b - a) * t;
+const ease = t => t * t * (3 - 2 * t);
+const wave = t => 0.5 + 0.5 * Math.sin(t);
+const cycle = (duration, offset = 0) => ((state.elapsed / duration + offset) % 1 + 1) % 1;
+const phaseLabel = (labels, p) => labels[Math.min(labels.length - 1, Math.floor(p * labels.length))];
+const hasPage = route => Object.prototype.hasOwnProperty.call(pages, route);
+
+function routeFromHash() {
+  const route = window.location.hash.replace("#", "");
+  return hasPage(route) ? route : "overview";
+}
+
+function normalizeRoute() {
+  const route = routeFromHash();
+  if (window.location.hash !== `#${route}`) {
+    window.location.hash = route;
+  }
+  return route;
+}
+
+function resizeCanvas() {
+  const rect = canvas.parentElement.getBoundingClientRect();
+  state.width = Math.max(1, Math.floor(rect.width));
+  state.height = Math.max(1, Math.floor(rect.height));
+  state.dpr = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = Math.floor(state.width * state.dpr);
+  canvas.height = Math.floor(state.height * state.dpr);
+  canvas.style.width = `${state.width}px`;
+  canvas.style.height = `${state.height}px`;
+  ctx.setTransform(state.dpr, 0, 0, state.dpr, 0, 0);
+  reafferenceBasis = null;
+  scheduleFrame();
+}
+
+function setRoute(route) {
+  state.route = hasPage(route) ? route : "overview";
+  const page = pages[state.route];
+  kickerEl.textContent = page.kicker;
+  titleEl.textContent = page.title;
+  subtitleEl.textContent = page.subtitle;
+  thesisEl.textContent = page.thesis;
+  motionListEl.replaceChildren(...page.motions.map(text => {
+    const item = document.createElement("li");
+    item.textContent = text;
+    return item;
+  }));
+  sourceLinksEl.replaceChildren(...page.sources.map(source => {
+    const link = document.createElement("a");
+    link.href = source.href;
+    link.textContent = source.label;
+    return link;
+  }));
+
+  routeButtons.forEach(button => {
+    const active = button.dataset.route === state.route;
+    if (active) button.setAttribute("aria-current", "page");
+    else button.removeAttribute("aria-current");
+  });
+  [...cardsEl.children].forEach(card => {
+    const active = card.dataset.route === state.route;
+    if (active) card.setAttribute("aria-current", "page");
+    else card.removeAttribute("aria-current");
+  });
+}
+
+function buildCards() {
+  const cards = pageList.map(page => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "experiment-card";
+    button.dataset.route = page.route;
+    const title = document.createElement("strong");
+    title.textContent = page.nav;
+    const thesis = document.createElement("span");
+    thesis.textContent = page.thesis;
+    button.append(title, thesis);
+    button.addEventListener("click", () => {
+      window.location.hash = page.route;
+    });
+    return button;
+  });
+  cardsEl.replaceChildren(...cards);
+}
+
+function buildNav() {
+  routeButtons = pageList.map(page => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "nav-item";
+    button.dataset.route = page.route;
+    button.textContent = page.nav;
+    button.addEventListener("click", () => {
+      window.location.hash = page.route;
+    });
+    return button;
+  });
+  navEl.replaceChildren(...routeButtons);
+}
+
+function clearCanvas() {
+  ctx.fillStyle = colors.dark;
+  ctx.fillRect(0, 0, state.width, state.height);
+}
+
+function text(label, x, y, size = 13, color = colors.ink, align = "center", weight = "700") {
+  if (!state.showLabels) return;
+  ctx.save();
+  let drawSize = size;
+  ctx.font = `${weight} ${drawSize}px "DejaVu Sans Mono", ui-monospace, monospace`;
+  let width = ctx.measureText(label).width;
+  while (width > state.width - 16 && drawSize > 9) {
+    drawSize -= 1;
+    ctx.font = `${weight} ${drawSize}px "DejaVu Sans Mono", ui-monospace, monospace`;
+    width = ctx.measureText(label).width;
+  }
+  let safeX = x;
+  if (align === "left") safeX = clamp(x, 8, Math.max(8, state.width - width - 8));
+  if (align === "right") safeX = clamp(x, Math.min(state.width - 8, width + 8), state.width - 8);
+  if (align === "center") safeX = clamp(x, Math.min(state.width / 2, width / 2 + 8), Math.max(state.width / 2, state.width - width / 2 - 8));
+  ctx.textAlign = align;
+  ctx.textBaseline = "middle";
+  ctx.lineJoin = "round";
+  ctx.lineWidth = Math.max(3, size * 0.25);
+  ctx.strokeStyle = "rgba(5, 7, 12, 0.78)";
+  ctx.fillStyle = color;
+  ctx.strokeText(label, safeX, y);
+  ctx.fillText(label, safeX, y);
+  ctx.restore();
+}
+
+function line(fromX, fromY, toX, toY, color, width = 2, alpha = 1, dash = null) {
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.strokeStyle = color;
+  ctx.lineWidth = width;
+  ctx.lineCap = "round";
+  if (dash) ctx.setLineDash(dash);
+  ctx.beginPath();
+  ctx.moveTo(fromX, fromY);
+  ctx.lineTo(toX, toY);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function arrow(fromX, fromY, toX, toY, color, width = 2, alpha = 1, bend = 0) {
+  const dx = toX - fromX;
+  const dy = toY - fromY;
+  const angle = Math.atan2(dy, dx);
+  const midX = fromX + dx * 0.5 - dy * bend;
+  const midY = fromY + dy * 0.5 + dx * bend;
+  const head = Math.max(8, width * 4.2);
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.strokeStyle = color;
+  ctx.fillStyle = color;
+  ctx.lineWidth = width;
+  ctx.lineCap = "round";
+  ctx.beginPath();
+  ctx.moveTo(fromX, fromY);
+  ctx.quadraticCurveTo(midX, midY, toX, toY);
+  ctx.stroke();
+  ctx.translate(toX, toY);
+  ctx.rotate(angle);
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(-head, -head * 0.44);
+  ctx.lineTo(-head * 0.62, 0);
+  ctx.lineTo(-head, head * 0.44);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
+function dot(x, y, radius, color, alpha = 1) {
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
+function withAlpha(color, alpha) {
+  if (color.startsWith("#") && color.length === 7) {
+    const r = Number.parseInt(color.slice(1, 3), 16);
+    const g = Number.parseInt(color.slice(3, 5), 16);
+    const b = Number.parseInt(color.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+  if (color.startsWith("rgb(")) {
+    return color.replace("rgb(", "rgba(").replace(")", `, ${alpha})`);
+  }
+  return color;
+}
+
+function halo(x, y, radius, color, alpha = 0.28) {
+  const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
+  gradient.addColorStop(0, withAlpha(color, alpha));
+  gradient.addColorStop(1, withAlpha(color, 0));
+  ctx.fillStyle = gradient;
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function roundedRect(x, y, width, height, radius, fill, stroke = "rgba(246,239,228,0.18)") {
+  ctx.save();
+  ctx.fillStyle = fill;
+  ctx.strokeStyle = stroke;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.roundRect(x, y, width, height, radius);
+  ctx.fill();
+  ctx.stroke();
+  ctx.restore();
+}
+
+function metricColor(name) {
+  if (/self|slot|probe|weak|viability/i.test(name)) return colors.cyan;
+  if (/world|concern|repair|steer/i.test(name)) return colors.amber;
+  if (/error|perturb|ood|null/i.test(name)) return colors.violet;
+  if (/observed|transfer|invariant|behavior/i.test(name)) return colors.green;
+  return colors.blue;
+}
+
+function updateMetrics(metrics) {
+  const nextSignature = metrics.map(metric => metric.label).join("|");
+  if (nextSignature !== metricSignature) {
+    metricSignature = nextSignature;
+    metricNodes.length = 0;
+    metricListEl.replaceChildren(...metrics.map(metric => {
+      const row = document.createElement("div");
+      const labelRow = document.createElement("div");
+      const label = document.createElement("span");
+      const value = document.createElement("span");
+      const meter = document.createElement("div");
+      const fill = document.createElement("span");
+
+      row.className = "metric";
+      labelRow.className = "metric-row";
+      value.className = "metric-value";
+      label.textContent = metric.label;
+      meter.className = "meter";
+      meter.append(fill);
+      labelRow.append(label, value);
+      row.append(labelRow, meter);
+      metricNodes.push({ fill, value });
+      return row;
+    }));
+  }
+
+  metrics.forEach((metric, index) => {
+    const node = metricNodes[index];
+    if (!node) return;
+    const color = metric.color || metricColor(metric.label);
+    const width = `${clamp(metric.amount, 0, 1) * 100}%`;
+    if (node.value.textContent !== metric.value) node.value.textContent = metric.value;
+    if (node.fill.style.width !== width) node.fill.style.width = width;
+    if (node.fill.style.background !== color) node.fill.style.background = color;
+  });
+}
+
+function updatePhase(label, value, amount) {
+  const width = `${clamp(amount, 0, 1) * 100}%`;
+  const nextSignature = `${label}|${value}|${width}`;
+  if (nextSignature === phaseSignature) return;
+  phaseSignature = nextSignature;
+  phaseLabelEl.textContent = label;
+  phaseValueEl.textContent = value;
+  phaseFillEl.style.width = width;
+}
+
+function drawOverview() {
+  clearCanvas();
+  const w = state.width;
+  const h = state.height;
+  const cx = w * 0.5;
+  const cy = h * 0.52;
+  const p = cycle(18);
+  const radius = Math.min(w, h) * 0.31;
+  const nodes = pageList.slice(1).map((page, index) => {
+    const angle = -Math.PI / 2 + index * (Math.PI * 2 / 5) + Math.sin(state.elapsed * 0.15) * 0.08;
+    return {
+      page,
+      x: cx + Math.cos(angle) * radius,
+      y: cy + Math.sin(angle) * radius * 0.78,
+      color: page.color,
+      index,
+    };
+  });
+
+  roundedRect(cx - w * 0.18, cy - h * 0.12, w * 0.36, h * 0.24, 8, "rgba(246,239,228,0.045)", "rgba(246,239,228,0.22)");
+  text("active geometry", cx, cy - 28, 18, colors.ink);
+  text("observation -> intervention -> evidence", cx, cy + 8, 13, colors.muted);
+  text("mechanism earns the picture", cx, cy + 38, 13, colors.green);
+
+  nodes.forEach(node => {
+    const pulse = (p + node.index / nodes.length) % 1;
+    arrow(node.x, node.y, cx, cy, node.color, 2.2, 0.42 + 0.35 * Math.sin(pulse * Math.PI), 0.08);
+    dot(mix(node.x, cx, pulse), mix(node.y, cy, pulse), 4.5, node.color, 0.85);
+    halo(node.x, node.y, 62 + 18 * wave(state.elapsed * 1.2 + node.index), node.color, 0.16);
+    roundedRect(node.x - 78, node.y - 28, 156, 56, 8, "rgba(12,15,24,0.82)", node.color);
+    text(node.page.nav, node.x, node.y - 6, 14, colors.ink);
+    text(node.page.route === "reafference" ? "source assignment" : node.page.kicker, node.x, node.y + 14, 10, node.color);
+  });
+
+  for (let i = 0; i < 18; i++) {
+    const a = i * 0.74 + state.elapsed * 0.24;
+    const rr = radius * (0.32 + (i % 5) * 0.11);
+    dot(cx + Math.cos(a) * rr, cy + Math.sin(a * 1.35) * rr * 0.54, 1.6, colors.faint, 0.5);
+  }
+
+  updatePhase("atlas loop", "families feed one mechanism question", p);
+  updateMetrics([
+    { label: "visualized families", value: "5 live views", amount: 1, color: colors.green },
+    { label: "mechanism binding", value: "labels tied to variables", amount: 0.86, color: colors.cyan },
+    { label: "decorative plasma", value: "kept out", amount: 0.08, color: colors.rose },
+  ]);
+}
+
+const agents = [
+  { name: "agent A", x: 0.28, y: 0.38, phase: 0.05 },
+  { name: "agent B", x: 0.66, y: 0.58, phase: 1.9 },
+  { name: "agent C", x: 0.78, y: 0.28, phase: 3.2 },
+];
+
+const worldSources = [
+  { x: 0.14, y: 0.78, phase: 2.4 },
+  { x: 0.88, y: 0.76, phase: 5.3 },
+];
+
+function buildReafferenceBasis(cell) {
+  const cols = Math.ceil(state.width / cell);
+  const rows = Math.ceil(state.height / cell);
+  const count = cols * rows;
+  const basis = {
+    cell,
+    cols,
+    rows,
+    xs: new Float32Array(count),
+    ys: new Float32Array(count),
+    selfBase: new Float32Array(count),
+    worldBase: new Float32Array(count),
+    observedBase: new Float32Array(count),
+    agentDistances: agents.map(() => new Float32Array(count)),
+    sourceDistances: worldSources.map(() => new Float32Array(count)),
+  };
+
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const index = row * cols + col;
+      const nx = (col * cell + cell / 2) / state.width;
+      const ny = 1 - (row * cell + cell / 2) / state.height;
+      basis.xs[index] = col * cell;
+      basis.ys[index] = row * cell;
+
+      agents.forEach((agent, agentIndex) => {
+        const d = Math.hypot(nx - agent.x, ny - agent.y);
+        basis.agentDistances[agentIndex][index] = d;
+        basis.selfBase[index] += Math.exp(-(d * d) / 0.026) * 0.48;
+        basis.observedBase[index] += Math.exp(-(d * d) / 0.006) * 0.34;
+      });
+
+      worldSources.forEach((source, sourceIndex) => {
+        const d = Math.hypot(nx - source.x, ny - source.y);
+        basis.sourceDistances[sourceIndex][index] = d;
+        basis.worldBase[index] += Math.exp(-(d * d) / 0.028) * 0.46;
+      });
+    }
+  }
+
+  return basis;
+}
+
+function fieldAt(index, basis, p) {
+  let self = basis.selfBase[index];
+  let world = basis.worldBase[index];
+  let observed = basis.observedBase[index];
+  const nx = (basis.xs[index] + basis.cell / 2) / state.width;
+  const ny = 1 - (basis.ys[index] + basis.cell / 2) / state.height;
+  const selfRadius = 0.04 + 0.42 * p;
+  const worldRadius = 0.03 + 0.58 * ((p + 0.28) % 1);
+
+  basis.agentDistances.forEach(distances => {
+    const d = distances[index];
+    self += Math.exp(-((d - selfRadius) ** 2) / 0.0014) * (p < 0.45 ? 1.1 : 0.4);
+  });
+
+  basis.sourceDistances.forEach(distances => {
+    const d = distances[index];
+    world += Math.exp(-((d - worldRadius) ** 2) / 0.0018) * (p > 0.18 && p < 0.72 ? 1.22 : 0.25);
+  });
+
+  observed += Math.min(1.2, self * 0.72 + world * 0.76) * (p > 0.38 ? 0.7 : 0.42);
+  const errorWave = (ny - 0.44) - 0.12 * Math.sin(nx * 8.2 + p * 6.2);
+  const error = Math.exp(-(errorWave * errorWave) / 0.0022) * (p > 0.63 ? 0.86 : 0.18);
+
+  return { self: clamp(self, 0, 1), world: clamp(world, 0, 1), observed: clamp(observed, 0, 1), error: clamp(error, 0, 1) };
+}
+
+function drawReafference() {
+  const w = state.width;
+  const h = state.height;
+  const p = cycle(7);
+  const cell = Math.max(8, Math.floor(Math.min(w, h) / 82));
+  if (!reafferenceBasis || reafferenceBasis.cell !== cell) {
+    reafferenceBasis = buildReafferenceBasis(cell);
+  }
+  clearCanvas();
+
+  for (let row = 0; row < reafferenceBasis.rows; row++) {
+    for (let col = 0; col < reafferenceBasis.cols; col++) {
+      const index = row * reafferenceBasis.cols + col;
+      const x = reafferenceBasis.xs[index];
+      const y = reafferenceBasis.ys[index];
+      const f = fieldAt(index, reafferenceBasis, p);
+      const texture = 0.90 + 0.10 * Math.sin(x * 0.034 + y * 0.027 + state.elapsed);
+      const r = clamp(7 + f.world * 178 + f.observed * 176 + f.error * 118, 0, 255) * texture;
+      const g = clamp(12 + f.self * 210 + f.world * 104 + f.observed * 192 + f.error * 68, 0, 255) * texture;
+      const b = clamp(30 + f.self * 220 + f.observed * 172 + f.error * 230, 0, 255) * texture;
+      ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+      ctx.fillRect(x, y, cell + 1, cell + 1);
+    }
+  }
+
+  agents.forEach((agent, index) => {
+    const x = agent.x * w;
+    const y = (1 - agent.y) * h;
+    halo(x, y, Math.min(w, h) * (0.08 + 0.035 * wave(state.elapsed * 2 + agent.phase)), "rgb(93,231,239)", 0.22);
+    dot(x, y, 9, colors.ink);
+    dot(x, y, 4, colors.cyan);
+    const sx = x + Math.cos(state.elapsed * 1.8 + agent.phase) * 38;
+    const sy = y + Math.sin(state.elapsed * 1.8 + agent.phase) * 26;
+    dot(sx, sy, 5, colors.cyan);
+    arrow(x - 48, y + 8, x + 52, y - 8, colors.cyan, 2.2, 0.8, -0.08);
+    arrow(x + 48, y - 12, x - 44, y + 14, colors.ink, 1.6, 0.58, -0.05);
+    text(agent.name, index === 0 ? x + 82 : x, index === 0 ? y - 62 : y + 44, 13, colors.ink, index === 0 ? "left" : "center");
+  });
+
+  worldSources.forEach((source, index) => {
+    const x = source.x * w;
+    const y = (1 - source.y) * h;
+    const pulse = (p + index * 0.2) % 1;
+    halo(x, y, 38 + 90 * pulse, "rgb(255,192,103)", 0.24 * (1 - pulse * 0.45));
+    dot(x, y, 7, colors.amber);
+    text("world shock", x, y - 34, 12, colors.amber);
+    agents.forEach(agent => {
+      const ax = agent.x * w;
+      const ay = (1 - agent.y) * h;
+      arrow(x, y, ax, ay, colors.amber, 1.5, 0.22, 0.08);
+      dot(mix(x, ax, pulse), mix(y, ay, pulse), 4, colors.ink, 0.65);
+    });
+  });
+
+  arrow(w * 0.36, h * 0.34, w * 0.61, h * 0.52, colors.violet, 3, 0.65 + 0.3 * wave(state.elapsed * 2.1), 0.16);
+  text("prediction error updates boundary", w * 0.48, h * 0.30, 13, colors.violet);
+  text("observed dE", w * 0.67, h * 0.47, 12, colors.ink);
+  text("self copy", w * 0.24, h * 0.51, 12, colors.cyan);
+
+  const phaseNames = ["act", "world shock", "observe dE", "assign source"];
+  updatePhase("reafference cycle", phaseLabel(phaseNames, p), p);
+  updateMetrics([
+    { label: "self dE", value: `${Math.round((0.46 + wave(p * Math.PI * 2) * 0.46) * 100)}%`, amount: 0.46 + wave(p * Math.PI * 2) * 0.46, color: colors.cyan },
+    { label: "world dE", value: `${Math.round((0.24 + wave(p * Math.PI * 2 + 1.5) * 0.58) * 100)}%`, amount: 0.24 + wave(p * Math.PI * 2 + 1.5) * 0.58, color: colors.amber },
+    { label: "prediction error", value: `${Math.round((p > 0.62 ? 0.78 : 0.28) * 100)}%`, amount: p > 0.62 ? 0.78 : 0.28, color: colors.violet },
+  ]);
+}
+
+function drawSyntax() {
+  clearCanvas();
+  const w = state.width;
+  const h = state.height;
+  const p = cycle(8);
+  const left = w * 0.08;
+  const top = h * 0.16;
+  const grid = Math.min(w, h) * 0.30;
+  const cell = grid / 6;
+
+  roundedRect(left - 18, top - 18, grid + 36, grid + 36, 8, "rgba(246,239,228,0.04)", "rgba(246,239,228,0.20)");
+  for (let row = 0; row < 6; row++) {
+    for (let col = 0; col < 6; col++) {
+      const active = (row === 1 && col > 1 && col < 5) || (col === 2 && row > 1 && row < 5) || (row === 4 && col === 4);
+      const concern = active && wave(state.elapsed * 2 + row + col) > 0.34;
+      ctx.fillStyle = concern ? colors.amber : active ? "rgba(93,231,239,0.55)" : "rgba(246,239,228,0.08)";
+      ctx.fillRect(left + col * cell + 2, top + row * cell + 2, cell - 4, cell - 4);
+    }
+  }
+  text("raw scene", left + grid * 0.5, top - 36, 13, colors.muted);
+
+  const slotX = w * 0.44;
+  const slotYs = [h * 0.24, h * 0.39, h * 0.54, h * 0.69];
+  slotYs.forEach((y, index) => {
+    const amount = clamp((p - index * 0.08) * 1.7, 0, 1);
+    roundedRect(slotX - 72, y - 22, 144, 44, 8, "rgba(12,15,24,0.86)", index === 1 ? colors.amber : colors.cyan);
+    line(slotX - 58, y + 13, slotX - 58 + 116 * amount, y + 13, index === 1 ? colors.amber : colors.cyan, 5, 0.8);
+    text(["shape slot", "concern slot", "relation slot", "policy slot"][index], slotX, y - 3, 12, colors.ink);
+    arrow(left + grid + 22, top + grid * (0.24 + index * 0.15), slotX - 76, y, index === 1 ? colors.amber : colors.cyan, 1.7, 0.45, 0.08);
+  });
+
+  const programX = w * 0.70;
+  const programY = h * 0.42;
+  roundedRect(programX - 88, programY - 90, 176, 180, 8, "rgba(181,140,255,0.08)", "rgba(181,140,255,0.45)");
+  ["if concern", "bind slot", "test cause", "intervene"].forEach((label, index) => {
+    const y = programY - 58 + index * 38;
+    text(label, programX, y, 12, index === Math.floor(p * 4) ? colors.violet : colors.muted);
+    if (index < 3) line(programX, y + 12, programX, y + 24, colors.violet, 1.2, 0.42);
+  });
+
+  slotYs.forEach((y, index) => arrow(slotX + 76, y, programX - 92, programY - 50 + index * 32, index === 1 ? colors.amber : colors.cyan, 1.6, 0.42, -0.05));
+  const targetX = w * 0.88;
+  const targetY = h * 0.42;
+  arrow(programX + 92, programY, targetX - 32, targetY, colors.green, 3, 0.72, 0.05);
+  halo(targetX, targetY, 62 + 20 * wave(state.elapsed * 2.5), "rgb(140,226,169)", 0.20);
+  dot(targetX, targetY, 12, colors.green);
+  text("OOD transfer", targetX, targetY + 42, 13, colors.green);
+  text("concern gate opens only for causal slots", w * 0.52, h * 0.86, 14, colors.amber);
+
+  updatePhase("syntax loop", phaseLabel(["observe", "slot", "gate", "program", "transfer"], p), p);
+  updateMetrics([
+    { label: "slot confidence", value: `${Math.round((0.42 + 0.50 * ease(p)) * 100)}%`, amount: 0.42 + 0.50 * ease(p), color: colors.cyan },
+    { label: "concern gate", value: p > 0.32 && p < 0.78 ? "open" : "testing", amount: p > 0.32 && p < 0.78 ? 0.86 : 0.36, color: colors.amber },
+    { label: "transfer signal", value: `${Math.round((p > 0.58 ? 0.80 : 0.28) * 100)}%`, amount: p > 0.58 ? 0.80 : 0.28, color: colors.green },
+  ]);
+}
+
+function drawBodies() {
+  clearCanvas();
+  const w = state.width;
+  const h = state.height;
+  const p = cycle(9);
+  const modules = [
+    { label: "sensor", color: colors.cyan, x: 0.13, y: 0.22, tx: 0.39, ty: 0.30 },
+    { label: "memory", color: colors.blue, x: 0.15, y: 0.47, tx: 0.50, ty: 0.28 },
+    { label: "policy", color: colors.violet, x: 0.13, y: 0.72, tx: 0.53, ty: 0.55 },
+    { label: "actuator", color: colors.amber, x: 0.84, y: 0.72, tx: 0.66, ty: 0.68 },
+  ];
+  const dock = ease(clamp(p * 1.8, 0, 1));
+  const perturb = p > 0.42 && p < 0.66 ? Math.sin(((p - 0.42) / 0.24) * Math.PI) : 0;
+  const repair = p > 0.60 ? ease((p - 0.60) / 0.40) : 0;
+
+  roundedRect(w * 0.31, h * 0.18, w * 0.44, h * 0.60, 8, "rgba(246,239,228,0.035)", "rgba(246,239,228,0.20)");
+  text("typed architecture body", w * 0.53, h * 0.15, 14, colors.ink);
+
+  modules.forEach(module => {
+    const x = mix(module.x * w, module.tx * w, dock);
+    const y = mix(module.y * h, module.ty * h, dock);
+    roundedRect(x - 54, y - 24, 108, 48, 8, "rgba(12,15,24,0.88)", module.color);
+    text(module.label, x, y, 12, colors.ink);
+  });
+
+  const bodyPoints = modules.map(module => ({ x: mix(module.x * w, module.tx * w, dock), y: mix(module.y * h, module.ty * h, dock), color: module.color }));
+  for (let i = 0; i < bodyPoints.length; i++) {
+    const a = bodyPoints[i];
+    const b = bodyPoints[(i + 1) % bodyPoints.length];
+    arrow(a.x, a.y, b.x, b.y, repair > 0.45 ? colors.green : colors.faint, 2.1, 0.5 + repair * 0.35, 0.04);
+  }
+
+  if (perturb > 0) {
+    for (let i = 0; i < 4; i++) {
+      const radius = 40 + i * 34 + perturb * 46;
+      ctx.save();
+      ctx.globalAlpha = (1 - i * 0.18) * 0.35;
+      ctx.strokeStyle = colors.rose;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(w * 0.54, h * 0.46, radius, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
+    text("perturbation", w * 0.54, h * 0.44, 13, colors.rose);
+  }
+
+  const gateX = w * 0.82;
+  const gateY = h * 0.29;
+  roundedRect(gateX - 72, gateY - 44, 144, 88, 8, "rgba(140,226,169,0.07)", "rgba(140,226,169,0.42)");
+  text("formal gate", gateX, gateY - 12, 13, colors.green);
+  text(repair > 0.45 ? "passes repair" : "checking types", gateX, gateY + 14, 11, repair > 0.45 ? colors.green : colors.muted);
+  arrow(w * 0.70, h * 0.50, gateX - 76, gateY, colors.green, 2, 0.52, -0.10);
+  arrow(gateX, gateY + 48, w * 0.60, h * 0.70, colors.green, 2.4, repair, -0.18);
+
+  const viability = clamp(0.82 - perturb * 0.42 + repair * 0.36, 0, 1);
+  roundedRect(w * 0.08, h * 0.84, w * 0.84, 34, 8, "rgba(246,239,228,0.04)", "rgba(246,239,228,0.18)");
+  line(w * 0.10, h * 0.84 + 17, w * 0.10 + w * 0.80 * viability, h * 0.84 + 17, viability > 0.70 ? colors.green : colors.amber, 13, 0.9);
+  text("viability", w * 0.10, h * 0.81, 13, colors.muted, "left");
+  text(`${Math.round(viability * 100)}%`, w * 0.91, h * 0.81, 13, colors.ink, "right");
+
+  updatePhase("body loop", phaseLabel(["assemble", "run", "perturb", "repair", "viable"], p), p);
+  updateMetrics([
+    { label: "viability", value: `${Math.round(viability * 100)}%`, amount: viability, color: colors.green },
+    { label: "perturbation load", value: `${Math.round(perturb * 100)}%`, amount: perturb, color: colors.rose },
+    { label: "repair closure", value: `${Math.round(repair * 100)}%`, amount: repair, color: colors.amber },
+  ]);
+}
+
+function drawSymmetry() {
+  clearCanvas();
+  const w = state.width;
+  const h = state.height;
+  const p = cycle(8);
+  const cx = w * 0.34;
+  const cy = h * 0.50;
+  const r = Math.min(w, h) * 0.23;
+  const angle = p * Math.PI * 2;
+
+  ctx.save();
+  ctx.strokeStyle = "rgba(246,239,228,0.18)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.restore();
+  text("latent symmetry group", cx, cy - r - 30, 13, colors.muted);
+
+  const base = [
+    [0.00, 0.72],
+    [1.26, 0.62],
+    [2.51, 0.86],
+    [3.77, 0.54],
+    [5.03, 0.80],
+  ];
+  base.forEach(([a, scale], index) => {
+    const trainX = cx + Math.cos(a) * r * scale;
+    const trainY = cy + Math.sin(a) * r * scale;
+    const testX = cx + Math.cos(a + angle) * r * scale;
+    const testY = cy + Math.sin(a + angle) * r * scale;
+    line(trainX, trainY, testX, testY, colors.faint, 1, 0.28);
+    dot(trainX, trainY, 5, colors.cyan, 0.92);
+    dot(testX, testY, 4.5, index % 2 ? colors.amber : colors.green, 0.82);
+  });
+
+  const ruleX = w * 0.70;
+  const weakY = h * 0.34;
+  const memY = h * 0.62;
+  roundedRect(ruleX - 104, weakY - 48, 208, 96, 8, "rgba(140,226,169,0.06)", "rgba(140,226,169,0.45)");
+  roundedRect(ruleX - 104, memY - 48, 208, 96, 8, "rgba(255,143,155,0.05)", "rgba(255,143,155,0.42)");
+  text("weak compatible rule", ruleX, weakY - 14, 13, colors.green);
+  text("preserves transform", ruleX, weakY + 13, 11, colors.muted);
+  text("memorizing rule", ruleX, memY - 14, 13, colors.rose);
+  text("fits train only", ruleX, memY + 13, 11, colors.muted);
+
+  arrow(cx + r + 24, cy - 42, ruleX - 108, weakY, colors.green, 2.4, 0.72, -0.06);
+  arrow(cx + r + 24, cy + 42, ruleX - 108, memY, colors.rose, 2.0, 0.46, 0.05);
+  const ood = ease(clamp((p - 0.48) / 0.32, 0, 1));
+  line(ruleX - 82, weakY + 34, ruleX - 82 + 164 * (0.72 + ood * 0.20), weakY + 34, colors.green, 8, 0.85);
+  line(ruleX - 82, memY + 34, ruleX - 82 + 164 * (0.76 - ood * 0.42), memY + 34, colors.rose, 8, 0.85);
+  text("OOD gate", ruleX, h * 0.82, 13, colors.amber);
+  arrow(ruleX, memY + 60, ruleX, h * 0.79, colors.amber, 2, 0.46, 0.10);
+  arrow(ruleX, weakY + 60, ruleX, h * 0.79, colors.green, 2.2, 0.62, -0.10);
+
+  updatePhase("symmetry loop", phaseLabel(["tie on train", "transform", "probe OOD", "weak rule remains"], p), p);
+  updateMetrics([
+    { label: "invariant preservation", value: `${Math.round((0.70 + ood * 0.22) * 100)}%`, amount: 0.70 + ood * 0.22, color: colors.green },
+    { label: "memorizer OOD fit", value: `${Math.round((0.76 - ood * 0.42) * 100)}%`, amount: 0.76 - ood * 0.42, color: colors.rose },
+    { label: "symmetry pressure", value: `${Math.round((0.46 + wave(angle) * 0.44) * 100)}%`, amount: 0.46 + wave(angle) * 0.44, color: colors.violet },
+  ]);
+}
+
+function drawActivation() {
+  clearCanvas();
+  const w = state.width;
+  const h = state.height;
+  const p = cycle(7.5);
+  const left = w * 0.10;
+  const right = w * 0.78;
+  const rows = 7;
+
+  for (let i = 0; i < rows; i++) {
+    const y = h * (0.18 + i * 0.10);
+    const active = Math.max(0, 1 - Math.abs(i - (1.5 + p * 5)) / 2.2);
+    line(left, y, right, y, active > 0.35 ? colors.cyan : "rgba(246,239,228,0.16)", 4 + active * 7, 0.35 + active * 0.45);
+    text(`layer ${i + 1}`, left - 20, y, 11, colors.muted, "right");
+    for (let j = 0; j < 10; j++) {
+      const x = mix(left + 22, right - 20, j / 9);
+      dot(x, y + Math.sin(state.elapsed * 1.1 + j + i) * 8 * active, 2.2 + active * 2.2, active > 0.45 ? colors.cyan : colors.faint, 0.7);
+    }
+  }
+
+  const probeX = w * 0.45;
+  const probeY = h * 0.48;
+  const steerX = w * 0.84;
+  const steerY = h * 0.34;
+  roundedRect(probeX - 82, probeY - 46, 164, 92, 8, "rgba(181,140,255,0.07)", "rgba(181,140,255,0.46)");
+  text("probe direction", probeX, probeY - 13, 13, colors.violet);
+  text("stable across controls", probeX, probeY + 14, 11, colors.muted);
+  arrow(probeX + 84, probeY, steerX - 46, steerY, colors.amber, 2.8, 0.68, -0.08);
+  roundedRect(steerX - 48, steerY - 42, 96, 84, 8, "rgba(255,192,103,0.08)", "rgba(255,192,103,0.48)");
+  text("steer", steerX, steerY - 6, 13, colors.amber);
+  text("behavior", steerX, steerY + 19, 11, colors.ink);
+
+  const nullX = w * 0.84;
+  const nullY = h * 0.68;
+  roundedRect(nullX - 58, nullY - 42, 116, 84, 8, "rgba(255,143,155,0.05)", "rgba(255,143,155,0.42)");
+  text("matched null", nullX, nullY - 8, 13, colors.rose);
+  text("should fail", nullX, nullY + 18, 11, colors.muted);
+  arrow(probeX + 84, probeY + 18, nullX - 62, nullY, colors.rose, 2, 0.38, 0.10);
+
+  const behaviorProgress = clamp((p - 0.45) / 0.35, 0, 1);
+  const behavior = p > 0.45 ? ease(behaviorProgress) : 0.18 + wave(state.elapsed * 1.7) * 0.14;
+  const nullScore = 0.22 + wave(state.elapsed * 2.3 + 1.2) * 0.08;
+  line(steerX - 30, steerY + 54, steerX - 30 + 62 * behavior, steerY + 54, colors.green, 8, 0.9);
+  line(nullX - 35, nullY + 54, nullX - 35 + 70 * nullScore, nullY + 54, colors.rose, 8, 0.85);
+  text("causal only if behavior moves and controls do not", w * 0.50, h * 0.88, 13, colors.green);
+
+  updatePhase("activation loop", phaseLabel(["read state", "fit probe", "steer", "control check"], p), p);
+  updateMetrics([
+    { label: "probe stability", value: `${Math.round((0.52 + wave(p * Math.PI * 2) * 0.34) * 100)}%`, amount: 0.52 + wave(p * Math.PI * 2) * 0.34, color: colors.violet },
+    { label: "behavior shift", value: `${Math.round(behavior * 100)}%`, amount: behavior, color: colors.green },
+    { label: "matched null shift", value: `${Math.round(nullScore * 100)}%`, amount: nullScore, color: colors.rose },
+  ]);
+}
+
+function drawCurrentView() {
+  pages[state.route].draw();
+}
+
+function scheduleFrame() {
+  if (!frameRequest) frameRequest = requestAnimationFrame(frame);
+}
+
+function updateMotionControls() {
+  pauseButton.disabled = state.reducedMotion;
+  pauseButton.textContent = state.reducedMotion ? "reduced motion" : state.paused ? "play" : "pause";
+  pauseButton.setAttribute(
+    "aria-label",
+    state.reducedMotion ? "Animation disabled by reduced motion preference" : state.paused ? "Play animation" : "Pause animation",
+  );
+}
+
+function frame(now) {
+  frameRequest = 0;
+  const seconds = now / 1000;
+  const delta = state.lastFrame ? seconds - state.lastFrame : 0;
+  state.lastFrame = seconds;
+  const animating = !state.paused && !state.reducedMotion;
+  if (animating) {
+    state.elapsed += delta * state.speed;
+  }
+  drawCurrentView();
+  if (animating) scheduleFrame();
+}
+
+buildNav();
+buildCards();
+setRoute(normalizeRoute());
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+window.addEventListener("hashchange", () => {
+  setRoute(normalizeRoute());
+  scheduleFrame();
+});
+pauseButton.addEventListener("click", () => {
+  if (state.reducedMotion) return;
+  state.paused = !state.paused;
+  updateMotionControls();
+  state.lastFrame = 0;
+  scheduleFrame();
+});
+labelsButton.addEventListener("click", () => {
+  state.showLabels = !state.showLabels;
+  labelsButton.textContent = state.showLabels ? "labels on" : "labels off";
+  scheduleFrame();
+});
+speedRange.addEventListener("input", () => {
+  state.speed = Number(speedRange.value);
+});
+window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", event => {
+  state.reducedMotion = event.matches;
+  state.lastFrame = 0;
+  updateMotionControls();
+  scheduleFrame();
+});
+updateMotionControls();
+scheduleFrame();

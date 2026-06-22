@@ -1,11 +1,12 @@
 {
-  "name": "reafference-attribution-field",
+  "name": "research-mechanism-atlas",
   "version": "1.0.0",
   "private": true,
   "engines": {
     "node": "20.x"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "node --test tests/*.test.js"
   }
 }

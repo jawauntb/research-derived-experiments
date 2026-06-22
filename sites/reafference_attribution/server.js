@@ -9,6 +9,7 @@ const types = {
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
   ".css": "text/css; charset=utf-8",
+  ".md": "text/markdown; charset=utf-8",
 };
 
 const server = http.createServer((request, response) => {
@@ -18,11 +19,20 @@ const server = http.createServer((request, response) => {
     return;
   }
 
-  const url = new URL(request.url || "/", "http://localhost");
-  const pathname = url.pathname === "/" ? "/index.html" : url.pathname;
-  const filePath = path.join(root, path.normalize(pathname));
+  const rawPath = (request.url || "/").split(/[?#]/, 1)[0] || "/";
+  let pathname;
+  try {
+    pathname = decodeURIComponent(rawPath);
+  } catch {
+    response.writeHead(400);
+    response.end("Bad request");
+    return;
+  }
 
-  if (!filePath.startsWith(root)) {
+  const normalizedPath = pathname === "/" ? "index.html" : pathname.replace(/^\/+/, "");
+  const filePath = path.resolve(root, normalizedPath);
+
+  if (filePath !== root && !filePath.startsWith(`${root}${path.sep}`)) {
     response.writeHead(403);
     response.end("Forbidden");
     return;
@@ -35,14 +45,19 @@ const server = http.createServer((request, response) => {
       return;
     }
 
+    const extension = path.extname(filePath);
+    const cacheControl = extension === ".html"
+      ? "no-cache, max-age=0"
+      : "public, max-age=300";
+
     response.writeHead(200, {
-      "Content-Type": types[path.extname(filePath)] || "application/octet-stream",
-      "Cache-Control": "public, max-age=60",
+      "Content-Type": types[extension] || "application/octet-stream",
+      "Cache-Control": cacheControl,
     });
     response.end(request.method === "HEAD" ? undefined : body);
   });
 });
 
 server.listen(port, () => {
-  console.log(`reafference attribution field listening on ${port}`);
+  console.log(`research mechanism atlas listening on ${port}`);
 });
