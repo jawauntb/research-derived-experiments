@@ -65,6 +65,27 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
   --induction-calibration-trials 1200
 ```
 
+Searched executable module bodies against the learned-object-slot +
+discovered-profile 2A-v2 transfer gate:
+
+```bash
+python3 -m experiments.viable_computational_bodies.object_slot_executable_modules \
+  --seeds 1 --generations 6 --population 8 \
+  --train-trials 90 --test-trials 40 --epochs 10 \
+  --induction-calibration-trials 80 \
+  --extractor-calibration-trials 80 --extractor-epochs 10 \
+  --out artifacts/viable_computational_bodies/object_slot_executable_modules_local.json \
+  --report experiments/viable_computational_bodies/results/object_slot_executable_modules_local_2026_06_22.md
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/viable_computational_bodies/modal_object_slot_executable_modules.py \
+  --generations 18 --population 18 \
+  --train-trials 3000 --test-trials 1200 --epochs 90 \
+  --induction-calibration-trials 1200 \
+  --extractor-calibration-trials 1200 --extractor-epochs 45
+```
+
 Executable body validation is produced by the learned Arc 2A sweep:
 
 ```bash

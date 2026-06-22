@@ -5007,9 +5007,131 @@ Residual content:
   remain open" with "bounded executable-module search now consumes label-free
   2A-v2 transfer; full neural module search remains open."
 
-Next move: consume the discovered-profile 2A contract in 2B, or replace
-bounded executable contracts with trainable neural object-slot, graph-binding,
-routing, and program-composition modules.
+Next move completed by the following card: consume the learned-object-slot and
+discovered-profile 2A contract in 2B. The remaining body-side frontier is to
+replace bounded executable contracts with trainable neural object-slot,
+graph-binding, routing, and program-composition modules.
+
+## Arc 2A/2B: Object-Slot Executable Modules Against Discovered 2A-v2 Transfer
+
+Question: can Arc 2B search executable module bodies that consume the learned
+object-slot + discovered-profile 2A contract rather than the older label-free
+supplied-profile contract?
+
+Current regime:
+
+- Artifact types: learned-object-slot 2A transfer summaries, searched
+  executable module-body specs, required module lists, Python static formal
+  verdicts, local smoke reports, Modal reports, and 2B paper updates.
+- Operations: run the learned foreground slot + discovered-profile transfer
+  gate, mutate/repair/promote executable module sets, map module coverage to
+  empirical 2A controls, and score reward-only, family-proxy, target-proxy,
+  ungated-rich, and viability-guided searches against slot recovery,
+  discovered profiles, transfer, module coverage, formal validity, resource
+  cost, and low-concern discipline.
+- Gates/verifiers: learned object-slot slot/scene recovery, profile purity,
+  semantic family/pair, action-template consistency, held-out transfer gate,
+  executable module coverage, formal validity, resource cost <= 24,
+  family/target/useful/rich high-concern rates, low-concern program cap,
+  targeted unit tests, local smoke report, and Modal five-seed sweep.
+- Known limitations: searched modules are bounded executable contracts over a
+  synthetic fixed-slot renderer, learned foreground extractor, slot-local
+  center search, discovered-profile feedback, and finite rich-program grammar;
+  this is not full neural architecture search, natural-image object discovery,
+  full slot attention, or open-ended semantic discovery.
+
+Action class:
+
+- Retrieval/search/discovery: coupled contract-consumption transition.
+- Why: 2B now consumes the newest 2A scaffold-removal path. The body search
+  cannot pass by expressing the older connected-component label-free contract;
+  it must carry learned foreground extraction, object-slot centering,
+  discovered profile induction, profile action templates, concern gating,
+  target binding, family routing, rich composition, world-model support, and
+  a formal guard together.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/viable_computational_bodies/object_slot_executable_modules.py`;
+  `experiments/viable_computational_bodies/modal_object_slot_executable_modules.py`;
+  `experiments/viable_computational_bodies/results/object_slot_executable_modules_local_2026_06_22.md`;
+  `experiments/viable_computational_bodies/results/object_slot_executable_modules_modal_2026_06_22.md`;
+  local ignored artifact
+  `artifacts/viable_computational_bodies/object_slot_executable_modules_local.json`;
+  Modal ignored artifact
+  `artifacts/viable_computational_bodies/object_slot_executable_modules_modal.json`.
+- Positive target: `viability_guided` should discover a body mapping to
+  `learned_object_slot_discovered_world_model` and covering learned foreground
+  extraction, object-slot centering, discovered profile induction, action
+  templates, concern gating, target binding, family routing, rich composition,
+  world-model support, and a formal guard.
+- Negative controls: `reward_only`, `family_proxy`, `target_proxy`, and
+  `ungated_rich_proxy`.
+- Stress tests: reward-only should prefer a legacy shortcut body; family-proxy
+  should miss target/useful modules; target-proxy should miss family/rich
+  modules and violate low-concern discipline; ungated-rich should recover rich
+  composition but fail concern discipline and transfer.
+
+Gate:
+
+- Acceptance rule: object-slot body gate rate >= 0.75 across Modal seeds,
+  transfer gate rate 1.000, formal validity 1.000, module coverage 1.000,
+  slot and scene recovery >= 0.95, profile purity/action-template and semantic
+  family/pair >= 0.95, family/target/useful/rich high-concern rates >= 0.70,
+  low-concern program rate <= 0.25, resource cost <= 24, and controls fail for
+  distinct reasons.
+- Withheld/rejected rule: do not claim full neural architecture search,
+  natural-image perception, full slot attention, fully open-ended semantics,
+  or open-ended program invention.
+
+Results:
+
+- Accepted artifacts: object-slot executable-module implementation, Modal
+  entrypoint, local and Modal reports, targeted tests, README commands,
+  audit card, handoff updates, and paper/PDF update.
+- Rejected or withheld artifacts: raw JSON remains under ignored `artifacts/`;
+  learned neural module implementations and open-ended natural perception
+  remain future work.
+- Key metrics across five Modal seeds: `viability_guided` object-slot body
+  gate `1.000`, transfer gate `1.000`, formal validity `1.000`, slot/scene
+  recovery `1.000`, profile purity/semantic pair/action-template `1.000`,
+  module coverage `1.000`, family/target/useful/rich high-concern rates
+  `1.000`, low-program `0.000`, cost `21`, gate PASS. `reward_only` returns a
+  legacy shortcut body with module coverage `0.000` and transfer `0.000`;
+  `family_proxy` reaches family and profile metrics `1.000` but target/useful
+  `0.214` and module coverage `0.400`; `target_proxy` reaches target `1.000`
+  but family/useful/rich `0.143`, low-program `0.714`, and module coverage
+  `0.500`; `ungated_rich_proxy` reaches family/target/useful/rich `1.000` but
+  low-program `0.714`, transfer `0.000`, and module coverage `0.800`.
+- Variance or ablation: five Modal seeds with 18 generations, population 18,
+  3,000 train trials, 1,200 test trials, 1,200 profile-induction trials, 1,200
+  extractor-calibration images, 90 policy epochs, and 45 extractor epochs per
+  seed; accepted body gate SD is `0.000`.
+
+Residual content:
+
+- Explained by old regime: label-free searched executable bodies already
+  showed that a complete body must carry concern, target, family, composer,
+  world-model, and formal modules together.
+- New content outside old regime: 2B can now be forced to track the newest 2A
+  scaffold-removal path. A body that only consumes the older
+  connected-component/supplied-profile abstraction is no longer sufficient.
+- Retractions or supersessions: supersede "2B still needs to consume the
+  learned-object-slot/discovered-profile contract" with "bounded executable
+  body search now consumes the latest learned-object-slot/discovered-profile
+  2A contract; trainable neural module search remains open."
+
+Allowed claim:
+
+2B bounded executable-module search can consume the learned-object-slot plus
+discovered-profile 2A-v2 contract inside the synthetic fixed-slot world, while
+reward-only, family-only, target-only, and ungated-rich controls remain
+rejected.
+
+Next move: replace bounded searched executable contracts with trainable neural
+object-slot, graph-binding, routing, and program-composition modules; or move
+to the external P1 LoRA and P2 corruption-taxonomy follow-ups.
 
 ## Arc 2A: Learned Slot Semantics Against 2A-v2 Transfer
 

@@ -3,7 +3,7 @@
 Date: 2026-06-22
 Repo: `jawauntb/research-derived-experiments`
 Internal branch prepared from fresh `origin/main`:
-`codex/phase2-learned-object-slots`
+`codex/phase2-object-slot-2b-consumption`
 
 External-contact synthesis note:
 commit `79206fa` was fetched from
@@ -26,11 +26,12 @@ pixels -> object slots -> causal pair -> program family -> intervention
 -> bound/unbound parse evidence -> concern-gated action
 ```
 
-The newest internal step in this branch is learned object-slot perception for
-the discovered semantic-profile gate. It removes algorithmic connected
-components from the accepted path, while keeping the synthetic renderer, fixed
-six-slot layout, slot-local center search, and contract-shaped feedback as
-explicit scaffolds.
+The newest internal step in this branch is 2B consumption of the learned
+object-slot + discovered-profile transfer contract. It makes bounded
+executable body search track the latest 2A scaffold-removal path rather than
+the older label-free supplied-profile abstraction, while keeping the synthetic
+renderer, fixed six-slot layout, slot-local center search, bounded module
+grammar, and contract-shaped feedback as explicit scaffolds.
 
 The newest external-contact step is the P1 LoRA Tier-B branch. The earlier
 synthesis paper at commit `79206fa` said P1 was a tooling block that still
@@ -39,13 +40,22 @@ non-constant, and the literal P1 external-transfer gate hard-killed.
 
 ## What Just Changed Internally
 
-This branch adds:
+The learned-object-slot dependency adds:
 
 ```text
 experiments/concerned_syntax/learned_object_slots.py
 experiments/concerned_syntax/modal_learned_object_slots_sweep.py
 experiments/concerned_syntax/results/learned_object_slots_local_2026_06_22.md
 experiments/concerned_syntax/results/learned_object_slots_modal_2026_06_22.md
+```
+
+This branch then adds:
+
+```text
+experiments/viable_computational_bodies/object_slot_executable_modules.py
+experiments/viable_computational_bodies/modal_object_slot_executable_modules.py
+experiments/viable_computational_bodies/results/object_slot_executable_modules_local_2026_06_22.md
+experiments/viable_computational_bodies/results/object_slot_executable_modules_modal_2026_06_22.md
 ```
 
 The accepted path is:
@@ -110,6 +120,39 @@ Interpret the result carefully:
 - The fixed six-slot layout, synthetic renderer, and contract-shaped feedback
   remain scaffolds.
 
+2B consumption evidence:
+
+```text
+modal run experiments/viable_computational_bodies/modal_object_slot_executable_modules.py
+seeds: 20260622, 1729, 4242, 8675309, 314159
+generations/population: 18/18
+train/test: 3000/1200 per held-out slice/seed
+profile induction: 1200 calibration examples/seed
+extractor calibration: 1200 images/seed
+extractor epochs: 45
+policy epochs: 90
+report: experiments/viable_computational_bodies/results/object_slot_executable_modules_modal_2026_06_22.md
+accepted strategy: viability_guided
+accepted body: concern_gate+discovered_profile_inducer+formal_guard+learned_foreground_extractor+object_slot_centerer+profile_action_template+profile_memory+program_family_router+reward_head+rich_program_composer+target_binder+world_model
+object-slot body gate: 1.000
+transfer gate: 1.000
+slot/scene recovery: 1.000
+profile purity/semantic pair/action-template: 1.000
+module coverage/formal validity: 1.000
+family/target/useful/rich high: 1.000
+low-concern program rate: 0.000
+```
+
+Interpret the 2B result carefully:
+
+- The allowed claim is that bounded executable body search can consume the
+  learned-object-slot + discovered-profile 2A-v2 contract in the synthetic
+  fixed-slot world.
+- Do not call this trainable neural architecture search.
+- Do not call this natural-image perception or full slot attention.
+- The synthetic renderer, fixed slot layout, slot-local center search, finite
+  module grammar, and contract-shaped feedback remain scaffolds.
+
 ## Current Internal Phase 2 Ledger
 
 ### 2A: Concerned Syntax And Intervention Programs
@@ -157,6 +200,7 @@ program_body_search_modal_2026_06_16.md
 rich_program_body_search_modal_2026_06_18.md
 learned_executable_modules_modal_2026_06_18.md
 searched_executable_modules_modal_2026_06_22.md
+object_slot_executable_modules_modal_2026_06_22.md
 ```
 
 What this supports:
@@ -165,15 +209,15 @@ What this supports:
 - Bounded executable module contracts can pass formal validity, module
   coverage, transfer, family, target, useful-program, rich-program, and
   low-concern discipline gates.
+- 2B body search can consume the newest learned-object-slot +
+  discovered-profile 2A contract at bounded contract-search scale.
 - Reward-only, family-proxy, target-proxy, and ungated-rich bodies fail in
   diagnostic ways.
 
 What remains open:
 
-- Make 2B consume the discovered-profile contract rather than the older
-  supplied-profile/label-free contract.
-- Make 2B consume the learned-object-slot contract from this branch.
 - Replace compact searched module contracts with trainable neural modules.
+- Open-ended motor/apparatus discovery beyond the finite rich-program DSL.
 
 ## Current External-Contact Ledger
 
@@ -330,53 +374,22 @@ but: "we need the next result to change the allowed claim boundary"
 
 ## Best Next Moves
 
-### 1. Finish This Branch And Land Learned Object Slots
+### 1. Land The Stacked Internal Branches
 
-Do this first if the Modal sweep passes. It closes the current internal
-perception scaffold cleanly enough to update the 2A paper and the next-agent
-map.
+Do this first if PR #158 and this stacked 2B branch are still open. Together
+they close learned object-slot perception for discovered profiles and 2B
+consumption of that newest 2A contract at bounded contract-search scale.
 
 Definition of done:
 
 - Modal report is written.
 - Audit card is updated.
-- Concerned Syntax paper states the new claim boundary.
-- PDF is rendered and visually checked.
+- Concerned Syntax and 2B papers state the new claim boundaries.
+- PDFs are rendered and visually checked.
 - Clean-context and next-breakthrough handoffs point to this note.
 - Checks pass, commit, push, PR, merge if clean.
 
-### 2. 2B Consumption Of The Discovered/Learned-Object Contract
-
-Suggested branch:
-
-```text
-codex/phase2-object-slot-2b-consumption
-```
-
-Question:
-
-```text
-Can viable computational bodies consume the learned-object-slot +
-discovered-profile 2A contract rather than the older label-free supplied-profile
-contract?
-```
-
-Why this is good:
-
-- It couples the newest 2A scaffold-removal result to body syntax.
-- It should expose whether the 2B motif grammar really tracks the latest 2A
-  mechanism or just an older abstraction.
-
-Definition of done:
-
-- Body search or executable-module evaluation consumes the exact learned
-  object-slot/discovered-profile transfer summary.
-- Reward-only, family-only, target-only, and ungated-rich body controls remain
-  rejected.
-- Formal validity and module coverage remain explicit.
-- Modal five-seed evidence, audit card, 2B paper update, PDF render.
-
-### 3. Trainable Neural 2B Modules
+### 2. Trainable Neural 2B Modules
 
 Suggested branch:
 
@@ -405,14 +418,14 @@ Guardrails:
 - Keep module coverage and formal validity explicit.
 - Do not call bounded trainable modules full neural architecture search.
 
-### 4. Stronger External P1 Variant, If Reopened
+### 3. Stronger External P1 Variant, If Reopened
 
 Only reopen P1 if the branch changes the operationalization materially:
 public grokking checkpoints, full fine-tuning, richer two-input modular
 addition, or a published external arithmetic benchmark. Do not treat another
 small LoRA/classifier-head sweep as a new test of the original claim.
 
-### 5. P2 Tier-B Corruption Extension
+### 4. P2 Tier-B Corruption Extension
 
 Suggested branch:
 
@@ -461,6 +474,8 @@ Use these phrasings:
 
 - "Semantic-profile induction inside a synthetic fixed-slot world."
 - "Learned object-slot bridge for 2A-v2, not natural-image vision."
+- "2B bounded executable-module search now consumes the learned-object-slot +
+  discovered-profile transfer contract."
 - "External P2b is a clean methodological correction."
 - "P2a narrows to ensemble variance plus blur-class shift."
 - "P3 is substrate-sensitive; cross-family Platonic convergence is not
@@ -489,30 +504,26 @@ Read:
 - `docs/phase2_next_breakthrough_handoff.md`
 - `docs/discovery_regime_audit.md`
 
-First verify whether the learned-object-slot branch landed. If it did, read:
+First verify whether PR #158 and the object-slot 2B branch landed. If they did,
+read:
 - `experiments/concerned_syntax/results/learned_object_slots_modal_2026_06_22.md`
+- `experiments/viable_computational_bodies/results/object_slot_executable_modules_modal_2026_06_22.md`
 - `experiments/concerned_syntax/learned_object_slots.py`
-- `experiments/concerned_syntax/modal_learned_object_slots_sweep.py`
+- `experiments/viable_computational_bodies/object_slot_executable_modules.py`
 
 Then choose one next move:
 
-1. Internal 2B route:
-   create `codex/phase2-object-slot-2b-consumption` and make viable
-   computational bodies consume the learned-object-slot + discovered-profile
-   2A transfer contract. Keep body controls, formal validity, module coverage,
-   Modal evidence, paper/PDF updates, and audit gates.
-
-2. Neural-module route:
+1. Neural-module route:
    create `codex/phase2-neural-module-search` and replace compact executable
    bodies with trainable modules under the same learned-object-slot /
    discovered-profile transfer contract.
 
-3. External P2 route:
+2. External P2 route:
    create `codex/external-contact-p2-corruption-extension` and extend P2
    Tier-B to the full Hendrycks corruption set, especially blur families, to
    test whether the variance/blur finding generalizes.
 
-4. Stronger P1 route, only if materially changed:
+3. Stronger P1 route, only if materially changed:
    use public grokking checkpoints, full fine-tuning, richer two-input modular
    addition, or a published external arithmetic benchmark. Do not repeat the
    small LoRA/classifier-head diagnostics as if P1 were still unresolved.

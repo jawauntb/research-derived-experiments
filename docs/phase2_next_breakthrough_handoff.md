@@ -24,6 +24,7 @@ wrap gates:
   + held-out role/parse transfer repair
   + executable module bodies consuming the transfer gate
   + searched executable-module bodies consuming label-free slot transfer
+  + searched executable-module bodies consuming learned object slots
 ```
 
 Arc 2A now has a rich intervention-program result: from pixel-rendered object
@@ -81,21 +82,31 @@ target-proxy, and ungated-rich searches fail for distinct reasons. This closes
 bounded executable contract search, but not trainable neural module search or
 full neural architecture search.
 
+The object-slot executable successor branch then makes 2B consume the newest
+2A scaffold-removal path. Bounded executable-module search now recovers the
+body that consumes learned foreground object slots plus discovered semantic
+profiles across five Modal seeds, while reward-only, family-proxy,
+target-proxy, and ungated-rich searches still fail for distinct reasons. This
+closes 2B consumption of the learned-object-slot/discovered-profile contract
+at bounded contract-search scale, but not trainable neural module search,
+natural-image vision, or full slot attention.
+
 Do not phrase this as "2A is done" or "2B is done." Phrase it this way:
 
 - `2A-v2` is done as a provided-rich-grammar contract with Modal-confirmed
   searched recipes, transfer repair, supervised learned slot semantics, and
   label-free role-token calibration plus discovered semantic-profile induction,
-  not as open-ended motor/apparatus invention, learned object-slot perception,
-  or fully open-ended semantics.
+  plus a learned object-slot bridge, not as open-ended motor/apparatus
+  invention, natural-image perception, full slot attention, or fully
+  open-ended semantics.
 - `2B-v2` is done as motif search, Modal-confirmed compact executable-module
   validation, and bounded searched executable-module contracts over the
-  label-free transfer gate, not as full neural architecture search.
+  label-free and learned-object-slot transfer gates, not as full neural
+  architecture search.
 - 2A and 2B are already combined through the frozen empirical contract and the
   new transfer-consuming body gate.
-- The next combination is learned object slots, trainable neural module bodies,
-  2B consumption of discovered profiles, and program discovery beyond the
-  finite DSL.
+- The next combination is trainable neural module bodies, external P1 LoRA,
+  P2 corruption taxonomy, and program discovery beyond the finite DSL.
 
 Current accepted 2A result:
 
@@ -297,6 +308,34 @@ Important rejected controls:
 - `ungated_rich_proxy`: family/target/useful/rich `1.000`, but transfer
   `0.000` and low-program `0.714`.
 
+Current object-slot executable-module result:
+
+```text
+report: experiments/viable_computational_bodies/results/object_slot_executable_modules_modal_2026_06_22.md
+positive: viability_guided
+best body: concern_gate+discovered_profile_inducer+formal_guard+learned_foreground_extractor+object_slot_centerer+profile_action_template+profile_memory+program_family_router+reward_head+rich_program_composer+target_binder+world_model
+object-slot body gate: 1.000
+transfer gate: 1.000
+formal valid: 1.000
+slot/scene recovery: 1.000
+profile purity/semantic pair/action-template: 1.000
+module coverage: 1.000
+family/target/useful/rich high: 1.000
+low-program: 0.000
+resource cost: 21
+gate: PASS across 5 Modal seeds
+```
+
+Important rejected controls:
+
+- `reward_only`: legacy shortcut body, transfer `0.000`, modules `0.000`.
+- `family_proxy`: profile/family `1.000`, but target/useful `0.214` and
+  modules `0.400`.
+- `target_proxy`: target `1.000`, but family/useful/rich `0.143`,
+  low-program `0.714`, and modules `0.500`.
+- `ungated_rich_proxy`: family/target/useful/rich `1.000`, but transfer
+  `0.000`, low-program `0.714`, and modules `0.800`.
+
 ## 2. The North Star
 
 The Phase I Metric Stack of Concern showed a measurable correction chain:
@@ -455,7 +494,28 @@ Definition of done:
 - Do not claim natural-image vision or full slot attention. This is a learned
   object-slot bridge on a synthetic fixed-slot rendered world.
 
-### Milestone E: Figure Upgrade Pass
+### Milestone E: 2B Object-Slot Contract Consumption
+
+Suggested branch: `codex/phase2-object-slot-2b-consumption`
+
+Status: completed by
+`experiments/viable_computational_bodies/results/object_slot_executable_modules_modal_2026_06_22.md`.
+Bounded executable body search now consumes the learned-object-slot plus
+discovered-profile 2A transfer contract rather than the older label-free
+supplied-profile abstraction.
+
+Definition of done:
+
+- The accepted body includes learned foreground extraction, object-slot
+  centering, discovered profile induction, profile action templates, concern
+  gating, target binding, family routing, rich composition, world-model
+  support, and a formal guard.
+- Reward-only, family-only, target-only, and ungated-rich body searches remain
+  rejected for distinct reasons.
+- Do not claim trainable neural architecture search, natural-image vision, or
+  full slot attention.
+
+### Milestone F: Figure Upgrade Pass
 
 Suggested branch: `codex/phase2-paper-figures`
 
@@ -743,18 +803,20 @@ materially stronger external P1 variant only if it changes the operationalizatio
 beyond small LoRA. Ordinary P1 LoRA Tier-B has now been run and hard-killed.
 
 Reason: the current stack lands Modal-confirmed searched executable-module
-contracts over the label-free 2A-v2 transfer gate, removes the supplied profile
-table for 2A, and now removes algorithmic connected components from the
-accepted discovered-profile path inside the synthetic fixed-slot world. The
-next scientific gap is not another seed sweep or another bounded contract
-search; it is trainable neural module search under 2B, extending the P2
-corruption taxonomy, open-ended motor/apparatus discovery beyond the finite
-DSL, or reopening P1 only with a materially stronger external arithmetic setup.
+contracts over both the label-free 2A-v2 transfer gate and the learned-object-
+slot/discovered-profile transfer gate. It removes the supplied profile table
+for 2A, removes algorithmic connected components from the accepted
+discovered-profile path inside the synthetic fixed-slot world, and makes 2B
+consume that newest 2A contract at bounded contract-search scale. The next
+scientific gap is not another seed sweep or another bounded contract search;
+it is trainable neural module search under 2B, extending the P2 corruption
+taxonomy, open-ended motor/apparatus discovery beyond the finite DSL, or
+reopening P1 only with a materially stronger external arithmetic setup.
 
-For the recommended internal route, make viable computational bodies consume
-the learned-object-slot plus discovered-profile transfer contract while
-keeping the Modal-first rule and the same held-out transfer gate as a required
-contract.
+For the recommended internal route, replace bounded executable contracts with
+trainable neural object-slot, graph-binding, routed-head, and program-
+composition modules while keeping the same held-out transfer gate and controls
+as required contracts.
 
 The working rhythm:
 
