@@ -234,19 +234,25 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
         opt.zero_grad(); loss.backward(); opt.step()
         final_loss = float(loss.item())
 
+    decode_arenas = list(arg.get("decode_arenas", [1.0, 1.25, 1.5]))
     model.eval()
     with torch.no_grad():
-        # OOD on held-out fresh trajectories
-        vel, p0c, tgt = make_batch()
-        logits, _ = model(vel, p0c)
-        pi = logits.reshape(-1, Np).argmax(-1).cpu().numpy(); ti = tgt.reshape(-1, Np).argmax(-1).cpu().numpy()
         step = 1.0 / (side - 1)
-        ood_acc = float((np.sqrt(((centers[pi] - centers[ti]) ** 2).sum(1)) <= step + 1e-6).mean())
-        # OOD on a larger arena (true OOD geometry)
-        velL, p0cL, tgtL = make_batch(box=1.25)
-        logitsL, _ = model(velL, p0cL)
-        piL = logitsL.reshape(-1, Np).argmax(-1).cpu().numpy(); tiL = tgtL.reshape(-1, Np).argmax(-1).cpu().numpy()
-        ood_acc_big = float((np.sqrt(((centers[piL] - centers[tiL]) ** 2).sum(1)) <= step + 1e-6).mean())
+
+        def decode_acc(box):
+            v, p, t = make_batch(box=box)
+            lg, _ = model(v, p)
+            pidx = lg.reshape(-1, Np).argmax(-1).cpu().numpy()
+            tidx = t.reshape(-1, Np).argmax(-1).cpu().numpy()
+            return float((np.sqrt(((centers[pidx] - centers[tidx]) ** 2).sum(1)) <= step + 1e-6).mean())
+
+        # in-distribution: held-out fresh trajectories in the training arena (box=1.0)
+        id_acc = decode_acc(1.0)
+        # OOD geometry: a sweep over arena scales (>1.0 = larger, never-seen geometry)
+        ood_by_arena = {f"{box:g}": decode_acc(box) for box in decode_arenas}
+        ood_scales = [b for b in decode_arenas if b > 1.0] or [max(decode_arenas)]
+        # primary OOD (gate metric) = hardest (largest) held-out arena, per prereg
+        ood_acc = ood_by_arena[f"{max(ood_scales):g}"]
 
         # population manifold: bin hidden by position
         vels, poss = _gen_trajectories(512, T, rng)
@@ -272,7 +278,7 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
     # Hutchinson sharpness proxy on the decoder (classical baseline)
     return dict(
         augment=aug, arch=arch, seed=seed, final_loss=final_loss,
-        ood_accuracy=ood_acc, ood_accuracy_big_arena=ood_acc_big,
+        ood_accuracy=ood_acc, id_accuracy=id_acc, ood_by_arena=ood_by_arena,
         weakness_translation=w, weakness_wrong_group=w_wrong,
         toroidal_score=topo["toroidal_score"], betti1_estimate=topo["betti1_estimate"],
         betti_match_torus=topo["betti_match_torus"], h1_top2=topo["h1_top2"], h2_top=topo["h2_top"],
@@ -316,15 +322,17 @@ def main(
     lr: float = 1e-3,
     weight_decay: float = 1e-4,
     activity_reg: float = 1e-3,
+    decode_arenas: str = "1.0,1.25,1.5",
     base_seed: int = 20260628,
     out: str = "artifacts/grid_cell_weakness/sweep.json",
 ) -> None:
     cond_list = [c.strip() for c in conditions.split(",") if c.strip()]
     arch_list = [a.strip() for a in archs.split(",") if a.strip()]
     seed_list = [base_seed + 100 * k for k in range(seeds)]
+    arena_list = [float(x) for x in decode_arenas.split(",") if x.strip()]
     cells = [dict(augment=c, arch=a, seed=s, Ng=Ng, Np=Np, sigma=sigma, T=T,
                   steps=steps, batch=batch, lr=lr, weight_decay=weight_decay,
-                  activity_reg=activity_reg)
+                  activity_reg=activity_reg, decode_arenas=arena_list)
              for c in cond_list for a in arch_list for s in seed_list]
     print(f"[gcw] dispatching {len(cells)} cells "
           f"(conditions={cond_list}, archs={arch_list}, seeds={len(seed_list)}, steps={steps})")
@@ -378,7 +386,8 @@ def main(
     out_path.write_text(json.dumps(dict(
         kind="REAL Paper A grid-cell weakness sweep on Modal",
         manifest=dict(conditions=cond_list, archs=arch_list, seeds=seed_list, Ng=Ng, Np=Np,
-                      steps=steps, batch=batch, lr=lr, weight_decay=weight_decay, activity_reg=activity_reg),
+                      steps=steps, batch=batch, lr=lr, weight_decay=weight_decay, activity_reg=activity_reg,
+                      decode_arenas=arena_list),
         analysis=analysis, cells=results,
     ), indent=2, sort_keys=True, default=float) + "\n")
     print(f"[gcw] wrote {out_path}")

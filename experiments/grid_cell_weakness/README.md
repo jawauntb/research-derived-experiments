@@ -5,6 +5,7 @@ learned population code on a path-integration task — scaling the symbolic weak
 the substrate where brains and RNNs both produce a torus (Gardner et al. 2022; Sorscher–Ganguli).
 
 Pre-registration: [`papers/grid_cell_weakness/preregistration.md`](../../papers/grid_cell_weakness/preregistration.md).
+Runbook (dispatch + emergence tuning): [`papers/grid_cell_weakness/runbook.md`](../../papers/grid_cell_weakness/runbook.md).
 Strategy: [`notes/weakness_topology_program_synthesis.md`](../../notes/weakness_topology_program_synthesis.md).
 
 ## Files
@@ -36,13 +37,21 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
         experiments/grid_cell_weakness/modal_grid_cell_weakness_sweep.py \
         --seeds 1 --steps 400 --conditions full_translation,none
 
-# full sweep (5 conditions x 2 archs x 8 seeds, steps=4000)
+# full sweep (5 conditions x 2 archs x 8 seeds), with the larger-arena OOD sweep
 doppler --scope /Users/jawaun/superoptimizers run -- \
     uvx --python 3.12 --from modal modal run \
         experiments/grid_cell_weakness/modal_grid_cell_weakness_sweep.py \
-        --seeds 8 --steps 4000 \
+        --seeds 8 --steps 4000 --decode-arenas 1.0,1.25,1.5,2.0 \
         --out artifacts/grid_cell_weakness/sweep.json
 ```
 
-The entrypoint prints `ρ(weakness,topology)`, `ρ(weakness,OOD)`, the G4 partial correlation, and
-the G1–G6 pass flags, and writes the full per-cell JSON.
+`--decode-arenas` is a comma list of arena scales; `1.0` is in-distribution (`id_accuracy`),
+scales `> 1.0` are never-seen geometry, and the **largest** is the primary OOD metric for gates
+G3/G6 (per-cell `ood_by_arena` records all of them). The entrypoint prints
+`ρ(weakness,topology)`, `ρ(weakness,OOD)`, the G4 partial correlation, and the G1–G6 pass flags,
+and writes the full per-cell JSON.
+
+**Before trusting gates:** run the emergence probe in the
+[runbook](../../papers/grid_cell_weakness/runbook.md) — if the `full_translation` nets don't form
+a torus (`betti_match_torus`), tune steps / activity-reg / hidden size first. Emergence is a
+precondition, not the hypothesis.
