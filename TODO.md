@@ -72,6 +72,21 @@
 - [x] Write the first full paper draft with limitations and reviewer-risk mitigations (`papers/weakness_invariance_neurips/paper.md`).
 - [ ] Add learned-rule or LLM-rule baselines where the model proposes hypotheses from training examples (future work).
 
+## Paper A Scale-Up: Weakness Predicts Topology (grid-cell RNN)
+
+Prereg `papers/grid_cell_weakness/preregistration.md`; strategy `notes/weakness_topology_program_synthesis.md`.
+Tests weakness ↔ toroidal topology (Betti numbers) ↔ OOD on a path-integration RNN — the
+Fourier↔weakness↔torus triangle, with the Webb–Miolane/Gardner torus as the external anchor.
+
+- [x] Build the self-contained harness: path-integration RNN + the four metrics (weakness under wrapped translations, gudhi persistent homology, Fourier participation ratio, OOD) — `experiments/grid_cell_weakness/core.py`.
+- [x] Validate the metric harness discriminates torus vs plane vs sphere (torus β₁=2 + void, score 0.823 vs 0.001/0.0; weakness 0.998 vs 0.300/0.700) and run the end-to-end CPU pilot (`results/pilot_2026_06_28.md`).
+- [x] Add the self-contained Modal sweep entrypoint with G1–G6 gate evaluation (`modal_grid_cell_weakness_sweep.py`).
+- [ ] Dispatch the Modal sweep (5 conditions × 2 archs × 8 seeds, steps=4000) from a Modal-authed machine and commit the result report.
+- [ ] Add the wrong-group/random-shift null-control reporting and the topology-mediation (G4) figure (gate-margin heatmap).
+- [ ] Derive the weakness↔PAC-Bayes bound sketch (invariant code → reduced KL/complexity term).
+- [ ] Reward-deformation follow-up (Paper B seed): reward locally lowers weakness to raise resolution — the `valence_tapestry` gap on the navigation torus.
+- [ ] Brain-data prediction (deferred; data hosts proxy-blocked here): weakness tracks H₁ persistence in the Gardner et al. grid-cell recordings.
+
 ## Experiment Track 2: Cross-Model Concept Geometry
 
 - [x] Define concept set: concrete, abstract, values, emotions, agency/boundary terms.
