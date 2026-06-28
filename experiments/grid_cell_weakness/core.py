@@ -284,7 +284,7 @@ def gen_trajectories(batch: int, T: int, rng: np.random.Generator,
 
 def train_pi_rnn(seed: int, *, augment: str = "none", Ng: int = 64, Np: int = 64,
                  sigma: float = 0.12, T: int = 20, steps: int = 400, batch: int = 64,
-                 lr: float = 1e-3, weight_decay: float = 1e-4,
+                 lr: float = 1e-3, weight_decay: float = 1e-4, activity_reg: float = 0.0,
                  device: str = "cpu") -> dict[str, Any]:
     """Train a velocity-driven RNN to predict place-cell codes along a path.
 
@@ -345,9 +345,11 @@ def train_pi_rnn(seed: int, *, augment: str = "none", Ng: int = 64, Np: int = 64
 
     for _ in range(steps):
         vel, p0c, tgt = make_batch()
-        logits, _ = model(vel, p0c)
+        logits, G_tr = model(vel, p0c)
         logp = torch.log_softmax(logits, dim=-1)
         loss = lossfn(logp.reshape(-1, Np), tgt.reshape(-1, Np))
+        if activity_reg:
+            loss = loss + activity_reg * (G_tr ** 2).mean()
         opt.zero_grad(); loss.backward(); opt.step()
         final_loss = float(loss.item())
 
