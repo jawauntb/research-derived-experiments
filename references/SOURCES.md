@@ -35,6 +35,10 @@ The downloaded PDFs, HTML snapshots, and extracted full text are intentionally l
 - Object-Centric World Models for Causality-Aware Reinforcement Learning: https://arxiv.org/abs/2511.14262
 - CausalARC: Abstract Reasoning with Causal World Models: https://arxiv.org/abs/2509.03636
 
+## Talks and Transcripts
+
+- The Geometry of Consciousness — Claire Webb & Nina Miolane (Long Now Talk): https://longnow.org/talks/02026-webb-miolane/ — full transcript archived at [webb-miolane-geometry-of-consciousness-transcript.md](webb-miolane-geometry-of-consciousness-transcript.md) (committed; user-provided paste). On-thesis: biological brains and trained artificial networks independently converge on the same geometric structures (torus of spatial navigation, ring of head direction); the Geometric Intelligence Lab program aims at a "mathematical theory of intelligence" (Kepler-observes / Newton-explains) via Fourier decomposition of space, with reward-driven metric deformation and sleep-state geometry as consciousness correlates.
+
 ## Local User-Provided Files
 
 These remain local-only:

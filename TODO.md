@@ -175,7 +175,7 @@
 
 ## Open Questions Ledger
 
-- [ ] What counts as "same geometry" across substrates: linear map, kernel, topology, dynamics, or intervention?
+- [ ] What counts as "same geometry" across substrates: linear map, kernel, topology, dynamics, or intervention? (Webb–Miolane torus is an existence proof for *topological invariant / homology* as an answer-type — same 2-torus across init, architecture, and species; see [notes/webb_miolane_fit.md](notes/webb_miolane_fit.md).)
 - [ ] What distinguishes passive representation geometry from active attractor geometry?
 - [ ] Can weakness maximization be measured in activation spaces?
 - [ ] Can discovery be detected as a regime transition rather than search?
