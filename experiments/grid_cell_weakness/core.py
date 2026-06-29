@@ -260,9 +260,13 @@ def place_code(pos: np.ndarray, centers: np.ndarray, sigma: float) -> np.ndarray
 
 
 def gen_trajectories(batch: int, T: int, rng: np.random.Generator,
-                     speed: float = 0.06) -> tuple[np.ndarray, np.ndarray]:
-    """Random-walk trajectories in the unit box with reflecting walls."""
-    pos = rng.uniform(0.1, 0.9, size=(batch, 2))
+                     speed: float = 0.06, box: float = 1.0) -> tuple[np.ndarray, np.ndarray]:
+    """Random-walk trajectories in a `box`-sized arena with reflecting walls.
+
+    box=1.0 is the unit (training) arena; box>1.0 gives a larger, never-seen arena
+    for true OOD-geometry decoding (Experiment ③).
+    """
+    pos = rng.uniform(0.1 * box, 0.9 * box, size=(batch, 2))
     vels = np.zeros((batch, T, 2))
     poss = np.zeros((batch, T, 2))
     heading = rng.uniform(0, 2 * math.pi, size=batch)
@@ -271,9 +275,9 @@ def gen_trajectories(batch: int, T: int, rng: np.random.Generator,
         v = speed * np.stack([np.cos(heading), np.sin(heading)], axis=1)
         npos = pos + v
         for d in range(2):
-            lo, hi = npos[:, d] < 0.0, npos[:, d] > 1.0
+            lo, hi = npos[:, d] < 0.0, npos[:, d] > box
             npos[lo, d] = -npos[lo, d]
-            npos[hi, d] = 2.0 - npos[hi, d]
+            npos[hi, d] = 2.0 * box - npos[hi, d]
             heading[lo | hi] = heading[lo | hi] + math.pi
         v = npos - pos
         vels[:, t] = v
