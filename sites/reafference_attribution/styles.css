@@ -348,11 +348,12 @@ canvas {
 .source-links a {
   display: inline-flex;
   align-items: center;
-  min-height: 30px;
-  padding: 0 10px;
+  min-height: 36px;
+  padding: 0 12px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 9px;
   text-decoration: none;
+  font-weight: 600;
   background: rgba(255, 255, 255, 0.035);
 }
 

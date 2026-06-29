@@ -176,6 +176,27 @@ const pageList = [
       { label: "readiness", href: `${repoUrl}/docs/paper_readiness.md` },
     ],
   },
+  {
+    route: "findings",
+    nav: "findings",
+    draw: drawFindings,
+    color: colors.amber,
+    kicker: "results & papers",
+    title: "what we found, and the papers",
+    subtitle: "Three results turn the program's thesis — adaptive systems rediscover geometry because geometry is the portable language of constraints — into measured claims, from a symbolic separation to a causal warp of a learned spatial map.",
+    thesis: "The story in one line: symmetry pressure makes generalization measurable as WEAKNESS; weakness and the toroidal GEOMETRY of a spatial code are the same thing seen two ways; and a goal signal CAUSALLY DEFORMS that geometry — concern reshapes the map. The first two are clean but partly definitional; the third is the non-circular result, an intervention that warps the metric where the reward is.",
+    motions: [
+      "Paper 1 — weakness predicts out-of-distribution generalization where loss, MDL, flatness and validation do not (cyclic/dihedral 100% vs 0%; neural Pearson r = +0.81).",
+      "Paper A — the same scalar tracks the toroidal topology of a learned spatial code (Betti numbers 1,2,1); spectral leg confirmed at rho = +0.89.",
+      "Paper B — a reward CAUSALLY deforms the code's induced metric at the rewarded location and tracks it when moved (specificity +0.65 / +1.27; control flat +0.04) — local resolution bought at the cost of global generalization.",
+    ],
+    sources: [
+      { label: "PDF · Paper 1: Weakness Predicts OOD", href: "papers/weakness_predicts_ood.pdf" },
+      { label: "PDF · Paper A: Weakness \u2192 Toroidal Topology", href: "papers/weakness_predicts_topology.pdf" },
+      { label: "PDF · Paper B: Concern Deforms the Metric", href: "papers/concern_deforms_metric.pdf" },
+      { label: "repo", href: "https://github.com/jawauntb/research-derived-experiments" },
+    ],
+  },
 ];
 
 const pages = Object.fromEntries(pageList.map(page => [page.route, page]));
@@ -366,6 +387,11 @@ const storyPlans = {
     { label: "fit probe", detail: "A probe direction becomes interesting only if it is stable across controls.", color: colors.violet },
     { label: "steer", detail: "Intervention asks whether moving the direction changes behavior.", color: colors.amber },
     { label: "control check", detail: "Matched nulls must fail before the direction earns causal credit.", color: colors.rose },
+  ],
+  findings: [
+    { label: "weakness predicts OOD", detail: "Paper 1: symmetry-compatible volume beats loss, MDL and flatness at predicting generalization (r = +0.81).", color: colors.cyan },
+    { label: "weakness is geometry", detail: "Paper A: the same scalar tracks a spatial code's toroidal topology; spectral leg confirmed (rho = +0.89).", color: colors.violet },
+    { label: "concern deforms it", detail: "Paper B: a reward causally warps the code's induced metric at the goal and tracks it when moved (specificity +1.27, control +0.04).", color: colors.amber },
   ],
 };
 
@@ -692,6 +718,62 @@ function updatePhase(label, value, amount) {
   phaseLabelEl.textContent = label;
   phaseValueEl.textContent = value;
   phaseFillEl.style.width = width;
+}
+
+const findingsNodes = [
+  { key: "weakness", label: "weakness", sub: "predicts OOD", detail: "r = +0.81", color: colors.cyan },
+  { key: "geometry", label: "geometry", sub: "toroidal code", detail: "spectral rho +0.89", color: colors.violet },
+  { key: "concern", label: "concern", sub: "deforms metric", detail: "specificity +1.27", color: colors.amber },
+];
+
+function drawFindings() {
+  clearCanvas();
+  const w = state.width;
+  const h = state.height;
+  const p = cycle(state.storyMode ? 26 : 20);
+  const { index: focusIndex, step } = storyState("findings", p);
+  const vertical = w < 560;
+  const n = findingsNodes.length;
+
+  const pts = findingsNodes.map((node, i) => {
+    const t = (i + 0.5) / n;
+    return vertical
+      ? { x: w * 0.42, y: h * (0.16 + 0.68 * t), node, i }
+      : { x: w * (0.12 + 0.76 * t), y: h * 0.46, node, i };
+  });
+
+  for (let i = 0; i < pts.length - 1; i++) {
+    const a = pts[i], b = pts[i + 1];
+    line(a.x, a.y, b.x, b.y, withAlpha(colors.faint, 0.5), 1.5, 0.6);
+    const fp = (p * 1.0 + i * 0.33) % 1;
+    const px = mix(a.x, b.x, fp), py = mix(a.y, b.y, fp);
+    dot(px, py, 3.4 + 1.6 * wave(state.elapsed * 2 + i), b.node.color, 0.9);
+  }
+
+  pts.forEach(({ x, y, node, i }) => {
+    const active = storyActive(i, focusIndex);
+    const alpha = active ? 1 : 0.4;
+    const r = Math.min(w, h) * (vertical ? 0.085 : 0.072);
+    halo(x, y, r * 1.8, node.color, active ? 0.26 : 0.1);
+    dot(x, y, r, withAlpha(node.color, active ? 0.9 : 0.4));
+    dot(x, y, r * 0.62, colors.dark, 1);
+    text(node.label, x, y - 4, vertical ? 13 : 14, withAlpha(colors.ink, alpha), "center", "700");
+    text(node.sub, x, y + 12, 10, withAlpha(colors.muted, alpha), "center", "600");
+    text(node.detail, x, y + r + 14, 11, withAlpha(node.color, alpha), "center", "700");
+  });
+
+  if (state.storyMode) {
+    const f = pts[focusIndex];
+    drawStoryCue(step, f.x, f.y - Math.min(w, h) * 0.12, w * 0.7, "three papers, one thesis");
+  }
+
+  updatePhase(state.storyMode ? "results story" : "results & papers",
+    state.storyMode ? step.label : "three papers, one thesis", p);
+  updateMetrics([
+    { label: "weakness -> OOD", value: "r = +0.81", amount: 0.81, color: colors.cyan },
+    { label: "weakness -> torus topology", value: "rho = +0.89", amount: 0.89, color: colors.violet },
+    { label: "reward deforms metric", value: "+1.27 (control +0.04)", amount: 0.86, color: colors.amber },
+  ]);
 }
 
 function drawOverview() {

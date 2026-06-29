@@ -6,7 +6,7 @@ const { test } = require("node:test");
 
 const siteRoot = path.join(__dirname, "..");
 const appSource = fs.readFileSync(path.join(siteRoot, "app.js"), "utf8");
-const routes = ["overview", "phase2", "reafference", "syntax", "bodies", "symmetry", "activation"];
+const routes = ["overview", "phase2", "reafference", "syntax", "bodies", "symmetry", "activation", "findings"];
 const routeLabels = {
   overview: "program",
   phase2: "phase 2",
@@ -15,6 +15,7 @@ const routeLabels = {
   bodies: "bodies",
   symmetry: "symmetry",
   activation: "activation",
+  findings: "findings",
 };
 
 class Element {
@@ -321,12 +322,12 @@ test("reviewer tour advances routes and manual navigation stops it", () => {
 
   tourButton.click();
   assert.equal(tourButton.textContent, "tour on");
-  assert.equal(tourStatus.textContent, "tour 1/7 · program");
+  assert.equal(tourStatus.textContent, "tour 1/8 · program");
 
   context.lastFrame?.(1000);
   context.lastFrame?.(11500);
   assert.equal(document.querySelector(".nav-item[aria-current='page']").textContent, "phase 2");
-  assert.equal(tourStatus.textContent, "tour 2/7 · phase 2");
+  assert.equal(tourStatus.textContent, "tour 2/8 · phase 2");
   assert.equal(window.location.hash, "phase2");
   assert.equal(tourFill.style.width, "0%");
 
