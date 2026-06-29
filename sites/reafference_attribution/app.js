@@ -720,59 +720,129 @@ function updatePhase(label, value, amount) {
   phaseFillEl.style.width = width;
 }
 
-const findingsNodes = [
-  { key: "weakness", label: "weakness", sub: "predicts OOD", detail: "r = +0.81", color: colors.cyan },
-  { key: "geometry", label: "geometry", sub: "toroidal code", detail: "spectral rho +0.89", color: colors.violet },
-  { key: "concern", label: "concern", sub: "deforms metric", detail: "specificity +1.27", color: colors.amber },
+const findingsLabels = [
+  { label: "weakness", sub: "predicts OOD", detail: "r = +0.81", color: colors.cyan },
+  { label: "geometry", sub: "toroidal code", detail: "rho = +0.89", color: colors.violet },
+  { label: "concern", sub: "deforms metric", detail: "specificity +1.27", color: colors.amber },
 ];
+
+// A rotating 3-D torus (the population manifold). Returns the screen position of
+// the reward point when `reward` is supplied, so callers can mark it.
+function drawFindingsTorus(cx, cy, scale, spin, alpha, reward) {
+  const Nu = 22, Nv = 10, R = 1, r = 0.42;
+  const rotX = 0.62, cxx = Math.cos(rotX), sxx = Math.sin(rotX);
+  const cyy = Math.cos(spin), syy = Math.sin(spin);
+  let rewardPos = null;
+  const project = (u, v) => {
+    let x = (R + r * Math.cos(v)) * Math.cos(u);
+    let y = (R + r * Math.cos(v)) * Math.sin(u);
+    let z = r * Math.sin(v);
+    const y2 = y * cxx - z * sxx, z2 = y * sxx + z * cxx;
+    const x2 = x * cyy + z2 * syy, z3 = -x * syy + z2 * cyy;
+    return { sx: cx + x2 * scale, sy: cy - y2 * scale, depth: clamp((z3 + 1.5) / 3, 0, 1) };
+  };
+  for (let i = 0; i < Nu; i++) {
+    const u = (i / Nu) * Math.PI * 2;
+    for (let j = 0; j < Nv; j++) {
+      const v = (j / Nv) * Math.PI * 2;
+      const { sx, sy, depth } = project(u, v);
+      let size = 1.3 + depth * 1.9;
+      let col = colors.violet;
+      let a = alpha * (0.22 + depth * 0.78);
+      if (reward) {
+        const du = Math.atan2(Math.sin(u - reward.u), Math.cos(u - reward.u));
+        const dv = Math.atan2(Math.sin(v - reward.v), Math.cos(v - reward.v));
+        const boost = Math.exp(-(du * du + dv * dv) / 0.28) * reward.amt;
+        size += boost * 3.4;
+        a = clamp(a + boost * 0.6, 0, 1);
+        if (boost > 0.22) col = colors.amber;
+      }
+      dot(sx, sy, size, col, a);
+    }
+  }
+  if (reward) {
+    const rp = project(reward.u, reward.v);
+    rewardPos = { x: rp.sx, y: rp.sy };
+  }
+  return rewardPos;
+}
+
+// Act 1: a rotating symmetry orbit (train dots + transformed probes) feeding two
+// OOD-gate bars where the weak invariant overtakes the memorizer.
+function drawFindingsWeakness(cx, cy, scale, p, active) {
+  const r = scale * 0.92;
+  ctx.save();
+  ctx.strokeStyle = withAlpha(colors.cyan, active ? 0.4 : 0.16);
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+  ctx.restore();
+  const ang = p * Math.PI * 2;
+  [0.3, 1.7, 3.0, 4.3, 5.6].forEach((a, i) => {
+    dot(cx + Math.cos(a) * r, cy + Math.sin(a) * r, 3, colors.cyan, active ? 0.92 : 0.5);
+    dot(cx + Math.cos(a + ang) * r, cy + Math.sin(a + ang) * r, 3, i % 2 ? colors.amber : colors.green, active ? 0.82 : 0.42);
+  });
+  const ood = ease(clamp((p - 0.3) / 0.4, 0, 1));
+  const bx = cx - r, bw = r * 2;
+  line(bx, cy + r + 10, bx + bw * (0.4 + ood * 0.46), cy + r + 10, colors.green, 6, active ? 0.92 : 0.5);
+  line(bx, cy + r + 22, bx + bw * (0.74 - ood * 0.5), cy + r + 22, colors.rose, 6, active ? 0.92 : 0.5);
+}
 
 function drawFindings() {
   clearCanvas();
   const w = state.width;
   const h = state.height;
-  const p = cycle(state.storyMode ? 26 : 20);
+  const p = cycle(state.storyMode ? 18 : 13);
   const { index: focusIndex, step } = storyState("findings", p);
-  const vertical = w < 560;
-  const n = findingsNodes.length;
+  const vertical = w < 620;
+  const spin = state.elapsed * 0.5;
+  const scale = Math.min(w, h) * (vertical ? 0.072 : 0.12);
 
-  const pts = findingsNodes.map((node, i) => {
-    const t = (i + 0.5) / n;
-    return vertical
-      ? { x: w * 0.42, y: h * (0.16 + 0.68 * t), node, i }
-      : { x: w * (0.12 + 0.76 * t), y: h * 0.46, node, i };
-  });
+  const stations = vertical
+    ? [{ x: w * 0.5, y: h * 0.14 }, { x: w * 0.5, y: h * 0.39 }, { x: w * 0.5, y: h * 0.64 }]
+    : [{ x: w * 0.18, y: h * 0.44 }, { x: w * 0.5, y: h * 0.44 }, { x: w * 0.82, y: h * 0.44 }];
 
-  for (let i = 0; i < pts.length - 1; i++) {
-    const a = pts[i], b = pts[i + 1];
-    line(a.x, a.y, b.x, b.y, withAlpha(colors.faint, 0.5), 1.5, 0.6);
-    const fp = (p * 1.0 + i * 0.33) % 1;
-    const px = mix(a.x, b.x, fp), py = mix(a.y, b.y, fp);
-    dot(px, py, 3.4 + 1.6 * wave(state.elapsed * 2 + i), b.node.color, 0.9);
+  // connecting flow + a single evidence packet travelling the whole chain
+  for (let i = 0; i < 2; i++) {
+    line(stations[i].x, stations[i].y, stations[i + 1].x, stations[i + 1].y, withAlpha(colors.faint, 0.45), 1.4, 0.5);
+  }
+  const seg = p * 2, si = Math.min(1, Math.floor(seg)), sf = seg - si;
+  dot(mix(stations[si].x, stations[si + 1].x, sf), mix(stations[si].y, stations[si + 1].y, sf),
+    3.4 + 1.6 * wave(state.elapsed * 3), colors.green, 0.9);
+
+  // Act 1 — weakness predicts OOD
+  drawFindingsWeakness(stations[0].x, stations[0].y, scale, p, storyActive(0, focusIndex));
+  // Act 2 — the same scalar is the toroidal geometry
+  drawFindingsTorus(stations[1].x, stations[1].y, scale, spin, storyActive(1, focusIndex) ? 1 : 0.5, null);
+  // Act 3 — concern deforms the metric: a reward warps the torus locally
+  const warp = state.storyMode ? (focusIndex >= 2 ? 1 : 0.15) : (0.45 + 0.55 * wave(state.elapsed * 1.4));
+  const reward = { u: 1.1, v: 0.5, amt: 0.35 + 0.75 * warp };
+  const rp = drawFindingsTorus(stations[2].x, stations[2].y, scale, spin * 0.85, storyActive(2, focusIndex) ? 1 : 0.5, reward);
+  if (rp) {
+    halo(rp.x, rp.y, (10 + scale * 0.5) * (0.7 + 0.5 * wave(state.elapsed * 3)), colors.amber, storyActive(2, focusIndex) ? 0.3 : 0.14);
+    dot(rp.x, rp.y, 3.2, colors.amber, 0.95);
+    if (!vertical) text("reward", rp.x, rp.y - scale * 0.5 - 8, 10, colors.amber);
   }
 
-  pts.forEach(({ x, y, node, i }) => {
+  // labels under each station (offset depends on what the station draws:
+  // the weakness orbit has gate bars under it, the tori are taller)
+  stations.forEach((st, i) => {
     const active = storyActive(i, focusIndex);
-    const alpha = active ? 1 : 0.4;
-    const r = Math.min(w, h) * (vertical ? 0.085 : 0.072);
-    halo(x, y, r * 1.8, node.color, active ? 0.26 : 0.1);
-    dot(x, y, r, withAlpha(node.color, active ? 0.9 : 0.4));
-    dot(x, y, r * 0.62, colors.dark, 1);
-    text(node.label, x, y - 4, vertical ? 13 : 14, withAlpha(colors.ink, alpha), "center", "700");
-    text(node.sub, x, y + 12, 10, withAlpha(colors.muted, alpha), "center", "600");
-    text(node.detail, x, y + r + 14, 11, withAlpha(node.color, alpha), "center", "700");
+    const al = active ? 1 : 0.45;
+    const ly = st.y + (i === 0 ? scale * 0.92 + 34 : scale * 1.42 + 14);
+    text(findingsLabels[i].label, st.x, ly, vertical ? 12 : 14, withAlpha(colors.ink, al), "center", "700");
+    text(findingsLabels[i].sub, st.x, ly + 14, 10, withAlpha(colors.muted, al));
+    text(findingsLabels[i].detail, st.x, ly + 28, 11, withAlpha(findingsLabels[i].color, al), "center", "700");
   });
 
-  if (state.storyMode) {
-    const f = pts[focusIndex];
-    drawStoryCue(step, f.x, f.y - Math.min(w, h) * 0.12, w * 0.7, "three papers, one thesis");
-  }
+  drawStoryCue(step, w * 0.5, vertical ? h * 0.92 : h * 0.9, Math.min(w * 0.82, 720),
+    "Three results, one program: weakness -> toroidal geometry -> concern deforms it.");
 
   updatePhase(state.storyMode ? "results story" : "results & papers",
-    state.storyMode ? step.label : "three papers, one thesis", p);
+    state.storyMode ? step.label : phaseLabel(["weakness predicts OOD", "weakness is geometry", "concern deforms it"], p), p);
   updateMetrics([
     { label: "weakness -> OOD", value: "r = +0.81", amount: 0.81, color: colors.cyan },
     { label: "weakness -> torus topology", value: "rho = +0.89", amount: 0.89, color: colors.violet },
-    { label: "reward deforms metric", value: "+1.27 (control +0.04)", amount: 0.86, color: colors.amber },
+    { label: "reward deforms metric", value: `+${(0.4 + warp * 0.87).toFixed(2)}`, amount: 0.5 + warp * 0.4, color: colors.amber },
   ]);
 }
 
