@@ -10,4 +10,7 @@ gitignored). Regenerate with the committed builders:
   Generalization of Population Codes" (preliminary CPU results).
   Rebuild: `python scripts/build_gridcell_pdf.py`
 
+- `concern_deforms_metric.pdf` — Paper B "Concern Deforms the Representational Metric" (reward warps a learned spatial code; the non-circular result).
+  Rebuild: `python scripts/build_paperB_pdf.py`
+
 Toolkit: `scripts/paperkit.py` (LaTeX-free; reportlab + matplotlib).
