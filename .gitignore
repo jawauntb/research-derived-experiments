@@ -28,3 +28,6 @@ tmp/
 
 # OS/editor noise.
 .DS_Store
+
+# Runtime logs.
+*.log
