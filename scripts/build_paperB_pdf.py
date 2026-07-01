@@ -275,7 +275,9 @@ def build():
         "representational metric deforms to follow it. <b>Reward-warping of spatial codes.</b> "
         "Hippocampal and entorhinal codes over-represent rewarded and goal locations (Hollup et al. "
         "2001; Dupret et al. 2010; Boccara et al. 2019; Butler et al. 2019); Webb & Miolane (2026) "
-        "frame this geometrically as a metric deformation. That work is in biological recordings; "
+        "frame this geometrically as a metric deformation, and developmental connectomics shows the "
+        "deeper principle that neural activity itself sculpts structure (Meirovitch et al. 2026). "
+        "That work is in biological systems; "
         "<b>we show the same warp emerges in a trained network from a reward-weighted objective "
         "alone, and quantify it as an induced-metric deformation with a matched control</b> — a "
         "bridge from the neuroscience phenomenon to a controllable model, which we have not seen "
@@ -328,6 +330,8 @@ def build():
         "J. Neurosci. 21 (2001).",
         "Dupret, D., O'Neill, J., Pleydell-Bouverie, B., Csicsvari, J. The reorganization and "
         "reactivation of hippocampal maps predict spatial memory performance. Nat. Neurosci. 13 (2010).",
+        "Meirovitch, Y., Draft, R., Tapia, J.-C., Lichtman, J. W., et al. Neural activity shapes "
+        "the developing motor connectome (function generates structure). Nature Neuroscience (2026).",
         "Boccara, C. N., Nardin, M., Stella, F., O'Neill, J., Csicsvari, J. The entorhinal cognitive "
         "map is attracted to goals. Science 363 (2019).",
         "Butler, W. N., Hardcastle, K., Giocomo, L. M. Remembered reward locations restructure "
