@@ -44,6 +44,25 @@ LOCAL = {
 PDF_BUILDERS = {
     "symbolic_weakness": ["python scripts/build_weakness_pdf.py"],
 }
+# After building, copy the rendered PDF to the committed + site-served locations so
+# a regen refreshes what readers actually see.
+PDF_OUTPUTS = {
+    "symbolic_weakness": ["weakness_predicts_ood.pdf"],
+    "grid_cell_weakness": ["weakness_predicts_topology.pdf", "concern_deforms_metric.pdf"],
+}
+
+
+def refresh_committed_pdfs(name):
+    import shutil
+    for fname in PDF_OUTPUTS.get(name, []):
+        src = ROOT / "artifacts" / "papers" / fname
+        if not src.exists():
+            continue
+        for dest_dir in (ROOT / "papers" / "pdf",
+                         ROOT / "sites" / "reafference_attribution" / "papers"):
+            if dest_dir.exists():
+                shutil.copy2(src, dest_dir / fname)
+                print(f"[regen] refreshed {dest_dir.relative_to(ROOT)}/{fname}")
 
 
 def load_manifest():
@@ -82,9 +101,11 @@ def main():
     if name in LOCAL:
         print(f"[regen] reproducing {name} locally (CPU, deterministic)")
         run(LOCAL[name] + PDF_BUILDERS.get(name, []))
+        refresh_committed_pdfs(name)
     elif name in PDF_BUILDERS:
         print(f"[regen] rebuilding {name} paper PDF from committed numbers")
         run(PDF_BUILDERS[name])
+        refresh_committed_pdfs(name)
     elif name in man:
         cmd = man[name].get("run_command")
         print(f"[regen] {name} is not a local CPU reproducer (likely needs Modal/GPU/secrets).")
