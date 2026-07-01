@@ -121,11 +121,28 @@ Honest diagnosis of why (each is a concrete next step, not an excuse):
    grid-periodic, violating the smooth space-filling assumption behind `D ∝ ρ^{-2/d}`.
 3. **Noisy metric estimation** on a 16×16 binned population (R² ≈ 0.15), 2 seeds — underpowered.
 
-**Status:** the law remains a *candidate*; its quantitative prediction is **unconfirmed**. The
-attempted Kepler→Newton move did not land here — which is the useful, honest outcome: it says the
-path to a real test is (a) an explicit capacity bottleneck, (b) a well-formed high-resolution code,
-(c) robust metric estimation, (d) an amplitude sweep to test the `(1+A)^{1/2}` scaling. Until then
-we have Kepler (the warp) and a derived candidate law, not a confirmed Newton.
+**Status (first test):** unconfirmed at toy scale — see the follow-up below.
+
+### 8a. Follow-up with a capacity bottleneck — mechanism confirmed, exponent ≈ 0.30
+
+The first test lacked the derivation's load-bearing constraint. Adding it — projecting the code
+onto a **unit sphere** (hard finite capacity) plus a **fixed-variance channel** (finite SNR) —
+changes the picture (`capacity_bottleneck.py`; `results/capacity_bottleneck_2026_07_01.md`):
+
+| config | area exponent α | R² |
+| --- | ---: | ---: |
+| no capacity constraint | +0.07 | 0.15 |
+| **+ capacity bottleneck** | **+0.30** | **0.44** |
+
+**The capacity constraint is causal:** it moves α ~4–5× toward the predicted 0.5 (0.07 → 0.30) and
+triples the fit quality — exactly the derivation's prediction that a *finite-capacity* code is
+forced to trade resolution. But α **plateaus at ≈ 0.30**, below the 2-D value 0.5, robustly across
+seeds and deeper training. Intriguingly **0.30 ≈ 1/3**, the *1-D* rate-distortion exponent — a
+(post-hoc, untested) sign that a radially-symmetric reward drives effectively-1-D reallocation
+(`d_eff ≈ 1`). Net: **partial confirmation** — the law's mechanism is validated and the exponent is
+in the predicted power-law family, but the specific 2-D value is not hit. We have Kepler (the warp),
+a derived candidate law, and now causal evidence for its key assumption — not yet a confirmed
+Newton. Next: measure `d_eff`, test a 1-D (stripe) reward, and run the amplitude sweep.
 
 ## 9. Prior art anchoring
 
