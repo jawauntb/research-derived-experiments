@@ -10,7 +10,8 @@
 
 ## Verification
 - Pre-registration: `papers/grid_cell_weakness/preregistration.md`
-- Result reports (4):
+- Result reports (5):
+  - `experiments/grid_cell_weakness/results/capacity_bottleneck_2026_07_01.md`
   - `experiments/grid_cell_weakness/results/local_cpu_sweep_2026_06_29.md`
   - `experiments/grid_cell_weakness/results/pilot_2026_06_28.md`
   - `experiments/grid_cell_weakness/results/ratedistortion_2026_07_01.md`
@@ -22,6 +23,6 @@ Key verification signals (from the latest result report):
   - non-tautological result (unlike the passive weakness↔generalization correlations).
 
 ## Artifacts
-- Committed: `experiments/grid_cell_weakness/results/local_cpu_sweep_2026_06_29.md`, `experiments/grid_cell_weakness/results/pilot_2026_06_28.md`, `experiments/grid_cell_weakness/results/ratedistortion_2026_07_01.md`, `experiments/grid_cell_weakness/results/reward_deformation_2026_06_29.md`
+- Committed: `experiments/grid_cell_weakness/results/capacity_bottleneck_2026_07_01.md`, `experiments/grid_cell_weakness/results/local_cpu_sweep_2026_06_29.md`, `experiments/grid_cell_weakness/results/pilot_2026_06_28.md`, `experiments/grid_cell_weakness/results/ratedistortion_2026_07_01.md`, `experiments/grid_cell_weakness/results/reward_deformation_2026_06_29.md`
 - Local-only: artifacts/ (gitignored raw outputs; see result reports for summaries)
 - Paper: _none_
