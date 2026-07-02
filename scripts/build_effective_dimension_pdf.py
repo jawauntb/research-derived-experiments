@@ -255,7 +255,7 @@ def build() -> None:
     p.rule()
     p.abstract(
         "A value-weighted rate-distortion derivation predicts that a finite-capacity 2-D code "
-        "should allocate local area density as √det <i>g</i> proportional to <i>w</i><super>1/2</super>. We preregistered "
+        "should allocate local area density as √det g ∝ w^{1/2}. We preregistered "
         "a geometry sweep designed to distinguish this physical 2-D law from an effectively 1-D "
         "allocation law: a stripe value field should give α near 1/3, while an anisotropic value "
         "field varying along both arena axes should give α near 1/2 if the 2-D law governs the "

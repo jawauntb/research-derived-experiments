@@ -93,7 +93,7 @@ We compare eleven selectors. In the discussion below, "classical baselines" mean
 | `weakness_data_inferred` | weakness under transformations retained by training-pair consistency |
 | `random` | uniform random train-consistent candidate |
 
-The validation baseline is deliberately in-distribution: it holds out one observed training pair and scores the fixed candidate on that pair. Validation examples are drawn from the same shortcut-compatible partial-orbit distribution as training; no held-out OOD transformations are included. Wilson intervals use the standard score interval with \(z = 1.959963984540054\).
+The validation baseline is deliberately in-distribution: it holds out one observed training pair and scores the fixed candidate on that pair. Validation examples are drawn from the same shortcut-compatible partial-orbit distribution as training; no held-out OOD transformations are included. Wilson intervals use the standard score interval with \(z = 1.959963984540054\). The symbolic `flatness_proxy` is a completion-volume proxy, not Hessian flatness; the neural sections report Hutchinson-style sharpness separately.
 
 The `weakness_data_inferred` selector does not receive the hidden offset, reflection parameter, or ground-truth function. For cyclic tasks it enumerates circular shifts and keeps shifts that do not contradict observed pairs under some output shift. For dihedral tasks it enumerates the signed circular prior (rotations plus reflections) and keeps transformations consistent with the observed pairs under some output-side signed action. For color permutation, the current heuristic falls back to a small cyclic prior and is intentionally weak.
 

@@ -270,7 +270,7 @@ def build() -> None:
         "The negative result is equally important. Across individual networks, weakness does not "
         "explain toroidal score strongly enough to pass the registered gate, does not outperform "
         "final loss on OOD by the required margin, and leaves the weakness-OOD association intact "
-        "after controlling for topology. These are not wording problems; they falsify the strongest "
+        "after controlling for topology. These are not wording problems; they reject the strongest "
         "version of the theory tested here.")
 
     p.h1("5. Interpretation")
