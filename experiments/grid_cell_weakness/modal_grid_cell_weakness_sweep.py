@@ -170,7 +170,15 @@ def _fourier_pr(rate_maps):
 # Modal worker: train one net, measure four quantities
 # --------------------------------------------------------------------------- #
 
-@app.function(image=IMAGE, gpu="A10G", timeout=3600, memory=16384)
+@app.function(
+    image=IMAGE,
+    gpu="H100",
+    timeout=7200,
+    memory=32768,
+    max_containers=96,
+    retries=1,
+    nonpreemptible=True,
+)
 def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
     import numpy as np
     import torch
@@ -361,7 +369,10 @@ def main(
     g1 = (sum(r["betti_match_torus"] for r in ft) / len(ft)) if ft else 0.0
     best_classical_topo = abs(analysis["rho_loss_topology"])
     best_classical_ood = abs(analysis["rho_loss_ood"])
-    mean = lambda xs: (sum(xs) / len(xs)) if xs else float("nan")
+
+    def mean(xs):
+        return (sum(xs) / len(xs)) if xs else float("nan")
+
     analysis["gates"] = dict(
         G1_manifold_recovered=dict(value=g1, pass_=g1 >= 0.6),
         G2_weakness_topology=dict(pass_=r_wt >= 0.5 and abs(r_wt) >= 2 * best_classical_topo),

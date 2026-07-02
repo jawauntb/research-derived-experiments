@@ -87,10 +87,10 @@ def end_to_end_smoke() -> dict:
                 betti1_estimate=t.get("betti1_estimate", -1),
                 fourier_pr=f.get("fourier_pr", float("nan")),
             ))
-    w = [x["weakness_translation"] for x in nets]
-    topo = [x["toroidal_score"] for x in nets]
-    ood = [x["ood_accuracy"] for x in nets]
-    fpr = [x["fourier_pr"] for x in nets]
+    w = [float(x["weakness_translation"]) for x in nets]
+    topo = [float(x["toroidal_score"]) for x in nets]
+    ood = [float(x["ood_accuracy"]) for x in nets]
+    fpr = [float(x["fourier_pr"]) for x in nets]
     corr = dict(
         rho_weakness_topology=spearman(w, topo),
         rho_weakness_ood=spearman(w, ood),

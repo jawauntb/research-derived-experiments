@@ -108,7 +108,10 @@ def main() -> None:
         return [c[key] for c in cells if (where is None or c["augment"] in where)]
     w, topo, ood, fpr = col("weakness_translation"), col("toroidal_score"), col("ood_accuracy"), col("fourier_pr")
     r_wt, r_wo, r_ot = spearman(w, topo), spearman(w, ood), spearman(topo, ood)
-    mean = lambda xs: (sum(xs) / len(xs)) if xs else float("nan")
+
+    def mean(xs):
+        return (sum(xs) / len(xs)) if xs else float("nan")
+
     ft = [c for c in cells if c["augment"] == "full_translation"]
     analysis = dict(
         n_cells=len(cells),

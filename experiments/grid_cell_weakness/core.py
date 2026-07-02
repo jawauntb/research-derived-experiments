@@ -36,17 +36,20 @@ run -- the pilot's headline check.
 from __future__ import annotations
 
 import math
+import importlib
 from typing import Any
 
 import numpy as np
 
 _HOMOLOGY = None
+_gudhi: Any | None = None
+_ripser: Any | None = None
 try:  # prefer gudhi (manylinux wheels, no build); fall back to ripser.
-    import gudhi as _gudhi  # noqa: F401
+    _gudhi = importlib.import_module("gudhi")
     _HOMOLOGY = "gudhi"
 except Exception:  # pragma: no cover
     try:
-        from ripser import ripser as _ripser  # noqa: F401
+        _ripser = importlib.import_module("ripser").ripser
         _HOMOLOGY = "ripser"
     except Exception:
         _HOMOLOGY = None
@@ -55,8 +58,10 @@ except Exception:  # pragma: no cover
 def _persistence(P: np.ndarray, maxdim: int = 2) -> list[np.ndarray]:
     """Return finite persistence diagrams [H0, H1, ..., Hmaxdim] as (k,2) arrays."""
     if _HOMOLOGY == "ripser":
+        assert _ripser is not None
         return _ripser(P, maxdim=maxdim)["dgms"]
     # gudhi Rips up to (maxdim+1)-simplices; cap edge length to bound blow-up.
+    assert _gudhi is not None
     from scipy.spatial.distance import pdist
     d = pdist(P)
     max_edge = float(np.percentile(d, 45)) if len(d) else 1.0

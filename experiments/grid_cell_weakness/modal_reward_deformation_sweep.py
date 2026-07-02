@@ -135,7 +135,15 @@ def _loglog_slope(w, rho):
     return float(slope), float(1 - ss_res / ss_tot), int(m.sum())
 
 
-@app.function(image=IMAGE, gpu="A10G", timeout=3600, memory=16384)
+@app.function(
+    image=IMAGE,
+    gpu="H100",
+    timeout=7200,
+    memory=32768,
+    max_containers=192,
+    retries=1,
+    nonpreemptible=True,
+)
 def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
     import numpy as np
     import torch
