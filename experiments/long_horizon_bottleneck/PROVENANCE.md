@@ -10,16 +10,17 @@
 
 ## Verification
 - Pre-registration: `papers/long_horizon_bottleneck/preregistration.md`
-- Result reports (1):
+- Result reports (2):
   - `experiments/long_horizon_bottleneck/results/modal_transformer_l4_8seed_2026_07_02.md`
+  - `experiments/long_horizon_bottleneck/results/modal_transformer_l4_horizon_4seed_2026_07_02.md`
 
 Key verification signals (from the latest result report):
   - Group | Accuracy | Memory specificity z | 95% CI | Rank | Gate
   - bottleneck/transformer | 1.000 | +2.309 | [+2.309, +2.309] | 0.875 | pass
-  - visible_control/transformer | 1.000 | +0.000 | [-0.466, +0.471] | 0.500 | pass
-  - Pooled bottleneck passes all registered gates:
+  - visible_control/transformer | 1.000 | -0.000 | [-0.389, +0.361] | 0.500 | pass
+  - Horizon | Condition | Accuracy | Memory specificity z | 95% CI | Rank | Gate
 
 ## Artifacts
-- Committed: `experiments/long_horizon_bottleneck/results/modal_transformer_l4_8seed_2026_07_02.md`
+- Committed: `experiments/long_horizon_bottleneck/results/modal_transformer_l4_8seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/modal_transformer_l4_horizon_4seed_2026_07_02.md`
 - Local-only: artifacts/ (gitignored raw outputs; see result reports for summaries)
 - Paper: _none_
