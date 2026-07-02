@@ -205,7 +205,7 @@ def write_report(payload: dict[str, Any], out: Path) -> None:
         lines.append(
             f"| {arch} | {fmt_stat(lift)} | {fmt_stat(spec)} | "
             f"{rank['mean']:.3f} | {peak['mean']:.3f} | "
-            f"{'pass' if item['gate']['pass'] else 'fail'} |"
+            f"{'met' if item['gate']['pass'] else 'not met'} |"
         )
     pooled = summary["pooled_architecture_balanced"]
     lines += [
@@ -226,7 +226,7 @@ def write_report(payload: dict[str, Any], out: Path) -> None:
         directional = lift["ci95"][0] > 0 and spec["ci95"][0] > 0
         lines.append(
             f"| {arch} | {lift['se'] <= strict_se} | {spec['se'] <= strict_se} | "
-            f"{directional} | {'pass' if precision_pass(item, strict_se) else 'fail'} |"
+            f"{directional} | {'met' if precision_pass(item, strict_se) else 'not met'} |"
         )
     lines += [
         "",
@@ -249,12 +249,12 @@ def write_report(payload: dict[str, Any], out: Path) -> None:
         "displacement per unit physical displacement. Area density is reported only as a companion",
         "rate-distortion diagnostic.",
         "",
-        "Interpret the claim exactly as preregistered: architectures pass only when the bootstrap",
+        "Interpret the claim exactly as preregistered: architectures meet the report threshold only when the bootstrap",
         "intervals for both control-subtracted lift and moved-location specificity exclude zero on",
         f"the positive side, the primary standard errors are at or below the stated report target "
         f"({target_se:.2f} here), and the reward-location rank is above chance. The frozen stricter",
         "1% precision audit is retained separately because the 2% threshold was accepted after the",
-        "first-wave results were visible. Failed architecture families must remain failed in the paper.",
+        "first-wave results were visible. Families that do not meet an audit must remain non-meeting in the paper.",
         "",
     ]
     out.parent.mkdir(parents=True, exist_ok=True)

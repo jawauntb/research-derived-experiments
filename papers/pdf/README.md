@@ -13,7 +13,9 @@ gitignored). Regenerate with the committed builders:
 - `concern_deforms_metric.pdf` — Paper B "Value-Weighted Training Deforms Learned
   Metrics" (controlled 64-seed moved-location test across RNN, Transformer, and
   JEPA-style spatial models; the 2% report threshold is met with the stricter frozen 1%
-  audit retained as a non-passing precision check).
+  audit retained as a non-passing precision check). Appendix A adds the semantic
+  transformer boundary check, where naive text-encoder transfer does not meet the
+  registered local semantic-margin gate.
   Rebuild: `python scripts/build_paperB_pdf.py`
 
 - `reward_deformation_effective_dimension_law.pdf` — standalone Newton-gate paper: the
