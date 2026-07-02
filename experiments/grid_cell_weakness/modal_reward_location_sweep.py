@@ -241,7 +241,7 @@ def _metric_observables(pop, side: int, xy: list[float], locations: list[list[fl
 
 @app.function(
     image=IMAGE,
-    gpu=["B200", "H200", "H100"],
+    gpu=["H200", "H100"],
     timeout=7200,
     memory=32768,
     max_containers=1024,
