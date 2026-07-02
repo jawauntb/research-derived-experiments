@@ -19,4 +19,9 @@ gitignored). Regenerate with the committed builders:
   2-D exponent is falsified and the measured law has effective dimension near 1.
   Rebuild: `python scripts/build_effective_dimension_pdf.py`
 
+- `semantic_concern_geometry_boundary.pdf` — Paper B externality follow-up: a 256-seed
+  real-text transformer/JEPA-like sweep that fails the preregistered semantic-margin
+  transport gate while revealing positive companion geometry.
+  Rebuild: `python scripts/build_semantic_concern_pdf.py`
+
 Toolkit: `scripts/paperkit.py` (LaTeX-free; reportlab + matplotlib).

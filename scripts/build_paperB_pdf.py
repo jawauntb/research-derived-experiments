@@ -351,8 +351,10 @@ def build() -> None:
         "[1.917,1.984], specificity +2.005 [1.988,2.022]. The frozen stricter 1% precision audit is "
         "not claimed to pass. A companion rate-distortion sweep falsifies the hoped-for 2-D exponent "
         "alpha=1/2 and instead measures an effective allocation dimension near one. The bounded "
-        "conclusion is therefore: concern causally deforms a learned metric, robustly across model "
-        "families, while the scaling law reveals an architecture-dependent capacity bottleneck.")
+        "conclusion is therefore: concern causally deforms a learned spatial metric, robustly across model "
+        "families, while the scaling law reveals an architecture-dependent capacity bottleneck. A separate "
+        "256-seed real-text follow-up on pretrained DistilBERT and MiniLM encoders fails the preregistered "
+        "semantic-margin transport gate, so this paper does not claim foundation-model generality.")
 
     p.h1("1. Claim and Definitions")
     p.para(
@@ -446,11 +448,19 @@ def build() -> None:
         "tests are language and vision analogues, where the concern field is semantic or task-value "
         "weighted rather than spatial.")
     p.para(
-        "The strongest future baseline is a non-spatial analogue in a real transformer: for example, "
-        "upweight a controlled semantic region, syntactic construction, or retrieval-relevant document "
-        "cluster, then test whether local representation geometry changes specifically there while "
-        "matched controls do not. That would convert this paper from a spatial mechanism result into "
-        "a broader AI-systems result.")
+        "We ran the first such text analogue after the spatial result: a 20 Newsgroups moved-target "
+        "sweep with DistilBERT and all-MiniLM-L6-v2, classifier and JEPA-like objectives, random-matched "
+        "controls, and 256 seeds per family. It fails the preregistered semantic-margin gate in the "
+        "opposite direction: architecture-balanced lift is -0.441 vs uniform and -0.441 vs random-matched "
+        "controls, both with SE 0.007. Companion centroid and kNN-purity probes move positively, but "
+        "target F1 decreases. The correct interpretation is a boundary condition: the spatial mechanism "
+        "is real, but a foundation-model semantic generalization remains unconfirmed.")
+    p.para(
+        "The strongest future baseline is therefore not simply 'more transformer seeds.' It is a "
+        "task-native semantic-resolution setting: retrieval under asymmetric cost, paraphrase or "
+        "subtopic discrimination inside a valued class, or a contrastive corpus where valuable examples "
+        "require finer distinctions rather than broader class separation. That experiment should be "
+        "pre-registered as a new gate rather than retrofitted to this result.")
 
     p.h1("7. Limitations")
     p.para(
@@ -458,8 +468,10 @@ def build() -> None:
         "audit is therefore retained rather than rewritten. The task is synthetic path integration. "
         "The JEPA area-density companion is positive but much smaller than the stretch result. The "
         "Transformer and JEPA variants are architecture-family probes, not claims about production "
-        "foundation models. Raw JSON remains local and gitignored; committed reports contain the "
-        "gate numbers and provenance.")
+        "foundation models. A Modal-scale semantic transformer follow-up now makes that limitation "
+        "empirical rather than speculative: the pretrained text setting fails the registered local-margin "
+        "transport gate. Raw JSON remains local and gitignored; committed reports contain the gate "
+        "numbers and provenance.")
 
     p.references([
         "Bennett, W. R. Spectra of quantized signals. Bell System Technical Journal (1948).",
@@ -476,6 +488,10 @@ def build() -> None:
         "Vaswani, A. et al. Attention is all you need. NeurIPS (2017).",
         "Assran, M. et al. Self-supervised learning from images with a joint-embedding predictive architecture. CVPR (2023).",
         "LeCun, Y. A path towards autonomous machine intelligence. OpenReview (2022).",
+        "Lang, K. NewsWeeder: Learning to filter netnews. ICML (1995).",
+        "Devlin, J., Chang, M.-W., Lee, K., Toutanova, K. BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding. NAACL (2019).",
+        "Sanh, V., Debut, L., Chaumond, J., Wolf, T. DistilBERT, a distilled version of BERT: smaller, faster, cheaper and lighter. arXiv:1910.01108 (2019).",
+        "Wang, W. et al. MiniLM: Deep Self-Attention Distillation for Task-Agnostic Compression of Pre-Trained Transformers. NeurIPS (2020).",
     ])
     out = p.build()
     print(f"[paperB] wrote {out}")

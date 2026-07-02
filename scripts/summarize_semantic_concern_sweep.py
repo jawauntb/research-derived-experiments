@@ -36,6 +36,31 @@ def boot_stat(vals: list[float], n_boot: int = 5000, seed: int = 0) -> dict[str,
     }
 
 
+def balanced_boot_stat(groups: dict[str, list[float]], n_boot: int = 5000, seed: int = 0) -> dict[str, Any]:
+    import numpy as np
+
+    clean = {k: np.asarray(_finite(v), dtype=float) for k, v in groups.items()}
+    clean = {k: v for k, v in clean.items() if v.size}
+    if not clean:
+        return {"mean": math.nan, "se": math.nan, "ci95": [math.nan, math.nan], "n": 0}
+    keys = sorted(clean)
+    family_means = [float(clean[k].mean()) for k in keys]
+    rng = np.random.default_rng(seed)
+    boot = np.empty(n_boot)
+    for i in range(n_boot):
+        vals = []
+        for key in keys:
+            arr = clean[key]
+            vals.append(float(arr[rng.integers(0, arr.size, arr.size)].mean()))
+        boot[i] = float(np.mean(vals))
+    return {
+        "mean": float(np.mean(family_means)),
+        "se": float(boot.std(ddof=1)),
+        "ci95": [float(np.percentile(boot, 2.5)), float(np.percentile(boot, 97.5))],
+        "n": int(sum(v.size for v in clean.values())),
+    }
+
+
 def family_key(row: dict[str, Any]) -> str:
     return f"{row['model_slug']}::{row['objective']}"
 
@@ -104,7 +129,7 @@ def summarize(payload: dict[str, Any]) -> dict[str, Any]:
     for effect in effects:
         grouped[effect["family"]].append(effect)
 
-    balanced_primary = defaultdict(list)
+    balanced_primary: dict[str, dict[str, list[float]]] = defaultdict(dict)
     for family in families:
         items = grouped[family]
         stats = {
@@ -141,17 +166,21 @@ def summarize(payload: dict[str, Any]) -> dict[str, Any]:
         stats["gate"] = gate
         stats["n_effects"] = len(items)
         out["families"][family] = stats
-        for metric in (
-            "margin_lift_vs_uniform",
-            "margin_lift_vs_random",
-            "specificity_z",
-            "target_rank_percentile",
-        ):
-            balanced_primary[metric].append(stats[metric]["mean"])
+        balanced_primary["margin_lift_vs_uniform"][family] = [
+            e["margin_lift_vs_uniform"] for e in items
+        ]
+        balanced_primary["margin_lift_vs_random"][family] = [
+            e["margin_lift_vs_random"] for e in items
+        ]
+        balanced_primary["specificity_z"][family] = [e["specificity_z"] for e in items]
+        balanced_primary["target_rank_percentile"][family] = [
+            e["target_rank_percentile"] for e in items
+        ]
 
     pooled = {
-        metric: boot_stat(vals, seed=20 + i)
+        metric: balanced_boot_stat(groups, seed=20 + i)
         for i, (metric, vals) in enumerate(balanced_primary.items())
+        for groups in [vals]
     }
     pooled_gate = {
         "uniform_lift_positive": pooled["margin_lift_vs_uniform"]["ci95"][0] > 0,
@@ -178,6 +207,8 @@ def fmt_stat(stat: dict[str, Any], digits: int = 3) -> str:
 
 def report_markdown(payload: dict[str, Any], summary: dict[str, Any]) -> str:
     manifest = payload.get("manifest", {})
+    input_payloads = manifest.get("input_payloads", [])
+    input_manifests = manifest.get("input_manifests", [manifest])
     lines = [
         "# Semantic Concern Geometry Sweep -- Modal Results (2026-07-02)",
         "",
@@ -210,15 +241,25 @@ def report_markdown(payload: dict[str, Any], summary: dict[str, Any]) -> str:
         f"- Target bootstrap SE: {manifest.get('target_bootstrap_se')}",
         f"- Dataset kinds observed: {', '.join(summary['dataset_kinds'])}",
         f"- Rows: {summary['n_rows']}; paired concern effects: {summary['n_effects']}",
+        f"- Merged payloads: {len(input_payloads) if input_payloads else 1}",
         "",
-        "Run command:",
+        "Run command(s):",
         "",
         "```bash",
-        "doppler --scope /Users/jawaun/superoptimizers run -- \\",
-        "  uvx --python 3.12 --from modal modal run \\",
-        "    experiments/semantic_concern_geometry/modal_semantic_concern_sweep.py \\",
-        "    --seeds 64 --steps 90 --batch-size 32 --target-se 0.02 \\",
-        "    --out artifacts/semantic_concern_geometry/semantic_concern_sweep_2026_07_02.json",
+    ]
+    for idx, run_manifest in enumerate(input_manifests):
+        out_path = input_payloads[idx] if idx < len(input_payloads) else "artifacts/semantic_concern_geometry/semantic_concern_sweep_2026_07_02.json"
+        lines += [
+            "doppler --scope /Users/jawaun/superoptimizers run -- \\",
+            "  uvx --python 3.12 --from modal modal run \\",
+            "    experiments/semantic_concern_geometry/modal_semantic_concern_sweep.py \\",
+            f"    --seeds {run_manifest.get('seeds')} --base-seed {run_manifest.get('base_seed')} "
+            f"--steps {run_manifest.get('steps')} --batch-size {run_manifest.get('batch_size')} "
+            f"--target-se {run_manifest.get('target_bootstrap_se')} \\",
+            f"    --out {out_path}",
+            "",
+        ]
+    lines += [
         "```",
         "",
         "## Gate Summary",
@@ -292,12 +333,24 @@ def report_markdown(payload: dict[str, Any], summary: dict[str, Any]) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input", default="artifacts/semantic_concern_geometry/semantic_concern_sweep_2026_07_02.json")
+    parser.add_argument(
+        "--input",
+        nargs="+",
+        default=["artifacts/semantic_concern_geometry/semantic_concern_sweep_2026_07_02.json"],
+    )
     parser.add_argument("--summary-json", default="artifacts/semantic_concern_geometry/semantic_concern_summary_2026_07_02.json")
     parser.add_argument("--report", default="experiments/semantic_concern_geometry/results/semantic_concern_sweep_2026_07_02.md")
     args = parser.parse_args()
 
-    payload = json.loads(Path(args.input).read_text())
+    payloads = [json.loads(Path(p).read_text()) for p in args.input]
+    payload = dict(payloads[0])
+    payload["rows"] = [row for p in payloads for row in p["rows"]]
+    manifest = dict(payload.get("manifest", {}))
+    manifest["input_payloads"] = args.input
+    manifest["input_manifests"] = [p.get("manifest", {}) for p in payloads]
+    if all("manifest" in p and "seeds" in p["manifest"] for p in payloads):
+        manifest["seeds"] = sum(int(p["manifest"]["seeds"]) for p in payloads)
+    payload["manifest"] = manifest
     summary = summarize(payload)
     summary_path = Path(args.summary_json)
     summary_path.parent.mkdir(parents=True, exist_ok=True)
