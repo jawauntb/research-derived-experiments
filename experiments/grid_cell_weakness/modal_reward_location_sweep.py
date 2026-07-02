@@ -244,7 +244,7 @@ def _metric_observables(pop, side: int, xy: list[float], locations: list[list[fl
     gpu="H100",
     timeout=7200,
     memory=32768,
-    max_containers=256,
+    max_containers=1024,
     retries=1,
 )
 def run_cell(arg: dict[str, Any]) -> list[dict[str, Any]]:
