@@ -60,7 +60,7 @@ def figures():
     f["vision"] = pk.chart_hbar(
         f"{FIG}/fig4_vision_predictors.png", vlabels, vvals,
         highlight={"weakness (rotation)"}, vmin=-0.45, vmax=0.8,
-        title="Vision ℤ₈ rotated strokes (96 models): predictor correlation with OOD",
+        title="Vision Z_8 rotated strokes (96 models): predictor correlation with OOD",
         xlabel="Pearson r with OOD accuracy", figsize=(6.2, 2.6))
     # Fig 5: language paraphrase-orbit gap by layer (centered)
     layers = list(range(7))
@@ -96,9 +96,12 @@ def build():
         "transformation enumeration plus training-pair consistency, matches the oracle without "
         "using the hidden offset or reflection parameter. Across 256, 1024, and 4096 trained "
         "MLPs, learned-function weakness under the true group is the strongest correlate of OOD "
-        "accuracy (r = +0.817, +0.813, +0.8085). Vision gives the same ordering (ℤ₈ rotation, "
-        "r = +0.672). Parity and S_n are honest negative cases; the Pythia-70M result is "
-        "reported only as latent geometry, not behavioral evidence.")
+        "accuracy (r = +0.817, +0.813, +0.8085; 4096 CI +0.798 to +0.819), and an "
+        "augmentation-fixed-effect check remains positive (residual r = +0.488). Vision gives "
+        "the same ordering (Z_8 rotation, r = +0.672). Parity is a clean negative case, and "
+        "S_n is a large-group boundary case: oracle weakness helps, but data-inferred group "
+        "discovery degrades. Pythia-70M is reported only in an appendix as latent geometry, "
+        "not behavioral evidence.")
 
     p.h1("1. Introduction")
     p.para(
@@ -130,7 +133,7 @@ def build():
         "We build four task families, each with a known transformation group and a training "
         "distribution that admits both a train-perfect local shortcut and the true invariant: "
         "<i>cyclic_prefix_shift</i> (ℤ_n), <i>dihedral_reflection</i> (D_n), <i>parity_coset</i> "
-        "(ℤ₂), and <i>color_permutation</i> (S_n). We compare eleven selectors over 500 trials per "
+        "(Z_2), and <i>color_permutation</i> (S_n). We compare eleven selectors over 500 trials per "
         "family with Wilson 95% intervals.")
     p.figure(f["sep"],
              "Figure 1. On cyclic and dihedral families, only weakness-based selectors recover "
@@ -166,9 +169,10 @@ def build():
              "Figure 3. The per-augmentation gradient is monotone in weakness: full-cyclic "
              "(orbit completion) reaches 94% OOD and 0.95 weakness, while none / "
              "wrong-reflection collapse to ≤1.4% OOD and ≤0.13 weakness. Augmentations that "
-             "approximately respect the symmetry raise weakness and OOD together.", width_in=5.0)
+             "approximately respect the symmetry raise weakness and OOD together; after "
+             "augmentation fixed effects, residual r remains +0.488.", width_in=5.0)
 
-    p.h1("5. Scaling: vision and language")
+    p.h1("5. Scaling: vision")
     p.para(
         "On a synthetic Z_8 rotated-stroke task (eight classes, 16×16, three of eight angles shown "
         "in training; a re-implementation of Perin and Deny's partial-orbit setup), weakness under "
@@ -180,16 +184,8 @@ def build():
              "control is anti-correlated, as expected of a model that has actually learned the "
              "rotation symmetry.", width_in=5.9)
     p.para(
-        "In language, we extract per-layer mean-pooled Pythia-70M states for 24 concepts × 3 "
-        "paraphrases. After per-layer centering (All-but-the-Top), same-orbit paraphrase cosine "
-        "exceeds the wrong-orbit control by +0.44 to +0.79 (peak at layer 5): paraphrase orbits "
-        "genuinely cluster. We report honestly that this latent clustering does <i>not</i> yet "
-        "predict next-token behavioral consistency at this scale (per-concept |r| ≤ 0.35, N = 24) — "
-        "the latent-geometry claim holds; the latent→behavior chain is unconfirmed at 70M.")
-    p.figure(f["lang"],
-             "Figure 5. Pythia-70M paraphrase orbits cluster strongly in centered latent space "
-             "(gap peaks at +0.79, layer 5). This is a latent-geometry result only; the "
-             "latent-to-behavior prediction is not confirmed at this scale.", width_in=5.2)
+        "The language probe is moved to Appendix C and treated as exploratory latent geometry only; "
+        "it is not used as behavioral OOD evidence.")
 
     p.h1("6. Operating regime and limitations")
     p.para(
@@ -208,11 +204,65 @@ def build():
         "families where both are train-perfect — is symmetry-compatible-hypothesis volume: a "
         "measurable, intervention-friendly, reparameterization-invariant quantity, not a "
         "parameter-space artifact. It operationalizes Bennett's weakness on neural function tables "
-        "and bridges the manifold-hypothesis intuition (intelligence needs symmetry-preserving "
-        "compression) with the practical question of which heuristic to trust when training loss is "
+        "and answers the practical question of which heuristic to trust when training loss is "
         "tied. The safe thesis is not that compression is wrong; it is that, in these "
         "shortcut-compatible symmetry tasks, the relevant compression is compatibility with the "
         "transformations that generate the missing cases.")
+
+    p.h1("Appendix A. Methods and statistics")
+    p.para(
+        "Symbolic families are exact finite tasks. Cyclic uses X=Z_n, n in {7,11,13}, truth "
+        "f_b(x)=x+b mod n, a prefix train window, and a suffix OOD set. Dihedral uses X=Z_n, "
+        "n in {7,9,11,13}, truth f_b(x)=b-x mod n, and D_n rotations/reflections. Parity uses "
+        "an even domain and f(x)=x xor 1 with one parity coset held out. Color-permutation uses "
+        "S_n, n in {4,5,6}, a sampled non-identity permutation, sparse training inputs, and "
+        "unobserved inputs as OOD.")
+    p.table(
+        [["Selector", "Score", "Tie-break", "Group access"],
+         ["train_loss", "train accuracy", "shorter form", "none"],
+         ["validation", "leave-one-observed-pair accuracy", "shorter form", "none"],
+         ["simplicity", "shorter form_length", "random exact tie", "none"],
+         ["compression", "form_length + 20*train_errors", "random exact tie", "none"],
+         ["mdl_program", "2^-form_length", "shorter form", "none"],
+         ["flatness_proxy", "unconstrained domain count", "shorter form", "none"],
+         ["weakness_oracle", "W_G(f)", "compression", "true task group"],
+         ["weakness_wrong_group", "W under random perms", "compression", "wrong control"],
+         ["weakness_noisy_group", "W under noisy subset", "compression", "noisy true group"],
+         ["weakness_data_inferred", "W under inferred G_hat", "compression", "train pairs only"],
+         ["random", "uniform train-perfect candidate", "-", "none"]],
+        caption="Appendix Table A1. Exact selector definitions. Classical baselines are the first "
+                "six rows; validation is in-distribution only.",
+        col_widths=[105, 165, 95, 105])
+    p.para(
+        "Data-inferred group discovery enumerates a family-specific domain prior (Z_n shifts for "
+        "cyclic, D_n rotations/reflections for dihedral, parity swap for parity, and a small cyclic "
+        "heuristic for S_n), then keeps every input-side transformation g for which some output-side "
+        "transformation h is non-contradictory on observed training pairs. It uses training inputs, "
+        "training outputs, and the domain prior only: no test labels, hidden offset, hidden "
+        "reflection, sampled permutation, or invariant-candidate identity.")
+    p.table(
+        [["Statistic", "Value"],
+         ["4096 true-group Pearson r", "+0.8085 (95% CI +0.7976 to +0.8189)"],
+         ["4096 partial-cyclic Pearson r", "+0.7940 (95% CI +0.7824 to +0.8051)"],
+         ["4096 validation Pearson r", "+0.0924 (95% CI +0.0620 to +0.1227)"],
+         ["4096 parameter L2 Pearson r", "+0.2533 (95% CI +0.2244 to +0.2818)"],
+         ["4096 fixed-effect residual r", "+0.4883 (95% CI +0.4647 to +0.5113)"],
+         ["Fixed-effect beta", "+0.3652 (95% CI +0.3452 to +0.3853)"]],
+        caption="Appendix Table A2. Fisher-z intervals and augmentation fixed-effect check. "
+                "The headline effect is partly augmentation-mediated, but a within-condition "
+                "learned-function signal remains.",
+        col_widths=[180, 270])
+
+    p.h1("Appendix C. Exploratory language check")
+    p.para(
+        "Pythia-70M hidden states for 24 concepts x 3 paraphrases show centered same-orbit "
+        "cosine gaps of +0.44 to +0.79 after All-but-the-Top centering, but per-concept "
+        "next-token behavioral consistency is not predicted at this scale (Pearson range "
+        "-0.35 to -0.13, N=24). This supports only a latent-geometry statement: paraphrase "
+        "orbits cluster in centered representation space.")
+    p.figure(f["lang"],
+             "Appendix Figure C1. Pythia-70M paraphrase orbits cluster in centered latent space "
+             "(gap peaks at +0.79, layer 5). This is a latent-geometry result only.", width_in=5.2)
 
     p.references([
         "[1] Bennett, M. T. How to Create Conscious Machines. arXiv:2403.00644 (2024).",
@@ -245,6 +295,14 @@ def build():
         "Parameter–Function Map is Biased Towards Simple Functions. ICLR (2019).",
         "[18] van der Ouderaa, T. F. A., Immer, A., van der Wilk, M. Learning Layer-wise "
         "Equivariances Automatically using Gradients. NeurIPS (2023).",
+        "[19] Arjovsky, M., Bottou, L., Gulrajani, I., Lopez-Paz, D. Invariant Risk Minimization. "
+        "arXiv:1907.02893 (2019).",
+        "[20] Zhou, K., Liu, Z., Qiao, Y., Xiang, T., Loy, C. C. Domain Generalization: A Survey. "
+        "arXiv:2103.02503 (2021).",
+        "[21] Rissanen, J. Modeling by Shortest Data Description. Automatica 14(5):465-471 (1978).",
+        "[22] Grunwald, P. D. The Minimum Description Length Principle. MIT Press (2007).",
+        "[23] Mingard, C. et al. Neural Networks are a Priori Biased Towards Boolean Functions "
+        "with Low Entropy. arXiv:1909.11522 (2019).",
     ])
     out = p.build()
     print(f"[weakness-pdf] wrote {out}")

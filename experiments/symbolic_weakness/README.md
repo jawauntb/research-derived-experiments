@@ -90,6 +90,13 @@ python3 -m experiments.symbolic_weakness.summarize_neural_sweep \
 Result report (post-augmentation-fix, 256 models):
 [results/neural_sweep_v3_2026_06_09.md](results/neural_sweep_v3_2026_06_09.md).
 
+Larger Modal reports:
+[results/modal_neural_sweep_v1_2026_06_09.md](results/modal_neural_sweep_v1_2026_06_09.md)
+and
+[results/modal_neural_sweep_2026_07_02.md](results/modal_neural_sweep_2026_07_02.md).
+Correlation intervals and augmentation fixed-effect checks:
+[results/neural_correlation_checks_2026_07_02.md](results/neural_correlation_checks_2026_07_02.md).
+
 ## Paper
 
 Full draft: [`papers/weakness_invariance_neurips/paper.md`](../../papers/weakness_invariance_neurips/paper.md).

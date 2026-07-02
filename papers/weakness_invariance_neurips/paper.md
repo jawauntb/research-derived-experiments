@@ -6,7 +6,7 @@
 
 ## Abstract
 
-We study model selection in finite-domain settings where the training data admits both a local shortcut and a globally symmetry-compatible rule. In these settings, training loss and standard in-distribution validation cannot distinguish the two completions, and generic simplicity or flatness proxies can prefer the shortcut. We define a finite operationalization of Bennett-style **weakness** as the number of transformations under which a candidate function remains equivariant up to an output action. Across cyclic and dihedral symbolic task families (500 trials each), weakness selects the invariant rule in 100% of trials (Wilson 95% lower bound 0.992), while the tested train-loss, validation, description-length, MDL-style, compression, and flatness proxies select the shortcut in 100% of trials (Wilson 95% upper bound 0.008). A data-inferred selector, built by enumerating circular-domain transformations and retaining those consistent with training pairs, matches the oracle selector on cyclic and dihedral families without using the hidden offset or reflection parameter. On trained neural models, learned-function weakness under the true group is the strongest correlate of OOD accuracy across 256 local MLPs (Pearson r = +0.817), a 1024-model Modal replication (r = +0.813), and a 4096-model Modal rescale (r = +0.8085), while held-out validation, training loss, parameter norm, and Hutchinson sharpness remain substantially weaker. A rotated-stroke vision benchmark gives the same ordering (rotation weakness r = +0.672; wrong-group control r = -0.341). Negative cases with parity and full symmetric groups delineate the operating regime, and a Pythia-70M paraphrase experiment is reported as an exploratory latent-geometry result rather than behavioral evidence. The claim is not that compression is useless in general; it is that, in shortcut-compatible symmetry tasks, the relevant inductive bias is symmetry-compatible hypothesis volume.
+We study model selection in finite-domain settings where the training data admits both a local shortcut and a globally symmetry-compatible rule. In these settings, training loss and in-distribution validation cannot distinguish the two completions, and generic simplicity or flatness proxies can prefer the shortcut. We define a finite operationalization of Bennett-style **weakness** as the number of transformations under which a candidate function remains equivariant up to an output action. Across cyclic and dihedral symbolic task families (500 trials each), weakness selects the invariant rule in 100% of trials (Wilson 95% lower bound 0.992), while the tested train-loss, validation, description-length, MDL-style, compression, and flatness proxies select the shortcut in 100% of trials (Wilson 95% upper bound 0.008). A data-inferred selector, built by enumerating circular-domain transformations and retaining those consistent with training pairs, matches the oracle selector on cyclic and dihedral families without using the hidden offset or reflection parameter. On trained neural models, learned-function weakness under the true group is the strongest correlate of OOD accuracy across 256 local MLPs (Pearson r = +0.817, Fisher 95% CI +0.772 to +0.854), a 1024-model Modal resample (r = +0.813), and a 4096-model Modal rescale (r = +0.8085, CI +0.798 to +0.819). A 4096-model augmentation-fixed-effect check leaves a positive residual correlation (r = +0.488, CI +0.465 to +0.511), so the effect is not only an augmentation-condition label. A rotated-stroke vision benchmark gives the same ordering (rotation weakness r = +0.672; wrong-group control r = -0.341). Parity is a clean negative case, and \(S_n\) is a large-group boundary case: oracle weakness helps, but data-inferred group discovery degrades. An appendix reports a Pythia-70M paraphrase latent-geometry check, not behavioral OOD evidence. The claim is not that compression is useless in general; it is that, in shortcut-compatible symmetry tasks, the relevant inductive bias is symmetry-compatible hypothesis volume.
 
 ## 1. Introduction
 
@@ -22,7 +22,8 @@ Contributions:
 2. We construct shortcut-compatible symbolic tasks where the local shortcut and the invariant rule are both train-perfect, but only the invariant generalizes to OOD inputs.
 3. We show that weakness selects the OOD-correct completion on cyclic and dihedral families where the candidate group has the right granularity, while the tested loss, validation, description-length, compression, MDL-style, and flatness proxies do not.
 4. We verify the neural version across 256 local MLPs, a 1024-model Modal replication, and a 4096-model Modal rescale.
-5. We report honest boundaries: parity is too small a group to disambiguate, the full symmetric group is too uninformative for this candidate pool, and the language result currently supports only a latent-geometry claim.
+5. We add a methods appendix with exact task definitions, selector definitions, data-inferred group pseudocode, neural training distributions, OOD splits, correlation intervals, and an augmentation-fixed-effect check.
+6. We report honest boundaries: parity is too small a group to disambiguate, the full symmetric group is too uninformative for the current data-inferred heuristic, and the language result currently supports only a latent-geometry claim.
 
 Claim level. This is evidence for a symmetry-volume model-selection principle in finite shortcut-compatible regimes. It is not a claim that generic compression, PAC-Bayes, validation, or flatness never matter. A safer summary is: when train-perfect shortcuts and invariant rules coexist, generic simplicity proxies can be underdetermined or misaligned, while symmetry-compatible volume directly measures the completion that will transport across the group-generated OOD split.
 
@@ -59,6 +60,8 @@ with ties broken by the same compression proxy used by the baseline selectors.
 
 The principle has a clear failure mode. If \(\hat G\) is too small, many wrong local completions can be equally compatible. If \(\hat G\) is too large or semantically uninformative, wrong candidates may have comparable compatibility counts. Those are not footnotes; they are part of the proposed operating regime.
 
+**Proposition 1 (group-completed coverage).** Suppose deployment inputs are generated by applying a subset \(S \subseteq G\) of transformations to observed training inputs, and suppose labels are generated by an output action in the same transformation family. Among train-consistent hypotheses with zero compatibility error on observed orbits, a candidate compatible with more elements of \(S\) correctly transports more observed labels to the group-completed deployment set. Thus, when \(S\) is unknown but contained in the candidate family, \(W_G(f)\) is an upper-level proxy for missing-orbit coverage. The proposition is modest: it does not say weakness helps when \(G\) is misaligned, too small, or too large to distinguish the competing train-consistent functions.
+
 ## 3. Symbolic Benchmark
 
 ### 3.1 Task Families
@@ -74,7 +77,7 @@ The candidate pool always includes a local patch that copies the observed traini
 
 ### 3.2 Selectors and Baselines
 
-We compare eleven selectors. In the discussion below, "classical baselines" means these implemented proxies, not every possible MDL, PAC-Bayes, flatness, or validation method.
+We compare eleven selectors. In the discussion below, "classical baselines" means these implemented proxies, not every possible MDL, PAC-Bayes, flatness, or validation method. Appendix A.2 gives the full score/tie-break/access table.
 
 | Selector | Definition |
 | --- | --- |
@@ -90,7 +93,7 @@ We compare eleven selectors. In the discussion below, "classical baselines" mean
 | `weakness_data_inferred` | weakness under transformations retained by training-pair consistency |
 | `random` | uniform random train-consistent candidate |
 
-The validation baseline is deliberately in-distribution: it holds out one observed training pair and scores the fixed candidate on that pair. It is not allowed to see OOD transformations. Wilson intervals use the standard score interval with \(z = 1.959963984540054\).
+The validation baseline is deliberately in-distribution: it holds out one observed training pair and scores the fixed candidate on that pair. Validation examples are drawn from the same shortcut-compatible partial-orbit distribution as training; no held-out OOD transformations are included. Wilson intervals use the standard score interval with \(z = 1.959963984540054\).
 
 The `weakness_data_inferred` selector does not receive the hidden offset, reflection parameter, or ground-truth function. For cyclic tasks it enumerates circular shifts and keeps shifts that do not contradict observed pairs under some output shift. For dihedral tasks it enumerates the signed circular prior (rotations plus reflections) and keeps transformations consistent with the observed pairs under some output-side signed action. For color permutation, the current heuristic falls back to a small cyclic prior and is intentionally weak.
 
@@ -181,7 +184,7 @@ Per-augmentation breakdown:
 
 ### 4.3 Modal Replications
 
-The 1024-model Modal replication uses 8 shards by 128 models with the same hyperparameter space and base seed family. The 4096-model rescale uses 32 shards by 128 models with base seed 20260702. Both preserve the ordering.
+The 1024-model Modal run uses 8 shards by 128 models with the same hyperparameter schema as the local sweep. The 4096-model rescale uses 32 shards by 128 models with base seed 20260702. These are larger stochastic draws from the same sweep family rather than new task families; the 4096 run is the highest-powered estimate.
 
 | Predictor | 256 Pearson | 1024 Pearson | 4096 Pearson | 4096 Spearman |
 | --- | ---: | ---: | ---: | ---: |
@@ -193,6 +196,18 @@ The 1024-model Modal replication uses 8 shards by 128 models with the same hyper
 | training loss | -0.031 | -0.048 | -0.0249 | +0.1200 |
 | `weakness_wrong_group_norm` | -0.129 | -0.116 | -0.1040 | -0.0218 |
 
+Fisher-z 95% intervals on the 4096-model run are:
+
+| Predictor | Pearson r | 95% CI |
+| --- | ---: | --- |
+| **`weakness_oracle_norm`** | **+0.8085** | **(+0.7976, +0.8189)** |
+| `weakness_partial_cyclic_norm` | +0.7940 | (+0.7824, +0.8051) |
+| parameter \(L_2\) | +0.2533 | (+0.2244, +0.2818) |
+| held-out validation accuracy | +0.0924 | (+0.0620, +0.1227) |
+| Hutchinson sharpness proxy | +0.0848 | (+0.0543, +0.1151) |
+| training loss | -0.0249 | (-0.0555, +0.0057) |
+| `weakness_wrong_group_norm` | -0.1040 | (-0.1342, -0.0736) |
+
 4096-model per-augmentation breakdown:
 
 | Augmentation | n | Mean OOD | Mean weakness |
@@ -202,6 +217,14 @@ The 1024-model Modal replication uses 8 shards by 128 models with the same hyper
 | `wrong_random` | 841 | 0.0877 | 0.1230 |
 | `wrong_reflection` | 823 | 0.0135 | 0.1315 |
 | `none` | 821 | 0.0000 | 0.1157 |
+
+Because augmentation condition raises both true-group weakness and OOD accuracy, we also run an augmentation fixed-effect check on the 4096 raw records. Residualizing both OOD accuracy and `weakness_oracle_norm` by augmentation condition leaves Pearson \(r = +0.4883\) (Fisher 95% CI +0.4647 to +0.5113). Equivalently, the fixed-effect regression
+
+$$
+\text{OOD}_i = \alpha_{\text{augmentation}(i)} + \beta W_G(\hat f_i) + \epsilon_i
+$$
+
+gives \(\beta = +0.3652\) (95% CI +0.3452 to +0.3853). Within-condition correlations are positive in the informative `partial_cyclic` and `full_cyclic` regimes (r = +0.6242 and +0.4716 respectively) and near zero in regimes where OOD accuracy is almost degenerate (`none`, `wrong_random`, `wrong_reflection`). The headline correlation is therefore partly augmentation-mediated, but a substantial learned-function signal remains after controlling for augmentation labels.
 
 The wrong-group and random-label controls rule out the trivial explanation that any equivariance count predicts OOD. The observed signal is specific to the group aligned with the deployment shift.
 
@@ -245,30 +268,15 @@ Per-augmentation breakdown:
 
 The wrong-group control is anti-correlated, consistent with a real tradeoff between rotation-compatible structure and pixel-permutation-compatible structure.
 
-### 6.2 Language: Pythia-70M Paraphrase Invariance
-
-We extract per-layer mean-pooled hidden states from Pythia-70M for 24 concepts with 3 paraphrase variants each, treating each concept's variants as an approximate paraphrase orbit. We compute same-orbit cosine, wrong-orbit cosine, and next-token argmax consistency. Raw cosine is dominated by embedding anisotropy, so we also apply per-layer mean-centering following All-but-the-Top.
-
-After centering, same-orbit paraphrase similarity exceeds the wrong-orbit control by +0.44 to +0.79 across layers:
-
-| Layer | Same-orbit centered | Wrong-orbit centered | Gap |
-| ---: | ---: | ---: | ---: |
-| 0 | 0.400 | -0.038 | +0.438 |
-| 1 | 0.568 | -0.020 | +0.588 |
-| 2 | 0.565 | -0.030 | +0.596 |
-| 3 | 0.718 | +0.029 | +0.689 |
-| 4 | 0.742 | +0.008 | +0.734 |
-| 5 | 0.726 | -0.067 | **+0.793** |
-| 6 | 0.700 | -0.014 | +0.713 |
-
-This is a real latent-geometry signal, but it does not predict per-concept next-token behavioral consistency at this scale: Pearson(centered weakness, behavior) lies in [-0.35, -0.13] across layers with only 24 concepts. We therefore treat the language section as exploratory. It supports "paraphrase orbits cluster in centered latent space," not "latent weakness predicts LLM behavior."
+Appendix C reports an exploratory Pythia-70M latent-geometry check. It is not used as evidence for OOD behavioral generalization.
 
 ## 7. Related Work
 
 - **Shortcut learning and underspecification.** Geirhos et al. frame shortcuts as rules that solve benchmarks but fail under changed test conditions. D'Amour et al. show that standard held-out validation can leave pipelines underspecified, returning predictors with similar validation performance but different deployment behavior. Our benchmark is a controlled finite-domain version of this ambiguity.
+- **Domain generalization and invariant prediction.** Invariant Risk Minimization seeks representations whose optimal classifier is stable across training environments, and domain-generalization surveys organize a broad literature on OOD generalization without target-domain labels. Our setting is narrower: we do not learn invariances from multiple natural environments, but score train-consistent finite functions by compatibility with a candidate deployment-generating transformation family.
 - **Geometric deep learning and equivariance.** Cohen and Welling, Kondor and Trivedi, and Bronstein et al. formalize how architectural equivariance builds transformation structure into the model class. Our contribution is a measurement/selection criterion for candidate functions and learned function tables, rather than a new equivariant architecture.
 - **Symmetry learning from data.** Perin and Deny analyze partially observed cyclic orbits and show when conventional supervised networks fail to generalize symmetries not present in the architecture or sufficiently dense in the data. Van der Ouderaa, Immer, and van der Wilk learn layer-wise equivariances using gradients and model evidence. Our data-inferred selector is much simpler and enumerative, but it targets the same gap: useful symmetries are often not known in advance.
-- **Simplicity, MDL, and function-space priors.** Solomonoff and Hutter provide the algorithmic-probability foundation; Valle-Perez, Camargo, and Louis argue that neural parameter-function maps are biased toward simple functions. Our result is not a refutation of simplicity bias. It shows that, in these shortcut-compatible constructions, the tested generic simplicity proxies prefer the wrong train-perfect completion.
+- **Simplicity, MDL, and function-space priors.** Solomonoff and Hutter provide the algorithmic-probability foundation; Rissanen and Grunwald formalize MDL as a model-selection principle; Valle-Perez, Camargo, and Louis and Mingard et al. argue that neural parameter-function maps are biased toward simple functions. Our result is not a refutation of simplicity bias. It shows that, in these shortcut-compatible constructions, the tested generic simplicity proxies prefer the wrong train-perfect completion.
 - **Flatness and sharpness.** Hochreiter and Schmidhuber and Keskar et al. motivate flat minima; Dinh et al. show that sharpness can be changed by reparameterization without changing the represented function. Bennett's recent flat-minima critique argues for weakness as a function-level alternative. Our Hutchinson proxy is only one flatness measure, so the empirical claim is deliberately narrow.
 - **Grokking and emergence of structure.** Power et al. and Liu et al. document transitions from memorization to structured generalization. The neural sweeps here give one concrete variable, learned-function weakness, that tracks the structured side of that transition in cyclic tasks.
 
@@ -290,6 +298,7 @@ All core code is in `experiments/symbolic_weakness/`. The committed result repor
 - `experiments/symbolic_weakness/results/neural_sweep_v3_2026_06_09.md`
 - `experiments/symbolic_weakness/results/modal_neural_sweep_v1_2026_06_09.md`
 - `experiments/symbolic_weakness/results/modal_neural_sweep_2026_07_02.md`
+- `experiments/symbolic_weakness/results/neural_correlation_checks_2026_07_02.md`
 - `experiments/rotation_weakness/results/sweep_v1_2026_06_09.md`
 - `experiments/paraphrase_weakness/results/pythia_70m_2026_06_09.md`
 
@@ -341,6 +350,136 @@ The negative cases should guide future work. Parity says that some transformatio
 
 The next steps are clear: replace enumeration with learned transformation generators, test stronger compression and PAC-Bayes baselines, scale from synthetic groups to natural partial-orbit datasets, and turn weakness from a post-hoc selector into a training-time regularizer.
 
+## Appendix A. Symbolic Methods
+
+### A.1 Formal Task Definitions
+
+Each symbolic trial is a finite supervised problem with domain \(X = \{0,\ldots,n-1\}\), train set \(D_{\text{train}}\), OOD input set \(X_{\text{ood}}\), candidate pool \(\mathcal{F}\), invariant candidate \(f^\star\), and candidate transformation family \(G\). All selector comparisons are restricted to train-perfect candidates.
+
+| Family | Domain and group | Truth | Training split | OOD split | Candidate pool |
+| --- | --- | --- | --- | --- | --- |
+| `cyclic_prefix_shift` | \(X=\mathbb{Z}_n\), \(n\in\{7,11,13\}\), \(G=\mathbb{Z}_n\) cyclic shifts | \(f_b(x)=(x+b)\bmod n\), \(b\in\{1,\ldots,n-1\}\) | prefix \(x\in\{0,\ldots,w-1\}\), \(w\in\{3,4,5\}\) | suffix \(x\in\{w,\ldots,n-1\}\) | local prefix patch, memorizer, true shift, all wrong global shifts |
+| `dihedral_reflection` | \(X=\mathbb{Z}_n\), \(n\in\{7,9,11,13\}\), \(G=D_n\) rotations plus reflections | \(f_b(x)=(b-x)\bmod n\) | prefix \(x\in\{0,\ldots,w-1\}\) | suffix \(x\in\{w,\ldots,n-1\}\) | local patch then identity, memorizer, true reflection, train-consistent rotation shifts |
+| `parity_coset` | even \(n\in\{6,8,10\}\), \(G=\mathbb{Z}_2\) parity swap | \(f(x)=x\oplus 1\) | one sampled parity coset | opposite parity coset | seen-coset patch, memorizer, parity swap, identity |
+| `color_permutation` | \(X=\{0,\ldots,n-1\}\), \(n\in\{4,5,6\}\), \(G=S_n\) | sampled non-identity permutation \(\pi\) | sparse sampled subset of size \(w\) | unobserved inputs | local train patch, memorizer, true permutation, sampled train-consistent wrong permutations |
+
+The local-patch candidates copy every observed training output and use an identity/default value elsewhere. This makes them short and train-perfect but usually non-transportable. The invariant candidate is the true globally defined rule. Wrong invariant candidates are included when they also fit the observed pairs, so the candidate pool contains real ambiguity rather than a single obvious global rule.
+
+The invariant-recovery criterion is whether the selector chooses the candidate named by `trial.invariant_name`. OOD accuracy is exact agreement with the invariant candidate on `trial.ood_inputs`.
+
+### A.2 Selector Definitions
+
+All selectors operate on train-perfect candidates unless otherwise noted. "Uses labels" means the selector inspects observed training outputs; "uses group" means it scores against a transformation set.
+
+| Selector | Score optimized | Tie-break | Uses labels? | Uses group? |
+| --- | --- | --- | --- | --- |
+| `train_loss` | observed training accuracy | lower `form_length` | yes | no |
+| `validation` | leave-one-observed-pair-out accuracy | lower `form_length` | yes, in-distribution only | no |
+| `simplicity` | lower hand-coded `form_length` | random among exact ties | no | no |
+| `compression` | lower `form_length + 20 * train_errors` | random among exact ties | yes | no |
+| `mdl_program` | higher \(2^{-\text{form_length}}\) | lower `form_length` | no | no |
+| `flatness_proxy` | larger count of domain positions unconstrained by training | lower `form_length` | yes | no |
+| `weakness_oracle` | higher \(W_G(f)\) under the task group | lower compression length | no test labels; true candidate group | yes, oracle group |
+| `weakness_wrong_group` | higher weakness under random non-cyclic permutations | lower compression length | no | yes, wrong control group |
+| `weakness_noisy_group` | higher weakness under identity plus a random half-subset of \(G\) plus one wrong element | lower compression length | no | yes, noisy true-group subset |
+| `weakness_data_inferred` | higher weakness under \(\hat G\) inferred from training-pair consistency | lower compression length | yes, train pairs only | yes, inferred group |
+| `random` | none | uniform random train-perfect candidate | no | no |
+
+The "classical baselines" column in the main tables aggregates `train_loss`, `validation`, `simplicity`, `compression`, `mdl_program`, and `flatness_proxy`. It should be read only as this implemented set of proxies.
+
+### A.3 Data-Inferred Group Algorithm
+
+The data-inferred selector is not open-ended symmetry discovery. It assumes a small enumerable domain-action prior and filters that prior by training-pair consistency.
+
+```text
+Input: training pairs D = {(x_i, y_i)}, domain size n, family tag
+
+Choose base transformation prior T:
+  cyclic_prefix_shift: cyclic shifts of Z_n
+  dihedral_reflection: rotations and reflections of D_n
+  parity_coset: identity and parity swap
+  color_permutation: cyclic subgroup heuristic
+
+Initialize G_hat = empty set.
+For each input-side transformation g in T:
+  Keep g if there exists an output-side transformation h in T such that
+  every observed pair is non-contradictory:
+      for all (x, y) in D, if g(x) is also observed with label y',
+      then h(y) == y'.
+Ensure identity is included.
+Return G_hat.
+```
+
+No leakage: the algorithm uses only the observed training inputs and outputs, the domain size, and the enumerable transformation prior for the family. It does not use test labels, OOD inputs, the hidden shift offset \(b\), the hidden reflection parameter, the sampled permutation \(\pi\), or the identity of the invariant candidate.
+
+## Appendix B. Neural and Vision Methods
+
+### B.1 MLP Training Distribution and OOD Split
+
+The neural cyclic benchmark samples finite cyclic-prefix-shift tasks and trains small MLPs for 2000 full-batch steps. The local 256-model sweep uses `experiments.symbolic_weakness.neural`; the Modal sweeps use `experiments.symbolic_weakness.modal_neural_sweep`.
+
+For the Modal runs, each model samples:
+
+- modulus \(n\in\{7,11,13\}\);
+- train window \(w\in\{2,3,4\}\), with OOD inputs \(\{w,\ldots,n-1\}\);
+- augmentation in {`none`, `partial_cyclic`, `full_cyclic`, `wrong_reflection`, `wrong_random`};
+- augmentation count in \(\{2,4,6,8\}\) for partial/wrong augmentations and 0 for none/full;
+- hidden width in \(\{16,32,64,128\}\), depth in \(\{1,2,3\}\), initialization scale in \(\{0.3,0.7,1.0,1.5\}\);
+- optimizer in {Adam, SGD with momentum}, learning rate in \(\{10^{-3},3\cdot 10^{-3},10^{-2},3\cdot 10^{-2}\}\), and weight decay in \(\{0,10^{-4},10^{-2}\}\).
+
+After training, the model is converted to a full argmax function table over the finite domain. Weakness scores are computed on that learned function table, not on hidden activations.
+
+### B.2 Correlation Intervals and Augmentation Fixed Effects
+
+Correlation intervals use the Fisher transform:
+`z = atanh(r)`, `SE(z) = 1 / sqrt(n - 3)`, and
+`CI_95 = tanh(z +/- 1.959963984540054 * SE(z))`.
+
+Selected Pearson intervals:
+
+| Run | Predictor | r | Fisher 95% CI |
+| --- | --- | ---: | --- |
+| 256 local | `weakness_oracle_norm` | +0.8169 | (+0.7716, +0.8540) |
+| 256 local | `weakness_partial_cyclic_norm` | +0.8035 | (+0.7553, +0.8431) |
+| 256 local | held-out validation | +0.0960 | (-0.0269, +0.2161) |
+| 256 local | parameter \(L_2\) | +0.0991 | (-0.0238, +0.2190) |
+| 256 local | Hutchinson sharpness | +0.1294 | (+0.0069, +0.2481) |
+| 1024 Modal | `weakness_oracle_norm` | +0.8132 | (+0.7914, +0.8330) |
+| 1024 Modal | parameter \(L_2\) | +0.2731 | (+0.2154, +0.3289) |
+| 4096 Modal | `weakness_oracle_norm` | +0.8085 | (+0.7976, +0.8189) |
+| 4096 Modal | `weakness_partial_cyclic_norm` | +0.7940 | (+0.7824, +0.8051) |
+| 4096 Modal | held-out validation | +0.0924 | (+0.0620, +0.1227) |
+| 4096 Modal | parameter \(L_2\) | +0.2533 | (+0.2244, +0.2818) |
+| 4096 Modal | Hutchinson sharpness | +0.0848 | (+0.0543, +0.1151) |
+| 4096 Modal | training loss | -0.0249 | (-0.0555, +0.0057) |
+| 4096 Modal | wrong-group weakness | -0.1040 | (-0.1342, -0.0736) |
+
+For the augmentation fixed-effect check, we subtract each augmentation condition's mean from both OOD accuracy and `weakness_oracle_norm`, then correlate the residuals. This is equivalent to fitting the one-predictor fixed-effect regression shown in Section 4.3. On the 4096-model raw records, residual \(r=+0.4883\) and \(\beta=+0.3652\) show that weakness still predicts OOD variation inside augmentation strata, although the headline effect is partly mediated by augmentation condition.
+
+### B.3 Vision Task Generation
+
+The rotated-stroke benchmark uses eight hand-coded stroke classes rendered on 16 by 16 grayscale grids. The transformation group is \(\mathbb{Z}_8\) rotation in 45-degree increments. For each class, the split samples 3 of 8 rotations for training and holds out the remaining 5 rotations for OOD evaluation. Each class-rotation cell is materialized with repeated noisy samples (`noise_std=0.05` by default). The sweep trains 96 small CNN/MLP models for 250 epochs with architecture, width, depth, initialization scale, optimizer, learning rate, weight decay, and augmentation sampled as reported in `experiments/rotation_weakness/results/sweep_v1_2026_06_09.md`.
+
+Vision weakness is the fraction of sample/rotation pairs for which the model's argmax prediction is invariant under rotating the input. The wrong-group control repeats the computation under random pixel permutations of equal cardinality.
+
+## Appendix C. Exploratory Pythia-70M Latent Geometry
+
+We extract per-layer mean-pooled hidden states from Pythia-70M for 24 concepts with 3 paraphrase variants each, treating each concept's variants as an approximate paraphrase orbit. We compute same-orbit cosine, wrong-orbit cosine, and next-token argmax consistency. Raw cosine is dominated by embedding anisotropy, so we also apply per-layer mean-centering following All-but-the-Top.
+
+After centering, same-orbit paraphrase similarity exceeds the wrong-orbit control by +0.44 to +0.79 across layers:
+
+| Layer | Same-orbit centered | Wrong-orbit centered | Gap |
+| ---: | ---: | ---: | ---: |
+| 0 | 0.400 | -0.038 | +0.438 |
+| 1 | 0.568 | -0.020 | +0.588 |
+| 2 | 0.565 | -0.030 | +0.596 |
+| 3 | 0.718 | +0.029 | +0.689 |
+| 4 | 0.742 | +0.008 | +0.734 |
+| 5 | 0.726 | -0.067 | **+0.793** |
+| 6 | 0.700 | -0.014 | +0.713 |
+
+This is a real latent-geometry signal, but it does not predict per-concept next-token behavioral consistency at this scale: Pearson(centered weakness, behavior) lies in [-0.35, -0.13] across layers with only 24 concepts. We therefore treat it as exploratory. It supports "paraphrase orbits cluster in centered latent space," not "latent weakness predicts LLM behavior."
+
 ## Acknowledgements and Code
 
 The benchmark, neural sweep, Modal entrypoint, summarization tools, and tests are available at <https://github.com/jawauntb/research-derived-experiments> under `experiments/symbolic_weakness/`.
@@ -382,3 +521,13 @@ The benchmark, neural sweep, Modal entrypoint, summarization tools, and tests ar
 [17] **Valle-Perez, G., Camargo, C. Q., and Louis, A. A.** Deep Learning Generalizes Because the Parameter-Function Map is Biased Towards Simple Functions. *ICLR* (2019).
 
 [18] **van der Ouderaa, T. F. A., Immer, A., and van der Wilk, M.** Learning Layer-wise Equivariances Automatically using Gradients. *NeurIPS* (2023).
+
+[19] **Arjovsky, M., Bottou, L., Gulrajani, I., and Lopez-Paz, D.** Invariant Risk Minimization. arXiv:1907.02893 (2019).
+
+[20] **Zhou, K., Liu, Z., Qiao, Y., Xiang, T., and Loy, C. C.** Domain Generalization: A Survey. arXiv:2103.02503 (2021).
+
+[21] **Rissanen, J.** Modeling by Shortest Data Description. *Automatica* 14(5):465-471 (1978).
+
+[22] **Grunwald, P. D.** *The Minimum Description Length Principle.* MIT Press (2007).
+
+[23] **Mingard, C., Skalse, J., Valle-Perez, G., Martinez-Rubio, D., Mikulik, V., and Louis, A. A.** Neural Networks are a Priori Biased Towards Boolean Functions with Low Entropy. arXiv:1909.11522 (2019).
