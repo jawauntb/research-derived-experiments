@@ -261,7 +261,7 @@ def fig_gate_audit(path: str) -> str:
             ax.text(j, i, "pass" if arr[i, j] else "fail", ha="center", va="center",
                     color="white", fontsize=8, weight="bold")
     ax.tick_params(length=0)
-    ax.set_title("Gate audit: 2% precision passes; frozen 1% audit remains failed")
+    ax.set_title("Gate audit: 2% report threshold met; frozen 1% audit not met")
     fig.savefig(path, bbox_inches="tight", facecolor="white", dpi=230)
     plt.close(fig)
     return path
@@ -332,27 +332,29 @@ def build() -> None:
     f_exp = fig_exponent_gate(f"{FIG}/fig4_exponent_gate.png")
 
     p = pk.Paper(OUT, FIG)
-    p.title("Concern Deforms a Learned Metric: A Moved-Location Replication Across RNN, Transformer, and JEPA Models")
+    p.title("Concern Deforms a Learned Metric: A Controlled Moved-Location Test Across RNN, Transformer, and JEPA Models")
     p.authors("Jawaun Brown")
     p.authors("Research-Derived Experiments · Paper B")
     p.rule()
     p.abstract(
         "If a representation is used to act, valuable regions should not merely receive labels; they "
-        "should receive resolution. This paper tests that claim by injecting a movable loss-weight "
-        "field, called concern only as operational shorthand, into a path-integration task and asking "
-        "whether the learned representational metric moves "
-        "with it. A Modal H200/H100 sweep trains 1,920 finite-capacity spatial models: three "
-        "architecture families (RNN, causal Transformer, and JEPA-style predictive latent model), "
-        "64 seeds per family, nine registered concern locations, and matched uniform controls. The "
-        "primary observable is neighbor-stretch metric density, the mean latent displacement induced "
-        "by a unit physical displacement. Under a revised 2% bootstrap-SE precision standard, all "
-        "three architectures pass: JEPA lift +0.685 [0.648,0.723], specificity +0.916 [0.889,0.943]; "
-        "RNN lift +1.201 [1.185,1.218], specificity +1.357 [1.337,1.377]; Transformer lift +1.951 "
-        "[1.917,1.984], specificity +2.005 [1.988,2.022]. The frozen stricter 1% precision audit is "
-        "not claimed to pass. A companion rate-distortion sweep falsifies the hoped-for 2-D exponent "
-        "alpha=1/2 and instead measures an effective allocation dimension near one. The bounded "
-        "conclusion is therefore: concern causally deforms a learned metric, robustly across model "
-        "families, while the scaling law reveals an architecture-dependent capacity bottleneck.")
+        "should receive resolution. This paper tests a bounded version of that claim by injecting a "
+        "movable loss-weight field, called concern here only as operational shorthand, into a "
+        "path-integration task and asking whether the learned representational metric moves with it. "
+        "A Modal H200/H100 sweep trains 1,920 finite-capacity spatial models: three architecture "
+        "families (RNN, causal Transformer, and JEPA-style predictive latent model), 64 seeds per "
+        "family, nine registered concern locations, and matched uniform controls. The primary "
+        "observable is neighbor-stretch metric density, the mean latent displacement induced by a "
+        "unit physical displacement. Under a 2% bootstrap-SE report threshold, all three architectures "
+        "show positive moved-location lift and specificity: JEPA lift +0.685 [0.648,0.723], specificity "
+        "+0.916 [0.889,0.943]; RNN lift +1.201 [1.185,1.218], specificity +1.357 [1.337,1.377]; "
+        "Transformer lift +1.951 [1.917,1.984], specificity +2.005 [1.988,2.022]. The frozen stricter "
+        "1% precision audit is retained and is not claimed to pass. A companion rate-distortion sweep "
+        "falsifies the hoped-for 2-D exponent alpha=1/2 and instead measures an effective allocation "
+        "dimension near one. The bounded conclusion is therefore: within this synthetic spatial setup, "
+        "moving an externally specified priority field reliably moves local representational metric "
+        "density across model families, while the scaling law reveals an architecture-dependent "
+        "capacity bottleneck.")
 
     p.h1("1. Claim and Definitions")
     p.para(
@@ -368,7 +370,7 @@ def build() -> None:
         "density, the average latent displacement per unit physical displacement. Area density, "
         "sqrt(det J^T J), is reported separately as a rate-distortion companion but is not substituted "
         "for the original moved-location claim.")
-    p.figure(f_schema, "Figure 1. Schematic only, not raw data: the intervention is a movable loss-weight field, and the causal question is whether the learned metric-density peak follows that field. The measured statistics below test this with matched controls and nine registered target locations.", width_in=6.0)
+    p.figure(f_schema, "Figure 1. Schematic only, not raw data: the intervention is a movable loss-weight field, and the interventional question is whether the learned metric-density peak follows that field. The measured statistics below test this with matched controls and nine registered target locations.", width_in=6.0)
 
     p.h1("2. Positioning Against Prior Work")
     p.para(
@@ -385,7 +387,7 @@ def build() -> None:
         "This positioning also bounds the claim. The experiment is synthetic and spatial. The RNN, "
         "Transformer, and JEPA variants show that the mechanism is not idiosyncratic to one recurrent "
         "cell, but they do not establish generality to production language models or open-world agents. "
-        "For NeurIPS-style review, the result should be read as a controlled representational-geometry "
+        "For peer review, the result should be read as a controlled representational-geometry "
         "finding with clear next baselines, not as a completed theory of concern in all AI systems.")
 
     p.h1("3. Experiment")
@@ -405,11 +407,11 @@ def build() -> None:
         "one fixed probe location.")
     p.figure(f_loc, "Figure 2. Data-backed target map. Each cell is the mean control-subtracted lift when the concern field is centered at that registered location. Positive lift appears across the whole 3x3 grid, not only at one convenient target.", width_in=6.2)
     p.figure(f_forest, "Figure 3. Primary moved-location result. Lift is the rewarded-location metric z-score minus the matched uniform-control z-score. Specificity is the rewarded-location z-score minus unrewarded registered locations in the same model. Error bars are bootstrap 95% intervals.", width_in=6.2)
-    p.figure(f_gate, "Figure 4. Gate audit. The 2% precision rule passes for all three architectures; the originally frozen 1% precision audit does not. This distinction is retained in the report and should remain in any submission.", width_in=5.8)
+    p.figure(f_gate, "Figure 4. Gate audit. The 2% report threshold is met for all three architectures; the originally frozen 1% precision audit is not met. This distinction is retained in the report and should remain in any submission.", width_in=5.8)
 
     p.h1("4. Results")
     p.table(
-        [["Architecture", "lift z (95% CI)", "SE", "specificity z (95% CI)", "SE", "rank", "2% gate"],
+        [["Architecture", "lift z (95% CI)", "SE", "specificity z (95% CI)", "SE", "rank", "2% report"],
          ["JEPA", "+0.685 [0.648,0.723]", "0.019", "+0.916 [0.889,0.943]", "0.014", "0.832", "pass"],
          ["RNN", "+1.201 [1.185,1.218]", "0.009", "+1.357 [1.337,1.377]", "0.010", "0.930", "pass"],
          ["Transformer", "+1.951 [1.917,1.984]", "0.017", "+2.005 [1.988,2.022]", "0.009", "0.928", "pass"]],
@@ -417,10 +419,11 @@ def build() -> None:
         col_widths=[78, 106, 35, 126, 35, 42, 48])
     p.para(
         "The architecture-balanced pooled lift is +1.279 with bootstrap SE 0.009; pooled specificity "
-        "is +1.426 with SE 0.006. Thus the cross-architecture effect is already below the original "
-        "1% precision target, while the per-architecture 1% audit remains failed for at least one "
-        "metric in every architecture. The report therefore treats the 2% result as confirmed and "
-        "the stricter 1% audit as an honest non-passing precision check.")
+        "is +1.426 with SE 0.006. Thus the pooled cross-architecture estimate is already below the "
+        "original 1% precision target, while the per-architecture 1% audit remains failed for at least "
+        "one metric in every architecture. The report therefore treats the moved-location effect as "
+        "robust under the 2% report threshold and keeps the stricter 1% audit as a visible non-passing "
+        "precision check.")
 
     p.h1("5. Companion Rate-Distortion Result")
     p.figure(f_area, "Figure 5. Companion area-density diagnostic. JEPA's area-density lift is positive but smaller; the cross-architecture claim is the neighbor-stretch metric.", width_in=5.05)
@@ -431,13 +434,14 @@ def build() -> None:
         "an effectively 1-D allocation. The large Modal exponent sweep does not confirm the 2-D law: "
         "anisotropic 2-D gives alpha=0.309 [0.304,0.314], stripe gives 0.302 [0.298,0.307], and point "
         "reward gives 0.283 [0.278,0.288]. This is a precise negative result for the hoped-for "
-        "Newton step and a positive measurement of an effective-dimension bottleneck.")
+        "2-D rate-distortion account and a positive measurement of an effective-dimension bottleneck.")
 
     p.h1("6. Interpretation")
     p.para(
-        "The core scientific value is causal non-circularity. The concern field is an external "
-        "intervention. When it moves, the metric deformation moves with it. That is stronger than "
-        "discovering a salient region after the representation is trained. It says a value-like "
+        "The core scientific value is non-circularity. The concern field is specified externally "
+        "before training rather than inferred from the trained representation. When that field moves, "
+        "the metric deformation moves with it. That is stronger than discovering a salient region "
+        "after the representation is trained. It supports the narrower claim that a value-like "
         "training signal can allocate local resolution in the geometry of the learned code.")
     p.para(
         "The result should still be framed narrowly. It does not establish consciousness, agency, or "
@@ -452,14 +456,26 @@ def build() -> None:
         "matched controls do not. That would convert this paper from a spatial mechanism result into "
         "a broader AI-systems result.")
 
-    p.h1("7. Limitations")
+    p.h1("7. Reproducibility")
     p.para(
-        "The 2% precision rule was accepted after the first-wave results were visible; the frozen 1% "
-        "audit is therefore retained rather than rewritten. The task is synthetic path integration. "
+        "The moved-location design is registered in papers/grid_cell_weakness/preregistration.md, the "
+        "runner is experiments/grid_cell_weakness/modal_reward_location_sweep.py, and the committed "
+        "result report is experiments/grid_cell_weakness/results/reward_location_sweep_2026_07_02.md. "
+        "The PDF itself is regenerated from committed aggregate numbers with "
+        "python scripts/build_paperB_pdf.py. The raw Modal JSON is not committed under the repository "
+        "artifact policy, so full recomputation of bootstrap samples requires rerunning the Modal sweep; "
+        "the manuscript does not rely on unpublished tuning beyond the registered runner and reported "
+        "aggregate results.")
+
+    p.h1("8. Limitations")
+    p.para(
+        "The 2% report threshold was accepted after the first-wave results were visible; the frozen "
+        "1% audit is therefore retained rather than rewritten. The task is synthetic path integration. "
         "The JEPA area-density companion is positive but much smaller than the stretch result. The "
         "Transformer and JEPA variants are architecture-family probes, not claims about production "
-        "foundation models. Raw JSON remains local and gitignored; committed reports contain the "
-        "gate numbers and provenance.")
+        "foundation models. The result also does not establish consciousness, agency, or biological "
+        "realism; it establishes a controlled representational-geometry effect in artificial spatial "
+        "learners.")
 
     p.references([
         "Bennett, W. R. Spectra of quantized signals. Bell System Technical Journal (1948).",

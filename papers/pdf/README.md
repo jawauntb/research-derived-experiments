@@ -10,9 +10,10 @@ gitignored). Regenerate with the committed builders:
   Generalization of Population Codes" (preliminary CPU results).
   Rebuild: `python scripts/build_gridcell_pdf.py`
 
-- `concern_deforms_metric.pdf` — Paper B "Concern Deforms a Learned Metric" (64-seed
-  moved-location replication across RNN, Transformer, and JEPA-style spatial models; 2%
-  precision gate passes with the stricter 1% audit retained as a non-passing check).
+- `concern_deforms_metric.pdf` — Paper B "Concern Deforms a Learned Metric" (controlled
+  64-seed moved-location test across RNN, Transformer, and JEPA-style spatial models; the
+  2% report threshold is met with the stricter frozen 1% audit retained as a non-passing
+  precision check).
   Rebuild: `python scripts/build_paperB_pdf.py`
 
 - `reward_deformation_effective_dimension_law.pdf` — standalone Newton-gate paper: the
