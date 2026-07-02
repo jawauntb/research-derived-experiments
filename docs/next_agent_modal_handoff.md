@@ -105,7 +105,7 @@ the two variables that resolve 1/3 vs 1/2:
 doppler --scope /Users/jawaun/superoptimizers run -- \
     uvx --python 3.12 --from modal modal run \
     experiments/grid_cell_weakness/modal_reward_deformation_sweep.py \
-    --seeds 10 --steps 8000 --Ng 256 --Np 256 \
+    --seeds 10 --steps 8000 --ng 256 --np 256 \
     --geometries point,stripe,aniso2d --amps 3,6,12 \
     --out artifacts/grid_cell_weakness/reward_deformation_sweep.json
 ```

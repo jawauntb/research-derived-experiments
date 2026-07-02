@@ -56,12 +56,12 @@ Turn these knobs, in order, and re-run the probe until `betti_match_torus` appea
    hidden activity and is the main driver of *localized, periodic* codes (Sorscher–Ganguli use an
    activity/metabolic cost). Sweep `1e-3 → 3e-3 → 1e-2`. Too high → dead units; too low → no grid.
 3. **Weight decay** (`--weight-decay`, default `1e-4`). Sweep `1e-4 → 1e-3`. Couples with (2).
-4. **Hidden size** (`--Ng`, default `128`). Grids need headroom for multiple periods/orientations;
-   try `128 → 256`. Place-cell count `--Np` (default `100`) sets target resolution; `144`/`196`
+4. **Hidden size** (`--ng`, default `128`). Grids need headroom for multiple periods/orientations;
+   try `128 → 256`. Place-cell count (`--np`, default `100`) sets target resolution; `144`/`196`
    sharpen it.
 5. **Sigma** (`--sigma`, default `0.10`) — place-cell width. Narrower (`0.08`) sharpens the target
    manifold but is harder to fit; wider (`0.12`) is easier but blurs topology.
-6. **Trajectory length** `--T` (default `20`). Longer paths give the recurrence more integration
+6. **Trajectory length** `--t` (default `20`). Longer paths give the recurrence more integration
    signal; `20 → 30`.
 
 Re-run only the cheap `full_translation` emergence probe between changes. Lock the first

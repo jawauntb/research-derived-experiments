@@ -320,8 +320,8 @@ def main(
     conditions: str = ",".join(CONDITIONS),
     archs: str = "rnn,gru",
     seeds: int = 8,
-    Ng: int = 128,
-    Np: int = 100,
+    ng: int = 128,
+    np: int = 100,
     sigma: float = 0.10,
     t: int = 20,
     steps: int = 4000,
@@ -337,7 +337,7 @@ def main(
     arch_list = [a.strip() for a in archs.split(",") if a.strip()]
     seed_list = [base_seed + 100 * k for k in range(seeds)]
     arena_list = [float(x) for x in decode_arenas.split(",") if x.strip()]
-    cells = [dict(augment=c, arch=a, seed=s, Ng=Ng, Np=Np, sigma=sigma, T=t,
+    cells = [dict(augment=c, arch=a, seed=s, Ng=ng, Np=np, sigma=sigma, T=t,
                   steps=steps, batch=batch, lr=lr, weight_decay=weight_decay,
                   activity_reg=activity_reg, decode_arenas=arena_list)
              for c in cond_list for a in arch_list for s in seed_list]
@@ -395,7 +395,7 @@ def main(
     out_path = Path(out); out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(dict(
         kind="REAL Paper A grid-cell weakness sweep on Modal",
-        manifest=dict(conditions=cond_list, archs=arch_list, seeds=seed_list, Ng=Ng, Np=Np,
+        manifest=dict(conditions=cond_list, archs=arch_list, seeds=seed_list, Ng=ng, Np=np,
                       T=t, steps=steps, batch=batch, lr=lr, weight_decay=weight_decay, activity_reg=activity_reg,
                       decode_arenas=arena_list),
         analysis=analysis, cells=results,
