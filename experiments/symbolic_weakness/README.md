@@ -24,6 +24,10 @@ Eleven selectors are scored, including `train_loss`, `validation`, `simplicity`,
 `weakness_wrong_group` (control), `weakness_noisy_group`,
 `weakness_data_inferred`, and `random`.
 
+`flatness_proxy` is a symbolic completion-volume proxy: it counts how many
+domain positions remain unconstrained by training. It is not a Hessian or
+weight-space flatness measure.
+
 Run:
 
 ```bash

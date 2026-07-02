@@ -21,7 +21,8 @@ Selectors:
 - `train_loss`: perfect training accuracy, tied by simplicity.
 - `simplicity`: shortest form.
 - `compression`: shortest form plus training-error penalty.
-- `flatness_proxy`: broad local slack proxy, tied by simplicity.
+- `flatness_proxy`: symbolic completion-volume/slack proxy, tied by
+  simplicity; not Hessian or weight-space flatness.
 - `weakness`: maximum translation-equivariance count.
 - `random`: random train-consistent candidate.
 
