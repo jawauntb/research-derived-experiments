@@ -234,14 +234,14 @@ def _boot_ci(vals, n=2000):
 
 @app.local_entrypoint()
 def main(seeds: int = 10, steps: int = 8000, Ng: int = 256, Np: int = 256,
-         sigma: float = 0.12, sig_pc: float = 0.09, T: int = 20, batch: int = 128,
+         sigma: float = 0.12, sig_pc: float = 0.09, t: int = 20, batch: int = 128,
          noise_std: float = 0.15, geometries: str = "point,stripe,aniso2d",
          amps: str = "3,6,12", base_seed: int = 20260701,
          out: str = "artifacts/grid_cell_weakness/reward_deformation_sweep.json"):
     geos = [g.strip() for g in geometries.split(",") if g.strip()]
     As = [float(a) for a in amps.split(",") if a.strip()]
     cells = [dict(seed=base_seed + 100 * k, geometry=g, A=a, Ng=Ng, Np=Np, sigma=sigma,
-                  sig_pc=sig_pc, T=T, steps=steps, batch=batch, noise_std=noise_std, xy=[0.5, 0.5])
+                  sig_pc=sig_pc, T=t, steps=steps, batch=batch, noise_std=noise_std, xy=[0.5, 0.5])
              for g in geos for a in As for k in range(seeds)]
     print(f"[rd-sweep] dispatching {len(cells)} cells: geometries={geos} amps={As} seeds={seeds} "
           f"Ng={Ng} Np={Np} steps={steps}")
