@@ -10,8 +10,9 @@
 
 ## Verification
 - Pre-registration: `papers/grid_cell_weakness/preregistration.md`
-- Result reports (8):
+- Result reports (9):
   - `experiments/grid_cell_weakness/results/capacity_bottleneck_2026_07_01.md`
+  - `experiments/grid_cell_weakness/results/grid_cell_weakness_conference_evidence_2026_07_02.md`
   - `experiments/grid_cell_weakness/results/local_cpu_sweep_2026_06_29.md`
   - `experiments/grid_cell_weakness/results/modal_grid_cell_weakness_sweep_2026_07_02.md`
   - `experiments/grid_cell_weakness/results/pilot_2026_06_28.md`
@@ -27,6 +28,6 @@ Key verification signals (from the latest result report):
   - Architecture | <=1% lift SE | <=1% specificity SE | Directional CIs positive | Strict 1% audit
 
 ## Artifacts
-- Committed: `experiments/grid_cell_weakness/results/capacity_bottleneck_2026_07_01.md`, `experiments/grid_cell_weakness/results/local_cpu_sweep_2026_06_29.md`, `experiments/grid_cell_weakness/results/modal_grid_cell_weakness_sweep_2026_07_02.md`, `experiments/grid_cell_weakness/results/pilot_2026_06_28.md`, `experiments/grid_cell_weakness/results/ratedistortion_2026_07_01.md`, `experiments/grid_cell_weakness/results/reward_deformation_2026_06_29.md`, `experiments/grid_cell_weakness/results/reward_deformation_sweep_2026_07_02.md`, `experiments/grid_cell_weakness/results/reward_location_sweep_2026_07_02.md`
+- Committed: `experiments/grid_cell_weakness/results/capacity_bottleneck_2026_07_01.md`, `experiments/grid_cell_weakness/results/grid_cell_weakness_conference_evidence_2026_07_02.md`, `experiments/grid_cell_weakness/results/local_cpu_sweep_2026_06_29.md`, `experiments/grid_cell_weakness/results/modal_grid_cell_weakness_sweep_2026_07_02.md`, `experiments/grid_cell_weakness/results/pilot_2026_06_28.md`, `experiments/grid_cell_weakness/results/ratedistortion_2026_07_01.md`, `experiments/grid_cell_weakness/results/reward_deformation_2026_06_29.md`, `experiments/grid_cell_weakness/results/reward_deformation_sweep_2026_07_02.md`, `experiments/grid_cell_weakness/results/reward_location_sweep_2026_07_02.md`
 - Local-only: artifacts/ (gitignored raw outputs; see result reports for summaries)
 - Paper: _none_
