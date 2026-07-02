@@ -10,7 +10,7 @@
 
 ## Verification
 - Pre-registration: `papers/grid_cell_weakness/preregistration.md`
-- Result reports (7):
+- Result reports (8):
   - `experiments/grid_cell_weakness/results/capacity_bottleneck_2026_07_01.md`
   - `experiments/grid_cell_weakness/results/local_cpu_sweep_2026_06_29.md`
   - `experiments/grid_cell_weakness/results/modal_grid_cell_weakness_sweep_2026_07_02.md`
@@ -18,14 +18,15 @@
   - `experiments/grid_cell_weakness/results/ratedistortion_2026_07_01.md`
   - `experiments/grid_cell_weakness/results/reward_deformation_2026_06_29.md`
   - `experiments/grid_cell_weakness/results/reward_deformation_sweep_2026_07_02.md`
+  - `experiments/grid_cell_weakness/results/reward_location_sweep_2026_07_02.md`
 
 Key verification signals (from the latest result report):
-  - frozen addendum "Reward-Deformation Exponent Gate" (2026-07-02). Runner:
-  - The preregistered 2-D rate-distortion law is **not confirmed**. At the primary
-  - **Confirmed.** The capacity-bottleneck mechanism is real and highly powered:
-  - paper is therefore not "we confirmed the 2-D law"; it is "finite-capacity
+  - frozen addendum "Paper B Moved-Location Metric-Deformation Gate" (2026-07-02). Runner:
+  - Architecture | lift z | specificity z | rank | peak error | Gate
+  - jepa | +0.6847 [+0.6476, +0.7228], SE=0.0193, n=576 | +0.9162 [+0.8890, +0.9425], SE=0.0138, n=576 | 0.832 | 0.205 | pass
+  - rnn | +1.2013 [+1.1846, +1.2179], SE=0.0085, n=576 | +1.3572 [+1.3372, +1.3774], SE=0.0103, n=576 | 0.930 | 0.069 | pass
 
 ## Artifacts
-- Committed: `experiments/grid_cell_weakness/results/capacity_bottleneck_2026_07_01.md`, `experiments/grid_cell_weakness/results/local_cpu_sweep_2026_06_29.md`, `experiments/grid_cell_weakness/results/modal_grid_cell_weakness_sweep_2026_07_02.md`, `experiments/grid_cell_weakness/results/pilot_2026_06_28.md`, `experiments/grid_cell_weakness/results/ratedistortion_2026_07_01.md`, `experiments/grid_cell_weakness/results/reward_deformation_2026_06_29.md`, `experiments/grid_cell_weakness/results/reward_deformation_sweep_2026_07_02.md`
+- Committed: `experiments/grid_cell_weakness/results/capacity_bottleneck_2026_07_01.md`, `experiments/grid_cell_weakness/results/local_cpu_sweep_2026_06_29.md`, `experiments/grid_cell_weakness/results/modal_grid_cell_weakness_sweep_2026_07_02.md`, `experiments/grid_cell_weakness/results/pilot_2026_06_28.md`, `experiments/grid_cell_weakness/results/ratedistortion_2026_07_01.md`, `experiments/grid_cell_weakness/results/reward_deformation_2026_06_29.md`, `experiments/grid_cell_weakness/results/reward_deformation_sweep_2026_07_02.md`, `experiments/grid_cell_weakness/results/reward_location_sweep_2026_07_02.md`
 - Local-only: artifacts/ (gitignored raw outputs; see result reports for summaries)
 - Paper: _none_
