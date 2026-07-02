@@ -163,6 +163,7 @@ def fig_schematic_fields(path: str) -> str:
 
 def fig_location_map(path: str) -> str:
     import matplotlib.pyplot as plt
+    import matplotlib.patheffects as pe
     import numpy as np
 
     arch_order = ["jepa", "rnn", "transformer"]
@@ -187,8 +188,8 @@ def fig_location_map(path: str) -> str:
             for j in range(3):
                 val = mat[j, i]
                 ax.text(i, j, f"{val:.2f}", ha="center", va="center",
-                        fontsize=7.4, color="white" if val > 0.9 else "#111",
-                        weight="bold")
+                        fontsize=7.4, color="white", weight="bold",
+                        path_effects=[pe.withStroke(linewidth=1.4, foreground="#111")])
         ax.set_xticks(np.arange(-.5, 3, 1), minor=True)
         ax.set_yticks(np.arange(-.5, 3, 1), minor=True)
         ax.grid(which="minor", color="white", linewidth=1.0)
@@ -259,7 +260,7 @@ def fig_gate_audit(path: str) -> str:
     ax.set_yticklabels([r["arch"] for r in ARCH_ROWS])
     for i in range(arr.shape[0]):
         for j in range(arr.shape[1]):
-            ax.text(j, i, "pass" if arr[i, j] else "fail", ha="center", va="center",
+            ax.text(j, i, "met" if arr[i, j] else "not met", ha="center", va="center",
                     color="white", fontsize=8, weight="bold")
     ax.tick_params(length=0)
     ax.set_title("Gate audit: 2% report threshold met; frozen 1% audit not met")
@@ -333,7 +334,7 @@ def build() -> None:
     f_exp = fig_exponent_gate(f"{FIG}/fig4_exponent_gate.png")
 
     p = pk.Paper(OUT, FIG)
-    p.title("Concern Deforms a Learned Metric: A Controlled Moved-Location Test Across RNN, Transformer, and JEPA Models")
+    p.title("Value-Weighted Training Deforms Learned Metrics Across RNN, Transformer, and JEPA-Style Spatial Models")
     p.authors("Jawaun Brown")
     p.authors("Research-Derived Experiments · Paper B")
     p.rule()
@@ -350,7 +351,7 @@ def build() -> None:
         "show positive moved-location lift and specificity: JEPA lift +0.685 [0.648,0.723], specificity "
         "+0.916 [0.889,0.943]; RNN lift +1.201 [1.185,1.218], specificity +1.357 [1.337,1.377]; "
         "Transformer lift +1.951 [1.917,1.984], specificity +2.005 [1.988,2.022]. The frozen stricter "
-        "1% precision audit is retained and is not claimed to pass. A companion rate-distortion sweep "
+        "1% precision audit is retained and is not claimed to meet. A companion rate-distortion sweep "
         "falsifies the hoped-for 2-D exponent alpha=1/2 and instead measures an effective allocation "
         "dimension near one. The bounded conclusion is therefore: within this synthetic spatial setup, "
         "moving an externally specified priority field reliably moves local representational metric "
@@ -391,23 +392,28 @@ def build() -> None:
 
     p.h1("3. Positioning Against Prior Work")
     p.para(
-        "The paper sits at the intersection of four literatures. Efficient coding and rate-distortion "
-        "theory explain why finite representations should allocate more resolution where errors are "
-        "costly. Information geometry and representational similarity analysis supply the language of "
-        "a learned metric. Grid-cell RNN work provides a tractable spatial substrate where metric "
-        "density can be measured. Goal-dependent remapping in hippocampal-entorhinal systems motivates "
-        "the idea that value can reshape spatial codes. The contribution here is not that any one of "
-        "these ingredients is new. It is the direct moved-location intervention: a known external "
-        "priority field is moved before training, and the induced metric is tested at the moved target "
-        "against matched controls and unrewarded registered locations.")
+        "The paper sits at the intersection of four literatures. Efficient coding and high-resolution "
+        "rate-distortion theory (Bennett; Gersho and Gray; Cover and Thomas; Ganguli and Simoncelli; "
+        "Wei and Stocker) explain why finite representations should allocate more resolution where "
+        "errors are costly. Information geometry, latent-space Riemannian metrics, and representational "
+        "similarity analysis (Amari; Kriegeskorte et al.; Arvanitidis et al.; Kornblith et al.) supply "
+        "the language of a learned metric. Grid-cell RNN work (Cueva and Wei; Banino et al.; Sorscher "
+        "et al.) provides a tractable spatial substrate where metric density can be measured. "
+        "Goal-dependent remapping and elastic spatial-code deformation (Ocko et al.; Boccara et al.; "
+        "Butler et al.) motivate the idea that value can reshape spatial codes.")
+    p.para(
+        "The contribution here is not that any one of these ingredients is new. It is the direct "
+        "moved-location intervention: a known external priority field is moved before training, and "
+        "the induced metric is tested at the moved target against matched controls and unrewarded "
+        "registered locations.")
     p.para(
         "This positioning also bounds the claim. The experiment is synthetic and spatial. The RNN, "
         "Transformer, and JEPA variants show that the mechanism is not idiosyncratic to one recurrent "
         "cell, but they do not establish generality to production language models or open-world agents. "
         "For peer review, the result should be read as a controlled representational-geometry "
-        "finding with clear next baselines, not as a completed theory of concern in all AI systems.")
+        "finding with clear next baselines, not as a claim of generality beyond this setting.")
 
-    p.h1("4. Experiment")
+    p.h1("4. Experiment and Estimators")
     p.para(
         "Each model performs 2-D path integration. It receives velocity sequences and predicts a "
         "place-cell-like code over a square arena. For each seed and architecture, we train one "
@@ -417,11 +423,53 @@ def build() -> None:
         "Transformer over velocity tokens, and a JEPA-style model that predicts future latent states "
         "against a stop-gradient target encoder.")
     p.para(
+        "Task generation is identical across concern and control conditions. The arena is [0,1]^2 "
+        "with reflective boundaries. Initial position is sampled uniformly from [0.1,0.9]^2; heading "
+        "is initialized uniformly, updated by Gaussian angular noise with standard deviation 0.4, and "
+        "advanced with speed 0.06 for T=20 steps. Place-cell targets use a 16x16 grid of centers "
+        "(Np=256) and a softmax-normalized Gaussian field with sigma_p=0.09.")
+    p.para(
+        "The concern intervention changes only the loss weight, not trajectory sampling. For target "
+        "location c, w_c(x)=1+6 exp(-||x-c||^2/(2*0.12^2)); for each batch the weights are divided "
+        "by their batch mean before multiplying the KL loss. Thus the intervention reallocates gradient "
+        "pressure spatially without changing the global loss scale. Models train for 4,000 AdamW steps "
+        "with learning rate 1e-3, weight decay 1e-4, batch size 128, latent dimension Ng=256, L2-normalized "
+        "latent states, and readout noise standard deviation 0.15. Evaluation uses 1,024 trajectories.")
+    p.para(
+        "Architecture details are fixed across the sweep. The RNN encodes the initial place code to "
+        "Ng and updates a ReLU RNNCell from velocity. The Transformer uses velocity and initial-place "
+        "projections, learned positional embeddings, two causal Transformer encoder layers, four heads, "
+        "GELU activations, no dropout, and feed-forward width 4Ng. The JEPA-style model uses an MLP "
+        "place encoder and an MLP latent predictor conditioned on velocity; an auxiliary stop-gradient "
+        "target-latent loss is added with weight 0.5.")
+    p.h2("Metric Definitions")
+    p.para(
+        "For evaluation, latent states r(x) are averaged into a 16x16 spatial grid. At each interior "
+        "grid cell, central differences define du=(r_{i+1,j}-r_{i-1,j})/(2dx) and "
+        "dv=(r_{i,j+1}-r_{i,j-1})/(2dx). The primary neighbor-stretch field is "
+        "s(x)=0.5(||du||_2+||dv||_2). The companion area-density field is "
+        "a(x)=sqrt(max(0, ||du||^2||dv||^2-(du dot dv)^2)).")
+    p.para(
+        "All primary statistics use the log neighbor-stretch field z-scored over finite spatial bins: "
+        "z_s(x)=(log s(x)-mean(log s))/sd(log s). The target statistic is the mean z_s over a radius-2 "
+        "bin neighborhood around the registered location c. Lift is z_reward(c)-z_control(c), where "
+        "control is the seed-matched uniform-loss model evaluated at the same location. Specificity is "
+        "z_reward(c) minus the mean z_reward(c') over the other eight registered locations in the same "
+        "trained concern model.")
+    p.para(
         "The built-in negative controls are important. Lift subtracts a seed-matched uniform-control "
         "model at the same location. Specificity compares the rewarded location with the other eight "
-        "registered locations inside the same trained model. A result therefore cannot pass merely by "
+        "registered locations inside the same trained model. A result therefore cannot meet the criterion merely by "
         "making the whole representation high-resolution, by favoring the arena center, or by exploiting "
         "one fixed probe location.")
+    p.h2("Statistics")
+    p.para(
+        "The nine concern targets are fixed registered probes at coordinates {0.25,0.50,0.75}^2. "
+        "Architecture-level intervals use 5,000 bootstrap resamples over the 64 seeds x 9 registered "
+        "locations (=576 reward-location rows per architecture), after matched control subtraction. "
+        "The architecture-balanced pooled estimate resamples rows within each architecture, computes "
+        "one mean per architecture, and averages those three means. Reported SE is the bootstrap "
+        "standard deviation; intervals are percentile 95% intervals.")
     p.figure(f_loc, "Figure 2. Data-backed target map. Each cell is the mean control-subtracted lift when the concern field is centered at that registered location. Positive lift appears across the whole 3x3 grid, not only at one convenient target.", width_in=6.2)
     p.figure(f_forest, "Figure 3. Primary moved-location result. Lift is the rewarded-location metric z-score minus the matched uniform-control z-score. Specificity is the rewarded-location z-score minus unrewarded registered locations in the same model. Error bars are bootstrap 95% intervals.", width_in=6.2)
     p.figure(f_gate, "Figure 4. Gate audit. The 2% report threshold is met for all three architectures; the originally frozen 1% precision audit is not met. This distinction is retained in the report and should remain in any submission.", width_in=5.8)
@@ -429,18 +477,18 @@ def build() -> None:
     p.h1("5. Results")
     p.table(
         [["Architecture", "lift z (95% CI)", "SE", "specificity z (95% CI)", "SE", "rank", "2% report"],
-         ["JEPA", "+0.685 [0.648,0.723]", "0.019", "+0.916 [0.889,0.943]", "0.014", "0.832", "pass"],
-         ["RNN", "+1.201 [1.185,1.218]", "0.009", "+1.357 [1.337,1.377]", "0.010", "0.930", "pass"],
-         ["Transformer", "+1.951 [1.917,1.984]", "0.017", "+2.005 [1.988,2.022]", "0.009", "0.928", "pass"]],
-        caption="Table 1. Primary moved-location metric-deformation gate, 64 seeds per architecture and nine registered concern locations. All intervals exclude zero by a wide margin.",
+         ["JEPA", "+0.685 [0.648,0.723]", "0.019", "+0.916 [0.889,0.943]", "0.014", "0.832", "met"],
+         ["RNN", "+1.201 [1.185,1.218]", "0.009", "+1.357 [1.337,1.377]", "0.010", "0.930", "met"],
+         ["Transformer", "+1.951 [1.917,1.984]", "0.017", "+2.005 [1.988,2.022]", "0.009", "0.928", "met"]],
+        caption="Table 1. Primary moved-location metric-deformation summary, 64 seeds per architecture and nine registered concern locations. All intervals exclude zero by a wide margin.",
         col_widths=[78, 106, 35, 126, 35, 42, 48])
     p.para(
         "The architecture-balanced pooled lift is +1.279 with bootstrap SE 0.009; pooled specificity "
         "is +1.426 with SE 0.006. Thus the pooled cross-architecture estimate is already below the "
         "original 1% precision target, while the per-architecture 1% audit remains failed for at least "
         "one metric in every architecture. The report therefore treats the moved-location effect as "
-        "robust under the 2% report threshold and keeps the stricter 1% audit as a visible non-passing "
-        "precision check.")
+        "positive and stable under the revised 2% report threshold and keeps the stricter 1% audit "
+        "as a visible non-passing precision check.")
 
     p.h1("6. Companion Rate-Distortion Result")
     p.figure(f_area, "Figure 5. Companion area-density diagnostic. JEPA's area-density lift is positive but smaller; the cross-architecture claim is the neighbor-stretch metric.", width_in=5.05)
@@ -492,14 +540,19 @@ def build() -> None:
 
     p.references([
         "Bennett, W. R. Spectra of quantized signals. Bell System Technical Journal (1948).",
+        "Gersho, A., Gray, R. M. Vector Quantization and Signal Compression. Kluwer Academic Publishers (1992).",
+        "Cover, T. M., Thomas, J. A. Elements of Information Theory. Wiley (1991).",
         "Amari, S. Natural gradient works efficiently in learning. Neural Computation (1998).",
         "Ganguli, D., Simoncelli, E. P. Efficient sensory encoding and Bayesian inference with heterogeneous neural populations. Neural Computation (2014).",
         "Kriegeskorte, N., Mur, M., Bandettini, P. A. Representational similarity analysis - connecting the branches of systems neuroscience. Frontiers in Systems Neuroscience (2008).",
+        "Arvanitidis, G., Hansen, L. K., Hauberg, S. Latent space oddity: on the curvature of deep generative models. ICLR (2018).",
+        "Kornblith, S., Norouzi, M., Lee, H., Hinton, G. Similarity of neural network representations revisited. ICML (2019).",
         "Wei, X.-X., Stocker, A. A. A Bayesian observer model constrained by efficient coding can explain 'anti-Bayesian' percepts. Nature Neuroscience (2015).",
         "Cueva, C. J., Wei, X.-X. Emergence of grid-like representations by training recurrent neural networks to perform spatial localization. ICLR (2018).",
         "Banino, A. et al. Vector-based navigation using grid-like representations in artificial agents. Nature 557 (2018).",
         "Sorscher, B., Mel, G. C., Ganguli, S., Ocko, S. A. A unified theory for the origin of grid cells through the lens of pattern formation. NeurIPS (2019).",
         "Gardner, R. J. et al. Toroidal topology of population activity in grid cells. Nature 602 (2022).",
+        "Ocko, S. A., Hardcastle, K., Giocomo, L. M., Ganguli, S. Emergent elasticity in the neural code for space. PNAS 115 (2018).",
         "Boccara, C. N. et al. The entorhinal cognitive map is attracted to goals. Science (2019).",
         "Butler, W. N., Hardcastle, K., Giocomo, L. M. Remembered reward locations restructure entorhinal spatial maps. Science (2019).",
         "Vaswani, A. et al. Attention is all you need. NeurIPS (2017).",
