@@ -176,3 +176,67 @@ the target, report the achieved uncertainty plainly and do not call the exponent
 No tuning may use the exponent value itself. Harness tuning is allowed only for mechanical worker
 success and for the Paper A emergence precondition (`betti_match_torus` in `full_translation`), never
 to move `alpha` toward `1/2`.
+
+---
+
+## Frozen Addendum: Paper B Moved-Location Metric-Deformation Gate
+
+**Frozen:** 2026-07-02, before the large Modal moved-location Paper B replication.
+
+This addendum pre-registers the decision rule for the direct "Kepler" claim in Paper B:
+moving a concern/reward field should move the learned representational metric deformation.
+The prior CPU result tested two reward locations with three seeds. The Modal replication
+must test the same causal claim at scale and across architecture families, rather than
+only reusing the rate-distortion exponent sweep.
+
+### Primary estimands
+
+For each architecture, reward location, and seed, train a finite-capacity predictive
+spatial model with either a uniform loss or a loss weighted by a localized concern field.
+Measure the induced area-density field `sqrt(det J(x)^T J(x))` of the learned latent code.
+All primary metrics are computed on the log area-density z-score field:
+
+1. `control_subtracted_lift_z`: metric z-score at the rewarded location in the reward
+   condition minus the matched uniform-control z-score at the same location.
+2. `specificity_z`: metric z-score at the rewarded location minus the mean metric
+   z-score at the other registered, unrewarded locations in the same trained model.
+3. `reward_rank_percentile`: percentile rank of the rewarded-location metric density
+   among spatial bins.
+4. `peak_error`: Euclidean distance between the reward location and the maximum-density
+   spatial bin, reported as a diagnostic rather than a pass/fail gate.
+
+The primary analysis aggregates over registered locations within each architecture.
+Per-location tables are reported as diagnostics; they are not individually tuned.
+
+### Architecture families
+
+The confirmatory architecture set is:
+
+| Architecture | Reading |
+| --- | --- |
+| `rnn` | recurrent path-integration grid harness used by the original Paper B result |
+| `transformer` | causal Transformer sequence model over velocities and initial place code |
+| `jepa` | JEPA-style predictive latent dynamics model with a stop-gradient target-latent loss |
+
+### Decision gate
+
+The moved-location Kepler claim is counted as confirmed for an architecture only if:
+
+1. the bootstrap 95% CI for aggregate `control_subtracted_lift_z` excludes zero on the
+   positive side;
+2. the bootstrap 95% CI for aggregate `specificity_z` excludes zero on the positive side;
+3. the bootstrap SE for both aggregate primary metrics is `<= 0.01` whenever Modal quota
+   permits adaptive continuation;
+4. `reward_rank_percentile` is reported and is above chance (`> 0.5`) in the aggregate.
+
+The cross-architecture claim is counted as confirmed only if all three architecture families
+pass the first two gates and the pooled architecture-balanced mean is positive with bootstrap
+SE `<= 0.01`.
+
+If a model family fails, the paper must report that failure plainly and narrow the claim to
+the passing families. If the SE target is missed because of quota, runner failure, or wall-clock
+interruption, the achieved uncertainty must be reported and the claim must not be called
+"below 1%" for that metric.
+
+No harness change may be selected because it improves the primary metric. Tuning is allowed
+only for mechanical worker success, finite-loss training, and sufficient spatial-bin coverage.
