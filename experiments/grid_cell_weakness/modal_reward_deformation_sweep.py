@@ -142,7 +142,6 @@ def _loglog_slope(w, rho):
     memory=32768,
     max_containers=192,
     retries=1,
-    nonpreemptible=True,
 )
 def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
     import numpy as np

@@ -177,7 +177,6 @@ def _fourier_pr(rate_maps):
     memory=32768,
     max_containers=96,
     retries=1,
-    nonpreemptible=True,
 )
 def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
     import numpy as np
