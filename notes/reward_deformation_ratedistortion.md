@@ -173,6 +173,31 @@ parameter-free 2-D exponent" to "a measured finite-capacity effective-dimension
 law, with d_eff≈1 in this architecture." The 2-D variational law remains a
 normative high-resolution prediction, not the empirical law of this system.
 
+### 8c. Modal moved-location replication — Kepler claim holds at 2% precision
+
+The direct Paper B moved-location claim was then rerun at scale on 2026-07-02
+(`modal_reward_location_sweep.py`; 3 architectures × 64 seeds × 9 registered
+locations, with matched uniform controls). This is the causal "Kepler" claim:
+moving the externally injected priority field should move the learned metric
+deformation.
+
+Primary neighbor-stretch metric-density results under the revised 2% bootstrap
+SE report threshold:
+
+| architecture | control-subtracted lift z | specificity z | rank | reading |
+| --- | ---: | ---: | ---: | --- |
+| JEPA | +0.685 [0.648, 0.723], SE=0.019 | +0.916 [0.889, 0.943], SE=0.014 | 0.832 | pass at 2% |
+| RNN | +1.201 [1.185, 1.218], SE=0.009 | +1.357 [1.337, 1.377], SE=0.010 | 0.930 | pass at 2% |
+| Transformer | +1.951 [1.917, 1.984], SE=0.017 | +2.005 [1.988, 2.022], SE=0.009 | 0.928 | pass at 2% |
+
+Architecture-balanced pooled lift is +1.279 (SE=0.009) and pooled specificity
+is +1.426 (SE=0.006). The frozen stricter 1% per-architecture precision audit
+does **not** pass and should remain visible in the paper. The honest claim is:
+the moved-location concern/priority field robustly deforms the primary
+neighbor-stretch metric across RNN, Transformer, and JEPA-style spatial models;
+the separate area-density and exponent analyses reveal a narrower
+effective-dimension law rather than the hoped-for 2-D exponent.
+
 ## 9. Prior art anchoring
 
 - Bennett (1948), high-resolution quantization: optimal point density `∝ p^{1/3}` (1D).
