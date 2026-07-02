@@ -127,6 +127,11 @@ def build():
         "by the same compression proxy used by the baselines. Selection principle: when training "
         "constrains only part of a transformation orbit, train-consistent hypotheses compatible "
         "with more deployment-generating transformations should cover more of the missing orbit.")
+    p.para(
+        "Tiny proposition: if deployment inputs are completed from observed examples by a subset "
+        "S of G, then every compatible g in S transports observed labels along its orbit without "
+        "contradiction. More compatible transformations therefore cover more of the missing orbit, "
+        "provided the candidate group is aligned with the deployment shift.")
 
     p.h1("3. Symbolic separation")
     p.para(
@@ -134,7 +139,9 @@ def build():
         "distribution that admits both a train-perfect local shortcut and the true invariant: "
         "<i>cyclic_prefix_shift</i> (ℤ_n), <i>dihedral_reflection</i> (D_n), <i>parity_coset</i> "
         "(Z_2), and <i>color_permutation</i> (S_n). We compare eleven selectors over 500 trials per "
-        "family with Wilson 95% intervals.")
+        "family with Wilson 95% intervals. Candidate pools are explicit: cyclic has K=n+1 "
+        "(8/12/14 here), dihedral K=3, parity K=4, and color-permutation K=3..6 in the reported "
+        "seeded run.")
     p.figure(f["sep"],
              "Figure 1. On cyclic and dihedral families, only weakness-based selectors recover "
              "the invariant rule (1.000; Wilson LB 0.992); training loss, simplicity, MDL, "
@@ -156,8 +163,9 @@ def build():
     p.h1("4. Neural weakness predicts OOD accuracy")
     p.para(
         "We train 256 small MLPs, replicate at 1024 models, and rescale to 4096 models via Modal "
-        "on cyclic tasks with diverse depth, width, initialization, optimizer, learning rate, "
-        "weight decay, and augmentation. From each model we extract the argmax function table and "
+        "on cyclic tasks with n in {7,11,13}, train window w in {2,3,4}, diverse depth, width, "
+        "initialization, optimizer, learning rate, weight decay, and augmentation. From each model "
+        "we extract the argmax function table and "
         "compute true-group weakness together with classical predictors, correlating each against "
         "held-out OOD accuracy.")
     p.figure(f["neural"],
@@ -193,7 +201,8 @@ def build():
         "too large/uninformative (full symmetric group, where wrong involutions have comparable "
         "centralizer-orbit sizes). This is a precise statement of when symmetry-volume is "
         "load-bearing, not a defect. Present limitations: small finite domains (n ≤ 13 symbolic, "
-        "16×16 vision); intentionally simple MDL/compression/flatness proxies; the language "
+        "16×16 vision); intentionally simple MDL/compression/completion-volume and sharpness "
+        "proxies; the language "
         "latent→behavior chain unconfirmed; transformation discovery is still enumerative. The "
         "natural next steps are stronger compression/PAC-Bayes baselines, learned transformation "
         "generators, and training-time weakness regularization.")
@@ -224,7 +233,7 @@ def build():
          ["simplicity", "shorter form_length", "random exact tie", "none"],
          ["compression", "form_length + 20*train_errors", "random exact tie", "none"],
          ["mdl_program", "2^-form_length", "shorter form", "none"],
-         ["flatness_proxy", "unconstrained domain count", "shorter form", "none"],
+         ["flatness_proxy", "completion-volume proxy, not Hessian flatness", "shorter form", "none"],
          ["weakness_oracle", "W_G(f)", "compression", "true task group"],
          ["weakness_wrong_group", "W under random perms", "compression", "wrong control"],
          ["weakness_noisy_group", "W under noisy subset", "compression", "noisy true group"],

@@ -9,7 +9,9 @@ We compare:
 - `simplicity`        : shortest hypothesis form length.
 - `compression`       : form_length + 20 * train errors (MDL-style proxy).
 - `mdl_program`       : weight by 2^-form_length (Solomonoff-style proxy).
-- `flatness_proxy`    : largest free-domain count (toy flatness proxy).
+- `flatness_proxy`    : largest free-domain count. This is a symbolic
+                        completion-volume proxy, not Hessian/weight-space
+                        flatness.
 - `weakness_oracle`   : largest equivariance count under the trial's true group.
 - `weakness_wrong_group`: weakness scored under a wrong group (control).
 - `weakness_noisy`    : weakness with a noisy subset of the true group.
@@ -228,8 +230,8 @@ def candidate_metrics(
     train_errors = round((1.0 - train_acc) * len(trial.train_examples))
     compression_length = candidate.form_length + 20 * train_errors
 
-    # Toy "flatness" proxy: how many domain positions are unconstrained by
-    # the training set.
+    # Symbolic completion-volume proxy: how many domain positions are
+    # unconstrained by the training set. This is not Hessian flatness.
     flatness_proxy = trial.domain_size - len(trial.train_examples)
 
     # Definition: weakness = number of group elements g such that there
