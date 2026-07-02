@@ -300,3 +300,83 @@ def summarize_gate_group(
         "memory_rank_percentile": rank_stat,
         "gate": gate,
     }
+
+
+def summarize_tool_rows(rows: list[dict[str, Any]], *, n_boot: int = 2000) -> dict[str, Any]:
+    """Summarize tool-commitment rows with behavior and commitment gates."""
+
+    grouped: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    by_slot: dict[tuple[str, str, int], list[dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        key = (str(row["condition"]), str(row["architecture"]))
+        grouped[key].append(row)
+        by_slot[(key[0], key[1], int(row["critical_slot"]))].append(row)
+
+    out: dict[str, Any] = {"n_rows": len(rows), "groups": {}, "slot_groups": {}}
+    for (condition, arch), group_rows in sorted(grouped.items()):
+        out["groups"][f"{condition}/{arch}"] = summarize_tool_gate_group(
+            group_rows,
+            visible_control=condition == "visible_control",
+            n_boot=n_boot,
+        )
+
+    for (condition, arch, slot), group_rows in sorted(by_slot.items()):
+        out["slot_groups"][f"{condition}/{arch}/slot_{slot}"] = summarize_tool_gate_group(
+            group_rows,
+            visible_control=condition == "visible_control",
+            n_boot=n_boot,
+        )
+
+    bottleneck_rows = [r for r in rows if r["condition"] == "tool_bottleneck"]
+    if bottleneck_rows:
+        out["pooled_tool_bottleneck"] = summarize_tool_gate_group(
+            bottleneck_rows,
+            visible_control=False,
+            n_boot=n_boot,
+        )
+
+    return out
+
+
+def summarize_tool_gate_group(
+    rows: list[dict[str, Any]],
+    *,
+    visible_control: bool,
+    n_boot: int = 2000,
+) -> dict[str, Any]:
+    final_acc = bootstrap_mean_ci([r["final_accuracy"] for r in rows], n_boot=n_boot, seed=20260710)
+    tool_slot_acc = bootstrap_mean_ci([r["tool_slot_accuracy"] for r in rows], n_boot=n_boot, seed=20260711)
+    memory_spec = bootstrap_mean_ci([r["memory_specificity_z"] for r in rows], n_boot=n_boot, seed=20260712)
+    memory_rank = bootstrap_mean_ci([r["memory_rank_percentile"] for r in rows], n_boot=n_boot, seed=20260713)
+    tool_value_spec = bootstrap_mean_ci([r["tool_value_specificity_z"] for r in rows], n_boot=n_boot, seed=20260714)
+
+    gate = {
+        "final_acc_ge_0_90": final_acc["mean"] >= 0.90,
+        "tool_slot_acc_ge_0_90": tool_slot_acc["mean"] >= 0.90,
+        "memory_specificity_positive": memory_spec["ci95"][0] > 0.0,
+        "tool_value_specificity_positive": tool_value_spec["ci95"][0] > 0.0,
+        "rank_above_chance": memory_rank["mean"] > 0.5,
+    }
+    tool_value_acc = None
+    if visible_control:
+        gate = {
+            "final_acc_ge_0_90": final_acc["mean"] >= 0.90,
+            "tool_slot_null_acc_ge_0_90": tool_slot_acc["mean"] >= 0.90,
+            "memory_specificity_not_strong_positive": memory_spec["mean"] < 0.5,
+        }
+    else:
+        tool_value_acc = bootstrap_mean_ci([r["tool_value_accuracy"] for r in rows], n_boot=n_boot, seed=20260715)
+        gate["tool_value_acc_ge_0_90"] = tool_value_acc["mean"] >= 0.90
+    gate["pass"] = all(gate.values())
+
+    item = {
+        "final_accuracy": final_acc,
+        "tool_slot_accuracy": tool_slot_acc,
+        "memory_specificity_z": memory_spec,
+        "memory_rank_percentile": memory_rank,
+        "tool_value_specificity_z": tool_value_spec,
+        "gate": gate,
+    }
+    if tool_value_acc is not None:
+        item["tool_value_accuracy"] = tool_value_acc
+    return item

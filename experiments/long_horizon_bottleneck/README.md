@@ -58,6 +58,24 @@ The horizon pass reuses the same early clue positions and lengthens only the
 post-clue delay. This tests whether the moved-bottleneck signal survives longer
 credit-assignment spans rather than only the initial 128-token setting.
 
+Tool-commitment pass:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/long_horizon_bottleneck/modal_tool_commitment_sweep.py \
+    --seeds 4 --train-steps 700 --architectures transformer \
+    --conditions tool_bottleneck,visible_control \
+    --critical-slots 0,1,2,3 \
+    --budget-usd 25 \
+    --out artifacts/long_horizon_bottleneck/tool_commitment_l4.json
+```
+
+The tool pass adds a commit token and a teacher-forced tool-return token. In the
+`tool_bottleneck` condition, the agent must commit the moved critical slot and
+its value before receiving the external return; in `visible_control`, it should
+choose the null tool and solve from the terminal visible bit.
+
 Smoke:
 
 ```bash
