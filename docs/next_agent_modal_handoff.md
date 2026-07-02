@@ -22,7 +22,7 @@ remains, how to run it, and where everything lives. Read it fully before acting.
   `@app.local_entrypoint` via `.map()`. Dispatch with:
   ```
   doppler --scope /Users/jawaun/superoptimizers run -- \
-      uvx --python 3.12 --from modal modal run <entrypoint.py> <--flags>
+      uvx --python 3.12 --from modal --with numpy modal run <entrypoint.py> <--flags>
   ```
 - **Attribution/honesty rules:** results are AI-agent-generated under human direction — say so.
   Report honest negatives. Do **not** overclaim. Do **not** put model identifiers in committed
@@ -56,7 +56,7 @@ remains, how to run it, and where everything lives. Read it fully before acting.
   archs, 8 seeds, 4000 steps — which is exactly what G2/G3/G4 need:
   ```
   doppler --scope /Users/jawaun/superoptimizers run -- \
-      uvx --python 3.12 --from modal modal run \
+      uvx --python 3.12 --from modal --with numpy modal run \
       experiments/grid_cell_weakness/modal_grid_cell_weakness_sweep.py \
       --seeds 8 --steps 4000 --decode-arenas 1.0,1.25,1.5,2.0 \
       --out artifacts/grid_cell_weakness/sweep.json
@@ -103,7 +103,7 @@ the two variables that resolve 1/3 vs 1/2:
 - **Amplitude sweep** (`--amps`) to test the `(1+A)^{d/(d+2)}` peak-resolution scaling.
 ```
 doppler --scope /Users/jawaun/superoptimizers run -- \
-    uvx --python 3.12 --from modal modal run \
+    uvx --python 3.12 --from modal --with numpy modal run \
     experiments/grid_cell_weakness/modal_reward_deformation_sweep.py \
     --seeds 10 --steps 8000 --ng 256 --np 256 \
     --geometries point,stripe,aniso2d --amps 3,6,12 \

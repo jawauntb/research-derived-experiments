@@ -20,7 +20,7 @@ emergence, then measures the four pre-registered quantities:
 Run (laptop, dispatches to Modal):
 
     doppler --scope /Users/jawaun/superoptimizers run -- \\
-        uvx --python 3.12 --from modal modal run \\
+        uvx --python 3.12 --from modal --with numpy modal run \\
             experiments/grid_cell_weakness/modal_grid_cell_weakness_sweep.py \\
             --seeds 8 --steps 4000 \\
             --out artifacts/grid_cell_weakness/sweep.json

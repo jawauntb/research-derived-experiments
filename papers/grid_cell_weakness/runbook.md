@@ -13,20 +13,20 @@ No Modal auth in the web session; dispatch from a Modal-authed machine.
 ```
 # 1) smoke (1 seed, short) — confirms the worker runs on Modal end to end
 doppler --scope /Users/jawaun/superoptimizers run -- \
-  uvx --python 3.12 --from modal modal run \
+  uvx --python 3.12 --from modal --with numpy modal run \
     experiments/grid_cell_weakness/modal_grid_cell_weakness_sweep.py \
     --seeds 1 --steps 400 --conditions full_translation,none
 
 # 2) emergence probe (1–2 seeds, full steps, full_translation only) — see below
 doppler --scope /Users/jawaun/superoptimizers run -- \
-  uvx --python 3.12 --from modal modal run \
+  uvx --python 3.12 --from modal --with numpy modal run \
     experiments/grid_cell_weakness/modal_grid_cell_weakness_sweep.py \
     --seeds 2 --steps 4000 --conditions full_translation \
     --out artifacts/grid_cell_weakness/emergence_probe.json
 
 # 3) full sweep (5 conditions × 2 archs × 8 seeds), with the arena OOD sweep
 doppler --scope /Users/jawaun/superoptimizers run -- \
-  uvx --python 3.12 --from modal modal run \
+  uvx --python 3.12 --from modal --with numpy modal run \
     experiments/grid_cell_weakness/modal_grid_cell_weakness_sweep.py \
     --seeds 8 --steps 4000 --decode-arenas 1.0,1.25,1.5,2.0 \
     --out artifacts/grid_cell_weakness/sweep.json
