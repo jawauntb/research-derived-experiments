@@ -16,7 +16,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import paperkit as pk  # noqa: E402
-from reportlab.platypus import PageBreak  # noqa: E402
+from reportlab.platypus import PageBreak, Paragraph  # noqa: E402
 
 FIG = "artifacts/papers/figs_gridcell"
 OUT = "artifacts/papers/weakness_predicts_topology.pdf"
@@ -33,6 +33,13 @@ OOD_CURVES = {
     "random shift": [0.976, 0.910, 0.778, 0.615],
     "none": [0.984, 0.805, 0.655, 0.484],
     "wrong group": [0.985, 0.808, 0.659, 0.489],
+}
+TORUS_MATCH_WILSON = {
+    "full translation": "[0.61, 0.83]",
+    "partial": "[0.00, 0.06]",
+    "random shift": "[0.00, 0.06]",
+    "none": "[0.00, 0.06]",
+    "wrong group": "[0.00, 0.06]",
 }
 
 
@@ -138,9 +145,9 @@ def build() -> None:
     p.para(
         "The strong version predicted a triangle: high weakness, low Fourier participation ratio "
         "(few aligned frequency modes), clean toroidal topology, and larger-arena OOD "
-        "generalization should be different measurements of one event. This sweep was designed to "
-        "test that strong triangle and let it fail. The published posture should therefore be an "
-        "empirical note, not a broad confirmation paper.")
+        "generalization should be different measurements of one event. The sweep was designed to "
+        "make that strong triangle falsifiable. We therefore present the result as an empirical "
+        "note and negative mediation result, not as a broad confirmation of the weakness program.")
 
     p.h1("2. Pre-Registered Test")
     p.para(
@@ -181,6 +188,12 @@ def build() -> None:
         "R^2 across the registered shifts. The metric is computed on hidden activity, not on the "
         "decoded position or place-cell target.")
     p.para(
+        "<b>Statistics.</b> Unless otherwise stated, rho denotes Spearman rank correlation with "
+        "average-rank tie handling. G2 and G3 report signed rho values, while the registered "
+        "2x baseline comparisons use absolute rho for classical predictors. The loss baseline is "
+        "raw final training loss, not negative loss; its positive rho with OOD reflects the fact "
+        "that the translation-augmented condition is harder to fit but generalizes better.")
+    p.para(
         "<b>Topology.</b> Hidden states are sampled from fresh trajectories, averaged into a "
         "16 x 16 spatial grid, and treated as a point cloud in hidden-state space. Empty spatial "
         "bins, when present, are filled with the global mean so the grid is complete; the Modal "
@@ -189,20 +202,21 @@ def build() -> None:
         "distances), yielding H0, H1, and H2 persistence intervals. A torus should have Betti "
         "signature (1,2,1): one component, two loops, and one void. The continuous toroidal score "
         "combines the second H1 bar above the third-bar noise floor with the strongest H2 void; "
-        "`betti_match_torus` requires two estimated H1 loops and a nontrivial H2 bar.")
+        "`betti_match_torus` requires two estimated H1 loops and a nontrivial H2 bar. Torus match "
+        "is the fraction of networks in a condition satisfying this Boolean criterion.")
 
     p.h1("4. Results")
     p.figure(f_cond, "Figure 2. Condition means. Full translation is the only condition that reliably forms a torus and preserves OOD decoding at arena scale 2.0.", width_in=6.3)
     p.figure(f_ood, "Figure 3. Larger-arena OOD curves. Full translation remains stable as the arena doubles; controls degrade sharply.", width_in=6.0)
     p.table(
-        [["Condition", "n", "weakness", "toroidal", "torus match", "OOD @2.0"],
-         ["full translation", "64", "0.768", "0.357", "0.734", "0.949"],
-         ["partial translation", "64", "0.416", "0.007", "0.000", "0.732"],
-         ["random shift", "64", "0.400", "0.000", "0.000", "0.615"],
-         ["none", "64", "0.446", "0.000", "0.000", "0.484"],
-         ["wrong group", "64", "0.048", "0.009", "0.000", "0.489"]],
-        caption="Table 2. Condition means. Full translation is the positive intervention; random shift and wrong group are controls. Weakness is not monotone with toroidal score outside the full-translation condition.",
-        col_widths=[130, 42, 70, 70, 80, 70])
+        [["Condition", "n", "weakness", "toroidal", "torus match", "Wilson 95%", "OOD @2.0"],
+         ["full translation", "64", "0.768", "0.357", "0.734", TORUS_MATCH_WILSON["full translation"], "0.949"],
+         ["partial translation", "64", "0.416", "0.007", "0.000", TORUS_MATCH_WILSON["partial"], "0.732"],
+         ["random shift", "64", "0.400", "0.000", "0.000", TORUS_MATCH_WILSON["random shift"], "0.615"],
+         ["none", "64", "0.446", "0.000", "0.000", TORUS_MATCH_WILSON["none"], "0.484"],
+         ["wrong group", "64", "0.048", "0.009", "0.000", TORUS_MATCH_WILSON["wrong group"], "0.489"]],
+        caption="Table 2. Condition means. Wilson intervals apply only to the torus-match fraction. Full translation is the positive intervention; random shift and wrong group are controls. Weakness is not monotone with toroidal score outside the full-translation condition.",
+        col_widths=[115, 34, 62, 62, 70, 76, 62])
     p.para(
         "The positive result is clean at the condition level. Full translation augmentation is the "
         "only condition that reliably produces a torus, and it preserves decoding accuracy as the "
@@ -253,6 +267,77 @@ def build() -> None:
         "new confirmatory study on public grid-cell recordings, not an interpretation of the RNN "
         "result itself.")
 
+    p.flow += [PageBreak()]
+    p.h1("Appendix A. Implementation Details")
+    p.table(
+        [["Component", "Vanilla RNN cell", "GRU cell"],
+         ["recurrent update", "torch RNNCell, ReLU", "torch GRUCell + ReLU hidden"],
+         ["hidden size", "128", "128"],
+         ["input at t", "2-D velocity", "2-D velocity"],
+         ["initial state", "linear encoder of initial place code", "same"],
+         ["output", "100 place-cell logits", "same"],
+         ["loss", "KL divergence to target place-cell code + 1e-3 activity penalty", "same"],
+         ["optimizer", "Adam, lr 1e-3, weight decay 1e-4", "same"],
+         ["training", "4000 steps, batch 200, trajectory length 20", "same"]],
+        caption="Table A1. Architecture and training hyperparameters used in every Modal cell.",
+        col_widths=[95, 205, 205])
+    p.para(
+        "<b>Path-integration task.</b> Each training trajectory starts with x0 sampled uniformly "
+        "from the interior [0.1B, 0.9B]^2 of a square box of side B. Heading is initialized "
+        "uniformly and perturbed each step by Normal(0, 0.4); velocity is 0.06(cos theta, "
+        "sin theta). Positions update as x(t+1) = x(t) + v(t) with reflecting boundaries. Training "
+        "uses B=1.0. Place targets are softmax-normalized Gaussian activations over a 10 x 10 "
+        "unit-square place-cell grid with sigma=0.10.")
+    a2_rows = [
+        ("none", "no augmentation"),
+        (
+            "full translation",
+            "sample offset u~Uniform([0,1]^2); add u to positions and initial position "
+            "modulo 1; velocities unchanged",
+        ),
+        (
+            "partial translation",
+            "sample offset u~Uniform([0,0.3]^2); add u modulo 1; velocities unchanged",
+        ),
+        (
+            "random shift",
+            "sample offset epsilon~Normal(0,0.05); add to positions and initial position, "
+            "clipped to the current box",
+        ),
+        ("wrong group", "swap the two velocity coordinates while leaving target positions unchanged"),
+        (
+            "null predictor",
+            "separate wrong-group metric: replace wrapped translations by a fixed random bin "
+            "permutation in the weakness calculation",
+        ),
+    ]
+    p.table(
+        [["Condition", "Exact intervention in the worker"]]
+        + [[Paragraph(condition, p.s_small), Paragraph(intervention, p.s_small)] for condition, intervention in a2_rows],
+        caption="Table A2. Training conditions and the separate wrong-group null predictor.",
+        col_widths=[115, 390])
+    p.para(
+        "<b>OOD decoding.</b> Evaluation generates fresh trajectories with B in {1.0, 1.25, "
+        "1.5, 2.0}. The model's place-cell argmax is counted correct when its center lies within "
+        "one unit-square place-cell spacing of the target argmax. The primary OOD score is the "
+        "largest scale, B=2.0. The same condition-specific preprocessing is used at decode time; "
+        "therefore the result should be read as larger-trajectory/arena-scale OOD in this harness, "
+        "not as an unbounded coordinate extrapolation claim.")
+    p.para(
+        "<b>Fourier participation ratio.</b> Hidden activity is averaged into 16 x 16 spatial "
+        "rate maps per unit. After subtracting each map's mean and dropping the DC Fourier bin, "
+        "power is normalized over spatial frequencies and PR = 1 / sum_k p_k^2 is averaged over "
+        "units. Lower PR means fewer effective Fourier modes; G5 correlates weakness with -PR.")
+    p.para(
+        "<b>Topology and uncertainty status.</b> The committed result report stores condition "
+        "means and gate correlations; the raw per-cell JSON is gitignored and was not available "
+        "in this fresh worktree, so this PDF reports Wilson intervals only for the Boolean "
+        "torus-match fractions and does not invent seed-level CIs for continuous metrics. Before "
+        "conference review, the raw-cell appendix should add bootstrap intervals for weakness, "
+        "toroidal score, OOD curves, and robustness sweeps over bin counts, Vietoris-Rips edge "
+        "caps, and empty-bin handling. The present note treats those as limitations rather than "
+        "completed evidence.")
+
     p.references([
         "Gardner, R. J. et al. Toroidal topology of population activity in grid cells. Nature 602, 123-128 (2022).",
         "McNaughton, B. L., Battaglia, F. P., Jensen, O., Moser, E. I., Moser, M.-B. Path integration and the neural basis of the cognitive map. Nature Reviews Neuroscience 7, 663-678 (2006).",
@@ -265,6 +350,9 @@ def build() -> None:
         "Cohen, T., Welling, M. Group Equivariant Convolutional Networks. ICML (2016).",
         "Gruver, N., Finzi, M., Goldblum, M., Wilson, A. G. The Lie Derivative for Measuring Learned Equivariance. ICLR (2023).",
         "Xu, M., Song, F., Si, B., Qin, S. The Principle of Isomorphism: A Theory of Population Activity in Grid Cells and Beyond. arXiv:2510.02853 (2025).",
+        "Zomorodian, A., Carlsson, G. Computing Persistent Homology. Discrete & Computational Geometry 33, 249-274 (2005).",
+        "Maria, C., Boissonnat, J.-D., Glisse, M., Yvinec, M. The Gudhi Library: Simplicial Complexes and Persistent Homology. ICMS (2014).",
+        "Imai, K., Keele, L., Tingley, D. A General Approach to Causal Mediation Analysis. Psychological Methods 15(4), 309-334 (2010).",
         "Bennett, M. T. How to Create Conscious Machines. arXiv:2403.00644 (2024).",
     ])
     out = p.build()
