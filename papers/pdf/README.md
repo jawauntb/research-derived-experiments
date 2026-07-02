@@ -11,9 +11,12 @@ gitignored). Regenerate with the committed builders:
   Modal sweep; negative mediation result for weakness as the governing scalar).
   Rebuild: `python scripts/build_gridcell_pdf.py`
 
-- `concern_deforms_metric.pdf` — Paper B "Concern Deforms a Learned Metric" (64-seed
-  moved-location replication across RNN, Transformer, and JEPA-style spatial models; 2%
-  precision gate passes with the stricter 1% audit retained as a non-passing check).
+- `concern_deforms_metric.pdf` — Paper B "Value-Weighted Training Deforms Learned
+  Metrics" (controlled 64-seed moved-location test across RNN, Transformer, and
+  JEPA-style spatial models; the 2% report threshold is met with the stricter frozen 1%
+  audit retained as a non-passing precision check). Appendix A adds the semantic
+  transformer boundary check, where naive text-encoder transfer does not meet the
+  registered local semantic-margin gate.
   Rebuild: `python scripts/build_paperB_pdf.py`
 
 - `reward_deformation_effective_dimension_law.pdf` — standalone effective-dimension note:
