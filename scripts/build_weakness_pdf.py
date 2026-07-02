@@ -45,10 +45,10 @@ def figures():
         highlight={"weakness (true group)"}, vmin=-0.3, vmax=1.0,
         title="Neural sweep (256 MLPs): correlation of each predictor with OOD accuracy",
         xlabel="Pearson r with OOD accuracy", figsize=(6.2, 3.2))
-    # Fig 3: per-augmentation monotone gradient (1024 MLPs)
+    # Fig 3: per-augmentation monotone gradient (4096 MLPs, 2026-07-02 Modal rescale)
     augs = ["none", "wrong\nreflection", "wrong\nrandom", "partial\ncyclic", "full\ncyclic"]
-    weak = [0.118, 0.129, 0.137, 0.358, 0.963]
-    ood = [0.000, 0.012, 0.100, 0.621, 0.967]
+    weak = [0.1157, 0.1315, 0.1230, 0.3678, 0.9545]
+    ood = [0.0000, 0.0135, 0.0877, 0.6438, 0.9434]
     f["grad"] = pk.chart_scatter_gradient(
         f"{FIG}/fig3_augmentation_gradient.png", weak, ood, labels=augs,
         title="Per-augmentation gradient (1024 MLPs): OOD rises monotonically with weakness",
@@ -93,7 +93,7 @@ def build():
         "and dihedral trials (Wilson 95% lower bound 0.992) while every classical baseline recovers "
         "it in 0% (upper bound 0.008). Across 256 and 1024 trained MLPs, learned-function weakness "
         "under the true group is the strongest correlate of OOD accuracy (Pearson r = +0.81), far "
-        "exceeding training loss (−0.03), validation (+0.10), parameter L₂ (+0.10–0.27), and a "
+        "exceeding training loss (−0.03), validation (+0.09), parameter L₂ (+0.10–0.25), and a "
         "sharpness proxy (+0.13); wrong-group and random-label controls are correctly null (|r| ≤ "
         "0.13). A <b>data-inferred</b> group — recovered from training pairs without oracle access — "
         "matches the oracle (100% on cyclic and dihedral), and the result extends to vision "
@@ -160,14 +160,14 @@ def build():
         "group together with classical predictors, correlating each against held-out OOD accuracy.")
     p.figure(f["neural"],
              "Figure 2. Across 256 MLPs, weakness under the true group is the single strongest "
-             "predictor of OOD accuracy (Pearson r = +0.82). Training loss, validation, parameter "
+             "predictor of OOD accuracy (Pearson r = +0.82 locally and +0.8085 in the 4096-model Modal rescale). Training loss, validation, parameter "
              "L₂, and sharpness are weak; the wrong-group and random-label controls are correctly "
              "negative — ruling out 'any equivariance count works.' The 1024-MLP Modal replication "
              "is consistent (weakness r = +0.81).", width_in=5.9)
     p.figure(f["grad"],
              "Figure 3. The per-augmentation gradient is monotone in weakness: full-cyclic "
-             "(orbit completion) saturates at 97% OOD and 0.96 weakness, while none / "
-             "wrong-reflection collapse to ≤1% OOD and ≤0.13 weakness. Augmentations that "
+             "(orbit completion) reaches 94% OOD and 0.95 weakness, while none / "
+             "wrong-reflection collapse to ≤1.4% OOD and ≤0.13 weakness. Augmentations that "
              "approximately respect the symmetry raise weakness and OOD together.", width_in=5.0)
 
     p.h1("5. Scaling: vision and language")
