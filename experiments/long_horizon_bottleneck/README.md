@@ -40,6 +40,24 @@ bottleneck task at 700 steps, while a same-budget GRU calibration remained at
 chance. The broader GRU sweep remains useful as a negative/architecture-control
 diagnostic, but it is not the fastest route to a clean initial result.
 
+Horizon stress pass:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/long_horizon_bottleneck/modal_moved_bottleneck_sweep.py \
+    --seeds 4 --train-steps 700 --architectures transformer \
+    --conditions bottleneck,visible_control \
+    --critical-slots 0,1,2,3 \
+    --sequence-lengths 128,256,384 \
+    --budget-usd 50 \
+    --out artifacts/long_horizon_bottleneck/horizon_transformer_l4.json
+```
+
+The horizon pass reuses the same early clue positions and lengthens only the
+post-clue delay. This tests whether the moved-bottleneck signal survives longer
+credit-assignment spans rather than only the initial 128-token setting.
+
 Smoke:
 
 ```bash

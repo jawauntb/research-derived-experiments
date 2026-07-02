@@ -24,6 +24,16 @@ Default:
         experiments/long_horizon_bottleneck/modal_moved_bottleneck_sweep.py \\
         --seeds 8 --train-steps 700 --budget-usd 100 \\
         --out artifacts/long_horizon_bottleneck/moved_bottleneck_sweep.json
+
+Horizon stress:
+
+    doppler --scope /Users/jawaun/superoptimizers run -- \\
+        uvx --python 3.12 --from modal modal run \\
+        experiments/long_horizon_bottleneck/modal_moved_bottleneck_sweep.py \\
+        --seeds 4 --train-steps 700 --architectures transformer \\
+        --conditions bottleneck,visible_control --critical-slots 0,1,2,3 \\
+        --sequence-lengths 128,256,384 --budget-usd 50 \\
+        --out artifacts/long_horizon_bottleneck/horizon_transformer_l4.json
 """
 
 from __future__ import annotations
@@ -261,6 +271,7 @@ def main(
     metric_batches: int = 3,
     hidden_size: int = 64,
     sequence_length: int = 128,
+    sequence_lengths: str = "",
     n_slots: int = 4,
     slot_gap: int = 8,
     architectures: str = "gru,transformer",
@@ -273,6 +284,7 @@ def main(
 ):
     from experiments.long_horizon_bottleneck.core import (
         build_cells,
+        build_horizon_cells,
         estimate_modal_cost,
         parse_csv,
         parse_int_csv,
@@ -282,22 +294,40 @@ def main(
     arch_list = parse_csv(architectures)
     condition_list = parse_csv(conditions)
     slot_list = parse_int_csv(critical_slots)
+    sequence_length_list = parse_int_csv(sequence_lengths) if sequence_lengths else [sequence_length]
     seed_values = list(range(seeds))
-    cells = build_cells(
-        seeds=seed_values,
-        architectures=arch_list,
-        conditions=condition_list,
-        critical_slots=slot_list,
-        n_slots=n_slots,
-        sequence_length=sequence_length,
-        slot_gap=slot_gap,
-        train_steps=train_steps,
-        batch_size=batch_size,
-        eval_batches=eval_batches,
-        metric_batches=metric_batches,
-        hidden_size=hidden_size,
-        base_seed=base_seed,
-    )
+    if len(sequence_length_list) == 1:
+        cells = build_cells(
+            seeds=seed_values,
+            architectures=arch_list,
+            conditions=condition_list,
+            critical_slots=slot_list,
+            n_slots=n_slots,
+            sequence_length=sequence_length_list[0],
+            slot_gap=slot_gap,
+            train_steps=train_steps,
+            batch_size=batch_size,
+            eval_batches=eval_batches,
+            metric_batches=metric_batches,
+            hidden_size=hidden_size,
+            base_seed=base_seed,
+        )
+    else:
+        cells = build_horizon_cells(
+            sequence_lengths=sequence_length_list,
+            seeds=seed_values,
+            architectures=arch_list,
+            conditions=condition_list,
+            critical_slots=slot_list,
+            n_slots=n_slots,
+            slot_gap=slot_gap,
+            train_steps=train_steps,
+            batch_size=batch_size,
+            eval_batches=eval_batches,
+            metric_batches=metric_batches,
+            hidden_size=hidden_size,
+            base_seed=base_seed,
+        )
     estimate = estimate_modal_cost(
         cells=len(cells),
         gpu=GPU,
@@ -315,7 +345,8 @@ def main(
         "conditions": condition_list,
         "critical_slots": slot_list,
         "n_slots": n_slots,
-        "sequence_length": sequence_length,
+        "sequence_length": sequence_length_list[0],
+        "sequence_lengths": sequence_length_list,
         "slot_gap": slot_gap,
         "train_steps": train_steps,
         "batch_size": batch_size,
@@ -360,6 +391,17 @@ def main(
             f"spec={spec['mean']:+.3f} CI[{spec['ci95'][0]:+.3f},{spec['ci95'][1]:+.3f}] "
             f"rank={rank['mean']:.3f} pass={item['gate']['pass']}"
         )
+    if summary["horizon_groups"]:
+        print("[moved-bottleneck] horizon groups")
+        for key, item in summary["horizon_groups"].items():
+            acc = item["accuracy"]
+            spec = item["memory_specificity_z"]
+            rank = item["memory_rank_percentile"]
+            print(
+                f"  {key:39s} acc={acc['mean']:.3f} "
+                f"spec={spec['mean']:+.3f} CI[{spec['ci95'][0]:+.3f},{spec['ci95'][1]:+.3f}] "
+                f"rank={rank['mean']:.3f} pass={item['gate']['pass']}"
+            )
     if "pooled_bottleneck" in summary:
         pooled = summary["pooled_bottleneck"]
         print(

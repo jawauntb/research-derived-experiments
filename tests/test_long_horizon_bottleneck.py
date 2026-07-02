@@ -2,6 +2,7 @@ import pytest
 
 from experiments.long_horizon_bottleneck.core import (
     build_cells,
+    build_horizon_cells,
     estimate_modal_cost,
     summarize_rows,
 )
@@ -60,6 +61,28 @@ def test_build_cells_rejects_slot_positions_that_reach_terminal_query():
         )
 
 
+def test_build_horizon_cells_crosses_sequence_lengths_with_distinct_seed_blocks():
+    cells = build_horizon_cells(
+        sequence_lengths=[128, 256],
+        seeds=[0, 1],
+        architectures=["transformer"],
+        conditions=["bottleneck"],
+        critical_slots=[0, 1],
+        n_slots=4,
+        slot_gap=8,
+        train_steps=100,
+        batch_size=64,
+        eval_batches=2,
+        metric_batches=2,
+        hidden_size=32,
+        base_seed=20260702,
+    )
+
+    assert len(cells) == 2 * 2 * 2
+    assert {c["sequence_length"] for c in cells} == {128, 256}
+    assert min(c["seed"] for c in cells if c["sequence_length"] == 256) >= 20360702
+
+
 def test_summarize_rows_detects_transport_and_visible_control_null():
     rows = []
     for seed in range(8):
@@ -68,6 +91,7 @@ def test_summarize_rows_detects_transport_and_visible_control_null():
                 "condition": "bottleneck",
                 "architecture": "gru",
                 "critical_slot": seed % 4,
+                "sequence_length": 128,
                 "accuracy": 0.98,
                 "memory_specificity_z": 1.2,
                 "memory_rank_percentile": 1.0,
@@ -78,6 +102,7 @@ def test_summarize_rows_detects_transport_and_visible_control_null():
                 "condition": "visible_control",
                 "architecture": "gru",
                 "critical_slot": seed % 4,
+                "sequence_length": 128,
                 "accuracy": 0.99,
                 "memory_specificity_z": 0.05,
                 "memory_rank_percentile": 0.5,
@@ -87,5 +112,6 @@ def test_summarize_rows_detects_transport_and_visible_control_null():
     summary = summarize_rows(rows, n_boot=200)
 
     assert summary["groups"]["bottleneck/gru"]["gate"]["pass"]
+    assert summary["horizon_groups"]["bottleneck/gru/length_128"]["gate"]["pass"]
     assert summary["groups"]["visible_control/gru"]["gate"]["pass"]
     assert summary["pooled_bottleneck"]["gate"]["pass"]

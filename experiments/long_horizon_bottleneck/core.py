@@ -91,11 +91,11 @@ def build_cells(
     hidden_size: int,
     base_seed: int,
 ) -> list[dict[str, Any]]:
-    slot_positions = default_slot_positions(n_slots, slot_gap)
     if n_slots <= 0:
         raise ValueError("n_slots must be positive")
     if slot_gap <= 0:
         raise ValueError("slot_gap must be positive")
+    slot_positions = default_slot_positions(n_slots, slot_gap)
     if slot_positions[-1] >= sequence_length - 1:
         raise ValueError(
             "slot positions must leave the final sequence element for the query "
@@ -124,6 +124,49 @@ def build_cells(
                             "hidden_size": hidden_size,
                         }
                     )
+    return cells
+
+
+def build_horizon_cells(
+    *,
+    sequence_lengths: Iterable[int],
+    seeds: Iterable[int],
+    architectures: Iterable[str],
+    conditions: Iterable[str],
+    critical_slots: Iterable[int],
+    n_slots: int,
+    slot_gap: int,
+    train_steps: int,
+    batch_size: int,
+    eval_batches: int,
+    metric_batches: int,
+    hidden_size: int,
+    base_seed: int,
+) -> list[dict[str, Any]]:
+    sequence_values = list(sequence_lengths)
+    seed_values = list(seeds)
+    architecture_values = list(architectures)
+    condition_values = list(conditions)
+    slot_values = list(critical_slots)
+    cells: list[dict[str, Any]] = []
+    for sequence_index, sequence_length in enumerate(sequence_values):
+        cells.extend(
+            build_cells(
+                seeds=seed_values,
+                architectures=architecture_values,
+                conditions=condition_values,
+                critical_slots=slot_values,
+                n_slots=n_slots,
+                sequence_length=sequence_length,
+                slot_gap=slot_gap,
+                train_steps=train_steps,
+                batch_size=batch_size,
+                eval_batches=eval_batches,
+                metric_batches=metric_batches,
+                hidden_size=hidden_size,
+                base_seed=base_seed + 100_000 * sequence_index,
+            )
+        )
     return cells
 
 
@@ -160,38 +203,29 @@ def summarize_rows(rows: list[dict[str, Any]], *, n_boot: int = 2000) -> dict[st
     """Summarize Modal cell rows into preregistered gate statistics."""
 
     grouped: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    horizon_grouped: dict[tuple[str, str, int], list[dict[str, Any]]] = defaultdict(list)
     by_slot: dict[tuple[str, str, int], list[dict[str, Any]]] = defaultdict(list)
     for row in rows:
         key = (str(row["condition"]), str(row["architecture"]))
         grouped[key].append(row)
+        if "sequence_length" in row:
+            horizon_grouped[(key[0], key[1], int(row["sequence_length"]))].append(row)
         by_slot[(key[0], key[1], int(row["critical_slot"]))].append(row)
 
-    out: dict[str, Any] = {"n_rows": len(rows), "groups": {}, "slot_groups": {}}
+    out: dict[str, Any] = {"n_rows": len(rows), "groups": {}, "horizon_groups": {}, "slot_groups": {}}
     for (condition, arch), group_rows in sorted(grouped.items()):
-        spec = [r["memory_specificity_z"] for r in group_rows]
-        acc = [r["accuracy"] for r in group_rows]
-        rank = [r["memory_rank_percentile"] for r in group_rows]
-        visible = condition == "visible_control"
-        spec_stat = bootstrap_mean_ci(spec, n_boot=n_boot, seed=20260702)
-        acc_stat = bootstrap_mean_ci(acc, n_boot=n_boot, seed=20260703)
-        rank_stat = bootstrap_mean_ci(rank, n_boot=n_boot, seed=20260704)
-        gate = {
-            "behavior_acc_ge_0_90": acc_stat["mean"] >= 0.90,
-            "specificity_positive": spec_stat["ci95"][0] > 0.0,
-            "rank_above_chance": rank_stat["mean"] > 0.5,
-        }
-        if visible:
-            gate = {
-                "behavior_acc_ge_0_90": acc_stat["mean"] >= 0.90,
-                "specificity_not_strong_positive": spec_stat["mean"] < 0.5,
-            }
-        gate["pass"] = all(gate.values())
-        out["groups"][f"{condition}/{arch}"] = {
-            "accuracy": acc_stat,
-            "memory_specificity_z": spec_stat,
-            "memory_rank_percentile": rank_stat,
-            "gate": gate,
-        }
+        out["groups"][f"{condition}/{arch}"] = summarize_gate_group(
+            group_rows,
+            visible_control=condition == "visible_control",
+            n_boot=n_boot,
+        )
+
+    for (condition, arch, sequence_length), group_rows in sorted(horizon_grouped.items()):
+        out["horizon_groups"][f"{condition}/{arch}/length_{sequence_length}"] = summarize_gate_group(
+            group_rows,
+            visible_control=condition == "visible_control",
+            n_boot=n_boot,
+        )
 
     for (condition, arch, slot), group_rows in sorted(by_slot.items()):
         out["slot_groups"][f"{condition}/{arch}/slot_{slot}"] = {
@@ -235,3 +269,34 @@ def summarize_rows(rows: list[dict[str, Any]], *, n_boot: int = 2000) -> dict[st
         pooled["gate"]["pass"] = all(pooled["gate"].values())
 
     return out
+
+
+def summarize_gate_group(
+    rows: list[dict[str, Any]],
+    *,
+    visible_control: bool,
+    n_boot: int = 2000,
+) -> dict[str, Any]:
+    spec = [r["memory_specificity_z"] for r in rows]
+    acc = [r["accuracy"] for r in rows]
+    rank = [r["memory_rank_percentile"] for r in rows]
+    spec_stat = bootstrap_mean_ci(spec, n_boot=n_boot, seed=20260702)
+    acc_stat = bootstrap_mean_ci(acc, n_boot=n_boot, seed=20260703)
+    rank_stat = bootstrap_mean_ci(rank, n_boot=n_boot, seed=20260704)
+    gate = {
+        "behavior_acc_ge_0_90": acc_stat["mean"] >= 0.90,
+        "specificity_positive": spec_stat["ci95"][0] > 0.0,
+        "rank_above_chance": rank_stat["mean"] > 0.5,
+    }
+    if visible_control:
+        gate = {
+            "behavior_acc_ge_0_90": acc_stat["mean"] >= 0.90,
+            "specificity_not_strong_positive": spec_stat["mean"] < 0.5,
+        }
+    gate["pass"] = all(gate.values())
+    return {
+        "accuracy": acc_stat,
+        "memory_specificity_z": spec_stat,
+        "memory_rank_percentile": rank_stat,
+        "gate": gate,
+    }
