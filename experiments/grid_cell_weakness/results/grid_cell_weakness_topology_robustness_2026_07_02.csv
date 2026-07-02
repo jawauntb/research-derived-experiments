@@ -1,0 +1,2 @@
+condition,bin_count,edge_percentile,empty_policy,max_points,n,toroidal_score,toroidal_score_ci_low,toroidal_score_ci_high,torus_match,torus_match_ci_low,torus_match_ci_high,ci_method,bootstrap_samples,status
+,,,,,,,,,,,,requires_modal_rerun_with_robustness_true,5000,not_available_in_scalar_2026_07_02_json

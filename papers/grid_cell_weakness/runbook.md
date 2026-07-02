@@ -24,11 +24,11 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     --seeds 2 --steps 4000 --conditions full_translation \
     --out artifacts/grid_cell_weakness/emergence_probe.json
 
-# 3) full sweep (5 conditions × 2 archs × 8 seeds), with the arena OOD sweep
+# 3) full sweep (5 conditions × 2 archs × 32 seeds), with the arena OOD sweep
 doppler --scope /Users/jawaun/superoptimizers run -- \
   uvx --python 3.12 --from modal --with numpy modal run \
     experiments/grid_cell_weakness/modal_grid_cell_weakness_sweep.py \
-    --seeds 8 --steps 4000 --decode-arenas 1.0,1.25,1.5,2.0 \
+    --seeds 32 --steps 4000 --decode-arenas 1.0,1.25,1.5,2.0 \
     --out artifacts/grid_cell_weakness/sweep.json
 ```
 
@@ -41,6 +41,47 @@ scale** (per the prereg's "held-out larger arena" definition); every scale's acc
 per cell under `ood_by_arena`. A grid code should path-integrate into a larger arena gracefully;
 a memorized place-code should fall off a cliff — so the `ood_by_arena` curve is itself a diagnostic
 of *how* generalization fails, not just whether.
+
+## Conference-evidence export
+
+Once a raw Modal JSON exists locally, export reviewer-facing CSVs and the evidence appendix:
+
+```
+python scripts/analyze_gridcell_conference_evidence.py \
+  --raw-json artifacts/grid_cell_weakness/grid_cell_weakness_sweep_2026_07_02_seed32.json
+```
+
+This writes:
+
+- `experiments/grid_cell_weakness/results/grid_cell_weakness_cells_2026_07_02.csv`
+- `experiments/grid_cell_weakness/results/grid_cell_weakness_bootstrap_2026_07_02.csv`
+- `experiments/grid_cell_weakness/results/grid_cell_weakness_ood_bootstrap_2026_07_02.csv`
+- `experiments/grid_cell_weakness/results/grid_cell_weakness_within_toroidal_2026_07_02.csv`
+- `experiments/grid_cell_weakness/results/grid_cell_weakness_topology_robustness_2026_07_02.csv`
+- `experiments/grid_cell_weakness/results/grid_cell_weakness_conference_evidence_2026_07_02.md`
+
+The 2026-07-02 raw JSON stores scalar per-cell metrics but not hidden-state populations, so it
+supports bootstrap CIs and within-toroidal analysis but cannot reconstruct topology robustness.
+For conference-grade robustness, rerun with topology robustness enabled while each worker still
+has the trained model and sampled hidden states in memory:
+
+```
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal --with numpy modal run \
+    experiments/grid_cell_weakness/modal_grid_cell_weakness_sweep.py \
+    --seeds 32 --steps 4000 --decode-arenas 1.0,1.25,1.5,2.0 \
+    --robustness \
+    --robustness-bin-counts 12,16,20 \
+    --robustness-edge-percentiles 35,45,55 \
+    --robustness-empty-policies global_mean,drop \
+    --robustness-max-points 200,400 \
+    --out artifacts/grid_cell_weakness/grid_cell_weakness_sweep_robustness.json
+```
+
+After that rerun, run the same `analyze_gridcell_conference_evidence.py` command against the
+robustness JSON. The robustness CSV will then aggregate toroidal score and torus-match intervals
+over bin counts, Vietoris-Rips edge caps, empty-bin handling, and sampling density instead of
+emitting the current status row.
 
 ## Grid-cell emergence tuning (do this BEFORE trusting any gate)
 

@@ -1,0 +1,13 @@
+subset,n_toroidal,comparison,estimate,ci_low,ci_high,ci_method,bootstrap_samples
+all_conditions,47,rho_weakness_ood,-0.19761154993557603,-0.5180518492957967,0.1356238390801725,percentile_bootstrap_spearman,5000
+all_conditions,47,rho_weakness_toroidal_score,-0.3353376503237743,-0.5769814797052751,-0.06274986008350518,percentile_bootstrap_spearman,5000
+all_conditions,47,rho_weakness_neg_fourier_pr,-0.35638297872340424,-0.5852658982606374,-0.07112010388959272,percentile_bootstrap_spearman,5000
+all_conditions,47,rho_loss_ood,-0.7793424778846423,-0.8735279786647208,-0.6124461672047192,percentile_bootstrap_spearman,5000
+full_translation,47,rho_weakness_ood,-0.19761154993557603,-0.5180518492957967,0.1356238390801725,percentile_bootstrap_spearman,5000
+full_translation,47,rho_weakness_toroidal_score,-0.3353376503237743,-0.5769814797052751,-0.06274986008350518,percentile_bootstrap_spearman,5000
+full_translation,47,rho_weakness_neg_fourier_pr,-0.35638297872340424,-0.5852658982606374,-0.07112010388959272,percentile_bootstrap_spearman,5000
+full_translation,47,rho_loss_ood,-0.7793424778846423,-0.8735279786647208,-0.6124461672047192,percentile_bootstrap_spearman,5000
+partial_translation,0,insufficient_toroidal_cells,,,,,
+random_shift,0,insufficient_toroidal_cells,,,,,
+none,0,insufficient_toroidal_cells,,,,,
+wrong_group,0,insufficient_toroidal_cells,,,,,
