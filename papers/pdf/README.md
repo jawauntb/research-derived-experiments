@@ -23,4 +23,9 @@ gitignored). Regenerate with the committed builders:
   the d=2 exponent is rejected in this harness and the measured law has effective dimension near 1.
   Rebuild: `python scripts/build_effective_dimension_pdf.py`
 
+- `unified_metric_weakness_portfolio/finite_representations_portfolio_with_bookmarks.pdf` —
+  portfolio packet combining the four July 2026 arXiv-ready papers with front matter,
+  reading guide, divider pages, and bookmarks.
+  Rebuild: `python scripts/build_unified_portfolio_pdf.py`
+
 Toolkit: `scripts/paperkit.py` (LaTeX-free; reportlab + matplotlib).
