@@ -13,6 +13,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import paperkit as pk  # noqa: E402
+from reportlab.platypus import PageBreak  # noqa: E402
 
 FIG = "artifacts/papers/figs_paperB"
 OUT = "artifacts/papers/concern_deforms_metric.pdf"
@@ -372,7 +373,23 @@ def build() -> None:
         "for the original moved-location claim.")
     p.figure(f_schema, "Figure 1. Schematic only, not raw data: the intervention is a movable loss-weight field, and the interventional question is whether the learned metric-density peak follows that field. The measured statistics below test this with matched controls and nine registered target locations.", width_in=6.0)
 
-    p.h1("2. Positioning Against Prior Work")
+    p.h1("2. Formal Prediction")
+    p.para(
+        "<b>Proposition (weighted finite-capacity allocation).</b> In a high-resolution local "
+        "rate-distortion approximation, suppose a d-dimensional task variable x is encoded with "
+        "local representational density rho(x), weighted distortion proportional to the integral "
+        "of w(x)D(x), and fixed total capacity proportional to the integral of rho(x). If local "
+        "distortion scales as "
+        "D(x) proportional to rho(x)^(-2/d), the optimal allocation obeys "
+        "rho*(x) proportional to w(x)^{d/(d+2)}. Therefore, for a translated priority field "
+        "w_c(x)=w_0(x-c), the predicted density rho*_c(x) translates with c.")
+    p.para(
+        "This proposition is the formal target, not the empirical conclusion. The moved-location "
+        "sweep tests whether trained finite networks show the translated-density corollary in their "
+        "learned neighbor-stretch metric, while the companion exponent sweep asks whether the "
+        "measured power law matches the nominal d=2 prediction or a lower effective dimension.")
+
+    p.h1("3. Positioning Against Prior Work")
     p.para(
         "The paper sits at the intersection of four literatures. Efficient coding and rate-distortion "
         "theory explain why finite representations should allocate more resolution where errors are "
@@ -390,7 +407,7 @@ def build() -> None:
         "For peer review, the result should be read as a controlled representational-geometry "
         "finding with clear next baselines, not as a completed theory of concern in all AI systems.")
 
-    p.h1("3. Experiment")
+    p.h1("4. Experiment")
     p.para(
         "Each model performs 2-D path integration. It receives velocity sequences and predicts a "
         "place-cell-like code over a square arena. For each seed and architecture, we train one "
@@ -409,7 +426,7 @@ def build() -> None:
     p.figure(f_forest, "Figure 3. Primary moved-location result. Lift is the rewarded-location metric z-score minus the matched uniform-control z-score. Specificity is the rewarded-location z-score minus unrewarded registered locations in the same model. Error bars are bootstrap 95% intervals.", width_in=6.2)
     p.figure(f_gate, "Figure 4. Gate audit. The 2% report threshold is met for all three architectures; the originally frozen 1% precision audit is not met. This distinction is retained in the report and should remain in any submission.", width_in=5.8)
 
-    p.h1("4. Results")
+    p.h1("5. Results")
     p.table(
         [["Architecture", "lift z (95% CI)", "SE", "specificity z (95% CI)", "SE", "rank", "2% report"],
          ["JEPA", "+0.685 [0.648,0.723]", "0.019", "+0.916 [0.889,0.943]", "0.014", "0.832", "pass"],
@@ -425,7 +442,7 @@ def build() -> None:
         "robust under the 2% report threshold and keeps the stricter 1% audit as a visible non-passing "
         "precision check.")
 
-    p.h1("5. Companion Rate-Distortion Result")
+    p.h1("6. Companion Rate-Distortion Result")
     p.figure(f_area, "Figure 5. Companion area-density diagnostic. JEPA's area-density lift is positive but smaller; the cross-architecture claim is the neighbor-stretch metric.", width_in=5.05)
     p.figure(f_exp, "Figure 6. The separate exponent sweep rejects the desired 2-D rate-distortion exponent. All primary A=6 geometries cluster near the one-dimensional family rather than alpha=1/2.", width_in=5.2)
     p.para(
@@ -436,7 +453,8 @@ def build() -> None:
         "reward gives 0.283 [0.278,0.288]. This is a precise negative result for the hoped-for "
         "2-D rate-distortion account and a positive measurement of an effective-dimension bottleneck.")
 
-    p.h1("6. Interpretation")
+    p.flow.append(PageBreak())
+    p.h1("7. Interpretation")
     p.para(
         "The core scientific value is non-circularity. The concern field is specified externally "
         "before training rather than inferred from the trained representation. When that field moves, "
@@ -444,11 +462,10 @@ def build() -> None:
         "after the representation is trained. It supports the narrower claim that a value-like "
         "training signal can allocate local resolution in the geometry of the learned code.")
     p.para(
-        "The result should still be framed narrowly. It does not establish consciousness, agency, or "
-        "biological realism. It establishes a reproducible representational mechanism in artificial "
-        "spatial learners: value-weighted prediction reshapes the induced metric. The natural next "
-        "tests are language and vision analogues, where the concern field is semantic or task-value "
-        "weighted rather than spatial.")
+        "The result should still be framed as a spatial mechanism result. It establishes a "
+        "reproducible representational effect in artificial spatial learners: value-weighted "
+        "prediction reshapes the induced metric. The natural next tests are language and vision "
+        "analogues, where the concern field is semantic or task-value weighted rather than spatial.")
     p.para(
         "The strongest future baseline is a non-spatial analogue in a real transformer: for example, "
         "upweight a controlled semantic region, syntactic construction, or retrieval-relevant document "
@@ -456,26 +473,22 @@ def build() -> None:
         "matched controls do not. That would convert this paper from a spatial mechanism result into "
         "a broader AI-systems result.")
 
-    p.h1("7. Reproducibility")
+    p.h1("8. Code and Data Availability")
     p.para(
-        "The moved-location design is registered in papers/grid_cell_weakness/preregistration.md, the "
-        "runner is experiments/grid_cell_weakness/modal_reward_location_sweep.py, and the committed "
-        "result report is experiments/grid_cell_weakness/results/reward_location_sweep_2026_07_02.md. "
-        "The PDF itself is regenerated from committed aggregate numbers with "
-        "python scripts/build_paperB_pdf.py. The raw Modal JSON is not committed under the repository "
-        "artifact policy, so full recomputation of bootstrap samples requires rerunning the Modal sweep; "
-        "the manuscript does not rely on unpublished tuning beyond the registered runner and reported "
-        "aggregate results.")
+        "Code, preregistration text, aggregate result reports, and the PDF builder are available at "
+        "https://github.com/jawauntb/research-derived-experiments. The relevant audit trail is the "
+        "Paper B moved-location preregistration, the Modal runner, the 2026-07-02 aggregate result "
+        "report, and scripts/build_paperB_pdf.py. Raw Modal JSON is not stored in git; recomputing "
+        "bootstrap samples requires rerunning the Modal sweep.")
 
-    p.h1("8. Limitations")
+    p.h1("9. Limitations")
     p.para(
         "The 2% report threshold was accepted after the first-wave results were visible; the frozen "
         "1% audit is therefore retained rather than rewritten. The task is synthetic path integration. "
         "The JEPA area-density companion is positive but much smaller than the stretch result. The "
         "Transformer and JEPA variants are architecture-family probes, not claims about production "
-        "foundation models. The result also does not establish consciousness, agency, or biological "
-        "realism; it establishes a controlled representational-geometry effect in artificial spatial "
-        "learners.")
+        "foundation models. The result is scoped to controlled spatial learners rather than language, "
+        "vision, or open-world systems.")
 
     p.references([
         "Bennett, W. R. Spectra of quantized signals. Bell System Technical Journal (1948).",
