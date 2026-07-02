@@ -193,8 +193,13 @@ only reusing the rate-distortion exponent sweep.
 
 For each architecture, reward location, and seed, train a finite-capacity predictive
 spatial model with either a uniform loss or a loss weighted by a localized concern field.
-Measure the induced area-density field `sqrt(det J(x)^T J(x))` of the learned latent code.
-All primary metrics are computed on the log area-density z-score field:
+Measure the induced metric field of the learned latent code. The Paper B Kepler primary
+uses the original Paper B observable: local neighbor-stretch metric density, the mean
+latent displacement per unit physical displacement. Area-density `sqrt(det J(x)^T J(x))`
+is co-reported as the rate-distortion companion observable, but it is not substituted
+for the original moved-location metric-density claim.
+
+All primary metrics are computed on the log neighbor-stretch metric-density z-score field:
 
 1. `control_subtracted_lift_z`: metric z-score at the rewarded location in the reward
    condition minus the matched uniform-control z-score at the same location.

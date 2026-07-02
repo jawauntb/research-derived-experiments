@@ -206,25 +206,34 @@ def _metric_observables(pop, side: int, xy: list[float], locations: list[list[fl
     import numpy as np
 
     area, stretch = _area_density(pop, side)
-    log_area = np.log(area + 1e-12)
-    finite = np.isfinite(log_area)
-    mu = float(np.nanmean(log_area[finite])) if finite.any() else 0.0
-    sd = float(np.nanstd(log_area[finite])) if finite.any() else 1.0
-    z_area = (log_area - mu) / (sd + 1e-9)
-    reward_z = _region_mean(z_area, xy, radius=2)
-    wrong = [_region_mean(z_area, loc, radius=2) for loc in locations
-             if math.dist(loc, xy) > 1e-6]
-    wrong = [x for x in wrong if math.isfinite(x)]
-    wrong_z = float(np.mean(wrong)) if wrong else float("nan")
     reward = _reward_field(side, xy, strength, width)
+
+    def field_metrics(field, prefix: str) -> dict[str, float]:
+        log_field = np.log(field + 1e-12)
+        finite = np.isfinite(log_field)
+        mu = float(np.nanmean(log_field[finite])) if finite.any() else 0.0
+        sd = float(np.nanstd(log_field[finite])) if finite.any() else 1.0
+        z_field = (log_field - mu) / (sd + 1e-9)
+        reward_z = _region_mean(z_field, xy, radius=2)
+        wrong = [_region_mean(z_field, loc, radius=2) for loc in locations
+                 if math.dist(loc, xy) > 1e-6]
+        wrong = [x for x in wrong if math.isfinite(x)]
+        wrong_z = float(np.mean(wrong)) if wrong else float("nan")
+        return {
+            f"{prefix}reward_z": reward_z,
+            f"{prefix}wrong_z_mean": wrong_z,
+            f"{prefix}specificity_z": reward_z - wrong_z if math.isfinite(wrong_z) else float("nan"),
+            f"{prefix}reward_rank_percentile": _rank_percentile(log_field, xy, radius=2),
+            f"{prefix}peak_error": _peak_error(log_field, xy),
+            f"{prefix}top10_com_error": _top_com_error(log_field, xy),
+            f"{prefix}spatial_corr_reward_log_metric": _pearson(reward, log_field),
+        }
+
+    primary = field_metrics(stretch, "")
+    companion = field_metrics(area, "area_")
     return {
-        "reward_z": reward_z,
-        "wrong_z_mean": wrong_z,
-        "specificity_z": reward_z - wrong_z if math.isfinite(wrong_z) else float("nan"),
-        "reward_rank_percentile": _rank_percentile(log_area, xy, radius=2),
-        "peak_error": _peak_error(log_area, xy),
-        "top10_com_error": _top_com_error(log_area, xy),
-        "spatial_corr_reward_log_area": _pearson(reward, log_area),
+        **primary,
+        **companion,
         "mean_area": float(np.nanmean(area)),
         "mean_stretch": float(np.nanmean(stretch)),
     }
@@ -497,9 +506,18 @@ def _summarize(rows: list[dict[str, Any]], target_se: float) -> dict[str, Any]:
             "control_subtracted_lift_z": _boot_stat(lift),
             "specificity_z": _boot_stat(spec),
             "reward_rank_percentile": _boot_stat([r["reward_rank_percentile"] for r in ars]),
-            "spatial_corr_reward_log_area": _boot_stat([r["spatial_corr_reward_log_area"] for r in ars]),
+            "spatial_corr_reward_log_metric": _boot_stat([r["spatial_corr_reward_log_metric"] for r in ars]),
             "peak_error": _boot_stat([r["peak_error"] for r in ars]),
             "top10_com_error": _boot_stat([r["top10_com_error"] for r in ars]),
+            "area_control_subtracted_lift_z": _boot_stat([
+                r["area_reward_z"] - controls.get(
+                    (r["arch"], r["seed"], _loc_key(r["reward_xy"])), {}
+                ).get("area_reward_z", float("nan"))
+                for r in ars
+            ]),
+            "area_specificity_z": _boot_stat([r["area_specificity_z"] for r in ars]),
+            "area_reward_rank_percentile": _boot_stat([r["area_reward_rank_percentile"] for r in ars]),
+            "area_spatial_corr_reward_log_metric": _boot_stat([r["area_spatial_corr_reward_log_metric"] for r in ars]),
             "final_loss": _boot_stat([r["final_loss"] for r in ars]),
             "coverage": _boot_stat([r["coverage"] for r in ars]),
             "locations": {},
