@@ -255,11 +255,11 @@ def build() -> None:
     p.rule()
     p.abstract(
         "A value-weighted rate-distortion derivation predicts that a finite-capacity 2-D code "
-        "should allocate local area density as sqrt(det g) proportional to w^(1/2). We preregistered "
+        "should allocate local area density as √det <i>g</i> proportional to <i>w</i><super>1/2</super>. We preregistered "
         "a geometry sweep designed to distinguish this physical 2-D law from an effectively 1-D "
         "allocation law: a stripe value field should give α near 1/3, while an anisotropic value "
         "field varying along both arena axes should give α near 1/2 if the 2-D law governs the "
-        "trained code. The experiment falsifies that 2-D exponent as an empirical description of "
+        "trained code. The experiment rejects that d=2, α=1/2 prediction as a description of "
         "this path-integration RNN harness. Across 576 H100-trained capacity-bottleneck networks, "
         "anisotropic 2-D at A=6 gives α=0.309 [0.304, 0.314], stripe gives α=0.302 [0.298, 0.307], "
         "and point gives α=0.283 [0.278, 0.288]. The measured exponent therefore reports an "
@@ -304,12 +304,13 @@ def build() -> None:
     p.figure(
         f_fields,
         "Figure 1. Registered value-weight fields w(x). The stripe condition varies along one "
-        "coordinate. The anisotropic 2-D condition has nonzero gradients along both arena axes, "
-        "so the failed 1/2 prediction is not explained by accidentally using a one-dimensional field.",
+        "coordinate. The anisotropic 2-D condition has nonzero gradients along both arena axes; "
+        "the plotted gradient-covariance diagnostic is rank 2 with λ2/λ1=0.16. Thus the failed "
+        "1/2 prediction is not explained by accidentally using a one-dimensional field.",
         width_in=6.25,
     )
     p.para(
-        "The gate was frozen before the large Modal sweep. The primary estimand is the slope α from "
+        "The project-preregistered gate was frozen before the large Modal sweep. The primary estimand is the slope α from "
         "ordinary least squares regression of log sqrt(det g(x)) on log w(x), over spatial bins with "
         "finite positive area density. The primary comparison is at amplitude A=6, with A in {3,6,12} "
         "used to check stability and amplitude scaling."
@@ -318,7 +319,8 @@ def build() -> None:
         "Confirmation of the 2-D law required an anisotropic 2-D mean closer to 1/2 than 1/3, a "
         "bootstrap standard error at or below 0.02, a stripe result near 1/3, and a nonzero "
         "aniso2d-vs-stripe gap. Failure of aniso2d to separate from stripe was preregistered as "
-        "evidence for a measured effective-dimension law rather than a confirmed 2-D law."
+        "rejection of the d=2 gate; the effective-dimension interpretation was the planned diagnostic "
+        "for such a failure."
     )
 
     p.h1("4. Experiment")
@@ -328,13 +330,21 @@ def build() -> None:
         "64 seeds per cell. Each network used Ng=256 hidden units, Np=256 place cells, T=20 rollout "
         "steps, batch size 128, 8000 optimization steps, Adam with learning rate 1e-3 and weight "
         "decay 1e-4, unit-sphere hidden-state normalization at every recurrent step, and Gaussian "
-        "channel noise with standard deviation 0.15 before decoding."
+        "channel noise with standard deviation 0.15 before decoding. Training weights were "
+        "mean-normalized within each batch, so the intervention changes the spatial allocation of "
+        "loss rather than the global loss scale."
+    )
+    p.para(
+        "Each condition-level α is the mean of 64 seed-level OLS slopes, not a pooled regression "
+        "over all bins from all networks. Evaluation uses 20,480 sampled positions per model before "
+        "16x16 binning; finite-positive interior-bin fitting and empty-bin handling are reported "
+        "in Appendix A.5."
     )
     p.figure(
         f_land,
         "Figure 2. Full exponent landscape. Values are precise and stable, but they cluster around "
         "the 1-D family rather than the 2-D prediction.",
-        width_in=4.85,
+        width_in=4.15,
     )
 
     p.h1("5. Results")
@@ -357,8 +367,8 @@ def build() -> None:
     p.para(
         "The aniso2d-vs-stripe difference is Δ=+0.0065 with bootstrap 95% CI "
         "[-0.0003,+0.0132]. That is not the expected separation between 1/3 and 1/2. The exponent "
-        "landscape is therefore not a noisy confirmation of the 2-D law; it is a precise "
-        "falsification of that law as the empirical description of this architecture."
+        "landscape is therefore not a noisy confirmation of the 2-D prediction; it rejects the "
+        "d=2, α=1/2 prediction as the empirical description of this architecture."
     )
     p.table(
         [
@@ -469,6 +479,11 @@ def build() -> None:
         "estimated area density is sqrt((du dot du)(dv dot dv)-(du dot dv)^2), exactly the square "
         "root of the determinant of the local pullback metric."
     )
+    p.para(
+        "At this 20,480-position evaluation scale, the 64 sweep seeds occupy all 256 spatial bins "
+        "under the trajectory generator; mean occupied bins are 256/256 and interior occupancy is "
+        "100% (196/196 interior bins)."
+    )
     p.h2("A.6 Slope Fitting and Bootstrap")
     p.para(
         "For each trained network, α is the ordinary least squares slope in log area density versus "
@@ -491,13 +506,15 @@ def build() -> None:
         "Berger, T. Rate Distortion Theory: A Mathematical Basis for Data Compression. Prentice-Hall (1971).",
         "Cover, T. M. and Thomas, J. A. Elements of Information Theory. Wiley (2006).",
         "Ganguli, D. and Simoncelli, E. P. Efficient sensory encoding and Bayesian inference with heterogeneous neural populations. Neural Computation (2014).",
-        "Wei, X.-X. and Stocker, A. A. A Bayesian observer model constrained by efficient coding can explain anti-Bayesian percepts. Nature Neuroscience (2015).",
+        "Wei, X.-X. and Stocker, A. A. A Bayesian observer model constrained by efficient coding can explain anti-Bayesian percepts. Nature Neuroscience 18, 1509-1517 (2015).",
         "Sorscher, B., Mel, G. C., Ganguli, S., and Ocko, S. A. A unified theory for the origin of grid cells through the lens of pattern formation. NeurIPS (2019).",
         "Cueva, C. J. and Wei, X.-X. Emergence of grid-like representations by training recurrent neural networks to perform spatial localization. ICLR (2018).",
-        "Banino, A. et al. Vector-based navigation using grid-like representations in artificial agents. Nature (2018).",
-        "Gardner, R. J. et al. Toroidal topology of population activity in grid cells. Nature (2022).",
-        "Boccara, C. N. et al. Grid cells in pre- and parasubiculum. Nature Neuroscience (2010).",
-        "Butler, W. N., Hardcastle, K., and Giocomo, L. M. Remembered reward locations restructure entorhinal spatial maps. Science (2019).",
+        "Banino, A. et al. Vector-based navigation using grid-like representations in artificial agents. Nature 557, 429-433 (2018).",
+        "Gardner, R. J. et al. Toroidal topology of population activity in grid cells. Nature 602, 123-128 (2022).",
+        "Boccara, C. N., Nardin, M., Stella, F., O'Neill, J., and Csicsvari, J. The entorhinal cognitive map is attracted to goals. Science 363, 1443-1447 (2019).",
+        "Butler, W. N., Hardcastle, K., and Giocomo, L. M. Remembered reward locations restructure entorhinal spatial maps. Science 363, 1447-1452 (2019).",
+        "Ocko, S. A., Hardcastle, K., Giocomo, L. M., and Ganguli, S. Emergent elasticity in the neural code for space. PNAS 115, E11798-E11806 (2018).",
+        "Brunel, N. and Nadal, J.-P. Mutual information, Fisher information, and population coding. Neural Computation 10, 1731-1757 (1998).",
         "Amari, S. Information Geometry and Its Applications. Springer (2016).",
     ])
     out = p.build()

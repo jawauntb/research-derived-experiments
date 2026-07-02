@@ -20,7 +20,7 @@ gitignored). Regenerate with the committed builders:
   Rebuild: `python scripts/build_paperB_pdf.py`
 
 - `reward_deformation_effective_dimension_law.pdf` — standalone effective-dimension note:
-  the 2-D exponent is falsified and the measured law has effective dimension near 1.
+  the d=2 exponent is rejected in this harness and the measured law has effective dimension near 1.
   Rebuild: `python scripts/build_effective_dimension_pdf.py`
 
 Toolkit: `scripts/paperkit.py` (LaTeX-free; reportlab + matplotlib).
