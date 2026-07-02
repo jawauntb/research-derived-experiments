@@ -6,8 +6,9 @@ gitignored). Regenerate with the committed builders:
 - `weakness_predicts_ood.pdf` — flagship "Weakness, Not Compression: Symmetry-Compatible
   Hypothesis Volume Predicts Out-of-Distribution Generalization."
   Rebuild: `python scripts/build_weakness_pdf.py`
-- `weakness_predicts_topology.pdf` — Paper A "Weakness Predicts the Toroidal Topology and
-  Generalization of Population Codes" (preliminary CPU results).
+- `weakness_predicts_topology.pdf` — empirical note "Translation Augmentation Produces
+  Toroidal Codes and Larger-Arena Generalization in Path-Integration RNNs" (320-network
+  Modal sweep; negative mediation result for weakness as the governing scalar).
   Rebuild: `python scripts/build_gridcell_pdf.py`
 
 - `concern_deforms_metric.pdf` — Paper B "Concern Deforms a Learned Metric" (64-seed
