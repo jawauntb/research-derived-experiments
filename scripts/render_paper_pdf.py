@@ -24,6 +24,8 @@ LATEX_REPLACEMENTS = [
     (r"\\mathcal\{X\}", "X"),
     (r"\\mathcal\{Y\}", "Y"),
     (r"\\mathbb\{Z\}_n", "Z_n"),
+    (r"\\mathbb\{Z\}_8", "Z_8"),
+    (r"\\mathbb\{Z\}_2", "Z_2"),
     (r"\\mathbb\{Z\}", "Z"),
     (r"\\mathbb\{R\}", "R"),
     (r"\\arg\\max", "argmax"),
@@ -31,13 +33,18 @@ LATEX_REPLACEMENTS = [
     (r"\\bmod\s*", " mod "),
     (r"\\cdot\s*", "·"),
     (r"\\to\s*", " → "),
+    (r"\\mapsto\s*", " ↦ "),
     (r"\\in\s*", " ∈ "),
     (r"\\forall\s*", "∀"),
     (r"\\exists\s*", "∃"),
+    (r"\\left", ""),
+    (r"\\right", ""),
+    (r"\\ldots", "..."),
     (r"\\ge\s*", "≥"),
     (r"\\le\s*", "≤"),
     (r"\\ne\s*", "≠"),
     (r"\\approx\s*", "≈"),
+    (r"\\oplus", "⊕"),
     (r"\\rho", "ρ"),
     (r"\\sigma", "σ"),
     (r"\\pi", "π"),
@@ -46,6 +53,7 @@ LATEX_REPLACEMENTS = [
     (r"\\Delta", "Δ"),
     (r"\\times", "×"),
     (r"\\big\|", "|"),
+    (r"\\quad", "    "),
     (r"\\;", " "),
     (r"\\\\,", ", "),
     (r"\\text\{([^}]+)\}", lambda m: m.group(1).replace("_", "_")),
@@ -64,28 +72,29 @@ LATEX_REPLACEMENTS = [
 
 
 def _delatex(text: str) -> str:
-    # Display math: $$ ... $$ → centred block.
-    def display(m: re.Match) -> str:
-        inner = m.group(1).strip()
+    def clean_math(inner: str) -> str:
         for pat, sub in LATEX_REPLACEMENTS:
             inner = re.sub(pat, sub, inner)
         # Final cleanup: remove remaining backslashes and braces.
+        inner = re.sub(r"\\\s+", " ", inner)
         inner = re.sub(r"\\([a-zA-Z]+)", r"\1", inner)
-        inner = inner.replace("{", "").replace("}", "")
-        return f"\n\n<div style=\"text-align:center;font-family:'Menlo',monospace;margin:0.6em 0\">{inner}</div>\n\n"
-
-    text = re.sub(r"\$\$(.+?)\$\$", display, text, flags=re.DOTALL)
-
-    # Inline math: $ ... $ → plain text with substitutions.
-    def inline(m: re.Match) -> str:
-        inner = m.group(1)
-        for pat, sub in LATEX_REPLACEMENTS:
-            inner = re.sub(pat, sub, inner)
-        # Drop any leftover backslash commands and braces.
-        inner = re.sub(r"\\([a-zA-Z]+)", r"\1", inner)
+        inner = inner.replace(r"\{", "{").replace(r"\}", "}")
         inner = inner.replace("{", "").replace("}", "")
         return inner
 
+    # Display math: $$ ... $$ → centred block.
+    def display(m: re.Match) -> str:
+        inner = clean_math(m.group(1).strip())
+        return f"\n\n<div style=\"text-align:center;font-family:'Menlo',monospace;margin:0.6em 0\">{inner}</div>\n\n"
+
+    text = re.sub(r"\$\$(.+?)\$\$", display, text, flags=re.DOTALL)
+    text = re.sub(r"\\\[(.+?)\\\]", display, text, flags=re.DOTALL)
+
+    # Inline math: $ ... $ → plain text with substitutions.
+    def inline(m: re.Match) -> str:
+        return clean_math(m.group(1))
+
+    text = re.sub(r"\\\((.+?)\\\)", inline, text)
     text = re.sub(r"\$([^$\n]+?)\$", inline, text)
     return text
 

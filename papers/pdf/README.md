@@ -3,8 +3,8 @@
 Committed, shareable renders of the project's papers (the rest of `artifacts/` is
 gitignored). Regenerate with the committed builders:
 
-- `weakness_predicts_ood.pdf` — flagship "Weakness, Not Compression: Symmetry-Compatible
-  Hypothesis Volume Predicts Out-of-Distribution Generalization."
+- `weakness_predicts_ood.pdf` — flagship "Symmetry-Compatible Hypothesis Volume
+  Predicts Out-of-Distribution Generalization."
   Rebuild: `python scripts/build_weakness_pdf.py`
 - `weakness_predicts_topology.pdf` — empirical note "Translation Augmentation Produces
   Toroidal Codes and Larger-Arena Generalization in Path-Integration RNNs" (320-network

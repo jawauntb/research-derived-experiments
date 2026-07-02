@@ -105,6 +105,11 @@ class SelectorsTest(unittest.TestCase):
         self.assertGreaterEqual(
             invariant_hits["weakness_oracle"] / N, expected_weakness_inv_rate
         )
+        # The data-inferred selector should match the oracle on the clean
+        # cyclic and dihedral regimes without reading the trial's oracle group.
+        self.assertGreaterEqual(
+            invariant_hits["weakness_data_inferred"] / N, expected_weakness_inv_rate
+        )
         # Surface-statistic baselines should not select the invariant.
         for s in ("train_loss", "simplicity", "compression", "mdl_program", "flatness_proxy"):
             self.assertLessEqual(invariant_hits[s] / N, 0.05)
