@@ -4,6 +4,8 @@ This repository tracks a research program around a recurring pattern:
 
 > adaptive systems keep rediscovering geometric language because geometry is the portable language of constraints.
 
+> **Picking this up on a Modal machine?** Start with [docs/next_agent_modal_handoff.md](docs/next_agent_modal_handoff.md) — it covers all three experiments, the rate-distortion "Newton" test to run next, and the parallel Modal commands.
+
 The first synthesis is in [notes/geometric_convergence_research_synthesis.md](notes/geometric_convergence_research_synthesis.md). The working question:
 
 **Why do independently developed systems of thought and computation keep converging on geometric descriptions of meaning, agency, and intelligence, and can we predict when that geometry is merely a passive representation versus when it becomes an active, self-maintaining attractor regime?**
