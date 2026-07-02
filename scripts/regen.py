@@ -44,7 +44,6 @@ LOCAL = {
 # Flagship paper PDFs (built from committed numbers/data).
 PDF_BUILDERS = {
     "symbolic_weakness": ["python scripts/build_weakness_pdf.py"],
-    "semantic_concern_geometry": ["python scripts/build_semantic_concern_pdf.py"],
 }
 # After building, copy the rendered PDF to the committed + site-served locations so
 # a regen refreshes what readers actually see.
@@ -55,7 +54,6 @@ PDF_OUTPUTS = {
         "concern_deforms_metric.pdf",
         "reward_deformation_effective_dimension_law.pdf",
     ],
-    "semantic_concern_geometry": ["semantic_concern_geometry_boundary.pdf"],
 }
 
 

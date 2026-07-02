@@ -119,6 +119,108 @@ LOC_LIFT = {
     },
 }
 
+SEMANTIC_ROWS = [
+    {
+        "family": "DistilBERT classifier",
+        "short": "DistilBERT\nclassifier",
+        "lift_u": -0.3982,
+        "lift_u_lo": -0.4297,
+        "lift_u_hi": -0.3671,
+        "lift_u_se": 0.0160,
+        "lift_r": -0.3960,
+        "lift_r_lo": -0.4263,
+        "lift_r_hi": -0.3665,
+        "lift_r_se": 0.0152,
+        "spec": -0.5309,
+        "rank": 0.4729,
+        "centroid": 0.3250,
+        "purity": 0.3693,
+        "erank": 0.5531,
+        "f1": -0.0181,
+    },
+    {
+        "family": "DistilBERT JEPA-like",
+        "short": "DistilBERT\nJEPA-like",
+        "lift_u": -0.3576,
+        "lift_u_lo": -0.3887,
+        "lift_u_hi": -0.3275,
+        "lift_u_se": 0.0154,
+        "lift_r": -0.3596,
+        "lift_r_lo": -0.3878,
+        "lift_r_hi": -0.3318,
+        "lift_r_se": 0.0143,
+        "spec": -0.4768,
+        "rank": 0.4846,
+        "centroid": 0.3094,
+        "purity": 0.3160,
+        "erank": 0.4434,
+        "f1": -0.0140,
+    },
+    {
+        "family": "MiniLM classifier",
+        "short": "MiniLM\nclassifier",
+        "lift_u": -0.5083,
+        "lift_u_lo": -0.5336,
+        "lift_u_hi": -0.4841,
+        "lift_u_se": 0.0128,
+        "lift_r": -0.5048,
+        "lift_r_lo": -0.5308,
+        "lift_r_hi": -0.4798,
+        "lift_r_se": 0.0131,
+        "spec": -0.6778,
+        "rank": 0.4502,
+        "centroid": 0.5419,
+        "purity": 0.4561,
+        "erank": 0.1037,
+        "f1": -0.0189,
+    },
+    {
+        "family": "MiniLM JEPA-like",
+        "short": "MiniLM\nJEPA-like",
+        "lift_u": -0.4989,
+        "lift_u_lo": -0.5254,
+        "lift_u_hi": -0.4735,
+        "lift_u_se": 0.0133,
+        "lift_r": -0.5049,
+        "lift_r_lo": -0.5309,
+        "lift_r_hi": -0.4795,
+        "lift_r_se": 0.0129,
+        "spec": -0.6652,
+        "rank": 0.4524,
+        "centroid": 0.5450,
+        "purity": 0.4409,
+        "erank": 0.1253,
+        "f1": -0.0172,
+    },
+]
+
+SEMANTIC_TARGET_LIFT = {
+    "DistilBERT classifier": {
+        "comp.graphics": -0.3289,
+        "rec.sport.hockey": -0.5031,
+        "sci.med": -0.3796,
+        "sci.space": -0.3812,
+    },
+    "DistilBERT JEPA-like": {
+        "comp.graphics": -0.3008,
+        "rec.sport.hockey": -0.4130,
+        "sci.med": -0.3431,
+        "sci.space": -0.3735,
+    },
+    "MiniLM classifier": {
+        "comp.graphics": -0.5026,
+        "rec.sport.hockey": -0.4421,
+        "sci.med": -0.5649,
+        "sci.space": -0.5236,
+    },
+    "MiniLM JEPA-like": {
+        "comp.graphics": -0.5080,
+        "rec.sport.hockey": -0.4309,
+        "sci.med": -0.5504,
+        "sci.space": -0.5063,
+    },
+}
+
 
 def fig_schematic_fields(path: str) -> str:
     import matplotlib.pyplot as plt
@@ -322,6 +424,94 @@ def fig_exponent_gate(path: str) -> str:
     return path
 
 
+def fig_semantic_gate(path: str) -> str:
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    labels = []
+    vals = []
+    lows = []
+    highs = []
+    colors = []
+    for row in SEMANTIC_ROWS:
+        labels.extend([f"{row['family']} vs uniform", f"{row['family']} vs random"])
+        vals.extend([row["lift_u"], row["lift_r"]])
+        lows.extend([row["lift_u_lo"], row["lift_r_lo"]])
+        highs.extend([row["lift_u_hi"], row["lift_r_hi"]])
+        colors.extend(["#b23a48", "#7b2cbf"])
+    y = np.arange(len(labels))[::-1]
+    xerr = [[v - lo for v, lo in zip(vals, lows)], [hi - v for v, hi in zip(vals, highs)]]
+    fig, ax = plt.subplots(figsize=(6.6, 4.25))
+    ax.errorbar(vals, y, xerr=xerr, fmt="none", ecolor="#1f2933", lw=0.9, capsize=3)
+    ax.scatter(vals, y, s=48, c=colors, edgecolor="#1f2933", linewidth=0.5, zorder=3)
+    ax.axvline(0, color="#111", lw=0.9)
+    ax.axvspan(-0.58, 0, color="#f7d9dd", alpha=0.45, zorder=0)
+    ax.set_yticks(y)
+    ax.set_yticklabels(labels, fontsize=7.2)
+    ax.set_xlim(-0.58, 0.06)
+    ax.set_xlabel("semantic-margin lift z")
+    ax.set_title("Appendix gate: semantic transformer margin moves opposite the spatial prediction")
+    for x, yy in zip(vals, y):
+        ax.text(x - 0.018, yy, f"{x:.2f}", ha="right", va="center", fontsize=7.2)
+    ax.grid(axis="y", visible=False)
+    fig.savefig(path, bbox_inches="tight", facecolor="white", dpi=230)
+    plt.close(fig)
+    return path
+
+
+def fig_semantic_split(path: str) -> str:
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    labels = [r["short"] for r in SEMANTIC_ROWS]
+    x = np.arange(len(labels))
+    width = 0.19
+    series = [
+        ("margin gate", [r["lift_u"] for r in SEMANTIC_ROWS], "#b23a48"),
+        ("centroid", [r["centroid"] for r in SEMANTIC_ROWS], "#2b6cb0"),
+        ("kNN purity", [r["purity"] for r in SEMANTIC_ROWS], "#2f9e44"),
+        ("eff. rank", [r["erank"] for r in SEMANTIC_ROWS], "#e8a13a"),
+    ]
+    fig, ax = plt.subplots(figsize=(6.5, 3.9))
+    for i, (name, vals, color) in enumerate(series):
+        ax.bar(x + (i - 1.5) * width, vals, width, label=name, color=color)
+    ax.axhline(0, color="#111", lw=0.8)
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, fontsize=7.5)
+    ax.set_ylabel("z-lift vs uniform")
+    ax.set_title("Companion geometry changes, but the registered margin goes negative")
+    ax.legend(fontsize=7.3, ncol=4, loc="lower center", bbox_to_anchor=(0.5, -0.31))
+    ax.grid(axis="x", visible=False)
+    fig.subplots_adjust(bottom=0.26)
+    fig.savefig(path, bbox_inches="tight", facecolor="white", dpi=230)
+    plt.close(fig)
+    return path
+
+
+def fig_semantic_target_heatmap(path: str) -> str:
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    families = [r["family"] for r in SEMANTIC_ROWS]
+    targets = ["comp.graphics", "rec.sport.hockey", "sci.med", "sci.space"]
+    mat = np.array([[SEMANTIC_TARGET_LIFT[f][t] for t in targets] for f in families])
+    fig, ax = plt.subplots(figsize=(6.4, 3.0))
+    im = ax.imshow(mat, cmap="RdBu_r", vmin=-0.65, vmax=0.65, aspect="auto")
+    ax.set_yticks(range(len(families)))
+    ax.set_yticklabels(families, fontsize=7.3)
+    ax.set_xticks(range(len(targets)))
+    ax.set_xticklabels(targets, rotation=18, ha="right", fontsize=7.3)
+    ax.set_title("Per-target semantic audit: no class carries a positive primary lift")
+    for i in range(mat.shape[0]):
+        for j in range(mat.shape[1]):
+            ax.text(j, i, f"{mat[i, j]:.2f}", ha="center", va="center", fontsize=7.1, color="#111")
+    cbar = fig.colorbar(im, ax=ax, fraction=0.035, pad=0.02)
+    cbar.set_label("lift vs uniform", fontsize=7.4)
+    fig.savefig(path, bbox_inches="tight", facecolor="white", dpi=230)
+    plt.close(fig)
+    return path
+
+
 def build() -> None:
     Path(FIG).mkdir(parents=True, exist_ok=True)
     f_schema = fig_schematic_fields(f"{FIG}/fig0_schematic_fields.png")
@@ -330,6 +520,9 @@ def build() -> None:
     f_gate = fig_gate_audit(f"{FIG}/fig2_gate_audit.png")
     f_area = fig_area_companion(f"{FIG}/fig3_area_companion.png")
     f_exp = fig_exponent_gate(f"{FIG}/fig4_exponent_gate.png")
+    f_sem_gate = fig_semantic_gate(f"{FIG}/figA1_semantic_gate.png")
+    f_sem_split = fig_semantic_split(f"{FIG}/figA2_semantic_split.png")
+    f_sem_heat = fig_semantic_target_heatmap(f"{FIG}/figA3_semantic_targets.png")
 
     p = pk.Paper(OUT, FIG)
     p.title("Concern Deforms a Learned Metric: A Moved-Location Replication Across RNN, Transformer, and JEPA Models")
@@ -352,9 +545,10 @@ def build() -> None:
         "not claimed to pass. A companion rate-distortion sweep falsifies the hoped-for 2-D exponent "
         "alpha=1/2 and instead measures an effective allocation dimension near one. The bounded "
         "conclusion is therefore: concern causally deforms a learned spatial metric, robustly across model "
-        "families, while the scaling law reveals an architecture-dependent capacity bottleneck. A separate "
-        "256-seed real-text follow-up on pretrained DistilBERT and MiniLM encoders fails the preregistered "
-        "semantic-margin transport gate, so this paper does not claim foundation-model generality.")
+        "families, while the scaling law reveals an architecture-dependent capacity bottleneck. Appendix A "
+        "adds a 256-seed real-text transformer boundary check: pretrained DistilBERT and MiniLM encoders "
+        "fail the preregistered semantic-margin transport gate, so this paper does not claim "
+        "foundation-model generality.")
 
     p.h1("1. Claim and Definitions")
     p.para(
@@ -456,11 +650,12 @@ def build() -> None:
         "target F1 decreases. The correct interpretation is a boundary condition: the spatial mechanism "
         "is real, but a foundation-model semantic generalization remains unconfirmed.")
     p.para(
-        "The strongest future baseline is therefore not simply 'more transformer seeds.' It is a "
-        "task-native semantic-resolution setting: retrieval under asymmetric cost, paraphrase or "
-        "subtopic discrimination inside a valued class, or a contrastive corpus where valuable examples "
-        "require finer distinctions rather than broader class separation. That experiment should be "
-        "pre-registered as a new gate rather than retrofitted to this result.")
+        "Appendix A reports the full text analogue rather than splitting it into a separate paper. The "
+        "strongest future baseline is therefore not simply 'more transformer seeds.' It is a task-native "
+        "semantic-resolution setting: retrieval under asymmetric cost, paraphrase or subtopic "
+        "discrimination inside a valued class, or a contrastive corpus where valuable examples require "
+        "finer distinctions rather than broader class separation. That experiment should be pre-registered "
+        "as a new gate rather than retrofitted to this result.")
 
     p.h1("7. Limitations")
     p.para(
@@ -472,6 +667,46 @@ def build() -> None:
         "empirical rather than speculative: the pretrained text setting fails the registered local-margin "
         "transport gate. Raw JSON remains local and gitignored; committed reports contain the gate "
         "numbers and provenance.")
+
+    p.h1("Appendix A. Semantic Transformer Boundary")
+    p.para(
+        "This appendix tests the most direct non-spatial transport of the Paper B claim. The target is "
+        "not a coordinate in an arena, but one of four 20 Newsgroups classes: comp.graphics, "
+        "rec.sport.hockey, sci.med, and sci.space. The intervention is still external and causal: "
+        "upweight the training loss for one registered semantic class, move which class receives that "
+        "weight, and compare against both uniform and random-matched weighting controls.")
+    p.para(
+        "The pre-registered primary metric is local semantic margin in the learned latent: mean "
+        "k-nearest different-class cosine distance minus mean k-nearest same-class cosine distance, "
+        "z-scored across classes inside the same model. The run used two pretrained encoders "
+        "(DistilBERT and all-MiniLM-L6-v2), classifier and JEPA-like predictive latent objectives, two "
+        "128-seed Modal waves for 256 seeds per family, and the same 2% standard-error rule accepted "
+        "for the main Paper 27 scale-up.")
+    p.figure(f_sem_gate, "Figure A1. Primary semantic transport gate. Every pretrained text family moves opposite the registered margin prediction, against both uniform and random-matched controls. Error bars are bootstrap 95% intervals over seed-target effects.", width_in=6.0)
+    p.table(
+        [
+            ["Family", "lift vs uniform", "SE", "lift vs random", "SE", "rank", "gate"],
+            ["DistilBERT classifier", "-0.398 [-0.430,-0.367]", "0.016", "-0.396 [-0.426,-0.366]", "0.015", "0.473", "fail"],
+            ["DistilBERT JEPA-like", "-0.358 [-0.389,-0.327]", "0.015", "-0.360 [-0.388,-0.332]", "0.014", "0.485", "fail"],
+            ["MiniLM classifier", "-0.508 [-0.534,-0.484]", "0.013", "-0.505 [-0.531,-0.480]", "0.013", "0.450", "fail"],
+            ["MiniLM JEPA-like", "-0.499 [-0.525,-0.474]", "0.013", "-0.505 [-0.531,-0.480]", "0.013", "0.452", "fail"],
+        ],
+        caption="Table A1. Confirmatory semantic gate. All primary standard errors are below 2%, but every primary sign is negative.",
+        col_widths=[116, 105, 34, 105, 34, 38, 34],
+    )
+    p.para(
+        "The architecture-balanced primary effect is -0.441 vs uniform with SE 0.007 and -0.441 vs "
+        "random-matched controls with SE 0.007. The real-dataset requirement passes; the semantic "
+        "margin transport gate does not. This is a precise boundary condition, not an underpowered "
+        "null.")
+    p.figure(f_sem_heat, "Figure A2. Per-target audit. No registered semantic class carries a positive primary lift, so the failed gate is not caused by one difficult topic.", width_in=5.85)
+    p.figure(f_sem_split, "Figure A3. Companion probes reveal non-null geometry. Upweighting increases centroid separation and kNN purity, and often effective rank, even while the registered local semantic-margin gate becomes negative.", width_in=6.0)
+    p.para(
+        "This split prevents a sloppy conclusion in either direction. The semantic experiment does not "
+        "confirm Paper 27's local metric-density transport in pretrained text encoders. It also does not "
+        "say that semantic loss weighting leaves geometry unchanged. Instead, it appears closer to "
+        "class-level re-centering or cluster sharpening, with slightly lower target F1, than to the "
+        "spatial resolution-allocation effect measured in the main experiment.")
 
     p.references([
         "Bennett, W. R. Spectra of quantized signals. Bell System Technical Journal (1948).",
