@@ -183,16 +183,16 @@ const pageList = [
     color: colors.amber,
     kicker: "results & papers",
     title: "what we found, and the papers",
-    subtitle: "Three results turn the program's thesis — adaptive systems rediscover geometry because geometry is the portable language of constraints — into measured claims, from a symbolic separation to a causal warp of a learned spatial map.",
-    thesis: "The story in one line: symmetry pressure makes generalization measurable as WEAKNESS; weakness and the toroidal GEOMETRY of a spatial code are the same thing seen two ways; and a goal signal CAUSALLY DEFORMS that geometry — concern reshapes the map. The first two are clean but partly definitional; the third is the non-circular result, an intervention that warps the metric where the reward is.",
+    subtitle: "Three results turn the program's thesis - adaptive systems rediscover geometry because geometry is the portable language of constraints - into measured claims, from a symbolic separation to a causal warp of a learned spatial map.",
+    thesis: "The story in one line: symmetry pressure makes generalization measurable as WEAKNESS; translation-structured training produces toroidal GEOMETRY but weakness does not mediate it in the grid-cell harness; and a goal signal CAUSALLY DEFORMS that geometry - concern reshapes the map. The negative Paper A gate is part of the result, not a footnote.",
     motions: [
-      "Paper 1 — weakness predicts out-of-distribution generalization where loss, MDL, flatness and validation do not (cyclic/dihedral 100% vs 0%; neural Pearson r = +0.81).",
-      "Paper A — the same scalar tracks the toroidal topology of a learned spatial code (Betti numbers 1,2,1); spectral leg confirmed at rho = +0.89.",
-      "Paper B — a reward CAUSALLY deforms the code's induced metric at the rewarded location and tracks it when moved (specificity +0.65 / +1.27; control flat +0.04) — local resolution bought at the cost of global generalization.",
+      "Paper 1 - weakness predicts out-of-distribution generalization where loss, MDL, flatness and validation do not (cyclic/dihedral 100% vs 0%; neural Pearson r = +0.81).",
+      "Paper A - full translation augmentation produces toroidal codes and larger-arena OOD, but weakness does not pass the topology or mediation gates (G2-G4 fail).",
+      "Paper B - a reward CAUSALLY deforms the code's induced metric at the rewarded location and tracks it when moved (specificity +0.65 / +1.27; control flat +0.04) - local resolution bought at the cost of global generalization.",
     ],
     sources: [
       { label: "PDF · Paper 1: Weakness Predicts OOD", href: "papers/weakness_predicts_ood.pdf" },
-      { label: "PDF · Paper A: Weakness \u2192 Toroidal Topology", href: "papers/weakness_predicts_topology.pdf" },
+      { label: "PDF · Paper A: Translation Augmentation & Toroidal Codes", href: "papers/weakness_predicts_topology.pdf" },
       { label: "PDF · Paper B: Concern Deforms the Metric", href: "papers/concern_deforms_metric.pdf" },
       { label: "repo", href: "https://github.com/jawauntb/research-derived-experiments" },
     ],
@@ -415,7 +415,7 @@ const storyPlans = {
   ],
   findings: [
     { label: "weakness predicts OOD", detail: "Paper 1: symmetry-compatible volume beats loss, MDL and flatness at predicting generalization (r = +0.81).", color: colors.cyan },
-    { label: "weakness is geometry", detail: "Paper A: the same scalar tracks a spatial code's toroidal topology; spectral leg confirmed (rho = +0.89).", color: colors.violet },
+    { label: "torus, not mediation", detail: "Paper A: translation augmentation forms toroidal codes; weakness-topology and mediation gates fail.", color: colors.violet },
     { label: "concern deforms it", detail: "Paper B: a reward causally warps the code's induced metric at the goal and tracks it when moved (specificity +1.27, control +0.04).", color: colors.amber },
   ],
   verification: [
@@ -752,7 +752,7 @@ function updatePhase(label, value, amount) {
 
 const findingsLabels = [
   { label: "weakness", sub: "predicts OOD", detail: "r = +0.81", color: colors.cyan },
-  { label: "geometry", sub: "toroidal code", detail: "rho = +0.89", color: colors.violet },
+  { label: "geometry", sub: "translation makes torus", detail: "G2-G4 fail", color: colors.violet },
   { label: "concern", sub: "deforms metric", detail: "specificity +1.27", color: colors.amber },
 ];
 
@@ -905,13 +905,13 @@ function drawFindings() {
   });
 
   drawStoryCue(step, w * 0.5, vertical ? h * 0.92 : h * 0.9, Math.min(w * 0.82, 720),
-    "Three results, one program: weakness -> toroidal geometry -> concern deforms it.");
+    "Three results, one program: weakness predicts OOD; translation makes tori; concern deforms metric.");
 
   updatePhase(state.storyMode ? "results story" : "results & papers",
-    state.storyMode ? step.label : phaseLabel(["weakness predicts OOD", "weakness is geometry", "concern deforms it"], p), p);
+    state.storyMode ? step.label : phaseLabel(["weakness predicts OOD", "translation makes tori", "concern deforms it"], p), p);
   updateMetrics([
     { label: "weakness -> OOD", value: "r = +0.81", amount: 0.81, color: colors.cyan },
-    { label: "weakness -> torus topology", value: "rho = +0.89", amount: 0.89, color: colors.violet },
+    { label: "weakness-topology gate", value: "rho = +0.197", amount: 0.197, color: colors.violet },
     { label: "reward deforms metric", value: `+${(0.4 + warp * 0.87).toFixed(2)}`, amount: 0.5 + warp * 0.4, color: colors.amber },
   ]);
 }
