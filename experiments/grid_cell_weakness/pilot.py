@@ -60,8 +60,21 @@ def spearman(xs, ys) -> float:
     xs, ys = np.asarray(xs, float), np.asarray(ys, float)
     if len(xs) < 2:
         return 0.0
-    rx = np.argsort(np.argsort(xs)).astype(float)
-    ry = np.argsort(np.argsort(ys)).astype(float)
+
+    def rank(vals):
+        order = np.argsort(vals)
+        ranks = np.empty(len(vals), dtype=float)
+        i = 0
+        while i < len(vals):
+            j = i
+            while j + 1 < len(vals) and vals[order[j + 1]] == vals[order[i]]:
+                j += 1
+            ranks[order[i:j + 1]] = (i + j) / 2.0
+            i = j + 1
+        return ranks
+
+    rx = rank(xs)
+    ry = rank(ys)
     rx -= rx.mean(); ry -= ry.mean()
     den = math.sqrt((rx ** 2).sum() * (ry ** 2).sum())
     return float((rx * ry).sum() / den) if den else 0.0
@@ -87,10 +100,10 @@ def end_to_end_smoke() -> dict:
                 betti1_estimate=t.get("betti1_estimate", -1),
                 fourier_pr=f.get("fourier_pr", float("nan")),
             ))
-    w = [x["weakness_translation"] for x in nets]
-    topo = [x["toroidal_score"] for x in nets]
-    ood = [x["ood_accuracy"] for x in nets]
-    fpr = [x["fourier_pr"] for x in nets]
+    w = [float(x["weakness_translation"]) for x in nets]
+    topo = [float(x["toroidal_score"]) for x in nets]
+    ood = [float(x["ood_accuracy"]) for x in nets]
+    fpr = [float(x["fourier_pr"]) for x in nets]
     corr = dict(
         rho_weakness_topology=spearman(w, topo),
         rho_weakness_ood=spearman(w, ood),

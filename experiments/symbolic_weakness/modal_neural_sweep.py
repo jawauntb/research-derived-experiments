@@ -33,7 +33,7 @@ IMAGE = modal.Image.debian_slim(python_version="3.12").pip_install(
 app = modal.App(name="research-derived-symbolic-weakness-neural")
 
 
-@app.function(image=IMAGE, timeout=3600, cpu=4)
+@app.function(image=IMAGE, timeout=7200, cpu=4, max_containers=64, retries=1, nonpreemptible=True)
 def shard_sweep(arg: dict[str, Any]) -> dict[str, Any]:
     models_per_shard = arg["models_per_shard"]
     base_seed = arg["base_seed"]

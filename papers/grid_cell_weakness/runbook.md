@@ -13,20 +13,20 @@ No Modal auth in the web session; dispatch from a Modal-authed machine.
 ```
 # 1) smoke (1 seed, short) — confirms the worker runs on Modal end to end
 doppler --scope /Users/jawaun/superoptimizers run -- \
-  uvx --python 3.12 --from modal modal run \
+  uvx --python 3.12 --from modal --with numpy modal run \
     experiments/grid_cell_weakness/modal_grid_cell_weakness_sweep.py \
     --seeds 1 --steps 400 --conditions full_translation,none
 
 # 2) emergence probe (1–2 seeds, full steps, full_translation only) — see below
 doppler --scope /Users/jawaun/superoptimizers run -- \
-  uvx --python 3.12 --from modal modal run \
+  uvx --python 3.12 --from modal --with numpy modal run \
     experiments/grid_cell_weakness/modal_grid_cell_weakness_sweep.py \
     --seeds 2 --steps 4000 --conditions full_translation \
     --out artifacts/grid_cell_weakness/emergence_probe.json
 
 # 3) full sweep (5 conditions × 2 archs × 8 seeds), with the arena OOD sweep
 doppler --scope /Users/jawaun/superoptimizers run -- \
-  uvx --python 3.12 --from modal modal run \
+  uvx --python 3.12 --from modal --with numpy modal run \
     experiments/grid_cell_weakness/modal_grid_cell_weakness_sweep.py \
     --seeds 8 --steps 4000 --decode-arenas 1.0,1.25,1.5,2.0 \
     --out artifacts/grid_cell_weakness/sweep.json
@@ -56,12 +56,12 @@ Turn these knobs, in order, and re-run the probe until `betti_match_torus` appea
    hidden activity and is the main driver of *localized, periodic* codes (Sorscher–Ganguli use an
    activity/metabolic cost). Sweep `1e-3 → 3e-3 → 1e-2`. Too high → dead units; too low → no grid.
 3. **Weight decay** (`--weight-decay`, default `1e-4`). Sweep `1e-4 → 1e-3`. Couples with (2).
-4. **Hidden size** (`--Ng`, default `128`). Grids need headroom for multiple periods/orientations;
-   try `128 → 256`. Place-cell count `--Np` (default `100`) sets target resolution; `144`/`196`
+4. **Hidden size** (`--ng`, default `128`). Grids need headroom for multiple periods/orientations;
+   try `128 → 256`. Place-cell count (`--np`, default `100`) sets target resolution; `144`/`196`
    sharpen it.
 5. **Sigma** (`--sigma`, default `0.10`) — place-cell width. Narrower (`0.08`) sharpens the target
    manifold but is harder to fit; wider (`0.12`) is easier but blurs topology.
-6. **Trajectory length** `--T` (default `20`). Longer paths give the recurrence more integration
+6. **Trajectory length** `--t` (default `20`). Longer paths give the recurrence more integration
    signal; `20 → 30`.
 
 Re-run only the cheap `full_translation` emergence probe between changes. Lock the first

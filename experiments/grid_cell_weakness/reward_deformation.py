@@ -284,7 +284,10 @@ def main():
     # Control-subtracted deformation (removes positional baseline asymmetry):
     # the reward effect is (reward-condition − control) at the SAME location.
     cA = analysis["control"]
-    dz = lambda name, where: analysis[name][f"density_z_at_{where}"]
+
+    def dz(name, where):
+        return analysis[name][f"density_z_at_{where}"]
+
     analysis["control_subtracted"] = dict(
         # reward at A should raise density at A vs control, and do so MORE at A than at B
         deform_at_reward_A=dz("reward_A", "A") - cA["density_z_at_A"],

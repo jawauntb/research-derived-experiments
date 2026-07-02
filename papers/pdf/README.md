@@ -13,4 +13,8 @@ gitignored). Regenerate with the committed builders:
 - `concern_deforms_metric.pdf` — Paper B "Concern Deforms the Representational Metric" (reward warps a learned spatial code; the non-circular result).
   Rebuild: `python scripts/build_paperB_pdf.py`
 
+- `reward_deformation_effective_dimension_law.pdf` — standalone Newton-gate paper: the
+  2-D exponent is falsified and the measured law has effective dimension near 1.
+  Rebuild: `python scripts/build_effective_dimension_pdf.py`
+
 Toolkit: `scripts/paperkit.py` (LaTeX-free; reportlab + matplotlib).

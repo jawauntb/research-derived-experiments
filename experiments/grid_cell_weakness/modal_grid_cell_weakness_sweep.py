@@ -20,7 +20,7 @@ emergence, then measures the four pre-registered quantities:
 Run (laptop, dispatches to Modal):
 
     doppler --scope /Users/jawaun/superoptimizers run -- \\
-        uvx --python 3.12 --from modal modal run \\
+        uvx --python 3.12 --from modal --with numpy modal run \\
             experiments/grid_cell_weakness/modal_grid_cell_weakness_sweep.py \\
             --seeds 8 --steps 4000 \\
             --out artifacts/grid_cell_weakness/sweep.json
@@ -170,7 +170,14 @@ def _fourier_pr(rate_maps):
 # Modal worker: train one net, measure four quantities
 # --------------------------------------------------------------------------- #
 
-@app.function(image=IMAGE, gpu="A10G", timeout=3600, memory=16384)
+@app.function(
+    image=IMAGE,
+    gpu="H100",
+    timeout=7200,
+    memory=32768,
+    max_containers=96,
+    retries=1,
+)
 def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
     import numpy as np
     import torch
@@ -297,7 +304,20 @@ def _spearman(xs, ys) -> float:
     xs, ys = xs[ok], ys[ok]
     if len(xs) < 2:
         return 0.0
-    rx = np.argsort(np.argsort(xs)).astype(float); ry = np.argsort(np.argsort(ys)).astype(float)
+
+    def rank(vals):
+        order = np.argsort(vals)
+        ranks = np.empty(len(vals), dtype=float)
+        i = 0
+        while i < len(vals):
+            j = i
+            while j + 1 < len(vals) and vals[order[j + 1]] == vals[order[i]]:
+                j += 1
+            ranks[order[i:j + 1]] = (i + j) / 2.0
+            i = j + 1
+        return ranks
+
+    rx = rank(xs); ry = rank(ys)
     rx -= rx.mean(); ry -= ry.mean()
     den = math.sqrt((rx ** 2).sum() * (ry ** 2).sum())
     return float((rx * ry).sum() / den) if den else 0.0
@@ -313,10 +333,10 @@ def main(
     conditions: str = ",".join(CONDITIONS),
     archs: str = "rnn,gru",
     seeds: int = 8,
-    Ng: int = 128,
-    Np: int = 100,
+    ng: int = 128,
+    np: int = 100,
     sigma: float = 0.10,
-    T: int = 20,
+    t: int = 20,
     steps: int = 4000,
     batch: int = 200,
     lr: float = 1e-3,
@@ -330,7 +350,7 @@ def main(
     arch_list = [a.strip() for a in archs.split(",") if a.strip()]
     seed_list = [base_seed + 100 * k for k in range(seeds)]
     arena_list = [float(x) for x in decode_arenas.split(",") if x.strip()]
-    cells = [dict(augment=c, arch=a, seed=s, Ng=Ng, Np=Np, sigma=sigma, T=T,
+    cells = [dict(augment=c, arch=a, seed=s, Ng=ng, Np=np, sigma=sigma, T=t,
                   steps=steps, batch=batch, lr=lr, weight_decay=weight_decay,
                   activity_reg=activity_reg, decode_arenas=arena_list)
              for c in cond_list for a in arch_list for s in seed_list]
@@ -361,7 +381,10 @@ def main(
     g1 = (sum(r["betti_match_torus"] for r in ft) / len(ft)) if ft else 0.0
     best_classical_topo = abs(analysis["rho_loss_topology"])
     best_classical_ood = abs(analysis["rho_loss_ood"])
-    mean = lambda xs: (sum(xs) / len(xs)) if xs else float("nan")
+
+    def mean(xs):
+        return (sum(xs) / len(xs)) if xs else float("nan")
+
     analysis["gates"] = dict(
         G1_manifold_recovered=dict(value=g1, pass_=g1 >= 0.6),
         G2_weakness_topology=dict(pass_=r_wt >= 0.5 and abs(r_wt) >= 2 * best_classical_topo),
@@ -385,8 +408,8 @@ def main(
     out_path = Path(out); out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(dict(
         kind="REAL Paper A grid-cell weakness sweep on Modal",
-        manifest=dict(conditions=cond_list, archs=arch_list, seeds=seed_list, Ng=Ng, Np=Np,
-                      steps=steps, batch=batch, lr=lr, weight_decay=weight_decay, activity_reg=activity_reg,
+        manifest=dict(conditions=cond_list, archs=arch_list, seeds=seed_list, Ng=ng, Np=np,
+                      T=t, steps=steps, batch=batch, lr=lr, weight_decay=weight_decay, activity_reg=activity_reg,
                       decode_arenas=arena_list),
         analysis=analysis, cells=results,
     ), indent=2, sort_keys=True, default=float) + "\n")
