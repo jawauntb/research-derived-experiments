@@ -467,8 +467,8 @@
         "experiments/grid_cell_weakness/results/ratedistortion_2026_07_01.md",
         "experiments/grid_cell_weakness/results/reward_deformation_2026_06_29.md"
       ],
-      "n_modal_entrypoints": 1,
-      "n_scripts": 9,
+      "n_modal_entrypoints": 2,
+      "n_scripts": 10,
       "paper": null,
       "preregistration": "papers/grid_cell_weakness/preregistration.md",
       "verification_signals": [
