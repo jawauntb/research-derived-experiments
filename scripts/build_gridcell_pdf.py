@@ -41,6 +41,45 @@ TORUS_MATCH_WILSON = {
     "none": "[0.00, 0.06]",
     "wrong group": "[0.00, 0.06]",
 }
+METRIC_CI = {
+    "full translation": {
+        "weakness": "0.768 [0.723, 0.808]",
+        "toroidal": "0.357 [0.317, 0.396]",
+        "fourier": "4.472 [4.188, 4.773]",
+        "ood": "0.949 [0.946, 0.953]",
+    },
+    "partial translation": {
+        "weakness": "0.416 [0.363, 0.467]",
+        "toroidal": "0.007 [0.006, 0.009]",
+        "fourier": "7.557 [7.094, 8.038]",
+        "ood": "0.732 [0.725, 0.738]",
+    },
+    "random shift": {
+        "weakness": "0.400 [0.368, 0.433]",
+        "toroidal": "0.000 [0.000, 0.000]",
+        "fourier": "8.778 [8.200, 9.354]",
+        "ood": "0.615 [0.597, 0.628]",
+    },
+    "none": {
+        "weakness": "0.446 [0.409, 0.481]",
+        "toroidal": "0.000 [0.000, 0.000]",
+        "fourier": "8.324 [7.791, 8.899]",
+        "ood": "0.484 [0.473, 0.495]",
+    },
+    "wrong group": {
+        "weakness": "0.048 [0.033, 0.064]",
+        "toroidal": "0.009 [0.007, 0.011]",
+        "fourier": "14.634 [14.128, 15.180]",
+        "ood": "0.489 [0.479, 0.499]",
+    },
+}
+OOD_CI = {
+    "full translation": ["0.947 [0.944, 0.949]", "0.949 [0.946, 0.952]", "0.948 [0.945, 0.951]", "0.949 [0.946, 0.953]"],
+    "partial translation": ["0.913 [0.909, 0.918]", "0.793 [0.786, 0.800]", "0.706 [0.697, 0.715]", "0.732 [0.725, 0.738]"],
+    "random shift": ["0.976 [0.958, 0.987]", "0.910 [0.890, 0.923]", "0.778 [0.756, 0.793]", "0.615 [0.597, 0.628]"],
+    "none": ["0.984 [0.980, 0.987]", "0.805 [0.794, 0.815]", "0.655 [0.645, 0.665]", "0.484 [0.473, 0.495]"],
+    "wrong group": ["0.985 [0.983, 0.987]", "0.808 [0.797, 0.818]", "0.659 [0.650, 0.669]", "0.489 [0.479, 0.499]"],
+}
 
 
 def fig_gate_matrix(path: str) -> str:
@@ -218,6 +257,10 @@ def build() -> None:
         caption="Table 2. Condition means. Wilson intervals apply only to the torus-match fraction. Full translation is the positive intervention; random shift and wrong group are controls. Weakness is not monotone with toroidal score outside the full-translation condition.",
         col_widths=[115, 34, 62, 62, 70, 76, 62])
     p.para(
+        "The recovered raw-cell export also supports seed-level uncertainty for the continuous "
+        "metrics. Appendix B reports percentile bootstrap intervals for weakness, toroidal score, "
+        "Fourier participation ratio, and each OOD arena.")
+    p.para(
         "The positive result is clean at the condition level. Full translation augmentation is the "
         "only condition that reliably produces a torus, and it preserves decoding accuracy as the "
         "arena doubles. Partial translation and random shifts lift OOD relative to no augmentation, "
@@ -330,13 +373,52 @@ def build() -> None:
         "units. Lower PR means fewer effective Fourier modes; G5 correlates weakness with -PR.")
     p.para(
         "<b>Topology and uncertainty status.</b> The committed result report stores condition "
-        "means and gate correlations; the raw per-cell JSON is gitignored and was not available "
-        "in this fresh worktree, so this PDF reports Wilson intervals only for the Boolean "
-        "torus-match fractions and does not invent seed-level CIs for continuous metrics. Before "
-        "conference review, the raw-cell appendix should add bootstrap intervals for weakness, "
-        "toroidal score, OOD curves, and robustness sweeps over bin counts, Vietoris-Rips edge "
-        "caps, and empty-bin handling. The present note treats those as limitations rather than "
-        "completed evidence.")
+        "means and gate correlations; the recovered raw per-cell JSON has now been exported to "
+        "committed CSVs and supports seed-level bootstrap intervals for scalar metrics. It does "
+        "not store the hidden-state populations needed to reconstruct topology robustness over "
+        "bin counts, Vietoris-Rips edge caps, empty-bin handling, or sampling density. The Modal "
+        "runner now supports that robustness export for reruns, but the present PDF does not "
+        "treat robustness as completed evidence.")
+
+    p.flow += [PageBreak()]
+    p.h1("Appendix B. Conference Evidence Exports")
+    p.para(
+        "The raw 320-cell Modal JSON was recovered locally and exported with "
+        "`scripts/analyze_gridcell_conference_evidence.py` into per-cell and aggregate CSVs under "
+        "`experiments/grid_cell_weakness/results`. Continuous intervals are percentile bootstrap "
+        "95% intervals from 5000 resamples within condition; torus-match intervals are Wilson "
+        "95% intervals for the Boolean `betti_match_torus` fraction.")
+    p.table(
+        [["Condition", "weakness", "toroidal", "Fourier PR", "OOD @2.0"],
+         ["full translation", METRIC_CI["full translation"]["weakness"], METRIC_CI["full translation"]["toroidal"], METRIC_CI["full translation"]["fourier"], METRIC_CI["full translation"]["ood"]],
+         ["partial translation", METRIC_CI["partial translation"]["weakness"], METRIC_CI["partial translation"]["toroidal"], METRIC_CI["partial translation"]["fourier"], METRIC_CI["partial translation"]["ood"]],
+         ["random shift", METRIC_CI["random shift"]["weakness"], METRIC_CI["random shift"]["toroidal"], METRIC_CI["random shift"]["fourier"], METRIC_CI["random shift"]["ood"]],
+         ["none", METRIC_CI["none"]["weakness"], METRIC_CI["none"]["toroidal"], METRIC_CI["none"]["fourier"], METRIC_CI["none"]["ood"]],
+         ["wrong group", METRIC_CI["wrong group"]["weakness"], METRIC_CI["wrong group"]["toroidal"], METRIC_CI["wrong group"]["fourier"], METRIC_CI["wrong group"]["ood"]]],
+        caption="Table B1. Scalar metric means with 95% intervals. Fourier PR is included because the spectral leg is the surviving weakness-aligned measurement.",
+        col_widths=[105, 100, 100, 105, 100])
+    p.table(
+        [["Condition", "1.0", "1.25", "1.5", "2.0"],
+         ["full translation", *OOD_CI["full translation"]],
+         ["partial translation", *OOD_CI["partial translation"]],
+         ["random shift", *OOD_CI["random shift"]],
+         ["none", *OOD_CI["none"]],
+         ["wrong group", *OOD_CI["wrong group"]]],
+        caption="Table B2. OOD decoding curves with bootstrap 95% intervals.",
+        col_widths=[105, 100, 100, 100, 100])
+    p.para(
+        "<b>Within-toroidal subset.</b> Among the 47 already-toroidal full-translation models, "
+        "weakness does not explain additional OOD variation after torus formation: "
+        "rho(weakness, OOD) = -0.198 with bootstrap 95% CI [-0.518, 0.136]. Within this subset, "
+        "weakness also anticorrelates with continuous toroidal score (rho = -0.335, CI "
+        "[-0.577, -0.063]) and with -Fourier PR (rho = -0.356, CI [-0.585, -0.071]). No control "
+        "condition has enough torus-matching models for the same analysis.")
+    p.para(
+        "<b>Topology robustness.</b> The recovered scalar raw JSON cannot reconstruct robustness "
+        "over bin counts, edge caps, empty-bin handling, or sampling density because it does not "
+        "store hidden-state populations. The runner now emits `topology_robustness` rows when "
+        "rerun with robustness enabled; until then, robustness remains the next required "
+        "conference-review evidence item.")
 
     p.references([
         "Gardner, R. J. et al. Toroidal topology of population activity in grid cells. Nature 602, 123-128 (2022).",
