@@ -345,7 +345,7 @@ def main(
     wrong, loss = col("weakness_wrong_group"), col("final_loss")
 
     r_wt = _spearman(w, topo); r_wo = _spearman(w, ood); r_ot = _spearman(topo, ood)
-    analysis = dict(
+    analysis: dict[str, Any] = dict(
         n_cells=len(results),
         rho_weakness_topology=r_wt,
         rho_weakness_ood=r_wo,
@@ -361,7 +361,9 @@ def main(
     g1 = (sum(r["betti_match_torus"] for r in ft) / len(ft)) if ft else 0.0
     best_classical_topo = abs(analysis["rho_loss_topology"])
     best_classical_ood = abs(analysis["rho_loss_ood"])
-    mean = lambda xs: (sum(xs) / len(xs)) if xs else float("nan")
+    def mean(xs):
+        return (sum(xs) / len(xs)) if xs else float("nan")
+
     analysis["gates"] = dict(
         G1_manifold_recovered=dict(value=g1, pass_=g1 >= 0.6),
         G2_weakness_topology=dict(pass_=r_wt >= 0.5 and abs(r_wt) >= 2 * best_classical_topo),

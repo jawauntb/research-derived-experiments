@@ -238,11 +238,11 @@ def main():
             r = train(s, reward_xy=rxy, steps=args.steps)
             side = r["side"]
             binA, binB = reward_bin(A, side), reward_bin(B, side)
-            dens = r["density"]; dz = (dens - dens.mean()) / (dens.std() + 1e-9)
+            dens = r["density"]; density_z = (dens - dens.mean()) / (dens.std() + 1e-9)
             cell = dict(
                 condition=name, seed=s, final_loss=r["final_loss"], ood=r["ood"],
                 # induced-metric density z-score at A and B (deformation localisation)
-                density_z_at_A=float(dz[binA]), density_z_at_B=float(dz[binB]),
+                density_z_at_A=float(density_z[binA]), density_z_at_B=float(density_z[binB]),
                 density_raw_at_A=region_mean(dens, binA), density_raw_at_B=region_mean(dens, binB),
                 density_mean=float(dens.mean()),
                 # local weakness near A vs B (symmetry spent locally)
@@ -284,7 +284,9 @@ def main():
     # Control-subtracted deformation (removes positional baseline asymmetry):
     # the reward effect is (reward-condition − control) at the SAME location.
     cA = analysis["control"]
-    dz = lambda name, where: analysis[name][f"density_z_at_{where}"]
+    def dz(name, where):
+        return analysis[name][f"density_z_at_{where}"]
+
     analysis["control_subtracted"] = dict(
         # reward at A should raise density at A vs control, and do so MORE at A than at B
         deform_at_reward_A=dz("reward_A", "A") - cA["density_z_at_A"],

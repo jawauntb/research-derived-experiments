@@ -27,6 +27,7 @@ import argparse
 import json
 import math
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 
@@ -120,7 +121,7 @@ def main():
     widths = [16, 32, 64]
     lrs = [3e-3, 1e-2, 3e-2]
     wds = [0.0, 1e-4, 1e-2]
-    rows = []
+    rows: list[dict[str, Any]] = []
     out = Path(args.out); out.parent.mkdir(parents=True, exist_ok=True)
 
     for m in range(args.n_models):
@@ -144,7 +145,7 @@ def main():
     ae = [r["early"]["train_acc"] for r in rows]
     of = [r["final"]["ood_acc"] for r in rows]
 
-    analysis = dict(
+    analysis: dict[str, Any] = dict(
         n_models=len(rows),
         # cross-time prediction: early signal -> final OOD
         spearman_weakness_early_vs_ood_final=spearman(we, of),
