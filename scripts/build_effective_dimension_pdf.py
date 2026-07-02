@@ -255,7 +255,7 @@ def build() -> None:
     p.rule()
     p.abstract(
         "A value-weighted rate-distortion derivation predicts that a finite-capacity 2-D code "
-        "should allocate local area density as sqrt(det g) proportional to w^(1/2). We preregistered "
+        "should allocate local area density as √det <i>g</i> proportional to <i>w</i><super>1/2</super>. We preregistered "
         "a geometry sweep designed to distinguish this physical 2-D law from an effectively 1-D "
         "allocation law: a stripe value field should give α near 1/3, while an anisotropic value "
         "field varying along both arena axes should give α near 1/2 if the 2-D law governs the "
@@ -310,7 +310,7 @@ def build() -> None:
         width_in=6.25,
     )
     p.para(
-        "The gate was frozen before the large Modal sweep. The primary estimand is the slope α from "
+        "The project-preregistered gate was frozen before the large Modal sweep. The primary estimand is the slope α from "
         "ordinary least squares regression of log sqrt(det g(x)) on log w(x), over spatial bins with "
         "finite positive area density. The primary comparison is at amplitude A=6, with A in {3,6,12} "
         "used to check stability and amplitude scaling."
@@ -479,6 +479,11 @@ def build() -> None:
         "estimated area density is sqrt((du dot du)(dv dot dv)-(du dot dv)^2), exactly the square "
         "root of the determinant of the local pullback metric."
     )
+    p.para(
+        "At this 20,480-position evaluation scale, the 64 sweep seeds occupy all 256 spatial bins "
+        "under the trajectory generator; mean occupied bins are 256/256 and interior occupancy is "
+        "100% (196/196 interior bins)."
+    )
     p.h2("A.6 Slope Fitting and Bootstrap")
     p.para(
         "For each trained network, α is the ordinary least squares slope in log area density versus "
@@ -501,11 +506,11 @@ def build() -> None:
         "Berger, T. Rate Distortion Theory: A Mathematical Basis for Data Compression. Prentice-Hall (1971).",
         "Cover, T. M. and Thomas, J. A. Elements of Information Theory. Wiley (2006).",
         "Ganguli, D. and Simoncelli, E. P. Efficient sensory encoding and Bayesian inference with heterogeneous neural populations. Neural Computation (2014).",
-        "Wei, X.-X. and Stocker, A. A. A Bayesian observer model constrained by efficient coding can explain anti-Bayesian percepts. Nature Neuroscience (2015).",
+        "Wei, X.-X. and Stocker, A. A. A Bayesian observer model constrained by efficient coding can explain anti-Bayesian percepts. Nature Neuroscience 18, 1509-1517 (2015).",
         "Sorscher, B., Mel, G. C., Ganguli, S., and Ocko, S. A. A unified theory for the origin of grid cells through the lens of pattern formation. NeurIPS (2019).",
         "Cueva, C. J. and Wei, X.-X. Emergence of grid-like representations by training recurrent neural networks to perform spatial localization. ICLR (2018).",
-        "Banino, A. et al. Vector-based navigation using grid-like representations in artificial agents. Nature (2018).",
-        "Gardner, R. J. et al. Toroidal topology of population activity in grid cells. Nature (2022).",
+        "Banino, A. et al. Vector-based navigation using grid-like representations in artificial agents. Nature 557, 429-433 (2018).",
+        "Gardner, R. J. et al. Toroidal topology of population activity in grid cells. Nature 602, 123-128 (2022).",
         "Boccara, C. N., Nardin, M., Stella, F., O'Neill, J., and Csicsvari, J. The entorhinal cognitive map is attracted to goals. Science 363, 1443-1447 (2019).",
         "Butler, W. N., Hardcastle, K., and Giocomo, L. M. Remembered reward locations restructure entorhinal spatial maps. Science 363, 1447-1452 (2019).",
         "Ocko, S. A., Hardcastle, K., Giocomo, L. M., and Ganguli, S. Emergent elasticity in the neural code for space. PNAS 115, E11798-E11806 (2018).",
