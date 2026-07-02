@@ -2,9 +2,10 @@
 
 This is the flagship benchmark for the claim:
 
-> Out-of-distribution generalization is better predicted by *symmetry-compatible-
-> hypothesis weakness* than by training loss, MDL/compression, parameter-space
-> flatness/sharpness, parameter norm, or held-out validation accuracy.
+> In shortcut-compatible symmetry tasks, out-of-distribution generalization is
+> better predicted by *symmetry-compatible-hypothesis weakness* than by the
+> tested training-loss, MDL/compression, parameter-space flatness/sharpness,
+> parameter-norm, or held-out-validation proxies.
 
 The benchmark has two arms.
 
