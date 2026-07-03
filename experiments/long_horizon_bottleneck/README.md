@@ -298,7 +298,8 @@ container, then evaluates parser-scored JSON text actions across format,
 visible-control, short-horizon, and stochastic moved-bottleneck conditions. The
 2026-07-03 confirmatory run is a controlled strong negative for the full
 prompt-level gate: controls and behavior pass, but the hidden critical-slot
-specificity confidence interval crosses zero.
+specificity confidence interval crosses zero at that single final-prompt-token
+site.
 
 Prompt-level hidden-localization replication pass:
 
@@ -325,6 +326,13 @@ Hugging Face cache. The terminal outcome is positive only if behavior passes and
 at least one preregistered hidden site passes; it is a controlled strong negative
 only if behavior passes but no preregistered hidden site localizes the moved
 critical slot.
+
+The 2026-07-03 confirmatory localization run is positive. All behavior controls
+pass for all three default models, and 17 preregistered hidden sites pass. The
+strongest signal appears at `generated_final` states across all default models;
+late/final `prompt_final` sites also pass for `Qwen/Qwen2.5-1.5B-Instruct`.
+See
+`experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzz_prompt_json_hidden_localization_l4_4seed_2026_07_03.md`.
 
 Smoke:
 
@@ -376,5 +384,7 @@ fixed-length parser strings, but those strings are still vocabulary-constrained
 and supervised; the autoregressive JSON pass adds token-by-token decoding, but
 it is still not open-ended decoding from a pretrained model. The prompt-level
 JSON transfer pass uses a pretrained model and real tokenizer decoding, but it
-is still a compact harness rather than autonomous API use; its current result is
-positive for behavior and negative for the stronger hidden-geometry claim.
+is still a compact harness rather than autonomous API use. The first
+prompt-level hidden probe was negative at one site, but the multi-model
+hidden-localization replication is positive on the preregistered token/layer
+grid.

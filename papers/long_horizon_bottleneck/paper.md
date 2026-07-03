@@ -29,20 +29,22 @@ decoded JSON-like action strings. Across the confirmed Modal reports, the
 relevant bottleneck groups reach 1.000 closed-loop accuracy and positive
 moved-slot specificity, while visible controls keep specificity near zero.
 
-The first prompt-level transfer produced a useful controlled strong negative.
-`Qwen/Qwen2.5-0.5B-Instruct` emits valid parser-scored JSON actions and passes
-format, visible-control, short-horizon, stochastic repair, and success no-op
-behavioral gates. However, its hidden-state critical-slot specificity is not
-confirmed: mean specificity is positive (+0.695), but the 95% bootstrap
-interval crosses zero [-0.376, 2.080]. Thus prompt-level behavior transfers,
-while the stronger memory-geometry claim does not yet transfer.
+The first prompt-level transfer produced a useful controlled strong negative at
+one hidden site: `Qwen/Qwen2.5-0.5B-Instruct` emits valid parser-scored JSON
+actions and passes the behavioral gates, but final-prompt hidden specificity is
+not confirmed. A follow-up localization sweep resolves that ambiguity. Across
+`Qwen/Qwen2.5-0.5B-Instruct`, `Qwen/Qwen2.5-1.5B-Instruct`, and
+`HuggingFaceTB/SmolLM2-1.7B-Instruct`, all behavior controls pass and 17
+registered hidden sites pass. The strongest signal appears at final generated
+JSON tokens, with additional late/final prompt-token sites passing for Qwen
+1.5B.
 
 The allowed claim is deliberately modest: in this synthetic neural-agent
 setting, **future control relevance can move finite memory-state and
 tool-commitment sensitivity**. This is not a production-agent benchmark,
-language-agent benchmark, or consciousness claim. Its value is as a cheap,
-reproducible diagnostic for whether an agent's internal state tracks the
-variables that will later control action.
+production-agent benchmark or consciousness claim. Its value is as a cheap,
+reproducible diagnostic for whether an agent's internal state and generated
+action trajectory track the variables that will later control action.
 
 ## 1. Motivation
 
@@ -125,6 +127,7 @@ the agent's interaction with future-relevant information.
 | Generated JSON surface | Model emits a fixed-length JSON-like token sequence | 32 | Generated sequence/schema, parsed slot/value, and repair gates all 1.000 | `generated_json` |
 | Autoregressive JSON surface | JSON action is decoded token-by-token from commit state | 32 | Greedy decoded sequence/schema, parsed slot/value, and repair gates all 1.000 | `autoregressive_json` |
 | Prompt JSON transfer | Pretrained open model emits parser-scored JSON text | 64 | Controls and behavior pass; hidden specificity CI crosses zero | `prompt_json_transfer` |
+| Prompt JSON hidden localization | Multi-model, multi-layer, multi-token hidden-site grid | 192 behavior cells + 576 hidden rows | Controls and behavior pass for three models; 17 hidden sites pass | `prompt_json_hidden_localization` |
 
 All confirmed sweeps used Modal `L4`, not H100/H200. The timeout-based
 conservative spend guard for the listed confirmed reports is under USD 160 in
@@ -132,7 +135,9 @@ aggregate; individual recent passes used guards of USD 8.63 to USD 17.26. Actual
 runtime was much lower than the timeout budget, with the latest autoregressive
 JSON pass averaging 15.08 seconds per remote cell. The prompt-level transfer
 used one `L4` container for all 64 logical cells, with a conservative timeout
-guard of USD 1.08 and a 212.0 second remote runtime.
+guard of USD 1.08 and a 212.0 second remote runtime. The prompt-level
+hidden-localization sweep used three parallel `L4` model jobs, 192 behavior
+cells, 576 hidden rows, and a conservative timeout guard of USD 6.47.
 
 Report keys map to committed summaries under
 `experiments/long_horizon_bottleneck/results/`: `base` =
@@ -150,9 +155,11 @@ Report keys map to committed summaries under
 `autoregressive_json` =
 `zzzzzzzzzz_autoregressive_json_surface_l4_4seed_2026_07_03.md`, and
 `prompt_json_transfer` =
-`zzzzzzzzzzz_prompt_json_transfer_l4_4seed_2026_07_03.md`.
+`zzzzzzzzzzz_prompt_json_transfer_l4_4seed_2026_07_03.md`, and
+`prompt_json_hidden_localization` =
+`zzzzzzzzzzzzz_prompt_json_hidden_localization_l4_4seed_2026_07_03.md`.
 
-## 4. Prompt-Level JSON Transfer
+## 4. Prompt-Level JSON Transfer and Hidden Localization
 
 The autoregressive JSON pass completed the synthetic ladder: the trained model
 could decode parser-scored JSON-like action strings token by token under
@@ -190,6 +197,28 @@ solve the parser-scored prompt-level moved-bottleneck behavior, including
 stochastic repair, but this run does not show reliable hidden-state transport
 of the future-critical slot.
 
+The hidden-localization follow-up asked whether that negative was specific to
+the measured site. It ran three cheap open models in parallel on Modal `L4`:
+`Qwen/Qwen2.5-0.5B-Instruct`, `Qwen/Qwen2.5-1.5B-Instruct`, and
+`HuggingFaceTB/SmolLM2-1.7B-Instruct`. The sweep preserved the same behavior
+conditions, then measured hidden specificity at `prompt_final`,
+`generated_first`, and `generated_final` token positions across early, mid,
+late, and final layer aliases.
+
+This run was positive. All behavior controls passed for all three models.
+Behavioral bottleneck accuracy was 1.000 for SmolLM2 1.7B, 0.961 for Qwen 0.5B,
+and 0.938 for Qwen 1.5B. Seventeen registered hidden sites passed both the
+specificity and rank gates. The strongest sites were generated-final states:
+SmolLM2 1.7B generated-final/mid had specificity +228.301 with CI
+[129.438, 386.540]; Qwen 1.5B generated-final/early had +216.902 with CI
+[119.175, 332.137]; and Qwen 0.5B generated-final/early had +183.444 with CI
+[99.032, 279.601]. Qwen 1.5B also passed late/final prompt-final sites.
+
+The interpretation is therefore narrower and stronger than the first prompt
+run: final behavior transfers, and hidden localization is present in the
+generated action trajectory. The original negative was a measurement-site
+failure, not evidence that prompt-level hidden geometry is absent.
+
 ## 5. Interpretation
 
 The core result is a **metric transport** result. The future-critical variable
@@ -208,10 +237,12 @@ sequence classifiers. The bottleneck is not just "remember bit 2." It becomes
 "know which early variable must later be committed through an interface, recover
 it under feedback, and ignore matched distractors."
 
-The prompt-level result sharpens the interpretation. Final behavior alone is
-not enough: a small open model can pass the prompt-level JSON behavior while
-failing the registered hidden-specificity confidence gate. That split is the
-point of the diagnostic.
+The prompt-level results sharpen the interpretation. Final behavior alone is
+not enough: a small open model can pass the prompt-level JSON behavior while one
+registered hidden site fails. But localization across token positions and layers
+recovers a positive signal, especially in generated action states. That split is
+the point of the diagnostic: it can distinguish interface behavior, prompt-state
+memory, and action-surface commitment.
 
 ## 6. Boundaries
 
@@ -253,14 +284,14 @@ That is a sharper evaluation target than final-task success alone.
 ## 8. Remaining Work
 
 The synthetic mechanism ladder is complete enough to write up and share, and
-the first prompt-level transfer has produced a useful controlled strong
-negative. The next regimes answer different questions:
+the prompt-level hidden-localization replication is now positive. The next
+regimes answer different questions:
 
-- **Prompt-level replication:** rerun the same frozen gate on stronger open
-  models and API models to test whether the hidden-specificity failure is
-  model-specific.
-- **Hidden metric localization:** measure multiple layers and token positions,
-  not only the final hidden state at the generation point.
+- **Prompt-level robustness:** rerun the frozen gate across prompt families,
+  longer contexts, and API models to test whether the generated-token
+  localization signal is robust rather than prompt-specific.
+- **Causal hidden localization:** use activation patching or fixed-action
+  counterfactuals to separate prompt-state memory from action-token identity.
 - **LLM-agent transfer:** add longer tool contexts, natural-language argument
   aliases, and API-style parser recovery around the prompt-level version.
 - **Multi-step planning:** require two or more future commitments where the
@@ -270,7 +301,8 @@ negative. The next regimes answer different questions:
 
 The most valuable immediate next step is to publish the diagnostic as a compact
 benchmark card: synthetic ladder positive, prompt-level behavior positive, and
-prompt-level hidden specificity currently negative.
+prompt-level hidden localization positive with a clear caveat that the strongest
+signal is in generated action states.
 
 ## 9. Reproducibility
 
@@ -305,6 +337,24 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     --budget-usd 25 \
     --base-seed 20260800 \
     --out artifacts/long_horizon_bottleneck/prompt_json_transfer_l4.json
+```
+
+Prompt-level hidden-localization runner:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/long_horizon_bottleneck/modal_prompt_json_hidden_localization_sweep.py \
+    --models Qwen/Qwen2.5-0.5B-Instruct,Qwen/Qwen2.5-1.5B-Instruct,HuggingFaceTB/SmolLM2-1.7B-Instruct \
+    --seeds 4 \
+    --episodes-per-cell 8 \
+    --hidden-metric-episodes 2 \
+    --critical-slots 0,1,2,3 \
+    --hidden-positions prompt_final,generated_first,generated_final \
+    --hidden-layers early,mid,late,final \
+    --budget-usd 25 \
+    --base-seed 20260850 \
+    --out artifacts/long_horizon_bottleneck/prompt_json_hidden_localization_l4.json
 ```
 
 Local verification for the code paths:
