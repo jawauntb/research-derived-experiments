@@ -10,9 +10,11 @@ Test whether future control relevance moves both generated behavior and internal
 - Prompt-level open-model transfer: behavior positive; initial final-prompt hidden gate was a controlled strong negative.
 - Hidden-localization replication: positive across the default multi-model, multi-layer,
   multi-token-position grid.
+- Fixed-action localization counterfactual: positive after generated action tokens
+  are held fixed under base and slot-flipped prompts.
 - Latest models: `Qwen/Qwen2.5-0.5B-Instruct`, `Qwen/Qwen2.5-1.5B-Instruct`, `HuggingFaceTB/SmolLM2-1.7B-Instruct`.
-- Latest confirmatory artifact: `artifacts/long_horizon_bottleneck/prompt_json_hidden_localization_l4.json`.
-- Latest committed report: `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzz_prompt_json_hidden_localization_l4_4seed_2026_07_03.md`.
+- Latest confirmatory artifact: `artifacts/long_horizon_bottleneck/prompt_json_fixed_action_localization_l4.json`.
+- Latest committed report: `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzz_prompt_json_fixed_action_localization_l4_4seed_2026_07_03.md`.
 
 ## Prompt-Level Terminal Result
 
@@ -49,6 +51,25 @@ The confirmatory run is positive:
 - behavioral moved-bottleneck passes for all three models;
 - 17 registered hidden sites pass specificity and rank gates;
 - strongest sites are generated-final states, with positive CIs across all three model families.
+
+Outcome: `positive`.
+
+## Fixed-Action Localization Terminal Result
+
+The fixed-action counterfactual tested whether the generated-action localization
+positive was just answer-token identity. The runner teacher-forced the same
+assistant JSON action under each base prompt and slot-flipped counterfactual,
+then measured `prompt_final`, `fixed_noop_first/final`, and
+`fixed_read_first/final` states across the same model and layer grid.
+
+The confirmatory run is positive:
+
+- controls pass for all three models;
+- behavioral moved-bottleneck passes for all three models;
+- 24 registered hidden sites pass specificity and rank gates;
+- fixed noop final-layer sites pass in all three model families;
+- strongest fixed noop site: `Qwen/Qwen2.5-1.5B-Instruct/fixed_noop_final/final`,
+  specificity z 12.514, 95% CI [8.035, 18.310], rank 0.984.
 
 Outcome: `positive`.
 

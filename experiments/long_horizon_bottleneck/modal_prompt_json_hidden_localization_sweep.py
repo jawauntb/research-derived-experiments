@@ -8,6 +8,11 @@ prompt-level behavior. The sweep preserves format, visible, short-horizon, and
 behavioral moved-bottleneck gates, then measures hidden sensitivity at multiple
 token positions and layers.
 
+The runner also supports fixed-action counterfactual positions. These
+teacher-force a constant assistant JSON action under the base and slot-flipped
+prompts, then measure whether hidden localization survives without varying the
+generated answer tokens.
+
 Recommended dry run:
 
     doppler --scope /Users/jawaun/superoptimizers run -- \\
@@ -24,6 +29,18 @@ Recommended confirmatory run:
         --seeds 4 --episodes-per-cell 8 --hidden-metric-episodes 2 \\
         --critical-slots 0,1,2,3 --budget-usd 25 \\
         --out artifacts/long_horizon_bottleneck/prompt_json_hidden_localization_l4.json
+
+Recommended fixed-action counterfactual run:
+
+    doppler --scope /Users/jawaun/superoptimizers run -- \\
+        uvx --python 3.12 --from modal modal run \\
+        experiments/long_horizon_bottleneck/modal_prompt_json_hidden_localization_sweep.py \\
+        --models Qwen/Qwen2.5-0.5B-Instruct,Qwen/Qwen2.5-1.5B-Instruct,HuggingFaceTB/SmolLM2-1.7B-Instruct \\
+        --seeds 4 --episodes-per-cell 8 --hidden-metric-episodes 2 \\
+        --critical-slots 0,1,2,3 \\
+        --hidden-positions prompt_final,fixed_noop_first,fixed_noop_final,fixed_read_first,fixed_read_final \\
+        --budget-usd 25 --base-seed 20260900 \\
+        --out artifacts/long_horizon_bottleneck/prompt_json_fixed_action_localization_l4.json
 """
 
 from __future__ import annotations
@@ -49,6 +66,7 @@ from experiments.long_horizon_bottleneck.prompt_json_tasks import (
     messages,
     repair_messages,
     short_user_prompt,
+    slot_phrase,
     visible_user_prompt,
 )
 
@@ -112,44 +130,115 @@ def _resolve_layer_specs(layer_names: list[str], n_layers: int) -> list[dict[str
     return specs
 
 
-def _hidden_vectors_by_site(
+def _fixed_action_texts(critical_slot: int, variants_per_slot: int) -> dict[str, str]:
+    phrase = slot_phrase(critical_slot, variants_per_slot)
+    return {
+        "fixed_noop": '{"tool":"noop"}',
+        "fixed_read": f'{{"tool":"read_slot","slot":"{phrase}","value":0}}',
+    }
+
+
+def _manual_chat_text(message_list: list[dict[str, str]], *, add_generation_prompt: bool) -> str:
+    text = "\n\n".join(f"{message['role'].title()}: {message['content']}" for message in message_list)
+    if add_generation_prompt:
+        text += "\n\nAssistant:"
+    return text
+
+
+def _chat_text(tokenizer: Any, message_list: list[dict[str, str]], *, add_generation_prompt: bool) -> str:
+    if getattr(tokenizer, "chat_template", None):
+        return str(
+            tokenizer.apply_chat_template(
+                message_list,
+                add_generation_prompt=add_generation_prompt,
+                tokenize=False,
+            )
+        )
+    return _manual_chat_text(message_list, add_generation_prompt=add_generation_prompt)
+
+
+def _fixed_action_encoding_and_indices(
+    tokenizer: Any,
+    message_list: list[dict[str, str]],
+    action_text: str,
+    device: Any,
+) -> tuple[dict[str, Any], list[int]]:
+    import torch
+
+    prompt_text = _chat_text(tokenizer, message_list, add_generation_prompt=True)
+    if getattr(tokenizer, "chat_template", None):
+        full_text = _chat_text(
+            tokenizer,
+            [*message_list, {"role": "assistant", "content": action_text}],
+            add_generation_prompt=False,
+        )
+    else:
+        full_text = f"{prompt_text}{action_text}"
+
+    action_start = full_text.find(action_text, max(0, len(prompt_text) - 16))
+    if action_start < 0:
+        action_start = full_text.rfind(action_text)
+    if action_start < 0:
+        raise ValueError("Could not locate fixed assistant action text in rendered chat template")
+    action_end = action_start + len(action_text)
+
+    try:
+        encoded = tokenizer(
+            full_text,
+            return_tensors="pt",
+            return_offsets_mapping=True,
+            add_special_tokens=False,
+        )
+        offsets = encoded.pop("offset_mapping")[0].tolist()
+        action_indices = [
+            index
+            for index, (start, end) in enumerate(offsets)
+            if end > action_start and start < action_end
+        ]
+        if not action_indices:
+            raise ValueError("offset mapping did not identify fixed action tokens")
+    except Exception:
+        encoded = tokenizer(full_text, return_tensors="pt", add_special_tokens=False)
+        prefix_encoded = tokenizer(full_text[:action_start], return_tensors="pt", add_special_tokens=False)
+        action_encoded = tokenizer(action_text, return_tensors="pt", add_special_tokens=False)
+        start_index = int(prefix_encoded["input_ids"].shape[-1])
+        action_length = max(1, int(action_encoded["input_ids"].shape[-1]))
+        end_index = min(start_index + action_length, int(encoded["input_ids"].shape[-1]))
+        action_indices = list(range(start_index, end_index))
+    if not action_indices:
+        action_indices = [int(encoded["input_ids"].shape[-1]) - 1]
+
+    model_inputs = {
+        key: value.to(device)
+        for key, value in encoded.items()
+        if key != "offset_mapping"
+    }
+    if "attention_mask" not in model_inputs:
+        model_inputs["attention_mask"] = torch.ones_like(model_inputs["input_ids"])
+    return model_inputs, action_indices
+
+
+def _fixed_action_hidden_vectors_by_site(
     model: Any,
     tokenizer: Any,
     message_list: list[dict[str, str]],
     *,
+    action_prefix: str,
+    action_text: str,
     positions: list[str],
     layer_specs: list[dict[str, int | str]],
-    max_new_tokens: int,
 ) -> dict[tuple[str, str, int], Any]:
     import torch
 
-    encoded = encode_messages(tokenizer, message_list, model.device)
-    input_len = int(encoded["input_ids"].shape[-1])
-    needs_generation = any(position != "prompt_final" for position in positions)
-    if needs_generation:
-        with torch.inference_mode():
-            input_ids = model.generate(
-                **encoded,
-                do_sample=False,
-                max_new_tokens=max_new_tokens,
-                pad_token_id=tokenizer.eos_token_id,
-            )
-        attention_mask = torch.ones_like(input_ids)
-    else:
-        input_ids = encoded["input_ids"]
-        attention_mask = encoded["attention_mask"]
-
-    generated_len = int(input_ids.shape[-1] - input_len)
-    position_indices: dict[str, int] = {
-        "prompt_final": input_len - 1,
-        "generated_first": input_len if generated_len > 0 else input_len - 1,
-        "generated_final": int(input_ids.shape[-1] - 1),
+    encoded, action_indices = _fixed_action_encoding_and_indices(tokenizer, message_list, action_text, model.device)
+    position_indices = {
+        f"{action_prefix}_first": action_indices[0],
+        f"{action_prefix}_final": action_indices[-1],
     }
-
     with torch.inference_mode():
         outputs = model(
-            input_ids=input_ids,
-            attention_mask=attention_mask,
+            input_ids=encoded["input_ids"],
+            attention_mask=encoded["attention_mask"],
             output_hidden_states=True,
             use_cache=False,
         )
@@ -158,13 +247,109 @@ def _hidden_vectors_by_site(
     for position in positions:
         if position not in position_indices:
             known = ", ".join(sorted(position_indices))
-            raise ValueError(f"Unknown hidden position {position!r}. Known positions: {known}")
+            raise ValueError(f"Unknown fixed-action position {position!r}. Known positions: {known}")
         token_index = position_indices[position]
         for layer_spec in layer_specs:
             label = str(layer_spec["label"])
             layer_index = int(layer_spec["index"])
             vector = outputs.hidden_states[layer_index][0, token_index].detach().float().cpu()
             vectors[(position, label, layer_index)] = vector
+    return vectors
+
+
+def _hidden_vectors_by_site(
+    model: Any,
+    tokenizer: Any,
+    message_list: list[dict[str, str]],
+    *,
+    critical_slot: int,
+    variants_per_slot: int,
+    positions: list[str],
+    layer_specs: list[dict[str, int | str]],
+    max_new_tokens: int,
+) -> dict[tuple[str, str, int], Any]:
+    import torch
+
+    token_positions = [
+        position
+        for position in positions
+        if position in {"prompt_final", "generated_first", "generated_final"}
+    ]
+    vectors: dict[tuple[str, str, int], Any] = {}
+    if token_positions:
+        encoded = encode_messages(tokenizer, message_list, model.device)
+        input_len = int(encoded["input_ids"].shape[-1])
+        needs_generation = any(position != "prompt_final" for position in token_positions)
+        if needs_generation:
+            with torch.inference_mode():
+                input_ids = model.generate(
+                    **encoded,
+                    do_sample=False,
+                    max_new_tokens=max_new_tokens,
+                    pad_token_id=tokenizer.eos_token_id,
+                )
+            attention_mask = torch.ones_like(input_ids)
+        else:
+            input_ids = encoded["input_ids"]
+            attention_mask = encoded["attention_mask"]
+
+        generated_len = int(input_ids.shape[-1] - input_len)
+        position_indices: dict[str, int] = {
+            "prompt_final": input_len - 1,
+            "generated_first": input_len if generated_len > 0 else input_len - 1,
+            "generated_final": int(input_ids.shape[-1] - 1),
+        }
+
+        with torch.inference_mode():
+            outputs = model(
+                input_ids=input_ids,
+                attention_mask=attention_mask,
+                output_hidden_states=True,
+                use_cache=False,
+            )
+
+        for position in token_positions:
+            if position not in position_indices:
+                known = ", ".join(sorted(position_indices))
+                raise ValueError(f"Unknown hidden position {position!r}. Known positions: {known}")
+            token_index = position_indices[position]
+            for layer_spec in layer_specs:
+                label = str(layer_spec["label"])
+                layer_index = int(layer_spec["index"])
+                vector = outputs.hidden_states[layer_index][0, token_index].detach().float().cpu()
+                vectors[(position, label, layer_index)] = vector
+
+    fixed_actions = _fixed_action_texts(critical_slot, variants_per_slot)
+    for action_prefix, action_text in fixed_actions.items():
+        fixed_positions = [
+            position
+            for position in positions
+            if position in {f"{action_prefix}_first", f"{action_prefix}_final"}
+        ]
+        if fixed_positions:
+            vectors.update(
+                _fixed_action_hidden_vectors_by_site(
+                    model,
+                    tokenizer,
+                    message_list,
+                    action_prefix=action_prefix,
+                    action_text=action_text,
+                    positions=fixed_positions,
+                    layer_specs=layer_specs,
+                )
+            )
+
+    missing_positions = [
+        position
+        for position in positions
+        if all(key[0] != position for key in vectors)
+    ]
+    if missing_positions:
+        known = (
+            "prompt_final, generated_first, generated_final, "
+            "fixed_noop_first, fixed_noop_final, fixed_read_first, fixed_read_final"
+        )
+        raise ValueError(f"Unknown hidden positions {missing_positions}. Known positions: {known}")
     return vectors
 
 
@@ -202,6 +387,8 @@ def _hidden_localization_sensitivity(
             model,
             tokenizer,
             messages(base_prompt),
+            critical_slot=critical_slot,
+            variants_per_slot=variants_per_slot,
             positions=positions,
             layer_specs=layer_specs,
             max_new_tokens=max_new_tokens,
@@ -215,6 +402,8 @@ def _hidden_localization_sensitivity(
                 model,
                 tokenizer,
                 messages(flipped_prompt),
+                critical_slot=critical_slot,
+                variants_per_slot=variants_per_slot,
                 positions=positions,
                 layer_specs=layer_specs,
                 max_new_tokens=max_new_tokens,
@@ -561,6 +750,12 @@ def main(
     critical_slot_list = parse_int_csv(critical_slots)
     position_list = parse_csv(hidden_positions)
     layer_list = parse_csv(hidden_layers)
+    uses_fixed_actions = any(position.startswith("fixed_") for position in position_list)
+    prompt_contract = (
+        "papers/long_horizon_bottleneck/prompt_json_fixed_action_localization_preregistration.md"
+        if uses_fixed_actions
+        else "papers/long_horizon_bottleneck/prompt_json_hidden_localization_preregistration.md"
+    )
     seed_values = list(range(seeds))
     if not model_list:
         raise SystemExit("At least one model is required")
@@ -616,6 +811,12 @@ def main(
         "max_new_tokens": max_new_tokens,
         "hidden_positions": position_list,
         "hidden_layers": layer_list,
+        "fixed_action_templates": {
+            "fixed_noop": '{"tool":"noop"}',
+            "fixed_read": '{"tool":"read_slot","slot":"<critical slot phrase>","value":0}',
+        }
+        if uses_fixed_actions
+        else {},
         "budget_estimate": estimate.__dict__,
         "thresholds": {
             "format_schema_validity": 0.95,
@@ -623,7 +824,7 @@ def main(
             "localization_specificity_ci_low": 0.0,
             "localization_rank_chance": 0.5,
         },
-        "prompt_contract": "papers/long_horizon_bottleneck/prompt_json_hidden_localization_preregistration.md",
+        "prompt_contract": prompt_contract,
         "model_sources": [f"https://huggingface.co/{model_id}" for model_id in model_list],
     }
     print(
@@ -638,7 +839,10 @@ def main(
             f"${estimate.conservative_cost_usd:.2f} exceeds budget ${budget_usd:.2f}."
         )
     if dry_run_budget:
-        print(json.dumps({"kind": "prompt JSON hidden-localization dry run", "manifest": manifest}, indent=2))
+        dry_run_kind = "prompt JSON fixed-action localization dry run" if uses_fixed_actions else (
+            "prompt JSON hidden-localization dry run"
+        )
+        print(json.dumps({"kind": dry_run_kind, "manifest": manifest}, indent=2))
         return
 
     model_args = [
@@ -664,7 +868,9 @@ def main(
     rows = [row for row_group in model_row_groups for row in row_group]
     summary = summarize_prompt_localization_rows(rows)
     payload = {
-        "kind": "prompt JSON hidden-localization moved-bottleneck sweep",
+        "kind": "prompt JSON fixed-action localization moved-bottleneck sweep"
+        if uses_fixed_actions
+        else "prompt JSON hidden-localization moved-bottleneck sweep",
         "manifest": manifest,
         "summary": summary,
         "rows": rows,
