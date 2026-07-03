@@ -198,6 +198,30 @@ neighbor-stretch metric across RNN, Transformer, and JEPA-style spatial models;
 the separate area-density and exponent analyses reveal a narrower
 effective-dimension law rather than the hoped-for 2-D exponent.
 
+### 8d. Semantic transformer externality check - Paper B does not yet generalize
+
+After the spatial moved-location result, we preregistered a non-spatial
+semantic analogue in `papers/semantic_concern_geometry/preregistration.md` and
+ran it on Modal H200/H100 workers on 2026-07-02. The sweep used real 20
+Newsgroups text, two pretrained encoders (`distilbert-base-uncased` and
+`sentence-transformers/all-MiniLM-L6-v2`), classifier and JEPA-like predictive
+latent objectives, four registered semantic targets, random-matched weighting
+controls, and 256 seeds per family after a precision continuation.
+
+Result: the preregistered semantic-margin transport gate fails decisively and in
+the opposite direction. Architecture-balanced margin lift is -0.441 vs uniform
+[-0.455, -0.427], SE=0.007, and -0.441 vs random-matched controls
+[-0.455, -0.428], SE=0.007. Every family is negative with primary SE below 2%.
+Companion geometry is non-null: centroid separation, kNN purity, and often
+effective rank increase, but target F1 and the registered local semantic margin
+decrease.
+
+Interpretation: Paper B remains a robust spatial causal mechanism result, but
+it should not be marketed as a foundation-model/general-semantic result. The
+next semantic experiment should define task-native resolution, such as
+retrieval under asymmetric cost or finer within-class paraphrase/subtopic
+discrimination, and preregister that as a new confirmatory gate.
+
 ## 9. Prior art anchoring
 
 - Bennett (1948), high-resolution quantization: optimal point density `∝ p^{1/3}` (1D).
