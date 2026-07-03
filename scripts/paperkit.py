@@ -74,6 +74,8 @@ class Paper:
         self.out.parent.mkdir(parents=True, exist_ok=True)
         self.figdir = Path(figdir); self.figdir.mkdir(parents=True, exist_ok=True)
         self.flow: list[Any] = []
+        self._title_text = self.out.stem
+        self._author_text = ""
         ss = getSampleStyleSheet()
         self.s_title = ParagraphStyle("t", parent=ss["Title"], fontName=F_BOLD,
                                       fontSize=17, leading=21, textColor=INK, spaceAfter=6)
@@ -97,8 +99,14 @@ class Paper:
         self.s_small = ParagraphStyle("sm", parent=self.s_body, fontSize=8.6, leading=11)
 
     # ---- content ----
-    def title(self, text): self.flow += [Paragraph(text, self.s_title)]
-    def authors(self, text): self.flow += [Paragraph(text, self.s_authors)]
+    def title(self, text):
+        self._title_text = text
+        self.flow += [Paragraph(text, self.s_title)]
+
+    def authors(self, text):
+        if not self._author_text:
+            self._author_text = text
+        self.flow += [Paragraph(text, self.s_authors)]
 
     def rule(self): self.flow += [Spacer(1, 3), HRFlowable(width="100%", thickness=0.6,
                                                            color=GRID), Spacer(1, 5)]
@@ -149,7 +157,7 @@ class Paper:
         doc = SimpleDocTemplate(str(self.out), pagesize=letter,
                                 leftMargin=0.85 * inch, rightMargin=0.85 * inch,
                                 topMargin=0.8 * inch, bottomMargin=0.8 * inch,
-                                title=self.out.stem)
+                                title=self._title_text, author=self._author_text)
         doc.build(self.flow)
         return self.out
 
@@ -203,6 +211,7 @@ def chart_scatter_gradient(figpath, x, y, labels=None, *, title="", xlabel="", y
             ax.annotate(li, (xi, yi), fontsize=7, xytext=(4, 4), textcoords="offset points",
                         color="#333")
     ax.set_title(title); ax.set_xlabel(xlabel); ax.set_ylabel(ylabel)
+    ax.margins(x=0.12, y=0.18)
     return _save(fig, Path(figpath))
 
 

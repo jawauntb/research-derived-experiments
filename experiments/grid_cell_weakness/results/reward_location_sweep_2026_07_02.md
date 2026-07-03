@@ -14,9 +14,9 @@ Report precision target: bootstrap SE <= 0.02. The frozen pre-registration also 
 
 | Architecture | lift z | specificity z | rank | peak error | Gate |
 | --- | ---: | ---: | ---: | ---: | --- |
-| jepa | +0.6847 [+0.6476, +0.7228], SE=0.0193, n=576 | +0.9162 [+0.8890, +0.9425], SE=0.0138, n=576 | 0.832 | 0.205 | pass |
-| rnn | +1.2013 [+1.1846, +1.2179], SE=0.0085, n=576 | +1.3572 [+1.3372, +1.3774], SE=0.0103, n=576 | 0.930 | 0.069 | pass |
-| transformer | +1.9507 [+1.9170, +1.9843], SE=0.0173, n=576 | +2.0053 [+1.9883, +2.0218], SE=0.0086, n=576 | 0.928 | 0.082 | pass |
+| jepa | +0.6847 [+0.6476, +0.7228], SE=0.0193, n=576 | +0.9162 [+0.8890, +0.9425], SE=0.0138, n=576 | 0.832 | 0.205 | met |
+| rnn | +1.2013 [+1.1846, +1.2179], SE=0.0085, n=576 | +1.3572 [+1.3372, +1.3774], SE=0.0103, n=576 | 0.930 | 0.069 | met |
+| transformer | +1.9507 [+1.9170, +1.9843], SE=0.0173, n=576 | +2.0053 [+1.9883, +2.0218], SE=0.0086, n=576 | 0.928 | 0.082 | met |
 
 Architecture-balanced pooled lift: +1.2789 [+1.2610, +1.2965], SE=0.0091, n=1728.
 Architecture-balanced pooled specificity: +1.4262 [+1.4139, +1.4391], SE=0.0064, n=1728.
@@ -25,9 +25,9 @@ Architecture-balanced pooled specificity: +1.4262 [+1.4139, +1.4391], SE=0.0064,
 
 | Architecture | <=1% lift SE | <=1% specificity SE | Directional CIs positive | Strict 1% audit |
 | --- | ---: | ---: | ---: | --- |
-| jepa | False | False | True | fail |
-| rnn | True | False | True | fail |
-| transformer | False | True | True | fail |
+| jepa | False | False | True | not met |
+| rnn | True | False | True | not met |
+| transformer | False | True | True | not met |
 
 ## Companion Area-Density Diagnostics
 
@@ -43,8 +43,8 @@ The Paper B primary observable is the original neighbor-stretch metric density: 
 displacement per unit physical displacement. Area density is reported only as a companion
 rate-distortion diagnostic.
 
-Interpret the claim exactly as preregistered: architectures pass only when the bootstrap
+Interpret the claim exactly as preregistered: architectures meet the report threshold only when the bootstrap
 intervals for both control-subtracted lift and moved-location specificity exclude zero on
 the positive side, the primary standard errors are at or below the stated report target (0.02 here), and the reward-location rank is above chance. The frozen stricter
 1% precision audit is retained separately because the 2% threshold was accepted after the
-first-wave results were visible. Failed architecture families must remain failed in the paper.
+first-wave results were visible. Families that do not meet an audit must remain non-meeting in the paper.

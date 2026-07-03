@@ -1,0 +1,41 @@
+condition,n,metric,label,estimate,ci_low,ci_high,ci_method,bootstrap_samples
+full_translation,64,weakness_translation,weakness,0.7682259957993713,0.7225799278247713,0.8083855608800695,percentile_bootstrap,5000
+full_translation,64,toroidal_score,toroidal score,0.35667644524482267,0.316702408293237,0.3962438698348199,percentile_bootstrap,5000
+full_translation,64,fourier_pr,Fourier PR,4.4721370119668515,4.188387410150701,4.772700378479416,percentile_bootstrap,5000
+full_translation,64,id_accuracy,ID accuracy,0.9471171875000004,0.9446640625000002,0.9495118164062498,percentile_bootstrap,5000
+full_translation,64,ood_accuracy,OOD accuracy @max arena,0.9492812500000001,0.94580068359375,0.9524805664062503,percentile_bootstrap,5000
+full_translation,64,final_loss,final loss,0.14016986591741443,0.13506298565480393,0.14559961734048557,percentile_bootstrap,5000
+full_translation,64,coverage,coverage,1.0,1.0,1.0,percentile_bootstrap,5000
+full_translation,64,torus_match,torus match,0.734375,0.6151712627143486,0.8270362092577739,wilson,
+partial_translation,64,weakness_translation,weakness,0.41553791052268413,0.36262556503454185,0.46746100848457456,percentile_bootstrap,5000
+partial_translation,64,toroidal_score,toroidal score,0.007349227853489719,0.005617985272824683,0.009225669250160311,percentile_bootstrap,5000
+partial_translation,64,fourier_pr,Fourier PR,7.5567132475582515,7.094146200332185,8.037723977003301,percentile_bootstrap,5000
+partial_translation,64,id_accuracy,ID accuracy,0.9129218750000002,0.90859765625,0.91689462890625,percentile_bootstrap,5000
+partial_translation,64,ood_accuracy,OOD accuracy @max arena,0.7316835937500001,0.7248201171875,0.7382265625000002,percentile_bootstrap,5000
+partial_translation,64,final_loss,final loss,0.24965177266858518,0.23788903912645765,0.2621052652946673,percentile_bootstrap,5000
+partial_translation,64,coverage,coverage,1.0,1.0,1.0,percentile_bootstrap,5000
+partial_translation,64,torus_match,torus match,0.0,0.0,0.05662405979280534,wilson,
+random_shift,64,weakness_translation,weakness,0.4004532448602931,0.36827433371309165,0.4329589196904061,percentile_bootstrap,5000
+random_shift,64,toroidal_score,toroidal score,8.427358271385755e-06,0.0,2.5282074814157263e-05,percentile_bootstrap,5000
+random_shift,64,fourier_pr,Fourier PR,8.77811047827356,8.199827675843542,9.35416755186355,percentile_bootstrap,5000
+random_shift,64,id_accuracy,ID accuracy,0.9760117187499997,0.9572523437499998,0.98726201171875,percentile_bootstrap,5000
+random_shift,64,ood_accuracy,OOD accuracy @max arena,0.6148085937499999,0.5973310546875001,0.62832451171875,percentile_bootstrap,5000
+random_shift,64,final_loss,final loss,0.05304511450231075,0.0339591269606899,0.08564861892446055,percentile_bootstrap,5000
+random_shift,64,coverage,coverage,1.0,1.0,1.0,percentile_bootstrap,5000
+random_shift,64,torus_match,torus match,0.0,0.0,0.05662405979280534,wilson,
+none,64,weakness_translation,weakness,0.44585614184615,0.4093410891437177,0.4809934749048991,percentile_bootstrap,5000
+none,64,toroidal_score,toroidal score,1.8339379142006217e-05,0.0,5.501813742601865e-05,percentile_bootstrap,5000
+none,64,fourier_pr,Fourier PR,8.324173969608525,7.791020099547625,8.899454683010763,percentile_bootstrap,5000
+none,64,id_accuracy,ID accuracy,0.9838593750000002,0.9792810546874999,0.9870782226562503,percentile_bootstrap,5000
+none,64,ood_accuracy,OOD accuracy @max arena,0.48428125000000005,0.47344882812500005,0.49520351562499987,percentile_bootstrap,5000
+none,64,final_loss,final loss,0.03430985307204537,0.02978363636721042,0.04077241910490556,percentile_bootstrap,5000
+none,64,coverage,coverage,1.0,1.0,1.0,percentile_bootstrap,5000
+none,64,torus_match,torus match,0.0,0.0,0.05662405979280534,wilson,
+wrong_group,64,weakness_translation,weakness,0.04751517204608739,0.03301963812341699,0.06350344665877937,percentile_bootstrap,5000
+wrong_group,64,toroidal_score,toroidal score,0.008997858163957591,0.007418781498573321,0.01068409223640728,percentile_bootstrap,5000
+wrong_group,64,fourier_pr,Fourier PR,14.634250955070623,14.128490808686367,15.179741417608918,percentile_bootstrap,5000
+wrong_group,64,id_accuracy,ID accuracy,0.985515625,0.9828280273437502,0.9878007812499997,percentile_bootstrap,5000
+wrong_group,64,ood_accuracy,OOD accuracy @max arena,0.4887773437500001,0.4787412109375,0.4985782226562501,percentile_bootstrap,5000
+wrong_group,64,final_loss,final loss,0.03473926323931664,0.03041086503508268,0.04001639423950109,percentile_bootstrap,5000
+wrong_group,64,coverage,coverage,1.0,1.0,1.0,percentile_bootstrap,5000
+wrong_group,64,torus_match,torus match,0.0,0.0,0.05662405979280534,wilson,

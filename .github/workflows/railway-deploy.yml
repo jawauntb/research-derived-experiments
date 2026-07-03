@@ -1,0 +1,42 @@
+name: Deploy Railway site
+
+"on":
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: railway-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy reafference atlas
+    runs-on: ubuntu-latest
+    container: ghcr.io/railwayapp/cli:latest
+    env:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      RAILWAY_PROJECT_ID: 2fd18d7f-bf1b-42ae-b756-d29f836cb1d9
+      RAILWAY_ENVIRONMENT_ID: f97509f3-815f-43c3-9013-f3748a787f39
+      RAILWAY_SERVICE_ID: e4143302-3161-4454-bdd1-742487f1ce99
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Confirm Railway token is configured
+        shell: bash
+        run: test -n "$RAILWAY_TOKEN"
+
+      - name: Deploy to Railway
+        shell: bash
+        run: >
+          railway up
+          --project "$RAILWAY_PROJECT_ID"
+          --environment "$RAILWAY_ENVIRONMENT_ID"
+          --service "$RAILWAY_SERVICE_ID"
+          --ci
+          --message "GitHub Actions deploy ${GITHUB_SHA}"

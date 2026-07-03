@@ -107,7 +107,7 @@ def end_to_end_smoke() -> dict:
     corr = dict(
         rho_weakness_topology=spearman(w, topo),
         rho_weakness_ood=spearman(w, ood),
-        rho_weakness_neg_fourier_pr=spearman(w, [-v for v in fpr]),
+        rho_weakness_neg_fourier_pr=spearman(w, [-float(v) for v in fpr]),
         n_nets=len(nets),
         note="pilot-scale; correlations are directional sanity only, not gate evidence",
     )

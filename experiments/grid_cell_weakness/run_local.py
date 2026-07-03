@@ -20,6 +20,7 @@ import json
 import math
 import time
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 
@@ -76,10 +77,19 @@ def main() -> None:
     seeds = [args.base_seed + 100 * k for k in range(args.seeds)]
     out = Path(args.out); out.parent.mkdir(parents=True, exist_ok=True)
 
-    manifest = dict(conditions=conds, seeds=seeds, steps=args.steps, Ng=args.Ng,
-                    Np=args.Np, sigma=args.sigma, T=args.T, batch=args.batch,
-                    activity_reg=args.activity_reg, weight_decay=args.weight_decay,
-                    backend="local-cpu")
+    manifest: dict[str, Any] = dict(
+        conditions=conds,
+        seeds=seeds,
+        steps=args.steps,
+        Ng=args.Ng,
+        Np=args.Np,
+        sigma=args.sigma,
+        T=args.T,
+        batch=args.batch,
+        activity_reg=args.activity_reg,
+        weight_decay=args.weight_decay,
+        backend="local-cpu",
+    )
     cells = []
 
     def flush():
@@ -126,7 +136,7 @@ def main() -> None:
         return (sum(xs) / len(xs)) if xs else float("nan")
 
     ft = [c for c in cells if c["augment"] == "full_translation"]
-    analysis = dict(
+    analysis: dict[str, Any] = dict(
         n_cells=len(cells),
         rho_weakness_topology=r_wt, rho_weakness_ood=r_wo, rho_topology_ood=r_ot,
         rho_weakness_neg_fourier_pr=spearman(w, [-v for v in fpr]),

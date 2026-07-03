@@ -2,9 +2,10 @@
 
 This is the flagship benchmark for the claim:
 
-> Out-of-distribution generalization is better predicted by *symmetry-compatible-
-> hypothesis weakness* than by training loss, MDL/compression, parameter-space
-> flatness/sharpness, parameter norm, or held-out validation accuracy.
+> In shortcut-compatible symmetry tasks, out-of-distribution generalization is
+> better predicted by *symmetry-compatible-hypothesis weakness* than by the
+> tested training-loss, MDL/compression, parameter-space flatness/sharpness,
+> parameter-norm, or held-out-validation proxies.
 
 The benchmark has two arms.
 
@@ -22,6 +23,10 @@ Eleven selectors are scored, including `train_loss`, `validation`, `simplicity`,
 `compression`, `mdl_program`, `flatness_proxy`, `weakness_oracle`,
 `weakness_wrong_group` (control), `weakness_noisy_group`,
 `weakness_data_inferred`, and `random`.
+
+`flatness_proxy` is a symbolic completion-volume proxy: it counts how many
+domain positions remain unconstrained by training. It is not a Hessian or
+weight-space flatness measure.
 
 Run:
 
@@ -88,6 +93,13 @@ python3 -m experiments.symbolic_weakness.summarize_neural_sweep \
 
 Result report (post-augmentation-fix, 256 models):
 [results/neural_sweep_v3_2026_06_09.md](results/neural_sweep_v3_2026_06_09.md).
+
+Larger Modal reports:
+[results/modal_neural_sweep_v1_2026_06_09.md](results/modal_neural_sweep_v1_2026_06_09.md)
+and
+[results/modal_neural_sweep_2026_07_02.md](results/modal_neural_sweep_2026_07_02.md).
+Correlation intervals and augmentation fixed-effect checks:
+[results/neural_correlation_checks_2026_07_02.md](results/neural_correlation_checks_2026_07_02.md).
 
 ## Paper
 
