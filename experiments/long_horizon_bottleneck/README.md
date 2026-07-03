@@ -300,6 +300,32 @@ visible-control, short-horizon, and stochastic moved-bottleneck conditions. The
 prompt-level gate: controls and behavior pass, but the hidden critical-slot
 specificity confidence interval crosses zero.
 
+Prompt-level hidden-localization replication pass:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/long_horizon_bottleneck/modal_prompt_json_hidden_localization_sweep.py \
+    --models Qwen/Qwen2.5-0.5B-Instruct,Qwen/Qwen2.5-1.5B-Instruct,HuggingFaceTB/SmolLM2-1.7B-Instruct \
+    --seeds 4 \
+    --episodes-per-cell 8 \
+    --hidden-metric-episodes 2 \
+    --hidden-positions prompt_final,generated_first,generated_final \
+    --hidden-layers early,mid,late,final \
+    --critical-slots 0,1,2,3 \
+    --budget-usd 25 \
+    --base-seed 20260850 \
+    --out artifacts/long_horizon_bottleneck/prompt_json_hidden_localization_l4.json
+```
+
+The hidden-localization pass preserves the prompt-transfer behavior controls,
+then emits separate hidden rows for each `(model, token position, layer)` site.
+It maps one model per Modal `L4` worker, capped at three containers with a shared
+Hugging Face cache. The terminal outcome is positive only if behavior passes and
+at least one preregistered hidden site passes; it is a controlled strong negative
+only if behavior passes but no preregistered hidden site localizes the moved
+critical slot.
+
 Smoke:
 
 ```bash
