@@ -17,6 +17,10 @@ FORBIDDEN_TRACKED_PREFIXES = (
     "data/",
     "artifacts/",
 )
+ALLOWED_TRACKED_PREFIXES = (
+    # Small aggregate snapshots used to reproduce Paper B tables without raw Modal logs.
+    "data/paper_b/",
+)
 SECRET_PATTERNS = (
     re.compile(r"sk-[A-Za-z0-9_-]{20,}"),
     re.compile(r"sk-ant-[A-Za-z0-9_-]{20,}"),
@@ -39,9 +43,11 @@ def main() -> int:
     failures: list[str] = []
     for path in tracked_files():
         normalized = path.as_posix()
+        is_allowed_prefix = normalized.startswith(ALLOWED_TRACKED_PREFIXES)
         if normalized.startswith(FORBIDDEN_TRACKED_PREFIXES):
-            failures.append(f"forbidden tracked path: {normalized}")
-            continue
+            if not is_allowed_prefix:
+                failures.append(f"forbidden tracked path: {normalized}")
+                continue
         if path.exists() and path.stat().st_size > MAX_TRACKED_FILE_BYTES:
             failures.append(f"tracked file over 10 MB: {normalized}")
             continue
@@ -68,4 +74,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

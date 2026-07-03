@@ -16,7 +16,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import paperkit as pk  # noqa: E402
-from reportlab.platypus import PageBreak  # noqa: E402
+from reportlab.platypus import PageBreak, Paragraph  # noqa: E402
 
 FIG = "artifacts/papers/figs_gridcell"
 OUT = "artifacts/papers/weakness_predicts_topology.pdf"
@@ -33,6 +33,52 @@ OOD_CURVES = {
     "random shift": [0.976, 0.910, 0.778, 0.615],
     "none": [0.984, 0.805, 0.655, 0.484],
     "wrong group": [0.985, 0.808, 0.659, 0.489],
+}
+TORUS_MATCH_WILSON = {
+    "full translation": "[0.61, 0.83]",
+    "partial": "[0.00, 0.06]",
+    "random shift": "[0.00, 0.06]",
+    "none": "[0.00, 0.06]",
+    "wrong group": "[0.00, 0.06]",
+}
+METRIC_CI = {
+    "full translation": {
+        "weakness": "0.768 [0.723, 0.808]",
+        "toroidal": "0.357 [0.317, 0.396]",
+        "fourier": "4.472 [4.188, 4.773]",
+        "ood": "0.949 [0.946, 0.953]",
+    },
+    "partial translation": {
+        "weakness": "0.416 [0.363, 0.467]",
+        "toroidal": "0.007 [0.006, 0.009]",
+        "fourier": "7.557 [7.094, 8.038]",
+        "ood": "0.732 [0.725, 0.738]",
+    },
+    "random shift": {
+        "weakness": "0.400 [0.368, 0.433]",
+        "toroidal": "0.000 [0.000, 0.000]",
+        "fourier": "8.778 [8.200, 9.354]",
+        "ood": "0.615 [0.597, 0.628]",
+    },
+    "none": {
+        "weakness": "0.446 [0.409, 0.481]",
+        "toroidal": "0.000 [0.000, 0.000]",
+        "fourier": "8.324 [7.791, 8.899]",
+        "ood": "0.484 [0.473, 0.495]",
+    },
+    "wrong group": {
+        "weakness": "0.048 [0.033, 0.064]",
+        "toroidal": "0.009 [0.007, 0.011]",
+        "fourier": "14.634 [14.128, 15.180]",
+        "ood": "0.489 [0.479, 0.499]",
+    },
+}
+OOD_CI = {
+    "full translation": ["0.947 [0.944, 0.949]", "0.949 [0.946, 0.952]", "0.948 [0.945, 0.951]", "0.949 [0.946, 0.953]"],
+    "partial translation": ["0.913 [0.909, 0.918]", "0.793 [0.786, 0.800]", "0.706 [0.697, 0.715]", "0.732 [0.725, 0.738]"],
+    "random shift": ["0.976 [0.958, 0.987]", "0.910 [0.890, 0.923]", "0.778 [0.756, 0.793]", "0.615 [0.597, 0.628]"],
+    "none": ["0.984 [0.980, 0.987]", "0.805 [0.794, 0.815]", "0.655 [0.645, 0.665]", "0.484 [0.473, 0.495]"],
+    "wrong group": ["0.985 [0.983, 0.987]", "0.808 [0.797, 0.818]", "0.659 [0.650, 0.669]", "0.489 [0.479, 0.499]"],
 }
 
 
@@ -138,9 +184,9 @@ def build() -> None:
     p.para(
         "The strong version predicted a triangle: high weakness, low Fourier participation ratio "
         "(few aligned frequency modes), clean toroidal topology, and larger-arena OOD "
-        "generalization should be different measurements of one event. This sweep was designed to "
-        "test that strong triangle and let it fail. The published posture should therefore be an "
-        "empirical note, not a broad confirmation paper.")
+        "generalization should be different measurements of one event. The sweep was designed to "
+        "make that strong triangle falsifiable. We therefore present the result as an empirical "
+        "note and negative mediation result, not as a broad confirmation of the weakness program.")
 
     p.h1("2. Pre-Registered Test")
     p.para(
@@ -181,6 +227,12 @@ def build() -> None:
         "R^2 across the registered shifts. The metric is computed on hidden activity, not on the "
         "decoded position or place-cell target.")
     p.para(
+        "<b>Statistics.</b> Unless otherwise stated, rho denotes Spearman rank correlation with "
+        "average-rank tie handling. G2 and G3 report signed rho values, while the registered "
+        "2x baseline comparisons use absolute rho for classical predictors. The loss baseline is "
+        "raw final training loss, not negative loss; its positive rho with OOD reflects the fact "
+        "that the translation-augmented condition is harder to fit but generalizes better.")
+    p.para(
         "<b>Topology.</b> Hidden states are sampled from fresh trajectories, averaged into a "
         "16 x 16 spatial grid, and treated as a point cloud in hidden-state space. Empty spatial "
         "bins, when present, are filled with the global mean so the grid is complete; the Modal "
@@ -189,20 +241,25 @@ def build() -> None:
         "distances), yielding H0, H1, and H2 persistence intervals. A torus should have Betti "
         "signature (1,2,1): one component, two loops, and one void. The continuous toroidal score "
         "combines the second H1 bar above the third-bar noise floor with the strongest H2 void; "
-        "`betti_match_torus` requires two estimated H1 loops and a nontrivial H2 bar.")
+        "`betti_match_torus` requires two estimated H1 loops and a nontrivial H2 bar. Torus match "
+        "is the fraction of networks in a condition satisfying this Boolean criterion.")
 
     p.h1("4. Results")
     p.figure(f_cond, "Figure 2. Condition means. Full translation is the only condition that reliably forms a torus and preserves OOD decoding at arena scale 2.0.", width_in=6.3)
     p.figure(f_ood, "Figure 3. Larger-arena OOD curves. Full translation remains stable as the arena doubles; controls degrade sharply.", width_in=6.0)
     p.table(
-        [["Condition", "n", "weakness", "toroidal", "torus match", "OOD @2.0"],
-         ["full translation", "64", "0.768", "0.357", "0.734", "0.949"],
-         ["partial translation", "64", "0.416", "0.007", "0.000", "0.732"],
-         ["random shift", "64", "0.400", "0.000", "0.000", "0.615"],
-         ["none", "64", "0.446", "0.000", "0.000", "0.484"],
-         ["wrong group", "64", "0.048", "0.009", "0.000", "0.489"]],
-        caption="Table 2. Condition means. Full translation is the positive intervention; random shift and wrong group are controls. Weakness is not monotone with toroidal score outside the full-translation condition.",
-        col_widths=[130, 42, 70, 70, 80, 70])
+        [["Condition", "n", "weakness", "toroidal", "torus match", "Wilson 95%", "OOD @2.0"],
+         ["full translation", "64", "0.768", "0.357", "0.734", TORUS_MATCH_WILSON["full translation"], "0.949"],
+         ["partial translation", "64", "0.416", "0.007", "0.000", TORUS_MATCH_WILSON["partial"], "0.732"],
+         ["random shift", "64", "0.400", "0.000", "0.000", TORUS_MATCH_WILSON["random shift"], "0.615"],
+         ["none", "64", "0.446", "0.000", "0.000", TORUS_MATCH_WILSON["none"], "0.484"],
+         ["wrong group", "64", "0.048", "0.009", "0.000", TORUS_MATCH_WILSON["wrong group"], "0.489"]],
+        caption="Table 2. Condition means. Wilson intervals apply only to the torus-match fraction. Full translation is the positive intervention; random shift and wrong group are controls. Weakness is not monotone with toroidal score outside the full-translation condition.",
+        col_widths=[115, 34, 62, 62, 70, 76, 62])
+    p.para(
+        "The recovered raw-cell export also supports seed-level uncertainty for the continuous "
+        "metrics. Appendix B reports percentile bootstrap intervals for weakness, toroidal score, "
+        "Fourier participation ratio, and each OOD arena.")
     p.para(
         "The positive result is clean at the condition level. Full translation augmentation is the "
         "only condition that reliably produces a torus, and it preserves decoding accuracy as the "
@@ -213,7 +270,7 @@ def build() -> None:
         "The negative result is equally important. Across individual networks, weakness does not "
         "explain toroidal score strongly enough to pass the registered gate, does not outperform "
         "final loss on OOD by the required margin, and leaves the weakness-OOD association intact "
-        "after controlling for topology. These are not wording problems; they falsify the strongest "
+        "after controlling for topology. These are not wording problems; they reject the strongest "
         "version of the theory tested here.")
 
     p.h1("5. Interpretation")
@@ -253,6 +310,116 @@ def build() -> None:
         "new confirmatory study on public grid-cell recordings, not an interpretation of the RNN "
         "result itself.")
 
+    p.flow += [PageBreak()]
+    p.h1("Appendix A. Implementation Details")
+    p.table(
+        [["Component", "Vanilla RNN cell", "GRU cell"],
+         ["recurrent update", "torch RNNCell, ReLU", "torch GRUCell + ReLU hidden"],
+         ["hidden size", "128", "128"],
+         ["input at t", "2-D velocity", "2-D velocity"],
+         ["initial state", "linear encoder of initial place code", "same"],
+         ["output", "100 place-cell logits", "same"],
+         ["loss", "KL divergence to target place-cell code + 1e-3 activity penalty", "same"],
+         ["optimizer", "Adam, lr 1e-3, weight decay 1e-4", "same"],
+         ["training", "4000 steps, batch 200, trajectory length 20", "same"]],
+        caption="Table A1. Architecture and training hyperparameters used in every Modal cell.",
+        col_widths=[95, 205, 205])
+    p.para(
+        "<b>Path-integration task.</b> Each training trajectory starts with x0 sampled uniformly "
+        "from the interior [0.1B, 0.9B]^2 of a square box of side B. Heading is initialized "
+        "uniformly and perturbed each step by Normal(0, 0.4); velocity is 0.06(cos theta, "
+        "sin theta). Positions update as x(t+1) = x(t) + v(t) with reflecting boundaries. Training "
+        "uses B=1.0. Place targets are softmax-normalized Gaussian activations over a 10 x 10 "
+        "unit-square place-cell grid with sigma=0.10.")
+    a2_rows = [
+        ("none", "no augmentation"),
+        (
+            "full translation",
+            "sample offset u~Uniform([0,1]^2); add u to positions and initial position "
+            "modulo 1; velocities unchanged",
+        ),
+        (
+            "partial translation",
+            "sample offset u~Uniform([0,0.3]^2); add u modulo 1; velocities unchanged",
+        ),
+        (
+            "random shift",
+            "sample offset epsilon~Normal(0,0.05); add to positions and initial position, "
+            "clipped to the current box",
+        ),
+        ("wrong group", "swap the two velocity coordinates while leaving target positions unchanged"),
+        (
+            "null predictor",
+            "separate wrong-group metric: replace wrapped translations by a fixed random bin "
+            "permutation in the weakness calculation",
+        ),
+    ]
+    p.table(
+        [["Condition", "Exact intervention in the worker"]]
+        + [[Paragraph(condition, p.s_small), Paragraph(intervention, p.s_small)] for condition, intervention in a2_rows],
+        caption="Table A2. Training conditions and the separate wrong-group null predictor.",
+        col_widths=[115, 390])
+    p.para(
+        "<b>OOD decoding.</b> Evaluation generates fresh trajectories with B in {1.0, 1.25, "
+        "1.5, 2.0}. The model's place-cell argmax is counted correct when its center lies within "
+        "one unit-square place-cell spacing of the target argmax. The primary OOD score is the "
+        "largest scale, B=2.0. The same condition-specific preprocessing is used at decode time; "
+        "therefore the result should be read as larger-trajectory/arena-scale OOD in this harness, "
+        "not as an unbounded coordinate extrapolation claim.")
+    p.para(
+        "<b>Fourier participation ratio.</b> Hidden activity is averaged into 16 x 16 spatial "
+        "rate maps per unit. After subtracting each map's mean and dropping the DC Fourier bin, "
+        "power is normalized over spatial frequencies and PR = 1 / sum_k p_k^2 is averaged over "
+        "units. Lower PR means fewer effective Fourier modes; G5 correlates weakness with -PR.")
+    p.para(
+        "<b>Topology and uncertainty status.</b> The committed result report stores condition "
+        "means and gate correlations; the recovered raw per-cell JSON has now been exported to "
+        "committed CSVs and supports seed-level bootstrap intervals for scalar metrics. It does "
+        "not store the hidden-state populations needed to reconstruct topology robustness over "
+        "bin counts, Vietoris-Rips edge caps, empty-bin handling, or sampling density. The Modal "
+        "runner now supports that robustness export for reruns, but the present PDF does not "
+        "treat robustness as completed evidence.")
+
+    p.flow += [PageBreak()]
+    p.h1("Appendix B. Conference Evidence Exports")
+    p.para(
+        "The raw 320-cell Modal JSON was recovered locally and exported with "
+        "`scripts/analyze_gridcell_conference_evidence.py` into per-cell and aggregate CSVs under "
+        "`experiments/grid_cell_weakness/results`. Continuous intervals are percentile bootstrap "
+        "95% intervals from 5000 resamples within condition; torus-match intervals are Wilson "
+        "95% intervals for the Boolean `betti_match_torus` fraction.")
+    p.table(
+        [["Condition", "weakness", "toroidal", "Fourier PR", "OOD @2.0"],
+         ["full translation", METRIC_CI["full translation"]["weakness"], METRIC_CI["full translation"]["toroidal"], METRIC_CI["full translation"]["fourier"], METRIC_CI["full translation"]["ood"]],
+         ["partial translation", METRIC_CI["partial translation"]["weakness"], METRIC_CI["partial translation"]["toroidal"], METRIC_CI["partial translation"]["fourier"], METRIC_CI["partial translation"]["ood"]],
+         ["random shift", METRIC_CI["random shift"]["weakness"], METRIC_CI["random shift"]["toroidal"], METRIC_CI["random shift"]["fourier"], METRIC_CI["random shift"]["ood"]],
+         ["none", METRIC_CI["none"]["weakness"], METRIC_CI["none"]["toroidal"], METRIC_CI["none"]["fourier"], METRIC_CI["none"]["ood"]],
+         ["wrong group", METRIC_CI["wrong group"]["weakness"], METRIC_CI["wrong group"]["toroidal"], METRIC_CI["wrong group"]["fourier"], METRIC_CI["wrong group"]["ood"]]],
+        caption="Table B1. Scalar metric means with 95% intervals. Fourier PR is included because the spectral leg is the surviving weakness-aligned measurement.",
+        col_widths=[105, 100, 100, 105, 100])
+    p.table(
+        [["Condition", "1.0", "1.25", "1.5", "2.0"],
+         ["full translation", *OOD_CI["full translation"]],
+         ["partial translation", *OOD_CI["partial translation"]],
+         ["random shift", *OOD_CI["random shift"]],
+         ["none", *OOD_CI["none"]],
+         ["wrong group", *OOD_CI["wrong group"]]],
+        caption="Table B2. OOD decoding curves with bootstrap 95% intervals.",
+        col_widths=[105, 100, 100, 100, 100])
+    p.para(
+        "<b>Within-toroidal subset.</b> Among the 47 already-toroidal full-translation models, "
+        "weakness does not explain additional OOD variation after torus formation: "
+        "rho(weakness, OOD) = -0.198 with bootstrap 95% CI [-0.518, 0.136]. Within this subset, "
+        "weakness also anticorrelates with continuous toroidal score (rho = -0.335, CI "
+        "[-0.577, -0.063]) and with -Fourier PR (rho = -0.356, CI [-0.585, -0.071]). No control "
+        "condition has enough torus-matching models for the same analysis.")
+    p.para(
+        "<b>Topology robustness.</b> The recovered scalar raw JSON cannot reconstruct robustness "
+        "over bin counts, edge caps, empty-bin handling, or sampling density because it does not "
+        "store hidden-state populations. The runner now emits `topology_robustness` rows when "
+        "rerun with robustness enabled; until then, robustness remains the next required "
+        "conference-review evidence item.")
+
     p.references([
         "Gardner, R. J. et al. Toroidal topology of population activity in grid cells. Nature 602, 123-128 (2022).",
         "McNaughton, B. L., Battaglia, F. P., Jensen, O., Moser, E. I., Moser, M.-B. Path integration and the neural basis of the cognitive map. Nature Reviews Neuroscience 7, 663-678 (2006).",
@@ -265,6 +432,9 @@ def build() -> None:
         "Cohen, T., Welling, M. Group Equivariant Convolutional Networks. ICML (2016).",
         "Gruver, N., Finzi, M., Goldblum, M., Wilson, A. G. The Lie Derivative for Measuring Learned Equivariance. ICLR (2023).",
         "Xu, M., Song, F., Si, B., Qin, S. The Principle of Isomorphism: A Theory of Population Activity in Grid Cells and Beyond. arXiv:2510.02853 (2025).",
+        "Zomorodian, A., Carlsson, G. Computing Persistent Homology. Discrete & Computational Geometry 33, 249-274 (2005).",
+        "Maria, C., Boissonnat, J.-D., Glisse, M., Yvinec, M. The Gudhi Library: Simplicial Complexes and Persistent Homology. ICMS (2014).",
+        "Imai, K., Keele, L., Tingley, D. A General Approach to Causal Mediation Analysis. Psychological Methods 15(4), 309-334 (2010).",
         "Bennett, M. T. How to Create Conscious Machines. arXiv:2403.00644 (2024).",
     ])
     out = p.build()

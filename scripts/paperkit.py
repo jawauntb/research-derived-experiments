@@ -211,6 +211,7 @@ def chart_scatter_gradient(figpath, x, y, labels=None, *, title="", xlabel="", y
             ax.annotate(li, (xi, yi), fontsize=7, xytext=(4, 4), textcoords="offset points",
                         color="#333")
     ax.set_title(title); ax.set_xlabel(xlabel); ax.set_ylabel(ylabel)
+    ax.margins(x=0.12, y=0.18)
     return _save(fig, Path(figpath))
 
 

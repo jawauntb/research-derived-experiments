@@ -6,6 +6,8 @@ This repository tracks a research program around a recurring pattern:
 
 > **Picking this up on a Modal machine?** Start with [docs/next_agent_modal_handoff.md](docs/next_agent_modal_handoff.md) — it covers all three experiments, the rate-distortion "Newton" test to run next, and the parallel Modal commands.
 
+> **Public atlas deploys?** See [docs/railway-autodeploy.md](docs/railway-autodeploy.md) for the Railway production service, GitHub Actions fallback, and autodeploy diagnostics.
+
 The first synthesis is in [notes/geometric_convergence_research_synthesis.md](notes/geometric_convergence_research_synthesis.md). The working question:
 
 **Why do independently developed systems of thought and computation keep converging on geometric descriptions of meaning, agency, and intelligence, and can we predict when that geometry is merely a passive representation versus when it becomes an active, self-maintaining attractor regime?**

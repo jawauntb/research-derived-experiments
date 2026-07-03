@@ -18,6 +18,14 @@ Classical predictors remain much weaker: parameter L2 reaches r = +0.2533, held-
 validation r = +0.0924, sharpness r = +0.0848, and final train loss r = −0.0249.
 Wrong-group weakness is correctly negative/null (Pearson r = **−0.1040**).
 
+Fisher-z intervals and augmentation fixed-effect checks are recorded in
+`experiments/symbolic_weakness/results/neural_correlation_checks_2026_07_02.md`.
+On this 4096-model run, true-group weakness has 95% CI **(+0.7976, +0.8189)**.
+After residualizing both OOD accuracy and true-group weakness by augmentation
+condition, the residual correlation remains **+0.4883** (95% CI
+**+0.4647 to +0.5113**). The headline correlation is partly augmentation-mediated, but a
+substantial learned-function signal remains inside augmentation strata.
+
 ## Predictors of OOD accuracy
 
 | Predictor | Mean | Stdev | Pearson w/ OOD | Spearman w/ OOD |
