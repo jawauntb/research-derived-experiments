@@ -146,6 +146,26 @@ closed-loop final accuracy, per-field action accuracy, composed schema validity,
 parsed slot/value accuracy for executable calls, memory specificity, tool-value
 specificity, and the visible-control no-op null.
 
+Stochastic tool-failure pass:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/long_horizon_bottleneck/modal_stochastic_tool_failure_sweep.py \
+    --seeds 4 --train-steps 900 --architectures transformer \
+    --conditions stochastic_failure_bottleneck,stochastic_visible_control \
+    --critical-slots 0,1,2,3 \
+    --failure-probability 0.5 \
+    --budget-usd 25 \
+    --out artifacts/long_horizon_bottleneck/stochastic_tool_failure_l4.json
+```
+
+The stochastic pass keeps the multifield schema but samples first-call failures
+per episode. On success, the agent should emit a schema-valid repair no-op; on
+failure, it must repair by re-emitting the executable call for the moved critical
+slot. Gates split those cases so a model cannot pass by always repairing or
+always no-oping.
+
 Smoke:
 
 ```bash
@@ -185,5 +205,7 @@ multifield tool-schema passes move the model-visible interface toward
 naturalistic tool schemas (parsed calls, schema validity, malformed actions,
 argument fields, and repair prompts) but remain fully synthetic: fields are
 fixed discrete classifiers, not free-form JSON or natural-language tool use, and
-the tool semantics are toy. Passing gates justifies the next regime: stochastic
-tool failures, larger schemas, and natural-language argument surfaces.
+the tool semantics are toy. The stochastic failure pass adds per-episode API
+success/failure variation, but the failure process is still synthetic and
+environment-sampled. Passing gates justifies the next regime: larger schemas and
+natural-language argument surfaces.

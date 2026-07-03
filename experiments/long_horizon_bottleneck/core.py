@@ -848,6 +848,155 @@ def summarize_multifield_gate_group(
     return item
 
 
+def summarize_stochastic_rows(rows: list[dict[str, Any]], *, n_boot: int = 2000) -> dict[str, Any]:
+    """Summarize stochastic tool-failure rows with conditional repair gates."""
+
+    grouped: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    by_slot: dict[tuple[str, str, int], list[dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        key = (str(row["condition"]), str(row["architecture"]))
+        grouped[key].append(row)
+        by_slot[(key[0], key[1], int(row["critical_slot"]))].append(row)
+
+    out: dict[str, Any] = {"n_rows": len(rows), "groups": {}, "slot_groups": {}}
+    for (condition, arch), group_rows in sorted(grouped.items()):
+        out["groups"][f"{condition}/{arch}"] = summarize_stochastic_gate_group(
+            group_rows,
+            condition=condition,
+            n_boot=n_boot,
+        )
+
+    for (condition, arch, slot), group_rows in sorted(by_slot.items()):
+        out["slot_groups"][f"{condition}/{arch}/slot_{slot}"] = summarize_stochastic_gate_group(
+            group_rows,
+            condition=condition,
+            n_boot=n_boot,
+        )
+
+    condition_rows = [r for r in rows if r["condition"] == "stochastic_failure_bottleneck"]
+    if condition_rows:
+        out["pooled_stochastic_failure_bottleneck"] = summarize_stochastic_gate_group(
+            condition_rows,
+            condition="stochastic_failure_bottleneck",
+            n_boot=n_boot,
+        )
+    return out
+
+
+def summarize_stochastic_gate_group(
+    rows: list[dict[str, Any]],
+    *,
+    condition: str,
+    n_boot: int = 2000,
+) -> dict[str, Any]:
+    """Summarize one stochastic tool-failure group."""
+
+    final_key = "closed_loop_final_accuracy" if all("closed_loop_final_accuracy" in r for r in rows) else "final_accuracy"
+    final_acc = bootstrap_mean_ci([r[final_key] for r in rows], n_boot=n_boot, seed=20260770)
+    teacher_forced_acc = None
+    if all("teacher_forced_final_accuracy" in r for r in rows):
+        teacher_forced_acc = bootstrap_mean_ci(
+            [r["teacher_forced_final_accuracy"] for r in rows],
+            n_boot=n_boot,
+            seed=20260771,
+        )
+    first_field_acc = bootstrap_mean_ci([r["first_field_accuracy"] for r in rows], n_boot=n_boot, seed=20260772)
+    first_schema = bootstrap_mean_ci([r["first_schema_validity"] for r in rows], n_boot=n_boot, seed=20260773)
+    first_slot_acc = bootstrap_mean_ci([r["first_parsed_slot_accuracy"] for r in rows], n_boot=n_boot, seed=20260774)
+    first_value_acc = bootstrap_mean_ci([r["first_parsed_value_accuracy"] for r in rows], n_boot=n_boot, seed=20260775)
+    repair_field_acc = bootstrap_mean_ci([r["repair_field_accuracy"] for r in rows], n_boot=n_boot, seed=20260776)
+    repair_schema = bootstrap_mean_ci([r["repair_schema_validity"] for r in rows], n_boot=n_boot, seed=20260777)
+    repair_failed_field_acc = bootstrap_mean_ci(
+        [r["repair_failed_field_accuracy"] for r in rows],
+        n_boot=n_boot,
+        seed=20260778,
+    )
+    repair_failed_schema = bootstrap_mean_ci(
+        [r["repair_failed_schema_validity"] for r in rows],
+        n_boot=n_boot,
+        seed=20260779,
+    )
+    repair_failed_slot_acc = bootstrap_mean_ci(
+        [r["repair_failed_parsed_slot_accuracy"] for r in rows],
+        n_boot=n_boot,
+        seed=20260780,
+    )
+    repair_failed_value_acc = bootstrap_mean_ci(
+        [r["repair_failed_parsed_value_accuracy"] for r in rows],
+        n_boot=n_boot,
+        seed=20260781,
+    )
+    repair_success_noop_acc = bootstrap_mean_ci(
+        [r["repair_success_noop_field_accuracy"] for r in rows],
+        n_boot=n_boot,
+        seed=20260782,
+    )
+    repair_success_schema = bootstrap_mean_ci(
+        [r["repair_success_schema_validity"] for r in rows],
+        n_boot=n_boot,
+        seed=20260783,
+    )
+    failure_rate = bootstrap_mean_ci([r["sampled_failure_rate"] for r in rows], n_boot=n_boot, seed=20260784)
+    memory_spec = bootstrap_mean_ci([r["memory_specificity_z"] for r in rows], n_boot=n_boot, seed=20260785)
+    memory_rank = bootstrap_mean_ci([r["memory_rank_percentile"] for r in rows], n_boot=n_boot, seed=20260786)
+    tool_value_spec = bootstrap_mean_ci([r["tool_value_specificity_z"] for r in rows], n_boot=n_boot, seed=20260787)
+
+    if condition == "stochastic_visible_control":
+        gate = {
+            f"{final_key}_ge_0_90": final_acc["mean"] >= 0.90,
+            "first_noop_field_acc_ge_0_90": first_field_acc["mean"] >= 0.90,
+            "repair_noop_field_acc_ge_0_90": repair_field_acc["mean"] >= 0.90,
+            "first_schema_valid_ge_0_90": first_schema["mean"] >= 0.90,
+            "repair_schema_valid_ge_0_90": repair_schema["mean"] >= 0.90,
+            "memory_specificity_not_strong_positive": memory_spec["mean"] < 0.5,
+        }
+    elif condition == "stochastic_failure_bottleneck":
+        gate = {
+            f"{final_key}_ge_0_90": final_acc["mean"] >= 0.90,
+            "first_field_acc_ge_0_90": first_field_acc["mean"] >= 0.90,
+            "first_schema_valid_ge_0_90": first_schema["mean"] >= 0.90,
+            "first_parsed_slot_acc_ge_0_90": first_slot_acc["mean"] >= 0.90,
+            "first_parsed_value_acc_ge_0_90": first_value_acc["mean"] >= 0.90,
+            "repair_failed_field_acc_ge_0_90": repair_failed_field_acc["mean"] >= 0.90,
+            "repair_failed_schema_valid_ge_0_90": repair_failed_schema["mean"] >= 0.90,
+            "repair_failed_parsed_slot_acc_ge_0_90": repair_failed_slot_acc["mean"] >= 0.90,
+            "repair_failed_parsed_value_acc_ge_0_90": repair_failed_value_acc["mean"] >= 0.90,
+            "repair_success_noop_field_acc_ge_0_90": repair_success_noop_acc["mean"] >= 0.90,
+            "repair_success_schema_valid_ge_0_90": repair_success_schema["mean"] >= 0.90,
+            "memory_specificity_positive": memory_spec["ci95"][0] > 0.0,
+            "tool_value_specificity_positive": tool_value_spec["ci95"][0] > 0.0,
+            "rank_above_chance": memory_rank["mean"] > 0.5,
+        }
+    else:
+        raise ValueError(f"Unknown stochastic condition {condition!r}")
+    gate["pass"] = all(gate.values())
+
+    item = {
+        "final_metric": final_key,
+        "final_accuracy": final_acc,
+        "first_field_accuracy": first_field_acc,
+        "first_schema_validity": first_schema,
+        "first_parsed_slot_accuracy": first_slot_acc,
+        "first_parsed_value_accuracy": first_value_acc,
+        "repair_field_accuracy": repair_field_acc,
+        "repair_schema_validity": repair_schema,
+        "repair_failed_field_accuracy": repair_failed_field_acc,
+        "repair_failed_schema_validity": repair_failed_schema,
+        "repair_failed_parsed_slot_accuracy": repair_failed_slot_acc,
+        "repair_failed_parsed_value_accuracy": repair_failed_value_acc,
+        "repair_success_noop_field_accuracy": repair_success_noop_acc,
+        "repair_success_schema_validity": repair_success_schema,
+        "sampled_failure_rate": failure_rate,
+        "memory_specificity_z": memory_spec,
+        "memory_rank_percentile": memory_rank,
+        "tool_value_specificity_z": tool_value_spec,
+        "gate": gate,
+    }
+    if teacher_forced_acc is not None:
+        item["teacher_forced_final_accuracy"] = teacher_forced_acc
+    return item
+
+
 def summarize_recovery_rows(rows: list[dict[str, Any]], *, n_boot: int = 2000) -> dict[str, Any]:
     """Summarize tool-recovery rows with direct, repair, and visible-control gates."""
 
