@@ -391,3 +391,111 @@ def summarize_tool_gate_group(
     if teacher_forced_acc is not None:
         item["teacher_forced_final_accuracy"] = teacher_forced_acc
     return item
+
+
+def summarize_recovery_rows(rows: list[dict[str, Any]], *, n_boot: int = 2000) -> dict[str, Any]:
+    """Summarize tool-recovery rows with direct, repair, and visible-control gates."""
+
+    grouped: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    by_slot: dict[tuple[str, str, int], list[dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        key = (str(row["condition"]), str(row["architecture"]))
+        grouped[key].append(row)
+        by_slot[(key[0], key[1], int(row["critical_slot"]))].append(row)
+
+    out: dict[str, Any] = {"n_rows": len(rows), "groups": {}, "slot_groups": {}}
+    for (condition, arch), group_rows in sorted(grouped.items()):
+        out["groups"][f"{condition}/{arch}"] = summarize_recovery_gate_group(
+            group_rows,
+            condition=condition,
+            n_boot=n_boot,
+        )
+
+    for (condition, arch, slot), group_rows in sorted(by_slot.items()):
+        out["slot_groups"][f"{condition}/{arch}/slot_{slot}"] = summarize_recovery_gate_group(
+            group_rows,
+            condition=condition,
+            n_boot=n_boot,
+        )
+
+    for condition in ("direct_bottleneck", "repair_bottleneck"):
+        condition_rows = [r for r in rows if r["condition"] == condition]
+        if condition_rows:
+            out[f"pooled_{condition}"] = summarize_recovery_gate_group(
+                condition_rows,
+                condition=condition,
+                n_boot=n_boot,
+            )
+
+    return out
+
+
+def summarize_recovery_gate_group(
+    rows: list[dict[str, Any]],
+    *,
+    condition: str,
+    n_boot: int = 2000,
+) -> dict[str, Any]:
+    final_key = "closed_loop_final_accuracy" if all("closed_loop_final_accuracy" in r for r in rows) else "final_accuracy"
+    final_acc = bootstrap_mean_ci([r[final_key] for r in rows], n_boot=n_boot, seed=20260720)
+    teacher_forced_acc = None
+    if all("teacher_forced_final_accuracy" in r for r in rows):
+        teacher_forced_acc = bootstrap_mean_ci(
+            [r["teacher_forced_final_accuracy"] for r in rows],
+            n_boot=n_boot,
+            seed=20260721,
+        )
+    first_slot_acc = bootstrap_mean_ci([r["first_tool_slot_accuracy"] for r in rows], n_boot=n_boot, seed=20260722)
+    repair_slot_acc = bootstrap_mean_ci([r["repair_tool_slot_accuracy"] for r in rows], n_boot=n_boot, seed=20260723)
+    memory_spec = bootstrap_mean_ci([r["memory_specificity_z"] for r in rows], n_boot=n_boot, seed=20260724)
+    memory_rank = bootstrap_mean_ci([r["memory_rank_percentile"] for r in rows], n_boot=n_boot, seed=20260725)
+    tool_value_spec = bootstrap_mean_ci([r["tool_value_specificity_z"] for r in rows], n_boot=n_boot, seed=20260726)
+
+    first_value_acc = bootstrap_mean_ci([r["first_tool_value_accuracy"] for r in rows], n_boot=n_boot, seed=20260727)
+    repair_value_acc = bootstrap_mean_ci([r["repair_tool_value_accuracy"] for r in rows], n_boot=n_boot, seed=20260728)
+
+    if condition == "visible_control":
+        gate = {
+            f"{final_key}_ge_0_90": final_acc["mean"] >= 0.90,
+            "first_tool_slot_null_acc_ge_0_90": first_slot_acc["mean"] >= 0.90,
+            "repair_tool_slot_null_acc_ge_0_90": repair_slot_acc["mean"] >= 0.90,
+            "memory_specificity_not_strong_positive": memory_spec["mean"] < 0.5,
+        }
+    elif condition == "repair_bottleneck":
+        gate = {
+            f"{final_key}_ge_0_90": final_acc["mean"] >= 0.90,
+            "first_tool_slot_acc_ge_0_90": first_slot_acc["mean"] >= 0.90,
+            "repair_tool_slot_acc_ge_0_90": repair_slot_acc["mean"] >= 0.90,
+            "repair_tool_value_acc_ge_0_90": repair_value_acc["mean"] >= 0.90,
+            "memory_specificity_positive": memory_spec["ci95"][0] > 0.0,
+            "tool_value_specificity_positive": tool_value_spec["ci95"][0] > 0.0,
+            "rank_above_chance": memory_rank["mean"] > 0.5,
+        }
+    elif condition == "direct_bottleneck":
+        gate = {
+            f"{final_key}_ge_0_90": final_acc["mean"] >= 0.90,
+            "first_tool_slot_acc_ge_0_90": first_slot_acc["mean"] >= 0.90,
+            "first_tool_value_acc_ge_0_90": first_value_acc["mean"] >= 0.90,
+            "memory_specificity_positive": memory_spec["ci95"][0] > 0.0,
+            "tool_value_specificity_positive": tool_value_spec["ci95"][0] > 0.0,
+            "rank_above_chance": memory_rank["mean"] > 0.5,
+        }
+    else:
+        raise ValueError(f"Unknown recovery condition {condition!r}")
+    gate["pass"] = all(gate.values())
+
+    item = {
+        "final_metric": final_key,
+        "final_accuracy": final_acc,
+        "first_tool_slot_accuracy": first_slot_acc,
+        "first_tool_value_accuracy": first_value_acc,
+        "repair_tool_slot_accuracy": repair_slot_acc,
+        "repair_tool_value_accuracy": repair_value_acc,
+        "memory_specificity_z": memory_spec,
+        "memory_rank_percentile": memory_rank,
+        "tool_value_specificity_z": tool_value_spec,
+        "gate": gate,
+    }
+    if teacher_forced_acc is not None:
+        item["teacher_forced_final_accuracy"] = teacher_forced_acc
+    return item
