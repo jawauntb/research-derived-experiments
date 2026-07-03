@@ -383,6 +383,29 @@ all three model families pass at `value_prefix_final` late/final sites, while
 `prompt_final` sites do not pass. See
 `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzz_prompt_json_causal_patch_l4_4seed_2026_07_03.md`.
 
+Prompt-level prompt-family causal patch robustness pass:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/long_horizon_bottleneck/modal_prompt_json_causal_patch_sweep.py \
+    --models Qwen/Qwen2.5-0.5B-Instruct,Qwen/Qwen2.5-1.5B-Instruct,HuggingFaceTB/SmolLM2-1.7B-Instruct \
+    --prompt-families standard,compact,ledger \
+    --seeds 4 \
+    --episodes-per-cell 8 \
+    --critical-slots 0,1,2,3 \
+    --patch-positions prompt_final,value_prefix_final \
+    --patch-layers late,final \
+    --budget-usd 25 \
+    --base-seed 20261000 \
+    --out artifacts/long_horizon_bottleneck/prompt_json_prompt_family_causal_patch_l4.json
+```
+
+The prompt-family pass tests the causal patch across standard, compact, and
+audit-checklist prompt framings. The 2026-07-03 confirmatory run is positive:
+all 9 `(prompt family, model)` pairs are causally ready and patch-pass. See
+`experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzzz_prompt_json_prompt_family_causal_patch_l4_4seed_2026_07_03.md`.
+
 Smoke:
 
 ```bash

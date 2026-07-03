@@ -1529,6 +1529,7 @@ PROMPT_JSON_LOCALIZATION_POSITIONS = (
 )
 PROMPT_JSON_LOCALIZATION_LAYERS = ("early", "mid", "late", "final")
 PROMPT_JSON_CAUSAL_PATCH_POSITIONS = ("prompt_final", "value_prefix_final")
+PROMPT_JSON_PROMPT_FAMILIES = ("standard", "compact", "ledger")
 
 
 def summarize_prompt_transfer_rows(rows: list[dict[str, Any]], *, n_boot: int = 2000) -> dict[str, Any]:
@@ -1736,6 +1737,67 @@ def summarize_prompt_causal_patch_rows(rows: list[dict[str, Any]], *, n_boot: in
     out["decision"] = {
         "causal_ready": causal_ready,
         "patch_pass": patch_pass,
+        "positive": positive,
+        "strong_negative": strong_negative,
+    }
+    if positive:
+        out["outcome"] = "positive"
+    elif strong_negative:
+        out["outcome"] = "strong_negative"
+    else:
+        out["outcome"] = "inconclusive"
+    return out
+
+
+def summarize_prompt_family_causal_patch_rows(rows: list[dict[str, Any]], *, n_boot: int = 2000) -> dict[str, Any]:
+    """Classify causal-patch robustness rows across prompt families."""
+
+    grouped: dict[tuple[str, str, str, str], list[dict[str, Any]]] = defaultdict(list)
+    by_family_model: dict[tuple[str, str], list[str]] = defaultdict(list)
+    for row in rows:
+        family = str(row.get("prompt_family", "standard"))
+        model = str(row.get("model", row.get("architecture", "unknown_model")))
+        position = str(row["patch_position"])
+        layer = str(row["patch_layer"])
+        key = (family, model, position, layer)
+        grouped[key].append(row)
+
+    out: dict[str, Any] = {
+        "n_rows": len(rows),
+        "groups": {},
+        "family_model": {},
+    }
+    for (family, model, position, layer), group_rows in sorted(grouped.items()):
+        key = f"{family}/{model}/{position}/{layer}"
+        out["groups"][key] = summarize_prompt_causal_patch_gate_group(
+            group_rows,
+            n_boot=n_boot,
+        )
+        by_family_model[(family, model)].append(key)
+
+    for (family, model), group_keys in sorted(by_family_model.items()):
+        groups = [out["groups"][key] for key in group_keys]
+        causal_ready = any(
+            group["gate"]["clean_prefers_donor"] and group["gate"]["corrupted_prefers_corrupted"]
+            for group in groups
+        )
+        patch_pass = any(group["gate"]["pass"] for group in groups)
+        out["family_model"][f"{family}/{model}"] = {
+            "prompt_family": family,
+            "model": model,
+            "causal_ready": causal_ready,
+            "patch_pass": patch_pass,
+            "passing_groups": [key for key in group_keys if out["groups"][key]["gate"]["pass"]],
+        }
+
+    family_model_items = list(out["family_model"].values())
+    all_ready = bool(family_model_items) and all(item["causal_ready"] for item in family_model_items)
+    all_pass = bool(family_model_items) and all(item["patch_pass"] for item in family_model_items)
+    positive = all_ready and all_pass
+    strong_negative = all_ready and not all_pass
+    out["decision"] = {
+        "all_family_models_causal_ready": all_ready,
+        "all_family_models_patch_pass": all_pass,
         "positive": positive,
         "strong_negative": strong_negative,
     }

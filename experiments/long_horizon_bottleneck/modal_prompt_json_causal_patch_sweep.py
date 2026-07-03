@@ -25,6 +25,18 @@ Recommended confirmatory run:
         --patch-positions prompt_final,value_prefix_final \\
         --patch-layers late,final --budget-usd 25 --base-seed 20260950 \\
         --out artifacts/long_horizon_bottleneck/prompt_json_causal_patch_l4.json
+
+Recommended prompt-family robustness run:
+
+    doppler --scope /Users/jawaun/superoptimizers run -- \\
+        uvx --python 3.12 --from modal modal run \\
+        experiments/long_horizon_bottleneck/modal_prompt_json_causal_patch_sweep.py \\
+        --models Qwen/Qwen2.5-0.5B-Instruct,Qwen/Qwen2.5-1.5B-Instruct,HuggingFaceTB/SmolLM2-1.7B-Instruct \\
+        --prompt-families standard,compact,ledger \\
+        --seeds 4 --episodes-per-cell 8 --critical-slots 0,1,2,3 \\
+        --patch-positions prompt_final,value_prefix_final \\
+        --patch-layers late,final --budget-usd 25 --base-seed 20261000 \\
+        --out artifacts/long_horizon_bottleneck/prompt_json_prompt_family_causal_patch_l4.json
 """
 
 from __future__ import annotations
@@ -39,6 +51,7 @@ from typing import Any
 
 from experiments.long_horizon_bottleneck.prompt_json_tasks import (
     bottleneck_user_prompt,
+    context_lines,
     episode_bits,
     messages,
     slot_phrase,
@@ -126,6 +139,45 @@ def _chat_text(tokenizer: Any, message_list: list[dict[str, str]], *, add_genera
 def _value_action_prefix(critical_slot: int, variants_per_slot: int) -> str:
     phrase = slot_phrase(critical_slot, variants_per_slot)
     return f'{{"tool":"read_slot","slot":"{phrase}","value":'
+
+
+def _bottleneck_user_prompt_for_family(
+    prompt_family: str,
+    bits: list[int],
+    critical_slot: int,
+    n_slots: int,
+    slot_gap: int,
+    variants_per_slot: int,
+) -> str:
+    if prompt_family == "standard":
+        return bottleneck_user_prompt(bits, critical_slot, n_slots, slot_gap, variants_per_slot)
+
+    phrase = slot_phrase(critical_slot, variants_per_slot)
+    allowed = ", ".join(f'"{slot_phrase(slot, variants_per_slot)}"' for slot in range(n_slots))
+    lines = context_lines(bits, n_slots, slot_gap, variants_per_slot)
+    if prompt_family == "compact":
+        return "\n".join(
+            [
+                "Long-horizon moved-bottleneck task, compact version.",
+                "Find the requested slot phrase in the records and continue the read_slot JSON action.",
+                f"Allowed slot phrases: {allowed}.",
+                *lines,
+                f"Requested slot phrase: {phrase}",
+                f"Emit the read_slot JSON for {phrase} with its recorded value.",
+            ]
+        )
+    if prompt_family == "ledger":
+        return "\n".join(
+            [
+                "Audit-checklist moved-bottleneck task.",
+                "Read the records, ignore trace filler rows, and find the requested slot phrase.",
+                f"Allowed slot phrases: {allowed}.",
+                *lines,
+                f"Requested slot phrase: {phrase}",
+                f"Emit the read_slot JSON for {phrase} with its recorded value.",
+            ]
+        )
+    raise ValueError(f"Unknown prompt family {prompt_family!r}")
 
 
 def _encode_value_prefix(
@@ -256,6 +308,7 @@ def run_prompt_causal_patch_model(arg: dict[str, Any]) -> list[dict[str, Any]]:
     base_seed = int(arg["base_seed"])
     seeds = [int(seed) for seed in arg["seeds"]]
     critical_slots = [int(slot) for slot in arg["critical_slots"]]
+    prompt_families = [str(family) for family in arg["prompt_families"]]
     patch_positions = [str(position) for position in arg["patch_positions"]]
     patch_layers = [str(layer) for layer in arg["patch_layers"]]
 
@@ -286,92 +339,102 @@ def run_prompt_causal_patch_model(arg: dict[str, Any]) -> list[dict[str, Any]]:
     ]
     rows: list[dict[str, Any]] = []
     started_at = time.time()
-    for critical_slot in critical_slots:
-        if not 0 <= critical_slot < n_slots:
-            raise ValueError(f"critical_slot={critical_slot} outside n_slots={n_slots}")
-        action_prefix = _value_action_prefix(critical_slot, variants_per_slot)
-        for seed in seeds:
-            row_seed = base_seed + seed + 1000 * critical_slot
-            rng = random.Random(row_seed)
-            for episode in range(episodes_per_cell):
-                bits = episode_bits(rng, n_slots)
-                donor_value = bits[critical_slot]
-                corrupted_bits = list(bits)
-                corrupted_bits[critical_slot] = 1 - corrupted_bits[critical_slot]
+    for family_index, prompt_family in enumerate(prompt_families):
+        for critical_slot in critical_slots:
+            if not 0 <= critical_slot < n_slots:
+                raise ValueError(f"critical_slot={critical_slot} outside n_slots={n_slots}")
+            action_prefix = _value_action_prefix(critical_slot, variants_per_slot)
+            for seed in seeds:
+                row_seed = base_seed + seed + 1000 * critical_slot + 100_000 * family_index
+                rng = random.Random(row_seed)
+                for episode in range(episodes_per_cell):
+                    bits = episode_bits(rng, n_slots)
+                    donor_value = bits[critical_slot]
+                    corrupted_bits = list(bits)
+                    corrupted_bits[critical_slot] = 1 - corrupted_bits[critical_slot]
 
-                clean_prompt = bottleneck_user_prompt(bits, critical_slot, n_slots, slot_gap, variants_per_slot)
-                corrupted_prompt = bottleneck_user_prompt(
-                    corrupted_bits,
-                    critical_slot,
-                    n_slots,
-                    slot_gap,
-                    variants_per_slot,
-                )
-                clean_encoded, clean_positions = _encode_value_prefix(
-                    tokenizer,
-                    messages(clean_prompt),
-                    action_prefix,
-                    model.device,
-                )
-                corrupted_encoded, corrupted_positions = _encode_value_prefix(
-                    tokenizer,
-                    messages(corrupted_prompt),
-                    action_prefix,
-                    model.device,
-                )
-                clean_logits, clean_hidden_states = _forward_logits_and_hidden(
-                    model,
-                    clean_encoded,
-                    output_hidden_states=True,
-                )
-                if clean_hidden_states is None:
-                    raise ValueError("Expected hidden states from clean forward pass")
-                corrupted_logits, _ = _forward_logits_and_hidden(
-                    model,
-                    corrupted_encoded,
-                    output_hidden_states=False,
-                )
-                clean_margin = _margin(clean_logits, donor_value, zero_token_id, one_token_id)
-                corrupted_margin = _margin(corrupted_logits, donor_value, zero_token_id, one_token_id)
-
-                for position, layer_label, layer_index in site_keys:
-                    if position not in clean_positions or position not in corrupted_positions:
-                        known = ", ".join(sorted(clean_positions))
-                        raise ValueError(f"Unknown patch position {position!r}. Known positions: {known}")
-                    donor_vector = clean_hidden_states[layer_index][0, clean_positions[position]].detach()
-                    patched_logits, _ = _forward_logits_and_hidden(
+                    clean_prompt = _bottleneck_user_prompt_for_family(
+                        prompt_family,
+                        bits,
+                        critical_slot,
+                        n_slots,
+                        slot_gap,
+                        variants_per_slot,
+                    )
+                    corrupted_prompt = _bottleneck_user_prompt_for_family(
+                        prompt_family,
+                        corrupted_bits,
+                        critical_slot,
+                        n_slots,
+                        slot_gap,
+                        variants_per_slot,
+                    )
+                    clean_encoded, clean_positions = _encode_value_prefix(
+                        tokenizer,
+                        messages(clean_prompt),
+                        action_prefix,
+                        model.device,
+                    )
+                    corrupted_encoded, corrupted_positions = _encode_value_prefix(
+                        tokenizer,
+                        messages(corrupted_prompt),
+                        action_prefix,
+                        model.device,
+                    )
+                    clean_logits, clean_hidden_states = _forward_logits_and_hidden(
+                        model,
+                        clean_encoded,
+                        output_hidden_states=True,
+                    )
+                    if clean_hidden_states is None:
+                        raise ValueError("Expected hidden states from clean forward pass")
+                    corrupted_logits, _ = _forward_logits_and_hidden(
                         model,
                         corrupted_encoded,
                         output_hidden_states=False,
-                        patch_layer_index=layer_index,
-                        patch_position=corrupted_positions[position],
-                        patch_vector=donor_vector,
                     )
-                    patched_margin = _margin(patched_logits, donor_value, zero_token_id, one_token_id)
-                    patch_effect = patched_margin - corrupted_margin
-                    denominator = clean_margin - corrupted_margin
-                    patch_recovery = patch_effect / denominator if abs(denominator) > 1e-8 else float("nan")
-                    rows.append(
-                        {
-                            "row_kind": "causal_patch",
-                            "model": model_id,
-                            "architecture": model_id,
-                            "critical_slot": critical_slot,
-                            "seed": row_seed,
-                            "episode": episode,
-                            "patch_position": position,
-                            "patch_layer": layer_label,
-                            "patch_layer_index": layer_index,
-                            "donor_value": donor_value,
-                            "corrupted_value": 1 - donor_value,
-                            "clean_margin": clean_margin,
-                            "corrupted_margin": corrupted_margin,
-                            "patched_margin": patched_margin,
-                            "patch_effect": patch_effect,
-                            "patch_recovery": patch_recovery,
-                            "patch_direction_success": float(patch_effect > 0.0),
-                        }
-                    )
+                    clean_margin = _margin(clean_logits, donor_value, zero_token_id, one_token_id)
+                    corrupted_margin = _margin(corrupted_logits, donor_value, zero_token_id, one_token_id)
+
+                    for position, layer_label, layer_index in site_keys:
+                        if position not in clean_positions or position not in corrupted_positions:
+                            known = ", ".join(sorted(clean_positions))
+                            raise ValueError(f"Unknown patch position {position!r}. Known positions: {known}")
+                        donor_vector = clean_hidden_states[layer_index][0, clean_positions[position]].detach()
+                        patched_logits, _ = _forward_logits_and_hidden(
+                            model,
+                            corrupted_encoded,
+                            output_hidden_states=False,
+                            patch_layer_index=layer_index,
+                            patch_position=corrupted_positions[position],
+                            patch_vector=donor_vector,
+                        )
+                        patched_margin = _margin(patched_logits, donor_value, zero_token_id, one_token_id)
+                        patch_effect = patched_margin - corrupted_margin
+                        denominator = clean_margin - corrupted_margin
+                        patch_recovery = patch_effect / denominator if abs(denominator) > 1e-8 else float("nan")
+                        rows.append(
+                            {
+                                "row_kind": "causal_patch",
+                                "model": model_id,
+                                "architecture": model_id,
+                                "prompt_family": prompt_family,
+                                "critical_slot": critical_slot,
+                                "seed": row_seed,
+                                "episode": episode,
+                                "patch_position": position,
+                                "patch_layer": layer_label,
+                                "patch_layer_index": layer_index,
+                                "donor_value": donor_value,
+                                "corrupted_value": 1 - donor_value,
+                                "clean_margin": clean_margin,
+                                "corrupted_margin": corrupted_margin,
+                                "patched_margin": patched_margin,
+                                "patch_effect": patch_effect,
+                                "patch_recovery": patch_recovery,
+                                "patch_direction_success": float(patch_effect > 0.0),
+                            }
+                        )
 
     print(f"[prompt-json-causal-patch] {model_id} produced {len(rows)} rows in {time.time() - started_at:.1f}s")
     return rows
@@ -386,6 +449,7 @@ def main(
     slot_gap: int = 8,
     variants_per_slot: int = 3,
     critical_slots: str = "0,1,2,3",
+    prompt_families: str = "standard",
     patch_positions: str = "prompt_final,value_prefix_final",
     patch_layers: str = "late,final",
     base_seed: int = 20260950,
@@ -396,14 +460,17 @@ def main(
     from experiments.long_horizon_bottleneck.core import (
         PROMPT_JSON_CAUSAL_PATCH_POSITIONS,
         PROMPT_JSON_LOCALIZATION_LAYERS,
+        PROMPT_JSON_PROMPT_FAMILIES,
         estimate_modal_cost,
         parse_csv,
         parse_int_csv,
         summarize_prompt_causal_patch_rows,
+        summarize_prompt_family_causal_patch_rows,
     )
 
     model_list = parse_csv(models)
     critical_slot_list = parse_int_csv(critical_slots)
+    prompt_family_list = parse_csv(prompt_families)
     position_list = parse_csv(patch_positions)
     layer_list = parse_csv(patch_layers)
     seed_values = list(range(seeds))
@@ -413,6 +480,10 @@ def main(
         raise SystemExit("episodes_per_cell must be positive")
     if variants_per_slot <= 0:
         raise SystemExit("variants_per_slot must be positive")
+    unknown_families = sorted(set(prompt_family_list) - set(PROMPT_JSON_PROMPT_FAMILIES))
+    if unknown_families:
+        known = ", ".join(PROMPT_JSON_PROMPT_FAMILIES)
+        raise SystemExit(f"Unknown prompt families {unknown_families}. Known families: {known}")
     unknown_positions = sorted(set(position_list) - set(PROMPT_JSON_CAUSAL_PATCH_POSITIONS))
     if unknown_positions:
         known = ", ".join(PROMPT_JSON_CAUSAL_PATCH_POSITIONS)
@@ -428,7 +499,7 @@ def main(
         known = ", ".join(PROMPT_JSON_LOCALIZATION_LAYERS)
         raise SystemExit(f"Unknown patch layers {unknown_layers}. Known layers: {known} or integer indices")
 
-    logical_cells = len(model_list) * len(critical_slot_list) * len(seed_values)
+    logical_cells = len(model_list) * len(prompt_family_list) * len(critical_slot_list) * len(seed_values)
     patch_sites = len(position_list) * len(layer_list)
     estimate = estimate_modal_cost(
         cells=len(model_list),
@@ -447,6 +518,7 @@ def main(
         "seeds": seed_values,
         "base_seed": base_seed,
         "episodes_per_cell": episodes_per_cell,
+        "prompt_families": prompt_family_list,
         "critical_slots": critical_slot_list,
         "n_slots": n_slots,
         "slot_gap": slot_gap,
@@ -460,7 +532,9 @@ def main(
             "patch_effect_ci_low": 0.0,
             "patch_direction_chance": 0.5,
         },
-        "prompt_contract": "papers/long_horizon_bottleneck/prompt_json_causal_patch_preregistration.md",
+        "prompt_contract": "papers/long_horizon_bottleneck/prompt_json_prompt_family_causal_patch_preregistration.md"
+        if len(prompt_family_list) > 1
+        else "papers/long_horizon_bottleneck/prompt_json_causal_patch_preregistration.md",
         "model_sources": [f"https://huggingface.co/{model_id}" for model_id in model_list],
     }
     print(
@@ -475,7 +549,12 @@ def main(
             f"${estimate.conservative_cost_usd:.2f} exceeds budget ${budget_usd:.2f}."
         )
     if dry_run_budget:
-        print(json.dumps({"kind": "prompt JSON fixed-prefix causal-patch dry run", "manifest": manifest}, indent=2))
+        dry_run_kind = (
+            "prompt JSON prompt-family causal-patch dry run"
+            if len(prompt_family_list) > 1
+            else "prompt JSON fixed-prefix causal-patch dry run"
+        )
+        print(json.dumps({"kind": dry_run_kind, "manifest": manifest}, indent=2))
         return
 
     model_args = [
@@ -487,6 +566,7 @@ def main(
             "slot_gap": slot_gap,
             "variants_per_slot": variants_per_slot,
             "critical_slots": critical_slot_list,
+            "prompt_families": prompt_family_list,
             "base_seed": base_seed,
             "patch_positions": position_list,
             "patch_layers": layer_list,
@@ -495,9 +575,15 @@ def main(
     ]
     model_row_groups = list(run_prompt_causal_patch_model.map(model_args))
     rows = [row for row_group in model_row_groups for row in row_group]
-    summary = summarize_prompt_causal_patch_rows(rows)
+    summary = (
+        summarize_prompt_family_causal_patch_rows(rows)
+        if len(prompt_family_list) > 1
+        else summarize_prompt_causal_patch_rows(rows)
+    )
     payload = {
-        "kind": "prompt JSON fixed-prefix causal-patch sweep",
+        "kind": "prompt JSON prompt-family causal-patch sweep"
+        if len(prompt_family_list) > 1
+        else "prompt JSON fixed-prefix causal-patch sweep",
         "manifest": manifest,
         "summary": summary,
         "rows": rows,
@@ -526,6 +612,13 @@ def main(
             f"dir={fmt(item['patch_direction_success'])} "
             f"pass={item['gate']['pass']}"
         )
+    if "family_model" in summary:
+        for key, item in summary["family_model"].items():
+            print(
+                f"  family_model {key:70s} "
+                f"ready={item['causal_ready']} "
+                f"pass={item['patch_pass']}"
+            )
     if passing_groups:
         print("[prompt-json-causal-patch] passing patch groups:")
         for key, item in passing_groups:
