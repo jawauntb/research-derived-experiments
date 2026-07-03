@@ -12,6 +12,11 @@ The first tool call now fails stochastically per episode. On success, the agent
 should no-op at the repair position; on failure, it must repair by re-emitting a
 complete call for the moved bottleneck slot.
 
+The alias conditions replace the compact slot argument with several equivalent
+argument aliases per canonical slot. The parser maps aliases back to canonical
+slots, so the gate asks whether the bottleneck survives a synonym-like argument
+surface rather than a tiny slot-id field.
+
 Recommended cheap pass:
 
     doppler --scope /Users/jawaun/superoptimizers run -- \\
@@ -74,12 +79,21 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
     metric_batches = int(arg["metric_batches"])
     hidden_size = int(arg["hidden_size"])
     failure_probability = float(arg["failure_probability"])
+    aliases_per_slot = int(arg.get("aliases_per_slot", 1))
+
+    alias_conditions = {"alias_stochastic_bottleneck", "alias_visible_control"}
+    bottleneck_conditions = {"stochastic_failure_bottleneck", "alias_stochastic_bottleneck"}
+    visible_conditions = {"stochastic_visible_control", "alias_visible_control"}
+    alias_surface = condition in alias_conditions
+    if aliases_per_slot <= 0:
+        raise ValueError("aliases_per_slot must be positive")
 
     call_opcode = 0
     noop_opcode = 1
     opcode_vocab_size = 3
-    slot_missing_id = n_slots
-    slot_vocab_size = n_slots + 2
+    slot_argument_size = n_slots * aliases_per_slot if alias_surface else n_slots
+    slot_missing_id = slot_argument_size
+    slot_vocab_size = slot_argument_size + 2
     value_missing_id = 2
     value_vocab_size = 4
 
@@ -125,7 +139,7 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
         noop_slot = torch.full((batch,), slot_missing_id, dtype=torch.long, device=device)
         noop_value = torch.full((batch,), value_missing_id, dtype=torch.long, device=device)
 
-        if condition == "stochastic_failure_bottleneck":
+        if condition in bottleneck_conditions:
             final_target = bits[:, critical_slot].long()
             first_targets = (call_op, crit_slot, crit_value)
             repair_targets = (
@@ -146,7 +160,7 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
                 )
             train_first = True
             train_repair = True
-        elif condition == "stochastic_visible_control":
+        elif condition in visible_conditions:
             final_target = terminal_bits.long()
             first_targets = (noop_op, noop_slot, noop_value)
             repair_targets = (noop_op, noop_slot, noop_value)
@@ -231,11 +245,26 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
     else:
         raise ValueError(architecture)
 
+    def slot_argument_loss(slot_logits, slot_target):
+        if not alias_surface:
+            return F.cross_entropy(slot_logits, slot_target)
+        log_probs = F.log_softmax(slot_logits, dim=-1)
+        losses = torch.empty(slot_target.shape, device=slot_target.device, dtype=log_probs.dtype)
+        call_mask = slot_target < n_slots
+        if call_mask.any():
+            alias_offsets = torch.arange(aliases_per_slot, device=slot_target.device).unsqueeze(0)
+            alias_ids = slot_target[call_mask].unsqueeze(1) * aliases_per_slot + alias_offsets
+            losses[call_mask] = -torch.logsumexp(log_probs[call_mask].gather(1, alias_ids), dim=1)
+        if (~call_mask).any():
+            non_call_targets = slot_target[~call_mask]
+            losses[~call_mask] = -log_probs[~call_mask].gather(1, non_call_targets.unsqueeze(1)).squeeze(1)
+        return losses.mean()
+
     def field_loss(op_logits, slot_logits, value_logits, targets):
         op_target, slot_target, value_target = targets
         return (
             F.cross_entropy(op_logits, op_target)
-            + F.cross_entropy(slot_logits, slot_target)
+            + slot_argument_loss(slot_logits, slot_target)
             + F.cross_entropy(value_logits, value_target)
         )
 
@@ -278,16 +307,25 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
             losses.append(float(loss.detach().cpu().item()))
 
     def parse_fields(op_pred, slot_pred, value_pred):
-        executable = (op_pred == call_opcode) & (slot_pred < n_slots) & (value_pred < 2)
+        slot_is_argument = slot_pred < slot_argument_size
+        parsed_argument_slot = torch.div(slot_pred, max(1, aliases_per_slot), rounding_mode="floor")
+        if not alias_surface:
+            parsed_argument_slot = slot_pred
+        executable = (op_pred == call_opcode) & slot_is_argument & (value_pred < 2)
         valid_noop = (op_pred == noop_opcode) & (slot_pred == slot_missing_id) & (value_pred == value_missing_id)
         valid = executable | valid_noop
-        parsed_slot = torch.where(executable, slot_pred, torch.full_like(slot_pred, n_slots))
+        parsed_slot = torch.where(executable, parsed_argument_slot, torch.full_like(slot_pred, n_slots))
         parsed_value = torch.where(executable, value_pred, torch.zeros_like(value_pred))
         return valid, executable, parsed_slot, parsed_value
 
     def field_exact(op_pred, slot_pred, value_pred, targets):
         op_target, slot_target, value_target = targets
-        return (op_pred == op_target) & (slot_pred == slot_target) & (value_pred == value_target)
+        if alias_surface:
+            _valid, _executable, parsed_slot, _parsed_value = parse_fields(op_pred, slot_pred, value_pred)
+            slot_matches = torch.where(slot_target < n_slots, parsed_slot == slot_target, slot_pred == slot_target)
+        else:
+            slot_matches = slot_pred == slot_target
+        return (op_pred == op_target) & slot_matches & (value_pred == value_target)
 
     model.eval()
     teacher_forced_final_correct = 0
@@ -311,7 +349,7 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
     sampled_failures = 0
     sampled_total = 0
     total = 0
-    is_bottleneck = condition == "stochastic_failure_bottleneck"
+    is_bottleneck = condition in bottleneck_conditions
     with torch.no_grad():
         for _ in range(eval_batches):
             (
@@ -365,7 +403,7 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
                     field_exact(repair_op, repair_slot, repair_value, repair_targets).sum().item()
                 )
                 repair_schema_valid += int(repair_valid.sum().item())
-                if condition == "stochastic_failure_bottleneck":
+                if is_bottleneck:
                     failed = first_failed
                     succeeded = ~first_failed
                     failed_total = int(failed.sum().item())
@@ -416,7 +454,7 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
             first_op_pred = open_first_op.argmax(-1)
             first_slot_pred = open_first_slot.argmax(-1)
             first_value_pred = open_first_value.argmax(-1)
-            if condition == "stochastic_failure_bottleneck":
+            if is_bottleneck:
                 _valid, executable, parsed_slot, parsed_value = parse_fields(
                     first_op_pred,
                     first_slot_pred,
@@ -448,7 +486,7 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
                 _after_first_states,
             ) = model(x_after_first)
             x_closed = x_after_first.clone()
-            if condition == "stochastic_failure_bottleneck":
+            if is_bottleneck:
                 repair_op_pred = repair_op_logits_open.argmax(-1)
                 repair_slot_pred = repair_slot_logits_open.argmax(-1)
                 repair_value_pred = repair_value_logits_open.argmax(-1)
@@ -578,6 +616,8 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
         "first_return_position": first_return_position,
         "repair_commit_position": repair_commit_position,
         "repair_return_position": repair_return_position,
+        "argument_surface": "alias" if alias_surface else "slot",
+        "aliases_per_slot": aliases_per_slot,
         "opcode_vocab_size": opcode_vocab_size,
         "slot_vocab_size": slot_vocab_size,
         "value_vocab_size": value_vocab_size,
@@ -640,6 +680,7 @@ def main(
     critical_slots: str = "0,1,2,3",
     base_seed: int = 20260704,
     failure_probability: float = 0.5,
+    aliases_per_slot: int = 1,
     budget_usd: float = 25.0,
     dry_run_budget: bool = False,
     out: str = "artifacts/long_horizon_bottleneck/stochastic_tool_failure_l4.json",
@@ -655,6 +696,16 @@ def main(
     arch_list = parse_csv(architectures)
     condition_list = parse_csv(conditions)
     slot_list = parse_int_csv(critical_slots)
+    alias_conditions = {"alias_stochastic_bottleneck", "alias_visible_control"}
+    compact_conditions = {"stochastic_failure_bottleneck", "stochastic_visible_control"}
+    uses_alias_surface = any(condition in alias_conditions for condition in condition_list)
+    uses_compact_surface = any(condition in compact_conditions for condition in condition_list)
+    if uses_alias_surface and uses_compact_surface:
+        raise SystemExit("Do not mix alias and compact-slot stochastic conditions in one sweep")
+    if aliases_per_slot <= 0:
+        raise SystemExit("aliases_per_slot must be positive")
+    argument_surface = "alias" if uses_alias_surface else "slot"
+    argument_vocab_size = n_slots * aliases_per_slot + 2 if uses_alias_surface else n_slots + 2
     seed_values = list(range(seeds))
     cells = build_cells(
         seeds=seed_values,
@@ -682,6 +733,7 @@ def main(
     for cell in cells:
         cell["first_commit_position"] = resolved_first_commit
         cell["failure_probability"] = failure_probability
+        cell["aliases_per_slot"] = aliases_per_slot
 
     estimate = estimate_modal_cost(
         cells=len(cells),
@@ -704,7 +756,9 @@ def main(
         "sequence_length": sequence_length,
         "slot_gap": slot_gap,
         "opcode_vocab_size": 3,
-        "slot_vocab_size": n_slots + 2,
+        "argument_surface": argument_surface,
+        "aliases_per_slot": aliases_per_slot,
+        "slot_vocab_size": argument_vocab_size,
         "value_vocab_size": 4,
         "first_commit_position": resolved_first_commit,
         "error_position": resolved_first_commit + 1,
@@ -717,8 +771,14 @@ def main(
         "hidden_size": hidden_size,
         "budget_estimate": estimate.__dict__,
     }
+    run_label = "alias-argument-surface" if uses_alias_surface else "stochastic-tool-failure"
+    payload_kind = (
+        "alias argument-surface stochastic moved-bottleneck sweep"
+        if uses_alias_surface
+        else "stochastic tool failure moved-bottleneck sweep"
+    )
     print(
-        "[stochastic-tool-failure] "
+        f"[{run_label}] "
         f"cells={len(cells)} gpu={GPU} timeout={TIMEOUT_SECONDS}s "
         f"conservative_cost=${estimate.conservative_cost_usd:.2f} "
         f"budget=${budget_usd:.2f}"
@@ -729,13 +789,13 @@ def main(
             f"${estimate.conservative_cost_usd:.2f} exceeds budget ${budget_usd:.2f}."
         )
     if dry_run_budget:
-        print(json.dumps({"kind": "stochastic tool failure bottleneck dry run", "manifest": manifest}, indent=2))
+        print(json.dumps({"kind": f"{payload_kind} dry run", "manifest": manifest}, indent=2))
         return
 
     rows = list(run_stochastic_cell.map(cells))
     summary = summarize_stochastic_rows(rows)
     payload = {
-        "kind": "stochastic tool failure moved-bottleneck sweep",
+        "kind": payload_kind,
         "manifest": manifest,
         "summary": summary,
         "rows": rows,
@@ -743,7 +803,7 @@ def main(
     op = Path(out)
     op.parent.mkdir(parents=True, exist_ok=True)
     op.write_text(json.dumps(payload, indent=2, default=float) + "\n")
-    print(f"[stochastic-tool-failure] wrote {op}")
+    print(f"[{run_label}] wrote {op}")
 
     def fmt(stat: dict[str, Any]) -> str:
         value = float(stat["mean"])
@@ -770,10 +830,11 @@ def main(
             f"memory_spec={spec['mean']:+.3f} tool_spec={tool_spec['mean']:+.3f} "
             f"pass={item['gate']['pass']}"
         )
-    if "pooled_stochastic_failure_bottleneck" in summary:
-        pooled = summary["pooled_stochastic_failure_bottleneck"]
+    pooled_key = "pooled_alias_stochastic_bottleneck" if uses_alias_surface else "pooled_stochastic_failure_bottleneck"
+    if pooled_key in summary:
+        pooled = summary[pooled_key]
         print(
-            "[stochastic-tool-failure] pooled_stochastic_failure_bottleneck "
+            f"[{run_label}] {pooled_key} "
             f"final={fmt(pooled['final_accuracy'])}; "
             f"teacher_forced={fmt(pooled['teacher_forced_final_accuracy'])}; "
             f"first_field={fmt(pooled['first_field_accuracy'])}; "

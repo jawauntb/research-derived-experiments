@@ -718,6 +718,68 @@ def parse_multifield_action(opcode_id: int, slot_id: int, value_id: int, n_slots
     }
 
 
+# The alias-argument regime keeps the opcode/value heads from the multifield
+# schema but replaces the slot field with several equivalent argument aliases
+# per canonical slot. This is still a classifier, not free-form language, but
+# it tests whether the moved bottleneck survives a synonym-like argument surface.
+
+
+def alias_argument_vocab_size(n_slots: int, aliases_per_slot: int) -> int:
+    """Vocabulary size for alias arguments plus missing and malformed sentinels."""
+
+    if n_slots <= 0:
+        raise ValueError("n_slots must be positive")
+    if aliases_per_slot <= 0:
+        raise ValueError("aliases_per_slot must be positive")
+    return n_slots * aliases_per_slot + 2
+
+
+def alias_argument_id(slot: int, alias_index: int, n_slots: int, aliases_per_slot: int) -> int:
+    """Return the alias argument id for one canonical slot alias."""
+
+    alias_argument_vocab_size(n_slots, aliases_per_slot)
+    if not 0 <= slot < n_slots:
+        raise ValueError(f"slot={slot} outside n_slots={n_slots}")
+    if not 0 <= alias_index < aliases_per_slot:
+        raise ValueError(f"alias_index={alias_index} outside aliases_per_slot={aliases_per_slot}")
+    return slot * aliases_per_slot + alias_index
+
+
+def parse_alias_argument(argument_id: int, n_slots: int, aliases_per_slot: int) -> dict[str, Any]:
+    """Parse an alias argument id into its canonical slot and alias index."""
+
+    size = alias_argument_vocab_size(n_slots, aliases_per_slot)
+    if not 0 <= argument_id < size:
+        raise ValueError(f"argument_id={argument_id} outside alias argument vocab size {size}")
+    missing_id = n_slots * aliases_per_slot
+    malformed_id = missing_id + 1
+    if argument_id < missing_id:
+        return {
+            "slot": argument_id // aliases_per_slot,
+            "alias_index": argument_id % aliases_per_slot,
+            "valid": True,
+            "missing": False,
+            "reason": None,
+        }
+    if argument_id == missing_id:
+        return {
+            "slot": None,
+            "alias_index": None,
+            "valid": True,
+            "missing": True,
+            "reason": None,
+        }
+    if argument_id == malformed_id:
+        return {
+            "slot": None,
+            "alias_index": None,
+            "valid": False,
+            "missing": False,
+            "reason": "bad_alias",
+        }
+    raise AssertionError("unreachable alias argument parser branch")
+
+
 def render_multifield_action(parsed: dict[str, Any]) -> str:
     """Render a parsed multifield action as a JSON-like tool-call string."""
 
@@ -873,13 +935,14 @@ def summarize_stochastic_rows(rows: list[dict[str, Any]], *, n_boot: int = 2000)
             n_boot=n_boot,
         )
 
-    condition_rows = [r for r in rows if r["condition"] == "stochastic_failure_bottleneck"]
-    if condition_rows:
-        out["pooled_stochastic_failure_bottleneck"] = summarize_stochastic_gate_group(
-            condition_rows,
-            condition="stochastic_failure_bottleneck",
-            n_boot=n_boot,
-        )
+    for condition in ("stochastic_failure_bottleneck", "alias_stochastic_bottleneck"):
+        condition_rows = [r for r in rows if r["condition"] == condition]
+        if condition_rows:
+            out[f"pooled_{condition}"] = summarize_stochastic_gate_group(
+                condition_rows,
+                condition=condition,
+                n_boot=n_boot,
+            )
     return out
 
 
@@ -941,7 +1004,9 @@ def summarize_stochastic_gate_group(
     memory_rank = bootstrap_mean_ci([r["memory_rank_percentile"] for r in rows], n_boot=n_boot, seed=20260786)
     tool_value_spec = bootstrap_mean_ci([r["tool_value_specificity_z"] for r in rows], n_boot=n_boot, seed=20260787)
 
-    if condition == "stochastic_visible_control":
+    visible_conditions = {"stochastic_visible_control", "alias_visible_control"}
+    bottleneck_conditions = {"stochastic_failure_bottleneck", "alias_stochastic_bottleneck"}
+    if condition in visible_conditions:
         gate = {
             f"{final_key}_ge_0_90": final_acc["mean"] >= 0.90,
             "first_noop_field_acc_ge_0_90": first_field_acc["mean"] >= 0.90,
@@ -950,7 +1015,7 @@ def summarize_stochastic_gate_group(
             "repair_schema_valid_ge_0_90": repair_schema["mean"] >= 0.90,
             "memory_specificity_not_strong_positive": memory_spec["mean"] < 0.5,
         }
-    elif condition == "stochastic_failure_bottleneck":
+    elif condition in bottleneck_conditions:
         gate = {
             f"{final_key}_ge_0_90": final_acc["mean"] >= 0.90,
             "first_field_acc_ge_0_90": first_field_acc["mean"] >= 0.90,
