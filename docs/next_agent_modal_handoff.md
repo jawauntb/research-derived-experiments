@@ -22,7 +22,7 @@ remains, how to run it, and where everything lives. Read it fully before acting.
   `@app.local_entrypoint` via `.map()`. Dispatch with:
   ```
   doppler --scope /Users/jawaun/superoptimizers run -- \
-      uvx --python 3.12 --from modal modal run <entrypoint.py> <--flags>
+      uvx --python 3.12 --from modal --with numpy modal run <entrypoint.py> <--flags>
   ```
 - **Attribution/honesty rules:** results are AI-agent-generated under human direction — say so.
   Report honest negatives. Do **not** overclaim. Do **not** put model identifiers in committed
@@ -44,26 +44,22 @@ remains, how to run it, and where everything lives. Read it fully before acting.
   scale-up = Experiment A**, which is the genuinely novel extension.
 - **Modal TODO:** low priority. Optionally derive the weakness↔PAC-Bayes bound (theory, no compute).
 
-### Experiment A — Weakness Predicts Toroidal Topology (Paper A). STATUS: registered report; CPU-confirmed 2 of 6 gates.
+### Experiment A — Translation Augmentation, Toroidal Codes, and Weakness Mediation. STATUS: Modal complete; publishable negative mediation note.
 - Files: `papers/pdf/weakness_predicts_topology.pdf`, `papers/grid_cell_weakness/preregistration.md`
   + `runbook.md`, `experiments/grid_cell_weakness/{core,run_local}.py`,
-  **`modal_grid_cell_weakness_sweep.py` (ready to dispatch)**.
-- CPU result (`results/local_cpu_sweep_2026_06_29.md`): **G5 confirmed** (weakness↔spectral
-  concentration ρ=+0.89) and **G6 confirmed** (topology causal contrast: full-translation toroidal
-  score 0.27 vs none 0.00). **NOT confirmed:** G2 (weakness↔topology, only ρ=+0.37 at n=6), G3
-  (weakness↔OOD — the same-arena OOD proxy saturated at 0.95–0.98), G4 (topology mediates).
-- **Modal TODO (ready now):** run the full sweep — it has larger-arena OOD (`--decode-arenas`), 2
-  archs, 8 seeds, 4000 steps — which is exactly what G2/G3/G4 need:
-  ```
-  doppler --scope /Users/jawaun/superoptimizers run -- \
-      uvx --python 3.12 --from modal modal run \
-      experiments/grid_cell_weakness/modal_grid_cell_weakness_sweep.py \
-      --seeds 8 --steps 4000 --decode-arenas 1.0,1.25,1.5,2.0 \
-      --out artifacts/grid_cell_weakness/sweep.json
-  ```
-  First run the emergence probe in the runbook (`--seeds 2 --steps 4000 --conditions
-  full_translation`); if `betti_match_torus` is < ~0.6, raise steps / `--activity-reg` before trusting
-  gates. Tune **only** against `betti_match_torus`, never the gate correlations.
+  `modal_grid_cell_weakness_sweep.py`.
+- Modal result (`results/modal_grid_cell_weakness_sweep_2026_07_02.md`): **G1 confirmed**
+  (full-translation torus match 0.734), **G5 confirmed** (weakness-spectral concentration
+  rho=+0.635), **G6 confirmed** (full translation lifts topology and larger-arena OOD: OOD
+  0.949 vs 0.484 for no augmentation), and wrong-group null passes with tie-aware rho 0.000.
+- **NOT confirmed:** G2 (weakness-topology only rho=+0.197 and loss-topology rho=+0.431),
+  G3 (weakness-OOD rho=+0.617 does not beat loss-OOD rho=+0.652 by the registered 2x margin),
+  and G4 (topology does not mediate; partial rho=+0.623, no drop).
+- Paper posture: publish as an empirical note / negative mediation result. Do not claim weakness
+  governs toroidal topology, topology causes OOD, or biological grid cells are explained. The
+  positive claim is that translation augmentation causally produces toroidal, larger-arena
+  OOD-generalizing codes in this RNN harness; weakness tracks one spectral aspect of the learned
+  translation structure.
 
 ### Experiment B — Concern Deforms the Metric (Paper B). STATUS: proof-of-concept n=3; big-n pending.
 - Files: `papers/pdf/concern_deforms_metric.pdf`, `experiments/grid_cell_weakness/reward_deformation.py`
@@ -103,9 +99,9 @@ the two variables that resolve 1/3 vs 1/2:
 - **Amplitude sweep** (`--amps`) to test the `(1+A)^{d/(d+2)}` peak-resolution scaling.
 ```
 doppler --scope /Users/jawaun/superoptimizers run -- \
-    uvx --python 3.12 --from modal modal run \
+    uvx --python 3.12 --from modal --with numpy modal run \
     experiments/grid_cell_weakness/modal_reward_deformation_sweep.py \
-    --seeds 10 --steps 8000 --Ng 256 --Np 256 \
+    --seeds 10 --steps 8000 --ng 256 --np 256 \
     --geometries point,stripe,aniso2d --amps 3,6,12 \
     --out artifacts/grid_cell_weakness/reward_deformation_sweep.json
 ```
@@ -122,11 +118,10 @@ Smoke first: `--seeds 1 --steps 800 --geometries point --amps 6`.
 
 ## 3. Run order (parallel — the three are independent Modal apps)
 
-Dispatch all three in parallel (separate shells or `&`); they don't share state:
-1. **Paper A gate sweep** — `modal_grid_cell_weakness_sweep.py` (validates G2/G3/G4).
-2. **Newton + Paper B big-n** — `modal_reward_deformation_sweep.py` (exponent resolution +
+Dispatch remaining Modal work in parallel (separate shells or `&`); the Paper A gate sweep is done:
+1. **Newton + Paper B big-n** — `modal_reward_deformation_sweep.py` (exponent resolution +
    specificity CIs).
-3. **(optional) Flagship rescale** — `symbolic_weakness/modal_neural_sweep.py` only if you want
+2. **(optional) Flagship rescale** — `symbolic_weakness/modal_neural_sweep.py` only if you want
    tighter CIs; not required.
 
 ## 4. After each sweep — the loop (do this every time)
@@ -146,9 +141,9 @@ Dispatch all three in parallel (separate shells or `&`); they don't share state:
 
 ## 5. Papers to rewrite (once the numbers are in)
 
-- **Paper A → confirmatory.** With G2/G3/G4 filled from the Modal sweep, drop "Registered Report /
-  Stage 1", report the real ρ(weakness,topology), ρ(weakness,OOD-geometry), and the mediation
-  partial-correlation, with the gate-margin heatmap. Builder: `build_gridcell_pdf.py`.
+- **Paper A → negative mediation note.** G2/G3/G4 are filled and fail. Keep the title/framing around
+  translation augmentation, toroidal codes, and larger-arena generalization; report the failed
+  weakness-topology and mediation gates as central results. Builder: `build_gridcell_pdf.py`.
 - **Paper B → big-n + a derived law.** Replace n=3 with the multi-seed specificity + bootstrap CIs
   and a significance test; **and fold in the rate-distortion law** as the theoretical spine (this is
   the big upgrade — Paper B stops being "a phenomenon" and becomes "a phenomenon + a derived law +

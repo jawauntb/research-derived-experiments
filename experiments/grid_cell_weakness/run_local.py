@@ -33,7 +33,20 @@ def spearman(xs, ys) -> float:
     xs, ys = xs[ok], ys[ok]
     if len(xs) < 2:
         return 0.0
-    rx = np.argsort(np.argsort(xs)).astype(float); ry = np.argsort(np.argsort(ys)).astype(float)
+
+    def rank(vals):
+        order = np.argsort(vals)
+        ranks = np.empty(len(vals), dtype=float)
+        i = 0
+        while i < len(vals):
+            j = i
+            while j + 1 < len(vals) and vals[order[j + 1]] == vals[order[i]]:
+                j += 1
+            ranks[order[i:j + 1]] = (i + j) / 2.0
+            i = j + 1
+        return ranks
+
+    rx = rank(xs); ry = rank(ys)
     rx -= rx.mean(); ry -= ry.mean()
     den = math.sqrt((rx ** 2).sum() * (ry ** 2).sum())
     return float((rx * ry).sum() / den) if den else 0.0
@@ -118,6 +131,7 @@ def main() -> None:
         return [c[key] for c in cells if (where is None or c["augment"] in where)]
     w, topo, ood, fpr = col("weakness_translation"), col("toroidal_score"), col("ood_accuracy"), col("fourier_pr")
     r_wt, r_wo, r_ot = spearman(w, topo), spearman(w, ood), spearman(topo, ood)
+
     def mean(xs):
         return (sum(xs) / len(xs)) if xs else float("nan")
 

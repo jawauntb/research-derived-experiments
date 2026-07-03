@@ -13,22 +13,22 @@ No Modal auth in the web session; dispatch from a Modal-authed machine.
 ```
 # 1) smoke (1 seed, short) — confirms the worker runs on Modal end to end
 doppler --scope /Users/jawaun/superoptimizers run -- \
-  uvx --python 3.12 --from modal modal run \
+  uvx --python 3.12 --from modal --with numpy modal run \
     experiments/grid_cell_weakness/modal_grid_cell_weakness_sweep.py \
     --seeds 1 --steps 400 --conditions full_translation,none
 
 # 2) emergence probe (1–2 seeds, full steps, full_translation only) — see below
 doppler --scope /Users/jawaun/superoptimizers run -- \
-  uvx --python 3.12 --from modal modal run \
+  uvx --python 3.12 --from modal --with numpy modal run \
     experiments/grid_cell_weakness/modal_grid_cell_weakness_sweep.py \
     --seeds 2 --steps 4000 --conditions full_translation \
     --out artifacts/grid_cell_weakness/emergence_probe.json
 
-# 3) full sweep (5 conditions × 2 archs × 8 seeds), with the arena OOD sweep
+# 3) full sweep (5 conditions × 2 archs × 32 seeds), with the arena OOD sweep
 doppler --scope /Users/jawaun/superoptimizers run -- \
-  uvx --python 3.12 --from modal modal run \
+  uvx --python 3.12 --from modal --with numpy modal run \
     experiments/grid_cell_weakness/modal_grid_cell_weakness_sweep.py \
-    --seeds 8 --steps 4000 --decode-arenas 1.0,1.25,1.5,2.0 \
+    --seeds 32 --steps 4000 --decode-arenas 1.0,1.25,1.5,2.0 \
     --out artifacts/grid_cell_weakness/sweep.json
 ```
 
@@ -41,6 +41,47 @@ scale** (per the prereg's "held-out larger arena" definition); every scale's acc
 per cell under `ood_by_arena`. A grid code should path-integrate into a larger arena gracefully;
 a memorized place-code should fall off a cliff — so the `ood_by_arena` curve is itself a diagnostic
 of *how* generalization fails, not just whether.
+
+## Conference-evidence export
+
+Once a raw Modal JSON exists locally, export reviewer-facing CSVs and the evidence appendix:
+
+```
+python scripts/analyze_gridcell_conference_evidence.py \
+  --raw-json artifacts/grid_cell_weakness/grid_cell_weakness_sweep_2026_07_02_seed32.json
+```
+
+This writes:
+
+- `experiments/grid_cell_weakness/results/grid_cell_weakness_cells_2026_07_02.csv`
+- `experiments/grid_cell_weakness/results/grid_cell_weakness_bootstrap_2026_07_02.csv`
+- `experiments/grid_cell_weakness/results/grid_cell_weakness_ood_bootstrap_2026_07_02.csv`
+- `experiments/grid_cell_weakness/results/grid_cell_weakness_within_toroidal_2026_07_02.csv`
+- `experiments/grid_cell_weakness/results/grid_cell_weakness_topology_robustness_2026_07_02.csv`
+- `experiments/grid_cell_weakness/results/grid_cell_weakness_conference_evidence_2026_07_02.md`
+
+The 2026-07-02 raw JSON stores scalar per-cell metrics but not hidden-state populations, so it
+supports bootstrap CIs and within-toroidal analysis but cannot reconstruct topology robustness.
+For conference-grade robustness, rerun with topology robustness enabled while each worker still
+has the trained model and sampled hidden states in memory:
+
+```
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal --with numpy modal run \
+    experiments/grid_cell_weakness/modal_grid_cell_weakness_sweep.py \
+    --seeds 32 --steps 4000 --decode-arenas 1.0,1.25,1.5,2.0 \
+    --robustness \
+    --robustness-bin-counts 12,16,20 \
+    --robustness-edge-percentiles 35,45,55 \
+    --robustness-empty-policies global_mean,drop \
+    --robustness-max-points 200,400 \
+    --out artifacts/grid_cell_weakness/grid_cell_weakness_sweep_robustness.json
+```
+
+After that rerun, run the same `analyze_gridcell_conference_evidence.py` command against the
+robustness JSON. The robustness CSV will then aggregate toroidal score and torus-match intervals
+over bin counts, Vietoris-Rips edge caps, empty-bin handling, and sampling density instead of
+emitting the current status row.
 
 ## Grid-cell emergence tuning (do this BEFORE trusting any gate)
 
@@ -56,12 +97,12 @@ Turn these knobs, in order, and re-run the probe until `betti_match_torus` appea
    hidden activity and is the main driver of *localized, periodic* codes (Sorscher–Ganguli use an
    activity/metabolic cost). Sweep `1e-3 → 3e-3 → 1e-2`. Too high → dead units; too low → no grid.
 3. **Weight decay** (`--weight-decay`, default `1e-4`). Sweep `1e-4 → 1e-3`. Couples with (2).
-4. **Hidden size** (`--Ng`, default `128`). Grids need headroom for multiple periods/orientations;
-   try `128 → 256`. Place-cell count `--Np` (default `100`) sets target resolution; `144`/`196`
+4. **Hidden size** (`--ng`, default `128`). Grids need headroom for multiple periods/orientations;
+   try `128 → 256`. Place-cell count (`--np`, default `100`) sets target resolution; `144`/`196`
    sharpen it.
 5. **Sigma** (`--sigma`, default `0.10`) — place-cell width. Narrower (`0.08`) sharpens the target
    manifold but is harder to fit; wider (`0.12`) is easier but blurs topology.
-6. **Trajectory length** `--T` (default `20`). Longer paths give the recurrence more integration
+6. **Trajectory length** `--t` (default `20`). Longer paths give the recurrence more integration
    signal; `20 → 30`.
 
 Re-run only the cheap `full_translation` emergence probe between changes. Lock the first

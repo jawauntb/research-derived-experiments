@@ -35,6 +35,7 @@ LOCAL = {
         "cd experiments/grid_cell_weakness && python dump_fields.py && python dump_manifold.py",
         "python scripts/build_gridcell_pdf.py",
         "python scripts/build_paperB_pdf.py",
+        "python scripts/build_effective_dimension_pdf.py",
     ],
     "weakness_temporal": [
         "python experiments/weakness_temporal/temporal.py --n-models 240",
@@ -48,7 +49,11 @@ PDF_BUILDERS = {
 # a regen refreshes what readers actually see.
 PDF_OUTPUTS = {
     "symbolic_weakness": ["weakness_predicts_ood.pdf"],
-    "grid_cell_weakness": ["weakness_predicts_topology.pdf", "concern_deforms_metric.pdf"],
+    "grid_cell_weakness": [
+        "weakness_predicts_topology.pdf",
+        "concern_deforms_metric.pdf",
+        "reward_deformation_effective_dimension_law.pdf",
+    ],
 }
 
 

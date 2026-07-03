@@ -83,7 +83,7 @@ def train_one(n, b, window, *, width, lr, wd, seed, steps, early_frac):
     opt = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=wd)
     lossfn = nn.CrossEntropyLoss()
     early_step = max(1, int(steps * early_frac))
-    snap = {}
+    snap: dict[str, dict[str, float]] = {}
 
     def measure(tag):
         model.eval()

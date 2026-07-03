@@ -117,3 +117,131 @@ falsifiable proposition: that a single substrate-general scalar (weakness) predi
 out-of-distribution generalization of a learned population code, and that the topology mediates the
 generalization. Weakness is treated as a selection pressure measured *after* validity, consistent with
 the flagship's broad-excluder caveat.
+
+---
+
+## Frozen Addendum: Reward-Deformation Exponent Gate
+
+**Frozen:** 2026-07-02, before the large Modal reward-deformation sweep.
+
+This addendum pre-registers the decision rule for the rate-distortion "Newton" test in
+`experiments/grid_cell_weakness/modal_reward_deformation_sweep.py`. The prior CPU result showed that
+adding a finite-capacity bottleneck causally moves the area-density exponent from approximately
+`+0.07` to approximately `+0.30`, but it did **not** confirm the 2-D prediction `alpha = 1/2`.
+The open question is whether the plateau near `1/3` is explained by an effectively 1-D
+reallocation, or whether a genuinely 2-D reward geometry reaches the predicted exponent.
+
+### Primary estimand
+
+For each reward geometry and amplitude, regress `log sqrt(det g(x))` on `log w(x)` over spatial
+bins with finite positive metric density. The slope is the area-density exponent `alpha`. The
+derived effective dimension is reported as:
+
+`d_eff = 2 alpha / (1 - alpha)`.
+
+The primary comparison is at amplitude `A = 6`, with the full amplitude sweep (`A in {3,6,12}`)
+used to check stability and peak-resolution scaling.
+
+### Locked hypotheses
+
+| Reward geometry | Interpretation | Pre-registered prediction |
+| --- | --- | --- |
+| `stripe` | one coordinate is value-weighted, so allocation is effectively 1-D | `alpha` near `1/3` |
+| `aniso2d` | both coordinates are value-weighted, so allocation is genuinely 2-D | `alpha` near `1/2` |
+| `point` | radially symmetric bump; diagnostic for the earlier plateau | resolves by measured `d_eff` |
+
+### Decision gate
+
+The 2-D rate-distortion law is counted as confirmed only if, at `A = 6`:
+
+1. `aniso2d` has bootstrap standard error `<= 0.02` for `alpha`, its 95% CI excludes `1/3`, and its
+   mean is closer to `1/2` than to `1/3`;
+2. `stripe` has bootstrap standard error `<= 0.02`, its 95% CI includes or is closer to `1/3` than
+   `1/2`, and the `stripe` vs `aniso2d` exponent gap has a bootstrap 95% CI excluding zero;
+3. coverage and log-log fit diagnostics are reported for every cell; low-coverage or poor-fit cells
+   may be flagged but not selectively removed unless a mechanical worker failure is documented.
+
+If all geometries remain near `1/3`, or if `aniso2d` fails to separate from `stripe`, the 2-D law is
+not confirmed as stated. The honest conclusion then becomes a measured effective-dimension law
+(`d_eff` near 1 in this harness), not a Newton-style confirmation of `alpha = 1/2`.
+
+### Precision and scaling rule
+
+The sweep should be run on Modal with enough seeds to reach bootstrap standard error `<= 0.02` for
+the primary exponents whenever the platform quota permits. If the first large sweep misses this
+precision target, dispatch additional seeds with a non-overlapping `base_seed` and combine the JSONs
+before writing the result report. If Modal quota, package failure, or wall-clock interruption prevents
+the target, report the achieved uncertainty plainly and do not call the exponent gate decisive.
+
+No tuning may use the exponent value itself. Harness tuning is allowed only for mechanical worker
+success and for the Paper A emergence precondition (`betti_match_torus` in `full_translation`), never
+to move `alpha` toward `1/2`.
+
+---
+
+## Frozen Addendum: Paper B Moved-Location Metric-Deformation Gate
+
+**Frozen:** 2026-07-02, before the large Modal moved-location Paper B replication.
+
+This addendum pre-registers the decision rule for the direct "Kepler" claim in Paper B:
+moving a concern/reward field should move the learned representational metric deformation.
+The prior CPU result tested two reward locations with three seeds. The Modal replication
+must test the same causal claim at scale and across architecture families, rather than
+only reusing the rate-distortion exponent sweep.
+
+### Primary estimands
+
+For each architecture, reward location, and seed, train a finite-capacity predictive
+spatial model with either a uniform loss or a loss weighted by a localized concern field.
+Measure the induced metric field of the learned latent code. The Paper B Kepler primary
+uses the original Paper B observable: local neighbor-stretch metric density, the mean
+latent displacement per unit physical displacement. Area-density `sqrt(det J(x)^T J(x))`
+is co-reported as the rate-distortion companion observable, but it is not substituted
+for the original moved-location metric-density claim.
+
+All primary metrics are computed on the log neighbor-stretch metric-density z-score field:
+
+1. `control_subtracted_lift_z`: metric z-score at the rewarded location in the reward
+   condition minus the matched uniform-control z-score at the same location.
+2. `specificity_z`: metric z-score at the rewarded location minus the mean metric
+   z-score at the other registered, unrewarded locations in the same trained model.
+3. `reward_rank_percentile`: percentile rank of the rewarded-location metric density
+   among spatial bins.
+4. `peak_error`: Euclidean distance between the reward location and the maximum-density
+   spatial bin, reported as a diagnostic rather than a pass/fail gate.
+
+The primary analysis aggregates over registered locations within each architecture.
+Per-location tables are reported as diagnostics; they are not individually tuned.
+
+### Architecture families
+
+The confirmatory architecture set is:
+
+| Architecture | Reading |
+| --- | --- |
+| `rnn` | recurrent path-integration grid harness used by the original Paper B result |
+| `transformer` | causal Transformer sequence model over velocities and initial place code |
+| `jepa` | JEPA-style predictive latent dynamics model with a stop-gradient target-latent loss |
+
+### Decision gate
+
+The moved-location Kepler claim is counted as confirmed for an architecture only if:
+
+1. the bootstrap 95% CI for aggregate `control_subtracted_lift_z` excludes zero on the
+   positive side;
+2. the bootstrap 95% CI for aggregate `specificity_z` excludes zero on the positive side;
+3. the bootstrap SE for both aggregate primary metrics is `<= 0.01` whenever Modal quota
+   permits adaptive continuation;
+4. `reward_rank_percentile` is reported and is above chance (`> 0.5`) in the aggregate.
+
+The cross-architecture claim is counted as confirmed only if all three architecture families
+pass the first two gates and the pooled architecture-balanced mean is positive with bootstrap
+SE `<= 0.01`.
+
+If a model family fails, the paper must report that failure plainly and narrow the claim to
+the passing families. If the SE target is missed because of quota, runner failure, or wall-clock
+interruption, the achieved uncertainty must be reported and the claim must not be called
+"below 1%" for that metric.
+
+No harness change may be selected because it improves the primary metric. Tuning is allowed
+only for mechanical worker success, finite-loss training, and sufficient spatial-bin coverage.

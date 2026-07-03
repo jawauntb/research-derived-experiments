@@ -20,7 +20,7 @@ emergence, then measures the four pre-registered quantities:
 Run (laptop, dispatches to Modal):
 
     doppler --scope /Users/jawaun/superoptimizers run -- \\
-        uvx --python 3.12 --from modal modal run \\
+        uvx --python 3.12 --from modal --with numpy modal run \\
             experiments/grid_cell_weakness/modal_grid_cell_weakness_sweep.py \\
             --seeds 8 --steps 4000 \\
             --out artifacts/grid_cell_weakness/sweep.json
@@ -119,7 +119,7 @@ def _weakness(points, side, shifts=None, train_frac=0.5, seed=0, permute=False):
     return float(np.mean(r2s))
 
 
-def _toroidal_score(points, max_points=400, seed=0):
+def _toroidal_score(points, max_points=400, seed=0, edge_percentile=45.0):
     import numpy as np
     import gudhi
     from scipy.spatial.distance import pdist
@@ -128,7 +128,7 @@ def _toroidal_score(points, max_points=400, seed=0):
     if P.shape[0] > max_points:
         P = P[rng.choice(P.shape[0], max_points, replace=False)]
     d = pdist(P)
-    max_edge = float(np.percentile(d, 45)) if len(d) else 1.0
+    max_edge = float(np.percentile(d, edge_percentile)) if len(d) else 1.0
     st = gudhi.RipsComplex(points=P.tolist(), max_edge_length=max_edge).create_simplex_tree(max_dimension=3)
     st.compute_persistence()
 
@@ -146,7 +146,8 @@ def _toroidal_score(points, max_points=400, seed=0):
     betti1 = int((h1 > (h1_top2[1] * 0.5 if h1_top2[1] > 0 else np.inf)).sum()) if len(h1) else 0
     return dict(toroidal_score=float(score), betti1_estimate=betti1,
                 betti_match_torus=bool(betti1 == 2 and h2_top > 0.2 * scale),
-                h1_top2=h1_top2, h2_top=h2_top)
+                h1_top2=h1_top2, h2_top=h2_top, edge_percentile=float(edge_percentile),
+                max_points=int(max_points), n_points=int(P.shape[0]))
 
 
 def _fourier_pr(rate_maps):
@@ -166,11 +167,41 @@ def _fourier_pr(rate_maps):
     return float(np.mean(prs)) if prs else float("nan")
 
 
+def _bin_population(hidden, positions, side, empty_policy="global_mean"):
+    import numpy as np
+    b = np.clip((positions * side).astype(int), 0, side - 1)
+    bid = b[:, 0] * side + b[:, 1]
+    pop = np.zeros((side * side, hidden.shape[1]))
+    cnt = np.zeros(side * side)
+    for k, g in zip(bid, hidden):
+        pop[k] += g
+        cnt[k] += 1
+    ne = cnt > 0
+    if ne.any():
+        pop[ne] /= cnt[ne, None]
+    if empty_policy == "drop":
+        return pop[ne], cnt[ne], float(ne.mean())
+    if empty_policy == "zero":
+        pop[~ne] = 0.0
+    elif empty_policy == "global_mean":
+        pop[~ne] = pop[ne].mean(0) if ne.any() else 0.0
+    else:
+        raise ValueError(f"unknown empty_policy={empty_policy!r}")
+    return pop, cnt, float(ne.mean())
+
+
 # --------------------------------------------------------------------------- #
 # Modal worker: train one net, measure four quantities
 # --------------------------------------------------------------------------- #
 
-@app.function(image=IMAGE, gpu="A10G", timeout=3600, memory=16384)
+@app.function(
+    image=IMAGE,
+    gpu="H100",
+    timeout=7200,
+    memory=32768,
+    max_containers=96,
+    retries=1,
+)
 def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
     import numpy as np
     import torch
@@ -262,18 +293,39 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
         G = G.reshape(-1, Ng).cpu().numpy(); flat = poss.reshape(-1, 2)
 
     ms = 16
-    b = np.clip((flat * ms).astype(int), 0, ms - 1); bid = b[:, 0] * ms + b[:, 1]
-    pop = np.zeros((ms * ms, Ng)); cnt = np.zeros(ms * ms)
-    for k, g in zip(bid, G):
-        pop[k] += g; cnt[k] += 1
-    ne = cnt > 0; pop[ne] /= cnt[ne, None]
-    pop[~ne] = pop[ne].mean(0) if ne.any() else 0.0
+    pop, _, coverage = _bin_population(G, flat, ms, empty_policy="global_mean")
     rate_maps = pop.reshape(ms, ms, Ng).transpose(2, 0, 1)
 
     w = _weakness(pop, ms, seed=seed)
     w_wrong = _weakness(pop, ms, seed=seed, permute=True)
     topo = _toroidal_score(pop, seed=seed)
     fpr = _fourier_pr(rate_maps)
+    topology_robustness = []
+    if arg.get("robustness", False):
+        for bin_count in arg.get("robustness_bin_counts", [12, 16, 20]):
+            for empty_policy in arg.get("robustness_empty_policies", ["global_mean", "drop"]):
+                robust_pop, _, robust_coverage = _bin_population(G, flat, int(bin_count), empty_policy=empty_policy)
+                for edge_percentile in arg.get("robustness_edge_percentiles", [35.0, 45.0, 55.0]):
+                    for max_points in arg.get("robustness_max_points", [200, 400]):
+                        robust_topo = _toroidal_score(
+                            robust_pop,
+                            max_points=int(max_points),
+                            seed=seed,
+                            edge_percentile=float(edge_percentile),
+                        )
+                        topology_robustness.append(dict(
+                            bin_count=int(bin_count),
+                            empty_policy=empty_policy,
+                            edge_percentile=float(edge_percentile),
+                            max_points=int(max_points),
+                            coverage=robust_coverage,
+                            toroidal_score=robust_topo["toroidal_score"],
+                            betti1_estimate=robust_topo["betti1_estimate"],
+                            betti_match_torus=robust_topo["betti_match_torus"],
+                            h1_top2=robust_topo["h1_top2"],
+                            h2_top=robust_topo["h2_top"],
+                            n_points=robust_topo["n_points"],
+                        ))
 
     # Hutchinson sharpness proxy on the decoder (classical baseline)
     return dict(
@@ -282,7 +334,7 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
         weakness_translation=w, weakness_wrong_group=w_wrong,
         toroidal_score=topo["toroidal_score"], betti1_estimate=topo["betti1_estimate"],
         betti_match_torus=topo["betti_match_torus"], h1_top2=topo["h1_top2"], h2_top=topo["h2_top"],
-        fourier_pr=fpr, coverage=float(ne.mean()),
+        fourier_pr=fpr, coverage=coverage, topology_robustness=topology_robustness,
     )
 
 
@@ -297,7 +349,20 @@ def _spearman(xs, ys) -> float:
     xs, ys = xs[ok], ys[ok]
     if len(xs) < 2:
         return 0.0
-    rx = np.argsort(np.argsort(xs)).astype(float); ry = np.argsort(np.argsort(ys)).astype(float)
+
+    def rank(vals):
+        order = np.argsort(vals)
+        ranks = np.empty(len(vals), dtype=float)
+        i = 0
+        while i < len(vals):
+            j = i
+            while j + 1 < len(vals) and vals[order[j + 1]] == vals[order[i]]:
+                j += 1
+            ranks[order[i:j + 1]] = (i + j) / 2.0
+            i = j + 1
+        return ranks
+
+    rx = rank(xs); ry = rank(ys)
     rx -= rx.mean(); ry -= ry.mean()
     den = math.sqrt((rx ** 2).sum() * (ry ** 2).sum())
     return float((rx * ry).sum() / den) if den else 0.0
@@ -313,16 +378,21 @@ def main(
     conditions: str = ",".join(CONDITIONS),
     archs: str = "rnn,gru",
     seeds: int = 8,
-    Ng: int = 128,
-    Np: int = 100,
+    ng: int = 128,
+    np: int = 100,
     sigma: float = 0.10,
-    T: int = 20,
+    t: int = 20,
     steps: int = 4000,
     batch: int = 200,
     lr: float = 1e-3,
     weight_decay: float = 1e-4,
     activity_reg: float = 1e-3,
     decode_arenas: str = "1.0,1.25,1.5",
+    robustness: bool = False,
+    robustness_bin_counts: str = "12,16,20",
+    robustness_edge_percentiles: str = "35,45,55",
+    robustness_empty_policies: str = "global_mean,drop",
+    robustness_max_points: str = "200,400",
     base_seed: int = 20260628,
     out: str = "artifacts/grid_cell_weakness/sweep.json",
 ) -> None:
@@ -330,9 +400,17 @@ def main(
     arch_list = [a.strip() for a in archs.split(",") if a.strip()]
     seed_list = [base_seed + 100 * k for k in range(seeds)]
     arena_list = [float(x) for x in decode_arenas.split(",") if x.strip()]
-    cells = [dict(augment=c, arch=a, seed=s, Ng=Ng, Np=Np, sigma=sigma, T=T,
+    robustness_bin_count_list = [int(x) for x in robustness_bin_counts.split(",") if x.strip()]
+    robustness_edge_percentile_list = [float(x) for x in robustness_edge_percentiles.split(",") if x.strip()]
+    robustness_empty_policy_list = [x.strip() for x in robustness_empty_policies.split(",") if x.strip()]
+    robustness_max_point_list = [int(x) for x in robustness_max_points.split(",") if x.strip()]
+    cells = [dict(augment=c, arch=a, seed=s, Ng=ng, Np=np, sigma=sigma, T=t,
                   steps=steps, batch=batch, lr=lr, weight_decay=weight_decay,
-                  activity_reg=activity_reg, decode_arenas=arena_list)
+                  activity_reg=activity_reg, decode_arenas=arena_list,
+                  robustness=robustness, robustness_bin_counts=robustness_bin_count_list,
+                  robustness_edge_percentiles=robustness_edge_percentile_list,
+                  robustness_empty_policies=robustness_empty_policy_list,
+                  robustness_max_points=robustness_max_point_list)
              for c in cond_list for a in arch_list for s in seed_list]
     print(f"[gcw] dispatching {len(cells)} cells "
           f"(conditions={cond_list}, archs={arch_list}, seeds={len(seed_list)}, steps={steps})")
@@ -361,6 +439,7 @@ def main(
     g1 = (sum(r["betti_match_torus"] for r in ft) / len(ft)) if ft else 0.0
     best_classical_topo = abs(analysis["rho_loss_topology"])
     best_classical_ood = abs(analysis["rho_loss_ood"])
+
     def mean(xs):
         return (sum(xs) / len(xs)) if xs else float("nan")
 
@@ -387,9 +466,13 @@ def main(
     out_path = Path(out); out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(dict(
         kind="REAL Paper A grid-cell weakness sweep on Modal",
-        manifest=dict(conditions=cond_list, archs=arch_list, seeds=seed_list, Ng=Ng, Np=Np,
-                      steps=steps, batch=batch, lr=lr, weight_decay=weight_decay, activity_reg=activity_reg,
-                      decode_arenas=arena_list),
+        manifest=dict(conditions=cond_list, archs=arch_list, seeds=seed_list, Ng=ng, Np=np,
+                      T=t, steps=steps, batch=batch, lr=lr, weight_decay=weight_decay, activity_reg=activity_reg,
+                      decode_arenas=arena_list, robustness=robustness,
+                      robustness_bin_counts=robustness_bin_count_list,
+                      robustness_edge_percentiles=robustness_edge_percentile_list,
+                      robustness_empty_policies=robustness_empty_policy_list,
+                      robustness_max_points=robustness_max_point_list),
         analysis=analysis, cells=results,
     ), indent=2, sort_keys=True, default=float) + "\n")
     print(f"[gcw] wrote {out_path}")

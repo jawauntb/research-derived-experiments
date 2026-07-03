@@ -20,9 +20,9 @@ next tests from the result reports:
 Self-contained worker (house pattern). Run from a Modal-authed machine:
 
     doppler --scope /Users/jawaun/superoptimizers run -- \\
-        uvx --python 3.12 --from modal modal run \\
+        uvx --python 3.12 --from modal --with numpy modal run \\
             experiments/grid_cell_weakness/modal_reward_deformation_sweep.py \\
-            --seeds 10 --steps 8000 --Ng 256 --Np 256 \\
+            --seeds 10 --steps 8000 --ng 256 --np 256 \\
             --geometries point,stripe,aniso2d --amps 3,6,12 \\
             --out artifacts/grid_cell_weakness/reward_deformation_sweep.json
 
@@ -135,7 +135,14 @@ def _loglog_slope(w, rho):
     return float(slope), float(1 - ss_res / ss_tot), int(m.sum())
 
 
-@app.function(image=IMAGE, gpu="A10G", timeout=3600, memory=16384)
+@app.function(
+    image=IMAGE,
+    gpu="H100",
+    timeout=7200,
+    memory=32768,
+    max_containers=192,
+    retries=1,
+)
 def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
     import numpy as np
     import torch
@@ -226,18 +233,18 @@ def _boot_ci(vals, n=2000):
 
 
 @app.local_entrypoint()
-def main(seeds: int = 10, steps: int = 8000, Ng: int = 256, Np: int = 256,
-         sigma: float = 0.12, sig_pc: float = 0.09, T: int = 20, batch: int = 128,
+def main(seeds: int = 10, steps: int = 8000, ng: int = 256, np: int = 256,
+         sigma: float = 0.12, sig_pc: float = 0.09, t: int = 20, batch: int = 128,
          noise_std: float = 0.15, geometries: str = "point,stripe,aniso2d",
          amps: str = "3,6,12", base_seed: int = 20260701,
          out: str = "artifacts/grid_cell_weakness/reward_deformation_sweep.json"):
     geos = [g.strip() for g in geometries.split(",") if g.strip()]
     As = [float(a) for a in amps.split(",") if a.strip()]
-    cells = [dict(seed=base_seed + 100 * k, geometry=g, A=a, Ng=Ng, Np=Np, sigma=sigma,
-                  sig_pc=sig_pc, T=T, steps=steps, batch=batch, noise_std=noise_std, xy=[0.5, 0.5])
+    cells = [dict(seed=base_seed + 100 * k, geometry=g, A=a, Ng=ng, Np=np, sigma=sigma,
+                  sig_pc=sig_pc, T=t, steps=steps, batch=batch, noise_std=noise_std, xy=[0.5, 0.5])
              for g in geos for a in As for k in range(seeds)]
     print(f"[rd-sweep] dispatching {len(cells)} cells: geometries={geos} amps={As} seeds={seeds} "
-          f"Ng={Ng} Np={Np} steps={steps}")
+          f"Ng={ng} Np={np} steps={steps}")
     rows = [r for r in run_cell.map(cells) if r]
 
     # aggregate exponent + implied d_eff per (geometry, A), and amplitude scaling

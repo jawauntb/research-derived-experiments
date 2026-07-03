@@ -284,6 +284,7 @@ def main():
     # Control-subtracted deformation (removes positional baseline asymmetry):
     # the reward effect is (reward-condition − control) at the SAME location.
     cA = analysis["control"]
+
     def dz(name, where):
         return analysis[name][f"density_z_at_{where}"]
 

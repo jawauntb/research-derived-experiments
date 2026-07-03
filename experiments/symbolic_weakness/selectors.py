@@ -9,7 +9,9 @@ We compare:
 - `simplicity`        : shortest hypothesis form length.
 - `compression`       : form_length + 20 * train errors (MDL-style proxy).
 - `mdl_program`       : weight by 2^-form_length (Solomonoff-style proxy).
-- `flatness_proxy`    : largest free-domain count (toy flatness proxy).
+- `flatness_proxy`    : largest free-domain count. This is a symbolic
+                        completion-volume proxy, not Hessian/weight-space
+                        flatness.
 - `weakness_oracle`   : largest equivariance count under the trial's true group.
 - `weakness_wrong_group`: weakness scored under a wrong group (control).
 - `weakness_noisy`    : weakness with a noisy subset of the true group.
@@ -29,6 +31,7 @@ from experiments.symbolic_weakness.families import (
     GroupAction,
     Trial,
     cyclic_group,
+    dihedral_group,
     equivariance_count_with_action,
     ground_truth_from_invariant,
     ood_accuracy,
@@ -112,48 +115,83 @@ def _noisy_group_for_trial(trial: Trial, rng: random.Random) -> GroupAction:
 def _data_inferred_group(trial: Trial) -> GroupAction:
     """Infer a candidate transformation group from training data alone.
 
-    Heuristic: collect every permutation g of {0..n-1} such that the
-    mapping x -> g(x) preserves every observed (x, y) pair under SOME
-    output-side permutation h satisfying h(y_i) = y_{g^{-1}(i)}. In the
-    cyclic case this recovers the translation group. We bound the search
-    to make the inference computationally trivial.
+    Heuristic: enumerate a small transformation family implied by the domain
+    type, then keep every input-side permutation g whose action on observed
+    training pairs is consistent with at least one output-side permutation h
+    from the same family. This is not unconstrained group discovery; it is an
+    explicit, reproducible "no oracle offset" prior over rotations/reflections.
     """
     n = trial.domain_size
     train_pairs = list(trial.train_examples)
     if not train_pairs:
         return trial.group
 
-    if trial.family in {"cyclic_prefix_shift", "linear_mod", "compositional"}:
-        # Test each cyclic shift.
+    def _consistent_subset(
+        base: GroupAction,
+        *,
+        name: str,
+    ) -> GroupAction:
+        seen = {ex.x: ex.y for ex in train_pairs}
         keep: list[tuple[int, ...]] = []
-        for shift in range(n):
-            g = tuple((x + shift) % n for x in range(n))
-            # Check there exists h such that h(y_i) = y' for the shifted x:
-            # We test the candidate translation by checking whether the rule
-            # y -> y + shift mod n preserves any single observed pair.
-            valid = True
-            seen = {ex.x: ex.y for ex in train_pairs}
-            for ex in train_pairs:
-                new_x = g[ex.x]
-                new_y_expected = (ex.y + shift) % n
-                if new_x in seen and seen[new_x] != new_y_expected:
-                    valid = False
+        for g in base.elements:
+            valid_for_some_h = False
+            for h in base.elements:
+                valid = True
+                for ex in train_pairs:
+                    shifted_x = g[ex.x]
+                    if shifted_x in seen and h[ex.y] != seen[shifted_x]:
+                        valid = False
+                        break
+                if valid:
+                    valid_for_some_h = True
                     break
-            if valid:
+            if valid_for_some_h:
                 keep.append(g)
-        if not keep:
-            keep = [tuple(range(n))]
+        identity = tuple(range(n))
+        if identity not in keep:
+            keep.insert(0, identity)
         return GroupAction(
-            name=f"data_inferred_cyclic_subset_{len(keep)}",
+            name=name.format(count=len(keep)),
+            domain_size=n,
+            elements=tuple(keep),
+            identity_index=keep.index(identity),
+        )
+
+    if trial.family in {"cyclic_prefix_shift", "linear_mod", "compositional"}:
+        # Circular-domain translation prior inferred by training-pair
+        # consistency, without reading the trial's oracle group object.
+        return _consistent_subset(
+            cyclic_group(n),
+            name="data_inferred_cyclic_subset_{count}",
+        )
+
+    if trial.family == "dihedral_reflection":
+        # Signed circular-domain prior: rotations plus reflections. This fixes
+        # the previous fallback that reused trial.group for dihedral tasks.
+        return _consistent_subset(
+            dihedral_group(n),
+            name="data_inferred_dihedral_subset_{count}",
+        )
+
+    if trial.family == "parity_coset":
+        # Infer identity/parity swap by checking the only nontrivial pairwise
+        # involution available in the parity-domain prior.
+        seen = {ex.x: ex.y for ex in train_pairs}
+        keep: list[tuple[int, ...]] = []
+        base = parity_group(n)
+        for g in base.elements:
+            for ex in train_pairs:
+                shifted_x = g[ex.x]
+                if shifted_x in seen and g[ex.y] != seen[shifted_x]:
+                    break
+            else:
+                keep.append(g)
+        return GroupAction(
+            name=f"data_inferred_parity_subset_{len(keep)}",
             domain_size=n,
             elements=tuple(keep),
             identity_index=keep.index(tuple(range(n))),
         )
-
-    if trial.family == "parity_coset":
-        # Only identity and the parity swap exist; we keep both as the
-        # default candidate set.
-        return parity_group(n)
 
     if trial.family == "color_permutation":
         # In S_n the data-inferred group is small without more cues; we
@@ -192,8 +230,8 @@ def candidate_metrics(
     train_errors = round((1.0 - train_acc) * len(trial.train_examples))
     compression_length = candidate.form_length + 20 * train_errors
 
-    # Toy "flatness" proxy: how many domain positions are unconstrained by
-    # the training set.
+    # Symbolic completion-volume proxy: how many domain positions are
+    # unconstrained by the training set. This is not Hessian flatness.
     flatness_proxy = trial.domain_size - len(trial.train_examples)
 
     # Definition: weakness = number of group elements g such that there

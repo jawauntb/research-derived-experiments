@@ -10,13 +10,15 @@
 
 ## Verification
 - Pre-registration: _none_
-- Result reports (4):
+- Result reports (6):
+  - `experiments/symbolic_weakness/results/modal_neural_sweep_2026_07_02.md`
   - `experiments/symbolic_weakness/results/modal_neural_sweep_v1_2026_06_09.md`
   - `experiments/symbolic_weakness/results/multi_family_500_2026_06_09.md`
+  - `experiments/symbolic_weakness/results/neural_correlation_checks_2026_07_02.md`
   - `experiments/symbolic_weakness/results/neural_sweep_v3_2026_06_09.md`
   - `experiments/symbolic_weakness/results/prefix_shift_pilot_2026_06_09.md`
 
 ## Artifacts
-- Committed: `experiments/symbolic_weakness/results/modal_neural_sweep_v1_2026_06_09.md`, `experiments/symbolic_weakness/results/multi_family_500_2026_06_09.md`, `experiments/symbolic_weakness/results/neural_sweep_v3_2026_06_09.md`, `experiments/symbolic_weakness/results/prefix_shift_pilot_2026_06_09.md`
+- Committed: `experiments/symbolic_weakness/results/modal_neural_sweep_2026_07_02.md`, `experiments/symbolic_weakness/results/modal_neural_sweep_v1_2026_06_09.md`, `experiments/symbolic_weakness/results/multi_family_500_2026_06_09.md`, `experiments/symbolic_weakness/results/neural_correlation_checks_2026_07_02.md`, `experiments/symbolic_weakness/results/neural_sweep_v3_2026_06_09.md`, `experiments/symbolic_weakness/results/prefix_shift_pilot_2026_06_09.md`
 - Local-only: artifacts/ (gitignored raw outputs; see result reports for summaries)
 - Paper: _none_
