@@ -7,12 +7,12 @@ Test whether future control relevance moves both generated behavior and internal
 ## Current Status
 
 - Synthetic trained-agent ladder: positive through autoregressively decoded JSON-like action strings.
-- Prompt-level open-model transfer: controlled strong negative for the full hidden-geometry gate.
-- Hidden-localization replication: runner and preregistration added for multi-model, multi-layer,
-  multi-token-position follow-up.
-- Latest model: `Qwen/Qwen2.5-0.5B-Instruct`.
-- Latest confirmatory artifact: `artifacts/long_horizon_bottleneck/prompt_json_transfer_l4.json`.
-- Latest committed report: `experiments/long_horizon_bottleneck/results/zzzzzzzzzzz_prompt_json_transfer_l4_4seed_2026_07_03.md`.
+- Prompt-level open-model transfer: behavior positive; initial final-prompt hidden gate was a controlled strong negative.
+- Hidden-localization replication: positive across the default multi-model, multi-layer,
+  multi-token-position grid.
+- Latest models: `Qwen/Qwen2.5-0.5B-Instruct`, `Qwen/Qwen2.5-1.5B-Instruct`, `HuggingFaceTB/SmolLM2-1.7B-Instruct`.
+- Latest confirmatory artifact: `artifacts/long_horizon_bottleneck/prompt_json_hidden_localization_l4.json`.
+- Latest committed report: `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzz_prompt_json_hidden_localization_l4_4seed_2026_07_03.md`.
 
 ## Prompt-Level Terminal Result
 
@@ -32,22 +32,25 @@ The hidden-state gate fails:
 - 95% bootstrap CI: [-0.376, 2.080];
 - preregistered hidden gate requires the CI lower bound to be above zero.
 
-Outcome: `strong_negative`.
+Outcome: `strong_negative` for that single final-prompt hidden site.
 
-## Next Hidden-Localization Gate
+## Hidden-Localization Terminal Result
 
-The follow-up sweep tests whether the hidden negative is just a bad measurement
-site. It preserves the prompt-transfer behavior gates and probes
+The follow-up sweep tested whether the hidden negative was a bad measurement
+site. It preserved the prompt-transfer behavior gates and probed
 `prompt_final`, `generated_first`, and `generated_final` hidden states at
 `early`, `mid`, `late`, and `final` layer aliases across the default cheap model
 set: `Qwen/Qwen2.5-0.5B-Instruct`, `Qwen/Qwen2.5-1.5B-Instruct`, and
 `HuggingFaceTB/SmolLM2-1.7B-Instruct`.
 
-Terminal outcomes:
+The confirmatory run is positive:
 
-- `positive`: behavior passes and at least one preregistered hidden site passes.
-- `strong_negative`: behavior passes and no preregistered hidden site passes.
-- `inconclusive`: behavior controls fail, bottleneck behavior fails, or hidden rows are missing.
+- controls pass for all three models;
+- behavioral moved-bottleneck passes for all three models;
+- 17 registered hidden sites pass specificity and rank gates;
+- strongest sites are generated-final states, with positive CIs across all three model families.
+
+Outcome: `positive`.
 
 ## Use
 

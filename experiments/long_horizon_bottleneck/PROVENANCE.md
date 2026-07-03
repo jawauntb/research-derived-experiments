@@ -10,7 +10,7 @@
 
 ## Verification
 - Pre-registration: `papers/long_horizon_bottleneck/preregistration.md`
-- Result reports (16):
+- Result reports (17):
   - `experiments/long_horizon_bottleneck/results/modal_transformer_l4_8seed_2026_07_02.md`
   - `experiments/long_horizon_bottleneck/results/modal_transformer_l4_horizon_4seed_2026_07_02.md`
   - `experiments/long_horizon_bottleneck/results/tool_commitment_l4_4seed_2026_07_02.md`
@@ -27,14 +27,15 @@
   - `experiments/long_horizon_bottleneck/results/zzzzzzzzzz_autoregressive_json_surface_l4_4seed_2026_07_03.md`
   - `experiments/long_horizon_bottleneck/results/zzzzzzzzzzz_prompt_json_transfer_l4_4seed_2026_07_03.md`
   - `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzz_prompt_json_hidden_localization_smoke_2026_07_03.md`
+  - `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzz_prompt_json_hidden_localization_l4_4seed_2026_07_03.md`
 
 Key verification signals (from the latest result report):
+  - gate. All behavior controls pass for all three models, behavioral
+  - `prompt_json_bottleneck` passes for all three models, and at least one
+  - registered hidden site passes the specificity and rank gates.
   - - Controls pass: yes.
-  - - Behavioral prompt-level moved bottleneck passes: yes.
-  - - Hidden localization pass: no.
-  - Site | Memory specificity z | Memory rank percentile | Gate
 
 ## Artifacts
-- Committed: `experiments/long_horizon_bottleneck/results/modal_transformer_l4_8seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/modal_transformer_l4_horizon_4seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/tool_commitment_l4_4seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/z_closed_loop_tool_commitment_l4_4seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/zz_structured_tool_call_local_smoke_2026_07_03.md`, `experiments/long_horizon_bottleneck/results/zz_tool_recovery_l4_4seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/zzz_structured_tool_call_l4_4seed_2026_07_03.md`, `experiments/long_horizon_bottleneck/results/zzzz_multifield_tool_schema_l4_4seed_2026_07_03.md`, `experiments/long_horizon_bottleneck/results/zzzzz_stochastic_tool_failure_l4_4seed_2026_07_03.md`, `experiments/long_horizon_bottleneck/results/zzzzzz_stochastic_tool_failure_8slot_l4_4seed_2026_07_03.md`, `experiments/long_horizon_bottleneck/results/zzzzzzz_alias_argument_surface_l4_4seed_2026_07_03.md`, `experiments/long_horizon_bottleneck/results/zzzzzzzz_text_argument_surface_l4_4seed_2026_07_03.md`, `experiments/long_horizon_bottleneck/results/zzzzzzzzz_generated_json_surface_l4_4seed_2026_07_03.md`, `experiments/long_horizon_bottleneck/results/zzzzzzzzzz_autoregressive_json_surface_l4_4seed_2026_07_03.md`, `experiments/long_horizon_bottleneck/results/zzzzzzzzzzz_prompt_json_transfer_l4_4seed_2026_07_03.md`, `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzz_prompt_json_hidden_localization_smoke_2026_07_03.md`, `papers/long_horizon_bottleneck/paper.md`
+- Committed: `experiments/long_horizon_bottleneck/results/modal_transformer_l4_8seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/modal_transformer_l4_horizon_4seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/tool_commitment_l4_4seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/z_closed_loop_tool_commitment_l4_4seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/zz_structured_tool_call_local_smoke_2026_07_03.md`, `experiments/long_horizon_bottleneck/results/zz_tool_recovery_l4_4seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/zzz_structured_tool_call_l4_4seed_2026_07_03.md`, `experiments/long_horizon_bottleneck/results/zzzz_multifield_tool_schema_l4_4seed_2026_07_03.md`, `experiments/long_horizon_bottleneck/results/zzzzz_stochastic_tool_failure_l4_4seed_2026_07_03.md`, `experiments/long_horizon_bottleneck/results/zzzzzz_stochastic_tool_failure_8slot_l4_4seed_2026_07_03.md`, `experiments/long_horizon_bottleneck/results/zzzzzzz_alias_argument_surface_l4_4seed_2026_07_03.md`, `experiments/long_horizon_bottleneck/results/zzzzzzzz_text_argument_surface_l4_4seed_2026_07_03.md`, `experiments/long_horizon_bottleneck/results/zzzzzzzzz_generated_json_surface_l4_4seed_2026_07_03.md`, `experiments/long_horizon_bottleneck/results/zzzzzzzzzz_autoregressive_json_surface_l4_4seed_2026_07_03.md`, `experiments/long_horizon_bottleneck/results/zzzzzzzzzzz_prompt_json_transfer_l4_4seed_2026_07_03.md`, `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzz_prompt_json_hidden_localization_smoke_2026_07_03.md`, `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzz_prompt_json_hidden_localization_l4_4seed_2026_07_03.md`, `papers/long_horizon_bottleneck/paper.md`
 - Local-only: artifacts/ (gitignored raw outputs; see result reports for summaries)
 - Paper: `papers/long_horizon_bottleneck/paper.md`
