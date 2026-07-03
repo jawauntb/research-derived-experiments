@@ -6,15 +6,21 @@ from experiments.long_horizon_bottleneck.core import (
     build_cells,
     build_horizon_cells,
     estimate_modal_cost,
+    generated_json_call_token_ids,
+    generated_json_noop_token_ids,
+    generated_json_sequence_length,
+    generated_json_vocab_size,
     multifield_call_tokens,
     multifield_malformed_tokens,
     multifield_noop_tokens,
     multifield_vocab_sizes,
+    parse_generated_json_tokens,
     parse_multifield_action,
     parse_text_argument,
     parse_alias_argument,
     parse_structured_action,
     render_text_argument,
+    render_generated_json_tokens,
     render_multifield_action,
     render_structured_action,
     structured_action_vocab_size,
@@ -519,6 +525,51 @@ def test_text_argument_surface_renders_and_parses_phrase_variants():
         render_text_argument(text_argument_vocab_size(n_slots, variants_per_slot), n_slots, variants_per_slot)
 
 
+def test_generated_json_surface_renders_and_parses_token_sequences():
+    n_slots = 4
+    variants_per_slot = 3
+
+    assert generated_json_sequence_length() == 13
+    assert generated_json_vocab_size(n_slots, variants_per_slot) == 13 + text_argument_vocab_size(
+        n_slots,
+        variants_per_slot,
+    )
+
+    call_tokens = generated_json_call_token_ids(
+        slot=1,
+        variant_index=1,
+        value=0,
+        n_slots=n_slots,
+        variants_per_slot=variants_per_slot,
+    )
+    rendered_call = render_generated_json_tokens(call_tokens, n_slots, variants_per_slot)
+    parsed_call = parse_generated_json_tokens(call_tokens, n_slots, variants_per_slot)
+
+    assert "second clue" in rendered_call
+    assert parsed_call == {
+        "opcode": "call",
+        "slot": 1,
+        "variant_index": 1,
+        "value": 0,
+        "valid": True,
+        "executable": True,
+        "reason": None,
+        "text": rendered_call,
+    }
+
+    noop_tokens = generated_json_noop_token_ids(n_slots, variants_per_slot)
+    parsed_noop = parse_generated_json_tokens(noop_tokens, n_slots, variants_per_slot)
+    assert parsed_noop["opcode"] == "noop"
+    assert parsed_noop["valid"] and not parsed_noop["executable"]
+
+    malformed_tokens = list(call_tokens)
+    malformed_tokens[3] = generated_json_noop_token_ids(n_slots, variants_per_slot)[3]
+    parsed_malformed = parse_generated_json_tokens(malformed_tokens, n_slots, variants_per_slot)
+    assert parsed_malformed["opcode"] == "malformed"
+    assert not parsed_malformed["valid"]
+    assert parsed_malformed["reason"] == "malformed_order"
+
+
 def test_summarize_multifield_rows_requires_composed_schema_and_repair_fields():
     rows = []
     for seed in range(8):
@@ -803,6 +854,67 @@ def test_summarize_stochastic_rows_supports_text_argument_conditions():
     assert summary["groups"]["text_stochastic_bottleneck/transformer"]["gate"]["pass"]
     assert summary["groups"]["text_visible_control/transformer"]["gate"]["pass"]
     assert summary["pooled_text_stochastic_bottleneck"]["gate"]["pass"]
+
+
+def test_summarize_stochastic_rows_supports_generated_json_conditions():
+    rows = []
+    for seed in range(8):
+        rows.append(
+            {
+                "condition": "generated_json_bottleneck",
+                "architecture": "transformer",
+                "critical_slot": seed % 4,
+                "closed_loop_final_accuracy": 1.0,
+                "teacher_forced_final_accuracy": 1.0,
+                "first_field_accuracy": 1.0,
+                "first_schema_validity": 1.0,
+                "first_parsed_slot_accuracy": 1.0,
+                "first_parsed_value_accuracy": 1.0,
+                "repair_field_accuracy": 1.0,
+                "repair_schema_validity": 1.0,
+                "repair_failed_field_accuracy": 1.0,
+                "repair_failed_schema_validity": 1.0,
+                "repair_failed_parsed_slot_accuracy": 1.0,
+                "repair_failed_parsed_value_accuracy": 1.0,
+                "repair_success_noop_field_accuracy": 1.0,
+                "repair_success_schema_validity": 1.0,
+                "sampled_failure_rate": 0.5,
+                "memory_specificity_z": 1.5,
+                "memory_rank_percentile": 0.875,
+                "tool_value_specificity_z": 1.2,
+            }
+        )
+        rows.append(
+            {
+                "condition": "generated_json_visible_control",
+                "architecture": "transformer",
+                "critical_slot": seed % 4,
+                "closed_loop_final_accuracy": 1.0,
+                "teacher_forced_final_accuracy": 1.0,
+                "first_field_accuracy": 1.0,
+                "first_schema_validity": 1.0,
+                "first_parsed_slot_accuracy": float("nan"),
+                "first_parsed_value_accuracy": float("nan"),
+                "repair_field_accuracy": 1.0,
+                "repair_schema_validity": 1.0,
+                "repair_failed_field_accuracy": float("nan"),
+                "repair_failed_schema_validity": float("nan"),
+                "repair_failed_parsed_slot_accuracy": float("nan"),
+                "repair_failed_parsed_value_accuracy": float("nan"),
+                "repair_success_noop_field_accuracy": 1.0,
+                "repair_success_schema_validity": 1.0,
+                "sampled_failure_rate": 0.5,
+                "memory_specificity_z": 0.0,
+                "memory_rank_percentile": 0.5,
+                "tool_value_specificity_z": 0.0,
+            }
+        )
+
+    summary = summarize_stochastic_rows(rows, n_boot=200)
+
+    assert summary["groups"]["generated_json_bottleneck/transformer"]["gate"]["pass"]
+    assert summary["groups"]["generated_json_visible_control/transformer"]["gate"]["pass"]
+    assert summary["pooled_generated_json_bottleneck"]["gate"]["pass"]
 
 
 def test_summarize_stochastic_rows_fails_when_success_repair_is_not_noop():

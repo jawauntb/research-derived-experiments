@@ -21,6 +21,10 @@ The text conditions render those canonical slot alternatives as parser-facing
 phrases such as `clue_1`, `second clue`, and `memory slot 1`, then parse the
 phrase back to the canonical slot before applying the same stochastic gates.
 
+The generated-JSON conditions replace field heads with a fixed-length emitted
+token sequence that renders to a JSON-like call. The evaluator parses the
+sequence back into opcode/slot/value before granting tool state.
+
 Recommended cheap pass:
 
     doppler --scope /Users/jawaun/superoptimizers run -- \\
@@ -87,14 +91,22 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
 
     alias_conditions = {"alias_stochastic_bottleneck", "alias_visible_control"}
     text_conditions = {"text_stochastic_bottleneck", "text_visible_control"}
+    generated_json_conditions = {"generated_json_bottleneck", "generated_json_visible_control"}
     bottleneck_conditions = {
         "stochastic_failure_bottleneck",
         "alias_stochastic_bottleneck",
         "text_stochastic_bottleneck",
+        "generated_json_bottleneck",
     }
-    visible_conditions = {"stochastic_visible_control", "alias_visible_control", "text_visible_control"}
+    visible_conditions = {
+        "stochastic_visible_control",
+        "alias_visible_control",
+        "text_visible_control",
+        "generated_json_visible_control",
+    }
     alias_surface = condition in alias_conditions
     text_surface = condition in text_conditions
+    generated_json_surface = condition in generated_json_conditions
     variant_argument_surface = alias_surface or text_surface
     if aliases_per_slot <= 0:
         raise ValueError("aliases_per_slot must be positive")
@@ -107,6 +119,21 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
     slot_vocab_size = slot_argument_size + 2
     value_missing_id = 2
     value_vocab_size = 4
+    json_base_token_count = 13
+    json_sequence_length = 13
+    json_vocab_size = json_base_token_count + n_slots * aliases_per_slot + 2
+    json_lbrace = 0
+    json_rbrace = 1
+    json_tool = 2
+    json_read_slot = 3
+    json_noop = 4
+    json_slot = 5
+    json_value = 6
+    json_colon = 7
+    json_comma = 8
+    json_zero = 9
+    json_one = 10
+    json_pad = 11
 
     torch.manual_seed(seed)
     torch.set_float32_matmul_precision("high")
@@ -126,6 +153,47 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
     first_return_position = first_commit_position + 1
     repair_commit_position = first_commit_position + 2
     repair_return_position = first_commit_position + 3
+
+    def json_noop_targets(batch: int) -> torch.Tensor:
+        targets = torch.full(
+            (batch, json_sequence_length),
+            json_pad,
+            dtype=torch.long,
+            device=device,
+        )
+        targets[:, 0] = json_lbrace
+        targets[:, 1] = json_tool
+        targets[:, 2] = json_colon
+        targets[:, 3] = json_noop
+        targets[:, 4] = json_rbrace
+        return targets
+
+    def json_call_targets(values: torch.Tensor) -> torch.Tensor:
+        targets = torch.full(
+            (values.shape[0], json_sequence_length),
+            json_pad,
+            dtype=torch.long,
+            device=device,
+        )
+        phrase_token = json_base_token_count + critical_slot * aliases_per_slot + (critical_slot % aliases_per_slot)
+        targets[:, 0] = json_lbrace
+        targets[:, 1] = json_tool
+        targets[:, 2] = json_colon
+        targets[:, 3] = json_read_slot
+        targets[:, 4] = json_comma
+        targets[:, 5] = json_slot
+        targets[:, 6] = json_colon
+        targets[:, 7] = phrase_token
+        targets[:, 8] = json_comma
+        targets[:, 9] = json_value
+        targets[:, 10] = json_colon
+        targets[:, 11] = torch.where(
+            values.bool(),
+            torch.full_like(values, json_one),
+            torch.full_like(values, json_zero),
+        )
+        targets[:, 12] = json_rbrace
+        return targets
 
     def make_batch(batch: int, *, include_teacher_return: bool = True):
         x = torch.zeros(batch, sequence_length, input_dim, device=device)
@@ -153,11 +221,15 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
         if condition in bottleneck_conditions:
             final_target = bits[:, critical_slot].long()
             first_targets = (call_op, crit_slot, crit_value)
+            first_json_targets = json_call_targets(crit_value)
+            repair_json_call = json_call_targets(crit_value)
+            repair_json_noop = json_noop_targets(batch)
             repair_targets = (
                 torch.where(first_failed, call_op, noop_op),
                 torch.where(first_failed, crit_slot, noop_slot),
                 torch.where(first_failed, crit_value, noop_value),
             )
+            repair_json_targets = torch.where(first_failed.unsqueeze(1), repair_json_call, repair_json_noop)
             if include_teacher_return:
                 first_succeeded = ~first_failed
                 x[first_failed, first_return_position, error_idx] = 1.0
@@ -175,6 +247,8 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
             final_target = terminal_bits.long()
             first_targets = (noop_op, noop_slot, noop_value)
             repair_targets = (noop_op, noop_slot, noop_value)
+            first_json_targets = json_noop_targets(batch)
+            repair_json_targets = json_noop_targets(batch)
             if include_teacher_return:
                 first_succeeded = ~first_failed
                 x[first_failed, first_return_position, error_idx] = 1.0
@@ -186,7 +260,19 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
             train_repair = True
         else:
             raise ValueError(condition)
-        return x, final_target, first_targets, repair_targets, crit_value, first_failed, feedback_values, train_first, train_repair
+        return (
+            x,
+            final_target,
+            first_targets,
+            repair_targets,
+            first_json_targets,
+            repair_json_targets,
+            crit_value,
+            first_failed,
+            feedback_values,
+            train_first,
+            train_repair,
+        )
 
     class GRUAgent(nn.Module):
         def __init__(self):
@@ -196,11 +282,14 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
             self.opcode_head = nn.Linear(hidden_size, opcode_vocab_size)
             self.slot_head = nn.Linear(hidden_size, slot_vocab_size)
             self.value_head = nn.Linear(hidden_size, value_vocab_size)
+            self.json_head = nn.Linear(hidden_size, json_sequence_length * json_vocab_size)
 
         def forward(self, x):
             states, _ = self.rnn(x)
             first_state = states[:, first_commit_position]
             repair_state = states[:, repair_commit_position]
+            first_json = self.json_head(first_state).view(-1, json_sequence_length, json_vocab_size)
+            repair_json = self.json_head(repair_state).view(-1, json_sequence_length, json_vocab_size)
             return (
                 self.final_head(states[:, -1]),
                 self.opcode_head(first_state),
@@ -209,6 +298,8 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
                 self.opcode_head(repair_state),
                 self.slot_head(repair_state),
                 self.value_head(repair_state),
+                first_json,
+                repair_json,
                 states,
             )
 
@@ -231,6 +322,7 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
             self.opcode_head = nn.Linear(hidden_size, opcode_vocab_size)
             self.slot_head = nn.Linear(hidden_size, slot_vocab_size)
             self.value_head = nn.Linear(hidden_size, value_vocab_size)
+            self.json_head = nn.Linear(hidden_size, json_sequence_length * json_vocab_size)
             mask = torch.triu(torch.ones(sequence_length, sequence_length), diagonal=1).bool()
             self.register_buffer("causal_mask", mask)
 
@@ -238,6 +330,8 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
             states = self.encoder(self.inp(x) + self.pos.unsqueeze(0), mask=self.causal_mask)
             first_state = states[:, first_commit_position]
             repair_state = states[:, repair_commit_position]
+            first_json = self.json_head(first_state).view(-1, json_sequence_length, json_vocab_size)
+            repair_json = self.json_head(repair_state).view(-1, json_sequence_length, json_vocab_size)
             return (
                 self.final_head(states[:, -1]),
                 self.opcode_head(first_state),
@@ -246,6 +340,8 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
                 self.opcode_head(repair_state),
                 self.slot_head(repair_state),
                 self.value_head(repair_state),
+                first_json,
+                repair_json,
                 states,
             )
 
@@ -279,6 +375,9 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
             + F.cross_entropy(value_logits, value_target)
         )
 
+    def json_sequence_loss(logits, targets):
+        return F.cross_entropy(logits.reshape(-1, json_vocab_size), targets.reshape(-1))
+
     opt = torch.optim.AdamW(model.parameters(), lr=2e-3, weight_decay=1e-4)
     t0 = time.time()
     losses = []
@@ -289,6 +388,8 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
             final_target,
             first_targets,
             repair_targets,
+            first_json_targets,
+            repair_json_targets,
             _crit_value,
             _first_failed,
             _feedback_values,
@@ -303,13 +404,21 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
             repair_op,
             repair_slot,
             repair_value,
+            first_json_logits,
+            repair_json_logits,
             _states,
         ) = model(x)
         loss = F.cross_entropy(final_logits, final_target)
         if train_first:
-            loss = loss + 0.25 * field_loss(first_op, first_slot, first_value, first_targets)
+            if generated_json_surface:
+                loss = loss + 0.75 * json_sequence_loss(first_json_logits, first_json_targets)
+            else:
+                loss = loss + 0.25 * field_loss(first_op, first_slot, first_value, first_targets)
         if train_repair:
-            loss = loss + 0.25 * field_loss(repair_op, repair_slot, repair_value, repair_targets)
+            if generated_json_surface:
+                loss = loss + 0.75 * json_sequence_loss(repair_json_logits, repair_json_targets)
+            else:
+                loss = loss + 0.25 * field_loss(repair_op, repair_slot, repair_value, repair_targets)
         opt.zero_grad(set_to_none=True)
         loss.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
@@ -337,6 +446,38 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
         else:
             slot_matches = slot_pred == slot_target
         return (op_pred == op_target) & slot_matches & (value_pred == value_target)
+
+    def parse_json_sequences(pred):
+        noop = json_noop_targets(pred.shape[0])
+        noop_exact = (pred == noop).all(dim=1)
+        call_order = (
+            (pred[:, 0] == json_lbrace)
+            & (pred[:, 1] == json_tool)
+            & (pred[:, 2] == json_colon)
+            & (pred[:, 3] == json_read_slot)
+            & (pred[:, 4] == json_comma)
+            & (pred[:, 5] == json_slot)
+            & (pred[:, 6] == json_colon)
+            & (pred[:, 8] == json_comma)
+            & (pred[:, 9] == json_value)
+            & (pred[:, 10] == json_colon)
+            & (pred[:, 12] == json_rbrace)
+        )
+        phrase_base = pred[:, 7] - json_base_token_count
+        slot_is_argument = (phrase_base >= 0) & (phrase_base < n_slots * aliases_per_slot)
+        value_valid = (pred[:, 11] == json_zero) | (pred[:, 11] == json_one)
+        executable = call_order & slot_is_argument & value_valid
+        valid = executable | noop_exact
+        parsed_slot = torch.where(
+            executable,
+            torch.div(phrase_base, aliases_per_slot, rounding_mode="floor"),
+            torch.full_like(phrase_base, n_slots),
+        )
+        parsed_value = torch.where(pred[:, 11] == json_one, torch.ones_like(pred[:, 11]), torch.zeros_like(pred[:, 11]))
+        return valid, executable, parsed_slot, parsed_value
+
+    def json_exact(pred, targets):
+        return (pred == targets).all(dim=1)
 
     model.eval()
     teacher_forced_final_correct = 0
@@ -368,6 +509,8 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
                 final_target,
                 first_targets,
                 repair_targets,
+                first_json_targets,
+                repair_json_targets,
                 crit_value,
                 first_failed,
                 _feedback_values,
@@ -382,46 +525,61 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
                 repair_op_logits,
                 repair_slot_logits,
                 repair_value_logits,
+                first_json_logits,
+                repair_json_logits,
                 _states,
             ) = model(x)
             teacher_forced_final_correct += int((final_logits.argmax(-1) == final_target).sum().item())
 
-            first_op = first_op_logits.argmax(-1)
-            first_slot = first_slot_logits.argmax(-1)
-            first_value = first_value_logits.argmax(-1)
-            first_valid, first_executable, parsed_first_slot, parsed_first_value = parse_fields(
-                first_op,
-                first_slot,
-                first_value,
-            )
-            first_field_correct += int(field_exact(first_op, first_slot, first_value, first_targets).sum().item())
+            if generated_json_surface:
+                first_json = first_json_logits.argmax(-1)
+                first_valid, first_executable, parsed_first_slot, parsed_first_value = parse_json_sequences(first_json)
+                first_field_correct += int(json_exact(first_json, first_json_targets).sum().item())
+                first_count = int(first_json.shape[0])
+            else:
+                first_op = first_op_logits.argmax(-1)
+                first_slot = first_slot_logits.argmax(-1)
+                first_value = first_value_logits.argmax(-1)
+                first_valid, first_executable, parsed_first_slot, parsed_first_value = parse_fields(
+                    first_op,
+                    first_slot,
+                    first_value,
+                )
+                first_field_correct += int(field_exact(first_op, first_slot, first_value, first_targets).sum().item())
+                first_count = int(first_op.numel())
             first_schema_valid += int(first_valid.sum().item())
             if is_bottleneck:
                 first_slot_correct += int(((parsed_first_slot == critical_slot) & first_executable).sum().item())
                 first_value_correct += int(((parsed_first_value == crit_value) & first_executable).sum().item())
-            first_total += int(first_op.numel())
+            first_total += first_count
 
             if train_repair:
-                repair_op = repair_op_logits.argmax(-1)
-                repair_slot = repair_slot_logits.argmax(-1)
-                repair_value = repair_value_logits.argmax(-1)
-                repair_valid, repair_executable, parsed_repair_slot, parsed_repair_value = parse_fields(
-                    repair_op,
-                    repair_slot,
-                    repair_value,
-                )
-                repair_field_correct += int(
-                    field_exact(repair_op, repair_slot, repair_value, repair_targets).sum().item()
-                )
+                if generated_json_surface:
+                    repair_json = repair_json_logits.argmax(-1)
+                    repair_valid, repair_executable, parsed_repair_slot, parsed_repair_value = parse_json_sequences(
+                        repair_json
+                    )
+                    repair_exact = json_exact(repair_json, repair_json_targets)
+                    repair_count = int(repair_json.shape[0])
+                else:
+                    repair_op = repair_op_logits.argmax(-1)
+                    repair_slot = repair_slot_logits.argmax(-1)
+                    repair_value = repair_value_logits.argmax(-1)
+                    repair_valid, repair_executable, parsed_repair_slot, parsed_repair_value = parse_fields(
+                        repair_op,
+                        repair_slot,
+                        repair_value,
+                    )
+                    repair_exact = field_exact(repair_op, repair_slot, repair_value, repair_targets)
+                    repair_count = int(repair_op.numel())
+                repair_field_correct += int(repair_exact.sum().item())
                 repair_schema_valid += int(repair_valid.sum().item())
                 if is_bottleneck:
                     failed = first_failed
                     succeeded = ~first_failed
                     failed_total = int(failed.sum().item())
                     success_total = int(succeeded.sum().item())
-                    repair_failed_field_correct += int(
-                        field_exact(repair_op, repair_slot, repair_value, repair_targets)[failed].sum().item()
-                    )
+                    repair_failed_field_correct += int(repair_exact[failed].sum().item())
                     repair_failed_schema_valid += int(repair_valid[failed].sum().item())
                     repair_failed_slot_correct += int(
                         ((parsed_repair_slot == critical_slot) & repair_executable)[failed].sum().item()
@@ -429,13 +587,11 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
                     repair_failed_value_correct += int(
                         ((parsed_repair_value == crit_value) & repair_executable)[failed].sum().item()
                     )
-                    repair_success_noop_correct += int(
-                        field_exact(repair_op, repair_slot, repair_value, repair_targets)[succeeded].sum().item()
-                    )
+                    repair_success_noop_correct += int(repair_exact[succeeded].sum().item())
                     repair_success_schema_valid += int(repair_valid[succeeded].sum().item())
                     repair_failed_total += failed_total
                     repair_success_total += success_total
-                repair_total += int(repair_op.numel())
+                repair_total += repair_count
             sampled_failures += int(first_failed.sum().item())
             sampled_total += int(first_failed.numel())
 
@@ -445,6 +601,8 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
                 closed_final_target,
                 _open_first_targets,
                 _open_repair_targets,
+                _open_first_json_targets,
+                _open_repair_json_targets,
                 _open_crit_value,
                 open_failed,
                 open_feedback_values,
@@ -459,18 +617,24 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
                 _open_repair_op,
                 _open_repair_slot,
                 _open_repair_value,
+                open_first_json,
+                _open_repair_json,
                 _open_states,
             ) = model(x_open)
             x_after_first = x_open.clone()
-            first_op_pred = open_first_op.argmax(-1)
-            first_slot_pred = open_first_slot.argmax(-1)
-            first_value_pred = open_first_value.argmax(-1)
             if is_bottleneck:
-                _valid, executable, parsed_slot, parsed_value = parse_fields(
-                    first_op_pred,
-                    first_slot_pred,
-                    first_value_pred,
-                )
+                if generated_json_surface:
+                    first_json_pred = open_first_json.argmax(-1)
+                    _valid, executable, parsed_slot, parsed_value = parse_json_sequences(first_json_pred)
+                else:
+                    first_op_pred = open_first_op.argmax(-1)
+                    first_slot_pred = open_first_slot.argmax(-1)
+                    first_value_pred = open_first_value.argmax(-1)
+                    _valid, executable, parsed_slot, parsed_value = parse_fields(
+                        first_op_pred,
+                        first_slot_pred,
+                        first_value_pred,
+                    )
                 slot_matches = executable & (parsed_slot == critical_slot)
                 first_success = (~open_failed) & slot_matches
                 x_after_first[open_failed, first_return_position, error_idx] = 1.0
@@ -494,18 +658,26 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
                 repair_op_logits_open,
                 repair_slot_logits_open,
                 repair_value_logits_open,
+                _after_first_json,
+                repair_json_logits_open,
                 _after_first_states,
             ) = model(x_after_first)
             x_closed = x_after_first.clone()
             if is_bottleneck:
-                repair_op_pred = repair_op_logits_open.argmax(-1)
-                repair_slot_pred = repair_slot_logits_open.argmax(-1)
-                repair_value_pred = repair_value_logits_open.argmax(-1)
-                _repair_valid, repair_executable, parsed_repair_slot, parsed_repair_value = parse_fields(
-                    repair_op_pred,
-                    repair_slot_pred,
-                    repair_value_pred,
-                )
+                if generated_json_surface:
+                    repair_json_pred = repair_json_logits_open.argmax(-1)
+                    _repair_valid, repair_executable, parsed_repair_slot, parsed_repair_value = parse_json_sequences(
+                        repair_json_pred
+                    )
+                else:
+                    repair_op_pred = repair_op_logits_open.argmax(-1)
+                    repair_slot_pred = repair_slot_logits_open.argmax(-1)
+                    repair_value_pred = repair_value_logits_open.argmax(-1)
+                    _repair_valid, repair_executable, parsed_repair_slot, parsed_repair_value = parse_fields(
+                        repair_op_pred,
+                        repair_slot_pred,
+                        repair_value_pred,
+                    )
                 repair_slot_matches = open_failed & repair_executable & (parsed_repair_slot == critical_slot)
                 x_closed[repair_slot_matches, repair_return_position, tool_return_idx] = 1.0
                 x_closed[repair_slot_matches, repair_return_position, tool_return_value_idx] = (
@@ -567,14 +739,36 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
                     x1[:, repair_return_position, tool_return_value_idx] = -x1[
                         :, repair_return_position, tool_return_value_idx
                     ]
-                final0, first_op0, first_slot0, first_value0, repair_op0, repair_slot0, repair_value0, states0 = model(
-                    x0
-                )
-                final1, first_op1, first_slot1, first_value1, repair_op1, repair_slot1, repair_value1, states1 = model(
-                    x1
-                )
-                fields0 = torch.cat([repair_op0, repair_slot0, repair_value0], dim=-1)
-                fields1 = torch.cat([repair_op1, repair_slot1, repair_value1], dim=-1)
+                (
+                    final0,
+                    _first_op0,
+                    _first_slot0,
+                    _first_value0,
+                    repair_op0,
+                    repair_slot0,
+                    repair_value0,
+                    _first_json0,
+                    repair_json0,
+                    states0,
+                ) = model(x0)
+                (
+                    final1,
+                    _first_op1,
+                    _first_slot1,
+                    _first_value1,
+                    repair_op1,
+                    repair_slot1,
+                    repair_value1,
+                    _first_json1,
+                    repair_json1,
+                    states1,
+                ) = model(x1)
+                if generated_json_surface:
+                    fields0 = repair_json0.flatten(1)
+                    fields1 = repair_json1.flatten(1)
+                else:
+                    fields0 = torch.cat([repair_op0, repair_slot0, repair_value0], dim=-1)
+                    fields1 = torch.cat([repair_op1, repair_slot1, repair_value1], dim=-1)
                 memory_vals.append((states1[:, -1] - states0[:, -1]).norm(dim=-1).mean())
                 commit_vals.append((states1[:, decision_position] - states0[:, decision_position]).norm(dim=-1).mean())
                 final_logit_vals.append((final1 - final0).norm(dim=-1).mean())
@@ -627,11 +821,15 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
         "first_return_position": first_return_position,
         "repair_commit_position": repair_commit_position,
         "repair_return_position": repair_return_position,
-        "argument_surface": "text" if text_surface else ("alias" if alias_surface else "slot"),
+        "argument_surface": (
+            "generated_json" if generated_json_surface else ("text" if text_surface else ("alias" if alias_surface else "slot"))
+        ),
         "aliases_per_slot": aliases_per_slot,
         "opcode_vocab_size": opcode_vocab_size,
         "slot_vocab_size": slot_vocab_size,
         "value_vocab_size": value_vocab_size,
+        "generated_json_sequence_length": json_sequence_length,
+        "generated_json_vocab_size": json_vocab_size,
         "train_steps": train_steps,
         "batch_size": batch_size,
         "eval_batches": eval_batches,
@@ -699,8 +897,13 @@ def main(
     from experiments.long_horizon_bottleneck.core import (
         build_cells,
         estimate_modal_cost,
+        generated_json_call_token_ids,
+        generated_json_noop_token_ids,
+        generated_json_sequence_length,
+        generated_json_vocab_size,
         parse_csv,
         parse_int_csv,
+        render_generated_json_tokens,
         summarize_stochastic_rows,
     )
 
@@ -709,16 +912,27 @@ def main(
     slot_list = parse_int_csv(critical_slots)
     alias_conditions = {"alias_stochastic_bottleneck", "alias_visible_control"}
     text_conditions = {"text_stochastic_bottleneck", "text_visible_control"}
+    generated_json_conditions = {"generated_json_bottleneck", "generated_json_visible_control"}
     compact_conditions = {"stochastic_failure_bottleneck", "stochastic_visible_control"}
     uses_alias_surface = any(condition in alias_conditions for condition in condition_list)
     uses_text_surface = any(condition in text_conditions for condition in condition_list)
+    uses_generated_json_surface = any(condition in generated_json_conditions for condition in condition_list)
     uses_compact_surface = any(condition in compact_conditions for condition in condition_list)
-    if sum((uses_alias_surface, uses_text_surface, uses_compact_surface)) > 1:
-        raise SystemExit("Do not mix alias, text, and compact-slot stochastic conditions in one sweep")
+    if sum((uses_alias_surface, uses_text_surface, uses_generated_json_surface, uses_compact_surface)) > 1:
+        raise SystemExit("Do not mix alias, text, generated-JSON, and compact-slot conditions in one sweep")
     if aliases_per_slot <= 0:
         raise SystemExit("aliases_per_slot must be positive")
-    argument_surface = "text" if uses_text_surface else ("alias" if uses_alias_surface else "slot")
-    argument_vocab_size = n_slots * aliases_per_slot + 2 if uses_alias_surface or uses_text_surface else n_slots + 2
+    argument_surface = (
+        "generated_json"
+        if uses_generated_json_surface
+        else ("text" if uses_text_surface else ("alias" if uses_alias_surface else "slot"))
+    )
+    field_slot_vocab_size = n_slots * aliases_per_slot + 2 if uses_alias_surface or uses_text_surface else n_slots + 2
+    generated_json_arg_vocab_size = (
+        generated_json_vocab_size(n_slots, aliases_per_slot)
+        if uses_generated_json_surface
+        else None
+    )
     seed_values = list(range(seeds))
     cells = build_cells(
         seeds=seed_values,
@@ -749,7 +963,7 @@ def main(
         cell["aliases_per_slot"] = aliases_per_slot
 
     text_argument_phrases: list[dict[str, Any]] = []
-    if uses_text_surface:
+    if uses_text_surface or uses_generated_json_surface:
         from experiments.long_horizon_bottleneck.core import render_text_argument
 
         for slot in range(n_slots):
@@ -763,6 +977,23 @@ def main(
                         "phrase": render_text_argument(argument_id, n_slots, aliases_per_slot),
                     }
                 )
+
+    generated_json_examples: dict[str, Any] = {}
+    if uses_generated_json_surface:
+        example_call_tokens = generated_json_call_token_ids(
+            slot=min(1, n_slots - 1),
+            variant_index=min(1, aliases_per_slot - 1),
+            value=0,
+            n_slots=n_slots,
+            variants_per_slot=aliases_per_slot,
+        )
+        example_noop_tokens = generated_json_noop_token_ids(n_slots, aliases_per_slot)
+        generated_json_examples = {
+            "call_tokens": example_call_tokens,
+            "call_text": render_generated_json_tokens(example_call_tokens, n_slots, aliases_per_slot),
+            "noop_tokens": example_noop_tokens,
+            "noop_text": render_generated_json_tokens(example_noop_tokens, n_slots, aliases_per_slot),
+        }
 
     estimate = estimate_modal_cost(
         cells=len(cells),
@@ -788,8 +1019,11 @@ def main(
         "argument_surface": argument_surface,
         "aliases_per_slot": aliases_per_slot,
         "text_argument_phrases": text_argument_phrases,
-        "slot_vocab_size": argument_vocab_size,
+        "slot_vocab_size": field_slot_vocab_size,
         "value_vocab_size": 4,
+        "generated_json_sequence_length": generated_json_sequence_length() if uses_generated_json_surface else None,
+        "generated_json_vocab_size": generated_json_arg_vocab_size,
+        "generated_json_examples": generated_json_examples,
         "first_commit_position": resolved_first_commit,
         "error_position": resolved_first_commit + 1,
         "repair_commit_position": resolved_first_commit + 2,
@@ -802,11 +1036,16 @@ def main(
         "budget_estimate": estimate.__dict__,
     }
     run_label = (
-        "text-argument-surface"
-        if uses_text_surface
-        else ("alias-argument-surface" if uses_alias_surface else "stochastic-tool-failure")
+        "generated-json-surface"
+        if uses_generated_json_surface
+        else (
+            "text-argument-surface"
+            if uses_text_surface
+            else ("alias-argument-surface" if uses_alias_surface else "stochastic-tool-failure")
+        )
     )
     payload_kind = {
+        "generated_json": "generated JSON stochastic moved-bottleneck sweep",
         "text": "text argument-surface stochastic moved-bottleneck sweep",
         "alias": "alias argument-surface stochastic moved-bottleneck sweep",
         "slot": "stochastic tool failure moved-bottleneck sweep",
@@ -865,9 +1104,17 @@ def main(
             f"pass={item['gate']['pass']}"
         )
     pooled_key = (
-        "pooled_text_stochastic_bottleneck"
-        if uses_text_surface
-        else ("pooled_alias_stochastic_bottleneck" if uses_alias_surface else "pooled_stochastic_failure_bottleneck")
+        "pooled_generated_json_bottleneck"
+        if uses_generated_json_surface
+        else (
+            "pooled_text_stochastic_bottleneck"
+            if uses_text_surface
+            else (
+                "pooled_alias_stochastic_bottleneck"
+                if uses_alias_surface
+                else "pooled_stochastic_failure_bottleneck"
+            )
+        )
     )
     if pooled_key in summary:
         pooled = summary[pooled_key]
