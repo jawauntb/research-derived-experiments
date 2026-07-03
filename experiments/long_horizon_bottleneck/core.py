@@ -1518,11 +1518,14 @@ def summarize_stochastic_gate_group(
 
 PROMPT_JSON_CONTROL_SCHEMA_THRESHOLD = 0.95
 PROMPT_JSON_ACTION_THRESHOLD = 0.85
+PROMPT_JSON_LOCALIZATION_POSITIONS = ("prompt_final", "generated_first", "generated_final")
+PROMPT_JSON_LOCALIZATION_LAYERS = ("early", "mid", "late", "final")
 
 
 def summarize_prompt_transfer_rows(rows: list[dict[str, Any]], *, n_boot: int = 2000) -> dict[str, Any]:
     """Classify prompt-level JSON transfer as positive, strong negative, or inconclusive."""
 
+    rows = [row for row in rows if row.get("row_kind", "behavior") != "hidden_localization"]
     grouped: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
     by_slot: dict[tuple[str, str, int], list[dict[str, Any]]] = defaultdict(list)
     for row in rows:
@@ -1583,6 +1586,103 @@ def summarize_prompt_transfer_rows(rows: list[dict[str, Any]], *, n_boot: int = 
     else:
         out["outcome"] = "inconclusive"
     return out
+
+
+def summarize_prompt_localization_rows(rows: list[dict[str, Any]], *, n_boot: int = 2000) -> dict[str, Any]:
+    """Classify prompt JSON hidden-localization replication rows.
+
+    Behavior rows keep the original prompt-transfer controls. Rows with
+    ``row_kind == "hidden_localization"`` are gated separately by model, token
+    position, and layer so a negative result says something specific: behavior
+    transferred, but no preregistered hidden site localized the moved slot.
+    """
+
+    behavior_rows = [row for row in rows if row.get("row_kind", "behavior") != "hidden_localization"]
+    localization_rows = [row for row in rows if row.get("row_kind") == "hidden_localization"]
+    behavior_summary = summarize_prompt_transfer_rows(behavior_rows, n_boot=n_boot)
+
+    grouped: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
+    by_slot: dict[tuple[str, str, str, int], list[dict[str, Any]]] = defaultdict(list)
+    for row in localization_rows:
+        model = str(row.get("model", row.get("architecture", "unknown_model")))
+        position = str(row["hidden_position"])
+        layer = str(row["hidden_layer"])
+        grouped[(model, position, layer)].append(row)
+        by_slot[(model, position, layer, int(row["critical_slot"]))].append(row)
+
+    out: dict[str, Any] = {
+        "n_rows": len(rows),
+        "n_behavior_rows": len(behavior_rows),
+        "n_localization_rows": len(localization_rows),
+        "behavior": behavior_summary,
+        "localization_groups": {},
+        "localization_slot_groups": {},
+    }
+    for (model, position, layer), group_rows in sorted(grouped.items()):
+        out["localization_groups"][f"{model}/{position}/{layer}"] = summarize_prompt_localization_gate_group(
+            group_rows,
+            n_boot=n_boot,
+        )
+
+    for (model, position, layer, slot), group_rows in sorted(by_slot.items()):
+        key = f"{model}/{position}/{layer}/slot_{slot}"
+        out["localization_slot_groups"][key] = summarize_prompt_localization_gate_group(
+            group_rows,
+            n_boot=n_boot,
+        )
+
+    behavior_decision = behavior_summary["decision"]
+    localization_pass = any(group["gate"]["pass"] for group in out["localization_groups"].values())
+    has_localization = bool(out["localization_groups"])
+    behavior_ready = behavior_decision["controls_pass"] and behavior_decision["bottleneck_pass"]
+    positive = behavior_ready and localization_pass
+    strong_negative = behavior_ready and has_localization and not localization_pass
+    out["decision"] = {
+        "controls_pass": behavior_decision["controls_pass"],
+        "behavior_bottleneck_pass": behavior_decision["bottleneck_pass"],
+        "localization_pass": localization_pass,
+        "positive": positive,
+        "strong_negative": strong_negative,
+    }
+    if positive:
+        out["outcome"] = "positive"
+    elif strong_negative:
+        out["outcome"] = "strong_negative"
+    else:
+        out["outcome"] = "inconclusive"
+    return out
+
+
+def summarize_prompt_localization_gate_group(
+    rows: list[dict[str, Any]],
+    *,
+    n_boot: int = 2000,
+) -> dict[str, Any]:
+    """Summarize one hidden-localization group."""
+
+    memory_spec = _bootstrap_row_metric(rows, ("memory_specificity_z",), n_boot, 20260821)
+    memory_rank = _bootstrap_row_metric(rows, ("memory_rank_percentile",), n_boot, 20260822)
+    layer_indices = [
+        int(row["hidden_layer_index"])
+        for row in rows
+        if "hidden_layer_index" in row and math.isfinite(float(row["hidden_layer_index"]))
+    ]
+    gate = {
+        "memory_specificity_positive": memory_spec["n"] > 0 and memory_spec["ci95"][0] > 0.0,
+        "rank_above_chance": memory_rank["n"] > 0 and memory_rank["mean"] > 0.5,
+    }
+    gate["pass"] = all(gate.values())
+
+    return {
+        "model": str(rows[0].get("model", rows[0].get("architecture", "unknown_model"))) if rows else "unknown_model",
+        "hidden_position": str(rows[0].get("hidden_position", "unknown_position")) if rows else "unknown_position",
+        "hidden_layer": str(rows[0].get("hidden_layer", "unknown_layer")) if rows else "unknown_layer",
+        "hidden_layer_index": min(layer_indices) if layer_indices else None,
+        "memory_specificity_z": memory_spec,
+        "memory_rank_percentile": memory_rank,
+        "failure_modes": [key for key, value in gate.items() if key != "pass" and not value],
+        "gate": gate,
+    }
 
 
 def summarize_prompt_transfer_gate_group(

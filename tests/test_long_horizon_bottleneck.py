@@ -1,3 +1,5 @@
+from typing import Optional
+
 import pytest
 
 from experiments.long_horizon_bottleneck.core import (
@@ -31,6 +33,7 @@ from experiments.long_horizon_bottleneck.core import (
     summarize_rows,
     summarize_recovery_rows,
     summarize_multifield_rows,
+    summarize_prompt_localization_rows,
     summarize_prompt_transfer_rows,
     summarize_structured_rows,
     summarize_stochastic_rows,
@@ -50,6 +53,18 @@ def test_budget_guard_keeps_default_l4_sweep_well_under_1000():
 
     assert est.within_budget
     assert est.conservative_cost_usd < 40
+
+
+def test_prompt_hidden_localization_default_budget_stays_under_25():
+    est = estimate_modal_cost(
+        cells=3,
+        gpu="L4",
+        timeout_seconds=7200,
+        budget_usd=25,
+    )
+
+    assert est.within_budget
+    assert est.conservative_cost_usd < 10
 
 
 def test_build_cells_crosses_conditions_architectures_slots_and_seeds():
@@ -1129,6 +1144,108 @@ def test_summarize_prompt_transfer_rows_classifies_controlled_strong_negative():
     assert summary["outcome"] == "strong_negative"
     assert summary["decision"]["controls_pass"]
     assert not summary["decision"]["positive"]
+
+
+def test_summarize_prompt_localization_rows_classifies_positive_site():
+    rows = _prompt_localization_rows(
+        localization={
+            "memory_specificity_z": 1.1,
+            "memory_rank_percentile": 0.75,
+        }
+    )
+
+    summary = summarize_prompt_localization_rows(rows, n_boot=200)
+    transfer_summary = summarize_prompt_transfer_rows(rows, n_boot=200)
+
+    assert summary["outcome"] == "positive"
+    assert summary["decision"]["controls_pass"]
+    assert summary["decision"]["behavior_bottleneck_pass"]
+    assert summary["decision"]["localization_pass"]
+    assert summary["localization_groups"]["qwen2.5-0.5b/generated_first/mid"]["gate"]["pass"]
+    assert transfer_summary["n_rows"] == 40
+
+
+def test_summarize_prompt_localization_rows_classifies_hidden_strong_negative():
+    rows = _prompt_localization_rows(
+        localization={
+            "memory_specificity_z": 0.0,
+            "memory_rank_percentile": 0.5,
+        }
+    )
+
+    summary = summarize_prompt_localization_rows(rows, n_boot=200)
+
+    assert summary["outcome"] == "strong_negative"
+    assert summary["decision"]["controls_pass"]
+    assert summary["decision"]["behavior_bottleneck_pass"]
+    assert not summary["decision"]["localization_pass"]
+    assert not summary["decision"]["positive"]
+
+
+def test_summarize_prompt_localization_rows_is_inconclusive_when_controls_fail():
+    rows = _prompt_localization_rows(
+        localization={
+            "memory_specificity_z": 1.1,
+            "memory_rank_percentile": 0.75,
+        },
+        format_control={"schema_validity": 0.0},
+    )
+
+    summary = summarize_prompt_localization_rows(rows, n_boot=200)
+
+    assert summary["outcome"] == "inconclusive"
+    assert not summary["decision"]["controls_pass"]
+    assert not summary["decision"]["positive"]
+
+
+def _prompt_localization_rows(
+    *,
+    localization: dict[str, float],
+    format_control: Optional[dict[str, float]] = None,
+) -> list[dict[str, object]]:
+    rows = _prompt_transfer_rows(
+        bottleneck={
+            "closed_loop_final_accuracy": 0.9,
+            "first_schema_validity": 1.0,
+            "first_parsed_slot_accuracy": 0.9,
+            "first_parsed_value_accuracy": 0.9,
+            "repair_failed_schema_validity": 1.0,
+            "repair_failed_parsed_slot_accuracy": 0.9,
+            "repair_failed_parsed_value_accuracy": 0.9,
+            "repair_success_noop_field_accuracy": 0.9,
+            "repair_success_schema_validity": 1.0,
+        },
+        visible={
+            "closed_loop_final_accuracy": 1.0,
+            "first_schema_validity": 1.0,
+            "first_noop_field_accuracy": 1.0,
+            "memory_specificity_z": 0.0,
+        },
+        format_control=format_control or {"schema_validity": 1.0},
+        short_control={
+            "closed_loop_final_accuracy": 1.0,
+            "first_schema_validity": 1.0,
+            "first_parsed_slot_accuracy": 1.0,
+            "first_parsed_value_accuracy": 1.0,
+        },
+    )
+    for seed in range(10):
+        rows.append(
+            {
+                "row_kind": "hidden_localization",
+                "condition": "prompt_json_bottleneck",
+                "architecture": "qwen2.5-0.5b",
+                "model": "qwen2.5-0.5b",
+                "critical_slot": seed % 4,
+                "seed": seed,
+                "hidden_position": "generated_first",
+                "hidden_layer": "mid",
+                "hidden_layer_index": 12,
+                "memory_specificity_z": localization["memory_specificity_z"],
+                "memory_rank_percentile": localization["memory_rank_percentile"],
+            }
+        )
+    return rows
 
 
 def _prompt_transfer_rows(

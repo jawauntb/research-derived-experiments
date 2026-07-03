@@ -8,6 +8,8 @@ Test whether future control relevance moves both generated behavior and internal
 
 - Synthetic trained-agent ladder: positive through autoregressively decoded JSON-like action strings.
 - Prompt-level open-model transfer: controlled strong negative for the full hidden-geometry gate.
+- Hidden-localization replication: runner and preregistration added for multi-model, multi-layer,
+  multi-token-position follow-up.
 - Latest model: `Qwen/Qwen2.5-0.5B-Instruct`.
 - Latest confirmatory artifact: `artifacts/long_horizon_bottleneck/prompt_json_transfer_l4.json`.
 - Latest committed report: `experiments/long_horizon_bottleneck/results/zzzzzzzzzzz_prompt_json_transfer_l4_4seed_2026_07_03.md`.
@@ -31,6 +33,21 @@ The hidden-state gate fails:
 - preregistered hidden gate requires the CI lower bound to be above zero.
 
 Outcome: `strong_negative`.
+
+## Next Hidden-Localization Gate
+
+The follow-up sweep tests whether the hidden negative is just a bad measurement
+site. It preserves the prompt-transfer behavior gates and probes
+`prompt_final`, `generated_first`, and `generated_final` hidden states at
+`early`, `mid`, `late`, and `final` layer aliases across the default cheap model
+set: `Qwen/Qwen2.5-0.5B-Instruct`, `Qwen/Qwen2.5-1.5B-Instruct`, and
+`HuggingFaceTB/SmolLM2-1.7B-Instruct`.
+
+Terminal outcomes:
+
+- `positive`: behavior passes and at least one preregistered hidden site passes.
+- `strong_negative`: behavior passes and no preregistered hidden site passes.
+- `inconclusive`: behavior controls fail, bottleneck behavior fails, or hidden rows are missing.
 
 ## Use
 
