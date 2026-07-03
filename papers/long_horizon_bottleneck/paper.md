@@ -102,23 +102,35 @@ The experiment was advanced through a sequence of regimes. Each regime keeps
 the moved critical slot and visible-control null, then changes one surface of
 the agent's interaction with future-relevant information.
 
-| Regime | What changed | Cells | Key signal | Result report |
+| Regime | What changed | Cells | Key signal | Report key |
 |---|---|---:|---|---|
-| Base moved bottleneck | Delayed query over four matched clue slots | 64 | Bottleneck final accuracy 1.000; memory specificity +2.309; visible null | `modal_transformer_l4_8seed_2026_07_02.md` |
-| Horizon stress | Delay lengths 128, 256, 384 | 96 | All lengths preserve final accuracy 1.000 and moved-slot specificity | `modal_transformer_l4_horizon_4seed_2026_07_02.md` |
-| Closed-loop tool handoff | Model commits slot/value to recover external state | 32 | Tool bottleneck final accuracy 1.000; slot/value commitment 1.000 | `z_closed_loop_tool_commitment_l4_4seed_2026_07_02.md` |
-| Repair bottleneck | First tool attempt receives an error; model must repair | 48 | Repair condition final accuracy 1.000; repair slot/value 1.000 | `zz_tool_recovery_l4_4seed_2026_07_02.md` |
-| Structured tool call | One parsed JSON-like action token replaces direct heads | 48 | Direct and repair structured calls pass schema and parsed-slot gates | `zzz_structured_tool_call_l4_4seed_2026_07_03.md` |
-| Multifield schema | Separate opcode, slot, and value fields | 48 | Multifield direct/repair groups pass field, schema, and parsed-value gates | `zzzz_multifield_tool_schema_l4_4seed_2026_07_03.md` |
-| Stochastic tool failure | First-call success/failure sampled per episode | 32 | Failed repair and success no-op both 1.000; failure rate 0.506 | `zzzzz_stochastic_tool_failure_l4_4seed_2026_07_03.md` |
-| 8-slot stochastic | Larger argument namespace and longer sequence | 64 | 8-slot stochastic gates pass; memory specificity +3.023 | `zzzzzz_stochastic_tool_failure_8slot_l4_4seed_2026_07_03.md` |
-| Alias argument surface | Three equivalent aliases per canonical slot | 32 | Alias parsed slot/value, failed repair, and success no-op all 1.000 | `zzzzzzz_alias_argument_surface_l4_4seed_2026_07_03.md` |
+| Base moved bottleneck | Delayed query over four matched clue slots | 64 | Bottleneck final accuracy 1.000; memory specificity +2.309; visible null | `base` |
+| Horizon stress | Delay lengths 128, 256, 384 | 96 | All lengths preserve final accuracy 1.000 and moved-slot specificity | `horizon` |
+| Closed-loop tool handoff | Model commits slot/value to recover external state | 32 | Tool bottleneck final accuracy 1.000; slot/value commitment 1.000 | `commit` |
+| Repair bottleneck | First tool attempt receives an error; model must repair | 48 | Repair condition final accuracy 1.000; repair slot/value 1.000 | `repair` |
+| Structured tool call | One parsed JSON-like action token replaces direct heads | 48 | Direct and repair structured calls pass schema and parsed-slot gates | `structured` |
+| Multifield schema | Separate opcode, slot, and value fields | 48 | Multifield direct/repair groups pass field, schema, and parsed-value gates | `multifield` |
+| Stochastic tool failure | First-call success/failure sampled per episode | 32 | Failed repair and success no-op both 1.000; failure rate 0.506 | `stochastic` |
+| 8-slot stochastic | Larger argument namespace and longer sequence | 64 | 8-slot stochastic gates pass; memory specificity +3.023 | `8slot` |
+| Alias argument surface | Three equivalent aliases per canonical slot | 32 | Alias parsed slot/value, failed repair, and success no-op all 1.000 | `alias` |
 
 All confirmed sweeps used Modal `L4`, not H100/H200. The timeout-based
 conservative spend guard for the listed confirmed reports is under `$130` in
 aggregate; individual recent passes used guards of `$8.63` to `$17.26`. Actual
 runtime was much lower than the timeout budget, with the latest alias pass
 averaging 15.07 seconds per remote cell.
+
+Report keys map to committed summaries under
+`experiments/long_horizon_bottleneck/results/`: `base` =
+`modal_transformer_l4_8seed_2026_07_02.md`, `horizon` =
+`modal_transformer_l4_horizon_4seed_2026_07_02.md`, `commit` =
+`z_closed_loop_tool_commitment_l4_4seed_2026_07_02.md`, `repair` =
+`zz_tool_recovery_l4_4seed_2026_07_02.md`, `structured` =
+`zzz_structured_tool_call_l4_4seed_2026_07_03.md`, `multifield` =
+`zzzz_multifield_tool_schema_l4_4seed_2026_07_03.md`, `stochastic` =
+`zzzzz_stochastic_tool_failure_l4_4seed_2026_07_03.md`, `8slot` =
+`zzzzzz_stochastic_tool_failure_8slot_l4_4seed_2026_07_03.md`, and `alias` =
+`zzzzzzz_alias_argument_surface_l4_4seed_2026_07_03.md`.
 
 ## 4. Latest Alias-Surface Result
 
