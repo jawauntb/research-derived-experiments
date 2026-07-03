@@ -22,6 +22,7 @@ from experiments.long_horizon_bottleneck.core import (
     parse_text_argument,
     parse_alias_argument,
     parse_structured_action,
+    PROMPT_JSON_LOCALIZATION_POSITIONS,
     render_text_argument,
     render_generated_json_tokens,
     render_multifield_action,
@@ -1165,6 +1166,25 @@ def test_summarize_prompt_localization_rows_classifies_positive_site():
     assert transfer_summary["n_rows"] == 40
 
 
+def test_prompt_localization_positions_include_fixed_action_counterfactual_sites():
+    assert {"fixed_noop_first", "fixed_noop_final", "fixed_read_first", "fixed_read_final"}.issubset(
+        set(PROMPT_JSON_LOCALIZATION_POSITIONS)
+    )
+
+    rows = _prompt_localization_rows(
+        localization={
+            "memory_specificity_z": 1.1,
+            "memory_rank_percentile": 0.75,
+        },
+        hidden_position="fixed_noop_final",
+    )
+
+    summary = summarize_prompt_localization_rows(rows, n_boot=200)
+
+    assert summary["outcome"] == "positive"
+    assert summary["localization_groups"]["qwen2.5-0.5b/fixed_noop_final/mid"]["gate"]["pass"]
+
+
 def test_summarize_prompt_localization_rows_classifies_hidden_strong_negative():
     rows = _prompt_localization_rows(
         localization={
@@ -1202,6 +1222,7 @@ def _prompt_localization_rows(
     *,
     localization: dict[str, float],
     format_control: Optional[dict[str, float]] = None,
+    hidden_position: str = "generated_first",
 ) -> list[dict[str, object]]:
     rows = _prompt_transfer_rows(
         bottleneck={
@@ -1238,7 +1259,7 @@ def _prompt_localization_rows(
                 "model": "qwen2.5-0.5b",
                 "critical_slot": seed % 4,
                 "seed": seed,
-                "hidden_position": "generated_first",
+                "hidden_position": hidden_position,
                 "hidden_layer": "mid",
                 "hidden_layer_index": 12,
                 "memory_specificity_z": localization["memory_specificity_z"],

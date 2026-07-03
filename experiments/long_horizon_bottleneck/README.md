@@ -334,6 +334,31 @@ late/final `prompt_final` sites also pass for `Qwen/Qwen2.5-1.5B-Instruct`.
 See
 `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzz_prompt_json_hidden_localization_l4_4seed_2026_07_03.md`.
 
+Prompt-level fixed-action counterfactual localization pass:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/long_horizon_bottleneck/modal_prompt_json_hidden_localization_sweep.py \
+    --models Qwen/Qwen2.5-0.5B-Instruct,Qwen/Qwen2.5-1.5B-Instruct,HuggingFaceTB/SmolLM2-1.7B-Instruct \
+    --seeds 4 \
+    --episodes-per-cell 8 \
+    --hidden-metric-episodes 2 \
+    --hidden-positions prompt_final,fixed_noop_first,fixed_noop_final,fixed_read_first,fixed_read_final \
+    --hidden-layers early,mid,late,final \
+    --critical-slots 0,1,2,3 \
+    --budget-usd 25 \
+    --base-seed 20260900 \
+    --out artifacts/long_horizon_bottleneck/prompt_json_fixed_action_localization_l4.json
+```
+
+The fixed-action pass removes the generated-token identity confound by
+teacher-forcing the same assistant JSON action under the base prompt and every
+slot-flipped counterfactual prompt. The 2026-07-03 confirmatory run is positive:
+all behavior controls pass, 24 registered hidden sites pass, and fixed noop
+final-layer sites pass in all three default model families. See
+`experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzz_prompt_json_fixed_action_localization_l4_4seed_2026_07_03.md`.
+
 Smoke:
 
 ```bash

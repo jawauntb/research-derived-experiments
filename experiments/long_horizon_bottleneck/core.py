@@ -1518,7 +1518,15 @@ def summarize_stochastic_gate_group(
 
 PROMPT_JSON_CONTROL_SCHEMA_THRESHOLD = 0.95
 PROMPT_JSON_ACTION_THRESHOLD = 0.85
-PROMPT_JSON_LOCALIZATION_POSITIONS = ("prompt_final", "generated_first", "generated_final")
+PROMPT_JSON_LOCALIZATION_POSITIONS = (
+    "prompt_final",
+    "generated_first",
+    "generated_final",
+    "fixed_noop_first",
+    "fixed_noop_final",
+    "fixed_read_first",
+    "fixed_read_final",
+)
 PROMPT_JSON_LOCALIZATION_LAYERS = ("early", "mid", "late", "final")
 
 
