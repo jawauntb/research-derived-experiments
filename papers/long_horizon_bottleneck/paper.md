@@ -23,11 +23,11 @@ regimes. A transformer on Modal `L4` solves the base delayed-memory task,
 survives longer horizons through sequence length 384, and preserves the moved
 bottleneck through closed-loop external-state handoff, repair after tool error,
 parsed structured calls, multi-field tool schemas, stochastic API failures, an
-8-slot larger argument namespace, and finally an alias-rich argument surface
-with three equivalent aliases per canonical slot. Across the confirmed Modal
-reports, the relevant bottleneck groups reach 1.000 closed-loop accuracy and
-positive moved-slot specificity, while visible controls keep specificity near
-zero.
+8-slot larger argument namespace, an alias-rich argument surface, parser-facing
+text arguments, fixed-length generated JSON strings, and autoregressively
+decoded JSON-like action strings. Across the confirmed Modal reports, the
+relevant bottleneck groups reach 1.000 closed-loop accuracy and positive
+moved-slot specificity, while visible controls keep specificity near zero.
 
 The allowed claim is deliberately modest: in this synthetic neural-agent
 setting, **future control relevance can move finite memory-state and
@@ -113,12 +113,15 @@ the agent's interaction with future-relevant information.
 | Stochastic tool failure | First-call success/failure sampled per episode | 32 | Failed repair and success no-op both 1.000; failure rate 0.506 | `stochastic` |
 | 8-slot stochastic | Larger argument namespace and longer sequence | 64 | 8-slot stochastic gates pass; memory specificity +3.023 | `8slot` |
 | Alias argument surface | Three equivalent aliases per canonical slot | 32 | Alias parsed slot/value, failed repair, and success no-op all 1.000 | `alias` |
+| Text argument surface | Parser-facing phrases such as `second clue` replace alias IDs | 32 | Text parsed slot/value, failed repair, and success no-op all 1.000 | `text` |
+| Generated JSON surface | Model emits a fixed-length JSON-like token sequence | 32 | Generated sequence/schema, parsed slot/value, and repair gates all 1.000 | `generated_json` |
+| Autoregressive JSON surface | JSON action is decoded token-by-token from commit state | 32 | Greedy decoded sequence/schema, parsed slot/value, and repair gates all 1.000 | `autoregressive_json` |
 
 All confirmed sweeps used Modal `L4`, not H100/H200. The timeout-based
-conservative spend guard for the listed confirmed reports is under `$130` in
+conservative spend guard for the listed confirmed reports is under `$160` in
 aggregate; individual recent passes used guards of `$8.63` to `$17.26`. Actual
-runtime was much lower than the timeout budget, with the latest alias pass
-averaging 15.07 seconds per remote cell.
+runtime was much lower than the timeout budget, with the latest autoregressive
+JSON pass averaging 15.08 seconds per remote cell.
 
 Report keys map to committed summaries under
 `experiments/long_horizon_bottleneck/results/`: `base` =
@@ -130,29 +133,36 @@ Report keys map to committed summaries under
 `zzzz_multifield_tool_schema_l4_4seed_2026_07_03.md`, `stochastic` =
 `zzzzz_stochastic_tool_failure_l4_4seed_2026_07_03.md`, `8slot` =
 `zzzzzz_stochastic_tool_failure_8slot_l4_4seed_2026_07_03.md`, and `alias` =
-`zzzzzzz_alias_argument_surface_l4_4seed_2026_07_03.md`.
+`zzzzzzz_alias_argument_surface_l4_4seed_2026_07_03.md`, `text` =
+`zzzzzzzz_text_argument_surface_l4_4seed_2026_07_03.md`, `generated_json` =
+`zzzzzzzzz_generated_json_surface_l4_4seed_2026_07_03.md`, and
+`autoregressive_json` =
+`zzzzzzzzzz_autoregressive_json_surface_l4_4seed_2026_07_03.md`.
 
-## 4. Latest Alias-Surface Result
+## 4. Latest Autoregressive JSON Result
 
-The alias pass is the most natural-language-adjacent synthetic regime in the
-current ladder. It replaces the compact slot id with an alias argument field:
-four canonical slots, three aliases per slot, plus missing and malformed
-sentinels, for a vocabulary size of 14. The loss accepts any alias belonging to
-the correct canonical slot. The evaluator parses aliases back to canonical
-slots before applying the same stochastic repair/no-op checks.
+The autoregressive JSON pass is the most language-adjacent synthetic regime in
+the current ladder. It keeps the controlled four-slot stochastic environment
+and parser-facing phrases, but the model no longer emits three classifier
+fields or a parallel fixed sequence head. Instead, it decodes a JSON-like action
+token-by-token from the commit state, feeding the previous emitted token back
+before predicting the next one. The greedy decoded string is parsed before any
+external state is granted.
 
 The Modal `L4` run used 32 cells: 2 conditions, 4 moved critical slots, and 4
-seeds. Results:
+seeds. The bottleneck group reached 1.000 closed-loop final accuracy, 1.000
+first decoded-sequence/schema accuracy, 1.000 parsed slot/value accuracy,
+1.000 failed-repair slot/value accuracy, and 1.000 success repair no-op
+accuracy. The sampled failure rate was 0.506; memory specificity was +2.309
+and action-channel specificity was +2.309. The visible-control group reached
+1.000 final accuracy with no-op sequences, while memory and action specificity
+remained near zero (-0.000 and +0.000). Both gates passed.
 
-| Group | Closed-loop final | First parsed slot/value | Failed repair slot/value | Success repair no-op | Failure rate | Memory specificity | Gate |
-|---|---:|---:|---:|---:|---:|---:|---|
-| `alias_stochastic_bottleneck/transformer` | 1.000 | 1.000 / 1.000 | 1.000 / 1.000 | 1.000 | 0.506 | +2.309 | pass |
-| `alias_visible_control/transformer` | 1.000 | n/a | n/a | n/a | 0.506 | +0.000 | pass |
-
-This rules out a small but important alternative: the prior result was not only
-an artifact of a single compact slot-id classifier. The moved bottleneck
-survives a synonym-like argument surface under stochastic first-call failure
-and conditional repair.
+This rules out a stronger alternative than the alias result: the prior result
+was not only an artifact of parallel classifier fields or classifier-rendered
+text. The moved bottleneck survives a parser-scored, autoregressively decoded
+JSON-like action channel under stochastic first-call failure and conditional
+repair.
 
 ## 5. Interpretation
 
@@ -188,8 +198,8 @@ The result does not establish:
 - multi-step planning in an open environment;
 - human cognition or consciousness.
 
-The latest alias regime is still a fixed classifier surface. It is a bridge
-toward natural language, not natural language itself.
+The latest autoregressive JSON regime is still fixed-vocabulary and synthetic.
+It is a bridge toward natural language, not natural language itself.
 
 ## 7. Why This Is Valuable
 
@@ -213,10 +223,11 @@ That is a sharper evaluation target than final-task success alone.
 The synthetic mechanism ladder is now complete enough to write up and share.
 The next regimes are optional and answer different questions:
 
-- **Text-prompt tool use:** replace alias classifiers with real text arguments
-  and parser-facing JSON.
-- **LLM-agent transfer:** run a small language model or API model through a
-  prompt-level version of the moved bottleneck.
+- **Prompt-level JSON tool use:** run a small pretrained language model or API
+  model through a prompt-level moved-bottleneck variant with parser-scored JSON
+  actions.
+- **LLM-agent transfer:** add longer tool contexts, natural-language argument
+  aliases, and API-style parser recovery around the prompt-level version.
 - **Multi-step planning:** require two or more future commitments where the
   critical bottleneck changes after intermediate feedback.
 - **Interpretability probes:** compare the hidden-state metric to attention,
@@ -237,12 +248,12 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     uvx --python 3.12 --from modal modal run \
     experiments/long_horizon_bottleneck/modal_stochastic_tool_failure_sweep.py \
     --seeds 4 --train-steps 900 --architectures transformer \
-    --conditions alias_stochastic_bottleneck,alias_visible_control \
+    --conditions autoregressive_json_bottleneck,autoregressive_json_visible_control \
     --critical-slots 0,1,2,3 \
     --aliases-per-slot 3 \
     --failure-probability 0.5 \
     --budget-usd 25 \
-    --out artifacts/long_horizon_bottleneck/alias_argument_surface_l4.json
+    --out artifacts/long_horizon_bottleneck/autoregressive_json_surface_l4.json
 ```
 
 Local verification for the code paths:
