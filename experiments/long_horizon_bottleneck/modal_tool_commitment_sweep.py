@@ -16,7 +16,11 @@ Recommended cheap pass:
         --seeds 4 --train-steps 700 --architectures transformer \\
         --conditions tool_bottleneck,visible_control --critical-slots 0,1,2,3 \\
         --budget-usd 25 \\
-        --out artifacts/long_horizon_bottleneck/tool_commitment_l4.json
+        --out artifacts/long_horizon_bottleneck/closed_loop_tool_commitment_l4.json
+
+The runner reports both teacher-forced and closed-loop final accuracy. Closed
+loop means the model's predicted tool slot and value determine the returned
+external state before the final query.
 """
 
 from __future__ import annotations
@@ -85,7 +89,7 @@ def run_tool_cell(arg: dict[str, Any]) -> dict[str, Any]:
     null_tool_slot = n_slots
     tool_return_position = commit_position + 1
 
-    def make_batch(batch: int):
+    def make_batch(batch: int, *, include_teacher_return: bool = True):
         x = torch.zeros(batch, sequence_length, input_dim, device=device)
         bits = torch.randint(0, 2, (batch, n_slots), device=device)
         terminal_bits = torch.randint(0, 2, (batch,), device=device)
@@ -102,8 +106,9 @@ def run_tool_cell(arg: dict[str, Any]) -> dict[str, Any]:
             final_target = bits[:, critical_slot].long()
             tool_slot_target = torch.full((batch,), critical_slot, dtype=torch.long, device=device)
             tool_value_target = bits[:, critical_slot].long()
-            x[:, tool_return_position, tool_return_idx] = 1.0
-            x[:, tool_return_position, tool_return_value_idx] = tool_value_target.float() * 2.0 - 1.0
+            if include_teacher_return:
+                x[:, tool_return_position, tool_return_idx] = 1.0
+                x[:, tool_return_position, tool_return_value_idx] = tool_value_target.float() * 2.0 - 1.0
             train_tool_value = True
         elif condition == "visible_control":
             final_target = terminal_bits.long()
@@ -112,7 +117,7 @@ def run_tool_cell(arg: dict[str, Any]) -> dict[str, Any]:
             train_tool_value = False
         else:
             raise ValueError(condition)
-        return x, final_target, tool_slot_target, tool_value_target, train_tool_value
+        return x, final_target, tool_slot_target, tool_value_target, train_tool_value, bits
 
     class GRUAgent(nn.Module):
         def __init__(self):
@@ -175,7 +180,7 @@ def run_tool_cell(arg: dict[str, Any]) -> dict[str, Any]:
     losses = []
     model.train()
     for step in range(train_steps):
-        x, final_target, tool_slot_target, tool_value_target, train_tool_value = make_batch(batch_size)
+        x, final_target, tool_slot_target, tool_value_target, train_tool_value, _ = make_batch(batch_size)
         final_logits, tool_slot_logits, tool_value_logits, _ = model(x)
         loss = F.cross_entropy(final_logits, final_target)
         loss = loss + 0.5 * F.cross_entropy(tool_slot_logits, tool_slot_target)
@@ -189,22 +194,39 @@ def run_tool_cell(arg: dict[str, Any]) -> dict[str, Any]:
             losses.append(float(loss.detach().cpu().item()))
 
     model.eval()
-    final_correct = 0
+    teacher_forced_final_correct = 0
+    closed_loop_final_correct = 0
     slot_correct = 0
     value_correct = 0
     value_total = 0
     total = 0
     with torch.no_grad():
         for _ in range(eval_batches):
-            x, final_target, tool_slot_target, tool_value_target, train_tool_value = make_batch(batch_size)
+            x, final_target, tool_slot_target, tool_value_target, train_tool_value, _ = make_batch(batch_size)
             final_logits, tool_slot_logits, tool_value_logits, _ = model(x)
-            final_correct += int((final_logits.argmax(-1) == final_target).sum().item())
+            teacher_forced_final_correct += int((final_logits.argmax(-1) == final_target).sum().item())
             slot_correct += int((tool_slot_logits.argmax(-1) == tool_slot_target).sum().item())
             if train_tool_value:
                 value_correct += int((tool_value_logits.argmax(-1) == tool_value_target).sum().item())
                 value_total += int(tool_value_target.numel())
+            x_open, closed_final_target, _, _, _, _ = make_batch(batch_size, include_teacher_return=False)
+            _, open_slot_logits, open_value_logits, _ = model(x_open)
+            slot_pred = open_slot_logits.argmax(-1)
+            value_pred = open_value_logits.argmax(-1)
+            x_closed = x_open.clone()
+            if condition == "tool_bottleneck":
+                slot_matches = slot_pred == critical_slot
+                x_closed[:, tool_return_position, tool_return_idx] = slot_matches.float()
+                x_closed[:, tool_return_position, tool_return_value_idx] = torch.where(
+                    slot_matches,
+                    value_pred.float() * 2.0 - 1.0,
+                    torch.zeros_like(value_pred, dtype=torch.float32),
+                )
+            closed_logits, _, _, _ = model(x_closed)
+            closed_loop_final_correct += int((closed_logits.argmax(-1) == closed_final_target).sum().item())
             total += int(final_target.numel())
-    final_accuracy = final_correct / total if total else float("nan")
+    teacher_forced_final_accuracy = teacher_forced_final_correct / total if total else float("nan")
+    closed_loop_final_accuracy = closed_loop_final_correct / total if total else float("nan")
     tool_slot_accuracy = slot_correct / total if total else float("nan")
     tool_value_accuracy = value_correct / value_total if value_total else float("nan")
 
@@ -215,7 +237,7 @@ def run_tool_cell(arg: dict[str, Any]) -> dict[str, Any]:
         tool_value_vals = []
         with torch.no_grad():
             for _ in range(metric_batches):
-                x0, _, _, _, _ = make_batch(batch_size)
+                x0, _, _, _, _, _ = make_batch(batch_size)
                 x1 = x0.clone()
                 pos = slot_positions[slot]
                 x1[:, pos, bit_idx] = -x1[:, pos, bit_idx]
@@ -282,8 +304,10 @@ def run_tool_cell(arg: dict[str, Any]) -> dict[str, Any]:
         "device": str(device),
         "runtime_seconds": runtime,
         "loss_trace": losses,
-        "accuracy": final_accuracy,
-        "final_accuracy": final_accuracy,
+        "accuracy": closed_loop_final_accuracy,
+        "final_accuracy": closed_loop_final_accuracy,
+        "teacher_forced_final_accuracy": teacher_forced_final_accuracy,
+        "closed_loop_final_accuracy": closed_loop_final_accuracy,
         "tool_slot_accuracy": tool_slot_accuracy,
         "tool_value_accuracy": tool_value_accuracy,
         "memory_density": memory_density,
@@ -321,7 +345,7 @@ def main(
     base_seed: int = 20260702,
     budget_usd: float = 25.0,
     dry_run_budget: bool = False,
-    out: str = "artifacts/long_horizon_bottleneck/tool_commitment_l4.json",
+    out: str = "artifacts/long_horizon_bottleneck/closed_loop_tool_commitment_l4.json",
 ):
     from experiments.long_horizon_bottleneck.core import (
         build_cells,
@@ -404,7 +428,7 @@ def main(
     rows = list(run_tool_cell.map(cells))
     summary = summarize_tool_rows(rows)
     payload = {
-        "kind": "tool-commitment moved-bottleneck sweep",
+        "kind": "closed-loop tool-commitment moved-bottleneck sweep",
         "manifest": manifest,
         "summary": summary,
         "rows": rows,
@@ -415,19 +439,26 @@ def main(
     print(f"[tool-commitment] wrote {op}")
     for key, item in summary["groups"].items():
         final_acc = item["final_accuracy"]
+        teacher_forced_acc = item.get("teacher_forced_final_accuracy")
         slot_acc = item["tool_slot_accuracy"]
         spec = item["memory_specificity_z"]
         tool_spec = item["tool_value_specificity_z"]
+        teacher_forced_text = (
+            f" teacher_forced={teacher_forced_acc['mean']:.3f}" if teacher_forced_acc is not None else ""
+        )
         print(
-            f"  {key:32s} final={final_acc['mean']:.3f} slot={slot_acc['mean']:.3f} "
+            f"  {key:32s} final={final_acc['mean']:.3f}{teacher_forced_text} slot={slot_acc['mean']:.3f} "
             f"memory_spec={spec['mean']:+.3f} tool_spec={tool_spec['mean']:+.3f} "
             f"pass={item['gate']['pass']}"
         )
     if "pooled_tool_bottleneck" in summary:
         pooled = summary["pooled_tool_bottleneck"]
+        teacher_forced_acc = pooled.get("teacher_forced_final_accuracy")
+        teacher_forced_text = f"teacher_forced={teacher_forced_acc['mean']:.3f}; " if teacher_forced_acc else ""
         print(
             "[tool-commitment] pooled tool_bottleneck "
             f"final={pooled['final_accuracy']['mean']:.3f}; "
+            f"{teacher_forced_text}"
             f"slot={pooled['tool_slot_accuracy']['mean']:.3f}; "
             f"value={pooled['tool_value_accuracy']['mean']:.3f}; "
             f"memory_spec={pooled['memory_specificity_z']['mean']:+.3f}; "

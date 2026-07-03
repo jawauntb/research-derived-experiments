@@ -153,3 +153,30 @@ def test_summarize_tool_rows_requires_commitment_and_visible_null():
     assert summary["groups"]["tool_bottleneck/transformer"]["gate"]["pass"]
     assert summary["groups"]["visible_control/transformer"]["gate"]["pass"]
     assert summary["pooled_tool_bottleneck"]["gate"]["pass"]
+
+
+def test_summarize_tool_rows_prefers_closed_loop_final_accuracy_when_present():
+    rows = [
+        {
+            "condition": "tool_bottleneck",
+            "architecture": "transformer",
+            "critical_slot": seed % 4,
+            "final_accuracy": 1.0,
+            "teacher_forced_final_accuracy": 1.0,
+            "closed_loop_final_accuracy": 0.0,
+            "tool_slot_accuracy": 1.0,
+            "tool_value_accuracy": 1.0,
+            "memory_specificity_z": 1.4,
+            "memory_rank_percentile": 0.875,
+            "tool_value_specificity_z": 1.1,
+        }
+        for seed in range(8)
+    ]
+
+    summary = summarize_tool_rows(rows, n_boot=200)
+    group = summary["groups"]["tool_bottleneck/transformer"]
+
+    assert group["final_metric"] == "closed_loop_final_accuracy"
+    assert group["teacher_forced_final_accuracy"]["mean"] == 1.0
+    assert not group["gate"]["closed_loop_final_accuracy_ge_0_90"]
+    assert not group["gate"]["pass"]
