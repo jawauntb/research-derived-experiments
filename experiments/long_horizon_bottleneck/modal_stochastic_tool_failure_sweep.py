@@ -25,6 +25,10 @@ The generated-JSON conditions replace field heads with a fixed-length emitted
 token sequence that renders to a JSON-like call. The evaluator parses the
 sequence back into opcode/slot/value before granting tool state.
 
+The autoregressive JSON conditions keep the same parser and fixed token
+vocabulary, but decode the action token-by-token from the commit state with the
+previous emitted token as input.
+
 Recommended cheap pass:
 
     doppler --scope /Users/jawaun/superoptimizers run -- \\
@@ -92,21 +96,29 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
     alias_conditions = {"alias_stochastic_bottleneck", "alias_visible_control"}
     text_conditions = {"text_stochastic_bottleneck", "text_visible_control"}
     generated_json_conditions = {"generated_json_bottleneck", "generated_json_visible_control"}
+    autoregressive_json_conditions = {
+        "autoregressive_json_bottleneck",
+        "autoregressive_json_visible_control",
+    }
     bottleneck_conditions = {
         "stochastic_failure_bottleneck",
         "alias_stochastic_bottleneck",
         "text_stochastic_bottleneck",
         "generated_json_bottleneck",
+        "autoregressive_json_bottleneck",
     }
     visible_conditions = {
         "stochastic_visible_control",
         "alias_visible_control",
         "text_visible_control",
         "generated_json_visible_control",
+        "autoregressive_json_visible_control",
     }
     alias_surface = condition in alias_conditions
     text_surface = condition in text_conditions
     generated_json_surface = condition in generated_json_conditions
+    autoregressive_json_surface = condition in autoregressive_json_conditions
+    json_surface = generated_json_surface or autoregressive_json_surface
     variant_argument_surface = alias_surface or text_surface
     if aliases_per_slot <= 0:
         raise ValueError("aliases_per_slot must be positive")
@@ -283,13 +295,36 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
             self.slot_head = nn.Linear(hidden_size, slot_vocab_size)
             self.value_head = nn.Linear(hidden_size, value_vocab_size)
             self.json_head = nn.Linear(hidden_size, json_sequence_length * json_vocab_size)
+            self.json_token_embedding = nn.Embedding(json_vocab_size, hidden_size)
+            self.json_decoder = nn.GRU(hidden_size, hidden_size, batch_first=True)
+            self.json_decoder_head = nn.Linear(hidden_size, json_vocab_size)
 
-        def forward(self, x):
+        def decode_json(self, state, targets=None):
+            if not autoregressive_json_surface:
+                return self.json_head(state).view(-1, json_sequence_length, json_vocab_size)
+            batch = state.shape[0]
+            hidden = state.unsqueeze(0).contiguous()
+            if targets is not None:
+                start = torch.full((batch, 1), json_pad, dtype=torch.long, device=state.device)
+                shifted = torch.cat([start, targets[:, :-1]], dim=1)
+                decoded, _ = self.json_decoder(self.json_token_embedding(shifted), hidden)
+                return self.json_decoder_head(decoded)
+
+            prev = torch.full((batch,), json_pad, dtype=torch.long, device=state.device)
+            logits = []
+            for _ in range(json_sequence_length):
+                decoded, hidden = self.json_decoder(self.json_token_embedding(prev).unsqueeze(1), hidden)
+                step_logits = self.json_decoder_head(decoded[:, 0])
+                logits.append(step_logits)
+                prev = step_logits.argmax(-1)
+            return torch.stack(logits, dim=1)
+
+        def forward(self, x, first_json_targets=None, repair_json_targets=None):
             states, _ = self.rnn(x)
             first_state = states[:, first_commit_position]
             repair_state = states[:, repair_commit_position]
-            first_json = self.json_head(first_state).view(-1, json_sequence_length, json_vocab_size)
-            repair_json = self.json_head(repair_state).view(-1, json_sequence_length, json_vocab_size)
+            first_json = self.decode_json(first_state, first_json_targets)
+            repair_json = self.decode_json(repair_state, repair_json_targets)
             return (
                 self.final_head(states[:, -1]),
                 self.opcode_head(first_state),
@@ -323,15 +358,38 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
             self.slot_head = nn.Linear(hidden_size, slot_vocab_size)
             self.value_head = nn.Linear(hidden_size, value_vocab_size)
             self.json_head = nn.Linear(hidden_size, json_sequence_length * json_vocab_size)
+            self.json_token_embedding = nn.Embedding(json_vocab_size, hidden_size)
+            self.json_decoder = nn.GRU(hidden_size, hidden_size, batch_first=True)
+            self.json_decoder_head = nn.Linear(hidden_size, json_vocab_size)
             mask = torch.triu(torch.ones(sequence_length, sequence_length), diagonal=1).bool()
             self.register_buffer("causal_mask", mask)
 
-        def forward(self, x):
+        def decode_json(self, state, targets=None):
+            if not autoregressive_json_surface:
+                return self.json_head(state).view(-1, json_sequence_length, json_vocab_size)
+            batch = state.shape[0]
+            hidden = state.unsqueeze(0).contiguous()
+            if targets is not None:
+                start = torch.full((batch, 1), json_pad, dtype=torch.long, device=state.device)
+                shifted = torch.cat([start, targets[:, :-1]], dim=1)
+                decoded, _ = self.json_decoder(self.json_token_embedding(shifted), hidden)
+                return self.json_decoder_head(decoded)
+
+            prev = torch.full((batch,), json_pad, dtype=torch.long, device=state.device)
+            logits = []
+            for _ in range(json_sequence_length):
+                decoded, hidden = self.json_decoder(self.json_token_embedding(prev).unsqueeze(1), hidden)
+                step_logits = self.json_decoder_head(decoded[:, 0])
+                logits.append(step_logits)
+                prev = step_logits.argmax(-1)
+            return torch.stack(logits, dim=1)
+
+        def forward(self, x, first_json_targets=None, repair_json_targets=None):
             states = self.encoder(self.inp(x) + self.pos.unsqueeze(0), mask=self.causal_mask)
             first_state = states[:, first_commit_position]
             repair_state = states[:, repair_commit_position]
-            first_json = self.json_head(first_state).view(-1, json_sequence_length, json_vocab_size)
-            repair_json = self.json_head(repair_state).view(-1, json_sequence_length, json_vocab_size)
+            first_json = self.decode_json(first_state, first_json_targets)
+            repair_json = self.decode_json(repair_state, repair_json_targets)
             return (
                 self.final_head(states[:, -1]),
                 self.opcode_head(first_state),
@@ -407,15 +465,15 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
             first_json_logits,
             repair_json_logits,
             _states,
-        ) = model(x)
+        ) = model(x, first_json_targets, repair_json_targets)
         loss = F.cross_entropy(final_logits, final_target)
         if train_first:
-            if generated_json_surface:
+            if json_surface:
                 loss = loss + 0.75 * json_sequence_loss(first_json_logits, first_json_targets)
             else:
                 loss = loss + 0.25 * field_loss(first_op, first_slot, first_value, first_targets)
         if train_repair:
-            if generated_json_surface:
+            if json_surface:
                 loss = loss + 0.75 * json_sequence_loss(repair_json_logits, repair_json_targets)
             else:
                 loss = loss + 0.25 * field_loss(repair_op, repair_slot, repair_value, repair_targets)
@@ -531,7 +589,7 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
             ) = model(x)
             teacher_forced_final_correct += int((final_logits.argmax(-1) == final_target).sum().item())
 
-            if generated_json_surface:
+            if json_surface:
                 first_json = first_json_logits.argmax(-1)
                 first_valid, first_executable, parsed_first_slot, parsed_first_value = parse_json_sequences(first_json)
                 first_field_correct += int(json_exact(first_json, first_json_targets).sum().item())
@@ -554,7 +612,7 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
             first_total += first_count
 
             if train_repair:
-                if generated_json_surface:
+                if json_surface:
                     repair_json = repair_json_logits.argmax(-1)
                     repair_valid, repair_executable, parsed_repair_slot, parsed_repair_value = parse_json_sequences(
                         repair_json
@@ -623,7 +681,7 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
             ) = model(x_open)
             x_after_first = x_open.clone()
             if is_bottleneck:
-                if generated_json_surface:
+                if json_surface:
                     first_json_pred = open_first_json.argmax(-1)
                     _valid, executable, parsed_slot, parsed_value = parse_json_sequences(first_json_pred)
                 else:
@@ -664,7 +722,7 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
             ) = model(x_after_first)
             x_closed = x_after_first.clone()
             if is_bottleneck:
-                if generated_json_surface:
+                if json_surface:
                     repair_json_pred = repair_json_logits_open.argmax(-1)
                     _repair_valid, repair_executable, parsed_repair_slot, parsed_repair_value = parse_json_sequences(
                         repair_json_pred
@@ -763,7 +821,7 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
                     repair_json1,
                     states1,
                 ) = model(x1)
-                if generated_json_surface:
+                if json_surface:
                     fields0 = repair_json0.flatten(1)
                     fields1 = repair_json1.flatten(1)
                 else:
@@ -822,7 +880,12 @@ def run_stochastic_cell(arg: dict[str, Any]) -> dict[str, Any]:
         "repair_commit_position": repair_commit_position,
         "repair_return_position": repair_return_position,
         "argument_surface": (
-            "generated_json" if generated_json_surface else ("text" if text_surface else ("alias" if alias_surface else "slot"))
+            "autoregressive_json"
+            if autoregressive_json_surface
+            else ("generated_json" if generated_json_surface else ("text" if text_surface else ("alias" if alias_surface else "slot")))
+        ),
+        "json_generation_mode": (
+            "autoregressive" if autoregressive_json_surface else ("parallel" if generated_json_surface else None)
         ),
         "aliases_per_slot": aliases_per_slot,
         "opcode_vocab_size": opcode_vocab_size,
@@ -913,24 +976,43 @@ def main(
     alias_conditions = {"alias_stochastic_bottleneck", "alias_visible_control"}
     text_conditions = {"text_stochastic_bottleneck", "text_visible_control"}
     generated_json_conditions = {"generated_json_bottleneck", "generated_json_visible_control"}
+    autoregressive_json_conditions = {
+        "autoregressive_json_bottleneck",
+        "autoregressive_json_visible_control",
+    }
     compact_conditions = {"stochastic_failure_bottleneck", "stochastic_visible_control"}
     uses_alias_surface = any(condition in alias_conditions for condition in condition_list)
     uses_text_surface = any(condition in text_conditions for condition in condition_list)
     uses_generated_json_surface = any(condition in generated_json_conditions for condition in condition_list)
+    uses_autoregressive_json_surface = any(condition in autoregressive_json_conditions for condition in condition_list)
     uses_compact_surface = any(condition in compact_conditions for condition in condition_list)
-    if sum((uses_alias_surface, uses_text_surface, uses_generated_json_surface, uses_compact_surface)) > 1:
-        raise SystemExit("Do not mix alias, text, generated-JSON, and compact-slot conditions in one sweep")
+    if sum(
+        (
+            uses_alias_surface,
+            uses_text_surface,
+            uses_generated_json_surface,
+            uses_autoregressive_json_surface,
+            uses_compact_surface,
+        )
+    ) > 1:
+        raise SystemExit(
+            "Do not mix alias, text, generated-JSON, autoregressive-JSON, and compact-slot conditions in one sweep"
+        )
     if aliases_per_slot <= 0:
         raise SystemExit("aliases_per_slot must be positive")
     argument_surface = (
-        "generated_json"
-        if uses_generated_json_surface
-        else ("text" if uses_text_surface else ("alias" if uses_alias_surface else "slot"))
+        "autoregressive_json"
+        if uses_autoregressive_json_surface
+        else (
+            "generated_json"
+            if uses_generated_json_surface
+            else ("text" if uses_text_surface else ("alias" if uses_alias_surface else "slot"))
+        )
     )
     field_slot_vocab_size = n_slots * aliases_per_slot + 2 if uses_alias_surface or uses_text_surface else n_slots + 2
     generated_json_arg_vocab_size = (
         generated_json_vocab_size(n_slots, aliases_per_slot)
-        if uses_generated_json_surface
+        if uses_generated_json_surface or uses_autoregressive_json_surface
         else None
     )
     seed_values = list(range(seeds))
@@ -963,7 +1045,7 @@ def main(
         cell["aliases_per_slot"] = aliases_per_slot
 
     text_argument_phrases: list[dict[str, Any]] = []
-    if uses_text_surface or uses_generated_json_surface:
+    if uses_text_surface or uses_generated_json_surface or uses_autoregressive_json_surface:
         from experiments.long_horizon_bottleneck.core import render_text_argument
 
         for slot in range(n_slots):
@@ -979,7 +1061,7 @@ def main(
                 )
 
     generated_json_examples: dict[str, Any] = {}
-    if uses_generated_json_surface:
+    if uses_generated_json_surface or uses_autoregressive_json_surface:
         example_call_tokens = generated_json_call_token_ids(
             slot=min(1, n_slots - 1),
             variant_index=min(1, aliases_per_slot - 1),
@@ -1021,7 +1103,16 @@ def main(
         "text_argument_phrases": text_argument_phrases,
         "slot_vocab_size": field_slot_vocab_size,
         "value_vocab_size": 4,
-        "generated_json_sequence_length": generated_json_sequence_length() if uses_generated_json_surface else None,
+        "generated_json_sequence_length": (
+            generated_json_sequence_length()
+            if uses_generated_json_surface or uses_autoregressive_json_surface
+            else None
+        ),
+        "json_generation_mode": (
+            "autoregressive"
+            if uses_autoregressive_json_surface
+            else ("parallel" if uses_generated_json_surface else None)
+        ),
         "generated_json_vocab_size": generated_json_arg_vocab_size,
         "generated_json_examples": generated_json_examples,
         "first_commit_position": resolved_first_commit,
@@ -1036,15 +1127,20 @@ def main(
         "budget_estimate": estimate.__dict__,
     }
     run_label = (
-        "generated-json-surface"
-        if uses_generated_json_surface
+        "autoregressive-json-surface"
+        if uses_autoregressive_json_surface
         else (
-            "text-argument-surface"
-            if uses_text_surface
-            else ("alias-argument-surface" if uses_alias_surface else "stochastic-tool-failure")
+            "generated-json-surface"
+            if uses_generated_json_surface
+            else (
+                "text-argument-surface"
+                if uses_text_surface
+                else ("alias-argument-surface" if uses_alias_surface else "stochastic-tool-failure")
+            )
         )
     )
     payload_kind = {
+        "autoregressive_json": "autoregressive JSON stochastic moved-bottleneck sweep",
         "generated_json": "generated JSON stochastic moved-bottleneck sweep",
         "text": "text argument-surface stochastic moved-bottleneck sweep",
         "alias": "alias argument-surface stochastic moved-bottleneck sweep",
@@ -1104,15 +1200,19 @@ def main(
             f"pass={item['gate']['pass']}"
         )
     pooled_key = (
-        "pooled_generated_json_bottleneck"
-        if uses_generated_json_surface
+        "pooled_autoregressive_json_bottleneck"
+        if uses_autoregressive_json_surface
         else (
-            "pooled_text_stochastic_bottleneck"
-            if uses_text_surface
+            "pooled_generated_json_bottleneck"
+            if uses_generated_json_surface
             else (
-                "pooled_alias_stochastic_bottleneck"
-                if uses_alias_surface
-                else "pooled_stochastic_failure_bottleneck"
+                "pooled_text_stochastic_bottleneck"
+                if uses_text_surface
+                else (
+                    "pooled_alias_stochastic_bottleneck"
+                    if uses_alias_surface
+                    else "pooled_stochastic_failure_bottleneck"
+                )
             )
         )
     )

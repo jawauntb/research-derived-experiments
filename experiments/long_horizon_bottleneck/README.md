@@ -254,6 +254,29 @@ prompt benchmark, but it attacks the next bottleneck after classifier-rendered
 text phrases: whether the moved critical variable survives parser-scored
 generated action strings.
 
+Autoregressive JSON surface pass:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/long_horizon_bottleneck/modal_stochastic_tool_failure_sweep.py \
+    --seeds 4 --train-steps 900 --architectures transformer \
+    --conditions autoregressive_json_bottleneck,autoregressive_json_visible_control \
+    --critical-slots 0,1,2,3 \
+    --aliases-per-slot 3 \
+    --failure-probability 0.5 \
+    --budget-usd 25 \
+    --out artifacts/long_horizon_bottleneck/autoregressive_json_surface_l4.json
+```
+
+The autoregressive JSON pass keeps the parser and JSON-like token vocabulary,
+but decodes each action token-by-token from the commit state with the previous
+emitted token as input. The evaluator parses the greedy decoded sequence before
+granting tool state. This is still a synthetic fixed-vocabulary decoder, but it
+attacks the next bottleneck after parallel generated JSON: whether the moved
+critical variable survives a decoded action channel rather than a single
+parallel sequence head.
+
 Smoke:
 
 ```bash
@@ -301,4 +324,5 @@ equivalence classes, but those aliases are still fixed classifier labels.
 Passing gates justify either packaging the synthetic mechanism ladder or moving
 to a true text/LLM prompt regime. The generated JSON pass adds emitted
 fixed-length parser strings, but those strings are still vocabulary-constrained
-and supervised; they are not open-ended decoding from a pretrained model.
+and supervised; the autoregressive JSON pass adds token-by-token decoding, but
+it is still not open-ended decoding from a pretrained model.

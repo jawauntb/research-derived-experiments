@@ -1254,6 +1254,7 @@ def summarize_stochastic_rows(rows: list[dict[str, Any]], *, n_boot: int = 2000)
         "alias_stochastic_bottleneck",
         "text_stochastic_bottleneck",
         "generated_json_bottleneck",
+        "autoregressive_json_bottleneck",
     ):
         condition_rows = [r for r in rows if r["condition"] == condition]
         if condition_rows:
@@ -1328,12 +1329,14 @@ def summarize_stochastic_gate_group(
         "alias_visible_control",
         "text_visible_control",
         "generated_json_visible_control",
+        "autoregressive_json_visible_control",
     }
     bottleneck_conditions = {
         "stochastic_failure_bottleneck",
         "alias_stochastic_bottleneck",
         "text_stochastic_bottleneck",
         "generated_json_bottleneck",
+        "autoregressive_json_bottleneck",
     }
     if condition in visible_conditions:
         gate = {
