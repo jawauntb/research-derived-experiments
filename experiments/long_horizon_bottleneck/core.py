@@ -612,6 +612,242 @@ def summarize_structured_gate_group(
     return item
 
 
+# ---------------------------------------------------------------------------
+# Multifield tool-call schema
+#
+# The structured-action regime represented a whole JSON-like call with one
+# token. This regime splits the call into opcode, slot argument, and value
+# argument fields. Schema validity therefore becomes compositional: all fields
+# must line up as a valid executable call or as a valid no-op.
+# ---------------------------------------------------------------------------
+
+MULTIFIELD_OPCODES = ("call", "noop", "bad_opcode")
+MULTIFIELD_MALFORMED_REASONS = ("missing_slot", "bad_slot", "missing_value", "bad_value", "bad_opcode")
+
+
+def multifield_vocab_sizes(n_slots: int) -> dict[str, int]:
+    """Vocabulary sizes for opcode, slot-argument, and value-argument fields."""
+
+    if n_slots <= 0:
+        raise ValueError("n_slots must be positive")
+    return {"opcode": len(MULTIFIELD_OPCODES), "slot": n_slots + 2, "value": 4}
+
+
+def multifield_call_tokens(slot: int, value: int, n_slots: int) -> tuple[int, int, int]:
+    """Field tokens for ``{"tool": "read_slot", "slot": slot, "value": value}``."""
+
+    if not 0 <= slot < n_slots:
+        raise ValueError(f"slot={slot} outside n_slots={n_slots}")
+    if value not in (0, 1):
+        raise ValueError(f"value={value} must be 0 or 1")
+    return 0, slot, value
+
+
+def multifield_noop_tokens(n_slots: int) -> tuple[int, int, int]:
+    """Field tokens for a schema-valid no-op with absent slot/value arguments."""
+
+    return 1, n_slots, 2
+
+
+def multifield_malformed_tokens(reason: str, n_slots: int) -> tuple[int, int, int]:
+    """Representative malformed field-token triples for schema-error probes."""
+
+    if reason == "missing_slot":
+        return 0, n_slots, 1
+    if reason == "bad_slot":
+        return 0, n_slots + 1, 1
+    if reason == "missing_value":
+        return 0, 0, 2
+    if reason == "bad_value":
+        return 0, 0, 3
+    if reason == "bad_opcode":
+        return 2, 0, 1
+    known = ", ".join(MULTIFIELD_MALFORMED_REASONS)
+    raise ValueError(f"Unknown malformed reason {reason!r}. Known: {known}")
+
+
+def parse_multifield_action(opcode_id: int, slot_id: int, value_id: int, n_slots: int) -> dict[str, Any]:
+    """Parse opcode/slot/value field tokens into a schema verdict."""
+
+    sizes = multifield_vocab_sizes(n_slots)
+    if not 0 <= opcode_id < sizes["opcode"]:
+        raise ValueError(f"opcode_id={opcode_id} outside opcode vocab size {sizes['opcode']}")
+    if not 0 <= slot_id < sizes["slot"]:
+        raise ValueError(f"slot_id={slot_id} outside slot vocab size {sizes['slot']}")
+    if not 0 <= value_id < sizes["value"]:
+        raise ValueError(f"value_id={value_id} outside value vocab size {sizes['value']}")
+
+    opcode = MULTIFIELD_OPCODES[opcode_id]
+    slot_valid = 0 <= slot_id < n_slots
+    value_valid = value_id in (0, 1)
+    slot_missing = slot_id == n_slots
+    value_missing = value_id == 2
+    if opcode == "call" and slot_valid and value_valid:
+        return {
+            "opcode": "call",
+            "slot": slot_id,
+            "value": value_id,
+            "valid": True,
+            "executable": True,
+            "reason": None,
+        }
+    if opcode == "noop" and slot_missing and value_missing:
+        return {
+            "opcode": "noop",
+            "slot": None,
+            "value": None,
+            "valid": True,
+            "executable": False,
+            "reason": None,
+        }
+    if opcode == "bad_opcode":
+        reason = "bad_opcode"
+    elif not slot_valid and opcode == "call":
+        reason = "missing_slot" if slot_missing else "bad_slot"
+    elif not value_valid and opcode == "call":
+        reason = "missing_value" if value_missing else "bad_value"
+    else:
+        reason = "argument_mismatch"
+    return {
+        "opcode": opcode,
+        "slot": slot_id if slot_valid else None,
+        "value": value_id if value_valid else None,
+        "valid": False,
+        "executable": False,
+        "reason": reason,
+    }
+
+
+def render_multifield_action(parsed: dict[str, Any]) -> str:
+    """Render a parsed multifield action as a JSON-like tool-call string."""
+
+    opcode = parsed["opcode"]
+    if opcode == "call" and parsed["valid"]:
+        return f'{{"tool": "read_slot", "slot": {parsed["slot"]}, "value": {parsed["value"]}}}'
+    if opcode == "noop" and parsed["valid"]:
+        return '{"tool": "noop"}'
+    return f'{{"error": "{parsed["reason"]}"}}'
+
+
+def summarize_multifield_rows(rows: list[dict[str, Any]], *, n_boot: int = 2000) -> dict[str, Any]:
+    """Summarize multifield tool-call rows with direct, repair, and control gates."""
+
+    grouped: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    by_slot: dict[tuple[str, str, int], list[dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        key = (str(row["condition"]), str(row["architecture"]))
+        grouped[key].append(row)
+        by_slot[(key[0], key[1], int(row["critical_slot"]))].append(row)
+
+    out: dict[str, Any] = {"n_rows": len(rows), "groups": {}, "slot_groups": {}}
+    for (condition, arch), group_rows in sorted(grouped.items()):
+        out["groups"][f"{condition}/{arch}"] = summarize_multifield_gate_group(
+            group_rows,
+            condition=condition,
+            n_boot=n_boot,
+        )
+
+    for (condition, arch, slot), group_rows in sorted(by_slot.items()):
+        out["slot_groups"][f"{condition}/{arch}/slot_{slot}"] = summarize_multifield_gate_group(
+            group_rows,
+            condition=condition,
+            n_boot=n_boot,
+        )
+
+    for condition in ("multifield_direct_bottleneck", "multifield_repair_bottleneck"):
+        condition_rows = [r for r in rows if r["condition"] == condition]
+        if condition_rows:
+            out[f"pooled_{condition}"] = summarize_multifield_gate_group(
+                condition_rows,
+                condition=condition,
+                n_boot=n_boot,
+            )
+    return out
+
+
+def summarize_multifield_gate_group(
+    rows: list[dict[str, Any]],
+    *,
+    condition: str,
+    n_boot: int = 2000,
+) -> dict[str, Any]:
+    final_key = "closed_loop_final_accuracy" if all("closed_loop_final_accuracy" in r for r in rows) else "final_accuracy"
+    final_acc = bootstrap_mean_ci([r[final_key] for r in rows], n_boot=n_boot, seed=20260750)
+    teacher_forced_acc = None
+    if all("teacher_forced_final_accuracy" in r for r in rows):
+        teacher_forced_acc = bootstrap_mean_ci(
+            [r["teacher_forced_final_accuracy"] for r in rows],
+            n_boot=n_boot,
+            seed=20260751,
+        )
+    first_field_acc = bootstrap_mean_ci([r["first_field_accuracy"] for r in rows], n_boot=n_boot, seed=20260752)
+    first_schema = bootstrap_mean_ci([r["first_schema_validity"] for r in rows], n_boot=n_boot, seed=20260753)
+    first_slot_acc = bootstrap_mean_ci([r["first_parsed_slot_accuracy"] for r in rows], n_boot=n_boot, seed=20260754)
+    first_value_acc = bootstrap_mean_ci([r["first_parsed_value_accuracy"] for r in rows], n_boot=n_boot, seed=20260755)
+    repair_field_acc = bootstrap_mean_ci([r["repair_field_accuracy"] for r in rows], n_boot=n_boot, seed=20260756)
+    repair_schema = bootstrap_mean_ci([r["repair_schema_validity"] for r in rows], n_boot=n_boot, seed=20260757)
+    repair_slot_acc = bootstrap_mean_ci([r["repair_parsed_slot_accuracy"] for r in rows], n_boot=n_boot, seed=20260758)
+    repair_value_acc = bootstrap_mean_ci([r["repair_parsed_value_accuracy"] for r in rows], n_boot=n_boot, seed=20260759)
+    memory_spec = bootstrap_mean_ci([r["memory_specificity_z"] for r in rows], n_boot=n_boot, seed=20260760)
+    memory_rank = bootstrap_mean_ci([r["memory_rank_percentile"] for r in rows], n_boot=n_boot, seed=20260761)
+    tool_value_spec = bootstrap_mean_ci([r["tool_value_specificity_z"] for r in rows], n_boot=n_boot, seed=20260762)
+
+    if condition == "multifield_visible_control":
+        gate = {
+            f"{final_key}_ge_0_90": final_acc["mean"] >= 0.90,
+            "first_noop_field_acc_ge_0_90": first_field_acc["mean"] >= 0.90,
+            "repair_noop_field_acc_ge_0_90": repair_field_acc["mean"] >= 0.90,
+            "first_schema_valid_ge_0_90": first_schema["mean"] >= 0.90,
+            "memory_specificity_not_strong_positive": memory_spec["mean"] < 0.5,
+        }
+    elif condition == "multifield_repair_bottleneck":
+        gate = {
+            f"{final_key}_ge_0_90": final_acc["mean"] >= 0.90,
+            "first_field_acc_ge_0_90": first_field_acc["mean"] >= 0.90,
+            "repair_field_acc_ge_0_90": repair_field_acc["mean"] >= 0.90,
+            "repair_schema_valid_ge_0_90": repair_schema["mean"] >= 0.90,
+            "repair_parsed_slot_acc_ge_0_90": repair_slot_acc["mean"] >= 0.90,
+            "repair_parsed_value_acc_ge_0_90": repair_value_acc["mean"] >= 0.90,
+            "memory_specificity_positive": memory_spec["ci95"][0] > 0.0,
+            "tool_value_specificity_positive": tool_value_spec["ci95"][0] > 0.0,
+            "rank_above_chance": memory_rank["mean"] > 0.5,
+        }
+    elif condition == "multifield_direct_bottleneck":
+        gate = {
+            f"{final_key}_ge_0_90": final_acc["mean"] >= 0.90,
+            "first_field_acc_ge_0_90": first_field_acc["mean"] >= 0.90,
+            "first_schema_valid_ge_0_90": first_schema["mean"] >= 0.90,
+            "first_parsed_slot_acc_ge_0_90": first_slot_acc["mean"] >= 0.90,
+            "first_parsed_value_acc_ge_0_90": first_value_acc["mean"] >= 0.90,
+            "memory_specificity_positive": memory_spec["ci95"][0] > 0.0,
+            "tool_value_specificity_positive": tool_value_spec["ci95"][0] > 0.0,
+            "rank_above_chance": memory_rank["mean"] > 0.5,
+        }
+    else:
+        raise ValueError(f"Unknown multifield condition {condition!r}")
+    gate["pass"] = all(gate.values())
+
+    item = {
+        "final_metric": final_key,
+        "final_accuracy": final_acc,
+        "first_field_accuracy": first_field_acc,
+        "first_schema_validity": first_schema,
+        "first_parsed_slot_accuracy": first_slot_acc,
+        "first_parsed_value_accuracy": first_value_acc,
+        "repair_field_accuracy": repair_field_acc,
+        "repair_schema_validity": repair_schema,
+        "repair_parsed_slot_accuracy": repair_slot_acc,
+        "repair_parsed_value_accuracy": repair_value_acc,
+        "memory_specificity_z": memory_spec,
+        "memory_rank_percentile": memory_rank,
+        "tool_value_specificity_z": tool_value_spec,
+        "gate": gate,
+    }
+    if teacher_forced_acc is not None:
+        item["teacher_forced_final_accuracy"] = teacher_forced_acc
+    return item
+
+
 def summarize_recovery_rows(rows: list[dict[str, Any]], *, n_boot: int = 2000) -> dict[str, Any]:
     """Summarize tool-recovery rows with direct, repair, and visible-control gates."""
 

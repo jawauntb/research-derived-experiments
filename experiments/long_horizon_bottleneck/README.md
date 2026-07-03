@@ -125,6 +125,27 @@ terminal visible bit. Gates add schema-validity and parsed slot/value checks on
 top of the closed-loop final accuracy, memory specificity, tool-value
 specificity, and visible-control null.
 
+Multifield tool-schema pass:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/long_horizon_bottleneck/modal_multifield_tool_schema_sweep.py \
+    --seeds 4 --train-steps 900 --architectures transformer \
+    --conditions multifield_direct_bottleneck,multifield_repair_bottleneck,multifield_visible_control \
+    --critical-slots 0,1,2,3 \
+    --budget-usd 25 \
+    --out artifacts/long_horizon_bottleneck/multifield_tool_schema_l4.json
+```
+
+The multifield pass replaces the fused structured-action token with three
+separate fields: opcode, slot argument, and value argument. The parser composes
+schema validity across fields, distinguishing executable calls, a schema-valid
+no-op, missing or bad slot/value arguments, and bad opcodes. Gates require
+closed-loop final accuracy, per-field action accuracy, composed schema validity,
+parsed slot/value accuracy for executable calls, memory specificity, tool-value
+specificity, and the visible-control no-op null.
+
 Smoke:
 
 ```bash
@@ -159,10 +180,10 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
 ## Scope Boundary
 
 This is a synthetic long-horizon memory diagnostic, not a claim about production
-LLM agents, consciousness, or naturalistic tool use. The structured tool-call
-pass moves the model-visible interface toward naturalistic tool schemas (parsed
-JSON-like calls, schema validity, malformed actions, and a repair prompt) but
-remains fully synthetic: the vocabulary is a fixed discrete action set, not
-free-form natural-language tool use, and the tool semantics are toy. Passing
-gates would justify the next regime: multi-argument schemas, stochastic tool
-failures, and natural-language argument surfaces.
+LLM agents, consciousness, or naturalistic tool use. The structured and
+multifield tool-schema passes move the model-visible interface toward
+naturalistic tool schemas (parsed calls, schema validity, malformed actions,
+argument fields, and repair prompts) but remain fully synthetic: fields are
+fixed discrete classifiers, not free-form JSON or natural-language tool use, and
+the tool semantics are toy. Passing gates justifies the next regime: stochastic
+tool failures, larger schemas, and natural-language argument surfaces.
