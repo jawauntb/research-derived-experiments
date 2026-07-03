@@ -229,6 +229,31 @@ before applying the same gates. This is still a synthetic classifier surface,
 but it attacks the next bottleneck after compact alias IDs: whether the moved
 critical variable survives a text-labeled JSON argument namespace.
 
+Generated JSON surface pass:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/long_horizon_bottleneck/modal_stochastic_tool_failure_sweep.py \
+    --seeds 4 --train-steps 900 --architectures transformer \
+    --conditions generated_json_bottleneck,generated_json_visible_control \
+    --critical-slots 0,1,2,3 \
+    --aliases-per-slot 3 \
+    --failure-probability 0.5 \
+    --budget-usd 25 \
+    --out artifacts/long_horizon_bottleneck/generated_json_surface_l4.json
+```
+
+The generated JSON pass replaces the three classifier fields with a
+fixed-length emitted token sequence that renders to a JSON-like tool-call
+string, such as `{ tool : read_slot , slot : second clue , value : 0 }` or
+`{ tool : noop }`. The evaluator parses the emitted sequence back into opcode,
+slot phrase, and value before applying the same stochastic repair/no-op gates.
+This is still constrained synthetic generation, not an autoregressive LLM
+prompt benchmark, but it attacks the next bottleneck after classifier-rendered
+text phrases: whether the moved critical variable survives parser-scored
+generated action strings.
+
 Smoke:
 
 ```bash
@@ -274,4 +299,6 @@ environment-sampled. The larger-schema pass raises the argument namespace but
 still uses compact discrete fields. The alias pass adds synonym-like argument
 equivalence classes, but those aliases are still fixed classifier labels.
 Passing gates justify either packaging the synthetic mechanism ladder or moving
-to a true text/LLM prompt regime.
+to a true text/LLM prompt regime. The generated JSON pass adds emitted
+fixed-length parser strings, but those strings are still vocabulary-constrained
+and supervised; they are not open-ended decoding from a pretrained model.

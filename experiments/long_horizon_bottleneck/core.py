@@ -885,6 +885,215 @@ def parse_text_argument(text: str, n_slots: int, variants_per_slot: int) -> dict
     }
 
 
+# The generated-JSON regime moves one step beyond classifier-rendered text
+# phrases: the model emits a fixed-length token sequence that renders to a
+# JSON-like action. The parser must recover opcode/slot/value from that emitted
+# token string before the stochastic repair gates can grant external state.
+
+
+GENERATED_JSON_BASE_TOKENS = (
+    "{",
+    "}",
+    "tool",
+    "read_slot",
+    "noop",
+    "slot",
+    "value",
+    ":",
+    ",",
+    "0",
+    "1",
+    "pad",
+    "bad",
+)
+GENERATED_JSON_SEQUENCE_LENGTH = 13
+GENERATED_JSON_LBRACE = 0
+GENERATED_JSON_RBRACE = 1
+GENERATED_JSON_TOOL = 2
+GENERATED_JSON_READ_SLOT = 3
+GENERATED_JSON_NOOP = 4
+GENERATED_JSON_SLOT = 5
+GENERATED_JSON_VALUE = 6
+GENERATED_JSON_COLON = 7
+GENERATED_JSON_COMMA = 8
+GENERATED_JSON_ZERO = 9
+GENERATED_JSON_ONE = 10
+GENERATED_JSON_PAD = 11
+
+
+def generated_json_sequence_length() -> int:
+    """Fixed generated action length used by the token-sequence JSON surface."""
+
+    return GENERATED_JSON_SEQUENCE_LENGTH
+
+
+def generated_json_vocab_size(n_slots: int, variants_per_slot: int) -> int:
+    """Vocabulary size for base JSON tokens plus text slot-argument phrases."""
+
+    return len(GENERATED_JSON_BASE_TOKENS) + text_argument_vocab_size(n_slots, variants_per_slot)
+
+
+def generated_json_token_to_text(token_id: int, n_slots: int, variants_per_slot: int) -> str:
+    """Render one generated-JSON token id as its parser-facing text token."""
+
+    size = generated_json_vocab_size(n_slots, variants_per_slot)
+    if not 0 <= token_id < size:
+        raise ValueError(f"token_id={token_id} outside generated JSON vocab size {size}")
+    if token_id < len(GENERATED_JSON_BASE_TOKENS):
+        return GENERATED_JSON_BASE_TOKENS[token_id]
+    return render_text_argument(token_id - len(GENERATED_JSON_BASE_TOKENS), n_slots, variants_per_slot)
+
+
+def generated_json_call_token_ids(
+    *,
+    slot: int,
+    variant_index: int,
+    value: int,
+    n_slots: int,
+    variants_per_slot: int,
+) -> list[int]:
+    """Token sequence for ``{"tool": "read_slot", "slot": phrase, "value": bit}``."""
+
+    phrase_token = len(GENERATED_JSON_BASE_TOKENS) + text_argument_id(
+        slot=slot,
+        variant_index=variant_index,
+        n_slots=n_slots,
+        variants_per_slot=variants_per_slot,
+    )
+    if value not in (0, 1):
+        raise ValueError(f"value={value} must be 0 or 1")
+    value_token = GENERATED_JSON_ONE if value else GENERATED_JSON_ZERO
+    return [
+        GENERATED_JSON_LBRACE,
+        GENERATED_JSON_TOOL,
+        GENERATED_JSON_COLON,
+        GENERATED_JSON_READ_SLOT,
+        GENERATED_JSON_COMMA,
+        GENERATED_JSON_SLOT,
+        GENERATED_JSON_COLON,
+        phrase_token,
+        GENERATED_JSON_COMMA,
+        GENERATED_JSON_VALUE,
+        GENERATED_JSON_COLON,
+        value_token,
+        GENERATED_JSON_RBRACE,
+    ]
+
+
+def generated_json_noop_token_ids(n_slots: int, variants_per_slot: int) -> list[int]:
+    """Token sequence for a schema-valid ``{"tool": "noop"}`` action."""
+
+    generated_json_vocab_size(n_slots, variants_per_slot)
+    prefix = [
+        GENERATED_JSON_LBRACE,
+        GENERATED_JSON_TOOL,
+        GENERATED_JSON_COLON,
+        GENERATED_JSON_NOOP,
+        GENERATED_JSON_RBRACE,
+    ]
+    return prefix + [GENERATED_JSON_PAD] * (GENERATED_JSON_SEQUENCE_LENGTH - len(prefix))
+
+
+def render_generated_json_tokens(token_ids: Iterable[int], n_slots: int, variants_per_slot: int) -> str:
+    """Render generated-JSON token ids as the emitted parser-facing string."""
+
+    tokens = [generated_json_token_to_text(int(token_id), n_slots, variants_per_slot) for token_id in token_ids]
+    visible = [token for token in tokens if token != "pad"]
+    return " ".join(visible)
+
+
+def _generated_json_malformed(
+    token_ids: list[int],
+    n_slots: int,
+    variants_per_slot: int,
+    reason: str,
+) -> dict[str, Any]:
+    return {
+        "opcode": "malformed",
+        "slot": None,
+        "variant_index": None,
+        "value": None,
+        "valid": False,
+        "executable": False,
+        "reason": reason,
+        "text": render_generated_json_tokens(token_ids, n_slots, variants_per_slot),
+    }
+
+
+def parse_generated_json_tokens(
+    token_ids: Iterable[int],
+    n_slots: int,
+    variants_per_slot: int,
+) -> dict[str, Any]:
+    """Parse an emitted generated-JSON token sequence into a schema verdict."""
+
+    tokens = [int(token_id) for token_id in token_ids]
+    text = render_generated_json_tokens(tokens, n_slots, variants_per_slot)
+    if len(tokens) != GENERATED_JSON_SEQUENCE_LENGTH:
+        return _generated_json_malformed(tokens, n_slots, variants_per_slot, "bad_length")
+
+    if tokens == generated_json_noop_token_ids(n_slots, variants_per_slot):
+        return {
+            "opcode": "noop",
+            "slot": None,
+            "variant_index": None,
+            "value": None,
+            "valid": True,
+            "executable": False,
+            "reason": None,
+            "text": text,
+        }
+
+    call_template = [
+        GENERATED_JSON_LBRACE,
+        GENERATED_JSON_TOOL,
+        GENERATED_JSON_COLON,
+        GENERATED_JSON_READ_SLOT,
+        GENERATED_JSON_COMMA,
+        GENERATED_JSON_SLOT,
+        GENERATED_JSON_COLON,
+        None,
+        GENERATED_JSON_COMMA,
+        GENERATED_JSON_VALUE,
+        GENERATED_JSON_COLON,
+        None,
+        GENERATED_JSON_RBRACE,
+    ]
+    for index, expected in enumerate(call_template):
+        if expected is not None and tokens[index] != expected:
+            return _generated_json_malformed(tokens, n_slots, variants_per_slot, "malformed_order")
+
+    phrase_token = tokens[7]
+    phrase_base = phrase_token - len(GENERATED_JSON_BASE_TOKENS)
+    if not 0 <= phrase_base < text_argument_vocab_size(n_slots, variants_per_slot):
+        return _generated_json_malformed(tokens, n_slots, variants_per_slot, "bad_slot_argument")
+    phrase = render_text_argument(phrase_base, n_slots, variants_per_slot)
+    parsed_argument = parse_text_argument(phrase, n_slots, variants_per_slot)
+    if parsed_argument["missing"]:
+        return _generated_json_malformed(tokens, n_slots, variants_per_slot, "missing_slot")
+    if not parsed_argument["valid"]:
+        return _generated_json_malformed(tokens, n_slots, variants_per_slot, parsed_argument["reason"])
+
+    value_token = tokens[11]
+    if value_token == GENERATED_JSON_ZERO:
+        value = 0
+    elif value_token == GENERATED_JSON_ONE:
+        value = 1
+    else:
+        return _generated_json_malformed(tokens, n_slots, variants_per_slot, "bad_value")
+
+    return {
+        "opcode": "call",
+        "slot": parsed_argument["slot"],
+        "variant_index": parsed_argument["variant_index"],
+        "value": value,
+        "valid": True,
+        "executable": True,
+        "reason": None,
+        "text": text,
+    }
+
+
 def render_multifield_action(parsed: dict[str, Any]) -> str:
     """Render a parsed multifield action as a JSON-like tool-call string."""
 
@@ -1040,7 +1249,12 @@ def summarize_stochastic_rows(rows: list[dict[str, Any]], *, n_boot: int = 2000)
             n_boot=n_boot,
         )
 
-    for condition in ("stochastic_failure_bottleneck", "alias_stochastic_bottleneck", "text_stochastic_bottleneck"):
+    for condition in (
+        "stochastic_failure_bottleneck",
+        "alias_stochastic_bottleneck",
+        "text_stochastic_bottleneck",
+        "generated_json_bottleneck",
+    ):
         condition_rows = [r for r in rows if r["condition"] == condition]
         if condition_rows:
             out[f"pooled_{condition}"] = summarize_stochastic_gate_group(
@@ -1109,11 +1323,17 @@ def summarize_stochastic_gate_group(
     memory_rank = bootstrap_mean_ci([r["memory_rank_percentile"] for r in rows], n_boot=n_boot, seed=20260786)
     tool_value_spec = bootstrap_mean_ci([r["tool_value_specificity_z"] for r in rows], n_boot=n_boot, seed=20260787)
 
-    visible_conditions = {"stochastic_visible_control", "alias_visible_control", "text_visible_control"}
+    visible_conditions = {
+        "stochastic_visible_control",
+        "alias_visible_control",
+        "text_visible_control",
+        "generated_json_visible_control",
+    }
     bottleneck_conditions = {
         "stochastic_failure_bottleneck",
         "alias_stochastic_bottleneck",
         "text_stochastic_bottleneck",
+        "generated_json_bottleneck",
     }
     if condition in visible_conditions:
         gate = {
