@@ -1528,6 +1528,7 @@ PROMPT_JSON_LOCALIZATION_POSITIONS = (
     "fixed_read_final",
 )
 PROMPT_JSON_LOCALIZATION_LAYERS = ("early", "mid", "late", "final")
+PROMPT_JSON_CAUSAL_PATCH_POSITIONS = ("prompt_final", "value_prefix_final")
 
 
 def summarize_prompt_transfer_rows(rows: list[dict[str, Any]], *, n_boot: int = 2000) -> dict[str, Any]:
@@ -1688,6 +1689,102 @@ def summarize_prompt_localization_gate_group(
         "hidden_layer_index": min(layer_indices) if layer_indices else None,
         "memory_specificity_z": memory_spec,
         "memory_rank_percentile": memory_rank,
+        "failure_modes": [key for key, value in gate.items() if key != "pass" and not value],
+        "gate": gate,
+    }
+
+
+def summarize_prompt_causal_patch_rows(rows: list[dict[str, Any]], *, n_boot: int = 2000) -> dict[str, Any]:
+    """Classify fixed-prefix prompt JSON causal-patch rows."""
+
+    grouped: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
+    by_slot: dict[tuple[str, str, str, int], list[dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        model = str(row.get("model", row.get("architecture", "unknown_model")))
+        position = str(row["patch_position"])
+        layer = str(row["patch_layer"])
+        grouped[(model, position, layer)].append(row)
+        by_slot[(model, position, layer, int(row["critical_slot"]))].append(row)
+
+    out: dict[str, Any] = {
+        "n_rows": len(rows),
+        "groups": {},
+        "slot_groups": {},
+    }
+    for (model, position, layer), group_rows in sorted(grouped.items()):
+        out["groups"][f"{model}/{position}/{layer}"] = summarize_prompt_causal_patch_gate_group(
+            group_rows,
+            n_boot=n_boot,
+        )
+
+    for (model, position, layer, slot), group_rows in sorted(by_slot.items()):
+        out["slot_groups"][f"{model}/{position}/{layer}/slot_{slot}"] = summarize_prompt_causal_patch_gate_group(
+            group_rows,
+            n_boot=n_boot,
+        )
+
+    has_groups = bool(out["groups"])
+    sanity_groups = [
+        group
+        for group in out["groups"].values()
+        if group["gate"]["clean_prefers_donor"] and group["gate"]["corrupted_prefers_corrupted"]
+    ]
+    patch_pass = any(group["gate"]["pass"] for group in out["groups"].values())
+    causal_ready = has_groups and bool(sanity_groups)
+    positive = causal_ready and patch_pass
+    strong_negative = causal_ready and not patch_pass
+    out["decision"] = {
+        "causal_ready": causal_ready,
+        "patch_pass": patch_pass,
+        "positive": positive,
+        "strong_negative": strong_negative,
+    }
+    if positive:
+        out["outcome"] = "positive"
+    elif strong_negative:
+        out["outcome"] = "strong_negative"
+    else:
+        out["outcome"] = "inconclusive"
+    return out
+
+
+def summarize_prompt_causal_patch_gate_group(
+    rows: list[dict[str, Any]],
+    *,
+    n_boot: int = 2000,
+) -> dict[str, Any]:
+    """Summarize one fixed-prefix causal-patch group."""
+
+    clean_margin = _bootstrap_row_metric(rows, ("clean_margin",), n_boot, 20260920)
+    corrupted_margin = _bootstrap_row_metric(rows, ("corrupted_margin",), n_boot, 20260921)
+    patched_margin = _bootstrap_row_metric(rows, ("patched_margin",), n_boot, 20260922)
+    patch_effect = _bootstrap_row_metric(rows, ("patch_effect",), n_boot, 20260923)
+    patch_recovery = _bootstrap_row_metric(rows, ("patch_recovery",), n_boot, 20260924)
+    direction_success = _bootstrap_row_metric(rows, ("patch_direction_success",), n_boot, 20260925)
+    layer_indices = [
+        int(row["patch_layer_index"])
+        for row in rows
+        if "patch_layer_index" in row and math.isfinite(float(row["patch_layer_index"]))
+    ]
+    gate = {
+        "clean_prefers_donor": clean_margin["n"] > 0 and clean_margin["mean"] > 0.0,
+        "corrupted_prefers_corrupted": corrupted_margin["n"] > 0 and corrupted_margin["mean"] < 0.0,
+        "patch_effect_positive": patch_effect["n"] > 0 and patch_effect["ci95"][0] > 0.0,
+        "direction_success_above_chance": direction_success["n"] > 0 and direction_success["mean"] > 0.5,
+    }
+    gate["pass"] = all(gate.values())
+
+    return {
+        "model": str(rows[0].get("model", rows[0].get("architecture", "unknown_model"))) if rows else "unknown_model",
+        "patch_position": str(rows[0].get("patch_position", "unknown_position")) if rows else "unknown_position",
+        "patch_layer": str(rows[0].get("patch_layer", "unknown_layer")) if rows else "unknown_layer",
+        "patch_layer_index": min(layer_indices) if layer_indices else None,
+        "clean_margin": clean_margin,
+        "corrupted_margin": corrupted_margin,
+        "patched_margin": patched_margin,
+        "patch_effect": patch_effect,
+        "patch_recovery": patch_recovery,
+        "patch_direction_success": direction_success,
         "failure_modes": [key for key, value in gate.items() if key != "pass" and not value],
         "gate": gate,
     }

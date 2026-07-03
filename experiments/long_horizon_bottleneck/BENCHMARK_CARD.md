@@ -12,9 +12,11 @@ Test whether future control relevance moves both generated behavior and internal
   multi-token-position grid.
 - Fixed-action localization counterfactual: positive after generated action tokens
   are held fixed under base and slot-flipped prompts.
+- Fixed-prefix causal patch: positive value-token logit shifts at
+  `value_prefix_final` late/final sites in all three model families.
 - Latest models: `Qwen/Qwen2.5-0.5B-Instruct`, `Qwen/Qwen2.5-1.5B-Instruct`, `HuggingFaceTB/SmolLM2-1.7B-Instruct`.
-- Latest confirmatory artifact: `artifacts/long_horizon_bottleneck/prompt_json_fixed_action_localization_l4.json`.
-- Latest committed report: `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzz_prompt_json_fixed_action_localization_l4_4seed_2026_07_03.md`.
+- Latest confirmatory artifact: `artifacts/long_horizon_bottleneck/prompt_json_causal_patch_l4.json`.
+- Latest committed report: `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzz_prompt_json_causal_patch_l4_4seed_2026_07_03.md`.
 
 ## Prompt-Level Terminal Result
 
@@ -70,6 +72,25 @@ The confirmatory run is positive:
 - fixed noop final-layer sites pass in all three model families;
 - strongest fixed noop site: `Qwen/Qwen2.5-1.5B-Instruct/fixed_noop_final/final`,
   specificity z 12.514, 95% CI [8.035, 18.310], rank 0.984.
+
+Outcome: `positive`.
+
+## Fixed-Prefix Causal Patch Terminal Result
+
+The causal-patch pass tested whether the localized state can shift the
+behavior-adjacent next-token logits before the JSON `value` field. It patched a
+donor hidden state from the base prompt/prefix into a critical-slot-flipped
+prompt/prefix, then measured the donor-value minus corrupted-value logit margin.
+
+The confirmatory run is positive:
+
+- clean prompts prefer the donor value and corrupted prompts prefer the flipped
+  value;
+- `value_prefix_final` late/final patch sites pass in all three model families;
+- prompt-final patch sites do not pass, localizing the causal leverage to the
+  action/value prefix state;
+- strongest effect: `SmolLM2/value_prefix_final/final`, patch effect 7.053,
+  95% CI [6.738, 7.344], recovery 0.899.
 
 Outcome: `positive`.
 

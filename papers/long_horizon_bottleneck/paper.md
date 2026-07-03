@@ -129,9 +129,10 @@ the agent's interaction with future-relevant information.
 | Prompt JSON transfer | Pretrained open model emits parser-scored JSON text | 64 | Controls and behavior pass; hidden specificity CI crosses zero | `prompt_json_transfer` |
 | Prompt JSON hidden localization | Multi-model, multi-layer, multi-token hidden-site grid | 192 behavior cells + 576 hidden rows | Controls and behavior pass for three models; 17 hidden sites pass | `prompt_json_hidden_localization` |
 | Prompt JSON fixed-action localization | Teacher-forced constant assistant actions under slot flips | 192 behavior cells + 960 hidden rows | Controls and behavior pass; 24 hidden sites pass after generated action tokens are held fixed | `prompt_json_fixed_action_localization` |
+| Prompt JSON causal patch | Patch base hidden state into critical-slot-flipped prompt before JSON value token | 1,536 causal-patch rows | Value-prefix patch sites pass in all three model families; prompt-final sites do not pass | `prompt_json_causal_patch` |
 
 All confirmed sweeps used Modal `L4`, not H100/H200. The timeout-based
-conservative spend guard for the listed confirmed reports is under USD 170 in
+conservative spend guard for the listed confirmed reports is under USD 180 in
 aggregate; individual confirmed passes used guards of USD 1.08 to USD 17.26.
 Actual runtime was much lower than the timeout budget, with the latest
 autoregressive JSON pass averaging 15.08 seconds per remote cell. The
@@ -141,7 +142,9 @@ prompt-level hidden-localization sweep used three parallel `L4` model jobs, 192 
 cells, 576 hidden rows, and a conservative timeout guard of USD 6.47. The
 fixed-action localization counterfactual used the same three parallel `L4`
 model jobs, 192 behavior cells, 960 hidden rows, and the same conservative
-timeout guard of USD 6.47.
+timeout guard of USD 6.47. The causal-patch pass used three parallel `L4`
+model jobs, 1,536 patch rows, and the same conservative timeout guard of USD
+6.47.
 
 Report keys map to committed summaries under
 `experiments/long_horizon_bottleneck/results/`: `base` =
@@ -163,7 +166,9 @@ Report keys map to committed summaries under
 `prompt_json_hidden_localization` =
 `zzzzzzzzzzzzz_prompt_json_hidden_localization_l4_4seed_2026_07_03.md`, and
 `prompt_json_fixed_action_localization` =
-`zzzzzzzzzzzzzz_prompt_json_fixed_action_localization_l4_4seed_2026_07_03.md`.
+`zzzzzzzzzzzzzz_prompt_json_fixed_action_localization_l4_4seed_2026_07_03.md`,
+and `prompt_json_causal_patch` =
+`zzzzzzzzzzzzzzz_prompt_json_causal_patch_l4_4seed_2026_07_03.md`.
 
 ## 4. Prompt-Level JSON Transfer and Hidden Localization
 
@@ -241,6 +246,21 @@ families, with the strongest at Qwen 1.5B `fixed_noop_final/final`
 (specificity +12.514, CI [8.035, 18.310], rank 0.984). This removes the simple
 generated-answer-token explanation for the localization effect.
 
+Finally, the causal-patch pass asked whether the localized state can shift a
+behavior-adjacent readout. The runner appended a partial assistant action prefix
+ending immediately before the JSON value token, patched one donor hidden state
+from the base prompt/prefix into the critical-slot-flipped prompt/prefix, and
+measured the donor-value minus corrupted-value next-token logit margin.
+
+This run was positive across all three model families. Clean prompts preferred
+the donor value, corrupted prompts preferred the flipped value, and
+`value_prefix_final` late/final patch sites passed in every model. The strongest
+site was SmolLM2 `value_prefix_final/final`, with patch effect +7.053 and CI
+[6.738, 7.344]; Qwen 0.5B final had +5.503 [5.299, 5.697], and Qwen 1.5B final
+had +6.916 [6.375, 7.453]. Prompt-final patch sites did not pass. That negative
+control localizes the causal leverage to the action/value prefix state rather
+than the raw final prompt token.
+
 ## 5. Interpretation
 
 The core result is a **metric transport** result. The future-critical variable
@@ -263,9 +283,11 @@ The prompt-level results sharpen the interpretation. Final behavior alone is
 not enough: a small open model can pass the prompt-level JSON behavior while one
 registered hidden site fails. But localization across token positions and layers
 recovers a positive signal, and the fixed-action counterfactual shows that the
-signal can survive even when generated answer tokens are held constant. That
-split is the point of the diagnostic: it can distinguish interface behavior,
-prompt-state memory, and action-surface commitment.
+signal can survive even when generated answer tokens are held constant. The
+causal-patch pass then shows that the value-prefix state can shift the
+behavior-adjacent value-token readout. That split is the point of the
+diagnostic: it can distinguish interface behavior, prompt-state memory,
+action-surface commitment, and causal leverage over the next action token.
 
 ## 6. Boundaries
 
@@ -308,14 +330,16 @@ That is a sharper evaluation target than final-task success alone.
 
 The synthetic mechanism ladder is complete enough to write up and share. The
 prompt-level hidden-localization replication is positive, and the fixed-action
-counterfactual removes the simplest generated-token identity confound. The next
-regimes answer different questions:
+counterfactual removes the simplest generated-token identity confound. The
+fixed-prefix causal patch also shows behavior-adjacent causal leverage at the
+JSON value-token readout. The next regimes answer different questions:
 
 - **Prompt-level robustness:** rerun the frozen gate across prompt families,
   longer contexts, and API models to test whether fixed-action localization is
   robust rather than prompt-specific.
-- **Causal hidden localization:** use activation patching or steering to test
-  whether the measured fixed-action sites causally mediate the tool action.
+- **Stronger causal mediation:** patch multi-token generation or run path
+  patching to test whether the measured state mediates the full tool action,
+  not only the next value token.
 - **LLM-agent transfer:** add longer tool contexts, natural-language argument
   aliases, and API-style parser recovery around the prompt-level version.
 - **Multi-step planning:** require two or more future commitments where the
@@ -326,7 +350,8 @@ regimes answer different questions:
 The most valuable immediate next step is to publish the diagnostic as a compact
 benchmark card: synthetic ladder positive, prompt-level behavior positive,
 prompt-level hidden localization positive, and fixed-action localization
-positive after generated action tokens are held constant.
+positive after generated action tokens are held constant, with a first causal
+patch result showing value-token logit control.
 
 ## 9. Reproducibility
 
@@ -397,6 +422,23 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     --budget-usd 25 \
     --base-seed 20260900 \
     --out artifacts/long_horizon_bottleneck/prompt_json_fixed_action_localization_l4.json
+```
+
+Prompt-level fixed-prefix causal patch runner:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/long_horizon_bottleneck/modal_prompt_json_causal_patch_sweep.py \
+    --models Qwen/Qwen2.5-0.5B-Instruct,Qwen/Qwen2.5-1.5B-Instruct,HuggingFaceTB/SmolLM2-1.7B-Instruct \
+    --seeds 4 \
+    --episodes-per-cell 8 \
+    --critical-slots 0,1,2,3 \
+    --patch-positions prompt_final,value_prefix_final \
+    --patch-layers late,final \
+    --budget-usd 25 \
+    --base-seed 20260950 \
+    --out artifacts/long_horizon_bottleneck/prompt_json_causal_patch_l4.json
 ```
 
 Local verification for the code paths:
