@@ -7,6 +7,7 @@ importing Modal or Torch.
 
 from __future__ import annotations
 
+import json
 import math
 import random
 from collections import defaultdict
@@ -853,11 +854,18 @@ def render_text_argument(argument_id: int, n_slots: int, variants_per_slot: int)
     raise AssertionError("unreachable text argument renderer branch")
 
 
+def normalize_text_argument(text: str) -> str:
+    """Normalize parser-facing slot phrases without changing their meaning."""
+
+    normalized = text.strip().lower().replace("_", " ").replace("-", " ")
+    return " ".join(normalized.split())
+
+
 def parse_text_argument(text: str, n_slots: int, variants_per_slot: int) -> dict[str, Any]:
     """Parse a text slot argument phrase into its canonical slot."""
 
     text_argument_vocab_size(n_slots, variants_per_slot)
-    normalized = " ".join(text.strip().lower().split())
+    normalized = normalize_text_argument(text)
     if normalized in {"none", "missing", "null", "noop"}:
         return {
             "slot": None,
@@ -868,7 +876,7 @@ def parse_text_argument(text: str, n_slots: int, variants_per_slot: int) -> dict
         }
     for slot in range(n_slots):
         for variant_index in range(variants_per_slot):
-            if normalized == _text_argument_phrase(slot, variant_index):
+            if normalized == normalize_text_argument(_text_argument_phrase(slot, variant_index)):
                 return {
                     "slot": slot,
                     "variant_index": variant_index,
@@ -1091,6 +1099,120 @@ def parse_generated_json_tokens(
         "executable": True,
         "reason": None,
         "text": text,
+    }
+
+
+def extract_json_object(text: str) -> tuple[dict[str, Any] | None, str | None]:
+    """Return the first JSON object embedded in model output text."""
+
+    decoder = json.JSONDecoder()
+    for start, char in enumerate(text):
+        if char != "{":
+            continue
+        try:
+            parsed, end = decoder.raw_decode(text[start:])
+        except json.JSONDecodeError:
+            continue
+        if isinstance(parsed, dict):
+            return parsed, text[start : start + end]
+    return None, None
+
+
+def _prompt_json_malformed(text: str, reason: str, json_text: str | None = None) -> dict[str, Any]:
+    return {
+        "opcode": "malformed",
+        "slot": None,
+        "variant_index": None,
+        "value": None,
+        "valid": False,
+        "executable": False,
+        "reason": reason,
+        "text": text,
+        "json_text": json_text,
+    }
+
+
+def _parse_prompt_json_value(value: Any) -> int | None:
+    if isinstance(value, bool):
+        return int(value)
+    if isinstance(value, int) and value in (0, 1):
+        return value
+    if isinstance(value, str):
+        normalized = value.strip().lower()
+        if normalized in {"0", "false"}:
+            return 0
+        if normalized in {"1", "true"}:
+            return 1
+    return None
+
+
+def parse_prompt_json_action(
+    text: str,
+    n_slots: int,
+    variants_per_slot: int,
+) -> dict[str, Any]:
+    """Parse a prompted model's embedded JSON action into the canonical schema."""
+
+    text_argument_vocab_size(n_slots, variants_per_slot)
+    action, json_text = extract_json_object(text)
+    if action is None:
+        return _prompt_json_malformed(text, "missing_json_object")
+
+    tool = action.get("tool")
+    if not isinstance(tool, str):
+        return _prompt_json_malformed(text, "missing_tool", json_text)
+    normalized_tool = tool.strip().lower()
+    if normalized_tool == "noop":
+        return {
+            "opcode": "noop",
+            "slot": None,
+            "variant_index": None,
+            "value": None,
+            "valid": True,
+            "executable": False,
+            "reason": None,
+            "text": text,
+            "json_text": json_text,
+        }
+
+    if normalized_tool != "read_slot":
+        return _prompt_json_malformed(text, "unknown_tool", json_text)
+
+    slot_argument = action.get("slot")
+    if isinstance(slot_argument, int) and not isinstance(slot_argument, bool):
+        if not 0 <= slot_argument < n_slots:
+            return _prompt_json_malformed(text, "slot_out_of_range", json_text)
+        parsed_argument = {
+            "slot": slot_argument,
+            "variant_index": None,
+            "valid": True,
+            "missing": False,
+            "reason": None,
+        }
+    elif isinstance(slot_argument, str):
+        parsed_argument = parse_text_argument(slot_argument, n_slots, variants_per_slot)
+    else:
+        return _prompt_json_malformed(text, "missing_slot", json_text)
+
+    if parsed_argument["missing"]:
+        return _prompt_json_malformed(text, "missing_slot", json_text)
+    if not parsed_argument["valid"]:
+        return _prompt_json_malformed(text, str(parsed_argument["reason"]), json_text)
+
+    value = _parse_prompt_json_value(action.get("value"))
+    if value is None:
+        return _prompt_json_malformed(text, "bad_value", json_text)
+
+    return {
+        "opcode": "call",
+        "slot": parsed_argument["slot"],
+        "variant_index": parsed_argument["variant_index"],
+        "value": value,
+        "valid": True,
+        "executable": True,
+        "reason": None,
+        "text": text,
+        "json_text": json_text,
     }
 
 
@@ -1392,6 +1514,201 @@ def summarize_stochastic_gate_group(
     if teacher_forced_acc is not None:
         item["teacher_forced_final_accuracy"] = teacher_forced_acc
     return item
+
+
+PROMPT_JSON_CONTROL_SCHEMA_THRESHOLD = 0.95
+PROMPT_JSON_ACTION_THRESHOLD = 0.85
+
+
+def summarize_prompt_transfer_rows(rows: list[dict[str, Any]], *, n_boot: int = 2000) -> dict[str, Any]:
+    """Classify prompt-level JSON transfer as positive, strong negative, or inconclusive."""
+
+    grouped: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    by_slot: dict[tuple[str, str, int], list[dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        model = str(row.get("model", row.get("architecture", "unknown_model")))
+        condition = str(row["condition"])
+        grouped[(condition, model)].append(row)
+        by_slot[(condition, model, int(row["critical_slot"]))].append(row)
+
+    out: dict[str, Any] = {"n_rows": len(rows), "groups": {}, "slot_groups": {}}
+    for (condition, model), group_rows in sorted(grouped.items()):
+        out["groups"][f"{condition}/{model}"] = summarize_prompt_transfer_gate_group(
+            group_rows,
+            condition=condition,
+            n_boot=n_boot,
+        )
+
+    for (condition, model, slot), group_rows in sorted(by_slot.items()):
+        out["slot_groups"][f"{condition}/{model}/slot_{slot}"] = summarize_prompt_transfer_gate_group(
+            group_rows,
+            condition=condition,
+            n_boot=n_boot,
+        )
+
+    def condition_passes(condition: str) -> bool:
+        condition_groups = [
+            group
+            for key, group in out["groups"].items()
+            if key.startswith(f"{condition}/")
+        ]
+        return bool(condition_groups) and all(group["gate"]["pass"] for group in condition_groups)
+
+    controls_pass = all(
+        condition_passes(condition)
+        for condition in (
+            "prompt_json_format_control",
+            "prompt_json_visible_control",
+            "prompt_json_short_horizon_control",
+        )
+    )
+    bottleneck_groups = [
+        group
+        for key, group in out["groups"].items()
+        if key.startswith("prompt_json_bottleneck/")
+    ]
+    bottleneck_pass = bool(bottleneck_groups) and all(group["gate"]["pass"] for group in bottleneck_groups)
+    positive = controls_pass and bottleneck_pass
+    strong_negative = controls_pass and bool(bottleneck_groups) and not bottleneck_pass
+    out["decision"] = {
+        "controls_pass": controls_pass,
+        "bottleneck_pass": bottleneck_pass,
+        "positive": positive,
+        "strong_negative": strong_negative,
+    }
+    if positive:
+        out["outcome"] = "positive"
+    elif strong_negative:
+        out["outcome"] = "strong_negative"
+    else:
+        out["outcome"] = "inconclusive"
+    return out
+
+
+def summarize_prompt_transfer_gate_group(
+    rows: list[dict[str, Any]],
+    *,
+    condition: str,
+    n_boot: int = 2000,
+) -> dict[str, Any]:
+    """Summarize one prompt-level JSON transfer group."""
+
+    final_acc = _bootstrap_row_metric(rows, ("closed_loop_final_accuracy", "final_accuracy"), n_boot, 20260800)
+    schema = _bootstrap_row_metric(rows, ("schema_validity", "json_validity", "first_schema_validity"), n_boot, 20260801)
+    first_noop = _bootstrap_row_metric(
+        rows,
+        ("first_noop_field_accuracy", "first_field_accuracy"),
+        n_boot,
+        20260802,
+    )
+    first_slot = _bootstrap_row_metric(rows, ("first_parsed_slot_accuracy",), n_boot, 20260803)
+    first_value = _bootstrap_row_metric(rows, ("first_parsed_value_accuracy",), n_boot, 20260804)
+    repair_failed_schema = _bootstrap_row_metric(rows, ("repair_failed_schema_validity",), n_boot, 20260805)
+    repair_failed_slot = _bootstrap_row_metric(rows, ("repair_failed_parsed_slot_accuracy",), n_boot, 20260806)
+    repair_failed_value = _bootstrap_row_metric(rows, ("repair_failed_parsed_value_accuracy",), n_boot, 20260807)
+    repair_success_noop = _bootstrap_row_metric(rows, ("repair_success_noop_field_accuracy",), n_boot, 20260808)
+    repair_success_schema = _bootstrap_row_metric(rows, ("repair_success_schema_validity",), n_boot, 20260809)
+    failure_rate = _bootstrap_row_metric(rows, ("sampled_failure_rate",), n_boot, 20260810)
+    memory_spec = _bootstrap_row_metric(rows, ("memory_specificity_z",), n_boot, 20260811)
+    memory_rank = _bootstrap_row_metric(rows, ("memory_rank_percentile",), n_boot, 20260812)
+    tool_value_spec = _bootstrap_row_metric(rows, ("tool_value_specificity_z",), n_boot, 20260813)
+
+    if condition == "prompt_json_format_control":
+        gate = {
+            "schema_validity_ge_0_95": _mean_ge(schema, PROMPT_JSON_CONTROL_SCHEMA_THRESHOLD),
+        }
+    elif condition == "prompt_json_visible_control":
+        gate = {
+            "closed_loop_final_accuracy_ge_0_85": _mean_ge(final_acc, PROMPT_JSON_ACTION_THRESHOLD),
+            "first_noop_field_acc_ge_0_85": _mean_ge(first_noop, PROMPT_JSON_ACTION_THRESHOLD),
+            "schema_validity_ge_0_95": _mean_ge(schema, PROMPT_JSON_CONTROL_SCHEMA_THRESHOLD),
+            "memory_specificity_not_strong_positive": _optional_mean_lt(memory_spec, 0.5),
+        }
+    elif condition == "prompt_json_short_horizon_control":
+        gate = {
+            "closed_loop_final_accuracy_ge_0_85": _mean_ge(final_acc, PROMPT_JSON_ACTION_THRESHOLD),
+            "first_schema_valid_ge_0_95": _mean_ge(schema, PROMPT_JSON_CONTROL_SCHEMA_THRESHOLD),
+            "first_parsed_slot_acc_ge_0_85": _mean_ge(first_slot, PROMPT_JSON_ACTION_THRESHOLD),
+            "first_parsed_value_acc_ge_0_85": _mean_ge(first_value, PROMPT_JSON_ACTION_THRESHOLD),
+        }
+    elif condition == "prompt_json_bottleneck":
+        gate = {
+            "closed_loop_final_accuracy_ge_0_85": _mean_ge(final_acc, PROMPT_JSON_ACTION_THRESHOLD),
+            "first_schema_valid_ge_0_95": _mean_ge(schema, PROMPT_JSON_CONTROL_SCHEMA_THRESHOLD),
+            "first_parsed_slot_acc_ge_0_85": _mean_ge(first_slot, PROMPT_JSON_ACTION_THRESHOLD),
+            "first_parsed_value_acc_ge_0_85": _mean_ge(first_value, PROMPT_JSON_ACTION_THRESHOLD),
+            "repair_failed_schema_valid_ge_0_95": _mean_ge(
+                repair_failed_schema,
+                PROMPT_JSON_CONTROL_SCHEMA_THRESHOLD,
+            ),
+            "repair_failed_parsed_slot_acc_ge_0_85": _mean_ge(repair_failed_slot, PROMPT_JSON_ACTION_THRESHOLD),
+            "repair_failed_parsed_value_acc_ge_0_85": _mean_ge(repair_failed_value, PROMPT_JSON_ACTION_THRESHOLD),
+            "repair_success_noop_field_acc_ge_0_85": _mean_ge(repair_success_noop, PROMPT_JSON_ACTION_THRESHOLD),
+            "repair_success_schema_valid_ge_0_95": _mean_ge(
+                repair_success_schema,
+                PROMPT_JSON_CONTROL_SCHEMA_THRESHOLD,
+            ),
+            "memory_specificity_positive": _optional_ci_low_gt(memory_spec, 0.0),
+            "rank_above_chance": _optional_mean_gt(memory_rank, 0.5),
+        }
+    else:
+        raise ValueError(f"Unknown prompt transfer condition {condition!r}")
+    gate["pass"] = all(gate.values())
+
+    return {
+        "condition": condition,
+        "final_accuracy": final_acc,
+        "schema_validity": schema,
+        "first_noop_field_accuracy": first_noop,
+        "first_parsed_slot_accuracy": first_slot,
+        "first_parsed_value_accuracy": first_value,
+        "repair_failed_schema_validity": repair_failed_schema,
+        "repair_failed_parsed_slot_accuracy": repair_failed_slot,
+        "repair_failed_parsed_value_accuracy": repair_failed_value,
+        "repair_success_noop_field_accuracy": repair_success_noop,
+        "repair_success_schema_validity": repair_success_schema,
+        "sampled_failure_rate": failure_rate,
+        "memory_specificity_z": memory_spec,
+        "memory_rank_percentile": memory_rank,
+        "tool_value_specificity_z": tool_value_spec,
+        "failure_modes": [key for key, value in gate.items() if key != "pass" and not value],
+        "gate": gate,
+    }
+
+
+def _bootstrap_row_metric(
+    rows: list[dict[str, Any]],
+    keys: tuple[str, ...],
+    n_boot: int,
+    seed: int,
+) -> dict[str, Any]:
+    values: list[float] = []
+    for row in rows:
+        for key in keys:
+            if key in row:
+                value = float(row[key])
+                if math.isfinite(value):
+                    values.append(value)
+                    break
+        else:
+            values.append(float("nan"))
+    return bootstrap_mean_ci(values, n_boot=n_boot, seed=seed)
+
+
+def _mean_ge(metric: dict[str, Any], threshold: float) -> bool:
+    return metric["n"] > 0 and metric["mean"] >= threshold
+
+
+def _optional_mean_lt(metric: dict[str, Any], threshold: float) -> bool:
+    return metric["n"] == 0 or metric["mean"] < threshold
+
+
+def _optional_mean_gt(metric: dict[str, Any], threshold: float) -> bool:
+    return metric["n"] == 0 or metric["mean"] > threshold
+
+
+def _optional_ci_low_gt(metric: dict[str, Any], threshold: float) -> bool:
+    return metric["n"] == 0 or metric["ci95"][0] > threshold
 
 
 def summarize_recovery_rows(rows: list[dict[str, Any]], *, n_boot: int = 2000) -> dict[str, Any]:

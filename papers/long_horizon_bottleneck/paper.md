@@ -29,6 +29,14 @@ decoded JSON-like action strings. Across the confirmed Modal reports, the
 relevant bottleneck groups reach 1.000 closed-loop accuracy and positive
 moved-slot specificity, while visible controls keep specificity near zero.
 
+The first prompt-level transfer produced a useful controlled strong negative.
+`Qwen/Qwen2.5-0.5B-Instruct` emits valid parser-scored JSON actions and passes
+format, visible-control, short-horizon, stochastic repair, and success no-op
+behavioral gates. However, its hidden-state critical-slot specificity is not
+confirmed: mean specificity is positive (+0.695), but the 95% bootstrap
+interval crosses zero [-0.376, 2.080]. Thus prompt-level behavior transfers,
+while the stronger memory-geometry claim does not yet transfer.
+
 The allowed claim is deliberately modest: in this synthetic neural-agent
 setting, **future control relevance can move finite memory-state and
 tool-commitment sensitivity**. This is not a production-agent benchmark,
@@ -116,12 +124,15 @@ the agent's interaction with future-relevant information.
 | Text argument surface | Parser-facing phrases such as `second clue` replace alias IDs | 32 | Text parsed slot/value, failed repair, and success no-op all 1.000 | `text` |
 | Generated JSON surface | Model emits a fixed-length JSON-like token sequence | 32 | Generated sequence/schema, parsed slot/value, and repair gates all 1.000 | `generated_json` |
 | Autoregressive JSON surface | JSON action is decoded token-by-token from commit state | 32 | Greedy decoded sequence/schema, parsed slot/value, and repair gates all 1.000 | `autoregressive_json` |
+| Prompt JSON transfer | Pretrained open model emits parser-scored JSON text | 64 | Controls and behavior pass; hidden specificity CI crosses zero | `prompt_json_transfer` |
 
 All confirmed sweeps used Modal `L4`, not H100/H200. The timeout-based
-conservative spend guard for the listed confirmed reports is under `$160` in
-aggregate; individual recent passes used guards of `$8.63` to `$17.26`. Actual
+conservative spend guard for the listed confirmed reports is under USD 160 in
+aggregate; individual recent passes used guards of USD 8.63 to USD 17.26. Actual
 runtime was much lower than the timeout budget, with the latest autoregressive
-JSON pass averaging 15.08 seconds per remote cell.
+JSON pass averaging 15.08 seconds per remote cell. The prompt-level transfer
+used one `L4` container for all 64 logical cells, with a conservative timeout
+guard of USD 1.08 and a 212.0 second remote runtime.
 
 Report keys map to committed summaries under
 `experiments/long_horizon_bottleneck/results/`: `base` =
@@ -137,32 +148,47 @@ Report keys map to committed summaries under
 `zzzzzzzz_text_argument_surface_l4_4seed_2026_07_03.md`, `generated_json` =
 `zzzzzzzzz_generated_json_surface_l4_4seed_2026_07_03.md`, and
 `autoregressive_json` =
-`zzzzzzzzzz_autoregressive_json_surface_l4_4seed_2026_07_03.md`.
+`zzzzzzzzzz_autoregressive_json_surface_l4_4seed_2026_07_03.md`, and
+`prompt_json_transfer` =
+`zzzzzzzzzzz_prompt_json_transfer_l4_4seed_2026_07_03.md`.
 
-## 4. Latest Autoregressive JSON Result
+## 4. Prompt-Level JSON Transfer
 
-The autoregressive JSON pass is the most language-adjacent synthetic regime in
-the current ladder. It keeps the controlled four-slot stochastic environment
-and parser-facing phrases, but the model no longer emits three classifier
-fields or a parallel fixed sequence head. Instead, it decodes a JSON-like action
-token-by-token from the commit state, feeding the previous emitted token back
-before predicting the next one. The greedy decoded string is parsed before any
-external state is granted.
+The autoregressive JSON pass completed the synthetic ladder: the trained model
+could decode parser-scored JSON-like action strings token by token under
+stochastic first-call failure and conditional repair. The next question was
+whether the same diagnostic transfers to a pretrained prompt-level model.
 
-The Modal `L4` run used 32 cells: 2 conditions, 4 moved critical slots, and 4
-seeds. The bottleneck group reached 1.000 closed-loop final accuracy, 1.000
-first decoded-sequence/schema accuracy, 1.000 parsed slot/value accuracy,
-1.000 failed-repair slot/value accuracy, and 1.000 success repair no-op
-accuracy. The sampled failure rate was 0.506; memory specificity was +2.309
-and action-channel specificity was +2.309. The visible-control group reached
-1.000 final accuracy with no-op sequences, while memory and action specificity
-remained near zero (-0.000 and +0.000). Both gates passed.
+The prompt-level transfer used `Qwen/Qwen2.5-0.5B-Instruct` on one Modal `L4`
+container. The model saw natural-language memory records and had to emit one
+JSON object:
 
-This rules out a stronger alternative than the alias result: the prior result
-was not only an artifact of parallel classifier fields or classifier-rendered
-text. The moved bottleneck survives a parser-scored, autoregressively decoded
-JSON-like action channel under stochastic first-call failure and conditional
-repair.
+```json
+{"tool":"read_slot","slot":"second clue","value":0}
+```
+
+or:
+
+```json
+{"tool":"noop"}
+```
+
+The confirmatory run used 64 logical cells: 4 conditions, 4 moved critical
+slots, and 4 seeds, with 8 episodes per cell. Format, visible-control, and
+short-horizon controls passed. The behavioral bottleneck also passed:
+closed-loop final accuracy was 0.977, first parsed slot/value were 0.984/0.977,
+failed-repair slot/value were 1.000/1.000, and success repair no-op was 1.000.
+
+The full prompt-level gate nevertheless failed by the preregistered hidden
+metric. Critical-slot memory specificity was +0.695, but its 95% bootstrap
+interval was [-0.376, 2.080], so the lower bound was not above zero. The rank
+metric was above chance by mean rank percentile (0.594), but the primary
+specificity gate did not pass.
+
+This is a controlled strong negative, not an interface failure. The model can
+solve the parser-scored prompt-level moved-bottleneck behavior, including
+stochastic repair, but this run does not show reliable hidden-state transport
+of the future-critical slot.
 
 ## 5. Interpretation
 
@@ -182,6 +208,11 @@ sequence classifiers. The bottleneck is not just "remember bit 2." It becomes
 "know which early variable must later be committed through an interface, recover
 it under feedback, and ignore matched distractors."
 
+The prompt-level result sharpens the interpretation. Final behavior alone is
+not enough: a small open model can pass the prompt-level JSON behavior while
+failing the registered hidden-specificity confidence gate. That split is the
+point of the diagnostic.
+
 ## 6. Boundaries
 
 The strongest honest statement is:
@@ -194,12 +225,13 @@ The result does not establish:
 
 - production API reliability;
 - autonomous language-agent tool use;
-- robustness under natural-language prompts;
+- robustness across natural-language prompt families;
 - multi-step planning in an open environment;
 - human cognition or consciousness.
 
-The latest autoregressive JSON regime is still fixed-vocabulary and synthetic.
-It is a bridge toward natural language, not natural language itself.
+The latest prompt-level result uses a real pretrained tokenizer and generated
+JSON text, but it is still a compact harness, not an autonomous agent or real
+API environment.
 
 ## 7. Why This Is Valuable
 
@@ -220,12 +252,15 @@ That is a sharper evaluation target than final-task success alone.
 
 ## 8. Remaining Work
 
-The synthetic mechanism ladder is now complete enough to write up and share.
-The next regimes are optional and answer different questions:
+The synthetic mechanism ladder is complete enough to write up and share, and
+the first prompt-level transfer has produced a useful controlled strong
+negative. The next regimes answer different questions:
 
-- **Prompt-level JSON tool use:** run a small pretrained language model or API
-  model through a prompt-level moved-bottleneck variant with parser-scored JSON
-  actions.
+- **Prompt-level replication:** rerun the same frozen gate on stronger open
+  models and API models to test whether the hidden-specificity failure is
+  model-specific.
+- **Hidden metric localization:** measure multiple layers and token positions,
+  not only the final hidden state at the generation point.
 - **LLM-agent transfer:** add longer tool contexts, natural-language argument
   aliases, and API-style parser recovery around the prompt-level version.
 - **Multi-step planning:** require two or more future commitments where the
@@ -233,15 +268,15 @@ The next regimes are optional and answer different questions:
 - **Interpretability probes:** compare the hidden-state metric to attention,
   activation patching, or linear probes over the critical slot.
 
-The most valuable immediate next step is not another synthetic GPU sweep. It is
-to turn this into a compact external artifact: a paper, benchmark card, or
-agent-evaluation proposal with the Modal reports and code paths linked.
+The most valuable immediate next step is to publish the diagnostic as a compact
+benchmark card: synthetic ladder positive, prompt-level behavior positive, and
+prompt-level hidden specificity currently negative.
 
 ## 9. Reproducibility
 
 Experiment code lives in `experiments/long_horizon_bottleneck/`.
 
-Primary runner:
+Synthetic ladder runner:
 
 ```bash
 doppler --scope /Users/jawaun/superoptimizers run -- \
@@ -254,6 +289,22 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     --failure-probability 0.5 \
     --budget-usd 25 \
     --out artifacts/long_horizon_bottleneck/autoregressive_json_surface_l4.json
+```
+
+Prompt-level confirmatory runner:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/long_horizon_bottleneck/modal_prompt_json_transfer_sweep.py \
+    --model-id Qwen/Qwen2.5-0.5B-Instruct \
+    --seeds 4 \
+    --episodes-per-cell 8 \
+    --hidden-metric-episodes 2 \
+    --critical-slots 0,1,2,3 \
+    --budget-usd 25 \
+    --base-seed 20260800 \
+    --out artifacts/long_horizon_bottleneck/prompt_json_transfer_l4.json
 ```
 
 Local verification for the code paths:
