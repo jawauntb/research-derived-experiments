@@ -10,19 +10,20 @@
 
 ## Verification
 - Pre-registration: `papers/long_horizon_bottleneck/preregistration.md`
-- Result reports (4):
+- Result reports (5):
   - `experiments/long_horizon_bottleneck/results/modal_transformer_l4_8seed_2026_07_02.md`
   - `experiments/long_horizon_bottleneck/results/modal_transformer_l4_horizon_4seed_2026_07_02.md`
   - `experiments/long_horizon_bottleneck/results/tool_commitment_l4_4seed_2026_07_02.md`
   - `experiments/long_horizon_bottleneck/results/z_closed_loop_tool_commitment_l4_4seed_2026_07_02.md`
+  - `experiments/long_horizon_bottleneck/results/zz_tool_recovery_l4_4seed_2026_07_02.md`
 
 Key verification signals (from the latest result report):
-  - The gate uses closed-loop final accuracy; teacher-forced final accuracy remains diagnostic.
-  - tool_bottleneck/transformer | 1.000 | 1.000 | 1.000 | 1.000 | +2.309 | +2.309 | pass
-  - visible_control/transformer | 1.000 | 1.000 | 1.000 | n/a | +0.000 | -0.000 | pass
-  - Pooled tool-bottleneck gates pass:
+  - direct_bottleneck/transformer | 1.000 | 1.000 | 1.000 | 1.000 | n/a | n/a | +2.309 | +2.309 | pass
+  - repair_bottleneck/transformer | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | 1.000 | +2.309 | +2.309 | pass
+  - visible_control/transformer | 1.000 | 1.000 | 1.000 | n/a | 1.000 | n/a | +0.000 | +0.000 | pass
+  - Pooled repair-bottleneck gates pass:
 
 ## Artifacts
-- Committed: `experiments/long_horizon_bottleneck/results/modal_transformer_l4_8seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/modal_transformer_l4_horizon_4seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/tool_commitment_l4_4seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/z_closed_loop_tool_commitment_l4_4seed_2026_07_02.md`
+- Committed: `experiments/long_horizon_bottleneck/results/modal_transformer_l4_8seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/modal_transformer_l4_horizon_4seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/tool_commitment_l4_4seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/z_closed_loop_tool_commitment_l4_4seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/zz_tool_recovery_l4_4seed_2026_07_02.md`
 - Local-only: artifacts/ (gitignored raw outputs; see result reports for summaries)
 - Paper: _none_

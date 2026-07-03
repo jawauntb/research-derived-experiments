@@ -79,6 +79,24 @@ both teacher-forced final accuracy and closed-loop final accuracy; the closed-lo
 score is the gate metric because the model's emitted slot and value determine the
 returned external state.
 
+Tool-recovery pass:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/long_horizon_bottleneck/modal_tool_recovery_sweep.py \
+    --seeds 4 --train-steps 900 --architectures transformer \
+    --conditions direct_bottleneck,repair_bottleneck,visible_control \
+    --critical-slots 0,1,2,3 \
+    --budget-usd 25 \
+    --out artifacts/long_horizon_bottleneck/tool_recovery_l4.json
+```
+
+The recovery pass adds an API-style missing-return/error token after the first
+tool attempt in `repair_bottleneck`. The agent must preserve the moved critical
+bit through the error feedback and re-commit the correct slot/value at a later
+repair token before the final query.
+
 Smoke:
 
 ```bash

@@ -5,6 +5,7 @@ from experiments.long_horizon_bottleneck.core import (
     build_horizon_cells,
     estimate_modal_cost,
     summarize_rows,
+    summarize_recovery_rows,
     summarize_tool_rows,
 )
 
@@ -180,3 +181,64 @@ def test_summarize_tool_rows_prefers_closed_loop_final_accuracy_when_present():
     assert group["teacher_forced_final_accuracy"]["mean"] == 1.0
     assert not group["gate"]["closed_loop_final_accuracy_ge_0_90"]
     assert not group["gate"]["pass"]
+
+
+def test_summarize_recovery_rows_requires_repair_commitment_and_visible_null():
+    rows = []
+    for seed in range(8):
+        rows.append(
+            {
+                "condition": "direct_bottleneck",
+                "architecture": "transformer",
+                "critical_slot": seed % 4,
+                "closed_loop_final_accuracy": 1.0,
+                "teacher_forced_final_accuracy": 1.0,
+                "first_tool_slot_accuracy": 1.0,
+                "first_tool_value_accuracy": 1.0,
+                "repair_tool_slot_accuracy": 0.0,
+                "repair_tool_value_accuracy": float("nan"),
+                "memory_specificity_z": 1.4,
+                "memory_rank_percentile": 0.875,
+                "tool_value_specificity_z": 1.1,
+            }
+        )
+        rows.append(
+            {
+                "condition": "repair_bottleneck",
+                "architecture": "transformer",
+                "critical_slot": seed % 4,
+                "closed_loop_final_accuracy": 1.0,
+                "teacher_forced_final_accuracy": 1.0,
+                "first_tool_slot_accuracy": 1.0,
+                "first_tool_value_accuracy": 1.0,
+                "repair_tool_slot_accuracy": 1.0,
+                "repair_tool_value_accuracy": 1.0,
+                "memory_specificity_z": 1.5,
+                "memory_rank_percentile": 0.875,
+                "tool_value_specificity_z": 1.2,
+            }
+        )
+        rows.append(
+            {
+                "condition": "visible_control",
+                "architecture": "transformer",
+                "critical_slot": seed % 4,
+                "closed_loop_final_accuracy": 1.0,
+                "teacher_forced_final_accuracy": 1.0,
+                "first_tool_slot_accuracy": 1.0,
+                "first_tool_value_accuracy": float("nan"),
+                "repair_tool_slot_accuracy": 1.0,
+                "repair_tool_value_accuracy": float("nan"),
+                "memory_specificity_z": 0.0,
+                "memory_rank_percentile": 0.5,
+                "tool_value_specificity_z": 0.0,
+            }
+        )
+
+    summary = summarize_recovery_rows(rows, n_boot=200)
+
+    assert summary["groups"]["direct_bottleneck/transformer"]["gate"]["pass"]
+    assert summary["groups"]["repair_bottleneck/transformer"]["gate"]["pass"]
+    assert summary["groups"]["visible_control/transformer"]["gate"]["pass"]
+    assert summary["pooled_direct_bottleneck"]["gate"]["pass"]
+    assert summary["pooled_repair_bottleneck"]["gate"]["pass"]
