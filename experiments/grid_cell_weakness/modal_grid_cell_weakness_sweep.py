@@ -423,7 +423,7 @@ def main(
     wrong, loss = col("weakness_wrong_group"), col("final_loss")
 
     r_wt = _spearman(w, topo); r_wo = _spearman(w, ood); r_ot = _spearman(topo, ood)
-    analysis = dict(
+    analysis: dict[str, Any] = dict(
         n_cells=len(results),
         rho_weakness_topology=r_wt,
         rho_weakness_ood=r_wo,
