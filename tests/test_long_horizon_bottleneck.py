@@ -4,8 +4,15 @@ from experiments.long_horizon_bottleneck.core import (
     build_cells,
     build_horizon_cells,
     estimate_modal_cost,
+    parse_structured_action,
+    render_structured_action,
+    structured_action_vocab_size,
+    structured_call_action_id,
+    structured_malformed_action_id,
+    structured_noop_action_id,
     summarize_rows,
     summarize_recovery_rows,
+    summarize_structured_rows,
     summarize_tool_rows,
 )
 
@@ -242,3 +249,157 @@ def test_summarize_recovery_rows_requires_repair_commitment_and_visible_null():
     assert summary["groups"]["visible_control/transformer"]["gate"]["pass"]
     assert summary["pooled_direct_bottleneck"]["gate"]["pass"]
     assert summary["pooled_repair_bottleneck"]["gate"]["pass"]
+
+
+def test_structured_action_vocab_roundtrips_and_parses_schema():
+    n_slots = 4
+    assert structured_action_vocab_size(n_slots) == 2 * n_slots + 5
+
+    # Every executable call round-trips through parse with matching slot/value.
+    for slot in range(n_slots):
+        for value in (0, 1):
+            token = structured_call_action_id(slot, value, n_slots)
+            parsed = parse_structured_action(token, n_slots)
+            assert parsed["opcode"] == "call"
+            assert parsed["executable"] and parsed["valid"]
+            assert parsed["slot"] == slot and parsed["value"] == value
+
+    noop = parse_structured_action(structured_noop_action_id(n_slots), n_slots)
+    assert noop["opcode"] == "noop"
+    assert noop["valid"] and not noop["executable"]
+
+    bad = parse_structured_action(structured_malformed_action_id("bad_slot", n_slots), n_slots)
+    assert bad["opcode"] == "malformed"
+    assert bad["reason"] == "bad_slot"
+    assert not bad["valid"] and not bad["executable"]
+
+
+def test_structured_action_ids_are_unique_and_dense():
+    n_slots = 3
+    size = structured_action_vocab_size(n_slots)
+    ids = set()
+    for slot in range(n_slots):
+        for value in (0, 1):
+            ids.add(structured_call_action_id(slot, value, n_slots))
+    ids.add(structured_noop_action_id(n_slots))
+    for reason in ("missing_slot", "bad_slot", "bad_value", "malformed_order"):
+        ids.add(structured_malformed_action_id(reason, n_slots))
+    assert ids == set(range(size))
+
+
+def test_render_structured_action_emits_json_like_strings():
+    n_slots = 4
+    call = parse_structured_action(structured_call_action_id(2, 1, n_slots), n_slots)
+    assert render_structured_action(call) == '{"tool": "read_slot", "slot": 2, "value": 1}'
+    noop = parse_structured_action(structured_noop_action_id(n_slots), n_slots)
+    assert render_structured_action(noop) == '{"tool": "noop"}'
+    malformed = parse_structured_action(structured_malformed_action_id("bad_value", n_slots), n_slots)
+    assert render_structured_action(malformed) == '{"error": "bad_value"}'
+
+
+def test_parse_structured_action_rejects_out_of_range_tokens():
+    with pytest.raises(ValueError, match="outside structured vocab"):
+        parse_structured_action(structured_action_vocab_size(4), 4)
+
+
+def test_summarize_structured_rows_requires_repair_call_and_visible_null():
+    rows = []
+    for seed in range(8):
+        rows.append(
+            {
+                "condition": "structured_direct_bottleneck",
+                "architecture": "transformer",
+                "critical_slot": seed % 4,
+                "closed_loop_final_accuracy": 1.0,
+                "teacher_forced_final_accuracy": 1.0,
+                "first_action_token_accuracy": 1.0,
+                "first_action_schema_validity": 1.0,
+                "first_parsed_slot_accuracy": 1.0,
+                "first_parsed_value_accuracy": 1.0,
+                "repair_action_token_accuracy": 1.0,
+                "repair_action_schema_validity": 0.0,
+                "repair_parsed_slot_accuracy": float("nan"),
+                "repair_parsed_value_accuracy": float("nan"),
+                "memory_specificity_z": 1.4,
+                "memory_rank_percentile": 0.875,
+                "tool_value_specificity_z": 1.1,
+            }
+        )
+        rows.append(
+            {
+                "condition": "structured_repair_bottleneck",
+                "architecture": "transformer",
+                "critical_slot": seed % 4,
+                "closed_loop_final_accuracy": 1.0,
+                "teacher_forced_final_accuracy": 1.0,
+                "first_action_token_accuracy": 1.0,
+                "first_action_schema_validity": 1.0,
+                "first_parsed_slot_accuracy": 1.0,
+                "first_parsed_value_accuracy": 1.0,
+                "repair_action_token_accuracy": 1.0,
+                "repair_action_schema_validity": 1.0,
+                "repair_parsed_slot_accuracy": 1.0,
+                "repair_parsed_value_accuracy": 1.0,
+                "memory_specificity_z": 1.5,
+                "memory_rank_percentile": 0.875,
+                "tool_value_specificity_z": 1.2,
+            }
+        )
+        rows.append(
+            {
+                "condition": "structured_visible_control",
+                "architecture": "transformer",
+                "critical_slot": seed % 4,
+                "closed_loop_final_accuracy": 1.0,
+                "teacher_forced_final_accuracy": 1.0,
+                "first_action_token_accuracy": 1.0,
+                "first_action_schema_validity": 0.0,
+                "first_parsed_slot_accuracy": float("nan"),
+                "first_parsed_value_accuracy": float("nan"),
+                "repair_action_token_accuracy": 1.0,
+                "repair_action_schema_validity": 0.0,
+                "repair_parsed_slot_accuracy": float("nan"),
+                "repair_parsed_value_accuracy": float("nan"),
+                "memory_specificity_z": 0.0,
+                "memory_rank_percentile": 0.5,
+                "tool_value_specificity_z": 0.0,
+            }
+        )
+
+    summary = summarize_structured_rows(rows, n_boot=200)
+
+    assert summary["groups"]["structured_direct_bottleneck/transformer"]["gate"]["pass"]
+    assert summary["groups"]["structured_repair_bottleneck/transformer"]["gate"]["pass"]
+    assert summary["groups"]["structured_visible_control/transformer"]["gate"]["pass"]
+    assert summary["pooled_structured_direct_bottleneck"]["gate"]["pass"]
+    assert summary["pooled_structured_repair_bottleneck"]["gate"]["pass"]
+
+
+def test_summarize_structured_rows_fails_repair_when_schema_invalid():
+    rows = [
+        {
+            "condition": "structured_repair_bottleneck",
+            "architecture": "transformer",
+            "critical_slot": seed % 4,
+            "closed_loop_final_accuracy": 1.0,
+            "teacher_forced_final_accuracy": 1.0,
+            "first_action_token_accuracy": 1.0,
+            "first_action_schema_validity": 1.0,
+            "first_parsed_slot_accuracy": 1.0,
+            "first_parsed_value_accuracy": 1.0,
+            "repair_action_token_accuracy": 1.0,
+            "repair_action_schema_validity": 0.4,
+            "repair_parsed_slot_accuracy": 1.0,
+            "repair_parsed_value_accuracy": 1.0,
+            "memory_specificity_z": 1.5,
+            "memory_rank_percentile": 0.875,
+            "tool_value_specificity_z": 1.2,
+        }
+        for seed in range(8)
+    ]
+
+    summary = summarize_structured_rows(rows, n_boot=200)
+    group = summary["groups"]["structured_repair_bottleneck/transformer"]
+
+    assert not group["gate"]["repair_action_schema_valid_ge_0_90"]
+    assert not group["gate"]["pass"]

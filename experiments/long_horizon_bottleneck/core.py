@@ -393,6 +393,225 @@ def summarize_tool_gate_group(
     return item
 
 
+# ---------------------------------------------------------------------------
+# Structured tool-call action vocabulary
+#
+# The recovery regime supervised separate slot and value heads. This regime
+# replaces those heads with a single structured-action head over a small
+# JSON-like tool-call vocabulary. The evaluator parses the emitted token, checks
+# schema validity, and only returns external state when the parse is an
+# executable call whose slot matches the moved bottleneck. This keeps the task
+# synthetic while moving the model-visible interface toward naturalistic tool
+# schemas (well-formed calls, malformed calls, and a no-op).
+# ---------------------------------------------------------------------------
+
+STRUCTURED_MALFORMED_REASONS = ("missing_slot", "bad_slot", "bad_value", "malformed_order")
+
+
+def structured_action_vocab_size(n_slots: int) -> int:
+    """Vocabulary size: 2*n_slots executable calls + 1 no-op + malformed tokens."""
+
+    if n_slots <= 0:
+        raise ValueError("n_slots must be positive")
+    return 2 * n_slots + 1 + len(STRUCTURED_MALFORMED_REASONS)
+
+
+def structured_call_action_id(slot: int, value: int, n_slots: int) -> int:
+    """Token id for a well-formed call ``{"slot": slot, "value": value}``."""
+
+    if not 0 <= slot < n_slots:
+        raise ValueError(f"slot={slot} outside n_slots={n_slots}")
+    if value not in (0, 1):
+        raise ValueError(f"value={value} must be 0 or 1")
+    return slot * 2 + value
+
+
+def structured_noop_action_id(n_slots: int) -> int:
+    """Token id for the schema-valid, non-executable no-op action."""
+
+    return 2 * n_slots
+
+
+def structured_malformed_action_id(reason: str, n_slots: int) -> int:
+    """Token id for a malformed (schema-invalid) action of the given reason."""
+
+    if reason not in STRUCTURED_MALFORMED_REASONS:
+        known = ", ".join(STRUCTURED_MALFORMED_REASONS)
+        raise ValueError(f"Unknown malformed reason {reason!r}. Known: {known}")
+    return 2 * n_slots + 1 + STRUCTURED_MALFORMED_REASONS.index(reason)
+
+
+def parse_structured_action(token_id: int, n_slots: int) -> dict[str, Any]:
+    """Parse a structured-action token into its schema fields.
+
+    ``executable`` marks a well-formed call that returns external state.
+    ``valid`` marks any schema-valid action (a call or the no-op).
+    """
+
+    size = structured_action_vocab_size(n_slots)
+    if not 0 <= token_id < size:
+        raise ValueError(f"token_id={token_id} outside structured vocab size {size}")
+    if token_id < 2 * n_slots:
+        slot, value = divmod(token_id, 2)
+        return {
+            "opcode": "call",
+            "slot": slot,
+            "value": value,
+            "valid": True,
+            "executable": True,
+            "reason": None,
+        }
+    if token_id == 2 * n_slots:
+        return {
+            "opcode": "noop",
+            "slot": None,
+            "value": None,
+            "valid": True,
+            "executable": False,
+            "reason": None,
+        }
+    reason = STRUCTURED_MALFORMED_REASONS[token_id - 2 * n_slots - 1]
+    return {
+        "opcode": "malformed",
+        "slot": None,
+        "value": None,
+        "valid": False,
+        "executable": False,
+        "reason": reason,
+    }
+
+
+def render_structured_action(parsed: dict[str, Any]) -> str:
+    """Render a parsed action as a JSON-like tool-call string (documentation aid)."""
+
+    opcode = parsed["opcode"]
+    if opcode == "call":
+        return f'{{"tool": "read_slot", "slot": {parsed["slot"]}, "value": {parsed["value"]}}}'
+    if opcode == "noop":
+        return '{"tool": "noop"}'
+    if opcode == "malformed":
+        return f'{{"error": "{parsed["reason"]}"}}'
+    raise ValueError(f"Unknown opcode {opcode!r}")
+
+
+def summarize_structured_rows(rows: list[dict[str, Any]], *, n_boot: int = 2000) -> dict[str, Any]:
+    """Summarize structured tool-call rows with direct, repair, and control gates."""
+
+    grouped: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    by_slot: dict[tuple[str, str, int], list[dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        key = (str(row["condition"]), str(row["architecture"]))
+        grouped[key].append(row)
+        by_slot[(key[0], key[1], int(row["critical_slot"]))].append(row)
+
+    out: dict[str, Any] = {"n_rows": len(rows), "groups": {}, "slot_groups": {}}
+    for (condition, arch), group_rows in sorted(grouped.items()):
+        out["groups"][f"{condition}/{arch}"] = summarize_structured_gate_group(
+            group_rows,
+            condition=condition,
+            n_boot=n_boot,
+        )
+
+    for (condition, arch, slot), group_rows in sorted(by_slot.items()):
+        out["slot_groups"][f"{condition}/{arch}/slot_{slot}"] = summarize_structured_gate_group(
+            group_rows,
+            condition=condition,
+            n_boot=n_boot,
+        )
+
+    for condition in ("structured_direct_bottleneck", "structured_repair_bottleneck"):
+        condition_rows = [r for r in rows if r["condition"] == condition]
+        if condition_rows:
+            out[f"pooled_{condition}"] = summarize_structured_gate_group(
+                condition_rows,
+                condition=condition,
+                n_boot=n_boot,
+            )
+
+    return out
+
+
+def summarize_structured_gate_group(
+    rows: list[dict[str, Any]],
+    *,
+    condition: str,
+    n_boot: int = 2000,
+) -> dict[str, Any]:
+    final_key = "closed_loop_final_accuracy" if all("closed_loop_final_accuracy" in r for r in rows) else "final_accuracy"
+    final_acc = bootstrap_mean_ci([r[final_key] for r in rows], n_boot=n_boot, seed=20260730)
+    teacher_forced_acc = None
+    if all("teacher_forced_final_accuracy" in r for r in rows):
+        teacher_forced_acc = bootstrap_mean_ci(
+            [r["teacher_forced_final_accuracy"] for r in rows],
+            n_boot=n_boot,
+            seed=20260731,
+        )
+    first_token_acc = bootstrap_mean_ci([r["first_action_token_accuracy"] for r in rows], n_boot=n_boot, seed=20260732)
+    first_schema = bootstrap_mean_ci([r["first_action_schema_validity"] for r in rows], n_boot=n_boot, seed=20260733)
+    first_slot_acc = bootstrap_mean_ci([r["first_parsed_slot_accuracy"] for r in rows], n_boot=n_boot, seed=20260734)
+    first_value_acc = bootstrap_mean_ci([r["first_parsed_value_accuracy"] for r in rows], n_boot=n_boot, seed=20260735)
+    repair_token_acc = bootstrap_mean_ci([r["repair_action_token_accuracy"] for r in rows], n_boot=n_boot, seed=20260736)
+    repair_schema = bootstrap_mean_ci([r["repair_action_schema_validity"] for r in rows], n_boot=n_boot, seed=20260737)
+    repair_slot_acc = bootstrap_mean_ci([r["repair_parsed_slot_accuracy"] for r in rows], n_boot=n_boot, seed=20260738)
+    repair_value_acc = bootstrap_mean_ci([r["repair_parsed_value_accuracy"] for r in rows], n_boot=n_boot, seed=20260739)
+    memory_spec = bootstrap_mean_ci([r["memory_specificity_z"] for r in rows], n_boot=n_boot, seed=20260740)
+    memory_rank = bootstrap_mean_ci([r["memory_rank_percentile"] for r in rows], n_boot=n_boot, seed=20260741)
+    tool_value_spec = bootstrap_mean_ci([r["tool_value_specificity_z"] for r in rows], n_boot=n_boot, seed=20260742)
+
+    if condition == "structured_visible_control":
+        gate = {
+            f"{final_key}_ge_0_90": final_acc["mean"] >= 0.90,
+            "first_action_noop_token_acc_ge_0_90": first_token_acc["mean"] >= 0.90,
+            "memory_specificity_not_strong_positive": memory_spec["mean"] < 0.5,
+        }
+    elif condition == "structured_repair_bottleneck":
+        gate = {
+            f"{final_key}_ge_0_90": final_acc["mean"] >= 0.90,
+            "first_action_token_acc_ge_0_90": first_token_acc["mean"] >= 0.90,
+            "repair_action_token_acc_ge_0_90": repair_token_acc["mean"] >= 0.90,
+            "repair_action_schema_valid_ge_0_90": repair_schema["mean"] >= 0.90,
+            "repair_parsed_slot_acc_ge_0_90": repair_slot_acc["mean"] >= 0.90,
+            "repair_parsed_value_acc_ge_0_90": repair_value_acc["mean"] >= 0.90,
+            "memory_specificity_positive": memory_spec["ci95"][0] > 0.0,
+            "tool_value_specificity_positive": tool_value_spec["ci95"][0] > 0.0,
+            "rank_above_chance": memory_rank["mean"] > 0.5,
+        }
+    elif condition == "structured_direct_bottleneck":
+        gate = {
+            f"{final_key}_ge_0_90": final_acc["mean"] >= 0.90,
+            "first_action_token_acc_ge_0_90": first_token_acc["mean"] >= 0.90,
+            "first_action_schema_valid_ge_0_90": first_schema["mean"] >= 0.90,
+            "first_parsed_slot_acc_ge_0_90": first_slot_acc["mean"] >= 0.90,
+            "first_parsed_value_acc_ge_0_90": first_value_acc["mean"] >= 0.90,
+            "memory_specificity_positive": memory_spec["ci95"][0] > 0.0,
+            "tool_value_specificity_positive": tool_value_spec["ci95"][0] > 0.0,
+            "rank_above_chance": memory_rank["mean"] > 0.5,
+        }
+    else:
+        raise ValueError(f"Unknown structured condition {condition!r}")
+    gate["pass"] = all(gate.values())
+
+    item = {
+        "final_metric": final_key,
+        "final_accuracy": final_acc,
+        "first_action_token_accuracy": first_token_acc,
+        "first_action_schema_validity": first_schema,
+        "first_parsed_slot_accuracy": first_slot_acc,
+        "first_parsed_value_accuracy": first_value_acc,
+        "repair_action_token_accuracy": repair_token_acc,
+        "repair_action_schema_validity": repair_schema,
+        "repair_parsed_slot_accuracy": repair_slot_acc,
+        "repair_parsed_value_accuracy": repair_value_acc,
+        "memory_specificity_z": memory_spec,
+        "memory_rank_percentile": memory_rank,
+        "tool_value_specificity_z": tool_value_spec,
+        "gate": gate,
+    }
+    if teacher_forced_acc is not None:
+        item["teacher_forced_final_accuracy"] = teacher_forced_acc
+    return item
+
+
 def summarize_recovery_rows(rows: list[dict[str, Any]], *, n_boot: int = 2000) -> dict[str, Any]:
     """Summarize tool-recovery rows with direct, repair, and visible-control gates."""
 

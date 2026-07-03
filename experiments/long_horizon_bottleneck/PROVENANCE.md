@@ -10,11 +10,12 @@
 
 ## Verification
 - Pre-registration: `papers/long_horizon_bottleneck/preregistration.md`
-- Result reports (5):
+- Result reports (6):
   - `experiments/long_horizon_bottleneck/results/modal_transformer_l4_8seed_2026_07_02.md`
   - `experiments/long_horizon_bottleneck/results/modal_transformer_l4_horizon_4seed_2026_07_02.md`
   - `experiments/long_horizon_bottleneck/results/tool_commitment_l4_4seed_2026_07_02.md`
   - `experiments/long_horizon_bottleneck/results/z_closed_loop_tool_commitment_l4_4seed_2026_07_02.md`
+  - `experiments/long_horizon_bottleneck/results/zz_structured_tool_call_local_smoke_2026_07_03.md`
   - `experiments/long_horizon_bottleneck/results/zz_tool_recovery_l4_4seed_2026_07_02.md`
 
 Key verification signals (from the latest result report):
@@ -24,6 +25,6 @@ Key verification signals (from the latest result report):
   - Pooled repair-bottleneck gates pass:
 
 ## Artifacts
-- Committed: `experiments/long_horizon_bottleneck/results/modal_transformer_l4_8seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/modal_transformer_l4_horizon_4seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/tool_commitment_l4_4seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/z_closed_loop_tool_commitment_l4_4seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/zz_tool_recovery_l4_4seed_2026_07_02.md`
+- Committed: `experiments/long_horizon_bottleneck/results/modal_transformer_l4_8seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/modal_transformer_l4_horizon_4seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/tool_commitment_l4_4seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/z_closed_loop_tool_commitment_l4_4seed_2026_07_02.md`, `experiments/long_horizon_bottleneck/results/zz_structured_tool_call_local_smoke_2026_07_03.md`, `experiments/long_horizon_bottleneck/results/zz_tool_recovery_l4_4seed_2026_07_02.md`
 - Local-only: artifacts/ (gitignored raw outputs; see result reports for summaries)
 - Paper: _none_
