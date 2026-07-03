@@ -344,14 +344,22 @@ def summarize_tool_gate_group(
     visible_control: bool,
     n_boot: int = 2000,
 ) -> dict[str, Any]:
-    final_acc = bootstrap_mean_ci([r["final_accuracy"] for r in rows], n_boot=n_boot, seed=20260710)
+    final_key = "closed_loop_final_accuracy" if all("closed_loop_final_accuracy" in r for r in rows) else "final_accuracy"
+    final_acc = bootstrap_mean_ci([r[final_key] for r in rows], n_boot=n_boot, seed=20260710)
+    teacher_forced_acc = None
+    if all("teacher_forced_final_accuracy" in r for r in rows):
+        teacher_forced_acc = bootstrap_mean_ci(
+            [r["teacher_forced_final_accuracy"] for r in rows],
+            n_boot=n_boot,
+            seed=20260716,
+        )
     tool_slot_acc = bootstrap_mean_ci([r["tool_slot_accuracy"] for r in rows], n_boot=n_boot, seed=20260711)
     memory_spec = bootstrap_mean_ci([r["memory_specificity_z"] for r in rows], n_boot=n_boot, seed=20260712)
     memory_rank = bootstrap_mean_ci([r["memory_rank_percentile"] for r in rows], n_boot=n_boot, seed=20260713)
     tool_value_spec = bootstrap_mean_ci([r["tool_value_specificity_z"] for r in rows], n_boot=n_boot, seed=20260714)
 
     gate = {
-        "final_acc_ge_0_90": final_acc["mean"] >= 0.90,
+        f"{final_key}_ge_0_90": final_acc["mean"] >= 0.90,
         "tool_slot_acc_ge_0_90": tool_slot_acc["mean"] >= 0.90,
         "memory_specificity_positive": memory_spec["ci95"][0] > 0.0,
         "tool_value_specificity_positive": tool_value_spec["ci95"][0] > 0.0,
@@ -360,7 +368,7 @@ def summarize_tool_gate_group(
     tool_value_acc = None
     if visible_control:
         gate = {
-            "final_acc_ge_0_90": final_acc["mean"] >= 0.90,
+            f"{final_key}_ge_0_90": final_acc["mean"] >= 0.90,
             "tool_slot_null_acc_ge_0_90": tool_slot_acc["mean"] >= 0.90,
             "memory_specificity_not_strong_positive": memory_spec["mean"] < 0.5,
         }
@@ -370,6 +378,7 @@ def summarize_tool_gate_group(
     gate["pass"] = all(gate.values())
 
     item = {
+        "final_metric": final_key,
         "final_accuracy": final_acc,
         "tool_slot_accuracy": tool_slot_acc,
         "memory_specificity_z": memory_spec,
@@ -379,4 +388,6 @@ def summarize_tool_gate_group(
     }
     if tool_value_acc is not None:
         item["tool_value_accuracy"] = tool_value_acc
+    if teacher_forced_acc is not None:
+        item["teacher_forced_final_accuracy"] = teacher_forced_acc
     return item
