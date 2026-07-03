@@ -780,6 +780,111 @@ def parse_alias_argument(argument_id: int, n_slots: int, aliases_per_slot: int) 
     raise AssertionError("unreachable alias argument parser branch")
 
 
+# The text-argument regime is the next bridge after alias ids. The model still
+# emits a classifier token, but each token renders to a parser-facing text phrase
+# that must be interpreted back into a canonical slot before the same stochastic
+# repair/no-op gates are applied.
+
+
+TEXT_ARGUMENT_ORDINALS = (
+    "first",
+    "second",
+    "third",
+    "fourth",
+    "fifth",
+    "sixth",
+    "seventh",
+    "eighth",
+    "ninth",
+    "tenth",
+    "eleventh",
+    "twelfth",
+)
+
+
+def text_argument_vocab_size(n_slots: int, variants_per_slot: int) -> int:
+    """Vocabulary size for text phrases plus missing and malformed sentinels."""
+
+    if n_slots <= 0:
+        raise ValueError("n_slots must be positive")
+    if variants_per_slot <= 0:
+        raise ValueError("variants_per_slot must be positive")
+    return n_slots * variants_per_slot + 2
+
+
+def text_argument_id(slot: int, variant_index: int, n_slots: int, variants_per_slot: int) -> int:
+    """Return the text argument id for one canonical slot phrase variant."""
+
+    text_argument_vocab_size(n_slots, variants_per_slot)
+    if not 0 <= slot < n_slots:
+        raise ValueError(f"slot={slot} outside n_slots={n_slots}")
+    if not 0 <= variant_index < variants_per_slot:
+        raise ValueError(f"variant_index={variant_index} outside variants_per_slot={variants_per_slot}")
+    return slot * variants_per_slot + variant_index
+
+
+def _text_argument_phrase(slot: int, variant_index: int) -> str:
+    if variant_index == 0:
+        return f"clue_{slot}"
+    if variant_index == 1:
+        ordinal = TEXT_ARGUMENT_ORDINALS[slot] if slot < len(TEXT_ARGUMENT_ORDINALS) else f"slot {slot}"
+        return f"{ordinal} clue"
+    if variant_index == 2:
+        return f"memory slot {slot}"
+    return f"slot {slot} phrase {variant_index}"
+
+
+def render_text_argument(argument_id: int, n_slots: int, variants_per_slot: int) -> str:
+    """Render a text argument id as the phrase a parser-facing tool call would carry."""
+
+    size = text_argument_vocab_size(n_slots, variants_per_slot)
+    if not 0 <= argument_id < size:
+        raise ValueError(f"argument_id={argument_id} outside text argument vocab size {size}")
+    missing_id = n_slots * variants_per_slot
+    malformed_id = missing_id + 1
+    if argument_id < missing_id:
+        slot = argument_id // variants_per_slot
+        variant_index = argument_id % variants_per_slot
+        return _text_argument_phrase(slot, variant_index)
+    if argument_id == missing_id:
+        return "none"
+    if argument_id == malformed_id:
+        return "clue-nonesuch"
+    raise AssertionError("unreachable text argument renderer branch")
+
+
+def parse_text_argument(text: str, n_slots: int, variants_per_slot: int) -> dict[str, Any]:
+    """Parse a text slot argument phrase into its canonical slot."""
+
+    text_argument_vocab_size(n_slots, variants_per_slot)
+    normalized = " ".join(text.strip().lower().split())
+    if normalized in {"none", "missing", "null", "noop"}:
+        return {
+            "slot": None,
+            "variant_index": None,
+            "valid": True,
+            "missing": True,
+            "reason": None,
+        }
+    for slot in range(n_slots):
+        for variant_index in range(variants_per_slot):
+            if normalized == _text_argument_phrase(slot, variant_index):
+                return {
+                    "slot": slot,
+                    "variant_index": variant_index,
+                    "valid": True,
+                    "missing": False,
+                    "reason": None,
+                }
+    return {
+        "slot": None,
+        "variant_index": None,
+        "valid": False,
+        "missing": False,
+        "reason": "unparsed_text_argument",
+    }
+
+
 def render_multifield_action(parsed: dict[str, Any]) -> str:
     """Render a parsed multifield action as a JSON-like tool-call string."""
 
@@ -935,7 +1040,7 @@ def summarize_stochastic_rows(rows: list[dict[str, Any]], *, n_boot: int = 2000)
             n_boot=n_boot,
         )
 
-    for condition in ("stochastic_failure_bottleneck", "alias_stochastic_bottleneck"):
+    for condition in ("stochastic_failure_bottleneck", "alias_stochastic_bottleneck", "text_stochastic_bottleneck"):
         condition_rows = [r for r in rows if r["condition"] == condition]
         if condition_rows:
             out[f"pooled_{condition}"] = summarize_stochastic_gate_group(
@@ -1004,8 +1109,12 @@ def summarize_stochastic_gate_group(
     memory_rank = bootstrap_mean_ci([r["memory_rank_percentile"] for r in rows], n_boot=n_boot, seed=20260786)
     tool_value_spec = bootstrap_mean_ci([r["tool_value_specificity_z"] for r in rows], n_boot=n_boot, seed=20260787)
 
-    visible_conditions = {"stochastic_visible_control", "alias_visible_control"}
-    bottleneck_conditions = {"stochastic_failure_bottleneck", "alias_stochastic_bottleneck"}
+    visible_conditions = {"stochastic_visible_control", "alias_visible_control", "text_visible_control"}
+    bottleneck_conditions = {
+        "stochastic_failure_bottleneck",
+        "alias_stochastic_bottleneck",
+        "text_stochastic_bottleneck",
+    }
     if condition in visible_conditions:
         gate = {
             f"{final_key}_ge_0_90": final_acc["mean"] >= 0.90,

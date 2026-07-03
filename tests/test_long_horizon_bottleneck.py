@@ -11,8 +11,10 @@ from experiments.long_horizon_bottleneck.core import (
     multifield_noop_tokens,
     multifield_vocab_sizes,
     parse_multifield_action,
+    parse_text_argument,
     parse_alias_argument,
     parse_structured_action,
+    render_text_argument,
     render_multifield_action,
     render_structured_action,
     structured_action_vocab_size,
@@ -25,6 +27,8 @@ from experiments.long_horizon_bottleneck.core import (
     summarize_structured_rows,
     summarize_stochastic_rows,
     summarize_tool_rows,
+    text_argument_id,
+    text_argument_vocab_size,
 )
 
 
@@ -477,6 +481,44 @@ def test_alias_argument_surface_maps_synonyms_to_canonical_slots():
         parse_alias_argument(alias_argument_vocab_size(n_slots, aliases_per_slot), n_slots, aliases_per_slot)
 
 
+def test_text_argument_surface_renders_and_parses_phrase_variants():
+    n_slots = 4
+    variants_per_slot = 3
+
+    assert text_argument_vocab_size(n_slots, variants_per_slot) == 14
+    phrase_ids = [
+        text_argument_id(slot=1, variant_index=variant, n_slots=n_slots, variants_per_slot=variants_per_slot)
+        for variant in range(variants_per_slot)
+    ]
+    phrases = [render_text_argument(argument_id, n_slots, variants_per_slot) for argument_id in phrase_ids]
+
+    assert phrases == ["clue_1", "second clue", "memory slot 1"]
+    for variant, phrase in enumerate(phrases):
+        parsed = parse_text_argument(phrase, n_slots, variants_per_slot)
+        assert parsed["slot"] == 1
+        assert parsed["variant_index"] == variant
+        assert parsed["valid"]
+        assert not parsed["missing"]
+
+    assert parse_text_argument("none", n_slots, variants_per_slot) == {
+        "slot": None,
+        "variant_index": None,
+        "valid": True,
+        "missing": True,
+        "reason": None,
+    }
+    malformed = parse_text_argument("clue-nonesuch", n_slots, variants_per_slot)
+    assert malformed == {
+        "slot": None,
+        "variant_index": None,
+        "valid": False,
+        "missing": False,
+        "reason": "unparsed_text_argument",
+    }
+    with pytest.raises(ValueError, match="argument_id"):
+        render_text_argument(text_argument_vocab_size(n_slots, variants_per_slot), n_slots, variants_per_slot)
+
+
 def test_summarize_multifield_rows_requires_composed_schema_and_repair_fields():
     rows = []
     for seed in range(8):
@@ -700,6 +742,67 @@ def test_summarize_stochastic_rows_supports_alias_argument_conditions():
     assert summary["groups"]["alias_stochastic_bottleneck/transformer"]["gate"]["pass"]
     assert summary["groups"]["alias_visible_control/transformer"]["gate"]["pass"]
     assert summary["pooled_alias_stochastic_bottleneck"]["gate"]["pass"]
+
+
+def test_summarize_stochastic_rows_supports_text_argument_conditions():
+    rows = []
+    for seed in range(8):
+        rows.append(
+            {
+                "condition": "text_stochastic_bottleneck",
+                "architecture": "transformer",
+                "critical_slot": seed % 4,
+                "closed_loop_final_accuracy": 1.0,
+                "teacher_forced_final_accuracy": 1.0,
+                "first_field_accuracy": 1.0,
+                "first_schema_validity": 1.0,
+                "first_parsed_slot_accuracy": 1.0,
+                "first_parsed_value_accuracy": 1.0,
+                "repair_field_accuracy": 1.0,
+                "repair_schema_validity": 1.0,
+                "repair_failed_field_accuracy": 1.0,
+                "repair_failed_schema_validity": 1.0,
+                "repair_failed_parsed_slot_accuracy": 1.0,
+                "repair_failed_parsed_value_accuracy": 1.0,
+                "repair_success_noop_field_accuracy": 1.0,
+                "repair_success_schema_validity": 1.0,
+                "sampled_failure_rate": 0.5,
+                "memory_specificity_z": 1.5,
+                "memory_rank_percentile": 0.875,
+                "tool_value_specificity_z": 1.2,
+            }
+        )
+        rows.append(
+            {
+                "condition": "text_visible_control",
+                "architecture": "transformer",
+                "critical_slot": seed % 4,
+                "closed_loop_final_accuracy": 1.0,
+                "teacher_forced_final_accuracy": 1.0,
+                "first_field_accuracy": 1.0,
+                "first_schema_validity": 1.0,
+                "first_parsed_slot_accuracy": float("nan"),
+                "first_parsed_value_accuracy": float("nan"),
+                "repair_field_accuracy": 1.0,
+                "repair_schema_validity": 1.0,
+                "repair_failed_field_accuracy": float("nan"),
+                "repair_failed_schema_validity": float("nan"),
+                "repair_failed_parsed_slot_accuracy": float("nan"),
+                "repair_failed_parsed_value_accuracy": float("nan"),
+                "repair_success_noop_field_accuracy": 1.0,
+                "repair_success_schema_validity": 1.0,
+                "sampled_failure_rate": 0.5,
+                "memory_specificity_z": 0.0,
+                "memory_rank_percentile": 0.5,
+                "tool_value_specificity_z": 0.0,
+            }
+        )
+
+    summary = summarize_stochastic_rows(rows, n_boot=200)
+
+    assert summary["groups"]["text_stochastic_bottleneck/transformer"]["gate"]["pass"]
+    assert summary["groups"]["text_visible_control/transformer"]["gate"]["pass"]
+    assert summary["pooled_text_stochastic_bottleneck"]["gate"]["pass"]
 
 
 def test_summarize_stochastic_rows_fails_when_success_repair_is_not_noop():
