@@ -14,6 +14,7 @@ from experiments.long_horizon_bottleneck.core import (
     multifield_malformed_tokens,
     multifield_noop_tokens,
     multifield_vocab_sizes,
+    parse_prompt_json_action,
     parse_generated_json_tokens,
     parse_multifield_action,
     parse_text_argument,
@@ -30,6 +31,7 @@ from experiments.long_horizon_bottleneck.core import (
     summarize_rows,
     summarize_recovery_rows,
     summarize_multifield_rows,
+    summarize_prompt_transfer_rows,
     summarize_structured_rows,
     summarize_stochastic_rows,
     summarize_tool_rows,
@@ -1011,3 +1013,143 @@ def test_summarize_stochastic_rows_fails_when_success_repair_is_not_noop():
 
     assert not group["gate"]["repair_success_noop_field_acc_ge_0_90"]
     assert not group["gate"]["pass"]
+
+
+def test_parse_prompt_json_action_accepts_embedded_tool_call():
+    parsed = parse_prompt_json_action(
+        'Action: {"tool": "read_slot", "slot": "second clue", "value": "0"}',
+        n_slots=4,
+        variants_per_slot=3,
+    )
+    underscore = parse_prompt_json_action(
+        '{"tool": "read_slot", "slot": "second_clue", "value": 0}',
+        n_slots=4,
+        variants_per_slot=3,
+    )
+
+    assert parsed["opcode"] == "call"
+    assert parsed["slot"] == 1
+    assert parsed["variant_index"] == 1
+    assert parsed["value"] == 0
+    assert parsed["valid"]
+    assert parsed["executable"]
+    assert underscore["slot"] == 1
+    assert underscore["valid"]
+
+
+def test_parse_prompt_json_action_accepts_noop_and_rejects_malformed_text():
+    noop = parse_prompt_json_action(
+        '```json\n{"tool": "noop"}\n```',
+        n_slots=4,
+        variants_per_slot=3,
+    )
+    malformed = parse_prompt_json_action(
+        "I will inspect the clue without JSON.",
+        n_slots=4,
+        variants_per_slot=3,
+    )
+
+    assert noop["opcode"] == "noop"
+    assert noop["valid"]
+    assert not noop["executable"]
+    assert malformed["opcode"] == "malformed"
+    assert not malformed["valid"]
+    assert malformed["reason"] == "missing_json_object"
+
+
+def test_summarize_prompt_transfer_rows_classifies_positive_outcome():
+    rows = _prompt_transfer_rows(
+        bottleneck={
+            "closed_loop_final_accuracy": 0.9,
+            "first_schema_validity": 1.0,
+            "first_parsed_slot_accuracy": 0.9,
+            "first_parsed_value_accuracy": 0.9,
+            "repair_failed_schema_validity": 1.0,
+            "repair_failed_parsed_slot_accuracy": 0.9,
+            "repair_failed_parsed_value_accuracy": 0.9,
+            "repair_success_noop_field_accuracy": 0.9,
+            "repair_success_schema_validity": 1.0,
+            "memory_specificity_z": 1.25,
+            "memory_rank_percentile": 0.75,
+        },
+        visible={
+            "closed_loop_final_accuracy": 1.0,
+            "first_schema_validity": 1.0,
+            "first_noop_field_accuracy": 1.0,
+            "memory_specificity_z": 0.0,
+        },
+        format_control={"schema_validity": 1.0},
+        short_control={
+            "closed_loop_final_accuracy": 1.0,
+            "first_schema_validity": 1.0,
+            "first_parsed_slot_accuracy": 1.0,
+            "first_parsed_value_accuracy": 1.0,
+        },
+    )
+
+    summary = summarize_prompt_transfer_rows(rows, n_boot=200)
+
+    assert summary["outcome"] == "positive"
+    assert summary["decision"]["positive"]
+    assert summary["groups"]["prompt_json_bottleneck/qwen2.5-0.5b"]["gate"]["pass"]
+
+
+def test_summarize_prompt_transfer_rows_classifies_controlled_strong_negative():
+    rows = _prompt_transfer_rows(
+        bottleneck={
+            "closed_loop_final_accuracy": 0.2,
+            "first_schema_validity": 1.0,
+            "first_parsed_slot_accuracy": 0.2,
+            "first_parsed_value_accuracy": 0.2,
+            "repair_failed_schema_validity": 1.0,
+            "repair_failed_parsed_slot_accuracy": 0.2,
+            "repair_failed_parsed_value_accuracy": 0.2,
+            "repair_success_noop_field_accuracy": 0.9,
+            "repair_success_schema_validity": 1.0,
+            "memory_specificity_z": 0.0,
+            "memory_rank_percentile": 0.25,
+        },
+        visible={
+            "closed_loop_final_accuracy": 1.0,
+            "first_schema_validity": 1.0,
+            "first_noop_field_accuracy": 1.0,
+            "memory_specificity_z": 0.0,
+        },
+        format_control={"schema_validity": 1.0},
+        short_control={
+            "closed_loop_final_accuracy": 1.0,
+            "first_schema_validity": 1.0,
+            "first_parsed_slot_accuracy": 1.0,
+            "first_parsed_value_accuracy": 1.0,
+        },
+    )
+
+    summary = summarize_prompt_transfer_rows(rows, n_boot=200)
+
+    assert summary["outcome"] == "strong_negative"
+    assert summary["decision"]["controls_pass"]
+    assert not summary["decision"]["positive"]
+
+
+def _prompt_transfer_rows(
+    *,
+    bottleneck: dict[str, float],
+    visible: dict[str, float],
+    format_control: dict[str, float],
+    short_control: dict[str, float],
+) -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
+    for seed in range(10):
+        base = {
+            "architecture": "qwen2.5-0.5b",
+            "critical_slot": seed % 4,
+            "seed": seed,
+            "schema_validity": float("nan"),
+            "sampled_failure_rate": 0.5,
+            "tool_value_specificity_z": 0.0,
+        }
+        rows.append({**base, "condition": "prompt_json_bottleneck", **bottleneck})
+        rows.append({**base, "condition": "prompt_json_visible_control", **visible})
+        rows.append({**base, "condition": "prompt_json_format_control", **format_control})
+        rows.append({**base, "condition": "prompt_json_short_horizon_control", **short_control})
+    return rows

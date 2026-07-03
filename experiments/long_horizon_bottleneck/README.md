@@ -277,6 +277,29 @@ attacks the next bottleneck after parallel generated JSON: whether the moved
 critical variable survives a decoded action channel rather than a single
 parallel sequence head.
 
+Prompt-level JSON transfer pass:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/long_horizon_bottleneck/modal_prompt_json_transfer_sweep.py \
+    --model-id Qwen/Qwen2.5-0.5B-Instruct \
+    --seeds 4 \
+    --episodes-per-cell 8 \
+    --hidden-metric-episodes 2 \
+    --critical-slots 0,1,2,3 \
+    --budget-usd 25 \
+    --base-seed 20260800 \
+    --out artifacts/long_horizon_bottleneck/prompt_json_transfer_l4.json
+```
+
+The prompt-level pass loads a pretrained open model once in a single Modal `L4`
+container, then evaluates parser-scored JSON text actions across format,
+visible-control, short-horizon, and stochastic moved-bottleneck conditions. The
+2026-07-03 confirmatory run is a controlled strong negative for the full
+prompt-level gate: controls and behavior pass, but the hidden critical-slot
+specificity confidence interval crosses zero.
+
 Smoke:
 
 ```bash
@@ -325,4 +348,7 @@ Passing gates justify either packaging the synthetic mechanism ladder or moving
 to a true text/LLM prompt regime. The generated JSON pass adds emitted
 fixed-length parser strings, but those strings are still vocabulary-constrained
 and supervised; the autoregressive JSON pass adds token-by-token decoding, but
-it is still not open-ended decoding from a pretrained model.
+it is still not open-ended decoding from a pretrained model. The prompt-level
+JSON transfer pass uses a pretrained model and real tokenizer decoding, but it
+is still a compact harness rather than autonomous API use; its current result is
+positive for behavior and negative for the stronger hidden-geometry claim.
