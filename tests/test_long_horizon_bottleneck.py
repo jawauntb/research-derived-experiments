@@ -917,6 +917,67 @@ def test_summarize_stochastic_rows_supports_generated_json_conditions():
     assert summary["pooled_generated_json_bottleneck"]["gate"]["pass"]
 
 
+def test_summarize_stochastic_rows_supports_autoregressive_json_conditions():
+    rows = []
+    for seed in range(8):
+        rows.append(
+            {
+                "condition": "autoregressive_json_bottleneck",
+                "architecture": "transformer",
+                "critical_slot": seed % 4,
+                "closed_loop_final_accuracy": 1.0,
+                "teacher_forced_final_accuracy": 1.0,
+                "first_field_accuracy": 1.0,
+                "first_schema_validity": 1.0,
+                "first_parsed_slot_accuracy": 1.0,
+                "first_parsed_value_accuracy": 1.0,
+                "repair_field_accuracy": 1.0,
+                "repair_schema_validity": 1.0,
+                "repair_failed_field_accuracy": 1.0,
+                "repair_failed_schema_validity": 1.0,
+                "repair_failed_parsed_slot_accuracy": 1.0,
+                "repair_failed_parsed_value_accuracy": 1.0,
+                "repair_success_noop_field_accuracy": 1.0,
+                "repair_success_schema_validity": 1.0,
+                "sampled_failure_rate": 0.5,
+                "memory_specificity_z": 1.5,
+                "memory_rank_percentile": 0.875,
+                "tool_value_specificity_z": 1.2,
+            }
+        )
+        rows.append(
+            {
+                "condition": "autoregressive_json_visible_control",
+                "architecture": "transformer",
+                "critical_slot": seed % 4,
+                "closed_loop_final_accuracy": 1.0,
+                "teacher_forced_final_accuracy": 1.0,
+                "first_field_accuracy": 1.0,
+                "first_schema_validity": 1.0,
+                "first_parsed_slot_accuracy": float("nan"),
+                "first_parsed_value_accuracy": float("nan"),
+                "repair_field_accuracy": 1.0,
+                "repair_schema_validity": 1.0,
+                "repair_failed_field_accuracy": float("nan"),
+                "repair_failed_schema_validity": float("nan"),
+                "repair_failed_parsed_slot_accuracy": float("nan"),
+                "repair_failed_parsed_value_accuracy": float("nan"),
+                "repair_success_noop_field_accuracy": 1.0,
+                "repair_success_schema_validity": 1.0,
+                "sampled_failure_rate": 0.5,
+                "memory_specificity_z": 0.0,
+                "memory_rank_percentile": 0.5,
+                "tool_value_specificity_z": 0.0,
+            }
+        )
+
+    summary = summarize_stochastic_rows(rows, n_boot=200)
+
+    assert summary["groups"]["autoregressive_json_bottleneck/transformer"]["gate"]["pass"]
+    assert summary["groups"]["autoregressive_json_visible_control/transformer"]["gate"]["pass"]
+    assert summary["pooled_autoregressive_json_bottleneck"]["gate"]["pass"]
+
+
 def test_summarize_stochastic_rows_fails_when_success_repair_is_not_noop():
     rows = [
         {
