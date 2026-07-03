@@ -97,6 +97,34 @@ tool attempt in `repair_bottleneck`. The agent must preserve the moved critical
 bit through the error feedback and re-commit the correct slot/value at a later
 repair token before the final query.
 
+Structured tool-call pass:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/long_horizon_bottleneck/modal_structured_tool_call_sweep.py \
+    --seeds 4 --train-steps 900 --architectures transformer \
+    --conditions structured_direct_bottleneck,structured_repair_bottleneck,structured_visible_control \
+    --critical-slots 0,1,2,3 \
+    --budget-usd 25 \
+    --out artifacts/long_horizon_bottleneck/structured_tool_call_l4.json
+```
+
+The structured pass replaces the supervised slot and value heads with a single
+structured-action head over a small JSON-like tool-call vocabulary: `2*n_slots`
+executable calls (`{"tool": "read_slot", "slot": s, "value": v}`), one schema-valid
+no-op (`{"tool": "noop"}`), and four malformed tokens (`missing_slot`, `bad_slot`,
+`bad_value`, `malformed_order`). The evaluator parses the emitted token, checks
+schema validity, and returns external state only when the parse is an executable
+call whose slot matches the moved bottleneck. In `structured_direct_bottleneck`
+the agent commits a valid call for the moved slot; in
+`structured_repair_bottleneck` the first attempt is answered by an API-style
+error token that forces a second structured call at the repair position; in
+`structured_visible_control` the agent should emit the no-op and solve from the
+terminal visible bit. Gates add schema-validity and parsed slot/value checks on
+top of the closed-loop final accuracy, memory specificity, tool-value
+specificity, and visible-control null.
+
 Smoke:
 
 ```bash
@@ -131,6 +159,10 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
 ## Scope Boundary
 
 This is a synthetic long-horizon memory diagnostic, not a claim about production
-LLM agents, consciousness, or naturalistic tool use. Passing gates would justify
-the next regime: moving from synthetic sequence agents to API/tool-use agents
-where future-critical constraints, tools, or commitments move.
+LLM agents, consciousness, or naturalistic tool use. The structured tool-call
+pass moves the model-visible interface toward naturalistic tool schemas (parsed
+JSON-like calls, schema validity, malformed actions, and a repair prompt) but
+remains fully synthetic: the vocabulary is a fixed discrete action set, not
+free-form natural-language tool use, and the tool semantics are toy. Passing
+gates would justify the next regime: multi-argument schemas, stochastic tool
+failures, and natural-language argument surfaces.
