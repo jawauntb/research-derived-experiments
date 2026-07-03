@@ -35,6 +35,7 @@ from experiments.long_horizon_bottleneck.core import (
     summarize_recovery_rows,
     summarize_multifield_rows,
     summarize_prompt_causal_patch_rows,
+    summarize_prompt_family_causal_patch_rows,
     summarize_prompt_localization_rows,
     summarize_prompt_transfer_rows,
     summarize_structured_rows,
@@ -1208,6 +1209,35 @@ def test_summarize_prompt_causal_patch_rows_classifies_strong_negative_patch_sit
     assert not summary["decision"]["positive"]
 
 
+def test_summarize_prompt_family_causal_patch_rows_requires_each_family_model_pair():
+    rows = [
+        *_prompt_causal_patch_rows(patch_effect=1.2, patch_direction_success=1.0, prompt_family="standard"),
+        *_prompt_causal_patch_rows(patch_effect=1.1, patch_direction_success=1.0, prompt_family="compact"),
+    ]
+
+    summary = summarize_prompt_family_causal_patch_rows(rows, n_boot=200)
+
+    assert summary["outcome"] == "positive"
+    assert summary["decision"]["all_family_models_causal_ready"]
+    assert summary["decision"]["all_family_models_patch_pass"]
+    assert summary["family_model"]["standard/qwen2.5-0.5b"]["patch_pass"]
+    assert summary["family_model"]["compact/qwen2.5-0.5b"]["patch_pass"]
+
+
+def test_summarize_prompt_family_causal_patch_rows_fails_when_one_family_model_misses_patch():
+    rows = [
+        *_prompt_causal_patch_rows(patch_effect=1.2, patch_direction_success=1.0, prompt_family="standard"),
+        *_prompt_causal_patch_rows(patch_effect=0.0, patch_direction_success=0.0, prompt_family="ledger"),
+    ]
+
+    summary = summarize_prompt_family_causal_patch_rows(rows, n_boot=200)
+
+    assert summary["outcome"] == "strong_negative"
+    assert summary["decision"]["all_family_models_causal_ready"]
+    assert not summary["decision"]["all_family_models_patch_pass"]
+    assert not summary["family_model"]["ledger/qwen2.5-0.5b"]["patch_pass"]
+
+
 def test_summarize_prompt_localization_rows_classifies_hidden_strong_negative():
     rows = _prompt_localization_rows(
         localization={
@@ -1296,6 +1326,7 @@ def _prompt_causal_patch_rows(
     *,
     patch_effect: float,
     patch_direction_success: float,
+    prompt_family: str = "standard",
 ) -> list[dict[str, object]]:
     rows: list[dict[str, object]] = []
     for seed in range(12):
@@ -1304,6 +1335,7 @@ def _prompt_causal_patch_rows(
                 "row_kind": "causal_patch",
                 "architecture": "qwen2.5-0.5b",
                 "model": "qwen2.5-0.5b",
+                "prompt_family": prompt_family,
                 "critical_slot": seed % 4,
                 "seed": seed,
                 "patch_position": "value_prefix_final",

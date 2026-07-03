@@ -14,9 +14,11 @@ Test whether future control relevance moves both generated behavior and internal
   are held fixed under base and slot-flipped prompts.
 - Fixed-prefix causal patch: positive value-token logit shifts at
   `value_prefix_final` late/final sites in all three model families.
+- Prompt-family causal patch robustness: positive across standard, compact, and
+  audit-checklist prompt framings.
 - Latest models: `Qwen/Qwen2.5-0.5B-Instruct`, `Qwen/Qwen2.5-1.5B-Instruct`, `HuggingFaceTB/SmolLM2-1.7B-Instruct`.
-- Latest confirmatory artifact: `artifacts/long_horizon_bottleneck/prompt_json_causal_patch_l4.json`.
-- Latest committed report: `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzz_prompt_json_causal_patch_l4_4seed_2026_07_03.md`.
+- Latest confirmatory artifact: `artifacts/long_horizon_bottleneck/prompt_json_prompt_family_causal_patch_l4.json`.
+- Latest committed report: `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzzz_prompt_json_prompt_family_causal_patch_l4_4seed_2026_07_03.md`.
 
 ## Prompt-Level Terminal Result
 
@@ -91,6 +93,22 @@ The confirmatory run is positive:
   action/value prefix state;
 - strongest effect: `SmolLM2/value_prefix_final/final`, patch effect 7.053,
   95% CI [6.738, 7.344], recovery 0.899.
+
+Outcome: `positive`.
+
+## Prompt-Family Causal Patch Terminal Result
+
+The prompt-family robustness pass reran the causal-patch grid across three
+frozen prompt framings: `standard`, `compact`, and `ledger`/audit-checklist.
+
+The confirmatory run is positive:
+
+- all 9 `(prompt family, model)` pairs are causally ready;
+- all 9 pairs have at least one passing default patch group;
+- `value_prefix_final` late/final sites pass throughout;
+- prompt-final sites remain negative controls;
+- strongest final-layer value-prefix effect: compact Qwen2.5-1.5B, patch effect
+  7.754, 95% CI [7.282, 8.234], recovery 0.937.
 
 Outcome: `positive`.
 

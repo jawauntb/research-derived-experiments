@@ -130,9 +130,10 @@ the agent's interaction with future-relevant information.
 | Prompt JSON hidden localization | Multi-model, multi-layer, multi-token hidden-site grid | 192 behavior cells + 576 hidden rows | Controls and behavior pass for three models; 17 hidden sites pass | `prompt_json_hidden_localization` |
 | Prompt JSON fixed-action localization | Teacher-forced constant assistant actions under slot flips | 192 behavior cells + 960 hidden rows | Controls and behavior pass; 24 hidden sites pass after generated action tokens are held fixed | `prompt_json_fixed_action_localization` |
 | Prompt JSON causal patch | Patch base hidden state into critical-slot-flipped prompt before JSON value token | 1,536 causal-patch rows | Value-prefix patch sites pass in all three model families; prompt-final sites do not pass | `prompt_json_causal_patch` |
+| Prompt-family causal patch | Repeat causal patch over standard, compact, and audit-checklist prompt framings | 4,608 causal-patch rows | All 9 family/model pairs are causally ready and patch-pass | `prompt_json_prompt_family_causal_patch` |
 
 All confirmed sweeps used Modal `L4`, not H100/H200. The timeout-based
-conservative spend guard for the listed confirmed reports is under USD 180 in
+conservative spend guard for the listed confirmed reports is under USD 190 in
 aggregate; individual confirmed passes used guards of USD 1.08 to USD 17.26.
 Actual runtime was much lower than the timeout budget, with the latest
 autoregressive JSON pass averaging 15.08 seconds per remote cell. The
@@ -144,6 +145,8 @@ fixed-action localization counterfactual used the same three parallel `L4`
 model jobs, 192 behavior cells, 960 hidden rows, and the same conservative
 timeout guard of USD 6.47. The causal-patch pass used three parallel `L4`
 model jobs, 1,536 patch rows, and the same conservative timeout guard of USD
+6.47. The prompt-family causal-patch robustness pass used three parallel `L4`
+model jobs, 4,608 patch rows, and the same conservative timeout guard of USD
 6.47.
 
 Report keys map to committed summaries under
@@ -168,7 +171,9 @@ Report keys map to committed summaries under
 `prompt_json_fixed_action_localization` =
 `zzzzzzzzzzzzzz_prompt_json_fixed_action_localization_l4_4seed_2026_07_03.md`,
 and `prompt_json_causal_patch` =
-`zzzzzzzzzzzzzzz_prompt_json_causal_patch_l4_4seed_2026_07_03.md`.
+`zzzzzzzzzzzzzzz_prompt_json_causal_patch_l4_4seed_2026_07_03.md`, and
+`prompt_json_prompt_family_causal_patch` =
+`zzzzzzzzzzzzzzzz_prompt_json_prompt_family_causal_patch_l4_4seed_2026_07_03.md`.
 
 ## 4. Prompt-Level JSON Transfer and Hidden Localization
 
@@ -261,6 +266,15 @@ had +6.916 [6.375, 7.453]. Prompt-final patch sites did not pass. That negative
 control localizes the causal leverage to the action/value prefix state rather
 than the raw final prompt token.
 
+The prompt-family robustness pass then repeated the causal-patch grid across
+three frozen prompt framings: the original `standard` wording, a `compact`
+wording, and an audit-checklist `ledger` wording. This run was also positive.
+All 9 prompt-family/model pairs were causally ready and patch-pass. Final-layer
+`value_prefix_final` effects remained large: compact Qwen 1.5B had +7.754 with
+CI [7.282, 8.234], ledger Qwen 1.5B had +6.648 [6.159, 7.132], and standard
+SmolLM2 had +7.049 [6.751, 7.346]. Prompt-final sites remained negative
+controls across the robustness grid.
+
 ## 5. Interpretation
 
 The core result is a **metric transport** result. The future-critical variable
@@ -285,9 +299,11 @@ registered hidden site fails. But localization across token positions and layers
 recovers a positive signal, and the fixed-action counterfactual shows that the
 signal can survive even when generated answer tokens are held constant. The
 causal-patch pass then shows that the value-prefix state can shift the
-behavior-adjacent value-token readout. That split is the point of the
-diagnostic: it can distinguish interface behavior, prompt-state memory,
-action-surface commitment, and causal leverage over the next action token.
+behavior-adjacent value-token readout, and the prompt-family pass shows that
+this causal leverage survives several controlled wording changes. That split is
+the point of the diagnostic: it can distinguish interface behavior,
+prompt-state memory, action-surface commitment, causal leverage over the next
+action token, and prompt-family robustness.
 
 ## 6. Boundaries
 
@@ -332,7 +348,9 @@ The synthetic mechanism ladder is complete enough to write up and share. The
 prompt-level hidden-localization replication is positive, and the fixed-action
 counterfactual removes the simplest generated-token identity confound. The
 fixed-prefix causal patch also shows behavior-adjacent causal leverage at the
-JSON value-token readout. The next regimes answer different questions:
+JSON value-token readout, and the prompt-family run verifies that this leverage
+is not restricted to one frozen wording. The next regimes answer different
+questions:
 
 - **Prompt-level robustness:** rerun the frozen gate across prompt families,
   longer contexts, and API models to test whether fixed-action localization is
@@ -351,7 +369,7 @@ The most valuable immediate next step is to publish the diagnostic as a compact
 benchmark card: synthetic ladder positive, prompt-level behavior positive,
 prompt-level hidden localization positive, and fixed-action localization
 positive after generated action tokens are held constant, with a first causal
-patch result showing value-token logit control.
+patch result showing value-token logit control and prompt-family robustness.
 
 ## 9. Reproducibility
 
@@ -439,6 +457,24 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     --budget-usd 25 \
     --base-seed 20260950 \
     --out artifacts/long_horizon_bottleneck/prompt_json_causal_patch_l4.json
+```
+
+Prompt-level prompt-family causal patch runner:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/long_horizon_bottleneck/modal_prompt_json_causal_patch_sweep.py \
+    --models Qwen/Qwen2.5-0.5B-Instruct,Qwen/Qwen2.5-1.5B-Instruct,HuggingFaceTB/SmolLM2-1.7B-Instruct \
+    --prompt-families standard,compact,ledger \
+    --seeds 4 \
+    --episodes-per-cell 8 \
+    --critical-slots 0,1,2,3 \
+    --patch-positions prompt_final,value_prefix_final \
+    --patch-layers late,final \
+    --budget-usd 25 \
+    --base-seed 20261000 \
+    --out artifacts/long_horizon_bottleneck/prompt_json_prompt_family_causal_patch_l4.json
 ```
 
 Local verification for the code paths:
