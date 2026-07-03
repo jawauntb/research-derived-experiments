@@ -166,6 +166,26 @@ failure, it must repair by re-emitting the executable call for the moved critica
 slot. Gates split those cases so a model cannot pass by always repairing or
 always no-oping.
 
+Larger-schema stochastic pass:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/long_horizon_bottleneck/modal_stochastic_tool_failure_sweep.py \
+    --seeds 4 --train-steps 900 --architectures transformer \
+    --conditions stochastic_failure_bottleneck,stochastic_visible_control \
+    --n-slots 8 --sequence-length 160 \
+    --critical-slots 0,1,2,3,4,5,6,7 \
+    --failure-probability 0.5 \
+    --budget-usd 25 \
+    --out artifacts/long_horizon_bottleneck/stochastic_tool_failure_8slot_l4.json
+```
+
+The larger-schema pass doubles the registered clue slots, grows the slot
+argument vocabulary to 10, and lengthens the sequence so the first commit still
+comes after all clues. It checks whether the stochastic repair/no-op gate
+survives a larger argument namespace rather than only the four-slot toy schema.
+
 Smoke:
 
 ```bash
@@ -207,5 +227,6 @@ argument fields, and repair prompts) but remain fully synthetic: fields are
 fixed discrete classifiers, not free-form JSON or natural-language tool use, and
 the tool semantics are toy. The stochastic failure pass adds per-episode API
 success/failure variation, but the failure process is still synthetic and
-environment-sampled. Passing gates justifies the next regime: larger schemas and
+environment-sampled. The larger-schema pass raises the argument namespace but
+still uses discrete fields. Passing gates justifies the next regime:
 natural-language argument surfaces.
