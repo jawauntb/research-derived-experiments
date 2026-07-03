@@ -4,7 +4,13 @@ from experiments.long_horizon_bottleneck.core import (
     build_cells,
     build_horizon_cells,
     estimate_modal_cost,
+    multifield_call_tokens,
+    multifield_malformed_tokens,
+    multifield_noop_tokens,
+    multifield_vocab_sizes,
+    parse_multifield_action,
     parse_structured_action,
+    render_multifield_action,
     render_structured_action,
     structured_action_vocab_size,
     structured_call_action_id,
@@ -12,6 +18,7 @@ from experiments.long_horizon_bottleneck.core import (
     structured_noop_action_id,
     summarize_rows,
     summarize_recovery_rows,
+    summarize_multifield_rows,
     summarize_structured_rows,
     summarize_tool_rows,
 )
@@ -402,4 +409,137 @@ def test_summarize_structured_rows_fails_repair_when_schema_invalid():
     group = summary["groups"]["structured_repair_bottleneck/transformer"]
 
     assert not group["gate"]["repair_action_schema_valid_ge_0_90"]
+    assert not group["gate"]["pass"]
+
+
+def test_multifield_action_schema_parses_calls_noops_and_malformed_arguments():
+    n_slots = 4
+    assert multifield_vocab_sizes(n_slots) == {"opcode": 3, "slot": 6, "value": 4}
+
+    call = parse_multifield_action(*multifield_call_tokens(2, 1, n_slots), n_slots)
+    assert call["opcode"] == "call"
+    assert call["valid"] and call["executable"]
+    assert call["slot"] == 2 and call["value"] == 1
+    assert render_multifield_action(call) == '{"tool": "read_slot", "slot": 2, "value": 1}'
+
+    noop = parse_multifield_action(*multifield_noop_tokens(n_slots), n_slots)
+    assert noop["opcode"] == "noop"
+    assert noop["valid"] and not noop["executable"]
+    assert render_multifield_action(noop) == '{"tool": "noop"}'
+
+    bad_slot = parse_multifield_action(*multifield_malformed_tokens("bad_slot", n_slots), n_slots)
+    assert bad_slot["reason"] == "bad_slot"
+    assert not bad_slot["valid"] and not bad_slot["executable"]
+    assert render_multifield_action(bad_slot) == '{"error": "bad_slot"}'
+
+
+def test_parse_multifield_action_rejects_out_of_range_fields():
+    with pytest.raises(ValueError, match="opcode_id"):
+        parse_multifield_action(3, 0, 0, 4)
+    with pytest.raises(ValueError, match="slot_id"):
+        parse_multifield_action(0, 6, 0, 4)
+    with pytest.raises(ValueError, match="value_id"):
+        parse_multifield_action(0, 0, 4, 4)
+
+
+def test_summarize_multifield_rows_requires_composed_schema_and_repair_fields():
+    rows = []
+    for seed in range(8):
+        rows.append(
+            {
+                "condition": "multifield_direct_bottleneck",
+                "architecture": "transformer",
+                "critical_slot": seed % 4,
+                "closed_loop_final_accuracy": 1.0,
+                "teacher_forced_final_accuracy": 1.0,
+                "first_field_accuracy": 1.0,
+                "first_schema_validity": 1.0,
+                "first_parsed_slot_accuracy": 1.0,
+                "first_parsed_value_accuracy": 1.0,
+                "repair_field_accuracy": float("nan"),
+                "repair_schema_validity": float("nan"),
+                "repair_parsed_slot_accuracy": float("nan"),
+                "repair_parsed_value_accuracy": float("nan"),
+                "memory_specificity_z": 1.4,
+                "memory_rank_percentile": 0.875,
+                "tool_value_specificity_z": 1.1,
+            }
+        )
+        rows.append(
+            {
+                "condition": "multifield_repair_bottleneck",
+                "architecture": "transformer",
+                "critical_slot": seed % 4,
+                "closed_loop_final_accuracy": 1.0,
+                "teacher_forced_final_accuracy": 1.0,
+                "first_field_accuracy": 1.0,
+                "first_schema_validity": 1.0,
+                "first_parsed_slot_accuracy": 1.0,
+                "first_parsed_value_accuracy": 1.0,
+                "repair_field_accuracy": 1.0,
+                "repair_schema_validity": 1.0,
+                "repair_parsed_slot_accuracy": 1.0,
+                "repair_parsed_value_accuracy": 1.0,
+                "memory_specificity_z": 1.5,
+                "memory_rank_percentile": 0.875,
+                "tool_value_specificity_z": 1.2,
+            }
+        )
+        rows.append(
+            {
+                "condition": "multifield_visible_control",
+                "architecture": "transformer",
+                "critical_slot": seed % 4,
+                "closed_loop_final_accuracy": 1.0,
+                "teacher_forced_final_accuracy": 1.0,
+                "first_field_accuracy": 1.0,
+                "first_schema_validity": 1.0,
+                "first_parsed_slot_accuracy": float("nan"),
+                "first_parsed_value_accuracy": float("nan"),
+                "repair_field_accuracy": 1.0,
+                "repair_schema_validity": 1.0,
+                "repair_parsed_slot_accuracy": float("nan"),
+                "repair_parsed_value_accuracy": float("nan"),
+                "memory_specificity_z": 0.0,
+                "memory_rank_percentile": 0.5,
+                "tool_value_specificity_z": 0.0,
+            }
+        )
+
+    summary = summarize_multifield_rows(rows, n_boot=200)
+
+    assert summary["groups"]["multifield_direct_bottleneck/transformer"]["gate"]["pass"]
+    assert summary["groups"]["multifield_repair_bottleneck/transformer"]["gate"]["pass"]
+    assert summary["groups"]["multifield_visible_control/transformer"]["gate"]["pass"]
+    assert summary["pooled_multifield_direct_bottleneck"]["gate"]["pass"]
+    assert summary["pooled_multifield_repair_bottleneck"]["gate"]["pass"]
+
+
+def test_summarize_multifield_rows_fails_repair_when_a_field_breaks_schema():
+    rows = [
+        {
+            "condition": "multifield_repair_bottleneck",
+            "architecture": "transformer",
+            "critical_slot": seed % 4,
+            "closed_loop_final_accuracy": 1.0,
+            "teacher_forced_final_accuracy": 1.0,
+            "first_field_accuracy": 1.0,
+            "first_schema_validity": 1.0,
+            "first_parsed_slot_accuracy": 1.0,
+            "first_parsed_value_accuracy": 1.0,
+            "repair_field_accuracy": 1.0,
+            "repair_schema_validity": 0.4,
+            "repair_parsed_slot_accuracy": 1.0,
+            "repair_parsed_value_accuracy": 1.0,
+            "memory_specificity_z": 1.5,
+            "memory_rank_percentile": 0.875,
+            "tool_value_specificity_z": 1.2,
+        }
+        for seed in range(8)
+    ]
+
+    summary = summarize_multifield_rows(rows, n_boot=200)
+    group = summary["groups"]["multifield_repair_bottleneck/transformer"]
+
+    assert not group["gate"]["repair_schema_valid_ge_0_90"]
     assert not group["gate"]["pass"]
