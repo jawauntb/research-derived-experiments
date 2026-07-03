@@ -359,6 +359,30 @@ all behavior controls pass, 24 registered hidden sites pass, and fixed noop
 final-layer sites pass in all three default model families. See
 `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzz_prompt_json_fixed_action_localization_l4_4seed_2026_07_03.md`.
 
+Prompt-level fixed-prefix causal patch pass:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/long_horizon_bottleneck/modal_prompt_json_causal_patch_sweep.py \
+    --models Qwen/Qwen2.5-0.5B-Instruct,Qwen/Qwen2.5-1.5B-Instruct,HuggingFaceTB/SmolLM2-1.7B-Instruct \
+    --seeds 4 \
+    --episodes-per-cell 8 \
+    --critical-slots 0,1,2,3 \
+    --patch-positions prompt_final,value_prefix_final \
+    --patch-layers late,final \
+    --budget-usd 25 \
+    --base-seed 20260950 \
+    --out artifacts/long_horizon_bottleneck/prompt_json_causal_patch_l4.json
+```
+
+The causal-patch pass tests whether a donor hidden state from the base prompt
+can shift the corrupted prompt's next-token logits before the JSON `value`
+field back toward the donor value. The 2026-07-03 confirmatory run is positive:
+all three model families pass at `value_prefix_final` late/final sites, while
+`prompt_final` sites do not pass. See
+`experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzz_prompt_json_causal_patch_l4_4seed_2026_07_03.md`.
+
 Smoke:
 
 ```bash

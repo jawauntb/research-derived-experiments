@@ -34,6 +34,7 @@ from experiments.long_horizon_bottleneck.core import (
     summarize_rows,
     summarize_recovery_rows,
     summarize_multifield_rows,
+    summarize_prompt_causal_patch_rows,
     summarize_prompt_localization_rows,
     summarize_prompt_transfer_rows,
     summarize_structured_rows,
@@ -1185,6 +1186,28 @@ def test_prompt_localization_positions_include_fixed_action_counterfactual_sites
     assert summary["localization_groups"]["qwen2.5-0.5b/fixed_noop_final/mid"]["gate"]["pass"]
 
 
+def test_summarize_prompt_causal_patch_rows_classifies_positive_patch_site():
+    rows = _prompt_causal_patch_rows(patch_effect=1.2, patch_direction_success=1.0)
+
+    summary = summarize_prompt_causal_patch_rows(rows, n_boot=200)
+
+    assert summary["outcome"] == "positive"
+    assert summary["decision"]["causal_ready"]
+    assert summary["decision"]["patch_pass"]
+    assert summary["groups"]["qwen2.5-0.5b/value_prefix_final/final"]["gate"]["pass"]
+
+
+def test_summarize_prompt_causal_patch_rows_classifies_strong_negative_patch_site():
+    rows = _prompt_causal_patch_rows(patch_effect=0.0, patch_direction_success=0.0)
+
+    summary = summarize_prompt_causal_patch_rows(rows, n_boot=200)
+
+    assert summary["outcome"] == "strong_negative"
+    assert summary["decision"]["causal_ready"]
+    assert not summary["decision"]["patch_pass"]
+    assert not summary["decision"]["positive"]
+
+
 def test_summarize_prompt_localization_rows_classifies_hidden_strong_negative():
     rows = _prompt_localization_rows(
         localization={
@@ -1264,6 +1287,34 @@ def _prompt_localization_rows(
                 "hidden_layer_index": 12,
                 "memory_specificity_z": localization["memory_specificity_z"],
                 "memory_rank_percentile": localization["memory_rank_percentile"],
+            }
+        )
+    return rows
+
+
+def _prompt_causal_patch_rows(
+    *,
+    patch_effect: float,
+    patch_direction_success: float,
+) -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
+    for seed in range(12):
+        rows.append(
+            {
+                "row_kind": "causal_patch",
+                "architecture": "qwen2.5-0.5b",
+                "model": "qwen2.5-0.5b",
+                "critical_slot": seed % 4,
+                "seed": seed,
+                "patch_position": "value_prefix_final",
+                "patch_layer": "final",
+                "patch_layer_index": 24,
+                "clean_margin": 1.0,
+                "corrupted_margin": -1.0,
+                "patched_margin": -1.0 + patch_effect,
+                "patch_effect": patch_effect,
+                "patch_recovery": patch_effect / 2.0,
+                "patch_direction_success": patch_direction_success,
             }
         )
     return rows
