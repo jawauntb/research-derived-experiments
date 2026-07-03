@@ -186,6 +186,27 @@ argument vocabulary to 10, and lengthens the sequence so the first commit still
 comes after all clues. It checks whether the stochastic repair/no-op gate
 survives a larger argument namespace rather than only the four-slot toy schema.
 
+Alias argument-surface pass:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/long_horizon_bottleneck/modal_stochastic_tool_failure_sweep.py \
+    --seeds 4 --train-steps 900 --architectures transformer \
+    --conditions alias_stochastic_bottleneck,alias_visible_control \
+    --critical-slots 0,1,2,3 \
+    --aliases-per-slot 3 \
+    --failure-probability 0.5 \
+    --budget-usd 25 \
+    --out artifacts/long_horizon_bottleneck/alias_argument_surface_l4.json
+```
+
+The alias pass replaces the compact slot argument with three equivalent aliases
+per canonical slot, growing the argument vocabulary to 14. The training loss
+accepts any alias in the correct slot's alias set, while the evaluator parses
+aliases back to canonical slots before applying the same stochastic repair/no-op
+gates. It is a bridge toward natural-language arguments, not free-form language.
+
 Smoke:
 
 ```bash
@@ -228,5 +249,7 @@ fixed discrete classifiers, not free-form JSON or natural-language tool use, and
 the tool semantics are toy. The stochastic failure pass adds per-episode API
 success/failure variation, but the failure process is still synthetic and
 environment-sampled. The larger-schema pass raises the argument namespace but
-still uses discrete fields. Passing gates justifies the next regime:
-natural-language argument surfaces.
+still uses compact discrete fields. The alias pass adds synonym-like argument
+equivalence classes, but those aliases are still fixed classifier labels.
+Passing gates justify either packaging the synthetic mechanism ladder or moving
+to a true text/LLM prompt regime.

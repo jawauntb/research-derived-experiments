@@ -1,6 +1,8 @@
 import pytest
 
 from experiments.long_horizon_bottleneck.core import (
+    alias_argument_id,
+    alias_argument_vocab_size,
     build_cells,
     build_horizon_cells,
     estimate_modal_cost,
@@ -9,6 +11,7 @@ from experiments.long_horizon_bottleneck.core import (
     multifield_noop_tokens,
     multifield_vocab_sizes,
     parse_multifield_action,
+    parse_alias_argument,
     parse_structured_action,
     render_multifield_action,
     render_structured_action,
@@ -443,6 +446,37 @@ def test_parse_multifield_action_rejects_out_of_range_fields():
         parse_multifield_action(0, 0, 4, 4)
 
 
+def test_alias_argument_surface_maps_synonyms_to_canonical_slots():
+    n_slots = 4
+    aliases_per_slot = 3
+
+    assert alias_argument_vocab_size(n_slots, aliases_per_slot) == 14
+    alias_ids = [
+        alias_argument_id(slot=2, alias_index=alias, n_slots=n_slots, aliases_per_slot=aliases_per_slot)
+        for alias in range(aliases_per_slot)
+    ]
+
+    for alias, argument_id in enumerate(alias_ids):
+        parsed = parse_alias_argument(argument_id, n_slots, aliases_per_slot)
+        assert parsed["slot"] == 2
+        assert parsed["alias_index"] == alias
+        assert parsed["valid"]
+        assert not parsed["missing"]
+
+    missing = parse_alias_argument(n_slots * aliases_per_slot, n_slots, aliases_per_slot)
+    assert missing == {"slot": None, "alias_index": None, "valid": True, "missing": True, "reason": None}
+    malformed = parse_alias_argument(n_slots * aliases_per_slot + 1, n_slots, aliases_per_slot)
+    assert malformed == {
+        "slot": None,
+        "alias_index": None,
+        "valid": False,
+        "missing": False,
+        "reason": "bad_alias",
+    }
+    with pytest.raises(ValueError, match="argument_id"):
+        parse_alias_argument(alias_argument_vocab_size(n_slots, aliases_per_slot), n_slots, aliases_per_slot)
+
+
 def test_summarize_multifield_rows_requires_composed_schema_and_repair_fields():
     rows = []
     for seed in range(8):
@@ -605,6 +639,67 @@ def test_summarize_stochastic_rows_requires_failed_repair_and_success_noop():
     assert summary["groups"]["stochastic_failure_bottleneck/transformer"]["gate"]["pass"]
     assert summary["groups"]["stochastic_visible_control/transformer"]["gate"]["pass"]
     assert summary["pooled_stochastic_failure_bottleneck"]["gate"]["pass"]
+
+
+def test_summarize_stochastic_rows_supports_alias_argument_conditions():
+    rows = []
+    for seed in range(8):
+        rows.append(
+            {
+                "condition": "alias_stochastic_bottleneck",
+                "architecture": "transformer",
+                "critical_slot": seed % 4,
+                "closed_loop_final_accuracy": 1.0,
+                "teacher_forced_final_accuracy": 1.0,
+                "first_field_accuracy": 1.0,
+                "first_schema_validity": 1.0,
+                "first_parsed_slot_accuracy": 1.0,
+                "first_parsed_value_accuracy": 1.0,
+                "repair_field_accuracy": 1.0,
+                "repair_schema_validity": 1.0,
+                "repair_failed_field_accuracy": 1.0,
+                "repair_failed_schema_validity": 1.0,
+                "repair_failed_parsed_slot_accuracy": 1.0,
+                "repair_failed_parsed_value_accuracy": 1.0,
+                "repair_success_noop_field_accuracy": 1.0,
+                "repair_success_schema_validity": 1.0,
+                "sampled_failure_rate": 0.5,
+                "memory_specificity_z": 1.5,
+                "memory_rank_percentile": 0.875,
+                "tool_value_specificity_z": 1.2,
+            }
+        )
+        rows.append(
+            {
+                "condition": "alias_visible_control",
+                "architecture": "transformer",
+                "critical_slot": seed % 4,
+                "closed_loop_final_accuracy": 1.0,
+                "teacher_forced_final_accuracy": 1.0,
+                "first_field_accuracy": 1.0,
+                "first_schema_validity": 1.0,
+                "first_parsed_slot_accuracy": float("nan"),
+                "first_parsed_value_accuracy": float("nan"),
+                "repair_field_accuracy": 1.0,
+                "repair_schema_validity": 1.0,
+                "repair_failed_field_accuracy": float("nan"),
+                "repair_failed_schema_validity": float("nan"),
+                "repair_failed_parsed_slot_accuracy": float("nan"),
+                "repair_failed_parsed_value_accuracy": float("nan"),
+                "repair_success_noop_field_accuracy": 1.0,
+                "repair_success_schema_validity": 1.0,
+                "sampled_failure_rate": 0.5,
+                "memory_specificity_z": 0.0,
+                "memory_rank_percentile": 0.5,
+                "tool_value_specificity_z": 0.0,
+            }
+        )
+
+    summary = summarize_stochastic_rows(rows, n_boot=200)
+
+    assert summary["groups"]["alias_stochastic_bottleneck/transformer"]["gate"]["pass"]
+    assert summary["groups"]["alias_visible_control/transformer"]["gate"]["pass"]
+    assert summary["pooled_alias_stochastic_bottleneck"]["gate"]["pass"]
 
 
 def test_summarize_stochastic_rows_fails_when_success_repair_is_not_noop():
