@@ -11,6 +11,8 @@ Expected artifacts:
 - `phase3_learned_generators_preregistration.md`
 - `learned_generators_transfer.md`
 - `learned_generators_transfer.pdf`
+- `docs/paper_reviews/structure_compatible_generalization_critical_review.md`
+- `docs/paper_reviews/inferred_transformations_intervention_critical_review.md`
 - `figures/fig1_domain_predictors.png`
 - `figures/fig2_selection_without_ood.png`
 - `figures/fig3_discovered_vs_oracle.png`
@@ -41,3 +43,7 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
 
 python3 scripts/export_structure_compatible_artifacts.py --clean
 ```
+
+The local Metaphysics export copies descriptive paper PDFs by default. Use
+`--include-supporting` when markdown reports, reviews, and standalone figures
+should be copied too.

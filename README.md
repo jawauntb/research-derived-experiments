@@ -12,6 +12,39 @@ The first synthesis is in [notes/geometric_convergence_research_synthesis.md](no
 
 **Why do independently developed systems of thought and computation keep converging on geometric descriptions of meaning, agency, and intelligence, and can we predict when that geometry is merely a passive representation versus when it becomes an active, self-maintaining attractor regime?**
 
+## Causally Grounded Agents Benchmark
+
+The current field-facing package is the **Causally Grounded Finite Agents
+Benchmark**: a proxy-resistant benchmark family for testing whether agents
+succeed for the right causal reasons, not merely whether they get final answers
+right.
+
+Start here:
+
+- [Benchmark umbrella](docs/causally_grounded_agents_benchmark.md)
+- [Shared release schema](docs/causally_grounded_agents_release_schema.md)
+- [Next empirical gap: Suite C re-engagement](docs/causally_grounded_agents_next_gap.md)
+- [Suite D/E benchmark card](experiments/long_horizon_bottleneck/BENCHMARK_CARD.md)
+- [Paper 32 design note](papers/causally_grounded_agents_benchmark/paper.md)
+
+Minimum pass rule: behavior plus at least one structure-specific gate. The
+suite inventory maps existing evidence across consequence-to-action,
+self/world attribution, re-engagement, moved-bottleneck memory, tool
+commitment/repair, and structure-compatible OOD.
+
+Public fixture smoke test for the hardened long-horizon/tool suite:
+
+```bash
+python3 -m experiments.long_horizon_bottleneck.eval \
+    --provider fixture \
+    --models fixture \
+    --suite prompt_family \
+    --seeds 1 \
+    --episodes-per-cell 1 \
+    --out artifacts/long_horizon_bottleneck/fixture_public_smoke_summary.json \
+    --jsonl artifacts/long_horizon_bottleneck/fixture_public_smoke_rows.jsonl
+```
+
 ## Public Artifact Policy
 
 The repo is public-safe by design:

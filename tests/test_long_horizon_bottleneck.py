@@ -60,6 +60,7 @@ from experiments.long_horizon_bottleneck.api_dispatch_characterization import (
     evaluate_dispatch_characterization_cases,
     render_dispatch_characterization_markdown,
     summarize_dispatch_characterization_rows,
+    summarize_dispatch_robustness,
     total_request_count as total_dispatch_characterization_request_count,
 )
 from experiments.long_horizon_bottleneck.api_blackbox_report import (
@@ -1293,6 +1294,61 @@ def test_dispatch_characterization_summary_localizes_reproduced_failure():
     assert "value-copy pressure" in cell["diagnosis"]
     assert "repair-memory pressure" in cell["diagnosis"]
     assert "Diagnostic Matrix" in markdown
+
+
+def test_dispatch_characterization_summary_keeps_critical_slots_separate():
+    cases = []
+    for critical_slot in [0, 1]:
+        cases.extend(
+            build_dispatch_characterization_cases(
+                stress_cases=["4slot_gap8"],
+                case_types=list(DISPATCH_CHARACTERIZATION_CASE_TYPES),
+                seeds=1,
+                episodes_per_cell=1,
+                critical_slot=critical_slot,
+                n_slots_values=[4],
+                slot_gap_values=[8],
+                variants_per_slot=3,
+                base_seed=20261050,
+            )
+        )
+
+    def provider(
+        _messages: list[dict[str, str]],
+        case,
+        phase: str,
+    ) -> ProviderResult:
+        if phase == "repair_success" or case.condition in {
+            "prompt_json_format_control",
+            "prompt_json_visible_control",
+        }:
+            return ProviderResult(text='{"tool":"noop"}', usage={"fixture": True})
+        value = (
+            1 - case.expected_value
+            if case.case_type == "dispatch_original" and case.critical_slot == 0
+            else case.expected_value
+        )
+        text = f'{{"tool":"read_slot","slot":"clue_{case.critical_slot}","value":{value}}}'
+        return ProviderResult(text=text, usage={"fixture": True})
+
+    rows = evaluate_dispatch_characterization_cases(
+        cases,
+        model="fixture-dispatch",
+        provider_name="fixture",
+        provider_call=provider,
+        include_prompts=False,
+    )
+    summary = summarize_dispatch_characterization_rows(rows)
+
+    assert len(summary["cells"]) == 2
+    robustness = summarize_dispatch_robustness(summary)
+
+    assert robustness["outcome"] == "broad_reproduced_localized"
+    assert robustness["original_failure_cells"] == 1
+    assert robustness["controls_passing_cells"] == 2
+    assert summary["decision"]["localized_cells"] == 1
+    assert summary["decision"]["not_reproduced_cells"] == 1
+    assert {cell["critical_slot"] for cell in summary["cells"].values()} == {0, 1}
 
 
 def _api_summary_payload(*, suite: str, outcome: str, failed: bool = False) -> dict:

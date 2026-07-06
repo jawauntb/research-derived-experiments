@@ -23,12 +23,61 @@ PAPER_DIRS = {
     "vector_first_order_self": Path("papers/vector_first_order_self"),
     "scale_normalized_vprobe": Path("papers/scale_normalized_vprobe"),
     "architecture_laws_machine_agency": Path("papers/architecture_laws_machine_agency"),
+    "structure_compatible_generalization": Path("papers/structure_compatible_generalization"),
+    "inferred_transformations_intervention": Path("papers/structure_compatible_generalization"),
+    "virtual_governor_stress_signal": Path("papers/virtual_governor_stress_signal"),
+}
+PAPER_INPUTS = {
+    name: path / "paper.md" for name, path in PAPER_DIRS.items()
+}
+PAPER_INPUTS.update(
+    {
+        "structure_compatible_generalization": Path(
+            "papers/structure_compatible_generalization/"
+            "structure_compatible_generalization.md"
+        ),
+        "inferred_transformations_intervention": Path(
+            "papers/structure_compatible_generalization/"
+            "inferred_transformations_intervention.md"
+        ),
+    }
+)
+PAPER_OUTPUTS = {
+    name: path / "paper.pdf" for name, path in PAPER_DIRS.items()
+}
+PAPER_OUTPUTS.update(
+    {
+        "structure_compatible_generalization": Path(
+            "papers/structure_compatible_generalization/"
+            "structure_compatible_generalization.pdf"
+        ),
+        "inferred_transformations_intervention": Path(
+            "papers/structure_compatible_generalization/"
+            "inferred_transformations_intervention.pdf"
+        ),
+    }
+)
+PREVIEW_PREFIXES = {
+    "current_error_calibration": "current_error_calibration",
+    "vector_first_order_self": "vector_first_order_self",
+    "scale_normalized_vprobe": "scale_normalized_vprobe",
+    "architecture_laws_machine_agency": "architecture_laws_machine_agency",
+    "structure_compatible_generalization": "structure_compatible_generalization",
+    "inferred_transformations_intervention": "inferred_transformations_intervention",
+    "virtual_governor_stress_signal": "virtual_governor_stress_signal",
 }
 PAPER_TITLES = {
     "current_error_calibration": "Current-Error Calibration for Identifying Interventions",
     "vector_first_order_self": "Vector First-Order Self",
     "scale_normalized_vprobe": "Scale-Normalized Probe Calibration",
     "architecture_laws_machine_agency": "Architecture Laws for Machine Agency",
+    "structure_compatible_generalization": "Structure-Compatible Generalization",
+    "inferred_transformations_intervention": (
+        "Inferred Transformations for Structure-Compatible Generalization"
+    ),
+    "virtual_governor_stress_signal": (
+        "Virtual-Governor Stress Signals for Local Action Recovery"
+    ),
 }
 
 
@@ -77,8 +126,7 @@ def build_pdfs(paper_names: list[str], preview_pages: list[int]) -> dict[str, An
     with tempfile.TemporaryDirectory() as tmp:
         tmp_root = Path(tmp)
         for name in paper_names:
-            rel_dir = PAPER_DIRS[name]
-            in_path = REPO_REMOTE / rel_dir / "paper.md"
+            in_path = REPO_REMOTE / PAPER_INPUTS[name]
             out_pdf = tmp_root / f"{name}.pdf"
             subprocess.run(
                 [
@@ -126,14 +174,14 @@ def main(
     preview_dir = Path("tmp/pdfs")
     preview_dir.mkdir(parents=True, exist_ok=True)
     for name in paper_names:
-        rel_dir = PAPER_DIRS[name]
-        pdf_path = rel_dir / "paper.pdf"
+        pdf_path = PAPER_OUTPUTS[name]
         pdf_path.write_bytes(payload[name]["pdf"])
         print(
             f"[lineage-modal] wrote {pdf_path} "
             f"({pdf_path.stat().st_size} bytes, {payload[name]['page_count']} pages)"
         )
         for page_idx, png in sorted(payload[name]["previews"].items()):
-            preview_path = preview_dir / f"{name}_p{int(page_idx) + 1:03d}.png"
+            preview_prefix = PREVIEW_PREFIXES.get(name, name)
+            preview_path = preview_dir / f"{preview_prefix}_p{int(page_idx) + 1:03d}.png"
             preview_path.write_bytes(png)
             print(f"[lineage-modal] wrote {preview_path} ({preview_path.stat().st_size} bytes)")

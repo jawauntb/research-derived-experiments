@@ -140,6 +140,17 @@ def build(payload_path: Path, out: Path, figure_dir: Path) -> None:
         "intervention path, but it does not yet solve learned transformation "
         "generation for vision or language."
     )
+    p.h1("5. Architecture Lesson")
+    p.para(
+        "The architecture change is small: infer which transformations are "
+        "supported by the training evidence, reject vacuous shifts, and use "
+        "the accepted family as a compatibility regularizer on unlabeled "
+        "domain points. In virtual-governor language, this converts a "
+        "system-level deployment constraint into local training pressure. "
+        "The result is not that the model understands the governor; it is "
+        "that the training loop exposes and controls one governing stress."
+    )
+    p.h1("6. Next Operation")
     p.para(
         "The next operation is to make the transformation generator learned "
         "rather than enumerated, then carry the same protocol to rotations and "

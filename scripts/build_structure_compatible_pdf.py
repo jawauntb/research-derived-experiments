@@ -149,6 +149,17 @@ def build(payload_path: Path, out: Path, figure_dir: Path) -> None:
         "by a candidate transformation family, measured compatibility can "
         "predict and improve model selection under underspecification."
     )
+    p.h1("6. Architecture Lesson")
+    p.para(
+        "The simple architecture change is to make the expected deployment "
+        "transformation an explicit selection surface. Instead of choosing "
+        "among ID-equivalent models by loss, norm, or validation alone, score "
+        "whether the learned input-output map preserves the transformation "
+        "that will carry the task into deployment. This does not certify open "
+        "world behavior, but it turns a global OOD stress into a local, "
+        "auditable model-selection pressure."
+    )
+    p.h1("7. Next Step")
     p.para(
         "The next regime transition is learned or weakly inferred "
         "transformation discovery, followed by compatibility-guided "

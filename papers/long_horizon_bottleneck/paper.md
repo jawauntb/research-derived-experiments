@@ -45,8 +45,10 @@ Anthropic, OpenAI, and OpenAI-compatible providers. A matched follow-up across
 `gemini-3.1-flash-lite`, `claude-haiku-4-5-20251001`, and `gpt-4.1-nano`
 passes the registered prompt-family behavior suite for all three providers.
 The external-stress suite is mixed: Gemini and Anthropic pass, while OpenAI
-GPT-4.1 Nano gives a controlled strong negative on two `dispatch` cells. This
-is behavioral evidence only, not hidden-state evidence.
+GPT-4.1 Nano gives a controlled strong negative on two `dispatch` cells. A
+Modal CPU robustness follow-up narrows that negative to one reproduced cell out
+of 16 `(stress, critical slot)` cells. This is behavioral evidence only, not
+hidden-state evidence.
 
 The allowed claim is deliberately modest: in this synthetic neural-agent
 setting, **future control relevance can move finite memory-state and
@@ -147,10 +149,13 @@ the agent's interaction with future-relevant information.
 | Prompt-family causal patch | Repeat causal patch over standard, compact, and audit-checklist prompt framings | 4,608 causal-patch rows | All 9 family/model pairs are causally ready and patch-pass | `prompt_json_prompt_family_causal_patch` |
 | API black-box prompt-family | One-command provider evaluator over parser-scored JSON actions | 288 rows across 3 providers | Gemini, Anthropic, and OpenAI pass all registered prompt-family behavior cells | `api_blackbox_multi_provider` |
 | API black-box external stress | Wider slots, longer gaps, retrieval and dispatch prompt framings | 240 rows across 3 providers | Gemini and Anthropic pass; OpenAI 4.1 Nano yields a controlled `dispatch` strong negative | `api_blackbox_multi_provider` |
+| API dispatch robustness | Modal CPU expansion across dispatch stress cells and critical slots | 336 rows; 720 API requests | OpenAI 4.1 Nano failure is sparse: 1/16 cells reproduces and localizes | `api_dispatch_robustness` |
 
-All confirmed sweeps used Modal `L4`, not H100/H200. The timeout-based
+All model-weight sweeps used Modal `L4`, not H100/H200. The API robustness
+follow-up used Modal CPU workers and GPT-4.1 Nano API calls. The timeout-based
 conservative spend guard for the listed confirmed reports is under USD 190 in
-aggregate; individual confirmed passes used guards of USD 1.08 to USD 17.26.
+aggregate; individual confirmed model-weight passes used guards of USD 1.08 to
+USD 17.26.
 Actual runtime was much lower than the timeout budget, with the latest
 autoregressive JSON pass averaging 15.08 seconds per remote cell. The
 prompt-level transfer used one `L4` container for all 64 logical cells, with a
@@ -169,34 +174,8 @@ multi-provider follow-up used 792 planned API requests for 528 scored rows:
 external-stress suite.
 
 Report keys map to committed summaries under
-`experiments/long_horizon_bottleneck/results/`: `base` =
-`modal_transformer_l4_8seed_2026_07_02.md`, `horizon` =
-`modal_transformer_l4_horizon_4seed_2026_07_02.md`, `commit` =
-`z_closed_loop_tool_commitment_l4_4seed_2026_07_02.md`, `repair` =
-`zz_tool_recovery_l4_4seed_2026_07_02.md`, `structured` =
-`zzz_structured_tool_call_l4_4seed_2026_07_03.md`, `multifield` =
-`zzzz_multifield_tool_schema_l4_4seed_2026_07_03.md`, `stochastic` =
-`zzzzz_stochastic_tool_failure_l4_4seed_2026_07_03.md`, `8slot` =
-`zzzzzz_stochastic_tool_failure_8slot_l4_4seed_2026_07_03.md`, and `alias` =
-`zzzzzzz_alias_argument_surface_l4_4seed_2026_07_03.md`, `text` =
-`zzzzzzzz_text_argument_surface_l4_4seed_2026_07_03.md`, `generated_json` =
-`zzzzzzzzz_generated_json_surface_l4_4seed_2026_07_03.md`, and
-`autoregressive_json` =
-`zzzzzzzzzz_autoregressive_json_surface_l4_4seed_2026_07_03.md`, and
-`prompt_json_transfer` =
-`zzzzzzzzzzz_prompt_json_transfer_l4_4seed_2026_07_03.md`, and
-`prompt_json_hidden_localization` =
-`zzzzzzzzzzzzz_prompt_json_hidden_localization_l4_4seed_2026_07_03.md`, and
-`prompt_json_fixed_action_localization` =
-`zzzzzzzzzzzzzz_prompt_json_fixed_action_localization_l4_4seed_2026_07_03.md`,
-and `prompt_json_causal_patch` =
-`zzzzzzzzzzzzzzz_prompt_json_causal_patch_l4_4seed_2026_07_03.md`, and
-`prompt_json_prompt_family_causal_patch` =
-`zzzzzzzzzzzzzzzz_prompt_json_prompt_family_causal_patch_l4_4seed_2026_07_03.md`,
-and `api_blackbox_gemini` =
-`zzzzzzzzzzzzzzzzz_api_blackbox_gemini_flash_lite_2026_07_06.md`, and
-`api_blackbox_multi_provider` =
-`zzzzzzzzzzzzzzzzzz_api_blackbox_multi_provider_2026_07_06.md`.
+`experiments/long_horizon_bottleneck/results/`; the README maintains the full
+command ledger.
 
 ## 4. Prompt-Level JSON Transfer and Hidden Localization
 
@@ -318,16 +297,18 @@ behavioral evidence and a provider-specific stress failure surface, but because
 the API is black-box it does not add hidden-localization or causal-patch
 evidence.
 
-A dispatch-failure characterization then targeted the two OpenAI `dispatch`
-stress cells with 28 scored rows and 60 API requests. The run kept the parser,
-controls, provider adapter, and repair/no-op phases fixed while comparing the
+A Modal CPU dispatch-robustness characterization then expanded that OpenAI
+`dispatch` follow-up across four stress cells and critical slots 0-3, for 336
+scored rows and 720 API requests. The run kept the parser, controls, provider
+adapter, repair/no-op phases, and diagnostic variants fixed while comparing the
 original dispatch wording against neutral wording, value-copy assistance, and
-repair hinting. The result was `partially_reproduced_localized`: the 4-slot,
-gap-8 original failure did not reproduce, while the 8-slot, gap-16 failure
-reproduced as a failed-repair value miss. Neutral wording and copy assistance
-passed; repair hinting still failed. The allowed interpretation is narrow: this
-is black-box behavioral localization of one reproduced OpenAI stress failure,
-not a hidden-state mechanism claim.
+repair hinting. The result was `sparse_reproduced_localized`: 15 of 16 cells
+passed, while only the 8-slot, gap-16, critical-slot-0 cell reproduced as a
+failed-repair value miss. Neutral wording, copy assistance, and repair hinting
+all passed in the reproduced cell. The allowed interpretation is narrower than
+the initial stress negative: this is black-box behavioral localization of a
+sparse OpenAI repair-surface pressure point, not a broadly stable dispatch
+failure and not a hidden-state mechanism claim.
 
 ## 5. Interpretation
 
@@ -363,11 +344,12 @@ The API result adds operational evidence: several current black-box models pass
 the registered prompt-family suite, and the stress suite can produce useful
 provider-specific negatives rather than only confirmations. OpenAI 4.1 Nano
 passes the main prompt-family gate but fails narrow `dispatch` stress cells
-under passing controls. A targeted follow-up partially reproduces and localizes
-the failure to the harder 8-slot, gap-16 dispatch repair surface, where neutral
-wording and value-copy assistance pass but repair hinting does not. This does
-not locate state inside any API model; it shows other labs can run the prompts
-and parser without local weights, hooks, or GPUs.
+under passing controls. A robustness follow-up narrows the failure to one
+8-slot, gap-16, critical-slot-0 repair surface out of 16 tested cells; neutral
+wording, value-copy assistance, and repair hinting pass. This does not locate
+state inside any API model; it shows other labs can run the prompts and parser
+without local weights, hooks, or GPUs, and that the OpenAI dispatch negative is
+sparse rather than broadly stable.
 
 ## 6. Architecture Law: Commitment Surfaces
 
@@ -444,16 +426,16 @@ synthetic behavior, tool commitment, generated JSON, prompt-level behavior,
 hidden localization, fixed-action localization, causal patching, prompt-family
 robustness, and black-box API behavior all have bounded terminal results.
 
-The next regimes answer different questions: expand dispatch characterization
-across seeds, slots, model sizes, and endpoints; broaden external validity over
-longer contexts and paraphrase families; test multi-token or path-level causal
-mediation; transfer to real tool traces; add multi-step planning; and compare
-the metric to attention, activation patching, and linear probes.
+The next regimes answer different questions: expand dispatch robustness across
+model sizes and endpoints; broaden external validity over longer contexts and
+paraphrase families; test multi-token or path-level causal mediation; transfer
+to real tool traces; add multi-step planning; and compare the metric to
+attention, activation patching, and linear probes.
 
 The most valuable immediate next step is to publish the compact benchmark card:
 the current package now includes a multi-provider API prompt-family positive and
-a provider-specific dispatch stress negative with one reproduced failure
-localized to dispatch wording/value-copy pressure.
+a provider-specific dispatch stress negative narrowed by robustness follow-up to
+one sparse, reproduced repair-surface failure.
 
 ## 10. Reproducibility
 
@@ -470,7 +452,9 @@ prompt-family and external-stress runs,
 python3 -m experiments.long_horizon_bottleneck.api_blackbox_report for the
 multi-provider aggregate, and
 python3 -m experiments.long_horizon_bottleneck.api_dispatch_characterization
-for the targeted dispatch-failure follow-up.
+for the targeted dispatch-failure follow-up. The Modal entry point
+modal_api_dispatch_robustness_sweep.py runs the multi-slot API robustness grid
+on cheap CPU containers.
 
 The raw Modal/API outputs are kept under gitignored artifacts/; committed
 result reports in experiments/long_horizon_bottleneck/results/ summarize every

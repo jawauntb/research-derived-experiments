@@ -46,12 +46,24 @@ def source_files(*, include_supporting: bool) -> list[Path]:
                 "structure_compatible_l4_2026_07_06.md"
             ),
             Path(
+                "docs/paper_reviews/"
+                "structure_compatible_generalization_critical_review.md"
+            ),
+            Path(
                 "papers/structure_compatible_generalization/"
                 "inferred_transformations_intervention.md"
             ),
             Path(
                 "experiments/structure_compatible_generalization/results/"
                 "phase2_transformations_2026_07_06.md"
+            ),
+            Path(
+                "docs/paper_reviews/"
+                "inferred_transformations_intervention_critical_review.md"
+            ),
+            Path(
+                "papers/structure_compatible_generalization/"
+                "phase3_learned_generators_preregistration.md"
             ),
             Path(
                 "papers/structure_compatible_generalization/"

@@ -517,6 +517,29 @@ that is relieved by neutral wording and copy assistance but not by repair
 hinting. See
 `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzzzzzz_api_dispatch_characterization_openai_gpt41_nano_2026_07_06.md`.
 
+Dispatch robustness characterization on Modal CPU:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+    experiments/long_horizon_bottleneck/modal_api_dispatch_robustness_sweep.py \
+    --models gpt-4.1-nano \
+    --critical-slots 0,1,2,3 \
+    --seeds 3 \
+    --episodes-per-cell 1 \
+    --max-requests 720 \
+    --max-output-tokens 64 \
+    --sleep-seconds 0.05
+```
+
+The Modal follow-up expands the same diagnostic variants across all four
+4/8-slot by gap-8/16 stress cells and critical slots 0-3. The result is
+`sparse_reproduced_localized`: 336 scored rows, 720 API requests, all controls
+passing, and only one reproduced original dispatch failure out of 16 cells:
+8-slot/gap-16 at critical slot 0. That failure is a failed-repair value miss
+and is relieved by neutral wording, copy assistance, and repair hinting. See
+`experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzzzzzzz_api_dispatch_robustness_openai_gpt41_nano_2026_07_06.md`.
+
 Smoke:
 
 ```bash

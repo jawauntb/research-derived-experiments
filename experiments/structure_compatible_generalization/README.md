@@ -51,6 +51,10 @@ Export paper artifacts to the local Metaphysics archive:
 python3 scripts/export_structure_compatible_artifacts.py
 ```
 
+The export intentionally does not copy standalone figure PNGs. Figures live
+under `papers/structure_compatible_generalization/figures/` and are embedded in
+the paper PDFs.
+
 Phase-two inferred-transformation intervention sweep:
 
 ```bash
