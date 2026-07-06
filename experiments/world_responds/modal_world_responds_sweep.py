@@ -16,6 +16,11 @@ Conditions:
   - oracle_probe_value                  : Upper bound (probe-value oracle)
   - oracle_source                       : Upper bound (semantic labels)
 
+Paper 23A mode adds targeted re-engagement conditions:
+  - learned_scale_norm_audit_floor      : Learned probe + persistent audit floor
+  - learned_scale_norm_fast_slow        : Learned probe + fast/slow residual detector
+  - oracle_probe_value_true             : True one-step reducible-error oracle
+
 Hazard: h(t+1) = γ·h(t) + κ·I[consume_trigger]
 Regime A (eps 0-249): trigger = consume food
 Regime B (eps 250-499): trigger = consume medicine
@@ -87,6 +92,10 @@ AUDIT_FLOOR = 0.05
 WARMUP_PROBE_FLOOR = 0.33
 WARMUP_EPISODES = 50
 REGIME_SHIFT_EPISODE = 250
+SURPRISE_FAST_ALPHA = 0.35
+SURPRISE_SLOW_ALPHA = 0.03
+SURPRISE_ABS_THRESHOLD = 0.08
+SURPRISE_MARGIN = 0.04
 
 ALL_CONDITIONS = [
     "p21a_independent_baseline",
@@ -101,8 +110,19 @@ ALL_CONDITIONS = [
     "oracle_source",
 ]
 
+PAPER23A_CONDITIONS = [
+    "learned_scale_norm_current_replay",
+    "learned_scale_norm_audit_floor",
+    "learned_scale_norm_fast_slow",
+    "oracle_probe_value",
+    "oracle_probe_value_true",
+    "matched_random_time_budget",
+]
+
 LEARNED_PROBE_CONDS = {
     "learned_scale_norm_current_replay",
+    "learned_scale_norm_audit_floor",
+    "learned_scale_norm_fast_slow",
 }
 
 THREE_HEAD_CONDS = {
@@ -274,6 +294,11 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
     bucket_null_density_train = {b: 0 for b in BUCKETS}
     bucket_null_density_pre_shift = {b: 0 for b in BUCKETS}
     bucket_null_density_post_shift = {b: 0 for b in BUCKETS}
+    bucket_null_sum_E = {b: 0.0 for b in BUCKETS}
+    bucket_null_sum_D = {b: 0.0 for b in BUCKETS}
+    surprise_fast = {b: 0.0 for b in BUCKETS}
+    surprise_slow = {b: 0.0 for b in BUCKETS}
+    surprise_seen = {b: 0 for b in BUCKETS}
 
     var_state = {"mu_E": 0.0, "var_E": 0.05,
                   "mu_D": 0.0, "var_D": 0.05, "n_updates": 0}
@@ -329,6 +354,46 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
         scale_E = (var_state["var_E"] + VAR_EPS) ** 0.5
         scale_D = (var_state["var_D"] + VAR_EPS) ** 0.5
         return (raw_E / scale_E, raw_D / scale_D)
+
+    def true_null_probe_value(c, l, h, w_pred_E, w_pred_D, bucket):
+        """Expected absolute-error reduction for one null observation.
+
+        This is an oracle for a bucket-mean null estimator, not a full neural
+        training rollout. It fixes the Paper 22 error-proxy flaw by asking how
+        much one more null sample is expected to reduce reducible error.
+        """
+        role_name = role_of(c, l)
+        p_E = shock_prob_E(role_name, h)
+        p_D = shock_prob_D(role_name)
+        e_no = -ENERGY_DECAY
+        e_yes = -ENERGY_DECAY + SHOCK_E_MAG
+        d_no = DAMAGE_ACCRUAL
+        d_yes = DAMAGE_ACCRUAL + SHOCK_D_MAG
+        true_E = (1.0 - p_E) * e_no + p_E * e_yes
+        true_D = (1.0 - p_D) * d_no + p_D * d_yes
+
+        n = bucket_count[bucket]
+        est_E = bucket_null_sum_E[bucket] / n if n > 0 else w_pred_E
+        est_D = bucket_null_sum_D[bucket] / n if n > 0 else w_pred_D
+
+        def voi(est, true_mean, p, low, high):
+            now = abs(est - true_mean)
+            after_low = (est * n + low) / (n + 1)
+            after_high = (est * n + high) / (n + 1)
+            expected_after = (1.0 - p) * abs(after_low - true_mean) + p * abs(after_high - true_mean)
+            return max(0.0, now - expected_after)
+
+        return max(
+            voi(est_E, true_E, p_E, e_no, e_yes),
+            voi(est_D, true_D, p_D, d_no, d_yes),
+        )
+
+    def fast_slow_reengagement_signal(bucket):
+        if surprise_seen[bucket] < 4:
+            return False
+        fast = surprise_fast[bucket]
+        slow = surprise_slow[bucket]
+        return fast > SURPRISE_ABS_THRESHOLD and (fast - slow) > SURPRISE_MARGIN
 
     def step_loss(mb):
         actions_arr = np.array([bb["action"] for bb in mb], dtype=np.int64)
@@ -592,10 +657,20 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
                 err_E = abs(w_pred_E - true_w_E)
                 err_D = abs(w_pred_D - true_w_D)
                 take_null = (max(err_E, err_D) > cost)
+            elif condition == "oracle_probe_value_true":
+                b_now = bucket_key(c_, l_, E, D)
+                take_null = true_null_probe_value(c_, l_, h, w_pred_E, w_pred_D, b_now) > cost
             elif condition == "oracle_source":
                 take_null = (rng_online.rand() < 0.33)
             elif condition == "learned_scale_norm_current_replay":
                 take_null = (v_E > tau_E_perdim) or (v_D > tau_D_perdim)
+            elif condition == "learned_scale_norm_audit_floor":
+                learned_fire = (v_E > tau_E_perdim) or (v_D > tau_D_perdim)
+                take_null = learned_fire or (rng_online.rand() < AUDIT_FLOOR)
+            elif condition == "learned_scale_norm_fast_slow":
+                b_now = bucket_key(c_, l_, E, D)
+                learned_fire = (v_E > tau_E_perdim) or (v_D > tau_D_perdim)
+                take_null = learned_fire or fast_slow_reengagement_signal(b_now)
 
             if take_null:
                 action = 2
@@ -623,6 +698,27 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
             exogenous_D = BASE_SHOCK_D[role_name] * SHOCK_D_MAG
 
             b_now = bucket_key(c_, l_, E, D)
+            with torch.no_grad():
+                a_sel = torch.zeros(1, n_actions, device=device)
+                a_sel[0, action] = 1.0
+                ps_sel = self_head(torch.cat([z_cur, ff_cur, a_sel], dim=-1)).squeeze(0)
+                pred_total_E = float(ps_sel[0].item() + w_pred_E)
+                pred_total_D = float(ps_sel[1].item() + w_pred_D)
+            surprise = max(abs(pred_total_E - total_E), abs(pred_total_D - total_D))
+            if surprise_seen[b_now] == 0:
+                surprise_fast[b_now] = surprise
+                surprise_slow[b_now] = surprise
+            else:
+                surprise_fast[b_now] = (
+                    (1.0 - SURPRISE_FAST_ALPHA) * surprise_fast[b_now]
+                    + SURPRISE_FAST_ALPHA * surprise
+                )
+                surprise_slow[b_now] = (
+                    (1.0 - SURPRISE_SLOW_ALPHA) * surprise_slow[b_now]
+                    + SURPRISE_SLOW_ALPHA * surprise
+                )
+            surprise_seen[b_now] += 1
+
             buffer.append(dict(
                 obs=obs_raw, E=float(E), D=float(D), action=int(action),
                 total_E=float(total_E), total_D=float(total_D),
@@ -658,6 +754,8 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
                          float(total_E), float(total_D))
                     )
                 bucket_count[b_now] += 1
+                bucket_null_sum_E[b_now] += float(total_E)
+                bucket_null_sum_D[b_now] += float(total_D)
                 bucket_null_density_train[b_now] += 1
                 if post_shift_window:
                     bucket_null_density_post_shift[b_now] += 1
@@ -850,6 +948,9 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
         bucket_null_density_train=bucket_null_density_train,
         bucket_null_density_pre_shift=bucket_null_density_pre_shift,
         bucket_null_density_post_shift=bucket_null_density_post_shift,
+        surprise_fast=surprise_fast,
+        surprise_slow=surprise_slow,
+        surprise_seen=surprise_seen,
         var_state=var_state,
         thresholds={"tau_E": tau_E_perdim, "tau_D": tau_D_perdim},
     )
@@ -879,7 +980,108 @@ def _flatten_to_row(r):
     if r.get("learning_curve"):
         row["final_lc_mae"] = r["learning_curve"][-1]["total_food_E_poison_D_mae"]
         row["final_cum_nulls"] = r["learning_curve"][-1]["cum_null_count"]
+    affected_roles = ("food", "medicine")
+    pre = sum(
+        v for b, v in r.get("bucket_null_density_pre_shift", {}).items()
+        if any(role in b for role in affected_roles)
+    )
+    post = sum(
+        v for b, v in r.get("bucket_null_density_post_shift", {}).items()
+        if any(role in b for role in affected_roles)
+    )
+    row["affected_pre_shift_nulls"] = pre
+    row["affected_post_shift_nulls"] = post
+    row["affected_post_pre_ratio"] = post / max(pre, 1)
     return row
+
+
+def _write_paper23a_report(report_path: Path, payload: dict[str, Any]) -> None:
+    rows = payload["summary"]
+    manifest = payload["manifest"]
+    conditions = manifest["conditions"]
+    by_cond = {cond: [r for r in rows if r["condition"] == cond] for cond in conditions}
+
+    def mean(cond, key):
+        vals = [r.get(key, 0.0) for r in by_cond.get(cond, [])]
+        return sum(vals) / len(vals) if vals else 0.0
+
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    lines = [
+        "# Paper 23A: Probe Re-Engagement and True Probe-Value Oracle",
+        "",
+        "Date: 2026-07-06",
+        "",
+        "## Discovery-Regime Audit",
+        "",
+        "Question: can the Paper 22 re-engagement failure be fixed by adding a persistent audit floor or a fast/slow surprise detector, and does a reducible-error oracle behave differently from the current-error proxy?",
+        "",
+        "Current regime:",
+        "- Artifact types: Modal sweep JSON, committed result report, paper-ready figures.",
+        "- Operations: world-responds hazard environment, null-anchor self/world attribution, learned V_probe, oracle probe rules.",
+        "- Gates/verifiers: post-shift affected-bucket probe ratio, final learning-curve MAE, Modal lint/type/publication checks.",
+        "- Known limitations: the true probe-value oracle is exact for a bucket-mean null estimator, not a full neural retraining rollout.",
+        "",
+        "Action class:",
+        "- Retrieval/search/discovery: search inside the Paper 22 artifact schema, with one verifier upgrade.",
+        "- Why: the run adds re-engagement conditions and replaces current-error oracle logic with a reducible-error oracle proxy.",
+        "",
+        "Gate:",
+        "- Acceptance rule: a re-engagement condition should restore nonzero post-shift affected-bucket probes while keeping final LC MAE in the same broad range as the baseline learned probe.",
+        "- Withheld/rejected rule: if post-shift probes remain zero, the condition does not close G7.",
+        "",
+        "## Summary Metrics",
+        "",
+        "| Condition | Final LC MAE | Cum nulls | Affected pre-shift nulls | Affected post-shift nulls | Post/pre |",
+        "|---|---:|---:|---:|---:|---:|",
+    ]
+    for cond in conditions:
+        lines.append(
+            f"| `{cond}` | {mean(cond, 'final_lc_mae'):.3f} | "
+            f"{mean(cond, 'final_cum_nulls'):.1f} | "
+            f"{mean(cond, 'affected_pre_shift_nulls'):.1f} | "
+            f"{mean(cond, 'affected_post_shift_nulls'):.1f} | "
+            f"{mean(cond, 'affected_post_pre_ratio'):.3f} |"
+        )
+
+    baseline_post = mean("learned_scale_norm_current_replay", "affected_post_shift_nulls")
+    audit_post = mean("learned_scale_norm_audit_floor", "affected_post_shift_nulls")
+    fast_slow_post = mean("learned_scale_norm_fast_slow", "affected_post_shift_nulls")
+    oracle_true_post = mean("oracle_probe_value_true", "affected_post_shift_nulls")
+
+    lines.extend([
+        "",
+        "## Verdict",
+        "",
+    ])
+    if audit_post > baseline_post or fast_slow_post > baseline_post:
+        lines.append(
+            "Accepted as a re-engagement search result: at least one re-engagement condition increases post-shift affected-bucket probing over the learned baseline."
+        )
+    else:
+        lines.append(
+            "Rejected as a G7 fix: neither re-engagement condition increases post-shift affected-bucket probing over baseline."
+        )
+    lines.extend([
+        "",
+        "## Interpretation",
+        "",
+        f"- Baseline post-shift affected probing: {baseline_post:.1f}.",
+        f"- Audit-floor post-shift affected probing: {audit_post:.1f}.",
+        f"- Fast/slow post-shift affected probing: {fast_slow_post:.1f}.",
+        f"- True reducible-error oracle post-shift affected probing: {oracle_true_post:.1f}.",
+        "",
+        "The core test is whether the agent has a path back into inquiry after the world changes. Final MAE matters, but G7 is specifically about avoiding self-confirming silence.",
+        "",
+        "## Next Move",
+        "",
+        "Use this result to decide whether Paper 23A should become a full paper or whether the verifier needs a stronger neural-retraining oracle before publication.",
+        "",
+        "## Artifact Ledger",
+        "",
+        f"- Raw ignored payload: `{manifest.get('out_path', 'artifacts/world_responds/reengagement_23a_v1.json')}`",
+        f"- Committed report: `{report_path}`",
+    ])
+    report_path.write_text("\n".join(lines) + "\n")
 
 
 @app.local_entrypoint()
@@ -889,13 +1091,21 @@ def main(
     batch_size: int = 48,
     eval_episodes: int = 50,
     out: str = "artifacts/world_responds/sweep_v1.json",
+    mode: str = "paper22",
+    report: str = "experiments/world_responds/results/reengagement_23a_2026_07_06.md",
 ) -> None:
     seed_list = [int(s.strip()) for s in seeds.split(",") if s.strip()]
     primary_cost = COST_HEADLINE
+    if mode not in {"paper22", "paper23a"}:
+        raise ValueError(f"Unknown mode {mode!r}; expected 'paper22' or 'paper23a'")
+    if mode == "paper23a" and out == "artifacts/world_responds/sweep_v1.json":
+        out = "artifacts/world_responds/reengagement_23a_v1.json"
 
-    pass1_conds = [c for c in ALL_CONDITIONS
-                    if c not in ("matched_random_time_budget",
-                                  "matched_random_bucket_dim")]
+    conditions = PAPER23A_CONDITIONS if mode == "paper23a" else ALL_CONDITIONS
+    matched_conds = ["matched_random_time_budget"]
+    if mode == "paper22":
+        matched_conds.append("matched_random_bucket_dim")
+    pass1_conds = [c for c in conditions if c not in set(matched_conds)]
     pass1_args = []
     for sd in seed_list:
         for cond in pass1_conds:
@@ -911,14 +1121,13 @@ def main(
     for r in pass1_results:
         if r["condition"] == "learned_scale_norm_current_replay":
             total_nulls = sum(r["bucket_null_density_train"].values())
-            # rough rate estimate
-            rates[int(r["seed"])] = total_nulls / (r.get("n_actions", 500) * 25)
+            rates[int(r["seed"])] = total_nulls / max(n_episodes * T_MAX, 1)
     print(f"  estimated headline rates: {rates}")
 
     pass2_args = []
     for sd in seed_list:
         target_rate = rates.get(sd, 0.20)
-        for cond_name in ("matched_random_time_budget", "matched_random_bucket_dim"):
+        for cond_name in matched_conds:
             pass2_args.append(dict(
                 seed=sd, condition=cond_name, cost=primary_cost,
                 target_null_rate=target_rate,
@@ -933,14 +1142,21 @@ def main(
     out_path.parent.mkdir(parents=True, exist_ok=True)
     summary_rows = [_flatten_to_row(r) for r in results]
 
-    out_path.write_text(json.dumps({
+    payload = {
         "manifest": dict(
-            seeds=seed_list, conditions=ALL_CONDITIONS,
+            mode=mode,
+            seeds=seed_list, conditions=conditions,
             cost_headline=COST_HEADLINE,
+            out_path=str(out_path),
             n_episodes=n_episodes, batch_size=batch_size,
             eval_episodes=eval_episodes,
             warmup_episodes=WARMUP_EPISODES,
             regime_shift_episode=REGIME_SHIFT_EPISODE,
+            audit_floor=AUDIT_FLOOR,
+            surprise_fast_alpha=SURPRISE_FAST_ALPHA,
+            surprise_slow_alpha=SURPRISE_SLOW_ALPHA,
+            surprise_abs_threshold=SURPRISE_ABS_THRESHOLD,
+            surprise_margin=SURPRISE_MARGIN,
             hazard_gamma=HAZARD_GAMMA, hazard_kappa=HAZARD_KAPPA,
             hazard_amp=HAZARD_AMP,
             history_dim=HISTORY_DIM,
@@ -953,7 +1169,10 @@ def main(
         ),
         "summary": summary_rows,
         "results": results,
-    }, indent=2, sort_keys=True))
+    }
+    out_path.write_text(json.dumps(payload, indent=2, sort_keys=True))
+    if mode == "paper23a":
+        _write_paper23a_report(Path(report), payload)
 
     print(f"\nsummary ({len(summary_rows)} cells):")
     print(f"{'cond':<46} {'seed':>10} | {'psE_f':>6} {'psD_p':>6} {'pwE_f':>6} {'medH':>5} {'ret':>5} {'lc_mae':>7}")
