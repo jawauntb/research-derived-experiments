@@ -74,3 +74,36 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
   --artifacts-only \
   --artifact-input artifacts/structure_compatible_generalization/phase2_transformations.json
 ```
+
+Phase-three learned-generator transfer sweep:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/structure_compatible_generalization/modal_phase3_learned_generators.py \
+  --modular-shards 3 --vision-shards 3 \
+  --modular-configs 90 --vision-base 36 \
+  --modular-epochs 350 --vision-epochs 220 \
+  --budget-usd 50 \
+  --out artifacts/structure_compatible_generalization/phase3_learned_generators.json
+```
+
+Phase-four language/template substitution sweep:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/structure_compatible_generalization/modal_language_template_substitution.py \
+  --shards 4 --n-configs 96 --epochs 260 --budget-usd 40 \
+  --out artifacts/structure_compatible_generalization/language_template_substitution.json
+```
+
+Generate phase-four report and descriptive paper artifacts:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/structure_compatible_generalization/modal_language_template_substitution.py \
+  --artifacts-only \
+  --artifact-input artifacts/structure_compatible_generalization/language_template_substitution.json
+```

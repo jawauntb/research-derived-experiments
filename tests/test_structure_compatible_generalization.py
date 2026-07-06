@@ -34,6 +34,17 @@ from experiments.structure_compatible_generalization.phase3_learned_generators i
     run_modular_generator_sweep,
     run_vision_generator_sweep,
 )
+from experiments.structure_compatible_generalization.template_language_domain import (
+    default_min_support,
+    exact_language_rows,
+    infer_language_transforms,
+    language_table_compatibility,
+    labels_for_examples,
+    base_train_examples as language_base_train_examples,
+    local_template_shortcut_table,
+    run_language_template_sweep,
+    true_language_table,
+)
 from experiments.structure_compatible_generalization.transformation_discovery import (
     close_shift_family,
     infer_supported_shifts,
@@ -308,3 +319,105 @@ def test_tiny_vision_generator_sweep_emits_paired_regimes() -> None:
     for row in rows:
         assert row.domain == "vision_rotation_learned_generator"
         assert row.compatibility_discovered is not None
+
+
+def test_language_generator_discovers_number_and_template_substitutions() -> None:
+    modulus = 7
+    n_templates = 4
+    train = language_base_train_examples(
+        modulus=modulus,
+        train_window=3,
+        n_templates=n_templates,
+    )
+    labels = labels_for_examples(
+        train,
+        modulus=modulus,
+        train_window=3,
+    )
+    family = infer_language_transforms(
+        train,
+        labels,
+        modulus=modulus,
+        n_templates=n_templates,
+        min_support=default_min_support(modulus, 3, n_templates),
+        max_transforms=16,
+    )
+    selected = set(family.selected_transforms)
+
+    assert ("a_shift", 1, 0, 1) in selected
+    assert ("b_shift", 1, 0, 1) in selected
+    assert any(item[0] == "template_swap" and item[3] == 0 for item in selected)
+
+
+def test_language_compatibility_separates_rule_from_shortcut() -> None:
+    modulus = 11
+    n_templates = 4
+    train_window = 4
+    train = language_base_train_examples(
+        modulus=modulus,
+        train_window=train_window,
+        n_templates=n_templates,
+    )
+    labels = labels_for_examples(
+        train,
+        modulus=modulus,
+        train_window=train_window,
+    )
+    family = infer_language_transforms(
+        train,
+        labels,
+        modulus=modulus,
+        n_templates=n_templates,
+        min_support=default_min_support(modulus, train_window, n_templates),
+        max_transforms=24,
+    )
+    rule_score = language_table_compatibility(
+        true_language_table(modulus, n_templates),
+        modulus=modulus,
+        n_templates=n_templates,
+        transforms=family.selected_transforms,
+    )
+    shortcut_score = language_table_compatibility(
+        local_template_shortcut_table(modulus, train_window, n_templates),
+        modulus=modulus,
+        n_templates=n_templates,
+        transforms=family.selected_transforms,
+    )
+
+    assert rule_score == 1.0
+    assert shortcut_score < 0.4
+
+
+def test_language_exact_rows_emit_common_schema() -> None:
+    rows = exact_language_rows(
+        modulus=7,
+        train_window=3,
+        n_templates=4,
+        max_transforms=16,
+    )
+    assert {row.model_id for row in rows} == {
+        "true_rule",
+        "local_template_shortcut",
+    }
+    assert all(row.compatibility_discovered is not None for row in rows)
+    assert summarize_rows(rows)["by_domain"]["language_template_exact"]["n_rows"] == 2
+
+
+def test_tiny_language_template_sweep_records_learned_generator() -> None:
+    if importlib.util.find_spec("torch") is None:
+        pytest.skip()
+    rows = run_language_template_sweep(
+        n_configs=1,
+        epochs=2,
+        base_seed=2468,
+        regularization_values=(0.0, 0.05),
+        device="cpu",
+        include_exact=False,
+        max_transforms=12,
+    )
+    assert len(rows) == 2
+    for row in rows:
+        assert row.domain == "language_template_substitution"
+        assert row.compatibility_discovered is not None
+        assert "learned_generator" in row.metadata
+        assert "regularizer_transforms" in row.metadata

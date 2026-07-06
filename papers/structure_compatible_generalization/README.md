@@ -11,6 +11,9 @@ Expected artifacts:
 - `phase3_learned_generators_preregistration.md`
 - `learned_generators_transfer.md`
 - `learned_generators_transfer.pdf`
+- `language_template_substitution_preregistration.md`
+- `language_template_substitution.md`
+- `language_template_substitution.pdf`
 - `docs/paper_reviews/structure_compatible_generalization_critical_review.md`
 - `docs/paper_reviews/inferred_transformations_intervention_critical_review.md`
 - `figures/fig1_domain_predictors.png`
@@ -19,6 +22,8 @@ Expected artifacts:
 - `figures/fig4_regularization_intervention.png`
 - `figures/fig5_learned_generator_predictors.png`
 - `figures/fig6_learned_generator_interventions.png`
+- `figures/fig7_language_template_predictors.png`
+- `figures/fig8_language_template_intervention.png`
 
 Build flow:
 
@@ -40,6 +45,12 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
   experiments/structure_compatible_generalization/modal_phase3_learned_generators.py \
   --artifacts-only \
   --artifact-input artifacts/structure_compatible_generalization/phase3_learned_generators.json
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/structure_compatible_generalization/modal_language_template_substitution.py \
+  --artifacts-only \
+  --artifact-input artifacts/structure_compatible_generalization/language_template_substitution.json
 
 python3 scripts/export_structure_compatible_artifacts.py --clean
 ```
