@@ -16,17 +16,37 @@ DEFAULT_DEST = Path(
 
 def source_files() -> list[Path]:
     files = [
-        Path("papers/structure_compatible_generalization/paper.md"),
-        Path("papers/structure_compatible_generalization/paper.pdf"),
+        Path(
+            "papers/structure_compatible_generalization/"
+            "structure_compatible_generalization.md"
+        ),
+        Path(
+            "papers/structure_compatible_generalization/"
+            "structure_compatible_generalization.pdf"
+        ),
         Path(
             "experiments/structure_compatible_generalization/results/"
             "structure_compatible_l4_2026_07_06.md"
         ),
+        Path(
+            "papers/structure_compatible_generalization/"
+            "inferred_transformations_intervention.md"
+        ),
+        Path(
+            "papers/structure_compatible_generalization/"
+            "inferred_transformations_intervention.pdf"
+        ),
+        Path(
+            "experiments/structure_compatible_generalization/results/"
+            "phase2_transformations_2026_07_06.md"
+        ),
     ]
+    required = files[:3]
+    optional = files[3:]
     figure_dir = Path("papers/structure_compatible_generalization/figures")
     if figure_dir.exists():
-        files.extend(sorted(figure_dir.glob("*.png")))
-    return files
+        optional.extend(sorted(figure_dir.glob("*.png")))
+    return required + optional
 
 
 def export(dest: Path, *, dry_run: bool) -> list[Path]:
@@ -64,4 +84,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

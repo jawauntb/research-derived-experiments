@@ -51,3 +51,22 @@ Export paper artifacts to the local Metaphysics archive:
 python3 scripts/export_structure_compatible_artifacts.py
 ```
 
+Phase-two inferred-transformation intervention sweep:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/structure_compatible_generalization/modal_phase2_transformations.py \
+  --shards 6 --n-configs 180 --epochs 450 --budget-usd 50 \
+  --out artifacts/structure_compatible_generalization/phase2_transformations.json
+```
+
+Generate the phase-two report and descriptive paper artifacts:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/structure_compatible_generalization/modal_phase2_transformations.py \
+  --artifacts-only \
+  --artifact-input artifacts/structure_compatible_generalization/phase2_transformations.json
+```

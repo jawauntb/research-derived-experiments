@@ -163,7 +163,10 @@ def main() -> int:
     parser.add_argument(
         "--out",
         type=Path,
-        default=Path("papers/structure_compatible_generalization/paper.pdf"),
+        default=Path(
+            "papers/structure_compatible_generalization/"
+            "structure_compatible_generalization.pdf"
+        ),
     )
     parser.add_argument(
         "--figure-dir",

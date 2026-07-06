@@ -201,8 +201,8 @@ That schema is the bridge between experiments and the paper.
 
 - `experiments/structure_compatible_generalization/summarize_suite.py`
 - `experiments/structure_compatible_generalization/results/structure_compatible_l4_2026_07_06.md`
-- `papers/structure_compatible_generalization/paper.md`
-- `papers/structure_compatible_generalization/paper.pdf`
+- `papers/structure_compatible_generalization/structure_compatible_generalization.md`
+- `papers/structure_compatible_generalization/structure_compatible_generalization.pdf`
 - `papers/structure_compatible_generalization/figures/`
 - `scripts/build_structure_compatible_pdf.py`
 - `tests/test_structure_compatible_generalization.py`
