@@ -25,6 +25,7 @@ PAPER_DIRS = {
     "architecture_laws_machine_agency": Path("papers/architecture_laws_machine_agency"),
     "structure_compatible_generalization": Path("papers/structure_compatible_generalization"),
     "inferred_transformations_intervention": Path("papers/structure_compatible_generalization"),
+    "virtual_governor_stress_signal": Path("papers/virtual_governor_stress_signal"),
 }
 PAPER_INPUTS = {
     name: path / "paper.md" for name, path in PAPER_DIRS.items()
@@ -63,6 +64,7 @@ PREVIEW_PREFIXES = {
     "architecture_laws_machine_agency": "architecture_laws_machine_agency",
     "structure_compatible_generalization": "structure_compatible_generalization",
     "inferred_transformations_intervention": "inferred_transformations_intervention",
+    "virtual_governor_stress_signal": "virtual_governor_stress_signal",
 }
 PAPER_TITLES = {
     "current_error_calibration": "Current-Error Calibration for Identifying Interventions",
@@ -72,6 +74,9 @@ PAPER_TITLES = {
     "structure_compatible_generalization": "Structure-Compatible Generalization",
     "inferred_transformations_intervention": (
         "Inferred Transformations for Structure-Compatible Generalization"
+    ),
+    "virtual_governor_stress_signal": (
+        "Virtual-Governor Stress Signals for Local Action Recovery"
     ),
 }
 

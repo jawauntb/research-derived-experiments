@@ -25,7 +25,9 @@ against the current model, normalize uncertainty before allocating inquiry,
 re-open inquiry after apparent convergence, cool at the decision layer rather
 than deleting the signal, split or gate heads when component identifiability
 stalls, bind memory to future action surfaces, and expose expected deployment
-transformations as local selection or training pressures.
+transformations as local selection or training pressures. The newest
+virtual-governor diagnostic adds one more law: translate live system stress into
+the local action surface, and test stale or wrong stress as controls.
 
 ## 1. Claim Boundary
 
@@ -62,6 +64,7 @@ really tracks the intended global concern.
 | Long-horizon memory drift | Bind memory to commitment and tool-action surfaces | Memory becomes control-relevant, not merely present. |
 | Dispatch-surface brittleness | Harden commitment surfaces across parser, repair, and wording variants | Tool/action memory remains useful under interface stress. |
 | Shortcut-compatible OOD success | Score or regularize structure-compatible transformations | Global deployment stress becomes local model pressure. |
+| Invisible global stress | Transduce live system stress into local policy features | Policies recover after target shifts instead of optimizing proxies. |
 
 ## 3. Why These Laws Matter
 
@@ -108,7 +111,18 @@ tool repair, and black-box API dispatch wording. A sparse OpenAI GPT-4.1 Nano
 negative under one dispatch repair cell is therefore useful precisely because it
 localizes the pressure point without turning it into a broad provider claim.
 
-### 3.6 Structure-Compatible Generalization
+### 3.6 Virtual-Governor Stress Signals
+
+The virtual-governor diagnostic makes the preprint vocabulary executable. Five
+small neural policies receive the same oracle action labels but different
+features: reward-only, local-state proxy, stale stress memory, wrong stress
+signal, and live global stress. The live condition reaches global recovery score
+0.843 versus 0.184 for reward-only, 0.520 for local proxy, 0.517 for wrong
+stress, and 0.678 for stale memory. The architecture lesson is not that the
+policy is conscious or aligned in general; it is that current global constraint
+violation must be represented where local action is chosen.
+
+### 3.7 Structure-Compatible Generalization
 
 The structure-compatible generalization work adds an OOD complement. When ID
 evidence admits both shortcuts and transportable rules, the architecture needs a
@@ -143,6 +157,9 @@ The strongest "small changes, large effects" observed so far are:
 8. **Compatibility selection/regularization:** score or train against the
    transformations that define the deployment shift. This converts an OOD
    constraint into a local architecture pressure.
+9. **Stress transduction:** expose live system-level constraint violation as a
+   feature at the local action surface. Stale or wrong stress behaves like a
+   proxy; live stress supports recovery after target shifts.
 
 ## 5. Major Contribution Opportunity
 
@@ -187,4 +204,6 @@ the laws. The next contribution is to test whether they transfer to:
 - `papers/long_horizon_bottleneck/paper.md`
 - `papers/structure_compatible_generalization/structure_compatible_generalization.md`
 - `papers/structure_compatible_generalization/inferred_transformations_intervention.md`
+- `papers/virtual_governor_stress_signal/paper.md`
 - `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzzzzzzz_api_dispatch_robustness_openai_gpt41_nano_2026_07_06.md`
+- `experiments/virtual_governor_stress_signal/results/virtual_governor_stress_signal_l4_2026_07_06.md`
