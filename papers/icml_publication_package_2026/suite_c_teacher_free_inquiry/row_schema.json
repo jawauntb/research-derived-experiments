@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Suite C Teacher-Free Inquiry Row",
+  "type": "object",
+  "required": [
+    "training_regime",
+    "condition",
+    "seed",
+    "total_probes",
+    "final_component_mae",
+    "first_selectivity_ratio",
+    "second_reopen_ratio",
+    "no_false_calm",
+    "recovery_pass",
+    "reengagement_pass",
+    "reopen_pass",
+    "teacher_labels_used"
+  ],
+  "properties": {
+    "training_regime": {"type": "string"},
+    "condition": {"type": "string"},
+    "seed": {"type": "integer"},
+    "total_probes": {"type": "integer", "minimum": 0},
+    "final_component_mae": {"type": "number"},
+    "first_selectivity_ratio": {"type": "number"},
+    "second_reopen_ratio": {"type": "number"},
+    "no_false_calm": {"type": "boolean"},
+    "recovery_pass": {"type": "boolean"},
+    "reengagement_pass": {"type": "boolean"},
+    "reopen_pass": {"type": "boolean"},
+    "teacher_labels_used": {"type": "boolean", "const": false},
+    "training_loss": {"type": "number"},
+    "reward": {"type": "number"},
+    "control_failure_reason": {"type": "string"}
+  },
+  "additionalProperties": true
+}
+

@@ -1,0 +1,66 @@
+{
+  "benchmark": {
+    "name": "Causally Grounded Finite Agents Benchmark",
+    "version": "2026-07-06",
+    "charter": "Evaluate whether finite agents succeed for the right causal reasons by requiring behavior plus suite-specific structure and anti-cheat gates."
+  },
+  "suite": {
+    "id": "suite_c_reengagement",
+    "name": "Suite C: Re-Engagement Under World Change",
+    "axis_coverage": ["behavior", "attribution", "inquiry", "anti_cheat"],
+    "status": "strong"
+  },
+  "run": {
+    "run_id": "suite_c_reengagement_2026_07_06",
+    "date": "2026-07-06",
+    "rows": 72,
+    "providers": ["modal_l4"]
+  },
+  "minimum_pass_rule": {
+    "behavior_passed": true,
+    "structure_gate_passed": true,
+    "anti_cheat_controls_passed": true,
+    "passed": true
+  },
+  "score_axes": {
+    "behavior": {
+      "headline_condition": "burst_then_refractory",
+      "final_component_mae": 0.112,
+      "recovery_rate": 1.0
+    },
+    "inquiry": {
+      "first_selectivity_ratio": 16.927,
+      "second_reopen_ratio": 16.667,
+      "headline_total_probes": 22.625
+    },
+    "anti_cheat": {
+      "false_calm_caught": true,
+      "matched_random_recovery_rate": 0.0
+    }
+  },
+  "gates": [
+    {"gate_id": "C1", "name": "silence_replication", "passed": true},
+    {"gate_id": "C2", "name": "reengagement", "passed": true},
+    {"gate_id": "C3", "name": "recovery", "passed": true},
+    {"gate_id": "C4", "name": "no_false_calm", "passed": true},
+    {"gate_id": "C5", "name": "cost_aware_inquiry", "passed": true},
+    {"gate_id": "C6", "name": "second_shift_reopenability", "passed": true}
+  ],
+  "baselines": [
+    {"name": "fixed_surprise_decrement", "kind": "control"},
+    {"name": "matched_random_time_budget", "kind": "control"},
+    {"name": "scheduled_null_anchor", "kind": "upper"}
+  ],
+  "artifacts": {
+    "report_md": "experiments/world_responds/results/suite_c_reengagement_2026_07_06.md",
+    "summary_json": "experiments/world_responds/results/suite_c_reengagement_2026_07_06.json",
+    "benchmark_card": "experiments/world_responds/BENCHMARK_CARD.md"
+  },
+  "allowed_claim": "Controlled finite re-engagement benchmark pass.",
+  "non_claims": [
+    "Not a consciousness test.",
+    "Not a production reliability certificate.",
+    "Not a human or biological result."
+  ]
+}
+
