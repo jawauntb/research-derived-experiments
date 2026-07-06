@@ -189,7 +189,7 @@ def test_tiny_modular_neural_sweep_emits_rows() -> None:
 
 def test_tiny_intervention_sweep_records_regularizer_metadata() -> None:
     if importlib.util.find_spec("torch") is None:
-        pytest.skip("torch unavailable; neural training is exercised in Modal runs")
+        pytest.skip()
     rows = run_intervention_sweep(
         n_configs=1,
         epochs=2,

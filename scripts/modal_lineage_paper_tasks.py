@@ -22,11 +22,13 @@ PAPER_DIRS = {
     "current_error_calibration": Path("papers/current_error_calibration"),
     "vector_first_order_self": Path("papers/vector_first_order_self"),
     "scale_normalized_vprobe": Path("papers/scale_normalized_vprobe"),
+    "architecture_laws_machine_agency": Path("papers/architecture_laws_machine_agency"),
 }
 PAPER_TITLES = {
     "current_error_calibration": "Current-Error Calibration for Identifying Interventions",
     "vector_first_order_self": "Vector First-Order Self",
     "scale_normalized_vprobe": "Scale-Normalized Probe Calibration",
+    "architecture_laws_machine_agency": "Architecture Laws for Machine Agency",
 }
 
 
