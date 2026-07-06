@@ -13,41 +13,53 @@
       "inquiry",
       "anti_cheat"
     ],
-    "status": "partial"
+    "status": "strong"
   },
   "run": {
     "run_id": "suite_c_reengagement_2026_07_06",
     "date": "2026-07-06",
-    "command": "Synthesis of committed Paper 22, Paper 23A, Paper 23B, and July 6 Paper 23A Modal report; Paper 23B needs a first-class JSONL runner.",
-    "rows": 0
+    "command": "doppler --scope /Users/jawaun/superoptimizers run -- uvx --python 3.12 --from modal modal run experiments/world_responds/modal_suite_c_reengagement.py --seeds 8 --base-seed 20260706 --budget-usd 75 --out artifacts/world_responds/suite_c_reengagement_payload.json",
+    "rows": 72,
+    "models": [
+      "finite_policy_harness"
+    ],
+    "providers": [
+      "modal_l4"
+    ]
   },
   "minimum_pass_rule": {
-    "behavior_passed": false,
+    "behavior_passed": true,
     "structure_gate_passed": true,
     "anti_cheat_controls_passed": true,
-    "passed": false,
-    "notes": "Suite C is a bounded positive with a recovery gap: re-engagement and no-false-calm structure gates pass, but strict recovery and public JSONL cost-normalized scoring remain partial."
+    "passed": true,
+    "notes": "Suite C terminal finite gate passed: burst_then_refractory re-engages, recovers, avoids false calm, costs less than scheduled/oracle controls, and reopens after a second shift."
   },
   "score_axes": {
     "behavior": {
-      "recovery_status": "partial",
-      "best_decision_layer_recoveries": "2/3",
-      "oracle_source_recoveries": "3/3"
+      "headline_condition": "burst_then_refractory",
+      "final_component_mae": 0.11222147783035083,
+      "recovery_rate": 1.0
     },
     "inquiry": {
-      "p23a_headline_post_pre_density": "137%",
-      "p23a_headline_affected_unaffected_ratio": 3.04,
-      "paper23a_modal_baseline_post_shift_nulls": 0.0,
-      "paper23a_modal_fast_slow_post_shift_nulls": 191.0
+      "baseline_post_shift_density": 0.005208333333333333,
+      "first_reengagement_ratio": 12.59375,
+      "first_selectivity_ratio": 16.927083333333332,
+      "second_reopen_ratio": 16.666666666666664,
+      "headline_total_probes": 22.625,
+      "scheduled_total_probes": 144.0,
+      "oracle_total_probes": 69.5,
+      "matched_random_total_probes": 22.625,
+      "matched_budget_condition": "burst_then_refractory"
     },
     "attribution": {
-      "mediated_exogenous_status": "partial",
-      "headline_mediated_mae": 0.09,
-      "headline_exogenous_mae": 0.03
+      "headline_final_component_mae": 0.11222147783035083,
+      "fixed_surprise_final_component_mae": 0.5170382880889797
     },
     "anti_cheat": {
       "false_calm_caught": true,
-      "fixed_surprise_decrement_recoveries": "0/3"
+      "fixed_surprise_no_false_calm_rate": 0.0,
+      "matched_random_recovery_rate": 0.0,
+      "matched_random_selectivity_ratio": 0.8839285714285714
     }
   },
   "gates": [
@@ -56,96 +68,110 @@
       "name": "silence_replication",
       "axis": "inquiry",
       "threshold": "baseline learned current-replay probe has near-zero affected-bucket probes after shift",
-      "value": "0.0 affected post-shift nulls in the July 6 Modal report",
+      "value": 0.005208333333333333,
       "passed": true,
-      "evidence_ref": "experiments/world_responds/results/reengagement_23a_2026_07_06.md"
+      "evidence_ref": "experiments/world_responds/results/suite_c_reengagement_2026_07_06.md"
     },
     {
       "gate_id": "C2",
       "name": "reengagement",
       "axis": "inquiry",
-      "threshold": "candidate restores affected post-shift probe density and selects affected over unaffected buckets",
-      "value": "Paper 23A headline reaches 137% pre-shift density and 3.04x unaffected buckets",
+      "threshold": "candidate affected post-shift density >= 0.5x pre-shift and >= 2x unaffected buckets",
+      "value": 16.927083333333332,
       "passed": true,
-      "evidence_ref": "papers/probe_value_reengagement/paper.md"
+      "evidence_ref": "experiments/world_responds/results/suite_c_reengagement_2026_07_06.md"
     },
     {
       "gate_id": "C3",
       "name": "recovery",
       "axis": "behavior",
-      "threshold": "candidate reaches strict MAE threshold or justified oracle-relative recovery in most seeds",
-      "value": "decision-layer variants recover 1/3 to 2/3 seeds; oracle_source recovers 3/3",
-      "passed": false,
-      "evidence_ref": "papers/habituated_reengagement/paper.md"
+      "threshold": "candidate final affected-component MAE <= 0.12 in most seeds",
+      "value": 0.11222147783035083,
+      "passed": true,
+      "evidence_ref": "experiments/world_responds/results/suite_c_reengagement_2026_07_06.md"
     },
     {
       "gate_id": "C4",
       "name": "no_false_calm",
       "axis": "anti_cheat",
-      "threshold": "probe-rate drop must pair with attribution or outcome improvement",
-      "value": "fixed_surprise_decrement has low AUC but 0/3 recovery",
+      "threshold": "candidate quieting pairs with recovery while fixed_surprise_decrement fails",
+      "value": 0.0,
       "passed": true,
-      "evidence_ref": "papers/habituated_reengagement/paper.md"
+      "evidence_ref": "experiments/world_responds/results/suite_c_reengagement_2026_07_06.md"
     },
     {
       "gate_id": "C5",
       "name": "cost_aware_inquiry",
       "axis": "inquiry",
-      "threshold": "lower inquiry cost than scheduled or always-probe controls at comparable recovery",
-      "value": "decision-layer variants reduce post-shift AUC by 37-46%, but public JSONL cost-normalized scorer is not emitted yet",
-      "passed": false,
-      "evidence_ref": "papers/habituated_reengagement/paper.md"
+      "threshold": "candidate uses fewer probes than scheduled/oracle controls at recovery threshold and beats matched-random selectivity",
+      "value": 22.625,
+      "passed": true,
+      "evidence_ref": "experiments/world_responds/results/suite_c_reengagement_2026_07_06.md"
     },
     {
       "gate_id": "C6",
       "name": "second_shift_reopenability",
       "axis": "inquiry",
       "threshold": "affected-bucket probes rise again after a second shift",
-      "value": "2.05x leaky effort, 1.81x decision refractory, 2.18x burst then refractory",
+      "value": 16.666666666666664,
       "passed": true,
-      "evidence_ref": "papers/habituated_reengagement/paper.md"
+      "evidence_ref": "experiments/world_responds/results/suite_c_reengagement_2026_07_06.md"
     }
   ],
   "baselines": [
     {
       "name": "p22_learned_current_replay",
       "kind": "lower",
-      "result": "self-silences after shift; July 6 report baseline affected post-shift nulls are 0.0",
-      "evidence_ref": "experiments/world_responds/results/reengagement_23a_2026_07_06.md"
+      "result": "self-silences after shift; affected post-shift density is 0.005 and final MAE is 1.357",
+      "evidence_ref": "experiments/world_responds/results/suite_c_reengagement_2026_07_06.md"
     },
     {
-      "name": "p23a_surprise_no_cooling",
+      "name": "two_timescale_plus_prediction_error",
       "kind": "diagnostic",
-      "result": "re-engages but over-fires; 0/3 recoveries and high post-shift AUC",
-      "evidence_ref": "papers/probe_value_reengagement/paper.md"
+      "result": "re-engages and recovers but over-fires at 92.4 probes versus 22.6 for the headline",
+      "evidence_ref": "experiments/world_responds/results/suite_c_reengagement_2026_07_06.md"
     },
     {
       "name": "fixed_surprise_decrement",
       "kind": "control",
-      "result": "false calm negative control; low AUC but 0/3 recovery",
-      "evidence_ref": "papers/habituated_reengagement/paper.md"
+      "result": "false calm negative control; no-false-calm rate 0.000 and final MAE 0.517",
+      "evidence_ref": "experiments/world_responds/results/suite_c_reengagement_2026_07_06.md"
+    },
+    {
+      "name": "scheduled_null_anchor",
+      "kind": "upper",
+      "result": "high-cost positive control; 144.0 probes and final MAE 0.046",
+      "evidence_ref": "experiments/world_responds/results/suite_c_reengagement_2026_07_06.md"
     },
     {
       "name": "oracle_source",
       "kind": "upper",
-      "result": "semantic upper reference; 3/3 recoveries",
-      "evidence_ref": "papers/habituated_reengagement/paper.md"
+      "result": "semantic high-cost reference; 69.5 probes and final MAE 0.052",
+      "evidence_ref": "experiments/world_responds/results/suite_c_reengagement_2026_07_06.md"
+    },
+    {
+      "name": "matched_random_time_budget",
+      "kind": "control",
+      "result": "equal-budget random inquiry control matched to burst_then_refractory; recovery rate 0.000 and selectivity 0.884",
+      "evidence_ref": "experiments/world_responds/results/suite_c_reengagement_2026_07_06.md"
     }
   ],
   "artifacts": {
-    "rows_jsonl": "artifacts/world_responds/suite_c_reengagement_rows.jsonl (not emitted yet; next implementation item)",
+    "rows_jsonl": "artifacts/world_responds/suite_c_reengagement_rows.jsonl",
     "summary_json": "experiments/world_responds/results/suite_c_reengagement_2026_07_06.json",
+    "raw_summary_json": "artifacts/world_responds/suite_c_reengagement_summary.json",
     "report_md": "experiments/world_responds/results/suite_c_reengagement_2026_07_06.md",
     "benchmark_card": "experiments/world_responds/BENCHMARK_CARD.md",
-    "paper_md": "papers/habituated_reengagement/paper.md",
-    "paper_pdf": "papers/habituated_reengagement/paper.pdf"
+    "paper_md": "papers/habituated_reengagement/suite_c_reengagement_under_world_change.md",
+    "paper_pdf": "papers/habituated_reengagement/suite_c_reengagement_under_world_change.pdf",
+    "critical_review_md": "docs/paper_reviews/suite_c_reengagement_under_world_change_critical_review.md"
   },
-  "allowed_claim": "Diagnostic benchmark packaging for re-engagement under world change, with positive evidence that decision-layer cooling preserves re-openability while no-false-calm controls reject signal-layer surprise erasure.",
+  "allowed_claim": "In a controlled finite benchmark, decision-layer burst/refractory cooling can close the re-engagement bottleneck by preserving surprise as information while regulating and later reopening the probe action tendency.",
   "non_claims": [
-    "Not a terminal Suite C pass.",
+    "Not a neural-training result.",
     "Not a production reliability certificate.",
     "Not hidden-state localization evidence.",
-    "Not a human or neural habituation result.",
+    "Not a human or biological habituation result.",
     "Not a consciousness test."
   ]
 }

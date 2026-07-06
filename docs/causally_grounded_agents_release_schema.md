@@ -80,6 +80,13 @@ Every summary should include:
 - allowed claim and non-claims;
 - artifact pointers.
 
+Artifact pointers should distinguish tracked release artifacts from local-only
+raw material. For example, `summary_json` should point at the public tracked
+summary when one exists, while `raw_summary_json` or `rows_jsonl` may point to
+gitignored local `artifacts/` paths only when they are explicitly described as
+local-only in the report/card ledger. Use `critical_review_md` for the tracked
+paper or benchmark review when a release includes one.
+
 ## Gate Definitions
 
 Each suite should define gates in the same shape:
@@ -194,5 +201,6 @@ plus archive names:
 | Metric Stack of Concern | `papers/metric_stack_synthesis/paper.pdf` | `26_Metric_Stack_of_Concern_v4_2026_07_06.pdf` |
 | Long-Horizon Moved Bottleneck | `papers/long_horizon_bottleneck/paper.pdf` | `31_Future_Control_Moves_Memory_2026_07_06.pdf` |
 | Causally Grounded Agents Benchmark | `papers/causally_grounded_agents_benchmark/paper.pdf` | `32_Benchmarking_Causally_Grounded_Finite_Agents_2026_07_06.pdf` |
+| Suite C Re-Engagement | `papers/habituated_reengagement/suite_c_reengagement_under_world_change.pdf` | `33_Suite_C_Reengagement_Under_World_Change_2026_07_06.pdf` |
 
 The public sharing bundle is indexed in `docs/publication_sharing_map.md`.

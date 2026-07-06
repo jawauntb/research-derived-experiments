@@ -26,8 +26,11 @@ re-open inquiry after apparent convergence, cool at the decision layer rather
 than deleting the signal, split or gate heads when component identifiability
 stalls, bind memory to future action surfaces, and expose expected deployment
 transformations as local selection or training pressures. The newest
-virtual-governor diagnostic adds one more law: translate live system stress into
-the local action surface, and test stale or wrong stress as controls.
+Suite C benchmark makes the re-engagement law terminal in a finite harness:
+bounded burst-and-refractory inquiry passes recovery, cost, no-false-calm, and
+second-shift reopenability gates. The virtual-governor diagnostic adds one more
+law: translate live system stress into the local action surface, and test stale
+or wrong stress as controls.
 
 ## 1. Claim Boundary
 
@@ -59,7 +62,7 @@ really tracks the intended global concern.
 | Stale or noisy uncertainty | Estimate current-model error on recent raw evidence | Probe calibration flips from anti-aligned to aligned. |
 | Cross-dimension scale mismatch | Normalize uncertainty per concern dimension | Vector attribution becomes stable across seeds. |
 | Learned quiet after shifts | Add a re-engagement floor or surprise detector | The agent can restart inquiry after the world changes. |
-| Anxiety or false calm | Cool at the decision layer, not the signal layer | The agent re-engages after shifts and quiets after recovery. |
+| Anxiety or false calm | Cool at the decision layer, not the signal layer; bound the burst, then let refractory state decay | The agent re-engages after shifts, quiets after recovery, and reopens after a second shift. |
 | Shared-head role ceiling | Split or gate heads when identifiability stalls | The next move becomes architectural or interventional. |
 | Long-horizon memory drift | Bind memory to commitment and tool-action surfaces | Memory becomes control-relevant, not merely present. |
 | Dispatch-surface brittleness | Harden commitment surfaces across parser, repair, and wording variants | Tool/action memory remains useful under interface stress. |
@@ -89,6 +92,14 @@ The null-intervention and world-responds papers show that self/world
 attribution requires actions whose purpose is identification, not reward. In
 nonstationary worlds, the action policy also needs a way to re-open inquiry after
 the model becomes quiet. Learned silence is not evidence of world stability.
+
+The Suite C re-engagement benchmark now packages this as a six-gate finite test.
+The `burst_then_refractory` controller reaches final affected MAE 0.112, uses
+22.6 probes versus 144.0 scheduled and 69.5 oracle-source probes, and reopens
+after a second shift with post-second/pre-second affected probe ratio 16.667.
+The signal-layer `fixed_surprise_decrement` control fails: it looks quiet, but
+final MAE remains 0.517. The law is therefore precise: regulate the decision to
+ask, not the signal that says the world is surprising.
 
 ### 3.4 Reafference And Selfhood
 
@@ -146,8 +157,10 @@ The strongest "small changes, large effects" observed so far are:
    on passive self/world factorization. This broke the attribution gauge.
 4. **Re-engagement floor / surprise trigger:** add a path back into inquiry
    after convergence. This fixes self-confirming silence.
-5. **Decision-layer cooling:** damp the action tendency after recent probing
-   without erasing the surprise signal. This avoids both anxiety and false calm.
+5. **Decision-layer cooling with re-openable refractory state:** damp the
+   action tendency after recent probing without erasing the surprise signal.
+   Suite C's bounded burst-and-refractory controller passes recovery, cost,
+   no-false-calm, and second-shift reopenability gates in the finite harness.
 6. **Commitment-surface memory:** test whether early information causally reaches
    a later action surface. This relocates long-horizon agency from context length
    to state/action coupling.
@@ -200,6 +213,7 @@ the laws. The next contribution is to test whether they transfer to:
 - `papers/vector_first_order_self/paper.md`
 - `papers/scale_normalized_vprobe/paper.md`
 - `papers/world_responds/paper.md`
+- `papers/habituated_reengagement/suite_c_reengagement_under_world_change.md`
 - `papers/planning_from_concern/paper.md`
 - `papers/long_horizon_bottleneck/paper.md`
 - `papers/structure_compatible_generalization/structure_compatible_generalization.md`

@@ -24,8 +24,9 @@ Start here:
 - [Benchmark umbrella](docs/causally_grounded_agents_benchmark.md)
 - [Shared release schema](docs/causally_grounded_agents_release_schema.md)
 - [Publication sharing map](docs/publication_sharing_map.md)
-- [Suite C benchmark frontier](experiments/world_responds/BENCHMARK_CARD.md)
-- [Next Suite C hardening gap](docs/causally_grounded_agents_next_gap.md)
+- [Suite C terminal finite gate](experiments/world_responds/BENCHMARK_CARD.md)
+- [Suite C transfer gap](docs/causally_grounded_agents_next_gap.md)
+- [Suite C paper](papers/habituated_reengagement/suite_c_reengagement_under_world_change.md)
 - [Suite D/E benchmark card](experiments/long_horizon_bottleneck/BENCHMARK_CARD.md)
 - [Paper 32 design note](papers/causally_grounded_agents_benchmark/paper.md)
 
