@@ -17,6 +17,7 @@ The downloaded PDFs, HTML snapshots, and extracted full text are intentionally l
 - The Machine Consciousness Hypothesis: https://cimc.ai/cimcHypothesis.pdf
 - Technological Approach to Mind Everywhere: https://www.frontiersin.org/journals/systems-neuroscience/articles/10.3389/fnsys.2022.768201/full
 - On Having No Head: Cognition throughout Biological Systems: https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2016.00902/full
+- Alignment Is to a Virtual Governor: A Theory of Coordination in Diverse Intelligence: https://doi.org/10.20944/preprints202607.0220.v1 - Preprints.org version posted 2026-07-03; not peer-reviewed. Useful as terminology and framing for decentralized alignment as a signal architecture that converts global constraint violations into local incentives. On-thesis for the allostatic/self-world/long-horizon lines, but cite only where the paper's "virtual governor" concept is actually used to motivate a mechanism, claim boundary, or limitation.
 - Why Muon Outperforms Adam: A Curvature Perspective: https://arxiv.org/abs/2606.04662
 - Neural Networks Provably Learn Spectral Representations for Group Composition: https://arxiv.org/abs/2606.02993
 - Representations of Geometric Shapes Have Syntactic Structure: https://doi.org/10.1037/xge0001890
@@ -57,3 +58,4 @@ These remain local-only:
 - `/Users/jawaun/Downloads/2027-43747-005.pdf`
 - `/Users/jawaun/Metaphysics of Intelligence/dynamical_ontologies_blueprint.pdf`
 - `/Users/jawaun/Metaphysics of Intelligence/Maintained_Concern_Axioms_for_Meaning_Self_and_Epistemic_Action_fixed.pdf`
+- `/Users/jawaun/Downloads/preprints202607.0220.v1.pdf`
