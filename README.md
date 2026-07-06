@@ -25,8 +25,9 @@ Start here:
 - [Shared release schema](docs/causally_grounded_agents_release_schema.md)
 - [Publication sharing map](docs/publication_sharing_map.md)
 - [Suite C terminal finite gate](experiments/world_responds/BENCHMARK_CARD.md)
-- [Suite C transfer gap](docs/causally_grounded_agents_next_gap.md)
+- [Suite C transfer status](docs/causally_grounded_agents_next_gap.md)
 - [Suite C paper](papers/habituated_reengagement/suite_c_reengagement_under_world_change.md)
+- [Suite C learned probe transfer](papers/habituated_reengagement/suite_c_neural_probe_transfer.md)
 - [Suite D/E benchmark card](experiments/long_horizon_bottleneck/BENCHMARK_CARD.md)
 - [Paper 32 design note](papers/causally_grounded_agents_benchmark/paper.md)
 
@@ -34,6 +35,11 @@ Minimum pass rule: behavior plus at least one structure-specific gate. The
 suite inventory maps existing evidence across consequence-to-action,
 self/world attribution, re-engagement, moved-bottleneck memory, tool
 commitment/repair, and structure-compatible OOD.
+
+Suite C now has two public layers: a hand-specified finite terminal gate and a
+learned probe-head transfer. The learned head passes C1-C6 on held-out seeds
+while stale-signal, wrong-signal, signal-suppression, and matched-random
+controls remain rejection artifacts.
 
 Public fixture smoke test for the hardened long-horizon/tool suite:
 

@@ -42,6 +42,7 @@
               "causal_representation",
               "attribution",
               "inquiry",
+              "learned_policy",
               "commitment",
               "generalization",
               "anti_cheat"
@@ -114,6 +115,7 @@
               "causal_representation",
               "attribution",
               "inquiry",
+              "learned_policy",
               "commitment",
               "generalization",
               "anti_cheat"

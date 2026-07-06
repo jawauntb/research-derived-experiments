@@ -10,7 +10,8 @@ Suite C tests adaptive inquiry under nonstationary world dynamics. A condition p
 
 - Suite pass: **PASS**
 - Headline condition: `burst_then_refractory`
-- Claim level: `diagnostic`; finite controlled benchmark gate, not a consciousness, biological, or production reliability claim.
+- Learned-transfer pass: **PASS** for `learned_probe_head`
+- Claim level: `diagnostic`; finite controlled benchmark gate and teacher-trained probe-head transfer, not a consciousness, biological, or production reliability claim.
 
 ## Execution Record
 
@@ -42,6 +43,17 @@ A model or policy cannot pass Suite C from final recovery alone. It must pass be
 - `scheduled_null_anchor`: high-cost positive control.
 - `oracle_source`: semantic high-cost reference.
 - `matched_random_time_budget`: equal-budget random inquiry control.
+- `stale_signal_head`: learned-policy control where affected buckets do not receive fresh post-shift stress.
+- `wrong_signal_head`: learned-policy control where stress is attributed to the wrong source.
+- `signal_suppression_head`: learned-policy control where perceived stress is hidden while actual attribution error remains high.
+
+## Learned-Policy Transfer
+
+The transfer runner trains a small NumPy MLP probe head from Suite C teacher
+traces, calibrates a threshold on separate seeds, and evaluates held-out seeds.
+The learned head reaches final affected MAE 0.112, first-shift selectivity
+16.667, second-shift reopenability 17.448, and 23.1 probes. Matched random at
+the same budget reaches selectivity 0.969.
 
 ## Artifacts
 
@@ -49,9 +61,13 @@ A model or policy cannot pass Suite C from final recovery alone. It must pass be
 - Local-only raw summary: `artifacts/world_responds/suite_c_reengagement_summary.json`
 - Public release summary: `experiments/world_responds/results/suite_c_reengagement_2026_07_06.json`
 - Result report: `experiments/world_responds/results/suite_c_reengagement_2026_07_06.md`
+- Learned-transfer summary: `experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.json`
+- Learned-transfer report: `experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md`
 - Paper: `papers/habituated_reengagement/suite_c_reengagement_under_world_change.md`
+- Learned-transfer paper: `papers/habituated_reengagement/suite_c_neural_probe_transfer.md`
 - Critical review: `docs/paper_reviews/suite_c_reengagement_under_world_change_critical_review.md`
+- Learned-transfer critical review: `docs/paper_reviews/suite_c_neural_probe_transfer_critical_review.md`
 
 ## Non-Claims
 
-This benchmark does not certify consciousness, broad autonomy, biological validity, or open-world reliability. It is a controlled finite test of adaptive inquiry mechanics.
+This benchmark does not certify consciousness, broad autonomy, biological validity, or open-world reliability. The learned-transfer layer is teacher-trained inside the same finite harness; reward-trained and open-agent transfer remain separate claims.

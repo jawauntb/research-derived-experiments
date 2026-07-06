@@ -1,4 +1,4 @@
-# Suite C Re-Engagement Under World Change: Terminal Gate Result
+# Suite C Re-Engagement Under World Change: Transfer Status
 
 Generated: 2026-07-06
 
@@ -27,8 +27,10 @@ That runner has now been added and run on Modal L4. The headline
   oracle-source probes; matched random fails recovery and selectivity.
 - C6 re-openability: post-second/pre-second affected probe ratio 16.667.
 
-The new next gap is transfer: make the same C1-C6 gate neural or long-horizon
-rather than policy-specified.
+The first transfer gap is now closed in a bounded form. A trained NumPy MLP
+probe head passes the same held-out C1-C6 gate while stale-signal, wrong-signal,
+signal-suppression, and matched-random controls fail. The new next gap is
+teacher-free policy learning or long-horizon/open-agent transfer.
 
 ## Discovery-Regime Audit
 
@@ -51,8 +53,9 @@ rather than policy-specified.
 - Residual finding: healthy quiet requires attribution recovery. A lower probe
   rate is only good if error actually falls and the policy can reopen after a
   later shift.
-- Readiness: terminal finite Suite C gate complete; neural and long-horizon
-  transfers remain open.
+- Readiness: terminal finite Suite C gate complete; teacher-trained neural
+  probe-head transfer complete; reward-trained and long-horizon transfers remain
+  open.
 - Allowed claim: completed finite controlled re-engagement benchmark, not a
   human, biological, consciousness, neural-training, or production result.
 
@@ -106,9 +109,18 @@ The Suite C run produced:
 - PDF under `papers/habituated_reengagement/suite_c_reengagement_under_world_change.pdf`;
 - critical review under `docs/paper_reviews/suite_c_reengagement_under_world_change_critical_review.md`.
 
+The learned-transfer run produced:
+
+- `experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md`;
+- `experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.json`;
+- local-only payload under `artifacts/world_responds/suite_c_neural_transfer_payload.json`;
+- standalone paper under `papers/habituated_reengagement/suite_c_neural_probe_transfer.md`;
+- PDF under `papers/habituated_reengagement/suite_c_neural_probe_transfer.pdf`;
+- critical review under `docs/paper_reviews/suite_c_neural_probe_transfer_critical_review.md`.
+
 ## Stop Conditions
 
-These remain stop conditions for future neural or long-horizon transfers:
+These remain stop conditions for future reward-trained or long-horizon transfers:
 
 - re-engagement passes but recovery fails again;
 - recovery passes only by scheduled/prohibitively dense probing;
