@@ -31,6 +31,12 @@ Three findings:
 
 This is the cleanest closing-the-loop result in the program so far: a fully self-organized concern-shaped agent on a minimal homeostatic task, *with no supervision other than the agent's own observed viability dynamics*. We follow the cautions of companion paper [9] and the conceptual readings discussed below: this is precursor concern under controlled conditions, not consciousness or full agency. But it operationalizes — minimally — the conceptual paper [1]'s claim that meaning is geometry under concern, and Bennett [10]'s claim that a causal-identity should both classify causes of valence and impel action.
 
+The architecture lesson is direct: when the predictive model is already trained
+on action-conditioned viability change, a separate policy-learning bottleneck
+can be removed. In this setting, the policy is the viability model's action
+argmax. This is the simplest architecture change in the program so far that
+turns a representational result into competent action.
+
 ## 1. Introduction
 
 The five papers preceding this one [4–9] established a ladder. Paper [4] showed that under action coupling, paraphrase clusters become causally load-bearing — passive geometry crosses the Layer-3 transition. Paper [5] showed the active geometry preserves a viability buffer, repairs under perturbation, and obeys a Law-of-the-Stack ordering on lower-layer slack. Paper [6] showed that under a supervised optimal-action objective, encoders organize the world by causal-valence role (XOR reward gap +1.96, color gap +0.005). Paper [7] showed the same representation transfers to episodic homeostatic RL via `rl_after_valence` and `rl_frozen_valence`. Paper [8] tested self-organization without supervised labels and reported a clean negative on XOR. Paper [9] resolved the negative: when encoder training is decoupled from sparse-reward REINFORCE (uniform random-action data collection, no policy gradient interference), the ΔE auxiliary mechanism reaches XOR reward_gap +1.84.
@@ -176,7 +182,32 @@ This paper resolves both bottlenecks via prediction. The encoder bottleneck is s
 
 The decoupling is no longer a failure mode; it is a *design property*. By having representation and action both flow from a single learned predictive model, the program has — in the minimal setting — produced concern-shaped agency without external supervision.
 
-## 5. Connection to the program
+<div style="page-break-before: always;"></div>
+
+## 5. Architecture Law: Predictive Policy Closure
+
+The paper's practical design law is:
+
+> If a model learns action-conditioned viability change well enough, the first
+> policy should be the model's own argmax, not a separately learned policy head.
+
+![Figure 6. Predictive-policy closure. The architecture removes the sparse policy bottleneck by routing observed viability change through a predictive model and using that model directly for action selection.](figures/fig6_predictive_policy_closure.png)
+
+This is the planning counterpart to the reafference and long-horizon results.
+In the long-horizon paper, memory matters when it reaches a future commitment
+surface. In the first-order-self paper, self/world attribution matters when a
+gauge-breaking signal pins causal source. Here, concern-shaped representation
+matters when it closes the action loop: the same head that predicts what will
+happen to viability under each action becomes the policy surface.
+
+The limitation is equally important. The result does not say "always replace RL
+with greedy one-step planning." It says that when the agent has a reliable,
+action-conditioned model of the current viability variable, a separate policy
+head can be an avoidable source of failure. The next architecture step is to add
+uncertainty and multi-step epistemic value without losing this tight predictive
+closure.
+
+## 6. Connection to the program
 
 | Layer | Claim | Evidence |
 | --- | --- | --- |
@@ -193,7 +224,7 @@ The decoupling is no longer a failure mode; it is a *design property*. By having
 | 4g | Proxy-trap claim is sparse-reward-specific | [9] |
 | 4h | **Model-based ΔE planning yields fully self-organized concern-shaped competence (no labels, no policy gradient)** | **This paper, return 50 / action acc 0.996 on XOR** |
 
-## 6. Limitations
+## 7. Limitations
 
 1. **The environment is small.** 4 colors × 2 labels × σ=0.15 noise; 32-dim encoder; one internal viability variable. T_max = 50 saturates return for any competent policy. A richer environment (richer observations, multiple viability variables, more action choices) would let action accuracy translate into return differences and discriminate more sharply between methods.
 2. **Policy-head capacity hides representation effects.** Companion paper [9] showed that a 2-layer policy head can compute XOR from a color-clustered encoder despite reward_gap 0. The same caveat applies here: if we replaced the model planner with a high-capacity policy head trained jointly with the ΔE aux head, the head might compensate for less-organized encoders. The minimal-policy nature of `argmax_a ΔE_head` is what makes encoder organization causally necessary here.
@@ -203,7 +234,7 @@ The decoupling is no longer a failure mode; it is a *design property*. By having
 6. **No second-order self.** Following Bach & Sorensen [40] and Bennett [10], a strong concern-shaped agent should distinguish self-caused from world-caused viability changes and represent its own intervention. Our agent does not. This is a precursor system, not a self-modeling system.
 7. **The uniform random data-collection policy is a procedural choice.** A biased data-collection policy (e.g., curiosity-directed, ε-greedy from a partial policy) may degrade or improve the ΔE encoder's organization. The next paper should test biased exploration variants.
 
-## 7. Next paper
+## 8. Next paper
 
 Three concrete candidates, in priority order:
 
@@ -213,7 +244,7 @@ Three concrete candidates, in priority order:
 
 Items (a) and (c) together would be a paper-and-a-half. The cleanest single Paper 11 is (a): state-dependent valence as the direct test of the "geometry under concern" thesis. (b) and (c) are then Papers 12 and 13.
 
-## 8. Reproducibility
+## 9. Reproducibility
 
 ```bash
 doppler --scope /Users/jawaun/superoptimizers run -- \
@@ -224,7 +255,7 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
 
 Wall clock ~20 min on Modal CPU for 36 cells. Raw: `artifacts/planning_from_concern/sweep_v1.json`. Figures: `papers/planning_from_concern/figures/`.
 
-## 9. References
+## 10. References
 
 ### Program companion papers
 [1] **Brown, J.** *Towards a Theory of Geometric Meaning, Active Agency, and Weakly Constrained Intelligence.* Conceptual companion paper (2026).
