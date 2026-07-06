@@ -180,10 +180,16 @@ wrong compatibility & -0.872 & -0.919 & 64 \\
 
 Source:
 \path{experiments/structure_compatible_generalization/results/semantic_selection_control_2026_07_06.md}.
+Bootstrap source:
+\path{experiments/structure_compatible_generalization/results/semantic_selection_bootstrap_2026_07_06.md}.
 
 All registered selector gates passed: minimum zoo count, beats ID validation,
 beats train accuracy, beats random candidate, wrong control fails, and accepted.
-The table in the main paper reports the full selector comparison.
+The table in the main paper reports the full selector comparison. The
+regenerated 120-zoo payload gives learned-minus-random selected OOD 0.059 with
+95\% CI [0.052, 0.065], learned-minus-ID 0.059 [0.052, 0.065],
+learned-minus-wrong 0.227 [0.221, 0.233], and learned regret 0.014
+[0.011, 0.018].
 
 \section{Companion Benchmark Appendix}
 \label{app:agents}
@@ -257,8 +263,9 @@ The strongest reviewer objections are:
   augmentation control.
   \item The semantic tasks are constructed around frozen encoders and model
   zoos; they are not broad natural-language deployment.
-  \item The package needs confidence intervals or bootstrap intervals for final
-  paper submission where the current reports give point estimates.
+  \item Phase 6 now has bootstrap intervals, but earlier phases still need
+  row-level uncertainty if they keep quantitative table space in the main
+  paper.
   \item The finite-agent benchmark material should remain an appendix unless a
   separate benchmark paper is submitted.
 \end{enumerate}
@@ -267,11 +274,13 @@ The strongest reviewer objections are:
 
 The next ICML-strengthening experiments are:
 \begin{itemize}
-  \item bootstrap CIs for Phase 6 selector lift and wrong-control gap,
+  \item deterministic tie-break stress tests for the Phase 6 selector lift and
+  wrong-control gap,
   \item larger semantic model zoos with a third frozen encoder,
   \item held-out transformation-family discovery where candidate transforms are
   learned from one family and evaluated on another,
   \item an ablation that holds augmentation volume fixed while varying
   transformation correctness,
-  \item teacher-free Suite C inquiry learning for the companion benchmark.
+  \item less privileged source-estimation and open-agent transfer for the
+  teacher-free Suite C companion benchmark.
 \end{itemize}

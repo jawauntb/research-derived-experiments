@@ -39,9 +39,11 @@ This folder is a paper-engineering package, not a claim that every submission is
 already venue-ready. It contains the comprehensive drafts, literature maps,
 methods, figure plans, appendices, validation notes, and next-experiment
 preregistration needed to move from sparse memos to venue-facing submissions.
-The main remaining empirical gap is row-level statistical artifacts for
-structure-compatible confidence intervals, plus replication and open-agent
-transfer beyond the completed finite teacher-free Suite C run.
+The main structure-compatible statistical gap is now narrower: Phase 6 has
+zoo-level bootstrap intervals, while phases 1-5 still need restored or
+regenerated row-level artifacts for full uncertainty treatment. For Suite C,
+the finite teacher-free result now has a 64-seed bootstrap; the next empirical
+gap is less privileged source-estimation plus open-agent transfer.
 
 ## Validation Run
 
@@ -59,6 +61,22 @@ Completed on 2026-07-06 from the fresh branch
   passed.
 - `uvx --python 3.12 --with torch --with numpy --with scikit-learn --with scipy --with matplotlib --with pytest python -m pytest tests/test_structure_compatible_generalization.py tests/test_world_responds_suite_c.py tests/test_world_responds_suite_c_neural_transfer.py tests/test_long_horizon_bottleneck.py`
   passed: 104 passed, 3 skipped.
+
+Updated on 2026-07-06 from
+`codex/suite-c-stats-polish-20260706`.
+
+- Phase 6 semantic selection regenerated and bootstrapped over 120 selection
+  zoos with 1,000 reps.
+- Suite C teacher-free wide stats regenerated over 64 held-out eval seeds with
+  1,000 bootstrap reps.
+- `tectonic paper.tex` passed for
+  `structure_compatible_model_selection/paper.tex`.
+- `tectonic paper_outline.tex` passed for
+  `suite_c_teacher_free_inquiry/paper_outline.tex`.
+- `uvx ruff check .` passed.
+- `uvx --python 3.12 --with numpy --with torch --with scikit-learn --with scipy --with matplotlib --with pytest ty check scripts experiments tests`
+  passed.
+- Targeted pytest passed: 115 passed, 3 skipped.
 
 ## Safe Claim Boundary
 

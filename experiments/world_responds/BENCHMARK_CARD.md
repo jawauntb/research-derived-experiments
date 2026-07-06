@@ -74,6 +74,11 @@ recovery rate 1.000, first-shift selectivity 12.500, second-shift reopenability
 selectivity is 0.000, suppressed-signal final MAE is 0.464, and matched random
 at the same budget reaches selectivity 0.833.
 
+The wider 64-seed/1000-bootstrap check preserves the result: final affected MAE
+0.095 with 95% CI [0.095, 0.096], recovery rate 1.000 [1.000, 1.000],
+selectivity lift over matched random 11.292 [10.976, 11.596], stale-signal
+recovery 0.000 [0.000, 0.000], and suite pass rate 1.000 [1.000, 1.000].
+
 ## Artifacts
 
 - Local-only raw rows: `artifacts/world_responds/suite_c_reengagement_rows.jsonl`
@@ -85,6 +90,7 @@ at the same budget reaches selectivity 0.833.
 - Teacher-free rows: `experiments/world_responds/results/suite_c_teacher_free_inquiry_rows_2026_07_06.jsonl`
 - Teacher-free summary: `experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.json`
 - Teacher-free report: `experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.md`
+- Teacher-free wide stats: `experiments/world_responds/results/suite_c_teacher_free_wide_stats_2026_07_06.md`
 - Paper: `papers/habituated_reengagement/suite_c_reengagement_under_world_change.md`
 - Learned-transfer paper: `papers/habituated_reengagement/suite_c_neural_probe_transfer.md`
 - Critical review: `docs/paper_reviews/suite_c_reengagement_under_world_change_critical_review.md`

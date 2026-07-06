@@ -6,13 +6,15 @@ be regenerated or restored before a main-conference submission.
 ## Current Evidence State
 
 Tracked evidence for structure-compatible generalization consists of Markdown
-summary reports, PDFs, figures, preregistrations, and source code. The raw
-`artifacts/structure_compatible_generalization/` JSON/JSONL payloads are not
-present in this worktree.
+summary reports, PDFs, figures, preregistrations, source code, and the new
+Phase 6 semantic-selection bootstrap report. The regenerated raw Phase 6
+payload was produced locally at
+`artifacts/structure_compatible_generalization/semantic_selection_control_regen_2026_07_06.json`
+and is intentionally outside git because `artifacts/` is ignored.
 
-Consequence: the paper can report point estimates and tables exactly as
-archived, but full bootstrap intervals over seeds, model rows, semantic orbits,
-and zoos require either restoring the raw artifacts or rerunning the suites.
+Consequence: the paper can now report Phase 6 zoo-level bootstrap intervals.
+Full bootstrap intervals over seeds, model rows, and semantic orbits for phases
+1-5 still require restoring the raw artifacts or rerunning those suites.
 
 ## Required Independent Units
 
@@ -49,19 +51,42 @@ Current point estimates:
 | true compatibility | 0.993 | 0.000 | 0.073 |
 | OOD oracle | 0.993 | 0.000 | 0.073 |
 
-## Required Bootstrap/Significance Before Submission
+## Completed Phase 6 Bootstrap
 
-1. Restore or regenerate Phase 6 selection records.
-2. Cluster-bootstrap over `zoo_id`, stratified by encoder and threshold.
-3. Report 95% CIs for:
-   - learned compatibility selected OOD,
-   - learned minus random selected OOD,
-   - learned minus ID selected OOD,
-   - learned minus wrong selected OOD,
-   - learned regret.
-4. Use paired differences within each zoo where selectors share the same
+Completed on 2026-07-06:
+
+```bash
+uvx --python 3.12 --with numpy --with scipy --with torch --with sentence-transformers \
+  python -m experiments.structure_compatible_generalization.semantic_selection_control \
+  --n-zoos 12 --configs-per-zoo 12 --thresholds 0.50,0.56,0.62,0.68,0.74 \
+  --out artifacts/structure_compatible_generalization/semantic_selection_control_regen_2026_07_06.json
+
+uvx --python 3.12 --with numpy --with matplotlib \
+  python -m experiments.structure_compatible_generalization.semantic_selection_bootstrap \
+  artifacts/structure_compatible_generalization/semantic_selection_control_regen_2026_07_06.json \
+  --out-root . --bootstrap-reps 1000
+```
+
+Tracked outputs:
+
+- `experiments/structure_compatible_generalization/results/semantic_selection_bootstrap_2026_07_06.json`
+- `experiments/structure_compatible_generalization/results/semantic_selection_bootstrap_2026_07_06.md`
+- `papers/structure_compatible_generalization/figures/fig13_semantic_selection_bootstrap_ci.png`
+
+Key intervals:
+
+- learned selected OOD: 0.978, 95% CI [0.973, 0.983];
+- learned minus random: 0.059, 95% CI [0.052, 0.065];
+- learned minus ID: 0.059, 95% CI [0.052, 0.065];
+- learned minus wrong: 0.227, 95% CI [0.221, 0.233];
+- learned regret: 0.014, 95% CI [0.011, 0.018].
+
+## Remaining Bootstrap/Significance Before Submission
+
+1. Restore or regenerate row-level payloads for phases 1-5.
+2. Use paired differences within each zoo where selectors share the same
    candidate set.
-5. Repeat with deterministic tie-break variants:
+3. Repeat Phase 6 with deterministic tie-break variants:
    - mean of ties, current summary behavior;
    - worst tied candidate;
    - random tied candidate with bootstrap over tie samples.
@@ -94,4 +119,3 @@ artifacts/structure_compatible_generalization/
 
 If raw Modal payloads contain paths or provider-specific metadata, publish
 curated row-level fixtures instead.
-

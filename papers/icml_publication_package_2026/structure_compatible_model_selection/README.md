@@ -41,6 +41,7 @@ Primary structure-compatible result reports:
 - `experiments/structure_compatible_generalization/results/language_template_substitution_2026_07_06.md`
 - `experiments/structure_compatible_generalization/results/semantic_retrieval_transfer_2026_07_06.md`
 - `experiments/structure_compatible_generalization/results/semantic_selection_control_2026_07_06.md`
+- `experiments/structure_compatible_generalization/results/semantic_selection_bootstrap_2026_07_06.md`
 
 Companion finite-agent benchmark evidence:
 
@@ -69,6 +70,15 @@ so the package can compile in this repository. For conference submission, move
 the body into the current ICML template and keep the appendix and bibliography
 in the same PDF.
 
+## Current Statistical Status
+
+Phase 6 now has regenerated zoo-level bootstrap intervals. The tracked report
+uses 120 selection zoos, 840 selector records, and 1,000 bootstrap reps. Learned
+compatibility selects OOD 0.978 with 95% CI [0.973, 0.983]; learned-minus-random
+and learned-minus-ID are both 0.059 [0.052, 0.065]; learned-minus-wrong is 0.227
+[0.221, 0.233]. Earlier phases still need restored or regenerated raw rows for
+full confidence intervals.
+
 ## Claim Boundary
 
 This package does not claim universal OOD certification, open-world paraphrase
@@ -76,4 +86,3 @@ understanding, general machine agency, consciousness, or production reliability.
 It claims controlled finite evidence for a reusable model-selection and
 benchmarking rule: evaluate whether success is supported by the structure that
 deployment or future action will require.
-

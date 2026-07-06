@@ -14,10 +14,10 @@ to prevent the paper from sounding stronger than the evidence.
    compatibility as an upper bound, make discovered compatibility the deployable
    claim, and move oracle-only results into background.
 
-3. **Thin uncertainty:** current tracked artifacts expose point estimates but
-   not row-level bootstrap intervals. Mitigation: include the statistical plan,
-   restore/generate row artifacts before submission, and do not claim
-   significance until the intervals exist.
+3. **Partial uncertainty:** Phase 6 now has zoo-level bootstrap intervals, but
+   phases 1-5 still mostly expose point summaries. Mitigation: keep Phase 6 as
+   the headline statistical claim and label earlier phases as an evidence
+   ladder until row-level payloads are restored or regenerated.
 
 4. **Controls that weaken claims:** Phase 3 random vision augmentation is close
    to learned augmentation. Mitigation: present this as a boundary; do not make
@@ -31,9 +31,10 @@ to prevent the paper from sounding stronger than the evidence.
    from the model-selection paper. Mitigation: keep the benchmark material in a
    short appendix and create a separate benchmark package.
 
-7. **Reproducibility gap:** summary reports are tracked, raw SCG JSONL artifacts
-   are absent. Mitigation: add row schema and artifact checklist now; restore or
-   regenerate artifacts before submission.
+7. **Reproducibility gap:** the regenerated Phase 6 bootstrap report is
+   tracked, but the raw regenerated payload lives under ignored `artifacts/`.
+   Mitigation: publish a curated row-level payload or artifact bundle before
+   submission.
 
 ## Strongest Safe Claim
 
@@ -49,7 +50,8 @@ deployment-relevant one.
 - "Causally grounded agents" as the main SCG result.
 - "Learned transformation discovery" without noting experimenter-chosen
   candidate generator families.
-- "ICML-ready" until CIs, row artifacts, and template conversion are complete.
+- "ICML-ready" until row artifacts, tie-break stress tests, and template
+  conversion are complete.
 
 ## Concrete Fixes Already Reflected In This Package
 
@@ -57,6 +59,6 @@ deployment-relevant one.
 - Oracle compatibility is described as an upper bound.
 - Vision/random-augmentation caveat appears in the appendix.
 - Benchmark material is a companion appendix, not the main paper.
-- Separate statistical plan names missing raw artifacts and required intervals.
+- Separate statistical plan names completed Phase 6 intervals and remaining raw
+  artifact work.
 - Separate benchmark package will carry the broader finite-agent claim.
-

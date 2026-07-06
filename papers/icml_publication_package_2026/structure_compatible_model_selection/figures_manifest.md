@@ -64,21 +64,25 @@ paths auditable.
     - Source: `papers/structure_compatible_generalization/figures/fig12_semantic_selection_regret.png`
     - Use: selector regret and threshold stress.
 
+13. **Semantic selection bootstrap intervals**
+    - Source: `papers/structure_compatible_generalization/figures/fig13_semantic_selection_bootstrap_ci.png`
+    - Use: Phase 6 zoo-bootstrap 95% CIs for selected OOD accuracy.
+
 ## Companion Benchmark Appendix Figures
 
-13. **Suite C gate status**
+14. **Suite C gate status**
     - Source: `papers/habituated_reengagement/figures/suite_c_fig1_gate_status.png`
     - Use: finite-agent companion appendix.
 
-14. **Suite C no-false-calm control**
+15. **Suite C no-false-calm control**
     - Source: `papers/habituated_reengagement/figures/suite_c_fig4_no_false_calm.png`
     - Use: central anti-cheat control for re-engagement.
 
-15. **Suite C learned transfer controls**
+16. **Suite C learned transfer controls**
     - Source: `papers/habituated_reengagement/figures/suite_c_neural_fig4_control_failures.png`
     - Use: stale/wrong/suppressed-signal controls.
 
-16. **Long-horizon commitment ladder**
+17. **Long-horizon commitment ladder**
     - Source: `papers/long_horizon_bottleneck/figures/fig1_commitment_surface_ladder.png`
     - Use: Suite D/E companion benchmark framing.
 
@@ -86,7 +90,5 @@ paths auditable.
 
 - A single new schematic for the paper's main method:
   "ID-equivalent model zoo -> compatibility audit -> OOD-free selector."
-- Bootstrap interval or uncertainty-bar figure for the Phase 6 selector lift.
 - A compact negative-control figure comparing true/discovered/wrong
   compatibility across all six phases.
-
