@@ -30,7 +30,9 @@ structure-compatible predictors usually separate OOD behavior better than train
 accuracy, ID validation accuracy, loss, norm, or sharpness proxies. The strongest
 finished result is semantic model selection: among high train/ID candidates,
 learned compatibility selects mean OOD accuracy 0.978 versus 0.919 for train,
-ID, and random selectors, while wrong compatibility selects 0.751. The claim is
+ID, and random selectors, while wrong compatibility selects 0.751; a
+zoo-bootstrap gives learned-minus-random 0.059 with 95\% CI [0.052, 0.065].
+The claim is
 bounded: this is not universal OOD certification. It is a practical diagnostic
 and model-selection rule for finite settings where the relevant deployment
 structure is known, weakly inferred, or learned well enough to audit.
@@ -136,11 +138,10 @@ out OOD data.
 \paragraph{Tie handling and uncertainty.}
 When a selector ties among eligible candidates, the current semantic-selection
 summary reports the mean OOD of tied candidates rather than choosing a favorable
-tie-break. This is conservative with respect to cherry-picking, but the
-submission version should add bootstrap intervals over zoos, seeds, and semantic
-orbits once raw row artifacts are restored. The tracked repository currently
-contains summary reports and public Suite C JSON summaries; raw
-structure-compatible JSONL rows are referenced but not checked in.
+tie-break. This is conservative with respect to cherry-picking. For the Phase 6
+selector, we regenerate the finite payload and report 1,000-rep bootstrap
+intervals clustered by selection zoo. Earlier phases still rely on archived
+point summaries unless their raw row payloads are restored or regenerated.
 
 \section{Experimental Ladder}
 
@@ -239,8 +240,11 @@ anti-predictive at $r=-0.872$.
 The strongest finished result is the selector test. Across 120 eligible semantic
 model zoos, train accuracy, ID validation, and random candidate selection all
 select mean OOD 0.919. Learned compatibility selects 0.978 with regret 0.014,
-while wrong compatibility selects 0.751. True compatibility and the OOD oracle
-select 0.993.
+while wrong compatibility selects 0.751. A 1,000-rep selection-zoo bootstrap
+gives learned selected OOD 0.978 [0.973, 0.983], learned-minus-random 0.059
+[0.052, 0.065], learned-minus-ID 0.059 [0.052, 0.065], learned-minus-wrong
+0.227 [0.221, 0.233], and learned regret 0.014 [0.011, 0.018]. True
+compatibility and the OOD oracle select 0.993.
 
 \begin{table}[t]
 \centering
@@ -270,6 +274,15 @@ high-ID candidates before OOD labels are inspected.}
 headline visual because it is the closest deployment analogue: choose among
 ID-equivalent candidates before seeing OOD labels.}
 \label{fig:semantic-selection}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{../../structure_compatible_generalization/figures/fig13_semantic_selection_bootstrap_ci.png}
+\caption{Zoo-bootstrap intervals for Phase 6 selector performance. Learned
+compatibility separates from train/ID/random and from the wrong-compatibility
+control under the model-zoo bootstrap unit.}
+\label{fig:semantic-bootstrap}
 \end{figure}
 
 \begin{figure}[t]

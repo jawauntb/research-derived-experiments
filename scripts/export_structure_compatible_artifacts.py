@@ -121,6 +121,14 @@ def source_files(*, include_supporting: bool) -> list[Path]:
                 "experiments/structure_compatible_generalization/results/"
                 "semantic_selection_control_2026_07_06.md"
             ),
+            Path(
+                "experiments/structure_compatible_generalization/results/"
+                "semantic_selection_bootstrap_2026_07_06.md"
+            ),
+            Path(
+                "experiments/structure_compatible_generalization/results/"
+                "semantic_selection_bootstrap_2026_07_06.json"
+            ),
         ]
     )
     figure_dir = Path("papers/structure_compatible_generalization/figures")

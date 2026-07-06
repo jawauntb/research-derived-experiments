@@ -139,6 +139,9 @@ paraphrase certification.
 Source:
 `experiments/structure_compatible_generalization/results/semantic_selection_control_2026_07_06.md`
 
+Bootstrap source:
+`experiments/structure_compatible_generalization/results/semantic_selection_bootstrap_2026_07_06.md`
+
 Manifest: base seed `20260706`; encoders `all_minilm_l6_v2` and
 `bge_small_en_v1_5`; `12` zoos; `12` configs per zoo; thresholds
 `[0.5, 0.56, 0.62, 0.68, 0.74]`; budget estimate `$0.80` against `$30.00`.
@@ -154,6 +157,19 @@ Gate status: all registered gates passed.
 | `compatibility_discovered` | 120 | 8.617 | 0.978 | 0.014 | 0.059 |
 | `compatibility_true` | 120 | 8.617 | 0.993 | 0.000 | 0.073 |
 | `ood_oracle` | 120 | 8.617 | 0.993 | 0.000 | 0.073 |
+
+Zoo-level bootstrap intervals, 1,000 reps:
+
+| Metric | Point | 95% CI |
+| --- | ---: | ---: |
+| `learned_selected_ood` | 0.978 | [0.973, 0.983] |
+| `random_selected_ood` | 0.919 | [0.915, 0.924] |
+| `id_selected_ood` | 0.919 | [0.915, 0.924] |
+| `wrong_selected_ood` | 0.751 | [0.750, 0.753] |
+| `learned_regret` | 0.014 | [0.011, 0.018] |
+| `learned_lift_vs_random` | 0.059 | [0.052, 0.065] |
+| `learned_lift_vs_id` | 0.059 | [0.052, 0.065] |
+| `learned_lift_vs_wrong` | 0.227 | [0.221, 0.233] |
 
 Claim boundary: finite semantic retrieval model selection; not universal
 semantic/OOD certification.
@@ -186,4 +202,3 @@ Source:
 Main lesson: future-critical variables must survive the surfaces where they
 control action: hidden states, generated JSON, tool calls, repair branches, and
 value-token causal patches.
-

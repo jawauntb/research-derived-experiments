@@ -25,7 +25,8 @@
 
 ## Submission Risks
 
-- Suite C learned head is teacher-trained, not teacher-free.
+- Suite C now has a positive finite teacher-free reward/CEM layer, but it still
+  uses a privileged source-identity feature and remains a finite-harness result.
 - Suite D/E API results are behavior-only for closed models.
 - Raw local Modal artifacts should not be published without curation.
 - The package is better suited to a benchmark/workshop/dataset venue unless

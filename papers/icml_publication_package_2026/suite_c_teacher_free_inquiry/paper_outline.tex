@@ -10,35 +10,57 @@
 \maketitle
 
 \begin{abstract}
-This paper will test whether Suite C re-engagement can be learned without
-teacher labels. The current learned probe head transfers a hand-policy inquiry
-law; the next result must train from downstream recovery, cost, and
-intervention feedback while preserving the same C1-C6 and learned-signal
-controls.
+Suite C previously showed that a hand-specified policy and then a
+teacher-trained probe head can re-engage after world change. This paper reports
+the next finite step: a linear inquiry policy selected by teacher-free
+cross-entropy-method reward search. The training objective uses downstream
+recovery, selective re-engagement, second-shift reopenability, probe cost, and
+anti-cheat controls; it does not consume hand-policy labels, teacher actions, or
+teacher probabilities. On held-out seeds the policy passes C1-C6 plus T1/N1,
+and a 64-seed bootstrap replication preserves the effect.
 \end{abstract}
 
 \section{Introduction}
-State the reviewer objection: imitation of a hand-designed inquiry law is weaker
-than teacher-free adaptive inquiry.
+The reviewer objection is direct: imitation of a hand-designed inquiry law is
+weaker than teacher-free adaptive inquiry. The result here removes direct
+teacher supervision while keeping the same minimum pass rule: final recovery is
+not sufficient unless inquiry is selective, fresh, cost-aware, reopenable, and
+robust to anti-cheat controls.
 
 \section{Suite C Task}
 Describe two world shifts, affected and unaffected buckets, probe cost, recovery,
 false calm, and second-shift reopenability.
 
 \section{Teacher-Free Training}
-Compare reward-trained policy search, self-supervised value-of-information, and
-contrastive stress policy variants.
+The implemented policy is a linear probe head over the existing observable
+Suite C feature surface: perceived error, perceived surprise, jumps relative to
+a lagging baseline, effort, improvement, time since probe, recent probe rate,
+source identity, and bucket index. Cross-entropy-method search selects
+parameters using only downstream reward terms for recovery, selectivity,
+reopenability, probe cost, no-false-calm behavior, and control failure.
 
 \section{Gates and Controls}
-Report C1-C6, T1 no-teacher-label audit, stale/wrong/suppressed signal controls,
-and matched random budget.
+The accepted policy must pass C1-C6 plus T1 and N1. T1 audits that no teacher
+labels, teacher actions, or teacher probabilities enter the training loss. N1
+requires stale-signal, wrong-signal, signal-suppression, and matched-random
+controls to fail in the intended ways.
 
 \section{Results}
-Reserved for the actual run.
+The first held-out run passes all gates: final affected MAE 0.095, recovery rate
+1.000, first-shift selectivity 12.500, second-shift reopenability 11.312, and
+22.0 probes. Matched random at the same budget reaches selectivity 0.833;
+stale-signal recovery is 0.000; wrong-signal selectivity is 0.000; and
+suppressed-signal final MAE is 0.464.
+
+A wider 64-seed bootstrap replication preserves the conclusion. Final affected
+MAE is 0.095 with 95\% CI [0.095, 0.096]; recovery rate is 1.000 [1.000,
+1.000]; selectivity lift over matched random is 11.292 [10.976, 11.596]; and
+suite pass rate is 1.000 [1.000, 1.000].
 
 \section{Limitations}
 Finite simulator, no biological or consciousness claim, no production-agent
-claim, long-horizon/open-agent transfer remains open.
+claim, long-horizon/open-agent transfer remains open. The source-identity
+feature is still privileged; a paper-ready follow-up should replace it with a
+learned or noisy source estimator.
 
 \end{document}
-
