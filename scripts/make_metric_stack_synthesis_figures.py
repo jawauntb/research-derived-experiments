@@ -7,6 +7,7 @@ import json
 import sys
 from pathlib import Path
 from collections import defaultdict
+from textwrap import fill
 
 import matplotlib
 matplotlib.use("Agg")
@@ -128,6 +129,10 @@ def fig6_arc_food_attribution():
                 "std": float(np.std(food_preds)) if len(food_preds) > 1 else 0,
             })
 
+    if not points:
+        print("  no arc attribution data — skipping fig6")
+        return
+
     fig, ax = plt.subplots(figsize=(10, 5.5))
     x = np.arange(len(points))
     means = [p["mean"] for p in points]
@@ -208,6 +213,172 @@ def fig2_correction_chain():
     fig.savefig(FIG_DIR / "fig2_correction_chain.png", dpi=200, bbox_inches="tight")
     plt.close(fig)
     print(f"wrote {FIG_DIR}/fig2_correction_chain.png")
+
+
+def fig2b_architecture_laws():
+    """Figure 2B: design laws distilled from the correction chain."""
+    rows = [
+        (
+            "Behavior-only success",
+            "Test internal load-bearing structure separately",
+            "Return and task success do not certify the intended representation.",
+        ),
+        (
+            "Scalar priority collapse",
+            "Keep concern vector-valued until decision time",
+            "Priority shifts can reweight E and D without retraining the encoder.",
+        ),
+        (
+            "Gauge-symmetric attribution",
+            "Use anchored interventions, not passive factorization",
+            "Null-anchor supervision breaks self/world false credit.",
+        ),
+        (
+            "Stale or noisy uncertainty",
+            "Estimate current-model error on recent evidence",
+            "Probe calibration flips from anti-aligned to aligned.",
+        ),
+        (
+            "Cross-dimension scale mismatch",
+            "Normalize uncertainty per concern dimension",
+            "Vector attribution becomes stable across seeds.",
+        ),
+        (
+            "Anxiety or false calm",
+            "Cool at the decision layer, not the signal layer",
+            "The agent re-engages after shifts, then quiets after recovery.",
+        ),
+        (
+            "Shared-head role ceiling",
+            "Split or gate heads when identifiability stalls",
+            "The next move is architectural or interventional, not more probing.",
+        ),
+        (
+            "Long-horizon memory drift",
+            "Bind memory to commitment and tool-action surfaces",
+            "A later diagnostic turns future relevance into state/action sensitivity.",
+        ),
+    ]
+    col_specs = [
+        (0.25, 3.3, "Failure mode", "#f5d2ca"),
+        (3.8, 5.0, "Architecture law", "#fff0c2"),
+        (9.1, 4.55, "Why it matters", "#d9eadf"),
+    ]
+    fig, ax = plt.subplots(figsize=(14, 8.2))
+    ax.set_xlim(0, 14)
+    ax.set_ylim(-0.2, len(rows) + 1.35)
+    ax.axis("off")
+
+    ax.text(
+        7,
+        len(rows) + 1.05,
+        "Figure 2B. Architecture laws forced by the Metric Stack",
+        ha="center",
+        fontsize=14,
+        fontweight="bold",
+    )
+    ax.text(
+        7,
+        len(rows) + 0.68,
+        "The payoff is not one clever module; it is a reusable failure → law → payoff ledger.",
+        ha="center",
+        fontsize=10.5,
+        style="italic",
+        color="#444",
+    )
+
+    for x, width, label, color in col_specs:
+        header = FancyBboxPatch(
+            (x, len(rows) + 0.08),
+            width,
+            0.42,
+            boxstyle="round,pad=0.035",
+            facecolor=color,
+            edgecolor="#555",
+            linewidth=0.9,
+        )
+        ax.add_patch(header)
+        ax.text(
+            x + width / 2,
+            len(rows) + 0.29,
+            label,
+            ha="center",
+            va="center",
+            fontsize=10.5,
+            fontweight="bold",
+        )
+
+    for i, (failure, law, payoff) in enumerate(rows):
+        y = len(rows) - i - 0.62
+        stripe = "#fafafa" if i % 2 == 0 else "#f2f5f7"
+        ax.add_patch(
+            patches.Rectangle(
+                (0.12, y - 0.37),
+                13.63,
+                0.74,
+                facecolor=stripe,
+                edgecolor="#e1e1e1",
+                linewidth=0.5,
+            )
+        )
+        for x, width, _label, color in col_specs:
+            ax.add_patch(
+                patches.Rectangle(
+                    (x, y - 0.31),
+                    width,
+                    0.62,
+                    facecolor=color,
+                    edgecolor="white",
+                    linewidth=0.7,
+                    alpha=0.82,
+                )
+            )
+        ax.text(
+            0.42,
+            y,
+            fill(failure, 23),
+            ha="left",
+            va="center",
+            fontsize=9.8,
+            fontweight="bold",
+            color="#6b2418",
+        )
+        ax.text(
+            4.05,
+            y,
+            fill(law, 36),
+            ha="left",
+            va="center",
+            fontsize=10,
+            fontweight="bold",
+            color="#4e3d00",
+        )
+        ax.text(
+            9.35,
+            y,
+            fill(payoff, 35),
+            ha="left",
+            va="center",
+            fontsize=9.5,
+            color="#163b22",
+        )
+        ax.annotate(
+            "",
+            xy=(3.72, y),
+            xytext=(3.45, y),
+            arrowprops=dict(arrowstyle="->", color="#777", lw=1.1),
+        )
+        ax.annotate(
+            "",
+            xy=(9.02, y),
+            xytext=(8.82, y),
+            arrowprops=dict(arrowstyle="->", color="#777", lw=1.1),
+        )
+
+    fig.tight_layout()
+    fig.savefig(FIG_DIR / "fig2b_architecture_laws.png", dpi=220, bbox_inches="tight")
+    plt.close(fig)
+    print(f"wrote {FIG_DIR}/fig2b_architecture_laws.png")
 
 
 def fig5_maintained_boundary_cycle():
@@ -472,6 +643,7 @@ def fig7_philosophical_correlates():
 def main():
     fig1_metric_stack()
     fig2_correction_chain()
+    fig2b_architecture_laws()
     fig3_p23b_goldilocks()
     fig4_architectural_ceiling()
     fig5_maintained_boundary_cycle()
