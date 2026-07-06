@@ -27,6 +27,13 @@ from experiments.structure_compatible_generalization.modular_domain import (
     true_translation_compatibility,
     wrong_permutation_compatibility,
 )
+from experiments.structure_compatible_generalization.phase3_learned_generators import (
+    affine_table_compatibility,
+    exact_generator_rows,
+    infer_affine_transports,
+    run_modular_generator_sweep,
+    run_vision_generator_sweep,
+)
 from experiments.structure_compatible_generalization.transformation_discovery import (
     close_shift_family,
     infer_supported_shifts,
@@ -207,3 +214,97 @@ def test_tiny_intervention_sweep_records_regularizer_metadata() -> None:
         assert row.compatibility_discovered is not None
         assert "training_discovery" in row.metadata
         assert "regularizer_shifts" in row.metadata
+
+
+def test_affine_generator_discovers_label_transport_offsets() -> None:
+    modulus = 7
+    train_window = 3
+    train = base_train_pairs(modulus, train_window)
+    labels = labels_for_pairs(train, modulus=modulus, train_window=train_window)
+    family = infer_affine_transports(
+        train,
+        labels,
+        modulus=modulus,
+        min_support=modulus,
+        max_transports=16,
+    )
+    offsets = set(family.selected_offsets)
+
+    assert (0, 0, 0) in offsets
+    assert (1, 0, 1) in offsets
+    assert (0, 1, 1) in offsets
+
+
+def test_affine_generator_compatibility_separates_rule_from_shortcut() -> None:
+    modulus = 11
+    train_window = 4
+    train = base_train_pairs(modulus, train_window)
+    labels = labels_for_pairs(train, modulus=modulus, train_window=train_window)
+    family = infer_affine_transports(
+        train,
+        labels,
+        modulus=modulus,
+        min_support=modulus,
+        max_transports=16,
+    )
+    rule_score = affine_table_compatibility(
+        true_table(modulus),
+        modulus=modulus,
+        offsets=family.selected_offsets,
+    )
+    shortcut_score = affine_table_compatibility(
+        shortcut_table(modulus, train_window),
+        modulus=modulus,
+        offsets=family.selected_offsets,
+    )
+
+    assert rule_score == 1.0
+    assert shortcut_score < 0.5
+
+
+def test_modular_generator_exact_rows_emit_common_schema() -> None:
+    rows = exact_generator_rows(modulus=7, train_window=3, max_transports=12)
+    assert {row.model_id for row in rows} == {"true_rule", "local_shortcut"}
+    assert all(row.compatibility_discovered is not None for row in rows)
+    assert summarize_rows(rows)["by_domain"]["modular_generator_exact"]["n_rows"] == 2
+
+
+def test_tiny_modular_generator_sweep_records_learned_generator() -> None:
+    if importlib.util.find_spec("torch") is None:
+        pytest.skip()
+    rows = run_modular_generator_sweep(
+        n_configs=1,
+        epochs=2,
+        base_seed=789,
+        regularization_values=(0.0, 0.05),
+        device="cpu",
+        include_exact=False,
+        max_transports=8,
+    )
+    assert len(rows) == 2
+    for row in rows:
+        assert row.domain == "modular_learned_generator"
+        assert row.compatibility_discovered is not None
+        assert "learned_generator" in row.metadata
+        assert "regularizer_offsets" in row.metadata
+
+
+def test_tiny_vision_generator_sweep_emits_paired_regimes() -> None:
+    if importlib.util.find_spec("torch") is None:
+        pytest.skip()
+    if importlib.util.find_spec("scipy") is None:
+        pytest.skip()
+    rows = run_vision_generator_sweep(
+        n_base=1,
+        epochs=1,
+        base_seed=321,
+        device="cpu",
+    )
+    assert len(rows) == 4
+    assert {
+        row.metadata["regime"]
+        for row in rows
+    } == {"none", "oracle_aug", "learned_aug", "random_aug"}
+    for row in rows:
+        assert row.domain == "vision_rotation_learned_generator"
+        assert row.compatibility_discovered is not None
