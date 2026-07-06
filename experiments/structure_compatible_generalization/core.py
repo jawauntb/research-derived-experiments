@@ -26,6 +26,7 @@ class DiagnosticRow:
     parameter_l2: float | None = None
     sharpness_proxy: float | None = None
     compatibility_inferred: float | None = None
+    compatibility_discovered: float | None = None
     train_loss_score: float | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
@@ -46,6 +47,9 @@ class DiagnosticRow:
             parameter_l2=_optional_float(record.get("parameter_l2")),
             sharpness_proxy=_optional_float(record.get("sharpness_proxy")),
             compatibility_inferred=_optional_float(record.get("compatibility_inferred")),
+            compatibility_discovered=_optional_float(
+                record.get("compatibility_discovered")
+            ),
             train_loss_score=_optional_float(record.get("train_loss_score")),
             metadata=dict(record.get("metadata") or {}),
         )
@@ -107,6 +111,8 @@ def row_predictor_values(row: DiagnosticRow) -> dict[str, float]:
     }
     if row.compatibility_inferred is not None:
         out["compatibility_inferred"] = row.compatibility_inferred
+    if row.compatibility_discovered is not None:
+        out["compatibility_discovered"] = row.compatibility_discovered
     if row.final_train_loss is not None:
         out["negative_train_loss"] = -row.final_train_loss
     if row.train_loss_score is not None:

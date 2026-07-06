@@ -193,7 +193,7 @@ def write_paper_markdown(
     figure_paths: list[Path],
 ) -> None:
     paper_dir.mkdir(parents=True, exist_ok=True)
-    path = paper_dir / "paper.md"
+    path = paper_dir / "structure_compatible_generalization.md"
     top_lines = []
     for domain, domain_summary in summary["by_domain"].items():
         top = domain_summary["predictor_ranking"][0]
@@ -303,10 +303,12 @@ def main() -> int:
     write_report(payload, summary, args.report_out)
     write_paper_markdown(payload, summary, args.paper_dir, figure_paths)
     print(f"Wrote report to {args.report_out}")
-    print(f"Wrote paper markdown to {args.paper_dir / 'paper.md'}")
+    print(
+        "Wrote paper markdown to "
+        f"{args.paper_dir / 'structure_compatible_generalization.md'}"
+    )
     return 0
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

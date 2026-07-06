@@ -27,6 +27,11 @@ from experiments.structure_compatible_generalization.core import (
     rows_to_records,
     summarize_rows,
 )
+from experiments.structure_compatible_generalization.transformation_discovery import (
+    close_shift_family,
+    infer_supported_shifts,
+    shift_table_compatibility,
+)
 
 
 Pair = tuple[int, int]
@@ -47,6 +52,8 @@ class ModularConfig:
     optimizer: str
     augmentation: str
     augmentation_count: int
+    compatibility_regularization: float = 0.0
+    compatibility_min_support: int = 1
 
 
 def pair_index(a: int, b: int, modulus: int) -> int:
@@ -234,6 +241,28 @@ def inferred_translation_compatibility(
     return compatible / len(admitted_shifts)
 
 
+def discovered_translation_compatibility(
+    table: Table,
+    train_pairs: list[Pair],
+    train_labels: list[int],
+    modulus: int,
+    *,
+    min_support: int,
+) -> tuple[float, dict[str, object]]:
+    family = infer_supported_shifts(
+        train_pairs,
+        train_labels,
+        modulus=modulus,
+        min_support=min_support,
+    )
+    closed = close_shift_family(family.admitted_shifts, modulus)
+    compatibility = shift_table_compatibility(table, modulus=modulus, shifts=closed)
+    record = family.to_record()
+    record["closed_shifts"] = list(closed)
+    record["closed_count"] = len(closed)
+    return compatibility, record
+
+
 def _is_translation(perm: tuple[int, ...]) -> bool:
     if not perm:
         return True
@@ -250,6 +279,14 @@ def exact_rows(modulus: int = 11, train_window: int = 4) -> list[DiagnosticRow]:
         ("true_rule", true_table(modulus)),
         ("local_shortcut", shortcut_table(modulus, train_window)),
     ]:
+        train_labels = [truth_value(a, b, modulus) for a, b in train]
+        discovered_compatibility, discovery_record = discovered_translation_compatibility(
+            table,
+            train,
+            train_labels,
+            modulus,
+            min_support=modulus,
+        )
         rows.append(
             DiagnosticRow(
                 domain="modular_exact",
@@ -264,10 +301,15 @@ def exact_rows(modulus: int = 11, train_window: int = 4) -> list[DiagnosticRow]:
                 compatibility_inferred=inferred_translation_compatibility(
                     table,
                     train,
-                    [truth_value(a, b, modulus) for a, b in train],
+                    train_labels,
                     modulus,
                 ),
-                metadata={"modulus": modulus, "train_window": train_window},
+                compatibility_discovered=discovered_compatibility,
+                metadata={
+                    "modulus": modulus,
+                    "train_window": train_window,
+                    "discovery": discovery_record,
+                },
             )
         )
     return rows
@@ -356,6 +398,38 @@ def sharpness_proxy(
     return float(sum((h * v).sum().detach().cpu().item() for h, v in zip(hv, vectors)))
 
 
+def compatibility_regularizer(
+    model: Any,
+    *,
+    modulus: int,
+    device: Any,
+    shifts: tuple[int, ...],
+) -> Any:
+    torch, _nn, F = _load_torch()
+    non_identity = [shift % modulus for shift in shifts if shift % modulus != 0]
+    if not non_identity:
+        return torch.zeros((), device=device)
+
+    pairs = all_pairs(modulus)
+    inputs = one_hot_pairs(pairs, modulus, device)
+    base_logits = model(inputs)
+    base_probs = F.softmax(base_logits, dim=-1).detach()
+
+    losses = []
+    for shift in non_identity:
+        shifted_pairs = [translated_pair(pair, shift, modulus) for pair in pairs]
+        shifted_logits = model(one_hot_pairs(shifted_pairs, modulus, device))
+        shifted_targets = torch.roll(base_probs, shifts=shift, dims=-1)
+        losses.append(
+            F.kl_div(
+                F.log_softmax(shifted_logits, dim=-1),
+                shifted_targets,
+                reduction="batchmean",
+            )
+        )
+    return sum(losses) / len(losses)
+
+
 def train_one(config: ModularConfig, *, device: str | None = None) -> DiagnosticRow:
     torch, _nn, F = _load_torch()
     rng = random.Random(config.seed)
@@ -374,6 +448,16 @@ def train_one(config: ModularConfig, *, device: str | None = None) -> Diagnostic
         modulus=config.modulus,
         augmentation=config.augmentation,
         train_window=config.train_window,
+    )
+    discovered_family = infer_supported_shifts(
+        train_pairs,
+        train_labels,
+        modulus=config.modulus,
+        min_support=config.compatibility_min_support,
+    )
+    regularizer_shifts = close_shift_family(
+        discovered_family.admitted_shifts,
+        config.modulus,
     )
 
     inputs = one_hot_pairs(train_pairs, config.modulus, torch_device)
@@ -400,13 +484,25 @@ def train_one(config: ModularConfig, *, device: str | None = None) -> Diagnostic
         )
 
     final_loss = math.inf
+    final_regularizer = 0.0
     for _ in range(config.epochs):
         model.train()
         opt.zero_grad()
-        loss = F.cross_entropy(model(inputs), targets)
+        supervised_loss = F.cross_entropy(model(inputs), targets)
+        if config.compatibility_regularization > 0.0:
+            regularizer_loss = compatibility_regularizer(
+                model,
+                modulus=config.modulus,
+                device=torch_device,
+                shifts=regularizer_shifts,
+            )
+        else:
+            regularizer_loss = torch.zeros((), device=torch_device)
+        loss = supervised_loss + config.compatibility_regularization * regularizer_loss
         loss.backward()
         opt.step()
-        final_loss = float(loss.detach().cpu().item())
+        final_loss = float(supervised_loss.detach().cpu().item())
+        final_regularizer = float(regularizer_loss.detach().cpu().item())
 
     table = function_table(model, modulus=config.modulus, device=torch_device)
     base_pairs = base_train_pairs(config.modulus, config.train_window)
@@ -415,9 +511,17 @@ def train_one(config: ModularConfig, *, device: str | None = None) -> Diagnostic
         sum(float((p.detach().cpu() ** 2).sum().item()) for p in model.parameters())
     )
     sharp = sharpness_proxy(model, inputs, targets)
+    discovered_compatibility, discovery_record = discovered_translation_compatibility(
+        table,
+        train_pairs,
+        train_labels,
+        config.modulus,
+        min_support=config.compatibility_min_support,
+    )
     model_id = (
         f"modular-{config.seed}-{config.augmentation}-"
-        f"n{config.modulus}-w{config.train_window}"
+        f"n{config.modulus}-w{config.train_window}-"
+        f"reg{config.compatibility_regularization:g}"
     )
     return DiagnosticRow(
         domain="modular_neural",
@@ -432,10 +536,18 @@ def train_one(config: ModularConfig, *, device: str | None = None) -> Diagnostic
         compatibility_inferred=inferred_translation_compatibility(
             table, train_pairs, train_labels, config.modulus
         ),
+        compatibility_discovered=discovered_compatibility,
         final_train_loss=final_loss,
         parameter_l2=param_l2,
         sharpness_proxy=sharp,
-        metadata={"config": asdict(config), "table": list(table)},
+        metadata={
+            "config": asdict(config),
+            "table": list(table),
+            "discovery": discovery_record,
+            "training_discovery": discovered_family.to_record(),
+            "regularizer_shifts": list(regularizer_shifts),
+            "final_regularizer_loss": final_regularizer,
+        },
     )
 
 
@@ -453,7 +565,11 @@ def run_sweep(
         augmentation = rng.choice(
             ["none", "partial_translation", "full_translation", "wrong_identity"]
         )
-        count = 0 if augmentation in ("none", "full_translation") else rng.choice([1, 2, 3, 4])
+        count = (
+            0
+            if augmentation in ("none", "full_translation")
+            else rng.choice([1, 2, 3, 4])
+        )
         config = ModularConfig(
             seed=rng.randrange(0, 2**31 - 1),
             modulus=rng.choice([7, 11, 13]),
@@ -467,8 +583,60 @@ def run_sweep(
             optimizer=rng.choice(["adam", "sgd"]),
             augmentation=augmentation,
             augmentation_count=count,
+            compatibility_regularization=0.0,
+            compatibility_min_support=1,
         )
         rows.append(train_one(config, device=device))
+    return rows
+
+
+def run_intervention_sweep(
+    *,
+    n_configs: int,
+    epochs: int,
+    base_seed: int,
+    device: str | None = None,
+    regularization_values: tuple[float, ...] = (0.0, 0.05, 0.2),
+    include_exact: bool = True,
+) -> list[DiagnosticRow]:
+    rng = random.Random(base_seed)
+    rows = exact_rows() if include_exact else []
+    for _ in range(n_configs):
+        augmentation = rng.choice(
+            ["none", "partial_translation", "full_translation", "wrong_identity"]
+        )
+        count = (
+            0
+            if augmentation in ("none", "full_translation")
+            else rng.choice([1, 2, 3, 4])
+        )
+        seed = rng.randrange(0, 2**31 - 1)
+        modulus = rng.choice([7, 11, 13])
+        train_window = rng.choice([2, 3, 4])
+        hidden_width = rng.choice([32, 64, 128])
+        depth = rng.choice([1, 2, 3])
+        init_scale = rng.choice([0.5, 1.0, 1.5])
+        learning_rate = rng.choice([1e-3, 3e-3, 1e-2])
+        weight_decay = rng.choice([0.0, 1e-4, 1e-3])
+        optimizer = rng.choice(["adam", "sgd"])
+        for strength in regularization_values:
+            config = ModularConfig(
+                seed=seed,
+                modulus=modulus,
+                train_window=train_window,
+                hidden_width=hidden_width,
+                depth=depth,
+                init_scale=init_scale,
+                learning_rate=learning_rate,
+                weight_decay=weight_decay,
+                epochs=epochs,
+                optimizer=optimizer,
+                augmentation=augmentation,
+                augmentation_count=count,
+                compatibility_min_support=1,
+                compatibility_regularization=strength,
+            )
+            rows.append(train_one(config, device=device))
     return rows
 
 
