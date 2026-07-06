@@ -7,11 +7,12 @@
 
 How can we tell whether a minimal agent's behavior depends on the intended internal structure, rather than on a proxy? We address this measurement problem in homeostatic bandits where agents must predict viability change, act, intervene through costly null actions, and attribute observed changes to self versus world. We synthesize a 25-study experimental arc in which a *family of minimal homeostatic agents* is progressively augmented with mechanisms for autonomous self/world attribution: concern-like representation, vector-valued valence, active null-anchored intervention (Brehmer et al., 2022), calibrated probe selection (Houlsby et al., 2011; Settles, 2009), decision-layer habituation, and learned probe abstractions. The arc reaches a clearly identified architectural ceiling: in the tested shared-head / null-intervention setup, probe-policy improvements no longer close the role-specific mediated-identifiability gap.
 
-We study **minimal computational precursors of concern-like agency**. We do not claim consciousness, full agency, or general intelligence. The contribution is threefold:
+We study **minimal computational precursors of concern-like agency**. We do not claim consciousness, full agency, or general intelligence. The contribution is fourfold:
 
 1. The **Metric Stack of Concern** — a 20-layer diagnostic stack (twelve core quantitative metrics expanded into the historical sequence in which they were added) that makes the philosophical thesis "meaning is regulated concern" empirically tractable.
 2. The **Correction Chain** — eight named distinctions the program forced (behavior ≠ representation, residual scale ≠ systematic error, current error ≠ value of probing, etc.).
 3. A **Positive Mechanism** — a working detect–allocate–saturate–re-engage cycle (Friston, 2010; Dewey, 1938) with three-head world decomposition and learned probe abstractions, plus a precise architectural ceiling at the role-specific mediated identification limit.
+4. An **Architecture-Law Ledger** — simple design rules forced by the failures: preserve vector-valued concern until action selection, anchor self/world attribution with interventions, estimate uncertainty from current-model error, cool acquisition at the decision layer, and move to split/gated heads or richer interventions when identifiability stalls.
 
 The autonomous-probing arc assumes a privileged null intervention; learning or inventing identifying interventions is left for Phase 2. The arc reaches its natural endpoint at the architectural ceiling; further closure requires different research questions (disjoint per-role representations, richer intervention types, multi-agent or continuous-state environments).
 
@@ -21,13 +22,15 @@ The autonomous-probing arc assumes a privileged null intervention; learning or i
 
 The starting thesis is conceptual: meaning is not merely compression or passive latent geometry. Meaning-like structure appears when differences become salient under concern, and agency-like structure appears when that concern is coupled to action, self-maintenance, boundary preservation, repair, and time. This claim is shared across multiple traditions — Heidegger's care-laden world (Heidegger, 1927), Gibson's affordances (Gibson, 1979), Uexküll's *Umwelt* (Uexküll, 1934), the enactive/autopoietic tradition (Maturana & Varela, 1980; Thompson, 2007; Di Paolo, 2005), Ashby's cybernetics (Ashby, 1952), Friston's active inference (Friston, 2010; Parr et al., 2022), Jonas's organism-as-self-concern (Jonas, 1966), Vervaeke's relevance realization (Vervaeke, 2019), and Simondon's individuation (Simondon, 1958). None of these traditions predicted the specific mechanisms we found, but all predicted the *shape*.
 
+A recent non-peer-reviewed preprint by Lyons, Pio-Lopez, and Levin (2026) gives one useful phrase for this kind of architecture: a **virtual governor**, an emergent control structure in which signaling relationships translate global constraint violations into local incentives. We use that phrase only as terminology and adjacent framing, not as evidence. The experiments here are narrower: they ask when a single minimal agent's viability, uncertainty, memory, and action surfaces become organized enough that the agent can maintain a self/world boundary over time.
+
 We **do not claim** to have built consciousness, full agency, or general intelligence. We study **minimal computational precursors of concern-like agency**. The contribution is computational and methodological — a working mechanism stack and a metric ladder that makes the philosophical thesis empirically tractable, with sharp boundary conditions.
 
 **Scope and key caveats up front.** The arc operates in a two-variable homeostatic bandit (energy E, damage D) with four item roles, three actions, and a hand-coded null action whose dynamics the agent uses as a privileged identifying intervention. Both the viability variables and the null action are simulator-defined; learning either the viability dimensions or the intervention type is out of scope. All results are reported across three seeds. Pre-registration discipline was added at Paper 17A; earlier metric-stack layers should be treated as exploratory. Section 16 enumerates these and other limitations; Section 17 lists six falsification conditions under which the maintained-boundary interpretation would weaken.
 
 **Why this is a measurement-stack paper, not a benchmark paper.** Several reliable patterns in the deep-learning literature on uncertainty (Lakshminarayanan et al., 2017; Kendall & Gal, 2017; Gal & Ghahramani, 2016), active learning (Settles, 2009; Houlsby et al., 2011), intrinsic motivation (Pathak et al., 2017; Burda et al., 2019), causal representation learning (Locatello et al., 2019; Brehmer et al., 2022; Schölkopf et al., 2021), and empowerment / information-gain action selection (Klyubin et al., 2005; Mohamed & Rezende, 2015) predict that *something like* the mechanisms studied here should be useful for self-modeling agents. They also warn that uncertainty- and intrinsic-reward-driven acquisition can fail when the signal is miscalibrated. Our contribution is a sequence of diagnostics — the Metric Stack — that operationalizes this family of warnings inside one minimal self/world attribution problem, plus a working mechanism that survives the diagnostics within a clearly stated representational limit.
 
-This paper is organized so a reader can reproduce, review, and critique all key findings without external references to internal documents. §2 details the experimental setup (environment, architecture, training pipeline) shared across the eight anchor experiments. §3 reports the diagnostic Metric Stack and §4 the Correction Chain of empirical distinctions. §5–§12 present the eight anchor experiments with their own methods, gates, and results. §13 describes the positive mechanism in full. §14 specifies the architectural ceiling. §15 maps results to philosophical correlates. §16–§18 cover limitations, falsification conditions, and the next phase. Appendices A–D give a red-team alternative-explanations table, the full failure taxonomy, the pre-registration discipline, and reproducibility recipes.
+This paper is organized so a reader can reproduce, review, and critique all key findings without external references to internal documents. §2 details the experimental setup (environment, architecture, training pipeline) shared across the eight anchor experiments. §3 reports the diagnostic Metric Stack and §4 the Correction Chain of empirical distinctions, including the architecture laws distilled from them. §5–§12 present the eight anchor experiments with their own methods, gates, and results. §13 describes the positive mechanism in full. §14 specifies the architectural ceiling. §15 maps results to philosophical correlates. §16–§18 cover limitations, falsification conditions, and the next phase. Appendices A–D give a red-team alternative-explanations table, the full failure taxonomy, the pre-registration discipline, and reproducibility recipes.
 
 ## 2. Experimental setup (shared across all anchor experiments)
 
@@ -258,6 +261,25 @@ The no-false-calm pattern is a transferable design principle for any acquisition
 ### 4.8 Total world prediction is not component identifiability (Papers 23B → 25)
 
 Three-head world architecture (`direct_self + mediated_world + exogenous_world`) captures total world prediction with high accuracy in action-correlated environments, but the internal mediated/exogenous split is gauge-arbitrary without explicit anchoring — a familiar identifiability problem in causal representation learning (Locatello et al., 2019; Brehmer et al., 2022; Schölkopf et al., 2021). Paper 24's interventional contrast loss closed most of this gap (mediated MAE 56% reduction). But Paper 25 showed that even under role-specific mediated effects, **the shared mediated head produces near-identical predictions for food vs. medicine** — at seed 1729, food's predicted mediated_E and medicine's were identically 0.048 to three decimal places (Figure 4). The architecture's expressive capacity, conditioned on the available supervision, is the limit (§14).
+
+### 4.9 Architecture laws for concern-mediated agency
+
+The Correction Chain is not just historical cleanup. It is the program's best evidence for simple architecture changes that matter. Each distinction forced a design law: a local rule about what to preserve, factor, calibrate, or gate so that an agent's behavior remains tied to the intended internal structure rather than to a proxy.
+
+![Figure 2B. Architecture laws forced by the Metric Stack. Takeaway: the payoff is not one clever module; it is a reusable failure-to-law ledger for concern-mediated agency.](figures/fig2b_architecture_laws.png)
+
+The laws, stated compactly:
+
+1. **Preserve concern dimensions until decision time.** Scalar drive heads hide priority flips; vector-valued ΔV lets the policy reweight "hungry" and "injured" priorities without relearning the representation.
+2. **Give the agent low-risk control and intervention actions.** Safe fallback actions and null probes convert failure from "act wrongly" into "gather identifying evidence or preserve viability."
+3. **Anchor self/world attribution by intervention, not architecture alone.** Factorized heads are gauge-symmetric unless some observation pins what counts as self-caused versus world-caused change.
+4. **Estimate uncertainty from the current model on recent evidence.** Same-class ensembles, raw residual magnitude, and stale EMAs all failed. Current-replay targets made the uncertainty signal track present systematic error.
+5. **Normalize uncertainty across concern dimensions.** When E and D live on different scales, a global probe threshold silently privileges one dimension. Per-dimension normalization fixed the vector gap.
+6. **Cool acquisition at the decision layer.** Suppressing the surprise signal produces false calm. Keeping the signal intact while raising the action threshold after recent probes gives habituation without amnesia.
+7. **Change architecture or interventions when identifiability gates stall.** Paper 25's shared-head ceiling says the next move is disjoint/gated heads or richer counterfactual interventions, not another probe-policy variant.
+8. **Bind memory to future commitment surfaces.** This is a cross-program bridge rather than a result inside the homeostatic arc: our later long-horizon tool-memory diagnostic suggests that memory becomes agentic when it is coupled to a delayed action or tool-call commitment, not when it is merely present in context.
+
+This ledger is the clearest answer to the architecture question. The program has not found a universal recipe for agency or consciousness. It has found a sequence of cheap, testable design constraints that repeatedly convert proxy success into more causally organized behavior: vector concern, safe intervention, current-error calibration, scale-aware thresholds, decision-layer habituation, and architecture changes at the identifiability ceiling.
 
 ## 5. Anchor Experiment 1 (Paper 16b): Active Null-Anchored Intervention
 
@@ -561,6 +583,7 @@ Specific limitations of the experimental program:
 - **Null action is privileged.** All identifying intervention is via null observation. Richer intervention types (counterfactual rollouts, action-counterfactuals, n-step sequences) remain open. The arc's central mechanism depends on this assumption.
 - **Shared-head ceiling under null-only intervention.** Mediated / exogenous identification is bounded by representational capacity + interventional regime, not policy design (§14).
 - **No multi-agent or social structure.** Other agents, communication, and theory-of-mind are open.
+- **Architecture laws are still within-scope hypotheses.** Section 4.9 distills design laws from this arc and from one later long-horizon bridge result, but the homeostatic experiments themselves do not prove transfer to language agents, robotics, markets, or decentralized collectives.
 - **Continuous state and real-world embodiment remain untested.** The minimal-bandit framing is deliberate but it does not validate generalization to robotics or continuous control.
 - **Three seeds per anchor experiment.** Stable qualitative patterns across all seeds but magnitude error bars are wide. Larger replication is a Phase 2 priority.
 - **No human evaluation of philosophical claims.** Mapping to Heidegger / Vervaeke / etc. is offered as conceptual correspondence, not experimental verification.
@@ -586,6 +609,7 @@ The natural next phase is not "another autonomous-probing paper." Three pre-comm
 1. **Disjoint per-role mediated representation** (mixture-of-experts gated on learned cluster IDs; Shazeer et al., 2017), or factored heads with role-discriminative supervision. Tests whether the architectural ceiling lifts.
 2. **Richer interventions beyond null.** Counterfactual rollouts against a learned world model (Ha & Schmidhuber, 2018); action-counterfactual queries; temporally extended interventions. Tests whether null observation is the right interventional primitive.
 3. **Multi-agent and continuous environments.** Other agents introduce communication, theory-of-mind, and shared world structure. Continuous state and embodied robotics test transfer.
+4. **Cross-domain architecture-law tests.** Long-horizon tool-memory tasks, structure-compatible OOD generalization, and language-agent action interfaces should test whether the same laws — vector concern, current evidence, action-surface commitment, and anti-cheat gates — survive outside this bandit.
 
 We expect each direction will produce new failure modes, new metric-stack entries, and new corrections. The methodological pattern — name the failure, build the smallest sufficient mechanism, verify with anti-cheat gates, identify the next ceiling — should transfer.
 
@@ -762,6 +786,8 @@ Lakshminarayanan, B., Pritzel, A., & Blundell, C. (2017). Simple and scalable pr
 Levin, M. (2022). Technological approach to mind everywhere. *Frontiers in Systems Neuroscience*, 16.
 
 Locatello, F., Bauer, S., Lucic, M., Rätsch, G., Gelly, S., Schölkopf, B., & Bachem, O. (2019). Challenging common assumptions in the unsupervised learning of disentangled representations. *International Conference on Machine Learning*.
+
+Lyons, B., Pio-Lopez, L., & Levin, M. (2026). Alignment is to a virtual governor: A theory of coordination in diverse intelligence. *Preprints.org*. doi:10.20944/preprints202607.0220.v1. Not peer-reviewed.
 
 Maturana, H. R., & Varela, F. J. (1980). *Autopoiesis and Cognition: The Realization of the Living*. D. Reidel.
 
