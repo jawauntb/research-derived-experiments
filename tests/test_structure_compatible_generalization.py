@@ -123,7 +123,7 @@ def test_modular_exact_rows_emit_common_schema() -> None:
 
 def test_tiny_modular_neural_sweep_emits_rows() -> None:
     if importlib.util.find_spec("torch") is None:
-        pytest.skip("torch unavailable; neural training is exercised in Modal runs")
+        pytest.skip()
     rows = run_sweep(n_models=1, epochs=2, base_seed=123, device="cpu")
     assert len(rows) == 3
     assert {"modular_exact", "modular_neural"} == {row.domain for row in rows}
