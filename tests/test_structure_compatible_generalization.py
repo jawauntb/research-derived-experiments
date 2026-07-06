@@ -34,6 +34,15 @@ from experiments.structure_compatible_generalization.phase3_learned_generators i
     run_modular_generator_sweep,
     run_vision_generator_sweep,
 )
+from experiments.structure_compatible_generalization.semantic_retrieval_transfer import (
+    exact_semantic_rows,
+    fixture_embeddings,
+    infer_embedding_pairs,
+    run_fixture_semantic_sweep,
+    semantic_items,
+    true_orbit_pairs,
+    wrong_cross_label_pairs,
+)
 from experiments.structure_compatible_generalization.template_language_domain import (
     default_min_support,
     exact_language_rows,
@@ -421,3 +430,45 @@ def test_tiny_language_template_sweep_records_learned_generator() -> None:
         assert row.compatibility_discovered is not None
         assert "learned_generator" in row.metadata
         assert "regularizer_transforms" in row.metadata
+
+
+def test_semantic_retrieval_fixture_pairs_have_controls() -> None:
+    items = semantic_items()
+    embeddings = fixture_embeddings(items)
+    inferred = infer_embedding_pairs(embeddings, threshold=0.72)
+    wrong = wrong_cross_label_pairs(items, embeddings)
+
+    assert len(items) > 20
+    assert len(true_orbit_pairs(items)) > len(items)
+    assert inferred
+    assert wrong
+
+
+def test_semantic_retrieval_exact_rows_separate_rule_from_shortcut() -> None:
+    rows = exact_semantic_rows()
+    assert {row.model_id for row in rows} == {
+        "semantic_rule",
+        "train_lexical_shortcut",
+    }
+    rule = next(row for row in rows if row.model_id == "semantic_rule")
+    shortcut = next(row for row in rows if row.model_id == "train_lexical_shortcut")
+
+    assert rule.ood_accuracy == 1.0
+    assert rule.compatibility_discovered is not None
+    assert shortcut.compatibility_discovered is not None
+    assert rule.compatibility_true >= shortcut.compatibility_true
+    assert rule.compatibility_discovered >= shortcut.compatibility_discovered
+
+
+def test_tiny_semantic_retrieval_fixture_sweep_emits_rows() -> None:
+    rows = run_fixture_semantic_sweep(n_configs=4, base_seed=1357, include_exact=True)
+
+    assert len(rows) == 6
+    assert {"semantic_retrieval_exact", "semantic_retrieval_frozen_encoder"} == {
+        row.domain for row in rows
+    }
+    for row in rows:
+        assert 0.0 <= row.ood_accuracy <= 1.0
+        assert 0.0 <= row.compatibility_true <= 1.0
+        assert 0.0 <= row.compatibility_wrong <= 1.0
+        assert row.compatibility_discovered is not None

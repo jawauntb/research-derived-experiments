@@ -14,6 +14,9 @@ Expected artifacts:
 - `language_template_substitution_preregistration.md`
 - `language_template_substitution.md`
 - `language_template_substitution.pdf`
+- `semantic_retrieval_transfer_preregistration.md`
+- `semantic_retrieval_transfer.md`
+- `semantic_retrieval_transfer.pdf`
 - `docs/paper_reviews/structure_compatible_generalization_critical_review.md`
 - `docs/paper_reviews/inferred_transformations_intervention_critical_review.md`
 - `figures/fig1_domain_predictors.png`
@@ -24,6 +27,8 @@ Expected artifacts:
 - `figures/fig6_learned_generator_interventions.png`
 - `figures/fig7_language_template_predictors.png`
 - `figures/fig8_language_template_intervention.png`
+- `figures/fig9_semantic_retrieval_predictors.png`
+- `figures/fig10_semantic_retrieval_breakdowns.png`
 
 Build flow:
 
@@ -51,6 +56,12 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
   experiments/structure_compatible_generalization/modal_language_template_substitution.py \
   --artifacts-only \
   --artifact-input artifacts/structure_compatible_generalization/language_template_substitution.json
+
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/structure_compatible_generalization/modal_semantic_retrieval_transfer.py \
+  --artifacts-only \
+  --artifact-input artifacts/structure_compatible_generalization/semantic_retrieval_transfer.json
 
 python3 scripts/export_structure_compatible_artifacts.py --clean
 ```
