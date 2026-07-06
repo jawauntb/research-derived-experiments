@@ -20,6 +20,8 @@ The decomposition succeeded: H2 was the right hypothesis. V_probe's failure was 
 
 This is the program's first clean positive on autonomous probing.
 
+**Architecture law.** A memory trace becomes an epistemic control signal only when it is re-scored by the model that will act on it. Recent residuals alone are not enough: if the stored number was computed by an old model, it can be precise, recent, and still point at the wrong intervention. The simple change that matters is architectural, not large: keep a compact raw calibration buffer and recompute error against the present predictor before training or firing the probe. In agent terms, useful memory is not just retained experience; it is experience re-entered through the current policy/world-model loop.
+
 ## 1. Background
 
 Paper 17A: V_probe target `|pred_world − total|` per-sample → noise-floor saturation → probe fires 100% at every cost → policy collapse.
@@ -183,6 +185,18 @@ The substantive question — does probe-shaping actually shape attribution? — 
 - **fig3** — `figures/fig3_h1_vs_h2.png`: G18 visualization. Current_replay_audit MAE bar dropping below the matched_random reference line; H1 variants towering above.
 - **fig4** — `figures/fig4_calibration.png`: G14 scatter (probe rate per bucket vs oracle uncertainty) with current_replay (+0.62) above P18 (−0.55) overlaid. Plus G15 panel.
 
+<div style="page-break-before: always;"></div>
+
+![Figure 1. Factorial and total MAE comparison.](figures/fig1_factorial.png)
+
+![Figure 2. Per-role self predictions across conditions.](figures/fig2_per_role_self.png)
+
+<div style="page-break-before: always;"></div>
+
+![Figure 3. H1 recency variants versus H2 current replay.](figures/fig3_h1_vs_h2.png)
+
+![Figure 4. Probe calibration against oracle uncertainty.](figures/fig4_calibration.png)
+
 ## 5. Discussion
 
 ### 5.1 The pattern: decompose the failure mode
@@ -226,6 +240,21 @@ The cumulative arc through Paper 19:
 - **Paper 19 (current-error calibration): autonomous probing with current_replay achieves +0.62 Spearman to oracle, beats matched-random by 61.5% MAE, near-oracle attribution. The agent self-discovers its own probe schedule.**
 
 The first-order self in this minimal setting is now constituted by an architecturally-factorized model whose self/world decomposition is identifiable through active null-anchor intervention, with the timing of those interventions selected by a probe-value head whose target is the model's *current* residual error on a recent calibration buffer. The agent both establishes its boundary and knows when to stop reasserting it.
+
+### 5.6 Architecture law: current-memory revaluation
+
+The portable result is a small architecture rule:
+
+> Do not train an intervention policy on stale error tokens; train it on raw evidence revalued by the current model.
+
+That rule is why the experiment matters beyond the bandit. Long-horizon agents accumulate traces, plans, tool outcomes, refusals, repairs, and partial world models. If the agent stores only scalar "error happened here" memories, it will inherit the belief state that produced the error. If it stores enough raw context to replay the event through the present model, the same memory can become a live acquisition signal: "this bucket is still uncertain now" or "this used to be uncertain but no longer is."
+
+This is a simple architecture change with large consequences for memory, planning, and action:
+
+- **Memory:** store recent raw calibration tuples, not only summarized residuals.
+- **Planning:** score information-gathering actions by present reducible error, not by historical surprise.
+- **Action:** let probe actions taper when the current model has learned, without deleting the buffer that would let uncertainty reappear.
+- **Agency:** make the agent's boundary-maintenance loop self-updating rather than a frozen diagnostic from a previous policy.
 
 ## 6. Limitations
 

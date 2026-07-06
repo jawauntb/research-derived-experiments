@@ -30,6 +30,8 @@ The program's three strongest scalar mechanisms — Paper 15's vector ΔV head, 
 
 This is the program's first cleanly identified **scale-asymmetric calibration** failure: a mechanism that works on one dimension fails on a co-existing dimension of smaller magnitude. The fix candidate (Paper 21): per-dimension variance-normalized V_probe targets, or dimension-balanced sampling that forces minimum coverage per (bucket × dimension).
 
+**Architecture law.** Vector agency is not obtained by adding vector heads and then applying a scalar acquisition rule. Each mattering dimension needs an uncertainty signal in comparable units, or the largest residual scale becomes the agent's de facto concern. The simple architectural change suggested by this failure is per-dimension normalization or per-dimension thresholds before any `max`, sum, or priority-weighted probe decision. Without that comparability layer, a multi-valence agent can act as if it has several concerns while its inquiry policy is still governed by one dominant scale.
+
 ## 1. Background
 
 Three scalar mechanisms compose here:
@@ -249,6 +251,18 @@ The interpretation matrix predicted: "priority_weighted_probe ignores D under hu
 - **fig3** — `figures/fig3_dim_calibration.png`: per-bucket V_probe vs oracle uncertainty, separately for E (ρ=+0.20) and D (ρ=−0.41). The asymmetric calibration is visible as opposite-direction scatter trends.
 - **fig4** — `figures/fig4_total_mae.png`: total MAE bar chart across all 12 conditions. Oracle source = 0.026; matched_random = 0.138; learned = 0.176; scheduled = 0.181.
 
+<div style="page-break-before: always;"></div>
+
+![Figure 1. Per-dimension self/world predictions.](figures/fig1_per_dim_predictions.png)
+
+![Figure 2. Zero-shot priority reweighting.](figures/fig2_zero_shot_reweighting.png)
+
+<div style="page-break-before: always;"></div>
+
+![Figure 3. Dimension-wise probe calibration.](figures/fig3_dim_calibration.png)
+
+![Figure 4. Total MAE by condition.](figures/fig4_total_mae.png)
+
 ## 5. Discussion
 
 ### 5.1 What composes, what doesn't
@@ -297,6 +311,16 @@ This is not a clean positive. It is also not a clean negative — the anchor + r
 Bennett's first-order self in this setting is now constituted by *vector* architectural factorization with active anchored intervention — the agent has a multi-dimensional boundary that recovers what's self-caused vs world-caused per dimension. Levin's "computational boundary of self" is maintained per dimension through scheduled or autonomous probing. Vervaeke's relevance realization at the action-selection level partially works: the agent selects when to probe, but the selection signal is scale-biased toward whichever dimension has bigger residuals.
 
 The honest reading: vector first-order self exists as a *behavioral and attributional* phenomenon (G1, G2, G7 all pass strongly). The agent's **own choice** of when to identify the boundary is partially autonomous — it operates on the dominant dimension's uncertainty and neglects the smaller. This is closer to "scalar concern wearing vector clothes" (the user's framing) than to fully vector epistemic agency, even though the underlying machinery (vector ΔV, per-dim heads, per-dim V_probe) is honestly vector.
+
+### 5.6 Architecture law: comparable concern channels
+
+The negative result is a constructive architecture rule:
+
+> A vector self needs comparable uncertainty channels before it can make a single intervention decision.
+
+This matters because long-horizon agents rarely optimize one scalar. They trade off task progress, safety, uncertainty, tool reliability, social commitments, budget, latency, and future optionality. If these channels feed one probe/action gate in raw units, the channel with the largest numeric scale silently wins. The result can look like planning, but it is really scale capture.
+
+Paper 20B therefore adds a practical diagnostic for agent design. Before claiming a system has multi-objective or multi-concern agency, ask whether the action-selection and inquiry-selection layers are calibrated per channel. The simplest fix is also the next experiment: normalize each probe target by its own running scale, or give each dimension its own threshold before a shared decision rule combines them.
 
 ## 6. Limitations
 
