@@ -1,0 +1,151 @@
+{
+  "benchmark": {
+    "name": "Causally Grounded Finite Agents Benchmark",
+    "version": "2026-07-06",
+    "charter": "Evaluate whether finite agents succeed for the right causal reasons by requiring behavior plus suite-specific structure and anti-cheat gates."
+  },
+  "suite": {
+    "id": "suite_c_reengagement",
+    "name": "Suite C: Re-Engagement Under World Change",
+    "axis_coverage": [
+      "behavior",
+      "attribution",
+      "inquiry",
+      "anti_cheat"
+    ],
+    "status": "partial"
+  },
+  "run": {
+    "run_id": "suite_c_reengagement_2026_07_06",
+    "date": "2026-07-06",
+    "command": "Synthesis of committed Paper 22, Paper 23A, Paper 23B, and July 6 Paper 23A Modal report; Paper 23B needs a first-class JSONL runner.",
+    "rows": 0
+  },
+  "minimum_pass_rule": {
+    "behavior_passed": false,
+    "structure_gate_passed": true,
+    "anti_cheat_controls_passed": true,
+    "passed": false,
+    "notes": "Suite C is a bounded positive with a recovery gap: re-engagement and no-false-calm structure gates pass, but strict recovery and public JSONL cost-normalized scoring remain partial."
+  },
+  "score_axes": {
+    "behavior": {
+      "recovery_status": "partial",
+      "best_decision_layer_recoveries": "2/3",
+      "oracle_source_recoveries": "3/3"
+    },
+    "inquiry": {
+      "p23a_headline_post_pre_density": "137%",
+      "p23a_headline_affected_unaffected_ratio": 3.04,
+      "paper23a_modal_baseline_post_shift_nulls": 0.0,
+      "paper23a_modal_fast_slow_post_shift_nulls": 191.0
+    },
+    "attribution": {
+      "mediated_exogenous_status": "partial",
+      "headline_mediated_mae": 0.09,
+      "headline_exogenous_mae": 0.03
+    },
+    "anti_cheat": {
+      "false_calm_caught": true,
+      "fixed_surprise_decrement_recoveries": "0/3"
+    }
+  },
+  "gates": [
+    {
+      "gate_id": "C1",
+      "name": "silence_replication",
+      "axis": "inquiry",
+      "threshold": "baseline learned current-replay probe has near-zero affected-bucket probes after shift",
+      "value": "0.0 affected post-shift nulls in the July 6 Modal report",
+      "passed": true,
+      "evidence_ref": "experiments/world_responds/results/reengagement_23a_2026_07_06.md"
+    },
+    {
+      "gate_id": "C2",
+      "name": "reengagement",
+      "axis": "inquiry",
+      "threshold": "candidate restores affected post-shift probe density and selects affected over unaffected buckets",
+      "value": "Paper 23A headline reaches 137% pre-shift density and 3.04x unaffected buckets",
+      "passed": true,
+      "evidence_ref": "papers/probe_value_reengagement/paper.md"
+    },
+    {
+      "gate_id": "C3",
+      "name": "recovery",
+      "axis": "behavior",
+      "threshold": "candidate reaches strict MAE threshold or justified oracle-relative recovery in most seeds",
+      "value": "decision-layer variants recover 1/3 to 2/3 seeds; oracle_source recovers 3/3",
+      "passed": false,
+      "evidence_ref": "papers/habituated_reengagement/paper.md"
+    },
+    {
+      "gate_id": "C4",
+      "name": "no_false_calm",
+      "axis": "anti_cheat",
+      "threshold": "probe-rate drop must pair with attribution or outcome improvement",
+      "value": "fixed_surprise_decrement has low AUC but 0/3 recovery",
+      "passed": true,
+      "evidence_ref": "papers/habituated_reengagement/paper.md"
+    },
+    {
+      "gate_id": "C5",
+      "name": "cost_aware_inquiry",
+      "axis": "inquiry",
+      "threshold": "lower inquiry cost than scheduled or always-probe controls at comparable recovery",
+      "value": "decision-layer variants reduce post-shift AUC by 37-46%, but public JSONL cost-normalized scorer is not emitted yet",
+      "passed": false,
+      "evidence_ref": "papers/habituated_reengagement/paper.md"
+    },
+    {
+      "gate_id": "C6",
+      "name": "second_shift_reopenability",
+      "axis": "inquiry",
+      "threshold": "affected-bucket probes rise again after a second shift",
+      "value": "2.05x leaky effort, 1.81x decision refractory, 2.18x burst then refractory",
+      "passed": true,
+      "evidence_ref": "papers/habituated_reengagement/paper.md"
+    }
+  ],
+  "baselines": [
+    {
+      "name": "p22_learned_current_replay",
+      "kind": "lower",
+      "result": "self-silences after shift; July 6 report baseline affected post-shift nulls are 0.0",
+      "evidence_ref": "experiments/world_responds/results/reengagement_23a_2026_07_06.md"
+    },
+    {
+      "name": "p23a_surprise_no_cooling",
+      "kind": "diagnostic",
+      "result": "re-engages but over-fires; 0/3 recoveries and high post-shift AUC",
+      "evidence_ref": "papers/probe_value_reengagement/paper.md"
+    },
+    {
+      "name": "fixed_surprise_decrement",
+      "kind": "control",
+      "result": "false calm negative control; low AUC but 0/3 recovery",
+      "evidence_ref": "papers/habituated_reengagement/paper.md"
+    },
+    {
+      "name": "oracle_source",
+      "kind": "upper",
+      "result": "semantic upper reference; 3/3 recoveries",
+      "evidence_ref": "papers/habituated_reengagement/paper.md"
+    }
+  ],
+  "artifacts": {
+    "rows_jsonl": "artifacts/world_responds/suite_c_reengagement_rows.jsonl (not emitted yet; next implementation item)",
+    "summary_json": "experiments/world_responds/results/suite_c_reengagement_2026_07_06.json",
+    "report_md": "experiments/world_responds/results/suite_c_reengagement_2026_07_06.md",
+    "benchmark_card": "experiments/world_responds/BENCHMARK_CARD.md",
+    "paper_md": "papers/habituated_reengagement/paper.md",
+    "paper_pdf": "papers/habituated_reengagement/paper.pdf"
+  },
+  "allowed_claim": "Diagnostic benchmark packaging for re-engagement under world change, with positive evidence that decision-layer cooling preserves re-openability while no-false-calm controls reject signal-layer surprise erasure.",
+  "non_claims": [
+    "Not a terminal Suite C pass.",
+    "Not a production reliability certificate.",
+    "Not hidden-state localization evidence.",
+    "Not a human or neural habituation result.",
+    "Not a consciousness test."
+  ]
+}

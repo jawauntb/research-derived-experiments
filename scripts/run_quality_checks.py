@@ -29,18 +29,41 @@ def main() -> int:
         "numpy",
         "--with",
         "scikit-learn",
+        "--with",
+        "pytest",
         "python",
     ]
     plain_python = ["uvx", "--python", "3.12", "python"]
+    ty_check = [
+        "uvx",
+        "--python",
+        "3.12",
+        "--with",
+        "numpy",
+        "--with",
+        "torch",
+        "--with",
+        "scikit-learn",
+        "--with",
+        "scipy",
+        "--with",
+        "matplotlib",
+        "--with",
+        "pytest",
+        "ty",
+        "check",
+        "scripts",
+        "experiments",
+        "tests",
+    ]
 
     run(test_python + ["-m", "unittest", "discover", "-s", "tests"])
     run(plain_python + ["-m", "compileall", "scripts", "experiments", "tests"])
     run(["python3", "scripts/publication_guard.py"])
     run(["uvx", "ruff", "check", "."])
-    run(["uvx", "ty", "check", "scripts", "experiments", "tests"])
+    run(ty_check)
     return 0
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

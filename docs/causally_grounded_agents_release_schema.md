@@ -189,6 +189,10 @@ plus archive names:
 | Planning from Concern | `papers/planning_from_concern/paper.pdf` | `10_Planning_from_Concern_v2_2026_07_06.pdf` |
 | First-Order Self | `papers/first_order_self/paper.pdf` | `16_First_Order_Self_v2_2026_07_06.pdf` |
 | World Responds | `papers/world_responds/paper.pdf` | `22_World_Responds_Reengagement_Floor_2026_07_06.pdf` |
+| Probe Value Re-Engagement | `papers/probe_value_reengagement/paper.pdf` | `23A_Probe_Value_Reengagement_2026_06_12.pdf` |
+| Habituated Re-Engagement | `papers/habituated_reengagement/paper.pdf` | `23B_Habituated_Reengagement_2026_06_12.pdf` |
+| Metric Stack of Concern | `papers/metric_stack_synthesis/paper.pdf` | `26_Metric_Stack_of_Concern_v4_2026_07_06.pdf` |
 | Long-Horizon Moved Bottleneck | `papers/long_horizon_bottleneck/paper.pdf` | `31_Future_Control_Moves_Memory_2026_07_06.pdf` |
 | Causally Grounded Agents Benchmark | `papers/causally_grounded_agents_benchmark/paper.pdf` | `32_Benchmarking_Causally_Grounded_Finite_Agents_2026_07_06.pdf` |
 
+The public sharing bundle is indexed in `docs/publication_sharing_map.md`.
