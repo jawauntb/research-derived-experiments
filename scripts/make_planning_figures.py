@@ -15,19 +15,25 @@ Five figures:
                                  distilled_policy vs delta_e+supervised.
   fig5_headline_table.png      : single-figure summary of all 6
                                  conditions × envs with return + rg.
+  fig6_predictive_policy_closure.png
+                               : architecture-law diagram for predictive
+                                 policy closure.
 """
 
 from __future__ import annotations
 
 import json
 import sys
-from pathlib import Path
 from collections import defaultdict
+from pathlib import Path
+from textwrap import fill
 
 import matplotlib
 matplotlib.use("Agg")
+import matplotlib.patches as patches
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.patches import FancyBboxPatch
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
@@ -52,6 +58,147 @@ COND_LABEL = {
     "delta_e_then_supervised_policy": "ΔE encoder + supervised policy (Paper 9)",
 }
 ENV_LABEL = {"xor": "XOR", "additive_thresh": "additive_thresh"}
+
+
+def fig6_predictive_policy_closure() -> None:
+    """Diagram the architecture law that turns a ΔE model into a policy."""
+    rows = [
+        (
+            "Experience",
+            "(observation, action, observed delta-E)",
+            "agent-owned signal",
+            "#dbeafe",
+        ),
+        (
+            "Representation",
+            "Encoder organizes items by viability-relevant causal role.",
+            "concern geometry",
+            "#d1fae5",
+        ),
+        (
+            "Prediction",
+            "Delta-E head estimates future viability change for candidate actions.",
+            "counterfactual model",
+            "#fef3c7",
+        ),
+        (
+            "Action",
+            "Planner chooses argmax_a Delta-E_head(z, E, a).",
+            "policy closure",
+            "#dcfce7",
+        ),
+        (
+            "Outcome",
+            "XOR return 50/50 and action accuracy 0.996 with no action labels.",
+            "competent agency",
+            "#e9d5ff",
+        ),
+    ]
+
+    fig, ax = plt.subplots(figsize=(13.5, 6.8))
+    ax.set_xlim(0, 14)
+    ax.set_ylim(-0.2, len(rows) + 1.5)
+    ax.axis("off")
+
+    ax.text(
+        7,
+        len(rows) + 1.15,
+        "Figure 6. Predictive-policy closure",
+        ha="center",
+        fontsize=14,
+        fontweight="bold",
+    )
+    ax.text(
+        7,
+        len(rows) + 0.78,
+        "The learned viability model becomes the policy surface; the separate policy bottleneck is removed.",
+        ha="center",
+        fontsize=10,
+        color="#444",
+        style="italic",
+    )
+
+    x0, w0 = 0.35, 2.7
+    x1, w1 = 3.45, 6.65
+    x2, w2 = 10.55, 2.95
+    for x, w, title in [
+        (x0, w0, "Stage"),
+        (x1, w1, "Mechanism"),
+        (x2, w2, "Role"),
+    ]:
+        header = FancyBboxPatch(
+            (x, len(rows) + 0.1),
+            w,
+            0.44,
+            boxstyle="round,pad=0.035",
+            facecolor="#e5e7eb",
+            edgecolor="#555",
+            linewidth=0.9,
+        )
+        ax.add_patch(header)
+        ax.text(x + w / 2, len(rows) + 0.32, title, ha="center", va="center", fontweight="bold")
+
+    for idx, (stage, mechanism, role, color) in enumerate(rows):
+        y = len(rows) - idx - 0.62
+        stripe = "#ffffff" if idx % 2 == 0 else "#f8fafc"
+        ax.add_patch(
+            patches.Rectangle(
+                (0.15, y - 0.39),
+                13.65,
+                0.78,
+                facecolor=stripe,
+                edgecolor="#e5e7eb",
+                linewidth=0.6,
+            )
+        )
+        ax.add_patch(
+            FancyBboxPatch(
+                (x0, y - 0.28),
+                w0,
+                0.56,
+                boxstyle="round,pad=0.03",
+                facecolor=color,
+                edgecolor="#cbd5e1",
+                linewidth=0.7,
+            )
+        )
+        ax.add_patch(
+            patches.Rectangle(
+                (x1, y - 0.28),
+                w1,
+                0.56,
+                facecolor="#f8fafc",
+                edgecolor="#e5e7eb",
+                linewidth=0.7,
+            )
+        )
+        ax.add_patch(
+            FancyBboxPatch(
+                (x2, y - 0.28),
+                w2,
+                0.56,
+                boxstyle="round,pad=0.03",
+                facecolor="#f1f5f9",
+                edgecolor="#cbd5e1",
+                linewidth=0.7,
+            )
+        )
+        ax.text(x0 + 0.18, y, fill(stage, 20), ha="left", va="center", fontweight="bold", color="#0f172a")
+        ax.text(x1 + 0.18, y, fill(mechanism, 66), ha="left", va="center", color="#1f2937")
+        ax.text(x2 + w2 / 2, y, fill(role, 20), ha="center", va="center", fontweight="bold", color="#334155")
+        if idx < len(rows) - 1:
+            ax.annotate(
+                "",
+                xy=(1.7, y - 0.45),
+                xytext=(1.7, y - 0.29),
+                arrowprops=dict(arrowstyle="->", color="#64748b", lw=1.0),
+            )
+
+    fig.tight_layout()
+    out = FIG_DIR / "fig6_predictive_policy_closure.png"
+    fig.savefig(out, dpi=220, bbox_inches="tight")
+    plt.close(fig)
+    print(f"wrote {out}")
 
 
 def main() -> int:
@@ -253,6 +400,8 @@ def main() -> int:
     fig.savefig(out, dpi=200, bbox_inches="tight")
     plt.close(fig)
     print(f"wrote {out}")
+
+    fig6_predictive_policy_closure()
 
     # ============ Summary ============
     summary = {}
