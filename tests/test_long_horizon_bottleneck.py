@@ -1,3 +1,4 @@
+import json
 from typing import Optional
 
 import pytest
@@ -51,6 +52,10 @@ from experiments.long_horizon_bottleneck.api_blackbox import (
     make_provider_call,
     summarize_api_blackbox_rows,
     total_request_count,
+)
+from experiments.long_horizon_bottleneck.api_blackbox_report import (
+    aggregate_api_blackbox_summaries,
+    render_api_blackbox_markdown,
 )
 from experiments.long_horizon_bottleneck.prompt_json_tasks import API_PROMPT_FAMILIES, prompt_family_user_prompt
 
@@ -1173,6 +1178,72 @@ def test_summarize_api_blackbox_rows_classifies_controlled_strong_negative():
     assert summary["outcome"] == "strong_negative"
     assert summary["decision"]["controls_pass"]
     assert not summary["decision"]["bottleneck_pass"]
+
+
+def test_aggregate_api_blackbox_summaries_preserves_failed_cells(tmp_path):
+    positive_path = tmp_path / "positive.json"
+    negative_path = tmp_path / "negative.json"
+    positive_path.write_text(
+        json.dumps(_api_summary_payload(suite="prompt_family", outcome="positive")),
+        encoding="utf-8",
+    )
+    negative_path.write_text(
+        json.dumps(_api_summary_payload(suite="external_stress", outcome="strong_negative", failed=True)),
+        encoding="utf-8",
+    )
+
+    aggregate = aggregate_api_blackbox_summaries([positive_path, negative_path])
+    markdown = render_api_blackbox_markdown(aggregate, report_date="2026-07-06")
+
+    assert aggregate["n_summaries"] == 2
+    assert aggregate["total_rows"] == 8
+    assert aggregate["total_request_budget"] == 12
+    assert aggregate["suite_outcomes"]["prompt_family"]["all_positive"]
+    assert aggregate["suite_outcomes"]["external_stress"]["any_strong_negative"]
+    assert aggregate["failed_cells"][0]["prompt_family"] == "dispatch"
+    assert aggregate["failed_cells"][0]["controls_pass"]
+    assert not aggregate["failed_cells"][0]["bottleneck_pass"]
+    assert "mixed with controlled strong negative" in markdown
+    assert "dispatch" in markdown
+
+
+def _api_summary_payload(*, suite: str, outcome: str, failed: bool = False) -> dict:
+    cell_key = f"{suite}/4slot_gap8/test-provider/test-model/dispatch/4slot/gap8"
+    return {
+        "manifest": {
+            "suite": suite,
+            "provider": "test-provider",
+            "models": ["test-model"],
+            "n_requests": 6,
+            "prompt_families": ["dispatch"],
+            "stress_cases": ["4slot_gap8"],
+        },
+        "summary": {
+            "outcome": outcome,
+            "n_rows": 4,
+            "cells": {
+                cell_key: {
+                    "suite": suite,
+                    "stress_case": "4slot_gap8",
+                    "provider": "test-provider",
+                    "model": "test-model",
+                    "prompt_family": "dispatch",
+                    "n_slots": 4,
+                    "slot_gap": 8,
+                    "complete": True,
+                    "controls_pass": True,
+                    "bottleneck_pass": not failed,
+                    "pass": not failed,
+                    "condition_gates": {
+                        "prompt_json_format_control": True,
+                        "prompt_json_visible_control": True,
+                        "prompt_json_short_horizon_control": True,
+                        "prompt_json_bottleneck": not failed,
+                    },
+                }
+            },
+        },
+    }
 
 
 def test_summarize_prompt_transfer_rows_classifies_positive_outcome():

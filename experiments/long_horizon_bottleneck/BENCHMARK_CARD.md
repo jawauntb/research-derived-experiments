@@ -16,12 +16,14 @@ Test whether future control relevance moves both generated behavior and internal
   `value_prefix_final` late/final sites in all three model families.
 - Prompt-family causal patch robustness: positive across standard, compact, and
   audit-checklist prompt framings.
-- API black-box behavioral benchmark: Gemini 3.1 Flash-Lite passes the
-  prompt-family suite and a small external-validity stress suite.
+- API black-box behavioral benchmark: Gemini 3.1 Flash-Lite, Anthropic Haiku
+  4.5, and OpenAI GPT-4.1 Nano all pass the matched prompt-family suite.
+  Gemini and Anthropic pass the external-stress suite; OpenAI produces a
+  controlled strong negative on two `dispatch` stress cells.
 - Latest models: `Qwen/Qwen2.5-0.5B-Instruct`, `Qwen/Qwen2.5-1.5B-Instruct`, `HuggingFaceTB/SmolLM2-1.7B-Instruct`.
 - Latest prompt-level causal artifact: `artifacts/long_horizon_bottleneck/prompt_json_prompt_family_causal_patch_l4.json`.
-- Latest API artifact: `artifacts/long_horizon_bottleneck/api_blackbox_gemini_flash_lite_prompt_family_summary.json`.
-- Latest committed report: `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzzzz_api_blackbox_gemini_flash_lite_2026_07_06.md`.
+- Latest API artifact: `artifacts/long_horizon_bottleneck/api_blackbox_multi_provider_2026_07_06_summary.json`.
+- Latest committed report: `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzzzzz_api_blackbox_multi_provider_2026_07_06.md`.
 
 ## Prompt-Level Terminal Result
 
@@ -120,22 +122,27 @@ Outcome: `positive`.
 The API benchmark exposes the moved-bottleneck task as a one-command black-box
 evaluator. It emits JSONL rows and scored summaries for provider/model runs.
 
-Gemini 3.1 Flash-Lite passes the registered prompt-family behavior suite:
+The matched multi-provider prompt-family behavior suite is positive:
 
-- 96 scored rows;
-- 144 API requests;
+- 288 scored rows;
+- 432 API requests;
+- providers/models: `gemini-3.1-flash-lite`,
+  `claude-haiku-4-5-20251001`, and `gpt-4.1-nano`;
 - all `standard`, `compact`, and `ledger` cells complete;
-- controls pass and bottleneck/repair gates pass in all three cells.
+- controls pass and bottleneck/repair gates pass in all nine provider/family
+  cells.
 
-It also passes a small external-validity stress smoke:
+The matched external-validity stress suite is mixed:
 
-- 80 scored rows;
-- 120 API requests;
-- 20 stress/family cells complete;
+- 240 scored rows;
+- 360 API requests;
+- Gemini and Anthropic pass all 20 stress/family cells;
+- OpenAI GPT-4.1 Nano passes controls but fails two `dispatch` bottleneck cells;
 - axes include 8-slot width, longer filler gaps, `retrieval`, and `dispatch`
   prompt framings.
 
-Outcome: `positive`.
+Outcome: prompt-family `positive`; external stress `mixed with controlled strong
+negative`.
 
 ## Use
 

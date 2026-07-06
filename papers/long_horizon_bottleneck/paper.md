@@ -41,10 +41,12 @@ JSON tokens, with additional late/final prompt-token sites passing for Qwen
 
 The diagnostic now also has a black-box API surface. A dependency-free
 evaluator emits JSONL rows and scored summaries for fixture, Gemini,
-Anthropic, OpenAI, and OpenAI-compatible providers. `gemini-3.1-flash-lite`
-passes the registered prompt-family behavior suite and a small external-stress
-suite covering wider slot sets, longer filler gaps, and API-dispatch prompt
-framings. This is behavioral evidence only, not hidden-state evidence.
+Anthropic, OpenAI, and OpenAI-compatible providers. A matched follow-up across
+`gemini-3.1-flash-lite`, `claude-haiku-4-5-20251001`, and `gpt-4.1-nano`
+passes the registered prompt-family behavior suite for all three providers.
+The external-stress suite is mixed: Gemini and Anthropic pass, while OpenAI
+GPT-4.1 Nano gives a controlled strong negative on two `dispatch` cells. This
+is behavioral evidence only, not hidden-state evidence.
 
 The allowed claim is deliberately modest: in this synthetic neural-agent
 setting, **future control relevance can move finite memory-state and
@@ -143,8 +145,8 @@ the agent's interaction with future-relevant information.
 | Prompt JSON fixed-action localization | Teacher-forced constant assistant actions under slot flips | 192 behavior cells + 960 hidden rows | Controls and behavior pass; 24 hidden sites pass after generated action tokens are held fixed | `prompt_json_fixed_action_localization` |
 | Prompt JSON causal patch | Patch base hidden state into critical-slot-flipped prompt before JSON value token | 1,536 causal-patch rows | Value-prefix patch sites pass in all three model families; prompt-final sites do not pass | `prompt_json_causal_patch` |
 | Prompt-family causal patch | Repeat causal patch over standard, compact, and audit-checklist prompt framings | 4,608 causal-patch rows | All 9 family/model pairs are causally ready and patch-pass | `prompt_json_prompt_family_causal_patch` |
-| API black-box prompt-family | One-command provider evaluator over parser-scored JSON actions | 96 Gemini rows | Gemini 3.1 Flash-Lite passes all registered prompt-family behavior cells | `api_blackbox_gemini` |
-| API black-box external stress | Wider slots, longer gaps, retrieval and dispatch prompt framings | 80 Gemini rows | All 20 stress/family behavior cells pass | `api_blackbox_gemini` |
+| API black-box prompt-family | One-command provider evaluator over parser-scored JSON actions | 288 rows across 3 providers | Gemini, Anthropic, and OpenAI pass all registered prompt-family behavior cells | `api_blackbox_multi_provider` |
+| API black-box external stress | Wider slots, longer gaps, retrieval and dispatch prompt framings | 240 rows across 3 providers | Gemini and Anthropic pass; OpenAI 4.1 Nano yields a controlled `dispatch` strong negative | `api_blackbox_multi_provider` |
 
 All confirmed sweeps used Modal `L4`, not H100/H200. The timeout-based
 conservative spend guard for the listed confirmed reports is under USD 190 in
@@ -161,9 +163,10 @@ timeout guard of USD 6.47. The causal-patch pass used three parallel `L4`
 model jobs, 1,536 patch rows, and the same conservative timeout guard of USD
 6.47. The prompt-family causal-patch robustness pass used three parallel `L4`
 model jobs, 4,608 patch rows, and the same conservative timeout guard of USD
-6.47. The black-box API runs used provider calls rather than GPUs: the Gemini
-prompt-family run used 144 API requests for 96 scored rows, and the
-external-stress run used 120 API requests for 80 scored rows.
+6.47. The black-box API runs used provider calls rather than GPUs. The matched
+multi-provider follow-up used 792 planned API requests for 528 scored rows:
+432 requests for the prompt-family suite and 360 requests for the
+external-stress suite.
 
 Report keys map to committed summaries under
 `experiments/long_horizon_bottleneck/results/`: `base` =
@@ -191,7 +194,9 @@ and `prompt_json_causal_patch` =
 `prompt_json_prompt_family_causal_patch` =
 `zzzzzzzzzzzzzzzz_prompt_json_prompt_family_causal_patch_l4_4seed_2026_07_03.md`,
 and `api_blackbox_gemini` =
-`zzzzzzzzzzzzzzzzz_api_blackbox_gemini_flash_lite_2026_07_06.md`.
+`zzzzzzzzzzzzzzzzz_api_blackbox_gemini_flash_lite_2026_07_06.md`, and
+`api_blackbox_multi_provider` =
+`zzzzzzzzzzzzzzzzzz_api_blackbox_multi_provider_2026_07_06.md`.
 
 ## 4. Prompt-Level JSON Transfer and Hidden Localization
 
@@ -297,15 +302,21 @@ The API black-box evaluator then exposed the same parser-scored behavior as a
 public benchmark package. The command `python3 -m
 experiments.long_horizon_bottleneck.eval` builds cases, calls a provider
 adapter, writes JSONL rows, and writes a scored summary. Deterministic fixture
-runs validate the package locally. A real Gemini run using
-`gemini-3.1-flash-lite` passed the registered prompt-family behavior suite:
-96 scored rows, 144 API requests, all three prompt-family cells complete, and
-all controls, bottleneck actions, failed-tool repairs, and successful-tool
-no-ops passing. A second external-stress smoke covered 20 stress/family cells
-over 4-slot and 8-slot settings, gap sizes 8 and 16, and two extra black-box
-prompt framings (`retrieval` and `dispatch`); all 20 cells passed. This result
-adds API-model behavioral evidence, but because the API is black-box it does
-not add hidden-localization or causal-patch evidence.
+runs validate the package locally. A matched multi-provider follow-up used
+Gemini 3.1 Flash-Lite, Anthropic Haiku 4.5, and OpenAI GPT-4.1 Nano. The
+registered prompt-family behavior suite was positive across all three
+providers: 288 scored rows, 432 API requests, and all nine provider/family
+cells complete, controls-pass, and bottleneck-pass.
+
+The external-stress suite covered 20 stress/family cells per provider over
+4-slot and 8-slot settings, gap sizes 8 and 16, and two extra black-box prompt
+framings (`retrieval` and `dispatch`). Gemini and Anthropic passed all 20
+cells. OpenAI GPT-4.1 Nano produced a controlled strong negative: controls
+passed, but two `dispatch` bottleneck cells failed, including a failed-tool
+repair value miss in the 8-slot, gap-16 cell. This result adds API-model
+behavioral evidence and a provider-specific stress failure surface, but because
+the API is black-box it does not add hidden-localization or causal-patch
+evidence.
 
 ## 5. Interpretation
 
@@ -337,14 +348,13 @@ the point of the diagnostic: it can distinguish interface behavior,
 prompt-state memory, action-surface commitment, causal leverage over the next
 action token, and prompt-family robustness.
 
-The API result adds a different kind of evidence. It shows that the same
-surface can be packaged as a cheap provider benchmark and that one current
-black-box model passes both the registered prompt-family behavior suite and a
-small external-validity stress suite. It does not show where the relevant
-state lives in that API model. The value is operational: other labs can run the
-same prompts and parser without needing local weights, hooks, or GPUs.
-
-<div style="page-break-before: always;"></div>
+The API result adds operational evidence: several current black-box models pass
+the registered prompt-family suite, and the stress suite can produce useful
+provider-specific negatives rather than only confirmations. OpenAI 4.1 Nano
+passes the main prompt-family gate but fails narrow `dispatch` stress cells
+under passing controls. This does not locate state inside any API model; it
+shows other labs can run the prompts and parser without local weights, hooks,
+or GPUs.
 
 ## 6. Architecture Law: Commitment Surfaces
 
@@ -394,8 +404,8 @@ The result does not establish:
 
 The latest prompt-level hidden-state result uses real pretrained tokenizers and
 teacher-forced/generated JSON text, but it is still a compact harness. The
-latest API result uses a real API model, but only as a black-box behavior
-surface; it does not expose hidden states or production tool execution.
+latest API results use real API models, but only as black-box behavior
+surfaces; they do not expose hidden states or production tool execution.
 
 ## 8. Why This Is Valuable
 
@@ -421,15 +431,16 @@ prompt-level hidden-localization replication is positive, and the fixed-action
 counterfactual removes the simplest generated-token identity confound. The
 fixed-prefix causal patch also shows behavior-adjacent causal leverage at the
 JSON value-token readout, and the prompt-family run verifies that this leverage
-is not restricted to one frozen wording. The API benchmark package adds a
-black-box behavioral bridge and a first Gemini Flash-Lite positive. The next
-regimes answer different questions:
+is not restricted to one frozen wording. The API benchmark package now adds a
+multi-provider behavioral bridge and a controlled OpenAI dispatch-stress
+negative. The next regimes answer different questions:
 
-- **Multi-provider API replication:** run the same black-box suite across
-  OpenAI, Anthropic, Gemini, and OpenAI-compatible endpoints with matched
-  request budgets.
-- **Broader external validity:** expand beyond the current small smoke to more
-  critical slots, more episodes, longer contexts, and paraphrase families.
+- **Dispatch failure characterization:** split the `dispatch` stress into
+  wording, value-copying, and repair-memory variants to isolate why OpenAI 4.1
+  Nano passes the main suite but fails two dispatch cells.
+- **Broader external validity:** expand beyond the current small stress to more
+  critical slots, more episodes, longer contexts, paraphrase families, and
+  OpenAI-compatible endpoints.
 - **Stronger causal mediation:** patch multi-token generation or run path
   patching to test whether the measured state mediates the full tool action,
   not only the next value token.
@@ -444,8 +455,9 @@ The most valuable immediate next step is to publish the diagnostic as a compact
 benchmark card: synthetic ladder positive, prompt-level behavior positive,
 prompt-level hidden localization positive, fixed-action localization positive
 after generated action tokens are held constant, value-prefix causal patching
-positive, prompt-family robustness positive, and black-box API behavior exposed
-as a reproducible benchmark surface.
+positive, prompt-family robustness positive, black-box API behavior exposed as
+a reproducible benchmark surface, a multi-provider API prompt-family positive,
+and a provider-specific dispatch stress negative.
 
 ## 10. Reproducibility
 
@@ -591,6 +603,21 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     --sleep-seconds 0.05 \
     --out artifacts/long_horizon_bottleneck/api_blackbox_gemini_flash_lite_external_stress_summary.json \
     --jsonl artifacts/long_horizon_bottleneck/api_blackbox_gemini_flash_lite_external_stress_rows.jsonl
+```
+
+API black-box multi-provider aggregate report:
+
+```bash
+PYTHONPATH=. python3 -m experiments.long_horizon_bottleneck.api_blackbox_report \
+    artifacts/long_horizon_bottleneck/api_blackbox_openai_gpt41_nano_prompt_family_summary.json \
+    artifacts/long_horizon_bottleneck/api_blackbox_anthropic_haiku45_prompt_family_summary.json \
+    artifacts/long_horizon_bottleneck/api_blackbox_gemini_flash_lite_prompt_family_multi_summary.json \
+    artifacts/long_horizon_bottleneck/api_blackbox_openai_gpt41_nano_external_stress_summary.json \
+    artifacts/long_horizon_bottleneck/api_blackbox_anthropic_haiku45_external_stress_summary.json \
+    artifacts/long_horizon_bottleneck/api_blackbox_gemini_flash_lite_external_stress_multi_summary.json \
+    --date 2026-07-06 \
+    --out-json artifacts/long_horizon_bottleneck/api_blackbox_multi_provider_2026_07_06_summary.json \
+    --out-md experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzzzzz_api_blackbox_multi_provider_2026_07_06.md
 ```
 
 Local verification for the code paths:
