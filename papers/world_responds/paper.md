@@ -31,6 +31,12 @@ Two conceptual upgrades over Paper 21A:
 
 This **identifies a new bottleneck**: the program's `oracle_X` upper bound has been measuring current-error, not probe-value-of-information. The principled upper-bound oracle would estimate `E[MAE_after_probe − MAE_now]` per bucket, not `|pred_world − true_world|`. Paper 23A's main test should adopt this corrected oracle.
 
+The architecture lesson is sharper than a failed gate. In action-correlated
+worlds, silence after convergence is not evidence that the world is stable. A
+machine agent needs a re-engagement floor: periodic audit, surprise-triggered
+probe boost, or a fast/slow detector that can reopen inquiry after the world
+changes.
+
 ## 1. Background
 
 The Paper 21A program-ending question — "does autonomous selection beat random matched-volume?" — turned vacuous because the agent's mechanism worked well enough that at convergence, V_probe stopped firing and matched-random with the same volume produced parity. The 2-head + scale-normalized + warmup pipeline drove world_head to near-oracle.
@@ -243,7 +249,28 @@ The fix candidates are concrete:
 - **Prediction-error-driven V_probe boost**: when the policy's *non-null* action observations show consistent residual surprise, force a probe boost
 - **Two-timescale V_probe**: fast EMA + slow EMA, fire when fast >> slow (detects abrupt shifts)
 
-### 5.4 The `oracle_probe_value` finding reframes the program's oracle conditions
+### 5.4 Architecture law: re-engagement floor
+
+The paper's practical design law is:
+
+> In nonstationary or action-correlated worlds, an epistemic probe controller
+> needs a re-engagement floor. Learned quiet is not evidence of world stability.
+
+![Figure 5. Re-engagement floor. The learned probe is efficient before convergence, but after the regime shift it self-confirms silence unless a floor, surprise boost, or fast/slow detector reopens inquiry.](figures/fig5_reengagement_floor.png)
+
+This is the world-model counterpart to predictive-policy closure. Planning from
+Concern showed that a viability predictor can close the action loop. This paper
+shows the missing companion rule: a world predictor also needs a way to reopen
+the inquiry loop. If the agent cannot ask again after the world changes, its
+policy can remain competent-looking while its attribution machinery becomes
+stale.
+
+That matters for long-horizon agents. Long tasks are not just long contexts;
+they are long exposure to changing causal structure. Memory, planning, and
+self/world attribution remain agent-relevant only if the system can detect when
+old calibration should stop being trusted.
+
+### 5.5 The `oracle_probe_value` finding reframes the program's oracle conditions
 
 Every oracle_X condition since Paper 17A has used current attribution error as the probe signal. This paper shows that's *not* a valid upper bound for autonomous probing in action-correlated environments. The actual upper bound — oracle value-of-information — would require simulator-rollout estimates that we haven't been computing.
 
@@ -251,7 +278,7 @@ This means: program-wide, our "upper bound on probe placement" claims have been 
 
 Going forward, every probe-mechanism paper should include an `oracle_probe_value` condition using simulator-derived expected MAE reduction. If learned still beats this stronger oracle, the result is meaningful. If it doesn't, the program has a sharper diagnostic for what's still open.
 
-### 5.5 Updated synthesis through Paper 22
+### 5.6 Updated synthesis through Paper 22
 
 > Through Paper 22, in minimal homeostatic bandits with both action-independent and action-correlated worlds: vector first-order self attribution composes from anchor + scale-norm + three-head architecture; autonomous probe selection achieves ≥18× null-volume efficiency over time-matched random in action-correlated environments; the three-head decomposition (direct self / mediated world / exogenous world) is the correct architecture under action-correlation. **Open**: probe re-engagement after world-state changes (G7), and full upper-bound oracle defined as expected MAE reduction rather than current error.
 
