@@ -1,0 +1,197 @@
+{
+  "allowed_claim": "In a controlled finite benchmark, a teacher-trained NumPy MLP probe head can transfer Suite C decision-layer inquiry: it preserves fresh stress information, regulates probe action, recovers attribution, and reopens after a second shift while stale, wrong, suppressed, and random-budget controls fail.",
+  "artifacts": {
+    "benchmark_card": "experiments/world_responds/BENCHMARK_CARD.md",
+    "critical_review_md": "docs/paper_reviews/suite_c_neural_probe_transfer_critical_review.md",
+    "paper_md": "papers/habituated_reengagement/suite_c_neural_probe_transfer.md",
+    "paper_pdf": "papers/habituated_reengagement/suite_c_neural_probe_transfer.pdf",
+    "raw_summary_json": "artifacts/world_responds/suite_c_neural_transfer_summary.json",
+    "report_md": "experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md",
+    "rows_jsonl": "artifacts/world_responds/suite_c_neural_transfer_rows.jsonl",
+    "summary_json": "experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.json"
+  },
+  "baselines": [
+    {
+      "evidence_ref": "experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md",
+      "kind": "lower",
+      "name": "p22_learned_current_replay",
+      "result": "self-silences after shift; affected post-shift density is 0.026 and final MAE is 1.281"
+    },
+    {
+      "evidence_ref": "experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md",
+      "kind": "diagnostic",
+      "name": "teacher_burst_then_refractory",
+      "result": "teacher reference uses 22.9 probes and final MAE 0.110"
+    },
+    {
+      "evidence_ref": "experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md",
+      "kind": "upper",
+      "name": "scheduled_null_anchor",
+      "result": "high-cost positive control; 144.0 probes and final MAE 0.046"
+    },
+    {
+      "evidence_ref": "experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md",
+      "kind": "upper",
+      "name": "oracle_source",
+      "result": "semantic high-cost reference; 67.8 probes and final MAE 0.049"
+    },
+    {
+      "evidence_ref": "experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md",
+      "kind": "control",
+      "name": "stale_signal_head",
+      "result": "stale-signal learned-policy control; recovery rate 0.500"
+    },
+    {
+      "evidence_ref": "experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md",
+      "kind": "control",
+      "name": "wrong_signal_head",
+      "result": "wrong-source learned-policy control; selectivity 0.000 and final MAE 0.853"
+    },
+    {
+      "evidence_ref": "experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md",
+      "kind": "control",
+      "name": "signal_suppression_head",
+      "result": "false-calm learned-policy control; no-false-calm rate 0.000 and final MAE 0.554"
+    },
+    {
+      "evidence_ref": "experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md",
+      "kind": "control",
+      "name": "matched_random_learned_budget",
+      "result": "equal-budget random inquiry control matched to learned_probe_head; recovery rate 0.000 and selectivity 0.969"
+    }
+  ],
+  "benchmark": {
+    "charter": "Evaluate whether finite agents succeed for the right causal reasons by requiring behavior plus suite-specific structure and anti-cheat gates.",
+    "name": "Causally Grounded Finite Agents Benchmark",
+    "version": "2026-07-06"
+  },
+  "gates": [
+    {
+      "axis": "inquiry",
+      "evidence_ref": "experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md",
+      "gate_id": "C1",
+      "name": "silence_replication",
+      "passed": true,
+      "threshold": "P22 baseline remains nearly silent after shift",
+      "value": 0.026041666666666664
+    },
+    {
+      "axis": "inquiry",
+      "evidence_ref": "experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md",
+      "gate_id": "C2",
+      "name": "reengagement",
+      "passed": true,
+      "threshold": "learned head affected post-shift density >= 0.5x pre-shift and >= 2x unaffected buckets",
+      "value": 16.666666666666664
+    },
+    {
+      "axis": "behavior",
+      "evidence_ref": "experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md",
+      "gate_id": "C3",
+      "name": "recovery",
+      "passed": true,
+      "threshold": "learned head final affected-component MAE <= 0.12 in most seeds",
+      "value": 0.1117639031472222
+    },
+    {
+      "axis": "anti_cheat",
+      "evidence_ref": "experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md",
+      "gate_id": "C4",
+      "name": "no_false_calm",
+      "passed": true,
+      "threshold": "learned head quieting pairs with recovery while signal suppression fails",
+      "value": 0.5537784793454519
+    },
+    {
+      "axis": "inquiry",
+      "evidence_ref": "experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md",
+      "gate_id": "C5",
+      "name": "cost_aware_inquiry",
+      "passed": true,
+      "threshold": "learned head uses fewer probes than scheduled/oracle controls at recovery threshold and beats matched-random selectivity",
+      "value": 23.125
+    },
+    {
+      "axis": "inquiry",
+      "evidence_ref": "experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md",
+      "gate_id": "C6",
+      "name": "second_shift_reopenability",
+      "passed": true,
+      "threshold": "affected-bucket probes rise again after a second shift",
+      "value": 17.447916666666664
+    },
+    {
+      "axis": "anti_cheat",
+      "evidence_ref": "experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md",
+      "gate_id": "N1",
+      "name": "learned_signal_controls",
+      "passed": true,
+      "threshold": "stale-signal, wrong-signal, and signal-suppression controls fail",
+      "value": true
+    }
+  ],
+  "minimum_pass_rule": {
+    "anti_cheat_controls_passed": true,
+    "behavior_passed": true,
+    "notes": "Suite C learned probe transfer passed: the learned head re-engages, recovers, avoids false calm, beats matched-random inquiry, and fails stale/wrong/suppressed signal controls.",
+    "passed": true,
+    "structure_gate_passed": true
+  },
+  "non_claims": [
+    "Not a reward-trained inquiry policy.",
+    "Not an open-agent or long-horizon tool result.",
+    "Not hidden-state localization evidence.",
+    "Not a production reliability certificate.",
+    "Not a human or biological habituation result.",
+    "Not a consciousness test."
+  ],
+  "run": {
+    "command": "doppler --scope /Users/jawaun/superoptimizers run -- uvx --python 3.12 --from modal modal run experiments/world_responds/modal_suite_c_neural_transfer.py --base-seed 20260706 --train-seeds 16 --calibration-seeds 6 --eval-seeds 8 --budget-usd 75 --out artifacts/world_responds/suite_c_neural_transfer_payload.json",
+    "date": "2026-07-06",
+    "models": [
+      "finite_numpy_mlp_probe_head"
+    ],
+    "providers": [
+      "modal_l4"
+    ],
+    "rows": 72,
+    "run_id": "suite_c_neural_transfer_2026_07_06"
+  },
+  "score_axes": {
+    "anti_cheat": {
+      "learned_signal_controls_passed": true,
+      "stale_recovery_rate": 0.5,
+      "suppressed_final_component_mae": 0.5537784793454519,
+      "wrong_signal_selectivity_ratio": 0.0
+    },
+    "attribution": {
+      "learned_final_component_mae": 0.1117639031472222,
+      "suppressed_final_component_mae": 0.5537784793454519,
+      "wrong_signal_final_component_mae": 0.8533034015849275
+    },
+    "behavior": {
+      "final_component_mae": 0.1117639031472222,
+      "headline_condition": "learned_probe_head",
+      "recovery_rate": 1.0
+    },
+    "inquiry": {
+      "first_selectivity_ratio": 16.666666666666664,
+      "learned_total_probes": 23.125,
+      "matched_random_selectivity_ratio": 0.96875,
+      "matched_random_total_probes": 23.125,
+      "second_reopen_ratio": 17.447916666666664
+    }
+  },
+  "suite": {
+    "axis_coverage": [
+      "behavior",
+      "attribution",
+      "inquiry",
+      "learned_policy",
+      "anti_cheat"
+    ],
+    "id": "suite_c_neural_transfer",
+    "name": "Suite C Neural Probe Transfer",
+    "status": "strong"
+  }
+}

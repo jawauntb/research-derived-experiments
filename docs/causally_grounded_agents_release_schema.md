@@ -109,6 +109,7 @@ Gate axes must be one of:
 - `causal_representation`
 - `attribution`
 - `inquiry`
+- `learned_policy`
 - `commitment`
 - `generalization`
 - `anti_cheat`
@@ -181,6 +182,7 @@ Allowed claim levels:
 - `causal steering result`
 - `human-validated result`
 - `neural-validated result`
+- `learned-policy diagnostic`
 
 Most suites in this repo currently justify `diagnostic`, `activation result`,
 or `cross-model activation result`. API-only runs are behavioral diagnostics and
@@ -202,5 +204,6 @@ plus archive names:
 | Long-Horizon Moved Bottleneck | `papers/long_horizon_bottleneck/paper.pdf` | `31_Future_Control_Moves_Memory_2026_07_06.pdf` |
 | Causally Grounded Agents Benchmark | `papers/causally_grounded_agents_benchmark/paper.pdf` | `32_Benchmarking_Causally_Grounded_Finite_Agents_2026_07_06.pdf` |
 | Suite C Re-Engagement | `papers/habituated_reengagement/suite_c_reengagement_under_world_change.pdf` | `33_Suite_C_Reengagement_Under_World_Change_2026_07_06.pdf` |
+| Suite C Neural Probe Transfer | `papers/habituated_reengagement/suite_c_neural_probe_transfer.pdf` | `34_Suite_C_Neural_Probe_Transfer_2026_07_06.pdf` |
 
 The public sharing bundle is indexed in `docs/publication_sharing_map.md`.
