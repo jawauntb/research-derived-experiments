@@ -53,6 +53,11 @@ consciousness claim. Its value is as a cheap, reproducible diagnostic for
 whether an agent's internal state, generated action trajectory, or black-box
 tool-call behavior tracks the variables that will later control action.
 
+The architecture lesson is equally bounded: memory becomes most agent-relevant
+where it is coupled to a future commitment surface. In these experiments, the
+critical variable matters because it must later be selected, emitted, repaired,
+or patched at an action/value interface.
+
 ## 1. Motivation
 
 Many long-horizon agent evaluations ask whether an agent eventually gives the
@@ -339,7 +344,39 @@ small external-validity stress suite. It does not show where the relevant
 state lives in that API model. The value is operational: other labs can run the
 same prompts and parser without needing local weights, hooks, or GPUs.
 
-## 6. Boundaries
+<div style="page-break-before: always;"></div>
+
+## 6. Architecture Law: Commitment Surfaces
+
+The paper's central design law is:
+
+> A memory trace becomes agent-relevant when future control relevance crosses a
+> commitment surface: a decision head, tool argument, generated action token,
+> repair branch, or value-token readout.
+
+![Figure 1. Commitment-surface evidence ladder. Takeaway: the claim strengthens as evidence moves from final behavior to memory transport, action commitment, generated action, hidden localization, and causal readout.](figures/fig1_commitment_surface_ladder.png)
+
+This is the long-horizon complement to the concern/self-world papers. In the
+homeostatic arc, a variable matters when it affects viability and can be
+identified through intervention. In this temporal arc, a variable matters when
+it becomes a delayed constraint on action. The same methodological discipline
+appears in both: do not stop at behavior; test the internal surface where the
+claim says the variable should become load-bearing.
+
+The negative controls are part of the law. Visible-control conditions remove
+the early-slot memory peak. The first prompt-level hidden site failed even when
+behavior passed. Prompt-final causal patch sites do not pass while
+value-prefix sites do. Those failures keep the claim from becoming vague. They
+say that future relevance is not "stored everywhere"; it is most diagnostic
+near the surfaces where the model must commit to the future-relevant value.
+
+This also clarifies the relationship to planning and agency. Planning is not
+just retaining a fact over a long context. At minimum, it is retaining a fact in
+a form that can control a later choice, tool call, repair, or generated action.
+The moved-bottleneck diagnostic tests that exact transition from memory to
+commitment.
+
+## 7. Boundaries
 
 The strongest honest statement is:
 
@@ -360,7 +397,7 @@ teacher-forced/generated JSON text, but it is still a compact harness. The
 latest API result uses a real API model, but only as a black-box behavior
 surface; it does not expose hidden states or production tool execution.
 
-## 7. Why This Is Valuable
+## 8. Why This Is Valuable
 
 The experiment's field value is not that it solves a benchmark. It gives a
 small, inspectable test for a pattern that current agent evaluations often miss:
@@ -377,7 +414,7 @@ A useful follow-on benchmark could ask, for a real agent or language model:
 
 That is a sharper evaluation target than final-task success alone.
 
-## 8. Remaining Work
+## 9. Remaining Work
 
 The synthetic mechanism ladder is complete enough to write up and share. The
 prompt-level hidden-localization replication is positive, and the fixed-action
@@ -405,12 +442,12 @@ regimes answer different questions:
 
 The most valuable immediate next step is to publish the diagnostic as a compact
 benchmark card: synthetic ladder positive, prompt-level behavior positive,
-prompt-level hidden localization positive, and fixed-action localization
-positive after generated action tokens are held constant, with a first causal
-patch result showing value-token logit control, prompt-family robustness, and
-a black-box API benchmark surface.
+prompt-level hidden localization positive, fixed-action localization positive
+after generated action tokens are held constant, value-prefix causal patching
+positive, prompt-family robustness positive, and black-box API behavior exposed
+as a reproducible benchmark surface.
 
-## 9. Reproducibility
+## 10. Reproducibility
 
 Experiment code lives in `experiments/long_horizon_bottleneck/`.
 
