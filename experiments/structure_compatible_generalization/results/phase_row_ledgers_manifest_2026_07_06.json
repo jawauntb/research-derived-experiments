@@ -1,0 +1,76 @@
+{
+  "artifact_type": "local_regenerated_row_ledgers",
+  "artifacts": {
+    "experiments/structure_compatible_generalization/results/row_ledgers/phase1_l4_rows_2026_07_06.jsonl": {
+      "kind": "structure-compatible generalization suite",
+      "manifest": {
+        "base_seed": 20260706,
+        "device": null,
+        "domains": [
+          "symbolic_cyclic",
+          "modular_neural"
+        ],
+        "include_exact": true,
+        "modular_epochs": 20,
+        "modular_models": 4,
+        "symbolic_epochs": 20,
+        "symbolic_models": 4,
+        "vision_epochs": 20,
+        "vision_models": 0
+      },
+      "rows": 10,
+      "sha256": "a7009776cdb4ac8a43b495c07d8b79c4e6f5201b8946118bb5d141cf00677a51"
+    },
+    "experiments/structure_compatible_generalization/results/row_ledgers/phase2_transformations_rows_2026_07_06.jsonl": {
+      "kind": "phase2 inferred transformations local row ledger",
+      "manifest": {
+        "base_seed": 20260706,
+        "device": null,
+        "n_configs": 11,
+        "profile": "smoke",
+        "provenance": "local_regeneration"
+      },
+      "rows": 11,
+      "sha256": "9bdf5ab8917ba5d7315410552e63f0fdbdcc051d609a9a44dec0f7e69c710a8c"
+    },
+    "experiments/structure_compatible_generalization/results/row_ledgers/phase3_learned_generators_rows_2026_07_06.jsonl": {
+      "kind": "phase3 learned generators local row ledger",
+      "manifest": {
+        "base_seed": 20260706,
+        "device": null,
+        "n_rows": 15,
+        "profile": "smoke",
+        "provenance": "local_regeneration"
+      },
+      "rows": 15,
+      "sha256": "8e43f767716e6f345e880eefe2140323fd7bfe4d3f5675ad1615c96cb0c70922"
+    },
+    "experiments/structure_compatible_generalization/results/row_ledgers/phase4_language_templates_rows_2026_07_06.jsonl": {
+      "kind": "phase4 language templates local row ledger",
+      "manifest": {
+        "base_seed": 20260706,
+        "device": null,
+        "n_rows": 14,
+        "profile": "smoke",
+        "provenance": "local_regeneration"
+      },
+      "rows": 14,
+      "sha256": "00c36659191ee0dd9fece0b5cac92b60323e255d5457ecbe2145752ebd71da5b"
+    },
+    "experiments/structure_compatible_generalization/results/row_ledgers/phase5_semantic_retrieval_rows_2026_07_06.jsonl": {
+      "kind": "phase5 semantic retrieval local row ledger",
+      "manifest": {
+        "base_seed": 20260706,
+        "device": null,
+        "n_rows": 6,
+        "profile": "smoke",
+        "provenance": "local_regeneration",
+        "semantic_fixture": true
+      },
+      "rows": 6,
+      "sha256": "cd8999645ba566f6290ed1a724771f80014e0e4c15c89ef07b54487833c149e9"
+    }
+  },
+  "claim_boundary": "These ledgers provide row-level regenerated evidence for phases 1-5. They are not claimed to be byte-identical restorations of prior Modal payloads.",
+  "run_id": "phase_row_ledgers_2026_07_06"
+}

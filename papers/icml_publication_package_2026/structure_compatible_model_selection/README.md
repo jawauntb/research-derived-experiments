@@ -42,6 +42,9 @@ Primary structure-compatible result reports:
 - `experiments/structure_compatible_generalization/results/semantic_retrieval_transfer_2026_07_06.md`
 - `experiments/structure_compatible_generalization/results/semantic_selection_control_2026_07_06.md`
 - `experiments/structure_compatible_generalization/results/semantic_selection_bootstrap_2026_07_06.md`
+- `experiments/structure_compatible_generalization/results/semantic_selection_row_release_2026_07_06.md`
+- `experiments/structure_compatible_generalization/results/semantic_selection_tiebreak_stress_2026_07_06.md`
+- `experiments/structure_compatible_generalization/results/phase_row_ledgers_2026_07_06.md`
 
 Companion finite-agent benchmark evidence:
 
@@ -76,8 +79,10 @@ Phase 6 now has regenerated zoo-level bootstrap intervals. The tracked report
 uses 120 selection zoos, 840 selector records, and 1,000 bootstrap reps. Learned
 compatibility selects OOD 0.978 with 95% CI [0.973, 0.983]; learned-minus-random
 and learned-minus-ID are both 0.059 [0.052, 0.065]; learned-minus-wrong is 0.227
-[0.221, 0.233]. Earlier phases still need restored or regenerated raw rows for
-full confidence intervals.
+[0.221, 0.233]. The Phase 6 row release tracks 1,440 diagnostic rows and 840
+selection records. Mean-tie, worst-tie, and random-tie stress tests all pass.
+Earlier phases now have local regenerated smoke row ledgers, but still need
+full Modal-scale raw rows for main-table confidence intervals.
 
 ## Claim Boundary
 

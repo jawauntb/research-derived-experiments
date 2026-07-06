@@ -129,8 +129,43 @@ def source_files(*, include_supporting: bool) -> list[Path]:
                 "experiments/structure_compatible_generalization/results/"
                 "semantic_selection_bootstrap_2026_07_06.json"
             ),
+            Path(
+                "experiments/structure_compatible_generalization/results/"
+                "semantic_selection_row_release_2026_07_06.md"
+            ),
+            Path(
+                "experiments/structure_compatible_generalization/results/"
+                "semantic_selection_row_release_manifest_2026_07_06.json"
+            ),
+            Path(
+                "experiments/structure_compatible_generalization/results/"
+                "semantic_selection_rows_2026_07_06.jsonl"
+            ),
+            Path(
+                "experiments/structure_compatible_generalization/results/"
+                "semantic_selection_records_2026_07_06.jsonl"
+            ),
+            Path(
+                "experiments/structure_compatible_generalization/results/"
+                "semantic_selection_tiebreak_stress_2026_07_06.md"
+            ),
+            Path(
+                "experiments/structure_compatible_generalization/results/"
+                "semantic_selection_tiebreak_stress_2026_07_06.json"
+            ),
+            Path(
+                "experiments/structure_compatible_generalization/results/"
+                "phase_row_ledgers_2026_07_06.md"
+            ),
+            Path(
+                "experiments/structure_compatible_generalization/results/"
+                "phase_row_ledgers_manifest_2026_07_06.json"
+            ),
         ]
     )
+    ledger_dir = Path("experiments/structure_compatible_generalization/results/row_ledgers")
+    if ledger_dir.exists():
+        files.extend(sorted(ledger_dir.glob("*_rows_2026_07_06.jsonl")))
     figure_dir = Path("papers/structure_compatible_generalization/figures")
     if figure_dir.exists():
         files.extend(sorted(figure_dir.glob("*.png")))

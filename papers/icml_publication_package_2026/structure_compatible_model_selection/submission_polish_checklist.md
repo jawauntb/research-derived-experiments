@@ -10,8 +10,17 @@ track. It separates what is now done from what remains before a real submission.
 - Phase 6 is the headline result rather than a broad survey claim.
 - Zoo-level bootstrap CIs are tracked for Phase 6 semantic selection:
   `experiments/structure_compatible_generalization/results/semantic_selection_bootstrap_2026_07_06.md`.
+- Curated Phase 6 row/selector JSONL artifacts are tracked:
+  `experiments/structure_compatible_generalization/results/semantic_selection_rows_2026_07_06.jsonl`
+  and
+  `experiments/structure_compatible_generalization/results/semantic_selection_records_2026_07_06.jsonl`.
+- Phase 6 tie-break stress is tracked for mean ties, worst tied candidates, and
+  random-tie bootstrap:
+  `experiments/structure_compatible_generalization/results/semantic_selection_tiebreak_stress_2026_07_06.md`.
 - The new uncertainty figure is generated at
   `papers/structure_compatible_generalization/figures/fig13_semantic_selection_bootstrap_ci.png`.
+- Phases 1-5 have local regenerated smoke row ledgers for reproducibility
+  audits, with provenance boundaries.
 - Wrong-compatibility controls remain visible in the main result.
 - Suite C teacher-free is framed as a positive finite companion result, not as
   a foundation-model agency claim.
@@ -20,12 +29,8 @@ track. It separates what is now done from what remains before a real submission.
 
 - Move `paper.tex`, `appendix.tex`, and `references.bib` into the current venue
   LaTeX template and keep the main body within the page limit.
-- Publish or archive a curated Phase 6 row-level payload corresponding to the
-  regenerated local artifact under `artifacts/`.
-- Add deterministic tie-break stress tests for the Phase 6 selector:
-  mean-of-ties, worst-tied-candidate, and random-tie bootstrap.
-- Restore or regenerate row-level artifacts for phases 1-5 if those phases keep
-  quantitative table space in the main paper.
+- Restore or regenerate full Modal-scale row-level artifacts for phases 1-5 if
+  those phases keep quantitative table space in the main paper.
 - Decide whether the agent-benchmark appendix should stay as a short appendix
   or move entirely to the separate benchmark paper.
 - Rebuild PDFs after template conversion and rerun lint, type checks, and

@@ -1,0 +1,39 @@
+{
+  "artifacts": {
+    "experiments/structure_compatible_generalization/results/semantic_selection_records_2026_07_06.jsonl": {
+      "rows": 840,
+      "sha256": "bc49c6740ace8fbea21673a73eba6b3b6856d2375767d5c57d915451f8d024bc"
+    },
+    "experiments/structure_compatible_generalization/results/semantic_selection_rows_2026_07_06.jsonl": {
+      "rows": 1440,
+      "sha256": "25f4607c772d62d22866c4d423579dcbac1e5d562519effc4779d48fd15bf2ac"
+    }
+  },
+  "claim_boundary": [
+    "This is a finite regenerated row release for Phase 6 semantic selection.",
+    "It is not universal OOD certification or open-world semantic robustness."
+  ],
+  "kind": "curated_phase6_semantic_selection_row_release",
+  "n_rows": 1440,
+  "n_selection_records": 840,
+  "row_schema": {
+    "privacy_curation": "No embeddings, model weights, credentials, or provider paths are included.",
+    "rows": "DiagnosticRow records: model/config metrics, compatibility scores, and selection metadata.",
+    "selection_records": "Per-zoo selector outcomes over ID-equivalent candidate sets."
+  },
+  "run_id": "semantic_selection_row_release_2026_07_06",
+  "source_manifest": {
+    "base_seed": 20260706,
+    "configs_per_zoo": 12,
+    "fixture": false,
+    "n_zoos": 12,
+    "thresholds": [
+      0.5,
+      0.56,
+      0.62,
+      0.68,
+      0.74
+    ]
+  },
+  "source_payload_kind": "structure-compatible semantic selection control"
+}

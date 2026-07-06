@@ -6,15 +6,18 @@ be regenerated or restored before a main-conference submission.
 ## Current Evidence State
 
 Tracked evidence for structure-compatible generalization consists of Markdown
-summary reports, PDFs, figures, preregistrations, source code, and the new
-Phase 6 semantic-selection bootstrap report. The regenerated raw Phase 6
-payload was produced locally at
-`artifacts/structure_compatible_generalization/semantic_selection_control_regen_2026_07_06.json`
-and is intentionally outside git because `artifacts/` is ignored.
+summary reports, PDFs, figures, preregistrations, source code, the Phase 6
+semantic-selection bootstrap report, a curated Phase 6 row-level release, and
+smoke row ledgers for phases 1-5. The full regenerated Phase 6 payload was
+produced locally at
+`artifacts/structure_compatible_generalization/semantic_selection_control_regen_2026_07_06.json`;
+its reviewer-facing row and selector records are now tracked as JSONL.
 
-Consequence: the paper can now report Phase 6 zoo-level bootstrap intervals.
-Full bootstrap intervals over seeds, model rows, and semantic orbits for phases
-1-5 still require restoring the raw artifacts or rerunning those suites.
+Consequence: the paper can now report Phase 6 zoo-level bootstrap intervals,
+publish the Phase 6 row records, and report tie-break stress tests. The phases
+1-5 ledgers are local regenerated smoke fixtures, not byte-identical restores
+of the original Modal payloads, so they support reproducibility audits rather
+than headline statistical intervals.
 
 ## Required Independent Units
 
@@ -71,6 +74,10 @@ Tracked outputs:
 
 - `experiments/structure_compatible_generalization/results/semantic_selection_bootstrap_2026_07_06.json`
 - `experiments/structure_compatible_generalization/results/semantic_selection_bootstrap_2026_07_06.md`
+- `experiments/structure_compatible_generalization/results/semantic_selection_rows_2026_07_06.jsonl`
+- `experiments/structure_compatible_generalization/results/semantic_selection_records_2026_07_06.jsonl`
+- `experiments/structure_compatible_generalization/results/semantic_selection_row_release_manifest_2026_07_06.json`
+- `experiments/structure_compatible_generalization/results/semantic_selection_tiebreak_stress_2026_07_06.md`
 - `papers/structure_compatible_generalization/figures/fig13_semantic_selection_bootstrap_ci.png`
 
 Key intervals:
@@ -80,16 +87,32 @@ Key intervals:
 - learned minus ID: 0.059, 95% CI [0.052, 0.065];
 - learned minus wrong: 0.227, 95% CI [0.221, 0.233];
 - learned regret: 0.014, 95% CI [0.011, 0.018].
+- tie-break stress: mean ties, worst tied candidate, and random-tie bootstrap
+  all pass the registered selector gates.
+
+## Phases 1-5 Row-Ledger Status
+
+Tracked smoke row ledgers:
+
+- `experiments/structure_compatible_generalization/results/phase_row_ledgers_2026_07_06.md`
+- `experiments/structure_compatible_generalization/results/phase_row_ledgers_manifest_2026_07_06.json`
+- `experiments/structure_compatible_generalization/results/row_ledgers/phase1_l4_rows_2026_07_06.jsonl`
+- `experiments/structure_compatible_generalization/results/row_ledgers/phase2_transformations_rows_2026_07_06.jsonl`
+- `experiments/structure_compatible_generalization/results/row_ledgers/phase3_learned_generators_rows_2026_07_06.jsonl`
+- `experiments/structure_compatible_generalization/results/row_ledgers/phase4_language_templates_rows_2026_07_06.jsonl`
+- `experiments/structure_compatible_generalization/results/row_ledgers/phase5_semantic_retrieval_rows_2026_07_06.jsonl`
+
+These ledgers are explicitly labeled as local regenerated smoke fixtures. The
+full Modal-scale row artifacts should still be restored or rerun if phases 1-5
+return to the main quantitative claim.
 
 ## Remaining Bootstrap/Significance Before Submission
 
-1. Restore or regenerate row-level payloads for phases 1-5.
-2. Use paired differences within each zoo where selectors share the same
-   candidate set.
-3. Repeat Phase 6 with deterministic tie-break variants:
-   - mean of ties, current summary behavior;
-   - worst tied candidate;
-   - random tied candidate with bootstrap over tie samples.
+1. Restore or rerun full Modal-scale row-level payloads for phases 1-5 if they
+   keep main-table quantitative space.
+2. Add third-encoder or larger-zoo Phase 6 replication if a venue reviewer asks
+   for scale beyond the current 120 zoos.
+3. Add paired-difference presentation for the existing Phase 6 selector rows.
 
 ## Boundary Analyses
 
@@ -104,7 +127,8 @@ The paper should include these as reviewer-facing boundary analyses:
 
 ## Artifact Work Needed
 
-Before a conference submission, add public or redacted artifacts:
+Before a conference submission, optionally add full-scale public or redacted
+artifacts:
 
 ```text
 artifacts/structure_compatible_generalization/
