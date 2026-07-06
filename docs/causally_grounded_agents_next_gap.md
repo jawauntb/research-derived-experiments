@@ -1,31 +1,36 @@
-# Next Empirical Gap: Suite C Re-Engagement Under World Change
+# Next Empirical Gap: Suite C Re-Engagement Runner
 
 Generated: 2026-07-06
 
-## Why Suite C Is Next
+## Why Suite C Still Matters
 
 Suites D and E are the most hardened current results: the long-horizon moved
 bottleneck and tool-commitment ladder now include synthetic, open-model,
 causal-patch, prompt-family, and API behavior surfaces.
 
-Suite C remains the most scientifically valuable active gap. Existing work has
-shown all the interesting pieces separately:
+Suite C is now packaged as a benchmark frontier in
+`experiments/world_responds/BENCHMARK_CARD.md` and
+`experiments/world_responds/results/suite_c_reengagement_2026_07_06.md`.
+Existing work has shown the important pieces:
 
 - Paper 22: learned probing can self-silence after the world changes.
 - Paper 23A: non-null surprise re-engages probing, but can over-fire.
 - Paper 23B: decision-layer cooling reduces anxiety and preserves second-shift
   re-openability, while signal-layer cooling creates false calm.
 
-The missing terminal result is a compact benchmark condition that jointly
-requires re-engagement, recovery, cost discipline, and no false calm.
+The missing hardening step is not another isolated prose result. It is a
+first-class runner that emits public JSONL rows and a schema-valid summary for
+the Paper 23B conditions, so the suite can be scored like the hardened Suite
+D/E package.
 
 ## Discovery-Regime Audit
 
 - Old regime: self/world attribution and probe-value papers with per-paper
   gates, including Paper 22's post-shift silence, Paper 23A's anxiety, and
   Paper 23B's decision-layer cooling.
-- Transition: a Suite C benchmark gate that treats re-engagement as a public
-  benchmark condition rather than a paper-local result.
+- Transition: a Suite C benchmark card and status report now treat
+  re-engagement as a public benchmark condition rather than a paper-local
+  result.
 - Transported evidence: `papers/world_responds/paper.md`,
   `papers/probe_value_reengagement/paper.md`,
   `papers/habituated_reengagement/paper.md`, and
@@ -33,18 +38,19 @@ requires re-engagement, recovery, cost discipline, and no false calm.
 - Rejected alternatives: current-error probing as an oracle; ensemble variance
   as sufficient uncertainty; signal-layer surprise decrement as healthy
   habituation; final MAE alone as a pass.
-- Residual finding: the benchmark must distinguish healthy quiet from false
-  calm. A lower probe rate is only good if attribution actually recovered.
-- Readiness: enough evidence exists to define the suite; the terminal gate is
-  not yet complete.
-- Allowed claim: diagnostic benchmark plan for finite re-engagement, not a
-  completed human/neural result.
+- Residual finding: the benchmark must still distinguish healthy quiet from
+  false calm in machine-readable rows. A lower probe rate is only good if
+  attribution actually recovered.
+- Readiness: enough evidence exists to share the suite card; the reusable
+  runner and strict recovery pass are not yet complete.
+- Allowed claim: diagnostic benchmark frontier for finite re-engagement, not a
+  terminal human/neural or production result.
 
-## Proposed Suite C Gate
+## Suite C Gate To Implement
 
-The candidate terminal condition should include two world shifts. The first
-shift tests re-engagement after learned quiet; the second shift tests whether
-cooling decays enough to reopen inquiry.
+The reusable runner should include two world shifts. The first shift tests
+re-engagement after learned quiet; the second shift tests whether cooling
+decays enough to reopen inquiry.
 
 Acceptance gates:
 
@@ -79,9 +85,14 @@ Required controls:
 
 ## Release Artifacts
 
-When run, Suite C should produce:
+The packaged frontier now includes:
 
 - `experiments/world_responds/BENCHMARK_CARD.md`;
+- `experiments/world_responds/results/suite_c_reengagement_2026_07_06.md`;
+- `experiments/world_responds/results/suite_c_reengagement_2026_07_06.json`.
+
+The next runner should produce:
+
 - JSONL rows under `artifacts/world_responds/suite_c_reengagement_rows.jsonl`;
 - summary JSON under `artifacts/world_responds/suite_c_reengagement_summary.json`;
 - report under `experiments/world_responds/results/suite_c_reengagement_<date>.md`;
@@ -99,4 +110,3 @@ bounded negative if:
 
 The benchmark value comes from locating the bottleneck, not from forcing a
 positive.
-

@@ -67,7 +67,7 @@ follows the moved future-critical variable rather than a matched distractor.
 |---|---|---|---|---|---|---|
 | A. Consequence-to-action | `papers/planning_from_concern/paper.md`; `experiments/planning_from_concern` | Strong | return and action accuracy | action-conditioned Delta-E model selects by argmax | random/sensory encoder controls; policy/distillation parity | distributed concern means no single privileged reward axis is sufficient |
 | B. Reafferent attribution | `papers/first_order_self/paper.md`; `papers/null_intervention/paper.md`; `papers/world_responds/paper.md`; `experiments/world_responds` | Strong with ceiling | action competence or total prediction | self/world source MAE, gauge-breaker benefit, mediated/exogenous split | null intervention, shuffled source labels, oracle source labels, wrong-history controls | role-specific mediated effects hit a shared-head ceiling |
-| C. Re-engagement under world change | `papers/probe_value_reengagement/paper.md`; `papers/habituated_reengagement/paper.md`; `experiments/world_responds/results/reengagement_23a_2026_07_06.md` | Partial, active bottleneck | post-shift outcome recovery | post-shift probe density, value-of-information proxy, no-false-calm gate | cost-aware inquiry, surprise preserved, second-shift reopenability | learned mechanisms re-engage, but recovery/stability gates are not yet terminal |
+| C. Re-engagement under world change | `experiments/world_responds/BENCHMARK_CARD.md`; `papers/probe_value_reengagement/paper.md`; `papers/habituated_reengagement/paper.md`; `experiments/world_responds/results/suite_c_reengagement_2026_07_06.md` | Packaged frontier: bounded positive with recovery gap | post-shift outcome recovery | post-shift probe density, decision-layer cooling, no-false-calm gate | cost-aware inquiry, surprise preserved, second-shift reopenability, signal-layer false-calm control | decision-layer cooling reopens inquiry and catches false calm; strict recovery and public JSONL runner remain partial |
 | D. Long-horizon moved bottleneck | `papers/long_horizon_bottleneck/paper.md`; `experiments/long_horizon_bottleneck` | Strongest, hardened | delayed final accuracy | moved-slot memory specificity and rank | visible-control null, matched distractors, causal patch, fixed-action localization | black-box API runs are behavior-only, not hidden-state evidence |
 | E. Tool commitment and repair | `experiments/long_horizon_bottleneck/BENCHMARK_CARD.md`; prompt/API JSON suites | Strongest, hardened | parsed tool success, schema validity, repair/no-op behavior | critical variable survives tool argument, repair branch, generated action, or value-token readout | malformed schema controls, stochastic failure, alias/text argument surfaces, dispatch variants | OpenAI GPT-4.1 Nano dispatch failure is sparse: 1 of 16 robustness cells reproduced |
 | F. Structure-compatible OOD | `papers/weakness_invariance_neurips/paper.md`; `papers/structure_compatible_generalization`; `experiments/structure_compatible_generalization` | Strong, needs unified packaging | ID success and OOD accuracy | compatibility with true or inferred deployment-generating transformations | wrong-group control, no-OOD-label selection, shortcut-compatible train split | parity and large symmetric groups remain degraded; topology mediation failed in one harness |
@@ -108,7 +108,10 @@ Start here:
 
 - umbrella benchmark: `docs/causally_grounded_agents_benchmark.md`;
 - release schema: `docs/causally_grounded_agents_release_schema.md`;
-- next empirical gap: `docs/causally_grounded_agents_next_gap.md`;
+- publication sharing map: `docs/publication_sharing_map.md`;
+- Suite C frontier card: `experiments/world_responds/BENCHMARK_CARD.md`;
+- Suite C status report: `experiments/world_responds/results/suite_c_reengagement_2026_07_06.md`;
+- Suite C remaining implementation gap: `docs/causally_grounded_agents_next_gap.md`;
 - hardened Suite D/E card: `experiments/long_horizon_bottleneck/BENCHMARK_CARD.md`;
 - Paper 32 design note: `papers/causally_grounded_agents_benchmark/paper.md`;
 - Paper 32 PDF: `papers/causally_grounded_agents_benchmark/paper.pdf`.
@@ -139,14 +142,16 @@ Run the full provider/API suites with the commands in
   black-box API evaluator, and long-horizon benchmark card.
 - Rejected alternatives: a single scalar groundedness score; final behavior as
   sufficient evidence; source paths that only work on one local machine.
-- Residual finding: Suite C remains the clearest active bottleneck because
-  re-engagement and stable recovery are not yet jointly terminal.
+- Residual finding: Suite C is now packaged as a benchmark frontier. It has
+  positive re-engagement, decision-layer cooling, and no-false-calm evidence,
+  while strict recovery and public JSONL cost-normalized scoring remain partial.
 - Readiness: Suite D/E is release-hardened; Suite A/B/F are strong but need
-  packaging convergence; Suite C needs the next empirical gate.
+  packaging convergence; Suite C has a public card/status but still needs a
+  first-class Paper 23B runner.
 - Allowed claim: diagnostic benchmark release scaffold for finite agents, not
   a consciousness test, production reliability certificate, human behavioral
   result, or neural validation.
-- Next operation: run the Suite C re-engagement benchmark gate described in
+- Next operation: implement the reusable Suite C Paper 23B runner described in
   `docs/causally_grounded_agents_next_gap.md`.
 
 ## Non-Claims
@@ -155,4 +160,3 @@ This benchmark does not certify consciousness, full autonomy, production tool
 reliability, broad OOD robustness, or human/neural validity. It gives controlled
 finite evidence about whether success is tied to the causal surfaces that future
 action depends on.
-

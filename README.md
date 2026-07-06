@@ -23,7 +23,9 @@ Start here:
 
 - [Benchmark umbrella](docs/causally_grounded_agents_benchmark.md)
 - [Shared release schema](docs/causally_grounded_agents_release_schema.md)
-- [Next empirical gap: Suite C re-engagement](docs/causally_grounded_agents_next_gap.md)
+- [Publication sharing map](docs/publication_sharing_map.md)
+- [Suite C benchmark frontier](experiments/world_responds/BENCHMARK_CARD.md)
+- [Next Suite C hardening gap](docs/causally_grounded_agents_next_gap.md)
 - [Suite D/E benchmark card](experiments/long_horizon_bottleneck/BENCHMARK_CARD.md)
 - [Paper 32 design note](papers/causally_grounded_agents_benchmark/paper.md)
 
@@ -421,9 +423,9 @@ ephemeral scientific dependencies required by tests, then runs compile checks,
 the publication guard, ruff, and ty. To run the individual checks manually:
 
 ```bash
-uvx --python 3.12 --with torch --with numpy --with scikit-learn python -m unittest discover -s tests
+uvx --python 3.12 --with torch --with numpy --with scikit-learn --with pytest python -m unittest discover -s tests
 uvx --python 3.12 python -m compileall scripts experiments tests
 python3 scripts/publication_guard.py
 uvx ruff check .
-uvx ty check scripts experiments tests
+uvx --python 3.12 --with numpy --with torch --with scikit-learn --with scipy --with matplotlib --with pytest ty check scripts experiments tests
 ```
