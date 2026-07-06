@@ -103,11 +103,11 @@ CSS = """
 @page { size: Letter; margin: 0.72in 0.72in 0.72in 0.72in; }
 body { font-family: "Helvetica", "Arial", sans-serif; font-size: 9.6pt; line-height: 1.38; color: #111; }
 h1 { font-size: 16.5pt; margin-top: 0; }
-h2 { font-size: 12.2pt; margin-top: 1.05em; border-bottom: 1px solid #ccc; padding-bottom: 0.1em; }
+h2 { font-size: 12.2pt; margin-top: 1.05em; border-bottom: 0; padding-bottom: 0; }
 h3 { font-size: 11pt; margin-top: 1em; }
 p, li { font-size: 9.6pt; }
 code { font-family: "Menlo", "Courier New", monospace; font-size: 8.7pt; background: transparent; padding: 0; border-radius: 0; }
-pre { background: #f4f4f4; padding: 8px 10px; border-radius: 3px; font-size: 8.3pt; white-space: pre-wrap; overflow-wrap: anywhere; }
+pre { background: transparent; border-left: 2px solid #ddd; padding: 2px 0 2px 8px; border-radius: 0; font-size: 8.3pt; white-space: pre-wrap; overflow-wrap: anywhere; }
 pre code { background: transparent; padding: 0; font-size: 8.3pt; white-space: pre-wrap; overflow-wrap: anywhere; }
 table { border-collapse: collapse; margin: 0.5em 0; font-size: 8pt; width: 100%; table-layout: fixed; }
 th, td { border: 1px solid #bbb; padding: 3px 5px; text-align: left; vertical-align: top; overflow-wrap: anywhere; word-break: break-word; }

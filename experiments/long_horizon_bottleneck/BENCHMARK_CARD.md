@@ -20,10 +20,15 @@ Test whether future control relevance moves both generated behavior and internal
   4.5, and OpenAI GPT-4.1 Nano all pass the matched prompt-family suite.
   Gemini and Anthropic pass the external-stress suite; OpenAI produces a
   controlled strong negative on two `dispatch` stress cells.
+- API dispatch-failure characterization: a 60-request OpenAI GPT-4.1 Nano
+  follow-up partially reproduces and localizes the stress failure. The
+  4-slot/gap-8 dispatch cell no longer fails; the 8-slot/gap-16 cell reproduces
+  as a failed-repair value miss. Neutral wording and copy assistance pass,
+  while repair hinting does not.
 - Latest models: `Qwen/Qwen2.5-0.5B-Instruct`, `Qwen/Qwen2.5-1.5B-Instruct`, `HuggingFaceTB/SmolLM2-1.7B-Instruct`.
 - Latest prompt-level causal artifact: `artifacts/long_horizon_bottleneck/prompt_json_prompt_family_causal_patch_l4.json`.
-- Latest API artifact: `artifacts/long_horizon_bottleneck/api_blackbox_multi_provider_2026_07_06_summary.json`.
-- Latest committed report: `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzzzzz_api_blackbox_multi_provider_2026_07_06.md`.
+- Latest API artifact: `artifacts/long_horizon_bottleneck/api_dispatch_characterization_openai_gpt41_nano_summary.json`.
+- Latest committed report: `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzzzzzz_api_dispatch_characterization_openai_gpt41_nano_2026_07_06.md`.
 
 ## Prompt-Level Terminal Result
 
@@ -143,6 +148,30 @@ The matched external-validity stress suite is mixed:
 
 Outcome: prompt-family `positive`; external stress `mixed with controlled strong
 negative`.
+
+## API Dispatch-Failure Characterization Terminal Result
+
+The dispatch characterization runner keeps the same provider adapter, JSON
+parser, controls, failed-repair phase, and previously failed stress settings,
+then splits the original `dispatch` prompt into diagnostic variants:
+`wording_neutral`, `copy_assisted`, and `repair_hinted`.
+
+The OpenAI GPT-4.1 Nano follow-up is partially reproduced and localized:
+
+- 28 scored rows;
+- 60 API requests;
+- controls pass;
+- the 4-slot/gap-8 original dispatch failure does not reproduce;
+- the 8-slot/gap-16 original dispatch failure reproduces as a failed-repair
+  value miss: first action 1.000, repair-after-error 0.500, success no-op 1.000;
+- neutral wording passes;
+- copy-assisted dispatch passes;
+- repair-hinted dispatch still fails.
+
+Outcome: `partially_reproduced_localized`. The allowed claim is narrow: for the
+tested OpenAI model and stress cells, the reproduced dispatch failure behaves
+like a dispatch wording/value-copy pressure point under repair, not a generic
+parser or no-op-control failure.
 
 ## Use
 

@@ -487,6 +487,36 @@ OpenAI GPT-4.1 Nano produces a controlled strong negative in two `dispatch`
 cells with controls still passing. See
 `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzzzzz_api_blackbox_multi_provider_2026_07_06.md`.
 
+Dispatch-failure characterization:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    env PYTHONPATH=. python3 -m experiments.long_horizon_bottleneck.api_dispatch_characterization \
+    --provider openai-responses \
+    --models gpt-4.1-nano \
+    --stress-cases 4slot_gap8,8slot_gap16 \
+    --seeds 1 \
+    --episodes-per-cell 2 \
+    --critical-slot 0 \
+    --max-requests 60 \
+    --max-output-tokens 64 \
+    --sleep-seconds 0.05 \
+    --out artifacts/long_horizon_bottleneck/api_dispatch_characterization_openai_gpt41_nano_summary.json \
+    --jsonl artifacts/long_horizon_bottleneck/api_dispatch_characterization_openai_gpt41_nano_rows.jsonl \
+    --report-md experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzzzzzz_api_dispatch_characterization_openai_gpt41_nano_2026_07_06.md \
+    --omit-prompts
+```
+
+The 2026-07-06 dispatch characterization targets those two OpenAI `dispatch`
+cells while keeping the parser, controls, provider adapter, and repair/no-op
+phases fixed. It compares the original dispatch wording against neutral
+wording, value-copy assistance, and repair hinting. The result is
+`partially_reproduced_localized`: the 4-slot/gap-8 failure does not reproduce,
+while the 8-slot/gap-16 failure reproduces as a repair-after-error value miss
+that is relieved by neutral wording and copy assistance but not by repair
+hinting. See
+`experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzzzzzz_api_dispatch_characterization_openai_gpt41_nano_2026_07_06.md`.
+
 Smoke:
 
 ```bash
