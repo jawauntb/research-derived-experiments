@@ -1,0 +1,194 @@
+{
+  "allowed_claim": "In a controlled finite benchmark, a linear inquiry policy selected by teacher-free downstream reward search can pass Suite C C1-C6 and the T1/N1 anti-cheat gates on held-out seeds.",
+  "artifacts": {
+    "report_md": "experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.md",
+    "rows_jsonl": "experiments/world_responds/results/suite_c_teacher_free_inquiry_rows_2026_07_06.jsonl",
+    "summary_json": "experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.json"
+  },
+  "baselines": [
+    {
+      "evidence_ref": "experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.md",
+      "kind": "upper",
+      "name": "scheduled_null_anchor",
+      "result": "144.0 probes, final MAE 0.046"
+    },
+    {
+      "evidence_ref": "experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.md",
+      "kind": "upper",
+      "name": "oracle_source",
+      "result": "68.9 probes, final MAE 0.043"
+    },
+    {
+      "evidence_ref": "experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.md",
+      "kind": "control",
+      "name": "matched_random_teacher_free_budget",
+      "result": "equal-budget random selectivity 0.833"
+    },
+    {
+      "evidence_ref": "experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.md",
+      "kind": "proxy",
+      "name": "recovery_only_proxy_policy",
+      "result": "recovery-only proxy uses 14.9 probes"
+    },
+    {
+      "evidence_ref": "experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.md",
+      "kind": "proxy",
+      "name": "cost_only_proxy_policy",
+      "result": "cost-only proxy recovery rate 0.000"
+    }
+  ],
+  "benchmark": {
+    "charter": "Evaluate finite agents by requiring behavior plus structure-specific gates and anti-cheat controls.",
+    "name": "Causally Grounded Finite Agents Benchmark",
+    "version": "2026-07-06"
+  },
+  "gates": [
+    {
+      "evidence_ref": "experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.md",
+      "gate_id": "C1",
+      "name": "C1_silence_replication",
+      "passed": true
+    },
+    {
+      "evidence_ref": "experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.md",
+      "gate_id": "C2",
+      "name": "C2_reengagement",
+      "passed": true
+    },
+    {
+      "evidence_ref": "experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.md",
+      "gate_id": "C3",
+      "name": "C3_recovery",
+      "passed": true
+    },
+    {
+      "evidence_ref": "experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.md",
+      "gate_id": "C4",
+      "name": "C4_no_false_calm",
+      "passed": true
+    },
+    {
+      "evidence_ref": "experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.md",
+      "gate_id": "C5",
+      "name": "C5_cost_aware_inquiry",
+      "passed": true
+    },
+    {
+      "evidence_ref": "experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.md",
+      "gate_id": "C6",
+      "name": "C6_reopenability",
+      "passed": true
+    },
+    {
+      "evidence_ref": "experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.md",
+      "gate_id": "T1",
+      "name": "T1_teacher_free_training",
+      "passed": true
+    },
+    {
+      "evidence_ref": "experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.md",
+      "gate_id": "N1",
+      "name": "N1_learned_signal_controls",
+      "passed": true
+    },
+    {
+      "evidence_ref": "experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.md",
+      "gate_id": "suite",
+      "name": "suite_pass",
+      "passed": true
+    }
+  ],
+  "minimum_pass_rule": {
+    "anti_cheat_controls_passed": true,
+    "behavior_passed": true,
+    "notes": "Teacher-free reward/CEM policy passes C1-C6 plus T1/N1 on held-out seeds without teacher labels, actions, or probabilities.",
+    "passed": true,
+    "structure_gate_passed": true
+  },
+  "non_claims": [
+    "Not evidence of open-ended agency.",
+    "Not a foundation-model or API-agent result.",
+    "Not human or biological validation.",
+    "Not a production reliability certificate.",
+    "Not a consciousness test."
+  ],
+  "run": {
+    "command": "python -m experiments.world_responds.summarize_suite_c_teacher_free --out-root .",
+    "date": "2026-07-06",
+    "models": [
+      "linear_probe_policy"
+    ],
+    "providers": [
+      "local_numpy"
+    ],
+    "rows": 80,
+    "run_id": "suite_c_teacher_free_inquiry_2026_07_06"
+  },
+  "score_axes": {
+    "anti_cheat": {
+      "stale_recovery_rate": 0.0,
+      "suppressed_final_component_mae": 0.46418922845321176,
+      "teacher_free_gate": true,
+      "wrong_signal_selectivity_ratio": 0.0
+    },
+    "behavior": {
+      "final_component_mae": 0.09527455950978708,
+      "headline_condition": "teacher_free_reward_policy",
+      "recovery_rate": 1.0
+    },
+    "inquiry": {
+      "first_selectivity_ratio": 12.5,
+      "learned_total_probes": 22.0,
+      "matched_random_selectivity_ratio": 0.8333333333333333,
+      "matched_random_total_probes": 22.0,
+      "second_reopen_ratio": 11.3125
+    }
+  },
+  "suite": {
+    "axis_coverage": [
+      "behavior",
+      "attribution",
+      "inquiry",
+      "teacher_free_training",
+      "anti_cheat"
+    ],
+    "id": "suite_c_teacher_free_inquiry",
+    "name": "Suite C Teacher-Free Inquiry",
+    "status": "strong"
+  },
+  "training": {
+    "calibration_seeds": [
+      20341706,
+      20342703,
+      20343700,
+      20344697,
+      20345694,
+      20346691,
+      20347688,
+      20348685
+    ],
+    "eval_seeds": [
+      20351706,
+      20352703,
+      20353700,
+      20354697,
+      20355694,
+      20356691,
+      20357688,
+      20358685
+    ],
+    "iterations": 5,
+    "population_size": 36,
+    "teacher_actions_used": false,
+    "teacher_labels_used": false,
+    "teacher_probabilities_used": false,
+    "train_seeds": [
+      20331706,
+      20332703,
+      20333700,
+      20334697,
+      20335694
+    ],
+    "training_regime": "teacher_free_reward_cem"
+  }
+}

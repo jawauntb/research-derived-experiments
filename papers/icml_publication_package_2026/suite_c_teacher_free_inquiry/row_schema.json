@@ -14,7 +14,9 @@
     "recovery_pass",
     "reengagement_pass",
     "reopen_pass",
-    "teacher_labels_used"
+    "teacher_labels_used",
+    "teacher_actions_used",
+    "teacher_probabilities_used"
   ],
   "properties": {
     "training_regime": {"type": "string"},
@@ -29,10 +31,11 @@
     "reengagement_pass": {"type": "boolean"},
     "reopen_pass": {"type": "boolean"},
     "teacher_labels_used": {"type": "boolean", "const": false},
+    "teacher_actions_used": {"type": "boolean", "const": false},
+    "teacher_probabilities_used": {"type": "boolean", "const": false},
     "training_loss": {"type": "number"},
     "reward": {"type": "number"},
     "control_failure_reason": {"type": "string"}
   },
   "additionalProperties": true
 }
-
