@@ -1,0 +1,514 @@
+{
+  "cells": [
+    {
+      "gpu": "L4",
+      "model_key": "distilgpt2",
+      "preset": "full",
+      "track": "open_lm_action_coupling"
+    },
+    {
+      "gpu": "L4",
+      "model_key": "pythia_70m",
+      "preset": "full",
+      "track": "open_lm_action_coupling"
+    },
+    {
+      "gpu": "L4",
+      "model_key": "qwen2_0_5b_instruct",
+      "preset": "full",
+      "track": "open_lm_action_coupling"
+    },
+    {
+      "gpu": "L4",
+      "model_key": "all_minilm_l6_v2",
+      "preset": "full",
+      "track": "frozen_encoder_metric_deformation"
+    },
+    {
+      "gpu": "L4",
+      "model_key": "bge_small_en_v1_5",
+      "preset": "full",
+      "track": "frozen_encoder_metric_deformation"
+    }
+  ],
+  "kind": "phase6_real_model_validation_l4_suite",
+  "manifest": {
+    "budget_estimate": {
+      "budget_usd": 1000.0,
+      "cells": 5,
+      "conservative_cost_usd": 1.998,
+      "gpu": "L4",
+      "gpu_rate_per_second": 0.000222,
+      "max_containers": 8,
+      "timeout_seconds": 1800,
+      "within_budget": true
+    },
+    "claim_level": "actual open-LM and frozen-encoder validation result",
+    "gpu": "L4",
+    "kind": "phase6_real_model_validation_l4_manifest",
+    "max_containers": 8,
+    "models": [
+      "distilgpt2",
+      "pythia_70m",
+      "qwen2_0_5b_instruct",
+      "all_minilm_l6_v2",
+      "bge_small_en_v1_5"
+    ],
+    "preset": "full",
+    "tracks": [
+      "open_lm_action_coupling",
+      "frozen_encoder_metric_deformation"
+    ]
+  },
+  "rows": [
+    {
+      "condition": "distilgpt2",
+      "cue_specificity": -0.1240234375,
+      "elapsed_seconds": 21.209951162338257,
+      "geometry_action_r": 0.4540057997966592,
+      "label_geometry_gap": 0.016224239021539688,
+      "label_margin_lift": 0.70263671875,
+      "margin_auc": 0.75,
+      "matched_control_lift": 0.04736328125,
+      "model_id": "distilgpt2",
+      "n_items": 20,
+      "neutral_cue_drift": 0.75,
+      "ok": 1,
+      "random_control_lift": 0.07666015625,
+      "targeted_cue_lift": 0.6259765625,
+      "track": "open_lm_action_coupling"
+    },
+    {
+      "condition": "pythia_70m",
+      "cue_specificity": -3.25,
+      "elapsed_seconds": 22.703531503677368,
+      "geometry_action_r": -0.03541938146338827,
+      "label_geometry_gap": 0.011937964707612991,
+      "label_margin_lift": 0.00048828125,
+      "margin_auc": 0.5,
+      "matched_control_lift": 1.9990234375,
+      "model_id": "EleutherAI/pythia-70m-deduped",
+      "n_items": 20,
+      "neutral_cue_drift": 0.99951171875,
+      "ok": 1,
+      "random_control_lift": 1.24951171875,
+      "targeted_cue_lift": -1.2509765625,
+      "track": "open_lm_action_coupling"
+    },
+    {
+      "condition": "qwen2_0_5b_instruct",
+      "cue_specificity": 1.3125,
+      "elapsed_seconds": 32.231812477111816,
+      "geometry_action_r": 0.6016068450173538,
+      "label_geometry_gap": 0.15340974926948547,
+      "label_margin_lift": 2.48828125,
+      "margin_auc": 0.8125,
+      "matched_control_lift": 0.28515625,
+      "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+      "n_items": 20,
+      "neutral_cue_drift": 0.55078125,
+      "ok": 1,
+      "random_control_lift": 0.328125,
+      "targeted_cue_lift": 1.86328125,
+      "track": "open_lm_action_coupling"
+    },
+    {
+      "collapse_index": 0.09390831144107731,
+      "condition": "all_minilm_l6_v2",
+      "deformed_margin_lift": 0.37747606459715555,
+      "deformed_neighbor_precision": 1.0,
+      "deformed_precision_lift": 0.0,
+      "deformed_value_margin": 0.6936210975352917,
+      "elapsed_seconds": 15.851610660552979,
+      "model_id": "sentence-transformers/all-MiniLM-L6-v2",
+      "n_items": 22,
+      "off_target_drift": 0.0,
+      "ok": 1,
+      "random_margin_lift": 0.005647992133250179,
+      "random_neighbor_precision": 0.95,
+      "random_precision_lift": -0.050000000000000044,
+      "random_value_margin": 0.3217930250713863,
+      "raw_neighbor_precision": 1.0,
+      "raw_value_margin": 0.3161450329381361,
+      "template_transfer_auc": 1.0,
+      "track": "frozen_encoder_metric_deformation"
+    },
+    {
+      "collapse_index": 0.09668144329495498,
+      "condition": "bge_small_en_v1_5",
+      "deformed_margin_lift": 0.44063182405754897,
+      "deformed_neighbor_precision": 1.0,
+      "deformed_precision_lift": 0.0,
+      "deformed_value_margin": 0.6412089848212392,
+      "elapsed_seconds": 17.085660934448242,
+      "model_id": "BAAI/bge-small-en-v1.5",
+      "n_items": 22,
+      "off_target_drift": 0.0,
+      "ok": 1,
+      "random_margin_lift": 0.01054151901392128,
+      "random_neighbor_precision": 0.95,
+      "random_precision_lift": -0.050000000000000044,
+      "random_value_margin": 0.21111867977761156,
+      "raw_neighbor_precision": 1.0,
+      "raw_value_margin": 0.20057716076369028,
+      "template_transfer_auc": 1.0,
+      "track": "frozen_encoder_metric_deformation"
+    }
+  ],
+  "summary": {
+    "by_track": {
+      "frozen_encoder_metric_deformation": {
+        "conditions": {
+          "all_minilm_l6_v2": {
+            "error": null,
+            "metrics": {
+              "collapse_index": {
+                "mean": 0.09390831144107731,
+                "std": 0.0
+              },
+              "deformed_margin_lift": {
+                "mean": 0.37747606459715555,
+                "std": 0.0
+              },
+              "deformed_neighbor_precision": {
+                "mean": 1.0,
+                "std": 0.0
+              },
+              "deformed_precision_lift": {
+                "mean": 0.0,
+                "std": 0.0
+              },
+              "deformed_value_margin": {
+                "mean": 0.6936210975352917,
+                "std": 0.0
+              },
+              "elapsed_seconds": {
+                "mean": 15.851610660552979,
+                "std": 0.0
+              },
+              "n_items": {
+                "mean": 22.0,
+                "std": 0.0
+              },
+              "off_target_drift": {
+                "mean": 0.0,
+                "std": 0.0
+              },
+              "ok": {
+                "mean": 1.0,
+                "std": 0.0
+              },
+              "random_margin_lift": {
+                "mean": 0.005647992133250179,
+                "std": 0.0
+              },
+              "random_neighbor_precision": {
+                "mean": 0.95,
+                "std": 0.0
+              },
+              "random_precision_lift": {
+                "mean": -0.050000000000000044,
+                "std": 0.0
+              },
+              "random_value_margin": {
+                "mean": 0.3217930250713863,
+                "std": 0.0
+              },
+              "raw_neighbor_precision": {
+                "mean": 1.0,
+                "std": 0.0
+              },
+              "raw_value_margin": {
+                "mean": 0.3161450329381361,
+                "std": 0.0
+              },
+              "template_transfer_auc": {
+                "mean": 1.0,
+                "std": 0.0
+              }
+            },
+            "model_id": "sentence-transformers/all-MiniLM-L6-v2",
+            "n": 1,
+            "ok": true
+          },
+          "bge_small_en_v1_5": {
+            "error": null,
+            "metrics": {
+              "collapse_index": {
+                "mean": 0.09668144329495498,
+                "std": 0.0
+              },
+              "deformed_margin_lift": {
+                "mean": 0.44063182405754897,
+                "std": 0.0
+              },
+              "deformed_neighbor_precision": {
+                "mean": 1.0,
+                "std": 0.0
+              },
+              "deformed_precision_lift": {
+                "mean": 0.0,
+                "std": 0.0
+              },
+              "deformed_value_margin": {
+                "mean": 0.6412089848212392,
+                "std": 0.0
+              },
+              "elapsed_seconds": {
+                "mean": 17.085660934448242,
+                "std": 0.0
+              },
+              "n_items": {
+                "mean": 22.0,
+                "std": 0.0
+              },
+              "off_target_drift": {
+                "mean": 0.0,
+                "std": 0.0
+              },
+              "ok": {
+                "mean": 1.0,
+                "std": 0.0
+              },
+              "random_margin_lift": {
+                "mean": 0.01054151901392128,
+                "std": 0.0
+              },
+              "random_neighbor_precision": {
+                "mean": 0.95,
+                "std": 0.0
+              },
+              "random_precision_lift": {
+                "mean": -0.050000000000000044,
+                "std": 0.0
+              },
+              "random_value_margin": {
+                "mean": 0.21111867977761156,
+                "std": 0.0
+              },
+              "raw_neighbor_precision": {
+                "mean": 1.0,
+                "std": 0.0
+              },
+              "raw_value_margin": {
+                "mean": 0.20057716076369028,
+                "std": 0.0
+              },
+              "template_transfer_auc": {
+                "mean": 1.0,
+                "std": 0.0
+              }
+            },
+            "model_id": "BAAI/bge-small-en-v1.5",
+            "n": 1,
+            "ok": true
+          }
+        },
+        "n_rows": 2
+      },
+      "open_lm_action_coupling": {
+        "conditions": {
+          "distilgpt2": {
+            "error": null,
+            "metrics": {
+              "cue_specificity": {
+                "mean": -0.1240234375,
+                "std": 0.0
+              },
+              "elapsed_seconds": {
+                "mean": 21.209951162338257,
+                "std": 0.0
+              },
+              "geometry_action_r": {
+                "mean": 0.4540057997966592,
+                "std": 0.0
+              },
+              "label_geometry_gap": {
+                "mean": 0.016224239021539688,
+                "std": 0.0
+              },
+              "label_margin_lift": {
+                "mean": 0.70263671875,
+                "std": 0.0
+              },
+              "margin_auc": {
+                "mean": 0.75,
+                "std": 0.0
+              },
+              "matched_control_lift": {
+                "mean": 0.04736328125,
+                "std": 0.0
+              },
+              "n_items": {
+                "mean": 20.0,
+                "std": 0.0
+              },
+              "neutral_cue_drift": {
+                "mean": 0.75,
+                "std": 0.0
+              },
+              "ok": {
+                "mean": 1.0,
+                "std": 0.0
+              },
+              "random_control_lift": {
+                "mean": 0.07666015625,
+                "std": 0.0
+              },
+              "targeted_cue_lift": {
+                "mean": 0.6259765625,
+                "std": 0.0
+              }
+            },
+            "model_id": "distilgpt2",
+            "n": 1,
+            "ok": true
+          },
+          "pythia_70m": {
+            "error": null,
+            "metrics": {
+              "cue_specificity": {
+                "mean": -3.25,
+                "std": 0.0
+              },
+              "elapsed_seconds": {
+                "mean": 22.703531503677368,
+                "std": 0.0
+              },
+              "geometry_action_r": {
+                "mean": -0.03541938146338827,
+                "std": 0.0
+              },
+              "label_geometry_gap": {
+                "mean": 0.011937964707612991,
+                "std": 0.0
+              },
+              "label_margin_lift": {
+                "mean": 0.00048828125,
+                "std": 0.0
+              },
+              "margin_auc": {
+                "mean": 0.5,
+                "std": 0.0
+              },
+              "matched_control_lift": {
+                "mean": 1.9990234375,
+                "std": 0.0
+              },
+              "n_items": {
+                "mean": 20.0,
+                "std": 0.0
+              },
+              "neutral_cue_drift": {
+                "mean": 0.99951171875,
+                "std": 0.0
+              },
+              "ok": {
+                "mean": 1.0,
+                "std": 0.0
+              },
+              "random_control_lift": {
+                "mean": 1.24951171875,
+                "std": 0.0
+              },
+              "targeted_cue_lift": {
+                "mean": -1.2509765625,
+                "std": 0.0
+              }
+            },
+            "model_id": "EleutherAI/pythia-70m-deduped",
+            "n": 1,
+            "ok": true
+          },
+          "qwen2_0_5b_instruct": {
+            "error": null,
+            "metrics": {
+              "cue_specificity": {
+                "mean": 1.3125,
+                "std": 0.0
+              },
+              "elapsed_seconds": {
+                "mean": 32.231812477111816,
+                "std": 0.0
+              },
+              "geometry_action_r": {
+                "mean": 0.6016068450173538,
+                "std": 0.0
+              },
+              "label_geometry_gap": {
+                "mean": 0.15340974926948547,
+                "std": 0.0
+              },
+              "label_margin_lift": {
+                "mean": 2.48828125,
+                "std": 0.0
+              },
+              "margin_auc": {
+                "mean": 0.8125,
+                "std": 0.0
+              },
+              "matched_control_lift": {
+                "mean": 0.28515625,
+                "std": 0.0
+              },
+              "n_items": {
+                "mean": 20.0,
+                "std": 0.0
+              },
+              "neutral_cue_drift": {
+                "mean": 0.55078125,
+                "std": 0.0
+              },
+              "ok": {
+                "mean": 1.0,
+                "std": 0.0
+              },
+              "random_control_lift": {
+                "mean": 0.328125,
+                "std": 0.0
+              },
+              "targeted_cue_lift": {
+                "mean": 1.86328125,
+                "std": 0.0
+              }
+            },
+            "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+            "n": 1,
+            "ok": true
+          }
+        },
+        "n_rows": 3
+      }
+    },
+    "gates": {
+      "all_pass": true,
+      "frozen_encoder_metric_deformation": {
+        "claim": "a value-weighted metric deformation transports across actual frozen text encoders",
+        "collapse_index": 0.09529487736801615,
+        "criteria": "two frozen encoders; value metric lifts held-out value margin, random labels stay low, transfer AUC positive, no collapse",
+        "deformed_margin_lift": 0.40905394432735226,
+        "deformed_neighbor_precision": 1.0,
+        "deformed_precision_lift": 0.0,
+        "off_target_drift": 0.0,
+        "ok_models": 2,
+        "pass": true,
+        "random_margin_lift": 0.00809475557358573,
+        "raw_neighbor_precision": 1.0,
+        "template_transfer_auc": 1.0
+      },
+      "open_lm_action_coupling": {
+        "claim": "actual open LMs show measured concern/action transport signals without proxy weights",
+        "criteria": "at least two open LMs run; at least three signal tests clear weak positive thresholds",
+        "geometry_action_r": 0.3400644211168749,
+        "label_geometry_gap": 0.06052398433287939,
+        "label_margin_lift": 1.0638020833333333,
+        "margin_auc": 0.6875,
+        "max_cue_specificity": 1.3125,
+        "ok_models": 3,
+        "pass": true,
+        "signal_count": 5
+      }
+    },
+    "n_rows": 5
+  }
+}
