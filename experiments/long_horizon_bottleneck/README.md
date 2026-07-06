@@ -461,13 +461,31 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     --jsonl artifacts/long_horizon_bottleneck/api_blackbox_gemini_flash_lite_external_stress_rows.jsonl
 ```
 
+Aggregate matched provider summaries:
+
+```bash
+PYTHONPATH=. python3 -m experiments.long_horizon_bottleneck.api_blackbox_report \
+    artifacts/long_horizon_bottleneck/api_blackbox_openai_gpt41_nano_prompt_family_summary.json \
+    artifacts/long_horizon_bottleneck/api_blackbox_anthropic_haiku45_prompt_family_summary.json \
+    artifacts/long_horizon_bottleneck/api_blackbox_gemini_flash_lite_prompt_family_multi_summary.json \
+    artifacts/long_horizon_bottleneck/api_blackbox_openai_gpt41_nano_external_stress_summary.json \
+    artifacts/long_horizon_bottleneck/api_blackbox_anthropic_haiku45_external_stress_summary.json \
+    artifacts/long_horizon_bottleneck/api_blackbox_gemini_flash_lite_external_stress_multi_summary.json \
+    --date 2026-07-06 \
+    --out-json artifacts/long_horizon_bottleneck/api_blackbox_multi_provider_2026_07_06_summary.json \
+    --out-md experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzzzzz_api_blackbox_multi_provider_2026_07_06.md
+```
+
 The API benchmark emits JSONL rows and a scored summary JSON. Provider adapters
 currently support deterministic fixtures, Gemini `generateContent`, Anthropic
 Messages, OpenAI Responses, OpenAI Chat Completions, and OpenAI-compatible chat
-endpoints. The 2026-07-06 Gemini 3.1 Flash-Lite prompt-family run is positive
-with 96 rows and all three prompt-family cells passing; the external-stress
-smoke is positive with 80 rows and all 20 stress/family cells passing. See
-`experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzzzz_api_blackbox_gemini_flash_lite_2026_07_06.md`.
+endpoints. The 2026-07-06 matched multi-provider run is prompt-family positive
+across Gemini 3.1 Flash-Lite, Anthropic Haiku 4.5, and OpenAI GPT-4.1 Nano:
+288 rows, 432 API requests, and all nine provider/family cells passing. The
+external-stress suite is mixed: Gemini and Anthropic pass all 20 cells, while
+OpenAI GPT-4.1 Nano produces a controlled strong negative in two `dispatch`
+cells with controls still passing. See
+`experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzzzzz_api_blackbox_multi_provider_2026_07_06.md`.
 
 Smoke:
 
