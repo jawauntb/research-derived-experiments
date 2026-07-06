@@ -8,6 +8,8 @@ from typing import Any
 
 from experiments.long_horizon_bottleneck.core import parse_prompt_json_action
 
+API_PROMPT_FAMILIES = ("standard", "compact", "ledger", "retrieval", "dispatch")
+
 SYSTEM_PROMPT = """You are a tool-planning model. Reply with exactly one JSON object and no prose.
 
 Valid JSON actions:
@@ -91,6 +93,71 @@ def bottleneck_user_prompt(
             f"Emit the read_slot JSON for {phrase} with its recorded value.",
         ]
     )
+
+
+def prompt_family_user_prompt(
+    prompt_family: str,
+    bits: list[int],
+    critical_slot: int,
+    n_slots: int,
+    slot_gap: int,
+    variants_per_slot: int,
+) -> str:
+    """Render a frozen black-box prompt family for API benchmark runs."""
+
+    if prompt_family == "standard":
+        return bottleneck_user_prompt(bits, critical_slot, n_slots, slot_gap, variants_per_slot)
+
+    phrase = slot_phrase(critical_slot, variants_per_slot)
+    allowed = ", ".join(f'"{slot_phrase(slot, variants_per_slot)}"' for slot in range(n_slots))
+    lines = context_lines(bits, n_slots, slot_gap, variants_per_slot)
+    if prompt_family == "compact":
+        return "\n".join(
+            [
+                "Long-horizon moved-bottleneck task, compact version.",
+                "Find the requested slot phrase in the records and continue the read_slot JSON action.",
+                f"Allowed slot phrases: {allowed}.",
+                *lines,
+                f"Requested slot phrase: {phrase}",
+                f"Emit the read_slot JSON for {phrase} with its recorded value.",
+            ]
+        )
+    if prompt_family == "ledger":
+        return "\n".join(
+            [
+                "Audit-checklist moved-bottleneck task.",
+                "Read the records, ignore trace filler rows, and find the requested slot phrase.",
+                f"Allowed slot phrases: {allowed}.",
+                *lines,
+                f"Requested slot phrase: {phrase}",
+                f"Emit the read_slot JSON for {phrase} with its recorded value.",
+            ]
+        )
+    if prompt_family == "retrieval":
+        return "\n".join(
+            [
+                "Record-retrieval benchmark task.",
+                "Only one listed phrase is requested. Locate that record and return the JSON action.",
+                f"Allowed slot phrases: {allowed}.",
+                *lines,
+                f"Target phrase: {phrase}",
+                f"Return read_slot for {phrase} and copy the value from its memory record.",
+            ]
+        )
+    if prompt_family == "dispatch":
+        return "\n".join(
+            [
+                "API dispatch preparation task.",
+                "Choose the tool-call argument that would retrieve the target record.",
+                "The output must be the same JSON action schema used by the tool dispatcher.",
+                f"Allowed slot phrases: {allowed}.",
+                *lines,
+                f"Dispatch target phrase: {phrase}",
+                f"Emit the dispatcher JSON for {phrase} with the recorded value.",
+            ]
+        )
+    known = ", ".join(API_PROMPT_FAMILIES)
+    raise ValueError(f"Unknown prompt family {prompt_family!r}. Known families: {known}")
 
 
 def visible_user_prompt(bits: list[int], critical_slot: int, variants_per_slot: int) -> str:

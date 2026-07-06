@@ -44,6 +44,15 @@ from experiments.long_horizon_bottleneck.core import (
     text_argument_id,
     text_argument_vocab_size,
 )
+from experiments.long_horizon_bottleneck.api_blackbox import (
+    API_BLACKBOX_CONDITIONS,
+    build_api_benchmark_cases,
+    evaluate_api_cases,
+    make_provider_call,
+    summarize_api_blackbox_rows,
+    total_request_count,
+)
+from experiments.long_horizon_bottleneck.prompt_json_tasks import API_PROMPT_FAMILIES, prompt_family_user_prompt
 
 
 def test_budget_guard_keeps_default_l4_sweep_well_under_1000():
@@ -1073,6 +1082,97 @@ def test_parse_prompt_json_action_accepts_noop_and_rejects_malformed_text():
     assert malformed["opcode"] == "malformed"
     assert not malformed["valid"]
     assert malformed["reason"] == "missing_json_object"
+
+
+def test_prompt_family_user_prompt_supports_public_api_families():
+    bits = [0, 1, 0, 1]
+
+    prompts = [
+        prompt_family_user_prompt(family, bits, critical_slot=1, n_slots=4, slot_gap=4, variants_per_slot=3)
+        for family in API_PROMPT_FAMILIES
+    ]
+
+    assert all("Allowed slot phrases" in prompt for prompt in prompts)
+    assert any("API dispatch" in prompt for prompt in prompts)
+    with pytest.raises(ValueError, match="Unknown prompt family"):
+        prompt_family_user_prompt("unknown", bits, critical_slot=1, n_slots=4, slot_gap=4, variants_per_slot=3)
+
+
+def test_build_api_benchmark_cases_tracks_request_count_with_repairs():
+    cases = build_api_benchmark_cases(
+        suite="prompt_family",
+        prompt_families=["standard", "compact"],
+        conditions=list(API_BLACKBOX_CONDITIONS),
+        seeds=1,
+        episodes_per_cell=1,
+        critical_slots=[0, 1, 2, 3],
+        n_slots_values=[4],
+        slot_gap_values=[8],
+        variants_per_slot=3,
+        base_seed=20261050,
+    )
+
+    assert len(cases) == 2 * len(API_BLACKBOX_CONDITIONS) * 4
+    assert total_request_count(cases) == 2 * 4 * 6
+    assert {case.prompt_family for case in cases} == {"standard", "compact"}
+
+
+def test_summarize_api_blackbox_rows_classifies_fixture_positive():
+    cases = build_api_benchmark_cases(
+        suite="prompt_family",
+        prompt_families=["standard"],
+        conditions=list(API_BLACKBOX_CONDITIONS),
+        seeds=1,
+        episodes_per_cell=2,
+        critical_slots=[0],
+        n_slots_values=[4],
+        slot_gap_values=[8],
+        variants_per_slot=3,
+        base_seed=20261050,
+    )
+    provider = make_provider_call(provider="fixture", model="fixture-perfect")
+
+    rows = evaluate_api_cases(
+        cases,
+        model="fixture-perfect",
+        provider_name="fixture",
+        provider_call=provider,
+        include_prompts=False,
+    )
+    summary = summarize_api_blackbox_rows(rows)
+
+    assert summary["outcome"] == "positive"
+    assert summary["decision"]["controls_pass"]
+    assert summary["decision"]["bottleneck_pass"]
+
+
+def test_summarize_api_blackbox_rows_classifies_controlled_strong_negative():
+    cases = build_api_benchmark_cases(
+        suite="prompt_family",
+        prompt_families=["standard"],
+        conditions=list(API_BLACKBOX_CONDITIONS),
+        seeds=1,
+        episodes_per_cell=2,
+        critical_slots=[1],
+        n_slots_values=[4],
+        slot_gap_values=[8],
+        variants_per_slot=3,
+        base_seed=20261050,
+    )
+    provider = make_provider_call(provider="fixture_wrong_bottleneck", model="fixture-wrong")
+
+    rows = evaluate_api_cases(
+        cases,
+        model="fixture-wrong",
+        provider_name="fixture_wrong_bottleneck",
+        provider_call=provider,
+        include_prompts=False,
+    )
+    summary = summarize_api_blackbox_rows(rows)
+
+    assert summary["outcome"] == "strong_negative"
+    assert summary["decision"]["controls_pass"]
+    assert not summary["decision"]["bottleneck_pass"]
 
 
 def test_summarize_prompt_transfer_rows_classifies_positive_outcome():

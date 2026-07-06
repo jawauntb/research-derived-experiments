@@ -406,6 +406,69 @@ audit-checklist prompt framings. The 2026-07-03 confirmatory run is positive:
 all 9 `(prompt family, model)` pairs are causally ready and patch-pass. See
 `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzzz_prompt_json_prompt_family_causal_patch_l4_4seed_2026_07_03.md`.
 
+API / black-box behavioral benchmark:
+
+```bash
+python3 -m experiments.long_horizon_bottleneck.eval \
+    --provider fixture \
+    --models fixture-perfect \
+    --suite prompt_family \
+    --prompt-families standard,compact,ledger \
+    --seeds 1 \
+    --episodes-per-cell 2 \
+    --critical-slots 0,1,2,3 \
+    --out artifacts/long_horizon_bottleneck/api_blackbox_fixture_prompt_family_summary.json \
+    --jsonl artifacts/long_horizon_bottleneck/api_blackbox_fixture_prompt_family_rows.jsonl
+```
+
+Real API example:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    env PYTHONPATH=. python3 -m experiments.long_horizon_bottleneck.eval \
+    --provider gemini \
+    --models gemini-3.1-flash-lite \
+    --suite prompt_family \
+    --prompt-families standard,compact,ledger \
+    --seeds 1 \
+    --episodes-per-cell 2 \
+    --critical-slots 0,1,2,3 \
+    --max-requests 150 \
+    --max-output-tokens 64 \
+    --sleep-seconds 0.05 \
+    --out artifacts/long_horizon_bottleneck/api_blackbox_gemini_flash_lite_prompt_family_summary.json \
+    --jsonl artifacts/long_horizon_bottleneck/api_blackbox_gemini_flash_lite_prompt_family_rows.jsonl
+```
+
+External-validity stress example:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    env PYTHONPATH=. python3 -m experiments.long_horizon_bottleneck.eval \
+    --provider gemini \
+    --models gemini-3.1-flash-lite \
+    --suite external_stress \
+    --prompt-families standard,compact,ledger,retrieval,dispatch \
+    --seeds 1 \
+    --episodes-per-cell 1 \
+    --critical-slots 0 \
+    --n-slots 4,8 \
+    --slot-gap 8,16 \
+    --max-requests 150 \
+    --max-output-tokens 64 \
+    --sleep-seconds 0.05 \
+    --out artifacts/long_horizon_bottleneck/api_blackbox_gemini_flash_lite_external_stress_summary.json \
+    --jsonl artifacts/long_horizon_bottleneck/api_blackbox_gemini_flash_lite_external_stress_rows.jsonl
+```
+
+The API benchmark emits JSONL rows and a scored summary JSON. Provider adapters
+currently support deterministic fixtures, Gemini `generateContent`, Anthropic
+Messages, OpenAI Responses, OpenAI Chat Completions, and OpenAI-compatible chat
+endpoints. The 2026-07-06 Gemini 3.1 Flash-Lite prompt-family run is positive
+with 96 rows and all three prompt-family cells passing; the external-stress
+smoke is positive with 80 rows and all 20 stress/family cells passing. See
+`experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzzzz_api_blackbox_gemini_flash_lite_2026_07_06.md`.
+
 Smoke:
 
 ```bash
