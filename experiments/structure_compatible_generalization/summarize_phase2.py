@@ -318,7 +318,10 @@ def write_paper_markdown(
     ]
     if figure_paths:
         lines.extend(["## Figures", ""])
-        for fig_path in figure_paths:
+        for index, fig_path in enumerate(figure_paths):
+            if index == 1:
+                lines.append('<div style="page-break-before: always;"></div>')
+                lines.append("")
             rel = fig_path.relative_to(paper_dir)
             lines.append(f"![{fig_path.stem}]({rel})")
             lines.append("")
@@ -326,15 +329,25 @@ def write_paper_markdown(
         [
             "## 3. Scope",
             "",
-            "This is a finite modular-domain intervention result. It supports "
-            "the broader OOD-certifiability-lite program, but it does not yet "
-            "solve transformation discovery for vision, language, or open "
-            "deployment shifts.",
-            "",
-            "## 4. Next Operation",
-            "",
-            "The next operation is to make the discovery family learned rather "
-            "than enumerated, then transfer the same intervention protocol to "
+        "This is a finite modular-domain intervention result. It supports "
+        "the broader OOD-certifiability-lite program, but it does not yet "
+        "solve transformation discovery for vision, language, or open "
+        "deployment shifts.",
+        "",
+        "## 4. Architecture Lesson",
+        "",
+        "The architecture change is small: infer which transformations are "
+        "supported by the training evidence, reject vacuous shifts, and use "
+        "the accepted family as a compatibility regularizer on unlabeled "
+        "domain points. In virtual-governor language, this converts a "
+        "system-level deployment constraint into local training pressure. "
+        "The result is not that the model understands the governor; it is "
+        "that the training loop exposes and controls one governing stress.",
+        "",
+        "## 5. Next Operation",
+        "",
+        "The next operation is to make the discovery family learned rather "
+        "than enumerated, then transfer the same intervention protocol to "
             "vision rotations and paraphrase/template substitutions.",
             "",
         ]
