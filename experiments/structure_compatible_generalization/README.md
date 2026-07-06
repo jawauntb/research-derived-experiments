@@ -107,3 +107,24 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
   --artifacts-only \
   --artifact-input artifacts/structure_compatible_generalization/language_template_substitution.json
 ```
+
+Phase-five semantic retrieval transfer with frozen encoders:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/structure_compatible_generalization/modal_semantic_retrieval_transfer.py \
+  --encoder-keys all_minilm_l6_v2,bge_small_en_v1_5 \
+  --n-configs 32 --budget-usd 30 \
+  --out artifacts/structure_compatible_generalization/semantic_retrieval_transfer.json
+```
+
+Generate phase-five report and descriptive paper artifacts:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/structure_compatible_generalization/modal_semantic_retrieval_transfer.py \
+  --artifacts-only \
+  --artifact-input artifacts/structure_compatible_generalization/semantic_retrieval_transfer.json
+```

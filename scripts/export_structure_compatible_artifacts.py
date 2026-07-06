@@ -32,6 +32,10 @@ def paper_pdfs() -> list[Path]:
             "papers/structure_compatible_generalization/"
             "language_template_substitution.pdf"
         ),
+        Path(
+            "papers/structure_compatible_generalization/"
+            "semantic_retrieval_transfer.pdf"
+        ),
     ]
 
 
@@ -88,6 +92,18 @@ def source_files(*, include_supporting: bool) -> list[Path]:
             Path(
                 "experiments/structure_compatible_generalization/results/"
                 "language_template_substitution_2026_07_06.md"
+            ),
+            Path(
+                "papers/structure_compatible_generalization/"
+                "semantic_retrieval_transfer_preregistration.md"
+            ),
+            Path(
+                "papers/structure_compatible_generalization/"
+                "semantic_retrieval_transfer.md"
+            ),
+            Path(
+                "experiments/structure_compatible_generalization/results/"
+                "semantic_retrieval_transfer_2026_07_06.md"
             ),
         ]
     )
