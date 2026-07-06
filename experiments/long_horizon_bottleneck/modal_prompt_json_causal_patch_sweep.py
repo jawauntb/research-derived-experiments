@@ -50,10 +50,9 @@ from pathlib import Path
 from typing import Any
 
 from experiments.long_horizon_bottleneck.prompt_json_tasks import (
-    bottleneck_user_prompt,
-    context_lines,
     episode_bits,
     messages,
+    prompt_family_user_prompt,
     slot_phrase,
 )
 
@@ -149,35 +148,7 @@ def _bottleneck_user_prompt_for_family(
     slot_gap: int,
     variants_per_slot: int,
 ) -> str:
-    if prompt_family == "standard":
-        return bottleneck_user_prompt(bits, critical_slot, n_slots, slot_gap, variants_per_slot)
-
-    phrase = slot_phrase(critical_slot, variants_per_slot)
-    allowed = ", ".join(f'"{slot_phrase(slot, variants_per_slot)}"' for slot in range(n_slots))
-    lines = context_lines(bits, n_slots, slot_gap, variants_per_slot)
-    if prompt_family == "compact":
-        return "\n".join(
-            [
-                "Long-horizon moved-bottleneck task, compact version.",
-                "Find the requested slot phrase in the records and continue the read_slot JSON action.",
-                f"Allowed slot phrases: {allowed}.",
-                *lines,
-                f"Requested slot phrase: {phrase}",
-                f"Emit the read_slot JSON for {phrase} with its recorded value.",
-            ]
-        )
-    if prompt_family == "ledger":
-        return "\n".join(
-            [
-                "Audit-checklist moved-bottleneck task.",
-                "Read the records, ignore trace filler rows, and find the requested slot phrase.",
-                f"Allowed slot phrases: {allowed}.",
-                *lines,
-                f"Requested slot phrase: {phrase}",
-                f"Emit the read_slot JSON for {phrase} with its recorded value.",
-            ]
-        )
-    raise ValueError(f"Unknown prompt family {prompt_family!r}")
+    return prompt_family_user_prompt(prompt_family, bits, critical_slot, n_slots, slot_gap, variants_per_slot)
 
 
 def _encode_value_prefix(

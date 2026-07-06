@@ -16,9 +16,12 @@ Test whether future control relevance moves both generated behavior and internal
   `value_prefix_final` late/final sites in all three model families.
 - Prompt-family causal patch robustness: positive across standard, compact, and
   audit-checklist prompt framings.
+- API black-box behavioral benchmark: Gemini 3.1 Flash-Lite passes the
+  prompt-family suite and a small external-validity stress suite.
 - Latest models: `Qwen/Qwen2.5-0.5B-Instruct`, `Qwen/Qwen2.5-1.5B-Instruct`, `HuggingFaceTB/SmolLM2-1.7B-Instruct`.
-- Latest confirmatory artifact: `artifacts/long_horizon_bottleneck/prompt_json_prompt_family_causal_patch_l4.json`.
-- Latest committed report: `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzzz_prompt_json_prompt_family_causal_patch_l4_4seed_2026_07_03.md`.
+- Latest prompt-level causal artifact: `artifacts/long_horizon_bottleneck/prompt_json_prompt_family_causal_patch_l4.json`.
+- Latest API artifact: `artifacts/long_horizon_bottleneck/api_blackbox_gemini_flash_lite_prompt_family_summary.json`.
+- Latest committed report: `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzzzz_api_blackbox_gemini_flash_lite_2026_07_06.md`.
 
 ## Prompt-Level Terminal Result
 
@@ -112,10 +115,32 @@ The confirmatory run is positive:
 
 Outcome: `positive`.
 
+## API Black-Box Behavioral Terminal Result
+
+The API benchmark exposes the moved-bottleneck task as a one-command black-box
+evaluator. It emits JSONL rows and scored summaries for provider/model runs.
+
+Gemini 3.1 Flash-Lite passes the registered prompt-family behavior suite:
+
+- 96 scored rows;
+- 144 API requests;
+- all `standard`, `compact`, and `ledger` cells complete;
+- controls pass and bottleneck/repair gates pass in all three cells.
+
+It also passes a small external-validity stress smoke:
+
+- 80 scored rows;
+- 120 API requests;
+- 20 stress/family cells complete;
+- axes include 8-slot width, longer filler gaps, `retrieval`, and `dispatch`
+  prompt framings.
+
+Outcome: `positive`.
+
 ## Use
 
 Use this benchmark when final task success is too weak and the real question is whether an agent's internal state tracks the variable that will later control an action or tool commitment.
 
 ## Non-Claims
 
-This benchmark does not establish production tool reliability, autonomous API competence, human cognition, neural validation in humans, or consciousness.
+This benchmark does not establish production tool reliability, autonomous API competence, human cognition, neural validation in humans, or consciousness. API black-box runs are behavioral only; they do not establish hidden-state localization or causal patching.
