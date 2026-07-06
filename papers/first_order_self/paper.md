@@ -16,6 +16,13 @@ Only the **oracle** model — which has explicit self_ΔE and world_ΔE labels p
 
 Action-accuracy and return are *similar* across total, factorized, and oracle (acc 0.93–0.96, return 49.3–50.0 across distributions). The reason: action *differences* (self_pred(consume) − self_pred(skip)) are preserved across all non-shuffled conditions because they correspond to the action-conditional component of the data. The agent's policy doesn't materially change because the action-relevant signal is preserved even when the absolute self values are mis-allocated between heads.
 
+The bounded architecture law is therefore simple: **input factorization is not
+identification**. A reafferent self/world split needs an additional gauge-breaking
+signal such as explicit source labels, active null intervention, temporal
+asymmetry, or a distinct loss that pins the exogenous component. Without that
+signal, the model can act correctly while still assigning the causes of its own
+viability changes incorrectly.
+
 Pre-registered gates (split):
 - **G1 (factorization transfer +5 return)**: ❌ NOT MET. Factorized 49.3 / 50.0 vs total 49.8 / 50.0 — saturated, no meaningful return advantage.
 - **G2 (factorized self_pred more stable than total)**: ❌ NOT MET. Factorized overshoots true self by +0.51 on food consume; total overshoots by +0.28. *Total is closer to the truth than factorized.*
@@ -168,7 +175,33 @@ Paper [16] adds: factorized representations can be *behaviorally* correct (actio
 
 **Levin**: the computational boundary of self is not given by architecture; it's discovered by *active intervention*. An organism learns it can swim by swimming. A model can't learn the self/world boundary just by watching its own data, even with a well-designed architecture. The next step (Paper 16b) is to give the agent active counterfactual queries: actions designed to disambiguate.
 
-### 4.4 Connection to the program's metric stack
+<div style="page-break-before: always;"></div>
+
+### 4.4 Architecture law: reafferent identifiability
+
+The paper's practical design rule is:
+
+> Factorizing an action-visible self head from an action-blind world head does
+> not identify self-caused change. Reafferent attribution requires a
+> gauge-breaking signal.
+
+![Figure 5. Reafferent-identifiability ladder. Behavior and action-difference surfaces pass, but absolute self/world attribution fails until an external or interventional gauge breaker is supplied.](figures/fig5_reafferent_identifiability_ladder.png)
+
+This distinction matters for machine agency. A long-horizon agent can choose the
+right action while still being wrong about what part of the outcome it caused.
+That is not a cosmetic representational flaw: it blocks credit assignment,
+replanning after world change, and any stronger claim about a computational
+boundary of self. The self/world split becomes agent-relevant only when the
+decomposition is identifiable at the surface where later action, repair, or
+probe selection depends on it.
+
+The result also keeps the consciousness boundary honest. Reafference is one
+ingredient in biological selfhood and motor control, but this experiment does
+not build a conscious agent. It shows a minimal negative law for would-be
+machine selves: correct action and separated sub-heads are not enough. The
+system needs some way to test or supervise the causal boundary it is using.
+
+### 4.5 Connection to the program's metric stack
 
 The metric stack is now:
 
