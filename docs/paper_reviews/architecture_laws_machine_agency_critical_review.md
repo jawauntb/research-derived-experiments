@@ -34,6 +34,9 @@ portable architecture laws and states the next major contribution opportunity.
   transfer tests.
 - Added the latest dispatch-surface and structure-compatible transformation
   laws from the July 6 follow-up PRs.
+- Added the virtual-governor stress-transduction law after the L4 ablation
+  showed live stress beating reward-only, local-only, stale, and wrong-signal
+  controls.
 
 ## Contribution Opportunity
 
