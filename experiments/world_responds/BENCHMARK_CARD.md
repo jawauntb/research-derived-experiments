@@ -13,6 +13,13 @@ Suite C tests adaptive inquiry under nonstationary world dynamics. A condition p
 - Learned-transfer pass: **PASS** for `learned_probe_head`
 - Claim level: `diagnostic`; finite controlled benchmark gate and teacher-trained probe-head transfer, not a consciousness, biological, or production reliability claim.
 
+## Execution Record
+
+- Full Modal run: https://modal.com/apps/generalintelligencecompany/main/ap-Fgpr3fPDhd0mCNsStCfJ72.
+- Dry-run budget check: https://modal.com/apps/generalintelligencecompany/main/ap-hsB4QplExuXn36Q8foGpAL.
+- Conservative budget estimate: $14.3856 against budget $75.0.
+- Rows emitted: 72.
+
 ## Minimum Pass Rule
 
 A model or policy cannot pass Suite C from final recovery alone. It must pass behavior, inquiry, attribution, cost, false-calm, and second-shift gates together.

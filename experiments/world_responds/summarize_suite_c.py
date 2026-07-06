@@ -3,10 +3,15 @@
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 from typing import Any
 
-from experiments.world_responds.suite_c_contract import CONDITIONS
+REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from experiments.world_responds.suite_c_contract import CONDITIONS  # noqa: E402
 
 
 COLORS = {
@@ -301,6 +306,12 @@ def write_report(payload: dict[str, Any], out: Path) -> None:
         "- Positive targets: decision-layer cooling candidates.",
         "- Negative controls: P22 quiet, P23A anxious, signal-layer cooling, scheduled/oracle high-cost, matched random.",
         "",
+        "Execution record:",
+        f"- Full Modal run: {manifest.get('modal_run_url', 'not recorded')}.",
+        f"- Dry-run budget check: {manifest.get('dry_run_modal_url', 'not recorded')}.",
+        f"- Conservative budget estimate: ${manifest.get('budget_estimate', {}).get('conservative_cost_usd', 'not recorded')} against budget ${manifest.get('budget_estimate', {}).get('budget_usd', 'not recorded')}.",
+        f"- Rows emitted: {summary['n_rows']}.",
+        "",
         "Gate:",
         "- Acceptance rule: all C1-C6 gates pass for at least one decision-layer candidate, with required controls behaving as controls.",
         "- Withheld/rejected rule: do not claim Suite C closure if quiet is produced by signal suppression, recovery requires scheduled/oracle cost, or second-shift reopenability fails.",
@@ -362,8 +373,10 @@ def write_report(payload: dict[str, Any], out: Path) -> None:
 
 def write_benchmark_card(payload: dict[str, Any], out: Path) -> None:
     out.parent.mkdir(parents=True, exist_ok=True)
+    manifest = payload.get("manifest", {})
     summary = payload["summary"]
     gates = summary["gates"]
+    budget = manifest.get("budget_estimate", {})
     lines = [
         "# Benchmark Card: Suite C Re-Engagement Under World Change",
         "",
@@ -378,6 +391,13 @@ def write_benchmark_card(payload: dict[str, Any], out: Path) -> None:
         f"- Suite pass: **{_fmt(bool(gates['suite_pass']['pass']))}**",
         f"- Headline condition: `{summary['headline_condition']}`",
         "- Claim level: `diagnostic`; finite controlled benchmark gate, not a consciousness, biological, or production reliability claim.",
+        "",
+        "## Execution Record",
+        "",
+        f"- Full Modal run: {manifest.get('modal_run_url', 'not recorded')}.",
+        f"- Dry-run budget check: {manifest.get('dry_run_modal_url', 'not recorded')}.",
+        f"- Conservative budget estimate: ${budget.get('conservative_cost_usd', 'not recorded')} against budget ${budget.get('budget_usd', 'not recorded')}.",
+        f"- Rows emitted: {summary['n_rows']}.",
         "",
         "## Minimum Pass Rule",
         "",
@@ -556,6 +576,20 @@ def build_public_summary(payload: dict[str, Any]) -> dict[str, Any]:
     matched = rows["matched_random_time_budget"]
     gates = summary["gates"]
     report_ref = str(REPORT_MD)
+    run_record: dict[str, Any] = {
+        "run_id": "suite_c_reengagement_2026_07_06",
+        "date": "2026-07-06",
+        "command": manifest.get(
+            "command",
+            "doppler --scope /Users/jawaun/superoptimizers run -- uvx --python 3.12 --from modal modal run experiments/world_responds/modal_suite_c_reengagement.py --seeds 8 --budget-usd 75 --out artifacts/world_responds/suite_c_reengagement_payload.json",
+        ),
+        "rows": int(summary["n_rows"]),
+        "models": ["finite_policy_harness"],
+        "providers": ["modal_l4"],
+    }
+    for optional_key in ("modal_run_url", "dry_run_modal_url", "budget_estimate"):
+        if optional_key in manifest:
+            run_record[optional_key] = manifest[optional_key]
     return {
         "benchmark": {
             "name": "Causally Grounded Finite Agents Benchmark",
@@ -568,17 +602,7 @@ def build_public_summary(payload: dict[str, Any]) -> dict[str, Any]:
             "axis_coverage": ["behavior", "attribution", "inquiry", "anti_cheat"],
             "status": "strong" if gates["suite_pass"]["pass"] else "negative",
         },
-        "run": {
-            "run_id": "suite_c_reengagement_2026_07_06",
-            "date": "2026-07-06",
-            "command": manifest.get(
-                "command",
-                "doppler --scope /Users/jawaun/superoptimizers run -- uvx --python 3.12 --from modal modal run experiments/world_responds/modal_suite_c_reengagement.py --seeds 8 --budget-usd 75 --out artifacts/world_responds/suite_c_reengagement_payload.json",
-            ),
-            "rows": int(summary["n_rows"]),
-            "models": ["finite_policy_harness"],
-            "providers": ["modal_l4"],
-        },
+        "run": run_record,
         "minimum_pass_rule": {
             "behavior_passed": bool(gates["C3_recovery"]["pass"]),
             "structure_gate_passed": bool(
