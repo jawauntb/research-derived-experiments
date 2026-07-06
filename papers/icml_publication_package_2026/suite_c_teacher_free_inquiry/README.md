@@ -18,7 +18,7 @@ Open reviewer question:
 > Did the policy learn adaptive inquiry, or did it imitate a hand-designed
 > teacher?
 
-## Required Next Result
+## Previously Required Next Result
 
 Train the inquiry policy without teacher labels, using only downstream
 recovery/cost/false-calm signals or self-supervised intervention feedback, then
@@ -35,6 +35,9 @@ The first reward-trained version now exists in:
 - `experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.md`
 - `experiments/world_responds/results/suite_c_teacher_free_wide_stats_2026_07_06.json`
 - `experiments/world_responds/results/suite_c_teacher_free_wide_stats_2026_07_06.md`
+- `experiments/world_responds/results/suite_c_source_ablation_transfer_2026_07_06.json`
+- `experiments/world_responds/results/suite_c_source_ablation_transfer_rows_2026_07_06.jsonl`
+- `experiments/world_responds/results/suite_c_source_ablation_transfer_2026_07_06.md`
 
 Headline held-out result: `teacher_free_reward_policy` passes C1-C6 plus T1/N1
 with final affected MAE 0.095, recovery rate 1.000, first-shift selectivity
@@ -49,6 +52,15 @@ Wider 64-seed bootstrap result:
 - stale-signal recovery: 0.000, 95% CI [0.000, 0.000];
 - suite pass rate: 1.000, 95% CI [1.000, 1.000].
 
+## Source-Estimate and Tool-Transfer Follow-Up
+
+The less-privileged source-estimate ablation now passes in the finite harness.
+The policy replaces the privileged `source_is_affected` bit with an observable
+error/surprise-jump estimate, then routes the same policy through a local
+JSON-like tool adapter. Estimated-source Suite C passes, tool-transfer Suite C
+passes, and a malformed-tool control fails. This is still not an external
+open-model or API-agent result.
+
 ## Files
 
 - `preregistration.md`: acceptance gates and stop conditions.
@@ -59,5 +71,5 @@ Wider 64-seed bootstrap result:
 ## Claim Boundary
 
 This is a positive finite diagnostic result, not an open-agent or production
-reliability claim. The next paper-ready step is a less privileged
-source-estimate ablation plus transfer into an open-agent/tool-use harness.
+reliability claim. The next paper-ready step is an external open-model or
+API-agent replication of the local tool-transfer harness.

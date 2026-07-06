@@ -79,6 +79,15 @@ The wider 64-seed/1000-bootstrap check preserves the result: final affected MAE
 selectivity lift over matched random 11.292 [10.976, 11.596], stale-signal
 recovery 0.000 [0.000, 0.000], and suite pass rate 1.000 [1.000, 1.000].
 
+## Source-Estimate and Tool-Transfer Follow-Up
+
+The less-privileged source-estimate ablation replaces the privileged
+`source_is_affected` feature with an observable error/surprise-jump estimate.
+It passes the finite Suite C gate. The local JSON-like tool-transfer adapter
+also passes, while a malformed-tool control fails: malformed recovery rate
+0.000 and final affected MAE 0.158 versus 0.102 for valid tool transfer.
+This is still a finite local adapter, not an external API-agent result.
+
 ## Artifacts
 
 - Local-only raw rows: `artifacts/world_responds/suite_c_reengagement_rows.jsonl`
@@ -91,6 +100,9 @@ recovery 0.000 [0.000, 0.000], and suite pass rate 1.000 [1.000, 1.000].
 - Teacher-free summary: `experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.json`
 - Teacher-free report: `experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.md`
 - Teacher-free wide stats: `experiments/world_responds/results/suite_c_teacher_free_wide_stats_2026_07_06.md`
+- Source-estimate/tool-transfer summary: `experiments/world_responds/results/suite_c_source_ablation_transfer_2026_07_06.json`
+- Source-estimate/tool-transfer rows: `experiments/world_responds/results/suite_c_source_ablation_transfer_rows_2026_07_06.jsonl`
+- Source-estimate/tool-transfer report: `experiments/world_responds/results/suite_c_source_ablation_transfer_2026_07_06.md`
 - Paper: `papers/habituated_reengagement/suite_c_reengagement_under_world_change.md`
 - Learned-transfer paper: `papers/habituated_reengagement/suite_c_neural_probe_transfer.md`
 - Critical review: `docs/paper_reviews/suite_c_reengagement_under_world_change_critical_review.md`
@@ -99,6 +111,6 @@ recovery 0.000 [0.000, 0.000], and suite pass rate 1.000 [1.000, 1.000].
 ## Non-Claims
 
 This benchmark does not certify consciousness, broad autonomy, biological
-validity, or open-world reliability. The teacher-free layer is reward-trained
-inside the same finite NumPy harness; open-agent transfer remains a separate
-claim.
+validity, or open-world reliability. The teacher-free and source-estimate
+tool-transfer layers are finite NumPy/local-adapter results; external open-agent
+transfer remains a separate claim.

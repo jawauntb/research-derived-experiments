@@ -72,6 +72,19 @@ Updated run on `codex/suite-c-stats-polish-20260706`:
 - `uvx --python 3.12 --with numpy --with torch --with scikit-learn --with scipy --with matplotlib --with pytest python -m pytest tests/test_structure_compatible_generalization.py tests/test_structure_compatible_semantic_selection_bootstrap.py tests/test_world_responds_suite_c.py tests/test_world_responds_suite_c_neural_transfer.py tests/test_world_responds_suite_c_teacher_free.py tests/test_world_responds_suite_c_teacher_free_wide_stats.py tests/test_long_horizon_bottleneck.py`:
   passed, 115 passed and 3 skipped.
 
+Updated run on `codex/publish-raw-tiebreak-suitec-20260706`:
+
+- `tectonic paper.tex`: passed and regenerated `paper.pdf` with the Phase 6
+  row-release/tie-break framing.
+- `tectonic ../suite_c_teacher_free_inquiry/paper_outline.tex`: passed and
+  regenerated the Suite C outline PDF with the source-estimate/tool-transfer
+  framing.
+- `uvx ruff check .`: passed.
+- `uvx --python 3.12 --with numpy --with torch --with scikit-learn --with scipy --with matplotlib --with pytest ty check scripts experiments tests`:
+  passed.
+- `uvx --python 3.12 --with numpy --with torch --with scikit-learn --with scipy --with matplotlib --with pytest python -m pytest tests/test_structure_compatible_generalization.py tests/test_structure_compatible_semantic_selection_bootstrap.py tests/test_structure_compatible_semantic_selection_release.py tests/test_structure_compatible_phase_row_ledgers.py tests/test_world_responds_suite_c.py tests/test_world_responds_suite_c_neural_transfer.py tests/test_world_responds_suite_c_teacher_free.py tests/test_world_responds_suite_c_teacher_free_wide_stats.py tests/test_world_responds_suite_c_source_ablation_transfer.py tests/test_long_horizon_bottleneck.py`:
+  passed, 120 passed and 3 skipped.
+
 ## Manual Paper Audit
 
 - [x] Main claim is bounded to finite structured shifts.

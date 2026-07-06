@@ -40,10 +40,12 @@ already venue-ready. It contains the comprehensive drafts, literature maps,
 methods, figure plans, appendices, validation notes, and next-experiment
 preregistration needed to move from sparse memos to venue-facing submissions.
 The main structure-compatible statistical gap is now narrower: Phase 6 has
-zoo-level bootstrap intervals, while phases 1-5 still need restored or
-regenerated row-level artifacts for full uncertainty treatment. For Suite C,
-the finite teacher-free result now has a 64-seed bootstrap; the next empirical
-gap is less privileged source-estimation plus open-agent transfer.
+zoo-level bootstrap intervals, raw row JSONL, and tie-break stress tests, while
+phases 1-5 now have smoke row ledgers but still need Modal-scale row
+regeneration if they remain quantitatively central. For Suite C, the finite
+teacher-free result now has a 64-seed bootstrap plus a less-privileged
+source-estimate/tool-surface transfer in the local harness; the remaining
+empirical gap is external open-model or API-agent replication.
 
 ## Validation Run
 
@@ -65,8 +67,12 @@ Completed on 2026-07-06 from the fresh branch
 Updated on 2026-07-06 from
 `codex/suite-c-stats-polish-20260706`.
 
-- Phase 6 semantic selection regenerated and bootstrapped over 120 selection
-  zoos with 1,000 reps.
+- Phase 6 semantic selection regenerated, published as row/selector JSONL, and
+  bootstrapped over 120 selection zoos with 1,000 reps.
+- Phase 6 tie-break stress added for mean ties, worst tied candidates, and
+  random-tie bootstrap; all three pass.
+- Phases 1-5 smoke row ledgers added as local regenerated reproducibility
+  fixtures with explicit provenance boundaries.
 - Suite C teacher-free wide stats regenerated over 64 held-out eval seeds with
   1,000 bootstrap reps.
 - `tectonic paper.tex` passed for
@@ -77,6 +83,26 @@ Updated on 2026-07-06 from
 - `uvx --python 3.12 --with numpy --with torch --with scikit-learn --with scipy --with matplotlib --with pytest ty check scripts experiments tests`
   passed.
 - Targeted pytest passed: 115 passed, 3 skipped.
+
+Updated on 2026-07-06 from
+`codex/publish-raw-tiebreak-suitec-20260706`.
+
+- Phase 6 raw row payload curated from the ignored local artifact into tracked
+  JSONL/manifest/report files.
+- Phase 6 tie-break stress retained for mean ties, worst tied candidates, and
+  random tied bootstrap; all three pass.
+- Phases 1-5 smoke row ledgers retained as tracked reproducibility fixtures
+  with explicit provenance limits.
+- Suite C source-estimate ablation and local JSON-like tool-surface transfer
+  pass, while the malformed-tool control fails as intended.
+- `tectonic paper.tex` passed for
+  `structure_compatible_model_selection/paper.tex`.
+- `tectonic paper_outline.tex` passed for
+  `suite_c_teacher_free_inquiry/paper_outline.tex`.
+- `uvx ruff check .` passed.
+- `uvx --python 3.12 --with numpy --with torch --with scikit-learn --with scipy --with matplotlib --with pytest ty check scripts experiments tests`
+  passed.
+- Targeted pytest passed: 120 passed, 3 skipped.
 
 ## Safe Claim Boundary
 

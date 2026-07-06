@@ -17,7 +17,10 @@ cross-entropy-method reward search. The training objective uses downstream
 recovery, selective re-engagement, second-shift reopenability, probe cost, and
 anti-cheat controls; it does not consume hand-policy labels, teacher actions, or
 teacher probabilities. On held-out seeds the policy passes C1-C6 plus T1/N1,
-and a 64-seed bootstrap replication preserves the effect.
+and a 64-seed bootstrap replication preserves the effect. A follow-up ablation
+replaces the privileged source-identity bit with an observable source estimate
+and routes the policy through a local tool-call adapter; both finite gates pass,
+while a malformed-tool control fails.
 \end{abstract}
 
 \section{Introduction}
@@ -59,8 +62,8 @@ suite pass rate is 1.000 [1.000, 1.000].
 
 \section{Limitations}
 Finite simulator, no biological or consciousness claim, no production-agent
-claim, long-horizon/open-agent transfer remains open. The source-identity
-feature is still privileged; a paper-ready follow-up should replace it with a
-learned or noisy source estimator.
+claim, and no external API-agent result. The new source-estimate/tool-transfer
+run removes the privileged source bit inside this harness, but external
+open-model replication remains open.
 
 \end{document}

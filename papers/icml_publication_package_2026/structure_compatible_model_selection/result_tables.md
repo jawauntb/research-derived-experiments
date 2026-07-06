@@ -142,6 +142,12 @@ Source:
 Bootstrap source:
 `experiments/structure_compatible_generalization/results/semantic_selection_bootstrap_2026_07_06.md`
 
+Row release:
+`experiments/structure_compatible_generalization/results/semantic_selection_row_release_2026_07_06.md`
+
+Tie-break stress:
+`experiments/structure_compatible_generalization/results/semantic_selection_tiebreak_stress_2026_07_06.md`
+
 Manifest: base seed `20260706`; encoders `all_minilm_l6_v2` and
 `bge_small_en_v1_5`; `12` zoos; `12` configs per zoo; thresholds
 `[0.5, 0.56, 0.62, 0.68, 0.74]`; budget estimate `$0.80` against `$30.00`.
@@ -171,8 +177,25 @@ Zoo-level bootstrap intervals, 1,000 reps:
 | `learned_lift_vs_id` | 0.059 | [0.052, 0.065] |
 | `learned_lift_vs_wrong` | 0.227 | [0.221, 0.233] |
 
+Tie-break stress, 1,000 reps:
+
+| Tie mode | Learned OOD | Learned-random | Learned-ID | Learned-wrong | Gate |
+| --- | ---: | ---: | ---: | ---: | --- |
+| `mean_ties` | 0.978 [0.973, 0.983] | 0.059 [0.052, 0.065] | 0.059 [0.052, 0.065] | 0.227 [0.221, 0.233] | PASS |
+| `worst_tie` | 0.954 [0.940, 0.967] | 0.204 [0.190, 0.217] | 0.204 [0.190, 0.217] | 0.203 [0.189, 0.216] | PASS |
+| `random_tie` | 0.981 [0.974, 0.986] | 0.068 [0.050, 0.086] | 0.054 [0.036, 0.071] | 0.230 [0.222, 0.236] | PASS |
+
 Claim boundary: finite semantic retrieval model selection; not universal
 semantic/OOD certification.
+
+## Phases 1-5 Smoke Row Ledgers
+
+Source:
+`experiments/structure_compatible_generalization/results/phase_row_ledgers_2026_07_06.md`
+
+These ledgers contain 56 local-regenerated smoke rows across phases 1-5. They
+are reproducibility fixtures, not byte-identical restorations of the original
+Modal-scale payloads and not the source of the headline point estimates above.
 
 ## Companion Benchmark Results
 
