@@ -150,11 +150,12 @@
         "report_md": {"type": "string"},
         "benchmark_card": {"type": "string"},
         "paper_md": {"type": "string"},
-        "paper_pdf": {"type": "string"}
+        "paper_pdf": {"type": "string"},
+        "critical_review_md": {"type": "string"},
+        "raw_summary_json": {"type": "string"}
       }
     },
     "allowed_claim": {"type": "string"},
     "non_claims": {"type": "array", "items": {"type": "string"}}
   }
 }
-

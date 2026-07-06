@@ -1,67 +1,77 @@
-# Next Empirical Gap: Suite C Re-Engagement Runner
+# Suite C Re-Engagement Under World Change: Terminal Gate Result
 
 Generated: 2026-07-06
 
-## Why Suite C Still Matters
+## Status
 
 Suites D and E are the most hardened current results: the long-horizon moved
 bottleneck and tool-commitment ladder now include synthetic, open-model,
 causal-patch, prompt-family, and API behavior surfaces.
 
-Suite C is now packaged as a benchmark frontier in
+Suite C was previously packaged as a benchmark frontier in
 `experiments/world_responds/BENCHMARK_CARD.md` and
 `experiments/world_responds/results/suite_c_reengagement_2026_07_06.md`.
-Existing work has shown the important pieces:
+The missing hardening step was a first-class runner that emits local-only raw
+rows, a tracked public summary, a benchmark card, a paper artifact, and a strict
+C1-C6 pass/fail report.
 
-- Paper 22: learned probing can self-silence after the world changes.
-- Paper 23A: non-null surprise re-engages probing, but can over-fire.
-- Paper 23B: decision-layer cooling reduces anxiety and preserves second-shift
-  re-openability, while signal-layer cooling creates false calm.
+That runner has now been added and run on Modal L4. The headline
+`burst_then_refractory` condition passes all six gates over eight seeds:
 
-The missing hardening step is not another isolated prose result. It is a
-first-class runner that emits public JSONL rows and a schema-valid summary for
-the Paper 23B conditions, so the suite can be scored like the hardened Suite
-D/E package.
+- C1 silence replication: P22 baseline affected post-shift density 0.005.
+- C2 re-engagement: affected/unaffected post-shift selectivity 16.927.
+- C3 recovery: final affected-component MAE 0.112; recovery rate 8/8.
+- C4 no false calm: signal-layer `fixed_surprise_decrement` fails with final
+  MAE 0.517 and no-false-calm rate 0/8.
+- C5 cost-aware inquiry: 22.625 probes versus 144.000 scheduled and 69.500
+  oracle-source probes; matched random fails recovery and selectivity.
+- C6 re-openability: post-second/pre-second affected probe ratio 16.667.
+
+The new next gap is transfer: make the same C1-C6 gate neural or long-horizon
+rather than policy-specified.
 
 ## Discovery-Regime Audit
 
 - Old regime: self/world attribution and probe-value papers with per-paper
   gates, including Paper 22's post-shift silence, Paper 23A's anxiety, and
   Paper 23B's decision-layer cooling.
-- Transition: a Suite C benchmark card and status report now treat
-  re-engagement as a public benchmark condition rather than a paper-local
-  result.
+- Transition: Suite C now has a public benchmark card, a Modal L4 runner,
+  local-only JSONL rows, a tracked scored summary, and a standalone paper
+  artifact.
 - Transported evidence: `papers/world_responds/paper.md`,
   `papers/probe_value_reengagement/paper.md`,
-  `papers/habituated_reengagement/paper.md`, and
-  `experiments/world_responds/results/reengagement_23a_2026_07_06.md`.
+  `papers/habituated_reengagement/paper.md`,
+  `experiments/world_responds/results/reengagement_23a_2026_07_06.md`,
+  `experiments/world_responds/results/suite_c_reengagement_2026_07_06.md`,
+  and `papers/habituated_reengagement/suite_c_reengagement_under_world_change.md`.
 - Rejected alternatives: current-error probing as an oracle; ensemble variance
   as sufficient uncertainty; signal-layer surprise decrement as healthy
-  habituation; final MAE alone as a pass.
-- Residual finding: the benchmark must still distinguish healthy quiet from
-  false calm in machine-readable rows. A lower probe rate is only good if
-  attribution actually recovered.
-- Readiness: enough evidence exists to share the suite card; the reusable
-  runner and strict recovery pass are not yet complete.
-- Allowed claim: diagnostic benchmark frontier for finite re-engagement, not a
-  terminal human/neural or production result.
+  habituation; final MAE alone as a pass; matched-random inquiry at the same
+  probe budget.
+- Residual finding: healthy quiet requires attribution recovery. A lower probe
+  rate is only good if error actually falls and the policy can reopen after a
+  later shift.
+- Readiness: terminal finite Suite C gate complete; neural and long-horizon
+  transfers remain open.
+- Allowed claim: completed finite controlled re-engagement benchmark, not a
+  human, biological, consciousness, neural-training, or production result.
 
-## Suite C Gate To Implement
+## Suite C Gate
 
-The reusable runner should include two world shifts. The first shift tests
-re-engagement after learned quiet; the second shift tests whether cooling
-decays enough to reopen inquiry.
+The terminal condition includes two world shifts. The first shift tests
+re-engagement after learned quiet; the second shift tests whether cooling decays
+enough to reopen inquiry.
 
 Acceptance gates:
 
-| Gate | Requirement | Rationale |
+| Gate | Requirement | Result |
 |---|---|---|
-| C1. Silence replication | baseline learned current-replay probe has near-zero affected-bucket probes after shift | preserves the original failure |
-| C2. Re-engagement | candidate has affected post-shift probe density at least 0.5x pre-shift and at least 2x unaffected buckets | proves the agent asks again where the world changed |
-| C3. Recovery | candidate reaches final component MAE at or below the suite threshold in most seeds | prevents anxious probing without learning |
-| C4. No false calm | probe drop must be paired with attribution-error drop; direct surprise suppression fails | distinguishes habituation from blindness |
-| C5. Cost-aware inquiry | candidate uses fewer probes than scheduled-null or oracle-source controls at comparable recovery | prevents always-probe solutions |
-| C6. Re-openability | after a second shift, affected-bucket probes rise again above pre-second-shift density | proves cooling is not permanent suppression |
+| C1. Silence replication | baseline learned current-replay probe has near-zero affected-bucket probes after shift | PASS |
+| C2. Re-engagement | candidate has affected post-shift probe density at least 0.5x pre-shift and at least 2x unaffected buckets | PASS |
+| C3. Recovery | candidate reaches final component MAE at or below the suite threshold in most seeds | PASS |
+| C4. No false calm | probe drop must be paired with attribution-error drop; direct surprise suppression fails | PASS |
+| C5. Cost-aware inquiry | candidate uses fewer probes than scheduled-null or oracle-source controls at comparable recovery | PASS |
+| C6. Re-openability | after a second shift, affected-bucket probes rise again above pre-second-shift density | PASS |
 
 ## Candidate Conditions
 
@@ -85,23 +95,20 @@ Required controls:
 
 ## Release Artifacts
 
-The packaged frontier now includes:
+The Suite C run produced:
 
 - `experiments/world_responds/BENCHMARK_CARD.md`;
 - `experiments/world_responds/results/suite_c_reengagement_2026_07_06.md`;
-- `experiments/world_responds/results/suite_c_reengagement_2026_07_06.json`.
-
-The next runner should produce:
-
-- JSONL rows under `artifacts/world_responds/suite_c_reengagement_rows.jsonl`;
-- summary JSON under `artifacts/world_responds/suite_c_reengagement_summary.json`;
-- report under `experiments/world_responds/results/suite_c_reengagement_<date>.md`;
-- paper update or short standalone report under `papers/habituated_reengagement/`.
+- `experiments/world_responds/results/suite_c_reengagement_2026_07_06.json`;
+- local-only JSONL rows under `artifacts/world_responds/suite_c_reengagement_rows.jsonl`;
+- local-only raw summary JSON under `artifacts/world_responds/suite_c_reengagement_summary.json`;
+- standalone paper under `papers/habituated_reengagement/suite_c_reengagement_under_world_change.md`;
+- PDF under `papers/habituated_reengagement/suite_c_reengagement_under_world_change.pdf`;
+- critical review under `docs/paper_reviews/suite_c_reengagement_under_world_change_critical_review.md`.
 
 ## Stop Conditions
 
-A useful strong negative is acceptable. The next run should stop and report a
-bounded negative if:
+These remain stop conditions for future neural or long-horizon transfers:
 
 - re-engagement passes but recovery fails again;
 - recovery passes only by scheduled/prohibitively dense probing;

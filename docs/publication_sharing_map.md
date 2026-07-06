@@ -22,9 +22,9 @@ Minimum public bundle:
    `docs/causally_grounded_agents_release_schema.json`
 5. Suite D/E hardened card:
    `experiments/long_horizon_bottleneck/BENCHMARK_CARD.md`
-6. Suite C frontier card:
+6. Suite C terminal finite-gate card:
    `experiments/world_responds/BENCHMARK_CARD.md`
-7. Suite C status report:
+7. Suite C terminal result report:
    `experiments/world_responds/results/suite_c_reengagement_2026_07_06.md`
 8. Publication sharing map:
    `docs/publication_sharing_map.md`
@@ -35,6 +35,7 @@ Paper PDFs to share as the first reading packet:
 |---|---|---|
 | Benchmark umbrella | `papers/causally_grounded_agents_benchmark/paper.pdf` | `/Users/jawaun/Metaphysics of Intelligence/32_Benchmarking_Causally_Grounded_Finite_Agents_2026_07_06.pdf` |
 | Hardened moved-bottleneck Suite D/E evidence | `papers/long_horizon_bottleneck/paper.pdf` | `/Users/jawaun/Metaphysics of Intelligence/31_Future_Control_Moves_Memory_2026_07_06.pdf` |
+| Suite C terminal finite gate | `papers/habituated_reengagement/suite_c_reengagement_under_world_change.pdf` | `/Users/jawaun/Metaphysics of Intelligence/Suite_C_Reengagement_2026_07_06/33_Suite_C_Reengagement_Under_World_Change_2026_07_06.pdf` |
 | Suite C failure/repair frontier | `papers/habituated_reengagement/paper.pdf` | `/Users/jawaun/Metaphysics of Intelligence/23B_Habituated_Reengagement_2026_06_12.pdf` |
 | General metric-stack framing | `papers/metric_stack_synthesis/paper.pdf` | `/Users/jawaun/Metaphysics of Intelligence/26_Metric_Stack_of_Concern_v4_2026_07_06.pdf` |
 | Source failure before Suite C repair | `papers/world_responds/paper.pdf` | `/Users/jawaun/Metaphysics of Intelligence/22_World_Responds_Reengagement_Floor_2026_07_06.pdf` |
@@ -59,10 +60,10 @@ Use this one-sentence frame:
 
 Use this claim boundary:
 
-> The current strongest suite is the long-horizon moved-bottleneck/tool
-> commitment suite. Suite C re-engagement is packaged as a frontier: it has a
-> positive mechanism and a caught anti-cheat failure, but it is not a terminal
-> pass yet.
+> The current strongest suites are the long-horizon moved-bottleneck/tool
+> commitment suite and the finite Suite C re-engagement gate. Suite C is a
+> terminal controlled-harness pass, while neural and long-horizon transfer remain
+> open.
 
 Do not lead with "consciousness" or "AGI." Lead with benchmark methodology:
 behavior plus structure gate, proxy resistance, anti-cheat controls, JSONL rows,
@@ -83,6 +84,7 @@ Release assets:
 - `papers/causally_grounded_agents_benchmark/paper.pdf`
 - `papers/long_horizon_bottleneck/paper.pdf`
 - `papers/habituated_reengagement/paper.pdf`
+- `papers/habituated_reengagement/suite_c_reengagement_under_world_change.pdf`
 - `docs/causally_grounded_agents_benchmark.md`
 - `docs/causally_grounded_agents_release_schema.md`
 - `docs/causally_grounded_agents_release_schema.json`
