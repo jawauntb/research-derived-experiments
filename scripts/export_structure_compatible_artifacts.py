@@ -28,6 +28,10 @@ def paper_pdfs() -> list[Path]:
             "papers/structure_compatible_generalization/"
             "learned_generators_transfer.pdf"
         ),
+        Path(
+            "papers/structure_compatible_generalization/"
+            "language_template_substitution.pdf"
+        ),
     ]
 
 
@@ -72,6 +76,18 @@ def source_files(*, include_supporting: bool) -> list[Path]:
             Path(
                 "experiments/structure_compatible_generalization/results/"
                 "phase3_learned_generators_2026_07_06.md"
+            ),
+            Path(
+                "papers/structure_compatible_generalization/"
+                "language_template_substitution_preregistration.md"
+            ),
+            Path(
+                "papers/structure_compatible_generalization/"
+                "language_template_substitution.md"
+            ),
+            Path(
+                "experiments/structure_compatible_generalization/results/"
+                "language_template_substitution_2026_07_06.md"
             ),
         ]
     )
