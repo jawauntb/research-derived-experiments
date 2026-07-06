@@ -1,0 +1,82 @@
+\section{Suite Inventory}
+
+The full benchmark family has six suites:
+\begin{itemize}
+  \item Suite A: consequence-to-action.
+  \item Suite B: reafferent source attribution.
+  \item Suite C: re-engagement under world change.
+  \item Suite D: long-horizon moved bottleneck.
+  \item Suite E: tool commitment and repair.
+  \item Suite F: structure-compatible OOD.
+\end{itemize}
+
+The main paper centers Suite C and Suite D/E because they are the strongest
+current anchors. Suites A/B/F should remain in appendix or a suite-family
+overview unless expanded into their own benchmark cards.
+
+\section{Suite C Gate Definitions}
+
+Source:
+\path{experiments/world_responds/results/suite_c_reengagement_2026_07_06.md}
+and
+\path{experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md}.
+
+\begin{table*}[h]
+\centering
+\small
+\begin{tabular}{lll}
+\toprule
+Gate & Meaning & Current status \\
+\midrule
+C1 & baseline silence replication & pass \\
+C2 & selective first-shift re-engagement & pass \\
+C3 & affected-component recovery & pass \\
+C4 & no false calm & pass \\
+C5 & cost-aware inquiry & pass \\
+C6 & second-shift reopenability & pass \\
+N1 & stale/wrong/suppressed learned controls fail & pass in learned transfer \\
+\bottomrule
+\end{tabular}
+\caption{Suite C gates.}
+\end{table*}
+
+\section{Suite D/E Gate Surface}
+
+Source: \path{experiments/long_horizon_bottleneck/BENCHMARK_CARD.md}.
+
+The benchmark should report:
+\begin{itemize}
+  \item closed-loop final accuracy,
+  \item moved-slot specificity and rank,
+  \item visible-control null behavior,
+  \item hidden localization over model/layer/token-position grids,
+  \item fixed-action counterfactual localization,
+  \item causal patch value-prefix effects,
+  \item prompt-family robustness,
+  \item API black-box prompt-family and external-stress behavior.
+\end{itemize}
+
+\section{Release Schema}
+
+The machine-readable summary must contain:
+\begin{verbatim}
+benchmark, suite, run, minimum_pass_rule,
+score_axes, gates, baselines, artifacts,
+allowed_claim, non_claims
+\end{verbatim}
+
+Rows should be JSONL. Summary JSON should be public-safe and should not include
+secrets, uncurated provider transcripts, or local-only Modal payloads.
+
+\section{Known Negatives and Boundaries}
+
+Known negatives are valuable and should not be hidden:
+\begin{itemize}
+  \item signal-layer cooling can create false calm in Suite C,
+  \item matched-random inquiry at the same budget fails selectivity/recovery,
+  \item stale and wrong stress signals fail the learned Suite C transfer,
+  \item API dispatch failure for one tested OpenAI condition is sparse and
+  localized, not broad,
+  \item Suite F remains a companion OOD package rather than a complete benchmark
+  release inside this paper.
+\end{itemize}

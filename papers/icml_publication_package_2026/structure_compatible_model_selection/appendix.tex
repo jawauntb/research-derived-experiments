@@ -1,0 +1,277 @@
+\section{Detailed Result Ledger}
+\label{app:results}
+
+This appendix records the source-backed result tables used by the main paper.
+All paths are relative to the repository root.
+
+\subsection{Phase 1: Cross-Domain Structure Compatibility}
+
+Source:
+\path{experiments/structure_compatible_generalization/results/structure_compatible_l4_2026_07_06.md}.
+
+\begin{table*}[h]
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Domain & rows & mean train & mean ID & mean OOD \\
+\midrule
+modular exact & 2 & 1.000 & 1.000 & 0.545 \\
+modular neural & 128 & 0.732 & 0.732 & 0.165 \\
+symbolic cyclic & 128 & 0.973 & 0.984 & 0.394 \\
+vision rotation & 96 & 0.773 & 0.773 & 0.380 \\
+\bottomrule
+\end{tabular}
+\caption{Phase 1 domain sizes and mean accuracies.}
+\end{table*}
+
+\begin{table*}[h]
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Selector & domains & mean selected OOD & note \\
+\midrule
+true compatibility & 3 & 1.000 & oracle structure \\
+ID validation accuracy & 3 & 0.660 & standard selector \\
+train accuracy & 3 & 0.660 & standard selector \\
+inferred compatibility & 2 & 0.531 & unavailable in one domain \\
+wrong compatibility & 3 & 0.458 & negative control \\
+parameter L2 & 3 & 0.426 & proxy baseline \\
+sharpness proxy & 3 & 0.410 & proxy baseline \\
+negative train loss & 3 & 0.117 & proxy baseline \\
+\bottomrule
+\end{tabular}
+\caption{Phase 1 OOD-free selection by predictor family.}
+\end{table*}
+
+\subsection{Phase 2: Inferred Transformations and Intervention}
+
+Source:
+\path{experiments/structure_compatible_generalization/results/phase2_transformations_2026_07_06.md}.
+
+The main regime transition is from post-hoc oracle compatibility to supported
+modular shifts inferred from observed train-label overlaps. The evidence-bearing
+result is regularization, not the one-domain selector sanity check.
+
+\begin{table*}[h]
+\centering
+\small
+\begin{tabular}{rrrrrr}
+\toprule
+reg. & N & mean train & mean OOD & high-ID N & high-ID OOD \\
+\midrule
+0.000 & 180 & 0.719 & 0.134 & 98 & 0.178 \\
+0.050 & 180 & 0.719 & 0.320 & 98 & 0.519 \\
+0.200 & 180 & 0.723 & 0.352 & 99 & 0.573 \\
+\bottomrule
+\end{tabular}
+\caption{Phase 2 compatibility regularization improves OOD while preserving a
+high-ID comparison surface.}
+\end{table*}
+
+\subsection{Phase 3: Learned Generators and Vision Transfer}
+
+Source:
+\path{experiments/structure_compatible_generalization/results/phase3_learned_generators_2026_07_06.md}.
+
+\begin{table*}[h]
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Domain & predictor & Pearson $r$ & Spearman $r$ & N \\
+\midrule
+modular learned generator & true compatibility & 0.812 & 0.367 & 270 \\
+modular learned generator & discovered compatibility & 0.787 & 0.474 & 270 \\
+modular learned generator & ID validation & 0.398 & 0.120 & 270 \\
+modular learned generator & wrong compatibility & -0.085 & 0.049 & 270 \\
+vision learned generator & true compatibility & 0.678 & 0.591 & 144 \\
+vision learned generator & discovered compatibility & 0.599 & 0.502 & 144 \\
+vision learned generator & ID validation & 0.661 & 0.632 & 144 \\
+\bottomrule
+\end{tabular}
+\caption{Phase 3 predictor correlations. The vision arm is a mixed case where
+ID remains strong, so the paper should not overstate compatibility dominance.}
+\end{table*}
+
+\begin{table*}[h]
+\centering
+\small
+\begin{tabular}{lrrr}
+\toprule
+Vision regime & N & mean OOD & mean learned compatibility \\
+\midrule
+none & 36 & 0.258 & 0.486 \\
+learned augmentation & 36 & 0.644 & 0.793 \\
+oracle augmentation & 36 & 0.693 & 0.801 \\
+random augmentation & 36 & 0.610 & 0.760 \\
+\bottomrule
+\end{tabular}
+\caption{Phase 3 vision transfer arm. The random augmentation result means the
+vision claim should be framed as transfer evidence with a nontrivial control,
+not as a pure learned-generator victory.}
+\end{table*}
+
+\subsection{Phase 4: Language-Like Template Substitution}
+
+Source:
+\path{experiments/structure_compatible_generalization/results/language_template_substitution_2026_07_06.md}.
+
+\begin{table*}[h]
+\centering
+\small
+\begin{tabular}{lrrr}
+\toprule
+Predictor & Pearson $r$ & Spearman $r$ & N \\
+\midrule
+discovered compatibility & 0.858 & 0.596 & 256 \\
+true compatibility & 0.853 & 0.628 & 256 \\
+negative train loss & 0.492 & 0.232 & 256 \\
+ID validation & 0.478 & 0.127 & 256 \\
+train accuracy & 0.478 & 0.127 & 256 \\
+wrong compatibility & -0.088 & 0.059 & 256 \\
+sharpness proxy & -0.111 & 0.063 & 256 \\
+parameter L2 & -0.476 & -0.189 & 256 \\
+\bottomrule
+\end{tabular}
+\caption{Phase 4 finite-text bridge.}
+\end{table*}
+
+\begin{table*}[h]
+\centering
+\small
+\begin{tabular}{rrrrrrr}
+\toprule
+reg. & N & train & ID & OOD & high-ID N & high-ID OOD \\
+\midrule
+0.000 & 64 & 0.554 & 0.554 & 0.147 & 29 & 0.224 \\
+0.050 & 64 & 0.553 & 0.553 & 0.234 & 29 & 0.415 \\
+0.200 & 64 & 0.555 & 0.555 & 0.255 & 29 & 0.463 \\
+0.500 & 64 & 0.558 & 0.558 & 0.277 & 29 & 0.512 \\
+\bottomrule
+\end{tabular}
+\caption{Phase 4 compatibility regularization.}
+\end{table*}
+
+\subsection{Phase 5: Semantic Retrieval Transfer}
+
+Source:
+\path{experiments/structure_compatible_generalization/results/semantic_retrieval_transfer_2026_07_06.md}.
+
+\begin{table*}[h]
+\centering
+\small
+\begin{tabular}{lrrr}
+\toprule
+Predictor & Pearson $r$ & Spearman $r$ & N \\
+\midrule
+true compatibility & 0.940 & 0.915 & 64 \\
+discovered compatibility & 0.861 & 0.863 & 64 \\
+train accuracy & 0.772 & 0.628 & 64 \\
+ID validation & 0.709 & 0.488 & 64 \\
+wrong compatibility & -0.872 & -0.919 & 64 \\
+\bottomrule
+\end{tabular}
+\caption{Phase 5 frozen-encoder semantic retrieval.}
+\end{table*}
+
+\subsection{Phase 6: Semantic Selection Control}
+
+Source:
+\path{experiments/structure_compatible_generalization/results/semantic_selection_control_2026_07_06.md}.
+
+All registered selector gates passed: minimum zoo count, beats ID validation,
+beats train accuracy, beats random candidate, wrong control fails, and accepted.
+The table in the main paper reports the full selector comparison.
+
+\section{Companion Benchmark Appendix}
+\label{app:agents}
+
+The companion benchmark is not the main ICML claim, but it is useful because it
+shows the same anti-proxy rule in finite agents.
+
+\subsection{Minimum Pass Rule}
+
+Source: \path{docs/causally_grounded_agents_benchmark.md}.
+
+A suite does not pass on behavior alone. A pass requires:
+\begin{enumerate}
+  \item the task behavior gate,
+  \item the relevant causal-structure gate, and
+  \item anti-cheat controls specific to that suite.
+\end{enumerate}
+
+The score should remain vector-valued: behavior, causal representation,
+attribution, inquiry, commitment, and generalization.
+
+\subsection{Suite C: Re-Engagement Under World Change}
+
+Sources:
+\path{experiments/world_responds/results/suite_c_reengagement_2026_07_06.md}
+and
+\path{experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md}.
+
+The hand-policy headline condition is \texttt{burst\_then\_refractory}. It
+passes C1-C6 with final affected MAE 0.112, first-shift selectivity 16.927,
+second-shift reopenability 16.667, and 22.6 probes. The signal-layer
+\texttt{fixed\_surprise\_decrement} control fails correctly: it looks quiet but
+ends at final MAE 0.517.
+
+The learned probe head passes the same held-out C1-C6 gate with final affected
+MAE 0.112, first-shift selectivity 16.667, second-shift reopenability 17.448,
+and 23.1 probes. Stale-signal, wrong-signal, signal-suppression, and
+matched-random controls fail in the intended way.
+
+\subsection{Suite D/E: Long-Horizon Commitment Surfaces}
+
+Source: \path{experiments/long_horizon_bottleneck/BENCHMARK_CARD.md}.
+
+The long-horizon benchmark asks whether a future-critical variable survives the
+surfaces where it must control action: hidden state, generated JSON, tool
+arguments, repair branches, and value-token causal readouts. The strongest
+lesson is the commitment-surface law: memory becomes agent-relevant when it is
+bound to a future action or tool surface.
+
+\section{Reproducibility Notes}
+
+The source reports list base seeds, model/config counts, GPU type, and budget
+checks. The paper package should be submitted with:
+\begin{itemize}
+  \item the six source result reports above,
+  \item figure regeneration scripts under
+  \path{scripts/build_structure_compatible_*.py} and
+  \path{scripts/export_structure_compatible_artifacts.py},
+  \item task code under
+  \path{experiments/structure_compatible_generalization/},
+  \item public benchmark schema under
+  \path{docs/causally_grounded_agents_release_schema.json}.
+\end{itemize}
+
+\section{Reviewer-Facing Weaknesses}
+
+The strongest reviewer objections are:
+\begin{enumerate}
+  \item Some phases use oracle or partly hand-designed transformation families.
+  \item The vision arm has a strong ID baseline and a strong random
+  augmentation control.
+  \item The semantic tasks are constructed around frozen encoders and model
+  zoos; they are not broad natural-language deployment.
+  \item The package needs confidence intervals or bootstrap intervals for final
+  paper submission where the current reports give point estimates.
+  \item The finite-agent benchmark material should remain an appendix unless a
+  separate benchmark paper is submitted.
+\end{enumerate}
+
+\section{Next Experiments}
+
+The next ICML-strengthening experiments are:
+\begin{itemize}
+  \item bootstrap CIs for Phase 6 selector lift and wrong-control gap,
+  \item larger semantic model zoos with a third frozen encoder,
+  \item held-out transformation-family discovery where candidate transforms are
+  learned from one family and evaluated on another,
+  \item an ablation that holds augmentation volume fixed while varying
+  transformation correctness,
+  \item teacher-free Suite C inquiry learning for the companion benchmark.
+\end{itemize}
