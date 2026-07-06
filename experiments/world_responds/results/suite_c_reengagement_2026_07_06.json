@@ -25,7 +25,19 @@
     ],
     "providers": [
       "modal_l4"
-    ]
+    ],
+    "modal_run_url": "https://modal.com/apps/generalintelligencecompany/main/ap-Fgpr3fPDhd0mCNsStCfJ72",
+    "dry_run_modal_url": "https://modal.com/apps/generalintelligencecompany/main/ap-hsB4QplExuXn36Q8foGpAL",
+    "budget_estimate": {
+      "budget_usd": 75.0,
+      "cells": 72,
+      "conservative_cost_usd": 14.3856,
+      "gpu": "L4",
+      "gpu_rate_per_second": 0.000222,
+      "max_containers": 32,
+      "timeout_seconds": 900,
+      "within_budget": true
+    }
   },
   "minimum_pass_rule": {
     "behavior_passed": true,

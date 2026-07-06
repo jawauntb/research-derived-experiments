@@ -23,6 +23,12 @@ Experiment:
 - Positive targets: decision-layer cooling candidates.
 - Negative controls: P22 quiet, P23A anxious, signal-layer cooling, scheduled/oracle high-cost, matched random.
 
+Execution record:
+- Full Modal run: https://modal.com/apps/generalintelligencecompany/main/ap-Fgpr3fPDhd0mCNsStCfJ72.
+- Dry-run budget check: https://modal.com/apps/generalintelligencecompany/main/ap-hsB4QplExuXn36Q8foGpAL.
+- Conservative budget estimate: $14.3856 against budget $75.0.
+- Rows emitted: 72.
+
 Gate:
 - Acceptance rule: all C1-C6 gates pass for at least one decision-layer candidate, with required controls behaving as controls.
 - Withheld/rejected rule: do not claim Suite C closure if quiet is produced by signal suppression, recovery requires scheduled/oracle cost, or second-shift reopenability fails.

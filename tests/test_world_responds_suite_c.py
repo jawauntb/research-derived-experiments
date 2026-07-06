@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import subprocess
+import sys
 from copy import deepcopy
 from typing import Any, Callable
 
@@ -189,6 +191,33 @@ def test_artifact_builder_validates_payload_and_writes_public_contract(tmp_path)
         public_summary["score_axes"]["inquiry"]["matched_budget_condition"]
         == payload["summary"]["headline_condition"]
     )
+
+
+def test_artifact_builder_cli_runs_from_script_path(tmp_path) -> None:
+    payload = run_suite(seeds=[20260706, 20261709, 20262712])
+    payload_path = tmp_path / "payload.json"
+    payload_path.write_text(json.dumps(payload))
+
+    proc = subprocess.run(
+        [
+            sys.executable,
+            "experiments/world_responds/summarize_suite_c.py",
+            str(payload_path),
+            "--out-root",
+            str(tmp_path / "out"),
+        ],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
+
+    assert proc.returncode == 0, proc.stdout
+    assert (
+        tmp_path
+        / "out"
+        / "experiments/world_responds/results/suite_c_reengagement_2026_07_06.md"
+    ).exists()
 
 
 def test_artifact_builder_rejects_tampered_summary(tmp_path) -> None:
