@@ -40,12 +40,17 @@ def source_files() -> list[Path]:
             "experiments/structure_compatible_generalization/results/"
             "phase2_transformations_2026_07_06.md"
         ),
+        Path(
+            "docs/paper_reviews/"
+            "structure_compatible_generalization_critical_review.md"
+        ),
+        Path(
+            "docs/paper_reviews/"
+            "inferred_transformations_intervention_critical_review.md"
+        ),
     ]
     required = files[:3]
     optional = files[3:]
-    figure_dir = Path("papers/structure_compatible_generalization/figures")
-    if figure_dir.exists():
-        optional.extend(sorted(figure_dir.glob("*.png")))
     return required + optional
 
 

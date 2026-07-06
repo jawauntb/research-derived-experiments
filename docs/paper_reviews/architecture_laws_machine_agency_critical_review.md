@@ -19,7 +19,10 @@ portable architecture laws and states the next major contribution opportunity.
    ablation, not just a slogan.
 4. **Bridge to long horizon.** The strongest next opportunity is testing whether
    these laws survive when memory must reach future tool/action commitments.
-5. **Avoid duplicating the metric-stack paper.** This artifact should be short,
+5. **Absorb structure-compatible results without overclaiming.** The new
+   transformation work belongs here as a finite-domain law about OOD pressure,
+   not as a universal alignment result.
+6. **Avoid duplicating the metric-stack paper.** This artifact should be short,
    strategic, and readable as a roadmap.
 
 ## Rewrite Applied
@@ -29,6 +32,8 @@ portable architecture laws and states the next major contribution opportunity.
 - Embedded the architecture-law ledger figure from the metric-stack synthesis.
 - Added a critical caveats section and a major contribution section focused on
   transfer tests.
+- Added the latest dispatch-surface and structure-compatible transformation
+  laws from the July 6 follow-up PRs.
 
 ## Contribution Opportunity
 

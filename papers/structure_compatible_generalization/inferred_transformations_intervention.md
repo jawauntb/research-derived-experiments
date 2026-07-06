@@ -20,12 +20,18 @@ The best high-ID regularization arm was 0.200, with high-ID mean OOD 0.573. Delt
 
 ![fig3_discovered_vs_oracle](figures/fig3_discovered_vs_oracle.png)
 
+<div style="page-break-before: always;"></div>
+
 ![fig4_regularization_intervention](figures/fig4_regularization_intervention.png)
 
 ## 3. Scope
 
 This is a finite modular-domain intervention result. It supports the broader OOD-certifiability-lite program, but it does not yet solve transformation discovery for vision, language, or open deployment shifts.
 
-## 4. Next Operation
+## 4. Architecture Lesson
+
+The architecture change is small: infer which transformations are supported by the training evidence, reject vacuous shifts, and use the accepted family as a compatibility regularizer on unlabeled domain points. In virtual-governor language, this converts a system-level deployment constraint into local training pressure. The result is not that the model understands the governor; it is that the training loop exposes and controls one governing stress.
+
+## 5. Next Operation
 
 The next operation is to make the discovery family learned rather than enumerated, then transfer the same intervention protocol to vision rotations and paraphrase/template substitutions.

@@ -24,7 +24,8 @@ preserve vector-valued concern, use identifying interventions, recompute memory
 against the current model, normalize uncertainty before allocating inquiry,
 re-open inquiry after apparent convergence, cool at the decision layer rather
 than deleting the signal, split or gate heads when component identifiability
-stalls, and bind memory to future action surfaces.
+stalls, bind memory to future action surfaces, and expose expected deployment
+transformations as local selection or training pressures.
 
 ## 1. Claim Boundary
 
@@ -59,6 +60,8 @@ really tracks the intended global concern.
 | Anxiety or false calm | Cool at the decision layer, not the signal layer | The agent re-engages after shifts and quiets after recovery. |
 | Shared-head role ceiling | Split or gate heads when identifiability stalls | The next move becomes architectural or interventional. |
 | Long-horizon memory drift | Bind memory to commitment and tool-action surfaces | Memory becomes control-relevant, not merely present. |
+| Dispatch-surface brittleness | Harden commitment surfaces across parser, repair, and wording variants | Tool/action memory remains useful under interface stress. |
+| Shortcut-compatible OOD success | Score or regularize structure-compatible transformations | Global deployment stress becomes local model pressure. |
 
 ## 3. Why These Laws Matter
 
@@ -98,6 +101,24 @@ matters only if it reaches a later commitment surface, such as a tool call,
 schema field, or irreversible action. Memory without future action coupling is
 just context. Memory with commitment coupling becomes agentic state.
 
+The dispatch robustness follow-up sharpens the same law. The issue is not just
+whether a model remembers a hidden value; it is whether the value survives the
+surface on which it must be used: parser-facing text, aliases, generated JSON,
+tool repair, and black-box API dispatch wording. A sparse OpenAI GPT-4.1 Nano
+negative under one dispatch repair cell is therefore useful precisely because it
+localizes the pressure point without turning it into a broad provider claim.
+
+### 3.6 Structure-Compatible Generalization
+
+The structure-compatible generalization work adds an OOD complement. When ID
+evidence admits both shortcuts and transportable rules, the architecture needs a
+surface that asks whether the learned function preserves the transformation
+expected to generate deployment cases. Phase one shows this as model selection;
+phase two weakens the oracle by inferring supported modular shifts and using
+them as a compatibility regularizer. In virtual-governor terms, the training
+loop converts a global deployment constraint into local pressure on the model,
+but the claim remains finite-domain and task-family bounded.
+
 ## 4. Simple Changes That Moved Outcomes
 
 The strongest "small changes, large effects" observed so far are:
@@ -116,6 +137,12 @@ The strongest "small changes, large effects" observed so far are:
 6. **Commitment-surface memory:** test whether early information causally reaches
    a later action surface. This relocates long-horizon agency from context length
    to state/action coupling.
+7. **Dispatch-surface hardening:** test the same commitment under aliases,
+   parser-facing wording, generated JSON, repair, and API dispatch variants.
+   This prevents hidden memory from evaporating at the action interface.
+8. **Compatibility selection/regularization:** score or train against the
+   transformations that define the deployment shift. This converts an OOD
+   constraint into a local architecture pressure.
 
 ## 5. Major Contribution Opportunity
 
@@ -158,3 +185,6 @@ the laws. The next contribution is to test whether they transfer to:
 - `papers/world_responds/paper.md`
 - `papers/planning_from_concern/paper.md`
 - `papers/long_horizon_bottleneck/paper.md`
+- `papers/structure_compatible_generalization/structure_compatible_generalization.md`
+- `papers/structure_compatible_generalization/inferred_transformations_intervention.md`
+- `experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzzzzzzz_api_dispatch_robustness_openai_gpt41_nano_2026_07_06.md`

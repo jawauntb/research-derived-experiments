@@ -8,8 +8,12 @@ Expected artifacts:
 - `structure_compatible_generalization.pdf`
 - `inferred_transformations_intervention.md`
 - `inferred_transformations_intervention.pdf`
+- `docs/paper_reviews/structure_compatible_generalization_critical_review.md`
+- `docs/paper_reviews/inferred_transformations_intervention_critical_review.md`
 - `figures/fig1_domain_predictors.png`
 - `figures/fig2_selection_without_ood.png`
+- `figures/fig3_discovered_vs_oracle.png`
+- `figures/fig4_regularization_intervention.png`
 
 Build flow:
 
@@ -26,3 +30,6 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
   --artifacts-only \
   --artifact-input artifacts/structure_compatible_generalization/phase2_transformations.json
 ```
+
+The local Metaphysics export copies descriptive papers, reports, and reviews.
+Standalone figure PNGs stay in this repo because the paper PDFs embed them.
