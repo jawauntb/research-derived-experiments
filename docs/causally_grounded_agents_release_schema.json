@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jawauntb/research-derived-experiments/schemas/causally-grounded-agents-summary.schema.json",
+  "title": "Causally Grounded Agents Benchmark Summary",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "benchmark",
+    "suite",
+    "run",
+    "minimum_pass_rule",
+    "score_axes",
+    "gates",
+    "baselines",
+    "artifacts",
+    "allowed_claim",
+    "non_claims"
+  ],
+  "properties": {
+    "benchmark": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "charter"],
+      "properties": {
+        "name": {"type": "string"},
+        "version": {"type": "string"},
+        "charter": {"type": "string"}
+      }
+    },
+    "suite": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "axis_coverage", "status"],
+      "properties": {
+        "id": {"type": "string"},
+        "name": {"type": "string"},
+        "axis_coverage": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "behavior",
+              "causal_representation",
+              "attribution",
+              "inquiry",
+              "commitment",
+              "generalization",
+              "anti_cheat"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "status": {
+          "enum": [
+            "scaffold",
+            "partial",
+            "strong",
+            "hardened",
+            "negative",
+            "blocked"
+          ]
+        }
+      }
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["run_id", "date", "command", "rows"],
+      "properties": {
+        "run_id": {"type": "string"},
+        "date": {"type": "string"},
+        "command": {"type": "string"},
+        "rows": {"type": "integer", "minimum": 0},
+        "requests": {"type": "integer", "minimum": 0},
+        "models": {"type": "array", "items": {"type": "string"}},
+        "providers": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "minimum_pass_rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "behavior_passed",
+        "structure_gate_passed",
+        "anti_cheat_controls_passed",
+        "passed"
+      ],
+      "properties": {
+        "behavior_passed": {"type": "boolean"},
+        "structure_gate_passed": {"type": "boolean"},
+        "anti_cheat_controls_passed": {"type": "boolean"},
+        "passed": {"type": "boolean"},
+        "notes": {"type": "string"}
+      }
+    },
+    "score_axes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": {"type": ["number", "integer", "boolean", "string", "null"]}
+      }
+    },
+    "gates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["gate_id", "name", "axis", "passed"],
+        "properties": {
+          "gate_id": {"type": "string"},
+          "name": {"type": "string"},
+          "axis": {
+            "enum": [
+              "behavior",
+              "causal_representation",
+              "attribution",
+              "inquiry",
+              "commitment",
+              "generalization",
+              "anti_cheat"
+            ]
+          },
+          "threshold": {"type": "string"},
+          "value": {"type": ["number", "integer", "boolean", "string", "null"]},
+          "passed": {"type": "boolean"},
+          "evidence_ref": {"type": "string"}
+        }
+      }
+    },
+    "baselines": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "kind", "result"],
+        "properties": {
+          "name": {"type": "string"},
+          "kind": {"enum": ["lower", "upper", "control", "diagnostic"]},
+          "result": {"type": "string"},
+          "evidence_ref": {"type": "string"}
+        }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rows_jsonl", "summary_json", "report_md", "benchmark_card"],
+      "properties": {
+        "rows_jsonl": {"type": "string"},
+        "summary_json": {"type": "string"},
+        "report_md": {"type": "string"},
+        "benchmark_card": {"type": "string"},
+        "paper_md": {"type": "string"},
+        "paper_pdf": {"type": "string"}
+      }
+    },
+    "allowed_claim": {"type": "string"},
+    "non_claims": {"type": "array", "items": {"type": "string"}}
+  }
+}
+

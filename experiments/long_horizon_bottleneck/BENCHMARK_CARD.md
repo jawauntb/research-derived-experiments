@@ -4,6 +4,23 @@
 
 Test whether future control relevance moves both generated behavior and internal memory-state sensitivity toward the early variable that will later control action.
 
+## Position In Causally Grounded Agents Benchmark
+
+This benchmark is the hardened Suite D/E anchor in the broader causally
+grounded finite agents benchmark:
+
+- Suite D: long-horizon moved bottleneck.
+- Suite E: tool commitment and repair.
+- Covered axes: behavior, causal representation, and commitment.
+- Partly covered axes: anti-cheat controls through visible-control,
+  fixed-action, prompt-family, and dispatch robustness variants.
+- Not covered by this suite: self/world attribution, inquiry/re-engagement, and
+  broad structure-compatible OOD generalization.
+
+Use this card together with `docs/causally_grounded_agents_benchmark.md` and
+`docs/causally_grounded_agents_release_schema.md` when packaging the broader
+benchmark release.
+
 ## Current Status
 
 - Synthetic trained-agent ladder: positive through autoregressively decoded JSON-like action strings.
