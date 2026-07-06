@@ -47,11 +47,20 @@ from experiments.long_horizon_bottleneck.core import (
 )
 from experiments.long_horizon_bottleneck.api_blackbox import (
     API_BLACKBOX_CONDITIONS,
+    ProviderResult,
     build_api_benchmark_cases,
     evaluate_api_cases,
     make_provider_call,
     summarize_api_blackbox_rows,
     total_request_count,
+)
+from experiments.long_horizon_bottleneck.api_dispatch_characterization import (
+    DISPATCH_CHARACTERIZATION_CASE_TYPES,
+    build_dispatch_characterization_cases,
+    evaluate_dispatch_characterization_cases,
+    render_dispatch_characterization_markdown,
+    summarize_dispatch_characterization_rows,
+    total_request_count as total_dispatch_characterization_request_count,
 )
 from experiments.long_horizon_bottleneck.api_blackbox_report import (
     aggregate_api_blackbox_summaries,
@@ -1205,6 +1214,85 @@ def test_aggregate_api_blackbox_summaries_preserves_failed_cells(tmp_path):
     assert not aggregate["failed_cells"][0]["bottleneck_pass"]
     assert "mixed with controlled strong negative" in markdown
     assert "dispatch" in markdown
+
+
+def test_build_dispatch_characterization_cases_targets_failed_seed_blocks():
+    cases = build_dispatch_characterization_cases(
+        stress_cases=["4slot_gap8", "8slot_gap16"],
+        case_types=list(DISPATCH_CHARACTERIZATION_CASE_TYPES),
+        seeds=1,
+        episodes_per_cell=1,
+        critical_slot=0,
+        n_slots_values=[4, 8],
+        slot_gap_values=[8, 16],
+        variants_per_slot=3,
+        base_seed=20261050,
+    )
+
+    original_seeds = {
+        (case.stress_case, case.seed) for case in cases if case.case_type == "dispatch_original"
+    }
+
+    assert len(cases) == 2 * len(DISPATCH_CHARACTERIZATION_CASE_TYPES)
+    assert total_dispatch_characterization_request_count(cases) == 30
+    assert original_seeds == {
+        ("4slot_gap8", 50661050),
+        ("8slot_gap16", 53661050),
+    }
+
+
+def test_dispatch_characterization_summary_localizes_reproduced_failure():
+    cases = build_dispatch_characterization_cases(
+        stress_cases=["4slot_gap8"],
+        case_types=list(DISPATCH_CHARACTERIZATION_CASE_TYPES),
+        seeds=1,
+        episodes_per_cell=1,
+        critical_slot=0,
+        n_slots_values=[4],
+        slot_gap_values=[8],
+        variants_per_slot=3,
+        base_seed=20261050,
+    )
+
+    def provider(
+        _messages: list[dict[str, str]],
+        case,
+        phase: str,
+    ) -> ProviderResult:
+        if phase == "repair_success" or case.condition in {
+            "prompt_json_format_control",
+            "prompt_json_visible_control",
+        }:
+            return ProviderResult(text='{"tool":"noop"}', usage={"fixture": True})
+        value = 1 - case.expected_value if case.case_type == "dispatch_original" else case.expected_value
+        text = f'{{"tool":"read_slot","slot":"clue_{case.critical_slot}","value":{value}}}'
+        return ProviderResult(text=text, usage={"fixture": True})
+
+    rows = evaluate_dispatch_characterization_cases(
+        cases,
+        model="fixture-dispatch",
+        provider_name="fixture",
+        provider_call=provider,
+        include_prompts=False,
+    )
+    summary = summarize_dispatch_characterization_rows(rows)
+    markdown = render_dispatch_characterization_markdown(
+        {"manifest": {"n_requests": total_dispatch_characterization_request_count(cases)}, "summary": summary}
+    )
+    cell = next(iter(summary["cells"].values()))
+
+    assert summary["outcome"] == "localized"
+    assert summary["decision"]["controls_pass"]
+    assert summary["decision"]["original_failure_reproduced"]
+    assert summary["decision"]["not_reproduced_cells"] == 0
+    assert not cell["original_pass"]
+    assert cell["wording_neutral_pass"]
+    assert cell["copy_assisted_pass"]
+    assert cell["repair_hinted_pass"]
+    assert "dispatch wording/surface" in cell["diagnosis"]
+    assert "value-copy pressure" in cell["diagnosis"]
+    assert "repair-memory pressure" in cell["diagnosis"]
+    assert "Diagnostic Matrix" in markdown
 
 
 def _api_summary_payload(*, suite: str, outcome: str, failed: bool = False) -> dict:

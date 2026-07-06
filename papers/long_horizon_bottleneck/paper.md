@@ -318,6 +318,17 @@ behavioral evidence and a provider-specific stress failure surface, but because
 the API is black-box it does not add hidden-localization or causal-patch
 evidence.
 
+A dispatch-failure characterization then targeted the two OpenAI `dispatch`
+stress cells with 28 scored rows and 60 API requests. The run kept the parser,
+controls, provider adapter, and repair/no-op phases fixed while comparing the
+original dispatch wording against neutral wording, value-copy assistance, and
+repair hinting. The result was `partially_reproduced_localized`: the 4-slot,
+gap-8 original failure did not reproduce, while the 8-slot, gap-16 failure
+reproduced as a failed-repair value miss. Neutral wording and copy assistance
+passed; repair hinting still failed. The allowed interpretation is narrow: this
+is black-box behavioral localization of one reproduced OpenAI stress failure,
+not a hidden-state mechanism claim.
+
 ## 5. Interpretation
 
 The core result is a **metric transport** result. The future-critical variable
@@ -352,9 +363,11 @@ The API result adds operational evidence: several current black-box models pass
 the registered prompt-family suite, and the stress suite can produce useful
 provider-specific negatives rather than only confirmations. OpenAI 4.1 Nano
 passes the main prompt-family gate but fails narrow `dispatch` stress cells
-under passing controls. This does not locate state inside any API model; it
-shows other labs can run the prompts and parser without local weights, hooks,
-or GPUs.
+under passing controls. A targeted follow-up partially reproduces and localizes
+the failure to the harder 8-slot, gap-16 dispatch repair surface, where neutral
+wording and value-copy assistance pass but repair hinting does not. This does
+not locate state inside any API model; it shows other labs can run the prompts
+and parser without local weights, hooks, or GPUs.
 
 ## 6. Architecture Law: Commitment Surfaces
 
@@ -426,208 +439,39 @@ That is a sharper evaluation target than final-task success alone.
 
 ## 9. Remaining Work
 
-The synthetic mechanism ladder is complete enough to write up and share. The
-prompt-level hidden-localization replication is positive, and the fixed-action
-counterfactual removes the simplest generated-token identity confound. The
-fixed-prefix causal patch also shows behavior-adjacent causal leverage at the
-JSON value-token readout, and the prompt-family run verifies that this leverage
-is not restricted to one frozen wording. The API benchmark package now adds a
-multi-provider behavioral bridge and a controlled OpenAI dispatch-stress
-negative. The next regimes answer different questions:
+The synthetic mechanism ladder is complete enough to write up and share:
+synthetic behavior, tool commitment, generated JSON, prompt-level behavior,
+hidden localization, fixed-action localization, causal patching, prompt-family
+robustness, and black-box API behavior all have bounded terminal results.
 
-- **Dispatch failure characterization:** split the `dispatch` stress into
-  wording, value-copying, and repair-memory variants to isolate why OpenAI 4.1
-  Nano passes the main suite but fails two dispatch cells.
-- **Broader external validity:** expand beyond the current small stress to more
-  critical slots, more episodes, longer contexts, paraphrase families, and
-  OpenAI-compatible endpoints.
-- **Stronger causal mediation:** patch multi-token generation or run path
-  patching to test whether the measured state mediates the full tool action,
-  not only the next value token.
-- **LLM-agent transfer:** add real tool wrappers, multi-call traces, and
-  API-style parser recovery around the prompt-level version.
-- **Multi-step planning:** require two or more future commitments where the
-  critical bottleneck changes after intermediate feedback.
-- **Interpretability probes:** compare the hidden-state metric to attention,
-  activation patching, or linear probes over the critical slot.
+The next regimes answer different questions: expand dispatch characterization
+across seeds, slots, model sizes, and endpoints; broaden external validity over
+longer contexts and paraphrase families; test multi-token or path-level causal
+mediation; transfer to real tool traces; add multi-step planning; and compare
+the metric to attention, activation patching, and linear probes.
 
-The most valuable immediate next step is to publish the diagnostic as a compact
-benchmark card: synthetic ladder positive, prompt-level behavior positive,
-prompt-level hidden localization positive, fixed-action localization positive
-after generated action tokens are held constant, value-prefix causal patching
-positive, prompt-family robustness positive, black-box API behavior exposed as
-a reproducible benchmark surface, a multi-provider API prompt-family positive,
-and a provider-specific dispatch stress negative.
+The most valuable immediate next step is to publish the compact benchmark card:
+the current package now includes a multi-provider API prompt-family positive and
+a provider-specific dispatch stress negative with one reproduced failure
+localized to dispatch wording/value-copy pressure.
 
 ## 10. Reproducibility
 
-Experiment code lives in `experiments/long_horizon_bottleneck/`.
+Experiment code lives in experiments/long_horizon_bottleneck/.
 
-Synthetic ladder runner:
+The full reproduction command ledger is maintained in
+experiments/long_horizon_bottleneck/README.md. The main entry points are:
+modal_stochastic_tool_failure_sweep.py for the synthetic ladder,
+modal_prompt_json_transfer_sweep.py for the prompt-level transfer,
+modal_prompt_json_hidden_localization_sweep.py for hidden and fixed-action
+localization, modal_prompt_json_causal_patch_sweep.py for causal patching,
+python3 -m experiments.long_horizon_bottleneck.eval for black-box API
+prompt-family and external-stress runs,
+python3 -m experiments.long_horizon_bottleneck.api_blackbox_report for the
+multi-provider aggregate, and
+python3 -m experiments.long_horizon_bottleneck.api_dispatch_characterization
+for the targeted dispatch-failure follow-up.
 
-```bash
-doppler --scope /Users/jawaun/superoptimizers run -- \
-    uvx --python 3.12 --from modal modal run \
-    experiments/long_horizon_bottleneck/modal_stochastic_tool_failure_sweep.py \
-    --seeds 4 --train-steps 900 --architectures transformer \
-    --conditions autoregressive_json_bottleneck,autoregressive_json_visible_control \
-    --critical-slots 0,1,2,3 \
-    --aliases-per-slot 3 \
-    --failure-probability 0.5 \
-    --budget-usd 25 \
-    --out artifacts/long_horizon_bottleneck/autoregressive_json_surface_l4.json
-```
-
-Prompt-level confirmatory runner:
-
-```bash
-doppler --scope /Users/jawaun/superoptimizers run -- \
-    uvx --python 3.12 --from modal modal run \
-    experiments/long_horizon_bottleneck/modal_prompt_json_transfer_sweep.py \
-    --model-id Qwen/Qwen2.5-0.5B-Instruct \
-    --seeds 4 \
-    --episodes-per-cell 8 \
-    --hidden-metric-episodes 2 \
-    --critical-slots 0,1,2,3 \
-    --budget-usd 25 \
-    --base-seed 20260800 \
-    --out artifacts/long_horizon_bottleneck/prompt_json_transfer_l4.json
-```
-
-Prompt-level hidden-localization runner:
-
-```bash
-doppler --scope /Users/jawaun/superoptimizers run -- \
-    uvx --python 3.12 --from modal modal run \
-    experiments/long_horizon_bottleneck/modal_prompt_json_hidden_localization_sweep.py \
-    --models Qwen/Qwen2.5-0.5B-Instruct,Qwen/Qwen2.5-1.5B-Instruct,HuggingFaceTB/SmolLM2-1.7B-Instruct \
-    --seeds 4 \
-    --episodes-per-cell 8 \
-    --hidden-metric-episodes 2 \
-    --critical-slots 0,1,2,3 \
-    --hidden-positions prompt_final,generated_first,generated_final \
-    --hidden-layers early,mid,late,final \
-    --budget-usd 25 \
-    --base-seed 20260850 \
-    --out artifacts/long_horizon_bottleneck/prompt_json_hidden_localization_l4.json
-```
-
-Prompt-level fixed-action localization runner:
-
-```bash
-doppler --scope /Users/jawaun/superoptimizers run -- \
-    uvx --python 3.12 --from modal modal run \
-    experiments/long_horizon_bottleneck/modal_prompt_json_hidden_localization_sweep.py \
-    --models Qwen/Qwen2.5-0.5B-Instruct,Qwen/Qwen2.5-1.5B-Instruct,HuggingFaceTB/SmolLM2-1.7B-Instruct \
-    --seeds 4 \
-    --episodes-per-cell 8 \
-    --hidden-metric-episodes 2 \
-    --critical-slots 0,1,2,3 \
-    --hidden-positions prompt_final,fixed_noop_first,fixed_noop_final,fixed_read_first,fixed_read_final \
-    --hidden-layers early,mid,late,final \
-    --budget-usd 25 \
-    --base-seed 20260900 \
-    --out artifacts/long_horizon_bottleneck/prompt_json_fixed_action_localization_l4.json
-```
-
-Prompt-level fixed-prefix causal patch runner:
-
-```bash
-doppler --scope /Users/jawaun/superoptimizers run -- \
-    uvx --python 3.12 --from modal modal run \
-    experiments/long_horizon_bottleneck/modal_prompt_json_causal_patch_sweep.py \
-    --models Qwen/Qwen2.5-0.5B-Instruct,Qwen/Qwen2.5-1.5B-Instruct,HuggingFaceTB/SmolLM2-1.7B-Instruct \
-    --seeds 4 \
-    --episodes-per-cell 8 \
-    --critical-slots 0,1,2,3 \
-    --patch-positions prompt_final,value_prefix_final \
-    --patch-layers late,final \
-    --budget-usd 25 \
-    --base-seed 20260950 \
-    --out artifacts/long_horizon_bottleneck/prompt_json_causal_patch_l4.json
-```
-
-Prompt-level prompt-family causal patch runner:
-
-```bash
-doppler --scope /Users/jawaun/superoptimizers run -- \
-    uvx --python 3.12 --from modal modal run \
-    experiments/long_horizon_bottleneck/modal_prompt_json_causal_patch_sweep.py \
-    --models Qwen/Qwen2.5-0.5B-Instruct,Qwen/Qwen2.5-1.5B-Instruct,HuggingFaceTB/SmolLM2-1.7B-Instruct \
-    --prompt-families standard,compact,ledger \
-    --seeds 4 \
-    --episodes-per-cell 8 \
-    --critical-slots 0,1,2,3 \
-    --patch-positions prompt_final,value_prefix_final \
-    --patch-layers late,final \
-    --budget-usd 25 \
-    --base-seed 20261000 \
-    --out artifacts/long_horizon_bottleneck/prompt_json_prompt_family_causal_patch_l4.json
-```
-
-API black-box prompt-family runner:
-
-```bash
-doppler --scope /Users/jawaun/superoptimizers run -- \
-    env PYTHONPATH=. python3 -m experiments.long_horizon_bottleneck.eval \
-    --provider gemini \
-    --models gemini-3.1-flash-lite \
-    --suite prompt_family \
-    --prompt-families standard,compact,ledger \
-    --seeds 1 \
-    --episodes-per-cell 2 \
-    --critical-slots 0,1,2,3 \
-    --max-requests 150 \
-    --max-output-tokens 64 \
-    --sleep-seconds 0.05 \
-    --out artifacts/long_horizon_bottleneck/api_blackbox_gemini_flash_lite_prompt_family_summary.json \
-    --jsonl artifacts/long_horizon_bottleneck/api_blackbox_gemini_flash_lite_prompt_family_rows.jsonl
-```
-
-API black-box external-stress runner:
-
-```bash
-doppler --scope /Users/jawaun/superoptimizers run -- \
-    env PYTHONPATH=. python3 -m experiments.long_horizon_bottleneck.eval \
-    --provider gemini \
-    --models gemini-3.1-flash-lite \
-    --suite external_stress \
-    --prompt-families standard,compact,ledger,retrieval,dispatch \
-    --seeds 1 \
-    --episodes-per-cell 1 \
-    --critical-slots 0 \
-    --n-slots 4,8 \
-    --slot-gap 8,16 \
-    --max-requests 150 \
-    --max-output-tokens 64 \
-    --sleep-seconds 0.05 \
-    --out artifacts/long_horizon_bottleneck/api_blackbox_gemini_flash_lite_external_stress_summary.json \
-    --jsonl artifacts/long_horizon_bottleneck/api_blackbox_gemini_flash_lite_external_stress_rows.jsonl
-```
-
-API black-box multi-provider aggregate report:
-
-```bash
-PYTHONPATH=. python3 -m experiments.long_horizon_bottleneck.api_blackbox_report \
-    artifacts/long_horizon_bottleneck/api_blackbox_openai_gpt41_nano_prompt_family_summary.json \
-    artifacts/long_horizon_bottleneck/api_blackbox_anthropic_haiku45_prompt_family_summary.json \
-    artifacts/long_horizon_bottleneck/api_blackbox_gemini_flash_lite_prompt_family_multi_summary.json \
-    artifacts/long_horizon_bottleneck/api_blackbox_openai_gpt41_nano_external_stress_summary.json \
-    artifacts/long_horizon_bottleneck/api_blackbox_anthropic_haiku45_external_stress_summary.json \
-    artifacts/long_horizon_bottleneck/api_blackbox_gemini_flash_lite_external_stress_multi_summary.json \
-    --date 2026-07-06 \
-    --out-json artifacts/long_horizon_bottleneck/api_blackbox_multi_provider_2026_07_06_summary.json \
-    --out-md experiments/long_horizon_bottleneck/results/zzzzzzzzzzzzzzzzzz_api_blackbox_multi_provider_2026_07_06.md
-```
-
-Local verification for the code paths:
-
-```bash
-uvx ruff check experiments/long_horizon_bottleneck tests/test_long_horizon_bottleneck.py
-uvx ty check experiments/long_horizon_bottleneck tests/test_long_horizon_bottleneck.py
-python -m compileall -q experiments/long_horizon_bottleneck tests/test_long_horizon_bottleneck.py
-python -m pytest tests/test_long_horizon_bottleneck.py -q
-```
-
-The raw Modal artifacts are kept under gitignored `artifacts/`; committed result
-reports in `experiments/long_horizon_bottleneck/results/` summarize every run.
+The raw Modal/API outputs are kept under gitignored artifacts/; committed
+result reports in experiments/long_horizon_bottleneck/results/ summarize every
+run. Local code verification uses ruff, ty, pyright, compileall, and pytest.
