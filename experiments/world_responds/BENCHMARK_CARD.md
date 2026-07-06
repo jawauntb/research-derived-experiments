@@ -11,7 +11,10 @@ Suite C tests adaptive inquiry under nonstationary world dynamics. A condition p
 - Suite pass: **PASS**
 - Headline condition: `burst_then_refractory`
 - Learned-transfer pass: **PASS** for `learned_probe_head`
-- Claim level: `diagnostic`; finite controlled benchmark gate and teacher-trained probe-head transfer, not a consciousness, biological, or production reliability claim.
+- Teacher-free inquiry pass: **PASS** for `teacher_free_reward_policy`
+- Claim level: `diagnostic`; finite controlled benchmark gates with hand-policy,
+  teacher-trained probe-head, and teacher-free reward/CEM layers, not a
+  consciousness, biological, or production reliability claim.
 
 ## Execution Record
 
@@ -46,6 +49,10 @@ A model or policy cannot pass Suite C from final recovery alone. It must pass be
 - `stale_signal_head`: learned-policy control where affected buckets do not receive fresh post-shift stress.
 - `wrong_signal_head`: learned-policy control where stress is attributed to the wrong source.
 - `signal_suppression_head`: learned-policy control where perceived stress is hidden while actual attribution error remains high.
+- `teacher_free_stale_signal`: teacher-free policy control where fresh stress is withheld.
+- `teacher_free_wrong_signal`: teacher-free policy control where stress is attributed to the wrong source.
+- `teacher_free_signal_suppression`: teacher-free policy control where stress is hidden while attribution error remains high.
+- `matched_random_teacher_free_budget`: equal-budget random inquiry control for the teacher-free policy.
 
 ## Learned-Policy Transfer
 
@@ -55,6 +62,18 @@ The learned head reaches final affected MAE 0.112, first-shift selectivity
 16.667, second-shift reopenability 17.448, and 23.1 probes. Matched random at
 the same budget reaches selectivity 0.969.
 
+## Teacher-Free Inquiry
+
+The teacher-free runner selects a linear probe policy by cross-entropy-method
+search on downstream recovery, selectivity, reopenability, probe cost, and
+anti-cheat controls. The training loss does not consume hand-policy labels,
+teacher actions, or teacher probabilities. On held-out seeds,
+`teacher_free_reward_policy` passes C1-C6 plus T1/N1: final affected MAE 0.095,
+recovery rate 1.000, first-shift selectivity 12.500, second-shift reopenability
+11.312, and 22.0 probes. Stale-signal recovery is 0.000, wrong-signal
+selectivity is 0.000, suppressed-signal final MAE is 0.464, and matched random
+at the same budget reaches selectivity 0.833.
+
 ## Artifacts
 
 - Local-only raw rows: `artifacts/world_responds/suite_c_reengagement_rows.jsonl`
@@ -63,6 +82,9 @@ the same budget reaches selectivity 0.969.
 - Result report: `experiments/world_responds/results/suite_c_reengagement_2026_07_06.md`
 - Learned-transfer summary: `experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.json`
 - Learned-transfer report: `experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md`
+- Teacher-free rows: `experiments/world_responds/results/suite_c_teacher_free_inquiry_rows_2026_07_06.jsonl`
+- Teacher-free summary: `experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.json`
+- Teacher-free report: `experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.md`
 - Paper: `papers/habituated_reengagement/suite_c_reengagement_under_world_change.md`
 - Learned-transfer paper: `papers/habituated_reengagement/suite_c_neural_probe_transfer.md`
 - Critical review: `docs/paper_reviews/suite_c_reengagement_under_world_change_critical_review.md`
@@ -70,4 +92,7 @@ the same budget reaches selectivity 0.969.
 
 ## Non-Claims
 
-This benchmark does not certify consciousness, broad autonomy, biological validity, or open-world reliability. The learned-transfer layer is teacher-trained inside the same finite harness; reward-trained and open-agent transfer remain separate claims.
+This benchmark does not certify consciousness, broad autonomy, biological
+validity, or open-world reliability. The teacher-free layer is reward-trained
+inside the same finite NumPy harness; open-agent transfer remains a separate
+claim.

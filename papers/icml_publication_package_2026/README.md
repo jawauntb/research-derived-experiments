@@ -20,10 +20,11 @@ research arc from sparse memos into reviewer-facing paper packages.
      a structure-specific gate plus anti-cheat controls.
 
 3. `suite_c_teacher_free_inquiry/`
-   - Next required experiment package.
-   - Defines the reward/self-supervised Suite C run needed to move beyond the
-     current teacher-trained probe head.
-   - Status: preregistered design, not a positive result.
+   - Focused adaptive-inquiry experiment package.
+   - The reward/CEM Suite C run now moves beyond the current teacher-trained
+     probe head in the finite NumPy harness.
+   - Status: positive finite diagnostic result with public rows, summary JSON,
+     and report under `experiments/world_responds/results/`.
 
 4. `metric_stack_position_package/`
    - Broad synthesis/position track.
@@ -39,8 +40,8 @@ already venue-ready. It contains the comprehensive drafts, literature maps,
 methods, figure plans, appendices, validation notes, and next-experiment
 preregistration needed to move from sparse memos to venue-facing submissions.
 The main remaining empirical gap is row-level statistical artifacts for
-structure-compatible confidence intervals and a completed teacher-free Suite C
-run.
+structure-compatible confidence intervals, plus replication and open-agent
+transfer beyond the completed finite teacher-free Suite C run.
 
 ## Validation Run
 
@@ -74,5 +75,6 @@ Do claim, when backed by the cited source artifacts:
 - finite structured OOD model-selection evidence;
 - proxy-resistant finite-agent benchmark methodology;
 - Suite C controlled re-engagement evidence;
+- Suite C teacher-free finite reward-search evidence;
 - Suite D/E commitment-surface evidence;
-- a clear preregistered next step for teacher-free inquiry.
+- a clear next step for replication and open-agent inquiry transfer.
