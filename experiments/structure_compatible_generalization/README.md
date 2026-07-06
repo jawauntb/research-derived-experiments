@@ -128,3 +128,25 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
   --artifacts-only \
   --artifact-input artifacts/structure_compatible_generalization/semantic_retrieval_transfer.json
 ```
+
+Phase-six semantic selection-control sweep:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/structure_compatible_generalization/modal_semantic_selection_control.py \
+  --encoder-keys all_minilm_l6_v2,bge_small_en_v1_5 \
+  --thresholds 0.50,0.56,0.62,0.68,0.74 \
+  --n-zoos 12 --configs-per-zoo 12 --budget-usd 30 \
+  --out artifacts/structure_compatible_generalization/semantic_selection_control.json
+```
+
+Generate phase-six report and descriptive paper artifacts:
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+  uvx --python 3.12 --from modal modal run \
+  experiments/structure_compatible_generalization/modal_semantic_selection_control.py \
+  --artifacts-only \
+  --artifact-input artifacts/structure_compatible_generalization/semantic_selection_control.json
+```

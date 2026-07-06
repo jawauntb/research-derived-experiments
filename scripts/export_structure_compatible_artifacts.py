@@ -36,6 +36,10 @@ def paper_pdfs() -> list[Path]:
             "papers/structure_compatible_generalization/"
             "semantic_retrieval_transfer.pdf"
         ),
+        Path(
+            "papers/structure_compatible_generalization/"
+            "semantic_selection_control.pdf"
+        ),
     ]
 
 
@@ -104,6 +108,18 @@ def source_files(*, include_supporting: bool) -> list[Path]:
             Path(
                 "experiments/structure_compatible_generalization/results/"
                 "semantic_retrieval_transfer_2026_07_06.md"
+            ),
+            Path(
+                "papers/structure_compatible_generalization/"
+                "semantic_selection_control_preregistration.md"
+            ),
+            Path(
+                "papers/structure_compatible_generalization/"
+                "semantic_selection_control.md"
+            ),
+            Path(
+                "experiments/structure_compatible_generalization/results/"
+                "semantic_selection_control_2026_07_06.md"
             ),
         ]
     )

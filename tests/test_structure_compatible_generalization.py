@@ -43,6 +43,11 @@ from experiments.structure_compatible_generalization.semantic_retrieval_transfer
     true_orbit_pairs,
     wrong_cross_label_pairs,
 )
+from experiments.structure_compatible_generalization.semantic_selection_control import (
+    run_fixture_selection_control_sweep,
+    selection_records,
+    summarize_selection_records,
+)
 from experiments.structure_compatible_generalization.template_language_domain import (
     default_min_support,
     exact_language_rows,
@@ -472,3 +477,80 @@ def test_tiny_semantic_retrieval_fixture_sweep_emits_rows() -> None:
         assert 0.0 <= row.compatibility_true <= 1.0
         assert 0.0 <= row.compatibility_wrong <= 1.0
         assert row.compatibility_discovered is not None
+
+
+def test_semantic_selection_records_choose_within_id_equivalent_zoo() -> None:
+    rows = [
+        DiagnosticRow(
+            domain="semantic_retrieval_frozen_encoder",
+            model_id="shortcut",
+            train_accuracy=1.0,
+            id_validation_accuracy=1.0,
+            ood_accuracy=0.0,
+            compatibility_true=0.1,
+            compatibility_wrong=1.0,
+            compatibility_discovered=0.1,
+            metadata={
+                "selection_zoo": "fixture:t0:0.62:z00",
+                "encoder_key": "fixture",
+                "config": {"discovered_threshold": 0.62},
+            },
+        ),
+        DiagnosticRow(
+            domain="semantic_retrieval_frozen_encoder",
+            model_id="rule",
+            train_accuracy=1.0,
+            id_validation_accuracy=0.99,
+            ood_accuracy=1.0,
+            compatibility_true=1.0,
+            compatibility_wrong=0.0,
+            compatibility_discovered=1.0,
+            metadata={
+                "selection_zoo": "fixture:t0:0.62:z00",
+                "encoder_key": "fixture",
+                "config": {"discovered_threshold": 0.62},
+            },
+        ),
+        DiagnosticRow(
+            domain="semantic_retrieval_frozen_encoder",
+            model_id="bad-train",
+            train_accuracy=0.3,
+            id_validation_accuracy=1.0,
+            ood_accuracy=1.0,
+            compatibility_true=1.0,
+            compatibility_wrong=1.0,
+            compatibility_discovered=1.0,
+            metadata={
+                "selection_zoo": "fixture:t0:0.62:z00",
+                "encoder_key": "fixture",
+                "config": {"discovered_threshold": 0.62},
+            },
+        ),
+    ]
+
+    records = selection_records(rows, min_candidates=2)
+    by_selector = {record.selector: record for record in records}
+
+    assert by_selector["compatibility_discovered"].selected_ood == 1.0
+    assert by_selector["compatibility_true"].selected_ood == 1.0
+    assert by_selector["compatibility_wrong"].selected_ood == 0.0
+    assert by_selector["id_validation_accuracy"].selected_ood == 0.0
+
+
+def test_tiny_semantic_selection_fixture_sweep_emits_summary() -> None:
+    rows = run_fixture_selection_control_sweep(
+        thresholds=(0.50, 0.62),
+        n_zoos=2,
+        configs_per_zoo=8,
+        base_seed=97531,
+    )
+    records = selection_records(rows, train_floor=0.0, id_band=1.0, min_candidates=2)
+    summary = summarize_selection_records(records)
+
+    assert len(rows) == 32
+    assert records
+    assert {row.domain for row in rows} == {"semantic_retrieval_frozen_encoder"}
+    assert "accepted" in summary["gates"]
+    assert {"compatibility_discovered", "id_validation_accuracy", "random_candidate"} <= {
+        item["selector"] for item in summary["by_selector"]
+    }
