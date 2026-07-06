@@ -32,6 +32,8 @@ A **64% total MAE reduction**, and the variance-induced catastrophic seed-4242 f
 
 > In a minimal two-variable homeostatic bandit, scale-normalized current-replay V_probe targets restore vector attribution to near-oracle quality and cure Paper 20B's seed-variance collapse. The agent's per-dimension first-order self attribution is now stable across seeds. Whether autonomous probe selection adds value beyond matched-volume random anchoring remains undecided in the current setup: with warmup + factorized training, the system converges before probe selectivity has anything to do.
 
+**Architecture law.** Normalize uncertainty before using it to allocate intervention. Paper 20B showed that raw residual units make a vector agent inquire mostly along the largest-scale dimension. Paper 21A shows that per-dimension scale normalization restores stable multi-valence attribution. The simple change is not a larger network or a longer run: put the probe targets and thresholds into comparable units before the agent decides where to spend null actions. For long-horizon agents, this is the difference between memory/planning systems that allocate attention by actual reducible uncertainty and systems that allocate attention by whatever metric has the largest numeric range.
+
 ## 1. Background
 
 Paper 20B's §5 identified the scale-asymmetric calibration as the program's fourth same-class uncertainty failure:
@@ -218,6 +220,18 @@ Modified for the actual outcome: **G14 cannot be evaluated because probes don't 
 - `fig3_dim_calibration.png`: per-bucket V_probe vs oracle uncertainty for E and D, with P20B baseline scatter overlaid. The asymmetric anti-calibration P20B showed (D Spearman = −0.41) is no longer visible.
 - `fig4_total_mae.png`: total MAE across all 10 conditions. Oracle source 0.027; headline 0.129; matched-random 0.093 — all in a tight band.
 
+<div style="page-break-before: always;"></div>
+
+![Figure 1. Per-dimension predictions after scale normalization.](figures/fig1_per_dim_predictions.png)
+
+![Figure 2. Target × threshold factorial.](figures/fig2_factorial.png)
+
+<div style="page-break-before: always;"></div>
+
+![Figure 3. Dimension-wise V_probe calibration.](figures/fig3_dim_calibration.png)
+
+![Figure 4. Total MAE by condition.](figures/fig4_total_mae.png)
+
 ## 5. Discussion
 
 ### 5.1 What's solved, precisely
@@ -264,6 +278,16 @@ What's missing from the current setup is a measurement of whether the *path thro
 In sense-of-agency terms, Paper 19 established that a minimal agent can self-discover when to make identifying interventions (scalar). Paper 20B showed the mechanism doesn't compose cleanly to vector concern. Paper 21A shows the failure was scale, not principle: with proper scale normalization, the agent maintains *vector* first-order self attribution stably. The agent's body has two dimensions; the agent learns to attribute action effects on both dimensions correctly. This is closer to a multi-dimensional comparator model than to scalar drive.
 
 The Vervaeke "knowing when not to act" picture remains operational but partially vestigial at eval: by the time the model has converged, the agent doesn't need to probe. This is consistent with the relevance-realization picture — relevance is local in time, and once relevant uncertainty is reduced, the realization no longer fires.
+
+### 5.7 Architecture law: normalized inquiry budgets
+
+The positive architecture lesson is:
+
+> Normalize uncertainty channels before allocating scarce inquiry.
+
+That rule generalizes cleanly. In a long-horizon agent, memory retrieval scores, planner disagreement, tool-error estimates, safety monitors, and world-model residuals will usually be in different units. A shared action gate that consumes those raw numbers will not behave like a principled meta-controller; it will behave like an accidental unit selector. Paper 21A gives a minimal empirical example where the fix is simple and strong: variance-normalize the targets or thresholds, and the seed-level vector attribution collapse disappears.
+
+The result is also bounded. Scale normalization improves attribution stability, but it does not by itself prove that learned probe selection beats random volume in an easy environment that converges to near-oracle. The next major contribution requires a setting where uncertainty can return after apparent convergence, which is exactly why Paper 22 and Paper 23A move into action-correlated and nonstationary worlds.
 
 ## 6. Limitations
 
