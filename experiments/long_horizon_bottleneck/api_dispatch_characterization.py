@@ -331,13 +331,14 @@ def manifest_from_cases(
         "models": models,
         "base_seed": base_seed,
         "n_cases": len(cases),
-        "n_requests": total_request_count(cases),
+        "n_requests": total_request_count(cases) * len(models),
         "max_output_tokens": max_output_tokens,
         "case_types": sorted({case.case_type for case in cases}),
         "stress_cases": sorted({case.stress_case for case in cases}),
+        "critical_slots": sorted({case.critical_slot for case in cases}),
         "n_slots_values": sorted({case.n_slots for case in cases}),
         "slot_gap_values": sorted({case.slot_gap for case in cases}),
-        "expected_max_output_tokens": total_request_count(cases) * max_output_tokens,
+        "expected_max_output_tokens": total_request_count(cases) * len(models) * max_output_tokens,
     }
 
 
@@ -354,6 +355,7 @@ def manifest_from_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "max_output_tokens": None,
         "case_types": sorted({str(row["case_type"]) for row in rows}),
         "stress_cases": sorted({str(row["stress_case"]) for row in rows}),
+        "critical_slots": sorted({int(row["critical_slot"]) for row in rows}),
         "n_slots_values": sorted({int(row["n_slots"]) for row in rows}),
         "slot_gap_values": sorted({int(row["slot_gap"]) for row in rows}),
     }
@@ -361,6 +363,69 @@ def manifest_from_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
 
 def total_request_count(cases: list[DispatchCharacterizationCase]) -> int:
     return sum(case.request_count for case in cases)
+
+
+def summarize_dispatch_robustness(summary: dict[str, Any]) -> dict[str, Any]:
+    """Classify a multi-cell dispatch characterization as a robustness result."""
+
+    cells = list(summary["cells"].values())
+    complete_cells = [cell for cell in cells if cell["complete"]]
+    controls_passing_cells = [cell for cell in complete_cells if cell["controls_pass"]]
+    original_failure_cells = [cell for cell in controls_passing_cells if not cell["original_pass"]]
+    localized_failure_cells = [cell for cell in original_failure_cells if cell["localized"]]
+    unresolved_failure_cells = [cell for cell in original_failure_cells if not cell["localized"]]
+    not_reproduced_cells = [cell for cell in controls_passing_cells if cell["original_pass"]]
+    failure_rate = (
+        len(original_failure_cells) / len(controls_passing_cells)
+        if controls_passing_cells
+        else None
+    )
+    if len(controls_passing_cells) != len(cells):
+        outcome = "inconclusive"
+    elif not original_failure_cells:
+        outcome = "failure_not_reproduced"
+    elif unresolved_failure_cells:
+        outcome = "reproduced_unresolved"
+    elif failure_rate == 1.0:
+        outcome = "stable_reproduced_localized"
+    elif failure_rate is not None and failure_rate >= 0.5:
+        outcome = "broad_reproduced_localized"
+    else:
+        outcome = "sparse_reproduced_localized"
+
+    by_stress: dict[str, dict[str, Any]] = {}
+    for cell in cells:
+        stress = str(cell["stress_case"])
+        bucket = by_stress.setdefault(
+            stress,
+            {
+                "cells": 0,
+                "controls_passing_cells": 0,
+                "original_failure_cells": 0,
+                "localized_failure_cells": 0,
+            },
+        )
+        bucket["cells"] += 1
+        if cell["controls_pass"]:
+            bucket["controls_passing_cells"] += 1
+        if cell["controls_pass"] and not cell["original_pass"]:
+            bucket["original_failure_cells"] += 1
+        if cell["localized"]:
+            bucket["localized_failure_cells"] += 1
+
+    return {
+        "kind": "dispatch characterization robustness",
+        "outcome": outcome,
+        "total_cells": len(cells),
+        "complete_cells": len(complete_cells),
+        "controls_passing_cells": len(controls_passing_cells),
+        "original_failure_cells": len(original_failure_cells),
+        "localized_failure_cells": len(localized_failure_cells),
+        "unresolved_failure_cells": len(unresolved_failure_cells),
+        "not_reproduced_cells": len(not_reproduced_cells),
+        "original_failure_cell_rate": failure_rate,
+        "by_stress": dict(sorted(by_stress.items())),
+    }
 
 
 def render_dispatch_characterization_markdown(
@@ -371,6 +436,7 @@ def render_dispatch_characterization_markdown(
 ) -> str:
     manifest = payload.get("manifest", {})
     summary = payload["summary"]
+    robustness = payload.get("robustness")
     report_date = report_date or date.today().isoformat()
     lines = [
         f"# {title}",
@@ -392,16 +458,43 @@ def render_dispatch_characterization_markdown(
             f"{summary['decision']['unresolved_cells']}."
         ),
         f"Original dispatch failure not reproduced cells: {summary['decision']['not_reproduced_cells']}.",
-        "",
-        "## Diagnostic Matrix",
-        "",
-        "| Stress | Original | Neutral wording | Copy-assisted | Repair-hinted | Diagnosis |",
-        "|---|---|---|---|---|---|",
     ]
-    for cell in sorted(summary["cells"].values(), key=lambda item: item["stress_case"]):
+    if robustness:
+        rate = robustness["original_failure_cell_rate"]
+        rate_text = "n/a" if rate is None else f"{rate:.3f}"
+        failure_cells = [
+            f"{cell['stress_case']} slot {cell['critical_slot']}"
+            for cell in summary["cells"].values()
+            if cell["controls_pass"] and not cell["original_pass"]
+        ]
+        lines.extend(
+            [
+                f"Robustness outcome: `{robustness['outcome']}`.",
+                (
+                    "Original-failure cells: "
+                    f"{robustness['original_failure_cells']}/{robustness['controls_passing_cells']} "
+                    f"(rate {rate_text})."
+                ),
+                f"Gate: reproduced original-failure cells: {', '.join(failure_cells) or 'none'}.",
+            ]
+        )
+    lines.extend(
+        [
+            "",
+            "## Diagnostic Matrix",
+            "",
+            "| Stress | Critical slot | Original | Neutral wording | Copy-assisted | Repair-hinted | Diagnosis |",
+            "|---|---:|---|---|---|---|---|",
+        ]
+    )
+    for cell in sorted(
+        summary["cells"].values(),
+        key=lambda item: (item["stress_case"], item["critical_slot"]),
+    ):
         lines.append(
-            "| {stress} | {original} | {wording} | {copy} | {repair} | {diagnosis} |".format(
+            "| {stress} | {slot} | {original} | {wording} | {copy} | {repair} | {diagnosis} |".format(
                 stress=cell["stress_case"],
+                slot=cell["critical_slot"],
                 original=_pass_label(cell["original_pass"]),
                 wording=_pass_label(cell["wording_neutral_pass"]),
                 copy=_pass_label(cell["copy_assisted_pass"]),
@@ -415,20 +508,22 @@ def render_dispatch_characterization_markdown(
             "",
             "## Phase Metrics",
             "",
-            "| Stress | Variant | First action | Repair-after-error | Success no-op | Failed gates |",
-            "|---|---|---:|---:|---:|---|",
+            "| Stress | Critical slot | Variant | First action | Repair-after-error | Success no-op | Failed gates |",
+            "|---|---:|---|---:|---:|---:|---|",
         ]
     )
     for key, group in sorted(summary["groups"].items()):
         parts = key.split("/")
         stress = parts[1]
         case_type = parts[4]
+        critical_slot = parts[-1].removeprefix("slot")
         if case_type not in DISPATCH_CHARACTERIZATION_VARIANTS:
             continue
         metrics = group["metrics"]
         lines.append(
-            "| {stress} | {case_type} | {first:.3f} | {repair:.3f} | {noop:.3f} | {failed} |".format(
+            "| {stress} | {slot} | {case_type} | {first:.3f} | {repair:.3f} | {noop:.3f} | {failed} |".format(
                 stress=stress,
+                slot=critical_slot,
                 case_type=case_type,
                 first=_metric_or_zero(metrics.get("first_action_accuracy")),
                 repair=_metric_or_zero(metrics.get("repair_failed_action_accuracy")),
@@ -447,7 +542,7 @@ def render_dispatch_characterization_markdown(
             "- Transported evidence: exact JSON action parser, no-op controls, short-copy controls, failed-repair and success-no-op phases, and the previously failed stress settings.",
             "- Rejected alternatives: the diagnostic does not treat black-box behavior as hidden-state localization and does not add broader provider claims.",
             "- Residual finding: the diagnosis column identifies whether the reproduced failure is relieved by wording, value visibility, or repair hints.",
-            "- Allowed claim: black-box behavioral failure localization for the tested OpenAI model and stress cells only.",
+            "- Allowed claim: black-box behavioral robustness/localization for the tested OpenAI model, slots, and stress cells only.",
             "",
             "## Local Artifacts",
             "",
@@ -644,6 +739,7 @@ def _group_key(row: dict[str, Any]) -> str:
             str(row["case_type"]),
             f"{row['n_slots']}slot",
             f"gap{row['slot_gap']}",
+            f"slot{row['critical_slot']}",
         ]
     )
 
@@ -657,6 +753,7 @@ def _cell_key(row: dict[str, Any]) -> str:
             str(row["model"]),
             f"{row['n_slots']}slot",
             f"gap{row['slot_gap']}",
+            f"slot{row['critical_slot']}",
         ]
     )
 
