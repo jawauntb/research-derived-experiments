@@ -108,25 +108,36 @@ Verification-only findings (post-hoc):
 2. LaBraM integration research agent (see
    `coherence-testbench/docs/labram_integration.md`) — confirmed
    MIT-licensed, weights public, ~4 h to first result.
-3. LaBraM EEG rescue attempt (`phase0.eeg.labram.v1`, same task as the
-   killed EEG bench, encoder swapped to a frozen LaBraM-Base). Wired
-   up on Modal as `coherence-testbench-labram`. **Did NOT complete.**
-   Modal image build repeatedly failed with `libcudart.so.13`
-   linkage — braindecode's `filter` module imports torchaudio at
-   load time, and torchaudio's CPU wheel via Modal's `run_commands`
-   still resolved a CUDA-linked variant. Five variants tried:
-   - CPU-tagged pip_install (`torch==2.7.1+cpu`) — libcudart
-   - safetensors pin added — libcudart persisted
-   - Manual `hf_hub_download` + `torch.load` bypassing braindecode's
-     `from_pretrained` — libcudart persisted
-   - `run_commands` explicit uninstall + torch 2.4.1 CPU install —
-     image build failed
-   - `run_commands` with torch 2.5.1 CPU install — image build failed
-   The pre-registration `phase0.eeg.labram.v1` is on file, the code
-   is in the repo, but no LaBraM verdict tonight. This is a Modal
-   image-spec fight — a fresh look tomorrow, or a different foundation
-   model (CBraMod, EEGPT), should unstick it in an hour or two.
-   **Not load-bearing on the eyetrack GO.**
+3. LaBraM EEG rescue attempt (`phase0.eeg.labram.v1`). Wired up as
+   `coherence-testbench-labram`. **Did NOT complete.** Eight+
+   variants tried across two families of failures:
+
+   Image-family failures (5x):
+   - `debian_slim` + CPU-tagged pip_install → libcudart
+   - `debian_slim` + safetensors pin → libcudart
+   - `debian_slim` + manual `hf_hub_download` → libcudart
+   - `debian_slim` + `run_commands` uninstall + torch 2.4.1 CPU →
+     image build failed (dep resolver)
+   - `debian_slim` + `run_commands` + torch 2.5.1 CPU → build failed
+
+   Code-family failures on the pytorch/pytorch base (3x):
+   - `Image.from_registry("pytorch/pytorch:2.5.1-cuda12.4")` +
+     loose pins → image builds, but braindecode's
+     `Labram(n_chans=64, n_times=800)` raises
+     `ValueError("n_outputs not specified.")`
+   - Add `n_outputs=2` kwarg → same error; the kwarg is silently
+     dropped by braindecode's `wrapped` decorator
+   - Switch to `Labram.from_pretrained(repo_id)` → safetensors
+     `NameError` even with safetensors in pip_install (huggingface_hub
+     module-level try-import + torch version mismatch)
+
+   The pre-registration `phase0.eeg.labram.v1` is on file, the shard
+   code is in the repo, but no LaBraM verdict. Real fix requires
+   either (a) implementing a minimal LaBraM loader against the
+   upstream repo's weights + architecture (bypasses braindecode
+   entirely), or (b) switching to CBraMod / EEGPT / a different
+   commercially-friendly foundation model. Both are fresh-eyes work.
+   **Not load-bearing on the eyetrack result.**
 
 ## What I did NOT do
 

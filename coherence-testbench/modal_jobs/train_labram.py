@@ -22,29 +22,35 @@ from typing import Any
 modal = importlib.import_module("modal")
 
 
+# Start from the official PyTorch CPU image — torch + torchaudio are
+# pre-installed against a CPU-only build, so no libcudart is ever
+# referenced by braindecode's filter module. This is a cleaner base than
+# debian_slim + pip-installed torch, which repeatedly resolved
+# CUDA-linked wheels for torchaudio overnight.
 IMAGE = (
-    modal.Image.debian_slim(python_version="3.12")
+    modal.Image.from_registry(
+        "pytorch/pytorch:2.5.1-cuda12.4-cudnn9-runtime",
+        add_python="3.11",
+    )
     .apt_install("libgl1", "libglib2.0-0")
-    # Force a clean CPU torch install BEFORE anything else can pull a
-    # CUDA-linked wheel as a transitive dep. Braindecode's filter module
-    # imports torchaudio at load time, which triggers libcudart loading if
-    # torchaudio was built against CUDA.
+    # Ensure a CPU torch/torchaudio pair on top of the base's stack.
+    # The base has CUDA torch by default; we override with CPU wheels.
     .run_commands(
         "pip uninstall -y torch torchvision torchaudio 2>/dev/null || true",
         "pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu "
         "torch==2.5.1 torchaudio==2.5.1",
     )
     .pip_install(
-        "numpy>=1.26,<2.3",
-        "scipy>=1.11,<1.14",
-        "scikit-learn>=1.5",
-        "mne>=1.7,<1.10",
-        "pyEDFlib>=0.1.36",
-        "braindecode>=0.9",
-        "huggingface_hub>=0.24",
-        "einops>=0.7",
-        "pyyaml>=6.0",
-        "pydantic>=2.6",
+        "braindecode",
+        "mne",
+        "pyEDFlib",
+        "huggingface_hub",
+        "safetensors",
+        "einops",
+        "pyyaml",
+        "pydantic",
+        "scikit-learn",
+        # numpy + scipy come with the base torch install; don't repin.
     )
     .add_local_dir(
         local_path=str(Path(__file__).resolve().parent.parent / "src"),
@@ -103,43 +109,14 @@ def run_labram_shard(arg: dict[str, Any]) -> dict[str, Any]:
 
     win = int(epoch_s * dst_sfreq)   # 800 samples
 
-    # Load LaBraM-Base weights manually to bypass HF from_pretrained's
-    # fragile safetensors detection path. LaBraM-Base architecture is
-    # constructed with default kwargs and loaded from the .pth checkpoint
-    # shipped in the braindecode HF mirror.
+    # Load LaBraM-Base via braindecode's from_pretrained. Now that the
+    # image is on the pytorch base and pip resolved correctly, the
+    # safetensors path should work end-to-end.
     from braindecode.models import Labram
-    from huggingface_hub import hf_hub_download
 
     repo_id = config["decoders"]["encoder"]["hf_repo"]
-    # Try a few candidate weight files — the repo has moved between .safetensors
-    # and .pth across braindecode versions.
-    weight_candidates = [
-        "model.safetensors",
-        "pytorch_model.bin",
-        "labram-base.pth",
-        "labram_base.pth",
-    ]
-    weight_path: str | None = None
-    for name in weight_candidates:
-        try:
-            weight_path = hf_hub_download(repo_id, name)
-            break
-        except Exception:
-            continue
-    if weight_path is None:
-        raise RuntimeError(
-            f"Could not locate LaBraM weights in {repo_id}. "
-            f"Tried: {weight_candidates}"
-        )
-    encoder = Labram(n_chans=64, n_times=800)
-    if weight_path.endswith(".safetensors"):
-        from safetensors.torch import load_file as _safetensors_load
-        state = _safetensors_load(weight_path)
-    else:
-        state = torch.load(weight_path, map_location="cpu", weights_only=True)
-    missing, unexpected = encoder.load_state_dict(state, strict=False)
-    print(f"[exp{experiment}] LaBraM loaded; "
-          f"missing={len(missing)} unexpected={len(unexpected)}")
+    encoder = Labram.from_pretrained(repo_id)
+    print(f"[exp{experiment}] LaBraM loaded from {repo_id}")
     encoder = encoder.eval()
     for p in encoder.parameters():
         p.requires_grad = False
