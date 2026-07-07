@@ -1,0 +1,47 @@
+[project]
+name = "coherence-testbench"
+version = "0.0.1"
+description = "Phase-0 test-bench: prove cross-subject EEG decoding generalizes."
+readme = "README.md"
+requires-python = ">=3.11"
+
+dependencies = [
+    # Neuro I/O + preprocessing
+    "mne>=1.7",
+    "mne-bids>=0.15",
+    "pyEDFlib>=0.1.36",
+    # Cross-subject decoding
+    "braindecode>=0.8",
+    "pyriemann>=0.6",
+    "moabb>=1.0",
+    # Numerics + ML
+    "numpy>=1.26,<2.0",
+    "scipy>=1.11",
+    "scikit-learn>=1.4",
+    "torch>=2.5,<2.8",
+    # Config + data
+    "pydantic>=2.6",
+    "pyyaml>=6.0",
+    # Observability
+    "logfire>=0.30",
+    # Supabase corpus index (metadata only)
+    "supabase>=2.5",
+    # Download helpers
+    "requests>=2.32",
+    "tqdm>=4.66",
+]
+
+[project.optional-dependencies]
+modal = ["modal>=0.64"]
+dev = [
+    "ruff>=0.5",
+    "pytest>=8.0",
+    "ty>=0.0.1a5 ; python_version >= '3.11'",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

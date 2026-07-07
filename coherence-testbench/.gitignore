@@ -1,0 +1,13 @@
+# Venv (local dev only, 700+MB)
+.venv/
+
+# Smoke-test outputs; real run artifacts are committed intentionally when ready.
+artifacts/phase0_smoke/
+
+# Node/site build noise (site/.gitignore covers this too, kept for defense in depth)
+site/node_modules/
+
+# Python cache + editable-install metadata
+__pycache__/
+*.py[cod]
+*.egg-info/
