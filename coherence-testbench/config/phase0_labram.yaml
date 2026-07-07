@@ -1,0 +1,41 @@
+# Phase-0 EEG × LaBraM run config.
+
+kill_criterion: "config/kill_criterion_eeg_labram.yaml"
+
+data:
+  dataset: "bbbd"
+  cache_dir_env: "BBBD_CACHE_DIR"
+  experiments: [2, 3, 4]
+  subject_limit: null
+
+preprocess:
+  # BBBD is 128 Hz, LaBraM expects 200 Hz.
+  input_sfreq_hz: 128
+  target_sfreq_hz: 200
+  highpass_hz: 0.1
+  lowpass_hz: 75.0
+  notch_hz: [50.0]              # LaBraM paper default; BBBD was collected under mains 50/60 varies
+  amplitude_scale: 1.0e-4       # µV → 0.1 mV (i.e. divide µV by 100 = multiply V by 1e-4 * 1e6)
+  epoch_seconds: 4.0
+  epoch_overlap: 0.0            # LaBraM patches at exactly 200 samples, no overlap
+
+decoders:
+  encoder:
+    kind: "labram_base"
+    hf_repo: "braindecode/labram-pretrained"
+    freeze: true
+  head:
+    kind: "mlp"
+    hidden: 64
+    dropout: 0.2
+    epochs: 40
+    lr: 1.0e-3
+    batch_size: 64
+
+evaluate:
+  scheme: "leave_subjects_out"
+  n_lso_seeds: 5
+  train_subject_sweep: [8, 16, 24, 32]
+
+output:
+  root: "artifacts/phase0_labram"

@@ -1,0 +1,91 @@
+# =============================================================================
+# Supplementary pre-registration — EEG binary attention decoded with a
+# frozen LaBraM-Base foundation-model encoder. Committed BEFORE the first
+# LaBraM run touches BBBD data on 2026-07-07.
+#
+# Relationship to earlier pre-registrations
+# -----------------------------------------
+# * `kill_criterion.yaml` (phase0.v1) tested EEG binary attention with a
+#   Riemannian + adversarial + hand-baked SSL decoder → `KILL`.
+# * The KILL under phase0.v1 is FINAL for that decoder architecture. This
+#   file does NOT reopen phase0.v1. Instead, it registers a fresh gate
+#   for a distinct architectural bet: does a real EEG foundation model
+#   (LaBraM-Base, 5.8M params, ICLR 2024, MIT license) rescue cross-
+#   subject decoding on the same task?
+# * Thresholds and metrics are identical to phase0.v1 to keep the
+#   comparison honest. Only the decoder is swapped.
+#
+# Why this deserves its own pre-reg
+# ---------------------------------
+# The phase0.v1 pre-reg's allowed-rerun list named "SSL pretrain" only
+# in the sense of masked-feature reconstruction on tangent features
+# (which we ran). Substituting a foundation-model encoder is a bigger
+# architectural swap than that. Registering separately avoids reading
+# the old pre-reg as broader than it was.
+#
+version: "phase0.eeg.labram.v1"
+committed_at: "2026-07-07"
+committed_by: "jawaun"
+
+primary_task:
+  name: "attention_binary_lso_eeg_labram"
+  description: >
+    Same primary task as phase0.v1: BBBD exp 2/3/4 ses-01 (attentive)
+    vs ses-02 (distracted), leave-subjects-out over the same subjects,
+    same balanced-accuracy + bits/sec metrics. Only the decoder is
+    swapped: frozen LaBraM-Base encoder → mean-pool epoch embeddings →
+    2-layer MLP head trained with binary cross-entropy.
+  chance_level: 0.5
+
+thresholds:
+  # Identical to phase0.v1 so the LaBraM run's outcome is directly
+  # comparable to the earlier KILL.
+  go:
+    lso_balanced_accuracy_min: 0.60
+    bits_per_second_min: 0.05
+    generalization_gap_max: 0.15
+    stability:
+      n_seeds: 5
+      seed_min_bacc: 0.55
+  kill:
+    lso_balanced_accuracy_max: 0.55
+    bits_per_second_max: 0.01
+
+allowed_rerun_knobs:
+  # If INCONCLUSIVE: named recovery paths. Any other change is
+  # goalpost movement.
+  - name: "unfreeze_last_block"
+    description: >
+      Unfreeze the last transformer block and train it with a small
+      learning rate (5e-5) alongside the head. Everything else stays.
+  - name: "temporal_pool"
+    description: >
+      Swap mean-pool over epoch embeddings for CLS-token-only pool.
+  - name: "adamw_hyperparams"
+    description: >
+      Vary the head's LR ∈ {1e-3, 3e-4} and epochs ∈ {30, 50}.
+
+confounds_to_control:
+  - id: "artifact_16hz_exp45"
+    description: >
+      Same 16 Hz artifact BBBD has on exp 4/5. If LaBraM's win depends
+      on the artifact, that's a false positive.
+    mitigation: "12-20 Hz band-zero ablation must still clear threshold"
+  - id: "hallucinated_fidelity"
+    description: prior-only baseline must NOT clear the threshold
+    mitigation: "structural: chance predictor"
+  - id: "subject_id_leak"
+    description: >
+      No z-score is fit at head-training time; LaBraM's own layer-norm
+      handles normalization. Structural pass.
+    mitigation: "structural via encoder's built-in normalization"
+
+reporting:
+  required_sections:
+    - "pre_registered_thresholds"
+    - "generalization_curve"
+    - "cross_vs_per_subject_gap"
+    - "bits_per_second_MI"
+    - "confound_ablations"
+    - "verdict"
+    - "comparison_to_phase0_v1_riemann_kill"
