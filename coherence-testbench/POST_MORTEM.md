@@ -1,6 +1,17 @@
-# Phase-0 post-mortem — 2026-07-06
+# Phase-0 post-mortem — 2026-07-06 (EEG) / 2026-07-07 (eyetrack Branch-D)
 
-**Verdict:** `KILL`.
+> **Update 2026-07-07:** Branch-D (eyetrack cross-subject on the same
+> BBBD task) has now been tested end-to-end with its own pre-registration
+> (`config/kill_criterion_eyetrack.yaml`, phase0.eyetrack.v1). Both a
+> baseline gen-1 and a pre-registered rerun-1 (SSL pretrain + more
+> compute + expanded sweep) returned **INCONCLUSIVE with positive
+> signal**: LSO cross-subject BA 66.5% at n=32 (well above the 58% GO
+> threshold), gap 11.3 pts (inside the 20-pt limit), clean ablations —
+> but bits/sec MI 0.024 falls short of the 0.030 GO bar. See
+> [MODALITY_COMPARISON.md](MODALITY_COMPARISON.md) for the head-to-head.
+> Phase 3 stays FROZEN.
+
+**Original EEG verdict (still stands):** `KILL`.
 
 The pre-registered kill-criterion in `config/kill_criterion.yaml` (SHA-256
 `247d8736dfb2a05a…`, committed 2026-07-06 by jawaun before any data touch)
