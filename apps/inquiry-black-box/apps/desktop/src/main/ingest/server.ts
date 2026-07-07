@@ -1,0 +1,321 @@
+import {
+  createEvent,
+  isEventType,
+  type EventEnvelope,
+  type EventType,
+  type JsonObject,
+  type PrivacyClass,
+  type RetentionPolicy,
+} from "@inquiry/schema";
+import type { InquiryDatabase } from "../db";
+import { verifyPairingToken } from "../security/pairing";
+import type { SessionController } from "./session";
+
+export type IngestServerOptions = {
+  allowedOrigins?: readonly string[];
+  database: InquiryDatabase;
+  pairingSecret: string;
+  sessions: SessionController;
+  nowMs?: () => number;
+  sourceVersion?: string;
+};
+
+export type StartIngestServerOptions = IngestServerOptions & {
+  hostname?: string;
+  port?: number;
+};
+
+export type StartedIngestServer = {
+  url: string;
+  port: number;
+  stop: () => void;
+};
+
+type IngestEventBody = {
+  event_id?: unknown;
+  session_id?: unknown;
+  source?: unknown;
+  source_version?: unknown;
+  captured_at?: unknown;
+  monotonic_ms?: unknown;
+  timezone?: unknown;
+  event_type?: unknown;
+  payload?: unknown;
+  privacy_class?: unknown;
+  retention_policy?: unknown;
+  confidence?: unknown;
+  quality_flags?: unknown;
+};
+
+const defaultAllowedOrigins = ["chrome-extension://*"] as const;
+const forbiddenPayloadKeys = new Set(["rawFrame", "frameImage", "imageBlob", "frameBlob", "pixels"]);
+const ingestPaths = new Set(["/v1/events", "/v1/extension/events"]);
+
+export function createIngestRequestHandler(options: IngestServerOptions): (request: Request) => Promise<Response> {
+  const allowedOrigins = options.allowedOrigins ?? defaultAllowedOrigins;
+  const sourceVersion = options.sourceVersion ?? "extension@0.1.0";
+  const nowMs = options.nowMs ?? (() => Date.now());
+
+  return async function handleIngestRequest(request: Request): Promise<Response> {
+    const origin = request.headers.get("origin");
+
+    if (request.method === "OPTIONS") {
+      return jsonResponse({ ok: true }, 204, origin);
+    }
+
+    const url = new URL(request.url);
+    if (url.pathname === "/health") {
+      return jsonResponse({ ok: true }, 200, origin);
+    }
+
+    if (!ingestPaths.has(url.pathname)) {
+      return jsonResponse({ error: "not found" }, 404, origin);
+    }
+
+    if (request.method !== "POST") {
+      return jsonResponse({ error: "method not allowed" }, 405, origin);
+    }
+
+    if (!origin || !isAllowedOrigin(origin, allowedOrigins)) {
+      return jsonResponse({ error: "origin not allowed" }, 403, origin);
+    }
+
+    const token = pairingTokenFromHeaders(request.headers);
+    if (!token) {
+      return jsonResponse({ error: "missing pairing token" }, 401, origin);
+    }
+
+    const tokenDecision = verifyPairingToken({
+      secret: options.pairingSecret,
+      token,
+      nowMs: nowMs(),
+    });
+    if (!tokenDecision.valid) {
+      return jsonResponse({ error: tokenDecision.reason }, 401, origin);
+    }
+
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
+      return jsonResponse({ error: "request body must be JSON" }, 400, origin);
+    }
+
+    try {
+      const events = normalizeExtensionBody(body, {
+        sessions: options.sessions,
+        sourceVersion,
+      });
+      const appended = events.map((event) => options.sessions.appendActiveEvent(event));
+      return jsonResponse(
+        {
+          ok: true,
+          accepted: appended.length,
+          event_ids: appended.map((event) => event.event_id),
+        },
+        202,
+        origin,
+      );
+    } catch (error) {
+      return jsonResponse({ error: error instanceof Error ? error.message : "invalid event" }, 400, origin);
+    }
+  };
+}
+
+export function startIngestServer(options: StartIngestServerOptions): StartedIngestServer {
+  const hostname = options.hostname ?? "127.0.0.1";
+  const port = options.port ?? Number(process.env.INQUIRY_LOCAL_API_PORT ?? 39170);
+  const handler = createIngestRequestHandler(options);
+  const server = Bun.serve({
+    hostname,
+    port,
+    fetch: handler,
+  });
+
+  return {
+    url: `http://${hostname}:${server.port}`,
+    port: server.port ?? port,
+    stop: () => server.stop(true),
+  };
+}
+
+function normalizeExtensionBody(
+  value: unknown,
+  options: { sessions: SessionController; sourceVersion: string },
+): EventEnvelope[] {
+  if (!isRecord(value)) {
+    throw new Error("event body must be an object");
+  }
+
+  if (Array.isArray(value.events)) {
+    if (value.events.length === 0) {
+      throw new Error("events batch must not be empty");
+    }
+
+    if (value.session_id !== undefined && typeof value.session_id !== "string") {
+      throw new Error("batch session_id must be a string");
+    }
+
+    return value.events.map((event) =>
+      normalizeExtensionEvent(
+        {
+          ...(isRecord(event) ? event : {}),
+          session_id: isRecord(event) && event.session_id !== undefined ? event.session_id : value.session_id,
+        },
+        options,
+      ),
+    );
+  }
+
+  return [normalizeExtensionEvent(value, options)];
+}
+
+function normalizeExtensionEvent(
+  value: unknown,
+  options: { sessions: SessionController; sourceVersion: string },
+): EventEnvelope {
+  if (!isRecord(value)) {
+    throw new Error("event body must be an object");
+  }
+
+  const body = value as IngestEventBody;
+  const active = options.sessions.currentSession();
+  if (!active) {
+    throw new Error("no active session");
+  }
+  if (active.recording_state !== "recording") {
+    throw new Error(`session is ${active.recording_state}`);
+  }
+
+  if (body.session_id !== undefined && body.session_id !== active.session_id) {
+    throw new Error("event session does not match active session");
+  }
+
+  if (body.source !== undefined && body.source !== "browser") {
+    throw new Error("extension ingest accepts browser events only");
+  }
+
+  if (typeof body.event_type !== "string" || !isEventType(body.event_type) || !body.event_type.startsWith("browser.")) {
+    throw new Error("extension ingest accepts browser event types only");
+  }
+
+  if (typeof body.monotonic_ms !== "number") {
+    throw new Error("event.monotonic_ms must be a number");
+  }
+
+  if (!isRecord(body.payload)) {
+    throw new Error("event.payload must be an object");
+  }
+  assertNoUnsafePayload(body.payload);
+
+  const qualityFlags = body.quality_flags === undefined ? [] : body.quality_flags;
+  if (!Array.isArray(qualityFlags) || !qualityFlags.every((flag) => typeof flag === "string")) {
+    throw new Error("event.quality_flags must be a string array");
+  }
+
+  return createEvent({
+    ...(typeof body.event_id === "string" ? { event_id: body.event_id } : {}),
+    ...(typeof body.captured_at === "string" ? { captured_at: body.captured_at } : {}),
+    ...(typeof body.timezone === "string" ? { timezone: body.timezone } : {}),
+    session_id: active.session_id,
+    source: "browser",
+    source_version: typeof body.source_version === "string" ? body.source_version : options.sourceVersion,
+    monotonic_ms: body.monotonic_ms,
+    event_type: body.event_type as EventType,
+    confidence: typeof body.confidence === "number" ? body.confidence : 1,
+    quality_flags: qualityFlags,
+    payload: body.payload as JsonObject,
+    privacy_class: privacyClass(body.privacy_class),
+    retention_policy: retentionPolicy(body.retention_policy),
+  });
+}
+
+function pairingTokenFromHeaders(headers: Headers): string | null {
+  const explicit = headers.get("x-inquiry-pairing-token");
+  if (explicit) {
+    return explicit;
+  }
+
+  const authorization = headers.get("authorization");
+  if (!authorization) {
+    return null;
+  }
+
+  const [scheme, token] = authorization.split(" ");
+  if (scheme?.toLowerCase() !== "bearer" || !token) {
+    return null;
+  }
+
+  return token;
+}
+
+function isAllowedOrigin(origin: string, allowedOrigins: readonly string[]): boolean {
+  return allowedOrigins.some((allowed) => {
+    if (allowed === origin) {
+      return true;
+    }
+    if (allowed === "chrome-extension://*") {
+      return origin.startsWith("chrome-extension://");
+    }
+    return false;
+  });
+}
+
+function privacyClass(value: unknown): PrivacyClass {
+  if (value === undefined) {
+    return "local-derived";
+  }
+  if (value === "public" || value === "local-derived" || value === "redacted-sync" || value === "document-opt-in") {
+    return value;
+  }
+  throw new Error("event.privacy_class is not allowed for extension ingest");
+}
+
+function retentionPolicy(value: unknown): RetentionPolicy {
+  if (value === undefined) {
+    return "local-default";
+  }
+  if (value === "session-delete" || value === "local-default" || value === "expire-30d" || value === "cloud-redacted") {
+    return value;
+  }
+  throw new Error("event.retention_policy is not allowed for extension ingest");
+}
+
+function assertNoUnsafePayload(value: unknown, path = "payload"): void {
+  if (Array.isArray(value)) {
+    value.forEach((item, index) => assertNoUnsafePayload(item, `${path}[${index}]`));
+    return;
+  }
+
+  if (!isRecord(value)) {
+    return;
+  }
+
+  for (const [key, child] of Object.entries(value)) {
+    if (forbiddenPayloadKeys.has(key)) {
+      throw new Error(`event payload contains raw camera frame data at ${path}.${key}`);
+    }
+    assertNoUnsafePayload(child, `${path}.${key}`);
+  }
+}
+
+function jsonResponse(body: JsonObject, status: number, origin: string | null): Response {
+  const headers = new Headers({
+    "content-type": "application/json",
+  });
+  if (origin) {
+    headers.set("access-control-allow-origin", origin);
+    headers.set("access-control-allow-headers", "authorization, content-type, x-inquiry-pairing-token");
+    headers.set("access-control-allow-methods", "POST, OPTIONS");
+  }
+
+  if (status === 204) {
+    return new Response(null, { status, headers });
+  }
+
+  return new Response(JSON.stringify(body), { status, headers });
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}

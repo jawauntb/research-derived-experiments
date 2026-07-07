@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Inquiry Black Box",
+  "version": "0.1.0",
+  "description": "Local-first browser telemetry for Inquiry Black Box research sessions.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Inquiry Black Box"
+  },
+  "background": {
+    "service_worker": "dist/background/service-worker.js",
+    "type": "module"
+  },
+  "permissions": ["activeTab", "alarms", "storage"],
+  "host_permissions": ["http://localhost/*", "http://127.0.0.1/*"],
+  "optional_host_permissions": ["http://*/*", "https://*/*"],
+  "content_scripts": [
+    {
+      "matches": ["http://localhost/*", "http://127.0.0.1/*"],
+      "js": ["dist/content/index.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
