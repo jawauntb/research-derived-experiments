@@ -15,6 +15,9 @@ bun run test
 bun run test:e2e
 ```
 
+`bun run test:e2e` includes the local demo fixture loop and extension pairing
+smoke, so it works without Railway, Modal, Doppler, or model-provider keys.
+
 Packages:
 
 - `apps/desktop`: Electron-oriented local shell, ingest bridge, SQLite-facing
