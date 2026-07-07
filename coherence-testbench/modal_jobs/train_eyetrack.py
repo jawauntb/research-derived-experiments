@@ -139,6 +139,7 @@ def run_eyetrack_shard(arg: dict[str, Any]) -> dict[str, Any]:
     def factory():
         return CrossSubjectEyetrackDecoder(
             adversary_weight=float(config["decoders"]["target"]["adversary_weight"]),
+            ssl_pretrain=bool(config["decoders"]["target"].get("ssl_pretrain", False)),
             epochs=int(config["decoders"]["target"]["epochs"]),
             batch_size=int(config["decoders"]["target"]["batch_size"]),
             lr=float(config["decoders"]["target"]["lr"]),

@@ -93,6 +93,7 @@ class CrossSubjectEyetrackDecoder:
     ssl_pretrain: bool = False
     _scaler_: Any = field(default=None, init=False, repr=False)
     _model: Any = field(default=None, init=False, repr=False)
+    _pretrained_trunk_state_: Any = field(default=None, init=False, repr=False)
 
     def _fit_scaler(self, X: np.ndarray) -> np.ndarray:
         # Train-only z-score. Structural guarantee against
@@ -114,7 +115,52 @@ class CrossSubjectEyetrackDecoder:
         subj_train: np.ndarray,
     ) -> None:
         Z = self._fit_scaler(X_train)
+        if self.ssl_pretrain:
+            self._ssl_pretrain_trunk(Z)
         self._fit_classifier(Z, y_train, subj_train)
+
+    def _ssl_pretrain_trunk(self, feats: np.ndarray) -> None:
+        """Masked-feature reconstruction pretrain on train features only.
+
+        Same objective as the EEG side (cross_subject.py) — mask 20% of
+        the feature vector's dims and train a small autoencoder to
+        reconstruct. Learned trunk weights become the init for the
+        classifier's trunk. Non-load-bearing on rich EEG features; may
+        help more on eyetrack's small 11-D feature space where the
+        classifier could overfit."""
+        import torch
+        from torch import nn
+
+        torch.manual_seed(self.seed)
+        n, d = feats.shape
+        hidden = 64
+        trunk = nn.Sequential(
+            nn.Linear(d, hidden), nn.GELU(),
+            nn.Linear(hidden, hidden), nn.GELU(),
+        )
+        decoder = nn.Linear(hidden, d)
+        opt = torch.optim.Adam(
+            list(trunk.parameters()) + list(decoder.parameters()),
+            lr=self.lr,
+        )
+        mse = nn.MSELoss()
+        X_t = torch.from_numpy(feats).float()
+        pretrain_epochs = 30
+        mask_frac = 0.2
+        for _ in range(pretrain_epochs):
+            idx = torch.randperm(n)
+            for start in range(0, n, self.batch_size):
+                bi = idx[start:start + self.batch_size]
+                x = X_t[bi]
+                mask = (torch.rand_like(x) > mask_frac).float()
+                h = trunk(x * mask)
+                loss = mse(decoder(h), x)
+                opt.zero_grad()
+                loss.backward()
+                opt.step()
+        self._pretrained_trunk_state_ = {
+            k: v.clone().detach() for k, v in trunk.state_dict().items()
+        }
 
     def predict(self, X_test: np.ndarray) -> np.ndarray:
         Z = self._apply_scaler(X_test)
@@ -145,6 +191,12 @@ class CrossSubjectEyetrackDecoder:
             nn.Linear(d, hidden), nn.GELU(),
             nn.Linear(hidden, hidden), nn.GELU(),
         )
+        # Warm-start from SSL pretrain if it ran.
+        if self._pretrained_trunk_state_ is not None:
+            try:
+                trunk.load_state_dict(self._pretrained_trunk_state_)
+            except (RuntimeError, ValueError):
+                pass
         cls_head = nn.Linear(hidden, 2)
         subj_head = nn.Linear(hidden, n_subjects)
 
