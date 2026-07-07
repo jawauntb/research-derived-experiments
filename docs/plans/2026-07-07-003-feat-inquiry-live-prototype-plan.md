@@ -150,6 +150,52 @@ flowchart TB
 | C. Make it repeatable | U6 | Packaging and demo docs | A fresh developer can run the prototype from docs |
 | D. Make it expandable | U7-U8 | Cloud/Modal activation and research validation | Optional deploy/research tracks are ready without blocking local UX |
 
+### Parallelization Strategy
+
+The work can be parallelized, but the local prototype has one non-negotiable integration spine: U1 Electron shell enables U2 real extension pairing, U1+U2 enable U3 local demo, U3 anchors U4 heatmap, and U4 anchors U5 repair outcomes.
+Agents may start adjacent work from fixtures, but merges should respect that spine so runtime behavior does not drift.
+
+```mermaid
+flowchart TB
+  U1["U1 Electron shell"]
+  U2["U2 Extension pairing"]
+  U3["U3 Local demo loop"]
+  U4["U4 Heatmap"]
+  U5["U5 Repair loop"]
+  U6["U6 Packaging/runbook"]
+  U7["U7 Railway/Modal"]
+  U8["U8 Research validation"]
+
+  U1 --> U2 --> U3 --> U4 --> U5
+  U1 --> U3
+  U1 --> U6
+  U2 --> U6
+  U3 --> U6
+  U3 --> U7
+  U5 --> U7
+  U4 --> U8
+  U5 --> U8
+```
+
+| Workstream | Units | Can Start | Merge After | Collision Notes |
+|---|---|---|---|---|
+| Desktop shell | U1 | Immediately | First | Owns Electron, preload, renderer shell, and desktop runtime wiring. |
+| Extension pairing | U2 | Immediately against current bridge contract; final smoke waits for U1 | After U1 | Owns extension popup/background/content tests. Coordinate docs edits with U6. |
+| Local demo integration | U3 | After U1 and U2 contracts stabilize | After U1+U2 | Owns demo fixture and E2E loop. This is the main integration gate. |
+| Heatmap model/UI | U4 | Immediately using fixture events and current replay report | After U3 for runtime wiring | Owns `packages/signals` heatmap/stimulus files and replay heatmap rendering. Coordinate schema changes with U5. |
+| Repair loop | U5 | After U4 API shape is drafted | After U4 | Owns repair candidate logic, probe/outcome events, and repair UI. |
+| Runbook/packaging | U6 | Immediately for docs outline; final commands wait for U1-U3 | Near end of local tranche | Owns docs/scripts. Must track actual commands from U1-U3 rather than inventing them. |
+| Cloud activation | U7 | Design-only after U3; implementation after AE1-AE4 pass | After local prototype proof | Should not block local demo. Keep this out of the critical path unless the goal changes to hosted demo. |
+| Research validation | U8 | Immediately as docs/matrix work; code waits for separate research PR | Independent or after U4/U5 | Avoid broad `coherence-testbench` edits in the prototype branch. |
+
+**Two-agent dispatch:** Agent A owns U1 then U3. Agent B owns U2 and drafts U6 docs, then helps U4 once U3 fixture shape is stable. Keep U7/U8 as plan/docs notes unless the local demo finishes early.
+
+**Four-agent dispatch:** Agent A owns U1. Agent B owns U2. Agent C starts U4 from fixture events and later wires into U3. Agent D owns U6 and U8 docs, then supports U3 smoke/runbook updates. Merge order stays U1, U2, U3, U4, U5, U6, U8, U7.
+
+**Six-agent dispatch:** Agent A owns U1, Agent B owns U2, Agent C owns U3, Agent D owns U4, Agent E owns U5, and Agent F owns U6 plus U8 and prepares U7 as design-only. This is fastest only if one coordinator enforces schema/API boundaries and resolves overlapping files such as `ReplayTimeline.tsx`, `packages/schema/src/events.ts`, and `docs/local-dev.md`.
+
+**Do not parallelize blindly:** U7 should not run as a production deployment effort until the local prototype acceptance examples pass. U5 should not finalize event schemas before U4's heatmap contract lands. U3 should not fake success with fixture-only behavior if U2 has not proven real extension pairing.
+
 ### Assumptions
 
 - The merged PR #286 is the baseline and remains available on `main`.
