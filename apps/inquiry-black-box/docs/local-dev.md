@@ -8,17 +8,21 @@ bun run lint
 bun run typecheck
 bun run test
 bun run test:e2e
+bun run build:prototype
 ```
 
 The app is intentionally useful without cloud credentials. Desktop SQLite,
-extension telemetry fixtures, replay heuristics, privacy export/delete, and
-cloud rejection tests all run locally.
+extension telemetry fixtures, replay heuristics, comprehension heatmaps, repair
+outcomes, privacy export/delete, and cloud rejection tests all run locally.
 
 The committed local demo fixture lives at
-`tests/fixtures/demo-article.html`. `bun run test:e2e` exercises a fixture path
+`tests/fixtures/demo-article.html`. `bun run demo:fixture` exercises a fixture path
 that captures browser scroll, revisit, highlight/copy, media seek, tab churn,
-self-label, and recall-probe events, then verifies replay evidence, JSONL
-export, local delete, and the redacted cloud-delete tombstone.
+self-label, stimulus attachment, heatmap evidence, repair candidates, and
+recall-probe events, then verifies replay evidence, JSONL export, local delete,
+and the redacted cloud-delete tombstone.
+
+The canonical runbook is [Prototype Demo](prototype-demo.md).
 
 ## Desktop
 
@@ -27,7 +31,8 @@ bun run dev:desktop
 ```
 
 The desktop side owns SQLite, the localhost ingest bridge, session lifecycle,
-pairing tokens, privacy export/delete, notifications, and sync queueing.
+pairing tokens, replay, heatmaps, repair outcomes, privacy export/delete,
+notifications, and sync queueing.
 
 ## Extension
 
@@ -53,23 +58,32 @@ CI tests use fixture-friendly content and bridge modules instead of a real
 browser. `bun run test:e2e` includes a pairing smoke that posts extension-shaped
 browser events through the desktop ingest handler into SQLite.
 
+Build both local demo surfaces without launching Electron:
+
+```bash
+bun run build:prototype
+```
+
 ## Human Demo Checklist
 
 Use this as the short manual proof after the fixture tests pass:
 
 1. Start `bun run dev:desktop`.
 2. Start a session, copy the pairing token, and pair the unpacked extension.
-3. Open `tests/fixtures/demo-article.html` through a local `http` server or any
+3. Open `tests/fixtures/demo-article.html` through a local `http` server, for
+   example `python3 -m http.server 4173 --directory tests/fixtures`, or use any
    normal `http`/`https` research page.
 4. Scroll quickly, highlight/copy one claim, seek the media control, switch tabs,
    and add a self-label in the desktop window.
-5. Stop the session, inspect replay markers, export JSONL, then delete the
-   session and confirm the cloud-delete tombstone is queued locally.
+5. Stop the session, inspect replay markers, heatmap bands, and the repair
+   prompt.
+6. Start or answer the repair prompt, export JSONL, then delete the session and
+   confirm the cloud-delete tombstone is queued locally.
 
 ## Cloud
 
 ```bash
-doppler run -- bun --cwd apps/cloud run dev
+doppler run -- bun run --cwd apps/cloud dev
 ```
 
 Cloud sync is optional. The API accepts `public` and `redacted-sync` payloads
