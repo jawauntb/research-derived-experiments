@@ -28,7 +28,7 @@ decoders:
     kind: "cross_subject_adversarial"
     alignment: "riemann"          # euclidean | riemann
     adversary_weight: 0.1
-    ssl_pretrain: false           # flip on for full run once ingest is stable
+    ssl_pretrain: true            # masked-feature reconstruction warm-start
     epochs: 30
     batch_size: 64
     lr: 3.0e-4
