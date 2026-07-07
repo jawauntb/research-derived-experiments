@@ -1,4 +1,6 @@
 import type { EventEnvelope } from "@inquiry/schema";
+import { buildComprehensionHeatmap, type ComprehensionHeatmapSegment } from "./heatmap";
+import type { StimulusSegment } from "./stimulus";
 import { buildEventWindows, numericPayload, stringPayload, type EventWindow } from "./windows";
 
 export type ReplayMarkerKind =
@@ -26,7 +28,14 @@ export type ReplayMarker = {
 export type ReplayMemo = {
   session_id: string;
   markers: ReplayMarker[];
+  heatmap: ComprehensionHeatmapSegment[];
   next_actions: string[];
+};
+
+export type ReplayMemoOptions = {
+  window_ms?: number;
+  stimulus_segments?: StimulusSegment[];
+  stimulusSegments?: StimulusSegment[];
 };
 
 export function buildReplayMarkers(events: EventEnvelope[], windowMs = 30_000): ReplayMarker[] {
@@ -47,18 +56,27 @@ export function buildReplayMarkers(events: EventEnvelope[], windowMs = 30_000): 
     .sort((a, b) => a.start_ms - b.start_ms || b.confidence - a.confidence);
 }
 
-export function buildReplayMemo(events: EventEnvelope[], windowMs = 30_000): ReplayMemo {
+export function buildReplayMemo(events: EventEnvelope[], options: number | ReplayMemoOptions = {}): ReplayMemo {
+  const windowMs = typeof options === "number" ? options : options.window_ms ?? 30_000;
+  const stimulusSegments = typeof options === "number" ? [] : options.stimulus_segments ?? options.stimulusSegments ?? [];
   const sessionId = events[0]?.session_id ?? "unknown-session";
   const markers = buildReplayMarkers(events, windowMs);
+  const heatmap = buildComprehensionHeatmap({
+    session_id: sessionId,
+    markers,
+    stimulus_segments: stimulusSegments,
+  });
   const nextActions = [
     markers.find((marker) => marker.kind === "stuck-loop")?.suggested_action,
     markers.find((marker) => marker.kind === "high-load")?.suggested_action,
+    heatmap.find((segment) => segment.kind === "mixed-load" || segment.kind === "intrinsic-difficulty")?.suggested_repair,
     markers.find((marker) => marker.kind === "skim-risk")?.suggested_action,
   ].filter((value): value is string => typeof value === "string");
 
   return {
     session_id: sessionId,
     markers,
+    heatmap,
     next_actions: nextActions.slice(0, 3),
   };
 }
