@@ -75,7 +75,9 @@ class CrossSubjectEyetrackRegressor:
                     mask = (torch.rand_like(x) > 0.2).float()
                     h = trunk(x * mask)
                     loss = nn.functional.mse_loss(decoder(h), x)
-                    opt.zero_grad(); loss.backward(); opt.step()
+                    opt.zero_grad()
+                    loss.backward()
+                    opt.step()
 
         params = list(trunk.parameters()) + list(head.parameters())
         opt = torch.optim.Adam(params, lr=self.lr)
@@ -88,7 +90,9 @@ class CrossSubjectEyetrackRegressor:
                 bi = idx[start:start + self.batch_size]
                 pred = head(trunk(X_t[bi]))
                 loss = mse(pred, y_t[bi])
-                opt.zero_grad(); loss.backward(); opt.step()
+                opt.zero_grad()
+                loss.backward()
+                opt.step()
         self._model = (trunk, head)
 
     def predict(self, X: np.ndarray) -> np.ndarray:
