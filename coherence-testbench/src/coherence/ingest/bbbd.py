@@ -43,6 +43,65 @@ EXPERIMENT_ARCHIVES: Mapping[int, str] = {
 # Experiment 1 is eyetrack-only (no EEG); skip it in EEG decoders.
 EXPERIMENTS_WITH_EEG: tuple[int, ...] = (2, 3, 4, 5)
 
+# Experiments that expose a session-level attentive-vs-distracted contrast
+# (ses-01 = attentive, ses-02 = distracted / counting-back). Experiment 5
+# is intentionally excluded — its ses-02 is a monetary-incentive intervention,
+# not a distraction manipulation, so both sessions are attentive.
+# See docs/bbbd_label_protocol.md for the reasoning.
+EXPERIMENTS_WITH_ATTENTION_LABEL: tuple[int, ...] = (2, 3, 4)
+
+
+def _parse_session(bdf_path: Path) -> int | None:
+    """Extract the BIDS session number from a .bdf path.
+
+    BBBD paths follow ``.../sub-XX/ses-YY/eeg/sub-XX_ses-YY_task-….bdf``.
+    Returns the integer session number or None if the path doesn't match.
+    """
+    for part in bdf_path.parts:
+        if part.startswith("ses-"):
+            try:
+                return int(part[len("ses-"):])
+            except ValueError:
+                return None
+    return None
+
+
+def read_events_bounds(events_tsv: Path) -> tuple[float, float] | None:
+    """Return (start_onset, end_onset) in seconds from a BBBD events.tsv.
+
+    BBBD events.tsv files only carry start/end markers — no per-trial rows.
+    Returns None if the file is missing, malformed, or lacks either marker.
+    """
+    if not events_tsv.exists():
+        return None
+    lines = events_tsv.read_text().splitlines()
+    if len(lines) < 3:
+        return None
+    header = lines[0].split("\t")
+    try:
+        i_onset = header.index("onset")
+        i_event = header.index("event")
+    except ValueError:
+        return None
+    start: float | None = None
+    end: float | None = None
+    for row in lines[1:]:
+        cells = row.split("\t")
+        if len(cells) <= max(i_onset, i_event):
+            continue
+        tag = cells[i_event].strip().lower()
+        try:
+            onset = float(cells[i_onset])
+        except ValueError:
+            continue
+        if tag == "start":
+            start = onset
+        elif tag == "end":
+            end = onset
+    if start is None or end is None or end <= start:
+        return None
+    return (start, end)
+
 
 def _cache_root() -> Path:
     root = os.environ.get("BBBD_CACHE_DIR")
@@ -59,9 +118,26 @@ def _cache_root() -> Path:
 class SubjectRecord:
     subject_id: str
     experiment: int          # 1..5
+    session: int             # 1 or 2 (BIDS `ses-01` / `ses-02`)
     signal_path: Path        # .bdf
-    events_path: Path        # BIDS events
+    events_path: Path        # BIDS events tsv (start/end markers only in BBBD)
     labels: Mapping[str, float | int | str]
+
+    @property
+    def attention_label(self) -> int | None:
+        """Session-level binary label per BBBD's protocol.
+
+        Returns 1 (attentive), 0 (distracted), or None (no valid contrast for
+        this experiment). Exp 2/3/4: ses-01 attentive, ses-02 distracted.
+        Exp 1/5: None. See docs/bbbd_label_protocol.md.
+        """
+        if self.experiment not in EXPERIMENTS_WITH_ATTENTION_LABEL:
+            return None
+        if self.session == 1:
+            return 1
+        if self.session == 2:
+            return 0
+        return None
 
 
 class BBBDLoader:
@@ -124,9 +200,13 @@ class BBBDLoader:
                     continue
                 for bdf in sub_dir.rglob("*_eeg.bdf"):
                     events = bdf.with_name(bdf.name.replace("_eeg.bdf", "_events.tsv"))
+                    session = _parse_session(bdf)
+                    if session is None:
+                        continue
                     yield SubjectRecord(
                         subject_id=sub_dir.name,
                         experiment=exp,
+                        session=session,
                         signal_path=bdf,
                         events_path=events,
                         labels=self._participants.get(sub_dir.name, {}),

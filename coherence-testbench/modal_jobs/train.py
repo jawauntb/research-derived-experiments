@@ -114,15 +114,41 @@ def run_experiment_shard(arg: dict[str, Any]) -> dict[str, Any]:
     if subject_limit:
         subject_ids = subject_ids[: int(subject_limit)]
 
-    by_subject = {}
+    from coherence.ingest.bbbd import read_events_bounds  # noqa: PLC0415
+    import numpy as _np  # noqa: PLC0415
+
+    def _make_labeler(label: int, start_s: float, end_s: float):
+        def _get(t0: float, t1: float) -> int | None:
+            if t0 < start_s or t1 > end_s or t1 <= t0:
+                return None
+            return label
+        return _get
+
+    by_subject: dict[str, tuple[Any, Any]] = {}
     for record in loader.records(subject_ids=subject_ids):
+        label = record.attention_label
+        if label is None:
+            continue
+        bounds = read_events_bounds(record.events_path)
+        if bounds is None:
+            continue
+        start_s, end_s = bounds
+
         raw = loader.load_signal(record)
         raw = preprocess_raw(raw, pcfg, experiment=record.experiment)
         X, y = epoch_to_arrays(raw, pcfg,
-                               label_getter=lambda t0, t1: record.labels.get("attention_label"))
+                               label_getter=_make_labeler(label, start_s, end_s))
         if len(y) == 0:
             continue
-        by_subject[record.subject_id] = (X, y)
+
+        prior = by_subject.get(record.subject_id)
+        if prior is None:
+            by_subject[record.subject_id] = (X, y)
+        else:
+            by_subject[record.subject_id] = (
+                _np.concatenate([prior[0], X], axis=0),
+                _np.concatenate([prior[1], y], axis=0),
+            )
 
     baseline = PerSubjectRiemannDecoder(n_folds=int(config["decoders"]["baseline"]["n_folds"]))
     per_subject_baccs = []
