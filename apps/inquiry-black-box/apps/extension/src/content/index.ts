@@ -7,6 +7,8 @@ import {
 } from "../lib/localBridge";
 import {
   CONTENT_EVENTS_MESSAGE,
+  CONTENT_PING_MESSAGE,
+  CONTENT_PONG_MESSAGE,
   CONTENT_SETTINGS_MESSAGE,
   CONTENT_SETTINGS_UPDATED_MESSAGE,
 } from "../lib/messages";
@@ -79,6 +81,8 @@ export type TypingInput = {
   target: EditableElementLike | null;
   inputType?: string;
 };
+
+const CONTENT_SCRIPT_INSTALLED_KEY = "__inquiryBlackBoxContentInstalled";
 
 type EventCategory = "browser" | "typingMetrics" | "selection" | "media";
 
@@ -433,6 +437,12 @@ function installContentScript(): void {
     return;
   }
 
+  const globalState = globalThis as Record<string, unknown>;
+  if (globalState[CONTENT_SCRIPT_INSTALLED_KEY]) {
+    return;
+  }
+  globalState[CONTENT_SCRIPT_INSTALLED_KEY] = true;
+
   const runtime = readRuntime();
   if (!runtime) {
     return;
@@ -456,9 +466,14 @@ function installContentScript(): void {
     }
   });
 
-  runtime.onMessage?.addListener((message) => {
+  runtime.onMessage?.addListener((message, _sender, sendResponse) => {
     if (isSettingsUpdate(message)) {
       telemetry.setSettings(message.settings);
+      return;
+    }
+
+    if (isContentPing(message)) {
+      sendResponse?.({ type: CONTENT_PONG_MESSAGE, ok: true });
     }
   });
 
@@ -533,7 +548,7 @@ function isMediaElement(target: EventTarget | null): target is HTMLMediaElement 
 type RuntimeLike = {
   sendMessage(message: unknown, callback?: (response: unknown) => void): Promise<unknown> | void;
   onMessage?: {
-    addListener(listener: (message: unknown) => void): void;
+    addListener(listener: (message: unknown, sender?: unknown, sendResponse?: (response: unknown) => void) => void): void;
   };
 };
 
@@ -561,6 +576,10 @@ function isSettingsUpdate(value: unknown): value is { type: typeof CONTENT_SETTI
     (value as { type?: unknown }).type === CONTENT_SETTINGS_UPDATED_MESSAGE &&
     typeof (value as { settings?: unknown }).settings === "object"
   );
+}
+
+function isContentPing(value: unknown): value is { type: typeof CONTENT_PING_MESSAGE } {
+  return typeof value === "object" && value !== null && (value as { type?: unknown }).type === CONTENT_PING_MESSAGE;
 }
 
 function isContentSettings(value: unknown): value is ContentSettings {
