@@ -27,6 +27,7 @@ describe("popup page listener status", () => {
   test("injects the content script when the active tab does not answer the ping", async () => {
     let pingCount = 0;
     let injectedFile = "";
+    let injectedWorld = "";
 
     const status = await detectPageListener({
       tabs: {
@@ -40,6 +41,7 @@ describe("popup page listener status", () => {
       scripting: {
         executeScript: (details, callback) => {
           injectedFile = details.files[0] ?? "";
+          injectedWorld = details.world;
           callback?.();
         },
       },
@@ -48,6 +50,7 @@ describe("popup page listener status", () => {
     expect(status).toEqual({ status: "attached" });
     expect(pingCount).toBe(2);
     expect(injectedFile).toBe("dist/content/index.js");
+    expect(injectedWorld).toBe("ISOLATED");
   });
 
   test("marks browser-internal pages as unsupported", async () => {
