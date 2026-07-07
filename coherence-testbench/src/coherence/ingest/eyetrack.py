@@ -237,8 +237,18 @@ def read_quiz_scores(root: Path, experiments: list[int]
       * exp3: `stim_no, total_questions, score` -> score / total_questions
       * exp4: `stimulus_no, total_questions, score` -> score / total_questions
 
+    **Stimulus-numbering fix for exp4:** exp4's phenotype tsv uses
+    stimulus_no ∈ {1, 2, 3} for the three attentive-condition videos,
+    but the BIDS recording files are named `task-stim04`, `task-stim05`,
+    `task-stim06`. Keys are stored using the RECORDING-side numbering
+    (4, 5, 6) so shard lookups against `_parse_stimulus(record.pupil_path)`
+    match. Without this fix, exp4 silently dropped from the corpus at
+    lookup time.
+
     Missing / zero-question rows are dropped.
     """
+    # Per-experiment offset from phenotype stimulus_no to recording stim_no.
+    stim_offset = {4: 3}  # exp4 quiz 1..3 = recording stim04..06
     out: dict[tuple[str, int, int], float] = {}
     for exp in experiments:
         tsv = root / f"experiment{exp}" / "phenotype" / "stimuli_questionnaire_scores.tsv"
@@ -284,5 +294,6 @@ def read_quiz_scores(root: Path, experiments: list[int]
                 continue
             if not (0.0 <= frac <= 1.0):
                 continue
-            out[(subject, exp, stim)] = float(frac)
+            stim_key = stim + stim_offset.get(exp, 0)
+            out[(subject, exp, stim_key)] = float(frac)
     return out
