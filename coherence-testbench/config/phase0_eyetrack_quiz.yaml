@@ -1,0 +1,36 @@
+# Branch-D quiz-score regression run config.
+
+kill_criterion: "config/kill_criterion_eyetrack_quiz.yaml"
+
+data:
+  dataset: "bbbd"
+  cache_dir_env: "BBBD_CACHE_DIR"
+  # Same experiments as binary Branch-D; each has a phenotype/
+  # stimuli_questionnaire_scores.tsv keyed on (subject, stimulus).
+  experiments: [2, 3, 4]
+  subject_limit: null
+  # Attentive session only for target labels; distracted session used
+  # for the reporting-only "distracted-predicts-attentive-score" analysis.
+  target_session: 1
+
+preprocess:
+  epoch_seconds: 4.0
+  epoch_overlap: 0.5
+  saccade_speed_deg_s: 30.0
+
+decoders:
+  target:
+    kind: "cross_subject_regression"
+    ssl_pretrain: false           # rerun knob per pre-reg
+    epochs: 60
+    batch_size: 64
+    lr: 3.0e-4
+
+evaluate:
+  scheme: "leave_subjects_out_regression"
+  n_lso_seeds: 5
+  train_subject_sweep: [8, 16, 24, 32]
+  metric: "spearman_r"
+
+output:
+  root: "artifacts/phase0_eyetrack_quiz"

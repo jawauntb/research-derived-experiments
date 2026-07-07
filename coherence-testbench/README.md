@@ -7,19 +7,19 @@ market entry.
 
 ## Status
 
-- **Phase-0 (EEG):** `KILL` (2026-07-06). See [`POST_MORTEM.md`](POST_MORTEM.md).
-  Per-subject 93.2%, LSO cross-subject 50.0% (flat, exact chance),
-  bits/sec 0.000, ablations clean.
-- **Branch-D (eyetrack, same task):** `INCONCLUSIVE` (2026-07-07) after
-  a pre-registered rerun. See [`MODALITY_COMPARISON.md`](MODALITY_COMPARISON.md).
-  Per-subject 77.8%, LSO cross-subject 66.5% at n=32 (positive learning
-  curve, gap 11.3 pts, MI 0.024 bits/s). Signal is real; short of the
-  GO bits/sec threshold (0.030); pre-registered rerun path exhausted.
-- **Phase 3 build:** still **FROZEN**. Neither test returned GO.
-
-**Gate rule.** No Phase-3 build task starts until a test-bench returns `GO`
-— which none has. Do NOT swap corpora post-hoc and re-run the same
-kill-criterion. A new corpus needs its own pre-registration.
+- **Phase-0 EEG (binary attention):** `KILL` (2026-07-06). See [`POST_MORTEM.md`](POST_MORTEM.md).
+  LSO cross-subject 50.0% flat, bits/sec 0.000. Dead cross-subject.
+- **Branch-D eyetrack (binary attention):** `INCONCLUSIVE` (2026-07-07)
+  after pre-registered rerun. 66.5% BA at n=32, positive learning curve,
+  bits/sec just short of GO. See [`MODALITY_COMPARISON.md`](MODALITY_COMPARISON.md).
+- **Branch-D eyetrack (quiz-score regression, supplementary pre-reg
+  `phase0.eyetrack.quiz.v1`):** **`GO`** (2026-07-07). LSO Spearman
+  ρ = 0.277 at n=24, monotonic curve, clean ablations. First cleared
+  gate of the session.
+- **Phase 3 build:** the load-bearing criterion (a pre-registered
+  test returns GO) is now met on the quiz-score bench. Freeze rules
+  require explicit user re-scoping to actually start Phase 3, so this
+  stays frozen pending decision. See [`NEXT_STEPS.md`](NEXT_STEPS.md).
 
 ## What this repo does
 
