@@ -1,0 +1,25 @@
+{
+  "candidate_count": 164,
+  "evidence_level_counts": {
+    "abstract_read": 67,
+    "metadata_read": 3,
+    "topic_inferred_from_citation_fragment": 94
+  },
+  "status_counts": {
+    "manual_foundational_reference": 42,
+    "resolved_metadata_only": 3,
+    "resolved_with_abstract": 67,
+    "unresolved_external_reference": 52
+  },
+  "topic_counts": {
+    "agency_viability": 37,
+    "causal_representation": 30,
+    "description_length": 5,
+    "general_foundation": 42,
+    "geometry_symmetry": 15,
+    "meaning_mind": 21,
+    "ood_generalization": 33,
+    "uncertainty_inquiry": 51,
+    "world_models": 33
+  }
+}
