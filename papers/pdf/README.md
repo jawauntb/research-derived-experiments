@@ -28,6 +28,12 @@ gitignored). Regenerate with the committed builders:
   to consequence-weighted concern and load-bearing evaluation filters.
   Rebuild: `python scripts/build_concern_weighted_weakness_pdf.py`
 
+- `gauge_fixed_concern_transport.pdf` — self-contained bridge paper deriving
+  gauge-fixed transport of concern as a proof obligation for load-bearing
+  representation across ML, interpretability, neuro-control, philosophy, and
+  mathematical structure.
+  Rebuild: `python scripts/build_gauge_fixed_concern_transport_pdf.py`
+
 - `unified_metric_weakness_portfolio/finite_representations_portfolio_with_bookmarks.pdf` —
   portfolio packet combining the four July 2026 arXiv-ready papers with front matter,
   reading guide, divider pages, and bookmarks.
