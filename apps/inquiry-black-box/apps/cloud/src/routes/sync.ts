@@ -23,7 +23,7 @@ async function syncEvents(request: Request, context: SyncRouteContext): Promise<
   const body = await readJsonObject(request);
   const device_id = stringField(body, "device_id");
   const token_id = stringField(body, "token_id");
-  const revoked = context.store.getDeviceToken(user.user_id, device_id, token_id);
+  const revoked = await context.store.getDeviceToken(user.user_id, device_id, token_id);
   if (revoked?.status === "revoked") {
     throw new RouteError(403, "device_revoked", "device token has been revoked");
   }
@@ -68,7 +68,7 @@ async function syncEvents(request: Request, context: SyncRouteContext): Promise<
   let duplicates = 0;
   const event_ids: string[] = [];
   for (const event of validEvents) {
-    const result = context.store.syncEvent(user.user_id, device_id, event);
+    const result = await context.store.syncEvent(user.user_id, device_id, event);
     if (result.inserted) {
       accepted += 1;
     } else {
@@ -88,7 +88,7 @@ async function revokeDeviceToken(request: Request, context: SyncRouteContext): P
   const reason = stringField(body, "reason", false);
   const revoked_at = stringField(body, "revoked_at", false);
 
-  const record = context.store.revokeDeviceToken({
+  const record = await context.store.revokeDeviceToken({
     user_id: user.user_id,
     device_id,
     token_id,

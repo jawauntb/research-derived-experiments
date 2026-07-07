@@ -1,3 +1,4 @@
+import { createPostgresCloudStore } from "./postgres";
 import type { EventEnvelope, JsonObject, JsonValue, PrivacyClass } from "@inquiry/schema";
 
 export const jobStatuses = ["submitted", "running", "complete", "failed"] as const;
@@ -10,6 +11,9 @@ export type AuthenticatedUser = {
   user_id: string;
   token: string;
 };
+
+export type MaybePromise<T> = T | Promise<T>;
+export type CloudStoreKind = "memory" | "postgres";
 
 export type SyncEventRecord = {
   user_id: string;
@@ -67,18 +71,20 @@ export type ReportRecord = {
 };
 
 export type CloudStore = {
-  syncEvent(user_id: string, device_id: string, event: EventEnvelope): { inserted: boolean; record: SyncEventRecord };
-  listEvents(user_id: string): SyncEventRecord[];
+  kind: CloudStoreKind;
+  initialize?(): MaybePromise<void>;
+  syncEvent(user_id: string, device_id: string, event: EventEnvelope): MaybePromise<{ inserted: boolean; record: SyncEventRecord }>;
+  listEvents(user_id: string): MaybePromise<SyncEventRecord[]>;
   revokeDeviceToken(input: {
     user_id: string;
     device_id: string;
     token_id: string;
     revoked_at?: string;
     reason?: string;
-  }): DeviceTokenRecord;
-  getDeviceToken(user_id: string, device_id: string, token_id: string): DeviceTokenRecord | undefined;
-  createJob(input: { user_id: string; kind: JobKind; input: JsonObject; session_id?: string }): JobRecord;
-  getJob(user_id: string, job_id: string): JobRecord | undefined;
+  }): MaybePromise<DeviceTokenRecord>;
+  getDeviceToken(user_id: string, device_id: string, token_id: string): MaybePromise<DeviceTokenRecord | undefined>;
+  createJob(input: { user_id: string; kind: JobKind; input: JsonObject; session_id?: string }): MaybePromise<JobRecord>;
+  getJob(user_id: string, job_id: string): MaybePromise<JobRecord | undefined>;
   updateJobStatus(
     user_id: string,
     job_id: string,
@@ -90,7 +96,7 @@ export type CloudStore = {
       error?: string;
       message?: string;
     },
-  ): JobRecord | undefined;
+  ): MaybePromise<JobRecord | undefined>;
   createReport(input: {
     user_id: string;
     kind: string;
@@ -99,9 +105,14 @@ export type CloudStore = {
     payload: JsonObject;
     provenance: JsonObject;
     session_id?: string;
-  }): ReportRecord;
-  listReports(user_id: string): ReportRecord[];
-  getReport(user_id: string, report_id: string): ReportRecord | undefined;
+  }): MaybePromise<ReportRecord>;
+  listReports(user_id: string): MaybePromise<ReportRecord[]>;
+  getReport(user_id: string, report_id: string): MaybePromise<ReportRecord | undefined>;
+};
+
+export type CloudStoreFactoryOptions = {
+  now?: () => Date;
+  postgresFactory?: (databaseUrl: string) => CloudStore;
 };
 
 export function isJobStatus(value: unknown): value is JobStatus {
@@ -124,7 +135,21 @@ export function createCloudStore(now: () => Date = () => new Date()): CloudStore
   return new InMemoryCloudStore(now);
 }
 
+export function createCloudStoreFromEnv(
+  env: Record<string, string | undefined> = process.env,
+  options: CloudStoreFactoryOptions = {},
+): CloudStore {
+  if (env.DATABASE_URL) {
+    const postgresFactory = options.postgresFactory ?? ((databaseUrl: string) => createPostgresCloudStore({ databaseUrl }));
+    return postgresFactory(env.DATABASE_URL);
+  }
+
+  return createCloudStore(options.now);
+}
+
 class InMemoryCloudStore implements CloudStore {
+  readonly kind = "memory";
+
   private readonly events = new Map<string, SyncEventRecord>();
   private readonly deviceTokens = new Map<string, DeviceTokenRecord>();
   private readonly jobs = new Map<string, JobRecord>();
