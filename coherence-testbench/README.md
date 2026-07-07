@@ -5,21 +5,21 @@ task in the entire company: prove cross-subject decoding of waking cognitive sta
 generalizes on real EEG before spending anything on hardware, data collection, or
 market entry.
 
-## Status: Phase-0 verdict = `KILL` (2026-07-06)
+## Status
 
-Pre-registered kill-criterion fired. See [`POST_MORTEM.md`](POST_MORTEM.md) for
-the full read. Headline: per-subject baseline 93.2%, LSO cross-subject 50.0%
-(exactly chance, flat curve from 4 → 24 train subjects), bits/sec 0.000, all
-three confound ablations clean.
+- **Phase-0 (EEG):** `KILL` (2026-07-06). See [`POST_MORTEM.md`](POST_MORTEM.md).
+  Per-subject 93.2%, LSO cross-subject 50.0% (flat, exact chance),
+  bits/sec 0.000, ablations clean.
+- **Branch-D (eyetrack, same task):** `INCONCLUSIVE` (2026-07-07) after
+  a pre-registered rerun. See [`MODALITY_COMPARISON.md`](MODALITY_COMPARISON.md).
+  Per-subject 77.8%, LSO cross-subject 66.5% at n=32 (positive learning
+  curve, gap 11.3 pts, MI 0.024 bits/s). Signal is real; short of the
+  GO bits/sec threshold (0.030); pre-registered rerun path exhausted.
+- **Phase 3 build:** still **FROZEN**. Neither test returned GO.
 
-Per the plan and the kill-criterion, Phase 3 build (partner dashboard, outbound,
-custom hardware) is **frozen** until the human explicitly re-scopes the thesis.
-The site `neurophenom-site` on Railway remains live as a working draft, with a
-footer note. Do NOT swap corpora post-hoc and re-run the same kill-criterion —
-a new corpus needs its own pre-registration.
-
-**Gate rule.** No Phase-3 build task starts until this test-bench returns `GO`
-— which it did not.
+**Gate rule.** No Phase-3 build task starts until a test-bench returns `GO`
+— which none has. Do NOT swap corpora post-hoc and re-run the same
+kill-criterion. A new corpus needs its own pre-registration.
 
 ## What this repo does
 

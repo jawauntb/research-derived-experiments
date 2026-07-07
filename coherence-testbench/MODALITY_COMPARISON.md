@@ -6,16 +6,30 @@ Same LSO evaluation. Only the input signal differs.
 
 ## Headline
 
-|                              | EEG (Phase-0)   | Eyetrack (Branch-D gen-1) |
-|---                           | ---:            | ---:                       |
-| per-subject baseline BA      | 93.2%           | 77.8%                      |
-| LSO cross-subject BA @ n=4   | 50.0%           | 61.0%                      |
-| LSO cross-subject BA @ n=8   | 50.0%           | 61.7%                      |
-| LSO cross-subject BA @ n=16  | 50.0%           | 62.6%                      |
-| LSO cross-subject BA @ n=24  | 50.0%           | **65.5%**                  |
-| bits/sec MI @ n=24           | 0.000           | 0.021                      |
-| generalization gap           | 43.2 pts        | 12.3 pts                   |
-| verdict                      | `KILL`          | `INCONCLUSIVE` (rerun-1 pending) |
+|                              | EEG (Phase-0)   | Eyetrack gen-1 | Eyetrack gen-2 (SSL + more compute) |
+|---                           | ---:            | ---:            | ---:                       |
+| per-subject baseline BA      | 93.2%           | 77.8%           | 77.8%                      |
+| LSO cross-subject BA @ n=4   | 50.0%           | 61.0%           | 60.8%                      |
+| LSO cross-subject BA @ n=8   | 50.0%           | 61.7%           | 61.1%                      |
+| LSO cross-subject BA @ n=16  | 50.0%           | 62.6%           | 62.2%                      |
+| LSO cross-subject BA @ n=24  | 50.0%           | 65.5%           | 64.7%                      |
+| LSO cross-subject BA @ n=32  | 50.0%           | —               | **66.5%**                  |
+| bits/sec MI @ max n          | 0.000           | 0.021           | **0.024**                  |
+| generalization gap           | 43.2 pts        | 12.3 pts        | 11.3 pts                   |
+| verdict                      | `KILL`          | `INCONCLUSIVE`  | **`INCONCLUSIVE`**         |
+
+## Bottom line
+
+- **EEG:** dead cross-subject on this task.
+- **Eyetrack:** signal is real (66.5% BA at n=32, +16 pts over chance,
+  monotonic learning curve, non-zero MI, clean ablations).
+- **BUT** bits/sec (0.024) falls short of the pre-registered GO threshold
+  (0.030) by ~20%. The pre-registration's allowed rerun (SSL + more
+  compute) executed and the verdict remained INCONCLUSIVE.
+- **BBBD caps the data at ~32 subjects per experiment.** Based on the
+  learning-curve slope (61 → 66.5% over 4 → 32 subjects), reaching
+  the 0.030 bits/s bar would need roughly another ~50-60 subjects.
+  Not available on BBBD alone.
 
 ## Reading
 
@@ -105,10 +119,14 @@ Would drop SSL and re-analyze.
 ## Status
 
 - **EEG Phase-0:** CLOSED. Verdict `KILL`. See [POST_MORTEM.md](POST_MORTEM.md).
-- **Eyetrack Branch-D gen-1:** INCONCLUSIVE. Signal present.
-- **Eyetrack Branch-D gen-2:** RUNNING on Modal. Fire-and-forget spawned
-  as `eyetrack-20260707-002325-ssl`, call_id `fc-01KWXD232C9JMAQ68A3A34CKYS`.
-- **Site:** still shows the "on pause" footer from the EEG KILL. Will
-  be updated to reflect eyetrack outcome once gen-2 lands.
-- **Phase 3 build:** still FROZEN. Only a GO on gen-2 (or subsequent)
-  unfreezes.
+- **Eyetrack Branch-D gen-1:** INCONCLUSIVE. Signal present, bits/s short.
+- **Eyetrack Branch-D gen-2 (SSL + more compute):** INCONCLUSIVE.
+  Signal continues to strengthen (66.5% BA at n=32) but bits/s still
+  falls 20% below the GO threshold. Pre-registered rerun exhausted.
+- **Site:** footer updated to reflect the mixed EEG-KILL / eyetrack-
+  INCONCLUSIVE result.
+- **Phase 3 build:** still FROZEN. Signal present but no GO cleared.
+  Unfreeze requires either (a) a new pre-registration on a corpus with
+  more subjects, (b) a richer eyetrack featurizer that beats 66.5% BA,
+  or (c) an explicit user decision to accept the sub-threshold signal
+  as sufficient evidence.
