@@ -28,6 +28,7 @@ bun run lint
 bun run typecheck
 bun run test
 bun run test:e2e
+bun run build:prototype
 ```
 
 Modal checks:
@@ -47,12 +48,13 @@ doppler run -- modal run inquiry_jobs.py::smoke_job
 Cloud local dev:
 
 ```bash
-doppler run -- bun --cwd apps/cloud run dev
+doppler run -- bun run --cwd apps/cloud dev
 ```
 
 Desktop and extension dev:
 
 ```bash
+bun run build:prototype
 bun run dev:desktop
 bun run dev:extension
 ```
@@ -62,13 +64,14 @@ bun run dev:extension
 - `packages/schema`: canonical event envelope, privacy classes, retention
   policies, session records, and validation helpers. Add new event types here
   before using them elsewhere.
-- `packages/signals`: windowing and heuristic markers for replay,
-  notifications, and report generation.
+- `packages/signals`: windowing, heuristic markers, heatmaps, repair
+  candidates, notifications, and report generation.
 - `packages/ui`: dependency-light shared view models. Keep browser/Electron
   APIs out of this package.
 - `apps/desktop`: local source of truth. Electron main owns SQLite, ingest,
   notifications, exports, deletion, and sync queueing. Renderer owns camera
-  permission, visible recording controls, labels, probes, replay, and settings.
+  permission, visible recording controls, labels, probes, replay, heatmap,
+  repair prompts, and settings.
 - `apps/extension`: content scripts observe allowed pages, background/service
   worker batches events, popup exposes recording state and site/privacy toggles.
 - `apps/cloud`: optional Railway Bun API for redacted sync, reports, device
@@ -117,7 +120,7 @@ Local secret pattern:
 
 ```bash
 doppler setup
-doppler run -- bun --cwd apps/cloud run dev
+doppler run -- bun run --cwd apps/cloud dev
 doppler run -- python3 -m pytest modal/tests
 ```
 
@@ -168,3 +171,6 @@ local development uses a stub Modal client so desktop replay still works.
   smoke checks.
 - Run `bun run lint`, `bun run typecheck`, `bun run test`, and relevant targeted
   checks before committing.
+- Use `docs/prototype-demo.md` as the canonical local demo runbook. The current
+  local loop proves desktop + extension pairing, replay, heatmap, repair
+  outcomes, export, and delete without cloud credentials.

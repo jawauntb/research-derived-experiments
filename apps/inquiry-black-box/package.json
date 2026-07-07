@@ -13,9 +13,13 @@
     "typecheck": "tsc -b",
     "test": "bun test apps/desktop/tests apps/extension/tests apps/cloud/tests packages/schema/tests packages/signals/tests",
     "test:e2e": "bun test tests/e2e/*.ts",
-    "dev:desktop": "bun --cwd apps/desktop run dev",
-    "dev:extension": "bun --cwd apps/extension run build",
-    "dev:cloud": "bun --cwd apps/cloud run dev",
+    "demo:fixture": "bun run test:e2e",
+    "build:desktop": "bun run --cwd apps/desktop build",
+    "build:extension": "bun run --cwd apps/extension build",
+    "build:prototype": "bun run build:desktop && bun run build:extension",
+    "dev:desktop": "bun run --cwd apps/desktop dev",
+    "dev:extension": "bun run --cwd apps/extension build",
+    "dev:cloud": "bun run --cwd apps/cloud dev",
     "modal-check": "cd modal && python3 -m pytest"
   },
   "devDependencies": {

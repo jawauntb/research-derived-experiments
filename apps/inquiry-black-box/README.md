@@ -13,6 +13,7 @@ bun run lint
 bun run typecheck
 bun run test
 bun run test:e2e
+bun run build:prototype
 ```
 
 `bun run test:e2e` includes the local demo fixture loop and extension pairing
@@ -26,7 +27,8 @@ Packages:
 - `apps/cloud`: optional Railway Bun API for redacted sync and Modal job control.
 - `packages/schema`: canonical event envelope, privacy classes, and session
   validation.
-- `packages/signals`: windowing and heuristic markers.
+- `packages/signals`: windowing, heuristic markers, heatmaps, and repair
+  candidates.
 - `packages/ui`: dependency-light UI view models shared by renderer surfaces.
 - `modal`: Python batch-analysis jobs and model calibration helpers.
 
@@ -38,6 +40,7 @@ quality flags only.
 
 - [Agent guide](AGENTS.md)
 - [Local development](docs/local-dev.md)
+- [Prototype demo](docs/prototype-demo.md)
 - [Architecture](docs/architecture.md)
 - [Privacy model](docs/privacy-model.md)
 - [Deployment](docs/deployment.md)
