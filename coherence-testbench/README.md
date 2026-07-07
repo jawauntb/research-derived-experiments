@@ -57,10 +57,19 @@ Expected variables (see `.env.example`):
 
 ## Run Phase 0
 
-Local dry-run of the whole gate on a single subject (fast; sanity):
+Local dry-run of the whole gate on synthetic data (fast; sanity):
 
 ```bash
 python3 scripts/run_phase0.py --smoke
+```
+
+**Stage the dataset on Modal** (one-time; downloads any missing experiment
+archives directly on Modal's egress, unzips in place, then removes the zips):
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+        modal_jobs/prepare_bbbd.py
 ```
 
 Full ingest + preprocess + LSO on Modal (the actual gate run):
