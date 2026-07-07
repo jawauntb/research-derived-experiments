@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { createEvent, type EventEnvelope } from "@inquiry/schema";
-import { handleRuntimeMessage } from "../src/background/service-worker";
+import { ensureContentScriptRegistration, handleRuntimeMessage } from "../src/background/service-worker";
 import {
   BRIDGE_STATE_KEY,
   DEFAULT_BRIDGE_ENDPOINT,
@@ -130,6 +130,34 @@ describe("local bridge pairing and queue", () => {
           type: CONTENT_SETTINGS_UPDATED_MESSAGE,
           settings: expect.objectContaining({ recordingState: "recording" }),
         },
+      },
+    ]);
+  });
+
+  test("registers the content script as a service-worker fallback", async () => {
+    const registrations: unknown[] = [];
+    const unregistered: string[][] = [];
+
+    const registered = await ensureContentScriptRegistration({
+      unregisterContentScripts: (filter, callback) => {
+        unregistered.push(filter.ids);
+        callback?.();
+      },
+      registerContentScripts: (scripts, callback) => {
+        registrations.push(...scripts);
+        callback?.();
+      },
+    });
+
+    expect(registered).toBe(true);
+    expect(unregistered).toEqual([["inquiry-content-listener"]]);
+    expect(registrations).toEqual([
+      {
+        id: "inquiry-content-listener",
+        matches: ["http://*/*", "https://*/*"],
+        js: ["dist/content/index.js"],
+        runAt: "document_idle",
+        persistAcrossSessions: true,
       },
     ]);
   });

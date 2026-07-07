@@ -20,7 +20,7 @@ describe("popup page listener status", () => {
       },
     }, { id: 7, url: "http://127.0.0.1:4173/demo-article.html" });
 
-    expect(status).toBe("attached");
+    expect(status).toEqual({ status: "attached" });
     expect(injected).toBe(false);
   });
 
@@ -45,7 +45,7 @@ describe("popup page listener status", () => {
       },
     }, { id: 8, url: "https://example.test/article" });
 
-    expect(status).toBe("attached");
+    expect(status).toEqual({ status: "attached" });
     expect(pingCount).toBe(2);
     expect(injectedFile).toBe("dist/content/index.js");
   });
@@ -53,7 +53,29 @@ describe("popup page listener status", () => {
   test("marks browser-internal pages as unsupported", async () => {
     const status = await detectPageListener({}, { id: 9, url: "chrome://extensions" });
 
-    expect(status).toBe("unsupported");
-    expect(pageListenerLabel(status)).toBe("Unavailable on this page");
+    expect(status).toEqual({ status: "unsupported", detail: "not an http tab" });
+    expect(pageListenerLabel(status)).toBe("Unavailable - not an http tab");
+  });
+
+  test("surfaces the attach failure reason when script injection misses", async () => {
+    const status = await detectPageListener({
+      runtime: { sendMessage: () => undefined },
+      tabs: {
+        query: (_query, callback) => callback([]),
+        sendMessage: (_tabId, _message, callback) => {
+          callback?.(undefined);
+        },
+      },
+      scripting: {
+        executeScript: (_details, callback) => {
+          callback?.();
+        },
+      },
+    }, { id: 10, url: "http://127.0.0.1:4173/demo-article.html" });
+
+    expect(status.status).toBe("missing");
+    expect(pageListenerLabel({ status: "missing", detail: "tabs permission unavailable" })).toBe(
+      "Missing - tabs permission unavailable",
+    );
   });
 });
