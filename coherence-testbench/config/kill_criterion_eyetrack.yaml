@@ -1,0 +1,104 @@
+# =============================================================================
+# Pre-registered GO/KILL threshold for Branch-D eyetrack cross-subject decoding.
+# NEW pre-registration — DOES NOT reuse Phase-0's kill_criterion.yaml (that
+# committed to the EEG signal). This is a separate test on a different modality
+# with its own hypothesis. Committed BEFORE any data touch on 2026-07-06.
+#
+# Rationale
+# ---------
+# The EEG Phase-0 killed on BBBD exp 2/3/4 — cross-subject decoder returned
+# exactly 50.0% LSO on the session-level attentive-vs-distracted contrast.
+# The narrow question this pre-registration falsifies is:
+#
+#     Does cross-subject decoding of the SAME contrast work on the
+#     eyetrack modality that BBBD collected simultaneously?
+#
+# If yes: eyetrack is a viable objective biomarker channel and the company
+# pivots to eyetrack (or eyetrack + fNIRS). If no: the KILL generalizes
+# beyond EEG and the wearable-decoder thesis is under materially stronger
+# doubt.
+#
+# Signals available (from the schema inspection):
+#   * pupil_eyetrack.tsv.gz   1 col  (pupilSize), 128 Hz
+#   * gaze_visualangle...tsv  4 cols (x, y, vdx, vdy), 128 Hz
+#   * head_eyetrack.tsv.gz    3 cols (x, y, z), 128 Hz
+#
+# Threshold choice
+# ----------------
+# Eyetrack bandwidth is much lower than 64-ch EEG (fewer bits per epoch),
+# but the signal is well-known to carry cognitive-load / arousal
+# information (pupil dilation, blink rate under cognitive demand, gaze
+# dispersion during distraction). A modest but non-trivial LSO lift is
+# what would justify further eyetrack work.
+#
+version: "phase0.eyetrack.v1"
+committed_at: "2026-07-06"
+committed_by: "jawaun"
+
+primary_task:
+  name: "attention_binary_lso_eyetrack"
+  description: "Attentive vs distracted, leave-subjects-out, BBBD exp 2/3/4 eyetrack signals."
+  chance_level: 0.5
+
+thresholds:
+  # GO: eyetrack clearly beats chance AND transmits nontrivial info. The
+  # bar is 5 pts LOWER than the EEG pre-reg because eyetrack has lower
+  # bandwidth — a real signal here likely maxes in the low-to-mid 60s.
+  go:
+    lso_balanced_accuracy_min: 0.58      # +8 pts over chance
+    bits_per_second_min: 0.03            # ~0.03 bit/s of info
+    generalization_gap_max: 0.20         # per-subject BA - LSO BA <= 20 pts
+    stability:
+      n_seeds: 5
+      seed_min_bacc: 0.53
+
+  # KILL: escalate to human. Sub-chance-margin or MI at noise floor.
+  kill:
+    lso_balanced_accuracy_max: 0.53
+    bits_per_second_max: 0.01
+
+  # Anything between GO and KILL is INCONCLUSIVE — rerun ONLY with the
+  # branch-specific knobs pre-declared here (pupil-only ablation, gaze-
+  # only ablation) before committing.
+
+secondary_tasks:
+  # Reporting-only. Not part of the gate.
+  - name: "attention_by_experiment"
+    metric: "balanced_accuracy_per_experiment"
+    reporting_only: true
+
+confounds_to_control:
+  # Eyetrack-specific gotchas.
+  - id: "device_calibration_drift"
+    description: >
+      Session-level calibration differences between ses-01 and ses-02
+      could bake in a per-recording bias unrelated to attention. Any decoder
+      that clears the threshold must retain accuracy when features are
+      z-scored per recording (which removes the session-level DC).
+    mitigation: "per-recording z-score ablation must still clear threshold"
+  - id: "counting_motor_artifact"
+    description: >
+      The distraction manipulation is counting backwards by 7 — subjects
+      may mouth numbers or have distinctive micro-movements. That's a
+      task-signal-conflated confound: it would decode but wouldn't
+      transfer to a real attention read-out. Report an ablation where head
+      x/y/z is dropped (head motion removed) to check.
+    mitigation: "gaze-and-pupil-only ablation must still clear threshold"
+  - id: "hallucinated_fidelity"
+    description: >
+      Same as Phase-0. Prior-only baseline must NOT clear the threshold.
+    mitigation: "prior-only baseline must NOT clear the threshold"
+  - id: "subject_id_leak"
+    description: >
+      Standardization stats must be fit on the train fold only. Same
+      structural guarantee as Phase-0 EEG.
+    mitigation: "structural via _fit_scaler(train_only)"
+
+reporting:
+  required_sections:
+    - "pre_registered_thresholds"
+    - "generalization_curve"
+    - "cross_vs_per_subject_gap"
+    - "bits_per_second_MI"
+    - "confound_ablations"
+    - "verdict"
