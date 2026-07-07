@@ -36,15 +36,17 @@ def main() -> int:
                         help="Path to phase0.yaml")
     parser.add_argument("--run-id", required=True,
                         help="Directory name under phase0-results/ for this run")
+    parser.add_argument("--app", default="coherence-testbench-phase0",
+                        help="Modal app name")
+    parser.add_argument("--function", default="phase0_end_to_end",
+                        help="Modal function name on that app")
     args = parser.parse_args()
 
     # Load config as a string so it can be embedded in the Function call.
     config_text = Path(args.config).read_text()
 
     modal = importlib.import_module("modal")
-    # Look up the deployed app + its function.
-    app_name = "coherence-testbench-phase0"
-    fn = modal.Function.from_name(app_name, "phase0_end_to_end")
+    fn = modal.Function.from_name(args.app, args.function)
     call = fn.spawn(config_yaml=config_text, run_id=args.run_id)
     print(f"call_id={call.object_id}")
     print(f"run_id={args.run_id}")
