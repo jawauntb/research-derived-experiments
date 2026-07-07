@@ -1,5 +1,7 @@
 # Phase-0 TODO — Validate the core bet
 
+**STATUS: CLOSED — Verdict = `KILL` (2026-07-06). See [`POST_MORTEM.md`](POST_MORTEM.md).**
+
 Gate: **leave-subjects-out generalization measured, kill-threshold set FIRST.**
 Nothing from Phase 1/2/3 starts until this returns a GO.
 
@@ -7,24 +9,24 @@ Nothing from Phase 1/2/3 starts until this returns a GO.
 
 - [x] **Pre-register the kill-criterion in config.**
       `config/kill_criterion.yaml` committed with rationale.
-- [ ] **Ingest BBBD.** Download + BIDS loader for 64-ch EEG (`.bdf`) via
+- [x] **Ingest BBBD.** Download + BIDS loader for 64-ch EEG (`.bdf`) via
       `mne-bids` / `pyEDFlib`. Align labels (attention, quiz score, digit-span,
       ASRS). Done when: all 5 experiments load, labels joined.
-- [ ] **Preprocess per dataset methods.** 0.05 Hz HPF, 60 Hz notch, resample to
+- [x] **Preprocess per dataset methods.** 0.05 Hz HPF, 60 Hz notch, resample to
       128 Hz. Flag/notch the 16 Hz electrical artifact in Exp 4-5 so no decoder
       cheats on it. Done when: artifact accounted for; pipeline reproducible from
       config.
-- [ ] **Build two decoders.**
+- [x] **Build two decoders.**
       - Baseline: per-subject-calibrated (upper bound).
       - Target: SSL pretrain → Euclidean/Riemannian alignment →
         domain-adversarial head → probe/fine-tune.
       Done when: both train + evaluate on the same folds.
-- [ ] **Evaluate leave-subjects-out.**
+- [x] **Evaluate leave-subjects-out.**
       - Primary: attention (attentive vs distracted).
       - Secondary: regress quiz score / working-memory.
       - Report accuracy AND bits/sec mutual information.
       Done when: LSO metric + MI computed and dumped to `artifacts/phase0/`.
-- [ ] **Ship the GO/KILL report.** Generalization curve (perf vs #train-subjects),
+- [x] **Ship the GO/KILL report.** Generalization curve (perf vs #train-subjects),
       cross- vs per-subject gap, MI, explicit call vs the pre-set threshold.
       Done when: `artifacts/phase0/report.md` auto-generated and verdict recorded
       in the JSONL run log.

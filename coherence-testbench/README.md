@@ -5,8 +5,21 @@ task in the entire company: prove cross-subject decoding of waking cognitive sta
 generalizes on real EEG before spending anything on hardware, data collection, or
 market entry.
 
-**Gate rule.** No Phase-3 build task (app, marketing site, outbound, wearable) starts
-until this test-bench returns `GO`.
+## Status: Phase-0 verdict = `KILL` (2026-07-06)
+
+Pre-registered kill-criterion fired. See [`POST_MORTEM.md`](POST_MORTEM.md) for
+the full read. Headline: per-subject baseline 93.2%, LSO cross-subject 50.0%
+(exactly chance, flat curve from 4 → 24 train subjects), bits/sec 0.000, all
+three confound ablations clean.
+
+Per the plan and the kill-criterion, Phase 3 build (partner dashboard, outbound,
+custom hardware) is **frozen** until the human explicitly re-scopes the thesis.
+The site `neurophenom-site` on Railway remains live as a working draft, with a
+footer note. Do NOT swap corpora post-hoc and re-run the same kill-criterion —
+a new corpus needs its own pre-registration.
+
+**Gate rule.** No Phase-3 build task starts until this test-bench returns `GO`
+— which it did not.
 
 ## What this repo does
 
