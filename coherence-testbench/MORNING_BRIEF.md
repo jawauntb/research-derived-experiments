@@ -44,9 +44,28 @@ GO threshold: ρ ≥ 0.15. Passed by 12.7 pts.
 1. `quiz-20260707-014453` — the load-bearing quiz-score regression.
    Verdict `GO`. Report at
    `phase0-results:/quiz-20260707-014453/report.md`.
-2. LaBraM integration research agent finished / is still running (a
-   background research task speccing a real EEG foundation model as
-   an option if you ever want to revive the EEG bench).
+2. LaBraM integration research agent (see
+   `coherence-testbench/docs/labram_integration.md`) — confirmed
+   MIT-licensed, weights public, ~4 h to first result.
+3. LaBraM EEG rescue attempt (`phase0.eeg.labram.v1`, same task as the
+   killed EEG bench, encoder swapped to a frozen LaBraM-Base). Wired
+   up on Modal as `coherence-testbench-labram`. **Did NOT complete.**
+   Modal image build repeatedly failed with `libcudart.so.13`
+   linkage — braindecode's `filter` module imports torchaudio at
+   load time, and torchaudio's CPU wheel via Modal's `run_commands`
+   still resolved a CUDA-linked variant. Five variants tried:
+   - CPU-tagged pip_install (`torch==2.7.1+cpu`) — libcudart
+   - safetensors pin added — libcudart persisted
+   - Manual `hf_hub_download` + `torch.load` bypassing braindecode's
+     `from_pretrained` — libcudart persisted
+   - `run_commands` explicit uninstall + torch 2.4.1 CPU install —
+     image build failed
+   - `run_commands` with torch 2.5.1 CPU install — image build failed
+   The pre-registration `phase0.eeg.labram.v1` is on file, the code
+   is in the repo, but no LaBraM verdict tonight. This is a Modal
+   image-spec fight — a fresh look tomorrow, or a different foundation
+   model (CBraMod, EEGPT), should unstick it in an hour or two.
+   **Not load-bearing on the eyetrack GO.**
 
 ## What I did NOT do
 
@@ -54,6 +73,11 @@ GO threshold: ρ ≥ 0.15. Passed by 12.7 pts.
   says even after a GO, Phase 3 requires explicit user re-scoping.
 - Did NOT take the site down.
 - Did NOT change the pre-registered thresholds after the fact.
+- Did NOT succeed in getting LaBraM running — five image-spec
+  variants all failed on Modal (see attempts log in the LaBraM
+  section above). The `phase0.eeg.labram.v1` pre-registration is
+  on record but has no verdict. Not urgent — the quiz-score GO
+  stands on its own without any EEG rescue.
 
 ## What's on file
 
