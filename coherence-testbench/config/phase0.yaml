@@ -5,8 +5,10 @@ kill_criterion: "config/kill_criterion.yaml"
 data:
   dataset: "bbbd"
   cache_dir_env: "BBBD_CACHE_DIR"
-  # Experiment 1 is eyetrack-only on Zenodo (no EEG); decoders skip it.
-  experiments: [2, 3, 4, 5]
+  # Exp 1: eyetrack-only (no EEG). Exp 5: no attentive-vs-distracted contrast
+  # (ses-02 is a monetary-incentive intervention, both sessions attentive).
+  # See docs/bbbd_label_protocol.md.
+  experiments: [2, 3, 4]
   subject_limit: null           # null = all subjects; set an int for smoke tests
 
 preprocess:
@@ -34,7 +36,10 @@ decoders:
 evaluate:
   scheme: "leave_subjects_out"
   n_lso_seeds: 5
-  train_subject_sweep: [8, 16, 32, 64, 128]   # generalization curve
+  # BBBD exp 2/3/4 have 31/29/43 subjects — cap the sweep to what actually fits
+  # after the 20% LSO test hold-out. The LSO code silently skips n_train values
+  # that exceed the available train pool.
+  train_subject_sweep: [4, 8, 16, 24]
 
 output:
   root: "artifacts/phase0"
