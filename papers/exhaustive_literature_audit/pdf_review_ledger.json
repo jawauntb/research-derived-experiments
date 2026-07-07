@@ -1,0 +1,482 @@
+[
+  {
+    "file": "papers/allostatic_control/paper.pdf",
+    "title": "Allostatic State Control",
+    "pages": "10",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Allostatic State Control Works at the Boundary - But Greedy Planning Beats Uncertainty-Aware Allostasis: An Honest Falsi\ufb01cation of Four Pre-Registered Gates Author. Jawaun Brown. Abstract Companion paper [13b] showed that state-dependent valence is architecturally solvable (oracle boundary feature: return 50/50) but that smooth-function-approximator alternatives (Fourier features, sign-of-margin loss) reach state-conditional competence 0.99 yet trajectory-weighted return only 24.5/50, because the agent's policy-induced state distribution concentrates on the singular E=0.5 failure point. The proposed Paper 14 was to test whether a third \"regulate\" action - letting the agent move its own internal state away from the boundary - combined with an uncertainty-aware planner, can recover return without explicit boundary representation. We ran 36 cells: 4 conditions x 3 boundary locations x 3 see",
+    "keywords": "agents;geometry;concern;inquiry"
+  },
+  {
+    "file": "papers/architecture_laws_machine_agency/paper.pdf",
+    "title": "Architecture Laws for Machine Agency",
+    "pages": "5",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Architecture Laws for Machine Agency: A Synthesis of the Probe- Calibration Lineage Jawaun Brown 2026-07-06 Abstract This note distills the program's practical architecture lessons from the \ufb01rst-order self, probe-calibration, world-responds, planning, and long-horizon papers. The empirical arc does not show consciousness, full agency, or general intelligence. It shows something narrower and more useful: small architectural changes repeatedly determine whether an agent's behavior is tied to the intended internal structure or to a proxy. The recurring pattern is: 1. A behavior-level success appears. 2. A representation or control diagnostic shows the success is proxy-mediated. 3. A simple architecture change restores the intended causal structure. 4. A harder setting reveals the next proxy. The resulting contribution is a ledger of architecture laws for machine agency: preserve vector-valu",
+    "keywords": "causal;agents;geometry;concern;ood;inquiry"
+  },
+  {
+    "file": "papers/autopoietic_control/paper.pdf",
+    "title": "From Active Geometry to Autopoietic Control",
+    "pages": "9",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "From Active Geometry to Autopoietic Control: Viability Slack as the Bottleneck for Adaptive Generalization Author. Jawaun Brown. Abstract Four prior empirical papers in this program established that symmetry-compatible-hypothesis volume (weakness) predicts out-of-distribution generalization [1], that the relevant symmetry group can be recovered from training data alone [2], that pixel-cosine and learned-encoder methods occupy di\ufb00erent operating regimes [3], and that paraphrase clusters become causally load-bearing under action coupling via supervised \ufb01ne-tuning [4]. Paper [4] left one strong skeptical objection: \"of course ablating a direction the head was trained to use makes the head fail.\" The autopoietic theorem of Bennett & Suzuki [5] sharpens what the rebuttal needs to demonstrate. Action coupling is necessary but not su\ufb03cient for the Layer-3 claim; the system must also (a) preserv",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/causally_grounded_agents_benchmark/paper.pdf",
+    "title": "Benchmarking Causally Grounded Finite Agents",
+    "pages": "4",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Benchmarking Causally Grounded Finite Agents Condensed Design Note for a Proxy-Resistant Agent Benchmark Jawaun Brown 2026-07-06 Source Note This note is a benchmark-facing condensation of the research program in this repository. It is not a replacement for the full empirical reports. Portable source paths: \u2022 umbrella benchmark: docs/causally_grounded_agents_benchmark.md \u2022 release schema: docs/causally_grounded_agents_release_schema.md \u2022 long-horizon benchmark card: experiments/long_horizon_bottleneck/BENCHMARK_CARD.md \u2022 long-horizon paper: papers/long_horizon_bottleneck/paper.pdf \u2022 structure-compatible generalization: papers/structure_compatible_generalization/ \u2022 Metaphysics archive name for this note: 32_Benchmarking_Causally_Grounded_Finite_Agents_2026_07_06.pdf Benchmark North Star A \ufb01nite agent is not grounded because it succeeds. It is grounded when the variables that matter for fu",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/comprehensive_literature_review/paper.pdf",
+    "title": "From Concern to Action Surfaces",
+    "pages": "15",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "From Concern to Action Surfaces 1 From Concern to Action Surfaces A Critical Literature Review and Research Program for Causally Grounded Finite Agents Date: 2026-07-07 Abstract This paper reviews the research-derived experiments corpus as a unified program about finite agents: systems that must compress a world, preserve viability-relevant distinctions, act under uncertainty, and remain honest under distribution shift. The review starts from first principles for readers without machine learning, neuroscience, or philosophy background, then links the repository's papers to external literatures in representation learning, causal inference, active learning, reinforcement learning, domain generalization, cybernetics, active inference, enactivism, and mathematical theories of symmetry and compression. The central synthesis is that the program is not a claim that current systems are conscious",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/concern_bootstrap/paper.pdf",
+    "title": "Bootstrapping Concern",
+    "pages": "10",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Bootstrapping Concern: DeltaE Auxiliary Loss Builds Valence Geometry on Easy Reward Structures, But Sparse-Reward Policies Cannot Exploit It Author. Jawaun Brown. Abstract Companion paper [7] left a clean open question: can valence-aligned representation self-organize from viability interaction, rather than being installed by supervised optimal-action pretraining? Three candidate mechanisms have been proposed: (a) an action-conditioned DeltaE auxiliary loss in which the encoder is trained to predict its own future energy change given an item and a candidate action; (b) an ecological curriculum (train on an additive reward structure where sensory proxies work, then shift to a conjunctive XOR reward where they fail); (c) evolutionary selection over populations. This paper tests (a) and (b) under sparse-reward REINFORCE and compares them against the supervised valence upper bound from [6, 7",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/concerned_syntax/paper.pdf",
+    "title": "Constituency Tests for Concerned Representation in Minimal Agents",
+    "pages": "18",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Constituency Tests for Concerned Representation in Minimal Agents Jawaun Brown 2026-06-22 Abstract Arc 1 of the maintained-concern program showed that a minimal homeostatic agent can detect boundary staleness, allocate costly null probes, saturate after identi\ufb01cation, and re-engage after regime shifts. It also found a precise ceiling: under a shared-head, null-only intervention regime, better probe policy no longer closes role-speci\ufb01c mediated identi\ufb01ability. This paper opens Arc 2A by asking whether the next intervention problem is syntactic: can a concerned agent discover which parts of a world belong together causally? We introduce the Concerned Shape Grammar, a symbolic benchmark inspired by constituency tests from cognitive work on geometric shape syntax. A visible six-part shape can have the same surface but di\ufb00erent hidden parse trees. Causal roles such as shield, poison, repair, ",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/costly_null_probes/paper.pdf",
+    "title": "Learning When Not to Act: Costly Null Probes for Self/World Identifiability in Minimal Homeostatic Agents",
+    "pages": "10",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Learning When Not to Act: Costly Null Probes for Self/ World Identi\ufb01ability in Minimal Homeostatic Agents Jawaun Brown 2026-06-11 Abstract Paper 16b (Identi\ufb01ability Through Intervention) showed that scheduled null actions, when used as world- only supervision, break the self/world gauge symmetry that defeats architectural factorization (Paper 16). The agent learned the \ufb01rst-order self/world boundary through the act of not acting - but the null actions were experimenter-scheduled. This paper asks whether a minimal homeostatic agent can learn when to spend a viability cost on a null probe such that the probe (i) improves attribution and (ii) \ufb01res preferentially in states the model is uncertain about. We test seven conditions (factorized_no_null, factorized_null_passive, scheduled_null_anchor, matched_random_null_anchor, learned_costly_null_probe, oracle_uncertainty_probe, oracle_source) ac",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/current_error_calibration/paper.pdf",
+    "title": "Current-Error Calibration for Identifying Interventions",
+    "pages": "10",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Current-Error Calibration for Identifying Interventions: Recent Residuals Are Not Enough Unless Recomputed Against the Present Model Jawaun Brown 2026-06-12 Abstract Paper 18 (Online Identifying Interventions) found that the debiased V_probe head - designed to \ufb01x Paper 17A's noise- \ufb02oor saturation - was instead anti-calibrated to oracle attribution uncertainty (Spearman \u03c1 = \u22120.55). The \u00a75 diagnosis named \"historical residual scale != current systematic error,\" but con\ufb02ated three distinct mechanisms: (H1) lag (EMA \u03b1=0.05 too slow), (H2) staleness (residuals computed against the model-as-it-was, not the model-as-it-is-now), and (H3) structural (same-class local signals are intrinsically non-epistemic). Paper 19 builds conditions that uniquely support each hypothesis. Three V_probe target variants test H1 (recent_ema \u03b1=0.20, sliding_window K=50) and one tests H2 (current_replay: per-bucket ",
+    "keywords": "causal;agents;geometry;concern;ood;inquiry"
+  },
+  {
+    "file": "papers/ensemble_uncertainty/paper.pdf",
+    "title": "When Models Don't Know What They Don't Know",
+    "pages": "8",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "When Models Don't Know What They Don't Know: Bootstrap Ensembles Fail to Detect the Regime-Boundary Failure, Greedy Planning Remains Robust Author. Jawaun Brown. Abstract Companion paper [14] found that adding a regulate action lifts boundary-condition return from 24.5 to 42.5, but sophisticated planners (two-step lookahead, margin-con\ufb01dence) were worse than baseline because they used the model's own con\ufb01dence as a planning bonus and the model was con\ufb01dently wrong at the regime boundary. The reviewer's diagnostic proposal: train a K=5 ensemble of DeltaE heads; check whether calibrated ensemble uncertainty detects the boundary failure that margin-con\ufb01dence missed; test whether LCB-style risk-averse and UCB-style optimistic planners now rescue allostatic control. We ran the experiment as a falsi\ufb01able diagnostic, with the central question framed as: does calibrated ensemble uncertainty dete",
+    "keywords": "agents;geometry;concern;ood;inquiry;consciousness"
+  },
+  {
+    "file": "papers/epistemic_exploration/paper.pdf",
+    "title": "Learning to Ask What Matters",
+    "pages": "9",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Learning to Ask What Matters: Conservative Epistemic Exploration Recovers Self-Organized Concern from a Biased Initial Policy; Novelty-Seeking Exploration Does Not Author. Jawaun Brown. Abstract Companion paper [10b] identi\ufb01ed action coverage as a third necessary condition (alongside representational geometry and readout capacity) for self-organized concern-shaped competence: under a fully-biased \"always consume\" initial policy, the Paper 10 model_plan_delta_e pipeline collapses on XOR (action accuracy 0.491, return 1.97) even though the encoder's reward-cluster geometry remains high (rg +1.80). The reviewer of [10b] suggested four candidate \ufb01xes: \u03b5-greedy stochastic schedules, ICM-style prediction-error curiosity [3], bootstrap-DQN-style ensemble disagreement [4 by analogy], and active- inference-style expected information gain [5, 6]. This paper runs all four against the biased-prior f",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/exploration_diagnostics/paper.pdf",
+    "title": "Exploration Diagnostics",
+    "pages": "8",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Exploration Diagnostics: Skip-Branch Calibration Reveals Failure Modes; Margin-Based Epistemic Sampling Recovers Partially from Wrong-Init; All Mechanisms Fail Under High Noise Author. Jawaun Brown. Abstract Companion paper [11] reported that two intrinsic exploration mechanisms - \u03b5-greedy with decay and margin-based epistemic sampling (called expected_info_gain in [11]; here renamed to margin-based epistemic sampling, MBES, per reviewer guidance) - recover full XOR competence from a biased initial policy in the homeostatic bandit, while ICM-style prediction-error curiosity and bootstrap-DQN-style ensemble disagreement fail. The reviewer prescribed \ufb01ve diagnostic ablations before promoting Paper 11's result. This paper runs three of them as a 54-cell sweep (6 conditions x 3 variants x 3 seeds, XOR only): \u2022 Extended calibration - log skip-branch MSE, margin MSE, and margin sign accuracy a",
+    "keywords": "agents;geometry;concern;inquiry"
+  },
+  {
+    "file": "papers/first_order_self/paper.pdf",
+    "title": "First-Order Self",
+    "pages": "9",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "First-Order Self: Architectural Factorization Alone Does Not Recover Self/World Attribution; Oracle Supervision Does - Gauge-Symmetric Heads Without Identi\ufb01ability Author. Jawaun Brown. Abstract Companion paper [15] showed that vector DeltaV heads support \ufb02exible concern under shifted internal-priority weights, while scalar drive heads cannot reweight. The natural next step - and the cleanest minimal computational test of Bennett's \"\ufb01rst-order self\" and Levin's \"computational boundary of self\" - is self/world attribution: can the agent learn to separate viability changes that result from its own actions from changes that result from exogenous (world-caused) sources? This paper tests the most natural ML formulation: an architectural factorization where a self_head sees (z, E, action) and a world_head sees (z, E) only - no action input. The two sub-heads sum to predict total observed Delta",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/habituated_reengagement/paper.pdf",
+    "title": "Habituated Re-Engagement: Post-Probe Cooling Stabilizes Autonomous Identifying Interventions",
+    "pages": "11",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Habituated Re-Engagement: Post-Probe Cooling Stabilizes Autonomous Identifying Interventions Jawaun Brown 2026-06-12 Abstract Paper 23A established that adding a non-null prediction-error boost to V_probe broke the self-silencing trap from Paper 22 - for the \ufb01rst time in the program, the agent re-engaged probes after a regime shift (137% of pre-shift density, 3.04x of una\ufb00ected buckets). But the same mechanism produced anxiety: 0/3 seeds recovered to MAE <= 0.10, post-shift null rate rose above pre-shift, and post-shift AUC was the worst of any learned condition. Paper 23B isolates the third subproblem: stable saturation after su\ufb03cient identi\ufb01cation. The critical conceptual choice - implement cooling at the decision layer (reduce action tendency given recent probe e\ufb00ort) rather than at the signal layer (erase the surprise signal). Surprise is the agent's correct read that \"the world is c",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/habituated_reengagement/suite_c_neural_probe_transfer.pdf",
+    "title": "Suite C Neural Probe Transfer",
+    "pages": "3",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Suite C Neural Probe Transfer: Learned Inquiry Without False Calm Jawaun Brown Abstract Suite C previously showed that a hand-speci\ufb01ed decision-layer policy can re-engage after world change, recover attribution, quiet down without false calm, and reopen after a second shift. This paper tests the next bounded transfer: train the probe policy itself. A small NumPy MLP probe head is trained from Suite C teacher traces, calibrated on separate seeds, and evaluated on held-out seeds with stale-signal, wrong-signal, signal-suppression, and matched-random controls. The learned head passes the held-out neural-transfer gate: \ufb01nal a\ufb00ected MAE 0.112, a\ufb00ected/una\ufb00ected selectivity 16.667, second-shift reopenability 17.448, and 23.1 probes versus 144.0 scheduled and 67.8 oracle-source probes. Matched random at the same budget reaches selectivity 0.969. 1. Question The question is whether the architect",
+    "keywords": "agents;ood;inquiry;consciousness"
+  },
+  {
+    "file": "papers/habituated_reengagement/suite_c_reengagement_under_world_change.pdf",
+    "title": "Suite C Re-Engagement Under World Change",
+    "pages": "3",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Suite C Re-Engagement Under World Change: A No-False-Calm Benchmark for Adaptive Inquiry Jawaun Brown Abstract Prior work in this lineage found a precise failure: agents can learn to probe e\ufb03ciently, become quiet after apparent convergence, and then fail to ask again after the world changes. Paper 23A restored re-engagement but produced anxious over-probing; Paper 23B showed that decision-layer cooling is safer than erasing the surprise signal. This paper turns those \ufb01ndings into Suite C, a public \ufb01nite benchmark gate. The suite requires \ufb01rst-shift re-engagement, attribution recovery, no false calm, cost-aware inquiry, and second-shift re-openability in one artifact. The headline condition is burst_then_refractory. It passes all six Suite C gates in this controlled harness: \ufb01nal a\ufb00ected MAE 0.112, a\ufb00ected/una\ufb00ected post-shift selectivity 16.927, second-shift reopenability 16.667, and 22.",
+    "keywords": "causal;agents;ood;inquiry;consciousness"
+  },
+  {
+    "file": "papers/homeostatic_objects/paper.pdf",
+    "title": "When Active Geometry Transfers",
+    "pages": "9",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "When Active Geometry Transfers: Valence-Pretrained Encoders Survive Episodic Homeostatic RL Where Sparse-Reward RL Fails Author. Jawaun Brown. Abstract The companion paper [6] showed that under a supervised optimal-action objective, encoders cluster the world by causal-valence role rather than sensory similarity - a clean static-objective demonstration of \"objects from concern.\" This paper tests whether that demonstration transfers from the static-objective stand-in to the temporal viability setting Bennett & Suzuki's autopoietic theorem [7] explicitly cares about: an episodic environment with an internal energy variable, REINFORCE policy gradient updates, and viability- conditioned termination. We run a 42-cell Modal sweep (3 seeds x 2 reward structures x 7 training conditions) on a minimal homeostatic bandit (16-dim observations with crossed color x label -> reward, internal energy E \u2208",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/icml_publication_package_2026/proxy_resistant_agent_benchmarks/paper.pdf",
+    "title": "paper",
+    "pages": "5",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Agent benchmarks often reward final task success, but final success can be proxy-supported: a model may ex- ploit shortcuts, stale confidence, local final cues, uniform memory, or brittle tool surfaces. We propose a finite- agent benchmark design rule: a suite passes only when behavior, a suite-specific causal/structure gate, and anti- cheat controls all pass. We instantiate the rule with two hardened anchors. Suite C tests adaptive inquiry under world change: agents must remain quiet when stable, re- engage after change, recover attribution, avoid false calm, spend fewer probes than high-cost controls, and reopen after a second shift. Suite D/E tests long-horizon com- mitment: a future-critical variable must survive memory, generated action, tool schema, repair, causal readout, and black-box API behavior surfaces. The benchmark is not a consciousness test or production reliability certi",
+    "keywords": "causal;agents;geometry;ood;symmetry;inquiry"
+  },
+  {
+    "file": "papers/icml_publication_package_2026/structure_compatible_model_selection/paper.pdf",
+    "title": "paper",
+    "pages": "9",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Structure-Compatible Model Selection Under Underspecification Anonymous Authors Abstract Modern learning pipelines are often underspecified: many trained models can match train and in-distribution valida- tion metrics while behaving differently under deployment shift. We study a finite, auditable slice of this problem. The central hypothesis is that, when a deployment shift is generated by a candidate transformation family, mod- els should be selected not only by validation performance but also by whether their learned input-output map pre- serves that transformation. We consolidate six experi- mental phases spanning symbolic cyclic tasks, modular algorithmic tables, rotated visual objects, learned genera- tors, language-like template substitution, frozen-encoder semantic retrieval, and OOD-free semantic model-zoo se- lection. Across these settings, structure-compatible pre- dictors usua",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/icml_publication_package_2026/suite_c_teacher_free_inquiry/paper_outline.pdf",
+    "title": "paper_outline",
+    "pages": "1",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Suite C previously showed that a hand-specified policy and then a teacher-trained probe head can re-engage af- ter world change. This paper reports the next finite step: a linear inquiry policy selected by teacher-free cross-entropy-method reward search. The training objec- tive uses downstream recovery, selective re-engagement, second-shift reopenability, probe cost, and anti-cheat con- trols; it does not consume hand-policy labels, teacher ac- tions, or teacher probabilities. On held-out seeds the policy passes C1-C6 plus T1/N1, and a 64-seed boot- strap replication preserves the effect. A follow-up ab- lation replaces the privileged source-identity bit with an observable source estimate and routes the policy through a local tool-call adapter; both finite gates pass, while a malformed-tool control fails.",
+    "keywords": "agents;ood;inquiry;consciousness"
+  },
+  {
+    "file": "papers/interventional_contrast/paper.pdf",
+    "title": "Interventional Contrast for Mediated Self/World Attribution",
+    "pages": "10",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Interventional Contrast for Mediated Self/World Attribution: From Hand-Coded Buckets to Learned Probe Abstractions Jawaun Brown 2026-06-12 Abstract Paper 23B established the program's \ufb01rst stable maintained self/world boundary mechanism (8/10 gates, including G6 anti-cheating and G10 re-openability after a second regime shift). But Paper 23B's G8 (mediated/exogenous identi\ufb01ability) \ufb02agged a remaining issue: the three-head architecture's summed world prediction was correct, but the internal split between mediated and exogenous components was only partially identi\ufb01ed - the headline under-predicted mediated by ~40% (MAE 0.09, at threshold boundary). Paper 24 tests whether explicit interventional contrast supervision - training the mediated head on (world_pred(high_h_history) \u2212 world_pred(low_h_history)) against the empirical di\ufb00erence in paired null observations - identi\ufb01es the components t",
+    "keywords": "causal;agents;geometry;ood;symmetry;inquiry"
+  },
+  {
+    "file": "papers/learned_symmetry_discovery/paper.pdf",
+    "title": "Learning the Group",
+    "pages": "10",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Learning the Group: Data-Inferred Equivariance Predicts Out-of-Distribution Generalization Without Oracle Symmetry Author. Jawaun Brown. Abstract A central limitation of recent symmetry-and-generalization work - including our own prior result that weakness (symmetry-compatible-hypothesis volume) predicts OOD generalization on partially-observed cyclic symmetries - is that the transformation group is supplied by an oracle. Perin and Deny [4] prove that conventional networks cannot extrapolate partially-observed cyclic symmetries; the natural follow-up question is whether the group can be inferred from training data alone. We give a positive answer for the \ufb01nite-group case. Our infer_rotation_group_from_training procedure searches a discrete candidate set of transformations and keeps those under which training inputs map to other training inputs of the same label with high feature similari",
+    "keywords": "causal;agents;ood;symmetry;inquiry;consciousness"
+  },
+  {
+    "file": "papers/long_horizon_bottleneck/paper.pdf",
+    "title": "Future Control Moves Memory",
+    "pages": "8",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Future Control Moves Memory: A Long-Horizon Moved-Bottleneck Diagnostic for Synthetic Agents Jawaun Brown 2026-07-06 Abstract This paper asks a narrow question about \ufb01nite neural agents: when one early state variable becomes future-critical for a delayed decision, does the agent's memory geometry become speci\ufb01cally sensitive to that variable, and does that sensitivity move when the critical variable moves? We introduce the long-horizon moved-bottleneck diagnostic. Four early clue slots are matched for salience and frequency. One slot is selected as the future-critical bottleneck, moved across registered positions, and queried only after a long delay. The primary metric is not just \ufb01nal accuracy; it is the relative displacement of the \ufb01nal hidden state under single-slot bit \ufb02ips. The registered gate requires the \ufb01nal-state sensitivity peak to follow the moved critical slot while remaining",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/metaphysics_synthesis/paper.pdf",
+    "title": "paper",
+    "pages": "14",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "What Matters Becomes Measurable: A Synthesis of Structure-Compatible Generalization, Concern Geometry, and Proxy-Resistant Finite Agents Jawaun Brown Research Derived Experiments July 6, 2026 Abstract This synthesis condenses the July 2026 \"Metaphysics of Intelligence\" archive and the associated Research Derived Experiments repository into one reviewer-facing argument. The central result is not that the work proves consciousness, general agency, or universal OOD robustness. It does something more actionable: it shows how to test whether \ufb01nite learning systems succeed because the right structure controls behavior, rather than because a proxy passed the surface metric. Across the archive, the strongest evidence falls into \ufb01ve clusters. First, structure-compatible model selection shows that, under underspeci\ufb01cation, compatibility with deployment-relevant trans- formations can select better ",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/metric_stack_synthesis/paper.pdf",
+    "title": "The Metric Stack of Concern",
+    "pages": "27",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "The Metric Stack of Concern: From Viability Prediction to Maintained Self/World Boundaries in Minimal Agents Jawaun Brown 2026-06-12 Abstract How can we tell whether a minimal agent's behavior depends on the intended internal structure, rather than on a proxy? We address this measurement problem in homeostatic bandits where agents must predict viability change, act, intervene through costly null actions, and attribute observed changes to self versus world. We synthesize a 25-study experimental arc in which a family of minimal homeostatic agents is progressively augmented with mechanisms for autonomous self/ world attribution: concern-like representation, vector-valued valence, active null-anchored intervention (Brehmer et al., 2022), calibrated probe selection (Houlsby et al., 2011; Settles, 2009), decision-layer habituation, and learned probe abstractions. The arc reaches a clearly iden",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/neural_group_generator/paper.pdf",
+    "title": "When Pixels Beat Embeddings",
+    "pages": "8",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "When Pixels Beat Embeddings: Three Failed Neural Approaches to Symmetry Group Discovery Author. Jawaun Brown. Abstract The Learning the Group paper [2] showed that a simple enumerative procedure - for each candidate rotation \u03b8 in a 24-angle grid, score by mean pixel-cosine to the nearest same-class training example - recovers the true Z_8 rotation group from partial-orbit training data at 89.7% recall, 71.3% precision, with no oracle access. That paper's main limitation, raised in its \u00a76, is that the candidate set must be enumerable. The natural follow-on is to replace enumeration with a neural generator that proposes continuous-parameter transformations. We test three natural neural approaches on synthetic strokes and \ufb01nd that all three underperform the pixel-cosine baseline under threshold-based selection. We diagnose each failure. We then test the same methods on rotated MNIST (real d",
+    "keywords": "causal;agents;geometry;ood;symmetry"
+  },
+  {
+    "file": "papers/null_intervention/paper.pdf",
+    "title": "Identifiability Through Intervention",
+    "pages": "10",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Identi\ufb01ability Through Intervention: Null Actions Break the Gauge Symmetry of First-Order Self - Active Anchoring Reduces False-Credit by 82% Author. Jawaun Brown. Abstract Companion paper [16] established that architectural self/world factorization (self_head sees action; world_head doesn't) is gauge-symmetric: the two sub-heads can split the joint prediction arbitrarily, and architecture alone is insu\ufb03cient for semantic decomposition. The factorized model overshot the true self value for food consume by +0.51 (predicted +1.47 vs true +0.96) while the world_head compensated with the equal-and-opposite o\ufb00set. Action accuracy was una\ufb00ected (gauge symmetry preserves action di\ufb00erences) - the cleanest case in the program of behavioral correctness coexisting with representational error. This paper tests the active-intervention \ufb01x proposed in Paper [16] \u00a77: add a null action to the env. Null i",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/off_policy_state_coverage/paper.pdf",
+    "title": "Off-Policy State Coverage",
+    "pages": "9",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "O\ufb00-Policy DeltaE Training Partially Recovers State-Dependent Concern - But Refutes Paper 12's Coverage Diagnosis and Reveals a Boundary-Smoothing Failure at E=0.5 Author. Jawaun Brown. Abstract Companion paper [12] reported a uniform failure on state-dependent reward (return 13/50, action accuracy 0.47) across six online training conditions, including the Paper [11] winner (MBES) and the Paper [11b] ensemble-margin follow-up. Paper [12]'s diagnosis: the agent's own homeostatic dynamics produce training data biased toward low-E states, so the DeltaE head never sees the high-E counterfactual data needed to learn the E=0.5 inversion. The natural \ufb01x: decouple training data from episode dynamics via o\ufb00-policy sampling. This paper tests the o\ufb00-policy \ufb01x. 24-cell sweep (4 conditions x 2 envs x 3 seeds): o\ufb00-policy state-aware (HEADLINE), o\ufb00-policy state-blind (control), online state-aware (Paper",
+    "keywords": "causal;agents;geometry;concern;ood;inquiry"
+  },
+  {
+    "file": "papers/online_identifying_interventions/paper.pdf",
+    "title": "Online Identifying Interventions: Factorial Isolation of Probe-Target Bias and Data-Regime Effects in First-Order Self/World Identifiability",
+    "pages": "10",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Online Identifying Interventions: Factorial Isolation of Probe-Target Bias and Data-Regime E\ufb00ects in First-Order Self/World Identi\ufb01ability Jawaun Brown 2026-06-11 Abstract Paper 17A (Learning When Not to Act) falsi\ufb01ed autonomous null-probe selection while replicating Paper 16b's anchor mechanism. Its \u00a75 discussion named two distinct candidate bottlenecks: (i) the V_probe target was dominated by Bernoulli shock noise rather than systematic attribution error, and (ii) the o\ufb00-policy uniform training regime meant probe decisions could not a\ufb00ect training data - only viability cost. Paper 18 factorially isolates these two axes (probe target \u2208 {raw per-sample, lagged signed-residual EMA} x data regime \u2208 {o\ufb00-policy \ufb01xed, online bu\ufb00er-shaped}) with the full anchor/oracle/control ladder. Thirteen gates were pre-registered before any compute ran. Headline (mixed-with-mechanism, 4/13 gates pass): \u2022 ",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/passive_to_active_geometry/paper.pdf",
+    "title": "From Passive Cluster to Active Controller",
+    "pages": "9",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "From Passive Cluster to Active Controller: Action Coupling Makes Latent Geometry Causally Load-Bearing Author. Jawaun Brown. Abstract Three prior empirical papers in this program established that weakness (symmetry-compatible-hypothesis volume) predicts out-of-distribution generalization [1], that the relevant symmetry group can often be recovered from training data alone [2], and that pixel-cosine and learned-encoder methods occupy di\ufb00erent operating regimes [3]. Across those papers, the geometry being measured was passive: it predicted behavior but was not necessarily causally responsible for it. The prior paraphrase-probe result was the clearest example - paraphrase orbits clustered strongly in Pythia-70M layer-5 latent space (centered cosine gap +0.79), but per-concept latent clustering did not predict per-concept next-token behavioral consistency. This paper tests whether the same l",
+    "keywords": "causal;geometry;ood;symmetry;inquiry;consciousness"
+  },
+  {
+    "file": "papers/pdf/concern_deforms_metric.pdf",
+    "title": "Value-Weighted Training Deforms Learned Metrics Across RNN, Transformer, and JEPA-Style Spatial Models",
+    "pages": "12",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Value-Weighted Training Deforms Learned Metrics Across RNN, Transformer, and JEPA-Style Spatial Models Jawaun Brown Research-Derived Experiments \u00b7 Paper B Abstract If a representation is used to act, valuable regions should not merely receive labels; they should receive resolution. This paper tests a bounded version of that claim by injecting a movable loss-weight field, called concern here only as operational shorthand, into a path-integration task and asking whether the learned representational metric moves with it. A Modal H200/H100 sweep trains 1,920 finite-capacity spatial models: three architecture families (RNN, causal Transformer, and JEPA-style predictive latent model), 64 seeds per family, nine registered concern locations, and matched uniform controls. The primary observable is neighbor-stretch metric density, the mean latent displacement induced by a unit physical displacemen",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/pdf/reward_deformation_effective_dimension_law.pdf",
+    "title": "A Measured Effective-Dimension Law for Value-Weighted Metric Deformation in Path-Integration RNNs",
+    "pages": "6",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "A Measured Effective-Dimension Law for Value-Weighted Metric Deformation in Path-Integration RNNs Jawaun Brown Research-Derived Experiments \u00b7 Preregistered Geometry Sweep Abstract A value-weighted rate-distortion derivation predicts that a finite-capacity 2-D code should allocate local area density as \u221adet g \u221d w^{1/2}. We preregistered a geometry sweep designed to distinguish this physical 2-D law from an effectively 1-D allocation law: a stripe value field should give \u03b1 near 1/3, while an anisotropic value field varying along both arena axes should give \u03b1 near 1/2 if the 2-D law governs the trained code. The experiment rejects that d=2, \u03b1=1/2 prediction as a description of this path-integration RNN harness. Across 576 H100-trained capacity-bottleneck networks, anisotropic 2-D at A=6 gives \u03b1=0.309 [0.304, 0.314], stripe gives \u03b1=0.302 [0.298, 0.307], and point gives \u03b1=0.283 [0.278, 0.288]",
+    "keywords": "causal;agents;geometry;concern"
+  },
+  {
+    "file": "papers/pdf/unified_metric_weakness_portfolio/finite_representations_portfolio.pdf",
+    "title": "finite_representations_portfolio",
+    "pages": "38",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Finite Representations Allocate Resolution and Generalization Under Structure Four Research-Derived Experiments on Metric Deformation, Effective Dimension, Weakness, and Toroidal Topology Jawaun Brown July 2026 Executive Overview This portfolio collects four linked research-derived experiments on finite learned representations. 1. Metric allocation is experimentally movable. In finite-capacity spatial models, externally specified value weights causally reshape local representational geometry. Moving the priority field moves local metric density across RNN, Transformer, and JEPA-style spatial models. 2. The scaling exponent measures effective allocation dimension. A value-weighted rate-distortion derivation predicts a physical two-dimensional exponent, but the measured RNN exponent is near the one-dimensional family. The exponent therefore reports the effective dimension through which the",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/pdf/unified_metric_weakness_portfolio/finite_representations_portfolio_with_bookmarks.pdf",
+    "title": "finite_representations_portfolio_with_bookmarks",
+    "pages": "38",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Finite Representations Allocate Resolution and Generalization Under Structure Four Research-Derived Experiments on Metric Deformation, Effective Dimension, Weakness, and Toroidal Topology Jawaun Brown July 2026 Executive Overview This portfolio collects four linked research-derived experiments on finite learned representations. 1. Metric allocation is experimentally movable. In finite-capacity spatial models, externally specified value weights causally reshape local representational geometry. Moving the priority field moves local metric density across RNN, Transformer, and JEPA-style spatial models. 2. The scaling exponent measures effective allocation dimension. A value-weighted rate-distortion derivation predicts a physical two-dimensional exponent, but the measured RNN exponent is near the one-dimensional family. The exponent therefore reports the effective dimension through which the",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/pdf/weakness_predicts_ood.pdf",
+    "title": "Symmetry-Compatible Hypothesis Volume Predicts Out-of-Distribution Generalization",
+    "pages": "6",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Symmetry-Compatible Hypothesis Volume Predicts Out-of-Distribution Generalization Jawaun Brown Weakness, not generic compression alone, in shortcut-compatible learning problems Research-Derived Experiments \u00b7 preprint compiled from the project repository Abstract We study finite-domain model selection where training data admits both a local shortcut and a globally symmetry-compatible rule. Loss and in-distribution validation cannot distinguish the completions, and generic simplicity or flatness proxies can prefer the shortcut. We define weakness as the number of transformations under which a candidate function remains equivariant up to an output action. On cyclic and dihedral symbolic families (500 trials each), weakness recovers the invariant rule in 100% of trials (Wilson 95% lower bound 0.992) while the tested train-loss, validation, description-length, MDL-style, compression, and flat",
+    "keywords": "causal;geometry;ood;symmetry;inquiry"
+  },
+  {
+    "file": "papers/pdf/weakness_predicts_topology.pdf",
+    "title": "Translation Augmentation Produces Toroidal Codes and Larger-Arena Generalization in Path-Integration RNNs",
+    "pages": "7",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Translation Augmentation Produces Toroidal Codes and Larger-Arena Generalization in Path-Integration RNNs Jawaun Brown Research-Derived Experiments \u00b7 empirical note and negative mediation result Abstract This note tests a pre-registered strong claim about path-integration RNNs: weakness, a held-out linear equivariance score for wrapped translations, should govern whether a learned population code forms a toroidal manifold, and toroidal topology should mediate larger-arena generalization. The result is a useful negative mediation result. In a 320-network Modal H100 sweep, full translation augmentation reliably induces toroidal codes (G1 pass; torus match 0.734), preserves decoding when the arena doubles (OOD 0.949 versus 0.484 for no augmentation), and produces the causal condition contrast specified before the sweep (G6 pass). Weakness also tracks spectral concentration (G5 pass; rho = +",
+    "keywords": "causal;agents;geometry;ood;symmetry;inquiry"
+  },
+  {
+    "file": "papers/phase4_metaphysics/learning_missing_conditions.pdf",
+    "title": "Learning the Missing Conditions",
+    "pages": "3",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Learning the Missing Conditions Jawaun Brown Phase 4 diagnostics for the Metric Stack of Concern Research-Derived Experiments - controlled L4-parallel harnesses Abstract Phase 3 identified several open bottlenecks in the Metric Stack of Concern: language scale, non-enumerative symmetry discovery, learned regime variables, probe value, architecture beyond the mediated-identifiability ceiling, foundation-model-style metric deformation, and topology mediation. This paper reports a controlled Phase 4 diagnostic suite that turns those bottlenecks into seven cheap L4-parallel gates. The allowed claim is bounded: these experiments resolve mechanism choices inside controlled harnesses and identify which claims deserve heavier external validation. 1. Question The Phase 4 question is whether the missing conditions from the prior arc can be learned rather than handed to the agent: regime partitions",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/phase5_external_validity/from_controlled_concern_geometry_to_foundation_models.pdf",
+    "title": "From Controlled Concern Geometry to Foundation Models",
+    "pages": "3",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "From Controlled Concern Geometry to Foundation Models Jawaun Brown Phase 5 external-validity transport for the Metric Stack of Concern Research-Derived Experiments - budgeted L4-parallel proxy suite Abstract Phase 4 showed that several missing conditions in the Metric Stack of Concern can be learned inside controlled diagnostic harnesses. Phase 5 asks which mechanisms transport when the setup becomes more model-like, semantic, and counterfactual. The suite runs four cheap L4-parallel transport gates: language action coupling, foundation-style semantic metric deformation, role-routed world modeling, and topology/seam causal disentanglement. The allowed claim remains bounded: this is an external-validity proxy result that decides where expensive real-model validation should go next. 1. Question The Phase 5 question is not whether the Phase 4 controls can be tuned to pass again. It is wheth",
+    "keywords": "causal;agents;geometry;concern;ood;memory"
+  },
+  {
+    "file": "papers/phase6_real_model_validation/from_proxy_transport_to_open_models.pdf",
+    "title": "From Proxy Transport to Open Models",
+    "pages": "2",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "From Proxy Transport to Open Models Jawaun Brown Phase 6 actual-model validation for the Metric Stack of Concern Research-Derived Experiments - budgeted Modal L4 sweep Abstract Phase 5 used proxy harnesses to decide whether expensive validation was warranted. Phase 6 runs that heavier tier directly: public decoder language models are scored by hidden-state geometry and action logprob margins, while public frozen sentence encoders are tested with a post-hoc value-weighted metric deformation. The result is deliberately bounded. It is actual open-model evidence, not human behavioral evidence or foundation-model finetuning evidence. 1. Question The question is whether the Phase 5 proxy transport signals survive contact with actual open LMs and frozen encoders. For language, the validation asks whether a hidden concern axis predicts held-out help-versus-wait logprob margins and whether concer",
+    "keywords": "geometry;concern"
+  },
+  {
+    "file": "papers/planning_from_concern/paper.pdf",
+    "title": "Planning from Concern",
+    "pages": "11",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Planning from Concern: Model-Based DeltaE Action Selection Yields Self-Organized Homeostatic Competence Without Optimal-Action Supervision Author. Jawaun Brown. Abstract Companion paper [9] showed that an action-conditioned DeltaE auxiliary loss can self-organize a reward-aligned encoder representation (XOR cluster gap +1.84 without supervised optimal-action labels), but companion paper [8] showed that sparse-reward REINFORCE policy gradients fail to exploit it. The natural - and so far untested - closing of the loop is to use the learned DeltaE model directly for action selection. If the encoder has organized by reward and the DeltaE head predicts (item, energy, action) -> future energy change, then a greedy planner can act by a = argmax_a DeltaE_head(z, E, a), with no policy head and no policy gradient training. We run a 36-cell Modal sweep (6 conditions x 2 reward structures x 3 seeds",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/planning_hardening/paper.pdf",
+    "title": "Distributed Concern",
+    "pages": "13",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Distributed Concern: Planning from DeltaE Depends on Latent Geometry, Not a Single Reward Axis Author. Jawaun Brown. Abstract Companion paper [10] reported that a DeltaE-aux-organized encoder + greedy argmax_a DeltaE_head(z, E, a) achieves return 50/50 and action accuracy 0.996 on the XOR homeostatic bandit, without supervised optimal-action labels and without policy-gradient training, and o\ufb00ered the natural-seeming interpretation that the encoder's learned reward axis impels action. This paper hardens that result with \ufb01ve targeted ablations - reward-axis intervention, exploration-regime sweep, head-capacity sweep, DeltaE calibration diagnostics, and a harder environment - and \ufb01nds that the headline planning result is robust but the per-axis causal interpretation is not. The core empirical surprise: on XOR, ablating the encoder's reward axis at eval time drops action accuracy by \u22120.49, a",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/probe_value_reengagement/paper.pdf",
+    "title": "Probe Value and Re-Engagement: Learning When to Ask Again in Responsive Worlds",
+    "pages": "9",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Probe Value and Re-Engagement: Learning When to Ask Again in Responsive Worlds Jawaun Brown 2026-06-12 Abstract Paper 22 left two open issues. First, the program's oracle_probe_value condition used current attribution error as the signal, achieving \ufb01nal lc_MAE 5x worse than learned probing - empirically falsifying it as an upper bound (current error != value of information). Second, the agent's probe completely stopped \ufb01ring post-regime-shift (G7 failure): the V_probe was backward-looking and self-silencing, so once it stopped probing it stopped collecting the data that could reveal the world had changed. Paper 23A introduces two corrections: 1. Principled probe-value oracle: (world_error\u00b2) / (K + 1), the standard shrinkage estimate of expected MAE reduction from one more sample at bucket b. Plus a sequence variant adding a bonus when the agent's recent history contains a trigger consume",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/regime_sensitive_de/paper.pdf",
+    "title": "Regime-Sensitive DeltaE Models",
+    "pages": "8",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Regime-Sensitive DeltaE Models Solve State-Dependent Concern at the Diagnostic Limit: An Oracle Boundary Feature Closes the Gap; Learned Alternatives Solve Everywhere Except the Singular Point E=0.5 Author. Jawaun Brown. Abstract Companion paper [13a] showed that o\ufb00-policy DeltaE training partially recovers state-dependent concern (action accuracy 0.96 on state_dep_inv_xor, vs the online failure \ufb02oor 0.47) but leaves a residual failure at the discontinuous regime boundary at E=0.5 (margin sign accuracy 0.46 - chance). The diagnosis was smooth-function-approximator failure on a step function. This paper tests four architectural \ufb01xes - oracle boundary feature, learned mixture-of-experts gate, Fourier E-features, and a sign-of-margin auxiliary loss - all under o\ufb00-policy training. 30-cell sweep (5 conditions x 2 envs x 3 seeds). Three \ufb01ndings: 1. Oracle boundary feature closes the gap comple",
+    "keywords": "causal;agents;geometry;concern;ood"
+  },
+  {
+    "file": "papers/role_specific_identifiability/paper.pdf",
+    "title": "Role-Specific Mediated Effects, Two-Sided Gauge Anchoring, and Fully-Learned Probe Abstractions",
+    "pages": "9",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Role-Speci\ufb01c Mediated E\ufb00ects, Two-Sided Gauge Anchoring, and Fully-Learned Probe Abstractions: The Architectural Endpoint of the Autonomous-Probing Arc Jawaun Brown 2026-06-12 Abstract Paper 24 closed most of the mediated/exogenous identi\ufb01ability gap from Paper 23B via interventional contrast loss (G2 \u2713 56% mediated MAE reduction). But G7 caught a structural \ufb01nding: wrong-history contrast pairs also helped, because the environment's role-invariant mediated structure meant any high-h- vs-low-h supervision provided the same h-dependence signal. Paper 25 was designed as the \ufb01nal identi\ufb01ability stress test under the discipline that the autonomous- probing machinery is frozen - no changes to detection, allocation, saturation, or re-engagement. Three structural changes only: 1. Role-speci\ufb01c mediated environment: per-role hazard amps make food's mediated_E twice medicine's; poison's is on the D",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/scale_normalized_vprobe/paper.pdf",
+    "title": "Scale-Normalized Probe Calibration",
+    "pages": "12",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Scale-Normalized Probe Calibration for Vector First-Order Self: A Target x Threshold Factorial Jawaun Brown 2026-06-12 Abstract Paper 20B identi\ufb01ed a scale-asymmetric V_probe calibration failure in vector \ufb01rst-order self: the E dimension calibrated partially (Spearman \u03c1 = +0.20), the D dimension was anti-calibrated (\u03c1 = \u22120.41), and learned probing performed 28% worse than matched-random at matched null count. The diagnosis: V_probe's raw current-replay target |mean signed residual| is in raw DeltaE/DeltaD units; D's smaller magnitudes (shocks 0.20, self e\ufb00ects 0.5) compress its target distribution below the E-calibrated cost threshold. Paper 21A tests three hypotheses for what to \ufb01x: H1 target scale (normalize the residual target by per-dim variance), H2 decision threshold scale (per-dim cost thresholds), H3 both. A 2x2 factorial (raw/normalized target x global/per-dim threshold) with 10",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/state_dependent_concern/paper.pdf",
+    "title": "State-Dependent Concern Fails",
+    "pages": "8",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "State-Dependent Concern Fails Under Online Homeostatic Training: A Coupling Between Policy and Training Distribution Author. Jawaun Brown. Abstract Companion paper [11] established that the model_plan_delta_e pipeline ([10]) can self-organize concern- shaped competence under various exploration regimes. Companion paper [11b] tightened that result with calibration metrics and identi\ufb01ed margin-based epistemic sampling (MBES) as the best autonomous mechanism. The natural Layer-4 conceptual next step - and the priority called out by all reviewers across [10, 10b, 11, 11b] - is state-dependent valence: the same sensory item should change role depending on the agent's internal viability state, instantiating the philosophical-spine claim that \"meaning is geometry under concern\" in its fully state-conditional form. This paper reports a clean, uniform negative result. We test six conditions on a ",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/structure_compatible_generalization/inferred_transformations_intervention.pdf",
+    "title": "Inferred Transformations for Structure-Compatible Generalization",
+    "pages": "2",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Inferred Transformations for Structure-Compatible Generalization Jawaun Brown Abstract Phase one showed that oracle transformation compatibility predicts OOD behavior under underspeci\ufb01cation. This phase asks whether the oracle can be weakened: infer supported transformations from training evidence, score compatibility under that discovered family, and use the discovered family as a train-time regularizer. In a modular addition domain, a shift is admitted only when observed train-label overlaps support the induced input and label action. The resulting suite evaluates both prediction and control without using OOD labels for model selection or training. 1. Regime Transition The old regime supplied the deployment group. The new regime infers a supported \ufb01nite transformation family, rejects vacuous shifts, and applies compatibility pressure to unlabeled domain points. 2. Result The strongest ",
+    "keywords": "causal;ood;symmetry"
+  },
+  {
+    "file": "papers/structure_compatible_generalization/language_template_substitution.pdf",
+    "title": "Language-Template Substitution for Structure-Compatible Generalization",
+    "pages": "3",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Language-Template Substitution for Structure-Compatible Generalization Jawaun Brown Phase 4: finite text-template generator transfer Abstract This phase tests structure-compatible generalization in a controlled finite text domain. Examples are rendered as short language templates with number words and offset words, while the deployment shift is precise: held-out number-word substitutions transport the label by the same offset. A finite generator is inferred from observed input/label-overlap evidence and used for OOD prediction and regularization without OOD labels. 1. Regime Transition Earlier SCG phases tested oracle groups, inferred modular shifts, learned affine transports, and vision rotations. This phase keeps the finite auditability but moves the surface form into rendered language templates. Field Value GPU L4 configs 64 epochs 220 regularization [0.0, 0.05, 0.2, 0.5] max transfor",
+    "keywords": "causal;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/structure_compatible_generalization/learned_generators_transfer.pdf",
+    "title": "Learned Generators for Structure-Compatible Generalization",
+    "pages": "3",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Learned Generators for Structure-Compatible Generalization Jawaun Brown Phase 3: finite generator discovery plus transfer Abstract Earlier structure-compatible generalization results used oracle deployment transformations or finite shifts inferred from observed overlaps. Phase three learns finite generator families from data: modular affine input/label transports and vision rotations selected by training-set self-consistency. The result is a bounded test of OOD prediction and intervention without OOD labels, not an open-world transformation-discovery theorem. 1. Regime Transition The old regime supplied the transformation parameterization. The new operation learns candidate transports from data and evaluates whether the learned family predicts or controls OOD behavior under ID-equivalent training evidence. Field Value GPU L4 modular configs 90 vision base units 36 modular epochs 350 visi",
+    "keywords": "causal;ood;symmetry"
+  },
+  {
+    "file": "papers/structure_compatible_generalization/semantic_retrieval_transfer.pdf",
+    "title": "Semantic Retrieval Transfer for Structure-Compatible Generalization",
+    "pages": "3",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Semantic Retrieval Transfer for Structure-Compatible Generalization Jawaun Brown Phase 5: frozen-encoder semantic transfer Abstract This phase moves structure-compatible generalization from rendered templates to short semantic retrieval cases. Actual frozen sentence encoders provide embeddings; nearest-neighbor structure infers candidate paraphrase and entity-substitution orbits; trained retrieval selectors are evaluated on held-out semantic variants without OOD labels. 1. Manifest Field Value GPU L4 encoders ['all_minilm_l6_v2', 'bge_small_en_v1_5'] configs per encoder 32 rows 66 Table 1. Semantic retrieval Modal L4 manifest. 2. Predictor Correlations Domain Predictor Pearson r Spearman r N semantic_retrieval_frozen_encoder compatibility_true 0.940 0.915 64 semantic_retrieval_frozen_encoder compatibility_discovered 0.861 0.863 64 semantic_retrieval_frozen_encoder train_accuracy 0.772 0.",
+    "keywords": "ood"
+  },
+  {
+    "file": "papers/structure_compatible_generalization/semantic_selection_control.pdf",
+    "title": "Semantic Selection Control for Structure-Compatible Generalization",
+    "pages": "2",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Semantic Selection Control for Structure-Compatible Generalization Jawaun Brown Phase 6: OOD-free frozen-encoder model selection Abstract This phase turns semantic retrieval compatibility into an OOD-free model-selection protocol. Candidate retrieval models are grouped into encoder-threshold seed zoos, filtered to high train and ID validation performance, selected by learned compatibility or baseline selectors, and evaluated only afterward on held-out semantic variants. 1. Manifest Field Value GPU L4 encoders ['all_minilm_l6_v2', 'bge_small_en_v1_5'] thresholds [0.5, 0.56, 0.62, 0.68, 0.74] zoos 12 configs per zoo 12 selection records 840 Table 1. Semantic selection Modal L4 manifest. 2. Gate Status Gate Passed min_zoo_count True beats_id_validation True beats_train_accuracy True beats_random_candidate True wrong_control_fails True accepted True Table 2. Pre-registered selection-control ",
+    "keywords": "concern;ood;symmetry"
+  },
+  {
+    "file": "papers/structure_compatible_generalization/structure_compatible_generalization.pdf",
+    "title": "Structure-Compatible Generalization",
+    "pages": "2",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Structure-Compatible Generalization Jawaun Brown Abstract Modern learning systems are underspeci\ufb01ed: many \ufb01nite models can \ufb01t the same training data and pass the same in- distribution checks while behaving di\ufb00erently under deployment shifts. This paper reports a controlled diagnostic suite testing whether the transformation structure a learned function preserves predicts OOD behavior better than loss, ID validation, norm, or sharpness proxies. The suite combines cyclic symbolic MLPs, rotated visual objects, and a modular algorithmic table task under one schema. The claim is intentionally bounded: for \ufb01nite domains where deployment shift is generated by a known transformation family, compatibility is an OOD diagnostic and model-selection signal, not a universal certi\ufb01cation theorem. 1. Problem The practical question is which model to trust when train loss and ID validation do not identify",
+    "keywords": "agents;ood;symmetry"
+  },
+  {
+    "file": "papers/two_bottlenecks/paper.pdf",
+    "title": "Two Bottlenecks",
+    "pages": "10",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Two Bottlenecks: DeltaE Auxiliary Bootstraps XOR Valence Geometry When Decoupled from Sparse-Reward Policy Gradient Author. Jawaun Brown. Abstract Companion paper [8] found a clean decoupling cell: an encoder trained with an action-conditioned DeltaE auxiliary loss achieved reward-axis cluster gap +1.00 on the additive_thresh reward function, while sparse-reward REINFORCE on the same encoder + policy combination stayed at chance return. The paper concluded that representation and competence were independent bottlenecks but did not test the strongest version of the claim: if we hand a DeltaE-aux-organized encoder to a supervised policy head, does the agent achieve competence? This paper runs that test. Six conditions x 2 environments x 3 seeds = 36 cells. The encoder is trained in a clean stage 1 (no policy gradient interfering), then frozen, then the policy head is trained in stage 2 wit",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/valence_object_formation/paper.pdf",
+    "title": "Objects Form from Concern",
+    "pages": "8",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Objects Form from Concern: Valence-Coupled Encoders Cluster the World by Causal Role, Not Sensory Similarity Author. Jawaun Brown. Abstract The \ufb01ve prior empirical papers in this program established that weakness predicts OOD generalization [1], that the relevant symmetry group can be inferred from data [2], that pixel-cosine and learned-encoder methods occupy di\ufb00erent operating regimes [3], that paraphrase clusters become causally load-bearing under action coupling [4], and that the same active geometry preserves a viability bu\ufb00er, repairs itself under viability breach, and obeys the Law of the Stack [5]. The conceptual paper [6] argues that the deepest test of the framework is valence-induced object formation: do agents whose objective is coupled to their viability carve the world into objects according to causal-valence role, rather than sensory similarity? We give the \ufb01rst empirical ",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/valence_tapestry/paper.pdf",
+    "title": "Tapestry of Valence",
+    "pages": "10",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Tapestry of Valence: Vector DeltaV Models Adapt Medicine Handling Under Internal-Weight Shifts; Scalar Drive Models Cannot Author. Jawaun Brown. Abstract Companion paper [14b] showed that bootstrap ensembles of identical-architecture DeltaE heads fail to detect regime-boundary failures, and Paper [14] showed that greedy planning + a safe regulate fallback action robustly beats sophisticated planners under model error. The program has now characterized scalar concern (E only) about as completely as the minimal homeostatic bandit allows. The Bennett \"tapestry of valence\" thesis - that mattering is multi-dimensional, with objects a\ufb00ecting multiple internal variables in qualitatively di\ufb00erent ways - is the natural next step. This paper makes the \ufb01rst multi-valence test: replace scalar E with a two-dimensional (E, D) internal state and ask whether a vector DeltaV head produces \ufb02exible concern",
+    "keywords": "causal;agents;geometry;concern;ood;inquiry"
+  },
+  {
+    "file": "papers/vector_first_order_self/paper.pdf",
+    "title": "Vector First-Order Self",
+    "pages": "12",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Vector First-Order Self: Autonomous Identifying Interventions for Multi-Valence Homeostatic Agents Subtitle: Per-dimension self/world attribution under autonomous current-replay null probing. Jawaun Brown 2026-06-12 Abstract The program's three strongest scalar mechanisms - Paper 15's vector DeltaV head, Paper 16b's null-anchor intervention, and Paper 19's current-replay autonomous probe - exist independently. Paper 20B asks whether they compose in a multi-valence \ufb01rst-order self: can an agent autonomously identify which dimensions of viability change (energy AND damage) are self-caused vs world-caused, while preserving vector-valued concern for zero-shot priority reweighting? 12 conditions, 12 pre-registered gates, frozen pre-sweep. Three critical controls included (scalar_drive_selfworld for P15- style failure, scalar_probe_vector_heads for probe-dim collapse, priority_weighted_probe f",
+    "keywords": "causal;agents;geometry;concern;ood;symmetry"
+  },
+  {
+    "file": "papers/viable_computational_bodies/paper.pdf",
+    "title": "Viability-Guided Evolution of Syntax-Bearing Computational Bodies",
+    "pages": "16",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Viability-Guided Evolution of Syntax-Bearing Computational Bodies Jawaun Brown 2026-06-22 Abstract Arc 2A asks what interventions make the world's causal grammar visible. Arc 2B asks what computational bodies can express that grammar in the \ufb01rst place. We introduce a typed symbolic architecture-evolution benchmark for syntax-bearing agents. Candidate bodies are motif sets containing components such as tree binders, syntax memory, role-speci\ufb01c heads, world models, intervention planners, counterfactual rollout, formal guards, and shortcut reward heads. Static admissibility rules reject malformed bodies, and viability gates require the \ufb01nal architecture to pass concerned-syntax, self/world, resource, and anti-cheat criteria. In a 12-seed deterministic design pilot, an 18-cell symbolic Modal sweep, a learned executable-body validation, a vector-observation module validation, a Haskell typed-",
+    "keywords": "causal;agents;geometry;concern;symmetry;inquiry"
+  },
+  {
+    "file": "papers/virtual_governor_stress_signal/paper.pdf",
+    "title": "Virtual-Governor Stress Signals for Local Action Recovery",
+    "pages": "3",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Virtual-Governor Stress Signals for Local Action Recovery Jawaun Brown Abstract The virtual-governor preprint is useful because it names a signal architecture: global constraint violations become local incentives. This paper turns that phrase into a bounded neural diagnostic. Small policies act in a three-dimensional controlled state whose target changes during long rollouts. Five architectures receive the same oracle action labels but di\ufb00erent policy features: reward-only, local-state proxy, stale governor memory, wrong stress signal, and live virtual- governor stress. The result tests whether the live stress-transduction channel is load-bearing for recovery after shifts. 1. Diagnostic The task is deliberately \ufb01nite. A policy observes a local feature vector and chooses one of six actions. Each action moves the system state and the oracle chooses the action that most reduces distance to ",
+    "keywords": "causal;agents;ood;memory;consciousness"
+  },
+  {
+    "file": "papers/weakness_invariance_neurips/paper.pdf",
+    "title": "Symmetry-Compatible Hypothesis Volume Predicts Out-of-Distribution Generalization",
+    "pages": "16",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "Symmetry-Compatible Hypothesis Volume Predicts Out- of-Distribution Generalization Subtitle. Weakness, not generic compression alone, in shortcut-compatible learning problems. Author. Jawaun Brown. Abstract We study model selection in \ufb01nite-domain settings where the training data admits both a local shortcut and a globally symmetry-compatible rule. In these settings, training loss and in-distribution validation cannot distinguish the two completions, and generic simplicity or \ufb02atness proxies can prefer the shortcut. We de\ufb01ne a \ufb01nite operationalization of Bennett-style weakness as the number of transformations under which a candidate function remains equivariant up to an output action. Across cyclic and dihedral symbolic task families (500 trials each), weakness selects the invariant rule in 100% of trials (Wilson 95% lower bound 0.992), while the tested train-loss, validation, descriptio",
+    "keywords": "agents;geometry;ood;symmetry;consciousness"
+  },
+  {
+    "file": "papers/world_responds/paper.pdf",
+    "title": "When the World Responds",
+    "pages": "9",
+    "review_depth": "local_pdf_text_extracted_all_pages",
+    "summary": "When the World Responds: Action-Correlated Shocks and the Limits of Null-Anchored Self/World Attribution Jawaun Brown 2026-06-12 Abstract Papers 16b through 21A established autonomous self/world attribution mechanisms for environments where world shocks are independent of the agent's prior actions. Paper 22 tests the \ufb01rst regime where this independence breaks: a hidden hazard h(t+1) = \u03b3\u00b7h(t) + \u03ba\u00b7I[consume_trigger] whose dynamics depend on agent history, with a mid- training regime shift (trigger: food -> medicine at episode 250) to force renewed uncertainty. Two conceptual upgrades over Paper 21A: 1. Training-time selectivity metrics, not eval-time null rate (which became vacuous in P21A at near-oracle convergence) 2. Three-head decomposition: direct self / mediated world (action-history-conditioned) / exogenous world (action- independent) 10 conditions, 8 pre-registered gates frozen. Re",
+    "keywords": "causal;agents;geometry;concern;ood;inquiry"
+  }
+]
