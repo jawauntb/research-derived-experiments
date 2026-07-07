@@ -23,14 +23,16 @@ decoders:
   target:
     kind: "cross_subject_eyetrack_adv"
     adversary_weight: 0.1
-    epochs: 40
+    ssl_pretrain: true              # enabled after INCONCLUSIVE gen-1 run
+    epochs: 60                       # more compute per fold
     batch_size: 64
     lr: 3.0e-4
 
 evaluate:
   scheme: "leave_subjects_out"
   n_lso_seeds: 5
-  train_subject_sweep: [4, 8, 16, 24]
+  # exp4 has 43 subjects → ~34 train pool. Extend sweep to catch the tail.
+  train_subject_sweep: [4, 8, 16, 24, 32]
 
 output:
   root: "artifacts/phase0_eyetrack"
