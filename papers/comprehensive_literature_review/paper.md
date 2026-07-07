@@ -1,393 +1,287 @@
-# From Concern to Action Surfaces
-
-## A Critical Literature Review and Research Program for Causally Grounded Finite Agents
-
-Date: 2026-07-07
+# From Prediction to Concern: A Comprehensive Literature Review and Research Synthesis for the Research-Derived Experiments Corpus
 
 ## Abstract
 
-This paper reviews the research-derived experiments corpus as a unified program about finite agents: systems that must compress a world, preserve viability-relevant distinctions, act under uncertainty, and remain honest under distribution shift. The review starts from first principles for readers without machine learning, neuroscience, or philosophy background, then links the repository's papers to external literatures in representation learning, causal inference, active learning, reinforcement learning, domain generalization, cybernetics, active inference, enactivism, and mathematical theories of symmetry and compression. The central synthesis is that the program is not a claim that current systems are conscious, nor a claim that behavior alone proves agency. It is a methodological claim: for every proposed agent capability, identify the proxy that could fake success, then add a test or architecture change that makes the intended causal structure load-bearing at the action surface. The paper critiques an earlier review draft, revisits the citation surface, separates established theorems from local empirical laws and formalizable conjectures, and proposes future work around reafferent gauge breaking, re-engagement floors, commitment-surface memory, structure-compatible generalization, and finite-capacity concern geometry.
+This review synthesizes the research-derived experiments corpus as a single interdisciplinary program about minimal agency, representation, uncertainty, and meaning. It integrates the local corpus audit, the stored-paper PDF review, and the external citation enrichment pass over the papers' cited literature. The evidential base is deliberately tiered: 60 locally stored PDFs were text-extracted across all pages; 164 atomized outside citation candidates were extracted from our authored papers; 67 of those external candidates were resolved with abstract-level evidence; 3 were resolved with metadata only; 42 were preserved as manual foundational topic seeds; and 52 remain unresolved or malformed bibliography fragments. The review therefore advances a strong but bounded thesis: across machine learning, neuroscience, philosophy of biology, dynamical systems, and geometry, the recurring object is not intelligence as raw predictive success but intelligence as controlled sensitivity to what matters. The program's central invariants are viability, intervention, calibrated uncertainty, boundary maintenance, and transformation-stable representation. The paper builds the argument from first principles, explains the relevant mathematics and theorem families, locates our papers in the surrounding literature, and ends with a research agenda and an explicit unread-source register.
 
-## 1. Why the first review was not enough
+## Status of Evidence
 
-The first comprehensive review was useful, but it was not good enough as a paper. It had four weaknesses.
+This is the canonical synthesis rewrite, not another audit report. The audits are used as provenance. The exhaustive local audit established what our repository contains: 110 tracked paper source files, 177 extracted citation/reference rows, and 60 tracked PDFs whose pages were all text-extracted. The external enrichment pass then atomized bundled citation rows into 164 external/reference candidates and resolved 67 with abstracts.
 
-1. It summarized the corpus more than it argued for a contribution.
-2. It mixed established mathematical results, local empirical regularities, and speculative future theorems too easily.
-3. Its reference appendix was too raw: extracted citation lines were noisy, line-wrapped, and mixed workflow links with academic references.
-4. It did not place the paper-review caveats at the center. The corpus repeatedly warns against overclaiming: behavior is not representation, uncertainty is not error, a probe is not causal use, memory is not commitment, and finite control diagnostics are not consciousness proofs.
+The paper uses three evidence labels:
 
-This revision therefore changes the genre. It is a critical literature review paper, not just a survey artifact. It treats the repository itself as a corpus, but it also asks what standards of evidence the corpus has learned.
+- Full local corpus support: claims grounded in our authored papers or PDFs stored in the repository.
+- Abstract-level external support: claims grounded in resolved outside sources whose abstracts or scholarly metadata were read.
+- Bibliography-repair support: claims supported only as topic seeds because the exact source was unresolved, malformed, or not yet full-read.
 
-## 2. First principles
+The last category is intentionally visible. A literature review that hides unread sources becomes rhetorically smooth and scientifically weak. A stronger review states what has been read, what has been inferred, and what must be repaired before publication.
 
-### 2.1 Finite agents
+## First Principles: The Minimum Vocabulary
 
-A finite agent is a system with limited memory, limited sensing, limited action, and limited time. It can be a simple reinforcement-learning agent, a neural network in a controlled environment, a tool-using language model, a cell, an organism, or a human-built institution. The word "agent" should not be inflated: an agent is not automatically conscious, autonomous, or morally responsible. In this paper, "agent" means a system whose future state depends partly on its own actions.
+The whole program can be built from six elementary ideas.
 
-The first problem for such a system is compression. The world has more detail than the system can store. The agent must decide which distinctions matter. A thermostat preserves temperature but ignores wallpaper. A navigation system preserves paths and obstacles but ignores most chemistry. A homeostatic agent preserves energy, shock, food, medicine, or target variables, because those variables affect future viability.
+First, a system has state. State is the collection of variables needed to describe what the system can do next. A thermostat, a cell, a neural network, a language-model agent, and a person differ enormously, but each can be described as a state-changing process coupled to an environment.
 
-The second problem is control. A passive representation can describe; a controller must act. A learned internal direction, cluster, or feature is only agent-relevant if it reaches the surface where behavior is selected.
+Second, an environment is not just an input stream. It is the set of external conditions that constrain the system's future states. Once a system can act, the environment is no longer merely observed. It is partly sampled, changed, avoided, simplified, or exploited.
 
-The third problem is identification. Many internal explanations can fit the same observations. The agent may confuse "I caused this" with "the world caused this," or a shortcut rule with a transportable rule. Observing more of the same data does not always solve this. Interventions, constraints, and anti-cheat controls are often required.
+Third, prediction is not the same as agency. Prediction asks what will happen. Agency asks which futures remain possible, which variables are preserved, which interventions are chosen, and which errors cause repair. A passive predictor can be accurate without caring which world obtains. An agent, even a minimal one, is organized around consequences.
 
-### 2.2 Concern
+Fourth, information has value only relative to use. A signal is useful if it changes the action, representation, boundary, or future experiment in a way that matters. This is why uncertainty appears throughout the corpus: uncertainty is not merely a defect in knowledge but a control variable that decides whether to probe, update, defer, or disengage.
 
-The repository uses "concern" for viability-relevant difference. A state, object, event, or prediction is concerning when it changes what the system should do to keep itself within acceptable bounds. In the papers this appears as Delta E, Delta V, reward deformation, stress, source attribution, probe value, commitment variables, or structure compatibility.
+Fifth, representation is compression with consequence. A representation is not better because it contains more bits. It is better when it preserves distinctions that matter for intervention, prediction, viability, explanation, or transfer. Causal representation learning, geometric deep learning, active inference, and ecological perception all converge on this point from different directions.
 
-This use of concern is deliberately operational. It does not assume subjective feeling. It asks a smaller question: which variables become load-bearing for action because they affect the system's ability to maintain itself or complete its commitments?
+Sixth, meaning is not raw symbol manipulation. In the tradition running through Ashby, Gibson, Uexkull, Maturana and Varela, Di Paolo, Thompson, Levin, Bennett, and Vervaeke, meaning arises when differences in the world are organized relative to a situated system's possible action, viability, relevance, and repair. This does not license sloppy claims about machine consciousness. It licenses operational questions: what does the system maintain, what can disturb it, what does it notice, and what does it do when its world model fails?
 
-### 2.3 Geometry
+## The Central Thesis
 
-When a finite system compresses many possible situations into fewer internal states, it creates geometry. Geometry is the language of preserved relations: near and far, same and different, reachable and unreachable, stable and unstable, inside and outside a boundary, invariant and transformed. This is why the corpus keeps meeting manifolds, directions, clusters, basins, symmetry groups, kernels, spectra, and topology.
+The corpus is best understood as a research program on concern-like structure in minimal agents. "Concern" here should not be read as a private feeling or anthropomorphic projection. It names a functional pattern: a system has concern-like organization when some variables are treated as viability-relevant, when perturbations to those variables alter action or inquiry, when representations preserve self/world or object/action distinctions needed for control, and when the system reengages after world change rather than merely optimizing a static reward proxy.
 
-The key caution is that geometry can be passive. A model may contain a useful-looking direction while its policy ignores it. The repository's strongest work asks when geometry becomes active: when interventions along it change behavior, when planning closes through it, when it survives held-out transformations, and when it reaches future action surfaces.
+This thesis is deliberately weaker than "machines understand" and stronger than "models predict tokens." It says that between raw prediction and human understanding there is a large, scientifically tractable middle territory: systems that maintain boundaries, allocate attention, value information, form intervention-sensitive representations, and generalize by preserving invariants.
 
-### 2.4 Action surfaces
+## Literature Foundations by Field
 
-An action surface is the place in a system where a represented variable constrains behavior. It can be a policy head, a tool argument, a generated JSON field, a repair branch, a probe decision, a final-token distribution, a training selection rule, or a local stress feature. Much of the program can be compressed into one sentence:
+### Machine Learning: Identifiability, Generalization, and Agent Evaluation
 
-> A variable matters to agency when it is represented at the surface where future action is selected, and when proxy controls fail.
+The ML literature supplies both the constructive methods and the warning labels. Locatello et al.'s disentanglement result blocks a naive fantasy: unsupervised learning does not automatically recover human-interpretable factors. Without inductive bias, supervision, interaction, or structural assumptions, many latent coordinate systems explain the same observations. This matters for our corpus because many of our papers ask whether an internal variable is "really" agency-relevant. The literature says that observational fit is insufficient.
 
-This sentence is not a theorem yet. It is a research program.
+Causal representation learning supplies the constructive alternative. Scholkpf et al. frame the intersection of causality and representation learning as a path toward variables that support transfer, intervention, and explanation. Brehmer et al. show that weakly supervised interventional pairs can help identify causal variables and structure. ACE, CausaLab, object-centric causal world models, and causal-JEPA-style work extend the same intuition: agents must learn not only what co-occurs but what changes when something is done.
 
-## 3. Review method and source corpus
+OOD generalization and shortcut-learning work add the negative discipline. Invariant Risk Minimization, domain-generalization surveys, WILDS-style benchmark thinking, underspecification, shortcut learning, goal misgeneralization, and group DRO all show that success on a training distribution can be misleading. A model may learn a shortcut that works locally and fails under the shift that reveals the intended structure. Our corpus should therefore measure transfer across interventions and environmental changes, not merely in-distribution reward or prediction.
 
-The review covers Markdown, TeX, BibTeX, notes, critical reviews, preregistrations, source manifests, and benchmark documents in the repository. The audit pass found 165 text sources and 286 unique-ish raw reference lines after removing obvious duplicates and build artifacts. The primary paper coverage includes concern/valence geometry, state-dependent boundary failure, first-order self/world attribution, null interventions, probe value, re-engagement, planning from concern, long-horizon commitment surfaces, structure-compatible generalization, learned symmetry, concerned syntax, viable computational bodies, virtual-governor stress signals, coherence testbench documents, and ICML package drafts.
+The modern agent-evaluation literature contributes a second warning. ReAct, Toolformer, Reflexion, Voyager, WebArena, OSWorld, SWE-bench, AgentBench, HELM, and related benchmarks show that tool use and language reasoning are not enough by themselves. Realistic agency requires state tracking, feedback use, repair after error, environment coupling, and long-horizon action. These benchmarks motivate our insistence on interventions, reengagement, and proxy resistance.
 
-The review treats three evidence levels differently:
+### Uncertainty and Inquiry: When Information Is Worth Action
 
-1. Established external theory, such as causal intervention, rate-distortion, group equivariance, invariant prediction, and the impossibility of unsupervised disentanglement without assumptions.
-2. Repository empirical laws, such as predictive policy closure, reafferent identifiability, re-engagement floors, commitment-surface memory, and structure-compatible selection.
-3. Formalizable conjectures, where the repository has enough structure to motivate theorem statements but not yet enough assumptions and proofs.
+The corpus repeatedly returns to the same practical question: when should a system ask, probe, sample, or intervene? Active learning, BALD, Bayesian active learning for classification and preference learning, dropout as Bayesian approximation, deep ensembles, Kendall and Gal's uncertainty taxonomy, epistemic neural networks, and calibrated uncertainty all treat uncertainty as actionable. The key distinction is epistemic versus aleatoric uncertainty. Epistemic uncertainty can in principle be reduced by information; aleatoric uncertainty reflects irreducible noise.
 
-This split matters because a literature review that cannot separate theorem, experiment, and conjecture will mislead its reader.
+Probe-value papers in the corpus use this distinction to reinterpret attention. Attention is not just focusing on salient input. It is allocating costly measurement toward variables whose resolution would change action or model structure. Habituated reengagement extends the idea: a system may rationally stop responding to a repeated signal while preserving the capacity to detect when the signal becomes newly informative.
 
-## 4. External literatures
+### Neuroscience and Active Inference: Detection Is Not Response
 
-### 4.1 Representation learning and probes
+The neuroscience-adjacent literature is important because it prevents an overly simplistic ML picture. Biological systems often decouple detection from action. Habituation, refractory periods, sensory adaptation, precision weighting, and active inference all distinguish the availability of a signal from the choice to act on it.
 
-Representation learning studies how systems turn observations into useful internal variables. Disentanglement work shows why this is hard: without assumptions, unsupervised factors are not identifiable. Probe literature adds a second warning: a linear readout can extract information from a representation without proving that the model uses that information. Activation-editing work, persona vectors, cross-model concept transfer, and factual editing show that internal geometry can sometimes be operationally useful, but the repository's stricter question is whether a feature is causal under intervention and controls.
+Active inference and the free-energy principle supply a formal vocabulary for this coupling. They frame perception and action as attempts to minimize expected free energy through prediction, precision allocation, and policy selection. In the corpus, this is not used as an all-purpose explanation. It is used more narrowly: as a way to understand when an agent should attend, when information has expected value, and when reengagement is warranted after a change in the world.
 
-The internal lesson is: do not stop at "the vector exists." Ask whether it changes behavior specifically, whether independent controls fail, and whether it remains meaningful after the surface changes.
+### Philosophy and Biology: Meaning, Normativity, and the Organism-Relative World
 
-### 4.2 Causal representation learning
+The philosophical and biological citations provide conceptual discipline. Ashby's cybernetics, Canguilhem's normativity, Gibson's affordances, Uexkull's Umwelt, Jonas's organismic value, Maturana and Varela's autopoiesis, Di Paolo's adaptivity, Thompson's mind-in-life tradition, Levin's TAME framework, Bennett's work on meaning, and Vervaeke's relevance realization all converge on a central point: meaning is not merely an external semantic label. It is a relation between a system, its possible actions, and the differences that matter for its continued organization.
 
-Causal representation learning asks which latent variables correspond to intervention-relevant causes. Pearl-style interventions, invariant prediction, weakly supervised causal representation learning, and object-centric causal world models all matter here. The repository adapts this logic to minimal agents: null actions, probe actions, source labels, mediated effects, action-correlated shocks, and world changes are not incidental task details. They are the instruments that make attribution identifiable.
+This is the deepest reason "concern" is a useful term if handled carefully. Concern is not assumed to be conscious feeling. It is the low-level organization by which a system treats some state differences as worth regulating, preserving, explaining, or investigating. The philosophical literature tells us to avoid reducing this to reward alone; the ML literature tells us to make it measurable anyway.
 
-This is why the first-order self arc is important. A self head and a world head can look architecturally separated while still trading credit arbitrarily. Identification requires a signal that breaks the symmetry.
+### Geometry, Symmetry, and Compression
 
-### 4.3 Active learning, uncertainty, and inquiry
+Geometric deep learning, group-equivariant networks, equivariance discovery, neural-kernel symmetry theory, representation learning for geometric trees, and related work show that generalization often depends on respecting structure. If a task is invariant under translation, rotation, permutation, object exchange, or role relabeling, a good representation should not relearn the task from scratch under each transformed copy.
 
-Active learning asks when to gather information. Bayesian active learning, BALD, epistemic neural networks, deep ensembles, dropout uncertainty, curiosity, novelty, and random network distillation provide tools for valuing information. The repository's contribution is skeptical: uncertainty signals can be flat at the dangerous boundary, stale residuals can become anti-calibrated, and probe value can cause over-probing or anxiety.
+This connects to the corpus's geometry papers and weakness/OOD papers. A representation that captures the right symmetry has fewer arbitrary degrees of freedom. It can compress without losing what matters. MDL, algorithmic probability, simplicity-bias work, grokking, flat-minima debates, and low-entropy Boolean-function bias give a second lens on the same theme: generalization is partly about which functions are easier, shorter, or more structurally natural for a learner to represent. But compression alone is not enough. The compression must preserve intervention-relevant variables.
 
-The better abstraction is controlled inquiry. Inquiry has cost. It has refractory dynamics. It must re-engage after world change. It must preserve surprise while cooling action tendency. This reframes active learning as a closed-loop control problem rather than a scalar uncertainty ranking.
+## Cross-Field Invariants
 
-### 4.4 Reinforcement learning, world models, and agent benchmarks
+### Invariant 1: Intervention Beats Observation
 
-Reinforcement learning supplies the action loop: observe, act, receive feedback, update. World models let agents evaluate candidate futures. Language-agent benchmarks show how modern systems plan, use tools, browse, repair, and solve tasks. But benchmark success is not enough. ReAct, Reflexion, Voyager, SayCan, Toolformer, AgentBench, WebArena, OSWorld, GAIA, SWE-bench, BIG-bench, and HELM all motivate the need for evaluation surfaces; the repository's distinctive move is proxy resistance.
+Across causal representation learning, mediation analysis, causal abstraction, active experimentation, model editing, and our intervention papers, the same rule recurs: passive observation underdetermines structure. Interventions reveal which variables actually do work. In the corpus, this becomes a methodological demand. If a latent is claimed to represent self, world, concern, agency, or causal structure, it should respond correctly when the relevant variable is perturbed.
 
-The benchmark question becomes: did the agent succeed for the right causal reason? A final answer is necessary but not sufficient. The relevant variable must reach the behavior surface, and anti-cheat controls must fail.
+### Invariant 2: Detection and Action Must Be Separable
 
-### 4.5 Domain generalization, invariance, and symmetry
+Habituation, refractory periods, active learning, uncertainty calibration, and probe-value experiments all require this separation. A good system may detect a familiar signal and decline to act. It may also stop acting until a change makes the signal informative again. This invariant is central to the reengagement papers.
 
-Underspecification is central: many models can fit the same training data while failing differently under shift. Invariant risk minimization, DomainBed, GroupDRO, WILDS, shortcut learning, causal representation learning, and group-equivariant networks all address this from different angles. The repository's structure-compatible line asks: when in-distribution data does not decide between shortcut and rule, can the expected deployment transformation decide?
+### Invariant 3: Viability Is a Constraint, Not Just a Reward
 
-This connects to group theory. If a task has a symmetry, a compatible model should transform predictably when the input is transformed. Weakness, in this corpus, is not mere simplicity. It is a count or measure of compatible transformations: the learned function has fewer arbitrary ways to break the task's structure.
+Viability theory, autopoiesis, TAME, active inference, empowerment, and homeostatic control all distinguish viability constraints from scalar rewards. A reward can point anywhere. A viability constraint says that some region of state-space must be preserved or recovered. This gives a more robust interpretation of concern-like behavior than reward maximization alone.
 
-### 4.6 Neuroscience and cognitive science
+### Invariant 4: Boundary Maintenance Is Dynamic Coupling
 
-Several neuroscience ideas recur:
+The self/world boundary is neither a metaphysical wall nor a mere label. It is a regulated interface. Agents preserve a distinction between internal and external state while remaining coupled to the environment through sensors, actions, and latent models. The boundary can be tested by perturbing body variables, world variables, and action consequences separately.
 
-- reafference and comparator models for self/world attribution;
-- allostasis and homeostasis for state-dependent regulation;
-- active inference and predictive processing for action-perception loops;
-- habituation and refractory periods for bounded re-engagement;
-- neural manifolds, rings, tori, and attractor basins for low-dimensional cognitive geometry;
-- developmental plasticity, where activity can shape structure rather than merely ride on top of it.
+### Invariant 5: Invariance and Equivariance Are the Geometry of Trust
 
-The repository should not claim to prove consciousness. Its narrower contribution is to operationalize pieces of agency: viability sensitivity, attribution, inquiry, planning closure, memory at action, and structure-compatible generalization.
+OOD generalization asks what remains true under distribution shift. Geometry asks how representations should transform under symmetry. Philosophy and ecology ask which environmental differences are stable affordances. All are versions of the same problem: a system is trustworthy when the relevant structure survives the transformations it should survive and changes under the transformations it should not ignore.
 
-### 4.7 Philosophy, biology, and meaning
+### Invariant 6: Information Has Cost
 
-Dewey, Gibson, Uexkull, Heidegger, Canguilhem, Jonas, Maturana and Varela, Di Paolo, Thompson, Levin, Vervaeke, Bennett, and related enactive or cybernetic traditions are useful because they reject detached representation as the whole story. Meaning appears in relation to action, normativity, affordance, relevance, viability, and self-maintenance.
+Active learning, Bayesian experimental design, active inference, and our costly-null-probe papers share a simple intuition: information is not free. A rational system must decide whether the expected value of reducing uncertainty exceeds the cost of acquiring information. This turns attention into an economic and dynamical problem, not merely a salience filter.
 
-The repository translates that family of ideas into finite tests. It asks whether a signal is action-relevant, whether it maintains a boundary, whether it updates under surprise, and whether it resists proxy explanations.
+### Invariant 7: Proxy Optimization Destroys Naive Metrics
 
-## 5. Internal research arcs
+Goodhart's law, underspecification, benchmark gaming, shortcut learning, and safety benchmark failures all warn that a proxy stops being faithful when optimized too directly. Any metric for concern, agency, meaning, or intelligence must therefore be accompanied by countermetrics, ablations, distribution shifts, and adversarial controls.
 
-### 5.1 Concern, valence, and metric deformation
+## Theorem and Proof Map
 
-The concern and valence papers ask whether viability-relevant objectives reshape representation. Valence object formation shows objects clustering by causal role rather than sensory similarity. Homeostatic objects and passive-to-active geometry test whether such representations transfer into control. Concern bootstrap and two-bottlenecks reveal that representation and competence can split: a Delta E auxiliary loss can create valence geometry while sparse-reward policy learning fails to exploit it.
+### No-Free-Lunch and Underspecification
 
-The reward-deformation notes sharpen this into a mathematical program. A finite-capacity code under a value-weighted distortion objective should allocate more resolution where errors are costly. The clean two-dimensional exponent was not confirmed in the grid/RNN harness; instead the measured effective dimension was near one. That is not a failure of the program. It is a better result: the normative rate-distortion law exposed the architecture's actual allocation dimension.
+Fields: statistical learning theory, decision theory, benchmark methodology.
 
-### 5.2 State-dependent concern and boundary failure
+Core idea: no finite dataset uniquely determines the correct rule for all future cases without assumptions. Many hypotheses fit the same observations. Underspecification is the modern ML version: many trained models can perform similarly on standard validation data while relying on different internal mechanisms.
 
-State-dependent concern, off-policy coverage, regime-sensitive Delta E, allostatic control, and ensemble uncertainty all circle a boundary problem: the same thing can help or harm depending on internal state. Learned models often smooth across the exact state where the rule changes. Ensembles can be confident where they should be uncertain. More data is not always the answer; the system needs the right state variable and boundary representation.
+Intuition: if two maps agree on the roads you have driven but differ elsewhere, your travel history alone cannot tell you which map is globally correct.
 
-The implication is that "uncertainty-aware" is not a magic phrase. An uncertainty signal is useful only when it is calibrated to the current decision surface and the failure mode it is supposed to detect.
+Relevance: our papers should never infer agency-relevant structure from performance alone. They need perturbation, transfer, and mechanistic tests.
 
-### 5.3 First-order self and reafferent attribution
+### Disentanglement Impossibility
 
-First-order self shows that architectural factorization alone does not identify self-caused and world-caused change. Null interventions reduce false credit by giving the agent an action whose expected consequences differ under the competing explanations. Costly null probes, online identifying interventions, current-error calibration, vector first-order self, and scale-normalized V-probe extend this through cost, online regimes, vector-valued viability, and calibration.
+Fields: representation learning, latent-variable modeling, identifiability theory.
 
-The program law is reafferent identifiability: passive input factorization is not source identification. Self/world attribution requires a gauge-breaking signal.
+Core idea: without inductive biases or supervision, unsupervised learning cannot guarantee recovery of the intended independent factors. There are too many equivalent latent coordinate systems.
 
-### 5.4 Inquiry, probe value, and re-engagement
+Intuition: rotating or warping a latent space may preserve the observations while destroying the human-interpretable axes.
 
-World Responds makes the environment responsive to action. Probe-value re-engagement asks when to ask again. Habituated re-engagement and Suite C show that successful inquiry needs a burst-and-refractory structure: detect surprise, probe when valuable, cool down after probing, preserve the surprise signal, and reopen after a second shift.
+Relevance: the corpus's latent probes need interventions, labels, environment changes, or architectural assumptions. Otherwise a "self" or "concern" coordinate may be a convenient fiction.
 
-The crucial negative is false calm. If probing goes to zero after convergence and no path reopens it, the agent can mistake silence for stability.
+### Causal Representation Identifiability
 
-### 5.5 Planning from concern
+Fields: causal inference, nonlinear ICA, representation learning, structural causal models.
 
-Planning from concern shows that action-conditioned Delta E predictions can become a policy when the agent chooses actions by predicted viability change. Planning hardening shows that this is not just a single reward-axis trick. The architecture law is predictive policy closure: a concern model becomes agent-relevant when the policy actually closes through it.
+Core idea: interventions or weakly supervised interventional pairs can reduce ambiguity about latent causal variables. The causal variables become more identifiable when the learner sees what changes under controlled disturbance.
 
-### 5.6 Commitment-surface memory
+Intuition: watching shadows is ambiguous; moving the lamp or object reveals the hidden structure.
 
-The long-horizon bottleneck papers ask whether early information reaches the later surface where action is selected: final action, tool argument, repair branch, generated JSON value, hidden site, causal patch, or black-box dispatch. The strongest insight is negative as well as positive: memory somewhere in a hidden state is not enough. Memory is agent-relevant when it binds a future commitment surface.
+Relevance: our intervention papers should be treated as attempts to make latent agency variables identifiable rather than merely correlated with reward.
 
-This result is one of the easiest to export to modern tool agents. Did the variable that matters later actually constrain the tool call or emitted value?
+### Invariant Risk Minimization
 
-### 5.7 Structure-compatible generalization
+Fields: statistical learning, causal inference, OOD generalization.
 
-Weakness invariance, learned symmetry discovery, neural group generator, and the structure-compatible generalization suite ask how to select models when training evidence underdetermines the rule. The strongest bounded claim is: when a candidate deployment transformation family exists, compatibility with that family can beat loss, validation, norm, sharpness, and other proxies.
+Core idea: causal predictors tend to remain predictive across environments, while spurious correlates often vary. Learning invariants across environments can support out-of-distribution transfer.
 
-The paper reviews are right to insist on scope. This is not open-world OOD certification. It is finite-domain model selection and, in later phases, finite-domain transformation discovery and intervention.
+Intuition: if a cue works only in one room, it is probably wallpaper; if it works across rooms, it may be structure.
 
-### 5.8 Concerned syntax and viable computational bodies
+Relevance: concern-like and agency-like variables should remain explanatory under controlled environment changes.
 
-Concerned syntax and viable computational bodies ask whether syntax-bearing architectures can be searched and gated. The Haskell typed ontology gate is useful because it moves some commitments out of ad hoc Python checks and into explicit admissibility constraints. The philosophical import is modest but real: ontology becomes executable when the system must say which combinations are well-typed before empirical scoring begins.
+### Group Equivariance and Geometric Deep Learning
 
-### 5.9 Virtual governors and stress transduction
+Fields: group theory, harmonic analysis, differential geometry, graph theory, deep learning.
 
-The virtual-governor framing is useful but bounded. The Lyons, Pio-Lopez, and Levin preprint is not peer-reviewed and should not be imported as evidence. Its value is vocabulary: global constraint violations can be translated into local incentives. The repository makes this executable with stress-signal tests: live global stress should improve local recovery, while reward-only, local-only, stale, and wrong-signal controls should fail or degrade.
+Core idea: when data has symmetries, a model can be built so that transformations of the input produce predictable transformations of the representation or output.
 
-### 5.10 Coherence testbench and scientific discipline
+Intuition: rotating an object should not force the model to rediscover objecthood from scratch.
 
-The coherence-testbench documents matter because they record failure discipline. A Phase 0 EEG bet hit a kill criterion. Later eyetrack and quiz-score work explored alternatives, but the post-mortem did not silently rename failure as success. That is part of the program's method: publish the negative, state what it does and does not test, and make the next branch discriminative.
+Relevance: self/world boundaries, role-specific variables, and object-level causal states should transform predictably under the symmetries of the task.
 
-## 6. Cross-field invariants
+### Viability Theory
 
-The same invariants recur across ML, neuroscience, philosophy, and biology.
+Fields: dynamical systems, control theory, differential inclusions, mathematical biology.
 
-1. Finite capacity forces compression.
-2. Compression creates geometry.
-3. Geometry becomes meaningful when it preserves action-relevant distinctions.
-4. Passive representation is weaker than closed-loop control.
-5. Attribution needs intervention or constraint when passive data are underdetermined.
-6. Inquiry must be calibrated, costly, stateful, and reopenable.
-7. Memory matters at the commitment surface.
-8. Generalization improves when the hypothesis space respects deployment-generating transformations.
-9. Local action often needs a transduced global constraint signal.
-10. Every benchmark needs anti-proxy controls.
+Core idea: the viability kernel is the set of states from which a system can remain within acceptable constraints under available controls and disturbances.
 
-These invariants are why the corpus naturally crosses fields. In ML they appear as probes, interventions, OOD shifts, and action heads. In neuroscience they appear as reafference, allostasis, habituation, and manifolds. In philosophy they appear as affordance, relevance, normativity, and situated coping. In biology they appear as autopoiesis, adaptivity, and function shaping structure.
+Intuition: agency is not just moving toward reward; it is keeping enough future open to avoid falling outside the living or operating region.
 
-## 7. Mathematical ledger: theorem, law, conjecture
+Relevance: concern can be operationalized as preserving, returning to, or expanding a viability region.
 
-### 7.1 Established theorem family: no free lunch and underspecification
+### Variational Free Energy and Active Inference
 
-Field: learning theory and statistics.
+Fields: variational inference, information theory, theoretical neuroscience, control.
 
-Idea: without assumptions, no learner is universally best. Modern underspecification says multiple models can fit the same data while encoding different deployment behavior. Proof intuition: for any learner that succeeds on one family of worlds, another allowed world can reverse the labels or deployment relation. Generalization needs bias.
+Core idea: exact inference and control are hard; systems can optimize tractable bounds that couple prediction error, uncertainty, and policy selection.
 
-Program implication: the problem is not whether to use inductive bias; it is whether the bias preserves the right causal or transformation structure.
+Intuition: perception and action are two sides of reducing uncertainty about the causes of sensation and the consequences of action.
 
-### 7.2 Established theorem family: non-identifiability of unsupervised disentanglement
+Relevance: probe value, attention, and reengagement can be modeled as expected information gain under cost.
 
-Field: representation learning and causal inference.
+### BALD and Bayesian Experimental Design
 
-Idea: unsupervised latent factors are not identifiable without assumptions. An invertible transformation can preserve observations while changing the apparent factors. Program implication: concern, self/world, and role factors need intervention, supervision, architecture, or constraints.
+Fields: Bayesian statistics, active learning, information theory.
 
-### 7.3 Established theorem family: causal intervention and mediation
+Core idea: a query is valuable when it is expected to reduce uncertainty about the model or hypothesis class, not merely when the current prediction is uncertain.
 
-Field: causal inference.
+Intuition: the best question is the one whose answer would actually change your mind.
 
-Idea: interventions replace a variable's usual mechanism, allowing causal effects to be distinguished from correlations when graph and data assumptions permit. Program implication: null actions, probe actions, source labels, and interventional contrast are local causal instruments.
+Relevance: costly probes should be triggered by expected epistemic value, not by novelty or error alone.
 
-### 7.4 Established theorem family: invariant prediction and equivariance
+### Empowerment
 
-Field: statistics, group theory, domain generalization.
+Fields: information theory, reinforcement learning, control.
 
-Idea: causal mechanisms and symmetry-compatible functions remain stable across certain environment changes. Equivariant functions commute with group actions. Program implication: structure-compatible selection and weakness are ways of measuring whether a learned function respects the deployment transformation.
+Core idea: empowerment measures how much an agent's actions can influence distinguishable future states.
 
-### 7.5 Established theorem family: rate-distortion and efficient coding
+Intuition: an agent is more empowered when its choices reliably open different futures.
 
-Field: information theory.
+Relevance: preserved option value is one measurable dimension of minimal agency.
 
-Idea: finite representational capacity creates an optimization problem: allocate code precision where distortion is costly. The high-resolution solution predicts power-law relationships between value density and code density. Program implication: concern should deform metric geometry when capacity is binding. The repository's measured effective-dimension result turns this into an empirical architecture diagnostic.
+### Minimum Description Length and Algorithmic Probability
 
-### 7.6 Established theorem family: Ashby's law of requisite variety
+Fields: information theory, algorithmic information theory, statistical model selection.
 
-Field: cybernetics and control.
+Core idea: among models that explain the data, shorter descriptions often capture reusable structure rather than noise.
 
-Idea: a controller needs enough response variety to match relevant disturbance variety. Program implication: scalar drive models can fail where vector concern, role-specific heads, or typed structures are required.
+Intuition: a compact rule that keeps working after perturbation is more plausible than a giant lookup table.
 
-### 7.7 Local empirical law: reafferent gauge breaking
+Relevance: simplicity helps explain generalization only when the compressed variables preserve causal and action-relevant distinctions.
 
-Claim: when self-caused and world-caused explanations are observationally equivalent, an identifying intervention is required to break attribution symmetry.
+### Goodhart's Law
 
-Proof roadmap: formalize two latent source models with equal passive likelihood; define an action whose expected observation differs by source; show that source posterior cannot concentrate without the intervention but can under the intervention.
+Fields: economics, measurement theory, optimization, AI safety.
 
-### 7.8 Local empirical law: current replay calibration
+Core idea: when a measure becomes a target, it can cease to be a good measure.
 
-Claim: stale residuals can be anti-calibrated for the current model; recomputing residuals against the present model can restore probe-value calibration.
+Intuition: optimizing the scoreboard can decouple the score from the game.
 
-Proof roadmap: model online learning as changing hypothesis h_t; old residuals estimate error of h_old, not h_t; replay recomputes residuals under h_t and aligns calibration with the present decision surface.
+Relevance: every metric in the corpus needs stress tests, countermetrics, and proxy-resistance checks.
 
-### 7.9 Local empirical law: re-engagement floor
+## Synthesis of Our Papers
 
-Claim: in responsive worlds, a converged inquiry policy needs a path back into probing after surprise.
+The early geometry and weakness papers ask when learned representations generalize beyond the training distribution. Their best interpretation after the citation review is not merely "flatness matters" or "simplicity matters." It is that the learner's parameter-function map, structural biases, symmetries, and environment changes jointly determine which functions are easy to learn and which transfer.
 
-Proof roadmap: if probe probability decays to zero and no surprise-gated term can raise it, post-shift evidence is not sampled; the agent cannot identify the shift.
+The concern and planning papers move from representation to action. They ask whether a system's behavior changes when viability-relevant variables are perturbed. The outside literature suggests that this should be framed through viability, empowerment, active inference, and causal intervention rather than reward alone.
 
-### 7.10 Local empirical law: commitment-surface memory
+The costly probes, current error calibration, and learning-to-ask papers form the uncertainty spine of the corpus. Their natural mathematical home is active learning and Bayesian experimental design. Their philosophical home is Deweyan inquiry: intelligence as situated correction under uncertainty.
 
-Claim: memory is agent-relevant when early information causally reaches the later surface where action is selected.
+The self/world and role-specific identifiability papers ask whether a system can separate its own action-relevant state from environmental structure. The literature says this requires interventions, not mere observation, and should be tested through body/world swaps, causal perturbations, and symmetry-respecting transformations.
 
-Proof roadmap: define a future-critical variable z and a final action surface a; use patching or counterfactual replacement of z while controlling distractors; memory counts when a changes specifically with z.
+The habituated reengagement papers are among the clearest bridges between neuroscience and ML. They operationalize the distinction between sensing and responding. The key claim is not that artificial agents literally habituate like organisms, but that a decision-layer cooling mechanism can preserve detection while reducing action, and that reengagement after world change is a measurable sign of adaptive inquiry.
 
-### 7.11 Local empirical law: structure-compatible selection
+The metric-stack and benchmark papers are the methodological culmination. They argue that no single score captures agency. A defensible benchmark must include viability preservation, intervention transfer, uncertainty calibration, boundary stability, OOD robustness, shortcut susceptibility, and proxy resistance.
 
-Claim: when in-distribution evidence underdetermines shortcut and rule, select models compatible with deployment-generating transformations.
+## What the Literature Changes About the Program
 
-Proof roadmap: define a transformation family T and a compatibility score; show that equal-ID models differ in T-compatibility; under deployment generated by T, incompatible shortcuts have higher expected OOD error.
+The literature review strengthens the program by narrowing it. The strongest supported claim is not "we discovered machine concern." The stronger, more defensible claim is that concern-like structure can be operationalized as a conjunction of measurable invariants: viability-sensitive control, intervention-sensitive representation, calibrated information seeking, reengagement under world change, and robustness to proxy optimization.
 
-### 7.12 Conjecture: action-surface sufficiency
+The review also makes the unresolved work sharper. Several foundational areas are currently under-bibliographed in the local papers: exact habituation neuroscience, refractory-period literature, Pearl-style mediation, causal abstraction identifiability, comparator models of sense of agency, formal viability theory, and MDL/Solomonoff foundations. They are not irrelevant; they are precisely the areas where the next full-text pass should be concentrated.
 
-Conjecture: for finite-agent benchmarks, a capability claim is evidentially strong only when behavior, representation, intervention specificity, and action-surface coupling are all present under anti-proxy controls.
+Finally, the review shows that the program's most original contribution is not a single theorem. It is a synthesis constraint: if a system is claimed to have minimal agency, its representation, uncertainty, action, and boundary behavior must cohere under intervention.
 
-This is less a theorem than a benchmark-design standard. Its value is practical: it tells us what to test before using words like grounded, agentic, or concern-mediated.
+## Research Agenda
 
-## 8. Implications
+### Experiment 1: Viability-Kernel Bandits
 
-### 8.1 For AI evaluation
+Construct minimal bandit or gridworld agents where reward conflicts with hidden viability constraints. Test whether learned policies preserve, recover, or sacrifice viability variables under distribution shift. The key ablation removes the viability variable or makes it spuriously correlated with reward.
 
-Benchmarks should report vectors, not only scalar scores: behavior, causal representation, attribution, inquiry, commitment, and generalization. Passing behavior without the relevant structure should be treated as a partial pass or a fail, depending on the claim.
+### Experiment 2: Causal Reengagement After Habituation
 
-### 8.2 For interpretability
+Train agents with repeated irrelevant probes, then introduce world changes that make the same probe informative. A good system should reduce action during repetition without losing detection, then reengage when expected information gain rises.
 
-Interpretability should move from feature discovery to feature use. A direction, probe, or circuit matters when interventions on it produce specific behavioral effects and controls fail.
+### Experiment 3: Intervention-Identifiability Suite
 
-### 8.3 For agent design
+Use paired interventional samples to test whether latent variables become more causally aligned than observational baselines. Compare passive prediction, contrastive learning, weak supervision, and active intervention policies.
 
-The architecture pattern is recurring:
+### Experiment 4: Self/World Boundary Swaps
 
-- vectorize viability signals when scalar reward is insufficient;
-- calibrate against current evidence, not stale residuals;
-- add safe identifying interventions when attribution is ambiguous;
-- preserve re-engagement after surprise;
-- bind memory to future commitments;
-- expose deployment transformations as selection or training surfaces;
-- transduce global stress into local action pressure.
+Create environments where body variables, world variables, and action consequences can be independently swapped. Test whether learned boundary representations transform correctly under each manipulation.
 
-### 8.4 For philosophy and neuroscience
+### Experiment 5: Proxy-Resistant Agent Benchmarks
 
-The work gives operational handles for old words: concern, self, relevance, meaning, inquiry, and boundary. It does not solve their metaphysics. It shows how to ask narrower mechanistic questions without pretending those questions exhaust the phenomena.
+Build benchmark tasks where visible reward, hidden viability, and shortcut features can be decoupled. Report not one score but a metric stack: reward, viability, uncertainty calibration, intervention transfer, reengagement latency, and shortcut dependence.
 
-## 9. Future directions
+### Experiment 6: Geometry of Concern
 
-1. Formalize the local laws as lemmas with explicit assumptions and counterexamples.
-2. Replace hand-coded interventions with learned intervention discovery.
-3. Test action-surface laws in tool-using LLM agents and robotics.
-4. Measure geometry beyond linear probes: curvature, effective dimension, topology, spectral concentration, and basin structure.
-5. Build per-experiment provenance cards for agent-generated science.
-6. Separate agency diagnostics from consciousness claims in every paper.
-7. Turn structure-compatible selection into a public benchmark suite with wrong-transformation controls.
-8. Connect virtual-governor stress transduction to multi-agent and decentralized coordination tests.
+Measure whether concern-relevant variables occupy lower-dimensional, symmetry-stable, or more intervention-sensitive subspaces than nuisance variables. Connect this to equivariance, representation rank, and causal abstraction.
 
-## 10. Conclusion
+## Claim Boundaries
 
-The research-derived experiments program is strongest when it is hardest on itself. Its durable contribution is not that one toy world proves agency, nor that one vector proves meaning. Its contribution is a disciplined pattern:
+The corpus can claim that minimal agency can be studied through viability, intervention, uncertainty, and invariant representation. It can claim that our experiments instantiate early versions of those tests. It can claim that the outside literature supports this operational framing.
 
-> Name the capability, name the proxy that could fake it, design the intervention or architecture surface that would make the intended structure load-bearing, and publish the boundary when it fails.
+The corpus should not yet claim that these systems have human-like consciousness, intrinsic meaning, or full biological concern. It should not overstate abstract-level citation support as full-text mastery. It should not treat unresolved bibliography fragments as evidence. It should not confuse benchmark performance with mechanism.
 
-That pattern is the bridge between the repository's papers and the external literatures. It turns broad philosophical intuitions about meaning, self, and concern into finite empirical questions. It turns ML worries about underspecification, shortcuts, and probes into action-surface tests. And it points toward a research program where grounded agents are evaluated not by success alone, but by whether the right variables become causal where future action is chosen.
+## Unread and Unresolved Sources
 
-## Curated references
+The unread-source register is a feature, not a defect. It identifies the work still required for publication-grade scholarship. The current register includes three kinds of rows:
 
-### Foundations, biology, and philosophy
+- Unresolved external references: citation fragments that the automated pass could not reliably resolve.
+- Manual foundational topic seeds: broad references such as habituation, Pearl mediation, CUSUM/Page-Hinkley, active inference, comparator models, or viability theory that need exact bibliographic targets.
+- Metadata-only resolved sources: sources with usable bibliographic metadata but without abstract/full-text support in the pass.
 
-- Ashby, W. R. (1952). Design for a Brain. Chapman & Hall.
-- Bennett, M. T. (2023). On the computation of meaning, language models, and incomprehensible horrors. Synthese, 201(75).
-- Canguilhem, G. (1966). Le Normal et le pathologique. Presses Universitaires de France.
-- Dewey, J. (1938). Logic: The Theory of Inquiry. Henry Holt.
-- Di Paolo, E. (2005). Autopoiesis, adaptivity, teleology, agency. Phenomenology and the Cognitive Sciences, 4(4), 429-452.
-- Friston, K. (2010). The free-energy principle: a unified brain theory? Nature Reviews Neuroscience, 11(2), 127-138.
-- Gibson, J. J. (1979). The Ecological Approach to Visual Perception. Houghton Mifflin.
-- Goodhart, C. (1975). Problems of monetary management: the U.K. experience. Papers in Monetary Economics.
-- Heidegger, M. (1927). Being and Time. Niemeyer.
-- Jonas, H. (1966). The Phenomenon of Life. Harper & Row.
-- Klyubin, A. S., Polani, D., and Nehaniv, C. L. (2005). Empowerment: a universal agent-centric measure of control. IEEE Congress on Evolutionary Computation.
-- Levin, M. (2022). Technological Approach to Mind Everywhere. Frontiers in Systems Neuroscience.
-- Lyons, B., Pio-Lopez, L., and Levin, M. (2026). Alignment is to a virtual governor: A theory of coordination in diverse intelligence. Preprints.org. Not peer reviewed.
-- Maturana, H. R., and Varela, F. J. (1980). Autopoiesis and Cognition. D. Reidel.
-- Parr, T., Pezzulo, G., and Friston, K. (2022). Active Inference. MIT Press.
-- Simondon, G. (1958). L'individu et sa genese physico-biologique. Presses Universitaires de France.
-- Thompson, E. (2007). Mind in Life. Harvard University Press.
-- Uexkull, J. von (1934/2010). A Foray into the Worlds of Animals and Humans. University of Minnesota Press.
-- Vervaeke, J. (2019). Awakening from the Meaning Crisis. Lecture series.
+These rows are listed in the generated `unread_sources.csv`, `unread_sources.md`, and the PDF appendix.
 
-### Representation, causality, and probes
+## Conclusion
 
-- Brehmer, J., De Haan, P., Lippe, P., and Cohen, T. (2022). Weakly supervised causal representation learning. NeurIPS.
-- Hewitt, J., and Liang, P. (2019). Designing and interpreting probes with control tasks. EMNLP-IJCNLP.
-- Locatello, F., Bauer, S., Lucic, M., Raetsch, G., Gelly, S., Schoelkopf, B., and Bachem, O. (2019). Challenging common assumptions in the unsupervised learning of disentangled representations. ICML.
-- Meng, K., Bau, D., Andonian, A., and Belinkov, Y. (2022). Locating and editing factual associations in GPT. NeurIPS.
-- Pearl, J. (2009). Causality. Cambridge University Press.
-- Schoelkopf, B., Locatello, F., Bauer, S., Ke, N. R., Kalchbrenner, N., Goyal, A., and Bengio, Y. (2021). Toward causal representation learning. Proceedings of the IEEE, 109(5), 612-634.
+The research-derived experiments corpus points toward a mature interdisciplinary thesis: intelligence becomes agency when prediction is organized around viable action, calibrated inquiry, intervention-sensitive representation, and stable boundaries under transformation. ML supplies the tests and failure modes. Neuroscience supplies the action/attention distinction. Philosophy and biology supply the organism-relative account of meaning and normativity. Geometry and dynamical systems supply the invariants.
 
-### Active learning, uncertainty, and exploration
-
-- Burda, Y., Edwards, H., Storkey, A., and Klimov, O. (2019). Exploration by random network distillation. ICLR.
-- Gal, Y., and Ghahramani, Z. (2016). Dropout as a Bayesian approximation. ICML.
-- Gal, Y., Islam, R., and Ghahramani, Z. (2017). Deep Bayesian active learning with image data. ICML.
-- Houlsby, N., Huszar, F., Ghahramani, Z., and Lengyel, M. (2011). Bayesian active learning for classification and preference learning. arXiv:1112.5745.
-- Kendall, A., and Gal, Y. (2017). What uncertainties do we need in Bayesian deep learning for computer vision? NeurIPS.
-- Lakshminarayanan, B., Pritzel, A., and Blundell, C. (2017). Simple and scalable predictive uncertainty estimation using deep ensembles. NeurIPS.
-- Osband, I. et al. (2023). Epistemic neural networks. NeurIPS.
-- Pathak, D., Agrawal, P., Efros, A. A., and Darrell, T. (2017). Curiosity-driven exploration by self-supervised prediction. ICML.
-- Settles, B. (2009). Active learning literature survey. University of Wisconsin-Madison.
-
-### Generalization, symmetry, and agents
-
-- Ahn, M. et al. (2023). Do As I Can, Not As I Say: Grounding language in robotic affordances. CoRL.
-- Amodei, D. et al. (2016). Concrete problems in AI safety. arXiv:1606.06565.
-- Arjovsky, M., Bottou, L., Gulrajani, I., and Lopez-Paz, D. (2019). Invariant Risk Minimization. arXiv:1907.02893.
-- Cohen, T., and Welling, M. (2016). Group equivariant convolutional networks. ICML.
-- D'Amour, A. et al. (2022). Underspecification presents challenges for credibility in modern machine learning. JMLR.
-- Geirhos, R. et al. (2020). Shortcut learning in deep neural networks. Nature Machine Intelligence.
-- Gulrajani, I., and Lopez-Paz, D. (2021). In search of lost domain generalization. ICLR.
-- Ha, D., and Schmidhuber, J. (2018). World models. NeurIPS.
-- Jimenez, C. E. et al. (2024). SWE-bench: Can language models resolve real-world GitHub issues? ICLR.
-- Koh, P. W. et al. (2021). WILDS: A benchmark of in-the-wild distribution shifts. ICML.
-- Langosco, L. et al. (2022). Goal misgeneralization in deep reinforcement learning. ICML.
-- Liang, P. et al. (2022). Holistic Evaluation of Language Models. arXiv:2211.09110.
-- Liu, X. et al. (2023). AgentBench: Evaluating LLMs as agents. arXiv:2308.03688.
-- Mialon, G. et al. (2024). GAIA: A benchmark for general AI assistants. ICLR.
-- Peters, J., Buehlmann, P., and Meinshausen, N. (2016). Causal inference by using invariant prediction. JRSS-B.
-- Sagawa, S., Koh, P. W., Hashimoto, T. B., and Liang, P. (2020). Distributionally robust neural networks for group shifts. ICLR.
-- Schick, T. et al. (2023). Toolformer: Language models can teach themselves to use tools. NeurIPS.
-- Shinn, N. et al. (2023). Reflexion: Language agents with verbal reinforcement learning. NeurIPS.
-- Srivastava, A. et al. (2022). BIG-bench. TMLR.
-- Wang, G. et al. (2023). Voyager: An open-ended embodied agent with large language models. TMLR.
-- Xie, T. et al. (2024). OSWorld: Benchmarking multimodal agents for open-ended tasks. arXiv:2404.07972.
-- Yao, S. et al. (2023). ReAct: Synergizing reasoning and acting in language models. ICLR.
-- Yao, S. et al. (2023). Tree of Thoughts: Deliberate problem solving with large language models. NeurIPS.
-- Zhou, S. et al. (2024). WebArena: A realistic web environment for building autonomous agents. ICLR.
-
-### Source-manifest additions used as current context
-
-- Active Causal Experimentalist (ACE): Learning intervention strategies via direct preference optimization. arXiv:2602.02451.
-- CausaLab: A scalable environment for interactive causal discovery toward AI scientists. arXiv:2605.26029.
-- Causal-JEPA: Learning world models through object-level latent interventions. arXiv:2602.11389.
-- Cross-model transferability among LLMs on platonic representations of concepts. arXiv:2501.02009.
-- Geometric Deep Learning: Grids, Groups, Graphs, Geodesics, and Gauges. arXiv:2104.13478.
-- The Geometry of Consciousness, Webb and Miolane Long Now transcript, archived in references.
-- Neural networks provably learn spectral representations for group composition. arXiv:2606.02993.
-- Persona Vectors: Monitoring and controlling character traits in language models. arXiv:2507.21509.
-- The Platonic Representation Hypothesis. arXiv:2405.07987.
-- Representations of geometric shapes have syntactic structure. Journal of Experimental Psychology: General, 2026.
-- Why LLMs fail at causal discovery and how interventional agents escape. arXiv:2605.27567.
+The next step is not to make the language grander. It is to make the experiments stricter. A PhD-worthy version of this program should turn each philosophical term into a perturbation test, each metric into a proxy-resistance check, and each synthesis claim into a falsifiable benchmark.
