@@ -11,6 +11,7 @@ export const eventSources = [
   "desktop-camera",
   "desktop-hotkey",
   "desktop-system",
+  "stimulus",
   "user",
   "cloud",
   "modal",
@@ -36,6 +37,8 @@ export const eventTypes = [
   "label.added",
   "probe.requested",
   "probe.answered",
+  "stimulus.attached",
+  "stimulus.segmented",
   "notification.candidate",
   "notification.delivered",
   "notification.responded",
@@ -93,6 +96,24 @@ export type LabelPayload = JsonObject & {
     | "near-breakthrough"
     | "tired";
   note?: string;
+};
+
+export type StimulusSource = "article" | "transcript" | "manual" | "pdf-text" | "video-note";
+
+export type StimulusAttachedPayload = JsonObject & {
+  stimulus_id: string;
+  source: StimulusSource;
+  content_ref: string;
+  document_opt_in: boolean;
+  title?: string;
+  duration_ms?: number;
+};
+
+export type StimulusSegmentedPayload = JsonObject & {
+  stimulus_id: string;
+  segment_ids: string[];
+  segment_count: number;
+  content_refs: string[];
 };
 
 export function createEvent<TPayload extends JsonObject>(
@@ -172,8 +193,43 @@ export function validateEvent(value: unknown): asserts value is EventEnvelope {
   }
 
   assertNoBlockedPayload(value.payload);
+  assertStimulusTextOptIn(value as EventEnvelope);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+const rawStimulusTextFieldNames = new Set(["text", "rawText", "content", "html", "markdown", "excerpt"]);
+
+function assertStimulusTextOptIn(event: EventEnvelope): void {
+  if (!event.event_type.startsWith("stimulus.") || event.privacy_class === "document-opt-in") {
+    return;
+  }
+
+  const present = findRawStimulusTextFieldPaths(event.payload);
+  if (present.length > 0) {
+    throw new Error(`stimulus text requires document-opt-in: ${present.join(", ")}`);
+  }
+}
+
+function findRawStimulusTextFieldPaths(value: unknown, path = "$"): string[] {
+  if (Array.isArray(value)) {
+    return value.flatMap((item, index) => findRawStimulusTextFieldPaths(item, `${path}[${index}]`));
+  }
+
+  if (!isRecord(value)) {
+    return [];
+  }
+
+  const paths: string[] = [];
+  for (const [key, child] of Object.entries(value)) {
+    const childPath = `${path}.${key}`;
+    if (rawStimulusTextFieldNames.has(key)) {
+      paths.push(childPath);
+    }
+    paths.push(...findRawStimulusTextFieldPaths(child, childPath));
+  }
+
+  return paths;
 }

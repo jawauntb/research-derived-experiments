@@ -6,6 +6,7 @@ import {
   validateEvent,
   type BrowserTypingMetricsPayload,
   type CameraFeaturePayload,
+  type StimulusAttachedPayload,
 } from "../src";
 
 describe("event schema", () => {
@@ -80,5 +81,41 @@ describe("event schema", () => {
     expect(canSyncPrivacyClass("local-derived").allowed).toBe(false);
     expect(canExportPrivacyClass("local-derived").allowed).toBe(true);
     expect(canExportPrivacyClass("debug-sensitive").allowed).toBe(false);
+  });
+
+  test("allows stimulus references but requires document opt-in for raw text", () => {
+    const payload: StimulusAttachedPayload = {
+      stimulus_id: "article-1",
+      source: "article",
+      content_ref: "article:article-1:abc123#1",
+      document_opt_in: false,
+      title: "Demo article",
+    };
+
+    expect(() =>
+      createEvent({
+        session_id: "session-1",
+        source: "stimulus",
+        source_version: "desktop@0.1.0",
+        monotonic_ms: 30,
+        event_type: "stimulus.attached",
+        payload,
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    ).not.toThrow();
+
+    expect(() =>
+      createEvent({
+        session_id: "session-1",
+        source: "stimulus",
+        source_version: "desktop@0.1.0",
+        monotonic_ms: 31,
+        event_type: "stimulus.attached",
+        payload: { ...payload, text: "raw article body" },
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    ).toThrow(/document-opt-in/);
   });
 });

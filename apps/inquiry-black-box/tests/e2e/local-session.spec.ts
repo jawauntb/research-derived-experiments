@@ -24,6 +24,26 @@ describe("local session fixture loop", () => {
       active_task: "Read the local demo article",
     });
     const article = readDemoArticle();
+    const stimulusAttached = createEvent({
+      event_id: "fixture-stimulus-attached",
+      session_id: session.session_id,
+      source: "stimulus",
+      source_version: "desktop@0.1.0",
+      monotonic_ms: 0,
+      event_type: "stimulus.attached",
+      payload: {
+        stimulus_id: "demo-article",
+        source: "article",
+        content_ref: "fixture:demo-article",
+        document_opt_in: false,
+        title: "Demo article",
+        duration_ms: 120_000,
+      },
+      privacy_class: "local-derived",
+      retention_policy: "local-default",
+    });
+
+    database.appendEvent(stimulusAttached);
 
     for (const line of readFixture()) {
       database.appendEvent(line.event);
@@ -65,7 +85,18 @@ describe("local session fixture loop", () => {
     database.appendEvent(createCameraFeatureEvent({ session_id: session.session_id, featureWindow: cameraWindow }));
 
     const events = database.listEvents(session.session_id);
-    const replay = createSessionReplayReport(events);
+    const replay = createSessionReplayReport(events, {
+      stimulus_inputs: [
+        {
+          stimulus_id: "demo-article",
+          source: "article",
+          content_ref: "fixture:demo-article",
+          evidence_event_ids: [stimulusAttached.event_id],
+          duration_ms: 120_000,
+          text: article,
+        },
+      ],
+    });
     const exported = exportSession(database, session.session_id);
     const exportedLines = exported.jsonl
       .trim()
@@ -127,7 +158,13 @@ describe("local session fixture loop", () => {
     expect(replay.markers.some((marker) => marker.kind === "probe")).toBe(true);
     expect(replay.markers.some((marker) => marker.kind === "tab-churn")).toBe(true);
     expect(replay.markers.every((marker) => marker.evidence_event_ids.length > 0)).toBe(true);
+    expect(replay.heatmap.length).toBeGreaterThan(0);
+    expect(replay.heatmap.every((segment) => segment.limitation.length > 0)).toBe(true);
+    expect(replay.heatmap.some((segment) => segment.stimulus_evidence.length > 0)).toBe(true);
+    expect(replay.heatmap.some((segment) => segment.evidence_event_ids.length > 0)).toBe(true);
+    expect(replay.heatmap.some((segment) => segment.evidence_event_ids.includes(stimulusAttached.event_id))).toBe(true);
     expect(exportedLines.some((line) => line.event?.event_id === "fixture-scroll-1")).toBe(true);
+    expect(JSON.stringify(replay)).not.toContain("Stimulus Difficulty and Losing the Thread");
     expect(exported.jsonl).not.toContain("rawFrame");
     expect(exported.jsonl).not.toContain("Stimulus Difficulty and Losing the Thread");
     expect(rawCloudResponse.status).toBe(422);
