@@ -61,28 +61,44 @@ Verification-only findings (post-hoc):
   eyetrack):** ρ = +0.124 [95% CI +0.026, +0.229]. This explains
   ~44% of the observed effect. Eyetrack-specific signal above
   demographics is ρ ≈ 0.15.
+- **Residualized rerun (02:52) — full Frisch-Waugh-Lovell test.**
+  Fit `Ridge(Age, Sex) → quiz` on each train fold, compute residuals
+  on train + test, train eyetrack MLP on residuals. Cleanly
+  isolates the eyetrack signal above demographics.
+
+  | n_train | ρ_eyetrack_raw | ρ_demo_only | **ρ_residual** |
+  |---:|---:|---:|---:|
+  |  8 | +0.165 | −0.026 | +0.019 |
+  | 16 | +0.201 | +0.067 | +0.159 |
+  | 24 | +0.216 | +0.073 | **+0.207** ← peak |
+  | 32 | +0.091 | +0.027 | +0.109 |
+
+  Per-experiment surprise: exp3's raw ρ=+0.38 collapses to
+  ρ_residual=+0.112 (most of exp3's story was demographics).
+  Exp2 strengthens: raw +0.171 → residual +0.200 (genuine
+  per-recording signal). See `QUIZ_VERIFICATION.md` §7.
 
 ## What that means, at three levels of ambition
 
-- **Minimum honest read:** on ONE of three BBBD experiments (exp3),
-  eyetrack cross-subject-predicts video comprehension at ρ = 0.38
-  even after controlling for demographics. That IS a real biomarker
-  signal — just not one that clears the pre-registered gate when
-  averaged over the whole corpus.
-- **Middle read:** the pre-registered gate was designed to be strict.
-  It required signal to hold up at the LARGEST n_train_subjects
-  AND every seed to clear a 0.05 floor. At n=32 (which is only
-  supplyable by exp4), the signal is too noisy to satisfy either. So
-  the strict gate fails, but the underlying signal is there in a
-  subset.
-- **Full read:** the *modality* thesis (eyetrack captures cross-
-  subject cognitive engagement) is *supported by exp3* and
-  *unsupported by exp4*. Whether that's a real cross-experiment
-  heterogeneity signal or a stimulus-design artifact of BBBD is
-  unknown. Doing more with this specifically requires either (a) a
-  new pre-reg for a single-experiment target, (b) a different
-  corpus with more homogeneous design, or (c) a much richer
-  featurizer that finds signal in exp4.
+- **Minimum honest read:** the retracted GO was ~44% demographic
+  (Age+Sex from participants.tsv). The 02:52 residualized rerun
+  confirms this cleanly: **residual eyetrack ρ = +0.207 at n=24**,
+  well above zero, still positive, but half the raw headline.
+- **Middle read:** the pre-registered gate on the *raw* quiz score
+  ρ=0.15 doesn't clear over the full corpus; the residualized ρ
+  peaks at 0.207 but wasn't the pre-registered target. Also:
+  exp3 (the strongest per-experiment raw signal at ρ=+0.38)
+  collapses to +0.112 when residualized — most of exp3's story was
+  demographics, not eyetrack. Exp2 (weakest raw signal) actually
+  strengthens under residualization (+0.171 raw → +0.200 residual)
+  because its eyetrack signal is genuinely per-recording.
+- **Full read:** the honest three-line summary of the whole session
+  is: (1) EEG is dead cross-subject on BBBD; (2) eyetrack has a
+  real but modest signal above demographics on this task (residual
+  ρ ≈ 0.2); (3) the pre-registered gate does not clear on the
+  full corpus, so Phase 3 stays FROZEN — but the underlying
+  modality is not falsified, just not strong enough on this
+  particular corpus/task to justify build spend.
 
 ## What ran while you slept
 
