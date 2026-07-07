@@ -441,12 +441,12 @@ function installContentScript(): void {
   if (globalState[CONTENT_SCRIPT_INSTALLED_KEY]) {
     return;
   }
-  globalState[CONTENT_SCRIPT_INSTALLED_KEY] = true;
 
   const runtime = readRuntime();
   if (!runtime) {
     return;
   }
+  globalState[CONTENT_SCRIPT_INSTALLED_KEY] = true;
 
   const telemetry = createContentTelemetry({
     sendMessage: (message) => {

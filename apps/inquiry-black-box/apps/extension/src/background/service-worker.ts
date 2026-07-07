@@ -69,6 +69,7 @@ type ContentScriptRegistration = {
   js: string[];
   runAt: "document_idle";
   persistAcrossSessions: boolean;
+  world: "ISOLATED";
 };
 
 type ScriptingLike = {
@@ -350,6 +351,7 @@ export async function ensureContentScriptRegistration(scripting: ScriptingLike |
           js: ["dist/content/index.js"],
           runAt: "document_idle",
           persistAcrossSessions: true,
+          world: "ISOLATED",
         },
       ],
       callback,

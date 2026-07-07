@@ -158,6 +158,7 @@ describe("local bridge pairing and queue", () => {
         js: ["dist/content/index.js"],
         runAt: "document_idle",
         persistAcrossSessions: true,
+        world: "ISOLATED",
       },
     ]);
   });

@@ -30,7 +30,7 @@ type TabsLike = {
 
 type ScriptingLike = {
   executeScript(
-    details: { target: { tabId: number }; files: string[] },
+    details: { target: { tabId: number }; files: string[]; world: "ISOLATED" },
     callback?: () => void,
   ): Promise<unknown> | void;
 };
@@ -362,6 +362,7 @@ async function attachContentScript(chromeApi: ChromeLike, tabId: number): Promis
         {
           target: { tabId },
           files: ["dist/content/index.js"],
+          world: "ISOLATED",
         },
         () => {
           const error = chromeApi.runtime?.lastError?.message;
