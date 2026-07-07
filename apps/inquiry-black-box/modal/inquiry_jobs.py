@@ -7,9 +7,9 @@ from models.calibration import train_toy_calibration
 from models.session_features import extract_session_features
 
 try:
-    import modal
+    import modal as modal_module
 except ImportError:  # pragma: no cover - exercised only when Modal is installed
-    modal = None
+    modal_module: Any | None = None
 
 
 def synthetic_redacted_export() -> dict[str, Any]:
@@ -92,8 +92,8 @@ def run_calibration_job(samples: list[dict[str, Any]]) -> dict[str, Any]:
     return train_toy_calibration(samples)
 
 
-if modal:
-    app = modal.App("inquiry-black-box")
+if modal_module:
+    app = modal_module.App("inquiry-black-box")
 
     @app.function()
     def smoke_job(session_export: dict[str, Any] | None = None) -> dict[str, Any]:
