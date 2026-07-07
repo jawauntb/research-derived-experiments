@@ -5,8 +5,9 @@ kill_criterion: "config/kill_criterion.yaml"
 data:
   dataset: "bbbd"
   cache_dir_env: "BBBD_CACHE_DIR"
-  experiments: [1, 2, 3, 4, 5]
-  subject_limit: null           # null = all 178; set an int for smoke tests
+  # Experiment 1 is eyetrack-only on Zenodo (no EEG); decoders skip it.
+  experiments: [2, 3, 4, 5]
+  subject_limit: null           # null = all subjects; set an int for smoke tests
 
 preprocess:
   highpass_hz: 0.05

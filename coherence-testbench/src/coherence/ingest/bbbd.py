@@ -1,16 +1,24 @@
 """BBBD (Big Brain-Behavior Dataset) ingest — Zenodo record 19241964.
 
-The Zenodo download is large; the loader assumes the archive has already been
-staged at ``$BBBD_CACHE_DIR`` (see .env.example). ``download_bbbd`` streams
-the archive if it's missing.
+The full corpus is 26.97 GB, packaged as one zip per experiment:
+    experiment1.zip  0.89 GB   eyetrack-only (no EEG)
+    experiment2.zip  5.60 GB
+    experiment3.zip  7.97 GB
+    experiment4.zip  5.47 GB
+    experiment5.zip  7.04 GB
 
-BIDS structure follows the BBBD paper:
-    <root>/sub-<ID>/ses-<S>/eeg/sub-<ID>_ses-<S>_task-<T>_eeg.bdf
-    <root>/participants.tsv
-    <root>/task-<T>_events.tsv
+Unpacked layout (after ``modal_jobs/prepare_bbbd.py`` extracts them into
+``$BBBD_CACHE_DIR``):
+
+    <root>/experiment<N>/sub-<ID>/ses-<S>/eeg/sub-<ID>_ses-<S>_task-stim<K>_eeg.bdf
+    <root>/experiment<N>/participants.tsv
+    <root>/experiment<N>/README.md
+
+The BIDS task naming is ``task-stim0K`` (K=1..5, stimulus block), NOT
+``task-exp<N>``. Experiment identity lives in the parent directory.
 
 We expose one function per Phase-0 need: enumerate subjects, load a
-(signal, labels) pair, and stream all subjects for the LSO loop.
+(signal, labels) pair, and stream all records for the LSO loop.
 """
 
 from __future__ import annotations
@@ -23,6 +31,17 @@ from typing import Iterator
 
 ZENODO_RECORD = "19241964"
 ZENODO_URL = f"https://zenodo.org/records/{ZENODO_RECORD}"
+
+# One archive per experiment on Zenodo.
+EXPERIMENT_ARCHIVES: Mapping[int, str] = {
+    1: "experiment1.zip",
+    2: "experiment2.zip",
+    3: "experiment3.zip",
+    4: "experiment4.zip",
+    5: "experiment5.zip",
+}
+# Experiment 1 is eyetrack-only (no EEG); skip it in EEG decoders.
+EXPERIMENTS_WITH_EEG: tuple[int, ...] = (2, 3, 4, 5)
 
 
 def _cache_root() -> Path:
@@ -48,42 +67,69 @@ class SubjectRecord:
 class BBBDLoader:
     """Enumerates BBBD subjects across the 5 experiments.
 
+    Each experiment lives under its own directory: ``<root>/experiment<N>/``.
     Iteration is lazy; nothing is loaded into memory until ``load_signal`` is
     called on a record. This keeps the LSO loop memory-flat.
     """
 
     def __init__(self, root: Path | None = None, experiments: list[int] | None = None):
         self.root = root or _cache_root()
-        self.experiments = experiments or [1, 2, 3, 4, 5]
+        # Default to EEG-carrying experiments; a caller can still ask for exp1
+        # explicitly (for eyetrack-only work), but decoder code should stick
+        # with EXPERIMENTS_WITH_EEG.
+        self.experiments = experiments or list(EXPERIMENTS_WITH_EEG)
         self._participants = self._read_participants()
 
+    def _experiment_root(self, exp: int) -> Path:
+        return self.root / f"experiment{exp}"
+
     def _read_participants(self) -> dict[str, dict[str, str]]:
-        tsv = self.root / "participants.tsv"
-        if not tsv.exists():
-            return {}
         rows: dict[str, dict[str, str]] = {}
-        header, *lines = tsv.read_text().splitlines()
-        keys = header.split("\t")
-        for line in lines:
-            cells = line.split("\t")
-            row = dict(zip(keys, cells))
-            rows[row.get("participant_id", "")] = row
+        for exp in self.experiments:
+            tsv = self._experiment_root(exp) / "participants.tsv"
+            if not tsv.exists():
+                continue
+            header, *lines = tsv.read_text().splitlines()
+            keys = header.split("\t")
+            for line in lines:
+                cells = line.split("\t")
+                row = dict(zip(keys, cells))
+                # Same subject can appear across experiments; last write wins
+                # for the participant-wide labels (demographics, ASRS).
+                rows[row.get("participant_id", "")] = row
         return rows
 
     def subjects(self) -> list[str]:
-        return sorted(p.name for p in self.root.glob("sub-*") if p.is_dir())
+        """Union of all subjects across the enabled experiments."""
+        ids: set[str] = set()
+        for exp in self.experiments:
+            exp_root = self._experiment_root(exp)
+            if not exp_root.is_dir():
+                continue
+            for p in exp_root.glob("sub-*"):
+                if p.is_dir():
+                    ids.add(p.name)
+        return sorted(ids)
 
     def records(self, subject_ids: list[str] | None = None) -> Iterator[SubjectRecord]:
-        for sub_id in subject_ids or self.subjects():
-            for exp in self.experiments:
-                for bdf in (self.root / sub_id).rglob(f"*task-exp{exp}*_eeg.bdf"):
+        wanted = set(subject_ids) if subject_ids else None
+        for exp in self.experiments:
+            exp_root = self._experiment_root(exp)
+            if not exp_root.is_dir():
+                continue
+            for sub_dir in sorted(exp_root.glob("sub-*")):
+                if not sub_dir.is_dir():
+                    continue
+                if wanted is not None and sub_dir.name not in wanted:
+                    continue
+                for bdf in sub_dir.rglob("*_eeg.bdf"):
                     events = bdf.with_name(bdf.name.replace("_eeg.bdf", "_events.tsv"))
                     yield SubjectRecord(
-                        subject_id=sub_id,
+                        subject_id=sub_dir.name,
                         experiment=exp,
                         signal_path=bdf,
                         events_path=events,
-                        labels=self._participants.get(sub_id, {}),
+                        labels=self._participants.get(sub_dir.name, {}),
                     )
 
     def load_signal(self, record: SubjectRecord):
@@ -98,15 +144,25 @@ class BBBDLoader:
 
 def load_subject(record: SubjectRecord):
     """Compat one-shot: return the mne.Raw for a record."""
-    return BBBDLoader(root=record.signal_path.parents[3]).load_signal(record)
+    root = record.signal_path
+    # Walk up until we hit `experiment<N>`, then one more parent for the cache root.
+    while root.parent != root and not root.name.startswith("experiment"):
+        root = root.parent
+    return BBBDLoader(root=root.parent).load_signal(record)
+
+
+def zenodo_download_url(experiment: int) -> str:
+    """Direct-download URL for one experiment archive on Zenodo."""
+    return f"https://zenodo.org/api/records/{ZENODO_RECORD}/files/{EXPERIMENT_ARCHIVES[experiment]}/content"
 
 
 def download_bbbd(dest: Path | None = None) -> Path:
     """Fetch BBBD from Zenodo if not already present.
 
-    NOTE: the archive is many GB. This function only writes into
-    ``BBBD_CACHE_DIR`` (or ``dest`` if given). It refuses to write into the
-    repo tree.
+    Deliberately not implemented as a full downloader — the record is 26.97 GB
+    and the operator should decide bandwidth + storage. See
+    ``modal_jobs/prepare_bbbd.py`` for the Modal-side version that runs
+    server-side against the ``bbbd-cache`` Volume.
     """
     root = dest or _cache_root()
     root.mkdir(parents=True, exist_ok=True)
@@ -114,13 +170,9 @@ def download_bbbd(dest: Path | None = None) -> Path:
     if marker.exists():
         return root
 
-    # Deliberately not implemented as a full downloader here — the Zenodo
-    # record is large enough that the operator should choose bandwidth and
-    # storage. Print the exact commands instead.
     raise RuntimeError(
         "BBBD is not present at "
-        f"{root}. Download from {ZENODO_URL} (record {ZENODO_RECORD}) and "
-        "unpack the BIDS tree at that path, then create an empty "
-        f"{marker} to acknowledge. See github.com/madjens/bbbd-dataset "
-        "for the official download script."
+        f"{root}. The full record is 26.97 GB across 5 experiment archives; "
+        "use `modal_jobs/prepare_bbbd.py` to download + unzip server-side "
+        f"into the bbbd-cache Volume. Zenodo record: {ZENODO_URL}."
     )
