@@ -1,0 +1,826 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=0.85in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{xcolor}
+
+\emergencystretch=3em
+\Urlmuskip=0mu plus 2mu
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  urlcolor=blue!50!black,
+  citecolor=blue!50!black
+}
+
+\setlist[itemize]{leftmargin=1.25em}
+\setlist[enumerate]{leftmargin=1.5em}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+\newtheorem{law}{Operational law}
+\newtheorem{proposition}{Empirical proposition}
+\newenvironment{proofsketch}{\paragraph{Evidence sketch.}}{}
+
+\title{\vspace{-2em}What Matters Becomes Measurable:\\
+A Synthesis of Structure-Compatible Generalization, Concern Geometry, and Proxy-Resistant Finite Agents}
+\author{Jawaun Brown\\Research Derived Experiments}
+\date{July 6, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This synthesis condenses the July 2026 ``Metaphysics of Intelligence'' archive
+and the associated Research Derived Experiments repository into one
+reviewer-facing argument. The central result is not that the work proves
+consciousness, general agency, or universal OOD robustness. It does something
+more actionable: it shows how to test whether finite learning systems succeed
+because the right structure controls behavior, rather than because a proxy
+passed the surface metric.
+
+Across the archive, the strongest evidence falls into five clusters. First,
+structure-compatible model selection shows that, under underspecification,
+compatibility with deployment-relevant transformations can select better OOD
+models than train or in-distribution validation, with the strongest semantic
+selection result reaching selected OOD accuracy 0.978 versus 0.919 for ID,
+train, and random selectors. Second, concern geometry shows that value and
+viability deform representation: systems allocate resolution, objecthood, and
+memory toward what future action requires. Third, the minimal-agent line shows
+which mechanisms make concern load-bearing: action-conditioned consequence
+models, vector-valued viability heads, identifying interventions, current-error
+calibration, value-of-information probes, and decision-layer habituation.
+Fourth, Suite C and the long-horizon moved-bottleneck/tool suite turn agency
+claims into proxy-resistant benchmarks: behavior alone is not a pass; a pass
+requires behavior, a structure-specific gate, and anti-cheat controls. Fifth,
+foundation-model contact is bounded but real: open-model and frozen-encoder
+results validate selected transport signals, while strict activation-steering
+gates reject broader semantic-control claims.
+
+The practical takeaway is a design and evaluation rule: for every proposed
+agent capability, find the proxy that can pass without the intended structure,
+then add the smallest gate, architecture, or intervention that makes the
+intended structure load-bearing. This paper prioritizes the evidence, states
+the strongest safe claims, clusters the experiments, gives operational laws
+with proof sketches, maps field contributions, identifies the most actionable
+and commercially valuable directions, and ranks future work.
+\end{abstract}
+
+\section{What Matters First}
+
+Do not read this archive linearly. It contains a research program, a lab
+notebook, multiple draft papers, negative controls, reviewer-risk audits, and
+publication packages. The fastest accurate read is:
+
+\begin{enumerate}
+  \item \textbf{Core technical contribution:} structure-compatible model
+  selection under underspecification. When train and ID validation cannot tell
+  shortcut and transportable solutions apart, select the model whose learned
+  function preserves the transformations deployment will reuse.
+  \item \textbf{Core benchmark contribution:} no finite-agent suite should pass
+  on behavior alone. Require behavior plus a structure gate plus anti-cheat
+  controls.
+  \item \textbf{Core architecture contribution:} concern is not a scalar reward
+  label. In finite agents it appears as metric allocation, action-conditioned
+  consequence prediction, vector viability, identifying intervention,
+  re-engagement after world change, and commitment at tool/action surfaces.
+  \item \textbf{Core product contribution:} the work is most immediately
+  valuable as an eval and observability layer for model selection, agent
+  reliability, tool commitment, stale-confidence detection, and OOD governance.
+  \item \textbf{Core claim boundary:} the work does not prove consciousness,
+  broad autonomy, production reliability, biological validity, or universal OOD
+  certification. Its strongest claims are finite, controlled, source-backed,
+  and useful.
+\end{enumerate}
+
+\paragraph{The one-sentence thesis.}
+Finite intelligence becomes measurable when we ask which structure is
+preserved, which distinctions the system spends capacity on, and whether that
+structure still controls behavior under shift, intervention, memory pressure,
+inquiry pressure, and proxy temptation.
+
+\paragraph{The one-sentence evaluation rule.}
+A system does not pass because it gets the answer right; it passes when the
+right variable is represented, attributed, queried, preserved, or committed at
+the causal surface where action is selected.
+
+\section{Source Coverage and Claim Discipline}
+
+The synthesis is based on the local Metaphysics of Intelligence archive and the
+repository sources in this worktree. The archive includes the numbered paper
+sequence from the geometric-meaning seed paper through the July 6 structure,
+benchmark, Suite C, and open-model packages; the ICML publication package; the
+Structure-Compatible Generalization folder; Suite C re-engagement and neural
+transfer folders; Suite C teacher-free inquiry results; Phase Arc 2 and 3
+papers; virtual-governor stress-signal notes; and critical reviews.
+
+Where duplicate PDFs and Markdown/TeX sources exist, this paper treats the
+source-backed repository file and the archived PDF as one evidence item. Where
+later July 6 versions supersede earlier drafts, the later version supplies the
+claim boundary and the earlier versions supply lineage. Negative reports and
+reviewer-risk audits are first-class evidence.
+
+\paragraph{Claim levels.}
+The archive contains several kinds of evidence:
+
+\begin{itemize}
+  \item \textbf{Strong finite empirical result:} preregistered or gated
+  controlled experiments with negative controls and result rows.
+  \item \textbf{Bounded real-model validation:} open-LM, frozen-encoder, or API
+  behavior results that preserve a finite diagnostic.
+  \item \textbf{Diagnostic negative:} failed gates that identify a mechanism
+  boundary or reject an attractive interpretation.
+  \item \textbf{Synthesis or position result:} architecture laws and field
+  framing derived from the empirical stack.
+  \item \textbf{Conceptual seed:} philosophical vocabulary that motivated the
+  tests but is not by itself empirical evidence.
+\end{itemize}
+
+The strongest paper should lead with the first two categories, not with the
+conceptual seed.
+
+\section{Cluster Map}
+
+\begin{longtable}{L{0.16\linewidth}L{0.29\linewidth}L{0.25\linewidth}L{0.20\linewidth}}
+\toprule
+\textbf{Cluster} & \textbf{Question} & \textbf{Best evidence} & \textbf{Current claim} \\
+\midrule
+\endhead
+Structure-compatible generalization & Which model will survive deployment
+shift when ID evidence ties? & Weakness/OOD papers; SCG phases 1--6; semantic
+retrieval and semantic selection; tie-break stress and bootstrap reports. &
+Strong finite model-selection claim. \\
+\addlinespace
+Concern as metric allocation & Does value/viability bend representational
+geometry? & Objects from concern; valence tapestry; metric deformation;
+effective-dimension law; semantic metric deformation. & Strong controlled
+claim, bounded real-encoder validation. \\
+\addlinespace
+Concern to action & When does representation become competence? & Delta-E
+auxiliary learning; two bottlenecks; planning from concern; exploration
+diagnostics; state-dependent and allostatic results. & Strong mechanism ladder
+with important negative controls. \\
+\addlinespace
+Self/world attribution and inquiry & How does an agent know what came from
+itself, the world, or stale evidence? & First-order self negative; null
+intervention; current replay; vector self; world responds; Suite C hand,
+learned, teacher-free, source-estimate/tool-transfer results. & Strong finite
+agency diagnostic; open-agent replication still needed. \\
+\addlinespace
+Memory and commitment surfaces & Does a future-critical variable reach the
+place where action is committed? & Future Control Moves Memory; Suite D/E tool
+commitment; prompt hidden localization; fixed-action localization; causal
+patching; API behavior. & Strong synthetic and bounded open-model/API
+diagnostic. \\
+\addlinespace
+Proxy-resistant benchmark methodology & How should agent evals avoid being
+fooled by final answers? & Causally grounded agents benchmark; release schema;
+benchmark cards; proxy-resistant package. & Highly actionable benchmark
+methodology. \\
+\addlinespace
+Foundation-model boundary & Can hidden semantic geometry steer
+generation or action? & Phase 5/6 transport; semantic-specificity tracker;
+strict generation/readout gates; Pythia-160M negative replication. & Bounded
+transport positives; broad semantic steering not established. \\
+\bottomrule
+\end{longtable}
+
+\section{Evidence Cluster 1: Structure-Compatible Generalization}
+
+\subsection{What was learned}
+
+The OOD/generalization line began with an operational version of weakness:
+measure how many deployment-relevant transformations a candidate function
+preserves. The early symbolic result is sharp: in finite cyclic and dihedral
+settings where shortcuts and invariant rules both fit training data, weakness
+selects the invariant rule in 100\% of trials while the tested simplicity,
+description length, MDL-style, compression, validation, loss, and flatness
+proxies select the shortcut. Neural sweeps then show learned-function weakness
+as a strong OOD correlate.
+
+The newer Structure-Compatible Generalization package broadens this into a
+model-selection program. The key shift is from ``weakness as a diagnostic'' to
+``compatibility as a selector.'' Across symbolic, modular, vision, learned
+generator, finite text, semantic retrieval, and semantic model-zoo selection
+settings, the useful question is not ``which model validates best?'' but
+``which model preserves the transformation family deployment will require?''
+
+\subsection{Most important results}
+
+\begin{itemize}
+  \item Phase 1: true compatibility is the top OOD predictor in modular neural,
+  symbolic cyclic, and vision rotation tasks. In selection without OOD labels,
+  true compatibility selects mean OOD 1.000 across three domains, versus 0.660
+  for train or ID validation and 0.458 for wrong compatibility.
+  \item Phase 2: discovered compatibility regularization improves high-ID mean
+  OOD from 0.178 to 0.519 and 0.573 at regularization weights 0.05 and 0.20.
+  \item Phase 4 language-template substitution: discovered compatibility
+  correlates with OOD at Pearson \(r=0.858\), while wrong compatibility is
+  weak/negative.
+  \item Phase 5 semantic retrieval: true compatibility reaches \(r=0.940\),
+  discovered compatibility reaches \(r=0.861\), and wrong compatibility is
+  strongly anti-predictive at \(r=-0.872\).
+  \item Phase 6 semantic model selection: learned compatibility selects OOD
+  0.978, versus 0.919 for random, train, and ID selectors and 0.751 for wrong
+  compatibility. The learned-minus-random lift is 0.059 with 95\% CI
+  [0.052, 0.065]. Mean-tie, worst-tie, and random-tie stress tests all pass.
+\end{itemize}
+
+\subsection{Why it matters}
+
+This is the archive's cleanest main-conference-style contribution. It addresses
+underspecification directly: modern pipelines often produce many models with
+similar train and validation metrics but different deployment behavior.
+Compatibility gives a practical criterion for choosing among them when the
+deployment shift has known, inferable, or learnable structure.
+
+\subsection{Boundary}
+
+This is not universal OOD certification. It is a controlled finite result for
+structured-domain shifts where the relevant transformation family can be
+specified, weakly inferred, or learned well enough to audit. The vision/random
+augmentation caveat and phases 1--5 row-regeneration caveats should remain
+visible.
+
+\section{Evidence Cluster 2: Concern as Metric Allocation}
+
+\subsection{What was learned}
+
+The conceptual seed says meaning is geometry under concern. The empirical
+version is narrower: finite systems spend representational capacity on
+distinctions that matter for viability, prediction, or future action.
+
+The object-formation and valence papers show that encoders trained under
+viability pressure cluster by causal role rather than sensory similarity.
+Vector-valued valence then shows why scalar reward is not enough: preserving
+energy and damage as separate predicted consequences supports zero-shot
+reweighting across hungry, injured, and balanced contexts, while scalar drive
+collapses distinctions that later matter.
+
+The metric-deformation papers extend the same idea into spatial and semantic
+representations. Value-weighted training moves local metric density toward
+high-value regions. The effective-dimension paper is especially useful because
+it is an honest falsification/repair: the expected physical 2-D allocation law
+does not hold; the measured exponent implies an effective allocation dimension
+near one in the tested RNN harness.
+
+\subsection{Most important results}
+
+\begin{itemize}
+  \item Valence encoders group objects by causal reward role, not mere sensory
+  color or label.
+  \item Vector Delta-V heads preserve multi-dimensional concern and support
+  zero-shot priority reweighting where scalar drive heads fail.
+  \item Value-weighted metric deformation moves resolution toward priority
+  fields in controlled models.
+  \item The rate-distortion/effective-dimension test rejects a too-simple 2-D
+  allocation law and reveals the architecture's effective bottleneck.
+  \item Phase 4 and Phase 6 semantic metric tests show bounded transfer into
+  controlled semantic embeddings and actual frozen encoders, with deformed
+  margin lift 0.409 versus random-label lift 0.008 in Phase 6.
+\end{itemize}
+
+\subsection{Why it matters}
+
+This cluster supplies the scientific bridge between representation learning,
+interpretability, and cognitive science. It makes ``what matters'' measurable
+as resolution allocation, object formation, value-margin movement, and
+priority-sensitive reweighting. For product development, this is the basis of
+priority-aware embeddings and retrieval systems: measure whether the embedding
+space allocates resolution to the distinctions the task will actually reuse.
+
+\section{Evidence Cluster 3: From Concern to Action}
+
+\subsection{What was learned}
+
+Representation is not competence. Several papers exist because the program
+kept finding separations:
+
+\begin{itemize}
+  \item a representation can encode reward structure while a policy-gradient
+  learner fails to exploit it;
+  \item a policy can succeed while using a proxy representation;
+  \item a model can predict total outcome while misattributing self and world
+  components;
+  \item an uncertainty signal can be high while not indicating useful
+  information gain;
+  \item a quiet probe policy can be stable or falsely calm.
+\end{itemize}
+
+The clean positive mechanism is \textbf{predictive policy closure}: an
+action-conditioned consequence model can become the policy by argmax. In
+Planning from Concern, a Delta-E model reaches full return and near-perfect
+action accuracy on the XOR task without optimal-action labels or
+policy-gradient training.
+
+The negative results are just as important. State-dependent concern fails under
+smooth online training at the singular boundary. Off-policy state coverage
+helps but does not solve the boundary. An oracle boundary feature or learned
+hard gate solves the task. Ensemble uncertainty fails when all models share the
+same blind spot. Allostatic regulation helps most when it is simple and greedy,
+not when uncertainty bonuses amplify wrong confidence.
+
+\subsection{Why it matters}
+
+This cluster contributes practical architecture rules. Learn consequences, not
+only actions. Preserve vector-valued consequences until decision time. Ensure
+action coverage. Represent hard regime variables explicitly. Treat ensemble
+variance as a hypothesis, not as epistemic truth.
+
+\section{Evidence Cluster 4: Self/World Attribution and Adaptive Inquiry}
+
+\subsection{What was learned}
+
+The self/world line is one of the archive's most important scientific arcs.
+The first result is negative: architectural factorization alone does not
+recover a self/world decomposition. A self head that sees actions and a world
+head that does not can still split total prediction arbitrarily while preserving
+behavior. This is the gauge-symmetry problem.
+
+Null interventions break that gauge. A null action that is dynamically like
+skip but labeled as a world-anchor reduces false credit dramatically. But the
+next problem is deciding when to spend costly null probes. Early V-probe
+targets fail by saturating, tracking stale residuals, or confusing shock noise
+with systematic error. Current-replay calibration fixes part of the problem by
+recomputing residuals against the current model. Scale normalization fixes a
+vector-dimensional calibration failure.
+
+When the world responds to the agent, the decomposition must become richer:
+direct self, mediated world, and exogenous world. Current error stops being a
+good proxy for probe value. The agent needs value-of-information. This leads to
+the Suite C line: re-engage after world change, recover attribution, avoid
+false calm, spend probes selectively, and reopen after a second shift.
+
+\subsection{Most important results}
+
+\begin{itemize}
+  \item First-order self: factorized heads fail; behavior can be correct while
+  attribution is false.
+  \item Null intervention: active world anchoring reduces false credit; passive
+  exposure is insufficient.
+  \item Current-error calibration: current replay reduces food self MAE close
+  to oracle and beats matched random probing.
+  \item World Responds: three-head direct/mediated/exogenous decomposition is
+  the right structural choice when the world is action-correlated.
+  \item Suite C hand policy: final affected MAE 0.112, first-shift selectivity
+  16.927, second-shift reopenability 16.667, 22.6 probes, all C1--C6 gates pass.
+  \item Suite C learned transfer: final affected MAE 0.112, first-shift
+  selectivity 16.667, second-shift reopenability 17.448, 23.1 probes; stale,
+  wrong, suppressed, and matched-random controls fail.
+  \item Suite C teacher-free: reward/CEM policy passes C1--C6 plus T1/N1 with
+  final affected MAE 0.095, recovery 1.000, selectivity 12.500, second-shift
+  reopenability about 11, and about 22 probes. A 64-seed bootstrap preserves
+  the pass, with selectivity lift over matched random 11.292 [10.976, 11.596].
+  \item Source-estimate/tool-transfer follow-up: replacing privileged
+  source-identity with an observable estimate and routing through a local
+  JSON-like tool adapter passes, while malformed-tool control fails.
+\end{itemize}
+
+\subsection{Why it matters}
+
+This is the archive's best agency-eval result. It gives an operational test for
+world-coupled agency: not just acting, not just remembering, but knowing when
+the model has lost contact with the world and reopening inquiry selectively.
+For product development, this points toward a \textbf{re-engagement governor}
+between memory, tools, planning, and action.
+
+\section{Evidence Cluster 5: Memory and Commitment Surfaces}
+
+\subsection{What was learned}
+
+Future Control Moves Memory introduces the long-horizon moved-bottleneck
+diagnostic. Four early slots are matched for salience and frequency. One
+becomes future-critical, and the critical slot moves across runs. The question
+is not only whether the agent answers correctly. It is whether hidden-state
+sensitivity, generated action, tool call, repair behavior, and causal readout
+move with the future-critical slot.
+
+The result ladder is unusually complete. The diagnostic passes through a
+synthetic trained-agent ladder, longer horizons, closed-loop tool handoff,
+repair, structured tool calls, multi-field schemas, stochastic API failures,
+8-slot arguments, aliases, text arguments, generated JSON, autoregressive JSON,
+prompt-level open models, hidden localization, fixed-action localization,
+causal patching, prompt-family robustness, and black-box API behavior.
+
+\subsection{Most important results}
+
+\begin{itemize}
+  \item Synthetic trained agents reach 1.000 closed-loop accuracy and positive
+  moved-slot specificity across multiple tool/repair/action surfaces.
+  \item Initial prompt-level final-prompt hidden specificity is a controlled
+  strong negative: behavior passes, but the measured hidden site does not.
+  \item Hidden localization resolves the negative: 17 registered hidden sites
+  pass across Qwen 0.5B, Qwen 1.5B, and SmolLM2 1.7B, strongest at generated
+  final states.
+  \item Fixed-action localization removes the generated-answer-token confound:
+  24 hidden sites pass even when assistant action tokens are held fixed.
+  \item Fixed-prefix causal patching shows value-prefix hidden states can shift
+  next-token value logits, while prompt-final sites remain negative controls.
+  \item Prompt-family causal patch robustness passes across standard, compact,
+  and audit-checklist framings.
+  \item API black-box behavior: Gemini, Anthropic, and OpenAI pass the matched
+  prompt-family suite. External stress is mixed: Gemini and Anthropic pass,
+  OpenAI GPT-4.1 Nano shows a sparse dispatch failure localized to one
+  reproduced cell out of 16 in the robustness follow-up.
+\end{itemize}
+
+\subsection{Why it matters}
+
+This cluster gives an interpretable and product-relevant memory test. A
+business agent should not only hold context; it should preserve the variable
+that will later control a tool call, schema field, repair branch, or emitted
+value. The long-horizon suite is directly actionable for tool-use reliability,
+workflow agents, API-call auditing, and context-window memory diagnostics.
+
+\section{Evidence Cluster 6: Foundation-Model Contact and Rejected Steering}
+
+\subsection{What was learned}
+
+The archive contains a tempting story about hidden semantic geometry in
+language models. The careful version is: hidden geometry often predicts labels
+or moves log-prob surfaces, but strict behavior, generation, alias, and control
+gates reject broad semantic steering claims.
+
+Phase 5 is a transport suite. It shows that controlled proxy mechanisms survive
+harder model-like gates: language-action transport passes in a stronger proxy,
+semantic metric deformation survives a foundation-style encoder proxy,
+role-routed heads break the mediated-identifiability ceiling, and seam
+consistency, not topology alone, carries OOD lift.
+
+Phase 6 moves to actual open LMs and frozen encoders. It reports weak positive
+open-LM action-coupling signals across three decoder LMs, with Qwen 0.5B
+strongest and Pythia 70M weak/control-like. Frozen-encoder metric deformation
+passes with deformed margin lift 0.409 versus random 0.008.
+
+The activation-steering line is different. The semantic-specificity tracker
+records many failed rescues: held-out aliases, target-disjoint controls,
+random relation nulls, generation-match gates, learned generation readout,
+yes-bias controls, residualization, whitening, pair-specific optimization,
+feature masks, state gates, multi-class prototype gates, and Pythia-160M
+replication all prevent a broad steering claim. The current safe statement is
+diagnostic: the strict verifier exposes a narrow specificity frontier, but the
+frontier has not shown stable held-out alias specificity on expanded controls.
+
+\subsection{Why it matters}
+
+This is exactly how a healthy research program should behave. It promotes
+bounded transport signals while rejecting overbroad mechanistic claims. For
+future research, exact-relation readout identifiability should come before more
+steering optimization on the same brittle interface.
+
+\section{Operational Laws and Proof Sketches}
+
+\begin{law}[Behavior is not load-bearing structure]
+Final accuracy, return, or tool success is not sufficient evidence that a
+system used the intended structure.
+\end{law}
+\begin{proofsketch}
+The archive repeatedly constructs behavior-only passes that fail structure
+gates: shortcut OOD rules, gauge-symmetric self/world heads, visible-control
+memory cases, signal-suppression false calm, and activation directions that
+move positives and controls together. The proxy-resistant benchmark rule is the
+repair: behavior plus structure gate plus anti-cheat control.
+\end{proofsketch}
+
+\begin{proposition}[Structure-compatible selection]
+In finite structured shifts, compatibility with the deployment-relevant
+transformation family can improve OOD-free model selection among train/ID-tied
+candidates.
+\end{proposition}
+\begin{proofsketch}
+The evidence ladder runs from oracle finite transformations through inferred
+and learned generators, finite text substitutions, frozen semantic retrieval,
+and semantic model-zoo selection. Phase 6 selects OOD 0.978 with discovered
+compatibility versus 0.919 for train/ID/random and 0.751 for wrong
+compatibility, with bootstrap and tie-break stress passing. The boundary is
+finite structured shifts, not universal OOD certification.
+\end{proofsketch}
+
+\begin{law}[Predictive policy closure]
+When an agent learns an action-conditioned consequence model for what it cares
+about, the consequence model can become the policy by action argmax.
+\end{law}
+\begin{proofsketch}
+Planning from Concern shows that a Delta-E consequence model solves the XOR
+homeostatic task with near-perfect action accuracy and full return, without
+optimal-action labels or policy-gradient training. Earlier Delta-E auxiliary
+and two-bottleneck papers show why this matters: representation alone is not
+competence, and policy-gradient learning can fail to exploit a useful
+representation.
+\end{proofsketch}
+
+\begin{law}[Vector concern must survive until decision time]
+Scalar reward collapses distinctions that later priorities may need.
+\end{law}
+\begin{proofsketch}
+The valence tapestry and vector first-order self papers show that vector
+Delta-V heads support zero-shot reweighting across hungry, injured, and
+balanced contexts, especially for medicine handling. Scalar drive heads cannot
+preserve the needed distinctions.
+\end{proofsketch}
+
+\begin{law}[Attribution needs identifying interventions]
+Architectural factorization is not self/world identification.
+\end{law}
+\begin{proofsketch}
+First-Order Self shows that self/world heads can split total prediction
+arbitrarily while preserving behavior. Null interventions, source labels,
+temporal asymmetry, or interventional contrast are needed to break the gauge.
+Null anchoring and later contrastive/role-routed mechanisms supply positive
+evidence.
+\end{proofsketch}
+
+\begin{law}[Probe value is not current error]
+The best next question is not necessarily where the current model is most
+wrong.
+\end{law}
+\begin{proofsketch}
+World Responds shows an oracle-current-error probe can be much worse than a
+learned probe because high error may be irreducible or poorly positioned for
+future model improvement. Phase 4's learned VOI gate passes while current error
+and ensemble variance fail. Suite C strengthens this into re-engagement under
+world change.
+\end{proofsketch}
+
+\begin{law}[Cool the decision, not the signal]
+Habituation should reduce unnecessary action while preserving surprise.
+\end{law}
+\begin{proofsketch}
+Habituated Re-engagement shows decision-layer cooling reduces anxious probing,
+while signal-layer cooling creates false calm. Suite C formalizes the no-false
+calm gate: probe rate, uncertainty signal, and outcome error must improve
+together.
+\end{proofsketch}
+
+\begin{law}[Memory matters at commitment surfaces]
+Memory becomes agent-relevant when a future-critical variable reaches an
+action, tool, schema, repair, emitted value, or causal readout surface.
+\end{law}
+\begin{proofsketch}
+The moved-bottleneck suite shows memory sensitivity follows the moved critical
+slot through hidden states, generated JSON, tool calls, repair branches, and
+causal value-token patches. Visible-control and prompt-final negative controls
+rule out several shortcut explanations.
+\end{proofsketch}
+
+\section{Field Contributions}
+
+\subsection{Machine learning generalization}
+
+The contribution is a model-selection criterion for underspecification. If
+many models tie on train and ID validation, select by compatibility with the
+deployment-generating structure. This directly targets shortcut learning,
+domain generalization, and OOD model selection.
+
+\subsection{Agent evaluation and AI safety}
+
+The benchmark contribution is the minimum pass rule. A capable-looking agent
+should not pass unless the right causal/structural reason explains its behavior.
+This connects to reward hacking, goal misgeneralization, stale confidence,
+tool-call brittleness, and proxy optimization.
+
+\subsection{Interpretability}
+
+The work shifts interpretability from ``is information present?'' to ``does the
+information control behavior at the right surface?'' The memory, attribution,
+causal patch, and activation-specificity lines are all examples of this
+surface-based standard.
+
+\subsection{Agent architecture}
+
+The archive suggests concrete modules: action-conditioned consequence models,
+vector viability heads, source-attribution gates, null or contrastive
+interventions, value-of-information probe policies, re-engagement governors,
+role-routed heads, and commitment-surface tests.
+
+\subsection{Cognitive science, neuroscience, and philosophy}
+
+The contribution is not a proof of consciousness. It is a computational
+operationalization of concern-like organization: what matters bends
+representation, inquiry, action, attribution, and memory. This gives philosophy
+and cognitive science a testable vocabulary while keeping biological and human
+claims out of scope.
+
+\section{Actionability, Ironcladness, and Commercial Value}
+
+\begin{longtable}{L{0.23\linewidth}L{0.22\linewidth}L{0.22\linewidth}L{0.23\linewidth}}
+\toprule
+\textbf{Area} & \textbf{How ironclad?} & \textbf{How actionable?} & \textbf{Why lucrative?} \\
+\midrule
+\endhead
+Structure-compatible model selection & High within finite structured shifts;
+Phase 6 has bootstrap and tie-break stress. & Add compatibility selectors to
+model-zoo and eval pipelines. & Better model selection under deployment risk
+is immediately valuable for regulated and enterprise ML. \\
+\addlinespace
+Proxy-resistant agent benchmarks & High as methodology; suites vary by
+maturity. & Ship benchmark cards, JSONL rows, and one-command smoke tests. &
+Every agent platform needs evals that catch shortcut success and stale
+confidence. \\
+\addlinespace
+Suite C re-engagement governor & High in finite harness; open-agent transfer
+pending. & Add stale-belief monitors and selective inquiry policies between
+memory and action. & Reduces costly agent mistakes from stale assumptions,
+especially in long-running workflows. \\
+\addlinespace
+Commitment-surface memory tests & High across synthetic, open-model, and API
+behavior surfaces, with clear non-claims. & Test whether critical variables
+survive tool calls, schemas, repairs, and generated values. & Tool-use and
+workflow reliability are direct product pain points. \\
+\addlinespace
+Semantic metric deformation & Medium-high; controlled and frozen-encoder
+evidence is positive. & Build priority-aware retrieval or embedding audits. &
+Retrieval quality and high-value-case recall are commercially important. \\
+\addlinespace
+Activation steering & Low for broad claims; high as a diagnostic negative. &
+Stop optimizing brittle global vectors; test exact readout first. & Avoids
+shipping unsafe or fake controls; useful for research tooling, not product yet. \\
+\addlinespace
+Concern-geometry synthesis & Medium as theory; depends on narrower papers. &
+Use as architecture vocabulary after empirical anchors. & Valuable for
+strategy, but not a standalone product proof. \\
+\bottomrule
+\end{longtable}
+
+\section{Product Development Implications}
+
+\paragraph{1. Model selection product.}
+Build an OOD-free selector that evaluates compatibility against known or
+inferred deployment transformations. Inputs: candidate models, deployment
+transform hypotheses, train/ID filters, wrong-transform controls. Output:
+selected model, regret estimate, compatibility audit, claim boundary.
+
+\paragraph{2. Agent reliability product.}
+Build a proxy-resistant eval suite with vector scores: behavior, structure,
+attribution, inquiry, commitment, and generalization. The minimum pass rule
+should be a product primitive, not a paper footnote.
+
+\paragraph{3. Re-engagement governor.}
+Add a layer between memory, tools, and action that tracks assumption staleness,
+world-change signals, affected-source estimates, cost-aware inquiry, and
+no-false-calm recovery. The first product version can be benchmark-only; the
+second can become runtime monitoring.
+
+\paragraph{4. Tool commitment observability.}
+Instrument agents to verify that future-critical variables survive prompt
+state, tool-call JSON, schema validation, repair branches, and emitted values.
+The long-horizon suite is a direct template.
+
+\paragraph{5. Priority-aware retrieval.}
+Use metric-deformation audits to determine whether retrieval/embedding systems
+allocate resolution to high-value business distinctions, not only average
+semantic similarity.
+
+\section{Prioritized Future Directions}
+
+\begin{enumerate}
+  \item \textbf{External Suite C replication.} Highest scientific and product
+  priority. Reproduce teacher-free/source-estimate/tool-transfer Suite C in an
+  open LM or API-agent harness. This would move the inquiry governor from a
+  finite simulator result to a broadly legible agent-eval result.
+  \item \textbf{Publish Structure-Compatible Model Selection.} Keep Phase 6 as
+  the headline, include row-level artifacts, bootstrap intervals, tie-break
+  stress, formal compatibility definitions, and a strict finite-structured
+  claim boundary.
+  \item \textbf{Release proxy-resistant benchmark package.} Package Suite C and
+  Suite D/E with public JSONL rows, benchmark cards, fixture smoke tests,
+  release schema, and a Hugging Face dataset-style card.
+  \item \textbf{Productize commitment-surface memory tests.} Turn the
+  moved-bottleneck/tool suite into a reusable CI/eval for tool-using agents.
+  \item \textbf{Build role-routed self/world architectures.} Phase 4 suggests
+  the mediated-identifiability ceiling is architectural. Test disjoint
+  per-role heads, mixture-of-experts, and richer counterfactual interventions
+  in larger agent environments.
+  \item \textbf{Turn compatibility into training, not only selection.} Extend
+  discovered compatibility regularization to practical domains where
+  deployment transforms are partially known.
+  \item \textbf{Advance priority-aware embedding audits.} Move semantic metric
+  deformation from post-hoc/frozen evaluation toward controlled finetuning or
+  adapter training with business-relevant priority fields.
+  \item \textbf{Do exact-relation readout before more steering.} The activation
+  line should first establish stable exact-relation identifiability under
+  strict controls before attempting stronger generation steering.
+  \item \textbf{Keep the broad concern-geometry paper as synthesis.} It should
+  follow the narrower empirical submissions. It is valuable, but leading with
+  it risks reviewer confusion.
+\end{enumerate}
+
+\section{What Not To Prioritize}
+
+\begin{itemize}
+  \item Do not lead with consciousness, AGI, or metaphysics in technical
+  venues.
+  \item Do not claim universal OOD certification.
+  \item Do not claim production agent reliability from finite Suite C or
+  black-box API behavior alone.
+  \item Do not promote activation steering as a positive result yet.
+  \item Do not collapse benchmark results into a single leaderboard score.
+  \item Do not hide negative controls; they are the reason the program is
+  credible.
+\end{itemize}
+
+\section{Recommended Paper and Release Sequence}
+
+\begin{enumerate}
+  \item \textbf{Structure-Compatible Model Selection Under Underspecification.}
+  Main-conference target. Most complete, most legible, strongest statistical
+  anchor.
+  \item \textbf{Proxy-Resistant Benchmarks for Causally Grounded Finite
+  Agents.} Benchmark target. Lead with the minimum pass rule and Suite C plus
+  Suite D/E.
+  \item \textbf{Teacher-Free Re-Engagement.} Focused agency paper. Stronger if
+  external open-agent replication is added.
+  \item \textbf{What Matters Becomes Measurable.} Broad synthesis/position
+  paper. Use after the narrower empirical anchors exist publicly.
+\end{enumerate}
+
+\section{Conclusion}
+
+The archive's deepest contribution is not any single experiment. It is a
+research discipline: whenever a system appears capable, ask what proxy could
+make the behavior pass without the intended structure. Then make the structure
+load-bearing, add an anti-cheat control, and bound the claim to the weakest
+validated level.
+
+That discipline produced several strong results. Structure-compatible model
+selection gives a practical answer to underspecification. Suite C gives a
+finite test of adaptive inquiry after world change. The moved-bottleneck suite
+shows how future-control relevance moves memory and tool commitment. The
+metric-stack line shows how concern deforms representation and where
+architecture ceilings appear. The activation-steering failures show that the
+program can reject an attractive story when the controls do not support it.
+
+If one sentence should survive into future research and product work, it is
+this: \textbf{Do not ask only whether the agent succeeded; ask whether the
+future-controlling structure reached the surface where success was chosen.}
+
+\appendix
+
+\section{Primary Reading Spine}
+
+The shortest serious reading order is:
+
+\begin{enumerate}
+  \item ICML publication package README.
+  \item Structure-compatible model-selection result tables.
+  \item Semantic-selection control paper.
+  \item Causally grounded finite-agent benchmark paper.
+  \item Suite C teacher-free inquiry package README.
+  \item Suite C teacher-free wide-seed bootstrap report.
+  \item Long-horizon moved-bottleneck paper and benchmark card.
+  \item Metric Stack synthesis paper.
+  \item Paper-readiness and semantic-specificity audit notes.
+\end{enumerate}
+
+\section{Source Clusters Used}
+
+\begin{itemize}
+  \item \textbf{Conceptual and metric-stack archive:}
+  \url{0_geometric_meaning_and_agency.pdf};
+  \url{26_Metric_Stack_of_Concern_v4_2026_07_06.pdf};
+  \url{papers/metric_stack_synthesis/paper.md};
+  metric-stack position package.
+  \item \textbf{Weakness and structure-compatible generalization:}
+  \url{1_Weakness_Predicts_OOD_2026_06_09.pdf};
+  \url{30_Weakness_Predicts_OOD_2026_07_02_draft.pdf};
+  weakness-invariance paper;
+  structure-compatible generalization papers, results, and ICML package.
+  \item \textbf{Concern/action/mechanism ladder:}
+  numbered papers 4--25 in the archive; Planning from Concern; First-Order
+  Self; Null Intervention; World Responds; Probe-Value Re-engagement; and
+  Habituated Re-engagement.
+  \item \textbf{Suite C:}
+  Suite C re-engagement archive; neural probe transfer archive; teacher-free
+  inquiry package; and world-responds result reports.
+  \item \textbf{Long-horizon and tool commitment:}
+  \url{31_Future_Control_Moves_Memory_2026_07_06.pdf}; long-horizon
+  moved-bottleneck paper; benchmark card; and result reports.
+  \item \textbf{Foundation-model and activation boundary:}
+  Phase 4, Phase 5, and Phase 6 archive papers; paper-readiness and
+  semantic-specificity audits; and activation-geometry result reports.
+  \item \textbf{Benchmark packaging and release:}
+  Causally grounded agents benchmark paper; benchmark docs; release schema;
+  publication sharing map; and proxy-resistant agent benchmark package.
+\end{itemize}
+
+\section{Safety and Non-Claims}
+
+This synthesis intentionally avoids the following claims:
+
+\begin{itemize}
+  \item consciousness, sentience, or human-like subjective experience;
+  \item biological or neural validity beyond computational analogy;
+  \item production reliability for deployed agents;
+  \item universal OOD certification;
+  \item open-world semantic robustness;
+  \item broad activation-steering control.
+\end{itemize}
+
+\end{document}
