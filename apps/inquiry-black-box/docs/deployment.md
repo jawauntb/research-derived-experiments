@@ -15,12 +15,13 @@ bun run --cwd apps/cloud dev
 Required variables:
 
 - `INQUIRY_CLOUD_AUTH_SECRET`: HMAC secret used to verify cloud bearer tokens.
-- `DATABASE_URL`: Railway Postgres connection string for the future durable
-  store. The current foundation uses an in-memory store for local smoke tests.
+- `DATABASE_URL`: Railway Postgres connection string. When present, the API
+  selects the Postgres cloud store and runs idempotent table/index creation
+  during health/readiness checks and first store use.
 - `RAILWAY_PUBLIC_API_URL`: public API base URL used by clients.
 - `SYNC_ENCRYPTION_KEY`: key material for encrypted redacted sync payloads.
 - `INQUIRY_ALLOW_IN_MEMORY_CLOUD=1`: only for ephemeral Railway smoke tests
-  until a durable store is wired. Leave unset for real deployments.
+  without `DATABASE_URL`. Leave unset for real deployments.
 
 Optional Modal orchestration variables:
 
@@ -52,12 +53,18 @@ curl "$RAILWAY_PUBLIC_API_URL/health"
 doppler run -- bun run --cwd apps/cloud test
 ```
 
+The `/health` response includes `storage` and waits for the configured store to
+initialize, so a Postgres migration/connection failure fails the Railway health
+check instead of silently passing a process-only probe.
+
 The sync API accepts only `public` and `redacted-sync` event envelopes. It
 rejects local-only, debug, document, blocked, or sensitive-field payloads even
 when the request is authenticated.
 Railway/production startup fails with the local in-memory cloud store unless
 `INQUIRY_ALLOW_IN_MEMORY_CLOUD=1` is explicitly set, so a smoke deploy cannot be
 mistaken for durable storage.
+Railway/production startup also fails without `INQUIRY_CLOUD_AUTH_SECRET`, even
+before the first authenticated sync request.
 
 ## Modal Jobs
 
@@ -83,6 +90,26 @@ doppler run -- modal run inquiry_jobs.py::smoke_job
 The deployed `job_webhook` endpoint returns `modal_call_id` and `status` for the
 Bun cloud API. Configure its URL as `MODAL_JOB_WEBHOOK_URL` and protect it with
 `MODAL_JOB_WEBHOOK_TOKEN` when exposed.
+
+Cloud-to-Modal smoke can be verified through the Bun API with a redacted input:
+
+```bash
+curl -X POST "$RAILWAY_PUBLIC_API_URL/jobs" \
+  -H "authorization: Bearer $INQUIRY_CLOUD_BEARER_TOKEN" \
+  -H "content-type: application/json" \
+  --data '{
+    "kind": "session_summary",
+    "session_id": "smoke-session",
+    "input": {
+      "privacy_class": "redacted-sync",
+      "payload": { "export_ref": "smoke-fixture" }
+    }
+  }'
+```
+
+The response should include a `job.modal_call_id` and `job.status`. Do not send
+raw page text, typed content, camera frames, or video bytes in a `redacted-sync`
+Modal job; the API rejects those fields before the Modal webhook is called.
 
 If Modal is not configured, the Railway API falls back to a local Modal client
 that records job submission state without requiring cloud credentials. Local

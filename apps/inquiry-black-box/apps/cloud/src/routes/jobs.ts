@@ -33,7 +33,7 @@ async function submitJob(request: Request, context: JobsRouteContext): Promise<R
   const kind = parseJobKind(body.kind);
   const input = parseModalJobInput(body.input ?? {});
   const session_id = stringField(body, "session_id", false);
-  const job = context.store.createJob({
+  const job = await context.store.createJob({
     user_id: user.user_id,
     kind,
     input,
@@ -48,13 +48,13 @@ async function submitJob(request: Request, context: JobsRouteContext): Promise<R
       input,
       ...(session_id ? { session_id } : {}),
     });
-    const updated = context.store.updateJobStatus(user.user_id, job.job_id, {
+    const updated = await context.store.updateJobStatus(user.user_id, job.job_id, {
       status: modalSubmission.status,
       modal_call_id: modalSubmission.modal_call_id,
     });
     return jsonResponse({ job: updated ?? job }, 202);
   } catch (error) {
-    const updated = context.store.updateJobStatus(user.user_id, job.job_id, {
+    const updated = await context.store.updateJobStatus(user.user_id, job.job_id, {
       status: "failed",
       error: error instanceof Error ? error.message : "Modal submission failed",
     });
@@ -64,7 +64,7 @@ async function submitJob(request: Request, context: JobsRouteContext): Promise<R
 
 async function getJob(request: Request, context: JobsRouteContext, job_id: string): Promise<Response> {
   const user = authenticate(request);
-  const job = context.store.getJob(user.user_id, job_id);
+  const job = await context.store.getJob(user.user_id, job_id);
   if (!job) {
     throw new RouteError(404, "not_found", "job was not found");
   }
@@ -74,7 +74,7 @@ async function getJob(request: Request, context: JobsRouteContext, job_id: strin
 
 async function updateJob(request: Request, context: JobsRouteContext, job_id: string): Promise<Response> {
   const user = authenticate(request);
-  const existing = context.store.getJob(user.user_id, job_id);
+  const existing = await context.store.getJob(user.user_id, job_id);
   if (!existing) {
     throw new RouteError(404, "not_found", "job was not found");
   }
@@ -89,11 +89,11 @@ async function updateJob(request: Request, context: JobsRouteContext, job_id: st
 
   let report_id: string | undefined;
   if (status === "complete" && result && isRecord(result.report)) {
-    const report = createReportFromJobResult(context.store, existing, result.report);
+    const report = await createReportFromJobResult(context.store, existing, result.report);
     report_id = report.report_id;
   }
 
-  const updated = context.store.updateJobStatus(user.user_id, job_id, {
+  const updated = await context.store.updateJobStatus(user.user_id, job_id, {
     status,
     ...(report_id ? { report_id } : {}),
     ...(result ? { result } : {}),
@@ -103,7 +103,7 @@ async function updateJob(request: Request, context: JobsRouteContext, job_id: st
   return jsonResponse({ job: updated });
 }
 
-function createReportFromJobResult(
+async function createReportFromJobResult(
   store: CloudStore,
   job: { user_id: string; kind: JobKind; session_id?: string },
   reportInput: Record<string, unknown>,

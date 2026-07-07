@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { createEvent, type EventEnvelope } from "@inquiry/schema";
-import { createCloudStore } from "../src/db/schema";
+import { createCloudStore, createCloudStoreFromEnv, type CloudStore } from "../src/db/schema";
 import { createCloudBearerToken } from "../src/routes/common";
 import { createCloudHandler } from "../src/server";
 import type { ModalClient } from "../src/lib/modalClient";
@@ -63,7 +63,7 @@ describe("cloud sync route", () => {
     expect(await json(first)).toMatchObject({ accepted: 1, duplicates: 0 });
     expect(duplicate.status).toBe(202);
     expect(await json(duplicate)).toMatchObject({ accepted: 0, duplicates: 1 });
-    expect(store.listEvents("user-a")).toHaveLength(1);
+    expect(await store.listEvents("user-a")).toHaveLength(1);
   });
 
   test("rejects privacy-ineligible and sensitive-field payloads", async () => {
@@ -105,7 +105,7 @@ describe("cloud sync route", () => {
       }),
     );
     expect(rejected.status).toBe(422);
-    expect(store.listEvents("user-a")).toHaveLength(0);
+    expect(await store.listEvents("user-a")).toHaveLength(0);
 
     await handler(
       new Request("http://cloud.test/sync/device/revoke", {
@@ -141,14 +141,14 @@ describe("cloud sync route", () => {
 
     expect(response.status).toBe(200);
     expect(body).toMatchObject({ device_id: "device-1", token_id: "token-1", status: "revoked" });
-    expect(store.getDeviceToken("user-a", "device-1", "token-1")?.status).toBe("revoked");
+    expect((await store.getDeviceToken("user-a", "device-1", "token-1"))?.status).toBe("revoked");
   });
 });
 
 describe("cloud reports and jobs routes", () => {
   test("returns only reports for the authenticated user", async () => {
     const store = createCloudStore();
-    store.createReport({
+    await store.createReport({
       user_id: "user-a",
       session_id: "session-a",
       kind: "session_summary",
@@ -157,7 +157,7 @@ describe("cloud reports and jobs routes", () => {
       payload: { score: 1 },
       provenance: { source: "test" },
     });
-    store.createReport({
+    await store.createReport({
       user_id: "user-b",
       session_id: "session-b",
       kind: "session_summary",
@@ -270,5 +270,65 @@ describe("cloud reports and jobs routes", () => {
 
     expect(response.status).toBe(422);
     expect(body.error).toMatchObject({ code: "privacy_rejected" });
+  });
+});
+
+describe("cloud runtime configuration", () => {
+  test("health waits for configured store initialization", async () => {
+    let initialized = false;
+    const store = createCloudStore() as CloudStore & { initialize: () => Promise<void> };
+    store.initialize = async () => {
+      initialized = true;
+    };
+    const handler = createCloudHandler({ store });
+
+    const response = await handler(new Request("http://cloud.test/health"));
+    const body = await json(response);
+
+    expect(response.status).toBe(200);
+    expect(initialized).toBe(true);
+    expect(body).toMatchObject({ status: "ok", storage: "memory" });
+  });
+
+  test("selects Postgres storage when DATABASE_URL is configured", () => {
+    let selectedUrl: string | undefined;
+    const selected = createCloudStoreFromEnv(
+      { DATABASE_URL: "postgres://railway.example/inquiry" },
+      {
+        postgresFactory: (databaseUrl) => {
+          selectedUrl = databaseUrl;
+          const store = createCloudStore() as CloudStore & { kind: "postgres" };
+          store.kind = "postgres";
+          return store;
+        },
+      },
+    );
+
+    expect(selected.kind).toBe("postgres");
+    expect(selectedUrl).toBe("postgres://railway.example/inquiry");
+  });
+
+  test("fails production startup without auth secret or durable storage", () => {
+    expect(() => createCloudHandler({ env: { NODE_ENV: "production" } })).toThrow("INQUIRY_CLOUD_AUTH_SECRET");
+    expect(() =>
+      createCloudHandler({
+        env: {
+          NODE_ENV: "production",
+          INQUIRY_CLOUD_AUTH_SECRET: "secret",
+        },
+      }),
+    ).toThrow("requires durable persistence");
+  });
+
+  test("keeps explicit in-memory smoke mode available for Railway checks", () => {
+    expect(() =>
+      createCloudHandler({
+        env: {
+          NODE_ENV: "production",
+          INQUIRY_CLOUD_AUTH_SECRET: "secret",
+          INQUIRY_ALLOW_IN_MEMORY_CLOUD: "1",
+        },
+      }),
+    ).not.toThrow();
   });
 });
