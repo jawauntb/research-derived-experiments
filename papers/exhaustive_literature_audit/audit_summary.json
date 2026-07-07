@@ -1,0 +1,115 @@
+{
+  "paper_source_count": 110,
+  "paper_counts": {
+    "primary_paper": 45,
+    "preregistration_or_runbook": 30,
+    "supporting_paper_source": 24,
+    "readme": 9,
+    "bibliography": 2
+  },
+  "reference_count_unique": 177,
+  "reference_counts": {
+    "external_linked": 17,
+    "internal_repo": 39,
+    "external_bibliographic": 26,
+    "reference_note": 14,
+    "unclear_reference": 81
+  },
+  "tracked_pdf_count": 60,
+  "pdf_review_depth_counts": {
+    "local_pdf_text_extracted_all_pages": 60
+  },
+  "pdf_keyword_counts": {
+    "agents": 52,
+    "geometry": 49,
+    "concern": 44,
+    "inquiry": 18,
+    "causal": 50,
+    "ood": 55,
+    "symmetry": 43,
+    "consciousness": 8,
+    "memory": 2
+  },
+  "top_reference_source_files": [
+    [
+      "papers/icml_publication_package_2026/structure_compatible_model_selection/references.bib",
+      29
+    ],
+    [
+      "papers/scale_normalized_vprobe/paper.md",
+      24
+    ],
+    [
+      "papers/weakness_invariance_neurips/paper.md",
+      23
+    ],
+    [
+      "papers/world_responds/paper.md",
+      19
+    ],
+    [
+      "papers/probe_value_reengagement/paper.md",
+      16
+    ],
+    [
+      "papers/icml_publication_package_2026/proxy_resistant_agent_benchmarks/references.bib",
+      15
+    ],
+    [
+      "papers/architecture_laws_machine_agency/paper.md",
+      14
+    ],
+    [
+      "papers/habituated_reengagement/paper.md",
+      10
+    ],
+    [
+      "papers/current_error_calibration/paper.md",
+      9
+    ],
+    [
+      "papers/online_identifying_interventions/paper.md",
+      9
+    ],
+    [
+      "papers/vector_first_order_self/paper.md",
+      9
+    ],
+    [
+      "papers/costly_null_probes/paper.md",
+      8
+    ],
+    [
+      "papers/scale_normalized_vprobe/preregistration.md",
+      7
+    ],
+    [
+      "papers/habituated_reengagement/suite_c_reengagement_under_world_change.md",
+      5
+    ],
+    [
+      "papers/virtual_governor_stress_signal/paper.md",
+      5
+    ],
+    [
+      "papers/habituated_reengagement/preregistration.md",
+      5
+    ],
+    [
+      "papers/interventional_contrast/paper.md",
+      5
+    ],
+    [
+      "papers/interventional_contrast/preregistration.md",
+      5
+    ],
+    [
+      "papers/probe_value_reengagement/preregistration.md",
+      5
+    ],
+    [
+      "papers/habituated_reengagement/suite_c_neural_probe_transfer.md",
+      4
+    ]
+  ]
+}

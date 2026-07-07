@@ -1,0 +1,111 @@
+file,title,kind,chars
+papers/allostatic_control/paper.md,Allostatic State Control Works at the Boundary - But Greedy Planning Beats Uncertainty-Aware Allostasis: An Honest Falsification of Four Pre-Registered Gates,primary_paper,22648
+papers/architecture_laws_machine_agency/paper.md,Architecture Laws for Machine Agency: A Synthesis of the Probe-Calibration Lineage,primary_paper,12801
+papers/autopoietic_control/paper.md,From Active Geometry to Autopoietic Control: Viability Slack as the Bottleneck for Adaptive Generalization,primary_paper,19479
+papers/causally_grounded_agents_benchmark/paper.md,Benchmarking Causally Grounded Finite Agents,primary_paper,13066
+papers/comprehensive_literature_review/paper.md,From Concern to Action Surfaces,primary_paper,35454
+papers/concern_bootstrap/paper.md,"Bootstrapping Concern: DeltaE Auxiliary Loss Builds Valence Geometry on Easy Reward Structures, But Sparse-Reward Policies Cannot Exploit It",primary_paper,24852
+papers/concerned_syntax/paper.md,Constituency Tests for Concerned Representation in Minimal Agents,primary_paper,42035
+papers/concerned_syntax/preregistration.md,Paper 2A Pre-Registration,preregistration_or_runbook,3483
+papers/costly_null_probes/paper.md,Learning When Not to Act: Costly Null Probes for Self/World Identifiability in Minimal Homeostatic Agents,primary_paper,27167
+papers/costly_null_probes/preregistration.md,Paper 17A - Pre-Registration,preregistration_or_runbook,8467
+papers/current_error_calibration/paper.md,Current-Error Calibration for Identifying Interventions: Recent Residuals Are Not Enough Unless Recomputed Against the Present Model,primary_paper,26871
+papers/current_error_calibration/preregistration.md,Paper 19 - Pre-Registration,preregistration_or_runbook,11974
+papers/ensemble_uncertainty/paper.md,"When Models Don't Know What They Don't Know: Bootstrap Ensembles Fail to Detect the Regime-Boundary Failure, Greedy Planning Remains Robust",primary_paper,22144
+papers/epistemic_exploration/paper.md,Learning to Ask What Matters: Conservative Epistemic Exploration Recovers Self-Organized Concern from a Biased Initial Policy; Novelty-Seeking Exploration Does Not,primary_paper,20735
+papers/exploration_diagnostics/paper.md,Exploration Diagnostics: Skip-Branch Calibration Reveals Failure Modes; Margin-Based Epistemic Sampling Recovers Partially from Wrong-Init; All Mechanisms Fail Under High Noise,primary_paper,19547
+papers/first_order_self/paper.md,First-Order Self: Architectural Factorization Alone Does Not Recover Self/World Attribution; Oracle Supervision Does - Gauge-Symmetric Heads Without Identifiability,primary_paper,24940
+papers/grid_cell_weakness/preregistration.md,Paper A Scale-Up Pre-Registration,preregistration_or_runbook,14581
+papers/grid_cell_weakness/runbook.md,Paper A Runbook - Grid-Cell Weakness Sweep,preregistration_or_runbook,7140
+papers/habituated_reengagement/paper.md,Habituated Re-Engagement: Post-Probe Cooling Stabilizes Autonomous Identifying Interventions,primary_paper,24776
+papers/habituated_reengagement/preregistration.md,Paper 23B - Pre-Registration,preregistration_or_runbook,11118
+papers/habituated_reengagement/suite_c_neural_probe_transfer.md,Suite C Neural Probe Transfer: Learned Inquiry Without False Calm,supporting_paper_source,3689
+papers/habituated_reengagement/suite_c_reengagement_under_world_change.md,Suite C Re-Engagement Under World Change: A No-False-Calm Benchmark for Adaptive Inquiry,supporting_paper_source,4633
+papers/homeostatic_objects/paper.md,When Active Geometry Transfers: Valence-Pretrained Encoders Survive Episodic Homeostatic RL Where Sparse-Reward RL Fails,primary_paper,23014
+papers/icml_publication_package_2026/README.md,ICML Publication Package 2026,readme,5776
+papers/icml_publication_package_2026/metric_stack_position_package/README.md,Metric Stack / Concern Geometry Position Package,readme,1164
+papers/icml_publication_package_2026/metric_stack_position_package/architecture_laws.md,Architecture Laws for Concern-Mediated Finite Agents,supporting_paper_source,1931
+papers/icml_publication_package_2026/metric_stack_position_package/position_outline.md,Position Paper Outline: The Geometry of Concern,supporting_paper_source,3057
+papers/icml_publication_package_2026/metric_stack_position_package/publication_sequence.md,Publication Sequence,supporting_paper_source,1169
+papers/icml_publication_package_2026/proxy_resistant_agent_benchmarks/README.md,ICML/Benchmark-Style Package: Proxy-Resistant Finite-Agent Benchmarks,readme,1900
+papers/icml_publication_package_2026/proxy_resistant_agent_benchmarks/appendix.tex,appendix,supporting_paper_source,2743
+papers/icml_publication_package_2026/proxy_resistant_agent_benchmarks/figures_manifest.md,Figure Manifest,supporting_paper_source,1541
+papers/icml_publication_package_2026/proxy_resistant_agent_benchmarks/paper.tex,Proxy-Resistant Benchmarks for Causally Grounded Finite Agents,primary_paper,8728
+papers/icml_publication_package_2026/proxy_resistant_agent_benchmarks/references.bib,references,bibliography,4865
+papers/icml_publication_package_2026/proxy_resistant_agent_benchmarks/release_checklist.md,Release Checklist,supporting_paper_source,1787
+papers/icml_publication_package_2026/structure_compatible_model_selection/README.md,ICML-Style Paper Package: Structure-Compatible Model Selection,readme,4276
+papers/icml_publication_package_2026/structure_compatible_model_selection/appendix.tex,appendix,supporting_paper_source,10518
+papers/icml_publication_package_2026/structure_compatible_model_selection/figures_manifest.md,Figure Manifest,supporting_paper_source,4314
+papers/icml_publication_package_2026/structure_compatible_model_selection/paper.tex,Structure-Compatible Model Selection Under Underspecification,primary_paper,18748
+papers/icml_publication_package_2026/structure_compatible_model_selection/references.bib,references,bibliography,9437
+papers/icml_publication_package_2026/structure_compatible_model_selection/result_tables.md,Result Tables for the ICML-Style Package,supporting_paper_source,9410
+papers/icml_publication_package_2026/structure_compatible_model_selection/reviewer_risk_audit.md,Reviewer Risk Audit,supporting_paper_source,3047
+papers/icml_publication_package_2026/structure_compatible_model_selection/statistical_analysis_plan.md,Statistical Analysis Plan,supporting_paper_source,6665
+papers/icml_publication_package_2026/structure_compatible_model_selection/submission_polish_checklist.md,Submission Polish Checklist,supporting_paper_source,2358
+papers/icml_publication_package_2026/structure_compatible_model_selection/validation_checklist.md,Validation Checklist,supporting_paper_source,4713
+papers/icml_publication_package_2026/suite_c_teacher_free_inquiry/README.md,Suite C Teacher-Free Inquiry Package,readme,3303
+papers/icml_publication_package_2026/suite_c_teacher_free_inquiry/experiment_design.md,Experiment Design: Teacher-Free Suite C Inquiry,supporting_paper_source,2793
+papers/icml_publication_package_2026/suite_c_teacher_free_inquiry/paper_outline.tex,Teacher-Free Adaptive Inquiry Under World Change,supporting_paper_source,3336
+papers/icml_publication_package_2026/suite_c_teacher_free_inquiry/preregistration.md,Preregistration: Suite C Teacher-Free Inquiry,preregistration_or_runbook,2568
+papers/interventional_contrast/paper.md,Interventional Contrast for Mediated Self/World Attribution: From Hand-Coded Buckets to Learned Probe Abstractions,primary_paper,22315
+papers/interventional_contrast/preregistration.md,Paper 24 - Pre-Registration,preregistration_or_runbook,11440
+papers/learned_symmetry_discovery/paper.md,Learning the Group: Data-Inferred Equivariance Predicts Out-of-Distribution Generalization Without Oracle Symmetry,primary_paper,24059
+papers/long_horizon_bottleneck/api_blackbox_preregistration.md,API Black-Box Behavioral Benchmark Preregistration,preregistration_or_runbook,3108
+papers/long_horizon_bottleneck/autoregressive_json_surface_preregistration.md,Autoregressive JSON Surface Transition Record,preregistration_or_runbook,3154
+papers/long_horizon_bottleneck/generated_json_surface_preregistration.md,Generated JSON Surface Transition Record,preregistration_or_runbook,3545
+papers/long_horizon_bottleneck/paper.md,Future Control Moves Memory: A Long-Horizon Moved-Bottleneck Diagnostic for Synthetic Agents,primary_paper,27620
+papers/long_horizon_bottleneck/preregistration.md,Preregistration: Long-Horizon Moved Bottleneck,preregistration_or_runbook,1854
+papers/long_horizon_bottleneck/prompt_json_causal_patch_preregistration.md,Prompt JSON Fixed-Prefix Causal Patch Preregistration,preregistration_or_runbook,4376
+papers/long_horizon_bottleneck/prompt_json_fixed_action_localization_preregistration.md,Prompt JSON Fixed-Action Localization Preregistration,preregistration_or_runbook,5530
+papers/long_horizon_bottleneck/prompt_json_hidden_localization_preregistration.md,Prompt JSON Hidden-Localization Preregistration,preregistration_or_runbook,4588
+papers/long_horizon_bottleneck/prompt_json_prompt_family_causal_patch_preregistration.md,Prompt JSON Prompt-Family Causal Patch Preregistration,preregistration_or_runbook,4044
+papers/long_horizon_bottleneck/prompt_json_transfer_preregistration.md,Prompt JSON Transfer Preregistration,preregistration_or_runbook,3185
+papers/long_horizon_bottleneck/text_argument_surface_preregistration.md,Text Argument-Surface Transition Record,preregistration_or_runbook,3109
+papers/metaphysics_synthesis/README.md,Metaphysics of Intelligence Synthesis,readme,1334
+papers/metaphysics_synthesis/paper.tex,"What Matters Becomes Measurable: A Synthesis of Structure-Compatible Generalization, Concern Geometry, and Proxy-Resistant Finite Agents",primary_paper,40760
+papers/metric_stack_synthesis/paper.md,The Metric Stack of Concern: From Viability Prediction to Maintained Self/World Boundaries in Minimal Agents,primary_paper,78079
+papers/neural_group_generator/paper.md,When Pixels Beat Embeddings: Three Failed Neural Approaches to Symmetry Group Discovery,primary_paper,20217
+papers/null_intervention/paper.md,Identifiability Through Intervention: Null Actions Break the Gauge Symmetry of First-Order Self - Active Anchoring Reduces False-Credit by 82%,primary_paper,21683
+papers/off_policy_state_coverage/paper.md,Off-Policy DeltaE Training Partially Recovers State-Dependent Concern - But Refutes Paper 12's Coverage Diagnosis and Reveals a Boundary-Smoothing Failure at E=0.5,primary_paper,21177
+papers/online_identifying_interventions/paper.md,Online Identifying Interventions: Factorial Isolation of Probe-Target Bias and Data-Regime Effects in First-Order Self/World Identifiability,primary_paper,26453
+papers/online_identifying_interventions/preregistration.md,Paper 18 - Pre-Registration,preregistration_or_runbook,12358
+papers/passive_to_active_geometry/paper.md,From Passive Cluster to Active Controller: Action Coupling Makes Latent Geometry Causally Load-Bearing,primary_paper,17899
+papers/pdf/README.md,Compiled Paper PDFs,readme,1752
+papers/phase4_metaphysics/paper.md,Learning the Missing Conditions,primary_paper,6487
+papers/phase5_external_validity/paper.md,From Controlled Concern Geometry to Foundation Models,primary_paper,5446
+papers/phase6_real_model_validation/paper.md,From Proxy Transport to Open Models,primary_paper,1564
+papers/planning_from_concern/paper.md,Planning from Concern: Model-Based DeltaE Action Selection Yields Self-Organized Homeostatic Competence Without Optimal-Action Supervision,primary_paper,36277
+papers/planning_hardening/paper.md,"Distributed Concern: Planning from DeltaE Depends on Latent Geometry, Not a Single Reward Axis",primary_paper,32676
+papers/probe_value_reengagement/paper.md,Probe Value and Re-Engagement: Learning When to Ask Again in Responsive Worlds,primary_paper,22701
+papers/probe_value_reengagement/preregistration.md,Paper 23A - Pre-Registration,preregistration_or_runbook,11491
+papers/regime_sensitive_de/paper.md,Regime-Sensitive DeltaE Models Solve State-Dependent Concern at the Diagnostic Limit: An Oracle Boundary Feature Closes the Gap; Learned Alternatives Solve Everywhere Except the Singular Point E=0.5,primary_paper,20954
+papers/role_specific_identifiability/paper.md,"Role-Specific Mediated Effects, Two-Sided Gauge Anchoring, and Fully-Learned Probe Abstractions: The Architectural Endpoint of the Autonomous-Probing Arc",primary_paper,20521
+papers/role_specific_identifiability/preregistration.md,Paper 25 - Pre-Registration,preregistration_or_runbook,9545
+papers/scale_normalized_vprobe/paper.md,Scale-Normalized Probe Calibration for Vector First-Order Self: A Target x Threshold Factorial,primary_paper,28677
+papers/scale_normalized_vprobe/preregistration.md,Paper 21A - Pre-Registration,preregistration_or_runbook,12660
+papers/semantic_concern_geometry/preregistration.md,Pre-registration: Semantic Concern Geometry,preregistration_or_runbook,6061
+papers/state_dependent_concern/paper.md,State-Dependent Concern Fails Under Online Homeostatic Training: A Coupling Between Policy and Training Distribution,primary_paper,21323
+papers/structure_compatible_generalization/README.md,Structure-Compatible Generalization Paper,readme,3594
+papers/structure_compatible_generalization/inferred_transformations_intervention.md,Inferred Transformations for Structure-Compatible Generalization,supporting_paper_source,2243
+papers/structure_compatible_generalization/language_template_substitution.md,Language-Template Substitution for Structure-Compatible Generalization,supporting_paper_source,1711
+papers/structure_compatible_generalization/language_template_substitution_preregistration.md,Phase 4 Preregistration: Language-Template Substitution for SCG,preregistration_or_runbook,2996
+papers/structure_compatible_generalization/learned_generators_transfer.md,Learned Generators for Structure-Compatible Generalization,supporting_paper_source,1974
+papers/structure_compatible_generalization/phase3_learned_generators_preregistration.md,Phase 3 Preregistration: Learned Generators for Structure-Compatible Generalization,preregistration_or_runbook,2949
+papers/structure_compatible_generalization/semantic_retrieval_transfer.md,Semantic Retrieval Transfer for Structure-Compatible Generalization,supporting_paper_source,938
+papers/structure_compatible_generalization/semantic_retrieval_transfer_preregistration.md,Phase 5 Preregistration: Semantic Retrieval Transfer for SCG,preregistration_or_runbook,2350
+papers/structure_compatible_generalization/semantic_selection_control.md,Semantic Selection Control for Structure-Compatible Generalization,supporting_paper_source,1023
+papers/structure_compatible_generalization/semantic_selection_control_preregistration.md,Semantic Selection Control Preregistration,preregistration_or_runbook,1824
+papers/structure_compatible_generalization/structure_compatible_generalization.md,Structure-Compatible Generalization,supporting_paper_source,3117
+papers/two_bottlenecks/paper.md,Two Bottlenecks: DeltaE Auxiliary Bootstraps XOR Valence Geometry When Decoupled from Sparse-Reward Policy Gradient,primary_paper,22426
+papers/valence_object_formation/paper.md,"Objects Form from Concern: Valence-Coupled Encoders Cluster the World by Causal Role, Not Sensory Similarity",primary_paper,17140
+papers/valence_tapestry/paper.md,Tapestry of Valence: Vector DeltaV Models Adapt Medicine Handling Under Internal-Weight Shifts; Scalar Drive Models Cannot,primary_paper,25955
+papers/vector_first_order_self/paper.md,Vector First-Order Self: Autonomous Identifying Interventions for Multi-Valence Homeostatic Agents,primary_paper,27273
+papers/vector_first_order_self/preregistration.md,Paper 20B - Pre-Registration,preregistration_or_runbook,11506
+papers/viable_computational_bodies/paper.md,Viability-Guided Evolution of Syntax-Bearing Computational Bodies,primary_paper,35127
+papers/viable_computational_bodies/preregistration.md,Paper 2B Pre-Registration,preregistration_or_runbook,3189
+papers/virtual_governor_stress_signal/README.md,Virtual-Governor Stress Signals Paper,readme,270
+papers/virtual_governor_stress_signal/paper.md,Virtual-Governor Stress Signals for Local Action Recovery,primary_paper,3255
+papers/weakness_invariance_neurips/paper.md,Symmetry-Compatible Hypothesis Volume Predicts Out-of-Distribution Generalization,primary_paper,43834
+papers/weakness_invariance_neurips/roadmap.md,Weakness Invariance Paper Roadmap,supporting_paper_source,4226
+papers/world_responds/paper.md,When the World Responds: Action-Correlated Shocks and the Limits of Null-Anchored Self/World Attribution,primary_paper,24354
+papers/world_responds/preregistration.md,Paper 22 - Pre-Registration,preregistration_or_runbook,12623
