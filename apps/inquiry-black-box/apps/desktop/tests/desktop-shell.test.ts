@@ -1,0 +1,107 @@
+import { describe, expect, test } from "bun:test";
+import { createEvent } from "@inquiry/schema";
+import { createInquiryDatabase } from "../src/main/db";
+import { createDesktopIpcFacade } from "../src/main/ipc";
+import { createDesktopRuntime } from "../src/main/main";
+
+describe("desktop shell IPC facade", () => {
+  test("exposes visible session controls, pairing, replay, export, and delete without filesystem escape hatches", async () => {
+    const database = createInquiryDatabase();
+    const runtime = createDesktopRuntime({
+      database,
+      pairingSecret: "desktop-shell-test-secret",
+      startServer: false,
+    });
+    const facade = createDesktopIpcFacade(runtime);
+
+    expect(Object.keys(facade)).not.toContain("readFile");
+    expect((await facade.status()).pairingToken.split(".")).toHaveLength(3);
+
+    const started = await facade.startSession({ title: "Shell fixture" });
+    expect(started.recording_state).toBe("recording");
+
+    database.appendEvent(
+      createEvent({
+        session_id: started.session_id,
+        source: "browser",
+        source_version: "extension@0.1.0",
+        monotonic_ms: 1_000,
+        event_type: "browser.scroll",
+        payload: { url_hash: "url-shell", delta_y: 4_800, scroll_y: 4_800, viewport_h: 900 },
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    );
+    database.appendEvent(
+      createEvent({
+        session_id: started.session_id,
+        source: "browser",
+        source_version: "extension@0.1.0",
+        monotonic_ms: 1_500,
+        event_type: "browser.dwell",
+        payload: { url_hash: "url-shell", dwell_ms: 200 },
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    );
+
+    expect((await facade.pauseSession()).recording_state).toBe("paused");
+    expect((await facade.resumeSession()).recording_state).toBe("recording");
+    await facade.addLabel({ label: "near-breakthrough", note: "spotted the key turn" });
+    const stopped = await facade.stopSession();
+    expect(stopped.recording_state).toBe("stopped");
+
+    const replay = await facade.replayReport();
+    expect(replay?.markers.some((marker) => marker.kind === "skim-risk")).toBe(true);
+
+    const exported = await facade.exportSession();
+    expect(exported.jsonl).toContain("Shell fixture");
+    expect(exported.jsonl).toContain("near-breakthrough");
+
+    const deleted = await facade.deleteSession();
+    expect(deleted.deleted).toBe(true);
+    expect(database.getSession(stopped.session_id)).toBeNull();
+    expect(database.listSyncQueue()[0]?.payload).toMatchObject({
+      action: "delete-cloud-aggregates",
+      session_id: stopped.session_id,
+    });
+
+    runtime.stop();
+  });
+
+  test("keeps privacy settings and camera feature appends behind typed IPC methods", async () => {
+    const database = createInquiryDatabase();
+    const runtime = createDesktopRuntime({
+      database,
+      pairingSecret: "desktop-shell-test-secret",
+      startServer: false,
+    });
+    const facade = createDesktopIpcFacade(runtime);
+    const session = await facade.startSession({ title: "Camera fixture" });
+
+    const settings = await facade.setSignalEnabled("camera", true);
+    expect(settings.signals.camera).toBe(true);
+    expect(settings.cloud_sync_enabled).toBe(false);
+
+    const cameraEvent = await facade.appendCameraFeatureWindow({
+      window_start_ms: 0,
+      window_end_ms: 1_000,
+      sample_count: 3,
+      confidence: 0.8,
+      quality_flags: [],
+      payload: {
+        window_ms: 1_000,
+        face_present_ratio: 1,
+        gaze_away_ratio: 0.2,
+        blink_proxy: 0,
+        head_pose_variance: 0.1,
+        motion_score: 0.1,
+      },
+    });
+
+    expect(cameraEvent.event_type).toBe("camera.feature_window");
+    expect(database.listEvents(session.session_id).map((event) => event.event_type)).toContain("camera.feature_window");
+
+    runtime.stop();
+  });
+});

@@ -1,6 +1,9 @@
 import type { EventEnvelope, LabelPayload, SessionRecord } from "@inquiry/schema";
+import type { DesktopShellStatus } from "../main/ipc";
+import type { SessionReplayReport } from "../main/reports/sessionReplay";
 import { renderCameraPanel, type CameraPermissionState } from "./camera/CameraPanel";
 import type { CameraFeatureWindow } from "./camera/featureWorker";
+import { renderReplayTimeline } from "./replay/ReplayTimeline";
 import { renderSessionControls, type SelfLabel } from "./session/SessionControls";
 import {
   defaultPrivacySettingsView,
@@ -26,18 +29,26 @@ export type InquiryCameraFacade = {
 export type InquiryPrivacyFacade = {
   currentSettings: () => Promise<PrivacySettingsView>;
   setSignalEnabled: (key: keyof PrivacySettingsView["signals"], enabled: boolean) => Promise<PrivacySettingsView>;
-  exportSession: () => Promise<void>;
-  deleteSession: () => Promise<void>;
+  exportSession: () => Promise<unknown>;
+  deleteSession: () => Promise<unknown>;
 };
 
 export type InquiryDesktopBridge = {
+  status?: {
+    current: () => Promise<DesktopShellStatus>;
+  };
   session: InquirySessionFacade;
   camera: InquiryCameraFacade;
   privacy?: InquiryPrivacyFacade;
+  replay?: {
+    report: () => Promise<SessionReplayReport | null>;
+  };
 };
 
 export type AppViewModel = {
   session: SessionRecord | null;
+  status?: DesktopShellStatus;
+  replay?: SessionReplayReport | null;
   camera: {
     enabled: boolean;
     permission: CameraPermissionState;
@@ -65,40 +76,49 @@ export function createInitialAppViewModel(session: SessionRecord | null = null):
 
 export function renderApp(root: HTMLElement, bridge: InquiryDesktopBridge, initial: AppViewModel = createInitialAppViewModel()): void {
   let view = initial;
+  const headerRoot = document.createElement("div");
   const sessionRoot = document.createElement("div");
   const cameraRoot = document.createElement("div");
   const privacyRoot = document.createElement("div");
-  root.replaceChildren(sessionRoot, cameraRoot, privacyRoot);
+  const replayRoot = document.createElement("div");
+  root.replaceChildren(headerRoot, sessionRoot, cameraRoot, privacyRoot, replayRoot);
 
   const refresh = async (): Promise<void> => {
+    const status = bridge.status ? await bridge.status.current() : undefined;
+    const session = status?.session ?? (await bridge.session.currentSession());
+    const replay = bridge.replay ? await bridge.replay.report() : view.replay ?? null;
     view = {
       ...view,
-      session: await bridge.session.currentSession(),
+      ...(status ? { status } : {}),
+      session,
       privacy: bridge.privacy ? await bridge.privacy.currentSettings() : view.privacy,
+      replay,
     };
     render();
   };
 
   const render = (): void => {
+    renderShellHeader(headerRoot, view.status, view.session);
     renderSessionControls(sessionRoot, view.session, {
       startSession: async () => {
         view = { ...view, session: await bridge.session.startSession({ title: "Research session" }) };
-        render();
+        await refresh();
       },
       pauseSession: async () => {
         view = { ...view, session: await bridge.session.pauseSession() };
-        render();
+        await refresh();
       },
       resumeSession: async () => {
         view = { ...view, session: await bridge.session.resumeSession() };
-        render();
+        await refresh();
       },
       stopSession: async () => {
         view = { ...view, session: await bridge.session.stopSession() };
-        render();
+        await refresh();
       },
       addLabel: async (label: SelfLabel) => {
         await bridge.session.addLabel(label);
+        await refresh();
       },
     });
     renderCameraPanel(cameraRoot, view.camera, {
@@ -119,14 +139,65 @@ export function renderApp(root: HTMLElement, bridge: InquiryDesktopBridge, initi
           view = { ...view, privacy: await bridge.privacy!.setSignalEnabled(key, enabled) };
           render();
         },
-        exportSession: bridge.privacy.exportSession,
-        deleteSession: bridge.privacy.deleteSession,
+        exportSession: async () => {
+          await bridge.privacy!.exportSession();
+          await refresh();
+        },
+        deleteSession: async () => {
+          await bridge.privacy!.deleteSession();
+          await refresh();
+        },
       });
     } else {
       privacyRoot.replaceChildren();
+    }
+    if (view.replay) {
+      renderReplayTimeline(replayRoot, view.replay);
+    } else {
+      replayRoot.replaceChildren();
     }
   };
 
   render();
   void refresh();
+}
+
+function renderShellHeader(
+  root: HTMLElement,
+  status: DesktopShellStatus | undefined,
+  session: SessionRecord | null,
+): void {
+  const header = document.createElement("header");
+  header.className = "app-header";
+
+  const title = document.createElement("h1");
+  title.textContent = "Inquiry Black Box";
+  header.append(title);
+
+  const grid = document.createElement("div");
+  grid.className = "app-status-grid";
+  grid.append(
+    statusItem("Session", session?.title ?? "No session"),
+    statusItem("Ingest", status?.ingestUrl ?? "Not listening"),
+    statusItem("Pairing Token", status?.pairingToken ?? "Starting", "pairing-token"),
+  );
+  header.append(grid);
+
+  root.replaceChildren(header);
+}
+
+function statusItem(labelText: string, valueText: string, valueClassName = ""): HTMLElement {
+  const item = document.createElement("div");
+  item.className = "app-status-item";
+
+  const label = document.createElement("span");
+  label.className = "app-status-label";
+  label.textContent = labelText;
+
+  const value = document.createElement("strong");
+  value.className = `app-status-value ${valueClassName}`.trim();
+  value.textContent = valueText;
+
+  item.append(label, value);
+  return item;
 }

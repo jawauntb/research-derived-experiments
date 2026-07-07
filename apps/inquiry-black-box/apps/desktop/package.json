@@ -4,12 +4,18 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bun run src/main/main.ts",
+    "build": "bun run build:main && bun run build:preload && bun run build:renderer",
+    "build:main": "bun build src/main/electron.ts --target=node --format=esm --outfile dist/main/electron.js --external electron && mkdir -p dist/main/migrations && cp src/main/db/migrations/*.sql dist/main/migrations/",
+    "build:preload": "bun build src/main/preload.ts --target=node --format=cjs --outfile dist/main/preload.cjs --external electron",
+    "build:renderer": "bun build src/renderer/index.ts --target=browser --outfile dist/renderer/index.js && cp src/renderer/index.html dist/renderer/index.html",
+    "dev": "bun run build && electron dist/main/electron.js",
+    "dev:runtime": "bun run src/main/main.ts",
     "test": "bun test tests/*.test.ts"
   },
   "dependencies": {
     "@inquiry/schema": "workspace:*",
     "@inquiry/signals": "workspace:*",
-    "@inquiry/ui": "workspace:*"
+    "@inquiry/ui": "workspace:*",
+    "electron": "43.1.0"
   }
 }
