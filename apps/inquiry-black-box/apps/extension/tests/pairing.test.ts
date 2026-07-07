@@ -1,6 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { createEvent, type EventEnvelope } from "@inquiry/schema";
+import { handleRuntimeMessage } from "../src/background/service-worker";
 import {
+  BRIDGE_STATE_KEY,
   DEFAULT_BRIDGE_ENDPOINT,
   PairingRequiredError,
   PairingRejectedError,
@@ -10,7 +12,9 @@ import {
   isBridgeEventAllowed,
   postEventBatch,
   type BridgeState,
+  type StorageAreaLike,
 } from "../src/lib/localBridge";
+import { CONTENT_SETTINGS_UPDATED_MESSAGE } from "../src/lib/messages";
 
 describe("local bridge pairing and queue", () => {
   test("keeps events queued while desktop bridge is offline and retries later", async () => {
@@ -79,6 +83,56 @@ describe("local bridge pairing and queue", () => {
       }),
     ).rejects.toBeInstanceOf(PairingRejectedError);
   });
+
+  test("blocks capture while paused, stopped, or disabled for the site", () => {
+    const event = browserScrollEvent("event-gated");
+    const state = pairedState();
+
+    expect(isBridgeEventAllowed(event, state)).toBe(true);
+    expect(isBridgeEventAllowed(event, { ...state, recordingState: "paused" })).toBe(false);
+    expect(isBridgeEventAllowed(event, { ...state, recordingState: "stopped" })).toBe(false);
+    expect(isBridgeEventAllowed(event, { ...state, disabledSiteHashes: ["host-abc"] })).toBe(false);
+  });
+
+  test("broadcasts popup recording changes to loaded content scripts", async () => {
+    const storage = createMemoryStorage({ [BRIDGE_STATE_KEY]: { ...pairedState(), recordingState: "stopped" } });
+    const queue = createMemoryEventQueue();
+    const sentMessages: Array<{ tabId: number; message: unknown }> = [];
+
+    const response = await handleRuntimeMessage(
+      { type: "inquiry:set-recording-state", recordingState: "recording" },
+      {},
+      {
+        storage,
+        queue,
+        tabs: {
+          query: (_query, callback) => callback([{ id: 1 }, {}, { id: 2 }]),
+          sendMessage: (tabId, message) => {
+            sentMessages.push({ tabId, message });
+          },
+        },
+        now: () => 2_000,
+      },
+    );
+
+    expect(response).toMatchObject({ ok: true, recordingState: "recording" });
+    expect(sentMessages).toEqual([
+      {
+        tabId: 1,
+        message: {
+          type: CONTENT_SETTINGS_UPDATED_MESSAGE,
+          settings: expect.objectContaining({ recordingState: "recording" }),
+        },
+      },
+      {
+        tabId: 2,
+        message: {
+          type: CONTENT_SETTINGS_UPDATED_MESSAGE,
+          settings: expect.objectContaining({ recordingState: "recording" }),
+        },
+      },
+    ]);
+  });
 });
 
 function pairedState(): BridgeState {
@@ -95,6 +149,28 @@ function pairedState(): BridgeState {
       media: true,
     },
     updatedAt: "2026-07-07T00:00:00.000Z",
+  };
+}
+
+function createMemoryStorage(initial: Record<string, unknown> = {}): StorageAreaLike {
+  const state = { ...initial };
+  return {
+    get(key, callback) {
+      const keys = Array.isArray(key) ? key : [key];
+      const result: Record<string, unknown> = {};
+      for (const item of keys) {
+        if (typeof item === "string" && item in state) {
+          result[item] = state[item];
+        }
+      }
+      callback?.(result);
+      return Promise.resolve(result);
+    },
+    set(items, callback) {
+      Object.assign(state, items);
+      callback?.();
+      return Promise.resolve();
+    },
   };
 }
 

@@ -30,8 +30,22 @@ bun run dev:extension
 ```
 
 The build command creates unpacked MV3 assets under `apps/extension/dist`.
-Manual Chrome loading is still a smoke step; CI tests use fixture-friendly
-content and bridge modules instead of a real browser.
+Load `apps/inquiry-black-box/apps/extension` as the unpacked extension folder in
+Chrome. The root folder contains `manifest.json` and `popup.html`; the built
+background, content, and popup bundles live under `dist`.
+
+Pairing smoke:
+
+1. Run `bun run dev:desktop` and start a session in the desktop window.
+2. Copy the desktop pairing token.
+3. Load the unpacked extension folder in Chrome and pin/open the popup.
+4. Paste the token, keep the endpoint at `http://127.0.0.1:39170/v1/extension/events`, and pair.
+5. Click Record in the popup, visit a normal `http` or `https` page, then scroll, highlight/copy, and seek media.
+6. Use Pause, Stop, and Disable site from the popup to confirm new events stop posting.
+
+CI tests use fixture-friendly content and bridge modules instead of a real
+browser. `bun run test:e2e` includes a pairing smoke that posts extension-shaped
+browser events through the desktop ingest handler into SQLite.
 
 ## Cloud
 
