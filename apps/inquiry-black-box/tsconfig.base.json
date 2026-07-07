@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "useUnknownInCatchVariables": true,
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "jsx": "react-jsx",
+    "types": ["bun"],
+    "baseUrl": ".",
+    "paths": {
+      "@inquiry/schema": ["packages/schema/src/index.ts"],
+      "@inquiry/signals": ["packages/signals/src/index.ts"],
+      "@inquiry/ui": ["packages/ui/src/index.ts"]
+    }
+  }
+}
