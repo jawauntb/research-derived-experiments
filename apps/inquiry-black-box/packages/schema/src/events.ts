@@ -21,6 +21,8 @@ export type EventSource = (typeof eventSources)[number];
 export const eventTypes = [
   "browser.scroll",
   "browser.dwell",
+  "browser.visibility",
+  "browser.tab",
   "browser.media",
   "browser.selection",
   "browser.copy",
