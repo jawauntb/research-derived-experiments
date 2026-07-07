@@ -1,3 +1,4 @@
+import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import {
   assertNoBlockedPayload,
   createEvent,
@@ -140,17 +141,83 @@ export function startIngestServer(options: StartIngestServerOptions): StartedIng
   const hostname = options.hostname ?? "127.0.0.1";
   const port = options.port ?? Number(process.env.INQUIRY_LOCAL_API_PORT ?? 39170);
   const handler = createIngestRequestHandler(options);
-  const server = Bun.serve({
-    hostname,
-    port,
-    fetch: handler,
+  if (isBunRuntime()) {
+    const server = Bun.serve({
+      hostname,
+      port,
+      fetch: handler,
+    });
+
+    return {
+      url: `http://${hostname}:${server.port}`,
+      port: server.port ?? port,
+      stop: () => server.stop(true),
+    };
+  }
+
+  const server = createServer((request, response) => {
+    void handleNodeRequest(request, response, handler, hostname, port);
   });
+  server.listen(port, hostname);
 
   return {
-    url: `http://${hostname}:${server.port}`,
-    port: server.port ?? port,
-    stop: () => server.stop(true),
+    url: `http://${hostname}:${port}`,
+    port,
+    stop: () => server.close(),
   };
+}
+
+async function handleNodeRequest(
+  request: IncomingMessage,
+  response: ServerResponse,
+  handler: (request: Request) => Promise<Response>,
+  hostname: string,
+  port: number,
+): Promise<void> {
+  try {
+    const webResponse = await handler(await toWebRequest(request, hostname, port));
+    response.statusCode = webResponse.status;
+    webResponse.headers.forEach((value, key) => {
+      response.setHeader(key, value);
+    });
+    const body = Buffer.from(await webResponse.arrayBuffer());
+    response.end(body);
+  } catch (error) {
+    response.statusCode = 500;
+    response.setHeader("content-type", "application/json");
+    response.end(JSON.stringify({ error: error instanceof Error ? error.message : "ingest server error" }));
+  }
+}
+
+async function toWebRequest(request: IncomingMessage, hostname: string, port: number): Promise<Request> {
+  const method = request.method ?? "GET";
+  const headers = new Headers();
+  for (const [key, value] of Object.entries(request.headers)) {
+    if (Array.isArray(value)) {
+      for (const item of value) {
+        headers.append(key, item);
+      }
+    } else if (value !== undefined) {
+      headers.set(key, value);
+    }
+  }
+
+  const host = headers.get("host") ?? `${hostname}:${port}`;
+  const url = `http://${host}${request.url ?? "/"}`;
+  const init: RequestInit = { method, headers };
+  if (method !== "GET" && method !== "HEAD") {
+    init.body = Buffer.concat(await readRequestBody(request));
+  }
+
+  return new Request(url, init);
+}
+
+async function readRequestBody(request: IncomingMessage): Promise<Buffer[]> {
+  const chunks: Buffer[] = [];
+  for await (const chunk of request) {
+    chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+  }
+  return chunks;
 }
 
 function normalizeExtensionBody(
@@ -321,4 +388,8 @@ function jsonResponse(body: JsonObject, status: number, origin: string | null): 
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isBunRuntime(): boolean {
+  return typeof (globalThis as { Bun?: unknown }).Bun === "object";
 }

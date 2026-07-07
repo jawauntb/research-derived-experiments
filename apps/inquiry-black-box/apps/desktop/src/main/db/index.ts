@@ -1,4 +1,4 @@
-import { Database } from "bun:sqlite";
+import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -15,9 +15,27 @@ import {
 
 const moduleDir = dirname(fileURLToPath(import.meta.url));
 const migrationPath = join(moduleDir, "migrations", "001_initial.sql");
+const require = createRequire(import.meta.url);
+
+type StatementResult = {
+  changes?: number;
+};
+
+type SqliteStatement = {
+  run(parameters?: Record<string, unknown>): StatementResult;
+  get(parameters?: Record<string, unknown>): unknown;
+  all(parameters?: Record<string, unknown>): unknown[];
+};
+
+export type SqliteDatabase = {
+  exec(sql: string): void;
+  query(sql: string): SqliteStatement;
+  transaction<T>(callback: () => T): () => T;
+  close(): void;
+};
 
 export type InquiryDatabase = {
-  db: Database;
+  db: SqliteDatabase;
   createSession(input: { title: string; active_task?: string; notes?: string; session_id?: string }): SessionRecord;
   getSession(sessionId: string): SessionRecord | null;
   stopSession(sessionId: string, endedAt?: string): SessionRecord;
@@ -50,7 +68,7 @@ export type SyncQueueRecord = {
 };
 
 export function createInquiryDatabase(path = ":memory:"): InquiryDatabase {
-  const db = new Database(path, { create: true, strict: true });
+  const db = createSqliteDatabase(path);
   db.exec("PRAGMA foreign_keys = ON;");
   db.exec(readFileSync(migrationPath, "utf8"));
 
@@ -214,6 +232,55 @@ export function createInquiryDatabase(path = ":memory:"): InquiryDatabase {
       db.close();
     },
   };
+}
+
+function createSqliteDatabase(path: string): SqliteDatabase {
+  if (isBunRuntime()) {
+    const moduleName = "bun:sqlite";
+    const { Database } = require(moduleName) as {
+      Database: new (databasePath: string, options: { create: boolean; strict: boolean }) => SqliteDatabase;
+    };
+    return new Database(path, { create: true, strict: true });
+  }
+
+  const moduleName = "node:sqlite";
+  const { DatabaseSync } = require(moduleName) as {
+    DatabaseSync: new (databasePath: string) => {
+      exec(sql: string): void;
+      prepare(sql: string): SqliteStatement;
+      close(): void;
+    };
+  };
+  const database = new DatabaseSync(path);
+
+  return {
+    exec(sql) {
+      database.exec(sql);
+    },
+    query(sql) {
+      return database.prepare(sql);
+    },
+    transaction(callback) {
+      return () => {
+        database.exec("BEGIN IMMEDIATE");
+        try {
+          const result = callback();
+          database.exec("COMMIT");
+          return result;
+        } catch (error) {
+          database.exec("ROLLBACK");
+          throw error;
+        }
+      };
+    },
+    close() {
+      database.close();
+    },
+  };
+}
+
+function isBunRuntime(): boolean {
+  return typeof (globalThis as { Bun?: unknown }).Bun === "object";
 }
 
 function serializeEvent(event: EventEnvelope): Record<string, string | number> {
