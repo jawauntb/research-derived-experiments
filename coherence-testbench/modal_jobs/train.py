@@ -43,13 +43,26 @@ IMAGE = (
         "pydantic>=2.6",
         "logfire>=0.30",
     )
+    # Ship the coherence package into the worker so the shard can import it.
+    .add_local_dir(
+        local_path=str(Path(__file__).resolve().parent.parent / "src"),
+        remote_path="/root/src",
+    )
+    # Ship configs so kill_criterion.yaml is readable on the worker at a
+    # stable path independent of the driver's local layout.
+    .add_local_dir(
+        local_path=str(Path(__file__).resolve().parent.parent / "config"),
+        remote_path="/root/config",
+    )
 )
 
 app = modal.App(name="coherence-testbench-phase0")
 
-# Persistent volume for the BBBD BIDS tree.
+# Persistent volumes.
 bbbd_volume = modal.Volume.from_name("bbbd-cache", create_if_missing=True)
+results_volume = modal.Volume.from_name("phase0-results", create_if_missing=True)
 BBBD_MOUNT = "/data/bbbd"
+RESULTS_MOUNT = "/data/results"
 
 # Secrets pulled from Doppler at runtime (Modal reads them from the shell env).
 env_secret = modal.Secret.from_dict({
@@ -68,7 +81,7 @@ env_secret = modal.Secret.from_dict({
 def run_experiment_shard(arg: dict[str, Any]) -> dict[str, Any]:
     """Ingest + preprocess + LSO for a single BBBD experiment."""
     import sys
-    sys.path.insert(0, "/root/coherence-testbench/src")
+    sys.path.insert(0, "/root/src")
 
     experiment = int(arg["experiment"])
     config = arg["config"]
@@ -152,6 +165,84 @@ def run_experiment_shard(arg: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+@app.function(
+    image=IMAGE,
+    timeout=8 * 60 * 60,
+    cpu=2,
+    memory=4 * 1024,
+    volumes={BBBD_MOUNT: bbbd_volume, RESULTS_MOUNT: results_volume},
+    secrets=[env_secret],
+)
+def phase0_end_to_end(config_yaml: str, run_id: str) -> dict[str, Any]:
+    """Fully-Modal Phase-0 run. No local CPU needed.
+
+    Reads the config from a YAML string (embedded from the driver), fans out
+    per-experiment shards, merges outputs, writes the report + JSON + JSONL
+    into ``phase0-results:/<run_id>/``, and returns the verdict + paths.
+
+    Disconnect-safe: once submitted (e.g. via ``Function.spawn``), completes
+    regardless of the CLI. Fetch results later via
+    ``modal volume get phase0-results /<run_id>``.
+    """
+    import sys as _sys
+    _sys.path.insert(0, "/root/src")
+    import yaml as _yaml
+    import numpy as _np
+    from pathlib import Path as _Path
+
+    from coherence.config import load_kill_criterion
+    from coherence.evaluate import LSOFoldResult
+    from coherence.report import build_report
+
+    cfg = _yaml.safe_load(config_yaml)
+    kc_name = _Path(cfg["kill_criterion"]).name
+    kc_path = _Path("/root/config") / kc_name
+    kc = load_kill_criterion(kc_path)
+
+    experiments = list(cfg["data"]["experiments"])
+    args_list = [
+        {"experiment": e, "config": cfg, "kill_criterion_path": str(kc_path)}
+        for e in experiments
+    ]
+
+    shard_outputs = list(run_experiment_shard.map(args_list))
+
+    fold_results: list[LSOFoldResult] = []
+    all_per_subject: list[float] = []
+    for shard in shard_outputs:
+        all_per_subject.extend(shard["per_subject_baccs"])
+        for f in shard["folds"]:
+            fold_results.append(LSOFoldResult(
+                seed=f["seed"],
+                n_train_subjects=f["n_train_subjects"],
+                held_out_subjects=tuple(f["held_out_subjects"]),
+                balanced_accuracy=f["balanced_accuracy"],
+                bits_per_second=f["bits_per_second"],
+                n_test_epochs=f["n_test_epochs"],
+            ))
+    baseline_bacc = float(_np.mean(all_per_subject)) if all_per_subject else 0.5
+
+    out_dir = _Path(RESULTS_MOUNT) / run_id
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "shard_outputs.json").write_text(
+        json.dumps(shard_outputs, indent=2, default=list)
+    )
+    build_report(
+        kc=kc, fold_results=fold_results,
+        per_subject_baseline_bacc=baseline_bacc,
+        confound_ablations={}, out_dir=out_dir,
+    )
+    results_volume.commit()
+
+    report_json = json.loads((out_dir / "report.json").read_text())
+    return {
+        "run_id": run_id,
+        "verdict": report_json.get("verdict"),
+        "results_volume_path": str(out_dir),
+        "report_md_path": str(out_dir / "report.md"),
+    }
+
+
 @app.local_entrypoint()
 def main(config: str = "coherence-testbench/config/phase0.yaml",
          out: str = "coherence-testbench/artifacts/phase0") -> None:
@@ -159,11 +250,21 @@ def main(config: str = "coherence-testbench/config/phase0.yaml",
     import yaml
     config_path = Path(config).resolve()
     cfg_dict = yaml.safe_load(config_path.read_text())
-    kc_path = (config_path.parent / cfg_dict["kill_criterion"]).resolve()
+    # kill_criterion in phase0.yaml is relative to the coherence-testbench root,
+    # matching how coherence.config.load_phase0 resolves it.
+    kc_raw = cfg_dict["kill_criterion"]
+    if Path(kc_raw).is_absolute():
+        kc_path = Path(kc_raw)
+    else:
+        kc_path = (config_path.parent.parent / kc_raw).resolve()
 
     experiments = list(cfg_dict["data"]["experiments"])
+    # The worker reads the config from the Modal-mounted /root/config path,
+    # not the driver's laptop-side kc_path. Local kc_path stays for the
+    # report writer at the end (which runs on the driver).
+    worker_kc_path = f"/root/config/{Path(kc_raw).name}"
     args_list = [
-        {"experiment": e, "config": cfg_dict, "kill_criterion_path": str(kc_path)}
+        {"experiment": e, "config": cfg_dict, "kill_criterion_path": worker_kc_path}
         for e in experiments
     ]
 
