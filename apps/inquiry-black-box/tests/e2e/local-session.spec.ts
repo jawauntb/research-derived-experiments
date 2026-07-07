@@ -4,6 +4,8 @@ import { join } from "node:path";
 import { createCloudHandler } from "../../apps/cloud/src/server";
 import { createCloudBearerToken } from "../../apps/cloud/src/routes/common";
 import { createInquiryDatabase } from "../../apps/desktop/src/main/db";
+import { deleteLocalSession } from "../../apps/desktop/src/main/privacy/delete";
+import { exportSession } from "../../apps/desktop/src/main/privacy/export";
 import { createCameraFeatureEvent, summarizeCameraFeatureWindow } from "../../apps/desktop/src/renderer/camera/featureWorker";
 import { createSessionReplayReport } from "../../apps/desktop/src/main/reports/sessionReplay";
 import { createEvent, type EventEnvelope } from "../../packages/schema/src";
@@ -14,12 +16,14 @@ type FixtureLine = {
 };
 
 describe("local session fixture loop", () => {
-  test("ingests fixture events, renders replay evidence, exports safely, and rejects raw cloud payloads", async () => {
+  test("runs the demo path from fixture capture through replay, export, and delete", async () => {
     const database = createInquiryDatabase();
     const session = database.createSession({
       title: "Synthetic research session",
       session_id: "fixture-local-session",
+      active_task: "Read the local demo article",
     });
+    const article = readDemoArticle();
 
     for (const line of readFixture()) {
       database.appendEvent(line.event);
@@ -62,7 +66,11 @@ describe("local session fixture loop", () => {
 
     const events = database.listEvents(session.session_id);
     const replay = createSessionReplayReport(events);
-    const exported = database.exportSessionJsonl(session.session_id);
+    const exported = exportSession(database, session.session_id);
+    const exportedLines = exported.jsonl
+      .trim()
+      .split("\n")
+      .map((line) => JSON.parse(line) as { type: string; event?: EventEnvelope });
     const cloud = createCloudHandler();
     const rawCloudResponse = await cloud(
       new Request("http://cloud.test/sync/events", {
@@ -94,13 +102,42 @@ describe("local session fixture loop", () => {
         }),
       }),
     );
+    const deleted = deleteLocalSession(database, session.session_id);
+    const tombstone = database.listSyncQueue()[0]?.payload;
 
+    expect(article).toContain("Stimulus Difficulty and Losing the Thread");
     expect(events.map((event) => event.event_type)).toContain("camera.feature_window");
+    expect(events.map((event) => event.event_type)).toEqual(
+      expect.arrayContaining([
+        "browser.scroll",
+        "browser.visibility",
+        "browser.highlight",
+        "browser.copy",
+        "browser.media",
+        "browser.tab",
+        "label.added",
+        "probe.requested",
+        "probe.answered",
+      ]),
+    );
     expect(replay.markers.some((marker) => marker.kind === "skim-risk")).toBe(true);
+    expect(replay.markers.some((marker) => marker.kind === "copied-passage")).toBe(true);
+    expect(replay.markers.some((marker) => marker.kind === "rewind")).toBe(true);
+    expect(replay.markers.some((marker) => marker.kind === "label")).toBe(true);
+    expect(replay.markers.some((marker) => marker.kind === "probe")).toBe(true);
+    expect(replay.markers.some((marker) => marker.kind === "tab-churn")).toBe(true);
     expect(replay.markers.every((marker) => marker.evidence_event_ids.length > 0)).toBe(true);
-    expect(exported).toContain("fixture-scroll-1");
-    expect(exported).not.toContain("rawFrame");
+    expect(exportedLines.some((line) => line.event?.event_id === "fixture-scroll-1")).toBe(true);
+    expect(exported.jsonl).not.toContain("rawFrame");
+    expect(exported.jsonl).not.toContain("Stimulus Difficulty and Losing the Thread");
     expect(rawCloudResponse.status).toBe(422);
+    expect(deleted).toEqual({ session_id: session.session_id, deleted: true });
+    expect(database.getSession(session.session_id)).toBeNull();
+    expect(database.listEvents(session.session_id)).toEqual([]);
+    expect(tombstone).toMatchObject({
+      action: "delete-cloud-aggregates",
+      session_id: session.session_id,
+    });
     database.close();
   });
 });
@@ -111,4 +148,8 @@ function readFixture(): FixtureLine[] {
     .trim()
     .split("\n")
     .map((line) => JSON.parse(line) as FixtureLine);
+}
+
+function readDemoArticle(): string {
+  return readFileSync(join(import.meta.dir, "..", "fixtures", "demo-article.html"), "utf8");
 }
