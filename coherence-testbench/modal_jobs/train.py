@@ -31,10 +31,11 @@ IMAGE = (
     .apt_install("libgl1", "libglib2.0-0")
     .pip_install(
         "torch>=2.5,<2.8",
-        "numpy>=1.26,<2.0",
-        "scipy>=1.11",
-        "scikit-learn>=1.4",
-        "mne>=1.7",
+        # pyriemann uses ndarray.mT which is numpy>=2.0 only.
+        "numpy>=2.0,<3.0",
+        "scipy>=1.13",
+        "scikit-learn>=1.5",
+        "mne>=1.8",
         "mne-bids>=0.15",
         "pyEDFlib>=0.1.36",
         "braindecode>=0.8",
@@ -149,6 +150,20 @@ def run_experiment_shard(arg: dict[str, Any]) -> dict[str, Any]:
                 _np.concatenate([prior[0], X], axis=0),
                 _np.concatenate([prior[1], y], axis=0),
             )
+
+    # Drop subjects who only have one session's data (single-class y).
+    # BBBD's ~30-40 subjects per experiment usually did both ses-01 and ses-02,
+    # but a handful only completed one; those cannot supply an attentive-vs-
+    # distracted contrast and would crash the baseline decoder.
+    n_before = len(by_subject)
+    by_subject = {
+        sid: (X, y) for sid, (X, y) in by_subject.items()
+        if len(_np.unique(y)) >= 2
+    }
+    n_after = len(by_subject)
+    if n_after < n_before:
+        print(f"[exp{experiment}] dropped {n_before - n_after} single-class subjects, "
+              f"{n_after} usable")
 
     baseline = PerSubjectRiemannDecoder(n_folds=int(config["decoders"]["baseline"]["n_folds"]))
     per_subject_baccs = []
