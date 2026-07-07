@@ -25,12 +25,20 @@ modal = importlib.import_module("modal")
 IMAGE = (
     modal.Image.debian_slim(python_version="3.12")
     .apt_install("libgl1", "libglib2.0-0")
+    # Force a clean CPU torch install BEFORE anything else can pull a
+    # CUDA-linked wheel as a transitive dep. Braindecode's filter module
+    # imports torchaudio at load time, which triggers libcudart loading if
+    # torchaudio was built against CUDA.
+    .run_commands(
+        "pip uninstall -y torch torchvision torchaudio 2>/dev/null || true",
+        "pip install --no-cache-dir --index-url https://download.pytorch.org/whl/cpu "
+        "torch==2.5.1 torchaudio==2.5.1",
+    )
     .pip_install(
-        "torch>=2.5,<2.8",
-        "numpy>=2.0,<3.0",
-        "scipy>=1.13",
+        "numpy>=1.26,<2.3",
+        "scipy>=1.11,<1.14",
         "scikit-learn>=1.5",
-        "mne>=1.8",
+        "mne>=1.7,<1.10",
         "pyEDFlib>=0.1.36",
         "braindecode>=0.9",
         "huggingface_hub>=0.24",
@@ -67,8 +75,7 @@ env_secret = modal.Secret.from_dict({
 @app.function(
     image=IMAGE,
     timeout=4 * 60 * 60,
-    gpu="T4",
-    cpu=4,
+    cpu=8,
     memory=16 * 1024,
     volumes={
         BBBD_MOUNT: bbbd_volume,
@@ -96,10 +103,44 @@ def run_labram_shard(arg: dict[str, Any]) -> dict[str, Any]:
 
     win = int(epoch_s * dst_sfreq)   # 800 samples
 
-    # Load LaBraM-Base once per worker.
+    # Load LaBraM-Base weights manually to bypass HF from_pretrained's
+    # fragile safetensors detection path. LaBraM-Base architecture is
+    # constructed with default kwargs and loaded from the .pth checkpoint
+    # shipped in the braindecode HF mirror.
     from braindecode.models import Labram
-    encoder = Labram.from_pretrained(config["decoders"]["encoder"]["hf_repo"])
-    encoder = encoder.eval().cuda()
+    from huggingface_hub import hf_hub_download
+
+    repo_id = config["decoders"]["encoder"]["hf_repo"]
+    # Try a few candidate weight files — the repo has moved between .safetensors
+    # and .pth across braindecode versions.
+    weight_candidates = [
+        "model.safetensors",
+        "pytorch_model.bin",
+        "labram-base.pth",
+        "labram_base.pth",
+    ]
+    weight_path: str | None = None
+    for name in weight_candidates:
+        try:
+            weight_path = hf_hub_download(repo_id, name)
+            break
+        except Exception:
+            continue
+    if weight_path is None:
+        raise RuntimeError(
+            f"Could not locate LaBraM weights in {repo_id}. "
+            f"Tried: {weight_candidates}"
+        )
+    encoder = Labram(n_chans=64, n_times=800)
+    if weight_path.endswith(".safetensors"):
+        from safetensors.torch import load_file as _safetensors_load
+        state = _safetensors_load(weight_path)
+    else:
+        state = torch.load(weight_path, map_location="cpu", weights_only=True)
+    missing, unexpected = encoder.load_state_dict(state, strict=False)
+    print(f"[exp{experiment}] LaBraM loaded; "
+          f"missing={len(missing)} unexpected={len(unexpected)}")
+    encoder = encoder.eval()
     for p in encoder.parameters():
         p.requires_grad = False
 
@@ -156,15 +197,15 @@ def run_labram_shard(arg: dict[str, Any]) -> dict[str, Any]:
             continue
         eps = eps[valid]
 
-        # Encode in batches on GPU.
+        # Encode in batches on CPU.
         embs = []
-        batch = 32
+        batch = 16
         with torch.no_grad():
             for i in range(0, len(eps), batch):
-                x = torch.from_numpy(eps[i:i + batch]).float().cuda()
+                x = torch.from_numpy(eps[i:i + batch]).float()
                 out = encoder(x, return_features=True)
                 cls = out["cls_token"]  # (B, 200)
-                embs.append(cls.detach().cpu().numpy())
+                embs.append(cls.detach().numpy())
         E = _np.concatenate(embs, axis=0)  # (N_epochs, 200)
         y = _np.full(len(E), label, dtype=_np.int64)
 
