@@ -1,6 +1,6 @@
 import { validateEvent, type EventEnvelope } from "@inquiry/schema";
 
-export const DEFAULT_BRIDGE_ENDPOINT = "http://127.0.0.1:17389/v1/extension/events";
+export const DEFAULT_BRIDGE_ENDPOINT = "http://127.0.0.1:39170/v1/extension/events";
 export const BRIDGE_STATE_KEY = "inquiry.bridge.state";
 export const BRIDGE_QUEUE_KEY = "inquiry.bridge.queue";
 export const DEFAULT_SESSION_ID = "local-browser-session";
@@ -78,14 +78,21 @@ export const defaultPrivacyToggles: PrivacyToggles = {
   media: true,
 };
 
+export const disabledPrivacyToggles: PrivacyToggles = {
+  browser: false,
+  typingMetrics: false,
+  selection: false,
+  media: false,
+};
+
 export function defaultBridgeState(now = new Date()): BridgeState {
   return {
     endpoint: DEFAULT_BRIDGE_ENDPOINT,
     pairingToken: undefined,
     sessionId: DEFAULT_SESSION_ID,
-    recordingState: "recording",
+    recordingState: "stopped",
     disabledSiteHashes: [],
-    privacyToggles: { ...defaultPrivacyToggles },
+    privacyToggles: { ...disabledPrivacyToggles },
     updatedAt: now.toISOString(),
   };
 }
@@ -93,7 +100,7 @@ export function defaultBridgeState(now = new Date()): BridgeState {
 export async function postEventBatch(
   events: EventEnvelope[],
   state: BridgeState,
-  options: { fetchImpl?: FetchLike } = {},
+  options: { fetchImpl?: FetchLike; timeoutMs?: number } = {},
 ): Promise<{ accepted: number }> {
   if (!state.pairingToken) {
     throw new PairingRequiredError();
@@ -104,7 +111,7 @@ export async function postEventBatch(
   }
 
   const fetchImpl = options.fetchImpl ?? fetch;
-  const response = await fetchImpl(state.endpoint, {
+  const response = await fetchWithTimeout(fetchImpl, state.endpoint, {
     method: "POST",
     headers: {
       "content-type": "application/json",
@@ -115,7 +122,7 @@ export async function postEventBatch(
       source: "chrome-extension",
       events,
     }),
-  });
+  }, options.timeoutMs ?? 3_000);
 
   if (response.status === 401 || response.status === 403) {
     throw new PairingRejectedError(response.status);
@@ -125,7 +132,8 @@ export async function postEventBatch(
     throw new BridgePostError(response.status);
   }
 
-  return { accepted: events.length };
+  const responseBody = (await response.json().catch(() => ({}))) as Record<string, unknown>;
+  return { accepted: typeof responseBody.accepted === "number" ? responseBody.accepted : events.length };
 }
 
 export async function flushQueuedEvents(
@@ -181,6 +189,22 @@ export function createMemoryEventQueue(initialEvents: EventEnvelope[] = []): Eve
 }
 
 export function createStorageEventQueue(storage: StorageAreaLike, key = BRIDGE_QUEUE_KEY): EventQueue {
+  let mutation = Promise.resolve();
+
+  async function exclusive<T>(task: () => Promise<T>): Promise<T> {
+    const previous = mutation;
+    let release!: () => void;
+    mutation = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    await previous;
+    try {
+      return await task();
+    } finally {
+      release();
+    }
+  }
+
   async function readEvents(): Promise<EventEnvelope[]> {
     const value = (await readStorageValue(storage, key)) as unknown;
     if (!Array.isArray(value)) {
@@ -196,23 +220,27 @@ export function createStorageEventQueue(storage: StorageAreaLike, key = BRIDGE_Q
 
   return {
     async enqueue(nextEvents) {
-      const events = await readEvents();
-      events.push(...nextEvents);
-      await writeEvents(events);
+      await exclusive(async () => {
+        const events = await readEvents();
+        events.push(...nextEvents);
+        await writeEvents(events);
+      });
     },
     async peek(limit) {
       return (await readEvents()).slice(0, limit);
     },
     async remove(count) {
-      const events = await readEvents();
-      events.splice(0, count);
-      await writeEvents(events);
+      await exclusive(async () => {
+        const events = await readEvents();
+        events.splice(0, count);
+        await writeEvents(events);
+      });
     },
     async size() {
       return (await readEvents()).length;
     },
     async clear() {
-      await writeEvents([]);
+      await exclusive(async () => writeEvents([]));
     },
   };
 }
@@ -245,10 +273,11 @@ export function normalizeBridgeState(input?: Partial<BridgeState>): BridgeState 
       ? input.disabledSiteHashes.filter((hash): hash is string => typeof hash === "string")
       : [],
     privacyToggles: {
-      browser: typeof toggles.browser === "boolean" ? toggles.browser : true,
-      typingMetrics: typeof toggles.typingMetrics === "boolean" ? toggles.typingMetrics : true,
-      selection: typeof toggles.selection === "boolean" ? toggles.selection : true,
-      media: typeof toggles.media === "boolean" ? toggles.media : true,
+      browser: typeof toggles.browser === "boolean" ? toggles.browser : fallback.privacyToggles.browser,
+      typingMetrics:
+        typeof toggles.typingMetrics === "boolean" ? toggles.typingMetrics : fallback.privacyToggles.typingMetrics,
+      selection: typeof toggles.selection === "boolean" ? toggles.selection : fallback.privacyToggles.selection,
+      media: typeof toggles.media === "boolean" ? toggles.media : fallback.privacyToggles.media,
     },
     updatedAt: typeof input?.updatedAt === "string" ? input.updatedAt : fallback.updatedAt,
   };
@@ -261,11 +290,14 @@ export function normalizeBridgeState(input?: Partial<BridgeState>): BridgeState 
 }
 
 export function isBridgeEventAllowed(event: EventEnvelope, state: BridgeState, nowMs = Date.now()): boolean {
-  if (state.recordingState !== "recording") {
+  if (!state.pairingToken) {
     return false;
   }
 
-  if (typeof state.pausedUntilMs === "number" && state.pausedUntilMs > nowMs) {
+  const effectiveRecording =
+    state.recordingState === "recording" ||
+    (state.recordingState === "paused" && typeof state.pausedUntilMs === "number" && state.pausedUntilMs <= nowMs);
+  if (!effectiveRecording) {
     return false;
   }
 
@@ -299,6 +331,16 @@ export function isBridgeEventAllowed(event: EventEnvelope, state: BridgeState, n
   }
 
   return true;
+}
+
+async function fetchWithTimeout(fetchImpl: FetchLike, url: string, init: RequestInit, timeoutMs: number): Promise<Response> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetchImpl(url, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 async function readStorageValue(storage: StorageAreaLike, key: string): Promise<unknown> {

@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { createEvent } from "@inquiry/schema";
 import { createInquiryDatabase } from "../src/main/db";
-import { queueCloudDeletion, deleteLocalSession } from "../src/main/privacy/delete";
+import { deleteLocalSession } from "../src/main/privacy/delete";
 import { exportSession } from "../src/main/privacy/export";
 import { defaultPrivacySettingsView, updateSignalSetting } from "../src/renderer/settings/PrivacySettings";
 
@@ -52,17 +52,18 @@ describe("privacy controls", () => {
     );
 
     const exported = exportSession(database, session.session_id);
-    queueCloudDeletion(database, session.session_id);
     deleteLocalSession(database, session.session_id);
 
     expect(exported.jsonl).toContain("camera.feature_window");
     expect(exported.jsonl).not.toContain("debug-only");
     expect(database.getSession(session.session_id)).toBeNull();
     expect(database.listSyncQueue()).toHaveLength(1);
-    expect(database.listSyncQueue()[0]?.payload).toMatchObject({
+    const tombstone = database.listSyncQueue()[0]?.payload;
+    expect(tombstone).toMatchObject({
       action: "delete-cloud-aggregates",
       session_id: session.session_id,
     });
+    expect(JSON.stringify(tombstone)).not.toContain("Privacy session");
     database.close();
   });
 });

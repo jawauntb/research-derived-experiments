@@ -1,5 +1,6 @@
+import { findSensitiveFieldPaths, isPrivacyClass, type JsonObject, type PrivacyClass } from "@inquiry/schema";
 import type { CloudStore, JobKind, JobStatus } from "../db/schema";
-import { findSensitiveFieldPaths, isJobKind, isJobStatus, isJsonObject } from "../db/schema";
+import { isJobKind, isJobStatus, isJsonObject } from "../db/schema";
 import type { ModalClient } from "../lib/modalClient";
 import { RouteError, authenticate, isRecord, jsonResponse, readJsonObject, stringField } from "./common";
 
@@ -30,8 +31,7 @@ async function submitJob(request: Request, context: JobsRouteContext): Promise<R
   const user = authenticate(request);
   const body = await readJsonObject(request);
   const kind = parseJobKind(body.kind);
-  const input = parseJsonObject(body.input ?? {}, "input");
-  rejectSensitiveFields(input);
+  const input = parseModalJobInput(body.input ?? {});
   const session_id = stringField(body, "session_id", false);
   const job = context.store.createJob({
     user_id: user.user_id,
@@ -138,11 +138,50 @@ function parseJobStatus(value: unknown): JobStatus {
   return value;
 }
 
-function parseJsonObject(value: unknown, field: string) {
+function parseJsonObject(value: unknown, field: string): JsonObject {
   if (!isJsonObject(value)) {
     throw new RouteError(400, "invalid_request", `${field} must be a JSON object`);
   }
   return value;
+}
+
+function parseModalJobInput(value: unknown): JsonObject {
+  const input = parseJsonObject(value, "input");
+  const privacyClass = input.privacy_class;
+  if (!isPrivacyClass(privacyClass)) {
+    throw new RouteError(400, "invalid_request", "input.privacy_class must be a supported privacy class");
+  }
+
+  if (!isModalJobPrivacyClass(privacyClass)) {
+    throw new RouteError(422, "privacy_rejected", "Modal jobs require redacted-sync or document-opt-in input");
+  }
+
+  const payload = parseJsonObject(input.payload ?? {}, "input.payload");
+  rejectSensitiveFields(payload);
+  if (privacyClass === "redacted-sync" && containsRawTextField(payload)) {
+    throw new RouteError(422, "privacy_rejected", "redacted-sync Modal jobs cannot include raw text/content fields");
+  }
+
+  return { ...input, payload };
+}
+
+function isModalJobPrivacyClass(privacyClass: PrivacyClass): boolean {
+  return privacyClass === "redacted-sync" || privacyClass === "document-opt-in";
+}
+
+function containsRawTextField(value: unknown): boolean {
+  if (Array.isArray(value)) {
+    return value.some(containsRawTextField);
+  }
+
+  if (!isJsonObject(value)) {
+    return false;
+  }
+
+  return Object.entries(value).some(([key, child]) => {
+    const normalized = key.toLowerCase();
+    return normalized === "content" || normalized === "text" || normalized === "page_text" || containsRawTextField(child);
+  });
 }
 
 function rejectSensitiveFields(value: unknown): void {

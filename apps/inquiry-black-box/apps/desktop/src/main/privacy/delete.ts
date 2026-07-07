@@ -1,6 +1,7 @@
 import type { InquiryDatabase } from "../db";
 
 export function deleteLocalSession(db: InquiryDatabase, sessionId: string): { session_id: string; deleted: true } {
+  queueCloudDeletion(db, sessionId);
   db.deleteSession(sessionId);
   return { session_id: sessionId, deleted: true };
 }
@@ -16,7 +17,6 @@ export function queueCloudDeletion(db: InquiryDatabase, sessionId: string): void
     payload: {
       action: "delete-cloud-aggregates",
       session_id: sessionId,
-      title: session.title,
     },
     state: "queued",
   });

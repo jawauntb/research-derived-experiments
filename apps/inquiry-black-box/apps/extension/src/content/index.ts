@@ -1,7 +1,7 @@
 import { createEvent, type EventEnvelope, type EventType, type JsonObject } from "@inquiry/schema";
 import {
   DEFAULT_SESSION_ID,
-  defaultPrivacyToggles,
+  disabledPrivacyToggles,
   type PrivacyToggles,
   type RecordingState,
 } from "../lib/localBridge";
@@ -10,6 +10,7 @@ import {
   CONTENT_SETTINGS_MESSAGE,
   CONTENT_SETTINGS_UPDATED_MESSAGE,
 } from "../lib/messages";
+import { hashForTelemetry } from "../lib/telemetry";
 
 export const SOURCE_VERSION = "extension@0.1.0";
 
@@ -29,6 +30,7 @@ export type ContentSettings = {
 export type ContentTelemetryOptions = {
   sessionId?: string;
   now?: () => number;
+  wallClockNow?: () => number;
   sendMessage: (message: ContentEventMessage) => void | Promise<void>;
   location?: Pick<Location, "href" | "hostname">;
   visibilityState?: () => "visible" | "hidden" | "prerender" | "unloaded";
@@ -97,15 +99,19 @@ export function createContentTelemetry(options: ContentTelemetryOptions): Conten
 
 export class ContentTelemetry {
   private readonly now: () => number;
+  private readonly wallClockNow: () => number;
   private readonly sendMessage: (message: ContentEventMessage) => void | Promise<void>;
   private readonly location: Pick<Location, "href" | "hostname">;
   private readonly visibilityState: () => "visible" | "hidden" | "prerender" | "unloaded";
   private readonly typingByElement = new WeakMap<object, TypingState>();
+  private readonly mediaTimeByElement = new WeakMap<object, number>();
   private settings: ContentSettings;
   private visibleSinceMs: number;
+  private lastScrollY: number | null = null;
 
   constructor(options: ContentTelemetryOptions) {
     this.now = options.now ?? (() => performance.now());
+    this.wallClockNow = options.wallClockNow ?? (() => Date.now());
     this.sendMessage = options.sendMessage;
     this.location = options.location ?? globalThis.location;
     this.visibilityState = options.visibilityState ?? (() => readDocumentVisibility());
@@ -129,9 +135,14 @@ export class ContentTelemetry {
   }
 
   captureScroll(snapshot: ScrollSnapshot): EventEnvelope | null {
+    const scrollY = finiteNumber(snapshot.scrollY);
+    const deltaY = this.lastScrollY === null ? 0 : scrollY - this.lastScrollY;
+    this.lastScrollY = scrollY;
+
     return this.emit("browser.scroll", "browser", {
       ...this.commonPayload(),
-      scroll_y: finiteNumber(snapshot.scrollY),
+      scroll_y: scrollY,
+      delta_y: finiteNumber(deltaY),
       scroll_x: finiteNumber(snapshot.scrollX ?? 0),
       viewport_h: finiteNumber(snapshot.viewportHeight),
       viewport_w: finiteNumber(snapshot.viewportWidth ?? 0),
@@ -147,8 +158,10 @@ export class ContentTelemetry {
       this.visibleSinceMs = now;
     }
 
-    return this.emit("browser.dwell", "browser", {
+    const state = lifecycle === "pageshow" ? "revisited" : visible ? "visible" : "hidden";
+    return this.emit("browser.visibility", "browser", {
       ...this.commonPayload(),
+      state,
       visible,
       dwell_ms: finiteNumber(dwellMs),
       lifecycle,
@@ -156,11 +169,18 @@ export class ContentTelemetry {
   }
 
   captureMedia(action: MediaAction, media: MediaElementLike): EventEnvelope | null {
+    const currentTimeS = finiteNumber(media.currentTime ?? 0);
+    const previousTimeS = typeof media === "object" && media !== null ? this.mediaTimeByElement.get(media) : undefined;
+    if (typeof media === "object" && media !== null) {
+      this.mediaTimeByElement.set(media, currentTimeS);
+    }
+
     return this.emit("browser.media", "media", {
       ...this.commonPayload(),
       action,
       media_kind: mediaKind(media),
-      current_time_s: finiteNumber(media.currentTime ?? 0),
+      current_time_s: currentTimeS,
+      delta_ms: finiteNumber(previousTimeS === undefined ? 0 : (currentTimeS - previousTimeS) * 1_000),
       duration_s: finiteNumber(media.duration ?? 0),
       paused: Boolean(media.paused),
       playback_rate: finiteNumber(media.playbackRate ?? 1),
@@ -258,11 +278,12 @@ export class ContentTelemetry {
   }
 
   private canCapture(category: EventCategory): boolean {
-    if (this.settings.recordingState !== "recording" || this.settings.siteDisabled) {
-      return false;
-    }
-
-    if (typeof this.settings.pausedUntilMs === "number" && this.settings.pausedUntilMs > Date.now()) {
+    const pausedExpired =
+      this.settings.recordingState === "paused" &&
+      typeof this.settings.pausedUntilMs === "number" &&
+      this.settings.pausedUntilMs <= this.wallClockNow();
+    const recording = this.settings.recordingState === "recording" || pausedExpired;
+    if (!recording || this.settings.siteDisabled) {
       return false;
     }
 
@@ -306,27 +327,18 @@ export class ContentTelemetry {
   }
 }
 
-export function hashForTelemetry(value: string): string {
-  let hash = 5381;
-  for (let index = 0; index < value.length; index += 1) {
-    hash = (hash * 33) ^ value.charCodeAt(index);
-  }
-
-  return `h_${(hash >>> 0).toString(36)}`;
-}
-
 function normalizeContentSettings(input: Partial<ContentSettings>): ContentSettings {
   const toggles: Partial<PrivacyToggles> = input.privacyToggles ?? {};
   const settings: ContentSettings = {
     sessionId: input.sessionId && input.sessionId.length > 0 ? input.sessionId : DEFAULT_SESSION_ID,
-    recordingState: input.recordingState ?? "recording",
+    recordingState: input.recordingState ?? "stopped",
     siteDisabled: input.siteDisabled ?? false,
     privacyToggles: {
-      browser: typeof toggles.browser === "boolean" ? toggles.browser : defaultPrivacyToggles.browser,
+      browser: typeof toggles.browser === "boolean" ? toggles.browser : disabledPrivacyToggles.browser,
       typingMetrics:
-        typeof toggles.typingMetrics === "boolean" ? toggles.typingMetrics : defaultPrivacyToggles.typingMetrics,
-      selection: typeof toggles.selection === "boolean" ? toggles.selection : defaultPrivacyToggles.selection,
-      media: typeof toggles.media === "boolean" ? toggles.media : defaultPrivacyToggles.media,
+        typeof toggles.typingMetrics === "boolean" ? toggles.typingMetrics : disabledPrivacyToggles.typingMetrics,
+      selection: typeof toggles.selection === "boolean" ? toggles.selection : disabledPrivacyToggles.selection,
+      media: typeof toggles.media === "boolean" ? toggles.media : disabledPrivacyToggles.media,
     },
   };
 
@@ -458,6 +470,7 @@ function installContentScript(): void {
     { passive: true },
   );
   window.addEventListener("pagehide", () => telemetry.captureVisibility(false, "pagehide"));
+  window.addEventListener("pageshow", () => telemetry.captureVisibility(true, "pageshow"));
   document.addEventListener("visibilitychange", () => telemetry.captureVisibility(), true);
   document.addEventListener("play", (event) => captureMediaEvent(telemetry, "play", event), true);
   document.addEventListener("pause", (event) => captureMediaEvent(telemetry, "pause", event), true);

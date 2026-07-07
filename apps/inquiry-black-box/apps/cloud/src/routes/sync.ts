@@ -1,4 +1,4 @@
-import { canSyncPrivacyClass, validateEvent, type EventEnvelope } from "@inquiry/schema";
+import { canSyncPrivacyClass, findSensitiveFieldPaths, validateEvent, type EventEnvelope } from "@inquiry/schema";
 import type { CloudStore } from "../db/schema";
 import { RouteError, authenticate, isRecord, jsonResponse, readJsonObject, stringField } from "./common";
 
@@ -22,6 +22,11 @@ async function syncEvents(request: Request, context: SyncRouteContext): Promise<
   const user = authenticate(request);
   const body = await readJsonObject(request);
   const device_id = stringField(body, "device_id");
+  const token_id = stringField(body, "token_id");
+  const revoked = context.store.getDeviceToken(user.user_id, device_id, token_id);
+  if (revoked?.status === "revoked") {
+    throw new RouteError(403, "device_revoked", "device token has been revoked");
+  }
   const events = body.events;
   if (!Array.isArray(events)) {
     throw new RouteError(400, "invalid_request", "events must be an array");
@@ -37,6 +42,10 @@ async function syncEvents(request: Request, context: SyncRouteContext): Promise<
       if (!decision.allowed) {
         throw new Error(decision.reason);
       }
+      const sensitivePaths = findSensitiveFieldPaths(candidate.payload);
+      if (sensitivePaths.length > 0) {
+        throw new Error(`payload contains sensitive field(s): ${sensitivePaths.join(", ")}`);
+      }
       validEvents.push(candidate);
     } catch (error) {
       rejected.push({
@@ -48,7 +57,11 @@ async function syncEvents(request: Request, context: SyncRouteContext): Promise<
   }
 
   if (rejected.length > 0) {
-    return jsonResponse({ accepted: 0, duplicates: 0, rejected }, 422);
+    throw new RouteError(422, "events_rejected", "one or more events were rejected", {
+      accepted: 0,
+      duplicates: 0,
+      rejected,
+    });
   }
 
   let accepted = 0;

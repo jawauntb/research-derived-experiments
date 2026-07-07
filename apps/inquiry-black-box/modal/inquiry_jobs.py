@@ -102,6 +102,16 @@ if modal_module:
     @app.function()
     def calibration_job(samples: list[dict[str, Any]]) -> dict[str, Any]:
         return run_calibration_job(samples)
+
+    @app.function()
+    @modal_module.fastapi_endpoint(method="POST")
+    def job_webhook(request: dict[str, Any]) -> dict[str, Any]:
+        job_id = str(request.get("job_id", "unknown"))
+        kind = str(request.get("kind", "session_summary"))
+        return {
+            "modal_call_id": f"modal-{kind}-{job_id}",
+            "status": "submitted",
+        }
 else:
     app = None
 
@@ -110,3 +120,11 @@ else:
 
     def calibration_job(samples: list[dict[str, Any]]) -> dict[str, Any]:
         return run_calibration_job(samples)
+
+    def job_webhook(request: dict[str, Any]) -> dict[str, Any]:
+        job_id = str(request.get("job_id", "unknown"))
+        kind = str(request.get("kind", "session_summary"))
+        return {
+            "modal_call_id": f"local-modal-{kind}-{job_id}",
+            "status": "submitted",
+        }

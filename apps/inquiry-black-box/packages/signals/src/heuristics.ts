@@ -65,7 +65,9 @@ export function buildReplayMemo(events: EventEnvelope[], windowMs = 30_000): Rep
 
 function markSkimRisk(window: EventWindow): ReplayMarker[] {
   const scrollEvents = window.events.filter((event) => event.event_type === "browser.scroll");
-  const dwellEvents = window.events.filter((event) => event.event_type === "browser.dwell");
+  const dwellEvents = window.events.filter(
+    (event) => event.event_type === "browser.dwell" || event.event_type === "browser.visibility",
+  );
   const scrollDistance = sum(scrollEvents.map((event) => Math.abs(numericPayload(event, "delta_y") ?? 0)));
   const dwellMs = sum(dwellEvents.map((event) => numericPayload(event, "dwell_ms") ?? 0));
 

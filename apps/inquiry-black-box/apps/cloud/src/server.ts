@@ -11,6 +11,7 @@ export type CloudHandlerOptions = {
 };
 
 export function createCloudHandler(options: CloudHandlerOptions = {}) {
+  assertPersistenceIsIntentional(options);
   const store = options.store ?? createCloudStore();
   const modalClient = options.modalClient ?? createModalClientFromEnv();
 
@@ -51,4 +52,16 @@ if (import.meta.main) {
     fetch: createCloudHandler(),
   });
   console.log(`Inquiry Black Box cloud API listening on ${port}`);
+}
+
+function assertPersistenceIsIntentional(options: CloudHandlerOptions): void {
+  if (options.store) {
+    return;
+  }
+
+  const productionRuntime = process.env.NODE_ENV === "production" || Boolean(process.env.RAILWAY_ENVIRONMENT);
+  const allowInMemory = process.env.INQUIRY_ALLOW_IN_MEMORY_CLOUD === "1";
+  if (productionRuntime && !allowInMemory) {
+    throw new Error("Railway/production cloud API requires durable persistence; set INQUIRY_ALLOW_IN_MEMORY_CLOUD=1 only for ephemeral smoke tests");
+  }
 }

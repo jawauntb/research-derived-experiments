@@ -32,6 +32,7 @@ export class HttpModalClient implements ModalClient {
   constructor(
     private readonly endpoint: string,
     private readonly bearerToken?: string,
+    private readonly timeoutMs = 10_000,
   ) {}
 
   async submitJob(request: ModalJobRequest): Promise<ModalJobSubmission> {
@@ -40,11 +41,15 @@ export class HttpModalClient implements ModalClient {
       headers.set("authorization", `Bearer ${this.bearerToken}`);
     }
 
-    const response = await fetch(this.endpoint, {
-      method: "POST",
-      headers,
-      body: JSON.stringify(request),
-    });
+    const response = await fetchWithTimeout(
+      this.endpoint,
+      {
+        method: "POST",
+        headers,
+        body: JSON.stringify(request),
+      },
+      this.timeoutMs,
+    );
     if (!response.ok) {
       throw new Error(`Modal job submission failed with HTTP ${response.status}`);
     }
@@ -60,8 +65,22 @@ export class HttpModalClient implements ModalClient {
 export function createModalClientFromEnv(env: Record<string, string | undefined> = process.env): ModalClient {
   const endpoint = env.MODAL_JOB_WEBHOOK_URL ?? env.MODAL_WEBHOOK_URL;
   if (endpoint) {
-    return new HttpModalClient(endpoint, env.MODAL_JOB_WEBHOOK_TOKEN ?? env.MODAL_WEBHOOK_TOKEN);
+    return new HttpModalClient(
+      endpoint,
+      env.MODAL_JOB_WEBHOOK_TOKEN ?? env.MODAL_WEBHOOK_TOKEN,
+      Number(env.MODAL_JOB_TIMEOUT_MS ?? 10_000),
+    );
   }
 
   return new LocalModalClient();
+}
+
+async function fetchWithTimeout(url: string, init: RequestInit, timeoutMs: number): Promise<Response> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timeout);
+  }
 }

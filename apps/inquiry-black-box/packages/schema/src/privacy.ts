@@ -24,8 +24,22 @@ export type PrivacyDecision = {
   reason: string;
 };
 
+export const sensitivePayloadFieldNames = [
+  "rawFrame",
+  "frameImage",
+  "imageBlob",
+  "frameBlob",
+  "pixels",
+  "keyText",
+  "keyContent",
+  "documentText",
+  "rawVideo",
+  "videoBytes",
+] as const;
+
 const syncEligible = new Set<PrivacyClass>(["public", "redacted-sync"]);
 const exportEligible = new Set<PrivacyClass>(["public", "local-derived", "redacted-sync", "document-opt-in"]);
+const sensitivePayloadFields = new Set<string>(sensitivePayloadFieldNames);
 
 export function isPrivacyClass(value: unknown): value is PrivacyClass {
   return typeof value === "string" && privacyClasses.includes(value as PrivacyClass);
@@ -58,10 +72,30 @@ export function canExportPrivacyClass(privacyClass: PrivacyClass): PrivacyDecisi
 }
 
 export function assertNoBlockedPayload(payload: Record<string, unknown>): void {
-  const forbiddenKeys = ["rawFrame", "frameImage", "keyText", "documentText"];
-  const present = forbiddenKeys.filter((key) => key in payload);
+  const present = findSensitiveFieldPaths(payload);
 
   if (present.length > 0) {
     throw new Error(`payload contains blocked sensitive field(s): ${present.join(", ")}`);
   }
+}
+
+export function findSensitiveFieldPaths(value: unknown, path = "$"): string[] {
+  if (Array.isArray(value)) {
+    return value.flatMap((item, index) => findSensitiveFieldPaths(item, `${path}[${index}]`));
+  }
+
+  if (typeof value !== "object" || value === null) {
+    return [];
+  }
+
+  const paths: string[] = [];
+  for (const [key, child] of Object.entries(value)) {
+    const childPath = `${path}.${key}`;
+    if (sensitivePayloadFields.has(key)) {
+      paths.push(childPath);
+    }
+    paths.push(...findSensitiveFieldPaths(child, childPath));
+  }
+
+  return paths;
 }

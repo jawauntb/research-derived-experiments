@@ -1,3 +1,4 @@
+import { createHmac, timingSafeEqual } from "node:crypto";
 import type { AuthenticatedUser } from "../db/schema";
 
 export class RouteError extends Error {
@@ -22,12 +23,18 @@ export function authenticate(request: Request): AuthenticatedUser {
     throw new RouteError(401, "unauthorized", "authorization bearer token is required");
   }
 
-  const user_id = request.headers.get("x-inquiry-user-id") ?? userIdFromToken(token);
-  if (user_id.length === 0) {
-    throw new RouteError(401, "unauthorized", "authenticated user id could not be resolved");
+  const user_id = verifyCloudBearerToken(token);
+  if (!user_id) {
+    throw new RouteError(401, "unauthorized", "authorization bearer token is invalid");
   }
 
   return { user_id, token };
+}
+
+export function createCloudBearerToken(userId: string, secret = cloudAuthSecret()): string {
+  const encodedUserId = base64UrlEncode(userId);
+  const signature = signTokenSubject(encodedUserId, secret);
+  return `dev.${encodedUserId}.${signature}`;
 }
 
 export async function readJsonObject(request: Request): Promise<Record<string, unknown>> {
@@ -88,7 +95,51 @@ export function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-function userIdFromToken(token: string): string {
-  const delimiter = token.indexOf(".");
-  return delimiter === -1 ? token : token.slice(0, delimiter);
+function verifyCloudBearerToken(token: string): string | null {
+  const [scheme, encodedUserId, signature] = token.split(".");
+  if (scheme !== "dev" || !encodedUserId || !signature) {
+    return null;
+  }
+
+  const expected = signTokenSubject(encodedUserId, cloudAuthSecret());
+  if (!constantTimeEqual(signature, expected)) {
+    return null;
+  }
+
+  try {
+    return base64UrlDecode(encodedUserId);
+  } catch {
+    return null;
+  }
+}
+
+function signTokenSubject(subject: string, secret: string): string {
+  return createHmac("sha256", secret).update(subject).digest("base64url");
+}
+
+function constantTimeEqual(left: string, right: string): boolean {
+  const leftBuffer = Buffer.from(left);
+  const rightBuffer = Buffer.from(right);
+  return leftBuffer.length === rightBuffer.length && timingSafeEqual(leftBuffer, rightBuffer);
+}
+
+function cloudAuthSecret(): string {
+  const configured = process.env.INQUIRY_CLOUD_AUTH_SECRET;
+  if (configured && configured.length > 0) {
+    return configured;
+  }
+
+  if (process.env.NODE_ENV === "production" || process.env.RAILWAY_ENVIRONMENT) {
+    throw new RouteError(500, "auth_not_configured", "INQUIRY_CLOUD_AUTH_SECRET is required");
+  }
+
+  return "local-dev-inquiry-secret";
+}
+
+function base64UrlEncode(value: string): string {
+  return Buffer.from(value, "utf8").toString("base64url");
+}
+
+function base64UrlDecode(value: string): string {
+  return Buffer.from(value, "base64url").toString("utf8");
 }

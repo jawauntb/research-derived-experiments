@@ -1,3 +1,6 @@
+import { mkdirSync } from "node:fs";
+import { homedir } from "node:os";
+import { dirname, join } from "node:path";
 import { createEvent, type EventEnvelope, type LabelPayload, type SessionRecord } from "@inquiry/schema";
 import { createInquiryDatabase, type InquiryDatabase } from "./db";
 import {
@@ -48,7 +51,7 @@ export type DesktopMainBridge = {
 const defaultAllowedOrigins = ["chrome-extension://*"] as const;
 
 export function createDesktopRuntime(options: DesktopRuntimeOptions = {}): DesktopRuntime {
-  const database = options.database ?? createInquiryDatabase(options.databasePath);
+  const database = options.database ?? createInquiryDatabase(options.databasePath ?? defaultDesktopDatabasePath());
   const sessions = createSessionController(database);
   const pairingSecret = options.pairingSecret ?? process.env.INQUIRY_PAIRING_SECRET ?? createPairingSecret();
   const allowedOrigins = options.allowedOrigins ?? defaultAllowedOrigins;
@@ -177,4 +180,13 @@ if (import.meta.main) {
     runtime.stop();
     process.exit(0);
   });
+}
+
+function defaultDesktopDatabasePath(): string {
+  const configured = process.env.INQUIRY_DESKTOP_DB_PATH;
+  const databasePath = configured && configured.length > 0
+    ? configured
+    : join(homedir(), ".inquiry-black-box", "inquiry.sqlite");
+  mkdirSync(dirname(databasePath), { recursive: true });
+  return databasePath;
 }

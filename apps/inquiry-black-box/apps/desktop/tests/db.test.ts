@@ -28,6 +28,14 @@ describe("local inquiry database", () => {
     const exported = exportSession(database, session.session_id);
     expect(exported.jsonl).toContain('"type":"session"');
     expect(exported.jsonl).toContain('"browser.scroll"');
+    const parsed = exported.jsonl
+      .trim()
+      .split("\n")
+      .map((line) => JSON.parse(line) as { type: string; event?: { event_type: string } });
+    expect(parsed).toEqual([
+      expect.objectContaining({ type: "session" }),
+      expect.objectContaining({ type: "event", event: expect.objectContaining({ event_type: "browser.scroll" }) }),
+    ]);
     database.close();
   });
 

@@ -96,8 +96,17 @@ Common variables:
 
 - `INQUIRY_LOCAL_API_PORT`: localhost desktop ingest API.
 - `INQUIRY_PAIRING_SECRET`: desktop-extension pairing secret.
+- `INQUIRY_DESKTOP_DB_PATH`: optional desktop SQLite path; defaults to
+  `~/.inquiry-black-box/inquiry.sqlite`.
+- `INQUIRY_CLOUD_AUTH_SECRET`: HMAC secret for signed cloud bearer tokens.
+- `INQUIRY_ALLOW_IN_MEMORY_CLOUD=1`: Railway/production smoke-test escape
+  hatch for the local in-memory cloud store. Do not use for real data.
 - `DATABASE_URL`: Railway Postgres connection string for the cloud API.
 - `RAILWAY_PUBLIC_API_URL`: deployed cloud API base URL.
+- `MODAL_JOB_WEBHOOK_URL` / `MODAL_WEBHOOK_URL`: Modal HTTP job entrypoint.
+- `MODAL_JOB_WEBHOOK_TOKEN` / `MODAL_WEBHOOK_TOKEN`: bearer token for Modal
+  webhook calls.
+- `MODAL_JOB_TIMEOUT_MS`: cloud-to-Modal HTTP timeout in milliseconds.
 - `MODAL_TOKEN_ID` and `MODAL_TOKEN_SECRET`: Modal credentials.
 - `MODAL_ENVIRONMENT`: Modal environment name.
 - `OPENAI_API_KEY` / `ANTHROPIC_API_KEY`: optional model providers.
@@ -122,12 +131,18 @@ Expected flow:
 
 ```bash
 railway link
+railway variables set INQUIRY_CLOUD_AUTH_SECRET=...
 railway variables set DATABASE_URL=...
+railway variables set SYNC_ENCRYPTION_KEY=...
+railway variables set MODAL_JOB_WEBHOOK_URL=...
 railway up --service inquiry-black-box-api
 ```
 
 Use Railway variables or Doppler integrations for secrets. The API must reject
 raw-sensitive privacy classes even when authenticated.
+This foundation intentionally refuses Railway/production startup with the local
+in-memory cloud store unless `INQUIRY_ALLOW_IN_MEMORY_CLOUD=1` is set for an
+ephemeral smoke test.
 
 ## Modal
 
@@ -140,6 +155,9 @@ limitations.
 Keep local replay useful when Modal is unavailable. If a cloud or Modal action
 is attempted while sync is disabled, explain the opt-in requirement and leave
 local data untouched.
+When `MODAL_JOB_WEBHOOK_URL` is configured, the cloud API submits jobs to that
+endpoint and expects `modal_call_id` plus `status` in the response. Without it,
+local development uses a stub Modal client so desktop replay still works.
 
 ## Working Rules
 

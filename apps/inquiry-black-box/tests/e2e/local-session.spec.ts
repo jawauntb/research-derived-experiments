@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { createCloudHandler } from "../../apps/cloud/src/server";
+import { createCloudBearerToken } from "../../apps/cloud/src/routes/common";
 import { createInquiryDatabase } from "../../apps/desktop/src/main/db";
 import { createCameraFeatureEvent, summarizeCameraFeatureWindow } from "../../apps/desktop/src/renderer/camera/featureWorker";
 import { createSessionReplayReport } from "../../apps/desktop/src/main/reports/sessionReplay";
@@ -67,11 +68,12 @@ describe("local session fixture loop", () => {
       new Request("http://cloud.test/sync/events", {
         method: "POST",
         headers: {
-          authorization: "Bearer fixture-user.test-token",
+          authorization: `Bearer ${createCloudBearerToken("fixture-user")}`,
           "content-type": "application/json",
         },
         body: JSON.stringify({
           device_id: "fixture-device",
+          token_id: "fixture-token",
           events: [
             {
               event_id: "raw-cloud-event",

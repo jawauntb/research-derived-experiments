@@ -13,6 +13,7 @@ describe("content telemetry capture", () => {
     const telemetry = createContentTelemetry({
       now: () => now,
       sessionId: "session-fixture",
+      settings: recordingSettings(),
       location: {
         href: "https://research.example.test/paper?private=query",
         hostname: "research.example.test",
@@ -29,9 +30,11 @@ describe("content telemetry capture", () => {
       documentHeight: 2_400,
     });
     now += 30;
-    telemetry.captureMedia("play", fixtureMedia({ currentTime: 12.5, duration: 240 }));
+    const media = fixtureMedia({ currentTime: 12.5, duration: 240 });
+    telemetry.captureMedia("play", media);
     now += 40;
-    telemetry.captureMedia("seeked", fixtureMedia({ currentTime: 42, duration: 240 }));
+    media.currentTime = 42;
+    telemetry.captureMedia("seeked", media);
 
     const events = messages.flatMap((message) => message.events);
     expect(events.map((event) => event.event_type)).toEqual([
@@ -41,6 +44,7 @@ describe("content telemetry capture", () => {
     ]);
     expect(events[0]?.payload).toMatchObject({
       scroll_y: 320,
+      delta_y: 0,
       scroll_x: 4,
       viewport_h: 900,
       document_h: 2400,
@@ -48,8 +52,13 @@ describe("content telemetry capture", () => {
     expect(events[1]?.payload).toMatchObject({
       action: "play",
       current_time_s: 12.5,
+      delta_ms: 0,
       duration_s: 240,
       media_kind: "video",
+    });
+    expect(events[2]?.payload).toMatchObject({
+      action: "seeked",
+      delta_ms: 29_500,
     });
     expect(JSON.stringify(events)).not.toContain("private=query");
   });
@@ -59,6 +68,7 @@ describe("content telemetry capture", () => {
     const telemetry = createContentTelemetry({
       now: () => 200,
       sessionId: "session-selection",
+      settings: recordingSettings(),
       location: {
         href: "https://research.example.test/notes",
         hostname: "research.example.test",
@@ -88,6 +98,7 @@ describe("content telemetry capture", () => {
     const telemetry = createContentTelemetry({
       now: () => now,
       sessionId: "session-typing",
+      settings: recordingSettings(),
       location: {
         href: "https://research.example.test/search",
         hostname: "research.example.test",
@@ -134,7 +145,9 @@ describe("content telemetry capture", () => {
     const messages: ContentEventMessage[] = [];
     const telemetry = createContentTelemetry({
       now: () => 3_000,
+      wallClockNow: () => 300_000,
       sessionId: "session-paused",
+      settings: recordingSettings(),
       location: {
         href: "https://research.example.test/paused",
         hostname: "research.example.test",
@@ -166,6 +179,33 @@ describe("content telemetry capture", () => {
     expect(events[0]?.event_type).toBe("browser.scroll");
     expect(events[0]?.payload.scroll_y).toBe(20);
   });
+
+  test("defaults to stopped capture and resumes after timed pauses expire", () => {
+    const messages: ContentEventMessage[] = [];
+    let wallClockNow = 10_000;
+    const telemetry = createContentTelemetry({
+      now: () => 4_000,
+      wallClockNow: () => wallClockNow,
+      sessionId: "session-default-safe",
+      location: {
+        href: "https://research.example.test/default",
+        hostname: "research.example.test",
+      },
+      sendMessage: (message) => {
+        messages.push(message);
+      },
+    });
+
+    telemetry.captureScroll({ scrollY: 10, viewportHeight: 100, documentHeight: 500 });
+    telemetry.setSettings({ recordingState: "paused", pausedUntilMs: 20_000, privacyToggles: recordingSettings().privacyToggles });
+    telemetry.captureScroll({ scrollY: 20, viewportHeight: 100, documentHeight: 500 });
+    wallClockNow = 20_001;
+    telemetry.captureScroll({ scrollY: 30, viewportHeight: 100, documentHeight: 500 });
+
+    const events = messages.flatMap((message) => message.events);
+    expect(events).toHaveLength(1);
+    expect(events[0]?.payload.scroll_y).toBe(30);
+  });
 });
 
 function fixtureMedia(input: { currentTime: number; duration: number }): MediaElementLike {
@@ -175,5 +215,18 @@ function fixtureMedia(input: { currentTime: number; duration: number }): MediaEl
     duration: input.duration,
     paused: false,
     playbackRate: 1,
+  };
+}
+
+function recordingSettings() {
+  return {
+    recordingState: "recording" as const,
+    siteDisabled: false,
+    privacyToggles: {
+      browser: true,
+      typingMetrics: true,
+      selection: true,
+      media: true,
+    },
   };
 }

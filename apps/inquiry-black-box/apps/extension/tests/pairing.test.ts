@@ -1,10 +1,13 @@
 import { describe, expect, test } from "bun:test";
 import { createEvent, type EventEnvelope } from "@inquiry/schema";
 import {
+  DEFAULT_BRIDGE_ENDPOINT,
   PairingRequiredError,
   PairingRejectedError,
   createMemoryEventQueue,
+  defaultBridgeState,
   flushQueuedEvents,
+  isBridgeEventAllowed,
   postEventBatch,
   type BridgeState,
 } from "../src/lib/localBridge";
@@ -46,6 +49,17 @@ describe("local bridge pairing and queue", () => {
     ).rejects.toBeInstanceOf(PairingRequiredError);
   });
 
+  test("defaults to the desktop bridge port and blocks capture until paired and recording", () => {
+    const state = defaultBridgeState(new Date("2026-07-07T00:00:00.000Z"));
+    const event = browserScrollEvent("event-default-state");
+
+    expect(state.endpoint).toBe(DEFAULT_BRIDGE_ENDPOINT);
+    expect(state.recordingState).toBe("stopped");
+    expect(state.privacyToggles.browser).toBe(false);
+    expect(isBridgeEventAllowed(event, state)).toBe(false);
+    expect(isBridgeEventAllowed(event, { ...pairedState(), recordingState: "paused", pausedUntilMs: 1_000 }, 1_001)).toBe(true);
+  });
+
   test("sends the pairing token header and rejects stale tokens", async () => {
     let tokenHeader = "";
     const event = browserScrollEvent("event-paired");
@@ -69,7 +83,7 @@ describe("local bridge pairing and queue", () => {
 
 function pairedState(): BridgeState {
   return {
-    endpoint: "http://127.0.0.1:17389/v1/extension/events",
+    endpoint: "http://127.0.0.1:39170/v1/extension/events",
     pairingToken: "paired-token",
     sessionId: "session-bridge",
     recordingState: "recording",

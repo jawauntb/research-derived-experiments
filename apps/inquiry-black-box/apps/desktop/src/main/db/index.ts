@@ -22,6 +22,7 @@ export type InquiryDatabase = {
   getSession(sessionId: string): SessionRecord | null;
   stopSession(sessionId: string, endedAt?: string): SessionRecord;
   appendEvent(event: EventEnvelope): EventEnvelope;
+  appendEventIfNew(event: EventEnvelope): { inserted: boolean; event: EventEnvelope };
   appendSystemEvent(input: {
     session_id: string;
     event_type: EventEnvelope["event_type"];
@@ -96,14 +97,19 @@ export function createInquiryDatabase(path = ":memory:"): InquiryDatabase {
       };
     },
     appendEvent(event) {
+      this.appendEventIfNew(event);
+      return event;
+    },
+    appendEventIfNew(event) {
       validateEvent(event);
       const session = this.getSession(event.session_id);
       if (!session) {
         throw new Error(`cannot append event to missing session: ${event.session_id}`);
       }
 
-      db.query(
-        `INSERT INTO events (
+      const result = db
+        .query(
+          `INSERT OR IGNORE INTO events (
           event_id, session_id, source, source_version, captured_at, monotonic_ms,
           timezone, event_type, confidence, quality_flags, payload, privacy_class,
           retention_policy
@@ -112,9 +118,10 @@ export function createInquiryDatabase(path = ":memory:"): InquiryDatabase {
           $timezone, $event_type, $confidence, $quality_flags, $payload, $privacy_class,
           $retention_policy
         )`,
-      ).run(serializeEvent(event));
+        )
+        .run(serializeEvent(event)) as { changes?: number };
 
-      return event;
+      return { inserted: Number(result.changes ?? 0) > 0, event };
     },
     appendSystemEvent(input) {
       return this.appendEvent(

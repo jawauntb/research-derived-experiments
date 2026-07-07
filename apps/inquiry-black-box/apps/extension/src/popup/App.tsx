@@ -5,6 +5,7 @@ import {
   type PrivacyToggles,
   type RecordingState,
 } from "../lib/localBridge";
+import { hashForTelemetry } from "../lib/telemetry";
 import { renderPrivacyToggles } from "./PrivacyToggles";
 
 type PopupState = BridgeState & {
@@ -248,15 +249,6 @@ async function readActiveTabUrl(tabs: TabsLike | undefined): Promise<string | un
   return await new Promise((resolve) => {
     tabs.query({ active: true, currentWindow: true }, (activeTabs) => resolve(activeTabs[0]?.url));
   });
-}
-
-function hashForTelemetry(value: string): string {
-  let hash = 5381;
-  for (let index = 0; index < value.length; index += 1) {
-    hash = (hash * 33) ^ value.charCodeAt(index);
-  }
-
-  return `h_${(hash >>> 0).toString(36)}`;
 }
 
 function installStyles(): void {

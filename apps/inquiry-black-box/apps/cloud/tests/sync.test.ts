@@ -1,11 +1,12 @@
 import { describe, expect, test } from "bun:test";
 import { createEvent, type EventEnvelope } from "@inquiry/schema";
 import { createCloudStore } from "../src/db/schema";
+import { createCloudBearerToken } from "../src/routes/common";
 import { createCloudHandler } from "../src/server";
 import type { ModalClient } from "../src/lib/modalClient";
 
 const authHeaders = (userId = "user-a") => ({
-  authorization: `Bearer ${userId}.test-token`,
+  authorization: `Bearer ${createCloudBearerToken(userId)}`,
   "content-type": "application/json",
 });
 
@@ -41,7 +42,7 @@ describe("cloud sync route", () => {
   test("accepts redacted events idempotently by event_id", async () => {
     const store = createCloudStore();
     const handler = createCloudHandler({ store });
-    const body = JSON.stringify({ device_id: "device-1", events: [redactedEvent("event-1")] });
+    const body = JSON.stringify({ device_id: "device-1", token_id: "token-1", events: [redactedEvent("event-1")] });
 
     const first = await handler(
       new Request("http://cloud.test/sync/events", {
@@ -70,7 +71,7 @@ describe("cloud sync route", () => {
     const localOnly = { ...redactedEvent("event-local"), privacy_class: "local-derived" };
     const sensitive = {
       ...redactedEvent("event-sensitive"),
-      payload: { rawFrame: "base64-camera-frame" },
+      payload: { nested: { keyContent: "raw typed content" }, rawVideo: "base64-video" },
     };
 
     for (const event of [localOnly, sensitive]) {
@@ -78,14 +79,51 @@ describe("cloud sync route", () => {
         new Request("http://cloud.test/sync/events", {
           method: "POST",
           headers: authHeaders(),
-          body: JSON.stringify({ device_id: "device-1", events: [event] }),
+          body: JSON.stringify({ device_id: "device-1", token_id: "token-1", events: [event] }),
         }),
       );
       const body = await json(response);
 
       expect(response.status).toBe(422);
-      expect(Array.isArray(body.rejected)).toBe(true);
+      expect(body.error).toMatchObject({ code: "events_rejected" });
     }
+  });
+
+  test("does not store rejected events and rejects revoked device tokens", async () => {
+    const store = createCloudStore();
+    const handler = createCloudHandler({ store });
+
+    const rejected = await handler(
+      new Request("http://cloud.test/sync/events", {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({
+          device_id: "device-1",
+          token_id: "token-1",
+          events: [{ ...redactedEvent("event-sensitive-nested"), payload: { nested: { keyContent: "secret" } } }],
+        }),
+      }),
+    );
+    expect(rejected.status).toBe(422);
+    expect(store.listEvents("user-a")).toHaveLength(0);
+
+    await handler(
+      new Request("http://cloud.test/sync/device/revoke", {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({ device_id: "device-1", token_id: "token-1", reason: "user-disabled-sync" }),
+      }),
+    );
+    const revoked = await handler(
+      new Request("http://cloud.test/sync/events", {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({ device_id: "device-1", token_id: "token-1", events: [redactedEvent("event-after-revoke")] }),
+      }),
+    );
+
+    expect(revoked.status).toBe(403);
+    expect(await json(revoked)).toMatchObject({ error: { code: "device_revoked" } });
   });
 
   test("records device token revocation shape", async () => {
@@ -151,7 +189,11 @@ describe("cloud reports and jobs routes", () => {
       new Request("http://cloud.test/jobs", {
         method: "POST",
         headers: authHeaders(),
-        body: JSON.stringify({ kind: "session_summary", session_id: "session-cloud-1", input: { export_ref: "fixture" } }),
+        body: JSON.stringify({
+          kind: "session_summary",
+          session_id: "session-cloud-1",
+          input: { privacy_class: "redacted-sync", payload: { export_ref: "fixture" } },
+        }),
       }),
     );
     const submitted = (await json(submit)) as { job: { job_id: string; status: string; transitions: Array<{ status: string }> } };
@@ -187,7 +229,7 @@ describe("cloud reports and jobs routes", () => {
       new Request("http://cloud.test/jobs", {
         method: "POST",
         headers: authHeaders(),
-        body: JSON.stringify({ kind: "calibration", input: { export_ref: "fixture" } }),
+        body: JSON.stringify({ kind: "calibration", input: { privacy_class: "redacted-sync", payload: { export_ref: "fixture" } } }),
       }),
     );
     const failedJob = (await json(failedSubmit)) as { job: { job_id: string } };
@@ -218,7 +260,10 @@ describe("cloud reports and jobs routes", () => {
       new Request("http://cloud.test/jobs", {
         method: "POST",
         headers: authHeaders(),
-        body: JSON.stringify({ kind: "session_summary", input: { keyText: "typed content" } }),
+        body: JSON.stringify({
+          kind: "session_summary",
+          input: { privacy_class: "redacted-sync", payload: { keyText: "typed content" } },
+        }),
       }),
     );
     const body = await json(response);

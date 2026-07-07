@@ -103,6 +103,16 @@ async function enqueueContentEvents(
   const events = Array.isArray(message.events) ? message.events : [];
   const accepted: EventEnvelope[] = [];
 
+  if (!state.pairingToken) {
+    return {
+      ok: true,
+      accepted: 0,
+      posted: 0,
+      queued: await context.queue.size(),
+      error: "extension is not paired with the local desktop bridge",
+    };
+  }
+
   for (const value of events) {
     const event = normalizeIncomingEvent(value, state);
     if (event && isBridgeEventAllowed(event, state, context.now())) {

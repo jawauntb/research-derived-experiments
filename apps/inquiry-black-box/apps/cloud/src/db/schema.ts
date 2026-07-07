@@ -104,35 +104,12 @@ export type CloudStore = {
   getReport(user_id: string, report_id: string): ReportRecord | undefined;
 };
 
-const sensitivePayloadFields = new Set(["rawFrame", "frameImage", "keyText", "documentText", "rawVideo", "videoBytes", "keyContent"]);
-
 export function isJobStatus(value: unknown): value is JobStatus {
   return typeof value === "string" && jobStatuses.includes(value as JobStatus);
 }
 
 export function isJobKind(value: unknown): value is JobKind {
   return typeof value === "string" && jobKinds.includes(value as JobKind);
-}
-
-export function findSensitiveFieldPaths(value: unknown, path = "$"): string[] {
-  if (Array.isArray(value)) {
-    return value.flatMap((item, index) => findSensitiveFieldPaths(item, `${path}[${index}]`));
-  }
-
-  if (!isRecord(value)) {
-    return [];
-  }
-
-  const paths: string[] = [];
-  for (const [key, child] of Object.entries(value)) {
-    const childPath = `${path}.${key}`;
-    if (sensitivePayloadFields.has(key)) {
-      paths.push(childPath);
-    }
-    paths.push(...findSensitiveFieldPaths(child, childPath));
-  }
-
-  return paths;
 }
 
 export function isJsonObject(value: unknown): value is JsonObject {

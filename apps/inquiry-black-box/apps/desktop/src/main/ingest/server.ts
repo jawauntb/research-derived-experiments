@@ -1,4 +1,5 @@
 import {
+  assertNoBlockedPayload,
   createEvent,
   isEventType,
   type EventEnvelope,
@@ -48,7 +49,6 @@ type IngestEventBody = {
 };
 
 const defaultAllowedOrigins = ["chrome-extension://*"] as const;
-const forbiddenPayloadKeys = new Set(["rawFrame", "frameImage", "imageBlob", "frameBlob", "pixels"]);
 const ingestPaths = new Set(["/v1/events", "/v1/extension/events"]);
 
 export function createIngestRequestHandler(options: IngestServerOptions): (request: Request) => Promise<Response> {
@@ -106,12 +106,26 @@ export function createIngestRequestHandler(options: IngestServerOptions): (reque
         sessions: options.sessions,
         sourceVersion,
       });
-      const appended = events.map((event) => options.sessions.appendActiveEvent(event));
+      let accepted = 0;
+      let duplicates = 0;
+      const eventIds: string[] = [];
+      options.database.db.transaction(() => {
+        for (const event of events) {
+          const result = options.database.appendEventIfNew(event);
+          if (result.inserted) {
+            accepted += 1;
+          } else {
+            duplicates += 1;
+          }
+          eventIds.push(result.event.event_id);
+        }
+      })();
       return jsonResponse(
         {
           ok: true,
-          accepted: appended.length,
-          event_ids: appended.map((event) => event.event_id),
+          accepted,
+          duplicates,
+          event_ids: eventIds,
         },
         202,
         origin,
@@ -141,7 +155,7 @@ export function startIngestServer(options: StartIngestServerOptions): StartedIng
 
 function normalizeExtensionBody(
   value: unknown,
-  options: { sessions: SessionController; sourceVersion: string },
+  options: { sessions: SessionController; sourceVersion: string; rebindSession?: boolean },
 ): EventEnvelope[] {
   if (!isRecord(value)) {
     throw new Error("event body must be an object");
@@ -162,7 +176,7 @@ function normalizeExtensionBody(
           ...(isRecord(event) ? event : {}),
           session_id: isRecord(event) && event.session_id !== undefined ? event.session_id : value.session_id,
         },
-        options,
+        { ...options, rebindSession: true },
       ),
     );
   }
@@ -172,7 +186,7 @@ function normalizeExtensionBody(
 
 function normalizeExtensionEvent(
   value: unknown,
-  options: { sessions: SessionController; sourceVersion: string },
+  options: { sessions: SessionController; sourceVersion: string; rebindSession?: boolean },
 ): EventEnvelope {
   if (!isRecord(value)) {
     throw new Error("event body must be an object");
@@ -187,7 +201,7 @@ function normalizeExtensionEvent(
     throw new Error(`session is ${active.recording_state}`);
   }
 
-  if (body.session_id !== undefined && body.session_id !== active.session_id) {
+  if (!options.rebindSession && body.session_id !== undefined && body.session_id !== active.session_id) {
     throw new Error("event session does not match active session");
   }
 
@@ -282,21 +296,10 @@ function retentionPolicy(value: unknown): RetentionPolicy {
 }
 
 function assertNoUnsafePayload(value: unknown, path = "payload"): void {
-  if (Array.isArray(value)) {
-    value.forEach((item, index) => assertNoUnsafePayload(item, `${path}[${index}]`));
-    return;
-  }
-
   if (!isRecord(value)) {
-    return;
+    throw new Error(`${path} must be an object`);
   }
-
-  for (const [key, child] of Object.entries(value)) {
-    if (forbiddenPayloadKeys.has(key)) {
-      throw new Error(`event payload contains raw camera frame data at ${path}.${key}`);
-    }
-    assertNoUnsafePayload(child, `${path}.${key}`);
-  }
+  assertNoBlockedPayload(value);
 }
 
 function jsonResponse(body: JsonObject, status: number, origin: string | null): Response {
