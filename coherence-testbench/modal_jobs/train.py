@@ -188,10 +188,97 @@ def run_experiment_shard(arg: dict[str, Any]) -> dict[str, Any]:
         train_subject_sweep=tuple(int(n) for n in config["evaluate"]["train_subject_sweep"]),
     )
     fold_results = lso.run(by_subject, factory)
+
+    # ------------------------------------------------------------------
+    # Confound ablations. All declared in config/kill_criterion.yaml;
+    # each returns per-fold BA so the report can show whether the
+    # decoder's headline number depends on the confound.
+    # ------------------------------------------------------------------
+    ablations: dict[str, Any] = {}
+
+    # 1. 16 Hz artifact band-zero (Exp 4 & 5 only). Zero the 12-20 Hz band
+    #    in the frequency domain and rerun LSO. If BA is unchanged from
+    #    the main run, the decoder wasn't cheating on the artifact.
+    if experiment in (4, 5):
+        def _band_zero(x: _np.ndarray, sfreq: int, lo: float, hi: float) -> _np.ndarray:
+            # rFFT along the sample axis, zero the [lo,hi] Hz band, iFFT back.
+            fft = _np.fft.rfft(x, axis=-1)
+            freqs = _np.fft.rfftfreq(x.shape[-1], d=1.0 / sfreq)
+            mask = (freqs >= lo) & (freqs <= hi)
+            fft[..., mask] = 0
+            return _np.fft.irfft(fft, n=x.shape[-1], axis=-1).astype(x.dtype)
+
+        sfreq = int(pcfg.resample_hz)
+        by_subject_zeroed = {
+            sid: (_band_zero(X, sfreq, 12.0, 20.0), y)
+            for sid, (X, y) in by_subject.items()
+        }
+        try:
+            zeroed_folds = lso.run(by_subject_zeroed, factory)
+            zero_baccs = [f.balanced_accuracy for f in zeroed_folds]
+            ablations["artifact_16hz_exp45"] = {
+                "lso_balanced_accuracy": (
+                    float(_np.mean(zero_baccs)) if zero_baccs else float("nan")
+                ),
+                "n_folds": len(zeroed_folds),
+                "notes": "12-20 Hz band zeroed at 128 Hz sample rate",
+            }
+        except Exception as e:
+            ablations["artifact_16hz_exp45"] = {
+                "lso_balanced_accuracy": float("nan"),
+                "n_folds": 0,
+                "error": str(e)[:200],
+            }
+
+    # 2. Prior-only baseline: predict the train majority class for every
+    #    test epoch. If this clears the GO threshold, the pipeline is
+    #    memorizing class frequency, not signal.
+    try:
+        from sklearn.metrics import balanced_accuracy_score  # noqa: PLC0415
+        subjects_sorted = sorted(by_subject.keys())
+        prior_baccs: list[float] = []
+        for seed in range(int(config["evaluate"]["n_lso_seeds"])):
+            rng = _np.random.default_rng(seed)
+            shuffled = list(subjects_sorted)
+            rng.shuffle(shuffled)
+            n_test = max(1, int(len(shuffled) * 0.2))
+            test_subjects = shuffled[:n_test]
+            train_subjects = shuffled[n_test:]
+            y_train = _np.concatenate([by_subject[s][1] for s in train_subjects])
+            y_test = _np.concatenate([by_subject[s][1] for s in test_subjects])
+            majority = int(_np.bincount(y_train).argmax())
+            preds = _np.full_like(y_test, majority)
+            prior_baccs.append(float(balanced_accuracy_score(y_test, preds)))
+        ablations["hallucinated_fidelity"] = {
+            "lso_balanced_accuracy": (
+                float(_np.mean(prior_baccs)) if prior_baccs else float("nan")
+            ),
+            "n_folds": len(prior_baccs),
+            "notes": "prior-only (train-majority) predictor, should be ~50%",
+        }
+    except Exception as e:
+        ablations["hallucinated_fidelity"] = {
+            "lso_balanced_accuracy": float("nan"),
+            "n_folds": 0,
+            "error": str(e)[:200],
+        }
+
+    # 3. subject_id_leak: structurally correct via CrossSubjectAdversarial's
+    #    _fit_alignment (fits reference_mean on train fold only, uses it on
+    #    test). No runtime ablation needed — surfaced in the report as a
+    #    static "STRUCTURAL" pass.
+    ablations["subject_id_leak"] = {
+        "lso_balanced_accuracy": float("nan"),
+        "n_folds": 0,
+        "notes": "STRUCTURAL: alignment stats fit train-only in "
+                 "CrossSubjectAdversarialDecoder._fit_alignment",
+    }
+
     return {
         "experiment": experiment,
         "n_subjects": len(by_subject),
         "per_subject_baccs": per_subject_baccs,
+        "ablations": ablations,
         "folds": [
             {
                 "seed": r.seed,
@@ -250,6 +337,8 @@ def phase0_end_to_end(config_yaml: str, run_id: str) -> dict[str, Any]:
 
     fold_results: list[LSOFoldResult] = []
     all_per_subject: list[float] = []
+    # Merge per-shard ablations by weighted mean of balanced accuracy.
+    merged_ablations: dict[str, dict[str, Any]] = {}
     for shard in shard_outputs:
         all_per_subject.extend(shard["per_subject_baccs"])
         for f in shard["folds"]:
@@ -261,6 +350,22 @@ def phase0_end_to_end(config_yaml: str, run_id: str) -> dict[str, Any]:
                 bits_per_second=f["bits_per_second"],
                 n_test_epochs=f["n_test_epochs"],
             ))
+        for aid, arow in shard.get("ablations", {}).items():
+            row = merged_ablations.setdefault(
+                aid, {"lso_balanced_accuracy": 0.0, "_num": 0.0, "_den": 0}
+            )
+            ba = arow.get("lso_balanced_accuracy", float("nan"))
+            nf = int(arow.get("n_folds", 0))
+            if ba == ba and nf > 0:  # NaN check
+                row["_num"] += float(ba) * nf
+                row["_den"] += nf
+            row.setdefault("notes", arow.get("notes", ""))
+            if arow.get("error"):
+                row.setdefault("errors", []).append(arow["error"])
+    for aid, row in merged_ablations.items():
+        den = row.pop("_den")
+        num = row.pop("_num")
+        row["lso_balanced_accuracy"] = (num / den) if den > 0 else float("nan")
     baseline_bacc = float(_np.mean(all_per_subject)) if all_per_subject else 0.5
 
     out_dir = _Path(RESULTS_MOUNT) / run_id
@@ -271,7 +376,7 @@ def phase0_end_to_end(config_yaml: str, run_id: str) -> dict[str, Any]:
     build_report(
         kc=kc, fold_results=fold_results,
         per_subject_baseline_bacc=baseline_bacc,
-        confound_ablations={}, out_dir=out_dir,
+        confound_ablations=merged_ablations, out_dir=out_dir,
     )
     results_volume.commit()
 

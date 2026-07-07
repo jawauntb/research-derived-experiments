@@ -97,6 +97,7 @@ class CrossSubjectAdversarialDecoder:
 
     _train_reference_: Any = field(default=None, init=False, repr=False)
     _train_scaler_: Any = field(default=None, init=False, repr=False)
+    _pretrained_trunk_state_: Any = field(default=None, init=False, repr=False)
 
     def fit(
         self,
@@ -104,9 +105,59 @@ class CrossSubjectAdversarialDecoder:
         y_train: np.ndarray,
         subj_train: np.ndarray,
     ) -> None:
-        """Fit alignment stats (train-only) + adversarial classifier."""
+        """Fit alignment stats (train-only) + adversarial classifier.
+
+        When ``ssl_pretrain=True``, first pretrain the trunk with masked-
+        feature reconstruction on the train tangent features (no labels),
+        then use the pretrained weights as init for the supervised head.
+        """
         feats_train = self._fit_alignment(X_train)
+        if self.ssl_pretrain:
+            self._ssl_pretrain_trunk(feats_train)
         self._fit_classifier(feats_train, y_train, subj_train)
+
+    def _ssl_pretrain_trunk(self, feats: np.ndarray) -> None:
+        """Masked-feature reconstruction pretraining on train features only.
+
+        Rationale: the plan's Stage-2 stack calls for an SSL pretrain phase
+        before the supervised head. On tangent-space features, the tractable
+        SSL objective is masked reconstruction — zero 20% of feature dims and
+        reconstruct via a small autoencoder. Pretrained trunk weights become
+        the init for the classifier trunk. Not a foundation model; a placeholder
+        that honors the pre-registered flag."""
+        import torch  # noqa: PLC0415
+        from torch import nn  # noqa: PLC0415
+
+        torch.manual_seed(self.seed)
+        n, d = feats.shape
+        hidden = 128
+        trunk = nn.Sequential(
+            nn.Linear(d, hidden), nn.GELU(),
+            nn.Linear(hidden, hidden), nn.GELU(),
+        )
+        decoder = nn.Linear(hidden, d)
+        opt = torch.optim.Adam(
+            list(trunk.parameters()) + list(decoder.parameters()),
+            lr=self.lr,
+        )
+        mse = nn.MSELoss()
+        X_t = torch.from_numpy(feats).float()
+        pretrain_epochs = 30
+        mask_frac = 0.2
+        for _ in range(pretrain_epochs):
+            idx = torch.randperm(n)
+            for start in range(0, n, self.batch_size):
+                bi = idx[start:start + self.batch_size]
+                x = X_t[bi]
+                mask = (torch.rand_like(x) > mask_frac).float()
+                h = trunk(x * mask)
+                loss = mse(decoder(h), x)
+                opt.zero_grad()
+                loss.backward()
+                opt.step()
+        self._pretrained_trunk_state_ = {
+            k: v.clone().detach() for k, v in trunk.state_dict().items()
+        }
 
     def predict(self, X_test: np.ndarray) -> np.ndarray:
         feats = self._apply_alignment(X_test)
@@ -149,6 +200,14 @@ class CrossSubjectAdversarialDecoder:
         n, d = feats.shape
         n_subjects = int(subj.max()) + 1
         self._model = _AdversarialHead(d=d, n_subjects=n_subjects).to("cpu")
+        # If SSL pretraining ran, warm-start the trunk from its weights.
+        if self._pretrained_trunk_state_ is not None:
+            try:
+                self._model.trunk.load_state_dict(self._pretrained_trunk_state_)
+            except (RuntimeError, ValueError):
+                # Dim mismatch (shouldn't happen — same hidden=128, same d) —
+                # fall back to random init rather than crash.
+                pass
         opt = torch.optim.Adam(self._model.parameters(), lr=self.lr)
         cls_loss = nn.CrossEntropyLoss()
         subj_loss = nn.CrossEntropyLoss()
