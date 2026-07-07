@@ -32,7 +32,17 @@ def _riemannian_recentering(X: np.ndarray, reference_mean=None):
     from pyriemann.utils.mean import mean_riemann
     from pyriemann.utils.base import invsqrtm
 
-    covs = Covariances(estimator="oas").transform(X)
+    # Ledoit-Wolf shrinkage is more numerically stable than OAS on
+    # rank-deficient EEG. See baseline.py for the same choice.
+    covs = Covariances(estimator="lwf").transform(X)
+    # Substitute the identity matrix for any covariance that came out
+    # non-finite so we keep row alignment with y/subj vectors. Identity
+    # contributes zero information but doesn't crash the Riemann mean.
+    n_ch = covs.shape[-1]
+    finite = np.isfinite(covs).reshape(len(covs), -1).all(axis=1)
+    if not finite.all():
+        covs = covs.copy()
+        covs[~finite] = np.eye(n_ch, dtype=covs.dtype)
     if reference_mean is None:
         reference_mean = mean_riemann(covs)
     whitener = invsqrtm(reference_mean)
