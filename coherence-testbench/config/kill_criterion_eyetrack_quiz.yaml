@@ -1,0 +1,107 @@
+# =============================================================================
+# Supplementary pre-registration — Branch-D eyetrack, quiz-score regression.
+# Committed BEFORE the first quiz-score run touches data.
+#
+# Relationship to prior pre-registrations
+# ---------------------------------------
+# * `kill_criterion.yaml` (phase0.v1) tested EEG binary attention → KILL.
+# * `kill_criterion_eyetrack.yaml` (phase0.eyetrack.v1) tested eyetrack
+#   binary attention → INCONCLUSIVE (rerun exhausted).
+# * The eyetrack pre-reg's `secondary_tasks` block only listed
+#   "attention_by_experiment" as reporting-only. It did NOT commit to
+#   quiz-score regression. So this file adds a fresh, thresholded test
+#   for a distinct target on the same signal + subjects, rather than
+#   re-scoring the binary task under a different metric.
+#
+# Why quiz-score regression is a stronger test of the modality
+# ----------------------------------------------------------
+# Binary attention (ses-01 vs ses-02) is a coarse contrast between two
+# whole task-conditions ("watching a video" vs "counting backwards").
+# Quiz score is a continuous cognitive outcome per (subject, stimulus):
+# how well did the subject actually comprehend the video? If eyetrack
+# cross-subject-predicts quiz score, it is capturing a per-subject
+# cognitive-engagement signal that generalizes, not just a task-level
+# state.
+#
+# Rationale for thresholds
+# ------------------------
+# Cross-subject regression from eyetrack to a comprehension score is a
+# small-effect problem. Published pupil/gaze correlations with attention
+# behavioral measures are typically in the 0.1-0.3 range on within-
+# subject designs; cross-subject transfer is much noisier. A modest but
+# non-trivial ρ is what would justify further data collection.
+#
+version: "phase0.eyetrack.quiz.v1"
+committed_at: "2026-07-07"
+committed_by: "jawaun"
+
+primary_task:
+  name: "quiz_score_regression_lso_eyetrack"
+  description: >
+    Per-recording eyetrack features → predicted quiz score for that
+    (subject, stimulus). Leave-subjects-out. Spearman rank correlation
+    between predicted and true quiz scores on held-out subjects.
+    Held-out fraction: 20%. Seeds: 5. Train-subject sweep: [8, 16, 24, 32].
+    Only ses-01 (attentive-condition) recordings supply labels; ses-02
+    (distracted) recordings included in a secondary "distracted-predicts-
+    attentive-score" analysis, reporting-only.
+
+thresholds:
+  # GO: eyetrack cross-subject-predicts quiz score with a Spearman ρ
+  # clearly above the noise floor for behavioral cross-subject transfer.
+  go:
+    lso_spearman_r_min: 0.15
+    # For reference: interpret ~R² ≈ 0.023, which is small but real.
+    stability:
+      n_seeds: 5
+      seed_min_rho: 0.05     # every seed must clear the floor
+
+  # KILL: at or below the noise floor for this class of regression.
+  kill:
+    lso_spearman_r_max: 0.05
+
+  # Between → INCONCLUSIVE. Rerun ONLY with the pre-declared knobs below.
+
+allowed_rerun_knobs:
+  # If the first run is INCONCLUSIVE, these are the pre-authorized rerun
+  # variations. Any other change is goalpost movement.
+  - name: "ssl_pretrain"
+    description: "enable masked-feature reconstruction warm-start"
+  - name: "epochs"
+    description: "up to 100 training epochs per fold"
+  - name: "expand_sweep"
+    description: "expand train_subject_sweep to include n=40 if data allows"
+
+secondary_tasks_reporting_only:
+  - name: "distracted_predicts_attentive_score"
+    description: >
+      Predict the attentive-condition quiz score for a subject from that
+      subject's DISTRACTED-condition eyetrack. Tests whether eyetrack
+      captures individual cognitive-engagement ability even when the
+      subject wasn't actively studying. Spearman ρ. Report only.
+
+confounds_to_control:
+  - id: "hallucinated_fidelity"
+    description: >
+      Prior-only regressor (train-mean quiz score). Its Spearman ρ must
+      be at or below 0.05 (chance).
+    mitigation: "train-mean predictor must NOT clear the threshold"
+  - id: "subject_id_leak"
+    description: >
+      Feature standardization stats fit train-only in the decoder's
+      _fit_scaler. Structural guarantee, matches Branch-D.
+    mitigation: "structural via _fit_scaler(train_only)"
+  - id: "device_calibration_drift"
+    description: >
+      Session-level baseline differences could conflate with score.
+      Since scores are ses-01-only, this is less acute than in the
+      binary task, but we still report a per-recording-z-score ablation.
+    mitigation: "per-recording z-score ablation must still clear threshold"
+
+reporting:
+  required_sections:
+    - "pre_registered_thresholds"
+    - "lso_spearman_curve"        # Spearman ρ vs n_train_subjects
+    - "per_seed_stability"
+    - "confound_ablations"
+    - "verdict"

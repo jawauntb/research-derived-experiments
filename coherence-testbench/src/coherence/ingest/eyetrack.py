@@ -212,3 +212,77 @@ def _parse_session(bdf_or_tsv: Path) -> int | None:
             except ValueError:
                 return None
     return None
+
+
+def _parse_stimulus(path: Path) -> int | None:
+    """Extract the BIDS `task-stim0N` stimulus id from an eyetrack file path."""
+    name = path.name
+    for token in name.split("_"):
+        if token.startswith("task-stim"):
+            try:
+                return int(token[len("task-stim"):])
+            except ValueError:
+                return None
+    return None
+
+
+def read_quiz_scores(root: Path, experiments: list[int]
+                     ) -> dict[tuple[str, int, int], float]:
+    """Return {(subject_id, experiment, stimulus_no): fraction_correct}.
+
+    Handles the three schema variants across BBBD experiments:
+      * exp2: `stim_no, total_domain_questions, domain_score,
+              total_memory_questions, memory_score`
+              -> (domain + memory) / (total_domain + total_memory)
+      * exp3: `stim_no, total_questions, score` -> score / total_questions
+      * exp4: `stimulus_no, total_questions, score` -> score / total_questions
+
+    Missing / zero-question rows are dropped.
+    """
+    out: dict[tuple[str, int, int], float] = {}
+    for exp in experiments:
+        tsv = root / f"experiment{exp}" / "phenotype" / "stimuli_questionnaire_scores.tsv"
+        if not tsv.exists():
+            continue
+        lines = tsv.read_text().splitlines()
+        if len(lines) < 2:
+            continue
+        header = lines[0].split("\t")
+        idx: dict[str, int] = {name: i for i, name in enumerate(header)}
+        stim_col = "stim_no" if "stim_no" in idx else "stimulus_no"
+        for row in lines[1:]:
+            cells = row.split("\t")
+            if len(cells) < len(header):
+                continue
+            try:
+                subject = cells[idx["participant_id"]]
+                stim = int(cells[idx[stim_col]])
+            except (KeyError, ValueError):
+                continue
+            if "domain_score" in idx and "memory_score" in idx:
+                try:
+                    d = float(cells[idx["domain_score"]])
+                    m = float(cells[idx["memory_score"]])
+                    td = float(cells[idx["total_domain_questions"]])
+                    tm = float(cells[idx["total_memory_questions"]])
+                except (KeyError, ValueError):
+                    continue
+                denom = td + tm
+                if denom <= 0:
+                    continue
+                frac = (d + m) / denom
+            elif "score" in idx and "total_questions" in idx:
+                try:
+                    s = float(cells[idx["score"]])
+                    t = float(cells[idx["total_questions"]])
+                except ValueError:
+                    continue
+                if t <= 0:
+                    continue
+                frac = s / t
+            else:
+                continue
+            if not (0.0 <= frac <= 1.0):
+                continue
+            out[(subject, exp, stim)] = float(frac)
+    return out

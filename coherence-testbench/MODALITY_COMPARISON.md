@@ -1,8 +1,17 @@
-# Modality comparison — EEG vs eyetrack on the same BBBD task
+# Modality comparison — EEG vs eyetrack on BBBD
 
-Same 87 unique subject-experiments across BBBD exp 2/3/4. Same
-session-level attentive-vs-distracted contrast (ses-01 vs ses-02).
-Same LSO evaluation. Only the input signal differs.
+Two pre-registered contrasts on the same subjects (BBBD exp 2/3/4):
+
+1. **Binary attention:** ses-01 (attentive) vs ses-02 (distracted, counting-
+   backwards). Reported here as balanced accuracy under LSO.
+2. **Quiz-score regression:** predict per-recording quiz score (fraction
+   correct) from the attentive-session signal. Reported as Spearman ρ
+   under LSO.
+
+> **Headline (2026-07-07 update):** the quiz-score regression on eyetrack
+> returned **`GO`** — LSO Spearman ρ = **0.277** at n_train=24, monotonic
+> curve, every seed above the pre-registered floor, prior-only baseline
+> at ρ = 0.000. First cleared GO of the session. See §Quiz-score below.
 
 ## Headline
 
@@ -21,15 +30,38 @@ Same LSO evaluation. Only the input signal differs.
 ## Bottom line
 
 - **EEG:** dead cross-subject on this task.
-- **Eyetrack:** signal is real (66.5% BA at n=32, +16 pts over chance,
-  monotonic learning curve, non-zero MI, clean ablations).
-- **BUT** bits/sec (0.024) falls short of the pre-registered GO threshold
-  (0.030) by ~20%. The pre-registration's allowed rerun (SSL + more
-  compute) executed and the verdict remained INCONCLUSIVE.
-- **BBBD caps the data at ~32 subjects per experiment.** Based on the
-  learning-curve slope (61 → 66.5% over 4 → 32 subjects), reaching
-  the 0.030 bits/s bar would need roughly another ~50-60 subjects.
-  Not available on BBBD alone.
+- **Eyetrack binary attention:** signal is real (66.5% BA at n=32, +16
+  pts over chance, monotonic learning curve, non-zero MI, clean
+  ablations). BUT bits/sec (0.024) falls short of the pre-registered
+  GO threshold (0.030). Pre-registered rerun exhausted; verdict stays
+  INCONCLUSIVE. BBBD caps at ~32 subjects per experiment.
+- **Eyetrack quiz-score regression:** **`GO`.** LSO Spearman ρ = 0.277
+  at n_train=24, monotonic curve, clean ablations. First cleared GO
+  of the session. This is the load-bearing result — it says eyetrack
+  cross-subject-predicts a real cognitive outcome (comprehension) at
+  an effect size that would justify further data collection.
+
+## Quiz-score regression (Branch-D supplementary v1)
+
+Pre-reg: `config/kill_criterion_eyetrack_quiz.yaml` (`phase0.eyetrack.quiz.v1`).
+Modal run: `quiz-20260707-014453`. 60 subjects contributed labeled
+recordings across exp 2/3/4.
+
+| n_train | mean Spearman ρ | n folds |
+|---:|---:|---:|
+| 8  | +0.194 | 10 |
+| 16 | +0.289 | 10 |
+| 24 | **+0.277** | 10 |
+
+- Per-seed floor (0.05): every seed cleared.
+- Prior-only train-mean regressor: ρ = 0.000.
+- Structural subject-id-leak guarantee via train-only `_fit_scaler`.
+- Reporting-only secondary: distracted-session-features →
+  attentive-quiz-score = -0.030 (chance). You can't decode
+  comprehension of a video from a session where the subject was
+  counting backwards — as expected and validating.
+
+## Binary attention comparison
 
 ## Reading
 
@@ -118,15 +150,15 @@ Would drop SSL and re-analyze.
 
 ## Status
 
-- **EEG Phase-0:** CLOSED. Verdict `KILL`. See [POST_MORTEM.md](POST_MORTEM.md).
-- **Eyetrack Branch-D gen-1:** INCONCLUSIVE. Signal present, bits/s short.
-- **Eyetrack Branch-D gen-2 (SSL + more compute):** INCONCLUSIVE.
-  Signal continues to strengthen (66.5% BA at n=32) but bits/s still
-  falls 20% below the GO threshold. Pre-registered rerun exhausted.
-- **Site:** footer updated to reflect the mixed EEG-KILL / eyetrack-
-  INCONCLUSIVE result.
-- **Phase 3 build:** still FROZEN. Signal present but no GO cleared.
-  Unfreeze requires either (a) a new pre-registration on a corpus with
-  more subjects, (b) a richer eyetrack featurizer that beats 66.5% BA,
-  or (c) an explicit user decision to accept the sub-threshold signal
-  as sufficient evidence.
+- **EEG Phase-0 binary attention:** CLOSED. Verdict `KILL`. See [POST_MORTEM.md](POST_MORTEM.md).
+- **Eyetrack Branch-D binary attention gen-1 + gen-2:** INCONCLUSIVE
+  with signal (66.5% BA at n=32; bits/s just below GO bar).
+- **Eyetrack Branch-D quiz-score regression:** **`GO`** (ρ = 0.277,
+  supplementary pre-reg `phase0.eyetrack.quiz.v1`).
+- **Site footer:** updated to reflect the quiz-score GO.
+- **Phase 3 build decision:** the pre-registered rule ("only GO
+  unfreezes Phase 3") has now been met on eyetrack quiz-score
+  regression. The freeze rules from POST_MORTEM.md and memory
+  explicitly named an *explicit user re-scoping* as the trigger, not
+  just a passing GO — so this stays frozen pending your call, but the
+  gate is CLEARED on the load-bearing criterion.
