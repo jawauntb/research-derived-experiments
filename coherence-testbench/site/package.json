@@ -1,0 +1,16 @@
+{
+  "name": "neurophenom-site",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Neurophenom (codename: Coherence) — editorial marketing site. Static, self-contained.",
+  "scripts": {
+    "start": "serve -s . -l tcp://0.0.0.0:${PORT:-3000} --no-clipboard",
+    "dev": "serve -s . -l 3000 --no-clipboard"
+  },
+  "dependencies": {
+    "serve": "14.2.4"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

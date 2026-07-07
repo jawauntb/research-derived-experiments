@@ -1,0 +1,88 @@
+# =============================================================================
+# Pre-registered GO/KILL threshold for Phase-0 cross-subject decoding.
+# COMMITTED BEFORE ANY RUN. Do NOT edit after the first data touch — treat drift
+# as evidence of a broken pre-registration and start a new version.
+# =============================================================================
+#
+# Rationale
+# ---------
+# BBBD (n=178, 64-ch EEG) is clean research-grade data collected specifically
+# for attention decoding. If a modern cross-subject stack (population SSL +
+# Riemannian alignment + domain-adversarial head) cannot exceed a modest margin
+# over chance under leave-subjects-out on THIS corpus, then the Stage-2 bet
+# (cross-subject decoding kills per-user calibration) is in serious doubt.
+#
+# The threshold is set deliberately loose. We are not asking for state-of-the-art
+# — we are asking whether the direction is alive. A hard KILL says: even the
+# easiest, cleanest cross-subject signal doesn't lift. That is a company-ending
+# result and should escalate to a human before further build.
+#
+# Metric choices are locked to match the plan's evaluation-discipline note:
+#   * Leave-subjects-out CV only. Within-subject numbers are never a headline.
+#   * Bits/sec of mutual information alongside accuracy — accuracy alone hides
+#     bandwidth loss on skewed label distributions.
+#
+version: "phase0.v1"
+committed_at: "2026-07-06"
+committed_by: "jawaun"
+
+primary_task:
+  name: "attention_binary_lso"
+  description: "Attentive vs distracted, leave-subjects-out, BBBD Exp 1-5 combined."
+  chance_level: 0.5
+
+thresholds:
+  # GO: cross-subject decoder clearly beats chance AND transmits nontrivial info.
+  go:
+    lso_balanced_accuracy_min: 0.60      # +10 pts over chance
+    bits_per_second_min: 0.05            # ~0.05 bit/s of transmitted info
+    generalization_gap_max: 0.15         # per-subject BA - LSO BA <= 15 pts
+    stability:
+      # Averaged across the 5 outermost LSO seeds; not cherry-picked seed.
+      n_seeds: 5
+      seed_min_bacc: 0.55                # every seed must clear this floor
+
+  # KILL: escalate to human. Sub-chance-margin or MI at noise floor.
+  kill:
+    lso_balanced_accuracy_max: 0.55      # only +5 pts over chance
+    bits_per_second_max: 0.01
+
+  # Anything between GO and KILL is INCONCLUSIVE — rerun with more compute
+  # and/or an SSL pretraining phase before making the call.
+
+secondary_tasks:
+  # These are supporting evidence, not gate criteria on their own.
+  - name: "quiz_score_regression_lso"
+    metric: "spearman_r"
+    reporting_only: true
+  - name: "digit_span_regression_lso"
+    metric: "spearman_r"
+    reporting_only: true
+
+confounds_to_control:
+  # Any decoder that clears the threshold BUT depends on these fails the gate.
+  - id: "artifact_16hz_exp45"
+    description: >
+      16 Hz electrical artifact present in BBBD Exp 4-5. Notch it out at
+      preprocess time AND report an ablation where the 12-20 Hz band is zeroed.
+    mitigation: "notch + band-zero ablation must both still clear the threshold"
+  - id: "subject_id_leak"
+    description: >
+      Any per-subject normalization statistics computed on test folds leak
+      subject identity. Fit stats on train folds only.
+    mitigation: "unit test asserts train/test stat isolation"
+  - id: "hallucinated_fidelity"
+    description: >
+      Generative or prior-heavy reconstruction can mimic 'measured signal'.
+      Separate 'signal measured' from 'prior drawing it in'.
+    mitigation: "prior-only baseline must NOT clear the threshold"
+
+reporting:
+  # The auto-generated report must contain, in this order:
+  required_sections:
+    - "pre_registered_thresholds"   # verbatim from this file
+    - "generalization_curve"        # BA vs #train subjects
+    - "cross_vs_per_subject_gap"
+    - "bits_per_second_MI"
+    - "confound_ablations"
+    - "verdict"                     # GO | KILL | INCONCLUSIVE + rationale

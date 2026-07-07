@@ -1,0 +1,42 @@
+# Phase-0 run config. Reads kill_criterion.yaml; do NOT override thresholds here.
+
+kill_criterion: "config/kill_criterion.yaml"
+
+data:
+  dataset: "bbbd"
+  cache_dir_env: "BBBD_CACHE_DIR"
+  experiments: [1, 2, 3, 4, 5]
+  subject_limit: null           # null = all 178; set an int for smoke tests
+
+preprocess:
+  highpass_hz: 0.05
+  notch_hz: [60.0]
+  resample_hz: 128
+  notch_16hz_experiments: [4, 5]
+  epoch_seconds: 4.0
+  epoch_overlap: 0.5
+  reject_peak_to_peak_uv: 150.0
+
+decoders:
+  baseline:
+    kind: "per_subject_riemann"
+    n_folds: 5
+  target:
+    kind: "cross_subject_adversarial"
+    alignment: "riemann"          # euclidean | riemann
+    adversary_weight: 0.1
+    ssl_pretrain: false           # flip on for full run once ingest is stable
+    epochs: 30
+    batch_size: 64
+    lr: 3.0e-4
+
+evaluate:
+  scheme: "leave_subjects_out"
+  n_lso_seeds: 5
+  train_subject_sweep: [8, 16, 32, 64, 128]   # generalization curve
+
+output:
+  root: "artifacts/phase0"
+  run_manifest: "manifest.json"
+  jsonl_log: "run.jsonl"
+  report: "report.md"
