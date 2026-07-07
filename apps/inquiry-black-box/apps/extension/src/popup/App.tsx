@@ -43,8 +43,13 @@ type ChromeLike = {
 
 export type PageListenerStatus = "attached" | "missing" | "unsupported";
 
+type PageListenerCheck = {
+  status: PageListenerStatus;
+  detail?: string;
+};
+
 type PopupModel = {
-  pageListenerStatus: PageListenerStatus;
+  pageListener: PageListenerCheck;
   state: PopupState;
   siteHash: string | undefined;
   siteLabel: string;
@@ -73,10 +78,10 @@ async function loadModel(chromeApi: ChromeLike): Promise<PopupModel> {
   const queueSize = isRecord(response) && typeof response.queueSize === "number" ? response.queueSize : 0;
   const activeTab = await readActiveTab(chromeApi.tabs);
   const site = siteInfo(activeTab?.url);
-  const pageListenerStatus = await detectPageListener(chromeApi, activeTab);
+  const pageListener = await detectPageListener(chromeApi, activeTab);
 
   return {
-    pageListenerStatus,
+    pageListener,
     state: {
       ...normalized,
       queueSize,
@@ -109,7 +114,7 @@ function render(root: HTMLElement, model: PopupModel, chromeApi: ChromeLike): vo
     summaryRow("Pairing", model.state.pairingToken ? "Paired" : "Not paired"),
     summaryRow("Endpoint", model.state.endpoint),
     summaryRow("Session", model.state.sessionId),
-    summaryRow("Page listener", pageListenerLabel(model.pageListenerStatus)),
+    summaryRow("Page listener", pageListenerLabel(model.pageListener)),
     summaryRow("Site", model.siteHash && model.state.disabledSiteHashes.includes(model.siteHash) ? "Disabled" : "Allowed"),
   );
 
@@ -261,33 +266,45 @@ function siteInfo(url: string | undefined): { hash?: string; label: string } {
   }
 }
 
-export function pageListenerLabel(status: PageListenerStatus): string {
+export function pageListenerLabel(check: PageListenerCheck | PageListenerStatus): string {
+  const status = typeof check === "string" ? check : check.status;
+  const detail = typeof check === "string" ? undefined : check.detail;
+
   if (status === "attached") {
     return "Attached";
   }
 
   if (status === "unsupported") {
-    return "Unavailable on this page";
+    return detail ? `Unavailable - ${detail}` : "Unavailable on this page";
   }
 
-  return "Missing - reload tab";
+  return detail ? `Missing - ${detail}` : "Missing - reload tab";
 }
 
 export async function detectPageListener(
   chromeApi: ChromeLike,
   activeTab?: ActiveTab,
-): Promise<PageListenerStatus> {
+): Promise<PageListenerCheck> {
   const tab = activeTab ?? (await readActiveTab(chromeApi.tabs));
   if (!tab?.id || !canAttachToUrl(tab.url)) {
-    return "unsupported";
+    return { status: "unsupported", detail: tab?.url ? "not an http tab" : "no active tab" };
   }
 
-  if (await pingContentScript(chromeApi, tab.id)) {
-    return "attached";
+  const firstPing = await pingContentScript(chromeApi, tab.id);
+  if (firstPing.ok) {
+    return { status: "attached" };
   }
 
-  await attachContentScript(chromeApi, tab.id);
-  return (await pingContentScript(chromeApi, tab.id)) ? "attached" : "missing";
+  const attach = await attachContentScript(chromeApi, tab.id);
+  const secondPing = await pingContentScript(chromeApi, tab.id);
+  if (secondPing.ok) {
+    return { status: "attached" };
+  }
+
+  return {
+    status: "missing",
+    detail: attach.error ?? secondPing.error ?? firstPing.error ?? "reload tab",
+  };
 }
 
 function emptyState(message: string): HTMLElement {
@@ -328,15 +345,15 @@ async function readActiveTab(tabs: TabsLike | undefined): Promise<ActiveTab | un
   });
 }
 
-async function pingContentScript(chromeApi: ChromeLike, tabId: number): Promise<boolean> {
-  const response = await sendTabMessage(chromeApi, tabId, { type: CONTENT_PING_MESSAGE });
-  return isContentPong(response);
+async function pingContentScript(chromeApi: ChromeLike, tabId: number): Promise<{ ok: boolean; error?: string }> {
+  const result = await sendTabMessage(chromeApi, tabId, { type: CONTENT_PING_MESSAGE });
+  return { ok: isContentPong(result.response), ...(result.error ? { error: result.error } : {}) };
 }
 
-async function attachContentScript(chromeApi: ChromeLike, tabId: number): Promise<boolean> {
+async function attachContentScript(chromeApi: ChromeLike, tabId: number): Promise<{ ok: boolean; error?: string }> {
   const scripting = chromeApi.scripting;
   if (!scripting?.executeScript) {
-    return false;
+    return { ok: false, error: "scripting unavailable" };
   }
 
   return await new Promise((resolve) => {
@@ -346,34 +363,42 @@ async function attachContentScript(chromeApi: ChromeLike, tabId: number): Promis
           target: { tabId },
           files: ["dist/content/index.js"],
         },
-        () => resolve(!chromeApi.runtime?.lastError),
+        () => {
+          const error = chromeApi.runtime?.lastError?.message;
+          resolve(error ? { ok: false, error } : { ok: true });
+        },
       );
       if (isPromiseLike(result)) {
-        result.then(() => resolve(true), () => resolve(false));
+        result.then(() => resolve({ ok: true }), (error) => resolve({ ok: false, error: errorMessage(error) }));
       }
-    } catch {
-      resolve(false);
+    } catch (error) {
+      resolve({ ok: false, error: errorMessage(error) });
     }
   });
 }
 
-async function sendTabMessage(chromeApi: ChromeLike, tabId: number, message: unknown): Promise<unknown> {
+async function sendTabMessage(
+  chromeApi: ChromeLike,
+  tabId: number,
+  message: unknown,
+): Promise<{ response?: unknown; error?: string }> {
   const tabs = chromeApi.tabs;
   const sendMessage = tabs?.sendMessage;
   if (!sendMessage) {
-    return undefined;
+    return { error: "tabs permission unavailable" };
   }
 
   return await new Promise((resolve) => {
     try {
       const result = sendMessage.call(tabs, tabId, message, (response) => {
-        resolve(chromeApi.runtime?.lastError ? undefined : response);
+        const error = chromeApi.runtime?.lastError?.message;
+        resolve(error ? { error } : { response });
       });
       if (isPromiseLike(result)) {
-        result.then(resolve, () => resolve(undefined));
+        result.then((response) => resolve({ response }), (error) => resolve({ error: errorMessage(error) }));
       }
-    } catch {
-      resolve(undefined);
+    } catch (error) {
+      resolve({ error: errorMessage(error) });
     }
   });
 }
@@ -398,6 +423,10 @@ function isContentPong(value: unknown): value is { type: typeof CONTENT_PONG_MES
     (value as { type?: unknown }).type === CONTENT_PONG_MESSAGE &&
     (value as { ok?: unknown }).ok === true
   );
+}
+
+function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
 }
 
 function installStyles(): void {

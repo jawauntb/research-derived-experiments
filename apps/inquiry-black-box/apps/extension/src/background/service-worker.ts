@@ -21,6 +21,7 @@ import {
 
 const RETRY_ALARM_NAME = "inquiry-bridge-retry";
 const RETRY_PERIOD_MINUTES = 0.25;
+const REGISTERED_CONTENT_SCRIPT_ID = "inquiry-content-listener";
 
 type RuntimeSender = {
   url?: string;
@@ -53,12 +54,29 @@ type ChromeLike = {
     local?: StorageAreaLike;
   };
   tabs?: TabsLike;
+  scripting?: ScriptingLike;
   alarms?: {
     create(name: string, info: { periodInMinutes: number }): void;
     onAlarm?: {
       addListener(listener: (alarm: AlarmLike) => void): void;
     };
   };
+};
+
+type ContentScriptRegistration = {
+  id: string;
+  matches: string[];
+  js: string[];
+  runAt: "document_idle";
+  persistAcrossSessions: boolean;
+};
+
+type ScriptingLike = {
+  registerContentScripts?(
+    scripts: ContentScriptRegistration[],
+    callback?: () => void,
+  ): Promise<unknown> | void;
+  unregisterContentScripts?(filter: { ids: string[] }, callback?: () => void): Promise<unknown> | void;
 };
 
 type BackgroundContext = {
@@ -305,6 +323,8 @@ function installServiceWorker(): void {
     return true;
   });
 
+  void ensureContentScriptRegistration(chromeApi.scripting);
+
   chromeApi.alarms?.create(RETRY_ALARM_NAME, { periodInMinutes: RETRY_PERIOD_MINUTES });
   chromeApi.alarms?.onAlarm?.addListener((alarm) => {
     if (alarm.name !== RETRY_ALARM_NAME) {
@@ -312,6 +332,43 @@ function installServiceWorker(): void {
     }
 
     void getBridgeState(storage).then((state) => flushQueuedEvents(queue, state));
+  });
+}
+
+export async function ensureContentScriptRegistration(scripting: ScriptingLike | undefined): Promise<boolean> {
+  if (!scripting?.registerContentScripts) {
+    return false;
+  }
+
+  await callScriptingApi((callback) => scripting.unregisterContentScripts?.({ ids: [REGISTERED_CONTENT_SCRIPT_ID] }, callback));
+  return await callScriptingApi((callback) =>
+    scripting.registerContentScripts?.(
+      [
+        {
+          id: REGISTERED_CONTENT_SCRIPT_ID,
+          matches: ["http://*/*", "https://*/*"],
+          js: ["dist/content/index.js"],
+          runAt: "document_idle",
+          persistAcrossSessions: true,
+        },
+      ],
+      callback,
+    ),
+  );
+}
+
+async function callScriptingApi(task: (callback: () => void) => Promise<unknown> | void | undefined): Promise<boolean> {
+  return await new Promise((resolve) => {
+    try {
+      const result = task(() => resolve(true));
+      if (isPromiseLike(result)) {
+        result.then(() => resolve(true), () => resolve(false));
+      } else if (result === undefined) {
+        resolve(true);
+      }
+    } catch {
+      resolve(false);
+    }
   });
 }
 
