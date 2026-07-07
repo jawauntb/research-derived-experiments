@@ -82,12 +82,22 @@ function render(root: HTMLElement, model: PopupModel, chromeApi: ChromeLike): vo
   queue.className = "queue-row";
   queue.textContent = `${model.state.queueSize} queued`;
 
+  const summary = document.createElement("section");
+  summary.className = "pairing-summary";
+  summary.append(
+    summaryRow("Pairing", model.state.pairingToken ? "Paired" : "Not paired"),
+    summaryRow("Endpoint", model.state.endpoint),
+    summaryRow("Session", model.state.sessionId),
+    summaryRow("Site", model.siteHash && model.state.disabledSiteHashes.includes(model.siteHash) ? "Disabled" : "Allowed"),
+  );
+
   const controls = document.createElement("section");
   controls.className = "button-row";
+  const canControl = Boolean(model.state.pairingToken);
   controls.append(
-    actionButton("Record", () => setRecordingState(root, chromeApi, "recording")),
-    actionButton("Pause 15m", () => setRecordingState(root, chromeApi, "paused", Date.now() + 15 * 60_000)),
-    actionButton("Stop", () => setRecordingState(root, chromeApi, "stopped")),
+    actionButton("Record", () => setRecordingState(root, chromeApi, "recording"), !canControl),
+    actionButton("Pause 15m", () => setRecordingState(root, chromeApi, "paused", Date.now() + 15 * 60_000), !canControl),
+    actionButton("Stop", () => setRecordingState(root, chromeApi, "stopped"), !canControl),
   );
 
   const siteToggle = document.createElement("label");
@@ -118,8 +128,22 @@ function render(root: HTMLElement, model: PopupModel, chromeApi: ChromeLike): vo
     await renderFromRuntime(root, chromeApi);
   });
 
-  page.append(header, queue, controls, siteToggle, togglesMount, pairing);
+  page.append(header, queue, summary, controls, siteToggle, togglesMount, pairing);
   root.replaceChildren(page);
+}
+
+function summaryRow(labelText: string, valueText: string): HTMLElement {
+  const row = document.createElement("div");
+  row.className = "pairing-summary__row";
+
+  const label = document.createElement("span");
+  label.textContent = labelText;
+
+  const value = document.createElement("strong");
+  value.textContent = valueText;
+
+  row.append(label, value);
+  return row;
 }
 
 function pairingForm(model: PopupModel, chromeApi: ChromeLike, onSaved: () => void | Promise<void>): HTMLElement {
@@ -156,10 +180,11 @@ function pairingForm(model: PopupModel, chromeApi: ChromeLike, onSaved: () => vo
   return form;
 }
 
-function actionButton(label: string, onClick: () => void | Promise<void>): HTMLButtonElement {
+function actionButton(label: string, onClick: () => void | Promise<void>, disabled = false): HTMLButtonElement {
   const button = document.createElement("button");
   button.type = "button";
   button.textContent = label;
+  button.disabled = disabled;
   button.addEventListener("click", () => void onClick());
   return button;
 }
@@ -315,6 +340,31 @@ function installStyles(): void {
       font-size: 12px;
     }
 
+    .pairing-summary {
+      border: 1px solid #dbe3de;
+      border-radius: 8px;
+      display: grid;
+      gap: 6px;
+      padding: 10px;
+    }
+
+    .pairing-summary__row {
+      display: grid;
+      gap: 4px;
+      grid-template-columns: 76px minmax(0, 1fr);
+      min-width: 0;
+    }
+
+    .pairing-summary__row span {
+      color: #5a665f;
+      font-size: 12px;
+    }
+
+    .pairing-summary__row strong {
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
     .button-row {
       display: grid;
       gap: 8px;
@@ -336,6 +386,11 @@ function installStyles(): void {
 
     button:hover {
       background: #2d3a34;
+    }
+
+    button:disabled {
+      background: #cbd5cf;
+      cursor: not-allowed;
     }
 
     .toggle-row {

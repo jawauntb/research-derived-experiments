@@ -13,7 +13,11 @@ import {
   type RecordingState,
   type StorageAreaLike,
 } from "../lib/localBridge";
-import { CONTENT_EVENTS_MESSAGE, CONTENT_SETTINGS_MESSAGE } from "../lib/messages";
+import {
+  CONTENT_EVENTS_MESSAGE,
+  CONTENT_SETTINGS_MESSAGE,
+  CONTENT_SETTINGS_UPDATED_MESSAGE,
+} from "../lib/messages";
 
 const RETRY_ALARM_NAME = "inquiry-bridge-retry";
 const RETRY_PERIOD_MINUTES = 0.25;
@@ -34,11 +38,21 @@ type AlarmLike = {
   name: string;
 };
 
+type TabLike = {
+  id?: number;
+};
+
+type TabsLike = {
+  query(query: Record<string, unknown>, callback: (tabs: TabLike[]) => void): void;
+  sendMessage?(tabId: number, message: unknown, callback?: (response: unknown) => void): Promise<unknown> | void;
+};
+
 type ChromeLike = {
   runtime?: RuntimeLike;
   storage?: {
     local?: StorageAreaLike;
   };
+  tabs?: TabsLike;
   alarms?: {
     create(name: string, info: { periodInMinutes: number }): void;
     onAlarm?: {
@@ -50,6 +64,7 @@ type ChromeLike = {
 type BackgroundContext = {
   storage: StorageAreaLike;
   queue: EventQueue;
+  tabs?: TabsLike;
   now: () => number;
 };
 
@@ -148,6 +163,7 @@ async function updateState(
     delete next.pausedUntilMs;
   }
   await saveBridgeState(context.storage, next, BRIDGE_STATE_KEY);
+  await broadcastContentSettings(context, next);
   return { ...next, ok: true };
 }
 
@@ -215,6 +231,47 @@ function contentSettingsFor(state: BridgeState, request: Record<string, unknown>
   return settings;
 }
 
+async function broadcastContentSettings(context: BackgroundContext, state: BridgeState): Promise<void> {
+  const tabs = context.tabs;
+  if (!tabs?.sendMessage) {
+    return;
+  }
+
+  const settings = contentSettingsFor(state, {});
+  const message = {
+    type: CONTENT_SETTINGS_UPDATED_MESSAGE,
+    settings,
+  };
+  const openTabs = await queryTabs(tabs);
+  await Promise.all(
+    openTabs
+      .map((tab) => tab.id)
+      .filter((tabId): tabId is number => typeof tabId === "number")
+      .map((tabId) => sendTabMessage(tabs, tabId, message)),
+  );
+}
+
+async function queryTabs(tabs: TabsLike): Promise<TabLike[]> {
+  return await new Promise((resolve) => {
+    tabs.query({}, (openTabs) => resolve(openTabs));
+  });
+}
+
+async function sendTabMessage(tabs: TabsLike, tabId: number, message: unknown): Promise<void> {
+  await new Promise<void>((resolve) => {
+    try {
+      const result = tabs.sendMessage?.(tabId, message, () => resolve());
+      if (isPromiseLike(result)) {
+        result.then(() => resolve(), () => resolve());
+      } else if (result === undefined) {
+        resolve();
+      }
+    } catch {
+      resolve();
+    }
+  });
+}
+
 function normalizeIncomingEvent(value: unknown, state: BridgeState): EventEnvelope | null {
   try {
     validateEvent(value);
@@ -237,6 +294,7 @@ function installServiceWorker(): void {
   const context: BackgroundContext = {
     storage,
     queue,
+    ...(chromeApi.tabs ? { tabs: chromeApi.tabs } : {}),
     now: () => Date.now(),
   };
 
@@ -292,6 +350,10 @@ function booleanValue(value: unknown, fallback: boolean): boolean {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isPromiseLike<T>(value: unknown): value is Promise<T> {
+  return typeof value === "object" && value !== null && "then" in value;
 }
 
 installServiceWorker();
