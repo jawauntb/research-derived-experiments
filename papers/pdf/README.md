@@ -23,6 +23,11 @@ gitignored). Regenerate with the committed builders:
   the d=2 exponent is rejected in this harness and the measured law has effective dimension near 1.
   Rebuild: `python scripts/build_effective_dimension_pdf.py`
 
+- `concern_weighted_weakness.pdf` — theory note proving the bridge from Bennett
+  extension weakness to group-compatible OOD selection, then extending the bridge
+  to consequence-weighted concern and load-bearing evaluation filters.
+  Rebuild: `python scripts/build_concern_weighted_weakness_pdf.py`
+
 - `unified_metric_weakness_portfolio/finite_representations_portfolio_with_bookmarks.pdf` —
   portfolio packet combining the four July 2026 arXiv-ready papers with front matter,
   reading guide, divider pages, and bookmarks.
