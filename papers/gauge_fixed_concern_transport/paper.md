@@ -1,6 +1,6 @@
 # Gauge-Fixed Transport of Concern
 
-**Subtitle.** A bridge theorem for load-bearing agency, representation, and finite intelligence
+**Subtitle.** A bridge theorem and Modal L4 empirical suite for load-bearing agency, representation, and finite intelligence
 
 **Author.** Jawaun Brown
 
@@ -8,7 +8,7 @@
 
 ## Abstract
 
-This paper proposes a mathematical bridge between four ideas that are often studied separately: weakness in finite hypothesis choice, concern or relevance in embodied cognition, gauge freedom in representation, and causal load-bearing structure at the point of action. The thesis is simple: a finite agent does not merely have representations; it transports concern-weighted distinctions across contexts until they reach a commitment surface, and a claim about intelligence, mind, meaning, or safety becomes scientifically useful only when that transport is gauge-fixed and causally load-bearing. The framework is self-contained. It begins with finite sets and counting, recovers Bennett's weakness principle as the uniform special case, extends it by replacing uniform extension count with concern-weighted extension mass, and then adds transport maps, group actions, sheaf-like gluing conditions, and intervention-based gauge fixing. The main bridge theorem states that if a distinction has positive concern mass, survives a specified transport chain, is separated from gauge-equivalent alternatives by an intervention or commitment, and changes the expected commitment by a nonzero amount, then the distinction is load-bearing relative to that chain. The proof is elementary, but the payoff is broad: it gives one vocabulary for out-of-distribution generalization, causal representation learning, mechanistic interpretability, reafference, allostasis, type-theoretic proof obligations, topological obstruction, and philosophy of mind. The paper ends with experimental templates and application diagrams rather than appeals to prior unpublished work.
+This paper proposes and tests a mathematical bridge between four ideas that are often studied separately: weakness in finite hypothesis choice, concern or relevance in embodied cognition, gauge freedom in representation, and causal load-bearing structure at the point of action. The thesis is simple: a finite agent does not merely have representations; it transports concern-weighted distinctions across contexts until they reach a commitment surface, and a claim about intelligence, mind, meaning, or safety becomes scientifically useful only when that transport is gauge-fixed and causally load-bearing. The framework begins with finite sets and counting, recovers Bennett's weakness principle as the uniform special case, replaces uniform extension count with concern-weighted extension mass, and then adds transport maps, group actions, sheaf-like gluing conditions, and intervention-based gauge fixing. The main bridge theorem proves that if a distinction has positive concern mass, survives a specified transport chain, is separated from gauge-equivalent alternatives, and changes the expected commitment by a nonzero amount, then the distinction is load-bearing relative to that chain. To make the theorem operational, I ran a 320-row Modal L4 synthetic suite across five controlled gates: concern-weighted OOD selection, causal gauge fixing, mechanistic commitment, reafference/null intervention, and moved bottlenecks. All five gates passed on NVIDIA L4 workers. The allowed claim is bounded: this is proof plus synthetic L4 empirical validation, not human, neural, biological, or foundation-model validation. The payoff is a single usable vocabulary for out-of-distribution generalization, causal representation learning, mechanistic interpretability, reafference, allostasis, type-theoretic proof obligations, topological obstruction, and philosophy of mind.
 
 ## 1. Problem
 
@@ -24,11 +24,12 @@ This paper gives a formal answer:
 
 The phrase "concern" here is not used as a folk-psychological attitude. It is a nonnegative measure over distinctions that matter for the system's future control, viability, action, or evaluation. The phrase "gauge" is also not decorative. A gauge is a family of reparameterizations that changes an internal description while leaving the observations and commitments invariant. If there is no intervention, ablation, perturbation, or commitment that separates two descriptions, the difference between them is not yet an identified load-bearing structure.
 
-The paper has three goals.
+The paper has four goals.
 
 1. Prove a bridge theorem that connects weakness, concern, transport, gauge fixing, and commitment.
 2. Show why the theorem is not a metaphor by reducing several known mathematical and experimental ideas to special cases.
-3. Give a practical protocol for designing experiments across machine learning, neuroscience, robotics, cognitive science, and philosophy of mind.
+3. Run controlled experiments that test the theorem's measurement obligations.
+4. Give a practical protocol for designing experiments across machine learning, neuroscience, robotics, cognitive science, and philosophy of mind.
 
 ## 2. Running Picture
 
@@ -361,7 +362,63 @@ The type is inhabited only when the evidence fields are supplied. This prevents 
 
 If local transported distinctions agree on overlaps, they glue to a global section. If they cannot be glued, the failure is not merely noise; it is an obstruction. In practice, this diagnoses context-sensitive systems whose local explanations cannot be combined into one global account.
 
-## 6. Why This Connects So Many Fields
+## 6. Modal L4 Experimental Program
+
+The theorem says that representation claims should pass four measurement obligations: concern weighting, transport survival, gauge fixing, and commitment effect. I therefore ran a synthetic empirical suite where each task has known ground truth and an explicit failure mode. The suite used Modal `L4` workers with `max_containers=64`, `64` seeds, and five tracks, for `320` remote cells. The full run completed as Modal app `ap-GFeFvaDvcvaKGOjWyeciX8`; every row reported `NVIDIA L4` as the visible GPU. The committed payload is `experiments/gauge_fixed_concern_transport/results/gfc_l4_suite_2026_07_07.json`.
+
+![Modal L4 gate status across theorem obligations](figures/fig5_l4_gate_status.png)
+
+The conservative timeout-based budget guard estimated `$63.94 / $250.00` for the full run before dispatch. This is a cost guard, not a scientific result, but it matters methodologically: the experiment is cheap enough to rerun and broad enough to test all theorem obligations.
+
+| Gate | What It Tests | Modal L4 Result |
+| --- | --- | --- |
+| Concern-weighted OOD | Nonuniform concern should change which hypothesis is selected. | PASS; weighted deployment error gain `0.458`; concern selector chose the stable shape hypothesis in `1.000` of seeds. |
+| Causal gauge fixing | Observation alone leaves latent factors underidentified; paired interventions should fix the gauge. | PASS; factor-alignment lift `0.494`; commitment-effect lift `0.164`. |
+| Mechanistic commitment | A decodable feature need not be load-bearing. | PASS; distractor probe AUC `0.999`, but distractor patch effect `0.010`; causal patch effect was `35.964x` larger. |
+| Reafference/null | Self/world attribution requires a null or efference-style gauge fix. | PASS; attribution AUC lift `0.331`; correction-error reduction `0.669`; null-intervention AUC `0.964`. |
+| Moved bottleneck | The operative representation is where patching changes final commitment. | PASS; active-vs-early patch gain `0.488`; active/inactive ratio `69.420`; bottleneck localization `0.930`. |
+
+### Experiment 1: concern-weighted OOD selection
+
+The first experiment creates a shape/texture world. Training and validation correlate texture with label, so the validation-optimal selector chooses the shortcut. Deployment contains high-concern blocks where texture is flipped while shape remains stable. Uniform validation therefore selects a hypothesis with high average validation accuracy but high concern-weighted deployment error. The concern-weighted selector chooses the stable transported distinction.
+
+![Concern weighting changes the selected hypothesis](figures/fig6_concern_weighted_ood.png)
+
+This is the empirical counterpart of Theorems 1 and 2. When the future is not uniformly weighted, raw weakness and average validation can be the wrong selection rule. Concern-weighted weakness changes the selected hypothesis for the right reason: it counts the compatible futures that matter.
+
+### Experiment 2: causal gauge fixing
+
+The second experiment creates two correlated latent factors passed through a random rotation. Observational evidence alone leaves a coordinate gauge: a latent axis can be predictive without being the causal factor. Paired interventions change one true factor while holding the other fixed. The intervention direction identifies the gauge-fixed coordinate, improving both factor alignment and commitment effect.
+
+![Interventions fix the latent gauge](figures/fig7_gauge_fixing.png)
+
+This tests Theorem 4 and the bridge theorem's gauge-fixing premise. The result is not that every causal representation can be recovered from arbitrary data. It is that when the intervention family separates the orbit, the measured latent structure becomes usable at commitment.
+
+### Experiment 3: mechanistic commitment
+
+The third experiment creates a causal hidden feature and a highly decodable distractor. Both predict the label, but only the causal feature participates strongly in the commitment logit. A probe-only standard would overrate the distractor. Patch-style commitment effects separate availability from use.
+
+![Decodability and commitment effect diverge](figures/fig8_probe_vs_patch.png)
+
+The distractor probe AUC is `0.999`, yet its average patch effect is only `0.010`. The causal feature's patch effect is about `36x` larger. This is the cleanest empirical warning in the paper: decodability is not load-bearingness.
+
+### Experiment 4: reafference and null intervention
+
+The fourth experiment simulates a sensorimotor source-attribution task. Sensory change is produced by self-motion plus world change. Without efference copy, the same sensory observation is compatible with multiple source explanations. With efference copy, the system subtracts self-caused change and estimates world change. Null motor interventions provide the gauge-fixing contrast.
+
+### Experiment 5: moved bottleneck
+
+The fifth experiment simulates a long-horizon system in which the final answer depends on either scratchpad state or tool state. Early memory can be present and interpretable while no longer controlling the final commitment. Patching the active bottleneck changes final behavior; patching early encoding or inactive storage does not.
+
+![Temporal transport reaches the action surface](figures/fig9_reafference_and_bottleneck.png)
+
+Together, experiments 4 and 5 test the temporal claim: a distinction matters where the system commits, not necessarily where the distinction first appears.
+
+### Discovery-regime audit
+
+Old regime: a proof-focused bridge paper with diagrams and proposed demos. New regime: a Modal L4 synthetic empirical suite with raw rows, budget guard, GPU metadata, gate decisions, figures, and a rewritten paper. Preserved evidence: the theorem ladder and proof obligations. Rejected alternatives: no-experiment templates, local-only runs, and probe-only evidence. Residual bottleneck: the result is synthetic. It promotes the claim from `scaffold/proof paper` to `synthetic Modal L4 empirical validation result`, and no further.
+
+## 7. Why This Connects So Many Fields
 
 ![Applicability matrix](figures/fig3_applicability_matrix.png)
 
@@ -391,7 +448,7 @@ The framework translates several philosophical questions into proof obligations.
 
 Group theory describes transformations. Representation theory describes how transformations act in latent spaces. Category theory describes structure-preserving transport. Type theory describes what evidence must inhabit a claim. Topology and sheaf theory describe whether local data can be glued globally. Measure theory and continuous optimization replace finite sums with integrals and rate-distortion-like allocation laws. Combinatorics supplies the finite extension counts that make weakness precise.
 
-## 7. Literature Review
+## 8. Literature Review
 
 This section gives the external backbone so the paper can stand without reference to any prior internal corpus.
 
@@ -427,13 +484,13 @@ Noether's theorem is the classic model of symmetry producing conserved structure
 
 Olah, Cammarata, Schubert, Goh, Petrov, and Carter's circuits program studies neural networks by finding human-legible algorithms in weights and activations. Vig, Gehrmann, Belinkov, and Qian apply causal mediation to language models. Geiger, Lu, Icard, and Potts use causal abstraction and interchange interventions to test whether neural representations realize high-level causal variables. Meng, Bau, Andonian, and Belinkov's ROME uses causal tracing and editing to locate factual associations in GPT models. These are concrete examples of the bridge theorem's last two requirements: gauge-fix the representation and test its commitment effect.
 
-## 8. Demonstrations and Experimental Templates
+## 9. External Demonstrations and Next Experiments
 
-The framework is useful only if it changes what one measures. This section gives self-contained demonstrations that can be run in different fields.
+The Modal suite tests the bridge theorem under controlled synthetic ground truth. The framework becomes more useful if the same measurement discipline is exported to messier domains. This section gives self-contained next experiments that can be run in different fields.
 
 ![Failure taxonomy](figures/fig4_failure_taxonomy.png)
 
-### Demo A: OOD model selection
+### Next Experiment A: OOD model selection
 
 **Claim being tested.** A model has learned a shape concept rather than a spurious texture concept.
 
@@ -449,7 +506,7 @@ The framework is useful only if it changes what one measures. This section gives
 
 **Prediction.** The preferred model is not necessarily the shortest, simplest, or best average-validation model. It is the model with the largest concern-weighted transported mass after the gauge-fixing shifts.
 
-### Demo B: Causal representation learning
+### Next Experiment B: Causal representation learning
 
 **Claim being tested.** A latent variable represents a causal factor rather than a visual proxy.
 
@@ -465,7 +522,7 @@ The framework is useful only if it changes what one measures. This section gives
 
 **Prediction.** Pure reconstruction will not identify the causal variable. Weak intervention supervision can.
 
-### Demo C: Mechanistic interpretability
+### Next Experiment C: Mechanistic interpretability
 
 **Claim being tested.** A transformer component stores or computes a factual association used in the answer.
 
@@ -481,7 +538,7 @@ The framework is useful only if it changes what one measures. This section gives
 
 **Prediction.** A probe-only feature can fail the bridge theorem. A patched or edited mechanism with specific answer change passes a stronger load-bearing test.
 
-### Demo D: Reafference and self-world attribution
+### Next Experiment D: Reafference and self-world attribution
 
 **Claim being tested.** A system distinguishes self-caused sensory change from external change.
 
@@ -497,7 +554,7 @@ The framework is useful only if it changes what one measures. This section gives
 
 **Prediction.** The self/world distinction exists for the system only when the transported prediction changes commitment.
 
-### Demo E: Long-horizon tool agents
+### Next Experiment E: Long-horizon tool agents
 
 **Claim being tested.** An agent remembers a future-relevant commitment.
 
@@ -513,7 +570,7 @@ The framework is useful only if it changes what one measures. This section gives
 
 **Prediction.** Memory is located at the bottleneck that controls the later commitment, not necessarily where the information first appeared.
 
-## 9. Continuous Version
+## 10. Continuous Version
 
 The finite theory is the clean proof base. For continuous systems, replace the finite set S(c) with a measurable space X_c, the concern density with a measure kappa_c, and the transport map with a Markov kernel K_m.
 
@@ -550,7 +607,7 @@ rho*(x) proportional to w(x)^{d_eff/(d_eff + 2)}.
 
 The exponent depends on effective dimension, not always physical dimension. This matters because a system can live in a two-dimensional arena while allocating representation along an effectively one-dimensional concern gradient. Continuous math therefore does not replace the finite theorem; it extends the same concern-transport logic to densities, flows, manifolds, and learned metrics.
 
-## 10. What Would Make This Groundbreaking
+## 11. What Would Make This Groundbreaking
 
 The framework becomes more than a synthesis if it produces new tests and laws. The paper suggests four.
 
@@ -572,7 +629,7 @@ In systems with memory, tools, recurrence, or institutions, the operative repres
 
 These are intentionally falsifiable. A field can reject the framework by showing cases where raw weakness beats concern-weighted weakness under known nonuniform concern, where ungauge-fixed probes reliably identify mechanisms across interventions, or where commitment effects are unnecessary for robust explanatory success.
 
-## 11. Practical Protocol
+## 12. Practical Protocol
 
 To use the theorem in a new domain:
 
@@ -586,17 +643,19 @@ To use the theorem in a new domain:
 
 This protocol is deliberately stricter than ordinary correlation, probing, or average validation. That is the point. It turns "the system has X" into a claim with inspectable proof obligations.
 
-## 12. Limits and Nonclaims
+## 13. Limits and Nonclaims
 
 This paper does not claim that concern is always scalar. Many systems require vector-valued, partially ordered, or context-dependent concern. The finite scalar case is the entry point, not the final ontology.
 
 It does not claim that every representation must be conscious, semantic, or morally relevant. Load-bearing concern is a general evidential structure; consciousness and moral status require additional arguments.
 
+It does not claim that the Modal L4 experiments validate human, neural, biological, or foundation-model generality. They validate the theorem's measurement obligations in synthetic controlled regimes with known ground truth. That is a real empirical step beyond a proof-only paper, but it remains bounded.
+
 It does not claim that category theory, type theory, topology, or gauge theory are required to run every experiment. The finite theorem can be used with ordinary sets, interventions, and effect sizes. The higher mathematics becomes useful when contexts compose, local explanations conflict, symmetries matter, or evidence obligations need formal checking.
 
 It does not claim that proof replaces experiment. The proof tells us what must be measured. The application lives or dies by the interventions.
 
-## 13. Conclusion
+## 14. Conclusion
 
 The latent unity across weakness, concern, representation, topology, type theory, mechanistic interpretability, and cognitive science is transport. A finite agent is not explained by locating a representation in space. It is explained by showing how a concern-weighted distinction survives transformations through time and becomes causally active where the system commits.
 
@@ -607,7 +666,7 @@ Load_gamma(h) >= (initial concern mass - transport loss)
                 * (gauge-fixed commitment effect).
 ```
 
-This inequality is not the whole theory of intelligence. It is a load-bearing gate for theories of intelligence. It tells us when a distinction has earned the right to be treated as meaningful for a finite system.
+The Modal L4 suite shows that the inequality is not just prose. In five synthetic regimes, the correct empirical question was the one the theorem demanded: which distinction survived concern weighting, which gauge was fixed, which feature changed commitment, and which bottleneck controlled the final surface? This inequality is not the whole theory of intelligence. It is a load-bearing gate for theories of intelligence. It tells us when a distinction has earned the right to be treated as meaningful for a finite system.
 
 ## References
 

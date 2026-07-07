@@ -29,9 +29,9 @@ gitignored). Regenerate with the committed builders:
   Rebuild: `python scripts/build_concern_weighted_weakness_pdf.py`
 
 - `gauge_fixed_concern_transport.pdf` — self-contained bridge paper deriving
-  gauge-fixed transport of concern as a proof obligation for load-bearing
-  representation across ML, interpretability, neuro-control, philosophy, and
-  mathematical structure.
+  gauge-fixed transport of concern, then testing the proof obligations with a
+  320-row Modal L4 synthetic suite across concern weighting, gauge fixing,
+  mechanistic commitment, reafference/null control, and moved bottlenecks.
   Rebuild: `python scripts/build_gauge_fixed_concern_transport_pdf.py`
 
 - `unified_metric_weakness_portfolio/finite_representations_portfolio_with_bookmarks.pdf` —

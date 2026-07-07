@@ -387,7 +387,7 @@ def figure_matrix() -> Path:
     fig, ax = plt.subplots(figsize=(6.8, 3.2))
     im = ax.imshow(data, cmap="YlGnBu", vmin=0, vmax=3)
     ax.set_xticks(range(len(cols)))
-    ax.set_xticklabels(cols, fontsize=8.3)
+    ax.set_xticklabels(cols, fontsize=7.8, rotation=30, ha="right")
     ax.set_yticks(range(len(rows)))
     ax.set_yticklabels(rows, fontsize=8.3)
     for i, row in enumerate(data):
