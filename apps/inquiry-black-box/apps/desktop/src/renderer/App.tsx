@@ -2,6 +2,11 @@ import type { EventEnvelope, LabelPayload, SessionRecord } from "@inquiry/schema
 import { renderCameraPanel, type CameraPermissionState } from "./camera/CameraPanel";
 import type { CameraFeatureWindow } from "./camera/featureWorker";
 import { renderSessionControls, type SelfLabel } from "./session/SessionControls";
+import {
+  defaultPrivacySettingsView,
+  renderPrivacySettings,
+  type PrivacySettingsView,
+} from "./settings/PrivacySettings";
 
 export type InquirySessionFacade = {
   currentSession: () => Promise<SessionRecord | null>;
@@ -18,9 +23,17 @@ export type InquiryCameraFacade = {
   appendFeatureWindow: (featureWindow: CameraFeatureWindow) => Promise<EventEnvelope>;
 };
 
+export type InquiryPrivacyFacade = {
+  currentSettings: () => Promise<PrivacySettingsView>;
+  setSignalEnabled: (key: keyof PrivacySettingsView["signals"], enabled: boolean) => Promise<PrivacySettingsView>;
+  exportSession: () => Promise<void>;
+  deleteSession: () => Promise<void>;
+};
+
 export type InquiryDesktopBridge = {
   session: InquirySessionFacade;
   camera: InquiryCameraFacade;
+  privacy?: InquiryPrivacyFacade;
 };
 
 export type AppViewModel = {
@@ -30,6 +43,7 @@ export type AppViewModel = {
     permission: CameraPermissionState;
     featureWindow?: CameraFeatureWindow;
   };
+  privacy: PrivacySettingsView;
 };
 
 export function createInitialAppViewModel(session: SessionRecord | null = null): AppViewModel {
@@ -39,6 +53,13 @@ export function createInitialAppViewModel(session: SessionRecord | null = null):
       enabled: false,
       permission: "prompt",
     },
+    privacy: defaultPrivacySettingsView({
+      browser: true,
+      camera: false,
+      typingMetrics: true,
+      notifications: false,
+      cloudSync: false,
+    }),
   };
 }
 
@@ -46,10 +67,15 @@ export function renderApp(root: HTMLElement, bridge: InquiryDesktopBridge, initi
   let view = initial;
   const sessionRoot = document.createElement("div");
   const cameraRoot = document.createElement("div");
-  root.replaceChildren(sessionRoot, cameraRoot);
+  const privacyRoot = document.createElement("div");
+  root.replaceChildren(sessionRoot, cameraRoot, privacyRoot);
 
   const refresh = async (): Promise<void> => {
-    view = { ...view, session: await bridge.session.currentSession() };
+    view = {
+      ...view,
+      session: await bridge.session.currentSession(),
+      privacy: bridge.privacy ? await bridge.privacy.currentSettings() : view.privacy,
+    };
     render();
   };
 
@@ -87,6 +113,18 @@ export function renderApp(root: HTMLElement, bridge: InquiryDesktopBridge, initi
         render();
       },
     });
+    if (bridge.privacy) {
+      renderPrivacySettings(privacyRoot, view.privacy, {
+        setSignalEnabled: async (key, enabled) => {
+          view = { ...view, privacy: await bridge.privacy!.setSignalEnabled(key, enabled) };
+          render();
+        },
+        exportSession: bridge.privacy.exportSession,
+        deleteSession: bridge.privacy.deleteSession,
+      });
+    } else {
+      privacyRoot.replaceChildren();
+    }
   };
 
   render();

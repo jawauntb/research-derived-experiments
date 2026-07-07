@@ -12,7 +12,7 @@
     "lint": "bun run scripts/lint.ts",
     "typecheck": "tsc -b",
     "test": "bun test apps/desktop/tests apps/extension/tests apps/cloud/tests packages/schema/tests packages/signals/tests",
-    "test:e2e": "bun test tests/e2e/*.test.ts",
+    "test:e2e": "bun test tests/e2e/*.ts",
     "dev:desktop": "bun --cwd apps/desktop run dev",
     "dev:extension": "bun --cwd apps/extension run build",
     "dev:cloud": "bun --cwd apps/cloud run dev",

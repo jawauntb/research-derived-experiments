@@ -1,4 +1,3 @@
-import { createEvent } from "@inquiry/schema";
 import type { InquiryDatabase } from "../db";
 
 export function deleteLocalSession(db: InquiryDatabase, sessionId: string): { session_id: string; deleted: true } {
@@ -12,16 +11,13 @@ export function queueCloudDeletion(db: InquiryDatabase, sessionId: string): void
     return;
   }
 
-  db.appendEvent(
-    createEvent({
+  db.enqueueSyncPayload({
+    session_id: null,
+    payload: {
+      action: "delete-cloud-aggregates",
       session_id: sessionId,
-      source: "desktop-system",
-      source_version: "desktop@0.1.0",
-      monotonic_ms: 0,
-      event_type: "sync.queued",
-      payload: { action: "delete-cloud-aggregates", session_id: sessionId },
-      privacy_class: "redacted-sync",
-      retention_policy: "cloud-redacted",
-    }),
-  );
+      title: session.title,
+    },
+    state: "queued",
+  });
 }

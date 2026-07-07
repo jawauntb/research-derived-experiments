@@ -1,0 +1,44 @@
+# Privacy Model
+
+Inquiry Black Box treats privacy controls as product behavior. The default app
+captures derived signals, not raw surveillance artifacts.
+
+## Default Capture
+
+- Browser: scroll, dwell, visibility, tab, media, selection length, copy/highlight
+  metrics, and typing rhythm aggregates.
+- Camera: face-present ratio, gaze-away proxy, blink proxy, head-pose variance,
+  motion score, confidence, and quality flags.
+- Typing: burst length, pause length, backspace count, edit churn, and field role.
+- User input: explicit labels, probes, recall answers, notification outcomes.
+
+## Not Stored By Default
+
+- Raw camera frames or image blobs.
+- Raw key names, raw typed text, passwords, or document text.
+- Full page text unless a future document-level opt-in explicitly allows it.
+- Hidden/background recording after the user stops or pauses a session.
+
+## Privacy Classes
+
+- `public`: safe metadata and documentation-like payloads.
+- `local-derived`: derived local features that stay on device by default.
+- `redacted-sync`: payloads eligible for optional cloud sync.
+- `document-opt-in`: user-selected document snapshots for explicit analysis.
+- `debug-sensitive`: local debug artifacts omitted from default export.
+- `blocked-sensitive`: payloads that should be rejected by normal flows.
+
+Only `public` and `redacted-sync` are cloud-sync eligible. Default export omits
+`debug-sensitive` and `blocked-sensitive` events.
+
+## Deletion
+
+Local deletion removes the session and dependent local events. If cloud sync was
+used, a redacted cloud-deletion request is placed in `sync_queue` without a
+foreign-key dependency on the deleted session, so the delete request survives.
+
+## Notifications
+
+Notifications are off by default. When enabled, they are generated only from
+inspectable local markers, respect quiet hours and cooldowns, and record whether
+the user accepted, snoozed, dismissed, or ignored the prompt.

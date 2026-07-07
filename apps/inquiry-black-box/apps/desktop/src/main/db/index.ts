@@ -31,9 +31,21 @@ export type InquiryDatabase = {
   listEvents(sessionId: string): EventEnvelope[];
   exportSessionJsonl(sessionId: string): string;
   deleteSession(sessionId: string): void;
+  enqueueSyncPayload(input: { payload: JsonObject; session_id?: string | null; state?: string }): SyncQueueRecord;
+  listSyncQueue(): SyncQueueRecord[];
   setSignalEnabled(key: keyof SignalSettings, enabled: boolean): void;
   signalSettings(): SignalSettings;
   close(): void;
+};
+
+export type SyncQueueRecord = {
+  sync_id: string;
+  session_id: string | null;
+  payload: JsonObject;
+  state: string;
+  attempt_count: number;
+  created_at: string;
+  updated_at: string;
 };
 
 export function createInquiryDatabase(path = ":memory:"): InquiryDatabase {
@@ -141,6 +153,35 @@ export function createInquiryDatabase(path = ":memory:"): InquiryDatabase {
     deleteSession(sessionId) {
       db.query("DELETE FROM sessions WHERE session_id = $sessionId").run({ sessionId });
     },
+    enqueueSyncPayload(input) {
+      const now = new Date().toISOString();
+      const record: SyncQueueRecord = {
+        sync_id: crypto.randomUUID(),
+        session_id: input.session_id ?? null,
+        payload: input.payload,
+        state: input.state ?? "queued",
+        attempt_count: 0,
+        created_at: now,
+        updated_at: now,
+      };
+
+      db.query(
+        `INSERT INTO sync_queue (
+          sync_id, session_id, payload, state, attempt_count, created_at, updated_at
+        ) VALUES (
+          $sync_id, $session_id, $payload, $state, $attempt_count, $created_at, $updated_at
+        )`,
+      ).run({
+        ...record,
+        payload: JSON.stringify(record.payload),
+      });
+
+      return record;
+    },
+    listSyncQueue() {
+      const rows = db.query("SELECT * FROM sync_queue ORDER BY created_at, sync_id").all() as Record<string, unknown>[];
+      return rows.map(rowToSyncQueueRecord);
+    },
     setSignalEnabled(key, enabled) {
       db.query(
         `INSERT INTO signal_settings (key, enabled, updated_at)
@@ -204,6 +245,18 @@ function rowToEvent(row: Record<string, unknown>): EventEnvelope {
   };
   validateEvent(event);
   return event;
+}
+
+function rowToSyncQueueRecord(row: Record<string, unknown>): SyncQueueRecord {
+  return {
+    sync_id: String(row.sync_id),
+    session_id: row.session_id === null ? null : String(row.session_id),
+    payload: JSON.parse(String(row.payload)) as JsonObject,
+    state: String(row.state),
+    attempt_count: Number(row.attempt_count),
+    created_at: String(row.created_at),
+    updated_at: String(row.updated_at),
+  };
 }
 
 function rowToSession(row: Record<string, unknown>): SessionRecord {

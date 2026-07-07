@@ -30,3 +30,12 @@ Packages:
 Cloud sync, desktop notifications, debug captures, and any document text upload
 are opt-in. The default local loop stores derived events, timing aggregates, and
 quality flags only.
+
+## Guides
+
+- [Agent guide](AGENTS.md)
+- [Local development](docs/local-dev.md)
+- [Architecture](docs/architecture.md)
+- [Privacy model](docs/privacy-model.md)
+- [Deployment](docs/deployment.md)
+- [Research validation](docs/research-validation.md)
