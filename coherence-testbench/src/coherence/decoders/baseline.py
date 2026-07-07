@@ -32,7 +32,6 @@ class PerSubjectRiemannDecoder:
         from sklearn.linear_model import LogisticRegression
         from sklearn.metrics import balanced_accuracy_score
         from sklearn.model_selection import StratifiedKFold
-        from sklearn.pipeline import make_pipeline
 
         # Also drop epochs whose raw values contain NaN/Inf before we even
         # try to compute covariance.
@@ -53,21 +52,31 @@ class PerSubjectRiemannDecoder:
         baccs: list[float] = []
         for train_idx, test_idx in skf.split(X, y):
             try:
-                # Lwf (Ledoit-Wolf) is more numerically stable than OAS for
-                # small samples with rank-deficient EEG.
-                clf = make_pipeline(
-                    Covariances(estimator="lwf"),
-                    TangentSpace(),
-                    LogisticRegression(max_iter=1000),
-                )
-                # Sanity-check post-transform features BEFORE fit — pyriemann
-                # can silently emit NaN on bad covariances.
+                # LWF shrinkage is more numerically stable than OAS on
+                # rank-deficient EEG; still, small samples can produce PSD-
+                # but-singular matrices, so we regularize before tangent
+                # space (matches cross_subject.py's ridge).
                 cov = Covariances(estimator="lwf").fit_transform(X[train_idx])
+                n_ch = cov.shape[-1]
+                trace = np.trace(cov, axis1=-2, axis2=-1).mean()
+                ridge = 1e-6 * max(float(trace) / n_ch, 1.0)
+                cov = cov + ridge * np.eye(n_ch, dtype=cov.dtype)[None, :, :]
                 ts_feats = TangentSpace().fit_transform(cov)
                 if not np.isfinite(ts_feats).all():
                     continue
-                clf.fit(X[train_idx], y[train_idx])
-                preds = clf.predict(X[test_idx])
+                # Rebuild the pipeline with the same ridged-cov approach for
+                # the actual fit. We compute train/test features manually so
+                # test-side covariance also gets the ridge.
+                cov_test = Covariances(estimator="lwf").fit_transform(X[test_idx])
+                cov_test = cov_test + ridge * np.eye(n_ch, dtype=cov_test.dtype)[None, :, :]
+                ts = TangentSpace()
+                Ftr = ts.fit_transform(cov)
+                Fte = ts.transform(cov_test)
+                if not np.isfinite(Fte).all():
+                    continue
+                lr = LogisticRegression(max_iter=1000)
+                lr.fit(Ftr, y[train_idx])
+                preds = lr.predict(Fte)
                 baccs.append(balanced_accuracy_score(y[test_idx], preds))
             except (ValueError, np.linalg.LinAlgError):
                 continue

@@ -35,14 +35,21 @@ def _riemannian_recentering(X: np.ndarray, reference_mean=None):
     # Ledoit-Wolf shrinkage is more numerically stable than OAS on
     # rank-deficient EEG. See baseline.py for the same choice.
     covs = Covariances(estimator="lwf").transform(X)
+    n_ch = covs.shape[-1]
     # Substitute the identity matrix for any covariance that came out
     # non-finite so we keep row alignment with y/subj vectors. Identity
-    # contributes zero information but doesn't crash the Riemann mean.
-    n_ch = covs.shape[-1]
+    # is positive-definite and contributes zero information.
     finite = np.isfinite(covs).reshape(len(covs), -1).all(axis=1)
     if not finite.all():
         covs = covs.copy()
         covs[~finite] = np.eye(n_ch, dtype=covs.dtype)
+    # Ensure strict positive-definiteness so pyriemann's Riemannian mean
+    # doesn't raise "Matrices must be positive definite". LWF can still
+    # emit matrices that are PSD but numerically singular; add a small
+    # trace-scaled ridge.
+    trace = np.trace(covs, axis1=-2, axis2=-1).mean()
+    ridge = 1e-6 * max(float(trace) / n_ch, 1.0)
+    covs = covs + ridge * np.eye(n_ch, dtype=covs.dtype)[None, :, :]
     if reference_mean is None:
         reference_mean = mean_riemann(covs)
     whitener = invsqrtm(reference_mean)
