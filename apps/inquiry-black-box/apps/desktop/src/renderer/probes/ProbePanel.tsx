@@ -1,3 +1,5 @@
+import type { RepairCandidate } from "@inquiry/signals";
+
 export type ProbePrompt = {
   probe_id: string;
   question: string;
@@ -5,9 +7,15 @@ export type ProbePrompt = {
 };
 
 export type ProbeAnswer = {
-  probe_id: string;
+  repair_id: string;
   answer: string;
   confidence: number;
+};
+
+export type ProbePanelActions = {
+  acceptRepair: (repair_id: RepairCandidate["repair_id"]) => void | Promise<void>;
+  answerRepair: (answer: ProbeAnswer) => void | Promise<void>;
+  dismissRepair: (repair_id: RepairCandidate["repair_id"]) => void | Promise<void>;
 };
 
 export function createRecallProbe(source_marker_id: string, question: string): ProbePrompt {
@@ -20,8 +28,8 @@ export function createRecallProbe(source_marker_id: string, question: string): P
 
 export function renderProbePanel(
   container: HTMLElement,
-  prompt: ProbePrompt | null,
-  onAnswer: (answer: ProbeAnswer) => void | Promise<void>,
+  prompt: RepairCandidate | null,
+  actions: ProbePanelActions,
 ): void {
   const section = document.createElement("section");
   section.className = "probe-panel";
@@ -32,7 +40,10 @@ export function renderProbePanel(
   }
 
   const question = document.createElement("h2");
-  question.textContent = prompt.question;
+  question.textContent = prompt.prompt;
+
+  const details = document.createElement("p");
+  details.textContent = `${prompt.action} (${Math.round(prompt.confidence * 100)}%). ${prompt.limitation}`;
 
   const textarea = document.createElement("textarea");
   textarea.rows = 4;
@@ -44,17 +55,31 @@ export function renderProbePanel(
   confidence.step = "0.1";
   confidence.value = "0.5";
 
+  const accept = document.createElement("button");
+  accept.type = "button";
+  accept.textContent = "Start";
+  accept.addEventListener("click", () => {
+    void actions.acceptRepair(prompt.repair_id);
+  });
+
   const submit = document.createElement("button");
   submit.type = "button";
   submit.textContent = "Save";
   submit.addEventListener("click", () => {
-    void onAnswer({
-      probe_id: prompt.probe_id,
+    void actions.answerRepair({
+      repair_id: prompt.repair_id,
       answer: textarea.value,
       confidence: Number(confidence.value),
     });
   });
 
-  section.append(question, textarea, confidence, submit);
+  const dismiss = document.createElement("button");
+  dismiss.type = "button";
+  dismiss.textContent = "Dismiss";
+  dismiss.addEventListener("click", () => {
+    void actions.dismissRepair(prompt.repair_id);
+  });
+
+  section.append(question, details, textarea, confidence, accept, submit, dismiss);
   container.replaceChildren(section);
 }

@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer } from "electron";
 import type { LabelPayload, SignalSettings } from "@inquiry/schema";
+import type { RepairCandidate } from "@inquiry/signals";
 import type { CameraFeatureWindow } from "../renderer/camera/featureWorker";
 
 type CameraPermissionState = "prompt" | "granted" | "denied" | "unavailable";
@@ -53,6 +54,13 @@ const desktopBridge = {
   },
   replay: {
     report: () => invoke("inquiry:replay:report"),
+  },
+  repair: {
+    accept: (repair_id: RepairCandidate["repair_id"]) => invoke("inquiry:repair:accept", repair_id),
+    answer: (input: { repair_id: RepairCandidate["repair_id"]; answer: string; confidence: number }) =>
+      invoke("inquiry:repair:answer", input),
+    dismiss: (input: { repair_id: RepairCandidate["repair_id"]; reason?: string }) =>
+      invoke("inquiry:repair:dismiss", input),
   },
 };
 

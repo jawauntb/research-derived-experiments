@@ -53,10 +53,30 @@ describe("desktop shell IPC facade", () => {
 
     const replay = await facade.replayReport();
     expect(replay?.markers.some((marker) => marker.kind === "skim-risk")).toBe(true);
+    const repair = replay?.repair_candidates[0];
+    expect(repair?.action).toBe("recall-question");
+    if (!repair) {
+      throw new Error("expected repair candidate");
+    }
+
+    const requestedProbe = await facade.acceptRepair(repair.repair_id);
+    expect(requestedProbe.event_type).toBe("probe.requested");
+    const answerEvents = await facade.answerRepair({
+      repair_id: repair.repair_id,
+      answer: "The span should answer what claim the fast scroll skipped.",
+      confidence: 0.7,
+    });
+    const dismissed = await facade.dismissRepair({ repair_id: repair.repair_id, reason: "handled in notes" });
+    expect(answerEvents.map((event) => event.event_type)).toEqual(["probe.answered", "repair.outcome"]);
+    expect(dismissed.event_type).toBe("repair.outcome");
+    expect(database.listRepairEvents(started.session_id).map((event) => event.event_type)).toEqual(
+      expect.arrayContaining(["repair.candidate", "probe.requested", "probe.answered", "repair.outcome"]),
+    );
 
     const exported = await facade.exportSession();
     expect(exported.jsonl).toContain("Shell fixture");
     expect(exported.jsonl).toContain("near-breakthrough");
+    expect(exported.jsonl).toContain("repair.outcome");
 
     const deleted = await facade.deleteSession();
     expect(deleted.deleted).toBe(true);

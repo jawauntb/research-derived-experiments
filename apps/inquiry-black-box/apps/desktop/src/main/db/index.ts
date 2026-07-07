@@ -48,6 +48,7 @@ export type InquiryDatabase = {
     monotonic_ms?: number;
   }): EventEnvelope;
   listEvents(sessionId: string): EventEnvelope[];
+  listRepairEvents(sessionId: string): EventEnvelope[];
   exportSessionJsonl(sessionId: string): string;
   deleteSession(sessionId: string): void;
   enqueueSyncPayload(input: { payload: JsonObject; session_id?: string | null; state?: string }): SyncQueueRecord;
@@ -160,6 +161,11 @@ export function createInquiryDatabase(path = ":memory:"): InquiryDatabase {
         .query("SELECT * FROM events WHERE session_id = $sessionId ORDER BY monotonic_ms, captured_at")
         .all({ sessionId }) as Record<string, unknown>[];
       return rows.map(rowToEvent);
+    },
+    listRepairEvents(sessionId) {
+      return this.listEvents(sessionId).filter(
+        (event) => event.event_type.startsWith("repair.") || event.event_type.startsWith("probe."),
+      );
     },
     exportSessionJsonl(sessionId) {
       const session = this.getSession(sessionId);

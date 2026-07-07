@@ -1,8 +1,10 @@
 import type { EventEnvelope, LabelPayload, SessionRecord } from "@inquiry/schema";
+import type { RepairCandidate } from "@inquiry/signals";
 import type { DesktopShellStatus } from "../main/ipc";
 import type { SessionReplayReport } from "../main/reports/sessionReplay";
 import { renderCameraPanel, type CameraPermissionState } from "./camera/CameraPanel";
 import type { CameraFeatureWindow } from "./camera/featureWorker";
+import { renderProbePanel, type ProbeAnswer } from "./probes/ProbePanel";
 import { renderReplayTimeline } from "./replay/ReplayTimeline";
 import { renderSessionControls, type SelfLabel } from "./session/SessionControls";
 import {
@@ -43,12 +45,18 @@ export type InquiryDesktopBridge = {
   replay?: {
     report: () => Promise<SessionReplayReport | null>;
   };
+  repair?: {
+    accept: (repair_id: RepairCandidate["repair_id"]) => Promise<EventEnvelope>;
+    answer: (input: ProbeAnswer) => Promise<EventEnvelope[]>;
+    dismiss: (input: { repair_id: RepairCandidate["repair_id"]; reason?: string }) => Promise<EventEnvelope>;
+  };
 };
 
 export type AppViewModel = {
   session: SessionRecord | null;
   status?: DesktopShellStatus;
   replay?: SessionReplayReport | null;
+  repairCandidate?: RepairCandidate | null;
   camera: {
     enabled: boolean;
     permission: CameraPermissionState;
@@ -81,7 +89,8 @@ export function renderApp(root: HTMLElement, bridge: InquiryDesktopBridge, initi
   const cameraRoot = document.createElement("div");
   const privacyRoot = document.createElement("div");
   const replayRoot = document.createElement("div");
-  root.replaceChildren(headerRoot, sessionRoot, cameraRoot, privacyRoot, replayRoot);
+  const probeRoot = document.createElement("div");
+  root.replaceChildren(headerRoot, sessionRoot, cameraRoot, privacyRoot, replayRoot, probeRoot);
 
   const refresh = async (): Promise<void> => {
     const status = bridge.status ? await bridge.status.current() : undefined;
@@ -93,6 +102,7 @@ export function renderApp(root: HTMLElement, bridge: InquiryDesktopBridge, initi
       session,
       privacy: bridge.privacy ? await bridge.privacy.currentSettings() : view.privacy,
       replay,
+      repairCandidate: replay?.repair_candidates[0] ?? null,
     };
     render();
   };
@@ -155,6 +165,24 @@ export function renderApp(root: HTMLElement, bridge: InquiryDesktopBridge, initi
       renderReplayTimeline(replayRoot, view.replay);
     } else {
       replayRoot.replaceChildren();
+    }
+    if (bridge.repair) {
+      renderProbePanel(probeRoot, view.repairCandidate ?? null, {
+        acceptRepair: async (repair_id) => {
+          await bridge.repair!.accept(repair_id);
+          await refresh();
+        },
+        answerRepair: async (answer) => {
+          await bridge.repair!.answer(answer);
+          await refresh();
+        },
+        dismissRepair: async (repair_id) => {
+          await bridge.repair!.dismiss({ repair_id });
+          await refresh();
+        },
+      });
+    } else {
+      probeRoot.replaceChildren();
     }
   };
 

@@ -163,6 +163,8 @@ describe("local session fixture loop", () => {
     expect(replay.heatmap.some((segment) => segment.stimulus_evidence.length > 0)).toBe(true);
     expect(replay.heatmap.some((segment) => segment.evidence_event_ids.length > 0)).toBe(true);
     expect(replay.heatmap.some((segment) => segment.evidence_event_ids.includes(stimulusAttached.event_id))).toBe(true);
+    expect(replay.repair_candidates.length).toBeGreaterThan(0);
+    expect(replay.repair_candidates.every((candidate) => candidate.evidence_event_ids.length > 0)).toBe(true);
     expect(exportedLines.some((line) => line.event?.event_id === "fixture-scroll-1")).toBe(true);
     expect(JSON.stringify(replay)).not.toContain("Stimulus Difficulty and Losing the Thread");
     expect(exported.jsonl).not.toContain("rawFrame");

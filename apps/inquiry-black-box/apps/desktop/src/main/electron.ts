@@ -27,6 +27,9 @@ function registerHandlers(nextFacade: DesktopIpcFacade): void {
   ipcMain.handle("inquiry:privacy:export", () => nextFacade.exportSession());
   ipcMain.handle("inquiry:privacy:delete", () => nextFacade.deleteSession());
   ipcMain.handle("inquiry:replay:report", () => nextFacade.replayReport());
+  ipcMain.handle("inquiry:repair:accept", (_event, repair_id) => nextFacade.acceptRepair(repair_id));
+  ipcMain.handle("inquiry:repair:answer", (_event, input) => nextFacade.answerRepair(input));
+  ipcMain.handle("inquiry:repair:dismiss", (_event, input) => nextFacade.dismissRepair(input));
 }
 
 async function createWindow(): Promise<void> {
