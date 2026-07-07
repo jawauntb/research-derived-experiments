@@ -173,3 +173,69 @@ exp3), but per the pre-reg gate the aggregate result is INCONCLUSIVE.
   (Branch-E-like).
 - The residualized-eyetrack ablation (§5) is still worth doing but
   the pre-reg gate is what it is.
+
+## 7. Residualized run (2026-07-07 02:52 EDT) — the confound-controlled read
+
+Fired `residual-20260707-022913` after §5's recommendation. Frisch-
+Waugh-Lovell setup: on each train fold, fit `Ridge(Age, Sex) → quiz`,
+compute residuals for both train and test, then train the eyetrack
+MLP to predict the residual. The Spearman ρ between predicted-residual
+and true-residual on held-out subjects is the eyetrack signal that is
+NOT explainable by static demographics.
+
+### Curves
+
+| n_train | eyetrack raw ρ | demo-only ρ | **residual ρ** |
+|---:|---:|---:|---:|
+|  8 | +0.165 | −0.026 | +0.019 |
+| 16 | +0.201 | +0.067 | +0.159 |
+| **24** | **+0.216** | **+0.073** | **+0.207** ← peak |
+| 32 | +0.091 | +0.027 | +0.109 |
+
+### Per-experiment ρ_residual (all folds)
+
+| exp | subjects | records | mean ρ_residual |
+|---:|---:|---:|---:|
+|  2  |    31    |   150   |    +0.200       |
+|  3  |    29    |   161   |    +0.112       |
+|  4  |    42    |   126   |    +0.083       |
+
+### Surprises worth naming
+
+- **exp2 is stronger on residuals than raw.** ρ raw = +0.171; ρ
+  residual = +0.200. Meaning exp2's eyetrack signal is genuinely
+  per-recording, not just tracking demographic covariates.
+- **exp3 is DRAMATICALLY weaker on residuals than raw.** ρ raw =
+  +0.382; ρ residual = +0.112. So most of exp3's headline number
+  was Age+Sex explaining variance in quiz score, not eyetrack
+  features doing the work. This is a big update on how much of the
+  original GO story was really about a modality-agnostic
+  cross-subject-demographics effect.
+- **exp4 is weakest on both raw AND residuals** (~0.11 and +0.083).
+  Consistent with earlier finding that exp4's design (fewer
+  attentive-session recordings per subject) leaves less to decode.
+
+### Bottom-line reading
+
+Eyetrack DOES carry cross-subject signal above and beyond static
+demographics. Peak residual ρ = +0.207 at n_train=24 is a real,
+non-demographic effect. But:
+
+- The peak residual (0.207) doesn't reach the hypothetical GO
+  threshold of the original binary bench (0.58 BA). It IS above
+  the quiz pre-reg's 0.15 threshold, but the pre-reg was for the
+  raw target, not the residual.
+- The signal is highest at n=24 and DROPS at n=32 (which is
+  exp4-only). So there's no clean "more data → better" story.
+- Most of the original ρ = 0.28 headline was demographic
+  correlation, not eyetrack-specific.
+
+Any external narrative built on this should quote **residual ρ = 0.20
+at n=24**, not the raw 0.28, and should acknowledge that the effect
+is heterogeneous across experiments (exp2 stronger, exp3 mostly
+demographic, exp4 weak).
+
+Artifacts:
+- `phase0-results:/residual-20260707-022913/report.md`
+- `phase0-results:/residual-20260707-022913/shard_outputs.json`
+- Modal app: `coherence-testbench-eyetrack-quiz-residual`.
