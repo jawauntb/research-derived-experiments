@@ -64,16 +64,23 @@ def epoch_to_arrays(
     sfreq = int(raw.info["sfreq"])
     win = int(cfg.epoch_seconds * sfreq)
     step = max(1, int(win * (1 - cfg.epoch_overlap)))
-    data = raw.get_data(picks="eeg")  # (n_ch, n_samp), Volts
+    # mne returns Volts (~1e-6 scale). Riemannian covariance on Volt-scale
+    # data underflows: sample covariances become tiny, matrix inverses blow
+    # up (overflow in scipy), and every downstream sample lands on NaN. We
+    # scale to microvolts before any downstream ops touch this array — the
+    # standard convention for EEG decoding stacks (braindecode / pyRiemann /
+    # MOABB benchmarks all assume microvolts).
+    data = raw.get_data(picks="eeg") * 1e6  # (n_ch, n_samp), microvolts
     n_ch, n_samp = data.shape
 
     xs: list[np.ndarray] = []
     ys: list[int] = []
-    reject_v = cfg.reject_peak_to_peak_uv * 1e-6
+    # Reject threshold is already in microvolts (see PreprocessConfig.reject_peak_to_peak_uv).
+    reject_uv = cfg.reject_peak_to_peak_uv
     for start in range(0, n_samp - win + 1, step):
         stop = start + win
         seg = data[:, start:stop]
-        if np.ptp(seg, axis=1).max() > reject_v:
+        if np.ptp(seg, axis=1).max() > reject_uv:
             continue
         label = label_getter(start / sfreq, stop / sfreq)
         if label is None:
