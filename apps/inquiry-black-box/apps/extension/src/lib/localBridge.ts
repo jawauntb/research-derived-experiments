@@ -1,0 +1,393 @@
+import { validateEvent, type EventEnvelope } from "@inquiry/schema";
+
+export const DEFAULT_BRIDGE_ENDPOINT = "http://127.0.0.1:39170/v1/extension/events";
+export const BRIDGE_STATE_KEY = "inquiry.bridge.state";
+export const BRIDGE_QUEUE_KEY = "inquiry.bridge.queue";
+export const DEFAULT_SESSION_ID = "local-browser-session";
+export const MAX_QUEUE_EVENTS = 500;
+
+export type RecordingState = "recording" | "paused" | "stopped";
+
+export type PrivacyToggles = {
+  browser: boolean;
+  typingMetrics: boolean;
+  selection: boolean;
+  media: boolean;
+};
+
+export type BridgeState = {
+  endpoint: string;
+  pairingToken: string | undefined;
+  sessionId: string;
+  recordingState: RecordingState;
+  pausedUntilMs?: number;
+  disabledSiteHashes: string[];
+  privacyToggles: PrivacyToggles;
+  updatedAt: string;
+};
+
+export type FlushResult = {
+  posted: number;
+  remaining: number;
+  error?: Error;
+};
+
+export type FetchLike = (url: string, init?: RequestInit) => Promise<Response>;
+
+export type EventQueue = {
+  enqueue(events: EventEnvelope[]): Promise<void>;
+  peek(limit: number): Promise<EventEnvelope[]>;
+  remove(count: number): Promise<void>;
+  size(): Promise<number>;
+  clear(): Promise<void>;
+};
+
+export type StorageAreaLike = {
+  get(
+    key: string | string[] | Record<string, unknown>,
+    callback?: (items: Record<string, unknown>) => void,
+  ): Promise<Record<string, unknown>> | void;
+  set(items: Record<string, unknown>, callback?: () => void): Promise<void> | void;
+};
+
+export class PairingRequiredError extends Error {
+  constructor() {
+    super("extension is not paired with the local desktop bridge");
+    this.name = "PairingRequiredError";
+  }
+}
+
+export class PairingRejectedError extends Error {
+  constructor(status: number) {
+    super(`desktop bridge rejected the pairing token with status ${status}`);
+    this.name = "PairingRejectedError";
+  }
+}
+
+export class BridgePostError extends Error {
+  constructor(status: number) {
+    super(`desktop bridge post failed with status ${status}`);
+    this.name = "BridgePostError";
+  }
+}
+
+export const defaultPrivacyToggles: PrivacyToggles = {
+  browser: true,
+  typingMetrics: true,
+  selection: true,
+  media: true,
+};
+
+export const disabledPrivacyToggles: PrivacyToggles = {
+  browser: false,
+  typingMetrics: false,
+  selection: false,
+  media: false,
+};
+
+export function defaultBridgeState(now = new Date()): BridgeState {
+  return {
+    endpoint: DEFAULT_BRIDGE_ENDPOINT,
+    pairingToken: undefined,
+    sessionId: DEFAULT_SESSION_ID,
+    recordingState: "stopped",
+    disabledSiteHashes: [],
+    privacyToggles: { ...disabledPrivacyToggles },
+    updatedAt: now.toISOString(),
+  };
+}
+
+export async function postEventBatch(
+  events: EventEnvelope[],
+  state: BridgeState,
+  options: { fetchImpl?: FetchLike; timeoutMs?: number } = {},
+): Promise<{ accepted: number }> {
+  if (!state.pairingToken) {
+    throw new PairingRequiredError();
+  }
+
+  for (const event of events) {
+    validateEvent(event);
+  }
+
+  const fetchImpl = options.fetchImpl ?? fetch;
+  const response = await fetchWithTimeout(fetchImpl, state.endpoint, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      "x-inquiry-pairing-token": state.pairingToken,
+    },
+    body: JSON.stringify({
+      session_id: state.sessionId,
+      source: "chrome-extension",
+      events,
+    }),
+  }, options.timeoutMs ?? 3_000);
+
+  if (response.status === 401 || response.status === 403) {
+    throw new PairingRejectedError(response.status);
+  }
+
+  if (!response.ok) {
+    throw new BridgePostError(response.status);
+  }
+
+  const responseBody = (await response.json().catch(() => ({}))) as Record<string, unknown>;
+  return { accepted: typeof responseBody.accepted === "number" ? responseBody.accepted : events.length };
+}
+
+export async function flushQueuedEvents(
+  queue: EventQueue,
+  state: BridgeState,
+  options: { batchSize?: number; fetchImpl?: FetchLike } = {},
+): Promise<FlushResult> {
+  const pending = await queue.peek(options.batchSize ?? 50);
+  if (pending.length === 0) {
+    return { posted: 0, remaining: 0 };
+  }
+
+  try {
+    const postOptions = options.fetchImpl ? { fetchImpl: options.fetchImpl } : {};
+    await postEventBatch(pending, state, postOptions);
+    await queue.remove(pending.length);
+    return {
+      posted: pending.length,
+      remaining: await queue.size(),
+    };
+  } catch (error) {
+    return {
+      posted: 0,
+      remaining: await queue.size(),
+      error: normalizeError(error),
+    };
+  }
+}
+
+export function createMemoryEventQueue(initialEvents: EventEnvelope[] = []): EventQueue {
+  const events = [...initialEvents];
+
+  return {
+    async enqueue(nextEvents) {
+      events.push(...nextEvents);
+      if (events.length > MAX_QUEUE_EVENTS) {
+        events.splice(0, events.length - MAX_QUEUE_EVENTS);
+      }
+    },
+    async peek(limit) {
+      return events.slice(0, limit);
+    },
+    async remove(count) {
+      events.splice(0, count);
+    },
+    async size() {
+      return events.length;
+    },
+    async clear() {
+      events.length = 0;
+    },
+  };
+}
+
+export function createStorageEventQueue(storage: StorageAreaLike, key = BRIDGE_QUEUE_KEY): EventQueue {
+  let mutation = Promise.resolve();
+
+  async function exclusive<T>(task: () => Promise<T>): Promise<T> {
+    const previous = mutation;
+    let release!: () => void;
+    mutation = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    await previous;
+    try {
+      return await task();
+    } finally {
+      release();
+    }
+  }
+
+  async function readEvents(): Promise<EventEnvelope[]> {
+    const value = (await readStorageValue(storage, key)) as unknown;
+    if (!Array.isArray(value)) {
+      return [];
+    }
+
+    return value.filter(isEventEnvelope);
+  }
+
+  async function writeEvents(events: EventEnvelope[]): Promise<void> {
+    await writeStorageValue(storage, key, events.slice(-MAX_QUEUE_EVENTS));
+  }
+
+  return {
+    async enqueue(nextEvents) {
+      await exclusive(async () => {
+        const events = await readEvents();
+        events.push(...nextEvents);
+        await writeEvents(events);
+      });
+    },
+    async peek(limit) {
+      return (await readEvents()).slice(0, limit);
+    },
+    async remove(count) {
+      await exclusive(async () => {
+        const events = await readEvents();
+        events.splice(0, count);
+        await writeEvents(events);
+      });
+    },
+    async size() {
+      return (await readEvents()).length;
+    },
+    async clear() {
+      await exclusive(async () => writeEvents([]));
+    },
+  };
+}
+
+export async function getBridgeState(storage: StorageAreaLike, key = BRIDGE_STATE_KEY): Promise<BridgeState> {
+  return normalizeBridgeState((await readStorageValue(storage, key)) as Partial<BridgeState> | undefined);
+}
+
+export async function saveBridgeState(
+  storage: StorageAreaLike,
+  state: BridgeState,
+  key = BRIDGE_STATE_KEY,
+): Promise<BridgeState> {
+  const normalized = normalizeBridgeState(state);
+  await writeStorageValue(storage, key, normalized);
+  return normalized;
+}
+
+export function normalizeBridgeState(input?: Partial<BridgeState>): BridgeState {
+  const fallback = defaultBridgeState();
+  const toggles: Partial<PrivacyToggles> = input?.privacyToggles ?? {};
+  const state: BridgeState = {
+    endpoint: typeof input?.endpoint === "string" && input.endpoint.length > 0 ? input.endpoint : fallback.endpoint,
+    pairingToken:
+      typeof input?.pairingToken === "string" && input.pairingToken.length > 0 ? input.pairingToken : undefined,
+    sessionId:
+      typeof input?.sessionId === "string" && input.sessionId.length > 0 ? input.sessionId : fallback.sessionId,
+    recordingState: isRecordingState(input?.recordingState) ? input.recordingState : fallback.recordingState,
+    disabledSiteHashes: Array.isArray(input?.disabledSiteHashes)
+      ? input.disabledSiteHashes.filter((hash): hash is string => typeof hash === "string")
+      : [],
+    privacyToggles: {
+      browser: typeof toggles.browser === "boolean" ? toggles.browser : fallback.privacyToggles.browser,
+      typingMetrics:
+        typeof toggles.typingMetrics === "boolean" ? toggles.typingMetrics : fallback.privacyToggles.typingMetrics,
+      selection: typeof toggles.selection === "boolean" ? toggles.selection : fallback.privacyToggles.selection,
+      media: typeof toggles.media === "boolean" ? toggles.media : fallback.privacyToggles.media,
+    },
+    updatedAt: typeof input?.updatedAt === "string" ? input.updatedAt : fallback.updatedAt,
+  };
+
+  if (typeof input?.pausedUntilMs === "number" && Number.isFinite(input.pausedUntilMs)) {
+    state.pausedUntilMs = input.pausedUntilMs;
+  }
+
+  return state;
+}
+
+export function isBridgeEventAllowed(event: EventEnvelope, state: BridgeState, nowMs = Date.now()): boolean {
+  if (!state.pairingToken) {
+    return false;
+  }
+
+  const effectiveRecording =
+    state.recordingState === "recording" ||
+    (state.recordingState === "paused" && typeof state.pausedUntilMs === "number" && state.pausedUntilMs <= nowMs);
+  if (!effectiveRecording) {
+    return false;
+  }
+
+  if (!state.privacyToggles.browser) {
+    return false;
+  }
+
+  const hostnameHash = event.payload.hostname_hash;
+  const urlHash = event.payload.url_hash;
+  if (
+    (typeof hostnameHash === "string" && state.disabledSiteHashes.includes(hostnameHash)) ||
+    (typeof urlHash === "string" && state.disabledSiteHashes.includes(urlHash))
+  ) {
+    return false;
+  }
+
+  if (event.event_type === "browser.typing_metrics") {
+    return state.privacyToggles.typingMetrics;
+  }
+
+  if (
+    event.event_type === "browser.selection" ||
+    event.event_type === "browser.copy" ||
+    event.event_type === "browser.highlight"
+  ) {
+    return state.privacyToggles.selection;
+  }
+
+  if (event.event_type === "browser.media") {
+    return state.privacyToggles.media;
+  }
+
+  return true;
+}
+
+async function fetchWithTimeout(fetchImpl: FetchLike, url: string, init: RequestInit, timeoutMs: number): Promise<Response> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetchImpl(url, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+async function readStorageValue(storage: StorageAreaLike, key: string): Promise<unknown> {
+  const items = await new Promise<Record<string, unknown>>((resolve, reject) => {
+    try {
+      const maybePromise = storage.get(key, (result) => resolve(result ?? {}));
+      if (isPromiseLike(maybePromise)) {
+        maybePromise.then((result) => resolve(result ?? {}), reject);
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+
+  return items[key];
+}
+
+async function writeStorageValue(storage: StorageAreaLike, key: string, value: unknown): Promise<void> {
+  await new Promise<void>((resolve, reject) => {
+    try {
+      const maybePromise = storage.set({ [key]: value }, () => resolve());
+      if (isPromiseLike(maybePromise)) {
+        maybePromise.then(() => resolve(), reject);
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+function isEventEnvelope(value: unknown): value is EventEnvelope {
+  try {
+    validateEvent(value);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function isRecordingState(value: unknown): value is RecordingState {
+  return value === "recording" || value === "paused" || value === "stopped";
+}
+
+function isPromiseLike<T>(value: unknown): value is Promise<T> {
+  return typeof value === "object" && value !== null && "then" in value;
+}
+
+function normalizeError(error: unknown): Error {
+  return error instanceof Error ? error : new Error(String(error));
+}

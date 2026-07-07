@@ -1,0 +1,13 @@
+{
+  "name": "@inquiry/cloud",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun run src/server.ts",
+    "test": "bun test tests/*.test.ts"
+  },
+  "dependencies": {
+    "@inquiry/schema": "workspace:*"
+  }
+}

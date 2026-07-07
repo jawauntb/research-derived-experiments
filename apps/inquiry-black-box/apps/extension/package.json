@@ -1,0 +1,13 @@
+{
+  "name": "@inquiry/extension",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "bun build src/background/service-worker.ts src/content/index.ts src/popup/App.tsx --outdir dist",
+    "test": "bun test tests/*.test.ts"
+  },
+  "dependencies": {
+    "@inquiry/schema": "workspace:*"
+  }
+}

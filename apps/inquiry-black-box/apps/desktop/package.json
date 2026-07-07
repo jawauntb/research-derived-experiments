@@ -1,0 +1,15 @@
+{
+  "name": "@inquiry/desktop",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun run src/main/main.ts",
+    "test": "bun test tests/*.test.ts"
+  },
+  "dependencies": {
+    "@inquiry/schema": "workspace:*",
+    "@inquiry/signals": "workspace:*",
+    "@inquiry/ui": "workspace:*"
+  }
+}

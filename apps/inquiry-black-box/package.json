@@ -1,0 +1,25 @@
+{
+  "name": "@inquiry-black-box/workspace",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "install:check": "bun install --frozen-lockfile",
+    "lint": "bun run scripts/lint.ts",
+    "typecheck": "tsc -b",
+    "test": "bun test apps/desktop/tests apps/extension/tests apps/cloud/tests packages/schema/tests packages/signals/tests",
+    "test:e2e": "bun test tests/e2e/*.ts",
+    "dev:desktop": "bun --cwd apps/desktop run dev",
+    "dev:extension": "bun --cwd apps/extension run build",
+    "dev:cloud": "bun --cwd apps/cloud run dev",
+    "modal-check": "cd modal && python3 -m pytest"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.3.0",
+    "typescript": "^5.9.2"
+  }
+}
