@@ -1,10 +1,19 @@
 import type { EventEnvelope } from "@inquiry/schema";
-import { buildReplayMemo, segmentStimulus, type ReplayMemo, type StimulusInput, type StimulusSegment } from "@inquiry/signals";
+import {
+  buildRepairCandidates,
+  buildReplayMemo,
+  segmentStimulus,
+  type RepairCandidate,
+  type ReplayMemo,
+  type StimulusInput,
+  type StimulusSegment,
+} from "@inquiry/signals";
 
 export type SessionReplayReport = ReplayMemo & {
   report_id: string;
   generated_at: string;
   limitations: string[];
+  repair_candidates: RepairCandidate[];
 };
 
 export type SessionReplayReportOptions = {
@@ -27,6 +36,7 @@ export function createSessionReplayReport(events: EventEnvelope[], options: Sess
     ...memo,
     report_id: crypto.randomUUID(),
     generated_at: new Date().toISOString(),
+    repair_candidates: buildRepairCandidates(memo.heatmap),
     limitations: [
       "Markers are conservative heuristics, not cognitive-state certainty.",
       "Camera-derived markers require adequate quality flags and should be interpreted with surrounding evidence.",

@@ -39,6 +39,8 @@ export const eventTypes = [
   "probe.answered",
   "stimulus.attached",
   "stimulus.segmented",
+  "repair.candidate",
+  "repair.outcome",
   "notification.candidate",
   "notification.delivered",
   "notification.responded",
@@ -114,6 +116,38 @@ export type StimulusSegmentedPayload = JsonObject & {
   segment_ids: string[];
   segment_count: number;
   content_refs: string[];
+};
+
+export type RepairAction =
+  | "restate-claim"
+  | "missing-prerequisite"
+  | "rewatch-span"
+  | "recall-question"
+  | "explain-copied-passage"
+  | "follow-up-note";
+
+export type RepairCandidatePayload = JsonObject & {
+  repair_id: string;
+  heatmap_id: string;
+  action: RepairAction;
+  prompt: string;
+  start_ms: number;
+  end_ms: number;
+  source_kind: string;
+  source_marker_ids: string[];
+  evidence_event_ids: string[];
+  limitation: string;
+};
+
+export type RepairOutcomePayload = JsonObject & {
+  repair_id: string;
+  heatmap_id: string;
+  outcome: "accepted" | "answered" | "dismissed" | "snoozed" | "rated-useful" | "rated-not-useful";
+  action: RepairAction;
+  probe_id?: string;
+  answer?: string;
+  answer_confidence?: number;
+  reason?: string;
 };
 
 export function createEvent<TPayload extends JsonObject>(

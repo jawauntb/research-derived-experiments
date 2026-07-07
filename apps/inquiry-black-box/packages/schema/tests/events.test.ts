@@ -6,6 +6,8 @@ import {
   validateEvent,
   type BrowserTypingMetricsPayload,
   type CameraFeaturePayload,
+  type RepairCandidatePayload,
+  type RepairOutcomePayload,
   type StimulusAttachedPayload,
 } from "../src";
 
@@ -117,5 +119,52 @@ describe("event schema", () => {
         retention_policy: "local-default",
       }),
     ).toThrow(/document-opt-in/);
+  });
+
+  test("accepts local repair candidate and outcome events", () => {
+    const candidatePayload: RepairCandidatePayload = {
+      repair_id: "repair-1",
+      heatmap_id: "heatmap-1",
+      action: "missing-prerequisite",
+      prompt: "What prerequisite was missing?",
+      start_ms: 1000,
+      end_ms: 2000,
+      source_kind: "behavioral-loss-of-thread",
+      source_marker_ids: ["marker-1"],
+      evidence_event_ids: ["event-1"],
+      limitation: "repair hypothesis",
+    };
+    const outcomePayload: RepairOutcomePayload = {
+      repair_id: "repair-1",
+      heatmap_id: "heatmap-1",
+      action: "missing-prerequisite",
+      outcome: "dismissed",
+      reason: "already answered",
+    };
+
+    expect(() =>
+      createEvent({
+        session_id: "session-1",
+        source: "desktop-system",
+        source_version: "desktop@0.1.0",
+        monotonic_ms: 40,
+        event_type: "repair.candidate",
+        payload: candidatePayload,
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    ).not.toThrow();
+    expect(() =>
+      createEvent({
+        session_id: "session-1",
+        source: "user",
+        source_version: "desktop@0.1.0",
+        monotonic_ms: 41,
+        event_type: "repair.outcome",
+        payload: outcomePayload,
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    ).not.toThrow();
   });
 });
