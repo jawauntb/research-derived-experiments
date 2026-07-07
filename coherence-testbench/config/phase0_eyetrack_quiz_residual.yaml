@@ -1,0 +1,31 @@
+# Residualized quiz-score run config. Same base as phase0_eyetrack_quiz.yaml.
+# NOT a pre-registered gate — see QUIZ_VERIFICATION.md §5 for context.
+
+data:
+  dataset: "bbbd"
+  cache_dir_env: "BBBD_CACHE_DIR"
+  experiments: [2, 3, 4]
+  subject_limit: null
+  target_session: 1
+
+preprocess:
+  epoch_seconds: 4.0
+  epoch_overlap: 0.5
+  saccade_speed_deg_s: 30.0
+
+decoders:
+  target:
+    kind: "cross_subject_regression_residualized"
+    ssl_pretrain: false
+    epochs: 60
+    batch_size: 64
+    lr: 3.0e-4
+
+evaluate:
+  scheme: "leave_subjects_out_regression"
+  n_lso_seeds: 5
+  train_subject_sweep: [8, 16, 24, 32]
+  metric: "spearman_r_residual"
+
+output:
+  root: "artifacts/phase0_eyetrack_quiz_residual"
