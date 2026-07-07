@@ -13,13 +13,17 @@ market entry.
   after pre-registered rerun. 66.5% BA at n=32, positive learning curve,
   bits/sec just short of GO. See [`MODALITY_COMPARISON.md`](MODALITY_COMPARISON.md).
 - **Branch-D eyetrack (quiz-score regression, supplementary pre-reg
-  `phase0.eyetrack.quiz.v1`):** **`GO`** (2026-07-07). LSO Spearman
-  ρ = 0.277 at n=24, monotonic curve, clean ablations. First cleared
-  gate of the session.
-- **Phase 3 build:** the load-bearing criterion (a pre-registered
-  test returns GO) is now met on the quiz-score bench. Freeze rules
-  require explicit user re-scoping to actually start Phase 3, so this
-  stays frozen pending decision. See [`NEXT_STEPS.md`](NEXT_STEPS.md).
+  `phase0.eyetrack.quiz.v1`):** originally reported **GO** (ρ=0.28)
+  on 2026-07-07 at 01:44, but the corrected rerun at 02:16 (with
+  a fixed exp4 stim-numbering mapping) reverts to **`INCONCLUSIVE`**.
+  Signal is real on exp3 (ρ=0.38), weaker on exp2 (ρ=0.17), weakest
+  on exp4 (ρ=0.11). Full write-up:
+  [`QUIZ_VERIFICATION.md`](QUIZ_VERIFICATION.md). No pre-registered
+  gate has been cleared on the full corpus.
+- **Phase 3 build:** still **FROZEN**. The 01:44 GO was retracted
+  when the corrected run showed the original was a subset effect
+  (exp4 dropped by a silent bug). No pre-registered gate has cleared
+  on the full corpus. See [`NEXT_STEPS.md`](NEXT_STEPS.md).
 
 ## What this repo does
 

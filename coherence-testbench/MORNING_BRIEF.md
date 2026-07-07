@@ -1,43 +1,88 @@
-# Morning brief — 2026-07-07
+# Morning brief — 2026-07-07 (revised 02:35 EDT after verification)
 
-## What changed while you slept
+## What changed while you slept — TL;DR
 
-**Cleared the first GO of the session.** Eyetrack cross-subject-predicts
-per-recording quiz score (video comprehension) at Spearman ρ = 0.277 on
-held-out subjects. Pre-registered before touching data. Ablations clean.
-Reporting-only secondary "distracted → attentive score" sits at chance,
-which validates the direction (the signal comes from active attention,
-not from subject-level personality).
+- **01:44 EDT:** quiz-score regression on eyetrack cleared the pre-
+  registered GO threshold, ρ = 0.277 on the pooled result.
+- **02:16 EDT:** adversarial verification (bootstrap CI + demographic
+  baseline + per-experiment breakdown) surfaced a silent bug —
+  exp4 had been dropped from the ingest due to a stim-numbering
+  mismatch. GO was based on exp2+exp3 only.
+- **02:35 EDT:** corrected run (with exp4's mapping fixed) returned
+  **INCONCLUSIVE, not GO.** Signal is real on exp3 (ρ=0.38) but
+  weaker on exp2 (ρ=0.17) and weakest on exp4 (ρ=0.11). Pooled ρ
+  at max n=32 = 0.132, below the 0.15 GO threshold; one seed
+  fails the per-seed 0.05 floor.
+- **Site footer + README + memory rolled back.** Phase 3 stays
+  frozen. No pre-registered gate cleared on the full corpus.
 
-## The one figure
+The pre-registration + verification loop caught its own artifact.
+That's the system working correctly, but it means the "first GO" story
+you would have woken up to at 01:44 was premature.
+
+## The three tables that matter
+
+**Original (01:44) — pre-bug-fix, exp2+3 only, 60 subjects:**
 
 | n_train_subjects | mean Spearman ρ | folds |
 |---:|---:|---:|
 | 8  | +0.194 | 10 |
 | 16 | +0.289 | 10 |
 | 24 | **+0.277** | 10 |
-| — prior-only baseline: 0.000 | | |
-| — distracted-predicts-attentive-score: -0.030 | | |
 
-Every seed cleared the pre-registered 0.05 per-seed floor.
-GO threshold: ρ ≥ 0.15. Passed by 12.7 pts.
+Verdict: **GO** (later retracted).
+
+**Corrected (02:35) — bug-fix, all three experiments, 102 subjects:**
+
+| n_train_subjects | mean Spearman ρ | folds |
+|---:|---:|---:|
+| 8  | +0.152 | 15 |
+| 16 | +0.216 | 15 |
+| 24 | +0.223 | 15 |
+| 32 | **+0.132** | 5 (exp4-only) |
+
+Verdict: **INCONCLUSIVE** (per-seed at n=32 fails floor: [−0.009,
++0.615, +0.017, −0.161, +0.198]).
+
+**Per-experiment ρ at n=24 (corrected):**
+
+| exp | subjects | records | ρ at n=24 |
+|----:|---------:|--------:|----------:|
+|  2  |    31    |   297   |   +0.171  |
+|  3  |    29    |   323   |   +0.382  |
+|  4  |    42    |   126   |   +0.114  |
+
+Common controls (both runs):
+- prior-only train-mean regressor: ρ = 0.000 ✅ (clean)
+- distracted-predicts-attentive-score: ρ ≈ −0.02 ✅ (chance)
+
+Verification-only findings (post-hoc):
+- **Demographics-only baseline (Age+Sex from participants.tsv, no
+  eyetrack):** ρ = +0.124 [95% CI +0.026, +0.229]. This explains
+  ~44% of the observed effect. Eyetrack-specific signal above
+  demographics is ρ ≈ 0.15.
 
 ## What that means, at three levels of ambition
 
-- **Minimum honest read:** eyetrack features carry cross-subject
-  information about how well someone will comprehend a video, even
-  when trained on strangers' data. Effect is small but robust. This
-  is a real biomarker.
-- **Middle read:** on the same subjects, EEG was flat at chance and
-  eyetrack binary attention was inconclusive on bits/sec. Only this
-  regression target cleared its gate. So the productizable channel is
-  eyetrack, and the productizable measurement is comprehension /
-  cognitive engagement, not binary attention.
-- **Full read:** the plan's "objective brain-state biomarker for CNS
-  trials" thesis survives — narrowed from "wearable multi-modal
-  decoder" to "eyetrack biomarker of engagement." All the reusable
-  infra (Modal apps, Doppler secrets, Supabase schema, Railway site)
-  still applies.
+- **Minimum honest read:** on ONE of three BBBD experiments (exp3),
+  eyetrack cross-subject-predicts video comprehension at ρ = 0.38
+  even after controlling for demographics. That IS a real biomarker
+  signal — just not one that clears the pre-registered gate when
+  averaged over the whole corpus.
+- **Middle read:** the pre-registered gate was designed to be strict.
+  It required signal to hold up at the LARGEST n_train_subjects
+  AND every seed to clear a 0.05 floor. At n=32 (which is only
+  supplyable by exp4), the signal is too noisy to satisfy either. So
+  the strict gate fails, but the underlying signal is there in a
+  subset.
+- **Full read:** the *modality* thesis (eyetrack captures cross-
+  subject cognitive engagement) is *supported by exp3* and
+  *unsupported by exp4*. Whether that's a real cross-experiment
+  heterogeneity signal or a stimulus-design artifact of BBBD is
+  unknown. Doing more with this specifically requires either (a) a
+  new pre-reg for a single-experiment target, (b) a different
+  corpus with more homogeneous design, or (c) a much richer
+  featurizer that finds signal in exp4.
 
 ## What ran while you slept
 
