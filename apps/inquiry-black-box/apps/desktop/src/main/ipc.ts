@@ -67,7 +67,7 @@ export function createDesktopIpcFacade(
   runtime: DesktopRuntime,
   options: DesktopIpcFacadeOptions = {},
 ): DesktopIpcFacade {
-  let lastSessionId = runtime.sessions.currentSession()?.session_id ?? null;
+  let lastSessionId = runtime.sessions.currentSession()?.session_id ?? latestStoredSessionId();
 
   function remember(session: SessionRecord): SessionRecord {
     lastSessionId = session.session_id;
@@ -82,6 +82,10 @@ export function createDesktopIpcFacade(
     }
 
     return lastSessionId ? runtime.database.getSession(lastSessionId) : null;
+  }
+
+  function latestStoredSessionId(): string | null {
+    return runtime.database.listSessions().at(-1)?.session_id ?? null;
   }
 
   function requireRememberedSessionId(): string {

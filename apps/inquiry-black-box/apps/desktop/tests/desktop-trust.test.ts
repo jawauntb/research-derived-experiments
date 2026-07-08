@@ -261,6 +261,31 @@ describe("desktop shell trust surfaces", () => {
     expect(demo.markers.length + demo.heatmap.length).toBeGreaterThan(0);
     runtime.stop();
   });
+
+  test("selects the latest stored session on launch so interpretation actions are reachable", async () => {
+    const database = createInquiryDatabase();
+    const session = database.createSession({ title: "Stored summary fixture", session_id: "stored-summary-session" });
+    database.appendEvent(
+      createEvent({
+        session_id: session.session_id,
+        source: "browser",
+        source_version: "test@0.1.0",
+        monotonic_ms: 1_000,
+        event_type: "browser.scroll",
+        payload: { delta_y: 400 },
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    );
+    database.stopSession(session.session_id);
+
+    const runtime = createDesktopRuntime({ database, pairingSecret: "summary-launch-secret", startServer: false });
+    const facade = createDesktopIpcFacade(runtime);
+
+    expect((await facade.status()).session?.session_id).toBe(session.session_id);
+    expect((await facade.sessionInterpretation())?.session_id).toBe(session.session_id);
+    runtime.stop();
+  });
 });
 
 function shellStatus(token: string) {
