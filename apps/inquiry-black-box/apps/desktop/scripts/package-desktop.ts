@@ -18,6 +18,7 @@ const appName = "Inquiry Black Box";
 const bundleId = "com.inquiry.blackbox";
 const sourceElectronApp = join(desktopRoot, "node_modules", "electron", "dist", "Electron.app");
 const outputApp = join(releaseRoot, `${appName}.app`);
+const bundleIcon = join(desktopRoot, "assets", "icon.icns");
 
 export type PackageDesktopResult = {
   appPath: string;
@@ -42,6 +43,7 @@ export function packageDesktopApp(): PackageDesktopResult {
   }
 
   writeInfoPlist(join(outputApp, "Contents", "Info.plist"));
+  cpSync(bundleIcon, join(resourcesDir, "icon.icns"));
   rmSync(appResourcesDir, { recursive: true, force: true });
   mkdirSync(appResourcesDir, { recursive: true });
   cpSync(join(desktopRoot, "dist"), join(appResourcesDir, "dist"), { recursive: true });
@@ -99,10 +101,11 @@ export function writeInfoPlist(path: string): void {
     .replace(/<key>CFBundleExecutable<\/key>\s*<string>[^<]+<\/string>/, `<key>CFBundleExecutable</key>\n\t<string>${appName}</string>`)
     .replace(/<key>CFBundleIdentifier<\/key>\s*<string>[^<]+<\/string>/, `<key>CFBundleIdentifier</key>\n\t<string>${bundleId}</string>`)
     .replace(/<key>CFBundleName<\/key>\s*<string>[^<]+<\/string>/, `<key>CFBundleName</key>\n\t<string>${appName}</string>`)
-    .replace(/<key>CFBundleDisplayName<\/key>\s*<string>[^<]+<\/string>/, `<key>CFBundleDisplayName</key>\n\t<string>${appName}</string>`);
+    .replace(/<key>CFBundleDisplayName<\/key>\s*<string>[^<]+<\/string>/, `<key>CFBundleDisplayName</key>\n\t<string>${appName}</string>`)
+    .replace(/<key>CFBundleIconFile<\/key>\s*<string>[^<]+<\/string>/, "<key>CFBundleIconFile</key>\n\t<string>icon.icns</string>");
   const withUsageDescriptions = ensurePlistString(
     ensurePlistString(
-      next,
+      ensurePlistString(next, "CFBundleIconFile", "icon.icns"),
       "NSCameraUsageDescription",
       "Inquiry Black Box can derive local camera feature windows when you explicitly enable camera features.",
     ),

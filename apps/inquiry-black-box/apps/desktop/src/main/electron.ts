@@ -40,6 +40,7 @@ async function createWindow(): Promise<void> {
     minHeight: 660,
     title: "Inquiry Black Box",
     backgroundColor: "#f6f7f9",
+    icon: join(moduleDir, "../../assets/icon.png"),
     webPreferences: {
       preload: join(moduleDir, "preload.cjs"),
       contextIsolation: true,

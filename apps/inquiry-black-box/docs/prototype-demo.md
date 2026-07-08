@@ -214,5 +214,5 @@ bun run package:extension
 
 Smoke the packaged desktop app and packaged/staged extension with the same demo
 script above after app restart and extension reload. macOS signing,
-notarization, auto-update, PNG/ICNS production icon export, and Chrome Web Store
-publication require account-level credentials outside the repo.
+notarization, auto-update, and Chrome Web Store publication require account-level
+credentials outside the repo.

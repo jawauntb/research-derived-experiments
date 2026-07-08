@@ -13,8 +13,8 @@ bun run package:desktop
 
 The command builds the desktop app and writes
 `apps/desktop/release/mac/Inquiry Black Box.app`. It stages the Electron runtime,
-compiled main/preload/renderer files, SQLite migrations, app metadata, and icon
-source. This is for local installed smoke only.
+compiled main/preload/renderer files, SQLite migrations, app metadata, and the
+macOS `.icns` icon. This is for local installed smoke only.
 
 After package smoke passes, install the app into the user Applications folder:
 
@@ -40,7 +40,9 @@ open /tmp/inquiry-apps/Inquiry\ Black\ Box.app
 
 Before wider distribution:
 
-- Convert `apps/desktop/assets/icon.svg` into the required `.icns` sizes.
+- Regenerate `apps/desktop/assets/icon.png`, `apps/desktop/assets/icon.icns`,
+  and the extension `apps/extension/assets/icon*.png` files if the product icon
+  source changes.
 - Sign the app with bundle id `com.inquiry.blackbox`.
 - Use `apps/desktop/packaging/mac/entitlements.plist` as the starting point for
   camera and localhost network permissions. Foreground app/window metadata uses
