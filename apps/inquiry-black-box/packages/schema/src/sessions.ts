@@ -16,10 +16,64 @@ export type SessionRecord = {
 export type SignalSettings = {
   browser: boolean;
   camera: boolean;
+  desktopActivity: boolean;
+  desktopWindowTitles: boolean;
+  screenSnapshots: boolean;
   typingMetrics: boolean;
   notifications: boolean;
   cloudSync: boolean;
 };
+
+export const signalSettingKeys = [
+  "browser",
+  "camera",
+  "desktopActivity",
+  "desktopWindowTitles",
+  "screenSnapshots",
+  "typingMetrics",
+  "notifications",
+  "cloudSync",
+] as const satisfies ReadonlyArray<keyof SignalSettings>;
+
+export function defaultSignalSettings(): SignalSettings {
+  return {
+    browser: true,
+    camera: false,
+    desktopActivity: false,
+    desktopWindowTitles: false,
+    screenSnapshots: false,
+    typingMetrics: true,
+    notifications: false,
+    cloudSync: false,
+  };
+}
+
+export function isSignalSettingKey(value: unknown): value is keyof SignalSettings {
+  return typeof value === "string" && signalSettingKeys.includes(value as keyof SignalSettings);
+}
+
+export function normalizeSignalSettings(settings: SignalSettings): SignalSettings {
+  return {
+    ...settings,
+    desktopWindowTitles: settings.desktopActivity && settings.desktopWindowTitles,
+    screenSnapshots: false,
+  };
+}
+
+export function applySignalSettingChange(
+  current: SignalSettings,
+  key: keyof SignalSettings,
+  enabled: boolean,
+): SignalSettings {
+  if (!isSignalSettingKey(key)) {
+    throw new Error(`unsupported signal setting: ${String(key)}`);
+  }
+
+  return normalizeSignalSettings({
+    ...current,
+    [key]: key === "screenSnapshots" ? false : enabled,
+  });
+}
 
 export function createSessionRecord(input: {
   title: string;

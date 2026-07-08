@@ -3,13 +3,21 @@ import { createEvent } from "@inquiry/schema";
 import { createInquiryDatabase } from "../src/main/db";
 import { deleteLocalSession } from "../src/main/privacy/delete";
 import { exportSession } from "../src/main/privacy/export";
-import { defaultPrivacySettingsView, updateSignalSetting } from "../src/renderer/settings/PrivacySettings";
+import {
+  defaultPrivacySettingsView,
+  desktopActivityPrivacyStatus,
+  privacySignalRows,
+  updateSignalSetting,
+} from "../src/renderer/settings/PrivacySettings";
 
 describe("privacy controls", () => {
   test("privacy settings update per-signal toggles without enabling cloud by accident", () => {
     const view = defaultPrivacySettingsView({
       browser: true,
       camera: false,
+      desktopActivity: false,
+      desktopWindowTitles: false,
+      screenSnapshots: false,
       typingMetrics: true,
       notifications: false,
       cloudSync: false,
@@ -21,6 +29,106 @@ describe("privacy controls", () => {
     expect(cameraEnabled.signals.camera).toBe(true);
     expect(cloudStillDisabled.signals.cloudSync).toBe(false);
     expect(cloudStillDisabled.cloud_sync_enabled).toBe(false);
+  });
+
+  test("desktop privacy settings default to metadata off with screen snapshots deferred", () => {
+    const view = defaultPrivacySettingsView({
+      browser: true,
+      camera: false,
+      desktopActivity: false,
+      desktopWindowTitles: false,
+      screenSnapshots: false,
+      typingMetrics: true,
+      notifications: false,
+      cloudSync: false,
+    });
+    const rows = privacySignalRows(view);
+
+    expect(rows.find((row) => row.key === "desktopActivity")).toMatchObject({
+      checked: false,
+      disabled: false,
+      status: "Off",
+    });
+    expect(rows.find((row) => row.key === "desktopWindowTitles")).toMatchObject({
+      checked: false,
+      disabled: true,
+      status: "Needs app context",
+    });
+    expect(rows.find((row) => row.key === "screenSnapshots")).toMatchObject({
+      checked: false,
+      disabled: true,
+      status: "Deferred",
+    });
+    expect(desktopActivityPrivacyStatus(view)).toMatchObject({
+      label: "Desktop activity off",
+      tone: "muted",
+    });
+  });
+
+  test("desktop app context does not enable window titles or screen snapshots by accident", () => {
+    const view = defaultPrivacySettingsView({
+      browser: true,
+      camera: false,
+      desktopActivity: false,
+      desktopWindowTitles: false,
+      screenSnapshots: false,
+      typingMetrics: true,
+      notifications: false,
+      cloudSync: false,
+    });
+
+    const desktopEnabled = updateSignalSetting(view, "desktopActivity", true);
+    const titleEnabled = updateSignalSetting(desktopEnabled, "desktopWindowTitles", true);
+    const snapshotsStillDeferred = updateSignalSetting(titleEnabled, "screenSnapshots", true);
+    const desktopDisabled = updateSignalSetting(snapshotsStillDeferred, "desktopActivity", false);
+
+    expect(desktopEnabled.signals.desktopActivity).toBe(true);
+    expect(desktopEnabled.signals.desktopWindowTitles).toBe(false);
+    expect(titleEnabled.signals.desktopWindowTitles).toBe(true);
+    expect(snapshotsStillDeferred.signals.screenSnapshots).toBe(false);
+    expect(desktopDisabled.signals.desktopActivity).toBe(false);
+    expect(desktopDisabled.signals.desktopWindowTitles).toBe(false);
+  });
+
+  test("desktop permission status surfaces blocked and active collector states", () => {
+    const blocked = defaultPrivacySettingsView({
+      browser: true,
+      camera: false,
+      desktopActivity: true,
+      desktopWindowTitles: false,
+      screenSnapshots: false,
+      typingMetrics: true,
+      notifications: false,
+      cloudSync: false,
+    });
+    blocked.desktop_activity = {
+      enabled: true,
+      includeWindowTitles: false,
+      active: false,
+      permission_status: "denied",
+    };
+
+    const active = {
+      ...blocked,
+      desktop_activity: {
+        enabled: true,
+        includeWindowTitles: false,
+        active: true,
+        permission_status: "granted" as const,
+        last_heartbeat_monotonic_ms: 2_500,
+        last_app_name: "Cursor",
+      },
+    };
+
+    expect(desktopActivityPrivacyStatus(blocked)).toMatchObject({
+      label: "Permission blocked",
+      tone: "blocked",
+    });
+    expect(desktopActivityPrivacyStatus(active)).toMatchObject({
+      label: "Desktop activity active",
+      tone: "good",
+    });
+    expect(desktopActivityPrivacyStatus(active).detail).toContain("Cursor");
   });
 
   test("export excludes debug-sensitive payloads and local delete preserves cloud deletion request", () => {
@@ -130,6 +238,70 @@ describe("privacy controls", () => {
         payload: expect.objectContaining({ selected_text: "opted excerpt" }),
       }),
     ]);
+    database.close();
+  });
+
+  test("exports and deletes desktop activity metadata without making it cloud eligible", () => {
+    const database = createInquiryDatabase();
+    const session = database.createSession({ title: "Desktop activity session", session_id: "session-privacy-3" });
+    database.appendEvent(
+      createEvent({
+        event_id: "desktop-app-focus-1",
+        session_id: session.session_id,
+        source: "desktop-activity",
+        source_version: "desktop@0.1.0",
+        monotonic_ms: 10,
+        event_type: "desktop.app_focus",
+        payload: {
+          app_name: "Cursor",
+          bundle_id: "com.todesktop.230313mzl4w4u92",
+          pid_hash: "pid_hash_1",
+          focus_started_monotonic_ms: 1_000,
+          focus_ended_monotonic_ms: 3_000,
+          duration_ms: 2_000,
+          permission_status: "granted",
+        },
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    );
+    database.appendEvent(
+      createEvent({
+        event_id: "desktop-window-focus-1",
+        session_id: session.session_id,
+        source: "desktop-activity",
+        source_version: "desktop@0.1.0",
+        monotonic_ms: 11,
+        event_type: "desktop.window_focus",
+        payload: {
+          app_name: "Cursor",
+          bundle_id: "com.todesktop.230313mzl4w4u92",
+          window_id_hash: "window_hash_1",
+          focus_started_monotonic_ms: 3_000,
+          focus_ended_monotonic_ms: 4_000,
+          duration_ms: 1_000,
+          permission_status: "granted",
+        },
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    );
+
+    const exported = exportSession(database, session.session_id);
+    deleteLocalSession(database, session.session_id);
+
+    expect(exported.jsonl).toContain("desktop.app_focus");
+    expect(exported.jsonl).toContain("desktop.window_focus");
+    expect(exported.jsonl).toContain("com.todesktop.230313mzl4w4u92");
+    expect(exported.jsonl).not.toContain("screenshot");
+    expect(database.getSession(session.session_id)).toBeNull();
+    expect(database.listEvents(session.session_id)).toEqual([]);
+    expect(database.listSyncQueue()).toHaveLength(1);
+    expect(database.listSyncQueue()[0]?.payload).toMatchObject({
+      action: "delete-cloud-aggregates",
+      session_id: session.session_id,
+      privacy_class: "redacted-sync",
+    });
     database.close();
   });
 });

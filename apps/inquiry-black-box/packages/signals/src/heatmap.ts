@@ -56,6 +56,9 @@ const behaviorWeights: Record<ReplayMarkerKind, number> = {
   "copied-passage": 0.35,
   rewind: 0.7,
   "tab-churn": 0.6,
+  "app-churn": 0.55,
+  "off-browser-focus": 0.4,
+  "deep-work-span": 0.45,
   label: 0.2,
   probe: 0.15,
 };
@@ -261,6 +264,18 @@ function repairFor(kind: ComprehensionHeatmapKind, behaviorEvidence: HeatmapBeha
 
   if (behaviorKinds.has("tab-churn")) {
     return "Choose one branch to keep and turn the rest into follow-up notes.";
+  }
+
+  if (behaviorKinds.has("app-churn")) {
+    return "Choose which app/task branch should become a follow-up note.";
+  }
+
+  if (behaviorKinds.has("deep-work-span")) {
+    return "Summarize what the non-browser work block produced.";
+  }
+
+  if (behaviorKinds.has("off-browser-focus")) {
+    return "Name what happened in this app block and whether it should become a note.";
   }
 
   return "Review this span against the source and mark whether the thread recovered.";

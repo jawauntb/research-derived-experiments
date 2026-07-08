@@ -3,8 +3,10 @@ import { createEvent } from "@inquiry/schema";
 import { createInquiryDatabase } from "../src/main/db";
 import { createSessionController } from "../src/main/ingest/session";
 import { createIngestRequestHandler } from "../src/main/ingest/server";
+import { createDesktopRuntime } from "../src/main/main";
 import { createGlobalHotkeyEvent } from "../src/main/security/hotkeys";
 import { createPairingToken } from "../src/main/security/pairing";
+import type { DesktopActivityProvider } from "../src/main/activity/desktopActivity";
 
 const origin = "chrome-extension://extension-fixture";
 const secret = "fixture-pairing-secret";
@@ -229,6 +231,74 @@ describe("desktop extension ingest", () => {
     const invalidToken = await handler(sessionControlRequest({ recording_state: "recording" }, { token: "bad-token" }));
     expect(invalidToken.status).toBe(401);
     database.close();
+  });
+
+  test("drives desktop activity lifecycle through extension session controls", async () => {
+    let nowMs = 0;
+    let foregroundCalls = 0;
+    const provider: DesktopActivityProvider = {
+      permissionStatus: () => "granted",
+      foregroundActivity: () => {
+        foregroundCalls += 1;
+        return foregroundCalls === 1
+          ? {
+              app_name: "Cursor",
+              bundle_id: "com.todesktop.230313mzl4w4u92",
+              permission_status: "granted",
+            }
+          : {
+              app_name: "Terminal",
+              bundle_id: "com.apple.Terminal",
+              permission_status: "granted",
+            };
+      },
+    };
+    const database = createInquiryDatabase();
+    const runtime = createDesktopRuntime({
+      database,
+      pairingSecret: secret,
+      startServer: false,
+      desktopActivityProvider: provider,
+      desktopActivityClock: {
+        nowMs: () => nowMs,
+        nowIso: () => new Date(nowMs).toISOString(),
+      },
+      desktopActivityAutoPoll: false,
+    });
+    database.setSignalEnabled("desktopActivity", true);
+    const handler = createIngestRequestHandler({
+      allowedOrigins: [origin],
+      database,
+      pairingSecret: secret,
+      sessions: runtime.sessions,
+      sessionControls: runtime.bridge,
+      nowMs: () => issuedAtMs,
+    });
+
+    await handler(sessionControlRequest({ recording_state: "recording", title: "Extension desktop activity" }));
+    const sessionId = runtime.sessions.currentSession()?.session_id;
+    if (!sessionId) {
+      throw new Error("expected active session");
+    }
+
+    nowMs = 1_000;
+    await runtime.desktopActivity.tick();
+    nowMs = 2_000;
+    await handler(sessionControlRequest({ recording_state: "paused", monotonic_ms: 2_000 }));
+    await runtime.desktopActivity.tick();
+    nowMs = 3_000;
+    await handler(sessionControlRequest({ recording_state: "recording", monotonic_ms: 3_000 }));
+    await runtime.desktopActivity.tick();
+    nowMs = 4_000;
+    await handler(sessionControlRequest({ recording_state: "stopped", monotonic_ms: 4_000 }));
+    await runtime.desktopActivity.tick();
+
+    const desktopEvents = database.listEvents(sessionId).filter((event) => event.source === "desktop-activity");
+    expect(foregroundCalls).toBe(2);
+    expect(desktopEvents.map((event) => event.payload.app_name)).toEqual(["Cursor", "Terminal"]);
+    expect(desktopEvents.map((event) => event.payload.focus_ended_monotonic_ms)).toEqual([2_000, 4_000]);
+    expect(runtime.desktopActivity.status().active).toBe(false);
+    runtime.stop();
   });
 
   test("returns authoritative desktop session status behind pairing checks", async () => {

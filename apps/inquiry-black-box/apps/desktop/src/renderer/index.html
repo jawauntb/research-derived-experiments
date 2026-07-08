@@ -185,15 +185,83 @@
         gap: 10px;
       }
 
+      .privacy-settings__status {
+        align-items: start;
+        background: var(--surface-inset);
+        border-radius: 8px;
+        box-shadow: var(--shadow-pressed);
+        display: grid;
+        gap: 4px;
+        min-height: 56px;
+        padding: 10px;
+      }
+
+      .privacy-settings__status span {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.35;
+      }
+
       .privacy-settings__row {
         align-items: center;
         background: var(--surface-inset);
         border-radius: 8px;
         box-shadow: var(--shadow-pressed);
-        display: flex;
+        display: grid;
         gap: 8px;
+        grid-template-columns: auto minmax(0, 1fr) auto;
         min-height: 34px;
         padding: 6px 10px;
+      }
+
+      .privacy-settings__row-disabled {
+        opacity: 0.72;
+      }
+
+      .privacy-settings__text {
+        display: grid;
+        gap: 2px;
+        min-width: 0;
+      }
+
+      .privacy-settings__text > span {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.3;
+      }
+
+      .privacy-settings__badge {
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        justify-self: end;
+        min-width: 44px;
+        padding: 4px 8px;
+        text-align: center;
+      }
+
+      .privacy-settings__badge-good,
+      .privacy-settings__status-good strong {
+        background: var(--green-soft);
+        color: var(--green);
+      }
+
+      .privacy-settings__badge-warn,
+      .privacy-settings__status-warn strong {
+        background: var(--amber-soft);
+        color: var(--amber);
+      }
+
+      .privacy-settings__badge-blocked,
+      .privacy-settings__status-blocked strong {
+        background: var(--rose-soft);
+        color: var(--rose);
+      }
+
+      .privacy-settings__badge-muted,
+      .privacy-settings__status-muted strong {
+        background: var(--surface-raised);
+        color: var(--muted);
       }
 
       input[type="checkbox"] {

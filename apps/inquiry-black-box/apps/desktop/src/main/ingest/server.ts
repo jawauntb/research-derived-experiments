@@ -12,13 +12,22 @@ import {
 } from "@inquiry/schema";
 import type { InquiryDatabase } from "../db";
 import { verifyPairingToken } from "../security/pairing";
-import type { SessionController } from "./session";
+import type { SessionController, SessionStateChangeInput, StartSessionInput } from "./session";
+
+export type SessionControlTarget = {
+  currentSession(): SessionRecord | null;
+  startSession(input: StartSessionInput): SessionRecord;
+  pauseSession(input?: SessionStateChangeInput): SessionRecord;
+  resumeSession(input?: SessionStateChangeInput): SessionRecord;
+  stopSession(input?: SessionStateChangeInput): SessionRecord;
+};
 
 export type IngestServerOptions = {
   allowedOrigins?: readonly string[];
   database: InquiryDatabase;
   pairingSecret: string;
   sessions: SessionController;
+  sessionControls?: SessionControlTarget;
   nowMs?: () => number;
   sourceVersion?: string;
 };
@@ -121,7 +130,7 @@ export function createIngestRequestHandler(options: IngestServerOptions): (reque
       }
 
       if (isSessionControlPath) {
-        return jsonResponse(applySessionControl(body, options.sessions), 200, origin);
+        return jsonResponse(applySessionControl(body, options.sessionControls ?? options.sessions), 200, origin);
       }
 
       const events = normalizeExtensionBody(body, {
@@ -158,7 +167,7 @@ export function createIngestRequestHandler(options: IngestServerOptions): (reque
   };
 }
 
-function applySessionControl(value: unknown, sessions: SessionController): JsonObject {
+function applySessionControl(value: unknown, sessions: SessionControlTarget): JsonObject {
   if (!isRecord(value)) {
     throw new Error("session control body must be an object");
   }

@@ -1,11 +1,11 @@
 import { describe, expect, test } from "bun:test";
 import { createEvent, type EventEnvelope, type EventType, type JsonObject } from "@inquiry/schema";
-import { buildReplayMemo, buildReplayMarkers } from "../src";
+import { buildRepairCandidates, buildReplayMemo, buildReplayMarkers } from "../src";
 
 function event(event_type: EventType, monotonic_ms: number, payload: JsonObject, quality_flags: string[] = []): EventEnvelope {
   return createEvent({
     session_id: "fixture-session",
-    source: event_type.startsWith("camera") ? "desktop-camera" : "browser",
+    source: sourceForEventType(event_type),
     source_version: "test@0.1.0",
     monotonic_ms,
     event_type,
@@ -14,6 +14,17 @@ function event(event_type: EventType, monotonic_ms: number, payload: JsonObject,
     retention_policy: "local-default",
     quality_flags,
   });
+}
+
+function sourceForEventType(eventType: EventType): EventEnvelope["source"] {
+  if (eventType.startsWith("camera")) {
+    return "desktop-camera";
+  }
+  if (eventType.startsWith("desktop.")) {
+    return "desktop-activity";
+  }
+
+  return "browser";
 }
 
 describe("replay heuristics", () => {
@@ -39,6 +50,72 @@ describe("replay heuristics", () => {
     expect(kinds).toContain("copied-passage");
     expect(kinds).toContain("rewind");
     expect(kinds).toContain("tab-churn");
+  });
+
+  test("marks frequent foreground app switching as app churn with event evidence", () => {
+    const events = [
+      event("desktop.app_focus", 1_000, { app_name: "Cursor", focus_started_monotonic_ms: 0, focus_ended_monotonic_ms: 1_000, duration_ms: 1_000, permission_status: "granted" }),
+      event("desktop.app_focus", 3_000, { app_name: "Terminal", focus_started_monotonic_ms: 1_000, focus_ended_monotonic_ms: 3_000, duration_ms: 2_000, permission_status: "granted" }),
+      event("desktop.app_focus", 5_000, { app_name: "Google Chrome", focus_started_monotonic_ms: 3_000, focus_ended_monotonic_ms: 5_000, duration_ms: 2_000, permission_status: "granted" }),
+      event("desktop.app_focus", 8_000, { app_name: "Slack", focus_started_monotonic_ms: 5_000, focus_ended_monotonic_ms: 8_000, duration_ms: 3_000, permission_status: "granted" }),
+    ];
+
+    const marker = buildReplayMarkers(events, 30_000).find((item) => item.kind === "app-churn");
+
+    expect(marker).toBeDefined();
+    expect(marker?.evidence_event_ids).toHaveLength(4);
+    expect(marker?.evidence.join(" ")).toContain("Cursor, Terminal, Google Chrome, Slack");
+    expect(marker?.suggested_action).toContain("follow-up note");
+  });
+
+  test("marks long non-browser focus after browser research as a deep-work span", () => {
+    const events = [
+      event("browser.scroll", 1_000, { delta_y: 700 }),
+      event("desktop.app_focus", 905_000, {
+        app_name: "Cursor",
+        bundle_id: "com.todesktop.230313mzl4w4u92",
+        focus_started_monotonic_ms: 5_000,
+        focus_ended_monotonic_ms: 905_000,
+        duration_ms: 900_000,
+        permission_status: "granted",
+      }),
+    ];
+
+    const memo = buildReplayMemo(events);
+    const marker = memo.markers.find((item) => item.kind === "deep-work-span");
+    const repair = buildRepairCandidates(memo.heatmap).find((candidate) => candidate.action === "follow-up-note");
+
+    expect(marker).toBeDefined();
+    if (!marker) {
+      throw new Error("expected deep-work marker");
+    }
+
+    expect(marker.evidence_event_ids).toHaveLength(2);
+    expect(marker.evidence.join(" ")).toContain("Cursor held foreground");
+    expect(marker.evidence.join(" ")).not.toMatch(/distract/i);
+    expect(memo.markers.some((item) => item.kind === "off-browser-focus")).toBe(false);
+    expect(memo.next_actions).toContain(marker.suggested_action);
+    expect(repair?.evidence_event_ids).toEqual(expect.arrayContaining(marker.evidence_event_ids));
+    expect(repair?.prompt).toContain("non-browser work block");
+  });
+
+  test("marks long app focus without a window title using app-level evidence", () => {
+    const events = [
+      event("desktop.app_focus", 360_000, {
+        app_name: "Preview",
+        bundle_id: "com.apple.Preview",
+        focus_started_monotonic_ms: 60_000,
+        focus_ended_monotonic_ms: 360_000,
+        duration_ms: 300_000,
+        permission_status: "granted",
+      }),
+    ];
+
+    const marker = buildReplayMarkers(events).find((item) => item.kind === "off-browser-focus");
+
+    expect(marker).toBeDefined();
+    expect(marker?.evidence.join(" ")).toContain("Preview held foreground");
+    expect(marker?.evidence.join(" ")).not.toContain("window_title");
   });
 
   test("coalesces noisy selection, highlight, and copy bursts into one copied-passage marker", () => {

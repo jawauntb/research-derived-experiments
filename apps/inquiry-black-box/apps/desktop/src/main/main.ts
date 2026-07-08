@@ -2,6 +2,14 @@ import { mkdirSync } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join } from "node:path";
 import { createEvent, type EventEnvelope, type LabelPayload, type SessionRecord } from "@inquiry/schema";
+import {
+  createDesktopActivityCollector,
+  type DesktopActivityClock,
+  type DesktopActivityCollector,
+  type DesktopActivityProvider,
+  type DesktopActivityStatus,
+} from "./activity/desktopActivity";
+import { createMacosActivityProvider } from "./activity/macosActivityProvider";
 import { createInquiryDatabase, type InquiryDatabase } from "./db";
 import {
   createIngestRequestHandler,
@@ -9,7 +17,12 @@ import {
   type StartedIngestServer,
   type StartIngestServerOptions,
 } from "./ingest/server";
-import { createSessionController, type SessionController } from "./ingest/session";
+import {
+  createSessionController,
+  type SessionController,
+  type SessionStateChangeInput,
+  type StartSessionInput,
+} from "./ingest/session";
 import { createGlobalHotkeyEvent } from "./security/hotkeys";
 import { createPairingSecret, createPairingToken } from "./security/pairing";
 import type { CameraFeatureWindow } from "../renderer/camera/featureWorker";
@@ -21,6 +34,10 @@ export type DesktopRuntimeOptions = {
   allowedOrigins?: readonly string[];
   ingestPort?: number;
   startServer?: boolean;
+  desktopActivityProvider?: DesktopActivityProvider;
+  desktopActivityClock?: Partial<DesktopActivityClock>;
+  desktopActivityPollIntervalMs?: number;
+  desktopActivityAutoPoll?: boolean;
 };
 
 export type DesktopRuntime = {
@@ -29,17 +46,20 @@ export type DesktopRuntime = {
   ingest: StartedIngestServer | null;
   pairingToken: () => string;
   bridge: DesktopMainBridge;
+  desktopActivity: DesktopActivityCollector;
   stop: () => void;
 };
 
 export type DesktopMainBridge = {
   currentSession: () => SessionRecord | null;
-  startSession: (input: { title: string; active_task?: string; notes?: string }) => SessionRecord;
-  pauseSession: () => SessionRecord;
-  resumeSession: () => SessionRecord;
-  stopSession: () => SessionRecord;
+  startSession: (input: StartSessionInput) => SessionRecord;
+  pauseSession: (input?: SessionStateChangeInput) => SessionRecord;
+  resumeSession: (input?: SessionStateChangeInput) => SessionRecord;
+  stopSession: (input?: SessionStateChangeInput) => SessionRecord;
   addLabel: (input: { label: LabelPayload["label"]; note?: string; monotonic_ms?: number }) => EventEnvelope<LabelPayload>;
   appendCameraFeatureWindow: (featureWindow: CameraFeatureWindow) => EventEnvelope;
+  desktopActivityStatus: () => DesktopActivityStatus;
+  syncDesktopActivity: () => void;
   handleGlobalHotkey: (input: {
     action: string;
     monotonic_ms: number;
@@ -55,12 +75,33 @@ export function createDesktopRuntime(options: DesktopRuntimeOptions = {}): Deskt
   const sessions = createSessionController(database);
   const pairingSecret = options.pairingSecret ?? process.env.INQUIRY_PAIRING_SECRET ?? createPairingSecret();
   const allowedOrigins = options.allowedOrigins ?? defaultAllowedOrigins;
-  const bridge = createDesktopMainBridge(database, sessions);
+  const desktopActivityOptions: Parameters<typeof createDesktopActivityCollector>[0] = {
+    provider: options.desktopActivityProvider ?? createMacosActivityProvider(),
+    appendEvent: (event) => database.appendEvent(event),
+    canCapture: (session_id) => {
+      const session = sessions.currentSession();
+      return session?.session_id === session_id && session.recording_state === "recording";
+    },
+  };
+  if (options.desktopActivityClock !== undefined) {
+    desktopActivityOptions.clock = options.desktopActivityClock;
+  }
+  if (options.desktopActivityPollIntervalMs !== undefined) {
+    desktopActivityOptions.pollIntervalMs = options.desktopActivityPollIntervalMs;
+  }
+  if (options.desktopActivityAutoPoll !== undefined) {
+    desktopActivityOptions.autoPoll = options.desktopActivityAutoPoll;
+  }
+  const desktopActivity = createDesktopActivityCollector({
+    ...desktopActivityOptions,
+  });
+  const bridge = createDesktopMainBridge(database, sessions, desktopActivity);
   const serverOptions: StartIngestServerOptions = {
     allowedOrigins,
     database,
     pairingSecret,
     sessions,
+    sessionControls: bridge,
   };
   if (options.ingestPort !== undefined) {
     serverOptions.port = options.ingestPort;
@@ -73,27 +114,54 @@ export function createDesktopRuntime(options: DesktopRuntimeOptions = {}): Deskt
     ingest,
     pairingToken: () => createPairingToken({ secret: pairingSecret }),
     bridge,
+    desktopActivity,
     stop() {
+      desktopActivity.stop();
       ingest?.stop();
       database.close();
     },
   };
 }
 
-export function createDesktopMainBridge(database: InquiryDatabase, sessions: SessionController): DesktopMainBridge {
+export function createDesktopMainBridge(
+  database: InquiryDatabase,
+  sessions: SessionController,
+  desktopActivity: DesktopActivityCollector,
+): DesktopMainBridge {
+  function configureDesktopActivity(): void {
+    const settings = database.signalSettings();
+    desktopActivity.configure({
+      enabled: settings.desktopActivity,
+      includeWindowTitles: settings.desktopWindowTitles,
+    });
+
+    const session = sessions.currentSession();
+    if (session?.recording_state === "recording" && settings.desktopActivity) {
+      desktopActivity.start({ session_id: session.session_id });
+    } else {
+      desktopActivity.stop();
+    }
+  }
+
   return {
     currentSession: () => sessions.currentSession(),
     startSession(input) {
-      return sessions.startSession(input);
+      const session = sessions.startSession(input);
+      configureDesktopActivity();
+      return session;
     },
-    pauseSession() {
-      return sessions.pauseSession({ reason: "visible-control" });
+    pauseSession(input) {
+      desktopActivity.stop();
+      return sessions.pauseSession(input ?? { reason: "visible-control" });
     },
-    resumeSession() {
-      return sessions.resumeSession({ reason: "visible-control" });
+    resumeSession(input) {
+      const session = sessions.resumeSession(input ?? { reason: "visible-control" });
+      configureDesktopActivity();
+      return session;
     },
-    stopSession() {
-      return sessions.stopSession({ reason: "visible-control" });
+    stopSession(input) {
+      desktopActivity.stop();
+      return sessions.stopSession(input ?? { reason: "visible-control" });
     },
     addLabel(input) {
       const session = requireCurrentSession(sessions);
@@ -136,13 +204,22 @@ export function createDesktopMainBridge(database: InquiryDatabase, sessions: Ses
         }),
       );
     },
+    desktopActivityStatus() {
+      return desktopActivity.status();
+    },
+    syncDesktopActivity() {
+      configureDesktopActivity();
+    },
     handleGlobalHotkey(input) {
       const session = requireCurrentSession(sessions);
       if (input.action === "pause") {
+        desktopActivity.stop();
         return sessions.pauseSession({ reason: "global-hotkey", monotonic_ms: input.monotonic_ms });
       }
       if (input.action === "resume") {
-        return sessions.resumeSession({ reason: "global-hotkey", monotonic_ms: input.monotonic_ms });
+        const resumed = sessions.resumeSession({ reason: "global-hotkey", monotonic_ms: input.monotonic_ms });
+        configureDesktopActivity();
+        return resumed;
       }
 
       const event = createGlobalHotkeyEvent({ ...input, session_id: session.session_id });

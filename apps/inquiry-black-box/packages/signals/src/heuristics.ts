@@ -11,6 +11,9 @@ export type ReplayMarkerKind =
   | "copied-passage"
   | "rewind"
   | "tab-churn"
+  | "app-churn"
+  | "off-browser-focus"
+  | "deep-work-span"
   | "label"
   | "probe";
 
@@ -46,7 +49,9 @@ export function buildReplayMarkers(events: EventEnvelope[], windowMs = 30_000): 
     ...windows.flatMap(markSkimRisk),
     ...windows.flatMap(markHighLoad),
     ...windows.flatMap(markTabChurn),
+    ...windows.flatMap(markAppChurn),
     ...markStuckLoops(windows),
+    ...markDesktopFocus(events),
     ...markCopiedPassages(events),
     ...markRewinds(events),
     ...markLabels(events),
@@ -72,6 +77,9 @@ export function buildReplayMemo(events: EventEnvelope[], options: number | Repla
   const nextActions = [
     markers.find((marker) => marker.kind === "stuck-loop")?.suggested_action,
     markers.find((marker) => marker.kind === "high-load")?.suggested_action,
+    markers.find((marker) => marker.kind === "app-churn")?.suggested_action,
+    markers.find((marker) => marker.kind === "deep-work-span")?.suggested_action,
+    markers.find((marker) => marker.kind === "off-browser-focus")?.suggested_action,
     heatmap.find((segment) => segment.kind === "mixed-load" || segment.kind === "intrinsic-difficulty")?.suggested_repair,
     markers.find((marker) => marker.kind === "skim-risk")?.suggested_action,
   ].filter((value): value is string => typeof value === "string");
@@ -133,6 +141,27 @@ function markTabChurn(window: EventWindow): ReplayMarker[] {
   ];
 }
 
+function markAppChurn(window: EventWindow): ReplayMarker[] {
+  const desktopEvents = window.events.filter(isDesktopFocusEvent);
+  const appNames = desktopEvents.map((event) => stringPayload(event, "app_name")).filter(isString);
+  const uniqueApps = unique(appNames);
+  const adjacentChanges = appNames.filter((appName, index) => index > 0 && appName !== appNames[index - 1]).length;
+  if (desktopEvents.length < 4 || uniqueApps.length < 3 || adjacentChanges < 3) {
+    return [];
+  }
+
+  return [
+    marker(
+      window,
+      "app-churn",
+      0.66,
+      desktopEvents,
+      [`Foreground app context changed ${adjacentChanges} times across ${uniqueApps.slice(0, 4).join(", ")}.`],
+      "Choose which app/task branch should become a follow-up note, and close the rest.",
+    ),
+  ];
+}
+
 function markStuckLoops(windows: EventWindow[]): ReplayMarker[] {
   const markers: ReplayMarker[] = [];
   for (const window of windows) {
@@ -148,6 +177,70 @@ function markStuckLoops(windows: EventWindow[]): ReplayMarker[] {
       ], "Mark the confusing span and ask what prerequisite is missing."),
     );
   }
+  return markers;
+}
+
+function markDesktopFocus(events: EventEnvelope[]): ReplayMarker[] {
+  const ordered = [...events].sort((a, b) => a.monotonic_ms - b.monotonic_ms);
+  const browserEvents = ordered.filter((event) => event.source === "browser");
+  const focusEvents = ordered.filter(isDesktopFocusEvent);
+  const deepWorkEventIds = new Set<string>();
+  const markers: ReplayMarker[] = [];
+
+  for (const event of focusEvents) {
+    const appName = stringPayload(event, "app_name");
+    const durationMs = numericPayload(event, "duration_ms") ?? 0;
+    if (!appName || isBrowserAppName(appName) || durationMs < 180_000) {
+      continue;
+    }
+
+    const startedAt = numericPayload(event, "focus_started_monotonic_ms") ?? event.monotonic_ms;
+    const endedAt = numericPayload(event, "focus_ended_monotonic_ms") ?? event.monotonic_ms;
+    const recentBrowserEvent = lastEventAtOrBefore(browserEvents, startedAt);
+    const hasRecentBrowserContext = recentBrowserEvent !== undefined && startedAt - recentBrowserEvent.monotonic_ms <= 10 * 60_000;
+    if (durationMs >= 600_000 && (isDeepWorkAppName(appName) || hasRecentBrowserContext)) {
+      const evidenceEvents = recentBrowserEvent ? [recentBrowserEvent, event] : [event];
+      markers.push(
+        spanMarker({
+          event,
+          kind: "deep-work-span",
+          confidence: 0.64,
+          start_ms: startedAt,
+          end_ms: endedAt,
+          evidenceEvents,
+          evidence: [`${appName} held foreground for ${formatMinutes(durationMs)} after browser-context evidence.`],
+          suggestedAction: "Summarize what the non-browser work block produced, then decide what should return to notes or browser research.",
+        }),
+      );
+      deepWorkEventIds.add(event.event_id);
+    }
+  }
+
+  for (const event of focusEvents) {
+    if (deepWorkEventIds.has(event.event_id)) {
+      continue;
+    }
+
+    const appName = stringPayload(event, "app_name");
+    const durationMs = numericPayload(event, "duration_ms") ?? 0;
+    if (!appName || isBrowserAppName(appName) || durationMs < 180_000) {
+      continue;
+    }
+
+    markers.push(
+      spanMarker({
+        event,
+        kind: "off-browser-focus",
+        confidence: 0.58,
+        start_ms: numericPayload(event, "focus_started_monotonic_ms") ?? event.monotonic_ms,
+        end_ms: numericPayload(event, "focus_ended_monotonic_ms") ?? event.monotonic_ms,
+        evidenceEvents: [event],
+        evidence: [`${appName} held foreground outside the browser for ${formatMinutes(durationMs)}.`],
+        suggestedAction: "Name what happened in this app block and whether it should become a follow-up note.",
+      }),
+    );
+  }
+
   return markers;
 }
 
@@ -224,6 +317,29 @@ function eventMarker(
   };
 }
 
+function spanMarker(input: {
+  event: EventEnvelope;
+  kind: ReplayMarkerKind;
+  confidence: number;
+  start_ms: number;
+  end_ms: number;
+  evidenceEvents: EventEnvelope[];
+  evidence: string[];
+  suggestedAction: string;
+}): ReplayMarker {
+  return {
+    marker_id: `${input.kind}:${input.event.event_id}`,
+    session_id: input.event.session_id,
+    kind: input.kind,
+    start_ms: input.start_ms,
+    end_ms: input.end_ms,
+    confidence: input.confidence,
+    evidence_event_ids: input.evidenceEvents.map((event) => event.event_id),
+    evidence: input.evidence,
+    suggested_action: input.suggestedAction,
+  };
+}
+
 function sum(values: number[]): number {
   return values.reduce((total, value) => total + value, 0);
 }
@@ -238,4 +354,40 @@ function average(values: number[]): number {
 
 function isNumber(value: number | null): value is number {
   return typeof value === "number";
+}
+
+function isString(value: string | null): value is string {
+  return typeof value === "string" && value.length > 0;
+}
+
+function isDesktopFocusEvent(event: EventEnvelope): boolean {
+  return event.event_type === "desktop.app_focus" || event.event_type === "desktop.window_focus";
+}
+
+function isBrowserAppName(appName: string): boolean {
+  return /chrome|safari|firefox|edge|brave|arc/i.test(appName);
+}
+
+function isDeepWorkAppName(appName: string): boolean {
+  return /cursor|terminal|iterm|visual studio code|xcode|preview|figma|obsidian|notes/i.test(appName);
+}
+
+function unique(values: string[]): string[] {
+  return [...new Set(values)];
+}
+
+function formatMinutes(durationMs: number): string {
+  const minutes = durationMs / 60_000;
+  return `${minutes.toFixed(minutes >= 10 ? 0 : 1)}m`;
+}
+
+function lastEventAtOrBefore(events: EventEnvelope[], monotonicMs: number): EventEnvelope | undefined {
+  for (let index = events.length - 1; index >= 0; index -= 1) {
+    const event = events[index];
+    if (event && event.monotonic_ms <= monotonicMs) {
+      return event;
+    }
+  }
+
+  return undefined;
 }

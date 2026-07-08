@@ -1,7 +1,9 @@
 import {
   assertNoBlockedPayload,
+  findSensitiveFieldPaths,
   isPrivacyClass,
   isRetentionPolicy,
+  normalizeSensitiveFieldName,
   rawTextPayloadFieldNames,
   selectedTextPayloadFieldNames,
   type PrivacyClass,
@@ -11,6 +13,7 @@ import {
 export const eventSources = [
   "browser",
   "desktop-camera",
+  "desktop-activity",
   "desktop-hotkey",
   "desktop-system",
   "stimulus",
@@ -32,6 +35,8 @@ export const eventTypes = [
   "browser.highlight",
   "browser.typing_metrics",
   "camera.feature_window",
+  "desktop.app_focus",
+  "desktop.window_focus",
   "session.started",
   "session.paused",
   "session.resumed",
@@ -88,6 +93,26 @@ export type CameraFeaturePayload = JsonObject & {
   blink_proxy: number;
   head_pose_variance: number;
   motion_score: number;
+};
+
+export const desktopPermissionStatuses = ["not_requested", "granted", "denied", "unavailable"] as const;
+
+export type DesktopPermissionStatus = (typeof desktopPermissionStatuses)[number];
+
+export type DesktopAppFocusPayload = JsonObject & {
+  app_name: string;
+  bundle_id?: string;
+  pid_hash?: string;
+  focus_started_monotonic_ms: number;
+  focus_ended_monotonic_ms?: number;
+  duration_ms?: number;
+  permission_status: DesktopPermissionStatus;
+};
+
+export type DesktopWindowFocusPayload = DesktopAppFocusPayload & {
+  window_id_hash?: string;
+  window_title?: string;
+  title_truncated?: boolean;
 };
 
 export type LabelPayload = JsonObject & {
@@ -231,45 +256,40 @@ export function validateEvent(value: unknown): asserts value is EventEnvelope {
   assertNoBlockedPayload(value.payload);
   assertStimulusTextOptIn(value as EventEnvelope);
   assertBrowserSelectedTextOptIn(value as EventEnvelope);
+  assertDesktopWindowTitleOptIn(value as EventEnvelope);
+  assertDesktopActivityPayloadShape(value as EventEnvelope);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-const rawStimulusTextFieldNames: ReadonlySet<string> = new Set(rawTextPayloadFieldNames);
-const rawBrowserSelectedTextFieldNames: ReadonlySet<string> = new Set(selectedTextPayloadFieldNames);
+const desktopWindowTitleFieldNames = ["window_title", "windowTitle", "window-title"] as const;
+const desktopActivityAllowedPayloadKeys: ReadonlySet<string> = new Set([
+  "app_name",
+  "bundle_id",
+  "pid_hash",
+  "focus_started_monotonic_ms",
+  "focus_ended_monotonic_ms",
+  "duration_ms",
+  "permission_status",
+  "window_id_hash",
+  "window_title",
+  "title_truncated",
+]);
 
 function assertStimulusTextOptIn(event: EventEnvelope): void {
   if (!event.event_type.startsWith("stimulus.") || event.privacy_class === "document-opt-in") {
     return;
   }
 
-  const present = findRawStimulusTextFieldPaths(event.payload);
+  const present = findSensitiveFieldPaths(event.payload, {
+    extraFieldNames: rawTextPayloadFieldNames,
+    normalizeFieldName: normalizeSensitiveFieldName,
+  });
   if (present.length > 0) {
     throw new Error(`stimulus text requires document-opt-in: ${present.join(", ")}`);
   }
-}
-
-function findRawStimulusTextFieldPaths(value: unknown, path = "$"): string[] {
-  if (Array.isArray(value)) {
-    return value.flatMap((item, index) => findRawStimulusTextFieldPaths(item, `${path}[${index}]`));
-  }
-
-  if (!isRecord(value)) {
-    return [];
-  }
-
-  const paths: string[] = [];
-  for (const [key, child] of Object.entries(value)) {
-    const childPath = `${path}.${key}`;
-    if (rawStimulusTextFieldNames.has(key)) {
-      paths.push(childPath);
-    }
-    paths.push(...findRawStimulusTextFieldPaths(child, childPath));
-  }
-
-  return paths;
 }
 
 function assertBrowserSelectedTextOptIn(event: EventEnvelope): void {
@@ -277,7 +297,10 @@ function assertBrowserSelectedTextOptIn(event: EventEnvelope): void {
     return;
   }
 
-  const present = findRawBrowserSelectedTextFieldPaths(event.payload);
+  const present = findSensitiveFieldPaths(event.payload, {
+    extraFieldNames: selectedTextPayloadFieldNames,
+    normalizeFieldName: normalizeSensitiveFieldName,
+  });
   if (present.length > 0) {
     throw new Error(`browser selected text requires document-opt-in: ${present.join(", ")}`);
   }
@@ -287,23 +310,89 @@ function isBrowserSelectionTextEvent(eventType: EventType): boolean {
   return eventType === "browser.selection" || eventType === "browser.copy" || eventType === "browser.highlight";
 }
 
-function findRawBrowserSelectedTextFieldPaths(value: unknown, path = "$"): string[] {
-  if (Array.isArray(value)) {
-    return value.flatMap((item, index) => findRawBrowserSelectedTextFieldPaths(item, `${path}[${index}]`));
+function assertDesktopWindowTitleOptIn(event: EventEnvelope): void {
+  if (event.event_type !== "desktop.window_focus" || event.privacy_class === "document-opt-in") {
+    return;
   }
 
-  if (!isRecord(value)) {
-    return [];
+  const present = findDesktopWindowTitleFieldPaths(event.payload);
+  if (present.length > 0) {
+    throw new Error(`desktop window titles require document-opt-in: ${present.join(", ")}`);
+  }
+}
+
+export function findDesktopWindowTitleFieldPaths(value: unknown): string[] {
+  return findSensitiveFieldPaths(value, {
+    extraFieldNames: desktopWindowTitleFieldNames,
+    normalizeFieldName: normalizeSensitiveFieldName,
+  });
+}
+
+function assertDesktopActivityPayloadShape(event: EventEnvelope): void {
+  if (event.event_type !== "desktop.app_focus" && event.event_type !== "desktop.window_focus") {
+    return;
   }
 
-  const paths: string[] = [];
-  for (const [key, child] of Object.entries(value)) {
-    const childPath = `${path}.${key}`;
-    if (rawBrowserSelectedTextFieldNames.has(key)) {
-      paths.push(childPath);
+  if (event.source !== "desktop-activity") {
+    throw new Error("desktop activity events must use desktop-activity source");
+  }
+
+  const payload = event.payload;
+  for (const key of Object.keys(payload)) {
+    if (!desktopActivityAllowedPayloadKeys.has(key)) {
+      throw new Error(`desktop activity payload contains unsupported field: ${key}`);
     }
-    paths.push(...findRawBrowserSelectedTextFieldPaths(child, childPath));
   }
 
-  return paths;
+  if (typeof payload.app_name !== "string" || payload.app_name.length === 0) {
+    throw new Error("desktop activity payload.app_name must be a non-empty string");
+  }
+
+  if (!desktopPermissionStatuses.includes(payload.permission_status as DesktopPermissionStatus)) {
+    throw new Error("desktop activity payload.permission_status is unsupported");
+  }
+
+  assertFiniteNonNegative(payload.focus_started_monotonic_ms, "desktop activity payload.focus_started_monotonic_ms");
+  assertFiniteNonNegative(payload.focus_ended_monotonic_ms, "desktop activity payload.focus_ended_monotonic_ms");
+  assertFiniteNonNegative(payload.duration_ms, "desktop activity payload.duration_ms");
+
+  const startedMs = payload.focus_started_monotonic_ms as number;
+  const endedMs = payload.focus_ended_monotonic_ms as number;
+  const durationMs = payload.duration_ms as number;
+  if (endedMs < startedMs) {
+    throw new Error("desktop activity payload.focus_ended_monotonic_ms must be at or after focus_started_monotonic_ms");
+  }
+  if (durationMs !== endedMs - startedMs) {
+    throw new Error("desktop activity payload.duration_ms must match focus span length");
+  }
+
+  for (const key of ["bundle_id", "pid_hash", "window_id_hash"] as const) {
+    if (payload[key] !== undefined && (typeof payload[key] !== "string" || payload[key].length === 0)) {
+      throw new Error(`desktop activity payload.${key} must be a non-empty string when present`);
+    }
+  }
+
+  const titlePaths = findDesktopWindowTitleFieldPaths(payload);
+  if (event.event_type === "desktop.app_focus" && titlePaths.length > 0) {
+    throw new Error(`desktop.app_focus must not include window title fields: ${titlePaths.join(", ")}`);
+  }
+
+  if (payload.window_title !== undefined) {
+    if (event.event_type !== "desktop.window_focus") {
+      throw new Error("desktop window title payloads must use desktop.window_focus");
+    }
+    if (typeof payload.window_title !== "string" || payload.window_title.length === 0 || payload.window_title.length > 120) {
+      throw new Error("desktop activity payload.window_title must be a 1-120 character string");
+    }
+  }
+
+  if (payload.title_truncated !== undefined && typeof payload.title_truncated !== "boolean") {
+    throw new Error("desktop activity payload.title_truncated must be a boolean when present");
+  }
+}
+
+function assertFiniteNonNegative(value: unknown, field: string): asserts value is number {
+  if (typeof value !== "number" || !Number.isFinite(value) || value < 0) {
+    throw new Error(`${field} must be a non-negative number`);
+  }
 }

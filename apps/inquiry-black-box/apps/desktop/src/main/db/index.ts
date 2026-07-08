@@ -3,9 +3,14 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
+  applySignalSettingChange,
   canExportPrivacyClass,
   createEvent,
   createSessionRecord,
+  defaultSignalSettings,
+  isSignalSettingKey,
+  normalizeSignalSettings,
+  signalSettingKeys,
   validateEvent,
   type EventEnvelope,
   type JsonObject,
@@ -214,25 +219,31 @@ export function createInquiryDatabase(path = ":memory:"): InquiryDatabase {
       return rows.map(rowToSyncQueueRecord);
     },
     setSignalEnabled(key, enabled) {
-      db.query(
-        `INSERT INTO signal_settings (key, enabled, updated_at)
-         VALUES ($key, $enabled, $updatedAt)
-         ON CONFLICT(key) DO UPDATE SET enabled = excluded.enabled, updated_at = excluded.updated_at`,
-      ).run({ key, enabled: enabled ? 1 : 0, updatedAt: new Date().toISOString() });
+      if (!isSignalSettingKey(key)) {
+        throw new Error(`unsupported signal setting: ${String(key)}`);
+      }
+
+      const next = applySignalSettingChange(this.signalSettings(), key, enabled);
+      const updatedAt = new Date().toISOString();
+      db.transaction(() => {
+        for (const settingKey of signalSettingKeys) {
+          db.query(
+            `INSERT INTO signal_settings (key, enabled, updated_at)
+             VALUES ($key, $enabled, $updatedAt)
+             ON CONFLICT(key) DO UPDATE SET enabled = excluded.enabled, updated_at = excluded.updated_at`,
+          ).run({ key: settingKey, enabled: next[settingKey] ? 1 : 0, updatedAt });
+        }
+      })();
     },
     signalSettings() {
-      const defaults: SignalSettings = {
-        browser: true,
-        camera: false,
-        typingMetrics: true,
-        notifications: false,
-        cloudSync: false,
-      };
-      const rows = db.query("SELECT key, enabled FROM signal_settings").all() as { key: keyof SignalSettings; enabled: 0 | 1 }[];
+      const defaults = defaultSignalSettings();
+      const rows = db.query("SELECT key, enabled FROM signal_settings").all() as { key: string; enabled: 0 | 1 }[];
       for (const row of rows) {
-        defaults[row.key] = row.enabled === 1;
+        if (isSignalSettingKey(row.key)) {
+          defaults[row.key] = row.enabled === 1;
+        }
       }
-      return defaults;
+      return normalizeSignalSettings(defaults);
     },
     close() {
       db.close();
