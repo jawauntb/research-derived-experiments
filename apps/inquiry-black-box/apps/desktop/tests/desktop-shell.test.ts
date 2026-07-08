@@ -241,8 +241,6 @@ describe("desktop shell IPC facade", () => {
     const database = createInquiryDatabase();
     const postedBodies: Record<string, unknown>[] = [];
     const authorizations: string[] = [];
-    const previousBearer = process.env.INQUIRY_CLOUD_BEARER_TOKEN;
-    process.env.INQUIRY_CLOUD_BEARER_TOKEN = "fixture-token";
     const runtime = createDesktopRuntime({
       database,
       pairingSecret: "desktop-shell-test-secret",
@@ -251,6 +249,8 @@ describe("desktop shell IPC facade", () => {
     const facade = createDesktopIpcFacade(runtime, {
       redactedSummary: {
         cloudApiUrl: "https://cloud.example.test",
+        bearerToken: "fixture-token",
+        provider: "modal",
         nowMs: () => 10_000,
         fetchImpl: async (_url, init) => {
           authorizations.push(new Headers(init?.headers).get("authorization") ?? "");
@@ -298,12 +298,6 @@ describe("desktop shell IPC facade", () => {
       expect(serialized).not.toContain("com.todesktop.230313mzl4w4u92");
       expect(database.listEvents(session.session_id).map((event) => event.event_type)).toContain("model.run");
     } finally {
-      if (previousBearer === undefined) {
-        delete process.env.INQUIRY_CLOUD_BEARER_TOKEN;
-      } else {
-        process.env.INQUIRY_CLOUD_BEARER_TOKEN = previousBearer;
-      }
-
       runtime.stop();
     }
   });
@@ -323,6 +317,10 @@ describe("desktop shell IPC facade", () => {
     let fetchCalls = 0;
 
     const result = await requestRedactedSessionSummary(database, session.session_id, {
+      cloudApiUrl: "",
+      bearerToken: "",
+      provider: "modal",
+      disableDopplerGemini: true,
       fetchImpl: async () => {
         fetchCalls += 1;
         return new Response("should not be called", { status: 500 });
@@ -331,10 +329,71 @@ describe("desktop shell IPC facade", () => {
 
     expect(result).toMatchObject({
       status: "unavailable",
-      message: "Cloud job endpoint or auth token is not configured.",
+      message: "Cloud job endpoint/auth token or Gemini API key is not configured.",
     });
     expect(fetchCalls).toBe(0);
     expect(database.listEvents(session.session_id).filter((event) => event.event_type === "model.run")).toHaveLength(1);
+    runtime.stop();
+  });
+
+  test("requests a direct Gemini redacted summary when cloud job config is absent", async () => {
+    const database = createInquiryDatabase();
+    const runtime = createDesktopRuntime({
+      database,
+      pairingSecret: "desktop-shell-test-secret",
+      startServer: false,
+    });
+    const facade = createDesktopIpcFacade(runtime);
+    const session = await facade.startSession({ title: "Gemini redacted summary" });
+    appendDesktopActivityFixture(database, session.session_id);
+    await facade.stopSession();
+    database.setSignalEnabled("cloudSync", true);
+    let requestedUrl = "";
+    let apiKey = "";
+    let postedBody = "";
+
+    const result = await requestRedactedSessionSummary(database, session.session_id, {
+      cloudApiUrl: "",
+      bearerToken: "",
+      provider: "gemini",
+      geminiApiKey: "fixture-gemini-key",
+      model: "gemini-2.0-flash",
+      nowMs: () => 10_000,
+      fetchImpl: async (url, init) => {
+        requestedUrl = url;
+        apiKey = new Headers(init?.headers).get("x-goog-api-key") ?? "";
+        postedBody = String(init?.body ?? "");
+        return new Response(
+          JSON.stringify({
+            candidates: [
+              {
+                content: {
+                  parts: [{ text: "Gemini says copied evidence needs one follow-up note." }],
+                },
+              },
+            ],
+          }),
+          { status: 200 },
+        );
+      },
+    });
+
+    expect(result).toMatchObject({
+      status: "complete",
+      message: "Gemini says copied evidence needs one follow-up note.",
+    });
+    expect(requestedUrl).toBe("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent");
+    expect(apiKey).toBe("fixture-gemini-key");
+    expect(postedBody).toContain("redacted-sync");
+    expect(postedBody).not.toContain("Cursor");
+    expect(postedBody).not.toContain("com.todesktop.230313mzl4w4u92");
+    const modelRun = database.listEvents(session.session_id).find((event) => event.event_type === "model.run");
+    expect(modelRun?.payload).toMatchObject({
+      provider: "gemini",
+      model: "gemini-2.0-flash",
+      status: "complete",
+      input_privacy_class: "redacted-sync",
+    });
     runtime.stop();
   });
 
