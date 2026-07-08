@@ -349,7 +349,7 @@ describe("cloud reports and jobs routes", () => {
     const modalClient: ModalClient = {
       submitJob: async ({ job_id }) => ({ modal_call_id: `modal-${job_id}`, status: "running" }),
     };
-    const handler = createCloudHandler({ store, modalClient });
+    const handler = createCloudHandler({ store, modalClient, summaryClient: null });
 
     const submit = await handler(
       new Request("http://cloud.test/jobs", {
@@ -541,7 +541,7 @@ describe("cloud reports and jobs routes", () => {
     const modalClient: ModalClient = {
       submitJob: async ({ job_id }) => ({ modal_call_id: `modal-${job_id}`, status: "running" }),
     };
-    const handler = createCloudHandler({ store, modalClient });
+    const handler = createCloudHandler({ store, modalClient, summaryClient: null });
 
     const submittedResponse = await handler(
       new Request("http://cloud.test/jobs", {
@@ -588,7 +588,7 @@ describe("cloud reports and jobs routes", () => {
         throw new Error("Modal should not be called for sensitive input");
       },
     };
-    const handler = createCloudHandler({ store: createCloudStore(), modalClient });
+    const handler = createCloudHandler({ store: createCloudStore(), modalClient, summaryClient: null });
 
     const response = await handler(
       new Request("http://cloud.test/jobs", {
@@ -614,7 +614,7 @@ describe("cloud reports and jobs routes", () => {
         throw new Error("Modal should not be called for malformed session summary input");
       },
     };
-    const handler = createCloudHandler({ store: createCloudStore(), modalClient });
+    const handler = createCloudHandler({ store: createCloudStore(), modalClient, summaryClient: null });
     const malformed = await handler(
       new Request("http://cloud.test/jobs", {
         method: "POST",
@@ -653,7 +653,7 @@ describe("cloud reports and jobs routes", () => {
         throw new Error("Modal should not be called for sensitive input");
       },
     };
-    const handler = createCloudHandler({ store: createCloudStore(), modalClient });
+    const handler = createCloudHandler({ store: createCloudStore(), modalClient, summaryClient: null });
     const payloads = [
       { rawFrame: "base64-frame" },
       { nested: { rawKey: "A" } },
@@ -690,7 +690,7 @@ describe("cloud reports and jobs routes", () => {
         throw new Error("Modal should not be called for desktop activity input");
       },
     };
-    const handler = createCloudHandler({ store: createCloudStore(), modalClient });
+    const handler = createCloudHandler({ store: createCloudStore(), modalClient, summaryClient: null });
     const inputs = [
       {
         privacy_class: "document-opt-in",
