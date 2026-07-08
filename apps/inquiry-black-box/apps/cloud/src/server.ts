@@ -9,7 +9,7 @@ import { handleSyncRoute } from "./routes/sync";
 export type CloudHandlerOptions = {
   store?: CloudStore;
   modalClient?: ModalClient;
-  summaryClient?: SummaryClient;
+  summaryClient?: SummaryClient | null;
   env?: Record<string, string | undefined>;
 };
 
@@ -18,7 +18,7 @@ export function createCloudHandler(options: CloudHandlerOptions = {}) {
   const store = options.store ?? createCloudStoreFromEnv(env);
   assertCloudConfiguration({ env, store, storeWasProvided: Boolean(options.store) });
   const modalClient = options.modalClient ?? createModalClientFromEnv(env);
-  const summaryClient = options.summaryClient ?? createSummaryClientFromEnv(env);
+  const summaryClient = options.summaryClient === null ? undefined : options.summaryClient ?? createSummaryClientFromEnv(env);
 
   return async function handleCloudRequest(request: Request): Promise<Response> {
     const url = new URL(request.url);

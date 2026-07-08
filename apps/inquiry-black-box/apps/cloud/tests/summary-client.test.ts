@@ -1,5 +1,11 @@
 import { describe, expect, test } from "bun:test";
-import { createSummaryClientFromEnv, geminiSessionSummaryModel, openAiSessionSummaryModel } from "../src/lib/summaryClient";
+import {
+  createSummaryClientFromEnv,
+  geminiSessionSummaryMaxOutputTokens,
+  geminiSessionSummaryModel,
+  openAiSessionSummaryMaxOutputTokens,
+  openAiSessionSummaryModel,
+} from "../src/lib/summaryClient";
 
 const redactedInput = {
   privacy_class: "redacted-sync",
@@ -54,6 +60,7 @@ describe("cloud summary provider client", () => {
     expect(requestedUrl).toBe("https://api.openai.com/v1/responses");
     expect(authorization).toBe("Bearer fixture-openai-key");
     expect(postedBody).toContain("redacted-sync");
+    expect(JSON.parse(postedBody)).toMatchObject({ max_output_tokens: 2_000 });
     expect(postedBody).not.toContain("Cursor");
     expect(postedBody).not.toContain("com.todesktop.230313mzl4w4u92");
   });
@@ -65,15 +72,25 @@ describe("cloud summary provider client", () => {
     expect(geminiSessionSummaryModel({ SESSION_SUMMARY_MODEL: "gemini-3.5-flash" })).toBe("gemini-3.5-flash");
   });
 
+  test("uses a 2000 token summary output cap unless overridden per provider", () => {
+    expect(openAiSessionSummaryMaxOutputTokens()).toBe(2_000);
+    expect(geminiSessionSummaryMaxOutputTokens()).toBe(2_000);
+    expect(openAiSessionSummaryMaxOutputTokens({ SESSION_SUMMARY_MAX_OUTPUT_TOKENS: "1800" })).toBe(1_800);
+    expect(geminiSessionSummaryMaxOutputTokens({ GEMINI_SESSION_SUMMARY_MAX_OUTPUT_TOKENS: "1600" })).toBe(1_600);
+    expect(openAiSessionSummaryMaxOutputTokens({ OPENAI_SESSION_SUMMARY_MAX_OUTPUT_TOKENS: "not-a-number" })).toBe(2_000);
+  });
+
   test("falls back to Gemini with the current summary model default", async () => {
     let requestedUrl = "";
+    let postedBody = "";
     const client = createSummaryClientFromEnv(
       {
         GOOGLE_API_KEY: "fixture-google-key",
       },
       {
-        fetchImpl: async (url) => {
+        fetchImpl: async (url, init) => {
           requestedUrl = url;
+          postedBody = String(init?.body ?? "");
           return new Response(
             JSON.stringify({
               candidates: [{ content: { parts: [{ text: "Gemini cloud summary." }] } }],
@@ -97,5 +114,6 @@ describe("cloud summary provider client", () => {
       text: "Gemini cloud summary.",
     });
     expect(requestedUrl).toBe("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent");
+    expect(JSON.parse(postedBody)).toMatchObject({ generationConfig: { maxOutputTokens: 2_000 } });
   });
 });
