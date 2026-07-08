@@ -17,6 +17,7 @@
     </a>
     <nav class="nav" aria-label="Site sections">
       <a href="https://github.com/jawauntb/research-derived-experiments/tree/main/apps/inquiry-black-box">Product</a>
+      <a href="#product">Product proof</a>
       <a href="#how">How it works</a>
       <a href="#privacy">Privacy</a>
       <a href="https://github.com/jawauntb/research-derived-experiments/blob/main/apps/inquiry-black-box/README.md">README</a>
@@ -143,25 +144,71 @@
           </dl>
         </div>
         <div class="copy-block">
-          <p>The planned value layer turns session replays into local deterministic summaries, daily suggestions, and optional redacted LLM enrichment. The model can help word the report, but it does not replace evidence ids, limitations, or user ratings.</p>
+          <p>The desktop app now turns session replays into local deterministic daily review, suggestion feedback, and optional redacted LLM enrichment later. The model can help word the report, but it does not replace evidence ids, limitations, or user ratings.</p>
           <p>Suggestions learn from explicit responses: accept, snooze, dismiss, rated useful, and rated not useful. That is how "what I care about" becomes a candidate you confirm, not a claim the app makes behind your back.</p>
         </div>
       </div>
     </section>
 
+    <section id="product" class="section" aria-labelledby="product-title">
+      <div class="section-heading">
+        <span class="label"><b>05</b> Product proof</span>
+        <h2 id="product-title">What the cockpit looks like today.</h2>
+      </div>
+      <p class="product-proof-note">Fixture-backed preview. This is sample replay and daily-review copy, not a live session capture.</p>
+      <div class="product-proof" aria-label="Desktop cockpit fixture preview">
+        <aside class="product-rail">
+          <div class="product-rail__brand">Inquiry Black Box</div>
+          <div class="product-chip product-chip-recording">Recording</div>
+          <div class="product-field">
+            <span>Session title</span>
+            <strong>Session on demo-article</strong>
+          </div>
+          <div class="product-controls">
+            <span class="product-button product-button-active">Record</span>
+            <span class="product-button">Pause</span>
+            <span class="product-button product-button-danger">Stop</span>
+          </div>
+          <div class="product-history">
+            <h3>Recent sessions</h3>
+            <div class="product-history__item">
+              <strong>Paper reading on example.com</strong>
+              <span>stopped · 12m · skim-risk</span>
+            </div>
+          </div>
+          <div class="product-field">
+            <span>Pairing token</span>
+            <strong>head…oken</strong>
+          </div>
+        </aside>
+        <main class="product-canvas">
+          <section class="product-panel">
+            <h3>Daily review</h3>
+            <p><strong>What helped:</strong> Deep-work span after copied evidence.</p>
+            <p><strong>What to retry:</strong> Reread the fastest-scrolled section and write one recall question.</p>
+            <p class="product-limitation"><strong>Limitation:</strong> Behavior-only markers until selected-text excerpts are enabled.</p>
+          </section>
+          <section class="product-panel">
+            <h3>Reading engagement map</h3>
+            <p>mixed-load segment · Medium confidence · fixture evidence ids preserved.</p>
+          </section>
+        </main>
+      </div>
+    </section>
+
     <section id="state" class="section" aria-labelledby="state-title">
       <div class="section-heading">
-        <span class="label"><b>05</b> Current state</span>
+        <span class="label"><b>06</b> Current state</span>
         <h2 id="state-title">Built as a local instrument, expanding toward a daily copilot.</h2>
       </div>
       <div class="status-grid">
         <article class="soft-panel">
           <h3>Ready now</h3>
-          <p>Extension pairing, local session recording, desktop activity metadata, replay markers, heatmaps, repair prompts, export, delete, and packaged app icons.</p>
+          <p>Masked pairing, titled sessions, session history, rail-plus-canvas desktop cockpit, deterministic daily review, reading engagement map, repair prompts, sample replay preview, export, and confirm-delete.</p>
         </article>
         <article class="soft-panel">
           <h3>Next build</h3>
-          <p>Session interpretation, daily review, suggestion feedback, opt-in desktop notifications, and optional redacted LLM session summaries.</p>
+          <p>One-click deep-link pairing, optional redacted LLM session summaries, dark mode, store-listing art, and signed distribution.</p>
         </article>
         <article class="soft-panel">
           <h3>Boundary</h3>

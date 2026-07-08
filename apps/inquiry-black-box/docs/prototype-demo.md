@@ -31,11 +31,16 @@ Use this before a manual demo:
 bun run lint
 bun run typecheck
 bun run test
+bun run test:e2e
 bun run demo:fixture
 bun run build:prototype
 bun run package:desktop
 bun run install:desktop -- --destination /tmp/inquiry-apps --overwrite
 ```
+
+`bun run test:e2e` covers the automated pair → record → replay → export → delete fixture
+loop. Manual dogfood should still walk the titled-session, daily review, confirm-delete,
+and popup transport matrix below on a throwaway SQLite path.
 
 ## Manual Desktop + Extension Demo
 

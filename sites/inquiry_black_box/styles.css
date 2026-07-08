@@ -402,6 +402,132 @@ dd {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.product-proof-note {
+  color: var(--muted);
+  font-size: 15px;
+  margin: 0 0 18px;
+}
+
+.product-proof {
+  background: var(--paper-raised);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 22px;
+  box-shadow: var(--shadow-raised);
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(220px, 0.85fr) minmax(0, 1.15fr);
+  overflow: hidden;
+  padding: 16px;
+}
+
+.product-rail,
+.product-canvas {
+  display: grid;
+  gap: 12px;
+}
+
+.product-rail {
+  background: var(--paper-inset);
+  border-radius: 16px;
+  box-shadow: var(--shadow-inset);
+  padding: 14px;
+}
+
+.product-rail__brand {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.product-chip {
+  border-radius: 999px;
+  display: inline-flex;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  width: fit-content;
+}
+
+.product-chip-recording {
+  background: #dceee8;
+  color: var(--aqua-deep);
+}
+
+.product-field {
+  display: grid;
+  gap: 4px;
+}
+
+.product-field span {
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.product-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.product-button {
+  background: var(--paper-raised);
+  border-radius: 10px;
+  box-shadow: var(--shadow-small);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 10px;
+}
+
+.product-button-active {
+  outline: 2px solid var(--aqua-deep);
+}
+
+.product-button-danger {
+  background: #f9dfe5;
+  color: #a83347;
+}
+
+.product-history h3,
+.product-panel h3 {
+  font-size: 16px;
+  margin: 0 0 8px;
+}
+
+.product-history__item {
+  background: var(--paper-raised);
+  border-radius: 10px;
+  box-shadow: var(--shadow-small);
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+}
+
+.product-history__item span {
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.product-panel {
+  background: var(--paper-inset);
+  border-radius: 16px;
+  box-shadow: var(--shadow-inset);
+  padding: 14px;
+}
+
+.product-panel p {
+  font-size: 15px;
+  margin: 0 0 8px;
+}
+
+.product-limitation {
+  color: var(--blue);
+}
+
 .footer {
   align-items: center;
   background: var(--paper-inset);
@@ -443,7 +569,8 @@ dd {
   .section,
   .privacy-board,
   .interpretation-layout,
-  .status-grid {
+  .status-grid,
+  .product-proof {
     grid-template-columns: 1fr;
   }
 
