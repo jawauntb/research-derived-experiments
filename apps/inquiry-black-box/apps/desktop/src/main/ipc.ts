@@ -10,6 +10,9 @@ import type { CameraFeatureWindow } from "../renderer/camera/featureWorker";
 import type { PrivacySettingsView } from "../renderer/settings/PrivacySettings";
 import { deleteLocalSession } from "./privacy/delete";
 import { exportSession, type SessionExport } from "./privacy/export";
+import { runDailyReviewCheckupNotification } from "./notifications/notificationScheduler";
+import { createDailyReviewReport, recordSuggestionResponse, type DailyReviewReport } from "./reports/dailyDigest";
+import { createSessionInterpretationReport, type SessionInterpretationReport } from "./reports/sessionInterpretation";
 import { createSessionReplayReport, type SessionReplayReport } from "./reports/sessionReplay";
 import type { DesktopRuntime } from "./main";
 import type { DesktopActivityStatus } from "./activity/desktopActivity";
@@ -36,6 +39,10 @@ export type DesktopIpcFacade = {
   exportSession: () => Promise<SessionExport>;
   deleteSession: () => Promise<{ session_id: string; deleted: true }>;
   replayReport: () => Promise<SessionReplayReport | null>;
+  sessionInterpretation: () => Promise<SessionInterpretationReport | null>;
+  dailyReview: () => Promise<DailyReviewReport>;
+  refreshDailyReview: () => Promise<DailyReviewReport>;
+  respondSuggestion: (input: Parameters<typeof recordSuggestionResponse>[1]) => Promise<EventEnvelope>;
   acceptRepair: (repair_id: string) => Promise<EventEnvelope>;
   answerRepair: (input: { repair_id: string; answer: string; confidence: number }) => Promise<EventEnvelope[]>;
   dismissRepair: (input: { repair_id: string; reason?: string }) => Promise<EventEnvelope>;
@@ -92,7 +99,11 @@ export function createDesktopIpcFacade(runtime: DesktopRuntime): DesktopIpcFacad
       return remember(runtime.bridge.resumeSession());
     },
     async stopSession() {
-      return remember(runtime.bridge.stopSession());
+      const stopped = remember(runtime.bridge.stopSession());
+      createSessionInterpretationReport(runtime.database, stopped.session_id);
+      const review = createDailyReviewReport(runtime.database);
+      await runDailyReviewCheckupNotification({ database: runtime.database, review, notifier: runtime.notifier });
+      return stopped;
     },
     async addLabel(input) {
       return runtime.bridge.addLabel(input);
@@ -132,6 +143,28 @@ export function createDesktopIpcFacade(runtime: DesktopRuntime): DesktopIpcFacad
       }
 
       return createSessionReplayReport(runtime.database.listEvents(session.session_id));
+    },
+    async sessionInterpretation() {
+      const session = rememberedSession();
+      if (!session) {
+        return null;
+      }
+
+      return createSessionInterpretationReport(runtime.database, session.session_id);
+    },
+    async dailyReview() {
+      return createDailyReviewReport(runtime.database);
+    },
+    async refreshDailyReview() {
+      const review = createDailyReviewReport(runtime.database);
+      await runDailyReviewCheckupNotification({ database: runtime.database, review, notifier: runtime.notifier });
+      return review;
+    },
+    async respondSuggestion(input) {
+      const event = recordSuggestionResponse(runtime.database, input);
+      const review = createDailyReviewReport(runtime.database, input.local_date ? { local_date: input.local_date } : {});
+      await runDailyReviewCheckupNotification({ database: runtime.database, review, notifier: runtime.notifier });
+      return event;
     },
     async acceptRepair(repair_id) {
       const candidate = repairCandidateById(repair_id);

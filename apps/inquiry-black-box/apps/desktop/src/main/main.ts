@@ -25,6 +25,7 @@ import {
 } from "./ingest/session";
 import { createGlobalHotkeyEvent } from "./security/hotkeys";
 import { createPairingSecret, createPairingToken } from "./security/pairing";
+import type { DesktopNotifier } from "./notifications/desktopNotifier";
 import type { CameraFeatureWindow } from "../renderer/camera/featureWorker";
 
 export type DesktopRuntimeOptions = {
@@ -38,6 +39,7 @@ export type DesktopRuntimeOptions = {
   desktopActivityClock?: Partial<DesktopActivityClock>;
   desktopActivityPollIntervalMs?: number;
   desktopActivityAutoPoll?: boolean;
+  notifier?: DesktopNotifier;
 };
 
 export type DesktopRuntime = {
@@ -47,6 +49,7 @@ export type DesktopRuntime = {
   pairingToken: () => string;
   bridge: DesktopMainBridge;
   desktopActivity: DesktopActivityCollector;
+  notifier: DesktopNotifier;
   stop: () => void;
 };
 
@@ -95,6 +98,7 @@ export function createDesktopRuntime(options: DesktopRuntimeOptions = {}): Deskt
   const desktopActivity = createDesktopActivityCollector({
     ...desktopActivityOptions,
   });
+  const notifier = options.notifier ?? noopNotifier;
   const bridge = createDesktopMainBridge(database, sessions, desktopActivity);
   const serverOptions: StartIngestServerOptions = {
     allowedOrigins,
@@ -115,6 +119,7 @@ export function createDesktopRuntime(options: DesktopRuntimeOptions = {}): Deskt
     pairingToken: () => createPairingToken({ secret: pairingSecret }),
     bridge,
     desktopActivity,
+    notifier,
     stop() {
       desktopActivity.stop();
       ingest?.stop();
@@ -122,6 +127,12 @@ export function createDesktopRuntime(options: DesktopRuntimeOptions = {}): Deskt
     },
   };
 }
+
+const noopNotifier: DesktopNotifier = {
+  async show() {
+    return "failed";
+  },
+};
 
 export function createDesktopMainBridge(
   database: InquiryDatabase,

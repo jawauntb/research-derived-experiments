@@ -3,6 +3,7 @@ import { createEvent } from "@inquiry/schema";
 import { createInquiryDatabase } from "../src/main/db";
 import { deleteLocalSession } from "../src/main/privacy/delete";
 import { exportSession } from "../src/main/privacy/export";
+import { createSessionInterpretationReport } from "../src/main/reports/sessionInterpretation";
 import {
   defaultPrivacySettingsView,
   desktopActivityPrivacyStatus,
@@ -152,7 +153,7 @@ describe("privacy controls", () => {
         source: "desktop-system",
         source_version: "desktop@0.1.0",
         monotonic_ms: 11,
-        event_type: "report.generated",
+        event_type: "sync.queued",
         payload: { debug_note: "debug-only" },
         privacy_class: "debug-sensitive",
         retention_policy: "debug-ephemeral",
@@ -302,6 +303,45 @@ describe("privacy controls", () => {
       session_id: session.session_id,
       privacy_class: "redacted-sync",
     });
+    database.close();
+  });
+
+  test("exports and deletes local interpretation artifacts with the session", () => {
+    const database = createInquiryDatabase();
+    const session = database.createSession({ title: "Artifact privacy", session_id: "session-privacy-artifacts" });
+    database.appendEvent(
+      createEvent({
+        session_id: session.session_id,
+        source: "browser",
+        source_version: "extension@0.1.0",
+        monotonic_ms: 10,
+        event_type: "browser.scroll",
+        payload: { delta_y: 4_800, scroll_y: 4_800, viewport_h: 900 },
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    );
+    database.appendEvent(
+      createEvent({
+        session_id: session.session_id,
+        source: "browser",
+        source_version: "extension@0.1.0",
+        monotonic_ms: 11,
+        event_type: "browser.dwell",
+        payload: { dwell_ms: 200 },
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    );
+    createSessionInterpretationReport(database, session.session_id);
+
+    const exported = exportSession(database, session.session_id);
+    deleteLocalSession(database, session.session_id);
+
+    expect(exported.jsonl).toContain("session_interpretation");
+    expect(exported.jsonl).toContain("suggestion.candidate");
+    expect(database.getSession(session.session_id)).toBeNull();
+    expect(database.listEvents(session.session_id)).toEqual([]);
     database.close();
   });
 });

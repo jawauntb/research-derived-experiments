@@ -5,7 +5,8 @@ Run all commands from `apps/inquiry-black-box`.
 The local prototype does not require Railway, Modal, Doppler, or model-provider
 keys. It uses desktop SQLite, the Electron shell, the unpacked Chrome extension,
 local replay heuristics, deterministic stimulus heatmaps, repair prompts, JSONL
-export, and local delete.
+export, local delete, local session interpretation, daily review, suggestion
+feedback, and opt-in notifications.
 
 ## Automated Fixture Proof
 
@@ -21,7 +22,8 @@ paths:
   handler into SQLite.
 - A research-session fixture captures scroll, revisit, highlight/copy, media
   seek, tab churn, self-label, stimulus attachment, heatmap evidence, repair
-  candidates, JSONL export, local delete, and a redacted cloud-delete tombstone.
+  candidates, interpretation reports, daily suggestions, JSONL export, local
+  delete, and a redacted cloud-delete tombstone.
 
 Use this before a manual demo:
 
@@ -87,6 +89,9 @@ instead of editing this runbook.
 | Selected text off | Copy/highlight text with `Selected text excerpts` off. | Replay/export show counts, lengths, hashes, and privacy limits without raw snippets. |
 | Selected text on | Repeat after enabling `Selected text excerpts`. | Bounded local snippets appear as `document-opt-in`; cloud sync remains ineligible. |
 | Stop/replay | Stop from extension, then inspect the desktop replay. | Replay refreshes, leads with evidence episodes, and shows heatmap and repair prompt. |
+| Interpretation | Inspect the Session Interpretation and Daily Review panels after stop. | Session summary, evidence-linked themes, six daily sections, and feedback controls appear without raw text. |
+| Suggestion feedback | Accept, snooze, dismiss, useful, and not-useful actions on a daily suggestion. | `suggestion.responded` events are stored locally and the refreshed daily review reflects feedback. |
+| Notifications opt-in | Enable Notifications, stop or refresh a day with actionable suggestions. | A daily checkup notification appears only after quiet-hour/cooldown gates; notification events are local-derived. |
 | Export/delete | Export JSONL, then delete the session. | Export omits raw frames/raw typed content by default; delete removes local rows and queues a redacted tombstone if cloud sync applies. |
 | Restart/reload | Restart desktop and reload the extension. | Pairing and recording state reconcile; stale Recording state does not silently keep capturing. |
 | Design QA | Capture desktop wide, desktop narrow, and Chrome popup screenshots. | Soft raised/inset controls are readable, focus is visible, text wraps, and no dense workflow state overlaps. |
@@ -111,6 +116,9 @@ Copy this template into the PR, issue, or release notes for each manual pass.
 - Cloud sync: off / on
 - Events captured by type:
 - Replay outcome:
+- Session interpretation outcome:
+- Daily review / suggestion feedback outcome:
+- Notifications: off / on; delivered / suppressed reason
 - Export/delete outcome:
 - Restart/reload outcome:
 - Screenshots or recordings:
@@ -157,10 +165,12 @@ Useful checks:
 6. Add a self-label in the desktop app.
 7. Stop the session from the extension popup. For browser-plus-desktop demos,
    extension Stop also asks the desktop session to stop.
-8. Inspect replay markers, evidence episodes, the comprehension heatmap, and the
-   repair prompt.
-9. Click Start on the repair prompt, answer it, then Save or Dismiss.
-10. Export JSONL and confirm it contains derived events and repair outcomes, not
+8. Inspect replay markers, evidence episodes, the comprehension heatmap, the
+   session interpretation, daily review, and repair prompt.
+9. Use one suggestion feedback control, then click Start on the repair prompt,
+   answer it, and Save or Dismiss.
+10. Export JSONL and confirm it contains derived events, reports, suggestions,
+    feedback, and repair outcomes, not
     raw camera frames, raw typed content, or raw article text by default. If
     `Selected text excerpts` was enabled, copied/highlighted excerpts appear as
     local `document-opt-in` events.
@@ -183,6 +193,10 @@ loop. Move to `~/Applications` only after this throwaway install passes.
   confidence plus limitation copy.
 - Repair actions are stored as `repair.candidate`, `probe.requested`,
   `probe.answered`, and `repair.outcome` events.
+- Session interpretation and daily review are stored as `report.generated`,
+  `suggestion.candidate`, and `suggestion.responded` events.
+- Opt-in daily notifications are stored as `notification.candidate` and
+  `notification.delivered` events when delivered.
 - Export/delete works without cloud credentials. Optional cloud sync remains
   limited to `public` and `redacted-sync` payloads.
 

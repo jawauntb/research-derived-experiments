@@ -169,4 +169,70 @@ describe("desktop shell IPC facade", () => {
 
     runtime.stop();
   });
+
+  test("generates interpretation, daily review, feedback, and opted-in notification events", async () => {
+    const database = createInquiryDatabase();
+    const shown: Array<{ title: string; body: string }> = [];
+    const runtime = createDesktopRuntime({
+      database,
+      pairingSecret: "desktop-shell-test-secret",
+      startServer: false,
+      notifier: {
+        show: async (input) => {
+          shown.push(input);
+          return "shown";
+        },
+      },
+    });
+    const facade = createDesktopIpcFacade(runtime);
+    await facade.setSignalEnabled("notifications", true);
+    const session = await facade.startSession({ title: "Interpretation fixture" });
+
+    database.appendEvent(
+      createEvent({
+        session_id: session.session_id,
+        source: "browser",
+        source_version: "extension@0.1.0",
+        monotonic_ms: 1_000,
+        event_type: "browser.scroll",
+        payload: { delta_y: 4_800, scroll_y: 4_800, viewport_h: 900 },
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    );
+    database.appendEvent(
+      createEvent({
+        session_id: session.session_id,
+        source: "browser",
+        source_version: "extension@0.1.0",
+        monotonic_ms: 1_500,
+        event_type: "browser.dwell",
+        payload: { dwell_ms: 200 },
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    );
+
+    await facade.stopSession();
+    const interpretation = await facade.sessionInterpretation();
+    const review = await facade.refreshDailyReview();
+    const suggestion = review.suggestions[0];
+    if (!suggestion) {
+      throw new Error("expected a daily suggestion");
+    }
+    const response = await facade.respondSuggestion({
+      suggestion_id: suggestion.suggestion_id,
+      response: "accepted",
+      local_date: review.local_date,
+    });
+
+    expect(interpretation?.summary).toContain("Interpretation fixture");
+    expect(review.sections.retry.length + review.sections.fragmented.length + review.sections.open_loops.length).toBeGreaterThan(0);
+    expect(response.event_type).toBe("suggestion.responded");
+    expect(shown.length).toBe(1);
+    expect(database.listEvents(session.session_id).map((event) => event.event_type)).toEqual(
+      expect.arrayContaining(["report.generated", "suggestion.candidate", "suggestion.responded", "notification.delivered"]),
+    );
+    runtime.stop();
+  });
 });

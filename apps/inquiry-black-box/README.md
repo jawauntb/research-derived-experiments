@@ -1,8 +1,9 @@
 # Inquiry Black Box
 
 Local-first Neurophenom cockpit for capturing private research-session traces,
-replaying comprehension moments, and building a longitudinal dataset without
-storing raw camera frames or raw keystrokes by default.
+replaying comprehension moments, turning sessions into daily next-action
+suggestions, and building a longitudinal dataset without storing raw camera
+frames or raw keystrokes by default.
 
 ## Workspace
 
@@ -30,15 +31,18 @@ Packages:
 - `apps/extension`: Chrome MV3 telemetry capture with pairing and offline queue.
 - `apps/cloud`: optional Railway Bun API for redacted sync and Modal job control.
 - `packages/schema`: canonical event envelope, privacy classes, and session
-  validation.
-- `packages/signals`: windowing, heuristic markers, heatmaps, and repair
-  candidates.
+  validation for replay, report, suggestion, notification, and model provenance
+  events.
+- `packages/signals`: windowing, heuristic markers, heatmaps, repair
+  candidates, session interpretation, daily review, and redacted Modal job
+  inputs.
 - `packages/ui`: dependency-light UI view models shared by renderer surfaces.
 - `modal`: Python batch-analysis jobs and model calibration helpers.
 
-Cloud sync, desktop notifications, debug captures, and any document text upload
-are opt-in. The default local loop stores derived events, timing aggregates, and
-quality flags only.
+Cloud sync, desktop notifications, debug captures, document text upload, and
+redacted LLM summaries are opt-in. The default local loop stores derived events,
+timing aggregates, quality flags, local interpretations, suggestion feedback,
+and daily reviews only.
 
 ## Guides
 

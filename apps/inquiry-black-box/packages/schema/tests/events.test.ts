@@ -16,9 +16,13 @@ import {
   type DesktopAppFocusPayload,
   type DesktopWindowFocusPayload,
   type JsonObject,
+  type ModelRunPayload,
   type PrivacyClass,
   type RepairCandidatePayload,
   type RepairOutcomePayload,
+  type ReportGeneratedPayload,
+  type SuggestionCandidatePayload,
+  type SuggestionRespondedPayload,
   type StimulusAttachedPayload,
 } from "../src";
 
@@ -528,5 +532,169 @@ describe("event schema", () => {
         retention_policy: "local-default",
       }),
     ).not.toThrow();
+  });
+
+  test("accepts generated reports, suggestions, responses, and model provenance", () => {
+    const reportPayload: ReportGeneratedPayload = {
+      report_id: "interpretation-session-1",
+      report_kind: "session_interpretation",
+      subject_session_id: "session-1",
+      summary: "Evidence suggests tab churn created one open loop.",
+      generated_at: "2026-07-08T10:00:00.000Z",
+      evidence_event_ids: ["event-1"],
+      source_report_ids: ["replay-1"],
+      suggestion_ids: ["suggestion-1"],
+      limitations: ["Local heuristic interpretation; needs user confirmation."],
+      provenance: { builder: "local-session-interpretation@0.1.0" },
+    };
+    const suggestionPayload: SuggestionCandidatePayload = {
+      suggestion_id: "suggestion-1",
+      suggestion_kind: "next-action",
+      category: "retry",
+      title: "Close the open search branch",
+      action: "Pick one branch to save as a follow-up note.",
+      rationale: "Tab changes repeated around copied evidence.",
+      confidence: 0.72,
+      evidence_event_ids: ["event-1"],
+      report_ids: ["interpretation-session-1"],
+      session_ids: ["session-1"],
+      limitation: "Suggestion is evidence-backed but unconfirmed.",
+      pattern_key: "tab-churn:follow-up-note",
+      local_date: "2026-07-08",
+    };
+    const responsePayload: SuggestionRespondedPayload = {
+      suggestion_id: "suggestion-1",
+      response: "rated-useful",
+      responded_at: "2026-07-08T10:03:00.000Z",
+      source_report_id: "daily-2026-07-08",
+    };
+    const modelRunPayload: ModelRunPayload = {
+      run_id: "model-run-1",
+      job_kind: "session_summary",
+      provider: "deterministic",
+      model: "local-fallback",
+      status: "complete",
+      input_privacy_class: "redacted-sync",
+      input_report_id: "interpretation-session-1",
+      output_report_id: "llm-summary-1",
+      limitations: ["Fallback summary; no provider credentials used."],
+    };
+
+    expect(() =>
+      createEvent({
+        session_id: "session-1",
+        source: "desktop-system",
+        source_version: "desktop@0.1.0",
+        monotonic_ms: 50,
+        event_type: "report.generated",
+        payload: reportPayload,
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    ).not.toThrow();
+    expect(() =>
+      createEvent({
+        session_id: "session-1",
+        source: "desktop-system",
+        source_version: "desktop@0.1.0",
+        monotonic_ms: 51,
+        event_type: "suggestion.candidate",
+        payload: suggestionPayload,
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    ).not.toThrow();
+    expect(() =>
+      createEvent({
+        session_id: "session-1",
+        source: "user",
+        source_version: "desktop@0.1.0",
+        monotonic_ms: 52,
+        event_type: "suggestion.responded",
+        payload: responsePayload,
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    ).not.toThrow();
+    expect(() =>
+      createEvent({
+        session_id: "session-1",
+        source: "modal",
+        source_version: "modal@0.1.0",
+        monotonic_ms: 53,
+        event_type: "model.run",
+        payload: modelRunPayload,
+        privacy_class: "redacted-sync",
+        retention_policy: "cloud-redacted",
+      }),
+    ).not.toThrow();
+  });
+
+  test("rejects malformed generated artifact events", () => {
+    const baseSuggestion: SuggestionCandidatePayload = {
+      suggestion_id: "suggestion-bad",
+      suggestion_kind: "next-action",
+      category: "retry",
+      title: "Retry the copied evidence",
+      action: "Explain what the copied evidence preserved.",
+      rationale: "Copied-evidence marker existed.",
+      confidence: 0.7,
+      evidence_event_ids: [],
+      report_ids: [],
+      session_ids: ["session-1"],
+      limitation: "Needs confirmation.",
+    };
+
+    expect(() =>
+      createEvent({
+        session_id: "session-1",
+        source: "desktop-system",
+        source_version: "desktop@0.1.0",
+        monotonic_ms: 60,
+        event_type: "suggestion.candidate",
+        payload: baseSuggestion,
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    ).toThrow(/requires evidence/);
+
+    expect(() =>
+      createEvent({
+        session_id: "session-1",
+        source: "user",
+        source_version: "desktop@0.1.0",
+        monotonic_ms: 61,
+        event_type: "suggestion.responded",
+        payload: {
+          suggestion_id: "suggestion-bad",
+          response: "snoozed",
+          responded_at: "2026-07-08T10:03:00.000Z",
+        },
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    ).toThrow(/snoozed_until/);
+
+    expect(() =>
+      createEvent({
+        session_id: "session-1",
+        source: "desktop-system",
+        source_version: "desktop@0.1.0",
+        monotonic_ms: 62,
+        event_type: "report.generated",
+        payload: {
+          report_id: "daily-bad",
+          report_kind: "daily_review",
+          summary: "Daily report missing local date.",
+          generated_at: "2026-07-08T10:00:00.000Z",
+          evidence_event_ids: [],
+          source_report_ids: [],
+          limitations: [],
+          provenance: {},
+        },
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    ).toThrow(/local_date/);
   });
 });

@@ -14,6 +14,8 @@ captures derived signals, not raw surveillance artifacts.
   separate window-title toggle is enabled.
 - Typing: burst length, pause length, backspace count, edit churn, and field role.
 - User input: explicit labels, probes, recall answers, notification outcomes.
+- Local interpretation: report summaries, evidence ids, suggestion candidates,
+  daily review sections, and suggestion feedback.
 
 ## Not Stored By Default
 
@@ -68,8 +70,30 @@ Local deletion removes the session and dependent local events. If cloud sync was
 used, a redacted cloud-deletion request is placed in `sync_queue` without a
 foreign-key dependency on the deleted session, so the delete request survives.
 
+## Interpretation And Daily Review
+
+Session interpretations and daily reviews are local-derived artifacts. They
+summarize marker kinds, evidence ids, timing/count patterns, labels, repair
+outcomes, and explicit user feedback. They do not require raw typed text, raw
+selected text, screenshots, OCR, or raw page text.
+
+Care candidates are confirmation prompts, not settled preferences. Suggestion
+feedback is explicit: accepted/useful patterns can be boosted, while dismissed
+or not-useful patterns move toward the `ignore` section instead of being treated
+as hidden personalization.
+
+## Optional Redacted LLM Summaries
+
+The optional Modal session-summary job accepts only a redacted session
+interpretation payload. It includes counts, theme titles, suggestion titles,
+limitations, and provenance, and it explicitly excludes raw typed text, selected
+text, page text, screenshots, OCR, desktop event objects, app names, and window
+titles. App/window identifiers remain local-only even when desktop activity is
+enabled.
+
 ## Notifications
 
 Notifications are off by default. When enabled, they are generated only from
-inspectable local markers, respect quiet hours and cooldowns, and record whether
-the user accepted, snoozed, dismissed, or ignored the prompt.
+inspectable daily review suggestions, respect quiet hours and cooldowns, and
+record local candidate/delivery events plus whether the user accepted, snoozed,
+dismissed, or rated the prompt.

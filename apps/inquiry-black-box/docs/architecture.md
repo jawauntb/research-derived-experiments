@@ -18,9 +18,24 @@ so privacy class and retention are explicit at the point of capture.
 
 ## Signals
 
-`packages/signals` converts event streams into windowed replay markers. Markers
-must include evidence event ids and a suggested action. They are heuristics, not
-diagnostic claims.
+`packages/signals` converts event streams into windowed replay markers, then
+builds local session interpretations and daily reviews. Markers, themes,
+suggestions, and daily sections must include evidence event ids, report ids, or
+an explicit low-confidence limitation. They are heuristics, not diagnostic
+claims.
+
+Session interpretation writes `report.generated` and `suggestion.candidate`
+events back into SQLite when a session is stopped or refreshed. Daily review
+aggregates those interpretations plus `suggestion.responded` feedback into the
+six review sections: helped, fragmented, retry, ignore, open loops, and care
+candidates.
+
+## Notifications
+
+Desktop notifications are opt-in and local. A daily checkup notification is
+created from the daily review only after notifications are enabled, quiet hours
+and cooldowns pass, and at least one actionable suggestion exists. Candidate and
+delivered notifications are stored as local events for auditability.
 
 ## Optional Cloud
 
@@ -29,6 +44,8 @@ and Modal orchestration. It should never be required for local replay.
 
 ## Modal
 
-Modal jobs consume redacted exports or explicitly selected content snapshots.
-They return reports, model cards, calibration metrics, and provenance rather
+Modal jobs consume redacted exports, redacted session interpretation summaries,
+or explicitly selected content snapshots. The session-summary path requires
+`redacted-sync`, rejects app names, bundle IDs, window titles, raw text, and
+desktop event objects, then returns report payloads and model provenance rather
 than raw private data.

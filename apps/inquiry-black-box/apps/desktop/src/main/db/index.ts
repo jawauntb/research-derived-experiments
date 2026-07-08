@@ -43,6 +43,7 @@ export type InquiryDatabase = {
   db: SqliteDatabase;
   createSession(input: { title: string; active_task?: string; notes?: string; session_id?: string }): SessionRecord;
   getSession(sessionId: string): SessionRecord | null;
+  listSessions(): SessionRecord[];
   stopSession(sessionId: string, endedAt?: string): SessionRecord;
   appendEvent(event: EventEnvelope): EventEnvelope;
   appendEventIfNew(event: EventEnvelope): { inserted: boolean; event: EventEnvelope };
@@ -99,6 +100,10 @@ export function createInquiryDatabase(path = ":memory:"): InquiryDatabase {
     getSession(sessionId) {
       const row = db.query("SELECT * FROM sessions WHERE session_id = $sessionId").get({ sessionId });
       return row ? rowToSession(row as Record<string, unknown>) : null;
+    },
+    listSessions() {
+      const rows = db.query("SELECT * FROM sessions ORDER BY started_at, session_id").all() as Record<string, unknown>[];
+      return rows.map(rowToSession);
     },
     stopSession(sessionId, endedAt = new Date().toISOString()) {
       const existing = this.getSession(sessionId);
