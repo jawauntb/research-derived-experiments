@@ -16,15 +16,30 @@ captures derived signals, not raw surveillance artifacts.
 
 - Raw camera frames or image blobs.
 - Raw key names, raw typed text, passwords, or document text.
-- Full page text unless a future document-level opt-in explicitly allows it.
+- Full page text or selected/copied text unless a document-level opt-in explicitly
+  allows it.
 - Hidden/background recording after the user stops or pauses a session.
+
+## Explicit Text Opt-In
+
+Selection metrics and selected text are separate controls. The default
+`Selection metrics` toggle stores only derived values such as character count,
+range count, timing, and hashed page references. The off-by-default
+`Selected text excerpts` toggle allows copy/highlight events to store a bounded
+`selected_text` excerpt as `document-opt-in`.
+
+Document-opt-in selected text stays local by default and is eligible for local
+export so the user can inspect what was stored. It is not eligible for cloud
+sync; only `public` and `redacted-sync` payloads can leave the device through
+the normal sync path.
 
 ## Privacy Classes
 
 - `public`: safe metadata and documentation-like payloads.
 - `local-derived`: derived local features that stay on device by default.
 - `redacted-sync`: payloads eligible for optional cloud sync.
-- `document-opt-in`: user-selected document snapshots for explicit analysis.
+- `document-opt-in`: user-selected document snapshots or selected text excerpts
+  for explicit local analysis.
 - `debug-sensitive`: local debug artifacts omitted from default export.
 - `blocked-sensitive`: payloads that should be rejected by normal flows.
 

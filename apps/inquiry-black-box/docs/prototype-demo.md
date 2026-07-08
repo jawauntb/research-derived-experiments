@@ -72,21 +72,28 @@ Open `http://127.0.0.1:4173/demo-article.html`.
 2. Open the extension popup, leave the endpoint as
    `http://127.0.0.1:39170/v1/extension/events`, paste the token, and pair.
 3. Click Record in the extension popup.
-4. On the article page, scroll quickly, dwell briefly, highlight/copy a claim,
+4. Leave `Selected text excerpts` off for a derived-only run, or enable it when
+   you want copied/highlighted excerpts stored locally as `document-opt-in`.
+5. On the article page, scroll quickly, dwell briefly, highlight/copy a claim,
    seek the media control, and switch tabs once or twice.
-5. Add a self-label in the desktop app.
-6. Stop the session.
-7. Inspect replay markers, the comprehension heatmap, and the repair prompt.
-8. Click Start on the repair prompt, answer it, then Save or Dismiss.
-9. Export JSONL and confirm it contains derived events and repair outcomes, not
-   raw camera frames, raw typed content, or raw article text by default.
-10. Delete the session and confirm the local session disappears.
+6. Add a self-label in the desktop app.
+7. Stop the session.
+8. Inspect replay markers, evidence episodes, the comprehension heatmap, and the
+   repair prompt.
+9. Click Start on the repair prompt, answer it, then Save or Dismiss.
+10. Export JSONL and confirm it contains derived events and repair outcomes, not
+    raw camera frames, raw typed content, or raw article text by default. If
+    `Selected text excerpts` was enabled, copied/highlighted excerpts appear as
+    local `document-opt-in` events.
+11. Delete the session and confirm the local session disappears.
 
 ## Expected Demo Signals
 
 - The desktop header shows recording state, ingest URL, and pairing token.
-- Replay includes event-backed markers such as skim risk, copied passage, rewind,
-  tab churn, labels, and probes.
+- Replay includes event-backed evidence episodes and markers such as skim risk,
+  copied passage, rewind, tab churn, labels, and probes.
+- Copy/highlight evidence shows selected text snippets only when `Selected text
+  excerpts` was enabled.
 - The heatmap separates stimulus evidence from behavior evidence and shows
   confidence plus limitation copy.
 - Repair actions are stored as `repair.candidate`, `probe.requested`,

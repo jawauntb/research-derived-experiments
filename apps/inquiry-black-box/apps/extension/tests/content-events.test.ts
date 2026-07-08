@@ -78,9 +78,9 @@ describe("content telemetry capture", () => {
       },
     });
 
-    telemetry.captureSelection("selection", { selectionLength: 17, rangeCount: 1 });
-    telemetry.captureSelection("copy", { selectionLength: 17, rangeCount: 1 });
-    telemetry.captureSelection("highlight", { selectionLength: 17, rangeCount: 1 });
+    telemetry.captureSelection("selection", { selectionLength: 17, rangeCount: 1, selectedText: "selected phrase" });
+    telemetry.captureSelection("copy", { selectionLength: 17, rangeCount: 1, selectedText: "selected phrase" });
+    telemetry.captureSelection("highlight", { selectionLength: 17, rangeCount: 1, selectedText: "selected phrase" });
 
     const events = messages.flatMap((message) => message.events);
     expect(events.map((event) => event.event_type)).toEqual([
@@ -89,7 +89,72 @@ describe("content telemetry capture", () => {
       "browser.highlight",
     ]);
     expect(events.every((event) => event.payload.selection_length === 17)).toBe(true);
+    expect(events.every((event) => event.privacy_class === "local-derived")).toBe(true);
     expect(JSON.stringify(events)).not.toContain("selected phrase");
+  });
+
+  test("captures selected text only for opted-in copy and highlight events", () => {
+    const messages: ContentEventMessage[] = [];
+    const telemetry = createContentTelemetry({
+      now: () => 250,
+      sessionId: "session-selection-text",
+      settings: recordingSettings({
+        selectedText: true,
+      }),
+      location: {
+        href: "https://research.example.test/notes",
+        hostname: "research.example.test",
+      },
+      sendMessage: (message) => {
+        messages.push(message);
+      },
+    });
+
+    telemetry.captureSelection("selection", { selectionLength: 17, rangeCount: 1, selectedText: "ambient selection" });
+    telemetry.captureSelection("copy", { selectionLength: 17, rangeCount: 1, selectedText: "copied claim" });
+    telemetry.captureSelection("highlight", { selectionLength: 21, rangeCount: 1, selectedText: "highlighted claim" });
+
+    const events = messages.flatMap((message) => message.events);
+    expect(events).toHaveLength(3);
+    expect(events[0]?.event_type).toBe("browser.selection");
+    expect(events[0]?.privacy_class).toBe("local-derived");
+    expect(JSON.stringify(events[0])).not.toContain("ambient selection");
+    expect(events[1]?.privacy_class).toBe("document-opt-in");
+    expect(events[1]?.retention_policy).toBe("session-delete");
+    expect(events[1]?.payload).toMatchObject({
+      selected_text: "copied claim",
+      selected_text_char_count: 12,
+      selected_text_truncated: false,
+      document_opt_in: true,
+    });
+    expect(events[2]?.privacy_class).toBe("document-opt-in");
+    expect(events[2]?.payload.selected_text).toBe("highlighted claim");
+  });
+
+  test("caps opted-in selected text excerpts", () => {
+    const messages: ContentEventMessage[] = [];
+    const telemetry = createContentTelemetry({
+      now: () => 260,
+      sessionId: "session-selection-text-cap",
+      settings: recordingSettings({
+        selectedText: true,
+      }),
+      location: {
+        href: "https://research.example.test/notes",
+        hostname: "research.example.test",
+      },
+      sendMessage: (message) => {
+        messages.push(message);
+      },
+    });
+    const selectedText = "x".repeat(2_050);
+
+    telemetry.captureSelection("copy", { selectionLength: selectedText.length, rangeCount: 1, selectedText });
+
+    const event = messages.flatMap((message) => message.events)[0];
+    expect(event?.payload.selected_text).toBe("x".repeat(2_000));
+    expect(event?.payload.selected_text_char_count).toBe(2_050);
+    expect(event?.payload.selected_text_truncated).toBe(true);
   });
 
   test("typing payloads contain timing and edit metrics but no typed content", () => {
@@ -163,14 +228,14 @@ describe("content telemetry capture", () => {
     telemetry.captureMedia("pause", fixtureMedia({ currentTime: 3, duration: 10 }));
     telemetry.setSettings({
       siteDisabled: false,
-      privacyToggles: { browser: true, typingMetrics: false, selection: true, media: true },
+      privacyToggles: { browser: true, typingMetrics: false, selection: true, selectedText: false, media: true },
     });
     telemetry.captureTypingInput({
       target: { tagName: "TEXTAREA", value: "private note", isContentEditable: false },
       inputType: "insertText",
     });
     telemetry.setSettings({
-      privacyToggles: { browser: true, typingMetrics: true, selection: true, media: true },
+      privacyToggles: { browser: true, typingMetrics: true, selection: true, selectedText: false, media: true },
     });
     telemetry.captureScroll({ scrollY: 20, viewportHeight: 100, documentHeight: 500 });
 
@@ -218,15 +283,23 @@ function fixtureMedia(input: { currentTime: number; duration: number }): MediaEl
   };
 }
 
-function recordingSettings() {
+function recordingSettings(overrides: Partial<ReturnType<typeof basePrivacyToggles>> = {}) {
   return {
     recordingState: "recording" as const,
     siteDisabled: false,
     privacyToggles: {
-      browser: true,
-      typingMetrics: true,
-      selection: true,
-      media: true,
+      ...basePrivacyToggles(),
+      ...overrides,
     },
+  };
+}
+
+function basePrivacyToggles() {
+  return {
+    browser: true,
+    typingMetrics: true,
+    selection: true,
+    selectedText: false,
+    media: true,
   };
 }

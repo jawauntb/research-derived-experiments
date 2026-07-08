@@ -76,6 +76,7 @@ function pairedState(sessionId: string): BridgeState {
       browser: true,
       typingMetrics: true,
       selection: true,
+      selectedText: false,
       media: true,
     },
     updatedAt: "2026-07-07T00:00:00.000Z",
@@ -105,6 +106,7 @@ function recordingSettings() {
       browser: true,
       typingMetrics: true,
       selection: true,
+      selectedText: false,
       media: true,
     },
   };

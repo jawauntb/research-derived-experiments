@@ -94,6 +94,33 @@ describe("local bridge pairing and queue", () => {
     expect(isBridgeEventAllowed(event, { ...state, disabledSiteHashes: ["host-abc"] })).toBe(false);
   });
 
+  test("requires selected text opt-in for document-opt-in copy evidence", () => {
+    const event = browserCopyTextEvent("event-selected-text");
+    const alternateTextFieldEvent = browserCopyTextEvent("event-copied-text", { copied_text: "copied claim" });
+    const state = pairedState();
+
+    expect(isBridgeEventAllowed(event, state)).toBe(false);
+    expect(isBridgeEventAllowed(alternateTextFieldEvent, state)).toBe(false);
+    expect(
+      isBridgeEventAllowed(event, {
+        ...state,
+        privacyToggles: {
+          ...state.privacyToggles,
+          selectedText: true,
+        },
+      }),
+    ).toBe(true);
+    expect(
+      isBridgeEventAllowed(alternateTextFieldEvent, {
+        ...state,
+        privacyToggles: {
+          ...state.privacyToggles,
+          selectedText: true,
+        },
+      }),
+    ).toBe(true);
+  });
+
   test("broadcasts popup recording changes to loaded content scripts", async () => {
     const storage = createMemoryStorage({ [BRIDGE_STATE_KEY]: { ...pairedState(), recordingState: "stopped" } });
     const queue = createMemoryEventQueue();
@@ -175,10 +202,33 @@ function pairedState(): BridgeState {
       browser: true,
       typingMetrics: true,
       selection: true,
+      selectedText: false,
       media: true,
     },
     updatedAt: "2026-07-07T00:00:00.000Z",
   };
+}
+
+function browserCopyTextEvent(eventId: string, textPayload: Record<string, string> = { selected_text: "copied claim" }): EventEnvelope {
+  return createEvent({
+    event_id: eventId,
+    captured_at: "2026-07-07T00:00:00.000Z",
+    timezone: "UTC",
+    session_id: "session-bridge",
+    source: "browser",
+    source_version: "extension@0.1.0",
+    monotonic_ms: 2,
+    event_type: "browser.copy",
+    payload: {
+      url_hash: "url-abc",
+      hostname_hash: "host-abc",
+      selection_length: 12,
+      range_count: 1,
+      ...textPayload,
+    },
+    privacy_class: "document-opt-in",
+    retention_policy: "session-delete",
+  });
 }
 
 function createMemoryStorage(initial: Record<string, unknown> = {}): StorageAreaLike {

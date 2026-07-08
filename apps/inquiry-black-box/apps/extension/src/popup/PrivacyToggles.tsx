@@ -6,6 +6,7 @@ const toggleLabels: Array<{ key: keyof PrivacyToggles; label: string }> = [
   { key: "browser", label: "Browser events" },
   { key: "typingMetrics", label: "Typing rhythm" },
   { key: "selection", label: "Selection metrics" },
+  { key: "selectedText", label: "Selected text excerpts" },
   { key: "media", label: "Media events" },
 ];
 

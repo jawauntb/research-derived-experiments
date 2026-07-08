@@ -121,6 +121,46 @@ describe("event schema", () => {
     ).toThrow(/document-opt-in/);
   });
 
+  test("requires document opt-in for raw browser selected text", () => {
+    expect(() =>
+      createEvent({
+        session_id: "session-1",
+        source: "browser",
+        source_version: "extension@0.1.0",
+        monotonic_ms: 35,
+        event_type: "browser.copy",
+        payload: {
+          hostname_hash: "h_demo",
+          url_hash: "h_page",
+          selection_length: 13,
+          selected_text: "copied claim",
+        },
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    ).toThrow(/document-opt-in/);
+
+    const event = createEvent({
+      session_id: "session-1",
+      source: "browser",
+      source_version: "extension@0.1.0",
+      monotonic_ms: 36,
+      event_type: "browser.copy",
+      payload: {
+        hostname_hash: "h_demo",
+        url_hash: "h_page",
+        selection_length: 13,
+        selected_text: "copied claim",
+      },
+      privacy_class: "document-opt-in",
+      retention_policy: "session-delete",
+    });
+
+    expect(event.privacy_class).toBe("document-opt-in");
+    expect(canExportPrivacyClass(event.privacy_class).allowed).toBe(true);
+    expect(canSyncPrivacyClass(event.privacy_class).allowed).toBe(false);
+  });
+
   test("accepts local repair candidate and outcome events", () => {
     const candidatePayload: RepairCandidatePayload = {
       repair_id: "repair-1",

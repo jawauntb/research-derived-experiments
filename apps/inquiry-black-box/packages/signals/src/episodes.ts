@@ -13,6 +13,7 @@ export type EvidenceEpisode = {
   marker_ids: string[];
   evidence_event_ids: string[];
   source_refs: string[];
+  snippets: string[];
   summary: string;
   details: string[];
   privacy_note: string;
@@ -96,6 +97,13 @@ function groupToEpisode(group: CopyGroup): EvidenceEpisode {
   const sourceSummary = group.source_refs.join(", ");
   const selectionRange = numberRange(lengths);
   const rangeCount = numberRange(rangeCounts);
+  const snippets = unique(
+    group.events
+      .filter((event) => event.privacy_class === "document-opt-in")
+      .map((event) => stringPayload(event, "selected_text"))
+      .filter((value): value is string => typeof value === "string" && value.length > 0),
+  );
+  const snippetDetails = snippets.slice(0, 2).map((snippet) => `Opt-in excerpt: "${displaySnippet(snippet)}"`);
 
   return {
     episode_id: `copied-selection:${group.session_id}:${Math.round(first.monotonic_ms)}:${stableHash(eventIds.join("|"))}`,
@@ -107,13 +115,18 @@ function groupToEpisode(group: CopyGroup): EvidenceEpisode {
     marker_ids: [],
     evidence_event_ids: eventIds,
     source_refs: group.source_refs,
+    snippets,
     summary: `${capitalize(actionSummary)} on ${sourceSummary} over ${formatDuration(spanMs)}.`,
     details: [
       selectionRange ? `Selection length ranged ${selectionRange} characters.` : "Selection length was not available.",
       rangeCount ? `DOM range count ranged ${rangeCount}.` : "DOM range count was not available.",
       `${group.events.length} evidence event${group.events.length === 1 ? "" : "s"} contributed to this episode.`,
+      ...snippetDetails,
     ],
-    privacy_note: "Raw selected or copied text was not stored; this episode uses timing, counts, lengths, and hashed page refs.",
+    privacy_note:
+      snippets.length > 0
+        ? "Selected text was stored because the selected text excerpts opt-in was enabled for this local session."
+        : "Raw selected or copied text was not stored; this episode uses timing, counts, lengths, and hashed page refs.",
   };
 }
 
@@ -178,6 +191,15 @@ function numberRange(values: number[]): string | null {
   const min = Math.min(...values);
   const max = Math.max(...values);
   return min === max ? `${Math.round(min)}` : `${Math.round(min)}-${Math.round(max)}`;
+}
+
+function unique(values: string[]): string[] {
+  return [...new Set(values)];
+}
+
+function displaySnippet(value: string): string {
+  const normalized = value.replace(/\s+/g, " ").trim();
+  return normalized.length > 160 ? `${normalized.slice(0, 157)}...` : normalized;
 }
 
 function formatDuration(durationMs: number): string {

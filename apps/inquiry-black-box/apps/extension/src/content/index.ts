@@ -62,6 +62,7 @@ export type SelectionKind = "selection" | "copy" | "highlight";
 export type SelectionMetrics = {
   selectionLength: number;
   rangeCount?: number;
+  selectedText?: string;
 };
 
 export type EditableElementLike = {
@@ -85,6 +86,10 @@ export type TypingInput = {
 const CONTENT_SCRIPT_INSTALLED_KEY = "__inquiryBlackBoxContentInstalled";
 
 type EventCategory = "browser" | "typingMetrics" | "selection" | "media";
+type EmitOptions = {
+  privacyClass?: EventEnvelope["privacy_class"];
+  retentionPolicy?: EventEnvelope["retention_policy"];
+};
 
 type TypingState = {
   burstLength: number;
@@ -197,11 +202,13 @@ export class ContentTelemetry {
     }
 
     const eventType = selectionEventType(kind);
+    const optedInText = selectedTextPayload(kind, metrics, this.settings.privacyToggles.selectedText);
     return this.emit(eventType, "selection", {
       ...this.commonPayload(),
       selection_length: finiteNumber(metrics.selectionLength),
       range_count: finiteNumber(metrics.rangeCount ?? 0),
-    });
+      ...optedInText.payload,
+    }, optedInText.enabled ? { privacyClass: "document-opt-in", retentionPolicy: "session-delete" } : {});
   }
 
   recordKeydown(input: KeyboardInput): void {
@@ -253,7 +260,7 @@ export class ContentTelemetry {
     });
   }
 
-  private emit(eventType: EventType, category: EventCategory, payload: JsonObject): EventEnvelope | null {
+  private emit(eventType: EventType, category: EventCategory, payload: JsonObject, options: EmitOptions = {}): EventEnvelope | null {
     if (!this.canCapture(category)) {
       return null;
     }
@@ -265,8 +272,8 @@ export class ContentTelemetry {
       monotonic_ms: Math.max(0, this.now()),
       event_type: eventType,
       payload,
-      privacy_class: "local-derived",
-      retention_policy: "local-default",
+      privacy_class: options.privacyClass ?? "local-derived",
+      retention_policy: options.retentionPolicy ?? "local-default",
     });
 
     void this.sendMessage({ type: CONTENT_EVENTS_MESSAGE, events: [event] });
@@ -342,6 +349,8 @@ function normalizeContentSettings(input: Partial<ContentSettings>): ContentSetti
       typingMetrics:
         typeof toggles.typingMetrics === "boolean" ? toggles.typingMetrics : disabledPrivacyToggles.typingMetrics,
       selection: typeof toggles.selection === "boolean" ? toggles.selection : disabledPrivacyToggles.selection,
+      selectedText:
+        typeof toggles.selectedText === "boolean" ? toggles.selectedText : disabledPrivacyToggles.selectedText,
       media: typeof toggles.media === "boolean" ? toggles.media : disabledPrivacyToggles.media,
     },
   };
@@ -363,6 +372,38 @@ function selectionEventType(kind: SelectionKind): EventType {
   }
 
   return "browser.selection";
+}
+
+const MAX_SELECTED_TEXT_CHARS = 2_000;
+
+function selectedTextPayload(
+  kind: SelectionKind,
+  metrics: SelectionMetrics,
+  enabled: boolean,
+): { enabled: boolean; payload: JsonObject } {
+  if (!enabled || kind === "selection" || typeof metrics.selectedText !== "string") {
+    return { enabled: false, payload: {} };
+  }
+
+  const normalized = normalizeSelectedText(metrics.selectedText);
+  if (normalized.length === 0) {
+    return { enabled: false, payload: {} };
+  }
+
+  const selectedText = normalized.slice(0, MAX_SELECTED_TEXT_CHARS);
+  return {
+    enabled: true,
+    payload: {
+      selected_text: selectedText,
+      selected_text_char_count: normalized.length,
+      selected_text_truncated: normalized.length > selectedText.length,
+      document_opt_in: true,
+    },
+  };
+}
+
+function normalizeSelectedText(value: string): string {
+  return value.replace(/\u0000/g, "").replace(/\r\n?/g, "\n").trim();
 }
 
 function mediaKind(media: MediaElementLike): "audio" | "video" {
@@ -519,9 +560,11 @@ function captureMediaEvent(telemetry: ContentTelemetry, action: MediaAction, eve
 
 function readSelectionMetrics(): SelectionMetrics {
   const selection = document.getSelection();
+  const selectedText = selection?.toString() ?? "";
   return {
-    selectionLength: selection?.toString().length ?? 0,
+    selectionLength: selectedText.length,
     rangeCount: selection?.rangeCount ?? 0,
+    selectedText,
   };
 }
 
