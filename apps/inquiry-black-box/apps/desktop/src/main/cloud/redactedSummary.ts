@@ -1,4 +1,6 @@
+import { execFileSync } from "node:child_process";
 import { randomUUID } from "node:crypto";
+import { homedir } from "node:os";
 import {
   assertNoBlockedPayload,
   type EventEnvelope,
@@ -10,7 +12,7 @@ import { createModelRunEvent, redactedSessionSummaryJobInput } from "@inquiry/si
 import type { InquiryDatabase } from "../db";
 import { createSessionInterpretationReport } from "../reports/sessionInterpretation";
 
-export type RedactedSummarySubmissionStatus = "submitted" | "blocked" | "unavailable" | "failed";
+export type RedactedSummarySubmissionStatus = "submitted" | "complete" | "blocked" | "unavailable" | "failed";
 
 export type RedactedSummarySubmission = {
   status: RedactedSummarySubmissionStatus;
@@ -29,6 +31,12 @@ export type RedactedSummaryOptions = {
   fetchImpl?: FetchLike;
   provider?: string;
   model?: string;
+  geminiApiKey?: string;
+  geminiApiBaseUrl?: string;
+  disableDopplerGemini?: boolean;
+  dopplerProject?: string;
+  dopplerConfig?: string;
+  dopplerCommand?: string;
   nowMs?: () => number;
   timeoutMs?: number;
 };
@@ -43,18 +51,17 @@ export async function requestRedactedSessionSummary(
   const settings = database.signalSettings();
   const nowMs = options.nowMs ?? (() => Date.now());
   const runId = `session-summary:${sessionId}:${nowMs()}:${randomUUID()}`;
-  const provider = options.provider ?? process.env.MODEL_PROVIDER ?? "modal";
-  const model = options.model ?? process.env.SESSION_SUMMARY_MODEL ?? "redacted-session-summary";
+  const providerPreference = options.provider ?? process.env.MODEL_PROVIDER;
 
   if (!settings.cloudSync) {
     return appendRun(database, {
       sessionId,
       runId,
-      provider,
-      model,
+      provider: providerPreference ?? "modal",
+      model: options.model ?? process.env.SESSION_SUMMARY_MODEL ?? "redacted-session-summary",
       status: "unavailable",
       message: "Cloud sync is off. Enable Cloud sync before requesting a redacted LLM summary.",
-      limitations: ["No cloud or Modal request was made.", "Local interpretation remains available."],
+      limitations: ["No cloud, Modal, or Gemini request was made.", "Local interpretation remains available."],
       submissionStatus: "blocked",
     });
   }
@@ -67,20 +74,45 @@ export async function requestRedactedSessionSummary(
   const interpretation = createSessionInterpretationReport(database, sessionId);
   const input = redactedSessionSummaryJobInput(interpretation);
   assertRedactedInput(input);
+  const wantsGemini = isGeminiProvider(providerPreference) || (!cloudApiUrl || !bearerToken);
+  const geminiApiKey = wantsGemini ? resolveGeminiApiKey(options) : undefined;
+
+  if (wantsGemini && geminiApiKey) {
+    const model = options.model ?? process.env.SESSION_SUMMARY_MODEL ?? process.env.GEMINI_MODEL_JUDGE ?? "gemini-2.0-flash";
+    return requestGeminiSummary(database, {
+      sessionId,
+      runId,
+      inputReportId: interpretation.report_id,
+      input,
+      apiKey: geminiApiKey,
+      model,
+      fetchImpl: options.fetchImpl ?? fetch,
+      timeoutMs: options.timeoutMs ?? 10_000,
+      ...(options.geminiApiBaseUrl ? { baseUrl: options.geminiApiBaseUrl } : {}),
+    });
+  }
 
   if (!cloudApiUrl || !bearerToken) {
     return appendRun(database, {
       sessionId,
       runId,
-      provider,
-      model,
+      provider: isGeminiProvider(providerPreference) ? "gemini" : providerPreference ?? "modal",
+      model:
+        isGeminiProvider(providerPreference)
+          ? options.model ?? process.env.SESSION_SUMMARY_MODEL ?? process.env.GEMINI_MODEL_JUDGE ?? "gemini-2.0-flash"
+          : options.model ?? process.env.SESSION_SUMMARY_MODEL ?? "redacted-session-summary",
       status: "unavailable",
       inputReportId: interpretation.report_id,
-      message: "Cloud job endpoint or auth token is not configured.",
-      limitations: ["Generated the redacted job input locally.", "No cloud or Modal request was made."],
+      message: isGeminiProvider(providerPreference)
+        ? "Gemini API key is not configured."
+        : "Cloud job endpoint/auth token or Gemini API key is not configured.",
+      limitations: ["Generated the redacted job input locally.", "No cloud, Modal, or Gemini request was made."],
       submissionStatus: "unavailable",
     });
   }
+
+  const provider = providerPreference ?? "modal";
+  const model = options.model ?? process.env.SESSION_SUMMARY_MODEL ?? "redacted-session-summary";
 
   try {
     const response = await fetchWithTimeout(
@@ -140,6 +172,90 @@ export async function requestRedactedSessionSummary(
       status: "failed",
       inputReportId: interpretation.report_id,
       message: "Cloud job request failed before submission completed.",
+      limitations: [error instanceof Error ? error.message : String(error)],
+      submissionStatus: "failed",
+    });
+  }
+}
+
+async function requestGeminiSummary(
+  database: InquiryDatabase,
+  input: {
+    sessionId: string;
+    runId: string;
+    inputReportId: string;
+    input: JsonObject;
+    apiKey: string;
+    model: string;
+    fetchImpl: FetchLike;
+    baseUrl?: string;
+    timeoutMs: number;
+  },
+): Promise<RedactedSummarySubmission> {
+  try {
+    const response = await fetchWithTimeout(
+      input.fetchImpl,
+      geminiGenerateContentUrl(input.model, input.baseUrl),
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          "x-goog-api-key": input.apiKey,
+        },
+        body: JSON.stringify(geminiSummaryRequestBody(input.input)),
+      },
+      input.timeoutMs,
+    );
+    const body = (await response.json().catch(() => ({}))) as Record<string, unknown>;
+    if (!response.ok) {
+      return appendRun(database, {
+        sessionId: input.sessionId,
+        runId: input.runId,
+        provider: "gemini",
+        model: input.model,
+        status: "failed",
+        inputReportId: input.inputReportId,
+        message: `Gemini summary request failed with status ${response.status}.`,
+        limitations: [errorMessage(body), "The submitted payload was redacted-sync only."],
+        submissionStatus: "failed",
+      });
+    }
+
+    const text = geminiText(body);
+    if (!text) {
+      return appendRun(database, {
+        sessionId: input.sessionId,
+        runId: input.runId,
+        provider: "gemini",
+        model: input.model,
+        status: "failed",
+        inputReportId: input.inputReportId,
+        message: "Gemini summary response did not include text.",
+        limitations: ["The submitted payload was redacted-sync only."],
+        submissionStatus: "failed",
+      });
+    }
+
+    return appendRun(database, {
+      sessionId: input.sessionId,
+      runId: input.runId,
+      provider: "gemini",
+      model: input.model,
+      status: "complete",
+      inputReportId: input.inputReportId,
+      message: text,
+      limitations: ["Generated by Gemini from redacted session interpretation counts, themes, actions, and limitations only."],
+      submissionStatus: "complete",
+    });
+  } catch (error) {
+    return appendRun(database, {
+      sessionId: input.sessionId,
+      runId: input.runId,
+      provider: "gemini",
+      model: input.model,
+      status: "failed",
+      inputReportId: input.inputReportId,
+      message: "Gemini summary request failed before completion.",
       limitations: [error instanceof Error ? error.message : String(error)],
       submissionStatus: "failed",
     });
@@ -206,11 +322,111 @@ function assertRedactedInput(input: JsonObject): void {
   }
 }
 
+function resolveGeminiApiKey(options: RedactedSummaryOptions): string | undefined {
+  const explicit = stringValue(options.geminiApiKey);
+  if (explicit) {
+    return explicit;
+  }
+
+  const envKey = stringValue(process.env.GEMINI_API_KEY) ?? stringValue(process.env.GOOGLE_API_KEY);
+  if (envKey || options.disableDopplerGemini) {
+    return envKey;
+  }
+
+  return resolveDopplerSecret("GEMINI_API_KEY", options) ?? resolveDopplerSecret("GOOGLE_API_KEY", options);
+}
+
+function resolveDopplerSecret(key: string, options: RedactedSummaryOptions): string | undefined {
+  const project = options.dopplerProject ?? process.env.INQUIRY_DOPPLER_PROJECT ?? "cofounder";
+  const config = options.dopplerConfig ?? process.env.INQUIRY_DOPPLER_CONFIG ?? "prd_superoptimizers";
+  const commands = uniqueStrings([
+    options.dopplerCommand,
+    process.env.INQUIRY_DOPPLER_COMMAND,
+    `${homedir()}/.local/bin/doppler`,
+    "/opt/homebrew/bin/doppler",
+    "/usr/local/bin/doppler",
+    "doppler",
+  ]);
+
+  for (const command of commands) {
+    try {
+      const output = execFileSync(
+        command,
+        ["run", "--project", project, "--config", config, "--", "printenv", key],
+        {
+          encoding: "utf8",
+          stdio: ["ignore", "pipe", "ignore"],
+          timeout: 2_500,
+        },
+      ).trim();
+      if (output.length > 0) {
+        return output;
+      }
+    } catch {
+      // Keep the summary path usable when Doppler is unavailable or unconfigured.
+    }
+  }
+
+  return undefined;
+}
+
 function normalizeCloudApiUrl(value: string | undefined): string | undefined {
   if (!value) {
     return undefined;
   }
   return value.replace(/\/+$/, "");
+}
+
+function geminiGenerateContentUrl(model: string, baseUrl = "https://generativelanguage.googleapis.com/v1beta"): string {
+  const normalizedBase = baseUrl.replace(/\/+$/, "");
+  const normalizedModel = model.startsWith("models/") || model.startsWith("tunedModels/") ? model : `models/${model}`;
+  return `${normalizedBase}/${normalizedModel}:generateContent`;
+}
+
+function geminiSummaryRequestBody(input: JsonObject): JsonObject {
+  return {
+    contents: [
+      {
+        role: "user",
+        parts: [
+          {
+            text: [
+              "Summarize this Inquiry Black Box session using only the redacted JSON below.",
+              "Do not infer identities, diagnoses, hidden mental states, raw page text, typed text, or window titles.",
+              "Return concise plain text: one evidence-grounded summary sentence and up to two next actions.",
+              "",
+              JSON.stringify({
+                kind: "session_summary",
+                privacy_class: "redacted-sync",
+                input,
+              }),
+            ].join("\n"),
+          },
+        ],
+      },
+    ],
+    generationConfig: {
+      temperature: 0.2,
+      maxOutputTokens: 384,
+    },
+  };
+}
+
+function geminiText(body: Record<string, unknown>): string | undefined {
+  const candidates = Array.isArray(body.candidates) ? body.candidates : [];
+  for (const candidate of candidates) {
+    const content = isRecord(candidate) && isRecord(candidate.content) ? candidate.content : {};
+    const parts = Array.isArray(content.parts) ? content.parts : [];
+    const text = parts
+      .map((part) => (isRecord(part) && typeof part.text === "string" ? part.text : ""))
+      .join("")
+      .trim();
+    if (text.length > 0) {
+      return text;
+    }
+  }
+
+  return undefined;
 }
 
 async function fetchWithTimeout(fetchImpl: FetchLike, url: string, init: RequestInit, timeoutMs: number): Promise<Response> {
@@ -243,6 +459,14 @@ function errorMessage(value: Record<string, unknown>): string {
 
 function stringValue(value: unknown): string | undefined {
   return typeof value === "string" && value.length > 0 ? value : undefined;
+}
+
+function isGeminiProvider(value: unknown): boolean {
+  return value === "gemini" || value === "google" || value === "google-gemini";
+}
+
+function uniqueStrings(values: Array<string | undefined>): string[] {
+  return [...new Set(values.filter((value): value is string => typeof value === "string" && value.length > 0))];
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
