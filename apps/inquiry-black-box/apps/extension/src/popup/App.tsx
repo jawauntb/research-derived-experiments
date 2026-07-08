@@ -10,6 +10,7 @@ import { CONTENT_PING_MESSAGE, CONTENT_PONG_MESSAGE } from "../lib/messages";
 import { hashForTelemetry } from "../lib/telemetry";
 import {
   defaultSessionTitle,
+  inquiryCssVariableBlock,
   recordingIndicator,
   sessionTransportButtons,
   siteCaptureLabel,
@@ -540,19 +541,9 @@ function installStyles(): void {
   const style = document.createElement("style");
   style.id = "inquiry-popup-styles";
   style.textContent = `
+    ${inquiryCssVariableBlock(":root")}
+
     :root {
-      --surface: #eef2f5;
-      --surface-raised: #f8fafb;
-      --surface-inset: #e4eaee;
-      --ink: #16202a;
-      --muted: #5d6b78;
-      --line: #d4dde4;
-      --green: #0f6b55;
-      --amber: #8a5b00;
-      --rose: #a83347;
-      --shadow-raised: 6px 6px 14px rgba(105, 122, 138, 0.22), -6px -6px 14px rgba(255, 255, 255, 0.92);
-      --shadow-pressed: inset 3px 3px 8px rgba(105, 122, 138, 0.2), inset -3px -3px 8px rgba(255, 255, 255, 0.9);
-      --focus: 0 0 0 3px rgba(36, 91, 147, 0.24);
       color-scheme: light;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
