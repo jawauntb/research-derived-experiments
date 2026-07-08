@@ -525,6 +525,64 @@ describe("local bridge pairing and queue", () => {
     expect(await getBridgeState(storage)).toMatchObject({ recordingState: "recording", sessionId: "session-bridge" });
   });
 
+  test("clears stale pairing when desktop status rejects the saved token", async () => {
+    const storage = createMemoryStorage({ [BRIDGE_STATE_KEY]: { ...pairedState(), recordingState: "recording" } });
+    const queue = createMemoryEventQueue();
+
+    const response = await handleRuntimeMessage(
+      { type: "inquiry:get-popup-state" },
+      {},
+      {
+        storage,
+        queue,
+        now: () => 2_000,
+        fetchImpl: async () => new Response(JSON.stringify({ error: "origin not allowed" }), { status: 403 }),
+      },
+    );
+
+    expect(response).toMatchObject({
+      ok: true,
+      pairingToken: undefined,
+      recordingState: "stopped",
+      sessionId: DEFAULT_SESSION_ID,
+      desktopStatusWarning: "desktop bridge rejected the pairing token with status 403. Pair with local desktop again.",
+    });
+    expect(await getBridgeState(storage)).toMatchObject({
+      pairingToken: undefined,
+      recordingState: "stopped",
+      sessionId: DEFAULT_SESSION_ID,
+    });
+  });
+
+  test("clears stale pairing when desktop stop control rejects the saved token", async () => {
+    const storage = createMemoryStorage({ [BRIDGE_STATE_KEY]: { ...pairedState(), recordingState: "recording" } });
+    const queue = createMemoryEventQueue();
+
+    const response = await handleRuntimeMessage(
+      { type: "inquiry:set-recording-state", recordingState: "stopped" },
+      {},
+      {
+        storage,
+        queue,
+        now: () => 2_000,
+        fetchImpl: async () => new Response(JSON.stringify({ error: "origin not allowed" }), { status: 403 }),
+      },
+    );
+
+    expect(response).toMatchObject({
+      ok: true,
+      pairingToken: undefined,
+      recordingState: "stopped",
+      sessionId: DEFAULT_SESSION_ID,
+      warning: "desktop bridge rejected the pairing token with status 403. Pair with local desktop again.",
+    });
+    expect(await getBridgeState(storage)).toMatchObject({
+      pairingToken: undefined,
+      recordingState: "stopped",
+      sessionId: DEFAULT_SESSION_ID,
+    });
+  });
+
   test("retry alarm reconciliation clears stale queued events instead of rebinding them", async () => {
     const storage = createMemoryStorage({ [BRIDGE_STATE_KEY]: { ...pairedState(), recordingState: "recording" } });
     const queuedEvent = browserScrollEvent("event-retry-reconcile");

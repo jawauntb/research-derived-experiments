@@ -76,9 +76,12 @@ export class PairingRequiredError extends Error {
 }
 
 export class PairingRejectedError extends Error {
+  readonly status: number;
+
   constructor(status: number) {
     super(`desktop bridge rejected the pairing token with status ${status}`);
     this.name = "PairingRejectedError";
+    this.status = status;
   }
 }
 

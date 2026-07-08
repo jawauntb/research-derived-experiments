@@ -9,6 +9,7 @@ import {
   getBridgeState,
   isBridgeEventAllowed,
   normalizeBridgeState,
+  PairingRejectedError,
   postSessionControl,
   requestBridgePairing,
   saveBridgeState,
@@ -217,6 +218,11 @@ async function reconcileDesktopState(
     const reconciled = await updateState(context, state, updates);
     return { state: reconciled, desktopRecordingState: status.recordingState };
   } catch (error) {
+    if (isPairingRejectedError(error)) {
+      const unpaired = await clearRejectedPairing(context, state);
+      return { state: unpaired, warning: `${errorMessage(error)}. Pair with local desktop again.` };
+    }
+
     return { state, warning: errorMessage(error) };
   }
 }
@@ -310,6 +316,11 @@ async function updateRecordingState(
       }
       return updateState(context, state, updates);
     } catch (error) {
+      if (isPairingRejectedError(error)) {
+        const unpaired = await clearRejectedPairing(context, state);
+        return { ...unpaired, ok: false, error: `${errorMessage(error)}. Pair with local desktop again.` };
+      }
+
       return { ...state, ok: false, error: errorMessage(error) };
     }
   }
@@ -334,12 +345,25 @@ async function updateRecordingState(
         sessionId: control.sessionId ?? DEFAULT_SESSION_ID,
       });
     } catch (error) {
+      if (isPairingRejectedError(error)) {
+        const unpaired = await clearRejectedPairing(context, state);
+        return { ...unpaired, warning: `${errorMessage(error)}. Pair with local desktop again.` };
+      }
+
       const next = await updateState(context, state, updates);
       return { ...next, warning: errorMessage(error) };
     }
   }
 
   return updateState(context, state, updates);
+}
+
+async function clearRejectedPairing(context: BackgroundContext, state: BridgeState): Promise<BridgeState & { ok: true }> {
+  return updateState(context, state, {
+    pairingToken: undefined,
+    recordingState: "stopped",
+    sessionId: DEFAULT_SESSION_ID,
+  });
 }
 
 async function setSiteDisabled(
@@ -567,6 +591,10 @@ function isPromiseLike<T>(value: unknown): value is Promise<T> {
 
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
+}
+
+function isPairingRejectedError(error: unknown): error is PairingRejectedError {
+  return error instanceof PairingRejectedError;
 }
 
 installServiceWorker();
