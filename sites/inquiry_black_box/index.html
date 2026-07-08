@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inquiry Black Box - local-first session replay</title>
+  <meta name="description" content="Inquiry Black Box is a local-first Chrome extension and desktop app that replays research and work sessions into evidence-backed next actions.">
+  <link rel="icon" href="assets/aperture-icon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="masthead">
+    <a class="wordmark" href="#top" aria-label="Inquiry Black Box home">
+      <img src="assets/aperture-icon.png" alt="" aria-hidden="true">
+      <span>Inquiry Black Box</span>
+      <em>Neurophenom session instrument</em>
+    </a>
+    <nav class="nav" aria-label="Site sections">
+      <a href="#how">How it works</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#interpretation">Interpretation</a>
+      <a href="#state">Current state</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="hero-title">
+      <img class="hero-mark" src="assets/aperture-mark.png" alt="Inquiry aperture icon">
+      <div class="hero-copy">
+        <span class="label"><b>00</b> Local-first replay</span>
+        <h1 id="hero-title">Inquiry Black Box</h1>
+        <p class="lede">A Chrome extension and desktop app that records explicit work sessions, turns browser and desktop traces into replayable evidence, and helps you decide what to do next.</p>
+        <div class="hero-actions" aria-label="Primary links">
+          <a class="primary-link" href="#how">See the loop</a>
+          <a class="secondary-link" href="#privacy">Privacy stance</a>
+        </div>
+      </div>
+      <div class="hero-readout" aria-label="Product status">
+        <div>
+          <span>Capture</span>
+          <strong>Chrome + desktop</strong>
+        </div>
+        <div>
+          <span>Storage</span>
+          <strong>Local SQLite</strong>
+        </div>
+        <div>
+          <span>Cloud</span>
+          <strong>Optional redacted jobs</strong>
+        </div>
+      </div>
+    </section>
+
+    <section id="what" class="section section-tight">
+      <div class="section-heading">
+        <span class="label"><b>01</b> Product shape</span>
+        <h2>A private flight recorder for sessions that matter.</h2>
+      </div>
+      <div class="copy-block">
+        <p>Inquiry watches only when you start a visible session. It collects derived browser activity, optional camera feature windows, explicit labels, repair outcomes, and opt-in desktop app context. Then it rebuilds the session as markers, heatmap segments, and next actions.</p>
+        <p>It is for research, web search, coding from references, paper reading, note-making, and mixed desktop/browser work. The unit is the session, not the person.</p>
+      </div>
+    </section>
+
+    <section id="how" class="section band" aria-labelledby="how-title">
+      <div class="section-heading">
+        <span class="label"><b>02</b> How it works</span>
+        <h2 id="how-title">Capture, replay, interpret, decide.</h2>
+      </div>
+      <div class="flow-grid">
+        <article class="soft-panel" data-step="01">
+          <h3>Capture</h3>
+          <p>Chrome records scroll, dwell, tab changes, media seeks, selection metrics, copy/highlight counts, and typing rhythm aggregates.</p>
+        </article>
+        <article class="soft-panel" data-step="02">
+          <h3>Context</h3>
+          <p>The desktop app owns session state, SQLite, pairing, export, delete, and opt-in foreground app/window metadata.</p>
+        </article>
+        <article class="soft-panel" data-step="03">
+          <h3>Replay</h3>
+          <p>Signals become evidence-backed markers: skim risk, stuck loops, copied passages, tab churn, app churn, off-browser focus, and deep-work spans.</p>
+        </article>
+        <article class="soft-panel" data-step="04">
+          <h3>Repair</h3>
+          <p>Replay produces conservative prompts: restate a claim, name a missing prerequisite, answer a recall check, or promote a branch to a follow-up note.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="privacy" class="section" aria-labelledby="privacy-title">
+      <div class="section-heading">
+        <span class="label"><b>03</b> Privacy model</span>
+        <h2 id="privacy-title">Derived signals first. Raw surveillance out.</h2>
+      </div>
+      <div class="privacy-board">
+        <article class="inset-panel">
+          <h3>Stored by default</h3>
+          <ul>
+            <li>Timing, counts, hashes, quality flags, and bounded metadata.</li>
+            <li>Session labels, probe answers, repair outcomes, and notification responses.</li>
+            <li>Foreground app identity only after the desktop activity toggle is enabled.</li>
+          </ul>
+        </article>
+        <article class="inset-panel">
+          <h3>Not stored by default</h3>
+          <ul>
+            <li>Raw camera frames, raw screenshots, OCR text, or screen recordings.</li>
+            <li>Raw keystrokes, raw typed text, passwords, or document text.</li>
+            <li>Selected/copied text unless document-level opt-in explicitly allows it.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="interpretation" class="section band" aria-labelledby="interpretation-title">
+      <div class="section-heading">
+        <span class="label"><b>04</b> Interpretation layer</span>
+        <h2 id="interpretation-title">The replay becomes a short answer to "what now?"</h2>
+      </div>
+      <div class="interpretation-layout">
+        <div class="report-surface" aria-label="Example daily review">
+          <div class="report-header">
+            <span>Daily review</span>
+            <strong>local evidence</strong>
+          </div>
+          <dl>
+            <div>
+              <dt>Helped</dt>
+              <dd>Deep-work span after copied evidence. Preserve the produced note.</dd>
+            </div>
+            <div>
+              <dt>Fragmented</dt>
+              <dd>Tab churn plus app switching around the same question.</dd>
+            </div>
+            <div>
+              <dt>Retry</dt>
+              <dd>Reread the fastest-scrolled section and write one recall question.</dd>
+            </div>
+            <div>
+              <dt>Confirm</dt>
+              <dd>Care candidate: "model provenance and privacy boundaries".</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="copy-block">
+          <p>The planned value layer turns session replays into local deterministic summaries, daily suggestions, and optional redacted LLM enrichment. The model can help word the report, but it does not replace evidence ids, limitations, or user ratings.</p>
+          <p>Suggestions learn from explicit responses: accept, snooze, dismiss, rated useful, and rated not useful. That is how "what I care about" becomes a candidate you confirm, not a claim the app makes behind your back.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="state" class="section" aria-labelledby="state-title">
+      <div class="section-heading">
+        <span class="label"><b>05</b> Current state</span>
+        <h2 id="state-title">Built as a local instrument, expanding toward a daily copilot.</h2>
+      </div>
+      <div class="status-grid">
+        <article class="soft-panel">
+          <h3>Ready now</h3>
+          <p>Extension pairing, local session recording, desktop activity metadata, replay markers, heatmaps, repair prompts, export, delete, and packaged app icons.</p>
+        </article>
+        <article class="soft-panel">
+          <h3>Next build</h3>
+          <p>Session interpretation, daily review, suggestion feedback, opt-in desktop notifications, and optional redacted LLM session summaries.</p>
+        </article>
+        <article class="soft-panel">
+          <h3>Boundary</h3>
+          <p>No hidden background monitoring, no raw screen capture by default, no diagnostic mind-reading claims, and no cloud upload unless explicitly enabled.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Inquiry Black Box</span>
+    <span>Local-first Neurophenom session replay</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
