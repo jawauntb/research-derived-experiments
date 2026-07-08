@@ -1,4 +1,4 @@
-name: Deploy Railway site
+name: Deploy Railway sites
 
 "on":
   push:
@@ -10,33 +10,43 @@ permissions:
   contents: read
 
 concurrency:
-  group: railway-production
+  group: railway-production-${{ matrix.name }}
   cancel-in-progress: true
 
 jobs:
   deploy:
-    name: Deploy reafference atlas
+    name: Deploy ${{ matrix.name }}
     runs-on: ubuntu-latest
     container: ghcr.io/railwayapp/cli:latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: reafference atlas
+            project_id: 2fd18d7f-bf1b-42ae-b756-d29f836cb1d9
+            environment_id: f97509f3-815f-43c3-9013-f3748a787f39
+            service_id: e4143302-3161-4454-bdd1-742487f1ce99
+            working_directory: .
+          - name: inquiry black box site
+            project_id: 520094f1-620a-436c-953f-26273416786e
+            environment_id: b10dfd06-42ea-4e30-bdfa-3576253047fb
+            service_id: c2f71d20-10ec-48d8-bc87-60c61e8a7b14
+            working_directory: sites/inquiry_black_box
     env:
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-      RAILWAY_PROJECT_ID: 2fd18d7f-bf1b-42ae-b756-d29f836cb1d9
-      RAILWAY_ENVIRONMENT_ID: f97509f3-815f-43c3-9013-f3748a787f39
-      RAILWAY_SERVICE_ID: e4143302-3161-4454-bdd1-742487f1ce99
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
       - name: Confirm Railway token is configured
-        shell: bash
         run: test -n "$RAILWAY_TOKEN"
 
       - name: Deploy to Railway
-        shell: bash
+        working-directory: ${{ matrix.working_directory }}
         run: >
           railway up
-          --project "$RAILWAY_PROJECT_ID"
-          --environment "$RAILWAY_ENVIRONMENT_ID"
-          --service "$RAILWAY_SERVICE_ID"
+          --project "${{ matrix.project_id }}"
+          --environment "${{ matrix.environment_id }}"
+          --service "${{ matrix.service_id }}"
           --ci
           --message "GitHub Actions deploy ${GITHUB_SHA}"
