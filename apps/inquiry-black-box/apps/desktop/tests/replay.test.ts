@@ -283,6 +283,45 @@ describe("session replay report", () => {
     }
   });
 
+  test("renders desktop app context without requiring window titles", () => {
+    const documentStub = new FakeDocument();
+    const globalWithDocument = globalThis as unknown as { document?: unknown };
+    const originalDocument = globalWithDocument.document;
+    globalWithDocument.document = documentStub;
+
+    try {
+      const root = documentStub.createElement("div");
+      const report = createSessionReplayReport([
+        createEvent({
+          session_id: "replay-session",
+          source: "desktop-activity",
+          source_version: "test@0.1.0",
+          monotonic_ms: 360_000,
+          event_type: "desktop.app_focus",
+          payload: {
+            app_name: "Preview",
+            bundle_id: "com.apple.Preview",
+            focus_started_monotonic_ms: 60_000,
+            focus_ended_monotonic_ms: 360_000,
+            duration_ms: 300_000,
+            permission_status: "granted",
+          },
+          privacy_class: "local-derived",
+          retention_policy: "local-default",
+        }),
+      ]);
+
+      renderReplayTimeline(root as unknown as HTMLElement, report);
+
+      expect(root.textContent).toContain("Preview held foreground");
+      expect(root.textContent).toContain("off-browser-focus");
+      expect(root.textContent).not.toContain("window_title");
+      expect(report.limitations.join(" ")).toContain("raw screenshots");
+    } finally {
+      globalWithDocument.document = originalDocument;
+    }
+  });
+
   test("refreshes replay after stop and repair answers", async () => {
     const documentStub = new FakeDocument();
     const globalWithDocument = globalThis as unknown as { document?: unknown };
@@ -303,6 +342,12 @@ describe("session replay report", () => {
             recordingState: stoppedSession ? "stopped" : "recording",
             ingestUrl: "http://127.0.0.1:39170",
             pairingToken: "pairing-token",
+            desktopActivity: {
+              enabled: false,
+              includeWindowTitles: false,
+              active: false,
+              permission_status: "not_requested",
+            },
           }),
         },
         session: {

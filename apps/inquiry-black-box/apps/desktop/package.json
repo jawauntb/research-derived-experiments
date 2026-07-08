@@ -9,6 +9,7 @@
     "build:preload": "bun build src/main/preload.ts --target=node --format=cjs --outfile dist/main/preload.cjs --external electron",
     "build:renderer": "bun build src/renderer/index.ts --target=browser --outfile dist/renderer/index.js && cp src/renderer/index.html dist/renderer/index.html",
     "package:mac": "bun run build && bun run scripts/package-desktop.ts",
+    "install:mac": "bun run scripts/install-desktop.ts",
     "dev": "bun run build && electron dist/main/electron.js",
     "dev:runtime": "bun run src/main/main.ts",
     "test": "bun test tests/*.test.ts"

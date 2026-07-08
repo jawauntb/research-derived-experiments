@@ -12,12 +12,14 @@ import { deleteLocalSession } from "./privacy/delete";
 import { exportSession, type SessionExport } from "./privacy/export";
 import { createSessionReplayReport, type SessionReplayReport } from "./reports/sessionReplay";
 import type { DesktopRuntime } from "./main";
+import type { DesktopActivityStatus } from "./activity/desktopActivity";
 
 export type DesktopShellStatus = {
   session: SessionRecord | null;
   recordingState: SessionRecord["recording_state"] | "idle";
   pairingToken: string;
   ingestUrl: string | null;
+  desktopActivity: DesktopActivityStatus;
 };
 
 export type DesktopIpcFacade = {
@@ -74,6 +76,7 @@ export function createDesktopIpcFacade(runtime: DesktopRuntime): DesktopIpcFacad
         recordingState: session?.recording_state ?? "idle",
         pairingToken: runtime.pairingToken(),
         ingestUrl: runtime.ingest?.url ?? null,
+        desktopActivity: runtime.bridge.desktopActivityStatus(),
       };
     },
     async currentSession() {
@@ -98,17 +101,24 @@ export function createDesktopIpcFacade(runtime: DesktopRuntime): DesktopIpcFacad
       return runtime.bridge.appendCameraFeatureWindow(featureWindow);
     },
     async currentSettings() {
-      return privacyView(runtime.database.signalSettings());
+      return privacyView(runtime.database.signalSettings(), runtime.bridge.desktopActivityStatus());
     },
     async setSignalEnabled(key, enabled) {
       runtime.database.setSignalEnabled(key, enabled);
-      return privacyView(runtime.database.signalSettings());
+      runtime.bridge.syncDesktopActivity();
+      return privacyView(runtime.database.signalSettings(), runtime.bridge.desktopActivityStatus());
     },
     async exportSession() {
       return exportSession(runtime.database, requireRememberedSessionId());
     },
     async deleteSession() {
       const sessionId = requireRememberedSessionId();
+      const active = runtime.sessions.currentSession();
+      if (active?.session_id === sessionId && active.recording_state !== "stopped") {
+        runtime.bridge.stopSession({ reason: "delete-session" });
+      } else {
+        runtime.desktopActivity.stop();
+      }
       const result = deleteLocalSession(runtime.database, sessionId);
       if (lastSessionId === sessionId) {
         lastSessionId = null;
@@ -206,7 +216,7 @@ function probeEventId(candidate: RepairCandidate): string {
   return `repair-probe:${candidate.repair_id}`;
 }
 
-function privacyView(signals: SignalSettings): PrivacySettingsView {
+function privacyView(signals: SignalSettings, desktopActivity?: DesktopActivityStatus): PrivacySettingsView {
   return {
     signals,
     retention_days: 30,
@@ -214,5 +224,6 @@ function privacyView(signals: SignalSettings): PrivacySettingsView {
     cloud_sync_enabled: signals.cloudSync,
     export_available: true,
     delete_available: true,
+    ...(desktopActivity ? { desktop_activity: desktopActivity } : {}),
   };
 }

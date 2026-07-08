@@ -3,6 +3,7 @@ import { createEvent } from "@inquiry/schema";
 import { createInquiryDatabase } from "../src/main/db";
 import { createDesktopIpcFacade } from "../src/main/ipc";
 import { createDesktopRuntime } from "../src/main/main";
+import type { DesktopActivityProvider } from "../src/main/activity/desktopActivity";
 
 describe("desktop shell IPC facade", () => {
   test("exposes visible session controls, pairing, replay, export, and delete without filesystem escape hatches", async () => {
@@ -86,6 +87,46 @@ describe("desktop shell IPC facade", () => {
       session_id: stopped.session_id,
     });
 
+    runtime.stop();
+  });
+
+  test("stops active desktop activity before deleting the current session", async () => {
+    let foregroundCalls = 0;
+    const provider: DesktopActivityProvider = {
+      permissionStatus: () => "granted",
+      foregroundActivity: () => {
+        foregroundCalls += 1;
+        return {
+          app_name: "Cursor",
+          bundle_id: "com.todesktop.230313mzl4w4u92",
+          permission_status: "granted",
+        };
+      },
+    };
+    const database = createInquiryDatabase();
+    const runtime = createDesktopRuntime({
+      database,
+      pairingSecret: "desktop-shell-test-secret",
+      startServer: false,
+      desktopActivityProvider: provider,
+      desktopActivityClock: {
+        nowMs: () => 1_000,
+        nowIso: () => "1970-01-01T00:00:01.000Z",
+      },
+      desktopActivityAutoPoll: false,
+    });
+    const facade = createDesktopIpcFacade(runtime);
+    await facade.setSignalEnabled("desktopActivity", true);
+    const session = await facade.startSession({ title: "Delete active desktop activity" });
+
+    await runtime.desktopActivity.tick();
+    const deleted = await facade.deleteSession();
+    await runtime.desktopActivity.tick();
+
+    expect(deleted).toEqual({ session_id: session.session_id, deleted: true });
+    expect(database.getSession(session.session_id)).toBeNull();
+    expect(foregroundCalls).toBe(1);
+    expect((await facade.status()).desktopActivity.active).toBe(false);
     runtime.stop();
   });
 

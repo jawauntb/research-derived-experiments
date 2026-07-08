@@ -16,12 +16,36 @@ The command builds the desktop app and writes
 compiled main/preload/renderer files, SQLite migrations, app metadata, and icon
 source. This is for local installed smoke only.
 
+After package smoke passes, install the app into the user Applications folder:
+
+```bash
+bun run install:desktop
+```
+
+The install command defaults to `~/Applications/Inquiry Black Box.app`, refuses
+to replace an existing app unless you confirm or pass `--overwrite`, and prints
+the installed path. Use the system Applications folder only with an explicit
+target:
+
+```bash
+bun run install:desktop -- --target system
+```
+
+For throwaway install smoke, pass a test folder:
+
+```bash
+bun run install:desktop -- --destination /tmp/inquiry-apps --overwrite
+open /tmp/inquiry-apps/Inquiry\ Black\ Box.app
+```
+
 Before wider distribution:
 
 - Convert `apps/desktop/assets/icon.svg` into the required `.icns` sizes.
 - Sign the app with bundle id `com.inquiry.blackbox`.
 - Use `apps/desktop/packaging/mac/entitlements.plist` as the starting point for
-  camera and localhost network permissions.
+  camera and localhost network permissions. Foreground app/window metadata uses
+  visible in-app opt-in plus macOS automation/accessibility permission behavior;
+  screen-content capture is intentionally not enabled in this package.
 - Notarize the signed app with Apple Developer credentials.
 - Smoke the signed build with a throwaway `INQUIRY_DESKTOP_DB_PATH`.
 
@@ -30,8 +54,15 @@ Installed desktop smoke:
 1. Launch the packaged app.
 2. Confirm the ingest bridge URL and pairing token are visible.
 3. Pair the unpacked or packaged extension.
-4. Record, stop, replay, export, delete, quit, relaunch, and confirm state
-   recovery.
+4. Enable Desktop app context only when you want cross-app metadata; leave
+   Window titles off unless this smoke explicitly needs title capture.
+5. Record, switch between Chrome and one or two desktop apps, stop, replay,
+   export, delete, quit, relaunch, and confirm state recovery.
+
+ScreenCaptureKit/screen snapshots are deferred. Do not add screen recording,
+OCR, screenshot storage, or screen-content sync to this package without a
+separate opt-in flow, Screen Recording permission smoke, local-only retention
+rules, and schema tests proving raw screen payloads remain rejected by default.
 
 ## Chrome Extension Package
 

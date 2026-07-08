@@ -13,6 +13,8 @@ import {
   validateEvent,
   type BrowserTypingMetricsPayload,
   type CameraFeaturePayload,
+  type DesktopAppFocusPayload,
+  type DesktopWindowFocusPayload,
   type JsonObject,
   type PrivacyClass,
   type RepairCandidatePayload,
@@ -85,6 +87,185 @@ describe("event schema", () => {
         retention_policy: "debug-ephemeral",
       }),
     ).toThrow(/blocked sensitive/);
+  });
+
+  test("accepts local desktop app focus metadata while keeping it cloud-ineligible", () => {
+    const payload: DesktopAppFocusPayload = {
+      app_name: "Cursor",
+      bundle_id: "com.todesktop.230313mzl4w4u92",
+      pid_hash: "pid_a1b2",
+      focus_started_monotonic_ms: 1_000,
+      focus_ended_monotonic_ms: 8_000,
+      duration_ms: 7_000,
+      permission_status: "granted",
+    };
+
+    const event = createEvent({
+      session_id: "session-1",
+      source: "desktop-activity",
+      source_version: "desktop@0.1.0",
+      monotonic_ms: 8_000,
+      event_type: "desktop.app_focus",
+      payload,
+      privacy_class: "local-derived",
+      retention_policy: "local-default",
+    });
+
+    expect(event.payload.app_name).toBe("Cursor");
+    expect(canExportPrivacyClass(event.privacy_class).allowed).toBe(true);
+    expect(canSyncPrivacyClass(event.privacy_class).allowed).toBe(false);
+    expect(canRunModalJobPrivacyClass(event.privacy_class).allowed).toBe(false);
+  });
+
+  test("gates desktop window titles separately from app focus metadata", () => {
+    const metadataOnlyPayload: DesktopWindowFocusPayload = {
+      app_name: "Terminal",
+      bundle_id: "com.apple.Terminal",
+      focus_started_monotonic_ms: 2_000,
+      focus_ended_monotonic_ms: 4_000,
+      duration_ms: 2_000,
+      permission_status: "granted",
+      window_id_hash: "window_hash_1",
+    };
+
+    expect(() =>
+      createEvent({
+        session_id: "session-1",
+        source: "desktop-activity",
+        source_version: "desktop@0.1.0",
+        monotonic_ms: 4_000,
+        event_type: "desktop.window_focus",
+        payload: metadataOnlyPayload,
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    ).not.toThrow();
+
+    expect(() =>
+      createEvent({
+        session_id: "session-1",
+        source: "desktop-activity",
+        source_version: "desktop@0.1.0",
+        monotonic_ms: 4_000,
+        event_type: "desktop.window_focus",
+        payload: {
+          ...metadataOnlyPayload,
+          window_title: "private-notes.md",
+        },
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    ).toThrow(/window titles require document-opt-in/);
+
+    const titledEvent = createEvent({
+      session_id: "session-1",
+      source: "desktop-activity",
+      source_version: "desktop@0.1.0",
+      monotonic_ms: 4_000,
+      event_type: "desktop.window_focus",
+      payload: {
+        ...metadataOnlyPayload,
+        window_title: "private-notes.md",
+        title_truncated: false,
+      },
+      privacy_class: "document-opt-in",
+      retention_policy: "session-delete",
+    });
+
+    expect(titledEvent.payload.window_title).toBe("private-notes.md");
+    expect(canExportPrivacyClass(titledEvent.privacy_class).allowed).toBe(true);
+    expect(canSyncPrivacyClass(titledEvent.privacy_class).allowed).toBe(false);
+  });
+
+  test("rejects malformed desktop activity payloads", () => {
+    const validPayload: DesktopAppFocusPayload = {
+      app_name: "Cursor",
+      focus_started_monotonic_ms: 1_000,
+      focus_ended_monotonic_ms: 2_000,
+      duration_ms: 1_000,
+      permission_status: "granted",
+    };
+    const invalidPayloads: Array<{ payload: JsonObject; pattern: RegExp; event_type?: "desktop.app_focus" | "desktop.window_focus" }> = [
+      { payload: {}, pattern: /app_name/ },
+      { payload: { ...validPayload, permission_status: "maybe" }, pattern: /permission_status/ },
+      { payload: { ...validPayload, focus_started_monotonic_ms: "1" }, pattern: /focus_started/ },
+      { payload: { ...validPayload, focus_started_monotonic_ms: 2_000, focus_ended_monotonic_ms: 1_000 }, pattern: /at or after/ },
+      { payload: { ...validPayload, duration_ms: 999 }, pattern: /duration_ms/ },
+      { payload: { ...validPayload, pid_hash: "" }, pattern: /pid_hash/ },
+      { payload: { ...validPayload, "window-title": "private.md" }, pattern: /unsupported field: window-title/ },
+      { payload: { ...validPayload, screenData: "base64-png" }, pattern: /unsupported field: screenData/ },
+      { payload: { ...validPayload, bitmap: "base64-png" }, pattern: /unsupported field: bitmap/ },
+      { payload: { ...validPayload, imageData: "base64-png" }, pattern: /unsupported field: imageData/ },
+      { payload: { ...validPayload, displayFrame: "base64-png" }, pattern: /unsupported field: displayFrame/ },
+      { payload: { ...validPayload, base64Png: "base64-png" }, pattern: /unsupported field: base64Png/ },
+      {
+        payload: { ...validPayload, window_title: "x".repeat(121) },
+        event_type: "desktop.window_focus",
+        pattern: /1-120/,
+      },
+      {
+        payload: { ...validPayload, title_truncated: "yes" },
+        event_type: "desktop.window_focus",
+        pattern: /title_truncated/,
+      },
+    ];
+
+    for (const item of invalidPayloads) {
+      expect(() =>
+        createEvent({
+          session_id: "session-1",
+          source: "desktop-activity",
+          source_version: "desktop@0.1.0",
+          monotonic_ms: 2_000,
+          event_type: item.event_type ?? "desktop.app_focus",
+          payload: item.payload,
+          privacy_class: "document-opt-in",
+          retention_policy: "session-delete",
+        }),
+      ).toThrow(item.pattern);
+    }
+
+    expect(() =>
+      createEvent({
+        session_id: "session-1",
+        source: "desktop-system",
+        source_version: "desktop@0.1.0",
+        monotonic_ms: 2_000,
+        event_type: "desktop.app_focus",
+        payload: validPayload,
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    ).toThrow(/desktop-activity source/);
+  });
+
+  test("rejects raw screen image and OCR aliases for desktop activity", () => {
+    const blockedPayloads: JsonObject[] = [
+      { screenshot: "base64-screen" },
+      { nested: { screen_image: "base64-screen" } },
+      { nested: { "screen-image": "base64-screen" } },
+      { screenRecording: "movie-bytes" },
+      { screen_recording: "movie-bytes" },
+      { ocr_text: "raw screen words" },
+      { OCRText: "raw screen words" },
+      { rawScreenText: "visible document body" },
+      { "raw-screen-text": "visible document body" },
+    ];
+
+    for (const payload of blockedPayloads) {
+      expect(() =>
+        createEvent({
+          session_id: "session-1",
+          source: "desktop-activity",
+          source_version: "desktop@0.1.0",
+          monotonic_ms: 32,
+          event_type: "desktop.app_focus",
+          payload,
+          privacy_class: "blocked-sensitive",
+          retention_policy: "debug-ephemeral",
+        }),
+      ).toThrow(/blocked sensitive/);
+    }
   });
 
   test("makes privacy sync/export/job/delete eligibility explicit", () => {

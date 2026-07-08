@@ -45,6 +45,27 @@ export const sensitivePayloadFieldNames = [
   "image_blob",
   "frameBlob",
   "frame_blob",
+  "screenshot",
+  "screenShot",
+  "screen_shot",
+  "screenshotBlob",
+  "screenshot_blob",
+  "screenImage",
+  "screen_image",
+  "screenFrame",
+  "screen_frame",
+  "screenRecording",
+  "screen_recording",
+  "screenVideo",
+  "screen_video",
+  "ocrText",
+  "ocr_text",
+  "screenText",
+  "screen_text",
+  "rawScreenText",
+  "raw_screen_text",
+  "recognizedText",
+  "recognized_text",
   "pixels",
   "rawPixels",
   "raw_pixels",
@@ -177,7 +198,9 @@ export function privacyDecisionFor(privacyClass: PrivacyClass, surface: PrivacyS
 }
 
 export function assertNoBlockedPayload(payload: Record<string, unknown>): void {
-  const present = findSensitiveFieldPaths(payload);
+  const present = findSensitiveFieldPaths(payload, {
+    normalizeFieldName: normalizeSensitiveFieldName,
+  });
 
   if (present.length > 0) {
     throw new Error(`payload contains blocked sensitive field(s): ${present.join(", ")}`);

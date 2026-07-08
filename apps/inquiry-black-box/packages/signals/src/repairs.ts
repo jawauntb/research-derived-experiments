@@ -212,7 +212,7 @@ function actionForSegment(segment: ComprehensionHeatmapSegment): RepairActionKin
     return "explain-copied-passage";
   }
 
-  if (behaviorKinds.has("tab-churn")) {
+  if (behaviorKinds.has("tab-churn") || behaviorKinds.has("app-churn") || behaviorKinds.has("off-browser-focus") || behaviorKinds.has("deep-work-span")) {
     return "follow-up-note";
   }
 
@@ -248,6 +248,17 @@ function promptForAction(action: RepairActionKind, segment: ComprehensionHeatmap
   }
 
   if (action === "follow-up-note") {
+    const behaviorKinds = new Set(segment.behavior_evidence.map((evidence) => evidence.kind));
+    if (behaviorKinds.has("deep-work-span")) {
+      return `Around ${span}, what did the non-browser work block produce, and what should return to notes or browser research?`;
+    }
+    if (behaviorKinds.has("off-browser-focus")) {
+      return `Around ${span}, what happened in the desktop app block, and should it become a follow-up note?`;
+    }
+    if (behaviorKinds.has("app-churn")) {
+      return `Around ${span}, which app/task branch should become a follow-up note, and which can be closed?`;
+    }
+
     return `Which open branch should become a follow-up note, and which can be closed?`;
   }
 

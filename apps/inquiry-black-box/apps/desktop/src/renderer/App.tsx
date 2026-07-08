@@ -75,6 +75,9 @@ export function createInitialAppViewModel(session: SessionRecord | null = null):
     privacy: defaultPrivacySettingsView({
       browser: true,
       camera: false,
+      desktopActivity: false,
+      desktopWindowTitles: false,
+      screenSnapshots: false,
       typingMetrics: true,
       notifications: false,
       cloudSync: false,

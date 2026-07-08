@@ -9,16 +9,32 @@ captures derived signals, not raw surveillance artifacts.
   metrics, and typing rhythm aggregates.
 - Camera: face-present ratio, gaze-away proxy, blink proxy, head-pose variance,
   motion score, confidence, and quality flags.
+- Desktop activity: foreground app name, bundle ID, hashed process/window
+  identifiers, timing spans, and optional bounded window titles only after the
+  separate window-title toggle is enabled.
 - Typing: burst length, pause length, backspace count, edit churn, and field role.
 - User input: explicit labels, probes, recall answers, notification outcomes.
 
 ## Not Stored By Default
 
 - Raw camera frames or image blobs.
+- Raw screenshots, screen recordings, OCR text, screen text, or image frames.
 - Raw key names, raw typed text, passwords, or document text.
 - Full page text or selected/copied text unless a document-level opt-in explicitly
   allows it.
 - Hidden/background recording after the user stops or pauses a session.
+
+## Desktop Activity
+
+Desktop activity is off by default. When enabled, the first lane records only
+foreground app/window metadata during an active recording session. App identity
+remains `local-derived`; optional window titles use `document-opt-in` retention
+because titles can reveal filenames, meeting names, or private chats.
+
+Screen snapshots are not part of the default product path. A later
+ScreenCaptureKit feature must use a separate explicit opt-in, macOS Screen
+Recording permission/picker UX, local-only retention by default, and tests that
+reject screenshot, image, OCR, document text, and screen text payload fields.
 
 ## Explicit Text Opt-In
 

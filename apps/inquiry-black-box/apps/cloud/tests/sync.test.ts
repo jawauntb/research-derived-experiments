@@ -528,6 +528,84 @@ describe("cloud reports and jobs routes", () => {
     }
     expect(calls).toBe(0);
   });
+
+  test("rejects desktop activity and window-title Modal job inputs", async () => {
+    let calls = 0;
+    const modalClient: ModalClient = {
+      submitJob: async () => {
+        calls += 1;
+        throw new Error("Modal should not be called for desktop activity input");
+      },
+    };
+    const handler = createCloudHandler({ store: createCloudStore(), modalClient });
+    const inputs = [
+      {
+        privacy_class: "document-opt-in",
+        source: "desktop-activity",
+        event_type: "desktop.window_focus",
+        payload: {
+          app_name: "Cursor",
+          window_title: "private-notes.md",
+          focus_started_monotonic_ms: 1_000,
+          focus_ended_monotonic_ms: 2_000,
+          duration_ms: 1_000,
+          permission_status: "granted",
+        },
+      },
+      {
+        privacy_class: "document-opt-in",
+        payload: { window_title: "private-notes.md" },
+      },
+      {
+        privacy_class: "document-opt-in",
+        payload: {
+          events: [
+            {
+              source: "desktop-activity",
+              event_type: "desktop.app_focus",
+              payload: {
+                app_name: "Cursor",
+                bundle_id: "com.todesktop.230313mzl4w4u92",
+              },
+            },
+          ],
+        },
+      },
+      {
+        privacy_class: "document-opt-in",
+        payload: {
+          events: [
+            {
+              source: "desktop-activity",
+              event_type: "desktop.window_focus",
+              payload: {
+                app_name: "Cursor",
+                bundle_id: "com.todesktop.230313mzl4w4u92",
+              },
+            },
+          ],
+        },
+      },
+    ];
+
+    for (const input of inputs) {
+      const response = await handler(
+        new Request("http://cloud.test/jobs", {
+          method: "POST",
+          headers: authHeaders(),
+          body: JSON.stringify({
+            kind: "session_summary",
+            input,
+          }),
+        }),
+      );
+      const body = await json(response);
+
+      expect(response.status).toBe(422);
+      expect(body.error).toMatchObject({ code: "privacy_rejected" });
+    }
+    expect(calls).toBe(0);
+  });
 });
 
 describe("cloud runtime configuration", () => {

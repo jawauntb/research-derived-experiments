@@ -1,5 +1,6 @@
 import {
   canRunModalJobPrivacyClass,
+  findDesktopWindowTitleFieldPaths,
   findSensitiveFieldPaths,
   isPrivacyClass,
   normalizeSensitiveFieldName,
@@ -199,6 +200,7 @@ function parseModalJobInput(value: unknown): JsonObject {
   }
 
   const payload = parseJsonObject(input.payload ?? {}, "input.payload");
+  rejectDesktopActivityInput(input, payload);
   rejectSensitiveFields(payload);
   const rawTextFields = privacyClass === "redacted-sync" ? findRawTextFieldPaths(payload) : [];
   if (rawTextFields.length > 0) {
@@ -208,6 +210,40 @@ function parseModalJobInput(value: unknown): JsonObject {
   }
 
   return { ...input, payload };
+}
+
+function rejectDesktopActivityInput(input: JsonObject, payload: JsonObject): void {
+  const titleFields = findDesktopWindowTitleFieldPaths(payload);
+  const desktopPaths = findDesktopActivityPaths({ input, payload });
+  if (desktopPaths.length > 0 || titleFields.length > 0) {
+    throw new RouteError(422, "privacy_rejected", "desktop activity and window-title payloads are not eligible for Modal jobs", {
+      ...(desktopPaths.length > 0 ? { desktop_fields: desktopPaths } : {}),
+      ...(titleFields.length > 0 ? { fields: titleFields } : {}),
+    });
+  }
+}
+
+function findDesktopActivityPaths(value: unknown, path = "$"): string[] {
+  if (Array.isArray(value)) {
+    return value.flatMap((item, index) => findDesktopActivityPaths(item, `${path}[${index}]`));
+  }
+
+  if (!isRecord(value)) {
+    return [];
+  }
+
+  const paths: string[] = [];
+  if (value.source === "desktop-activity") {
+    paths.push(`${path}.source`);
+  }
+  if (typeof value.event_type === "string" && value.event_type.startsWith("desktop.")) {
+    paths.push(`${path}.event_type`);
+  }
+
+  for (const [key, child] of Object.entries(value)) {
+    paths.push(...findDesktopActivityPaths(child, `${path}.${key}`));
+  }
+  return paths;
 }
 
 const redactedModalRawTextFieldNames = [...rawTextPayloadFieldNames, "page_text"] as const;

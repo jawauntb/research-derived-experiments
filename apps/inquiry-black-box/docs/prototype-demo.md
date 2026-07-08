@@ -31,6 +31,8 @@ bun run typecheck
 bun run test
 bun run demo:fixture
 bun run build:prototype
+bun run package:desktop
+bun run install:desktop -- --destination /tmp/inquiry-apps --overwrite
 ```
 
 ## Manual Desktop + Extension Demo
@@ -79,6 +81,9 @@ instead of editing this runbook.
 | Cross-tab capture | Interact with the demo article, then a second normal `http` or `https` tab. | Browser events from both tabs land in the same desktop session. |
 | Unsupported page | Open `chrome://extensions` or another restricted page. | Popup reports the page is unsupported rather than implying capture is broken. |
 | Camera permission | Enable camera features with permission allowed, denied, and not yet granted where possible. | UI distinguishes permission, enabled state, feature heartbeat, and degraded quality. |
+| Desktop activity off | Leave Desktop app context off, switch from Chrome to another app, then stop. | Replay/export contain no `desktop.app_focus` or `desktop.window_focus` events. |
+| Desktop activity on | Enable Desktop app context with Window titles off, switch among Chrome, Cursor/Terminal, and back. | Replay shows app-level desktop context and no window title strings. |
+| Window titles opt-in | Enable Window titles only for a throwaway session. | Desktop window events are `document-opt-in`, bounded, exportable locally, and cloud-ineligible. |
 | Selected text off | Copy/highlight text with `Selected text excerpts` off. | Replay/export show counts, lengths, hashes, and privacy limits without raw snippets. |
 | Selected text on | Repeat after enabling `Selected text excerpts`. | Bounded local snippets appear as `document-opt-in`; cloud sync remains ineligible. |
 | Stop/replay | Stop from extension, then inspect the desktop replay. | Replay refreshes, leads with evidence episodes, and shows heatmap and repair prompt. |
@@ -161,11 +166,17 @@ Useful checks:
     local `document-opt-in` events.
 11. Delete the session and confirm the local session disappears.
 
+For packaged smoke, run `bun run package:desktop`, then
+`bun run install:desktop -- --destination /tmp/inquiry-apps --overwrite`, open
+the installed app manually, and repeat the same pair/record/replay/export/delete
+loop. Move to `~/Applications` only after this throwaway install passes.
+
 ## Expected Demo Signals
 
 - The desktop header shows recording state, ingest URL, and pairing token.
 - Replay includes event-backed evidence episodes and markers such as skim risk,
-  copied passage, rewind, tab churn, labels, and probes.
+  copied passage, rewind, tab churn, app churn, desktop work spans, labels, and
+  probes.
 - Copy/highlight evidence shows selected text snippets only when `Selected text
   excerpts` was enabled.
 - The heatmap separates stimulus evidence from behavior evidence and shows

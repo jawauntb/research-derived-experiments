@@ -21,6 +21,7 @@
     "build:extension": "bun run --cwd apps/extension build",
     "build:prototype": "bun run build:desktop && bun run build:extension",
     "package:desktop": "bun run --cwd apps/desktop package:mac",
+    "install:desktop": "bun run --cwd apps/desktop install:mac",
     "package:extension": "bun run --cwd apps/extension package",
     "package:local": "bun run package:desktop && bun run package:extension",
     "dev:desktop": "bun run --cwd apps/desktop dev",

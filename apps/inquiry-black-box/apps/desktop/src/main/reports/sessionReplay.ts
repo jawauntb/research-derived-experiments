@@ -42,6 +42,7 @@ export function createSessionReplayReport(events: EventEnvelope[], options: Sess
       "Camera-derived markers require adequate quality flags and should be interpreted with surrounding evidence.",
       "Stimulus heatmap segments use local deterministic features and only include document text after explicit opt-in.",
       "Copied or selected page text is not stored by default; replay uses timing, counts, lengths, and hashed page refs.",
+      "Desktop activity replay uses app/window metadata only; raw screenshots, OCR text, and screen recordings are not stored by default.",
     ],
   };
 }
