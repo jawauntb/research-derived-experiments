@@ -33,6 +33,7 @@ export const eventTypes = [
   "browser.selection",
   "browser.copy",
   "browser.highlight",
+  "browser.reading_context",
   "browser.typing_metrics",
   "camera.feature_window",
   "desktop.app_focus",
@@ -86,6 +87,14 @@ export type BrowserTypingMetricsPayload = JsonObject & {
   pause_ms: number;
   backspace_count: number;
   edit_churn: number;
+};
+
+export type BrowserReadingContextPayload = JsonObject & {
+  reading_text: string;
+  reading_text_char_count: number;
+  reading_text_truncated: boolean;
+  reading_source: "visible-page" | "page-fallback";
+  document_opt_in: true;
 };
 
 export type CameraFeaturePayload = JsonObject & {
@@ -346,6 +355,7 @@ export function validateEvent(value: unknown): asserts value is EventEnvelope {
   assertNoBlockedPayload(value.payload);
   assertStimulusTextOptIn(value as EventEnvelope);
   assertBrowserSelectedTextOptIn(value as EventEnvelope);
+  assertBrowserReadingTextOptIn(value as EventEnvelope);
   assertDesktopWindowTitleOptIn(value as EventEnvelope);
   assertDesktopActivityPayloadShape(value as EventEnvelope);
   assertGeneratedArtifactPayloadShape(value as EventEnvelope);
@@ -356,6 +366,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 const desktopWindowTitleFieldNames = ["window_title", "windowTitle", "window-title"] as const;
+const browserReadingTextFieldNames = ["reading_text", "readingText"] as const;
 const desktopActivityAllowedPayloadKeys: ReadonlySet<string> = new Set([
   "app_name",
   "bundle_id",
@@ -399,6 +410,20 @@ function assertBrowserSelectedTextOptIn(event: EventEnvelope): void {
 
 function isBrowserSelectionTextEvent(eventType: EventType): boolean {
   return eventType === "browser.selection" || eventType === "browser.copy" || eventType === "browser.highlight";
+}
+
+function assertBrowserReadingTextOptIn(event: EventEnvelope): void {
+  if (event.event_type !== "browser.reading_context" || event.privacy_class === "document-opt-in") {
+    return;
+  }
+
+  const present = findSensitiveFieldPaths(event.payload, {
+    extraFieldNames: browserReadingTextFieldNames,
+    normalizeFieldName: normalizeSensitiveFieldName,
+  });
+  if (present.length > 0) {
+    throw new Error(`browser reading text requires document-opt-in: ${present.join(", ")}`);
+  }
 }
 
 function assertDesktopWindowTitleOptIn(event: EventEnvelope): void {

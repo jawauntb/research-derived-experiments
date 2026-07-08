@@ -64,7 +64,8 @@ const desktopBridge = {
   },
   interpretation: {
     session: () => invoke("inquiry:interpretation:session"),
-    requestRedactedSummary: () => invoke("inquiry:interpretation:redacted-summary"),
+    requestRedactedSummary: (input?: { additionalContext?: string }) =>
+      invoke("inquiry:interpretation:redacted-summary", input),
     daily: () => invoke("inquiry:interpretation:daily"),
     refreshDaily: () => invoke("inquiry:interpretation:daily-refresh"),
     respondSuggestion: (input: {

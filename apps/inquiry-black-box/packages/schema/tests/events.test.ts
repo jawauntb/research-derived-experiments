@@ -12,6 +12,7 @@ import {
   privacyClasses,
   validateEvent,
   type BrowserTypingMetricsPayload,
+  type BrowserReadingContextPayload,
   type CameraFeaturePayload,
   type DesktopAppFocusPayload,
   type DesktopWindowFocusPayload,
@@ -485,6 +486,46 @@ describe("event schema", () => {
         retention_policy: "local-default",
       }),
     ).toThrow(/document-opt-in/);
+  });
+
+  test("requires document opt-in for browser reading context text", () => {
+    const payload: BrowserReadingContextPayload = {
+      hostname_hash: "h_demo",
+      url_hash: "h_page",
+      reading_text: "visible article paragraph",
+      reading_text_char_count: 25,
+      reading_text_truncated: false,
+      reading_source: "visible-page",
+      document_opt_in: true,
+    };
+
+    expect(() =>
+      createEvent({
+        session_id: "session-1",
+        source: "browser",
+        source_version: "extension@0.1.0",
+        monotonic_ms: 38,
+        event_type: "browser.reading_context",
+        payload,
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    ).toThrow(/document-opt-in/);
+
+    const event = createEvent({
+      session_id: "session-1",
+      source: "browser",
+      source_version: "extension@0.1.0",
+      monotonic_ms: 39,
+      event_type: "browser.reading_context",
+      payload,
+      privacy_class: "document-opt-in",
+      retention_policy: "session-delete",
+    });
+
+    expect(event.payload.reading_text).toBe("visible article paragraph");
+    expect(canSyncPrivacyClass(event.privacy_class).allowed).toBe(false);
+    expect(canRunModalJobPrivacyClass(event.privacy_class).allowed).toBe(true);
   });
 
   test("accepts local repair candidate and outcome events", () => {

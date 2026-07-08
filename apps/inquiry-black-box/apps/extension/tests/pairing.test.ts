@@ -337,6 +337,22 @@ describe("local bridge pairing and queue", () => {
     ).toBe(true);
   });
 
+  test("requires reading context opt-in for document-opt-in page text", () => {
+    const event = browserReadingContextEvent("event-reading-context");
+    const state = pairedState();
+
+    expect(isBridgeEventAllowed(event, state)).toBe(false);
+    expect(
+      isBridgeEventAllowed(event, {
+        ...state,
+        privacyToggles: {
+          ...state.privacyToggles,
+          readingContext: true,
+        },
+      }),
+    ).toBe(true);
+  });
+
   test("broadcasts popup recording changes to loaded content scripts", async () => {
     const storage = createMemoryStorage({ [BRIDGE_STATE_KEY]: { ...pairedState(), recordingState: "stopped" } });
     const queue = createMemoryEventQueue();
@@ -661,6 +677,7 @@ function pairedState(): BridgeState {
       typingMetrics: true,
       selection: true,
       selectedText: false,
+      readingContext: false,
       media: true,
     },
     updatedAt: "2026-07-07T00:00:00.000Z",
@@ -709,6 +726,30 @@ function createMemoryStorage(initial: Record<string, unknown> = {}): StorageArea
       return Promise.resolve();
     },
   };
+}
+
+function browserReadingContextEvent(eventId: string): EventEnvelope {
+  return createEvent({
+    event_id: eventId,
+    captured_at: "2026-07-06T12:00:00.000Z",
+    timezone: "UTC",
+    session_id: "desktop-session-1",
+    source: "browser",
+    source_version: "extension@0.1.0",
+    monotonic_ms: 43,
+    event_type: "browser.reading_context",
+    payload: {
+      hostname_hash: "host-abc",
+      url_hash: "url-abc",
+      reading_text: "visible article paragraph",
+      reading_text_char_count: 25,
+      reading_text_truncated: false,
+      reading_source: "visible-page",
+      document_opt_in: true,
+    },
+    privacy_class: "document-opt-in",
+    retention_policy: "session-delete",
+  });
 }
 
 function browserScrollEvent(eventId: string): EventEnvelope {

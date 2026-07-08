@@ -67,7 +67,7 @@ function registerHandlers(nextFacade: DesktopIpcFacade): void {
   ipcMain.handle("inquiry:sessions:history", () => nextFacade.listSessionHistory());
   ipcMain.handle("inquiry:sessions:select", (_event, session_id) => nextFacade.selectSession(session_id));
   ipcMain.handle("inquiry:interpretation:session", () => nextFacade.sessionInterpretation());
-  ipcMain.handle("inquiry:interpretation:redacted-summary", () => nextFacade.requestRedactedSummary());
+  ipcMain.handle("inquiry:interpretation:redacted-summary", (_event, input) => nextFacade.requestRedactedSummary(input));
   ipcMain.handle("inquiry:interpretation:daily", () => nextFacade.dailyReview());
   ipcMain.handle("inquiry:interpretation:daily-refresh", () => nextFacade.refreshDailyReview());
   ipcMain.handle("inquiry:suggestion:respond", (_event, input) => nextFacade.respondSuggestion(input));

@@ -4,7 +4,8 @@ import type { SessionInterpretationReport } from "../../main/reports/sessionInte
 export type SessionInterpretationActions = {
   cloudSyncEnabled: boolean;
   redactedSummary?: RedactedSummarySubmission | null;
-  requestRedactedSummary?: () => void | Promise<void>;
+  documentContextEnabled?: boolean;
+  requestRedactedSummary?: (input?: { additionalContext?: string }) => void | Promise<void>;
 };
 
 export function renderSessionInterpretationPanel(
@@ -79,7 +80,19 @@ function redactedSummaryAction(actions: SessionInterpretationActions): HTMLEleme
   button.className = "interpretation-llm__button";
   button.textContent = "Analyze and ask about your data";
   button.disabled = !actions.cloudSyncEnabled || !actions.requestRedactedSummary;
-  button.addEventListener("click", () => void actions.requestRedactedSummary?.());
+
+  const contextInput = document.createElement("textarea");
+  contextInput.className = "interpretation-llm__context";
+  contextInput.rows = 3;
+  contextInput.maxLength = 2_000;
+  contextInput.placeholder = "Add context for this analysis...";
+  contextInput.setAttribute("aria-label", "Additional analysis context");
+  contextInput.disabled = !actions.cloudSyncEnabled || !actions.requestRedactedSummary;
+
+  button.addEventListener("click", () => {
+    const additionalContext = contextInput.value.trim();
+    void actions.requestRedactedSummary?.(additionalContext ? { additionalContext } : undefined);
+  });
 
   const status = document.createElement("p");
   status.className = "interpretation-llm__status";
@@ -87,11 +100,13 @@ function redactedSummaryAction(actions: SessionInterpretationActions): HTMLEleme
     status.textContent = actions.redactedSummary.message;
   } else if (!actions.cloudSyncEnabled) {
     status.textContent = "Cloud sync is off; no model request will be sent.";
+  } else if (actions.documentContextEnabled) {
+    status.textContent = "Opted-in page/selection text and your optional context can be submitted for analysis.";
   } else {
     status.textContent = "Only redacted counts, themes, actions, and limitations are submitted for analysis.";
   }
 
-  panel.append(button, status);
+  panel.append(button, contextInput, status);
   return panel;
 }
 

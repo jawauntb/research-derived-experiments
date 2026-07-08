@@ -49,7 +49,7 @@ export type DesktopIpcFacade = {
   demoReplayReport: () => Promise<SessionReplayReport>;
   replayReport: () => Promise<SessionReplayReport | null>;
   sessionInterpretation: () => Promise<SessionInterpretationReport | null>;
-  requestRedactedSummary: () => Promise<RedactedSummarySubmission>;
+  requestRedactedSummary: (input?: { additionalContext?: string }) => Promise<RedactedSummarySubmission>;
   dailyReview: () => Promise<DailyReviewReport>;
   refreshDailyReview: () => Promise<DailyReviewReport>;
   respondSuggestion: (input: Parameters<typeof recordSuggestionResponse>[1]) => Promise<EventEnvelope>;
@@ -186,8 +186,11 @@ export function createDesktopIpcFacade(
 
       return createSessionInterpretationReport(runtime.database, session.session_id);
     },
-    async requestRedactedSummary() {
-      return requestRedactedSessionSummary(runtime.database, requireRememberedSessionId(), options.redactedSummary);
+    async requestRedactedSummary(input) {
+      return requestRedactedSessionSummary(runtime.database, requireRememberedSessionId(), {
+        ...options.redactedSummary,
+        ...(typeof input?.additionalContext === "string" ? { additionalContext: input.additionalContext } : {}),
+      });
     },
     async dailyReview() {
       return createDailyReviewReport(runtime.database);
