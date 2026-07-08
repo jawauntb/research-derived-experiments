@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from "electron";
-import type { LabelPayload, SignalSettings } from "@inquiry/schema";
+import type { LabelPayload, SignalSettings, SuggestionResponse } from "@inquiry/schema";
 import type { RepairCandidate } from "@inquiry/signals";
 import type { CameraFeatureWindow } from "../renderer/camera/featureWorker";
 
@@ -54,6 +54,18 @@ const desktopBridge = {
   },
   replay: {
     report: () => invoke("inquiry:replay:report"),
+  },
+  interpretation: {
+    session: () => invoke("inquiry:interpretation:session"),
+    daily: () => invoke("inquiry:interpretation:daily"),
+    refreshDaily: () => invoke("inquiry:interpretation:daily-refresh"),
+    respondSuggestion: (input: {
+      suggestion_id: string;
+      response: SuggestionResponse;
+      reason?: string;
+      snoozed_until?: string;
+      local_date?: string;
+    }) => invoke("inquiry:suggestion:respond", input),
   },
   repair: {
     accept: (repair_id: RepairCandidate["repair_id"]) => invoke("inquiry:repair:accept", repair_id),

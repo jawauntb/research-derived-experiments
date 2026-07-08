@@ -48,6 +48,8 @@ export const eventTypes = [
   "stimulus.segmented",
   "repair.candidate",
   "repair.outcome",
+  "suggestion.candidate",
+  "suggestion.responded",
   "notification.candidate",
   "notification.delivered",
   "notification.responded",
@@ -177,6 +179,94 @@ export type RepairOutcomePayload = JsonObject & {
   reason?: string;
 };
 
+export const reportKinds = ["session_interpretation", "daily_review", "llm_session_summary"] as const;
+export type ReportKind = (typeof reportKinds)[number];
+
+export type ReportGeneratedPayload = JsonObject & {
+  report_id: string;
+  report_kind: ReportKind;
+  summary: string;
+  generated_at: string;
+  subject_session_id?: string;
+  local_date?: string;
+  evidence_event_ids: string[];
+  source_report_ids: string[];
+  suggestion_ids?: string[];
+  limitations: string[];
+  provenance: JsonObject;
+};
+
+export const suggestionKinds = [
+  "next-action",
+  "retry",
+  "ignore",
+  "open-loop",
+  "care-candidate",
+  "daily-checkup",
+] as const;
+export type SuggestionKind = (typeof suggestionKinds)[number];
+
+export const suggestionCategories = [
+  "helped",
+  "fragmented",
+  "retry",
+  "ignore",
+  "open_loops",
+  "care_candidates",
+] as const;
+export type SuggestionCategory = (typeof suggestionCategories)[number];
+
+export type SuggestionCandidatePayload = JsonObject & {
+  suggestion_id: string;
+  suggestion_kind: SuggestionKind;
+  category: SuggestionCategory;
+  title: string;
+  action: string;
+  rationale: string;
+  confidence: number;
+  evidence_event_ids: string[];
+  report_ids: string[];
+  session_ids: string[];
+  limitation: string;
+  pattern_key?: string;
+  local_date?: string;
+};
+
+export const suggestionResponses = [
+  "accepted",
+  "snoozed",
+  "dismissed",
+  "rated-useful",
+  "rated-not-useful",
+  "confirmed-care",
+  "rejected-care",
+] as const;
+export type SuggestionResponse = (typeof suggestionResponses)[number];
+
+export type SuggestionRespondedPayload = JsonObject & {
+  suggestion_id: string;
+  response: SuggestionResponse;
+  responded_at: string;
+  source_report_id?: string;
+  reason?: string;
+  snoozed_until?: string;
+};
+
+export const modelRunStatuses = ["submitted", "running", "complete", "failed", "unavailable"] as const;
+export type ModelRunStatus = (typeof modelRunStatuses)[number];
+
+export type ModelRunPayload = JsonObject & {
+  run_id: string;
+  job_kind: "session_summary" | "content_difficulty" | "embedding" | "calibration";
+  provider: string;
+  model: string;
+  status: ModelRunStatus;
+  input_privacy_class: PrivacyClass;
+  input_report_id?: string;
+  output_report_id?: string;
+  limitations: string[];
+};
+
 export function createEvent<TPayload extends JsonObject>(
   event: Omit<EventEnvelope<TPayload>, "event_id" | "captured_at" | "timezone" | "confidence" | "quality_flags"> &
     Partial<Pick<EventEnvelope<TPayload>, "event_id" | "captured_at" | "timezone" | "confidence" | "quality_flags">>,
@@ -258,6 +348,7 @@ export function validateEvent(value: unknown): asserts value is EventEnvelope {
   assertBrowserSelectedTextOptIn(value as EventEnvelope);
   assertDesktopWindowTitleOptIn(value as EventEnvelope);
   assertDesktopActivityPayloadShape(value as EventEnvelope);
+  assertGeneratedArtifactPayloadShape(value as EventEnvelope);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -394,5 +485,162 @@ function assertDesktopActivityPayloadShape(event: EventEnvelope): void {
 function assertFiniteNonNegative(value: unknown, field: string): asserts value is number {
   if (typeof value !== "number" || !Number.isFinite(value) || value < 0) {
     throw new Error(`${field} must be a non-negative number`);
+  }
+}
+
+function assertGeneratedArtifactPayloadShape(event: EventEnvelope): void {
+  if (event.event_type === "report.generated") {
+    assertReportGeneratedPayload(event);
+    return;
+  }
+
+  if (event.event_type === "suggestion.candidate") {
+    assertSuggestionCandidatePayload(event);
+    return;
+  }
+
+  if (event.event_type === "suggestion.responded") {
+    assertSuggestionRespondedPayload(event);
+    return;
+  }
+
+  if (event.event_type === "model.run") {
+    assertModelRunPayload(event);
+  }
+}
+
+function assertReportGeneratedPayload(event: EventEnvelope): void {
+  if (event.source !== "desktop-system" && event.source !== "cloud" && event.source !== "modal") {
+    throw new Error("report.generated events must use desktop-system, cloud, or modal source");
+  }
+
+  const payload = event.payload;
+  assertNonEmptyString(payload.report_id, "report.generated payload.report_id");
+  assertOneOf(payload.report_kind, reportKinds, "report.generated payload.report_kind");
+  assertNonEmptyString(payload.summary, "report.generated payload.summary");
+  assertNonEmptyString(payload.generated_at, "report.generated payload.generated_at");
+  assertStringArray(payload.evidence_event_ids, "report.generated payload.evidence_event_ids");
+  assertStringArray(payload.source_report_ids, "report.generated payload.source_report_ids");
+  assertStringArray(payload.limitations, "report.generated payload.limitations");
+  assertOptionalString(payload.subject_session_id, "report.generated payload.subject_session_id");
+  assertOptionalString(payload.local_date, "report.generated payload.local_date");
+  assertOptionalStringArray(payload.suggestion_ids, "report.generated payload.suggestion_ids");
+  if (!isRecord(payload.provenance)) {
+    throw new Error("report.generated payload.provenance must be an object");
+  }
+
+  if (payload.report_kind === "daily_review" && typeof payload.local_date !== "string") {
+    throw new Error("daily review reports require payload.local_date");
+  }
+  if (payload.report_kind === "session_interpretation" && typeof payload.subject_session_id !== "string") {
+    throw new Error("session interpretation reports require payload.subject_session_id");
+  }
+}
+
+function assertSuggestionCandidatePayload(event: EventEnvelope): void {
+  if (event.source !== "desktop-system") {
+    throw new Error("suggestion.candidate events must use desktop-system source");
+  }
+  if (event.privacy_class !== "local-derived") {
+    throw new Error("suggestion.candidate events must be local-derived");
+  }
+
+  const payload = event.payload;
+  assertNonEmptyString(payload.suggestion_id, "suggestion.candidate payload.suggestion_id");
+  assertOneOf(payload.suggestion_kind, suggestionKinds, "suggestion.candidate payload.suggestion_kind");
+  assertOneOf(payload.category, suggestionCategories, "suggestion.candidate payload.category");
+  assertNonEmptyString(payload.title, "suggestion.candidate payload.title");
+  assertNonEmptyString(payload.action, "suggestion.candidate payload.action");
+  assertNonEmptyString(payload.rationale, "suggestion.candidate payload.rationale");
+  assertNonEmptyString(payload.limitation, "suggestion.candidate payload.limitation");
+  assertStringArray(payload.evidence_event_ids, "suggestion.candidate payload.evidence_event_ids");
+  assertStringArray(payload.report_ids, "suggestion.candidate payload.report_ids");
+  assertStringArray(payload.session_ids, "suggestion.candidate payload.session_ids");
+  assertOptionalString(payload.pattern_key, "suggestion.candidate payload.pattern_key");
+  assertOptionalString(payload.local_date, "suggestion.candidate payload.local_date");
+  assertConfidence(payload.confidence, "suggestion.candidate payload.confidence");
+
+  const hasEvidence = payload.evidence_event_ids.length + payload.report_ids.length > 0;
+  if (!hasEvidence && (payload.suggestion_kind !== "daily-checkup" || payload.confidence > 0.4)) {
+    throw new Error("suggestion.candidate requires evidence ids or report ids unless it is a low-confidence daily-checkup");
+  }
+}
+
+function assertSuggestionRespondedPayload(event: EventEnvelope): void {
+  if (event.source !== "user") {
+    throw new Error("suggestion.responded events must use user source");
+  }
+  if (event.privacy_class !== "local-derived") {
+    throw new Error("suggestion.responded events must be local-derived");
+  }
+
+  const payload = event.payload;
+  assertNonEmptyString(payload.suggestion_id, "suggestion.responded payload.suggestion_id");
+  assertOneOf(payload.response, suggestionResponses, "suggestion.responded payload.response");
+  assertNonEmptyString(payload.responded_at, "suggestion.responded payload.responded_at");
+  assertOptionalString(payload.source_report_id, "suggestion.responded payload.source_report_id");
+  assertOptionalString(payload.reason, "suggestion.responded payload.reason");
+  assertOptionalString(payload.snoozed_until, "suggestion.responded payload.snoozed_until");
+  if (payload.response === "snoozed" && typeof payload.snoozed_until !== "string") {
+    throw new Error("snoozed suggestion responses require payload.snoozed_until");
+  }
+}
+
+function assertModelRunPayload(event: EventEnvelope): void {
+  if (event.source !== "cloud" && event.source !== "modal" && event.source !== "desktop-system") {
+    throw new Error("model.run events must use cloud, modal, or desktop-system source");
+  }
+
+  const payload = event.payload;
+  assertNonEmptyString(payload.run_id, "model.run payload.run_id");
+  assertOneOf(payload.job_kind, ["session_summary", "content_difficulty", "embedding", "calibration"] as const, "model.run payload.job_kind");
+  assertNonEmptyString(payload.provider, "model.run payload.provider");
+  assertNonEmptyString(payload.model, "model.run payload.model");
+  assertOneOf(payload.status, modelRunStatuses, "model.run payload.status");
+  if (!isPrivacyClass(payload.input_privacy_class)) {
+    throw new Error("model.run payload.input_privacy_class is unsupported");
+  }
+  assertOptionalString(payload.input_report_id, "model.run payload.input_report_id");
+  assertOptionalString(payload.output_report_id, "model.run payload.output_report_id");
+  assertStringArray(payload.limitations, "model.run payload.limitations");
+}
+
+function assertNonEmptyString(value: unknown, field: string): asserts value is string {
+  if (typeof value !== "string" || value.length === 0) {
+    throw new Error(`${field} must be a non-empty string`);
+  }
+}
+
+function assertOptionalString(value: unknown, field: string): void {
+  if (value !== undefined && (typeof value !== "string" || value.length === 0)) {
+    throw new Error(`${field} must be a non-empty string when present`);
+  }
+}
+
+function assertStringArray(value: unknown, field: string): asserts value is string[] {
+  if (!Array.isArray(value) || !value.every((item) => typeof item === "string" && item.length > 0)) {
+    throw new Error(`${field} must be a non-empty string array`);
+  }
+}
+
+function assertOptionalStringArray(value: unknown, field: string): void {
+  if (value !== undefined) {
+    assertStringArray(value, field);
+  }
+}
+
+function assertConfidence(value: unknown, field: string): asserts value is number {
+  if (typeof value !== "number" || !Number.isFinite(value) || value < 0 || value > 1) {
+    throw new Error(`${field} must be between 0 and 1`);
+  }
+}
+
+function assertOneOf<TValue extends string>(
+  value: unknown,
+  choices: readonly TValue[],
+  field: string,
+): asserts value is TValue {
+  if (typeof value !== "string" || !choices.includes(value as TValue)) {
+    throw new Error(`${field} is unsupported`);
   }
 }

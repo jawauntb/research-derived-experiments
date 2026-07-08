@@ -40,7 +40,7 @@ async function submitJob(request: Request, context: JobsRouteContext): Promise<R
   const user = authenticate(request);
   const body = await readJsonObject(request);
   const kind = parseJobKind(body.kind);
-  const input = parseModalJobInput(body.input ?? {});
+  const input = parseModalJobInput(kind, body.input ?? {});
   const session_id = stringField(body, "session_id", false);
   const job = await context.store.createJob({
     user_id: user.user_id,
@@ -187,7 +187,7 @@ function parseJsonObject(value: unknown, field: string): JsonObject {
   return value;
 }
 
-function parseModalJobInput(value: unknown): JsonObject {
+function parseModalJobInput(kind: JobKind, value: unknown): JsonObject {
   const input = parseJsonObject(value, "input");
   const privacyClass = input.privacy_class;
   if (!isPrivacyClass(privacyClass)) {
@@ -208,8 +208,52 @@ function parseModalJobInput(value: unknown): JsonObject {
       fields: rawTextFields,
     });
   }
+  assertSessionSummaryRedactedInput(kind, privacyClass, payload);
 
   return { ...input, payload };
+}
+
+function assertSessionSummaryRedactedInput(kind: JobKind, privacyClass: string, payload: JsonObject): void {
+  if (kind !== "session_summary") {
+    return;
+  }
+  if (privacyClass !== "redacted-sync") {
+    throw new RouteError(422, "privacy_rejected", "session_summary jobs require redacted-sync input");
+  }
+
+  const localIdentityFields = findSensitiveFieldPaths(payload, {
+    extraFieldNames: ["app_name", "appName", "bundle_id", "bundleId", "window_title", "windowTitle"],
+    normalizeFieldName: normalizeSensitiveFieldName,
+  });
+  if (localIdentityFields.length > 0) {
+    throw new RouteError(422, "privacy_rejected", "session_summary redacted payload cannot include app names, bundle ids, or window titles", {
+      fields: localIdentityFields,
+    });
+  }
+
+  const requiredStrings = ["report_id", "report_kind", "summary"] as const;
+  for (const key of requiredStrings) {
+    if (typeof payload[key] !== "string" || String(payload[key]).length === 0) {
+      throw new RouteError(400, "invalid_request", `session_summary payload.${key} must be a non-empty string`);
+    }
+  }
+  if (payload.report_kind !== "session_interpretation") {
+    throw new RouteError(400, "invalid_request", "session_summary payload.report_kind must be session_interpretation");
+  }
+
+  for (const key of ["marker_count", "theme_count", "open_loop_count", "next_action_count"] as const) {
+    if (typeof payload[key] !== "number" || !Number.isFinite(payload[key])) {
+      throw new RouteError(400, "invalid_request", `session_summary payload.${key} must be a number`);
+    }
+  }
+  for (const key of ["themes", "next_actions", "limitations"] as const) {
+    if (!Array.isArray(payload[key])) {
+      throw new RouteError(400, "invalid_request", `session_summary payload.${key} must be an array`);
+    }
+  }
+  if (!isRecord(payload.provenance)) {
+    throw new RouteError(400, "invalid_request", "session_summary payload.provenance must be an object");
+  }
 }
 
 function rejectDesktopActivityInput(input: JsonObject, payload: JsonObject): void {

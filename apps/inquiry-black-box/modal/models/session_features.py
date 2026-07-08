@@ -6,7 +6,21 @@ from typing import Any
 
 FEATURE_VERSION = "session_features@0.1.0"
 ALLOWED_PRIVACY_CLASSES = {"public", "redacted-sync", "document-opt-in"}
-SENSITIVE_FIELD_NAMES = {"rawFrame", "frameImage", "keyText", "documentText", "rawVideo", "videoBytes", "keyContent"}
+SENSITIVE_FIELD_NAMES = {
+    "rawFrame",
+    "frameImage",
+    "keyText",
+    "documentText",
+    "rawVideo",
+    "videoBytes",
+    "keyContent",
+    "app_name",
+    "appName",
+    "bundle_id",
+    "bundleId",
+    "window_title",
+    "windowTitle",
+}
 
 
 class RedactionViolation(ValueError):

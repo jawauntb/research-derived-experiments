@@ -1,9 +1,13 @@
-import type { EventEnvelope, LabelPayload, SessionRecord } from "@inquiry/schema";
+import type { EventEnvelope, LabelPayload, SessionRecord, SuggestionResponse } from "@inquiry/schema";
 import type { RepairCandidate } from "@inquiry/signals";
 import type { DesktopShellStatus } from "../main/ipc";
+import type { DailyReviewReport } from "../main/reports/dailyDigest";
+import type { SessionInterpretationReport } from "../main/reports/sessionInterpretation";
 import type { SessionReplayReport } from "../main/reports/sessionReplay";
 import { renderCameraPanel, type CameraPermissionState } from "./camera/CameraPanel";
 import type { CameraFeatureWindow } from "./camera/featureWorker";
+import { renderDailyReviewPanel } from "./daily/DailyReviewPanel";
+import { renderSessionInterpretationPanel } from "./interpretation/SessionInterpretationPanel";
 import { renderProbePanel, type ProbeAnswer } from "./probes/ProbePanel";
 import { renderReplayTimeline } from "./replay/ReplayTimeline";
 import { renderSessionControls, type SelfLabel } from "./session/SessionControls";
@@ -45,6 +49,18 @@ export type InquiryDesktopBridge = {
   replay?: {
     report: () => Promise<SessionReplayReport | null>;
   };
+  interpretation?: {
+    session: () => Promise<SessionInterpretationReport | null>;
+    daily: () => Promise<DailyReviewReport>;
+    refreshDaily: () => Promise<DailyReviewReport>;
+    respondSuggestion: (input: {
+      suggestion_id: string;
+      response: SuggestionResponse;
+      reason?: string;
+      snoozed_until?: string;
+      local_date?: string;
+    }) => Promise<EventEnvelope>;
+  };
   repair?: {
     accept: (repair_id: RepairCandidate["repair_id"]) => Promise<EventEnvelope>;
     answer: (input: ProbeAnswer) => Promise<EventEnvelope[]>;
@@ -56,6 +72,8 @@ export type AppViewModel = {
   session: SessionRecord | null;
   status?: DesktopShellStatus;
   replay?: SessionReplayReport | null;
+  interpretation?: SessionInterpretationReport | null;
+  dailyReview?: DailyReviewReport | null;
   repairCandidate?: RepairCandidate | null;
   camera: {
     enabled: boolean;
@@ -92,19 +110,25 @@ export function renderApp(root: HTMLElement, bridge: InquiryDesktopBridge, initi
   const cameraRoot = document.createElement("div");
   const privacyRoot = document.createElement("div");
   const replayRoot = document.createElement("div");
+  const interpretationRoot = document.createElement("div");
+  const dailyRoot = document.createElement("div");
   const probeRoot = document.createElement("div");
-  root.replaceChildren(headerRoot, sessionRoot, cameraRoot, privacyRoot, replayRoot, probeRoot);
+  root.replaceChildren(headerRoot, sessionRoot, cameraRoot, privacyRoot, replayRoot, interpretationRoot, dailyRoot, probeRoot);
 
   const refresh = async (): Promise<void> => {
     const status = bridge.status ? await bridge.status.current() : undefined;
     const session = status?.session ?? (await bridge.session.currentSession());
     const replay = bridge.replay ? await bridge.replay.report() : view.replay ?? null;
+    const interpretation = bridge.interpretation ? await bridge.interpretation.session() : view.interpretation ?? null;
+    const dailyReview = bridge.interpretation ? await bridge.interpretation.daily() : view.dailyReview ?? null;
     view = {
       ...view,
       ...(status ? { status } : {}),
       session,
       privacy: bridge.privacy ? await bridge.privacy.currentSettings() : view.privacy,
       replay,
+      interpretation,
+      dailyReview,
       repairCandidate: replay?.repair_candidates[0] ?? null,
     };
     render();
@@ -168,6 +192,25 @@ export function renderApp(root: HTMLElement, bridge: InquiryDesktopBridge, initi
       renderReplayTimeline(replayRoot, view.replay);
     } else {
       replayRoot.replaceChildren();
+    }
+    renderSessionInterpretationPanel(interpretationRoot, view.interpretation);
+    if (bridge.interpretation) {
+      renderDailyReviewPanel(dailyRoot, view.dailyReview, {
+        refreshDailyReview: async () => {
+          view = { ...view, dailyReview: await bridge.interpretation!.refreshDaily() };
+          render();
+        },
+        respondSuggestion: async (input) => {
+          await bridge.interpretation!.respondSuggestion({
+            ...input,
+            ...(view.dailyReview?.local_date ? { local_date: view.dailyReview.local_date } : {}),
+          });
+          view = { ...view, dailyReview: await bridge.interpretation!.refreshDaily() };
+          render();
+        },
+      });
+    } else {
+      dailyRoot.replaceChildren();
     }
     if (bridge.repair) {
       renderProbePanel(probeRoot, view.repairCandidate ?? null, {

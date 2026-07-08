@@ -3,6 +3,7 @@ import { createEvent } from "@inquiry/schema";
 import { createRepairCandidateEvent, createRepairOutcomeEvent, type RepairCandidate } from "@inquiry/signals";
 import { createInquiryDatabase } from "../src/main/db";
 import { exportSession } from "../src/main/privacy/export";
+import { createSessionInterpretationReport } from "../src/main/reports/sessionInterpretation";
 
 describe("local inquiry database", () => {
   test("persists validated events and exports readable JSONL", () => {
@@ -50,7 +51,7 @@ describe("local inquiry database", () => {
         source: "desktop-system",
         source_version: "desktop@0.1.0",
         monotonic_ms: 0,
-        event_type: "report.generated",
+        event_type: "sync.queued",
         payload: { debug_summary: "local only" },
         privacy_class: "debug-sensitive",
         retention_policy: "debug-ephemeral",
@@ -106,6 +107,50 @@ describe("local inquiry database", () => {
       "repair.outcome",
     ]);
     expect(database.exportSessionJsonl(session.session_id)).toContain("repair-outcome-db-1");
+    database.close();
+  });
+
+  test("lists sessions and exports generated reports plus suggestions", () => {
+    const database = createInquiryDatabase();
+    const older = database.createSession({ title: "Older", session_id: "session-db-older" });
+    const session = database.createSession({ title: "Generated artifacts", session_id: "session-db-generated" });
+
+    database.appendEvent(
+      createEvent({
+        session_id: session.session_id,
+        source: "browser",
+        source_version: "extension@0.1.0",
+        monotonic_ms: 1_000,
+        event_type: "browser.scroll",
+        payload: { delta_y: 4_800, scroll_y: 4_800, viewport_h: 900 },
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    );
+    database.appendEvent(
+      createEvent({
+        session_id: session.session_id,
+        source: "browser",
+        source_version: "extension@0.1.0",
+        monotonic_ms: 1_500,
+        event_type: "browser.dwell",
+        payload: { dwell_ms: 200 },
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    );
+    database.stopSession(session.session_id, "2026-07-07T12:10:00.000Z");
+
+    const report = createSessionInterpretationReport(database, session.session_id);
+    const exported = exportSession(database, session.session_id);
+
+    expect(database.listSessions().map((record) => record.session_id)).toEqual(expect.arrayContaining([older.session_id, session.session_id]));
+    expect(report.next_actions.length).toBeGreaterThan(0);
+    expect(database.listEvents(session.session_id).map((event) => event.event_type)).toEqual(
+      expect.arrayContaining(["report.generated", "suggestion.candidate"]),
+    );
+    expect(exported.jsonl).toContain("session_interpretation");
+    expect(exported.jsonl).toContain("suggestion.candidate");
     database.close();
   });
 });

@@ -2,6 +2,7 @@ import electron from "electron";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createDesktopIpcFacade, type DesktopIpcFacade } from "./ipc";
+import { createElectronDesktopNotifier } from "./notifications/desktopNotifier";
 import { createDesktopRuntime, type DesktopRuntime } from "./main";
 
 const { app, BrowserWindow, ipcMain } = electron;
@@ -27,6 +28,10 @@ function registerHandlers(nextFacade: DesktopIpcFacade): void {
   ipcMain.handle("inquiry:privacy:export", () => nextFacade.exportSession());
   ipcMain.handle("inquiry:privacy:delete", () => nextFacade.deleteSession());
   ipcMain.handle("inquiry:replay:report", () => nextFacade.replayReport());
+  ipcMain.handle("inquiry:interpretation:session", () => nextFacade.sessionInterpretation());
+  ipcMain.handle("inquiry:interpretation:daily", () => nextFacade.dailyReview());
+  ipcMain.handle("inquiry:interpretation:daily-refresh", () => nextFacade.refreshDailyReview());
+  ipcMain.handle("inquiry:suggestion:respond", (_event, input) => nextFacade.respondSuggestion(input));
   ipcMain.handle("inquiry:repair:accept", (_event, repair_id) => nextFacade.acceptRepair(repair_id));
   ipcMain.handle("inquiry:repair:answer", (_event, input) => nextFacade.answerRepair(input));
   ipcMain.handle("inquiry:repair:dismiss", (_event, input) => nextFacade.dismissRepair(input));
@@ -53,7 +58,7 @@ async function createWindow(): Promise<void> {
 }
 
 void app.whenReady().then(async () => {
-  runtime = createDesktopRuntime();
+  runtime = createDesktopRuntime({ notifier: createElectronDesktopNotifier() });
   facade = createDesktopIpcFacade(runtime);
   registerHandlers(facade);
   await createWindow();

@@ -1,8 +1,12 @@
 import { describe, expect, test } from "bun:test";
 import { createEvent, type SessionRecord } from "@inquiry/schema";
 import type { RepairCandidate } from "@inquiry/signals";
+import type { DailyReviewReport } from "../src/main/reports/dailyDigest";
+import type { SessionInterpretationReport } from "../src/main/reports/sessionInterpretation";
 import { createSessionReplayReport } from "../src/main/reports/sessionReplay";
 import { createInitialAppViewModel, renderApp, type InquiryDesktopBridge } from "../src/renderer/App";
+import { renderDailyReviewPanel } from "../src/renderer/daily/DailyReviewPanel";
+import { renderSessionInterpretationPanel } from "../src/renderer/interpretation/SessionInterpretationPanel";
 import { renderProbePanel } from "../src/renderer/probes/ProbePanel";
 import { renderReplayTimeline } from "../src/renderer/replay/ReplayTimeline";
 
@@ -317,6 +321,48 @@ describe("session replay report", () => {
       expect(root.textContent).toContain("off-browser-focus");
       expect(root.textContent).not.toContain("window_title");
       expect(report.limitations.join(" ")).toContain("raw screenshots");
+    } finally {
+      globalWithDocument.document = originalDocument;
+    }
+  });
+
+  test("renders session interpretation and daily suggestion feedback controls", () => {
+    const documentStub = new FakeDocument();
+    const globalWithDocument = globalThis as unknown as { document?: unknown };
+    const originalDocument = globalWithDocument.document;
+    globalWithDocument.document = documentStub;
+
+    try {
+      const interpretationRoot = documentStub.createElement("div");
+      const dailyRoot = documentStub.createElement("div");
+      const responses: string[] = [];
+
+      renderSessionInterpretationPanel(interpretationRoot as unknown as HTMLElement, interpretationFixture());
+      renderDailyReviewPanel(dailyRoot as unknown as HTMLElement, dailyReviewFixture(), {
+        refreshDailyReview: () => {
+          responses.push("refresh");
+        },
+        respondSuggestion: (input) => {
+          responses.push(`${input.suggestion_id}:${input.response}`);
+        },
+      });
+
+      expect(interpretationRoot.textContent).toContain("Session Interpretation");
+      expect(interpretationRoot.textContent).toContain("Repeated skim risk");
+      expect(interpretationRoot.findByDataset("themeKind", "retry")).toBeDefined();
+      expect(dailyRoot.textContent).toContain("Daily Review");
+      expect(dailyRoot.textContent).toContain("What to retry");
+      expect(dailyRoot.findByDataset("suggestionId", "suggestion-render-1")).toBeDefined();
+
+      const buttons = dailyRoot.findAllByTag("button");
+      expect(buttons.map((button) => button.textContent)).toEqual(["Refresh", "Accept", "Snooze", "Dismiss", "Useful", "Not useful"]);
+      buttons[0]!.click();
+      buttons[1]!.click();
+      buttons[5]!.click();
+
+      expect(responses[0]).toBe("refresh");
+      expect(responses).toContain("suggestion-render-1:accepted");
+      expect(responses).toContain("suggestion-render-1:rated-not-useful");
     } finally {
       globalWithDocument.document = originalDocument;
     }
@@ -684,5 +730,73 @@ function repairCandidateFixture(): RepairCandidate {
     source_marker_ids: ["marker-render-1"],
     evidence_event_ids: ["event-render-1"],
     limitation: "repair hypothesis",
+  };
+}
+
+function interpretationFixture(): SessionInterpretationReport {
+  return {
+    report_id: "session-interpretation:render",
+    report_kind: "session_interpretation",
+    session_id: "replay-render-session",
+    generated_at: "2026-07-07T12:10:00.000Z",
+    summary: "Replay evidence suggests one retry theme and one concrete next action.",
+    confidence: 0.78,
+    themes: [
+      {
+        theme_id: "theme-render-1",
+        title: "Repeated skim risk",
+        detail: "Fast movement followed by short dwell suggests this passage should be revisited.",
+        kind: "retry",
+        confidence: 0.78,
+        marker_ids: ["marker-render-1"],
+        evidence_event_ids: ["event-render-1"],
+        limitation: "Local marker evidence only.",
+      },
+    ],
+    next_actions: [
+      {
+        suggestion_id: "suggestion-render-1",
+        suggestion_kind: "retry",
+        category: "retry",
+        title: "Retry the skipped span",
+        action: "Write one question the skipped span should answer.",
+        rationale: "Fast scroll plus short dwell.",
+        confidence: 0.78,
+        evidence_event_ids: ["event-render-1"],
+        report_ids: ["session-interpretation:render"],
+        session_ids: ["replay-render-session"],
+        limitation: "Needs user feedback.",
+        pattern_key: "skim-risk:retry",
+      },
+    ],
+    open_loops: [],
+    limitations: ["Local deterministic guidance only."],
+    evidence_event_ids: ["event-render-1"],
+    source_report_ids: ["replay:render"],
+    provenance: { builder: "test" },
+  };
+}
+
+function dailyReviewFixture(): DailyReviewReport {
+  const suggestion = interpretationFixture().next_actions[0]!;
+  return {
+    report_id: "daily-review:2026-07-07",
+    report_kind: "daily_review",
+    local_date: "2026-07-07",
+    generated_at: "2026-07-07T22:00:00.000Z",
+    summary: "One retry pattern stood out today.",
+    sections: {
+      helped: [],
+      fragmented: [],
+      retry: [suggestion],
+      ignore: [],
+      open_loops: [],
+      care_candidates: [],
+    },
+    suggestions: [suggestion],
+    limitations: ["Suggestions are local deterministic summaries."],
+    evidence_event_ids: ["event-render-1"],
+    source_report_ids: ["session-interpretation:render"],
+    provenance: { builder: "test" },
   };
 }

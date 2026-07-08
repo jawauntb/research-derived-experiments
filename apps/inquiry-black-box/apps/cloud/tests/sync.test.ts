@@ -34,6 +34,46 @@ function redactedEvent(eventId: string): EventEnvelope {
   });
 }
 
+function redactedSessionSummaryJobInput() {
+  return {
+    privacy_class: "redacted-sync",
+    payload: {
+      report_id: "session-interpretation:session-cloud-1",
+      report_kind: "session_interpretation",
+      subject_session_id: "session-cloud-1",
+      marker_count: 2,
+      theme_count: 1,
+      open_loop_count: 1,
+      next_action_count: 1,
+      summary: "Redacted local session summary with 1 theme, 1 open loop, and 1 next action.",
+      themes: [
+        {
+          kind: "stuck-loop",
+          title: "Repeated repair loop",
+          confidence: 0.82,
+          marker_count: 2,
+          evidence_count: 2,
+        },
+      ],
+      next_actions: [
+        {
+          suggestion_kind: "refocus",
+          category: "retry",
+          title: "Write the missing prerequisite",
+          confidence: 0.78,
+          evidence_count: 2,
+        },
+      ],
+      limitations: ["No raw text, screenshots, app names, or window titles included."],
+      provenance: {
+        input_report_id: "session-interpretation:session-cloud-1",
+        builder: "test-redacted-session-summary-input@0.1.0",
+        excludes: ["raw typed text", "raw selected text", "raw page text", "app names", "window titles"],
+      },
+    },
+  };
+}
+
 async function json(response: Response) {
   return response.json() as Promise<Record<string, unknown>>;
 }
@@ -317,7 +357,7 @@ describe("cloud reports and jobs routes", () => {
         body: JSON.stringify({
           kind: "session_summary",
           session_id: "session-cloud-1",
-          input: { privacy_class: "redacted-sync", payload: { export_ref: "fixture" } },
+          input: redactedSessionSummaryJobInput(),
         }),
       }),
     );
@@ -435,7 +475,7 @@ describe("cloud reports and jobs routes", () => {
         headers: authHeaders("user-a"),
         body: JSON.stringify({
           kind: "session_summary",
-          input: { privacy_class: "redacted-sync", payload: { export_ref: "fixture" } },
+          input: redactedSessionSummaryJobInput(),
         }),
       }),
     );
@@ -490,6 +530,45 @@ describe("cloud reports and jobs routes", () => {
 
     expect(response.status).toBe(422);
     expect(body.error).toMatchObject({ code: "privacy_rejected" });
+  });
+
+  test("requires redacted session summary inputs to be structured and identity-free", async () => {
+    let calls = 0;
+    const modalClient: ModalClient = {
+      submitJob: async () => {
+        calls += 1;
+        throw new Error("Modal should not be called for malformed session summary input");
+      },
+    };
+    const handler = createCloudHandler({ store: createCloudStore(), modalClient });
+    const malformed = await handler(
+      new Request("http://cloud.test/jobs", {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({
+          kind: "session_summary",
+          input: { privacy_class: "redacted-sync", payload: { report_id: "missing-shape" } },
+        }),
+      }),
+    );
+    const identityPayload = redactedSessionSummaryJobInput();
+    (identityPayload.payload as Record<string, unknown>).window_title = "private-notes.md";
+    const identity = await handler(
+      new Request("http://cloud.test/jobs", {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({
+          kind: "session_summary",
+          input: identityPayload,
+        }),
+      }),
+    );
+
+    expect(malformed.status).toBe(400);
+    expect((await json(malformed)).error).toMatchObject({ code: "invalid_request" });
+    expect(identity.status).toBe(422);
+    expect((await json(identity)).error).toMatchObject({ code: "privacy_rejected" });
+    expect(calls).toBe(0);
   });
 
   test("rejects raw frame, raw key, typed text, and document text Modal job inputs", async () => {

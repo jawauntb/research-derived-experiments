@@ -92,6 +92,8 @@
       .camera-panel,
       .privacy-settings,
       .replay-timeline,
+      .interpretation-panel,
+      .daily-review-panel,
       .probe-panel {
         background: var(--surface-raised);
         border: 1px solid rgba(255, 255, 255, 0.7);
@@ -107,6 +109,8 @@
 
       .app-header h1,
       .replay-timeline h2,
+      .interpretation-panel h2,
+      .daily-review-panel h2,
       .privacy-settings h2,
       .probe-panel h2 {
         font-size: 18px;
@@ -345,7 +349,11 @@
 
       .replay-state,
       .replay-evidence,
-      .replay-heatmap {
+      .replay-heatmap,
+      .interpretation-empty,
+      .daily-review-empty,
+      .interpretation-themes li,
+      .daily-review-group {
         background: var(--surface-inset);
         border-radius: 8px;
         box-shadow: var(--shadow-pressed);
@@ -355,7 +363,8 @@
 
       .replay-state h3,
       .replay-evidence h3,
-      .replay-heatmap h3 {
+      .replay-heatmap h3,
+      .daily-review-group h3 {
         font-size: 14px;
         margin: 0 0 8px;
       }
@@ -363,11 +372,56 @@
       .replay-state p,
       .replay-evidence p,
       .replay-heatmap p,
+      .interpretation-panel p,
+      .daily-review-panel p,
       .probe-panel p,
       .camera-privacy-note {
         font-size: 13px;
         line-height: 1.45;
         margin: 8px 0 0;
+      }
+
+      .interpretation-themes,
+      .interpretation-actions,
+      .daily-review-group ol {
+        margin-bottom: 0;
+        padding-left: 22px;
+      }
+
+      .interpretation-themes li,
+      .daily-review-group li {
+        margin: 8px 0;
+      }
+
+      .interpretation-summary,
+      .daily-review-summary {
+        color: var(--ink);
+        font-size: 14px;
+      }
+
+      .interpretation-limitations,
+      .evidence-ref {
+        color: var(--muted);
+      }
+
+      .daily-review-header {
+        align-items: center;
+        display: flex;
+        gap: 12px;
+        justify-content: space-between;
+      }
+
+      .suggestion-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .suggestion-controls button {
+        font-size: 12px;
+        min-height: 30px;
+        padding: 5px 8px;
       }
 
       .replay-timeline__actions {
@@ -405,7 +459,9 @@
 
         #app > div:first-child,
         #app > div:nth-child(5),
-        #app > div:nth-child(6) {
+        #app > div:nth-child(6),
+        #app > div:nth-child(7),
+        #app > div:nth-child(8) {
           grid-column: 1 / -1;
         }
       }

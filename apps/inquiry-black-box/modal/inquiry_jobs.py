@@ -6,6 +6,7 @@ from typing import Any
 from model_env import resolve_model_environment
 from models.calibration import train_toy_calibration
 from models.session_features import extract_session_features
+from models.session_summary import summarize_redacted_session
 
 try:
     import modal as modal_module
@@ -94,6 +95,10 @@ def run_calibration_job(samples: list[dict[str, Any]]) -> dict[str, Any]:
     return train_toy_calibration(samples)
 
 
+def run_session_summary_job(job_input: dict[str, Any]) -> dict[str, Any]:
+    return summarize_redacted_session(job_input)
+
+
 if modal_module:
     app = modal_module.App("inquiry-black-box")
 
@@ -104,6 +109,10 @@ if modal_module:
     @app.function()
     def calibration_job(samples: list[dict[str, Any]]) -> dict[str, Any]:
         return run_calibration_job(samples)
+
+    @app.function()
+    def session_summary_job(job_input: dict[str, Any]) -> dict[str, Any]:
+        return run_session_summary_job(job_input)
 
     @app.function()
     @modal_module.fastapi_endpoint(method="POST")
@@ -122,6 +131,9 @@ else:
 
     def calibration_job(samples: list[dict[str, Any]]) -> dict[str, Any]:
         return run_calibration_job(samples)
+
+    def session_summary_job(job_input: dict[str, Any]) -> dict[str, Any]:
+        return run_session_summary_job(job_input)
 
     def job_webhook(request: dict[str, Any]) -> dict[str, Any]:
         job_id = str(request.get("job_id", "unknown"))
