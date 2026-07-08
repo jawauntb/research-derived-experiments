@@ -83,7 +83,10 @@ export function createIngestRequestHandler(options: IngestServerOptions): (reque
       return jsonResponse({ error: "not found" }, 404, origin);
     }
 
-    if (request.method !== "POST") {
+    const canHandleMethod =
+      (isIngestPath && request.method === "POST") ||
+      (isSessionControlPath && (request.method === "POST" || request.method === "GET"));
+    if (!canHandleMethod) {
       return jsonResponse({ error: "method not allowed" }, 405, origin);
     }
 
@@ -105,14 +108,18 @@ export function createIngestRequestHandler(options: IngestServerOptions): (reque
       return jsonResponse({ error: tokenDecision.reason }, 401, origin);
     }
 
-    let body: unknown;
     try {
-      body = await request.json();
-    } catch {
-      return jsonResponse({ error: "request body must be JSON" }, 400, origin);
-    }
+      if (isSessionControlPath && request.method === "GET") {
+        return jsonResponse(sessionStatusResponse(options.sessions.currentSession()), 200, origin);
+      }
 
-    try {
+      let body: unknown;
+      try {
+        body = await request.json();
+      } catch {
+        return jsonResponse({ error: "request body must be JSON" }, 400, origin);
+      }
+
       if (isSessionControlPath) {
         return jsonResponse(applySessionControl(body, options.sessions), 200, origin);
       }
@@ -182,6 +189,23 @@ function applySessionControl(value: unknown, sessions: SessionController): JsonO
     return sessionControlResponse(current);
   }
 
+  if (body.recording_state === "paused") {
+    if (!current) {
+      throw new Error("no active session");
+    }
+
+    if (current.recording_state === "paused") {
+      return sessionControlResponse(current);
+    }
+
+    return sessionControlResponse(
+      sessions.pauseSession({
+        reason: "extension-pause",
+        ...(typeof monotonicMs === "number" ? { monotonic_ms: monotonicMs } : {}),
+      }),
+    );
+  }
+
   if (body.recording_state === "stopped") {
     if (!current) {
       return {
@@ -200,7 +224,7 @@ function applySessionControl(value: unknown, sessions: SessionController): JsonO
     );
   }
 
-  throw new Error("session control recording_state must be recording or stopped");
+  throw new Error("session control recording_state must be recording, paused, or stopped");
 }
 
 function sessionControlResponse(session: SessionRecord): JsonObject {
@@ -210,6 +234,19 @@ function sessionControlResponse(session: SessionRecord): JsonObject {
     session_id: session.session_id,
     session: sessionRecordJson(session),
   };
+}
+
+function sessionStatusResponse(session: SessionRecord | null): JsonObject {
+  if (!session) {
+    return {
+      ok: true,
+      recording_state: "stopped",
+      session_id: null,
+      session: null,
+    };
+  }
+
+  return sessionControlResponse(session);
 }
 
 function sessionRecordJson(session: SessionRecord): JsonObject {
@@ -310,7 +347,7 @@ async function readRequestBody(request: IncomingMessage): Promise<Buffer[]> {
 
 function normalizeExtensionBody(
   value: unknown,
-  options: { sessions: SessionController; sourceVersion: string; rebindSession?: boolean },
+  options: { sessions: SessionController; sourceVersion: string },
 ): EventEnvelope[] {
   if (!isRecord(value)) {
     throw new Error("event body must be an object");
@@ -325,15 +362,22 @@ function normalizeExtensionBody(
       throw new Error("batch session_id must be a string");
     }
 
-    return value.events.map((event) =>
-      normalizeExtensionEvent(
-        {
-          ...(isRecord(event) ? event : {}),
-          session_id: isRecord(event) && event.session_id !== undefined ? event.session_id : value.session_id,
-        },
-        { ...options, rebindSession: true },
-      ),
-    );
+    const batchSessionId = typeof value.session_id === "string" ? value.session_id : undefined;
+
+    return value.events.map((event) => {
+      const eventRecord = isRecord(event) ? event : {};
+      if (eventRecord.session_id !== undefined && typeof eventRecord.session_id !== "string") {
+        throw new Error("event session_id must be a string");
+      }
+      if (batchSessionId && typeof eventRecord.session_id === "string" && eventRecord.session_id !== batchSessionId) {
+        throw new Error("event session does not match batch session");
+      }
+
+      return normalizeExtensionEvent({
+        ...eventRecord,
+        session_id: typeof eventRecord.session_id === "string" ? eventRecord.session_id : batchSessionId,
+      }, options);
+    });
   }
 
   return [normalizeExtensionEvent(value, options)];
@@ -341,7 +385,7 @@ function normalizeExtensionBody(
 
 function normalizeExtensionEvent(
   value: unknown,
-  options: { sessions: SessionController; sourceVersion: string; rebindSession?: boolean },
+  options: { sessions: SessionController; sourceVersion: string },
 ): EventEnvelope {
   if (!isRecord(value)) {
     throw new Error("event body must be an object");
@@ -356,7 +400,7 @@ function normalizeExtensionEvent(
     throw new Error(`session is ${active.recording_state}`);
   }
 
-  if (!options.rebindSession && body.session_id !== undefined && body.session_id !== active.session_id) {
+  if (body.session_id !== undefined && body.session_id !== active.session_id) {
     throw new Error("event session does not match active session");
   }
 
@@ -464,7 +508,7 @@ function jsonResponse(body: JsonObject, status: number, origin: string | null): 
   if (origin) {
     headers.set("access-control-allow-origin", origin);
     headers.set("access-control-allow-headers", "authorization, content-type, x-inquiry-pairing-token");
-    headers.set("access-control-allow-methods", "POST, OPTIONS");
+    headers.set("access-control-allow-methods", "GET, POST, OPTIONS");
   }
 
   if (status === 204) {

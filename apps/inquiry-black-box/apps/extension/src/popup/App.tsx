@@ -1,5 +1,6 @@
 import {
   defaultBridgeState,
+  isRecordingState,
   normalizeBridgeState,
   type BridgeState,
   type PrivacyToggles,
@@ -11,6 +12,8 @@ import { renderPrivacyToggles } from "./PrivacyToggles";
 
 type PopupState = BridgeState & {
   queueSize: number;
+  desktopRecordingState?: RecordingState;
+  desktopStatusWarning?: string;
 };
 
 type RuntimeLike = {
@@ -76,6 +79,10 @@ async function loadModel(chromeApi: ChromeLike): Promise<PopupModel> {
   const response = await sendRuntimeMessage(chromeApi.runtime, { type: "inquiry:get-popup-state" });
   const normalized = normalizeBridgeState(isRecord(response) ? response : undefined);
   const queueSize = isRecord(response) && typeof response.queueSize === "number" ? response.queueSize : 0;
+  const desktopRecordingState =
+    isRecord(response) && isRecordingState(response.desktopRecordingState) ? response.desktopRecordingState : undefined;
+  const desktopStatusWarning =
+    isRecord(response) && typeof response.desktopStatusWarning === "string" ? response.desktopStatusWarning : undefined;
   const activeTab = await readActiveTab(chromeApi.tabs);
   const site = siteInfo(activeTab?.url);
   const pageListener = await detectPageListener(chromeApi, activeTab);
@@ -85,6 +92,8 @@ async function loadModel(chromeApi: ChromeLike): Promise<PopupModel> {
     state: {
       ...normalized,
       queueSize,
+      ...(desktopRecordingState ? { desktopRecordingState } : {}),
+      ...(desktopStatusWarning ? { desktopStatusWarning } : {}),
     },
     siteHash: site.hash,
     siteLabel: site.label,
@@ -108,10 +117,11 @@ function render(root: HTMLElement, model: PopupModel, chromeApi: ChromeLike, not
   queue.className = "queue-row";
   queue.textContent = queueLabel(model.state);
 
+  const effectiveNotice = notice ?? (model.state.desktopStatusWarning ? `Desktop status unavailable: ${model.state.desktopStatusWarning}` : undefined);
   const noticeElement = document.createElement("div");
   noticeElement.className = "popup-notice";
-  noticeElement.hidden = !notice;
-  noticeElement.textContent = notice ?? "";
+  noticeElement.hidden = !effectiveNotice;
+  noticeElement.textContent = effectiveNotice ?? "";
 
   const summary = document.createElement("section");
   summary.className = "pairing-summary";
@@ -119,6 +129,7 @@ function render(root: HTMLElement, model: PopupModel, chromeApi: ChromeLike, not
     summaryRow("Pairing", model.state.pairingToken ? "Paired" : "Not paired"),
     summaryRow("Endpoint", model.state.endpoint),
     summaryRow("Session", model.state.sessionId),
+    summaryRow("Desktop", model.state.desktopRecordingState ? statusLabel(model.state.desktopRecordingState) : "Not checked"),
     summaryRow("Page listener", pageListenerLabel(model.pageListener)),
     summaryRow("Site", model.siteHash && model.state.disabledSiteHashes.includes(model.siteHash) ? "Disabled" : "Allowed"),
   );
@@ -128,7 +139,7 @@ function render(root: HTMLElement, model: PopupModel, chromeApi: ChromeLike, not
   const canControl = Boolean(model.state.pairingToken);
   controls.append(
     actionButton("Record", () => setRecordingState(root, chromeApi, "recording"), !canControl),
-    actionButton("Pause 15m", () => setRecordingState(root, chromeApi, "paused", Date.now() + 15 * 60_000), !canControl),
+    actionButton("Pause", () => setRecordingState(root, chromeApi, "paused"), !canControl),
     actionButton("Stop", () => setRecordingState(root, chromeApi, "stopped"), !canControl),
   );
 
@@ -461,6 +472,18 @@ function installStyles(): void {
   style.id = "inquiry-popup-styles";
   style.textContent = `
     :root {
+      --surface: #eef2f5;
+      --surface-raised: #f8fafb;
+      --surface-inset: #e4eaee;
+      --ink: #16202a;
+      --muted: #5d6b78;
+      --line: #d4dde4;
+      --green: #0f6b55;
+      --amber: #8a5b00;
+      --rose: #a83347;
+      --shadow-raised: 6px 6px 14px rgba(105, 122, 138, 0.22), -6px -6px 14px rgba(255, 255, 255, 0.92);
+      --shadow-pressed: inset 3px 3px 8px rgba(105, 122, 138, 0.2), inset -3px -3px 8px rgba(255, 255, 255, 0.9);
+      --focus: 0 0 0 3px rgba(36, 91, 147, 0.24);
       color-scheme: light;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
@@ -468,8 +491,8 @@ function installStyles(): void {
     body {
       margin: 0;
       min-width: 320px;
-      background: #f8faf9;
-      color: #16211d;
+      background: var(--surface);
+      color: var(--ink);
     }
 
     .popup {
@@ -496,30 +519,37 @@ function installStyles(): void {
       color: #fff;
       font-size: 12px;
       font-weight: 700;
+      min-width: 76px;
       padding: 4px 8px;
+      text-align: center;
     }
 
     .status-recording {
-      background: #12715b;
+      background: var(--green);
     }
 
     .status-paused {
-      background: #8a5a00;
+      background: var(--amber);
     }
 
     .status-stopped {
-      background: #616b66;
+      background: #68737c;
     }
 
     .queue-row {
-      color: #5a665f;
+      background: var(--surface-inset);
+      border-radius: 8px;
+      box-shadow: var(--shadow-pressed);
+      color: var(--muted);
       font-size: 12px;
+      min-height: 30px;
+      padding: 8px 10px;
     }
 
     .popup-notice {
       background: #fff8e6;
       border: 1px solid #ead399;
-      border-radius: 6px;
+      border-radius: 8px;
       color: #5f4300;
       font-size: 12px;
       padding: 8px;
@@ -530,8 +560,10 @@ function installStyles(): void {
     }
 
     .pairing-summary {
-      border: 1px solid #dbe3de;
+      background: var(--surface-raised);
+      border: 1px solid rgba(255, 255, 255, 0.7);
       border-radius: 8px;
+      box-shadow: var(--shadow-raised);
       display: grid;
       gap: 6px;
       padding: 10px;
@@ -545,7 +577,7 @@ function installStyles(): void {
     }
 
     .pairing-summary__row span {
-      color: #5a665f;
+      color: var(--muted);
       font-size: 12px;
     }
 
@@ -561,10 +593,11 @@ function installStyles(): void {
     }
 
     button {
-      background: #18211d;
-      border: 0;
-      border-radius: 6px;
-      color: #fff;
+      background: var(--surface-raised);
+      border: 1px solid transparent;
+      border-radius: 8px;
+      box-shadow: var(--shadow-raised);
+      color: var(--ink);
       cursor: pointer;
       font: inherit;
       font-size: 12px;
@@ -573,8 +606,18 @@ function installStyles(): void {
       padding: 0 10px;
     }
 
+    .button-row button {
+      background: #18211d;
+      color: #fff;
+    }
+
     button:hover {
-      background: #2d3a34;
+      border-color: var(--line);
+    }
+
+    button:active:not(:disabled) {
+      box-shadow: var(--shadow-pressed);
+      transform: translateY(1px);
     }
 
     button:disabled {
@@ -582,17 +625,33 @@ function installStyles(): void {
       cursor: not-allowed;
     }
 
+    button:focus-visible,
+    input:focus-visible {
+      box-shadow: var(--focus), var(--shadow-raised);
+      outline: none;
+    }
+
     .toggle-row {
       align-items: center;
+      background: var(--surface-inset);
+      border-radius: 8px;
+      box-shadow: var(--shadow-pressed);
       display: flex;
       gap: 8px;
       font-size: 13px;
       min-height: 28px;
+      padding: 6px 8px;
+    }
+
+    input[type="checkbox"] {
+      accent-color: var(--green);
     }
 
     .privacy-toggles {
-      border: 1px solid #dbe3de;
+      background: var(--surface-raised);
+      border: 1px solid rgba(255, 255, 255, 0.7);
       border-radius: 8px;
+      box-shadow: var(--shadow-raised);
       display: grid;
       gap: 6px;
       margin: 0;
@@ -612,15 +671,26 @@ function installStyles(): void {
       grid-template-columns: 1fr;
     }
 
+    .pairing-form button {
+      background: var(--green);
+      color: #fff;
+    }
+
     input[type="password"],
     input[type="url"] {
-      border: 1px solid #cdd8d2;
-      border-radius: 6px;
+      background: var(--surface-inset);
+      border: 1px solid transparent;
+      border-radius: 8px;
+      box-shadow: var(--shadow-pressed);
       box-sizing: border-box;
       font: inherit;
       min-height: 34px;
       padding: 0 9px;
       width: 100%;
+    }
+
+    .site-row {
+      overflow-wrap: anywhere;
     }
   `;
   document.head.append(style);

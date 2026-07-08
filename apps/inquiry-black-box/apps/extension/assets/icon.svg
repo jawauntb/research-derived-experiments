@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Inquiry Black Box extension icon">
+  <rect width="128" height="128" rx="28" fill="#eef2f5"/>
+  <path d="M25 68c9-22 25-34 42-34 15 0 28 8 35 20" fill="none" stroke="#0f6b55" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="66" cy="64" r="18" fill="#16202a"/>
+  <circle cx="72" cy="58" r="5" fill="#dceaf7"/>
+  <path d="M34 91h60" stroke="#245b93" stroke-width="8" stroke-linecap="round"/>
+</svg>

@@ -34,8 +34,8 @@ describe("extension pairing smoke", () => {
       { fetchImpl },
     );
     const sessionId = control.sessionId ?? "";
-    const messages: ContentEventMessage[] = [];
-    const telemetry = createContentTelemetry({
+    const firstTabMessages: ContentEventMessage[] = [];
+    const firstTabTelemetry = createContentTelemetry({
       now: () => 1_000,
       sessionId: "extension-session-before-rebind",
       settings: recordingSettings(),
@@ -44,19 +44,38 @@ describe("extension pairing smoke", () => {
         hostname: "127.0.0.1",
       },
       sendMessage: (message) => {
-        messages.push(message);
+        firstTabMessages.push(message);
+      },
+    });
+    const secondTabMessages: ContentEventMessage[] = [];
+    const secondTabTelemetry = createContentTelemetry({
+      now: () => 2_000,
+      sessionId: "second-tab-before-rebind",
+      settings: recordingSettings(),
+      location: {
+        href: "https://example.test/reference-note",
+        hostname: "example.test",
+      },
+      sendMessage: (message) => {
+        secondTabMessages.push(message);
       },
     });
 
-    telemetry.captureScroll({ scrollY: 320, viewportHeight: 900, documentHeight: 2_400 });
-    telemetry.captureSelection("highlight", { selectionLength: 28, rangeCount: 1 });
-    telemetry.captureMedia("seeked", { tagName: "VIDEO", currentTime: 42, duration: 120, paused: false });
+    firstTabTelemetry.captureScroll({ scrollY: 320, viewportHeight: 900, documentHeight: 2_400 });
+    firstTabTelemetry.captureSelection("highlight", { selectionLength: 28, rangeCount: 1 });
+    firstTabTelemetry.captureMedia("seeked", { tagName: "VIDEO", currentTime: 42, duration: 120, paused: false });
+    secondTabTelemetry.captureVisibility(false);
+    secondTabTelemetry.captureSelection("copy", { selectionLength: 19, rangeCount: 1 });
 
-    const events = messages.flatMap((message) => message.events);
+    const events = [...firstTabMessages, ...secondTabMessages]
+      .flatMap((message) => message.events)
+      .map((event) => ({ ...event, session_id: sessionId }));
     const result = await postEventBatch(events, { ...initialBridgeState, sessionId }, {
       fetchImpl,
     });
     const stored = database.listEvents(sessionId);
+    const browserEvents = stored.filter((event) => event.source === "browser");
+    const hostHashes = new Set(browserEvents.map((event) => event.payload.hostname_hash));
 
     expect(control).toMatchObject({ recordingState: "recording" });
     expect(sessionId).not.toBe("local-browser-session");
@@ -66,9 +85,13 @@ describe("extension pairing smoke", () => {
       "browser.scroll",
       "browser.highlight",
       "browser.media",
+      "browser.visibility",
+      "browser.copy",
     ]);
-    expect(stored.filter((event) => event.source === "browser").every((event) => event.session_id === sessionId)).toBe(true);
+    expect(browserEvents.every((event) => event.session_id === sessionId)).toBe(true);
+    expect(hostHashes.size).toBe(2);
     expect(JSON.stringify(stored)).not.toContain("demo-article.html");
+    expect(JSON.stringify(stored)).not.toContain("example.test");
 
     runtime.stop();
   });

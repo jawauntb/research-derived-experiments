@@ -66,6 +66,76 @@ python3 -m http.server 4173 --directory tests/fixtures
 
 Open `http://127.0.0.1:4173/demo-article.html`.
 
+## Manual QA Matrix
+
+Use this matrix for each dogfood pass. Record the result in the ledger below
+instead of editing this runbook.
+
+| Area | Action | Expected result |
+| --- | --- | --- |
+| Desktop startup | Start `bun run dev:desktop` with a throwaway `INQUIRY_DESKTOP_DB_PATH`. | Header shows ingest URL, recording state, and a visible pairing token. |
+| Pairing | Pair the unpacked extension with the desktop token. | Popup shows paired state without requiring desktop Start. |
+| Extension Record | Click Record in the extension popup. | Desktop session starts or resumes and the popup switches to Recording. |
+| Cross-tab capture | Interact with the demo article, then a second normal `http` or `https` tab. | Browser events from both tabs land in the same desktop session. |
+| Unsupported page | Open `chrome://extensions` or another restricted page. | Popup reports the page is unsupported rather than implying capture is broken. |
+| Camera permission | Enable camera features with permission allowed, denied, and not yet granted where possible. | UI distinguishes permission, enabled state, feature heartbeat, and degraded quality. |
+| Selected text off | Copy/highlight text with `Selected text excerpts` off. | Replay/export show counts, lengths, hashes, and privacy limits without raw snippets. |
+| Selected text on | Repeat after enabling `Selected text excerpts`. | Bounded local snippets appear as `document-opt-in`; cloud sync remains ineligible. |
+| Stop/replay | Stop from extension, then inspect the desktop replay. | Replay refreshes, leads with evidence episodes, and shows heatmap and repair prompt. |
+| Export/delete | Export JSONL, then delete the session. | Export omits raw frames/raw typed content by default; delete removes local rows and queues a redacted tombstone if cloud sync applies. |
+| Restart/reload | Restart desktop and reload the extension. | Pairing and recording state reconcile; stale Recording state does not silently keep capturing. |
+| Design QA | Capture desktop wide, desktop narrow, and Chrome popup screenshots. | Soft raised/inset controls are readable, focus is visible, text wraps, and no dense workflow state overlaps. |
+
+## Dogfood Ledger Template
+
+Copy this template into the PR, issue, or release notes for each manual pass.
+
+```markdown
+### Inquiry dogfood ledger
+
+- Date:
+- Build commit:
+- OS / Chrome version:
+- Desktop command:
+- DB path:
+- Extension path:
+- Session id:
+- Pages exercised:
+- Camera permission state:
+- Selected text excerpts: off / on
+- Cloud sync: off / on
+- Events captured by type:
+- Replay outcome:
+- Export/delete outcome:
+- Restart/reload outcome:
+- Screenshots or recordings:
+- Design QA screenshots: desktop wide / desktop narrow / popup
+- Bugs found:
+- Follow-up tickets:
+- Release decision: pass / blocked
+```
+
+## Database Inspection
+
+With the desktop stopped or while using a throwaway demo DB, inspect the local
+SQLite file directly:
+
+```bash
+sqlite3 /tmp/inquiry-demo.sqlite '.tables'
+sqlite3 /tmp/inquiry-demo.sqlite 'select session_id,title,recording_state,started_at,ended_at from sessions;'
+sqlite3 /tmp/inquiry-demo.sqlite 'select event_type,privacy_class,retention_policy,count(*) from events group by 1,2,3 order by 1;'
+sqlite3 /tmp/inquiry-demo.sqlite 'select kind,payload from sync_queue order by queued_at desc limit 5;'
+```
+
+Useful checks:
+
+- `camera.feature_window` events exist after a camera-enabled run, with quality
+  flags but no raw image fields.
+- `browser.copy` and `browser.highlight` events are `local-derived` unless
+  selected-text excerpts were explicitly enabled.
+- `document-opt-in` events appear only for local/exportable selected snippets.
+- Sync tombstones contain the session id and delete action, not raw local data.
+
 ## Demo Script
 
 1. Open the desktop app and copy the visible pairing token. You do not need to
@@ -105,9 +175,33 @@ Open `http://127.0.0.1:4173/demo-article.html`.
 - Export/delete works without cloud credentials. Optional cloud sync remains
   limited to `public` and `redacted-sync` payloads.
 
+## Known Failure Modes
+
+- `Queue clear` means no retry backlog exists; it is healthy when events are
+  posting successfully.
+- Restricted pages such as `chrome://extensions` cannot run the content script.
+  Use the popup listener status to distinguish unsupported pages from a missing
+  listener on a normal page.
+- A desktop Stop, desktop crash, extension reload, or popup reopen should
+  reconcile recording state before additional capture continues.
+- Real camera permission prompts are OS/browser controlled and are not proven by
+  fixture tests; smoke them manually on the target Mac.
+- Fixture E2E does not prove a packaged app, installed extension, Railway,
+  Modal, or Chrome Web Store behavior.
+
 ## Packaging Notes
 
 `bun run build:prototype` creates local desktop and extension build artifacts.
-It is a developer-run prototype build, not a signed distribution. macOS signing,
-notarization, auto-update, and Chrome Web Store publication remain follow-up
-work.
+It is a developer-run prototype build, not a signed distribution.
+
+Unsigned local package commands:
+
+```bash
+bun run package:desktop
+bun run package:extension
+```
+
+Smoke the packaged desktop app and packaged/staged extension with the same demo
+script above after app restart and extension reload. macOS signing,
+notarization, auto-update, PNG/ICNS production icon export, and Chrome Web Store
+publication require account-level credentials outside the repo.

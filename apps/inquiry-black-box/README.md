@@ -14,10 +14,14 @@ bun run typecheck
 bun run test
 bun run test:e2e
 bun run build:prototype
+bun run package:local
+bun run validation:smoke
 ```
 
 `bun run test:e2e` includes the local demo fixture loop and extension pairing
 smoke, so it works without Railway, Modal, Doppler, or model-provider keys.
+For manual release proof, use the QA matrix and dogfood ledger in
+[Prototype demo](docs/prototype-demo.md).
 
 Packages:
 
@@ -45,3 +49,4 @@ quality flags only.
 - [Privacy model](docs/privacy-model.md)
 - [Deployment](docs/deployment.md)
 - [Research validation](docs/research-validation.md)
+- [Release checklist](docs/release-checklist.md)

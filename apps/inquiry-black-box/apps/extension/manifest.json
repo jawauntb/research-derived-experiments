@@ -3,9 +3,16 @@
   "name": "Inquiry Black Box",
   "version": "0.1.0",
   "description": "Local-first browser telemetry for Inquiry Black Box research sessions.",
+  "minimum_chrome_version": "116",
+  "icons": {
+    "128": "assets/icon.svg"
+  },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Inquiry Black Box"
+    "default_title": "Inquiry Black Box",
+    "default_icon": {
+      "128": "assets/icon.svg"
+    }
   },
   "background": {
     "service_worker": "dist/background/service-worker.js",

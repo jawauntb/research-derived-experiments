@@ -1,4 +1,12 @@
-import { findSensitiveFieldPaths, isPrivacyClass, type JsonObject, type PrivacyClass } from "@inquiry/schema";
+import {
+  canRunModalJobPrivacyClass,
+  findSensitiveFieldPaths,
+  isPrivacyClass,
+  normalizeSensitiveFieldName,
+  rawTextPayloadFieldNames,
+  selectedTextPayloadFieldNames,
+  type JsonObject,
+} from "@inquiry/schema";
 import type { CloudStore, JobKind, JobStatus } from "../db/schema";
 import { isJobKind, isJobStatus, isJsonObject } from "../db/schema";
 import type { ModalClient } from "../lib/modalClient";
@@ -81,16 +89,19 @@ async function updateJob(request: Request, context: JobsRouteContext, job_id: st
 
   const body = await readJsonObject(request);
   const status = parseJobStatus(body.status);
-  const result = body.result === undefined ? undefined : parseJsonObject(body.result, "result");
+  const parsedResult = body.result === undefined ? undefined : parseJsonObject(body.result, "result");
+  const result = parsedResult ? sanitizeJobResult(existing.kind, parsedResult) : undefined;
   const error = stringField(body, "error", false);
   if (result) {
-    rejectSensitiveFields(result);
+    rejectSensitiveFields(result, [...selectedTextPayloadFieldNames, ...rawTextPayloadFieldNames]);
   }
 
-  let report_id: string | undefined;
+  let report_id: string | undefined = existing.report_id;
   if (status === "complete" && result && isRecord(result.report)) {
-    const report = await createReportFromJobResult(context.store, existing, result.report);
-    report_id = report.report_id;
+    if (!report_id) {
+      const report = await createReportFromJobResult(context.store, existing, result.report);
+      report_id = report.report_id;
+    }
   }
 
   const updated = await context.store.updateJobStatus(user.user_id, job_id, {
@@ -108,8 +119,8 @@ async function createReportFromJobResult(
   job: { user_id: string; kind: JobKind; session_id?: string },
   reportInput: Record<string, unknown>,
 ) {
-  const title = typeof reportInput.title === "string" && reportInput.title.length > 0 ? reportInput.title : "Modal report";
-  const summary = typeof reportInput.summary === "string" ? reportInput.summary : "";
+  const title = modalReportTitle(job.kind);
+  const summary = modalReportSummary();
   const payload = parseJsonObject(reportInput.payload ?? {}, "result.report.payload");
   const provenance = parseJsonObject(reportInput.provenance ?? {}, "result.report.provenance");
 
@@ -122,6 +133,36 @@ async function createReportFromJobResult(
     provenance,
     ...(job.session_id ? { session_id: job.session_id } : {}),
   });
+}
+
+function modalReportTitle(kind: JobKind): string {
+  return `Modal ${kind.replaceAll("_", " ")} report`;
+}
+
+function modalReportSummary(): string {
+  return "Modal report completed.";
+}
+
+function sanitizeJobResult(kind: JobKind, result: JsonObject): JsonObject {
+  const sanitized: JsonObject = { ...result };
+  if (typeof sanitized.title === "string") {
+    sanitized.title = modalReportTitle(kind);
+  }
+  if (typeof sanitized.summary === "string") {
+    sanitized.summary = modalReportSummary();
+  }
+
+  const report = result.report;
+  if (!isRecord(report)) {
+    return sanitized;
+  }
+
+  sanitized.report = {
+    ...(report as JsonObject),
+    title: modalReportTitle(kind),
+    summary: modalReportSummary(),
+  };
+  return sanitized;
 }
 
 function parseJobKind(value: unknown): JobKind {
@@ -152,40 +193,37 @@ function parseModalJobInput(value: unknown): JsonObject {
     throw new RouteError(400, "invalid_request", "input.privacy_class must be a supported privacy class");
   }
 
-  if (!isModalJobPrivacyClass(privacyClass)) {
-    throw new RouteError(422, "privacy_rejected", "Modal jobs require redacted-sync or document-opt-in input");
+  const decision = canRunModalJobPrivacyClass(privacyClass);
+  if (!decision.allowed) {
+    throw new RouteError(422, "privacy_rejected", decision.reason);
   }
 
   const payload = parseJsonObject(input.payload ?? {}, "input.payload");
   rejectSensitiveFields(payload);
-  if (privacyClass === "redacted-sync" && containsRawTextField(payload)) {
-    throw new RouteError(422, "privacy_rejected", "redacted-sync Modal jobs cannot include raw text/content fields");
+  const rawTextFields = privacyClass === "redacted-sync" ? findRawTextFieldPaths(payload) : [];
+  if (rawTextFields.length > 0) {
+    throw new RouteError(422, "privacy_rejected", "redacted-sync Modal jobs cannot include raw text/content fields", {
+      fields: rawTextFields,
+    });
   }
 
   return { ...input, payload };
 }
 
-function isModalJobPrivacyClass(privacyClass: PrivacyClass): boolean {
-  return privacyClass === "redacted-sync" || privacyClass === "document-opt-in";
-}
+const redactedModalRawTextFieldNames = [...rawTextPayloadFieldNames, "page_text"] as const;
 
-function containsRawTextField(value: unknown): boolean {
-  if (Array.isArray(value)) {
-    return value.some(containsRawTextField);
-  }
-
-  if (!isJsonObject(value)) {
-    return false;
-  }
-
-  return Object.entries(value).some(([key, child]) => {
-    const normalized = key.toLowerCase();
-    return normalized === "content" || normalized === "text" || normalized === "page_text" || containsRawTextField(child);
+function findRawTextFieldPaths(value: unknown): string[] {
+  return findSensitiveFieldPaths(value, {
+    extraFieldNames: redactedModalRawTextFieldNames,
+    normalizeFieldName: normalizeSensitiveFieldName,
   });
 }
 
-function rejectSensitiveFields(value: unknown): void {
-  const paths = findSensitiveFieldPaths(value);
+function rejectSensitiveFields(value: unknown, extraFieldNames: Iterable<string> = []): void {
+  const paths = findSensitiveFieldPaths(value, {
+    extraFieldNames,
+    normalizeFieldName: normalizeSensitiveFieldName,
+  });
   if (paths.length > 0) {
     throw new RouteError(422, "privacy_rejected", "payload contains sensitive fields that cannot be sent to cloud analysis", {
       fields: paths,

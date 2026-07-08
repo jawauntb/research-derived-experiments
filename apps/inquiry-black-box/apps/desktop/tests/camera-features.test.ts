@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { createInquiryDatabase } from "../src/main/db";
+import { cameraPanelViewModel } from "../src/renderer/camera/CameraPanel";
 import {
   createCameraFeatureEvent,
   summarizeCameraFeatureWindow,
@@ -97,5 +98,47 @@ describe("camera feature worker", () => {
       ),
     ).toThrow(/raw camera frame data/);
     database.close();
+  });
+});
+
+describe("camera panel view model", () => {
+  test("shows blocked permission and privacy-safe local-only status", () => {
+    const view = cameraPanelViewModel({ enabled: false, permission: "denied" });
+
+    expect(view.status).toBe("Camera blocked");
+    expect(view.permissionStatus.label).toBe("Permission blocked");
+    expect(view.enabledStatus.label).toBe("Feature collection off");
+    expect(view.featureHeartbeat.label).toBe("No derived feature heartbeat yet");
+    expect(view.qualityStatus.label).toBe("Quality unavailable");
+    expect(view.localOnlyStatus.label).toBe("Local only");
+    expect(view.privacyNote).toBe("No raw camera frames are stored or exported by default.");
+  });
+
+  test("shows waiting state when enabled before the first feature heartbeat", () => {
+    const view = cameraPanelViewModel({ enabled: true, permission: "granted" });
+
+    expect(view.status).toBe("Camera features waiting");
+    expect(view.enabledStatus.label).toBe("Feature collection on");
+    expect(view.featureHeartbeat.label).toBe("Waiting for derived feature heartbeat");
+    expect(view.qualityStatus.label).toBe("Degraded until features arrive");
+  });
+
+  test("translates quality flags into degraded copy with last heartbeat", () => {
+    const featureWindow = summarizeCameraFeatureWindow(
+      [
+        { ...goodFrame, monotonic_ms: 2_000, face_present: false, brightness: 0.1 },
+        { ...goodFrame, monotonic_ms: 2_500, face_present: false, brightness: 0.2 },
+      ],
+      { window_ms: 1_000, min_frames: 3 },
+    );
+    const view = cameraPanelViewModel({ enabled: true, permission: "granted", featureWindow });
+
+    expect(view.status).toBe("Camera features degraded");
+    expect(view.featureHeartbeat.label).toBe("Derived feature heartbeat received");
+    expect(view.featureHeartbeat.detail).toContain("3.0s");
+    expect(view.qualityStatus.label).toBe("Feature quality degraded");
+    expect(view.qualityStatus.detail).toContain("Low sample count");
+    expect(view.qualityStatus.detail).toContain("Face not consistently visible");
+    expect(view.qualityStatus.detail).toContain("Low light");
   });
 });

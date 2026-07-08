@@ -1,3 +1,4 @@
+import type { JsonObject } from "@inquiry/schema";
 import type { InquiryDatabase } from "../db";
 
 export function deleteLocalSession(db: InquiryDatabase, sessionId: string): { session_id: string; deleted: true } {
@@ -14,10 +15,16 @@ export function queueCloudDeletion(db: InquiryDatabase, sessionId: string): void
 
   db.enqueueSyncPayload({
     session_id: null,
-    payload: {
-      action: "delete-cloud-aggregates",
-      session_id: sessionId,
-    },
+    payload: createCloudDeleteTombstone(sessionId),
     state: "queued",
   });
+}
+
+function createCloudDeleteTombstone(sessionId: string): JsonObject {
+  return {
+    action: "delete-cloud-aggregates",
+    session_id: sessionId,
+    privacy_class: "redacted-sync",
+    retention_policy: "cloud-redacted",
+  };
 }
