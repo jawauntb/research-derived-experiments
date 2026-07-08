@@ -1,7 +1,8 @@
 import { describe, expect, test } from "bun:test";
-import { createEvent } from "@inquiry/schema";
+import { createEvent, type SessionRecord } from "@inquiry/schema";
 import type { RepairCandidate } from "@inquiry/signals";
 import { createSessionReplayReport } from "../src/main/reports/sessionReplay";
+import { createInitialAppViewModel, renderApp, type InquiryDesktopBridge } from "../src/renderer/App";
 import { renderProbePanel } from "../src/renderer/probes/ProbePanel";
 import { renderReplayTimeline } from "../src/renderer/replay/ReplayTimeline";
 
@@ -263,6 +264,196 @@ describe("session replay report", () => {
     }
   });
 
+  test("renders an explicit no-event replay state", () => {
+    const documentStub = new FakeDocument();
+    const globalWithDocument = globalThis as unknown as { document?: unknown };
+    const originalDocument = globalWithDocument.document;
+    globalWithDocument.document = documentStub;
+
+    try {
+      const root = documentStub.createElement("div");
+      const report = createSessionReplayReport([]);
+
+      renderReplayTimeline(root as unknown as HTMLElement, report);
+
+      expect(root.textContent).toContain("No replay evidence yet");
+      expect(root.textContent).toContain("Stop a session after browser, camera, label, or probe events arrive");
+    } finally {
+      globalWithDocument.document = originalDocument;
+    }
+  });
+
+  test("refreshes replay after stop and repair answers", async () => {
+    const documentStub = new FakeDocument();
+    const globalWithDocument = globalThis as unknown as { document?: unknown };
+    const originalDocument = globalWithDocument.document;
+    globalWithDocument.document = documentStub;
+
+    try {
+      const root = documentStub.createElement("div");
+      const session = sessionFixture("recording");
+      const stopped = { ...session, recording_state: "stopped" as const, ended_at: "2026-07-07T12:01:00.000Z" };
+      let replayCalls = 0;
+      let stoppedSession = false;
+      let answeredRepair = false;
+      const bridge: InquiryDesktopBridge = {
+        status: {
+          current: async () => ({
+            session: stoppedSession ? stopped : session,
+            recordingState: stoppedSession ? "stopped" : "recording",
+            ingestUrl: "http://127.0.0.1:39170",
+            pairingToken: "pairing-token",
+          }),
+        },
+        session: {
+          currentSession: async () => (stoppedSession ? stopped : session),
+          startSession: async () => session,
+          pauseSession: async () => ({ ...session, recording_state: "paused" }),
+          resumeSession: async () => session,
+          stopSession: async () => {
+            stoppedSession = true;
+            return stopped;
+          },
+          addLabel: async () =>
+            createEvent({
+              session_id: session.session_id,
+              source: "desktop-system",
+              source_version: "test@0.1.0",
+              monotonic_ms: 1,
+              event_type: "label.added",
+              payload: { label: "flow" },
+              privacy_class: "local-derived",
+              retention_policy: "local-default",
+            }),
+        },
+        camera: {
+          requestCamera: async () => "granted",
+          disableCamera: async () => undefined,
+          appendFeatureWindow: async () =>
+            createEvent({
+              session_id: session.session_id,
+              source: "desktop-camera",
+              source_version: "test@0.1.0",
+              monotonic_ms: 1,
+              event_type: "camera.feature_window",
+              payload: { window_ms: 1000 },
+              privacy_class: "local-derived",
+              retention_policy: "local-default",
+            }),
+        },
+        replay: {
+          report: async () => {
+            replayCalls += 1;
+            return stoppedSession
+              ? createSessionReplayReport([
+                  createEvent({
+                    session_id: session.session_id,
+                    source: "browser",
+                    source_version: "test@0.1.0",
+                    monotonic_ms: 500,
+                    event_type: "browser.scroll",
+                    payload: { delta_y: 4_800, scroll_y: 4_800, viewport_h: 900 },
+                    privacy_class: "local-derived",
+                    retention_policy: "local-default",
+                  }),
+                  createEvent({
+                    session_id: session.session_id,
+                    source: "browser",
+                    source_version: "test@0.1.0",
+                    monotonic_ms: 900,
+                    event_type: "browser.dwell",
+                    payload: { dwell_ms: 200 },
+                    privacy_class: "local-derived",
+                    retention_policy: "local-default",
+                  }),
+                  createEvent({
+                    session_id: session.session_id,
+                    source: "browser",
+                    source_version: "test@0.1.0",
+                    monotonic_ms: 1_000,
+                    event_type: "browser.copy",
+                    payload: { hostname_hash: "host", url_hash: "page", selection_length: 20, range_count: 1 },
+                    privacy_class: "local-derived",
+                    retention_policy: "local-default",
+                  }),
+                  ...(answeredRepair
+                    ? [
+                        createEvent({
+                          session_id: session.session_id,
+                          source: "desktop-system",
+                          source_version: "test@0.1.0",
+                          monotonic_ms: 2_000,
+                          event_type: "repair.outcome",
+                          payload: { repair_id: "repair-render-1", outcome: "answered" },
+                          privacy_class: "local-derived",
+                          retention_policy: "local-default",
+                        }),
+                      ]
+                    : []),
+                ])
+              : null;
+          },
+        },
+        repair: {
+          accept: async () =>
+            createEvent({
+              session_id: session.session_id,
+              source: "desktop-system",
+              source_version: "test@0.1.0",
+              monotonic_ms: 1,
+              event_type: "probe.requested",
+              payload: { repair_id: "repair-render-1" },
+              privacy_class: "local-derived",
+              retention_policy: "local-default",
+            }),
+          answer: async () => {
+            answeredRepair = true;
+            return [];
+          },
+          dismiss: async () =>
+            createEvent({
+              session_id: session.session_id,
+              source: "desktop-system",
+              source_version: "test@0.1.0",
+              monotonic_ms: 1,
+              event_type: "repair.outcome",
+              payload: { repair_id: "repair-render-1", outcome: "dismissed" },
+              privacy_class: "local-derived",
+              retention_policy: "local-default",
+            }),
+        },
+      };
+
+      renderApp(root as unknown as HTMLElement, bridge, {
+        ...createInitialAppViewModel(session),
+        replay: null,
+      });
+      await flushAsync();
+
+      const stopButton = root.findAllByTag("button").find((button) => button.textContent === "Stop");
+      expect(stopButton).toBeDefined();
+      stopButton!.click();
+      await flushAsync();
+
+      expect(root.textContent).toContain("Evidence");
+      expect(root.textContent).toContain("Raw selected or copied text was not stored");
+      expect(replayCalls).toBeGreaterThanOrEqual(2);
+
+      const textarea = root.findByTag("textarea");
+      const saveButton = root.findAllByTag("button").find((button) => button.textContent === "Save");
+      expect(textarea).toBeDefined();
+      expect(saveButton).toBeDefined();
+      textarea!.value = "The copied claim needed a concrete check.";
+      saveButton!.click();
+      await flushAsync();
+
+      expect(answeredRepair).toBe(true);
+      expect(replayCalls).toBeGreaterThanOrEqual(3);
+    } finally {
+      globalWithDocument.document = originalDocument;
+    }
+  });
+
   test("renders repair probe actions for start, answer, and dismiss", () => {
     const documentStub = new FakeDocument();
     const globalWithDocument = globalThis as unknown as { document?: unknown };
@@ -335,6 +526,9 @@ class FakeElement {
   max = "";
   step = "";
   value = "";
+  checked = false;
+  disabled = false;
+  attributes: Record<string, string> = {};
   private ownText = "";
   private children: Array<FakeElement | FakeText> = [];
   private clickListeners: Array<() => void> = [];
@@ -365,6 +559,10 @@ class FakeElement {
     if (type === "click") {
       this.clickListeners.push(listener);
     }
+  }
+
+  setAttribute(name: string, value: string): void {
+    this.attributes[name] = value;
   }
 
   click(): void {
@@ -410,6 +608,21 @@ class FakeElement {
 
 class FakeText {
   constructor(readonly textContent: string) {}
+}
+
+function sessionFixture(recordingState: SessionRecord["recording_state"]): SessionRecord {
+  return {
+    session_id: "replay-render-session",
+    title: "Replay renderer session",
+    started_at: "2026-07-07T12:00:00.000Z",
+    recording_state: recordingState,
+    created_at: "2026-07-07T12:00:00.000Z",
+    updated_at: "2026-07-07T12:00:00.000Z",
+  };
+}
+
+async function flushAsync(): Promise<void> {
+  await new Promise((resolve) => setTimeout(resolve, 0));
 }
 
 function repairCandidateFixture(): RepairCandidate {

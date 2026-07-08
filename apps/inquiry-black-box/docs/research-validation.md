@@ -35,6 +35,53 @@ Rejected claims:
 | G4. Repair utility | Do suggested repairs improve recall or user-rated usefulness? | A/B or within-user comparison of repair prompt versus no prompt or generic prompt. | Random repair assignment, stale prompt, mismatched segment prompt. | Keep repair templates that improve outcomes without increasing annoyance. |
 | G5. EEG-over-browser later | Does EEG add value beyond stimulus, browser, and camera/eyetrack traces? | Separate research PR in `coherence-testbench`; leave-subject/session-out residual tests. | Cross-subject shuffle, within-video permutation, fake shifted EEG windows, stimulus-only and browser-only baselines. | Only revisit product EEG if residual gates clear and privacy/UX costs are justified. |
 
+## Current Fixture Artifact
+
+The first R15 / AE7 artifact is a fixture smoke report, not a state-prediction
+benchmark:
+
+```bash
+bun run research/validation.ts \
+  --input tests/fixtures/research-session.jsonl \
+  --output research/validation-smoke-report.json \
+  --markdown research/validation-smoke-report.md \
+  --run-id fixture-smoke
+```
+
+Checked-in outputs:
+
+- `research/validation-smoke-report.json`
+- `research/validation-smoke-report.md`
+
+The script consumes local JSONL export rows and emits a validation table plus
+G0-G4 gate summaries. It does not read raw camera frames, raw typed answers, raw
+selected text, or raw stimulus/page text. The fixture uses redacted
+`stimulus.segmented` feature metadata for G1.
+
+### Export To Validation Rows
+
+| Export source | Validation row | Used by | Raw content policy |
+| --- | --- | --- | --- |
+| `label.added` with a segment target or timestamp | `label` | G0 reliability, G1 target smoke | Label class only; no free-text note required. |
+| `probe.answered` with `answer_quality` | `probe` | G0 reliability, G1 target smoke | Uses answer quality and length metadata; ignores raw answers. |
+| `repair.outcome` | `repair_outcome` | G0 reliability, G4 repair utility scaffold | Uses outcome/action IDs; ignores free-text answers or reasons. |
+| `stimulus.segmented` redacted features | `stimulus_segment` | G1 stimulus-only baseline | Uses density, novelty, transition count, and checkpoint flags only. |
+| Browser-derived replay markers from local events | `behavior_marker` | G2 browser residual scaffold | Uses derived marker kind/confidence/evidence count only. |
+| `camera.feature_window` quality flags | `camera_quality_flag` | G3 camera residual scaffold | Uses feature-window metadata and quality flags only; no frames. |
+
+Current fixture smoke result:
+
+- G0 reliability: smoke only; repeated fixture labels, probes, and repair
+  outcomes agree, but this is not a real reliability ceiling.
+- G1 stimulus-only baseline: deterministic fixture baseline runs, with negative
+  controls for shuffled segment order and shifted boundaries.
+- G2 browser residual: insufficient data until held-out sessions can be compared
+  against G1.
+- G3 camera residual: insufficient data until quality-stratified held-out
+  sessions exist; camera remains a weak auxiliary signal.
+- G4 repair utility: insufficient data until A/B or within-user repair
+  comparisons exist.
+
 ## Measurement Plan
 
 ### G0. Reliability Ceiling

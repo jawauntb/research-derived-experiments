@@ -1,4 +1,4 @@
-import { validateEvent, type EventEnvelope } from "@inquiry/schema";
+import { selectedTextPayloadFieldNames, validateEvent, type EventEnvelope } from "@inquiry/schema";
 
 export const DEFAULT_BRIDGE_ENDPOINT = "http://127.0.0.1:39170/v1/extension/events";
 export const BRIDGE_STATE_KEY = "inquiry.bridge.state";
@@ -36,6 +36,11 @@ export type FlushResult = {
 export type SessionControlResult = {
   recordingState: RecordingState;
   sessionId?: string;
+};
+
+export type SessionStatusResult = {
+  recordingState: RecordingState;
+  sessionId?: string | null;
 };
 
 export type FetchLike = (url: string, init?: RequestInit) => Promise<Response>;
@@ -77,6 +82,13 @@ export class BridgePostError extends Error {
   }
 }
 
+export class BridgeStatusError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "BridgeStatusError";
+  }
+}
+
 export const defaultPrivacyToggles: PrivacyToggles = {
   browser: true,
   typingMetrics: true,
@@ -93,7 +105,7 @@ export const disabledPrivacyToggles: PrivacyToggles = {
   media: false,
 };
 
-const rawSelectedTextPayloadKeys = ["selected_text", "copied_text", "highlight_text"] as const;
+const rawSelectedTextPayloadKeys = selectedTextPayloadFieldNames;
 
 export function defaultBridgeState(now = new Date()): BridgeState {
   return {
@@ -118,6 +130,9 @@ export async function postEventBatch(
 
   for (const event of events) {
     validateEvent(event);
+    if (event.session_id !== state.sessionId) {
+      throw new Error("event session does not match bridge session");
+    }
   }
 
   const fetchImpl = options.fetchImpl ?? fetch;
@@ -148,7 +163,7 @@ export async function postEventBatch(
 
 export async function postSessionControl(
   state: BridgeState,
-  input: { recordingState: Extract<RecordingState, "recording" | "stopped">; title?: string; monotonicMs?: number },
+  input: { recordingState: RecordingState; title?: string; monotonicMs?: number },
   options: { fetchImpl?: FetchLike; timeoutMs?: number } = {},
 ): Promise<SessionControlResult> {
   if (!state.pairingToken) {
@@ -195,6 +210,52 @@ export async function postSessionControl(
   return {
     recordingState,
     ...(typeof responseBody.session_id === "string" ? { sessionId: responseBody.session_id } : {}),
+  };
+}
+
+export async function fetchSessionStatus(
+  state: BridgeState,
+  options: { fetchImpl?: FetchLike; timeoutMs?: number } = {},
+): Promise<SessionStatusResult> {
+  if (!state.pairingToken) {
+    throw new PairingRequiredError();
+  }
+
+  const fetchImpl = options.fetchImpl ?? fetch;
+  const response = await fetchWithTimeout(
+    fetchImpl,
+    sessionControlEndpoint(state.endpoint),
+    {
+      method: "GET",
+      headers: {
+        "x-inquiry-pairing-token": state.pairingToken,
+      },
+    },
+    options.timeoutMs ?? 3_000,
+  );
+
+  if (response.status === 401 || response.status === 403) {
+    throw new PairingRejectedError(response.status);
+  }
+
+  if (!response.ok) {
+    throw new BridgePostError(response.status);
+  }
+
+  let responseBody: Record<string, unknown>;
+  try {
+    responseBody = (await response.json()) as Record<string, unknown>;
+  } catch {
+    throw new BridgeStatusError("desktop bridge returned invalid session status JSON");
+  }
+  if (!isRecordingState(responseBody.recording_state)) {
+    throw new BridgeStatusError("desktop bridge returned invalid session recording state");
+  }
+  return {
+    recordingState: responseBody.recording_state,
+    ...(typeof responseBody.session_id === "string" || responseBody.session_id === null
+      ? { sessionId: responseBody.session_id }
+      : {}),
   };
 }
 
@@ -464,7 +525,7 @@ function isEventEnvelope(value: unknown): value is EventEnvelope {
   }
 }
 
-function isRecordingState(value: unknown): value is RecordingState {
+export function isRecordingState(value: unknown): value is RecordingState {
   return value === "recording" || value === "paused" || value === "stopped";
 }
 

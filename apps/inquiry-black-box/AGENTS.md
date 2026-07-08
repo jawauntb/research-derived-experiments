@@ -29,6 +29,9 @@ bun run typecheck
 bun run test
 bun run test:e2e
 bun run build:prototype
+bun run package:extension
+bun run package:desktop
+bun run validation:smoke
 ```
 
 Modal checks:
@@ -58,6 +61,16 @@ bun run build:prototype
 bun run dev:desktop
 bun run dev:extension
 ```
+
+Release checklist:
+
+```bash
+bun run package:local
+bun run validation:smoke
+```
+
+Use `docs/release-checklist.md` for the full local, packaged, cloud, Modal,
+database, troubleshooting, and validation gate list.
 
 ## Architecture Map
 

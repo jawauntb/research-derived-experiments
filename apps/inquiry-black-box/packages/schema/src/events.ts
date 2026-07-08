@@ -2,6 +2,8 @@ import {
   assertNoBlockedPayload,
   isPrivacyClass,
   isRetentionPolicy,
+  rawTextPayloadFieldNames,
+  selectedTextPayloadFieldNames,
   type PrivacyClass,
   type RetentionPolicy,
 } from "./privacy";
@@ -235,8 +237,8 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-const rawStimulusTextFieldNames = new Set(["text", "rawText", "content", "html", "markdown", "excerpt"]);
-const rawBrowserSelectedTextFieldNames = new Set(["selected_text", "copied_text", "highlight_text"]);
+const rawStimulusTextFieldNames: ReadonlySet<string> = new Set(rawTextPayloadFieldNames);
+const rawBrowserSelectedTextFieldNames: ReadonlySet<string> = new Set(selectedTextPayloadFieldNames);
 
 function assertStimulusTextOptIn(event: EventEnvelope): void {
   if (!event.event_type.startsWith("stimulus.") || event.privacy_class === "document-opt-in") {

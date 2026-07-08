@@ -6,8 +6,25 @@
     <title>Inquiry Black Box</title>
     <style>
       :root {
-        color: #17202a;
-        background: #f6f7f9;
+        --surface: #eef2f5;
+        --surface-raised: #f8fafb;
+        --surface-inset: #e4eaee;
+        --ink: #16202a;
+        --muted: #5d6b78;
+        --line: #d4dde4;
+        --green: #0f6b55;
+        --green-soft: #dceee8;
+        --amber: #8a5b00;
+        --amber-soft: #fff3cf;
+        --rose: #a83347;
+        --rose-soft: #f9dfe5;
+        --blue: #245b93;
+        --blue-soft: #dceaf7;
+        --shadow-raised: 8px 8px 18px rgba(105, 122, 138, 0.22), -8px -8px 18px rgba(255, 255, 255, 0.92);
+        --shadow-pressed: inset 4px 4px 10px rgba(105, 122, 138, 0.2), inset -4px -4px 10px rgba(255, 255, 255, 0.9);
+        --focus: 0 0 0 3px rgba(36, 91, 147, 0.24);
+        color: var(--ink);
+        background: var(--surface);
         font-family:
           Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       }
@@ -18,6 +35,8 @@
 
       body {
         margin: 0;
+        min-height: 100vh;
+        background: var(--surface);
       }
 
       button,
@@ -27,23 +46,42 @@
       }
 
       button {
-        border: 1px solid #b9c2ce;
-        border-radius: 6px;
-        background: #ffffff;
-        color: #17202a;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        background: var(--surface-raised);
+        box-shadow: var(--shadow-raised);
+        color: var(--ink);
         cursor: pointer;
+        font-weight: 700;
         min-height: 34px;
-        padding: 6px 10px;
+        padding: 7px 12px;
+      }
+
+      button:hover:not(:disabled) {
+        border-color: var(--line);
+      }
+
+      button:active:not(:disabled) {
+        box-shadow: var(--shadow-pressed);
+        transform: translateY(1px);
       }
 
       button:disabled {
         cursor: not-allowed;
-        opacity: 0.45;
+        opacity: 0.54;
+      }
+
+      button:focus-visible,
+      input:focus-visible,
+      textarea:focus-visible {
+        box-shadow: var(--focus), var(--shadow-raised);
+        outline: none;
       }
 
       #app {
         display: grid;
         gap: 16px;
+        grid-template-columns: minmax(0, 1fr);
         margin: 0 auto;
         max-width: 1180px;
         padding: 20px;
@@ -53,10 +91,12 @@
       .session-controls,
       .camera-panel,
       .privacy-settings,
-      .replay-timeline {
-        background: #ffffff;
-        border: 1px solid #d8dee7;
+      .replay-timeline,
+      .probe-panel {
+        background: var(--surface-raised);
+        border: 1px solid rgba(255, 255, 255, 0.7);
         border-radius: 8px;
+        box-shadow: var(--shadow-raised);
         padding: 16px;
       }
 
@@ -67,7 +107,8 @@
 
       .app-header h1,
       .replay-timeline h2,
-      .privacy-settings h2 {
+      .privacy-settings h2,
+      .probe-panel h2 {
         font-size: 18px;
         line-height: 1.2;
         margin: 0;
@@ -80,13 +121,18 @@
       }
 
       .app-status-item {
+        background: var(--surface-inset);
+        border: 1px solid rgba(255, 255, 255, 0.62);
+        border-radius: 8px;
+        box-shadow: var(--shadow-pressed);
         display: grid;
         gap: 4px;
         min-width: 0;
+        padding: 10px;
       }
 
       .app-status-label {
-        color: #5f6f82;
+        color: var(--muted);
         font-size: 12px;
         text-transform: uppercase;
       }
@@ -106,27 +152,32 @@
       }
 
       .session-button-primary {
-        background: #116149;
-        border-color: #116149;
+        background: var(--green);
+        border-color: var(--green);
         color: #ffffff;
       }
 
       .session-button-danger {
-        border-color: #be3347;
-        color: #9f2637;
+        background: var(--rose-soft);
+        border-color: var(--rose-soft);
+        color: var(--rose);
       }
 
       .recording-state {
+        background: var(--surface-inset);
+        border-radius: 8px;
+        box-shadow: var(--shadow-pressed);
         display: inline-flex;
+        padding: 6px 10px;
         width: fit-content;
       }
 
       .recording-state-active {
-        color: #116149;
+        color: var(--green);
       }
 
       .recording-state-paused {
-        color: #7c5d00;
+        color: var(--amber);
       }
 
       .privacy-settings {
@@ -136,8 +187,82 @@
 
       .privacy-settings__row {
         align-items: center;
+        background: var(--surface-inset);
+        border-radius: 8px;
+        box-shadow: var(--shadow-pressed);
         display: flex;
         gap: 8px;
+        min-height: 34px;
+        padding: 6px 10px;
+      }
+
+      input[type="checkbox"] {
+        accent-color: var(--green);
+      }
+
+      textarea,
+      input[type="range"] {
+        accent-color: var(--blue);
+      }
+
+      .camera-status-list {
+        display: grid;
+        gap: 8px;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        margin: 12px 0 0;
+      }
+
+      .camera-status-list dt {
+        color: var(--muted);
+        font-size: 12px;
+        text-transform: uppercase;
+      }
+
+      .camera-status-list dd {
+        background: var(--surface-inset);
+        border-radius: 8px;
+        box-shadow: var(--shadow-pressed);
+        margin: 0;
+        min-height: 58px;
+        padding: 10px;
+      }
+
+      .camera-status-line {
+        display: grid;
+        gap: 4px;
+      }
+
+      .camera-status-line-good strong {
+        color: var(--green);
+      }
+
+      .camera-status-line-warn strong {
+        color: var(--amber);
+      }
+
+      .camera-status-line-blocked strong {
+        color: var(--rose);
+      }
+
+      .camera-status-line-muted strong,
+      .camera-privacy-note {
+        color: var(--muted);
+      }
+
+      .camera-quality-flags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        list-style: none;
+        margin: 12px 0 0;
+        padding: 0;
+      }
+
+      .camera-quality-flags li {
+        background: var(--amber-soft);
+        border-radius: 8px;
+        color: var(--amber);
+        padding: 5px 8px;
       }
 
       .replay-timeline ol,
@@ -148,6 +273,73 @@
 
       .replay-timeline li {
         margin: 8px 0;
+      }
+
+      .replay-state,
+      .replay-evidence,
+      .replay-heatmap {
+        background: var(--surface-inset);
+        border-radius: 8px;
+        box-shadow: var(--shadow-pressed);
+        margin-top: 12px;
+        padding: 12px;
+      }
+
+      .replay-state h3,
+      .replay-evidence h3,
+      .replay-heatmap h3 {
+        font-size: 14px;
+        margin: 0 0 8px;
+      }
+
+      .replay-state p,
+      .replay-evidence p,
+      .replay-heatmap p,
+      .probe-panel p,
+      .camera-privacy-note {
+        font-size: 13px;
+        line-height: 1.45;
+        margin: 8px 0 0;
+      }
+
+      .replay-timeline__actions {
+        background: var(--blue-soft);
+        border-radius: 8px;
+        color: #173d64;
+        margin-top: 12px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+      }
+
+      .probe-panel textarea {
+        background: var(--surface-inset);
+        border: 1px solid transparent;
+        border-radius: 8px;
+        box-shadow: var(--shadow-pressed);
+        display: block;
+        margin-top: 10px;
+        min-height: 88px;
+        padding: 10px;
+        resize: vertical;
+        width: 100%;
+      }
+
+      .probe-panel input[type="range"] {
+        display: block;
+        margin: 12px 0;
+        width: 100%;
+      }
+
+      @media (min-width: 900px) {
+        #app {
+          grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.2fr);
+        }
+
+        #app > div:first-child,
+        #app > div:nth-child(5),
+        #app > div:nth-child(6) {
+          grid-column: 1 / -1;
+        }
       }
     </style>
   </head>

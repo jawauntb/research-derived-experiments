@@ -1,0 +1,472 @@
+{
+  "artifact": "inquiry-validation-report/v1",
+  "run_id": "fixture-smoke",
+  "generated_at": "2026-07-07T14:00:07.300Z",
+  "scope": {
+    "requirements": [
+      "R15"
+    ],
+    "acceptance_examples": [
+      "AE7"
+    ],
+    "state_prediction_claims": "not-made"
+  },
+  "validation_rows": [
+    {
+      "kind": "behavior_marker",
+      "session_id": "fixture-local-session",
+      "source_event_id": "skim-risk:fixture-local-session:0",
+      "target_id": "skim-risk:fixture-local-session:0",
+      "value": "skim-risk",
+      "monotonic_ms": 0,
+      "privacy_class": "local-derived",
+      "smoke": true,
+      "metrics": {
+        "confidence": 0.72,
+        "evidence_event_count": 4
+      }
+    },
+    {
+      "kind": "behavior_marker",
+      "session_id": "fixture-local-session",
+      "source_event_id": "stuck-loop:fixture-local-session:0",
+      "target_id": "stuck-loop:fixture-local-session:0",
+      "value": "stuck-loop",
+      "monotonic_ms": 0,
+      "privacy_class": "local-derived",
+      "smoke": true,
+      "metrics": {
+        "confidence": 0.76,
+        "evidence_event_count": 3
+      }
+    },
+    {
+      "kind": "behavior_marker",
+      "session_id": "fixture-local-session",
+      "source_event_id": "tab-churn:fixture-local-session:0",
+      "target_id": "tab-churn:fixture-local-session:0",
+      "value": "tab-churn",
+      "monotonic_ms": 0,
+      "privacy_class": "local-derived",
+      "smoke": true,
+      "metrics": {
+        "confidence": 0.7,
+        "evidence_event_count": 4
+      }
+    },
+    {
+      "kind": "stimulus_segment",
+      "session_id": "fixture-local-session",
+      "source_event_id": "fixture-stimulus-segmented",
+      "target_id": "demo-article:1",
+      "value": "demo-article:1",
+      "privacy_class": "local-derived",
+      "smoke": true,
+      "segment_id": "demo-article:1",
+      "ordinal": 1,
+      "start_ms": 0,
+      "end_ms": 4000,
+      "monotonic_ms": 0,
+      "density": 0.42,
+      "term_novelty": 0.38,
+      "transition_count": 1,
+      "quiz_checkpoint_candidate": false,
+      "metrics": {
+        "ordinal": 1,
+        "start_ms": 0,
+        "end_ms": 4000,
+        "density": 0.42,
+        "term_novelty": 0.38,
+        "transition_count": 1,
+        "quiz_checkpoint_candidate": false
+      }
+    },
+    {
+      "kind": "behavior_marker",
+      "session_id": "fixture-local-session",
+      "source_event_id": "rewind:fixture-media-1",
+      "target_id": "rewind:fixture-media-1",
+      "value": "rewind",
+      "monotonic_ms": 3000,
+      "privacy_class": "local-derived",
+      "smoke": true,
+      "metrics": {
+        "confidence": 0.74,
+        "evidence_event_count": 1
+      }
+    },
+    {
+      "kind": "behavior_marker",
+      "session_id": "fixture-local-session",
+      "source_event_id": "copied-passage:copied-selection:fixture-local-session:3500:00c2196c",
+      "target_id": "copied-passage:copied-selection:fixture-local-session:3500:00c2196c",
+      "value": "copied-passage",
+      "monotonic_ms": 3500,
+      "privacy_class": "local-derived",
+      "smoke": true,
+      "metrics": {
+        "confidence": 0.86,
+        "evidence_event_count": 2
+      }
+    },
+    {
+      "kind": "stimulus_segment",
+      "session_id": "fixture-local-session",
+      "source_event_id": "fixture-stimulus-segmented",
+      "target_id": "demo-article:2",
+      "value": "demo-article:2",
+      "privacy_class": "local-derived",
+      "smoke": true,
+      "segment_id": "demo-article:2",
+      "ordinal": 2,
+      "start_ms": 4000,
+      "end_ms": 8000,
+      "monotonic_ms": 4000,
+      "density": 0.82,
+      "term_novelty": 0.74,
+      "transition_count": 4,
+      "quiz_checkpoint_candidate": true,
+      "metrics": {
+        "ordinal": 2,
+        "start_ms": 4000,
+        "end_ms": 8000,
+        "density": 0.82,
+        "term_novelty": 0.74,
+        "transition_count": 4,
+        "quiz_checkpoint_candidate": true
+      }
+    },
+    {
+      "kind": "behavior_marker",
+      "session_id": "fixture-local-session",
+      "source_event_id": "label:fixture-label-1",
+      "target_id": "label:fixture-label-1",
+      "value": "label",
+      "monotonic_ms": 5000,
+      "privacy_class": "local-derived",
+      "smoke": true,
+      "metrics": {
+        "confidence": 1,
+        "evidence_event_count": 1
+      }
+    },
+    {
+      "kind": "label",
+      "session_id": "fixture-local-session",
+      "source_event_id": "fixture-label-1",
+      "target_id": "demo-article:2",
+      "value": "confused-good",
+      "monotonic_ms": 5000,
+      "privacy_class": "local-derived",
+      "smoke": true
+    },
+    {
+      "kind": "behavior_marker",
+      "session_id": "fixture-local-session",
+      "source_event_id": "label:fixture-label-2",
+      "target_id": "label:fixture-label-2",
+      "value": "label",
+      "monotonic_ms": 5100,
+      "privacy_class": "local-derived",
+      "smoke": true,
+      "metrics": {
+        "confidence": 1,
+        "evidence_event_count": 1
+      }
+    },
+    {
+      "kind": "label",
+      "session_id": "fixture-local-session",
+      "source_event_id": "fixture-label-2",
+      "target_id": "demo-article:2",
+      "value": "confused-good",
+      "monotonic_ms": 5100,
+      "privacy_class": "local-derived",
+      "smoke": true
+    },
+    {
+      "kind": "behavior_marker",
+      "session_id": "fixture-local-session",
+      "source_event_id": "probe:fixture-probe-answered-1",
+      "target_id": "probe:fixture-probe-answered-1",
+      "value": "probe",
+      "monotonic_ms": 6500,
+      "privacy_class": "local-derived",
+      "smoke": true,
+      "metrics": {
+        "confidence": 0.8,
+        "evidence_event_count": 1
+      }
+    },
+    {
+      "kind": "probe",
+      "session_id": "fixture-local-session",
+      "source_event_id": "fixture-probe-answered-1",
+      "target_id": "demo-article:2",
+      "value": "partial",
+      "monotonic_ms": 6500,
+      "privacy_class": "local-derived",
+      "smoke": true
+    },
+    {
+      "kind": "behavior_marker",
+      "session_id": "fixture-local-session",
+      "source_event_id": "probe:fixture-probe-answered-2",
+      "target_id": "probe:fixture-probe-answered-2",
+      "value": "probe",
+      "monotonic_ms": 6700,
+      "privacy_class": "local-derived",
+      "smoke": true,
+      "metrics": {
+        "confidence": 0.8,
+        "evidence_event_count": 1
+      }
+    },
+    {
+      "kind": "probe",
+      "session_id": "fixture-local-session",
+      "source_event_id": "fixture-probe-answered-2",
+      "target_id": "demo-article:2",
+      "value": "partial",
+      "monotonic_ms": 6700,
+      "privacy_class": "local-derived",
+      "smoke": true
+    },
+    {
+      "kind": "camera_quality_flag",
+      "session_id": "fixture-local-session",
+      "source_event_id": "fixture-camera-1",
+      "target_id": "fixture-camera-1",
+      "value": "low-light",
+      "monotonic_ms": 6800,
+      "privacy_class": "local-derived",
+      "smoke": true,
+      "quality_flags": [
+        "low-light"
+      ]
+    },
+    {
+      "kind": "repair_outcome",
+      "session_id": "fixture-local-session",
+      "source_event_id": "fixture-repair-outcome-1",
+      "target_id": "demo-article:2",
+      "value": "rated-useful",
+      "monotonic_ms": 6950,
+      "privacy_class": "local-derived",
+      "smoke": true
+    },
+    {
+      "kind": "repair_outcome",
+      "session_id": "fixture-local-session",
+      "source_event_id": "fixture-repair-outcome-2",
+      "target_id": "demo-article:2",
+      "value": "rated-useful",
+      "monotonic_ms": 6980,
+      "privacy_class": "local-derived",
+      "smoke": true
+    },
+    {
+      "kind": "stimulus_segment",
+      "session_id": "fixture-local-session",
+      "source_event_id": "fixture-stimulus-segmented",
+      "target_id": "demo-article:3",
+      "value": "demo-article:3",
+      "privacy_class": "local-derived",
+      "smoke": true,
+      "segment_id": "demo-article:3",
+      "ordinal": 3,
+      "start_ms": 8000,
+      "end_ms": 12000,
+      "monotonic_ms": 8000,
+      "density": 0.35,
+      "term_novelty": 0.31,
+      "transition_count": 1,
+      "quiz_checkpoint_candidate": false,
+      "metrics": {
+        "ordinal": 3,
+        "start_ms": 8000,
+        "end_ms": 12000,
+        "density": 0.35,
+        "term_novelty": 0.31,
+        "transition_count": 1,
+        "quiz_checkpoint_candidate": false
+      }
+    }
+  ],
+  "gates": {
+    "g0": {
+      "status": "smoke",
+      "repeated_target_count": 3,
+      "agreement_mean": 1,
+      "rows": [
+        {
+          "kind": "label",
+          "target_id": "demo-article:2",
+          "observations": 2,
+          "majority_value": "confused-good",
+          "agreement": 1
+        },
+        {
+          "kind": "probe",
+          "target_id": "demo-article:2",
+          "observations": 2,
+          "majority_value": "partial",
+          "agreement": 1
+        },
+        {
+          "kind": "repair_outcome",
+          "target_id": "demo-article:2",
+          "observations": 2,
+          "majority_value": "rated-useful",
+          "agreement": 1
+        }
+      ],
+      "negative_controls": [
+        {
+          "control": "randomly-paired-labels",
+          "status": "insufficient-data",
+          "note": "Needs multiple sessions before random-pair reliability is meaningful."
+        },
+        {
+          "control": "duplicate-session-disagreement-audit",
+          "status": "insufficient-data",
+          "note": "Needs repeated exported sessions, not a single fixture."
+        }
+      ],
+      "decision": "Fixture repeats are internally consistent, but this is only a smoke ceiling; collect real repeated labels, probes, and outcomes before modeling."
+    },
+    "g1": {
+      "status": "smoke",
+      "baseline": {
+        "top_segment_id": "demo-article:2",
+        "target_segment_ids": [
+          "demo-article:2"
+        ],
+        "hit_at_1": true,
+        "segment_scores": [
+          {
+            "segment_id": "demo-article:2",
+            "score": 0.82,
+            "density": 0.82,
+            "term_novelty": 0.74,
+            "transition_count": 4,
+            "quiz_checkpoint_candidate": true
+          },
+          {
+            "segment_id": "demo-article:1",
+            "score": 0.39,
+            "density": 0.42,
+            "term_novelty": 0.38,
+            "transition_count": 1,
+            "quiz_checkpoint_candidate": false
+          },
+          {
+            "segment_id": "demo-article:3",
+            "score": 0.33,
+            "density": 0.35,
+            "term_novelty": 0.31,
+            "transition_count": 1,
+            "quiz_checkpoint_candidate": false
+          }
+        ]
+      },
+      "negative_controls": [
+        {
+          "control": "shuffled-segment-order",
+          "top_segment_id": "demo-article:3",
+          "hit_at_1": false,
+          "note": "Deterministic one-step rotation assigns feature scores to the wrong segment IDs."
+        },
+        {
+          "control": "shifted-boundaries",
+          "top_segment_id": "demo-article:2",
+          "hit_at_1": true,
+          "note": "Targets are re-associated after shifting segment windows by half a segment."
+        }
+      ],
+      "decision": "Stimulus-only smoke baseline is available; product models must beat it on held-out sessions before any user-specific claim."
+    },
+    "g2": {
+      "status": "insufficient-data",
+      "available_sessions": 1,
+      "available_targets": 1,
+      "browser_marker_counts": {
+        "skim-risk": 1,
+        "stuck-loop": 1,
+        "tab-churn": 1,
+        "rewind": 1,
+        "copied-passage": 1,
+        "label": 2,
+        "probe": 2
+      },
+      "threshold": "At least 5 real sessions with held-out evaluation after the G1 stimulus-only baseline.",
+      "decision": "Do not claim browser-behavior residual value from fixture smoke; collect held-out sessions and compare against G1."
+    },
+    "g3": {
+      "status": "insufficient-data",
+      "available_sessions": 1,
+      "available_targets": 1,
+      "browser_marker_counts": {
+        "skim-risk": 1,
+        "stuck-loop": 1,
+        "tab-churn": 1,
+        "rewind": 1,
+        "copied-passage": 1,
+        "label": 2,
+        "probe": 2
+      },
+      "camera_feature_windows": 1,
+      "quality_flag_counts": {
+        "low-light": 1
+      },
+      "uses_raw_camera_frames": false,
+      "threshold": "At least 5 real sessions with quality-stratified held-out residual lift after G1 and G2.",
+      "decision": "Camera features remain weak auxiliary metadata; fixture smoke only proves quality flags can be tabulated."
+    },
+    "g4": {
+      "status": "insufficient-data",
+      "repair_outcome_count": 2,
+      "outcome_counts": {
+        "rated-useful": 2
+      },
+      "threshold": "A/B or within-user comparison of heatmap repair prompts versus no, generic, random, or stale prompts.",
+      "decision": "Repair outcomes are present as smoke rows, but utility needs a comparison group before keep/drop decisions."
+    }
+  },
+  "privacy_checks": {
+    "uses_raw_camera_frames": false,
+    "uses_raw_typed_content": false,
+    "excluded_payload_fields": [
+      "answer",
+      "content",
+      "copied_text",
+      "frame",
+      "highlight_text",
+      "html",
+      "key",
+      "question",
+      "rawFrame",
+      "rawText",
+      "selected_text",
+      "text",
+      "typed_text",
+      "user_response",
+      "video"
+    ]
+  },
+  "interpretation": {
+    "proven": [
+      "Fixture JSONL converts to validation rows without raw camera frames, raw typed content, or raw stimulus text.",
+      "Stimulus-only G1 baseline and deterministic negative controls run from redacted segment features."
+    ],
+    "smoke": [
+      "G0 agreement is fixture smoke over repeated labels, probes, and repair outcomes.",
+      "G1 hit-at-1 is fixture smoke and is not evidence of personalized state prediction."
+    ],
+    "insufficient_data": [
+      "G2 browser residual needs held-out sessions after G1.",
+      "G3 camera residual needs quality-stratified held-out sessions and remains auxiliary only.",
+      "G4 repair utility needs A/B or within-user repair comparisons."
+    ]
+  }
+}

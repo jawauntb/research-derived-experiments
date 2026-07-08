@@ -8,15 +8,36 @@ export function renderReplayTimeline(container: HTMLElement, memo: ReplayMemo): 
   title.textContent = "Replay";
   section.append(title);
 
+  if (memo.episodes.length === 0 && memo.markers.length === 0 && memo.heatmap.length === 0) {
+    section.append(
+      renderReplayState(
+        "No replay evidence yet",
+        "Stop a session after browser, camera, label, or probe events arrive. Replay uses evidence events, not hidden page text or raw camera frames.",
+      ),
+    );
+    container.replaceChildren(section);
+    return;
+  }
+
   if (memo.episodes.length > 0) {
     section.append(renderEpisodes(memo.episodes));
+  } else {
+    section.append(
+      renderReplayState(
+        "No evidence episodes yet",
+        "Copy, highlight, selected-text opt-in, labels, probes, or camera feature windows will appear here when available.",
+      ),
+    );
   }
 
   const list = document.createElement("ol");
+  list.className = "replay-marker-list";
   for (const marker of memo.markers) {
     list.append(renderMarker(marker));
   }
-  section.append(list);
+  if (memo.markers.length > 0) {
+    section.append(list);
+  }
 
   if (memo.heatmap.length > 0) {
     section.append(renderHeatmap(memo.heatmap));
@@ -24,7 +45,11 @@ export function renderReplayTimeline(container: HTMLElement, memo: ReplayMemo): 
 
   const actions = document.createElement("ul");
   actions.className = "replay-timeline__actions";
-  for (const action of memo.next_actions) {
+  const nextActions =
+    memo.next_actions.length > 0
+      ? memo.next_actions
+      : ["No repair prompt yet; collect more browser, stimulus, camera, label, or probe evidence before acting."];
+  for (const action of nextActions) {
     const item = document.createElement("li");
     item.textContent = action;
     actions.append(item);
@@ -32,6 +57,19 @@ export function renderReplayTimeline(container: HTMLElement, memo: ReplayMemo): 
   section.append(actions);
 
   container.replaceChildren(section);
+}
+
+function renderReplayState(titleText: string, detailText: string): HTMLElement {
+  const state = document.createElement("section");
+  state.className = "replay-state";
+
+  const title = document.createElement("h3");
+  title.textContent = titleText;
+  const detail = document.createElement("p");
+  detail.textContent = detailText;
+
+  state.append(title, detail);
+  return state;
 }
 
 function renderEpisodes(episodes: EvidenceEpisode[]): HTMLElement {

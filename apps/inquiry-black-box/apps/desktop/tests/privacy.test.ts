@@ -57,13 +57,79 @@ describe("privacy controls", () => {
     expect(exported.jsonl).toContain("camera.feature_window");
     expect(exported.jsonl).not.toContain("debug-only");
     expect(database.getSession(session.session_id)).toBeNull();
+    expect(database.listEvents(session.session_id)).toEqual([]);
     expect(database.listSyncQueue()).toHaveLength(1);
     const tombstone = database.listSyncQueue()[0]?.payload;
     expect(tombstone).toMatchObject({
       action: "delete-cloud-aggregates",
       session_id: session.session_id,
+      privacy_class: "redacted-sync",
+      retention_policy: "cloud-redacted",
     });
     expect(JSON.stringify(tombstone)).not.toContain("Privacy session");
+    expect(JSON.stringify(tombstone)).not.toContain("camera.feature_window");
+    database.close();
+  });
+
+  test("exports selected text only when the event is document-opt-in", () => {
+    const database = createInquiryDatabase();
+    const session = database.createSession({ title: "Selected text session", session_id: "session-privacy-2" });
+    database.appendEvent(
+      createEvent({
+        event_id: "copy-derived",
+        session_id: session.session_id,
+        source: "browser",
+        source_version: "extension@0.1.0",
+        monotonic_ms: 10,
+        event_type: "browser.copy",
+        payload: {
+          hostname_hash: "h_demo",
+          url_hash: "h_page",
+          selection_length: 21,
+          selection_hash: "h_unopted_claim",
+        },
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    );
+    database.appendEvent(
+      createEvent({
+        event_id: "copy-document-opt-in",
+        session_id: session.session_id,
+        source: "browser",
+        source_version: "extension@0.1.0",
+        monotonic_ms: 11,
+        event_type: "browser.copy",
+        payload: {
+          hostname_hash: "h_demo",
+          url_hash: "h_page",
+          selection_length: 18,
+          selected_text: "opted excerpt",
+        },
+        privacy_class: "document-opt-in",
+        retention_policy: "session-delete",
+      }),
+    );
+
+    const exported = exportSession(database, session.session_id);
+    const parsed = exported.jsonl
+      .trim()
+      .split("\n")
+      .map((line) => JSON.parse(line) as { type: string; event?: { event_id: string; payload: Record<string, unknown> } });
+    const exportedEvents = parsed.filter((line) => line.type === "event").map((line) => line.event);
+
+    expect(exported.jsonl).toContain("selection_hash");
+    expect(exported.jsonl).toContain("opted excerpt");
+    expect(exportedEvents).toEqual([
+      expect.objectContaining({
+        event_id: "copy-derived",
+        payload: expect.not.objectContaining({ selected_text: expect.any(String) }),
+      }),
+      expect.objectContaining({
+        event_id: "copy-document-opt-in",
+        payload: expect.objectContaining({ selected_text: "opted excerpt" }),
+      }),
+    ]);
     database.close();
   });
 });

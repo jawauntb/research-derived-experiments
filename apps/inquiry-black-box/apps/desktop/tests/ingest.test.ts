@@ -50,6 +50,16 @@ function sessionControlRequest(body: unknown, overrides: { origin?: string; toke
   });
 }
 
+function sessionStatusRequest(overrides: { origin?: string; token?: string } = {}): Request {
+  return new Request("http://127.0.0.1:39170/v1/extension/session", {
+    method: "GET",
+    headers: {
+      "x-inquiry-pairing-token": overrides.token ?? token(),
+      origin: overrides.origin ?? origin,
+    },
+  });
+}
+
 describe("desktop extension ingest", () => {
   test("accepts valid extension events and rejects invalid token or origin", async () => {
     const database = createInquiryDatabase();
@@ -150,10 +160,21 @@ describe("desktop extension ingest", () => {
     expect(response.status).toBe(202);
     expect(body).toMatchObject({ accepted: 1, event_ids: ["extension-event-1"] });
     expect(database.listEvents(session.session_id).map((stored) => stored.event_id)).toContain("extension-event-1");
+
+    const staleEvent = { ...event, event_id: "extension-event-stale", session_id: "stale-session" };
+    const stale = await handler(
+      extensionBatchRequest({
+        session_id: session.session_id,
+        source: "chrome-extension",
+        events: [staleEvent],
+      }),
+    );
+    expect(stale.status).toBe(400);
+    expect(database.listEvents(session.session_id).map((stored) => stored.event_id)).not.toContain("extension-event-stale");
     database.close();
   });
 
-  test("allows a paired extension to start and stop the desktop session", async () => {
+  test("allows a paired extension to start, pause, resume, and stop the desktop session", async () => {
     const database = createInquiryDatabase();
     const sessions = createSessionController(database, {
       nowIso: () => "2026-07-07T12:10:00.000Z",
@@ -187,6 +208,18 @@ describe("desktop extension ingest", () => {
     expect(repeatedStart.status).toBe(200);
     expect(repeatedBody.session_id).toBe(sessionId);
 
+    const paused = await handler(sessionControlRequest({ recording_state: "paused", monotonic_ms: 2_500 }));
+    const pausedBody = await paused.json();
+    expect(paused.status).toBe(200);
+    expect(pausedBody).toMatchObject({ ok: true, session_id: sessionId, recording_state: "paused" });
+    expect(database.getSession(sessionId)?.recording_state).toBe("paused");
+
+    const resumed = await handler(sessionControlRequest({ recording_state: "recording", monotonic_ms: 3_000 }));
+    const resumedBody = await resumed.json();
+    expect(resumed.status).toBe(200);
+    expect(resumedBody).toMatchObject({ ok: true, session_id: sessionId, recording_state: "recording" });
+    expect(database.getSession(sessionId)?.recording_state).toBe("recording");
+
     const stopped = await handler(sessionControlRequest({ recording_state: "stopped" }));
     const stoppedBody = await stopped.json();
     expect(stopped.status).toBe(200);
@@ -195,6 +228,42 @@ describe("desktop extension ingest", () => {
 
     const invalidToken = await handler(sessionControlRequest({ recording_state: "recording" }, { token: "bad-token" }));
     expect(invalidToken.status).toBe(401);
+    database.close();
+  });
+
+  test("returns authoritative desktop session status behind pairing checks", async () => {
+    const database = createInquiryDatabase();
+    const sessions = createSessionController(database, {
+      nowIso: () => "2026-07-07T12:15:00.000Z",
+      nowMs: () => issuedAtMs,
+    });
+    const handler = createIngestRequestHandler({
+      allowedOrigins: [origin],
+      database,
+      pairingSecret: secret,
+      sessions,
+      nowMs: () => issuedAtMs,
+    });
+
+    const idle = await handler(sessionStatusRequest());
+    expect(await idle.json()).toMatchObject({ ok: true, recording_state: "stopped", session_id: null });
+
+    const started = sessions.startSession({ title: "Status check", session_id: "session-status-1" });
+    const recording = await handler(sessionStatusRequest());
+    expect(await recording.json()).toMatchObject({
+      ok: true,
+      recording_state: "recording",
+      session_id: started.session_id,
+      session: {
+        session_id: started.session_id,
+        title: "Status check",
+      },
+    });
+
+    const invalidToken = await handler(sessionStatusRequest({ token: "bad-token" }));
+    const invalidOrigin = await handler(sessionStatusRequest({ origin: "https://attacker.example" }));
+    expect(invalidToken.status).toBe(401);
+    expect(invalidOrigin.status).toBe(403);
     database.close();
   });
 

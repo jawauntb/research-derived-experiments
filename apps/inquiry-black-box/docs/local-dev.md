@@ -9,6 +9,9 @@ bun run typecheck
 bun run test
 bun run test:e2e
 bun run build:prototype
+bun run package:extension
+bun run package:desktop
+bun run validation:smoke
 ```
 
 The app is intentionally useful without cloud credentials. Desktop SQLite,
@@ -23,6 +26,10 @@ recall-probe events, then verifies replay evidence, JSONL export, local delete,
 and the redacted cloud-delete tombstone.
 
 The canonical runbook is [Prototype Demo](prototype-demo.md).
+Use its manual QA matrix and dogfood ledger for release checks; this page stays
+focused on day-to-day commands.
+Use [Release Checklist](release-checklist.md) for final local, packaged, cloud,
+Modal, database, troubleshooting, and validation gates.
 
 ## Desktop
 
@@ -66,7 +73,8 @@ bun run build:prototype
 
 ## Human Demo Checklist
 
-Use this as the short manual proof after the fixture tests pass:
+Use this as the short manual proof after the fixture tests pass, then record the
+full result in the [Prototype Demo](prototype-demo.md) dogfood ledger:
 
 1. Start `bun run dev:desktop`.
 2. Start a session, copy the pairing token, and pair the unpacked extension.

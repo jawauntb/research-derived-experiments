@@ -1,4 +1,12 @@
-import { canSyncPrivacyClass, findSensitiveFieldPaths, validateEvent, type EventEnvelope } from "@inquiry/schema";
+import {
+  canSyncPrivacyClass,
+  findSensitiveFieldPaths,
+  normalizeSensitiveFieldName,
+  rawTextPayloadFieldNames,
+  selectedTextPayloadFieldNames,
+  validateEvent,
+  type EventEnvelope,
+} from "@inquiry/schema";
 import type { CloudStore } from "../db/schema";
 import { RouteError, authenticate, isRecord, jsonResponse, readJsonObject, stringField } from "./common";
 
@@ -42,7 +50,10 @@ async function syncEvents(request: Request, context: SyncRouteContext): Promise<
       if (!decision.allowed) {
         throw new Error(decision.reason);
       }
-      const sensitivePaths = findSensitiveFieldPaths(candidate.payload);
+      const sensitivePaths = findSensitiveFieldPaths(candidate.payload, {
+        extraFieldNames: [...selectedTextPayloadFieldNames, ...rawTextPayloadFieldNames],
+        normalizeFieldName: normalizeSensitiveFieldName,
+      });
       if (sensitivePaths.length > 0) {
         throw new Error(`payload contains sensitive field(s): ${sensitivePaths.join(", ")}`);
       }

@@ -1,13 +1,15 @@
 import { describe, expect, test } from "bun:test";
 import { createEvent, type EventEnvelope } from "@inquiry/schema";
-import { ensureContentScriptRegistration, handleRuntimeMessage } from "../src/background/service-worker";
+import { ensureContentScriptRegistration, handleRuntimeMessage, retryBridgeQueue } from "../src/background/service-worker";
 import {
   BRIDGE_STATE_KEY,
   DEFAULT_BRIDGE_ENDPOINT,
+  DEFAULT_SESSION_ID,
   PairingRequiredError,
   PairingRejectedError,
   createMemoryEventQueue,
   defaultBridgeState,
+  fetchSessionStatus,
   flushQueuedEvents,
   getBridgeState,
   isBridgeEventAllowed,
@@ -86,6 +88,19 @@ describe("local bridge pairing and queue", () => {
     ).rejects.toBeInstanceOf(PairingRejectedError);
   });
 
+  test("rejects bridge posts with stale event session ids before sending", async () => {
+    let calls = 0;
+    await expect(
+      postEventBatch([{ ...browserScrollEvent("event-stale-session"), session_id: "stale-session" }], pairedState(), {
+        fetchImpl: async () => {
+          calls += 1;
+          return new Response(JSON.stringify({ accepted: 1 }), { status: 202 });
+        },
+      }),
+    ).rejects.toThrow("event session does not match bridge session");
+    expect(calls).toBe(0);
+  });
+
   test("posts session controls to the desktop session endpoint", async () => {
     let url = "";
     let tokenHeader = "";
@@ -114,6 +129,48 @@ describe("local bridge pairing and queue", () => {
       monotonic_ms: 2_500,
     });
     expect(result).toEqual({ recordingState: "recording", sessionId: "desktop-session-1" });
+
+    const paused = await postSessionControl(
+      pairedState(),
+      { recordingState: "paused", monotonicMs: 3_000 },
+      {
+        fetchImpl: async (nextUrl, init) => {
+          url = nextUrl;
+          tokenHeader = new Headers(init?.headers).get("x-inquiry-pairing-token") ?? "";
+          postedBody = JSON.parse(String(init?.body ?? "{}")) as Record<string, unknown>;
+          return new Response(JSON.stringify({ ok: true, recording_state: "paused", session_id: "desktop-session-1" }), {
+            status: 200,
+          });
+        },
+      },
+    );
+
+    expect(url).toBe("http://127.0.0.1:39170/v1/extension/session");
+    expect(tokenHeader).toBe("paired-token");
+    expect(postedBody).toMatchObject({
+      recording_state: "paused",
+      monotonic_ms: 3_000,
+    });
+    expect(paused).toEqual({ recordingState: "paused", sessionId: "desktop-session-1" });
+  });
+
+  test("fetches authoritative desktop session status", async () => {
+    let url = "";
+    let tokenHeader = "";
+
+    const result = await fetchSessionStatus(pairedState(), {
+      fetchImpl: async (nextUrl, init) => {
+        url = nextUrl;
+        tokenHeader = new Headers(init?.headers).get("x-inquiry-pairing-token") ?? "";
+        return new Response(JSON.stringify({ ok: true, recording_state: "stopped", session_id: null, session: null }), {
+          status: 200,
+        });
+      },
+    });
+
+    expect(url).toBe("http://127.0.0.1:39170/v1/extension/session");
+    expect(tokenHeader).toBe("paired-token");
+    expect(result).toEqual({ recordingState: "stopped", sessionId: null });
   });
 
   test("blocks capture while paused, stopped, or disabled for the site", () => {
@@ -129,10 +186,12 @@ describe("local bridge pairing and queue", () => {
   test("requires selected text opt-in for document-opt-in copy evidence", () => {
     const event = browserCopyTextEvent("event-selected-text");
     const alternateTextFieldEvent = browserCopyTextEvent("event-copied-text", { copied_text: "copied claim" });
+    const camelTextFieldEvent = browserCopyTextEvent("event-selection-text", { selectionText: "selected claim" });
     const state = pairedState();
 
     expect(isBridgeEventAllowed(event, state)).toBe(false);
     expect(isBridgeEventAllowed(alternateTextFieldEvent, state)).toBe(false);
+    expect(isBridgeEventAllowed(camelTextFieldEvent, state)).toBe(false);
     expect(
       isBridgeEventAllowed(event, {
         ...state,
@@ -144,6 +203,15 @@ describe("local bridge pairing and queue", () => {
     ).toBe(true);
     expect(
       isBridgeEventAllowed(alternateTextFieldEvent, {
+        ...state,
+        privacyToggles: {
+          ...state.privacyToggles,
+          selectedText: true,
+        },
+      }),
+    ).toBe(true);
+    expect(
+      isBridgeEventAllowed(camelTextFieldEvent, {
         ...state,
         privacyToggles: {
           ...state.privacyToggles,
@@ -216,6 +284,165 @@ describe("local bridge pairing and queue", () => {
 
     expect(response).toMatchObject({ ok: false, recordingState: "stopped", error: "desktop offline" });
     expect((await getBridgeState(storage)).recordingState).toBe("stopped");
+  });
+
+  test("pauses through the desktop session endpoint before changing local capture state", async () => {
+    const storage = createMemoryStorage({ [BRIDGE_STATE_KEY]: pairedState() });
+    const queue = createMemoryEventQueue();
+    let postedBody: Record<string, unknown> = {};
+
+    const response = await handleRuntimeMessage(
+      { type: "inquiry:set-recording-state", recordingState: "paused" },
+      {},
+      {
+        storage,
+        queue,
+        now: () => 2_500,
+        fetchImpl: async (_url, init) => {
+          postedBody = JSON.parse(String(init?.body ?? "{}")) as Record<string, unknown>;
+          return new Response(JSON.stringify({ ok: true, recording_state: "paused", session_id: "session-bridge" }), {
+            status: 200,
+          });
+        },
+      },
+    );
+
+    expect(response).toMatchObject({ ok: true, recordingState: "paused", sessionId: "session-bridge" });
+    expect(postedBody).toMatchObject({ recording_state: "paused", monotonic_ms: 2_500 });
+    expect(await getBridgeState(storage)).toMatchObject({ recordingState: "paused", sessionId: "session-bridge" });
+  });
+
+  test("reconciles stale popup recording state against stopped desktop status", async () => {
+    const storage = createMemoryStorage({ [BRIDGE_STATE_KEY]: { ...pairedState(), recordingState: "recording" } });
+    const queue = createMemoryEventQueue();
+    const sentMessages: unknown[] = [];
+
+    const response = await handleRuntimeMessage(
+      { type: "inquiry:get-popup-state" },
+      {},
+      {
+        storage,
+        queue,
+        tabs: {
+          query: (_query, callback) => callback([{ id: 1 }]),
+          sendMessage: (_tabId, message) => {
+            sentMessages.push(message);
+          },
+        },
+        now: () => 2_000,
+        fetchImpl: async () =>
+          new Response(JSON.stringify({ ok: true, recording_state: "stopped", session_id: null, session: null }), {
+            status: 200,
+          }),
+      },
+    );
+
+    expect(response).toMatchObject({
+      ok: true,
+      recordingState: "stopped",
+      sessionId: DEFAULT_SESSION_ID,
+      desktopRecordingState: "stopped",
+    });
+    expect(await getBridgeState(storage)).toMatchObject({ recordingState: "stopped", sessionId: DEFAULT_SESSION_ID });
+    expect(sentMessages).toEqual([
+      {
+        type: CONTENT_SETTINGS_UPDATED_MESSAGE,
+        settings: expect.objectContaining({ recordingState: "stopped", sessionId: DEFAULT_SESSION_ID }),
+      },
+    ]);
+  });
+
+  test("returns a desktop status warning without changing stored popup state", async () => {
+    const storage = createMemoryStorage({ [BRIDGE_STATE_KEY]: { ...pairedState(), recordingState: "recording" } });
+    const queue = createMemoryEventQueue();
+
+    const response = await handleRuntimeMessage(
+      { type: "inquiry:get-popup-state" },
+      {},
+      {
+        storage,
+        queue,
+        now: () => 2_000,
+        fetchImpl: async () => new Response("desktop failed", { status: 500 }),
+      },
+    );
+
+    expect(response).toMatchObject({
+      ok: true,
+      recordingState: "recording",
+      desktopStatusWarning: "desktop bridge post failed with status 500",
+    });
+    expect(await getBridgeState(storage)).toMatchObject({ recordingState: "recording", sessionId: "session-bridge" });
+
+    const malformed = await handleRuntimeMessage(
+      { type: "inquiry:get-popup-state" },
+      {},
+      {
+        storage,
+        queue,
+        now: () => 2_100,
+        fetchImpl: async () => new Response("not json", { status: 200 }),
+      },
+    );
+    expect(malformed).toMatchObject({
+      ok: true,
+      recordingState: "recording",
+      desktopStatusWarning: "desktop bridge returned invalid session status JSON",
+    });
+    expect(await getBridgeState(storage)).toMatchObject({ recordingState: "recording", sessionId: "session-bridge" });
+
+    const missingState = await handleRuntimeMessage(
+      { type: "inquiry:get-popup-state" },
+      {},
+      {
+        storage,
+        queue,
+        now: () => 2_200,
+        fetchImpl: async () => new Response(JSON.stringify({ ok: true, session_id: null }), { status: 200 }),
+      },
+    );
+    expect(missingState).toMatchObject({
+      ok: true,
+      recordingState: "recording",
+      desktopStatusWarning: "desktop bridge returned invalid session recording state",
+    });
+    expect(await getBridgeState(storage)).toMatchObject({ recordingState: "recording", sessionId: "session-bridge" });
+  });
+
+  test("retry alarm reconciliation clears stale queued events instead of rebinding them", async () => {
+    const storage = createMemoryStorage({ [BRIDGE_STATE_KEY]: { ...pairedState(), recordingState: "recording" } });
+    const queuedEvent = browserScrollEvent("event-retry-reconcile");
+    const queue = createMemoryEventQueue([queuedEvent]);
+    const calls: string[] = [];
+
+    await retryBridgeQueue({
+      storage,
+      queue,
+      tabs: {
+        query: (_query, callback) => callback([{ id: 1 }]),
+        sendMessage: (_tabId, message) => {
+          calls.push(`broadcast:${JSON.stringify(message)}`);
+        },
+      },
+      now: () => 2_000,
+      fetchImpl: async (url) => {
+        if (url.endsWith("/v1/extension/session")) {
+          calls.push("status");
+          return new Response(JSON.stringify({ ok: true, recording_state: "stopped", session_id: null, session: null }), {
+            status: 200,
+          });
+        }
+        calls.push("post-events");
+        return new Response(JSON.stringify({ accepted: 1 }), { status: 202 });
+      },
+    });
+
+    expect(await getBridgeState(storage)).toMatchObject({ recordingState: "stopped", sessionId: DEFAULT_SESSION_ID });
+    expect(await queue.size()).toBe(0);
+    expect(calls[0]).toBe("status");
+    expect(calls[1]).toContain(CONTENT_SETTINGS_UPDATED_MESSAGE);
+    expect(calls[1]).toContain(DEFAULT_SESSION_ID);
+    expect(calls).not.toContain("post-events");
   });
 
   test("registers the content script as a service-worker fallback", async () => {

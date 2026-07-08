@@ -26,6 +26,20 @@ export function createCloudHandler(options: CloudHandlerOptions = {}) {
         return jsonResponse({ status: "ok", service: "inquiry-black-box-cloud", storage: store.kind });
       }
 
+      if (url.pathname === "/ready" && request.method === "GET") {
+        await store.initialize?.();
+        const durable = store.kind === "postgres";
+        return jsonResponse(
+          {
+            status: durable ? "ready" : "not_ready",
+            service: "inquiry-black-box-cloud",
+            storage: store.kind,
+            durable,
+          },
+          durable ? 200 : 503,
+        );
+      }
+
       const syncResponse = await handleSyncRoute(request, url, { store });
       if (syncResponse) {
         return syncResponse;

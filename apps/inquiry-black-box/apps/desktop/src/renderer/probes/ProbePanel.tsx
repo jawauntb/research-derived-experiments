@@ -35,6 +35,11 @@ export function renderProbePanel(
   section.className = "probe-panel";
 
   if (!prompt) {
+    const title = document.createElement("h2");
+    title.textContent = "No repair prompt yet";
+    const detail = document.createElement("p");
+    detail.textContent = "Replay will suggest a repair prompt after enough evidence-backed markers appear.";
+    section.append(title, detail);
     container.replaceChildren(section);
     return;
   }

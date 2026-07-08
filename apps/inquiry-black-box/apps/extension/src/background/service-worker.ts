@@ -2,6 +2,8 @@ import { validateEvent, type EventEnvelope } from "@inquiry/schema";
 import {
   BRIDGE_STATE_KEY,
   createStorageEventQueue,
+  DEFAULT_SESSION_ID,
+  fetchSessionStatus,
   type FetchLike,
   flushQueuedEvents,
   getBridgeState,
@@ -22,7 +24,7 @@ import {
 } from "../lib/messages";
 
 const RETRY_ALARM_NAME = "inquiry-bridge-retry";
-const RETRY_PERIOD_MINUTES = 0.25;
+const RETRY_PERIOD_MINUTES = 0.5;
 const REGISTERED_CONTENT_SCRIPT_ID = "inquiry-content-listener";
 
 type RuntimeSender = {
@@ -82,7 +84,7 @@ type ScriptingLike = {
   unregisterContentScripts?(filter: { ids: string[] }, callback?: () => void): Promise<unknown> | void;
 };
 
-type BackgroundContext = {
+export type BackgroundContext = {
   storage: StorageAreaLike;
   queue: EventQueue;
   tabs?: TabsLike;
@@ -106,11 +108,7 @@ export async function handleRuntimeMessage(
     case CONTENT_SETTINGS_MESSAGE:
       return contentSettingsFor(state, message);
     case "inquiry:get-popup-state":
-      return {
-        ...state,
-        queueSize: await context.queue.size(),
-        senderUrl: sender.url,
-      };
+      return popupState(context, state, sender);
     case "inquiry:set-pairing-token":
       return updateState(context, state, {
         pairingToken: stringValue(message.token),
@@ -129,6 +127,60 @@ export async function handleRuntimeMessage(
       return flushQueuedEvents(context.queue, state);
     default:
       return { ok: false, error: "unsupported message" };
+  }
+}
+
+async function popupState(
+  context: BackgroundContext,
+  state: BridgeState,
+  sender: RuntimeSender,
+): Promise<BridgeState & {
+  ok: true;
+  queueSize: number;
+  senderUrl?: string;
+  desktopRecordingState?: RecordingState;
+  desktopStatusWarning?: string;
+}> {
+  const reconciliation = await reconcileDesktopState(context, state);
+  return {
+    ...reconciliation.state,
+    ok: true,
+    queueSize: await context.queue.size(),
+    ...(sender.url ? { senderUrl: sender.url } : {}),
+    ...(reconciliation.desktopRecordingState ? { desktopRecordingState: reconciliation.desktopRecordingState } : {}),
+    ...(reconciliation.warning ? { desktopStatusWarning: reconciliation.warning } : {}),
+  };
+}
+
+async function reconcileDesktopState(
+  context: BackgroundContext,
+  state: BridgeState,
+): Promise<{ state: BridgeState; desktopRecordingState?: RecordingState; warning?: string }> {
+  if (!state.pairingToken) {
+    return { state };
+  }
+
+  try {
+    const status = await fetchSessionStatus(state, context.fetchImpl ? { fetchImpl: context.fetchImpl } : {});
+    const updates: Partial<BridgeState> = {};
+    if (status.recordingState !== state.recordingState) {
+      updates.recordingState = status.recordingState;
+    }
+    if ("sessionId" in status) {
+      const sessionId = status.sessionId ?? DEFAULT_SESSION_ID;
+      if (sessionId !== state.sessionId) {
+        updates.sessionId = sessionId;
+      }
+    }
+
+    if (Object.keys(updates).length === 0) {
+      return { state, desktopRecordingState: status.recordingState };
+    }
+
+    const reconciled = await updateState(context, state, updates);
+    return { state: reconciled, desktopRecordingState: status.recordingState };
+  } catch (error) {
+    return { state, warning: errorMessage(error) };
   }
 }
 
@@ -198,17 +250,25 @@ async function updateRecordingState(
   | (BridgeState & { ok: true; warning?: string })
   | (BridgeState & { ok: false; error: string })
 > {
-  if (recordingState === "recording") {
+  if (recordingState === "recording" || recordingState === "paused") {
     try {
       const control = await postSessionControl(
         state,
-        { recordingState: "recording", title: "Research session", monotonicMs: context.now() },
+        {
+          recordingState,
+          ...(recordingState === "recording" ? { title: "Research session" } : {}),
+          monotonicMs: context.now(),
+        },
         context.fetchImpl ? { fetchImpl: context.fetchImpl } : {},
       );
-      return updateState(context, state, {
-        recordingState: control.recordingState === "recording" ? "recording" : recordingState,
-        sessionId: control.sessionId ?? state.sessionId,
-      });
+      const updates: Partial<BridgeState> = {
+        recordingState: control.recordingState,
+        sessionId: control.sessionId ?? (control.recordingState === "stopped" ? DEFAULT_SESSION_ID : state.sessionId),
+      };
+      if (recordingState === "paused" && control.recordingState === "paused" && typeof pausedUntilMs === "number") {
+        updates.pausedUntilMs = pausedUntilMs;
+      }
+      return updateState(context, state, updates);
     } catch (error) {
       return { ...state, ok: false, error: errorMessage(error) };
     }
@@ -224,11 +284,15 @@ async function updateRecordingState(
 
   if (recordingState === "stopped") {
     try {
-      await postSessionControl(
+      const control = await postSessionControl(
         state,
         { recordingState: "stopped", monotonicMs: context.now() },
         context.fetchImpl ? { fetchImpl: context.fetchImpl } : {},
       );
+      return updateState(context, state, {
+        recordingState: control.recordingState,
+        sessionId: control.sessionId ?? DEFAULT_SESSION_ID,
+      });
     } catch (error) {
       const next = await updateState(context, state, updates);
       return { ...next, warning: errorMessage(error) };
@@ -367,8 +431,18 @@ function installServiceWorker(): void {
       return;
     }
 
-    void getBridgeState(storage).then((state) => flushQueuedEvents(queue, state));
+    void retryBridgeQueue(context);
   });
+}
+
+export async function retryBridgeQueue(context: BackgroundContext): Promise<void> {
+  const state = await getBridgeState(context.storage);
+  const reconciliation = await reconcileDesktopState(context, state);
+  if (reconciliation.state.recordingState !== "recording" || reconciliation.state.sessionId !== state.sessionId) {
+    await context.queue.clear();
+    return;
+  }
+  await flushQueuedEvents(context.queue, reconciliation.state, context.fetchImpl ? { fetchImpl: context.fetchImpl } : {});
 }
 
 export async function ensureContentScriptRegistration(scripting: ScriptingLike | undefined): Promise<boolean> {

@@ -66,15 +66,76 @@ describe("cloud sync route", () => {
     expect(await store.listEvents("user-a")).toHaveLength(1);
   });
 
-  test("rejects privacy-ineligible and sensitive-field payloads", async () => {
+  test("rejects privacy-ineligible sync classes", async () => {
     const handler = createCloudHandler({ store: createCloudStore() });
-    const localOnly = { ...redactedEvent("event-local"), privacy_class: "local-derived" };
-    const sensitive = {
-      ...redactedEvent("event-sensitive"),
-      payload: { nested: { keyContent: "raw typed content" }, rawVideo: "base64-video" },
-    };
+    const documentOptIn = createEvent({
+      event_id: "event-document-opt-in",
+      session_id: "session-cloud-1",
+      source: "browser",
+      source_version: "extension@0.1.0",
+      captured_at: "2026-07-07T12:00:00.000Z",
+      monotonic_ms: 121,
+      timezone: "UTC",
+      event_type: "browser.copy",
+      confidence: 0.9,
+      quality_flags: [],
+      payload: {
+        hostname_hash: "h_demo",
+        url_hash: "h_page",
+        selection_length: 12,
+        selected_text: "copied claim",
+      },
+      privacy_class: "document-opt-in",
+      retention_policy: "session-delete",
+    });
+    const events = [
+      { ...redactedEvent("event-local"), privacy_class: "local-derived", retention_policy: "local-default" },
+      documentOptIn,
+      { ...redactedEvent("event-debug"), privacy_class: "debug-sensitive", retention_policy: "debug-ephemeral" },
+      { ...redactedEvent("event-blocked"), privacy_class: "blocked-sensitive", retention_policy: "session-delete" },
+    ];
 
-    for (const event of [localOnly, sensitive]) {
+    for (const event of events) {
+      const response = await handler(
+        new Request("http://cloud.test/sync/events", {
+          method: "POST",
+          headers: authHeaders(),
+          body: JSON.stringify({ device_id: "device-1", token_id: "token-1", events: [event] }),
+        }),
+      );
+      const body = await json(response);
+
+      expect(response.status).toBe(422);
+      expect(body.error).toMatchObject({ code: "events_rejected" });
+    }
+  });
+
+  test("rejects raw frame, raw key, typed text, selected text, and document text sync payloads", async () => {
+    const handler = createCloudHandler({ store: createCloudStore() });
+    const events: EventEnvelope[] = [
+      { ...redactedEvent("event-raw-frame"), payload: { rawFrame: "base64-frame" } },
+      { ...redactedEvent("event-raw-key"), payload: { nested: { rawKey: "A" } } },
+      { ...redactedEvent("event-typed-text"), payload: { typedText: "typed search" } },
+      { ...redactedEvent("event-generic-text"), event_type: "model.run", payload: { text: "raw model text" } },
+      { ...redactedEvent("event-content"), event_type: "model.run", payload: { content: "raw article body" } },
+      { ...redactedEvent("event-html"), event_type: "model.run", payload: { html: "<p>raw</p>" } },
+      { ...redactedEvent("event-excerpt"), event_type: "model.run", payload: { excerpt: "raw excerpt" } },
+      { ...redactedEvent("event-selected-text-camel"), event_type: "model.run", payload: { selectedText: "copied text" } },
+      {
+        ...redactedEvent("event-selected-text"),
+        event_type: "browser.copy",
+        payload: {
+          hostname_hash: "h_demo",
+          url_hash: "h_page",
+          selection_length: 11,
+          selected_text: "copied text",
+        },
+      },
+      { ...redactedEvent("event-document-text"), payload: { page_text: "article text" } },
+      { ...redactedEvent("event-document-text-camel"), payload: { documentText: "article text" } },
+    ];
+
+    for (const event of events) {
       const response = await handler(
         new Request("http://cloud.test/sync/events", {
           method: "POST",
@@ -178,6 +239,70 @@ describe("cloud reports and jobs routes", () => {
     expect((body.reports as Array<{ title: string }>)[0]?.title).toBe("A report");
   });
 
+  test("redacts sensitive report payloads before hosted review responses", async () => {
+    const store = createCloudStore();
+    const report = await store.createReport({
+      user_id: "user-a",
+      session_id: "session-sensitive",
+      kind: "session_summary",
+      title: "Sensitive report",
+      summary: "Hosted review should stay redacted.",
+      payload: {
+        score: 1,
+        selectedText: "local selected text",
+        nested: [{ copied_text: "copied text" }, { content: "article body" }],
+      },
+      provenance: { modal_call_id: "modal-sensitive", rawText: "raw page text" },
+    });
+    const handler = createCloudHandler({ store });
+
+    const response = await handler(new Request(`http://cloud.test/reports/${report.report_id}`, { headers: authHeaders("user-a") }));
+    const body = await json(response);
+
+    expect(response.status).toBe(200);
+    expect(JSON.stringify(body)).not.toContain("local selected text");
+    expect(JSON.stringify(body)).not.toContain("copied text");
+    expect(JSON.stringify(body)).not.toContain("article body");
+    expect(JSON.stringify(body)).not.toContain("raw page text");
+    expect(body.report).toMatchObject({
+      report_id: report.report_id,
+      user_id: "user-a",
+      payload: {
+        score: 1,
+        redacted: true,
+        omitted_sensitive_fields: ["$.selectedText", "$.nested[0].copied_text", "$.nested[1].content"],
+      },
+      provenance: {
+        modal_call_id: "modal-sensitive",
+        redacted: true,
+        omitted_sensitive_fields: ["$.rawText"],
+      },
+    });
+
+    const listResponse = await handler(new Request("http://cloud.test/reports", { headers: authHeaders("user-a") }));
+    const listBody = await json(listResponse);
+
+    expect(listResponse.status).toBe(200);
+    expect(JSON.stringify(listBody)).not.toContain("local selected text");
+    expect(JSON.stringify(listBody)).not.toContain("copied text");
+    expect(JSON.stringify(listBody)).not.toContain("article body");
+    expect(JSON.stringify(listBody)).not.toContain("raw page text");
+    expect((listBody.reports as Array<Record<string, unknown>>)[0]).toMatchObject({
+      report_id: report.report_id,
+      user_id: "user-a",
+      payload: {
+        score: 1,
+        redacted: true,
+        omitted_sensitive_fields: ["$.selectedText", "$.nested[0].copied_text", "$.nested[1].content"],
+      },
+      provenance: {
+        modal_call_id: "modal-sensitive",
+        redacted: true,
+        omitted_sensitive_fields: ["$.rawText"],
+      },
+    });
+  });
+
   test("records submitted, running, complete, and failed job states through a Modal client", async () => {
     const store = createCloudStore();
     const modalClient: ModalClient = {
@@ -209,9 +334,11 @@ describe("cloud reports and jobs routes", () => {
         body: JSON.stringify({
           status: "complete",
           result: {
+            title: "Top-level Modal title with private prompt",
+            summary: "Top-level Modal summary with raw page notes.",
             report: {
-              title: "Smoke report",
-              summary: "Synthetic analysis completed.",
+              title: "Raw Modal title with copied claim",
+              summary: "Raw Modal summary with selected task text.",
               payload: { markers: 2 },
               provenance: { modal_call_id: `modal-${submitted.job.job_id}` },
             },
@@ -219,11 +346,58 @@ describe("cloud reports and jobs routes", () => {
         }),
       }),
     );
-    const completed = (await json(complete)) as { job: { status: string; report_id: string } };
+    const completed = (await json(complete)) as { job: { status: string; report_id: string; result: Record<string, unknown> } };
 
     expect(complete.status).toBe(200);
     expect(completed.job.status).toBe("complete");
     expect(completed.job.report_id.startsWith("report_")).toBe(true);
+    expect(JSON.stringify(completed)).not.toContain("copied claim");
+    expect(JSON.stringify(completed)).not.toContain("selected task text");
+    expect(JSON.stringify(completed)).not.toContain("private prompt");
+    expect(JSON.stringify(completed)).not.toContain("raw page notes");
+    expect(completed.job.result).toMatchObject({
+      title: "Modal session summary report",
+      summary: "Modal report completed.",
+    });
+    expect(completed.job.result.report).toMatchObject({
+      title: "Modal session summary report",
+      summary: "Modal report completed.",
+    });
+
+    const reportResponse = await handler(
+      new Request(`http://cloud.test/reports/${completed.job.report_id}`, { headers: authHeaders() }),
+    );
+    const reportBody = await json(reportResponse);
+    expect(reportResponse.status).toBe(200);
+    expect(JSON.stringify(reportBody)).not.toContain("copied claim");
+    expect(JSON.stringify(reportBody)).not.toContain("selected task text");
+    expect(reportBody.report).toMatchObject({
+      title: "Modal session summary report",
+      summary: "Modal report completed.",
+      payload: { markers: 2 },
+    });
+
+    const repeatedComplete = await handler(
+      new Request(`http://cloud.test/jobs/${submitted.job.job_id}/status`, {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({
+          status: "complete",
+          result: {
+            report: {
+              title: "Second Modal title",
+              summary: "Second Modal summary.",
+              payload: { markers: 3 },
+              provenance: { modal_call_id: `modal-${submitted.job.job_id}-again` },
+            },
+          },
+        }),
+      }),
+    );
+    const repeated = (await json(repeatedComplete)) as { job: { report_id: string } };
+    expect(repeatedComplete.status).toBe(200);
+    expect(repeated.job.report_id).toBe(completed.job.report_id);
+    expect(await store.listReports("user-a")).toHaveLength(1);
 
     const failedSubmit = await handler(
       new Request("http://cloud.test/jobs", {
@@ -245,6 +419,52 @@ describe("cloud reports and jobs routes", () => {
     expect(((await json(fail)) as { job: { status: string; error: string } }).job).toMatchObject({
       status: "failed",
       error: "synthetic failure",
+    });
+  });
+
+  test("rejects raw text in Modal job results before report creation", async () => {
+    const store = createCloudStore();
+    const modalClient: ModalClient = {
+      submitJob: async ({ job_id }) => ({ modal_call_id: `modal-${job_id}`, status: "running" }),
+    };
+    const handler = createCloudHandler({ store, modalClient });
+
+    const submittedResponse = await handler(
+      new Request("http://cloud.test/jobs", {
+        method: "POST",
+        headers: authHeaders("user-a"),
+        body: JSON.stringify({
+          kind: "session_summary",
+          input: { privacy_class: "redacted-sync", payload: { export_ref: "fixture" } },
+        }),
+      }),
+    );
+    const submitted = (await json(submittedResponse)) as { job: { job_id: string } };
+
+    const response = await handler(
+      new Request(`http://cloud.test/jobs/${submitted.job.job_id}/status`, {
+        method: "POST",
+        headers: authHeaders("user-a"),
+        body: JSON.stringify({
+          status: "complete",
+          result: {
+            report: {
+              title: "Sensitive result",
+              payload: { score: 1, content: "raw article body" },
+              provenance: { selectedText: "copied claim" },
+            },
+          },
+        }),
+      }),
+    );
+    const body = await json(response);
+
+    expect(response.status).toBe(422);
+    expect(body.error).toMatchObject({
+      code: "privacy_rejected",
+      details: {
+        fields: ["$.report.payload.content", "$.report.provenance.selectedText"],
+      },
     });
   });
 
@@ -270,6 +490,43 @@ describe("cloud reports and jobs routes", () => {
 
     expect(response.status).toBe(422);
     expect(body.error).toMatchObject({ code: "privacy_rejected" });
+  });
+
+  test("rejects raw frame, raw key, typed text, and document text Modal job inputs", async () => {
+    let calls = 0;
+    const modalClient: ModalClient = {
+      submitJob: async () => {
+        calls += 1;
+        throw new Error("Modal should not be called for sensitive input");
+      },
+    };
+    const handler = createCloudHandler({ store: createCloudStore(), modalClient });
+    const payloads = [
+      { rawFrame: "base64-frame" },
+      { nested: { rawKey: "A" } },
+      { typedText: "typed search" },
+      { content: "article body" },
+      { page_text: "article body" },
+      { documentText: "article body" },
+    ];
+
+    for (const payload of payloads) {
+      const response = await handler(
+        new Request("http://cloud.test/jobs", {
+          method: "POST",
+          headers: authHeaders(),
+          body: JSON.stringify({
+            kind: "session_summary",
+            input: { privacy_class: "redacted-sync", payload },
+          }),
+        }),
+      );
+      const body = await json(response);
+
+      expect(response.status).toBe(422);
+      expect(body.error).toMatchObject({ code: "privacy_rejected" });
+    }
+    expect(calls).toBe(0);
   });
 });
 
@@ -330,5 +587,26 @@ describe("cloud runtime configuration", () => {
         },
       }),
     ).not.toThrow();
+  });
+
+  test("readiness distinguishes durable Postgres from local memory storage", async () => {
+    const memory = createCloudHandler({ store: createCloudStore() });
+    const memoryReady = await memory(new Request("http://cloud.test/ready"));
+    const memoryBody = await json(memoryReady);
+    const postgresStore = createCloudStore() as CloudStore & { kind: "postgres"; initialize: () => Promise<void> };
+    postgresStore.kind = "postgres";
+    let initialized = false;
+    postgresStore.initialize = async () => {
+      initialized = true;
+    };
+    const postgres = createCloudHandler({ store: postgresStore });
+    const postgresReady = await postgres(new Request("http://cloud.test/ready"));
+    const postgresBody = await json(postgresReady);
+
+    expect(memoryReady.status).toBe(503);
+    expect(memoryBody).toMatchObject({ status: "not_ready", storage: "memory", durable: false });
+    expect(postgresReady.status).toBe(200);
+    expect(initialized).toBe(true);
+    expect(postgresBody).toMatchObject({ status: "ready", storage: "postgres", durable: true });
   });
 });

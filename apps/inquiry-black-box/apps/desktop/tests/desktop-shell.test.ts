@@ -121,6 +121,10 @@ describe("desktop shell IPC facade", () => {
 
     expect(cameraEvent.event_type).toBe("camera.feature_window");
     expect(database.listEvents(session.session_id).map((event) => event.event_type)).toContain("camera.feature_window");
+    const exported = await facade.exportSession();
+    expect(exported.jsonl).toContain("camera.feature_window");
+    expect(exported.jsonl).toContain("face_present_ratio");
+    expect(exported.jsonl).not.toMatch(/rawFrame|frameImage|imageBlob|frameBlob|pixels|data:image|base64/);
 
     runtime.stop();
   });

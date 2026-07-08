@@ -1,11 +1,20 @@
 import { describe, expect, test } from "bun:test";
 import {
+  canExportSelectedTextPrivacyClass,
   canExportPrivacyClass,
+  canQueueDeleteTombstonePrivacyClass,
+  canRunModalJobPrivacyClass,
   canSyncPrivacyClass,
   createEvent,
+  findSensitiveFieldPaths,
+  normalizeSensitiveFieldName,
+  privacyClassMatrix,
+  privacyClasses,
   validateEvent,
   type BrowserTypingMetricsPayload,
   type CameraFeaturePayload,
+  type JsonObject,
+  type PrivacyClass,
   type RepairCandidatePayload,
   type RepairOutcomePayload,
   type StimulusAttachedPayload,
@@ -78,11 +87,125 @@ describe("event schema", () => {
     ).toThrow(/blocked sensitive/);
   });
 
-  test("makes privacy sync/export eligibility explicit", () => {
+  test("makes privacy sync/export/job/delete eligibility explicit", () => {
     expect(canSyncPrivacyClass("redacted-sync").allowed).toBe(true);
     expect(canSyncPrivacyClass("local-derived").allowed).toBe(false);
     expect(canExportPrivacyClass("local-derived").allowed).toBe(true);
     expect(canExportPrivacyClass("debug-sensitive").allowed).toBe(false);
+    expect(canExportSelectedTextPrivacyClass("document-opt-in").allowed).toBe(true);
+    expect(canExportSelectedTextPrivacyClass("local-derived").allowed).toBe(false);
+    expect(canRunModalJobPrivacyClass("redacted-sync").allowed).toBe(true);
+    expect(canRunModalJobPrivacyClass("document-opt-in").allowed).toBe(true);
+    expect(canRunModalJobPrivacyClass("debug-sensitive").allowed).toBe(false);
+    expect(canQueueDeleteTombstonePrivacyClass("redacted-sync").allowed).toBe(true);
+    expect(canQueueDeleteTombstonePrivacyClass("document-opt-in").allowed).toBe(false);
+  });
+
+  test("publishes the privacy-class matrix for product data paths", () => {
+    const expected: Record<
+      PrivacyClass,
+      {
+        defaultExport: boolean;
+        selectedTextOptInExport: boolean;
+        cloudSync: boolean;
+        modalJob: boolean;
+        deleteTombstone: boolean;
+      }
+    > = {
+      public: {
+        defaultExport: true,
+        selectedTextOptInExport: false,
+        cloudSync: true,
+        modalJob: false,
+        deleteTombstone: false,
+      },
+      "local-derived": {
+        defaultExport: true,
+        selectedTextOptInExport: false,
+        cloudSync: false,
+        modalJob: false,
+        deleteTombstone: false,
+      },
+      "redacted-sync": {
+        defaultExport: true,
+        selectedTextOptInExport: false,
+        cloudSync: true,
+        modalJob: true,
+        deleteTombstone: true,
+      },
+      "document-opt-in": {
+        defaultExport: true,
+        selectedTextOptInExport: true,
+        cloudSync: false,
+        modalJob: true,
+        deleteTombstone: false,
+      },
+      "debug-sensitive": {
+        defaultExport: false,
+        selectedTextOptInExport: false,
+        cloudSync: false,
+        modalJob: false,
+        deleteTombstone: false,
+      },
+      "blocked-sensitive": {
+        defaultExport: false,
+        selectedTextOptInExport: false,
+        cloudSync: false,
+        modalJob: false,
+        deleteTombstone: false,
+      },
+    };
+
+    expect(Object.keys(privacyClassMatrix).sort()).toEqual([...privacyClasses].sort());
+    for (const privacyClass of privacyClasses) {
+      expect(privacyClassMatrix[privacyClass]["default-export"].allowed).toBe(expected[privacyClass].defaultExport);
+      expect(privacyClassMatrix[privacyClass]["selected-text-opt-in-export"].allowed).toBe(
+        expected[privacyClass].selectedTextOptInExport,
+      );
+      expect(privacyClassMatrix[privacyClass]["cloud-sync"].allowed).toBe(expected[privacyClass].cloudSync);
+      expect(privacyClassMatrix[privacyClass]["modal-job"].allowed).toBe(expected[privacyClass].modalJob);
+      expect(privacyClassMatrix[privacyClass]["delete-tombstone"].allowed).toBe(expected[privacyClass].deleteTombstone);
+    }
+  });
+
+  test("rejects raw frame, raw key, typed text, and document text aliases", () => {
+    const blockedPayloads: JsonObject[] = [
+      { rawFrame: "base64-frame" },
+      { nested: { rawKey: "A" } },
+      { typedText: "search terms" },
+      { page_text: "visible article body" },
+    ];
+
+    for (const payload of blockedPayloads) {
+      expect(() =>
+        createEvent({
+          session_id: "session-1",
+          source: "browser",
+          source_version: "extension@0.1.0",
+          monotonic_ms: 32,
+          event_type: "browser.typing_metrics",
+          payload,
+          privacy_class: "redacted-sync",
+          retention_policy: "cloud-redacted",
+        }),
+      ).toThrow(/blocked sensitive/);
+    }
+  });
+
+  test("finds sensitive fields with route-specific normalized aliases", () => {
+    const paths = findSensitiveFieldPaths(
+      {
+        safe: 1,
+        selectedText: "selected claim",
+        nested: [{ copied_text: "copied claim" }, { content: "raw article body" }],
+      },
+      {
+        extraFieldNames: ["selected_text", "copied_text", "content"],
+        normalizeFieldName: normalizeSensitiveFieldName,
+      },
+    );
+
+    expect(paths).toEqual(["$.selectedText", "$.nested[0].copied_text", "$.nested[1].content"]);
   });
 
   test("allows stimulus references but requires document opt-in for raw text", () => {
@@ -159,6 +282,24 @@ describe("event schema", () => {
     expect(event.privacy_class).toBe("document-opt-in");
     expect(canExportPrivacyClass(event.privacy_class).allowed).toBe(true);
     expect(canSyncPrivacyClass(event.privacy_class).allowed).toBe(false);
+
+    expect(() =>
+      createEvent({
+        session_id: "session-1",
+        source: "browser",
+        source_version: "extension@0.1.0",
+        monotonic_ms: 37,
+        event_type: "browser.selection",
+        payload: {
+          hostname_hash: "h_demo",
+          url_hash: "h_page",
+          selection_length: 13,
+          selectedText: "selected claim",
+        },
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    ).toThrow(/document-opt-in/);
   });
 
   test("accepts local repair candidate and outcome events", () => {
