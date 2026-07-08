@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Any
 
+from model_env import resolve_model_environment
 from models.calibration import train_toy_calibration
 from models.session_features import extract_session_features
 
@@ -84,6 +85,7 @@ def run_smoke_job(session_export: dict[str, Any] | None = None) -> dict[str, Any
             "input_privacy": "redacted",
             "feature_version": features["provenance"]["feature_version"],
             "limitations": features["provenance"]["limitations"],
+            "model_environment": resolve_model_environment(),
         },
     }
 
