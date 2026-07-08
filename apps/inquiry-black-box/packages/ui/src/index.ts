@@ -5,21 +5,75 @@ export type RecordingIndicatorView = {
 };
 
 export const designTokens = {
-  surface: "#eef2f5",
-  surfaceRaised: "#f8fafb",
-  surfaceInset: "#e4eaee",
-  ink: "#16202a",
-  muted: "#5d6b78",
-  line: "#d4dde4",
-  teal: "#0f6b55",
+  surface: "#f3f1eb",
+  surfaceRaised: "#fbfaf6",
+  surfaceInset: "#e7e3da",
+  ink: "#151515",
+  muted: "#68645d",
+  line: "#d6d0c4",
+  teal: "#087d73",
+  tealBright: "#0f6b55",
   tealSoft: "#dceee8",
   amber: "#8a5b00",
   amberSoft: "#fff3cf",
   rose: "#a83347",
   roseSoft: "#f9dfe5",
-  blue: "#245b93",
+  blue: "#2d5d7c",
   blueSoft: "#dceaf7",
+  shadowRaised: "14px 14px 30px rgba(124, 112, 96, 0.22), -14px -14px 30px rgba(255, 255, 255, 0.86)",
+  shadowPressed: "inset 8px 8px 18px rgba(124, 112, 96, 0.18), inset -8px -8px 18px rgba(255, 255, 255, 0.78)",
+  focusRing: "0 0 0 3px rgba(8, 125, 115, 0.24)",
 } as const;
+
+export type InquiryCssVariableName =
+  | "--surface"
+  | "--surface-raised"
+  | "--surface-inset"
+  | "--ink"
+  | "--muted"
+  | "--line"
+  | "--teal"
+  | "--green"
+  | "--green-soft"
+  | "--amber"
+  | "--amber-soft"
+  | "--rose"
+  | "--rose-soft"
+  | "--blue"
+  | "--blue-soft"
+  | "--shadow-raised"
+  | "--shadow-pressed"
+  | "--focus";
+
+export function inquiryCssVariables(): Record<InquiryCssVariableName, string> {
+  return {
+    "--surface": designTokens.surface,
+    "--surface-raised": designTokens.surfaceRaised,
+    "--surface-inset": designTokens.surfaceInset,
+    "--ink": designTokens.ink,
+    "--muted": designTokens.muted,
+    "--line": designTokens.line,
+    "--teal": designTokens.teal,
+    "--green": designTokens.tealBright,
+    "--green-soft": designTokens.tealSoft,
+    "--amber": designTokens.amber,
+    "--amber-soft": designTokens.amberSoft,
+    "--rose": designTokens.rose,
+    "--rose-soft": designTokens.roseSoft,
+    "--blue": designTokens.blue,
+    "--blue-soft": designTokens.blueSoft,
+    "--shadow-raised": designTokens.shadowRaised,
+    "--shadow-pressed": designTokens.shadowPressed,
+    "--focus": designTokens.focusRing,
+  };
+}
+
+export function inquiryCssVariableBlock(selector = ":root"): string {
+  const variables = Object.entries(inquiryCssVariables())
+    .map(([name, value]) => `  ${name}: ${value};`)
+    .join("\n");
+  return `${selector} {\n${variables}\n}`;
+}
 
 export const READING_ENGAGEMENT_MAP_TITLE = "Reading engagement map";
 

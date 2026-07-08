@@ -24,12 +24,22 @@ test("site exposes product, privacy, and repository trust links", () => {
   assert.match(html, /github\.com/);
 });
 
+test("site documents shipped daily review and fixture-backed product proof", () => {
+  assert.match(html, /id="product"/);
+  assert.match(html, /Fixture-backed preview/i);
+  assert.match(html, /Reading engagement map/i);
+  assert.match(html, /deterministic daily review/i);
+  assert.match(html, /Ready now[\s\S]*session history/i);
+  assert.doesNotMatch(html, /Next build[\s\S]*daily review/i);
+});
+
 test("site keeps Neurophenom typography and adds neumorphic tokens", () => {
   assert.match(css, /Iowan Old Style/);
   assert.match(css, /SF Mono/);
   assert.match(css, /--shadow-raised/);
   assert.match(css, /--shadow-inset/);
   assert.match(css, /border-radius: 22px/);
+  assert.match(css, /\.product-proof/);
 });
 
 test("mobile nav links keep readable tap targets", () => {
