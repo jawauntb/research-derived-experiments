@@ -84,8 +84,13 @@ payloads before shipping it.
 
 ## Railway API
 
-Create one Railway service rooted at `apps/inquiry-black-box` and point it at
-`apps/cloud/railway.json`. The service starts the Bun API with:
+Railway is only needed for the optional cloud API. Local desktop recording,
+Chrome extension pairing, SQLite replay, local export, and local deletion do
+not require Railway or Railway Postgres. Create the Railway app when you want
+redacted sync, hosted report lookup, and cloud-to-Modal orchestration.
+
+Create one Railway service rooted at `apps/inquiry-black-box`. The root
+`railway.json` builds/tests `apps/cloud` and starts the Bun API with:
 
 ```bash
 bun run --cwd apps/cloud dev
@@ -93,6 +98,8 @@ bun run --cwd apps/cloud dev
 
 Required variables:
 
+- `NIXPACKS_NODE_VERSION`: set to `22` so Railway/Nixpacks does not fall back to
+  its removed Node 18 default.
 - `INQUIRY_CLOUD_AUTH_SECRET`: HMAC secret used to verify cloud bearer tokens.
 - `DATABASE_URL`: Railway Postgres connection string. When present, the API
   selects the Postgres cloud store and runs idempotent table/index creation
@@ -118,12 +125,28 @@ Use Doppler locally and Railway variables or a Doppler integration in deploys:
 doppler setup
 doppler run -- bun run --cwd apps/cloud dev
 railway link
-railway variables set INQUIRY_CLOUD_AUTH_SECRET=...
-railway variables set DATABASE_URL=...
-railway variables set SYNC_ENCRYPTION_KEY=...
-railway variables set MODAL_JOB_WEBHOOK_URL=...
+npx -y @railway/cli init --name inquiry-black-box --json
+npx -y @railway/cli add --service inquiry-black-box-api --json
+npx -y @railway/cli add --database postgres --json
+bun run railway:sync-model-env -- \
+  --doppler-project cofounder \
+  --doppler-config prd_superoptimizers \
+  --env-file /Users/jawaun/jackson_prosocial_interp_research/.env \
+  --railway-project inquiry-black-box-api \
+  --railway-service inquiry-black-box-api \
+  --railway-environment production
 railway up --service inquiry-black-box-api
 ```
+
+The sync script pipes values from Doppler to Railway with stdin and prints only
+key names/status. It reuses the Superoptimizers Doppler model keys, can use the
+social-cohesion/prosocial dotenv file as a fallback for model IDs, accepts
+`HF_TOKEN` and `HUGGINGFACE_TOKEN`, and stores default research model IDs for
+TRIBE v2, Brain2Qwerty, Braindecode, and Modal GPU selection when Doppler or the
+dotenv fallback do not already own those keys. It also defaults
+`MODEL_PROVIDER` to Anthropic, `EMBEDDING_MODEL` to `text-embedding-3-small`,
+and derives `SESSION_SUMMARY_MODEL` from `ANTHROPIC_MODEL_BULK` when no explicit
+summary model is configured.
 
 Smoke checks:
 
@@ -173,6 +196,26 @@ doppler run -- modal run inquiry_jobs.py::smoke_job
 The deployed `job_webhook` endpoint returns `modal_call_id` and `status` for the
 Bun cloud API. Configure its URL as `MODAL_JOB_WEBHOOK_URL` and protect it with
 `MODAL_JOB_WEBHOOK_TOKEN` when exposed.
+
+Model/provider environment is resolved in `modal/model_env.py` and included in
+Modal report provenance without secret values. Reuse the existing
+Superoptimizers/social-cohesion keys wherever possible:
+
+- Providers: `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `GOOGLE_API_KEY`,
+  `OPENROUTER_API_KEY`, `OPENROUTER_BASE_URL`, `VOYAGE_API_KEY`.
+- Routing: `MODEL_PROVIDER`, `SESSION_SUMMARY_MODEL`, `EMBEDDING_MODEL`,
+  `ANTHROPIC_MODEL_JUDGE`, `ANTHROPIC_MODEL_BULK`, `GEMINI_MODEL_VIDEO`,
+  `GEMINI_MODEL_JUDGE`.
+- Hugging Face: `HF_TOKEN`; `HUGGINGFACE_TOKEN` is accepted as an alias.
+- Research model IDs: `TRIBE_MODEL_ID`, `TRIBE_MODEL_REVISION`,
+  `TRIBE_GIT_REF`, `BRAIN2QWERTY_REPO`, `BRAIN2QWERTY_DATASET_ID`,
+  `BRAINDECODE_MODEL_ID`, `VJEPA_MODEL_ID`, `VJEPA_LARGE_MODEL_ID`,
+  `INTERNVIDEO_MODEL_ID`, `QWEN_VL_MODEL_ID`, `WHISPER_MODEL_ID`,
+  `FASTER_WHISPER_MODEL_ID`, `SCV_OPEN_LLM_MODEL_ID`,
+  `SCV_OPEN_LLM_ACTIVATION_LAYER`, and `SCV_MODAL_APP_BASE_NAME`.
+
+Brain2Qwerty is a research-only, license-gated path until its data/model terms
+allow product use. Do not route user production analysis through it by default.
 
 Cloud-to-Modal smoke can be verified through the Bun API with a redacted input:
 

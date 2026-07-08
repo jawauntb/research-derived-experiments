@@ -1,6 +1,9 @@
+import json
+
 import pytest
 
 from inquiry_jobs import run_smoke_job
+from model_env import resolve_model_environment
 from models.calibration import train_toy_calibration
 from models.session_features import RedactionViolation, extract_session_features
 
@@ -95,3 +98,32 @@ def test_smoke_job_returns_report_and_model_card():
     assert report["feature_summary"]["event_count"] == 3
     assert report["model_card"]["model_name"] == "toy_session_calibration"
     assert report["provenance"]["input_privacy"] == "redacted"
+    assert report["provenance"]["model_environment"]["version"] == "model_env@0.1.0"
+
+
+def test_model_environment_reuses_canonical_provider_and_research_keys(monkeypatch):
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "anthropic-secret-value")
+    monkeypatch.setenv("OPENAI_API_KEY", "openai-secret-value")
+    monkeypatch.setenv("HF_TOKEN", "hf-secret-value")
+    monkeypatch.setenv("MODEL_PROVIDER", "anthropic")
+    monkeypatch.setenv("SESSION_SUMMARY_MODEL", "claude-session-model")
+    monkeypatch.setenv("TRIBE_MODEL_ID", "facebook/tribev2")
+    monkeypatch.setenv("BRAINDECODE_MODEL_ID", "braindecode/cbramod-pretrained")
+    monkeypatch.setenv("MODAL_ENVIRONMENT", "main")
+
+    summary = resolve_model_environment()
+    serialized = json.dumps(summary)
+
+    assert summary["routing"]["provider"] == "anthropic"
+    assert summary["routing"]["session_summary_model"] == "claude-session-model"
+    assert summary["providers"]["anthropic"]["configured"] is True
+    assert summary["providers"]["anthropic"]["configured_secret_keys"] == ["ANTHROPIC_API_KEY"]
+    assert summary["providers"]["openai"]["configured_secret_keys"] == ["OPENAI_API_KEY"]
+    assert summary["providers"]["huggingface"]["configured_secret_keys"] == ["HF_TOKEN"]
+    assert summary["research_models"]["tribe"]["model_id"] == "facebook/tribev2"
+    assert summary["research_models"]["brain2qwerty"]["repo"] == "facebookresearch/brain2qwerty"
+    assert summary["research_models"]["braindecode"]["model_id"] == "braindecode/cbramod-pretrained"
+    assert "MODAL_ENVIRONMENT" in summary["deploy"]["modal"]["configured_keys"]
+    assert "anthropic-secret-value" not in serialized
+    assert "openai-secret-value" not in serialized
+    assert "hf-secret-value" not in serialized

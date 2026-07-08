@@ -110,6 +110,7 @@ managed variables in Railway/Modal.
 
 Common variables:
 
+- `NIXPACKS_NODE_VERSION`: set to `22` for Railway/Nixpacks builds.
 - `INQUIRY_LOCAL_API_PORT`: localhost desktop ingest API.
 - `INQUIRY_PAIRING_SECRET`: desktop-extension pairing secret.
 - `INQUIRY_DESKTOP_DB_PATH`: optional desktop SQLite path; defaults to
@@ -126,7 +127,17 @@ Common variables:
 - `MODAL_TOKEN_ID` and `MODAL_TOKEN_SECRET`: Modal credentials.
 - `MODAL_ENVIRONMENT`: Modal environment name.
 - `OPENAI_API_KEY` / `ANTHROPIC_API_KEY`: optional model providers.
+- `GOOGLE_API_KEY`, `OPENROUTER_API_KEY`, `OPENROUTER_BASE_URL`,
+  `VOYAGE_API_KEY`: additional optional model providers reused from existing
+  Superoptimizers/social-cohesion envs.
+- `HF_TOKEN` / `HUGGINGFACE_TOKEN`: Hugging Face access; `HF_TOKEN` is the
+  canonical Doppler key and `HUGGINGFACE_TOKEN` is accepted for compatibility.
 - `MODEL_PROVIDER`, `EMBEDDING_MODEL`, `SESSION_SUMMARY_MODEL`: model routing.
+- `TRIBE_MODEL_ID`, `BRAIN2QWERTY_REPO`, `BRAIN2QWERTY_DATASET_ID`,
+  `BRAINDECODE_MODEL_ID`, `VJEPA_MODEL_ID`, `VJEPA_LARGE_MODEL_ID`,
+  `INTERNVIDEO_MODEL_ID`, `QWEN_VL_MODEL_ID`, `WHISPER_MODEL_ID`,
+  `FASTER_WHISPER_MODEL_ID`: optional research model IDs. Keep Brain2Qwerty
+  research-only/license-gated unless its terms permit product use.
 - `SYNC_ENCRYPTION_KEY`: encryption key for redacted sync payloads.
 
 Local secret pattern:
@@ -140,17 +151,20 @@ doppler run -- python3 -m pytest modal/tests
 ## Railway
 
 Railway is the optional always-on control plane, not a requirement for local
-replay. Deploy only the `apps/cloud` Bun service. Required deployment files and
-docs live under `apps/cloud/railway.json` and `docs/deployment.md`.
+replay. Deploy only the `apps/cloud` Bun service from the app root. Required
+deployment files and docs live under `railway.json` and `docs/deployment.md`.
 
 Expected flow:
 
 ```bash
 railway link
-railway variables set INQUIRY_CLOUD_AUTH_SECRET=...
-railway variables set DATABASE_URL=...
-railway variables set SYNC_ENCRYPTION_KEY=...
-railway variables set MODAL_JOB_WEBHOOK_URL=...
+bun run railway:sync-model-env -- \
+  --doppler-project cofounder \
+  --doppler-config prd_superoptimizers \
+  --env-file /Users/jawaun/jackson_prosocial_interp_research/.env \
+  --railway-project inquiry-black-box-api \
+  --railway-service inquiry-black-box-api \
+  --railway-environment production
 railway up --service inquiry-black-box-api
 ```
 
