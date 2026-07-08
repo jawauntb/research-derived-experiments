@@ -103,8 +103,8 @@ async function createCloudSummaryReport(
   return store.createReport({
     user_id: job.user_id,
     kind: job.kind,
-    title: "Redacted LLM session summary",
-    summary: "Cloud LLM report completed.",
+    title: "Redacted LLM session analysis",
+    summary: "Cloud LLM analysis completed.",
     payload,
     provenance,
     ...(job.session_id ? { session_id: job.session_id } : {}),
@@ -227,11 +227,11 @@ function sessionSummaryJobResult(jobId: string, input: JsonObject, summary: Sess
     ...(inputReportId ? { input_report_id: inputReportId } : {}),
   };
   return {
-    title: "Redacted LLM session summary",
-    summary: "Cloud LLM report completed.",
+    title: "Redacted LLM session analysis",
+    summary: "Cloud LLM analysis completed.",
     report: {
-      title: "Redacted LLM session summary",
-      summary: "Cloud LLM report completed.",
+      title: "Redacted LLM session analysis",
+      summary: "Cloud LLM analysis completed.",
       payload: reportPayload,
       provenance,
     },

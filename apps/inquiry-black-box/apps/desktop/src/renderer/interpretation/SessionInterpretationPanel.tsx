@@ -77,7 +77,7 @@ function redactedSummaryAction(actions: SessionInterpretationActions): HTMLEleme
   const button = document.createElement("button");
   button.type = "button";
   button.className = "interpretation-llm__button";
-  button.textContent = "Request redacted LLM summary";
+  button.textContent = "Analyze and ask about your data";
   button.disabled = !actions.cloudSyncEnabled || !actions.requestRedactedSummary;
   button.addEventListener("click", () => void actions.requestRedactedSummary?.());
 
@@ -88,7 +88,7 @@ function redactedSummaryAction(actions: SessionInterpretationActions): HTMLEleme
   } else if (!actions.cloudSyncEnabled) {
     status.textContent = "Cloud sync is off; no model request will be sent.";
   } else {
-    status.textContent = "Only redacted counts, themes, actions, and limitations are submitted.";
+    status.textContent = "Only redacted counts, themes, actions, and limitations are submitted for analysis.";
   }
 
   panel.append(button, status);

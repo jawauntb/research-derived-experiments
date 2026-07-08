@@ -60,6 +60,9 @@ describe("cloud summary provider client", () => {
     expect(requestedUrl).toBe("https://api.openai.com/v1/responses");
     expect(authorization).toBe("Bearer fixture-openai-key");
     expect(postedBody).toContain("redacted-sync");
+    expect(postedBody).toContain("Analyze this Inquiry Black Box session");
+    expect(postedBody).toContain("follow-up questions or next actions");
+    expect(postedBody).not.toContain("Summarize this Inquiry Black Box session");
     expect(JSON.parse(postedBody)).toMatchObject({ max_output_tokens: 2_000 });
     expect(postedBody).not.toContain("Cursor");
     expect(postedBody).not.toContain("com.todesktop.230313mzl4w4u92");
@@ -114,6 +117,9 @@ describe("cloud summary provider client", () => {
       text: "Gemini cloud summary.",
     });
     expect(requestedUrl).toBe("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent");
+    expect(postedBody).toContain("Analyze this Inquiry Black Box session");
+    expect(postedBody).toContain("follow-up questions or next actions");
+    expect(postedBody).not.toContain("Summarize this Inquiry Black Box session");
     expect(JSON.parse(postedBody)).toMatchObject({ generationConfig: { maxOutputTokens: 2_000 } });
   });
 });

@@ -63,7 +63,7 @@ export async function requestRedactedSessionSummary(
       provider: providerPreference ?? "modal",
       model: options.model ?? process.env.SESSION_SUMMARY_MODEL ?? "redacted-session-summary",
       status: "unavailable",
-      message: "Cloud sync is off. Enable Cloud sync before requesting a redacted LLM summary.",
+      message: "Cloud sync is off. Enable Cloud sync before asking the model to analyze redacted data.",
       limitations: ["No cloud, Modal, OpenAI, or Gemini request was made.", "Local interpretation remains available."],
       submissionStatus: "blocked",
     });
@@ -175,8 +175,8 @@ export async function requestRedactedSessionSummary(
       model,
       status: modelRunStatus(job.status),
       inputReportId: interpretation.report_id,
-      message: completedSummary ?? "Redacted LLM summary job submitted.",
-      limitations: ["Submitted only redacted session interpretation counts, themes, actions, and limitations."],
+      message: completedSummary ?? "Redacted LLM analysis job submitted.",
+      limitations: ["Submitted only redacted session interpretation counts, themes, actions, and limitations for analysis."],
       submissionStatus: modelRunStatus(job.status) === "complete" ? "complete" : "submitted",
       ...(jobId ? { jobId } : {}),
       ...(modalCallId ? { modalCallId } : {}),
@@ -233,7 +233,7 @@ async function requestOpenAiSummary(
         model: input.model,
         status: "failed",
         inputReportId: input.inputReportId,
-        message: `OpenAI summary request failed with status ${response.status}.`,
+        message: `OpenAI analysis request failed with status ${response.status}.`,
         limitations: [errorMessage(body), "The submitted payload was redacted-sync only."],
         submissionStatus: "failed",
       });
@@ -248,7 +248,7 @@ async function requestOpenAiSummary(
         model: input.model,
         status: "failed",
         inputReportId: input.inputReportId,
-        message: "OpenAI summary response did not include text.",
+        message: "OpenAI analysis response did not include text.",
         limitations: ["The submitted payload was redacted-sync only."],
         submissionStatus: "failed",
       });
@@ -273,7 +273,7 @@ async function requestOpenAiSummary(
       model: input.model,
       status: "failed",
       inputReportId: input.inputReportId,
-      message: "OpenAI summary request failed before completion.",
+      message: "OpenAI analysis request failed before completion.",
       limitations: [error instanceof Error ? error.message : String(error)],
       submissionStatus: "failed",
     });
@@ -317,7 +317,7 @@ async function requestGeminiSummary(
         model: input.model,
         status: "failed",
         inputReportId: input.inputReportId,
-        message: `Gemini summary request failed with status ${response.status}.`,
+        message: `Gemini analysis request failed with status ${response.status}.`,
         limitations: [errorMessage(body), "The submitted payload was redacted-sync only."],
         submissionStatus: "failed",
       });
@@ -332,7 +332,7 @@ async function requestGeminiSummary(
         model: input.model,
         status: "failed",
         inputReportId: input.inputReportId,
-        message: "Gemini summary response did not include text.",
+        message: "Gemini analysis response did not include text.",
         limitations: ["The submitted payload was redacted-sync only."],
         submissionStatus: "failed",
       });
@@ -357,7 +357,7 @@ async function requestGeminiSummary(
       model: input.model,
       status: "failed",
       inputReportId: input.inputReportId,
-      message: "Gemini summary request failed before completion.",
+      message: "Gemini analysis request failed before completion.",
       limitations: [error instanceof Error ? error.message : String(error)],
       submissionStatus: "failed",
     });
@@ -590,7 +590,7 @@ function openAiSummaryRequestBody(model: string, input: JsonObject): JsonObject 
     model,
     instructions: sessionSummaryInstructions(),
     input: redactedSummaryPromptInput(input),
-    max_output_tokens: 384,
+    max_output_tokens: 2_000,
   };
 }
 
@@ -614,16 +614,16 @@ function geminiSummaryRequestBody(input: JsonObject): JsonObject {
     ],
     generationConfig: {
       temperature: 0.2,
-      maxOutputTokens: 384,
+      maxOutputTokens: 2_000,
     },
   };
 }
 
 function sessionSummaryInstructions(): string {
   return [
-    "Summarize this Inquiry Black Box session using only the redacted JSON below.",
+    "Analyze this Inquiry Black Box session using only the redacted JSON below.",
     "Do not infer identities, diagnoses, hidden mental states, raw page text, typed text, selected text, app identities, or window titles.",
-    "Return concise plain text: one evidence-grounded summary sentence and up to two next actions.",
+    "Return concise plain text: one evidence-grounded analysis sentence and up to two follow-up questions or next actions the user can answer from their data.",
   ].join("\n");
 }
 
