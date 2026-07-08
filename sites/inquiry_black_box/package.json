@@ -1,0 +1,14 @@
+{
+  "name": "inquiry-black-box-site",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Inquiry Black Box marketing and product explanation site.",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "PORT=3010 node server.js",
+    "test": "bun test tests/*.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
