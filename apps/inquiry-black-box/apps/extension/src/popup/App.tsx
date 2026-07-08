@@ -67,9 +67,9 @@ export function mountPopup(root: HTMLElement, chromeApi = readChrome()): void {
   void renderFromRuntime(root, chromeApi);
 }
 
-async function renderFromRuntime(root: HTMLElement, chromeApi: ChromeLike): Promise<void> {
+async function renderFromRuntime(root: HTMLElement, chromeApi: ChromeLike, notice?: string): Promise<void> {
   const model = await loadModel(chromeApi);
-  render(root, model, chromeApi);
+  render(root, model, chromeApi, notice);
 }
 
 async function loadModel(chromeApi: ChromeLike): Promise<PopupModel> {
@@ -91,7 +91,7 @@ async function loadModel(chromeApi: ChromeLike): Promise<PopupModel> {
   };
 }
 
-function render(root: HTMLElement, model: PopupModel, chromeApi: ChromeLike): void {
+function render(root: HTMLElement, model: PopupModel, chromeApi: ChromeLike, notice?: string): void {
   const page = document.createElement("main");
   page.className = "popup";
 
@@ -106,7 +106,12 @@ function render(root: HTMLElement, model: PopupModel, chromeApi: ChromeLike): vo
 
   const queue = document.createElement("div");
   queue.className = "queue-row";
-  queue.textContent = `${model.state.queueSize} queued`;
+  queue.textContent = queueLabel(model.state);
+
+  const noticeElement = document.createElement("div");
+  noticeElement.className = "popup-notice";
+  noticeElement.hidden = !notice;
+  noticeElement.textContent = notice ?? "";
 
   const summary = document.createElement("section");
   summary.className = "pairing-summary";
@@ -155,8 +160,20 @@ function render(root: HTMLElement, model: PopupModel, chromeApi: ChromeLike): vo
     await renderFromRuntime(root, chromeApi);
   });
 
-  page.append(header, queue, summary, controls, siteToggle, togglesMount, pairing);
+  page.append(header, queue, noticeElement, summary, controls, siteToggle, togglesMount, pairing);
   root.replaceChildren(page);
+}
+
+function queueLabel(state: PopupState): string {
+  if (state.queueSize > 0) {
+    return `${state.queueSize} queued for retry`;
+  }
+
+  if (!state.pairingToken) {
+    return "Not paired";
+  }
+
+  return state.recordingState === "recording" ? "Queue clear" : "No queued events";
 }
 
 function summaryRow(labelText: string, valueText: string): HTMLElement {
@@ -222,11 +239,16 @@ async function setRecordingState(
   recordingState: RecordingState,
   pausedUntilMs?: number,
 ): Promise<void> {
-  await sendRuntimeMessage(chromeApi.runtime, {
+  const response = await sendRuntimeMessage(chromeApi.runtime, {
     type: "inquiry:set-recording-state",
     recordingState,
     pausedUntilMs,
   });
+  if (isRecord(response) && response.ok === false) {
+    await renderFromRuntime(root, chromeApi, `Desktop control failed: ${String(response.error ?? "unknown error")}`);
+    return;
+  }
+
   await detectPageListener(chromeApi);
   await renderFromRuntime(root, chromeApi);
 }
@@ -492,6 +514,19 @@ function installStyles(): void {
     .queue-row {
       color: #5a665f;
       font-size: 12px;
+    }
+
+    .popup-notice {
+      background: #fff8e6;
+      border: 1px solid #ead399;
+      border-radius: 6px;
+      color: #5f4300;
+      font-size: 12px;
+      padding: 8px;
+    }
+
+    .popup-notice[hidden] {
+      display: none;
     }
 
     .pairing-summary {

@@ -38,6 +38,18 @@ function extensionBatchRequest(body: unknown, overrides: { origin?: string; toke
   });
 }
 
+function sessionControlRequest(body: unknown, overrides: { origin?: string; token?: string } = {}): Request {
+  return new Request("http://127.0.0.1:39170/v1/extension/session", {
+    method: "POST",
+    headers: {
+      "x-inquiry-pairing-token": overrides.token ?? token(),
+      "content-type": "application/json",
+      origin: overrides.origin ?? origin,
+    },
+    body: JSON.stringify(body),
+  });
+}
+
 describe("desktop extension ingest", () => {
   test("accepts valid extension events and rejects invalid token or origin", async () => {
     const database = createInquiryDatabase();
@@ -138,6 +150,51 @@ describe("desktop extension ingest", () => {
     expect(response.status).toBe(202);
     expect(body).toMatchObject({ accepted: 1, event_ids: ["extension-event-1"] });
     expect(database.listEvents(session.session_id).map((stored) => stored.event_id)).toContain("extension-event-1");
+    database.close();
+  });
+
+  test("allows a paired extension to start and stop the desktop session", async () => {
+    const database = createInquiryDatabase();
+    const sessions = createSessionController(database, {
+      nowIso: () => "2026-07-07T12:10:00.000Z",
+      nowMs: () => issuedAtMs,
+    });
+    const handler = createIngestRequestHandler({
+      allowedOrigins: [origin],
+      database,
+      pairingSecret: secret,
+      sessions,
+      nowMs: () => issuedAtMs,
+    });
+
+    const started = await handler(sessionControlRequest({ recording_state: "recording", title: "Extension session" }));
+    const startedBody = await started.json();
+    const sessionId = String(startedBody.session_id);
+
+    expect(started.status).toBe(200);
+    expect(startedBody).toMatchObject({
+      ok: true,
+      recording_state: "recording",
+      session: {
+        title: "Extension session",
+        recording_state: "recording",
+      },
+    });
+    expect(database.getSession(sessionId)?.recording_state).toBe("recording");
+
+    const repeatedStart = await handler(sessionControlRequest({ recording_state: "recording" }));
+    const repeatedBody = await repeatedStart.json();
+    expect(repeatedStart.status).toBe(200);
+    expect(repeatedBody.session_id).toBe(sessionId);
+
+    const stopped = await handler(sessionControlRequest({ recording_state: "stopped" }));
+    const stoppedBody = await stopped.json();
+    expect(stopped.status).toBe(200);
+    expect(stoppedBody).toMatchObject({ ok: true, session_id: sessionId, recording_state: "stopped" });
+    expect(database.getSession(sessionId)?.recording_state).toBe("stopped");
+
+    const invalidToken = await handler(sessionControlRequest({ recording_state: "recording" }, { token: "bad-token" }));
+    expect(invalidToken.status).toBe(401);
     database.close();
   });
 

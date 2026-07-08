@@ -2,10 +2,12 @@ import { validateEvent, type EventEnvelope } from "@inquiry/schema";
 import {
   BRIDGE_STATE_KEY,
   createStorageEventQueue,
+  type FetchLike,
   flushQueuedEvents,
   getBridgeState,
   isBridgeEventAllowed,
   normalizeBridgeState,
+  postSessionControl,
   saveBridgeState,
   type BridgeState,
   type EventQueue,
@@ -84,6 +86,7 @@ type BackgroundContext = {
   storage: StorageAreaLike;
   queue: EventQueue;
   tabs?: TabsLike;
+  fetchImpl?: FetchLike;
   now: () => number;
 };
 
@@ -191,13 +194,45 @@ async function updateRecordingState(
   state: BridgeState,
   recordingState: RecordingState | undefined,
   pausedUntilMs: number | undefined,
-): Promise<BridgeState & { ok: true }> {
+): Promise<
+  | (BridgeState & { ok: true; warning?: string })
+  | (BridgeState & { ok: false; error: string })
+> {
+  if (recordingState === "recording") {
+    try {
+      const control = await postSessionControl(
+        state,
+        { recordingState: "recording", title: "Research session", monotonicMs: context.now() },
+        context.fetchImpl ? { fetchImpl: context.fetchImpl } : {},
+      );
+      return updateState(context, state, {
+        recordingState: control.recordingState === "recording" ? "recording" : recordingState,
+        sessionId: control.sessionId ?? state.sessionId,
+      });
+    } catch (error) {
+      return { ...state, ok: false, error: errorMessage(error) };
+    }
+  }
+
   const updates: Partial<BridgeState> = {
     recordingState: recordingState ?? state.recordingState,
   };
 
   if (typeof pausedUntilMs === "number") {
     updates.pausedUntilMs = pausedUntilMs;
+  }
+
+  if (recordingState === "stopped") {
+    try {
+      await postSessionControl(
+        state,
+        { recordingState: "stopped", monotonicMs: context.now() },
+        context.fetchImpl ? { fetchImpl: context.fetchImpl } : {},
+      );
+    } catch (error) {
+      const next = await updateState(context, state, updates);
+      return { ...next, warning: errorMessage(error) };
+    }
   }
 
   return updateState(context, state, updates);
@@ -414,6 +449,10 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function isPromiseLike<T>(value: unknown): value is Promise<T> {
   return typeof value === "object" && value !== null && "then" in value;
+}
+
+function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
 }
 
 installServiceWorker();
