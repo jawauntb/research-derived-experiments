@@ -110,6 +110,34 @@ describe("replay heuristics", () => {
     expect(buildReplayMarkers(events).filter((marker) => marker.kind === "copied-passage")).toHaveLength(2);
   });
 
+  test("evidence episodes include snippets only for document opt-in selected text", () => {
+    const events = [
+      createEvent({
+        session_id: "fixture-session",
+        source: "browser",
+        source_version: "test@0.1.0",
+        monotonic_ms: 7_000,
+        event_type: "browser.copy",
+        payload: {
+          hostname_hash: "h_demo",
+          url_hash: "h_page",
+          selection_length: 36,
+          range_count: 1,
+          selected_text: "a copied claim about residual evidence",
+        },
+        privacy_class: "document-opt-in",
+        retention_policy: "session-delete",
+      }),
+    ];
+
+    const memo = buildReplayMemo(events);
+
+    expect(memo.episodes).toHaveLength(1);
+    expect(memo.episodes[0]?.snippets).toEqual(["a copied claim about residual evidence"]);
+    expect(memo.episodes[0]?.details.join(" ")).toContain('Opt-in excerpt: "a copied claim about residual evidence"');
+    expect(memo.episodes[0]?.privacy_note).toContain("opt-in was enabled");
+  });
+
   test("low camera quality suppresses high-load marker", () => {
     const events = [
       event("camera.feature_window", 1_000, { gaze_away_ratio: 0.9 }, ["face-missing"]),

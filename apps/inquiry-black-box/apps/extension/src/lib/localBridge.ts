@@ -12,6 +12,7 @@ export type PrivacyToggles = {
   browser: boolean;
   typingMetrics: boolean;
   selection: boolean;
+  selectedText: boolean;
   media: boolean;
 };
 
@@ -75,6 +76,7 @@ export const defaultPrivacyToggles: PrivacyToggles = {
   browser: true,
   typingMetrics: true,
   selection: true,
+  selectedText: false,
   media: true,
 };
 
@@ -82,8 +84,11 @@ export const disabledPrivacyToggles: PrivacyToggles = {
   browser: false,
   typingMetrics: false,
   selection: false,
+  selectedText: false,
   media: false,
 };
+
+const rawSelectedTextPayloadKeys = ["selected_text", "copied_text", "highlight_text"] as const;
 
 export function defaultBridgeState(now = new Date()): BridgeState {
   return {
@@ -277,6 +282,8 @@ export function normalizeBridgeState(input?: Partial<BridgeState>): BridgeState 
       typingMetrics:
         typeof toggles.typingMetrics === "boolean" ? toggles.typingMetrics : fallback.privacyToggles.typingMetrics,
       selection: typeof toggles.selection === "boolean" ? toggles.selection : fallback.privacyToggles.selection,
+      selectedText:
+        typeof toggles.selectedText === "boolean" ? toggles.selectedText : fallback.privacyToggles.selectedText,
       media: typeof toggles.media === "boolean" ? toggles.media : fallback.privacyToggles.media,
     },
     updatedAt: typeof input?.updatedAt === "string" ? input.updatedAt : fallback.updatedAt,
@@ -323,6 +330,10 @@ export function isBridgeEventAllowed(event: EventEnvelope, state: BridgeState, n
     event.event_type === "browser.copy" ||
     event.event_type === "browser.highlight"
   ) {
+    if (event.privacy_class === "document-opt-in" && hasSelectedText(event)) {
+      return state.privacyToggles.selection && state.privacyToggles.selectedText;
+    }
+
     return state.privacyToggles.selection;
   }
 
@@ -331,6 +342,10 @@ export function isBridgeEventAllowed(event: EventEnvelope, state: BridgeState, n
   }
 
   return true;
+}
+
+function hasSelectedText(event: EventEnvelope): boolean {
+  return rawSelectedTextPayloadKeys.some((key) => typeof event.payload[key] === "string" && event.payload[key].length > 0);
 }
 
 async function fetchWithTimeout(fetchImpl: FetchLike, url: string, init: RequestInit, timeoutMs: number): Promise<Response> {

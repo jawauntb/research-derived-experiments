@@ -228,6 +228,7 @@ export function validateEvent(value: unknown): asserts value is EventEnvelope {
 
   assertNoBlockedPayload(value.payload);
   assertStimulusTextOptIn(value as EventEnvelope);
+  assertBrowserSelectedTextOptIn(value as EventEnvelope);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -235,6 +236,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 const rawStimulusTextFieldNames = new Set(["text", "rawText", "content", "html", "markdown", "excerpt"]);
+const rawBrowserSelectedTextFieldNames = new Set(["selected_text", "copied_text", "highlight_text"]);
 
 function assertStimulusTextOptIn(event: EventEnvelope): void {
   if (!event.event_type.startsWith("stimulus.") || event.privacy_class === "document-opt-in") {
@@ -263,6 +265,42 @@ function findRawStimulusTextFieldPaths(value: unknown, path = "$"): string[] {
       paths.push(childPath);
     }
     paths.push(...findRawStimulusTextFieldPaths(child, childPath));
+  }
+
+  return paths;
+}
+
+function assertBrowserSelectedTextOptIn(event: EventEnvelope): void {
+  if (!isBrowserSelectionTextEvent(event.event_type) || event.privacy_class === "document-opt-in") {
+    return;
+  }
+
+  const present = findRawBrowserSelectedTextFieldPaths(event.payload);
+  if (present.length > 0) {
+    throw new Error(`browser selected text requires document-opt-in: ${present.join(", ")}`);
+  }
+}
+
+function isBrowserSelectionTextEvent(eventType: EventType): boolean {
+  return eventType === "browser.selection" || eventType === "browser.copy" || eventType === "browser.highlight";
+}
+
+function findRawBrowserSelectedTextFieldPaths(value: unknown, path = "$"): string[] {
+  if (Array.isArray(value)) {
+    return value.flatMap((item, index) => findRawBrowserSelectedTextFieldPaths(item, `${path}[${index}]`));
+  }
+
+  if (!isRecord(value)) {
+    return [];
+  }
+
+  const paths: string[] = [];
+  for (const [key, child] of Object.entries(value)) {
+    const childPath = `${path}.${key}`;
+    if (rawBrowserSelectedTextFieldNames.has(key)) {
+      paths.push(childPath);
+    }
+    paths.push(...findRawBrowserSelectedTextFieldPaths(child, childPath));
   }
 
   return paths;

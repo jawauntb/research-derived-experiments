@@ -399,6 +399,7 @@ function privacyTogglesValue(value: unknown): PrivacyToggles | undefined {
     browser: booleanValue(value.browser, true),
     typingMetrics: booleanValue(value.typingMetrics, true),
     selection: booleanValue(value.selection, true),
+    selectedText: booleanValue(value.selectedText, false),
     media: booleanValue(value.media, true),
   };
 }

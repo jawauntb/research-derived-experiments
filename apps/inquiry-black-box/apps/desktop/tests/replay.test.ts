@@ -134,6 +134,33 @@ describe("session replay report", () => {
     expect(report.limitations.join(" ")).toContain("Copied or selected page text is not stored");
   });
 
+  test("shows opted-in selected text snippets in replay evidence episodes", () => {
+    const report = createSessionReplayReport([
+      createEvent({
+        session_id: "replay-session",
+        source: "browser",
+        source_version: "test@0.1.0",
+        monotonic_ms: 23_000,
+        event_type: "browser.copy",
+        payload: {
+          hostname_hash: "h_demo",
+          url_hash: "h_page",
+          selection_length: 41,
+          range_count: 1,
+          selected_text: "repair should be evidence-backed and answerable",
+        },
+        privacy_class: "document-opt-in",
+        retention_policy: "session-delete",
+      }),
+    ]);
+
+    expect(report.episodes).toHaveLength(1);
+    expect(report.episodes[0]?.details.join(" ")).toContain(
+      'Opt-in excerpt: "repair should be evidence-backed and answerable"',
+    );
+    expect(report.episodes[0]?.privacy_note).toContain("Selected text was stored");
+  });
+
   test("renders heatmap bands with confidence, evidence, and limitation text", () => {
     const documentStub = new FakeDocument();
     const globalWithDocument = globalThis as unknown as { document?: unknown };
