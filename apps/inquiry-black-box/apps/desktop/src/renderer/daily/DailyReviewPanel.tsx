@@ -3,6 +3,8 @@ import type { DailyReviewReport } from "../../main/reports/dailyDigest";
 
 export type DailyReviewActions = {
   refreshDailyReview: () => void | Promise<void>;
+  refreshState?: "idle" | "refreshing" | "refreshed" | "failed";
+  refreshMessage?: string | undefined;
   respondSuggestion: (input: { suggestion_id: string; response: SuggestionResponse; reason?: string; snoozed_until?: string }) => void | Promise<void>;
 };
 
@@ -22,10 +24,18 @@ export function renderDailyReviewPanel(
   title.textContent = "Daily Review";
   const refresh = document.createElement("button");
   refresh.type = "button";
-  refresh.textContent = "Refresh";
+  refresh.textContent = actions.refreshState === "refreshing" ? "Refreshing..." : "Refresh";
+  refresh.disabled = actions.refreshState === "refreshing";
   refresh.addEventListener("click", () => void actions.refreshDailyReview());
   header.append(title, refresh);
   section.append(header);
+
+  if (actions.refreshMessage) {
+    const status = document.createElement("p");
+    status.className = `daily-review-refresh-status daily-review-refresh-status-${actions.refreshState ?? "idle"}`;
+    status.textContent = actions.refreshMessage;
+    section.append(status);
+  }
 
   if (!review || (review.suggestions.length === 0 && review.limitations.length === 0)) {
     section.append(emptyState("No daily suggestions yet", "Run and stop an explicit session, then refresh today's review."));
