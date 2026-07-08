@@ -11,6 +11,11 @@ export type PairingTokenVerification = {
   reason: string;
 };
 
+export type PairingChallengeStore = {
+  approveChallenge: (challenge: string, nowMs?: number) => void;
+  consumeChallenge: (challenge: string, nowMs?: number) => boolean;
+};
+
 export type VerifyPairingTokenInput = {
   secret: string;
   token: string;
@@ -21,6 +26,7 @@ export type VerifyPairingTokenInput = {
 
 const defaultMaxAgeMs = 24 * 60 * 60 * 1000;
 const defaultMaxFutureSkewMs = 60 * 1000;
+const defaultChallengeMaxAgeMs = 60_000;
 
 export function createPairingSecret(): string {
   return randomBytes(32).toString("base64url");
@@ -70,9 +76,52 @@ export function verifyPairingToken(input: VerifyPairingTokenInput): PairingToken
   return { valid: true, reason: "token accepted" };
 }
 
+export function createPairingChallengeStore(maxAgeMs = defaultChallengeMaxAgeMs): PairingChallengeStore {
+  const approved = new Map<string, number>();
+
+  return {
+    approveChallenge(challenge, nowMs = Date.now()) {
+      assertUsableChallenge(challenge);
+      pruneExpiredChallenges(approved, nowMs, maxAgeMs);
+      approved.set(challenge, nowMs);
+    },
+    consumeChallenge(challenge, nowMs = Date.now()) {
+      if (!isUsableChallenge(challenge)) {
+        return false;
+      }
+
+      const approvedAt = approved.get(challenge);
+      if (approvedAt === undefined) {
+        return false;
+      }
+
+      approved.delete(challenge);
+      return nowMs - approvedAt <= maxAgeMs;
+    },
+  };
+}
+
 function assertUsableSecret(secret: string): void {
   if (secret.trim().length < 16) {
     throw new Error("pairing secret must be at least 16 characters");
+  }
+}
+
+function assertUsableChallenge(challenge: string): void {
+  if (!isUsableChallenge(challenge)) {
+    throw new Error("pairing challenge must be a non-empty bounded string");
+  }
+}
+
+function isUsableChallenge(challenge: string): boolean {
+  return challenge.length >= 16 && challenge.length <= 200;
+}
+
+function pruneExpiredChallenges(approved: Map<string, number>, nowMs: number, maxAgeMs: number): void {
+  for (const [challenge, approvedAt] of approved) {
+    if (nowMs - approvedAt > maxAgeMs) {
+      approved.delete(challenge);
+    }
   }
 }
 

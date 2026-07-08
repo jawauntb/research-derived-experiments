@@ -116,6 +116,9 @@ Common variables:
 - `INQUIRY_DESKTOP_DB_PATH`: optional desktop SQLite path; defaults to
   `~/.inquiry-black-box/inquiry.sqlite`.
 - `INQUIRY_CLOUD_AUTH_SECRET`: HMAC secret for signed cloud bearer tokens.
+- `INQUIRY_CLOUD_BEARER_TOKEN`: pre-issued desktop bearer token for optional
+  redacted cloud summaries. Do not ship `INQUIRY_CLOUD_AUTH_SECRET` in desktop
+  app environments.
 - `INQUIRY_ALLOW_IN_MEMORY_CLOUD=1`: Railway/production smoke-test escape
   hatch for the local in-memory cloud store. Do not use for real data.
 - `DATABASE_URL`: Railway Postgres connection string for the cloud API.

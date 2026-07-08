@@ -1,4 +1,5 @@
 import {
+  createPairingChallenge,
   defaultBridgeState,
   isRecordingState,
   normalizeBridgeState,
@@ -10,6 +11,7 @@ import { CONTENT_PING_MESSAGE, CONTENT_PONG_MESSAGE } from "../lib/messages";
 import { hashForTelemetry } from "../lib/telemetry";
 import {
   defaultSessionTitle,
+  inquiryDarkCssVariableBlock,
   inquiryCssVariableBlock,
   recordingIndicator,
   sessionTransportButtons,
@@ -184,7 +186,9 @@ function render(root: HTMLElement, model: PopupModel, chromeApi: ChromeLike, not
   ].join(" · ");
 
   const diagnostics = diagnosticsSection(model);
-  const pairing = model.state.pairingToken ? pairingEditAction(model, chromeApi, () => renderFromRuntime(root, chromeApi)) : pairingForm(model, chromeApi, () => renderFromRuntime(root, chromeApi));
+  const pairing = model.state.pairingToken
+    ? pairingEditAction(model, chromeApi, () => renderFromRuntime(root, chromeApi))
+    : pairingPanel(root, model, chromeApi);
 
   const togglesMount = document.createElement("details");
   togglesMount.className = "privacy-disclosure";
@@ -243,6 +247,50 @@ function pairingEditAction(model: PopupModel, chromeApi: ChromeLike, onSaved: ()
   const summary = document.createElement("summary");
   summary.textContent = "Edit pairing";
   wrapper.append(summary, pairingForm(model, chromeApi, onSaved));
+  return wrapper;
+}
+
+function pairingPanel(root: HTMLElement, model: PopupModel, chromeApi: ChromeLike): HTMLElement {
+  const wrapper = document.createElement("section");
+  wrapper.className = "pairing-panel";
+
+  const autoButton = document.createElement("button");
+  autoButton.type = "button";
+  autoButton.className = "pairing-auto-button";
+  autoButton.textContent = "Pair with local desktop";
+  autoButton.addEventListener("click", async () => {
+    const challenge = createPairingChallenge();
+    autoButton.disabled = true;
+    autoButton.textContent = "Opening desktop...";
+    globalThis.open(pairingDeepLink(challenge), "_blank", "noopener");
+
+    try {
+      await autoPairWithRetry(chromeApi.runtime, challenge);
+      await renderFromRuntime(root, chromeApi, "Paired with local desktop.");
+    } catch (error) {
+      await renderFromRuntime(root, chromeApi, `Desktop pairing failed: ${errorMessage(error)}`);
+    }
+  });
+
+  const openDesktop = document.createElement("button");
+  openDesktop.type = "button";
+  openDesktop.className = "pairing-open-desktop-button";
+  openDesktop.textContent = "Open desktop";
+  openDesktop.addEventListener("click", () => {
+    globalThis.open("inquiry-black-box://pair?source=chrome-extension", "_blank", "noopener");
+  });
+
+  const actions = document.createElement("div");
+  actions.className = "pairing-actions";
+  actions.append(autoButton, openDesktop);
+
+  const manual = document.createElement("details");
+  manual.className = "pairing-disclosure";
+  const summary = document.createElement("summary");
+  summary.textContent = "Manual token";
+  manual.append(summary, pairingForm(model, chromeApi, () => renderFromRuntime(root, chromeApi)));
+
+  wrapper.append(actions, manual);
   return wrapper;
 }
 
@@ -428,7 +476,14 @@ async function sendRuntimeMessage(runtime: RuntimeLike | undefined, message: unk
 
   return await new Promise((resolve, reject) => {
     try {
-      const result = runtime.sendMessage(message, (response) => resolve(response));
+      const result = runtime.sendMessage(message, (response) => {
+        const error = runtime.lastError?.message;
+        if (error) {
+          reject(new Error(error));
+          return;
+        }
+        resolve(response);
+      });
       if (isPromiseLike(result)) {
         result.then(resolve, reject);
       }
@@ -436,6 +491,43 @@ async function sendRuntimeMessage(runtime: RuntimeLike | undefined, message: unk
       reject(error);
     }
   });
+}
+
+async function autoPairWithRetry(runtime: RuntimeLike | undefined, challenge: string): Promise<Record<string, unknown>> {
+  let lastError = "desktop pairing did not complete";
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    try {
+      const response = await sendRuntimeMessage(runtime, { type: "inquiry:auto-pair", challenge });
+      if (isSuccessfulPairingResponse(response)) {
+        return response;
+      }
+      if (isRecord(response) && response.ok === false) {
+        lastError = String(response.error ?? lastError);
+      } else {
+        lastError = "desktop pairing returned an invalid response";
+      }
+    } catch (error) {
+      lastError = errorMessage(error);
+    }
+    await sleep(attempt < 2 ? 250 : 500);
+  }
+
+  throw new Error(lastError);
+}
+
+function isSuccessfulPairingResponse(value: unknown): value is Record<string, unknown> {
+  return isRecord(value) && value.ok === true && typeof value.pairingToken === "string" && value.pairingToken.length > 0;
+}
+
+function pairingDeepLink(challenge: string): string {
+  const url = new URL("inquiry-black-box://pair");
+  url.searchParams.set("source", "chrome-extension");
+  url.searchParams.set("challenge", challenge);
+  return url.toString();
+}
+
+async function sleep(ms: number): Promise<void> {
+  await new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function readActiveTab(tabs: TabsLike | undefined): Promise<ActiveTab | undefined> {
@@ -542,10 +634,19 @@ function installStyles(): void {
   style.id = "inquiry-popup-styles";
   style.textContent = `
     ${inquiryCssVariableBlock(":root")}
+    ${inquiryDarkCssVariableBlock(":root[data-theme='dark']")}
 
     :root {
       color-scheme: light;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      ${inquiryDarkCssVariableBlock(":root")}
+
+      :root {
+        color-scheme: dark;
+      }
     }
 
     body {
@@ -643,17 +744,41 @@ function installStyles(): void {
 
     .privacy-disclosure,
     .diagnostics-disclosure,
-    .pairing-disclosure {
+    .pairing-disclosure,
+    .pairing-panel {
       background: var(--surface-raised);
-      border: 1px solid rgba(255, 255, 255, 0.7);
+      border: 1px solid var(--line);
       border-radius: 8px;
       box-shadow: var(--shadow-raised);
       padding: 10px;
     }
 
+    .pairing-panel {
+      display: grid;
+      gap: 10px;
+    }
+
+    .pairing-actions {
+      display: grid;
+      gap: 8px;
+      grid-template-columns: minmax(0, 1fr) minmax(96px, auto);
+    }
+
+    .pairing-auto-button {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+    }
+
+    .pairing-open-desktop-button {
+      background: var(--blue-soft);
+      border-color: var(--blue-soft);
+      color: var(--blue);
+    }
+
     .pairing-summary {
       background: var(--surface-raised);
-      border: 1px solid rgba(255, 255, 255, 0.7);
+      border: 1px solid var(--line);
       border-radius: 8px;
       box-shadow: var(--shadow-raised);
       display: grid;
@@ -741,7 +866,7 @@ function installStyles(): void {
 
     .privacy-toggles {
       background: var(--surface-raised);
-      border: 1px solid rgba(255, 255, 255, 0.7);
+      border: 1px solid var(--line);
       border-radius: 8px;
       box-shadow: var(--shadow-raised);
       display: grid;

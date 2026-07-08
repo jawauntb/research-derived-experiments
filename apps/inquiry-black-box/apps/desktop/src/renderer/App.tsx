@@ -1,7 +1,9 @@
 import type { EventEnvelope, LabelPayload, SessionRecord, SuggestionResponse } from "@inquiry/schema";
 import type { RepairCandidate } from "@inquiry/signals";
 import { defaultSessionTitle, maskPairingToken } from "@inquiry/ui";
+import type { InquiryDeepLink } from "../main/deepLink";
 import type { DesktopShellStatus } from "../main/ipc";
+import type { RedactedSummarySubmission } from "../main/cloud/redactedSummary";
 import type { DailyReviewReport } from "../main/reports/dailyDigest";
 import type { SessionHistoryEntry } from "../main/reports/sessionHistory";
 import type { SessionInterpretationReport } from "../main/reports/sessionInterpretation";
@@ -58,6 +60,7 @@ export type InquiryDesktopBridge = {
   };
   interpretation?: {
     session: () => Promise<SessionInterpretationReport | null>;
+    requestRedactedSummary: () => Promise<RedactedSummarySubmission>;
     daily: () => Promise<DailyReviewReport>;
     refreshDaily: () => Promise<DailyReviewReport>;
     respondSuggestion: (input: {
@@ -73,7 +76,14 @@ export type InquiryDesktopBridge = {
     answer: (input: ProbeAnswer) => Promise<EventEnvelope[]>;
     dismiss: (input: { repair_id: RepairCandidate["repair_id"]; reason?: string }) => Promise<EventEnvelope>;
   };
+  deepLinks?: {
+    onReceived: (handler: (deepLink: InquiryDeepLink) => void) => () => void;
+  };
 };
+
+const themePreferences = ["system", "light", "dark"] as const;
+
+export type ThemePreference = (typeof themePreferences)[number];
 
 export type AppViewModel = {
   session: SessionRecord | null;
@@ -81,10 +91,13 @@ export type AppViewModel = {
   replay?: SessionReplayReport | null;
   interpretation?: SessionInterpretationReport | null;
   dailyReview?: DailyReviewReport | null;
+  redactedSummary?: RedactedSummarySubmission | null;
   sessionHistory: SessionHistoryEntry[];
   repairCandidate?: RepairCandidate | null;
   pairingTokenRevealed: boolean;
   replayDemo: boolean;
+  themePreference: ThemePreference;
+  deepLinkNotice?: string | null;
   camera: {
     enabled: boolean;
     permission: CameraPermissionState;
@@ -99,6 +112,7 @@ export function createInitialAppViewModel(session: SessionRecord | null = null):
     sessionHistory: [],
     pairingTokenRevealed: false,
     replayDemo: false,
+    themePreference: "system",
     camera: {
       enabled: false,
       permission: "prompt",
@@ -117,7 +131,8 @@ export function createInitialAppViewModel(session: SessionRecord | null = null):
 }
 
 export function renderApp(root: HTMLElement, bridge: InquiryDesktopBridge, initial: AppViewModel = createInitialAppViewModel()): void {
-  let view = initial;
+  let view = { ...initial, themePreference: readThemePreference() };
+  applyThemePreference(view.themePreference);
   const shell = document.createElement("div");
   shell.className = "app-shell";
   const rail = document.createElement("aside");
@@ -166,7 +181,8 @@ export function renderApp(root: HTMLElement, bridge: InquiryDesktopBridge, initi
   };
 
   const render = (): void => {
-    renderShellHeader(headerRoot, view.status, view.session, view.pairingTokenRevealed, {
+    renderShellHeader(headerRoot, view.status, view.session, view.pairingTokenRevealed, view.themePreference, {
+      deepLinkNotice: view.deepLinkNotice ?? null,
       revealPairingToken: () => {
         view = { ...view, pairingTokenRevealed: true };
         render();
@@ -176,10 +192,21 @@ export function renderApp(root: HTMLElement, bridge: InquiryDesktopBridge, initi
           await navigator.clipboard.writeText(view.status.pairingToken);
         }
       },
+      setThemePreference: (themePreference) => {
+        view = { ...view, themePreference };
+        writeThemePreference(themePreference);
+        applyThemePreference(themePreference);
+        render();
+      },
     });
     renderSessionControls(sessionRoot, view.session, {
       startSession: async (title) => {
-        view = { ...view, session: await bridge.session.startSession({ title: title || defaultSessionTitle() }), replayDemo: false };
+        view = {
+          ...view,
+          session: await bridge.session.startSession({ title: title || defaultSessionTitle() }),
+          replayDemo: false,
+          redactedSummary: null,
+        };
         await refresh();
       },
       pauseSession: async () => {
@@ -191,7 +218,7 @@ export function renderApp(root: HTMLElement, bridge: InquiryDesktopBridge, initi
         await refresh();
       },
       stopSession: async () => {
-        view = { ...view, session: await bridge.session.stopSession(), replayDemo: false };
+        view = { ...view, session: await bridge.session.stopSession(), replayDemo: false, redactedSummary: null };
         await refresh();
       },
       addLabel: async (label: SelfLabel) => {
@@ -202,7 +229,7 @@ export function renderApp(root: HTMLElement, bridge: InquiryDesktopBridge, initi
     renderSessionHistory(historyRoot, view.sessionHistory, view.session?.session_id ?? null, {
       selectSession: async (session_id) => {
         if (bridge.sessions) {
-          view = { ...view, replayDemo: false };
+          view = { ...view, replayDemo: false, redactedSummary: null };
           await bridge.sessions.select(session_id);
           await refresh();
         }
@@ -220,7 +247,7 @@ export function renderApp(root: HTMLElement, bridge: InquiryDesktopBridge, initi
         },
         deleteSession: async () => {
           await bridge.privacy!.deleteSession();
-          view = { ...view, replayDemo: false };
+          view = { ...view, replayDemo: false, redactedSummary: null };
           await refresh();
         },
       });
@@ -245,7 +272,26 @@ export function renderApp(root: HTMLElement, bridge: InquiryDesktopBridge, initi
         next_actions: [],
       });
     }
-    renderSessionInterpretationPanel(interpretationRoot, view.interpretation);
+    const redactedSummary =
+      view.redactedSummary && view.interpretation && view.redactedSummary.session_id === view.interpretation.session_id
+        ? view.redactedSummary
+        : null;
+    const interpretationActions = {
+      cloudSyncEnabled: view.privacy.cloud_sync_enabled,
+      redactedSummary,
+      ...(bridge.interpretation
+        ? {
+            requestRedactedSummary: async () => {
+              view = {
+                ...view,
+                redactedSummary: await bridge.interpretation!.requestRedactedSummary(),
+              };
+              render();
+            },
+          }
+        : {}),
+    };
+    renderSessionInterpretationPanel(interpretationRoot, view.interpretation, interpretationActions);
     if (bridge.interpretation) {
       renderDailyReviewPanel(dailyRoot, view.dailyReview, {
         refreshDailyReview: async () => {
@@ -295,6 +341,11 @@ export function renderApp(root: HTMLElement, bridge: InquiryDesktopBridge, initi
       },
     });
   };
+
+  bridge.deepLinks?.onReceived((deepLink) => {
+    view = { ...view, deepLinkNotice: deepLinkNoticeFor(deepLink) };
+    render();
+  });
 
   render();
   void refresh();
@@ -360,7 +411,13 @@ function renderShellHeader(
   status: DesktopShellStatus | undefined,
   session: SessionRecord | null,
   pairingTokenRevealed: boolean,
-  actions: { revealPairingToken: () => void; copyPairingToken: () => void | Promise<void> },
+  themePreference: ThemePreference,
+  actions: {
+    deepLinkNotice?: string | null;
+    revealPairingToken: () => void;
+    copyPairingToken: () => void | Promise<void>;
+    setThemePreference: (themePreference: ThemePreference) => void;
+  },
 ): void {
   const header = document.createElement("header");
   header.className = "app-header";
@@ -368,6 +425,13 @@ function renderShellHeader(
   const title = document.createElement("h1");
   title.textContent = "Inquiry Black Box";
   header.append(title);
+
+  if (actions.deepLinkNotice) {
+    const notice = document.createElement("p");
+    notice.className = "app-header-notice";
+    notice.textContent = actions.deepLinkNotice;
+    header.append(notice);
+  }
 
   const grid = document.createElement("div");
   grid.className = "app-status-grid";
@@ -377,8 +441,34 @@ function renderShellHeader(
     pairingTokenItem(status?.pairingToken ?? "Starting", pairingTokenRevealed, actions),
   );
   header.append(grid);
+  header.append(themePreferenceControl(themePreference, actions.setThemePreference));
 
   root.replaceChildren(header);
+}
+
+function themePreferenceControl(
+  themePreference: ThemePreference,
+  setThemePreference: (themePreference: ThemePreference) => void,
+): HTMLElement {
+  const group = document.createElement("div");
+  group.className = "theme-preference";
+  group.setAttribute("role", "group");
+  group.setAttribute("aria-label", "Theme");
+
+  for (const value of themePreferences) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "theme-preference__button";
+    button.textContent = value[0]!.toUpperCase() + value.slice(1);
+    button.setAttribute("aria-pressed", String(themePreference === value));
+    if (themePreference === value) {
+      button.className += " theme-preference__button-active";
+    }
+    button.addEventListener("click", () => setThemePreference(value));
+    group.append(button);
+  }
+
+  return group;
 }
 
 function statusItem(labelText: string, valueText: string, valueClassName = ""): HTMLElement {
@@ -436,4 +526,37 @@ function formatDuration(durationMs: number): string {
     return `${minutes}m ${seconds}s`;
   }
   return `${seconds}s`;
+}
+
+function readThemePreference(): ThemePreference {
+  const stored = globalThis.localStorage?.getItem("inquiry.theme");
+  return isThemePreference(stored) ? stored : "system";
+}
+
+function writeThemePreference(themePreference: ThemePreference): void {
+  globalThis.localStorage?.setItem("inquiry.theme", themePreference);
+}
+
+function applyThemePreference(themePreference: ThemePreference): void {
+  const root = document.documentElement;
+  if (!root) {
+    return;
+  }
+  if (themePreference === "system") {
+    root.removeAttribute("data-theme");
+    return;
+  }
+  root.dataset.theme = themePreference;
+}
+
+function isThemePreference(value: unknown): value is ThemePreference {
+  return typeof value === "string" && themePreferences.includes(value as ThemePreference);
+}
+
+function deepLinkNoticeFor(deepLink: InquiryDeepLink): string {
+  if (deepLink.action === "pair") {
+    return "Pairing request received. Return to the Chrome popup to finish one-click pairing.";
+  }
+
+  return "Inquiry Black Box is open.";
 }

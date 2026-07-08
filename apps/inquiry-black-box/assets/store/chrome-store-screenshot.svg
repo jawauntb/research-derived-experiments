@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800" role="img" aria-labelledby="title desc">
+  <title id="title">Inquiry Black Box Chrome Web Store screenshot</title>
+  <desc id="desc">A screenshot-style store asset showing the dark desktop shell, popup pairing controls, and redacted summary state.</desc>
+  <rect width="1280" height="800" fill="#202622"/>
+  <rect x="48" y="48" width="824" height="704" rx="8" fill="#151816" stroke="#3a453f"/>
+  <rect x="80" y="82" width="250" height="638" rx="8" fill="#202622" stroke="#3a453f"/>
+  <text x="112" y="128" fill="#f3f1eb" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="800">Inquiry Black Box</text>
+  <rect x="112" y="168" width="186" height="54" rx="8" fill="#101311"/>
+  <text x="130" y="200" fill="#74d1b8" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="700">Paired</text>
+  <rect x="112" y="246" width="186" height="42" rx="8" fill="#17372f"/>
+  <text x="130" y="273" fill="#74d1b8" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Record</text>
+  <rect x="112" y="306" width="186" height="42" rx="8" fill="#101311"/>
+  <text x="130" y="333" fill="#a8b0aa" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Recent sessions</text>
+  <rect x="368" y="82" width="468" height="190" rx="8" fill="#202622" stroke="#3a453f"/>
+  <text x="400" y="128" fill="#f3f1eb" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800">Daily review</text>
+  <rect x="400" y="158" width="348" height="12" rx="6" fill="#a8b0aa"/>
+  <rect x="400" y="186" width="292" height="12" rx="6" fill="#55c7bc"/>
+  <rect x="400" y="214" width="212" height="12" rx="6" fill="#f0bf63"/>
+  <rect x="368" y="304" width="468" height="190" rx="8" fill="#202622" stroke="#3a453f"/>
+  <text x="400" y="350" fill="#f3f1eb" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800">Replay timeline</text>
+  <rect x="400" y="382" width="380" height="16" rx="8" fill="#101311"/>
+  <rect x="400" y="382" width="240" height="16" rx="8" fill="#74d1b8"/>
+  <rect x="400" y="426" width="156" height="12" rx="6" fill="#8bb9df"/>
+  <rect x="568" y="426" width="126" height="12" rx="6" fill="#f08da0"/>
+  <rect x="368" y="526" width="468" height="194" rx="8" fill="#202622" stroke="#3a453f"/>
+  <text x="400" y="572" fill="#f3f1eb" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800">Redacted LLM summary</text>
+  <rect x="400" y="604" width="254" height="36" rx="8" fill="#1c3346"/>
+  <text x="420" y="628" fill="#8bb9df" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="700">Request redacted summary</text>
+  <text x="400" y="674" fill="#a8b0aa" font-family="Inter, Arial, sans-serif" font-size="15">Cloud sync is explicit. Raw content stays local.</text>
+  <rect x="924" y="110" width="292" height="520" rx="8" fill="#f3f1eb"/>
+  <text x="948" y="154" fill="#151515" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800">Chrome popup</text>
+  <rect x="948" y="184" width="244" height="56" rx="8" fill="#e7e3da"/>
+  <text x="968" y="218" fill="#0f6b55" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="800">Pair with local desktop</text>
+  <rect x="948" y="266" width="244" height="44" rx="8" fill="#18211d"/>
+  <text x="1040" y="294" text-anchor="middle" fill="#fff" font-family="Inter, Arial, sans-serif" font-size="14" font-weight="800">Record</text>
+  <rect x="948" y="330" width="244" height="44" rx="8" fill="#e7e3da"/>
+  <text x="968" y="358" fill="#68645d" font-family="Inter, Arial, sans-serif" font-size="14">Privacy toggles</text>
+  <rect x="948" y="396" width="244" height="44" rx="8" fill="#e7e3da"/>
+  <text x="968" y="424" fill="#68645d" font-family="Inter, Arial, sans-serif" font-size="14">Diagnostics</text>
+  <text x="924" y="686" fill="#a8b0aa" font-family="Inter, Arial, sans-serif" font-size="18">Dark mode ready for desktop review.</text>
+</svg>

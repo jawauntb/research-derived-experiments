@@ -11,7 +11,7 @@ import {
   type SessionRecord,
 } from "@inquiry/schema";
 import type { InquiryDatabase } from "../db";
-import { verifyPairingToken } from "../security/pairing";
+import { createPairingToken, type PairingChallengeStore, verifyPairingToken } from "../security/pairing";
 import type { SessionController, SessionStateChangeInput, StartSessionInput } from "./session";
 
 export type SessionControlTarget = {
@@ -26,6 +26,7 @@ export type IngestServerOptions = {
   allowedOrigins?: readonly string[];
   database: InquiryDatabase;
   pairingSecret: string;
+  pairingChallenges?: PairingChallengeStore;
   sessions: SessionController;
   sessionControls?: SessionControlTarget;
   nowMs?: () => number;
@@ -68,6 +69,7 @@ type SessionControlBody = {
 const defaultAllowedOrigins = ["chrome-extension://*"] as const;
 const ingestPaths = new Set(["/v1/events", "/v1/extension/events"]);
 const sessionControlPaths = new Set(["/v1/extension/session"]);
+const pairingPaths = new Set(["/v1/extension/pairing"]);
 
 export function createIngestRequestHandler(options: IngestServerOptions): (request: Request) => Promise<Response> {
   const allowedOrigins = options.allowedOrigins ?? defaultAllowedOrigins;
@@ -88,19 +90,28 @@ export function createIngestRequestHandler(options: IngestServerOptions): (reque
 
     const isIngestPath = ingestPaths.has(url.pathname);
     const isSessionControlPath = sessionControlPaths.has(url.pathname);
-    if (!isIngestPath && !isSessionControlPath) {
+    const isPairingPath = pairingPaths.has(url.pathname);
+    if (!isIngestPath && !isSessionControlPath && !isPairingPath) {
       return jsonResponse({ error: "not found" }, 404, origin);
     }
 
     const canHandleMethod =
       (isIngestPath && request.method === "POST") ||
-      (isSessionControlPath && (request.method === "POST" || request.method === "GET"));
+      (isSessionControlPath && (request.method === "POST" || request.method === "GET")) ||
+      (isPairingPath && request.method === "GET");
     if (!canHandleMethod) {
       return jsonResponse({ error: "method not allowed" }, 405, origin);
     }
 
     if (!origin || !isAllowedOrigin(origin, allowedOrigins)) {
       return jsonResponse({ error: "origin not allowed" }, 403, origin);
+    }
+
+    if (isPairingPath) {
+      const pairing = pairingResponse(url, options, nowMs);
+      return pairing
+        ? jsonResponse(pairing, 200, origin)
+        : jsonResponse({ error: "pairing challenge was not approved by the desktop app" }, 401, origin);
     }
 
     const token = pairingTokenFromHeaders(request.headers);
@@ -164,6 +175,27 @@ export function createIngestRequestHandler(options: IngestServerOptions): (reque
     } catch (error) {
       return jsonResponse({ error: error instanceof Error ? error.message : "invalid event" }, 400, origin);
     }
+  };
+}
+
+function pairingResponse(url: URL, options: IngestServerOptions, nowMs: () => number): JsonObject | null {
+  const challenge = url.searchParams.get("challenge") ?? "";
+  if (!options.pairingChallenges?.consumeChallenge(challenge, nowMs())) {
+    return null;
+  }
+
+  const endpoint = new URL(url.toString());
+  endpoint.pathname = "/v1/extension/events";
+  endpoint.search = "";
+  endpoint.hash = "";
+  const current = options.sessions.currentSession();
+
+  return {
+    ok: true,
+    endpoint: endpoint.toString(),
+    pairing_token: createPairingToken({ secret: options.pairingSecret, issuedAtMs: nowMs() }),
+    session_id: current?.session_id ?? null,
+    recording_state: current?.recording_state ?? "stopped",
   };
 }
 
