@@ -527,8 +527,8 @@ describe("cloud reports and jobs routes", () => {
     const reportBody = await json(reportResponse);
     expect(reportResponse.status).toBe(200);
     expect(reportBody.report).toMatchObject({
-      title: "Redacted LLM session summary",
-      summary: "Cloud LLM report completed.",
+      title: "Redacted LLM session analysis",
+      summary: "Cloud LLM analysis completed.",
       payload: {
         summary_text: "OpenAI says the copied evidence needs one follow-up note.",
         provider: "openai",

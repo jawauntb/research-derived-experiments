@@ -337,7 +337,10 @@ describe("session replay report", () => {
       const dailyRoot = documentStub.createElement("div");
       const responses: string[] = [];
 
-      renderSessionInterpretationPanel(interpretationRoot as unknown as HTMLElement, interpretationFixture());
+      renderSessionInterpretationPanel(interpretationRoot as unknown as HTMLElement, interpretationFixture(), {
+        cloudSyncEnabled: true,
+        requestRedactedSummary: () => undefined,
+      });
       renderDailyReviewPanel(dailyRoot as unknown as HTMLElement, dailyReviewFixture(), {
         refreshDailyReview: () => {
           responses.push("refresh");
@@ -349,6 +352,8 @@ describe("session replay report", () => {
 
       expect(interpretationRoot.textContent).toContain("Session Interpretation");
       expect(interpretationRoot.textContent).toContain("Repeated skim risk");
+      expect(interpretationRoot.textContent).toContain("Analyze and ask about your data");
+      expect(interpretationRoot.textContent).not.toContain("Request redacted LLM summary");
       expect(interpretationRoot.findByDataset("themeKind", "retry")).toBeDefined();
       expect(dailyRoot.textContent).toContain("Daily Review");
       expect(dailyRoot.textContent).toContain("What to retry");

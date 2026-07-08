@@ -92,12 +92,12 @@ export class OpenAiSummaryClient implements SummaryClient {
     );
     const body = (await response.json().catch(() => ({}))) as Record<string, unknown>;
     if (!response.ok) {
-      throw new Error(`OpenAI summary request failed with status ${response.status}: ${providerErrorMessage(body)}`);
+      throw new Error(`OpenAI analysis request failed with status ${response.status}: ${providerErrorMessage(body)}`);
     }
 
     const text = openAiOutputText(body);
     if (!text) {
-      throw new Error("OpenAI summary response did not include text");
+      throw new Error("OpenAI analysis response did not include text");
     }
 
     return {
@@ -137,12 +137,12 @@ export class GeminiSummaryClient implements SummaryClient {
     );
     const body = (await response.json().catch(() => ({}))) as Record<string, unknown>;
     if (!response.ok) {
-      throw new Error(`Gemini summary request failed with status ${response.status}: ${providerErrorMessage(body)}`);
+      throw new Error(`Gemini analysis request failed with status ${response.status}: ${providerErrorMessage(body)}`);
     }
 
     const text = geminiOutputText(body);
     if (!text) {
-      throw new Error("Gemini summary response did not include text");
+      throw new Error("Gemini analysis response did not include text");
     }
 
     return {
@@ -223,9 +223,9 @@ function geminiSessionSummaryBody(input: JsonObject, maxOutputTokens: number): J
 
 function sessionSummaryInstructions(): string {
   return [
-    "Summarize this Inquiry Black Box session using only the redacted JSON below.",
+    "Analyze this Inquiry Black Box session using only the redacted JSON below.",
     "Do not infer identities, diagnoses, hidden mental states, raw page text, typed text, selected text, app identities, or window titles.",
-    "Return concise plain text: one evidence-grounded summary sentence and up to two next actions.",
+    "Return concise plain text: one evidence-grounded analysis sentence and up to two follow-up questions or next actions the user can answer from their data.",
   ].join("\n");
 }
 
