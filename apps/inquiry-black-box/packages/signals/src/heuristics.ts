@@ -1,4 +1,5 @@
 import type { EventEnvelope } from "@inquiry/schema";
+import { buildCopiedSelectionEpisodes, buildEvidenceEpisodes, type EvidenceEpisode } from "./episodes";
 import { buildComprehensionHeatmap, type ComprehensionHeatmapSegment } from "./heatmap";
 import type { StimulusSegment } from "./stimulus";
 import { buildEventWindows, numericPayload, stringPayload, type EventWindow } from "./windows";
@@ -28,6 +29,7 @@ export type ReplayMarker = {
 export type ReplayMemo = {
   session_id: string;
   markers: ReplayMarker[];
+  episodes: EvidenceEpisode[];
   heatmap: ComprehensionHeatmapSegment[];
   next_actions: string[];
 };
@@ -61,6 +63,7 @@ export function buildReplayMemo(events: EventEnvelope[], options: number | Repla
   const stimulusSegments = typeof options === "number" ? [] : options.stimulus_segments ?? options.stimulusSegments ?? [];
   const sessionId = events[0]?.session_id ?? "unknown-session";
   const markers = buildReplayMarkers(events, windowMs);
+  const episodes = buildEvidenceEpisodes(events, markers);
   const heatmap = buildComprehensionHeatmap({
     session_id: sessionId,
     markers,
@@ -76,6 +79,7 @@ export function buildReplayMemo(events: EventEnvelope[], options: number | Repla
   return {
     session_id: sessionId,
     markers,
+    episodes,
     heatmap,
     next_actions: nextActions.slice(0, 3),
   };
@@ -148,9 +152,17 @@ function markStuckLoops(windows: EventWindow[]): ReplayMarker[] {
 }
 
 function markCopiedPassages(events: EventEnvelope[]): ReplayMarker[] {
-  return events
-    .filter((event) => event.event_type === "browser.copy" || event.event_type === "browser.highlight")
-    .map((event) => eventMarker(event, "copied-passage", 0.82, "Copied or highlighted passage.", "Attach a note explaining why this passage mattered."));
+  return buildCopiedSelectionEpisodes(events).map((episode) => ({
+    marker_id: `copied-passage:${episode.episode_id}`,
+    session_id: episode.session_id,
+    kind: "copied-passage",
+    start_ms: episode.start_ms,
+    end_ms: episode.end_ms,
+    confidence: episode.confidence,
+    evidence_event_ids: episode.evidence_event_ids,
+    evidence: [episode.summary, ...episode.details, episode.privacy_note],
+    suggested_action: "Explain what this selected or copied evidence was preserving.",
+  }));
 }
 
 function markRewinds(events: EventEnvelope[]): ReplayMarker[] {

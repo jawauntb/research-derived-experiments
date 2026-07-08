@@ -41,6 +41,75 @@ describe("replay heuristics", () => {
     expect(kinds).toContain("tab-churn");
   });
 
+  test("coalesces noisy selection, highlight, and copy bursts into one copied-passage marker", () => {
+    const events = [
+      event("browser.selection", 7_000, {
+        hostname_hash: "h_demo",
+        url_hash: "h_page",
+        selection_length: 120,
+        range_count: 1,
+      }),
+      event("browser.highlight", 7_400, {
+        hostname_hash: "h_demo",
+        url_hash: "h_page",
+        selection_length: 140,
+        range_count: 1,
+      }),
+      event("browser.selection", 8_000, {
+        hostname_hash: "h_demo",
+        url_hash: "h_page",
+        selection_length: 180,
+        range_count: 1,
+      }),
+      event("browser.highlight", 8_300, {
+        hostname_hash: "h_demo",
+        url_hash: "h_page",
+        selection_length: 180,
+        range_count: 1,
+      }),
+      event("browser.copy", 9_000, {
+        hostname_hash: "h_demo",
+        url_hash: "h_page",
+        selection_length: 180,
+        range_count: 1,
+      }),
+    ];
+
+    const markers = buildReplayMarkers(events);
+    const copiedMarkers = markers.filter((marker) => marker.kind === "copied-passage");
+    const memo = buildReplayMemo(events);
+    const firstCopiedMarker = copiedMarkers[0];
+    if (!firstCopiedMarker) {
+      throw new Error("expected one copied marker");
+    }
+
+    expect(copiedMarkers).toHaveLength(1);
+    expect(firstCopiedMarker.evidence.join(" ")).toContain("2 selection changes, 2 highlights, and 1 copy action");
+    expect(firstCopiedMarker.evidence.join(" ")).toContain("Selection length ranged 120-180 characters");
+    expect(memo.episodes).toHaveLength(1);
+    expect(memo.episodes[0]?.marker_ids).toEqual([firstCopiedMarker.marker_id]);
+    expect(memo.episodes[0]?.privacy_note).toContain("Raw selected or copied text was not stored");
+  });
+
+  test("keeps distant copied-passage bursts separate", () => {
+    const events = [
+      event("browser.copy", 1_000, {
+        hostname_hash: "h_demo",
+        url_hash: "h_page",
+        selection_length: 80,
+        range_count: 1,
+      }),
+      event("browser.copy", 20_000, {
+        hostname_hash: "h_demo",
+        url_hash: "h_page",
+        selection_length: 90,
+        range_count: 1,
+      }),
+    ];
+
+    expect(buildReplayMarkers(events).filter((marker) => marker.kind === "copied-passage")).toHaveLength(2);
+  });
+
   test("low camera quality suppresses high-load marker", () => {
     const events = [
       event("camera.feature_window", 1_000, { gaze_away_ratio: 0.9 }, ["face-missing"]),
