@@ -11,11 +11,13 @@ import {
 import type { CloudStore, JobKind, JobStatus } from "../db/schema";
 import { isJobKind, isJobStatus, isJsonObject } from "../db/schema";
 import type { ModalClient } from "../lib/modalClient";
+import type { SessionSummaryResult, SummaryClient } from "../lib/summaryClient";
 import { RouteError, authenticate, isRecord, jsonResponse, readJsonObject, stringField } from "./common";
 
 export type JobsRouteContext = {
   store: CloudStore;
   modalClient: ModalClient;
+  summaryClient?: SummaryClient;
 };
 
 export async function handleJobsRoute(request: Request, url: URL, context: JobsRouteContext): Promise<Response | undefined> {
@@ -50,6 +52,25 @@ async function submitJob(request: Request, context: JobsRouteContext): Promise<R
   });
 
   try {
+    if (kind === "session_summary" && context.summaryClient) {
+      const summary = await context.summaryClient.summarizeSession({
+        job_id: job.job_id,
+        user_id: user.user_id,
+        input,
+        ...(session_id ? { session_id } : {}),
+      });
+      const result = sessionSummaryJobResult(job.job_id, input, summary);
+      const reportInput = isRecord(result.report) ? result.report : {};
+      const report = await createCloudSummaryReport(context.store, { ...job, user_id: user.user_id }, reportInput);
+      const updated = await context.store.updateJobStatus(user.user_id, job.job_id, {
+        status: "complete",
+        report_id: report.report_id,
+        result,
+        message: `Completed by ${summary.provider}.`,
+      });
+      return jsonResponse({ job: updated ?? job }, 202);
+    }
+
     const modalSubmission = await context.modalClient.submitJob({
       job_id: job.job_id,
       user_id: user.user_id,
@@ -69,6 +90,25 @@ async function submitJob(request: Request, context: JobsRouteContext): Promise<R
     });
     return jsonResponse({ job: updated ?? job }, 502);
   }
+}
+
+async function createCloudSummaryReport(
+  store: CloudStore,
+  job: { user_id: string; kind: JobKind; session_id?: string },
+  reportInput: Record<string, unknown>,
+) {
+  const payload = parseJsonObject(reportInput.payload ?? {}, "result.report.payload");
+  const provenance = parseJsonObject(reportInput.provenance ?? {}, "result.report.provenance");
+
+  return store.createReport({
+    user_id: job.user_id,
+    kind: job.kind,
+    title: "Redacted LLM session summary",
+    summary: "Cloud LLM report completed.",
+    payload,
+    provenance,
+    ...(job.session_id ? { session_id: job.session_id } : {}),
+  });
 }
 
 async function getJob(request: Request, context: JobsRouteContext, job_id: string): Promise<Response> {
@@ -164,6 +204,38 @@ function sanitizeJobResult(kind: JobKind, result: JsonObject): JsonObject {
     summary: modalReportSummary(),
   };
   return sanitized;
+}
+
+function sessionSummaryJobResult(jobId: string, input: JsonObject, summary: SessionSummaryResult): JsonObject {
+  const payload = parseJsonObject(input.payload ?? {}, "input.payload");
+  const inputReportId = stringField(payload, "report_id", false);
+  const subjectSessionId = stringField(payload, "subject_session_id", false);
+  const reportPayload: JsonObject = {
+    summary_text: summary.text,
+    provider: summary.provider,
+    model: summary.model,
+    privacy_class: "redacted-sync",
+    limitations: summary.limitations,
+    ...(inputReportId ? { input_report_id: inputReportId } : {}),
+    ...(subjectSessionId ? { subject_session_id: subjectSessionId } : {}),
+  };
+  const provenance: JsonObject = {
+    job_id: jobId,
+    provider: summary.provider,
+    model: summary.model,
+    input_privacy_class: "redacted-sync",
+    ...(inputReportId ? { input_report_id: inputReportId } : {}),
+  };
+  return {
+    title: "Redacted LLM session summary",
+    summary: "Cloud LLM report completed.",
+    report: {
+      title: "Redacted LLM session summary",
+      summary: "Cloud LLM report completed.",
+      payload: reportPayload,
+      provenance,
+    },
+  };
 }
 
 function parseJobKind(value: unknown): JobKind {

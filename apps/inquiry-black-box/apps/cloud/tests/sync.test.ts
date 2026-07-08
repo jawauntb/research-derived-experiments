@@ -4,6 +4,7 @@ import { createCloudStore, createCloudStoreFromEnv, type CloudStore } from "../s
 import { createCloudBearerToken } from "../src/routes/common";
 import { createCloudHandler } from "../src/server";
 import type { ModalClient } from "../src/lib/modalClient";
+import type { SummaryClient } from "../src/lib/summaryClient";
 
 const authHeaders = (userId = "user-a") => ({
   authorization: `Bearer ${createCloudBearerToken(userId)}`,
@@ -459,6 +460,79 @@ describe("cloud reports and jobs routes", () => {
     expect(((await json(fail)) as { job: { status: string; error: string } }).job).toMatchObject({
       status: "failed",
       error: "synthetic failure",
+    });
+  });
+
+  test("completes redacted session summary jobs through a cloud summary provider before Modal", async () => {
+    const store = createCloudStore();
+    let modalCalls = 0;
+    let summaryInput = "";
+    const modalClient: ModalClient = {
+      submitJob: async () => {
+        modalCalls += 1;
+        throw new Error("Modal should not be called when cloud summary provider is configured");
+      },
+    };
+    const summaryClient: SummaryClient = {
+      summarizeSession: async ({ input }) => {
+        summaryInput = JSON.stringify(input);
+        return {
+          provider: "openai",
+          model: "gpt-test-summary",
+          text: "OpenAI says the copied evidence needs one follow-up note.",
+          limitations: ["fixture limitation"],
+        };
+      },
+    };
+    const handler = createCloudHandler({ store, modalClient, summaryClient });
+
+    const response = await handler(
+      new Request("http://cloud.test/jobs", {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({
+          kind: "session_summary",
+          session_id: "session-cloud-1",
+          input: redactedSessionSummaryJobInput(),
+        }),
+      }),
+    );
+    const body = (await json(response)) as { job: { status: string; report_id: string; result: Record<string, unknown> } };
+
+    expect(response.status).toBe(202);
+    expect(body.job.status).toBe("complete");
+    expect(body.job.report_id.startsWith("report_")).toBe(true);
+    expect(body.job.result).toMatchObject({
+      report: {
+        payload: {
+          summary_text: "OpenAI says the copied evidence needs one follow-up note.",
+          provider: "openai",
+          model: "gpt-test-summary",
+          privacy_class: "redacted-sync",
+          limitations: ["fixture limitation"],
+        },
+        provenance: {
+          provider: "openai",
+          model: "gpt-test-summary",
+          input_privacy_class: "redacted-sync",
+        },
+      },
+    });
+    expect(summaryInput).toContain("redacted-sync");
+    expect(summaryInput).not.toContain("Cursor");
+    expect(summaryInput).not.toContain("com.todesktop.230313mzl4w4u92");
+    expect(modalCalls).toBe(0);
+
+    const reportResponse = await handler(new Request(`http://cloud.test/reports/${body.job.report_id}`, { headers: authHeaders() }));
+    const reportBody = await json(reportResponse);
+    expect(reportResponse.status).toBe(200);
+    expect(reportBody.report).toMatchObject({
+      title: "Redacted LLM session summary",
+      summary: "Cloud LLM report completed.",
+      payload: {
+        summary_text: "OpenAI says the copied evidence needs one follow-up note.",
+        provider: "openai",
+      },
     });
   });
 

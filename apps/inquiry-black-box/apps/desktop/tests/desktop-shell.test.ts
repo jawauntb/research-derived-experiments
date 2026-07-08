@@ -302,6 +302,52 @@ describe("desktop shell IPC facade", () => {
     }
   });
 
+  test("shows completed cloud redacted LLM summaries when Railway returns provider output", async () => {
+    const database = createInquiryDatabase();
+    const runtime = createDesktopRuntime({
+      database,
+      pairingSecret: "desktop-shell-test-secret",
+      startServer: false,
+    });
+    const facade = createDesktopIpcFacade(runtime);
+    const session = await facade.startSession({ title: "Cloud completed summary" });
+    appendDesktopActivityFixture(database, session.session_id);
+    await facade.stopSession();
+    database.setSignalEnabled("cloudSync", true);
+
+    const result = await requestRedactedSessionSummary(database, session.session_id, {
+      cloudApiUrl: "https://cloud.example.test",
+      bearerToken: "fixture-token",
+      fetchImpl: async () =>
+        new Response(
+          JSON.stringify({
+            job: {
+              job_id: "job-openai-1",
+              status: "complete",
+              result: {
+                report: {
+                  payload: {
+                    summary_text: "OpenAI says the copied evidence needs one follow-up note.",
+                  },
+                },
+              },
+            },
+          }),
+          { status: 202 },
+        ),
+    });
+
+    expect(result).toMatchObject({
+      status: "complete",
+      message: "OpenAI says the copied evidence needs one follow-up note.",
+      job_id: "job-openai-1",
+    });
+    expect(database.listEvents(session.session_id).find((event) => event.event_type === "model.run")?.payload).toMatchObject({
+      status: "complete",
+    });
+    runtime.stop();
+  });
+
   test("records redacted LLM summary unavailability without sending network requests", async () => {
     const database = createInquiryDatabase();
     const runtime = createDesktopRuntime({
@@ -320,6 +366,7 @@ describe("desktop shell IPC facade", () => {
       cloudApiUrl: "",
       bearerToken: "",
       provider: "modal",
+      disableDopplerOpenAI: true,
       disableDopplerGemini: true,
       fetchImpl: async () => {
         fetchCalls += 1;
@@ -329,10 +376,60 @@ describe("desktop shell IPC facade", () => {
 
     expect(result).toMatchObject({
       status: "unavailable",
-      message: "Cloud job endpoint/auth token or Gemini API key is not configured.",
+      message: "Cloud job endpoint/auth token or direct OpenAI/Gemini API key is not configured.",
     });
     expect(fetchCalls).toBe(0);
     expect(database.listEvents(session.session_id).filter((event) => event.event_type === "model.run")).toHaveLength(1);
+    runtime.stop();
+  });
+
+  test("requests a direct OpenAI redacted summary when cloud job config is absent", async () => {
+    const database = createInquiryDatabase();
+    const runtime = createDesktopRuntime({
+      database,
+      pairingSecret: "desktop-shell-test-secret",
+      startServer: false,
+    });
+    const facade = createDesktopIpcFacade(runtime);
+    const session = await facade.startSession({ title: "OpenAI redacted summary" });
+    appendDesktopActivityFixture(database, session.session_id);
+    await facade.stopSession();
+    database.setSignalEnabled("cloudSync", true);
+    let requestedUrl = "";
+    let authorization = "";
+    let postedBody = "";
+
+    const result = await requestRedactedSessionSummary(database, session.session_id, {
+      cloudApiUrl: "",
+      bearerToken: "",
+      openAiApiKey: "fixture-openai-key",
+      model: "gpt-test-summary",
+      nowMs: () => 10_000,
+      fetchImpl: async (url, init) => {
+        requestedUrl = url;
+        authorization = new Headers(init?.headers).get("authorization") ?? "";
+        postedBody = String(init?.body ?? "");
+        return new Response(JSON.stringify({ output_text: "OpenAI says copied evidence needs one follow-up note." }), {
+          status: 200,
+        });
+      },
+    });
+
+    expect(result).toMatchObject({
+      status: "complete",
+      message: "OpenAI says copied evidence needs one follow-up note.",
+    });
+    expect(requestedUrl).toBe("https://api.openai.com/v1/responses");
+    expect(authorization).toBe("Bearer fixture-openai-key");
+    expect(postedBody).toContain("redacted-sync");
+    expect(postedBody).not.toContain("Cursor");
+    expect(postedBody).not.toContain("com.todesktop.230313mzl4w4u92");
+    expect(database.listEvents(session.session_id).find((event) => event.event_type === "model.run")?.payload).toMatchObject({
+      provider: "openai",
+      model: "gpt-test-summary",
+      status: "complete",
+      input_privacy_class: "redacted-sync",
+    });
     runtime.stop();
   });
 
@@ -348,53 +445,62 @@ describe("desktop shell IPC facade", () => {
     appendDesktopActivityFixture(database, session.session_id);
     await facade.stopSession();
     database.setSignalEnabled("cloudSync", true);
+    const previousSessionSummaryModel = process.env.SESSION_SUMMARY_MODEL;
+    process.env.SESSION_SUMMARY_MODEL = "redacted-session-summary";
     let requestedUrl = "";
     let apiKey = "";
     let postedBody = "";
 
-    const result = await requestRedactedSessionSummary(database, session.session_id, {
-      cloudApiUrl: "",
-      bearerToken: "",
-      provider: "gemini",
-      geminiApiKey: "fixture-gemini-key",
-      model: "gemini-2.0-flash",
-      nowMs: () => 10_000,
-      fetchImpl: async (url, init) => {
-        requestedUrl = url;
-        apiKey = new Headers(init?.headers).get("x-goog-api-key") ?? "";
-        postedBody = String(init?.body ?? "");
-        return new Response(
-          JSON.stringify({
-            candidates: [
-              {
-                content: {
-                  parts: [{ text: "Gemini says copied evidence needs one follow-up note." }],
+    try {
+      const result = await requestRedactedSessionSummary(database, session.session_id, {
+        cloudApiUrl: "",
+        bearerToken: "",
+        provider: "gemini",
+        geminiApiKey: "fixture-gemini-key",
+        nowMs: () => 10_000,
+        fetchImpl: async (url, init) => {
+          requestedUrl = url;
+          apiKey = new Headers(init?.headers).get("x-goog-api-key") ?? "";
+          postedBody = String(init?.body ?? "");
+          return new Response(
+            JSON.stringify({
+              candidates: [
+                {
+                  content: {
+                    parts: [{ text: "Gemini says copied evidence needs one follow-up note." }],
+                  },
                 },
-              },
-            ],
-          }),
-          { status: 200 },
-        );
-      },
-    });
+              ],
+            }),
+            { status: 200 },
+          );
+        },
+      });
 
-    expect(result).toMatchObject({
-      status: "complete",
-      message: "Gemini says copied evidence needs one follow-up note.",
-    });
-    expect(requestedUrl).toBe("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent");
-    expect(apiKey).toBe("fixture-gemini-key");
-    expect(postedBody).toContain("redacted-sync");
-    expect(postedBody).not.toContain("Cursor");
-    expect(postedBody).not.toContain("com.todesktop.230313mzl4w4u92");
-    const modelRun = database.listEvents(session.session_id).find((event) => event.event_type === "model.run");
-    expect(modelRun?.payload).toMatchObject({
-      provider: "gemini",
-      model: "gemini-2.0-flash",
-      status: "complete",
-      input_privacy_class: "redacted-sync",
-    });
-    runtime.stop();
+      expect(result).toMatchObject({
+        status: "complete",
+        message: "Gemini says copied evidence needs one follow-up note.",
+      });
+      expect(requestedUrl).toBe("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent");
+      expect(apiKey).toBe("fixture-gemini-key");
+      expect(postedBody).toContain("redacted-sync");
+      expect(postedBody).not.toContain("Cursor");
+      expect(postedBody).not.toContain("com.todesktop.230313mzl4w4u92");
+      const modelRun = database.listEvents(session.session_id).find((event) => event.event_type === "model.run");
+      expect(modelRun?.payload).toMatchObject({
+        provider: "gemini",
+        model: "gemini-2.5-flash",
+        status: "complete",
+        input_privacy_class: "redacted-sync",
+      });
+    } finally {
+      if (previousSessionSummaryModel === undefined) {
+        delete process.env.SESSION_SUMMARY_MODEL;
+      } else {
+        process.env.SESSION_SUMMARY_MODEL = previousSessionSummaryModel;
+      }
+      runtime.stop();
+    }
   });
 
   test("records redacted LLM summary cloud rejection and timeout failures", async () => {

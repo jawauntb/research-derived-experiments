@@ -1,5 +1,6 @@
 import { createCloudStoreFromEnv, type CloudStore } from "./db/schema";
 import { createModalClientFromEnv, type ModalClient } from "./lib/modalClient";
+import { createSummaryClientFromEnv, type SummaryClient } from "./lib/summaryClient";
 import { handleJobsRoute } from "./routes/jobs";
 import { jsonResponse, routeErrorResponse } from "./routes/common";
 import { handleReportsRoute } from "./routes/reports";
@@ -8,6 +9,7 @@ import { handleSyncRoute } from "./routes/sync";
 export type CloudHandlerOptions = {
   store?: CloudStore;
   modalClient?: ModalClient;
+  summaryClient?: SummaryClient;
   env?: Record<string, string | undefined>;
 };
 
@@ -16,6 +18,7 @@ export function createCloudHandler(options: CloudHandlerOptions = {}) {
   const store = options.store ?? createCloudStoreFromEnv(env);
   assertCloudConfiguration({ env, store, storeWasProvided: Boolean(options.store) });
   const modalClient = options.modalClient ?? createModalClientFromEnv(env);
+  const summaryClient = options.summaryClient ?? createSummaryClientFromEnv(env);
 
   return async function handleCloudRequest(request: Request): Promise<Response> {
     const url = new URL(request.url);
@@ -45,7 +48,11 @@ export function createCloudHandler(options: CloudHandlerOptions = {}) {
         return syncResponse;
       }
 
-      const jobsResponse = await handleJobsRoute(request, url, { store, modalClient });
+      const jobsResponse = await handleJobsRoute(request, url, {
+        store,
+        modalClient,
+        ...(summaryClient ? { summaryClient } : {}),
+      });
       if (jobsResponse) {
         return jobsResponse;
       }
