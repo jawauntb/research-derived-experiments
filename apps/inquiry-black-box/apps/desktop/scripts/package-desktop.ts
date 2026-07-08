@@ -152,7 +152,7 @@ export function ensurePlistString(plist: string, key: string, value: string): st
     return plist;
   }
 
-  return plist.replace("</dict>", `\t<key>${key}</key>\n\t<string>${value}</string>\n</dict>`);
+  return insertTopLevelPlistEntry(plist, `\t<key>${key}</key>\n\t<string>${value}</string>`);
 }
 
 export function ensureProtocolScheme(plist: string): string {
@@ -160,8 +160,8 @@ export function ensureProtocolScheme(plist: string): string {
     return plist;
   }
 
-  return plist.replace(
-    "</dict>",
+  return insertTopLevelPlistEntry(
+    plist,
     [
       "\t<key>CFBundleURLTypes</key>",
       "\t<array>",
@@ -174,9 +174,12 @@ export function ensureProtocolScheme(plist: string): string {
       "\t\t\t</array>",
       "\t\t</dict>",
       "\t</array>",
-      "</dict>",
     ].join("\n"),
   );
+}
+
+function insertTopLevelPlistEntry(plist: string, entry: string): string {
+  return plist.replace(/<\/dict>\s*<\/plist>\s*$/u, `${entry}\n</dict>\n</plist>`);
 }
 
 export function signMacApp(appPath: string, dependencies: SigningDependencies = {}): SigningResult {

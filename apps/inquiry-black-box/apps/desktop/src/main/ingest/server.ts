@@ -103,15 +103,19 @@ export function createIngestRequestHandler(options: IngestServerOptions): (reque
       return jsonResponse({ error: "method not allowed" }, 405, origin);
     }
 
-    if (!origin || !isAllowedOrigin(origin, allowedOrigins)) {
-      return jsonResponse({ error: "origin not allowed" }, 403, origin);
-    }
-
     if (isPairingPath) {
+      if (!origin || !isAllowedOrigin(origin, allowedOrigins)) {
+        return jsonResponse({ error: "origin not allowed" }, 403, origin);
+      }
+
       const pairing = pairingResponse(url, options, nowMs);
       return pairing
         ? jsonResponse(pairing, 200, origin)
         : jsonResponse({ error: "pairing challenge was not approved by the desktop app" }, 401, origin);
+    }
+
+    if (origin && !isAllowedOrigin(origin, allowedOrigins)) {
+      return jsonResponse({ error: "origin not allowed" }, 403, origin);
     }
 
     const token = pairingTokenFromHeaders(request.headers);
