@@ -311,6 +311,59 @@ describe("desktop extension ingest", () => {
     database.close();
   });
 
+  test("accepts paired extension session controls when Chrome omits the Origin header", async () => {
+    const database = createInquiryDatabase();
+    const sessions = createSessionController(database, {
+      nowIso: () => "2026-07-07T12:12:00.000Z",
+      nowMs: () => issuedAtMs,
+    });
+    const handler = createIngestRequestHandler({
+      allowedOrigins: [origin],
+      database,
+      pairingSecret: secret,
+      sessions,
+      nowMs: () => issuedAtMs,
+    });
+
+    const started = await handler(
+      new Request("http://127.0.0.1:39170/v1/extension/session", {
+        method: "POST",
+        headers: {
+          "x-inquiry-pairing-token": token(),
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ recording_state: "recording", title: "No-origin extension session" }),
+      }),
+    );
+    expect(started.status).toBe(200);
+
+    const status = await handler(
+      new Request("http://127.0.0.1:39170/v1/extension/session", {
+        method: "GET",
+        headers: {
+          "x-inquiry-pairing-token": token(),
+        },
+      }),
+    );
+    expect(status.status).toBe(200);
+    expect(await status.json()).toMatchObject({ recording_state: "recording" });
+
+    const missingToken = await handler(
+      new Request("http://127.0.0.1:39170/v1/extension/session", {
+        method: "GET",
+      }),
+    );
+    expect(missingToken.status).toBe(401);
+
+    const websiteOrigin = await handler(
+      sessionStatusRequest({
+        origin: "https://en.wikipedia.org",
+      }),
+    );
+    expect(websiteOrigin.status).toBe(403);
+    database.close();
+  });
+
   test("drives desktop activity lifecycle through extension session controls", async () => {
     let nowMs = 0;
     let foregroundCalls = 0;

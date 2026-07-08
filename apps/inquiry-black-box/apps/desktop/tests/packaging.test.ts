@@ -145,6 +145,24 @@ describe("desktop packaging configuration", () => {
     const plist = ensureProtocolScheme("<plist><dict></dict></plist>");
     expect(plist).toContain("<key>CFBundleURLTypes</key>");
     expect(ensureProtocolScheme(plist).match(/CFBundleURLTypes/g)).toHaveLength(1);
+    const nestedPlist = ensureProtocolScheme(
+      [
+        "<plist>",
+        "<dict>",
+        "<key>ElectronAsarIntegrity</key>",
+        "<dict>",
+        "<key>Resources/default_app.asar</key>",
+        "<dict>",
+        "<key>hash</key>",
+        "<string>fixture</string>",
+        "</dict>",
+        "</dict>",
+        "</dict>",
+        "</plist>",
+      ].join("\n"),
+    );
+    expect(nestedPlist.indexOf("<key>CFBundleURLTypes</key>")).toBeGreaterThan(nestedPlist.indexOf("</dict>\n</dict>"));
+    expect(nestedPlist).toContain("<key>ElectronAsarIntegrity</key>");
     expect(signMacApp("/tmp/Inquiry Black Box.app", { env: {}, platform: "darwin" })).toEqual({
       status: "skipped",
       reason: "INQUIRY_MAC_CODESIGN_IDENTITY is not set",
