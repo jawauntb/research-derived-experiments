@@ -27,7 +27,7 @@ export function renderDailyReviewPanel(
   header.append(title, refresh);
   section.append(header);
 
-  if (!review || review.suggestions.length === 0) {
+  if (!review || (review.suggestions.length === 0 && review.limitations.length === 0)) {
     section.append(emptyState("No daily suggestions yet", "Run and stop an explicit session, then refresh today's review."));
     container.replaceChildren(section);
     return;
@@ -42,9 +42,9 @@ export function renderDailyReviewPanel(
     ["helped", "What helped"],
     ["fragmented", "What fragmented"],
     ["retry", "What to retry"],
-    ["ignore", "What to ignore"],
     ["open_loops", "Open loops"],
-    ["care_candidates", "Care candidates to confirm"],
+    ["care_candidates", "What to confirm"],
+    ["ignore", "What to ignore"],
   ];
 
   for (const [key, label] of categories) {
@@ -81,6 +81,22 @@ export function renderDailyReviewPanel(
     }
     group.append(list);
     section.append(group);
+  }
+
+  if (review.limitations.length > 0) {
+    const limitations = document.createElement("section");
+    limitations.className = "daily-review-group daily-review-limitations";
+    const heading = document.createElement("h3");
+    heading.textContent = "Limitations";
+    limitations.append(heading);
+    const list = document.createElement("ul");
+    for (const limitation of review.limitations) {
+      const item = document.createElement("li");
+      item.textContent = limitation;
+      list.append(item);
+    }
+    limitations.append(list);
+    section.append(limitations);
   }
 
   container.replaceChildren(section);

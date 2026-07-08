@@ -116,7 +116,13 @@ export async function handleRuntimeMessage(
         sessionId: stringValue(message.sessionId) ?? state.sessionId,
       });
     case "inquiry:set-recording-state":
-      return updateRecordingState(context, state, recordingStateValue(message.recordingState), numberValue(message.pausedUntilMs));
+      return updateRecordingState(
+        context,
+        state,
+        recordingStateValue(message.recordingState),
+        numberValue(message.pausedUntilMs),
+        stringValue(message.title),
+      );
     case "inquiry:set-site-disabled":
       return setSiteDisabled(context, state, stringValue(message.siteHash), Boolean(message.disabled));
     case "inquiry:set-privacy-toggles":
@@ -246,6 +252,7 @@ async function updateRecordingState(
   state: BridgeState,
   recordingState: RecordingState | undefined,
   pausedUntilMs: number | undefined,
+  title?: string,
 ): Promise<
   | (BridgeState & { ok: true; warning?: string })
   | (BridgeState & { ok: false; error: string })
@@ -256,7 +263,9 @@ async function updateRecordingState(
         state,
         {
           recordingState,
-          ...(recordingState === "recording" ? { title: "Research session" } : {}),
+          ...(recordingState === "recording"
+            ? { title: title && title.length > 0 ? title : "Research session" }
+            : {}),
           monotonicMs: context.now(),
         },
         context.fetchImpl ? { fetchImpl: context.fetchImpl } : {},

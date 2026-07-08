@@ -77,9 +77,9 @@ instead of editing this runbook.
 
 | Area | Action | Expected result |
 | --- | --- | --- |
-| Desktop startup | Start `bun run dev:desktop` with a throwaway `INQUIRY_DESKTOP_DB_PATH`. | Header shows ingest URL, recording state, and a visible pairing token. |
-| Pairing | Pair the unpacked extension with the desktop token. | Popup shows paired state without requiring desktop Start. |
-| Extension Record | Click Record in the extension popup. | Desktop session starts or resumes and the popup switches to Recording. |
+| Desktop startup | Start `bun run dev:desktop` with a throwaway `INQUIRY_DESKTOP_DB_PATH`. | Rail shows ingest URL, recording state, session title field, and a masked pairing token with Reveal/Copy. |
+| Pairing | Pair the unpacked extension with the desktop token. | Popup shows paired transport controls; pairing form stays behind Edit pairing. |
+| Extension Record | Click Record in the extension popup. | Desktop session starts with a titled session (hostname-derived by default) and the popup marks Recording as active. |
 | Cross-tab capture | Interact with the demo article, then a second normal `http` or `https` tab. | Browser events from both tabs land in the same desktop session. |
 | Unsupported page | Open `chrome://extensions` or another restricted page. | Popup reports the page is unsupported rather than implying capture is broken. |
 | Camera permission | Enable camera features with permission allowed, denied, and not yet granted where possible. | UI distinguishes permission, enabled state, feature heartbeat, and degraded quality. |
@@ -88,7 +88,10 @@ instead of editing this runbook.
 | Window titles opt-in | Enable Window titles only for a throwaway session. | Desktop window events are `document-opt-in`, bounded, exportable locally, and cloud-ineligible. |
 | Selected text off | Copy/highlight text with `Selected text excerpts` off. | Replay/export show counts, lengths, hashes, and privacy limits without raw snippets. |
 | Selected text on | Repeat after enabling `Selected text excerpts`. | Bounded local snippets appear as `document-opt-in`; cloud sync remains ineligible. |
-| Stop/replay | Stop from extension, then inspect the desktop replay. | Replay refreshes, leads with evidence episodes, and shows heatmap and repair prompt. |
+| Stop/replay | Stop from extension, then inspect the desktop replay. | Daily review leads the main canvas; replay shows evidence episodes, reading engagement map, and repair prompt. |
+| Session history | Start and stop two titled sessions, then reopen desktop. | Recent sessions list shows title, duration, top markers, and one-line verdict. |
+| Empty replay | Open replay with no live evidence. | Sample replay preview demonstrates fixture-backed value without claiming live data. |
+| Delete safety | Click Delete session in privacy settings. | Confirmation is required; Export and Delete use distinct styling. |
 | Interpretation | Inspect the Session Interpretation and Daily Review panels after stop. | Session summary, evidence-linked themes, six daily sections, and feedback controls appear without raw text. |
 | Suggestion feedback | Accept, snooze, dismiss, useful, and not-useful actions on a daily suggestion. | `suggestion.responded` events are stored locally and the refreshed daily review reflects feedback. |
 | Notifications opt-in | Enable Notifications, stop or refresh a day with actionable suggestions. | A daily checkup notification appears only after quiet-hour/cooldown gates; notification events are local-derived. |
@@ -151,30 +154,30 @@ Useful checks:
 
 ## Demo Script
 
-1. Open the desktop app and copy the visible pairing token. You do not need to
+1. Open the desktop app and reveal/copy the pairing token from the rail. You do not need to
    click desktop Start for a browser-plus-desktop demo; extension Record starts
    the desktop session after pairing.
 2. Open the extension popup, leave the endpoint as
    `http://127.0.0.1:39170/v1/extension/events`, paste the token, and pair.
-3. Click Record in the extension popup. The popup should switch to Recording
-   and show `Queue clear` when no retry backlog exists.
+3. Click Record in the extension popup. Transport controls should disable invalid
+   actions and mark Recording active when the desktop session is live.
 4. Leave `Selected text excerpts` off for a derived-only run, or enable it when
    you want copied/highlighted excerpts stored locally as `document-opt-in`.
 5. On the article page, scroll quickly, dwell briefly, highlight/copy a claim,
    seek the media control, and switch tabs once or twice.
-6. Add a self-label in the desktop app.
+6. Add a self-label in the desktop rail (human-readable labels, canonical slugs in events).
 7. Stop the session from the extension popup. For browser-plus-desktop demos,
    extension Stop also asks the desktop session to stop.
-8. Inspect replay markers, evidence episodes, the comprehension heatmap, the
-   session interpretation, daily review, and repair prompt.
-9. Use one suggestion feedback control, then click Start on the repair prompt,
-   answer it, and Save or Dismiss.
+8. Inspect daily review first, then replay markers, evidence episodes, the reading
+   engagement map, session interpretation, and repair prompt.
+9. Use one suggestion feedback control, then click Accept repair on the repair prompt,
+   answer it, and Save answer or Dismiss.
 10. Export JSONL and confirm it contains derived events, reports, suggestions,
     feedback, and repair outcomes, not
     raw camera frames, raw typed content, or raw article text by default. If
     `Selected text excerpts` was enabled, copied/highlighted excerpts appear as
     local `document-opt-in` events.
-11. Delete the session and confirm the local session disappears.
+11. Confirm delete asks for confirmation, then delete the session and confirm the local session disappears.
 
 For packaged smoke, run `bun run package:desktop`, then
 `bun run install:desktop -- --destination /tmp/inquiry-apps --overwrite`, open
@@ -183,14 +186,14 @@ loop. Move to `~/Applications` only after this throwaway install passes.
 
 ## Expected Demo Signals
 
-- The desktop header shows recording state, ingest URL, and pairing token.
+- The desktop rail shows recording state, ingest URL, masked pairing token, session history, and transport controls.
 - Replay includes event-backed evidence episodes and markers such as skim risk,
   copied passage, rewind, tab churn, app churn, desktop work spans, labels, and
   probes.
 - Copy/highlight evidence shows selected text snippets only when `Selected text
   excerpts` was enabled.
-- The heatmap separates stimulus evidence from behavior evidence and shows
-  confidence plus limitation copy.
+- The reading engagement map separates stimulus evidence from behavior evidence and shows
+  confidence bands plus limitation copy, including contextual privacy upgrade hints.
 - Repair actions are stored as `repair.candidate`, `probe.requested`,
   `probe.answered`, and `repair.outcome` events.
 - Session interpretation and daily review are stored as `report.generated`,

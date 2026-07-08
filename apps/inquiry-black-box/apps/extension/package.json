@@ -9,6 +9,7 @@
     "test": "bun test tests/*.test.ts"
   },
   "dependencies": {
-    "@inquiry/schema": "workspace:*"
+    "@inquiry/schema": "workspace:*",
+    "@inquiry/ui": "workspace:*"
   }
 }

@@ -1,4 +1,9 @@
-import { recordingIndicator, type RecordingIndicatorView } from "@inquiry/ui";
+import {
+  defaultSessionTitle,
+  recordingIndicator,
+  selfLabelDisplayName,
+  type RecordingIndicatorView,
+} from "@inquiry/ui";
 import type { LabelPayload, SessionRecord } from "@inquiry/schema";
 
 export type SessionCommand = "start" | "pause" | "resume" | "stop";
@@ -15,10 +20,12 @@ export type SessionControlsViewModel = {
   indicator: RecordingIndicatorView;
   buttons: SessionButton[];
   labels: readonly SelfLabel[];
+  titleDraft: string;
+  canEditTitle: boolean;
 };
 
 export type SessionControlsActions = {
-  startSession: () => void | Promise<void>;
+  startSession: (title: string) => void | Promise<void>;
   pauseSession: () => void | Promise<void>;
   resumeSession: () => void | Promise<void>;
   stopSession: () => void | Promise<void>;
@@ -35,7 +42,10 @@ export const visibleSelfLabels = [
   "tired",
 ] as const satisfies readonly SelfLabel[];
 
-export function sessionControlsViewModel(session: SessionRecord | null): SessionControlsViewModel {
+export function sessionControlsViewModel(
+  session: SessionRecord | null,
+  titleDraft = "",
+): SessionControlsViewModel {
   const state = session?.recording_state ?? "idle";
   return {
     indicator: recordingIndicator(state),
@@ -46,6 +56,8 @@ export function sessionControlsViewModel(session: SessionRecord | null): Session
       { command: "stop", label: "Stop", enabled: state === "recording" || state === "paused", tone: "danger" },
     ],
     labels: visibleSelfLabels,
+    titleDraft: titleDraft || session?.title || defaultSessionTitle(),
+    canEditTitle: state === "idle" || state === "stopped",
   };
 }
 
@@ -53,8 +65,9 @@ export function renderSessionControls(
   root: HTMLElement,
   session: SessionRecord | null,
   actions: SessionControlsActions,
+  titleDraft = "",
 ): void {
-  const view = sessionControlsViewModel(session);
+  const view = sessionControlsViewModel(session, titleDraft);
   const container = document.createElement("section");
   container.className = "session-controls";
 
@@ -63,6 +76,19 @@ export function renderSessionControls(
   status.textContent = view.indicator.label;
   status.setAttribute("aria-live", "polite");
   container.append(status);
+
+  const titleField = document.createElement("label");
+  titleField.className = "session-title-field";
+  titleField.textContent = "Session title";
+  const titleInput = document.createElement("input");
+  titleInput.type = "text";
+  titleInput.className = "session-title-input";
+  titleInput.value = view.titleDraft;
+  titleInput.disabled = !view.canEditTitle;
+  titleInput.placeholder = defaultSessionTitle();
+  titleInput.setAttribute("aria-label", "Session title");
+  titleField.append(titleInput);
+  container.append(titleField);
 
   const toolbar = document.createElement("div");
   toolbar.className = "session-toolbar";
@@ -73,6 +99,11 @@ export function renderSessionControls(
     control.disabled = !button.enabled;
     control.className = `session-button session-button-${button.tone}`;
     control.addEventListener("click", () => {
+      if (button.command === "start") {
+        const nextTitle = titleInput.value.trim() || defaultSessionTitle();
+        void actions.startSession(nextTitle);
+        return;
+      }
       void actionFor(button.command, actions)();
     });
     toolbar.append(control);
@@ -84,7 +115,8 @@ export function renderSessionControls(
   for (const label of view.labels) {
     const control = document.createElement("button");
     control.type = "button";
-    control.textContent = label;
+    control.textContent = selfLabelDisplayName(label);
+    control.dataset.labelSlug = label;
     control.disabled = view.indicator.state !== "recording" && view.indicator.state !== "paused";
     control.addEventListener("click", () => {
       void actions.addLabel(label);
@@ -99,7 +131,7 @@ export function renderSessionControls(
 function actionFor(command: SessionCommand, actions: SessionControlsActions): () => void | Promise<void> {
   switch (command) {
     case "start":
-      return actions.startSession;
+      return () => actions.startSession(defaultSessionTitle());
     case "pause":
       return actions.pauseSession;
     case "resume":

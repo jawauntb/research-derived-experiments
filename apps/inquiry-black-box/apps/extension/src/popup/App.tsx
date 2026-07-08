@@ -8,6 +8,13 @@ import {
 } from "../lib/localBridge";
 import { CONTENT_PING_MESSAGE, CONTENT_PONG_MESSAGE } from "../lib/messages";
 import { hashForTelemetry } from "../lib/telemetry";
+import {
+  defaultSessionTitle,
+  recordingIndicator,
+  sessionTransportButtons,
+  siteCaptureLabel,
+  type SessionTransportButton,
+} from "@inquiry/ui";
 import { renderPrivacyToggles } from "./PrivacyToggles";
 
 type PopupState = BridgeState & {
@@ -104,13 +111,16 @@ function render(root: HTMLElement, model: PopupModel, chromeApi: ChromeLike, not
   const page = document.createElement("main");
   page.className = "popup";
 
+  const effectiveState = model.state.desktopRecordingState ?? model.state.recordingState;
+  const indicator = recordingIndicator(effectiveState === "stopped" ? "stopped" : effectiveState);
+
   const header = document.createElement("header");
   header.className = "popup-header";
   const title = document.createElement("h1");
   title.textContent = "Inquiry Black Box";
   const status = document.createElement("span");
-  status.className = `status status-${model.state.recordingState}`;
-  status.textContent = statusLabel(model.state.recordingState);
+  status.className = `status status-${indicator.state}`;
+  status.textContent = indicator.label;
   header.append(title, status);
 
   const queue = document.createElement("div");
@@ -123,32 +133,32 @@ function render(root: HTMLElement, model: PopupModel, chromeApi: ChromeLike, not
   noticeElement.hidden = !effectiveNotice;
   noticeElement.textContent = effectiveNotice ?? "";
 
-  const summary = document.createElement("section");
-  summary.className = "pairing-summary";
-  summary.append(
-    summaryRow("Pairing", model.state.pairingToken ? "Paired" : "Not paired"),
-    summaryRow("Endpoint", model.state.endpoint),
-    summaryRow("Session", model.state.sessionId),
-    summaryRow("Desktop", model.state.desktopRecordingState ? statusLabel(model.state.desktopRecordingState) : "Not checked"),
-    summaryRow("Page listener", pageListenerLabel(model.pageListener)),
-    summaryRow("Site", model.siteHash && model.state.disabledSiteHashes.includes(model.siteHash) ? "Disabled" : "Allowed"),
-  );
-
   const controls = document.createElement("section");
   controls.className = "button-row";
   const canControl = Boolean(model.state.pairingToken);
-  controls.append(
-    actionButton("Record", () => setRecordingState(root, chromeApi, "recording"), !canControl),
-    actionButton("Pause", () => setRecordingState(root, chromeApi, "paused"), !canControl),
-    actionButton("Stop", () => setRecordingState(root, chromeApi, "stopped"), !canControl),
-  );
+  for (const button of sessionTransportButtons(indicator.state)) {
+    if (button.command === "resume") {
+      continue;
+    }
+    const mappedCommand = button.command === "record" ? "recording" : button.command;
+    controls.append(
+      transportButton(button, () => setRecordingState(root, chromeApi, mappedCommand as RecordingState, model.siteLabel), !canControl || !button.enabled),
+    );
+  }
+  if (indicator.state === "paused") {
+    const resume = sessionTransportButtons("paused").find((button) => button.command === "resume");
+    if (resume) {
+      controls.append(transportButton(resume, () => setRecordingState(root, chromeApi, "recording", model.siteLabel), !canControl || !resume.enabled));
+    }
+  }
 
+  const sitePaused = Boolean(model.siteHash && model.state.disabledSiteHashes.includes(model.siteHash));
   const siteToggle = document.createElement("label");
   siteToggle.className = "toggle-row site-row";
   const siteCheckbox = document.createElement("input");
   siteCheckbox.type = "checkbox";
   siteCheckbox.disabled = !model.siteHash;
-  siteCheckbox.checked = Boolean(model.siteHash && model.state.disabledSiteHashes.includes(model.siteHash));
+  siteCheckbox.checked = sitePaused;
   siteCheckbox.addEventListener("change", () => {
     if (!model.siteHash) {
       return;
@@ -161,18 +171,78 @@ function render(root: HTMLElement, model: PopupModel, chromeApi: ChromeLike, not
     }).then(() => renderFromRuntime(root, chromeApi));
   });
   const siteText = document.createElement("span");
-  siteText.textContent = `Disable ${model.siteLabel}`;
+  siteText.textContent = siteCaptureLabel(model.siteLabel, sitePaused);
   siteToggle.append(siteCheckbox, siteText);
 
-  const pairing = pairingForm(model, chromeApi, () => renderFromRuntime(root, chromeApi));
-  const togglesMount = document.createElement("section");
-  renderPrivacyToggles(togglesMount, model.state.privacyToggles, async (privacyToggles) => {
+  const health = document.createElement("div");
+  health.className = "health-row";
+  health.textContent = [
+    model.state.pairingToken ? "Paired" : "Not paired",
+    pageListenerLabel(model.pageListener),
+    sitePaused ? "Site paused" : "Site allowed",
+  ].join(" · ");
+
+  const diagnostics = diagnosticsSection(model);
+  const pairing = model.state.pairingToken ? pairingEditAction(model, chromeApi, () => renderFromRuntime(root, chromeApi)) : pairingForm(model, chromeApi, () => renderFromRuntime(root, chromeApi));
+
+  const togglesMount = document.createElement("details");
+  togglesMount.className = "privacy-disclosure";
+  const togglesSummary = document.createElement("summary");
+  togglesSummary.textContent = "Privacy toggles";
+  togglesMount.append(togglesSummary);
+  const togglesBody = document.createElement("div");
+  renderPrivacyToggles(togglesBody, model.state.privacyToggles, async (privacyToggles) => {
     await updatePrivacyToggles(chromeApi, privacyToggles);
     await renderFromRuntime(root, chromeApi);
   });
+  togglesMount.append(togglesBody);
 
-  page.append(header, queue, noticeElement, summary, controls, siteToggle, togglesMount, pairing);
+  page.append(header, queue, noticeElement, controls, siteToggle, health, togglesMount, diagnostics, pairing);
   root.replaceChildren(page);
+}
+
+function transportButton(
+  button: SessionTransportButton,
+  onClick: () => void | Promise<void>,
+  disabled: boolean,
+): HTMLButtonElement {
+  const control = document.createElement("button");
+  control.type = "button";
+  control.textContent = button.label;
+  control.disabled = disabled;
+  if (button.active) {
+    control.className = "transport-active";
+    control.setAttribute("aria-pressed", "true");
+  }
+  control.addEventListener("click", () => void onClick());
+  return control;
+}
+
+function diagnosticsSection(model: PopupModel): HTMLElement {
+  const details = document.createElement("details");
+  details.className = "diagnostics-disclosure";
+  const summary = document.createElement("summary");
+  summary.textContent = "Diagnostics";
+  details.append(summary);
+  const body = document.createElement("section");
+  body.className = "pairing-summary";
+  body.append(
+    summaryRow("Endpoint", model.state.endpoint),
+    summaryRow("Session", model.state.sessionId),
+    summaryRow("Desktop", model.state.desktopRecordingState ? statusLabel(model.state.desktopRecordingState) : "Not checked"),
+    summaryRow("Page listener", pageListenerLabel(model.pageListener)),
+  );
+  details.append(body);
+  return details;
+}
+
+function pairingEditAction(model: PopupModel, chromeApi: ChromeLike, onSaved: () => void | Promise<void>): HTMLElement {
+  const wrapper = document.createElement("details");
+  wrapper.className = "pairing-disclosure";
+  const summary = document.createElement("summary");
+  summary.textContent = "Edit pairing";
+  wrapper.append(summary, pairingForm(model, chromeApi, onSaved));
+  return wrapper;
 }
 
 function queueLabel(state: PopupState): string {
@@ -235,25 +305,24 @@ function pairingForm(model: PopupModel, chromeApi: ChromeLike, onSaved: () => vo
   return form;
 }
 
-function actionButton(label: string, onClick: () => void | Promise<void>, disabled = false): HTMLButtonElement {
-  const button = document.createElement("button");
-  button.type = "button";
-  button.textContent = label;
-  button.disabled = disabled;
-  button.addEventListener("click", () => void onClick());
-  return button;
-}
-
 async function setRecordingState(
   root: HTMLElement,
   chromeApi: ChromeLike,
   recordingState: RecordingState,
+  siteLabel?: string,
   pausedUntilMs?: number,
 ): Promise<void> {
   const response = await sendRuntimeMessage(chromeApi.runtime, {
     type: "inquiry:set-recording-state",
     recordingState,
     pausedUntilMs,
+    ...(recordingState === "recording"
+      ? {
+          title: defaultSessionTitle(
+            siteLabel && siteLabel !== "this site" ? { hostname: siteLabel } : undefined,
+          ),
+        }
+      : {}),
   });
   if (isRecord(response) && response.ok === false) {
     await renderFromRuntime(root, chromeApi, `Desktop control failed: ${String(response.error ?? "unknown error")}`);
@@ -557,6 +626,38 @@ function installStyles(): void {
 
     .popup-notice[hidden] {
       display: none;
+    }
+
+    .health-row {
+      background: var(--surface-inset);
+      border-radius: 8px;
+      box-shadow: var(--shadow-pressed);
+      color: var(--muted);
+      font-size: 12px;
+      min-height: 30px;
+      padding: 8px 10px;
+    }
+
+    .transport-active {
+      box-shadow: var(--shadow-pressed);
+      outline: 2px solid var(--green);
+    }
+
+    details summary {
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .privacy-disclosure,
+    .diagnostics-disclosure,
+    .pairing-disclosure {
+      background: var(--surface-raised);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 8px;
+      box-shadow: var(--shadow-raised);
+      padding: 10px;
     }
 
     .pairing-summary {

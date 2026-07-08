@@ -12,6 +12,7 @@ import { deleteLocalSession } from "./privacy/delete";
 import { exportSession, type SessionExport } from "./privacy/export";
 import { runDailyReviewCheckupNotification } from "./notifications/notificationScheduler";
 import { createDailyReviewReport, recordSuggestionResponse, type DailyReviewReport } from "./reports/dailyDigest";
+import { loadDemoReplayReport, listSessionHistory, type SessionHistoryEntry } from "./reports/sessionHistory";
 import { createSessionInterpretationReport, type SessionInterpretationReport } from "./reports/sessionInterpretation";
 import { createSessionReplayReport, type SessionReplayReport } from "./reports/sessionReplay";
 import type { DesktopRuntime } from "./main";
@@ -38,6 +39,9 @@ export type DesktopIpcFacade = {
   setSignalEnabled: (key: keyof SignalSettings, enabled: boolean) => Promise<PrivacySettingsView>;
   exportSession: () => Promise<SessionExport>;
   deleteSession: () => Promise<{ session_id: string; deleted: true }>;
+  listSessionHistory: () => Promise<SessionHistoryEntry[]>;
+  selectSession: (session_id: string) => Promise<SessionRecord | null>;
+  demoReplayReport: () => Promise<SessionReplayReport>;
   replayReport: () => Promise<SessionReplayReport | null>;
   sessionInterpretation: () => Promise<SessionInterpretationReport | null>;
   dailyReview: () => Promise<DailyReviewReport>;
@@ -135,6 +139,19 @@ export function createDesktopIpcFacade(runtime: DesktopRuntime): DesktopIpcFacad
         lastSessionId = null;
       }
       return result;
+    },
+    async listSessionHistory() {
+      return listSessionHistory(runtime.database);
+    },
+    async selectSession(session_id) {
+      const session = runtime.database.getSession(session_id);
+      if (session) {
+        lastSessionId = session.session_id;
+      }
+      return session;
+    },
+    async demoReplayReport() {
+      return loadDemoReplayReport();
     },
     async replayReport() {
       const session = rememberedSession();

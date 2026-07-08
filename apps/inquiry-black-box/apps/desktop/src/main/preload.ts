@@ -54,6 +54,11 @@ const desktopBridge = {
   },
   replay: {
     report: () => invoke("inquiry:replay:report"),
+    demo: () => invoke("inquiry:replay:demo"),
+  },
+  sessions: {
+    listHistory: () => invoke("inquiry:sessions:history"),
+    select: (session_id: string) => invoke("inquiry:sessions:select", session_id),
   },
   interpretation: {
     session: () => invoke("inquiry:interpretation:session"),

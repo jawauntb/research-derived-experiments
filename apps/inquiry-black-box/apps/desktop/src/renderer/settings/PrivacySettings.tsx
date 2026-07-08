@@ -202,17 +202,29 @@ export function renderPrivacySettings(
 
   const exportButton = document.createElement("button");
   exportButton.type = "button";
+  exportButton.className = "privacy-export-button";
   exportButton.disabled = !view.export_available;
-  exportButton.textContent = "Export";
+  exportButton.textContent = "Export session";
   exportButton.addEventListener("click", () => void actions.exportSession());
 
   const deleteButton = document.createElement("button");
   deleteButton.type = "button";
+  deleteButton.className = "privacy-delete-button";
   deleteButton.disabled = !view.delete_available;
-  deleteButton.textContent = "Delete";
-  deleteButton.addEventListener("click", () => void actions.deleteSession());
+  deleteButton.textContent = "Delete session";
+  deleteButton.addEventListener("click", () => {
+    const confirmed = globalThis.confirm(
+      "Delete this session and all local replay data? This cannot be undone. Cloud deletion requests are queued separately.",
+    );
+    if (confirmed) {
+      void actions.deleteSession();
+    }
+  });
 
-  section.append(exportButton, deleteButton);
+  const actionsRow = document.createElement("div");
+  actionsRow.className = "privacy-settings__actions";
+  actionsRow.append(exportButton, deleteButton);
+  section.append(actionsRow);
   container.replaceChildren(section);
 }
 
