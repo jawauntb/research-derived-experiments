@@ -5,6 +5,13 @@ replaying comprehension moments, turning sessions into daily next-action
 suggestions, and building a longitudinal dataset without storing raw camera
 frames or raw keystrokes by default.
 
+The current activation loop is: pair desktop + extension, start a titled session,
+review daily replay and deterministic daily review, answer repair prompts, browse
+recent session history, then export or confirm-delete local data.
+
+Marketing site: `sites/inquiry_black_box` (repo-relative) links to this app path,
+privacy model, and README.
+
 ## Workspace
 
 ```bash

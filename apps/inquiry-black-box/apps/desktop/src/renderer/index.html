@@ -452,17 +452,153 @@
         width: 100%;
       }
 
-      @media (min-width: 900px) {
-        #app {
-          grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.2fr);
-        }
+      #app {
+        display: block;
+        margin: 0 auto;
+        max-width: 1280px;
+        padding: 16px;
+      }
 
-        #app > div:first-child,
-        #app > div:nth-child(5),
-        #app > div:nth-child(6),
-        #app > div:nth-child(7),
-        #app > div:nth-child(8) {
-          grid-column: 1 / -1;
+      .app-shell {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.4fr);
+        min-height: calc(100vh - 32px);
+      }
+
+      .app-rail,
+      .app-canvas {
+        display: grid;
+        gap: 16px;
+      }
+
+      .app-rail > *,
+      .app-canvas > * {
+        background: var(--surface-raised);
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        border-radius: 8px;
+        box-shadow: var(--shadow-raised);
+        padding: 16px;
+      }
+
+      .session-history__list {
+        display: grid;
+        gap: 8px;
+        list-style: none;
+        margin: 12px 0 0;
+        padding: 0;
+      }
+
+      .session-history__item {
+        background: var(--surface-inset);
+        border: 1px solid transparent;
+        border-radius: 8px;
+        box-shadow: var(--shadow-pressed);
+        cursor: pointer;
+        display: grid;
+        gap: 4px;
+        padding: 10px;
+        text-align: left;
+        width: 100%;
+      }
+
+      .session-history__item-active {
+        border-color: var(--green);
+      }
+
+      .session-history__meta,
+      .session-history__verdict,
+      .session-history__empty {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .session-title-field {
+        display: grid;
+        gap: 6px;
+        font-size: 12px;
+        margin-top: 12px;
+      }
+
+      .session-title-input {
+        background: var(--surface-inset);
+        border: 1px solid transparent;
+        border-radius: 8px;
+        box-shadow: var(--shadow-pressed);
+        min-height: 34px;
+        padding: 0 10px;
+        width: 100%;
+      }
+
+      .pairing-token-item {
+        gap: 8px;
+      }
+
+      .pairing-token-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .pairing-token-controls button {
+        font-size: 12px;
+        min-height: 28px;
+        padding: 4px 8px;
+      }
+
+      .privacy-settings__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 8px;
+      }
+
+      .privacy-delete-button {
+        background: var(--rose-soft);
+        border-color: var(--rose-soft);
+        color: var(--rose);
+      }
+
+      .privacy-export-button {
+        background: var(--blue-soft);
+        border-color: var(--blue-soft);
+        color: var(--blue);
+      }
+
+      .privacy-upgrade-hint {
+        color: var(--blue);
+        font-size: 12px;
+        margin-top: 6px;
+      }
+
+      .probe-field {
+        display: block;
+        font-size: 12px;
+        font-weight: 700;
+        margin-top: 10px;
+      }
+
+      .probe-confidence-readout {
+        color: var(--muted);
+        display: block;
+        font-size: 12px;
+        margin-bottom: 8px;
+      }
+
+      .replay-demo-button {
+        background: var(--teal-soft, var(--green-soft));
+        border-color: var(--green);
+        color: var(--green);
+        margin-top: 10px;
+      }
+
+      .replay-limitations {
+        margin-top: 12px;
+      }
+
+      @media (max-width: 899px) {
+        .app-shell {
+          grid-template-columns: 1fr;
         }
       }
     </style>

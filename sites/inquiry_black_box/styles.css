@@ -492,8 +492,10 @@ dd {
 
   .nav a {
     flex: 0 0 auto;
-    font-size: 9px;
+    font-size: 12px;
     letter-spacing: 0.08em;
+    min-height: 44px;
+    padding: 10px 0;
     white-space: nowrap;
   }
 

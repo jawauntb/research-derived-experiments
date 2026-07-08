@@ -23,6 +23,7 @@ import {
   type SessionStateChangeInput,
   type StartSessionInput,
 } from "./ingest/session";
+import { createIdleIntegrityWatcher, type IdleIntegrityWatcher } from "./ingest/idleIntegrity";
 import { createGlobalHotkeyEvent } from "./security/hotkeys";
 import { createPairingSecret, createPairingToken } from "./security/pairing";
 import type { DesktopNotifier } from "./notifications/desktopNotifier";
@@ -50,6 +51,7 @@ export type DesktopRuntime = {
   bridge: DesktopMainBridge;
   desktopActivity: DesktopActivityCollector;
   notifier: DesktopNotifier;
+  idleIntegrity: IdleIntegrityWatcher;
   stop: () => void;
 };
 
@@ -100,6 +102,13 @@ export function createDesktopRuntime(options: DesktopRuntimeOptions = {}): Deskt
   });
   const notifier = options.notifier ?? noopNotifier;
   const bridge = createDesktopMainBridge(database, sessions, desktopActivity);
+  const idleIntegrity = createIdleIntegrityWatcher({ database, sessions });
+  const originalAppend = database.appendEvent.bind(database);
+  database.appendEvent = (event) => {
+    idleIntegrity.recordActivity(event.monotonic_ms);
+    return originalAppend(event);
+  };
+  const idleTimer = setInterval(() => idleIntegrity.tick(), 60_000);
   const serverOptions: StartIngestServerOptions = {
     allowedOrigins,
     database,
@@ -120,7 +129,9 @@ export function createDesktopRuntime(options: DesktopRuntimeOptions = {}): Deskt
     bridge,
     desktopActivity,
     notifier,
+    idleIntegrity,
     stop() {
+      clearInterval(idleTimer);
       desktopActivity.stop();
       ingest?.stop();
       database.close();

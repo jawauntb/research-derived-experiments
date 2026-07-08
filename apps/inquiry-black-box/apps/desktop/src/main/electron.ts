@@ -28,6 +28,9 @@ function registerHandlers(nextFacade: DesktopIpcFacade): void {
   ipcMain.handle("inquiry:privacy:export", () => nextFacade.exportSession());
   ipcMain.handle("inquiry:privacy:delete", () => nextFacade.deleteSession());
   ipcMain.handle("inquiry:replay:report", () => nextFacade.replayReport());
+  ipcMain.handle("inquiry:replay:demo", () => nextFacade.demoReplayReport());
+  ipcMain.handle("inquiry:sessions:history", () => nextFacade.listSessionHistory());
+  ipcMain.handle("inquiry:sessions:select", (_event, session_id) => nextFacade.selectSession(session_id));
   ipcMain.handle("inquiry:interpretation:session", () => nextFacade.sessionInterpretation());
   ipcMain.handle("inquiry:interpretation:daily", () => nextFacade.dailyReview());
   ipcMain.handle("inquiry:interpretation:daily-refresh", () => nextFacade.refreshDailyReview());

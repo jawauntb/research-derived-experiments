@@ -17,10 +17,22 @@ test("site explains Inquiry without overstating privacy or cognition", () => {
   assert.doesNotMatch(html, /always-on background monitoring/i);
 });
 
+test("site exposes product, privacy, and repository trust links", () => {
+  assert.match(html, /apps\/inquiry-black-box/);
+  assert.match(html, /privacy-model\.md/);
+  assert.match(html, /README\.md/);
+  assert.match(html, /github\.com/);
+});
+
 test("site keeps Neurophenom typography and adds neumorphic tokens", () => {
   assert.match(css, /Iowan Old Style/);
   assert.match(css, /SF Mono/);
   assert.match(css, /--shadow-raised/);
   assert.match(css, /--shadow-inset/);
   assert.match(css, /border-radius: 22px/);
+});
+
+test("mobile nav links keep readable tap targets", () => {
+  assert.match(css, /min-height:\s*44px/);
+  assert.doesNotMatch(css, /font-size:\s*9px/);
 });

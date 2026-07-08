@@ -217,7 +217,7 @@ describe("session replay report", () => {
 
       renderReplayTimeline(root as unknown as HTMLElement, report);
 
-      expect(root.textContent).toContain("Comprehension Heatmap");
+      expect(root.textContent).toContain("Reading engagement map");
       expect(root.textContent).toContain("Evidence events:");
       expect(root.textContent).toContain(firstHeatmapSegment.limitation);
       expect(root.findByDataset("heatmapKind", firstHeatmapSegment.kind)).toBeDefined();
@@ -531,7 +531,7 @@ describe("session replay report", () => {
       expect(replayCalls).toBeGreaterThanOrEqual(2);
 
       const textarea = root.findByTag("textarea");
-      const saveButton = root.findAllByTag("button").find((button) => button.textContent === "Save");
+      const saveButton = root.findAllByTag("button").find((button) => button.textContent === "Save answer");
       expect(textarea).toBeDefined();
       expect(saveButton).toBeDefined();
       textarea!.value = "The copied claim needed a concrete check.";

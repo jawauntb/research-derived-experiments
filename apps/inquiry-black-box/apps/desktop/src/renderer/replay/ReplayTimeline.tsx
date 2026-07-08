@@ -1,19 +1,46 @@
 import type { ComprehensionHeatmapSegment, EvidenceEpisode, ReplayMarker, ReplayMemo } from "@inquiry/signals";
+import { confidenceBand, privacyUpgradeHintForText, READING_ENGAGEMENT_MAP_TITLE } from "@inquiry/ui";
 
-export function renderReplayTimeline(container: HTMLElement, memo: ReplayMemo): void {
+type ReplayTimelineMemo = ReplayMemo & {
+  limitations?: string[];
+};
+
+export type ReplayRenderOptions = {
+  demo?: boolean;
+  onViewDemo?: () => void | Promise<void>;
+};
+
+export function renderReplayTimeline(
+  container: HTMLElement,
+  memo: ReplayTimelineMemo,
+  options: ReplayRenderOptions = {},
+): void {
   const section = document.createElement("section");
   section.className = "replay-timeline";
+  if (options.demo) {
+    section.dataset.demo = "true";
+  }
 
   const title = document.createElement("h2");
-  title.textContent = "Replay";
+  title.textContent = options.demo ? "Sample replay preview" : "Replay";
   section.append(title);
+
+  if (options.demo) {
+    section.append(
+      renderReplayState(
+        "Fixture-backed preview",
+        "This sample shows what replay markers, evidence, and limitations look like. It is not live session data.",
+      ),
+    );
+  }
 
   if (memo.episodes.length === 0 && memo.markers.length === 0 && memo.heatmap.length === 0) {
     section.append(
       renderReplayState(
         "No replay evidence yet",
-        "Stop a session after browser, camera, label, or probe events arrive. Replay uses evidence events, not hidden page text or raw camera frames.",
+        "Stop a session after browser, camera, label, or probe events arrive, or open the sample preview to see expected value.",
       ),
+      renderDemoAction(options.onViewDemo),
     );
     container.replaceChildren(section);
     return;
@@ -56,7 +83,41 @@ export function renderReplayTimeline(container: HTMLElement, memo: ReplayMemo): 
   }
   section.append(actions);
 
+  if (memo.limitations && memo.limitations.length > 0) {
+    const limitations = document.createElement("section");
+    limitations.className = "replay-limitations";
+    const heading = document.createElement("h3");
+    heading.textContent = "Limitations";
+    limitations.append(heading);
+    const limitationList = document.createElement("ul");
+    for (const limitation of memo.limitations) {
+      const item = document.createElement("li");
+      item.textContent = limitation;
+      const hint = privacyUpgradeHintForText(limitation);
+      if (hint) {
+        const upgrade = document.createElement("p");
+        upgrade.className = "privacy-upgrade-hint";
+        upgrade.textContent = `${hint.title}: ${hint.detail}`;
+        item.append(upgrade);
+      }
+      limitationList.append(item);
+    }
+    limitations.append(limitationList);
+    section.append(limitations);
+  }
+
   container.replaceChildren(section);
+}
+
+function renderDemoAction(onViewDemo?: () => void | Promise<void>): HTMLElement {
+  const action = document.createElement("button");
+  action.type = "button";
+  action.className = "replay-demo-button";
+  action.textContent = "View sample replay";
+  if (onViewDemo) {
+    action.addEventListener("click", () => void onViewDemo());
+  }
+  return action;
 }
 
 function renderReplayState(titleText: string, detailText: string): HTMLElement {
@@ -111,6 +172,13 @@ function renderEpisode(episode: EvidenceEpisode): HTMLLIElement {
 
   const privacy = document.createElement("p");
   privacy.textContent = episode.privacy_note;
+  const hint = privacyUpgradeHintForText(episode.privacy_note);
+  if (hint) {
+    const upgrade = document.createElement("p");
+    upgrade.className = "privacy-upgrade-hint";
+    upgrade.textContent = `${hint.title}: ${hint.detail}`;
+    item.append(upgrade);
+  }
 
   item.append(title, range, details, source, privacy);
   return item;
@@ -121,7 +189,7 @@ function renderHeatmap(segments: ComprehensionHeatmapSegment[]): HTMLElement {
   heatmap.className = "replay-heatmap";
 
   const title = document.createElement("h3");
-  title.textContent = "Comprehension Heatmap";
+  title.textContent = READING_ENGAGEMENT_MAP_TITLE;
   heatmap.append(title);
 
   const list = document.createElement("ol");
@@ -139,8 +207,9 @@ function renderHeatmapSegment(segment: ComprehensionHeatmapSegment): HTMLLIEleme
   item.dataset.heatmapId = segment.heatmap_id;
   item.dataset.confidence = String(segment.confidence);
 
+  const band = confidenceBand(segment.confidence);
   const title = document.createElement("strong");
-  title.textContent = `${segment.kind} (${Math.round(segment.confidence * 100)}%)`;
+  title.textContent = `${segment.kind} (${band.label}; ${band.detail})`;
 
   const range = document.createElement("span");
   range.textContent = ` ${formatMs(segment.start_ms)}-${formatMs(segment.end_ms)}`;
@@ -157,6 +226,13 @@ function renderHeatmapSegment(segment: ComprehensionHeatmapSegment): HTMLLIEleme
 
   const limitation = document.createElement("p");
   limitation.textContent = segment.limitation;
+  const hint = privacyUpgradeHintForText(segment.limitation);
+  if (hint) {
+    const upgrade = document.createElement("p");
+    upgrade.className = "privacy-upgrade-hint";
+    upgrade.textContent = `${hint.title}: ${hint.detail}`;
+    item.append(upgrade);
+  }
 
   item.append(title, range, evidence, repair, limitation);
   return item;
@@ -196,10 +272,13 @@ function behaviorSummary(segment: ComprehensionHeatmapSegment): string {
   }
 
   return `Behavior evidence: ${segment.behavior_evidence
-    .map((evidence) => `${evidence.kind} ${Math.round(evidence.confidence * 100)}%`)
+    .map((evidence) => {
+      const band = confidenceBand(evidence.confidence);
+      return `${evidence.kind} ${band.label}`;
+    })
     .join(", ")}.`;
 }
 
-function formatMs(value: number): string {
-  return `${Math.round(value / 1000)}s`;
+function formatMs(ms: number): string {
+  return `${(ms / 1000).toFixed(1)}s`;
 }
