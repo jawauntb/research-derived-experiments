@@ -99,11 +99,13 @@ async function createCloudSummaryReport(
 ) {
   const payload = parseJsonObject(reportInput.payload ?? {}, "result.report.payload");
   const provenance = parseJsonObject(reportInput.provenance ?? {}, "result.report.provenance");
+  const title =
+    payload.privacy_class === "document-opt-in" ? "Document opt-in LLM session analysis" : "Redacted LLM session analysis";
 
   return store.createReport({
     user_id: job.user_id,
     kind: job.kind,
-    title: "Redacted LLM session analysis",
+    title,
     summary: "Cloud LLM analysis completed.",
     payload,
     provenance,
@@ -208,13 +210,14 @@ function sanitizeJobResult(kind: JobKind, result: JsonObject): JsonObject {
 
 function sessionSummaryJobResult(jobId: string, input: JsonObject, summary: SessionSummaryResult): JsonObject {
   const payload = parseJsonObject(input.payload ?? {}, "input.payload");
+  const inputPrivacyClass = input.privacy_class === "document-opt-in" ? "document-opt-in" : "redacted-sync";
   const inputReportId = stringField(payload, "report_id", false);
   const subjectSessionId = stringField(payload, "subject_session_id", false);
   const reportPayload: JsonObject = {
     summary_text: summary.text,
     provider: summary.provider,
     model: summary.model,
-    privacy_class: "redacted-sync",
+    privacy_class: inputPrivacyClass,
     limitations: summary.limitations,
     ...(inputReportId ? { input_report_id: inputReportId } : {}),
     ...(subjectSessionId ? { subject_session_id: subjectSessionId } : {}),
@@ -223,14 +226,16 @@ function sessionSummaryJobResult(jobId: string, input: JsonObject, summary: Sess
     job_id: jobId,
     provider: summary.provider,
     model: summary.model,
-    input_privacy_class: "redacted-sync",
+    input_privacy_class: inputPrivacyClass,
     ...(inputReportId ? { input_report_id: inputReportId } : {}),
   };
+  const title =
+    inputPrivacyClass === "document-opt-in" ? "Document opt-in LLM session analysis" : "Redacted LLM session analysis";
   return {
-    title: "Redacted LLM session analysis",
+    title,
     summary: "Cloud LLM analysis completed.",
     report: {
-      title: "Redacted LLM session analysis",
+      title,
       summary: "Cloud LLM analysis completed.",
       payload: reportPayload,
       provenance,
@@ -280,17 +285,17 @@ function parseModalJobInput(kind: JobKind, value: unknown): JsonObject {
       fields: rawTextFields,
     });
   }
-  assertSessionSummaryRedactedInput(kind, privacyClass, payload);
+  assertSessionSummaryInput(kind, privacyClass, payload);
 
   return { ...input, payload };
 }
 
-function assertSessionSummaryRedactedInput(kind: JobKind, privacyClass: string, payload: JsonObject): void {
+function assertSessionSummaryInput(kind: JobKind, privacyClass: string, payload: JsonObject): void {
   if (kind !== "session_summary") {
     return;
   }
-  if (privacyClass !== "redacted-sync") {
-    throw new RouteError(422, "privacy_rejected", "session_summary jobs require redacted-sync input");
+  if (privacyClass !== "redacted-sync" && privacyClass !== "document-opt-in") {
+    throw new RouteError(422, "privacy_rejected", "session_summary jobs require redacted-sync or document-opt-in input");
   }
 
   const localIdentityFields = findSensitiveFieldPaths(payload, {
@@ -298,7 +303,7 @@ function assertSessionSummaryRedactedInput(kind: JobKind, privacyClass: string, 
     normalizeFieldName: normalizeSensitiveFieldName,
   });
   if (localIdentityFields.length > 0) {
-    throw new RouteError(422, "privacy_rejected", "session_summary redacted payload cannot include app names, bundle ids, or window titles", {
+    throw new RouteError(422, "privacy_rejected", "session_summary payload cannot include app names, bundle ids, or window titles", {
       fields: localIdentityFields,
     });
   }
@@ -321,6 +326,14 @@ function assertSessionSummaryRedactedInput(kind: JobKind, privacyClass: string, 
   for (const key of ["themes", "next_actions", "limitations"] as const) {
     if (!Array.isArray(payload[key])) {
       throw new RouteError(400, "invalid_request", `session_summary payload.${key} must be an array`);
+    }
+  }
+  if (privacyClass === "document-opt-in") {
+    if (typeof payload.context_snippet_count !== "number" || !Number.isFinite(payload.context_snippet_count)) {
+      throw new RouteError(400, "invalid_request", "session_summary payload.context_snippet_count must be a number");
+    }
+    if (!Array.isArray(payload.context_snippets)) {
+      throw new RouteError(400, "invalid_request", "session_summary payload.context_snippets must be an array");
     }
   }
   if (!isRecord(payload.provenance)) {

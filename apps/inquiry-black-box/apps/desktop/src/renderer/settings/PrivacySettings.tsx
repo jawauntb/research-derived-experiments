@@ -49,6 +49,11 @@ const signalLabels: Array<{ key: keyof SignalSettings; label: string; detail: st
   { key: "camera", label: "Camera features", detail: "Derived camera windows without raw frames." },
   { key: "desktopActivity", label: "Desktop app context", detail: "Foreground app identity while recording." },
   { key: "desktopWindowTitles", label: "Window titles", detail: "Bounded focused-window titles." },
+  {
+    key: "llmDocumentContext",
+    label: "LLM reading context",
+    detail: "Allow analyze requests to include opted-in page/selection text and your typed context.",
+  },
   { key: "typingMetrics", label: "Typing rhythm", detail: "Aggregate typing cadence without typed text." },
   { key: "notifications", label: "Notifications", detail: "Local notification candidates." },
   { key: "screenSnapshots", label: "Screen snapshots", detail: "Reserved for a later explicit screen-capture opt-in." },

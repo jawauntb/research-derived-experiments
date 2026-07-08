@@ -60,7 +60,7 @@ export type InquiryDesktopBridge = {
   };
   interpretation?: {
     session: () => Promise<SessionInterpretationReport | null>;
-    requestRedactedSummary: () => Promise<RedactedSummarySubmission>;
+    requestRedactedSummary: (input?: { additionalContext?: string }) => Promise<RedactedSummarySubmission>;
     daily: () => Promise<DailyReviewReport>;
     refreshDaily: () => Promise<DailyReviewReport>;
     respondSuggestion: (input: {
@@ -128,6 +128,7 @@ export function createInitialAppViewModel(session: SessionRecord | null = null):
       camera: false,
       desktopActivity: false,
       desktopWindowTitles: false,
+      llmDocumentContext: false,
       screenSnapshots: false,
       typingMetrics: true,
       notifications: false,
@@ -284,13 +285,14 @@ export function renderApp(root: HTMLElement, bridge: InquiryDesktopBridge, initi
         : null;
     const interpretationActions = {
       cloudSyncEnabled: view.privacy.cloud_sync_enabled,
+      documentContextEnabled: view.privacy.signals.llmDocumentContext,
       redactedSummary,
       ...(bridge.interpretation
         ? {
-            requestRedactedSummary: async () => {
+            requestRedactedSummary: async (input?: { additionalContext?: string }) => {
               view = {
                 ...view,
-                redactedSummary: await bridge.interpretation!.requestRedactedSummary(),
+                redactedSummary: await bridge.interpretation!.requestRedactedSummary(input),
               };
               render();
             },

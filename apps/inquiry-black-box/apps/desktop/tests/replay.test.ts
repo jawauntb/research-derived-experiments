@@ -336,10 +336,14 @@ describe("session replay report", () => {
       const interpretationRoot = documentStub.createElement("div");
       const dailyRoot = documentStub.createElement("div");
       const responses: string[] = [];
+      const analysisContexts: string[] = [];
 
       renderSessionInterpretationPanel(interpretationRoot as unknown as HTMLElement, interpretationFixture(), {
         cloudSyncEnabled: true,
-        requestRedactedSummary: () => undefined,
+        documentContextEnabled: true,
+        requestRedactedSummary: (input) => {
+          analysisContexts.push(input?.additionalContext ?? "");
+        },
       });
       renderDailyReviewPanel(dailyRoot as unknown as HTMLElement, dailyReviewFixture(), {
         refreshDailyReview: () => {
@@ -353,8 +357,15 @@ describe("session replay report", () => {
       expect(interpretationRoot.textContent).toContain("Session Interpretation");
       expect(interpretationRoot.textContent).toContain("Repeated skim risk");
       expect(interpretationRoot.textContent).toContain("Analyze and ask about your data");
+      expect(interpretationRoot.textContent).toContain("Opted-in page/selection text");
       expect(interpretationRoot.textContent).not.toContain("Request redacted LLM summary");
       expect(interpretationRoot.findByDataset("themeKind", "retry")).toBeDefined();
+      const analysisTextarea = interpretationRoot.findByTag("textarea");
+      const analysisButton = interpretationRoot.findByTag("button");
+      expect(analysisTextarea?.attributes["aria-label"]).toBe("Additional analysis context");
+      analysisTextarea!.value = "I was trying to compare two definitions.";
+      analysisButton!.click();
+      expect(analysisContexts).toEqual(["I was trying to compare two definitions."]);
       expect(dailyRoot.textContent).toContain("Daily Review");
       expect(dailyRoot.textContent).toContain("What to retry");
       expect(dailyRoot.findByDataset("suggestionId", "suggestion-render-1")).toBeDefined();

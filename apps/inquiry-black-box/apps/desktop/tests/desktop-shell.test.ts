@@ -437,6 +437,56 @@ describe("desktop shell IPC facade", () => {
     runtime.stop();
   });
 
+  test("requests a direct OpenAI document-context summary when LLM context is enabled", async () => {
+    const database = createInquiryDatabase();
+    const runtime = createDesktopRuntime({
+      database,
+      pairingSecret: "desktop-shell-test-secret",
+      startServer: false,
+    });
+    const facade = createDesktopIpcFacade(runtime);
+    const session = await facade.startSession({ title: "OpenAI document context summary" });
+    appendDesktopActivityFixture(database, session.session_id);
+    appendReadingContextFixture(database, session.session_id);
+    await facade.stopSession();
+    database.setSignalEnabled("cloudSync", true);
+    database.setSignalEnabled("llmDocumentContext", true);
+    let postedBody = "";
+
+    const result = await requestRedactedSessionSummary(database, session.session_id, {
+      cloudApiUrl: "",
+      bearerToken: "",
+      openAiApiKey: "fixture-openai-key",
+      model: "gpt-test-summary",
+      additionalContext: "I was comparing this article against my local hypothesis.",
+      nowMs: () => 10_000,
+      fetchImpl: async (_url, init) => {
+        postedBody = String(init?.body ?? "");
+        return new Response(JSON.stringify({ output_text: "OpenAI used the article context." }), {
+          status: 200,
+        });
+      },
+    });
+
+    expect(result).toMatchObject({
+      status: "complete",
+      message: "OpenAI used the article context.",
+    });
+    expect(postedBody).toContain("document-opt-in");
+    expect(postedBody).toContain("You may use bounded reading/selected text snippets");
+    expect(postedBody).toContain("A visible article paragraph about evidence.");
+    expect(postedBody).toContain("I was comparing this article against my local hypothesis.");
+    expect(postedBody).not.toContain("Cursor");
+    expect(postedBody).not.toContain("com.todesktop.230313mzl4w4u92");
+    expect(database.listEvents(session.session_id).find((event) => event.event_type === "model.run")?.payload).toMatchObject({
+      provider: "openai",
+      model: "gpt-test-summary",
+      status: "complete",
+      input_privacy_class: "document-opt-in",
+    });
+    runtime.stop();
+  });
+
   test("requests a direct Gemini redacted summary when cloud job config is absent", async () => {
     const database = createInquiryDatabase();
     const runtime = createDesktopRuntime({
@@ -568,6 +618,29 @@ function appendDesktopActivityFixture(database: ReturnType<typeof createInquiryD
       },
       privacy_class: "local-derived",
       retention_policy: "local-default",
+    }),
+  );
+}
+
+function appendReadingContextFixture(database: ReturnType<typeof createInquiryDatabase>, sessionId: string): void {
+  database.appendEvent(
+    createEvent({
+      session_id: sessionId,
+      source: "browser",
+      source_version: "extension@0.1.0",
+      monotonic_ms: 1_500,
+      event_type: "browser.reading_context",
+      payload: {
+        hostname_hash: "host-reading",
+        url_hash: "url-reading",
+        reading_text: "A visible article paragraph about evidence.",
+        reading_text_char_count: 43,
+        reading_text_truncated: false,
+        reading_source: "visible-page",
+        document_opt_in: true,
+      },
+      privacy_class: "document-opt-in",
+      retention_policy: "session-delete",
     }),
   );
 }

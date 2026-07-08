@@ -75,6 +75,58 @@ function redactedSessionSummaryJobInput() {
   };
 }
 
+function documentContextSessionSummaryJobInput() {
+  return {
+    privacy_class: "document-opt-in",
+    payload: {
+      report_id: "session-interpretation:session-cloud-1",
+      report_kind: "session_interpretation",
+      subject_session_id: "session-cloud-1",
+      marker_count: 2,
+      theme_count: 1,
+      open_loop_count: 1,
+      next_action_count: 1,
+      context_snippet_count: 1,
+      summary: "Document opt-in local session summary with 1 snippet.",
+      themes: [
+        {
+          kind: "copied-passage",
+          title: "Copied evidence",
+          confidence: 0.82,
+          marker_count: 2,
+          evidence_count: 2,
+        },
+      ],
+      next_actions: [
+        {
+          suggestion_kind: "refocus",
+          category: "retry",
+          title: "Explain the copied evidence",
+          confidence: 0.78,
+          evidence_count: 2,
+        },
+      ],
+      context_snippets: [
+        {
+          kind: "reading",
+          text: "Visible article context for the model.",
+          event_id: "event-reading-1",
+        },
+      ],
+      user_context: {
+        text: "I was checking the definition.",
+        char_count: 30,
+        truncated: false,
+      },
+      limitations: ["Document text was explicitly opted in."],
+      provenance: {
+        input_report_id: "session-interpretation:session-cloud-1",
+        builder: "test-document-context-session-summary-input@0.1.0",
+      },
+    },
+  };
+}
+
 async function json(response: Response) {
   return response.json() as Promise<Record<string, unknown>>;
 }
@@ -532,6 +584,79 @@ describe("cloud reports and jobs routes", () => {
       payload: {
         summary_text: "OpenAI says the copied evidence needs one follow-up note.",
         provider: "openai",
+      },
+    });
+  });
+
+  test("completes document-context session summary jobs through the same cloud summary endpoint", async () => {
+    const store = createCloudStore();
+    let modalCalls = 0;
+    let summaryInput = "";
+    const modalClient: ModalClient = {
+      submitJob: async () => {
+        modalCalls += 1;
+        throw new Error("Modal should not be called when cloud summary provider is configured");
+      },
+    };
+    const summaryClient: SummaryClient = {
+      summarizeSession: async ({ input }) => {
+        summaryInput = JSON.stringify(input);
+        return {
+          provider: "openai",
+          model: "gpt-test-summary",
+          text: "OpenAI used the visible article context.",
+          limitations: ["fixture document limitation"],
+        };
+      },
+    };
+    const handler = createCloudHandler({ store, modalClient, summaryClient });
+
+    const response = await handler(
+      new Request("http://cloud.test/jobs", {
+        method: "POST",
+        headers: authHeaders(),
+        body: JSON.stringify({
+          kind: "session_summary",
+          session_id: "session-cloud-1",
+          input: documentContextSessionSummaryJobInput(),
+        }),
+      }),
+    );
+    const body = (await json(response)) as { job: { status: string; report_id: string; result: Record<string, unknown> } };
+
+    expect(response.status).toBe(202);
+    expect(body.job.status).toBe("complete");
+    expect(body.job.result).toMatchObject({
+      report: {
+        payload: {
+          summary_text: "OpenAI used the visible article context.",
+          provider: "openai",
+          model: "gpt-test-summary",
+          privacy_class: "document-opt-in",
+          limitations: ["fixture document limitation"],
+        },
+        provenance: {
+          provider: "openai",
+          model: "gpt-test-summary",
+          input_privacy_class: "document-opt-in",
+        },
+      },
+    });
+    expect(summaryInput).toContain("document-opt-in");
+    expect(summaryInput).toContain("Visible article context for the model.");
+    expect(summaryInput).toContain("I was checking the definition.");
+    expect(modalCalls).toBe(0);
+
+    const reportResponse = await handler(new Request(`http://cloud.test/reports/${body.job.report_id}`, { headers: authHeaders() }));
+    const reportBody = await json(reportResponse);
+    expect(reportResponse.status).toBe(200);
+    expect(reportBody.report).toMatchObject({
+      title: "Document opt-in LLM session analysis",
+      summary: "Cloud LLM analysis completed.",
+      payload: {
+        summary_text: "OpenAI used the visible article context.",
+        provider: "openai",
+        privacy_class: "document-opt-in",
       },
     });
   });

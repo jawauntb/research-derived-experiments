@@ -93,7 +93,7 @@ describe("content telemetry capture", () => {
     expect(JSON.stringify(events)).not.toContain("selected phrase");
   });
 
-  test("captures selected text only for opted-in copy and highlight events", () => {
+  test("captures selected text for opted-in selection, copy, and highlight events", () => {
     const messages: ContentEventMessage[] = [];
     const telemetry = createContentTelemetry({
       now: () => 250,
@@ -117,8 +117,8 @@ describe("content telemetry capture", () => {
     const events = messages.flatMap((message) => message.events);
     expect(events).toHaveLength(3);
     expect(events[0]?.event_type).toBe("browser.selection");
-    expect(events[0]?.privacy_class).toBe("local-derived");
-    expect(JSON.stringify(events[0])).not.toContain("ambient selection");
+    expect(events[0]?.privacy_class).toBe("document-opt-in");
+    expect(events[0]?.payload.selected_text).toBe("ambient selection");
     expect(events[1]?.privacy_class).toBe("document-opt-in");
     expect(events[1]?.retention_policy).toBe("session-delete");
     expect(events[1]?.payload).toMatchObject({
@@ -155,6 +155,78 @@ describe("content telemetry capture", () => {
     expect(event?.payload.selected_text).toBe("x".repeat(2_000));
     expect(event?.payload.selected_text_char_count).toBe(2_050);
     expect(event?.payload.selected_text_truncated).toBe(true);
+  });
+
+  test("captures bounded reading context only when opted in", () => {
+    const messages: ContentEventMessage[] = [];
+    let now = 500;
+    const telemetry = createContentTelemetry({
+      now: () => now,
+      sessionId: "session-reading-context",
+      settings: recordingSettings(),
+      location: {
+        href: "https://research.example.test/article",
+        hostname: "research.example.test",
+      },
+      sendMessage: (message) => {
+        messages.push(message);
+      },
+    });
+
+    telemetry.captureReadingContext({ readingText: "Private article body", source: "visible-page" });
+    telemetry.setSettings({ privacyToggles: { ...recordingSettings().privacyToggles, readingContext: true } });
+    const longText = "a".repeat(4_050);
+    telemetry.captureReadingContext({
+      readingText: longText,
+      source: "visible-page",
+      scrollY: 120,
+      viewportHeight: 900,
+      viewportWidth: 1200,
+    });
+    now += 1_000;
+    telemetry.captureReadingContext({ readingText: longText, source: "visible-page" });
+    now += 5_001;
+    telemetry.captureReadingContext({ readingText: "Next visible paragraph", source: "visible-page" });
+
+    const events = messages.flatMap((message) => message.events);
+    expect(events.map((event) => event.event_type)).toEqual(["browser.reading_context", "browser.reading_context"]);
+    expect(events[0]?.privacy_class).toBe("document-opt-in");
+    expect(events[0]?.retention_policy).toBe("session-delete");
+    expect(events[0]?.payload).toMatchObject({
+      reading_text: "a".repeat(4_000),
+      reading_text_char_count: 4_050,
+      reading_text_truncated: true,
+      reading_source: "visible-page",
+      scroll_y: 120,
+      viewport_h: 900,
+      viewport_w: 1200,
+      document_opt_in: true,
+    });
+    expect(events[1]?.payload.reading_text).toBe("Next visible paragraph");
+    expect(JSON.stringify(events)).not.toContain("Private article body");
+  });
+
+  test("does not dedupe reading context that was blocked before opt in", () => {
+    const messages: ContentEventMessage[] = [];
+    const telemetry = createContentTelemetry({
+      sessionId: "session-reading-context-opt-in",
+      settings: recordingSettings(),
+      location: {
+        href: "https://research.example.test/article",
+        hostname: "research.example.test",
+      },
+      sendMessage: (message) => {
+        messages.push(message);
+      },
+    });
+
+    telemetry.captureReadingContext({ readingText: "Same visible article body", source: "visible-page" });
+    telemetry.setSettings({ privacyToggles: { ...recordingSettings().privacyToggles, readingContext: true } });
+    telemetry.captureReadingContext({ readingText: "Same visible article body", source: "visible-page" });
+
+    const events = messages.flatMap((message) => message.events);
+    expect(events).toHaveLength(1);
+    expect(events[0]?.payload.reading_text).toBe("Same visible article body");
   });
 
   test("typing payloads contain timing and edit metrics but no typed content", () => {
@@ -228,14 +300,28 @@ describe("content telemetry capture", () => {
     telemetry.captureMedia("pause", fixtureMedia({ currentTime: 3, duration: 10 }));
     telemetry.setSettings({
       siteDisabled: false,
-      privacyToggles: { browser: true, typingMetrics: false, selection: true, selectedText: false, media: true },
+      privacyToggles: {
+        browser: true,
+        typingMetrics: false,
+        selection: true,
+        selectedText: false,
+        readingContext: false,
+        media: true,
+      },
     });
     telemetry.captureTypingInput({
       target: { tagName: "TEXTAREA", value: "private note", isContentEditable: false },
       inputType: "insertText",
     });
     telemetry.setSettings({
-      privacyToggles: { browser: true, typingMetrics: true, selection: true, selectedText: false, media: true },
+      privacyToggles: {
+        browser: true,
+        typingMetrics: true,
+        selection: true,
+        selectedText: false,
+        readingContext: false,
+        media: true,
+      },
     });
     telemetry.captureScroll({ scrollY: 20, viewportHeight: 100, documentHeight: 500 });
 
@@ -300,6 +386,7 @@ function basePrivacyToggles() {
     typingMetrics: true,
     selection: true,
     selectedText: false,
+    readingContext: false,
     media: true,
   };
 }

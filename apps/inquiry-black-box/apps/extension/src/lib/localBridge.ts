@@ -13,6 +13,7 @@ export type PrivacyToggles = {
   typingMetrics: boolean;
   selection: boolean;
   selectedText: boolean;
+  readingContext: boolean;
   media: boolean;
 };
 
@@ -111,6 +112,7 @@ export const defaultPrivacyToggles: PrivacyToggles = {
   typingMetrics: true,
   selection: true,
   selectedText: false,
+  readingContext: false,
   media: true,
 };
 
@@ -119,10 +121,12 @@ export const disabledPrivacyToggles: PrivacyToggles = {
   typingMetrics: false,
   selection: false,
   selectedText: false,
+  readingContext: false,
   media: false,
 };
 
 const rawSelectedTextPayloadKeys = selectedTextPayloadFieldNames;
+const rawReadingTextPayloadKeys = ["reading_text", "readingText"] as const;
 
 export function createPairingChallenge(): string {
   return crypto.randomUUID();
@@ -463,6 +467,8 @@ export function normalizeBridgeState(input?: Partial<BridgeState>): BridgeState 
       selection: typeof toggles.selection === "boolean" ? toggles.selection : fallback.privacyToggles.selection,
       selectedText:
         typeof toggles.selectedText === "boolean" ? toggles.selectedText : fallback.privacyToggles.selectedText,
+      readingContext:
+        typeof toggles.readingContext === "boolean" ? toggles.readingContext : fallback.privacyToggles.readingContext,
       media: typeof toggles.media === "boolean" ? toggles.media : fallback.privacyToggles.media,
     },
     updatedAt: typeof input?.updatedAt === "string" ? input.updatedAt : fallback.updatedAt,
@@ -516,6 +522,14 @@ export function isBridgeEventAllowed(event: EventEnvelope, state: BridgeState, n
     return state.privacyToggles.selection;
   }
 
+  if (event.event_type === "browser.reading_context") {
+    if (event.privacy_class === "document-opt-in" && hasReadingText(event)) {
+      return state.privacyToggles.readingContext;
+    }
+
+    return false;
+  }
+
   if (event.event_type === "browser.media") {
     return state.privacyToggles.media;
   }
@@ -525,6 +539,10 @@ export function isBridgeEventAllowed(event: EventEnvelope, state: BridgeState, n
 
 function hasSelectedText(event: EventEnvelope): boolean {
   return rawSelectedTextPayloadKeys.some((key) => typeof event.payload[key] === "string" && event.payload[key].length > 0);
+}
+
+function hasReadingText(event: EventEnvelope): boolean {
+  return rawReadingTextPayloadKeys.some((key) => typeof event.payload[key] === "string" && event.payload[key].length > 0);
 }
 
 function sessionControlEndpoint(eventsEndpoint: string): string {

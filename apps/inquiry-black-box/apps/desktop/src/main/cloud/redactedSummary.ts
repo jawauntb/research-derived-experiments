@@ -7,8 +7,9 @@ import {
   type JsonObject,
   type ModelRunPayload,
   type ModelRunStatus,
+  type PrivacyClass,
 } from "@inquiry/schema";
-import { createModelRunEvent, redactedSessionSummaryJobInput } from "@inquiry/signals";
+import { createModelRunEvent, documentContextSessionSummaryJobInput, redactedSessionSummaryJobInput } from "@inquiry/signals";
 import type { InquiryDatabase } from "../db";
 import { createSessionInterpretationReport } from "../reports/sessionInterpretation";
 
@@ -40,6 +41,7 @@ export type RedactedSummaryOptions = {
   dopplerProject?: string;
   dopplerConfig?: string;
   dopplerCommand?: string;
+  additionalContext?: string;
   nowMs?: () => number;
   timeoutMs?: number;
 };
@@ -65,6 +67,7 @@ export async function requestRedactedSessionSummary(
       status: "unavailable",
       message: "Cloud sync is off. Enable Cloud sync before asking the model to analyze redacted data.",
       limitations: ["No cloud, Modal, OpenAI, or Gemini request was made.", "Local interpretation remains available."],
+      inputPrivacyClass: "redacted-sync",
       submissionStatus: "blocked",
     });
   }
@@ -75,8 +78,13 @@ export async function requestRedactedSessionSummary(
     process.env.INQUIRY_CLOUD_BEARER_TOKEN ??
     process.env.INQUIRY_CLOUD_AUTH_TOKEN;
   const interpretation = createSessionInterpretationReport(database, sessionId);
-  const input = redactedSessionSummaryJobInput(interpretation);
-  assertRedactedInput(input);
+  const input = settings.llmDocumentContext
+    ? documentContextSessionSummaryJobInput(interpretation, {
+        events: database.listEvents(sessionId),
+        ...(typeof options.additionalContext === "string" ? { additionalContext: options.additionalContext } : {}),
+      })
+    : redactedSessionSummaryJobInput(interpretation);
+  const inputPrivacyClass = assertSessionSummaryInput(input);
   const directRequest = resolveDirectSummaryRequest({
     cloudConfigured: Boolean(cloudApiUrl && bearerToken),
     providerPreference,
@@ -91,6 +99,7 @@ export async function requestRedactedSessionSummary(
       input,
       apiKey: directRequest.apiKey,
       model: directRequest.model,
+      inputPrivacyClass,
       fetchImpl: options.fetchImpl ?? fetch,
       timeoutMs: options.timeoutMs ?? 10_000,
       ...(options.openAiApiBaseUrl ? { baseUrl: options.openAiApiBaseUrl } : {}),
@@ -105,6 +114,7 @@ export async function requestRedactedSessionSummary(
       input,
       apiKey: directRequest.apiKey,
       model: directRequest.model,
+      inputPrivacyClass,
       fetchImpl: options.fetchImpl ?? fetch,
       timeoutMs: options.timeoutMs ?? 10_000,
       ...(options.geminiApiBaseUrl ? { baseUrl: options.geminiApiBaseUrl } : {}),
@@ -119,8 +129,9 @@ export async function requestRedactedSessionSummary(
       model: missingConfigurationModel(providerPreference, options),
       status: "unavailable",
       inputReportId: interpretation.report_id,
+      inputPrivacyClass,
       message: missingConfigurationMessage(providerPreference),
-      limitations: ["Generated the redacted job input locally.", "No cloud, Modal, OpenAI, or Gemini request was made."],
+      limitations: [`Generated the ${inputPrivacyClass} job input locally.`, "No cloud, Modal, OpenAI, or Gemini request was made."],
       submissionStatus: "unavailable",
     });
   }
@@ -156,8 +167,9 @@ export async function requestRedactedSessionSummary(
         model,
         status: "failed",
         inputReportId: interpretation.report_id,
+        inputPrivacyClass,
         message: `Cloud job request failed with status ${response.status}.`,
-        limitations: [errorMessage(body), "The submitted payload was redacted-sync only."],
+        limitations: [errorMessage(body), submittedPayloadLimitation(inputPrivacyClass)],
         submissionStatus: "failed",
       });
     }
@@ -175,8 +187,9 @@ export async function requestRedactedSessionSummary(
       model,
       status: modelRunStatus(job.status),
       inputReportId: interpretation.report_id,
+      inputPrivacyClass,
       message: completedSummary ?? "Redacted LLM analysis job submitted.",
-      limitations: ["Submitted only redacted session interpretation counts, themes, actions, and limitations for analysis."],
+      limitations: [submittedPayloadLimitation(inputPrivacyClass)],
       submissionStatus: modelRunStatus(job.status) === "complete" ? "complete" : "submitted",
       ...(jobId ? { jobId } : {}),
       ...(modalCallId ? { modalCallId } : {}),
@@ -189,6 +202,7 @@ export async function requestRedactedSessionSummary(
       model,
       status: "failed",
       inputReportId: interpretation.report_id,
+      inputPrivacyClass,
       message: "Cloud job request failed before submission completed.",
       limitations: [error instanceof Error ? error.message : String(error)],
       submissionStatus: "failed",
@@ -205,6 +219,7 @@ async function requestOpenAiSummary(
     input: JsonObject;
     apiKey: string;
     model: string;
+    inputPrivacyClass: PrivacyClass;
     fetchImpl: FetchLike;
     baseUrl?: string;
     timeoutMs: number;
@@ -233,8 +248,9 @@ async function requestOpenAiSummary(
         model: input.model,
         status: "failed",
         inputReportId: input.inputReportId,
+        inputPrivacyClass: input.inputPrivacyClass,
         message: `OpenAI analysis request failed with status ${response.status}.`,
-        limitations: [errorMessage(body), "The submitted payload was redacted-sync only."],
+        limitations: [errorMessage(body), submittedPayloadLimitation(input.inputPrivacyClass)],
         submissionStatus: "failed",
       });
     }
@@ -248,8 +264,9 @@ async function requestOpenAiSummary(
         model: input.model,
         status: "failed",
         inputReportId: input.inputReportId,
+        inputPrivacyClass: input.inputPrivacyClass,
         message: "OpenAI analysis response did not include text.",
-        limitations: ["The submitted payload was redacted-sync only."],
+        limitations: [submittedPayloadLimitation(input.inputPrivacyClass)],
         submissionStatus: "failed",
       });
     }
@@ -261,8 +278,9 @@ async function requestOpenAiSummary(
       model: input.model,
       status: "complete",
       inputReportId: input.inputReportId,
+      inputPrivacyClass: input.inputPrivacyClass,
       message: text,
-      limitations: ["Generated by OpenAI from redacted session interpretation counts, themes, actions, and limitations only."],
+      limitations: [providerPayloadLimitation("OpenAI", input.inputPrivacyClass)],
       submissionStatus: "complete",
     });
   } catch (error) {
@@ -273,6 +291,7 @@ async function requestOpenAiSummary(
       model: input.model,
       status: "failed",
       inputReportId: input.inputReportId,
+      inputPrivacyClass: input.inputPrivacyClass,
       message: "OpenAI analysis request failed before completion.",
       limitations: [error instanceof Error ? error.message : String(error)],
       submissionStatus: "failed",
@@ -289,6 +308,7 @@ async function requestGeminiSummary(
     input: JsonObject;
     apiKey: string;
     model: string;
+    inputPrivacyClass: PrivacyClass;
     fetchImpl: FetchLike;
     baseUrl?: string;
     timeoutMs: number;
@@ -317,8 +337,9 @@ async function requestGeminiSummary(
         model: input.model,
         status: "failed",
         inputReportId: input.inputReportId,
+        inputPrivacyClass: input.inputPrivacyClass,
         message: `Gemini analysis request failed with status ${response.status}.`,
-        limitations: [errorMessage(body), "The submitted payload was redacted-sync only."],
+        limitations: [errorMessage(body), submittedPayloadLimitation(input.inputPrivacyClass)],
         submissionStatus: "failed",
       });
     }
@@ -332,8 +353,9 @@ async function requestGeminiSummary(
         model: input.model,
         status: "failed",
         inputReportId: input.inputReportId,
+        inputPrivacyClass: input.inputPrivacyClass,
         message: "Gemini analysis response did not include text.",
-        limitations: ["The submitted payload was redacted-sync only."],
+        limitations: [submittedPayloadLimitation(input.inputPrivacyClass)],
         submissionStatus: "failed",
       });
     }
@@ -345,8 +367,9 @@ async function requestGeminiSummary(
       model: input.model,
       status: "complete",
       inputReportId: input.inputReportId,
+      inputPrivacyClass: input.inputPrivacyClass,
       message: text,
-      limitations: ["Generated by Gemini from redacted session interpretation counts, themes, actions, and limitations only."],
+      limitations: [providerPayloadLimitation("Gemini", input.inputPrivacyClass)],
       submissionStatus: "complete",
     });
   } catch (error) {
@@ -357,6 +380,7 @@ async function requestGeminiSummary(
       model: input.model,
       status: "failed",
       inputReportId: input.inputReportId,
+      inputPrivacyClass: input.inputPrivacyClass,
       message: "Gemini analysis request failed before completion.",
       limitations: [error instanceof Error ? error.message : String(error)],
       submissionStatus: "failed",
@@ -373,6 +397,7 @@ function appendRun(
     model: string;
     status: ModelRunStatus;
     inputReportId?: string;
+    inputPrivacyClass: PrivacyClass;
     jobId?: string;
     modalCallId?: string;
     message: string;
@@ -386,7 +411,7 @@ function appendRun(
     provider: input.provider,
     model: input.model,
     status: input.status,
-    input_privacy_class: "redacted-sync",
+    input_privacy_class: input.inputPrivacyClass,
     limitations: input.limitations,
     ...(input.inputReportId ? { input_report_id: input.inputReportId } : {}),
   };
@@ -422,6 +447,36 @@ function assertRedactedInput(input: JsonObject): void {
       throw new Error(`redacted summary input contains blocked field: ${blocked}`);
     }
   }
+}
+
+function assertSessionSummaryInput(input: JsonObject): PrivacyClass {
+  if (input.privacy_class === "redacted-sync") {
+    assertRedactedInput(input);
+    return "redacted-sync";
+  }
+
+  if (input.privacy_class !== "document-opt-in") {
+    throw new Error("session summary input must use redacted-sync or document-opt-in privacy class");
+  }
+
+  const payload = isRecord(input.payload) ? input.payload : {};
+  const serialized = JSON.stringify(payload);
+  for (const blocked of [
+    "app_name",
+    "bundle_id",
+    "window_title",
+    "typed_text",
+    "typedText",
+    "page_text",
+    "pageText",
+    "document_text",
+    "documentText",
+  ]) {
+    if (serialized.includes(blocked)) {
+      throw new Error(`document context summary input contains blocked field: ${blocked}`);
+    }
+  }
+  return "document-opt-in";
 }
 
 type DirectSummaryRequest = {
@@ -588,8 +643,8 @@ function openAiResponsesUrl(baseUrl = "https://api.openai.com/v1"): string {
 function openAiSummaryRequestBody(model: string, input: JsonObject): JsonObject {
   return {
     model,
-    instructions: sessionSummaryInstructions(),
-    input: redactedSummaryPromptInput(input),
+    instructions: sessionSummaryInstructions(sessionSummaryInputPrivacyClass(input)),
+    input: sessionSummaryPromptInput(input),
     max_output_tokens: 2_000,
   };
 }
@@ -607,7 +662,7 @@ function geminiSummaryRequestBody(input: JsonObject): JsonObject {
         role: "user",
         parts: [
           {
-            text: `${sessionSummaryInstructions()}\n\n${redactedSummaryPromptInput(input)}`,
+            text: `${sessionSummaryInstructions(sessionSummaryInputPrivacyClass(input))}\n\n${sessionSummaryPromptInput(input)}`,
           },
         ],
       },
@@ -619,7 +674,16 @@ function geminiSummaryRequestBody(input: JsonObject): JsonObject {
   };
 }
 
-function sessionSummaryInstructions(): string {
+function sessionSummaryInstructions(privacyClass: PrivacyClass): string {
+  if (privacyClass === "document-opt-in") {
+    return [
+      "Analyze this Inquiry Black Box session using the document-opt-in JSON below.",
+      "You may use bounded reading/selected text snippets and the user's additional context when present.",
+      "Do not infer identities, diagnoses, hidden mental states, typed text, app identities, or window titles.",
+      "Return concise plain text: one evidence-grounded analysis sentence and up to two follow-up questions or next actions the user can answer from their data.",
+    ].join("\n");
+  }
+
   return [
     "Analyze this Inquiry Black Box session using only the redacted JSON below.",
     "Do not infer identities, diagnoses, hidden mental states, raw page text, typed text, selected text, app identities, or window titles.",
@@ -627,12 +691,33 @@ function sessionSummaryInstructions(): string {
   ].join("\n");
 }
 
-function redactedSummaryPromptInput(input: JsonObject): string {
+function sessionSummaryPromptInput(input: JsonObject): string {
+  const privacyClass = sessionSummaryInputPrivacyClass(input);
   return JSON.stringify({
     kind: "session_summary",
-    privacy_class: "redacted-sync",
+    privacy_class: privacyClass,
     input,
   });
+}
+
+function sessionSummaryInputPrivacyClass(input: JsonObject): PrivacyClass {
+  return input.privacy_class === "document-opt-in" ? "document-opt-in" : "redacted-sync";
+}
+
+function submittedPayloadLimitation(privacyClass: PrivacyClass): string {
+  if (privacyClass === "document-opt-in") {
+    return "Submitted document-opt-in session interpretation plus bounded reading/selection snippets and optional user context for analysis.";
+  }
+
+  return "Submitted only redacted session interpretation counts, themes, actions, and limitations for analysis.";
+}
+
+function providerPayloadLimitation(provider: "OpenAI" | "Gemini", privacyClass: PrivacyClass): string {
+  if (privacyClass === "document-opt-in") {
+    return `Generated by ${provider} from document-opt-in session interpretation plus bounded reading/selection snippets and optional user context.`;
+  }
+
+  return `Generated by ${provider} from redacted session interpretation counts, themes, actions, and limitations only.`;
 }
 
 function openAiText(body: Record<string, unknown>): string | undefined {

@@ -18,6 +18,7 @@ describe("privacy controls", () => {
       camera: false,
       desktopActivity: false,
       desktopWindowTitles: false,
+      llmDocumentContext: false,
       screenSnapshots: false,
       typingMetrics: true,
       notifications: false,
@@ -25,9 +26,11 @@ describe("privacy controls", () => {
     });
 
     const cameraEnabled = updateSignalSetting(view, "camera", true);
-    const cloudStillDisabled = updateSignalSetting(cameraEnabled, "notifications", true);
+    const contextEnabled = updateSignalSetting(cameraEnabled, "llmDocumentContext", true);
+    const cloudStillDisabled = updateSignalSetting(contextEnabled, "notifications", true);
 
     expect(cameraEnabled.signals.camera).toBe(true);
+    expect(contextEnabled.signals.llmDocumentContext).toBe(true);
     expect(cloudStillDisabled.signals.cloudSync).toBe(false);
     expect(cloudStillDisabled.cloud_sync_enabled).toBe(false);
   });
@@ -38,6 +41,7 @@ describe("privacy controls", () => {
       camera: false,
       desktopActivity: false,
       desktopWindowTitles: false,
+      llmDocumentContext: false,
       screenSnapshots: false,
       typingMetrics: true,
       notifications: false,
@@ -72,6 +76,7 @@ describe("privacy controls", () => {
       camera: false,
       desktopActivity: false,
       desktopWindowTitles: false,
+      llmDocumentContext: false,
       screenSnapshots: false,
       typingMetrics: true,
       notifications: false,
@@ -97,6 +102,7 @@ describe("privacy controls", () => {
       camera: false,
       desktopActivity: true,
       desktopWindowTitles: false,
+      llmDocumentContext: false,
       screenSnapshots: false,
       typingMetrics: true,
       notifications: false,

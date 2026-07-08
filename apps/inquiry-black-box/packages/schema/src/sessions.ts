@@ -18,6 +18,7 @@ export type SignalSettings = {
   camera: boolean;
   desktopActivity: boolean;
   desktopWindowTitles: boolean;
+  llmDocumentContext: boolean;
   screenSnapshots: boolean;
   typingMetrics: boolean;
   notifications: boolean;
@@ -29,6 +30,7 @@ export const signalSettingKeys = [
   "camera",
   "desktopActivity",
   "desktopWindowTitles",
+  "llmDocumentContext",
   "screenSnapshots",
   "typingMetrics",
   "notifications",
@@ -41,6 +43,7 @@ export function defaultSignalSettings(): SignalSettings {
     camera: false,
     desktopActivity: false,
     desktopWindowTitles: false,
+    llmDocumentContext: false,
     screenSnapshots: false,
     typingMetrics: true,
     notifications: false,

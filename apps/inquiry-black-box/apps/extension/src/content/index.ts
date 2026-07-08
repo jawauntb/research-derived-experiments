@@ -65,6 +65,14 @@ export type SelectionMetrics = {
   selectedText?: string;
 };
 
+export type ReadingContextSnapshot = {
+  readingText: string;
+  source: "visible-page" | "page-fallback";
+  scrollY?: number;
+  viewportHeight?: number;
+  viewportWidth?: number;
+};
+
 export type EditableElementLike = {
   tagName?: string;
   type?: string;
@@ -85,7 +93,7 @@ export type TypingInput = {
 
 const CONTENT_SCRIPT_INSTALLED_KEY = "__inquiryBlackBoxContentInstalled";
 
-type EventCategory = "browser" | "typingMetrics" | "selection" | "media";
+type EventCategory = "browser" | "typingMetrics" | "selection" | "readingContext" | "media";
 type EmitOptions = {
   privacyClass?: EventEnvelope["privacy_class"];
   retentionPolicy?: EventEnvelope["retention_policy"];
@@ -117,6 +125,8 @@ export class ContentTelemetry {
   private settings: ContentSettings;
   private visibleSinceMs: number;
   private lastScrollY: number | null = null;
+  private lastReadingTextHash: string | null = null;
+  private lastReadingCapturedAtMs = -Infinity;
 
   constructor(options: ContentTelemetryOptions) {
     this.now = options.now ?? (() => performance.now());
@@ -202,13 +212,44 @@ export class ContentTelemetry {
     }
 
     const eventType = selectionEventType(kind);
-    const optedInText = selectedTextPayload(kind, metrics, this.settings.privacyToggles.selectedText);
+    const optedInText = selectedTextPayload(metrics, this.settings.privacyToggles.selectedText);
     return this.emit(eventType, "selection", {
       ...this.commonPayload(),
       selection_length: finiteNumber(metrics.selectionLength),
       range_count: finiteNumber(metrics.rangeCount ?? 0),
       ...optedInText.payload,
     }, optedInText.enabled ? { privacyClass: "document-opt-in", retentionPolicy: "session-delete" } : {});
+  }
+
+  captureReadingContext(snapshot: ReadingContextSnapshot): EventEnvelope | null {
+    const normalized = normalizeReadableText(snapshot.readingText);
+    if (normalized.length === 0) {
+      return null;
+    }
+
+    const now = this.now();
+    const textHash = hashForTelemetry(normalized);
+    if (this.lastReadingTextHash === textHash && now - this.lastReadingCapturedAtMs < MIN_READING_CONTEXT_INTERVAL_MS) {
+      return null;
+    }
+
+    const readingText = normalized.slice(0, MAX_READING_CONTEXT_CHARS);
+    const event = this.emit("browser.reading_context", "readingContext", {
+      ...this.commonPayload(),
+      reading_text: readingText,
+      reading_text_char_count: normalized.length,
+      reading_text_truncated: normalized.length > readingText.length,
+      reading_source: snapshot.source,
+      scroll_y: finiteNumber(snapshot.scrollY ?? 0),
+      viewport_h: finiteNumber(snapshot.viewportHeight ?? 0),
+      viewport_w: finiteNumber(snapshot.viewportWidth ?? 0),
+      document_opt_in: true,
+    }, { privacyClass: "document-opt-in", retentionPolicy: "session-delete" });
+    if (event) {
+      this.lastReadingTextHash = textHash;
+      this.lastReadingCapturedAtMs = now;
+    }
+    return event;
   }
 
   recordKeydown(input: KeyboardInput): void {
@@ -310,6 +351,10 @@ export class ContentTelemetry {
       return this.settings.privacyToggles.selection;
     }
 
+    if (category === "readingContext") {
+      return this.settings.privacyToggles.readingContext;
+    }
+
     if (category === "media") {
       return this.settings.privacyToggles.media;
     }
@@ -351,6 +396,8 @@ function normalizeContentSettings(input: Partial<ContentSettings>): ContentSetti
       selection: typeof toggles.selection === "boolean" ? toggles.selection : disabledPrivacyToggles.selection,
       selectedText:
         typeof toggles.selectedText === "boolean" ? toggles.selectedText : disabledPrivacyToggles.selectedText,
+      readingContext:
+        typeof toggles.readingContext === "boolean" ? toggles.readingContext : disabledPrivacyToggles.readingContext,
       media: typeof toggles.media === "boolean" ? toggles.media : disabledPrivacyToggles.media,
     },
   };
@@ -375,13 +422,14 @@ function selectionEventType(kind: SelectionKind): EventType {
 }
 
 const MAX_SELECTED_TEXT_CHARS = 2_000;
+const MAX_READING_CONTEXT_CHARS = 4_000;
+const MIN_READING_CONTEXT_INTERVAL_MS = 5_000;
 
 function selectedTextPayload(
-  kind: SelectionKind,
   metrics: SelectionMetrics,
   enabled: boolean,
 ): { enabled: boolean; payload: JsonObject } {
-  if (!enabled || kind === "selection" || typeof metrics.selectedText !== "string") {
+  if (!enabled || typeof metrics.selectedText !== "string") {
     return { enabled: false, payload: {} };
   }
 
@@ -404,6 +452,15 @@ function selectedTextPayload(
 
 function normalizeSelectedText(value: string): string {
   return value.replace(/\u0000/g, "").replace(/\r\n?/g, "\n").trim();
+}
+
+function normalizeReadableText(value: string): string {
+  return value
+    .replace(/\u0000/g, "")
+    .replace(/\r\n?/g, "\n")
+    .replace(/[ \t\f\v]+/g, " ")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 }
 
 function mediaKind(media: MediaElementLike): "audio" | "video" {
@@ -496,6 +553,7 @@ function installContentScript(): void {
     location: window.location,
     now: () => performance.now(),
   });
+  const captureReadingContext = () => telemetry.captureReadingContext(readReadingContextSnapshot());
 
   void sendRuntimeMessage(runtime, {
     type: CONTENT_SETTINGS_MESSAGE,
@@ -504,6 +562,7 @@ function installContentScript(): void {
   }).then((response) => {
     if (isContentSettings(response)) {
       telemetry.setSettings(response);
+      captureReadingContext();
     }
   });
 
@@ -522,12 +581,21 @@ function installContentScript(): void {
     "scroll",
     () => {
       telemetry.captureScroll(readScrollSnapshot());
+      captureReadingContext();
     },
     { passive: true },
   );
   window.addEventListener("pagehide", () => telemetry.captureVisibility(false, "pagehide"));
-  window.addEventListener("pageshow", () => telemetry.captureVisibility(true, "pageshow"));
-  document.addEventListener("visibilitychange", () => telemetry.captureVisibility(), true);
+  window.addEventListener("pageshow", () => {
+    telemetry.captureVisibility(true, "pageshow");
+    captureReadingContext();
+  });
+  document.addEventListener("visibilitychange", () => {
+    const event = telemetry.captureVisibility();
+    if (event?.payload.visible === true) {
+      captureReadingContext();
+    }
+  }, true);
   document.addEventListener("play", (event) => captureMediaEvent(telemetry, "play", event), true);
   document.addEventListener("pause", (event) => captureMediaEvent(telemetry, "pause", event), true);
   document.addEventListener("seeking", (event) => captureMediaEvent(telemetry, "seeking", event), true);
@@ -549,6 +617,63 @@ function readScrollSnapshot(): ScrollSnapshot {
     viewportWidth: window.innerWidth,
     documentHeight: Math.max(documentElement.scrollHeight, document.body?.scrollHeight ?? 0),
   };
+}
+
+function readReadingContextSnapshot(): ReadingContextSnapshot {
+  const visibleText = readVisiblePageText();
+  const fallbackText =
+    typeof document.body?.innerText === "string"
+      ? document.body.innerText
+      : document.body?.textContent ?? document.documentElement?.textContent ?? "";
+  return {
+    readingText: visibleText.length > 0 ? visibleText : fallbackText,
+    source: visibleText.length > 0 ? "visible-page" : "page-fallback",
+    scrollY: window.scrollY,
+    viewportHeight: window.innerHeight,
+    viewportWidth: window.innerWidth,
+  };
+}
+
+function readVisiblePageText(): string {
+  if (!document.body || typeof document.createTreeWalker !== "function") {
+    return "";
+  }
+
+  const chunks: string[] = [];
+  let collected = 0;
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  let node = walker.nextNode();
+  while (node && collected < MAX_READING_CONTEXT_CHARS) {
+    const text = normalizeReadableText(node.textContent ?? "");
+    if (text.length > 0 && isReadableTextNode(node) && textNodeIntersectsViewport(node)) {
+      chunks.push(text);
+      collected += text.length + 1;
+    }
+    node = walker.nextNode();
+  }
+
+  return chunks.join("\n");
+}
+
+function isReadableTextNode(node: Node): boolean {
+  const parent = node.parentElement;
+  if (!parent || parent.closest("script, style, noscript, input, textarea, select, option")) {
+    return false;
+  }
+
+  const style = window.getComputedStyle(parent);
+  return style.display !== "none" && style.visibility !== "hidden" && style.opacity !== "0";
+}
+
+function textNodeIntersectsViewport(node: Node): boolean {
+  const range = document.createRange();
+  try {
+    range.selectNodeContents(node);
+    const rects = Array.from(range.getClientRects());
+    return rects.some((rect) => rect.bottom >= 0 && rect.right >= 0 && rect.top <= window.innerHeight && rect.left <= window.innerWidth);
+  } finally {
+    range.detach();
+  }
 }
 
 function captureMediaEvent(telemetry: ContentTelemetry, action: MediaAction, event: Event): void {
