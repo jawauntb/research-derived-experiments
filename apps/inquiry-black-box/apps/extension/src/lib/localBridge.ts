@@ -33,6 +33,11 @@ export type FlushResult = {
   error?: Error;
 };
 
+export type SessionControlResult = {
+  recordingState: RecordingState;
+  sessionId?: string;
+};
+
 export type FetchLike = (url: string, init?: RequestInit) => Promise<Response>;
 
 export type EventQueue = {
@@ -139,6 +144,58 @@ export async function postEventBatch(
 
   const responseBody = (await response.json().catch(() => ({}))) as Record<string, unknown>;
   return { accepted: typeof responseBody.accepted === "number" ? responseBody.accepted : events.length };
+}
+
+export async function postSessionControl(
+  state: BridgeState,
+  input: { recordingState: Extract<RecordingState, "recording" | "stopped">; title?: string; monotonicMs?: number },
+  options: { fetchImpl?: FetchLike; timeoutMs?: number } = {},
+): Promise<SessionControlResult> {
+  if (!state.pairingToken) {
+    throw new PairingRequiredError();
+  }
+
+  const body: Record<string, unknown> = {
+    recording_state: input.recordingState,
+  };
+  if (input.title) {
+    body.title = input.title;
+  }
+  if (typeof input.monotonicMs === "number") {
+    body.monotonic_ms = input.monotonicMs;
+  }
+
+  const fetchImpl = options.fetchImpl ?? fetch;
+  const response = await fetchWithTimeout(
+    fetchImpl,
+    sessionControlEndpoint(state.endpoint),
+    {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-inquiry-pairing-token": state.pairingToken,
+      },
+      body: JSON.stringify(body),
+    },
+    options.timeoutMs ?? 3_000,
+  );
+
+  if (response.status === 401 || response.status === 403) {
+    throw new PairingRejectedError(response.status);
+  }
+
+  if (!response.ok) {
+    throw new BridgePostError(response.status);
+  }
+
+  const responseBody = (await response.json().catch(() => ({}))) as Record<string, unknown>;
+  const recordingState = isRecordingState(responseBody.recording_state)
+    ? responseBody.recording_state
+    : input.recordingState;
+  return {
+    recordingState,
+    ...(typeof responseBody.session_id === "string" ? { sessionId: responseBody.session_id } : {}),
+  };
 }
 
 export async function flushQueuedEvents(
@@ -346,6 +403,18 @@ export function isBridgeEventAllowed(event: EventEnvelope, state: BridgeState, n
 
 function hasSelectedText(event: EventEnvelope): boolean {
   return rawSelectedTextPayloadKeys.some((key) => typeof event.payload[key] === "string" && event.payload[key].length > 0);
+}
+
+function sessionControlEndpoint(eventsEndpoint: string): string {
+  const url = new URL(eventsEndpoint);
+  if (url.pathname.endsWith("/extension/events")) {
+    url.pathname = url.pathname.replace(/\/extension\/events$/, "/extension/session");
+  } else if (url.pathname.endsWith("/events")) {
+    url.pathname = url.pathname.replace(/\/events$/, "/extension/session");
+  } else {
+    url.pathname = "/v1/extension/session";
+  }
+  return url.toString();
 }
 
 async function fetchWithTimeout(fetchImpl: FetchLike, url: string, init: RequestInit, timeoutMs: number): Promise<Response> {

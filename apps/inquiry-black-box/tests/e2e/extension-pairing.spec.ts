@@ -4,7 +4,7 @@ import { createIngestRequestHandler } from "../../apps/desktop/src/main/ingest/s
 import { createInquiryDatabase } from "../../apps/desktop/src/main/db";
 import { createPairingToken } from "../../apps/desktop/src/main/security/pairing";
 import { createContentTelemetry, type ContentEventMessage } from "../../apps/extension/src/content";
-import { postEventBatch, type BridgeState, type FetchLike } from "../../apps/extension/src/lib/localBridge";
+import { postEventBatch, postSessionControl, type BridgeState, type FetchLike } from "../../apps/extension/src/lib/localBridge";
 
 const origin = "chrome-extension://extension-pairing-smoke";
 const pairingSecret = "extension-pairing-smoke-secret";
@@ -19,7 +19,6 @@ describe("extension pairing smoke", () => {
       pairingSecret,
       startServer: false,
     });
-    const session = runtime.bridge.startSession({ title: "Extension pairing smoke" });
     const handler = createIngestRequestHandler({
       allowedOrigins: [origin],
       database,
@@ -27,6 +26,14 @@ describe("extension pairing smoke", () => {
       sessions: runtime.sessions,
       nowMs: () => issuedAtMs,
     });
+    const fetchImpl = handlerFetch(handler);
+    const initialBridgeState = pairedState("local-browser-session");
+    const control = await postSessionControl(
+      initialBridgeState,
+      { recordingState: "recording", title: "Extension pairing smoke" },
+      { fetchImpl },
+    );
+    const sessionId = control.sessionId ?? "";
     const messages: ContentEventMessage[] = [];
     const telemetry = createContentTelemetry({
       now: () => 1_000,
@@ -46,11 +53,13 @@ describe("extension pairing smoke", () => {
     telemetry.captureMedia("seeked", { tagName: "VIDEO", currentTime: 42, duration: 120, paused: false });
 
     const events = messages.flatMap((message) => message.events);
-    const result = await postEventBatch(events, pairedState(session.session_id), {
-      fetchImpl: handlerFetch(handler),
+    const result = await postEventBatch(events, { ...initialBridgeState, sessionId }, {
+      fetchImpl,
     });
-    const stored = database.listEvents(session.session_id);
+    const stored = database.listEvents(sessionId);
 
+    expect(control).toMatchObject({ recordingState: "recording" });
+    expect(sessionId).not.toBe("local-browser-session");
     expect(result.accepted).toBe(events.length);
     expect(stored.map((event) => event.event_type)).toEqual([
       "session.started",
@@ -58,7 +67,7 @@ describe("extension pairing smoke", () => {
       "browser.highlight",
       "browser.media",
     ]);
-    expect(stored.filter((event) => event.source === "browser").every((event) => event.session_id === session.session_id)).toBe(true);
+    expect(stored.filter((event) => event.source === "browser").every((event) => event.session_id === sessionId)).toBe(true);
     expect(JSON.stringify(stored)).not.toContain("demo-article.html");
 
     runtime.stop();

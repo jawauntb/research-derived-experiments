@@ -9,8 +9,10 @@ import {
   createMemoryEventQueue,
   defaultBridgeState,
   flushQueuedEvents,
+  getBridgeState,
   isBridgeEventAllowed,
   postEventBatch,
+  postSessionControl,
   type BridgeState,
   type StorageAreaLike,
 } from "../src/lib/localBridge";
@@ -84,6 +86,36 @@ describe("local bridge pairing and queue", () => {
     ).rejects.toBeInstanceOf(PairingRejectedError);
   });
 
+  test("posts session controls to the desktop session endpoint", async () => {
+    let url = "";
+    let tokenHeader = "";
+    let postedBody: Record<string, unknown> = {};
+
+    const result = await postSessionControl(
+      pairedState(),
+      { recordingState: "recording", title: "Research session", monotonicMs: 2_500 },
+      {
+        fetchImpl: async (nextUrl, init) => {
+          url = nextUrl;
+          tokenHeader = new Headers(init?.headers).get("x-inquiry-pairing-token") ?? "";
+          postedBody = JSON.parse(String(init?.body ?? "{}")) as Record<string, unknown>;
+          return new Response(JSON.stringify({ ok: true, recording_state: "recording", session_id: "desktop-session-1" }), {
+            status: 200,
+          });
+        },
+      },
+    );
+
+    expect(url).toBe("http://127.0.0.1:39170/v1/extension/session");
+    expect(tokenHeader).toBe("paired-token");
+    expect(postedBody).toMatchObject({
+      recording_state: "recording",
+      title: "Research session",
+      monotonic_ms: 2_500,
+    });
+    expect(result).toEqual({ recordingState: "recording", sessionId: "desktop-session-1" });
+  });
+
   test("blocks capture while paused, stopped, or disabled for the site", () => {
     const event = browserScrollEvent("event-gated");
     const state = pairedState();
@@ -139,26 +171,51 @@ describe("local bridge pairing and queue", () => {
           },
         },
         now: () => 2_000,
+        fetchImpl: async () =>
+          new Response(JSON.stringify({ ok: true, recording_state: "recording", session_id: "desktop-session-1" }), {
+            status: 200,
+          }),
       },
     );
 
-    expect(response).toMatchObject({ ok: true, recordingState: "recording" });
+    expect(response).toMatchObject({ ok: true, recordingState: "recording", sessionId: "desktop-session-1" });
     expect(sentMessages).toEqual([
       {
         tabId: 1,
         message: {
           type: CONTENT_SETTINGS_UPDATED_MESSAGE,
-          settings: expect.objectContaining({ recordingState: "recording" }),
+          settings: expect.objectContaining({ recordingState: "recording", sessionId: "desktop-session-1" }),
         },
       },
       {
         tabId: 2,
         message: {
           type: CONTENT_SETTINGS_UPDATED_MESSAGE,
-          settings: expect.objectContaining({ recordingState: "recording" }),
+          settings: expect.objectContaining({ recordingState: "recording", sessionId: "desktop-session-1" }),
         },
       },
     ]);
+  });
+
+  test("keeps extension stopped when desktop record coordination fails", async () => {
+    const storage = createMemoryStorage({ [BRIDGE_STATE_KEY]: { ...pairedState(), recordingState: "stopped" } });
+    const queue = createMemoryEventQueue();
+
+    const response = await handleRuntimeMessage(
+      { type: "inquiry:set-recording-state", recordingState: "recording" },
+      {},
+      {
+        storage,
+        queue,
+        now: () => 2_000,
+        fetchImpl: async () => {
+          throw new Error("desktop offline");
+        },
+      },
+    );
+
+    expect(response).toMatchObject({ ok: false, recordingState: "stopped", error: "desktop offline" });
+    expect((await getBridgeState(storage)).recordingState).toBe("stopped");
   });
 
   test("registers the content script as a service-worker fallback", async () => {

@@ -8,6 +8,7 @@ import {
   type JsonObject,
   type PrivacyClass,
   type RetentionPolicy,
+  type SessionRecord,
 } from "@inquiry/schema";
 import type { InquiryDatabase } from "../db";
 import { verifyPairingToken } from "../security/pairing";
@@ -49,8 +50,15 @@ type IngestEventBody = {
   quality_flags?: unknown;
 };
 
+type SessionControlBody = {
+  recording_state?: unknown;
+  title?: unknown;
+  monotonic_ms?: unknown;
+};
+
 const defaultAllowedOrigins = ["chrome-extension://*"] as const;
 const ingestPaths = new Set(["/v1/events", "/v1/extension/events"]);
+const sessionControlPaths = new Set(["/v1/extension/session"]);
 
 export function createIngestRequestHandler(options: IngestServerOptions): (request: Request) => Promise<Response> {
   const allowedOrigins = options.allowedOrigins ?? defaultAllowedOrigins;
@@ -69,7 +77,9 @@ export function createIngestRequestHandler(options: IngestServerOptions): (reque
       return jsonResponse({ ok: true }, 200, origin);
     }
 
-    if (!ingestPaths.has(url.pathname)) {
+    const isIngestPath = ingestPaths.has(url.pathname);
+    const isSessionControlPath = sessionControlPaths.has(url.pathname);
+    if (!isIngestPath && !isSessionControlPath) {
       return jsonResponse({ error: "not found" }, 404, origin);
     }
 
@@ -103,6 +113,10 @@ export function createIngestRequestHandler(options: IngestServerOptions): (reque
     }
 
     try {
+      if (isSessionControlPath) {
+        return jsonResponse(applySessionControl(body, options.sessions), 200, origin);
+      }
+
       const events = normalizeExtensionBody(body, {
         sessions: options.sessions,
         sourceVersion,
@@ -134,6 +148,80 @@ export function createIngestRequestHandler(options: IngestServerOptions): (reque
     } catch (error) {
       return jsonResponse({ error: error instanceof Error ? error.message : "invalid event" }, 400, origin);
     }
+  };
+}
+
+function applySessionControl(value: unknown, sessions: SessionController): JsonObject {
+  if (!isRecord(value)) {
+    throw new Error("session control body must be an object");
+  }
+
+  const body = value as SessionControlBody;
+  const monotonicMs = typeof body.monotonic_ms === "number" ? body.monotonic_ms : undefined;
+  const current = sessions.currentSession();
+
+  if (body.recording_state === "recording") {
+    if (!current) {
+      return sessionControlResponse(
+        sessions.startSession({
+          title: typeof body.title === "string" && body.title.length > 0 ? body.title : "Research session",
+          ...(typeof monotonicMs === "number" ? { monotonic_ms: monotonicMs } : {}),
+        }),
+      );
+    }
+
+    if (current.recording_state === "paused") {
+      return sessionControlResponse(
+        sessions.resumeSession({
+          reason: "extension-record",
+          ...(typeof monotonicMs === "number" ? { monotonic_ms: monotonicMs } : {}),
+        }),
+      );
+    }
+
+    return sessionControlResponse(current);
+  }
+
+  if (body.recording_state === "stopped") {
+    if (!current) {
+      return {
+        ok: true,
+        recording_state: "stopped",
+        session_id: null,
+        session: null,
+      };
+    }
+
+    return sessionControlResponse(
+      sessions.stopSession({
+        reason: "extension-stop",
+        ...(typeof monotonicMs === "number" ? { monotonic_ms: monotonicMs } : {}),
+      }),
+    );
+  }
+
+  throw new Error("session control recording_state must be recording or stopped");
+}
+
+function sessionControlResponse(session: SessionRecord): JsonObject {
+  return {
+    ok: true,
+    recording_state: session.recording_state,
+    session_id: session.session_id,
+    session: sessionRecordJson(session),
+  };
+}
+
+function sessionRecordJson(session: SessionRecord): JsonObject {
+  return {
+    session_id: session.session_id,
+    title: session.title,
+    active_task: session.active_task ?? null,
+    notes: session.notes ?? null,
+    recording_state: session.recording_state,
+    created_at: session.created_at,
+    updated_at: session.updated_at,
+    ended_at: session.ended_at ?? null,
   };
 }
 

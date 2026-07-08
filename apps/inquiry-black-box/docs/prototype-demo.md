@@ -68,16 +68,20 @@ Open `http://127.0.0.1:4173/demo-article.html`.
 
 ## Demo Script
 
-1. In the desktop app, start a session and copy the visible pairing token.
+1. Open the desktop app and copy the visible pairing token. You do not need to
+   click desktop Start for a browser-plus-desktop demo; extension Record starts
+   the desktop session after pairing.
 2. Open the extension popup, leave the endpoint as
    `http://127.0.0.1:39170/v1/extension/events`, paste the token, and pair.
-3. Click Record in the extension popup.
+3. Click Record in the extension popup. The popup should switch to Recording
+   and show `Queue clear` when no retry backlog exists.
 4. Leave `Selected text excerpts` off for a derived-only run, or enable it when
    you want copied/highlighted excerpts stored locally as `document-opt-in`.
 5. On the article page, scroll quickly, dwell briefly, highlight/copy a claim,
    seek the media control, and switch tabs once or twice.
 6. Add a self-label in the desktop app.
-7. Stop the session.
+7. Stop the session from the extension popup. For browser-plus-desktop demos,
+   extension Stop also asks the desktop session to stop.
 8. Inspect replay markers, evidence episodes, the comprehension heatmap, and the
    repair prompt.
 9. Click Start on the repair prompt, answer it, then Save or Dismiss.
