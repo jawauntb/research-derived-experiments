@@ -66,11 +66,12 @@ describe("repair candidates", () => {
     expect(candidate?.prompt).toContain("recall question");
   });
 
-  test("copied-passage segments ask why the passage mattered", () => {
+  test("copied-passage segments ask what the selected evidence preserved", () => {
     const [candidate] = buildRepairCandidates([heatmapSegment("behavior-only", "copied-passage")]);
 
     expect(candidate?.action).toBe("explain-copied-passage");
-    expect(candidate?.prompt).toContain("Why did this copied passage matter");
+    expect(candidate?.prompt).toContain("What were you trying to preserve");
+    expect(candidate?.prompt).not.toContain("Why did this copied passage matter");
   });
 
   test("low confidence segments without evidence do not emit candidates", () => {

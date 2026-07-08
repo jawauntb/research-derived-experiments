@@ -1,4 +1,4 @@
-import type { ComprehensionHeatmapSegment, ReplayMarker, ReplayMemo } from "@inquiry/signals";
+import type { ComprehensionHeatmapSegment, EvidenceEpisode, ReplayMarker, ReplayMemo } from "@inquiry/signals";
 
 export function renderReplayTimeline(container: HTMLElement, memo: ReplayMemo): void {
   const section = document.createElement("section");
@@ -7,6 +7,10 @@ export function renderReplayTimeline(container: HTMLElement, memo: ReplayMemo): 
   const title = document.createElement("h2");
   title.textContent = "Replay";
   section.append(title);
+
+  if (memo.episodes.length > 0) {
+    section.append(renderEpisodes(memo.episodes));
+  }
 
   const list = document.createElement("ol");
   for (const marker of memo.markers) {
@@ -28,6 +32,50 @@ export function renderReplayTimeline(container: HTMLElement, memo: ReplayMemo): 
   section.append(actions);
 
   container.replaceChildren(section);
+}
+
+function renderEpisodes(episodes: EvidenceEpisode[]): HTMLElement {
+  const evidence = document.createElement("section");
+  evidence.className = "replay-evidence";
+
+  const title = document.createElement("h3");
+  title.textContent = "Evidence";
+  evidence.append(title);
+
+  const list = document.createElement("ol");
+  for (const episode of episodes) {
+    list.append(renderEpisode(episode));
+  }
+  evidence.append(list);
+
+  return evidence;
+}
+
+function renderEpisode(episode: EvidenceEpisode): HTMLLIElement {
+  const item = document.createElement("li");
+  item.dataset.episodeKind = episode.kind;
+  item.dataset.episodeId = episode.episode_id;
+  item.dataset.confidence = String(episode.confidence);
+
+  const title = document.createElement("strong");
+  title.textContent = episode.summary;
+
+  const range = document.createElement("span");
+  range.textContent = ` ${formatMs(episode.start_ms)}-${formatMs(episode.end_ms)}`;
+
+  const details = document.createElement("p");
+  details.textContent = episode.details.join(" ");
+
+  const source = document.createElement("p");
+  source.textContent = `Source refs: ${episode.source_refs.join(", ")}. Evidence events: ${
+    episode.evidence_event_ids.length > 0 ? episode.evidence_event_ids.join(", ") : "none"
+  }.`;
+
+  const privacy = document.createElement("p");
+  privacy.textContent = episode.privacy_note;
+
+  item.append(title, range, details, source, privacy);
+  return item;
 }
 
 function renderHeatmap(segments: ComprehensionHeatmapSegment[]): HTMLElement {

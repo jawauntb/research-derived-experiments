@@ -92,6 +92,48 @@ describe("session replay report", () => {
     expect(JSON.stringify(report)).not.toContain("This easy paragraph repeats");
   });
 
+  test("creates privacy-aware evidence episodes for copied browser bursts", () => {
+    const report = createSessionReplayReport([
+      createEvent({
+        session_id: "replay-session",
+        source: "browser",
+        source_version: "test@0.1.0",
+        monotonic_ms: 21_000,
+        event_type: "browser.selection",
+        payload: { hostname_hash: "h_demo", url_hash: "h_page", selection_length: 807, range_count: 1 },
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+      createEvent({
+        session_id: "replay-session",
+        source: "browser",
+        source_version: "test@0.1.0",
+        monotonic_ms: 22_000,
+        event_type: "browser.highlight",
+        payload: { hostname_hash: "h_demo", url_hash: "h_page", selection_length: 820, range_count: 1 },
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+      createEvent({
+        session_id: "replay-session",
+        source: "browser",
+        source_version: "test@0.1.0",
+        monotonic_ms: 23_000,
+        event_type: "browser.copy",
+        payload: { hostname_hash: "h_demo", url_hash: "h_page", selection_length: 832, range_count: 1 },
+        privacy_class: "local-derived",
+        retention_policy: "local-default",
+      }),
+    ]);
+
+    expect(report.episodes).toHaveLength(1);
+    expect(report.markers.filter((marker) => marker.kind === "copied-passage")).toHaveLength(1);
+    expect(report.episodes[0]?.summary).toContain("1 selection change, 1 highlight, and 1 copy action");
+    expect(report.episodes[0]?.details.join(" ")).toContain("Selection length ranged 807-832 characters");
+    expect(report.episodes[0]?.privacy_note).toContain("Raw selected or copied text was not stored");
+    expect(report.limitations.join(" ")).toContain("Copied or selected page text is not stored");
+  });
+
   test("renders heatmap bands with confidence, evidence, and limitation text", () => {
     const documentStub = new FakeDocument();
     const globalWithDocument = globalThis as unknown as { document?: unknown };
@@ -147,6 +189,48 @@ describe("session replay report", () => {
       expect(root.textContent).toContain("Evidence events:");
       expect(root.textContent).toContain(firstHeatmapSegment.limitation);
       expect(root.findByDataset("heatmapKind", firstHeatmapSegment.kind)).toBeDefined();
+    } finally {
+      globalWithDocument.document = originalDocument;
+    }
+  });
+
+  test("renders evidence episodes before low-level replay markers", () => {
+    const documentStub = new FakeDocument();
+    const globalWithDocument = globalThis as unknown as { document?: unknown };
+    const originalDocument = globalWithDocument.document;
+    globalWithDocument.document = documentStub;
+
+    try {
+      const report = createSessionReplayReport([
+        createEvent({
+          session_id: "replay-session",
+          source: "browser",
+          source_version: "test@0.1.0",
+          monotonic_ms: 21_000,
+          event_type: "browser.selection",
+          payload: { hostname_hash: "h_demo", url_hash: "h_page", selection_length: 807, range_count: 1 },
+          privacy_class: "local-derived",
+          retention_policy: "local-default",
+        }),
+        createEvent({
+          session_id: "replay-session",
+          source: "browser",
+          source_version: "test@0.1.0",
+          monotonic_ms: 22_000,
+          event_type: "browser.highlight",
+          payload: { hostname_hash: "h_demo", url_hash: "h_page", selection_length: 832, range_count: 1 },
+          privacy_class: "local-derived",
+          retention_policy: "local-default",
+        }),
+      ]);
+      const root = documentStub.createElement("div");
+
+      renderReplayTimeline(root as unknown as HTMLElement, report);
+
+      expect(root.textContent).toContain("Evidence");
+      expect(root.textContent).toContain("Selection length ranged 807-832 characters");
+      expect(root.textContent).toContain("Raw selected or copied text was not stored");
+      expect(root.findByDataset("episodeKind", "copied-selection")).toBeDefined();
     } finally {
       globalWithDocument.document = originalDocument;
     }

@@ -41,6 +41,7 @@ export function createSessionReplayReport(events: EventEnvelope[], options: Sess
       "Markers are conservative heuristics, not cognitive-state certainty.",
       "Camera-derived markers require adequate quality flags and should be interpreted with surrounding evidence.",
       "Stimulus heatmap segments use local deterministic features and only include document text after explicit opt-in.",
+      "Copied or selected page text is not stored by default; replay uses timing, counts, lengths, and hashed page refs.",
     ],
   };
 }

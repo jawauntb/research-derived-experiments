@@ -239,7 +239,12 @@ function promptForAction(action: RepairActionKind, segment: ComprehensionHeatmap
   }
 
   if (action === "explain-copied-passage") {
-    return `Why did this copied passage matter to the claim?`;
+    const evidenceSummary = copiedEvidenceSummary(segment);
+    if (evidenceSummary) {
+      return `Around ${span}, ${evidenceSummary} What were you trying to preserve, compare, or question?`;
+    }
+
+    return `Around ${span}, what were you trying to preserve, compare, or question with the selected or copied evidence?`;
   }
 
   if (action === "follow-up-note") {
@@ -247,4 +252,14 @@ function promptForAction(action: RepairActionKind, segment: ComprehensionHeatmap
   }
 
   return `State the main claim from ${span} in one sentence.`;
+}
+
+function copiedEvidenceSummary(segment: ComprehensionHeatmapSegment): string | null {
+  const copiedEvidence = segment.behavior_evidence.find((evidence) => evidence.kind === "copied-passage");
+  const summary = copiedEvidence?.evidence[0];
+  if (!summary) {
+    return null;
+  }
+
+  return `${summary.charAt(0).toLowerCase()}${summary.slice(1)}`;
 }
