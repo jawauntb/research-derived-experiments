@@ -25,7 +25,12 @@ import {
 } from "./ingest/session";
 import { createIdleIntegrityWatcher, type IdleIntegrityWatcher } from "./ingest/idleIntegrity";
 import { createGlobalHotkeyEvent } from "./security/hotkeys";
-import { createPairingSecret, createPairingToken } from "./security/pairing";
+import {
+  createPairingChallengeStore,
+  createPairingSecret,
+  createPairingToken,
+  type PairingChallengeStore,
+} from "./security/pairing";
 import type { DesktopNotifier } from "./notifications/desktopNotifier";
 import type { CameraFeatureWindow } from "../renderer/camera/featureWorker";
 
@@ -47,6 +52,7 @@ export type DesktopRuntime = {
   database: InquiryDatabase;
   sessions: SessionController;
   ingest: StartedIngestServer | null;
+  pairingChallenges: PairingChallengeStore;
   pairingToken: () => string;
   bridge: DesktopMainBridge;
   desktopActivity: DesktopActivityCollector;
@@ -100,6 +106,7 @@ export function createDesktopRuntime(options: DesktopRuntimeOptions = {}): Deskt
   const desktopActivity = createDesktopActivityCollector({
     ...desktopActivityOptions,
   });
+  const pairingChallenges = createPairingChallengeStore();
   const notifier = options.notifier ?? noopNotifier;
   const bridge = createDesktopMainBridge(database, sessions, desktopActivity);
   const idleIntegrity = createIdleIntegrityWatcher({ database, sessions });
@@ -113,6 +120,7 @@ export function createDesktopRuntime(options: DesktopRuntimeOptions = {}): Deskt
     allowedOrigins,
     database,
     pairingSecret,
+    pairingChallenges,
     sessions,
     sessionControls: bridge,
   };
@@ -125,6 +133,7 @@ export function createDesktopRuntime(options: DesktopRuntimeOptions = {}): Deskt
     database,
     sessions,
     ingest,
+    pairingChallenges,
     pairingToken: () => createPairingToken({ secret: pairingSecret }),
     bridge,
     desktopActivity,
@@ -254,11 +263,13 @@ export function createDesktopIngestHandler(options: DesktopRuntimeOptions = {}):
   const database = options.database ?? createInquiryDatabase(options.databasePath);
   const sessions = createSessionController(database);
   const pairingSecret = options.pairingSecret ?? process.env.INQUIRY_PAIRING_SECRET ?? createPairingSecret();
+  const pairingChallenges = createPairingChallengeStore();
 
   return createIngestRequestHandler({
     allowedOrigins: options.allowedOrigins ?? defaultAllowedOrigins,
     database,
     pairingSecret,
+    pairingChallenges,
     sessions,
   });
 }

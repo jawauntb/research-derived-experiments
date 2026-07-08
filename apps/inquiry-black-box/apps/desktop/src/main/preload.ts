@@ -1,6 +1,8 @@
 import { contextBridge, ipcRenderer } from "electron";
+import type { IpcRendererEvent } from "electron";
 import type { LabelPayload, SignalSettings, SuggestionResponse } from "@inquiry/schema";
 import type { RepairCandidate } from "@inquiry/signals";
+import type { InquiryDeepLink } from "./deepLink";
 import type { CameraFeatureWindow } from "../renderer/camera/featureWorker";
 
 type CameraPermissionState = "prompt" | "granted" | "denied" | "unavailable";
@@ -62,6 +64,7 @@ const desktopBridge = {
   },
   interpretation: {
     session: () => invoke("inquiry:interpretation:session"),
+    requestRedactedSummary: () => invoke("inquiry:interpretation:redacted-summary"),
     daily: () => invoke("inquiry:interpretation:daily"),
     refreshDaily: () => invoke("inquiry:interpretation:daily-refresh"),
     respondSuggestion: (input: {
@@ -78,6 +81,13 @@ const desktopBridge = {
       invoke("inquiry:repair:answer", input),
     dismiss: (input: { repair_id: RepairCandidate["repair_id"]; reason?: string }) =>
       invoke("inquiry:repair:dismiss", input),
+  },
+  deepLinks: {
+    onReceived(handler: (deepLink: InquiryDeepLink) => void): () => void {
+      const listener = (_event: IpcRendererEvent, deepLink: InquiryDeepLink) => handler(deepLink);
+      ipcRenderer.on("inquiry:deep-link", listener);
+      return () => ipcRenderer.removeListener("inquiry:deep-link", listener);
+    },
   },
 };
 

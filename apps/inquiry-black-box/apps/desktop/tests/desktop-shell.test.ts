@@ -3,6 +3,7 @@ import { createEvent } from "@inquiry/schema";
 import { createInquiryDatabase } from "../src/main/db";
 import { createDesktopIpcFacade } from "../src/main/ipc";
 import { createDesktopRuntime } from "../src/main/main";
+import { requestRedactedSessionSummary } from "../src/main/cloud/redactedSummary";
 import type { DesktopActivityProvider } from "../src/main/activity/desktopActivity";
 
 describe("desktop shell IPC facade", () => {
@@ -235,4 +236,165 @@ describe("desktop shell IPC facade", () => {
     );
     runtime.stop();
   });
+
+  test("submits optional redacted LLM summaries only after cloud sync opt-in", async () => {
+    const database = createInquiryDatabase();
+    const postedBodies: Record<string, unknown>[] = [];
+    const authorizations: string[] = [];
+    const previousBearer = process.env.INQUIRY_CLOUD_BEARER_TOKEN;
+    process.env.INQUIRY_CLOUD_BEARER_TOKEN = "fixture-token";
+    const runtime = createDesktopRuntime({
+      database,
+      pairingSecret: "desktop-shell-test-secret",
+      startServer: false,
+    });
+    const facade = createDesktopIpcFacade(runtime, {
+      redactedSummary: {
+        cloudApiUrl: "https://cloud.example.test",
+        nowMs: () => 10_000,
+        fetchImpl: async (_url, init) => {
+          authorizations.push(new Headers(init?.headers).get("authorization") ?? "");
+          postedBodies.push(JSON.parse(String(init?.body ?? "{}")) as Record<string, unknown>);
+          return new Response(
+            JSON.stringify({
+              job: {
+                job_id: "job-redacted-1",
+                status: "submitted",
+                modal_call_id: "modal-call-1",
+              },
+            }),
+            { status: 202 },
+          );
+        },
+      },
+    });
+    try {
+      const session = await facade.startSession({ title: "Redacted summary fixture" });
+      appendDesktopActivityFixture(database, session.session_id);
+      await facade.stopSession();
+
+      const blocked = await facade.requestRedactedSummary();
+      expect(blocked).toMatchObject({ status: "blocked" });
+      expect(postedBodies).toHaveLength(0);
+
+      await facade.setSignalEnabled("cloudSync", true);
+      const submitted = await facade.requestRedactedSummary();
+      expect(submitted).toMatchObject({
+        status: "submitted",
+        job_id: "job-redacted-1",
+        modal_call_id: "modal-call-1",
+      });
+      expect(authorizations).toEqual(["Bearer fixture-token"]);
+      expect(postedBodies).toHaveLength(1);
+      expect(postedBodies[0]).toMatchObject({
+        kind: "session_summary",
+        session_id: session.session_id,
+        input: {
+          privacy_class: "redacted-sync",
+        },
+      });
+      const serialized = JSON.stringify(postedBodies[0]);
+      expect(serialized).not.toContain("Cursor");
+      expect(serialized).not.toContain("com.todesktop.230313mzl4w4u92");
+      expect(database.listEvents(session.session_id).map((event) => event.event_type)).toContain("model.run");
+    } finally {
+      if (previousBearer === undefined) {
+        delete process.env.INQUIRY_CLOUD_BEARER_TOKEN;
+      } else {
+        process.env.INQUIRY_CLOUD_BEARER_TOKEN = previousBearer;
+      }
+
+      runtime.stop();
+    }
+  });
+
+  test("records redacted LLM summary unavailability without sending network requests", async () => {
+    const database = createInquiryDatabase();
+    const runtime = createDesktopRuntime({
+      database,
+      pairingSecret: "desktop-shell-test-secret",
+      startServer: false,
+    });
+    const facade = createDesktopIpcFacade(runtime);
+    const session = await facade.startSession({ title: "Missing cloud config" });
+    appendDesktopActivityFixture(database, session.session_id);
+    await facade.stopSession();
+    database.setSignalEnabled("cloudSync", true);
+    let fetchCalls = 0;
+
+    const result = await requestRedactedSessionSummary(database, session.session_id, {
+      fetchImpl: async () => {
+        fetchCalls += 1;
+        return new Response("should not be called", { status: 500 });
+      },
+    });
+
+    expect(result).toMatchObject({
+      status: "unavailable",
+      message: "Cloud job endpoint or auth token is not configured.",
+    });
+    expect(fetchCalls).toBe(0);
+    expect(database.listEvents(session.session_id).filter((event) => event.event_type === "model.run")).toHaveLength(1);
+    runtime.stop();
+  });
+
+  test("records redacted LLM summary cloud rejection and timeout failures", async () => {
+    const database = createInquiryDatabase();
+    const runtime = createDesktopRuntime({
+      database,
+      pairingSecret: "desktop-shell-test-secret",
+      startServer: false,
+    });
+    const facade = createDesktopIpcFacade(runtime);
+    const session = await facade.startSession({ title: "Rejected cloud summary" });
+    appendDesktopActivityFixture(database, session.session_id);
+    await facade.stopSession();
+    database.setSignalEnabled("cloudSync", true);
+
+    const rejected = await requestRedactedSessionSummary(database, session.session_id, {
+      cloudApiUrl: "https://cloud.example.test",
+      bearerToken: "fixture-token",
+      fetchImpl: async () =>
+        new Response(JSON.stringify({ error: { message: "privacy rejected" } }), { status: 422 }),
+    });
+    expect(rejected).toMatchObject({
+      status: "failed",
+      limitations: expect.arrayContaining(["privacy rejected"]),
+    });
+
+    const timedOut = await requestRedactedSessionSummary(database, session.session_id, {
+      cloudApiUrl: "https://cloud.example.test",
+      bearerToken: "fixture-token",
+      timeoutMs: 1,
+      fetchImpl: async () => await new Promise<Response>(() => undefined),
+    });
+    expect(timedOut).toMatchObject({
+      status: "failed",
+      limitations: expect.arrayContaining(["cloud job request timed out after 1ms"]),
+    });
+    expect(database.listEvents(session.session_id).filter((event) => event.event_type === "model.run").length).toBeGreaterThanOrEqual(2);
+    runtime.stop();
+  });
 });
+
+function appendDesktopActivityFixture(database: ReturnType<typeof createInquiryDatabase>, sessionId: string): void {
+  database.appendEvent(
+    createEvent({
+      session_id: sessionId,
+      source: "desktop-activity",
+      source_version: "desktop@0.1.0",
+      monotonic_ms: 1_000,
+      event_type: "desktop.app_focus",
+      payload: {
+        app_name: "Cursor",
+        bundle_id: "com.todesktop.230313mzl4w4u92",
+        focus_started_monotonic_ms: 1_000,
+        focus_ended_monotonic_ms: 1_500,
+        duration_ms: 500,
+        permission_status: "granted",
+      },
+      privacy_class: "local-derived",
+      retention_policy: "local-default",
+    }),
+  );
+}

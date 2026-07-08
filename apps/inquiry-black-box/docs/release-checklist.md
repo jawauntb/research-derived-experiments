@@ -20,8 +20,10 @@ bun run validation:smoke
 cd modal && python3 -m pytest
 ```
 
-`bun run package:desktop` creates an unsigned local macOS app bundle for smoke
-only. Signing and notarization require Apple credentials outside the repo.
+`bun run package:desktop` creates a local macOS app bundle. It signs the app
+when `INQUIRY_MAC_CODESIGN_IDENTITY` or `INQUIRY_MAC_DEVELOPER_ID` is set on a
+macOS release machine; otherwise it records that signing was skipped in the
+package README. Notarize signed release archives before external distribution.
 
 ## Local Developer Demo
 
@@ -33,9 +35,11 @@ python3 -m http.server 4173 --directory tests/fixtures
 ```
 
 Load `apps/inquiry-black-box/apps/extension` as an unpacked Chrome extension,
-open `http://127.0.0.1:4173/demo-article.html`, pair with the desktop token,
-click Record in the extension, interact with two normal `http`/`https` tabs,
-stop, inspect replay, export, delete, restart desktop, and reload the extension.
+open `http://127.0.0.1:4173/demo-article.html`, click **Pair with local
+desktop** in the popup, click Record in the extension, interact with two normal
+`http`/`https` tabs, stop, inspect replay, request a redacted LLM summary only
+after enabling Cloud sync, export, delete, restart desktop, and reload the
+extension.
 
 Record the result with the dogfood ledger in
 [Prototype Demo](prototype-demo.md).
@@ -66,10 +70,22 @@ bun run package:extension
 ```
 
 Smoke `apps/desktop/release/mac/Inquiry Black Box.app` and
-`apps/extension/release/extension/inquiry-black-box-extension-0.1.0.zip` before
-signing or store submission. The localhost bridge is the default installed
-communication path; native messaging remains deferred unless installed smoke
-proves a concrete gap.
+`apps/extension/release/extension/inquiry-black-box-extension-0.1.0.zip`.
+Confirm `inquiry-black-box://pair` opens or focuses the desktop app, the popup
+one-click pairing succeeds, and manual token pairing remains available as a
+fallback.
+
+Optional redacted desktop LLM summaries require Cloud sync opt-in plus a
+pre-issued desktop bearer token:
+
+- `RAILWAY_PUBLIC_API_URL` or `INQUIRY_CLOUD_API_URL`
+- `INQUIRY_CLOUD_BEARER_TOKEN` (legacy alias: `INQUIRY_CLOUD_AUTH_TOKEN`)
+
+Store art lives in `assets/store`:
+
+- `chrome-store-small-tile.png` (440 x 280)
+- `chrome-store-marquee.png` (1280 x 800)
+- `chrome-store-screenshot.png` (1280 x 800)
 
 ## Railway Smoke
 

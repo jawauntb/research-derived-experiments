@@ -23,6 +23,26 @@ export const designTokens = {
   shadowRaised: "14px 14px 30px rgba(124, 112, 96, 0.22), -14px -14px 30px rgba(255, 255, 255, 0.86)",
   shadowPressed: "inset 8px 8px 18px rgba(124, 112, 96, 0.18), inset -8px -8px 18px rgba(255, 255, 255, 0.78)",
   focusRing: "0 0 0 3px rgba(8, 125, 115, 0.24)",
+  dark: {
+    surface: "#151816",
+    surfaceRaised: "#202622",
+    surfaceInset: "#101311",
+    ink: "#f3f1eb",
+    muted: "#a8b0aa",
+    line: "#3a453f",
+    teal: "#55c7bc",
+    tealBright: "#74d1b8",
+    tealSoft: "#17372f",
+    amber: "#f0bf63",
+    amberSoft: "#3d3015",
+    rose: "#f08da0",
+    roseSoft: "#3c2029",
+    blue: "#8bb9df",
+    blueSoft: "#1c3346",
+    shadowRaised: "0 16px 34px rgba(0, 0, 0, 0.34)",
+    shadowPressed: "inset 6px 6px 16px rgba(0, 0, 0, 0.32), inset -6px -6px 16px rgba(255, 255, 255, 0.04)",
+    focusRing: "0 0 0 3px rgba(85, 199, 188, 0.28)",
+  },
 } as const;
 
 export type InquiryCssVariableName =
@@ -45,31 +65,68 @@ export type InquiryCssVariableName =
   | "--shadow-pressed"
   | "--focus";
 
+type InquiryColorTokens = {
+  surface: string;
+  surfaceRaised: string;
+  surfaceInset: string;
+  ink: string;
+  muted: string;
+  line: string;
+  teal: string;
+  tealBright: string;
+  tealSoft: string;
+  amber: string;
+  amberSoft: string;
+  rose: string;
+  roseSoft: string;
+  blue: string;
+  blueSoft: string;
+  shadowRaised: string;
+  shadowPressed: string;
+  focusRing: string;
+};
+
 export function inquiryCssVariables(): Record<InquiryCssVariableName, string> {
-  return {
-    "--surface": designTokens.surface,
-    "--surface-raised": designTokens.surfaceRaised,
-    "--surface-inset": designTokens.surfaceInset,
-    "--ink": designTokens.ink,
-    "--muted": designTokens.muted,
-    "--line": designTokens.line,
-    "--teal": designTokens.teal,
-    "--green": designTokens.tealBright,
-    "--green-soft": designTokens.tealSoft,
-    "--amber": designTokens.amber,
-    "--amber-soft": designTokens.amberSoft,
-    "--rose": designTokens.rose,
-    "--rose-soft": designTokens.roseSoft,
-    "--blue": designTokens.blue,
-    "--blue-soft": designTokens.blueSoft,
-    "--shadow-raised": designTokens.shadowRaised,
-    "--shadow-pressed": designTokens.shadowPressed,
-    "--focus": designTokens.focusRing,
-  };
+  return cssVariablesFor(designTokens);
 }
 
 export function inquiryCssVariableBlock(selector = ":root"): string {
-  const variables = Object.entries(inquiryCssVariables())
+  return cssVariableBlock(selector, inquiryCssVariables());
+}
+
+export function inquiryDarkCssVariables(): Record<InquiryCssVariableName, string> {
+  return cssVariablesFor(designTokens.dark);
+}
+
+export function inquiryDarkCssVariableBlock(selector = '[data-theme="dark"]'): string {
+  return cssVariableBlock(selector, inquiryDarkCssVariables());
+}
+
+function cssVariablesFor(tokens: InquiryColorTokens): Record<InquiryCssVariableName, string> {
+  return {
+    "--surface": tokens.surface,
+    "--surface-raised": tokens.surfaceRaised,
+    "--surface-inset": tokens.surfaceInset,
+    "--ink": tokens.ink,
+    "--muted": tokens.muted,
+    "--line": tokens.line,
+    "--teal": tokens.teal,
+    "--green": tokens.tealBright,
+    "--green-soft": tokens.tealSoft,
+    "--amber": tokens.amber,
+    "--amber-soft": tokens.amberSoft,
+    "--rose": tokens.rose,
+    "--rose-soft": tokens.roseSoft,
+    "--blue": tokens.blue,
+    "--blue-soft": tokens.blueSoft,
+    "--shadow-raised": tokens.shadowRaised,
+    "--shadow-pressed": tokens.shadowPressed,
+    "--focus": tokens.focusRing,
+  };
+}
+
+function cssVariableBlock(selector: string, variablesByName: Record<InquiryCssVariableName, string>): string {
+  const variables = Object.entries(variablesByName)
     .map(([name, value]) => `  ${name}: ${value};`)
     .join("\n");
   return `${selector} {\n${variables}\n}`;

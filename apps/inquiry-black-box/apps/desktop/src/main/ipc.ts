@@ -11,6 +11,11 @@ import type { PrivacySettingsView } from "../renderer/settings/PrivacySettings";
 import { deleteLocalSession } from "./privacy/delete";
 import { exportSession, type SessionExport } from "./privacy/export";
 import { runDailyReviewCheckupNotification } from "./notifications/notificationScheduler";
+import {
+  requestRedactedSessionSummary,
+  type RedactedSummaryOptions,
+  type RedactedSummarySubmission,
+} from "./cloud/redactedSummary";
 import { createDailyReviewReport, recordSuggestionResponse, type DailyReviewReport } from "./reports/dailyDigest";
 import { loadDemoReplayReport, listSessionHistory, type SessionHistoryEntry } from "./reports/sessionHistory";
 import { createSessionInterpretationReport, type SessionInterpretationReport } from "./reports/sessionInterpretation";
@@ -44,6 +49,7 @@ export type DesktopIpcFacade = {
   demoReplayReport: () => Promise<SessionReplayReport>;
   replayReport: () => Promise<SessionReplayReport | null>;
   sessionInterpretation: () => Promise<SessionInterpretationReport | null>;
+  requestRedactedSummary: () => Promise<RedactedSummarySubmission>;
   dailyReview: () => Promise<DailyReviewReport>;
   refreshDailyReview: () => Promise<DailyReviewReport>;
   respondSuggestion: (input: Parameters<typeof recordSuggestionResponse>[1]) => Promise<EventEnvelope>;
@@ -53,7 +59,14 @@ export type DesktopIpcFacade = {
   shutdown: () => Promise<void>;
 };
 
-export function createDesktopIpcFacade(runtime: DesktopRuntime): DesktopIpcFacade {
+export type DesktopIpcFacadeOptions = {
+  redactedSummary?: RedactedSummaryOptions;
+};
+
+export function createDesktopIpcFacade(
+  runtime: DesktopRuntime,
+  options: DesktopIpcFacadeOptions = {},
+): DesktopIpcFacade {
   let lastSessionId = runtime.sessions.currentSession()?.session_id ?? null;
 
   function remember(session: SessionRecord): SessionRecord {
@@ -168,6 +181,9 @@ export function createDesktopIpcFacade(runtime: DesktopRuntime): DesktopIpcFacad
       }
 
       return createSessionInterpretationReport(runtime.database, session.session_id);
+    },
+    async requestRedactedSummary() {
+      return requestRedactedSessionSummary(runtime.database, requireRememberedSessionId(), options.redactedSummary);
     },
     async dailyReview() {
       return createDailyReviewReport(runtime.database);

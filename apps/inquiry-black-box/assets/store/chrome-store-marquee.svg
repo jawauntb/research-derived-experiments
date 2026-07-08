@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800" role="img" aria-labelledby="title desc">
+  <title id="title">Inquiry Black Box Chrome Web Store marquee</title>
+  <desc id="desc">A wide product image showing the desktop cockpit, extension pairing, and redacted model summary handoff.</desc>
+  <rect width="1280" height="800" fill="#151816"/>
+  <rect x="72" y="72" width="1136" height="656" rx="8" fill="#f3f1eb"/>
+  <rect x="112" y="118" width="280" height="564" rx="8" fill="#202622"/>
+  <text x="144" y="164" fill="#f3f1eb" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="800">Inquiry Black Box</text>
+  <text x="144" y="202" fill="#a8b0aa" font-family="Inter, Arial, sans-serif" font-size="18">Paired local research cockpit</text>
+  <rect x="144" y="244" width="216" height="66" rx="8" fill="#101311"/>
+  <text x="164" y="274" fill="#74d1b8" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">Recording</text>
+  <text x="164" y="296" fill="#a8b0aa" font-family="Inter, Arial, sans-serif" font-size="13">Chrome extension attached</text>
+  <rect x="144" y="332" width="216" height="44" rx="8" fill="#17372f"/>
+  <text x="164" y="360" fill="#74d1b8" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">One-click pairing</text>
+  <rect x="144" y="394" width="216" height="44" rx="8" fill="#1c3346"/>
+  <text x="164" y="422" fill="#8bb9df" font-family="Inter, Arial, sans-serif" font-size="15" font-weight="700">Redacted summary ready</text>
+  <rect x="432" y="118" width="704" height="564" rx="8" fill="#fbfaf6" stroke="#d6d0c4"/>
+  <rect x="472" y="158" width="624" height="80" rx="8" fill="#e7e3da"/>
+  <text x="504" y="194" fill="#151515" font-family="Inter, Arial, sans-serif" font-size="22" font-weight="800">Replay timeline</text>
+  <text x="504" y="220" fill="#68645d" font-family="Inter, Arial, sans-serif" font-size="15">Evidence-linked markers without raw typed text or raw frames.</text>
+  <rect x="472" y="276" width="624" height="120" rx="8" fill="#e7e3da"/>
+  <circle cx="522" cy="336" r="24" fill="#74d1b8"/>
+  <rect x="568" y="306" width="430" height="14" rx="7" fill="#087d73"/>
+  <rect x="568" y="336" width="354" height="12" rx="6" fill="#8bb9df"/>
+  <rect x="568" y="362" width="210" height="12" rx="6" fill="#f0bf63"/>
+  <rect x="472" y="424" width="300" height="170" rx="8" fill="#dceee8"/>
+  <text x="504" y="466" fill="#0f6b55" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="800">Session interpretation</text>
+  <text x="504" y="502" fill="#151515" font-family="Inter, Arial, sans-serif" font-size="15">Themes, limitations, and next actions stay grounded in local evidence.</text>
+  <rect x="796" y="424" width="300" height="170" rx="8" fill="#dceaf7"/>
+  <text x="828" y="466" fill="#2d5d7c" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="800">Optional LLM summary</text>
+  <text x="828" y="502" fill="#151515" font-family="Inter, Arial, sans-serif" font-size="15">Only redacted counts, themes, and limitations leave the device.</text>
+  <rect x="472" y="622" width="624" height="20" rx="10" fill="#202622"/>
+  <rect x="472" y="622" width="394" height="20" rx="10" fill="#74d1b8"/>
+</svg>

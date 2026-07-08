@@ -15,6 +15,7 @@ import {
   isBridgeEventAllowed,
   postEventBatch,
   postSessionControl,
+  requestBridgePairing,
   type BridgeState,
   type StorageAreaLike,
 } from "../src/lib/localBridge";
@@ -171,6 +172,121 @@ describe("local bridge pairing and queue", () => {
     expect(url).toBe("http://127.0.0.1:39170/v1/extension/session");
     expect(tokenHeader).toBe("paired-token");
     expect(result).toEqual({ recordingState: "stopped", sessionId: null });
+  });
+
+  test("requests one-click pairing from the desktop pairing endpoint", async () => {
+    let url = "";
+    const result = await requestBridgePairing(DEFAULT_BRIDGE_ENDPOINT, {
+      challenge: "pairing-challenge-fixture-123",
+      fetchImpl: async (nextUrl, init) => {
+        url = nextUrl;
+        expect(init?.method).toBe("GET");
+        return new Response(
+          JSON.stringify({
+            ok: true,
+            endpoint: DEFAULT_BRIDGE_ENDPOINT,
+            pairing_token: "auto-token",
+            session_id: "desktop-session-1",
+            recording_state: "paused",
+          }),
+          { status: 200 },
+        );
+      },
+    });
+
+    expect(url).toBe("http://127.0.0.1:39170/v1/extension/pairing?challenge=pairing-challenge-fixture-123");
+    expect(result).toEqual({
+      endpoint: DEFAULT_BRIDGE_ENDPOINT,
+      pairingToken: "auto-token",
+      sessionId: "desktop-session-1",
+      recordingState: "paused",
+    });
+  });
+
+  test("stores one-click desktop pairing responses", async () => {
+    const storage = createMemoryStorage({ [BRIDGE_STATE_KEY]: defaultBridgeState() });
+    const queue = createMemoryEventQueue();
+
+    const response = await handleRuntimeMessage(
+      { type: "inquiry:auto-pair", challenge: "pairing-challenge-fixture-123" },
+      {},
+      {
+        storage,
+        queue,
+        now: () => 2_000,
+        fetchImpl: async () =>
+          new Response(
+            JSON.stringify({
+              ok: true,
+              endpoint: DEFAULT_BRIDGE_ENDPOINT,
+              pairing_token: "auto-paired-token",
+              session_id: null,
+              recording_state: "stopped",
+            }),
+            { status: 200 },
+          ),
+      },
+    );
+
+    expect(response).toMatchObject({
+      ok: true,
+      endpoint: DEFAULT_BRIDGE_ENDPOINT,
+      pairingToken: "auto-paired-token",
+      sessionId: DEFAULT_SESSION_ID,
+      recordingState: "stopped",
+    });
+    expect(await getBridgeState(storage)).toMatchObject({ pairingToken: "auto-paired-token" });
+  });
+
+  test("rejects malformed one-click desktop pairing responses without changing stored state", async () => {
+    await expect(
+      requestBridgePairing(DEFAULT_BRIDGE_ENDPOINT, {
+        challenge: "pairing-challenge-fixture-123",
+        fetchImpl: async () => new Response("unauthorized", { status: 401 }),
+      }),
+    ).rejects.toThrow("desktop pairing failed with status 401");
+
+    await expect(
+      requestBridgePairing(DEFAULT_BRIDGE_ENDPOINT, {
+        challenge: "pairing-challenge-fixture-123",
+        fetchImpl: async () => new Response("not json", { status: 200 }),
+      }),
+    ).rejects.toThrow("desktop pairing returned invalid JSON");
+
+    await expect(
+      requestBridgePairing(DEFAULT_BRIDGE_ENDPOINT, {
+        challenge: "pairing-challenge-fixture-123",
+        fetchImpl: async () => new Response(JSON.stringify({ ok: true }), { status: 200 }),
+      }),
+    ).rejects.toThrow("desktop pairing did not return a token");
+
+    const storage = createMemoryStorage({ [BRIDGE_STATE_KEY]: defaultBridgeState() });
+    const queue = createMemoryEventQueue();
+    const missingChallenge = await handleRuntimeMessage(
+      { type: "inquiry:auto-pair" },
+      {},
+      {
+        storage,
+        queue,
+        now: () => 2_000,
+        fetchImpl: async () => new Response(JSON.stringify({ pairing_token: "should-not-store" }), { status: 200 }),
+      },
+    );
+    expect(missingChallenge).toMatchObject({ ok: false, error: "pairing challenge is required" });
+    expect((await getBridgeState(storage)).pairingToken).toBeUndefined();
+
+    const failed = await handleRuntimeMessage(
+      { type: "inquiry:auto-pair", challenge: "pairing-challenge-fixture-123" },
+      {},
+      {
+        storage,
+        queue,
+        now: () => 2_100,
+        fetchImpl: async () => new Response("unauthorized", { status: 401 }),
+      },
+    );
+    expect(failed).toMatchObject({ ok: false, error: "desktop pairing failed with status 401" });
+    expect((await getBridgeState(storage)).pairingToken).toBeUndefined();
   });
 
   test("blocks capture while paused, stopped, or disabled for the site", () => {

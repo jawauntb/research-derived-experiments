@@ -1,8 +1,16 @@
+import type { RedactedSummarySubmission } from "../../main/cloud/redactedSummary";
 import type { SessionInterpretationReport } from "../../main/reports/sessionInterpretation";
+
+export type SessionInterpretationActions = {
+  cloudSyncEnabled: boolean;
+  redactedSummary?: RedactedSummarySubmission | null;
+  requestRedactedSummary?: () => void | Promise<void>;
+};
 
 export function renderSessionInterpretationPanel(
   container: HTMLElement,
   interpretation: SessionInterpretationReport | null | undefined,
+  actions: SessionInterpretationActions = { cloudSyncEnabled: false },
 ): void {
   const section = document.createElement("section");
   section.className = "interpretation-panel";
@@ -21,6 +29,8 @@ export function renderSessionInterpretationPanel(
   summary.className = "interpretation-summary";
   summary.textContent = interpretation.summary;
   section.append(summary);
+
+  section.append(redactedSummaryAction(actions));
 
   const themes = document.createElement("ol");
   themes.className = "interpretation-themes";
@@ -58,6 +68,31 @@ export function renderSessionInterpretationPanel(
   section.append(limitations);
 
   container.replaceChildren(section);
+}
+
+function redactedSummaryAction(actions: SessionInterpretationActions): HTMLElement {
+  const panel = document.createElement("div");
+  panel.className = "interpretation-llm";
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "interpretation-llm__button";
+  button.textContent = "Request redacted LLM summary";
+  button.disabled = !actions.cloudSyncEnabled || !actions.requestRedactedSummary;
+  button.addEventListener("click", () => void actions.requestRedactedSummary?.());
+
+  const status = document.createElement("p");
+  status.className = "interpretation-llm__status";
+  if (actions.redactedSummary) {
+    status.textContent = actions.redactedSummary.message;
+  } else if (!actions.cloudSyncEnabled) {
+    status.textContent = "Cloud sync is off; no model request will be sent.";
+  } else {
+    status.textContent = "Only redacted counts, themes, actions, and limitations are submitted.";
+  }
+
+  panel.append(button, status);
+  return panel;
 }
 
 function emptyState(titleText: string, bodyText: string): HTMLElement {

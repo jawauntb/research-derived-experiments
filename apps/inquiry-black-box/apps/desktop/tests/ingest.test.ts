@@ -5,12 +5,13 @@ import { createSessionController } from "../src/main/ingest/session";
 import { createIngestRequestHandler } from "../src/main/ingest/server";
 import { createDesktopRuntime } from "../src/main/main";
 import { createGlobalHotkeyEvent } from "../src/main/security/hotkeys";
-import { createPairingToken } from "../src/main/security/pairing";
+import { createPairingChallengeStore, createPairingToken } from "../src/main/security/pairing";
 import type { DesktopActivityProvider } from "../src/main/activity/desktopActivity";
 
 const origin = "chrome-extension://extension-fixture";
 const secret = "fixture-pairing-secret";
 const issuedAtMs = 1_000;
+const challenge = "pairing-challenge-fixture-123";
 
 function token(): string {
   return createPairingToken({ secret, issuedAtMs, nonce: "fixture-nonce" });
@@ -62,7 +63,84 @@ function sessionStatusRequest(overrides: { origin?: string; token?: string } = {
   });
 }
 
+function pairingRequest(overrides: { origin?: string; challenge?: string } = {}): Request {
+  const url = new URL("http://127.0.0.1:39170/v1/extension/pairing");
+  url.searchParams.set("challenge", overrides.challenge ?? challenge);
+  return new Request(url, {
+    method: "GET",
+    headers: {
+      origin: overrides.origin ?? origin,
+    },
+  });
+}
+
 describe("desktop extension ingest", () => {
+  test("mints one-click pairing tokens only for allowed extension origins", async () => {
+    const database = createInquiryDatabase();
+    const sessions = createSessionController(database, {
+      nowIso: () => "2026-07-07T12:00:00.000Z",
+      nowMs: () => issuedAtMs,
+    });
+    const session = sessions.startSession({ title: "Pairing fixture", session_id: "session-pairing-1" });
+    const pairingChallenges = createPairingChallengeStore();
+    pairingChallenges.approveChallenge(challenge, issuedAtMs);
+    const handler = createIngestRequestHandler({
+      allowedOrigins: [origin],
+      database,
+      pairingSecret: secret,
+      pairingChallenges,
+      sessions,
+      nowMs: () => issuedAtMs,
+    });
+
+    const paired = await handler(pairingRequest());
+    const body = await paired.json();
+
+    expect(paired.status).toBe(200);
+    expect(body).toMatchObject({
+      ok: true,
+      endpoint: "http://127.0.0.1:39170/v1/extension/events",
+      session_id: session.session_id,
+      recording_state: "recording",
+    });
+    expect(String(body.pairing_token).split(".")).toHaveLength(3);
+
+    const reusedChallenge = await handler(pairingRequest());
+    expect(reusedChallenge.status).toBe(401);
+
+    pairingChallenges.approveChallenge(challenge, issuedAtMs);
+    const forbidden = await handler(pairingRequest({ origin: "https://attacker.example" }));
+    expect(forbidden.status).toBe(403);
+
+    const tokenlessSession = await handler(
+      new Request("http://127.0.0.1:39170/v1/extension/session", {
+        method: "GET",
+        headers: { origin },
+      }),
+    );
+    expect(tokenlessSession.status).toBe(401);
+    database.close();
+  });
+
+  test("rejects one-click pairing when the desktop did not approve the deep-link challenge", async () => {
+    const database = createInquiryDatabase();
+    const sessions = createSessionController(database);
+    const handler = createIngestRequestHandler({
+      database,
+      pairingSecret: secret,
+      pairingChallenges: createPairingChallengeStore(),
+      sessions,
+      nowMs: () => issuedAtMs,
+    });
+
+    const rejected = await handler(pairingRequest({ origin: "chrome-extension://attacker-extension" }));
+    expect(rejected.status).toBe(401);
+    expect(await rejected.json()).toMatchObject({
+      error: "pairing challenge was not approved by the desktop app",
+    });
+    database.close();
+  });
+
   test("accepts valid extension events and rejects invalid token or origin", async () => {
     const database = createInquiryDatabase();
     const sessions = createSessionController(database, {

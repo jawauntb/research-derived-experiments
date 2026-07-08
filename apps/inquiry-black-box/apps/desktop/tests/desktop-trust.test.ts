@@ -34,6 +34,73 @@ describe("desktop shell trust surfaces", () => {
     }
   });
 
+  test("shows native pairing notices from desktop deep links", async () => {
+    const documentStub = new FakeDocument();
+    const globalWithDocument = globalThis as unknown as { document?: unknown };
+    const originalDocument = globalWithDocument.document;
+    globalWithDocument.document = documentStub;
+    let deepLinkHandler: Parameters<NonNullable<InquiryDesktopBridge["deepLinks"]>["onReceived"]>[0] | undefined;
+
+    try {
+      const root = documentStub.createElement("div");
+      renderApp(root as unknown as HTMLElement, {
+        ...shellBridge("header.secret.token"),
+        deepLinks: {
+          onReceived: (handler) => {
+            deepLinkHandler = handler;
+            return () => undefined;
+          },
+        },
+      });
+      deepLinkHandler?.({
+        href: "inquiry-black-box://pair?source=chrome-extension&challenge=pairing-challenge-fixture-123",
+        action: "pair",
+        source: "chrome-extension",
+        challenge: "pairing-challenge-fixture-123",
+      });
+
+      expect(root.textContent).toContain("Pairing request received. Return to the Chrome popup to finish one-click pairing.");
+      await flushAsync();
+    } finally {
+      globalWithDocument.document = originalDocument;
+    }
+  });
+
+  test("persists dark mode choices on the root theme attribute", async () => {
+    const documentStub = new FakeDocument();
+    const storage = createMemoryLocalStorage({ "inquiry.theme": "dark" });
+    const globalWithDocument = globalThis as unknown as {
+      document?: unknown;
+      localStorage?: unknown;
+    };
+    const originalDocument = globalWithDocument.document;
+    const originalLocalStorage = globalWithDocument.localStorage;
+    globalWithDocument.document = documentStub;
+    globalWithDocument.localStorage = storage;
+
+    try {
+      const root = documentStub.createElement("div");
+      renderApp(root as unknown as HTMLElement, shellBridge("header.secret.token"));
+
+      expect(documentStub.documentElement.dataset.theme).toBe("dark");
+      root.findAllByTag("button").find((button) => button.textContent === "System")?.click();
+      expect(storage.getItem("inquiry.theme")).toBe("system");
+      expect(documentStub.documentElement.dataset.theme).toBeUndefined();
+
+      root.findAllByTag("button").find((button) => button.textContent === "Light")?.click();
+      expect(storage.getItem("inquiry.theme")).toBe("light");
+      expect(documentStub.documentElement.dataset.theme).toBe("light");
+      await flushAsync();
+    } finally {
+      globalWithDocument.document = originalDocument;
+      if (originalLocalStorage === undefined) {
+        delete globalWithDocument.localStorage;
+      } else {
+        globalWithDocument.localStorage = originalLocalStorage;
+      }
+    }
+  });
+
   test("requires delete confirmation before calling privacy delete", async () => {
     await flushAsync();
     const documentStub = new FakeDocument();
@@ -188,6 +255,8 @@ function shellBridge(token: string): InquiryDesktopBridge {
 }
 
 class FakeDocument {
+  readonly documentElement = new FakeElement("html");
+
   createElement(tagName: string): FakeElement {
     return new FakeElement(tagName);
   }
@@ -205,6 +274,7 @@ class FakeElement {
   disabled = false;
   value = "";
   placeholder = "";
+  private attributes: Record<string, string> = {};
   private ownText = "";
   private children: Array<FakeElement | FakeText> = [];
   private clickListeners: Array<() => void> = [];
@@ -238,9 +308,24 @@ class FakeElement {
   }
 
   setAttribute(name: string, value: string): void {
+    this.attributes[name] = value;
+    if (name === "data-theme") {
+      this.dataset.theme = value;
+    }
     if (name === "aria-live") {
       this.className += ` aria-${value}`;
     }
+  }
+
+  removeAttribute(name: string): void {
+    delete this.attributes[name];
+    if (name === "data-theme") {
+      delete this.dataset.theme;
+    }
+  }
+
+  getAttribute(name: string): string | null {
+    return this.attributes[name] ?? null;
   }
 
   click(): void {
@@ -265,6 +350,32 @@ class FakeElement {
 
 class FakeText {
   constructor(readonly textContent: string) {}
+}
+
+function createMemoryLocalStorage(initial: Record<string, string> = {}): Storage {
+  const state = { ...initial };
+  return {
+    get length() {
+      return Object.keys(state).length;
+    },
+    clear() {
+      for (const key of Object.keys(state)) {
+        delete state[key];
+      }
+    },
+    getItem(key: string) {
+      return state[key] ?? null;
+    },
+    key(index: number) {
+      return Object.keys(state)[index] ?? null;
+    },
+    removeItem(key: string) {
+      delete state[key];
+    },
+    setItem(key: string, value: string) {
+      state[key] = value;
+    },
+  };
 }
 
 async function flushAsync(): Promise<void> {

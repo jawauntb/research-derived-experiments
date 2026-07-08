@@ -8,7 +8,7 @@ import {
   parseInstallArgs,
   resolveInstallDestination,
 } from "../scripts/install-desktop";
-import { writeInfoPlist } from "../scripts/package-desktop";
+import { ensureProtocolScheme, signMacApp, writeInfoPlist } from "../scripts/package-desktop";
 
 describe("desktop packaging configuration", () => {
   test("defines a local unsigned macOS package path with identity metadata", () => {
@@ -25,6 +25,9 @@ describe("desktop packaging configuration", () => {
     const entitlements = readFileSync(join(desktopRoot, "packaging", "mac", "entitlements.plist"), "utf8");
     const iconPng = readFileSync(join(desktopRoot, "assets", "icon.png"));
     const iconIcns = readFileSync(join(desktopRoot, "assets", "icon.icns"));
+    const storeSmallTile = readFileSync(join(workspaceRoot, "assets", "store", "chrome-store-small-tile.png"));
+    const storeMarquee = readFileSync(join(workspaceRoot, "assets", "store", "chrome-store-marquee.png"));
+    const storeScreenshot = readFileSync(join(workspaceRoot, "assets", "store", "chrome-store-screenshot.png"));
 
     expect(packageJson.scripts?.["package:mac"]).toContain("scripts/package-desktop.ts");
     expect(packageJson.scripts?.["install:mac"]).toContain("scripts/install-desktop.ts");
@@ -36,6 +39,10 @@ describe("desktop packaging configuration", () => {
     expect(packageScript).toContain("icon.icns");
     expect(packageScript).toContain("NSCameraUsageDescription");
     expect(packageScript).toContain("NSAppleEventsUsageDescription");
+    expect(packageScript).toContain("CFBundleURLTypes");
+    expect(packageScript).toContain("inquiry-black-box");
+    expect(packageScript).toContain("INQUIRY_MAC_CODESIGN_IDENTITY");
+    expect(packageScript).toContain("codesign");
     expect(entitlements).toContain("com.apple.security.device.camera");
     expect(entitlements).toContain("com.apple.security.network.server");
     expect(entitlements).not.toContain("screen-capture");
@@ -44,6 +51,9 @@ describe("desktop packaging configuration", () => {
     expect(installScript).toContain("Run bun run package:desktop first");
     expect([...iconPng.subarray(0, 8)]).toEqual([137, 80, 78, 71, 13, 10, 26, 10]);
     expect(iconIcns.subarray(0, 4).toString("ascii")).toBe("icns");
+    expect(pngDimensions(storeSmallTile)).toEqual({ width: 440, height: 280 });
+    expect(pngDimensions(storeMarquee)).toEqual({ width: 1280, height: 800 });
+    expect(pngDimensions(storeScreenshot)).toEqual({ width: 1280, height: 800 });
   });
 
   test("resolves install targets without defaulting to system Applications", () => {
@@ -121,12 +131,82 @@ describe("desktop packaging configuration", () => {
       expect(plist).toContain("<string>icon.icns</string>");
       expect(plist).not.toContain("electron.icns");
       expect(plist.match(/CFBundleIconFile/g)).toHaveLength(1);
+      expect(plist.match(/CFBundleURLTypes/g)).toHaveLength(1);
+      expect(plist).toContain("<string>inquiry-black-box</string>");
       expect(plist.match(/NSCameraUsageDescription/g)).toHaveLength(1);
       expect(plist.match(/NSAppleEventsUsageDescription/g)).toHaveLength(1);
       expect(plist).not.toContain("ScreenCaptureKit");
     } finally {
       rmSync(tmpRoot, { recursive: true, force: true });
     }
+  });
+
+  test("keeps protocol scheme insertion and signing fallback deterministic", () => {
+    const plist = ensureProtocolScheme("<plist><dict></dict></plist>");
+    expect(plist).toContain("<key>CFBundleURLTypes</key>");
+    expect(ensureProtocolScheme(plist).match(/CFBundleURLTypes/g)).toHaveLength(1);
+    expect(signMacApp("/tmp/Inquiry Black Box.app", { env: {}, platform: "darwin" })).toEqual({
+      status: "skipped",
+      reason: "INQUIRY_MAC_CODESIGN_IDENTITY is not set",
+    });
+    expect(
+      signMacApp("/tmp/Inquiry Black Box.app", {
+        env: { INQUIRY_MAC_CODESIGN_IDENTITY: "Developer ID Application: Inquiry" },
+        platform: "linux",
+      }),
+    ).toEqual({
+      status: "skipped",
+      reason: "codesign is available only on macOS",
+    });
+  });
+
+  test("runs codesign with the expected arguments and degrades unless strict signing is requested", () => {
+    const calls: Array<{ file: string; args: string[]; cwd: string }> = [];
+    const signed = signMacApp("/tmp/Inquiry Black Box.app", {
+      env: { INQUIRY_MAC_CODESIGN_IDENTITY: "Developer ID Application: Inquiry" },
+      platform: "darwin",
+      execFileSync: (file, args, options) => {
+        calls.push({ file, args, cwd: options.cwd });
+      },
+    });
+
+    expect(signed).toEqual({ status: "signed", identity: "Developer ID Application: Inquiry" });
+    expect(calls[0]).toMatchObject({
+      file: "codesign",
+      args: [
+        "--force",
+        "--deep",
+        "--options",
+        "runtime",
+        "--entitlements",
+        expect.stringContaining("entitlements.plist"),
+        "--sign",
+        "Developer ID Application: Inquiry",
+        "/tmp/Inquiry Black Box.app",
+      ],
+    });
+
+    const skipped = signMacApp("/tmp/Inquiry Black Box.app", {
+      env: { INQUIRY_MAC_CODESIGN_IDENTITY: "Developer ID Application: Inquiry" },
+      platform: "darwin",
+      execFileSync: () => {
+        throw new Error("keychain locked");
+      },
+    });
+    expect(skipped).toEqual({ status: "skipped", reason: "codesign failed: keychain locked" });
+
+    expect(() =>
+      signMacApp("/tmp/Inquiry Black Box.app", {
+        env: {
+          INQUIRY_MAC_CODESIGN_IDENTITY: "Developer ID Application: Inquiry",
+          INQUIRY_MAC_CODESIGN_STRICT: "1",
+        },
+        platform: "darwin",
+        execFileSync: () => {
+          throw new Error("keychain locked");
+        },
+      }),
+    ).toThrow("keychain locked");
   });
 
   test("rejects invalid app bundles and refuses self-overwrite", async () => {
@@ -147,3 +227,11 @@ describe("desktop packaging configuration", () => {
     }
   });
 });
+
+function pngDimensions(buffer: Buffer): { width: number; height: number } {
+  expect([...buffer.subarray(0, 8)]).toEqual([137, 80, 78, 71, 13, 10, 26, 10]);
+  return {
+    width: buffer.readUInt32BE(16),
+    height: buffer.readUInt32BE(20),
+  };
+}

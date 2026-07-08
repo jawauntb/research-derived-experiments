@@ -43,6 +43,13 @@ export type SessionStatusResult = {
   sessionId?: string | null;
 };
 
+export type AutoPairingResult = {
+  endpoint: string;
+  pairingToken: string;
+  sessionId: string;
+  recordingState: RecordingState;
+};
+
 export type FetchLike = (url: string, init?: RequestInit) => Promise<Response>;
 
 export type EventQueue = {
@@ -89,6 +96,13 @@ export class BridgeStatusError extends Error {
   }
 }
 
+export class AutoPairingError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "AutoPairingError";
+  }
+}
+
 export const defaultPrivacyToggles: PrivacyToggles = {
   browser: true,
   typingMetrics: true,
@@ -106,6 +120,10 @@ export const disabledPrivacyToggles: PrivacyToggles = {
 };
 
 const rawSelectedTextPayloadKeys = selectedTextPayloadFieldNames;
+
+export function createPairingChallenge(): string {
+  return crypto.randomUUID();
+}
 
 export function defaultBridgeState(now = new Date()): BridgeState {
   return {
@@ -256,6 +274,46 @@ export async function fetchSessionStatus(
     ...(typeof responseBody.session_id === "string" || responseBody.session_id === null
       ? { sessionId: responseBody.session_id }
       : {}),
+  };
+}
+
+export async function requestBridgePairing(
+  eventsEndpoint = DEFAULT_BRIDGE_ENDPOINT,
+  options: { challenge: string; fetchImpl?: FetchLike; timeoutMs?: number },
+): Promise<AutoPairingResult> {
+  const fetchImpl = options.fetchImpl ?? fetch;
+  const response = await fetchWithTimeout(
+    fetchImpl,
+    pairingEndpoint(eventsEndpoint, options.challenge),
+    {
+      method: "GET",
+      cache: "no-store",
+    },
+    options.timeoutMs ?? 3_000,
+  );
+
+  if (!response.ok) {
+    throw new AutoPairingError(`desktop pairing failed with status ${response.status}`);
+  }
+
+  let body: Record<string, unknown>;
+  try {
+    body = (await response.json()) as Record<string, unknown>;
+  } catch {
+    throw new AutoPairingError("desktop pairing returned invalid JSON");
+  }
+
+  const endpoint = typeof body.endpoint === "string" && body.endpoint.length > 0 ? body.endpoint : eventsEndpoint;
+  const pairingToken = typeof body.pairing_token === "string" ? body.pairing_token : undefined;
+  if (!pairingToken) {
+    throw new AutoPairingError("desktop pairing did not return a token");
+  }
+
+  return {
+    endpoint,
+    pairingToken,
+    sessionId: typeof body.session_id === "string" && body.session_id.length > 0 ? body.session_id : DEFAULT_SESSION_ID,
+    recordingState: isRecordingState(body.recording_state) ? body.recording_state : "stopped",
   };
 }
 
@@ -467,13 +525,24 @@ function hasSelectedText(event: EventEnvelope): boolean {
 }
 
 function sessionControlEndpoint(eventsEndpoint: string): string {
+  return extensionEndpoint(eventsEndpoint, "session");
+}
+
+function pairingEndpoint(eventsEndpoint: string, challenge: string): string {
+  return extensionEndpoint(eventsEndpoint, "pairing", challenge);
+}
+
+function extensionEndpoint(eventsEndpoint: string, target: "pairing" | "session", challenge?: string): string {
   const url = new URL(eventsEndpoint);
   if (url.pathname.endsWith("/extension/events")) {
-    url.pathname = url.pathname.replace(/\/extension\/events$/, "/extension/session");
+    url.pathname = url.pathname.replace(/\/extension\/events$/, `/extension/${target}`);
   } else if (url.pathname.endsWith("/events")) {
-    url.pathname = url.pathname.replace(/\/events$/, "/extension/session");
+    url.pathname = url.pathname.replace(/\/events$/, `/extension/${target}`);
   } else {
-    url.pathname = "/v1/extension/session";
+    url.pathname = `/v1/extension/${target}`;
+  }
+  if (challenge) {
+    url.searchParams.set("challenge", challenge);
   }
   return url.toString();
 }

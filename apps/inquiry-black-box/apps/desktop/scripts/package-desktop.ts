@@ -10,6 +10,7 @@ import {
 } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { INQUIRY_DEEP_LINK_PROTOCOL } from "../src/main/deepLink";
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const desktopRoot = join(scriptDir, "..");
@@ -19,10 +20,37 @@ const bundleId = "com.inquiry.blackbox";
 const sourceElectronApp = join(desktopRoot, "node_modules", "electron", "dist", "Electron.app");
 const outputApp = join(releaseRoot, `${appName}.app`);
 const bundleIcon = join(desktopRoot, "assets", "icon.icns");
+const entitlementsPath = join(desktopRoot, "packaging", "mac", "entitlements.plist");
 
 export type PackageDesktopResult = {
   appPath: string;
   bundleId: string;
+  signing: SigningResult;
+};
+
+export type SigningResult =
+  | {
+      status: "signed";
+      identity: string;
+    }
+  | {
+      status: "skipped";
+      reason: string;
+    };
+
+type ExecFileSyncLike = (
+  file: string,
+  args: string[],
+  options: {
+    cwd: string;
+    stdio: "inherit";
+  },
+) => unknown;
+
+export type SigningDependencies = {
+  env?: NodeJS.ProcessEnv;
+  platform?: NodeJS.Platform;
+  execFileSync?: ExecFileSyncLike;
 };
 
 export function packageDesktopApp(): PackageDesktopResult {
@@ -61,22 +89,26 @@ export function packageDesktopApp(): PackageDesktopResult {
       2,
     ),
   );
+  const signing = signMacApp(outputApp);
   writeFileSync(
     join(releaseRoot, "README.md"),
     [
       "# Inquiry Black Box macOS Package",
       "",
-      "This is an unsigned local developer package.",
-      "Sign and notarize it before sharing outside a trusted local test machine.",
+      signing.status === "signed"
+        ? `This package was signed with ${signing.identity}.`
+        : `This is an unsigned local developer package: ${signing.reason}`,
+      "Notarize signed release archives before sharing outside a trusted local test machine.",
       "",
       "Smoke checklist:",
       "- Launch the app.",
+      `- Confirm ${INQUIRY_DEEP_LINK_PROTOCOL}://pair opens or focuses the desktop app.`,
       "- Pair the unpacked or packaged Chrome extension.",
       "- Record, stop, replay, export, delete, restart, and reload the extension.",
     ].join("\n"),
   );
 
-  return { appPath: outputApp, bundleId };
+  return { appPath: outputApp, bundleId, signing };
 }
 
 function ensureElectronRuntime(): void {
@@ -112,7 +144,7 @@ export function writeInfoPlist(path: string): void {
     "NSAppleEventsUsageDescription",
     "Inquiry Black Box can read the foreground app name and optional focused-window title when desktop activity is enabled.",
   );
-  writeFileSync(path, withUsageDescriptions);
+  writeFileSync(path, ensureProtocolScheme(withUsageDescriptions));
 }
 
 export function ensurePlistString(plist: string, key: string, value: string): string {
@@ -123,7 +155,74 @@ export function ensurePlistString(plist: string, key: string, value: string): st
   return plist.replace("</dict>", `\t<key>${key}</key>\n\t<string>${value}</string>\n</dict>`);
 }
 
+export function ensureProtocolScheme(plist: string): string {
+  if (plist.includes("<key>CFBundleURLTypes</key>")) {
+    return plist;
+  }
+
+  return plist.replace(
+    "</dict>",
+    [
+      "\t<key>CFBundleURLTypes</key>",
+      "\t<array>",
+      "\t\t<dict>",
+      "\t\t\t<key>CFBundleURLName</key>",
+      `\t\t\t<string>${bundleId}</string>`,
+      "\t\t\t<key>CFBundleURLSchemes</key>",
+      "\t\t\t<array>",
+      `\t\t\t\t<string>${INQUIRY_DEEP_LINK_PROTOCOL}</string>`,
+      "\t\t\t</array>",
+      "\t\t</dict>",
+      "\t</array>",
+      "</dict>",
+    ].join("\n"),
+  );
+}
+
+export function signMacApp(appPath: string, dependencies: SigningDependencies = {}): SigningResult {
+  const env = dependencies.env ?? process.env;
+  const platform = dependencies.platform ?? process.platform;
+  const run = dependencies.execFileSync ?? execFileSync;
+  const identity = env.INQUIRY_MAC_CODESIGN_IDENTITY ?? env.INQUIRY_MAC_DEVELOPER_ID;
+  if (!identity) {
+    return { status: "skipped", reason: "INQUIRY_MAC_CODESIGN_IDENTITY is not set" };
+  }
+  if (platform !== "darwin") {
+    return { status: "skipped", reason: "codesign is available only on macOS" };
+  }
+
+  try {
+    run(
+      "codesign",
+      [
+        "--force",
+        "--deep",
+        "--options",
+        "runtime",
+        "--entitlements",
+        entitlementsPath,
+        "--sign",
+        identity,
+        appPath,
+      ],
+      { cwd: desktopRoot, stdio: "inherit" },
+    );
+  } catch (error) {
+    if (env.INQUIRY_MAC_CODESIGN_STRICT === "1") {
+      throw error;
+    }
+
+    return { status: "skipped", reason: `codesign failed: ${errorMessage(error)}` };
+  }
+
+  return { status: "signed", identity };
+}
+
+function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
+}
+
 if (import.meta.main) {
   const result = packageDesktopApp();
-  console.log(`Packaged ${result.appPath}`);
+  console.log(`Packaged ${result.appPath} (${result.signing.status})`);
 }

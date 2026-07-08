@@ -10,6 +10,7 @@ import {
   isBridgeEventAllowed,
   normalizeBridgeState,
   postSessionControl,
+  requestBridgePairing,
   saveBridgeState,
   type BridgeState,
   type EventQueue,
@@ -115,6 +116,8 @@ export async function handleRuntimeMessage(
         endpoint: stringValue(message.endpoint) ?? state.endpoint,
         sessionId: stringValue(message.sessionId) ?? state.sessionId,
       });
+    case "inquiry:auto-pair":
+      return autoPairDesktop(context, state, stringValue(message.challenge));
     case "inquiry:set-recording-state":
       return updateRecordingState(
         context,
@@ -133,6 +136,34 @@ export async function handleRuntimeMessage(
       return flushQueuedEvents(context.queue, state);
     default:
       return { ok: false, error: "unsupported message" };
+  }
+}
+
+async function autoPairDesktop(
+  context: BackgroundContext,
+  state: BridgeState,
+  challenge: string | undefined,
+): Promise<
+  | (BridgeState & { ok: true })
+  | (BridgeState & { ok: false; error: string })
+> {
+  if (!challenge) {
+    return { ...state, ok: false, error: "pairing challenge is required" };
+  }
+
+  try {
+    const paired = await requestBridgePairing(state.endpoint, {
+      challenge,
+      ...(context.fetchImpl ? { fetchImpl: context.fetchImpl } : {}),
+    });
+    return updateState(context, state, {
+      endpoint: paired.endpoint,
+      pairingToken: paired.pairingToken,
+      sessionId: paired.sessionId,
+      recordingState: paired.recordingState,
+    });
+  } catch (error) {
+    return { ...state, ok: false, error: errorMessage(error) };
   }
 }
 
