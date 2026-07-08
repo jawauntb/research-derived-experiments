@@ -136,6 +136,9 @@ Common variables:
 - `HF_TOKEN` / `HUGGINGFACE_TOKEN`: Hugging Face access; `HF_TOKEN` is the
   canonical Doppler key and `HUGGINGFACE_TOKEN` is accepted for compatibility.
 - `MODEL_PROVIDER`, `EMBEDDING_MODEL`, `SESSION_SUMMARY_MODEL`: model routing.
+  Prefer provider-specific summary overrides (`OPENAI_SESSION_SUMMARY_MODEL`,
+  `GEMINI_SESSION_SUMMARY_MODEL`, or `GEMINI_MODEL_JUDGE`) over reusing a
+  generic session model across providers.
 - `TRIBE_MODEL_ID`, `BRAIN2QWERTY_REPO`, `BRAIN2QWERTY_DATASET_ID`,
   `BRAINDECODE_MODEL_ID`, `VJEPA_MODEL_ID`, `VJEPA_LARGE_MODEL_ID`,
   `INTERNVIDEO_MODEL_ID`, `QWEN_VL_MODEL_ID`, `WHISPER_MODEL_ID`,
