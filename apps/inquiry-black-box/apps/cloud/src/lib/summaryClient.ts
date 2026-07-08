@@ -43,6 +43,7 @@ export function createSummaryClientFromEnv(
     return new OpenAiSummaryClient({
       apiKey: openAiKey,
       model: openAiSessionSummaryModel(env),
+      maxOutputTokens: openAiSessionSummaryMaxOutputTokens(env),
       fetchImpl,
       timeoutMs,
       ...(openAiBaseUrl ? { baseUrl: openAiBaseUrl } : {}),
@@ -53,6 +54,7 @@ export function createSummaryClientFromEnv(
     return new GeminiSummaryClient({
       apiKey: geminiKey,
       model: geminiSessionSummaryModel(env),
+      maxOutputTokens: geminiSessionSummaryMaxOutputTokens(env),
       fetchImpl,
       timeoutMs,
       ...(geminiBaseUrl ? { baseUrl: geminiBaseUrl } : {}),
@@ -65,6 +67,7 @@ export function createSummaryClientFromEnv(
 type OpenAiSummaryClientOptions = {
   apiKey: string;
   model: string;
+  maxOutputTokens: number;
   baseUrl?: string;
   fetchImpl: FetchLike;
   timeoutMs: number;
@@ -83,7 +86,7 @@ export class OpenAiSummaryClient implements SummaryClient {
           authorization: `Bearer ${this.options.apiKey}`,
           "content-type": "application/json",
         },
-        body: JSON.stringify(openAiSessionSummaryBody(this.options.model, request.input)),
+        body: JSON.stringify(openAiSessionSummaryBody(this.options.model, request.input, this.options.maxOutputTokens)),
       },
       this.options.timeoutMs,
     );
@@ -109,6 +112,7 @@ export class OpenAiSummaryClient implements SummaryClient {
 type GeminiSummaryClientOptions = {
   apiKey: string;
   model: string;
+  maxOutputTokens: number;
   baseUrl?: string;
   fetchImpl: FetchLike;
   timeoutMs: number;
@@ -127,7 +131,7 @@ export class GeminiSummaryClient implements SummaryClient {
           "content-type": "application/json",
           "x-goog-api-key": this.options.apiKey,
         },
-        body: JSON.stringify(geminiSessionSummaryBody(request.input)),
+        body: JSON.stringify(geminiSessionSummaryBody(request.input, this.options.maxOutputTokens)),
       },
       this.options.timeoutMs,
     );
@@ -159,6 +163,10 @@ export function openAiSessionSummaryModel(env: Record<string, string | undefined
   );
 }
 
+export function openAiSessionSummaryMaxOutputTokens(env: Record<string, string | undefined> = process.env): number {
+  return summaryMaxOutputTokens(env.OPENAI_SESSION_SUMMARY_MAX_OUTPUT_TOKENS ?? env.SESSION_SUMMARY_MAX_OUTPUT_TOKENS);
+}
+
 export function geminiSessionSummaryModel(env: Record<string, string | undefined> = process.env): string {
   return (
     stringValue(env.GEMINI_SESSION_SUMMARY_MODEL) ??
@@ -166,6 +174,10 @@ export function geminiSessionSummaryModel(env: Record<string, string | undefined
     geminiCompatibleSessionModel(env.SESSION_SUMMARY_MODEL) ??
     "gemini-2.5-flash"
   );
+}
+
+export function geminiSessionSummaryMaxOutputTokens(env: Record<string, string | undefined> = process.env): number {
+  return summaryMaxOutputTokens(env.GEMINI_SESSION_SUMMARY_MAX_OUTPUT_TOKENS ?? env.SESSION_SUMMARY_MAX_OUTPUT_TOKENS);
 }
 
 function openAiCompatibleSessionModel(value: string | undefined): string | undefined {
@@ -180,12 +192,12 @@ function openAiResponsesUrl(baseUrl = "https://api.openai.com/v1"): string {
   return `${baseUrl.replace(/\/+$/, "")}/responses`;
 }
 
-function openAiSessionSummaryBody(model: string, input: JsonObject): JsonObject {
+function openAiSessionSummaryBody(model: string, input: JsonObject, maxOutputTokens: number): JsonObject {
   return {
     model,
     instructions: sessionSummaryInstructions(),
     input: redactedSummaryPromptInput(input),
-    max_output_tokens: 384,
+    max_output_tokens: maxOutputTokens,
   };
 }
 
@@ -195,7 +207,7 @@ function geminiGenerateContentUrl(model: string, baseUrl = "https://generativela
   return `${normalizedBase}/${normalizedModel}:generateContent`;
 }
 
-function geminiSessionSummaryBody(input: JsonObject): JsonObject {
+function geminiSessionSummaryBody(input: JsonObject, maxOutputTokens: number): JsonObject {
   return {
     contents: [
       {
@@ -204,7 +216,7 @@ function geminiSessionSummaryBody(input: JsonObject): JsonObject {
       },
     ],
     generationConfig: {
-      maxOutputTokens: 384,
+      maxOutputTokens,
     },
   };
 }
@@ -285,6 +297,11 @@ function normalizedProvider(value: string | undefined): SessionSummaryProvider |
     return "gemini";
   }
   return undefined;
+}
+
+function summaryMaxOutputTokens(value: string | undefined): number {
+  const parsed = Number(value);
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : 2_000;
 }
 
 function stringValue(value: unknown): string | undefined {
