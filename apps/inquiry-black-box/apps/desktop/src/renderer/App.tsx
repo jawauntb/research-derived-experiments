@@ -85,12 +85,18 @@ const themePreferences = ["system", "light", "dark"] as const;
 
 export type ThemePreference = (typeof themePreferences)[number];
 
+export type DailyReviewRefreshState = "idle" | "refreshing" | "refreshed" | "failed";
+
 export type AppViewModel = {
   session: SessionRecord | null;
   status?: DesktopShellStatus;
   replay?: SessionReplayReport | null;
   interpretation?: SessionInterpretationReport | null;
   dailyReview?: DailyReviewReport | null;
+  dailyReviewRefresh?: {
+    state: DailyReviewRefreshState;
+    message: string;
+  } | null;
   redactedSummary?: RedactedSummarySubmission | null;
   sessionHistory: SessionHistoryEntry[];
   repairCandidate?: RepairCandidate | null;
@@ -294,9 +300,37 @@ export function renderApp(root: HTMLElement, bridge: InquiryDesktopBridge, initi
     renderSessionInterpretationPanel(interpretationRoot, view.interpretation, interpretationActions);
     if (bridge.interpretation) {
       renderDailyReviewPanel(dailyRoot, view.dailyReview, {
+        refreshState: view.dailyReviewRefresh?.state ?? "idle",
+        refreshMessage: view.dailyReviewRefresh?.message,
         refreshDailyReview: async () => {
-          view = { ...view, dailyReview: await bridge.interpretation!.refreshDaily() };
+          view = {
+            ...view,
+            dailyReviewRefresh: {
+              state: "refreshing",
+              message: "Refreshing daily review...",
+            },
+          };
           render();
+          try {
+            view = {
+              ...view,
+              dailyReview: await bridge.interpretation!.refreshDaily(),
+              dailyReviewRefresh: {
+                state: "refreshed",
+                message: "Daily review refreshed.",
+              },
+            };
+            render();
+          } catch (error) {
+            view = {
+              ...view,
+              dailyReviewRefresh: {
+                state: "failed",
+                message: `Daily review refresh failed: ${errorMessage(error)}`,
+              },
+            };
+            render();
+          }
         },
         respondSuggestion: async (input) => {
           await bridge.interpretation!.respondSuggestion({
@@ -559,4 +593,8 @@ function deepLinkNoticeFor(deepLink: InquiryDeepLink): string {
   }
 
   return "Inquiry Black Box is open.";
+}
+
+function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
 }

@@ -7,6 +7,7 @@ import { createDesktopRuntime } from "../src/main/main";
 import { listSessionHistory } from "../src/main/reports/sessionHistory";
 import { renderPrivacySettings } from "../src/renderer/settings/PrivacySettings";
 import { renderApp, createInitialAppViewModel, type InquiryDesktopBridge } from "../src/renderer/App";
+import type { DailyReviewReport } from "../src/main/reports/dailyDigest";
 import { defaultPrivacySettingsView } from "../src/renderer/settings/PrivacySettings";
 
 describe("desktop shell trust surfaces", () => {
@@ -98,6 +99,67 @@ describe("desktop shell trust surfaces", () => {
       } else {
         globalWithDocument.localStorage = originalLocalStorage;
       }
+    }
+  });
+
+  test("daily review refresh shows progress and completion even when content is unchanged", async () => {
+    const documentStub = new FakeDocument();
+    const globalWithDocument = globalThis as unknown as { document?: unknown };
+    const originalDocument = globalWithDocument.document;
+    globalWithDocument.document = documentStub;
+    const review = dailyReviewFixture("Daily review built from one interpretation.");
+    let resolveRefresh!: (review: DailyReviewReport) => void;
+    const refreshPromise = new Promise<DailyReviewReport>((resolve) => {
+      resolveRefresh = resolve;
+    });
+
+    try {
+      const root = documentStub.createElement("div");
+      renderApp(root as unknown as HTMLElement, dailyReviewBridge(review, () => refreshPromise), {
+        ...createInitialAppViewModel(),
+        dailyReview: review,
+      });
+
+      const refresh = root.findAllByTag("button").find((button) => button.textContent === "Refresh");
+      refresh?.click();
+      expect(root.textContent).toContain("Refreshing daily review...");
+      expect(root.findAllByTag("button").find((button) => button.textContent === "Refreshing...")?.disabled).toBe(true);
+
+      resolveRefresh(review);
+      await flushAsync();
+      await flushAsync();
+
+      expect(root.textContent).toContain("Daily review refreshed.");
+      await flushAsync();
+    } finally {
+      globalWithDocument.document = originalDocument;
+    }
+  });
+
+  test("daily review refresh reports failures instead of failing silently", async () => {
+    const documentStub = new FakeDocument();
+    const globalWithDocument = globalThis as unknown as { document?: unknown };
+    const originalDocument = globalWithDocument.document;
+    globalWithDocument.document = documentStub;
+    const review = dailyReviewFixture("Daily review built from one interpretation.");
+
+    try {
+      const root = documentStub.createElement("div");
+      renderApp(root as unknown as HTMLElement, dailyReviewBridge(review, async () => {
+        throw new Error("database is busy");
+      }), {
+        ...createInitialAppViewModel(),
+        dailyReview: review,
+      });
+
+      root.findAllByTag("button").find((button) => button.textContent === "Refresh")?.click();
+      await flushAsync();
+      await flushAsync();
+
+      expect(root.textContent).toContain("Daily review refresh failed: database is busy");
+      await flushAsync();
+    } finally {
+      globalWithDocument.document = originalDocument;
     }
   });
 
@@ -250,6 +312,51 @@ function shellBridge(token: string): InquiryDesktopBridge {
     sessions: {
       listHistory: async () => [],
       select: async () => null,
+    },
+  };
+}
+
+function dailyReviewBridge(
+  review: DailyReviewReport,
+  refreshDaily: () => Promise<DailyReviewReport>,
+): InquiryDesktopBridge {
+  return {
+    ...shellBridge("header.secret.token"),
+    interpretation: {
+      session: async () => null,
+      requestRedactedSummary: async () => {
+        throw new Error("not used");
+      },
+      daily: async () => review,
+      refreshDaily,
+      respondSuggestion: async () => {
+        throw new Error("not used");
+      },
+    },
+  };
+}
+
+function dailyReviewFixture(summary: string): DailyReviewReport {
+  return {
+    report_id: "daily-review:fixture",
+    report_kind: "daily_review",
+    local_date: "2026-07-08",
+    generated_at: "2026-07-08T06:00:00.000Z",
+    summary,
+    sections: {
+      helped: [],
+      fragmented: [],
+      retry: [],
+      ignore: [],
+      open_loops: [],
+      care_candidates: [],
+    },
+    suggestions: [],
+    limitations: ["Refresh status fixture."],
+    evidence_event_ids: [],
+    source_report_ids: [],
+    provenance: {
+      builder: "test",
     },
   };
 }
