@@ -40,9 +40,9 @@ open /tmp/inquiry-apps/Inquiry\ Black\ Box.app
 
 Before wider distribution:
 
-- Regenerate `apps/desktop/assets/icon.png`, `apps/desktop/assets/icon.icns`,
-  and the extension `apps/extension/assets/icon*.png` files if the product icon
-  source changes.
+- Put the product logo at `assets/brand/logo.png` and run `bun run brand:sync`
+  to regenerate desktop, extension, and site logo assets from that single
+  source.
 - Sign the app with bundle id `com.inquiry.blackbox`.
 - Use `apps/desktop/packaging/mac/entitlements.plist` as the starting point for
   camera and localhost network permissions. Foreground app/window metadata uses
