@@ -35,7 +35,11 @@ describe("extension build output", () => {
     expect(listing).toContain("dist/background/service-worker.js");
     expect(listing).toContain("dist/content/index.js");
     expect(listing).toContain("dist/popup/App.js");
-    expect(listing).toContain("assets/icon.svg");
+    expect(listing).toContain("assets/icon16.png");
+    expect(listing).toContain("assets/icon32.png");
+    expect(listing).toContain("assets/icon48.png");
+    expect(listing).toContain("assets/icon128.png");
+    expect(listing).not.toContain("assets/icon.svg");
     expect(listing).not.toContain("tests/");
   });
 });

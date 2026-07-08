@@ -23,7 +23,8 @@ describe("desktop packaging configuration", () => {
     const packageScript = readFileSync(join(desktopRoot, "scripts", "package-desktop.ts"), "utf8");
     const installScript = readFileSync(join(desktopRoot, "scripts", "install-desktop.ts"), "utf8");
     const entitlements = readFileSync(join(desktopRoot, "packaging", "mac", "entitlements.plist"), "utf8");
-    const icon = readFileSync(join(desktopRoot, "assets", "icon.svg"), "utf8");
+    const iconPng = readFileSync(join(desktopRoot, "assets", "icon.png"));
+    const iconIcns = readFileSync(join(desktopRoot, "assets", "icon.icns"));
 
     expect(packageJson.scripts?.["package:mac"]).toContain("scripts/package-desktop.ts");
     expect(packageJson.scripts?.["install:mac"]).toContain("scripts/install-desktop.ts");
@@ -31,6 +32,8 @@ describe("desktop packaging configuration", () => {
     expect(packageScript).toContain("com.inquiry.blackbox");
     expect(packageScript).toContain("`${appName}.app`");
     expect(packageScript).toContain("dist/main/electron.js");
+    expect(packageScript).toContain("CFBundleIconFile");
+    expect(packageScript).toContain("icon.icns");
     expect(packageScript).toContain("NSCameraUsageDescription");
     expect(packageScript).toContain("NSAppleEventsUsageDescription");
     expect(entitlements).toContain("com.apple.security.device.camera");
@@ -39,7 +42,8 @@ describe("desktop packaging configuration", () => {
     expect(entitlements).not.toContain("com.apple.security.device.audio-input");
     expect(packageScript).not.toContain("ScreenCaptureKit");
     expect(installScript).toContain("Run bun run package:desktop first");
-    expect(icon).toContain("<svg");
+    expect([...iconPng.subarray(0, 8)]).toEqual([137, 80, 78, 71, 13, 10, 26, 10]);
+    expect(iconIcns.subarray(0, 4).toString("ascii")).toBe("icns");
   });
 
   test("resolves install targets without defaulting to system Applications", () => {
@@ -101,6 +105,8 @@ describe("desktop packaging configuration", () => {
           "<string>Electron</string>",
           "<key>CFBundleDisplayName</key>",
           "<string>Electron</string>",
+          "<key>CFBundleIconFile</key>",
+          "<string>electron.icns</string>",
           "</dict>",
           "</plist>",
         ].join("\n"),
@@ -112,6 +118,9 @@ describe("desktop packaging configuration", () => {
 
       expect(plist).toContain("<string>Inquiry Black Box</string>");
       expect(plist).toContain("<string>com.inquiry.blackbox</string>");
+      expect(plist).toContain("<string>icon.icns</string>");
+      expect(plist).not.toContain("electron.icns");
+      expect(plist.match(/CFBundleIconFile/g)).toHaveLength(1);
       expect(plist.match(/NSCameraUsageDescription/g)).toHaveLength(1);
       expect(plist.match(/NSAppleEventsUsageDescription/g)).toHaveLength(1);
       expect(plist).not.toContain("ScreenCaptureKit");
