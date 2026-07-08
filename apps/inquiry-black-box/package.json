@@ -27,6 +27,7 @@
     "dev:desktop": "bun run --cwd apps/desktop dev",
     "dev:extension": "bun run --cwd apps/extension build",
     "dev:cloud": "bun run --cwd apps/cloud dev",
+    "brand:sync": "bash scripts/sync-brand-assets.sh",
     "railway:sync-model-env": "bash scripts/sync-model-env-to-railway.sh",
     "modal-check": "cd modal && python3 -m pytest",
     "validation:smoke": "bun run research/validation.ts --input tests/fixtures/research-session.jsonl --output research/validation-smoke-report.json --markdown research/validation-smoke-report.md --run-id fixture-smoke",
