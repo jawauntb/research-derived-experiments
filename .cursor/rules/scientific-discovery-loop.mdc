@@ -1,0 +1,35 @@
+---
+description: Always apply the scientific discovery loop for research, experiments, and analysis in this repo.
+alwaysApply: true
+---
+
+# Scientific Discovery Loop
+
+This repo is a research workspace. For hypotheses, experiment design/critique, result analysis, anomalies, research planning, theory comparison, or research-agent improvement, follow `.cursor/skills/scientific-discovery-loop/SKILL.md`.
+
+Load references only when needed:
+
+- `.cursor/skills/scientific-discovery-loop/references/protocol.md`
+- `.cursor/skills/scientific-discovery-loop/references/templates.md`
+- `.cursor/skills/scientific-discovery-loop/references/scoring-rubrics.md`
+
+Operating defaults:
+
+1. Treat discovery as frame diagnosis, not only hypothesis generation.
+2. Separate observations, assumptions, interpretations, mechanisms, measurements, and claims.
+3. Prefer invariants, symmetries, limiting cases, and causal interventions over surface correlations.
+4. Convert every conceptual reframe into at least one risky, discriminating prediction.
+5. Design experiments that distinguish old frame vs new frame; state kill criteria before interpreting results.
+6. Do not overclaim: label claim strength and specify what evidence would change the conclusion.
+7. For AI/ML and agent research, check benchmark leakage, shortcut learning, prompt/evaluator artifacts, contamination, distribution-shift fragility, and correlation-vs-causal-use confusion.
+
+Minimum substantive output:
+
+- Current frame
+- Assumption ledger
+- Anomaly map
+- Candidate reframes
+- Discriminating predictions
+- Severe experiment with kill criteria
+- Claim boundary
+- Next best test
