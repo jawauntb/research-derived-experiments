@@ -251,10 +251,15 @@ def run_shard(arg: dict[str, Any]) -> dict[str, Any]:
                     ys.append((y + k) % n)
             return xs, ys
         if arm == "C":
-            # Wrong-group augmentation: pick random non-cyclic permutations,
-            # apply to x, and use the *implied* label to keep the pair
-            # train-perfect under that permutation. Same *volume* of augmented
-            # samples as arm B.
+            # Wrong-group augmentation: same *volume* as Arm B, but with
+            # an equivariance target under a non-cyclic permutation π.
+            # For train pair (x, y=truth[x]), augment with (π(x), π(y))
+            # so the augmented pair teaches f(π(x)) = π(truth[x]) instead
+            # of the cyclic rule f(x+k) = truth[x] + k. On shared inputs
+            # this is inconsistent with the true rule whenever π diverges
+            # from the cyclic action, giving the model a genuinely wrong
+            # equivariance to fit -- augmentation volume matched to B,
+            # group specificity broken.
             for _ in range(aug_multiplier):
                 perm = list(range(n))
                 rng.shuffle(perm)
@@ -263,8 +268,7 @@ def run_shard(arg: dict[str, Any]) -> dict[str, Any]:
                     perm[0], perm[1] = perm[1], perm[0]
                 for x in train_inputs:
                     xp = perm[x]
-                    # Label follows the permuted input under the true rule.
-                    yp = truth[xp]
+                    yp = perm[truth[x]]
                     xs.append(xp)
                     ys.append(yp)
             return xs, ys
