@@ -4,6 +4,14 @@ This repository tracks a research program around a recurring pattern:
 
 > adaptive systems keep rediscovering geometric language because geometry is the portable language of constraints.
 
+## Documentation
+
+| Doc | What it covers |
+|---|---|
+| [docs/system_design.md](docs/system_design.md) | End-to-end system design and operating model: components, runtime flow, config, deps, env setup, deploy, assumptions, limitations |
+| [docs/module_explainer.md](docs/module_explainer.md) | Package catalog and module explainer: experiments, scripts, tests, docs, and a script/test/doc map |
+| [AGENTS.md](AGENTS.md) | Contributor/agent rules, including the requirement to keep the two docs above in sync with meaningful code changes |
+
 > **Picking this up on a Modal machine?** Start with [docs/next_agent_modal_handoff.md](docs/next_agent_modal_handoff.md) — it covers all three experiments, the rate-distortion "Newton" test to run next, and the parallel Modal commands.
 
 > **Public atlas deploys?** See [docs/railway-autodeploy.md](docs/railway-autodeploy.md) for the Railway production service, GitHub Actions fallback, and autodeploy diagnostics.
