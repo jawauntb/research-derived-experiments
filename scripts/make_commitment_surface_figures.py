@@ -266,29 +266,49 @@ def make_frame_taxonomy_figure() -> str:
     """Schematic: old-frame taxonomy (footprint / selector / controller /
     anti-correlate) collapsed into the new-frame primitive: commitment-
     surface survival."""
-    fig, ax = plt.subplots(figsize=(7.2, 3.4))
+    fig, ax = plt.subplots(figsize=(8.4, 3.6))
     ax.axis("off")
-    ax.text(0.02, 0.90, "Old frame (availability of geometry / weakness ⇒ use)",
-            fontsize=11, weight="bold", color="#1a1a1a")
-    ax.text(0.02, 0.72, "Structure present ⇒ ?", fontsize=9.5, color="#333")
-    ax.text(0.02, 0.60, "  footprint    —  correlate, not cause", fontsize=9, color="#c0392b")
-    ax.text(0.02, 0.50, "  selector     —  picks amongst hypotheses", fontsize=9, color="#e67e22")
-    ax.text(0.02, 0.40, "  controller   —  actually used", fontsize=9, color="#2f9e44")
-    ax.text(0.02, 0.30, "  anti-correlate — present, opposite-signed to OOD", fontsize=9, color="#7f8c8d")
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
 
+    # Left column: old frame.
+    ax.text(0.02, 0.92, "Old frame", fontsize=12, weight="bold", color="#1a1a1a")
+    ax.text(0.02, 0.83, "availability of geometry / weakness ⇒ use",
+            fontsize=9, color="#555", style="italic")
+    ax.text(0.02, 0.70, "Structure present ⇒ ?", fontsize=9.5, color="#333")
+    ax.text(0.02, 0.58, "footprint   — correlate, not cause",
+            fontsize=8.8, color="#c0392b")
+    ax.text(0.02, 0.48, "selector    — picks amongst hypotheses",
+            fontsize=8.8, color="#e67e22")
+    ax.text(0.02, 0.38, "controller  — actually used",
+            fontsize=8.8, color="#2f9e44")
+    ax.text(0.02, 0.28, "anti-correlate — present, opposite-signed to OOD",
+            fontsize=8.8, color="#7f8c8d")
+
+    # Arrow in the middle gap.
     ax.annotate(
         "",
-        xy=(0.62, 0.55), xytext=(0.42, 0.55),
+        xy=(0.55, 0.55), xytext=(0.44, 0.55),
         arrowprops={"arrowstyle": "->", "lw": 1.4, "color": "#1a1a1a"},
     )
-    ax.text(0.63, 0.90, "New frame (commitment surface Σ = (G_dep, C, T))",
-            fontsize=11, weight="bold", color="#1a1a1a")
-    ax.text(0.63, 0.72, "Load-bearing at Σ iff:", fontsize=9.5, color="#333")
-    ax.text(0.63, 0.60, "  (i) train-time compat intervention → OOD lift", fontsize=9, color="#2b6cb0")
-    ax.text(0.63, 0.50, "  (ii) causal patch → CE ≥ ε at commitment", fontsize=9, color="#2b6cb0")
-    ax.text(0.63, 0.40, "  (iii) effect survives transport t ∈ T", fontsize=9, color="#2b6cb0")
-    ax.text(0.63, 0.20, "Weakness recovered when G_probe ⊇ G_dep (Prop. 2).",
-            fontsize=8.5, color="#555", style="italic")
+
+    # Right column: new frame. Start well past the arrow's tip.
+    ax.text(0.58, 0.92, "New frame", fontsize=12, weight="bold", color="#1a1a1a")
+    ax.text(0.58, 0.83, "commitment surface Σ = (G_dep, C, T)",
+            fontsize=9, color="#555", style="italic")
+    ax.text(0.58, 0.70, "Load-bearing at Σ iff:", fontsize=9.5, color="#333")
+    ax.text(0.58, 0.58, "(i)  train-time compat intervention → OOD lift",
+            fontsize=8.8, color="#2b6cb0")
+    ax.text(0.58, 0.48, "(ii) causal patch → CE ≥ ε at commitment",
+            fontsize=8.8, color="#2b6cb0")
+    ax.text(0.58, 0.38, "(iii) effect survives transport t ∈ T",
+            fontsize=8.8, color="#2b6cb0")
+
+    # Bottom footer spanning the width.
+    ax.text(0.5, 0.10,
+            "Weakness recovered when G_probe ⊇ G_dep (Prop. 2).",
+            fontsize=8.5, color="#555", style="italic",
+            ha="center")
     path = PAPER_FIG / "fig5_frame_taxonomy.png"
     _save(fig, path)
     return str(path)
