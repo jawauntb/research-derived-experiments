@@ -25,7 +25,8 @@ where unweighted weakness and misspecified concern selectors underperform
 well-specified concern-weighted selection by a decisive margin; (iii) show
 that neural training with cyclic-orbit augmentation dominates readout
 selection over trained-with-no-augmentation seeds on OOD accuracy AND
-patch-cross-entropy, with a wrong-group control at zero; and (iv) run a
+patch-cross-entropy, with a wrong-group-augmented control at
+0.167 OOD (collapse) and near-zero patch-CE Δ; and (iv) run a
 non-degenerate external-contact sweep on Pythia 70m/160m/410m LoRA-fine-tuned
 on modular addition, where the compatibility-augmented arm clears OOD while
 the readout arm hard-kills, closing the P1 external gap our prior work
