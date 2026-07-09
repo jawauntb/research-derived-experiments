@@ -99,6 +99,7 @@ uvx --python 3.12 --with torch --with numpy --with scikit-learn --with pytest \
 | [neurophenom_project_approach_menu.md](neurophenom_project_approach_menu.md) | Neurophenom approach menu |
 | [metaphysics_of_intelligence_reading_log.md](metaphysics_of_intelligence_reading_log.md) | Reading log |
 | [gauge_fixed_concern_transport_experiment_audit.md](gauge_fixed_concern_transport_experiment_audit.md) | GFC audit |
+| [metaphysics_complete_reading_notes_2026_07_09.md](metaphysics_complete_reading_notes_2026_07_09.md) | Full reading notes for every Metaphysics-of-Intelligence PDF/package listed 2026-07-09 (theorems, methods, findings, next directions); canonical copy also at `~/Metaphysics of Intelligence/COMPLETE_READING_NOTES_2026_07_09.md` |
 | `docs/plans/` | 13 dated implementation plans — §8.1 |
 | `docs/paper_reviews/` | 15 critical reviews — §8.2 |
 | `docs/solutions/` | Architecture-pattern notes — §8.3 |
