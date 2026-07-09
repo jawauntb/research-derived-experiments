@@ -439,6 +439,17 @@ the compression; a factorial ablation would upgrade it.
 - The patch-CE metric we use in E4 (LoRA-full-ablation) is a coarse
   approximation to true directional patching; a finer, rank-decomposition
   patch is left to future work.
+- The E2/E3 top-k-unit patch-CE metric loses absolute-magnitude
+  discriminating power at larger widths: a robustness sweep at
+  `n ∈ {17, 19, 23}`, hidden width 128, top_k 16
+  (`results/e2_e3_neural_larger_n.md`) shows Arm B mean OOD 1.000 vs
+  Arm A 0.089 (gap +0.911) — the OOD story holds decisively — but
+  patch-CE Δ for B drops to +0.04 because the trained model spreads
+  the load-bearing structure across more redundant units, so a fixed
+  top-k ablation catches a smaller fraction of the mechanism. This
+  is a metric-scaling artifact, not a substance failure. A fix left
+  to future work: normalize patch-CE by hidden-width fraction, or
+  rank-decompose the affected subspace.
 - The anti-Goodhart reading of the correction chain is a compression
   hypothesis; the strong form of {allocate, cool, reopen} as the load-
   bearing subset is only partially tested (Suite C hand/learned/
