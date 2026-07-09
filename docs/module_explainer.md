@@ -138,6 +138,7 @@ Universal dispatcher: `python scripts/regen.py <name>`.
 | `concept_geometry` | P R res | Cross-domain concepts in embedding space | `openai_embedding_probe.py`, `paraphrase_stability_probe.py` |
 | `activation_geometry` | P R res (58) | Hidden-state bridges, steering, patching, label-free gates | See §3.1.4 |
 | `passive_to_active` | P R res | Action coupling makes paraphrase geometry causally load-bearing | `modal_passive_to_active.py`, `modal_replication_sweep.py` |
+| `commitment_surface` | P R res | Commitment-first reframe: severe tests E1–E4 discriminating compatibility-augmented training + patch-CE against weakness readout on both synthetic MLP modular addition and external Pythia LoRA | See §3.1.5 |
 
 #### 3.1.1 `symbolic_weakness` modules
 
@@ -204,6 +205,41 @@ Local regen: `python scripts/regen.py grid_cell_weakness`.
 | Behavior-aligned directions | `behavior_aligned_direction.py` | `modal_behavior_aligned_direction.py`, `modal_behavior_direction_subspace.py` |
 | Attractor / answer basins | `attractor_pocket_diagnostic.py`, `answer_surface_basin_diagnostic.py` | `modal_attractor_pocket_diagnostic.py`, `modal_answer_surface_basin.py` |
 | Held-out / pair controls | `heldout_readout_pilot.py`, `pair_control_diagnostic.py` | (summarized from Modal payloads) |
+
+#### 3.1.5 `commitment_surface` modules
+
+Severe tests for the commitment-first reframe. See
+[`papers/commitment_surface/paper.md`](../papers/commitment_surface/paper.md)
+for the theory (Props 1+2, corollary, M4 anti-Goodhart loop) and
+[`papers/commitment_surface/PLAN.md`](../papers/commitment_surface/PLAN.md)
+for the frozen pre-registration.
+
+| Module | Purpose |
+|---|---|
+| `core.py` | Stdlib primitives: concern deployments (uniform / unequal / misspec), weighted extension mass, candidate hypothesis families (shifts, random train-perfect completions, biased-to-focus), selectors, `run_e1_cell` |
+| `run_e1.py` | E1 CPU sweep entrypoint (unequal-consequence selector comparison) |
+| `e2_e3_neural_sweep.py` | E2/E3 four-arm neural MLP sweep on cyclic modular addition; measures OOD, patch-CE Δ, weakness / wrong-group anti-cheat |
+| `modal_e4_pythia_lora_v2.py` | E4 Modal L4 external contact: four arms A (readout) / B (cyclic-orbit augmentation) / C (wrong-group aug) / D (loss selector) on Pythia 70m/160m/410m LoRA modular addition; adapter-disable patch-CE |
+| `results/e1_concern_weighted.{json,md}` | E1 summary + per-cell provenance |
+| `results/e2_e3_neural.{json,md}` | E2/E3 summary + per-cell provenance |
+
+Run:
+
+```bash
+python3 -m experiments.commitment_surface.run_e1
+python3 -m experiments.commitment_surface.e2_e3_neural_sweep
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+        experiments/commitment_surface/modal_e4_pythia_lora_v2.py \
+        --sizes 70m,160m,410m --ns 13,17,23 --seeds 3 --arms A,B,C,D
+```
+
+Rebuild the paper PDF:
+
+```bash
+python3 scripts/make_commitment_surface_figures.py
+python3 scripts/build_commitment_surface_pdf.py
+```
 
 ### 3.2 Arc 2A / 2B (deep)
 
@@ -396,6 +432,7 @@ Raw outputs stay under `artifacts/` until summarized.
 |---|---|
 | `paperkit.py` | Shared reportlab/matplotlib PDF helpers (library) |
 | `render_paper_pdf.py` | Markdown → PDF via markdown-pdf (`--in`, `--out`, `--title`, …) |
+| `build_commitment_surface_pdf.py` | Commitment-surface reframe paper PDF (E1–E4) |
 | `build_weakness_pdf.py` | Flagship weakness→OOD PDF |
 | `build_gridcell_pdf.py` | Paper A PDF |
 | `build_paperB_pdf.py` | Paper B reward-deformation PDF |
@@ -422,6 +459,7 @@ Raw outputs stay under `artifacts/` until summarized.
 
 | Script | Paper / figure set |
 |---|---|
+| `make_commitment_surface_figures.py` | E1–E4 figure set (selectors, arm bars, patch-CE vs weakness scatter, taxonomy schematic) |
 | `make_paper_figures.py` | Learned symmetry discovery |
 | `make_neural_generator_figure.py` | When-Pixels-Beat-Embeddings comparison |
 | `make_cluttered_mnist_figure.py` | Cluttered-MNIST heatmap |
