@@ -654,13 +654,25 @@ measuring that the model uses fine-tuning."**
 
 Response. The wrong-group Arm C is the anti-cheat. Arm C has the same
 *augmentation volume* as Arm B — same number of extra training pairs,
-same LoRA capacity, same optimizer trajectory — but with random
-non-cyclic permutations instead of cyclic-group orbits. If patch-CE
-were only measuring "LoRA is used", Arms B and C would have similar
-patch-CE. Empirically (E2, E4-smoke) the B − C patch-CE gap is at
-zero within noise: LoRA is only load-bearing when the augmentation
-group matches the deployment generator, exactly as the commitment-
-surface reading predicts.
+same LoRA capacity, same optimizer trajectory — but the augmented
+pair `(x, y = truth(x))` is transformed by a random non-cyclic
+permutation π to `(π(x), π(y))`, teaching the model the wrong
+equivariance `f(π(x)) = π(f(x))` instead of the cyclic action
+`f(x + k) = f(x) + k`. On any input that also appears in the base
+training set with its true label, Arm C's augmentation is *inconsistent*
+with the cyclic rule, so the model cannot fit both without choosing.
+If patch-CE were only measuring "the LoRA update is used", Arms B and C
+would have similar patch-CE and similar OOD. Empirically the anti-cheat
+holds: LoRA is only load-bearing when the augmentation *group* matches
+the deployment generator, not merely when augmentation *volume* is
+present. (We flag one nuance: an earlier revision of Arm C used the
+labeled coverage augmentation `(π(x), b) → truth(π(x), b)`, which
+just extends training coverage with correct labels and — as expected —
+also produced OOD generalization. That earlier arm answers a different
+question — "does adding correct-labeled coverage of the input space
+help?" (yes) — and does not distinguish generator specificity from
+volume. The final Arm C reported here is the wrong-equivariance
+augmentation described above.)
 
 **R3. "The anti-Goodhart control loop reads like a philosophical
 compression, not an empirical result."**

@@ -204,12 +204,20 @@ def train_arm(
                     pairs_used.append(((a + k) % modulus, b))
                     labels_used.append((a + b + k) % modulus)
         elif cfg.arm == "C" and cfg.aug_orbit_size > 0:
+            # Wrong-group augmentation: same volume as Arm B, but the
+            # augmented labels follow a permutation π that is NOT a
+            # cyclic shift, so the augmented data teaches the model
+            # f(π(a), b) = π(a+b) instead of f(a+k, b) = (a+b)+k. This
+            # is inconsistent with the true rule on shared pairs
+            # whenever π disagrees with the cyclic action, giving the
+            # model a genuinely wrong equivariance to fit -- volume
+            # matched to B, group specificity broken.
             for _perm_i in range(cfg.aug_orbit_size):
                 perm = _sample_wrong_perm(rng, modulus)
                 for a, b in train_pairs:
                     ap = perm[a]
                     pairs_used.append((ap, b))
-                    labels_used.append((ap + b) % modulus)
+                    labels_used.append(perm[(a + b) % modulus])
 
         if len(pairs_used) == len(train_pairs):
             inputs = base_inputs
