@@ -1,0 +1,85 @@
+{
+  "figures": {
+    "fig1": "/Users/jawaun/rde-commitment-first/papers/commitment_surface/figures/fig1_e1_selectors.png",
+    "fig2": "/Users/jawaun/rde-commitment-first/papers/commitment_surface/figures/fig2_e2_arms_ood.png",
+    "fig3": "/Users/jawaun/rde-commitment-first/papers/commitment_surface/figures/fig3_e3_readout_vs_patch.png",
+    "fig4": "/Users/jawaun/rde-commitment-first/papers/commitment_surface/figures/fig4_e4_pythia_arms.png",
+    "fig5": "/Users/jawaun/rde-commitment-first/papers/commitment_surface/figures/fig5_frame_taxonomy.png"
+  },
+  "headline": {
+    "e1": {
+      "n_cells": 96,
+      "gap_wellspec_vs_unweighted": 0.2441858867326534,
+      "gap_misspec_vs_unweighted": -0.054159416947479166,
+      "wellspec_mean": 0.8143000114047891,
+      "unweighted_mean": 0.5701141246721357,
+      "misspec_mean": 0.5159547077246566,
+      "loss_mean": 0.309555243422021
+    },
+    "e2": {
+      "gap_B_minus_A_ood": 0.9931464404971512,
+      "gap_B_minus_A_patch_ce": 0.7584403179439337,
+      "gap_B_minus_C_patch_ce": -0.0003603559302131597,
+      "rho_weakness_ood": 0.9173183705380172,
+      "rho_patch_ce_ood": 0.8082326599918904,
+      "per_arm_ood": {
+        "A": {
+          "mean": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 0.0,
+          "n": 9
+        },
+        "B": {
+          "mean": 0.9931464404971512,
+          "ci95_low": 0.9833872218246049,
+          "ci95_high": 1.0029056591696974,
+          "n": 54
+        },
+        "C": {
+          "mean": 0.9931464404971512,
+          "ci95_low": 0.9833872218246049,
+          "ci95_high": 1.0029056591696974,
+          "n": 54
+        },
+        "D": {
+          "mean": 0.0,
+          "ci95_low": 0.0,
+          "ci95_high": 0.0,
+          "n": 9
+        }
+      }
+    },
+    "e3": {
+      "rho_weakness_ood_all": 0.9173183705380172,
+      "rho_patch_ce_ood_all": 0.8082326599918904,
+      "n_cells": 216
+    },
+    "e4": {
+      "n_cells": 2,
+      "gap_B_minus_A_ood": 0.7142857142857143,
+      "gap_B_minus_A_patch_ce": 7.185964271990737,
+      "gap_B_minus_C_patch_ce": 4.799991567784543,
+      "rho_weakness_ood_all_cells": 0.0,
+      "rho_patch_ce_ood_all_cells": 1.0,
+      "e4_new_frame_pass": true,
+      "e4_old_frame_pass": false,
+      "per_arm": {
+        "A": {
+          "n": 1,
+          "ood_mean": 0.0,
+          "ood_max": 0.0,
+          "patch_ce_delta_mean": -2.3859727042061936,
+          "weakness_mean": 0.07692307692307693
+        },
+        "B": {
+          "n": 1,
+          "ood_mean": 0.7142857142857143,
+          "ood_max": 0.7142857142857143,
+          "patch_ce_delta_mean": 4.799991567784543,
+          "weakness_mean": 0.07692307692307693
+        }
+      },
+      "source": "artifacts/commitment_surface/e4_smoke.json"
+    }
+  }
+}
