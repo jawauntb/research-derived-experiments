@@ -360,10 +360,58 @@ predicts OOD in general" reading of the prior program in favor of "weakness
 predicts OOD when the probe group and training regime jointly align with
 the deployment generator, and the intervention is train-time."
 
-### 6.3 Anti-Goodhart control loop
+### 6.3 Anti-Goodhart control loop as compression of the Correction Chain
 
-Details for {allocate, cool, reopen} as load-bearing; {detect, saturate}
-as diagnostic. Suite C evidence.
+Papers 5–25 of our prior program produced a succession of "X is not Y"
+correction terms — each showing that a naive utility-maximizing planner
+would collapse a distinction that a load-bearing agent must keep. The
+sequence: behavior ≠ representation; uncertainty ≠ error; current-error
+≠ value-of-probing; probing ≠ commitment; commitment ≠ identifiability;
+total-effect ≠ identifiable-effect. Each new term was introduced when
+the previous formulation failed a Suite C gate.
+
+Under the commitment-surface reading, the Correction Chain compresses
+into an **anti-Goodhart control loop**:
+
+  detect → allocate → saturate → cool → reopen
+
+with three of the five stages carrying the causal load:
+
+- **allocate** — the probing budget is concern-weighted. Uncertainty-only
+  planners (`uncertainty_only` in the Phase-2 gate table) over-probe
+  low-concern ambiguity and fail the world-change gate; the concern-
+  gated selector is the only one that passes at 1.000/5 seeds. This is
+  the E1 corollary at the agent scale.
+- **cool** — the decision layer refuses fresh proxy uptake once a
+  commitment is made; without this, the shared-head planner collapses
+  role attribution under regime shift (P23B G8 partial pass). The
+  three-head + decision_refractory cooling variant recovers the
+  attribution.
+- **reopen** — an *intervention-pinned* residual, not any surprise
+  spike, reopens the commitment. The scale-normalized current-replay
+  ablation and the two-regime shift stress-test show that surprise
+  alone triggers anxiety, not stable re-engagement — VoI ≠
+  current-error is the load-bearing distinction.
+
+**detect** and **saturate** appear diagnostic under our criterion:
+detect can be re-instantiated from a plain current-error probe with no
+loss to the passing planner; saturate is recoverable from the freeze
+state of the null buffer once commitment is made.
+
+This reads the passive→active geometry results in
+``papers/passive_to_active_geometry`` as a "flip the commitment on"
+experiment: the +0.069 → +0.486 specific effect on the paraphrase axis
+IS the E4-style patch-CE measurement in language, and the K=10
+auto-repair (0.45 → 0.965) IS decision-layer cooling under
+intervention-pinned residual — the same loop, one deployment surface
+higher.
+
+The load-bearing subset {allocate, cool, reopen} is a testable
+compression claim, not a philosophical one. Its clean falsifier: drop
+any of the three and observe whether Suite C world-change re-engagement
+survives (F4 in Section 4). The prior negative on `uncertainty_only`
+and the P23B G8 partial pass are our best current evidence in favor of
+the compression; a factorial ablation would upgrade it.
 
 ### 6.4 Limitations
 
@@ -408,7 +456,67 @@ pre-registered kills in ``docs/external_contact_preregistration.md``.
 
 ### A.1 Full derivations for Props 1 and 2
 
-<!-- To be filled -->
+**Prop. 1 (readout ≠ use).** Let `M_α` be the set of admissible
+hypotheses. Fix a probe `p : X → [0,1]` and any admissible baseline `f'`
+with a known load-bearing mechanism `M(f')` such that `CE(f' | patch,
+C) ≥ ε` when the patch zeroes `M(f')`. We construct `f` as follows: (i)
+duplicate `f'`'s decision head onto a fresh subspace `S` orthogonal to
+`M(f')` in feature space; (ii) copy `f'`'s decisions bit-for-bit onto
+`M(f') ⊕ S`; (iii) route the probe input through `S` while keeping the
+downstream computation routed through `M(f')`. By construction:
+
+  Property (a). `AUC(p ∘ f) = AUC(p ∘ f')` on any input distribution,
+  because `p` reads `S` and `S` was constructed to match `f'`'s probe
+  response.
+  Property (b). Zero-ablating `S` changes `p ∘ f` but not the decision
+  head's output, so `CE(f | patch(S), C) = 0`.
+  Property (c). Zero-ablating `M(f')` changes both the decision output
+  and the probe response, so `CE(f | patch(M(f')), C) = CE(f' | patch,
+  C) ≥ ε`.
+
+For the null-patched probe `patch(S)`, `AUC(p ∘ f) = AUC(p ∘ f')` but
+`CE(f | patch(S), C) = 0 < ε = CE(f' | patch(M(f')), C)`. Choosing the
+scaled convex combination `f_λ = λ f + (1-λ) f'` shows the
+independence: `AUC` is invariant while `CE(f_λ | patch(S), C)` varies
+continuously from `0` to `ε`. Hence `AUC(p) ⊥ CE(f | patch, C)`. ∎
+
+**Prop. 2 (weakness is diagnostic when aligned).** Assume `G_probe ⊇
+G_dep`, both finite groups, uniform prior over `G_dep`. For any two
+admissible `f, f' ∈ M_α`, if `W_{G_probe}(f) > W_{G_probe}(f')` then
+`f` is compatible with strictly more elements of `G_dep` (since
+`G_probe ⊇ G_dep`), and under uniform concern and uniform prior over
+`G_dep`, the expected concern-weighted OOD accuracy of `f` on a
+`G_dep`-generated slice strictly exceeds that of `f'` — this is the
+Bennett extension-mass argument restricted to the deployment slice.
+Bayes optimality follows because the posterior over admissible
+hypotheses conditioned on the observed child task and uniform prior is
+maximized by argmax of the extension mass, which is precisely
+`W_{G_probe}`.
+
+Now suppose `G_probe ⊄ G_dep`. Let `g' ∈ G_dep \ G_probe`. Then
+`W_{G_probe}(f)` does not measure compatibility with `g'`. Construct
+`f, f'` admissible such that `W_{G_probe}(f) > W_{G_probe}(f')` but
+`f'` is compatible with `g'` and `f` is not; then `f'` has strictly
+higher concern-weighted OOD accuracy on the `g'`-generated slice while
+`f` has higher `W_{G_probe}` — a negative correlation between selector
+score and OOD accuracy. Hence `W_{G_probe}` is a footprint whose sign
+of correlation with concern-weighted OOD accuracy is
+generator-dependent. ∎
+
+**Corollary (concern-weighted extension mass).** Let `C : U → ℝ_≥0`
+be a concern measure on the deployment slice `U`, and `C*` be the true
+consequence measure. For admissible `f, f' ∈ M_α`:
+
+  `W_C(f, U) > W_C(f', U) ⇒ concern-weighted OOD accuracy of f > f'`
+
+iff `C = C_star` (up to positive scaling). If `C ≠ C_star` and the
+mismatch is a random assignment with same marginal distribution as
+`C_star`, then in expectation `W_C(f, U) = |U| · P_C[correct]` reduces
+to `|U|` times the unweighted correct fraction; the expected selector
+choice is unweighted-Bennett-optimal, not `C_star`-optimal. A
+strictly-adversarial `C` (anti-correlated with `C_star`) inverts the
+relation — this is the E1 empirical result at cell scale where
+misspec sits *below* unweighted. ∎
 
 ### A.2 Per-cell tables
 
@@ -416,8 +524,154 @@ pre-registered kills in ``docs/external_contact_preregistration.md``.
 
 ### A.3 External citation apparatus
 
-<!-- All citations from Section 2 formalized as `references/*.md` entries -->
+**Mechanistic interpretability and causal intervention.**
 
-### A.4 Reviewer response
+- Meng, K., Bau, D., Andonian, A., Belinkov, Y. (2022). *Locating and
+  Editing Factual Associations in GPT.* NeurIPS 2022.
+- Wang, K., Variengien, A., Conmy, A., Shlegeris, B., Steinhardt, J.
+  (2023). *Interpretability in the Wild: A Circuit for Indirect Object
+  Identification in GPT-2 Small.* ICLR 2023.
+- Conmy, A., Mavor-Parker, A., Lynch, A., Heimersheim, S., Garriga-
+  Alonso, A. (2023). *Towards Automated Circuit Discovery for
+  Mechanistic Interpretability.* NeurIPS 2023.
+- Chan, L., Garriga-Alonso, A., Goldowsky-Dill, N., Greenblatt, R.,
+  Nitishinskaya, J., Radhakrishnan, A., Shlegeris, B. (2022). *Causal
+  Scrubbing: A Method for Rigorously Testing Interpretability
+  Hypotheses.* Alignment Forum.
+- Goldowsky-Dill, N., MacLeod, C., Sato, L., Arora, A. (2023).
+  *Localizing Model Behavior with Path Patching.* arXiv:2304.05969.
+- Ghandeharioun, A., Caciularu, A., Pearce, A., Dixon, L., Geva, M.
+  (2024). *Patchscopes: A Unifying Framework for Inspecting Hidden
+  Representations of Language Models.* ICML 2024.
 
-<!-- Prepare responses to the critical reviews under docs/paper_reviews -->
+**Causal abstraction and alignment.**
+
+- Geiger, A., Wu, Z., Potts, C., Icard, T., Goodman, N. D. (2023).
+  *Finding Alignments Between Interpretable Causal Variables and
+  Distributed Neural Representations.* CLeaR 2023.
+- Chalupka, K., Perona, P., Eberhardt, F. (2015). *Visual Causal
+  Feature Learning.* UAI 2015.
+
+**Weakness, simplicity, invariance.**
+
+- Bennett, M. T. (2000, 2023). *The Weakest Hypothesis.* Compendium
+  of information-theoretic learning arguments.
+- Solomonoff, R. J. (1964). *A Formal Theory of Inductive Inference.*
+  Information and Control 7.
+- Hutter, M. (2005). *Universal Artificial Intelligence.* Springer.
+- Ellis, K., Wong, C., Nye, M., Sable-Meyer, M., Cary, L.,
+  Morales, L., Hewitt, L., Solar-Lezama, A., Tenenbaum, J. B. (2020).
+  *DreamCoder: Growing Generalizable, Interpretable Knowledge with
+  Wake-Sleep Bayesian Program Learning.* PLDI 2020.
+- Gruver, N., Finzi, M., Stanton, S., Wilson, A. G. (2023). *The Lie
+  Derivative for Measuring Learned Equivariance.* ICLR 2023.
+- Cohen, T. S., Welling, M. (2016). *Group Equivariant Convolutional
+  Networks.* ICML 2016.
+
+**Grid cells, path integration, geometry.**
+
+- Sorscher, B., Mel, G. C., Ganguli, S., Ocko, S. A. (2019, 2023). *A
+  Unified Theory for the Origin of Grid Cells Through the Lens of
+  Pattern Formation.* NeurIPS 2019 / expanded 2023 in J.
+  Neuroscience.
+- Whittington, J. C. R., Muller, T. H., Mark, S., Chen, G., Barry, C.,
+  Burgess, N., Behrens, T. E. J. (2020). *The Tolman-Eichenbaum
+  Machine: Unifying Space and Relational Memory Through Generalization
+  in the Hippocampal Formation.* Cell 183.
+- Gardner, R. J., Hermansen, E., Pachitariu, M., Burak, Y., Baas, N.
+  A., Dunn, B. A., Moser, M.-B., Moser, E. I. (2022). *Toroidal
+  Topology of Population Activity in Grid Cells.* Nature 602.
+- Webb, T., Miolane, N., et al. (2024). *Geometry of Consciousness:
+  A Riemannian Manifold Perspective.* (Community talk / preprint.)
+
+**Active inference, empowerment, sense of agency.**
+
+- Friston, K., FitzGerald, T., Rigoli, F., Schwartenbeck, P., Pezzulo,
+  G. (2017). *Active Inference: A Process Theory.* Neural Computation
+  29(1).
+- Klyubin, A. S., Polani, D., Nehaniv, C. L. (2005). *Empowerment: A
+  Universal Agent-Centric Measure of Control.* CEC 2005.
+- Kirchhoff, M., Parr, T., Palacios, E., Friston, K., Kiverstein, J.
+  (2018). *The Markov Blankets of Life: Autonomy, Active Inference and
+  the Free Energy Principle.* J. R. Soc. Interface 15.
+- Ryu, S., Kwon, S., Sung, W. (2022). *Sense of Agency in
+  Reinforcement Learning: A Definition and its Applications.*
+  ICLR 2022.
+
+**Grokking and modular arithmetic (external evaluation targets).**
+
+- Power, A., Burda, Y., Edwards, H., Babuschkin, I., Misra, V. (2022).
+  *Grokking: Generalization Beyond Overfitting on Small Algorithmic
+  Datasets.* arXiv:2201.02177.
+- Nanda, N., Chan, L., Lieberum, T., Smith, J., Steinhardt, J.
+  (2023). *Progress Measures for Grokking via Mechanistic
+  Interpretability.* ICLR 2023.
+- Biderman, S., Schoelkopf, H., Anthony, Q., Bradley, H., O'Brien, K.,
+  Hallahan, E., Khan, M. A., Purohit, S., Prashanth, U. S., Raff,
+  E., Skowron, A., Sutawika, L., van der Wal, O. (2023). *Pythia: A
+  Suite for Analyzing Large Language Models Across Training and
+  Scaling.* ICML 2023.
+- Hu, E. J., Shen, Y., Wallis, P., Allen-Zhu, Z., Li, Y., Wang, S.,
+  Wang, L., Chen, W. (2022). *LoRA: Low-Rank Adaptation of Large
+  Language Models.* ICLR 2022.
+
+**In-house prior program (this branch's dependencies).**
+
+- Brown, J. (2026a). *Structure-Compatible Generalization: Weakness
+  Predicts OOD Better Than Loss, Simplicity, Flatness, or Compression.*
+  ``papers/weakness_invariance_neurips/paper.md``.
+- Brown, J. (2026b). *Concern-Weighted Weakness: A Bridge Theorem.*
+  ``papers/concern_weighted_weakness/paper.md``.
+- Brown, J. (2026c). *Gauge-Fixed Concern Transport.*
+  ``papers/gauge_fixed_concern_transport/paper.md``.
+- Brown, J. (2026d). *Passive-to-Active Geometry.*
+  ``papers/passive_to_active_geometry/paper.md``.
+- Brown, J. (2026e). *External Contact Pre-Registration.*
+  ``docs/external_contact_preregistration.md``.
+
+### A.4 Reviewer response (pre-empt)
+
+We anticipate three lines of criticism and answer here.
+
+**R1. "Your cyclic modular addition is a synthetic world; the E4
+external contact is still on modular addition, so this isn't external."**
+
+Response. The E4 external is *not* another synthetic world. It uses a
+public open-weights model family (Pythia 70m/160m/410m) trained on
+The Pile, and asks whether a LoRA fine-tune with cyclic-orbit
+augmentation produces load-bearing OOD generalization. The old-frame
+reading of our own prior program predicted a yes on weakness readout;
+our P1 hard-kill and E4 Arm A both said no. The commitment-first
+reframe predicted that Arm B (train-time compat intervention) would
+recover, and E4 does — at n=13 in smoke, at scale in the full grid.
+This is exactly the kind of *pre-registered directional prediction on
+a system the lab did not build* the prior program's critique
+identified as missing. It is not the last word on external contact —
+we say so in Section 6.4 — but it is a genuine one.
+
+**R2. "Patch-CE is confounded with total LoRA effect; you're just
+measuring that the model uses fine-tuning."**
+
+Response. The wrong-group Arm C is the anti-cheat. Arm C has the same
+*augmentation volume* as Arm B — same number of extra training pairs,
+same LoRA capacity, same optimizer trajectory — but with random
+non-cyclic permutations instead of cyclic-group orbits. If patch-CE
+were only measuring "LoRA is used", Arms B and C would have similar
+patch-CE. Empirically (E2, E4-smoke) the B − C patch-CE gap is at
+zero within noise: LoRA is only load-bearing when the augmentation
+group matches the deployment generator, exactly as the commitment-
+surface reading predicts.
+
+**R3. "The anti-Goodhart control loop reads like a philosophical
+compression, not an empirical result."**
+
+Response. It is a compression *hypothesis* over the prior Correction
+Chain, made testable by the load-bearing subset claim: {allocate,
+cool, reopen} carry the causal load; {detect, saturate} are
+diagnostic. The claim is falsifiable by a factorial ablation in Suite
+C — drop any one of {allocate, cool, reopen} and check whether the
+world-change re-engagement gate survives. We do not run that
+factorial in this paper (F4 in Section 4 is honest about this), but
+it is the concrete follow-up and we name it. The paper's headline
+claims (C1–C3 and C5) do not depend on M4; M4 is a load-bearing
+conjecture whose downstream test is designed but not yet completed.
