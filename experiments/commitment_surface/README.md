@@ -20,7 +20,9 @@ of the aligned mechanism yields concern-weighted CE ≥ ε at the
 commitment target, and the effect survives transport `t ∈ T`.
 
 Weakness and concern geometry become diagnostics — powerful when
-`G_probe ⊇ G_dep`, footprints or anti-correlates otherwise.
+`G_probe = G_dep` (or weakness is restricted to `G_dep`; a strict
+superset probe group does not suffice, see paper §3.4), footprints or
+anti-correlates otherwise.
 
 ## Experiments
 
@@ -96,8 +98,16 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
 
 Smoke result: Arm A OOD 0.0 (reproduces the P1 hard kill); Arm B OOD
 0.714; patch-CE Δ +7.19; ρ(patch-CE, OOD) 1.0 vs ρ(weakness, OOD) 0.0
-— a clean per-cell witness of Prop. 1 (readout ⊥ causal use in the
-non-aligned regime).
+— a clean per-cell witness of Prop. 1 (probe readout does not identify
+causal use) in the non-aligned regime.
+
+Full-sweep result (108 cells): directionally decisive (Arm B 0.882 vs
+Arm A 0.113 mean OOD; ρ(patch-CE, OOD)=0.853 vs ρ(weakness, OOD)=0.290),
+but the strict pre-registered gate FAILED (A mean OOD 0.113 > 0.10).
+Interpretation is also bounded by the label-exposure confound: cyclic
+augmentation labels held-out-support points, so the sweep does not yet
+separate generator learning from labeled orbit coverage (paper §6.5).
+See `results/e4_pythia_lora_v2_summary.md`.
 
 ## Rebuild the paper PDF
 

@@ -286,9 +286,10 @@ def build_results_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
                   "Well-specified concern beats unweighted Bennett by "
                   f"+{e1['gap_wellspec_vs_unweighted']:.3f}; misspecified "
                   "concern is slightly *below* unweighted "
-                  f"({e1['gap_misspec_vs_unweighted']:.3f}), confirming "
-                  "the corollary that a random concern weighting is not "
-                  "helpful.", st)
+                  f"({e1['gap_misspec_vs_unweighted']:.3f}) — directionally "
+                  "consistent with the corollary (random concern weighting "
+                  "is not helpful) but outside the pre-registered ±0.05 "
+                  "equivalence band.", st)
         table_data = [
             ["Selector", "Mean", "95% CI"],
             ["Concern-weighted (well-spec)",
@@ -321,7 +322,13 @@ def build_results_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
             f"≥ 0.05 → <b>{_fmt(e1['gap_wellspec_vs_unweighted'])}</b> "
             f"(PASS = {_fmt(e1['commitment_first_pass_wellspec_beats_unweighted'])}). "
             f"Misspec vs unweighted within ±0.05 → "
-            f"<b>{_fmt(e1['gap_misspec_vs_unweighted'])}</b>.",
+            f"<b>{_fmt(e1['gap_misspec_vs_unweighted'])}</b> "
+            f"(PASS = {_fmt(e1['commitment_first_pass_misspec_matches_unweighted'])}: "
+            "outside the pre-registered equivalence band; this sub-gate "
+            "strictly fails. The direction — random concern weighting is "
+            "not helpful — holds, and the corollary's in-expectation "
+            "prediction is equality, so the realized draw was mildly "
+            "adversarial; see Section 3.5).",
             st["Body"]))
     else:
         flow.append(para("E1 result JSON not yet committed.", st["Body"]))
@@ -360,6 +367,9 @@ def build_results_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
         t.setStyle(_table_style())
         flow.append(t)
         flow.append(Spacer(1, 4))
+        b_patch = e2e3["per_arm"]["B"]["patch_ce_delta"]["mean"]
+        a_patch = e2e3["per_arm"]["A"]["patch_ce_delta"]["mean"]
+        c_patch = e2e3["per_arm"]["C"]["patch_ce_delta"]["mean"]
         flow.append(para(
             f"Total cells trained: {e2e3['n_total_cells']}. "
             f"Gate: B − A OOD gap ≥ 0.30 → "
@@ -371,6 +381,17 @@ def build_results_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
             f"B − C patch-CE gap = "
             f"{_fmt(e2e3['gap_B_minus_C_patch_ce'])} (anti-cheat: ~0 "
             "expected).",
+            st["Body"]))
+        flow.append(para(
+            "Honest decomposition of the patch-CE gate: Arm B's absolute "
+            f"patch-CE Δ is small (<b>{_fmt(b_patch)}</b>; Arm C "
+            f"{_fmt(c_patch)}; B − C only "
+            f"{_fmt(e2e3['gap_B_minus_C_patch_ce'])}), and the large "
+            "B − A gap is mostly produced by Arm A's <i>negative</i> patch "
+            f"score ({_fmt(a_patch)}). The result strongly supports "
+            "\"B's mechanism differs from A's\" but only weakly supports "
+            "\"B localizes a substantial mechanism in the top-k patched "
+            "units\"; see the fixed-top-k power caveat in Section 6.4.",
             st["Body"]))
         flow.append(para("5.3 E3 — Patch-CE vs weakness as OOD predictor",
                          st["H3"]))
@@ -432,6 +453,7 @@ def build_results_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
                 "lands."
             )
         flow.append(para(source_line, st["Body"]))
+        a_ood_mean = analysis["per_arm"].get("A", {}).get("ood_mean")
         flow.append(para(
             f"Cells: {analysis['n_cells']}. Gate (new frame): B mean "
             f"OOD ≥ 0.50, patch-CE ≥ 0.05, A mean OOD ≤ 0.10 → "
@@ -442,6 +464,18 @@ def build_results_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
             f"{_fmt(analysis['rho_patch_ce_ood_all_cells'])}; "
             f"ρ(weakness, OOD) = "
             f"{_fmt(analysis['rho_weakness_ood_all_cells'])}.",
+            st["Body"]))
+        flow.append(para(
+            "<b>Verdict: directionally decisive; strict pre-registered "
+            "gate failed.</b> The A-mean-OOD ≤ 0.10 condition came in at "
+            f"{_fmt(a_ood_mean)} and we record E4 as a gate failure by "
+            "the standard this paper advocates (outlier accounting in "
+            "Section 6.2 explains the miss; it does not convert it into "
+            "a pass). Interpretation is further bounded by the "
+            "label-exposure confound of Section 6.5: cyclic augmentation "
+            "places correctly labeled examples on the held-out "
+            "deployment support, so this result does not yet separate "
+            "generator learning from labeled orbit coverage.",
             st["Body"]))
     else:
         flow.append(para("E4 result JSON not yet available.", st["Body"]))

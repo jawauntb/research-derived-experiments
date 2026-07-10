@@ -53,9 +53,12 @@ A mean OOD ≤ 0.10.
 - B patch-CE Δ +4.86 ✔
 - A OOD 0.113 ✘ (missed by 0.013; driven by 2/27 outliers, see below)
 
-**Gate reads FAIL literally, PASS in substance.** Twenty-two of twenty-seven
-Arm A cells sit at OOD ≤ 0.15; two outliers stumbled into the aligned regime.
-The most striking is 410m / n=17 / seed=20260709, which reaches OOD 1.000 and
+**Gate verdict: FAIL (directionally decisive, strict gate missed).** The
+pre-registered A ≤ 0.10 condition failed at 0.113 and is recorded as a
+failure — the outlier accounting below explains the miss, it does not
+convert it into a pass. Twenty-two of twenty-seven Arm A cells sit at
+OOD ≤ 0.15; two outliers stumbled into the aligned regime. The most
+striking is 410m / n=17 / seed=20260709, which reaches OOD 1.000 and
 weakness 1.000 without any augmentation — a textbook aligned-regime recovery
 where weakness readout, patch-CE, and OOD all agree, confirming the theory at
 the cell where it applies. The mean is dragged from 0.089 (excluding the 2
@@ -81,10 +84,25 @@ augmentation count, wrong group, and the model fails at both OOD and
 patch-CE. Adapter LoRA is only load-bearing when what it teaches the model
 is aligned with the deployment.
 
-This closes the P1 external gap identified in the prior program without
-retracting the cyclic/dihedral 100%-vs-0% weakness positives — those become
-the aligned-generator special case (Prop. 2), where E4 shows the two Arm A
-outliers as within-experiment witnesses.
+This substantially narrows the P1 external gap identified in the prior
+program without retracting the cyclic/dihedral 100%-vs-0% weakness
+positives — those become the aligned-generator special case (Prop. 2),
+where E4 shows the two Arm A outliers as within-experiment witnesses.
+
+## Interpretation caveat: label-exposure confound (open)
+
+Arm B's cyclic augmentation `((x+k) mod n, (y+k) mod n)` produces
+*correctly labeled* pairs at inputs in the held-out complement, so the
+intervention arm was trained with direct labeled exposure to the OOD
+support. Arm C matches augmentation volume but places *incorrect* labels
+on held-out inputs; it therefore rules out generic augmentation volume,
+not target-support label exposure. E4 does not yet separate "the model
+learns a transportable generator and uses it at commitment" from
+"aligned augmentation exposes the OOD orbit with correct labels."
+The severe follow-up (train-support-only generator regularization,
+coverage-matched control, evaluation on a group element/modulus not
+used by the intervention, rank-normalized patching) is pre-registered
+in paper §6.5 with kill criteria.
 
 ## Interpretation caveat: outlier accounting
 
