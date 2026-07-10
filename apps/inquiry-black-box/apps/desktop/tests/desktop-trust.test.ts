@@ -19,16 +19,16 @@ describe("desktop shell trust surfaces", () => {
 
     try {
       const root = documentStub.createElement("div");
-      const token = "header.secret.token";
-      const status = shellStatus(token);
-      renderApp(root as unknown as HTMLElement, shellBridge(token), {
+      const fixturePairingCredential = "header.secret.token";
+      const status = shellStatus(fixturePairingCredential);
+      renderApp(root as unknown as HTMLElement, shellBridge(fixturePairingCredential), {
         ...createInitialAppViewModel(),
         status,
       });
       await flushAsync();
 
-      expect(root.textContent).not.toContain(token);
-      expect(root.textContent).toContain(maskPairingToken(token, false));
+      expect(root.textContent).not.toContain(fixturePairingCredential);
+      expect(root.textContent).toContain(maskPairingToken(fixturePairingCredential, false));
       expect(root.textContent).toContain("Reveal");
     } finally {
       globalWithDocument.document = originalDocument;
