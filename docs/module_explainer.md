@@ -68,6 +68,9 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_phase4_metaphysics.py`, `test_phase5_*.py`, `test_phase6_*.py` | Phase 4–6 harnesses |
 | `test_gauge_fixed_concern_transport_*.py` | Gauge-fixed transport + PDF |
 | `test_external_contact_p1_lora.py` | External-contact LoRA metrics |
+| `test_commitment_surface_appendix.py` | Public-safe E4 appendix export, metric retention, raw-field omission |
+| `test_commitment_surface_core.py`, `test_commitment_surface_e5.py` | Commitment-surface arithmetic plus E5 split, leakage, coverage, novel-shift, and frozen-gate contracts |
+| `test_publication_guard.py` | Secret-signature detection and non-secret fixture naming |
 | `test_semantic_concern_summary.py` | Semantic concern summarizer |
 | `test_summarize_label_free_dose_response.py` | Label-free dose-response summarizer |
 | `test_virtual_governor_stress_signal.py` | Virtual governor diagnostic |
@@ -218,8 +221,9 @@ The corrected formal surface treats Proposition 1 as non-identification,
 requires deployment-restricted weakness (or an ordering-preservation
 assumption) in Proposition 2, and uses finite-candidate order equivalence for
 concern weighting. E4 is a directional result with a strict gate failure; its
-open labeled-orbit-coverage confound and severe follow-up are recorded in
-paper §6.5.
+open labeled-orbit-coverage confound and timestamped post-hoc E5 severe
+follow-up are recorded in paper §6.5 and PLAN.md. The minimum E5 Modal smoke
+passed integrity; mechanism confirmation remains pending.
 
 | Module | Purpose |
 |---|---|
@@ -227,8 +231,11 @@ paper §6.5.
 | `run_e1.py` | E1 CPU sweep entrypoint (unequal-consequence selector comparison) |
 | `e2_e3_neural_sweep.py` | E2/E3 four-arm neural MLP sweep on cyclic modular addition; measures OOD, patch-CE Δ, weakness / wrong-group anti-cheat |
 | `modal_e4_pythia_lora_v2.py` | E4 Modal L4 external contact: four arms A (readout) / B (cyclic-orbit augmentation) / C (wrong-group aug) / D (loss selector) on Pythia 70m/160m/410m LoRA modular addition; adapter-disable patch-CE |
+| `e5_core.py` | E5 typed configs, disjoint support/intervention splits, supervised-vs-consistency exposure plans, leakage/coverage audits, and frozen smoke/confirmatory analysis gates |
+| `modal_e5_generator_vs_coverage.py` | E5 Modal Pythia-LoRA five-arm runner: train-support-only correct/wrong generator consistency, orbit and coverage references, novel-shift/paraphrase transport, exposure ledgers, and spectral-mass-normalized LoRA patching |
 | `results/e1_concern_weighted.{json,md}` | E1 summary + per-cell provenance |
 | `results/e2_e3_neural.{json,md}` | E2/E3 summary + per-cell provenance |
+| `results/e5_smoke_summary.md` | Public-safe one-seed harness-validation report; integrity pass, explicitly non-confirmatory |
 
 Run:
 
@@ -239,6 +246,11 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     uvx --python 3.12 --from modal modal run \
         experiments/commitment_surface/modal_e4_pythia_lora_v2.py \
         --sizes 70m,160m,410m --ns 13,17,23 --seeds 3 --arms A,B,C,D
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+        experiments/commitment_surface/modal_e5_generator_vs_coverage.py \
+        --sizes 70m --ns 13 --seeds 1 --arms G-reg,Cov,A-ref --epochs 20 \
+        --out artifacts/commitment_surface/e5_smoke.json
 ```
 
 Rebuild the paper PDF:
@@ -400,6 +412,7 @@ Figures for these papers are produced by matching `scripts/make_*_figures.py`
 
 | Package | Modules | Notes |
 |---|---|---|
+| `commitment_surface` | `core.py`, `run_e1.py`, `e2_e3_neural_sweep.py`, `modal_e4_pythia_lora_v2.py` | E1–E4 severe tests; compact 108-cell E4 appendix JSON supports clean-clone PDF reproduction without raw Modal output |
 | `external_contact` | `modal_p1_pythia_weakness.py`, `modal_p1_pythia_lora.py`, `p1_lora_metrics.py` | LoRA run does not pass P1; hard-kills external-transfer threshold |
 | `gauge_fixed_concern_transport` | `core.py`, `budget.py`, `summarize.py`, `modal_l4_suite.py` | Custom P; **not** in verification.json; smoke: `python -m experiments.gauge_fixed_concern_transport.core --preset smoke` |
 | `phase4_metaphysics` | `core.py`, `summarize.py`, `modal_l4_suite.py` | Custom P; seven cheap parallel diagnostics |
@@ -430,7 +443,7 @@ Raw outputs stay under `artifacts/` until summarized.
 | `gen_provenance.py` | Regenerate all auto `PROVENANCE.md` + `docs/verification.{md,json}` + site mirror | In: experiment dirs |
 | `regen.py` | List/reproduce experiments or print documented Modal commands | `list`, `<name>`, `--deps` |
 | `run_quality_checks.py` | unittest → compileall → publication_guard → ruff → ty (uvx 3.12) | Exit code |
-| `publication_guard.py` | Block tracked secrets, forbidden paths, oversized files | Exit code |
+| `publication_guard.py` | Block tracked secrets, forbidden paths, oversized files; exposes a tested text-signature helper | Exit code |
 | `env_probe.py` | Report env var presence/length only | `--json` |
 
 ### 4.2 PDF toolkit & builders
@@ -439,7 +452,8 @@ Raw outputs stay under `artifacts/` until summarized.
 |---|---|
 | `paperkit.py` | Shared reportlab/matplotlib PDF helpers (library) |
 | `render_paper_pdf.py` | Markdown → PDF via markdown-pdf (`--in`, `--out`, `--title`, …) |
-| `build_commitment_surface_pdf.py` | Commitment-surface reframe paper PDF (E1–E4) |
+| `export_commitment_surface_e4_appendix.py` | Raw E4 sweep → compact public-safe 108-cell/aggregate JSON (`--input`, `--output`) |
+| `build_commitment_surface_pdf.py` | Commitment-surface reframe paper PDF with repeating-header Appendix A.2 tables (E1–E4); synchronizes both PDF destinations |
 | `build_weakness_pdf.py` | Flagship weakness→OOD PDF |
 | `build_gridcell_pdf.py` | Paper A PDF |
 | `build_paperB_pdf.py` | Paper B reward-deformation PDF |

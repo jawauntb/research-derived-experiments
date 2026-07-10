@@ -10,19 +10,20 @@
 
 ## Verification
 - Pre-registration: _none_
-- Result reports (4):
+- Result reports (5):
   - `experiments/commitment_surface/results/e1_concern_weighted.md`
   - `experiments/commitment_surface/results/e2_e3_neural.md`
   - `experiments/commitment_surface/results/e2_e3_neural_larger_n.md`
   - `experiments/commitment_surface/results/e4_pythia_lora_v2_summary.md`
+  - `experiments/commitment_surface/results/e5_smoke_summary.md`
 
 Key verification signals (from the latest result report):
-  - *volume* as B; group specificity broken. Anti-cheat control.
-  - **E4 new-frame gate**: B mean OOD ≥ 0.50 AND B mean patch-CE Δ ≥ 0.05 AND
-  - **Gate verdict: FAIL (directionally decisive, strict gate missed).** The
-  - convert it into a pass. Twenty-two of twenty-seven Arm A cells sit at
+  - Status: **harness validation passed; confirmatory experiment pending**.
+  - - Every evaluated arm passed exposure integrity.
+  - within the preregistered ±0.02 tolerance; every evaluated arm passed patch
+  - - Aggregate smoke gate: **PASS** (`integrity_pass=true`,
 
 ## Artifacts
-- Committed: `experiments/commitment_surface/results/e1_concern_weighted.md`, `experiments/commitment_surface/results/e2_e3_neural.md`, `experiments/commitment_surface/results/e2_e3_neural_larger_n.md`, `experiments/commitment_surface/results/e4_pythia_lora_v2_summary.md`, `papers/commitment_surface/paper.md`
+- Committed: `experiments/commitment_surface/results/e1_concern_weighted.md`, `experiments/commitment_surface/results/e2_e3_neural.md`, `experiments/commitment_surface/results/e2_e3_neural_larger_n.md`, `experiments/commitment_surface/results/e4_pythia_lora_v2_summary.md`, `experiments/commitment_surface/results/e5_smoke_summary.md`, `papers/commitment_surface/paper.md`
 - Local-only: artifacts/ (gitignored raw outputs; see result reports for summaries)
 - Paper: `papers/commitment_surface/paper.md`

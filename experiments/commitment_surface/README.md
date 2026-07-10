@@ -107,7 +107,57 @@ but the strict pre-registered gate FAILED (A mean OOD 0.113 > 0.10).
 Interpretation is also bounded by the label-exposure confound: cyclic
 augmentation labels held-out-support points, so the sweep does not yet
 separate generator learning from labeled orbit coverage (paper §6.5).
-See `results/e4_pythia_lora_v2_summary.md`.
+See `results/e4_pythia_lora_v2_summary.md`. The complete publication metrics
+for all 108 cells are committed in
+`results/e4_pythia_lora_v2_appendix.json`; large function tables and input lists
+remain only in the gitignored raw payload. Regenerate the compact artifact with:
+
+```bash
+python3 scripts/export_commitment_surface_e4_appendix.py
+```
+
+### E5 — Generator Learning vs Labeled Orbit Coverage (Modal L4)
+
+Explicitly post-hoc severe follow-up, frozen in the timestamped PLAN.md
+addendum before E5 results. Five arms separate train-support-only generator
+consistency (`G-reg`) from E4-style labeled orbit augmentation (`B-ref`), a
+wrong-generator regularizer (`W-reg`), coverage-matched correct labels with no
+group construction (`Cov`), and the unaugmented reference (`A-ref`).
+
+The pure `e5_core.py` layer freezes support and intervention splits, constructs
+typed exposure plans, rejects held-out truth-label leakage into G-reg/W-reg,
+matches B-ref/Cov held-out exposure, and applies the frozen analysis gates.
+The Modal harness records the full exposure ledger, evaluates disjoint novel
+shifts and prompt paraphrases, and patches a fixed fraction of each effective
+LoRA update's spectral mass. Full-adapter disable is secondary only.
+
+Validation smoke (not scientific evidence):
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+        experiments/commitment_surface/modal_e5_generator_vs_coverage.py \
+        --sizes 70m --ns 13 --seeds 1 --arms G-reg,Cov,A-ref --epochs 20 \
+        --out artifacts/commitment_surface/e5_smoke.json
+```
+
+Confirmatory grid (launch only after the smoke passes and cost review):
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+        experiments/commitment_surface/modal_e5_generator_vs_coverage.py \
+        --sizes 70m,160m,410m --ns 13,17,23 --seeds 3 \
+        --arms G-reg,B-ref,W-reg,Cov,A-ref --epochs 160 \
+        --train-frac 0.5 --train-shift-count 3 \
+        --augmentation-multiplier 3 --spectral-mass-fraction 0.5 \
+        --base-seed 20260709 \
+        --out artifacts/commitment_surface/e5_generator_vs_coverage.json
+```
+
+Status: the 70m/n=13/one-seed validation smoke passed all integrity gates; see
+`results/e5_smoke_summary.md`. It is not scientific evidence. E5 remains
+confirmatory-pending, and no mechanism verdict is claimed.
 
 ## Rebuild the paper PDF
 
@@ -116,7 +166,8 @@ python3 scripts/make_commitment_surface_figures.py
 python3 scripts/build_commitment_surface_pdf.py
 ```
 
-Reads results JSON from `results/` and `artifacts/commitment_surface/`,
-regenerates figures under `papers/commitment_surface/figures/`, and
-writes both `papers/commitment_surface/paper.pdf` and
+Reads committed result JSON from `results/` (local raw artifacts are fallback
+inputs only), regenerates figures under
+`papers/commitment_surface/figures/`, renders all E1–E4 cells in Appendix A.2,
+and writes byte-identical outputs to `papers/commitment_surface/paper.pdf` and
 `papers/pdf/commitment_surface.pdf`.

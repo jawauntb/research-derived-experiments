@@ -502,9 +502,11 @@ the compression; a factorial ablation would upgrade it.
 - Modular addition is one commitment surface; language- and vision-scale
   commitment surfaces are gestured at (via passive→active and paraphrase
   weakness in prior work) but not run at Pythia-410m+.
-- The patch-CE metric we use in E4 (LoRA-full-ablation) is a coarse
-  approximation to true directional patching; a finer, rank-decomposition
-  patch is left to future work.
+- The patch-CE metric reported for E4 (LoRA-full-ablation) is a coarse
+  approximation to true directional patching. The pending E5 harness adds
+  per-matrix spectral-mass-normalized low-rank patching. Its one-seed smoke
+  validates execution and integrity only, so it does not retroactively
+  strengthen E4.
 - The E2 patch-CE evidence for *localization* is weaker than the
   headline B − A gap suggests. Arm B's absolute patch-CE Δ is small
   (+0.024; Arm C +0.003; B − C only +0.021), and the large B − A gap
@@ -565,9 +567,10 @@ E4 is therefore consistent with two readings:
    OOD orbit with correct labels; nothing transportable is learned
    beyond fitting the exposed points.
 
-The pre-registered severe follow-up separates them. Train **without
-ever presenting labels from the held-out deployment orbit**, and
-compare five arms:
+The timestamped, explicitly post-hoc E5 addendum to `PLAN.md` (frozen
+2026-07-09 21:36 EDT, before any E5 result) preregisters the severe follow-up.
+Train **without ever presenting labels from the held-out deployment orbit**,
+and compare five arms:
 
 1. aligned generator regularization using only train-support pairs
    (e.g., an equivariance-consistency loss `f((x+k) mod n)` vs
@@ -581,8 +584,11 @@ compare five arms:
    structure, matched count of held-out-support exposures);
 5. readout selection (current Arm A).
 
-Evaluate on a **new group element or modulus not used by the
-intervention**, with rank-normalized causal patching.
+Evaluate on **new group elements not used by the intervention**, repeat the
+commitment under task-preserving prompt paraphrases, and use
+spectral-mass-normalized LoRA causal patching. The harness records support
+exposure counts and invalidates any G-reg/W-reg cell that receives a held-out
+truth label.
 
 **Kill criteria (pre-registered).** The commitment-first interpretation
 is materially weakened if any of:
@@ -596,7 +602,15 @@ is materially weakened if any of:
 Until this follow-up runs, the E4 claim should be read as: *train-time
 aligned intervention recovers external OOD where readout selection does
 not* — with the mechanism (transportable generator vs labeled coverage)
-not yet isolated.
+not yet isolated. **E5 status at this revision: the Pythia-70m/n=13/one-seed
+20-epoch validation smoke passed its integrity gate.** G-reg recorded zero
+held-out truth-label exposures, B-ref/Cov's precomputed ledgers matched at 27
+held-out events over six unique inputs, novel shifts were disjoint, and the
+50% spectral-mass patch tolerance passed. Descriptively, G-reg/Cov/A-ref
+canonical OOD accuracies were 0.000/0.286/0.000; this undertrained one-seed
+smoke omits B-ref and W-reg and is explicitly not confirmatory evidence.
+The generator-vs-coverage mechanism therefore remains pending, and E4's claim
+boundary is unchanged.
 
 ## 7. Conclusion
 
@@ -739,7 +753,13 @@ with `C_star`) inverts the relation. ∎
 
 ### A.2 Per-cell tables
 
-<!-- To be filled from results JSON -->
+The PDF build renders complete per-cell tables directly from the committed
+public-safe E1 and E2/E3 JSON summaries and the compact committed E4 appendix
+artifact. The E2 and E3 analyses share one 216-cell population. E4 exports all
+108 cells while intentionally omitting raw function tables, train/OOD input
+lists, and parameter metadata; no requested appendix metric is unavailable.
+
+<!-- APPENDIX_A2_TABLES -->
 
 ### A.3 External citation apparatus
 
