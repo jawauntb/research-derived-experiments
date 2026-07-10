@@ -156,7 +156,10 @@ typed exposure plans, rejects held-out truth-label leakage into G-reg/W-reg,
 matches B-ref/Cov held-out exposure, and applies the frozen analysis gates.
 The Modal harness records the full exposure ledger, evaluates disjoint novel
 shifts and prompt paraphrases, and patches a fixed fraction of each effective
-LoRA update's spectral mass. Full-adapter disable is secondary only.
+LoRA update's spectral mass. Full-adapter disable is secondary only. Candidate
+evaluation is bounded by `candidate_batch_size`; train-support consistency is
+backpropagated in weighted pair microbatches so the frozen objective is
+unchanged while 410m runs stay within L4 memory.
 
 Validation smoke (not scientific evidence):
 
@@ -178,6 +181,7 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
         --arms G-reg,B-ref,W-reg,Cov,A-ref --epochs 160 \
         --train-frac 0.5 --train-shift-count 3 \
         --augmentation-multiplier 3 --spectral-mass-fraction 0.5 \
+        --candidate-batch-size 32 --consistency-pair-batch-size 1 \
         --base-seed 20260709 \
         --out artifacts/commitment_surface/e5_generator_vs_coverage.json
 ```
