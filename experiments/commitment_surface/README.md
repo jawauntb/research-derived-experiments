@@ -127,6 +127,32 @@ augmentation labels held-out-support points, so the sweep does not yet
 separate generator learning from labeled orbit coverage (paper §6.5).
 See `results/e4_pythia_lora_v2_summary.md`.
 
+### M4 — Suite C Allocate × Cool × Reopen Factorial
+
+The timestamped follow-up addendum is
+[`suite_c_factorial_ablation_preregistration_2026_07_09.md`](../world_responds/suite_c_factorial_ablation_preregistration_2026_07_09.md).
+It crosses all eight component settings in the real existing
+`burst_then_refractory` Suite C workflow over eight paired seeds, freezes
+detect/saturate, and reruns all original controls with exact per-seed matched
+probe budgets.
+
+```bash
+python3 -m experiments.world_responds.suite_c_factorial_ablation \
+    --seeds 20260709,20261712,20262715,20263718,20264721,20265724,20266727,20267730 \
+    --out artifacts/world_responds/suite_c_factorial_ablation_2026_07_09.json \
+    --summary-json experiments/commitment_surface/results/m4_suite_c_factorial_ablation_2026_07_09.json \
+    --summary-md experiments/commitment_surface/results/m4_suite_c_factorial_ablation_2026_07_09.md
+```
+
+**Strict verdict: FAIL.** All-on and transported controls pass, and removing
+`reopen` kills terminal success (8/8 → 0/8; main effect +1.0). Removing either
+`allocate` or `cool` leaves success at 8/8 (both terminal main effects 0.0);
+all terminal interaction contrasts are 0.0. Allocation still improves
+selectivity (17.188 vs 4.125) and probe cost (23.1 vs 27.1), but the current
+criterion does not make it necessary. The strong M4 load-bearing subset claim
+is rejected for this finite harness; only reopen is established as necessary.
+See `results/m4_suite_c_factorial_ablation_2026_07_09.{json,md}`.
+
 ## Rebuild the paper PDF
 
 ```bash

@@ -61,7 +61,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_concerned_syntax.py` | Arc 2A concerned-syntax suite |
 | `test_viable_computational_bodies.py` | Arc 2B body search / gates |
 | `test_long_horizon_bottleneck.py` | Suite D/E long-horizon / tool eval |
-| `test_world_responds_suite_c*.py` (5 files) | Suite C reengagement + neural transfer + teacher-free |
+| `test_world_responds_suite_c*.py` (6 files) | Suite C reengagement + 2^3 component factorial + neural transfer + teacher-free |
 | `test_structure_compatible_*.py` (4 files) | SCG suite, row ledgers, semantic selection |
 | `test_gridcell_conference_evidence.py` | Paper A evidence export helpers |
 | `test_paper_b_reproduce_stats.py` | Paper B CSV reproduction |
@@ -234,6 +234,7 @@ paper §6.5.
 | `results/e1_concern_weighted.{json,md}` | E1 summary + per-cell provenance |
 | `results/e1_misspecification_variance.{json,md}` | E1 follow-up aggregate draws, quantiles/CI, assumption audit, and randomization verdict |
 | `results/e2_e3_neural.{json,md}` | E2/E3 summary + per-cell provenance |
+| `results/m4_suite_c_factorial_ablation_2026_07_09.{json,md}` | M4 public-safe factorial summary: strict FAIL; reopen necessary, allocate/cool terminal-null |
 
 Run:
 
@@ -323,7 +324,9 @@ python3 -m experiments.viable_computational_bodies.search \
 |---|---|
 | `modal_world_responds_sweep.py` | Paper 22: action-correlated shocks + regime shift |
 | `suite_c_contract.py` | Shared Suite C condition constants |
-| `suite_c_reengagement.py` | Deterministic Suite C re-engagement (silence/anxiety/false-calm/cost) |
+| `suite_c_reengagement.py` | Deterministic Suite C re-engagement (silence/anxiety/false-calm/cost), with typed allocate/cool/reopen action-gate interventions that default to the unchanged policy |
+| `suite_c_factorial_ablation.py` | Local deterministic 2^3 allocate × cool × reopen runner using the real burst/refractory workflow; paired bootstrap contrasts, transported controls, strict gates, idempotent raw/public artifacts |
+| `suite_c_factorial_ablation_preregistration_2026_07_09.md` | Timestamped follow-up addendum frozen before implementation/run; exact component semantics, seeds, gates, kill criteria, rejected alternatives |
 | `modal_suite_c_reengagement.py` | Modal Suite C dispatch |
 | `suite_c_neural_transfer.py` | Learned probe-head transfer on held-out seeds |
 | `modal_suite_c_neural_transfer.py` | Modal neural-transfer sweep |
