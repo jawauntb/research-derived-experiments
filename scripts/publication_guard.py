@@ -39,6 +39,11 @@ def tracked_files() -> list[Path]:
     return [Path(line) for line in result.stdout.splitlines() if line.strip()]
 
 
+def contains_possible_secret(text: str) -> bool:
+    """Return whether text matches a high-confidence credential signature."""
+    return any(pattern.search(text) for pattern in SECRET_PATTERNS)
+
+
 def main() -> int:
     failures: list[str] = []
     for path in tracked_files():
@@ -57,10 +62,8 @@ def main() -> int:
             text = path.read_text(encoding="utf-8")
         except UnicodeDecodeError:
             continue
-        for pattern in SECRET_PATTERNS:
-            if pattern.search(text):
-                failures.append(f"possible secret pattern in: {normalized}")
-                break
+        if contains_possible_secret(text):
+            failures.append(f"possible secret pattern in: {normalized}")
 
     if failures:
         print("Publication guard failed:", file=sys.stderr)

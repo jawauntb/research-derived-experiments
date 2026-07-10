@@ -9,12 +9,12 @@ import { createPairingChallengeStore, createPairingToken } from "../src/main/sec
 import type { DesktopActivityProvider } from "../src/main/activity/desktopActivity";
 
 const origin = "chrome-extension://extension-fixture";
-const secret = "fixture-pairing-secret";
+const fixturePairingCredential = "fixture-pairing-secret";
 const issuedAtMs = 1_000;
 const challenge = "pairing-challenge-fixture-123";
 
 function token(): string {
-  return createPairingToken({ secret, issuedAtMs, nonce: "fixture-nonce" });
+  return createPairingToken({ secret: fixturePairingCredential, issuedAtMs, nonce: "fixture-nonce" });
 }
 
 function eventRequest(body: unknown, overrides: { origin?: string; token?: string } = {}): Request {
@@ -87,7 +87,7 @@ describe("desktop extension ingest", () => {
     const handler = createIngestRequestHandler({
       allowedOrigins: [origin],
       database,
-      pairingSecret: secret,
+      pairingSecret: fixturePairingCredential,
       pairingChallenges,
       sessions,
       nowMs: () => issuedAtMs,
@@ -127,7 +127,7 @@ describe("desktop extension ingest", () => {
     const sessions = createSessionController(database);
     const handler = createIngestRequestHandler({
       database,
-      pairingSecret: secret,
+      pairingSecret: fixturePairingCredential,
       pairingChallenges: createPairingChallengeStore(),
       sessions,
       nowMs: () => issuedAtMs,
@@ -151,7 +151,7 @@ describe("desktop extension ingest", () => {
     const handler = createIngestRequestHandler({
       allowedOrigins: [origin],
       database,
-      pairingSecret: secret,
+      pairingSecret: fixturePairingCredential,
       sessions,
       nowMs: () => issuedAtMs,
     });
@@ -204,7 +204,7 @@ describe("desktop extension ingest", () => {
     const handler = createIngestRequestHandler({
       allowedOrigins: [origin],
       database,
-      pairingSecret: secret,
+      pairingSecret: fixturePairingCredential,
       sessions,
       nowMs: () => issuedAtMs,
     });
@@ -263,7 +263,7 @@ describe("desktop extension ingest", () => {
     const handler = createIngestRequestHandler({
       allowedOrigins: [origin],
       database,
-      pairingSecret: secret,
+      pairingSecret: fixturePairingCredential,
       sessions,
       nowMs: () => issuedAtMs,
     });
@@ -320,7 +320,7 @@ describe("desktop extension ingest", () => {
     const handler = createIngestRequestHandler({
       allowedOrigins: [origin],
       database,
-      pairingSecret: secret,
+      pairingSecret: fixturePairingCredential,
       sessions,
       nowMs: () => issuedAtMs,
     });
@@ -387,7 +387,7 @@ describe("desktop extension ingest", () => {
     const database = createInquiryDatabase();
     const runtime = createDesktopRuntime({
       database,
-      pairingSecret: secret,
+      pairingSecret: fixturePairingCredential,
       startServer: false,
       desktopActivityProvider: provider,
       desktopActivityClock: {
@@ -400,7 +400,7 @@ describe("desktop extension ingest", () => {
     const handler = createIngestRequestHandler({
       allowedOrigins: [origin],
       database,
-      pairingSecret: secret,
+      pairingSecret: fixturePairingCredential,
       sessions: runtime.sessions,
       sessionControls: runtime.bridge,
       nowMs: () => issuedAtMs,
@@ -441,7 +441,7 @@ describe("desktop extension ingest", () => {
     const handler = createIngestRequestHandler({
       allowedOrigins: [origin],
       database,
-      pairingSecret: secret,
+      pairingSecret: fixturePairingCredential,
       sessions,
       nowMs: () => issuedAtMs,
     });

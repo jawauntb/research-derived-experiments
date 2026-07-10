@@ -125,7 +125,14 @@ but the strict pre-registered gate FAILED (A mean OOD 0.113 > 0.10).
 Interpretation is also bounded by the label-exposure confound: cyclic
 augmentation labels held-out-support points, so the sweep does not yet
 separate generator learning from labeled orbit coverage (paper §6.5).
-See `results/e4_pythia_lora_v2_summary.md`.
+See `results/e4_pythia_lora_v2_summary.md`. The complete publication metrics
+for all 108 cells are committed in
+`results/e4_pythia_lora_v2_appendix.json`; large function tables and input lists
+remain only in the gitignored raw payload. Regenerate the compact artifact with:
+
+```bash
+python3 scripts/export_commitment_surface_e4_appendix.py
+```
 
 ### M4 — Suite C Allocate × Cool × Reopen Factorial
 
@@ -160,7 +167,8 @@ python3 scripts/make_commitment_surface_figures.py
 python3 scripts/build_commitment_surface_pdf.py
 ```
 
-Reads results JSON from `results/` and `artifacts/commitment_surface/`,
-regenerates figures under `papers/commitment_surface/figures/`, and
-writes both `papers/commitment_surface/paper.pdf` and
+Reads committed result JSON from `results/` (local raw artifacts are fallback
+inputs only), regenerates figures under
+`papers/commitment_surface/figures/`, renders all E1–E4 cells in Appendix A.2,
+and writes byte-identical outputs to `papers/commitment_surface/paper.pdf` and
 `papers/pdf/commitment_surface.pdf`.

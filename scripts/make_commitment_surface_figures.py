@@ -5,7 +5,8 @@
 Reads:
 - experiments/commitment_surface/results/e1_concern_weighted.json
 - experiments/commitment_surface/results/e2_e3_neural.json
-- artifacts/commitment_surface/e4_pythia_lora_v2.json (or e4_smoke.json)
+- experiments/commitment_surface/results/e4_pythia_lora_v2_appendix.json
+  (with local raw/smoke artifacts as fallbacks)
 
 Writes:
 - papers/commitment_surface/figures/fig1_e1_selectors.png
@@ -35,6 +36,11 @@ PAPER_FIG.mkdir(parents=True, exist_ok=True)
 E1_JSON = ROOT / "experiments" / "commitment_surface" / "results" / "e1_concern_weighted.json"
 E2E3_JSON = ROOT / "experiments" / "commitment_surface" / "results" / "e2_e3_neural.json"
 E4_JSON_CANDIDATES = [
+    ROOT
+    / "experiments"
+    / "commitment_surface"
+    / "results"
+    / "e4_pythia_lora_v2_appendix.json",
     ROOT / "artifacts" / "commitment_surface" / "e4_pythia_lora_v2.json",
     ROOT / "artifacts" / "commitment_surface" / "e4_smoke.json",
 ]

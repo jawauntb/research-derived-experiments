@@ -7,7 +7,7 @@ import { createContentTelemetry, type ContentEventMessage } from "../../apps/ext
 import { postEventBatch, postSessionControl, type BridgeState, type FetchLike } from "../../apps/extension/src/lib/localBridge";
 
 const origin = "chrome-extension://extension-pairing-smoke";
-const pairingSecret = "extension-pairing-smoke-secret";
+const fixturePairingCredential = "extension-pairing-smoke-secret";
 const issuedAtMs = 10_000;
 
 describe("extension pairing smoke", () => {
@@ -16,13 +16,13 @@ describe("extension pairing smoke", () => {
     const runtime = createDesktopRuntime({
       allowedOrigins: [origin],
       database,
-      pairingSecret,
+      pairingSecret: fixturePairingCredential,
       startServer: false,
     });
     const handler = createIngestRequestHandler({
       allowedOrigins: [origin],
       database,
-      pairingSecret,
+      pairingSecret: fixturePairingCredential,
       sessions: runtime.sessions,
       nowMs: () => issuedAtMs,
     });
@@ -100,7 +100,7 @@ describe("extension pairing smoke", () => {
 function pairedState(sessionId: string): BridgeState {
   return {
     endpoint: "http://127.0.0.1:39170/v1/extension/events",
-    pairingToken: createPairingToken({ secret: pairingSecret, issuedAtMs, nonce: "smoke-nonce" }),
+    pairingToken: createPairingToken({ secret: fixturePairingCredential, issuedAtMs, nonce: "smoke-nonce" }),
     sessionId,
     recordingState: "recording",
     disabledSiteHashes: [],

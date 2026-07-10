@@ -46,6 +46,10 @@ LOCAL = {
 }
 # Flagship paper PDFs (built from committed numbers/data).
 PDF_BUILDERS = {
+    "commitment_surface": [
+        "python scripts/make_commitment_surface_figures.py",
+        "python scripts/build_commitment_surface_pdf.py",
+    ],
     "symbolic_weakness": ["python scripts/build_weakness_pdf.py"],
 }
 # After building, copy the rendered PDF to the committed + site-served locations so

@@ -3,6 +3,7 @@
     "fig1": "papers/commitment_surface/figures/fig1_e1_selectors.png",
     "fig2": "papers/commitment_surface/figures/fig2_e2_arms_ood.png",
     "fig3": "papers/commitment_surface/figures/fig3_e3_readout_vs_patch.png",
+    "fig4": "papers/commitment_surface/figures/fig4_e4_pythia_arms.png",
     "fig5": "papers/commitment_surface/figures/fig5_frame_taxonomy.png"
   },
   "headline": {
@@ -52,6 +53,47 @@
       "rho_weakness_ood_all": 0.6268363077710688,
       "rho_patch_ce_ood_all": 0.8088003779872894,
       "n_cells": 216
+    },
+    "e4": {
+      "n_cells": 108,
+      "gap_B_minus_A_ood": 0.7696007696007696,
+      "gap_B_minus_A_patch_ce": 5.603918414999025,
+      "gap_B_minus_C_patch_ce": 3.4169041026496365,
+      "rho_weakness_ood_all_cells": 0.28968757135618867,
+      "rho_patch_ce_ood_all_cells": 0.8534077560782499,
+      "e4_new_frame_pass": false,
+      "e4_old_frame_pass": false,
+      "per_arm": {
+        "A": {
+          "n": 27,
+          "ood_max": 1.0,
+          "ood_mean": 0.11276789054566833,
+          "patch_ce_delta_mean": -0.7420555454559208,
+          "weakness_mean": 0.09460001020103322
+        },
+        "B": {
+          "n": 27,
+          "ood_max": 1.0,
+          "ood_mean": 0.8823686601464379,
+          "patch_ce_delta_mean": 4.861862869543104,
+          "weakness_mean": 0.30468300289272154
+        },
+        "C": {
+          "n": 27,
+          "ood_max": 0.2222222222222222,
+          "ood_mean": 0.07134840468173802,
+          "patch_ce_delta_mean": 1.4449587668934671,
+          "weakness_mean": 0.05974162240146895
+        },
+        "D": {
+          "n": 27,
+          "ood_max": 1.0,
+          "ood_mean": 0.11276789054566833,
+          "patch_ce_delta_mean": -0.7420555454559208,
+          "weakness_mean": 0.09460001020103322
+        }
+      },
+      "source": "experiments/commitment_surface/results/e4_pythia_lora_v2_appendix.json"
     }
   }
 }

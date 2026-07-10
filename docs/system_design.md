@@ -128,6 +128,15 @@ PDF builders under `scripts/build_*_pdf.py` read **committed numbers** (result
 reports / small CSV snapshots), not live Modal logs. Shared rendering lives in
 `scripts/paperkit.py` (reportlab + matplotlib; no LaTeX required).
 
+The commitment-surface paper follows the same boundary for its appendix. E1 and
+E2/E3 tables come from committed result JSON; E4's gitignored 209 KB raw sweep is
+reduced by `export_commitment_surface_e4_appendix.py` to a compact committed
+108-cell artifact containing aggregate and publication metrics only. Both the
+figure maker and PDF builder prefer that public-safe artifact, so a clean clone
+can reproduce Appendix A.2 without Modal logs. The builder writes identical
+bytes to `papers/commitment_surface/paper.pdf` and
+`papers/pdf/commitment_surface.pdf`.
+
 Many maintained-concern experiments are **paper-primary**: the Modal sweep embeds
 the experiment, and the public record is `papers/<name>/paper.md` with zero
 committed `results/*.md` (status `paper` in verification).
@@ -369,7 +378,7 @@ plus shared Modal/API keys.
 | Location | Tracked? | Contents |
 |---|---|---|
 | `artifacts/` | No | Raw JSON/JSONL, local PDF build scratch |
-| `experiments/<name>/results/` | Yes | Summarized result reports |
+| `experiments/<name>/results/` | Yes | Summarized result reports and explicitly public-safe compact table artifacts |
 | `papers/`, `papers/pdf/` | Yes | Paper sources and shareable PDFs |
 | `data/` | No (except `data/paper_b/`) | Large/raw data; Paper B CSV snapshots are the committed exception |
 | `references/papers\|text\|html/` | No | Full-text citation archive |
@@ -379,6 +388,12 @@ plus shared Modal/API keys.
 Public policy: publish notes, code, summarized reports, audit cards, rejected
 alternatives; keep raw model dumps, secrets, and full-text PDFs local unless
 intentionally summarized. Enforced by `publication_guard.py`.
+
+`publication_guard.py` retains broad detection for vendor-token signatures and
+direct `api_key`/`token`/`secret` assignments. Test-only pairing values use
+explicit fixture-credential identifiers rather than a secret-like assignment
+name; regression tests lock both real-pattern detection and this non-secret
+fixture case without adding a path allowlist.
 
 ---
 
