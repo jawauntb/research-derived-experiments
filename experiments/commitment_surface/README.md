@@ -85,6 +85,15 @@ that also succeeded because it added correct-labeled coverage of the
 input space, and did not isolate group specificity from augmentation
 volume; see paper §R2 for the transparent note).
 
+The frozen rank-normalized follow-up in
+`results/e2_e3_rank_normalized_patch_2026_07_10.{json,md}` replaces the
+width-sensitive top-k intervention with the minimum activation subspace
+explaining 50% of between-orbit spectral mass. It strictly passes all gates:
+Arm B CE per removed mass is 1.119 at width 96 and 0.868 at width 128
+(77.5% retention), versus Arm C 0.159/0.174 and the matched wrong-subspace
+control 0.001/0.001. This supports distributed causal localization in these
+small MLPs, not in Pythia or language.
+
 ### E4 — Pythia LoRA v2 External Contact (Modal L4)
 
 Non-degenerate follow-up to the P1 hard kill in
@@ -148,7 +157,10 @@ matches G-reg/W-reg consistency schedules and B-ref/Cov held-out exposure, and
 applies the frozen analysis gates.
 The Modal harness records the full exposure ledger, evaluates disjoint novel
 shifts and prompt paraphrases, and patches a fixed fraction of each effective
-LoRA update's spectral mass. Full-adapter disable is secondary only.
+LoRA update's spectral mass. Full-adapter disable is secondary only. Candidate
+evaluation is bounded by `candidate_batch_size`; train-support consistency is
+backpropagated in weighted pair microbatches so the frozen objective is
+unchanged while 410m runs stay within L4 memory.
 
 Validation smoke (not scientific evidence):
 
@@ -175,6 +187,7 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
         --arms G-reg,B-ref,W-reg,Cov,A-ref --epochs 160 \
         --train-frac 0.5 --train-shift-count 3 \
         --augmentation-multiplier 3 --spectral-mass-fraction 0.5 \
+        --candidate-batch-size 32 --consistency-pair-batch-size 1 \
         --base-seed 20260709 --run-kind confirmatory --dry-run \
         --out artifacts/commitment_surface/e5_confirmatory_launch_manifest.json
 ```
@@ -190,6 +203,7 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
         --arms G-reg,B-ref,W-reg,Cov,A-ref --epochs 160 \
         --train-frac 0.5 --train-shift-count 3 \
         --augmentation-multiplier 3 --spectral-mass-fraction 0.5 \
+        --candidate-batch-size 32 --consistency-pair-batch-size 1 \
         --base-seed 20260709 --run-kind development \
         --execute --max-gpu-cells 45 \
         --out artifacts/commitment_surface/e5_development_calibration.json
@@ -205,6 +219,7 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
         --arms G-reg,B-ref,W-reg,Cov,A-ref --epochs 160 \
         --train-frac 0.5 --train-shift-count 3 \
         --augmentation-multiplier 3 --spectral-mass-fraction 0.5 \
+        --candidate-batch-size 32 --consistency-pair-batch-size 1 \
         --base-seed 20260709 --run-kind confirmatory --inspect \
         --out artifacts/commitment_surface/e5_confirmatory_status.json
 ```
@@ -219,6 +234,7 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
         --arms G-reg,B-ref,W-reg,Cov,A-ref --epochs 160 \
         --train-frac 0.5 --train-shift-count 3 \
         --augmentation-multiplier 3 --spectral-mass-fraction 0.5 \
+        --candidate-batch-size 32 --consistency-pair-batch-size 1 \
         --base-seed 20260709 --run-kind confirmatory \
         --execute --max-gpu-cells 135 \
         --expected-manifest-id "$E5_MANIFEST_ID" \

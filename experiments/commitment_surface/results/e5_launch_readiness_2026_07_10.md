@@ -15,7 +15,8 @@ coverage, group-specificity, patch, or transport claim is promoted here.
 - Seeds: 20260709, 20260809, and 20260909.
 - Arms: G-reg, B-ref, W-reg, Cov, and A-ref.
 - Training: 160 full epochs at `train_frac=0.5`, three train shifts, augmentation
-  multiplier 3, and the frozen LoRA/optimizer settings.
+  multiplier 3, candidate batch size 32, consistency-pair batch size 1, and the
+  frozen LoRA/optimizer settings.
 - Patch: 0.50 spectral-mass removal with the existing ±0.02 integrity tolerance.
 - Total: **3 × 3 × 3 × 5 = 135 cells**.
 
@@ -38,6 +39,9 @@ The hardened path now:
 3. Builds a deterministic 135-cell manifest and dispatches one L4 function per
    cell, with at most 12 containers active concurrently. L4 calls do not retry
    automatically; the six-hour timeout is therefore a one-attempt ceiling.
+   Candidate evaluation is chunked and the consistency objective is
+   backpropagated as the same weighted mean one pair-microbatch at a time, so
+   410m cells do not retain the full consistency graph on L4 memory.
 4. Binds the manifest and checkpoints to Python 3.12, Modal client 1.2.6, a
    complete 43-package Linux/Python runtime lock (including torch 2.7.1,
    transformers 4.56.2, PEFT 0.17.1, and accelerate 1.4.0), and immutable
@@ -66,10 +70,10 @@ The hardened path now:
 
 No-compute validation:
 
-- Final dry-run: <https://modal.com/apps/generalintelligencecompany/main/ap-gAp7hQnFBi7P6y8jJIgp4d>
-- Status-only inspection: <https://modal.com/apps/generalintelligencecompany/main/ap-KteZDDqr1mQOEz6idO51yD>
-- Manifest ID: `a308ea9cfdb6ac55d457db2b0639775aa5609697f433da3a0714efeb68876e28`
-- Implementation fingerprint: `ae131524c3345a02814dd5182338ebd2c1697a44334016c5cf3c1b613568240a`.
+- Final dry-run: <https://modal.com/apps/generalintelligencecompany/main/ap-un2ddkfp3iZJAPl5K0basK>
+- Status-only inspection: <https://modal.com/apps/generalintelligencecompany/main/ap-WS1ZF1JCRLc8CFhn7LhSaX>
+- Manifest ID: `836df5fff3492f5908b52160bc7e1eaa62f3e3aeff16141a1b050b2c9a8d58c8`
+- Implementation fingerprint: `cacaa889ca23c189cc934c41985fc69d86aea8449b906328f48d909eed4c936f`.
 - Exact cell count: 135.
 - Frozen-config mismatches: none.
 - CPU pinned-image/Volume preflight: passed; all 43 resolved package versions

@@ -72,6 +72,7 @@ GPU_MEMORY_MIB = 24576
 GPU_TIMEOUT_SECONDS = 6 * 60 * 60
 GPU_MAX_CONTAINERS = 12
 CELL_LEASE_TTL_SECONDS = GPU_TIMEOUT_SECONDS + 15 * 60
+PYTORCH_CUDA_ALLOC_CONF = "expandable_segments:True"
 EXECUTION_ENVIRONMENT = {
     "python": "3.12",
     "modal_client": MODAL_CLIENT_VERSION,
@@ -86,6 +87,7 @@ EXECUTION_ENVIRONMENT = {
         "result_volume_version": RESULT_VOLUME_VERSION,
         "cell_lease_dict": CELL_LEASE_DICT_NAME,
         "cell_lease_ttl_seconds": CELL_LEASE_TTL_SECONDS,
+        "pytorch_cuda_alloc_conf": PYTORCH_CUDA_ALLOC_CONF,
     },
 }
 CONTROL_IMAGE = modal.Image.debian_slim(
@@ -97,6 +99,7 @@ CONTROL_IMAGE = modal.Image.debian_slim(
 IMAGE = (
     modal.Image.debian_slim(python_version="3.12")
     .pip_install_from_requirements(str(RUNTIME_LOCK_PATH))
+    .env({"PYTORCH_CUDA_ALLOC_CONF": PYTORCH_CUDA_ALLOC_CONF})
     .add_local_python_source("experiments.commitment_surface.e5_core")
     .add_local_file(str(RUNTIME_LOCK_PATH), "/root/e5_requirements.txt")
 )
@@ -136,6 +139,14 @@ class E5RunConfig:
     weight_decay: float
     grad_clip: float
     spectral_mass_fraction: float
+    candidate_batch_size: int
+    consistency_pair_batch_size: int
+
+    def __post_init__(self) -> None:
+        if self.candidate_batch_size < 1:
+            raise ValueError("candidate_batch_size must be positive")
+        if self.consistency_pair_batch_size < 1:
+            raise ValueError("consistency_pair_batch_size must be positive")
 
 
 def _seed_list(base_seed: int, count: int) -> tuple[int, ...]:
@@ -391,6 +402,8 @@ def _run_cell_impl(arg: dict[str, Any]) -> dict[str, Any]:
         weight_decay=float(arg["weight_decay"]),
         grad_clip=float(arg["grad_clip"]),
         spectral_mass_fraction=float(arg["spectral_mass_fraction"]),
+        candidate_batch_size=int(arg["candidate_batch_size"]),
+        consistency_pair_batch_size=int(arg["consistency_pair_batch_size"]),
     )
     repo = f"EleutherAI/pythia-{size}"
     revision = str(arg["model_revision"])
@@ -494,34 +507,57 @@ def _run_cell_impl(arg: dict[str, Any]) -> dict[str, Any]:
     ) -> Any:
         repeated_xs = [x for x in xs for _ in range(n)]
         candidates = list(range(n)) * len(xs)
-        batch = encode_rows(
-            tokenizer,
-            n,
-            offset,
-            repeated_xs,
-            candidates,
-            template=template,
-        )
-        return F.log_softmax(-per_row_nll(model, batch).view(len(xs), n), dim=-1)
+        nll_chunks = []
+        for start in range(0, len(repeated_xs), run_config.candidate_batch_size):
+            stop = start + run_config.candidate_batch_size
+            batch = encode_rows(
+                tokenizer,
+                n,
+                offset,
+                repeated_xs[start:stop],
+                candidates[start:stop],
+                template=template,
+            )
+            nll_chunks.append(per_row_nll(model, batch))
+        nll = torch.cat(nll_chunks).view(len(xs), n)
+        return F.log_softmax(-nll, dim=-1)
 
-    def consistency_loss(
+    def backward_consistency_loss(
         model: Any,
         tokenizer: Any,
         n: int,
         offset: int,
         plan: Any,
-    ) -> Any:
+    ) -> float:
+        """Backpropagate consistency in pair microbatches.
+
+        Candidate batching alone does not bound training memory because all
+        chunk graphs remain live until a final backward call. Backpropagating
+        each pair microbatch releases its graph before the next one while the
+        weighted average preserves the frozen objective exactly.
+        """
         if not plan.consistency:
-            return torch.zeros((), device=device)
-        source_x = [pair.source_input for pair in plan.consistency]
-        target_x = [pair.target_input for pair in plan.consistency]
-        source = candidate_log_probs(model, tokenizer, n, offset, source_x)
-        target = candidate_log_probs(model, tokenizer, n, offset, target_x)
-        desired = torch.empty_like(source)
-        for row, pair in enumerate(plan.consistency):
-            permutation = torch.tensor(pair.output_permutation, device=device)
-            desired[row, permutation] = source[row].detach().exp()
-        return F.kl_div(target, desired, reduction="batchmean")
+            return 0.0
+        pairs = plan.consistency
+        total = len(pairs)
+        average_loss = 0.0
+        for start in range(0, total, run_config.consistency_pair_batch_size):
+            chunk = pairs[start : start + run_config.consistency_pair_batch_size]
+            source_x = [pair.source_input for pair in chunk]
+            target_x = [pair.target_input for pair in chunk]
+            source = candidate_log_probs(model, tokenizer, n, offset, source_x)
+            source_probs = source.detach().exp()
+            del source
+            target = candidate_log_probs(model, tokenizer, n, offset, target_x)
+            desired = torch.empty_like(target)
+            for row, pair in enumerate(chunk):
+                permutation = torch.tensor(pair.output_permutation, device=device)
+                desired[row, permutation] = source_probs[row]
+            chunk_loss = F.kl_div(target, desired, reduction="batchmean")
+            chunk_weight = len(chunk) / total
+            (run_config.consistency_weight * chunk_weight * chunk_loss).backward()
+            average_loss += chunk_weight * float(chunk_loss.detach().item())
+        return average_loss
 
     def evaluate(
         model: Any,
@@ -710,14 +746,15 @@ def _run_cell_impl(arg: dict[str, Any]) -> dict[str, Any]:
             model.train()
             optimizer.zero_grad(set_to_none=True)
             sup_loss = supervised_loss(model, supervised_batch)
-            reg_loss = consistency_loss(model, tokenizer, n, offset, plan)
-            loss = sup_loss + run_config.consistency_weight * reg_loss
-            loss.backward()
+            sup_loss.backward()
+            reg_loss = backward_consistency_loss(
+                model, tokenizer, n, offset, plan
+            )
             if run_config.grad_clip > 0:
                 torch.nn.utils.clip_grad_norm_(trainable, run_config.grad_clip)
             optimizer.step()
             final_supervised_loss = float(sup_loss.detach().item())
-            final_consistency_loss = float(reg_loss.detach().item())
+            final_consistency_loss = reg_loss
 
         model.eval()
         canonical_acc, canonical_nll, _ = evaluate(
@@ -918,6 +955,8 @@ def main(
     weight_decay: float = 0.0,
     grad_clip: float = 1.0,
     spectral_mass_fraction: float = 0.5,
+    candidate_batch_size: int = 32,
+    consistency_pair_batch_size: int = 1,
     base_seed: int = 20260709,
     run_kind: str = "development",
     dry_run: bool = False,
@@ -949,6 +988,8 @@ def main(
         weight_decay=weight_decay,
         grad_clip=grad_clip,
         spectral_mass_fraction=spectral_mass_fraction,
+        candidate_batch_size=candidate_batch_size,
+        consistency_pair_batch_size=consistency_pair_batch_size,
     )
     kind = E5RunKind(run_kind)
     config_dict = asdict(config)

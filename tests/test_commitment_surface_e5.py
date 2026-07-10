@@ -44,6 +44,8 @@ FROZEN_CONFIRMATORY_PARAMETERS = {
     "weight_decay": 0.0,
     "grad_clip": 1.0,
     "spectral_mass_fraction": 0.5,
+    "candidate_batch_size": 32,
+    "consistency_pair_batch_size": 1,
 }
 REPO_ROOT = Path(__file__).resolve().parents[1]
 E5_DIRECTORY = REPO_ROOT / "experiments" / "commitment_surface"
@@ -71,6 +73,7 @@ FROZEN_EXECUTION_ENVIRONMENT = {
         "result_volume_version": 2,
         "cell_lease_dict": "commitment-surface-e5-cell-leases",
         "cell_lease_ttl_seconds": 22500,
+        "pytorch_cuda_alloc_conf": "expandable_segments:True",
     },
 }
 

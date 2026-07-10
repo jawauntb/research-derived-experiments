@@ -92,6 +92,8 @@ E5_CONFIRMATORY_PARAMETERS: dict[str, object] = {
     "weight_decay": 0.0,
     "grad_clip": 1.0,
     "spectral_mass_fraction": 0.5,
+    "candidate_batch_size": 32,
+    "consistency_pair_batch_size": 1,
 }
 
 
