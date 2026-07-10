@@ -69,6 +69,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_gauge_fixed_concern_transport_*.py` | Gauge-fixed transport + PDF |
 | `test_external_contact_p1_lora.py` | External-contact LoRA metrics |
 | `test_semantic_concern_summary.py` | Semantic concern summarizer |
+| `test_commitment_surface_core.py`, `test_e1_misspecification_variance.py` | E1 concern selectors plus conditional-randomization reconstruction, seed, assignment, and statistics contracts |
 | `test_summarize_label_free_dose_response.py` | Label-free dose-response summarizer |
 | `test_virtual_governor_stress_signal.py` | Virtual governor diagnostic |
 
@@ -212,7 +213,9 @@ Severe tests for the commitment-first reframe. See
 [`papers/commitment_surface/paper.md`](../papers/commitment_surface/paper.md)
 for the theory (Props 1+2, corollary, M4 anti-Goodhart loop) and
 [`papers/commitment_surface/PLAN.md`](../papers/commitment_surface/PLAN.md)
-for the frozen pre-registration.
+for the frozen original pre-registration. The E1 variance follow-up is frozen
+separately in
+[`e1_misspecification_variance_preregistration_2026-07-09.md`](../papers/commitment_surface/e1_misspecification_variance_preregistration_2026-07-09.md).
 
 The corrected formal surface treats Proposition 1 as non-identification,
 requires deployment-restricted weakness (or an ordering-preservation
@@ -225,15 +228,18 @@ paper §6.5.
 |---|---|
 | `core.py` | Stdlib primitives: concern deployments (uniform / unequal / misspec), weighted extension mass, candidate hypothesis families (shifts, random train-perfect completions, biased-to-focus), selectors, `run_e1_cell` |
 | `run_e1.py` | E1 CPU sweep entrypoint (unequal-consequence selector comparison) |
+| `e1_misspecification_variance.py` | Stdlib CPU conditional-randomization harness: freezes 96 E1 structures, redraws 2,048 independent marginal-preserving assignments, estimates gap distribution/tail probability, and gates exchangeability assumptions |
 | `e2_e3_neural_sweep.py` | E2/E3 four-arm neural MLP sweep on cyclic modular addition; measures OOD, patch-CE Δ, weakness / wrong-group anti-cheat |
 | `modal_e4_pythia_lora_v2.py` | E4 Modal L4 external contact: four arms A (readout) / B (cyclic-orbit augmentation) / C (wrong-group aug) / D (loss selector) on Pythia 70m/160m/410m LoRA modular addition; adapter-disable patch-CE |
 | `results/e1_concern_weighted.{json,md}` | E1 summary + per-cell provenance |
+| `results/e1_misspecification_variance.{json,md}` | E1 follow-up aggregate draws, quantiles/CI, assumption audit, and randomization verdict |
 | `results/e2_e3_neural.{json,md}` | E2/E3 summary + per-cell provenance |
 
 Run:
 
 ```bash
 python3 -m experiments.commitment_surface.run_e1
+python3 -m experiments.commitment_surface.e1_misspecification_variance
 python3 -m experiments.commitment_surface.e2_e3_neural_sweep
 doppler --scope /Users/jawaun/superoptimizers run -- \
     uvx --python 3.12 --from modal modal run \

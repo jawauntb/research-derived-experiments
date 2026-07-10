@@ -9,9 +9,10 @@
 - **Reproduce (one command):** `python scripts/regen.py commitment_surface`
 
 ## Verification
-- Pre-registration: _none_
-- Result reports (4):
+- Pre-registration: `papers/commitment_surface/e1_misspecification_variance_preregistration_2026-07-09.md`
+- Result reports (5):
   - `experiments/commitment_surface/results/e1_concern_weighted.md`
+  - `experiments/commitment_surface/results/e1_misspecification_variance.md`
   - `experiments/commitment_surface/results/e2_e3_neural.md`
   - `experiments/commitment_surface/results/e2_e3_neural_larger_n.md`
   - `experiments/commitment_surface/results/e4_pythia_lora_v2_summary.md`
@@ -23,6 +24,6 @@ Key verification signals (from the latest result report):
   - convert it into a pass. Twenty-two of twenty-seven Arm A cells sit at
 
 ## Artifacts
-- Committed: `experiments/commitment_surface/results/e1_concern_weighted.md`, `experiments/commitment_surface/results/e2_e3_neural.md`, `experiments/commitment_surface/results/e2_e3_neural_larger_n.md`, `experiments/commitment_surface/results/e4_pythia_lora_v2_summary.md`, `papers/commitment_surface/paper.md`
+- Committed: `experiments/commitment_surface/results/e1_concern_weighted.md`, `experiments/commitment_surface/results/e1_misspecification_variance.md`, `experiments/commitment_surface/results/e2_e3_neural.md`, `experiments/commitment_surface/results/e2_e3_neural_larger_n.md`, `experiments/commitment_surface/results/e4_pythia_lora_v2_summary.md`, `papers/commitment_surface/paper.md`
 - Local-only: artifacts/ (gitignored raw outputs; see result reports for summaries)
 - Paper: `papers/commitment_surface/paper.md`
