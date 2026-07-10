@@ -18,21 +18,30 @@ survival**: a representation is real for a deployment only if a train-time
 compatibility intervention with the deployment generator produces a causal
 effect (patch-CE) at the commitment surface, and that effect survives
 gauge-fixing and change of commitment. Concretely, we (i) formalize the
-commitment surface as a triple `(G_dep, C, T)` and prove weakness reduces to
-Bennett's principle when the probe group matches the deployment generator;
-(ii) show a strong within-lab discriminator on cyclic modular addition
-where unweighted weakness and misspecified concern selectors underperform
-well-specified concern-weighted selection by a decisive margin; (iii) show
-that neural training with cyclic-orbit augmentation dominates readout
-selection over trained-with-no-augmentation seeds on OOD accuracy AND
-patch-cross-entropy, with a wrong-group-augmented control at
-0.167 OOD (collapse) and near-zero patch-CE Δ; and (iv) run a
+commitment surface as a triple `(G_dep, C, T)` and show, under an explicit
+prior and orbit-likelihood, that weakness is the optimal selector exactly
+when the probe group matches the deployment generator, and only a footprint
+otherwise (Prop. 2); (ii) show a strong within-lab discriminator on cyclic
+modular addition where unweighted weakness and misspecified concern
+selectors underperform well-specified concern-weighted selection by a
+decisive margin; (iii) show that neural training with cyclic-orbit
+augmentation dominates readout selection over trained-with-no-augmentation
+seeds on OOD accuracy AND patch-cross-entropy, with a wrong-group-augmented
+control at 0.167 OOD (collapse) and near-zero patch-CE Δ; and (iv) run a
 non-degenerate external-contact sweep on Pythia 70m/160m/410m LoRA-fine-tuned
 on modular addition, where the compatibility-augmented arm reaches 0.882
-mean OOD while the readout arm sits at 0.113 mean OOD, closing the
-P1 external gap our prior work identified; ρ(patch-CE, OOD) = 0.853 vs
-ρ(weakness, OOD) = 0.290 across 108 cells, an empirical demonstration
-of Prop. 1 (readout ⊥ causal use) in the non-aligned regime. We recover the old-frame positives — cyclic and dihedral
+mean OOD while the readout arm sits at 0.113 mean OOD, substantially
+narrowing the P1 external gap our prior work identified; ρ(patch-CE, OOD)
+= 0.853 vs ρ(weakness, OOD) = 0.290 across 108 cells, consistent with
+Prop. 1 (probe readout does not identify causal use) in the non-aligned
+regime. Two pre-registered gates strictly failed and we report them as
+failures: the E1 misspecification-equivalence band (−0.054 vs ±0.05) and
+the E4 Arm-A ceiling (0.113 vs ≤ 0.10); E4 is directionally decisive but
+its strict gate did not pass. One confound remains open and is
+pre-registered for a follow-up: cyclic-orbit augmentation places correctly
+labeled examples on held-out deployment support, so E4 does not yet
+separate *generator learning* from *labeled orbit coverage* (Section 6.5).
+We recover the old-frame positives — cyclic and dihedral
 100%-vs-0% weakness sweeps — as the boundary case where the probe group and
 deployment generator coincide, and interpret the correction chain of
 autonomous-probing agents as an anti-Goodhart control loop — *detect →
@@ -77,18 +86,25 @@ the commitment surface, whatever the probe caught was not the thing.
 Contributions.
 - **C1.** A formal reframe (Section 3): the commitment surface as a triple
   `(G_dep, C, T)`; load-bearing structure as CE ≥ ε that survives transport
-  under `T`; probe AUC ⊥ CE without a commitment term (Prop. 1).
+  under `T`; probe AUC does not identify or lower-bound CE — a
+  non-identification theorem (Prop. 1).
 - **C2.** A bridge from Bennett weakness (extension mass) to
   concern-weighted weakness (extension mass weighted by consequence) to
   commitment-pinned intervention (Prop. 2 + Corollary), with cyclic/dihedral
-  results as the aligned-generator special case, not the general law.
+  results as the aligned-generator special case, not the general law. The
+  optimality statement requires `G_probe = G_dep` (or weakness restricted
+  to `G_dep`); a strict superset probe group does *not* suffice
+  (Section 3.4).
 - **C3.** Four severe experiments (Section 5). E1 shows within-lab that
-  well-specified concern beats unweighted and misspec is *worse* than
-  unweighted (misspec at −0.05 vs unweighted, gap = +0.24 for
-  well-specified). E2/E3 show that a neural compatibility-augmented arm
-  dominates a weakness-readout selector on OOD by a decisive gap, with
-  patch-CE aligned. E4 (Modal L4) runs the non-degenerate external contact
-  on Pythia 70m/160m/410m LoRA.
+  well-specified concern beats unweighted by +0.24; the misspecification
+  arm lands at −0.054 vs unweighted, *outside* the pre-registered ±0.05
+  equivalence band, so that sub-gate strictly fails (the direction —
+  misspec is not helpful — still holds). E2/E3 show that a neural
+  compatibility-augmented arm dominates a weakness-readout selector on
+  OOD by a decisive gap, with patch-CE aligned. E4 (Modal L4) runs the
+  non-degenerate external contact on Pythia 70m/160m/410m LoRA:
+  directionally decisive, strict pre-registered gate narrowly failed
+  (Arm A mean OOD 0.113 vs the required ≤ 0.10).
 - **C4.** An anti-Goodhart interpretation of the correction chain that ran
   through Papers 5–25 of the prior program (Section 6): *detect → allocate
   → saturate → cool → reopen*. Old-frame planners that optimize an
@@ -136,8 +152,10 @@ prefers the shortest description. Our own prior work
 (``papers/weakness_invariance_neurips/paper.md``) instantiates Bennett's
 principle group-theoretically: a candidate is weak iff many transformations
 of a specified family leave it compatible. This paper's contribution is not
-to reject that instantiation, but to bound it: it is Bayes-optimal exactly
-when the probe group matches the deployment generator (Prop. 2).
+to reject that instantiation, but to bound it: under an explicit prior
+and orbit-likelihood it is Bayes-optimal exactly when the probe group
+equals the deployment generator, or weakness is restricted to it — a
+strict superset probe group does not suffice (Prop. 2).
 Related: Gruver et al. (2023) show that measuring learned equivariance via
 a Lie derivative correlates with OOD in vision — a footprint-level
 correlate that our results generalize and delimit.
@@ -194,7 +212,7 @@ if it is a model of the observed task: `f ∈ M_α`.
 ### 3.2 Definition: the commitment surface
 
 Let `G_dep` be the **deployment generator** — the group (or generative
-family) whose action generates the deployment shift; `C : X → ℝ_≥0` be a
+family) whose action generates the deployment shift; `C : X → R_≥0` be a
 **concern measure** — a nonnegative weighting on decisions capturing
 consequence/viability/binding-importance; and `T : F(X, Y) → F(X, Y)` be
 a **commitment transport** — a rewriting operator that changes the
@@ -212,56 +230,101 @@ where `CE(f | patch, C)` is the concern-weighted cross-entropy increase
 on `X` when the identified aligned mechanism of `f` is causally patched
 (zero-ablated, adapter-disabled, or projected out).
 
-### 3.3 Proposition 1: readout ≠ use without commitment
+### 3.3 Proposition 1: probe AUC does not identify causal use
 
 Let `p : X → [0,1]` be any probe on features of `f`. Then:
 
-**Prop. 1.** `AUC(p) ⊥ CE(f | patch, C)` in the class of hypotheses
-`f ∈ M_α` — there exist admissible `f, f'` with equal `AUC(p)` and
-arbitrary `CE(f | patch, C) − CE(f' | patch, C)`.
+**Prop. 1 (non-identification).** Probe AUC does not identify, and does
+not lower-bound, causal effect: for every attainable AUC value `a` and
+every target gap `δ ∈ [0, ε]`, there exist admissible `f, f' ∈ M_α`
+with `AUC(p · f) = AUC(p · f') = a` and
+`CE(f | patch, C) − CE(f' | patch, C) = δ`. Consequently no function of
+probe AUC alone can decide whether a hypothesis is load-bearing at Σ.
+
+We deliberately do *not* state this as probabilistic independence
+(`AUC ⊥ CE`): independence would require a distribution over admissible
+hypotheses, and no canonical one exists. The theorem is a
+*non-identification* result — equal probe evidence is consistent with any
+causal-effect gap in `[0, ε]` — which is the property the availability-⇒-use
+inference actually needs and lacks. Empirically, an ensemble of trained
+models can still exhibit correlation between AUC and CE (E3 measures
+exactly this in the aligned regime); Prop. 1 says such correlation is a
+property of the training distribution, not of the probe evidence.
 
 Sketch. Fix `f'` train-perfect. Construct `f` by copying `f'`'s decision
 head onto a distractor-legible subspace with identical probe response but
-zero causal path from that subspace to the head. Then `AUC(p) = AUC(p')`
-by construction, and `CE(f | patch, C)` can be made arbitrarily small
-by choosing the patch on the distractor subspace, while `CE(f' | patch, C)`
-remains ≥ ε.
+zero causal path from that subspace to the head. Then
+`AUC(p · f) = AUC(p · f')` by construction, and `CE(f | patch, C)` can be
+made arbitrarily small by choosing the patch on the distractor subspace,
+while `CE(f' | patch, C)` remains ≥ ε. Full construction in Appendix A.1.
 
 Empirical anchor: our prior distractor-AUC-0.999 vs patch-CE-0.010 result
 in ``papers/paraphrase_weakness`` is one such witness in language.
 
 ### 3.4 Proposition 2: weakness is diagnostic when aligned
 
-Let `G_probe` be the probe group used to score compatibility. Let
-`W_{G_probe}(f) = |{ g ∈ G_probe : ∃ h ∈ G_probe, ∀x ∈ X, f(g·x) = h·f(x) }|`
-be the compatibility (weakness) count. Then:
+Let `G_probe` be the probe group used to score compatibility. Say `f` is
+*compatible with* `g` iff `∃ h ∈ G_probe, ∀x ∈ X, f(g·x) = h·f(x)`, and
+let `W_G(f) = |{ g ∈ G : f is compatible with g }|` be the compatibility
+(weakness) count over any group `G`. Fix the deployment model that makes
+"Bayes-optimal" meaningful: a deployment slice is generated by drawing
+`g ~ Uniform(G_dep)` and evaluating `f` on the `g`-translated support;
+`f` scores 1 on that slice iff `f` is compatible with `g` (the
+orbit-likelihood), and concern is uniform.
 
-**Prop. 2.** If `G_probe ⊇ G_dep`, `W_{G_probe}` is Bayes-optimal among
-selectors on admissible hypotheses for concern-weighted deployment
-accuracy under a uniform prior over `G_dep`. If `G_probe ⊄ G_dep`,
-`W_{G_probe}` is a *footprint* — its correlation with concern-weighted
-deployment accuracy can be zero or negative.
+**Prop. 2 (alignment condition).** Under this prior and likelihood:
 
-Empirical anchors: our cyclic/dihedral 100%-vs-0% wins are the aligned
-case; our Pythia LoRA P1 hard kill is the non-aligned case; our grid
-G2/G4 non-mediation is the partially aligned case.
+- **(i) Aligned case.** If `G_probe = G_dep` — or, more generally, if
+  weakness is computed *restricted to* `G_dep`, i.e. the selector uses
+  `W_{G_dep}` — then `argmax W_{G_dep}` maximizes expected deployment
+  accuracy over admissible hypotheses, hence is Bayes-optimal among
+  selectors that depend only on `f`.
+- **(ii) Superset caveat.** `G_probe ⊃ G_dep` does *not* suffice: a
+  candidate can be compatible with many elements of
+  `G_probe \ G_dep` while compatible with few elements of `G_dep`, so
+  `W_{G_probe}` can rank candidates in the opposite order of
+  `W_{G_dep}` (explicit counterexample in Appendix A.1). Optimality is
+  recovered from a superset probe group only under an
+  *ordering-preservation assumption*: for the candidate set under
+  comparison, `W_{G_probe}(f) > W_{G_probe}(f') ⇒ W_{G_dep}(f) ≥
+  W_{G_dep}(f')`.
+- **(iii) Non-aligned case.** If `G_dep ⊄ G_probe` (the probe group does not contain the deployment generator), `W_{G_probe}` is a
+  *footprint* — its correlation with concern-weighted deployment accuracy
+  over a candidate set can be zero or negative.
+
+Empirical anchors: our cyclic/dihedral 100%-vs-0% wins instantiate (i)
+(`G_probe = G_dep = C_n`); our Pythia LoRA P1 hard kill is the
+non-aligned case (iii); our grid G2/G4 non-mediation is the partially
+aligned case where the ordering-preservation assumption of (ii) fails.
 
 ### 3.5 Corollary: concern-weighted extension mass
 
 Define the **concern-weighted extension** of an admissible hypothesis
 `f` for deployment slice `U ⊂ X` as
 
-  W_C(f, U) = Σ_{x ∈ U} C(x) · 𝟙[ f(x) = truth(x) ].
+  W_C(f, U) = Σ_{x ∈ U} C(x) · 1[ f(x) = truth(x) ].
 
-**Corollary.** `W_C(f, U)` is optimal for concern-weighted OOD accuracy
-iff `C` matches the deployment consequence measure `C_star`. A misspecified
-`C` reduces `W_C` to unweighted extension mass in expectation over a
-random assignment; a well-specified `C` strictly dominates unweighted
-extension mass when `f`s vary in coverage of high-`C_star` blocks.
+**Corollary (order-equivalence).** Let `C_star` be the deployment
+consequence measure. `C = C_star` up to positive scaling is *sufficient*
+for the selector `argmax_f W_C(f, U)` to pick a `C_star`-optimal
+candidate, but it is not *necessary*: over a finite candidate set
+`F ⊂ M_α`, the selector is `C_star`-optimal iff `C` is
+**order-equivalent to `C_star` on `F`** — i.e.
+`W_C(f, U) > W_C(f', U) ⇔ W_{C_star}(f, U) > W_{C_star}(f', U)` for all
+`f, f' ∈ F`. Distinct weightings can induce the same ranking and are
+then equally optimal. A misspecified `C` drawn as a random assignment
+with the same marginal reduces `W_C` to unweighted extension mass *in
+expectation*; a well-specified `C` strictly dominates unweighted
+extension mass when candidates vary in coverage of high-`C_star` blocks.
 
 Empirical anchor: E1 (Section 5.1). Well-specified: 0.814; unweighted:
-0.570; misspec: 0.516. Gap +0.24 (wellspec vs unweighted); misspec
-sits slightly *below* unweighted, confirming the corollary's direction.
+0.570; misspec: 0.516. Gap +0.24 (wellspec vs unweighted). The misspec
+arm sits 0.054 *below* unweighted — directionally consistent with the
+corollary (random weighting is not helpful), but note this is outside
+the pre-registered ±0.05 equivalence band, so the strict E1 misspec
+sub-gate fails (Section 5.1); the in-expectation reduction predicts
+equality, and the realized misspec draw was mildly adversarial rather
+than neutral.
 
 ### 3.6 M4: anti-Goodhart control loop
 
@@ -358,22 +421,25 @@ expected: the Pythia LoRA training regime *does not* respect
 `G_probe = G_dep = C_n` — the LM objective is over token distributions,
 not over group orbits. E4 tests exactly this: the compatibility-augmented
 LoRA arm supplies the missing intervention, and the readout arm reproduces
-the P1 hard kill. The result at 108 cells (Section 5.4) is directionally
-decisive: Arm B mean OOD 0.882 vs Arm A mean OOD 0.113, Arm B mean
+the P1 hard kill. The result at 108 cells (Section 5.4) is
+**directionally decisive, but the strict pre-registered gate failed**:
+Arm B mean OOD 0.882 vs Arm A mean OOD 0.113, Arm B mean
 patch-CE Δ +4.86 vs Arm A −0.74, and the anti-cheat Arm C sits at
 0.071 OOD despite the same augmentation volume as B. Weakness ρ drops
 to 0.29 across cells; patch-CE ρ holds at 0.85. The pre-registered
-"A mean OOD ≤ 0.10" gate is missed by 0.013 — driven by 2 of the 27
-Arm A cells (out of 108 across the sweep) that stumbled into the true
-cyclic rule without augmentation (the 410m/n=17/seed=709 cell reaches
-OOD 1.000 and weakness 1.000, textbook aligned-regime recovery).
-Twenty-two of twenty-seven Arm A cells sit at OOD ≤ 0.15 while
-**all twenty-seven Arm B cells** clear OOD ≥ 0.5; the two Arm A
-outliers confirm the theory rather than undermining it — Arm A can
-occasionally recover when a training run happens to land in the
-aligned regime, and when it does, weakness and patch-CE agree on the
-load-bearing signal at cell scale. We
-retract the "weakness predicts OOD in general" reading of the prior
+"A mean OOD ≤ 0.10" condition came in at 0.113 — a fail by the exact
+standard this paper advocates, and we record E4 as a gate failure, not
+a pass. The miss is attributable to 2 of the 27 Arm A cells that
+stumbled into the true cyclic rule without augmentation (the
+410m/n=17/seed=709 cell reaches OOD 1.000 and weakness 1.000, textbook
+aligned-regime recovery); twenty-two of twenty-seven Arm A cells sit at
+OOD ≤ 0.15 while **all twenty-seven Arm B cells** clear OOD ≥ 0.5.
+That diagnosis is a post-hoc account of a pre-registered miss — it
+explains the failure, it does not convert it into a pass. What the two
+Arm A outliers do show is that Arm A can occasionally recover when a
+training run happens to land in the aligned regime, and when it does,
+weakness and patch-CE agree on the load-bearing signal at cell scale.
+We retract the "weakness predicts OOD in general" reading of the prior
 program in favor of "weakness predicts OOD when the probe group and
 training regime jointly align with the deployment generator, and the
 intervention is train-time."
@@ -439,6 +505,15 @@ the compression; a factorial ablation would upgrade it.
 - The patch-CE metric we use in E4 (LoRA-full-ablation) is a coarse
   approximation to true directional patching; a finer, rank-decomposition
   patch is left to future work.
+- The E2 patch-CE evidence for *localization* is weaker than the
+  headline B − A gap suggests. Arm B's absolute patch-CE Δ is small
+  (+0.024; Arm C +0.003; B − C only +0.021), and the large B − A gap
+  (+0.758) is mostly produced by Arm A's *negative* patch score
+  (−0.734: ablating "compatibility-aligned" units in a memorizing
+  model *reduces* OOD CE). The E2 patch result therefore supports
+  "B's mechanism differs from A's" strongly, but supports "B localizes
+  a substantial mechanism in the top-k units" only weakly. The
+  large-width sweep sharpens this concern rather than resolving it.
 - The E2/E3 top-k-unit patch-CE metric loses absolute-magnitude
   discriminating power at larger widths: a robustness sweep at
   `n ∈ {17, 19, 23}`, hidden width 128, top_k 16
@@ -446,9 +521,11 @@ the compression; a factorial ablation would upgrade it.
   Arm A 0.089 (gap +0.911) — the OOD story holds decisively — but
   patch-CE Δ for B drops to +0.04 because the trained model spreads
   the load-bearing structure across more redundant units, so a fixed
-  top-k ablation catches a smaller fraction of the mechanism. This
-  is a metric-scaling artifact, not a substance failure. A fix left
-  to future work: normalize patch-CE by hidden-width fraction, or
+  top-k ablation catches a smaller fraction of the mechanism. A
+  fixed-width top-k patch loses power as width grows; until a
+  rank-normalized or subspace-decomposition patch is run, the E2/E3
+  localization claim should be read as preliminary. Fix left to
+  future work: normalize patch-CE by hidden-width fraction, or
   rank-decompose the affected subspace.
 - The anti-Goodhart reading of the correction chain is a compression
   hypothesis; the strong form of {allocate, cool, reopen} as the load-
@@ -456,6 +533,70 @@ the compression; a factorial ablation would upgrade it.
   teacher-free re-engagement).
 - Extension to non-group deployment generators (e.g., semantic
   distribution shifts with no clean group action) is open.
+- The highest-priority methodological issue is the label-exposure
+  confound of Section 6.5: cyclic-orbit augmentation places correctly
+  labeled examples on the held-out deployment support, so E2/E4 do not
+  yet separate *generator learning* from *labeled orbit coverage*.
+
+### 6.5 Open confound: labeled orbit coverage vs generator learning
+
+E4's compatibility augmentation generates, for each train pair
+`(x, y = (x + offset) mod n)`, the pair `((x+k) mod n, (y+k) mod n)`
+for random `k`. Because `(y+k) = ((x+k) + offset) mod n`, every
+augmented pair is a *correctly labeled* example at input `(x+k) mod n`
+— including inputs in the held-out deployment complement. The same
+holds for E2's `((a+k) mod n, b) ↦ (a+b+k) mod n` augmentation. In
+other words, the intervention arms were trained with direct labeled
+exposure to the OOD support. The wrong-group Arm C matches augmentation
+*volume* but places *incorrect* labels on held-out inputs
+(`π(truth(x))` at input `π(x)` is generally not `truth(π(x))`), so the
+B-vs-C contrast rules out generic augmentation volume — it does **not**
+rule out target-support label exposure as the operative mechanism.
+An earlier revision of Arm C that used correctly-labeled coverage
+augmentation *did* produce OOD generalization (Appendix A.4, R2),
+which keeps the coverage explanation live rather than hypothetical.
+
+E4 is therefore consistent with two readings:
+
+1. **Commitment-first (ours).** The model learns a transportable
+   generator (cyclic equivariance) and uses it at commitment; the
+   augmentation is how the generator is installed.
+2. **Coverage (deflationary).** Aligned augmentation simply exposes the
+   OOD orbit with correct labels; nothing transportable is learned
+   beyond fitting the exposed points.
+
+The pre-registered severe follow-up separates them. Train **without
+ever presenting labels from the held-out deployment orbit**, and
+compare five arms:
+
+1. aligned generator regularization using only train-support pairs
+   (e.g., an equivariance-consistency loss `f((x+k) mod n)` vs
+   `(f(x)+k) mod n` evaluated only where both points are in the train
+   support, or where the target is the model's own prediction rather
+   than a ground-truth label);
+2. aligned augmentation that is allowed to enter held-out support
+   (the current Arm B, as the coverage-exposed reference);
+3. wrong-generator regularization (matched form of (1), wrong group);
+4. ordinary coverage-matched augmentation (correct labels, no group
+   structure, matched count of held-out-support exposures);
+5. readout selection (current Arm A).
+
+Evaluate on a **new group element or modulus not used by the
+intervention**, with rank-normalized causal patching.
+
+**Kill criteria (pre-registered).** The commitment-first interpretation
+is materially weakened if any of:
+
+- arm (1)'s gains disappear when augmentation cannot label
+  deployment-support points (i.e., (1) ≈ (5) while (2) >> (5));
+- coverage-matched augmentation (4) performs on par with aligned
+  augmentation (2);
+- patch-CE fails to predict transfer to a novel commitment surface.
+
+Until this follow-up runs, the E4 claim should be read as: *train-time
+aligned intervention recovers external OOD where readout selection does
+not* — with the mechanism (transportable generator vs labeled coverage)
+not yet isolated.
 
 ## 7. Conclusion
 
@@ -485,67 +626,116 @@ pre-registered kills in ``docs/external_contact_preregistration.md``.
 
 ### A.1 Full derivations for Props 1 and 2
 
-**Prop. 1 (readout ≠ use).** Let `M_α` be the set of admissible
-hypotheses. Fix a probe `p : X → [0,1]` and any admissible baseline `f'`
-with a known load-bearing mechanism `M(f')` such that `CE(f' | patch,
-C) ≥ ε` when the patch zeroes `M(f')`. We construct `f` as follows: (i)
-duplicate `f'`'s decision head onto a fresh subspace `S` orthogonal to
-`M(f')` in feature space; (ii) copy `f'`'s decisions bit-for-bit onto
-`M(f') ⊕ S`; (iii) route the probe input through `S` while keeping the
-downstream computation routed through `M(f')`. By construction:
+**Prop. 1 (non-identification of causal use by probe AUC).** Let `M_α`
+be the set of admissible hypotheses. Fix a probe `p : X → [0,1]` and any
+admissible baseline `f'` with a known load-bearing mechanism `M(f')`
+such that `CE(f' | patch, C) ≥ ε` when the patch zeroes `M(f')`. We
+construct `f` as follows: (i) duplicate `f'`'s decision head onto a
+fresh subspace `S` orthogonal to `M(f')` in feature space; (ii) copy
+`f'`'s decisions bit-for-bit onto `M(f') ⊕ S`; (iii) route the probe
+input through `S` while keeping the downstream computation routed
+through `M(f')`. By construction:
 
-  Property (a). `AUC(p ∘ f) = AUC(p ∘ f')` on any input distribution,
+  Property (a). `AUC(p · f) = AUC(p · f')` on any input distribution,
   because `p` reads `S` and `S` was constructed to match `f'`'s probe
   response.
-  Property (b). Zero-ablating `S` changes `p ∘ f` but not the decision
+  Property (b). Zero-ablating `S` changes `p · f` but not the decision
   head's output, so `CE(f | patch(S), C) = 0`.
   Property (c). Zero-ablating `M(f')` changes both the decision output
   and the probe response, so `CE(f | patch(M(f')), C) = CE(f' | patch,
   C) ≥ ε`.
 
-For the null-patched probe `patch(S)`, `AUC(p ∘ f) = AUC(p ∘ f')` but
-`CE(f | patch(S), C) = 0 < ε = CE(f' | patch(M(f')), C)`. Choosing the
-scaled convex combination `f_λ = λ f + (1-λ) f'` shows the
-independence: `AUC` is invariant while `CE(f_λ | patch(S), C)` varies
-continuously from `0` to `ε`. Hence `AUC(p) ⊥ CE(f | patch, C)`. ∎
+This exhibits two admissible hypotheses with identical probe AUC and
+causal-effect gap `ε` under the respective identified-mechanism patches.
+To realize an arbitrary intermediate gap `δ ∈ [0, ε]`, interpolate the
+*routing*, not the functions: construct `f_λ` that routes a fraction
+`λ` of the decision head's input mass through `M(f')` and `1 − λ`
+through the (causally inert, probe-visible) copy on `S`, with the head
+re-normalized so the input–output behavior — hence admissibility and
+probe response — is unchanged. `AUC(p · f_λ)` is constant in `λ` while
+`CE(f_λ | patch(S), C)` moves continuously from `0` (at `λ = 1`) toward
+`ε` (at `λ = 0`), so every gap `δ ∈ [0, ε]` is attained at equal AUC.
 
-**Prop. 2 (weakness is diagnostic when aligned).** Assume `G_probe ⊇
-G_dep`, both finite groups, uniform prior over `G_dep`. For any two
-admissible `f, f' ∈ M_α`, if `W_{G_probe}(f) > W_{G_probe}(f')` then
-`f` is compatible with strictly more elements of `G_dep` (since
-`G_probe ⊇ G_dep`), and under uniform concern and uniform prior over
-`G_dep`, the expected concern-weighted OOD accuracy of `f` on a
-`G_dep`-generated slice strictly exceeds that of `f'` — this is the
-Bennett extension-mass argument restricted to the deployment slice.
-Bayes optimality follows because the posterior over admissible
-hypotheses conditioned on the observed child task and uniform prior is
-maximized by argmax of the extension mass, which is precisely
-`W_{G_probe}`.
+Hence no function of probe AUC alone identifies, or lower-bounds,
+`CE(· | patch, C)` on `M_α`. We emphasize the scope: this is a
+*non-identification* theorem over the admissible class. It does **not**
+assert probabilistic independence of AUC and CE — that would require a
+distribution over `M_α`, and under particular training distributions
+the two can correlate (E3 measures such a correlation in the aligned
+regime). What fails is the inference from probe evidence to causal use
+for any *individual* hypothesis. ∎
 
-Now suppose `G_probe ⊄ G_dep`. Let `g' ∈ G_dep \ G_probe`. Then
-`W_{G_probe}(f)` does not measure compatibility with `g'`. Construct
-`f, f'` admissible such that `W_{G_probe}(f) > W_{G_probe}(f')` but
-`f'` is compatible with `g'` and `f` is not; then `f'` has strictly
-higher concern-weighted OOD accuracy on the `g'`-generated slice while
-`f` has higher `W_{G_probe}` — a negative correlation between selector
-score and OOD accuracy. Hence `W_{G_probe}` is a footprint whose sign
-of correlation with concern-weighted OOD accuracy is
+**Prop. 2 (weakness is diagnostic exactly when aligned).**
+*Deployment model.* Both groups finite. A deployment slice is generated
+by drawing `g ~ Uniform(G_dep)` (the prior) and evaluating the
+candidate on the `g`-translated support; the candidate scores 1 on the
+slice iff it is compatible with `g` (the orbit-likelihood), and concern
+is uniform. Under this model the expected deployment accuracy of an
+admissible `f` is
+
+  E_g[acc(f)] = W_{G_dep}(f) / |G_dep|,
+
+i.e. expected accuracy is *exactly* normalized deployment-restricted
+weakness.
+
+*(i) Aligned case.* If the selector scores candidates by `W_{G_dep}` —
+either because `G_probe = G_dep`, or because weakness is explicitly
+restricted (or concern-weighted) to `G_dep` — then
+`argmax_f W_{G_dep}(f)` maximizes `E_g[acc(f)]` by the identity above.
+Since the score is a deterministic function of `f` and the objective is
+its own posterior expectation under the stated prior and likelihood,
+the argmax selector is Bayes-optimal among selectors that depend only
+on `f`. (Bayes-optimality here is *relative to this explicit prior and
+likelihood*; no claim is made under other priors.)
+
+*(ii) Superset counterexample.* `G_probe ⊃ G_dep` does not suffice.
+Let `G_dep = {e, g}` and `G_probe = {e, g, h1, h2, h3}`. Take `f`
+compatible with `{e, h1, h2, h3}` (so `W_{G_probe}(f) = 4`,
+`W_{G_dep}(f) = 1`) and `f'` compatible with `{e, g}` (so
+`W_{G_probe}(f') = 2`, `W_{G_dep}(f') = 2`). Then
+`W_{G_probe}(f) > W_{G_probe}(f')` while
+`E_g[acc(f)] = 1/2 < 1 = E_g[acc(f')]`: the superset-probe ranking is
+inverted on deployment. Optimality from a superset probe group is
+recovered only under an ordering-preservation assumption on the
+candidate set: `W_{G_probe}(f) > W_{G_probe}(f') ⇒ W_{G_dep}(f) ≥
+W_{G_dep}(f')`.
+
+*(iii) Non-aligned case.* Suppose `G_dep ⊄ G_probe`. Let
+`g' ∈ G_dep \ G_probe`. Then `W_{G_probe}(f)` does not measure
+compatibility with `g'`. Construct `f, f'` admissible such that
+`W_{G_probe}(f) > W_{G_probe}(f')` but `f'` is compatible with `g'`
+and `f` is not; then `f'` has strictly higher expected deployment
+accuracy on the `g'`-generated slice while `f` has higher
+`W_{G_probe}` — a negative association between selector score and OOD
+accuracy on that candidate pair. Hence `W_{G_probe}` is a footprint
+whose sign of association with deployment accuracy is
 generator-dependent. ∎
 
-**Corollary (concern-weighted extension mass).** Let `C : U → ℝ_≥0`
-be a concern measure on the deployment slice `U`, and `C*` be the true
-consequence measure. For admissible `f, f' ∈ M_α`:
+**Corollary (order-equivalence for concern-weighted extension mass).**
+Let `C : U → R_≥0` be a concern measure on the deployment slice `U`,
+`C_star` the true consequence measure, and `F ⊂ M_α` a finite candidate
+set. *Sufficiency:* if `C = a·C_star` for some `a > 0`, then
+`W_C = a·W_{C_star}` and `argmax_F W_C = argmax_F W_{C_star}`, so the
+selector is `C_star`-optimal on `F`. *Exact condition:* the selector
+`argmax_F W_C` picks a `C_star`-optimal candidate for every truth
+assignment iff `C` is order-equivalent to `C_star` on `F`:
 
-  `W_C(f, U) > W_C(f', U) ⇒ concern-weighted OOD accuracy of f > f'`
+  `W_C(f, U) > W_C(f', U) ⇔ W_{C_star}(f, U) > W_{C_star}(f', U)`
+  for all `f, f' ∈ F`.
 
-iff `C = C_star` (up to positive scaling). If `C ≠ C_star` and the
-mismatch is a random assignment with same marginal distribution as
-`C_star`, then in expectation `W_C(f, U) = |U| · P_C[correct]` reduces
-to `|U|` times the unweighted correct fraction; the expected selector
-choice is unweighted-Bennett-optimal, not `C_star`-optimal. A
-strictly-adversarial `C` (anti-correlated with `C_star`) inverts the
-relation — this is the E1 empirical result at cell scale where
-misspec sits *below* unweighted. ∎
+Equality up to positive scale is *not necessary*: over a finite `F`,
+distinct weightings that induce the same ranking of candidates are
+equally optimal, so the earlier "iff `C = C_star` up to scaling"
+phrasing was too strong and is retracted here in favor of the
+order-equivalence condition. *Misspecification:* if `C` is a random
+assignment with the same marginal distribution as `C_star`,
+independent of candidate coverage, then
+`E[W_C(f, U)] = E[C] · |{x ∈ U : f(x) = truth(x)}|` — proportional to
+unweighted extension mass — so the misspecified selector reduces to
+unweighted Bennett *in expectation* (any particular draw can be mildly
+helpful or mildly adversarial; E1's realized draw was mildly
+adversarial at −0.054). A strictly adversarial `C` (anti-correlated
+with `C_star`) inverts the relation. ∎
 
 ### A.2 Per-cell tables
 
@@ -694,14 +884,21 @@ If patch-CE were only measuring "the LoRA update is used", Arms B and C
 would have similar patch-CE and similar OOD. Empirically the anti-cheat
 holds: LoRA is only load-bearing when the augmentation *group* matches
 the deployment generator, not merely when augmentation *volume* is
-present. (We flag one nuance: an earlier revision of Arm C used the
-labeled coverage augmentation `(π(x), b) → truth(π(x), b)`, which
-just extends training coverage with correct labels and — as expected —
-also produced OOD generalization. That earlier arm answers a different
-question — "does adding correct-labeled coverage of the input space
-help?" (yes) — and does not distinguish generator specificity from
-volume. The final Arm C reported here is the wrong-equivariance
-augmentation described above.)
+present. However, Arm C controls volume, **not label exposure**: Arm B's
+cyclic augmentation places correctly labeled examples on the held-out
+deployment support, while Arm C places incorrectly labeled ones there.
+An earlier revision of Arm C used the labeled coverage augmentation
+`(π(x), b) → truth(π(x), b)`, which just extends training coverage
+with correct labels and — as expected — also produced OOD
+generalization. That result answers a different question ("does
+adding correct-labeled coverage help?" — yes) and, importantly, keeps
+the coverage explanation of Arm B live: the reviewer's confound is
+real, not hypothetical. Section 6.5 states the confound explicitly and
+pre-registers the severe follow-up (generator regularization confined
+to train support, tested on a novel group element or modulus) with
+kill criteria. Until it runs, R2's strongest defensible reading of E4
+is "aligned train-time intervention recovers external OOD where
+readout selection does not," with the mechanism not yet isolated.
 
 **R3. "The anti-Goodhart control loop reads like a philosophical
 compression, not an empirical result."**

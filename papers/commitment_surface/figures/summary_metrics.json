@@ -1,10 +1,10 @@
 {
   "figures": {
-    "fig1": "/Users/jawaun/rde-commitment-first/papers/commitment_surface/figures/fig1_e1_selectors.png",
-    "fig2": "/Users/jawaun/rde-commitment-first/papers/commitment_surface/figures/fig2_e2_arms_ood.png",
-    "fig3": "/Users/jawaun/rde-commitment-first/papers/commitment_surface/figures/fig3_e3_readout_vs_patch.png",
-    "fig4": "/Users/jawaun/rde-commitment-first/papers/commitment_surface/figures/fig4_e4_pythia_arms.png",
-    "fig5": "/Users/jawaun/rde-commitment-first/papers/commitment_surface/figures/fig5_frame_taxonomy.png"
+    "fig1": "/Users/jawaun/.cursor/worktrees/Research_Derived_Experiments/v3ni/papers/commitment_surface/figures/fig1_e1_selectors.png",
+    "fig2": "/Users/jawaun/.cursor/worktrees/Research_Derived_Experiments/v3ni/papers/commitment_surface/figures/fig2_e2_arms_ood.png",
+    "fig3": "/Users/jawaun/.cursor/worktrees/Research_Derived_Experiments/v3ni/papers/commitment_surface/figures/fig3_e3_readout_vs_patch.png",
+    "fig4": "/Users/jawaun/.cursor/worktrees/Research_Derived_Experiments/v3ni/papers/commitment_surface/figures/fig4_e4_pythia_arms.png",
+    "fig5": "/Users/jawaun/.cursor/worktrees/Research_Derived_Experiments/v3ni/papers/commitment_surface/figures/fig5_frame_taxonomy.png"
   },
   "headline": {
     "e1": {

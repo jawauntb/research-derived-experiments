@@ -214,6 +214,13 @@ for the theory (Props 1+2, corollary, M4 anti-Goodhart loop) and
 [`papers/commitment_surface/PLAN.md`](../papers/commitment_surface/PLAN.md)
 for the frozen pre-registration.
 
+The corrected formal surface treats Proposition 1 as non-identification,
+requires deployment-restricted weakness (or an ordering-preservation
+assumption) in Proposition 2, and uses finite-candidate order equivalence for
+concern weighting. E4 is a directional result with a strict gate failure; its
+open labeled-orbit-coverage confound and severe follow-up are recorded in
+paper §6.5.
+
 | Module | Purpose |
 |---|---|
 | `core.py` | Stdlib primitives: concern deployments (uniform / unequal / misspec), weighted extension mass, candidate hypothesis families (shifts, random train-perfect completions, biased-to-focus), selectors, `run_e1_cell` |
