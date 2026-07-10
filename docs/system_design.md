@@ -45,7 +45,10 @@ exposure plans keep supervised labels distinct from consistency pairs, record
 support exposure counts, reserve disjoint novel shifts, and reject leakage
 before analysis. The runtime evaluates canonical and paraphrased commitments and
 removes a fixed spectral-mass fraction from each effective LoRA update for a
-rank-comparable patch. The minimum Modal smoke passed its integrity gate; E5
+rank-comparable patch. Candidate rows are bounded in microbatches and the
+consistency objective backpropagates a weighted average one pair-microbatch at a
+time; this preserves the frozen loss while avoiding graph accumulation on
+410m/L4. The minimum Modal smoke passed its integrity gate; E5
 remains scientifically pending until the confirmatory grid passes the frozen
 post-hoc gates. Separately, E2/E3 now fit a compatibility-aligned activation
 subspace and normalize causal CE by realized removed between-orbit spectral

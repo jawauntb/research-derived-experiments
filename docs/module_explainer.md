@@ -236,7 +236,7 @@ passed integrity; mechanism confirmation remains pending.
 | `e2_e3_neural_sweep.py` | E2/E3 four-arm neural MLP sweep on cyclic modular addition; preserves fixed-top-k patching and adds spectral-mass-normalized compatibility/wrong-subspace projection for width-comparable causal localization |
 | `modal_e4_pythia_lora_v2.py` | E4 Modal L4 external contact: four arms A (readout) / B (cyclic-orbit augmentation) / C (wrong-group aug) / D (loss selector) on Pythia 70m/160m/410m LoRA modular addition; adapter-disable patch-CE |
 | `e5_core.py` | E5 typed configs, disjoint support/intervention splits, supervised-vs-consistency exposure plans, leakage/coverage audits, and frozen smoke/confirmatory analysis gates |
-| `modal_e5_generator_vs_coverage.py` | E5 Modal Pythia-LoRA five-arm runner: train-support-only correct/wrong generator consistency, orbit and coverage references, novel-shift/paraphrase transport, exposure ledgers, and spectral-mass-normalized LoRA patching |
+| `modal_e5_generator_vs_coverage.py` | E5 Modal Pythia-LoRA five-arm runner: train-support-only correct/wrong generator consistency, orbit and coverage references, novel-shift/paraphrase transport, exposure ledgers, spectral-mass-normalized LoRA patching, and weighted pair-microbatch backpropagation for 410m/L4 memory safety |
 | `results/e1_concern_weighted.{json,md}` | E1 summary + per-cell provenance |
 | `results/e1_misspecification_variance.{json,md}` | E1 follow-up aggregate draws, quantiles/CI, assumption audit, and randomization verdict |
 | `results/e2_e3_neural.{json,md}` | E2/E3 summary + per-cell provenance |
