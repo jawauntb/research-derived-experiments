@@ -314,13 +314,17 @@ def make_frame_taxonomy_figure() -> str:
     return str(path)
 
 
+def _repo_relative(path: str) -> str:
+    return str(Path(path).relative_to(ROOT))
+
+
 def main() -> None:
     summary = {"figures": {}, "headline": {}}
 
     if E1_JSON.exists():
         e1 = json.loads(E1_JSON.read_text())
         fig1_path, e1_meta = make_e1_figure(e1)
-        summary["figures"]["fig1"] = fig1_path
+        summary["figures"]["fig1"] = _repo_relative(fig1_path)
         summary["headline"]["e1"] = e1_meta
     else:
         print(f"skip E1 fig (missing {E1_JSON})")
@@ -329,8 +333,8 @@ def main() -> None:
         e2 = json.loads(E2E3_JSON.read_text())
         fig2_path, e2_meta = make_e2_figure(e2)
         fig3_path, e3_meta = make_e3_figure(e2)
-        summary["figures"]["fig2"] = fig2_path
-        summary["figures"]["fig3"] = fig3_path
+        summary["figures"]["fig2"] = _repo_relative(fig2_path)
+        summary["figures"]["fig3"] = _repo_relative(fig3_path)
         summary["headline"]["e2"] = e2_meta
         summary["headline"]["e3"] = e3_meta
     else:
@@ -340,14 +344,14 @@ def main() -> None:
     if e4_json is not None:
         e4 = json.loads(e4_json.read_text())
         fig4_path, e4_meta = make_e4_figure(e4)
-        summary["figures"]["fig4"] = fig4_path
+        summary["figures"]["fig4"] = _repo_relative(fig4_path)
         summary["headline"]["e4"] = e4_meta
         summary["headline"]["e4"]["source"] = str(e4_json.relative_to(ROOT))
     else:
         print("skip E4 fig (no artifact found)")
 
     fig5_path = make_frame_taxonomy_figure()
-    summary["figures"]["fig5"] = fig5_path
+    summary["figures"]["fig5"] = _repo_relative(fig5_path)
 
     out = PAPER_FIG / "summary_metrics.json"
     out.write_text(json.dumps(summary, indent=2))
