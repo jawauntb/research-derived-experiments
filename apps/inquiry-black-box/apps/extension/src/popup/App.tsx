@@ -11,14 +11,13 @@ import { CONTENT_PING_MESSAGE, CONTENT_PONG_MESSAGE } from "../lib/messages";
 import { hashForTelemetry } from "../lib/telemetry";
 import {
   defaultSessionTitle,
-  inquiryDarkCssVariableBlock,
-  inquiryCssVariableBlock,
   recordingIndicator,
   sessionTransportButtons,
   siteCaptureLabel,
   type SessionTransportButton,
 } from "@inquiry/ui";
 import { renderPrivacyToggles } from "./PrivacyToggles";
+import { installPopupStyles } from "./styles";
 
 type PopupState = BridgeState & {
   queueSize: number;
@@ -70,7 +69,7 @@ type PopupModel = {
 
 export function mountPopup(root: HTMLElement, chromeApi = readChrome()): void {
   root.className = "popup-root";
-  installStyles();
+  installPopupStyles();
 
   if (!chromeApi?.runtime) {
     root.replaceChildren(emptyState("Extension runtime unavailable"));
@@ -114,21 +113,30 @@ function render(root: HTMLElement, model: PopupModel, chromeApi: ChromeLike, not
   const page = document.createElement("main");
   page.className = "popup";
 
+  const paired = Boolean(model.state.pairingToken);
   const effectiveState = model.state.desktopRecordingState ?? model.state.recordingState;
   const indicator = recordingIndicator(effectiveState === "stopped" ? "stopped" : effectiveState);
 
   const header = document.createElement("header");
   header.className = "popup-header";
+  const brand = document.createElement("div");
+  brand.className = "popup-brand";
+  const eyebrow = document.createElement("span");
+  eyebrow.className = "popup-eyebrow";
+  eyebrow.textContent = "Neurophenom lab";
   const title = document.createElement("h1");
-  title.textContent = "Inquiry Black Box";
+  title.textContent = "Inquiry";
+  brand.append(eyebrow, title);
   const status = document.createElement("span");
-  status.className = `status status-${indicator.state}`;
-  status.textContent = indicator.label;
-  header.append(title, status);
+  status.className = `status ${paired ? `status-${indicator.state}` : "status-setup"}`;
+  status.textContent = paired ? indicator.label : "Setup needed";
+  status.setAttribute("role", "status");
+  header.append(brand, status);
 
   const queue = document.createElement("div");
   queue.className = "queue-row";
   queue.textContent = queueLabel(model.state);
+  queue.setAttribute("role", "status");
 
   const effectiveNotice = notice ?? (model.state.desktopStatusWarning ? `Desktop status unavailable: ${model.state.desktopStatusWarning}` : undefined);
   const noticeElement = document.createElement("div");
@@ -136,9 +144,20 @@ function render(root: HTMLElement, model: PopupModel, chromeApi: ChromeLike, not
   noticeElement.hidden = !effectiveNotice;
   noticeElement.textContent = effectiveNotice ?? "";
 
-  const controls = document.createElement("section");
+  const sessionPanel = document.createElement("section");
+  sessionPanel.className = "session-panel";
+  const sessionHeading = document.createElement("div");
+  sessionHeading.className = "section-heading";
+  const sessionTitle = document.createElement("h2");
+  sessionTitle.textContent = "Session capture";
+  const sessionHelp = document.createElement("p");
+  sessionHelp.textContent = paired
+    ? sessionHelper(indicator.state)
+    : "Pair the desktop app to unlock recording controls.";
+  sessionHeading.append(sessionTitle, sessionHelp);
+  const controls = document.createElement("div");
   controls.className = "button-row";
-  const canControl = Boolean(model.state.pairingToken);
+  const canControl = paired;
   for (const button of sessionTransportButtons(indicator.state)) {
     if (button.command === "resume") {
       continue;
@@ -153,6 +172,10 @@ function render(root: HTMLElement, model: PopupModel, chromeApi: ChromeLike, not
     if (resume) {
       controls.append(transportButton(resume, () => setRecordingState(root, chromeApi, "recording", model.siteLabel), !canControl || !resume.enabled));
     }
+  }
+  sessionPanel.append(sessionHeading, controls);
+  if (paired || model.state.queueSize > 0) {
+    sessionPanel.append(queue);
   }
 
   const sitePaused = Boolean(model.siteHash && model.state.disabledSiteHashes.includes(model.siteHash));
@@ -180,10 +203,21 @@ function render(root: HTMLElement, model: PopupModel, chromeApi: ChromeLike, not
   const health = document.createElement("div");
   health.className = "health-row";
   health.textContent = [
-    model.state.pairingToken ? "Paired" : "Not paired",
-    pageListenerLabel(model.pageListener),
-    sitePaused ? "Site paused" : "Site allowed",
+    paired ? "Desktop paired" : "Desktop not paired",
+    `Page listener ${pageListenerLabel(model.pageListener).toLowerCase()}`,
+    sitePaused ? "Capture paused" : "Capture allowed",
   ].join(" · ");
+
+  const sitePanel = document.createElement("section");
+  sitePanel.className = "site-panel";
+  const siteHeading = document.createElement("div");
+  siteHeading.className = "section-heading";
+  const siteTitle = document.createElement("h2");
+  siteTitle.textContent = "This page";
+  const siteHelp = document.createElement("p");
+  siteHelp.textContent = `Browser evidence for ${model.siteLabel}.`;
+  siteHeading.append(siteTitle, siteHelp);
+  sitePanel.append(siteHeading, siteToggle, health);
 
   const diagnostics = diagnosticsSection(model);
   const pairing = model.state.pairingToken
@@ -202,8 +236,25 @@ function render(root: HTMLElement, model: PopupModel, chromeApi: ChromeLike, not
   });
   togglesMount.append(togglesBody);
 
-  page.append(header, queue, noticeElement, controls, siteToggle, health, togglesMount, diagnostics, pairing);
+  page.append(header, noticeElement);
+  if (!paired) {
+    page.append(pairing);
+  }
+  page.append(sessionPanel, sitePanel, togglesMount, diagnostics);
+  if (paired) {
+    page.append(pairing);
+  }
   root.replaceChildren(page);
+}
+
+function sessionHelper(state: "idle" | "recording" | "paused" | "stopped"): string {
+  if (state === "recording") {
+    return "Recording private browser evidence on this Mac.";
+  }
+  if (state === "paused") {
+    return "Capture is paused until you resume.";
+  }
+  return "Start when you are ready to begin an inquiry session.";
 }
 
 function transportButton(
@@ -254,6 +305,14 @@ function pairingPanel(root: HTMLElement, model: PopupModel, chromeApi: ChromeLik
   const wrapper = document.createElement("section");
   wrapper.className = "pairing-panel";
 
+  const heading = document.createElement("div");
+  heading.className = "section-heading pairing-panel__heading";
+  const title = document.createElement("h2");
+  title.textContent = "Connect to the desktop";
+  const help = document.createElement("p");
+  help.textContent = "Pair once to keep browser traces local. No account or cloud sync is required.";
+  heading.append(title, help);
+
   const autoButton = document.createElement("button");
   autoButton.type = "button";
   autoButton.className = "pairing-auto-button";
@@ -290,7 +349,7 @@ function pairingPanel(root: HTMLElement, model: PopupModel, chromeApi: ChromeLik
   summary.textContent = "Manual token";
   manual.append(summary, pairingForm(model, chromeApi, () => renderFromRuntime(root, chromeApi)));
 
-  wrapper.append(actions, manual);
+  wrapper.append(heading, actions, manual);
   return wrapper;
 }
 
@@ -350,8 +409,21 @@ function pairingForm(model: PopupModel, chromeApi: ChromeLike, onSaved: () => vo
     }).then(onSaved);
   });
 
-  form.append(token, endpoint, submit);
+  form.append(
+    pairingField("Pairing code", token),
+    pairingField("Local bridge", endpoint),
+    submit,
+  );
   return form;
+}
+
+function pairingField(labelText: string, input: HTMLInputElement): HTMLLabelElement {
+  const field = document.createElement("label");
+  field.className = "pairing-field";
+  const label = document.createElement("span");
+  label.textContent = labelText;
+  field.append(label, input);
+  return field;
 }
 
 async function setRecordingState(
@@ -623,294 +695,6 @@ function isContentPong(value: unknown): value is { type: typeof CONTENT_PONG_MES
 
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
-}
-
-function installStyles(): void {
-  if (document.getElementById("inquiry-popup-styles")) {
-    return;
-  }
-
-  const style = document.createElement("style");
-  style.id = "inquiry-popup-styles";
-  style.textContent = `
-    ${inquiryCssVariableBlock(":root")}
-    ${inquiryDarkCssVariableBlock(":root[data-theme='dark']")}
-
-    :root {
-      color-scheme: light;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      ${inquiryDarkCssVariableBlock(":root")}
-
-      :root {
-        color-scheme: dark;
-      }
-    }
-
-    body {
-      margin: 0;
-      min-width: 320px;
-      background: var(--surface);
-      color: var(--ink);
-    }
-
-    .popup {
-      display: grid;
-      gap: 12px;
-      padding: 14px;
-    }
-
-    .popup-header {
-      align-items: center;
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    h1 {
-      font-size: 16px;
-      line-height: 1.2;
-      margin: 0;
-    }
-
-    .status {
-      border-radius: 999px;
-      color: #fff;
-      font-size: 12px;
-      font-weight: 700;
-      min-width: 76px;
-      padding: 4px 8px;
-      text-align: center;
-    }
-
-    .status-recording {
-      background: var(--green);
-    }
-
-    .status-paused {
-      background: var(--amber);
-    }
-
-    .status-stopped {
-      background: #68737c;
-    }
-
-    .queue-row {
-      background: var(--surface-inset);
-      border-radius: 8px;
-      box-shadow: var(--shadow-pressed);
-      color: var(--muted);
-      font-size: 12px;
-      min-height: 30px;
-      padding: 8px 10px;
-    }
-
-    .popup-notice {
-      background: #fff8e6;
-      border: 1px solid #ead399;
-      border-radius: 8px;
-      color: #5f4300;
-      font-size: 12px;
-      padding: 8px;
-    }
-
-    .popup-notice[hidden] {
-      display: none;
-    }
-
-    .health-row {
-      background: var(--surface-inset);
-      border-radius: 8px;
-      box-shadow: var(--shadow-pressed);
-      color: var(--muted);
-      font-size: 12px;
-      min-height: 30px;
-      padding: 8px 10px;
-    }
-
-    .transport-active {
-      box-shadow: var(--shadow-pressed);
-      outline: 2px solid var(--green);
-    }
-
-    details summary {
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .privacy-disclosure,
-    .diagnostics-disclosure,
-    .pairing-disclosure,
-    .pairing-panel {
-      background: var(--surface-raised);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      box-shadow: var(--shadow-raised);
-      padding: 10px;
-    }
-
-    .pairing-panel {
-      display: grid;
-      gap: 10px;
-    }
-
-    .pairing-actions {
-      display: grid;
-      gap: 8px;
-      grid-template-columns: minmax(0, 1fr) minmax(96px, auto);
-    }
-
-    .pairing-auto-button {
-      background: var(--green);
-      border-color: var(--green);
-      color: #fff;
-    }
-
-    .pairing-open-desktop-button {
-      background: var(--blue-soft);
-      border-color: var(--blue-soft);
-      color: var(--blue);
-    }
-
-    .pairing-summary {
-      background: var(--surface-raised);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      box-shadow: var(--shadow-raised);
-      display: grid;
-      gap: 6px;
-      padding: 10px;
-    }
-
-    .pairing-summary__row {
-      display: grid;
-      gap: 4px;
-      grid-template-columns: 76px minmax(0, 1fr);
-      min-width: 0;
-    }
-
-    .pairing-summary__row span {
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .pairing-summary__row strong {
-      font-size: 12px;
-      overflow-wrap: anywhere;
-    }
-
-    .button-row {
-      display: grid;
-      gap: 8px;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    button {
-      background: var(--surface-raised);
-      border: 1px solid transparent;
-      border-radius: 8px;
-      box-shadow: var(--shadow-raised);
-      color: var(--ink);
-      cursor: pointer;
-      font: inherit;
-      font-size: 12px;
-      font-weight: 700;
-      min-height: 34px;
-      padding: 0 10px;
-    }
-
-    .button-row button {
-      background: #18211d;
-      color: #fff;
-    }
-
-    button:hover {
-      border-color: var(--line);
-    }
-
-    button:active:not(:disabled) {
-      box-shadow: var(--shadow-pressed);
-      transform: translateY(1px);
-    }
-
-    button:disabled {
-      background: #cbd5cf;
-      cursor: not-allowed;
-    }
-
-    button:focus-visible,
-    input:focus-visible {
-      box-shadow: var(--focus), var(--shadow-raised);
-      outline: none;
-    }
-
-    .toggle-row {
-      align-items: center;
-      background: var(--surface-inset);
-      border-radius: 8px;
-      box-shadow: var(--shadow-pressed);
-      display: flex;
-      gap: 8px;
-      font-size: 13px;
-      min-height: 28px;
-      padding: 6px 8px;
-    }
-
-    input[type="checkbox"] {
-      accent-color: var(--green);
-    }
-
-    .privacy-toggles {
-      background: var(--surface-raised);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      box-shadow: var(--shadow-raised);
-      display: grid;
-      gap: 6px;
-      margin: 0;
-      padding: 10px;
-    }
-
-    legend {
-      color: #3f4d46;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 0 4px;
-    }
-
-    .pairing-form {
-      display: grid;
-      gap: 8px;
-      grid-template-columns: 1fr;
-    }
-
-    .pairing-form button {
-      background: var(--green);
-      color: #fff;
-    }
-
-    input[type="password"],
-    input[type="url"] {
-      background: var(--surface-inset);
-      border: 1px solid transparent;
-      border-radius: 8px;
-      box-shadow: var(--shadow-pressed);
-      box-sizing: border-box;
-      font: inherit;
-      min-height: 34px;
-      padding: 0 9px;
-      width: 100%;
-    }
-
-    .site-row {
-      overflow-wrap: anywhere;
-    }
-  `;
-  document.head.append(style);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

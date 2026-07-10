@@ -147,6 +147,7 @@ export function renderApp(root: HTMLElement, bridge: InquiryDesktopBridge, initi
   const canvas = document.createElement("main");
   canvas.className = "app-canvas";
   const headerRoot = document.createElement("div");
+  const connectionRoot = document.createElement("div");
   const historyRoot = document.createElement("div");
   const sessionRoot = document.createElement("div");
   const cameraRoot = document.createElement("div");
@@ -155,7 +156,7 @@ export function renderApp(root: HTMLElement, bridge: InquiryDesktopBridge, initi
   const replayRoot = document.createElement("div");
   const interpretationRoot = document.createElement("div");
   const probeRoot = document.createElement("div");
-  rail.append(headerRoot, sessionRoot, historyRoot);
+  rail.append(headerRoot, sessionRoot, connectionRoot, historyRoot);
   canvas.append(dailyRoot, replayRoot, interpretationRoot, probeRoot, cameraRoot, privacyRoot);
   shell.append(rail, canvas);
   root.replaceChildren(shell);
@@ -188,22 +189,24 @@ export function renderApp(root: HTMLElement, bridge: InquiryDesktopBridge, initi
   };
 
   const render = (): void => {
-    renderShellHeader(headerRoot, view.status, view.session, view.pairingTokenRevealed, view.themePreference, {
+    renderShellHeader(headerRoot, view.themePreference, {
       deepLinkNotice: view.deepLinkNotice ?? null,
-      revealPairingToken: () => {
-        view = { ...view, pairingTokenRevealed: true };
+      setThemePreference: (themePreference) => {
+        view = { ...view, themePreference };
+        writeThemePreference(themePreference);
+        applyThemePreference(themePreference);
+        render();
+      },
+    });
+    renderConnectionPanel(connectionRoot, view.status, view.session, view.pairingTokenRevealed, {
+      setPairingTokenRevealed: (revealed) => {
+        view = { ...view, pairingTokenRevealed: revealed };
         render();
       },
       copyPairingToken: async () => {
         if (view.status?.pairingToken) {
           await navigator.clipboard.writeText(view.status.pairingToken);
         }
-      },
-      setThemePreference: (themePreference) => {
-        view = { ...view, themePreference };
-        writeThemePreference(themePreference);
-        applyThemePreference(themePreference);
-        render();
       },
     });
     renderSessionControls(sessionRoot, view.session, {
@@ -444,23 +447,27 @@ function renderSessionHistory(
 
 function renderShellHeader(
   root: HTMLElement,
-  status: DesktopShellStatus | undefined,
-  session: SessionRecord | null,
-  pairingTokenRevealed: boolean,
   themePreference: ThemePreference,
   actions: {
     deepLinkNotice?: string | null;
-    revealPairingToken: () => void;
-    copyPairingToken: () => void | Promise<void>;
     setThemePreference: (themePreference: ThemePreference) => void;
   },
 ): void {
   const header = document.createElement("header");
   header.className = "app-header";
 
+  const brand = document.createElement("div");
+  brand.className = "app-brand";
+  const eyebrow = document.createElement("span");
+  eyebrow.className = "app-eyebrow";
+  eyebrow.textContent = "Neurophenom lab";
   const title = document.createElement("h1");
-  title.textContent = "Inquiry Black Box";
-  header.append(title);
+  title.textContent = "Inquiry";
+  const tagline = document.createElement("p");
+  tagline.className = "app-tagline";
+  tagline.textContent = "A private research cockpit for noticing how understanding changes while you work.";
+  brand.append(eyebrow, title, tagline);
+  header.append(brand);
 
   if (actions.deepLinkNotice) {
     const notice = document.createElement("p");
@@ -469,17 +476,60 @@ function renderShellHeader(
     header.append(notice);
   }
 
-  const grid = document.createElement("div");
-  grid.className = "app-status-grid";
-  grid.append(
-    statusItem("Session", session?.title ?? "No session"),
-    statusItem("Ingest", status?.ingestUrl ?? "Not listening"),
-    pairingTokenItem(status?.pairingToken ?? "Starting", pairingTokenRevealed, actions),
-  );
-  header.append(grid);
   header.append(themePreferenceControl(themePreference, actions.setThemePreference));
-
   root.replaceChildren(header);
+}
+
+function renderConnectionPanel(
+  root: HTMLElement,
+  status: DesktopShellStatus | undefined,
+  session: SessionRecord | null,
+  pairingTokenRevealed: boolean,
+  actions: {
+    setPairingTokenRevealed: (revealed: boolean) => void;
+    copyPairingToken: () => void | Promise<void>;
+  },
+): void {
+  const connection = document.createElement("section");
+  connection.className = "connection-card";
+  const connectionHeader = document.createElement("div");
+  connectionHeader.className = "connection-card__header";
+  const connectionTitle = document.createElement("div");
+  const connectionLabel = document.createElement("span");
+  connectionLabel.className = "app-eyebrow";
+  connectionLabel.textContent = "Browser companion";
+  const connectionHeading = document.createElement("h2");
+  connectionHeading.textContent = "Connect the Chrome extension";
+  connectionTitle.append(connectionLabel, connectionHeading);
+  const connectionStatus = document.createElement("span");
+  connectionStatus.className = `connection-status ${status?.pairingToken ? "connection-status-ready" : ""}`.trim();
+  connectionStatus.textContent = status?.pairingToken ? "Ready to pair" : "Starting";
+  connectionStatus.setAttribute("role", "status");
+  connectionHeader.append(connectionTitle, connectionStatus);
+
+  const connectionHelp = document.createElement("p");
+  connectionHelp.className = "connection-card__help";
+  connectionHelp.textContent = "Open the extension, choose Pair with local desktop, and keep browser evidence on this Mac.";
+
+  const advanced = document.createElement("details");
+  advanced.className = "connection-details";
+  const advancedSummary = document.createElement("summary");
+  advancedSummary.textContent = "Connection details";
+  const advancedGrid = document.createElement("div");
+  advancedGrid.className = "connection-details__grid";
+  advancedGrid.append(
+    statusItem("Local bridge", status?.ingestUrl ?? "Not listening"),
+    statusItem("Current session", session?.title ?? "No session yet"),
+  );
+  advanced.append(advancedSummary, advancedGrid);
+
+  connection.append(
+    connectionHeader,
+    connectionHelp,
+    pairingTokenItem(status?.pairingToken ?? "Starting", pairingTokenRevealed, actions),
+    advanced,
+  );
+  root.replaceChildren(connection);
 }
 
 function themePreferenceControl(
@@ -526,14 +576,17 @@ function statusItem(labelText: string, valueText: string, valueClassName = ""): 
 function pairingTokenItem(
   token: string,
   revealed: boolean,
-  actions: { revealPairingToken: () => void; copyPairingToken: () => void | Promise<void> },
+  actions: {
+    setPairingTokenRevealed: (revealed: boolean) => void;
+    copyPairingToken: () => void | Promise<void>;
+  },
 ): HTMLElement {
   const item = document.createElement("div");
   item.className = "app-status-item pairing-token-item";
 
   const label = document.createElement("span");
   label.className = "app-status-label";
-  label.textContent = "Pairing token";
+  label.textContent = "Pairing code";
 
   const value = document.createElement("strong");
   value.className = "app-status-value pairing-token";
@@ -544,10 +597,10 @@ function pairingTokenItem(
   const reveal = document.createElement("button");
   reveal.type = "button";
   reveal.textContent = revealed ? "Hide" : "Reveal";
-  reveal.addEventListener("click", () => actions.revealPairingToken());
+  reveal.addEventListener("click", () => actions.setPairingTokenRevealed(!revealed));
   const copy = document.createElement("button");
   copy.type = "button";
-  copy.textContent = "Copy";
+  copy.textContent = "Copy code";
   copy.addEventListener("click", () => void actions.copyPairingToken());
   controls.append(reveal, copy);
 
