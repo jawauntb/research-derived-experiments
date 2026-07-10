@@ -548,8 +548,7 @@ cells is prohibited. Canonical results are in
   (−0.734: ablating "compatibility-aligned" units in a memorizing
   model *reduces* OOD CE). The E2 patch result therefore supports
   "B's mechanism differs from A's" strongly, but supports "B localizes
-  a substantial mechanism in the top-k units" only weakly. The
-  large-width sweep sharpens this concern rather than resolving it.
+  a substantial mechanism in the top-k units" only weakly.
 - The E2/E3 top-k-unit patch-CE metric loses absolute-magnitude
   discriminating power at larger widths: a robustness sweep at
   `n ∈ {17, 19, 23}`, hidden width 128, top_k 16
@@ -557,12 +556,16 @@ cells is prohibited. Canonical results are in
   Arm A 0.089 (gap +0.911) — the OOD story holds decisively — but
   patch-CE Δ for B drops to +0.04 because the trained model spreads
   the load-bearing structure across more redundant units, so a fixed
-  top-k ablation catches a smaller fraction of the mechanism. A
-  fixed-width top-k patch loses power as width grows; until a
-  rank-normalized or subspace-decomposition patch is run, the E2/E3
-  localization claim should be read as preliminary. Fix left to
-  future work: normalize patch-CE by hidden-width fraction, or
-  rank-decompose the affected subspace.
+  top-k ablation catches a smaller fraction of the mechanism.
+- A frozen rank-normalized follow-up resolves that measurement defect in
+  the small-MLP regime. We fit the minimum compatibility-aligned activation
+  subspace explaining 50% of between-orbit spectral mass and project it out.
+  Arm B patch-CE per removed mass is 1.119 at width 96 and 0.868 at width
+  128 (77.5% retention); Arm C is 0.159/0.174 and Arm B's matched
+  `a`-only wrong-subspace control is 0.001/0.001. All four frozen gates pass.
+  Thus a distributed compatibility mechanism is causally localized across
+  these widths, but this does not establish the same localization in Pythia
+  or language (`results/e2_e3_rank_normalized_patch_2026_07_10.md`).
 - The anti-Goodhart reading remains a useful vocabulary, but its strong
   load-bearing subset `{allocate, cool, reopen}` is **rejected by the
   pre-registered finite Suite C factorial**: allocate and cool have zero

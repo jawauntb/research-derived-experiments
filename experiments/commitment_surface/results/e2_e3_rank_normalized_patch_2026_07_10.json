@@ -1,0 +1,36 @@
+{
+  "status": "complete",
+  "preregistration": "papers/commitment_surface/e2_e3_rank_normalized_patch_preregistration_2026-07-10.md",
+  "config": {
+    "moduli": [17, 19, 23],
+    "train_fracs": [0.5],
+    "widths": [96, 128],
+    "depth": 2,
+    "seeds_per_direct_arm": 4,
+    "selector_pool": 4,
+    "epochs": 1000,
+    "subspace_target_mass_fraction": 0.5
+  },
+  "width_96": {
+    "arm_B_subspace_patch_ce_per_mass": 1.119393189193045,
+    "arm_C_subspace_patch_ce_per_mass": 0.15884393172961342,
+    "arm_B_wrong_subspace_patch_ce_per_mass": 0.0009752189006476708,
+    "gap_B_minus_C": 0.9605492574634317,
+    "gap_B_true_minus_wrong": 1.1184179702923973
+  },
+  "width_128": {
+    "arm_B_subspace_patch_ce_per_mass": 0.8675654875817018,
+    "arm_C_subspace_patch_ce_per_mass": 0.17357251089949355,
+    "arm_B_wrong_subspace_patch_ce_per_mass": 0.0009053168458857229,
+    "gap_B_minus_C": 0.6939929766822083,
+    "gap_B_true_minus_wrong": 0.8666601707358161
+  },
+  "width_128_retention_of_width_96": 0.7750320014506112,
+  "gates": {
+    "arm_B_positive_both_widths": true,
+    "arm_B_minus_C_at_least_0p02_both_widths": true,
+    "arm_B_true_beats_wrong_both_widths": true,
+    "width_128_retains_at_least_half": true,
+    "strict_verdict": "PASS"
+  }
+}

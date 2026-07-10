@@ -16,7 +16,7 @@ import math
 from pathlib import Path
 import random
 from statistics import mean, pstdev
-from typing import Sequence
+from typing import Any, Sequence
 
 from experiments.commitment_surface.core import (
     biased_train_perfect_completion,
@@ -245,7 +245,7 @@ def pearson(xs: Sequence[float], ys: Sequence[float]) -> float:
     return numerator / denominator if denominator else 0.0
 
 
-def _distribution(values: Sequence[float], observed_gap: float) -> dict[str, object]:
+def _distribution(values: Sequence[float], observed_gap: float) -> dict[str, Any]:
     average = mean(values)
     sd = pstdev(values)
     half_width = 1.96 * sd / math.sqrt(len(values))
@@ -277,7 +277,7 @@ def run_randomization_audit(
     n_candidates: int = DEFAULT_N_CANDIDATES,
     train_window_frac: float = DEFAULT_TRAIN_WINDOW_FRAC,
     observed_gap: float = OBSERVED_GAP,
-) -> dict[str, object]:
+) -> dict[str, Any]:
     if replicates < 2:
         raise ValueError("replicates must be at least 2")
     cells = [
@@ -475,7 +475,7 @@ def run_randomization_audit(
     }
 
 
-def write_markdown(result: dict[str, object], path: Path) -> None:
+def write_markdown(result: dict[str, Any], path: Path) -> None:
     config = result["config"]
     null = result["null_distribution"]
     audit = result["assumption_audit"]

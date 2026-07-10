@@ -65,6 +65,7 @@ class Config:
     weight_decay: float
     aug_orbit_size: int  # for B/C: how many group elements to sample per epoch
     top_k_patch: int  # patch ablation width
+    subspace_mass_fraction: float = 0.5
 
 
 @dataclass
@@ -82,6 +83,14 @@ class CellResult:
     patched_ce_ood_wrong: float
     patch_ce_delta: float
     patch_ce_delta_wrong: float
+    subspace_patch_ce_delta: float
+    subspace_patch_ce_delta_wrong: float
+    subspace_patch_ce_per_mass: float
+    subspace_patch_ce_per_mass_wrong: float
+    subspace_rank: int
+    subspace_rank_wrong: int
+    subspace_mass_fraction: float
+    subspace_mass_fraction_wrong: float
     weakness_true: float
     weakness_wrong: float
     final_train_loss: float
@@ -395,6 +404,88 @@ def ce_with_ablation(
         return float(F.cross_entropy(logits, targets).cpu().item())
 
 
+def fit_group_mean_subspace(
+    model: Any,
+    modulus: int,
+    device: Any,
+    *,
+    grouping: str,
+    target_mass_fraction: float,
+) -> tuple[Any, Any, float, int]:
+    """Fit a last-hidden activation subspace from finite-grid group means.
+
+    ``grouping="sum"`` identifies the compatibility orbit `(a+b) mod n`;
+    ``grouping="a"`` is the matched wrong-subspace control. The minimum rank
+    explaining ``target_mass_fraction`` of between-group spectral mass is
+    returned with the global activation center used by the projection patch.
+    """
+    if grouping not in {"sum", "a"}:
+        raise ValueError(f"unsupported grouping: {grouping}")
+    if not 0.0 < target_mass_fraction <= 1.0:
+        raise ValueError("target_mass_fraction must be in (0, 1]")
+
+    torch, _nn, _F = _load_torch()
+    pairs = all_pairs(modulus)
+    model.eval()
+    with torch.no_grad():
+        feats = model.features(one_hot_pairs(pairs, modulus, device))
+        center = feats.mean(dim=0, keepdim=True)
+        group_means = []
+        for group_id in range(modulus):
+            indices = [
+                index
+                for index, (a, b) in enumerate(pairs)
+                if ((a + b) % modulus if grouping == "sum" else a) == group_id
+            ]
+            group_means.append(feats[indices].mean(dim=0) - center.squeeze(0))
+        mean_matrix = torch.stack(group_means)
+        _u, singular, vh = torch.linalg.svd(mean_matrix, full_matrices=False)
+        masses = singular.square()
+        total_mass = float(masses.sum().item())
+        if total_mass <= 1e-12:
+            empty = torch.zeros(
+                (feats.shape[1], 0), dtype=feats.dtype, device=feats.device
+            )
+            return center, empty, 0.0, 0
+        cumulative = torch.cumsum(masses, dim=0) / masses.sum()
+        rank = int(
+            torch.searchsorted(
+                cumulative,
+                torch.tensor(target_mass_fraction, device=cumulative.device),
+            ).item()
+        ) + 1
+        rank = min(rank, vh.shape[0])
+        realized = float(cumulative[rank - 1].item())
+        basis = vh[:rank].transpose(0, 1).contiguous()
+    return center, basis, realized, rank
+
+
+def ce_with_subspace_ablation(
+    model: Any,
+    modulus: int,
+    pairs: list[Pair],
+    device: Any,
+    *,
+    center: Any,
+    basis: Any,
+) -> float:
+    """Project an identified activation subspace out before the decision head."""
+    torch, _nn, F = _load_torch()
+    model.eval()
+    with torch.no_grad():
+        feats = model.features(one_hot_pairs(pairs, modulus, device))
+        if basis.shape[1]:
+            centered = feats - center
+            feats = feats - (centered @ basis) @ basis.transpose(0, 1)
+        logits = model.logits_from_features(feats)
+        targets = torch.tensor(
+            [(a + b) % modulus for a, b in pairs],
+            dtype=torch.long,
+            device=device,
+        )
+        return float(F.cross_entropy(logits, targets).cpu().item())
+
+
 # ---------------------------------------------------------------------------
 # Cell runner
 # ---------------------------------------------------------------------------
@@ -441,6 +532,43 @@ def run_cell(cfg: Config, device_str: str = "cpu") -> CellResult:
 
     patched_ce = ce_with_ablation(model, cfg.modulus, ood_pairs, device, top_units)
     patched_ce_wrong = ce_with_ablation(model, cfg.modulus, ood_pairs, device, wrong_units)
+    center, subspace, subspace_mass, subspace_rank = fit_group_mean_subspace(
+        model,
+        cfg.modulus,
+        device,
+        grouping="sum",
+        target_mass_fraction=cfg.subspace_mass_fraction,
+    )
+    (
+        wrong_center,
+        wrong_subspace,
+        wrong_subspace_mass,
+        wrong_subspace_rank,
+    ) = fit_group_mean_subspace(
+        model,
+        cfg.modulus,
+        device,
+        grouping="a",
+        target_mass_fraction=cfg.subspace_mass_fraction,
+    )
+    subspace_ce = ce_with_subspace_ablation(
+        model,
+        cfg.modulus,
+        ood_pairs,
+        device,
+        center=center,
+        basis=subspace,
+    )
+    wrong_subspace_ce = ce_with_subspace_ablation(
+        model,
+        cfg.modulus,
+        ood_pairs,
+        device,
+        center=wrong_center,
+        basis=wrong_subspace,
+    )
+    subspace_delta = subspace_ce - baseline_ce
+    wrong_subspace_delta = wrong_subspace_ce - baseline_ce
 
     return CellResult(
         arm=cfg.arm,
@@ -456,6 +584,20 @@ def run_cell(cfg: Config, device_str: str = "cpu") -> CellResult:
         patched_ce_ood_wrong=patched_ce_wrong,
         patch_ce_delta=patched_ce - baseline_ce,
         patch_ce_delta_wrong=patched_ce_wrong - baseline_ce,
+        subspace_patch_ce_delta=subspace_delta,
+        subspace_patch_ce_delta_wrong=wrong_subspace_delta,
+        subspace_patch_ce_per_mass=(
+            subspace_delta / subspace_mass if subspace_mass > 0 else 0.0
+        ),
+        subspace_patch_ce_per_mass_wrong=(
+            wrong_subspace_delta / wrong_subspace_mass
+            if wrong_subspace_mass > 0
+            else 0.0
+        ),
+        subspace_rank=subspace_rank,
+        subspace_rank_wrong=wrong_subspace_rank,
+        subspace_mass_fraction=subspace_mass,
+        subspace_mass_fraction_wrong=wrong_subspace_mass,
         weakness_true=weakness_true,
         weakness_wrong=weakness_wrong,
         final_train_loss=final_loss,
@@ -464,6 +606,7 @@ def run_cell(cfg: Config, device_str: str = "cpu") -> CellResult:
         metadata={
             "top_units": top_units,
             "wrong_units": wrong_units,
+            "subspace_target_mass_fraction": cfg.subspace_mass_fraction,
             "unit_score_max": max(unit_scores) if unit_scores else 0.0,
             "unit_score_mean": (
                 sum(unit_scores) / len(unit_scores) if unit_scores else 0.0
@@ -519,6 +662,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--weight-decay", type=float, default=1e-4)
     p.add_argument("--aug-orbit-size", type=int, default=4)
     p.add_argument("--top-k-patch", type=int, default=8)
+    p.add_argument("--subspace-mass-fraction", type=float, default=0.5)
     p.add_argument(
         "--out", type=Path,
         default=Path("experiments/commitment_surface/results/e2_e3_neural.json"),
@@ -545,6 +689,22 @@ def summarize(rows: list[CellResult], selected: dict[str, list[CellResult]]) -> 
             "ood_accuracy": _stat(arm_rows, "ood_accuracy"),
             "patch_ce_delta": _stat(arm_rows, "patch_ce_delta"),
             "patch_ce_delta_wrong": _stat(arm_rows, "patch_ce_delta_wrong"),
+            "subspace_patch_ce_delta": _stat(
+                arm_rows, "subspace_patch_ce_delta"
+            ),
+            "subspace_patch_ce_delta_wrong": _stat(
+                arm_rows, "subspace_patch_ce_delta_wrong"
+            ),
+            "subspace_patch_ce_per_mass": _stat(
+                arm_rows, "subspace_patch_ce_per_mass"
+            ),
+            "subspace_patch_ce_per_mass_wrong": _stat(
+                arm_rows, "subspace_patch_ce_per_mass_wrong"
+            ),
+            "subspace_rank": _stat(arm_rows, "subspace_rank"),
+            "subspace_mass_fraction": _stat(
+                arm_rows, "subspace_mass_fraction"
+            ),
             "weakness_true": _stat(arm_rows, "weakness_true"),
         }
 
@@ -553,6 +713,21 @@ def summarize(rows: list[CellResult], selected: dict[str, list[CellResult]]) -> 
     b_ce = per_arm.get("B", {}).get("patch_ce_delta", {}).get("mean", 0.0)
     a_ce = per_arm.get("A", {}).get("patch_ce_delta", {}).get("mean", 0.0)
     c_ce = per_arm.get("C", {}).get("patch_ce_delta", {}).get("mean", 0.0)
+    b_subspace = (
+        per_arm.get("B", {})
+        .get("subspace_patch_ce_per_mass", {})
+        .get("mean", 0.0)
+    )
+    c_subspace = (
+        per_arm.get("C", {})
+        .get("subspace_patch_ce_per_mass", {})
+        .get("mean", 0.0)
+    )
+    b_subspace_wrong = (
+        per_arm.get("B", {})
+        .get("subspace_patch_ce_per_mass_wrong", {})
+        .get("mean", 0.0)
+    )
 
     # E3: readout AUC vs patch-CE regression on OOD lift.
     # Compare correlations of (weakness_true) and (patch_ce_delta) with OOD
@@ -568,6 +743,17 @@ def summarize(rows: list[CellResult], selected: dict[str, list[CellResult]]) -> 
         "gap_B_minus_A_ood": b - a,
         "gap_B_minus_A_patch_ce": b_ce - a_ce,
         "gap_B_minus_C_patch_ce": b_ce - c_ce,
+        "gap_B_minus_C_subspace_patch_ce_per_mass": b_subspace - c_subspace,
+        "gap_B_true_minus_wrong_subspace_patch_ce_per_mass": (
+            b_subspace - b_subspace_wrong
+        ),
+        "rank_normalized_patch_gate_positive_B": b_subspace > 0,
+        "rank_normalized_patch_gate_B_minus_C_0p02": (
+            b_subspace - c_subspace
+        ) >= 0.02,
+        "rank_normalized_patch_gate_true_beats_wrong": (
+            b_subspace - b_subspace_wrong
+        ) > 0,
         "rho_weakness_ood": rho_weakness,
         "rho_patch_ce_ood": rho_patch_ce,
         # Gates from PLAN.md:
@@ -591,8 +777,8 @@ def write_markdown(
         "",
         "## Per-arm summary (selected cell per (n, train_frac))",
         "",
-        "| Arm | Description | # sel | OOD acc (mean, 95%CI) | Patch-CE Δ | Wrong Patch-CE Δ | Weakness |",
-        "|---|---|---:|---|---|---|---|",
+        "| Arm | Description | # sel | OOD acc (mean, 95%CI) | Patch-CE Δ | Subspace CE / mass | Wrong subspace CE / mass | Weakness |",
+        "|---|---|---:|---|---|---|---|---|",
     ]
     labels = {
         "A": "Readout selector (no aug)",
@@ -606,14 +792,16 @@ def write_markdown(
             continue
         ood = stats["ood_accuracy"]
         pce = stats["patch_ce_delta"]
-        wce = stats["patch_ce_delta_wrong"]
+        spce = stats["subspace_patch_ce_per_mass"]
+        swrong = stats["subspace_patch_ce_per_mass_wrong"]
         w = stats["weakness_true"]
         n_sel = ood["n"]
         lines.append(
             f"| {arm} | {labels[arm]} | {n_sel} | "
             f"{ood['mean']:.3f} [{ood['ci95_low']:.3f}, {ood['ci95_high']:.3f}] | "
             f"{pce['mean']:.3f} [{pce['ci95_low']:.3f}, {pce['ci95_high']:.3f}] | "
-            f"{wce['mean']:.3f} [{wce['ci95_low']:.3f}, {wce['ci95_high']:.3f}] | "
+            f"{spce['mean']:.3f} [{spce['ci95_low']:.3f}, {spce['ci95_high']:.3f}] | "
+            f"{swrong['mean']:.3f} [{swrong['ci95_low']:.3f}, {swrong['ci95_high']:.3f}] | "
             f"{w['mean']:.3f} |"
         )
     lines.extend([
@@ -630,11 +818,19 @@ def write_markdown(
         f"**{summary['e3_pass_patch_ce_beats_readout']}** "
         f"(ρ_patch = {summary['rho_patch_ce_ood']:.3f} vs ρ_weakness = "
         f"{summary['rho_weakness_ood']:.3f})",
+        f"- **Rank-normalized patch — Arm B positive:** "
+        f"**{summary['rank_normalized_patch_gate_positive_B']}**",
+        f"- **Rank-normalized patch — B − C ≥ 0.02:** "
+        f"**{summary['rank_normalized_patch_gate_B_minus_C_0p02']}** "
+        f"(gap = {summary['gap_B_minus_C_subspace_patch_ce_per_mass']:.3f})",
+        f"- **Rank-normalized patch — B true subspace beats wrong control:** "
+        f"**{summary['rank_normalized_patch_gate_true_beats_wrong']}** "
+        f"(gap = {summary['gap_B_true_minus_wrong_subspace_patch_ce_per_mass']:.3f})",
         "",
         "## Per-(modulus, train_frac, arm) breakdown",
         "",
-        "| Arm | n | train_frac | # seeds | Mean OOD | Mean Patch-CE Δ | Mean Weakness |",
-        "|---|---:|---:|---:|---:|---:|---:|",
+        "| Arm | n | train_frac | # seeds | Mean OOD | Mean Patch-CE Δ | Mean subspace CE / mass | Mean Weakness |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|",
     ])
     from itertools import groupby
     key = lambda r: (r.arm, r.modulus, r.train_frac)  # noqa: E731
@@ -644,6 +840,7 @@ def write_markdown(
             f"| {arm} | {mod} | {frac} | {len(gs)} | "
             f"{sum(g.ood_accuracy for g in gs) / len(gs):.3f} | "
             f"{sum(g.patch_ce_delta for g in gs) / len(gs):.3f} | "
+            f"{sum(g.subspace_patch_ce_per_mass for g in gs) / len(gs):.3f} | "
             f"{sum(g.weakness_true for g in gs) / len(gs):.3f} |"
         )
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -679,6 +876,7 @@ def main() -> None:
                         weight_decay=args.weight_decay,
                         aug_orbit_size=args.aug_orbit_size,
                         top_k_patch=args.top_k_patch,
+                        subspace_mass_fraction=args.subspace_mass_fraction,
                     )
                     row = run_cell(cfg, device_str=args.device)
                     all_rows.append(row)
@@ -686,6 +884,7 @@ def main() -> None:
                     print(
                         f"[cell] arm={arm} n={mod} frac={frac} seed={cfg.seed} "
                         f"ood={row.ood_accuracy:.3f} patch_ce_delta={row.patch_ce_delta:.3f} "
+                        f"subspace_ce_per_mass={row.subspace_patch_ce_per_mass:.3f} "
                         f"weakness={row.weakness_true:.3f}",
                         flush=True,
                     )
