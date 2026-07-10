@@ -144,7 +144,8 @@ group construction (`Cov`), and the unaugmented reference (`A-ref`).
 
 The pure `e5_core.py` layer freezes support and intervention splits, constructs
 typed exposure plans, rejects held-out truth-label leakage into G-reg/W-reg,
-matches B-ref/Cov held-out exposure, and applies the frozen analysis gates.
+matches G-reg/W-reg consistency schedules and B-ref/Cov held-out exposure, and
+applies the frozen analysis gates.
 The Modal harness records the full exposure ledger, evaluates disjoint novel
 shifts and prompt paraphrases, and patches a fixed fraction of each effective
 LoRA update's spectral mass. Full-adapter disable is secondary only.
@@ -153,29 +154,107 @@ Validation smoke (not scientific evidence):
 
 ```bash
 doppler --scope /Users/jawaun/superoptimizers run -- \
-    uvx --python 3.12 --from modal modal run \
+    uvx --python 3.12 --from modal==1.2.6 modal run \
         experiments/commitment_surface/modal_e5_generator_vs_coverage.py \
         --sizes 70m --ns 13 --seeds 1 --arms G-reg,Cov,A-ref --epochs 20 \
+        --run-kind smoke --execute --max-gpu-cells 3 \
         --out artifacts/commitment_surface/e5_smoke.json
 ```
 
-Confirmatory grid (launch only after the smoke passes and cost review):
+The runner has three explicit result regimes: `smoke`, `development`, and
+`confirmatory`. Only `confirmatory` can invoke the frozen gate, and that mode
+rejects any drift in sizes, moduli, seeds, arms, epochs, split, augmentation,
+LoRA, optimizer, or patch settings before remote work begins. Generate and
+inspect the exact 135-cell manifest without allocating GPUs:
 
 ```bash
 doppler --scope /Users/jawaun/superoptimizers run -- \
-    uvx --python 3.12 --from modal modal run \
+    uvx --python 3.12 --from modal==1.2.6 modal run \
         experiments/commitment_surface/modal_e5_generator_vs_coverage.py \
         --sizes 70m,160m,410m --ns 13,17,23 --seeds 3 \
         --arms G-reg,B-ref,W-reg,Cov,A-ref --epochs 160 \
         --train-frac 0.5 --train-shift-count 3 \
         --augmentation-multiplier 3 --spectral-mass-fraction 0.5 \
-        --base-seed 20260709 \
+        --base-seed 20260709 --run-kind confirmatory --dry-run \
+        --out artifacts/commitment_surface/e5_confirmatory_launch_manifest.json
+```
+
+Development calibration for the cost review (not scientific evidence; never
+use it to change the frozen gate or confirmatory hyperparameters):
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal==1.2.6 modal run \
+        experiments/commitment_surface/modal_e5_generator_vs_coverage.py \
+        --sizes 70m,160m,410m --ns 13,17,23 --seeds 1 \
+        --arms G-reg,B-ref,W-reg,Cov,A-ref --epochs 160 \
+        --train-frac 0.5 --train-shift-count 3 \
+        --augmentation-multiplier 3 --spectral-mass-fraction 0.5 \
+        --base-seed 20260709 --run-kind development \
+        --execute --max-gpu-cells 45 \
+        --out artifacts/commitment_surface/e5_development_calibration.json
+```
+
+Status-only checkpoint inspection (no model prefetch or GPU dispatch):
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal==1.2.6 modal run \
+        experiments/commitment_surface/modal_e5_generator_vs_coverage.py \
+        --sizes 70m,160m,410m --ns 13,17,23 --seeds 3 \
+        --arms G-reg,B-ref,W-reg,Cov,A-ref --epochs 160 \
+        --train-frac 0.5 --train-shift-count 3 \
+        --augmentation-multiplier 3 --spectral-mass-fraction 0.5 \
+        --base-seed 20260709 --run-kind confirmatory --inspect \
+        --out artifacts/commitment_surface/e5_confirmatory_status.json
+```
+
+Confirmatory grid (launch only after the smoke and cost review pass):
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal==1.2.6 modal run \
+        experiments/commitment_surface/modal_e5_generator_vs_coverage.py \
+        --sizes 70m,160m,410m --ns 13,17,23 --seeds 3 \
+        --arms G-reg,B-ref,W-reg,Cov,A-ref --epochs 160 \
+        --train-frac 0.5 --train-shift-count 3 \
+        --augmentation-multiplier 3 --spectral-mass-fraction 0.5 \
+        --base-seed 20260709 --run-kind confirmatory \
+        --execute --max-gpu-cells 135 \
+        --expected-manifest-id "$E5_MANIFEST_ID" \
         --out artifacts/commitment_surface/e5_generator_vs_coverage.json
 ```
 
+Set `E5_MANIFEST_ID` to the ID printed by the final dry run. The launcher
+rejects execution unless exactly one of `--dry-run`, `--inspect`, or
+`--execute` is present. Confirmatory execution also rejects an expected-ID
+mismatch, and every execution refuses to submit more missing GPU cells than
+the explicit `--max-gpu-cells` authorization.
+
+The grid is dispatched as 135 separately checkpointed L4 cells, capped at 12
+concurrent containers. Integrity-passing, finite cell payloads are keyed by a
+manifest that includes exact package versions and immutable Pythia revisions,
+then stored in the V2 `commitment-surface-e5-results-v2` Modal Volume. There
+are no automatic L4 retries: after a cell failure, the partial artifact records
+the error and missing IDs, and rerunning the identical command resumes only
+those missing cells. Final analysis requires the exact Cartesian grid: any
+missing, duplicate, unexpected, invalid-key, non-finite, or integrity-failed
+cell blocks `confirmatory_ready` and leaves the verdict pending. Each payload
+records measured worker runtime and its resource request for the development
+cost calibration. The dry run executes a CPU-only pinned-image/Volume
+round-trip preflight but no GPU training. A CPU control step scans checkpoints
+before dispatch, so completed cells never consume L4 slots; `--inspect` exposes
+reusable, invalid, missing, and actively leased cells without dispatch. An
+atomic expiring lease prevents overlapping launches from training the same
+manifest cell, and every checkpoint records its launch/lease attempt. Another
+CPU step prefetches each missing immutable model snapshot once. Remaining
+cells submit largest-model and regularizer work first to reduce the long tail,
+while the available payload is restored to frozen manifest order.
+
 Status: the 70m/n=13/one-seed validation smoke passed all integrity gates; see
 `results/e5_smoke_summary.md`. It is not scientific evidence. E5 remains
-confirmatory-pending, and no mechanism verdict is claimed.
+confirmatory-pending, and no mechanism verdict is claimed. The no-compute
+launch audit is recorded in `results/e5_launch_readiness_2026_07_10.md`.
 ### M4 — Suite C Allocate × Cool × Reopen Factorial
 
 The timestamped follow-up addendum is

@@ -226,7 +226,9 @@ assumption) in Proposition 2, and uses finite-candidate order equivalence for
 concern weighting. E4 is a directional result with a strict gate failure; its
 open labeled-orbit-coverage confound and timestamped post-hoc E5 severe
 follow-up are recorded in paper §6.5 and PLAN.md. The minimum E5 Modal smoke
-passed integrity; mechanism confirmation remains pending.
+passed integrity; mechanism confirmation remains pending. A no-compute launch
+audit now freezes an exact 135-cell manifest and makes grid completeness part
+of `confirmatory_ready` rather than inferring readiness from per-arm counts.
 
 | Module | Purpose |
 |---|---|
@@ -235,12 +237,14 @@ passed integrity; mechanism confirmation remains pending.
 | `e1_misspecification_variance.py` | Stdlib CPU conditional-randomization harness: freezes 96 E1 structures, redraws 2,048 independent marginal-preserving assignments, estimates gap distribution/tail probability, and gates exchangeability assumptions |
 | `e2_e3_neural_sweep.py` | E2/E3 four-arm neural MLP sweep on cyclic modular addition; measures OOD, patch-CE Δ, weakness / wrong-group anti-cheat |
 | `modal_e4_pythia_lora_v2.py` | E4 Modal L4 external contact: four arms A (readout) / B (cyclic-orbit augmentation) / C (wrong-group aug) / D (loss selector) on Pythia 70m/160m/410m LoRA modular addition; adapter-disable patch-CE |
-| `e5_core.py` | E5 typed configs, disjoint support/intervention splits, supervised-vs-consistency exposure plans, leakage/coverage audits, and frozen smoke/confirmatory analysis gates |
-| `modal_e5_generator_vs_coverage.py` | E5 Modal Pythia-LoRA five-arm runner: train-support-only correct/wrong generator consistency, orbit and coverage references, novel-shift/paraphrase transport, exposure ledgers, and spectral-mass-normalized LoRA patching |
+| `e5_core.py` | E5 typed configs, disjoint support/intervention splits, supervised-vs-consistency exposure plans, G/W schedule matching, leakage/coverage audits, deterministic launch manifests, exact Cartesian-grid and metric-range audits, and frozen smoke/confirmatory analysis gates |
+| `e5_requirements.txt` | Fully pinned 43-package Linux/Python runtime lock for the E5 training and CPU preflight image; included in the implementation fingerprint and manifest environment |
+| `modal_e5_generator_vs_coverage.py` | E5 Modal Pythia-LoRA five-arm runner: explicit smoke/development/confirmatory regimes and dry-run/inspect/execute actions; hard-locked confirmatory config and pinned runtime/model revisions; CPU image/Volume preflight, status scan, and model prefetch; bounded, leased, partial-failure-safe, resumable, longest-first per-cell L4 dispatch through a V2 result Volume; train-support-only correct/wrong generator consistency, orbit and coverage references, novel-shift/paraphrase transport, exposure ledgers, and spectral-mass-normalized LoRA patching |
 | `results/e1_concern_weighted.{json,md}` | E1 summary + per-cell provenance |
 | `results/e1_misspecification_variance.{json,md}` | E1 follow-up aggregate draws, quantiles/CI, assumption audit, and randomization verdict |
 | `results/e2_e3_neural.{json,md}` | E2/E3 summary + per-cell provenance |
 | `results/e5_smoke_summary.md` | Public-safe one-seed harness-validation report; integrity pass, explicitly non-confirmatory |
+| `results/e5_launch_readiness_2026_07_10.md` | Operational no-compute audit: exact 135-cell manifest, dispatch/checkpoint design, resource formula, and development timing-calibration boundary; no scientific result |
 | `results/m4_suite_c_factorial_ablation_2026_07_09.{json,md}` | M4 public-safe factorial summary: strict FAIL; reopen necessary, allocate/cool terminal-null |
 
 Run:
@@ -254,11 +258,18 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
         experiments/commitment_surface/modal_e4_pythia_lora_v2.py \
         --sizes 70m,160m,410m --ns 13,17,23 --seeds 3 --arms A,B,C,D
 doppler --scope /Users/jawaun/superoptimizers run -- \
-    uvx --python 3.12 --from modal modal run \
+    uvx --python 3.12 --from modal==1.2.6 modal run \
         experiments/commitment_surface/modal_e5_generator_vs_coverage.py \
         --sizes 70m --ns 13 --seeds 1 --arms G-reg,Cov,A-ref --epochs 20 \
+        --run-kind smoke --execute --max-gpu-cells 3 \
         --out artifacts/commitment_surface/e5_smoke.json
 ```
+
+Use `--run-kind confirmatory --dry-run` with the exact full-grid command in the
+experiment README to validate all 135 cells without GPU work, and `--inspect`
+to report checkpoints and leases without dispatch. Only explicit `--execute`
+with the expected manifest ID and a sufficient `--max-gpu-cells` authorization
+can produce a confirmatory verdict.
 
 Rebuild the paper PDF:
 

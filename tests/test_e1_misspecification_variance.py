@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from statistics import mean
+from typing import Any
 import unittest
 
 from experiments.commitment_surface.core import run_e1_cell
@@ -54,7 +55,7 @@ class E1MisspecificationVarianceTest(unittest.TestCase):
             for seed in range(2)
         ]
         observed = mean(cell.original_misspec_gap for cell in cells)
-        kwargs = {
+        kwargs: dict[str, Any] = {
             "moduli": (7,),
             "structural_seeds": 2,
             "replicates": 32,

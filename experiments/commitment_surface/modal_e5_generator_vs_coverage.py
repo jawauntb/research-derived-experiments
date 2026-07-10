@@ -5,22 +5,31 @@
 Smoke (validation only; not scientific evidence):
 
     doppler --scope /Users/jawaun/superoptimizers run -- \
-      uvx --python 3.12 --from modal modal run \
+      uvx --python 3.12 --from modal==1.2.6 modal run \
       experiments/commitment_surface/modal_e5_generator_vs_coverage.py \
       --sizes 70m --ns 13 --seeds 1 --arms G-reg,Cov,A-ref --epochs 20 \
+      --run-kind smoke --execute --max-gpu-cells 3 \
       --out artifacts/commitment_surface/e5_smoke.json
 
 The regularizer arms receive supervised labels only on the frozen original
 training support. Their equivariance losses compare model distributions at two
 training-support inputs and never construct held-out truth labels.
+
+Exactly one operational action is required: ``--dry-run`` validates the
+manifest and CPU control path, ``--inspect`` reports checkpoint status, and
+``--execute`` authorizes bounded GPU dispatch. Operational action flags are not
+part of the frozen scientific manifest.
 """
 
 from __future__ import annotations
 
 import gc
+import hashlib
 import importlib
 import json
 import math
+import time
+import uuid
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
@@ -28,23 +37,80 @@ from typing import Any
 from experiments.commitment_surface.e5_core import (
     E5Arm,
     E5Config,
+    E5RunKind,
     analyze_e5,
     audit_exposure,
+    build_run_manifest,
     build_exposure_plans,
+    cell_is_reusable,
     exposure_ledger,
+    grid_spec_for_run_kind,
+    lease_record_is_active,
     make_split,
+    prioritize_launch_cells,
 )
 
 modal = importlib.import_module("modal")
 
-IMAGE = modal.Image.debian_slim(python_version="3.12").pip_install(
-    "torch>=2.5,<2.8",
-    "transformers>=4.45,<4.57",
-    "peft>=0.13,<0.18",
-    "accelerate>=0.30,<1.5",
-).add_local_python_source("experiments.commitment_surface.e5_core")
+RUNTIME_LOCK_PATH = Path(__file__).with_name("e5_requirements.txt")
+DEPENDENCY_VERSIONS = dict(
+    line.split("==", maxsplit=1)
+    for line in RUNTIME_LOCK_PATH.read_text(encoding="utf-8").splitlines()
+    if line
+)
+MODAL_CLIENT_VERSION = "1.2.6"
+MODEL_REVISIONS = {
+    "70m": "a39f36b100fe8a5377810d56c3f4789b9c53ac42",
+    "160m": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "410m": "9879c9b5f8bea9051dcb0e68dff21493d67e9d4f",
+}
+RESULT_VOLUME_NAME = "commitment-surface-e5-results-v2"
+RESULT_VOLUME_VERSION = 2
+CELL_LEASE_DICT_NAME = "commitment-surface-e5-cell-leases"
+GPU_TYPE = "L4"
+GPU_MEMORY_MIB = 24576
+GPU_TIMEOUT_SECONDS = 6 * 60 * 60
+GPU_MAX_CONTAINERS = 12
+CELL_LEASE_TTL_SECONDS = GPU_TIMEOUT_SECONDS + 15 * 60
+EXECUTION_ENVIRONMENT = {
+    "python": "3.12",
+    "modal_client": MODAL_CLIENT_VERSION,
+    "dependencies": DEPENDENCY_VERSIONS,
+    "model_revisions": MODEL_REVISIONS,
+    "deployment": {
+        "gpu": GPU_TYPE,
+        "memory_mib": GPU_MEMORY_MIB,
+        "timeout_seconds": GPU_TIMEOUT_SECONDS,
+        "max_containers": GPU_MAX_CONTAINERS,
+        "result_volume": RESULT_VOLUME_NAME,
+        "result_volume_version": RESULT_VOLUME_VERSION,
+        "cell_lease_dict": CELL_LEASE_DICT_NAME,
+        "cell_lease_ttl_seconds": CELL_LEASE_TTL_SECONDS,
+    },
+}
+CONTROL_IMAGE = modal.Image.debian_slim(
+    python_version="3.12"
+).add_local_python_source("experiments.commitment_surface.e5_core").add_local_file(
+    str(RUNTIME_LOCK_PATH),
+    "/root/e5_requirements.txt",
+)
+IMAGE = (
+    modal.Image.debian_slim(python_version="3.12")
+    .pip_install_from_requirements(str(RUNTIME_LOCK_PATH))
+    .add_local_python_source("experiments.commitment_surface.e5_core")
+    .add_local_file(str(RUNTIME_LOCK_PATH), "/root/e5_requirements.txt")
+)
 app = modal.App(name="research-derived-commitment-surface-e5")
 hf_cache = modal.Volume.from_name("pythia-hf-cache", create_if_missing=True)
+e5_results = modal.Volume.from_name(
+    RESULT_VOLUME_NAME,
+    create_if_missing=True,
+    version=RESULT_VOLUME_VERSION,
+)
+e5_cell_leases = modal.Dict.from_name(
+    CELL_LEASE_DICT_NAME,
+    create_if_missing=True,
+)
 
 PARAPHRASES = (
     "Modulo {n}, what is {x} plus {offset}? Answer:",
@@ -76,25 +142,243 @@ def _seed_list(base_seed: int, count: int) -> tuple[int, ...]:
     return tuple(base_seed + 100 * index for index in range(count))
 
 
+def _implementation_fingerprint() -> str:
+    digest = hashlib.sha256()
+    for path in (
+        Path(__file__),
+        Path(__file__).with_name("e5_core.py"),
+        RUNTIME_LOCK_PATH,
+    ):
+        digest.update(path.name.encode("utf-8"))
+        digest.update(path.read_bytes())
+    return digest.hexdigest()
+
+
+def _result_path(manifest_id: str, cell_id: str) -> Path:
+    return Path("/results") / manifest_id / f"{cell_id}.json"
+
+
+def _lease_key(manifest_id: str, cell_id: str) -> str:
+    return f"{manifest_id}/{cell_id}"
+
+
+def _pop_lease_if_present(key: str) -> object:
+    try:
+        return e5_cell_leases.pop(key)
+    except KeyError:
+        return None
+
+
+def _acquire_cell_lease(
+    manifest_id: str,
+    cell_id: str,
+    launch_id: str,
+) -> dict[str, Any]:
+    key = _lease_key(manifest_id, cell_id)
+    now = time.time()
+    record = {
+        "key": key,
+        "manifest_id": manifest_id,
+        "cell_id": cell_id,
+        "launch_id": launch_id,
+        "attempt_number": 1,
+        "acquired_at_unix": now,
+        "expires_at_unix": now + CELL_LEASE_TTL_SECONDS,
+    }
+    if e5_cell_leases.put(key, record, skip_if_exists=True):
+        return record
+    existing = e5_cell_leases.get(key)
+    if (
+        isinstance(existing, dict)
+        and float(existing.get("expires_at_unix", float("inf"))) <= now
+        and _pop_lease_if_present(key) == existing
+        and e5_cell_leases.put(key, record, skip_if_exists=True)
+    ):
+        return record
+    raise RuntimeError(
+        f"cell already has an active lease: {cell_id}; inspect or retry later"
+    )
+
+
+def _release_cell_lease(record: dict[str, Any]) -> None:
+    key = str(record["key"])
+    if e5_cell_leases.get(key) == record:
+        _pop_lease_if_present(key)
+
+
+def _read_reusable_cell(
+    manifest_id: str, cell_id: str
+) -> dict[str, Any] | None:
+    try:
+        cell = json.loads(
+            _result_path(manifest_id, cell_id).read_text(encoding="utf-8")
+        )
+    except (OSError, json.JSONDecodeError):
+        return None
+    if not isinstance(cell, dict) or not cell_is_reusable(
+        cell, manifest_id, cell_id
+    ):
+        return None
+    return cell
+
+
+def _write_payload(path: Path, payload: dict[str, Any]) -> None:
+    temporary_path = path.with_suffix(path.suffix + ".tmp")
+    temporary_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    temporary_path.replace(path)
+
+
+def _record_phase_failure(
+    path: Path,
+    payload: dict[str, Any],
+    *,
+    phase: str,
+    error: BaseException,
+) -> None:
+    payload["status"] = f"failed during {phase}"
+    payload["operation"]["phase"] = phase
+    payload["diagnostics"] = {
+        "failed_phase": phase,
+        "error_type": type(error).__name__,
+        "error": str(error),
+    }
+    _write_payload(path, payload)
+
+
+@app.function(
+    image=CONTROL_IMAGE,
+    timeout=15 * 60,
+    memory=1024,
+    volumes={"/results": e5_results},
+)
+def inspect_cached_cells(arg: dict[str, Any]) -> dict[str, Any]:
+    e5_results.reload()
+    manifest_id = str(arg["manifest_id"])
+    reusable: list[dict[str, Any]] = []
+    invalid_cell_ids: list[str] = []
+    missing_cell_ids: list[str] = []
+    active_leases: list[dict[str, Any]] = []
+    now = time.time()
+    for cell in arg["cells"]:
+        cell_id = str(cell["cell_id"])
+        path = _result_path(manifest_id, cell_id)
+        lease = e5_cell_leases.get(_lease_key(manifest_id, cell_id))
+        if lease_record_is_active(lease, now_unix=now):
+            active_leases.append(dict(lease))
+        if not path.exists():
+            missing_cell_ids.append(cell_id)
+            continue
+        cached = _read_reusable_cell(manifest_id, cell_id)
+        if cached is None:
+            invalid_cell_ids.append(cell_id)
+            continue
+        reusable.append(cached)
+    return {
+        "reusable_count": len(reusable),
+        "reusable_cell_ids": [str(cell["cell_id"]) for cell in reusable],
+        "invalid_count": len(invalid_cell_ids),
+        "invalid_cell_ids": invalid_cell_ids,
+        "missing_count": len(missing_cell_ids),
+        "missing_cell_ids": missing_cell_ids,
+        "active_lease_count": len(active_leases),
+        "active_leases": active_leases,
+        "reusable_cells": (
+            reusable if bool(arg.get("include_reusable_cells", False)) else []
+        ),
+    }
+
+
 @app.function(
     image=IMAGE,
-    gpu="L4",
-    timeout=6 * 60 * 60,
-    memory=24576,
+    timeout=15 * 60,
+    memory=1024,
+    volumes={"/results": e5_results},
+)
+def control_preflight(arg: dict[str, Any]) -> dict[str, Any]:
+    """Prove the pinned image and result-volume round trip without a GPU."""
+    from importlib.metadata import version
+
+    manifest_id = str(arg["manifest_id"])
+    resolved_dependencies = {
+        package: version(package) for package in DEPENDENCY_VERSIONS
+    }
+    record = {
+        "manifest_id": manifest_id,
+        "expected_cell_count": int(arg["expected_cell_count"]),
+        "execution_environment": arg["execution_environment"],
+    }
+    path = Path("/results/preflight") / f"{manifest_id}.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary_path = path.with_suffix(".tmp")
+    temporary_path.write_text(json.dumps(record, sort_keys=True), encoding="utf-8")
+    temporary_path.replace(path)
+    e5_results.commit()
+    observed = json.loads(path.read_text(encoding="utf-8"))
+    return {
+        "pass": (
+            observed == record
+            and resolved_dependencies == DEPENDENCY_VERSIONS
+        ),
+        "resolved_dependencies": resolved_dependencies,
+        "result_volume": RESULT_VOLUME_NAME,
+        "result_volume_version": RESULT_VOLUME_VERSION,
+        "record_path": str(path),
+    }
+
+
+@app.function(
+    image=IMAGE,
+    timeout=60 * 60,
+    memory=4096,
+    retries=2,
     volumes={"/cache/huggingface": hf_cache},
 )
-def run_shard(arg: dict[str, Any]) -> dict[str, Any]:
+def prefetch_models(models: tuple[tuple[str, str], ...]) -> tuple[str, ...]:
+    from huggingface_hub import snapshot_download
+
+    hf_cache.reload()
+    for size, revision in models:
+        snapshot_download(
+            repo_id=f"EleutherAI/pythia-{size}",
+            revision=revision,
+            cache_dir="/cache/huggingface",
+        )
+    hf_cache.commit()
+    return tuple(size for size, _ in models)
+
+
+def _run_cell_impl(arg: dict[str, Any]) -> dict[str, Any]:
+    worker_started = time.perf_counter()
+    size = str(arg["size"])
+    modulus = int(arg["n"])
+    seed = int(arg["seed"])
+    arm_text = str(arg["arm"])
+    manifest_id = str(arg["manifest_id"])
+    cell_id = str(arg["cell_id"])
+    e5_results.reload()
+    hf_cache.reload()
+    result_path = _result_path(manifest_id, cell_id)
+    cached = _read_reusable_cell(manifest_id, cell_id)
+    if cached is not None:
+        return cached
+
     import torch
     import torch.nn.functional as F
-    from peft import LoraConfig, TaskType, get_peft_model
-    from transformers import AutoModelForCausalLM, AutoTokenizer
+    from peft import (  # ty: ignore[unresolved-import]
+        LoraConfig,
+        TaskType,
+        get_peft_model,
+    )
+    from transformers import (  # ty: ignore[unresolved-import]
+        AutoModelForCausalLM,
+        AutoTokenizer,
+    )
 
-    size = str(arg["size"])
     run_config = E5RunConfig(
         sizes=(size,),
-        moduli=tuple(int(value) for value in arg["moduli"]),
-        seeds=tuple(int(value) for value in arg["seeds"]),
-        arms=tuple(str(value) for value in arg["arms"]),
+        moduli=(modulus,),
+        seeds=(seed,),
+        arms=(arm_text,),
         train_frac=float(arg["train_frac"]),
         train_shift_count=int(arg["train_shift_count"]),
         augmentation_multiplier=int(arg["augmentation_multiplier"]),
@@ -109,6 +393,7 @@ def run_shard(arg: dict[str, Any]) -> dict[str, Any]:
         spectral_mass_fraction=float(arg["spectral_mass_fraction"]),
     )
     repo = f"EleutherAI/pythia-{size}"
+    revision = str(arg["model_revision"])
     cache_dir = "/cache/huggingface"
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -375,20 +660,24 @@ def run_shard(arg: dict[str, Any]) -> dict[str, Any]:
             seed=seed,
         )
         split = make_split(design)
-        offset = random_offset = random_seeded_offset(seed, n)
+        offset = random_seeded_offset(seed, n)
         plans = build_exposure_plans(split, design, offset)
         plan = plans[arm]
         audit = audit_exposure(plan, split)
 
-        tokenizer = AutoTokenizer.from_pretrained(repo, cache_dir=cache_dir)
+        tokenizer = AutoTokenizer.from_pretrained(
+            repo,
+            revision=revision,
+            cache_dir=cache_dir,
+        )
         if tokenizer.pad_token is None:
             tokenizer.pad_token = tokenizer.eos_token
         base = AutoModelForCausalLM.from_pretrained(
             repo,
+            revision=revision,
             cache_dir=cache_dir,
             dtype=torch.float32,
         )
-        hf_cache.commit()
         base.config.use_cache = False
         targets = choose_lora_targets(base)
         model = get_peft_model(
@@ -514,10 +803,14 @@ def run_shard(arg: dict[str, Any]) -> dict[str, Any]:
             and not set(audit.used_intervention_ids) & set(split.k_novel)
         )
         cell = {
+            "run_manifest_id": manifest_id,
+            "cell_id": cell_id,
             "arm": arm.value,
             "size": size,
             "n": n,
             "seed": seed,
+            "model_revision": revision,
+            "execution_environment": arg["execution_environment"],
             "offset": offset,
             "split": asdict(split),
             "exposure_audit": asdict(audit),
@@ -560,12 +853,51 @@ def run_shard(arg: dict[str, Any]) -> dict[str, Any]:
         # between arms while keeping their task and split exactly matched.
         return 1 + ((seed * 1103515245 + 12345) % (n - 1))
 
-    cells: list[dict[str, Any]] = []
-    for n in run_config.moduli:
-        for seed in run_config.seeds:
-            for arm in run_config.arms:
-                cells.append(train_cell(arm, n, seed))
-    return {"size": size, "cells": cells}
+    cell = train_cell(arm_text, modulus, seed)
+    cell["cell_runtime_seconds"] = time.perf_counter() - worker_started
+    cell["run_config"] = asdict(run_config)
+    cell["attempt"] = arg["attempt"]
+    cell["resource_request"] = {
+        "gpu": GPU_TYPE,
+        "memory_mib": GPU_MEMORY_MIB,
+        "timeout_seconds": GPU_TIMEOUT_SECONDS,
+        "max_containers": GPU_MAX_CONTAINERS,
+    }
+    result_path.parent.mkdir(parents=True, exist_ok=True)
+    temporary_path = result_path.with_suffix(".tmp")
+    temporary_path.write_text(json.dumps(cell, indent=2), encoding="utf-8")
+    temporary_path.replace(result_path)
+    e5_results.commit()
+    return cell
+
+
+@app.function(
+    image=IMAGE,
+    gpu=GPU_TYPE,
+    timeout=GPU_TIMEOUT_SECONDS,
+    memory=GPU_MEMORY_MIB,
+    max_containers=GPU_MAX_CONTAINERS,
+    volumes={
+        "/cache/huggingface": hf_cache,
+        "/results": e5_results,
+    },
+)
+def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
+    manifest_id = str(arg["manifest_id"])
+    cell_id = str(arg["cell_id"])
+    e5_results.reload()
+    cached = _read_reusable_cell(manifest_id, cell_id)
+    if cached is not None:
+        return cached
+    lease = _acquire_cell_lease(
+        manifest_id,
+        cell_id,
+        str(arg["launch_id"]),
+    )
+    try:
+        return _run_cell_impl({**arg, "attempt": lease})
+    finally:
+        _release_cell_lease(lease)
 
 
 @app.local_entrypoint()
@@ -587,8 +919,19 @@ def main(
     grad_clip: float = 1.0,
     spectral_mass_fraction: float = 0.5,
     base_seed: int = 20260709,
+    run_kind: str = "development",
+    dry_run: bool = False,
+    inspect: bool = False,
+    execute: bool = False,
+    expected_manifest_id: str = "",
+    max_gpu_cells: int = 0,
     out: str = "artifacts/commitment_surface/e5_generator_vs_coverage.json",
 ) -> None:
+    if getattr(modal, "__version__", None) != MODAL_CLIENT_VERSION:
+        raise RuntimeError(
+            "E5 requires modal=="
+            f"{MODAL_CLIENT_VERSION}; invoke uvx with the pinned version"
+        )
     config = E5RunConfig(
         sizes=tuple(item.strip() for item in sizes.split(",") if item.strip()),
         moduli=tuple(int(item.strip()) for item in ns.split(",") if item.strip()),
@@ -607,25 +950,319 @@ def main(
         grad_clip=grad_clip,
         spectral_mass_fraction=spectral_mass_fraction,
     )
-    args = [
-        {
-            **asdict(config),
-            "size": size,
-        }
-        for size in config.sizes
-    ]
-    cells: list[dict[str, Any]] = []
-    for result in run_shard.map(args):
-        cells.extend(result["cells"])
-    payload = {
-        "experiment": "E5 generator learning vs labeled orbit coverage",
-        "status": "post-hoc preregistered follow-up",
-        "config": asdict(config),
-        "cells": cells,
-        "analysis": analyze_e5(cells),
-    }
+    kind = E5RunKind(run_kind)
+    config_dict = asdict(config)
+    unsupported_sizes = sorted(set(config.sizes) - set(MODEL_REVISIONS))
+    if unsupported_sizes:
+        raise ValueError(
+            "no frozen model revision for sizes: " + ", ".join(unsupported_sizes)
+        )
+    manifest = build_run_manifest(
+        config_dict,
+        run_kind=kind,
+        implementation_fingerprint=_implementation_fingerprint(),
+        execution_environment=EXECUTION_ENVIRONMENT,
+    )
     out_path = Path(out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    selected_actions = [
+        name
+        for name, selected in (
+            ("dry_run", dry_run),
+            ("inspect", inspect),
+            ("execute", execute),
+        )
+        if selected
+    ]
+    if len(selected_actions) != 1:
+        raise ValueError(
+            "select exactly one action: --dry-run, --inspect, or --execute"
+        )
+    action = selected_actions[0]
+    launch_id = str(uuid.uuid4())
+    if execute and max_gpu_cells <= 0:
+        raise ValueError("--execute requires a positive --max-gpu-cells")
+    if execute and kind is E5RunKind.CONFIRMATORY:
+        if not expected_manifest_id:
+            raise ValueError(
+                "confirmatory --execute requires --expected-manifest-id"
+            )
+        if expected_manifest_id != manifest["manifest_id"]:
+            raise ValueError(
+                "--expected-manifest-id does not match the computed manifest: "
+                f"expected {manifest['manifest_id']}"
+            )
+
+    payload: dict[str, Any] = {
+        "experiment": "E5 generator learning vs labeled orbit coverage",
+        "status": "operation planned; no remote phase started",
+        "run_kind": kind.value,
+        "config": config_dict,
+        "manifest": manifest,
+        "operation": {
+            "launch_id": launch_id,
+            "action": action,
+            "phase": "manifest_built",
+            "max_gpu_cells": max_gpu_cells if execute else None,
+            "expected_manifest_id": expected_manifest_id or None,
+        },
+        "cells": [],
+        "analysis": {
+            "confirmatory_ready": False,
+            "verdict": "not_run",
+        },
+    }
+    _write_payload(out_path, payload)
+
+    if inspect:
+        try:
+            checkpoint_scan = inspect_cached_cells.remote(
+                {
+                    "manifest_id": manifest["manifest_id"],
+                    "cells": manifest["cells"],
+                }
+            )
+        except Exception as error:
+            _record_phase_failure(
+                out_path,
+                payload,
+                phase="checkpoint_inspection",
+                error=error,
+            )
+            raise
+        checkpoint_scan.pop("reusable_cells")
+        payload["status"] = "checkpoint inspection complete; no GPU cells executed"
+        payload["operation"]["phase"] = "complete"
+        payload["checkpoint_inspection"] = checkpoint_scan
+        _write_payload(out_path, payload)
+        print(json.dumps(checkpoint_scan, indent=2))
+        print(f"wrote {out_path}; inspection only")
+        return
+
+    try:
+        preflight = control_preflight.remote(
+            {
+                "manifest_id": manifest["manifest_id"],
+                "expected_cell_count": manifest["expected_cell_count"],
+                "execution_environment": EXECUTION_ENVIRONMENT,
+            }
+        )
+    except Exception as error:
+        _record_phase_failure(
+            out_path,
+            payload,
+            phase="control_preflight",
+            error=error,
+        )
+        raise
+    payload["control_preflight"] = preflight
+    payload["operation"]["phase"] = "control_preflight_complete"
+    _write_payload(out_path, payload)
+    if preflight.get("pass") is not True:
+        error = RuntimeError("E5 control preflight failed")
+        _record_phase_failure(
+            out_path,
+            payload,
+            phase="control_preflight",
+            error=error,
+        )
+        raise error
+    if dry_run:
+        payload["status"] = "manifest and CPU preflight only; no GPU cells executed"
+        payload["operation"]["phase"] = "complete"
+        _write_payload(out_path, payload)
+        print(
+            json.dumps(
+                {key: value for key, value in manifest.items() if key != "cells"},
+                indent=2,
+            )
+        )
+        print(f"wrote {out_path}; dry run only")
+        return
+
+    manifest_cells = list(manifest["cells"])
+    try:
+        initial_checkpoint_scan = inspect_cached_cells.remote(
+            {
+                "manifest_id": manifest["manifest_id"],
+                "cells": manifest_cells,
+                "include_reusable_cells": True,
+            }
+        )
+    except Exception as error:
+        _record_phase_failure(
+            out_path,
+            payload,
+            phase="checkpoint_scan",
+            error=error,
+        )
+        raise
+    cached_cells = initial_checkpoint_scan.pop("reusable_cells")
+    payload["initial_checkpoint_scan"] = initial_checkpoint_scan
+    payload["operation"]["phase"] = "checkpoint_scan_complete"
+    _write_payload(out_path, payload)
+    cached_by_id = {str(cell["cell_id"]): cell for cell in cached_cells}
+    missing_cells = [
+        cell
+        for cell in manifest_cells
+        if str(cell["cell_id"]) not in cached_by_id
+    ]
+    if kind is E5RunKind.CONFIRMATORY and max_gpu_cells < len(missing_cells):
+        error = ValueError(
+            "confirmatory --max-gpu-cells must cover every missing cell: "
+            f"need {len(missing_cells)}, received {max_gpu_cells}"
+        )
+        _record_phase_failure(
+            out_path,
+            payload,
+            phase="execution_authorization",
+            error=error,
+        )
+        raise error
+    fresh_cells: list[dict[str, Any]] = []
+    launch: dict[str, Any]
+    if missing_cells:
+        prioritized_cells = prioritize_launch_cells(missing_cells)[:max_gpu_cells]
+        missing_sizes = tuple(
+            dict.fromkeys(str(cell["size"]) for cell in prioritized_cells)
+        )
+        launch = {
+            "launch_id": launch_id,
+            "authorized_gpu_cell_count": max_gpu_cells,
+            "selected_cell_count": len(prioritized_cells),
+            "selected_cell_ids": [
+                str(cell["cell_id"]) for cell in prioritized_cells
+            ],
+        }
+        payload["launch"] = launch
+        payload["operation"]["phase"] = "model_prefetch"
+        _write_payload(out_path, payload)
+        try:
+            prefetch_models.remote(
+                tuple((size, MODEL_REVISIONS[size]) for size in missing_sizes)
+            )
+        except Exception as error:
+            _record_phase_failure(
+                out_path,
+                payload,
+                phase="model_prefetch",
+                error=error,
+            )
+            raise
+        payload["operation"]["phase"] = "model_prefetch_complete"
+        _write_payload(out_path, payload)
+        shared_config = {
+            key: value
+            for key, value in config_dict.items()
+            if key not in {"sizes", "moduli", "seeds", "arms"}
+        }
+        args = [
+            {
+                **shared_config,
+                **cell,
+                "manifest_id": manifest["manifest_id"],
+                "model_revision": MODEL_REVISIONS[str(cell["size"])],
+                "execution_environment": EXECUTION_ENVIRONMENT,
+                "launch_id": launch_id,
+            }
+            for cell in prioritized_cells
+        ]
+        payload["operation"]["phase"] = "gpu_dispatch"
+        _write_payload(out_path, payload)
+        try:
+            mapped = list(run_cell.map(args, return_exceptions=True))
+        except Exception as error:
+            _record_phase_failure(
+                out_path,
+                payload,
+                phase="gpu_dispatch",
+                error=error,
+            )
+            raise
+        launch_failures = [
+            {
+                "cell_id": str(arg["cell_id"]),
+                "launch_id": launch_id,
+                "error_type": type(result).__name__,
+                "error": str(result),
+            }
+            for arg, result in zip(args, mapped)
+            if not isinstance(result, dict)
+        ]
+        fresh_cells = [
+            result
+            for result in mapped
+            if isinstance(result, dict)
+        ]
+        launch["failures"] = launch_failures
+        payload["operation"]["phase"] = "gpu_dispatch_complete"
+        _write_payload(out_path, payload)
+    else:
+        launch_failures = []
+        launch = {
+            "launch_id": launch_id,
+            "authorized_gpu_cell_count": max_gpu_cells,
+            "selected_cell_count": 0,
+            "selected_cell_ids": [],
+            "failures": [],
+        }
+        payload["launch"] = launch
+    try:
+        final_checkpoint_scan = inspect_cached_cells.remote(
+            {
+                "manifest_id": manifest["manifest_id"],
+                "cells": manifest_cells,
+                "include_reusable_cells": True,
+            }
+        )
+    except Exception as error:
+        _record_phase_failure(
+            out_path,
+            payload,
+            phase="final_checkpoint_scan",
+            error=error,
+        )
+        raise
+    checkpointed_cells = final_checkpoint_scan.pop("reusable_cells")
+    cells_by_id = {
+        str(cell["cell_id"]): cell
+        for cell in [*cached_cells, *fresh_cells, *checkpointed_cells]
+    }
+    cells = [
+        cells_by_id[str(cell["cell_id"])]
+        for cell in manifest_cells
+        if str(cell["cell_id"]) in cells_by_id
+    ]
+    missing_cell_ids = [
+        str(cell["cell_id"])
+        for cell in manifest_cells
+        if str(cell["cell_id"]) not in cells_by_id
+    ]
+    payload.update(
+        {
+            "status": (
+                "post-hoc preregistered follow-up complete"
+                if not missing_cell_ids
+                else "incomplete; rerun the identical command to resume missing cells"
+            ),
+            "control_preflight": preflight,
+            "cells": cells,
+            "analysis": analyze_e5(
+                cells,
+                grid_spec=grid_spec_for_run_kind(kind),
+            ),
+        }
+    )
+    launch.update(
+        {
+            "cached_cell_count": len(cached_cells),
+            "completed_cell_count": len(cells),
+            "missing_cell_ids": missing_cell_ids,
+            "final_checkpoint_scan": final_checkpoint_scan,
+            "failures": launch_failures,
+        }
+    )
+    payload["operation"]["phase"] = "complete"
+    _write_payload(out_path, payload)
     print(json.dumps(payload["analysis"], indent=2))
     print(f"wrote {out_path}")
