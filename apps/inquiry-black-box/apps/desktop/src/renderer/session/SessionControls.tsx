@@ -50,7 +50,7 @@ export function sessionControlsViewModel(
   return {
     indicator: recordingIndicator(state),
     buttons: [
-      { command: "start", label: "Start", enabled: state === "idle" || state === "stopped", tone: "primary" },
+      { command: "start", label: "Start recording", enabled: state === "idle" || state === "stopped", tone: "primary" },
       { command: "pause", label: "Pause", enabled: state === "recording", tone: "secondary" },
       { command: "resume", label: "Resume", enabled: state === "paused", tone: "secondary" },
       { command: "stop", label: "Stop", enabled: state === "recording" || state === "paused", tone: "danger" },
@@ -71,11 +71,26 @@ export function renderSessionControls(
   const container = document.createElement("section");
   container.className = "session-controls";
 
+  const headingRow = document.createElement("div");
+  headingRow.className = "session-controls__header";
+  const headingGroup = document.createElement("div");
+  const eyebrow = document.createElement("span");
+  eyebrow.className = "app-eyebrow";
+  eyebrow.textContent = "Primary task";
+  const heading = document.createElement("h2");
+  heading.textContent = "Recording session";
+  headingGroup.append(eyebrow, heading);
   const status = document.createElement("strong");
   status.className = `recording-state recording-state-${view.indicator.tone}`;
   status.textContent = view.indicator.label;
   status.setAttribute("aria-live", "polite");
-  container.append(status);
+  headingRow.append(headingGroup, status);
+  container.append(headingRow);
+
+  const helper = document.createElement("p");
+  helper.className = "session-helper";
+  helper.textContent = sessionHelper(view.indicator.state);
+  container.append(helper);
 
   const titleField = document.createElement("label");
   titleField.className = "session-title-field";
@@ -92,11 +107,10 @@ export function renderSessionControls(
 
   const toolbar = document.createElement("div");
   toolbar.className = "session-toolbar";
-  for (const button of view.buttons) {
+  for (const button of view.buttons.filter((candidate) => candidate.enabled)) {
     const control = document.createElement("button");
     control.type = "button";
     control.textContent = button.label;
-    control.disabled = !button.enabled;
     control.className = `session-button session-button-${button.tone}`;
     control.addEventListener("click", () => {
       if (button.command === "start") {
@@ -110,22 +124,38 @@ export function renderSessionControls(
   }
   container.append(toolbar);
 
-  const labels = document.createElement("div");
-  labels.className = "session-labels";
-  for (const label of view.labels) {
-    const control = document.createElement("button");
-    control.type = "button";
-    control.textContent = selfLabelDisplayName(label);
-    control.dataset.labelSlug = label;
-    control.disabled = view.indicator.state !== "recording" && view.indicator.state !== "paused";
-    control.addEventListener("click", () => {
-      void actions.addLabel(label);
-    });
-    labels.append(control);
+  if (view.indicator.state === "recording" || view.indicator.state === "paused") {
+    const labelHeading = document.createElement("p");
+    labelHeading.className = "session-labels__heading";
+    labelHeading.textContent = "Mark this moment";
+    container.append(labelHeading);
+
+    const labels = document.createElement("div");
+    labels.className = "session-labels";
+    for (const label of view.labels) {
+      const control = document.createElement("button");
+      control.type = "button";
+      control.textContent = selfLabelDisplayName(label);
+      control.dataset.labelSlug = label;
+      control.addEventListener("click", () => {
+        void actions.addLabel(label);
+      });
+      labels.append(control);
+    }
+    container.append(labels);
   }
-  container.append(labels);
 
   root.replaceChildren(container);
+}
+
+function sessionHelper(state: RecordingIndicatorView["state"]): string {
+  if (state === "recording") {
+    return "Capture is active. Mark a moment when your understanding shifts.";
+  }
+  if (state === "paused") {
+    return "Capture is paused. Resume when you are ready to continue.";
+  }
+  return "Name the inquiry, then start capturing private browser evidence.";
 }
 
 function actionFor(command: SessionCommand, actions: SessionControlsActions): () => void | Promise<void> {

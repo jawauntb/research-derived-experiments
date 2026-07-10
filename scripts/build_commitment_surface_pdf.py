@@ -56,6 +56,10 @@ OUT_PDF = PAPER_DIR / "paper.pdf"
 COPY_PDF = ROOT / "papers" / "pdf" / "commitment_surface.pdf"
 
 E1_JSON = ROOT / "experiments" / "commitment_surface" / "results" / "e1_concern_weighted.json"
+E1_VARIANCE_JSON = (
+    ROOT / "experiments" / "commitment_surface" / "results"
+    / "e1_misspecification_variance.json"
+)
 E2E3_JSON = ROOT / "experiments" / "commitment_surface" / "results" / "e2_e3_neural.json"
 E4_JSON_CANDIDATES = [
     ROOT
@@ -449,16 +453,18 @@ def build_results_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
     flow.append(para("5.1 E1 — Concern-weighted selector", st["H3"]))
     if E1_JSON.exists():
         e1 = json.loads(E1_JSON.read_text())["summary"]
+        e1_variance = json.loads(E1_VARIANCE_JSON.read_text())
         add_image(flow, FIG_DIR / "fig1_e1_selectors.png",
                   "Figure 1. Concern-weighted deployment accuracy of five "
                   "selectors on unequal-consequence modular addition. "
                   "Well-specified concern beats unweighted Bennett by "
                   f"+{e1['gap_wellspec_vs_unweighted']:.3f}; misspecified "
                   "concern is slightly *below* unweighted "
-                  f"({e1['gap_misspec_vs_unweighted']:.3f}) — directionally "
-                  "consistent with the corollary (random concern weighting "
-                  "is not helpful) but outside the pre-registered ±0.05 "
-                  "equivalence band.", st)
+                  f"({e1['gap_misspec_vs_unweighted']:.3f}). The frozen "
+                  "±0.05 equivalence gate fails; the separately "
+                  "pre-registered randomization follow-up finds this gap "
+                  "typical of the frozen design rather than systematic "
+                  "anti-correlation.", st)
         table_data = [
             ["Selector", "Mean", "95% CI"],
             ["Concern-weighted (well-spec)",
@@ -494,10 +500,21 @@ def build_results_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
             f"<b>{_fmt(e1['gap_misspec_vs_unweighted'])}</b> "
             f"(PASS = {_fmt(e1['commitment_first_pass_misspec_matches_unweighted'])}: "
             "outside the pre-registered equivalence band; this sub-gate "
-            "strictly fails. The direction — random concern weighting is "
-            "not helpful — holds, and the corollary's in-expectation "
-            "prediction is equality, so the realized draw was mildly "
-            "adversarial; see Section 3.5).",
+            "strictly fails and remains failed).",
+            st["Body"]))
+        variance_null = e1_variance["null_distribution"]
+        variance_gate = e1_variance["gate"]
+        flow.append(para(
+            "Timestamped E1 follow-up: 2,048 conditional randomization "
+            "replicates give null mean gap "
+            f"<b>{_fmt(variance_null['mean'], 4)}</b> (SD "
+            f"{_fmt(variance_null['sd'], 4)}), with "
+            f"P(Δ ≤ observed) = "
+            f"<b>{_fmt(variance_null['probability_gap_le_observed'])}</b>. "
+            f"Verdict: <b>{variance_gate['verdict']}</b>. All frozen "
+            "independence/exchangeability checks pass. The score-level "
+            "expectation identity therefore survives, but it does not "
+            "commute through finite-pool argmax selection; see Section 3.5.",
             st["Body"]))
     else:
         flow.append(para("E1 result JSON not yet committed.", st["Body"]))

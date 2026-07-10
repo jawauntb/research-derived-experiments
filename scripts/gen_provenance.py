@@ -77,8 +77,13 @@ def collect(d: Path) -> dict:
     modal_txt = read(modal_scripts[0]) if modal_scripts else ""
     py_txt = "\n".join(read(p) for p in py_scripts[:6])
 
-    paper = PAPERS / name / "paper.md"
-    prereg = PAPERS / name / "preregistration.md"
+    paper_dir = PAPERS / name
+    paper = paper_dir / "paper.md"
+    prereg = paper_dir / "preregistration.md"
+    if name == "commitment_surface" and not prereg.exists():
+        followup_preregs = sorted(paper_dir.glob("*preregistration*.md"))
+        if followup_preregs:
+            prereg = followup_preregs[-1]
 
     run_cmd = first_match(RUN_PATTERNS, readme_txt, modal_txt, latest_result, py_txt)
     seed = first_match(SEED_PATTERNS, modal_txt, py_txt, readme_txt)

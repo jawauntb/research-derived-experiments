@@ -61,7 +61,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_concerned_syntax.py` | Arc 2A concerned-syntax suite |
 | `test_viable_computational_bodies.py` | Arc 2B body search / gates |
 | `test_long_horizon_bottleneck.py` | Suite D/E long-horizon / tool eval |
-| `test_world_responds_suite_c*.py` (5 files) | Suite C reengagement + neural transfer + teacher-free |
+| `test_world_responds_suite_c*.py` (6 files) | Suite C reengagement + 2^3 component factorial + neural transfer + teacher-free |
 | `test_structure_compatible_*.py` (4 files) | SCG suite, row ledgers, semantic selection |
 | `test_gridcell_conference_evidence.py` | Paper A evidence export helpers |
 | `test_paper_b_reproduce_stats.py` | Paper B CSV reproduction |
@@ -71,6 +71,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_commitment_surface_appendix.py` | Public-safe E4 appendix export, metric retention, raw-field omission |
 | `test_publication_guard.py` | Secret-signature detection and non-secret fixture naming |
 | `test_semantic_concern_summary.py` | Semantic concern summarizer |
+| `test_commitment_surface_core.py`, `test_e1_misspecification_variance.py` | E1 concern selectors plus conditional-randomization reconstruction, seed, assignment, and statistics contracts |
 | `test_summarize_label_free_dose_response.py` | Label-free dose-response summarizer |
 | `test_virtual_governor_stress_signal.py` | Virtual governor diagnostic |
 
@@ -214,7 +215,9 @@ Severe tests for the commitment-first reframe. See
 [`papers/commitment_surface/paper.md`](../papers/commitment_surface/paper.md)
 for the theory (Props 1+2, corollary, M4 anti-Goodhart loop) and
 [`papers/commitment_surface/PLAN.md`](../papers/commitment_surface/PLAN.md)
-for the frozen pre-registration.
+for the frozen original pre-registration. The E1 variance follow-up is frozen
+separately in
+[`e1_misspecification_variance_preregistration_2026-07-09.md`](../papers/commitment_surface/e1_misspecification_variance_preregistration_2026-07-09.md).
 
 The corrected formal surface treats Proposition 1 as non-identification,
 requires deployment-restricted weakness (or an ordering-preservation
@@ -227,15 +230,19 @@ paper §6.5.
 |---|---|
 | `core.py` | Stdlib primitives: concern deployments (uniform / unequal / misspec), weighted extension mass, candidate hypothesis families (shifts, random train-perfect completions, biased-to-focus), selectors, `run_e1_cell` |
 | `run_e1.py` | E1 CPU sweep entrypoint (unequal-consequence selector comparison) |
+| `e1_misspecification_variance.py` | Stdlib CPU conditional-randomization harness: freezes 96 E1 structures, redraws 2,048 independent marginal-preserving assignments, estimates gap distribution/tail probability, and gates exchangeability assumptions |
 | `e2_e3_neural_sweep.py` | E2/E3 four-arm neural MLP sweep on cyclic modular addition; measures OOD, patch-CE Δ, weakness / wrong-group anti-cheat |
 | `modal_e4_pythia_lora_v2.py` | E4 Modal L4 external contact: four arms A (readout) / B (cyclic-orbit augmentation) / C (wrong-group aug) / D (loss selector) on Pythia 70m/160m/410m LoRA modular addition; adapter-disable patch-CE |
 | `results/e1_concern_weighted.{json,md}` | E1 summary + per-cell provenance |
+| `results/e1_misspecification_variance.{json,md}` | E1 follow-up aggregate draws, quantiles/CI, assumption audit, and randomization verdict |
 | `results/e2_e3_neural.{json,md}` | E2/E3 summary + per-cell provenance |
+| `results/m4_suite_c_factorial_ablation_2026_07_09.{json,md}` | M4 public-safe factorial summary: strict FAIL; reopen necessary, allocate/cool terminal-null |
 
 Run:
 
 ```bash
 python3 -m experiments.commitment_surface.run_e1
+python3 -m experiments.commitment_surface.e1_misspecification_variance
 python3 -m experiments.commitment_surface.e2_e3_neural_sweep
 doppler --scope /Users/jawaun/superoptimizers run -- \
     uvx --python 3.12 --from modal modal run \
@@ -319,7 +326,9 @@ python3 -m experiments.viable_computational_bodies.search \
 |---|---|
 | `modal_world_responds_sweep.py` | Paper 22: action-correlated shocks + regime shift |
 | `suite_c_contract.py` | Shared Suite C condition constants |
-| `suite_c_reengagement.py` | Deterministic Suite C re-engagement (silence/anxiety/false-calm/cost) |
+| `suite_c_reengagement.py` | Deterministic Suite C re-engagement (silence/anxiety/false-calm/cost), with typed allocate/cool/reopen action-gate interventions that default to the unchanged policy |
+| `suite_c_factorial_ablation.py` | Local deterministic 2^3 allocate × cool × reopen runner using the real burst/refractory workflow; paired bootstrap contrasts, transported controls, strict gates, idempotent raw/public artifacts |
+| `suite_c_factorial_ablation_preregistration_2026_07_09.md` | Timestamped follow-up addendum frozen before implementation/run; exact component semantics, seeds, gates, kill criteria, rejected alternatives |
 | `modal_suite_c_reengagement.py` | Modal Suite C dispatch |
 | `suite_c_neural_transfer.py` | Learned probe-head transfer on held-out seeds |
 | `modal_suite_c_neural_transfer.py` | Modal neural-transfer sweep |
@@ -639,14 +648,14 @@ Local-first Neurophenom cockpit: pair extension → record → replay → daily 
 |---|---|
 | `packages/schema` | Event envelope, privacy classes, retention, session validation |
 | `packages/signals` | Windowing, heuristics, heatmaps, interpretation, daily review, redacted Modal inputs |
-| `packages/ui` | Shared view models/tokens |
+| `packages/ui` | Shared view models and warm-neutral/teal tokens used by desktop and extension |
 
 #### Apps
 
 | App | Role | Key areas |
 |---|---|---|
-| `apps/desktop` | Electron main + renderer; SQLite source of truth | ingest, db, privacy, reports, notifications, security, activity, packaging |
-| `apps/extension` | Chrome MV3 | service-worker, content telemetry, popup, localBridge |
+| `apps/desktop` | Electron main + renderer; SQLite source of truth | first-viewport recording controls, guided extension pairing, ingest, db, privacy, reports, notifications, security, activity, packaging |
+| `apps/extension` | Chrome MV3 | pairing-first popup, session/page capture controls, privacy disclosures, service-worker, content telemetry, localBridge |
 | `apps/cloud` | Optional Railway Bun API | sync/reports/jobs routes, Postgres, Modal bridge |
 
 #### Modal jobs (`modal/`)
