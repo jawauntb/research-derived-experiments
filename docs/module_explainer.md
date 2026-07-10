@@ -69,6 +69,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_gauge_fixed_concern_transport_*.py` | Gauge-fixed transport + PDF |
 | `test_external_contact_p1_lora.py` | External-contact LoRA metrics |
 | `test_commitment_surface_appendix.py` | Public-safe E4 appendix export, metric retention, raw-field omission |
+| `test_commitment_surface_core.py`, `test_commitment_surface_e5.py` | Commitment-surface arithmetic plus E5 split, leakage, coverage, novel-shift, and frozen-gate contracts |
 | `test_publication_guard.py` | Secret-signature detection and non-secret fixture naming |
 | `test_semantic_concern_summary.py` | Semantic concern summarizer |
 | `test_commitment_surface_core.py`, `test_e1_misspecification_variance.py` | E1 concern selectors plus conditional-randomization reconstruction, seed, assignment, and statistics contracts |
@@ -223,8 +224,9 @@ The corrected formal surface treats Proposition 1 as non-identification,
 requires deployment-restricted weakness (or an ordering-preservation
 assumption) in Proposition 2, and uses finite-candidate order equivalence for
 concern weighting. E4 is a directional result with a strict gate failure; its
-open labeled-orbit-coverage confound and severe follow-up are recorded in
-paper §6.5.
+open labeled-orbit-coverage confound and timestamped post-hoc E5 severe
+follow-up are recorded in paper §6.5 and PLAN.md. The minimum E5 Modal smoke
+passed integrity; mechanism confirmation remains pending.
 
 | Module | Purpose |
 |---|---|
@@ -233,9 +235,12 @@ paper §6.5.
 | `e1_misspecification_variance.py` | Stdlib CPU conditional-randomization harness: freezes 96 E1 structures, redraws 2,048 independent marginal-preserving assignments, estimates gap distribution/tail probability, and gates exchangeability assumptions |
 | `e2_e3_neural_sweep.py` | E2/E3 four-arm neural MLP sweep on cyclic modular addition; measures OOD, patch-CE Δ, weakness / wrong-group anti-cheat |
 | `modal_e4_pythia_lora_v2.py` | E4 Modal L4 external contact: four arms A (readout) / B (cyclic-orbit augmentation) / C (wrong-group aug) / D (loss selector) on Pythia 70m/160m/410m LoRA modular addition; adapter-disable patch-CE |
+| `e5_core.py` | E5 typed configs, disjoint support/intervention splits, supervised-vs-consistency exposure plans, leakage/coverage audits, and frozen smoke/confirmatory analysis gates |
+| `modal_e5_generator_vs_coverage.py` | E5 Modal Pythia-LoRA five-arm runner: train-support-only correct/wrong generator consistency, orbit and coverage references, novel-shift/paraphrase transport, exposure ledgers, and spectral-mass-normalized LoRA patching |
 | `results/e1_concern_weighted.{json,md}` | E1 summary + per-cell provenance |
 | `results/e1_misspecification_variance.{json,md}` | E1 follow-up aggregate draws, quantiles/CI, assumption audit, and randomization verdict |
 | `results/e2_e3_neural.{json,md}` | E2/E3 summary + per-cell provenance |
+| `results/e5_smoke_summary.md` | Public-safe one-seed harness-validation report; integrity pass, explicitly non-confirmatory |
 | `results/m4_suite_c_factorial_ablation_2026_07_09.{json,md}` | M4 public-safe factorial summary: strict FAIL; reopen necessary, allocate/cool terminal-null |
 
 Run:
@@ -248,6 +253,11 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
     uvx --python 3.12 --from modal modal run \
         experiments/commitment_surface/modal_e4_pythia_lora_v2.py \
         --sizes 70m,160m,410m --ns 13,17,23 --seeds 3 --arms A,B,C,D
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+        experiments/commitment_surface/modal_e5_generator_vs_coverage.py \
+        --sizes 70m --ns 13 --seeds 1 --arms G-reg,Cov,A-ref --epochs 20 \
+        --out artifacts/commitment_surface/e5_smoke.json
 ```
 
 Rebuild the paper PDF:

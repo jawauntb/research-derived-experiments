@@ -134,6 +134,48 @@ remain only in the gitignored raw payload. Regenerate the compact artifact with:
 python3 scripts/export_commitment_surface_e4_appendix.py
 ```
 
+### E5 — Generator Learning vs Labeled Orbit Coverage (Modal L4)
+
+Explicitly post-hoc severe follow-up, frozen in the timestamped PLAN.md
+addendum before E5 results. Five arms separate train-support-only generator
+consistency (`G-reg`) from E4-style labeled orbit augmentation (`B-ref`), a
+wrong-generator regularizer (`W-reg`), coverage-matched correct labels with no
+group construction (`Cov`), and the unaugmented reference (`A-ref`).
+
+The pure `e5_core.py` layer freezes support and intervention splits, constructs
+typed exposure plans, rejects held-out truth-label leakage into G-reg/W-reg,
+matches B-ref/Cov held-out exposure, and applies the frozen analysis gates.
+The Modal harness records the full exposure ledger, evaluates disjoint novel
+shifts and prompt paraphrases, and patches a fixed fraction of each effective
+LoRA update's spectral mass. Full-adapter disable is secondary only.
+
+Validation smoke (not scientific evidence):
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+        experiments/commitment_surface/modal_e5_generator_vs_coverage.py \
+        --sizes 70m --ns 13 --seeds 1 --arms G-reg,Cov,A-ref --epochs 20 \
+        --out artifacts/commitment_surface/e5_smoke.json
+```
+
+Confirmatory grid (launch only after the smoke passes and cost review):
+
+```bash
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal modal run \
+        experiments/commitment_surface/modal_e5_generator_vs_coverage.py \
+        --sizes 70m,160m,410m --ns 13,17,23 --seeds 3 \
+        --arms G-reg,B-ref,W-reg,Cov,A-ref --epochs 160 \
+        --train-frac 0.5 --train-shift-count 3 \
+        --augmentation-multiplier 3 --spectral-mass-fraction 0.5 \
+        --base-seed 20260709 \
+        --out artifacts/commitment_surface/e5_generator_vs_coverage.json
+```
+
+Status: the 70m/n=13/one-seed validation smoke passed all integrity gates; see
+`results/e5_smoke_summary.md`. It is not scientific evidence. E5 remains
+confirmatory-pending, and no mechanism verdict is claimed.
 ### M4 — Suite C Allocate × Cool × Reopen Factorial
 
 The timestamped follow-up addendum is

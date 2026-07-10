@@ -8,4 +8,6 @@ for the pre-registration.
 - E2: compatibility-augmented training vs post-hoc weakness readout.
 - E3: causal-patch effect (CE) as commitment predictor.
 - E4: Pythia LoRA v2 external contact with four arms (Modal L4).
+- E5: generator learning vs labeled orbit coverage, with leakage-audited
+  train-support regularization and spectral-mass-normalized patching.
 """

@@ -218,3 +218,120 @@ The loop exits (paper is "groundbreaking-shaped") when *all* of:
   synthesis, not just name-drops.
 - The reviewer-response appendix has an answer to each of the
   paper-reviews.d/*.md critical review threads that touched this cluster.
+
+## Post-hoc addendum: E5 generator learning vs labeled coverage
+
+**Timestamp: 2026-07-09 21:36 EDT. Status: explicitly post-hoc, frozen before
+any E5 result was produced or inspected.** This addendum does not alter the
+2026-07-09 preregistration above. E4 revealed a confound that its frozen design
+did not separate: Arm B's orbit augmentation supplied correct labels at
+held-out-support inputs. E5 asks whether the effect is generator learning,
+labeled coverage, or both.
+
+### Current frame, assumptions, and anomaly
+
+- Current frame: a compatibility intervention can make generator structure
+  load-bearing at a commitment surface.
+- Load-bearing assumptions: train-support-only consistency can teach a
+  generator without truth labels outside the original support; novel
+  intervention elements test rule learning rather than memorized transforms;
+  equal labeled support exposure makes B-ref and Cov coverage-comparable.
+- Measurement assumptions: canonical and paraphrased prompts address the same
+  function; normalized LoRA patches compare equal fractions of adapter
+  spectral mass rather than conflating mechanism with adapter magnitude/rank.
+- Anomaly: E4 B greatly improved OOD, but its transformed examples directly
+  labeled held-out inputs. Therefore E4 cannot identify generator learning as
+  the cause of that lift.
+
+### Arms and anti-leakage contract
+
+For each cell, freeze original labeled support `S_train`, held-out support
+`S_ood`, intervention shifts `K_train`, and disjoint `K_novel` before model
+training.
+
+- **G-reg:** ordinary supervised loss only on `S_train`, plus cyclic
+  equivariance-consistency regularization only for pairs `(x, x+k)` whose two
+  inputs are in `S_train`, with `k ∈ K_train`. The consistency target is the
+  model distribution shifted by `k`; no truth label from `S_ood` may enter
+  this loss.
+- **B-ref:** the E4 cyclic augmentation reference. It may add transformed
+  correctly labeled examples outside `S_train`.
+- **W-reg:** volume-matched train-support-only consistency under a frozen
+  non-cyclic permutation. It has the same label-exposure contract as G-reg:
+  zero truth labels from `S_ood`.
+- **Cov:** add correct labels at held-out inputs sampled without a group
+  transformation. Its number of unique held-out labeled inputs and total
+  supervised exposure events exactly match B-ref for that cell.
+- **A-ref:** ordinary LoRA training on `S_train`; no consistency intervention
+  and no added labels.
+
+Every raw cell must record supervised and consistency exposure counts by
+original/held-out support, unique exposed inputs, `K_train`, `K_novel`, and the
+actual intervention pairs. A G-reg or W-reg cell with any held-out truth-label
+exposure is invalid, not a negative result.
+
+### Evaluations and causal patch
+
+Primary evaluation is accuracy/NLL on `S_ood` using the canonical prompt.
+Transport evaluation repeats it under preregistered paraphrases that preserve
+the task and answer format. Novel-generator evaluation measures equivariance
+error and accuracy effects for every `k ∈ K_novel`; no `K_novel` element may
+occur in a training intervention. Change-of-commitment requires the direction
+of the OOD and patch effects to survive both the canonical and paraphrased
+commitments.
+
+Patch-CE is measured by removing the top singular directions of each effective
+LoRA update. Patches are normalized to the same removed spectral-mass fraction
+per matrix, with the realized rank and removed/total squared singular-value
+mass recorded. Full-adapter disable is retained only as a secondary diagnostic.
+
+### Frozen gates and kill criteria
+
+Integrity gates (all mandatory):
+
+1. `S_train ∩ S_ood = ∅`, `K_train ∩ K_novel = ∅`, and all intervention pairs
+   for G-reg/W-reg remain inside `S_train`.
+2. G-reg and W-reg have exactly zero supervised held-out truth-label exposures.
+3. B-ref and Cov exactly match both unique held-out labeled-input count and
+   total held-out supervised exposure events.
+4. No `K_novel` shift occurs in an intervention pair; canonical and paraphrase
+   evaluation records are complete.
+5. Normalized patches remove the configured spectral-mass fraction within
+   ±0.02 in every patched matrix with nonzero LoRA mass.
+
+The one-seed 70m/n=13 smoke is a harness validation only. It passes when arms
+G-reg/Cov/A-ref complete with finite metrics and integrity gates 1–5 pass; it
+cannot support a scientific claim.
+
+The confirmatory grid uses at least three seeds per `(size,n,train_frac)` cell.
+All numerical gates below are macro means over matched valid cells:
+
+- **Generator-learning evidence:** G-reg exceeds Cov by ≥0.10 canonical OOD
+  accuracy, exceeds A-ref by ≥0.20, improves novel-`k` equivariance accuracy
+  over A-ref by ≥0.10, and has normalized patch-CE ≥0.05 under both canonical
+  and paraphrase commitments.
+- **Coverage evidence:** Cov exceeds G-reg by ≥0.10 and G-reg either improves
+  over A-ref by <0.10 or has normalized patch-CE <0.05.
+- **Mixed mechanism:** both G-reg and Cov exceed A-ref by ≥0.20, their absolute
+  gap is <0.10, and both have positive normalized patch-CE under both
+  commitments.
+- **Group-specificity gate:** G-reg must exceed W-reg by ≥0.10 on canonical OOD
+  and novel-`k` equivariance accuracy. Failure blocks a generator-specific
+  interpretation even if G-reg beats A-ref.
+- **Transport gate:** G-reg's paraphrase OOD lift over A-ref must retain ≥75%
+  of its canonical lift, and its normalized patch-CE must remain ≥0.05.
+
+Kill the strong claim that train-support consistency learns a load-bearing
+generator if G-reg improves over A-ref by ≤0.05 on canonical OOD, improves
+novel-`k` equivariance by ≤0.05, or fails normalized patch-CE/transport. Kill
+the claim that E4 identified generator learning rather than coverage if Cov
+matches or beats B-ref within 0.05 while G-reg fails the generator-learning
+gate. Any integrity failure kills the affected cell and triggers rerun; it
+must never be repaired by post-hoc relabeling.
+
+Claim boundary before results: E5 is preregistered and pending. E4 remains
+evidence that cyclic augmentation improves Pythia LoRA OOD behavior and that
+the adapter is causally consequential, but not evidence that generator
+learning rather than labeled orbit coverage caused the improvement. The next
+best test is the one-seed smoke, followed only after it passes by the matched
+multi-seed grid.
