@@ -85,6 +85,15 @@ that also succeeded because it added correct-labeled coverage of the
 input space, and did not isolate group specificity from augmentation
 volume; see paper §R2 for the transparent note).
 
+The frozen rank-normalized follow-up in
+`results/e2_e3_rank_normalized_patch_2026_07_10.{json,md}` replaces the
+width-sensitive top-k intervention with the minimum activation subspace
+explaining 50% of between-orbit spectral mass. It strictly passes all gates:
+Arm B CE per removed mass is 1.119 at width 96 and 0.868 at width 128
+(77.5% retention), versus Arm C 0.159/0.174 and the matched wrong-subspace
+control 0.001/0.001. This supports distributed causal localization in these
+small MLPs, not in Pythia or language.
+
 ### E4 — Pythia LoRA v2 External Contact (Modal L4)
 
 Non-degenerate follow-up to the P1 hard kill in
