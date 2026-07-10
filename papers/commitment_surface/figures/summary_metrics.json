@@ -1,10 +1,10 @@
 {
   "figures": {
-    "fig1": "/Users/jawaun/.cursor/worktrees/Research_Derived_Experiments/v3ni/papers/commitment_surface/figures/fig1_e1_selectors.png",
-    "fig2": "/Users/jawaun/.cursor/worktrees/Research_Derived_Experiments/v3ni/papers/commitment_surface/figures/fig2_e2_arms_ood.png",
-    "fig3": "/Users/jawaun/.cursor/worktrees/Research_Derived_Experiments/v3ni/papers/commitment_surface/figures/fig3_e3_readout_vs_patch.png",
-    "fig4": "/Users/jawaun/.cursor/worktrees/Research_Derived_Experiments/v3ni/papers/commitment_surface/figures/fig4_e4_pythia_arms.png",
-    "fig5": "/Users/jawaun/.cursor/worktrees/Research_Derived_Experiments/v3ni/papers/commitment_surface/figures/fig5_frame_taxonomy.png"
+    "fig1": "/Users/jawaun/.cursor/worktrees/Research_Derived_Experiments/release-hardening-final/papers/commitment_surface/figures/fig1_e1_selectors.png",
+    "fig2": "/Users/jawaun/.cursor/worktrees/Research_Derived_Experiments/release-hardening-final/papers/commitment_surface/figures/fig2_e2_arms_ood.png",
+    "fig3": "/Users/jawaun/.cursor/worktrees/Research_Derived_Experiments/release-hardening-final/papers/commitment_surface/figures/fig3_e3_readout_vs_patch.png",
+    "fig4": "/Users/jawaun/.cursor/worktrees/Research_Derived_Experiments/release-hardening-final/papers/commitment_surface/figures/fig4_e4_pythia_arms.png",
+    "fig5": "/Users/jawaun/.cursor/worktrees/Research_Derived_Experiments/release-hardening-final/papers/commitment_surface/figures/fig5_frame_taxonomy.png"
   },
   "headline": {
     "e1": {
@@ -66,34 +66,34 @@
       "per_arm": {
         "A": {
           "n": 27,
-          "ood_mean": 0.11276789054566833,
           "ood_max": 1.0,
+          "ood_mean": 0.11276789054566833,
           "patch_ce_delta_mean": -0.7420555454559208,
           "weakness_mean": 0.09460001020103322
         },
         "B": {
           "n": 27,
-          "ood_mean": 0.8823686601464379,
           "ood_max": 1.0,
+          "ood_mean": 0.8823686601464379,
           "patch_ce_delta_mean": 4.861862869543104,
           "weakness_mean": 0.30468300289272154
         },
         "C": {
           "n": 27,
-          "ood_mean": 0.07134840468173802,
           "ood_max": 0.2222222222222222,
+          "ood_mean": 0.07134840468173802,
           "patch_ce_delta_mean": 1.4449587668934671,
           "weakness_mean": 0.05974162240146895
         },
         "D": {
           "n": 27,
-          "ood_mean": 0.11276789054566833,
           "ood_max": 1.0,
+          "ood_mean": 0.11276789054566833,
           "patch_ce_delta_mean": -0.7420555454559208,
           "weakness_mean": 0.09460001020103322
         }
       },
-      "source": "artifacts/commitment_surface/e4_pythia_lora_v2.json"
+      "source": "experiments/commitment_surface/results/e4_pythia_lora_v2_appendix.json"
     }
   }
 }

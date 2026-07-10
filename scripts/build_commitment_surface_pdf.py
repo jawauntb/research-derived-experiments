@@ -6,8 +6,8 @@ Reads:
 - papers/commitment_surface/paper.md
 - papers/commitment_surface/figures/*.png (produced by
   scripts/make_commitment_surface_figures.py)
-- experiments/commitment_surface/results/*.json and
-  artifacts/commitment_surface/*.json for embedded result tables
+- experiments/commitment_surface/results/*.json for embedded result and
+  appendix tables (local artifacts are fallback inputs only)
 
 Writes:
 - papers/commitment_surface/paper.pdf
@@ -37,6 +37,7 @@ from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet  # noqa: E4
 from reportlab.lib.units import inch  # noqa: E402
 from reportlab.platypus import (  # noqa: E402
     Image,
+    LongTable,
     PageBreak,
     Paragraph,
     Preformatted,
@@ -57,9 +58,15 @@ COPY_PDF = ROOT / "papers" / "pdf" / "commitment_surface.pdf"
 E1_JSON = ROOT / "experiments" / "commitment_surface" / "results" / "e1_concern_weighted.json"
 E2E3_JSON = ROOT / "experiments" / "commitment_surface" / "results" / "e2_e3_neural.json"
 E4_JSON_CANDIDATES = [
+    ROOT
+    / "experiments"
+    / "commitment_surface"
+    / "results"
+    / "e4_pythia_lora_v2_appendix.json",
     ROOT / "artifacts" / "commitment_surface" / "e4_pythia_lora_v2.json",
     ROOT / "artifacts" / "commitment_surface" / "e4_smoke.json",
 ]
+APPENDIX_TABLE_MARKER = "<!-- APPENDIX_A2_TABLES -->"
 
 
 def styles() -> dict[str, ParagraphStyle]:
@@ -262,6 +269,168 @@ def _fmt(x: float, precision: int = 3) -> str:
     if isinstance(x, bool):
         return "yes" if x else "no"
     return f"{x:.{precision}f}"
+
+
+def _appendix_table(rows: list[list[str]], col_widths: list[float]) -> LongTable:
+    table = LongTable(
+        rows,
+        colWidths=col_widths,
+        repeatRows=1,
+        splitByRow=1,
+        hAlign="LEFT",
+    )
+    table.setStyle(TableStyle([
+        ("FONT", (0, 0), (-1, -1), "Times-Roman", 6.4),
+        ("FONT", (0, 0), (-1, 0), "Times-Bold", 6.5),
+        ("TEXTCOLOR", (0, 0), (-1, 0), colors.HexColor("#2b6cb0")),
+        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+        ("LINEBELOW", (0, 0), (-1, 0), 0.6, colors.HexColor("#111827")),
+        ("LINEBELOW", (0, -1), (-1, -1), 0.5, colors.HexColor("#111827")),
+        ("ROWBACKGROUNDS", (0, 1), (-1, -1),
+         [colors.white, colors.HexColor("#f4f6f9")]),
+        ("TOPPADDING", (0, 0), (-1, -1), 1.6),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 1.6),
+    ]))
+    return table
+
+
+def build_appendix_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
+    """Build Appendix A.2 from committed public-safe result artifacts."""
+    flow: list[Any] = []
+
+    if E1_JSON.exists():
+        e1 = json.loads(E1_JSON.read_text(encoding="utf-8"))
+        cells = sorted(e1["cells"], key=lambda cell: (cell["modulus"], cell["seed"]))
+        flow.append(para(
+            f"**A.2.1 E1.** All {len(cells)} concern-weighted selector "
+            "cells from `experiments/commitment_surface/results/"
+            "e1_concern_weighted.json`.",
+            st["Body"],
+        ))
+        rows = [["n", "Seed", "Unweighted", "Well-spec", "Misspec", "Loss", "Truth"]]
+        rows.extend([
+            [
+                str(cell["modulus"]),
+                str(cell["seed"]),
+                _fmt(cell["unweighted_selector_acc"]),
+                _fmt(cell["concern_wellspec_selector_acc"]),
+                _fmt(cell["concern_misspec_selector_acc"]),
+                _fmt(cell["loss_selector_acc"]),
+                _fmt(cell["truth_selector_acc"]),
+            ]
+            for cell in cells
+        ])
+        flow.append(_appendix_table(
+            rows,
+            [0.45 * inch, 0.55 * inch, 0.95 * inch, 0.9 * inch,
+             0.85 * inch, 0.75 * inch, 0.75 * inch],
+        ))
+        flow.append(PageBreak())
+    else:
+        flow.append(para("E1 per-cell source unavailable.", st["Body"]))
+
+    if E2E3_JSON.exists():
+        e2e3 = json.loads(E2E3_JSON.read_text(encoding="utf-8"))
+        cells = sorted(
+            e2e3["all_rows"],
+            key=lambda cell: (
+                cell["modulus"],
+                cell["train_frac"],
+                cell["seed"],
+                cell["arm"],
+            ),
+        )
+        flow.append(para(
+            f"**A.2.2 E2/E3.** All {len(cells)} trained neural cells. "
+            "E2 arm comparisons and E3 correlations use this same committed "
+            "cell population from `experiments/commitment_surface/results/"
+            "e2_e3_neural.json`.",
+            st["Body"],
+        ))
+        rows = [[
+            "Arm", "n", "Seed", "Train frac", "OOD", "Patch-CE",
+            "Wrong patch", "Weakness",
+        ]]
+        rows.extend([
+            [
+                cell["arm"],
+                str(cell["modulus"]),
+                str(cell["seed"]),
+                _fmt(cell["train_frac"], 2),
+                _fmt(cell["ood_accuracy"]),
+                _fmt(cell["patch_ce_delta"]),
+                _fmt(cell["patch_ce_delta_wrong"]),
+                _fmt(cell["weakness_true"]),
+            ]
+            for cell in cells
+        ])
+        flow.append(_appendix_table(
+            rows,
+            [0.4 * inch, 0.35 * inch, 0.8 * inch, 0.7 * inch,
+             0.65 * inch, 0.75 * inch, 0.85 * inch, 0.7 * inch],
+        ))
+        flow.append(PageBreak())
+    else:
+        flow.append(para("E2/E3 per-cell source unavailable.", st["Body"]))
+
+    e4_json = next((path for path in E4_JSON_CANDIDATES if path.exists()), None)
+    if e4_json is not None:
+        e4 = json.loads(e4_json.read_text(encoding="utf-8"))
+        size_order = {"70m": 0, "160m": 1, "410m": 2}
+        cells = sorted(
+            e4["cells"],
+            key=lambda cell: (
+                size_order.get(cell["size"], 99),
+                cell["n"],
+                cell["seed"],
+                cell["arm"],
+            ),
+        )
+        coverage = e4.get("coverage", {})
+        unavailable = coverage.get("unavailable_fields", [])
+        availability = (
+            "No requested appendix fields are unavailable."
+            if not unavailable
+            else "Unavailable fields: " + ", ".join(unavailable) + "."
+        )
+        flow.append(para(
+            f"**A.2.3 E4.** All {len(cells)} Pythia LoRA cells from "
+            f"`{e4_json.relative_to(ROOT)}`. "
+            f"{availability}",
+            st["Body"],
+        ))
+        rows = [[
+            "Size", "Arm", "n", "Seed", "OOD", "Ablated OOD",
+            "Patch-CE", "Weakness", "Wrong group",
+        ]]
+        rows.extend([
+            [
+                cell["size"],
+                cell["arm"],
+                str(cell["n"]),
+                str(cell["seed"]),
+                _fmt(cell["ood_accuracy"]),
+                _fmt(cell["ablated_ood_accuracy"]),
+                _fmt(cell["patch_ce_delta"]),
+                _fmt(cell["weakness_oracle_norm"]),
+                _fmt(cell["weakness_wrong_group_norm"]),
+            ]
+            for cell in cells
+        ])
+        flow.append(_appendix_table(
+            rows,
+            [0.55 * inch, 0.35 * inch, 0.35 * inch, 0.75 * inch,
+             0.55 * inch, 0.75 * inch, 0.65 * inch, 0.65 * inch,
+             0.7 * inch],
+        ))
+    else:
+        flow.append(para(
+            "E4 per-cell fields are unavailable: neither the committed "
+            "public-safe appendix artifact nor a local raw/smoke artifact exists.",
+            st["Body"],
+        ))
+
+    return flow
 
 
 def build_results_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
@@ -506,13 +675,25 @@ def _split_paper(text: str) -> tuple[str, str]:
     return text[:idx], text[end:]
 
 
+def _split_appendix_tables(text: str) -> tuple[str, str]:
+    if APPENDIX_TABLE_MARKER not in text:
+        raise ValueError(
+            f"missing appendix marker {APPENDIX_TABLE_MARKER!r} in {PAPER_MD}"
+        )
+    before, after = text.split(APPENDIX_TABLE_MARKER, maxsplit=1)
+    return before, after
+
+
 def build_pdf() -> Path:
     st = styles()
     text = _load_paper()
     before, after = _split_paper(text)
     flow = markdown_to_flow(before, st)
     flow.extend(build_results_flow(st))
-    flow.extend(markdown_to_flow(after, st))
+    before_appendix_tables, after_appendix_tables = _split_appendix_tables(after)
+    flow.extend(markdown_to_flow(before_appendix_tables, st))
+    flow.extend(build_appendix_flow(st))
+    flow.extend(markdown_to_flow(after_appendix_tables, st))
 
     OUT_PDF.parent.mkdir(parents=True, exist_ok=True)
     doc = SimpleDocTemplate(

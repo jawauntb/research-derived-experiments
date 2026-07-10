@@ -739,7 +739,13 @@ with `C_star`) inverts the relation. ∎
 
 ### A.2 Per-cell tables
 
-<!-- To be filled from results JSON -->
+The PDF build renders complete per-cell tables directly from the committed
+public-safe E1 and E2/E3 JSON summaries and the compact committed E4 appendix
+artifact. The E2 and E3 analyses share one 216-cell population. E4 exports all
+108 cells while intentionally omitting raw function tables, train/OOD input
+lists, and parameter metadata; no requested appendix metric is unavailable.
+
+<!-- APPENDIX_A2_TABLES -->
 
 ### A.3 External citation apparatus
 

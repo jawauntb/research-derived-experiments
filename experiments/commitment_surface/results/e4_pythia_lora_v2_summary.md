@@ -5,6 +5,11 @@ Code: `experiments/commitment_surface/modal_e4_pythia_lora_v2.py`
 Pre-registration: `papers/commitment_surface/PLAN.md` §E4.
 Raw payload: `artifacts/commitment_surface/e4_pythia_lora_v2.json` (gitignored;
 209 KB).
+Public-safe appendix export:
+`experiments/commitment_surface/results/e4_pythia_lora_v2_appendix.json`
+(108/108 cells; source SHA-256
+`67e86aef888540ba70d013de6a2be2def1871aa0970134bd3d115e2f2dbc5428`;
+no requested appendix fields unavailable).
 Modal run: 3 L4 shards, one per Pythia size.
 
 ## Design
