@@ -21,8 +21,8 @@
         --rose-soft: #f9dfe5;
         --blue: #2d5d7c;
         --blue-soft: #dceaf7;
-        --shadow-raised: 14px 14px 30px rgba(124, 112, 96, 0.22), -14px -14px 30px rgba(255, 255, 255, 0.86);
-        --shadow-pressed: inset 8px 8px 18px rgba(124, 112, 96, 0.18), inset -8px -8px 18px rgba(255, 255, 255, 0.78);
+        --shadow-raised: 0 10px 28px rgba(89, 80, 68, 0.12);
+        --shadow-pressed: inset 0 0 0 1px rgba(124, 112, 96, 0.14);
         --focus: 0 0 0 3px rgba(8, 125, 115, 0.24);
         color-scheme: light;
         color: var(--ink);
@@ -47,8 +47,8 @@
         --rose-soft: #3c2029;
         --blue: #8bb9df;
         --blue-soft: #1c3346;
-        --shadow-raised: 0 16px 34px rgba(0, 0, 0, 0.34);
-        --shadow-pressed: inset 6px 6px 16px rgba(0, 0, 0, 0.32), inset -6px -6px 16px rgba(255, 255, 255, 0.04);
+        --shadow-raised: 0 12px 30px rgba(0, 0, 0, 0.24);
+        --shadow-pressed: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
         --focus: 0 0 0 3px rgba(85, 199, 188, 0.28);
         color-scheme: dark;
       }
@@ -70,8 +70,8 @@
           --rose-soft: #3c2029;
           --blue: #8bb9df;
           --blue-soft: #1c3346;
-          --shadow-raised: 0 16px 34px rgba(0, 0, 0, 0.34);
-          --shadow-pressed: inset 6px 6px 16px rgba(0, 0, 0, 0.32), inset -6px -6px 16px rgba(255, 255, 255, 0.04);
+          --shadow-raised: 0 12px 30px rgba(0, 0, 0, 0.24);
+          --shadow-pressed: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
           --focus: 0 0 0 3px rgba(85, 199, 188, 0.28);
           color-scheme: dark;
         }
@@ -95,14 +95,14 @@
 
       button {
         border: 1px solid transparent;
-        border-radius: 8px;
+        border-radius: 10px;
         background: var(--surface-raised);
         box-shadow: var(--shadow-raised);
         color: var(--ink);
         cursor: pointer;
         font-weight: 700;
-        min-height: 34px;
-        padding: 7px 12px;
+        min-height: 40px;
+        padding: 8px 13px;
       }
 
       button:hover:not(:disabled) {
@@ -145,14 +145,104 @@
       .probe-panel {
         background: var(--surface-raised);
         border: 1px solid var(--line);
-        border-radius: 8px;
+        border-radius: 14px;
         box-shadow: var(--shadow-raised);
         padding: 16px;
       }
 
       .app-header {
         display: grid;
+        gap: 14px;
+      }
+
+      .app-brand {
+        display: grid;
+        gap: 5px;
+      }
+
+      .app-eyebrow {
+        color: var(--teal);
+        display: block;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.11em;
+        line-height: 1.2;
+        text-transform: uppercase;
+      }
+
+      .app-header .app-brand h1 {
+        font-size: 30px;
+        letter-spacing: -0.03em;
+      }
+
+      .app-tagline,
+      .connection-card__help,
+      .session-helper {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+        margin: 0;
+      }
+
+      .connection-card {
+        background: var(--surface-inset);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        display: grid;
         gap: 12px;
+        padding: 14px;
+      }
+
+      .connection-card__header,
+      .session-controls__header {
+        align-items: start;
+        display: flex;
+        gap: 12px;
+        justify-content: space-between;
+      }
+
+      .connection-card h2,
+      .session-controls h2 {
+        font-size: 17px;
+        line-height: 1.25;
+        margin: 3px 0 0;
+      }
+
+      .connection-status,
+      .recording-state {
+        background: var(--surface-raised);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--muted);
+        flex: 0 0 auto;
+        font-size: 12px;
+        font-weight: 800;
+        padding: 6px 10px;
+      }
+
+      .connection-status-ready {
+        background: var(--green-soft);
+        border-color: transparent;
+        color: var(--green);
+      }
+
+      .connection-details summary {
+        box-sizing: border-box;
+        color: var(--muted);
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 750;
+        min-height: 36px;
+        padding: 9px 0;
+      }
+
+      .connection-details[open] summary {
+        margin-bottom: 8px;
+      }
+
+      .connection-details__grid {
+        display: grid;
+        gap: 8px;
       }
 
       .app-header h1,
@@ -184,10 +274,10 @@
       }
 
       .app-status-item {
-        background: var(--surface-inset);
+        background: var(--surface-raised);
         border: 1px solid var(--line);
-        border-radius: 8px;
-        box-shadow: var(--shadow-pressed);
+        border-radius: 10px;
+        box-shadow: none;
         display: grid;
         gap: 4px;
         min-width: 0;
@@ -227,11 +317,7 @@
       }
 
       .recording-state {
-        background: var(--surface-inset);
-        border-radius: 8px;
-        box-shadow: var(--shadow-pressed);
         display: inline-flex;
-        padding: 6px 10px;
         width: fit-content;
       }
 
@@ -336,14 +422,14 @@
         display: grid;
         gap: 4px;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        max-width: 320px;
+        max-width: none;
         padding: 4px;
       }
 
       .theme-preference__button {
         box-shadow: none;
         font-size: 12px;
-        min-height: 28px;
+        min-height: 36px;
         padding: 4px 8px;
       }
 
@@ -587,30 +673,27 @@
       #app {
         display: block;
         margin: 0 auto;
-        max-width: 1280px;
-        padding: 16px;
+        max-width: 1360px;
+        padding: 22px;
       }
 
       .app-shell {
         display: grid;
-        gap: 16px;
-        grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.4fr);
-        min-height: calc(100vh - 32px);
+        gap: 20px;
+        grid-template-columns: minmax(340px, 390px) minmax(0, 1fr);
+        min-height: calc(100vh - 44px);
       }
 
       .app-rail,
       .app-canvas {
+        align-content: start;
         display: grid;
-        gap: 16px;
+        gap: 20px;
       }
 
       .app-rail > *,
       .app-canvas > * {
-        background: var(--surface-raised);
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        box-shadow: var(--shadow-raised);
-        padding: 16px;
+        min-width: 0;
       }
 
       .session-history__list {
@@ -649,7 +732,7 @@
         display: grid;
         gap: 6px;
         font-size: 12px;
-        margin-top: 12px;
+        margin-top: 14px;
       }
 
       .session-title-input {
@@ -657,7 +740,7 @@
         border: 1px solid transparent;
         border-radius: 8px;
         box-shadow: var(--shadow-pressed);
-        min-height: 34px;
+        min-height: 44px;
         padding: 0 10px;
         width: 100%;
       }
@@ -674,8 +757,32 @@
 
       .pairing-token-controls button {
         font-size: 12px;
-        min-height: 28px;
-        padding: 4px 8px;
+        min-height: 36px;
+        padding: 6px 10px;
+      }
+
+      .session-controls {
+        border-color: color-mix(in srgb, var(--teal) 42%, var(--line));
+      }
+
+      .session-toolbar {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      }
+
+      .session-toolbar button {
+        min-height: 44px;
+      }
+
+      .session-labels__heading {
+        font-size: 12px;
+        font-weight: 800;
+        margin: 16px 0 -4px;
+      }
+
+      .session-labels button {
+        box-shadow: none;
+        min-height: 36px;
       }
 
       .privacy-settings__actions {
@@ -729,6 +836,10 @@
       }
 
       @media (max-width: 899px) {
+        #app {
+          padding: 14px;
+        }
+
         .app-shell {
           grid-template-columns: 1fr;
         }

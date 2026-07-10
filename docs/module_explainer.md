@@ -635,14 +635,14 @@ Local-first Neurophenom cockpit: pair extension → record → replay → daily 
 |---|---|
 | `packages/schema` | Event envelope, privacy classes, retention, session validation |
 | `packages/signals` | Windowing, heuristics, heatmaps, interpretation, daily review, redacted Modal inputs |
-| `packages/ui` | Shared view models/tokens |
+| `packages/ui` | Shared view models and warm-neutral/teal tokens used by desktop and extension |
 
 #### Apps
 
 | App | Role | Key areas |
 |---|---|---|
-| `apps/desktop` | Electron main + renderer; SQLite source of truth | ingest, db, privacy, reports, notifications, security, activity, packaging |
-| `apps/extension` | Chrome MV3 | service-worker, content telemetry, popup, localBridge |
+| `apps/desktop` | Electron main + renderer; SQLite source of truth | first-viewport recording controls, guided extension pairing, ingest, db, privacy, reports, notifications, security, activity, packaging |
+| `apps/extension` | Chrome MV3 | pairing-first popup, session/page capture controls, privacy disclosures, service-worker, content telemetry, localBridge |
 | `apps/cloud` | Optional Railway Bun API | sync/reports/jobs routes, Postgres, Modal bridge |
 
 #### Modal jobs (`modal/`)

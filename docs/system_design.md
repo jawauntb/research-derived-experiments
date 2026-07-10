@@ -283,6 +283,13 @@ Optional: Desktop ──redacted-sync──► Railway Bun API (apps/cloud)
                                       └──webhook──► Modal jobs (session summary)
 ```
 
+The desktop renderer keeps the recording title and start action in the first
+viewport, followed by a guided browser-companion card with technical connection
+details collapsed by default. The extension mirrors that activation order:
+local-only pairing first, then session capture, page capture, privacy, and
+diagnostics. Both surfaces share the warm-neutral/teal tokens in `packages/ui`,
+including the same focus, status, and elevation language.
+
 **Privacy boundary:** only `public` and `redacted-sync` events may leave the
 device; no raw frames/keystrokes by default. See
 `apps/inquiry-black-box/docs/privacy-model.md`.
