@@ -9,21 +9,23 @@
 - **Reproduce (one command):** `python scripts/regen.py commitment_surface`
 
 ## Verification
-- Pre-registration: _none_
-- Result reports (5):
+- Pre-registration: `papers/commitment_surface/e1_misspecification_variance_preregistration_2026-07-09.md`
+- Result reports (7):
   - `experiments/commitment_surface/results/e1_concern_weighted.md`
+  - `experiments/commitment_surface/results/e1_misspecification_variance.md`
   - `experiments/commitment_surface/results/e2_e3_neural.md`
   - `experiments/commitment_surface/results/e2_e3_neural_larger_n.md`
   - `experiments/commitment_surface/results/e4_pythia_lora_v2_summary.md`
   - `experiments/commitment_surface/results/e5_smoke_summary.md`
+  - `experiments/commitment_surface/results/m4_suite_c_factorial_ablation_2026_07_09.md`
 
 Key verification signals (from the latest result report):
-  - Status: **harness validation passed; confirmatory experiment pending**.
-  - - Every evaluated arm passed exposure integrity.
-  - within the preregistered ±0.02 tolerance; every evaluated arm passed patch
-  - - Aggregate smoke gate: **PASS** (`integrity_pass=true`,
+  - **Strict gate verdict: FAIL.**
+  - Claim level: failed diagnostic gate; M4 remains a compression hypothesis.
+  - allocate | cool | reopen | terminal pass | re-engage | selectivity | reopen ratio | final MAE | probes
+  - removed stage | knockout pass rate | full minus knockout | gate
 
 ## Artifacts
-- Committed: `experiments/commitment_surface/results/e1_concern_weighted.md`, `experiments/commitment_surface/results/e2_e3_neural.md`, `experiments/commitment_surface/results/e2_e3_neural_larger_n.md`, `experiments/commitment_surface/results/e4_pythia_lora_v2_summary.md`, `experiments/commitment_surface/results/e5_smoke_summary.md`, `papers/commitment_surface/paper.md`
+- Committed: `experiments/commitment_surface/results/e1_concern_weighted.md`, `experiments/commitment_surface/results/e1_misspecification_variance.md`, `experiments/commitment_surface/results/e2_e3_neural.md`, `experiments/commitment_surface/results/e2_e3_neural_larger_n.md`, `experiments/commitment_surface/results/e4_pythia_lora_v2_summary.md`, `experiments/commitment_surface/results/e5_smoke_summary.md`, `experiments/commitment_surface/results/m4_suite_c_factorial_ablation_2026_07_09.md`, `papers/commitment_surface/paper.md`
 - Local-only: artifacts/ (gitignored raw outputs; see result reports for summaries)
 - Paper: `papers/commitment_surface/paper.md`

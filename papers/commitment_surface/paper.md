@@ -36,17 +36,23 @@ narrowing the P1 external gap our prior work identified; ρ(patch-CE, OOD)
 Prop. 1 (probe readout does not identify causal use) in the non-aligned
 regime. Two pre-registered gates strictly failed and we report them as
 failures: the E1 misspecification-equivalence band (−0.054 vs ±0.05) and
-the E4 Arm-A ceiling (0.113 vs ≤ 0.10); E4 is directionally decisive but
-its strict gate did not pass. One confound remains open and is
+the E4 Arm-A ceiling (0.113 vs ≤ 0.10). A separately pre-registered E1
+conditional randomization follow-up (2,048 draws) finds the observed −0.054
+gap typical of the frozen candidate/deployment design (null mean −0.0589;
+lower-tail probability 0.620), so it does not indicate systematic
+anti-correlation; this calibration does not retroactively pass the original
+gate. E4 is directionally decisive but its strict gate did not pass. One confound remains open and is
 pre-registered for a follow-up: cyclic-orbit augmentation places correctly
 labeled examples on held-out deployment support, so E4 does not yet
 separate *generator learning* from *labeled orbit coverage* (Section 6.5).
 We recover the old-frame positives — cyclic and dihedral
 100%-vs-0% weakness sweeps — as the boundary case where the probe group and
-deployment generator coincide, and interpret the correction chain of
-autonomous-probing agents as an anti-Goodhart control loop — *detect →
-allocate → saturate → cool → reopen* — whose load-bearing signal is
-commitment-cooling under intervention-pinned residuals.
+deployment generator coincide. A pre-registered 2^3 ablation of the proposed
+anti-Goodhart loop — *detect → allocate → saturate → cool → reopen* — then
+rejects its strong M4 decomposition: `reopen` is necessary in all eight paired
+seeds, but removing `allocate` or `cool` leaves terminal Suite C success at
+8/8. Allocation changes selectivity and cost without crossing the existing
+gate; the cooling intervention is behaviorally null in this finite schedule.
 
 ## 1. Introduction
 
@@ -98,20 +104,23 @@ Contributions.
 - **C3.** Four severe experiments (Section 5). E1 shows within-lab that
   well-specified concern beats unweighted by +0.24; the misspecification
   arm lands at −0.054 vs unweighted, *outside* the pre-registered ±0.05
-  equivalence band, so that sub-gate strictly fails (the direction —
-  misspec is not helpful — still holds). E2/E3 show that a neural
+  equivalence band, so that sub-gate strictly fails. The pre-registered
+  follow-up places this realization near the center of its conditional null
+  (null mean −0.0589; lower-tail probability 0.620), localizing the negative
+  gap to random reassignment plus nonlinear selection rather than systematic
+  anti-correlation in the realized assignment. E2/E3 show that a neural
   compatibility-augmented arm dominates a weakness-readout selector on
   OOD by a decisive gap, with patch-CE aligned. E4 (Modal L4) runs the
   non-degenerate external contact on Pythia 70m/160m/410m LoRA:
   directionally decisive, strict pre-registered gate narrowly failed
   (Arm A mean OOD 0.113 vs the required ≤ 0.10).
-- **C4.** An anti-Goodhart interpretation of the correction chain that ran
-  through Papers 5–25 of the prior program (Section 6): *detect → allocate
-  → saturate → cool → reopen*. Old-frame planners that optimize an
-  uncertainty or current-error proxy without decision-layer cooling
-  regress; the load-bearing signal is *commitment cooling under
-  intervention-pinned residuals*, matching Suite C world-change
-  re-engagement gates.
+- **C4.** A severe negative result for the proposed anti-Goodhart
+  compression of Papers 5–25 (Section 6): in a pre-registered 2^3 Suite C
+  ablation, only `reopen` is necessary for the existing terminal criterion.
+  `allocate` strongly improves selectivity (+13.06 factorial effect) and
+  reduces probes, but its terminal-pass effect is 0; `cool` is null on both
+  terminal success and the reported trajectory metrics. We therefore reject
+  the strong load-bearing subset `{allocate, cool, reopen}` in this harness.
 - **C5.** A pre-registered failure calculus (Section 4). We list the exact
   observations that would retract the reframe — several are non-trivial to
   satisfy — and report each experiment's verdict at its pre-declared gate.
@@ -121,8 +130,10 @@ It requires localizing them. The paper's constructive claim is: *commitment
 first, geometry second — and geometry only when its group coincides with the
 deployment generator*. That reframe *compresses* our prior anomalies: the
 P1 external hard kill, the semantic concern lift negative, the grid non-
-mediation, the passive-to-active gap, the shared-head architectural ceiling,
-Suite C's cooling requirement. It does not invalidate cyclic/dihedral wins;
+mediation, the passive-to-active gap, and the shared-head architectural ceiling.
+The Suite C factorial does *not* support a general cooling requirement: only
+explicit reopening survives the component test. It does not invalidate
+cyclic/dihedral wins;
 it locates them.
 
 ## 2. Related work
@@ -181,8 +192,11 @@ correction chain (Section 6) is compatible with active inference in
 letter, but insists on the load-bearing signal being *commitment
 cooling under intervention-pinned residuals* — not free-energy per se.
 Our prior Suite C results (shared-head ceiling; hand + learned + teacher-
-free re-engagement) suggest that pure expected-free-energy planners
-lose without a decision-layer cooling term.
+free re-engagement) suggested that pure expected-free-energy planners
+lose without a decision-layer cooling term. The factorial intervention in
+Section 6.3 overturns that stronger reading for the finite hand-policy
+harness: removing its three-step refractory cooldown changes no measured
+outcome under the frozen schedule.
 
 Positions and departures. We disagree with the strong reading of the
 mechanistic-interpretability program that a probe's AUC is sufficient
@@ -312,19 +326,27 @@ candidate, but it is not *necessary*: over a finite candidate set
 **order-equivalent to `C_star` on `F`** — i.e.
 `W_C(f, U) > W_C(f', U) ⇔ W_{C_star}(f, U) > W_{C_star}(f', U)` for all
 `f, f' ∈ F`. Distinct weightings can induce the same ranking and are
-then equally optimal. A misspecified `C` drawn as a random assignment
-with the same marginal reduces `W_C` to unweighted extension mass *in
-expectation*; a well-specified `C` strictly dominates unweighted
-extension mass when candidates vary in coverage of high-`C_star` blocks.
+then equally optimal. For each fixed candidate, a misspecified `C` drawn as an exchangeable
+random assignment with the same marginal makes `E[W_C]` proportional to
+unweighted extension mass. This score-level identity does **not** imply that
+`argmax_f W_C` equals the unweighted selector in expectation: expectation and
+the nonlinear argmax need not commute. A well-specified `C` strictly dominates
+unweighted extension mass when candidates vary in coverage of high-`C_star`
+blocks.
 
 Empirical anchor: E1 (Section 5.1). Well-specified: 0.814; unweighted:
 0.570; misspec: 0.516. Gap +0.24 (wellspec vs unweighted). The misspec
-arm sits 0.054 *below* unweighted — directionally consistent with the
-corollary (random weighting is not helpful), but note this is outside
-the pre-registered ±0.05 equivalence band, so the strict E1 misspec
-sub-gate fails (Section 5.1); the in-expectation reduction predicts
-equality, and the realized misspec draw was mildly adversarial rather
-than neutral.
+arm sits 0.054 *below* unweighted, outside the pre-registered ±0.05 band,
+so the strict original sub-gate fails. The timestamped follow-up freezes all
+96 candidate pools and true deployments and redraws only misspecified
+assignments over 2,048 experiment-level replicates. Its null mean is −0.0589
+(95% CI for the mean [−0.0596, −0.0582]), with a central 95% interval
+[−0.0913, −0.0294] and `P(Delta <= −0.054159) = 0.620` (Wilson 95% CI
+[0.599, 0.641]). All exchangeability/independence diagnostics pass. Thus the
+observed gap is typical of random reassignment plus finite-pool argmax
+selection, not evidence of systematic anti-correlation. This result corrects
+the earlier "mildly adversarial draw" interpretation without changing the
+frozen gate verdict.
 
 ### 3.6 M4: anti-Goodhart control loop
 
@@ -332,8 +354,8 @@ The correction chain of Papers 5–25 introduces successive terms that a
 naive utility maximizer would collapse: mediated attribution (behavior ≠
 representation); uncertainty ≠ error; current-error ≠ value-of-probing;
 total ≠ identifiable. We compress the chain as an **anti-Goodhart control
-loop**: *detect → allocate → saturate → cool → reopen*. Load-bearing
-signal at each stage:
+loop**: *detect → allocate → saturate → cool → reopen*. The proposed
+role of each stage is:
 
 - **detect.** Concern-weighted current-error residual.
 - **allocate.** Concern-weighted probing budget; not raw uncertainty.
@@ -344,21 +366,29 @@ signal at each stage:
 - **reopen.** On new intervention-pinned residual, reopen the
   commitment.
 
-We conjecture (and Section 6 tests against Suite C data) that the
-subset of these terms which is *load-bearing* under our new definition
-(patch-CE > ε) is precisely {allocate, cool, reopen}; {detect, saturate}
-are diagnostics recoverable from availability signals.
+We pre-registered the conjecture that the subset of these terms which is
+*load-bearing* under the Suite C terminal intervention is precisely
+`{allocate, cool, reopen}`, with `{detect, saturate}` frozen as diagnostics.
+Section 6.3 reports the completed 2^3 test. The strict verdict is **FAIL**:
+only `reopen` is necessary for terminal success, so the three-stage
+load-bearing-subset claim is rejected in this harness. Because detect and
+saturate were held fixed, this experiment does not establish that they are
+merely diagnostic.
 
 ## 4. Pre-registered gates
 
 <!-- Section 4 -->
 
-Recorded before any experiment ran; frozen in ``PLAN.md``.
+E1–E4 were recorded before their runs and frozen in `PLAN.md`. M4 was
+recorded later, before its implementation and run, in the timestamped addendum
+linked below.
 
 - **E1 pass (commitment-first).** Well-specified concern-weighted selector
   beats unweighted by ≥ +0.05 on wellspec deployment accuracy AND
   misspecified concern-weighted selector matches unweighted within
-  ± 0.05.
+  ± 0.05. This original gate remains frozen and failed. The timestamped E1
+  follow-up addendum separately gates systematic anti-correlation at a
+  one-sided conditional-randomization tail probability `< 0.025`.
 - **E2 pass (commitment-first).** Arm B (compat aug) beats Arm A (readout)
   by ≥ +0.30 on OOD accuracy AND by ≥ +0.50 on patch-CE Δ.
 - **E3 pass (commitment-first).** ρ(patch-CE, OOD) > ρ(weakness, OOD)
@@ -369,6 +399,13 @@ Recorded before any experiment ran; frozen in ``PLAN.md``.
 - **E4 pass (old frame).** Arm A OOD ≥ 0.5, ρ(weakness, OOD) ≥ +0.5.
 - **Anti-cheat (all E).** Wrong-group patch-CE (E2/E3) or wrong-group
   compatibility (E4) must not itself explain OOD.
+- **M4 factorial addendum.** In the existing Suite C workflow, all-on must
+  pass in at least 6/8 paired seeds; every single knockout must pass in at
+  most 2/8 with a paired drop at least 0.50; each main effect must be at
+  least +0.20 with paired-bootstrap lower bound above zero; interaction
+  contrasts must be finite/nonnegative; no reduced cell may exceed 2/8;
+  and transported controls must retain C1–C6. The timestamped addendum is
+  `experiments/world_responds/suite_c_factorial_ablation_preregistration_2026_07_09.md`.
 
 ## 5. Results
 
@@ -444,58 +481,55 @@ program in favor of "weakness predicts OOD when the probe group and
 training regime jointly align with the deployment generator, and the
 intervention is train-time."
 
-### 6.3 Anti-Goodhart control loop as compression of the Correction Chain
+### 6.3 M4 factorial: the strong compression fails
 
-Papers 5–25 of our prior program produced a succession of "X is not Y"
-correction terms — each showing that a naive utility-maximizing planner
-would collapse a distinction that a load-bearing agent must keep. The
-sequence: behavior ≠ representation; uncertainty ≠ error; current-error
-≠ value-of-probing; probing ≠ commitment; commitment ≠ identifiability;
-total-effect ≠ identifiable-effect. Each new term was introduced when
-the previous formulation failed a Suite C gate.
+Papers 5–25 produced a succession of "X is not Y" correction terms. We
+compressed them into `detect → allocate → saturate → cool → reopen` and made
+the risky claim that `{allocate, cool, reopen}` carries the causal load. The
+follow-up addendum was frozen at 2026-07-09T21:38:40-04:00 before implementing
+or running the ablation. It uses the real `burst_then_refractory` Suite C
+policy, freezes detect and the eight-probe saturation quota, crosses the three
+action gates factorially, and reruns all historical controls on eight paired
+seeds.
 
-Under the commitment-surface reading, the Correction Chain compresses
-into an **anti-Goodhart control loop**:
+The result is not a near-pass. **The strict M4 verdict is FAIL.**
 
-  detect → allocate → saturate → cool → reopen
+- **Full loop:** 8/8 terminal passes; the all-on row exactly reproduces the
+  pre-existing policy row.
+- **Remove reopen:** 0/8 pass. Mean second-reopen ratio falls 16.667 → 0 and
+  final affected-component MAE rises 0.113 → 0.550. Reopen's terminal main
+  effect is +1.000, 95% paired-bootstrap CI [+1.000, +1.000].
+- **Remove allocate:** 8/8 still pass. Allocation has terminal main effect
+  0.000 [0.000, 0.000]. It nevertheless changes *how* the gate is met:
+  selectivity is 17.188 with allocation vs 4.125 without it, and the all-on
+  policy averages 23.1 probes vs 27.1. Allocation is an efficiency/selectivity
+  mechanism here, not a necessary terminal mechanism.
+- **Remove cool:** 8/8 still pass. The three-step refractory removal has
+  terminal main effect 0.000 [0.000, 0.000] and leaves the reported cell means
+  unchanged. Under this schedule, the burst quota already saturates before the
+  cooldown can alter action.
+- **Interactions and controls:** all terminal pairwise and three-way contrasts
+  are 0.000, so no complementarity rescues the strong claim. The unmodified
+  reference suite retains C1–C6; false surprise cooling remains rejected; the
+  matched-random control remains less selective at an exact per-seed matched
+  budget.
 
-with three of the five stages carrying the causal load:
+The factorial therefore resolves the anomaly in the simpler direction: the
+existing terminal criterion is effectively a test of explicit second-shift
+reopening once detect/saturate are fixed. It is not stringent enough to certify
+allocation or cooldown as load-bearing. Historical cross-policy comparisons
+confounded those components with other policy differences. We retract the
+strong M4 subset claim and retain only: **reopen is necessary in this finite
+Suite C implementation; allocation improves selectivity and probe cost; the
+current cooldown is redundant.** Detect and saturate were preserved, not
+shown diagnostic.
 
-- **allocate** — the probing budget is concern-weighted. Uncertainty-only
-  planners (`uncertainty_only` in the Phase-2 gate table) over-probe
-  low-concern ambiguity and fail the world-change gate; the concern-
-  gated selector is the only one that passes at 1.000/5 seeds. This is
-  the E1 corollary at the agent scale.
-- **cool** — the decision layer refuses fresh proxy uptake once a
-  commitment is made; without this, the shared-head planner collapses
-  role attribution under regime shift (P23B G8 partial pass). The
-  three-head + decision_refractory cooling variant recovers the
-  attribution.
-- **reopen** — an *intervention-pinned* residual, not any surprise
-  spike, reopens the commitment. The scale-normalized current-replay
-  ablation and the two-regime shift stress-test show that surprise
-  alone triggers anxiety, not stable re-engagement — VoI ≠
-  current-error is the load-bearing distinction.
-
-**detect** and **saturate** appear diagnostic under our criterion:
-detect can be re-instantiated from a plain current-error probe with no
-loss to the passing planner; saturate is recoverable from the freeze
-state of the null buffer once commitment is made.
-
-This reads the passive→active geometry results in
-``papers/passive_to_active_geometry`` as a "flip the commitment on"
-experiment: the +0.069 → +0.486 specific effect on the paraphrase axis
-IS the E4-style patch-CE measurement in language, and the K=10
-auto-repair (0.45 → 0.965) IS decision-layer cooling under
-intervention-pinned residual — the same loop, one deployment surface
-higher.
-
-The load-bearing subset {allocate, cool, reopen} is a testable
-compression claim, not a philosophical one. Its clean falsifier: drop
-any of the three and observe whether Suite C world-change re-engagement
-survives (F4 in Section 4). The prior negative on `uncertainty_only`
-and the P23B G8 partial pass are our best current evidence in favor of
-the compression; a factorial ablation would upgrade it.
+This is a frame diagnosis rather than a failed implementation: either strengthen
+Suite C so over-allocation and uncool probing cross explicit cost/anxiety gates,
+or transport the frozen intervention semantics to learned/teacher-free policies
+where cooldown can affect trajectories. Threshold retuning on these observed
+cells is prohibited. Canonical results are in
+`experiments/commitment_surface/results/m4_suite_c_factorial_ablation_2026_07_09.{json,md}`.
 
 ### 6.4 Limitations
 
@@ -529,10 +563,12 @@ the compression; a factorial ablation would upgrade it.
   localization claim should be read as preliminary. Fix left to
   future work: normalize patch-CE by hidden-width fraction, or
   rank-decompose the affected subspace.
-- The anti-Goodhart reading of the correction chain is a compression
-  hypothesis; the strong form of {allocate, cool, reopen} as the load-
-  bearing subset is only partially tested (Suite C hand/learned/
-  teacher-free re-engagement).
+- The anti-Goodhart reading remains a useful vocabulary, but its strong
+  load-bearing subset `{allocate, cool, reopen}` is **rejected by the
+  pre-registered finite Suite C factorial**: allocate and cool have zero
+  terminal-pass effect. Only reopen is necessary at the current gate. The
+  result has not yet been transported to learned neural or teacher-free
+  policies, and detect/saturate were frozen rather than ablated.
 - Extension to non-group deployment generators (e.g., semantic
   distribution shifts with no clean group action) is open.
 - The highest-priority methodological issue is the label-exposure
@@ -741,15 +777,22 @@ Equality up to positive scale is *not necessary*: over a finite `F`,
 distinct weightings that induce the same ranking of candidates are
 equally optimal, so the earlier "iff `C = C_star` up to scaling"
 phrasing was too strong and is retracted here in favor of the
-order-equivalence condition. *Misspecification:* if `C` is a random
-assignment with the same marginal distribution as `C_star`,
-independent of candidate coverage, then
+order-equivalence condition. *Misspecification:* if `C` is an exchangeable random assignment with the
+same coordinate marginal as `C_star`, independent of candidate coverage,
+then for every fixed candidate
 `E[W_C(f, U)] = E[C] · |{x ∈ U : f(x) = truth(x)}|` — proportional to
-unweighted extension mass — so the misspecified selector reduces to
-unweighted Bennett *in expectation* (any particular draw can be mildly
-helpful or mildly adversarial; E1's realized draw was mildly
-adversarial at −0.054). A strictly adversarial `C` (anti-correlated
-with `C_star`) inverts the relation. ∎
+unweighted extension mass. Fixed-cardinality assignment is exchangeable but
+not iid across positions; equal marginals are sufficient for this identity.
+However, `E[argmax_f W_C(f,U)]` is not determined by
+`argmax_f E[W_C(f,U)]`: finite candidate sets, ties, and winner selection make
+argmax nonlinear. The E1 follow-up measures this distinction directly. Across
+2,048 independent reassignments with all 96 candidate/deployment structures
+frozen, the selected-performance gap has mean −0.0589 and the observed −0.054
+has lower-tail probability 0.620. Thus E1 supports the score-level identity but
+falsifies the stronger, previously implied selector-equality reading for this
+finite candidate design. A strictly adversarial `C` (anti-correlated with
+`C_star`) can still invert the relation, but the observed assignment provides
+no evidence for that mechanism. ∎
 
 ### A.2 Per-cell tables
 
@@ -923,13 +966,17 @@ readout selection does not," with the mechanism not yet isolated.
 **R3. "The anti-Goodhart control loop reads like a philosophical
 compression, not an empirical result."**
 
-Response. It is a compression *hypothesis* over the prior Correction
-Chain, made testable by the load-bearing subset claim: {allocate,
-cool, reopen} carry the causal load; {detect, saturate} are
-diagnostic. The claim is falsifiable by a factorial ablation in Suite
-C — drop any one of {allocate, cool, reopen} and check whether the
-world-change re-engagement gate survives. We do not run that
-factorial in this paper (F4 in Section 4 is honest about this), but
-it is the concrete follow-up and we name it. The paper's headline
-claims (C1–C3 and C5) do not depend on M4; M4 is a load-bearing
-conjecture whose downstream test is designed but not yet completed.
+Response. We ran the named severe test rather than retaining the philosophical
+compression. The timestamped addendum froze all eight `allocate × cool ×
+reopen` cells, eight paired seeds, existing terminal success, main and
+interaction contrasts, and transported controls before implementation. The
+strict verdict is **FAIL**. All-on passes 8/8 and removing reopen fails 8/8
+(final MAE 0.113 → 0.550; reopen ratio 16.667 → 0), but removing allocate or
+cool still passes 8/8. Terminal main effects are allocate 0.0, cool 0.0,
+reopen +1.0; all terminal interaction contrasts are 0.0. Allocation does
+matter below threshold — selectivity 17.188 vs 4.125 and 23.1 vs 27.1 probes
+with reopen on — but it is not necessary for the frozen criterion. The cooling
+ablation is behaviorally identical under this schedule. We therefore reject
+the strong `{allocate, cool, reopen}` load-bearing-subset claim and retain only
+the bounded claim that the explicit second-shift reopen gate is necessary in
+this finite policy harness. C1–C3 and C5 do not depend on M4.

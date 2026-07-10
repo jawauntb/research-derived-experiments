@@ -11,7 +11,7 @@ import type { DailyReviewReport } from "../src/main/reports/dailyDigest";
 import { defaultPrivacySettingsView } from "../src/renderer/settings/PrivacySettings";
 
 describe("desktop shell trust surfaces", () => {
-  test("masks pairing token by default in the shell header", async () => {
+  test("masks and toggles the pairing code in the browser connection panel", async () => {
     const documentStub = new FakeDocument();
     const globalWithDocument = globalThis as unknown as { document?: unknown };
     const originalDocument = globalWithDocument.document;
@@ -19,17 +19,25 @@ describe("desktop shell trust surfaces", () => {
 
     try {
       const root = documentStub.createElement("div");
-      const token = "header.secret.token";
-      const status = shellStatus(token);
-      renderApp(root as unknown as HTMLElement, shellBridge(token), {
+      const fixturePairingCredential = "header.secret.token";
+      const status = shellStatus(fixturePairingCredential);
+      renderApp(root as unknown as HTMLElement, shellBridge(fixturePairingCredential), {
         ...createInitialAppViewModel(),
         status,
       });
       await flushAsync();
 
+      expect(root.textContent).not.toContain(fixturePairingCredential);
+      expect(root.textContent).toContain(maskPairingToken(fixturePairingCredential, false));
+      expect(root.textContent).toContain("Reveal");
+
+      root.findAllByTag("button").find((button) => button.textContent === "Reveal")?.click();
+      expect(root.textContent).toContain(token);
+      expect(root.textContent).toContain("Hide");
+
+      root.findAllByTag("button").find((button) => button.textContent === "Hide")?.click();
       expect(root.textContent).not.toContain(token);
       expect(root.textContent).toContain(maskPairingToken(token, false));
-      expect(root.textContent).toContain("Reveal");
     } finally {
       globalWithDocument.document = originalDocument;
     }

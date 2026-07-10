@@ -40,6 +40,9 @@ LOCAL = {
     "weakness_temporal": [
         "python experiments/weakness_temporal/temporal.py --n-models 240",
     ],
+    "world_responds": [
+        "python3 -m experiments.world_responds.suite_c_factorial_ablation",
+    ],
 }
 # Flagship paper PDFs (built from committed numbers/data).
 PDF_BUILDERS = {
