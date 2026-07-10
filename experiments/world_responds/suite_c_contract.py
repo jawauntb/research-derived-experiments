@@ -38,6 +38,18 @@ UNAFFECTED_BUCKETS = tuple(b for b in BUCKETS if b not in AFFECTED_BUCKETS)
 
 
 @dataclass(frozen=True)
+class SuiteCMechanisms:
+    """Action-gate interventions for the existing burst/refractory policy."""
+
+    allocate: bool = True
+    cool: bool = True
+    reopen: bool = True
+
+
+FULL_SUITE_C_MECHANISMS = SuiteCMechanisms()
+
+
+@dataclass(frozen=True)
 class SuiteCConfig:
     steps: int = 72
     first_shift: int = 24

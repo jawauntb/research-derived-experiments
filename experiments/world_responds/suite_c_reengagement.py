@@ -22,8 +22,10 @@ from experiments.world_responds.suite_c_contract import (
     CONDITIONS,
     CONTROL_CONDITIONS,
     DEFAULT_CONFIG,
+    FULL_SUITE_C_MECHANISMS,
     UNAFFECTED_BUCKETS,
     SuiteCConfig,
+    SuiteCMechanisms,
 )
 
 
@@ -126,6 +128,7 @@ def _condition_takes_probe(
     cooldown_remaining: np.ndarray,
     matched_slots: set[tuple[int, int]],
     cfg: SuiteCConfig,
+    mechanisms: SuiteCMechanisms,
 ) -> bool:
     affected = b in AFFECTED_IDX
     score_noise = float(rng.normal(0.0, 0.018))
@@ -173,13 +176,18 @@ def _condition_takes_probe(
     if condition == "burst_then_refractory":
         if t < cfg.first_shift and error[b] > 0.18:
             return (t + b) % 5 == 0
-        if cooldown_remaining[b] > 0:
+        if mechanisms.cool and cooldown_remaining[b] > 0:
+            return False
+        if not mechanisms.reopen and affected and t >= cfg.second_shift:
+            # Detection remains live in error/surprise state, but the second
+            # intervention cannot reopen the probe-action commitment.
             return False
         shift_window = (
             cfg.first_shift <= t < cfg.post_first_end
             or cfg.second_shift <= t < cfg.post_second_end
         )
-        if affected and shift_window and burst_remaining[b] > 0 and error[b] > 0.10:
+        allocated = affected or not mechanisms.allocate
+        if allocated and shift_window and burst_remaining[b] > 0 and error[b] > 0.10:
             return True
         return base_score > 0.36 + 0.16 * float(effort[b])
 
@@ -203,11 +211,14 @@ def run_trial(
     *,
     target_probe_count: int | None = None,
     cfg: SuiteCConfig = DEFAULT_CONFIG,
+    mechanisms: SuiteCMechanisms = FULL_SUITE_C_MECHANISMS,
 ) -> dict[str, Any]:
     """Run one deterministic Suite C cell and return a JSON-compatible row."""
 
     if condition not in CONDITIONS:
         raise ValueError(f"unknown condition {condition!r}")
+    if condition != "burst_then_refractory" and mechanisms != FULL_SUITE_C_MECHANISMS:
+        raise ValueError("Suite C mechanism interventions apply only to burst_then_refractory")
     rng = np.random.default_rng(seed)
     n_buckets = len(BUCKETS)
     error = rng.normal(0.26, 0.025, size=n_buckets).clip(0.16, 0.34)
@@ -231,8 +242,17 @@ def run_trial(
                 error[b] += float(rng.normal(0.56, 0.035))
                 surprise[b] += float(rng.normal(0.47, 0.025))
                 if condition == "burst_then_refractory":
-                    burst_remaining[b] = 8.0
-                    cooldown_remaining[b] = 0.0
+                    should_rearm = t == cfg.first_shift or mechanisms.reopen
+                    allocated = b in AFFECTED_IDX or not mechanisms.allocate
+                    if should_rearm and allocated:
+                        burst_remaining[b] = 8.0
+                        cooldown_remaining[b] = 0.0
+            if condition == "burst_then_refractory" and not mechanisms.allocate:
+                should_rearm = t == cfg.first_shift or mechanisms.reopen
+                if should_rearm:
+                    for b in UNAFFECTED_IDX:
+                        burst_remaining[b] = 8.0
+                        cooldown_remaining[b] = 0.0
 
         effort *= 0.72
         cooldown_remaining = np.maximum(0.0, cooldown_remaining - 1.0)
@@ -251,6 +271,7 @@ def run_trial(
                 cooldown_remaining=cooldown_remaining,
                 matched_slots=matched_slots,
                 cfg=cfg,
+                mechanisms=mechanisms,
             )
             before = float(error[b])
             if take_probe:
@@ -264,9 +285,11 @@ def run_trial(
                     surprise[b] = max(0.01, surprise[b] - 0.50)
                 else:
                     surprise[b] = max(0.012, 0.68 * surprise[b] + 0.24 * error[b])
-                if condition == "burst_then_refractory" and b in AFFECTED_IDX:
+                if condition == "burst_then_refractory" and (
+                    b in AFFECTED_IDX or not mechanisms.allocate
+                ):
                     burst_remaining[b] = max(0.0, burst_remaining[b] - 1.0)
-                    if burst_remaining[b] == 0.0:
+                    if burst_remaining[b] == 0.0 and mechanisms.cool:
                         cooldown_remaining[b] = 3.0
             else:
                 drift = 0.004 if b in AFFECTED_IDX else 0.0015

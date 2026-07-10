@@ -209,6 +209,15 @@ distinguish retrieval/search/discovery). Ledger: root `TODO.md`. Audit cards:
 **Minimum pass rule** for the agent benchmark family: behavior plus at least one
 structure-specific gate (see [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md)).
 
+Suite C component follow-ups use the same simulator and control contract rather
+than a replacement harness. The M4 path runs a balanced `allocate × cool ×
+reopen` factorial inside `burst_then_refractory`, freezes detect/saturate, pairs
+all cells by seed, reruns the original C1–C6 and matched-budget controls, writes
+raw rows only under gitignored `artifacts/world_responds/`, and commits a
+deterministic public summary under `experiments/commitment_surface/results/`.
+The 2026-07-09 run strictly failed the three-component necessity claim: reopen
+was necessary, while allocate and cool were not necessary at the existing gate.
+
 ---
 
 ## 5. Runtime flow

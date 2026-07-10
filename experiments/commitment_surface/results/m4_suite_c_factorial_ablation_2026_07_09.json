@@ -1,0 +1,609 @@
+{
+  "by_cell": [
+    {
+      "condition": "burst_then_refractory__allocate_0_cool_0_reopen_0",
+      "final_component_mae": 0.5496804744457147,
+      "first_reengagement_ratio": 11.135416666666666,
+      "first_selectivity_ratio": 4.125,
+      "mechanisms": {
+        "allocate": false,
+        "cool": false,
+        "reopen": false
+      },
+      "n": 8,
+      "no_false_calm": 0.0,
+      "second_reopen_ratio": 0.0,
+      "terminal_pass_rate": 0.0,
+      "total_probes": 19.125
+    },
+    {
+      "condition": "burst_then_refractory__allocate_0_cool_0_reopen_1",
+      "final_component_mae": 0.11301840261610849,
+      "first_reengagement_ratio": 11.135416666666666,
+      "first_selectivity_ratio": 4.125,
+      "mechanisms": {
+        "allocate": false,
+        "cool": false,
+        "reopen": true
+      },
+      "n": 8,
+      "no_false_calm": 1.0,
+      "second_reopen_ratio": 16.666666666666664,
+      "terminal_pass_rate": 1.0,
+      "total_probes": 27.125
+    },
+    {
+      "condition": "burst_then_refractory__allocate_0_cool_1_reopen_0",
+      "final_component_mae": 0.5496804744457147,
+      "first_reengagement_ratio": 11.135416666666666,
+      "first_selectivity_ratio": 4.125,
+      "mechanisms": {
+        "allocate": false,
+        "cool": true,
+        "reopen": false
+      },
+      "n": 8,
+      "no_false_calm": 0.0,
+      "second_reopen_ratio": 0.0,
+      "terminal_pass_rate": 0.0,
+      "total_probes": 19.125
+    },
+    {
+      "condition": "burst_then_refractory__allocate_0_cool_1_reopen_1",
+      "final_component_mae": 0.11301840261610849,
+      "first_reengagement_ratio": 11.135416666666666,
+      "first_selectivity_ratio": 4.125,
+      "mechanisms": {
+        "allocate": false,
+        "cool": true,
+        "reopen": true
+      },
+      "n": 8,
+      "no_false_calm": 1.0,
+      "second_reopen_ratio": 16.666666666666664,
+      "terminal_pass_rate": 1.0,
+      "total_probes": 27.125
+    },
+    {
+      "condition": "burst_then_refractory__allocate_1_cool_0_reopen_0",
+      "final_component_mae": 0.5496804744457147,
+      "first_reengagement_ratio": 11.135416666666666,
+      "first_selectivity_ratio": 17.1875,
+      "mechanisms": {
+        "allocate": true,
+        "cool": false,
+        "reopen": false
+      },
+      "n": 8,
+      "no_false_calm": 0.0,
+      "second_reopen_ratio": 0.0,
+      "terminal_pass_rate": 0.0,
+      "total_probes": 15.125
+    },
+    {
+      "condition": "burst_then_refractory__allocate_1_cool_0_reopen_1",
+      "final_component_mae": 0.11301840261610849,
+      "first_reengagement_ratio": 11.135416666666666,
+      "first_selectivity_ratio": 17.1875,
+      "mechanisms": {
+        "allocate": true,
+        "cool": false,
+        "reopen": true
+      },
+      "n": 8,
+      "no_false_calm": 1.0,
+      "second_reopen_ratio": 16.666666666666664,
+      "terminal_pass_rate": 1.0,
+      "total_probes": 23.125
+    },
+    {
+      "condition": "burst_then_refractory__allocate_1_cool_1_reopen_0",
+      "final_component_mae": 0.5496804744457147,
+      "first_reengagement_ratio": 11.135416666666666,
+      "first_selectivity_ratio": 17.1875,
+      "mechanisms": {
+        "allocate": true,
+        "cool": true,
+        "reopen": false
+      },
+      "n": 8,
+      "no_false_calm": 0.0,
+      "second_reopen_ratio": 0.0,
+      "terminal_pass_rate": 0.0,
+      "total_probes": 15.125
+    },
+    {
+      "condition": "burst_then_refractory__allocate_1_cool_1_reopen_1",
+      "final_component_mae": 0.11301840261610849,
+      "first_reengagement_ratio": 11.135416666666666,
+      "first_selectivity_ratio": 17.1875,
+      "mechanisms": {
+        "allocate": true,
+        "cool": true,
+        "reopen": true
+      },
+      "n": 8,
+      "no_false_calm": 1.0,
+      "second_reopen_ratio": 16.666666666666664,
+      "terminal_pass_rate": 1.0,
+      "total_probes": 23.125
+    }
+  ],
+  "claim_level": "failed diagnostic gate; M4 remains a compression hypothesis",
+  "factor_names": [
+    "allocate",
+    "cool",
+    "reopen"
+  ],
+  "factorial_effects": {
+    "final_component_mae": {
+      "allocate": {
+        "ci95_high": 6.071532165918825e-18,
+        "ci95_low": -1.951563910473908e-17,
+        "effect": -5.204170427930421e-18
+      },
+      "allocate_x_cool": {
+        "ci95_high": 1.951563910473908e-17,
+        "ci95_low": -4.336808689942018e-19,
+        "effect": 8.673617379884035e-18
+      },
+      "allocate_x_cool_x_reopen": {
+        "ci95_high": 3.469446951953614e-18,
+        "ci95_low": 0.0,
+        "effect": 1.734723475976807e-18
+      },
+      "allocate_x_reopen": {
+        "ci95_high": 1.8214596497756474e-17,
+        "ci95_low": -8.239936510889834e-18,
+        "effect": 5.204170427930421e-18
+      },
+      "cool": {
+        "ci95_high": 8.239936510889834e-18,
+        "ci95_low": -4.7704895589362195e-18,
+        "effect": 1.734723475976807e-18
+      },
+      "cool_x_reopen": {
+        "ci95_high": 3.469446951953614e-18,
+        "ci95_low": 0.0,
+        "effect": 1.734723475976807e-18
+      },
+      "reopen": {
+        "ci95_high": -0.42544422715679764,
+        "ci95_low": -0.44787932362066213,
+        "effect": -0.4366620718296062
+      }
+    },
+    "first_reengagement_ratio": {
+      "allocate": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "allocate_x_cool": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "allocate_x_cool_x_reopen": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "allocate_x_reopen": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "cool": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "cool_x_reopen": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "reopen": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      }
+    },
+    "first_selectivity_ratio": {
+      "allocate": {
+        "ci95_high": 13.656249999999996,
+        "ci95_low": 12.666666666666664,
+        "effect": 13.062499999999998
+      },
+      "allocate_x_cool": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "allocate_x_cool_x_reopen": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "allocate_x_reopen": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "cool": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "cool_x_reopen": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "reopen": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      }
+    },
+    "no_false_calm": {
+      "allocate": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "allocate_x_cool": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "allocate_x_cool_x_reopen": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "allocate_x_reopen": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "cool": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "cool_x_reopen": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "reopen": {
+        "ci95_high": 1.0,
+        "ci95_low": 1.0,
+        "effect": 1.0
+      }
+    },
+    "second_reopen_ratio": {
+      "allocate": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "allocate_x_cool": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "allocate_x_cool_x_reopen": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "allocate_x_reopen": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "cool": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "cool_x_reopen": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "reopen": {
+        "ci95_high": 16.66666666666666,
+        "ci95_low": 16.66666666666666,
+        "effect": 16.66666666666666
+      }
+    },
+    "total_probes": {
+      "allocate": {
+        "ci95_high": -4.0,
+        "ci95_low": -4.0,
+        "effect": -4.0
+      },
+      "allocate_x_cool": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "allocate_x_cool_x_reopen": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "allocate_x_reopen": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "cool": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "cool_x_reopen": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "reopen": {
+        "ci95_high": 8.0,
+        "ci95_low": 8.0,
+        "effect": 8.0
+      }
+    },
+    "world_change_reengagement_pass": {
+      "allocate": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "allocate_x_cool": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "allocate_x_cool_x_reopen": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "allocate_x_reopen": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "cool": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "cool_x_reopen": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "effect": 0.0
+      },
+      "reopen": {
+        "ci95_high": 1.0,
+        "ci95_low": 1.0,
+        "effect": 1.0
+      }
+    }
+  },
+  "frozen_stages": {
+    "detect": true,
+    "saturate": true
+  },
+  "gates": {
+    "F0_integrity": {
+      "all_on_matches_reference": true,
+      "balanced": true,
+      "deterministic_replay": true,
+      "n_rows": 64,
+      "pass": true
+    },
+    "F1_full_loop_replication": {
+      "full_loop_pass_rate": 1.0,
+      "pass": true,
+      "required": 0.75
+    },
+    "F2_single_removal_necessity": {
+      "components": {
+        "allocate": {
+          "knockout_condition": "burst_then_refractory__allocate_0_cool_1_reopen_1",
+          "knockout_pass_rate": 1.0,
+          "paired_full_minus_knockout": 0.0,
+          "pass": false
+        },
+        "cool": {
+          "knockout_condition": "burst_then_refractory__allocate_1_cool_0_reopen_1",
+          "knockout_pass_rate": 1.0,
+          "paired_full_minus_knockout": 0.0,
+          "pass": false
+        },
+        "reopen": {
+          "knockout_condition": "burst_then_refractory__allocate_1_cool_1_reopen_0",
+          "knockout_pass_rate": 0.0,
+          "paired_full_minus_knockout": 1.0,
+          "pass": true
+        }
+      },
+      "pass": false
+    },
+    "F3_main_effects": {
+      "components": {
+        "allocate": {
+          "ci95_high": 0.0,
+          "ci95_low": 0.0,
+          "effect": 0.0,
+          "pass": false
+        },
+        "cool": {
+          "ci95_high": 0.0,
+          "ci95_low": 0.0,
+          "effect": 0.0,
+          "pass": false
+        },
+        "reopen": {
+          "ci95_high": 1.0,
+          "ci95_low": 1.0,
+          "effect": 1.0,
+          "pass": true
+        }
+      },
+      "pass": false,
+      "required_ci95_low_strictly_above": 0.0,
+      "required_effect": 0.2
+    },
+    "F4_interactions": {
+      "interactions": {
+        "allocate_x_cool": {
+          "ci95_high": 0.0,
+          "ci95_low": 0.0,
+          "effect": 0.0,
+          "finite": true,
+          "nonnegative": true
+        },
+        "allocate_x_cool_x_reopen": {
+          "ci95_high": 0.0,
+          "ci95_low": 0.0,
+          "effect": 0.0,
+          "finite": true,
+          "nonnegative": true
+        },
+        "allocate_x_reopen": {
+          "ci95_high": 0.0,
+          "ci95_low": 0.0,
+          "effect": 0.0,
+          "finite": true,
+          "nonnegative": true
+        },
+        "cool_x_reopen": {
+          "ci95_high": 0.0,
+          "ci95_low": 0.0,
+          "effect": 0.0,
+          "finite": true,
+          "nonnegative": true
+        }
+      },
+      "pass": true,
+      "required_point_estimate": "finite and nonnegative"
+    },
+    "F5_no_interaction_rescue": {
+      "maximum_reduced_cell_pass_rate": 1.0,
+      "pass": false,
+      "required_maximum": 0.25
+    },
+    "F6_transported_controls": {
+      "fixed_surprise_no_false_calm_rate": 0.0,
+      "fixed_surprise_rejected": true,
+      "headline_condition": "burst_then_refractory",
+      "headline_selectivity_ratio": 17.1875,
+      "matched_less_selective": true,
+      "matched_per_seed_budget_exact": true,
+      "matched_selectivity_ratio": 0.7708333333333333,
+      "pass": true,
+      "reference_suite_pass": true
+    }
+  },
+  "kind": "world_responds_suite_c_factorial_ablation_summary",
+  "n_factorial_rows": 64,
+  "n_seeds": 8,
+  "preregistration": "experiments/world_responds/suite_c_factorial_ablation_preregistration_2026_07_09.md",
+  "reference_suite": {
+    "gates": {
+      "C1_silence_replication": {
+        "baseline_post_shift_density": 0.005208333333333333,
+        "pass": true
+      },
+      "C2_reengagement": {
+        "first_reengagement_ratio": 11.135416666666666,
+        "first_selectivity_ratio": 17.1875,
+        "headline_condition": "burst_then_refractory",
+        "pass": true
+      },
+      "C3_recovery": {
+        "final_component_mae": 0.11301840261610849,
+        "pass": true,
+        "recovery_rate": 1.0
+      },
+      "C4_no_false_calm": {
+        "fixed_final_component_mae": 0.5192054301478422,
+        "fixed_surprise_no_false_calm_rate": 0.0,
+        "headline_no_false_calm_rate": 1.0,
+        "pass": true
+      },
+      "C5_cost_aware_inquiry": {
+        "headline_total_probes": 23.125,
+        "matched_selectivity_ratio": 0.7708333333333333,
+        "oracle_total_probes": 68.5,
+        "pass": true,
+        "scheduled_total_probes": 144.0
+      },
+      "C6_reopenability": {
+        "pass": true,
+        "second_reopen_ratio": 16.666666666666664
+      },
+      "suite_pass": {
+        "pass": true
+      }
+    },
+    "headline_condition": "burst_then_refractory"
+  },
+  "rejected_alternatives": [
+    "new toy state machine",
+    "neural-transfer policy-learning confound",
+    "three single knockouts without the remaining factorial cells",
+    "aggregate-only unpaired reporting",
+    "post-result threshold retuning"
+  ],
+  "run_config": {
+    "base_condition": "burst_then_refractory",
+    "bootstrap_samples": 10000,
+    "bootstrap_seed": 20260709,
+    "command": "python3 -m experiments.world_responds.suite_c_factorial_ablation --seeds 20260709,20261712,20262715,20263718,20264721,20265724,20266727,20267730 --out artifacts/world_responds/suite_c_factorial_ablation_2026_07_09.json --summary-json experiments/commitment_surface/results/m4_suite_c_factorial_ablation_2026_07_09.json --summary-md experiments/commitment_surface/results/m4_suite_c_factorial_ablation_2026_07_09.md",
+    "factor_levels": [
+      false,
+      true
+    ],
+    "first_shift": 24,
+    "mechanism_default": {
+      "allocate": true,
+      "cool": true,
+      "reopen": true
+    },
+    "recovery_threshold": 0.12,
+    "reengagement_floor": 0.5,
+    "reopen_floor": 1.0,
+    "second_shift": 48,
+    "seeds": [
+      20260709,
+      20261712,
+      20262715,
+      20263718,
+      20264721,
+      20265724,
+      20266727,
+      20267730
+    ],
+    "selectivity_floor": 2.0,
+    "steps": 72
+  },
+  "seeds": [
+    20260709,
+    20261712,
+    20262715,
+    20263718,
+    20264721,
+    20265724,
+    20266727,
+    20267730
+  ],
+  "strict_verdict": "FAIL"
+}
