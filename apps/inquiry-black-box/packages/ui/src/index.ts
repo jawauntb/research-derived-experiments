@@ -20,8 +20,8 @@ export const designTokens = {
   roseSoft: "#f9dfe5",
   blue: "#2d5d7c",
   blueSoft: "#dceaf7",
-  shadowRaised: "14px 14px 30px rgba(124, 112, 96, 0.22), -14px -14px 30px rgba(255, 255, 255, 0.86)",
-  shadowPressed: "inset 8px 8px 18px rgba(124, 112, 96, 0.18), inset -8px -8px 18px rgba(255, 255, 255, 0.78)",
+  shadowRaised: "0 10px 28px rgba(89, 80, 68, 0.12)",
+  shadowPressed: "inset 0 0 0 1px rgba(124, 112, 96, 0.14)",
   focusRing: "0 0 0 3px rgba(8, 125, 115, 0.24)",
   dark: {
     surface: "#151816",
@@ -39,8 +39,8 @@ export const designTokens = {
     roseSoft: "#3c2029",
     blue: "#8bb9df",
     blueSoft: "#1c3346",
-    shadowRaised: "0 16px 34px rgba(0, 0, 0, 0.34)",
-    shadowPressed: "inset 6px 6px 16px rgba(0, 0, 0, 0.32), inset -6px -6px 16px rgba(255, 255, 255, 0.04)",
+    shadowRaised: "0 12px 30px rgba(0, 0, 0, 0.24)",
+    shadowPressed: "inset 0 0 0 1px rgba(255, 255, 255, 0.06)",
     focusRing: "0 0 0 3px rgba(85, 199, 188, 0.28)",
   },
 } as const;

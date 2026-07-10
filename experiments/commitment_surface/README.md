@@ -41,6 +41,24 @@ Result: `results/e1_concern_weighted.{json,md}`. Well-specified
 concern beats unweighted by +0.244; misspec (random `κ` with same
 marginal) sits *below* unweighted at −0.054.
 
+#### E1 follow-up — misspecification variance (CPU)
+
+The timestamped addendum
+[`e1_misspecification_variance_preregistration_2026-07-09.md`](../../papers/commitment_surface/e1_misspecification_variance_preregistration_2026-07-09.md)
+freezes the original 96 candidate/deployment structures and redraws only the
+misspecified assignment for 2,048 experiment-level replicates:
+
+```bash
+python3 -m experiments.commitment_surface.e1_misspecification_variance
+```
+
+Result: `results/e1_misspecification_variance.{json,md}`. Null mean gap
+−0.058864 (SD 0.016100; central 95% [−0.091310, −0.029364]); the observed
+−0.054159 has lower-tail probability 0.620117 (Wilson 95% CI
+[0.598890, 0.640895]). All preregistered independence/exchangeability checks
+pass. Verdict: **consistent with the random-assignment/selection null**, not
+systematic anti-correlation. The original frozen ±0.05 gate remains failed.
+
 ### E2 / E3 — Compat Augmentation vs Readout, with Patch-CE
 
 Neural MLP sweep on cyclic modular addition (requires torch, CPU is

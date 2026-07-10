@@ -36,8 +36,12 @@ narrowing the P1 external gap our prior work identified; ρ(patch-CE, OOD)
 Prop. 1 (probe readout does not identify causal use) in the non-aligned
 regime. Two pre-registered gates strictly failed and we report them as
 failures: the E1 misspecification-equivalence band (−0.054 vs ±0.05) and
-the E4 Arm-A ceiling (0.113 vs ≤ 0.10); E4 is directionally decisive but
-its strict gate did not pass. One confound remains open and is
+the E4 Arm-A ceiling (0.113 vs ≤ 0.10). A separately pre-registered E1
+conditional randomization follow-up (2,048 draws) finds the observed −0.054
+gap typical of the frozen candidate/deployment design (null mean −0.0589;
+lower-tail probability 0.620), so it does not indicate systematic
+anti-correlation; this calibration does not retroactively pass the original
+gate. E4 is directionally decisive but its strict gate did not pass. One confound remains open and is
 pre-registered for a follow-up: cyclic-orbit augmentation places correctly
 labeled examples on held-out deployment support, so E4 does not yet
 separate *generator learning* from *labeled orbit coverage* (Section 6.5).
@@ -100,8 +104,11 @@ Contributions.
 - **C3.** Four severe experiments (Section 5). E1 shows within-lab that
   well-specified concern beats unweighted by +0.24; the misspecification
   arm lands at −0.054 vs unweighted, *outside* the pre-registered ±0.05
-  equivalence band, so that sub-gate strictly fails (the direction —
-  misspec is not helpful — still holds). E2/E3 show that a neural
+  equivalence band, so that sub-gate strictly fails. The pre-registered
+  follow-up places this realization near the center of its conditional null
+  (null mean −0.0589; lower-tail probability 0.620), localizing the negative
+  gap to random reassignment plus nonlinear selection rather than systematic
+  anti-correlation in the realized assignment. E2/E3 show that a neural
   compatibility-augmented arm dominates a weakness-readout selector on
   OOD by a decisive gap, with patch-CE aligned. E4 (Modal L4) runs the
   non-degenerate external contact on Pythia 70m/160m/410m LoRA:
@@ -319,19 +326,27 @@ candidate, but it is not *necessary*: over a finite candidate set
 **order-equivalent to `C_star` on `F`** — i.e.
 `W_C(f, U) > W_C(f', U) ⇔ W_{C_star}(f, U) > W_{C_star}(f', U)` for all
 `f, f' ∈ F`. Distinct weightings can induce the same ranking and are
-then equally optimal. A misspecified `C` drawn as a random assignment
-with the same marginal reduces `W_C` to unweighted extension mass *in
-expectation*; a well-specified `C` strictly dominates unweighted
-extension mass when candidates vary in coverage of high-`C_star` blocks.
+then equally optimal. For each fixed candidate, a misspecified `C` drawn as an exchangeable
+random assignment with the same marginal makes `E[W_C]` proportional to
+unweighted extension mass. This score-level identity does **not** imply that
+`argmax_f W_C` equals the unweighted selector in expectation: expectation and
+the nonlinear argmax need not commute. A well-specified `C` strictly dominates
+unweighted extension mass when candidates vary in coverage of high-`C_star`
+blocks.
 
 Empirical anchor: E1 (Section 5.1). Well-specified: 0.814; unweighted:
 0.570; misspec: 0.516. Gap +0.24 (wellspec vs unweighted). The misspec
-arm sits 0.054 *below* unweighted — directionally consistent with the
-corollary (random weighting is not helpful), but note this is outside
-the pre-registered ±0.05 equivalence band, so the strict E1 misspec
-sub-gate fails (Section 5.1); the in-expectation reduction predicts
-equality, and the realized misspec draw was mildly adversarial rather
-than neutral.
+arm sits 0.054 *below* unweighted, outside the pre-registered ±0.05 band,
+so the strict original sub-gate fails. The timestamped follow-up freezes all
+96 candidate pools and true deployments and redraws only misspecified
+assignments over 2,048 experiment-level replicates. Its null mean is −0.0589
+(95% CI for the mean [−0.0596, −0.0582]), with a central 95% interval
+[−0.0913, −0.0294] and `P(Delta <= −0.054159) = 0.620` (Wilson 95% CI
+[0.599, 0.641]). All exchangeability/independence diagnostics pass. Thus the
+observed gap is typical of random reassignment plus finite-pool argmax
+selection, not evidence of systematic anti-correlation. This result corrects
+the earlier "mildly adversarial draw" interpretation without changing the
+frozen gate verdict.
 
 ### 3.6 M4: anti-Goodhart control loop
 
@@ -371,7 +386,9 @@ linked below.
 - **E1 pass (commitment-first).** Well-specified concern-weighted selector
   beats unweighted by ≥ +0.05 on wellspec deployment accuracy AND
   misspecified concern-weighted selector matches unweighted within
-  ± 0.05.
+  ± 0.05. This original gate remains frozen and failed. The timestamped E1
+  follow-up addendum separately gates systematic anti-correlation at a
+  one-sided conditional-randomization tail probability `< 0.025`.
 - **E2 pass (commitment-first).** Arm B (compat aug) beats Arm A (readout)
   by ≥ +0.30 on OOD accuracy AND by ≥ +0.50 on patch-CE Δ.
 - **E3 pass (commitment-first).** ρ(patch-CE, OOD) > ρ(weakness, OOD)
@@ -746,15 +763,22 @@ Equality up to positive scale is *not necessary*: over a finite `F`,
 distinct weightings that induce the same ranking of candidates are
 equally optimal, so the earlier "iff `C = C_star` up to scaling"
 phrasing was too strong and is retracted here in favor of the
-order-equivalence condition. *Misspecification:* if `C` is a random
-assignment with the same marginal distribution as `C_star`,
-independent of candidate coverage, then
+order-equivalence condition. *Misspecification:* if `C` is an exchangeable random assignment with the
+same coordinate marginal as `C_star`, independent of candidate coverage,
+then for every fixed candidate
 `E[W_C(f, U)] = E[C] · |{x ∈ U : f(x) = truth(x)}|` — proportional to
-unweighted extension mass — so the misspecified selector reduces to
-unweighted Bennett *in expectation* (any particular draw can be mildly
-helpful or mildly adversarial; E1's realized draw was mildly
-adversarial at −0.054). A strictly adversarial `C` (anti-correlated
-with `C_star`) inverts the relation. ∎
+unweighted extension mass. Fixed-cardinality assignment is exchangeable but
+not iid across positions; equal marginals are sufficient for this identity.
+However, `E[argmax_f W_C(f,U)]` is not determined by
+`argmax_f E[W_C(f,U)]`: finite candidate sets, ties, and winner selection make
+argmax nonlinear. The E1 follow-up measures this distinction directly. Across
+2,048 independent reassignments with all 96 candidate/deployment structures
+frozen, the selected-performance gap has mean −0.0589 and the observed −0.054
+has lower-tail probability 0.620. Thus E1 supports the score-level identity but
+falsifies the stronger, previously implied selector-equality reading for this
+finite candidate design. A strictly adversarial `C` (anti-correlated with
+`C_star`) can still invert the relation, but the observed assignment provides
+no evidence for that mechanism. ∎
 
 ### A.2 Per-cell tables
 
