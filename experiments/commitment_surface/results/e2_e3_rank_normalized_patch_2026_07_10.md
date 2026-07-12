@@ -1,6 +1,6 @@
 # E2/E3 Rank-Normalized Patch Follow-up
 
-Date: 2026-07-10.  
+Date: 2026-07-10.
 Pre-registration:
 `papers/commitment_surface/e2_e3_rank_normalized_patch_preregistration_2026-07-10.md`.
 

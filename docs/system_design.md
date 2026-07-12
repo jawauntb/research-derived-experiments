@@ -50,7 +50,11 @@ consistency objective backpropagates a weighted average one pair-microbatch at a
 time; this preserves the frozen loss while avoiding graph accumulation on
 410m/L4. The minimum Modal smoke passed its integrity gate; E5
 remains scientifically pending until the confirmatory grid passes the frozen
-post-hoc gates. Separately, E2/E3 now fit a compatibility-aligned activation
+post-hoc gates. The confirmatory launcher now hard-locks the frozen run
+configuration, expands it into an exact 135-cell manifest, and refuses a
+verdict unless every expected `(size, modulus, seed, arm)` key appears exactly
+once with finite metrics and passing integrity. Separately, E2/E3 now fit a
+compatibility-aligned activation
 subspace and normalize causal CE by realized removed between-orbit spectral
 mass. The frozen width-96/128 follow-up passes its group-specificity and
 width-retention gates, replacing fixed-top-k localization only for the small-MLP
@@ -284,7 +288,28 @@ its split/exposure construction in `e5_core.py`. G-reg and W-reg receive truth
 labels only for original train support; B-ref and Cov are matched on unique
 held-out labeled inputs and held-out exposure events. Raw E5 ledgers and metrics
 remain under `artifacts/commitment_surface/`; only a public-safe summary is
-committed after a successful run.
+committed after a successful run. E5 maps one cell per L4 call, caps the worker
+pool at 12 containers, and checkpoints finite, integrity-passing results by a
+deterministic manifest ID in the V2 `commitment-surface-e5-results-v2` Modal
+Volume. Candidate evaluation is chunked, and weighted pair-microbatch
+backpropagation preserves the frozen consistency objective without retaining
+the full graph on 410m/L4. The manifest binds exact Python-package versions and immutable Pythia
+snapshot revisions; the full 43-package lock file is part of the source
+fingerprint. L4 cells do not retry automatically; a failed map emits a
+partial artifact, and repeating an identical launch resumes completed cells
+and submits only missing IDs. A CPU control pass filters those checkpoints
+before GPU dispatch and prefetches each missing model once; only that prefetch
+function has two automatic retries. Missing work is ordered largest-model and
+regularizer first, then reconstructed in manifest order. Dry runs execute a
+CPU-only pinned-image and result-Volume round trip, but no training function.
+`--inspect` reports reusable, invalid, missing, and active-lease state without
+prefetch or GPU dispatch. GPU execution is explicit and cell-count bounded;
+confirmatory execution additionally acknowledges the computed manifest ID.
+An atomic expiring Modal Dict lease excludes overlapping work on the same
+manifest cell and is recorded with the cell attempt. `smoke` and `development`
+run kinds are
+structurally barred from confirmatory analysis; `confirmatory` rejects any
+frozen-parameter drift before GPU allocation.
 
 **Note:** The Doppler scope path is machine-specific; adapt on other hosts.
 

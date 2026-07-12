@@ -10,7 +10,7 @@
 
 ## Verification
 - Pre-registration: `papers/commitment_surface/e2_e3_rank_normalized_patch_preregistration_2026-07-10.md`
-- Result reports (10):
+- Result reports (11):
   - `experiments/commitment_surface/results/e1_concern_weighted.md`
   - `experiments/commitment_surface/results/e1_misspecification_variance.md`
   - `experiments/commitment_surface/results/e2_e3_neural.md`
@@ -19,6 +19,7 @@
   - `experiments/commitment_surface/results/e2_e3_rank_patch_width128.md`
   - `experiments/commitment_surface/results/e2_e3_rank_patch_width96.md`
   - `experiments/commitment_surface/results/e4_pythia_lora_v2_summary.md`
+  - `experiments/commitment_surface/results/e5_launch_readiness_2026_07_10.md`
   - `experiments/commitment_surface/results/e5_smoke_summary.md`
   - `experiments/commitment_surface/results/m4_suite_c_factorial_ablation_2026_07_09.md`
 
@@ -29,6 +30,6 @@ Key verification signals (from the latest result report):
   - removed stage | knockout pass rate | full minus knockout | gate
 
 ## Artifacts
-- Committed: `experiments/commitment_surface/results/e1_concern_weighted.md`, `experiments/commitment_surface/results/e1_misspecification_variance.md`, `experiments/commitment_surface/results/e2_e3_neural.md`, `experiments/commitment_surface/results/e2_e3_neural_larger_n.md`, `experiments/commitment_surface/results/e2_e3_rank_normalized_patch_2026_07_10.md`, `experiments/commitment_surface/results/e2_e3_rank_patch_width128.md`, `experiments/commitment_surface/results/e2_e3_rank_patch_width96.md`, `experiments/commitment_surface/results/e4_pythia_lora_v2_summary.md`, `experiments/commitment_surface/results/e5_smoke_summary.md`, `experiments/commitment_surface/results/m4_suite_c_factorial_ablation_2026_07_09.md`, `papers/commitment_surface/paper.md`
+- Committed: `experiments/commitment_surface/results/e1_concern_weighted.md`, `experiments/commitment_surface/results/e1_misspecification_variance.md`, `experiments/commitment_surface/results/e2_e3_neural.md`, `experiments/commitment_surface/results/e2_e3_neural_larger_n.md`, `experiments/commitment_surface/results/e2_e3_rank_normalized_patch_2026_07_10.md`, `experiments/commitment_surface/results/e2_e3_rank_patch_width128.md`, `experiments/commitment_surface/results/e2_e3_rank_patch_width96.md`, `experiments/commitment_surface/results/e4_pythia_lora_v2_summary.md`, `experiments/commitment_surface/results/e5_launch_readiness_2026_07_10.md`, `experiments/commitment_surface/results/e5_smoke_summary.md`, `experiments/commitment_surface/results/m4_suite_c_factorial_ablation_2026_07_09.md`, `papers/commitment_surface/paper.md`
 - Local-only: artifacts/ (gitignored raw outputs; see result reports for summaries)
 - Paper: `papers/commitment_surface/paper.md`
