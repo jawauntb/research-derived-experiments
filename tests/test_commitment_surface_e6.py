@@ -12,6 +12,8 @@ from experiments.commitment_surface.e6_analysis import (
     grid_spec_for_run_kind,
 )
 from experiments.commitment_surface.e6_core import (
+    E6_BOOTSTRAP_EPOCHS,
+    E6_CANDIDATE_PROPOSER,
     E6_CONFIRMATORY_GRID,
     E6_CONFIRMATORY_PARAMETERS,
     E6_GATE_METRICS,
@@ -27,6 +29,15 @@ from experiments.commitment_surface.e6_core import (
     plan_round,
     plan_self_training_loop,
 )
+from experiments.commitment_surface.e6_runtime import (
+    GPU_MAX_CONTAINERS,
+    GPU_TYPE,
+    build_execution_strata,
+    candidate_input_ids,
+    paired_proposer_schedule,
+    prioritize_strata,
+    validate_runtime_arms,
+)
 
 
 FROZEN_CONFIRMATORY_PARAMETERS = {
@@ -38,7 +49,9 @@ FROZEN_CONFIRMATORY_PARAMETERS = {
     "rounds": 6,
     "train_frac": 0.5,
     "train_shift_count": 3,
+    "bootstrap_epochs": 160,
     "generations_per_input": 8,
+    "candidate_proposer": "paired_half_mix",
     "generation_temperature": 0.8,
     "round_epochs": 40,
     "selection_fraction": 0.5,
@@ -95,6 +108,51 @@ class CommitmentSurfaceE6Test(unittest.TestCase):
         self.assertEqual(E6_CONFIRMATORY_PARAMETERS, FROZEN_CONFIRMATORY_PARAMETERS)
         self.assertEqual(len(E6_CONFIRMATORY_GRID.expected_keys()), 108)
         self.assertEqual(E6_CONFIRMATORY_GRID.seed_slots, (0, 1, 2))
+        self.assertEqual(E6_BOOTSTRAP_EPOCHS, 160)
+        self.assertEqual(E6_CANDIDATE_PROPOSER, "paired_half_mix")
+
+    def test_runner_uses_symmetric_current_adapter_proposals_on_l4(self) -> None:
+        self.assertEqual(GPU_TYPE, "L4")
+        self.assertEqual(GPU_MAX_CONTAINERS, 12)
+        self.assertEqual(
+            paired_proposer_schedule(8),
+            ("SC", "CS", "SC", "CS", "SC", "CS", "SC", "CS"),
+        )
+        with self.assertRaisesRegex(ValueError, "even"):
+            paired_proposer_schedule(7)
+
+    def test_runner_groups_arm_cells_into_coupled_gpu_strata(self) -> None:
+        manifest = build_run_manifest(
+            FROZEN_CONFIRMATORY_PARAMETERS,
+            run_kind="confirmatory",
+            implementation_fingerprint="runner-test",
+        )
+
+        strata = build_execution_strata(manifest["cells"])
+
+        self.assertEqual(len(strata), 27)
+        self.assertTrue(all(len(stratum["cell_ids"]) == 4 for stratum in strata))
+        self.assertEqual(strata[0]["stratum_id"], "70m__n13__slot0")
+        ordered = prioritize_strata(strata)
+        self.assertEqual(ordered[0]["size"], "410m")
+        self.assertEqual(ordered[-1]["size"], "70m")
+
+    def test_candidate_inputs_cover_ood_and_novel_shift_images(self) -> None:
+        inputs = candidate_input_ids(
+            train_inputs=(0, 2),
+            ood_inputs=(1, 3),
+            novel_shifts=(2,),
+            modulus=5,
+        )
+        self.assertEqual(inputs, (1, 2, 3, 4))
+
+    def test_runtime_arm_validation_preserves_coupling_and_run_kind(self) -> None:
+        validate_runtime_arms(("SC", "CS", "A-ref"), run_kind="smoke")
+        validate_runtime_arms(("SC", "CS", "GT", "A-ref"), run_kind="confirmatory")
+        with self.assertRaisesRegex(ValueError, "SC and CS"):
+            validate_runtime_arms(("SC", "A-ref"), run_kind="development")
+        with self.assertRaisesRegex(ValueError, "all four"):
+            validate_runtime_arms(("SC", "CS", "A-ref"), run_kind="confirmatory")
 
     def test_namespaced_seed_derivation_matches_frozen_sha256_formula(self) -> None:
         expected = int.from_bytes(
