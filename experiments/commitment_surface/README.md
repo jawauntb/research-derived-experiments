@@ -271,6 +271,33 @@ Status: the 70m/n=13/one-seed validation smoke passed all integrity gates; see
 `results/e5_smoke_summary.md`. It is not scientific evidence. E5 remains
 confirmatory-pending, and no mechanism verdict is claimed. The no-compute
 launch audit is recorded in `results/e5_launch_readiness_2026_07_10.md`.
+
+### E6 — Commitment-Surface Reward Self-Training (CPU protocol scaffold)
+
+The frozen E6 preregistration is
+[`e6_commitment_reward_self_training_preregistration_2026-07-13.md`](../../papers/commitment_surface/e6_commitment_reward_self_training_preregistration_2026-07-13.md).
+The dependency-free `e6_core.py` and `e6_analysis.py` now lock the first
+implementation boundary: the six-round SC/CS/GT/A-ref reward loop,
+truth-label-free typed CS signals, transport eligibility, top-half selection,
+exact SC/CS pool-digest and candidate/selection-count matching, namespaced
+SHA-256 seeds, the 108-cell confirmatory manifest, resumable trajectory
+validation, and the frozen G1–G5 analysis.
+
+Run the CPU contract tests with:
+
+```bash
+python3 -m unittest tests.test_commitment_surface_e6
+```
+
+Status: protocol scaffold only. No E6 Modal training runner, smoke, calibration,
+GPU cell, or scientific verdict exists yet. The runner must preserve a shared
+`SC-CS` candidate/generation seed scope and emit the same pool digest, candidate
+pool count, and selected count for both arms in every round; the analysis layer
+rejects confirmatory readiness when any differ or the frozen top-half selection
+volume is violated. Selecting which evolving adapter state proposes that shared
+pool remains an explicit implementation decision for the runner and may not
+weaken the frozen matched-pool gate.
+
 ### M4 — Suite C Allocate × Cool × Reopen Factorial
 
 The timestamped follow-up addendum is

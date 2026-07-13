@@ -69,7 +69,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_gauge_fixed_concern_transport_*.py` | Gauge-fixed transport + PDF |
 | `test_external_contact_p1_lora.py` | External-contact LoRA metrics |
 | `test_commitment_surface_appendix.py` | Public-safe E4 appendix export, metric retention, raw-field omission |
-| `test_commitment_surface_core.py`, `test_commitment_surface_e5.py` | Commitment-surface arithmetic plus E5 split, leakage, coverage, novel-shift, and frozen-gate contracts |
+| `test_commitment_surface_core.py`, `test_commitment_surface_e5.py`, `test_commitment_surface_e6.py` | Commitment-surface arithmetic; E5 split/leakage/coverage/novel-shift gates; and E6 six-round rewards, matched pools, deterministic seeds, manifests, integrity, resume, and G1–G5 verdict contracts |
 | `test_publication_guard.py` | Secret-signature detection and non-secret fixture naming |
 | `test_semantic_concern_summary.py` | Semantic concern summarizer |
 | `test_commitment_surface_core.py`, `test_e1_misspecification_variance.py` | E1 concern selectors plus conditional-randomization reconstruction, seed, assignment, and statistics contracts |
@@ -240,6 +240,8 @@ of `confirmatory_ready` rather than inferring readiness from per-arm counts.
 | `e5_core.py` | E5 typed configs, disjoint support/intervention splits, supervised-vs-consistency exposure plans, G/W schedule matching, leakage/coverage audits, deterministic launch manifests, exact Cartesian-grid and metric-range audits, and frozen smoke/confirmatory analysis gates |
 | `e5_requirements.txt` | Fully pinned 43-package Linux/Python runtime lock for the E5 training and CPU preflight image; included in the implementation fingerprint and manifest environment |
 | `modal_e5_generator_vs_coverage.py` | E5 Modal Pythia-LoRA five-arm runner: explicit smoke/development/confirmatory regimes and dry-run/inspect/execute actions; hard-locked confirmatory config and pinned runtime/model revisions; CPU image/Volume preflight, status scan, and model prefetch; bounded, leased, partial-failure-safe, resumable, longest-first per-cell L4 dispatch through a V2 result Volume; train-support-only correct/wrong generator consistency, weighted pair-microbatch backpropagation for 410m/L4 memory safety, orbit and coverage references, novel-shift/paraphrase transport, exposure ledgers, and spectral-mass-normalized LoRA patching |
+| `e6_core.py` | E6 dependency-free protocol scaffold: frozen six-round SC/CS/GT/A-ref reward selection; reward-neutral candidates and truth-label-free typed CS patch signals; strict transport eligibility; matched pool digests and candidate/selection counts; and namespaced SHA-256 seeds |
+| `e6_analysis.py` | E6 manifest and analysis scaffold: exact 108-cell confirmatory manifests; strict frozen-config, metric-range, top-half selection-volume, trajectory/resume, integrity, and matched-pool audits; and frozen G1–G5 aggregate verdicts. No Modal runner or result is claimed yet |
 | `results/e1_concern_weighted.{json,md}` | E1 summary + per-cell provenance |
 | `results/e1_misspecification_variance.{json,md}` | E1 follow-up aggregate draws, quantiles/CI, assumption audit, and randomization verdict |
 | `results/e2_e3_neural.{json,md}` | E2/E3 summary + per-cell provenance |
@@ -255,6 +257,7 @@ Run:
 python3 -m experiments.commitment_surface.run_e1
 python3 -m experiments.commitment_surface.e1_misspecification_variance
 python3 -m experiments.commitment_surface.e2_e3_neural_sweep
+python3 -m unittest tests.test_commitment_surface_e6
 doppler --scope /Users/jawaun/superoptimizers run -- \
     uvx --python 3.12 --from modal modal run \
         experiments/commitment_surface/modal_e4_pythia_lora_v2.py \
