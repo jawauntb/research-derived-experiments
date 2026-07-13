@@ -203,9 +203,9 @@
         "experiments/commitment_surface/results/m4_suite_c_factorial_ablation_2026_07_09.md"
       ],
       "n_modal_entrypoints": 2,
-      "n_scripts": 7,
+      "n_scripts": 9,
       "paper": "papers/commitment_surface/paper.md",
-      "preregistration": "papers/commitment_surface/e2_e3_rank_normalized_patch_preregistration_2026-07-10.md",
+      "preregistration": "papers/commitment_surface/e7_selective_subspace_continual_learning_preregistration_2026-07-13.md",
       "verification_signals": [
         "**Strict gate verdict: FAIL.**",
         "Claim level: failed diagnostic gate; M4 remains a compression hypothesis.",

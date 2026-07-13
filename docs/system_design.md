@@ -311,6 +311,21 @@ run kinds are
 structurally barred from confirmatory analysis; `confirmatory` rejects any
 frozen-parameter drift before GPU allocation.
 
+E6 extends this operating model with dependency-free protocol and analysis
+layers in `experiments/commitment_surface/e6_core.py` and
+`experiments/commitment_surface/e6_analysis.py`. They freeze a six-round
+self-training ledger over SC, commitment-surface (CS), ground-truth ceiling,
+and frozen-reference arms. Candidate identity is reward-neutral; CS patch-CE
+and GT correctness use separate typed records, so the CS scoring interface has
+no truth-label field. SC and CS are planned against one candidate-pool digest
+and must expose the same candidate-pool count and select the same top-half
+volume each round. The protocol layer owns namespaced SHA-256 seed derivation;
+the analysis layer owns the exact 108-cell manifest, complete finite
+trajectory/resume checks, selection-volume and matched-pool audits, bounded
+metrics, and G1–G5 aggregate verdict. This is currently a CPU protocol scaffold
+only: no E6 Modal worker or GPU result is present, and non-confirmatory inputs
+cannot produce a scientific verdict.
+
 **Note:** The Doppler scope path is machine-specific; adapt on other hosts.
 
 ### 5.3 Local CPU / fixture paths
