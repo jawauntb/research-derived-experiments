@@ -247,8 +247,11 @@ rejects execution unless exactly one of `--dry-run`, `--inspect`, or
 mismatch, and every execution refuses to submit more missing GPU cells than
 the explicit `--max-gpu-cells` authorization.
 
-The grid is dispatched as 135 separately checkpointed L4 cells, capped at 12
-concurrent containers. Integrity-passing, finite cell payloads are keyed by a
+The grid is submitted as 135 independent, separately checkpointed L4 calls,
+capped at 12 concurrent containers. One detached remote orchestrator observes
+every spawned call through completion; Modal queues excess calls, so a local
+network disconnect does not cancel the remote workload. Integrity-passing,
+finite cell payloads are keyed by a
 manifest that includes exact package versions and immutable Pythia revisions,
 then stored in the V2 `commitment-surface-e5-results-v2` Modal Volume. There
 are no automatic L4 retries: after a cell failure, the partial artifact records

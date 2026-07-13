@@ -941,6 +941,38 @@ def run_cell(arg: dict[str, Any]) -> dict[str, Any]:
         _release_cell_lease(lease)
 
 
+@app.function(
+    image=CONTROL_IMAGE,
+    timeout=GPU_TIMEOUT_SECONDS,
+    memory=1024,
+)
+def dispatch_cells(args: list[dict[str, Any]]) -> list[dict[str, str]]:
+    """Keep spawned cells alive and observed from one remote orchestrator."""
+    calls = [run_cell.spawn(arg) for arg in args]
+    outcomes: list[dict[str, str]] = []
+    for arg, call in zip(args, calls):
+        try:
+            call.get()
+            outcomes.append(
+                {
+                    "cell_id": str(arg["cell_id"]),
+                    "function_call_id": call.object_id,
+                    "status": "completed",
+                }
+            )
+        except Exception as error:
+            outcomes.append(
+                {
+                    "cell_id": str(arg["cell_id"]),
+                    "function_call_id": call.object_id,
+                    "status": "failed",
+                    "error_type": type(error).__name__,
+                    "error": str(error),
+                }
+            )
+    return outcomes
+
+
 @app.local_entrypoint()
 def main(
     sizes: str = "70m,160m,410m",
@@ -1215,7 +1247,7 @@ def main(
         payload["operation"]["phase"] = "gpu_dispatch"
         _write_payload(out_path, payload)
         try:
-            mapped = list(run_cell.map(args, return_exceptions=True))
+            dispatch_outcomes = dispatch_cells.remote(args)
         except Exception as error:
             _record_phase_failure(
                 out_path,
@@ -1225,19 +1257,12 @@ def main(
             )
             raise
         launch_failures = [
-            {
-                "cell_id": str(arg["cell_id"]),
-                "launch_id": launch_id,
-                "error_type": type(result).__name__,
-                "error": str(result),
-            }
-            for arg, result in zip(args, mapped)
-            if not isinstance(result, dict)
+            outcome for outcome in dispatch_outcomes
+            if outcome["status"] == "failed"
         ]
-        fresh_cells = [
-            result
-            for result in mapped
-            if isinstance(result, dict)
+        launch["submission_mode"] = "remote_orchestrated_spawn"
+        launch["submitted_function_call_ids"] = [
+            outcome["function_call_id"] for outcome in dispatch_outcomes
         ]
         launch["failures"] = launch_failures
         payload["operation"]["phase"] = "gpu_dispatch_complete"

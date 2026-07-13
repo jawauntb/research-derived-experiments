@@ -291,7 +291,11 @@ remain under `artifacts/commitment_surface/`; only a public-safe summary is
 committed after a successful run. E5 maps one cell per L4 call, caps the worker
 pool at 12 containers, and checkpoints finite, integrity-passing results by a
 deterministic manifest ID in the V2 `commitment-surface-e5-results-v2` Modal
-Volume. Candidate evaluation is chunked, and weighted pair-microbatch
+Volume. One detached remote orchestrator submits each missing cell as an
+independent spawned function and observes every call through completion;
+Modal's function-level container cap queues excess cells, so local client loss
+cannot cancel the remote workload.
+Candidate evaluation is chunked, and weighted pair-microbatch
 backpropagation preserves the frozen consistency objective without retaining
 the full graph on 410m/L4. The manifest binds exact Python-package versions and immutable Pythia
 snapshot revisions; the full 43-package lock file is part of the source

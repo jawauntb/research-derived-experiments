@@ -37,8 +37,10 @@ The hardened path now:
    modulus/seed strata; the wrong control changes only the support-preserving
    non-cyclic generator relation.
 3. Builds a deterministic 135-cell manifest and dispatches one L4 function per
-   cell, with at most 12 containers active concurrently. L4 calls do not retry
-   automatically; the six-hour timeout is therefore a one-attempt ceiling.
+   cell from one detached remote orchestrator, with at most 12 containers active
+   concurrently. The orchestrator observes every spawned call through
+   completion, so a local disconnect cannot cancel the child calls. L4 calls do
+   not retry automatically; the six-hour timeout is therefore a one-attempt ceiling.
    Candidate evaluation is chunked and the consistency objective is
    backpropagated as the same weighted mean one pair-microbatch at a time, so
    410m cells do not retain the full consistency graph on L4 memory.
@@ -72,10 +74,10 @@ The hardened path now:
 
 No-compute validation:
 
-- Final dry-run: <https://modal.com/apps/generalintelligencecompany/main/ap-Hx2Om89zykjdD9Lbft7E9A>
-- Status-only inspection: <https://modal.com/apps/generalintelligencecompany/main/ap-pHhEE1JplOciZ7gFq2ilTL>
-- Manifest ID: `e1db57affdf272b5e4f017641ecdcc54b06d7b7921465e1d116bd9c83dea497e`
-- Implementation fingerprint: `63479e2e0a6a70b7304f287141dae8960d139a0285307dff687a4472bfb2c683`.
+- Final dry-run: <https://modal.com/apps/generalintelligencecompany/main/ap-CxgU8sJEniIgTTRAOmBBjp>
+- Status-only inspection: <https://modal.com/apps/generalintelligencecompany/main/ap-QtdreeAY52XaT8KmklgjZF>
+- Manifest ID: `f7af4f65f5a402886002dac9a65faaefd8e6ffc845efe6ebce8a20c9bc710e9e`
+- Implementation fingerprint: `32bfe0fd782ebb1e88cda7ae39c7e1d81dd4b230e3c61a08195a502fb7a5a473`.
 - Exact cell count: 135.
 - Frozen-config mismatches: none.
 - CPU pinned-image/Volume preflight: passed; all 43 resolved package versions
@@ -89,8 +91,14 @@ Modal rejected the reload because Transformers held cache files open; the local
 client subsequently lost DNS and canceled the map. The unsafe worker reload was
 removed without changing the frozen scientific parameters, which necessarily
 changed the implementation fingerprint and therefore the manifest ID. The
-replacement dry-run and inspection above passed, with no old-manifest result
-reused or relabeled.
+replacement map then demonstrated a second orchestration defect: local client
+loss canceled the ephemeral mapped calls before the longest-first 410m cells
+could checkpoint. A spawn-only attempt was also rejected because unobserved
+children do not outlive ephemeral app shutdown. The final runner uses one
+detached remote orchestrator that both spawns and observes every child call.
+A one-cell Pythia-70m execution completed and checkpointed through that exact
+path (<https://modal.com/apps/generalintelligencecompany/main/ap-29YTIJ2WXdIuSB71Bbrifa>).
+The final dry-run above passed, with no old-manifest result reused or relabeled.
 
 ## Resource and cost review
 
