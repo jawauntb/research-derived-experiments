@@ -45,6 +45,10 @@ gate. E4 is directionally decisive but its strict gate did not pass. One confoun
 pre-registered for a follow-up: cyclic-orbit augmentation places correctly
 labeled examples on held-out deployment support, so E4 does not yet
 separate *generator learning* from *labeled orbit coverage* (Section 6.5).
+<!-- E5_ABSTRACT_START -->
+The exact 135-cell E5 confirmatory grid is running; no E5 mechanism verdict is
+reported until all cells pass the frozen integrity gate.
+<!-- E5_ABSTRACT_END -->
 We recover the old-frame positives — cyclic and dihedral
 100%-vs-0% weakness sweeps — as the boundary case where the probe group and
 deployment generator coincide. A pre-registered 2^3 ablation of the proposed
@@ -399,6 +403,13 @@ linked below.
 - **E4 pass (old frame).** Arm A OOD ≥ 0.5, ρ(weakness, OOD) ≥ +0.5.
 - **Anti-cheat (all E).** Wrong-group patch-CE (E2/E3) or wrong-group
   compatibility (E4) must not itself explain OOD.
+- **E5 post-hoc severe follow-up.** The timestamped `PLAN.md` addendum freezes
+  an exact 135-cell Pythia grid crossing train-support-only generator
+  regularization, E4-style orbit labels, wrong-generator regularization,
+  coverage-matched labels, and readout. The mechanism verdict additionally
+  requires exact-grid integrity, disjoint novel shifts, prompt transport, and
+  spectral-mass-normalized patching. Coverage, generator, mixed, and kill/draw
+  outcomes are adjudicated only after all cells pass.
 - **M4 factorial addendum.** In the existing Suite C workflow, all-on must
   pass in at least 6/8 paired seeds; every single knockout must pass in at
   most 2/8 with a paired drop at least 0.50; each main effect must be at
@@ -431,6 +442,10 @@ from each experiment's committed JSON.
 
 <!-- Filled from artifacts/commitment_surface/e4_pythia_lora_v2.json (or
      smoke) via scripts/write_commitment_surface_results.py -->
+
+### 5.5 E5 — Generator learning vs labeled orbit coverage
+
+<!-- Filled from the committed public-safe E5 result after exact-grid integrity. -->
 
 ## 6. Discussion
 
@@ -638,18 +653,12 @@ is materially weakened if any of:
   augmentation (2);
 - patch-CE fails to predict transfer to a novel commitment surface.
 
-Until this follow-up runs, the E4 claim should be read as: *train-time
-aligned intervention recovers external OOD where readout selection does
-not* — with the mechanism (transportable generator vs labeled coverage)
-not yet isolated. **E5 status at this revision: the Pythia-70m/n=13/one-seed
-20-epoch validation smoke passed its integrity gate.** G-reg recorded zero
-held-out truth-label exposures, B-ref/Cov's precomputed ledgers matched at 27
-held-out events over six unique inputs, novel shifts were disjoint, and the
-50% spectral-mass patch tolerance passed. Descriptively, G-reg/Cov/A-ref
-canonical OOD accuracies were 0.000/0.286/0.000; this undertrained one-seed
-smoke omits B-ref and W-reg and is explicitly not confirmatory evidence.
-The generator-vs-coverage mechanism therefore remains pending, and E4's claim
-boundary is unchanged.
+<!-- E5_CLAIM_UPDATE_START -->
+Until the exact E5 grid completes, the E4 claim remains: *train-time aligned
+intervention recovers external OOD where readout selection does not* — with
+the mechanism (transportable generator vs labeled coverage) not yet isolated.
+The validation smoke passed integrity but is not confirmatory evidence.
+<!-- E5_CLAIM_UPDATE_END -->
 
 ## 7. Conclusion
 

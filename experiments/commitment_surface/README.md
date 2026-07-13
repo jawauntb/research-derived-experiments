@@ -279,6 +279,19 @@ Status: the 70m/n=13/one-seed validation smoke passed all integrity gates; see
 confirmatory-pending, and no mechanism verdict is claimed. The no-compute
 launch audit is recorded in `results/e5_launch_readiness_2026_07_10.md`.
 
+After the exact grid completes, validate and export the public result before
+rebuilding the paper:
+
+```bash
+python3 scripts/export_commitment_surface_e5_results.py
+python3 scripts/make_commitment_surface_figures.py
+python3 scripts/build_commitment_surface_pdf.py
+```
+
+The exporter rejects incomplete or integrity-failed grids, strips raw support
+and model-internal fields, writes `results/e5_generator_vs_coverage.{json,md}`,
+and updates only the marked E5 abstract/discussion blocks.
+
 ### E6 — Commitment-Surface Reward Self-Training
 
 The frozen E6 preregistration is

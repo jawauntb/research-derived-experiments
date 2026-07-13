@@ -253,6 +253,7 @@ of `confirmatory_ready` rather than inferring readiness from per-arm counts.
 | `results/e2_e3_rank_normalized_patch_2026_07_10.{json,md}` | Frozen-gate aggregate: strict PASS, 77.5% width retention, group-specific subspace effect |
 | `results/e5_smoke_summary.md` | Public-safe one-seed harness-validation report; integrity pass, explicitly non-confirmatory |
 | `results/e5_launch_readiness_2026_07_10.md` | Operational no-compute audit: exact 135-cell manifest, dispatch/checkpoint design, resource formula, and development timing-calibration boundary; no scientific result |
+| `results/e5_generator_vs_coverage.{json,md}` | Generated public-safe confirmatory artifact: exact-grid audit, frozen mechanism verdict, per-arm means, and compact metrics for all 135 cells |
 | `results/e6_smoke_readiness_2026_07_13.md`, `results/e6_smoke_readiness.json` | Public-safe negative L4 readiness record: pinned preflight pass, round-1 CS eligibility 8/104 versus 52 required, no completed trajectory, and development/confirmatory dispatch withheld |
 | `results/m4_suite_c_factorial_ablation_2026_07_09.{json,md}` | M4 public-safe factorial summary: strict FAIL; reopen necessary, allocate/cool terminal-null |
 
@@ -492,7 +493,8 @@ Raw outputs stay under `artifacts/` until summarized.
 | `paperkit.py` | Shared reportlab/matplotlib PDF helpers (library) |
 | `render_paper_pdf.py` | Markdown → PDF via markdown-pdf (`--in`, `--out`, `--title`, …) |
 | `export_commitment_surface_e4_appendix.py` | Raw E4 sweep → compact public-safe 108-cell/aggregate JSON (`--input`, `--output`) |
-| `build_commitment_surface_pdf.py` | Commitment-surface reframe paper PDF with repeating-header Appendix A.2 tables (E1–E4); synchronizes both PDF destinations |
+| `export_commitment_surface_e5_results.py` | Complete raw E5 grid → validated public-safe JSON/Markdown plus bounded abstract/discussion claim update |
+| `build_commitment_surface_pdf.py` | Commitment-surface reframe paper PDF with repeating-header Appendix A.2 tables (E1–E5); synchronizes both PDF destinations |
 | `build_weakness_pdf.py` | Flagship weakness→OOD PDF |
 | `build_gridcell_pdf.py` | Paper A PDF |
 | `build_paperB_pdf.py` | Paper B reward-deformation PDF |

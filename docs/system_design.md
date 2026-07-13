@@ -288,7 +288,11 @@ its split/exposure construction in `e5_core.py`. G-reg and W-reg receive truth
 labels only for original train support; B-ref and Cov are matched on unique
 held-out labeled inputs and held-out exposure events. Raw E5 ledgers and metrics
 remain under `artifacts/commitment_surface/`; only a public-safe summary is
-committed after a successful run. E5 maps one cell per L4 call, caps the worker
+committed after a successful run. The E5 exporter refuses incomplete or
+integrity-failed grids, strips support/model-internal fields, writes compact
+JSON and Markdown, and updates only marked paper claim blocks. The PDF builder
+then adds the confirmatory table and all 135 compact appendix rows. E5 maps one
+cell per L4 call, caps the worker
 pool at 12 containers, and checkpoints finite, integrity-passing results by a
 deterministic manifest ID in the V2 `commitment-surface-e5-results-v2` Modal
 Volume. One detached remote orchestrator submits each missing cell as an
