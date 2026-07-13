@@ -56,9 +56,11 @@ The hardened path now:
 6. Builds the pinned image and proves a CPU-only V2 Volume write/read round trip
    during `--dry-run`, then scans checkpoints in a CPU control function before
    allocating GPUs. A separate CPU function prefetches each needed immutable
-   Pythia snapshot once, and missing largest-model/regularizer cells dispatch
-   first. Completed cells do not consume L4 slots, and available output is
-   reconstructed in frozen manifest order.
+   Pythia snapshot once. Fresh workers consume the committed container-start
+   cache snapshot without reloading the shared Hugging Face Volume while model
+   files may be open. Missing largest-model/regularizer cells dispatch first.
+   Completed cells do not consume L4 slots, and available output is reconstructed
+   in frozen manifest order.
 7. Collects mapped-cell exceptions instead of discarding successful siblings.
    A partial artifact names every failure and missing cell; the unchanged
    command is the explicit retry/resume mechanism.
@@ -70,16 +72,25 @@ The hardened path now:
 
 No-compute validation:
 
-- Final dry-run: <https://modal.com/apps/generalintelligencecompany/main/ap-un2ddkfp3iZJAPl5K0basK>
-- Status-only inspection: <https://modal.com/apps/generalintelligencecompany/main/ap-WS1ZF1JCRLc8CFhn7LhSaX>
-- Manifest ID: `836df5fff3492f5908b52160bc7e1eaa62f3e3aeff16141a1b050b2c9a8d58c8`
-- Implementation fingerprint: `cacaa889ca23c189cc934c41985fc69d86aea8449b906328f48d909eed4c936f`.
+- Final dry-run: <https://modal.com/apps/generalintelligencecompany/main/ap-Hx2Om89zykjdD9Lbft7E9A>
+- Status-only inspection: <https://modal.com/apps/generalintelligencecompany/main/ap-pHhEE1JplOciZ7gFq2ilTL>
+- Manifest ID: `e1db57affdf272b5e4f017641ecdcc54b06d7b7921465e1d116bd9c83dea497e`
+- Implementation fingerprint: `63479e2e0a6a70b7304f287141dae8960d139a0285307dff687a4472bfb2c683`.
 - Exact cell count: 135.
 - Frozen-config mismatches: none.
 - CPU pinned-image/Volume preflight: passed; all 43 resolved package versions
   matched the lock and the V2 result Volume write/read round trip succeeded.
 - Checkpoint inspection: 0 reusable, 0 invalid, 135 missing, 0 active leases.
 - Remote GPU training cells executed: 0.
+
+The first confirmatory execution attempt exposed an operational defect before
+producing a reusable cell: workers concurrently called `hf_cache.reload()` and
+Modal rejected the reload because Transformers held cache files open; the local
+client subsequently lost DNS and canceled the map. The unsafe worker reload was
+removed without changing the frozen scientific parameters, which necessarily
+changed the implementation fingerprint and therefore the manifest ID. The
+replacement dry-run and inspection above passed, with no old-manifest result
+reused or relabeled.
 
 ## Resource and cost review
 
