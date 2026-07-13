@@ -9,7 +9,7 @@
 - **Reproduce (one command):** `python scripts/regen.py commitment_surface`
 
 ## Verification
-- Pre-registration: `papers/commitment_surface/e2_e3_rank_normalized_patch_preregistration_2026-07-10.md`
+- Pre-registration: `papers/commitment_surface/e7_selective_subspace_continual_learning_preregistration_2026-07-13.md`
 - Result reports (11):
   - `experiments/commitment_surface/results/e1_concern_weighted.md`
   - `experiments/commitment_surface/results/e1_misspecification_variance.md`
