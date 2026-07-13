@@ -70,6 +70,27 @@ supervised exposure counts match. `ε = 0.05` (frozen E5 patch-CE threshold).
   namespaces `{"split","candidate","generation","subspace","transport"}`.
   Confirmatory `seed_slot ∈ {0,1,2}` (≥3 seeds per `(size,n)` cell).
 
+### Post-smoke record of pre-run implementation resolution
+
+This explanatory addendum was written after the readiness smoke. The following
+underspecified runner details were nevertheless resolved in code and bound into
+the implementation fingerprint before the first E6 candidate pool was
+generated. Recording them here does not retroactively change any reward,
+threshold, gate, or claim boundary above.
+
+- All arms begin from one E5-matched supervised bootstrap on `S_train` for 160
+  epochs. The resulting LoRA adapter is copied byte-for-byte to SC, CS, and GT;
+  A-ref is that same adapter frozen at round 0.
+- The shared current-adapter proposer is a symmetric `paired_half_mix`. For each
+  input and round, frozen candidate order alternates four draws from the current
+  SC adapter with four draws from the current CS adapter. The combined eight-draw
+  pool is hashed once and handed unchanged to both arms. This avoids privileging
+  either diverged adapter while retaining the preregistered `G=8` pool size.
+- One L4 worker owns a complete `(size,n,seed_slot)` stratum so paired adapter
+  state and candidate pools cannot cross process boundaries. It emits separate
+  analytical cells for the requested arms; the confirmatory grid therefore has
+  108 analytical cells but 27 coupled GPU strata.
+
 ## Frozen analysis
 
 Per round `r` and arm, record: canonical `S_ood` accuracy, paraphrase `S_ood`

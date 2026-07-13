@@ -49,10 +49,12 @@ E6_ROUND_INTEGRITY_FIELDS = (
     "reward_leakage_pass",
     "patch_integrity_pass",
 )
-E6_RUN_PROTOCOL_VERSION = "e6-commitment-reward-v1-20260713"
+E6_RUN_PROTOCOL_VERSION = "e6-commitment-reward-v2-20260713"
 E6_BASE_SEED = 20260713
 E6_ROUNDS = 6
+E6_BOOTSTRAP_EPOCHS = 160
 E6_GENERATIONS_PER_INPUT = 8
+E6_CANDIDATE_PROPOSER = "paired_half_mix"
 E6_SELECTION_FRACTION = 0.5
 E6_PATCH_CE_THRESHOLD = 0.05
 E6_COLLAPSE_TOLERANCE = 0.05
@@ -103,7 +105,9 @@ E6_CONFIRMATORY_PARAMETERS: dict[str, object] = {
     "rounds": E6_ROUNDS,
     "train_frac": 0.5,
     "train_shift_count": 3,
+    "bootstrap_epochs": E6_BOOTSTRAP_EPOCHS,
     "generations_per_input": E6_GENERATIONS_PER_INPUT,
+    "candidate_proposer": E6_CANDIDATE_PROPOSER,
     "generation_temperature": 0.8,
     "round_epochs": 40,
     "selection_fraction": E6_SELECTION_FRACTION,
@@ -131,7 +135,9 @@ class E6Config:
     rounds: int = E6_ROUNDS
     train_frac: float = 0.5
     train_shift_count: int = 3
+    bootstrap_epochs: int = E6_BOOTSTRAP_EPOCHS
     generations_per_input: int = E6_GENERATIONS_PER_INPUT
+    candidate_proposer: str = E6_CANDIDATE_PROPOSER
     generation_temperature: float = 0.8
     round_epochs: int = 40
     selection_fraction: float = E6_SELECTION_FRACTION
@@ -166,8 +172,14 @@ class E6Config:
             raise ValueError("train_frac must be strictly between zero and one")
         if not 1 <= self.train_shift_count < self.modulus - 1:
             raise ValueError("train_shift_count must leave a novel shift")
-        if self.generations_per_input < 2:
-            raise ValueError("generations_per_input must be at least two")
+        if self.bootstrap_epochs < 1:
+            raise ValueError("bootstrap_epochs must be positive")
+        if self.generations_per_input < 2 or self.generations_per_input % 2:
+            raise ValueError("generations_per_input must be an even value of at least two")
+        if self.candidate_proposer != E6_CANDIDATE_PROPOSER:
+            raise ValueError(
+                f"candidate_proposer must be {E6_CANDIDATE_PROPOSER}"
+            )
         if self.generation_temperature <= 0.0:
             raise ValueError("generation_temperature must be positive")
         if self.round_epochs < 1:

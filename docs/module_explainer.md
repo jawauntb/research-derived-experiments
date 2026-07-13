@@ -69,7 +69,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_gauge_fixed_concern_transport_*.py` | Gauge-fixed transport + PDF |
 | `test_external_contact_p1_lora.py` | External-contact LoRA metrics |
 | `test_commitment_surface_appendix.py` | Public-safe E4 appendix export, metric retention, raw-field omission |
-| `test_commitment_surface_core.py`, `test_commitment_surface_e5.py`, `test_commitment_surface_e6.py` | Commitment-surface arithmetic; E5 split/leakage/coverage/novel-shift gates; and E6 six-round rewards, matched pools, deterministic seeds, manifests, integrity, resume, and G1–G5 verdict contracts |
+| `test_commitment_surface_core.py`, `test_commitment_surface_e5.py`, `test_commitment_surface_e6.py` | Commitment-surface arithmetic; E5 split/leakage/coverage/novel-shift gates; and E6 six-round rewards, symmetric proposer scheduling, coupled L4 strata, matched pools, deterministic seeds, manifests, integrity, resume, and G1–G5 verdict contracts |
 | `test_publication_guard.py` | Secret-signature detection and non-secret fixture naming |
 | `test_semantic_concern_summary.py` | Semantic concern summarizer |
 | `test_commitment_surface_core.py`, `test_e1_misspecification_variance.py` | E1 concern selectors plus conditional-randomization reconstruction, seed, assignment, and statistics contracts |
@@ -241,7 +241,11 @@ of `confirmatory_ready` rather than inferring readiness from per-arm counts.
 | `e5_requirements.txt` | Fully pinned 43-package Linux/Python runtime lock for the E5 training and CPU preflight image; included in the implementation fingerprint and manifest environment |
 | `modal_e5_generator_vs_coverage.py` | E5 Modal Pythia-LoRA five-arm runner: explicit smoke/development/confirmatory regimes and dry-run/inspect/execute actions; hard-locked confirmatory config and pinned runtime/model revisions; CPU image/Volume preflight, status scan, and model prefetch; bounded, leased, partial-failure-safe, resumable, longest-first per-cell L4 submission observed by one detached remote orchestrator and checkpointed through a V2 result Volume; fresh workers consume the committed prefetch snapshot without an unsafe concurrent cache reload; train-support-only correct/wrong generator consistency, weighted pair-microbatch backpropagation for 410m/L4 memory safety, orbit and coverage references, novel-shift/paraphrase transport, exposure ledgers, and spectral-mass-normalized LoRA patching |
 | `e6_core.py` | E6 dependency-free protocol scaffold: frozen six-round SC/CS/GT/A-ref reward selection; reward-neutral candidates and truth-label-free typed CS patch signals; strict transport eligibility; matched pool digests and candidate/selection counts; and namespaced SHA-256 seeds |
-| `e6_analysis.py` | E6 manifest and analysis scaffold: exact 108-cell confirmatory manifests; strict frozen-config, metric-range, top-half selection-volume, trajectory/resume, integrity, and matched-pool audits; and frozen G1–G5 aggregate verdicts. No Modal runner or result is claimed yet |
+| `e6_analysis.py` | E6 manifest and analysis scaffold: exact 108-cell confirmatory manifests; strict frozen-config, metric-range, top-half selection-volume, trajectory/resume, integrity, and matched-pool audits; and frozen G1–G5 aggregate verdicts |
+| `e6_runtime.py` | Pure E6 execution planner: frozen paired-half current-adapter proposer, candidate support, coupled arm-cell strata, run-kind arm validation, L4 resource constants, launch ordering, and lease validation |
+| `e6_training.py` | E6 GPU stratum implementation: shared E5-matched bootstrap, symmetric current-SC/current-CS generation, typed reward scoring, strict transport eligibility, matched pseudo-label fine-tuning, per-round patch/equivariance/coverage measurements, and integrity-rich cell payloads |
+| `e6_requirements.txt` | Fully pinned 43-package E6 Linux/Python runtime lock used by CPU preflight and L4 training images and included in the implementation fingerprint |
+| `modal_e6_commitment_reward.py` | Guarded E6 Modal runner: exact dry-run/inspect/execute actions, immutable Pythia revisions, CPU image/Volume preflight, separate result Volume and fail-closed stratum leases, exact returned-cell validation, bounded checkpointed L4 dispatch, resumable per-arm cells, nonzero exit on worker or selected-checkpoint failures, and confirmatory manifest acknowledgement |
 | `results/e1_concern_weighted.{json,md}` | E1 summary + per-cell provenance |
 | `results/e1_misspecification_variance.{json,md}` | E1 follow-up aggregate draws, quantiles/CI, assumption audit, and randomization verdict |
 | `results/e2_e3_neural.{json,md}` | E2/E3 summary + per-cell provenance |
@@ -249,6 +253,7 @@ of `confirmatory_ready` rather than inferring readiness from per-arm counts.
 | `results/e2_e3_rank_normalized_patch_2026_07_10.{json,md}` | Frozen-gate aggregate: strict PASS, 77.5% width retention, group-specific subspace effect |
 | `results/e5_smoke_summary.md` | Public-safe one-seed harness-validation report; integrity pass, explicitly non-confirmatory |
 | `results/e5_launch_readiness_2026_07_10.md` | Operational no-compute audit: exact 135-cell manifest, dispatch/checkpoint design, resource formula, and development timing-calibration boundary; no scientific result |
+| `results/e6_smoke_readiness_2026_07_13.md`, `results/e6_smoke_readiness.json` | Public-safe negative L4 readiness record: pinned preflight pass, round-1 CS eligibility 8/104 versus 52 required, no completed trajectory, and development/confirmatory dispatch withheld |
 | `results/m4_suite_c_factorial_ablation_2026_07_09.{json,md}` | M4 public-safe factorial summary: strict FAIL; reopen necessary, allocate/cool terminal-null |
 
 Run:
@@ -268,6 +273,12 @@ doppler --scope /Users/jawaun/superoptimizers run -- \
         --sizes 70m --ns 13 --seeds 1 --arms G-reg,Cov,A-ref --epochs 20 \
         --run-kind smoke --execute --max-gpu-cells 3 \
         --out artifacts/commitment_surface/e5_smoke.json
+doppler --scope /Users/jawaun/superoptimizers run -- \
+    uvx --python 3.12 --from modal==1.2.6 modal run \
+        experiments/commitment_surface/modal_e6_commitment_reward.py \
+        --sizes 70m,160m,410m --ns 13,17,23 --seed-slots 1 \
+        --arms SC,CS,GT,A-ref --run-kind development --dry-run \
+        --out artifacts/commitment_surface/e6_development.json
 ```
 
 Use `--run-kind confirmatory --dry-run` with the exact full-grid command in the
@@ -275,6 +286,9 @@ experiment README to validate all 135 cells without GPU work, and `--inspect`
 to report checkpoints and leases without dispatch. Only explicit `--execute`
 with the expected manifest ID and a sufficient `--max-gpu-cells` authorization
 can produce a confirmatory verdict.
+E6 follows the same action discipline but counts coupled GPU strata in
+`--max-gpu-cells`; its current smoke is readiness-blocked, so further execution
+requires a newly frozen design rather than replaying the failed objective.
 
 Rebuild the paper PDF:
 
