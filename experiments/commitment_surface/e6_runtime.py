@@ -204,6 +204,42 @@ def build_execution_strata(
     return tuple(strata)
 
 
+def validate_stratum_result(
+    result: object,
+    *,
+    expected_cell_ids: Sequence[str],
+) -> tuple[dict[str, Any], ...]:
+    expected = tuple(expected_cell_ids)
+    if not expected or len(expected) != len(set(expected)):
+        raise ValueError("expected stratum cell IDs must be nonempty and unique")
+    if not isinstance(result, list):
+        raise TypeError("stratum result must be a list of cell payloads")
+    cells: list[dict[str, Any]] = []
+    observed: list[str] = []
+    for cell in result:
+        if not isinstance(cell, Mapping):
+            raise TypeError("stratum result cells must be mappings")
+        if any(not isinstance(key, str) for key in cell):
+            raise ValueError("stratum result cell keys must be strings")
+        cell_id = cell.get("cell_id")
+        if not isinstance(cell_id, str):
+            raise ValueError("stratum result cells require string cell_id values")
+        observed.append(cell_id)
+        cells.append(
+            {
+                key: value
+                for key, value in cell.items()
+                if isinstance(key, str)
+            }
+        )
+    if tuple(observed) != expected:
+        raise ValueError(
+            "stratum result cell IDs must exactly match the requested order: "
+            f"expected {expected}, observed {tuple(observed)}"
+        )
+    return tuple(cells)
+
+
 def prioritize_strata(
     strata: Sequence[Mapping[str, object]],
 ) -> tuple[dict[str, Any], ...]:

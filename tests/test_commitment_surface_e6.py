@@ -36,6 +36,7 @@ from experiments.commitment_surface.e6_runtime import (
     candidate_input_ids,
     paired_proposer_schedule,
     prioritize_strata,
+    validate_stratum_result,
     validate_runtime_arms,
 )
 
@@ -136,6 +137,34 @@ class CommitmentSurfaceE6Test(unittest.TestCase):
         ordered = prioritize_strata(strata)
         self.assertEqual(ordered[0]["size"], "410m")
         self.assertEqual(ordered[-1]["size"], "70m")
+
+    def test_runner_requires_exact_stratum_result_cell_ids(self) -> None:
+        expected = ("cell-SC", "cell-CS", "cell-A-ref")
+        result = [{"cell_id": cell_id, "integrity_pass": True} for cell_id in expected]
+
+        validated = validate_stratum_result(
+            result,
+            expected_cell_ids=expected,
+        )
+
+        self.assertEqual(tuple(cell["cell_id"] for cell in validated), expected)
+        for invalid in (
+            [],
+            result[:-1],
+            [result[0], result[0], result[2]],
+            [result[1], result[0], result[2]],
+        ):
+            with self.subTest(invalid=invalid):
+                with self.assertRaisesRegex(ValueError, "exactly match"):
+                    validate_stratum_result(
+                        invalid,
+                        expected_cell_ids=expected,
+                    )
+        with self.assertRaisesRegex(TypeError, "list"):
+            validate_stratum_result(
+                RuntimeError("worker failed"),
+                expected_cell_ids=expected,
+            )
 
     def test_candidate_inputs_cover_ood_and_novel_shift_images(self) -> None:
         inputs = candidate_input_ids(

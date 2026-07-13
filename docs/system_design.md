@@ -318,9 +318,11 @@ run kinds are
 structurally barred from confirmatory analysis; `confirmatory` rejects any
 frozen-parameter drift before GPU allocation.
 
-E6 extends this operating model with dependency-free protocol and analysis
-layers in `experiments/commitment_surface/e6_core.py` and
-`experiments/commitment_surface/e6_analysis.py`. They freeze a six-round
+E6 extends this operating model with dependency-free protocol, analysis, and
+runtime-planning layers in `experiments/commitment_surface/e6_core.py`,
+`e6_analysis.py`, and `e6_runtime.py`, plus an isolated GPU implementation in
+`e6_training.py` and the guarded `modal_e6_commitment_reward.py` entrypoint.
+They freeze a six-round
 self-training ledger over SC, commitment-surface (CS), ground-truth ceiling,
 and frozen-reference arms. Candidate identity is reward-neutral; CS patch-CE
 and GT correctness use separate typed records, so the CS scoring interface has
@@ -329,9 +331,21 @@ and must expose the same candidate-pool count and select the same top-half
 volume each round. The protocol layer owns namespaced SHA-256 seed derivation;
 the analysis layer owns the exact 108-cell manifest, complete finite
 trajectory/resume checks, selection-volume and matched-pool audits, bounded
-metrics, and G1–G5 aggregate verdict. This is currently a CPU protocol scaffold
-only: no E6 Modal worker or GPU result is present, and non-confirmatory inputs
-cannot produce a scientific verdict.
+metrics, and G1–G5 aggregate verdict. One L4 worker owns each coupled
+`(size,n,seed_slot)` stratum and alternates four current-SC with four current-CS
+draws per input before hashing one shared pool. CPU preflight, immutable model
+revisions, a pinned 43-package image, atomic stratum leases, and per-cell Volume
+checkpoints fail closed before scientific analysis. E6 never reclaims an
+expired lease automatically because Modal Dict does not expose
+compare-and-delete; an operator must inspect a stale record and clear it only
+after confirming the prior worker has ended.
+
+The first 70m/n=13 L4 smoke passed infrastructure preflight but stopped at the
+frozen round-1 CS eligibility gate: 8 of 104 candidates survived both patch-CE
+thresholds while matched top-half exposure required 52. No trajectory or
+scientific cell was emitted; development and confirmatory dispatch remain
+withheld. The negative readiness artifact is
+`results/e6_smoke_readiness_2026_07_13.md`.
 
 **Note:** The Doppler scope path is machine-specific; adapt on other hosts.
 

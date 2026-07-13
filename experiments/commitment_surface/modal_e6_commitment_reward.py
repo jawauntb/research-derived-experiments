@@ -38,6 +38,7 @@ from experiments.commitment_surface.e6_runtime import (
     build_execution_strata,
     lease_record_is_active,
     prioritize_strata,
+    validate_stratum_result,
     validate_runtime_arms,
 )
 modal = importlib.import_module("modal")
@@ -158,15 +159,18 @@ def _acquire_stratum_lease(
     if e6_stratum_leases.put(key, record, skip_if_exists=True):
         return record
     existing = e6_stratum_leases.get(key)
-    if (
-        isinstance(existing, dict)
-        and float(existing.get("expires_at_unix", float("inf"))) <= now
-        and _pop_lease_if_present(key) == existing
-        and e6_stratum_leases.put(key, record, skip_if_exists=True)
+    if existing is None and e6_stratum_leases.put(
+        key, record, skip_if_exists=True
     ):
         return record
+    state = (
+        "active"
+        if lease_record_is_active(existing, now_unix=now)
+        else "stale or malformed"
+    )
     raise RuntimeError(
-        f"stratum already has an active lease: {stratum_id}; inspect or retry later"
+        f"stratum already has an {state} lease: {stratum_id}; "
+        "inspect before manual cleanup or retry"
     )
 
 
@@ -615,9 +619,7 @@ def main(
             )
         )
         for stratum_arg, result in zip(args, mapped):
-            if isinstance(result, list) and all(isinstance(cell, dict) for cell in result):
-                fresh_cells.extend(result)
-            else:
+            if isinstance(result, BaseException):
                 launch_failures.append(
                     {
                         "stratum_id": str(stratum_arg["stratum_id"]),
@@ -626,6 +628,23 @@ def main(
                         "error": str(result),
                     }
                 )
+                continue
+            try:
+                validated = validate_stratum_result(
+                    result,
+                    expected_cell_ids=tuple(stratum_arg["cell_ids"]),
+                )
+            except (TypeError, ValueError) as error:
+                launch_failures.append(
+                    {
+                        "stratum_id": str(stratum_arg["stratum_id"]),
+                        "launch_id": launch_id,
+                        "error_type": type(error).__name__,
+                        "error": str(error),
+                    }
+                )
+            else:
+                fresh_cells.extend(validated)
 
     final_scan = inspect_cached_cells.remote(
         {
@@ -636,9 +655,28 @@ def main(
     )
     checkpointed_cells = final_scan.pop("reusable_cells")
     cells_by_id = {
-        str(cell["cell_id"]): cell
-        for cell in [*cached_cells, *fresh_cells, *checkpointed_cells]
+        str(cell["cell_id"]): cell for cell in checkpointed_cells
     }
+    failed_strata = {str(failure["stratum_id"]) for failure in launch_failures}
+    for stratum in selected_strata:
+        missing_selected = [
+            str(cell_id)
+            for cell_id in stratum["cell_ids"]
+            if str(cell_id) not in cells_by_id
+        ]
+        stratum_id = str(stratum["stratum_id"])
+        if missing_selected and stratum_id not in failed_strata:
+            launch_failures.append(
+                {
+                    "stratum_id": stratum_id,
+                    "launch_id": launch_id,
+                    "error_type": "IncompleteStratumCheckpoint",
+                    "error": (
+                        "selected stratum did not produce reusable checkpoints: "
+                        + ", ".join(missing_selected)
+                    ),
+                }
+            )
     cells = [
         cells_by_id[str(cell["cell_id"])]
         for cell in manifest["cells"]
@@ -667,6 +705,7 @@ def main(
             "missing_cell_ids": missing_cell_ids,
             "final_checkpoint_scan": final_scan,
             "failures": launch_failures,
+            "fresh_cell_return_count": len(fresh_cells),
         }
     )
     payload["operation"]["phase"] = "complete"

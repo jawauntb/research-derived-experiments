@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "experiment": "E6 commitment-surface reward self-training",
+  "run_kind": "smoke",
+  "status": "readiness_blocked",
+  "manifest_id": "0498cd7e0440df3ffd507debad2842f5f9587cc883b5a7cbf18b4cdaee85b25c",
+  "implementation_fingerprint": "24afc68a904a6a7e6d79528bdf2fbe1353fd5ed5e447e017e4b5340e787e101b",
+  "control_preflight_pass": true,
+  "requested_gpu": "L4",
+  "coupled_gpu_strata_attempted": 1,
+  "analytical_cells_completed": 0,
+  "round_reached": 1,
+  "candidate_pool_count": 104,
+  "required_cs_candidates": 52,
+  "eligible_cs_candidates": 8,
+  "smoke_pass": false,
+  "confirmatory_ready": false,
+  "verdict": "pending_confirmatory_grid",
+  "development_calibration_launched": false,
+  "confirmatory_grid_launched": false,
+  "raw_artifact": "artifacts/commitment_surface/e6_smoke_reviewed.json"
+}

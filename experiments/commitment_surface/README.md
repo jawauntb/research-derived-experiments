@@ -279,16 +279,21 @@ Status: the 70m/n=13/one-seed validation smoke passed all integrity gates; see
 confirmatory-pending, and no mechanism verdict is claimed. The no-compute
 launch audit is recorded in `results/e5_launch_readiness_2026_07_10.md`.
 
-### E6 — Commitment-Surface Reward Self-Training (CPU protocol scaffold)
+### E6 — Commitment-Surface Reward Self-Training
 
 The frozen E6 preregistration is
 [`e6_commitment_reward_self_training_preregistration_2026-07-13.md`](../../papers/commitment_surface/e6_commitment_reward_self_training_preregistration_2026-07-13.md).
-The dependency-free `e6_core.py` and `e6_analysis.py` now lock the first
-implementation boundary: the six-round SC/CS/GT/A-ref reward loop,
+The dependency-free `e6_core.py`, `e6_analysis.py`, and `e6_runtime.py` plus the
+L4 `modal_e6_commitment_reward.py` runner lock the implementation boundary: the
+six-round SC/CS/GT/A-ref reward loop,
 truth-label-free typed CS signals, transport eligibility, top-half selection,
 exact SC/CS pool-digest and candidate/selection-count matching, namespaced
 SHA-256 seeds, the 108-cell confirmatory manifest, resumable trajectory
-validation, and the frozen G1–G5 analysis.
+validation, frozen G1–G5 analysis, pinned runtime, CPU preflight, fail-closed
+leases, exact returned-cell validation, and coupled-stratum checkpointing.
+Expired E6 lease records are not reclaimed automatically; inspect and clear a
+stale record only after confirming its prior worker has ended. Each shared pool
+alternates four current-SC and four current-CS draws per input in frozen order.
 
 Run the CPU contract tests with:
 
@@ -296,14 +301,15 @@ Run the CPU contract tests with:
 python3 -m unittest tests.test_commitment_surface_e6
 ```
 
-Status: protocol scaffold only. No E6 Modal training runner, smoke, calibration,
-GPU cell, or scientific verdict exists yet. The runner must preserve a shared
-`SC-CS` candidate/generation seed scope and emit the same pool digest, candidate
-pool count, and selected count for both arms in every round; the analysis layer
-rejects confirmatory readiness when any differ or the frozen top-half selection
-volume is violated. Selecting which evolving adapter state proposes that shared
-pool remains an explicit implementation decision for the runner and may not
-weaken the frozen matched-pool gate.
+Status: **L4 smoke readiness blocked; no scientific verdict.** The final
+smallest-stratum smoke passed its pinned image/Volume preflight and reached
+round-1 candidate scoring, but only 8 of 104 candidates cleared both frozen CS
+patch-CE thresholds; matched top-half training required 52. The runner stopped
+without producing a trajectory, and the nine-stratum development calibration
+and 27-stratum confirmatory grid were not launched. See
+`results/e6_smoke_readiness_2026_07_13.md` and the compact
+`results/e6_smoke_readiness.json`. Changing the threshold, selection fraction,
+bootstrap, or eligibility semantics now requires a new preregistration.
 
 ### M4 — Suite C Allocate × Cool × Reopen Factorial
 
