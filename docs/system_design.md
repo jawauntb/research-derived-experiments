@@ -302,6 +302,9 @@ before GPU dispatch and prefetches each missing model once; only that prefetch
 function has two automatic retries. Missing work is ordered largest-model and
 regularizer first, then reconstructed in manifest order. Dry runs execute a
 CPU-only pinned-image and result-Volume round trip, but no training function.
+The prefetch function commits the immutable model snapshots before L4 dispatch;
+fresh workers consume that container-start snapshot and never reload the shared
+Hugging Face Volume while Transformers may hold cache files open.
 `--inspect` reports reusable, invalid, missing, and active-lease state without
 prefetch or GPU dispatch. GPU execution is explicit and cell-count bounded;
 confirmatory execution additionally acknowledges the computed manifest ID.

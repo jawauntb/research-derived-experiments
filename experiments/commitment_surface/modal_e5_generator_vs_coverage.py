@@ -367,7 +367,11 @@ def _run_cell_impl(arg: dict[str, Any]) -> dict[str, Any]:
     manifest_id = str(arg["manifest_id"])
     cell_id = str(arg["cell_id"])
     e5_results.reload()
-    hf_cache.reload()
+    # The prefetch control step completes before GPU dispatch, so each fresh
+    # worker sees the committed cache snapshot at container start. Reloading
+    # the shared cache here is unsafe: concurrent Transformers workers may
+    # already hold cache files open, and Modal rejects Volume.reload() in that
+    # state. Results use a separate volume and remain explicitly reloaded.
     result_path = _result_path(manifest_id, cell_id)
     cached = _read_reusable_cell(manifest_id, cell_id)
     if cached is not None:

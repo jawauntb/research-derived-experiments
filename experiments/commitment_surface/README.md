@@ -266,6 +266,10 @@ manifest cell, and every checkpoint records its launch/lease attempt. Another
 CPU step prefetches each missing immutable model snapshot once. Remaining
 cells submit largest-model and regularizer work first to reduce the long tail,
 while the available payload is restored to frozen manifest order.
+The prefetch step commits those snapshots before L4 dispatch. Fresh workers
+consume the mounted cache snapshot directly and do not reload the shared
+Hugging Face Volume while concurrent Transformers processes may hold cache
+files open.
 
 Status: the 70m/n=13/one-seed validation smoke passed all integrity gates; see
 `results/e5_smoke_summary.md`. It is not scientific evidence. E5 remains
