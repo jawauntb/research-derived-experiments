@@ -70,6 +70,10 @@ E4_JSON_CANDIDATES = [
     ROOT / "artifacts" / "commitment_surface" / "e4_pythia_lora_v2.json",
     ROOT / "artifacts" / "commitment_surface" / "e4_smoke.json",
 ]
+E5_JSON = (
+    ROOT / "experiments" / "commitment_surface" / "results"
+    / "e5_generator_vs_coverage.json"
+)
 APPENDIX_TABLE_MARKER = "<!-- APPENDIX_A2_TABLES -->"
 
 
@@ -434,6 +438,49 @@ def build_appendix_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
             st["Body"],
         ))
 
+    if E5_JSON.exists():
+        e5 = json.loads(E5_JSON.read_text(encoding="utf-8"))
+        size_order = {"70m": 0, "160m": 1, "410m": 2}
+        cells = sorted(
+            e5["cells"],
+            key=lambda cell: (
+                size_order.get(cell["size"], 99),
+                cell["n"],
+                cell["seed"],
+                cell["arm"],
+            ),
+        )
+        flow.append(PageBreak())
+        flow.append(para(
+            f"**A.2.4 E5.** All {len(cells)} confirmatory generator-versus-"
+            "coverage cells from the committed public-safe result artifact.",
+            st["Body"],
+        ))
+        rows = [[
+            "Size", "Arm", "n", "Seed", "OOD", "Paraphrase",
+            "Novel-k", "Patch-CE", "Para patch",
+        ]]
+        rows.extend([
+            [
+                cell["size"],
+                cell["arm"],
+                str(cell["n"]),
+                str(cell["seed"]),
+                _fmt(cell["canonical_ood_accuracy"]),
+                _fmt(cell["paraphrase_ood_accuracy"]),
+                _fmt(cell["novel_k_equivariance_accuracy"]),
+                _fmt(cell["canonical_normalized_patch_ce"]),
+                _fmt(cell["paraphrase_normalized_patch_ce"]),
+            ]
+            for cell in cells
+        ])
+        flow.append(_appendix_table(
+            rows,
+            [0.5 * inch, 0.5 * inch, 0.3 * inch, 0.7 * inch,
+             0.5 * inch, 0.65 * inch, 0.55 * inch, 0.65 * inch,
+             0.65 * inch],
+        ))
+
     return flow
 
 
@@ -665,6 +712,59 @@ def build_results_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
             st["Body"]))
     else:
         flow.append(para("E4 result JSON not yet available.", st["Body"]))
+
+    flow.append(para(
+        "5.5 E5 — Generator learning vs labeled orbit coverage",
+        st["H3"],
+    ))
+    if E5_JSON.exists():
+        e5 = json.loads(E5_JSON.read_text(encoding="utf-8"))
+        analysis = e5["analysis"]
+        rows = [[
+            "Arm", "OOD", "Paraphrase", "Novel-k", "Patch-CE", "Para patch",
+        ]]
+        for arm in ("G-reg", "B-ref", "W-reg", "Cov", "A-ref"):
+            metrics = analysis["per_arm"][arm]
+            rows.append([
+                arm,
+                _fmt(metrics["canonical_ood_accuracy"]),
+                _fmt(metrics["paraphrase_ood_accuracy"]),
+                _fmt(metrics["novel_k_equivariance_accuracy"]),
+                _fmt(metrics["canonical_normalized_patch_ce"]),
+                _fmt(metrics["paraphrase_normalized_patch_ce"]),
+            ])
+        table = Table(
+            rows,
+            colWidths=[
+                0.7 * inch, 0.7 * inch, 0.9 * inch,
+                0.75 * inch, 0.8 * inch, 0.85 * inch,
+            ],
+        )
+        table.setStyle(_table_style())
+        flow.append(table)
+        flow.append(Spacer(1, 4))
+        flow.append(para(
+            f"Exact-grid integrity: <b>{_fmt(analysis['confirmatory_ready'])}</b>. "
+            f"Strict verdict: <b>{analysis['verdict']}</b>. "
+            f"Generator-learning gate: {_fmt(analysis['generator_learning_gate'])}; "
+            f"coverage gate: {_fmt(analysis['coverage_gate'])}; "
+            f"mixed gate: {_fmt(analysis['mixed_gate'])}; "
+            f"group specificity: {_fmt(analysis['group_specificity_gate'])}; "
+            f"transport: {_fmt(analysis['transport_gate'])}.",
+            st["Body"],
+        ))
+        flow.append(para(
+            "E5 is the severe follow-up to E4's labeled-support confound. "
+            "Its mechanism verdict is restricted to this frozen Pythia modular-"
+            "addition grid; Section 6.5 states the corresponding claim update.",
+            st["Body"],
+        ))
+    else:
+        flow.append(para(
+            "Confirmatory E5 is running. No mechanism verdict is reported until "
+            "the exact 135-cell grid passes integrity and is committed.",
+            st["Body"],
+        ))
 
     flow.append(para("Frame-taxonomy schematic (Figure 5).", st["H3"]))
     add_image(flow, FIG_DIR / "fig5_frame_taxonomy.png",
