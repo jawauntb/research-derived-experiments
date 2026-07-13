@@ -1,0 +1,1111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Mathematics of the Research Program — A Primer from First Principles</title>
+<style>
+/* ---------- page setup ---------- */
+@page { size: letter; margin: 0.9in 0.85in; }
+:root {
+  --ink: #1a1a1e;
+  --muted: #55555e;
+  --rule: #d8d8de;
+  --def-bg: #eef4fb;  --def-edge: #2c6cb0;   /* definitions */
+  --pump-bg: #fdf6e8; --pump-edge: #c98a1b;  /* intuition pumps */
+  --vis-bg: #f4effa;  --vis-edge: #7a4fb5;   /* visual proofs */
+  --prog-bg: #edf7ee; --prog-edge: #35854a;  /* in our papers */
+  --warn-bg: #fbeeee; --warn-edge: #b04040;  /* pitfalls */
+  --eq-bg: #f7f7f9;
+}
+* { box-sizing: border-box; }
+html { font-size: 10.4pt; }
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--ink);
+  line-height: 1.52;
+  margin: 0;
+}
+p { margin: 0.55em 0 0.75em; text-align: justify; hyphens: auto; }
+ul, ol { margin: 0.4em 0 0.8em; padding-left: 1.4em; }
+li { margin-bottom: 0.28em; text-align: justify; }
+strong { color: #000; }
+
+/* ---------- headings ---------- */
+h1, h2, h3, h4 { font-family: Georgia, serif; line-height: 1.22; page-break-after: avoid; }
+h1.part {
+  page-break-before: always;
+  font-size: 2.05em; margin: 2.2em 0 0.2em;
+  color: #17314f;
+}
+h1.part .kicker {
+  display: block; font-size: 0.42em; letter-spacing: 0.18em;
+  text-transform: uppercase; color: #8a6a2f; margin-bottom: 0.9em;
+  font-weight: normal;
+}
+h2.chapter {
+  page-break-before: always;
+  font-size: 1.62em; margin: 1.4em 0 0.25em; color: #17314f;
+  border-bottom: 2.5px solid #17314f; padding-bottom: 0.22em;
+}
+h2.chapter .chnum {
+  display: block; font-size: 0.58em; letter-spacing: 0.14em;
+  text-transform: uppercase; color: #8a6a2f; margin-bottom: 0.25em;
+}
+h3 { font-size: 1.18em; margin: 1.35em 0 0.35em; color: #1f3a5c; }
+h4 { font-size: 1.02em; margin: 1.1em 0 0.3em; color: #33333a; font-style: italic; }
+
+/* ---------- math ---------- */
+.m { font-family: 'Georgia', serif; font-style: italic; white-space: nowrap; }
+.m b, .mrm { font-style: normal; }
+.eq {
+  display: block; text-align: center; font-family: Georgia, serif;
+  font-style: italic; font-size: 1.09em; margin: 0.85em auto;
+  page-break-inside: avoid;
+}
+.eqbox {
+  background: var(--eq-bg); border: 1px solid var(--rule); border-radius: 6px;
+  padding: 0.6em 1em; margin: 0.9em 0; page-break-inside: avoid;
+}
+.frac { display: inline-block; vertical-align: -0.9em; text-align: center; margin: 0 0.12em; }
+.frac .top { display: block; padding: 0 0.25em 0.08em; border-bottom: 1px solid currentColor; }
+.frac .bot { display: block; padding: 0.08em 0.25em 0; }
+sub, sup { font-size: 0.68em; }
+.big { font-size: 1.35em; font-style: normal; vertical-align: -0.12em; }
+.rm { font-style: normal; }
+
+/* equation decoder tables */
+table.decoder {
+  width: 100%; border-collapse: collapse; margin: 0.7em 0 1em;
+  font-size: 0.93em; page-break-inside: avoid;
+}
+table.decoder th, table.decoder td {
+  border: 1px solid var(--rule); padding: 0.32em 0.55em; text-align: left; vertical-align: top;
+}
+table.decoder th { background: #eef1f5; font-size: 0.9em; letter-spacing: 0.04em; }
+table.decoder td:first-child { font-family: Georgia, serif; font-style: italic; white-space: nowrap; }
+
+table.plain {
+  width: 100%; border-collapse: collapse; margin: 0.7em 0 1em; font-size: 0.93em;
+}
+table.plain th, table.plain td {
+  border: 1px solid var(--rule); padding: 0.3em 0.5em; text-align: left; vertical-align: top;
+}
+table.plain th { background: #eef1f5; }
+
+/* ---------- callout boxes ---------- */
+.box {
+  border-radius: 7px; padding: 0.7em 0.95em 0.55em; margin: 1em 0;
+  page-break-inside: avoid; border-left: 4.5px solid;
+}
+.box .boxtitle {
+  display: block; font-size: 0.78em; font-weight: bold; letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 0.35em; font-family: Helvetica, Arial, sans-serif;
+}
+.box p:last-child { margin-bottom: 0.25em; }
+.def  { background: var(--def-bg);  border-color: var(--def-edge); }
+.def .boxtitle { color: var(--def-edge); }
+.pump { background: var(--pump-bg); border-color: var(--pump-edge); }
+.pump .boxtitle { color: var(--pump-edge); }
+.vis  { background: var(--vis-bg);  border-color: var(--vis-edge); }
+.vis .boxtitle { color: var(--vis-edge); }
+.prog { background: var(--prog-bg); border-color: var(--prog-edge); }
+.prog .boxtitle { color: var(--prog-edge); }
+.warn { background: var(--warn-bg); border-color: var(--warn-edge); }
+.warn .boxtitle { color: var(--warn-edge); }
+
+/* ---------- figures ---------- */
+figure {
+  margin: 1.1em auto; text-align: center; page-break-inside: avoid;
+}
+figcaption {
+  font-size: 0.86em; color: var(--muted); margin-top: 0.45em;
+  text-align: justify; padding: 0 1.2em;
+}
+figcaption b { color: #333; }
+svg { max-width: 100%; }
+svg text { font-family: Helvetica, Arial, sans-serif; }
+.svglabel { font-size: 11px; fill: #333; }
+
+/* ---------- misc ---------- */
+code, .code {
+  font-family: 'Courier New', monospace; font-size: 0.9em;
+  background: #f2f2f4; padding: 0.05em 0.3em; border-radius: 3px;
+}
+.titlepage { text-align: center; padding-top: 2.4in; }
+.titlepage h1 { font-size: 2.5em; color: #17314f; margin-bottom: 0.2em; border: none; }
+.titlepage .subtitle { font-size: 1.25em; color: var(--muted); font-style: italic; margin: 0.6em 0 2em; }
+.titlepage .meta { font-size: 0.95em; color: var(--muted); margin-top: 3.2em; line-height: 1.9; }
+.toc { page-break-before: always; }
+.toc h2 { font-size: 1.5em; color: #17314f; }
+.toc ul { list-style: none; padding-left: 0; column-count: 2; column-gap: 2.2em; font-size: 0.92em; }
+.toc ul li { margin-bottom: 0.32em; }
+.toc .tocpart { font-weight: bold; margin-top: 0.7em; color: #17314f; break-after: avoid; }
+.chip {
+  display: inline-block; font-family: Helvetica, Arial, sans-serif; font-size: 0.7em;
+  background: #e7edf5; color: #2c4a72; border-radius: 9px; padding: 0.1em 0.65em;
+  margin-right: 0.3em; letter-spacing: 0.03em; vertical-align: 0.15em;
+}
+.small { font-size: 0.88em; color: var(--muted); }
+hr.sep { border: none; border-top: 1px solid var(--rule); margin: 1.6em 15%; }
+</style>
+</head>
+<body>
+
+<div class="titlepage">
+  <h1>The Lineage and the Trajectory</h1>
+  <p class="subtitle">A History of the Ideas Behind the Research Program —<br>Where They Came From, and How the Program Grew</p>
+  <svg width="320" height="140" viewBox="0 0 320 140">
+    <line x1="20" y1="70" x2="300" y2="70" stroke="#d8d8de" stroke-width="1"/>
+    <circle cx="45" cy="70" r="5" fill="#2c6cb0"/><text x="45" y="92" text-anchor="middle" font-size="8" fill="#55555e">1948</text>
+    <circle cx="110" cy="70" r="5" fill="#7a4fb5"/><text x="110" y="92" text-anchor="middle" font-size="8" fill="#55555e">1980</text>
+    <circle cx="175" cy="70" r="5" fill="#35854a"/><text x="175" y="92" text-anchor="middle" font-size="8" fill="#55555e">2005</text>
+    <circle cx="240" cy="70" r="5" fill="#c98a1b"/><text x="240" y="92" text-anchor="middle" font-size="8" fill="#55555e">2024</text>
+    <circle cx="290" cy="70" r="6" fill="#b04040"/><text x="290" y="92" text-anchor="middle" font-size="8" fill="#b04040">now</text>
+    <text x="45" y="55" text-anchor="middle" font-size="8" fill="#2c6cb0">cybernetics</text>
+    <text x="110" y="55" text-anchor="middle" font-size="8" fill="#7a4fb5">autopoiesis</text>
+    <text x="175" y="55" text-anchor="middle" font-size="8" fill="#35854a">grid cells</text>
+    <text x="240" y="55" text-anchor="middle" font-size="8" fill="#c98a1b">weakness</text>
+  </svg>
+  <p class="meta">
+    A companion to <em>The Mathematics of Constraint</em>.<br>
+    Part I traces the decades of science the program stands on.<br>
+    Part II reconstructs how the program itself evolved, paper by paper.
+  </p>
+</div>
+
+<div class="toc">
+<h2>Why History Matters Here</h2>
+<p>No idea is born from nothing, and this program less than most. Its central conjecture — that
+adaptive systems keep rediscovering geometric language because geometry is the portable language of
+constraints — is itself a claim <em>about history</em>: that a dozen independent fields, working for
+decades in ignorance of one another, kept arriving at the same shapes. You cannot judge that claim
+without knowing the fields. And you cannot understand any individual result without knowing which
+tradition it extends, tests, or departs from.</p>
+
+<p>This book supplies both histories. <strong>Part I</strong> is the <em>external</em> lineage: the
+intellectual ancestry the program draws on — cybernetics and autopoiesis, information theory and
+rate-distortion coding, group theory and topology, causal inference and reinforcement learning — with
+the key figures, the seminal ideas in plain language, and exactly how the repository uses each.
+<strong>Part II</strong> is the <em>internal</em> trajectory: how the program itself developed, from
+a single founding question through a numbered chain of some thirty-five experiments, its "correction
+chain" of self-discovered mistakes, its pivots and abandoned directions, and its current frontier.</p>
+
+<div class="pump" style="margin-top:0.4em"><span class="boxtitle">How to read this book</span>
+<p>You do not need the mathematics to follow the history; where a technical idea appears, it is
+explained in a sentence, with a pointer to the math primer for depth. Read Part I to understand what
+the program inherited and Part II to understand what it did with the inheritance. A recurring
+<span class="chip">Verdict</span> box gives a mature assessment — what is genuinely novel versus what
+is skilled recombination — because a history that only celebrates is not a history.</p></div>
+
+<h3 style="margin-top:1.1em">Contents</h3>
+<ul>
+<li class="tocpart">Part I · The Lineage</li>
+<li>1 · The Convergence Puzzle</li>
+<li>2 · Cybernetics, Autopoiesis, and the Systems Tradition</li>
+<li>3 · Information, Compression, and Constraint</li>
+<li>4 · Symmetry, Topology, and the Brain</li>
+<li>5 · Causality, Control, and Agency</li>
+<li class="tocpart">Part II · The Trajectory</li>
+<li>6 · The Founding Question and the Three Threads</li>
+<li>7 · The Numbered Spine and the Correction Chain</li>
+<li>8 · Arc 2, the Benchmark, and the Phases</li>
+<li>9 · The Reframe and the Frontier</li>
+<li>10 · The Meta-Story: Machine-Made Science</li>
+</ul>
+</div>
+
+<h1 class="part"><span class="kicker">Part I</span>The Lineage</h1>
+
+<p>Before the program's own story comes the story it inherited. This part traces the traditions its
+ideas descend from — not as a dry bibliography, but as a living intellectual family tree, so that when
+you meet "weakness" or "the metric deforms under concern" you hear the centuries of thought standing
+behind the phrase. We begin with the puzzle that motivates the whole enterprise.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 1</span>The Convergence Puzzle</h2>
+
+<h3>1.1 The observation that started it</h3>
+
+<p>Here is the pattern the program exists to explain. Over the twentieth and twenty-first centuries, a
+striking number of independent fields — mathematics, neuroscience, linguistics, control theory,
+machine learning, theoretical biology — kept reaching, apparently without coordination, for the same
+kind of language to describe meaning, thought, and agency: <em>geometric</em> language. Distances and
+neighborhoods. Attractors and basins. Manifolds, boundaries, directions, curvature, regime
+transitions. A neuroscientist describing how the brain codes space, a linguist describing how word
+meanings relate, an AI researcher describing a neural network's internal states, and a mathematician
+describing a dynamical system would, more and more, find themselves drawing the same pictures.</p>
+
+<p>The program's founding document states the puzzle as its central question:</p>
+
+<div class="prog"><span class="boxtitle">The manifesto, verbatim</span>
+<p>"Why do independently developed systems of thought and computation keep converging on geometric
+descriptions of meaning, agency, and intelligence, and can we predict when that geometry is merely a
+passive representation versus when it becomes an active, self-maintaining attractor regime?"</p>
+<p>And the compressed thesis: "adaptive systems keep rediscovering geometric language because geometry
+is the portable language of constraints."</p></div>
+
+<h3>1.2 The proposed answer: a shared problem, not a shared substrate</h3>
+
+<p>Why would unrelated fields converge? The program's answer is elegant and worth stating carefully,
+because it is the hypothesis every later chapter tests: they converge <em>not because they study the
+same stuff</em>, but because they all solve <em>the same problem</em>. That problem is compression
+under constraint. Any finite system — a brain, a network, a language, an organism — cannot keep every
+possible state of the world separate; it has limited capacity. So it must fold the world down into a
+lower-dimensional organization that keeps the <em>useful</em> distinctions and throws the rest away.
+And geometry, the program argues, is simply the natural language for that folding: it is the
+mathematics of "which things are near, which are far, which are reachable, which are stable" — exactly
+the relations a compressed-but-useful representation must preserve.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — why every subway map looks the same</span>
+<p>Subway maps from Tokyo, London, and New York look eerily alike: colored lines, dots for stations,
+distances distorted, geography sacrificed. No cartographer copied another; they converged because they
+all solved the same problem — <em>show a rider which stops connect to which, and throw away everything
+else.</em> The true geography (the constraint of the physical city) is folded down to the one thing
+that matters for the task (connectivity), and the result is a shared visual language. The program's
+claim is that minds, networks, and organisms are all drawing subway maps of reality, and that is why
+they rhyme. The geometry is not proof they are the same thing; it is evidence they face the same
+compression problem.</p></div>
+
+<h3>1.3 The disciplined form of the claim</h3>
+
+<p>What keeps this from being mysticism is a single sentence of restraint that recurs throughout the
+program: <em>"Geometry is not proof of mind. But recurring geometry is evidence of a shared constraint
+problem."</em> This is the crucial move. It would be easy — and wrong — to leap from "brains and neural
+networks both use geometric codes" to "neural networks have minds." The program explicitly refuses
+that leap. The convergence is evidence of a common <em>problem structure</em>, not a common inner life.
+The sharpened research question is therefore not "are these systems the same?" but "why does the same
+<em>form of explanation</em> keep winning?" — a question that can actually be investigated.</p>
+
+<h3>1.4 The map of what feeds in</h3>
+
+<p>To explain a convergence, you must know what is converging. The rest of Part I lays out the
+tributaries — the traditions whose independent arrival at geometric-constraint language <em>is</em> the
+phenomenon to be explained, and whose tools the program borrows to study it:</p>
+
+<table class="plain">
+<tr><th>Tradition</th><th>What it contributes</th><th>Chapter</th></tr>
+<tr><td>Cybernetics &amp; autopoiesis</td><td>self-maintenance, feedback, viability, the living boundary</td><td>2</td></tr>
+<tr><td>Information theory &amp; MDL</td><td>compression, description length, the simplicity principle weakness challenges</td><td>3</td></tr>
+<tr><td>Rate-distortion &amp; efficient coding</td><td>how finite capacity should allocate resolution — the "reward deforms the metric" law</td><td>3</td></tr>
+<tr><td>Group theory &amp; equivariant ML</td><td>symmetry as the backbone of weakness and generalization</td><td>4</td></tr>
+<tr><td>Topology &amp; neural manifolds</td><td>the torus code, shape as a substrate-independent invariant</td><td>4</td></tr>
+<tr><td>Causal inference</td><td>interventions, identifiability, the do-operator, the self/world gauge</td><td>5</td></tr>
+<tr><td>Reinforcement &amp; homeostatic learning</td><td>agents as viability-maintainers, value, planning</td><td>5</td></tr>
+</table>
+
+<div class="pump"><span class="boxtitle">Verdict — is the convergence thesis itself novel?</span>
+<p>A mature reader should note up front: the grand convergence thesis is a <em>synthesis of others'
+ideas</em>, and the program says so. That many fields reach for geometry has been observed before —
+by the efficient-coding neuroscientists, by the "Platonic Representation Hypothesis" in machine
+learning (Chapter 4), by the enactivists. The program's original contribution is not the observation
+but the attempt to make it <em>predictive</em>: to name the specific constraint (finite capacity), the
+specific mechanism (weakness / symmetry-compatible compression), and the specific threshold (passive
+representation becoming active agency), and then to test these in experiments. Whether that
+sharpening succeeds is the subject of Part II. The thesis as inspiration is borrowed; the thesis as a
+falsifiable research program is the program's own.</p></div>
+
+<h3>1.5 What to carry forward</h3>
+<p class="small">Many independent fields converged on geometric language for mind and agency; the
+program explains this as a shared compression-under-constraint problem, not a shared substrate; it
+disciplines the claim with "geometry is evidence of a shared problem, not proof of mind"; and its
+originality lies in trying to make an old observation predictive rather than in the observation
+itself.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 2</span>Cybernetics, Autopoiesis, and the Systems Tradition</h2>
+
+<p>The program's ideas about <em>agency</em> — self-maintenance, viability, repair, the living boundary
+— descend from a lineage that began in the 1940s and has never quite entered the mainstream. This
+chapter traces it, because more than any other tradition it supplies the program's answer to "when does
+a representation become an agent?"</p>
+
+<h3>2.1 Ashby and the birth of ultrastability (1948–1960)</h3>
+
+<p>W. Ross Ashby, a British psychiatrist, asked a deceptively simple question: how does an organism
+stay alive in a world that keeps trying to knock it out of its viable range? His answer, in
+<em>Design for a Brain</em> (1952/1960), introduced two ideas the program uses directly.
+<strong>Requisite variety</strong>: to control a disturbance, a regulator must have at least as much
+variety in its responses as the disturbance has in its assaults — you cannot stabilize what you cannot
+match. And <strong>ultrastability</strong>: when a system is pushed outside its viable zone, it does
+not merely resist; it <em>reorganizes its own internal parameters</em> until stability returns. The
+thermostat that can only heat and cool is stable; the creature that can rewire itself when heating and
+cooling stop working is <em>ultra</em>stable.</p>
+
+<div class="prog"><span class="boxtitle">In the repo — "Ashby ultrastability in the small"</span>
+<p>The autopoietic-control experiments make Ashby measurable. A trained model is deliberately damaged
+with random weight noise (accuracy drops to 0.45), then allowed a handful of self-supervised update
+steps. It climbs back to 0.965 — recovering its competence by reorganizing itself from its own input
+stream. The paper names this exactly: "Ashby ultrastability in the small," and cites <em>Design for a
+Brain</em> as "the conceptual ancestor of the repair experiment." Sixty years of theory becomes a
+measured recovery curve. The amount of slack a system has in its lower layers, the program finds,
+predicts how well it repairs — which is the program's own quantitative extension of Ashby's qualitative
+idea.</p></div>
+
+<h3>2.2 Wiener, and the word "cybernetics"</h3>
+
+<p>Norbert Wiener gave the field its name in 1948, from the Greek for "steersman." Cybernetics is the
+science of <em>feedback</em> — of systems that sense their own error and act to reduce it. The
+steam-engine governor that pinches the throttle as the engine speeds up is the ancestral image: no
+intelligence, just a loop converting "too fast" into "less fuel." The program's homeostatic agents are
+Wienerian feedback loops at heart — an internal energy variable, a decay that pushes it down, actions
+that push it back up — though, tellingly, the repository invokes Ashby by name far more than Wiener. It
+is a lineage the program uses without always crediting, which a careful historian should note.</p>
+
+<h3>2.3 Maturana, Varela, and autopoiesis (1970s–1980s)</h3>
+
+<p>The Chilean biologists Humberto Maturana and Francisco Varela pushed the systems tradition to its
+most radical claim: a living system is defined not by its <em>parts</em> but by a <strong>self-producing
+organization</strong> — an <em>autopoiesis</em> (self-making) — that continuously rebuilds its own
+boundary and components. A cell is not a bag of chemicals; it is the ongoing process that makes the bag
+that contains the chemicals that make the bag. From this grew <strong>enactivism</strong> (Varela,
+Thompson, Di Paolo): the view that cognition is not passive representation but active
+<em>sense-making</em> by a self-maintaining organism, and that meaning is always organism-relative —
+the same world matters differently to different living things.</p>
+
+<div class="warn"><span class="boxtitle">Verdict — a lineage claimed more than earned</span>
+<p>Here a mature reader must be precise, because the program is. Its experiments invoke autopoiesis,
+but the strict Maturana–Varela criterion — a system that <em>produces its own components and boundary</em>
+— is <em>not met</em>. The program's "repair" is a model updating its weights via labeled gradient
+descent, not a system regenerating itself from within. The papers admit this directly: "the system does
+not yet generate new policy, it only updates head weights." What the program has is <em>homeostasis</em>
+(staying in range) and <em>ultrastability</em> (reorganizing to stay in range), which are real and
+measured — but not full autopoiesis. Notably, Maturana and Varela are cited only in the synthesis
+papers, never in the primary experiments, which route autopoiesis entirely through Bennett's more
+recent formalization. The tradition supplies the <em>vocabulary and the aspiration</em>; the
+experiments deliver something more modest and should be read that way.</p></div>
+
+<h3>2.4 Bennett: the modern hub (2023–2026)</h3>
+
+<p>If one contemporary figure is the program's true intellectual center, it is Michael Timothy Bennett,
+whose doctoral work at ANU the repository leans on more than any other single source. Bennett
+recombined the older systems tradition with information theory into a set of sharp, formal claims the
+program then tests:</p>
+
+<ul>
+<li><strong>Weakness over simplicity.</strong> The best hypothesis is not the shortest but the
+<em>weakest</em> — the one compatible with the most possibilities while still fitting the data
+(Chapter 3 and the math primer develop this). This is the program's flagship idea, inherited whole from
+Bennett and turned into an experiment.</li>
+<li><strong>The Autopoietic Theorem</strong> (Bennett &amp; Suzuki): life-like organization is
+<em>derivable</em> from weak axioms — that things change, that information capacity is finite, that
+low-level conditions are stable. The program operationalizes its two testable consequences: a
+<em>viability buffer</em> (how many futures a policy keeps open) and the <em>Law of the Stack</em> (a
+layer's flexibility is capped by the slack beneath it).</li>
+<li><strong>The tapestry of valence</strong> and <strong>first-order selves</strong>: that a system
+represents not one drive but a pattern of effects on many internal variables, and that selfhood comes
+in layers. The program's vector-valued concern experiments test this directly.</li>
+</ul>
+
+<p>To a large degree, then, the program is an <strong>empirical test-bed for Bennett's theory</strong> —
+taking claims that Bennett argues philosophically and asking whether they hold up as measured results
+in small neural systems. This is an honorable and unusual role, and it is worth seeing clearly: many of
+the program's most distinctive terms are not its own coinages but Bennett's, put to the test.</p>
+
+<h3>2.5 The virtual governor and Levin (2021–2026)</h3>
+
+<p>A newer strand comes from Michael Levin's work on <em>basal cognition</em> and multiscale agency —
+the idea, from developmental biology, that goal-directed, problem-solving behavior appears at every
+scale of life, from cells to tissues to organisms, and that a "self" is a provisional, nested,
+scale-relative construction. The program borrows Levin's "virtual governor" framing — the idea that a
+global constraint can be transduced into local incentives so that parts, each minimizing their own
+discomfort, collectively maintain the whole — for its distributed-control experiments. It is careful,
+though, to keep this at "scaffold" level: framing vocabulary, not evidence.</p>
+
+<h3>2.6 What to carry forward</h3>
+<p class="small">The agency ideas descend from cybernetics: Ashby's requisite variety and
+ultrastability (measured in the repo as self-repair), Wiener's feedback (used but under-credited), and
+Maturana–Varela's autopoiesis (invoked as aspiration, but the strict self-production criterion is not
+met). Bennett is the modern hub — weakness, the viability buffer, the Law of the Stack, the tapestry of
+valence — making the program largely an empirical test-bed for his theory, with Levin's multiscale
+agency supplying newer framing.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 3</span>Information, Compression, and Constraint</h2>
+
+<p>The program's ideas about <em>generalization</em> and <em>geometry</em> descend from information
+theory — the mathematics of compression, born in 1948 and central ever since. This chapter traces two
+strands: the description-length tradition that weakness challenges, and the rate-distortion tradition
+that gives the program its sharpest (and falsified) prediction.</p>
+
+<h3>3.1 Shannon and the bit (1948)</h3>
+
+<p>Claude Shannon's <em>A Mathematical Theory of Communication</em> founded the field at a stroke,
+giving the world the <strong>bit</strong> as the unit of information and <strong>entropy</strong> as
+the measure of a source's unpredictability. The deep idea the program inherits is that
+<em>information and compression are the same subject seen from two sides</em>: the fewer bits you need
+to describe something, the more structure (and less randomness) it contains. Every later idea in this
+chapter is a way of asking "what is the right thing to compress, and how?"</p>
+
+<h3>3.2 The description-length tradition: Solomonoff, Rissanen, and Occam made precise</h3>
+
+<p>The oldest answer to "which explanation should I believe?" is Occam's razor: prefer the simplest.
+Ray Solomonoff (1964) and Jorma Rissanen (1978, the <strong>Minimum Description Length</strong>
+principle) made this mathematically exact. Among all models that fit your data, prefer the one that
+lets you <em>compress the data most</em> — shortest (model + data-given-model), measured in bits. A
+short description is an a-priori probable one; simplicity and compressibility become the same thing.
+For half a century, this was the dominant formal theory of induction, and it works remarkably well.</p>
+
+<div class="prog"><span class="boxtitle">In the repo — the rival that weakness dethrones</span>
+<p>The program's flagship result is a direct challenge to this tradition. On tasks engineered so that
+a short "shortcut" rule and a broadly-compatible "weak" rule both fit the training data perfectly, the
+program pits weakness against an explicit menu of description-length selectors — MDL, compression,
+shortest-form, plus validation, parameter-norm, and flatness. The finding: the description-length
+family picks the shortcut and generalizes badly (near 0% of the time), while weakness picks the
+symmetric rule and generalizes (near 100%). The slogan the program inherits from Bennett to explain
+this: <em>simplicity is a property of form, but generalization is a property of function.</em> A short
+description commits hard to one guess; a weak hypothesis stays compatible with many, and under
+distribution shift the weak one travels better. This is the program's most consequential departure from
+the classical tradition — not a rejection of information theory, but a claim that it was measuring the
+wrong quantity.</p></div>
+
+<h3>3.3 Rate-distortion and efficient coding: how to spend a limited budget</h3>
+
+<p>The second strand asks a different question: given a <em>fixed</em> bit budget, how should you spend
+it? Shannon's <strong>rate-distortion theory</strong> answers in general; the neuroscience of
+<strong>efficient coding</strong> (from Barlow in 1961 to Ganguli and Simoncelli in 2014) answers for
+brains. The unifying principle: <em>allocate resolution in proportion to how much each region
+matters.</em> A sensory system with limited neurons should spend them finely where stimuli are common
+or important and coarsely elsewhere. W.R. Bennett's 1948 quantization law and its descendants make this
+a precise power-law relationship between how densely you sample a region and how much error remains
+there.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the mapmaker's budget</span>
+<p>A mapmaker with a fixed amount of ink must choose where to spend detail. A road atlas renders
+cities at high resolution and empty deserts at low, because that is where travelers need precision.
+Rate-distortion theory is the mathematics of that choice — the optimal ink-allocation given a budget
+and a map of what matters. The program's boldest geometric claim is that a neural code, facing the same
+budget, should warp its internal "map" the same way: spend representational resolution where
+<em>concern</em> (value, reward) concentrates. "Reward deforms the metric" is efficient coding with a
+value signal in the driver's seat — the same mathematics the brain's sensory systems are thought to
+use, pointed at what an agent cares about.</p></div>
+
+<div class="prog"><span class="boxtitle">In the repo — a derived law, and its instructive falsification</span>
+<p>The program does something admirable: it <em>derives</em> the exact form of the reward-deformation
+law before measuring — resolution should grow as concern raised to the power d/(d+2), giving a specific
+predicted exponent of 0.5 for a two-dimensional code. Then it measures, and the exponent comes out
+≈ 0.30, not 0.5, with tight confidence intervals. The prediction is <em>falsified</em> — but
+productively: the mismatch implies the code was concentrating its resolution as if it lived in
+essentially <em>one</em> dimension, not two. This is the efficient-coding tradition working exactly as
+it should: a sharp quantitative prediction, honestly tested, revealing a hidden fact (an effective
+dimensionality collapse) precisely because it was specific enough to be wrong. It is the program's
+cleanest inheritance from Shannon's descendants, and its cleanest falsification.</p></div>
+
+<h3>3.4 The through-line: compression under constraint</h3>
+
+<p>Step back and the two strands unite in the program's founding thesis (Chapter 1). Generalization
+(the description-length strand) and geometry (the rate-distortion strand) are both about the same
+thing: a finite system deciding <em>what to keep and what to throw away</em> under a capacity limit.
+Weakness is a claim about <em>which</em> distinctions to keep (the broadly-compatible ones); the
+reward-deformation law is a claim about <em>where</em> to spend resolution keeping them (where concern
+is high). The concern-weighted-weakness theory paper proves these are two faces of one optimization —
+which is why information theory, more than any other tradition, is the mathematical spine of the whole
+program.</p>
+
+<h3>3.5 What to carry forward</h3>
+<p class="small">Information theory casts information and compression as one subject; the
+description-length tradition (Solomonoff, Rissanen, MDL) made Occam precise and is the rival weakness
+dethrones with "simplicity is form, generalization is function"; the rate-distortion / efficient-coding
+tradition (Shannon, Bennett-1948, Ganguli–Simoncelli) says spend resolution by importance, which
+becomes the program's "reward deforms the metric" law — derived, then productively falsified to an
+exponent of 0.30; and both strands are the same compression-under-constraint problem, unified in the
+program's theory.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 4</span>Symmetry, Topology, and the Brain</h2>
+
+<p>The program's most technically distinctive result — that "weakness" is really about symmetry, and
+that symmetry shows up as a specific <em>shape</em> in a neural code — sits at the meeting point of
+three traditions: the group theory of symmetry, the topology of neural manifolds, and the neuroscience
+of grid cells. This chapter braids them, because in the program they turn out to be three views of one
+event.</p>
+
+<h3>4.1 Group theory and equivariant machine learning</h3>
+
+<p>Symmetry — a change that leaves something looking the same — has been mathematics' deepest organizing
+idea since the nineteenth century, formalized as <strong>group theory</strong>. In the last decade it
+transformed machine learning through <strong>equivariant networks</strong>: Cohen and Welling's
+group-equivariant CNNs (2016), and the "geometric deep learning" synthesis of Bronstein and colleagues
+(2021), which argued that most successful neural architectures are really exploiting symmetries — a
+convolutional network works because it is <em>equivariant</em> to translation (shift the image, the
+features shift too). A deep result connects this to Chapter 3's Fourier ideas: the patterns compatible
+with a symmetry are exactly its <strong>irreducible representations</strong>, which for shift-symmetry
+are the frequency modes. Symmetry and Fourier analysis are one subject.</p>
+
+<div class="prog"><span class="boxtitle">In the repo — weakness <em>is</em> symmetry-counting</span>
+<p>The program's central quantity, weakness, is defined group-theoretically: it counts how many of a
+symmetry group's transformations a learned function respects. A function compatible with many
+symmetries treats whole families of inputs alike — it is "weak" in Bennett's sense of committing to
+little. This is where the program fuses Bennett's abstract weakness with the concrete machinery of
+equivariant ML: weakness becomes a measurable count, computed against cyclic, dihedral, and permutation
+groups, and (in the learned-symmetry work) even against a group <em>inferred from the data itself</em>.
+The claim that this count predicts generalization better than any simplicity measure is the program's
+signature contribution, and it lives squarely in the equivariant-ML tradition.</p></div>
+
+<h3>4.2 Topology and neural manifolds</h3>
+
+<p><strong>Topology</strong> — the study of shape up to bending and stretching, indifferent to distance
+and angle — supplies a different, coarser invariant: the count of a shape's "holes" (its Betti
+numbers). The insight that transformed neuroscience is that the collective activity of many neurons,
+though embedded in a very high-dimensional space, often lies on a low-dimensional <em>manifold</em> with
+a specific topology. Nina Miolane's work on population-code topology, and the landmark 2022 <em>Nature</em>
+paper by Gardner and colleagues, showed that the brain's grid cells collectively trace out a
+<strong>torus</strong> — a donut — with the exact hole-signature (1, 2, 1), reproducibly, across
+animals. Topology gives a substrate-independent fingerprint: two systems can be called "the same" if
+their activity has the same shape, regardless of what they are made of.</p>
+
+<h3>4.3 Grid cells and the convergent code</h3>
+
+<p>The grid cells themselves — discovered by the Mosers (Nobel Prize, 2014) — fire in a periodic,
+hexagonal pattern as an animal moves through space, a biological Fourier basis for position. The result
+that ties everything together: when you train an artificial recurrent network to do nothing but
+<em>integrate its own motion</em> (path integration), grid cells and their toroidal geometry
+<em>spontaneously appear</em> (Sorscher, Ganguli, and others, 2018–2019). An optimal code for 2-D space,
+arrived at independently by evolution and by gradient descent — a striking instance of the convergence
+puzzle of Chapter 1.</p>
+
+<div class="prog"><span class="boxtitle">In the repo — one event, three needles</span>
+<p>The program's grid-cell work makes the deepest unification attempt in the whole enterprise. Its
+prediction: when a network discovers 2-D translational symmetry, three measurements should all light up
+together, because they are measuring the same discovery. <strong>Weakness</strong> (the code stays
+consistent under many shifts), <strong>spectrum</strong> (the code concentrates into a few Fourier
+modes), and <strong>topology</strong> (those modes trace a torus) become "three measurements of one
+event: the code discovered the group." It is a genuinely beautiful synthesis linking Bennett's weakness,
+Fourier analysis, and Gardner's torus. And — in the program's characteristic honesty — the specific
+<em>mediation</em> prediction (that weakness would predict generalization <em>through</em> the topology)
+<strong>failed</strong>: weakness and topology each predict generalization independently, with no single
+mediating object. The conceptual bridge is real and the honest negative is instructive: here, the paper
+concludes, "weakness is a footprint, not the cause."</p></div>
+
+<h3>4.4 The Platonic Representation Hypothesis</h3>
+
+<p>A 2024 idea from machine learning (Huh and colleagues) crystallized the convergence puzzle for
+neural networks: the <strong>Platonic Representation Hypothesis</strong> holds that different models,
+trained on enough data, converge to the <em>same</em> internal representational geometry — as if
+approaching a shared, substrate-independent statistical model of reality. The program adopts this as
+background and proposes weakness as a <em>mechanism</em> for it: when a task has a symmetry, every
+capable learner is driven to the same high-weakness code, hence the same geometry. This is the program
+at its most ambitious — offering not just to observe convergence but to explain <em>when it must
+happen</em>.</p>
+
+<div class="warn"><span class="boxtitle">Verdict — genuine synthesis, honestly bounded</span>
+<p>The symmetry–topology–grid braid is where the program is most original: the specific claim that one
+scalar (weakness) governs whether a code carries the right topological structure of a task's symmetry,
+tying together three literatures that rarely speak, is a real intellectual contribution. But a mature
+reader should hold two limits the program itself surfaces. First, the mediation failed — the three
+needles co-occur but weakness does not <em>drive</em> the topology, softening the unification from
+"cause" to "correlated footprints." Second, the cross-model convergence claim (the Platonic mechanism)
+did not survive external contact: tested across three unrelated model families, the shared-geometry
+reading failed. The braid is a beautiful and defensible hypothesis; it is not yet a demonstrated law,
+and the program's own negatives are what tell you so.</p></div>
+
+<h3>4.5 What to carry forward</h3>
+<p class="small">Group theory and equivariant ML make weakness a measurable symmetry-count; topology
+and neural manifolds give the torus as a substrate-independent shape; grid cells show that shape
+emerging independently in brains and networks; the program braids all three into "generalization,
+spectrum, and topology are one event — the code found the group," a genuine synthesis whose specific
+mediation and cross-model claims honestly failed, leaving a strong hypothesis rather than a proven law.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 5</span>Causality, Control, and Agency</h2>
+
+<p>The program's benchmark and agency work descends from two more traditions: the causal-inference
+revolution that taught science to distinguish "found" from "made," and the reinforcement-learning and
+viability-theory lineages that model agents as maintainers of their own existence. This chapter closes
+Part I by tracing them.</p>
+
+<h3>5.1 Pearl and the causal revolution</h3>
+
+<p>For most of the twentieth century, statistics was officially agnostic about causation — "correlation
+is not causation" was a warning, not a method. Judea Pearl's work (culminating in <em>Causality</em>,
+2009) changed that by giving causation its own mathematics: the <strong>do-operator</strong>, which
+distinguishes <em>observing</em> a variable to have a value from <em>intervening</em> to set it. This
+sounds like a small notational move; it is a revolution. It makes precise why a randomized trial beats
+an observational study, what "controlling for a confounder" really does, and — crucially for the
+program — when a hidden quantity is <em>identifiable</em> from data at all.</p>
+
+<div class="prog"><span class="boxtitle">In the repo — the do-operator inside a neural network</span>
+<p>The program applies Pearl's framework not to epidemiology but to the insides of models. Its
+distinction between a feature being <em>decodable</em> (a probe can read it) and being <em>used</em>
+(it causally drives the decision) is pure Pearl: decodability is observational, use is interventional.
+The program tests use by <strong>activation patching</strong> — surgically overwriting an internal
+feature and measuring the change in the output, which is <em>do(feature = value)</em> made literal. And
+its self/world "gauge problem" — that a system can be a perfect agent while having no fact of the matter
+about which changes are "its own" — is a causal <em>identifiability</em> result: when the data reveals
+only a sum, the split into parts is underdetermined, fixable only by intervention (the agent
+deliberately doing nothing). This is Pearl's identifiability theory reincarnated as a philosophy-of-mind
+result, and it is one of the program's genuinely novel moves.</p></div>
+
+<h3>5.2 Reinforcement learning and its homeostatic turn</h3>
+
+<p>Reinforcement learning — agents learning to act by maximizing reward — is the workhorse tradition of
+modern AI agency. The program uses its standard machinery (policies, value, discounting, the REINFORCE
+algorithm) but leans on a specific dissenting strand: <strong>homeostatic reinforcement learning</strong>
+(Keramati and Gutkin), which reframes reward not as an arbitrary scalar to be maximized but as
+<em>drive reduction</em> — the restoration of internal viability variables toward a healthy setpoint.
+An agent is not a reward-maximizer but a homeostat that stays alive. This reframing is the bridge from
+the RL tradition to the cybernetic tradition of Chapter 2, and it is why the program's agents have an
+"energy" that decays and must be replenished rather than a bare score to run up.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the difference between a gambler and a body</span>
+<p>Standard reinforcement learning models an agent like a gambler: maximize the number, whatever it is.
+Homeostatic RL models it like a body: keep the vital signs in range, and "reward" is just how much a
+choice moved you back toward health. The two can look similar when the number happens to be "how alive
+you are" — but they diverge sharply at the edges, where a gambler chases the last point and a body
+protects its viability. The program deliberately builds bodies, not gamblers, because its whole
+question is about <em>agency as self-maintenance</em>, and you cannot study self-maintenance in a system
+that has no self to maintain. This choice — inherited from Keramati, Gutkin, and behind them Ashby — is
+what makes "concern" a meaningful word in these experiments.</p></div>
+
+<h3>5.3 Viability theory and the free-energy principle</h3>
+
+<p>Two more traditions round out the agency picture. Jean-Pierre Aubin's <strong>viability theory</strong>
+(1990s) formalizes the "viability kernel" — the set of states from which a system can stay alive forever,
+given its controls and the disturbances it faces. The program uses this vocabulary (its "viability
+buffer" is the slack between how many futures a policy keeps open and how many it has committed to),
+though it uses the language informally rather than computing formal kernels. And Karl Friston's
+<strong>free-energy principle</strong> and <strong>active inference</strong> (2006–present) — the sweeping
+claim that perception and action both minimize a single quantity, and that action can be
+<em>epistemic</em> (undertaken to reduce uncertainty, not to gain reward) — supplies the program's
+framing for why an agent should pay to <em>probe</em> its own world. The program is careful here: it
+borrows active inference as a <em>reading</em>, a source of framing, not as a formalism it commits to
+implementing.</p>
+
+<h3>5.4 The lineage assembled</h3>
+
+<p>Assemble the five chapters of Part I and the program's intellectual ancestry comes into focus. From
+<strong>cybernetics and autopoiesis</strong> (Chapter 2): agency as self-maintenance, the viability
+buffer, ultrastable repair. From <strong>information theory</strong> (Chapter 3): weakness as the right
+compression, the reward-deformation law. From <strong>symmetry and topology</strong> (Chapter 4): weakness
+as symmetry-counting, the torus as the fingerprint of a discovered group. From <strong>causal
+inference</strong> (this chapter): the do-operator inside networks, the self/world gauge, availability
+versus use. And from <strong>reinforcement and viability</strong>: agents as homeostats, not gamblers.
+Michael Bennett's recent work is the solder joining several of these — weakness, the Law of the Stack,
+the tapestry of valence — which is why the program reads, at times, as an empirical test-bed for a
+single contemporary theorist recombining a century of ideas.</p>
+
+<div class="warn"><span class="boxtitle">Verdict — an honest scholarly gap</span>
+<p>One thing a historian should flag: the program's ancestry has unmarked debts. Its core claim that
+content is grounded in an item's <em>function for survival</em> is structurally <strong>teleosemantics</strong>
+(Millikan, Dretske, Papineau) — a forty-year philosophical literature — yet that tradition is entirely
+uncited, with meaning-grounding routed instead through Bennett and enactivism. Its "objects form from
+causal role" is a <strong>natural-kinds</strong> claim (Boyd's homeostatic-property-cluster kinds) that
+goes unnamed. And its availability-versus-use distinction reinvents Dretske's "structuring versus
+triggering cause." These gaps make the program look more <em>sui generis</em> than it is, and forfeit
+sharpening tools those literatures already built. Naming them would strengthen, not diminish, the work —
+a point the philosophy primer develops.</p></div>
+
+<h3>5.5 What to carry forward</h3>
+<p class="small">Pearl's do-operator and identifiability theory become, in the repo, activation patching
+and the self/world gauge; homeostatic RL (Keramati–Gutkin) reframes agents as viability-maintaining
+bodies, not reward-maximizing gamblers; Aubin's viability theory and Friston's active inference supply
+the buffer and the epistemic-probe framing; Bennett solders much of the lineage together; and the
+program carries unmarked debts to teleosemantics and natural-kinds theory that naming would strengthen.</p>
+
+<h1 class="part"><span class="kicker">Part II</span>The Trajectory</h1>
+
+<p>Part I traced what the program inherited. Part II traces what it did with the inheritance — how a
+single question fissioned into three research threads, grew a numbered chain of some thirty-five
+experiments, corrected its own mistakes in public, pivoted when the evidence demanded, and arrived at
+its current frontier. This is the program as a <em>living trajectory</em>, not a static shelf of
+papers.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 6</span>The Founding Question and the Three Threads</h2>
+
+<h3>6.1 The seed</h3>
+
+<p>The program begins not with an experiment but with a conceptual wager, stated in its founding
+synthesis: <em>"meaning is not merely compression or passive latent geometry. Meaning-like structure
+appears when differences become salient under concern, and agency-like structure appears when that
+concern is coupled to action, self-maintenance, boundary preservation, repair, and time."</em> The
+whole enterprise is an attempt to take that sentence — which could easily remain armchair philosophy —
+and make it <em>tractable</em>: to find experiments where its claims could be measured, and could be
+wrong.</p>
+
+<p>Driving every experiment is one recurring anxiety, which is worth naming because it explains the
+program's entire character: <em>how can we tell whether a system's behavior depends on the intended
+internal structure, rather than on a proxy?</em> A model can get the right answer for the wrong reason.
+The program's obsession with catching that — its gates, its controls, its "behavior alone doesn't count"
+rule — all flows from this single worry.</p>
+
+<h3>6.2 The fissioning into three threads</h3>
+
+<p>The founding question splits naturally into three, according to <em>what</em> the geometry is a
+geometry <em>of</em>:</p>
+
+<table class="plain">
+<tr><th>Thread</th><th>The question</th><th>Geometry of…</th></tr>
+<tr><td><strong>A — Weakness / generalization</strong></td><td>Among many rules that fit the training data, which one generalizes to new data — and why?</td><td>hypotheses</td></tr>
+<tr><td><strong>B — Geometry of concern</strong></td><td>Does an agent whose objective is coupled to its viability organize its internal space around what <em>matters</em>, and does that organization causally drive behavior?</td><td>representations</td></tr>
+<tr><td><strong>C — Agency / benchmark</strong></td><td>Can a minimal agent predict its viability, intervene on its world, attribute changes to self versus world, and maintain that boundary over time?</td><td>action &amp; attribution</td></tr>
+</table>
+
+<p>These are not three separate projects but three faces of one hypothesis. Thread A asks which
+distinctions a system should keep (the weak, broadly-compatible ones). Thread B asks whether a living
+system keeps the ones that <em>matter</em> to it (concern-weighted). Thread C asks whether keeping them
+adds up to <em>agency</em> (self-maintenance under intervention and time). Much of the program's later
+theoretical work is the attempt to prove these three threads are mathematically one — that weakness,
+concern, and agency are views of a single optimization. Part I's Chapter 3 and the math primer's
+theorems chapter are where that unification is attempted.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — three instruments, one phenomenon</span>
+<p>Imagine astronomers studying one object with three instruments — a telescope, a spectrometer, a
+radio dish. Each sees something different (an image, a chemical signature, a pulse), and the science
+advances by showing these are one star. The program's three threads are three instruments trained on
+one conjecture about meaning and agency. Thread A's weakness-counting, Thread B's cluster-gap geometry,
+Thread C's intervention-and-attribution — each measures a different facet, and the program's ambition
+is to demonstrate they are reading one underlying thing. Whether they truly are, or only seem to, is
+the open question the whole trajectory circles.</p></div>
+
+<h3>6.3 The character this gives the program</h3>
+
+<p>Two features of the program's style follow directly from this founding structure. First, its
+<strong>relentless anti-proxy discipline</strong>: because the founding worry is "did it work for the
+right reason?", every result must survive controls that a merely-behavioral success would fail. Second,
+its <strong>layered, ladder-like growth</strong>: because the three threads are meant to be one, each
+result tends to expose the next question, producing a chain rather than a scatter. That chain — the
+"numbered spine" of some thirty-five experiments, each answering the previous one's residual doubt — is
+the subject of the next chapter, and it is the most distinctive thing about how this program grew.</p>
+
+<h3>6.4 What to carry forward</h3>
+<p class="small">The program began as a wager that meaning is "geometry under concern" and agency is
+concern coupled to self-maintenance; it is driven throughout by one worry — did the system succeed for
+the intended reason or a proxy?; the wager fissions into three threads (weakness/generalization,
+geometry-of-concern, agency/benchmark) meant to be mathematically one; and this founding structure
+produces the program's anti-proxy discipline and its ladder-like, self-correcting growth.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 7</span>The Numbered Spine and the Correction Chain</h2>
+
+<h3>7.1 A program that grows like a proof</h3>
+
+<p>Most research programs grow by branching — many groups pursuing loosely related questions. This one
+grew like a <em>proof</em>: a numbered sequence of experiments (Papers 1 through 25 and beyond), each
+one triggered by a doubt the previous one could not dispel. The program calls the underlying pattern its
+<strong>Correction Chain</strong>, and it is the single most distinctive thing about its history. Each
+link has the same shape: <em>a system succeeds behaviorally → a diagnostic reveals it succeeded via a
+proxy, not the intended structure → a small architectural change makes the structure load-bearing → a
+harder setting reveals the next proxy.</em> Repeat.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — peeling an onion of self-deception</span>
+<p>Each layer of the onion is a way the system could <em>look</em> right while being wrong, and each
+experiment peels one off. The agent survives — but is it representing its viability, or just reacting to
+a sensory cue? Peel: it turns out to use a proxy. Add structure so it must represent viability. Now it
+represents viability — but can it tell which changes it caused versus the world caused? Peel: the two
+are confounded. Add an intervention to separate them. Now it attributes correctly — but does it keep
+attributing after the world changes? Peel again. The program's history is this peeling, and its honesty
+is that it keeps finding new layers rather than declaring the onion finished. Reading the numbered
+papers in order is watching a system refuse to let itself off the hook.</p></div>
+
+<h3>7.2 The chain, in brief</h3>
+
+<p>The spine is long; here is its logic in compressed form, so you can see the doubt propagating from
+each result to the next:</p>
+
+<table class="plain">
+<tr><th>Stage</th><th>Result</th><th>The doubt it raised</th></tr>
+<tr><td><strong>Weakness (P1–3)</strong></td><td>Weakness predicts generalization where simplicity fails; the symmetry can even be inferred from data.</td><td>But on real language models the geometry is <em>passive</em> — it predicts, but does it <em>control</em>?</td></tr>
+<tr><td><strong>Passive→active (P4)</strong></td><td>Coupling a representation to action makes it causally load-bearing (a 7× jump).</td><td>Is that real self-maintenance, or just "of course ablating a trained direction hurts"?</td></tr>
+<tr><td><strong>Autopoietic (P5)</strong></td><td>The active representation also repairs itself after damage and obeys the Law of the Stack.</td><td>Do <em>objects</em> themselves form from concern, or only directions?</td></tr>
+<tr><td><strong>Valence objects (P6)</strong></td><td>A viability-coupled encoder carves the world by causal role, discarding sensory similarity (reward-axis +1.96 vs sensory +0.005).</td><td>Can this representation actually drive <em>competent action</em>?</td></tr>
+<tr><td><strong>Two bottlenecks (P7–9)</strong></td><td>Representation and competence are independent: a good geometry can fail under weak learning signal, and greedy planning on a learned model <em>is</em> a competent policy.</td><td>Is the training distribution even stable enough to learn from?</td></tr>
+<tr><td><strong>Boundaries &amp; uncertainty (P12–14)</strong></td><td>Smooth networks fail at sharp decision boundaries; ensembles' "uncertainty" does not track error.</td><td>Can a single drive even represent multi-dimensional concern?</td></tr>
+<tr><td><strong>Vector self (P15–16)</strong></td><td>Vector-valued concern enables priority reweighting; but the self/world split is <em>gauge-symmetric</em> — right behavior, arbitrary attribution.</td><td>Can the agent choose <em>when</em> to probe to break the gauge?</td></tr>
+<tr><td><strong>The probing saga (P17–21)</strong></td><td>A long sub-chain: naive probing saturates → a fix is anti-calibrated → recomputing against the current model fixes it → the same failure recurs on a second dimension → scale-normalization fixes that too.</td><td>What if the world doesn't hold still while you learn?</td></tr>
+<tr><td><strong>Responsive world (P22–25)</strong></td><td>When the world responds to the agent and shifts, the agent self-silences, then over-probes ("anxiety"), then achieves a stable detect-probe-cool-reopen cycle — but a shared network can't disambiguate role-specific effects.</td><td>An <em>architectural</em> ceiling: the next question is structural, not about training.</td></tr>
+</table>
+
+<h3>7.3 The probing saga: the chain at its most granular</h3>
+
+<p>One sub-chain deserves a closer look because it shows the correction discipline at maximum
+resolution. The question was simple: an agent should probe (run a costly experiment on its own world)
+where it is <em>uncertain</em>. The obvious rule — "probe where your prediction error is high" — was
+tested and <em>falsified</em>: high error can be irreducible noise you cannot learn from, so the naive
+prober fired constantly. The fix (a running average of past errors) turned out <em>anti-calibrated</em>
+— it pointed reliably at the <em>wrong</em> places. The next fix recomputed the error against the
+<em>current</em> model rather than a stale average, and finally flipped the calibration positive. Then
+the identical failure reappeared on a second internal dimension, requiring a scale-normalization fix.
+Four papers, each correcting the last, to get one signal right — and each correction published, with
+the failed intermediate versions preserved rather than hidden. This is the program's method in
+miniature: not a leap to the answer, but a documented descent through the ways of being wrong.</p>
+
+<div class="warn"><span class="boxtitle">Verdict — the strength and the risk of a proof-like program</span>
+<p>The correction chain is genuinely admirable: it is what serious self-scrutiny looks like, and it
+produces real knowledge (the value-of-information insight, the gauge result, the architectural ceiling
+are all durable). But a mature reader should hold one risk. A program that grows as a single chain, each
+link authored and judged by the same system, can descend a long way into a <em>self-consistent</em>
+structure without an external check that the whole ladder is leaning against the right wall. Each
+correction is validated against the program's own environments and gates. The peeling is real; whether
+the onion is the right onion — whether these toy worlds teach us about real minds and models — is a
+question the chain cannot answer from inside itself. That is why the program's later turn toward
+external models and data (Chapter 8) matters so much.</p></div>
+
+<h3>7.4 What to carry forward</h3>
+<p class="small">The program grew like a proof — a numbered spine of ~35 experiments linked by a
+Correction Chain (behavior succeeds → proxy exposed → structure added → next proxy revealed); the chain
+runs from weakness through passive-to-active geometry, valence objects, the two-bottlenecks
+dissociation, the gauge problem, the four-paper probing saga, to a responsive-world architectural
+ceiling; its granular self-correction is its great strength; and its risk is that a single
+self-judged chain can grow self-consistent without an external check on whether its toy worlds
+generalize.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 8</span>Arc 2, the Benchmark, and the Phases</h2>
+
+<h3>8.1 The director's reset</h3>
+
+<p>Around the midpoint of its history, the program did something research programs rarely do to
+themselves: it delivered a blunt internal critique and changed course. The founding numbered arc, the
+critique held, had become "too demo-shaped" — its experiments tested whether an agent could
+<em>use a provided probe well</em>, not whether it could <em>invent the next useful experiment</em>.
+Passing a supplied test is a lower bar than deciding what test to run. This reset, visible in the
+program's phase documents, pushed it from "mechanism" toward what it calls "regime transition" — results
+that change what can even be represented.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — from answering the exam to writing it</span>
+<p>There is a difference between a student who aces every exam you hand them and a student who figures
+out which experiment the field should run next. The first has mastered a fixed game; the second is doing
+science. The program's Arc 2 reset is the recognition that its agents had been acing handed exams, and
+the decision to test something harder: can an agent <em>invent the intervention</em> — choose, from a
+space of possible experiments, the one that would reveal a hidden structure it needs? Inventing the
+right question is much harder to fake by pattern-matching than answering a given one, which is precisely
+why the program pivoted toward it.</p></div>
+
+<h3>8.2 Arc 2A and 2B: from using probes to inventing them</h3>
+
+<p><strong>Arc 2A ("concerned syntax")</strong> built agents that must, from raw pixels, <em>choose</em>
+which intervention to run to expose a hidden compositional structure — and must do so only when that
+structure actually matters for their survival ("concern-gated intervention invention"). It climbs a
+ladder of increasing autonomy: from a supplied vocabulary of experiments, to label-free calibration, to
+discovering the relevant categories itself. <strong>Arc 2B ("viable computational bodies")</strong> went
+a level up: it evolves candidate agent <em>architectures</em> — "bodies" — under viability and formal
+constraints, using a typed Haskell checker to gate which bodies are even admissible. The two arcs couple
+at a shared contract, with a "scaffold-removal ladder" that progressively strips away supervision to
+test how much the agent can do on its own. Both reach their transfer targets under anti-cheat controls —
+while honestly leaving natural-image perception and open-ended semantics out of reach.</p>
+
+<h3>8.3 The benchmark: packaging the science for the field</h3>
+
+<p>The program's next move was to turn its accumulated agency findings into a <em>product</em> the wider
+research community could use: the <strong>Causally Grounded Finite Agents Benchmark</strong>. Its thesis,
+distilled from the whole trajectory: an agent should be judged not on whether it gets answers right but
+on whether it succeeds <em>for the right causal reasons</em> — whether "the variables that matter for
+future control are represented, attributed, queried, and committed at the causal surfaces where action
+is selected." Its enforced minimum: no suite passes on behavior alone; a pass requires behavior plus at
+least one structure-specific gate plus anti-cheat controls.</p>
+
+<p>The benchmark crystallized the trajectory's hard-won lessons into four named "laws of machine agency"
+— compact statements of things the correction chain had discovered the hard way:</p>
+
+<table class="plain">
+<tr><th>Law</th><th>What the chain learned</th></tr>
+<tr><td><strong>Predictive Policy Closure</strong></td><td>An agent that learns how its actions change what it cares about can use that consequence model directly as its policy.</td></tr>
+<tr><td><strong>Reafferent Identifiability</strong></td><td>Splitting inputs into "self" and "world" is not identification; telling them apart requires a gauge-breaking signal (like a deliberate null action).</td></tr>
+<tr><td><strong>Re-Engagement Floor</strong></td><td>Efficient inquiry is not adaptive inquiry; quiet is not evidence of stability. An agent must re-probe when the world changes.</td></tr>
+<tr><td><strong>Commitment-Surface Memory</strong></td><td>Memory becomes agent-relevant precisely where it is coupled to a future decision.</td></tr>
+</table>
+
+<h3>8.4 The phases: leaving the toy world</h3>
+
+<p>Running alongside the benchmark packaging, a sequence of "phases" (4, 5, 6) addressed the deepest
+worry from Chapter 7: <em>does any of this hold outside the worlds the program built itself?</em> The
+director stated the critique bluntly — "every result lives on toy worlds the lab built itself" — and the
+phases were the response. Phase 4 tested which mechanisms could be learned at all; Phase 5 pushed them
+toward "more model-like" settings; Phase 6 ran them on <em>actual public models</em> (small language
+models, frozen sentence encoders). This is the program at its most exposed, and the results were mixed
+in exactly the way honest external contact produces: some mechanisms survived (uncertainty decoupling
+from error, value-weighted metric deformation on real encoders), while the flagship weakness→OOD
+prediction was <strong>"hard-killed"</strong> on an external model — its correlation with generalization
+essentially zero.</p>
+
+<div class="warn"><span class="boxtitle">Verdict — the phases are the program's moment of truth</span>
+<p>A mature reader should treat the phases as the most important part of the trajectory, because they
+are where the program's claims meet ground it did not prepare. The honest scorecard: the agency and
+uncertainty mechanisms show real, if bounded, external signal; the concern-geometry story does
+<em>not</em> yet transfer to language as-is (a wrong-sign result); and the flagship weakness result may
+be bound to self-built worlds — a single external hard-kill that forced the program's largest
+theoretical reframe (Chapter 9). That the program ran these tests at all, and published the kills, is to
+its enormous credit. That most of its boldest claims have not yet survived external contact is the
+plain state of the evidence, and the program says so.</p></div>
+
+<h3>8.5 What to carry forward</h3>
+<p class="small">A mid-program reset pushed from "using probes" to "inventing them"; Arc 2A/2B built
+agents that choose interventions and evolve their own architectures under a typed formal gate; the work
+was packaged into the Causally Grounded Finite Agents Benchmark ("succeed for the right causal reasons")
+with four named agency laws; and Phases 4–6 carried the claims to real models, where agency and
+uncertainty mechanisms showed bounded external signal but the flagship weakness result was hard-killed —
+the program's honest moment of truth.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 9</span>The Reframe and the Frontier</h2>
+
+<h3>9.1 When an anomaly reorganizes a program</h3>
+
+<p>The history of science has a recurring shape: a program accumulates results within a framework until
+a single stubborn anomaly forces the framework itself to change. This program had such a moment. The
+external "hard-kill" of Chapter 8 — weakness failing to predict generalization on a model the lab did
+not build — was not just a failed experiment; it was a crack in the foundation. If weakness is the
+<em>cause</em> of generalization, it should not vanish when you change the model. Its vanishing implied
+that weakness might be, in the program's own later phrase, <em>a footprint rather than the cause.</em></p>
+
+<h3>9.2 The commitment-surface reframe</h3>
+
+<p>The response is the program's current organizing theory, and its title states the reframe:
+<em>"Weakness Is a Footprint, Compatibility Is the Cause."</em> The move is subtle and worth
+understanding, because it reorganizes the entire prior trajectory. The program had, throughout its
+history, been treating <em>availability</em> of a structure — a probe can decode it, weakness predicts
+it on a toy world — as evidence the structure was <em>real</em> and used. The reframe demotes this. A
+structure is real for a deployment only if a <em>train-time intervention</em> that couples the model to
+the actual deployment-generating process produces a <em>causal effect at the commitment surface</em> —
+the place where the decision is actually made — and only if that effect survives gauge-fixing and
+changes of context. Weakness and geometry become <em>diagnostics</em> — footprints of the real cause —
+load-bearing only when the symmetry you score against happens to match the one that actually generates
+the deployment data.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the footprint and the animal</span>
+<p>A footprint in mud tells you an animal passed. It is real evidence — but the footprint is not the
+animal, and in the wrong terrain (rock, water) the same animal leaves no print at all. The program spent
+years measuring footprints (weakness, cluster geometry, probe decodability) and treating a clear print
+as proof of the beast. The reframe insists on tracking the animal itself: the causal effect at the point
+of decision. Footprints remain useful — they are cheap and often reliable — but only where the ground
+takes prints, i.e. only where the measurement's assumptions match reality. The external hard-kill was a
+patch of rock where the animal left no print, and it forced the program to stop mistaking prints for
+beasts. This is a genuine conceptual maturation, driven by a negative result the program could have
+buried and did not.</p></div>
+
+<h3>9.3 A confound the program found in its own flagship</h3>
+
+<p>The reframe also surfaced a subtle confound in the program's best result, and the way it handled this
+is characteristic. Its data-augmentation scheme, it realized, placed <em>correctly-labeled</em> examples
+onto the held-out deployment region — meaning a model might score well not by <em>learning the underlying
+rule</em> but by effectively <em>memorizing transformed copies of labels</em>. The existing experiments
+could not tell these apart. Rather than let the ambiguity ride, the program pre-registered a new
+multi-arm experiment (the "E5" generator-versus-coverage design) built specifically to separate
+"learning the rule" from "labeled coverage." At the time of writing, that experiment is at the frontier —
+frozen, partly run, verdict pending. The program is, in effect, actively trying to determine whether its
+own flagship result is real or a sophisticated artifact.</p>
+
+<h3>9.4 The current frontier: from verifying to learning</h3>
+
+<p>The frontier has a clear theme: the crossing from <em>static verification</em> (does this trained
+system use the structure?) into <em>learning dynamics</em> (does the commitment-surface criterion govern
+how a system <em>improves itself</em> over time?). Several experiments sit pre-registered and mostly
+unbuilt, each testing whether the program's hard-won criterion is not just a diagnostic but a usable
+<em>objective</em>:</p>
+
+<ul>
+<li><strong>Self-training without collapse.</strong> The flagship frontier test asks whether a
+commitment-surface-survival <em>reward</em> can prevent the reward-hacking collapse that self-training
+loops are known to suffer — whether "does the structure reach the decision surface?" is a self-improvement
+objective, not merely a verification check.</li>
+<li><strong>Continual learning by protecting the load-bearing subspace.</strong> Whether protecting only
+the specific compatibility-carrying directions (rather than all weights uniformly) escapes the usual
+stability-plasticity tradeoff.</li>
+<li><strong>Commitment-change as a plasticity trigger.</strong> Whether the moment a commitment changes
+is a better signal for when to adapt than any internal statistic.</li>
+</ul>
+
+<p>These share a hypothesis: that the criterion the program spent its whole history discovering — a
+structure is real when it causally reaches the commitment surface — might be the right thing not just to
+<em>measure</em> but to <em>optimize</em>. If so, the program crosses from a science of diagnosing agency
+into a science of building it. If not, the criterion remains a valuable measuring stick. Either way, by
+the program's own design, the result narrows the program.</p>
+
+<div class="warn"><span class="boxtitle">Verdict — a program that reframes on its own negatives is doing it right</span>
+<p>The commitment-surface reframe is the strongest single piece of evidence that this is a real research
+program and not an elaborate confirmation machine. A confirmation machine does not demote its own
+flagship quantity to "a footprint" on the strength of one external kill; it explains the kill away. This
+program reorganized its entire theory around the anomaly, then designed experiments to test whether its
+best result is an artifact. That is exactly the behavior philosophy of science prescribes and rarely
+observes. The open question — whether the new criterion survives its own frontier tests — is genuinely
+open, which is the honest and correct state for a frontier to be in.</p></div>
+
+<h3>9.5 What to carry forward</h3>
+<p class="small">An external hard-kill cracked the "weakness is the cause" framework; the
+commitment-surface reframe ("weakness is a footprint, compatibility is the cause") demoted availability
+in favor of causal effect at the decision surface; the program found and is actively testing a confound
+in its own flagship result; and the frontier is the crossing from verifying that a system uses structure
+to using the criterion as a self-improvement objective — with the whole reframe standing as proof the
+program corrects itself on its own negatives.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 10</span>The Meta-Story: Machine-Made Science</h2>
+
+<h3>10.1 A history unlike other histories</h3>
+
+<p>Every previous chapter could, in principle, describe a program run by human scientists. This one
+cannot, because the most historically novel fact about this program is <em>how</em> it was made: its
+experiments, sweeps, figures, and paper drafts were <strong>generated by an AI coding agent under a
+human director's</strong> (Jawaun Brown) direction and review. This is not a footnote to the history;
+in an important sense it <em>is</em> the history, because it shapes the program's pace, structure, and
+character in ways worth reading explicitly.</p>
+
+<h3>10.2 How the machine-authorship shows up</h3>
+
+<table class="plain">
+<tr><th>Feature</th><th>How AI-authorship produced it</th></tr>
+<tr><td><strong>Pace and volume</strong></td><td>Roughly fifty experiments and as many papers in a span no small human team could match — a numbered arc, three benchmark suites, and multiple phases, all inside one compressed period.</td></tr>
+<tr><td><strong>Self-documentation as infrastructure</strong></td><td>An unusually heavy scaffolding of ledgers, audit cards, provenance files, and handoff documents <em>written for other AI agents</em> — because each agent may start with no memory of the last, so the repository itself must be the memory.</td></tr>
+<tr><td><strong>Guardrails against machine failure modes</strong></td><td>The pre-registration apparatus, anti-cheat gates, publication guards, and "do not retune a gate" rules read as defenses specifically against the ways an eager generator would overclaim: retroactive reframing, metric-gaming, leaking answers into the setup.</td></tr>
+<tr><td><strong>Rhetorical restraint as policy</strong></td><td>The near-verbatim "we do not claim consciousness" disclaimers in paper after paper are a <em>systemic</em> guard against a vocabulary (concern, self, care) that constantly invites overreach.</td></tr>
+</table>
+
+<div class="pump"><span class="boxtitle">Intuition pump — a laboratory built for amnesiac scientists</span>
+<p>Imagine a lab staffed by brilliant researchers who each forget everything at the end of the day and
+are replaced by a fresh colleague every morning. To function, such a lab would have to externalize all
+its memory into meticulous notebooks, standing procedures, and handoff notes — because nothing lives in
+anyone's head overnight. This program is that lab. Its extraordinary density of ledgers, provenance
+cards, and "next-agent handoff" documents is not bureaucratic excess; it is the necessary condition for
+a research program whose workers are stateless. The repository is not just where the science is stored;
+it is the only place the science's continuity <em>exists</em>. This is a genuinely new organizational
+form, and its documentation habits are the fossil record of it.</p></div>
+
+<h3>10.3 The human in the loop</h3>
+
+<p>Where, in all this, is the human director? Most visible not in the experiments but in the
+<em>taste and ambition</em>. The program's sharpest internal documents — the mid-program critique that
+forced the Arc 2 reset, the demand to leave the toy worlds, the judgment that most results are "only
+diagnostic-to-mechanism" — read as a human steering the level of ambition while the agents supply
+throughput. The director judges the program through the lenses of named researchers (the compute-scaling
+view, the causal-inference view, the "build the strongest shortcut first" ethic) and pushes back when
+the output drifts toward "one more positive table" instead of "change the allowed claim boundary." The
+division of labor is legible: the machine generates and self-checks at scale; the human sets the taste,
+picks the fights, and decides what would actually count as progress.</p>
+
+<h3>10.4 The novelty question, answered honestly</h3>
+
+<p>A history owes its reader a verdict on originality. What, across this whole trajectory, is genuinely
+new versus skilled recombination of the lineage in Part I?</p>
+
+<div class="prog"><span class="boxtitle">Verdict — what is genuinely the program's own</span>
+<p><strong>Defensibly novel:</strong> (1) turning Bennett's philosophical "weakness" into a
+reparameterization-invariant, data-inferable, <em>causal</em> predictor of generalization that beats
+every classical simplicity measure in a clean head-to-head — the crown jewel. (2) The passive→active
+transition made <em>measurable</em>: showing that coupling a representation to action turns a correlational
+cluster into a self-defending, self-repairing attractor. (3) The self/world <em>gauge</em> result — a
+computational proof that a system can be a perfect agent while having no fact of the matter about which
+changes are its own, fixable only by intervention. (4) The "availability is not use" / load-bearing
+standard as a general <em>criterion of representational reality</em> — which survives all of the program's
+own negatives and may be its most durable contribution. (5) An unusually large corpus of <em>honest
+negatives</em> — the falsified exponent, the failed mediation, the external hard-kill, the self-retracted
+synthesis — published at a density that is itself a contribution to how AI-generated science should be
+done.</p>
+<p><strong>Skilled recombination (discount accordingly):</strong> the grand convergence thesis (a
+synthesis of the efficient-coding, Platonic-hypothesis, and enactivist observations); the "concern /
+viability / boundary" vocabulary (recombined from Ashby, Maturana–Varela, Di Paolo, Bennett, Levin); and
+most of the mathematical machinery (equivariance, rate-distortion, viability kernels, causal
+identifiability), imported largely intact.</p></div>
+
+<h3>10.5 The bottom line</h3>
+
+<p>Read as a whole, the trajectory is a program that took a cluster of speculative philosophy-of-mind
+claims and did the unglamorous, disciplined work of trying to make them measurable and to catch itself
+when they weren't. Its strongest results sit at the intersection of generalization, geometry, and
+intervention on small clean systems; its reach exceeds its grasp when it stretches toward real models and
+open-ended meaning, and it mostly says so. The historically new thing is not any single result but the
+<em>form</em>: a fast, self-documenting, self-critiquing, honestly-negative research program authored by
+a machine and steered by a human — an early specimen of what science may look like when its labor is
+automated but its judgment is not. Whether its boldest bets are right remains open. That it made the bets
+legible, testable, and honestly scored is already a contribution, and it is the one a history can
+certify.</p>
+
+<h3>10.6 What to carry forward</h3>
+<p class="small">The program's most novel fact is its authorship — AI-generated under human direction —
+which explains its pace, its memory-as-infrastructure documentation, its guardrails against machine
+overclaiming, and its rhetorical restraint; the human supplies taste and ambition, the machine supplies
+throughput and self-checking; genuinely novel contributions include causal weakness, measured
+passive→active transition, the self/world gauge, the load-bearing criterion, and the density of honest
+negatives; and the deepest novelty is the <em>form</em> — an early specimen of automated-labor,
+human-judgment science.</p>
+
+</body></html>

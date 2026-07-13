@@ -1,0 +1,1110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Mathematics of the Research Program — A Primer from First Principles</title>
+<style>
+/* ---------- page setup ---------- */
+@page { size: letter; margin: 0.9in 0.85in; }
+:root {
+  --ink: #1a1a1e;
+  --muted: #55555e;
+  --rule: #d8d8de;
+  --def-bg: #eef4fb;  --def-edge: #2c6cb0;   /* definitions */
+  --pump-bg: #fdf6e8; --pump-edge: #c98a1b;  /* intuition pumps */
+  --vis-bg: #f4effa;  --vis-edge: #7a4fb5;   /* visual proofs */
+  --prog-bg: #edf7ee; --prog-edge: #35854a;  /* in our papers */
+  --warn-bg: #fbeeee; --warn-edge: #b04040;  /* pitfalls */
+  --eq-bg: #f7f7f9;
+}
+* { box-sizing: border-box; }
+html { font-size: 10.4pt; }
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--ink);
+  line-height: 1.52;
+  margin: 0;
+}
+p { margin: 0.55em 0 0.75em; text-align: justify; hyphens: auto; }
+ul, ol { margin: 0.4em 0 0.8em; padding-left: 1.4em; }
+li { margin-bottom: 0.28em; text-align: justify; }
+strong { color: #000; }
+
+/* ---------- headings ---------- */
+h1, h2, h3, h4 { font-family: Georgia, serif; line-height: 1.22; page-break-after: avoid; }
+h1.part {
+  page-break-before: always;
+  font-size: 2.05em; margin: 2.2em 0 0.2em;
+  color: #17314f;
+}
+h1.part .kicker {
+  display: block; font-size: 0.42em; letter-spacing: 0.18em;
+  text-transform: uppercase; color: #8a6a2f; margin-bottom: 0.9em;
+  font-weight: normal;
+}
+h2.chapter {
+  page-break-before: always;
+  font-size: 1.62em; margin: 1.4em 0 0.25em; color: #17314f;
+  border-bottom: 2.5px solid #17314f; padding-bottom: 0.22em;
+}
+h2.chapter .chnum {
+  display: block; font-size: 0.58em; letter-spacing: 0.14em;
+  text-transform: uppercase; color: #8a6a2f; margin-bottom: 0.25em;
+}
+h3 { font-size: 1.18em; margin: 1.35em 0 0.35em; color: #1f3a5c; }
+h4 { font-size: 1.02em; margin: 1.1em 0 0.3em; color: #33333a; font-style: italic; }
+
+/* ---------- math ---------- */
+.m { font-family: 'Georgia', serif; font-style: italic; white-space: nowrap; }
+.m b, .mrm { font-style: normal; }
+.eq {
+  display: block; text-align: center; font-family: Georgia, serif;
+  font-style: italic; font-size: 1.09em; margin: 0.85em auto;
+  page-break-inside: avoid;
+}
+.eqbox {
+  background: var(--eq-bg); border: 1px solid var(--rule); border-radius: 6px;
+  padding: 0.6em 1em; margin: 0.9em 0; page-break-inside: avoid;
+}
+.frac { display: inline-block; vertical-align: -0.9em; text-align: center; margin: 0 0.12em; }
+.frac .top { display: block; padding: 0 0.25em 0.08em; border-bottom: 1px solid currentColor; }
+.frac .bot { display: block; padding: 0.08em 0.25em 0; }
+sub, sup { font-size: 0.68em; }
+.big { font-size: 1.35em; font-style: normal; vertical-align: -0.12em; }
+.rm { font-style: normal; }
+
+/* equation decoder tables */
+table.decoder {
+  width: 100%; border-collapse: collapse; margin: 0.7em 0 1em;
+  font-size: 0.93em; page-break-inside: avoid;
+}
+table.decoder th, table.decoder td {
+  border: 1px solid var(--rule); padding: 0.32em 0.55em; text-align: left; vertical-align: top;
+}
+table.decoder th { background: #eef1f5; font-size: 0.9em; letter-spacing: 0.04em; }
+table.decoder td:first-child { font-family: Georgia, serif; font-style: italic; white-space: nowrap; }
+
+table.plain {
+  width: 100%; border-collapse: collapse; margin: 0.7em 0 1em; font-size: 0.93em;
+}
+table.plain th, table.plain td {
+  border: 1px solid var(--rule); padding: 0.3em 0.5em; text-align: left; vertical-align: top;
+}
+table.plain th { background: #eef1f5; }
+
+/* ---------- callout boxes ---------- */
+.box {
+  border-radius: 7px; padding: 0.7em 0.95em 0.55em; margin: 1em 0;
+  page-break-inside: avoid; border-left: 4.5px solid;
+}
+.box .boxtitle {
+  display: block; font-size: 0.78em; font-weight: bold; letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 0.35em; font-family: Helvetica, Arial, sans-serif;
+}
+.box p:last-child { margin-bottom: 0.25em; }
+.def  { background: var(--def-bg);  border-color: var(--def-edge); }
+.def .boxtitle { color: var(--def-edge); }
+.pump { background: var(--pump-bg); border-color: var(--pump-edge); }
+.pump .boxtitle { color: var(--pump-edge); }
+.vis  { background: var(--vis-bg);  border-color: var(--vis-edge); }
+.vis .boxtitle { color: var(--vis-edge); }
+.prog { background: var(--prog-bg); border-color: var(--prog-edge); }
+.prog .boxtitle { color: var(--prog-edge); }
+.warn { background: var(--warn-bg); border-color: var(--warn-edge); }
+.warn .boxtitle { color: var(--warn-edge); }
+
+/* ---------- figures ---------- */
+figure {
+  margin: 1.1em auto; text-align: center; page-break-inside: avoid;
+}
+figcaption {
+  font-size: 0.86em; color: var(--muted); margin-top: 0.45em;
+  text-align: justify; padding: 0 1.2em;
+}
+figcaption b { color: #333; }
+svg { max-width: 100%; }
+svg text { font-family: Helvetica, Arial, sans-serif; }
+.svglabel { font-size: 11px; fill: #333; }
+
+/* ---------- misc ---------- */
+code, .code {
+  font-family: 'Courier New', monospace; font-size: 0.9em;
+  background: #f2f2f4; padding: 0.05em 0.3em; border-radius: 3px;
+}
+.titlepage { text-align: center; padding-top: 2.4in; }
+.titlepage h1 { font-size: 2.5em; color: #17314f; margin-bottom: 0.2em; border: none; }
+.titlepage .subtitle { font-size: 1.25em; color: var(--muted); font-style: italic; margin: 0.6em 0 2em; }
+.titlepage .meta { font-size: 0.95em; color: var(--muted); margin-top: 3.2em; line-height: 1.9; }
+.toc { page-break-before: always; }
+.toc h2 { font-size: 1.5em; color: #17314f; }
+.toc ul { list-style: none; padding-left: 0; column-count: 2; column-gap: 2.2em; font-size: 0.92em; }
+.toc ul li { margin-bottom: 0.32em; }
+.toc .tocpart { font-weight: bold; margin-top: 0.7em; color: #17314f; break-after: avoid; }
+.chip {
+  display: inline-block; font-family: Helvetica, Arial, sans-serif; font-size: 0.7em;
+  background: #e7edf5; color: #2c4a72; border-radius: 9px; padding: 0.1em 0.65em;
+  margin-right: 0.3em; letter-spacing: 0.03em; vertical-align: 0.15em;
+}
+.small { font-size: 0.88em; color: var(--muted); }
+hr.sep { border: none; border-top: 1px solid var(--rule); margin: 1.6em 15%; }
+</style>
+</head>
+<body>
+
+<div class="titlepage">
+  <h1>How This Knowledge Is Made</h1>
+  <p class="subtitle">A Primer on the Scientific Method, Epistemology, and Trust<br>Behind an AI-Generated Research Program</p>
+  <svg width="300" height="150" viewBox="0 0 300 150">
+    <rect x="40" y="30" width="220" height="90" rx="6" fill="none" stroke="#2c6cb0" stroke-width="1"/>
+    <line x1="90" y1="30" x2="90" y2="120" stroke="#d8d8de"/>
+    <line x1="210" y1="30" x2="210" y2="120" stroke="#d8d8de"/>
+    <text x="65" y="78" text-anchor="middle" font-size="10" fill="#35854a">gate</text>
+    <text x="150" y="72" text-anchor="middle" font-size="10" fill="#c98a1b">controls</text>
+    <text x="150" y="88" text-anchor="middle" font-size="10" fill="#c98a1b">that fail</text>
+    <text x="235" y="78" text-anchor="middle" font-size="10" fill="#b04040">oracle</text>
+    <circle cx="150" cy="135" r="4" fill="#7a4fb5"/>
+  </svg>
+  <p class="meta">
+    A companion to <em>The Mathematics of Constraint</em>.<br>
+    Where the math primer taught you to read the equations,<br>
+    this one teaches you to judge whether the claims are earned.
+  </p>
+</div>
+
+<div class="toc">
+<h2>Why a Book About Method</h2>
+<p>A research program is not its results; it is the <em>procedure</em> that produced them. Two labs
+can report the same number and mean utterly different things by it — one having stumbled on it, the
+other having pre-committed to it, red-teamed it, and tried and failed to make it disappear. This book
+is about that procedure: how your program manufactures knowledge, why it is built the way it is, and
+where a mature reader should trust it and where they should push back.</p>
+
+<p>The program has an unusual property that makes its method especially interesting: <strong>the
+science is generated by an AI agent under a human director's review.</strong> That is not a footnote.
+It changes what "trust" can mean, because the classical anchors — a named scientist's reputation, the
+slow friction of human labor, the assumption that fabrication is costly — are all weakened when a
+program can produce plausible-looking results at high volume and near-zero cost. The program's answer
+is to make trust rest on <em>machine-checkable artifacts</em> rather than on anyone's word. Watching
+how it does that is the through-line of this book.</p>
+
+<div class="pump" style="margin-top:0.4em"><span class="boxtitle">Who this is for</span>
+<p>You do not need to be a working scientist. You need only the willingness to ask, of every claim,
+"how would I know if this were false?" — which is the whole of science compressed into one question.
+By the end you will hold a mature, critical picture of the program's epistemology: its genuinely
+strong methodological ideas, its honest treatment of failure, and the specific weaknesses a skeptic
+should press. The boxes work as in the math primer: <span class="chip">Definition</span>,
+<span class="chip">Intuition pump</span>, <span class="chip">In the repo</span> (pointing to real
+files and results), and <span class="chip">Criticism</span> (where a mature reader should object).</p></div>
+
+<h3 style="margin-top:1.1em">Contents</h3>
+<ul>
+<li class="tocpart">Part I · The Problem</li>
+<li>1 · What Science Is, and the New Problem of AI-Made Science</li>
+<li class="tocpart">Part II · The Epistemic Engine</li>
+<li>2 · Pre-Registration and Gates: Unit Tests for Claims</li>
+<li>3 · Controls Designed to Fail</li>
+<li>4 · Oracles, Seeds, and the Bootstrap</li>
+<li>5 · Claim Tiers: Not Overclaiming</li>
+<li class="tocpart">Part III · Trust and Honesty</li>
+<li>6 · Observability: Provenance, Guards, Reproduce</li>
+<li>7 · Negative Results as the Product</li>
+<li>8 · Retrieval, Search, and Discovery</li>
+<li class="tocpart">Part IV · A Mature Verdict</li>
+<li>9 · Where a Skeptic Should Push — and How to Improve the Science</li>
+</ul>
+</div>
+
+<h1 class="part"><span class="kicker">Part I</span>The Problem</h1>
+
+<p>Before the machinery, the motivation. This part states what science is at its core, and then the
+specific twist that shapes everything about how your program works: it is science whose experiments
+were run by an AI agent. That twist is not a gimmick — it is a genuine epistemological problem, and
+the program's entire method is an answer to it.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 1</span>What Science Is, and the New Problem of AI-Made Science</h2>
+
+<h3>1.1 Science is organized distrust</h3>
+
+<p>Strip away the lab coats and science is a single discipline: <strong>the systematic refusal to
+fool yourself.</strong> Feynman's version — "the first principle is that you must not fool yourself,
+and you are the easiest person to fool" — is the whole thing. Every method in this book is a
+particular defense against a particular way humans (and now machines) fool themselves: seeing
+patterns in noise, remembering the hits and forgetting the misses, adjusting the target after the
+arrow lands, believing a result because we wanted it.</p>
+
+<p>The reason this is hard is that <em>the data never speaks for itself.</em> Any finite set of
+observations is compatible with endless different explanations, most of which will fail on the next
+observation. So science is not "collect data and read off the truth"; it is "propose explanations,
+then attack them as hard as you can, and provisionally keep the ones that survive." A claim earns
+credibility not by being confirmed but by having <em>survived a serious attempt to kill it.</em>
+That asymmetry — attack, don't confirm — is the deepest idea in the field, and it is worth holding in
+mind as you read, because your program takes it unusually seriously.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the difference a prediction makes</span>
+<p>Two people watch a coin land heads five times. The first says "see, it's a magic heads coin." The
+second said, <em>before the flips</em>, "if it's a fair coin, five heads has probability 1/32; if I
+see that, I'll suspect it's loaded." Same data, wildly different epistemic weight — because the
+second person put their prediction at risk <em>in advance</em>, where the data could have refuted
+them. The first merely told a story after the fact, which any data could have supported. Almost
+every method in this book exists to convert scientists of the first kind into scientists of the
+second kind, by forcing the prediction to be written down before the data arrives. This is the
+single most important idea you will meet, so it gets the first pump.</p></div>
+
+<h3>1.2 The classical trust stack, and why it wobbles here</h3>
+
+<p>When you read a paper from a university lab, you extend it a quantum of trust that comes from
+sources mostly outside the paper itself: a named researcher with a reputation to lose; peer reviewers
+who tried to poke holes; the sheer <em>cost</em> of the work, which makes wholesale fabrication
+irrational; and an implicit assumption that a slow human being was in the loop, noticing anomalies.
+This is a social trust stack, and it usually works.</p>
+
+<p>Your program strains every layer of it. The experiments, sweeps, figures, and paper drafts are
+<strong>generated by an AI coding agent</strong> under the direction and review of a human author,
+Jawaun Brown — a fact the repository states plainly rather than hides, embedding it in every
+provenance record ("Experiment code, sweeps, and paper drafts generated by an AI coding agent under
+the author's direction and review — stated, not hidden," per the repo's own attribution norm). But
+stating it does not dissolve the problem it creates:</p>
+
+<ul>
+<li><strong>Volume outruns human review.</strong> The program spans roughly fifty experiments and as
+many papers, produced at a cadence no small human team could match. A reviewer cannot re-run and
+scrutinize each one by hand, so trust cannot rest on "a careful human checked everything."</li>
+<li><strong>Plausibility is cheap.</strong> A language model can produce results, prose, and even
+self-critiques that <em>read</em> as rigorous. Fluency is no longer evidence of correctness — if it
+ever was — so the usual heuristic "this is well-written and careful, so it's probably sound" fails.</li>
+<li><strong>The reviewer can be the same kind of system.</strong> When the experimenter, the
+red-teamer, and the critic are all instances of similar AI systems, their shared blind spots do not
+cancel out. Independence — the thing that makes multiple checks valuable — is not guaranteed.</li>
+</ul>
+
+<div class="def"><span class="boxtitle">Definition — the AI-science trust problem</span>
+<p>When scientific artifacts are generated by an AI agent at high volume and low cost, credibility
+can no longer be inherited from the author's reputation, the labor's expense, or a human's careful
+oversight. It must instead be <strong>reconstructed from machine-checkable evidence</strong>: exact
+commands, fixed seeds, committed inputs and outputs, automated guards, and pre-committed decision
+rules that a third party can independently verify without trusting the generator. The program's
+methodology is, at bottom, an engineering answer to this problem.</p></div>
+
+<h3>1.3 The program's response: observability by default</h3>
+
+<p>The repository adopts an explicit stance, borrowed from a 2026 methodological paper it cites (Mo,
+<em>"The Age of AI Agents Demands a New Scientific Paradigm to Sustain Trustworthy Science"</em>): be
+<strong>observable by default</strong>, resting on three pillars — <em>observability</em> (you can
+see exactly what was done), <em>attribution</em> (who/what did it is recorded), and
+<em>reproducibility</em> (anyone can regenerate it). The rest of this book is largely an unpacking of
+how those three pillars are built into concrete tooling: pre-registered gates you cannot retrofit
+(Chapter 2), controls that must fail (Chapter 3), provenance cards and publication guards and
+one-command reproduction (Chapter 6), and a discipline of publishing failures as loudly as successes
+(Chapter 7).</p>
+
+<p>Here is the thesis of the whole book, stated once, plainly: <strong>the program tries to make its
+trustworthiness independent of trusting the AI that produced it.</strong> Whether it fully succeeds
+is the question Chapter 9 takes up with a skeptic's eye. But the ambition is the right one, and it is
+worth appreciating before we examine the parts — because every piece of apparatus that follows is
+there to let a suspicious outsider verify a claim without having to believe the machine that made it.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the restaurant kitchen with glass walls</span>
+<p>You can trust a restaurant two ways. The old way: it has a famous chef and a reputation, so you
+assume the kitchen is clean. The new way: the kitchen has glass walls, every ingredient is labeled
+with its source, the recipes are posted, and a health inspector's checklist hangs by the door — so
+you can <em>see</em> it's clean regardless of who's cooking. When the cook is an AI you've never met,
+the first kind of trust is unavailable. The program bets everything on the second: glass walls
+(observability), ingredient labels (attribution), posted recipes anyone can follow (reproducibility).
+Read the coming chapters as a tour of that glass-walled kitchen — and Chapter 9 as the health
+inspector finding the spots the glass doesn't cover.</p></div>
+
+<h3>1.4 What to carry forward</h3>
+<p class="small">Science is organized self-distrust; a claim's weight comes from surviving attempts
+to kill it, not from confirmations; predictions made <em>before</em> the data count for far more than
+stories told after; the classical social trust stack wobbles when an AI generates science at volume;
+and the program's answer is "observability by default" — reconstructing trust from machine-checkable
+artifacts. Everything in Parts II and III is a concrete instance of that answer; Part IV judges how
+well it works.</p>
+
+<h1 class="part"><span class="kicker">Part II</span>The Epistemic Engine</h1>
+
+<p>The program produces knowledge with a stack of interlocking devices, each defending against a
+specific way of fooling yourself. This part takes them one at a time — pre-registration and gates,
+controls designed to fail, oracles and seeds and the bootstrap, and the claim-tier discipline that
+stops a toy result from being dressed up as a law. None of these is exotic; together they are unusually
+rigorous.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 2</span>Pre-Registration and Gates: Unit Tests for Claims</h2>
+
+<h3>2.1 The disease: deciding what counts as success after you see the data</h3>
+
+<p>The most common way careful people fool themselves has a name: the <strong>garden of forking
+paths</strong>. You run an experiment, look at the results, and — entirely honestly — notice that
+<em>one</em> of the several things you measured looks impressive, so you write the paper about that.
+The problem is that with enough measurements, <em>something</em> will look impressive by chance, and
+by choosing which one to highlight after the fact, you have quietly turned noise into a "finding."
+A close cousin is <strong>HARKing</strong> — Hypothesizing After the Results are Known — where the
+prediction is written to match the data it was supposed to test.</p>
+
+<p>Both are invisible in the final paper. The reader sees a clean prediction and a matching result and
+cannot tell whether the prediction came first (real) or the result came first (an illusion). The only
+cure is to <em>timestamp the prediction</em> — to fix, before the data exists, exactly what will
+count as success.</p>
+
+<h3>2.2 Pre-registration: freezing the prediction before the data</h3>
+
+<div class="def"><span class="boxtitle">Definition — pre-registration</span>
+<p>A <strong>pre-registration</strong> is a document, committed and dated <em>before any data is
+collected</em>, that fixes: the question, the experimental setup, the conditions, the number of runs,
+the exact numeric thresholds for success, and — crucially — an <strong>interpretation matrix</strong>
+saying in advance what every possible outcome will be taken to mean. Once frozen, it cannot be
+retrofitted to the data.</p></div>
+
+<p>In this repository, every serious experiment carries a <code>preregistration.md</code> frozen with
+a date before its compute runs. The discipline is enforced even for after-the-fact additions: when a
+confound was discovered after one experiment (E4) and a new follow-up (E5) was designed, the plan
+file records the addendum as "explicitly post-hoc, frozen before any E5 result was produced or
+inspected" — and states plainly that it "does not alter" the original pre-registration. That is the
+tell of a serious program: it will not let a later idea quietly rewrite an earlier commitment, even
+its own.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — sealed envelopes</span>
+<p>Imagine every experiment must first mail itself a sealed envelope containing its prediction and
+its pass/fail line, postmarked before the data is gathered. When the results come in, you open the
+envelope and check. You cannot claim a bullseye by painting the target around wherever the arrow
+landed, because the target's coordinates are already in the mail. Pre-registration is that sealed,
+postmarked envelope — and because this program's envelopes are git commits with timestamps, an
+outsider can verify the postmark without trusting anyone.</p></div>
+
+<h3>2.3 Gates: turning "it worked" into a checkable boolean</h3>
+
+<p>Inside each pre-registration are <strong>gates</strong>: named, numeric pass/fail thresholds. Not
+"the effect was large" but "G3 — Selection beats volume: the learned method's error must be at least
+25% lower than a matched-random baseline at the same budget." Not "the probe was well-calibrated" but
+"G6: Spearman correlation with the oracle must be at least 0.5." Each gate ties one claim to one
+falsifiable line in the sand, decided in advance.</p>
+
+<div class="prog"><span class="boxtitle">In the repo — gates are literally unit tests for claims</span>
+<p>If you have written software tests, you already understand this exactly. A pre-registered gate is
+a unit test written <em>before</em> the code: it pins down, numerically and in advance, what "passing"
+means. The program even serializes gates as structured records — each gate carries an id, a name, the
+axis of evidence it tests, its threshold expression (e.g. <code>ci_lower &gt; 0 and rank_percentile &gt;
+0.5</code>), the achieved value, and a boolean <code>passed</code> — the same shape a test runner
+emits. Reading a results section becomes code review: you are checking which assertions passed, which
+failed, and whether the assertions were the right ones.</p></div>
+
+<h3>2.4 The most important gate: behavior alone never counts</h3>
+
+<p>One gate recurs across nearly every experiment and expresses the program's deepest methodological
+commitment. It says, in effect: <strong>getting the right answer is not evidence of the right
+mechanism.</strong> A typical form: "G12 — Behavior alone does not count: a return of 45/50 without the
+structure gates (G1, G3, G5) also passing counts as a <em>mechanistic failure</em>." Read that twice.
+The program is willing to call a <em>high-scoring agent a failure</em> if it can't show the agent
+succeeded for the intended internal reason. This is the entire premise of its benchmark work — an
+agent must pass "behavior plus at least one structure-specific gate plus anti-cheat controls," never
+behavior alone.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the student who gets the right answer the wrong way</span>
+<p>A student writes "42" and it's correct — but the working shows they added where they should have
+multiplied and hit the right number by luck. A good teacher marks it wrong, because the goal is the
+method, not the digit. Standard AI benchmarks grade only the digit: did the model output the right
+answer? This program grades the working: did the intended structure actually drive the answer? That
+is why it builds elaborate structure gates and is content to fail a model that "passed" the task.
+The philosophical name for this is "availability is not use" — a representation being present, or
+decodable, is not the same as it being <em>used</em> to make the decision. The whole benchmark family
+exists to enforce that distinction.</p></div>
+
+<h3>2.5 The interpretation matrix: no result can be spun</h3>
+
+<p>The subtlest device is the <strong>interpretation matrix</strong>: a table, written before the
+run, mapping every possible pattern of results to a fixed conclusion. "Headline passes G1–G10 →
+strong positive. G7 fails → the probe doesn't track regime shifts. Action-blind control succeeds
+anyway → the task isn't hard enough yet; strengthen the coupling." Because every outcome already has
+an assigned meaning, no outcome can be re-spun after the fact. The program states the design principle
+bluntly: <em>"Any outcome is publishable. All narrow the program."</em></p>
+
+<p>That last phrase is worth dwelling on, because it inverts the usual incentive. In most science, a
+null result feels like failure and tempts you to keep digging until something "works." Here, every
+result — pass or fail — is defined in advance to be informative, so there is nothing to salvage by
+digging. The pressure to fool yourself is engineered out at the source.</p>
+
+<div class="warn"><span class="boxtitle">Criticism — pre-registration constrains one experiment, not a program</span>
+<p>A mature reader should hold this limit firmly. Pre-registration makes any <em>single</em>
+experiment honest, but the program runs <em>many</em> experiments and pivots often. Across a long
+chain of pre-registered-then-redirected studies, the program-level rate of false discoveries is not
+controlled even if each study is individually clean — the forking happens <em>between</em> experiments
+instead of within them. And an interpretation matrix with a publishable cell for literally every
+outcome can blur the line between "we predicted this" and "we can explain anything." The fixes
+(Chapter 9) are a program-level registry of every frozen gate and its outcome, and multiplicity
+correction across the family of results that feed a single big claim. The program does not yet do
+this, and it is the sharpest place to press.</p></div>
+
+<h3>2.6 What to carry forward</h3>
+<p class="small">The garden of forking paths and HARKing turn noise into findings; pre-registration
+defeats them by timestamping the prediction; gates are unit tests for claims (numeric, pre-committed,
+machine-readable); the recurring "behavior alone doesn't count" gate encodes "availability is not use";
+and the interpretation matrix makes every outcome informative and unspinnable — though only within a
+single experiment, which is the standing limitation.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 3</span>Controls Designed to Fail</h2>
+
+<h3>3.1 The signature move</h3>
+
+<p>If one technique distinguishes this program's method, it is this: alongside the real experiment, it
+runs a battery of <strong>controls that <em>should</em> fail</strong> — and it treats their failure as
+the proof that the real result means what it claims. The logic is precise and worth internalizing,
+because once you have it, you can read any results table adversarially.</p>
+
+<div class="def"><span class="boxtitle">Definition — a control designed to fail</span>
+<p>A <strong>negative control</strong> is a condition constructed so that, <em>if your metric measures
+what you think it measures</em>, it must score poorly. You feed the mechanism something that has the
+right <em>shape</em> but the wrong <em>content</em> — a signal of the correct format but scrambled
+meaning, the right data with the pairings shuffled, or random behavior granted the same resources as
+the learned method. If a control that <em>shouldn't</em> work works anyway, your metric is measuring
+something other than what you intended, and the real result is called into question.</p></div>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the placebo, and why it must be inert</span>
+<p>A drug trial gives half the patients the real pill and half a sugar pill. The sugar pill is a
+control <em>designed to fail</em>: it has the right shape (a pill, a ritual, an expectation) but no
+active content. If the sugar pill cures as many people as the drug, you have learned that your "cure"
+was the ritual, not the chemistry. The entire value of the placebo is that it is supposed to do
+nothing — and confirms your drug works only by <em>failing</em> to. This program runs placebo arms
+for everything: for a learned probe, the placebo is a random prober with the same budget; for a
+"signal" the agent uses, the placebo is that same signal scrambled or made stale. A claim earns
+credit only by beating its placebos.</p></div>
+
+<h3>3.2 The catalogue of controls</h3>
+
+<p>The program uses a recognizable family of them. Learning to spot each by name makes results tables
+legible:</p>
+
+<table class="plain">
+<tr><th>Control</th><th>What it feeds the mechanism</th><th>What its failure proves</th></tr>
+<tr><td><strong>Matched-random</strong></td><td>random behavior, given the <em>same</em> budget as the learned method (e.g. the same number of probes the learned agent chose to use)</td><td>the learned method's advantage is from <em>selection</em>, not merely from doing more</td></tr>
+<tr><td><strong>Wrong-signal</strong></td><td>a signal of the correct format but the wrong content (e.g. the wrong symmetry group, a distractor feature)</td><td>the result depends on the signal's <em>meaning</em>, not its mere presence</td></tr>
+<tr><td><strong>Stale-signal</strong></td><td>the correct signal, but out of date</td><td>the mechanism needs <em>live</em> information, not a frozen memory of it</td></tr>
+<tr><td><strong>Shuffled</strong></td><td>the right data with its pairings scrambled</td><td>the result depends on the true <em>correspondences</em>, not marginal statistics</td></tr>
+<tr><td><strong>Signal-suppression</strong></td><td>the mechanism with its key signal erased</td><td>the signal was actually load-bearing (and its absence produces a detectable "false calm")</td></tr>
+<tr><td><strong>Visible-control</strong></td><td>the task with the answer visible at decision time</td><td>a specificity effect should <em>collapse</em> when memory isn't needed</td></tr>
+</table>
+
+<div class="prog"><span class="boxtitle">In the repo — the "no false calm" gate, a control doing real work</span>
+<p>The re-engagement experiments include a beautifully specific control called
+<code>fixed_surprise_decrement</code> — a "false-calm" negative control. The worry it guards against:
+an agent's probing rate might drop simply because you told it to stop, not because it correctly
+learned the world went quiet. The gate insists that a falling probe rate only counts as real
+adaptation if the <em>error</em> and the <em>surprise signal</em> fall alongside it. Feed the system a
+mechanism that just decrements its own alarm on a fixed schedule, and it produces "false calm" — quiet
+without competence — and the gate catches it (final error 0.517, zero passes out of eight seeds). The
+control fails exactly as designed, and its failure is what licenses the claim that the real agent's
+quiet reflects genuine stability rather than mere silence. As the program puts it: "Quiet is not
+evidence of stability."</p></div>
+
+<h3>3.3 Distinct failure modes: controls must fail differently</h3>
+
+<p>A refinement worth appreciating: good controls don't just fail — they fail in <em>different ways</em>,
+each isolating a different necessary ingredient. In the concern-gated experiments, one control
+(<code>target_without_concern</code>) shows that selecting the right target is not enough (it probes
+constantly, failing the "no restless inquiry" gate); another (<code>concern_without_target</code>)
+shows the reverse. Because each control knocks out one ingredient and fails on the specific gate tied
+to that ingredient, the full set of failures triangulates <em>which</em> combination of parts is
+actually necessary. This is the difference between "our thing works" and "our thing works, and here
+are the five ways it would break, each of which we induced on purpose."</p>
+
+<h3>3.4 Red-teaming: build the strongest cheat first</h3>
+
+<p>The program frames this as an explicit adversarial discipline, borrowed from Feynman's ethic:
+<em>build the strongest shortcut first.</em> Before claiming a capability, find the "proxy" — the
+cheap trick that would let a system pass the behavioral test <em>without</em> the intended structure —
+and build it. If the proxy passes your gate, the claim dies early and cheaply. If the proxy fails
+while the real mechanism passes, the positive result "has teeth." This inverts the usual temptation
+to construct the weakest possible strawman; here you are supposed to construct the strongest possible
+impostor and try to let it win.</p>
+
+<div class="warn"><span class="boxtitle">Criticism — anti-cheat is an arms race, not a proof</span>
+<p>Hold this limit clearly. Every control is a <em>hypothesis about how cheating could occur</em>. A
+shortcut that lives <em>outside</em> the space of cheats you imagined will pass all your controls
+undetected. The program's own activation-steering saga is the cautionary tale: a determined optimizer
+kept finding new leakage channels — free vectors leak, constrained vectors kill the real signal,
+sparse masks leak — each defeating the previous verifier, an unbounded game of whack-a-mole. And
+because in this program the experimenter, the red-teamer, and the critic can all be instances of
+similar AI systems, they may share blind spots that no amount of internal controlling will surface.
+The genuine fix is <em>independent</em> adversaries: a separate party (ideally human, or at least a
+differently-built system) designing the shortcut and the verifier. Chapter 9 returns to this as the
+program's most important unmet need.</p></div>
+
+<h3>3.5 What to carry forward</h3>
+<p class="small">Negative controls are placebos — right shape, wrong content — that earn a claim by
+failing; the catalogue (matched-random, wrong-signal, stale, shuffled, suppression, visible-control)
+each isolates a different assumption; good controls fail in distinct ways to triangulate necessity;
+red-teaming means building the strongest cheat first; and the standing weakness is that controls only
+catch the cheats you thought of, so genuine independence of the adversary is the real safeguard.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 4</span>Oracles, Seeds, and the Bootstrap</h2>
+
+<p>Three more devices complete the engine: <strong>oracles</strong> that tell you how much room is
+left to improve, <strong>seeds</strong> that separate signal from luck, and the <strong>bootstrap</strong>
+that puts honest error bars on everything. Each is simple; together they let the program state not just
+"we got a result" but "here is how good it could possibly be, here is how sure we are, and here is the
+unluckiest version of the story."</p>
+
+<h3>4.1 Oracles: the ceiling of the possible</h3>
+
+<div class="def"><span class="boxtitle">Definition — an oracle condition</span>
+<p>An <strong>oracle</strong> is a version of the experiment given <em>cheat access to the ground
+truth</em> — it is told the answer, or the right place to look. It cannot be a real method (it cheats),
+so its purpose is to establish the <strong>ceiling</strong>: the best score achievable if you knew
+everything. A learned method is then judged not against zero but against the oracle. "The learned
+method reaches 90% of the oracle" is a strong sentence; "it beats random but sits at 30% of the
+oracle" tells you most of the problem is still unsolved.</p></div>
+
+<p>The oracle does something subtle and valuable: it <em>disambiguates failure</em>. When a method
+underperforms, you can't tell from the method alone whether the mechanism is broken or the task is
+simply impossible. Run the oracle: if even the cheating version can't score well, the task is too
+hard (or ill-posed), and the method isn't to blame. If the oracle aces it but the method flops, the
+gap is real and the mechanism has room to grow. The program firewalls oracles carefully — it greps
+its own code to ensure oracle labels never leak into the non-oracle conditions — because an oracle
+whose knowledge quietly reaches the "real" method would make everything look artificially good.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — par for the course</span>
+<p>A golf score of 78 means nothing until you know par. On a par-72 course it's respectable; on a
+par-100 pitch-and-putt it's dreadful. The oracle is par: the score a perfect-information player would
+shoot. Reporting "we scored 78" without par is the sin the program refuses; it always reports the
+gap to par, so you can tell an impressive round from a lucky one on an easy course. And it checks that
+nobody in the "real" foursome is secretly reading the perfect player's scorecard.</p></div>
+
+<h3>4.2 Seeds: separating signal from luck</h3>
+
+<p>Every experiment involves randomness — random starting weights, random sampling, random shuffles.
+Run once and a good number might be a fluke; run again with a different random <strong>seed</strong>
+(the number that initializes the randomness) and the fluke may vanish. So the program re-runs each
+condition across several independent seeds and reports the average with its spread ("mean ± standard
+deviation across seeds"). A result that holds at one seed and dies at another is noise, and the
+program treats it as such.</p>
+
+<p>The honest tension here — which the program names repeatedly — is that most of its sweeps use only
+<strong>three seeds</strong>. Three is enough to catch gross flukes but thin for stable error bars;
+the flagship benchmark suites push to eight or sixty-four seeds for their headline claims, but the
+default is low. When a paper writes "only 3 seeds — wide error bars," this is the law of
+diminishing returns talking: halving your uncertainty costs roughly four times the compute, and
+compute budgets are finite. Chapter 9 flags this as the program's most pervasive statistical
+weakness.</p>
+
+<h3>4.3 The bootstrap and the gate that vetoes a positive number</h3>
+
+<p>How do you put error bars on a result without assuming a bell curve? The <strong>bootstrap</strong>:
+resample your own data with replacement thousands of times, recompute the statistic each time, and
+take the middle 95% of those recomputations as your <strong>confidence interval</strong>. It is a
+computational way of asking "if I had re-run this experiment, how much would the answer wobble?" — and
+the program uses it constantly, with fixed seeds so the interval itself is reproducible.</p>
+
+<p>The program's favorite gate is expressed through it: <strong>"the 95% confidence interval's lower
+bound must be above zero."</strong> This is stricter than "the average was positive," and the
+difference matters enormously.</p>
+
+<div class="prog"><span class="boxtitle">In the repo — a positive number rejected as a negative result</span>
+<p>The clearest demonstration in the whole repository that its statistics have teeth: a
+long-horizon-memory experiment measured a specificity effect of <strong>+0.695</strong> — a positive
+mean, the kind of number a less careful lab would report as a win. But its 95% bootstrap interval was
+<strong>[−0.376, 2.080]</strong>, which straddles zero. Because the pre-registered gate required the
+interval's lower bound to exceed zero, the program recorded this as a <em>strong negative</em>. The
+mean flattered; the interval told the truth; the gate believed the interval. A program that will call
++0.695 a negative result is one whose positive results you can take seriously.</p></div>
+
+<div class="warn"><span class="boxtitle">Criticism — bootstrap CIs over three seeds are themselves shaky</span>
+<p>A mature reader should notice the interaction between §4.2 and §4.3. A bootstrap resamples the data
+you have; if you have only three seeds, the interval is built from three numbers and is itself
+unstable — its apparent precision can outrun its real reliability. "CI lower bound above zero" is a
+strong gate, but with n = 3 it has weak error control and remains vulnerable to seed variation. The
+program mitigates this where it can afford to (64-seed bootstraps for its polished benchmark claims),
+but the pairing of a strict-looking gate with a thin sample is the subtlest statistical caveat in the
+program, and worth holding whenever you read a three-seed bootstrap interval.</p></div>
+
+<h3>4.4 Effect sizes over significance</h3>
+
+<p>One stylistic choice deserves applause: the program leads with <strong>effect sizes</strong> —
+magnitudes in meaningful units — rather than mere statistical significance. It reports "+51.5
+percentage points of OOD accuracy from the intervention," "selectivity 16.9× (the agent probes the
+affected region almost seventeen times more densely)," "82% reduction in false self-credit," and,
+tellingly, "9.6% of the oracle gap closed" — a polite way of saying a mechanism barely helped. A
+difference can be statistically real and practically trivial; by leading with the magnitude and its
+interval, the program keeps the two straight. When you read a table, find the effect size first, its
+interval second, and only then the pass/fail marks.</p>
+
+<div class="warn"><span class="boxtitle">Pitfall — "AUC" means three different things here</span>
+<p>Watch this word. In mainstream machine learning, AUC usually means area under the ROC curve — a
+ranking-quality score, higher is better, 0.5 is chance. Several of this program's agent papers use
+"AUC" for something entirely different: the area under the <em>error-versus-time learning curve</em>,
+where <em>lower</em> is better. And its real-model work uses a third sense, "rank AUC" — the
+probability a random positive outranks a random negative. The papers define it locally each time;
+always check which is in play before reading a number, or you will invert its meaning.</p></div>
+
+<h3>4.5 What to carry forward</h3>
+<p class="small">Oracles set the ceiling and disambiguate "broken mechanism" from "impossible task"
+(and must be firewalled from the real methods); seeds separate signal from luck, with three-seed
+sweeps as the thin default; the bootstrap gives formula-free error bars, and "CI lower bound &gt; 0" is
+a gate that can veto a positive-looking mean; effect sizes lead over significance; and "AUC" is a
+locally-defined word with three incompatible meanings.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 5</span>Claim Tiers: The Discipline of Not Overclaiming</h2>
+
+<h3>5.1 The failure mode this defends against</h3>
+
+<p>A result on a synthetic toy world can be perfectly real and still be dressed up in language that
+implies far more than it shows. "Our agent maintains a self/world boundary" sounds like a claim about
+minds; the underlying experiment is a two-variable simulated creature deciding whether to eat pixels.
+Both descriptions can be true, but one invites the reader to over-update. The program defends against
+this <strong>level-inflation</strong> with an explicit ladder of allowed claim strengths, and it
+requires each result to declare which rung it has earned.</p>
+
+<div class="def"><span class="boxtitle">Definition — the claim-strength ladder</span>
+<p>The program grades every result on a rising ladder of what it is permitted to assert:</p>
+<ul style="margin:0.3em 0">
+<li><strong>Diagnostic</strong> — "a benchmark cleanly separates the controls." The measurement works;
+no mechanism is claimed yet.</li>
+<li><strong>Mechanism</strong> — "the positive agent actually composes the required internal operation,"
+not just passes behaviorally.</li>
+<li><strong>Regime transition</strong> — "a new kind of artifact or verifier changes what can even be
+represented." The frontier moved.</li>
+<li><strong>Field claim</strong> — "the mechanism survives transfer to new conditions, adversarial
+shortcuts, and the nearest baselines from the literature." Only here is a general statement licensed.</li>
+</ul>
+<p>The program's honest self-assessment: most of its results sit at "diagnostic-to-mechanism," and it
+says so.</p></div>
+
+<div class="pump"><span class="boxtitle">Intuition pump — evidence has a temperature</span>
+<p>Think of claims as running from cold to hot. A cold claim ("this instrument distinguishes A from B
+in my lab") is cheap to make and hard to dispute. A hot claim ("this is how memory works in general")
+is expensive and easy to attack. The sin is stating a hot claim on cold evidence — announcing a law
+when you have a lab curiosity. The claim ladder is a thermometer taped to every result: it forces the
+author to read off the temperature the evidence actually supports and forbids turning up the dial in
+the prose. A program that files most of its own work as "diagnostic" is being cold-blooded about its
+own thermometer, which is exactly what you want.</p></div>
+
+<h3>5.2 A second ladder: what kind of evidence, on what substrate</h3>
+
+<p>Running alongside the strength ladder is a ladder of evidence <em>type</em> — what physical thing
+the claim rests on. It runs roughly: a <em>scaffold</em> (a conceptual frame or proof with no data) →
+a <em>diagnostic</em> on synthetic data → a <em>generated-text result</em> → an <em>activation
+result</em> (something measured inside a model's hidden states) → a <em>cross-model activation
+result</em> → a <em>causal steering result</em> → a <em>human- or neural-validated result</em>. Each
+rung requires a firmer substrate than the last. The program stamps each paper with its rung — the
+gauge-transport theory work, for instance, is labeled "scaffold plus proof paper; no empirical
+validation," and the benchmark work is careful to note that "API-only runs are behavioral diagnostics
+and do not establish hidden-state localization." These stamps are guardrails against reading a
+proof-of-concept as a measured fact.</p>
+
+<h3>5.3 The claim-boundary paragraph</h3>
+
+<p>Most papers include an explicit <strong>claim-boundary</strong> statement — a paragraph saying, in
+effect, "here is precisely what we are and are not asserting." The flagship weakness paper is a model
+of the form: it claims evidence for a specific model-selection principle "in finite shortcut-compatible
+regimes," and then states outright that this is "not a claim that generic compression, PAC-Bayes,
+validation, or flatness never matter." That sentence gives away most of the rhetorical territory a
+less scrupulous paper would try to hold — and in doing so makes the narrower claim it keeps far more
+credible.</p>
+
+<div class="prog"><span class="boxtitle">In the repo — the standing "do not claim" list</span>
+<p>The program maintains, across its papers, a remarkably consistent list of things it explicitly
+declines to claim: consciousness, sentience, subjective experience, full autonomy, general
+intelligence, human cognitive validity, neural (brain) validity, production reliability, and broad
+out-of-distribution robustness. This appears near-verbatim in paper after paper — "We study minimal
+computational precursors of concern-like agency. We do not claim consciousness, full agency, or
+general intelligence." Given that the program's own vocabulary — concern, valence, self, care —
+actively invites the consciousness reading, this repeated refusal is not throat-clearing; it is
+load-bearing to the program's credibility. A reader should take the disclaimers as seriously as the
+claims, because a program that polices its own hype is telling you where to trust it.</p></div>
+
+<h3>5.4 Why this is rarer, and better, than it sounds</h3>
+
+<p>Most research rhetoric drifts upward: the abstract claims a bit more than the results section, the
+press release claims a bit more than the abstract, and by the time an idea reaches the public it has
+inflated several rungs. The claim-tier discipline is a ratchet against that drift, applied by the
+authors to themselves before anyone else can. It is the textual counterpart of the pre-registered
+gate: just as the gate fixes what counts as success before the data, the claim tier fixes how loudly
+you may announce it after. Both are refusals to let the story grow in the retelling.</p>
+
+<div class="warn"><span class="boxtitle">Criticism — self-assigned tiers still need an external auditor</span>
+<p>The ladder is only as honest as the person applying it, and here the person is (largely) the same
+AI system that produced the result. A tier is a judgment call — is this "mechanism" or merely
+"diagnostic"? — and nothing structurally prevents a systematic, well-intentioned upgrade of one's own
+work by half a rung. The interpretation matrices and gates constrain this, but the tier assignment
+itself is prose, not a checked boolean. The remedy is the same as everywhere in this book: independent
+review that re-grades the tiers. The discipline is genuine and unusually good; it is not
+self-certifying.</p></div>
+
+<h3>5.5 What to carry forward</h3>
+<p class="small">Level-inflation is stating a hot claim on cold evidence; the strength ladder
+(diagnostic → mechanism → regime transition → field claim) and the evidence-type ladder (scaffold →
+synthetic → activation → cross-model → causal → validated) force each result to declare its
+temperature and substrate; the claim-boundary paragraph and the standing "do not claim" list give
+away rhetorical territory to make the kept claims credible; and the one weakness is that the tiers are
+self-assigned prose, so they still want an external auditor.</p>
+
+<h1 class="part"><span class="kicker">Part III</span>Trust and Honesty</h1>
+
+<p>The engine of Part II makes individual results rigorous. Part III addresses the harder,
+program-level problem introduced in Chapter 1: how a suspicious outsider can trust a body of science
+generated by an AI agent, without having to trust the agent. The answer has three components —
+machine-checkable observability, a culture that publishes failures as loudly as successes, and a
+discipline for telling genuine discovery apart from sophisticated pattern-matching.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 6</span>Observability: Provenance, Guards, and One-Command Reproduce</h2>
+
+<h3>6.1 The three pillars</h3>
+
+<p>The program adopts an explicit standard for AI-generated science, resting on three pillars:
+<strong>observability</strong> (you can see exactly what was done), <strong>attribution</strong> (who
+and what did it is recorded), and <strong>reproducibility</strong> (anyone can regenerate it). The
+point of all three is to relocate trust from the generator to the artifacts — so that verifying a
+claim requires checking a file, not believing a machine. This chapter tours the concrete tooling that
+implements each pillar.</p>
+
+<h3>6.2 Provenance cards: the lab notebook that can't drift</h3>
+
+<div class="def"><span class="boxtitle">Definition — a provenance card</span>
+<p>Every experiment carries an auto-generated <code>PROVENANCE.md</code> recording its attribution,
+the <em>exact</em> command that produced it, the random seed, the pre-registration link, the extracted
+gate signals, which artifacts are committed versus local, and a one-command way to regenerate it. The
+crucial design choice: <strong>the card is generated by a script, not written by hand</strong>, and
+that generator "is itself the reproducible artifact." Re-run the generator and every card is rebuilt
+from the committed files — so provenance can never silently drift out of sync with reality.</p></div>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the difference between a diary and a receipt</span>
+<p>A hand-written lab diary is a <em>claim</em> about what you did; you could misremember or embellish.
+A receipt printed by the cash register is a <em>record</em> the transaction itself emitted. Provenance
+cards are receipts, not diaries: they are regenerated mechanically from the committed inputs, so they
+report what the files actually contain rather than what anyone remembers doing. When the auditor
+(you) wants to know how a result was produced, you don't ask the AI to recall — you re-run the
+generator and read the receipt it prints from the evidence on disk.</p></div>
+
+<h3>6.3 The publication guard: safe by construction</h3>
+
+<p>A small script, run as part of the quality gate, refuses to let unsafe files be committed. It scans
+every tracked file and fails the build if it finds: a file under a forbidden path (raw data dumps,
+full-text citation archives, the local artifact folders), a file over 10 MB, or anything matching a
+credential signature (API-key and token patterns). This is <strong>defense in depth</strong> —
+the <code>.gitignore</code> is the first wall, the guard is the second, and field-allowlist exporters
+(which whitelist exactly which columns of a raw sweep may become public) are the third. Together they
+enforce the program's public-artifact policy by construction: it is <em>structurally hard</em> to leak
+a secret or a raw dump, rather than merely against the rules.</p>
+
+<div class="prog"><span class="boxtitle">In the repo — the guard's detector is itself unit-tested</span>
+<p>A nice touch that signals engineering seriousness: the secret-detector is exposed as a testable
+function and locked down by a unit test which asserts it flags real vendor tokens and
+<code>api_key='…'</code> assignments but does <em>not</em> flag innocent fixture credential
+<em>names</em>. In other words, the guard against false negatives (missing a real secret) is itself
+guarded against false positives (crying wolf on test fixtures). The safety net has a safety net, and
+both are checked in CI-style tests. This is the texture of a program that treats its trust
+infrastructure as first-class code, not an afterthought.</p></div>
+
+<h3>6.4 One-command reproduce</h3>
+
+<p>The reproducibility pillar is made concrete by a single dispatcher: <code>regen.py &lt;name&gt;</code>.
+For deterministic CPU experiments it re-runs the whole chain locally and checks the outputs match;
+for papers it rebuilds the PDF from committed numbers; and for the large GPU/secret sweeps it prints
+the exact documented command to dispatch from an authorized machine. The stated purpose is that "a
+wiped environment never forces a manual re-run — the reproduce step is one command." This directly
+attacks the reproducibility hole that AI-generated science is most prone to: results that existed once,
+on some machine, under some forgotten configuration, that no one can ever recreate.</p>
+
+<div class="warn"><span class="boxtitle">Criticism — observability proves the recipe, not the meal</span>
+<p>Here is the honest ceiling of the whole apparatus, and a mature reader must hold it. Provenance
+cards prove <em>what command was recorded</em>; they do not prove the underlying numbers reflect an
+unbiased execution. The committed result summaries are AI-written condensations of raw outputs that
+are themselves gitignored — so a reader usually <em>cannot independently see the raw rows</em> and
+must trust that the summary faithfully represents them. Worse, the audit layer can itself mislead: the
+program has already caught its own provenance-signal extractor "misfiring on positive-discipline
+language" — the automated scraper misreading careful hedging as a passing gate. Observability makes
+the recipe checkable; it does not, by itself, guarantee the meal was cooked as described. The genuine
+closure — committing raw rows for flagship results, scoring gates from structured machine records
+rather than regex over prose, and independent human replication — is Chapter 9's business, and it is
+the program's most important unfinished work.</p></div>
+
+<h3>6.5 Attribution stated, not hidden</h3>
+
+<p>The final pillar is the simplest and, ethically, the most important: the program never hides that it
+is AI-generated. A constant attribution string — human director Jawaun Brown; experiment code, sweeps,
+and paper drafts generated by an AI coding agent under his direction and review — is embedded in every
+provenance record, and the contributor norms make "keep provenance honest" a rule. This matters
+because the alternative — quietly presenting AI-generated science as if a human team produced it — is
+precisely the deception the whole observability apparatus exists to prevent. Stating the provenance
+plainly is the first act of the honesty the rest of the tooling enforces.</p>
+
+<h3>6.6 What to carry forward</h3>
+<p class="small">Observability, attribution, and reproducibility relocate trust from the generator to
+the artifacts; provenance cards are mechanically-regenerated receipts that can't drift; the publication
+guard makes leaking secrets structurally hard (and its detector is itself tested); one-command
+reproduce closes the "results that can never be recreated" hole; attribution is stated, not hidden;
+and the ceiling is that observability proves the recipe, not the meal — raw rows are usually not
+visible and the audit layer can itself misread, which is why independent replication remains the
+missing piece.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 7</span>Negative Results as the Product</h2>
+
+<h3>7.1 The inversion</h3>
+
+<p>In most of science, a negative result — the effect wasn't there, the method didn't work — feels
+like failure. It goes in a file drawer; the incentives push toward publishing only the wins. This
+<strong>publication bias</strong> quietly corrupts whole literatures: if only positive results see
+daylight, the published record overstates every effect. This program inverts the incentive. Its stated
+design principle is that <em>every</em> outcome narrows the program, so a well-run negative is not a
+disappointment to bury but a product to ship. "The benchmark value comes from locating the bottleneck,
+not from forcing a positive."</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the map is drawn by the dead ends</span>
+<p>Exploring a cave, the passages that go nowhere are not wasted effort — they are the map. Each dead
+end you mark is a region you never have to search again, and the shape of all the dead ends together
+<em>is</em> the shape of the cave. A program that publishes only its successful passages hands you a
+map with no walls, which is no map at all. This program marks its dead ends carefully and prominently,
+so the negative space — the falsified predictions, the failed gates — defines the real geography of
+what is and isn't true. Reading its negatives is reading the walls of the cave.</p></div>
+
+<h3>7.2 A tour of the program's most instructive failures</h3>
+
+<p>The negatives are not incidental; several are among the program's most valuable results. A sampler,
+because the specifics show how honest failure does real scientific work:</p>
+
+<table class="plain">
+<tr><th>The falsification</th><th>What it taught</th></tr>
+<tr><td><strong>The reward-deformation exponent.</strong> Theory predicted a log–log slope of 0.5 for a 2-D code; measurement across many seeds gave ≈ 0.30.</td><td>The code was reallocating resolution as if it were effectively <em>one</em>-dimensional (d<sub>eff</sub> ≈ 1). A falsified exponent to two decimals is far more informative than a vague "correlation exists" — it revealed a hidden dimensionality.</td></tr>
+<tr><td><strong>Weakness → topology mediation failed.</strong> The prediction that weakness would predict generalization <em>through</em> toroidal topology did not hold.</td><td>Weakness and topology each predict generalization independently; there is no single mediating object. "Weakness is a footprint, not the cause" — a reframe that reorganized a whole thread.</td></tr>
+<tr><td><strong>Semantic concern-geometry, wrong sign.</strong> Concern-weighting was predicted to sharpen a semantic representation; the measured lift was <em>negative</em> (−0.44).</td><td>The metric-deformation story does not transfer from spatial toys to language as-is. A clean signal of where the theory's domain ends.</td></tr>
+<tr><td><strong>The external weakness "hard kill."</strong> On a model the lab didn't build, weakness's correlation with generalization was −0.08 — essentially nothing.</td><td>The flagship result may be bound to self-built worlds. This single anomaly forced the program's largest theoretical reframe (from "weakness is the cause" to "compatibility is the cause; weakness is its footprint").</td></tr>
+<tr><td><strong>The uncertainty-aware planner lost to greedy.</strong> A sophisticated planner underperformed a dumb one near a decision boundary.</td><td>Sophistication that trusts a confidently-wrong model is worse than none. Named honestly in the paper's own title as a falsification of four pre-registered gates.</td></tr>
+<tr><td><strong>The factorial that overturned the program's own compression.</strong> The program had compressed years of work into a claim that three mechanisms were jointly load-bearing; a clean factorial test found only <em>one</em> was necessary.</td><td>"We retract the strong subset claim." The program falsified its own tidy synthesis and downgraded the claim in place.</td></tr>
+</table>
+
+<h3>7.3 The discipline of not converting a failure into a pass</h3>
+
+<p>The subtlest and most admirable habit: when a pre-registered gate fails, the program often
+<em>explains</em> the failure without <em>reversing</em> it. After one gate missed its band (−0.054
+against a ±0.05 threshold), a follow-up analysis showed the gap was statistically typical of the
+design — and the program stated explicitly that "this calibration does not retroactively pass the
+original gate." It explained the miss and left the miss standing. This is the exact opposite of the
+common move where a failed prediction is rescued by a post-hoc reinterpretation. The rule is stated
+plainly in the program's guidance: do not retune a gate, do not patch the analysis "to make the
+current result look better."</p>
+
+<div class="prog"><span class="boxtitle">In the repo — refusing to count a crash as a result</span>
+<p>A tiny episode captures the ethic. A replication attempt was "interrupted by a local network
+failure and produced no artifact, so it is non-evidence" — and was rerun to produce a real (and
+negative) result. A crashed run is neither a success nor a failure; it is <em>nothing</em>, and the
+program refuses to let an absence of data quietly become evidence in either direction. Combined with
+the standing "do not claim" lists and the honest-negative sections that appear as literal headings in
+result reports ("## Honest negative"), this builds a texture of trustworthiness that no single positive
+result could.</p></div>
+
+<h3>7.4 Why publishing negatives is itself the strongest credibility signal</h3>
+
+<p>Step back and notice what the density of honest negatives does for the reader's trust. A program
+that reported only clean wins would be <em>indistinguishable</em> from one that cherry-picked, spun,
+or fabricated — the surface would look identical. A program that prominently reports its falsified
+exponents, its failed mediation, its self-retracted syntheses, and its wrong-sign transfers is
+demonstrating, by costly signal, that it is not doing those things. The willingness to publish failure
+is not a separate virtue from rigor; for AI-generated science especially, it may be the single most
+convincing evidence that the rigor is real.</p>
+
+<div class="warn"><span class="boxtitle">Criticism — a caveat even here</span>
+<p>Two honest qualifications. First, publishing negatives proves the program is not <em>only</em>
+reporting wins; it does not by itself prove any individual number is correctly computed — a
+conscientiously-reported wrong negative is still wrong. Second, the very fluency of the honest-negative
+prose is, in an AI-generated program, something to hold lightly: the discipline of saying "we do not
+claim" is easier to <em>write</em> than to <em>embody</em>, and only independent replication of a few
+flagship negatives would fully close the loop. The negatives are the program's best credibility signal
+— and, like every signal in this book, they ultimately point to the same unmet need for an outside
+check.</p></div>
+
+<h3>7.5 What to carry forward</h3>
+<p class="small">Publication bias corrupts literatures by hiding failures; this program inverts the
+incentive so every outcome is a product; its most instructive results are falsifications (the
+0.30-not-0.50 exponent, the failed mediation, the external hard-kill, the self-retracted factorial);
+it explains failed gates without converting them to passes and refuses to count crashes as evidence;
+and the density of honest negatives is its strongest credibility signal — while still pointing, like
+everything, at the need for independent replication.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 8</span>Retrieval, Search, and Discovery</h2>
+
+<h3>8.1 The question a machine-run program must ask about itself</h3>
+
+<p>Here is a worry unique to AI-generated science, and the program takes it seriously enough to build
+a discipline around it. A language model is, at bottom, an extraordinary <em>pattern-completer</em>.
+It can produce something that <em>looks</em> like a discovery — fluent, structured, novel-seeming —
+simply by recombining patterns it has absorbed, without anything genuinely new having been learned
+about the world. So the program forces itself to answer, for every result: <strong>did we actually
+discover something, or did we merely retrieve and recombine what was already representable?</strong></p>
+
+<div class="def"><span class="boxtitle">Definition — the three action classes</span>
+<p>Every research action is classified as one of three kinds:</p>
+<ul style="margin:0.3em 0">
+<li><strong>Retrieval</strong> — surfacing an artifact that was already representable within the
+current framework. No new content; just bringing forward what the framework already contained.</li>
+<li><strong>Search</strong> — exploring within the existing framework's space of possibilities. New
+combinations, but no new <em>kind</em> of thing.</li>
+<li><strong>Discovery</strong> — a result that requires a <em>new kind of artifact or a new
+verifier</em> — something that changes what can even be represented. This is the rare and valuable
+category.</li>
+</ul>
+<p>Each experiment's audit card carries an explicit "action class" field with a justification, and the
+program is candid that most of its work is retrieval-plus-search, with discovery being the rare event
+it is reaching for.</p></div>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the library, the librarian, and the new wing</span>
+<p>Retrieval is finding a book already on the shelves. Search is reading across many books to
+assemble a synthesis none of them stated but all of them contained — genuinely useful, but the
+building didn't change. Discovery is realizing you need a <em>new wing</em> the library doesn't have —
+a category of knowledge that requires new shelves, a new cataloguing system, a new kind of thing to
+be filed. A pattern-completing machine is a spectacular librarian; it can retrieve and search at
+superhuman speed. The open question the program keeps asking itself is whether it is ever actually
+building new wings, or only becoming an ever-better librarian of the wings that exist. Naming the
+three classes is how it keeps score honestly.</p></div>
+
+<h3>8.2 Residual content: quarantining what the framework can't yet explain</h3>
+
+<p>Bound to the action-class audit is a second field: <strong>residual content</strong>. Each result
+is split into "explained by the old framework" versus "new content outside it." This is where the
+program isolates genuine novelty from restatement. A striking example of the discipline eating its
+own optimism: one experiment on paraphrase-stability geometry honestly assigned most of its signal to
+the old framework — "ordinary language similarity can explain much of the embedding-space structure"
+— and quarantined only a small residual as potentially new. It even added a retraction note: "this
+should not be cited as evidence of shared active attractor dynamics." The program caught its own
+result overreaching and filed the correction against itself.</p>
+
+<h3>8.3 How the program fights pattern-matching specifically</h3>
+
+<p>Three concrete moves distinguish real discovery from sophisticated completion:</p>
+
+<ul>
+<li><strong>Make the agent invent the next experiment, not use a supplied one.</strong> The program
+explicitly criticizes its own earlier work for testing "whether an agent uses a provided probe well,
+not whether it invents the next useful experiment." Its Arc 2 work pushes toward
+<em>intervention invention</em> — the agent choosing which experiment to run — precisely because
+inventing the right next question is harder to fake by pattern-completion than answering a given one.</li>
+<li><strong>Demand held-out transfer, not just repetition.</strong> A pattern-completer excels at
+in-distribution repetition. So the program's frontier gates increasingly require results to hold on
+<em>held-out</em> roles, unseen parse families, and new surface transformations — conditions the
+training patterns didn't cover. Transfer to the genuinely-unseen is the signature of understanding
+over memorization.</li>
+<li><strong>Record a mechanism trace.</strong> Some experiments log the full trajectory —
+hypothesis → chosen experiment → observation → belief update → action — so a run can be judged "as a
+scientific trajectory," not just by its final score. A trace that shows genuine belief-updating from
+evidence is harder to counterfeit than a right answer.</li>
+</ul>
+
+<div class="prog"><span class="boxtitle">In the repo — separating "learning the rule" from "memorizing transformed labels"</span>
+<p>The sharpest instance of this discipline is a confound the program found in its own flagship
+result and then designed an experiment to kill. Its data-augmentation scheme, it realized, placed
+<em>correctly-labeled</em> examples onto the held-out deployment region — so a model might be scoring
+well not by <em>learning the underlying rule</em> (real generalization) but by effectively
+<em>memorizing transformed copies of labels</em> (glorified retrieval). It could not tell these apart
+from the existing experiments. So it pre-registered a new five-arm design built specifically to
+separate "generator learning" from "labeled coverage." Whether the result survives that test is, at
+the frontier, still open — but the willingness to notice that its best result might be dressed-up
+retrieval, and to build the experiment that could expose it, is the retrieval-vs-discovery discipline
+working exactly as intended.</p></div>
+
+<div class="warn"><span class="boxtitle">Criticism — the hardest self-check to actually enforce</span>
+<p>Of all the disciplines in this book, this is the one most vulnerable to the fact that the auditor
+and the audited are the same kind of system. Classifying your own work as "retrieval" versus
+"discovery" is a judgment call, and a pattern-completing system asked to judge whether it has
+transcended pattern-completion is in a genuinely awkward position — the very faculty doing the judging
+is the one in question. The external moves (held-out transfer, mechanism traces, confound-killing
+experiments) are the real teeth here, because they don't rely on introspection; they put the claim in
+front of data that patterns alone shouldn't handle. A mature reader should weight those behavioral
+tests heavily and the self-classification lightly.</p></div>
+
+<h3>8.4 What to carry forward</h3>
+<p class="small">A pattern-completing machine can fake the <em>look</em> of discovery by retrieval and
+recombination; the program grades every action as retrieval, search, or discovery, quarantines
+"residual content" the framework can't explain, and fights faking through invent-the-next-experiment,
+held-out transfer, and mechanism traces; its confound-killing on its own flagship result is the
+discipline at its best; and the enduring difficulty is that self-classification by the same kind of
+system is weak, so the behavioral transfer tests carry the real weight.</p>
+
+<h1 class="part"><span class="kicker">Part IV</span>A Mature Verdict</h1>
+
+<p>You now understand the machine: pre-registered gates, controls designed to fail, oracles and seeds
+and bootstraps, claim tiers, observability tooling, a culture of honest negatives, and a
+retrieval-versus-discovery discipline. This final part steps back and asks the reader's real question:
+knowing all that, how much should you trust this program — and how could it become more trustworthy?</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 9</span>Where a Skeptic Should Push — and How to Improve the Science</h2>
+
+<h3>9.1 The honest verdict, in one paragraph</h3>
+
+<p>This is, methodologically, an unusually rigorous program — more disciplined than a great deal of
+published academic work. It pre-registers, it red-teams, it publishes its failures, it grades its own
+claims conservatively, and it builds machine-checkable provenance. If you were grading the
+<em>method</em>, it earns high marks. But its rigor is concentrated at the level of the
+<em>individual experiment</em>, and almost all of its striking results live on <em>small, synthetic
+worlds it built itself</em>, produced by an <em>AI system that also reviews itself</em>. Those three
+facts — program-level looseness, synthetic substrate, and self-review — are where a mature skeptic
+should push, and they are, not coincidentally, exactly the weaknesses the program most often names
+about itself. What follows is the skeptic's brief, organized so each criticism comes with the fix.</p>
+
+<h3>9.2 The six pressure points</h3>
+
+<table class="plain">
+<tr><th>Pressure point</th><th>The criticism</th><th>The fix</th></tr>
+<tr><td><strong>Statistical power</strong></td><td>Most sweeps use only three seeds; a "CI lower bound &gt; 0" gate built from three numbers is itself unstable, and its apparent precision can outrun its reliability.</td><td>Make five-to-ten seeds the floor for any promoted claim; pre-register power/precision targets; report per-seed distributions, not just pooled intervals; treat three-seed runs strictly as pilots.</td></tr>
+<tr><td><strong>External validity</strong></td><td>The bulk of strong results are on bespoke synthetic environments whose task-generator and success-gate were designed by the same program the results serve — a structural risk of encoding the intended answer into the world.</td><td>Push results onto real models and third-party data (the program's own Phase 5→6 arc); make external-contact results the primary currency; use environments authored by outsiders.</td></tr>
+<tr><td><strong>Proxy-resistance is never total</strong></td><td>Anti-cheat gates are hypotheses about how cheating could occur; a shortcut outside that hypothesis space passes undetected. The activation-steering whack-a-mole shows a determined optimizer repeatedly finding new leaks.</td><td>Adversarial collaboration: have an <em>independent</em> party (ideally human, or a differently-built system) design the shortcut and the verifier, so the red-team doesn't share the experimenter's blind spots.</td></tr>
+<tr><td><strong>Program-level forking paths</strong></td><td>Pre-registration cleans each experiment, but the program runs many and pivots often; the family-wide false-discovery rate is uncontrolled even if each study is clean.</td><td>A program-level registry of every frozen gate and its outcome; multiplicity correction across the family of results feeding any single field claim; pre-committed stopping rules.</td></tr>
+<tr><td><strong>Metric-stack over-fitting</strong></td><td>An elaborate stack of gates authored, run, and judged by one system risks overfitting to <em>this</em> gate, and an interpretation matrix with a cell for every outcome can blur "we predicted this" into "we can explain anything."</td><td>A locked "audit" gate never used during development; publish the full gate ledger including quietly-dropped gates; hold out an unseen implementation for replication.</td></tr>
+<tr><td><strong>Trust in AI-generated results</strong></td><td>Provenance proves the recorded command, not that the numbers reflect unbiased execution; result summaries are AI-written condensations of gitignored raw rows; the audit layer has already been caught misreading its own hedged prose.</td><td>Commit raw rows for flagship suites so a reader can recompute the gate; score gates from structured machine records, not regex over prose; and — decisively — independent human replication of the flagship claims.</td></tr>
+</table>
+
+<h3>9.3 The one fix that matters most</h3>
+
+<p>Notice that five of the six fixes converge on a single word: <strong>independence</strong>. An
+independent red-team designing the cheats. Independent external data and outsider-authored
+environments. Independent replication of flagship results and negatives. The reason is structural and
+worth stating plainly: nearly every safeguard in this program — the gates, the controls, the tiers,
+the audits — is authored, executed, and judged within one system. Those safeguards are genuine and
+well-built, but they cannot, in principle, catch a blind spot the system shares with itself. The
+single highest-value investment the program could make is not another clever internal control; it is
+a genuinely external check — a human, or a pointedly different system, re-running a handful of the
+flagship experiments and trying to break them. That is the one thing the observability apparatus
+sets up but cannot itself supply.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — you cannot proofread your own typos</span>
+<p>Everyone knows the experience: you read your own draft five times, catch nothing, hand it to a
+friend, and they find three errors in a minute. It is not that you are careless; it is that your mind
+supplies what it <em>expects</em> to see, and the expectation is exactly the thing that's wrong. A
+system checking its own work has this problem in its purest form: the faculty generating the error is
+the faculty checking for it, so they agree. Every internal safeguard in this program is you re-reading
+your own draft more carefully. Valuable — but no amount of careful re-reading substitutes for the
+friend. Independent replication is the friend, and it is the piece the program still needs.</p></div>
+
+<h3>9.4 What the program gets right, kept in view</h3>
+
+<p>It would be a misreading of this book to come away thinking the program is untrustworthy. The
+opposite is closer to true: the reason we <em>can</em> list its weaknesses so precisely is that the
+program is transparent enough to expose them, and honest enough to have named most of them first. A
+program that hid its synthetic substrate, buried its failures, inflated its claims, and obscured its
+AI authorship would present a <em>smoother</em> surface and deserve <em>far less</em> trust. This one
+does the opposite on every count. Its rigor is real; its honesty is, by the costly signal of publishing
+its own falsifications, demonstrated rather than asserted. The correct stance is neither credulity nor
+dismissal but <strong>calibrated trust</strong>: believe the diagnostic and mechanism-level claims on
+their synthetic worlds, hold the field-level and real-world claims as promising-but-unproven pending
+external replication, and appreciate that the program tells you which is which.</p>
+
+<h3>9.5 A reader's checklist for any result in the program</h3>
+<table class="plain">
+<tr><th>Ask</th><th>Chapter</th></tr>
+<tr><td>Was the gate pre-registered, with a fixed threshold and an interpretation matrix?</td><td>2</td></tr>
+<tr><td>Did the "behavior alone doesn't count" structure gate also pass — or just the task?</td><td>2</td></tr>
+<tr><td>Which controls were run, and did they fail as they should have?</td><td>3</td></tr>
+<tr><td>What's the oracle ceiling, and how far from it is the result? Is the effect size meaningful?</td><td>4</td></tr>
+<tr><td>How many seeds? Does the bootstrap CI lower bound clear zero — and is it built from enough seeds to trust?</td><td>4</td></tr>
+<tr><td>What claim tier is declared — diagnostic, mechanism, or field claim? On what substrate?</td><td>5</td></tr>
+<tr><td>Is this on a synthetic world the program built, or on an external model/dataset?</td><td>9</td></tr>
+<tr><td>Has anyone <em>independent</em> reproduced it?</td><td>9</td></tr>
+</table>
+
+<h3>9.6 Closing</h3>
+<p>Science is the systematic refusal to fool yourself, and its hardest form is refusing to fool
+yourself when a tireless, fluent machine is doing the work and grading the homework. This program's
+answer — pre-register everything, red-team your own claims, publish your failures loudly, grade your
+confidence conservatively, and make every step machine-checkable — is a serious and largely successful
+attempt at that hardest form. What remains is the one thing no system can do for itself: submit to an
+outside check. Read the program as it asks to be read — by its gates, its controls, its declared
+tiers, and its honest negatives — and hold its boldest claims exactly as provisionally as it tells you
+to, until an independent hand has tried and failed to break them.</p>
+
+</body></html>

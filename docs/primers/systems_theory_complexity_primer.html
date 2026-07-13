@@ -1,0 +1,988 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Mathematics of the Research Program — A Primer from First Principles</title>
+<style>
+/* ---------- page setup ---------- */
+@page { size: letter; margin: 0.9in 0.85in; }
+:root {
+  --ink: #1a1a1e;
+  --muted: #55555e;
+  --rule: #d8d8de;
+  --def-bg: #eef4fb;  --def-edge: #2c6cb0;   /* definitions */
+  --pump-bg: #fdf6e8; --pump-edge: #c98a1b;  /* intuition pumps */
+  --vis-bg: #f4effa;  --vis-edge: #7a4fb5;   /* visual proofs */
+  --prog-bg: #edf7ee; --prog-edge: #35854a;  /* in our papers */
+  --warn-bg: #fbeeee; --warn-edge: #b04040;  /* pitfalls */
+  --eq-bg: #f7f7f9;
+}
+* { box-sizing: border-box; }
+html { font-size: 10.4pt; }
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--ink);
+  line-height: 1.52;
+  margin: 0;
+}
+p { margin: 0.55em 0 0.75em; text-align: justify; hyphens: auto; }
+ul, ol { margin: 0.4em 0 0.8em; padding-left: 1.4em; }
+li { margin-bottom: 0.28em; text-align: justify; }
+strong { color: #000; }
+
+/* ---------- headings ---------- */
+h1, h2, h3, h4 { font-family: Georgia, serif; line-height: 1.22; page-break-after: avoid; }
+h1.part {
+  page-break-before: always;
+  font-size: 2.05em; margin: 2.2em 0 0.2em;
+  color: #17314f;
+}
+h1.part .kicker {
+  display: block; font-size: 0.42em; letter-spacing: 0.18em;
+  text-transform: uppercase; color: #8a6a2f; margin-bottom: 0.9em;
+  font-weight: normal;
+}
+h2.chapter {
+  page-break-before: always;
+  font-size: 1.62em; margin: 1.4em 0 0.25em; color: #17314f;
+  border-bottom: 2.5px solid #17314f; padding-bottom: 0.22em;
+}
+h2.chapter .chnum {
+  display: block; font-size: 0.58em; letter-spacing: 0.14em;
+  text-transform: uppercase; color: #8a6a2f; margin-bottom: 0.25em;
+}
+h3 { font-size: 1.18em; margin: 1.35em 0 0.35em; color: #1f3a5c; }
+h4 { font-size: 1.02em; margin: 1.1em 0 0.3em; color: #33333a; font-style: italic; }
+
+/* ---------- math ---------- */
+.m { font-family: 'Georgia', serif; font-style: italic; white-space: nowrap; }
+.m b, .mrm { font-style: normal; }
+.eq {
+  display: block; text-align: center; font-family: Georgia, serif;
+  font-style: italic; font-size: 1.09em; margin: 0.85em auto;
+  page-break-inside: avoid;
+}
+.eqbox {
+  background: var(--eq-bg); border: 1px solid var(--rule); border-radius: 6px;
+  padding: 0.6em 1em; margin: 0.9em 0; page-break-inside: avoid;
+}
+.frac { display: inline-block; vertical-align: -0.9em; text-align: center; margin: 0 0.12em; }
+.frac .top { display: block; padding: 0 0.25em 0.08em; border-bottom: 1px solid currentColor; }
+.frac .bot { display: block; padding: 0.08em 0.25em 0; }
+sub, sup { font-size: 0.68em; }
+.big { font-size: 1.35em; font-style: normal; vertical-align: -0.12em; }
+.rm { font-style: normal; }
+
+/* equation decoder tables */
+table.decoder {
+  width: 100%; border-collapse: collapse; margin: 0.7em 0 1em;
+  font-size: 0.93em; page-break-inside: avoid;
+}
+table.decoder th, table.decoder td {
+  border: 1px solid var(--rule); padding: 0.32em 0.55em; text-align: left; vertical-align: top;
+}
+table.decoder th { background: #eef1f5; font-size: 0.9em; letter-spacing: 0.04em; }
+table.decoder td:first-child { font-family: Georgia, serif; font-style: italic; white-space: nowrap; }
+
+table.plain {
+  width: 100%; border-collapse: collapse; margin: 0.7em 0 1em; font-size: 0.93em;
+}
+table.plain th, table.plain td {
+  border: 1px solid var(--rule); padding: 0.3em 0.5em; text-align: left; vertical-align: top;
+}
+table.plain th { background: #eef1f5; }
+
+/* ---------- callout boxes ---------- */
+.box {
+  border-radius: 7px; padding: 0.7em 0.95em 0.55em; margin: 1em 0;
+  page-break-inside: avoid; border-left: 4.5px solid;
+}
+.box .boxtitle {
+  display: block; font-size: 0.78em; font-weight: bold; letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 0.35em; font-family: Helvetica, Arial, sans-serif;
+}
+.box p:last-child { margin-bottom: 0.25em; }
+.def  { background: var(--def-bg);  border-color: var(--def-edge); }
+.def .boxtitle { color: var(--def-edge); }
+.pump { background: var(--pump-bg); border-color: var(--pump-edge); }
+.pump .boxtitle { color: var(--pump-edge); }
+.vis  { background: var(--vis-bg);  border-color: var(--vis-edge); }
+.vis .boxtitle { color: var(--vis-edge); }
+.prog { background: var(--prog-bg); border-color: var(--prog-edge); }
+.prog .boxtitle { color: var(--prog-edge); }
+.warn { background: var(--warn-bg); border-color: var(--warn-edge); }
+.warn .boxtitle { color: var(--warn-edge); }
+
+/* ---------- figures ---------- */
+figure {
+  margin: 1.1em auto; text-align: center; page-break-inside: avoid;
+}
+figcaption {
+  font-size: 0.86em; color: var(--muted); margin-top: 0.45em;
+  text-align: justify; padding: 0 1.2em;
+}
+figcaption b { color: #333; }
+svg { max-width: 100%; }
+svg text { font-family: Helvetica, Arial, sans-serif; }
+.svglabel { font-size: 11px; fill: #333; }
+
+/* ---------- misc ---------- */
+code, .code {
+  font-family: 'Courier New', monospace; font-size: 0.9em;
+  background: #f2f2f4; padding: 0.05em 0.3em; border-radius: 3px;
+}
+.titlepage { text-align: center; padding-top: 2.4in; }
+.titlepage h1 { font-size: 2.5em; color: #17314f; margin-bottom: 0.2em; border: none; }
+.titlepage .subtitle { font-size: 1.25em; color: var(--muted); font-style: italic; margin: 0.6em 0 2em; }
+.titlepage .meta { font-size: 0.95em; color: var(--muted); margin-top: 3.2em; line-height: 1.9; }
+.toc { page-break-before: always; }
+.toc h2 { font-size: 1.5em; color: #17314f; }
+.toc ul { list-style: none; padding-left: 0; column-count: 2; column-gap: 2.2em; font-size: 0.92em; }
+.toc ul li { margin-bottom: 0.32em; }
+.toc .tocpart { font-weight: bold; margin-top: 0.7em; color: #17314f; break-after: avoid; }
+.chip {
+  display: inline-block; font-family: Helvetica, Arial, sans-serif; font-size: 0.7em;
+  background: #e7edf5; color: #2c4a72; border-radius: 9px; padding: 0.1em 0.65em;
+  margin-right: 0.3em; letter-spacing: 0.03em; vertical-align: 0.15em;
+}
+.small { font-size: 0.88em; color: var(--muted); }
+hr.sep { border: none; border-top: 1px solid var(--rule); margin: 1.6em 15%; }
+</style>
+</head>
+<body>
+
+<div class="titlepage">
+  <h1>Systems That Hold Themselves Together</h1>
+  <p class="subtitle">A Systems-Theory and Complexity-Science Primer<br>on Constraint, Emergence, and the Threshold of Agency</p>
+  <svg width="300" height="150" viewBox="0 0 300 150">
+    <path d="M40 40 Q120 150 200 40" fill="none" stroke="#2c6cb0" stroke-width="1.5"/>
+    <circle cx="120" cy="103" r="6" fill="#c98a1b"/>
+    <path d="M90 60 Q105 90 116 100" fill="none" stroke="#b04040" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#z)"/>
+    <path d="M150 58 Q135 90 124 100" fill="none" stroke="#b04040" stroke-width="1" stroke-dasharray="3 2" marker-end="url(#z)"/>
+    <text x="235" y="70" font-size="10" fill="#55555e">basin</text>
+    <text x="235" y="88" font-size="10" fill="#55555e">of</text>
+    <text x="235" y="106" font-size="10" fill="#55555e">attraction</text>
+    <defs><marker id="z" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="#b04040"/></marker></defs>
+  </svg>
+  <p class="meta">
+    A companion to <em>The Mathematics of Constraint</em>.<br>
+    This program studies systems that compress the world under constraint<br>
+    and, sometimes, begin to defend their own existence. That is complexity science.
+  </p>
+</div>
+
+<div class="toc">
+<h2>The Program Through a Complexity Lens</h2>
+<p>Strip away the specifics and this research program is a complexity-science program. Its central
+thesis — that adaptive systems converge on geometric structure because geometry is "the portable
+language of constraints" — is a claim about how complex systems organize themselves under limits. Its
+agents are feedback loops maintaining viability; its representations self-organize around what matters;
+its deepest question — when does passive structure become an active, self-maintaining regime? — is the
+question of the <em>emergence of agency</em>, one of complexity science's grand challenges. To read the
+program well is, in part, to read it as complexity science.</p>
+
+<p>This book supplies that lens. It teaches the classic vocabulary of systems theory and complexity —
+feedback, attractors, self-organization, emergence, hierarchy, constraint, autopoiesis, criticality — from
+the ground up, and shows exactly where the program instantiates each concept with a measured result, and
+exactly where it only borrows the word. Because a fair complexity reader must do both: appreciate the
+genuine self-organization and self-repair the program measures, and press hard on whether its "emergence,"
+its "attractors," and its "phase transitions" are earned or merely asserted.</p>
+
+<div class="pump" style="margin-top:0.4em"><span class="boxtitle">Who this is for</span>
+<p>You need no prior systems theory and no heavy math (the math primer is there if you want depth). You
+need only curiosity about how things — cells, brains, networks, economies — hold themselves together and
+sometimes come alive. The boxes: <span class="chip">Definition</span> for the core concepts,
+<span class="chip">Intuition pump</span> for the pictures, <span class="chip">In the program</span> for
+the measured instances, and <span class="chip">Tension</span> for where a complexity scientist should
+push.</p></div>
+
+<h3 style="margin-top:1.1em">Contents</h3>
+<ul>
+<li class="tocpart">Part I · The Complex-Systems Vocabulary</li>
+<li>1 · What Complexity Science Is</li>
+<li>2 · Feedback, Homeostasis, and Control</li>
+<li>3 · Attractors and the Threshold of Agency</li>
+<li>4 · Self-Organization and Emergence</li>
+<li class="tocpart">Part II · Structure and Constraint</li>
+<li>5 · Hierarchy and the Law of the Stack</li>
+<li>6 · Constraint as the Ordering Principle</li>
+<li>7 · Autopoiesis and Self-Maintenance</li>
+<li class="tocpart">Part III · A Mature Verdict</li>
+<li>8 · Earned or Asserted?</li>
+<li>9 · How to Strengthen It as Complexity Science</li>
+</ul>
+</div>
+
+<h1 class="part"><span class="kicker">Part I</span>The Complex-Systems Vocabulary</h1>
+
+<p>Complexity science has a core vocabulary — feedback, attractors, self-organization, emergence — that
+recurs across every system it studies, from cells to markets. This part builds that vocabulary from
+scratch and installs it on the program's own experiments, so you can see which concepts the program
+genuinely instantiates and which it reaches for as metaphor.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 1</span>What Complexity Science Is</h2>
+
+<h3>1.1 The science of the in-between</h3>
+
+<p>Classical science mastered two extremes. The very simple — a planet orbiting a star — yields to exact
+equations. The very random — a gas of countless molecules — yields to statistics. <strong>Complexity
+science</strong> studies the vast, interesting middle: systems made of many parts whose
+<em>interactions</em> produce organized behavior that is neither perfectly predictable nor merely random.
+A living cell, a brain, an ant colony, an economy, a neural network — each is too structured for
+statistics and too intricate for a clean equation. The organization arises from the interactions
+themselves, and understanding <em>how</em> is the whole enterprise.</p>
+
+<div class="def"><span class="boxtitle">Definition — a complex adaptive system</span>
+<p>A <strong>complex adaptive system</strong> has: many components; local interactions among them (no
+central controller); <em>emergent</em> global structure that none of the parts contains; feedback loops
+that let the system respond to itself; and <em>adaptation</em> — the system changes its own organization
+in response to its environment. Complexity science asks how such systems self-organize, when they undergo
+sudden transitions, how they maintain themselves, and how new levels of organization emerge.</p></div>
+
+<h3>1.2 The program's founding claim is a complexity claim</h3>
+
+<p>Read the program's manifesto through this lens and it is unmistakably a complexity-science thesis. Its
+central sentence — <em>geometry is the portable language of constraints</em> — is a claim about how <em>any</em>
+finite adaptive system, facing limited capacity, must organize itself: by compressing the world into a
+low-dimensional structure that keeps the useful distinctions and discards the rest. Its grand question —
+"can we predict when geometry is merely a passive representation versus when it becomes an active,
+self-maintaining attractor regime?" — is a question about the <em>emergence of agency</em>, phrased in the
+exact terms (attractor, self-maintaining, regime) that complexity science uses for the transition from
+passive structure to living organization.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — why a snowflake and a thought might rhyme</span>
+<p>A snowflake's six-fold symmetry is not designed; it emerges from simple local rules (water molecules
+bonding) under a constraint (the physics of freezing). No molecule "knows" the hexagon; the pattern is a
+global consequence of local interaction under constraint. Complexity science is the study of this
+move — local rules plus constraint yielding global order — wherever it appears. The program's bet is that
+a mind's concepts, a brain's spatial map, and a neural network's internal geometry are all snowflakes of
+a sort: low-dimensional order crystallizing out of a high-dimensional world under the constraint of
+finite capacity. Whether that analogy is deep or loose is the question the whole book weighs; but the
+<em>shape</em> of the claim — order from constraint — is pure complexity science.</p></div>
+
+<h3>1.3 The lineage the program stands in</h3>
+
+<p>Complexity science has its own genealogy, and the program draws on much of it (the history primer
+traces the details). The founding cybernetics of Ashby and Wiener (feedback, self-regulation). The
+autopoiesis of Maturana and Varela (self-producing organization). Prigogine's <em>dissipative
+structures</em> (order emerging far from equilibrium). Kauffman's self-organization at the "edge of
+chaos." Bak's self-organized criticality. Holland's complex adaptive systems and the study of emergence.
+Simon's near-decomposable hierarchies. The program inherits the questions and much of the vocabulary of
+this tradition — though, as later chapters show, it inherits some strands (cybernetics, autopoiesis,
+constraint) far more concretely than others (criticality, dissipative structures), and a mature reader
+should track which.</p>
+
+<h3>1.4 The three questions this book asks of the program</h3>
+
+<p>Complexity science, applied to any system, asks three questions, and this book asks them of the
+program:</p>
+
+<table class="plain">
+<tr><th>Question</th><th>For the program</th><th>Chapter</th></tr>
+<tr><td><strong>How does order arise without a designer?</strong></td><td>Do the program's representations genuinely self-organize, or are they organized by a supplied objective?</td><td>4</td></tr>
+<tr><td><strong>How does a system maintain itself?</strong></td><td>Do its agents really regulate their own viability and repair after damage?</td><td>2, 7</td></tr>
+<tr><td><strong>When does a new level of organization emerge?</strong></td><td>Is the passive→active "threshold" a real transition or a training artifact?</td><td>3, 8</td></tr>
+</table>
+
+<p>The honest answer, developed across the book, is <em>mixed and interesting</em>: the program measures
+some genuine self-organization and self-repair, gestures at emergence and phase transitions it does not
+rigorously establish, and studies all of it in single-agent systems that are, strictly, small feedback
+loops rather than the many-interacting-parts systems complexity science classically means. Holding both
+the genuine results and the honest limits is what this book trains.</p>
+
+<h3>1.5 What to carry forward</h3>
+<p class="small">Complexity science studies the organized middle between the simple and the random —
+complex adaptive systems where local interaction under constraint yields emergent global order; the
+program's founding thesis (geometry as the language of constraints) and its grand question (when passive
+structure becomes active self-maintenance) are complexity-science claims; it stands in the
+cybernetics–autopoiesis–self-organization lineage, inheriting some strands concretely and others loosely;
+and the book asks three questions of it — order without a designer, self-maintenance, and the emergence of
+new levels — to which the honest answers are genuinely mixed.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 2</span>Feedback, Homeostasis, and Control</h2>
+
+<h3>2.1 The loop that makes systems stable</h3>
+
+<p>The most basic mechanism in all of complexity science is the <strong>feedback loop</strong>: a system
+senses its own output and uses it to adjust its own behavior. <em>Negative</em> feedback opposes change
+and produces stability (a thermostat cooling a hot room); <em>positive</em> feedback amplifies change and
+produces runaway or transition (a microphone's screech, a bandwagon). Almost every stable structure in
+nature — body temperature, blood sugar, an ecosystem's populations — is held in place by negative feedback.
+The program's agents are, at their core, feedback loops, and this is where its systems-theory content is
+most literal and most solid.</p>
+
+<div class="def"><span class="boxtitle">Definition — homeostasis</span>
+<p><strong>Homeostasis</strong> is the maintenance of an internal variable within a viable range by
+feedback — the property that lets a living system persist in a fluctuating world. A setpoint (the target
+value), an error signal (how far off you are), and a corrective action (which reduces the error) are its
+three parts. Homeostasis is the minimal form of "a system caring about its own continuation," and it is the
+seed from which the program grows its whole notion of concern.</p></div>
+
+<div class="prog"><span class="boxtitle">In the program — the homeostat at the center of every agent</span>
+<p>The program's agents are built around a textbook homeostat. Each has an internal energy that decays a
+little every step and is replenished by eating; the episode <em>ends</em> if energy hits zero. In symbols
+the program uses everywhere: energy is updated as itself, minus a decay, plus whatever the last action
+earned, clipped to a viable range. This tiny loop is doing real conceptual work: it makes "survival" a
+literal, measurable thing (steps survived before energy runs out), which in turn makes "what the agent
+cares about" (staying alive) something the experiments can ground rather than merely assert. Two-variable
+versions add a "damage" that accrues and must be kept below a ceiling — a second homeostatic dimension, so
+the agent must balance competing viability needs, exactly as a real organism balances hunger against
+injury. This is genuine, if minimal, homeostatic systems theory, cleanly instantiated.</p></div>
+
+<h3>2.2 Allostasis: regulating ahead of need</h3>
+
+<p>A refinement the program uses: <strong>allostasis</strong> — "stability through change" — is regulation
+that acts <em>predictively</em>, adjusting before a deficit arrives rather than only reacting to it. A body
+that raises its heart rate in anticipation of exertion is allostatic; one that only responds after oxygen
+drops is merely homeostatic. The program builds agents with explicit "regulate" actions that let them
+move their internal state proactively, and studies when predictive regulation helps — finding, in a nice
+honest negative, that sophisticated predictive planning can actually <em>hurt</em> near a decision
+boundary where the agent's model is confidently wrong. Systems theory predicts allostasis should help;
+the program measures a regime where it doesn't, and reports it.</p>
+
+<h3>2.3 The virtual governor: turning a global constraint into local incentives</h3>
+
+<p>One of the program's more interesting systems-theory experiments concerns <strong>distributed
+control</strong>: how do the parts of a system, each acting locally, collectively maintain a global
+condition none of them can see? The classical image is the steam-engine governor (Chapter 2 of the
+history primer). The program's "virtual governor" work asks whether a global constraint-violation signal
+("stress") can be transduced into a <em>local</em> signal that a local policy acts on, so that each part
+minimizing its own local discomfort also reduces the system-wide stress. It measures that a live global
+signal enables recovery where a stale, wrong, or absent one fails — a clean demonstration that the
+<em>fidelity</em> of the coordinating signal, not merely its presence, is what does the work.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the market price as a global signal made local</span>
+<p>A market has no central planner, yet it coordinates millions of local decisions through one device: the
+<em>price</em>. A shortage somewhere (a global condition no single buyer perceives) raises the price
+everywhere, and each buyer, minimizing their own local cost, collectively relieves the shortage. The price
+is a global constraint transduced into a local incentive — exactly the virtual-governor idea. The program's
+experiment is a miniature of this: can a system-level stress be turned into a local signal that makes
+each part's selfish minimization serve the whole? The measured answer — yes, but only if the signal is
+live and accurate — is a small but genuine result about how distributed systems coordinate, and it is one
+of the places the program touches real complexity science.</p></div>
+
+<div class="warn"><span class="boxtitle">Tension — a "distributed" control experiment with one agent</span>
+<p>A complexity scientist should note the catch honestly. Distributed control is, classically, about
+<em>many</em> interacting agents (buyers in a market, cells in a tissue). The program's virtual-governor
+experiment has a single policy fed a hand-computed global-stress feature — it demonstrates that a
+<em>signal architecture</em> can work, but not that a genuinely distributed, many-part system
+self-coordinates. The program flags this itself, keeping the result at "scaffold" level. The systems-theory
+<em>idea</em> is real and cleanly framed; the systems-theory <em>phenomenon</em> (emergent coordination
+among many parts) is aspired to, not yet demonstrated. This gap — single-agent experiments dressed in
+multi-agent language — recurs, and Chapter 8 treats it as the program's central complexity-science
+limitation.</p></div>
+
+<h3>2.4 What to carry forward</h3>
+<p class="small">Feedback (negative for stability, positive for transition) is complexity science's most
+basic mechanism; homeostasis — maintaining a viable variable by feedback — is the seed of the program's
+"concern," cleanly instantiated in its decaying-energy agents (single- and two-variable); allostasis adds
+predictive regulation, which the program shows can sometimes hurt; and the virtual-governor work genuinely
+frames distributed control (global constraint → local incentive, fidelity matters) but tests it in a
+single-agent system, so the coordination <em>idea</em> is real while the many-part <em>phenomenon</em>
+remains aspirational.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 3</span>Attractors and the Threshold of Agency</h2>
+
+<h3>3.1 The landscape picture of dynamics</h3>
+
+<p>The most powerful mental image in complexity science is the <strong>landscape</strong>. Imagine a
+system's every possible state as a location on a hilly terrain, and the system's evolution as a ball
+rolling on it. Valleys are <strong>attractors</strong> — states the system settles into and returns to
+after a nudge. Hilltops are unstable — the slightest push sends the ball away. The set of starting points
+that all roll into a given valley is that attractor's <strong>basin</strong>. This picture — attractors,
+basins, and the ridges between them — organizes how complexity scientists think about stability, memory,
+decision, and change.</p>
+
+<div class="def"><span class="boxtitle">Definition — attractor, basin, and stability</span>
+<p>An <strong>attractor</strong> is a state (or cycle, or region) toward which a dynamical system evolves
+from a range of starting conditions and to which it <em>returns after small perturbations</em>. Its
+<strong>basin of attraction</strong> is the set of states that eventually funnel into it. The defining
+test of an attractor — as opposed to a mere resting spot — is <em>restoration</em>: perturb it, and it
+comes back. This restoration property is exactly what turns a passive location into an active, self-
+maintaining thing.</p></div>
+
+<h3>3.2 The program's central bet: passive representation becomes active attractor</h3>
+
+<p>Here is the program's deepest and most complexity-flavored claim, and its answer to "when does
+structure become agency." A learned representation can be merely <em>passive</em> — a cluster of points
+that <em>correlates</em> with behavior, a location on the landscape. Or it can be <em>active</em> — an
+attractor that <em>causally controls</em> behavior and <em>resists perturbation</em>. The program claims a
+measurable transition between these: couple a representation to action, and a passive cluster becomes an
+active, self-defending attractor.</p>
+
+<div class="prog"><span class="boxtitle">In the program — the two signatures of an attractor, measured</span>
+<p>The program operationalizes the passive→active transition with the two properties an attractor should
+have. <strong>Load-bearing</strong>: removing the representation's key direction should <em>destroy</em>
+behavior far more after coupling than before (it does — the specific effect grows roughly sevenfold).
+<strong>Self-maintenance</strong>: the system should <em>resist</em> being pushed in the wrong direction.
+The measured result is striking — a passively-trained representation is fooled by a wrong-direction push
+85% of the time; the action-coupled one, 0% of the time. "The property a self-maintaining attractor should
+have," as the program puts it. This is a genuine, controlled measurement of something that looks like the
+passive-to-active transition — the closest the program comes to catching the emergence of agency in the
+act.</p></div>
+
+<div class="pump"><span class="boxtitle">Intuition pump — a dent in a cushion versus a magnet</span>
+<p>Press your hand into a cushion and leave a dent: it records where your hand was (it correlates with the
+past) but it does nothing — nudge it and the dent just shifts. Now consider a magnet's field: push a
+compass needle away and it actively swings <em>back</em>. The dent is passive structure; the magnet is an
+attractor that restores itself. The program's claim is that a neural representation can undergo exactly
+this upgrade — from a dent (a cluster that merely records what mattered) to a magnet (a configuration that
+actively pulls behavior back when perturbed) — and that coupling the representation to action is what
+installs the magnetism. Finding the moment a dent becomes a magnet, and measuring it, is the program's
+signature complexity-science ambition.</p></div>
+
+<h3>3.3 Attractors in the brain: rings and tori</h3>
+
+<p>The program also inherits attractors from neuroscience, where they are among the best-established ideas.
+The brain's head-direction system behaves as a <strong>ring attractor</strong> (a circle of states, one
+per heading, each stable); its grid cells trace a <strong>torus attractor</strong> (Chapter 4 of the
+history primer). A beautiful and eerie fact the program engages: these attractor topologies are preserved
+across brain states in waking and dreaming sleep but <em>degrade</em> in deep sleep — the ring collapsing
+toward a lower-dimensional shape. Here the attractor language is fully earned, because it comes from
+systems (brains) where the dynamics have been measured directly; the program borrows it as an anchor for
+what a genuine neural attractor looks like.</p>
+
+<div class="warn"><span class="boxtitle">Tension — "attractor" as measured property versus as metaphor</span>
+<p>A complexity scientist must hold a sharp distinction the program sometimes blurs. In the neuroscience
+(rings, tori), "attractor" is backed by measured dynamics — return maps, stability analysis, the actual
+geometry of the state space over time. In the program's own agent experiments, "attractor" describes a
+trained classifier's <em>robustness to perturbation</em> — a real and interesting property, but <em>not</em>
+established with the tools that define an attractor rigorously: no basin geometry is mapped, no stability
+eigenvalues computed, no return dynamics traced. The perturbation-immunity result is genuine; calling it an
+"attractor" imports connotations (a mapped basin, characterized dynamics) the experiment does not deliver.
+The program is measuring something real and attractor-<em>like</em>; whether it is an attractor in the full
+dynamical-systems sense is not yet shown, and Chapter 8 returns to whether the passive→active "threshold"
+is a genuine transition or a feature of a training trajectory.</p></div>
+
+<h3>3.4 What to carry forward</h3>
+<p class="small">The landscape picture — attractors (valleys the system returns to), basins, and ridges —
+is complexity science's central image; the defining test of an attractor is restoration after
+perturbation; the program's signature bet is that coupling a representation to action turns a passive
+correlating cluster into an active self-defending attractor, which it measures via load-bearing (7×) and
+perturbation-immunity (85%→0%); the brain's ring and torus attractors anchor what a genuine neural
+attractor is; and the tension is that the program's agent "attractors" are measured as perturbation-
+robustness, not with the basin-and-stability tools that define an attractor rigorously.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 4</span>Self-Organization and Emergence</h2>
+
+<h3>4.1 Order without an orderer</h3>
+
+<p>The concept that gives complexity science its wonder is <strong>self-organization</strong>: the
+spontaneous appearance of global order from local interactions, with no central designer and no blueprint.
+Sand dunes ripple; birds flock; cells differentiate; markets find prices — in each case, structure that no
+component contains arises from the components' interactions under constraint. Its close cousin is
+<strong>emergence</strong>: the appearance, at the level of the whole, of properties and behaviors that
+none of the parts possess and that could not be read off from them individually.</p>
+
+<div class="def"><span class="boxtitle">Definition — self-organization and emergence</span>
+<p><strong>Self-organization</strong> is the increase of order in a system driven by its own internal
+dynamics rather than an external plan. <strong>Emergence</strong> is the appearance of higher-level
+structure or behavior not present in, and not simply predictable from, the lower-level parts. The two go
+together: self-organization is the process, emergence is what it produces. The philosophically loaded
+question — and the one a complexity reader must press on the program — is when order is genuinely
+<em>emergent</em> (novel, not designed in) versus merely <em>installed</em> (a consequence of a rule the
+designer chose).</p></div>
+
+<h3>4.2 The program's cleanest self-organization result</h3>
+
+<p>The program's best claim to genuine self-organization is its "objects form from concern" result
+(developed in the philosophy primer as a theory of content; here we read it as systems science). Three
+identical neural networks, trained with different objectives on the same inputs, develop radically
+different internal geometries — and the one whose objective is coupled to viability spontaneously
+organizes its internal space around the <em>consequence axis</em> (what matters for survival), discarding
+the sensory features, even when no single sensory feature predicts the outcome. The reorganization is
+dramatic and measured: the consequence-based organization is hundreds of times stronger than the
+sensory-based one. Structure the designer did not explicitly place emerges from the interaction of the
+learning rule with the viability coupling.</p>
+
+<div class="prog"><span class="boxtitle">In the program — emergence you can time</span>
+<p>An even more emergence-flavored observation comes from the passive→active work: as a representation is
+coupled to action, the cluster geometry tightens <em>gradually</em> over training, but the
+<em>causal</em> load-bearing — the representation's power to control behavior — appears <em>abruptly</em>,
+over a narrow window of training steps. Geometry and causal dependence are "not coextensive in time": the
+structure builds up smoothly, then its <em>function</em> switches on sharply. This abrupt onset of a
+capability from smooth underlying change is a recognizable emergence signature — one of the few places the
+program catches something that looks like a genuine transition rather than a gradual accumulation, and it
+is worth taking seriously.</p></div>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the moment the arch stands</span>
+<p>Build a stone arch by placing stones one at a time on scaffolding. For most of the process, nothing
+about the structure is self-supporting — remove the scaffolding and it collapses. Then you place the
+final keystone, and <em>suddenly</em> the arch holds its own weight: a global property (self-support) that
+no individual stone possesses and that appeared abruptly at the end of a gradual process. The program's
+"gradual geometry, abrupt load-bearing" finding has this flavor — the representation is assembled smoothly,
+and then, at a threshold, it "stands on its own" as a causal controller of behavior. Whether this is a true
+emergent transition (a keystone moment) or just the point where a smoothly-growing signal crosses a
+detection threshold is exactly the question a rigorous emergence analysis would settle — and which the
+program has not yet run.</p></div>
+
+<div class="warn"><span class="boxtitle">Tension — is it emergence, or supervised feature selection?</span>
+<p>Here is the criticism a complexity scientist must press, and it is the same one that stalks the whole
+program. The cleanest "self-organization" result trains the network on a <em>supervised</em> objective
+derived from the reward. So a deflationary reading is available and strong: the network reorganizes around
+the consequence axis because the designer's loss function <em>selects</em> for it — this is supervised
+representation learning doing exactly what it is told, not order arising spontaneously from the system's
+own dynamics. The program's own steelman of this objection ("you trained a classifier to use a direction;
+of course ablating it matters — this is not emergence, it is supervised feature selection") is not fully
+rebutted. The program's attempts to make concern <em>self-organize</em> from the agent's own experience,
+without a supervised target, only partly succeed. So the strong, wonderful form of self-organization — order
+arising from the system's <em>own</em> stakes and interactions — is, at the frontier, demonstrated for easy
+cases and open for hard ones. The program has genuine reorganization-under-objective; whether it has
+genuine <em>self</em>-organization is precisely what remains to be shown.</p></div>
+
+<h3>4.3 What to carry forward</h3>
+<p class="small">Self-organization is order arising from a system's own dynamics without a designer;
+emergence is higher-level structure not present in the parts; the program's cleanest instance is "objects
+form from concern" (dramatic measured reorganization around the consequence axis) plus the emergence-
+flavored "gradual geometry, abrupt load-bearing" onset; and the central tension is that the cleanest
+demonstrations use a <em>supervised</em> objective, so they show reorganization-under-a-chosen-rule, while
+genuine <em>self</em>-organization from the system's own stakes is only partly achieved — the deflationary
+"supervised feature selection" reading is not yet fully answered.</p>
+
+<h1 class="part"><span class="kicker">Part II</span>Structure and Constraint</h1>
+
+<p>Complex systems are organized in layers, held together by constraints, and — when alive — actively
+maintain themselves. This part covers the program's engagement with hierarchy (the Law of the Stack),
+with constraint as the ordering principle (rate-distortion and effective dimension), and with
+self-maintenance (autopoiesis and ultrastability) — the concepts where the program's systems-theory content
+is richest.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 5</span>Hierarchy and the Law of the Stack</h2>
+
+<h3>5.1 Why complex systems are layered</h3>
+
+<p>Nearly every complex system that persists is <strong>hierarchical</strong> — built in nested layers,
+each relatively self-contained, communicating with the others through limited interfaces. Cells make
+tissues make organs make organisms; letters make words make sentences make arguments; transistors make
+gates make chips make computers. Herbert Simon's classic argument explains why: hierarchical systems are
+<strong>near-decomposable</strong> — the parts within a layer interact strongly, the layers interact
+weakly — and this makes them far more robust and far quicker to evolve than a system where everything
+depends directly on everything. A layered system can fix or upgrade one level without shattering the
+others.</p>
+
+<div class="def"><span class="boxtitle">Definition — near-decomposability</span>
+<p>A system is <strong>near-decomposable</strong> when it separates into subsystems whose internal
+interactions are much stronger than their interactions with each other. This lets each subsystem be
+understood, maintained, and evolved semi-independently — the reason complex biological and engineered
+systems are almost always built in modular layers rather than as one tangled whole. Hierarchy is not a
+convenience; it is a near-universal condition for complex systems to be viable and evolvable at all.</p></div>
+
+<h3>5.2 The Law of the Stack</h3>
+
+<p>The program's distinctive contribution to hierarchy theory is a claim it inherits from Bennett and turns
+into a measured ordering — the <strong>Law of the Stack</strong>. In plain terms: how much flexibility a
+higher layer can have is <em>bounded by the slack in the layer beneath it</em>. A layer built on a rigid,
+fully-committed foundation cannot itself be flexible; a layer built on a foundation with room to spare can
+be. The formal version is an inequality relating each layer's "weakness" (its flexibility, in the sense of
+the math primer) to the layer below — each bit of slack underneath roughly doubles the room available
+above.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — you can only build as tall as your foundations allow</span>
+<p>A skyscraper's height is limited by its foundation: a deep, robust footing can support many floors; a
+shallow one caps the building low. You cannot add flexibility at the top that the base cannot bear. The Law
+of the Stack says learned representations obey the same discipline — a layer can only be as adaptable as the
+slack in the layers supporting it permits. This reframes a system's capacity for higher-order adaptation
+(learning, repair, flexibility) as a <em>resource that must be provisioned from below</em>. It is a genuine
+systems-theory claim about hierarchy: adaptability is not free at any level; it is paid for by slack
+underneath. And the program makes it testable, which is more than most hierarchy theory manages.</p></div>
+
+<div class="prog"><span class="boxtitle">In the program — the ordering, measured</span>
+<p>The program does not (yet) test the exact numerical bound, but it tests the <em>ordering</em> the Law
+predicts, and it holds. Across conditions that vary how much slack the lower layers have, the higher-level
+capacities the Law governs — how much a representation reorganizes under coupling, and crucially how well
+the system <em>repairs</em> after damage — line up monotonically with the available slack: more slack
+below, more adaptation and faster repair above. A system with full lower-layer slack recovers from
+perturbation to near-perfect accuracy; one with the slack frozen out recovers far less. This is a
+real, if partial, confirmation of a hierarchy-theoretic prediction: the capacity for self-repair is
+provisioned from below, exactly as the Law says.</p></div>
+
+<h3>5.3 A subtlety: alignment matters as much as slack</h3>
+
+<p>The program adds a refinement that a good systems theorist should appreciate. The Law bounds capacity by
+lower-layer slack, but whether <em>using</em> that capacity helps depends on whether the lower layer is
+<em>aligned</em> with the task. The program finds that a pre-trained lower representation is a "competence
+aid when aligned, a competence trap when not" — freezing a well-aligned foundation gives perfect
+performance, freezing a misaligned one locks in failure. This sharpens the hierarchy picture: it is not
+just how much slack a layer supplies, but whether the structure it commits to points the right way. A deep
+foundation in the wrong place is worse than useless — it is a trap you cannot escape from above. This is a
+genuinely useful addition to how one thinks about layered adaptive systems.</p>
+
+<div class="warn"><span class="boxtitle">Tension — the bound is asserted; only the ordering is tested</span>
+<p>A rigorous complexity reader should mark the gap precisely. The Law of the Stack states a specific
+quantitative bound (a doubling relationship between adjacent layers' flexibility). The program tests only
+the <em>ordinal</em> prediction — that more slack below yields more adaptation above — not the actual
+numerical bound, which it explicitly has not measured. Confirming an ordering is real evidence, but it is
+weaker than confirming the law: many mechanisms produce "more foundation, more flexibility" without obeying
+the specific doubling relation. Continuously tuning the lower-layer slack and tracing the actual
+layer-to-layer flexibility relationship — rather than comparing a few frozen conditions — is the experiment
+that would upgrade this from a suggestive ordering to a tested law, and Chapter 9 flags it.</p></div>
+
+<h3>5.4 What to carry forward</h3>
+<p class="small">Complex systems persist by being hierarchical and near-decomposable (Simon) — modular
+layers that can be maintained and evolved semi-independently; the program's Law of the Stack says a layer's
+flexibility is bounded by the slack beneath it (adaptability provisioned from below), refined by the point
+that lower-layer <em>alignment</em> matters as much as slack (aligned foundations aid, misaligned ones
+trap); the program measures the predicted <em>ordering</em> (more slack → more adaptation and faster repair)
+but not the exact quantitative bound, which remains asserted rather than tested.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 6</span>Constraint as the Ordering Principle</h2>
+
+<h3>6.1 Constraint is what makes order possible</h3>
+
+<p>It is tempting to think of constraints as purely limiting — the walls that stop a system doing what it
+wants. Complexity science teaches the opposite lesson: <strong>constraint is generative</strong>. A river
+constrained by its banks flows powerfully; unconstrained, it spreads into a stagnant marsh. The
+constraints of chemistry make only certain molecules possible, and that <em>selectivity</em> is what
+allows the intricate order of life. Order is not what remains when you remove constraints; order is what
+constraints <em>produce</em>. The program takes this principle as its very name — "the geometry of
+constraint" — and it is the deepest systems-theory idea it engages.</p>
+
+<div class="def"><span class="boxtitle">Definition — constraint as an ordering principle</span>
+<p>A <strong>constraint</strong> is a restriction on a system's possible states or dynamics. In complexity
+science, constraints are <em>ordering principles</em>: by ruling out most possibilities, they concentrate a
+system into the small set of configurations that satisfy them, and that concentration <em>is</em> the
+system's order. The central constraint the program studies is <strong>finite capacity</strong> — a system
+cannot represent everything, so it must compress — and its central claim is that this one constraint,
+faced by any adaptive system, forces the convergence on low-dimensional geometric structure that the whole
+program is about.</p></div>
+
+<h3>6.2 The capacity constraint and its power-law consequence</h3>
+
+<p>The program's sharpest use of constraint is a quantitative prediction (developed mathematically in the
+math and history primers). Given the constraint of a <em>finite representational budget</em>, a system
+minimizing value-weighted error should allocate its resolution in proportion to a power of how much each
+region matters — a specific power law linking "how much you care about a region" to "how finely you
+represent it." This is the constraint principle at its most precise: a single budget constraint, plus an
+optimization, <em>derives</em> the shape of the system's internal geometry. The order (the resolution
+allocation) is a direct consequence of the constraint (the budget).</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the sculptor and the block</span>
+<p>A sculptor does not add a statue to a block of marble; she removes everything that is not the statue.
+The form emerges entirely through the constraint of subtraction — the statue is what survives the chisel.
+Constraint-based order works this way throughout complex systems: the organized structure is what remains
+after the constraints rule out everything incompatible with them. The program's capacity constraint is the
+chisel: a finite system cannot keep every distinction, so it must carve away all but the ones that matter,
+and what survives — the low-dimensional, concern-weighted geometry — is the "statue." The program's ambition
+is to predict the exact shape of the statue from the shape of the chisel, which is why its capacity-derived
+power law is such a characteristic move.</p></div>
+
+<h3>6.3 The falsification, and why it is a good complexity result</h3>
+
+<p>The program's constraint-derived power law makes a specific numerical prediction — an exponent of 0.5
+for a two-dimensional system. When measured, the exponent came out ≈ 0.30 instead, with tight confidence
+intervals. The prediction was <em>falsified</em>. And this is where the program does its best
+complexity science, because the falsification is <em>informative</em>: inverting the measured exponent
+implies the system was behaving as if it were effectively <em>one</em>-dimensional, not two — its
+resolution allocation had collapsed onto essentially a single direction. A constraint-based prediction,
+honestly tested, revealed a hidden dimensional collapse precisely because it was specific enough to be
+wrong.</p>
+
+<div class="prog"><span class="boxtitle">In the program — effective dimension as an order parameter</span>
+<p>The quantity the falsification revealed — <strong>effective dimension</strong> — is exactly the kind of
+<em>order parameter</em> that complexity science prizes: a single number summarizing how a system's order
+is organized (here, how many directions it effectively uses). That a finite-capacity code, meant to tile a
+two-dimensional space, instead concentrated its resolution as if in one dimension is a genuine, quantitative
+finding about how constraint shapes self-organized structure — a dimensional collapse under a capacity
+budget. It is the program's cleanest constraint-based result, and it works precisely because it treats a
+system property (effective dimension) as a measurable order parameter and lets a constraint-derived
+prediction be wrong about it. This is how constraint-based complexity science is supposed to go.</p></div>
+
+<div class="warn"><span class="boxtitle">Tension — one order parameter, one point, three seeds</span>
+<p>The rigorous caveat: a complexity scientist studying constraint would want the <em>whole curve</em>, not
+one exponent. How does the effective dimension change as you vary the constraint strength (the capacity),
+the value field's shape, the amplitude of concern? A single measured exponent at one setting, over few
+seeds, is a data point, not a characterized relationship. The program has the right order parameter and the
+right instinct (derive, then measure); what would elevate it to strong complexity science is sweeping the
+control parameters and mapping how the order parameter responds — turning a single falsified point into a
+full picture of how constraint governs the system's dimensional organization. Chapter 9 develops this.</p></div>
+
+<h3>6.4 What to carry forward</h3>
+<p class="small">Constraint is generative, not merely limiting — order is what constraints produce by ruling
+out alternatives, and finite capacity is the program's central ordering constraint; the capacity budget
+<em>derives</em> a power-law resolution allocation (the constraint fixing the geometry); the prediction was
+productively falsified (0.30 not 0.50), revealing a dimensional collapse to effective-dimension ≈ 1 — a
+genuine constraint-based finding using effective dimension as an order parameter; and the improvement is to
+sweep the control parameters and map the whole order-parameter curve rather than measure one point.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 7</span>Autopoiesis and Self-Maintenance</h2>
+
+<h3>7.1 The system that makes itself</h3>
+
+<p>The furthest reach of systems theory is <strong>autopoiesis</strong> — the property of a system that
+continuously produces and maintains its own organization, actively rebuilding the very boundary that makes
+it a system. A living cell is the paradigm: it is not a fixed object but an ongoing process that
+manufactures its own membrane, which contains the chemistry that manufactures the membrane. Life, on this
+view, is not a substance but a self-maintaining <em>pattern of activity</em>. This is the concept the
+program reaches toward when it asks whether a representation can become a "self-maintaining regime" — and
+it is where the program's ambition most exceeds its current grasp, in ways worth understanding precisely.</p>
+
+<div class="def"><span class="boxtitle">Definition — autopoiesis and operational closure</span>
+<p><strong>Autopoiesis</strong> (self-making) is the capacity of a system to continuously regenerate the
+network of processes and the boundary that constitute it. Its technical heart is <strong>operational
+closure</strong>: the system's processes loop back to produce the components and organization that produce
+those processes — a self-sustaining circle. This is stronger than homeostasis (which merely maintains a
+variable) and stronger than self-repair (which restores a fixed structure): autopoiesis is a system
+<em>producing its own components and boundary</em>. It is the deepest sense in which something can be said
+to maintain <em>itself</em>.</p></div>
+
+<h3>7.2 What the program genuinely measures: ultrastability and repair</h3>
+
+<p>The program's real, measured contribution here is not full autopoiesis but its cybernetic ancestor:
+<strong>ultrastability</strong>, Ashby's idea that a system knocked out of its viable range reorganizes
+its own parameters until it returns (history primer, Chapter 2). The program damages a trained system with
+random noise and lets it run a few self-supervised updates; it climbs back to near its original competence,
+"using its own ongoing input stream to re-establish a preferred state." This is a genuine, quantitative
+demonstration of self-repair — a system restoring its own function after perturbation. And, connecting to
+Chapter 5, the program shows the <em>capacity</em> for this repair scales with lower-layer slack, exactly
+as the hierarchy theory predicts. As a measurement of ultrastable self-repair, this is solid systems
+science.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the wound that heals versus the body that lives</span>
+<p>A cut on your skin heals: the tissue restores a fixed pattern after damage. That is <em>repair</em>,
+and it is impressive. But it is not the same as the deeper fact that your body is <em>continuously
+remaking itself</em> — replacing cells, rebuilding its own boundary, sustaining the very processes that
+sustain it — every moment, wound or no wound. Repair restores a structure; autopoiesis <em>is</em> the
+ongoing self-production of the structure. The program has convincingly shown the wound healing (a damaged
+network restoring its accuracy). It has not shown the body living (a system producing its own
+organization). These are different achievements, and conflating them is the main way the program's
+systems-theory language outruns its results.</p></div>
+
+<div class="warn"><span class="boxtitle">Tension — "autopoiesis" claimed, repair delivered</span>
+<p>The precise criticism, which the program half-concedes: its "repair" is a network updating its weights
+via <em>labeled gradient descent</em> — restoring a fixed function using an external training signal — not a
+system <em>producing its own components and boundary</em>. There is no operational closure: the system does
+not generate its own new organization; it re-tunes existing weights toward a supervised target. The papers
+admit "the system does not yet generate new policy, it only updates head weights." So what the program has
+is homeostasis (Chapter 2) plus ultrastable repair (this chapter) — both real and measured — but <em>not</em>
+autopoiesis in Maturana and Varela's strict sense. The word is aspirational; the achievement is more
+modest. This matters because "self-maintaining" is doing heavy lifting in the program's grand question, and
+a reader should keep the measured repair separate from the claimed self-production.</p></div>
+
+<h3>7.3 Viability: the space of staying alive</h3>
+
+<p>Underlying all of this is the systems-theory notion of <strong>viability</strong> — the set of states
+from which a system can continue to exist, given its controls and the disturbances it faces (Aubin's
+viability theory). The program operationalizes a <em>viability buffer</em>: the slack between how many
+futures a policy keeps open and how many it has committed to — a measure of how much shock the system can
+absorb before dying. This is a genuinely useful systems concept, cleanly rendered: it makes "robustness"
+or "resilience" — usually vague — into a specific quantity (room to absorb perturbation without leaving the
+viable set). The program uses it informally rather than computing formal viability kernels, but the
+<em>idea</em> — agency as keeping enough futures open to stay alive — is a real and attractive
+systems-theoretic framing of what an agent is <em>for</em>.</p>
+
+<h3>7.4 The through-line: what "self-maintaining" really requires</h3>
+
+<p>Assemble Chapters 2, 3, 5, and 7 and the program's picture of agency-as-self-maintenance comes into
+focus, along with exactly how far it reaches. An agent is a homeostat (Chapter 2) whose representation can
+become a self-defending attractor (Chapter 3), whose adaptive capacity is provisioned hierarchically
+(Chapter 5), and which can repair itself ultrastably after damage while keeping a viability buffer (this
+chapter). That is a substantial, coherent, and largely-measured account of a <em>self-regulating,
+self-repairing</em> system. What it is <em>not</em> yet is an account of a <em>self-producing</em> one —
+the operational closure that would make it autopoietic in the full sense. The program has climbed from
+homeostasis through ultrastability toward autopoiesis and stopped one genuine step short, which is both an
+honest limit and a clear direction for the future.</p>
+
+<h3>7.5 What to carry forward</h3>
+<p class="small">Autopoiesis is a system producing its own components and boundary (operational closure) —
+deeper than homeostasis or repair; the program genuinely measures ultrastable self-repair (a damaged
+network restoring its function, with repair capacity scaling with lower-layer slack) and cleanly renders
+viability as a "buffer" (room to absorb shock before dying); but its "repair" is supervised weight-tuning,
+not self-production, so it delivers homeostasis-plus-ultrastability, not full autopoiesis — the word is
+aspirational and the achievement one honest step short of it.</p>
+
+<h1 class="part"><span class="kicker">Part III</span>A Mature Verdict</h1>
+
+<p>Having toured the program's engagement with the complex-systems vocabulary, this final part renders
+judgment: which systems-theory language is earned by measurement and which is borrowed as metaphor, and
+what concrete moves would make the program a stronger complexity science. The goal is a reader who can tell
+the difference on their own.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 8</span>Earned or Asserted?</h2>
+
+<h3>8.1 The honest scorecard</h3>
+
+<p>A fair complexity reader must sort the program's systems language into three bins: concepts it genuinely
+<em>measures</em>, concepts it <em>frames well but has not established</em>, and concepts it <em>invokes as
+metaphor</em>. Here is that scorecard, assembled from the previous chapters.</p>
+
+<table class="plain">
+<tr><th>Concept</th><th>Status in the program</th></tr>
+<tr><td><strong>Homeostasis / feedback</strong></td><td><b>Earned.</b> The decaying-energy agent is a genuine, measured homeostat; two-variable versions add real competing viability needs.</td></tr>
+<tr><td><strong>Ultrastable self-repair</strong></td><td><b>Earned.</b> Damaged networks measurably restore function via self-supervised updates; repair capacity scales with slack as predicted.</td></tr>
+<tr><td><strong>Self-organization (of representations)</strong></td><td><b>Partly earned.</b> Dramatic measured reorganization around the consequence axis — but under a <em>supervised</em> objective, so "self" is contested.</td></tr>
+<tr><td><strong>Constraint-driven order / effective dimension</strong></td><td><b>Earned as a result, incompletely characterized.</b> A real, falsified power law revealing dimensional collapse — but measured at one point, not swept.</td></tr>
+<tr><td><strong>Hierarchy (Law of the Stack)</strong></td><td><b>Ordering earned, bound asserted.</b> The predicted ordering (slack below → adaptation above) holds; the exact quantitative law is untested.</td></tr>
+<tr><td><strong>Attractors (in agents)</strong></td><td><b>Attractor-<em>like</em>, not established.</b> Perturbation-immunity measured; but no basin geometry, stability analysis, or return dynamics.</td></tr>
+<tr><td><strong>Emergence / phase transition</strong></td><td><b>Gestured at.</b> The "abrupt load-bearing onset" is suggestive; no order-parameter discontinuity or bifurcation analysis establishes a true transition.</td></tr>
+<tr><td><strong>Autopoiesis / operational closure</strong></td><td><b>Aspirational.</b> Repair is supervised weight-tuning, not self-production; the strict criterion is not met.</td></tr>
+<tr><td><strong>Criticality / self-organized criticality</strong></td><td><b>Not claimed.</b> No critical exponents, avalanches, or edge-of-chaos results — and the program is right not to claim them.</td></tr>
+<tr><td><strong>Distributed / collective systems</strong></td><td><b>Single-agent.</b> The virtual-governor idea is framed well but tested on one agent; genuine many-part coordination is absent.</td></tr>
+</table>
+
+<h3>8.2 The three deepest limitations</h3>
+
+<p>Three limitations recur across the scorecard and deserve to be named as the program's central
+complexity-science weaknesses.</p>
+
+<div class="warn"><span class="boxtitle">Limitation 1 — it is single-agent, not many-part</span>
+<p>Complexity science, in its classic form, is about <em>many</em> interacting components producing
+emergent macro-order — flocks, markets, colonies, tissues. Nearly every result in the program is
+<strong>single-agent</strong>: a small feedback loop with a few internal variables. This is a real system,
+and studying it is legitimate, but it is at the far simple end of what "complex adaptive system" usually
+means. The emergent macro-order from micro-interaction — the defining phenomenon of the field — is largely
+absent, because there is usually only one "part." Much of the program's systems vocabulary (distributed
+control, collective coding, emergence) describes phenomena that need many agents, applied to systems that
+have one.</p></div>
+
+<div class="warn"><span class="boxtitle">Limitation 2 — "emergence" and "phase transition" are asserted, not demonstrated</span>
+<p>The program's grand question is about a <em>transition</em> (passive → active), and it uses attractor
+and emergence language freely. But it never runs the analysis that would <em>establish</em> a transition:
+sweeping a control parameter (coupling strength, capacity, decay rate) and showing an <em>order parameter</em>
+jump discontinuously at a critical value; mapping a bifurcation; testing for hysteresis (does the system
+stay active if you reverse the coupling?). The "abrupt load-bearing onset" is the closest it comes, and it
+is suggestive — but a sharp change during a training trajectory is not the same as a phase transition in a
+control parameter. Whether the passive→active threshold is a genuine bifurcation or a feature of how
+gradient descent installs a capability is, rigorously, still open — and it is the program's most important
+unanswered complexity question.</p></div>
+
+<div class="warn"><span class="boxtitle">Limitation 3 — the self-organization is objective-driven</span>
+<p>As Chapter 4 pressed: the cleanest "self-organization" runs under a supervised objective, so the
+deflationary reading (reorganization <em>installed</em> by a chosen loss, not <em>emergent</em> from the
+system's own dynamics) is not fully answered. Genuine self-organization in complexity science means order
+from the system's <em>own</em> internal dynamics; the program's attempts to reach this (learning concern
+from the agent's own experience) only partly succeed. Until they do, the program has
+reorganization-under-constraint — real and interesting — rather than the stronger self-organization its
+language implies.</p></div>
+
+<h3>8.3 What the program gets right, kept in view</h3>
+
+<p>The scorecard should not read as dismissal. The program earns more systems-theory content than most
+machine-learning work attempts: a real homeostat, measured ultrastable repair, a hierarchy law confirmed in
+its ordering, a constraint-derived power law honestly falsified into a dimensional-collapse finding, and a
+carefully-framed distributed-control idea. Crucially, the program is <em>disciplined about the difference</em>
+— it does not claim criticality it hasn't shown, it flags the virtual governor as "scaffold," it labels
+its repair as not-yet-autopoietic, it publishes the falsified exponent. A less careful program would drape
+all this in unearned "emergence" and "self-organizing complexity" language; this one mostly tells you which
+bin each result belongs in. Reading the scorecard is possible precisely because the program is honest
+enough to make it possible.</p>
+
+<h3>8.4 What to carry forward</h3>
+<p class="small">Sort the systems language into earned (homeostasis, ultrastable repair), partly-earned
+(self-organization under a supervised objective, constraint-driven order measured at one point, the Law of
+the Stack's ordering), attractor-like-but-unestablished, gestured-at (emergence/phase transition), and
+aspirational (autopoiesis) — with criticality rightly not claimed and the systems mostly single-agent; the
+three deepest limits are single-agent scope, asserted-not-demonstrated transitions, and objective-driven
+rather than genuine self-organization; and the program's saving grace is that it is disciplined enough about
+these distinctions to let you draw the scorecard at all.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 9</span>How to Strengthen It as Complexity Science</h2>
+
+<h3>9.1 From metaphor to measurement</h3>
+
+<p>The scorecard of Chapter 8 is also a to-do list. Nearly every place the program's systems language runs
+ahead of its results is a place where a specific, runnable experiment would either earn the language or
+honestly retire it. This closing chapter lays out those moves — the ones that would turn the program from a
+study that <em>uses</em> complexity vocabulary into one that <em>establishes</em> complexity results.</p>
+
+<h3>9.2 Establish the transition, or find there isn't one</h3>
+
+<div class="prog"><span class="boxtitle">The bifurcation experiment</span>
+<p>The single highest-value move: turn the passive→active "threshold" from a metaphor into a measured
+transition. The recipe is standard complexity science. Pick a <strong>control parameter</strong> — the
+strength of the action-coupling is the natural one — and sweep it continuously from zero upward. Track an
+<strong>order parameter</strong> — the causal load-bearing, or the perturbation-immunity, or the viability
+buffer. Then look for the signatures of a genuine transition: does the order parameter jump
+<em>discontinuously</em> at a critical coupling value (a bifurcation), or does it rise smoothly (just a
+threshold-crossing of a continuous quantity)? Test for <strong>hysteresis</strong>: once the system is
+"active," does reversing the coupling bring it straight back to passive, or does it stay active (a
+memory, a true regime)? These experiments would <em>settle</em> whether the program's central claim — that
+agency emerges at a threshold — describes a real phase transition or a gradual installation. Either answer
+is a genuine result, and running this is the most important thing the program could do as complexity
+science.</p></div>
+
+<h3>9.3 Go multi-agent</h3>
+
+<p>The program's deepest structural limitation (Chapter 8) is that it is single-agent, and its own notes
+point at the fix. Several extensions would introduce genuine many-part dynamics: <em>evolving a population</em>
+of encoders under viability selection (the evolutionary form of the Law of the Stack); putting
+<em>multiple agents</em> in a shared world so that coordination must emerge rather than be hand-fed;
+testing the "virtual governor" on an actual collection of parts that must self-organize around a global
+signal. This is where the program would finally exhibit the phenomenon complexity science exists to
+study — <strong>emergent macro-order from micro-interaction</strong> — rather than describing it with
+borrowed words. The program already gestures at a striking motivation here: the observation that adding a
+second navigating agent "explodes" the clean single-agent torus into something richer, an unexplored
+collective frontier.</p>
+
+<h3>9.4 Measure order parameters as curves, not points</h3>
+
+<p>Wherever the program has a good order parameter — effective dimension, the cluster gap, the viability
+buffer, the toroidal signature — it should measure the <em>whole curve</em> of how that parameter responds
+to its control parameters, not a single point. The falsified power-law exponent (Chapter 6) is the model:
+it became informative by being a specific number. But one number at one setting is a data point; sweeping
+the capacity, the value-field shape, and the concern amplitude, and mapping how the effective dimension
+responds, would turn that single falsification into a <em>characterized relationship</em> — a real law of
+how constraint governs the system's dimensional organization. Complexity science lives in these
+response-curves, and the program mostly measures endpoints.</p>
+
+<h3>9.5 Earn the deeper words</h3>
+
+<div class="prog"><span class="boxtitle">Three upgrades to specific concepts</span>
+<ul>
+<li><strong>Autopoiesis, for real.</strong> Replace supervised "repair" with genuine self-production:
+a system that, on viability breach, <em>generates its own new organization</em> (explores and adopts new
+policy) rather than re-tuning weights toward a supplied target. Only then is the "autopoietic" label
+earned rather than aspirational.</li>
+<li><strong>Attractors, rigorously.</strong> For the agent "attractors," actually do the dynamical-systems
+analysis: map the basin, estimate stability, trace the return dynamics. Turn "robust to perturbation" into
+"a characterized attractor with a mapped basin," which is a much stronger and more useful claim.</li>
+<li><strong>The Law of the Stack, quantitatively.</strong> Move from comparing a few frozen conditions to
+continuously tuning lower-layer slack (via graded capacity control) and tracing the actual layer-to-layer
+flexibility relationship — testing the specific quantitative bound, not just its ordering.</li>
+</ul></div>
+
+<h3>9.6 The missing lineage: far-from-equilibrium thinking</h3>
+
+<p>One whole strand of complexity science is almost absent from the program and would enrich it:
+<strong>Prigogine's dissipative structures</strong> — the physics of how order arises in systems held
+<em>far from equilibrium</em> by a continuous flow of energy. A living thing is not a static structure but a
+pattern sustained by throughput, constantly exporting entropy to maintain its internal order. The program's
+agents already have an energy budget and a decay; framing self-maintenance <em>thermodynamically</em> —
+making the flow of "energy" through the agent, and the cost of maintaining its boundary, first-class
+measured quantities — would give "self-maintenance" a physical anchor it currently lacks, and connect the
+program to the deepest tradition of why order and life arise at all. It is the single richest unexplored
+lineage, and the program's own energy-based homeostat is the natural place to start.</p>
+
+<h3>9.7 The bottom line for a complexity reader</h3>
+
+<p>Read as complexity science, the program is a serious, disciplined study of small self-regulating,
+self-repairing systems under constraint — with genuine measured results (homeostasis, ultrastable repair, a
+constraint-derived dimensional collapse, a confirmed hierarchy ordering) and an honest awareness of where
+its bolder language (emergence, phase transition, autopoiesis, distributed control) outruns its evidence.
+It sits at the simple, single-agent end of the field, and its grand claim — the emergence of agency at a
+threshold — remains, by the field's own standards, framed rather than established. But the path to
+establishing it is clear and mostly runnable: sweep the control parameters, go multi-agent, map the order
+parameters as curves, earn the deep words one measurement at a time, and reach for the far-from-equilibrium
+framing its energy budgets already invite. The program has the right instincts and the right vocabulary; it
+now needs the specific transition-and-order-parameter experiments that would let it speak the language of
+complexity science not by borrowing it, but by having earned it.</p>
+
+<div class="pump"><span class="boxtitle">A closing thought</span>
+<p>Perhaps the most complexity-scientific thing about this program is not any result but its founding
+intuition: that mind, agency, and meaning are what happens when a finite system compresses an overwhelming
+world down to the few distinctions it must keep to persist — that intelligence is, at bottom, a
+constraint-satisfaction problem solved by geometry. That intuition places the study of minds squarely
+inside the study of complex systems, alongside cells and colonies and climates, as one more instance of
+order wrung from constraint. Whether the program's specific bets are right, that reframing — treating a
+thinking thing as a complex adaptive system holding itself together against dissolution — is a genuinely
+useful place to stand. It is the place from which the hardest question in the field, how passive structure
+becomes active life, might finally be asked with instruments rather than only with words.</p></div>
+
+<h3>9.8 What to carry forward</h3>
+<p class="small">To strengthen the program as complexity science: run the bifurcation experiment (sweep
+coupling, watch for an order-parameter jump and hysteresis) to establish or retire the passive→active
+transition; go multi-agent to exhibit real emergent coordination; measure order parameters as full curves,
+not points; earn the deep words (genuine self-production for autopoiesis, real basin/stability analysis for
+attractors, the quantitative Law of the Stack); and add the far-from-equilibrium (Prigogine) framing its
+energy budgets already invite — turning borrowed complexity vocabulary into earned complexity results.</p>
+
+</body></html>
