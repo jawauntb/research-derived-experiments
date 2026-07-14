@@ -317,6 +317,25 @@ deterministic public summary under `experiments/commitment_surface/results/`.
 The 2026-07-09 run strictly failed the three-component necessity claim: reopen
 was necessary, while allocate and cool were not necessary at the existing gate.
 
+M5 reuses that simulator and control suite but freezes a common per-seed probe
+plan from the M4 `allocate=0, cool=0, reopen=1` cell. Five trigger policies route
+the same actual probes through affected or unaffected buckets according to an
+eight-step open commitment, so trigger timing varies without varying cost. A
+pre-run implementation contract records the utility/age and robust-normalized
+statistics, outcome-blind M4 calibration receipt, right-censored latency, and a
+coupled second-shift no-change control. Outcome execution loads and hash-pins
+the frozen receipt, pre-indexes branch-independent variates for the coupled
+outcome/no-change paths, and validates the complete eight-seed grid, corrected
+rows, rebuilt M4 plans, and transported reference against a frozen integrity
+manifest. Raw trigger/probe traces remain under
+`artifacts/world_responds/`; only aggregate arm intervals and F0–F5 gates are
+public. Provenance generation takes the runnable command and preregistration
+from the latest result report so its machine-readable signal stays aligned with
+the experiment it describes. The 2026-07-14 run is byte-stable and strictly
+fails F2/F3: periodic
+reset ties commitment latency, while the never-firing normalized arm ties its
+zero false-reopen rate.
+
 ---
 
 ## 5. Runtime flow

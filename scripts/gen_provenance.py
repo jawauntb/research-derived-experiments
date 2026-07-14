@@ -48,12 +48,16 @@ RUN_PATTERNS = [
     re.compile(r"(python3?\s+experiments/[^\n`]*\.py[^\n`]*)"),
     re.compile(r"(python3?\s+[A-Za-z0-9_./-]+\.py[^\n`]*)"),
 ]
+EXACT_RUN_PATTERN = re.compile(r"## Exact run config\s+```bash\s+([^\n`]+)", re.I)
 SEED_PATTERNS = [
     re.compile(r"--base-?seed[ =]+(\d{4,})"),
     re.compile(r"base_seed[^\d]{0,8}(\d{4,})"),
     re.compile(r"\bseed[ =:]+(\d{4,})"),
 ]
-GATE_HINTS = re.compile(r"(pass|gate|confirmed|rho\s*=|r\s*=|specificity|betti|✅|❌|Wilson)", re.I)
+GATE_HINTS = re.compile(
+    r"(pass|gate|confirmed|rho\s*=|r\s*=|specificity|betti|✅|❌|Wilson)", re.I
+)
+PREREG_HINT = re.compile(r"Pre-registration:\s*`([^`]+)`", re.I)
 
 
 def read(p: Path) -> str:
@@ -191,7 +195,22 @@ def collect(d: Path) -> dict:
     )
     prereg = prereg_candidates[0] if prereg_candidates else None
 
-    run_cmd = first_match(RUN_PATTERNS, readme_txt, modal_txt, latest_result, py_txt)
+    latest_prereg = PREREG_HINT.search(latest_result)
+    latest_exact_contract = bool(
+        name == "commitment_surface"
+        and latest_prereg
+        and "## Exact run config" in latest_result
+    )
+    if latest_exact_contract:
+        candidate = ROOT / latest_prereg.group(1)
+        if candidate.exists():
+            prereg = candidate
+
+    run_cmd = (
+        first_match([EXACT_RUN_PATTERN], latest_result)
+        if latest_exact_contract
+        else first_match(RUN_PATTERNS, readme_txt, modal_txt, latest_result, py_txt)
+    )
     seed = first_match(SEED_PATTERNS, modal_txt, py_txt, readme_txt)
 
     # verification signal: pull the most gate-like lines from the latest result report
@@ -237,15 +256,16 @@ def card_md(e: dict) -> str:
         "",
         f"- **Status:** {e['status']}",
         f"- **Attribution:** {e['attribution']}",
-        f"- **Run command:** `{val(e['run_command'])}`" if e['run_command'] else
-        f"- **Run command:** {val(e['run_command'])}",
+        f"- **Run command:** `{val(e['run_command'])}`"
+        if e["run_command"]
+        else f"- **Run command:** {val(e['run_command'])}",
         f"- **Seed:** {val(e['seed'])}",
         f"- **Reproduce (one command):** `{e['regen']}`",
         "",
         "## Verification",
-        f"- Pre-registration: {('`'+e['preregistration']+'`') if e['preregistration'] else '_none_'}",
+        f"- Pre-registration: {('`' + e['preregistration'] + '`') if e['preregistration'] else '_none_'}",
         f"- Result reports ({e['n_result_reports']}):"
-        + ("" if e['result_reports'] else " _none committed_"),
+        + ("" if e["result_reports"] else " _none committed_"),
     ]
     for r in e["result_reports"]:
         lines.append(f"  - `{r}`")
@@ -256,9 +276,9 @@ def card_md(e: dict) -> str:
     lines += [
         "",
         "## Artifacts",
-        f"- Committed: {', '.join('`'+a+'`' for a in e['artifacts_committed']) if e['artifacts_committed'] else '_code only_'}",
+        f"- Committed: {', '.join('`' + a + '`' for a in e['artifacts_committed']) if e['artifacts_committed'] else '_code only_'}",
         f"- Local-only: {e['artifacts_local']}",
-        f"- Paper: {('`'+e['paper']+'`') if e['paper'] else '_none_'}",
+        f"- Paper: {('`' + e['paper'] + '`') if e['paper'] else '_none_'}",
         "",
     ]
     return "\n".join(lines)

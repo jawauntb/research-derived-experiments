@@ -1,0 +1,66 @@
+{
+  "calibration_receipt_sha256": "741efa930978a0de622b4fbea4deed82e250535b0b0b37ecaf3f9043136d992b",
+  "config": {
+    "final_start": 64,
+    "first_shift": 24,
+    "late_first_start": 40,
+    "post_first_end": 36,
+    "post_second_end": 60,
+    "pre_first_start": 12,
+    "pre_second_start": 42,
+    "recovery_threshold": 0.12,
+    "reengagement_floor": 0.5,
+    "reopen_floor": 1.0,
+    "second_shift": 48,
+    "selectivity_floor": 2.0,
+    "steps": 72
+  },
+  "kind": "m5_suite_c_frozen_integrity_manifest",
+  "probe_plans": {
+    "20260709": {
+      "budget": 26,
+      "plan_id": "4cfd409a4abc4622c7edfe0b0694fc2cecd9780a8b10a5b9fb7d49dfba140518"
+    },
+    "20261712": {
+      "budget": 28,
+      "plan_id": "97f986f87f29641f3a4c75576f703fd19e50eaa32d3a3ba2fb7827d781c238a8"
+    },
+    "20262715": {
+      "budget": 28,
+      "plan_id": "cdfa06fd34badc5137b98f1adeab1d2cf6324f39cd68eabb97b790f2ac965101"
+    },
+    "20263718": {
+      "budget": 27,
+      "plan_id": "bdbde1c85c7d0cbe04331f5217d1ca0e01d89581ac3d43e4712954226db3ebce"
+    },
+    "20264721": {
+      "budget": 27,
+      "plan_id": "21dd503051a5ff181f19c69c905ee849499e49821930c48a6b47dbfaba57ad8d"
+    },
+    "20265724": {
+      "budget": 26,
+      "plan_id": "d141295c4a35e11038b8c8684ffc5cd0e32ef58ed76af0306150a93b460d47f1"
+    },
+    "20266727": {
+      "budget": 27,
+      "plan_id": "d4fac269ad856af1fdffe9d8e10b13dc0d40797b4b25481deb9f53348c543c27"
+    },
+    "20267730": {
+      "budget": 28,
+      "plan_id": "e7b3c2fbd30c5e61a25e3b30dccf6b3123dee749934a7314121cd6b4ddc7ed03"
+    }
+  },
+  "reference_suite_sha256": "a6c730b98e82b81ba4f98a31ff1d75fee0c5adcaee24c2e593f1c4fdd67eb652",
+  "rows_sha256": "80f84d3ef673f8f8f3e837334e7e336555d01702ef001e847184aaab493762af",
+  "seeds": [
+    20260709,
+    20261712,
+    20262715,
+    20263718,
+    20264721,
+    20265724,
+    20266727,
+    20267730
+  ],
+  "source_revision": "9e5e218a2efbcd726d0d9555d34c2292e886f72a"
+}

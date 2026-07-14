@@ -5800,3 +5800,95 @@ Next move: do not tune or reinterpret E7. Complete the already-frozen,
 genuinely idle M5 reopen-trigger test after re-auditing live work. Any future
 E7 replacement needs a new preregistration and a non-tautological timing or
 operation-budget verifier frozen before outcomes are inspected.
+
+## M5: Reopen-Trigger Superiority Strictly Fails
+
+Question: is Suite C commitment-change reopening strictly faster and more
+specific than utility/age, self-normalized, or periodic reset triggers at an
+exact matched probe budget?
+
+Current regime:
+
+- Artifact types: deterministic Suite C trajectories, M4 component cells,
+  trigger events, eight-step open commitments, common probe plans, coupled
+  no-change runs, paired-seed contrasts, and strict gate reports.
+- Operations: M4 reference replay, pre-shift shadow calibration, SHA-256
+  substreams and fallback routing, five trigger policies, exact probe-token
+  consumption, percentile bootstrap, and transported C1–C6 controls.
+- Gates/verifiers: timestamped preregistration plus pre-outcome implementation
+  repair and calibration receipt; complete 5×8 grid; exact per-seed actual
+  probes; byte-identical rerun; F0–F5; public-safety, tests, Ruff, and `ty`.
+- Known limitations: finite hand-coded Suite C; periodic period exactly matches
+  the 24-step world schedule; utility and normalized triggers are repaired
+  finite-harness analogues, not implementations inside a neural network.
+
+Action class:
+
+- Retrieval/search/discovery: search within the existing Suite C artifact
+  schema, with a pre-run verifier repair rather than a regime discovery.
+- Why: M5 varies only the reopening trigger. Audit found missing operational
+  trigger and budget definitions, so those were frozen from pre-shift M4 state
+  before any outcome cell instead of being selected from results.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/world_responds/suite_c_reopen_reset_trigger.py`;
+  `experiments/world_responds/suite_c_reopen_reset_trigger_implementation_contract_2026-07-14.md`;
+  `experiments/world_responds/suite_c_reopen_reset_trigger_calibration_2026_07_14.json`;
+  `experiments/commitment_surface/results/m5_suite_c_reopen_reset_trigger_2026_07_14.{json,md}`;
+  ignored raw artifact
+  `artifacts/world_responds/m5_suite_c_reopen_reset_trigger_2026_07_14.json`.
+- Positive targets: commitment trigger 8/8, ≥1-step paired median latency edge
+  and ≥0.10 false-reopen edge over every internal arm, Pareto
+  non-domination, and exact controls/budgets.
+- Negative controls: periodic reset, never-reopen floor, coupled no-change
+  trajectory, fixed-surprise false calm, and matched-random selectivity.
+- Stress tests: five arms, eight paired seeds, 40 outcome and 40 coupled
+  no-change trajectories, 10,000 shared bootstrap resamples, and full reference
+  Suite C rerun.
+
+Gate:
+
+- Acceptance rule: PASS only when F0–F5 all pass; no directional upgrade.
+- Withheld/rejected rule: any tie inside a frozen strict margin fails that gate;
+  no trigger, threshold, period, routing, or censoring changes after calibration.
+
+Results:
+
+- Accepted artifacts: complete exact-budget grid, outcome-blind calibration
+  receipt, common probe-plan verifier, coupled no-change occupancy measure,
+  transported controls, and byte-identical rerun.
+- Rejected or withheld artifacts: the universal claim that commitment change is
+  strictly faster and more specific than every internal trigger is rejected.
+- Key metrics: `T_commit` passes 8/8 with latency 0 and false reopen 0;
+  `T_periodic` passes 8/8 with latency 0 and false reopen 0.667; `T_util`
+  passes 0/8 with latency 1 and false reopen 0.656; `T_norm` and `T_none` pass
+  0/8 with latency 12 and false reopen 0. F0/F1/F4/F5 pass; F2/F3 fail.
+  Raw SHA-256 is
+  `ec666ddb098579897974765c2f5431e0a0c636092f928f63102be85cca2899cc`.
+- Post-outcome review invalidated raw payloads `cf6f640d…` and `bd94aeda…`:
+  fallback collisions changed sequential RNG consumption at eight `T_commit`
+  steps in the coupled no-change run. The replacement pre-indexes all
+  initial/shift/probe/drift variates and pins the corrected rows, M4 plans,
+  transported reference, calibration, config, and seed grid in a frozen
+  integrity manifest. Arm point estimates were recomputed; the F0–F5 pass/fail
+  map and strict FAIL verdict did not change.
+- Variance or ablation: public summaries carry paired-bootstrap intervals for
+  all frozen metrics; rerun raw/public hashes are byte-identical.
+
+Residual content:
+
+- Explained by old regime: explicit reopening is still required for affected
+  second-shift adaptation, reproducing M4's 0/8 never-reopen floor.
+- New content outside old regime: none. Commitment reopening composes the best
+  observed latency and specificity, but strict component-wise dominance fails
+  on two different ties.
+- Retractions or supersessions: retract “better than every internal trigger.”
+  Retain only “Pareto-undominated best observed combination in this finite
+  schedule,” bounded away from neural continual learning.
+
+Next move: the active four-experiment handoff queue is exhausted. Do not tune
+M5. E6 requires a new preregistration before its blocked smoke can change, and
+E5-L should become active only through an explicit new queue decision and its
+required L4 calibration/cost audit.

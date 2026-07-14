@@ -389,6 +389,39 @@ criterion does not make it necessary. The strong M4 load-bearing subset claim
 is rejected for this finite harness; only reopen is established as necessary.
 See `results/m4_suite_c_factorial_ablation_2026_07_09.{json,md}`.
 
+### M5 — Suite C Reopen/Reset Trigger Comparison
+
+M5 holds the Suite C dynamics and exact per-seed actual probe count fixed while
+comparing commitment-change, utility/age, self-normalized, periodic, and
+never-reopen triggers over the eight M4 seeds. A timestamped pre-run
+implementation contract transparently freezes trigger formulas, M4-only
+calibration, common probe routing, latency censoring, and the coupled no-change
+control before any outcome cell.
+
+```bash
+PYTHONPATH=. uvx --python 3.12 --with numpy python -m \
+  experiments.world_responds.suite_c_reopen_reset_trigger \
+  --calibration-only
+
+PYTHONPATH=. uvx --python 3.12 --with numpy python -m \
+  experiments.world_responds.suite_c_reopen_reset_trigger
+```
+
+**Strict verdict: FAIL.** F0 integrity, F1 commitment 8/8, F4 joint
+non-domination, and F5 never-reopen 0/8 pass. F2 fails because the periodic
+trigger ties commitment at median latency 0; F3 fails because the normalized
+trigger ties commitment's zero false-reopen rate by never firing. The strong
+claim of strict latency and specificity superiority over every internal
+trigger is rejected. The raw trace hash is
+`ec666ddb098579897974765c2f5431e0a0c636092f928f63102be85cca2899cc`;
+the mandatory second run was byte-identical. See
+`results/m5_suite_c_reopen_reset_trigger_2026_07_14.{json,md}`.
+Post-outcome review invalidated two pre-fix payloads after detecting eight
+fallback-collision steps with branch-dependent RNG consumption. The corrected
+replacement pre-indexes every variate and pins rows/plans/reference/config in a
+frozen integrity manifest. Point estimates were recomputed, but no F0–F5 gate
+disposition changed; the hash above is the corrected final run.
+
 ## Rebuild the paper PDF
 
 ```bash
@@ -398,7 +431,7 @@ python3 scripts/build_commitment_surface_pdf.py
 
 Reads committed result JSON from `results/` (local raw artifacts are fallback
 inputs only), regenerates figures under
-`papers/commitment_surface/figures/`, renders the E1–E5 cells and E7 integrity audit
-in Appendix A.2, and writes byte-identical outputs to
+`papers/commitment_surface/figures/`, renders the E1–E5 cells, E7 integrity
+audit, and M5 trigger comparison in Appendix A.2, and writes byte-identical outputs to
 `papers/commitment_surface/paper.pdf` and
 `papers/pdf/commitment_surface.pdf`.

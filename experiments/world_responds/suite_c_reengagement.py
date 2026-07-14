@@ -212,6 +212,7 @@ def run_trial(
     target_probe_count: int | None = None,
     cfg: SuiteCConfig = DEFAULT_CONFIG,
     mechanisms: SuiteCMechanisms = FULL_SUITE_C_MECHANISMS,
+    include_probe_trace: bool = False,
 ) -> dict[str, Any]:
     """Run one deterministic Suite C cell and return a JSON-compatible row."""
 
@@ -371,7 +372,7 @@ def run_trial(
         - total_probes / 250.0
     )
 
-    return {
+    row: dict[str, Any] = {
         "condition": condition,
         "seed": seed,
         "steps": cfg.steps,
@@ -406,6 +407,12 @@ def run_trial(
         "candidate_terminal_pass": candidate_terminal_pass,
         "cost_adjusted_score": cost_adjusted_score,
     }
+    if include_probe_trace:
+        row["probe_trace"] = [
+            {"step": int(t), "bucket": BUCKETS[int(b)]}
+            for t, b in sorted(probe_history)
+        ]
+    return row
 
 
 def _mean(rows: list[dict[str, Any]], key: str) -> float:
