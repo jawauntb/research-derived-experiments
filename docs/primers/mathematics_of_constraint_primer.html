@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>The Mathematics of the Research Program — A Primer from First Principles</title>
+<title>The Mathematics of Constraint — A Primer from First Principles</title>
 <style>
 /* ---------- page setup ---------- */
 @page { size: letter; margin: 0.9in 0.85in; }
@@ -1887,20 +1887,23 @@ where it matters most," and it appears in nearly every theoretical result in the
 <h3>11.3 The Lagrange multiplier is a price</h3>
 
 <div class="def"><span class="boxtitle">Definition — Lagrange multiplier</span>
-<p>To optimize with a budget constraint, invent a single number <span class="m">λ</span> — the
-<strong>Lagrange multiplier</strong> — that acts as the <em>price</em> of the resource, and instead
-optimize (goal) <span class="m">−</span> λ·(resource used), freely. At the best allocation, λ is
-exactly the <em>exchange rate</em>: how much your goal would improve if the budget grew by one unit
-("the marginal value of one more unit of capacity"). The constraint disappears into a price, and
-ordinary calculus (set the derivative to zero) finishes the job.</p></div>
+<p>For a minimization problem with a maximum budget, write the constraint as
+<span class="m">g(ρ) = ∫ρ(x)dx − B ≤ 0</span> and introduce a non-negative number
+<span class="m">λ ≥ 0</span>. The <strong>Lagrangian</strong> is
+<span class="m">L = objective + λg(ρ)</span>: the resource receives a positive price, while
+<span class="m">−λB</span> is constant with respect to the allocation. At the best allocation, λ is
+the <em>exchange rate</em> (the marginal decrease in the minimized objective per extra unit of
+budget). The constraint is not discarded: complementary slackness decides whether the budget is
+active, and ordinary calculus (set the stationarity derivative to zero) finishes the job.</p></div>
 
 <div class="pump"><span class="boxtitle">Intuition pump — the shadow price of a rule you can't break</span>
-<p>A factory maxing out profit under a hard limit of 100 machine-hours will, at the optimum, have a
-number in mind: "one more machine-hour is worth $40 to me." That $40 is the Lagrange multiplier —
-the <em>shadow price</em> of the constraint. Nobody wrote it on the wall; it emerges from the
-optimization. Lagrange's insight is that you can run the whole problem <em>forward</em> from this
-price: pretend hours cost $40 each, optimize with no limit, and you land exactly on the constrained
-optimum. Every constraint has such a hidden price, and λ names it.</p></div>
+<p>A factory minimizing defects while allowed at most 100 machine-hours will, at the optimum, have a
+number in mind: "one more machine-hour would reduce defects by about 40 units." That $40-equivalent
+number is the Lagrange multiplier — the <em>shadow price</em> of the constraint. Nobody wrote it on
+the wall; it emerges from the optimization. Lagrange's insight is that you can run the whole problem
+<em>forward</em> from this price: charge a positive $40-equivalent cost for each hour, include the
+fixed offset for the 100-hour budget, and optimize without explicitly enforcing the limit. Every
+constraint has such a hidden price, and λ names it.</p></div>
 
 <h3>11.4 Worked derivation: where the reward-deformation exponent comes from</h3>
 
@@ -1914,18 +1917,28 @@ predicts ρ*(x) ∝ w(x)<sup>d/(d+2)</sup>. Watch how few moves it takes.</p>
 <span class="m">D ∝ ρ<sup>−2/d</sup></span> — more resolution, less error, with a dimension-dependent
 exponent. (More pixels → sharper image, and how fast depends on how many dimensions you're tiling.)</li>
 <li><strong>Set up the priced objective.</strong> Fold the budget into a price λ:
-<div class="eq">L[ρ] = <span class="big">∫</span> [ w(x)·ρ(x)<sup>−2/d</sup> &nbsp;−&nbsp; λ·ρ(x) ] dx</div>
-minimize value-weighted error minus the price of the resolution you buy.</li>
+<div class="eq">L[ρ,λ] = <span class="big">∫</span> [ w(x)·ρ(x)<sup>−2/d</sup> &nbsp;+&nbsp; λ·ρ(x) ] dx &nbsp;−&nbsp; λB, &nbsp; λ ≥ 0</div>
+minimize value-weighted error plus the price of the resolution you buy, with the constant
+<span class="m">−λB</span> carrying the budget constraint.</li>
 <li><strong>Set the derivative to zero.</strong> Differentiate the bracket with respect to ρ at each
 point (power rule from Chapter 10: the derivative of ρ<sup>−2/d</sup> is (−2/d)ρ<sup>−2/d−1</sup>) and
 set it to 0:
-<div class="eq">−<span class="frac"><span class="top">2</span><span class="bot">d</span></span> w(x)&thinsp;ρ(x)<sup>−(d+2)/d</sup> &nbsp;−&nbsp; λ &nbsp;=&nbsp; 0</div></li>
+<div class="eq">−<span class="frac"><span class="top">2</span><span class="bot">d</span></span> w(x)&thinsp;ρ(x)<sup>−(d+2)/d</sup> &nbsp;+&nbsp; λ &nbsp;=&nbsp; 0</div>
+For an interior point with <span class="m">w(x) &gt; 0</span>, this requires a positive price
+<span class="m">λ &gt; 0</span>.</li>
 <li><strong>Solve for ρ.</strong> Rearranging (pure algebra — move terms, raise both sides to a
-power) gives
-<div class="eq">ρ<sup>*</sup>(x) &nbsp;∝&nbsp; w(x)<sup>&thinsp;d/(d+2)</sup></div>
-the reward-deformation law. Plug d = 2 to get the predicted exponent 0.5.</li>
+power) gives the pointwise allocation
+<div class="eq">ρ<sup>*</sup>(x) = ( <span class="frac"><span class="top">2w(x)</span><span class="bot">dλ</span></span> )<sup>d/(d+2)</sup> &nbsp;∝&nbsp; w(x)<sup>&thinsp;d/(d+2)</sup></div>
+the reward-deformation law. Choose λ so that <span class="m">∫ρ<sup>*</sup>dx = B</span> when
+the capacity constraint is active; plug d = 2 to get the predicted exponent 0.5.</li>
+<li><strong>A hand-worked d = 1 check.</strong> On two equal cells with
+<span class="m">w = (1, 8)</span> and <span class="m">B = 3</span>, the exponent is
+<span class="m">1/(1+2) = 1/3</span>, so the positive allocation is
+<span class="m">ρ<sup>*</sup> = (1, 2)</span>. With <span class="m">λ = 2</span>, each stationarity
+residual is <span class="m">−2wρ<sup>−3</sup> + λ = 0</span>, and the two densities exactly use
+the budget.</li>
 </ol>
-<figcaption><b>Four moves, one prediction.</b> A coding fact, a priced objective, a zero-derivative
+<figcaption><b>Five moves, one prediction.</b> A coding fact, a priced objective, a zero-derivative
 condition, and algebra. No step is beyond this book — and the output is a falsifiable exponent that
 a log–log slope later measured at ≈ 0.30, revealing an effective dimension near 1. This is the
 program in miniature: derive a sharp number before measuring, then let the measurement talk back.</figcaption>
@@ -2589,7 +2602,7 @@ step:</p>
 <tr><th>Piece</th><th>Meaning</th></tr>
 <tr><td>𝔼[·]</td><td>expected value (Ch 5) — average over the randomness of the world and policy</td></tr>
 <tr><td>r<sub>t</sub></td><td>the reward t steps from now</td></tr>
-<tr><td>γ<sup>t</sup></td><td>discount: with γ = 0.99, a reward 100 steps out is worth ~0.37× its face value; with γ = 0.5, ~0.001×</td></tr>
+<tr><td>γ<sup>t</sup></td><td>discount: with γ = 0.99, a reward 100 steps out is worth ~0.37× its face value; with γ = 0.5, ~7.9×10<sup>−31</sup> of its face value</td></tr>
 </table></div>
 
 <p>γ is a patience dial. Near 1 (the papers often use 0.99): far-sighted, the future matters almost
@@ -2646,20 +2659,32 @@ decides whether the agent ever becomes competent.</p>
 world). The naive rule — "probe where my current prediction error is high" — is shown to be wrong,
 because high error can be irreducible noise you can't learn from. The correct quantity is the
 <strong>value of information</strong>: the <em>expected reduction in future error</em> from probing,
-written <span class="m">𝔼[MAE<sub>after</sub> − MAE<sub>now</sub>]</span>, or in shrinkage form
-<span class="m">error<sup>2</sup> / (K + 1)</span> — big error but many prior samples (large K) means
-little left to learn, so low probe value. This is decision theory's classic "value of information"
-made into a trainable head, and watching the program discover that current-error ≠ information-value
+written <span class="m">𝔼[MAE<sub>now</sub> − MAE<sub>after</sub>]</span> (positive when the probe helps),
+or in the simple shrinkage heuristic <span class="m">error<sup>2</sup> / (K + 1)</span> — big error
+but many prior samples (large K) means little left to learn, so low probe value. The heuristic is not
+the definition: exact expected value of sample information averages the post-probe decision loss over
+possible observations and requires a stated model. This is decision theory's classic "value of
+information" made into a trainable head, and watching the program discover that current-error ≠ information-value
 (and then engineer a signal that tracks the right thing) is one of its most instructive arcs. You
 now have every piece to read those results: expected value, MAE, the K-samples shrinkage, and the
 argmax that turns a value estimate into an action.</p></div>
+
+<div class="prog"><span class="boxtitle">New executable check — the surrogate fails under misspecification</span>
+<p>The M-208 exact finite Bayesian benchmark now enumerates every probe outcome in three frozen
+regimes. In learnable uncertainty, mutual information and true expected regret reduction rank the
+useful signal correctly. In irreducible noise, current error remains 0.4 while every probe has zero
+oracle value. Under model misspecification, the apparently strongest signal has mutual information
+0.690 and assumed EVSI 0.35, yet its true expected regret reduction is -0.10 and oracle EVSI is zero;
+the weaker robust signal is the useful choice at +0.10. The conclusion is bounded but decisive:
+current error, posterior variance, the printed shrinkage heuristic, and information gain are
+candidate surrogates, not definitions or universal rankings of decision value.</p></div>
 
 <h3>17.5 What you can now read</h3>
 <p class="small">MDPs (state, action, transition, reward) and policies π; value V(s) as discounted
 expected future reward; the discount γ as a patience dial and γ<sup>t</sup> as its decay; greedy
 action a* = argmax score; predictive policy closure (a consequence model used as the policy);
 REINFORCE as reward-driven gradient descent, with baselines/whitened returns as variance reduction
-and ε-greedy as exploration; and value-of-information 𝔼[MAE_after − MAE_now] vs the current-error
+and ε-greedy as exploration; and value-of-information 𝔼[MAE_now − MAE_after] vs the current-error
 trap.</p>
 
 <h2 class="chapter"><span class="chnum">Chapter 18</span>Causality, Interventions, and Identifiability</h2>
@@ -2930,6 +2955,15 @@ You have met them all in pieces; this chapter gathers them in one place, fully d
 see the architecture whole. Treat it as a reference: when a paper cites "the bridge theorem" or "the
 Law of the Stack," come here.</p>
 
+<div class="prog"><span class="boxtitle">New executable assumption audit</span>
+<p>M-201 turns seven hidden premises into testable theorem cards: disjoint blocks, equal block mass,
+complete coverage, coherent output action, bounded transport loss, gauge separation, and nonzero
+commitment effect. Each card now carries both a satisfying example and a paired construction that
+violates the named assumption or bridge predicate. These are executable assumption examples, not tests
+of downstream theorem necessity, conclusion invalidation, or minimality. They prevent the primer from
+silently applying a conditional identity outside its assumptions while leaving the stronger theorem
+audit open.</p></div>
+
 <h3>20.1 The reward-deformation law</h3>
 <div class="eqbox"><div class="eq">ρ<sup>*</sup>(x) &nbsp;∝&nbsp; w(x)<sup>&thinsp;d/(d+2)</sup></div></div>
 <p><strong>What it says.</strong> A finite-capacity code minimizing value-weighted distortion should
@@ -2942,14 +2976,15 @@ was ≈ 0.30, not the 0.50 predicted for d = 2, implying d<sub>eff</sub> ≈ 1 (
 resolution along essentially one direction). <strong>How to read it in a paper.</strong> Any mention
 of "metric deformation," "effective dimension," "d_eff," or "α = d/(d+2)" is this law.</p>
 
-<h3>20.2 The Law of the Stack</h3>
+<h3>20.2 The candidate Law of the Stack</h3>
 <div class="eqbox"><div class="eq">w(ς<sub>i+1</sub>) &nbsp;≤&nbsp; 2<sup>w(ς<sub>i</sub>)</sup></div></div>
-<p><strong>What it says.</strong> The weakness (flexibility, Chapter 19) a layer ς<sub>i+1</sub> can
-have is capped by 2 raised to the weakness of the layer below it — each bit of slack underneath
-doubles the room available above (Chapter 3's 20-questions logic, stacked). <strong>Why it matters.</strong>
-It makes "a viable system needs slack in its foundations" a numerical, testable ordering rather than
-a slogan; the autopoietic-control paper checks whether a model's capacity to repair itself grows
-with lower-layer slack exactly as the Law predicts. <strong>Companion quantity:</strong> the
+<p><strong>What it proposes.</strong> The displayed inequality is a candidate upper-bound form for
+how lower-layer flexibility might constrain a layer above it. The current experiments support only the
+weaker ordinal observation that repair capacity tends to improve with lower-layer slack; they do not
+establish this exponential bound. <strong>Why it matters.</strong> It turns "a viable system needs
+slack in its foundations" into a falsifiable agenda, but the word <em>law</em> remains provisional until
+a registered sweep measures both sides of the inequality, finds violations when assumptions are
+removed, and replicates across architectures. <strong>Companion quantity:</strong> the
 viability buffer <span class="m">|B<sub>π</sub>| = w(π) − |α|</span> — flexibility minus commitments,
 i.e. how much shock a policy can absorb before dying.</p>
 
@@ -3183,7 +3218,7 @@ each pointing to the chapter that builds it).</p>
 <tr><td><strong>Irrep</strong></td><td>an indivisible symmetry pattern; for shifts, a Fourier frequency mode</td><td>13, 14</td></tr>
 <tr><td><strong>Jacobian / pullback metric</strong></td><td>local stretch of an encoder; the ruler J<sup>T</sup>J it induces</td><td>8, 9</td></tr>
 <tr><td><strong>KL divergence</strong></td><td>extra bits for using q when truth is p; a directed distance between distributions</td><td>12</td></tr>
-<tr><td><strong>Law of the Stack</strong></td><td>w(ς<sub>i+1</sub>) ≤ 2<sup>w(ς<sub>i</sub>)</sup>: lower-layer slack caps upper-layer flexibility</td><td>16, 20</td></tr>
+<tr><td><strong>Law of the Stack (candidate)</strong></td><td>w(ς<sub>i+1</sub>) ≤ 2<sup>w(ς<sub>i</sub>)</sup>: a proposed bound; current evidence supports only an ordinal slack/repair relation</td><td>16, 20</td></tr>
 <tr><td><strong>Load-bearing</strong></td><td>a structure that causally drives the decision — not merely decodable</td><td>18, 20</td></tr>
 <tr><td><strong>MAE / MSE</strong></td><td>mean absolute / squared error — the universal metrics and losses</td><td>6, 10</td></tr>
 <tr><td><strong>Matched-random control</strong></td><td>random behavior given the same budget; the bar a learned method must clear</td><td>6</td></tr>

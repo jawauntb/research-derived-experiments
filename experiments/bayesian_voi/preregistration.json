@@ -1,0 +1,37 @@
+{
+  "experiment_id": "bayesian_voi",
+  "schema_version": "1.0",
+  "hypothesis": "Exact expected value of sample information ranks informative probes better than current-error-only heuristics, while irreducible noise and misspecification expose their failure regimes.",
+  "primary_metric": "spearman_vs_oracle_evsi.mutual_information",
+  "gates": {
+    "learnable_mutual_information_rho_ge_0_7": "Spearman rho between probe mutual information and exact oracle EVSI is at least 0.7 in the learnable scenario.",
+    "learnable_oracle_signal_top": "The exact signal probe is the unique oracle-EVSI winner in the learnable scenario.",
+    "irreducible_oracle_evsi_zero": "All irreducible-noise oracle EVSI values are within 1e-12 of zero despite current error being at least 0.3.",
+    "misspecification_preserves_failure": "Under model misspecification, mutual-information and oracle-EVSI winners differ, while true expected-regret reduction selects the robust weak signal."
+  },
+  "metrics": [
+    "current_error",
+    "posterior_variance",
+    "error_squared_over_k_plus_one",
+    "mutual_information",
+    "assumed_evsi",
+    "expected_regret_reduction",
+    "oracle_evsi"
+  ],
+  "scenarios": [
+    "learnable_uncertainty",
+    "irreducible_noise",
+    "model_misspecification"
+  ],
+  "controls": [
+    "repeat_noise",
+    "unrelated_noise",
+    "noise"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": null,
+    "sampling": "exact enumeration of two latent states and two probe outcomes",
+    "raw_data": false
+  }
+}

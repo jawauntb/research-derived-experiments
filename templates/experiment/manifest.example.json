@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "example_replay_gate",
+  "hypothesis": "A registered intervention improves the primary metric without activating the matched null control.",
+  "claim_tier": "internal",
+  "controls": [
+    {
+      "control_id": "matched_null",
+      "description": "Run the same inputs and budget without the intervention."
+    }
+  ],
+  "seeds": [11, 23, 47],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python", "experiments/example_replay_gate/run.py"],
+    "estimated_minutes": 5,
+    "max_cost_usd": 0
+  },
+  "dependencies": [
+    {
+      "name": "numpy",
+      "version": ">=1.26,<2.2"
+    }
+  ],
+  "gates": [
+    {
+      "gate_id": "PRIMARY_EFFECT",
+      "criterion": "mean_delta >= 0.10"
+    },
+    {
+      "gate_id": "NEGATIVE_CONTROL",
+      "criterion": "abs(control_delta) <= 0.02"
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/example_replay_gate/results/summary.json",
+      "public": true
+    },
+    {
+      "kind": "provenance",
+      "path": "experiments/example_replay_gate/PROVENANCE.md",
+      "public": true
+    }
+  ],
+  "status": "planned"
+}

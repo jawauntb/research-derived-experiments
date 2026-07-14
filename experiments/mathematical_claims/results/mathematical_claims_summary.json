@@ -1,0 +1,228 @@
+{
+  "experiment_id": "mathematical_claims",
+  "n_assumptions": 7,
+  "results": [
+    {
+      "assumption": "deployment blocks are pairwise disjoint",
+      "example_satisfies_assumption": true,
+      "failure_case": {
+        "bridge_identity_holds": false,
+        "disjoint": false,
+        "overlaps": {
+          "a|b": [
+            "a2"
+          ]
+        },
+        "sum_sizes": 4,
+        "union_size": 3
+      },
+      "failure_case_detected": true,
+      "satisfying_example": {
+        "bridge_identity_holds": true,
+        "disjoint": true,
+        "overlaps": {},
+        "sum_sizes": 3,
+        "union_size": 3
+      },
+      "theorem_id": "M201_BLOCK_DISJOINTNESS"
+    },
+    {
+      "assumption": "all transformation blocks have equal concern mass",
+      "example_satisfies_assumption": true,
+      "failure_case": {
+        "argmax_agrees": false,
+        "block_masses": {
+          "a": 3.0,
+          "b": 1.0
+        },
+        "count_order": [
+          "h1",
+          "h2"
+        ],
+        "count_scores": {
+          "h1": 1,
+          "h2": 1
+        },
+        "count_winners": [
+          "h1",
+          "h2"
+        ],
+        "weighted_order": [
+          "h1",
+          "h2"
+        ],
+        "weighted_scores": {
+          "h1": 3.0,
+          "h2": 1.0
+        },
+        "weighted_winners": [
+          "h1"
+        ]
+      },
+      "failure_case_detected": true,
+      "satisfying_example": {
+        "argmax_agrees": true,
+        "block_masses": {
+          "a": 2.0,
+          "b": 2.0
+        },
+        "count_order": [
+          "h1",
+          "h2"
+        ],
+        "count_scores": {
+          "h1": 1,
+          "h2": 1
+        },
+        "count_winners": [
+          "h1",
+          "h2"
+        ],
+        "weighted_order": [
+          "h1",
+          "h2"
+        ],
+        "weighted_scores": {
+          "h1": 2.0,
+          "h2": 2.0
+        },
+        "weighted_winners": [
+          "h1",
+          "h2"
+        ]
+      },
+      "theorem_id": "M201_EQUAL_MASS"
+    },
+    {
+      "assumption": "a compatible block is covered in full",
+      "example_satisfies_assumption": true,
+      "failure_case": {
+        "actual_mass": 1,
+        "bridge_identity_holds": false,
+        "claimed_mass": 2,
+        "compatible_blocks": [
+          "a"
+        ],
+        "complete": false
+      },
+      "failure_case_detected": true,
+      "satisfying_example": {
+        "actual_mass": 2,
+        "bridge_identity_holds": true,
+        "claimed_mass": 2,
+        "compatible_blocks": [
+          "a"
+        ],
+        "complete": true
+      },
+      "theorem_id": "M201_COMPLETE_BLOCK_COVERAGE"
+    },
+    {
+      "assumption": "the output action respects the C2 identity and composition law",
+      "example_satisfies_assumption": true,
+      "failure_case": {
+        "closure_ok": true,
+        "coherent": false,
+        "identity_ok": true,
+        "involution_ok": false
+      },
+      "failure_case_detected": true,
+      "satisfying_example": {
+        "closure_ok": true,
+        "coherent": true,
+        "identity_ok": true,
+        "involution_ok": true
+      },
+      "theorem_id": "M201_COHERENT_OUTPUT_ACTION"
+    },
+    {
+      "assumption": "each transport loss is nonnegative and bounded by its declared delta",
+      "example_satisfies_assumption": true,
+      "failure_case": {
+        "bounded": false,
+        "declared_delta": [
+          2.0,
+          1.0
+        ],
+        "final_value": 4.0,
+        "losses": [
+          2.0,
+          4.0
+        ],
+        "lower_bound": 7.0,
+        "lower_bound_holds": false,
+        "monotone": true,
+        "values": [
+          10.0,
+          8.0,
+          4.0
+        ]
+      },
+      "failure_case_detected": true,
+      "satisfying_example": {
+        "bounded": true,
+        "declared_delta": [
+          2.0,
+          1.0
+        ],
+        "final_value": 7.0,
+        "losses": [
+          2.0,
+          1.0
+        ],
+        "lower_bound": 7.0,
+        "lower_bound_holds": true,
+        "monotone": true,
+        "values": [
+          10.0,
+          8.0,
+          7.0
+        ]
+      },
+      "theorem_id": "M201_BOUNDED_TRANSPORT_LOSS"
+    },
+    {
+      "assumption": "an intervention separates gauge-equivalent latent descriptions by eta",
+      "example_satisfies_assumption": true,
+      "failure_case": {
+        "eta": 1.0,
+        "gauge_fixed": false,
+        "max_distance": 0,
+        "pair_distances": {
+          "null": 0
+        }
+      },
+      "failure_case_detected": true,
+      "satisfying_example": {
+        "eta": 1.0,
+        "gauge_fixed": true,
+        "max_distance": 1,
+        "pair_distances": {
+          "probe": 1
+        }
+      },
+      "theorem_id": "M201_GAUGE_SEPARATION"
+    },
+    {
+      "assumption": "the matched commitment intervention has effect at least epsilon",
+      "example_satisfies_assumption": true,
+      "failure_case": {
+        "effect": 0.0,
+        "epsilon": 0.5,
+        "nonzero_effect": false,
+        "value_with": 1.0,
+        "value_without": 1.0
+      },
+      "failure_case_detected": true,
+      "satisfying_example": {
+        "effect": 1.0,
+        "epsilon": 0.5,
+        "nonzero_effect": true,
+        "value_with": 1.0,
+        "value_without": 0.0
+      },
+      "theorem_id": "M201_NONZERO_COMMITMENT_EFFECT"
+    }
+  ],
+  "status": "pass"
+}

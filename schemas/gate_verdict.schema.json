@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-derived-experiments.example/schemas/gate_verdict.schema.json",
+  "title": "Structured experiment gate verdict",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "gate_id",
+    "claim_id",
+    "claim_tier",
+    "status",
+    "observed",
+    "expected",
+    "evidence_refs"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "gate_id": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_-]{2,63}$"
+    },
+    "claim_id": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_-]{2,63}$"
+    },
+    "claim_tier": {
+      "type": "string",
+      "enum": ["descriptive", "internal", "external", "causal", "theoretical"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pass", "fail", "inconclusive", "not_run", "superseded", "retired"]
+    },
+    "observed": {},
+    "expected": {},
+    "threshold": {},
+    "unit": {
+      "type": "string"
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "preregistration_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

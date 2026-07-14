@@ -8,7 +8,7 @@ Run:
 Outputs:
     papers/gauge_fixed_concern_transport/paper.pdf
     papers/pdf/gauge_fixed_concern_transport.pdf
-    /Users/jawaun/Metaphysics of Intelligence/Gauge_Fixed_Concern_Transport_2026_07_07.pdf
+    Optionally, an external archive copy when its parent directory already exists.
 """
 
 from __future__ import annotations
@@ -606,7 +606,7 @@ def markdown_to_flow(text: str, st: dict[str, ParagraphStyle]) -> list[Any]:
     return flow
 
 
-def build_pdf() -> Path:
+def build_pdf(*, deposit_pdf: Path | None = None) -> Path:
     figures = make_figures()
     for figure in figures:
         if not figure.exists():
@@ -629,16 +629,19 @@ def build_pdf() -> Path:
     doc.build(flow)
     COPY_PDF.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(OUT_PDF, COPY_PDF)
-    DEPOSIT_PDF.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(OUT_PDF, DEPOSIT_PDF)
+    if deposit_pdf is not None:
+        deposit_pdf.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(OUT_PDF, deposit_pdf)
     return OUT_PDF
 
 
 def main() -> int:
-    out = build_pdf()
+    deposit_pdf = DEPOSIT_PDF if DEPOSIT_PDF.parent.is_dir() else None
+    out = build_pdf(deposit_pdf=deposit_pdf)
     print(f"Wrote {out} ({out.stat().st_size} bytes)")
     print(f"Wrote {COPY_PDF} ({COPY_PDF.stat().st_size} bytes)")
-    print(f"Wrote {DEPOSIT_PDF} ({DEPOSIT_PDF.stat().st_size} bytes)")
+    if deposit_pdf is not None:
+        print(f"Wrote {deposit_pdf} ({deposit_pdf.stat().st_size} bytes)")
     return 0
 
 

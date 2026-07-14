@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>The Mathematics of the Research Program — A Primer from First Principles</title>
+<title>The Instrument — A Software-Engineering Primer on How the Research Codebase Is Built, Run, and Kept Honest</title>
 <style>
 /* ---------- page setup ---------- */
 @page { size: letter; margin: 0.9in 0.85in; }
@@ -271,12 +271,14 @@ at first, like a serious omission.</p>
 
 <p>It is a deliberate choice, and understanding it is the first real lesson in the codebase's philosophy.
 Dependencies are not installed once and shared; they are pulled <em>ephemerally, per invocation</em>. A
-command that needs PyTorch and NumPy spins up a throwaway environment with exactly those, runs, and
-disappears (via a tool called <code>uvx</code>, Chapter 4). The GPU sweeps bake their dependencies into
+command that needs PyTorch and NumPy can spin up a throwaway environment from the packages and version
+ranges named at that call site, run, and disappear (via a tool called <code>uvx</code>, Chapter 4). The GPU
+sweeps bake their dependencies into
 per-experiment cloud images instead. The reasoning: the author's local machine runs an old Python, but
 the experiments need a newer one, so every entry point forces its own fresh, correct environment rather
 than relying on a shared install that might be wrong. It trades the convenience of "install once" for the
-guarantee that each experiment declares and gets exactly what it needs.</p>
+ability to state dependencies close to an entry point. That improves isolation, but loose or incomplete
+declarations still leave room for version drift.</p>
 
 <div class="warn"><span class="boxtitle">Smell — the version-pinning is scattered, and mostly loose</span>
 <p>A mature engineer should flag the cost of this choice, which the codebase itself acknowledges. Because
@@ -301,8 +303,9 @@ a sentence in that argument.</p>
 <p class="small">The repository is a scientific instrument, not an app — its product is trustworthy,
 reproducible records; the top level is a legible set of "rooms" (experiments, papers, scripts, tests,
 formal, docs, and gitignored raw-data cabinets); there is deliberately no installable package or central
-lockfile — dependencies are pulled ephemerally per run, which guarantees correctness but scatters version
-pins (a real smell); and the way to read every subsequent choice is to ask which honesty or
+lockfile — dependencies are pulled ephemerally per run, which isolates invocations but scatters version
+pins and does not by itself freeze an environment (a real smell); and the way to read every subsequent
+choice is to ask which honesty or
 reproducibility problem it solves.</p>
 
 <h2 class="chapter"><span class="chnum">Chapter 2</span>The Experiment Package and the Pipeline</h2>
@@ -477,49 +480,48 @@ kind that holds when a machine is committing at volume.</p>
 
 <h1 class="part"><span class="kicker">Part II</span>Running the Science</h1>
 
-<p>An instrument is defined by how it runs. This part covers the two execution regimes — deterministic
+<p>An instrument is defined by how it runs. This part covers the two execution regimes — seeded
 local runs and large rented-GPU sweeps — the striking spectrum of engineering maturity across the cloud
 sweeps, and the toolchain that turns a Markdown draft into a finished PDF without a heavyweight
 publishing system.</p>
 
 <h2 class="chapter"><span class="chnum">Chapter 4</span>Two Execution Regimes</h2>
 
-<h3>4.1 Local, deterministic, and seeded</h3>
+<h3>4.1 Local, seeded, and deterministic within a declared scope</h3>
 
-<p>Small experiments and all "pure" analysis run <strong>locally, on the CPU, deterministically</strong>.
-"Deterministic" is the key word: given the same inputs and the same random seed, the code produces
-<em>byte-for-byte</em> the same result, every time, on any machine. This is not automatic — randomness in
-software is a common source of irreproducibility — and the codebase achieves it through unusual
-discipline.</p>
+<p>Several small experiments and analysis paths run <strong>locally on the CPU with explicit seeds</strong>.
+That supports repeatable execution, especially within the same software and hardware environment, but a
+seed alone does not establish byte-for-byte identity across Python versions, numerical libraries,
+operating systems, CPU instruction sets, or GPU kernels. Each experiment therefore needs an explicit
+replay claim: which environment is in scope, which outputs are compared, and whether equality is exact or
+tolerance-based.</p>
 
-<div class="prog"><span class="boxtitle">In the code — no global randomness, ever</span>
-<p>The determinism discipline is remarkably consistent: <strong>there is no global random-number
-generator anywhere</strong>. Every function that needs randomness is <em>handed</em> its own generator,
-seeded explicitly, rather than reaching for a shared global one. Several modules go further with a
-second layer: a top-level generator draws a per-trial seed, and each trial is then built from a fresh
-generator seeded with <em>that</em> — so a trial's content is independent of how many other things ran
-before it. Some experiments even run the whole thing <em>twice</em> and assert the two runs produced
-identical results, gating on "deterministic replay." The payoff: an experiment tagged "local" can be
-re-run by anyone with one command and will reproduce exactly, which is the bedrock of the reproducibility
-pillar (Chapter 7).</p></div>
+<div class="prog"><span class="boxtitle">In the code — strong seed practices, not one universal RNG discipline</span>
+<p>Some modules use local generators such as <code>numpy.random.default_rng</code>, derive a fresh seed per
+trial, or run a same-environment replay check. Other paths still seed and consume process-global state
+through APIs such as <code>numpy.random.seed</code>, <code>torch.manual_seed</code>, and
+<code>random.seed</code>. Those approaches can both support useful repeatability, but they have different
+isolation properties and neither proves cross-machine byte identity. <strong>Open check:</strong> the
+experiment registry should state a determinism tier for each runnable path and validate it under the
+environments the project actually claims to support.</p></div>
 
 <div class="pump"><span class="boxtitle">Intuition pump — the recipe that always yields the same cake</span>
 <p>An ordinary recipe says "a pinch of salt, bake until done" — and two cooks get two different cakes.
-A <em>deterministic</em> recipe specifies every gram and every second, so any cook, any kitchen, gets the
-identical cake. Software randomness is the "pinch of salt": if the program grabs whatever random state
-happens to be lying around (a global generator), results wobble run to run. The codebase's rule — hand
-every function its own precisely-seeded generator — is the specified-to-the-gram recipe. It is more work
-to write, and it is why "reproduce this experiment" is a real promise here rather than a hope.</p></div>
+A more repeatable recipe specifies every gram and every second, but identical cakes still depend on the
+oven, ingredients, and measuring tools. A random seed is one precise ingredient; library versions,
+hardware, input data, and comparison tolerances are others. The codebase often records the first and
+sometimes controls more of the environment, but the complete replay contract is not yet uniform.</p></div>
 
 <h3>4.2 Ephemeral dependencies with uvx</h3>
 
-<p>Recall from Chapter 1 that there is no shared installed environment. Local runs get their
-dependencies through <code>uvx</code>, a tool that spins up a <em>throwaway</em> Python environment with
-exactly the requested libraries, runs the command inside it, and discards it. A quality-check run, for
+<p>Recall from Chapter 1 that there is no shared installed environment. Local runs can get their
+dependencies through <code>uvx</code>, a tool that spins up a <em>throwaway</em> Python environment from
+the packages and version constraints supplied by the command, runs inside it, and discards it. A
+quality-check run, for
 instance, invokes the tests inside a fresh environment carrying PyTorch, NumPy, scikit-learn, and the
-test framework — pinned to a specific Python version the code requires. The benefit is that each entry
-point declares and receives precisely its own needs, immune to whatever happens to be installed on the
-machine. The cost, flagged in Chapter 1, is that those declarations are scattered rather than centralized.</p>
+test framework — on a specific Python version the code requires. The benefit is isolation from much of
+the machine's preinstalled state. The cost, flagged in Chapter 1, is that declarations are scattered,
+some constraints are loose, and an ephemeral environment is not the same thing as a locked environment.</p>
 
 <h3>4.3 The cloud regime: Modal GPU sweeps</h3>
 
@@ -547,15 +549,17 @@ lightweight work (searching the code, running tests, linting, making figures); t
 anything heavy (multi-seed sweeps, neural training, architecture search). This protects the human
 director's laptop from being asked to do a supercomputer's job, and it keeps the expensive, credentialed,
 non-deterministic work in one clearly-marked place. The reproduce tooling (Chapter 7) respects this
-firewall: for local experiments it re-runs them outright; for cloud sweeps it prints the exact command to
-dispatch from an authorized machine, rather than pretending a laptop could reproduce a GPU sweep.</p>
+firewall for a small registered subset: it can execute three local CPU recipes and rebuild two paper
+targets; for the remaining registry entries it reports whatever run command the provenance manifest was
+able to detect, or points the reader back to the documentation.</p>
 
 <h3>4.5 What to carry forward</h3>
-<p class="small">Two execution regimes: local CPU runs are deterministic and seeded (no global RNG,
-per-trial seed isolation, double-run replay gates) so they reproduce byte-for-byte, with dependencies
-pulled ephemerally via <code>uvx</code>; and large work goes to Modal cloud GPUs as sharded sweeps
+<p class="small">Two execution regimes: many local CPU paths use explicit seeds, with some per-trial
+isolation and same-environment replay gates, but the repository does not establish cross-machine
+byte-for-byte determinism; dependencies can be pulled ephemerally via <code>uvx</code>, which isolates a
+run without fully locking it; and large work goes to Modal cloud GPUs as sharded sweeps
 wrapped in Doppler (secrets) and <code>uvx</code>. A firewall keeps light work local and heavy work in
-the cloud, and the reproduce tooling respects it.</p>
+the cloud, while the reproduce tooling covers only a small executable subset directly.</p>
 
 <h2 class="chapter"><span class="chnum">Chapter 5</span>The Modal Maturity Gradient</h2>
 
@@ -718,13 +722,15 @@ the codebase polices itself — and where that policing has gaps.</p>
 
 <h2 class="chapter"><span class="chnum">Chapter 7</span>The Quality and Provenance System</h2>
 
-<h3>7.1 One command, five checks</h3>
+<h3>7.1 One command, a complete root-Python gate</h3>
 
-<p>Before committing substantive changes, a contributor runs a single quality-check wrapper that
-executes five stages in order: the full test suite (in a fresh, correctly-versioned environment); a
-byte-compile pass over all the code (which catches syntax errors even in files the type-checker skips);
-the publication guard (Chapter 3); a linter; and a type-checker. Any stage failing aborts the whole gate.
-This is a conventional continuous-integration battery — but with two unconventional twists worth noting.</p>
+<p>Before committing substantive changes, a contributor can run
+<code>python3 scripts/run_quality_checks.py</code>. The wrapper runs the complete root <code>tests/</code>
+directory under pytest in a fresh Python 3.12 environment, byte-compiles Python sources, applies the
+publication guard, validates evidence/claim/experiment/gate contracts and primer metadata, checks that
+generated provenance is current, then runs Ruff and ty. Any stage failing aborts the wrapper. This is the
+canonical root-Python gate. It still does not include the app, coherence-testbench, Haskell, or site-specific
+suites; those remain explicit follow-on lanes rather than silently omitted root tests.</p>
 
 <div class="prog"><span class="boxtitle">In the code — the type-checker is declawed exactly where risk is highest</span>
 <p>Here is a genuine tension a careful reader should sit with. The linter and type-checker are
@@ -737,46 +743,45 @@ exactly the kind of error a type-checker catches, and exactly the kind that is t
 recommends narrowing this exclusion to at least cover the launch-and-dispatch logic, even if the
 inner GPU code stays unchecked.</p></div>
 
-<h3>7.2 The missing wall: no continuous integration</h3>
+<h3>7.2 The first wall is now live: pull-request quality CI</h3>
 
-<div class="warn"><span class="boxtitle">Smell — the quality gate is opt-in, not enforced</span>
-<p>The single most consequential engineering gap in the repository: <strong>there is no automated
-continuous-integration workflow that runs the quality gate on every change.</strong> The gate exists and
-is excellent; but running it depends on the contributor <em>choosing</em> to run it locally before
-committing. The only automated GitHub workflow deploys the public websites. This means a change that
-breaks a test, leaks a secret past the guard, or fails the linter can be merged with a green appearance,
-because nothing automatically checked it. For a repository where an AI agent commits at high volume — the
-very situation where you most want an unbypassable gate — the gate is bypassable by omission. This is the
-first thing an incoming engineer should fix, and it is cheap: the gate is already written; it simply is
-not wired to run on pull requests.</p></div>
+<div class="prog"><span class="boxtitle">Implemented correction — the root gate runs on pull requests</span>
+<p><code>.github/workflows/quality.yml</code> now runs the same root quality wrapper on every pull request
+and push to main. A pytest-only failure, stale provenance view, malformed structured verdict, publication
+leak, syntax error, lint error, or type error can no longer look green merely because a contributor skipped
+the local command. The remaining gap is narrower and visible: app/Bun, coherence-testbench, Cabal/Haskell,
+and site-specific suites still need owned CI lanes and an explicit exception inventory.</p></div>
 
 <h3>7.3 Provenance: the lab notebook that regenerates itself</h3>
 
 <p>The provenance system is the codebase's answer to the trust problem, rendered as tooling. A generator
-script scrapes every experiment package and writes a provenance card recording its attribution, the exact
-run command, the seed, the pre-registration link, extracted gate signals, and a one-command reproduce
-recipe. The crucial property: the cards are <em>generated, not hand-written</em>, and the generator is
-"itself the reproducible artifact" — re-run it and every card is rebuilt from the committed files, so
-provenance cannot silently drift out of sync with reality. The generator also emits a machine-readable
-manifest of all experiments (mirrored into the public website) and a human-readable index.</p>
+scans every experiment package and writes a card plus machine-readable and human-readable indexes. It
+always creates the records, but it can populate only what its regular-expression extractors find in the
+committed README and result prose. In the current 50-experiment verification manifest, 30 entries have no
+detected run command, 37 have no detected seed, and 34 have no detected pre-registration link; generated
+cards mark such fields as not auto-detected. Gate signals are likewise best-effort prose extractions, not
+structured verdicts. Regeneration reduces hand-copying and makes omissions visible, but it does not prove
+that the resulting provenance is complete or semantically correct.</p>
 
 <div class="pump"><span class="boxtitle">Intuition pump — the git of scientific claims</span>
-<p>Version control (git) works because it does not <em>ask</em> you what the code's history is — it
-<em>computes</em> the history from the commits themselves, so the record cannot lie about what happened.
-The provenance generator applies the same idea to scientific claims: it does not ask the experimenter to
-describe how a result was made; it computes the description from the committed files. A hand-written lab
-notebook is a claim about the work; a generated provenance card is a <em>derivation</em> from the work. In
-a program where the "scientist" is an AI, this shift — from asking to deriving — is what lets a reader
-trust the record without trusting the machine that wrote it.</p></div>
+<p>Version control (git) computes a history from commits rather than relying on a separately maintained
+change log. The provenance generator borrows that useful instinct: derive an index from committed files
+instead of maintaining 50 independent cards by hand. The analogy has a limit, however. The generator
+parses human-written README and result prose, so its output inherits their omissions and can misclassify
+their meaning. A generated card is best understood as a reproducible <em>index of detected claims</em>,
+not an independent proof of how the work was performed.</p></div>
 
-<h3>7.4 One-command reproduce</h3>
+<h3>7.4 One-command dispatch, with partial executable coverage</h3>
 
-<p>The reproducibility pillar is made concrete by a dispatcher script: name an experiment and it either
-re-runs it locally (for deterministic CPU experiments, checking the output matches), rebuilds its paper
-PDF from committed numbers, or — for GPU/secret sweeps a laptop cannot run — prints the exact documented
-command to dispatch from an authorized machine. Its stated purpose is that "a wiped environment never
-forces a manual re-run." This is the tooling that makes the abstract promise "our science is
-reproducible" into a literal command a skeptic can type.</p>
+<p><code>python scripts/regen.py &lt;name&gt;</code> provides one entry point, but its behavior is not one
+uniform reproduction guarantee. <code>python scripts/regen.py list</code> currently classifies three
+experiments as executable local-CPU recipes, two as paper-PDF builders, and 45 as
+<code>documented-command</code>. For those 45, the script prints the command detected in the verification
+manifest — which may be absent or host-specific — or directs the reader to README and result reports. The
+local recipes run commands and stop on failure, but the dispatcher does not generally compare regenerated
+artifacts with committed hashes or validate a repository-wide numerical tolerance. <strong>Open check:</strong>
+define expected artifacts and comparison rules per experiment before treating dispatch as
+verified reproduction.</p>
 
 <div class="warn"><span class="boxtitle">Smell — the audit layer can itself mislead</span>
 <p>An honest accounting must note a subtle failure mode the program itself caught. The provenance
@@ -793,7 +798,8 @@ infrastructure should read structured data, not natural language, wherever possi
 <p>Assemble the quality gate, the guard, the provenance generator, and the reproduce dispatcher, and you
 have a genuinely impressive trust apparatus — better than most research codebases possess. But its ceiling
 must be stated plainly, because it is the same ceiling the science and history primers reach: this
-machinery proves <em>the recipe</em> (what command was recorded, from what committed files), not
+machinery can document parts of <em>the recipe</em> (what command or seed its extractors found, from what
+committed files), not
 <em>the meal</em> (that the numbers reflect an unbiased execution). The committed summaries are AI-written
 condensations of raw outputs that are themselves gitignored, so a reader usually cannot recompute a result
 from the raw rows. The tooling makes the process observable; it does not, by itself, make the results
@@ -802,12 +808,13 @@ from structured records, and inviting outside replication — is engineering the
 finished.</p>
 
 <h3>7.6 What to carry forward</h3>
-<p class="small">A one-command quality gate runs tests, compile-check, publication guard, linter, and
-type-checker — but the type-checker is relaxed exactly on the risky GPU-spend scripts, and, worst, the
-gate is opt-in with no CI enforcing it; the provenance system generates (not writes) self-reproducing
-cards, a machine manifest, and one-command reproduce, applying "derive, don't ask" to scientific claims;
-and the honest ceiling is that this proves the recipe, not the meal — the audit layer can even misread
-prose — so committing raw rows and inviting external replication is the unfinished work.</p>
+<p class="small">A one-command root quality wrapper runs <code>unittest</code> discovery, compile-check,
+publication guard, Ruff, and ty, but it omits several test families, relaxes static checking on risky
+GPU-spend scripts, and has no pull-request workflow enforcing it; the provenance generator creates a
+50-experiment index while leaving many run-command, seed, and pre-registration fields undetected; and the
+dispatcher directly executes only three local recipes and two PDF builders. These tools make parts of the
+recipe observable, not the meal independently checkable — so structured verdicts, declared replay
+contracts, committed raw rows, and external replication remain unfinished work.</p>
 
 <h2 class="chapter"><span class="chnum">Chapter 8</span>Types as Contracts, and the Polyglot Boundary</h2>
 
@@ -904,9 +911,10 @@ scales without multiplying its one-off scripts.</p>
 any project that values correctness.</p>
 
 <ul>
-<li><strong>Reproducibility as a first-class feature.</strong> No global randomness, per-trial seed
-isolation, double-run replay gates, and a self-regenerating provenance system. "Reproduce this" is a real
-command, not a hope.</li>
+<li><strong>Reproducibility as an explicit engineering goal.</strong> Many paths use explicit seeds,
+some isolate per-trial generators or perform same-environment replay checks, and the repository includes
+generated provenance and a common dispatch entry point. The next step is to turn those ingredients into
+declared, testable replay contracts for every experiment.</li>
 <li><strong>Safety by construction.</strong> The three-wall public-safety stack (ignore list, tested
 guard, whitelist exporters) makes leaking hard rather than merely forbidden — the right model whenever a
 high-volume or automated committer is involved.</li>
@@ -924,7 +932,7 @@ publication-guard detector with its own false-positive test. The safety nets hav
 
 <table class="plain">
 <tr><th>Smell</th><th>Why it matters</th></tr>
-<tr><td><strong>1. No CI enforcing the quality gate</strong></td><td>The excellent gate is opt-in; a broken or unsafe change can merge green. The highest-value, lowest-effort fix — the gate already exists, it just isn't wired to run on pull requests.</td></tr>
+<tr><td><strong>1. Incomplete multi-language CI inventory</strong></td><td>The root Python gate is required on pull requests, but app/Bun, coherence pytest, Cabal/Haskell, and site suites still need explicit lanes or time-bounded exceptions.</td></tr>
 <tr><td><strong>2. Hardcoded numbers in build scripts (esp. the flagship)</strong></td><td>Breaks the traceability chain from published number to committed evidence at the last step — the exact thing the trust apparatus exists to prevent, left open in the most important paper.</td></tr>
 <tr><td><strong>3. The 50+ one-off paper/figure scripts</strong></td><td>Each new paper spawns a new ~300-line bespoke script with no shared schema; numbers can drift, and the surface grows linearly with the science.</td></tr>
 <tr><td><strong>4. No dependency lockfile</strong></td><td>Version pins scattered across call sites, mostly loose; the same experiment can resolve to different library versions in different places.</td></tr>
@@ -948,9 +956,9 @@ writing the same scaffolding fifty more times.</p></div>
 
 <div class="prog"><span class="boxtitle">A concrete plan</span>
 <ol>
-<li><strong>Wire the quality gate into CI.</strong> Run the existing gate on every pull request. Start
-cheap (guard + compile-check + a fast test subset). This is the biggest trust improvement for the least
-effort — it makes the whole quality system unbypassable.</li>
+<li><strong>Complete the CI inventory.</strong> Keep the required root-Python workflow, then add owned
+lanes for app/Bun, coherence pytest, Cabal/Haskell, and sites. Every test file should belong to a lane or
+a named, expiring exception.</li>
 <li><strong>A declarative paper manifest.</strong> Replace the 50+ bespoke build/figure scripts with one
 generic renderer that consumes a small per-paper config (source JSON paths, figure specs, table specs,
 prose). This kills smells 2 and 3 at once: every number is <em>forced</em> to originate in committed data,
@@ -977,19 +985,20 @@ config file, so run commands are host-agnostic.</li>
 <p>As engineering, this is a strong, unusual codebase whose best ideas — reproducibility as a feature,
 safety by construction, types enforcing scientific validity, armor proportional to stakes — are genuinely
 worth imitating, and are more disciplined than a great deal of production software. Its weaknesses are the
-characteristic weaknesses of a fast-moving research workshop authored by AI agents: an opt-in rather than
-enforced quality gate, a flagship paper whose numbers aren't traceable, and a proliferation of one-off
+characteristic weaknesses of a fast-moving research workshop authored by AI agents: incomplete
+multi-language CI beyond the now-required root gate, a flagship paper whose numbers aren't traceable, and a
+proliferation of one-off
 scripts held together by discipline rather than abstraction. None of these is deep; all are the kind of
 debt that accumulates when a small team (here, a human plus tireless agents) moves fast and prioritizes
-results over infrastructure. The refactor path is clear, incremental, and mostly cheap — and the first
-step, wiring the existing quality gate into CI, would do more for the codebase's trustworthiness than any
-new feature. The instrument is well-built; it now needs the factory fixtures that let it stay well-built
+results over infrastructure. The refactor path is clear and incremental; the first wall is now live, and
+the next gains come from completing its suite inventory and tracing published numbers. The instrument is
+well-built; it now needs the factory fixtures that let it stay well-built
 across the next hundred experiments.</p>
 
 <h3>9.5 What to carry forward</h3>
 <p class="small">Imitate: reproducibility-as-feature, safety-by-construction, types-enforce-validity,
-armor-proportional-to-stakes, test-the-test. Fix, in order: wire the quality gate into CI (biggest win,
-least effort); a declarative paper manifest to force numbers from committed data and collapse the one-off
+armor-proportional-to-stakes, test-the-test. Fix next: complete the CI lane inventory; add a declarative
+paper manifest to force numbers from committed data and collapse the one-off
 scripts; a shared Gate abstraction and experiment scaffold to replace hand-copied duplication; a single
 dependency lockfile; type-checking on the GPU launch logic; and externalized config. The instrument is
 excellent; it needs the workshop-to-factory transition to scale.</p>

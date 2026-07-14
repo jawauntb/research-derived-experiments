@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "gate_id": "PRIMARY_EFFECT",
+  "claim_id": "DEMO_PRIMARY_EFFECT",
+  "claim_tier": "causal",
+  "status": "not_run",
+  "observed": null,
+  "expected": "mean_delta >= 0.10",
+  "threshold": 0.1,
+  "unit": "mean delta",
+  "evidence_refs": [
+    "templates/experiment/manifest.example.json"
+  ],
+  "notes": "Copy into experiments/<name>/results/gate_verdicts/<gate>.json after registering the claim."
+}
+

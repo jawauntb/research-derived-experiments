@@ -10,11 +10,12 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 
 | Path | Responsibility |
 |---|---|
-| `experiments/` | Research harnesses, Modal sweeps, committed `results/`, `PROVENANCE.md` (49 dirs) |
+| `experiments/` | 54 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
 | `papers/` | Paper sources (`paper.md`), figures, shareable PDFs |
-| `scripts/` | ~80 ops scripts: quality, provenance, PDF/figure builders, summarizers |
-| `tests/` | Root `unittest` suite for core experiment logic |
+| `scripts/` | 91 Python ops modules: quality, contracts, provenance, PDF/figure builders, summarizers |
+| `tests/` | 69 root test files collected together by pytest (`unittest`-style and pytest-native) |
 | `docs/` | Design docs, verification, handoffs, plans, reviews, solutions |
+| `docs/primers/backlogs/` | Six article-specific, source-anchored research TODOs derived from the primer PDFs |
 | `notes/` | Program-level research synthesis |
 | `references/` | Public source list; local-only full texts (gitignored subdirs) |
 | `formal/ontology-hs/` | Haskell typed ontology gate (Arc 2B) |
@@ -26,7 +27,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `README.md` | Human entrypoint |
 | `TODO.md` | Active research ledger |
 | `AGENTS.md` | Agent/contributor rules (incl. doc sync) |
-| `pyproject.toml` | Python ≥3.12, Ruff, ty excludes — **no dependency lock** |
+| `pyproject.toml` | Python ≥3.12 project metadata plus Ruff and ty configuration; runtime dependencies remain call-site/Modal specific |
 
 ---
 
@@ -40,6 +41,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | Find an experiment’s purpose & modules | §3 below + `experiments/<name>/PROVENANCE.md` |
 | Reproduce or get the dispatch command | `python scripts/regen.py list` / `regen.py <name>` |
 | Refresh provenance index | `python scripts/gen_provenance.py` |
+| Validate research contracts | `python3 scripts/validate_{evidence_registry,claim_registry,experiment_manifest,gate_verdict}.py` |
 | Run the quality gate | `python3 scripts/run_quality_checks.py` |
 | Check API/Modal env without leaking secrets | `python3 scripts/env_probe.py` |
 | Public agent benchmark package | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) |
@@ -75,10 +77,17 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_commitment_surface_core.py`, `test_e1_misspecification_variance.py` | E1 concern selectors plus conditional-randomization reconstruction, seed, assignment, and statistics contracts |
 | `test_summarize_label_free_dose_response.py` | Label-free dose-response summarizer |
 | `test_virtual_governor_stress_signal.py` | Virtual governor diagnostic |
+| `test_mathematical_claims.py`, `test_bayesian_voi.py` | Executable theorem-assumption examples/failure cases and exact Bayesian VOI regimes |
+| `test_seed_bootstrap_calibration.py` | Deterministic seed-floor grid, correct resampling unit, negative-regime retention, exact summary regeneration |
+| `test_passive_active_phase_map.py` | Phase-map model comparison, matched-budget path controls, public aggregate contract |
+| `test_causal_use.py` | Shared mass-normalized causal-use dose curves, bootstrap uncertainty, and cross-surface transport |
+| `test_experiment_manifest.py`, `test_gate_verdict.py`, `test_evidence_registry.py`, `test_claim_registry.py` | Fail-closed research-contract adapters, discovery, references, supersession, and bidirectional edges |
+| `test_research_contract_schema_parity.py`, `test_gen_provenance.py` | Shared vocabulary/schema parity, support-directory exclusion, non-mutating provenance freshness |
 
 ```bash
-uvx --python 3.12 --with torch --with numpy --with scikit-learn --with pytest \
-  python -m unittest discover -s tests
+uvx --python 3.12 --with torch --with numpy --with scikit-learn \
+  --with matplotlib --with reportlab --with pytest \
+  python -m pytest -q tests
 # or: python3 scripts/run_quality_checks.py
 ```
 
@@ -88,7 +97,9 @@ uvx --python 3.12 --with torch --with numpy --with scikit-learn --with pytest \
 |---|---|
 | [system_design.md](system_design.md) | End-to-end design & operating model |
 | [module_explainer.md](module_explainer.md) | This catalog |
-| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated; 44 experiments) |
+| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 54 research packages; `experiments/common` excluded) |
+| `program_evidence_registry.json` | 12 canonical evidence records with stable IDs, states, artifact refs, and claim links |
+| `claim_registry.json` | 12 canonical claim records with tiers, states, source refs, and bidirectional evidence links |
 | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) | Benchmark umbrella |
 | [causally_grounded_agents_release_schema.md](causally_grounded_agents_release_schema.md) (+ `.json`) | Shared release schema |
 | [causally_grounded_agents_next_gap.md](causally_grounded_agents_next_gap.md) | Suite C transfer gaps |
@@ -104,6 +115,7 @@ uvx --python 3.12 --with torch --with numpy --with scikit-learn --with pytest \
 | [metaphysics_of_intelligence_reading_log.md](metaphysics_of_intelligence_reading_log.md) | Reading log |
 | [gauge_fixed_concern_transport_experiment_audit.md](gauge_fixed_concern_transport_experiment_audit.md) | GFC audit |
 | [metaphysics_complete_reading_notes_2026_07_09.md](metaphysics_complete_reading_notes_2026_07_09.md) | Full reading notes for every Metaphysics-of-Intelligence PDF/package listed 2026-07-09 (theorems, methods, findings, next directions); canonical copy also at `~/Metaphysics of Intelligence/COMPLETE_READING_NOTES_2026_07_09.md` |
+| [primers/backlogs/README.md](primers/backlogs/README.md) | Six per-primer criticism-to-TODO backlogs (268 gated items) |
 | `docs/plans/` | 13 dated implementation plans — §8.1 |
 | `docs/paper_reviews/` | 15 critical reviews — §8.2 |
 | `docs/solutions/` | Architecture-pattern notes — §8.3 |
@@ -114,14 +126,11 @@ uvx --python 3.12 --with torch --with numpy --with scikit-learn --with pytest \
 
 **Legend:** **P** = `PROVENANCE.md`, **B** = `BENCHMARK_CARD.md`, **R** = `README.md`, **res** = committed `results/`.
 
-**Verification reconciliation:** 49 on disk, 44 in `docs/verification.json`.
-Missing from manifest: `gauge_fixed_concern_transport`, `phase4_metaphysics`,
-`phase5_external_validity`, `phase6_real_model_validation`,
-`virtual_governor_stress_signal`.
-
-**Custom (hand-maintained) provenance:** `structure_compatible_generalization`,
-`gauge_fixed_concern_transport`, `phase4_metaphysics`, `phase5_external_validity`,
-`phase6_real_model_validation`. **No provenance yet:** `virtual_governor_stress_signal`.
+**Verification reconciliation:** 54 research packages on disk plus one shared
+support package, `experiments/common`. `gen_provenance.py` intentionally excludes
+the support package and derives 54 cards/index rows; `gen_provenance.py --check`
+fails if any generated card, either verification index, or the site mirror drifts.
+The structured registries currently contain 12 claims and 12 evidence records.
 
 Universal dispatcher: `python scripts/regen.py <name>`.
 
@@ -142,6 +151,7 @@ Universal dispatcher: `python scripts/regen.py <name>`.
 | `concept_geometry` | P R res | Cross-domain concepts in embedding space | `openai_embedding_probe.py`, `paraphrase_stability_probe.py` |
 | `activation_geometry` | P R res (58) | Hidden-state bridges, steering, patching, label-free gates | See §3.1.4 |
 | `passive_to_active` | P R res | Action coupling makes paraphrase geometry causally load-bearing | `modal_passive_to_active.py`, `modal_replication_sweep.py` |
+| `passive_active_phase_map` | P R res | Registered local coupling sweep: bifurcation not supported; controlled path dependence passed | `core.py`, `preregistration.md`, `experiment_manifest.json` |
 | `commitment_surface` | P R res | Commitment-first reframe: severe tests E1–E4 discriminating compatibility-augmented training + patch-CE against weakness readout on both synthetic MLP modular addition and external Pythia LoRA | See §3.1.5 |
 
 #### 3.1.1 `symbolic_weakness` modules
@@ -462,13 +472,23 @@ Figures for these papers are produced by matching `scripts/make_*_figures.py`
 |---|---|---|
 | `commitment_surface` | `core.py`, `run_e1.py`, `e2_e3_neural_sweep.py`, `modal_e4_pythia_lora_v2.py` | E1–E4 severe tests; compact 108-cell E4 appendix JSON supports clean-clone PDF reproduction without raw Modal output |
 | `external_contact` | `modal_p1_pythia_weakness.py`, `modal_p1_pythia_lora.py`, `p1_lora_metrics.py` | LoRA run does not pass P1; hard-kills external-transfer threshold |
-| `gauge_fixed_concern_transport` | `core.py`, `budget.py`, `summarize.py`, `modal_l4_suite.py` | Custom P; **not** in verification.json; smoke: `python -m experiments.gauge_fixed_concern_transport.core --preset smoke` |
-| `phase4_metaphysics` | `core.py`, `summarize.py`, `modal_l4_suite.py` | Custom P; seven cheap parallel diagnostics |
-| `phase5_external_validity` | `core.py`, `budget.py`, `summarize.py`, `modal_l4_suite.py` | Custom P; transport toward foundation-model proxies |
-| `phase6_real_model_validation` | `core.py`, `real_models.py`, `budget.py`, `summarize.py`, `modal_l4_suite.py` | Custom P; public decoder LMs under predeclared gates |
-| `virtual_governor_stress_signal` | `core.py`, `summarize.py`, `modal_l4_sweep.py` | README + res; **no** PROVENANCE; not in verification.json |
+| `gauge_fixed_concern_transport` | `core.py`, `budget.py`, `summarize.py`, `modal_l4_suite.py` | Gauge-fixed transport; smoke: `python -m experiments.gauge_fixed_concern_transport.core --preset smoke` |
+| `phase4_metaphysics` | `core.py`, `summarize.py`, `modal_l4_suite.py` | Seven cheap parallel diagnostics |
+| `phase5_external_validity` | `core.py`, `budget.py`, `summarize.py`, `modal_l4_suite.py` | Transport toward foundation-model proxies |
+| `phase6_real_model_validation` | `core.py`, `real_models.py`, `budget.py`, `summarize.py`, `modal_l4_suite.py` | Public decoder LMs under predeclared gates |
+| `virtual_governor_stress_signal` | `core.py`, `summarize.py`, `modal_l4_sweep.py` | README + committed stress-signal result |
 
-### 3.6 Experiment conventions
+### 3.6 Primer-derived local experiments and shared analysis
+
+| Package / module | Contract and result | Entrypoints / artifacts |
+|---|---|---|
+| `mathematical_claims` | M-201 theorem-assumption matrix: seven finite satisfying examples plus paired assumption/predicate failures; accepted audit that does not establish theorem necessity or minimality | `core.py`, `experiment.py`, `theorem_assumption_matrix.json`, `results/mathematical_claims_summary.json`, `experiment_manifest.json` |
+| `bayesian_voi` | M-208 exact two-state outcome enumeration across learnable, irreducible-noise, and misspecified-signal regimes; accepted gates separate oracle EVSI/true regret reduction from error heuristics | `core.py`, `experiment.py`, `preregistration.json`, `results/bayesian_voi_summary.json`, `experiment_manifest.json` |
+| `seed_bootstrap_calibration` | S-022 simulation over 3/5/8/10/16/64 seeds and five effect/noise/hierarchy regimes; compares naive row percentile with paired seed-cluster resampling and emits 30 pilot/promotion decisions | `simulation.py`, `PREREGISTRATION.md`, `results/summary.{json,md}`, `experiment_manifest.json` |
+| `passive_active_phase_map` | T-SYS-011/012 NumPy phase map with held-out segmented-vs-smooth fits and matched-budget continuation/reinit/washout paths; registered outcome is bifurcation not supported with path dependence | `core.py`, `preregistration.md`, `results/registered_summary.{json,md}`, `experiment_manifest.json` |
+| `common/causal_use.py` | Shared non-experiment utility: mass-normalized target-minus-wrong-subspace dose curves, positive AUC, replicate bootstrap interval, and minimum transport across surfaces | Imported by experiment/test code; excluded from provenance inventory |
+
+### 3.7 Experiment conventions
 
 From `experiments/README.md`:
 
@@ -488,9 +508,15 @@ Raw outputs stay under `artifacts/` until summarized.
 
 | Script | Purpose | Flags / I/O |
 |---|---|---|
-| `gen_provenance.py` | Regenerate all auto `PROVENANCE.md` + `docs/verification.{md,json}` + site mirror | In: experiment dirs |
+| `research_contracts.py` | Shared schema version, identifier patterns, claim tiers/statuses, and evidence statuses used by registry/verdict adapters | Library; parity-tested against JSON Schemas |
+| `gen_provenance.py` | Validate registries, regenerate all experiment `PROVENANCE.md` files + `docs/verification.{md,json}` + site mirror; `--check` compares expected bytes without writing | In: 54 experiment dirs + claim/evidence registries; excludes `experiments/common` |
+| `validate_evidence_registry.py` | Validate canonical evidence IDs, gate statuses, artifact refs, and supersession shape | `docs/program_evidence_registry.json` |
+| `validate_claim_registry.py` | Validate exact claim shape/tiers/states and bidirectional claim↔evidence edges | Reads `docs/claim_registry.json` + `docs/program_evidence_registry.json`; never writes either |
+| `validate_experiment_manifest.py` | Discover and dependency-free validate every v1 experiment-package contract | Reads `experiments/**/experiment_manifest.json`; portable contract in `schemas/experiment_manifest.schema.json` |
+| `validate_gate_verdict.py` | Discover per-gate verdicts, require registered claim IDs/canonical tiers/statuses, and resolve evidence paths | Reads `experiments/*/results/gate_verdicts/*.json` + `docs/claim_registry.json` |
+| `check_primer_metadata.py` | Require matching titles across all six primer HTML `<title>` values and PDF metadata | Needs `pdfinfo` (`poppler-utils` in CI) |
 | `regen.py` | List/reproduce experiments or print documented Modal commands | `list`, `<name>`, `--deps` |
-| `run_quality_checks.py` | unittest → compileall → publication_guard → ruff → ty (uvx 3.12) | Exit code |
+| `run_quality_checks.py` | pytest → compileall → publication guard → four research-contract validators → primer metadata → provenance freshness → Ruff → ty (uvx 3.12) | Exit code; canonical local/CI root gate |
 | `publication_guard.py` | Block tracked secrets, forbidden paths, oversized files; exposes a tested text-signature helper | Exit code |
 | `env_probe.py` | Report env var presence/length only | `--json` |
 
@@ -508,7 +534,7 @@ Raw outputs stay under `artifacts/` until summarized.
 | `build_paperB_pdf.py` | Paper B reward-deformation PDF |
 | `build_effective_dimension_pdf.py` | Rate-distortion effective-dimension PDF |
 | `build_concern_weighted_weakness_pdf.py` | Concern-weighted weakness note |
-| `build_gauge_fixed_concern_transport_pdf.py` | GFC transport PDF |
+| `build_gauge_fixed_concern_transport_pdf.py` | GFC transport PDF; always writes repository copies and optionally mirrors to an injected external archive path (the CLI uses it only when the local archive exists) |
 | `build_unified_portfolio_pdf.py` | Unified portfolio PDF |
 | `build_structure_compatible_pdf.py` | SCG base paper (`--in`, `--out`, `--figure-dir`) |
 | `build_structure_compatible_phase2_pdf.py` | SCG phase-2 inferred transformations |
@@ -645,6 +671,8 @@ cd formal/ontology-hs && cabal test all && cabal run ontology-check
 |---|---|
 | `SOURCES.md` | Public source manifest |
 | `webb-miolane-geometry-of-consciousness-transcript.md` | Committed talk transcript |
+| `philosophy_claim_boundaries.md` | Dretske/Millikan/Boyd/Dennett/Metzinger claim boundaries and experiment consequences |
+| `science_methodology_claim_boundaries.md` | Preregistration, bootstrap/power, independent analysis, provenance, and execution-grounded review decisions |
 | `papers/`, `text/`, `html/` | **Local-only** full texts (gitignored) |
 
 ---
@@ -820,7 +848,10 @@ python3 scripts/run_phase0.py --smoke
 
 | File | Role |
 |---|---|
+| `.github/workflows/quality.yml` | Required push/PR workflow: installs uv + `poppler-utils`, then runs the single full pytest-based root quality wrapper |
 | `.github/workflows/railway-deploy.yml` | Deploy atlas + Inquiry landing on `main` |
+| `schemas/{experiment_manifest,program_evidence_registry,claim_registry,gate_verdict}.schema.json` | Portable JSON Schema contracts for package intent, evidence, claims, and gate outcomes |
+| `templates/experiment/{manifest,gate_verdict}.example.json` | Copyable version-1 examples validated by the same adapters used in CI |
 | `pyproject.toml` | Project meta, Ruff, ty excludes |
 | `pyrightconfig.json` | Editor typecheck: missing imports silenced |
 | `.gitignore` | Secrets, `artifacts/`, `data/`, reference full texts, caches |
@@ -881,8 +912,8 @@ When you add or materially change code:
 
 1. Update [system_design.md](system_design.md) if runtime flow, deps, deploy, or capabilities/limitations change.
 2. Update this file: experiment modules, script entries, test mapping, plans/reviews, or product surfaces.
-3. Add/refresh `experiments/<name>/PROVENANCE.md` via `python scripts/gen_provenance.py` (or hand-edit custom cards).
-4. Shrink the verification.json gap when phase/gauge/governor packages join the verified set.
+3. Regenerate all experiment cards/indexes via `python scripts/gen_provenance.py`; never hand-edit generated cards.
+4. Add or update the versioned experiment manifest and per-gate verdict where the structured-contract surface applies.
 5. Keep `experiments/README.md` active-track list honest.
 6. Link new public-facing docs from root `README.md` when they are start-here material.
 

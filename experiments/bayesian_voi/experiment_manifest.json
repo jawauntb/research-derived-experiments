@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "bayesian_voi",
+  "hypothesis": "Current error and the printed error-squared heuristic do not generally rank probes by true expected regret reduction under irreducible noise or model misspecification.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "exact_outcome_enumeration",
+      "description": "All probe outcomes are enumerated exactly, so oracle EVSI and true expected regret reduction do not depend on Monte Carlo error."
+    },
+    {
+      "control_id": "irreducible_noise",
+      "description": "A high-current-error regime makes every candidate probe independent of the latent state."
+    },
+    {
+      "control_id": "misspecified_signal",
+      "description": "A learner-assumed high-information signal is uninformative under the true data-generating process."
+    }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/bayesian_voi/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "M208_LEARNABLE_RANKING",
+      "criterion": "In the learnable regime, mutual information correlates at least 0.7 with oracle EVSI and the true signal ranks first."
+    },
+    {
+      "gate_id": "M208_IRREDUCIBLE_NOISE",
+      "criterion": "In the irreducible-noise regime, current error remains high while oracle EVSI is zero for every probe."
+    },
+    {
+      "gate_id": "M208_MISSPECIFICATION",
+      "criterion": "Under misspecification, the highest-information assumed probe differs from the oracle choice and has negative true expected regret reduction."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/bayesian_voi/results/bayesian_voi_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/bayesian_voi/preregistration.json",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

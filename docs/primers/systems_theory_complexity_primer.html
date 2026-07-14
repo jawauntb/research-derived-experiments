@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>The Mathematics of the Research Program — A Primer from First Principles</title>
+<title>Systems That Hold Themselves Together — A Systems-Theory and Complexity-Science Primer</title>
 <style>
 /* ---------- page setup ---------- */
 @page { size: letter; margin: 0.9in 0.85in; }
@@ -285,10 +285,11 @@ program:</p>
 </table>
 
 <p>The honest answer, developed across the book, is <em>mixed and interesting</em>: the program measures
-some genuine self-organization and self-repair, gestures at emergence and phase transitions it does not
-rigorously establish, and studies all of it in single-agent systems that are, strictly, small feedback
-loops rather than the many-interacting-parts systems complexity science classically means. Holding both
-the genuine results and the honest limits is what this book trains.</p>
+some genuine self-organization and self-repair, and a registered synthetic coupling sweep now resolves
+one proposed transition as <strong>bifurcation not supported, with path dependence</strong>.
+That bounded result does not establish a general phase transition, and the systems remain, strictly,
+small single-agent feedback loops rather than the many-interacting-parts systems complexity science
+classically means. Holding both the genuine results and the honest limits is what this book trains.</p>
 
 <h3>1.5 What to carry forward</h3>
 <p class="small">Complexity science studies the organized middle between the simple and the random —
@@ -357,9 +358,9 @@ signal enables recovery where a stale, wrong, or absent one fails — a clean de
 everywhere, and each buyer, minimizing their own local cost, collectively relieves the shortage. The price
 is a global constraint transduced into a local incentive — exactly the virtual-governor idea. The program's
 experiment is a miniature of this: can a system-level stress be turned into a local signal that makes
-each part's selfish minimization serve the whole? The measured answer — yes, but only if the signal is
-live and accurate — is a small but genuine result about how distributed systems coordinate, and it is one
-of the places the program touches real complexity science.</p></div>
+each part's selfish minimization serve the whole? The measured answer — for one policy receiving a
+hand-computed global feature — is yes, but only if the signal is live and accurate. This establishes a
+signal-architecture scaffold, not distributed coordination among multiple autonomous parts.</p></div>
 
 <div class="warn"><span class="boxtitle">Tension — a "distributed" control experiment with one agent</span>
 <p>A complexity scientist should note the catch honestly. Distributed control is, classically, about
@@ -401,17 +402,17 @@ test of an attractor — as opposed to a mere resting spot — is <em>restoratio
 comes back. This restoration property is exactly what turns a passive location into an active, self-
 maintaining thing.</p></div>
 
-<h3>3.2 The program's central bet: passive representation becomes active attractor</h3>
+<h3>3.2 The program's central bet: passive representation becomes an attractor-like controller</h3>
 
 <p>Here is the program's deepest and most complexity-flavored claim, and its answer to "when does
 structure become agency." A learned representation can be merely <em>passive</em> — a cluster of points
 that <em>correlates</em> with behavior, a location on the landscape. Or it can be <em>active</em> — an
-attractor that <em>causally controls</em> behavior and <em>resists perturbation</em>. The program claims a
-measurable transition between these: couple a representation to action, and a passive cluster becomes an
-active, self-defending attractor.</p>
+controller that <em>causally controls</em> behavior and <em>resists perturbation</em>. The program measures
+that passive→active change, but it does not map a basin, estimate stability, or trace return dynamics;
+"attractor-like controller" is the earned tier.</p>
 
-<div class="prog"><span class="boxtitle">In the program — the two signatures of an attractor, measured</span>
-<p>The program operationalizes the passive→active transition with the two properties an attractor should
+<div class="prog"><span class="boxtitle">In the program — two attractor-like proxies, measured</span>
+<p>The program operationalizes the passive→active transition with two properties an attractor should
 have. <strong>Load-bearing</strong>: removing the representation's key direction should <em>destroy</em>
 behavior far more after coupling than before (it does — the specific effect grows roughly sevenfold).
 <strong>Self-maintenance</strong>: the system should <em>resist</em> being pushed in the wrong direction.
@@ -451,14 +452,15 @@ established with the tools that define an attractor rigorously: no basin geometr
 eigenvalues computed, no return dynamics traced. The perturbation-immunity result is genuine; calling it an
 "attractor" imports connotations (a mapped basin, characterized dynamics) the experiment does not deliver.
 The program is measuring something real and attractor-<em>like</em>; whether it is an attractor in the full
-dynamical-systems sense is not yet shown, and Chapter 8 returns to whether the passive→active "threshold"
-is a genuine transition or a feature of a training trajectory.</p></div>
+dynamical-systems sense is not yet shown. A later registered synthetic sweep finds a continuous coupling
+crossover rather than a bifurcation, while matched-budget forward/reverse paths retain a hysteretic
+history effect. That is evidence for optimization-path dependence, not a mapped dynamical basin.</p></div>
 
 <h3>3.4 What to carry forward</h3>
 <p class="small">The landscape picture — attractors (valleys the system returns to), basins, and ridges —
 is complexity science's central image; the defining test of an attractor is restoration after
 perturbation; the program's signature bet is that coupling a representation to action turns a passive
-correlating cluster into an active self-defending attractor, which it measures via load-bearing (7×) and
+correlating cluster into an attractor-like controller, which it measures via load-bearing (7×) and
 perturbation-immunity (85%→0%); the brain's ring and torus attractors anchor what a genuine neural
 attractor is; and the tension is that the program's agent "attractors" are measured as perturbation-
 robustness, not with the basin-and-stability tools that define an attractor rigorously.</p>
@@ -483,9 +485,9 @@ question — and the one a complexity reader must press on the program — is wh
 <em>emergent</em> (novel, not designed in) versus merely <em>installed</em> (a consequence of a rule the
 designer chose).</p></div>
 
-<h3>4.2 The program's cleanest self-organization result</h3>
+<h3>4.2 The program's cleanest objective-driven reorganization result</h3>
 
-<p>The program's best claim to genuine self-organization is its "objects form from concern" result
+<p>The program's best claim to objective-driven representational reorganization is its "objects form from concern" result
 (developed in the philosophy primer as a theory of content; here we read it as systems science). Three
 identical neural networks, trained with different objectives on the same inputs, develop radically
 different internal geometries — and the one whose objective is coupled to viability spontaneously
@@ -495,15 +497,18 @@ dramatic and measured: the consequence-based organization is hundreds of times s
 sensory-based one. Structure the designer did not explicitly place emerges from the interaction of the
 learning rule with the viability coupling.</p>
 
-<div class="prog"><span class="boxtitle">In the program — emergence you can time</span>
+<div class="prog"><span class="boxtitle">In the program — a sharp training trace, not a bifurcation</span>
 <p>An even more emergence-flavored observation comes from the passive→active work: as a representation is
 coupled to action, the cluster geometry tightens <em>gradually</em> over training, but the
 <em>causal</em> load-bearing — the representation's power to control behavior — appears <em>abruptly</em>,
 over a narrow window of training steps. Geometry and causal dependence are "not coextensive in time": the
-structure builds up smoothly, then its <em>function</em> switches on sharply. This abrupt onset of a
-capability from smooth underlying change is a recognizable emergence signature — one of the few places the
-program catches something that looks like a genuine transition rather than a gradual accumulation, and it
-is worth taking seriously.</p></div>
+structure builds up smoothly, then its <em>function</em> crosses a behavioral threshold sharply. A later
+registered coupling sweep tests the stronger interpretation directly: across eleven coupling values, two
+architectures, five seeds, and five order parameters, only causal specificity favored a segmented fit.
+Critical-point stability and multi-parameter co-location failed, so the preregistered verdict is a
+<strong>failed bifurcation gate</strong>. The experiment did not separately preregister a positive
+smooth-crossover criterion. The sharp training trace remains interesting, but it is not evidence of a
+phase transition.</p></div>
 
 <div class="pump"><span class="boxtitle">Intuition pump — the moment the arch stands</span>
 <p>Build a stone arch by placing stones one at a time on scaffolding. For most of the process, nothing
@@ -511,10 +516,10 @@ about the structure is self-supporting — remove the scaffolding and it collaps
 final keystone, and <em>suddenly</em> the arch holds its own weight: a global property (self-support) that
 no individual stone possesses and that appeared abruptly at the end of a gradual process. The program's
 "gradual geometry, abrupt load-bearing" finding has this flavor — the representation is assembled smoothly,
-and then, at a threshold, it "stands on its own" as a causal controller of behavior. Whether this is a true
-emergent transition (a keystone moment) or just the point where a smoothly-growing signal crosses a
-detection threshold is exactly the question a rigorous emergence analysis would settle — and which the
-program has not yet run.</p></div>
+and then, at a threshold, it "stands on its own" as a causal controller of behavior. The registered
+coupling analysis now favors the deflationary reading within its synthetic scope: a smoothly changing
+quantity crosses a functional threshold. Matched-budget hysteresis still shows that the route to a coupling
+value matters, but path dependence is not the same claim as a discontinuous phase transition.</p></div>
 
 <div class="warn"><span class="boxtitle">Tension — is it emergence, or supervised feature selection?</span>
 <p>Here is the criticism a complexity scientist must press, and it is the same one that stalks the whole
@@ -524,20 +529,21 @@ the consequence axis because the designer's loss function <em>selects</em> for i
 representation learning doing exactly what it is told, not order arising spontaneously from the system's
 own dynamics. The program's own steelman of this objection ("you trained a classifier to use a direction;
 of course ablating it matters — this is not emergence, it is supervised feature selection") is not fully
-rebutted. The program's attempts to make concern <em>self-organize</em> from the agent's own experience,
-without a supervised target, only partly succeed. So the strong, wonderful form of self-organization — order
-arising from the system's <em>own</em> stakes and interactions — is, at the frontier, demonstrated for easy
-cases and open for hard ones. The program has genuine reorganization-under-objective; whether it has
-genuine <em>self</em>-organization is precisely what remains to be shown.</p></div>
+rebutted. The initial joint REINFORCE attempt failed on XOR, but later staged learning from observed ΔE
+reached a +1.84 reward-geometry gap and ΔE-argmax planning reached 50/50 without optimal-action labels.
+That closes the old "hard XOR remains unsolved" status, while uniform exploration, observed ΔE, staged
+modules, and toy scale keep the result below the stronger claim of order arising from the system's own
+stakes. Yoked, shuffled, wrong-variable, and shifted-viability controls remain decisive.</p></div>
 
 <h3>4.3 What to carry forward</h3>
 <p class="small">Self-organization is order arising from a system's own dynamics without a designer;
 emergence is higher-level structure not present in the parts; the program's cleanest instance is "objects
-form from concern" (dramatic measured reorganization around the consequence axis) plus the emergence-
-flavored "gradual geometry, abrupt load-bearing" onset; and the central tension is that the cleanest
-demonstrations use a <em>supervised</em> objective, so they show reorganization-under-a-chosen-rule, while
-genuine <em>self</em>-organization from the system's own stakes is only partly achieved — the deflationary
-"supervised feature selection" reading is not yet fully answered.</p>
+form from concern" (dramatic measured reorganization around the consequence axis), while the formerly
+"abrupt" passive→active onset is now bounded as a continuous synthetic crossover with positive path
+dependence; and the central tension is that the cleanest demonstrations use a <em>supervised</em> objective,
+so they show reorganization-under-a-chosen-rule, while genuine <em>self</em>-organization from the system's
+own stakes is only partly achieved — the deflationary "supervised feature selection" reading is not yet
+fully answered.</p>
 
 <h1 class="part"><span class="kicker">Part II</span>Structure and Constraint</h1>
 
@@ -671,21 +677,18 @@ power law is such a characteristic move.</p></div>
 <p>The program's constraint-derived power law makes a specific numerical prediction — an exponent of 0.5
 for a two-dimensional system. When measured, the exponent came out ≈ 0.30 instead, with tight confidence
 intervals. The prediction was <em>falsified</em>. And this is where the program does its best
-complexity science, because the falsification is <em>informative</em>: inverting the measured exponent
-implies the system was behaving as if it were effectively <em>one</em>-dimensional, not two — its
-resolution allocation had collapsed onto essentially a single direction. A constraint-based prediction,
-honestly tested, revealed a hidden dimensional collapse precisely because it was specific enough to be
-wrong.</p>
+complexity science, because the falsification is <em>informative</em>: under the derived model, inverting
+the measured exponent is consistent with d<sub>eff</sub> ≈ 0.87–0.90. That is a model-dependent effective-
+dimension hypothesis, not a direct observation that the representation collapsed onto one direction.
+An independent dimension estimator and the frozen shape/capacity sweep are still required.</p>
 
 <div class="prog"><span class="boxtitle">In the program — effective dimension as an order parameter</span>
-<p>The quantity the falsification revealed — <strong>effective dimension</strong> — is exactly the kind of
+<p>The quantity suggested by the model-based interpretation — <strong>effective dimension</strong> — is the kind of
 <em>order parameter</em> that complexity science prizes: a single number summarizing how a system's order
 is organized (here, how many directions it effectively uses). That a finite-capacity code, meant to tile a
-two-dimensional space, instead concentrated its resolution as if in one dimension is a genuine, quantitative
-finding about how constraint shapes self-organized structure — a dimensional collapse under a capacity
-budget. It is the program's cleanest constraint-based result, and it works precisely because it treats a
-system property (effective dimension) as a measurable order parameter and lets a constraint-derived
-prediction be wrong about it. This is how constraint-based complexity science is supposed to go.</p></div>
+two-dimensional space, instead fit an exponent consistent with about one effective dimension is a useful
+hypothesis about how constraint shapes structure. The measured result is the falsified exponent; effective
+dimension is an inferred order parameter whose interpretation has not yet been independently validated.</p></div>
 
 <div class="warn"><span class="boxtitle">Tension — one order parameter, one point, three seeds</span>
 <p>The rigorous caveat: a complexity scientist studying constraint would want the <em>whole curve</em>, not
@@ -700,8 +703,8 @@ full picture of how constraint governs the system's dimensional organization. Ch
 <p class="small">Constraint is generative, not merely limiting — order is what constraints produce by ruling
 out alternatives, and finite capacity is the program's central ordering constraint; the capacity budget
 <em>derives</em> a power-law resolution allocation (the constraint fixing the geometry); the prediction was
-productively falsified (0.30 not 0.50), revealing a dimensional collapse to effective-dimension ≈ 1 — a
-genuine constraint-based finding using effective dimension as an order parameter; and the improvement is to
+productively falsified (0.30 not 0.50), suggesting effective-dimension ≈ 0.87–0.90 under the fitted model;
+the improvement is to validate dimension independently and
 sweep the control parameters and map the whole order-parameter curve rather than measure one point.</p>
 
 <h2 class="chapter"><span class="chnum">Chapter 7</span>Autopoiesis and Self-Maintenance</h2>
@@ -730,9 +733,9 @@ to maintain <em>itself</em>.</p></div>
 <p>The program's real, measured contribution here is not full autopoiesis but its cybernetic ancestor:
 <strong>ultrastability</strong>, Ashby's idea that a system knocked out of its viable range reorganizes
 its own parameters until it returns (history primer, Chapter 2). The program damages a trained system with
-random noise and lets it run a few self-supervised updates; it climbs back to near its original competence,
-"using its own ongoing input stream to re-establish a preferred state." This is a genuine, quantitative
-demonstration of self-repair — a system restoring its own function after perturbation. And, connecting to
+random noise and applies labeled gradient updates on held-out paraphrases; it climbs back to near its
+original competence. This is a quantitative demonstration of externally optimized functional repair — a
+system restoring function after perturbation — rather than self-supervised or autopoietic repair. And, connecting to
 Chapter 5, the program shows the <em>capacity</em> for this repair scales with lower-layer slack, exactly
 as the hierarchy theory predicts. As a measurement of ultrastable self-repair, this is solid systems
 science.</p>
@@ -774,10 +777,10 @@ systems-theoretic framing of what an agent is <em>for</em>.</p>
 
 <p>Assemble Chapters 2, 3, 5, and 7 and the program's picture of agency-as-self-maintenance comes into
 focus, along with exactly how far it reaches. An agent is a homeostat (Chapter 2) whose representation can
-become a self-defending attractor (Chapter 3), whose adaptive capacity is provisioned hierarchically
-(Chapter 5), and which can repair itself ultrastably after damage while keeping a viability buffer (this
-chapter). That is a substantial, coherent, and largely-measured account of a <em>self-regulating,
-self-repairing</em> system. What it is <em>not</em> yet is an account of a <em>self-producing</em> one —
+become a load-bearing, perturbation-resistant controller (Chapter 3), whose adaptive capacity is
+provisioned hierarchically (Chapter 5), and whose damaged function can be restored by labeled gradient
+updates while keeping a viability buffer (this chapter). That is a substantial account of regulation and
+externally optimized repair. What it is <em>not</em> yet is autonomous self-repair or a <em>self-producing</em> system —
 the operational closure that would make it autopoietic in the full sense. The program has climbed from
 homeostasis through ultrastability toward autopoiesis and stopped one genuine step short, which is both an
 honest limit and a clear direction for the future.</p>
@@ -808,12 +811,12 @@ metaphor</em>. Here is that scorecard, assembled from the previous chapters.</p>
 <table class="plain">
 <tr><th>Concept</th><th>Status in the program</th></tr>
 <tr><td><strong>Homeostasis / feedback</strong></td><td><b>Earned.</b> The decaying-energy agent is a genuine, measured homeostat; two-variable versions add real competing viability needs.</td></tr>
-<tr><td><strong>Ultrastable self-repair</strong></td><td><b>Earned.</b> Damaged networks measurably restore function via self-supervised updates; repair capacity scales with slack as predicted.</td></tr>
+<tr><td><strong>Ultrastable repair analogue</strong></td><td><b>Earned at the functional tier.</b> Damaged networks restore function via labeled test-time gradient updates; repair capacity is ordered by slack, but autonomous self-repair is not shown.</td></tr>
 <tr><td><strong>Self-organization (of representations)</strong></td><td><b>Partly earned.</b> Dramatic measured reorganization around the consequence axis — but under a <em>supervised</em> objective, so "self" is contested.</td></tr>
-<tr><td><strong>Constraint-driven order / effective dimension</strong></td><td><b>Earned as a result, incompletely characterized.</b> A real, falsified power law revealing dimensional collapse — but measured at one point, not swept.</td></tr>
+<tr><td><strong>Constraint-driven order / effective dimension</strong></td><td><b>Exponent earned; dimension inferred.</b> The power-law prediction is falsified, while dimensional collapse is a model-based interpretation awaiting an independent estimator and frozen sweep.</td></tr>
 <tr><td><strong>Hierarchy (Law of the Stack)</strong></td><td><b>Ordering earned, bound asserted.</b> The predicted ordering (slack below → adaptation above) holds; the exact quantitative law is untested.</td></tr>
 <tr><td><strong>Attractors (in agents)</strong></td><td><b>Attractor-<em>like</em>, not established.</b> Perturbation-immunity measured; but no basin geometry, stability analysis, or return dynamics.</td></tr>
-<tr><td><strong>Emergence / phase transition</strong></td><td><b>Gestured at.</b> The "abrupt load-bearing onset" is suggestive; no order-parameter discontinuity or bifurcation analysis establishes a true transition.</td></tr>
+<tr><td><strong>Emergence / phase transition</strong></td><td><b>Bifurcation not supported; path dependence measured in the synthetic tranche.</b> The registered sweep fails its bifurcation gate without positively adjudicating a smooth crossover. Matched-budget hysteresis passes, establishing path dependence in that harness without establishing a general phase transition.</td></tr>
 <tr><td><strong>Autopoiesis / operational closure</strong></td><td><b>Aspirational.</b> Repair is supervised weight-tuning, not self-production; the strict criterion is not met.</td></tr>
 <tr><td><strong>Criticality / self-organized criticality</strong></td><td><b>Not claimed.</b> No critical exponents, avalanches, or edge-of-chaos results — and the program is right not to claim them.</td></tr>
 <tr><td><strong>Distributed / collective systems</strong></td><td><b>Single-agent.</b> The virtual-governor idea is framed well but tested on one agent; genuine many-part coordination is absent.</td></tr>
@@ -834,16 +837,20 @@ absent, because there is usually only one "part." Much of the program's systems 
 control, collective coding, emergence) describes phenomena that need many agents, applied to systems that
 have one.</p></div>
 
-<div class="warn"><span class="boxtitle">Limitation 2 — "emergence" and "phase transition" are asserted, not demonstrated</span>
+<div class="warn"><span class="boxtitle">Limitation 2 — path dependence is measured; a phase transition is not</span>
 <p>The program's grand question is about a <em>transition</em> (passive → active), and it uses attractor
-and emergence language freely. But it never runs the analysis that would <em>establish</em> a transition:
-sweeping a control parameter (coupling strength, capacity, decay rate) and showing an <em>order parameter</em>
-jump discontinuously at a critical value; mapping a bifurcation; testing for hysteresis (does the system
-stay active if you reverse the coupling?). The "abrupt load-bearing onset" is the closest it comes, and it
-is suggestive — but a sharp change during a training trajectory is not the same as a phase transition in a
-control parameter. Whether the passive→active threshold is a genuine bifurcation or a feature of how
-gradient descent installs a capability is, rigorously, still open — and it is the program's most important
-unanswered complexity question.</p></div>
+and emergence language freely. It has now run a bounded version of the missing analysis: eleven action-
+coupling values, identical seeded data and initialization, two bottleneck architectures, five seeds, five
+order parameters, and held-out comparison of segmented against smooth curves. The bifurcation gate failed:
+only causal specificity cleared the segmented-model threshold, critical estimates were stable in 70% of
+architecture/seed cells rather than the required 80%, and two order parameters did not co-locate. The honest
+label is therefore <strong>bifurcation not supported</strong>; the run did not separately preregister a
+positive smooth-crossover criterion. A separate fixed-length forward/reverse test did pass its matched-
+budget hysteresis gate using a five-seed cluster bootstrap that retains both architectures (loop area
+0.0447, six contiguous significant continuation couplings and four under washout, clear reinitialization
+control). That positive result earns synthetic
+<strong>path dependence</strong>, but not a discontinuous phase transition, critical point, or dynamical
+attractor.</p></div>
 
 <div class="warn"><span class="boxtitle">Limitation 3 — the self-organization is objective-driven</span>
 <p>As Chapter 4 pressed: the cleanest "self-organization" runs under a supervised objective, so the
@@ -857,9 +864,12 @@ language implies.</p></div>
 <h3>8.3 What the program gets right, kept in view</h3>
 
 <p>The scorecard should not read as dismissal. The program earns more systems-theory content than most
-machine-learning work attempts: a real homeostat, measured ultrastable repair, a hierarchy law confirmed in
-its ordering, a constraint-derived power law honestly falsified into a dimensional-collapse finding, and a
-carefully-framed distributed-control idea. Crucially, the program is <em>disciplined about the difference</em>
+machine-learning work attempts: a real homeostat, measured labeled repair, a hierarchy law confirmed in
+its ordering, and a constraint-derived power law honestly falsified, with effective dimension proposed as
+a model-based interpretation rather than directly measured, plus a
+carefully-framed distributed-control idea. It has also converted a proposed bifurcation into an informative
+negative — bifurcation not supported — while preserving the positive matched-budget path-dependence result.
+Crucially, the program is <em>disciplined about the difference</em>
 — it does not claim criticality it hasn't shown, it flags the virtual governor as "scaffold," it labels
 its repair as not-yet-autopoietic, it publishes the falsified exponent. A less careful program would drape
 all this in unearned "emergence" and "self-organizing complexity" language; this one mostly tells you which
@@ -869,11 +879,12 @@ enough to make it possible.</p>
 <h3>8.4 What to carry forward</h3>
 <p class="small">Sort the systems language into earned (homeostasis, ultrastable repair), partly-earned
 (self-organization under a supervised objective, constraint-driven order measured at one point, the Law of
-the Stack's ordering), attractor-like-but-unestablished, gestured-at (emergence/phase transition), and
-aspirational (autopoiesis) — with criticality rightly not claimed and the systems mostly single-agent; the
-three deepest limits are single-agent scope, asserted-not-demonstrated transitions, and objective-driven
-rather than genuine self-organization; and the program's saving grace is that it is disciplined enough about
-these distinctions to let you draw the scorecard at all.</p>
+the Stack's ordering), attractor-like-but-unestablished, bifurcation-not-supported with path dependence in
+one synthetic harness (not a phase transition), and aspirational (autopoiesis) — with criticality rightly not
+claimed and the systems mostly single-agent; the three deepest limits are single-agent scope, the absence
+of a general transition or mapped attractor, and objective-driven rather than genuine self-organization;
+and the program's saving grace is that it is disciplined enough about these distinctions to let you draw
+the scorecard at all.</p>
 
 <h2 class="chapter"><span class="chnum">Chapter 9</span>How to Strengthen It as Complexity Science</h2>
 
@@ -884,21 +895,23 @@ ahead of its results is a place where a specific, runnable experiment would eith
 honestly retire it. This closing chapter lays out those moves — the ones that would turn the program from a
 study that <em>uses</em> complexity vocabulary into one that <em>establishes</em> complexity results.</p>
 
-<h3>9.2 Establish the transition, or find there isn't one</h3>
+<h3>9.2 The registered answer: bifurcation not supported; path dependence</h3>
 
-<div class="prog"><span class="boxtitle">The bifurcation experiment</span>
-<p>The single highest-value move: turn the passive→active "threshold" from a metaphor into a measured
-transition. The recipe is standard complexity science. Pick a <strong>control parameter</strong> — the
-strength of the action-coupling is the natural one — and sweep it continuously from zero upward. Track an
-<strong>order parameter</strong> — the causal load-bearing, or the perturbation-immunity, or the viability
-buffer. Then look for the signatures of a genuine transition: does the order parameter jump
-<em>discontinuously</em> at a critical coupling value (a bifurcation), or does it rise smoothly (just a
-threshold-crossing of a continuous quantity)? Test for <strong>hysteresis</strong>: once the system is
-"active," does reversing the coupling bring it straight back to passive, or does it stay active (a
-memory, a true regime)? These experiments would <em>settle</em> whether the program's central claim — that
-agency emerges at a threshold — describes a real phase transition or a gradual installation. Either answer
-is a genuine result, and running this is the most important thing the program could do as complexity
-science.</p></div>
+<div class="prog"><span class="boxtitle">The coupling experiment, now run</span>
+<p>The highest-value proposed test has a first registered answer. A local-CPU synthetic harness sweeps
+action coupling from zero to one, measures causal specificity, perturbation failure, viability buffer,
+geometry gap, and return, and compares discontinuous segmented curves against smooth nulls on held-out
+seeds. The discontinuity criteria do not replicate across enough order parameters or seed cells, so the
+frozen verdict is <strong>bifurcation not supported</strong>; no separate positive crossover criterion was
+registered. The complementary hysteresis test
+uses fixed-length monotone paths so forward and reverse cells at each target coupling receive exactly the
+same total updates. Its loop is nonzero across a contiguous interval, survives symmetric washout, and
+vanishes under reinitialization; the registered gate therefore supports <strong>path dependence</strong>.
+These two verdicts belong together: a discontinuous transition was not established, yet the learned state
+depends on how the system arrived there. The result is deliberately narrow — a controlled synthetic
+mechanism diagnostic, not evidence for biological criticality, foundation-model generality, or a mapped
+dynamical attractor. The next test is to preregister a positive smooth-crossover criterion and ask whether
+the response curve and memory survive new substrates and crossed control parameters.</p></div>
 
 <h3>9.3 Go multi-agent</h3>
 
@@ -915,14 +928,16 @@ collective frontier.</p>
 
 <h3>9.4 Measure order parameters as curves, not points</h3>
 
-<p>Wherever the program has a good order parameter — effective dimension, the cluster gap, the viability
-buffer, the toroidal signature — it should measure the <em>whole curve</em> of how that parameter responds
-to its control parameters, not a single point. The falsified power-law exponent (Chapter 6) is the model:
+<p>The synthetic coupling study now demonstrates the value of measuring a <em>whole curve</em>: it turns an
+apparently abrupt endpoint contrast into a failed bifurcation gate and separately exposes path dependence,
+while leaving a positive smooth-crossover test open. Wherever the program has another good order parameter — effective dimension, the cluster gap,
+the viability buffer, the toroidal signature — it should do the same. The falsified power-law exponent
+(Chapter 6) is the model:
 it became informative by being a specific number. But one number at one setting is a data point; sweeping
 the capacity, the value-field shape, and the concern amplitude, and mapping how the effective dimension
 responds, would turn that single falsification into a <em>characterized relationship</em> — a real law of
 how constraint governs the system's dimensional organization. Complexity science lives in these
-response-curves, and the program mostly measures endpoints.</p>
+response-curves, and outside the new coupling harness the program still mostly measures endpoints.</p>
 
 <h3>9.5 Earn the deeper words</h3>
 
@@ -954,17 +969,19 @@ lineage, and the program's own energy-based homeostat is the natural place to st
 
 <h3>9.7 The bottom line for a complexity reader</h3>
 
-<p>Read as complexity science, the program is a serious, disciplined study of small self-regulating,
-self-repairing systems under constraint — with genuine measured results (homeostasis, ultrastable repair, a
-constraint-derived dimensional collapse, a confirmed hierarchy ordering) and an honest awareness of where
+<p>Read as complexity science, the program is a serious, disciplined study of small self-regulating
+systems under constraint — with measured results (homeostasis, labeled functional repair, a falsified
+constraint-derived exponent, a confirmed hierarchy ordering) and a model-based effective-dimension
+hypothesis awaiting direct validation, alongside an honest awareness of where
 its bolder language (emergence, phase transition, autopoiesis, distributed control) outruns its evidence.
-It sits at the simple, single-agent end of the field, and its grand claim — the emergence of agency at a
-threshold — remains, by the field's own standards, framed rather than established. But the path to
-establishing it is clear and mostly runnable: sweep the control parameters, go multi-agent, map the order
-parameters as curves, earn the deep words one measurement at a time, and reach for the far-from-equilibrium
-framing its energy budgets already invite. The program has the right instincts and the right vocabulary; it
-now needs the specific transition-and-order-parameter experiments that would let it speak the language of
-complexity science not by borrowing it, but by having earned it.</p>
+It sits at the simple, single-agent end of the field, and its first registered coupling map supports a
+failed bifurcation gate plus optimization-path memory rather than the stronger claim that agency emerges
+at a critical point. The path forward is clear and mostly runnable: preregister a positive crossover test,
+cross additional control parameters,
+replicate the curve and hysteresis on new substrates, go multi-agent, earn the deep words one measurement
+at a time, and reach for the far-from-equilibrium framing its energy budgets already invite. The program
+has the right instincts and now one properly bounded transition diagnostic; it should build complexity
+science by preserving that negative bifurcation verdict alongside its positive path-dependence result.</p>
 
 <div class="pump"><span class="boxtitle">A closing thought</span>
 <p>Perhaps the most complexity-scientific thing about this program is not any result but its founding
@@ -978,11 +995,13 @@ useful place to stand. It is the place from which the hardest question in the fi
 becomes active life, might finally be asked with instruments rather than only with words.</p></div>
 
 <h3>9.8 What to carry forward</h3>
-<p class="small">To strengthen the program as complexity science: run the bifurcation experiment (sweep
-coupling, watch for an order-parameter jump and hysteresis) to establish or retire the passive→active
-transition; go multi-agent to exhibit real emergent coordination; measure order parameters as full curves,
-not points; earn the deep words (genuine self-production for autopoiesis, real basin/stability analysis for
-attractors, the quantitative Law of the Stack); and add the far-from-equilibrium (Prigogine) framing its
-energy budgets already invite — turning borrowed complexity vocabulary into earned complexity results.</p>
+<p class="small">To strengthen the program as complexity science: preserve the registered synthetic result
+as bifurcation not supported plus matched-budget path dependence, then preregister a positive crossover
+criterion and test whether the response curve and memory survive crossed controls and new substrates; go
+multi-agent to exhibit real emergent coordination; measure order parameters as full
+curves, not points; earn the deep words (genuine self-production for autopoiesis, real basin/stability
+analysis for attractors, the quantitative Law of the Stack); and add the far-from-equilibrium (Prigogine)
+framing its energy budgets already invite — turning borrowed complexity vocabulary into earned complexity
+results.</p>
 
 </body></html>

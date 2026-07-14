@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-derived-experiments.example/schemas/program_evidence_registry.schema.json",
+  "title": "Program evidence registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_by", "statuses", "records"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "generated_by": {
+      "type": "string",
+      "minLength": 1
+    },
+    "statuses": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1
+      },
+      "propertyNames": {
+        "enum": ["pass", "fail", "inconclusive", "not_run", "superseded", "retired"]
+      },
+      "minProperties": 6,
+      "maxProperties": 6
+    },
+    "records": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_record"
+      }
+    }
+  },
+  "$defs": {
+    "evidence_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_id", "experiment", "status", "claim_ids", "artifact_refs"],
+      "properties": {
+        "evidence_id": {
+          "type": "string",
+          "pattern": "^EVID-[A-Z0-9][A-Z0-9_-]{2,63}$"
+        },
+        "experiment": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pass", "fail", "inconclusive", "not_run", "superseded", "retired"]
+        },
+        "claim_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_-]{2,63}$"
+          },
+          "uniqueItems": true
+        },
+        "artifact_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "gate_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_-]{2,63}$"
+          },
+          "uniqueItems": true
+        },
+        "supersedes": {
+          "type": ["string", "null"],
+          "pattern": "^EVID-[A-Z0-9][A-Z0-9_-]{2,63}$"
+        },
+        "source_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

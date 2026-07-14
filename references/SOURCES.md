@@ -47,6 +47,19 @@ The downloaded PDFs, HTML snapshots, and extracted full text are intentionally l
 ## AI Science & Methodology
 
 - **Position: The Age of AI Agents Demands a New Scientific Paradigm to Sustain Trustworthy Science** — Belinda Mo, ICML 2026 (Long Horizon Research). PDF local-only at `references/papers/mo_ai_agents_trustworthy_science_2026.pdf` (text at `references/text/`). Argues that autonomous research agents widen the *verification gap* (output vs. our ability to check it) by magnitudes, breaking science's social backstops. Proposes verification infrastructure built on three pillars: **observable-by-default workflows, scalable verification, and clear attribution**, against three failure modes — observability (can we see what happened?), attribution (who is responsible?), reproducibility (can we verify?). **Directly relevant to this repo:** its experiments are agent-generated, so the repo should be observable-by-default (pre-registration, committed result reports, gitignored raw + committed summaries, unit tests pinning results, honest negatives — mostly already in place) with explicit provenance/attribution per experiment. Motivates a lightweight per-experiment verification/provenance card (generator + model, exact command/seed/config, gates verified, raw-vs-summary, limitations).
+- **Execution-grounded evaluation** — Bai et al., “The Story is Not the Science” (ICML 2026 AI4Science workshop): https://openreview.net/forum?id=cmXVfGR44k — supports checking code, data, and experimental process rather than narrative alone; treated as a bounded workshop result, not proof that automated review is sufficient.
+- **Preregistration** — Nosek et al., “The Preregistration Revolution,” PNAS 2018: https://doi.org/10.1073/pnas.1708274114 — used to preserve the prediction/postdiction distinction and immutable original gates.
+- **Bootstrap** — Efron, “Bootstrap Methods: Another Look at the Jackknife,” Annals of Statistics 1979: https://doi.org/10.1214/aos/1176344552 — source for resampling under an explicit sampling model; does not justify treating resamples as new independent runs.
+- **Small-sample design** — Gelman & Carlin, “Beyond Power Calculations,” 2014: https://doi.org/10.1177/1745691614551642 — motivates Type-S/Type-M and precision simulation rather than a universal seed floor.
+- **Analytic robustness** — Silberzahn et al., “Many Analysts, One Data Set,” 2018: https://doi.org/10.1177/2515245917747646 — motivates blinded independent analysis paths for theory-changing results.
+
+## Philosophy of Mind, Content, and Kinds
+
+- **Structuring versus triggering causes** — Fred Dretske, *Explaining Behavior* (1988): https://mitpress.mit.edu/9780262540612/explaining-behavior/ — sharpens availability versus causal use; it does not make arbitrary activation patches valid structuring-cause tests.
+- **Biosemantics and proper function** — Ruth Garrett Millikan, “Biosemantics” (1989): https://doi.org/10.2307/2027123 and “In Defense of Proper Functions” (1989): https://doi.org/10.1086/289488 — motivates producer/consumer, normal-use, malfunction, and misrepresentation controls for “objects from concern.”
+- **Homeostatic property-cluster kinds** — Richard Boyd, “Homeostasis, Species, and Higher Taxa” (1999 draft): https://www.joelvelasco.net/teaching/systematics/boyd%2099%20-%20Homeostasis%20Species%20and%20Higher%20Taxa%20%28draft%29.pdf — distinguishes projectible, mechanism-maintained clusters from useful experimenter labels.
+- **Real patterns** — Daniel Dennett, “Real Patterns” (1991): https://doi.org/10.2307/2027085 — motivates rival-pattern, compression, and held-out prediction tests for model-relative realism.
+- **Self-model theory** — Thomas Metzinger, *Being No One* (2003): https://mitpress.mit.edu/9780262633086/being-no-one/ — informs computational self-model comparisons while reinforcing the firewall against phenomenal-self claims.
 
 ## Local User-Provided Files
 

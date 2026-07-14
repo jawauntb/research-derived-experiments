@@ -1,5 +1,15 @@
 # Research TODO
 
+## Primer-derived execution contracts (2026-07-14)
+
+- [x] Add one canonical program evidence registry with explicit gate/status states.
+- [x] Add claim-to-evidence linkage and fail-closed validators for stable claim tiers.
+- [x] Add a versioned experiment manifest schema, validator, and starter template.
+- [x] Correct all six primer HTML titles and PDF metadata; rebuild PDFs from corrected HTML.
+- [x] Correct the mathematics primer's Lagrangian/KKT signs, VOI sign, and discount arithmetic with regression tests.
+- [ ] Migrate experiment families to structured manifests and replace prose-only provenance extraction.
+- [ ] Add CI lanes for manifest coverage, public-artifact envelopes, and clean-clone reproduction.
+
 ## Now
 
 - [x] Checkpoint the positive-family frontier pause state and exact next replication commands.
@@ -203,3 +213,11 @@ toroidal codes and larger-arena OOD, but weakness does not govern topology or me
 - [ ] Can weakness maximization be measured in activation spaces?
 - [ ] Can discovery be detected as a regime transition rather than search?
 - [ ] What ethical threshold follows if self-maintaining geometry appears in artificial systems?
+
+## Primer-derived research backlog
+
+The six primer reviews are now tracked as page-anchored, gated TODOs rather than
+free-floating suggestions. Start at [the backlog index](docs/primers/backlogs/README.md),
+then work each article list in its own source order. The index records the
+recommended cross-article sequence and the status (`new`, `partial`, or
+`existing`) of every item.

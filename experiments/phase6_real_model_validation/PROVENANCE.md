@@ -10,7 +10,8 @@
 
 ## Verification
 - Pre-registration: _none_
-- Result reports (1):
+- Result reports (2):
+  - `experiments/phase6_real_model_validation/results/l4_full_suite_2026_07_06.json`
   - `experiments/phase6_real_model_validation/results/phase6_real_model_suite_2026_07_06.md`
 
 Key verification signals (from the latest result report):
@@ -20,6 +21,6 @@ Key verification signals (from the latest result report):
   - Overall: **PASS**
 
 ## Artifacts
-- Committed: `experiments/phase6_real_model_validation/results/phase6_real_model_suite_2026_07_06.md`, `papers/phase6_real_model_validation/paper.md`
+- Committed: `experiments/phase6_real_model_validation/results/l4_full_suite_2026_07_06.json`, `experiments/phase6_real_model_validation/results/phase6_real_model_suite_2026_07_06.md`, `papers/phase6_real_model_validation/paper.md`
 - Local-only: artifacts/ (gitignored raw outputs; see result reports for summaries)
 - Paper: `papers/phase6_real_model_validation/paper.md`

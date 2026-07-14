@@ -16,15 +16,25 @@ Run:  python scripts/gen_provenance.py
 
 from __future__ import annotations
 
+import argparse
 import json
 import re
 from pathlib import Path
+
+try:
+    from scripts.validate_claim_registry import validate as validate_claim_registry
+    from scripts.validate_evidence_registry import validate as validate_evidence_registry
+except ModuleNotFoundError:  # Direct execution: python scripts/gen_provenance.py
+    from validate_claim_registry import validate as validate_claim_registry
+    from validate_evidence_registry import validate as validate_evidence_registry
 
 ROOT = Path(__file__).resolve().parent.parent
 EXP = ROOT / "experiments"
 PAPERS = ROOT / "papers"
 DOCS = ROOT / "docs"
 SITE = ROOT / "sites" / "reafference_attribution"
+PROGRAM_EVIDENCE = DOCS / "program_evidence_registry.json"
+CLAIMS = DOCS / "claim_registry.json"
 
 ATTRIBUTION = (
     "Human author & director: Jawaun Brown. "
@@ -62,15 +72,101 @@ def first_match(patterns, *texts):
     return None
 
 
+NON_EXPERIMENT_DIRS = {"common"}
+
+
 def experiment_dirs():
-    return sorted(d for d in EXP.iterdir() if d.is_dir())
+    return sorted(d for d in EXP.iterdir() if d.is_dir() and d.name not in NON_EXPERIMENT_DIRS)
+
+
+def _manifest_artifact_paths(d: Path) -> list[tuple[str, Path]]:
+    """Return existing public artifacts declared by an experiment manifest."""
+
+    manifest_path = d / "experiment_manifest.json"
+    try:
+        payload = json.loads(manifest_path.read_text())
+    except (OSError, json.JSONDecodeError):
+        return []
+
+    artifacts = payload.get("artifacts", [])
+    if not isinstance(artifacts, list):
+        return []
+
+    declared: list[tuple[str, Path]] = []
+    for artifact in artifacts:
+        if not isinstance(artifact, dict) or artifact.get("public") is not True:
+            continue
+        kind = artifact.get("kind")
+        relative = artifact.get("path")
+        if not isinstance(kind, str) or not isinstance(relative, str):
+            continue
+        path = ROOT / relative
+        if path.is_file():
+            declared.append((kind, path))
+    return declared
+
+
+def _dedupe_paths(paths: list[Path]) -> list[Path]:
+    return sorted(dict.fromkeys(paths))
+
+
+def _package_preregistrations(d: Path) -> list[Path]:
+    return sorted(
+        path
+        for path in d.iterdir()
+        if path.is_file()
+        and path.suffix.lower() in {".json", ".md"}
+        and "prereg" in path.stem.lower()
+    )
+
+
+def registry_summary() -> dict:
+    """Expose structured claim/evidence coverage beside the legacy manifest.
+
+    The experiment cards remain backward-compatible while the new registries
+    become the canonical place for adjudicated claim status.  Missing registries
+    are reported explicitly so a partial checkout cannot look complete.
+    """
+
+    summary = {
+        "program_evidence_registry": str(PROGRAM_EVIDENCE.relative_to(ROOT)),
+        "claim_registry": str(CLAIMS.relative_to(ROOT)),
+        "n_evidence_records": 0,
+        "n_claims": 0,
+    }
+    try:
+        evidence = json.loads(PROGRAM_EVIDENCE.read_text())
+        summary["n_evidence_records"] = len(evidence.get("records", []))
+    except (OSError, json.JSONDecodeError):
+        summary["program_evidence_registry"] = None
+    try:
+        claims = json.loads(CLAIMS.read_text())
+        summary["n_claims"] = len(claims.get("claims", []))
+    except (OSError, json.JSONDecodeError):
+        summary["claim_registry"] = None
+    return summary
 
 
 def collect(d: Path) -> dict:
     name = d.name
     readme = d / "README.md"
     readme_txt = read(readme)
-    results = sorted((d / "results").glob("*.md")) if (d / "results").exists() else []
+    manifest_artifacts = _manifest_artifact_paths(d)
+    declared_results = [
+        path
+        for kind, path in manifest_artifacts
+        if kind in {"summary", "paper"}
+    ]
+    discovered_results = (
+        [
+            path
+            for path in (d / "results").iterdir()
+            if path.is_file() and path.suffix.lower() in {".json", ".md"}
+        ]
+        if (d / "results").exists()
+        else []
+    )
+    results = _dedupe_paths(declared_results + discovered_results)
     latest_result = read(results[-1]) if results else ""
     modal_scripts = sorted(d.glob("modal_*.py"))
     py_scripts = sorted(p for p in d.glob("*.py") if p.name != "__init__.py")
@@ -79,11 +175,21 @@ def collect(d: Path) -> dict:
 
     paper_dir = PAPERS / name
     paper = paper_dir / "paper.md"
-    prereg = paper_dir / "preregistration.md"
-    if name == "commitment_surface" and not prereg.exists():
-        followup_preregs = sorted(paper_dir.glob("*preregistration*.md"))
-        if followup_preregs:
-            prereg = followup_preregs[-1]
+    declared_preregs = [
+        path
+        for _, path in manifest_artifacts
+        if "prereg" in path.stem.lower()
+    ]
+    package_preregs = _package_preregistrations(d)
+    paper_preregs = sorted(
+        path
+        for path in paper_dir.glob("*prereg*")
+        if path.is_file() and path.suffix.lower() in {".json", ".md"}
+    )
+    prereg_candidates = list(
+        dict.fromkeys(declared_preregs + package_preregs + paper_preregs)
+    )
+    prereg = prereg_candidates[0] if prereg_candidates else None
 
     run_cmd = first_match(RUN_PATTERNS, readme_txt, modal_txt, latest_result, py_txt)
     seed = first_match(SEED_PATTERNS, modal_txt, py_txt, readme_txt)
@@ -109,7 +215,7 @@ def collect(d: Path) -> dict:
         n_modal_entrypoints=len(modal_scripts),
         n_scripts=len(py_scripts),
         paper=str(paper.relative_to(ROOT)) if paper.exists() else None,
-        preregistration=str(prereg.relative_to(ROOT)) if prereg.exists() else None,
+        preregistration=str(prereg.relative_to(ROOT)) if prereg else None,
         verification_signals=gate_lines,
         artifacts_committed=[str(r.relative_to(ROOT)) for r in results]
         + ([str(paper.relative_to(ROOT))] if paper.exists() else []),
@@ -158,24 +264,28 @@ def card_md(e: dict) -> str:
     return "\n".join(lines)
 
 
-def main():
+def generated_outputs() -> tuple[dict[Path, str], int]:
+    """Render every generated provenance artifact without mutating the tree."""
+
     manifest = []
+    outputs: dict[Path, str] = {}
     for d in experiment_dirs():
         e = collect(d)
-        (d / "PROVENANCE.md").write_text(card_md(e))
+        outputs[d / "PROVENANCE.md"] = card_md(e)
         manifest.append(e)
 
-    DOCS.mkdir(exist_ok=True)
     payload = dict(
         kind="experiment verification manifest",
         criteria="observability + attribution + reproducibility (Mo, ICML 2026)",
         attribution=ATTRIBUTION,
         n_experiments=len(manifest),
+        structured_registries=registry_summary(),
         experiments=manifest,
     )
-    (DOCS / "verification.json").write_text(json.dumps(payload, indent=2) + "\n")
+    verification_json = json.dumps(payload, indent=2) + "\n"
+    outputs[DOCS / "verification.json"] = verification_json
     if SITE.exists():
-        (SITE / "verification.json").write_text(json.dumps(payload, indent=2) + "\n")
+        outputs[SITE / "verification.json"] = verification_json
 
     # human index
     by_status = {}
@@ -194,6 +304,11 @@ def main():
         f"**{len(manifest)} experiments** — "
         + ", ".join(f"{k}: {len(v)}" for k, v in sorted(by_status.items())),
         "",
+        "**Structured adjudication.** "
+        f"`{PROGRAM_EVIDENCE.relative_to(ROOT)}` and `{CLAIMS.relative_to(ROOT)}` "
+        "are validated before publication; they carry stable evidence IDs, claim tiers, "
+        "and explicit `pass`/`fail`/`inconclusive`/`open` states.",
+        "",
         "| Experiment | Status | Reports | Paper | Provenance |",
         "| --- | --- | ---: | :--: | --- |",
     ]
@@ -204,10 +319,46 @@ def main():
             f"`experiments/{e['name']}/PROVENANCE.md` |"
         )
     idx.append("")
-    (DOCS / "verification.md").write_text("\n".join(idx))
-    print(f"[provenance] wrote {len(manifest)} PROVENANCE.md cards + "
-          f"docs/verification.{{json,md}} + site manifest")
+    outputs[DOCS / "verification.md"] = "\n".join(idx)
+    return outputs, len(manifest)
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="fail without writing when committed provenance outputs are stale",
+    )
+    args = parser.parse_args(argv)
+
+    validate_evidence_registry(PROGRAM_EVIDENCE)
+    validate_claim_registry(CLAIMS, PROGRAM_EVIDENCE)
+    outputs, count = generated_outputs()
+    if args.check:
+        stale = [
+            path
+            for path, expected in outputs.items()
+            if not path.exists() or path.read_text(errors="replace") != expected
+        ]
+        if stale:
+            print("[provenance] FAIL: generated outputs are stale")
+            for path in stale:
+                display = path.relative_to(ROOT) if path.is_relative_to(ROOT) else path
+                print(f"- {display}")
+            return 1
+        print(f"[provenance] PASS: {count} cards and verification indexes are current")
+        return 0
+
+    for path, content in outputs.items():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(content)
+    print(
+        f"[provenance] wrote {count} PROVENANCE.md cards + "
+        "docs/verification.{json,md} + site manifest"
+    )
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
