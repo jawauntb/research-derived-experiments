@@ -14,6 +14,7 @@ Writes:
 - papers/commitment_surface/figures/fig3_e3_readout_vs_patch.png
 - papers/commitment_surface/figures/fig4_e4_pythia_arms.png
 - papers/commitment_surface/figures/fig5_frame_taxonomy.png
+- papers/commitment_surface/figures/fig6_e7_selective_subspace.png
 - papers/commitment_surface/figures/summary_metrics.json
     (summary of headline numbers for the PDF builder)
 """
@@ -35,6 +36,10 @@ PAPER_FIG.mkdir(parents=True, exist_ok=True)
 
 E1_JSON = ROOT / "experiments" / "commitment_surface" / "results" / "e1_concern_weighted.json"
 E2E3_JSON = ROOT / "experiments" / "commitment_surface" / "results" / "e2_e3_neural.json"
+E7_JSON = (
+    ROOT / "experiments" / "commitment_surface" / "results"
+    / "e7_selective_subspace_2026_07_13.json"
+)
 E4_JSON_CANDIDATES = [
     ROOT
     / "experiments"
@@ -55,6 +60,10 @@ PALETTE = {
     "misspec": "#c0392b",
     "loss": "#7f8c8d",
     "truth": "#2f9e44",
+    "P_none": "#9aa6b2",
+    "P_ewc": "#e67e22",
+    "P_sub": "#2b6cb0",
+    "P_wrong": "#7f8c8d",
 }
 
 plt.rcParams.update({
@@ -320,6 +329,122 @@ def make_frame_taxonomy_figure() -> str:
     return str(path)
 
 
+def make_e7_figure(e7: dict) -> tuple[str, dict]:
+    """Show E7's integrity verdict or, for a valid run, its gate result."""
+    if e7["status"] == "invalid":
+        budget = e7["integrity"]["budget_detail"]
+        timing_rows = sorted(
+            budget["relative_wall_clock_ranges"],
+            key=lambda row: (
+                row["width"], row["seed_index"], row["boundary_index"]
+            ),
+        )
+        xs = list(range(1, len(timing_rows) + 1))
+        percentages = [100.0 * row["relative_wall_clock_range"] for row in timing_rows]
+        colors = ["#c53030" if not row["pass"] else "#718096" for row in timing_rows]
+        failed_groups = sum(not row["pass"] for row in timing_rows)
+        valid_streams = int(e7["valid_streams"])
+
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7.6, 3.5))
+        ax1.bar(xs, percentages, color=colors, width=0.78)
+        ax1.axhline(2.0, color="#2b6cb0", linestyle="--", linewidth=1.2)
+        ax1.set_xlabel("Matched width/seed/task group")
+        ax1.set_ylabel("Per-arm timing range (%)")
+        ax1.set_title("6/32 groups exceed the frozen 2% gate")
+
+        ax2.bar(
+            ["Matched\ngroups", "Streams"],
+            [len(timing_rows) - failed_groups, valid_streams],
+            color="#718096",
+            label="valid",
+        )
+        ax2.bar(
+            ["Matched\ngroups", "Streams"],
+            [failed_groups, int(e7["stream_count"]) - valid_streams],
+            bottom=[len(timing_rows) - failed_groups, valid_streams],
+            color="#c53030",
+            label="invalid",
+        )
+        ax2.set_ylim(0, 32)
+        ax2.set_ylabel("Count")
+        ax2.set_title("Budget failure withholds G1–G4")
+        ax2.legend(fontsize=8)
+
+        path = PAPER_FIG / "fig6_e7_selective_subspace.png"
+        _save(fig, path)
+        return str(path), {
+            "status": "invalid",
+            "scientific_disposition": "INVALID_NO_SCIENTIFIC_VERDICT",
+            "failed_matched_groups": failed_groups,
+            "total_matched_groups": len(timing_rows),
+            "valid_streams": valid_streams,
+            "max_relative_wall_clock_range": budget[
+                "max_relative_wall_clock_range"
+            ],
+        }
+
+    rows = {(row["width"], row["arm"]): row for row in e7["summary"]}
+    arms = ["P_none", "P_ewc", "P_sub", "P_wrong"]
+    labels = ["None", "EWC", "Compat\nsubspace", "Wrong\nsubspace"]
+    widths = [96, 128]
+    xs = list(range(len(arms)))
+    bar_width = 0.36
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7.6, 3.5))
+    for offset_index, width in enumerate(widths):
+        offset = (offset_index - 0.5) * bar_width
+        patch_values = [
+            rows[(width, arm)]["earlier_patch_ce_per_mass"] for arm in arms
+        ]
+        retained_values = [
+            rows[(width, arm)]["retained_ood_accuracy"] for arm in arms
+        ]
+        ax1.bar(
+            [x + offset for x in xs],
+            patch_values,
+            width=bar_width,
+            color=[PALETTE[arm] for arm in arms],
+            alpha=1.0 if width == 96 else 0.55,
+            edgecolor="#333333",
+            linewidth=0.5,
+            label=f"width {width}",
+        )
+        ax2.bar(
+            [x + offset for x in xs],
+            retained_values,
+            width=bar_width,
+            color=[PALETTE[arm] for arm in arms],
+            alpha=1.0 if width == 96 else 0.55,
+            edgecolor="#333333",
+            linewidth=0.5,
+            label=f"width {width}",
+        )
+
+    ax1.set_xticks(xs)
+    ax1.set_xticklabels(labels, fontsize=8)
+    ax1.axhline(0.0, color="#333333", lw=0.8)
+    ax1.set_ylabel("Earlier-task patch-CE / realized mass")
+    ax1.set_title("Mechanism metric separates P_sub")
+    ax1.legend(fontsize=7.5)
+
+    ax2.set_xticks(xs)
+    ax2.set_xticklabels(labels, fontsize=8)
+    ax2.set_ylim(0.45, 0.57)
+    ax2.set_ylabel("Retained earlier-task OOD accuracy")
+    ax2.set_title("Behavioral frontier does not separate")
+    ax2.legend(fontsize=7.5)
+
+    path = PAPER_FIG / "fig6_e7_selective_subspace.png"
+    _save(fig, path)
+    return str(path), {
+        "strict_verdict": e7["gate_analysis"]["strict_verdict"],
+        "gates": e7["gate_analysis"]["gates"],
+        "margins": e7["gate_analysis"]["margins"],
+        "checkpoint_count": e7["checkpoint_count"],
+        "stability_rows": e7["stability_rows"],
+    }
+
+
 def _repo_relative(path: str) -> str:
     return str(Path(path).relative_to(ROOT))
 
@@ -358,6 +483,14 @@ def main() -> None:
 
     fig5_path = make_frame_taxonomy_figure()
     summary["figures"]["fig5"] = _repo_relative(fig5_path)
+
+    if E7_JSON.exists():
+        e7 = json.loads(E7_JSON.read_text())
+        fig6_path, e7_meta = make_e7_figure(e7)
+        summary["figures"]["fig6"] = _repo_relative(fig6_path)
+        summary["headline"]["e7"] = e7_meta
+    else:
+        print(f"skip E7 fig (missing {E7_JSON})")
 
     out = PAPER_FIG / "summary_metrics.json"
     out.write_text(json.dumps(summary, indent=2))

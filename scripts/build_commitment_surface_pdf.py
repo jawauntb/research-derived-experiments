@@ -61,6 +61,10 @@ E1_VARIANCE_JSON = (
     / "e1_misspecification_variance.json"
 )
 E2E3_JSON = ROOT / "experiments" / "commitment_surface" / "results" / "e2_e3_neural.json"
+E7_JSON = (
+    ROOT / "experiments" / "commitment_surface" / "results"
+    / "e7_selective_subspace_2026_07_13.json"
+)
 E4_JSON_CANDIDATES = [
     ROOT
     / "experiments"
@@ -481,6 +485,39 @@ def build_appendix_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
              0.65 * inch],
         ))
 
+    if E7_JSON.exists():
+        e7 = json.loads(E7_JSON.read_text(encoding="utf-8"))
+        flow.append(Spacer(1, 8))
+        flow.append(para(
+            f"**A.2.5 E7.** Public-safe aggregates from "
+            f"{e7['valid_streams']} of 32 budget-valid streams. The timing "
+            "gate invalidates the confirmatory run; these rows are diagnostic, "
+            "not a scientific verdict. Raw checkpoints remain gitignored.",
+            st["Body"],
+        ))
+        rows = [[
+            "Width", "Arm", "Streams", "Retained OOD", "Patch/mass",
+            "Final OOD", "Eff. rank", "Dead frac",
+        ]]
+        rows.extend([
+            [
+                str(row["width"]),
+                row["arm"],
+                str(row["valid_streams"]),
+                _fmt(row["retained_ood_accuracy"], 4),
+                _fmt(row["earlier_patch_ce_per_mass"], 4),
+                _fmt(row["final_task_ood_accuracy"], 4),
+                _fmt(row["effective_rank"], 2),
+                _fmt(row["dead_unit_fraction"], 4),
+            ]
+            for row in e7["summary"]
+        ])
+        flow.append(_appendix_table(
+            rows,
+            [0.5 * inch, 0.65 * inch, 0.6 * inch, 0.8 * inch,
+             0.8 * inch, 0.7 * inch, 0.7 * inch, 0.7 * inch],
+        ))
+
     return flow
 
 
@@ -491,8 +528,8 @@ def build_results_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
     flow.append(para(
         "Numbers are the pre-registered summary metrics from each "
         "experiment's committed JSON. Every table can be regenerated via "
-        "<font name='Courier'>scripts/make_commitment_surface_figures.py</font> "
-        "followed by <font name='Courier'>scripts/build_commitment_surface_pdf.py</font>.",
+        "`scripts/make_commitment_surface_figures.py` followed by "
+        "`scripts/build_commitment_surface_pdf.py`.",
         st["Body"],
     ))
 
@@ -541,10 +578,10 @@ def build_results_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
         flow.append(Spacer(1, 4))
         flow.append(para(
             f"Cells: {e1['n_cells']}. Gate: well-spec vs unweighted "
-            f"≥ 0.05 → <b>{_fmt(e1['gap_wellspec_vs_unweighted'])}</b> "
+            f"≥ 0.05 → **{_fmt(e1['gap_wellspec_vs_unweighted'])}** "
             f"(PASS = {_fmt(e1['commitment_first_pass_wellspec_beats_unweighted'])}). "
             f"Misspec vs unweighted within ±0.05 → "
-            f"<b>{_fmt(e1['gap_misspec_vs_unweighted'])}</b> "
+            f"**{_fmt(e1['gap_misspec_vs_unweighted'])}** "
             f"(PASS = {_fmt(e1['commitment_first_pass_misspec_matches_unweighted'])}: "
             "outside the pre-registered equivalence band; this sub-gate "
             "strictly fails and remains failed).",
@@ -554,11 +591,11 @@ def build_results_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
         flow.append(para(
             "Timestamped E1 follow-up: 2,048 conditional randomization "
             "replicates give null mean gap "
-            f"<b>{_fmt(variance_null['mean'], 4)}</b> (SD "
+            f"**{_fmt(variance_null['mean'], 4)}** (SD "
             f"{_fmt(variance_null['sd'], 4)}), with "
             f"P(Δ ≤ observed) = "
-            f"<b>{_fmt(variance_null['probability_gap_le_observed'])}</b>. "
-            f"Verdict: <b>{variance_gate['verdict']}</b>. All frozen "
+            f"**{_fmt(variance_null['probability_gap_le_observed'])}**. "
+            f"Verdict: **{variance_gate['verdict']}**. All frozen "
             "independence/exchangeability checks pass. The score-level "
             "expectation identity therefore survives, but it does not "
             "commute through finite-pool argmax selection; see Section 3.5.",
@@ -606,10 +643,10 @@ def build_results_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
         flow.append(para(
             f"Total cells trained: {e2e3['n_total_cells']}. "
             f"Gate: B − A OOD gap ≥ 0.30 → "
-            f"<b>{_fmt(e2e3['gap_B_minus_A_ood'])}</b> "
+            f"**{_fmt(e2e3['gap_B_minus_A_ood'])}** "
             f"(PASS = {_fmt(e2e3['e2_pass_B_beats_A_ood_0p3'])}). "
             f"B − A patch-CE gap ≥ 0.50 → "
-            f"<b>{_fmt(e2e3['gap_B_minus_A_patch_ce'])}</b> "
+            f"**{_fmt(e2e3['gap_B_minus_A_patch_ce'])}** "
             f"(PASS = {_fmt(e2e3['e2_pass_B_beats_A_patch_ce_0p5'])}). "
             f"B − C patch-CE gap = "
             f"{_fmt(e2e3['gap_B_minus_C_patch_ce'])} (anti-cheat: ~0 "
@@ -617,14 +654,14 @@ def build_results_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
             st["Body"]))
         flow.append(para(
             "Honest decomposition of the patch-CE gate: Arm B's absolute "
-            f"patch-CE Δ is small (<b>{_fmt(b_patch)}</b>; Arm C "
+            f"patch-CE Δ is small (**{_fmt(b_patch)}**; Arm C "
             f"{_fmt(c_patch)}; B − C only "
             f"{_fmt(e2e3['gap_B_minus_C_patch_ce'])}), and the large "
-            "B − A gap is mostly produced by Arm A's <i>negative</i> patch "
+            "B − A gap is mostly produced by Arm A's *negative* patch "
             f"score ({_fmt(a_patch)}). The result strongly supports "
             "\"B's mechanism differs from A's\" but only weakly supports "
             "\"B localizes a substantial mechanism in the top-k patched "
-            "units\"; see the fixed-top-k power caveat in Section 6.4.",
+            "units\"; see the fixed-top-k power caveat in Section 6.5.",
             st["Body"]))
         flow.append(para("5.3 E3 — Patch-CE vs weakness as OOD predictor",
                          st["H3"]))
@@ -677,11 +714,11 @@ def build_results_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
         flow.append(t)
         flow.append(Spacer(1, 4))
         source_line = (
-            f"Source: <font name='Courier'>{e4_json.relative_to(ROOT)}</font>."
+            f"Source: `{e4_json.relative_to(ROOT)}`."
         )
         if "smoke" in e4_json.name:
             source_line = (
-                f"<b>SMOKE RUN (partial coverage)</b>: {source_line} "
+                f"**SMOKE RUN (partial coverage)**: {source_line} "
                 "Full sweep will replace this table when the Modal L4 job "
                 "lands."
             )
@@ -690,22 +727,22 @@ def build_results_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
         flow.append(para(
             f"Cells: {analysis['n_cells']}. Gate (new frame): B mean "
             f"OOD ≥ 0.50, patch-CE ≥ 0.05, A mean OOD ≤ 0.10 → "
-            f"<b>{_fmt(analysis.get('e4_new_frame_pass'))}</b>. Gate "
+            f"**{_fmt(analysis.get('e4_new_frame_pass'))}**. Gate "
             f"(old frame): A mean OOD ≥ 0.50, ρ(weakness, OOD) ≥ 0.5 → "
-            f"<b>{_fmt(analysis.get('e4_old_frame_pass'))}</b>. "
+            f"**{_fmt(analysis.get('e4_old_frame_pass'))}**. "
             f"ρ(patch-CE, OOD) = "
             f"{_fmt(analysis['rho_patch_ce_ood_all_cells'])}; "
             f"ρ(weakness, OOD) = "
             f"{_fmt(analysis['rho_weakness_ood_all_cells'])}.",
             st["Body"]))
         flow.append(para(
-            "<b>Verdict: directionally decisive; strict pre-registered "
-            "gate failed.</b> The A-mean-OOD ≤ 0.10 condition came in at "
+            "**Verdict: directionally decisive; strict pre-registered "
+            "gate failed.** The A-mean-OOD ≤ 0.10 condition came in at "
             f"{_fmt(a_ood_mean)} and we record E4 as a gate failure by "
             "the standard this paper advocates (outlier accounting in "
             "Section 6.2 explains the miss; it does not convert it into "
             "a pass). Interpretation is further bounded by the "
-            "label-exposure confound of Section 6.5: cyclic augmentation "
+            "label-exposure confound of Section 6.6: cyclic augmentation "
             "places correctly labeled examples on the held-out "
             "deployment support, so E4 alone cannot separate generator "
             "learning from labeled orbit coverage. E5 resolves that contrast "
@@ -745,8 +782,8 @@ def build_results_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
         flow.append(table)
         flow.append(Spacer(1, 4))
         flow.append(para(
-            f"Exact-grid integrity: <b>{_fmt(analysis['confirmatory_ready'])}</b>. "
-            f"Strict verdict: <b>{analysis['verdict']}</b>. "
+            f"Exact-grid integrity: **{_fmt(analysis['confirmatory_ready'])}**. "
+            f"Strict verdict: **{analysis['verdict']}**. "
             f"Generator-learning gate: {_fmt(analysis['generator_learning_gate'])}; "
             f"coverage gate: {_fmt(analysis['coverage_gate'])}; "
             f"mixed gate: {_fmt(analysis['mixed_gate'])}; "
@@ -757,7 +794,7 @@ def build_results_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
         flow.append(para(
             "E5 is the severe follow-up to E4's labeled-support confound. "
             "Its mechanism verdict is restricted to this frozen Pythia modular-"
-            "addition grid; Section 6.5 states the corresponding claim update.",
+            "addition grid; Section 6.6 states the corresponding claim update.",
             st["Body"],
         ))
     else:
@@ -766,6 +803,91 @@ def build_results_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
             "the exact 135-cell grid passes integrity and is committed.",
             st["Body"],
         ))
+
+    # --- E7 ---
+    flow.append(para(
+        "5.6 E7 — Selective load-bearing subspace protection",
+        st["H3"],
+    ))
+    if E7_JSON.exists():
+        e7 = json.loads(E7_JSON.read_text(encoding="utf-8"))
+        if e7["status"] == "invalid":
+            budget = e7["integrity"]["budget_detail"]
+            add_image(
+                flow,
+                FIG_DIR / "fig6_e7_selective_subspace.png",
+                "Figure 6. E7 confirmatory integrity audit. Six of 32 "
+                "matched groups exceed the frozen 2% per-arm timing limit, "
+                "leaving only 12 of 32 streams budget-valid and withholding "
+                "all scientific gates.",
+                st,
+            )
+            rows = [["Width", "Seed", "Task", "Timing range", "Gate"]]
+            rows.extend([
+                [
+                    str(failure["key"][0]),
+                    str(failure["key"][1]),
+                    str(failure["key"][2]),
+                    f"{failure['relative_wall_clock_range']:.2%}",
+                    "FAIL",
+                ]
+                for failure in budget["failures"]
+            ])
+            table = Table(
+                rows,
+                colWidths=[0.8 * inch, 0.8 * inch, 0.8 * inch,
+                           1.2 * inch, 0.8 * inch],
+            )
+            table.setStyle(_table_style())
+            flow.append(table)
+            flow.append(Spacer(1, 4))
+            flow.append(para(
+                "**Strict disposition: INVALID — no scientific verdict.** "
+                "The original shared closing barrier made arm times nearly "
+                "identical by construction. Re-audit with the already-recorded "
+                "per-arm median-step estimator finds a maximum range of "
+                f"{budget['max_relative_wall_clock_range']:.2%}. Seed, "
+                "sequential-exposure, and exact-mass gates pass, but the frozen "
+                "budget kill criterion fails; G1–G4 are not evaluated.",
+                st["Body"],
+            ))
+        else:
+            add_image(
+                flow,
+                FIG_DIR / "fig6_e7_selective_subspace.png",
+                "Figure 6. E7 confirmatory continual-learning result. P_sub "
+                "separates on the mechanism metric but not retained OOD.",
+                st,
+            )
+            rows = [[
+                "Width", "Arm", "Retained OOD", "Patch/mass", "Final OOD",
+            ]]
+            rows.extend([
+                [
+                    str(row["width"]),
+                    row["arm"],
+                    _fmt(row["retained_ood_accuracy"], 4),
+                    _fmt(row["earlier_patch_ce_per_mass"], 4),
+                    _fmt(row["final_task_ood_accuracy"], 4),
+                ]
+                for row in e7["summary"]
+            ])
+            table = Table(
+                rows,
+                colWidths=[0.7 * inch, 1.0 * inch, 1.15 * inch,
+                           1.15 * inch, 1.0 * inch],
+            )
+            table.setStyle(_table_style())
+            flow.append(table)
+            flow.append(Spacer(1, 4))
+            gate = e7["gate_analysis"]
+            flow.append(para(
+                f"**Strict verdict: {gate['strict_verdict']}.** See the "
+                "committed public-safe report for frozen margins.",
+                st["Body"],
+            ))
+    else:
+        flow.append(para("E7 result JSON not yet available.", st["Body"]))
 
     flow.append(para("Frame-taxonomy schematic (Figure 5).", st["H3"]))
     add_image(flow, FIG_DIR / "fig5_frame_taxonomy.png",

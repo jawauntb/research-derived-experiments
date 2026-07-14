@@ -6,6 +6,14 @@ crosses from *static verification* into *learning dynamics*. Four experiments ar
 harness, run the cheap calibration, then the confirmatory grid under the frozen gates,
 summarize honestly, and update the paper + docs. Read this whole note before acting.
 
+> **Execution update (audited 2026-07-14):** E7 is built and its frozen CPU
+> confirmatory grid completed, but the original shared-barrier timing audit
+> could not detect per-arm divergence. The recorded per-arm estimator fails
+> 6/32 matched groups (maximum 8.53% versus 2%), so the run is **INVALID** and
+> G1–G4 are withheld; there is no scientific verdict. See
+> `experiments/commitment_surface/results/e7_selective_subspace_2026_07_13.md`.
+> Treat the original “not yet built” language below as the historical handoff state.
+
 > Human director: **Jawaun Brown**. All code/results are AI-agent-generated under his
 > direction and review. Keep provenance honest, report negatives, do not overclaim, and
 > never put model identifiers in committed artifacts.

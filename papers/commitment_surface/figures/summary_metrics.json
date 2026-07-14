@@ -4,7 +4,8 @@
     "fig2": "papers/commitment_surface/figures/fig2_e2_arms_ood.png",
     "fig3": "papers/commitment_surface/figures/fig3_e3_readout_vs_patch.png",
     "fig4": "papers/commitment_surface/figures/fig4_e4_pythia_arms.png",
-    "fig5": "papers/commitment_surface/figures/fig5_frame_taxonomy.png"
+    "fig5": "papers/commitment_surface/figures/fig5_frame_taxonomy.png",
+    "fig6": "papers/commitment_surface/figures/fig6_e7_selective_subspace.png"
   },
   "headline": {
     "e1": {
@@ -94,6 +95,14 @@
         }
       },
       "source": "experiments/commitment_surface/results/e4_pythia_lora_v2_appendix.json"
+    },
+    "e7": {
+      "status": "invalid",
+      "scientific_disposition": "INVALID_NO_SCIENTIFIC_VERDICT",
+      "failed_matched_groups": 6,
+      "total_matched_groups": 32,
+      "valid_streams": 12,
+      "max_relative_wall_clock_range": 0.085251646436262
     }
   }
 }
