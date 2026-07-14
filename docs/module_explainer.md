@@ -13,7 +13,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `experiments/` | 54 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
 | `papers/` | Paper sources (`paper.md`), figures, shareable PDFs |
 | `scripts/` | 91 Python ops modules: quality, contracts, provenance, PDF/figure builders, summarizers |
-| `tests/` | 68 root test files collected together by pytest (`unittest`-style and pytest-native) |
+| `tests/` | 69 root test files collected together by pytest (`unittest`-style and pytest-native) |
 | `docs/` | Design docs, verification, handoffs, plans, reviews, solutions |
 | `docs/primers/backlogs/` | Six article-specific, source-anchored research TODOs derived from the primer PDFs |
 | `notes/` | Program-level research synthesis |

@@ -456,7 +456,7 @@ Before committing:
 python3 scripts/run_quality_checks.py
 ```
 
-The wrapper runs all 68 root test files through `pytest` under Python 3.12 via
+The wrapper runs all 69 root test files through `pytest` under Python 3.12 via
 `uvx`, including the scientific and PDF dependencies needed by artifact-builder
 tests, `unittest.TestCase` tests, and pytest-native fixtures/marks. It
 then compiles the Python trees, applies the publication guard, validates the

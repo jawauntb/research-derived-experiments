@@ -461,7 +461,7 @@ python scripts/regen.py weakness_temporal
 
 `scripts/run_quality_checks.py` (Python 3.12 via `uvx`):
 
-1. `pytest -q tests` over all 68 root test files (torch, numpy, scikit-learn,
+1. `pytest -q tests` over all 69 root test files (torch, numpy, scikit-learn,
    matplotlib, reportlab, pytest)
 2. `compileall` on `scripts`, `experiments`, `tests`
 3. `publication_guard.py`
