@@ -126,6 +126,7 @@ environment.
 | [paper_readiness.md](paper_readiness.md) | Paper readiness tracking |
 | [discovery_regime_audit.md](discovery_regime_audit.md) | Regime audit ledger |
 | [next_agent_modal_handoff.md](next_agent_modal_handoff.md) | Modal handoff |
+| [next_agent_evidence_infrastructure_remaining_handoff_2026-07-14.md](next_agent_evidence_infrastructure_remaining_handoff_2026-07-14.md) | Current-main recovery and six-PR landing plan for package coverage, run provenance, public envelopes, and clean-clone reproduction |
 | [railway-autodeploy.md](railway-autodeploy.md) | Railway deploy |
 | [external_contact_preregistration.md](external_contact_preregistration.md) / [runbook](external_contact_runbook.md) | External-contact |
 | [phase2_*.md](phase2_next_phase_research_handoff.md) | Phase 2 research handoffs (6 files) |
