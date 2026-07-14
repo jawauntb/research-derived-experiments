@@ -21,7 +21,7 @@ The primer argues that the program inherits a common intellectual lineage from c
 - The topology mediation negative is also current: `experiments/grid_cell_weakness/results/modal_grid_cell_weakness_sweep_2026_07_02.md` reports G2-G4 failures; weakness tracks a spectral aspect but neither governs torus formation nor mediates OOD.
 - The effective-dimension statement is current but should cite the exact result: `experiments/grid_cell_weakness/results/reward_deformation_sweep_2026_07_02.md` gives alpha `0.302-0.309`, implying `d_eff=0.869-0.896`, not the nominal two-dimensional exponent `0.5`.
 - The primer is stale on E5. Page 25 says “partly run, verdict pending,” but `experiments/commitment_surface/results/e5_generator_vs_coverage.md` records the finished 135-cell strict verdict **coverage**: generator, group-specificity, and transport gates fail.
-- The frontier has also moved. E6 now has a Modal runner and real L4 smoke, but `experiments/commitment_surface/results/e6_smoke_readiness_2026_07_13.md` is blocked before round 1 because only `8/104` candidates satisfy the frozen two-surface eligibility threshold when `52` are required. E5-L, E7, and M5 remain preregistered but unbuilt/unrun.
+- The frontier has also moved. E6 now has a Modal runner and real L4 smoke, but `experiments/commitment_surface/results/e6_smoke_readiness_2026_07_13.md` is blocked before round 1 because only `8/104` candidates satisfy the frozen two-surface eligibility threshold when `52` are required. E7 now has a CPU harness and a complete 32-stream confirmatory artifact, but the run is `INVALID`: 6/32 matched groups exceed the frozen 2% per-arm timing limit (maximum 8.53%), so G1-G4 are withheld. E5-L and M5 remain preregistered but unrun.
 - The TODO ledger understates completed Arc 2A work: pixel observations and a learned pixel extractor already have passing reports. The remaining perception gap is richer object-centric/natural-image perception and open-ended semantics, not pixels per se.
 - Several external-contact reports named in `docs/phase2_next_phase_research_handoff.md` (`p2_uncertainty`, `p2_tier_b`, `p3_glove`, `p3_three_family`) are not present under `experiments/external_contact/results/`; the primer's three-family claim therefore lacks a tracked primary result report even though the handoff records the numbers.
 - **Resolved 2026-07-14:** PDF visual QA covered the title/timeline (p.1), the autopoiesis warning (p.7), symmetry/topology warning (p.12), correction-chain table and warning (p.20), external-contact verdict (p.23), reframe/frontier pages (pp.24-25), and novelty/conclusion (p.27). Layout is readable, and the rebuilt PDF metadata now reports the history-primer title instead of the former mathematics-primer title.
@@ -61,7 +61,7 @@ The primer argues that the program inherits a common intellectual lineage from c
 | HL-27 | E | 23-24, 8.4-9.1 | flagship weakness result hard-killed externally | Make the external kill the default boundary, not a footnote to the internal win. | H-001, H-005, H-101 |
 | HL-28 | E | 23, 8.4 | concern geometry has wrong-sign language result | Keep family-level failures visible and retest causal rather than post-hoc deformation. | H-108, H-202 |
 | HL-29 | E+I | 24-25, 9.3 | labeled coverage can mimic generator learning; E5 now says coverage | Update the article and study onset longitudinally rather than rerun E5. | H-001, H-207 |
-| HL-30 | E+I | 25, 9.4 | self-training, continual learning, and plasticity-trigger frontier | Resolve E6's sparse reward and execute E5-L/E7/M5 under frozen gates. | H-206, H-207, H-208, H-209 |
+| HL-30 | E+I | 25, 9.4 | self-training, continual learning, and plasticity-trigger frontier | Resolve E6's sparse reward, rerun E7 after its budget-integrity failure, and execute E5-L/M5 under frozen gates. | H-206, H-207, H-208, H-209 |
 | HL-31 | E | 26, 10.2 | AI pace requires guardrails against reframing, gaming, leakage | Productize preregistration, publication, and provenance checks. | H-401, H-402, H-403 |
 | HL-32 | E | 27, 10.4 | much is “skilled recombination” | Calibrate originality claims and broaden the intellectual comparison set. | H-003, H-005, H-303 |
 | HL-33 | E | 27, 10.5 | reach exceeds grasp on real models/open meaning | Allocate priority to external transport and stop conditions. | H-101, H-205, H-501, H-503 |
@@ -81,10 +81,10 @@ Statuses describe repository state, not task completion: **new** = no implementa
 
 - **Priority / status:** P0 / partial
 - **Source / inference:** pp.1, 22, 25, sections 8.2, 9.3-9.4; inference from repository state (HL-27, HL-29, HL-35, HL-36, HL-38).
-- **Action:** Correct the embedded PDF title; replace “E5 pending” with the strict coverage verdict; describe E6 as runner-complete but frozen-smoke-blocked; list E5-L/E7/M5 as unbuilt; change the Arc 2A gap from generic “pixels” to richer object-centric/natural-image perception.
+- **Action:** Correct the embedded PDF title; replace “E5 pending” with the strict coverage verdict; describe E6 as runner-complete but frozen-smoke-blocked; record E7 as executed but invalid on budget integrity; list E5-L/M5 as unrun; change the Arc 2A gap from generic “pixels” to richer object-centric/natural-image perception.
 - **Affected paths:** `docs/primers/history_lineage_and_trajectory_primer.html`, `docs/primers/history_lineage_and_trajectory_primer.pdf`, `docs/primers/README.md`, `TODO.md`.
 - **Deliverable:** rebuilt primer plus a one-paragraph dated status box and synchronized TODO entries.
-- **Pass/fail gate:** `pdfinfo` title exactly equals “The Lineage and the Trajectory”; text contains E5 `coverage`, E6 `8/104` versus `52`, and no “verdict pending”; TODO no longer marks completed pixel work open.
+- **Pass/fail gate:** `pdfinfo` title exactly equals “The Lineage and the Trajectory”; text contains E5 `coverage`, E6 `8/104` versus `52`, E7 `INVALID` with `6/32`, and no “verdict pending”; TODO no longer marks completed pixel work open.
 - **Dependencies:** accepted E5 and E6 public result reports.
 - **Rationale:** the current historical narrative is already materially stale on its most important frontier.
 
@@ -323,15 +323,16 @@ Statuses describe repository state, not task completion: **new** = no implementa
 - **Dependencies:** reusable E5 runner/manifest discipline and budget approval.
 - **Rationale:** E5 resolved the static confound as coverage; E5-L tests whether that mechanism explains dynamics.
 
-#### H-208 - Execute E7 selective subspace protection
+#### H-208 - Correct and rerun E7 selective subspace protection
 
 - **Priority / status:** P1 / partial
 - **Source / inference:** p.25, section 9.4 (HL-30).
-- **Action:** Implement the frozen P_sub/P_ewc/P_none/P_wrong continual-learning stream and compare retention, causal patch-CE, new-task learning, and protected-rank cost.
+- **Action:** Preserve the implemented frozen P_sub/P_ewc/P_none/P_wrong continual-learning stream, correct the per-arm budget measurement exposed by the first confirmatory audit, and rerun before comparing retention, causal patch-CE, new-task learning, and protected-rank cost.
 - **Affected paths:** `papers/commitment_surface/e7_selective_subspace_continual_learning_preregistration_2026-07-13.md`, `experiments/commitment_surface/e2_e3_neural_sweep.py`, new E7 runner/tests/results.
-- **Deliverable:** CPU confirmatory result with complete task-by-task trajectories.
+- **Deliverable:** Budget-valid CPU confirmatory result with complete task-by-task trajectories; retain the current invalid 32-stream artifact as non-evidence.
 - **Pass/fail gate:** use the preregistered Pareto/retention/plasticity gates without retuning; wrong-subspace must not reproduce the benefit.
 - **Dependencies:** #344 subspace implementation.
+- **Current outcome:** The first 32-stream run is `INVALID`: seed, sequential-exposure, and protected-mass checks pass, but 6/32 matched groups exceed the frozen 2% timing limit (maximum 8.53%); G1-G4 are not evaluated.
 - **Rationale:** this is the cleanest direct test of whether a commitment-surface diagnostic is useful for learning.
 
 #### H-209 - Execute M5 commitment-change plasticity trigger

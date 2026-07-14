@@ -71,7 +71,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_gauge_fixed_concern_transport_*.py` | Gauge-fixed transport + PDF |
 | `test_external_contact_p1_lora.py` | External-contact LoRA metrics |
 | `test_commitment_surface_appendix.py` | Public-safe E4 appendix export, metric retention, raw-field omission |
-| `test_commitment_surface_core.py`, `test_commitment_surface_e5.py`, `test_commitment_surface_e6.py` | Commitment-surface arithmetic; E5 split/leakage/coverage/novel-shift gates; and E6 six-round rewards, symmetric proposer scheduling, coupled L4 strata, matched pools, deterministic seeds, manifests, integrity, resume, and G1–G5 verdict contracts |
+| `test_commitment_surface_core.py`, `test_commitment_surface_e5.py`, `test_commitment_surface_e6.py`, `test_commitment_surface_e7.py` | Commitment-surface arithmetic; E5 split/leakage/coverage/novel-shift gates; E6 six-round rewards, coupled L4 strata, manifests, resume, and G1–G5 verdicts; and E7 padded-stream encoding, exact-mass subspaces, matched SHA-256 seeds, per-arm budget false-pass prevention, barrier failure handling, sequential exposure, and fail-closed G1–G4 analysis |
 | `test_publication_guard.py` | Secret-signature detection and non-secret fixture naming |
 | `test_semantic_concern_summary.py` | Semantic concern summarizer |
 | `test_commitment_surface_core.py`, `test_e1_misspecification_variance.py` | E1 concern selectors plus conditional-randomization reconstruction, seed, assignment, and statistics contracts |
@@ -235,11 +235,15 @@ requires deployment-restricted weakness (or an ordering-preservation
 assumption) in Proposition 2, and uses finite-candidate order equivalence for
 concern weighting. E4 is a directional result with a strict gate failure; its
 labeled-orbit-coverage confound and timestamped post-hoc E5 severe follow-up
-are recorded in paper §6.5 and PLAN.md. The exact E5 grid passed integrity and
+are recorded in paper §6.6 and PLAN.md. The exact E5 grid passed integrity and
 returned strict verdict `coverage` (Cov/B-ref 0.741/0.741 canonical OOD versus
 G-reg/A-ref 0.063/0.069); generator, group-specificity, and transport gates
 failed. Grid completeness is part of `confirmatory_ready`, not inferred from
 per-arm counts.
+The later E7 CPU follow-up transports #344's normalized compatibility subspace
+into continual learning, but its post-run timing re-audit fails 6/32 matched
+groups. The run is integrity-invalid, so the apparent mechanism/behavior
+separation is diagnostic only and paper §6.4 withholds a scientific verdict.
 
 | Module | Purpose |
 |---|---|
@@ -257,6 +261,7 @@ per-arm counts.
 | `e6_training.py` | E6 GPU stratum implementation: shared E5-matched bootstrap, symmetric current-SC/current-CS generation, typed reward scoring, strict transport eligibility, matched pseudo-label fine-tuning, per-round patch/equivariance/coverage measurements, and integrity-rich cell payloads |
 | `e6_requirements.txt` | Fully pinned 43-package E6 Linux/Python runtime lock used by CPU preflight and L4 training images and included in the implementation fingerprint |
 | `modal_e6_commitment_reward.py` | Guarded E6 Modal runner: exact dry-run/inspect/execute actions, immutable Pythia revisions, CPU image/Volume preflight, separate result Volume and fail-closed stratum leases, exact returned-cell validation, bounded checkpointed L4 dispatch, resumable per-arm cells, nonzero exit on worker or selected-checkpoint failures, and confirmatory manifest acknowledgement |
+| `e7_selective_subspace.py` | E7 CPU continual-learning runner: fixed padded 29-class depth-2 MLP over moduli 17/19/23/29; cyclic compatibility augmentation; naive/EWC/compatibility-subspace/wrong-subspace arms; replay-free Fisher and projected-parameter anchors; exact 50% boundary-weighted protection; full-rank #344 patch metrics; matched namespaced seeds; fail-closed per-arm median-step budget auditing with barrier-abort safety; exact pilot receipt lock; public-safe aggregation; and frozen G1–G4 analysis only for four-seed-valid widths |
 | `results/e1_concern_weighted.{json,md}` | E1 summary + per-cell provenance |
 | `results/e1_misspecification_variance.{json,md}` | E1 follow-up aggregate draws, quantiles/CI, assumption audit, and randomization verdict |
 | `results/e2_e3_neural.{json,md}` | E2/E3 summary + per-cell provenance |
@@ -266,6 +271,7 @@ per-arm counts.
 | `results/e5_launch_readiness_2026_07_10.md` | Operational no-compute audit: exact 135-cell manifest, dispatch/checkpoint design, resource formula, and development timing-calibration boundary; no scientific result |
 | `results/e5_generator_vs_coverage.{json,md}` | Generated public-safe confirmatory artifact: exact-grid audit, frozen mechanism verdict, per-arm means, and compact metrics for all 135 cells |
 | `results/e6_smoke_readiness_2026_07_13.md`, `results/e6_smoke_readiness.json` | Public-safe negative L4 readiness record: pinned preflight pass, round-1 CS eligibility 8/104 versus 52 required, no completed trajectory, and development/confirmatory dispatch withheld |
+| `results/e7_selective_subspace_2026_07_13.{json,md}` | E7 public-safe 32-stream/128-checkpoint integrity report: seed/sequential/mass checks pass, but 6/32 matched groups exceed the 2% timing limit (max 8.53%); run INVALID, G1–G4 withheld, no scientific verdict |
 | `results/m4_suite_c_factorial_ablation_2026_07_09.{json,md}` | M4 public-safe factorial summary: strict FAIL; reopen necessary, allocate/cool terminal-null |
 
 Run:
@@ -275,6 +281,7 @@ python3 -m experiments.commitment_surface.run_e1
 python3 -m experiments.commitment_surface.e1_misspecification_variance
 python3 -m experiments.commitment_surface.e2_e3_neural_sweep
 python3 -m unittest tests.test_commitment_surface_e6
+python3 -m unittest tests.test_commitment_surface_e7
 doppler --scope /Users/jawaun/superoptimizers run -- \
     uvx --python 3.12 --from modal modal run \
         experiments/commitment_surface/modal_e4_pythia_lora_v2.py \

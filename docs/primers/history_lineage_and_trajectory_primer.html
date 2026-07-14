@@ -973,15 +973,18 @@ multi-arm experiment (the "E5" generator-versus-coverage design) built specifica
 "learning the rule" from "labeled coverage." E5 is now complete across its frozen 135-cell design and
 returns a strict <strong>coverage</strong> verdict: the generator, group-specificity, and transport gates
 fail. E6 has a runner, but its frozen smoke check blocks the first round because only 8 of 104 candidates
-meet the two-surface threshold, short of the required 52; E5-L, E7, and M5 remain preregistered but unrun.</p>
+meet the two-surface threshold, short of the required 52. E7's 32-stream CPU confirmatory run executed,
+but its per-arm budget audit failed in 6 of 32 matched groups (maximum timing mismatch 8.53% versus the
+frozen 2% limit), so the result is <strong>INVALID</strong> and G1–G4 are withheld. E5-L and M5 remain
+preregistered but unrun.</p>
 
 <h3>9.4 The current frontier: from verifying to learning</h3>
 
 <p>The frontier has a clear theme: the crossing from <em>static verification</em> (does this trained
 system use the structure?) into <em>learning dynamics</em> (does the commitment-surface criterion govern
-how a system <em>improves itself</em> over time?). Several experiments sit pre-registered and mostly
-unbuilt, each testing whether the program's hard-won criterion is not just a diagnostic but a usable
-<em>objective</em>:</p>
+how a system <em>improves itself</em> over time?). E7 now has an executable harness and an invalidated
+first confirmatory run; the other experiments remain preregistered and mostly unbuilt. Each asks whether
+the program's hard-won criterion is not just a diagnostic but a usable <em>objective</em>:</p>
 
 <ul>
 <li><strong>Self-training without collapse.</strong> The flagship frontier test asks whether a
@@ -990,7 +993,8 @@ loops are known to suffer — whether "does the structure reach the decision sur
 objective, not merely a verification check.</li>
 <li><strong>Continual learning by protecting the load-bearing subspace.</strong> Whether protecting only
 the specific compatibility-carrying directions (rather than all weights uniformly) escapes the usual
-stability-plasticity tradeoff.</li>
+stability-plasticity tradeoff. E7's first run cannot answer because its frozen per-arm budget gate failed;
+the corrected rerun must pass integrity before any mechanism verdict is read.</li>
 <li><strong>Commitment-change as a plasticity trigger.</strong> Whether the moment a commitment changes
 is a better signal for when to adapt than any internal statistic.</li>
 </ul>

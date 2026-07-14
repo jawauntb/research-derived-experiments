@@ -132,8 +132,9 @@ Full-sweep result (108 cells): directionally decisive (Arm B 0.882 vs
 Arm A 0.113 mean OOD; ρ(patch-CE, OOD)=0.853 vs ρ(weakness, OOD)=0.290),
 but the strict pre-registered gate FAILED (A mean OOD 0.113 > 0.10).
 Interpretation is also bounded by the label-exposure confound: cyclic
-augmentation labels held-out-support points, so the sweep does not yet
-separate generator learning from labeled orbit coverage (paper §6.5).
+augmentation labels held-out-support points, so the sweep does not separate
+generator learning from labeled orbit coverage by itself (paper §6.6). E5
+later resolves that frozen contrast in favor of coverage.
 See `results/e4_pythia_lora_v2_summary.md`. The complete publication metrics
 for all 108 cells are committed in
 `results/e4_pythia_lora_v2_appendix.json`; large function tables and input lists
@@ -326,6 +327,42 @@ and 27-stratum confirmatory grid were not launched. See
 `results/e6_smoke_readiness.json`. Changing the threshold, selection fraction,
 bootstrap, or eligibility semantics now requires a new preregistration.
 
+### E7 — Selective Load-Bearing Subspace Continual Learning (CPU)
+
+E7 transports #344's rank-normalized compatibility subspace into an ordered
+four-task modular-addition stream. A shared padded depth-2 MLP is trained under
+four matched arms: naive fine-tuning, diagonal-Fisher EWC, selective
+compatibility-subspace protection, and the `a`-only wrong-subspace control.
+The replay-free runner stores tensor anchors rather than earlier examples,
+weights the boundary SVD axis to protect exactly 50% spectral mass, and runs
+the four arms concurrently behind task barriers. The frozen budget audit uses
+each arm's recorded `median_step_seconds × optimizer_steps`, not the shared
+closing-barrier makespan.
+
+Run the integrity pilot before the locked confirmatory grid:
+
+```bash
+.venv/bin/python -m experiments.commitment_surface.e7_selective_subspace \
+  --run-kind pilot \
+  --out artifacts/commitment_surface/e7_pilot_final_2026_07_13.json
+
+.venv/bin/python -m experiments.commitment_surface.e7_selective_subspace \
+  --run-kind confirmatory \
+  --pilot-result artifacts/commitment_surface/e7_pilot_final_2026_07_13.json \
+  --out artifacts/commitment_surface/e7_confirmatory_2026_07_13.json \
+  --public-json experiments/commitment_surface/results/e7_selective_subspace_2026_07_13.json \
+  --summary experiments/commitment_surface/results/e7_selective_subspace_2026_07_13.md
+```
+
+Status: all 32 streams, 128 checkpoints, and 192 stability rows are present,
+but the timing integrity gate **FAILS**. The original closing-barrier makespan
+made arm times nearly equal by construction; re-auditing the already-recorded
+per-arm estimator finds 6/32 matched groups above 2% (maximum 8.53%), leaving
+12/32 streams budget-valid. **Disposition: INVALID — no scientific verdict.**
+G1–G4 are withheld; diagnostic margins cannot accept or reject `H_subspace`. See
+`results/e7_selective_subspace_2026_07_13.{json,md}`; raw checkpoint rows stay
+under gitignored `artifacts/`.
+
 ### M4 — Suite C Allocate × Cool × Reopen Factorial
 
 The timestamped follow-up addendum is
@@ -361,6 +398,7 @@ python3 scripts/build_commitment_surface_pdf.py
 
 Reads committed result JSON from `results/` (local raw artifacts are fallback
 inputs only), regenerates figures under
-`papers/commitment_surface/figures/`, renders all E1–E4 cells in Appendix A.2,
-and writes byte-identical outputs to `papers/commitment_surface/paper.pdf` and
+`papers/commitment_surface/figures/`, renders the E1–E5 cells and E7 integrity audit
+in Appendix A.2, and writes byte-identical outputs to
+`papers/commitment_surface/paper.pdf` and
 `papers/pdf/commitment_surface.pdf`.
