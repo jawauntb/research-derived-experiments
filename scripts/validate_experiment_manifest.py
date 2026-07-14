@@ -10,23 +10,21 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import re
 import sys
 from pathlib import Path
 from typing import Never, cast
 
+try:
+    from scripts.research_contracts import CLAIM_ID, CLAIM_TIERS, SCHEMA_VERSION
+except ModuleNotFoundError:  # Direct execution: python scripts/validate_experiment_manifest.py
+    from research_contracts import CLAIM_ID, CLAIM_TIERS, SCHEMA_VERSION
+
 
 ROOT = Path(__file__).resolve().parent.parent
-SCHEMA_PATH = ROOT / "schemas" / "experiment_manifest.schema.json"
+MANIFEST_NAME = "experiment_manifest.json"
 
-SCHEMA_VERSION = "1.0"
-CLAIM_TIERS = {
-    "descriptive",
-    "internal",
-    "external",
-    "causal",
-    "theoretical",
-}
 STATUSES = {
     "planned",
     "running",
@@ -64,7 +62,7 @@ ROOT_FIELDS = {
     "status",
 }
 EXPERIMENT_ID = re.compile(r"^[a-z0-9][a-z0-9_-]{1,63}$")
-GATE_ID = re.compile(r"^[A-Z][A-Z0-9_-]{2,63}$")
+GATE_ID = CLAIM_ID
 
 
 def fail(message: str) -> Never:
@@ -112,6 +110,8 @@ def require_list(value: object, label: str, *, non_empty: bool = False) -> list[
 def require_number(value: object, label: str, *, allow_zero: bool) -> float | int:
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         fail(f"{label} must be a number")
+    if not math.isfinite(value):
+        fail(f"{label} must be finite")
     if value < 0 or (not allow_zero and value == 0):
         qualifier = "non-negative" if allow_zero else "positive"
         fail(f"{label} must be {qualifier}")
@@ -241,12 +241,27 @@ def validate(path: Path) -> dict[str, object]:
     return manifest
 
 
+def discover_manifests(root: Path = ROOT) -> list[Path]:
+    """Return every canonical experiment manifest in stable path order."""
+
+    experiments = root / "experiments"
+    if not experiments.exists():
+        return []
+    return sorted(experiments.rglob(MANIFEST_NAME))
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("manifests", nargs="+", type=Path, help="experiment manifest JSON files")
+    parser.add_argument(
+        "manifests",
+        nargs="*",
+        type=Path,
+        help=f"experiment manifest JSON files (default: discover experiments/**/{MANIFEST_NAME})",
+    )
     args = parser.parse_args(argv)
 
-    for path in args.manifests:
+    manifests = args.manifests or discover_manifests()
+    for path in manifests:
         try:
             payload = validate(path)
         except ValueError as exc:
@@ -256,6 +271,8 @@ def main(argv: list[str] | None = None) -> int:
             f"[experiment-manifest] PASS: {path} "
             f"({payload['experiment_id']}, schema={payload['schema_version']})"
         )
+    if not manifests:
+        print(f"[experiment-manifest] PASS: no {MANIFEST_NAME} files discovered")
     return 0
 
 

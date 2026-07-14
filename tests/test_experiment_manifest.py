@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from scripts.validate_experiment_manifest import CLAIM_TIERS, STATUSES, validate
+from scripts.validate_experiment_manifest import CLAIM_TIERS, STATUSES, discover_manifests, main, validate
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -121,6 +121,24 @@ class ExperimentManifestTests(unittest.TestCase):
         with TemporaryDirectory() as directory:
             with self.assertRaisesRegex(ValueError, "duplicate gate_id: PRIMARY_EFFECT"):
                 validate(self.write_manifest(directory, payload))
+
+    def test_non_finite_runtime_numbers_fail_closed(self) -> None:
+        for value in (float("nan"), float("inf"), float("-inf")):
+            with self.subTest(value=value), TemporaryDirectory() as directory:
+                payload = valid_manifest()
+                payload["runtime"]["estimated_minutes"] = value
+                with self.assertRaisesRegex(ValueError, "must be finite"):
+                    validate(self.write_manifest(directory, payload))
+
+    def test_discovery_finds_nested_canonical_manifests(self) -> None:
+        with TemporaryDirectory() as directory:
+            manifest_dir = Path(directory) / "experiments" / "demo"
+            manifest_dir.mkdir(parents=True)
+            path = self.write_manifest(str(manifest_dir), valid_manifest())
+            self.assertEqual(discover_manifests(Path(directory)), [path])
+
+    def test_cli_without_paths_discovers_repository_manifests(self) -> None:
+        self.assertEqual(main([]), 0)
 
 
 if __name__ == "__main__":

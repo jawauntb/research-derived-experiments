@@ -12,20 +12,26 @@ import json
 import re
 import sys
 from pathlib import Path
+from typing import cast
+
+try:
+    from scripts.research_contracts import (
+        CLAIM_ID,
+        EVIDENCE_ID,
+        EVIDENCE_STATUSES,
+        SCHEMA_VERSION,
+        SHA256,
+    )
+except ModuleNotFoundError:  # Direct execution: python scripts/validate_evidence_registry.py
+    from research_contracts import CLAIM_ID, EVIDENCE_ID, EVIDENCE_STATUSES, SCHEMA_VERSION, SHA256
 
 ROOT = Path(__file__).resolve().parent.parent
 REGISTRY = ROOT / "docs" / "program_evidence_registry.json"
 
-STATUSES = {
-    "pass",
-    "fail",
-    "inconclusive",
-    "not_run",
-    "superseded",
-    "retired",
-}
-EVIDENCE_ID = re.compile(r"^EVID-[A-Z0-9][A-Z0-9_-]{2,63}$")
-CLAIM_ID = re.compile(r"^[A-Z][A-Z0-9_-]{2,63}$")
+STATUSES = EVIDENCE_STATUSES
+ROOT_FIELDS = {"schema_version", "generated_by", "statuses", "records"}
+RECORD_REQUIRED = {"evidence_id", "experiment", "status", "claim_ids", "artifact_refs"}
+RECORD_OPTIONAL = {"gate_ids", "supersedes", "source_sha256", "notes"}
 
 
 def fail(message: str) -> None:
@@ -35,17 +41,18 @@ def fail(message: str) -> None:
 def require_string(value: object, label: str) -> str:
     if not isinstance(value, str) or not value.strip():
         fail(f"{label} must be a non-empty string")
-    return value
+    return cast(str, value)
 
 
 def require_unique_strings(value: object, label: str, pattern: re.Pattern[str] | None = None) -> list[str]:
     if not isinstance(value, list) or any(not isinstance(item, str) or not item for item in value):
         fail(f"{label} must be a list of non-empty strings")
-    if len(value) != len(set(value)):
+    strings = cast(list[str], value)
+    if len(strings) != len(set(strings)):
         fail(f"{label} contains duplicate values")
-    if pattern and any(pattern.fullmatch(item) is None for item in value):
+    if pattern and any(pattern.fullmatch(item) is None for item in strings):
         fail(f"{label} contains an invalid identifier")
-    return value
+    return strings
 
 
 def validate(path: Path = REGISTRY) -> dict:
@@ -55,8 +62,10 @@ def validate(path: Path = REGISTRY) -> dict:
         fail(f"cannot read {path}: {exc}")
     if not isinstance(payload, dict):
         fail("registry root must be an object")
-    if payload.get("schema_version") != "1.0":
-        fail("schema_version must be '1.0'")
+    if set(payload) != ROOT_FIELDS:
+        fail(f"registry root fields must be exactly {sorted(ROOT_FIELDS)}")
+    if payload.get("schema_version") != SCHEMA_VERSION:
+        fail(f"schema_version must be '{SCHEMA_VERSION}'")
     require_string(payload.get("generated_by"), "generated_by")
     statuses = payload.get("statuses")
     if not isinstance(statuses, dict) or set(statuses) != STATUSES:
@@ -68,9 +77,16 @@ def validate(path: Path = REGISTRY) -> dict:
     if not isinstance(records, list):
         fail("records must be a list")
     seen: set[str] = set()
+    supersession_edges: list[tuple[str, str]] = []
     for index, record in enumerate(records):
         if not isinstance(record, dict):
             fail(f"records[{index}] must be an object")
+        missing = RECORD_REQUIRED - set(record)
+        if missing:
+            fail(f"records[{index}] is missing required field: {sorted(missing)[0]}")
+        unknown = set(record) - RECORD_REQUIRED - RECORD_OPTIONAL
+        if unknown:
+            fail(f"records[{index}] contains unknown field: {sorted(unknown)[0]}")
         evidence_id = require_string(record.get("evidence_id"), f"records[{index}].evidence_id")
         if EVIDENCE_ID.fullmatch(evidence_id) is None:
             fail(f"records[{index}].evidence_id has invalid format: {evidence_id}")
@@ -93,6 +109,18 @@ def validate(path: Path = REGISTRY) -> dict:
             supersedes = require_string(record["supersedes"], f"records[{index}].supersedes")
             if EVIDENCE_ID.fullmatch(supersedes) is None:
                 fail(f"records[{index}].supersedes has invalid format: {supersedes}")
+            supersession_edges.append((evidence_id, supersedes))
+        if "source_sha256" in record:
+            source_sha256 = require_string(record["source_sha256"], f"records[{index}].source_sha256")
+            if SHA256.fullmatch(source_sha256) is None:
+                fail(f"records[{index}].source_sha256 must be a lowercase SHA-256 digest")
+        if "notes" in record and not isinstance(record["notes"], str):
+            fail(f"records[{index}].notes must be a string")
+    for evidence_id, supersedes in supersession_edges:
+        if supersedes not in seen:
+            fail(f"{evidence_id} supersedes unknown evidence: {supersedes}")
+        if supersedes == evidence_id:
+            fail(f"{evidence_id} cannot supersede itself")
     return payload
 
 

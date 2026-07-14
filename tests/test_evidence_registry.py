@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import copy
 import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -45,6 +46,44 @@ class EvidenceRegistryTests(unittest.TestCase):
             path.write_text(json.dumps(payload))
             with self.assertRaisesRegex(ValueError, "exactly the six canonical statuses"):
                 validate(path)
+
+    def test_dangling_supersession_fails_closed(self) -> None:
+        payload = validate()
+        payload["records"][0]["supersedes"] = "EVID-DOES-NOT-EXIST"
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "registry.json"
+            path.write_text(json.dumps(payload))
+            with self.assertRaisesRegex(ValueError, "supersedes unknown evidence"):
+                validate(path)
+
+    def test_schema_only_constraints_fail_closed(self) -> None:
+        mutations = [
+            ("unknown root", lambda payload: payload.__setitem__("extra", True), "root fields"),
+            (
+                "unknown record field",
+                lambda payload: payload["records"][0].__setitem__("extra", True),
+                "unknown field",
+            ),
+            (
+                "bad digest",
+                lambda payload: payload["records"][0].__setitem__("source_sha256", "nope"),
+                "lowercase SHA-256",
+            ),
+            (
+                "wrong notes type",
+                lambda payload: payload["records"][0].__setitem__("notes", []),
+                "notes must be a string",
+            ),
+        ]
+        original = validate()
+        for label, mutate, message in mutations:
+            with self.subTest(label=label), TemporaryDirectory() as directory:
+                payload = copy.deepcopy(original)
+                mutate(payload)
+                path = Path(directory) / "registry.json"
+                path.write_text(json.dumps(payload))
+                with self.assertRaisesRegex(ValueError, message):
+                    validate(path)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "commitment_surface_e5_generator_vs_coverage",
+  "hypothesis": "The E4 lift reflects a transportable learned generator rather than labeled orbit coverage.",
+  "claim_tier": "internal",
+  "controls": [
+    {"control_id": "b_ref", "description": "Exposure-matched supervised reference arm."},
+    {"control_id": "w_reg", "description": "Wrong-generator regularization control."},
+    {"control_id": "cov", "description": "Correctly labeled deployment-support coverage control."},
+    {"control_id": "a_ref", "description": "Original-support reference arm."}
+  ],
+  "seeds": [20260709, 20260809, 20260909],
+  "runtime": {
+    "execution_class": "modal_gpu",
+    "command": [
+      "doppler",
+      "run",
+      "--",
+      "uvx",
+      "--from",
+      "modal==1.2.6",
+      "modal",
+      "run",
+      "experiments/commitment_surface/modal_e5_generator_vs_coverage.py",
+      "--run-kind",
+      "confirmatory",
+      "--execute"
+    ],
+    "estimated_minutes": 360
+  },
+  "dependencies": [
+    {"name": "modal", "version": "1.2.6"},
+    {"name": "torch", "version": "2.7.1"},
+    {"name": "transformers", "version": "4.56.2"},
+    {"name": "peft", "version": "0.17.1"}
+  ],
+  "gates": [
+    {"gate_id": "E5_INTEGRITY", "criterion": "Exact 135-cell grid and all integrity checks pass."},
+    {"gate_id": "E5_GENERATOR_LEARNING", "criterion": "Frozen generator-learning contrast passes."},
+    {"gate_id": "E5_COVERAGE", "criterion": "Frozen labeled-coverage contrast passes."},
+    {"gate_id": "E5_MIXED_MECHANISM", "criterion": "Frozen mixed-mechanism contrast passes."},
+    {"gate_id": "E5_GROUP_SPECIFICITY", "criterion": "Frozen group-specificity contrast passes."},
+    {"gate_id": "E5_TRANSPORT", "criterion": "Frozen paraphrase transport contrast passes."},
+    {"gate_id": "E5_STRICT_COVERAGE", "criterion": "The derived strict generator verdict requires the generator-learning, group-specificity, and transport gates to pass together; otherwise the positive generator claim fails."}
+  ],
+  "artifacts": [
+    {"kind": "summary", "path": "experiments/commitment_surface/results/e5_generator_vs_coverage.json", "public": true},
+    {"kind": "paper", "path": "experiments/commitment_surface/results/e5_generator_vs_coverage.md", "public": true}
+  ],
+  "status": "rejected"
+}
