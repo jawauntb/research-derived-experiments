@@ -411,7 +411,16 @@ def validate_run_record(
     if integrity_state not in INTEGRITY_STATES:
         fail(f"{label}.integrity_state is not canonical: {integrity_state}")
     if "manifest_path" in run:
-        require_repo_path(run["manifest_path"], f"{label}.manifest_path", root)
+        manifest_path = require_repo_path(run["manifest_path"], f"{label}.manifest_path", root)
+        # A run binding must name a real manifest inside its publication
+        # package, and its content must validate — a binding that merely
+        # exists on disk is not a structured contract.
+        if manifest_path.name != MANIFEST_NAME:
+            fail(f"{label}.manifest_path must name an {MANIFEST_NAME} file")
+        package_prefix = f"experiments/{package}/"
+        if not cast(str, run["manifest_path"]).startswith(package_prefix):
+            fail(f"{label}.manifest_path must live inside {package_prefix}")
+        validate(manifest_path)
     if provenance_mode == "structured_manifest" and "manifest_path" not in run:
         fail(f"{label} with provenance_mode structured_manifest requires manifest_path")
 

@@ -253,6 +253,45 @@ class ContractRegistryFixtureTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "overlaps a package-root manifest: beta_family"):
                 fixture.validate()
 
+    def test_run_manifest_binding_rejects_arbitrary_files(self) -> None:
+        with TemporaryDirectory() as directory:
+            fixture, registry = standard_fixture(directory)
+            registry["packages"][0]["runs"][0]["manifest_path"] = (
+                "experiments/alpha_family/results/summary.json"
+            )
+            fixture.write(registry)
+            with self.assertRaisesRegex(ValueError, "must name an experiment_manifest.json"):
+                fixture.validate()
+
+    def test_run_manifest_binding_must_stay_inside_the_package(self) -> None:
+        with TemporaryDirectory() as directory:
+            fixture, registry = standard_fixture(directory)
+            (fixture.root / "experiments" / "beta_family" / MANIFEST_NAME).unlink(missing_ok=True)
+            foreign = fixture.root / "experiments" / "beta_family" / "manifests" / "run1"
+            foreign.mkdir(parents=True)
+            (foreign / MANIFEST_NAME).write_text(json.dumps(valid_manifest()))
+            registry["packages"][0]["runs"][0]["manifest_path"] = (
+                "experiments/beta_family/manifests/run1/experiment_manifest.json"
+            )
+            fixture.write(registry)
+            with self.assertRaisesRegex(ValueError, "must live inside experiments/alpha_family/"):
+                fixture.validate()
+
+    def test_malformed_bound_run_manifest_fails_closed(self) -> None:
+        with TemporaryDirectory() as directory:
+            fixture, registry = standard_fixture(directory)
+            nested = fixture.root / "experiments" / "alpha_family" / "manifests" / "run1"
+            nested.mkdir(parents=True)
+            broken = valid_manifest()
+            del broken["gates"]
+            (nested / MANIFEST_NAME).write_text(json.dumps(broken))
+            registry["packages"][0]["runs"][0]["manifest_path"] = (
+                "experiments/alpha_family/manifests/run1/experiment_manifest.json"
+            )
+            fixture.write(registry)
+            with self.assertRaisesRegex(ValueError, "missing required field: gates"):
+                fixture.validate()
+
     def test_non_dict_exception_fails_with_value_error(self) -> None:
         for value in (5, [{"owner": "x"}], "text"):
             with self.subTest(value=value), TemporaryDirectory() as directory:
