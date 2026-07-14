@@ -743,6 +743,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) | Benchmark umbrella |
 | [publication_sharing_map.md](publication_sharing_map.md) | What to share publicly |
 | [next_agent_modal_handoff.md](next_agent_modal_handoff.md) | Modal operator handoff |
+| [next_agent_evidence_infrastructure_remaining_handoff_2026-07-14.md](next_agent_evidence_infrastructure_remaining_handoff_2026-07-14.md) | Audited recovery and dependency order for the remaining evidence-infrastructure work |
 | [railway-autodeploy.md](railway-autodeploy.md) | Site deploy diagnostics |
 | [discovery_regime_audit.md](discovery_regime_audit.md) | Regime audit ledger |
 | [primers/backlogs/README.md](primers/backlogs/README.md) | Source-anchored TODOs for all six primer articles |
