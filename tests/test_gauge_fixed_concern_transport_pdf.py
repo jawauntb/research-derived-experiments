@@ -22,22 +22,22 @@ for candidate in CODEX_PYTHON_PACKAGES.glob(f"lib/{python_tag}/site-packages"):
 
 
 @pytest.mark.skipif(importlib.util.find_spec("reportlab") is None, reason="reportlab unavailable")
-def test_gauge_fixed_concern_transport_pdf_builds() -> None:
+def test_gauge_fixed_concern_transport_pdf_builds(tmp_path: Path) -> None:
     from scripts.build_gauge_fixed_concern_transport_pdf import (
         COPY_PDF,
-        DEPOSIT_PDF,
         FIG_DIR,
         build_pdf,
     )
 
-    out = build_pdf()
+    deposit_pdf = tmp_path / "archive" / "gauge_fixed_concern_transport.pdf"
+    out = build_pdf(deposit_pdf=deposit_pdf)
 
     assert out.exists()
     assert out.stat().st_size > 100_000
     assert COPY_PDF.exists()
     assert COPY_PDF.stat().st_size == out.stat().st_size
-    assert DEPOSIT_PDF.exists()
-    assert DEPOSIT_PDF.stat().st_size == out.stat().st_size
+    assert deposit_pdf.exists()
+    assert deposit_pdf.stat().st_size == out.stat().st_size
 
     expected_figures = {
         "fig1_transport_pipeline.png",

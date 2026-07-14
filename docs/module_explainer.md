@@ -534,7 +534,7 @@ Raw outputs stay under `artifacts/` until summarized.
 | `build_paperB_pdf.py` | Paper B reward-deformation PDF |
 | `build_effective_dimension_pdf.py` | Rate-distortion effective-dimension PDF |
 | `build_concern_weighted_weakness_pdf.py` | Concern-weighted weakness note |
-| `build_gauge_fixed_concern_transport_pdf.py` | GFC transport PDF |
+| `build_gauge_fixed_concern_transport_pdf.py` | GFC transport PDF; always writes repository copies and optionally mirrors to an injected external archive path (the CLI uses it only when the local archive exists) |
 | `build_unified_portfolio_pdf.py` | Unified portfolio PDF |
 | `build_structure_compatible_pdf.py` | SCG base paper (`--in`, `--out`, `--figure-dir`) |
 | `build_structure_compatible_phase2_pdf.py` | SCG phase-2 inferred transformations |

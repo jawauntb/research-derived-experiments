@@ -167,6 +167,11 @@ PDF builders under `scripts/build_*_pdf.py` read **committed numbers** (result
 reports / small CSV snapshots), not live Modal logs. Shared rendering lives in
 `scripts/paperkit.py` (reportlab + matplotlib; no LaTeX required).
 
+The gauge-fixed concern transport builder always writes its two repository
+copies. Its optional Metaphysics-of-Intelligence archive destination is injected
+at build time; the CLI enables that copy only when the local archive directory
+already exists, so clean-clone and CI builds remain portable.
+
 The commitment-surface paper follows the same boundary for its appendix. E1 and
 E2/E3 tables come from committed result JSON; E4's gitignored 209 KB raw sweep is
 reduced by `export_commitment_surface_e4_appendix.py` to a compact committed
