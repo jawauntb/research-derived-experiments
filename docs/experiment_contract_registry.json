@@ -1,0 +1,891 @@
+{
+  "schema_version": "1.0",
+  "legacy_policy": {
+    "frozen_package_cutoff": "2026-07-14",
+    "warning_days": 30,
+    "max_exception_horizon_days": 180,
+    "frozen_legacy_packages": [
+      "activation_geometry",
+      "allostatic_control",
+      "autopoietic_control",
+      "concept_geometry",
+      "concern_bootstrap",
+      "concerned_syntax",
+      "costly_null_probes",
+      "current_error_calibration",
+      "ensemble_uncertainty",
+      "epistemic_exploration",
+      "exploration_diagnostics",
+      "external_contact",
+      "first_order_self",
+      "gauge_fixed_concern_transport",
+      "grid_cell_weakness",
+      "habituated_reengagement",
+      "homeostatic_objects",
+      "interventional_contrast",
+      "learned_symmetry",
+      "long_horizon_bottleneck",
+      "neural_group_generator",
+      "null_intervention",
+      "off_policy_state_coverage",
+      "online_identifying_interventions",
+      "paraphrase_weakness",
+      "passive_to_active",
+      "phase4_metaphysics",
+      "phase5_external_validity",
+      "phase6_real_model_validation",
+      "planning_from_concern",
+      "planning_hardening",
+      "probe_value_reengagement",
+      "regime_sensitive_de",
+      "role_specific_identifiability",
+      "rotation_weakness",
+      "scale_normalized_vprobe",
+      "semantic_concern_geometry",
+      "state_dependent_concern",
+      "structure_compatible_generalization",
+      "symbolic_weakness",
+      "two_bottlenecks",
+      "valence_object_formation",
+      "valence_tapestry",
+      "vector_first_order_self",
+      "viable_computational_bodies",
+      "virtual_governor_stress_signal",
+      "weakness_temporal",
+      "weakness_vs_simplicity",
+      "world_responds"
+    ],
+    "frozen_legacy_packages_sha256": "86703ca46bc2a759a5f054247512c9c0df558404711db5c564ca58dfc76f2c77"
+  },
+  "packages": [
+    {
+      "package": "activation_geometry",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "ambiguous_run_history",
+        "explanation": "Multiple historical runs require an exact primary-run and partial-history decision before migration.",
+        "next_action": "Inventory run lineage and register only an explicitly authorized canonical binding.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-15",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "allostatic_control",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "autopoietic_control",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "bayesian_voi",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/bayesian_voi/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "bayesian_voi_2026_07_14",
+      "runs": [
+        {
+          "run_id": "bayesian_voi_2026_07_14",
+          "publication_package": "bayesian_voi",
+          "runtime_package": "bayesian_voi",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/bayesian_voi/experiment_manifest.json",
+          "report_paths": [
+            "experiments/bayesian_voi/results/bayesian_voi_summary.json"
+          ],
+          "claim_ids": [
+            "MATH_VOI_SURROGATE_GENERALITY"
+          ],
+          "evidence_ids": [
+            "EVID-BAYESIAN-VOI-MISSPEC"
+          ],
+          "gate_verdict_paths": []
+        }
+      ]
+    },
+    {
+      "package": "commitment_surface",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/commitment_surface/experiment_manifest.json",
+      "run_coverage": "partial",
+      "primary_run_id": "commitment_surface_e5_2026_07_10",
+      "runs": [
+        {
+          "run_id": "commitment_surface_e5_2026_07_10",
+          "publication_package": "commitment_surface",
+          "runtime_package": "commitment_surface",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/commitment_surface/experiment_manifest.json",
+          "report_paths": [
+            "experiments/commitment_surface/results/e5_generator_vs_coverage.json",
+            "experiments/commitment_surface/results/e5_generator_vs_coverage.md"
+          ],
+          "claim_ids": [
+            "COMMITMENT_GENERATOR_GENERALIZATION"
+          ],
+          "evidence_ids": [
+            "EVID-COMMITMENT-E5-COVERAGE"
+          ],
+          "gate_verdict_paths": [
+            "experiments/commitment_surface/results/gate_verdicts/e5_strict_coverage.json"
+          ]
+        }
+      ]
+    },
+    {
+      "package": "concept_geometry",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "concern_bootstrap",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "concerned_syntax",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "costly_null_probes",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "current_error_calibration",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "ensemble_uncertainty",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "epistemic_exploration",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "exploration_diagnostics",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "external_contact",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "scheduled_manifest_migration",
+        "explanation": "This unambiguous run is reserved for the next bounded manifest-migration tranche.",
+        "next_action": "Author and validate the approved root manifest, then replace this exception atomically.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-09-15",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "first_order_self",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "gauge_fixed_concern_transport",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "grid_cell_weakness",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "habituated_reengagement",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "homeostatic_objects",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "interventional_contrast",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "learned_symmetry",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "long_horizon_bottleneck",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "mathematical_claims",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/mathematical_claims/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "mathematical_claims_2026_07_14",
+      "runs": [
+        {
+          "run_id": "mathematical_claims_2026_07_14",
+          "publication_package": "mathematical_claims",
+          "runtime_package": "mathematical_claims",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/mathematical_claims/experiment_manifest.json",
+          "report_paths": [
+            "experiments/mathematical_claims/results/mathematical_claims_summary.json",
+            "experiments/mathematical_claims/theorem_assumption_matrix.json"
+          ],
+          "claim_ids": [
+            "MATH_ASSUMPTION_DEPENDENCE"
+          ],
+          "evidence_ids": [
+            "EVID-MATH-ASSUMPTION-MATRIX"
+          ],
+          "gate_verdict_paths": []
+        }
+      ]
+    },
+    {
+      "package": "neural_group_generator",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "null_intervention",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "off_policy_state_coverage",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "online_identifying_interventions",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "paraphrase_weakness",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "passive_active_phase_map",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/passive_active_phase_map/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "passive_active_phase_map_2026_07_14",
+      "runs": [
+        {
+          "run_id": "passive_active_phase_map_2026_07_14",
+          "publication_package": "passive_active_phase_map",
+          "runtime_package": "passive_active_phase_map",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/passive_active_phase_map/experiment_manifest.json",
+          "report_paths": [
+            "experiments/passive_active_phase_map/results/registered_summary.json",
+            "experiments/passive_active_phase_map/results/registered_summary.md"
+          ],
+          "claim_ids": [
+            "SYSTEMS_PASSIVE_ACTIVE_BIFURCATION",
+            "SYSTEMS_PASSIVE_ACTIVE_HYSTERESIS"
+          ],
+          "evidence_ids": [
+            "EVID-PASSIVE-ACTIVE-BIFURCATION",
+            "EVID-PASSIVE-ACTIVE-HYSTERESIS"
+          ],
+          "gate_verdict_paths": []
+        }
+      ]
+    },
+    {
+      "package": "passive_to_active",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "phase4_metaphysics",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "phase5_external_validity",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "scheduled_manifest_migration",
+        "explanation": "This unambiguous run is reserved for the next bounded manifest-migration tranche.",
+        "next_action": "Author and validate the approved root manifest, then replace this exception atomically.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-09-15",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "phase6_real_model_validation",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "planning_from_concern",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "planning_hardening",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "probe_value_reengagement",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "regime_sensitive_de",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "role_specific_identifiability",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "rotation_weakness",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "ambiguous_run_history",
+        "explanation": "Multiple historical runs require an exact primary-run and partial-history decision before migration.",
+        "next_action": "Inventory run lineage and register only an explicitly authorized canonical binding.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-15",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "scale_normalized_vprobe",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "seed_bootstrap_calibration",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/seed_bootstrap_calibration/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "seed_bootstrap_calibration_2026_07_14",
+      "runs": [
+        {
+          "run_id": "seed_bootstrap_calibration_2026_07_14",
+          "publication_package": "seed_bootstrap_calibration",
+          "runtime_package": "seed_bootstrap_calibration",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/seed_bootstrap_calibration/experiment_manifest.json",
+          "report_paths": [
+            "experiments/seed_bootstrap_calibration/results/summary.json",
+            "experiments/seed_bootstrap_calibration/results/summary.md"
+          ],
+          "claim_ids": [
+            "SCIENCE_THREE_SEED_PROMOTION"
+          ],
+          "evidence_ids": [
+            "EVID-SEED-BOOTSTRAP-S022"
+          ],
+          "gate_verdict_paths": []
+        }
+      ]
+    },
+    {
+      "package": "semantic_concern_geometry",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "multi_execution_contract_needed",
+        "explanation": "The aggregate spans multiple execution commands that manifest v1 cannot represent safely.",
+        "next_action": "Approve an execution-shard contract before authoring a package-root manifest.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-31",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "state_dependent_concern",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "structure_compatible_generalization",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "symbolic_weakness",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "two_bottlenecks",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "valence_object_formation",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "valence_tapestry",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "vector_first_order_self",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "viable_computational_bodies",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "virtual_governor_stress_signal",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "weakness_temporal",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "weakness_vs_simplicity",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    },
+    {
+      "package": "world_responds",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
+    }
+  ]
+}

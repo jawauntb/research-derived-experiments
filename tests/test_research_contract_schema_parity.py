@@ -12,6 +12,14 @@ from scripts.research_contracts import (
     EVIDENCE_STATUSES,
     SCHEMA_VERSION,
 )
+from scripts.validate_experiment_manifest import (
+    CONTRACT_COVERAGE_MODES,
+    FROZEN_LEGACY_PACKAGES_SHA256,
+    INTEGRITY_STATES,
+    LEGACY_REASON_CODES,
+    PROVENANCE_MODES,
+    RUN_COVERAGE_STATES,
+)
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -40,7 +48,31 @@ class ResearchContractSchemaParityTests(unittest.TestCase):
         self.assertEqual(set(gate["claim_tier"]["enum"]), CLAIM_TIERS)
         self.assertEqual(gate["claim_id"]["pattern"], CLAIM_ID_PATTERN)
 
+    def test_experiment_contract_registry_schema_matches_validator_vocabulary(self) -> None:
+        schema = self.schema("experiment_contract_registry.schema.json")
+        policy = schema["properties"]["legacy_policy"]["properties"]
+        structured = schema["$defs"]["structured_package"]["properties"]
+        run = schema["$defs"]["run_record"]["properties"]
+        exception = schema["$defs"]["legacy_exception"]["properties"]
+
+        self.assertEqual(schema["properties"]["schema_version"]["const"], SCHEMA_VERSION)
+        coverage_modes = {
+            schema["$defs"][branch["$ref"].split("/")[-1]]["properties"]["coverage_mode"]["const"]
+            for branch in schema["$defs"]["package_record"]["oneOf"]
+        }
+        self.assertEqual(coverage_modes, CONTRACT_COVERAGE_MODES)
+        self.assertEqual(set(structured["run_coverage"]["enum"]), RUN_COVERAGE_STATES)
+        self.assertEqual(set(run["provenance_mode"]["enum"]), PROVENANCE_MODES)
+        self.assertEqual(set(run["integrity_state"]["enum"]), INTEGRITY_STATES)
+        self.assertEqual(set(exception["reason_code"]["enum"]), LEGACY_REASON_CODES)
+        self.assertEqual(exception["adjudicates_claims"]["const"], False)
+        self.assertEqual(policy["warning_days"]["const"], 30)
+        self.assertEqual(policy["max_exception_horizon_days"]["const"], 180)
+        self.assertEqual(
+            policy["frozen_legacy_packages_sha256"]["const"],
+            FROZEN_LEGACY_PACKAGES_SHA256,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
-

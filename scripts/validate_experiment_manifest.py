@@ -9,21 +9,51 @@ duplicate gate-ID check that JSON Schema cannot express directly.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import re
 import sys
+from datetime import date
 from pathlib import Path
 from typing import Never, cast
 
 try:
-    from scripts.research_contracts import CLAIM_ID, CLAIM_TIERS, SCHEMA_VERSION
+    from scripts.research_contracts import (
+        CLAIM_ID,
+        CLAIM_TIERS,
+        EVIDENCE_ID,
+        SCHEMA_VERSION,
+        SHA256,
+    )
 except ModuleNotFoundError:  # Direct execution: python scripts/validate_experiment_manifest.py
-    from research_contracts import CLAIM_ID, CLAIM_TIERS, SCHEMA_VERSION
+    from research_contracts import CLAIM_ID, CLAIM_TIERS, EVIDENCE_ID, SCHEMA_VERSION, SHA256
 
 
 ROOT = Path(__file__).resolve().parent.parent
 MANIFEST_NAME = "experiment_manifest.json"
+CONTRACT_REGISTRY = ROOT / "docs" / "experiment_contract_registry.json"
+EXCLUDED_PACKAGES = {"common"}
+
+# This digest independently anchors the 49 packages that existed without a
+# root manifest at the 2026-07-14 cutoff. Keeping the digest in code (and as a
+# schema const) prevents a new package from authorizing its own exception by
+# editing an adjacent list and digest together.
+FROZEN_LEGACY_PACKAGES_SHA256 = (
+    "86703ca46bc2a759a5f054247512c9c0df558404711db5c564ca58dfc76f2c77"
+)
+CONTRACT_COVERAGE_MODES = {"structured_manifest", "legacy_exception"}
+RUN_COVERAGE_STATES = {"complete", "partial"}
+PROVENANCE_MODES = {"structured_manifest", "legacy_report"}
+INTEGRITY_STATES = {"valid", "invalid", "not_assessed"}
+LEGACY_REASON_CODES = {
+    "ambiguous_run_history",
+    "missing_package_manifest",
+    "multi_execution_contract_needed",
+    "scheduled_manifest_migration",
+}
+WARNING_DAYS = 30
+MAX_EXCEPTION_HORIZON_DAYS = 180
 
 STATUSES = {
     "planned",
@@ -63,6 +93,45 @@ ROOT_FIELDS = {
 }
 EXPERIMENT_ID = re.compile(r"^[a-z0-9][a-z0-9_-]{1,63}$")
 GATE_ID = CLAIM_ID
+RUN_ID = EXPERIMENT_ID
+
+CONTRACT_ROOT_FIELDS = {"schema_version", "legacy_policy", "packages"}
+LEGACY_POLICY_FIELDS = {
+    "frozen_package_cutoff",
+    "warning_days",
+    "max_exception_horizon_days",
+    "frozen_legacy_packages",
+    "frozen_legacy_packages_sha256",
+}
+STRUCTURED_PACKAGE_FIELDS = {
+    "package",
+    "coverage_mode",
+    "manifest_path",
+    "run_coverage",
+    "runs",
+}
+LEGACY_PACKAGE_FIELDS = {"package", "coverage_mode", "legacy_exception"}
+RUN_FIELDS = {
+    "run_id",
+    "publication_package",
+    "runtime_package",
+    "provenance_mode",
+    "integrity_state",
+    "report_paths",
+    "claim_ids",
+    "evidence_ids",
+    "gate_verdict_paths",
+}
+LEGACY_EXCEPTION_FIELDS = {
+    "owner",
+    "reason_code",
+    "explanation",
+    "next_action",
+    "review_date",
+    "expiry_date",
+    "frozen_legacy_cutoff",
+    "adjudicates_claims",
+}
 
 
 def fail(message: str) -> Never:
@@ -116,6 +185,79 @@ def require_number(value: object, label: str, *, allow_zero: bool) -> float | in
         qualifier = "non-negative" if allow_zero else "positive"
         fail(f"{label} must be {qualifier}")
     return value
+
+
+def require_integer(value: object, label: str) -> int:
+    if isinstance(value, bool) or not isinstance(value, int):
+        fail(f"{label} must be an integer")
+    return value
+
+
+def require_string_list(value: object, label: str) -> list[str]:
+    items = require_list(value, label)
+    strings: list[str] = []
+    for index, item in enumerate(items):
+        strings.append(require_string(item, f"{label}[{index}]"))
+    if len(strings) != len(set(strings)):
+        fail(f"{label} contains duplicate values")
+    return strings
+
+
+def require_iso_date(value: object, label: str) -> date:
+    raw = require_string(value, label)
+    try:
+        parsed = date.fromisoformat(raw)
+    except ValueError:
+        fail(f"{label} must be an ISO date (YYYY-MM-DD)")
+    if parsed.isoformat() != raw:
+        fail(f"{label} must be an ISO date (YYYY-MM-DD)")
+    return parsed
+
+
+def contract_registry_digest(packages: list[str]) -> str:
+    """Return the history-independent digest of a sorted legacy package set."""
+
+    canonical = "\n".join(packages) + "\n"
+    return hashlib.sha256(canonical.encode()).hexdigest()
+
+
+def discover_experiment_packages(root: Path = ROOT) -> list[str]:
+    """Return direct research package names, excluding shared support code."""
+
+    experiments = root / "experiments"
+    if not experiments.exists():
+        return []
+    return sorted(
+        path.name
+        for path in experiments.iterdir()
+        if path.is_dir() and path.name not in EXCLUDED_PACKAGES
+    )
+
+
+def _safe_repo_file(value: object, label: str, *, root: Path) -> tuple[str, Path]:
+    relative = require_string(value, label)
+    raw_path = Path(relative)
+    if raw_path.is_absolute() or ".." in raw_path.parts:
+        fail(f"{label} must be a safe repository-relative path: {relative}")
+    resolved_root = root.resolve()
+    resolved = (root / raw_path).resolve()
+    if not resolved.is_relative_to(resolved_root):
+        fail(f"{label} escapes the repository: {relative}")
+    if not resolved.is_file():
+        fail(f"{label} does not exist: {relative}")
+    return relative, resolved
+
+
+def _validate_identifier_list(
+    value: object,
+    label: str,
+    pattern: re.Pattern[str],
+) -> list[str]:
+    identifiers = require_string_list(value, label)
+    for identifier in identifiers:
+        if pattern.fullmatch(identifier) is None:
+            fail(f"{label} contains an invalid identifier: {identifier}")
+    return identifiers
 
 
 def validate_controls(value: object) -> None:
@@ -241,6 +383,284 @@ def validate(path: Path) -> dict[str, object]:
     return manifest
 
 
+def _validate_run_record(
+    value: object,
+    *,
+    package: str,
+    packages: set[str],
+    root: Path,
+    index: int,
+) -> str:
+    label = f"packages[{package}].runs[{index}]"
+    run = require_object(value, label)
+    require_fields(run, label, RUN_FIELDS, {"manifest_path"})
+
+    run_id = require_string(run["run_id"], f"{label}.run_id")
+    if RUN_ID.fullmatch(run_id) is None:
+        fail(f"{label}.run_id has invalid format: {run_id}")
+
+    publication_package = require_string(
+        run["publication_package"], f"{label}.publication_package"
+    )
+    if publication_package != package:
+        fail(f"run publication_package must match owning package: {run_id}")
+    runtime_package = require_string(run["runtime_package"], f"{label}.runtime_package")
+    if runtime_package not in packages:
+        fail(f"run runtime_package is not a direct package: {runtime_package}")
+
+    provenance_mode = require_string(run["provenance_mode"], f"{label}.provenance_mode")
+    if provenance_mode not in PROVENANCE_MODES:
+        fail(f"{label}.provenance_mode is not canonical: {provenance_mode}")
+    integrity_state = require_string(run["integrity_state"], f"{label}.integrity_state")
+    if integrity_state not in INTEGRITY_STATES:
+        fail(f"{label}.integrity_state is not canonical: {integrity_state}")
+
+    if provenance_mode == "structured_manifest" and "manifest_path" not in run:
+        fail(f"structured run is missing manifest_path: {run_id}")
+    if "manifest_path" in run:
+        _safe_repo_file(run["manifest_path"], f"{label}.manifest_path", root=root)
+
+    for path_label in ("report_paths", "gate_verdict_paths"):
+        paths = require_string_list(run[path_label], f"{label}.{path_label}")
+        for path_index, path in enumerate(paths):
+            _safe_repo_file(path, f"{label}.{path_label}[{path_index}]", root=root)
+    _validate_identifier_list(run["claim_ids"], f"{label}.claim_ids", CLAIM_ID)
+    _validate_identifier_list(run["evidence_ids"], f"{label}.evidence_ids", EVIDENCE_ID)
+    return run_id
+
+
+def _validate_structured_package(
+    record: dict[str, object],
+    *,
+    package: str,
+    packages: set[str],
+    root: Path,
+) -> None:
+    require_fields(record, f"package record {package}", STRUCTURED_PACKAGE_FIELDS, {"primary_run_id"})
+    expected_manifest = f"experiments/{package}/{MANIFEST_NAME}"
+    manifest_path = require_string(record["manifest_path"], f"{package}.manifest_path")
+    if manifest_path != expected_manifest:
+        fail(f"structured manifest must be package-root: {package}")
+    _, resolved_manifest = _safe_repo_file(
+        manifest_path,
+        f"{package}.manifest_path",
+        root=root,
+    )
+    validate(resolved_manifest)
+
+    run_coverage = require_string(record["run_coverage"], f"{package}.run_coverage")
+    if run_coverage not in RUN_COVERAGE_STATES:
+        fail(f"{package}.run_coverage is not canonical: {run_coverage}")
+    runs = require_list(record["runs"], f"{package}.runs", non_empty=True)
+    run_ids: list[str] = []
+    for index, run in enumerate(runs):
+        run_id = _validate_run_record(
+            run,
+            package=package,
+            packages=packages,
+            root=root,
+            index=index,
+        )
+        if run_id in run_ids:
+            fail(f"duplicate run_id in package {package}: {run_id}")
+        run_ids.append(run_id)
+
+    if "primary_run_id" in record:
+        primary_run_id = require_string(record["primary_run_id"], f"{package}.primary_run_id")
+        if primary_run_id not in run_ids:
+            fail(f"primary_run_id does not resolve in package {package}: {primary_run_id}")
+
+
+def _validate_legacy_package(
+    record: dict[str, object],
+    *,
+    package: str,
+    policy_cutoff: date,
+    frozen_packages: set[str],
+    as_of: date,
+    warning_days: int,
+    max_horizon_days: int,
+) -> list[str]:
+    require_fields(record, f"package record {package}", LEGACY_PACKAGE_FIELDS)
+    if package not in frozen_packages:
+        fail(f"legacy exception is outside the frozen package set: {package}")
+
+    exception = require_object(record["legacy_exception"], "legacy_exception")
+    require_fields(exception, "legacy_exception", LEGACY_EXCEPTION_FIELDS)
+    for field in ("owner", "explanation", "next_action"):
+        require_string(exception[field], f"legacy_exception.{field}")
+    reason_code = require_string(exception["reason_code"], "legacy_exception.reason_code")
+    if reason_code not in LEGACY_REASON_CODES:
+        fail(f"legacy_exception.reason_code is not canonical: {reason_code}")
+    if exception["adjudicates_claims"] is not False:
+        fail("legacy_exception.adjudicates_claims must be false")
+
+    cutoff = require_iso_date(
+        exception["frozen_legacy_cutoff"],
+        "legacy_exception.frozen_legacy_cutoff",
+    )
+    if cutoff != policy_cutoff:
+        fail(f"legacy exception cutoff does not match policy: {package}")
+    review_date = require_iso_date(exception["review_date"], "legacy_exception.review_date")
+    expiry_date = require_iso_date(exception["expiry_date"], "legacy_exception.expiry_date")
+    if review_date > as_of:
+        fail(f"legacy exception review date is in the future: {package}")
+    if expiry_date <= review_date:
+        fail(f"legacy exception expiry must follow review date: {package}")
+    if (expiry_date - review_date).days > max_horizon_days:
+        fail(f"exception horizon exceeds {max_horizon_days} days: {package}")
+    remaining_days = (expiry_date - as_of).days
+    if remaining_days <= 0:
+        fail(f"legacy exception expired: {package}")
+    if remaining_days <= warning_days:
+        return [f"{package} expires in {remaining_days} days ({expiry_date.isoformat()})"]
+    return []
+
+
+def validate_contract_registry(
+    path: Path = CONTRACT_REGISTRY,
+    *,
+    root: Path = ROOT,
+    as_of: date | None = None,
+    expected_frozen_digest: str | None = None,
+) -> tuple[dict[str, object], list[str]]:
+    """Validate the exact package coverage partition without consulting Git history."""
+
+    try:
+        payload = json.loads(path.read_text())
+    except (OSError, json.JSONDecodeError) as exc:
+        fail(f"cannot read {path}: {exc}")
+    registry = require_object(payload, "contract registry")
+    require_fields(registry, "contract registry", CONTRACT_ROOT_FIELDS)
+    if registry["schema_version"] != SCHEMA_VERSION:
+        fail(f"contract registry schema_version must be '{SCHEMA_VERSION}'")
+
+    policy = require_object(registry["legacy_policy"], "legacy_policy")
+    require_fields(policy, "legacy_policy", LEGACY_POLICY_FIELDS)
+    policy_cutoff = require_iso_date(
+        policy["frozen_package_cutoff"],
+        "legacy_policy.frozen_package_cutoff",
+    )
+    warning_days = require_integer(policy["warning_days"], "legacy_policy.warning_days")
+    if warning_days != WARNING_DAYS:
+        fail(f"legacy_policy.warning_days must be {WARNING_DAYS}")
+    max_horizon_days = require_integer(
+        policy["max_exception_horizon_days"],
+        "legacy_policy.max_exception_horizon_days",
+    )
+    if max_horizon_days != MAX_EXCEPTION_HORIZON_DAYS:
+        fail(
+            "legacy_policy.max_exception_horizon_days must be "
+            f"{MAX_EXCEPTION_HORIZON_DAYS}"
+        )
+
+    frozen_packages = require_string_list(
+        policy["frozen_legacy_packages"],
+        "legacy_policy.frozen_legacy_packages",
+    )
+    if frozen_packages != sorted(frozen_packages):
+        fail("legacy_policy.frozen_legacy_packages must be sorted")
+    for package in frozen_packages:
+        if EXPERIMENT_ID.fullmatch(package) is None:
+            fail(f"frozen legacy package has invalid format: {package}")
+        if package in EXCLUDED_PACKAGES:
+            fail(f"excluded support package cannot be frozen: {package}")
+    stored_digest = require_string(
+        policy["frozen_legacy_packages_sha256"],
+        "legacy_policy.frozen_legacy_packages_sha256",
+    )
+    if SHA256.fullmatch(stored_digest) is None:
+        fail("legacy_policy.frozen_legacy_packages_sha256 must be a SHA-256 digest")
+    computed_digest = contract_registry_digest(frozen_packages)
+    if stored_digest != computed_digest:
+        fail("frozen legacy package digest mismatch")
+    anchored_digest = expected_frozen_digest or FROZEN_LEGACY_PACKAGES_SHA256
+    if stored_digest != anchored_digest:
+        fail("frozen legacy package digest does not match the immutable anchor")
+
+    actual_packages = set(discover_experiment_packages(root))
+    records = require_list(registry["packages"], "packages", non_empty=True)
+    by_package: dict[str, tuple[str, dict[str, object]]] = {}
+    for index, item in enumerate(records):
+        label = f"packages[{index}]"
+        record = require_object(item, label)
+        require_fields(
+            record,
+            label,
+            {"package", "coverage_mode"},
+            {
+                "manifest_path",
+                "run_coverage",
+                "primary_run_id",
+                "runs",
+                "legacy_exception",
+            },
+        )
+        package = require_string(record["package"], f"{label}.package")
+        if EXPERIMENT_ID.fullmatch(package) is None:
+            fail(f"{label}.package has invalid format: {package}")
+        if package in EXCLUDED_PACKAGES:
+            fail(f"excluded support package cannot be registered: {package}")
+        if package in by_package:
+            fail(f"duplicate package record: {package}")
+        mode = require_string(record["coverage_mode"], f"{label}.coverage_mode")
+        if mode not in CONTRACT_COVERAGE_MODES:
+            fail(f"{label}.coverage_mode is not canonical: {mode}")
+        by_package[package] = (mode, record)
+
+    registered_packages = set(by_package)
+    orphaned = sorted(registered_packages - actual_packages)
+    if orphaned:
+        fail(f"orphaned package record: {orphaned[0]}")
+    uncovered = sorted(actual_packages - registered_packages)
+    if uncovered:
+        fail(f"uncovered package: {uncovered[0]}")
+
+    active_date = as_of or date.today()
+    warnings: list[str] = []
+    for package in sorted(by_package):
+        mode, record = by_package[package]
+        root_manifest = root / "experiments" / package / MANIFEST_NAME
+        if mode == "structured_manifest":
+            _validate_structured_package(
+                record,
+                package=package,
+                packages=actual_packages,
+                root=root,
+            )
+        else:
+            if root_manifest.is_file():
+                fail(f"package has both a root manifest and legacy exception: {package}")
+            warnings.extend(
+                _validate_legacy_package(
+                    record,
+                    package=package,
+                    policy_cutoff=policy_cutoff,
+                    frozen_packages=set(frozen_packages),
+                    as_of=active_date,
+                    warning_days=warning_days,
+                    max_horizon_days=max_horizon_days,
+                )
+            )
+
+    structured_packages = {
+        package for package, (mode, _record) in by_package.items() if mode == "structured_manifest"
+    }
+    physical_root_packages = {
+        path.parent.name
+        for path in (root / "experiments").glob(f"*/{MANIFEST_NAME}")
+        if path.parent.name not in EXCLUDED_PACKAGES
+    }
+    if physical_root_packages != structured_packages:
+        missing_record = sorted(physical_root_packages - structured_packages)
+        missing_manifest = sorted(structured_packages - physical_root_packages)
+        if missing_record:
+            fail(f"root manifest is not registered as structured: {missing_record[0]}")
+        fail(f"structured package is missing its root manifest: {missing_manifest[0]}")
+
+    return registry, warnings
+
+
 def discover_manifests(root: Path = ROOT) -> list[Path]:
     """Return every canonical experiment manifest in stable path order."""
 
@@ -258,9 +678,53 @@ def main(argv: list[str] | None = None) -> int:
         type=Path,
         help=f"experiment manifest JSON files (default: discover experiments/**/{MANIFEST_NAME})",
     )
+    parser.add_argument(
+        "--historical-inspection",
+        action="store_true",
+        help=(
+            "clearly labeled non-CI mode for inspecting registry validity at a historical "
+            "date; requires --as-of"
+        ),
+    )
+    parser.add_argument(
+        "--as-of",
+        type=str,
+        help="historical inspection date in YYYY-MM-DD form (never used by normal CI)",
+    )
     args = parser.parse_args(argv)
 
-    manifests = args.manifests or discover_manifests()
+    if args.as_of and not args.historical_inspection:
+        parser.error("--as-of requires --historical-inspection")
+    if args.historical_inspection and not args.as_of:
+        parser.error("--historical-inspection requires --as-of")
+    if args.historical_inspection and args.manifests:
+        parser.error("historical inspection validates repository coverage, not explicit paths")
+
+    if args.manifests:
+        manifests = args.manifests
+    else:
+        inspection_date = date.today()
+        if args.as_of:
+            try:
+                inspection_date = date.fromisoformat(args.as_of)
+            except ValueError:
+                parser.error("--as-of must be an ISO date (YYYY-MM-DD)")
+            if inspection_date.isoformat() != args.as_of:
+                parser.error("--as-of must be an ISO date (YYYY-MM-DD)")
+        try:
+            registry, warnings = validate_contract_registry(as_of=inspection_date)
+        except ValueError as exc:
+            print(f"[experiment-contract] FAIL: {exc}", file=sys.stderr)
+            return 1
+        for warning in warnings:
+            print(f"[experiment-contract] WARN: {warning}", file=sys.stderr)
+        mode = " historical-inspection" if args.historical_inspection else ""
+        print(
+            f"[experiment-contract] PASS{mode}: {len(registry['packages'])} packages "
+            f"at {inspection_date.isoformat()}"
+        )
+        manifests = discover_manifests()
+
     for path in manifests:
         try:
             payload = validate(path)
