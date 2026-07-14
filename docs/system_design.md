@@ -145,8 +145,8 @@ Each experiment directory is a self-contained research unit. Typical contents:
 | Research experiment packages | **54** |
 | Shared non-experiment support packages | **1** — `experiments/common` |
 | Contain one or more `modal_*.py` entrypoints | **46** |
-| Canonical package-root `experiment_manifest.json` files | **5** |
-| Authoritative package-contract records | **54** = **5** `structured_manifest` + **49** time-bounded `legacy_exception` in `docs/experiment_contract_registry.json` |
+| Canonical package-root `experiment_manifest.json` files | **6** |
+| Authoritative package-contract records | **54** = **6** `structured_manifest` + **48** time-bounded `legacy_exception` in `docs/experiment_contract_registry.json` |
 | Canonical per-gate verdict files | **1** (E5). Ten evidence rows declare gate IDs; only E5 currently has a committed verdict file. Manifest gate declarations are not verdicts. |
 | Canonical claim records | **12** |
 | Canonical evidence records | **12** |
@@ -733,7 +733,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 - **No universal research dependency specification.** The root quality gate has a complete locked dependency group, but experiment and Modal runtimes still rely on command-specific `uvx` sets or explicit Modal images.
 - **Machine-specific paths** in docs/handoffs (Doppler scope, local archives).
 - **Result fidelity depends on summarization discipline.** Gitignored JSON vs committed Markdown can drift.
-- **Structured-contract coverage is early but fail-closed.** All 54 research packages are partitioned in `docs/experiment_contract_registry.json` (5 structured roots + 49 bounded legacy exceptions). Only one gate currently has a committed verdict file. Registry run records are ready for provenance consumption, but `gen_provenance.py` does not yet read them.
+- **Structured-contract coverage is early but fail-closed.** All 54 research packages are partitioned in `docs/experiment_contract_registry.json` (6 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction.
 - **Paper-primary experiments** may have no committed `results/*.md`; evidence lives in the paper + local artifacts.
 - **Coherence / Inquiry / Cabal / site tests** are outside the root Python quality gate.
 - **Scientific claims are gate-bound.** Fixture smokes do not settle the program thesis.

@@ -289,8 +289,8 @@ class ExperimentContractRegistryTests(unittest.TestCase):
         modes = [record["coverage_mode"] for record in packages]
 
         self.assertEqual(len(modes), 54)
-        self.assertEqual(modes.count("structured_manifest"), 5)
-        self.assertEqual(modes.count("legacy_exception"), 49)
+        self.assertEqual(modes.count("structured_manifest"), 6)
+        self.assertEqual(modes.count("legacy_exception"), 48)
         self.assertEqual(warnings, [])
 
     def test_valid_registry_is_an_exact_structured_legacy_partition(self) -> None:

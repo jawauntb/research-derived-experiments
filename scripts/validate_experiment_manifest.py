@@ -41,7 +41,7 @@ EXCLUDED_PACKAGES = {"common"}
 # schema const) prevents a new package from authorizing its own exception by
 # editing an adjacent list and digest together.
 FROZEN_LEGACY_PACKAGES_SHA256 = (
-    "86703ca46bc2a759a5f054247512c9c0df558404711db5c564ca58dfc76f2c77"
+    "a7a41a68393e136f408e2b7f4e73ef49efdfe49cb3f39a3c1279fb3964382d91"
 )
 CONTRACT_COVERAGE_MODES = {"structured_manifest", "legacy_exception"}
 RUN_COVERAGE_STATES = {"complete", "partial"}

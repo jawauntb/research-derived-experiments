@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "external_contact_p1_pythia_lora",
+  "hypothesis": "Learned-function weakness transfers to external open-weights Pythia models under LoRA adaptation on a strict-subset modular-shift task.",
+  "claim_tier": "external",
+  "controls": [
+    {
+      "control_id": "wrong_group",
+      "description": "Wrong-group control predictor matched to the P1 gate."
+    },
+    {
+      "control_id": "classical_predictors",
+      "description": "Classical predictor acceptance gate used as the non-weakness baseline family."
+    },
+    {
+      "control_id": "linear_probe_degenerate",
+      "description": "Earlier Tier-B linear-probe run kept as legacy history, not the headline LoRA binding."
+    }
+  ],
+  "seeds": [
+    20260618,
+    20260718,
+    20260818
+  ],
+  "runtime": {
+    "execution_class": "modal_gpu",
+    "command": [
+      "doppler",
+      "--scope",
+      "/Users/jawaun/superoptimizers",
+      "run",
+      "--",
+      "uvx",
+      "--python",
+      "3.12",
+      "--from",
+      "modal",
+      "modal",
+      "run",
+      "experiments/external_contact/modal_p1_pythia_lora.py",
+      "--sizes",
+      "70m,160m,410m",
+      "--ns",
+      "13,17,23",
+      "--seeds",
+      "3",
+      "--train-frac",
+      "0.5",
+      "--epochs",
+      "160",
+      "--objective",
+      "lm",
+      "--base-seed",
+      "20260618",
+      "--out",
+      "artifacts/external_contact/p1_pythia_lora.json"
+    ],
+    "estimated_minutes": 240
+  },
+  "dependencies": [
+    {
+      "name": "modal",
+      "version": ">=1.0"
+    },
+    {
+      "name": "torch",
+      "version": ">=2.0"
+    },
+    {
+      "name": "transformers",
+      "version": ">=4.40"
+    },
+    {
+      "name": "peft",
+      "version": ">=0.10"
+    }
+  ],
+  "gates": [
+    {
+      "gate_id": "P1_WEAKNESS_TRANSFER",
+      "criterion": "Weakness-to-OOD transfer passes the frozen external-contact P1 acceptance gate."
+    },
+    {
+      "gate_id": "P1_WRONG_GROUP",
+      "criterion": "Wrong-group control remains below the acceptance threshold."
+    },
+    {
+      "gate_id": "P1_CLASSICAL",
+      "criterion": "Classical predictors do not absorb the positive claim under the frozen gate."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "paper",
+      "path": "experiments/external_contact/results/p1_pythia_lora_2026_06_22.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "docs/external_contact_preregistration.md",
+      "public": true
+    }
+  ],
+  "status": "rejected"
+}

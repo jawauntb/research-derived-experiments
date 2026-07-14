@@ -16,7 +16,6 @@
       "ensemble_uncertainty",
       "epistemic_exploration",
       "exploration_diagnostics",
-      "external_contact",
       "first_order_self",
       "gauge_fixed_concern_transport",
       "grid_cell_weakness",
@@ -55,7 +54,7 @@
       "weakness_vs_simplicity",
       "world_responds"
     ],
-    "frozen_legacy_packages_sha256": "86703ca46bc2a759a5f054247512c9c0df558404711db5c564ca58dfc76f2c77"
+    "frozen_legacy_packages_sha256": "a7a41a68393e136f408e2b7f4e73ef49efdfe49cb3f39a3c1279fb3964382d91"
   },
   "packages": [
     {
@@ -318,17 +317,30 @@
     },
     {
       "package": "external_contact",
-      "coverage_mode": "legacy_exception",
-      "legacy_exception": {
-        "owner": "Jawaun Brown",
-        "reason_code": "scheduled_manifest_migration",
-        "explanation": "This unambiguous run is reserved for the next bounded manifest-migration tranche.",
-        "next_action": "Author and validate the approved root manifest, then replace this exception atomically.",
-        "review_date": "2026-07-14",
-        "expiry_date": "2026-09-15",
-        "frozen_legacy_cutoff": "2026-07-14",
-        "adjudicates_claims": false
-      }
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/external_contact/experiment_manifest.json",
+      "run_coverage": "partial",
+      "primary_run_id": "external_contact_p1_pythia_lora_2026_06_22",
+      "runs": [
+        {
+          "run_id": "external_contact_p1_pythia_lora_2026_06_22",
+          "publication_package": "external_contact",
+          "runtime_package": "external_contact",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/external_contact/experiment_manifest.json",
+          "report_paths": [
+            "experiments/external_contact/results/p1_pythia_lora_2026_06_22.md"
+          ],
+          "claim_ids": [
+            "WEAKNESS_EXTERNAL_PORTABILITY"
+          ],
+          "evidence_ids": [
+            "EVID-EXTERNAL-WEAKNESS-P1"
+          ],
+          "gate_verdict_paths": []
+        }
+      ]
     },
     {
       "package": "first_order_self",

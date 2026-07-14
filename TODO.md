@@ -8,9 +8,10 @@
 - [x] Correct all six primer HTML titles and PDF metadata; rebuild PDFs from corrected HTML.
 - [x] Correct the mathematics primer's Lagrangian/KKT signs, VOI sign, and discount arithmetic with regression tests.
 - [ ] Migrate experiment families to structured manifests and replace prose-only provenance extraction.
-  - [x] Partition all 54 research packages in `docs/experiment_contract_registry.json`: 5 structured manifests and 49 time-bounded legacy exceptions.
+  - [x] Partition all 54 research packages in `docs/experiment_contract_registry.json` (currently 6 structured manifests and 48 time-bounded legacy exceptions after External Contact migration; Phase 5 deferred pending runtime-representation decision).
   - [x] Make provenance consume exact primary-run bindings for structured packages (commitment_surface primary is M5; E5/E6/E7 remain explicit partial history).
-  - [ ] Replace the remaining legacy exceptions and partial run histories with exact structured run bindings.
+  - [x] Migrate External Contact LoRA run to a structured root manifest (`rejected` / `valid`) bound to `WEAKNESS_EXTERNAL_PORTABILITY`.
+  - [ ] Replace the remaining legacy exceptions and partial run histories with exact structured run bindings (Phase 5 deferred).
 - [ ] Add CI lanes for manifest coverage, public-artifact envelopes, and clean-clone reproduction.
   - [x] Enforce manifest-or-active-exception package coverage in the required root quality gate.
   - [ ] Enforce public-artifact envelopes and clean-clone reproduction.
