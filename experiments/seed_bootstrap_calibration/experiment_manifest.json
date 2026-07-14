@@ -1,0 +1,65 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "seed_bootstrap_calibration",
+  "hypothesis": "Three-seed percentile intervals are inadequate for promotion and resampling nested episode rows as independent units understates uncertainty when treatment effects vary by seed.",
+  "claim_tier": "internal",
+  "controls": [
+    {
+      "control_id": "paired_methods",
+      "description": "Naive row and paired seed-cluster intervals are evaluated on the same simulated datasets."
+    },
+    {
+      "control_id": "null_regimes",
+      "description": "Independent and hierarchical null regimes expose false-positive behavior."
+    },
+    {
+      "control_id": "negative_regime",
+      "description": "The weak high-noise hierarchical regime is retained without post-hoc retuning or deletion."
+    }
+  ],
+  "seeds": [20260714],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "-m", "experiments.seed_bootstrap_calibration.simulation"],
+    "estimated_minutes": 2,
+    "max_cost_usd": 0
+  },
+  "dependencies": [
+    {
+      "name": "numpy",
+      "version": ">=2.0,<3"
+    }
+  ],
+  "gates": [
+    {
+      "gate_id": "S022_THREE_SEED_PROMOTION",
+      "criterion": "No three-seed cell is promotion-ready under the preregistered coverage, precision, power, false-positive, and sign-stability targets."
+    },
+    {
+      "gate_id": "S022_HIERARCHICAL_RESAMPLING",
+      "criterion": "At least one hierarchical cell improves coverage by at least 0.05 when seed clusters, rather than nested rows, are resampled."
+    },
+    {
+      "gate_id": "S022_NEGATIVE_REGIME",
+      "criterion": "The weak high-noise hierarchical regime is never promotion-ready at any tested seed count."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/seed_bootstrap_calibration/results/summary.json",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "experiments/seed_bootstrap_calibration/results/summary.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/seed_bootstrap_calibration/PREREGISTRATION.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

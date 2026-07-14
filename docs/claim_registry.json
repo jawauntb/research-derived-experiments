@@ -20,7 +20,7 @@
     },
     {
       "claim_id": "COMMITMENT_GENERATOR_GENERALIZATION",
-      "statement": "The frozen E5 design does not establish generator-level generalization beyond labeled coverage.",
+      "statement": "The frozen E5 design establishes generator-level generalization beyond labeled coverage.",
       "claim_tier": "internal",
       "status": "rejected",
       "evidence_ids": ["EVID-COMMITMENT-E5-COVERAGE"],
@@ -36,7 +36,7 @@
     },
     {
       "claim_id": "WEAKNESS_EXTERNAL_PORTABILITY",
-      "statement": "The current external-contact result does not support portable weakness-to-generalization causality.",
+      "statement": "Weakness-to-generalization causality transfers to external models under the current external-contact design.",
       "claim_tier": "external",
       "status": "rejected",
       "evidence_ids": ["EVID-EXTERNAL-WEAKNESS-P1"],
@@ -49,6 +49,54 @@
       "status": "open",
       "evidence_ids": ["EVID-PASSIVE-ACTIVE-ATTRACTOR"],
       "source_refs": ["experiments/passive_to_active/results/pythia_70m_v2_2026_06_10.md"]
+    },
+    {
+      "claim_id": "MATH_ASSUMPTION_DEPENDENCE",
+      "statement": "The seven registered theorem-bridge assumption families have executable satisfying examples and paired cases where the named assumption or bridge predicate fails; this audit does not establish theorem necessity, conclusion invalidation, or minimality.",
+      "claim_tier": "theoretical",
+      "status": "supported",
+      "evidence_ids": ["EVID-MATH-ASSUMPTION-MATRIX"],
+      "source_refs": ["experiments/mathematical_claims/results/mathematical_claims_summary.json"]
+    },
+    {
+      "claim_id": "MATH_VOI_SURROGATE_GENERALITY",
+      "statement": "Current error, posterior variance, error squared over K plus one, or mutual information universally rank probes by true expected regret reduction.",
+      "claim_tier": "theoretical",
+      "status": "rejected",
+      "evidence_ids": ["EVID-BAYESIAN-VOI-MISSPEC"],
+      "source_refs": ["experiments/bayesian_voi/results/bayesian_voi_summary.json"]
+    },
+    {
+      "claim_id": "SCIENCE_THREE_SEED_PROMOTION",
+      "statement": "Three independent seeds provide promotion-ready uncertainty across the registered independent, hierarchical, null, and high-noise regimes.",
+      "claim_tier": "internal",
+      "status": "rejected",
+      "evidence_ids": ["EVID-SEED-BOOTSTRAP-S022"],
+      "source_refs": ["experiments/seed_bootstrap_calibration/results/summary.json"]
+    },
+    {
+      "claim_id": "PHIL_GRADED_CAUSAL_USE",
+      "statement": "The registered mass-normalized dose-response score distinguishes a known causal feature from equally decodable-only and null features across synthetic commitment surfaces.",
+      "claim_tier": "internal",
+      "status": "supported",
+      "evidence_ids": ["EVID-GRADED-CAUSAL-USE"],
+      "source_refs": ["experiments/common/causal_use.py", "tests/test_causal_use.py"]
+    },
+    {
+      "claim_id": "SYSTEMS_PASSIVE_ACTIVE_BIFURCATION",
+      "statement": "Action coupling produces a reproducible discontinuous bifurcation across the registered order parameters, architectures, and seeds.",
+      "claim_tier": "internal",
+      "status": "rejected",
+      "evidence_ids": ["EVID-PASSIVE-ACTIVE-BIFURCATION"],
+      "source_refs": ["experiments/passive_active_phase_map/results/registered_summary.json"]
+    },
+    {
+      "claim_id": "SYSTEMS_PASSIVE_ACTIVE_HYSTERESIS",
+      "statement": "Matched-budget forward and reverse continuation exhibit registered path dependence that survives washout and clears reinitialization controls in the synthetic passive-active model.",
+      "claim_tier": "internal",
+      "status": "supported",
+      "evidence_ids": ["EVID-PASSIVE-ACTIVE-HYSTERESIS"],
+      "source_refs": ["experiments/passive_active_phase_map/results/registered_summary.json"]
     }
   ]
 }

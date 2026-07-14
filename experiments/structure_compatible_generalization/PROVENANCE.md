@@ -9,20 +9,24 @@
 - **Reproduce (one command):** `python scripts/regen.py structure_compatible_generalization`
 
 ## Verification
-- Pre-registration: _none_
-- Result reports (10):
+- Pre-registration: `papers/structure_compatible_generalization/language_template_substitution_preregistration.md`
+- Result reports (14):
   - `experiments/structure_compatible_generalization/results/language_template_substitution_2026_07_06.md`
   - `experiments/structure_compatible_generalization/results/phase2_transformations_2026_07_06.md`
   - `experiments/structure_compatible_generalization/results/phase3_learned_generators_2026_07_06.md`
   - `experiments/structure_compatible_generalization/results/phase_row_ledgers_2026_07_06.md`
+  - `experiments/structure_compatible_generalization/results/phase_row_ledgers_manifest_2026_07_06.json`
   - `experiments/structure_compatible_generalization/results/semantic_retrieval_transfer_2026_07_06.md`
+  - `experiments/structure_compatible_generalization/results/semantic_selection_bootstrap_2026_07_06.json`
   - `experiments/structure_compatible_generalization/results/semantic_selection_bootstrap_2026_07_06.md`
   - `experiments/structure_compatible_generalization/results/semantic_selection_control_2026_07_06.md`
   - `experiments/structure_compatible_generalization/results/semantic_selection_row_release_2026_07_06.md`
+  - `experiments/structure_compatible_generalization/results/semantic_selection_row_release_manifest_2026_07_06.json`
+  - `experiments/structure_compatible_generalization/results/semantic_selection_tiebreak_stress_2026_07_06.json`
   - `experiments/structure_compatible_generalization/results/semantic_selection_tiebreak_stress_2026_07_06.md`
   - `experiments/structure_compatible_generalization/results/structure_compatible_l4_2026_07_06.md`
 
 ## Artifacts
-- Committed: `experiments/structure_compatible_generalization/results/language_template_substitution_2026_07_06.md`, `experiments/structure_compatible_generalization/results/phase2_transformations_2026_07_06.md`, `experiments/structure_compatible_generalization/results/phase3_learned_generators_2026_07_06.md`, `experiments/structure_compatible_generalization/results/phase_row_ledgers_2026_07_06.md`, `experiments/structure_compatible_generalization/results/semantic_retrieval_transfer_2026_07_06.md`, `experiments/structure_compatible_generalization/results/semantic_selection_bootstrap_2026_07_06.md`, `experiments/structure_compatible_generalization/results/semantic_selection_control_2026_07_06.md`, `experiments/structure_compatible_generalization/results/semantic_selection_row_release_2026_07_06.md`, `experiments/structure_compatible_generalization/results/semantic_selection_tiebreak_stress_2026_07_06.md`, `experiments/structure_compatible_generalization/results/structure_compatible_l4_2026_07_06.md`
+- Committed: `experiments/structure_compatible_generalization/results/language_template_substitution_2026_07_06.md`, `experiments/structure_compatible_generalization/results/phase2_transformations_2026_07_06.md`, `experiments/structure_compatible_generalization/results/phase3_learned_generators_2026_07_06.md`, `experiments/structure_compatible_generalization/results/phase_row_ledgers_2026_07_06.md`, `experiments/structure_compatible_generalization/results/phase_row_ledgers_manifest_2026_07_06.json`, `experiments/structure_compatible_generalization/results/semantic_retrieval_transfer_2026_07_06.md`, `experiments/structure_compatible_generalization/results/semantic_selection_bootstrap_2026_07_06.json`, `experiments/structure_compatible_generalization/results/semantic_selection_bootstrap_2026_07_06.md`, `experiments/structure_compatible_generalization/results/semantic_selection_control_2026_07_06.md`, `experiments/structure_compatible_generalization/results/semantic_selection_row_release_2026_07_06.md`, `experiments/structure_compatible_generalization/results/semantic_selection_row_release_manifest_2026_07_06.json`, `experiments/structure_compatible_generalization/results/semantic_selection_tiebreak_stress_2026_07_06.json`, `experiments/structure_compatible_generalization/results/semantic_selection_tiebreak_stress_2026_07_06.md`, `experiments/structure_compatible_generalization/results/structure_compatible_l4_2026_07_06.md`
 - Local-only: artifacts/ (gitignored raw outputs; see result reports for summaries)
 - Paper: _none_

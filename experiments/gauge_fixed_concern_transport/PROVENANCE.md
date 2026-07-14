@@ -10,9 +10,12 @@
 
 ## Verification
 - Pre-registration: _none_
-- Result reports (3):
+- Result reports (6):
+  - `experiments/gauge_fixed_concern_transport/results/gfc_l4_suite_2026_07_07.json`
   - `experiments/gauge_fixed_concern_transport/results/gfc_l4_suite_2026_07_07.md`
+  - `experiments/gauge_fixed_concern_transport/results/gfc_local_full_rerun_2026_07_08.json`
   - `experiments/gauge_fixed_concern_transport/results/gfc_local_full_rerun_2026_07_08.md`
+  - `experiments/gauge_fixed_concern_transport/results/gfc_smoke_suite_2026_07_07.json`
   - `experiments/gauge_fixed_concern_transport/results/gfc_smoke_suite_2026_07_07.md`
 
 Key verification signals (from the latest result report):
@@ -22,6 +25,6 @@ Key verification signals (from the latest result report):
   - Concern-weighted OOD | PASS | `weighted_error_gain`=0.630; `concern_selector_is_shape`=1.000
 
 ## Artifacts
-- Committed: `experiments/gauge_fixed_concern_transport/results/gfc_l4_suite_2026_07_07.md`, `experiments/gauge_fixed_concern_transport/results/gfc_local_full_rerun_2026_07_08.md`, `experiments/gauge_fixed_concern_transport/results/gfc_smoke_suite_2026_07_07.md`, `papers/gauge_fixed_concern_transport/paper.md`
+- Committed: `experiments/gauge_fixed_concern_transport/results/gfc_l4_suite_2026_07_07.json`, `experiments/gauge_fixed_concern_transport/results/gfc_l4_suite_2026_07_07.md`, `experiments/gauge_fixed_concern_transport/results/gfc_local_full_rerun_2026_07_08.json`, `experiments/gauge_fixed_concern_transport/results/gfc_local_full_rerun_2026_07_08.md`, `experiments/gauge_fixed_concern_transport/results/gfc_smoke_suite_2026_07_07.json`, `experiments/gauge_fixed_concern_transport/results/gfc_smoke_suite_2026_07_07.md`, `papers/gauge_fixed_concern_transport/paper.md`
 - Local-only: artifacts/ (gitignored raw outputs; see result reports for summaries)
 - Paper: `papers/gauge_fixed_concern_transport/paper.md`

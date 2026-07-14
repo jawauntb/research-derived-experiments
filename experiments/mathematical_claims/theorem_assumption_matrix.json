@@ -1,0 +1,63 @@
+{
+  "experiment_id": "mathematical_claims",
+  "schema_version": "1.0",
+  "description": "Finite executable satisfying examples and paired failure cases for assumptions in the core theorem bridge.",
+  "assumptions": [
+    {
+      "assumption_id": "block_disjointness",
+      "theorem_id": "M201_BLOCK_DISJOINTNESS",
+      "statement": "Deployment blocks form a disjoint union, so union mass equals the sum of block masses.",
+      "satisfying_example": "Two blocks share no decision.",
+      "failure_case": "Two blocks share decision a2; summing block masses double-counts it.",
+      "assumption_test": "bridge_identity_holds"
+    },
+    {
+      "assumption_id": "equal_mass",
+      "theorem_id": "M201_EQUAL_MASS",
+      "statement": "Unweighted compatible-block count has the same argmax as weighted weakness only when block masses are equal.",
+      "satisfying_example": "Both candidate blocks have mass 2.",
+      "failure_case": "h1 covers mass-3 block a and h2 covers mass-1 block b; count ties but weighted ranking prefers h1.",
+      "assumption_test": "argmax_agrees"
+    },
+    {
+      "assumption_id": "complete_block_coverage",
+      "theorem_id": "M201_COMPLETE_BLOCK_COVERAGE",
+      "statement": "A compatible block is covered in full rather than only partially.",
+      "satisfying_example": "Both decisions in compatible block a are covered.",
+      "failure_case": "Only a1 of compatible block {a1,a2} is covered; claimed block mass overstates actual mass.",
+      "assumption_test": "bridge_identity_holds"
+    },
+    {
+      "assumption_id": "coherent_output_action",
+      "theorem_id": "M201_COHERENT_OUTPUT_ACTION",
+      "statement": "The output-side action is a coherent C2 action: identity is identity and g composed with g is identity.",
+      "satisfying_example": "Identity plus a closed output swap that fixes the third output.",
+      "failure_case": "Output shift modulo 3 has order 3, so it cannot represent the order-2 input action.",
+      "assumption_test": "coherent"
+    },
+    {
+      "assumption_id": "bounded_transport_loss",
+      "theorem_id": "M201_BOUNDED_TRANSPORT_LOSS",
+      "statement": "Each nonnegative transport loss is bounded by its declared delta, yielding the telescoping lower bound.",
+      "satisfying_example": "Values 10,8,7 with deltas 2,1.",
+      "failure_case": "Values 10,8,4 with deltas 2,1; the second loss is 4, exceeding its bound.",
+      "assumption_test": "bounded"
+    },
+    {
+      "assumption_id": "gauge_separation",
+      "theorem_id": "M201_GAUGE_SEPARATION",
+      "statement": "At least one intervention separates gauge-equivalent latent descriptions by distance eta.",
+      "satisfying_example": "Probe maps l0 to A and l1 to B with distance 1.",
+      "failure_case": "Null probe maps both latent descriptions to A, leaving the gauge unresolved.",
+      "assumption_test": "gauge_fixed"
+    },
+    {
+      "assumption_id": "nonzero_commitment_effect",
+      "theorem_id": "M201_NONZERO_COMMITMENT_EFFECT",
+      "statement": "The matched commitment intervention changes value by at least epsilon.",
+      "satisfying_example": "Values 1 and 0 with epsilon 0.5.",
+      "failure_case": "Both interventions produce value 1, so commitment effect is zero.",
+      "assumption_test": "nonzero_effect"
+    }
+  ]
+}

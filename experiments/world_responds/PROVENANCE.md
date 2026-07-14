@@ -9,13 +9,18 @@
 - **Reproduce (one command):** `python scripts/regen.py world_responds`
 
 ## Verification
-- Pre-registration: `papers/world_responds/preregistration.md`
-- Result reports (6):
+- Pre-registration: `experiments/world_responds/suite_c_factorial_ablation_preregistration_2026_07_09.md`
+- Result reports (11):
   - `experiments/world_responds/results/reengagement_23a_2026_07_06.md`
+  - `experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.json`
   - `experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md`
+  - `experiments/world_responds/results/suite_c_reengagement_2026_07_06.json`
   - `experiments/world_responds/results/suite_c_reengagement_2026_07_06.md`
+  - `experiments/world_responds/results/suite_c_source_ablation_transfer_2026_07_06.json`
   - `experiments/world_responds/results/suite_c_source_ablation_transfer_2026_07_06.md`
+  - `experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.json`
   - `experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.md`
+  - `experiments/world_responds/results/suite_c_teacher_free_wide_stats_2026_07_06.json`
   - `experiments/world_responds/results/suite_c_teacher_free_wide_stats_2026_07_06.md`
 
 Key verification signals (from the latest result report):
@@ -25,6 +30,6 @@ Key verification signals (from the latest result report):
   - C3_recovery | PASS
 
 ## Artifacts
-- Committed: `experiments/world_responds/results/reengagement_23a_2026_07_06.md`, `experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md`, `experiments/world_responds/results/suite_c_reengagement_2026_07_06.md`, `experiments/world_responds/results/suite_c_source_ablation_transfer_2026_07_06.md`, `experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.md`, `experiments/world_responds/results/suite_c_teacher_free_wide_stats_2026_07_06.md`, `papers/world_responds/paper.md`
+- Committed: `experiments/world_responds/results/reengagement_23a_2026_07_06.md`, `experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.json`, `experiments/world_responds/results/suite_c_neural_transfer_2026_07_06.md`, `experiments/world_responds/results/suite_c_reengagement_2026_07_06.json`, `experiments/world_responds/results/suite_c_reengagement_2026_07_06.md`, `experiments/world_responds/results/suite_c_source_ablation_transfer_2026_07_06.json`, `experiments/world_responds/results/suite_c_source_ablation_transfer_2026_07_06.md`, `experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.json`, `experiments/world_responds/results/suite_c_teacher_free_inquiry_2026_07_06.md`, `experiments/world_responds/results/suite_c_teacher_free_wide_stats_2026_07_06.json`, `experiments/world_responds/results/suite_c_teacher_free_wide_stats_2026_07_06.md`, `papers/world_responds/paper.md`
 - Local-only: artifacts/ (gitignored raw outputs; see result reports for summaries)
 - Paper: `papers/world_responds/paper.md`

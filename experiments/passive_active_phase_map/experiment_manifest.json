@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "passive_active_phase_map",
+  "hypothesis": "Action coupling produces a reproducible discontinuous transition and matched-budget forward/reverse hysteresis that survives washout controls.",
+  "claim_tier": "internal",
+  "controls": [
+    {
+      "control_id": "identical_initialization",
+      "description": "Each phase-map coupling uses identical seeded data and initialization within an architecture/seed cell."
+    },
+    {
+      "control_id": "reinitialization",
+      "description": "Every path stage restarts from the identical seeded initialization with the same target-update budget."
+    },
+    {
+      "control_id": "symmetric_washout",
+      "description": "Forward and reverse paths receive the same neutral washout and target-update budgets at each stage."
+    }
+  ],
+  "seeds": [0, 1, 2, 3, 4],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "uvx",
+      "--python",
+      "3.12",
+      "--with",
+      "numpy",
+      "python",
+      "-m",
+      "experiments.passive_active_phase_map.core",
+      "--preset",
+      "registered"
+    ],
+    "estimated_minutes": 2,
+    "max_cost_usd": 0
+  },
+  "dependencies": [
+    {
+      "name": "numpy",
+      "version": ">=2.0,<3"
+    }
+  ],
+  "gates": [
+    {
+      "gate_id": "BIFURCATION_GATE",
+      "criterion": "A segmented discontinuity beats the best smooth null by at least 10% held-out MSE for at least two order parameters; critical estimates replicate within 20% across two architectures and five seeds; at least two order parameters co-locate within one grid step."
+    },
+    {
+      "gate_id": "HYSTERESIS_GATE",
+      "criterion": "Seed-clustered paired forward/reverse bootstrap 95% intervals, preserving both architectures within seed, exclude zero at at least two contiguous couplings; loop area is at least 0.02, the effect survives symmetric washout, and reinitialization is clear."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "raw",
+      "path": "artifacts/passive_active_phase_map/registered_cells.json",
+      "public": false
+    },
+    {
+      "kind": "summary",
+      "path": "experiments/passive_active_phase_map/results/registered_summary.json",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "experiments/passive_active_phase_map/results/registered_summary.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/passive_active_phase_map/preregistration.md",
+      "public": true
+    }
+  ],
+  "status": "rejected"
+}

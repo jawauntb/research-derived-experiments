@@ -9,20 +9,31 @@
 - **Reproduce (one command):** `python scripts/regen.py commitment_surface`
 
 ## Verification
-- Pre-registration: `papers/commitment_surface/e7_selective_subspace_continual_learning_preregistration_2026-07-13.md`
-- Result reports (13):
+- Pre-registration: `papers/commitment_surface/e1_misspecification_variance_preregistration_2026-07-09.md`
+- Result reports (24):
+  - `experiments/commitment_surface/results/e1_concern_weighted.json`
   - `experiments/commitment_surface/results/e1_concern_weighted.md`
+  - `experiments/commitment_surface/results/e1_misspecification_variance.json`
   - `experiments/commitment_surface/results/e1_misspecification_variance.md`
+  - `experiments/commitment_surface/results/e2_e3_neural.json`
   - `experiments/commitment_surface/results/e2_e3_neural.md`
+  - `experiments/commitment_surface/results/e2_e3_neural_larger_n.json`
   - `experiments/commitment_surface/results/e2_e3_neural_larger_n.md`
+  - `experiments/commitment_surface/results/e2_e3_rank_normalized_patch_2026_07_10.json`
   - `experiments/commitment_surface/results/e2_e3_rank_normalized_patch_2026_07_10.md`
+  - `experiments/commitment_surface/results/e2_e3_rank_patch_width128.json`
   - `experiments/commitment_surface/results/e2_e3_rank_patch_width128.md`
+  - `experiments/commitment_surface/results/e2_e3_rank_patch_width96.json`
   - `experiments/commitment_surface/results/e2_e3_rank_patch_width96.md`
+  - `experiments/commitment_surface/results/e4_pythia_lora_v2_appendix.json`
   - `experiments/commitment_surface/results/e4_pythia_lora_v2_summary.md`
+  - `experiments/commitment_surface/results/e5_generator_vs_coverage.json`
   - `experiments/commitment_surface/results/e5_generator_vs_coverage.md`
   - `experiments/commitment_surface/results/e5_launch_readiness_2026_07_10.md`
   - `experiments/commitment_surface/results/e5_smoke_summary.md`
+  - `experiments/commitment_surface/results/e6_smoke_readiness.json`
   - `experiments/commitment_surface/results/e6_smoke_readiness_2026_07_13.md`
+  - `experiments/commitment_surface/results/m4_suite_c_factorial_ablation_2026_07_09.json`
   - `experiments/commitment_surface/results/m4_suite_c_factorial_ablation_2026_07_09.md`
 
 Key verification signals (from the latest result report):
@@ -32,6 +43,6 @@ Key verification signals (from the latest result report):
   - removed stage | knockout pass rate | full minus knockout | gate
 
 ## Artifacts
-- Committed: `experiments/commitment_surface/results/e1_concern_weighted.md`, `experiments/commitment_surface/results/e1_misspecification_variance.md`, `experiments/commitment_surface/results/e2_e3_neural.md`, `experiments/commitment_surface/results/e2_e3_neural_larger_n.md`, `experiments/commitment_surface/results/e2_e3_rank_normalized_patch_2026_07_10.md`, `experiments/commitment_surface/results/e2_e3_rank_patch_width128.md`, `experiments/commitment_surface/results/e2_e3_rank_patch_width96.md`, `experiments/commitment_surface/results/e4_pythia_lora_v2_summary.md`, `experiments/commitment_surface/results/e5_generator_vs_coverage.md`, `experiments/commitment_surface/results/e5_launch_readiness_2026_07_10.md`, `experiments/commitment_surface/results/e5_smoke_summary.md`, `experiments/commitment_surface/results/e6_smoke_readiness_2026_07_13.md`, `experiments/commitment_surface/results/m4_suite_c_factorial_ablation_2026_07_09.md`, `papers/commitment_surface/paper.md`
+- Committed: `experiments/commitment_surface/results/e1_concern_weighted.json`, `experiments/commitment_surface/results/e1_concern_weighted.md`, `experiments/commitment_surface/results/e1_misspecification_variance.json`, `experiments/commitment_surface/results/e1_misspecification_variance.md`, `experiments/commitment_surface/results/e2_e3_neural.json`, `experiments/commitment_surface/results/e2_e3_neural.md`, `experiments/commitment_surface/results/e2_e3_neural_larger_n.json`, `experiments/commitment_surface/results/e2_e3_neural_larger_n.md`, `experiments/commitment_surface/results/e2_e3_rank_normalized_patch_2026_07_10.json`, `experiments/commitment_surface/results/e2_e3_rank_normalized_patch_2026_07_10.md`, `experiments/commitment_surface/results/e2_e3_rank_patch_width128.json`, `experiments/commitment_surface/results/e2_e3_rank_patch_width128.md`, `experiments/commitment_surface/results/e2_e3_rank_patch_width96.json`, `experiments/commitment_surface/results/e2_e3_rank_patch_width96.md`, `experiments/commitment_surface/results/e4_pythia_lora_v2_appendix.json`, `experiments/commitment_surface/results/e4_pythia_lora_v2_summary.md`, `experiments/commitment_surface/results/e5_generator_vs_coverage.json`, `experiments/commitment_surface/results/e5_generator_vs_coverage.md`, `experiments/commitment_surface/results/e5_launch_readiness_2026_07_10.md`, `experiments/commitment_surface/results/e5_smoke_summary.md`, `experiments/commitment_surface/results/e6_smoke_readiness.json`, `experiments/commitment_surface/results/e6_smoke_readiness_2026_07_13.md`, `experiments/commitment_surface/results/m4_suite_c_factorial_ablation_2026_07_09.json`, `experiments/commitment_surface/results/m4_suite_c_factorial_ablation_2026_07_09.md`, `papers/commitment_surface/paper.md`
 - Local-only: artifacts/ (gitignored raw outputs; see result reports for summaries)
 - Paper: `papers/commitment_surface/paper.md`

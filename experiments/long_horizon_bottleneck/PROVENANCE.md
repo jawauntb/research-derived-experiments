@@ -9,7 +9,7 @@
 - **Reproduce (one command):** `python scripts/regen.py long_horizon_bottleneck`
 
 ## Verification
-- Pre-registration: `papers/long_horizon_bottleneck/preregistration.md`
+- Pre-registration: `papers/long_horizon_bottleneck/api_blackbox_preregistration.md`
 - Result reports (24):
   - `experiments/long_horizon_bottleneck/results/modal_transformer_l4_8seed_2026_07_02.md`
   - `experiments/long_horizon_bottleneck/results/modal_transformer_l4_horizon_4seed_2026_07_02.md`

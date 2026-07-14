@@ -10,7 +10,6 @@ environment with the lightweight scientific dependencies required by tests.
 from __future__ import annotations
 
 import subprocess
-import sys
 
 
 def run(cmd: list[str]) -> None:
@@ -29,6 +28,10 @@ def main() -> int:
         "numpy",
         "--with",
         "scikit-learn",
+        "--with",
+        "matplotlib",
+        "--with",
+        "reportlab",
         "--with",
         "pytest",
         "python",
@@ -57,12 +60,15 @@ def main() -> int:
         "tests",
     ]
 
-    run(test_python + ["-m", "unittest", "discover", "-s", "tests"])
+    run(test_python + ["-m", "pytest", "-q", "tests"])
     run(plain_python + ["-m", "compileall", "scripts", "experiments", "tests"])
     run(["python3", "scripts/publication_guard.py"])
     run(["python3", "scripts/validate_evidence_registry.py"])
     run(["python3", "scripts/validate_claim_registry.py"])
+    run(["python3", "scripts/validate_experiment_manifest.py"])
+    run(["python3", "scripts/validate_gate_verdict.py"])
     run(["python3", "scripts/check_primer_metadata.py"])
+    run(["python3", "scripts/gen_provenance.py", "--check"])
     run(["uvx", "ruff", "check", "."])
     run(ty_check)
     return 0

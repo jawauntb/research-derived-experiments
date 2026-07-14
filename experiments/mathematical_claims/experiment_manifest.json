@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "mathematical_claims",
+  "hypothesis": "Each registered theorem-bridge assumption has an executable satisfying example and a case where the named assumption or bridge predicate fails.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "paired_failure_cases",
+      "description": "Every satisfying example is paired with a construction where the named assumption or bridge predicate evaluates false."
+    }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/mathematical_claims/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "M201_ASSUMPTION_WITNESSES",
+      "criterion": "All seven registered assumption families have a satisfying example and a paired case where the named assumption or bridge predicate evaluates false."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/mathematical_claims/results/mathematical_claims_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/mathematical_claims/theorem_assumption_matrix.json",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}
