@@ -1,0 +1,942 @@
+{
+  "schema_version": "1.0",
+  "kind": "experiment contract registry",
+  "excluded_packages": [
+    "common"
+  ],
+  "frozen_legacy": {
+    "cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+    "frozen_on": "2026-07-14",
+    "packages": [
+      "activation_geometry",
+      "allostatic_control",
+      "autopoietic_control",
+      "concept_geometry",
+      "concern_bootstrap",
+      "concerned_syntax",
+      "costly_null_probes",
+      "current_error_calibration",
+      "ensemble_uncertainty",
+      "epistemic_exploration",
+      "exploration_diagnostics",
+      "external_contact",
+      "first_order_self",
+      "gauge_fixed_concern_transport",
+      "grid_cell_weakness",
+      "habituated_reengagement",
+      "homeostatic_objects",
+      "interventional_contrast",
+      "learned_symmetry",
+      "long_horizon_bottleneck",
+      "neural_group_generator",
+      "null_intervention",
+      "off_policy_state_coverage",
+      "online_identifying_interventions",
+      "paraphrase_weakness",
+      "passive_to_active",
+      "phase4_metaphysics",
+      "phase5_external_validity",
+      "phase6_real_model_validation",
+      "planning_from_concern",
+      "planning_hardening",
+      "probe_value_reengagement",
+      "regime_sensitive_de",
+      "role_specific_identifiability",
+      "rotation_weakness",
+      "scale_normalized_vprobe",
+      "semantic_concern_geometry",
+      "state_dependent_concern",
+      "structure_compatible_generalization",
+      "symbolic_weakness",
+      "two_bottlenecks",
+      "valence_object_formation",
+      "valence_tapestry",
+      "vector_first_order_self",
+      "viable_computational_bodies",
+      "virtual_governor_stress_signal",
+      "weakness_temporal",
+      "weakness_vs_simplicity",
+      "world_responds"
+    ],
+    "sha256": "86703ca46bc2a759a5f054247512c9c0df558404711db5c564ca58dfc76f2c77"
+  },
+  "packages": [
+    {
+      "package": "activation_geometry",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "multi_run_ambiguity",
+        "explanation": "Dozens of committed result reports from many separate dispatches; an honest migration needs per-run records, not a single root manifest.",
+        "next_action": "Decide the multi-execution run-record contract, then migrate run by run.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-12-11",
+        "expiry_date": "2027-01-10",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "allostatic_control",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "autopoietic_control",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "bayesian_voi",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/bayesian_voi/experiment_manifest.json",
+      "primary_run_id": "bayesian_voi",
+      "run_coverage": "complete",
+      "runs": [
+        {
+          "run_id": "bayesian_voi",
+          "publication_package": "bayesian_voi",
+          "runtime_package": "bayesian_voi",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/bayesian_voi/experiment_manifest.json",
+          "report_paths": [
+            "experiments/bayesian_voi/results/bayesian_voi_summary.json"
+          ],
+          "claim_ids": [
+            "MATH_VOI_SURROGATE_GENERALITY"
+          ],
+          "evidence_ids": [
+            "EVID-BAYESIAN-VOI-MISSPEC"
+          ],
+          "gate_verdict_paths": []
+        }
+      ]
+    },
+    {
+      "package": "commitment_surface",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/commitment_surface/experiment_manifest.json",
+      "primary_run_id": "commitment_surface_e5_generator_vs_coverage",
+      "run_coverage": "partial",
+      "runs": [
+        {
+          "run_id": "commitment_surface_e5_generator_vs_coverage",
+          "publication_package": "commitment_surface",
+          "runtime_package": "commitment_surface",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/commitment_surface/experiment_manifest.json",
+          "report_paths": [
+            "experiments/commitment_surface/results/e5_generator_vs_coverage.json",
+            "experiments/commitment_surface/results/e5_generator_vs_coverage.md"
+          ],
+          "claim_ids": [
+            "COMMITMENT_GENERATOR_GENERALIZATION"
+          ],
+          "evidence_ids": [
+            "EVID-COMMITMENT-E5-COVERAGE"
+          ],
+          "gate_verdict_paths": [
+            "experiments/commitment_surface/results/gate_verdicts/e5_strict_coverage.json"
+          ]
+        }
+      ]
+    },
+    {
+      "package": "concept_geometry",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "concern_bootstrap",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "concerned_syntax",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "costly_null_probes",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "current_error_calibration",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "ensemble_uncertainty",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "epistemic_exploration",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "exploration_diagnostics",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "external_contact",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs and reports predate the manifest contract; the negative p1_pythia_lora_2026_06_22 LoRA result is an unambiguous migration target.",
+        "next_action": "Migrate to a structured root manifest bound to the p1_pythia_lora_2026_06_22 run with base seed 20260618 (handoff tranche 3).",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-09-12",
+        "expiry_date": "2026-10-12",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "first_order_self",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "gauge_fixed_concern_transport",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "grid_cell_weakness",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "habituated_reengagement",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "homeostatic_objects",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "interventional_contrast",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "learned_symmetry",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "long_horizon_bottleneck",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "mathematical_claims",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/mathematical_claims/experiment_manifest.json",
+      "primary_run_id": "mathematical_claims",
+      "run_coverage": "complete",
+      "runs": [
+        {
+          "run_id": "mathematical_claims",
+          "publication_package": "mathematical_claims",
+          "runtime_package": "mathematical_claims",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/mathematical_claims/experiment_manifest.json",
+          "report_paths": [
+            "experiments/mathematical_claims/results/mathematical_claims_summary.json"
+          ],
+          "claim_ids": [
+            "MATH_ASSUMPTION_DEPENDENCE"
+          ],
+          "evidence_ids": [
+            "EVID-MATH-ASSUMPTION-MATRIX"
+          ],
+          "gate_verdict_paths": []
+        }
+      ]
+    },
+    {
+      "package": "neural_group_generator",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "null_intervention",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "off_policy_state_coverage",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "online_identifying_interventions",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "paraphrase_weakness",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "passive_active_phase_map",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/passive_active_phase_map/experiment_manifest.json",
+      "primary_run_id": "passive_active_phase_map",
+      "run_coverage": "complete",
+      "runs": [
+        {
+          "run_id": "passive_active_phase_map",
+          "publication_package": "passive_active_phase_map",
+          "runtime_package": "passive_active_phase_map",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/passive_active_phase_map/experiment_manifest.json",
+          "report_paths": [
+            "experiments/passive_active_phase_map/results/registered_summary.json",
+            "experiments/passive_active_phase_map/results/registered_summary.md"
+          ],
+          "claim_ids": [
+            "SYSTEMS_PASSIVE_ACTIVE_BIFURCATION",
+            "SYSTEMS_PASSIVE_ACTIVE_HYSTERESIS"
+          ],
+          "evidence_ids": [
+            "EVID-PASSIVE-ACTIVE-BIFURCATION",
+            "EVID-PASSIVE-ACTIVE-HYSTERESIS"
+          ],
+          "gate_verdict_paths": []
+        }
+      ]
+    },
+    {
+      "package": "passive_to_active",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "phase4_metaphysics",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "phase5_external_validity",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed run and paper predate the manifest contract; the registered run is an unambiguous migration target.",
+        "next_action": "Migrate to a structured root manifest bound to the committed registered run (handoff tranche 3).",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-09-12",
+        "expiry_date": "2026-10-12",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "phase6_real_model_validation",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "planning_from_concern",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "planning_hardening",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "probe_value_reengagement",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "regime_sensitive_de",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "role_specific_identifiability",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "rotation_weakness",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "multi_run_ambiguity",
+        "explanation": "Named ambiguous in the audited 2026-07-14 handoff; the run-to-report mapping is unresolved and must not be collapsed into one root manifest.",
+        "next_action": "Decide the multi-execution run-record contract, then migrate run by run.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-12-11",
+        "expiry_date": "2027-01-10",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "scale_normalized_vprobe",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "seed_bootstrap_calibration",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/seed_bootstrap_calibration/experiment_manifest.json",
+      "primary_run_id": "seed_bootstrap_calibration",
+      "run_coverage": "complete",
+      "runs": [
+        {
+          "run_id": "seed_bootstrap_calibration",
+          "publication_package": "seed_bootstrap_calibration",
+          "runtime_package": "seed_bootstrap_calibration",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/seed_bootstrap_calibration/experiment_manifest.json",
+          "report_paths": [
+            "experiments/seed_bootstrap_calibration/results/summary.json",
+            "experiments/seed_bootstrap_calibration/results/summary.md"
+          ],
+          "claim_ids": [
+            "SCIENCE_THREE_SEED_PROMOTION"
+          ],
+          "evidence_ids": [
+            "EVID-SEED-BOOTSTRAP-S022"
+          ],
+          "gate_verdict_paths": []
+        }
+      ]
+    },
+    {
+      "package": "semantic_concern_geometry",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "multi_run_ambiguity",
+        "explanation": "The committed aggregate spans two Modal dispatches while manifest v1 represents a single runtime command; awaiting a multi-execution contract decision.",
+        "next_action": "Decide the multi-execution run-record contract, then migrate run by run.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-12-11",
+        "expiry_date": "2027-01-10",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "state_dependent_concern",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "structure_compatible_generalization",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "symbolic_weakness",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "two_bottlenecks",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "valence_object_formation",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "valence_tapestry",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "vector_first_order_self",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "viable_computational_bodies",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "virtual_governor_stress_signal",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "weakness_temporal",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "scaffold_pending_contract",
+        "explanation": "Scaffold package with no committed result reports; it must gain a structured manifest before its first run or be retired.",
+        "next_action": "Add a manifest before the first run or retire the scaffold.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-09-12",
+        "expiry_date": "2026-10-12",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "weakness_vs_simplicity",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "pre_manifest_publication",
+        "explanation": "Committed runs, reports, and any paper for this package predate the manifest contract; provenance is prose-derived pending a root manifest.",
+        "next_action": "Author a package-root manifest v1 bound to an exact committed run and replace this exception.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-11-11",
+        "expiry_date": "2026-12-11",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    },
+    {
+      "package": "world_responds",
+      "coverage_mode": "legacy_exception",
+      "exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "multi_run_ambiguity",
+        "explanation": "Hosts runtime code for commitment-surface M-series runs alongside its own legacy reports; the runtime/publication split needs run records before migration.",
+        "next_action": "Decide the multi-execution run-record contract, then migrate run by run.",
+        "granted_on": "2026-07-14",
+        "review_date": "2026-12-11",
+        "expiry_date": "2027-01-10",
+        "legacy_cutoff_commit": "8c0183bca3d2cc45f40c79150c67001c18fcf748",
+        "adjudication": "This exception records migration debt only; it does not adjudicate scientific claims."
+      }
+    }
+  ]
+}

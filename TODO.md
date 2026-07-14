@@ -8,7 +8,15 @@
 - [x] Correct all six primer HTML titles and PDF metadata; rebuild PDFs from corrected HTML.
 - [x] Correct the mathematics primer's Lagrangian/KKT signs, VOI sign, and discount arithmetic with regression tests.
 - [ ] Migrate experiment families to structured manifests and replace prose-only provenance extraction.
+  - [x] 2026-07-14: land `docs/experiment_contract_registry.json` — an exact fail-closed
+    54-package partition (5 structured roots with explicit run records, 49 time-bounded
+    legacy exceptions, digest-pinned frozen legacy set) enforced by the no-argument
+    manifest validator. Coverage is now honest, not complete: 49 exceptions and all
+    partial run histories remain open, and prose provenance extraction is unchanged.
 - [ ] Add CI lanes for manifest coverage, public-artifact envelopes, and clean-clone reproduction.
+  - [x] 2026-07-14: manifest-coverage enforcement now runs inside the existing root
+    quality lane via `validate_experiment_manifest.py`; envelope and clean-clone lanes
+    remain unbuilt.
 
 ## Now
 

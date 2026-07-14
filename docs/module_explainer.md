@@ -83,6 +83,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_passive_active_phase_map.py` | Phase-map model comparison, matched-budget path controls, public aggregate contract |
 | `test_causal_use.py` | Shared mass-normalized causal-use dose curves, bootstrap uncertainty, and cross-surface transport |
 | `test_experiment_manifest.py`, `test_gate_verdict.py`, `test_evidence_registry.py`, `test_claim_registry.py` | Fail-closed research-contract adapters, discovery, references, supersession, and bidirectional edges |
+| `test_experiment_contract_registry.py` | Fail-closed package-coverage partition: uncovered/orphaned/duplicate packages, ungrounded or expired exceptions, frozen-set digest, nested-only manifests, manifest+exception overlap, forbidden scientific fields on legacy records, injected `as_of` dates, and labeled historical inspection |
 | `test_research_contract_schema_parity.py`, `test_gen_provenance.py` | Shared vocabulary/schema parity, support-directory exclusion, non-mutating provenance freshness |
 | `test_run_quality_checks.py` | Locked quality-command order, local serial default, bounded xdist worker parsing, `loadscope` scheduling, and native-thread caps |
 | `test_build_primer_residuals_pdf.py` | Required six-article residual source sections plus reproducible ReportLab PDF build |
@@ -119,6 +120,7 @@ environment.
 | [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 54 research packages; `experiments/common` excluded) |
 | `program_evidence_registry.json` | 12 canonical evidence records with stable IDs, states, artifact refs, and claim links |
 | `claim_registry.json` | 12 canonical claim records with tiers, states, source refs, and bidirectional evidence links |
+| `experiment_contract_registry.json` | Authoritative 54-package coverage partition: 5 structured roots with explicit run records (run IDs, runtime/publication packages, provenance mode, integrity state, claim/evidence/gate bindings) plus 49 time-bounded legacy exceptions and the digest-pinned frozen legacy set |
 | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) | Benchmark umbrella |
 | [causally_grounded_agents_release_schema.md](causally_grounded_agents_release_schema.md) (+ `.json`) | Shared release schema |
 | [causally_grounded_agents_next_gap.md](causally_grounded_agents_next_gap.md) | Suite C transfer gaps |
@@ -533,11 +535,11 @@ Raw outputs stay under `artifacts/` until summarized.
 
 | Script | Purpose | Flags / I/O |
 |---|---|---|
-| `research_contracts.py` | Shared schema version, identifier patterns, claim tiers/statuses, and evidence statuses used by registry/verdict adapters | Library; parity-tested against JSON Schemas |
+| `research_contracts.py` | Shared schema version, identifier patterns, claim tiers/statuses, evidence statuses, and contract-registry vocabulary (coverage/provenance modes, integrity states, exception reason codes, expiry horizons) used by registry/verdict adapters | Library; parity-tested against JSON Schemas |
 | `gen_provenance.py` | Validate registries, regenerate all experiment `PROVENANCE.md` files + `docs/verification.{md,json}` + site mirror; `--check` compares expected bytes without writing; an exact-config result can bind its own command/preregistration to the latest verification signal | In: 54 experiment dirs + claim/evidence registries; excludes `experiments/common` |
 | `validate_evidence_registry.py` | Validate canonical evidence IDs, gate statuses, artifact refs, and supersession shape | `docs/program_evidence_registry.json` |
 | `validate_claim_registry.py` | Validate exact claim shape/tiers/states and bidirectional claim↔evidence edges | Reads `docs/claim_registry.json` + `docs/program_evidence_registry.json`; never writes either |
-| `validate_experiment_manifest.py` | Discover and dependency-free validate every v1 experiment-package contract | Reads `experiments/**/experiment_manifest.json`; portable contract in `schemas/experiment_manifest.schema.json` |
+| `validate_experiment_manifest.py` | Discover and dependency-free validate every v1 experiment-package contract; in no-argument mode also enforce the fail-closed package-coverage partition (structured manifest XOR time-bounded legacy exception, digest-pinned frozen legacy set, expiry warn/fail, `--as-of` historical inspection) | Reads `experiments/**/experiment_manifest.json` + `docs/experiment_contract_registry.json`; portable contracts in `schemas/{experiment_manifest,experiment_contract_registry}.schema.json` |
 | `validate_gate_verdict.py` | Discover per-gate verdicts, require registered claim IDs/canonical tiers/statuses, and resolve evidence paths | Reads `experiments/*/results/gate_verdicts/*.json` + `docs/claim_registry.json` |
 | `check_primer_metadata.py` | Require matching titles across all six primer HTML `<title>` values and PDF metadata | Needs `pdfinfo` (`poppler-utils` in CI) |
 | `regen.py` | List/reproduce experiments or print documented Modal commands | `list`, `<name>`, `--deps` |
@@ -880,6 +882,7 @@ python3 scripts/run_phase0.py --smoke
 | `.github/workflows/quality.yml` | Required push/PR workflow: installs uv with cache keys derived from `uv.lock`, installs `poppler-utils`, sets `QUALITY_PYTEST_WORKERS=auto`, then runs the canonical root quality wrapper |
 | `.github/workflows/railway-deploy.yml` | Deploy atlas + Inquiry landing on `main` |
 | `schemas/{experiment_manifest,program_evidence_registry,claim_registry,gate_verdict}.schema.json` | Portable JSON Schema contracts for package intent, evidence, claims, and gate outcomes |
+| `schemas/experiment_contract_registry.schema.json` | Portable JSON Schema for the package-coverage partition: structured records with run bindings vs. time-bounded legacy exceptions plus the frozen legacy set |
 | `templates/experiment/{manifest,gate_verdict}.example.json` | Copyable version-1 examples validated by the same adapters used in CI |
 | `pyproject.toml` | Project metadata; root `quality` dependency group (pytest/xdist, scientific/PDF, Ruff, ty); explicit CPU-only PyTorch source; existing Ruff rules and ty exclusions |
 | `uv.lock` | Locked Python 3.12 root-quality graph used by `uv sync --locked`; records platform-specific CPU-only Torch wheels and excludes CUDA/Triton/NVIDIA packages |

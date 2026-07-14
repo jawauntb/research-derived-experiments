@@ -146,6 +146,7 @@ Each experiment directory is a self-contained research unit. Typical contents:
 | Shared non-experiment support packages | **1** — `experiments/common` |
 | Contain one or more `modal_*.py` entrypoints | **46** |
 | Canonical `experiment_manifest.json` files | **5** |
+| Registry-recorded legacy exceptions (time-bounded) | **49** |
 | Canonical per-gate verdict files | **1** |
 | Canonical claim records | **12** |
 | Canonical evidence records | **12** |
@@ -206,6 +207,7 @@ result is relabeled by the derivation.
 | Structured research vocabulary | `research_contracts.py`, `schemas/{program_evidence_registry,claim_registry,gate_verdict}.schema.json` |
 | Claim/evidence validation | `validate_evidence_registry.py`, `validate_claim_registry.py` |
 | Experiment/gate contracts | `validate_experiment_manifest.py`, `validate_gate_verdict.py`, `schemas/{experiment_manifest,gate_verdict}.schema.json`, `templates/experiment/*` |
+| Package coverage partition | `docs/experiment_contract_registry.json`, `schemas/experiment_contract_registry.schema.json` (validated by `validate_experiment_manifest.py` in no-argument mode) |
 | Secrets hygiene | `env_probe.py` |
 | Publication | `build_*_pdf.py`, `make_*_figures.py`, `paperkit.py` |
 | Summarization | `summarize_*.py` |
@@ -232,6 +234,14 @@ docs/claim_registry.json + docs/program_evidence_registry.json
 
 experiments/*/experiment_manifest.json
     → scripts/validate_experiment_manifest.py → pass/fail
+
+docs/experiment_contract_registry.json + experiments/* directory listing
+    → scripts/validate_experiment_manifest.py (no-argument mode) → pass/fail
+      (every direct package is exactly one of structured_manifest or a
+       time-bounded legacy_exception; exceptions are honoured only for
+       packages inside the committed frozen legacy set, whose SHA-256 is
+       validated without Git history; expiry warns at 30 days and fails at
+       0; `--as-of` is a clearly labeled historical-inspection mode)
 
 experiments/*/results/gate_verdicts/*.json + docs/claim_registry.json
     → scripts/validate_gate_verdict.py → pass/fail
@@ -715,7 +725,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 - **No universal research dependency specification.** The root quality gate has a complete locked dependency group, but experiment and Modal runtimes still rely on command-specific `uvx` sets or explicit Modal images.
 - **Machine-specific paths** in docs/handoffs (Doppler scope, local archives).
 - **Result fidelity depends on summarization discipline.** Gitignored JSON vs committed Markdown can drift.
-- **Structured-contract coverage is early.** Only 5 of 54 experiment packages have canonical manifests, and only one gate has a canonical verdict file.
+- **Structured-contract coverage is early.** Only 5 of 54 experiment packages have canonical manifests, and only one gate has a canonical verdict file. The gap is now explicit and fail-closed: `docs/experiment_contract_registry.json` records the other 49 packages as time-bounded legacy exceptions (owner, bounded reason code, next action, review/expiry dates), so an uncovered or newly added package stops the root quality gate instead of passing silently. Package coverage is not run coverage: a root manifest proves one structured contract exists, not that every historical run in that directory is structured.
 - **Paper-primary experiments** may have no committed `results/*.md`; evidence lives in the paper + local artifacts.
 - **Coherence / Inquiry / Cabal / site tests** are outside the root Python quality gate.
 - **Scientific claims are gate-bound.** Fixture smokes do not settle the program thesis.
