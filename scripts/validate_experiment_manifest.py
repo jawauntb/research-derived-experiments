@@ -13,6 +13,7 @@ import json
 import re
 import sys
 from pathlib import Path
+from typing import Never, cast
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -66,17 +67,22 @@ EXPERIMENT_ID = re.compile(r"^[a-z0-9][a-z0-9_-]{1,63}$")
 GATE_ID = re.compile(r"^[A-Z][A-Z0-9_-]{2,63}$")
 
 
-def fail(message: str) -> None:
+def fail(message: str) -> Never:
     raise ValueError(message)
 
 
-def require_object(value: object, label: str) -> dict:
+def require_object(value: object, label: str) -> dict[str, object]:
     if not isinstance(value, dict):
         fail(f"{label} must be an object")
-    return value
+    return cast(dict[str, object], value)
 
 
-def require_fields(value: dict, label: str, required: set[str], optional: set[str] | None = None) -> None:
+def require_fields(
+    value: dict[str, object],
+    label: str,
+    required: set[str],
+    optional: set[str] | None = None,
+) -> None:
     optional = optional or set()
     missing = required - set(value)
     if missing:
@@ -95,12 +101,12 @@ def require_string(value: object, label: str) -> str:
     return value
 
 
-def require_list(value: object, label: str, *, non_empty: bool = False) -> list:
+def require_list(value: object, label: str, *, non_empty: bool = False) -> list[object]:
     if not isinstance(value, list):
         fail(f"{label} must be a list")
     if non_empty and not value:
         fail(f"{label} must not be empty")
-    return value
+    return cast(list[object], value)
 
 
 def require_number(value: object, label: str, *, allow_zero: bool) -> float | int:
@@ -203,7 +209,7 @@ def validate_artifacts(value: object) -> None:
         seen.add(identity)
 
 
-def validate(path: Path) -> dict:
+def validate(path: Path) -> dict[str, object]:
     try:
         payload = json.loads(path.read_text())
     except (OSError, json.JSONDecodeError) as exc:
