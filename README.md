@@ -473,7 +473,7 @@ opt into the same bounded parallel path locally with `auto` or an integer from
 QUALITY_PYTEST_WORKERS=auto python3 scripts/run_quality_checks.py
 ```
 
-Coverage boundaries are unchanged: the wrapper runs all 70 root test files, including
+Coverage boundaries are unchanged: the wrapper runs all 72 root test files, including
 scientific and PDF artifact-builder tests, `unittest.TestCase` tests, and
 pytest-native fixtures and marks. After pytest it compiles the Python trees,
 applies the publication guard, validates the evidence, claim,
