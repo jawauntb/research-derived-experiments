@@ -374,13 +374,17 @@
       "cf6f640da6d2b37154d0371255730f9f8d28a39a2cad63de61826f4dd02818c1",
       "bd94aedab53b51d0a67668efeaca0ca610a9b0cbbf45459f341813c862bfb0e0"
     ],
+    "portability_repair": "use frozen 12-decimal semantic digests only for random schedules and the transported reference while retaining an exact final-row digest; all plans, point estimates, and F0-F5 dispositions are unchanged",
     "reason": "post-run review found eight T_commit steps where fallback collisions changed sequential RNG consumption across the coupled no-change run",
-    "replacement": "pre-index initial, shift, probe-token, and drift variates; retain the frozen arms, seeds, calibration, probe budgets, and F0-F5 gates"
+    "replacement": "pre-index initial, shift, probe-token, and drift variates; retain the frozen arms, seeds, calibration, probe budgets, and F0-F5 gates",
+    "superseded_portability_raw_payload_sha256": [
+      "ec666ddb098579897974765c2f5431e0a0c636092f928f63102be85cca2899cc"
+    ]
   },
   "kind": "m5_suite_c_reopen_reset_trigger_summary",
   "n_rows": 40,
   "preregistration_repair": "experiments/world_responds/suite_c_reopen_reset_trigger_implementation_contract_2026-07-14.md",
-  "raw_payload_sha256": "ec666ddb098579897974765c2f5431e0a0c636092f928f63102be85cca2899cc",
+  "raw_payload_sha256": "61978fcc67537744cd4fd6369d2893ff7d42573ba5483c48d07e618ac0518a13",
   "rejected_alternatives": [
     "post-outcome trigger threshold tuning",
     "unequal actual probe counts",

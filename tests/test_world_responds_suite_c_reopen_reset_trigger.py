@@ -16,6 +16,8 @@ from experiments.world_responds.suite_c_reopen_reset_trigger import (
     DEFAULT_SEEDS,
     FROZEN_CALIBRATION_FILE_SHA256,
     FROZEN_CALIBRATION_RECEIPT_SHA256,
+    INTEGRITY_FLOAT_DECIMALS,
+    _integrity_sha256,
     build_probe_plan,
     calibrate_trigger_thresholds,
     evaluate_gates,
@@ -74,6 +76,16 @@ def test_probe_trace_is_opt_in_and_preserves_the_default_trial_contract() -> Non
     assert "probe_trace" not in default
     assert traced == default
     assert len(trace) == default["total_probes"]
+
+
+def test_integrity_hash_ignores_only_subprecision_float_noise() -> None:
+    baseline = {"value": 0.12345678901234, "negative_zero": -0.0}
+    subprecision = {"value": 0.123456789012341, "negative_zero": 0.0}
+    visible_change = {"value": 0.12345678911234, "negative_zero": 0.0}
+
+    assert INTEGRITY_FLOAT_DECIMALS == 12
+    assert _integrity_sha256(baseline) == _integrity_sha256(subprecision)
+    assert _integrity_sha256(baseline) != _integrity_sha256(visible_change)
 
 
 def test_complete_grid_has_exact_matched_actual_probe_counts(
@@ -145,6 +157,23 @@ def test_integrity_gate_fails_closed_on_one_probe_mismatch(
     )
 
     assert not summary["gates"]["F0_integrity"]["pass"]
+    assert summary["strict_verdict"] == "FAIL"
+
+
+def test_integrity_gate_keeps_final_row_floats_exact(
+    payload: dict[str, Any],
+) -> None:
+    rows = deepcopy(payload["rows"])
+    rows[0]["final_mae"] += 1e-13
+    summary = evaluate_gates(
+        rows,
+        payload["reference_suite"],
+        DEFAULT_SEEDS,
+        payload["calibration"],
+        deterministic_replay=True,
+    )
+
+    assert not summary["gates"]["F0_integrity"]["integrity_manifest_valid"]
     assert summary["strict_verdict"] == "FAIL"
 
 

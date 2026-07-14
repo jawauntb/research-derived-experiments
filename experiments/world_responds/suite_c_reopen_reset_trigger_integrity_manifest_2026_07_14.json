@@ -15,6 +15,15 @@
     "selectivity_floor": 2.0,
     "steps": 72
   },
+  "hash_canonicalization": {
+    "float_decimals": 12,
+    "row_digest": "exact-json-v1",
+    "semantic_scopes": [
+      "random_schedule",
+      "reference_suite"
+    ],
+    "version": "json-rounded-v1"
+  },
   "kind": "m5_suite_c_frozen_integrity_manifest",
   "probe_plans": {
     "20260709": {
@@ -50,8 +59,8 @@
       "plan_id": "e7b3c2fbd30c5e61a25e3b30dccf6b3123dee749934a7314121cd6b4ddc7ed03"
     }
   },
-  "reference_suite_sha256": "a6c730b98e82b81ba4f98a31ff1d75fee0c5adcaee24c2e593f1c4fdd67eb652",
-  "rows_sha256": "80f84d3ef673f8f8f3e837334e7e336555d01702ef001e847184aaab493762af",
+  "reference_suite_sha256": "dba69072b02d7679255c08d00a2fc9b571c82fb84c9716680ce79249c13a8ab5",
+  "rows_sha256": "5bf213c408be52ff91d8111e488e3316b6906c4fc5f7f6e08dd925fd70992ab4",
   "seeds": [
     20260709,
     20261712,

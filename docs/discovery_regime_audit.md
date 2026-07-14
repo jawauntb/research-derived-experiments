@@ -5865,8 +5865,9 @@ Results:
   `T_periodic` passes 8/8 with latency 0 and false reopen 0.667; `T_util`
   passes 0/8 with latency 1 and false reopen 0.656; `T_norm` and `T_none` pass
   0/8 with latency 12 and false reopen 0. F0/F1/F4/F5 pass; F2/F3 fail.
-  Raw SHA-256 is
-  `ec666ddb098579897974765c2f5431e0a0c636092f928f63102be85cca2899cc`.
+  Canonical macOS raw SHA-256 is
+  `61978fcc67537744cd4fd6369d2893ff7d42573ba5483c48d07e618ac0518a13`;
+  cross-platform F0 uses frozen 12-decimal semantic digests.
 - Post-outcome review invalidated raw payloads `cf6f640d…` and `bd94aeda…`:
   fallback collisions changed sequential RNG consumption at eight `T_commit`
   steps in the coupled no-change run. The replacement pre-indexes all
@@ -5874,6 +5875,13 @@ Results:
   transported reference, calibration, config, and seed grid in a frozen
   integrity manifest. Arm point estimates were recomputed; the F0–F5 pass/fail
   map and strict FAIL verdict did not change.
+- Linux CI then exposed sub-`1e-14` platform variation in NumPy normal draws:
+  plans, metrics, and F1–F5 matched, but exact raw-float hashes made F0 fail.
+  The first corrected mac-only receipt `ec666ddb…` is superseded, not
+  scientifically invalidated. Schedule and transported-reference integrity now
+  use a manifest-declared 12-decimal canonicalization; the final-row digest
+  remains exact, macOS/Linux digests match, and every gate disposition remains
+  unchanged.
 - Variance or ablation: public summaries carry paired-bootstrap intervals for
   all frozen metrics; rerun raw/public hashes are byte-identical.
 

@@ -991,6 +991,17 @@ def build_results_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
             f"{', '.join(history['invalidated_raw_payload_sha256'])}.",
             st["Body"],
         ))
+        flow.append(para(
+            "**Cross-platform receipt.** Linux CI later showed sub-1e-14 "
+            "variation in NumPy normal draws, so the first corrected macOS "
+            "raw receipt was superseded. The manifest now uses declared "
+            "12-decimal semantic hashes only for schedules and the transported "
+            "reference, while the final-row digest stays exact; macOS/Linux "
+            "digests match and no plan, point estimate, or gate disposition "
+            "changed. Superseded hash: "
+            f"{', '.join(history['superseded_portability_raw_payload_sha256'])}.",
+            st["Body"],
+        ))
     else:
         flow.append(para("M5 result JSON not yet available.", st["Body"]))
 

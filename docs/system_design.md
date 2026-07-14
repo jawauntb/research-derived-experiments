@@ -334,7 +334,11 @@ coupled second-shift no-change control. Outcome execution loads and hash-pins
 the frozen receipt, pre-indexes branch-independent variates for the coupled
 outcome/no-change paths, and validates the complete eight-seed grid, corrected
 rows, rebuilt M4 plans, and transported reference against a frozen integrity
-manifest. Raw trigger/probe traces remain under
+manifest. The manifest declares a 12-decimal JSON canonicalization only for
+random-schedule IDs and transported-reference floats: this preserves exact
+within-run coupling while making F0 portable across macOS/Linux NumPy builds
+whose normal draws differ only below scientific precision. Final M5 rows retain
+an exact JSON digest. Raw trigger/probe traces remain under
 `artifacts/world_responds/`; only aggregate arm intervals and F0–F5 gates are
 public. Provenance generation takes the runnable command and preregistration
 from the latest result report so its machine-readable signal stays aligned with

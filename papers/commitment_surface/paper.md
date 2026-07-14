@@ -502,7 +502,8 @@ The CPU grid contains all five frozen trigger arms over eight paired seeds,
 with actual probe counts exactly matched per seed from the immutable M4
 `allocate=0, cool=0, reopen=1` cell. The unmodified reference suite retains
 C1–C6, fixed-surprise remains rejected, matched-random remains less selective,
-and a second execution is byte-identical. F0, F1, F4, and F5 pass.
+and a second same-platform execution is byte-identical. F0, F1, F4, and F5
+pass.
 
 A post-run adversarial audit invalidated two precursor payloads because fallback
 collisions changed sequential random-number consumption at eight `T_commit`
@@ -511,6 +512,15 @@ initial, shift, probe-token, and drift variates, while retaining the frozen
 arms, seeds, calibration, budgets, and gates. F0 now binds the corrected rows,
 M4 plans, transported reference, config, and receipt through a frozen integrity
 manifest. Point estimates changed slightly; no gate disposition changed.
+
+A subsequent Linux CI replay exposed a portability defect in that first
+corrected receipt: NumPy normal draws differed from macOS only below
+`1e-14`, but exact raw-float hashes made F0 fail despite identical plans,
+metrics, and F1–F5 decisions. The final manifest declares 12-decimal semantic
+hashing only for schedules and the transported reference, while final rows keep
+an exact digest. Those digests match across macOS/Linux; the mac-only receipt is
+superseded, while all scientific point estimates and gate dispositions remain
+unchanged.
 
 The strict verdict is **FAIL** because two universal superiority gates fail.
 `T_commit` passes 8/8, has median latency 0, and false-reopen occupancy 0.

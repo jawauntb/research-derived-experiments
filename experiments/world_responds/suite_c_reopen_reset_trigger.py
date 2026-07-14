@@ -69,12 +69,16 @@ FROZEN_CALIBRATION_RECEIPT_SHA256 = (
 FROZEN_CALIBRATION_FILE_SHA256 = (
     "7e62142b8a8efdd57176c6d5255ee6439941d951b4d9a5a20825d9198c3d58b9"
 )
+INTEGRITY_FLOAT_DECIMALS = 12
 FROZEN_INTEGRITY_MANIFEST_SHA256 = (
-    "1d1fedb65720d6a5f10dc41240aabbdc55c7ac8aadd1164cb165c71c2bca09d4"
+    "15db53ff84127acac2738b0102f2e8ad6af8f2ae51d5fff2b752b64620950d92"
 )
 INVALIDATED_RAW_PAYLOAD_SHA256 = (
     "cf6f640da6d2b37154d0371255730f9f8d28a39a2cad63de61826f4dd02818c1",
     "bd94aedab53b51d0a67668efeaca0ca610a9b0cbbf45459f341813c862bfb0e0",
+)
+SUPERSEDED_PORTABILITY_RAW_PAYLOAD_SHA256 = (
+    "ec666ddb098579897974765c2f5431e0a0c636092f928f63102be85cca2899cc",
 )
 PREREGISTRATION = Path(
     "experiments/world_responds/"
@@ -114,6 +118,26 @@ def _sha256(value: Any) -> str:
     return hashlib.sha256(_canonical_bytes(value)).hexdigest()
 
 
+def _canonicalize_for_integrity(value: Any) -> Any:
+    """Normalize sub-precision float noise before cross-platform hashing."""
+
+    if isinstance(value, (float, np.floating)):
+        number = float(value)
+        if not math.isfinite(number):
+            raise ValueError("integrity payloads require finite floats")
+        rounded = round(number, INTEGRITY_FLOAT_DECIMALS)
+        return 0.0 if rounded == 0.0 else rounded
+    if isinstance(value, dict):
+        return {key: _canonicalize_for_integrity(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_canonicalize_for_integrity(item) for item in value]
+    return value
+
+
+def _integrity_sha256(value: Any) -> str:
+    return _sha256(_canonicalize_for_integrity(value))
+
+
 def _calibration_receipt_is_valid(calibration: dict[str, Any]) -> bool:
     core = {key: value for key, value in calibration.items() if key != "receipt_sha256"}
     return bool(
@@ -150,13 +174,21 @@ def _integrity_manifest_is_valid(
     rows_sorted = sorted(rows, key=lambda row: (int(row["seed"]), str(row["arm"])))
     return bool(
         _sha256(manifest) == FROZEN_INTEGRITY_MANIFEST_SHA256
+        and manifest.get("hash_canonicalization")
+        == {
+            "float_decimals": INTEGRITY_FLOAT_DECIMALS,
+            "row_digest": "exact-json-v1",
+            "semantic_scopes": ["random_schedule", "reference_suite"],
+            "version": "json-rounded-v1",
+        }
         and manifest.get("source_revision") == SOURCE_REVISION
         and manifest.get("seeds") == list(seeds)
         and manifest.get("config") == asdict(cfg)
         and manifest.get("calibration_receipt_sha256")
         == calibration.get("receipt_sha256")
         and manifest.get("probe_plans") == observed_plans
-        and manifest.get("reference_suite_sha256") == _sha256(reference_suite)
+        and manifest.get("reference_suite_sha256")
+        == _integrity_sha256(reference_suite)
         and manifest.get("rows_sha256") == _sha256(rows_sorted)
     )
 
@@ -444,7 +476,7 @@ def _random_schedule(
         "probe_noise": probe_noise.tolist(),
         "drift_noise": drift_noise.tolist(),
     }
-    return {**core, "schedule_id": _sha256(core)}
+    return {**core, "schedule_id": _integrity_sha256(core)}
 
 
 def _simulate_arm(
@@ -978,6 +1010,9 @@ def run_m5_suite(
     )
     summary["integrity_history"] = {
         "invalidated_raw_payload_sha256": list(INVALIDATED_RAW_PAYLOAD_SHA256),
+        "superseded_portability_raw_payload_sha256": list(
+            SUPERSEDED_PORTABILITY_RAW_PAYLOAD_SHA256
+        ),
         "reason": (
             "post-run review found eight T_commit steps where fallback collisions "
             "changed sequential RNG consumption across the coupled no-change run"
@@ -985,6 +1020,11 @@ def run_m5_suite(
         "replacement": (
             "pre-index initial, shift, probe-token, and drift variates; retain the "
             "frozen arms, seeds, calibration, probe budgets, and F0-F5 gates"
+        ),
+        "portability_repair": (
+            "use frozen 12-decimal semantic digests only for random schedules and "
+            "the transported reference while retaining an exact final-row digest; "
+            "all plans, point estimates, and F0-F5 dispositions are unchanged"
         ),
     }
     command = (
@@ -1021,6 +1061,9 @@ def render_markdown(summary: dict[str, Any]) -> str:
     invalidated = ", ".join(
         summary["integrity_history"]["invalidated_raw_payload_sha256"]
     )
+    superseded_portability = ", ".join(
+        summary["integrity_history"]["superseded_portability_raw_payload_sha256"]
+    )
     lines = [
         "# M5 Suite C Reopen/Reset Trigger Comparison (2026-07-14)",
         "",
@@ -1050,6 +1093,11 @@ def render_markdown(summary: dict[str, Any]) -> str:
         f"`{invalidated}`.",
         "The replacement pre-indexes every variate; it does not change the frozen",
         "arms, seeds, thresholds, probe budgets, or F0–F5 gates.",
+        "A later Linux CI replay superseded the first corrected raw receipt",
+        f"`{superseded_portability}` because exact raw-float hashes were platform-sensitive.",
+        "The manifest now uses 12-decimal semantic hashes only for schedules and",
+        "the transported reference; its final-row digest remains exact. Plans, point",
+        "estimates, and every F0–F5 disposition remain unchanged.",
         "",
         "## Arm summaries",
         "",
