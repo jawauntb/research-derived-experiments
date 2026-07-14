@@ -73,6 +73,10 @@ class ExperimentManifestTests(unittest.TestCase):
 
         self.assertEqual(payload["experiment_id"], "demo_experiment")
 
+    def test_committed_example_manifest_is_valid(self) -> None:
+        payload = validate(ROOT / "templates" / "experiment" / "manifest.example.json")
+        self.assertEqual(payload["status"], "planned")
+
     def test_all_contract_fields_are_required(self) -> None:
         required = {
             "hypothesis",
