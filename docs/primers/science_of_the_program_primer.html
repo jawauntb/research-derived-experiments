@@ -578,20 +578,25 @@ deviation across seeds"). A result that holds at one seed and dies at another is
 program treats it as such.</p>
 
 <p>The honest tension here — which the program names repeatedly — is that most of its sweeps use only
-<strong>three seeds</strong>. Three is enough to catch gross flukes but thin for stable error bars;
-the flagship benchmark suites push to eight or sixty-four seeds for their headline claims, but the
-default is low. When a paper writes "only 3 seeds — wide error bars," this is the law of
-diminishing returns talking: halving your uncertainty costs roughly four times the compute, and
-compute budgets are finite. Chapter 9 flags this as the program's most pervasive statistical
-weakness.</p>
+<strong>three seeds</strong>. The new S-022 calibration makes the consequence executable rather than
+rhetorical: across all five preregistered synthetic regimes, three seeds were insufficient for
+promotion. Sixteen seeds were enough for the moderate independent-and-identically-distributed effect
+and null regimes under their frozen precision targets; the hierarchical effect and null regimes needed
+sixty-four; and the weak, high-noise hierarchical effect remained pilot-only even at sixty-four. This
+does <em>not</em> establish a universal seed floor. It shows why a floor must be derived from the
+effect, noise, hierarchy, sign-risk, and interval-width target instead of inherited as a ritual number.
+When a paper writes "only 3 seeds — wide error bars," the result is a pilot, not a promotable claim.
+S-022 reports raw estimate-sign stability, not the conditional Type-S and Type-M error measures of
+Gelman and Carlin; a separately preregistered exaggeration analysis remains open.</p>
 
 <h3>4.3 The bootstrap and the gate that vetoes a positive number</h3>
 
 <p>How do you put error bars on a result without assuming a bell curve? The <strong>bootstrap</strong>:
-resample your own data with replacement thousands of times, recompute the statistic each time, and
-take the middle 95% of those recomputations as your <strong>confidence interval</strong>. It is a
-computational way of asking "if I had re-run this experiment, how much would the answer wobble?" — and
-the program uses it constantly, with fixed seeds so the interval itself is reproducible.</p>
+resample your observed independent units with replacement, recompute the statistic, and use that
+empirical distribution to estimate uncertainty under a declared sampling model. The independent-unit
+clause is essential. If episodes are nested within trained seeds, resampling rows as though every
+episode were an independent rerun can badly understate uncertainty. Fixed bootstrap randomness makes
+the calculation reproducible; it cannot manufacture seeds, models, or tasks that were never observed.</p>
 
 <p>The program's favorite gate is expressed through it: <strong>"the 95% confidence interval's lower
 bound must be above zero."</strong> This is stricter than "the average was positive," and the
@@ -613,7 +618,10 @@ unstable — its apparent precision can outrun its real reliability. "CI lower b
 strong gate, but with n = 3 it has weak error control and remains vulnerable to seed variation. The
 program mitigates this where it can afford to (64-seed bootstraps for its polished benchmark claims),
 but the pairing of a strict-looking gate with a thin sample is the subtlest statistical caveat in the
-program, and worth holding whenever you read a three-seed bootstrap interval.</p></div>
+program, and worth holding whenever you read a three-seed bootstrap interval. S-022 found the stronger
+failure too: in the hierarchical null at sixty-four seeds, naive row resampling still covered only
+0.755 and produced a 0.245 false-positive rate, while paired seed-cluster resampling covered 0.925 with
+a 0.075 false-positive rate. The interval must follow the data-generating hierarchy.</p></div>
 
 <h3>4.4 Effect sizes over significance</h3>
 
@@ -758,9 +766,9 @@ implements each pillar.</p>
 <h3>6.2 Provenance cards: generated indexes that still need auditing</h3>
 
 <div class="def"><span class="boxtitle">Definition — a provenance card</span>
-<p>All 50 experiment-registry entries carry an auto-generated <code>PROVENANCE.md</code>, but card
-presence is not card completeness. In the 2026-07-14 repository audit, only 16/50 cards have a detected
-pre-registration link, 20/50 a detected run command, and 13/50 a detected seed. The generator rebuilds
+<p>All 54 experiment-registry entries carry an auto-generated <code>PROVENANCE.md</code>, but card
+presence is not card completeness. In the 2026-07-14 repository audit, only 20/54 cards have a detected
+pre-registration link, 24/54 a detected run command, and 13/54 a detected seed. The generator rebuilds
 cards from committed files, which is useful, but it extracts a few gate-like lines from prose and can
 therefore omit or misread evidence. These are mechanically generated indexes to available metadata, not
 complete receipts and not guarantees that provenance cannot drift.</p></div>
@@ -1043,7 +1051,7 @@ about itself. What follows is the skeptic's brief, organized so each criticism c
 
 <table class="plain">
 <tr><th>Pressure point</th><th>The criticism</th><th>The fix</th></tr>
-<tr><td><strong>Statistical power</strong></td><td>Most sweeps use only three seeds; a "CI lower bound &gt; 0" gate built from three numbers is itself unstable, and its apparent precision can outrun its reliability.</td><td>Make five-to-ten seeds the floor for any promoted claim; pre-register power/precision targets; report per-seed distributions, not just pooled intervals; treat three-seed runs strictly as pilots.</td></tr>
+<tr><td><strong>Statistical power</strong></td><td>Most sweeps use only three seeds; a "CI lower bound &gt; 0" gate built from three numbers is itself unstable, and its apparent precision can outrun its reliability.</td><td>Treat three-seed runs strictly as pilots. Pre-register coverage, width, power, false-positive, and sign-stability targets; simulate the expected noise and hierarchy; resample the true independent unit; promote only the smallest seed count that clears the regime-specific targets.</td></tr>
 <tr><td><strong>External validity</strong></td><td>The bulk of strong results are on bespoke synthetic environments whose task-generator and success-gate were designed by the same program the results serve — a structural risk of encoding the intended answer into the world.</td><td>Push results onto real models and third-party data (the program's own Phase 5→6 arc); make external-contact results the primary currency; use environments authored by outsiders.</td></tr>
 <tr><td><strong>Proxy-resistance is never total</strong></td><td>Anti-cheat gates are hypotheses about how cheating could occur; a shortcut outside that hypothesis space passes undetected. The activation-steering whack-a-mole shows a determined optimizer repeatedly finding new leaks.</td><td>Adversarial collaboration: have an <em>independent</em> party (ideally human, or a differently-built system) design the shortcut and the verifier, so the red-team doesn't share the experimenter's blind spots.</td></tr>
 <tr><td><strong>Program-level forking paths</strong></td><td>Pre-registration cleans each experiment, but the program runs many and pivots often; the family-wide false-discovery rate is uncontrolled even if each study is clean.</td><td>A program-level registry of every frozen gate and its outcome; multiplicity correction across the family of results feeding any single field claim; pre-committed stopping rules.</td></tr>
@@ -1099,7 +1107,23 @@ external replication, and appreciate that the program tells you which is which.<
 <tr><td>Has anyone <em>independent</em> reproduced it?</td><td>9</td></tr>
 </table>
 
-<h3>9.6 Closing</h3>
+<h3>9.6 The methodological sources now constrain the workflow</h3>
+
+<table class="plain">
+<tr><th>Source</th><th>Constraint adopted here</th></tr>
+<tr><td>Nosek, Ebersole, DeHaven, and Mellor, <a href="https://doi.org/10.1073/pnas.1708274114">"The Preregistration Revolution"</a> (2018)</td><td>Prediction and postdiction remain separately identified; an amendment cannot overwrite the original frozen verdict.</td></tr>
+<tr><td>Efron, <a href="https://doi.org/10.1214/aos/1176344552">"Bootstrap Methods: Another Look at the Jackknife"</a> (1979)</td><td>Every interval declares its sampling unit and resampling scheme; bootstrap resamples do not count as new independent experiments.</td></tr>
+<tr><td>Gelman and Carlin, <a href="https://doi.org/10.1177/1745691614551642">"Beyond Power Calculations"</a> (2014)</td><td>Wrong-sign and exaggerated-magnitude risk require conditional Type-S/Type-M analysis. S-022 does not yet compute those measures, so its promotion table remains a bounded synthetic calibration rather than a general policy.</td></tr>
+<tr><td>Silberzahn et al., <a href="https://doi.org/10.1177/2515245917747646">"Many Analysts, One Data Set"</a> (2018)</td><td>A second analysis is independent only when its code path and defensible analytic choices are independently implemented and reported.</td></tr>
+<tr><td>Mo, <a href="https://openreview.net/attachment?id=Pwt0TeGUE6&amp;name=pdf">"The Age of AI Agents Demands a New Scientific Paradigm"</a> (2026), and Bai et al., <a href="https://openreview.net/forum?id=cmXVfGR44k">"The Story is Not the Science"</a> (2026)</td><td>Agent provenance and execution-grounded review reduce a verification gap; they do not by themselves prove correctness or independence.</td></tr>
+</table>
+
+<p class="small">These sources do different jobs. Preregistration exposes forking paths; bootstrap
+estimates uncertainty under a sampling model; Type S/M analysis would calibrate conditional directional
+and magnitude risk once implemented; many-analyst work tests estimator dependence; and execution-grounded review checks artifacts
+beyond narrative coherence. No single item licenses a general claim of trustworthiness.</p>
+
+<h3>9.7 Closing</h3>
 <p>Science is the systematic refusal to fool yourself, and its hardest form is refusing to fool
 yourself when a tireless, fluent machine is doing the work and grading the homework. This program's
 answer — pre-register everything, red-team your own claims, publish your failures loudly, grade your

@@ -4,16 +4,16 @@
 
 ## Abstract
 
-Four prior empirical papers in this program established that symmetry-compatible-hypothesis volume (weakness) predicts out-of-distribution generalization [1], that the relevant symmetry group can be recovered from training data alone [2], that pixel-cosine and learned-encoder methods occupy different operating regimes [3], and that paraphrase clusters become *causally load-bearing* under action coupling via supervised fine-tuning [4]. Paper [4] left one strong skeptical objection: *"of course ablating a direction the head was trained to use makes the head fail."* The autopoietic theorem of Bennett & Suzuki [5] sharpens what the rebuttal needs to demonstrate. Action coupling is necessary but not sufficient for the Layer-3 claim; the system must also (a) preserve a *viability buffer* of compatible-future behaviors, (b) *repair itself* after viability breach (not merely resist perturbation), and (c) exhibit the *Law of the Stack* — lower-layer slack should cap upper-layer adaptive capacity.
+Four prior empirical papers in this program established that symmetry-compatible-hypothesis volume (weakness) predicts out-of-distribution generalization [1], that the relevant symmetry group can be recovered from training data alone [2], that pixel-cosine and learned-encoder methods occupy different operating regimes [3], and that paraphrase clusters become *causally load-bearing* under action coupling via supervised fine-tuning [4]. Paper [4] left one strong skeptical objection: *"of course ablating a direction the head was trained to use makes the head fail."* The autopoietic theorem of Bennett & Suzuki [5] sharpens what a stronger rebuttal would need to demonstrate. Action coupling is necessary but not sufficient for a strict Layer-3 claim; a candidate system would also need to preserve a *viability buffer*, repair after viability breach, and show that lower-layer slack constrains upper-layer adaptive capacity. This paper tests supervised analogues of those properties, not autopoiesis itself.
 
 We test all three. We run an 18-cell sweep (2 model families × 3 seeds × 3 Law-of-the-Stack training variants) on the same paraphrase-invariant classification task as [4], holding out 1 of 3 paraphrases per concept as a viability buffer. We report four findings:
 
 1. **Trajectory.** Across the fine-tuning trajectory, cluster geometry tightens *gradually* (centered cosine gap from +0.36 to +0.97 over 60 epochs), but causal load-bearing emerges *abruptly* between epochs 8 and 16. Geometry and causal dependence are not coextensive in time.
 2. **Buffer.** Held-out paraphrase classification accuracy (≈ buffer size, |B_π| in Bennett's formalism) starts already high (mean 0.958) because the pretrained encoder already separates paraphrases. The *causal* dependence on the right axis is what fine-tuning installs, not the predictive feature. Buffer and load-bearing are decoupled — exactly what the autopoietic frame predicts.
-3. **Repair (autopoietic control).** When we perturb the classifier head with Gaussian noise σ ∈ {0.05, 0.1, 0.2, 0.4} and allow K ∈ {0…20} test-time gradient updates on held-out paraphrases, the full-fine-tuned cell recovers held-out accuracy from immediate-post-noise 0.45 back to **0.965 within K = 10 updates** at σ = 0.2 — Ashby ultrastability in the small. The frozen-encoder cell recovers only to 0.806 over the same K.
-4. **Law of the Stack.** Across the LoS variants, both the passive→active transition magnitude (full_ft +0.437, frozen_early +0.080, frozen_encoder −0.215) and repair speed (0.965, 0.875, 0.806 at K = 10, σ = 0.2) are *monotone* in lower-layer slack. The geometric formalism — w(ς_{i+1}) ≤ 2^{w(ς_i)} — predicts this; we observe it.
+3. **Repair (supervised ultrastability analogue).** When we perturb the classifier head with Gaussian noise σ ∈ {0.05, 0.1, 0.2, 0.4} and allow K ∈ {0…20} test-time gradient updates on held-out labeled paraphrases, the full-fine-tuned cell recovers held-out accuracy from immediate-post-noise 0.45 back to **0.965 within K = 10 updates** at σ = 0.2. This is externally supplied, label-dependent parameter repair, not strict self-production. The frozen-encoder cell recovers only to 0.806 over the same K.
+4. **Stack ordering.** Across the LoS variants, both the passive→active transition magnitude (full_ft +0.437, frozen_early +0.080, frozen_encoder −0.215) and repair speed (0.965, 0.875, 0.806 at K = 10, σ = 0.2) are *monotone* in lower-layer slack. This is consistent with the inequality's ordinal implication; the experiment does not measure or test its formal upper bound.
 
-Together these signatures convert paper [4]'s "active classifier with a load-bearing direction" into an *autopoietic controller*: the same latent geometry causally controls behavior, preserves a buffer of compatible futures, repairs itself under viability breach, and degrades predictably when lower-layer slack is restricted.
+Together these signatures convert paper [4]'s "active classifier with a load-bearing direction" into an *ultrastable adaptive-controller analogue*: the same latent geometry causally controls behavior, preserves a buffer of compatible futures, undergoes supervised repair after viability breach, and degrades predictably when lower-layer slack is restricted. We reserve *autopoiesis* for systems that endogenously produce their own components and boundary, which this experiment does not test.
 
 ## 1. Introduction
 
@@ -26,7 +26,7 @@ The four prior empirical papers in this program built the ladder:
 
 [4] has a clean +7× ratio of the paraphrase-specific causal effect (passive +0.07, active +0.49), and replicates across 3 seeds × 2 model families with the active specific drop ≥ +0.30 in 6 of 6 cells. The strongest reviewer objection remains structural: *"You trained a classifier head to use a direction. Ablating it of course matters. This is not autopoiesis; it is supervised feature selection."*
 
-Bennett & Suzuki's autopoietic theorem [5] formalizes what the rebuttal should look like. The hierarchy of persistence — static → dynamic/autopoietic → novelty-generating — is derivable from change, finite information (Bekenstein), and stable low-level conditions. Their Proposition 1 makes weakness measurable as `|B_π|`, the buffer of unobserved compatible outcomes. Their Theorem 3 (the Law of the Stack) gives a sharp, falsifiable empirical claim: `w(ς_{i+1}) ≤ 2^{w(ς_i)}` — the weakness of layer i+1 is capped by the weakness of layer i. And the homeostatic-to-homeodynamic transition operationalizes "self-maintenance" as *repair under viability breach*, not merely *robustness to a fixed perturbation*.
+Bennett & Suzuki's autopoietic theorem [5] formalizes what the rebuttal should look like. The hierarchy of persistence — static → dynamic/autopoietic → novelty-generating — is derived from change, finite information (Bekenstein), and stable low-level conditions. Their Proposition 1 makes weakness measurable as `|B_π|`, the buffer of unobserved compatible outcomes. Their Theorem 3 (the Law of the Stack) proposes the sharp bound `w(ς_{i+1}) ≤ 2^{w(ς_i)}`. Our ablation can test only its weaker ordinal implication because it does not estimate both sides of that inequality. And the homeostatic-to-homeodynamic transition motivates repair under viability breach rather than mere robustness to a fixed perturbation; supervised label-dependent repair remains an analogue of that target.
 
 We translate these three into experiments on the same paraphrase-invariant classification task used in [4]:
 
@@ -72,7 +72,7 @@ At the final checkpoint, for each (σ, K) ∈ {0.05, 0.1, 0.2, 0.4} × {0, 1, 5,
 1. Add Gaussian noise of std σ to every parameter of the classifier head.
 2. Measure immediate held-out accuracy after the noise (K=0 row).
 3. Run K test-time Adam updates (lr 10⁻²) on the held-out paraphrases using cross-entropy against held-out labels.
-4. Measure held-out accuracy after K updates. The recovery is *self-supervised in the autopoietic sense*: the model's own viability function (correct classification of inputs from the same paraphrase distribution it was trained on) provides the recovery signal.
+4. Measure held-out accuracy after K updates. The recovery is **supervised**: cross-entropy uses held-out ground-truth labels. It tests label-dependent parameter reacquisition after damage. It does not test self-supervision, autonomous viability regulation, or production of components/boundaries.
 
 ### 2.5 Pre-registered acceptance gates
 
@@ -117,11 +117,11 @@ The full-slack system returns to within 3% of its pre-noise accuracy in 10 updat
 
 ![Figure 5: bar chart of immediate (K=0, light) and post-repair (K=10, solid) held-out accuracy at σ = 0.2, by LoS variant, separately for Pythia-70M and GPT-2. Both models show full_ft > frozen_early > frozen_encoder on repaired accuracy.](figures/fig5_los_repair_bars.png)
 
-### 3.4 The Law of the Stack holds quantitatively
+### 3.4 The candidate Stack ordering holds; the bound remains untested
 
 ![Figure 2: trajectories of cluster gap, paraphrase-specific drop, and buffer across LoS variants (rows: model; columns: metric; colors: variant). The full_ft trajectory (green) overshoots frozen_early (orange), which overshoots frozen_encoder (red), on both the cluster gap and the specific drop. The buffer is similar across variants.](figures/fig2_los_trajectories.png)
 
-The ordering predicted by the Law of the Stack — `full_ft` > `frozen_early` > `frozen_encoder` — holds on every dimension that matters:
+The ordinal ordering suggested by the Law of the Stack — `full_ft` > `frozen_early` > `frozen_encoder` — holds on every measured dimension:
 
 | Metric | full_ft | frozen_early | frozen_encoder |
 | --- | ---: | ---: | ---: |
@@ -129,7 +129,7 @@ The ordering predicted by the Law of the Stack — `full_ft` > `frozen_early` > 
 | Active cluster gap (mean) | high | medium | low |
 | Repair @ K=10, σ=0.2 (mean) | **0.965** | 0.875 | 0.806 |
 
-The frozen-encoder cell is informative: its active specific drop is *negative* — fine-tuning the classifier head alone produces a system in which ablating the labeled paraphrase axis is no worse than ablating a random axis. The head can classify (buffer 0.958), but it has not acquired specific causal dependence on the right axis. The Law of the Stack predicts exactly this — without lower-layer slack, the head cannot push upstream weakness into the right axis.
+The frozen-encoder cell is informative: its active specific drop is *negative* — fine-tuning the classifier head alone produces a system in which ablating the labeled paraphrase axis is no worse than ablating a random axis. The head can classify (buffer 0.958), but it has not acquired specific causal dependence on the right axis. This is consistent with the candidate Stack ordering: removing lower-layer slack removes the route by which training can reorganize the encoder around that axis. It is not a quantitative test of the exponential cap.
 
 ### 3.5 Two-signature summary
 
@@ -139,13 +139,13 @@ The frozen-encoder cell is informative: its active specific drop is *negative* �
 
 ## 4. Discussion
 
-The autopoietic theorem [5] makes a sharp prediction. Action coupling makes geometry causally load-bearing; viability coupling makes it self-maintaining; lower-layer slack caps higher-layer adaptive capacity. The v2 paper [4] established the first; this paper tests the second and third.
+The autopoietic theorem [5] motivates a sharp progression: action coupling makes geometry causally load-bearing; viability coupling should make it self-maintaining; lower-layer slack should constrain higher-layer adaptive capacity. The v2 paper [4] established the first within this harness; this paper tests supervised repair and the ordinal slack relation as analogues of the second and third. It does not test endogenous self-maintenance or the formal Stack bound.
 
 The buffer-causal *decoupling* (§3.1, §3.2) is the cleanest empirical contribution. Before fine-tuning, the model has a high buffer (96% accuracy on unseen paraphrases) and tight clusters (gap +0.36 to +0.76) — but no specific causal dependence on the labeled paraphrase axis. After fine-tuning, the buffer is still high (99%), the clusters are tighter (gap +0.97 to +1.04), and the causal dependence emerges robustly (+0.32 to +0.62 in full_ft cells). The pretrained encoder *predicts* paraphrases; fine-tuning installs the *causal axis*. These are different operations.
 
 The repair result (§3.3) closes the strongest reviewer objection to [4]. A system that merely resists a fixed perturbation could be a trained classifier with a redundant axis. A system that *recovers* from weight noise via test-time updates on held-out inputs is doing something closer to Ashby ultrastability — using its own ongoing input stream to re-establish a preferred state. The recovery speed *depends on lower-layer slack*: 0.965 with full slack, 0.806 with none. The gap is 16% with only 10 test-time updates. The "spare capacity" the autopoietic theorem identifies as the precondition for higher-order adaptability is empirically a 16-percent-recovery gap on this task.
 
-The Law of the Stack ablation (§3.4) is the experimental contribution we know of that most directly tests `w(ς_{i+1}) ≤ 2^{w(ς_i)}`. The frozen-encoder cell produces a classifier with a saturated buffer but *no causal axis*. The frozen-early cell produces a classifier with a partial causal axis but slower repair. The full-fine-tune cell produces the autopoietic controller. We have not tested the formal upper bound 2^{w(ς_i)}; we have shown the ordering predicted by the inequality.
+The Law of the Stack ablation (§3.4) is the experimental contribution we know of that most directly tests the ordering suggested by `w(ς_{i+1}) ≤ 2^{w(ς_i)}`. The frozen-encoder cell produces a classifier with a saturated buffer but *no causal axis*. The frozen-early cell produces a classifier with a partial causal axis but slower repair. The full-fine-tune cell produces the strongest ultrastable-controller analogue in this harness. We have not tested the formal upper bound `2^{w(ς_i)}`; we have shown only the ordinal ordering predicted by the inequality.
 
 ## 5. Connection to the program
 
@@ -154,7 +154,7 @@ The Law of the Stack ablation (§3.4) is the experimental contribution we know o
 | 1 (technical) | Weakness > compression/flatness/loss for OOD prediction | [1] symbolic + neural sweep, r ≈ +0.81 |
 | 2 (representation) | Weak invariant structure is inferable from data | [2] Z₈ recovery 89.7% recall; +51.5pp causal lift |
 | 3a (action coupling) | Active geometry becomes causally load-bearing | [4] +7× ratio, 6/6 replication |
-| 3b (autopoietic) | Active geometry preserves buffer, repairs, and respects Stack | **This paper** |
+| 3b (supervised analogue) | Active geometry preserves a predictive buffer, undergoes label-dependent repair, and follows the ordinal Stack ordering | **This paper** |
 | 4 (valenced agency) | Object formation by causal-valence role under self-maintenance | Open — homeostatic-agent program |
 
 ## 6. Limitations

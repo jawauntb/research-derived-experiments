@@ -10,14 +10,24 @@ The primer's thesis is that AI-generated science cannot inherit credibility from
 
 The executable implication is not “add more self-critique.” It is to build a program-wide evidence registry, promote structured raw evidence over prose extraction, calibrate uncertainty to actual seed counts, lock away audit gates and implementations, and arrange independent adversarial replication of both positive and negative flagship findings.
 
+## Implementation log (2026-07-14)
+
+| TODO | State | Implemented evidence |
+| --- | --- | --- |
+| S-001 | complete | HTML/PDF title metadata corrected and verified. |
+| S-003 | partial | Reproduction language separates dispatch from verified reproduction; provenance has a non-mutating staleness check, while clean-clone equivalence remains. |
+| S-022 | complete (synthetic calibration) | `experiments/seed_bootstrap_calibration/` evaluates 60 cells: three seeds fail every regime, hierarchy-aware promotion requires up to 64 seeds, and the weak/high-noise regime remains non-promotable. |
+| S-031-S-034 | partial (first reading tranche) | `references/science_methodology_claim_boundaries.md` ties Nosek, Efron, Gelman/Carlin, Many Analysts, Mo, and Bai et al. to repo gates. Kerr, Gelman/Loken, selective inference/FDR, Tibshirani, Lakens, adversarial-collaboration protocols, Lu et al., the named replication study, and benchmark/reproduction evidence remain open. |
+| S-036/S-038 | partial | Structured evidence, claim, manifest, and gate-verdict contracts validate in the root quality gate; full experiment migration remains. |
+
 ## Repo cross-check snapshot (2026-07-14)
 
-- `docs/verification.json` enumerates 50 experiments, but only 16 have a linked preregistration, 20 have an auto-detected run command, and 13 have an auto-detected seed. Therefore the primer's “every serious experiment” and “exact command/seed” language is not presently machine-verifiable at repository scale.
+- `docs/verification.json` enumerates 54 experiments, but only 20 have a linked preregistration, 24 have an auto-detected run command, and 13 have an auto-detected seed. Therefore the primer's “every serious experiment” and “exact command/seed” language is not presently machine-verifiable at repository scale.
 - `scripts/gen_provenance.py` extracts up to four “gate-like” lines from the lexicographically latest Markdown result using a permissive regex. This is the exact prose-scraping failure mode the primer criticizes.
 - `scripts/regen.py` has full local recipes for three experiment families and PDF builders for two families. Other entries print a detected command (which is absent for many); the script does not compare regenerated outputs against committed hashes. “One-command reproduce” exists as a dispatcher but not yet as a repository-wide reproduction guarantee.
 - There are 195 Markdown result reports across 23 experiment directories, but only 24 committed result JSON files across five experiment directories. Structured/raw public evidence is therefore real but sparse and uneven.
-- `docs/discovery_regime_audit.md` has 95 audit entries and repeatedly records action class, residual content, accepted/rejected artifacts, and next moves. This is valuable existing practice, but it is prose, not a normalized machine record linked one-to-one to all 50 experiment manifests and all result versions.
-- Existing strong foundations include `scripts/publication_guard.py`, `tests/test_publication_guard.py`, 50 generated `PROVENANCE.md` cards, `docs/external_contact_preregistration.md`, structured gate examples in `docs/causally_grounded_agents_release_schema.*`, many held-out/control experiments, and explicit negative/retraction records. The backlog below extends rather than discards these assets.
+- `docs/discovery_regime_audit.md` has 95 audit entries and repeatedly records action class, residual content, accepted/rejected artifacts, and next moves. This is valuable existing practice, but it is prose, not a normalized machine record linked one-to-one to all 54 experiment cards and all result versions.
+- Existing strong foundations include `scripts/publication_guard.py`, `tests/test_publication_guard.py`, 54 generated `PROVENANCE.md` cards, `docs/external_contact_preregistration.md`, structured gate examples in `docs/causally_grounded_agents_release_schema.*`, many held-out/control experiments, and explicit negative/retraction records. The backlog below extends rather than discards these assets.
 - `TODO.md` contains many experiment-specific replications but no program-level gate registry, multiplicity plan, independent replication program, locked audit-gate policy, or raw-row release policy for flagship claims.
 
 ## Exhaustive signal ledger
@@ -28,7 +38,7 @@ This ledger includes every distinct methodological idea, criticism, pitfall, or 
 | --- | --- | --- | --- | --- |
 | p.2, “Why a Book About Method” | Trust should rest on falsifiability and artifacts, not fluent prose or authority. | thesis | Strong norm, incompletely machine-enforced. | S-002, S-038, S-040, S-049 |
 | pp.4-6, §§1.1-1.4 | Science is organized distrust; predictions should precede data; AI volume outruns human review; similar AI experimenters/reviewers share blind spots; observability/attribution/reproducibility are the response. | idea + criticism | Attribution and provenance exist; review independence does not. | S-002-S-004, S-019, S-028, S-040, S-048 |
-| pp.8-10, §§2.1-2.2 | Prevent forking paths and HARKing with timestamped preregistrations containing setup, run count, thresholds, and a complete interpretation matrix. | idea | Preregistration exists but manifest coverage is 16/50 and timestamp integrity is not automatically verified. | S-002, S-031, S-044 |
+| pp.8-10, §§2.1-2.2 | Prevent forking paths and HARKing with timestamped preregistrations containing setup, run count, thresholds, and a complete interpretation matrix. | idea | Preregistration links are detected for 20/54 cards and timestamp integrity is not automatically verified. | S-002, S-031, S-044 |
 | pp.9-10, §2.3 | Gates should be named, numeric, precommitted, machine-readable booleans tied to claims. | idea | Structured examples exist, but the central provenance generator still scrapes prose. | S-036-S-038 |
 | p.9, §2.4 | Behavior alone must never license a mechanism claim; structure-specific and anti-cheat gates must also pass. | idea | Strong recurring local practice, not a global schema invariant. | S-038, S-042, S-051 |
 | pp.9-10, §2.5 | Interpretation matrices prevent spin, but “every outcome is publishable” can become unfalsifiable explanation. | tension | Common in preregistrations; no program-level audit of post-hoc cell use. | S-002, S-027, S-036, S-044 |
@@ -81,7 +91,7 @@ Priority meaning: P0 blocks trustworthy promotion or corrects a factual defect; 
 - **Deliverable:** Generated methodology-coverage table embedded in the primer or linked as a versioned appendix.
 - **Pass/fail gate:** Every universal claim has a machine test or is rewritten as a scoped claim; current counts reconcile exactly with the manifest.
 - **Dependencies:** S-036, S-038, S-047.
-- **Rationale:** Current machine evidence (16/50 prereg links, 20/50 commands, 13/50 seeds) does not justify the article's repository-wide wording.
+- **Rationale:** Current machine evidence (20/54 prereg links, 24/54 commands, 13/54 seeds) does not justify the article's repository-wide wording.
 
 #### S-003 — Correct the “one-command reproduce” and provenance guarantees
 
@@ -410,7 +420,7 @@ Priority meaning: P0 blocks trustworthy promotion or corrects a factual defect; 
 
 #### S-032 — Build the small-sample uncertainty and power reading packet
 
-- **Priority / status:** P0 / new.
+- **Priority / status:** P0 / partial (Efron and Gelman/Carlin tranche complete).
 - **Source / inference:** pp.14-16 Chapter 4; inference flag: **yes**.
 - **Action:** Read Efron/Tibshirani and modern bootstrap coverage guidance, Lakens on sample-size justification, hierarchical/mixed-effects resampling, randomization tests, and sequential/precision-based design. Explicitly study failure at n=3 independent units.
 - **Affected paths:** `references/SOURCES.md`, new `notes/seed_and_bootstrap_policy.md`, primer bibliography.
@@ -421,7 +431,7 @@ Priority meaning: P0 blocks trustworthy promotion or corrects a factual defect; 
 
 #### S-033 — Read adversarial collaboration, many-analyst, and replication-design literature
 
-- **Priority / status:** P0 / new.
+- **Priority / status:** P0 / partial (Many Analysts foundation complete).
 - **Source / inference:** p.12 §3.4 and p.29 §9.3; inference flag: **yes**.
 - **Action:** Internalize Kahneman's adversarial collaboration, Many Analysts/Many Labs, replicability-across-studies procedures, and independent reanalysis models. Extract contracts for blindness, frozen disagreements, authorship, and conflict resolution.
 - **Affected paths:** `references/SOURCES.md`, new `docs/independent_audit_protocol.md`, primer bibliography.

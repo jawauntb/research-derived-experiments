@@ -4,7 +4,14 @@ Source reviewed in full: `/Users/jawaun/Downloads/research_program_primers/syste
 
 ## Thesis
 
-The article's strongest defensible thesis is narrower than its opening rhetoric: the program has measured small, single-agent homeostatic and repair mechanisms, concern-shaped representation, an ordinal slack/repair relation, and capacity-driven metric deformation; it has not yet shown a distributed complex adaptive system, a dynamical attractor with a mapped basin, a control-parameter phase transition, strict autopoiesis, or self-organized criticality. The most valuable next program is therefore to replace nouns with tests: define control parameters and order parameters, measure response curves and path dependence, map return dynamics and viability sets, and move the virtual-governor and navigation claims into genuinely many-part worlds.
+The article's strongest defensible thesis is narrower than its opening rhetoric: the program has measured small, single-agent homeostatic and repair mechanisms, concern-shaped representation, an ordinal slack/repair relation, and capacity-driven metric deformation. A registered synthetic coupling sweep now rejects its bifurcation gate and adds matched-budget hysteresis/path dependence; it does not positively establish a continuous crossover or general phase transition. The program still has not shown a distributed complex adaptive system, a dynamical attractor with a mapped basin, strict autopoiesis, or self-organized criticality. The most valuable next program is therefore to replace nouns with tests: define control parameters and order parameters, measure response curves and path dependence, map return dynamics and viability sets, and move the virtual-governor and navigation claims into genuinely many-part worlds.
+
+## Implementation log (2026-07-14)
+
+| TODO | State | Implemented evidence |
+| --- | --- | --- |
+| T-SYS-011 | complete (bounded synthetic tranche) | `experiments/passive_active_phase_map/` sweeps 11 coupling values across two architectures and five seeds with five registered order parameters. Only causal specificity favored the segmented model (11.2% held-out MSE advantage); critical-cell stability was 70% and order-parameter co-location failed, so the frozen verdict is `bifurcation_not_supported`. A smooth crossover was not separately adjudicated. |
+| T-SYS-012 | complete (bounded synthetic tranche) | Fixed-length forward/reverse paths have exactly matched total updates. A seed-cluster bootstrap preserves both architecture rows per seed. The hysteresis gate passed: loop area 0.0447, six contiguous significant continuation couplings, four under washout, and a clear reinitialization control. Retention half-life was not observed through 80 neutral updates. This is synthetic path-dependence evidence, not a dynamical-attractor or foundation-model result. |
 
 ## Exhaustive signal ledger
 
@@ -24,8 +31,8 @@ Every substantive positive result, caveat, criticism, and proposed direction in 
 | S10 | p.9, §3.3 | Ring/torus neuroscience is the benchmark for dynamics-backed attractor language. | `experiments/grid_cell_weakness/` measures toroidal topology and OOD behavior, not return dynamics of the program's agent representation. | T-SYS-006, T-SYS-024 |
 | S11 | p.10, §4.2 | Valence-coupled supervision causes dramatic reward-axis rather than sensory-axis organization. | `papers/valence_object_formation/paper.md` reports reward gap +1.96 and explicitly calls the mechanism a supervised optimal-action stand-in. | T-SYS-010, T-SYS-022 |
 | S12 | p.11, Tension | The cleanest “self-organization” can be deflated to supervised feature selection. | `papers/concern_bootstrap/paper.md` partially answers this; `papers/two_bottlenecks/paper.md` gets XOR reward gap +1.84 without optimal-action labels only after decoupling representation learning from sparse-reward policy learning. | T-SYS-002, T-SYS-010, T-SYS-022, T-SYS-031 |
-| S13 | pp.10-11, §4.2 | Geometry tightens gradually while load-bearing appears abruptly. | The passive-to-active paper reports training trajectories, but no model comparison distinguishes discontinuity from a steep continuous curve. | T-SYS-005, T-SYS-011 |
-| S14 | p.11, arch analogy before Tension | Abruptness may be only a smooth signal crossing a measurement/detection threshold. | No change-point model, smooth-null comparison, or holdout threshold analysis is reported. | T-SYS-005, T-SYS-011, T-SYS-028 |
+| S13 | pp.10-11, §4.2 | Geometry tightens gradually while load-bearing appears abruptly. | The registered local-CPU coupling sweep compared segmented and smooth models on held-out seeds. Only one of five order parameters cleared the segmented advantage threshold, so the gate reports bifurcation not supported; it does not positively adjudicate a smooth crossover. | T-SYS-005, T-SYS-011 |
+| S14 | p.11, arch analogy before Tension | Abruptness may be only a smooth signal crossing a measurement/detection threshold. | The new smooth-null comparison supports this caution within the synthetic harness: no replicated multi-parameter discontinuity was found, although matched-budget path dependence was positive. | T-SYS-005, T-SYS-011, T-SYS-028 |
 | S15 | p.13, §5.1 | Hierarchy and near-decomposability motivate robustness/evolvability. | The program varies frozen regions but does not quantify within- versus between-module coupling. | T-SYS-025 |
 | S16 | pp.13-14, §§5.2-5.3 | More lower-layer slack gives more adaptation/repair; alignment can turn a foundation into an aid or trap. | `papers/autopoietic_control/paper.md` and `papers/homeostatic_objects/paper.md` report the ordinal ordering and alignment qualification. | T-SYS-007, T-SYS-016 |
 | S17 | p.14, Tension | The Law of the Stack's numerical bound is asserted; only an ordinal ordering across coarse freezes is tested. | `papers/autopoietic_control/paper.md:148,164,167` explicitly concedes that the exponential bound was not tested and suggests finer slack control. | T-SYS-002, T-SYS-007, T-SYS-025 |
@@ -35,11 +42,11 @@ Every substantive positive result, caveat, criticism, and proposed direction in 
 | S21 | p.17, §7.2 | Test-time recovery after head damage is genuine small-scale ultrastability, and recovery follows slack ordering. | `papers/autopoietic_control/paper.md` reports 0.45 to 0.965 recovery in 10 labeled-gradient updates for full fine-tuning. | T-SYS-009 |
 | S22 | pp.17-18, §7.2 and Tension | The prose first calls repair “self-supervised,” then correctly says it uses labeled gradient descent; neither is strict autopoiesis. | The source paper itself uses “self-supervised in the autopoietic sense” but later concedes labeled gradients and no policy generation. This terminology is internally inconsistent. | T-SYS-002, T-SYS-009, T-SYS-017, T-SYS-024 |
 | S23 | p.18, §7.3 | Viability buffer is useful, but formal viability kernels are not computed. | `viable_computational_bodies` has viability gates and typed search, not reachability-derived viable sets for the homeostatic dynamics. | T-SYS-018, T-SYS-026 |
-| S24 | p.20, §8.1 scorecard | Earned: homeostasis/repair; partial: self-organization, constraint order, Stack ordering; unestablished: attractors/transitions; aspirational: autopoiesis; absent: distributed systems. | This is broadly accurate after correcting S19 and S22. | T-SYS-002, T-SYS-031, T-SYS-032 |
+| S24 | p.20, §8.1 scorecard | Earned: homeostasis/repair; partial: self-organization, constraint order, Stack ordering; unestablished: attractors/transitions; aspirational: autopoiesis; absent: distributed systems. | The transition row now needs a split verdict: no bifurcation/phase transition, but positive matched-budget hysteresis and path dependence in one controlled synthetic mechanism. | T-SYS-002, T-SYS-011, T-SYS-012, T-SYS-031, T-SYS-032 |
 | S25 | p.20, §8.1 | Criticality is rightly not claimed: no avalanches, critical exponents, or edge-of-chaos result. | `TODO.md:192` mentions only an undefined “criticality proxy.” | T-SYS-027, T-SYS-032 |
-| S26 | p.21, Limitation 2 | No control-parameter sweep, bifurcation map, or hysteresis test establishes a passive-active transition. | `TODO.md:197` asks the attractor question but does not register a transition experiment. | T-SYS-011, T-SYS-012, T-SYS-013, T-SYS-028 |
+| S26 | p.21, Limitation 2 | No control-parameter sweep, bifurcation map, or hysteresis test establishes a passive-active transition. | Superseded in part: the registered synthetic sweep rejects bifurcation and passes matched-budget hysteresis. The result establishes neither a general phase transition nor a dynamical attractor. | T-SYS-011, T-SYS-012, T-SYS-013, T-SYS-028 |
 | S27 | pp.21 and 23, Limitation 1 and §9.3 | Move to populations, shared worlds, and genuinely distributed governors; a second navigator may disrupt the single-agent torus. | No corresponding experiment package exists. | T-SYS-014, T-SYS-015, T-SYS-016, T-SYS-029 |
-| S28 | pp.23-24, §§9.2-9.4 | Build explicit control-parameter/order-parameter maps, not endpoint comparisons. | Relevant metrics exist across packages but there is no shared phase-map schema or analysis utility. | T-SYS-011, T-SYS-013, T-SYS-028 |
+| S28 | pp.23-24, §§9.2-9.4 | Build explicit control-parameter/order-parameter maps, not endpoint comparisons. | A package-local phase-map runner, preregistration, gate evaluator, tests, and public-safe summary now exist; a shared schema/utility and multi-control diagram remain open. | T-SYS-011, T-SYS-013, T-SYS-028 |
 | S29 | p.24, §9.5 | Earn deeper terms through self-produced policy, mapped attractor basins, and quantitative Stack tests. | `viable_computational_bodies` searches bodies offline; it does not show an agent rebuilding its own organization during viability breach. | T-SYS-006, T-SYS-007, T-SYS-017 |
 | S30 | pp.24-25, §§9.6-9.8 | Far-from-equilibrium throughput, maintenance cost, and entropy export are the richest missing lineage/direction. | Current “energy” is a task variable, not a thermodynamic accounting. | T-SYS-019, T-SYS-027, T-SYS-033 |
 | S31 | PDF metadata and p.1 | The visible title is correct, but PDF metadata says “The Mathematics of the Research Program - A Primer from First Principles.” | `pdfinfo` confirms the stale title. | T-SYS-001 |
@@ -164,23 +171,25 @@ Every substantive positive result, caveat, criticism, and proposed direction in 
 ### New experiments
 
 #### T-SYS-011 - Run the coupling bifurcation experiment
-- **Priority / status:** P0 / new.
+- **Priority / status:** P0 / complete (bounded synthetic tranche).
 - **Source:** p.21 Limitation 2; p.23 §9.2.
 - **Action:** Sweep action-coupling strength continuously from zero, with identical data/initializations, and measure causal specific effect, perturbation failure rate, buffer, geometry gap, and return.
 - **Paths:** new `experiments/passive_active_phase_map/`; reuse `experiments/passive_to_active/` components.
 - **Deliverable:** Preregistered coupling/order curves, critical-point estimates, smooth-null comparison, and raw cells in `artifacts/` with summary under `results/`.
-- **Pass/fail gate:** PASS a bifurcation only if the registered discontinuous/segmented model beats smooth alternatives out of sample, the estimated critical coupling replicates within 20% across >=2 architectures and >=5 seeds, and at least two independent order parameters change at the same point; otherwise report a continuous crossover.
+- **Pass/fail gate:** PASS a bifurcation only if the registered discontinuous/segmented model beats smooth alternatives out of sample, the estimated critical coupling replicates within 20% across >=2 architectures and >=5 seeds, and at least two independent order parameters change at the same point; otherwise report bifurcation not supported. A continuous crossover requires its own positive criterion.
+- **Registered outcome:** FAIL bifurcation -> `bifurcation_not_supported`. Only causal specific effect cleared the 10% segmented-advantage rule (11.2%); the critical-cell stability fraction was 70%, and two-order-parameter co-location failed. Raw cells remain in `artifacts/passive_active_phase_map/`; public aggregates and the frozen verdict are under `experiments/passive_active_phase_map/results/`.
 - **Dependencies:** T-SYS-005 analysis and T-SYS-028 schema.
 - **Rationale:** This is the article's highest-value proposed test.
 - **Inference flag:** Yes - exact reproducibility gate proposed.
 
 #### T-SYS-012 - Test hysteresis and path dependence
-- **Priority / status:** P0 / new.
+- **Priority / status:** P0 / complete (bounded synthetic tranche).
 - **Source:** pp.21 and 23, Limitation 2 and §9.2.
 - **Action:** Train forward on increasing coupling and reverse on decreasing coupling; include washout/reinitialization controls and matched total-update budgets.
 - **Paths:** `experiments/passive_active_phase_map/`.
 - **Deliverable:** Forward/reverse loops with area-under-hysteresis, retention time, and control comparisons.
 - **Pass/fail gate:** PASS hysteresis only if forward/reverse curves differ with bootstrap 95% CI excluding zero over a contiguous coupling interval and the loop survives matched optimization-history controls; otherwise no regime memory.
+- **Registered outcome:** PASS hysteresis/path dependence. Forward/reverse total budgets match exactly; a seed-cluster bootstrap retains both architecture rows, the continuation loop area is 0.0447, six contiguous continuation couplings and four washout couplings exclude zero, and reinitialization is clear. The retention half-life was not observed through 80 neutral updates. The conclusion is limited to this synthetic mechanism and does not upgrade the failed bifurcation gate.
 - **Dependencies:** T-SYS-011.
 - **Rationale:** A sharp training onset without path dependence may be optimizer installation, not a persistent regime.
 - **Inference flag:** Yes - statistical gate proposed.
@@ -436,7 +445,7 @@ Every substantive positive result, caveat, criticism, and proposed direction in 
 ## Suggested execution order
 
 1. **Truth and artifact repair:** T-SYS-001 to 004, T-SYS-031, T-SYS-032.
-2. **Highest-value empirical corrections:** T-SYS-005 to 012, especially the bifurcation/hysteresis pair and quantitative Stack test.
+2. **Highest-value empirical corrections:** finish T-SYS-005 to 010, then extend the completed synthetic T-SYS-011/012 tranche through the multi-control and shared-framework work in T-SYS-013/T-SYS-028; keep the quantitative Stack test in view.
 3. **Complexity proper:** T-SYS-014/015 with T-SYS-029, then T-SYS-016.
 4. **Deep-word frontier:** T-SYS-017/018/034 after the autopoiesis and viability reading audit.
 5. **Separate exploratory track:** T-SYS-019/026/033; T-SYS-027 remains a no-go gate until the program has finite-size evidence.

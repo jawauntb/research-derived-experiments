@@ -2669,6 +2669,16 @@ information" made into a trainable head, and watching the program discover that 
 now have every piece to read those results: expected value, MAE, the K-samples shrinkage, and the
 argmax that turns a value estimate into an action.</p></div>
 
+<div class="prog"><span class="boxtitle">New executable check — the surrogate fails under misspecification</span>
+<p>The M-208 exact finite Bayesian benchmark now enumerates every probe outcome in three frozen
+regimes. In learnable uncertainty, mutual information and true expected regret reduction rank the
+useful signal correctly. In irreducible noise, current error remains 0.4 while every probe has zero
+oracle value. Under model misspecification, the apparently strongest signal has mutual information
+0.690 and assumed EVSI 0.35, yet its true expected regret reduction is -0.10 and oracle EVSI is zero;
+the weaker robust signal is the useful choice at +0.10. The conclusion is bounded but decisive:
+current error, posterior variance, the printed shrinkage heuristic, and information gain are
+candidate surrogates, not definitions or universal rankings of decision value.</p></div>
+
 <h3>17.5 What you can now read</h3>
 <p class="small">MDPs (state, action, transition, reward) and policies π; value V(s) as discounted
 expected future reward; the discount γ as a patience dial and γ<sup>t</sup> as its decay; greedy
@@ -2945,6 +2955,15 @@ You have met them all in pieces; this chapter gathers them in one place, fully d
 see the architecture whole. Treat it as a reference: when a paper cites "the bridge theorem" or "the
 Law of the Stack," come here.</p>
 
+<div class="prog"><span class="boxtitle">New executable assumption audit</span>
+<p>M-201 turns seven hidden premises into testable theorem cards: disjoint blocks, equal block mass,
+complete coverage, coherent output action, bounded transport loss, gauge separation, and nonzero
+commitment effect. Each card now carries both a satisfying example and a paired construction that
+violates the named assumption or bridge predicate. These are executable assumption examples, not tests
+of downstream theorem necessity, conclusion invalidation, or minimality. They prevent the primer from
+silently applying a conditional identity outside its assumptions while leaving the stronger theorem
+audit open.</p></div>
+
 <h3>20.1 The reward-deformation law</h3>
 <div class="eqbox"><div class="eq">ρ<sup>*</sup>(x) &nbsp;∝&nbsp; w(x)<sup>&thinsp;d/(d+2)</sup></div></div>
 <p><strong>What it says.</strong> A finite-capacity code minimizing value-weighted distortion should
@@ -2957,14 +2976,15 @@ was ≈ 0.30, not the 0.50 predicted for d = 2, implying d<sub>eff</sub> ≈ 1 (
 resolution along essentially one direction). <strong>How to read it in a paper.</strong> Any mention
 of "metric deformation," "effective dimension," "d_eff," or "α = d/(d+2)" is this law.</p>
 
-<h3>20.2 The Law of the Stack</h3>
+<h3>20.2 The candidate Law of the Stack</h3>
 <div class="eqbox"><div class="eq">w(ς<sub>i+1</sub>) &nbsp;≤&nbsp; 2<sup>w(ς<sub>i</sub>)</sup></div></div>
-<p><strong>What it says.</strong> The weakness (flexibility, Chapter 19) a layer ς<sub>i+1</sub> can
-have is capped by 2 raised to the weakness of the layer below it — each bit of slack underneath
-doubles the room available above (Chapter 3's 20-questions logic, stacked). <strong>Why it matters.</strong>
-It makes "a viable system needs slack in its foundations" a numerical, testable ordering rather than
-a slogan; the autopoietic-control paper checks whether a model's capacity to repair itself grows
-with lower-layer slack exactly as the Law predicts. <strong>Companion quantity:</strong> the
+<p><strong>What it proposes.</strong> The displayed inequality is a candidate upper-bound form for
+how lower-layer flexibility might constrain a layer above it. The current experiments support only the
+weaker ordinal observation that repair capacity tends to improve with lower-layer slack; they do not
+establish this exponential bound. <strong>Why it matters.</strong> It turns "a viable system needs
+slack in its foundations" into a falsifiable agenda, but the word <em>law</em> remains provisional until
+a registered sweep measures both sides of the inequality, finds violations when assumptions are
+removed, and replicates across architectures. <strong>Companion quantity:</strong> the
 viability buffer <span class="m">|B<sub>π</sub>| = w(π) − |α|</span> — flexibility minus commitments,
 i.e. how much shock a policy can absorb before dying.</p>
 
@@ -3198,7 +3218,7 @@ each pointing to the chapter that builds it).</p>
 <tr><td><strong>Irrep</strong></td><td>an indivisible symmetry pattern; for shifts, a Fourier frequency mode</td><td>13, 14</td></tr>
 <tr><td><strong>Jacobian / pullback metric</strong></td><td>local stretch of an encoder; the ruler J<sup>T</sup>J it induces</td><td>8, 9</td></tr>
 <tr><td><strong>KL divergence</strong></td><td>extra bits for using q when truth is p; a directed distance between distributions</td><td>12</td></tr>
-<tr><td><strong>Law of the Stack</strong></td><td>w(ς<sub>i+1</sub>) ≤ 2<sup>w(ς<sub>i</sub>)</sup>: lower-layer slack caps upper-layer flexibility</td><td>16, 20</td></tr>
+<tr><td><strong>Law of the Stack (candidate)</strong></td><td>w(ς<sub>i+1</sub>) ≤ 2<sup>w(ς<sub>i</sub>)</sup>: a proposed bound; current evidence supports only an ordinal slack/repair relation</td><td>16, 20</td></tr>
 <tr><td><strong>Load-bearing</strong></td><td>a structure that causally drives the decision — not merely decodable</td><td>18, 20</td></tr>
 <tr><td><strong>MAE / MSE</strong></td><td>mean absolute / squared error — the universal metrics and losses</td><td>6, 10</td></tr>
 <tr><td><strong>Matched-random control</strong></td><td>random behavior given the same budget; the bar a learned method must clear</td><td>6</td></tr>

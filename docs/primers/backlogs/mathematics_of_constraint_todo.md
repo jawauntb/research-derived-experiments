@@ -13,6 +13,15 @@
 
 The primer teaches the mathematical language used by the research program, then advances a stronger synthesis: finite adaptive systems allocate scarce representational capacity according to concern; weakness measures the compatible futures they leave open; symmetry, spectrum, topology, and geometry expose that allocation; and a representation counts as scientifically meaningful only when gauge-fixed structure causally reaches a commitment surface. Its best feature is that it repeatedly turns abstractions into falsifiable quantities. Its main risk is that pedagogical compression sometimes erases assumptions, promotes diagnostic correlations to mechanisms, or presents an open synthesis as a proved unity.
 
+## Implementation log (2026-07-14)
+
+| TODO | State | Implemented evidence |
+| --- | --- | --- |
+| M-001 | complete | Corrected positive-price KKT derivation, d=1 allocation, and numeric regression tests in the primer. |
+| M-002 | complete | Corrected discount arithmetic and VOI sign; executable primer examples pin the printed values. |
+| M-201 | partial (assumption audit) | `experiments/mathematical_claims/` supplies seven theorem-assumption cards, satisfying examples, paired assumption/predicate failures, deterministic results, and tests. Actual theorem-conclusion necessity and minimality checks remain open. |
+| M-208 | complete (bounded synthetic) | `experiments/bayesian_voi/` compares seven probe metrics in learnable, irreducible-noise, and misspecified regimes; the heuristic cannot rank probes and high information can have zero oracle value. |
+
 ## Status convention
 
 - new: not represented as an actionable repo item.

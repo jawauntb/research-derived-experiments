@@ -4,18 +4,32 @@
 
 The primer argues that the program’s grand metaphysics - “meaning is geometry under concern,” weakness as disciplined under-commitment, and objects carved by causal-valence role - remains motivational rather than established. Two contributions survive the strongest deflationary reading: the self/world gauge result and the intervention-based criterion of representational reality. The durable method is to build the strongest behavioral impostor, then require causal evidence that the attributed structure reaches the commitment surface.
 
+## Implementation log (2026-07-14)
+
+| TODO | State | Implemented evidence |
+| --- | --- | --- |
+| P-01 | complete | HTML/PDF identity metadata corrected and verified. |
+| P-02 | complete | Primer includes an eight-topic claim-tier/evidence/scope/falsifier matrix. |
+| P-03 | complete | Canonical C1 supplied, C2 self-observed, and C3 phenomenal senses plus an experiment-to-sense matrix are published. |
+| P-05/P-06 | complete | Weakness/E1/E4/E5 and XOR/staged-ΔE/50-of-50 correction chains are current. |
+| P-07 | complete | Null anchoring is explicitly model- and intervention-relative, not metaphysically unique. |
+| P-08/P-28 | complete (synthetic API) | Primer defines graded use; `experiments/common/causal_use.py` implements mass-normalized dose-response, wrong-subspace specificity, transport floors, and replicate bootstrap tests. |
+| P-18/P-19/P-20 | partial (first reading tranche) | `references/philosophy_claim_boundaries.md` connects Dretske, Millikan, Boyd, Dennett, and Metzinger to claim boundaries, controls, and next gates; Papineau, Swampman/function-indeterminacy responses, realist/pragmatist Boyd critiques, Hohwy, Seth, and the named paper revisions remain open. |
+| P-26 | partial | Machine-readable claim registry and validator exist; abstract-level coverage remains. |
+
 ## Repository-status corrections
 
-The primer is already stale in several important places:
+The source audit found several stale claims; completed corrections are marked
+explicitly so the historical finding is not mistaken for current repository state:
 
-- PDF page 1: the visible title is correct, but PDF metadata and the HTML `<title>` incorrectly say “The Mathematics of the Research Program.”
+- **Resolved 2026-07-14:** PDF page 1 was visibly correct while PDF metadata and the HTML `<title>` incorrectly said “The Mathematics of the Research Program”; both now use the philosophy-primer identity.
 - Pages 7 and 20-22: the original Pythia “hard kill” was a degenerate frozen-probe test. The LoRA follow-up remained negative for portable weakness, while `commitment_surface` E4/E5 later localized the apparent win to labeled coverage rather than generator learning.
 - Pages 9, 12, and 24: the claim that interaction-derived concern still fails on XOR is superseded. `two_bottlenecks` obtains XOR reward-gap `+1.84` from observed ΔE without optimal-action labels; `planning_from_concern` closes the loop at return `50/50` using ΔE argmax planning.
 - Page 24: the concern-weighted versus unweighted test has been run. Commitment-surface E1 gives a `+0.244` well-specified advantage; the frozen misspecification equivalence gate failed and remained failed after calibration.
 - Pages 14 and 24: null anchoring materially fixes a chosen operational gauge, but later responsive-world and role-specific experiments show that richer decompositions remain under-identified under shared heads. “True decomposition” is too realist without a stated structural causal model.
 - Pages 15-16: continuous patch effects and mass-normalized interventions exist, but the paper still defines “use” with a binary `CE >= epsilon` gate and lacks an independently adjudicated general metric.
 - Page 18: the functional tapestry result is positive, while encoder-RSA geometry is negative; the existing paper itself proposes head-internal and prediction-space metrics that have not been run.
-- Existing claim-boundary language is strong and repeated, but teleosemantics, natural kinds, Dretske, Dennett, Metzinger, Boyd, Millikan, and Papineau are absent from the repository’s citation corpus.
+- **Partially resolved 2026-07-14:** claim-boundary language now cites and operationalizes Dretske, Millikan, Boyd, Dennett, and Metzinger. Papineau and the remaining objections/readings listed in P-18 through P-20 are still absent.
 
 ## Source ledger
 
@@ -265,7 +279,7 @@ The primer is already stale in several important places:
 
 ### P-18 - Teleosemantics dossier
 
-- Priority/status: P1 / new
+- Priority/status: P1 / partial (Millikan and Dretske tranche complete)
 - Source: pp.8, 21; S09, S32
 - Action: read and annotate Millikan, Dretske, Papineau, Davidson’s Swampman, and function-indeterminacy responses against object-formation results.
 - Paths: `references/SOURCES.md`, literature ledgers, `papers/valence_object_formation/paper.md`
@@ -276,7 +290,7 @@ The primer is already stale in several important places:
 
 ### P-19 - Natural-kinds and causal-role dossier
 
-- Priority/status: P1 / new
+- Priority/status: P1 / partial (Boyd foundation complete)
 - Source: pp.9, 21, 23; S10, S32, S35
 - Action: read Boyd’s homeostatic-property-cluster work and realist/pragmatist critiques; map them to state-dependent and shifted-role experiments.
 - Paths: `references/SOURCES.md`, `papers/state_dependent_concern/`, `papers/valence_object_formation/`
@@ -287,7 +301,7 @@ The primer is already stale in several important places:
 
 ### P-20 - Causal use, intentional stance, and self-model dossier
 
-- Priority/status: P1 / new
+- Priority/status: P1 / partial (Dretske, Dennett, and Metzinger tranche complete)
 - Source: pp.14-16, 21; S20-S24, S32
 - Action: read Dretske on structuring/triggering causes, Dennett on real patterns/intentional stance, Metzinger, Hohwy, and Seth on self-models.
 - Paths: `references/SOURCES.md`, `papers/commitment_surface/paper.md`, `papers/first_order_self/paper.md`

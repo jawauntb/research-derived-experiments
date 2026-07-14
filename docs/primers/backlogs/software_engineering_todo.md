@@ -4,9 +4,18 @@ Source: `software_engineering_primer.pdf` / **The Instrument: A Software-Enginee
 
 ## Thesis
 
-The primer's durable thesis is that this repository should be treated as a scientific instrument whose product is an attributable, reproducible record, not merely executable code. Its strongest patterns are public-safe-by-construction exports, seeded experiments, risk-proportional Modal safeguards, generated provenance, and data types that separate scientifically incompatible evidence. Its central criticism is that these protections remain conventions and one-off implementations rather than an enforced instrument kernel: the PR gate is absent, dependencies and host configuration are scattered, risky launch code is excluded from static analysis, provenance scrapes prose, flagship numbers are welded into a renderer, and experiment/paper scaffolding is copied.
+The primer's durable thesis is that this repository should be treated as a scientific instrument whose product is an attributable, reproducible record, not merely executable code. Its strongest patterns are public-safe-by-construction exports, seeded experiments, risk-proportional Modal safeguards, generated provenance, and data types that separate scientifically incompatible evidence. Its central criticism is that these protections remain conventions and one-off implementations rather than an enforced instrument kernel: the new root PR gate does not yet cover every subproject, dependencies and host configuration are scattered, risky launch code is excluded from static analysis, provenance still partly scrapes prose, flagship numbers are welded into a renderer, and experiment/paper scaffolding is copied.
 
-The live repository strengthens that verdict and also requires corrections to the article. As of 2026-07-14 it has 1,423 tracked files, 50 experiment directories, 53 paper directories, 85 root Python scripts, 55 root test files, and 106 `modal_*.py` files. Only 20 experiments have a README, 23 have a `results/` directory, and all 50 have generated provenance. The root quality command uses `unittest` and does not execute 13 pytest-style test files; only the Railway deploy workflow exists. Provenance is incomplete (30 missing run commands, 37 missing seeds, 34 missing preregistrations), and `regen.py` truly reruns only three experiments and rebuilds two PDFs. There are exact locks for commitment-surface E5/E6 and a Bun lock for the app, but no root research lock. The flagship weakness builder still hardcodes its measurements. These are the high-leverage seams.
+## Implementation log (2026-07-14)
+
+| TODO | State | Implemented evidence |
+| --- | --- | --- |
+| E-SE-023 | partial | Required PR/push workflow runs the full root-Python quality gate; app, coherence, Haskell, and site lane inventory remains. |
+| E-SE-028 | partial | Versioned gate-verdict schema, example, validator, claim link, and one E5 FAIL migration exist; PASS and inconclusive migrations remain. |
+| E-SE-029 | partial | Versioned experiment manifest, validator/discovery, starter template, and E5 migration exist; scaffolder and legacy exception inventory remain. |
+| E-SE-033 | partial | Provenance validates registries and has a non-mutating `--check`; legacy prose scraping and completeness migration remain. |
+
+The live repository strengthens that verdict and also requires corrections to the article. As of 2026-07-14 it has 50+ experiment directories, 53 paper directories, 85+ root Python scripts, and 106 `modal_*.py` files. The root quality command now executes the full root `tests/` directory under pytest and is required on pull requests, while app/Bun, coherence, Haskell, and site suites still need owned lanes. Provenance remains incomplete for many legacy packages, and `regen.py` truly reruns only a small subset. There are exact locks for commitment-surface E5/E6 and a Bun lock for the app, but no root research lock. The flagship weakness builder still hardcodes its measurements. These are the high-leverage seams.
 
 ## Exhaustive source-signal ledger
 

@@ -6,6 +6,15 @@ Source: `history_lineage_and_trajectory_primer.pdf` (27 PDF pages), checked agai
 
 The primer argues that the program inherits a common intellectual lineage from cybernetics, autopoiesis, information theory, efficient coding, symmetry, topology, causal inference, and homeostatic reinforcement learning. Its substantive wager is that finite adaptive systems converge on geometry because geometry is a portable description of compression under constraint. Internally, the program is portrayed as a correction chain: behavioral successes are repeatedly challenged by proxies, causal interventions, gauge problems, environmental shifts, and finally external models. The mature reframe is that weakness, topology, and decodability are often *footprints*; the load-bearing cause must be demonstrated by a gauge-fixed causal effect at a commitment surface. The historical novelty claimed is therefore less a wholly new theory than a fast, machine-authored, human-directed method for turning inherited philosophical claims into preregistered, falsifiable experiments and preserving the negatives.
 
+## Implementation log (2026-07-14)
+
+| TODO | State | Implemented evidence |
+| --- | --- | --- |
+| H-001 | complete | Primer metadata/status corrections and rebuilt PDF; E5 coverage and E6 smoke block are current. |
+| H-004 | complete | The history primer now enforces the agency ladder; `papers/autopoietic_control/paper.md` labels held-out-label repair as a supervised ultrastability analogue, not strict autopoiesis. |
+| H-005 | partial | “One event” and cross-domain law language is bounded to a hypothesis/candidate-law tier; broader downstream paper audit remains. |
+| H-402 | partial | Canonical evidence and claim registries exist and validate; experiment-wide migration remains. |
+
 ## Repository reconciliation
 
 - The primer's strongest self-criticism is corroborated. `experiments/external_contact/results/p1_pythia_lora_2026_06_22.md` is a non-degenerate hard kill: weakness/OOD Spearman rho is `-0.0817`, below classical OOD NLL (`|-0.455|`), with weakness at the identity-only floor.
@@ -15,7 +24,7 @@ The primer argues that the program inherits a common intellectual lineage from c
 - The frontier has also moved. E6 now has a Modal runner and real L4 smoke, but `experiments/commitment_surface/results/e6_smoke_readiness_2026_07_13.md` is blocked before round 1 because only `8/104` candidates satisfy the frozen two-surface eligibility threshold when `52` are required. E5-L, E7, and M5 remain preregistered but unbuilt/unrun.
 - The TODO ledger understates completed Arc 2A work: pixel observations and a learned pixel extractor already have passing reports. The remaining perception gap is richer object-centric/natural-image perception and open-ended semantics, not pixels per se.
 - Several external-contact reports named in `docs/phase2_next_phase_research_handoff.md` (`p2_uncertainty`, `p2_tier_b`, `p3_glove`, `p3_three_family`) are not present under `experiments/external_contact/results/`; the primer's three-family claim therefore lacks a tracked primary result report even though the handoff records the numbers.
-- PDF visual QA covered the title/timeline (p.1), the autopoiesis warning (p.7), symmetry/topology warning (p.12), correction-chain table and warning (p.20), external-contact verdict (p.23), reframe/frontier pages (pp.24-25), and novelty/conclusion (p.27). Layout is readable. `pdfinfo`, however, reports the wrong document title: “The Mathematics of the Research Program - A Primer from First Principles.”
+- **Resolved 2026-07-14:** PDF visual QA covered the title/timeline (p.1), the autopoiesis warning (p.7), symmetry/topology warning (p.12), correction-chain table and warning (p.20), external-contact verdict (p.23), reframe/frontier pages (pp.24-25), and novelty/conclusion (p.27). Layout is readable, and the rebuilt PDF metadata now reports the history-primer title instead of the former mathematics-primer title.
 
 ## Exhaustive source ledger
 

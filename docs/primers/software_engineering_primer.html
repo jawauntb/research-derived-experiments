@@ -722,17 +722,15 @@ the codebase polices itself — and where that policing has gaps.</p>
 
 <h2 class="chapter"><span class="chnum">Chapter 7</span>The Quality and Provenance System</h2>
 
-<h3>7.1 One command, five checks</h3>
+<h3>7.1 One command, a complete root-Python gate</h3>
 
 <p>Before committing substantive changes, a contributor can run
-<code>python3 scripts/run_quality_checks.py</code>. The wrapper executes five root-level stages in order:
-<code>unittest</code> discovery under <code>tests/</code> in a fresh environment; a byte-compile pass over
-<code>scripts/</code>, <code>experiments/</code>, and <code>tests/</code>; the publication guard (Chapter 3);
-Ruff; and ty. Any stage failing aborts the wrapper. This is a useful local gate, but it is not the full
-repository test suite: the current wrapper does not run thirteen pytest-style files in the root test
-directory as pytest tests, nor the app, coherence-testbench, Haskell, or site-specific suites.
-<strong>Open check:</strong> define one canonical test inventory and make the wrapper report which suites
-were selected or omitted.</p>
+<code>python3 scripts/run_quality_checks.py</code>. The wrapper runs the complete root <code>tests/</code>
+directory under pytest in a fresh Python 3.12 environment, byte-compiles Python sources, applies the
+publication guard, validates evidence/claim/experiment/gate contracts and primer metadata, checks that
+generated provenance is current, then runs Ruff and ty. Any stage failing aborts the wrapper. This is the
+canonical root-Python gate. It still does not include the app, coherence-testbench, Haskell, or site-specific
+suites; those remain explicit follow-on lanes rather than silently omitted root tests.</p>
 
 <div class="prog"><span class="boxtitle">In the code — the type-checker is declawed exactly where risk is highest</span>
 <p>Here is a genuine tension a careful reader should sit with. The linter and type-checker are
@@ -745,19 +743,14 @@ exactly the kind of error a type-checker catches, and exactly the kind that is t
 recommends narrowing this exclusion to at least cover the launch-and-dispatch logic, even if the
 inner GPU code stays unchecked.</p></div>
 
-<h3>7.2 The missing wall: no pull-request quality CI</h3>
+<h3>7.2 The first wall is now live: pull-request quality CI</h3>
 
-<div class="warn"><span class="boxtitle">Smell — the local quality gate is not enforced on pull requests</span>
-<p>The single most consequential engineering gap in the repository: <strong>there is no GitHub Actions
-workflow that runs the quality gate on pull requests.</strong> The wrapper exists, but running it depends
-on the contributor <em>choosing</em> to run it locally before committing. The repository does have an
-automated deployment workflow, <code>.github/workflows/railway-deploy.yml</code>; it does not invoke the
-quality wrapper. This means a change that
-breaks a test, leaks a secret past the guard, or fails the linter can be merged with a green appearance,
-because nothing automatically checked it. For a repository where an AI agent commits at high volume — the
-very situation where you most want an unbypassable gate — the gate is bypassable by omission. This is the
-first thing an incoming engineer should fix, and it is cheap: the gate is already written; it simply is
-not wired to run on pull requests.</p></div>
+<div class="prog"><span class="boxtitle">Implemented correction — the root gate runs on pull requests</span>
+<p><code>.github/workflows/quality.yml</code> now runs the same root quality wrapper on every pull request
+and push to main. A pytest-only failure, stale provenance view, malformed structured verdict, publication
+leak, syntax error, lint error, or type error can no longer look green merely because a contributor skipped
+the local command. The remaining gap is narrower and visible: app/Bun, coherence-testbench, Cabal/Haskell,
+and site-specific suites still need owned CI lanes and an explicit exception inventory.</p></div>
 
 <h3>7.3 Provenance: the lab notebook that regenerates itself</h3>
 
@@ -939,7 +932,7 @@ publication-guard detector with its own false-positive test. The safety nets hav
 
 <table class="plain">
 <tr><th>Smell</th><th>Why it matters</th></tr>
-<tr><td><strong>1. No pull-request CI enforcing the quality gate</strong></td><td>The local wrapper is opt-in; a broken or unsafe change can merge green. The highest-value, lowest-effort fix is to wire it into pull requests and make its test-suite coverage explicit.</td></tr>
+<tr><td><strong>1. Incomplete multi-language CI inventory</strong></td><td>The root Python gate is required on pull requests, but app/Bun, coherence pytest, Cabal/Haskell, and site suites still need explicit lanes or time-bounded exceptions.</td></tr>
 <tr><td><strong>2. Hardcoded numbers in build scripts (esp. the flagship)</strong></td><td>Breaks the traceability chain from published number to committed evidence at the last step — the exact thing the trust apparatus exists to prevent, left open in the most important paper.</td></tr>
 <tr><td><strong>3. The 50+ one-off paper/figure scripts</strong></td><td>Each new paper spawns a new ~300-line bespoke script with no shared schema; numbers can drift, and the surface grows linearly with the science.</td></tr>
 <tr><td><strong>4. No dependency lockfile</strong></td><td>Version pins scattered across call sites, mostly loose; the same experiment can resolve to different library versions in different places.</td></tr>
@@ -963,9 +956,9 @@ writing the same scaffolding fifty more times.</p></div>
 
 <div class="prog"><span class="boxtitle">A concrete plan</span>
 <ol>
-<li><strong>Wire the quality gate into CI.</strong> Run the existing gate on every pull request. Start
-cheap (guard + compile-check + a fast test subset). This is the biggest trust improvement for the least
-effort — it makes the whole quality system unbypassable.</li>
+<li><strong>Complete the CI inventory.</strong> Keep the required root-Python workflow, then add owned
+lanes for app/Bun, coherence pytest, Cabal/Haskell, and sites. Every test file should belong to a lane or
+a named, expiring exception.</li>
 <li><strong>A declarative paper manifest.</strong> Replace the 50+ bespoke build/figure scripts with one
 generic renderer that consumes a small per-paper config (source JSON paths, figure specs, table specs,
 prose). This kills smells 2 and 3 at once: every number is <em>forced</em> to originate in committed data,
@@ -992,20 +985,20 @@ config file, so run commands are host-agnostic.</li>
 <p>As engineering, this is a strong, unusual codebase whose best ideas — reproducibility as a feature,
 safety by construction, types enforcing scientific validity, armor proportional to stakes — are genuinely
 worth imitating, and are more disciplined than a great deal of production software. Its weaknesses are the
-characteristic weaknesses of a fast-moving research workshop authored by AI agents: a local quality gate
-that is not enforced on pull requests, a flagship paper whose numbers aren't traceable, and a
+characteristic weaknesses of a fast-moving research workshop authored by AI agents: incomplete
+multi-language CI beyond the now-required root gate, a flagship paper whose numbers aren't traceable, and a
 proliferation of one-off
 scripts held together by discipline rather than abstraction. None of these is deep; all are the kind of
 debt that accumulates when a small team (here, a human plus tireless agents) moves fast and prioritizes
-results over infrastructure. The refactor path is clear, incremental, and mostly cheap — and the first
-step, wiring the existing quality gate into CI, would do more for the codebase's trustworthiness than any
-new feature. The instrument is well-built; it now needs the factory fixtures that let it stay well-built
+results over infrastructure. The refactor path is clear and incremental; the first wall is now live, and
+the next gains come from completing its suite inventory and tracing published numbers. The instrument is
+well-built; it now needs the factory fixtures that let it stay well-built
 across the next hundred experiments.</p>
 
 <h3>9.5 What to carry forward</h3>
 <p class="small">Imitate: reproducibility-as-feature, safety-by-construction, types-enforce-validity,
-armor-proportional-to-stakes, test-the-test. Fix, in order: wire the quality gate into CI (biggest win,
-least effort); a declarative paper manifest to force numbers from committed data and collapse the one-off
+armor-proportional-to-stakes, test-the-test. Fix next: complete the CI lane inventory; add a declarative
+paper manifest to force numbers from committed data and collapse the one-off
 scripts; a shared Gate abstraction and experiment scaffold to replace hand-copied duplication; a single
 dependency lockfile; type-checking on the GPU launch logic; and externalized config. The instrument is
 excellent; it needs the workshop-to-factory transition to scale.</p>
