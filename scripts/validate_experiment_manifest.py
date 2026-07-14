@@ -12,6 +12,7 @@ import argparse
 import hashlib
 import json
 import math
+import os
 import re
 import sys
 from datetime import date
@@ -699,6 +700,8 @@ def main(argv: list[str] | None = None) -> int:
         parser.error("--historical-inspection requires --as-of")
     if args.historical_inspection and args.manifests:
         parser.error("historical inspection validates repository coverage, not explicit paths")
+    if args.historical_inspection and os.environ.get("CI") == "true":
+        parser.error("historical inspection is forbidden in CI; use no-argument current-date validation")
 
     if args.manifests:
         manifests = args.manifests

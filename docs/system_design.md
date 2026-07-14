@@ -236,6 +236,11 @@ docs/experiment_contract_registry.json
       Exact 54-package XOR partition: root manifest XOR active legacy exception.
       Frozen legacy-package set + SHA-256 digest reject ungrounded new exceptions.
       Normal CI warns ≤30 days before expiry and fails on expiry (≤180-day renewals).
+      Structured run records may list claim/evidence IDs with empty
+      `gate_verdict_paths`; that means no committed verdict file is bound yet,
+      not that gates passed. Only E5 currently binds a verdict path. Do not
+      fabricate verdict files or treat manifest `gates[]` as verdicts.
+      `gen_provenance.py` does not yet consume these run records (U3).
 
 experiments/*/experiment_manifest.json
     → scripts/validate_experiment_manifest.py → pass/fail

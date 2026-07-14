@@ -715,13 +715,23 @@ class ExperimentContractRegistryTests(unittest.TestCase):
                 main(["--historical-inspection"])
             self.assertIn("--historical-inspection requires --as-of", stderr.getvalue())
 
-        with patch("sys.stdout", new_callable=StringIO) as stdout:
-            self.assertEqual(
-                main(["--historical-inspection", "--as-of", "2026-07-14"]),
-                0,
-            )
-            self.assertIn("[experiment-contract] PASS historical-inspection", stdout.getvalue())
-            self.assertIn("54 packages at 2026-07-14", stdout.getvalue())
+        with patch.dict("os.environ", {"CI": "true"}, clear=False):
+            with patch("sys.stderr", new_callable=StringIO) as stderr:
+                with self.assertRaises(SystemExit):
+                    main(["--historical-inspection", "--as-of", "2026-07-14"])
+                self.assertIn("historical inspection is forbidden in CI", stderr.getvalue())
+
+        with patch.dict("os.environ", {"CI": ""}, clear=False):
+            with patch("sys.stdout", new_callable=StringIO) as stdout:
+                self.assertEqual(
+                    main(["--historical-inspection", "--as-of", "2026-07-14"]),
+                    0,
+                )
+                self.assertIn(
+                    "[experiment-contract] PASS historical-inspection",
+                    stdout.getvalue(),
+                )
+                self.assertIn("54 packages at 2026-07-14", stdout.getvalue())
 
 
 if __name__ == "__main__":
