@@ -663,6 +663,9 @@ Notable bundles:
 - `papers/icml_publication_package_2026/` — submission packages
 - Synthesis: `metaphysics_synthesis`, `metric_stack_synthesis`, literature audits/reviews
 - Benchmark framing: `causally_grounded_agents_benchmark`, `weakness_invariance_neurips`
+- `papers/weakness_invariance_neurips/pac_bayes_weakness_sketch.md` — finite
+  compatibility-class PAC-Bayes derivation, assumption ledger, severe
+  aligned/wrong-group enumeration, and kill criteria; analytic only
 - Most §3.4 experiment names have a matching `papers/<name>/paper.md`
 
 ### 5.2 `notes/`

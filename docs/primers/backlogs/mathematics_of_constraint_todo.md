@@ -496,9 +496,13 @@ Short phrases are paraphrases or brief source phrases, not extended quotation. I
 - Rationale: a patch effect may reflect distribution shift or collateral state changes rather than the proposed feature.
 
 #### M-214 — Derive and test a weakness/PAC-Bayes connection
-- Priority/status: P1, existing.
+- Priority/status: P1, partial — finite conditional derivation complete; exact
+  enumeration and neural/nonvacuity tests remain.
 - Source: pp.40, 46, 66-70; S19, S22, S36.
-- Action: complete TODO.md’s invariant-code to reduced-complexity/KL sketch, state prior/posterior and data-dependence assumptions, then compare bound tightness and OOD ranking against weakness.
+- Action: run the predeclared aligned/wrong-group enumeration in
+  `papers/weakness_invariance_neurips/pac_bayes_weakness_sketch.md`, then compare
+  bound tightness and OOD ranking against weakness without data-dependent prior
+  leakage.
 - Affected paths: papers/weakness_invariance_neurips; notes/new theory note; experiments/symbolic_weakness.
 - Deliverable: proof or counterexample plus empirical bound table.
 - Pass/fail gate: no data-dependent prior leakage; bound is nonvacuous on a registered subset or the result explains why the link fails.

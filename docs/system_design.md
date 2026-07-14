@@ -187,6 +187,14 @@ Many maintained-concern experiments are **paper-primary**: the Modal sweep embed
 the experiment, and the public record is `papers/<name>/paper.md` with zero
 committed `results/*.md` (status `paper` in verification).
 
+The weakness paper also carries a theory-only companion,
+`papers/weakness_invariance_neurips/pac_bayes_weakness_sketch.md`. It derives a
+finite, prior-dependent compatibility-class KL certificate and keeps that
+analytic claim separate from empirical and neural PAC-Bayes evidence. Its next
+gate is an exact CPU enumeration on predeclared domains of size at most seven
+(maximum ambient class \(7^7\)) under aligned and wrong groups; no existing OOD
+result is relabeled by the derivation.
+
 ### 3.3 Scripts (`scripts/`)
 
 **91** Python modules. Operational spine:

@@ -79,7 +79,10 @@ Public report:
   - Mitigation: add wrong-group, incomplete-group, noisy-group, and learned-group experiments.
 
 - Flatness and compression baselines are too weak.
-  - Mitigation: add real neural sharpness estimates, PAC-Bayes-style perturbation sensitivity, and executable MDL baselines where feasible.
+  - Mitigation: the finite conditional KL bridge is now derived in
+    `pac_bayes_weakness_sketch.md`; next run its exact aligned/wrong-group
+    enumeration, then add neural PAC-Bayes perturbation sensitivity and
+    executable MDL baselines only if that severe test survives.
 
 - Weakness may collapse into group-invariant simplicity.
   - Mitigation: include cases where the invariant rule is longer than the local shortcut and cases where short symmetric but wrong rules exist.

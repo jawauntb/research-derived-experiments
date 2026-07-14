@@ -52,6 +52,25 @@ The downloaded PDFs, HTML snapshots, and extracted full text are intentionally l
 - **Bootstrap** — Efron, “Bootstrap Methods: Another Look at the Jackknife,” Annals of Statistics 1979: https://doi.org/10.1214/aos/1176344552 — source for resampling under an explicit sampling model; does not justify treating resamples as new independent runs.
 - **Small-sample design** — Gelman & Carlin, “Beyond Power Calculations,” 2014: https://doi.org/10.1177/1745691614551642 — motivates Type-S/Type-M and precision simulation rather than a universal seed floor.
 - **Analytic robustness** — Silberzahn et al., “Many Analysts, One Data Set,” 2018: https://doi.org/10.1177/2515245917747646 — motivates blinded independent analysis paths for theory-changing results.
+- **PAC-Bayes-kl bound** — Langford & Seeger, “Bounds for Averaging
+  Classifiers” (2001): http://reports-archive.adm.cs.cmu.edu/anon/2001/CMU-CS-01-102.pdf;
+  Seeger, “PAC-Bayesian Generalisation Error Bounds for Gaussian Process
+  Classification” (2002): https://www.jmlr.org/papers/v3/seeger02a.html; and
+  Maurer, “A Note on the PAC Bayesian Theorem” (2004):
+  https://arxiv.org/abs/cs/0411099 — sources for the bounded-loss
+  PAC-Bayes-kl inequality used in the weakness complexity sketch.
+- **Invariance and PAC-Bayes** — Lyle et al., “On the Benefits of Invariance in
+  Neural Networks” (2020): https://arxiv.org/abs/2005.00178; Beck & Ochs,
+  “Symmetries in PAC-Bayesian Learning” (2025):
+  https://arxiv.org/abs/2510.17303 — prior work showing that symmetry-aware
+  restriction or symmetrization can reduce PAC-Bayes complexity; cited as
+  related theory, not evidence that this repo's weakness metric already yields a
+  nonvacuous neural bound.
+- **Nonvacuous neural PAC-Bayes** — Dziugaite & Roy, “Computing Nonvacuous
+  Generalization Bounds for Deep (Stochastic) Neural Networks with Many More
+  Parameters than Training Data” (UAI 2017):
+  https://arxiv.org/abs/1703.11008 — motivates the withheld neural perturbation
+  test and the requirement to report numerical nonvacuity rather than analogy.
 
 ## Philosophy of Mind, Content, and Kinds
 
