@@ -102,7 +102,11 @@ toroidal codes and larger-arena OOD, but weakness does not govern topology or me
 - [x] Run a reduced local CPU sweep (3 conditions × 2 seeds) — spectral leg (G5 ρ=+0.89) and topology causal contrast (G6 0.27 vs 0.00) confirmed; OOD legs (G3/G4) need real arena geometry (`results/local_cpu_sweep_2026_06_29.md`).
 - [x] Dispatch the full Modal sweep (5 conditions × 2 archs × 32 seeds, steps=4000, --decode-arenas) from a Modal-authed machine to test G2-G4 with larger-arena OOD (`results/modal_grid_cell_weakness_sweep_2026_07_02.md`).
 - [x] Add the wrong-group/random-shift null-control reporting and the topology-mediation (G4) figure (gate-margin heatmap).
-- [ ] Derive the weakness↔PAC-Bayes bound sketch (invariant code → reduced KL/complexity term).
+- [x] Derive the conditional weakness↔PAC-Bayes bound sketch: a pre-sample
+  symmetry-indexed mixture prior gives
+  \(\mathrm{KL}(\delta_h\|P)\le\ln|H_{\ge W_G(h)}|-\ln\pi_{W_G(h)}\), while
+  explicitly withholding neural/OOD conclusions pending the registered finite
+  enumeration (`papers/weakness_invariance_neurips/pac_bayes_weakness_sketch.md`).
 - [ ] Reward-deformation follow-up (Paper B seed): reward locally lowers weakness to raise resolution — the `valence_tapestry` gap on the navigation torus.
 - [ ] Brain-data prediction (deferred; data hosts proxy-blocked here): weakness tracks H₁ persistence in the Gardner et al. grid-cell recordings.
 
