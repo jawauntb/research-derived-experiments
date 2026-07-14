@@ -56,13 +56,13 @@ The current wrapper also resolves two separate unpinned `uvx` environments and s
 ### Acceptance Examples
 
 - AE1. Given Linux/Python 3.12 dependency resolution, when the quality environment is locked, then Torch resolves to a `+cpu` build and the resolution contains no `nvidia-*` or `triton` packages.
-- AE2. Given `CI=true`, when the wrapper launches pytest, then tests are distributed by file across workers and the complete baseline passes before validators run.
+- AE2. Given CI requests parallelism, when the wrapper launches pytest, then tests are distributed by module/class scope across bounded workers and the complete baseline passes before validators run.
 - AE3. Given a contributor runs the documented wrapper locally without CI parallelism, when dependencies are absent, then uv creates the locked Python 3.12 environment once and the wrapper completes through ty.
 - AE4. Given a dependency declaration changes, when GitHub restores the uv cache, then the `uv.lock` hash selects a new cache entry.
 
 ### Scope Boundaries
 
-- Keep all 69 root test files, compile targets, research-contract validators, primer metadata checks, provenance checks, Ruff, and ty in the root gate.
+- Keep all root test files, compile targets, research-contract validators, primer metadata checks, provenance checks, Ruff, and ty in the root gate.
 - Keep `poppler-utils` and `pdfinfo` in this PR; replacing them with a Python PDF reader saves only about nine seconds and adds a separate metadata-parser change.
 - Do not add the Inquiry, coherence-testbench, Haskell, or site suites to the root gate.
 - Do not weaken assertions, add skips, or select tests by changed paths.
@@ -86,7 +86,7 @@ flowchart TB
   A[Restore uv cache keyed by uv.lock] --> B[Canonical quality wrapper]
   B --> C[Sync locked Python 3.12 quality environment]
   C --> D{CI parallelism enabled?}
-  D -->|yes| E[Run full suite by file across workers]
+  D -->|yes| E[Run full suite by module or class scope]
   D -->|no| F[Run full suite serially]
   E --> G[Compile, contract, metadata, provenance, Ruff, and ty gates]
   F --> G
@@ -96,7 +96,7 @@ flowchart TB
 ### Assumptions
 
 - GitHub's runner exposes enough CPU concurrency for scope-level xdist to reduce wall time materially.
-- Tests that write artifacts remain safe when tests from the same file stay on one worker; any discovered cross-file collision must be isolated rather than ignored.
+- Tests that write artifacts must redirect outputs to per-test temporary paths because separate classes from one file may run on different workers; any discovered collision must be isolated rather than ignored.
 - The CPU-only Torch build exercises the same code paths as the current CPU execution of the CUDA-capable wheel.
 
 ### Risks and Mitigations

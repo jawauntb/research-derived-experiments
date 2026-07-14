@@ -879,7 +879,7 @@ python3 scripts/run_phase0.py --smoke
 
 ## 8. Plans, paper reviews, solutions
 
-### 8.1 `docs/plans/` (13)
+### 8.1 `docs/plans/` (14)
 
 | File | Summary |
 |---|---|
@@ -896,6 +896,7 @@ python3 scripts/run_phase0.py --smoke
 | `2026-07-08-004-feat-inquiry-desktop-app-watch-plan.md` | Desktop app watch |
 | `2026-07-08-005-feat-inquiry-llm-daily-suggestions-plan.md` | LLM session interpretation + daily suggestions |
 | `2026-07-08-006-feat-inquiry-usability-value-redesign-plan.md` | Usability / value / design coherence |
+| `2026-07-14-001-perf-faster-quality-gate-plan.md` | Locked CPU-only root quality gate with bounded parallel pytest |
 
 ### 8.2 `docs/paper_reviews/` (15)
 

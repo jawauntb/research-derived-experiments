@@ -9,31 +9,77 @@ def test_quality_commands_sync_once_and_reuse_locked_environment() -> None:
     steps = run_quality_checks.quality_steps({})
     commands = [command for command, _environment in steps]
 
-    assert commands[0] == [
-        "uv",
-        "sync",
-        "--locked",
-        "--only-group",
-        "quality",
-        "--python",
-        "3.12",
+    assert commands == [
+        ["uv", "sync", "--locked", "--only-group", "quality", "--python", "3.12"],
+        ["uv", "run", "--no-sync", "python", "-m", "pytest", "-q", "tests"],
+        [
+            "uv",
+            "run",
+            "--no-sync",
+            "python",
+            "-m",
+            "compileall",
+            "scripts",
+            "experiments",
+            "tests",
+        ],
+        ["uv", "run", "--no-sync", "python", "scripts/publication_guard.py"],
+        [
+            "uv",
+            "run",
+            "--no-sync",
+            "python",
+            "scripts/validate_evidence_registry.py",
+        ],
+        [
+            "uv",
+            "run",
+            "--no-sync",
+            "python",
+            "scripts/validate_claim_registry.py",
+        ],
+        [
+            "uv",
+            "run",
+            "--no-sync",
+            "python",
+            "scripts/validate_experiment_manifest.py",
+        ],
+        [
+            "uv",
+            "run",
+            "--no-sync",
+            "python",
+            "scripts/validate_gate_verdict.py",
+        ],
+        ["uv", "run", "--no-sync", "python", "scripts/check_primer_metadata.py"],
+        [
+            "uv",
+            "run",
+            "--no-sync",
+            "python",
+            "scripts/gen_provenance.py",
+            "--check",
+        ],
+        ["uv", "run", "--no-sync", "ruff", "check", "."],
+        [
+            "uv",
+            "run",
+            "--no-sync",
+            "ty",
+            "check",
+            "scripts",
+            "experiments",
+            "tests",
+        ],
     ]
-    assert commands[1] == [
-        "uv",
-        "run",
-        "--no-sync",
-        "python",
-        "-m",
-        "pytest",
-        "-q",
-        "tests",
-    ]
-    assert all(command[:3] == ["uv", "run", "--no-sync"] for command in commands[1:])
-    assert not any("uvx" in command for command in commands)
+    assert all(environment is None for _command, environment in steps)
 
 
 def test_quality_commands_use_bounded_scope_distribution_when_requested() -> None:
-    steps = run_quality_checks.quality_steps({"QUALITY_PYTEST_WORKERS": "4"})
+    steps = run_quality_checks.quality_steps(
+        {"QUALITY_PYTEST_WORKERS": "4", "PATH": "/bin", "OMP_NUM_THREADS": "8"}
+    )
     commands = [command for command, _environment in steps]
 
     assert commands[1][-6:] == [
@@ -44,6 +90,14 @@ def test_quality_commands_use_bounded_scope_distribution_when_requested() -> Non
         "--max-worker-restart=0",
         "tests",
     ]
+    pytest_environment = steps[1][1]
+    assert pytest_environment is not None
+    assert pytest_environment["PATH"] == "/bin"
+    assert all(
+        pytest_environment[name] == "1"
+        for name in run_quality_checks.THREAD_LIMIT_VARIABLES
+    )
+    assert all(environment is None for _command, environment in steps[2:])
 
 
 def test_automatic_workers_are_capped_at_four(monkeypatch) -> None:
@@ -52,15 +106,6 @@ def test_automatic_workers_are_capped_at_four(monkeypatch) -> None:
     assert run_quality_checks.requested_pytest_workers(
         {"QUALITY_PYTEST_WORKERS": "auto"}
     ) == 4
-
-
-def test_parallel_environment_caps_native_math_threads() -> None:
-    environment = run_quality_checks.parallel_test_environment(
-        {"PATH": "/bin", "OMP_NUM_THREADS": "8"}
-    )
-
-    assert environment["PATH"] == "/bin"
-    assert all(environment[name] == "1" for name in run_quality_checks.THREAD_LIMIT_VARIABLES)
 
 
 def test_main_stops_after_the_first_failed_gate(monkeypatch) -> None:
