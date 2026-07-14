@@ -227,8 +227,11 @@ Requires GitHub secret `RAILWAY_TOKEN`. Native Railway GitHub autodeploy has
 historically been unreliable; Actions is the supported path. See
 [railway-autodeploy.md](railway-autodeploy.md).
 
-There is **no** GitHub Actions workflow for tests/lint; quality is local via
-`scripts/run_quality_checks.py`.
+The required `quality.yml` GitHub Actions workflow runs the same
+`scripts/run_quality_checks.py` gate on every push and pull request to `main`,
+then runs the focused pytest-only regression tests that `unittest` discovery
+does not collect. Local contributors can run the identical commands before
+opening a PR.
 
 ---
 

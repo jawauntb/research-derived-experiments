@@ -818,6 +818,7 @@ python3 scripts/run_phase0.py --smoke
 
 | File | Role |
 |---|---|
+| `.github/workflows/quality.yml` | Required push/PR quality workflow: root gate plus focused pytest-only regressions |
 | `.github/workflows/railway-deploy.yml` | Deploy atlas + Inquiry landing on `main` |
 | `pyproject.toml` | Project meta, Ruff, ty excludes |
 | `pyrightconfig.json` | Editor typecheck: missing imports silenced |
