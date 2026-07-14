@@ -253,6 +253,56 @@ class ContractRegistryFixtureTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "overlaps a package-root manifest: beta_family"):
                 fixture.validate()
 
+    def test_non_dict_exception_fails_with_value_error(self) -> None:
+        for value in (5, [{"owner": "x"}], "text"):
+            with self.subTest(value=value), TemporaryDirectory() as directory:
+                fixture, registry = standard_fixture(directory)
+                registry["packages"][1]["exception"] = value
+                fixture.write(registry)
+                with self.assertRaisesRegex(ValueError, "exception must be an object"):
+                    fixture.validate()
+
+    def test_non_canonical_iso_date_forms_fail(self) -> None:
+        for value in ("20261012", "2026-W41-1", "2026-10-12T00:00:00"):
+            with self.subTest(value=value), TemporaryDirectory() as directory:
+                fixture, registry = standard_fixture(directory)
+                registry["packages"][1]["exception"]["expiry_date"] = value
+                fixture.write(registry)
+                with self.assertRaisesRegex(ValueError, "must be an ISO YYYY-MM-DD date"):
+                    fixture.validate()
+
+    def test_dot_dot_substring_in_paths_fails_like_the_schema(self) -> None:
+        with TemporaryDirectory() as directory:
+            fixture, registry = standard_fixture(directory)
+            results = fixture.root / "experiments" / "alpha_family" / "results"
+            (results / "summary..v2.json").write_text("{}")
+            registry["packages"][0]["runs"][0]["report_paths"] = [
+                "experiments/alpha_family/results/summary..v2.json"
+            ]
+            fixture.write(registry)
+            with self.assertRaisesRegex(ValueError, "safe repo-relative path"):
+                fixture.validate()
+
+    def test_hidden_and_bytecode_directories_are_not_packages(self) -> None:
+        with TemporaryDirectory() as directory:
+            fixture, registry = standard_fixture(directory)
+            (fixture.root / "experiments" / ".ipynb_checkpoints").mkdir()
+            (fixture.root / "experiments" / "__pycache__").mkdir()
+            fixture.write(registry)
+            counts, _ = fixture.validate()
+            self.assertEqual(sum(counts.values()), 3)
+
+    def test_malformed_canonical_registry_is_diagnosed(self) -> None:
+        with TemporaryDirectory() as directory:
+            fixture, registry = standard_fixture(directory)
+            registry["packages"][0]["runs"][0]["claim_ids"] = ["DEMO_CLAIM"]
+            fixture.write(registry)
+            (fixture.root / "docs" / "claim_registry.json").write_text(
+                json.dumps({"claims": {"claim_id": "DEMO_CLAIM"}})
+            )
+            with self.assertRaisesRegex(ValueError, "expected a top-level claims list"):
+                fixture.validate()
+
     def test_forbidden_scientific_field_on_legacy_fails(self) -> None:
         for field, value in (("status", "accepted"), ("claim_ids", ["DEMO_CLAIM"])):
             with self.subTest(field=field), TemporaryDirectory() as directory:
@@ -334,8 +384,15 @@ class CommittedRegistryTests(unittest.TestCase):
     def test_cli_no_argument_mode_enforces_coverage(self) -> None:
         stdout = io.StringIO()
         with contextlib.redirect_stdout(stdout):
-            self.assertEqual(main([]), 0)
+            self.assertEqual(main([], today=date(2026, 7, 15)), 0)
         self.assertIn("[contract-registry] PASS: 5 structured + 49 legacy", stdout.getvalue())
+
+    def test_cli_rejects_as_of_with_explicit_manifest_paths(self) -> None:
+        stderr = io.StringIO()
+        manifest = str(ROOT / "experiments" / "bayesian_voi" / MANIFEST_NAME)
+        with contextlib.redirect_stderr(stderr):
+            self.assertEqual(main(["--as-of", "2026-07-15", manifest]), 1)
+        self.assertIn("only runs in no-argument mode", stderr.getvalue())
 
     def test_cli_historical_inspection_is_clearly_labeled(self) -> None:
         stdout = io.StringIO()

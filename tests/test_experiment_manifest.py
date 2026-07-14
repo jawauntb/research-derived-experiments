@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import json
 import unittest
+from datetime import date
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
@@ -138,7 +139,10 @@ class ExperimentManifestTests(unittest.TestCase):
             self.assertEqual(discover_manifests(Path(directory)), [path])
 
     def test_cli_without_paths_discovers_repository_manifests(self) -> None:
-        self.assertEqual(main([]), 0)
+        # Pin the coverage clock so the test cannot fail when committed
+        # legacy exceptions expire; expiry enforcement belongs to the
+        # contract-registry gate, not this discovery test.
+        self.assertEqual(main([], today=date(2026, 7, 15)), 0)
 
 
 if __name__ == "__main__":

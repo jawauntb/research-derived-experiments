@@ -27,6 +27,7 @@ GIT_COMMIT_PATTERN = r"^[0-9a-f]{40}$"
 ISO_DATE_PATTERN = r"^\d{4}-\d{2}-\d{2}$"
 PACKAGE_ID = re.compile(PACKAGE_ID_PATTERN)
 GIT_COMMIT = re.compile(GIT_COMMIT_PATTERN)
+ISO_DATE = re.compile(ISO_DATE_PATTERN)
 COVERAGE_MODES = {"structured_manifest", "legacy_exception"}
 PROVENANCE_MODES = {"structured_manifest", "legacy_report"}
 INTEGRITY_STATES = {"valid", "invalid", "not_assessed"}

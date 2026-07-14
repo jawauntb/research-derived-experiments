@@ -28,6 +28,7 @@ try:
         EXPIRY_WARNING_DAYS,
         GIT_COMMIT,
         INTEGRITY_STATES,
+        ISO_DATE,
         LEGACY_ADJUDICATION_STATEMENT,
         MAX_EXCEPTION_HORIZON_DAYS,
         PACKAGE_ID,
@@ -45,6 +46,7 @@ except ModuleNotFoundError:  # Direct execution: python scripts/validate_experim
         EXPIRY_WARNING_DAYS,
         GIT_COMMIT,
         INTEGRITY_STATES,
+        ISO_DATE,
         LEGACY_ADJUDICATION_STATEMENT,
         MAX_EXCEPTION_HORIZON_DAYS,
         PACKAGE_ID,
@@ -304,6 +306,10 @@ def frozen_legacy_digest(packages: list[str]) -> str:
 
 def require_iso_date(value: object, label: str) -> date:
     text = require_string(value, label)
+    # fromisoformat alone is laxer than the portable schema (it accepts
+    # "20260714" and week dates); pin the exact YYYY-MM-DD form first.
+    if ISO_DATE.fullmatch(text) is None:
+        fail(f"{label} must be an ISO YYYY-MM-DD date: {text}")
     try:
         return date.fromisoformat(text)
     except ValueError:
@@ -319,7 +325,9 @@ def require_package_id(value: object, label: str) -> str:
 
 def require_repo_path(value: object, label: str, root: Path, *, must_exist: bool = True) -> Path:
     text = require_string(value, label)
-    if text.startswith("/") or "\\" in text or ".." in Path(text).parts:
+    # Reject any ".." substring, matching the portable schema's stricter
+    # repo_relative_path pattern so both authorities accept the same registry.
+    if text.startswith("/") or "\\" in text or ".." in text:
         fail(f"{label} must be a safe repo-relative path: {text}")
     path = root / text
     if must_exist and not path.is_file():
@@ -334,7 +342,12 @@ def direct_packages(root: Path) -> list[str]:
     return sorted(
         entry.name
         for entry in experiments.iterdir()
-        if entry.is_dir() and entry.name not in EXCLUDED_PACKAGES
+        if entry.is_dir()
+        and entry.name not in EXCLUDED_PACKAGES
+        # Hidden and bytecode directories can never be research packages and
+        # could otherwise wedge CI with an unregisterable name.
+        and not entry.name.startswith(".")
+        and entry.name != "__pycache__"
     )
 
 
@@ -348,12 +361,12 @@ def load_registered_ids(root: Path, path: Path, list_key: str, id_key: str) -> s
         payload = json.loads(registry_path.read_text())
     except (OSError, json.JSONDecodeError) as exc:
         fail(f"cannot read {registry_path}: {exc}")
-    records = payload.get(list_key, []) if isinstance(payload, dict) else []
+    if not isinstance(payload, dict) or not isinstance(payload.get(list_key), list):
+        fail(f"{registry_path} is malformed: expected a top-level {list_key} list")
     identifiers: set[str] = set()
-    if isinstance(records, list):
-        for record in records:
-            if isinstance(record, dict) and isinstance(record.get(id_key), str):
-                identifiers.add(cast(str, record[id_key]))
+    for record in cast(list[object], payload[list_key]):
+        if isinstance(record, dict) and isinstance(record.get(id_key), str):
+            identifiers.add(cast(str, record[id_key]))
     return identifiers
 
 
@@ -411,6 +424,11 @@ def validate_run_record(
         ("evidence_ids", EVIDENCE_ID, evidence_ids),
     ):
         values = require_list(run[key], f"{label}.{key}")
+        if values and registered is None:
+            fail(
+                f"{label}.{key} cannot be verified: "
+                "the canonical registry is missing from this checkout"
+            )
         seen: set[str] = set()
         for index, value in enumerate(values):
             identifier = require_string(value, f"{label}.{key}[{index}]")
@@ -419,12 +437,7 @@ def validate_run_record(
             if identifier in seen:
                 fail(f"{label}.{key} contains duplicate entry: {identifier}")
             seen.add(identifier)
-            if registered is None:
-                fail(
-                    f"{label}.{key}[{index}] cannot be verified: "
-                    "the canonical registry is missing from this checkout"
-                )
-            if identifier not in registered:
+            if registered is not None and identifier not in registered:
                 fail(f"{label}.{key}[{index}] is not a registered identifier: {identifier}")
 
     verdicts = require_list(run["gate_verdict_paths"], f"{label}.gate_verdict_paths")
@@ -460,9 +473,9 @@ def validate_legacy_exception(
     as_of: date,
     warnings: list[str],
 ) -> None:
-    forbidden = (set(record) | set(cast(dict[str, object], record.get("exception") or {}))) & (
-        LEGACY_FORBIDDEN_FIELDS
-    )
+    exception_value = record.get("exception")
+    exception_keys = set(exception_value) if isinstance(exception_value, dict) else set()
+    forbidden = (set(record) | exception_keys) & LEGACY_FORBIDDEN_FIELDS
     if forbidden:
         fail(
             f"{label} must not carry scientific-status or run fields: "
@@ -613,12 +626,10 @@ def validate_contract_registry(
         counts[coverage_mode] += 1
 
         root_manifest = root / "experiments" / package / MANIFEST_NAME
-        nested_manifests = [
-            path
+        if not root_manifest.is_file() and any(
+            path != root_manifest
             for path in (root / "experiments" / package).rglob(MANIFEST_NAME)
-            if path != root_manifest
-        ]
-        if not root_manifest.is_file() and nested_manifests:
+        ):
             fail(
                 f"{label} has only nested manifests; a nested manifest does not "
                 "satisfy package-root coverage"
@@ -683,7 +694,13 @@ def validate_contract_registry(
     return counts, warnings
 
 
-def main(argv: list[str] | None = None) -> int:
+def main(argv: list[str] | None = None, *, today: date | None = None) -> int:
+    """Validate manifests, then (in no-argument mode) the coverage partition.
+
+    ``today`` exists so date-sensitive tests can inject a fixed date; the CLI
+    never sets it, so normal CI always evaluates expiry against the wall clock.
+    """
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "manifests",
@@ -702,6 +719,14 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     args = parser.parse_args(argv)
+
+    if args.as_of is not None and args.manifests:
+        print(
+            "[contract-registry] FAIL: --as-of applies to the registry coverage "
+            "check, which only runs in no-argument mode; remove the manifest paths",
+            file=sys.stderr,
+        )
+        return 1
 
     manifests = args.manifests or discover_manifests()
     for path in manifests:
@@ -722,7 +747,7 @@ def main(argv: list[str] | None = None) -> int:
         # package coverage is only enforced in no-argument (CI) mode.
         return 0
 
-    as_of: date | None = None
+    as_of: date | None = today
     if args.as_of is not None:
         try:
             as_of = date.fromisoformat(args.as_of)
