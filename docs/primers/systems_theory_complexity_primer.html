@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>The Mathematics of the Research Program — A Primer from First Principles</title>
+<title>Systems That Hold Themselves Together — A Systems-Theory and Complexity-Science Primer</title>
 <style>
 /* ---------- page setup ---------- */
 @page { size: letter; margin: 0.9in 0.85in; }
@@ -357,9 +357,9 @@ signal enables recovery where a stale, wrong, or absent one fails — a clean de
 everywhere, and each buyer, minimizing their own local cost, collectively relieves the shortage. The price
 is a global constraint transduced into a local incentive — exactly the virtual-governor idea. The program's
 experiment is a miniature of this: can a system-level stress be turned into a local signal that makes
-each part's selfish minimization serve the whole? The measured answer — yes, but only if the signal is
-live and accurate — is a small but genuine result about how distributed systems coordinate, and it is one
-of the places the program touches real complexity science.</p></div>
+each part's selfish minimization serve the whole? The measured answer — for one policy receiving a
+hand-computed global feature — is yes, but only if the signal is live and accurate. This establishes a
+signal-architecture scaffold, not distributed coordination among multiple autonomous parts.</p></div>
 
 <div class="warn"><span class="boxtitle">Tension — a "distributed" control experiment with one agent</span>
 <p>A complexity scientist should note the catch honestly. Distributed control is, classically, about
@@ -401,17 +401,17 @@ test of an attractor — as opposed to a mere resting spot — is <em>restoratio
 comes back. This restoration property is exactly what turns a passive location into an active, self-
 maintaining thing.</p></div>
 
-<h3>3.2 The program's central bet: passive representation becomes active attractor</h3>
+<h3>3.2 The program's central bet: passive representation becomes an attractor-like controller</h3>
 
 <p>Here is the program's deepest and most complexity-flavored claim, and its answer to "when does
 structure become agency." A learned representation can be merely <em>passive</em> — a cluster of points
 that <em>correlates</em> with behavior, a location on the landscape. Or it can be <em>active</em> — an
-attractor that <em>causally controls</em> behavior and <em>resists perturbation</em>. The program claims a
-measurable transition between these: couple a representation to action, and a passive cluster becomes an
-active, self-defending attractor.</p>
+controller that <em>causally controls</em> behavior and <em>resists perturbation</em>. The program measures
+that passive→active change, but it does not map a basin, estimate stability, or trace return dynamics;
+"attractor-like controller" is the earned tier.</p>
 
-<div class="prog"><span class="boxtitle">In the program — the two signatures of an attractor, measured</span>
-<p>The program operationalizes the passive→active transition with the two properties an attractor should
+<div class="prog"><span class="boxtitle">In the program — two attractor-like proxies, measured</span>
+<p>The program operationalizes the passive→active transition with two properties an attractor should
 have. <strong>Load-bearing</strong>: removing the representation's key direction should <em>destroy</em>
 behavior far more after coupling than before (it does — the specific effect grows roughly sevenfold).
 <strong>Self-maintenance</strong>: the system should <em>resist</em> being pushed in the wrong direction.
@@ -483,9 +483,9 @@ question — and the one a complexity reader must press on the program — is wh
 <em>emergent</em> (novel, not designed in) versus merely <em>installed</em> (a consequence of a rule the
 designer chose).</p></div>
 
-<h3>4.2 The program's cleanest self-organization result</h3>
+<h3>4.2 The program's cleanest objective-driven reorganization result</h3>
 
-<p>The program's best claim to genuine self-organization is its "objects form from concern" result
+<p>The program's best claim to objective-driven representational reorganization is its "objects form from concern" result
 (developed in the philosophy primer as a theory of content; here we read it as systems science). Three
 identical neural networks, trained with different objectives on the same inputs, develop radically
 different internal geometries — and the one whose objective is coupled to viability spontaneously
@@ -524,11 +524,11 @@ the consequence axis because the designer's loss function <em>selects</em> for i
 representation learning doing exactly what it is told, not order arising spontaneously from the system's
 own dynamics. The program's own steelman of this objection ("you trained a classifier to use a direction;
 of course ablating it matters — this is not emergence, it is supervised feature selection") is not fully
-rebutted. The program's attempts to make concern <em>self-organize</em> from the agent's own experience,
-without a supervised target, only partly succeed. So the strong, wonderful form of self-organization — order
-arising from the system's <em>own</em> stakes and interactions — is, at the frontier, demonstrated for easy
-cases and open for hard ones. The program has genuine reorganization-under-objective; whether it has
-genuine <em>self</em>-organization is precisely what remains to be shown.</p></div>
+rebutted. The initial joint REINFORCE attempt failed on XOR, but later staged learning from observed ΔE
+reached a +1.84 reward-geometry gap and ΔE-argmax planning reached 50/50 without optimal-action labels.
+That closes the old "hard XOR remains unsolved" status, while uniform exploration, observed ΔE, staged
+modules, and toy scale keep the result below the stronger claim of order arising from the system's own
+stakes. Yoked, shuffled, wrong-variable, and shifted-viability controls remain decisive.</p></div>
 
 <h3>4.3 What to carry forward</h3>
 <p class="small">Self-organization is order arising from a system's own dynamics without a designer;
@@ -671,21 +671,18 @@ power law is such a characteristic move.</p></div>
 <p>The program's constraint-derived power law makes a specific numerical prediction — an exponent of 0.5
 for a two-dimensional system. When measured, the exponent came out ≈ 0.30 instead, with tight confidence
 intervals. The prediction was <em>falsified</em>. And this is where the program does its best
-complexity science, because the falsification is <em>informative</em>: inverting the measured exponent
-implies the system was behaving as if it were effectively <em>one</em>-dimensional, not two — its
-resolution allocation had collapsed onto essentially a single direction. A constraint-based prediction,
-honestly tested, revealed a hidden dimensional collapse precisely because it was specific enough to be
-wrong.</p>
+complexity science, because the falsification is <em>informative</em>: under the derived model, inverting
+the measured exponent is consistent with d<sub>eff</sub> ≈ 0.87–0.90. That is a model-dependent effective-
+dimension hypothesis, not a direct observation that the representation collapsed onto one direction.
+An independent dimension estimator and the frozen shape/capacity sweep are still required.</p>
 
 <div class="prog"><span class="boxtitle">In the program — effective dimension as an order parameter</span>
-<p>The quantity the falsification revealed — <strong>effective dimension</strong> — is exactly the kind of
+<p>The quantity suggested by the model-based interpretation — <strong>effective dimension</strong> — is the kind of
 <em>order parameter</em> that complexity science prizes: a single number summarizing how a system's order
 is organized (here, how many directions it effectively uses). That a finite-capacity code, meant to tile a
-two-dimensional space, instead concentrated its resolution as if in one dimension is a genuine, quantitative
-finding about how constraint shapes self-organized structure — a dimensional collapse under a capacity
-budget. It is the program's cleanest constraint-based result, and it works precisely because it treats a
-system property (effective dimension) as a measurable order parameter and lets a constraint-derived
-prediction be wrong about it. This is how constraint-based complexity science is supposed to go.</p></div>
+two-dimensional space, instead fit an exponent consistent with about one effective dimension is a useful
+hypothesis about how constraint shapes structure. The measured result is the falsified exponent; effective
+dimension is an inferred order parameter whose interpretation has not yet been independently validated.</p></div>
 
 <div class="warn"><span class="boxtitle">Tension — one order parameter, one point, three seeds</span>
 <p>The rigorous caveat: a complexity scientist studying constraint would want the <em>whole curve</em>, not
@@ -700,8 +697,8 @@ full picture of how constraint governs the system's dimensional organization. Ch
 <p class="small">Constraint is generative, not merely limiting — order is what constraints produce by ruling
 out alternatives, and finite capacity is the program's central ordering constraint; the capacity budget
 <em>derives</em> a power-law resolution allocation (the constraint fixing the geometry); the prediction was
-productively falsified (0.30 not 0.50), revealing a dimensional collapse to effective-dimension ≈ 1 — a
-genuine constraint-based finding using effective dimension as an order parameter; and the improvement is to
+productively falsified (0.30 not 0.50), suggesting effective-dimension ≈ 0.87–0.90 under the fitted model;
+the improvement is to validate dimension independently and
 sweep the control parameters and map the whole order-parameter curve rather than measure one point.</p>
 
 <h2 class="chapter"><span class="chnum">Chapter 7</span>Autopoiesis and Self-Maintenance</h2>
@@ -730,9 +727,9 @@ to maintain <em>itself</em>.</p></div>
 <p>The program's real, measured contribution here is not full autopoiesis but its cybernetic ancestor:
 <strong>ultrastability</strong>, Ashby's idea that a system knocked out of its viable range reorganizes
 its own parameters until it returns (history primer, Chapter 2). The program damages a trained system with
-random noise and lets it run a few self-supervised updates; it climbs back to near its original competence,
-"using its own ongoing input stream to re-establish a preferred state." This is a genuine, quantitative
-demonstration of self-repair — a system restoring its own function after perturbation. And, connecting to
+random noise and applies labeled gradient updates on held-out paraphrases; it climbs back to near its
+original competence. This is a quantitative demonstration of externally optimized functional repair — a
+system restoring function after perturbation — rather than self-supervised or autopoietic repair. And, connecting to
 Chapter 5, the program shows the <em>capacity</em> for this repair scales with lower-layer slack, exactly
 as the hierarchy theory predicts. As a measurement of ultrastable self-repair, this is solid systems
 science.</p>
@@ -808,9 +805,9 @@ metaphor</em>. Here is that scorecard, assembled from the previous chapters.</p>
 <table class="plain">
 <tr><th>Concept</th><th>Status in the program</th></tr>
 <tr><td><strong>Homeostasis / feedback</strong></td><td><b>Earned.</b> The decaying-energy agent is a genuine, measured homeostat; two-variable versions add real competing viability needs.</td></tr>
-<tr><td><strong>Ultrastable self-repair</strong></td><td><b>Earned.</b> Damaged networks measurably restore function via self-supervised updates; repair capacity scales with slack as predicted.</td></tr>
+<tr><td><strong>Ultrastable repair analogue</strong></td><td><b>Earned at the functional tier.</b> Damaged networks restore function via labeled test-time gradient updates; repair capacity is ordered by slack, but autonomous self-repair is not shown.</td></tr>
 <tr><td><strong>Self-organization (of representations)</strong></td><td><b>Partly earned.</b> Dramatic measured reorganization around the consequence axis — but under a <em>supervised</em> objective, so "self" is contested.</td></tr>
-<tr><td><strong>Constraint-driven order / effective dimension</strong></td><td><b>Earned as a result, incompletely characterized.</b> A real, falsified power law revealing dimensional collapse — but measured at one point, not swept.</td></tr>
+<tr><td><strong>Constraint-driven order / effective dimension</strong></td><td><b>Exponent earned; dimension inferred.</b> The power-law prediction is falsified, while dimensional collapse is a model-based interpretation awaiting an independent estimator and frozen sweep.</td></tr>
 <tr><td><strong>Hierarchy (Law of the Stack)</strong></td><td><b>Ordering earned, bound asserted.</b> The predicted ordering (slack below → adaptation above) holds; the exact quantitative law is untested.</td></tr>
 <tr><td><strong>Attractors (in agents)</strong></td><td><b>Attractor-<em>like</em>, not established.</b> Perturbation-immunity measured; but no basin geometry, stability analysis, or return dynamics.</td></tr>
 <tr><td><strong>Emergence / phase transition</strong></td><td><b>Gestured at.</b> The "abrupt load-bearing onset" is suggestive; no order-parameter discontinuity or bifurcation analysis establishes a true transition.</td></tr>

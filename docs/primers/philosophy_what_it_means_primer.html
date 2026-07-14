@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>The Mathematics of the Research Program — A Primer from First Principles</title>
+<title>What It All Means — A Philosophy Primer on Concern, Selfhood, and Meaning</title>
 <style>
 /* ---------- page setup ---------- */
 @page { size: letter; margin: 0.9in 0.85in; }
@@ -439,12 +439,12 @@ predict the <em>optimal action</em> under the reward function — which is a <em
 So a deflationary reading is available: the network reorganizes around the reward axis because the
 experimenter <em>told it to</em> predict a reward-derived label. On this reading, "objects form from
 concern" is really "objects form from supervised labels of concern" — which is far less surprising, and
-much weaker as a metaphysics. The program's attempts to make concern <em>self-organize</em> from the
-agent's own experience (rather than be supervised) only partly succeed — they work on easy reward
-structures and fail on the hard (XOR) case. So the strong, exciting form of the thesis — that a system's
-<em>own</em> stakes spontaneously carve its world — remains, at the frontier, only partly demonstrated.
-The forager really does carve by consequence; whether the network does so <em>on its own</em>, or only
-when handed the consequences as labels, is not yet settled.</p></div>
+much weaker as a metaphysics. The first joint sparse-reward REINFORCE attempt did fail on XOR, but that
+is no longer the final result: staged learning from observed energy changes reaches a reward-geometry
+gap of +1.84 without optimal-action labels, and a ΔE-argmax planner reaches return 50/50. Those bounded
+toy results close the old "XOR cannot work" claim, while leaving a stronger question open: the pipeline
+still relies on uniform exploration, observed ΔE, and staged modules rather than demonstrating robust,
+endogenous concern under ecological shift and adversarial signal controls.</p></div>
 
 <h3>3.4 What is genuinely shown, and what is aspired to</h3>
 
@@ -452,11 +452,11 @@ when handed the consequences as labels, is not yet settled.</p></div>
 learner's objective is coupled to viability, its representational geometry reorganizes around causal
 role and discards sensory similarity — a real, measured dissociation between appearance-based and
 consequence-based representation. That is a solid result and a nice illustration of a teleosemantic
-mechanism. What it has <em>not</em> yet shown is the stronger claim the vocabulary implies: that a system
-carves the world this way from its <em>own</em> concern, discovered through its <em>own</em> interaction,
-without the experimenter supplying the consequence as a training target. The gap between these two — the
-supervised demonstration and the self-organizing aspiration — is exactly where the philosophical action
-is, and it is the frontier of the program's theory of content.</p>
+mechanism. Later staged work also learns useful reward geometry and action from self-observed ΔE without
+optimal-action labels. What it has <em>not</em> yet shown is the stronger claim the vocabulary implies:
+that this is the system's own concern rather than any correlated scalar the experimenter makes
+available. Yoked-agent, sign-shuffled, wrong-variable, and shifted-dynamics controls are still needed to
+separate endogenous stakes from successful value-signal engineering.</p>
 
 <h3>3.5 What to carry forward</h3>
 <p class="small">The thesis "objects form from concern" claims the world is carved into kinds by
@@ -518,13 +518,11 @@ visible.</p></div>
 <p>The program sees this problem clearly and tries to solve it. Its "concern-bootstrap" experiments
 attempt to make concern <strong>self-organize</strong> — to have the agent learn what matters from its
 <em>own</em> observed experience (the energy changes it actually undergoes) rather than from a supervised
-reward-label. This is exactly the right move philosophically: it is the attempt to cut the puppeteer's
-strings and let the system's stakes emerge from its own interaction with the world. And it
-<em>partly</em> works: on simple reward structures, the agent does self-organize a concern-aligned
-geometry without being handed the labels. But on the harder case (where the relevant structure is a
-non-linear XOR), it fails. So the strong form of the program's central claim — that a system's own
-concern spontaneously shapes its own meaning — is, at the frontier, demonstrated only for easy cases and
-open for hard ones.</p>
+optimal-action label. The initial joint REINFORCE learner failed on nonlinear XOR. The later diagnosis
+split representation from competence: staged ΔE learning reached a +1.84 reward-geometry gap and
+ΔE-argmax planning reached 50/50. This is real progress from interaction-derived signals, but uniform
+exploration, directly observed ΔE, staged training, and toy scale keep it below a general claim that the
+system's own concern spontaneously shapes meaning.</p>
 
 <h3>4.4 The three senses of concern, and why disentangling them would help</h3>
 
@@ -634,9 +632,11 @@ selfhood is grounded in agency (in what one does and refrains from doing) rather
 <p>One genuine unresolved tension a philosopher should press. The program says two things that are in
 mild tension. On one hand: the architectural prior that there <em>is</em> a self/world split is "a frame,
 not a fact" — the boundary is under-determined, a construction. On the other: the null-action
-intervention "recovers the true decomposition." But if the boundary was genuinely a gauge (mere
-convention), what makes the intervention-fixed version <em>true</em> rather than just another,
-practically-useful choice of frame? Is the self that intervention reveals a <em>real</em> self that was
+intervention "recovers the true decomposition." The defensible repo-grounded claim is narrower: null
+anchoring identifies a chosen operational decomposition relative to the declared structural model and
+allowed intervention set; richer shared-head worlds remain under-identified. What, then, makes that
+intervention-fixed version <em>true</em> rather than just another practically-useful choice of frame? Is
+the self that intervention reveals a <em>real</em> self that was
 there all along, or a <em>useful</em> self that intervention <em>constructs</em>? This is the deep
 question — realism versus instrumentalism about the self — and the program's result sharpens it without
 settling it. That is not a flaw; sharpening a genuine question to the point where it becomes decidable is
@@ -646,8 +646,8 @@ exactly what good philosophy of mind does, and this result does it.</p></div>
 <p class="small">The gauge result proves a system can be a perfect agent with no fact of the matter
 about which changes are its own — the self/world split is a gauge symmetry, under-determined by
 observation, a no-go theorem for passive identification; it is a computational vindication of the
-Kant-to-Metzinger view that the self is posited, not given; the fix is that the self is learned by
-intervention (the null action) — selfhood grounded in agency, echoing reafference; and it leaves open a
+Kant-to-Metzinger view that the self is posited, not given; null intervention fixes an operational gauge
+within the stated causal model rather than recovering a metaphysically unique self; and it leaves open a
 sharpened realism-versus-instrumentalism question about whether intervention reveals or constructs the
 self.</p>
 
@@ -968,14 +968,14 @@ claiming.</li>
 
 <div class="prog"><span class="boxtitle">The decisive tests</span>
 <ol>
-<li><strong>The concern-weighting load-bearing test.</strong> The program has <em>designed</em> but not
-decisively run the cleanest test of whether concern adds anything beyond weakness: pit concern-weighted
-against unweighted weakness on deployment where consequences are <em>unequal</em>, with wrong-weight and
-wrong-group controls. This directly answers the deflationist's core charge.</li>
-<li><strong>Learned-from-interaction valence at the hard boundary.</strong> Until concern
-<em>self-organizes</em> on the difficult (XOR) case rather than being supervised, "objects form from
-concern" remains "objects form from supervised labels of concern." Closing the bootstrap gap is the single
-experiment that would most strengthen the program's theory of content.</li>
+<li><strong>Stress-test the completed concern-weighting comparison.</strong> E1 reports a +0.244
+well-specified advantage for concern-weighted over unweighted weakness, but the frozen misspecification
+equivalence gate failed and still failed after calibration. The next test must explain that failure and
+hold any promoted claim to both benefit and safe-misspecification gates.</li>
+<li><strong>Distinguish endogenous concern from a useful supplied scalar.</strong> XOR is no longer the
+missing positive control: staged ΔE learning and planning succeed. The decisive follow-up is to hold data
+and optimization fixed while comparing self-observed ΔE with yoked-agent, sign-shuffled, wrong-variable,
+and shifted-viability controls. Only a selective advantage there supports "the system's own stakes."</li>
 <li><strong>A self that intervention cannot recover.</strong> Deliberately construct a world where even
 intervention leaves the self/world boundary under-identified. A self that is <em>in principle</em>
 unrecoverable — not just hard to find — would be the philosophically decisive case, sharpening the

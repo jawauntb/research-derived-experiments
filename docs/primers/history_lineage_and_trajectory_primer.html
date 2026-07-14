@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>The Mathematics of the Research Program — A Primer from First Principles</title>
+<title>The Lineage and the Trajectory — A History of the Ideas Behind the Research Program</title>
 <style>
 /* ---------- page setup ---------- */
 @page { size: letter; margin: 0.9in 0.85in; }
@@ -330,14 +330,11 @@ thermostat that can only heat and cool is stable; the creature that can rewire i
 cooling stop working is <em>ultra</em>stable.</p>
 
 <div class="prog"><span class="boxtitle">In the repo — "Ashby ultrastability in the small"</span>
-<p>The autopoietic-control experiments make Ashby measurable. A trained model is deliberately damaged
-with random weight noise (accuracy drops to 0.45), then allowed a handful of self-supervised update
-steps. It climbs back to 0.965 — recovering its competence by reorganizing itself from its own input
-stream. The paper names this exactly: "Ashby ultrastability in the small," and cites <em>Design for a
-Brain</em> as "the conceptual ancestor of the repair experiment." Sixty years of theory becomes a
-measured recovery curve. The amount of slack a system has in its lower layers, the program finds,
-predicts how well it repairs — which is the program's own quantitative extension of Ashby's qualitative
-idea.</p></div>
+<p>The autopoietic-control experiments make an Ashby-inspired repair analogue measurable. A trained
+model is deliberately damaged with random weight noise (accuracy drops to 0.45), then updated by
+labeled gradient descent on held-out paraphrases. It climbs back to 0.965. The recovery curve and the
+ordering by lower-layer slack are real, but the repair uses an external labeled objective: it supports
+"ultrastability in the small," not strict autopoiesis or autonomous self-repair.</p></div>
 
 <h3>2.2 Wiener, and the word "cybernetics"</h3>
 
@@ -481,11 +478,11 @@ use, pointed at what an agent cares about.</p></div>
 law before measuring — resolution should grow as concern raised to the power d/(d+2), giving a specific
 predicted exponent of 0.5 for a two-dimensional code. Then it measures, and the exponent comes out
 ≈ 0.30, not 0.5, with tight confidence intervals. The prediction is <em>falsified</em> — but
-productively: the mismatch implies the code was concentrating its resolution as if it lived in
-essentially <em>one</em> dimension, not two. This is the efficient-coding tradition working exactly as
-it should: a sharp quantitative prediction, honestly tested, revealing a hidden fact (an effective
-dimensionality collapse) precisely because it was specific enough to be wrong. It is the program's
-cleanest inheritance from Shannon's descendants, and its cleanest falsification.</p></div>
+productively: under the derived rate-distortion model, the mismatch is <em>consistent with</em> a code
+concentrating resolution as if it lived in about one effective dimension. It does not directly measure
+dimension; that interpretation still needs an independent estimator and the frozen shape/capacity
+sweeps. This remains a sharp and informative falsification, but the hidden-dimensionality reading is a
+model-dependent hypothesis rather than an observed fact.</p></div>
 
 <h3>3.4 The through-line: compression under constraint</h3>
 
@@ -799,7 +796,7 @@ each result to the next:</p>
 <tr><th>Stage</th><th>Result</th><th>The doubt it raised</th></tr>
 <tr><td><strong>Weakness (P1–3)</strong></td><td>Weakness predicts generalization where simplicity fails; the symmetry can even be inferred from data.</td><td>But on real language models the geometry is <em>passive</em> — it predicts, but does it <em>control</em>?</td></tr>
 <tr><td><strong>Passive→active (P4)</strong></td><td>Coupling a representation to action makes it causally load-bearing (a 7× jump).</td><td>Is that real self-maintenance, or just "of course ablating a trained direction hurts"?</td></tr>
-<tr><td><strong>Autopoietic (P5)</strong></td><td>The active representation also repairs itself after damage and obeys the Law of the Stack.</td><td>Do <em>objects</em> themselves form from concern, or only directions?</td></tr>
+<tr><td><strong>Ultrastable repair (P5)</strong></td><td>The active representation recovers after damage under labeled test-time updates, with repair ordered by lower-layer slack.</td><td>Can repair become autonomous self-production rather than supervised restoration?</td></tr>
 <tr><td><strong>Valence objects (P6)</strong></td><td>A viability-coupled encoder carves the world by causal role, discarding sensory similarity (reward-axis +1.96 vs sensory +0.005).</td><td>Can this representation actually drive <em>competent action</em>?</td></tr>
 <tr><td><strong>Two bottlenecks (P7–9)</strong></td><td>Representation and competence are independent: a good geometry can fail under weak learning signal, and greedy planning on a learned model <em>is</em> a competent policy.</td><td>Is the training distribution even stable enough to learn from?</td></tr>
 <tr><td><strong>Boundaries &amp; uncertainty (P12–14)</strong></td><td>Smooth networks fail at sharp decision boundaries; ensembles' "uncertainty" does not track error.</td><td>Can a single drive even represent multi-dimensional concern?</td></tr>
@@ -972,9 +969,10 @@ onto the held-out deployment region — meaning a model might score well not by 
 rule</em> but by effectively <em>memorizing transformed copies of labels</em>. The existing experiments
 could not tell these apart. Rather than let the ambiguity ride, the program pre-registered a new
 multi-arm experiment (the "E5" generator-versus-coverage design) built specifically to separate
-"learning the rule" from "labeled coverage." At the time of writing, that experiment is at the frontier —
-frozen, partly run, verdict pending. The program is, in effect, actively trying to determine whether its
-own flagship result is real or a sophisticated artifact.</p>
+"learning the rule" from "labeled coverage." E5 is now complete across its frozen 135-cell design and
+returns a strict <strong>coverage</strong> verdict: the generator, group-specificity, and transport gates
+fail. E6 has a runner, but its frozen smoke check blocks the first round because only 8 of 104 candidates
+meet the two-surface threshold, short of the required 52; E5-L, E7, and M5 remain preregistered but unrun.</p>
 
 <h3>9.4 The current frontier: from verifying to learning</h3>
 
@@ -1069,10 +1067,12 @@ new versus skilled recombination of the lineage in Part I?</p>
 
 <div class="prog"><span class="boxtitle">Verdict — what is genuinely the program's own</span>
 <p><strong>Defensibly novel:</strong> (1) turning Bennett's philosophical "weakness" into a
-reparameterization-invariant, data-inferable, <em>causal</em> predictor of generalization that beats
-every classical simplicity measure in a clean head-to-head — the crown jewel. (2) The passive→active
-transition made <em>measurable</em>: showing that coupling a representation to action turns a correlational
-cluster into a self-defending, self-repairing attractor. (3) The self/world <em>gauge</em> result — a
+reparameterization-invariant, data-inferable predictor that beats classical simplicity measures in the
+program's engineered head-to-heads — an important synthetic result whose portable weakness/OOD claim
+failed external contact. (2) The passive→active transition made <em>measurable</em>: showing that coupling
+a representation to action turns a correlational cluster into a causally load-bearing,
+perturbation-resistant controller. Calling it an attractor remains provisional because no basin,
+stability, or return dynamics were measured. (3) The self/world <em>gauge</em> result — a
 computational proof that a system can be a perfect agent while having no fact of the matter about which
 changes are its own, fixable only by intervention. (4) The "availability is not use" / load-bearing
 standard as a general <em>criterion of representational reality</em> — which survives all of the program's
@@ -1103,8 +1103,8 @@ certify.</p>
 <p class="small">The program's most novel fact is its authorship — AI-generated under human direction —
 which explains its pace, its memory-as-infrastructure documentation, its guardrails against machine
 overclaiming, and its rhetorical restraint; the human supplies taste and ambition, the machine supplies
-throughput and self-checking; genuinely novel contributions include causal weakness, measured
-passive→active transition, the self/world gauge, the load-bearing criterion, and the density of honest
+throughput and self-checking; genuinely novel contributions include the synthetic weakness program,
+the measured passive→active transition, the self/world gauge, the load-bearing criterion, and the density of honest
 negatives; and the deepest novelty is the <em>form</em> — an early specimen of automated-labor,
 human-judgment science.</p>
 
