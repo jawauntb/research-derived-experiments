@@ -456,25 +456,28 @@ Before committing:
 python3 scripts/run_quality_checks.py
 ```
 
-The wrapper runs all 69 root test files through `pytest` under Python 3.12 via
-`uvx`, including the scientific and PDF dependencies needed by artifact-builder
-tests, `unittest.TestCase` tests, and pytest-native fixtures/marks. It
-then compiles the Python trees, applies the publication guard, validates the
-evidence, claim, experiment-manifest, and gate-verdict contracts, checks all six
-primer HTML/PDF metadata pairs, verifies generated provenance without mutating
-it, and runs Ruff plus ty. GitHub Actions installs `poppler-utils` for the PDF
-metadata check and executes this same wrapper. To run the individual checks manually:
+The wrapper first runs `uv sync --locked --only-group quality --python 3.12`,
+then executes every gate from that one shared environment without resolving a
+second dependency set. The locked `quality` group includes the scientific,
+PDF, test, lint, and type-check dependencies; Torch is pinned to PyTorch's
+explicit CPU-only index so CPU runners do not install CUDA, Triton, or NVIDIA
+packages.
+
+Local runs are serial by default. GitHub Actions installs `poppler-utils`, sets
+`QUALITY_PYTEST_WORKERS=auto`, and invokes the same canonical wrapper; the
+wrapper bounds pytest-xdist to at most four usable workers. Contributors can
+opt into the same bounded parallel path locally with `auto` or an integer from
+1 through 4:
 
 ```bash
-uvx --python 3.12 --with torch --with numpy --with scikit-learn --with matplotlib --with reportlab --with pytest python -m pytest -q tests
-uvx --python 3.12 python -m compileall scripts experiments tests
-python3 scripts/publication_guard.py
-python3 scripts/validate_evidence_registry.py
-python3 scripts/validate_claim_registry.py
-python3 scripts/validate_experiment_manifest.py
-python3 scripts/validate_gate_verdict.py
-python3 scripts/check_primer_metadata.py
-python3 scripts/gen_provenance.py --check
-uvx ruff check .
-uvx --python 3.12 --with numpy --with torch --with scikit-learn --with scipy --with matplotlib --with pytest ty check scripts experiments tests
+QUALITY_PYTEST_WORKERS=auto python3 scripts/run_quality_checks.py
 ```
+
+Coverage boundaries are unchanged: the wrapper runs all 70 root test files, including
+scientific and PDF artifact-builder tests, `unittest.TestCase` tests, and
+pytest-native fixtures and marks. After pytest it compiles the Python trees,
+applies the publication guard, validates the evidence, claim,
+experiment-manifest, and gate-verdict contracts, checks all six primer HTML/PDF
+metadata pairs, verifies generated provenance without mutating it, and runs
+Ruff plus ty. The root gate still excludes the Inquiry, coherence-testbench,
+Haskell/Cabal, and site-specific suites; those retain their own workflows.
