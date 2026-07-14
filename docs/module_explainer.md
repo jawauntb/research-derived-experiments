@@ -15,6 +15,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `scripts/` | ~80 ops scripts: quality, provenance, PDF/figure builders, summarizers |
 | `tests/` | Root `unittest` suite for core experiment logic |
 | `docs/` | Design docs, verification, handoffs, plans, reviews, solutions |
+| `docs/primers/backlogs/` | Six article-specific, source-anchored research TODOs derived from the primer PDFs |
 | `notes/` | Program-level research synthesis |
 | `references/` | Public source list; local-only full texts (gitignored subdirs) |
 | `formal/ontology-hs/` | Haskell typed ontology gate (Arc 2B) |
@@ -104,6 +105,7 @@ uvx --python 3.12 --with torch --with numpy --with scikit-learn --with pytest \
 | [metaphysics_of_intelligence_reading_log.md](metaphysics_of_intelligence_reading_log.md) | Reading log |
 | [gauge_fixed_concern_transport_experiment_audit.md](gauge_fixed_concern_transport_experiment_audit.md) | GFC audit |
 | [metaphysics_complete_reading_notes_2026_07_09.md](metaphysics_complete_reading_notes_2026_07_09.md) | Full reading notes for every Metaphysics-of-Intelligence PDF/package listed 2026-07-09 (theorems, methods, findings, next directions); canonical copy also at `~/Metaphysics of Intelligence/COMPLETE_READING_NOTES_2026_07_09.md` |
+| [primers/backlogs/README.md](primers/backlogs/README.md) | Six per-primer criticism-to-TODO backlogs (268 gated items) |
 | `docs/plans/` | 13 dated implementation plans — §8.1 |
 | `docs/paper_reviews/` | 15 critical reviews — §8.2 |
 | `docs/solutions/` | Architecture-pattern notes — §8.3 |

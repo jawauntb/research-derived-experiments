@@ -198,3 +198,11 @@ toroidal codes and larger-arena OOD, but weakness does not govern topology or me
 - [ ] Can weakness maximization be measured in activation spaces?
 - [ ] Can discovery be detected as a regime transition rather than search?
 - [ ] What ethical threshold follows if self-maintaining geometry appears in artificial systems?
+
+## Primer-derived research backlog
+
+The six primer reviews are now tracked as page-anchored, gated TODOs rather than
+free-floating suggestions. Start at [the backlog index](docs/primers/backlogs/README.md),
+then work each article list in its own source order. The index records the
+recommended cross-article sequence and the status (`new`, `partial`, or
+`existing`) of every item.

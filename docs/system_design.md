@@ -239,6 +239,15 @@ Process wrapper: discovery-regime audit (pre-register gates, preserve rejects,
 distinguish retrieval/search/discovery). Ledger: root `TODO.md`. Audit cards:
 [discovery_regime_audit.md](discovery_regime_audit.md).
 
+The six primer-derived backlogs under
+[`docs/primers/backlogs/`](primers/backlogs/README.md) are the program's
+source-anchored planning layer. They keep article corrections, old-experiment
+replications, new experiments, reading/citation debt, framework work, and new
+directions separate while requiring a deliverable and measurable gate for each
+item. Their recommended order is evidence repair, mathematical validity,
+independent replication, causal-use tests, instrument hardening, and only then
+frontier expansion.
+
 **Minimum pass rule** for the agent benchmark family: behavior plus at least one
 structure-specific gate (see [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md)).
 
@@ -588,6 +597,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 | [next_agent_modal_handoff.md](next_agent_modal_handoff.md) | Modal operator handoff |
 | [railway-autodeploy.md](railway-autodeploy.md) | Site deploy diagnostics |
 | [discovery_regime_audit.md](discovery_regime_audit.md) | Regime audit ledger |
+| [primers/backlogs/README.md](primers/backlogs/README.md) | Source-anchored TODOs for all six primer articles |
 | Root `README.md` | Entry commands and experiment inventory |
 | Root `TODO.md` | Active research ledger |
 | Root `AGENTS.md` | Agent/contributor documentation obligations |
