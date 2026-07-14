@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 from pathlib import Path
 from typing import Any
 
@@ -60,6 +61,16 @@ def _select(source: dict[str, Any], fields: tuple[str, ...]) -> dict[str, Any]:
     return {field: source[field] for field in fields if field in source}
 
 
+def _json_safe(value: Any) -> Any:
+    if isinstance(value, float) and not math.isfinite(value):
+        return None
+    if isinstance(value, dict):
+        return {key: _json_safe(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_json_safe(item) for item in value]
+    return value
+
+
 def build_public_artifact(raw_bytes: bytes) -> dict[str, Any]:
     raw = json.loads(raw_bytes)
     analysis = raw["analysis"]
@@ -86,8 +97,8 @@ def build_public_artifact(raw_bytes: bytes) -> dict[str, Any]:
             "artifact": "artifacts/commitment_surface/e5_generator_vs_coverage.json",
             "sha256": hashlib.sha256(raw_bytes).hexdigest(),
             "bytes": len(raw_bytes),
-            "manifest_id": raw["run_manifest"]["manifest_id"],
-            "implementation_fingerprint": raw["run_manifest"][
+            "manifest_id": raw["manifest"]["manifest_id"],
+            "implementation_fingerprint": raw["manifest"][
                 "implementation_fingerprint"
             ],
             "public_safe_export": True,
@@ -98,8 +109,8 @@ def build_public_artifact(raw_bytes: bytes) -> dict[str, Any]:
             "complete": True,
             "omitted_raw_fields": sorted(set(cells[0]) - set(PUBLIC_CELL_FIELDS)),
         },
-        "config": raw["config"],
-        "analysis": analysis,
+        "config": _json_safe(raw["config"]),
+        "analysis": _json_safe(analysis),
         "cells": public_cells,
     }
 

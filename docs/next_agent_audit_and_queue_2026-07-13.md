@@ -50,14 +50,15 @@ produces a causal **patch-CE** at a **commitment surface** that survives **gauge
 | Experiment | Prereg | Harness | Run/result |
 |-----------|:------:|:-------:|:----------:|
 | E6 | ✅ | ⚠️ CPU scaffold + tests only (`e6_core.py`, `e6_analysis.py`, `tests/test_commitment_surface_e6.py`); **no Modal runner** | ❌ none |
-| E5 confirmatory (135-cell) | ✅ | ✅ runner + remote orchestrator (cache + keep-alive fixes merged) | ❌ manifest validated, **GPU grid not launched**, verdict pending |
+| E5 confirmatory (135-cell) | ✅ | ✅ runner + remote orchestrator | ✅ exact grid complete; strict verdict **coverage** |
 | E5-L | ✅ | ❌ not built | ❌ |
 | E7 | ✅ | ❌ not built | ❌ |
 | M5 | ✅ | ❌ not built | ❌ |
 
-E5 is closest to a real result: a first confirmatory launch was attempted, hit an operational
-defect (cells not outliving app shutdown), and that was fixed with a detached orchestrator.
-So E5 may be mid-launch — **check before launching again.**
+E5 completed after the detached-orchestrator repair: 135/135 cells passed
+integrity. Cov and B-ref match at 0.741 canonical OOD, G-reg/A-ref remain at
+0.063/0.069, and generator, group-specificity, and transport gates fail. Do
+not relaunch E5; use the committed public result.
 
 ---
 
@@ -69,7 +70,7 @@ git fetch origin --prune
 git log --oneline origin/main -15
 git ls-tree -r --name-only origin/main -- experiments/commitment_surface/results/ | sort
 # Look for NEW result docs: e6_*, e5_generator_vs_coverage*, e5_confirmatory*, m5_*, e7_*.
-# e5_launch_readiness / e5_smoke are PENDING, not results.
+# e5_generator_vs_coverage.{json,md} is the result; launch_readiness/smoke are provenance only.
 ```
 
 **1b. Inspect git worktrees + in-flight branches (is a runner being built right now?).**

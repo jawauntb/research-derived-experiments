@@ -274,10 +274,12 @@ consume the mounted cache snapshot directly and do not reload the shared
 Hugging Face Volume while concurrent Transformers processes may hold cache
 files open.
 
-Status: the 70m/n=13/one-seed validation smoke passed all integrity gates; see
-`results/e5_smoke_summary.md`. It is not scientific evidence. E5 remains
-confirmatory-pending, and no mechanism verdict is claimed. The no-compute
-launch audit is recorded in `results/e5_launch_readiness_2026_07_10.md`.
+Status: the exact 135-cell grid passed all integrity checks. Strict verdict:
+**coverage**. Cov and B-ref match at 0.741 mean canonical OOD, while G-reg and
+A-ref remain at 0.063 and 0.069; generator, group-specificity, and transport
+gates fail. See `results/e5_generator_vs_coverage.{json,md}`. The smoke remains
+integrity-only evidence, and the launch audit is retained as operational
+provenance.
 
 After the exact grid completes, validate and export the public result before
 rebuilding the paper:

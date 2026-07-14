@@ -29,8 +29,10 @@ summarize honestly, and update the paper + docs. Read this whole note before act
      `experiments/commitment_surface/e2_e3_neural_sweep.py`; prereg:
      `papers/commitment_surface/e2_e3_rank_normalized_patch_preregistration_2026-07-10.md`.
      **E7 protects exactly this subspace.**
-   - **E5** (generator-vs-coverage) harness exists and its **135-cell confirmatory grid is
-     frozen but UNLAUNCHED** (`#346`). Only an integrity smoke has run. E5-L and E6 reuse
+   - **E5** (generator-vs-coverage) is complete: all 135 cells pass integrity
+     and the strict verdict is **coverage**. Cov/B-ref canonical OOD is
+     0.741/0.741 versus G-reg/A-ref 0.063/0.069; generator,
+     group-specificity, and transport gates fail. E5-L and E6 reuse
      this harness. Code: `experiments/commitment_surface/e5_core.py`,
      `experiments/commitment_surface/modal_e5_generator_vs_coverage.py`.
    - **Suite C** 2³ factorial found **only `reopen` is necessary** (M4, strict FAIL of the

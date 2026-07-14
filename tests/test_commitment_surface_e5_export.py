@@ -44,7 +44,7 @@ def _raw_payload(*, ready: bool = True) -> bytes:
     }
     return json.dumps(
         {
-            "run_manifest": {
+            "manifest": {
                 "manifest_id": "manifest",
                 "implementation_fingerprint": "fingerprint",
             },
@@ -67,7 +67,7 @@ def _raw_payload(*, ready: bool = True) -> bytes:
                 "canonical_G_minus_A": 0.0,
                 "canonical_G_minus_Cov": -0.5,
                 "novel_k_G_minus_A": 0.0,
-                "paraphrase_lift_retained": 0.0,
+                "paraphrase_lift_retained": float("-inf"),
             },
         }
     ).encode()
@@ -81,7 +81,9 @@ class CommitmentSurfaceE5ExportTest(unittest.TestCase):
         self.assertTrue(public["coverage"]["complete"])
         self.assertNotIn("split", public["cells"][0])
         self.assertIn("split", public["coverage"]["omitted_raw_fields"])
+        self.assertIsNone(public["analysis"]["paraphrase_lift_retained"])
         self.assertIn("Strict verdict: `coverage`", render_markdown(public))
+        json.dumps(public, allow_nan=False)
 
     def test_export_rejects_nonconfirmatory_payload(self) -> None:
         with self.assertRaisesRegex(ValueError, "not confirmatory-ready"):

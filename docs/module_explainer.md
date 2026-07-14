@@ -224,11 +224,12 @@ The corrected formal surface treats Proposition 1 as non-identification,
 requires deployment-restricted weakness (or an ordering-preservation
 assumption) in Proposition 2, and uses finite-candidate order equivalence for
 concern weighting. E4 is a directional result with a strict gate failure; its
-open labeled-orbit-coverage confound and timestamped post-hoc E5 severe
-follow-up are recorded in paper §6.5 and PLAN.md. The minimum E5 Modal smoke
-passed integrity; mechanism confirmation remains pending. A no-compute launch
-audit now freezes an exact 135-cell manifest and makes grid completeness part
-of `confirmatory_ready` rather than inferring readiness from per-arm counts.
+labeled-orbit-coverage confound and timestamped post-hoc E5 severe follow-up
+are recorded in paper §6.5 and PLAN.md. The exact E5 grid passed integrity and
+returned strict verdict `coverage` (Cov/B-ref 0.741/0.741 canonical OOD versus
+G-reg/A-ref 0.063/0.069); generator, group-specificity, and transport gates
+failed. Grid completeness is part of `confirmatory_ready`, not inferred from
+per-arm counts.
 
 | Module | Purpose |
 |---|---|

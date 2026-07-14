@@ -707,8 +707,9 @@ def build_results_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
             "a pass). Interpretation is further bounded by the "
             "label-exposure confound of Section 6.5: cyclic augmentation "
             "places correctly labeled examples on the held-out "
-            "deployment support, so this result does not yet separate "
-            "generator learning from labeled orbit coverage.",
+            "deployment support, so E4 alone cannot separate generator "
+            "learning from labeled orbit coverage. E5 resolves that contrast "
+            "below.",
             st["Body"]))
     else:
         flow.append(para("E4 result JSON not yet available.", st["Body"]))
