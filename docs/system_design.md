@@ -312,6 +312,14 @@ item. Their recommended order is evidence repair, mathematical validity,
 independent replication, causal-use tests, instrument hardening, and only then
 frontier expansion.
 
+`docs/primers/primer_residuals_2026_07_14.md` is the reconciled planning view
+after the primer implementation, M5, and locked quality-gate merges. It marks
+completed negative experiments as complete, retains integrity-invalid runs as
+non-evidence, and collapses cross-article overlap into dependency-ordered waves.
+`scripts/build_primer_residuals_pdf.py` renders the stable public artifact at
+`output/pdf/primer_derived_research_residuals_2026_07_14.pdf`; a focused build
+test validates its required six-article structure and PDF output.
+
 **Minimum pass rule** for the agent benchmark family: behavior plus at least one
 structure-specific gate (see [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md)).
 
@@ -500,7 +508,7 @@ pins the PEP 735 quality environment, and the explicit `pytorch-cpu` source
 keeps Linux CI from resolving CUDA, NVIDIA, or Triton packages. Every remaining
 command reuses that environment through `uv run --no-sync`:
 
-1. `pytest -q tests` over all 70 root test files (torch, numpy, scikit-learn,
+1. `pytest -q tests` over all 72 root test files (torch, numpy, scikit-learn,
    matplotlib, reportlab, pytest)
 2. `compileall` on `scripts`, `experiments`, `tests`
 3. `publication_guard.py`
@@ -730,6 +738,8 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 | [railway-autodeploy.md](railway-autodeploy.md) | Site deploy diagnostics |
 | [discovery_regime_audit.md](discovery_regime_audit.md) | Regime audit ledger |
 | [primers/backlogs/README.md](primers/backlogs/README.md) | Source-anchored TODOs for all six primer articles |
+| [primers/primer_residuals_2026_07_14.md](primers/primer_residuals_2026_07_14.md) | Post-merge, residual-only synthesis and dependency order for the six primer backlogs |
+| `output/pdf/primer_derived_research_residuals_2026_07_14.pdf` | Rendered 15-page residual-work register |
 | Root `README.md` | Entry commands and experiment inventory |
 | Root `TODO.md` | Active research ledger |
 | Root `AGENTS.md` | Agent/contributor documentation obligations |

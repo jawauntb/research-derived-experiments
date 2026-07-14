@@ -13,7 +13,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `experiments/` | 54 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
 | `papers/` | Paper sources (`paper.md`), figures, shareable PDFs |
 | `scripts/` | 91 Python ops modules: quality, contracts, provenance, PDF/figure builders, summarizers |
-| `tests/` | 70 root test files collected together by pytest (`unittest`-style and pytest-native) |
+| `tests/` | 72 root test files collected together by pytest (`unittest`-style and pytest-native) |
 | `docs/` | Design docs, verification, handoffs, plans, reviews, solutions |
 | `docs/primers/backlogs/` | Six article-specific, source-anchored research TODOs derived from the primer PDFs |
 | `notes/` | Program-level research synthesis |
@@ -85,6 +85,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_experiment_manifest.py`, `test_gate_verdict.py`, `test_evidence_registry.py`, `test_claim_registry.py` | Fail-closed research-contract adapters, discovery, references, supersession, and bidirectional edges |
 | `test_research_contract_schema_parity.py`, `test_gen_provenance.py` | Shared vocabulary/schema parity, support-directory exclusion, non-mutating provenance freshness |
 | `test_run_quality_checks.py` | Locked quality-command order, local serial default, bounded xdist worker parsing, `loadscope` scheduling, and native-thread caps |
+| `test_build_primer_residuals_pdf.py` | Required six-article residual source sections plus reproducible ReportLab PDF build |
 
 ```bash
 python3 scripts/run_quality_checks.py
@@ -134,6 +135,7 @@ environment.
 | [gauge_fixed_concern_transport_experiment_audit.md](gauge_fixed_concern_transport_experiment_audit.md) | GFC audit |
 | [metaphysics_complete_reading_notes_2026_07_09.md](metaphysics_complete_reading_notes_2026_07_09.md) | Full reading notes for every Metaphysics-of-Intelligence PDF/package listed 2026-07-09 (theorems, methods, findings, next directions); canonical copy also at `~/Metaphysics of Intelligence/COMPLETE_READING_NOTES_2026_07_09.md` |
 | [primers/backlogs/README.md](primers/backlogs/README.md) | Six per-primer criticism-to-TODO backlogs (268 gated items) |
+| [primers/primer_residuals_2026_07_14.md](primers/primer_residuals_2026_07_14.md) | Residual-only post-merge reconciliation, six article registers, and deduplicated execution waves; rendered at `output/pdf/primer_derived_research_residuals_2026_07_14.pdf` |
 | `docs/plans/` | 13 dated implementation plans — §8.1 |
 | `docs/paper_reviews/` | 15 critical reviews — §8.2 |
 | `docs/solutions/` | Architecture-pattern notes — §8.3 |
@@ -557,6 +559,7 @@ Raw outputs stay under `artifacts/` until summarized.
 | `build_effective_dimension_pdf.py` | Rate-distortion effective-dimension PDF |
 | `build_concern_weighted_weakness_pdf.py` | Concern-weighted weakness note |
 | `build_gauge_fixed_concern_transport_pdf.py` | GFC transport PDF; always writes repository copies and optionally mirrors to an injected external archive path (the CLI uses it only when the local archive exists) |
+| `build_primer_residuals_pdf.py` | Render the post-merge six-primer residual register to `output/pdf/primer_derived_research_residuals_2026_07_14.pdf` with deterministic metadata, headers, and page numbers |
 | `build_unified_portfolio_pdf.py` | Unified portfolio PDF |
 | `build_structure_compatible_pdf.py` | SCG base paper (`--in`, `--out`, `--figure-dir`) |
 | `build_structure_compatible_phase2_pdf.py` | SCG phase-2 inferred transformations |

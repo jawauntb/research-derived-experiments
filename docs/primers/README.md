@@ -33,6 +33,20 @@ criticism, tension, limitation, and constructive idea in the six primers into a
 page-anchored, gated TODO list. It links one backlog per article and records
 which items are new, partial, or already evidenced in the repository.
 
+## Post-merge residual register
+
+The [residual-work source](primer_residuals_2026_07_14.md) reconciles those six
+backlogs against merged contracts, experiments, M5, and the locked root quality
+gate at `origin/main` commit `0413098`. Its rendered
+[15-page PDF](../../output/pdf/primer_derived_research_residuals_2026_07_14.pdf)
+separates completed or invalid work from stronger partials and genuine open
+residuals, then deduplicates the remainder into dependency-ordered execution
+waves. Rebuild it with:
+
+```bash
+python3 scripts/build_primer_residuals_pdf.py
+```
+
 ## Execution contracts
 
 The implementation work uses one shared contract instead of six competing article-specific schemas:
