@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "generated_by": "scripts/validate_evidence_registry.py",
+  "statuses": {
+    "pass": "The preregistered gate passed on the declared evidence.",
+    "fail": "The preregistered gate failed on the declared evidence.",
+    "inconclusive": "Evidence exists but cannot adjudicate the gate.",
+    "not_run": "The registered run has not produced evidence yet.",
+    "superseded": "A newer evidence record replaces this record; history remains immutable.",
+    "retired": "The claim or run was intentionally retired before adjudication."
+  },
+  "records": []
+}

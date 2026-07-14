@@ -60,6 +60,7 @@ def main() -> int:
     run(test_python + ["-m", "unittest", "discover", "-s", "tests"])
     run(plain_python + ["-m", "compileall", "scripts", "experiments", "tests"])
     run(["python3", "scripts/publication_guard.py"])
+    run(["python3", "scripts/validate_evidence_registry.py"])
     run(["uvx", "ruff", "check", "."])
     run(ty_check)
     return 0
