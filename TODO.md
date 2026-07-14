@@ -15,6 +15,11 @@
 - [x] Push a feature branch, open PR #1, and merge it.
 - [x] Start Phase / Arc 2A: Concerned Syntax benchmark and paper scaffold.
 - [x] Start Phase / Arc 2B: Viable Computational Bodies benchmark and paper scaffold.
+- [x] Complete and audit the E7 selective-subspace continual-learning grid
+  (integrity INVALID: 6/32 matched groups exceed the frozen 2% timing gate;
+  G1–G4 withheld, no scientific verdict).
+- [ ] Build and run frozen M5 Suite C reopen-trigger experiment after confirming
+  no other agent has queued it.
 
 ## Phase / Arc 2A: Concerned Syntax
 

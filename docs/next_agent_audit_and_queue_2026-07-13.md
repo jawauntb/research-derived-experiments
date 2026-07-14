@@ -6,6 +6,14 @@ Modal — for the four self-improvement / continual-learning experiments, and **
 launch the pieces that are not already being done.** Do not duplicate a run that is already
 executing or already queued.
 
+> **Execution update (audited 2026-07-14):** E7 is no longer queueable. Its
+> 32-stream / 128-checkpoint CPU grid completed, but review found that the
+> shared closing barrier made the original timing gate pass by construction.
+> Re-audit of recorded per-arm timings fails 6/32 matched groups (max 8.53%),
+> so E7 is integrity-invalid and G1–G4 have no scientific verdict. Canonical result:
+> `experiments/commitment_surface/results/e7_selective_subspace_2026_07_13.md`.
+> The audit table below preserves the earlier snapshot for provenance.
+
 > Paste everything below the line into the receiving agent. It is self-contained.
 
 ---

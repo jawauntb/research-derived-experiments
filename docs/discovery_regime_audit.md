@@ -5710,3 +5710,93 @@ Next move: make 2B consume the learned-object-slot/discovered-profile contract
 if that branch has not landed, extend the P2 corruption taxonomy, pursue
 trainable neural module search under the same transfer verifier, or reopen P1
 only with a materially stronger external arithmetic setup.
+
+## E7: Selective Subspace Confirmatory Run Is Integrity-Invalid
+
+Question: does protecting only #344's compatibility-aligned causal subspace
+retain earlier-task behavior better than uniform EWC without taxing new-task
+plasticity?
+
+Current regime:
+
+- Artifact types: depth-2 modular-addition MLPs, strict-subset task splits,
+  rank-normalized compatibility and `a`-only activation subspaces, diagonal
+  Fisher anchors, per-task causal-patch metrics, continual-learning streams,
+  and frozen multi-width gate reports.
+- Operations: cyclic compatibility augmentation, sequential task training,
+  replay-free projected-parameter protection, EWC anchoring, SVD subspace
+  fitting, exact spectral-mass weighting, full-rank patching, and synchronized
+  matched-arm execution.
+- Gates/verifiers: collision-free and matched SHA-256 seeds, sequential
+  exposure, exact 0.50 protected mass, ≤2% wall-clock/step budget, G1–G4 at
+  both widths, targeted unit tests, public-safety guard, Ruff, and `ty`.
+- Known limitations: small modular MLPs; inherited cyclic augmentation exposes
+  labels on held-out support; one frozen λ; protection acts at the last hidden
+  interface; aggregate patch effects after forgetting can be negative.
+
+Action class:
+
+- Retrieval/search/discovery: search inside the existing commitment-surface
+  schema, not a regime discovery.
+- Why: E7 composes already-representable #344 subspaces, EWC, and continual
+  streams. The completed run cannot expose a scientific residual because its
+  frozen budget gate fails; it does not validate a new artifact or verifier.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/commitment_surface/e7_selective_subspace.py`;
+  `experiments/commitment_surface/results/e7_selective_subspace_2026_07_13.{json,md}`;
+  `papers/commitment_surface/e7_selective_subspace_continual_learning_preregistration_2026-07-13.md`;
+  `papers/commitment_surface/e7_implementation_contract_2026-07-13.md`;
+  local ignored raw artifact
+  `artifacts/commitment_surface/e7_confirmatory_2026_07_13.json`.
+- Positive targets: P_sub beats P_none by +0.05 normalized earlier-task
+  patch-CE, matches P_ewc final OOD within −0.02, beats P_ewc retained OOD by
+  +0.03, and beats P_wrong patch-CE by +0.05 at both widths.
+- Negative controls: naive fine-tuning, uniform diagonal-Fisher EWC, and the
+  matched `a`-only protected subspace.
+- Stress tests: four ordered moduli, four seeds, widths 96/128, 1,000 epochs
+  per task, 32 streams, 128 checkpoints, and 192 earlier-task evaluations.
+
+Gate:
+
+- Acceptance rule: all integrity checks and all G1–G4 margins pass at both
+  widths; no partial promotion.
+- Withheld/rejected rule: any failed gate is a strict failure; do not tune λ,
+  margins, mass, or the protected interface from confirmatory cells; do not
+  generalize beyond the toy MLP regime.
+
+Results:
+
+- Accepted artifacts: deterministic padded-stream harness, protected-object
+  and Fisher contracts, synchronized budget scheduler, pilot correction
+  ledger, public-safe aggregate, figure/PDF integration, and tests.
+- Rejected or withheld artifacts: the original shared-closing-barrier timing
+  audit is rejected because it made each arm inherit the same group completion
+  boundary. `H_subspace` is neither accepted nor rejected; G1–G4, the apparent
+  diagnostic margins, and any post-hoc coefficient search are withheld. Raw
+  checkpoint rows and invalid timing receipts remain local.
+- Key metrics: all 32 streams and 128 checkpoints are present, but the recorded
+  per-arm `median_step_seconds × optimizer_steps` audit fails 6/32 matched
+  groups (maximum 8.53% versus 2%). Only 12/32 streams remain budget-valid.
+  Seed, sequential-exposure, and exact-mass checks pass; scientific disposition
+  is **INVALID — no verdict**.
+- Variance or ablation: the public artifact reports across-seed intervals for
+  valid-stream diagnostics and preserves all-stream observed aggregates as
+  explicitly non-scientific diagnostics.
+
+Residual content:
+
+- Explained by old regime: the harness can instantiate #344's compatibility
+  and wrong-subspace objects in an ordered replay-free stream.
+- New content outside old regime: none accepted; the budget verifier blocks
+  interpretation before the mechanism/behavior comparison.
+- Retractions or supersessions: retract the earlier E7 strict-failure report.
+  Replace it with integrity-invalid/no-verdict; do not preserve the apparent
+  mechanism/behavior separation as a result.
+
+Next move: do not tune or reinterpret E7. Complete the already-frozen,
+genuinely idle M5 reopen-trigger test after re-auditing live work. Any future
+E7 replacement needs a new preregistration and a non-tautological timing or
+operation-budget verifier frozen before outcomes are inspected.
