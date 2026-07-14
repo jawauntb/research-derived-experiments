@@ -61,6 +61,7 @@ def main() -> int:
     run(plain_python + ["-m", "compileall", "scripts", "experiments", "tests"])
     run(["python3", "scripts/publication_guard.py"])
     run(["python3", "scripts/validate_evidence_registry.py"])
+    run(["python3", "scripts/validate_claim_registry.py"])
     run(["python3", "scripts/check_primer_metadata.py"])
     run(["uvx", "ruff", "check", "."])
     run(ty_check)

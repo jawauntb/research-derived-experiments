@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "generated_by": "scripts/validate_claim_registry.py",
+  "claims": [
+    {
+      "claim_id": "MATH_RHO_KKT",
+      "statement": "For positive concern weights and an active capacity budget, the positive-price KKT solution scales as rho*(x) proportional to w(x)^(d/(d+2)).",
+      "claim_tier": "theoretical",
+      "status": "supported",
+      "evidence_ids": ["EVID-PRIMER-MATH-RHO"],
+      "source_refs": ["docs/primers/mathematics_of_constraint_primer.html"]
+    },
+    {
+      "claim_id": "MATH_VOI_REDUCTION",
+      "statement": "Value of information is expected error reduction, MAE_now minus MAE_after, not the reverse difference.",
+      "claim_tier": "descriptive",
+      "status": "supported",
+      "evidence_ids": ["EVID-PRIMER-MATH-VOI"],
+      "source_refs": ["docs/primers/mathematics_of_constraint_primer.html"]
+    },
+    {
+      "claim_id": "COMMITMENT_GENERATOR_GENERALIZATION",
+      "statement": "The frozen E5 design does not establish generator-level generalization beyond labeled coverage.",
+      "claim_tier": "internal",
+      "status": "rejected",
+      "evidence_ids": ["EVID-COMMITMENT-E5-COVERAGE"],
+      "source_refs": ["experiments/commitment_surface/results/e5_generator_vs_coverage.json"]
+    },
+    {
+      "claim_id": "COMMITMENT_E6_REPLICATION",
+      "statement": "The E6 confirmatory replication is not adjudicated because its frozen smoke gate is blocked.",
+      "claim_tier": "internal",
+      "status": "inconclusive",
+      "evidence_ids": ["EVID-COMMITMENT-E6-SMOKE"],
+      "source_refs": ["experiments/commitment_surface/results/e6_smoke_readiness.json"]
+    },
+    {
+      "claim_id": "WEAKNESS_EXTERNAL_PORTABILITY",
+      "statement": "The current external-contact result does not support portable weakness-to-generalization causality.",
+      "claim_tier": "external",
+      "status": "rejected",
+      "evidence_ids": ["EVID-EXTERNAL-WEAKNESS-P1"],
+      "source_refs": ["experiments/external_contact/results/p1_pythia_lora_2026_06_22.md"]
+    },
+    {
+      "claim_id": "PASSIVE_ACTIVE_ATTRACTOR",
+      "statement": "Passive-to-active results support a load-bearing, perturbation-resistant controller but do not establish an attractor basin or return dynamics.",
+      "claim_tier": "causal",
+      "status": "open",
+      "evidence_ids": ["EVID-PASSIVE-ACTIVE-ATTRACTOR"],
+      "source_refs": ["experiments/passive_to_active/results/pythia_70m_v2_2026_06_10.md"]
+    }
+  ]
+}

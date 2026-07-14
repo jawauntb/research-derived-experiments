@@ -9,5 +9,67 @@
     "superseded": "A newer evidence record replaces this record; history remains immutable.",
     "retired": "The claim or run was intentionally retired before adjudication."
   },
-  "records": []
+  "records": [
+    {
+      "evidence_id": "EVID-PRIMER-MATH-RHO",
+      "experiment": "primer_math_constraint",
+      "status": "pass",
+      "claim_ids": ["MATH_RHO_KKT"],
+      "artifact_refs": [
+        "docs/primers/mathematics_of_constraint_primer.html",
+        "tests/test_primer_numeric_examples.py"
+      ],
+      "gate_ids": ["MATH_RHO_KKT_REGRESSION"],
+      "notes": "The corrected positive-price Lagrangian and d=1 allocation pass executable regression checks."
+    },
+    {
+      "evidence_id": "EVID-PRIMER-MATH-VOI",
+      "experiment": "primer_math_constraint",
+      "status": "pass",
+      "claim_ids": ["MATH_VOI_REDUCTION"],
+      "artifact_refs": [
+        "docs/primers/mathematics_of_constraint_primer.html",
+        "tests/test_primer_numeric_examples.py"
+      ],
+      "gate_ids": ["MATH_VOI_SIGN_REGRESSION"],
+      "notes": "Expected error reduction is now MAE_now - MAE_after; the heuristic is explicitly scoped."
+    },
+    {
+      "evidence_id": "EVID-COMMITMENT-E5-COVERAGE",
+      "experiment": "commitment_surface_e5_generator_vs_coverage",
+      "status": "fail",
+      "claim_ids": ["COMMITMENT_GENERATOR_GENERALIZATION"],
+      "artifact_refs": ["experiments/commitment_surface/results/e5_generator_vs_coverage.json"],
+      "gate_ids": ["E5_STRICT_COVERAGE"],
+      "notes": "The frozen design fails generator, group-specificity, and transport gates; the apparent win is coverage-localized."
+    },
+    {
+      "evidence_id": "EVID-COMMITMENT-E6-SMOKE",
+      "experiment": "commitment_surface_e6_smoke",
+      "status": "inconclusive",
+      "claim_ids": ["COMMITMENT_E6_REPLICATION"],
+      "artifact_refs": ["experiments/commitment_surface/results/e6_smoke_readiness.json"],
+      "gate_ids": ["E6_SMOKE_READINESS"],
+      "notes": "Only 8 of 104 candidates meet the two-surface threshold versus 52 required; confirmatory execution is blocked."
+    },
+    {
+      "evidence_id": "EVID-EXTERNAL-WEAKNESS-P1",
+      "experiment": "external_contact_p1_pythia_lora",
+      "status": "fail",
+      "claim_ids": ["WEAKNESS_EXTERNAL_PORTABILITY"],
+      "artifact_refs": ["experiments/external_contact/results/p1_pythia_lora_2026_06_22.md"],
+      "notes": "The external-contact result does not support portable weakness-to-generalization causality."
+    },
+    {
+      "evidence_id": "EVID-PASSIVE-ACTIVE-ATTRACTOR",
+      "experiment": "passive_to_active",
+      "status": "inconclusive",
+      "claim_ids": ["PASSIVE_ACTIVE_ATTRACTOR"],
+      "artifact_refs": [
+        "experiments/passive_to_active/results/pythia_70m_v2_2026_06_10.md",
+        "docs/primers/systems_theory_complexity_primer.html"
+      ],
+      "notes": "Load-bearing and perturbation-resistance proxies are present, but basin geometry and return dynamics were not measured."
+    }
+  ]
 }
