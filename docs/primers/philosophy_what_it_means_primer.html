@@ -1,0 +1,1024 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Mathematics of the Research Program — A Primer from First Principles</title>
+<style>
+/* ---------- page setup ---------- */
+@page { size: letter; margin: 0.9in 0.85in; }
+:root {
+  --ink: #1a1a1e;
+  --muted: #55555e;
+  --rule: #d8d8de;
+  --def-bg: #eef4fb;  --def-edge: #2c6cb0;   /* definitions */
+  --pump-bg: #fdf6e8; --pump-edge: #c98a1b;  /* intuition pumps */
+  --vis-bg: #f4effa;  --vis-edge: #7a4fb5;   /* visual proofs */
+  --prog-bg: #edf7ee; --prog-edge: #35854a;  /* in our papers */
+  --warn-bg: #fbeeee; --warn-edge: #b04040;  /* pitfalls */
+  --eq-bg: #f7f7f9;
+}
+* { box-sizing: border-box; }
+html { font-size: 10.4pt; }
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--ink);
+  line-height: 1.52;
+  margin: 0;
+}
+p { margin: 0.55em 0 0.75em; text-align: justify; hyphens: auto; }
+ul, ol { margin: 0.4em 0 0.8em; padding-left: 1.4em; }
+li { margin-bottom: 0.28em; text-align: justify; }
+strong { color: #000; }
+
+/* ---------- headings ---------- */
+h1, h2, h3, h4 { font-family: Georgia, serif; line-height: 1.22; page-break-after: avoid; }
+h1.part {
+  page-break-before: always;
+  font-size: 2.05em; margin: 2.2em 0 0.2em;
+  color: #17314f;
+}
+h1.part .kicker {
+  display: block; font-size: 0.42em; letter-spacing: 0.18em;
+  text-transform: uppercase; color: #8a6a2f; margin-bottom: 0.9em;
+  font-weight: normal;
+}
+h2.chapter {
+  page-break-before: always;
+  font-size: 1.62em; margin: 1.4em 0 0.25em; color: #17314f;
+  border-bottom: 2.5px solid #17314f; padding-bottom: 0.22em;
+}
+h2.chapter .chnum {
+  display: block; font-size: 0.58em; letter-spacing: 0.14em;
+  text-transform: uppercase; color: #8a6a2f; margin-bottom: 0.25em;
+}
+h3 { font-size: 1.18em; margin: 1.35em 0 0.35em; color: #1f3a5c; }
+h4 { font-size: 1.02em; margin: 1.1em 0 0.3em; color: #33333a; font-style: italic; }
+
+/* ---------- math ---------- */
+.m { font-family: 'Georgia', serif; font-style: italic; white-space: nowrap; }
+.m b, .mrm { font-style: normal; }
+.eq {
+  display: block; text-align: center; font-family: Georgia, serif;
+  font-style: italic; font-size: 1.09em; margin: 0.85em auto;
+  page-break-inside: avoid;
+}
+.eqbox {
+  background: var(--eq-bg); border: 1px solid var(--rule); border-radius: 6px;
+  padding: 0.6em 1em; margin: 0.9em 0; page-break-inside: avoid;
+}
+.frac { display: inline-block; vertical-align: -0.9em; text-align: center; margin: 0 0.12em; }
+.frac .top { display: block; padding: 0 0.25em 0.08em; border-bottom: 1px solid currentColor; }
+.frac .bot { display: block; padding: 0.08em 0.25em 0; }
+sub, sup { font-size: 0.68em; }
+.big { font-size: 1.35em; font-style: normal; vertical-align: -0.12em; }
+.rm { font-style: normal; }
+
+/* equation decoder tables */
+table.decoder {
+  width: 100%; border-collapse: collapse; margin: 0.7em 0 1em;
+  font-size: 0.93em; page-break-inside: avoid;
+}
+table.decoder th, table.decoder td {
+  border: 1px solid var(--rule); padding: 0.32em 0.55em; text-align: left; vertical-align: top;
+}
+table.decoder th { background: #eef1f5; font-size: 0.9em; letter-spacing: 0.04em; }
+table.decoder td:first-child { font-family: Georgia, serif; font-style: italic; white-space: nowrap; }
+
+table.plain {
+  width: 100%; border-collapse: collapse; margin: 0.7em 0 1em; font-size: 0.93em;
+}
+table.plain th, table.plain td {
+  border: 1px solid var(--rule); padding: 0.3em 0.5em; text-align: left; vertical-align: top;
+}
+table.plain th { background: #eef1f5; }
+
+/* ---------- callout boxes ---------- */
+.box {
+  border-radius: 7px; padding: 0.7em 0.95em 0.55em; margin: 1em 0;
+  page-break-inside: avoid; border-left: 4.5px solid;
+}
+.box .boxtitle {
+  display: block; font-size: 0.78em; font-weight: bold; letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 0.35em; font-family: Helvetica, Arial, sans-serif;
+}
+.box p:last-child { margin-bottom: 0.25em; }
+.def  { background: var(--def-bg);  border-color: var(--def-edge); }
+.def .boxtitle { color: var(--def-edge); }
+.pump { background: var(--pump-bg); border-color: var(--pump-edge); }
+.pump .boxtitle { color: var(--pump-edge); }
+.vis  { background: var(--vis-bg);  border-color: var(--vis-edge); }
+.vis .boxtitle { color: var(--vis-edge); }
+.prog { background: var(--prog-bg); border-color: var(--prog-edge); }
+.prog .boxtitle { color: var(--prog-edge); }
+.warn { background: var(--warn-bg); border-color: var(--warn-edge); }
+.warn .boxtitle { color: var(--warn-edge); }
+
+/* ---------- figures ---------- */
+figure {
+  margin: 1.1em auto; text-align: center; page-break-inside: avoid;
+}
+figcaption {
+  font-size: 0.86em; color: var(--muted); margin-top: 0.45em;
+  text-align: justify; padding: 0 1.2em;
+}
+figcaption b { color: #333; }
+svg { max-width: 100%; }
+svg text { font-family: Helvetica, Arial, sans-serif; }
+.svglabel { font-size: 11px; fill: #333; }
+
+/* ---------- misc ---------- */
+code, .code {
+  font-family: 'Courier New', monospace; font-size: 0.9em;
+  background: #f2f2f4; padding: 0.05em 0.3em; border-radius: 3px;
+}
+.titlepage { text-align: center; padding-top: 2.4in; }
+.titlepage h1 { font-size: 2.5em; color: #17314f; margin-bottom: 0.2em; border: none; }
+.titlepage .subtitle { font-size: 1.25em; color: var(--muted); font-style: italic; margin: 0.6em 0 2em; }
+.titlepage .meta { font-size: 0.95em; color: var(--muted); margin-top: 3.2em; line-height: 1.9; }
+.toc { page-break-before: always; }
+.toc h2 { font-size: 1.5em; color: #17314f; }
+.toc ul { list-style: none; padding-left: 0; column-count: 2; column-gap: 2.2em; font-size: 0.92em; }
+.toc ul li { margin-bottom: 0.32em; }
+.toc .tocpart { font-weight: bold; margin-top: 0.7em; color: #17314f; break-after: avoid; }
+.chip {
+  display: inline-block; font-family: Helvetica, Arial, sans-serif; font-size: 0.7em;
+  background: #e7edf5; color: #2c4a72; border-radius: 9px; padding: 0.1em 0.65em;
+  margin-right: 0.3em; letter-spacing: 0.03em; vertical-align: 0.15em;
+}
+.small { font-size: 0.88em; color: var(--muted); }
+hr.sep { border: none; border-top: 1px solid var(--rule); margin: 1.6em 15%; }
+</style>
+</head>
+<body>
+
+<div class="titlepage">
+  <h1>What It All Means</h1>
+  <p class="subtitle">A Philosophy Primer on Concern, Selfhood, and Meaning<br>in an Empirical Research Program</p>
+  <svg width="300" height="150" viewBox="0 0 300 150">
+    <circle cx="110" cy="75" r="48" fill="none" stroke="#7a4fb5" stroke-width="1.3"/>
+    <circle cx="190" cy="75" r="48" fill="none" stroke="#2c6cb0" stroke-width="1.3"/>
+    <text x="80" y="79" text-anchor="middle" font-size="11" fill="#7a4fb5">self</text>
+    <text x="220" y="79" text-anchor="middle" font-size="11" fill="#2c6cb0">world</text>
+    <text x="150" y="79" text-anchor="middle" font-size="9" fill="#55555e">gauge?</text>
+    <text x="150" y="140" text-anchor="middle" font-size="9" fill="#b04040">what fixes the boundary?</text>
+  </svg>
+  <p class="meta">
+    A companion to <em>The Mathematics of Constraint</em>.<br>
+    The program uses words — concern, valence, self, care, meaning — that<br>
+    carry centuries of philosophy. This book asks what it is entitled to mean by them.
+  </p>
+</div>
+
+<div class="toc">
+<h2>Why Philosophy, and Why Carefully</h2>
+<p>This research program runs on words that are not innocent. <em>Concern. Valence. Self. Care.
+Meaning. Agency.</em> Each carries a heavy freight of philosophy, and each invites the reader to hear
+more than the experiments have shown. When a paper says an agent "maintains its self/world boundary,"
+you can hear a claim about minds — or a description of a small simulated creature deciding whether to
+eat a pixel. Both can be true at once, and the entire philosophical task is keeping straight which one
+is being asserted.</p>
+
+<p>This book does two things a mature reader needs. It takes the program's philosophical claims
+seriously — because several are genuinely interesting, and one or two may be real contributions to the
+philosophy of mind. And it holds them to account — because a program that borrows the vocabulary of
+care and selfhood owes an argument that it has <em>earned</em> the words, not merely relabeled reward
+signals with honorifics. The goal is that you finish able to see exactly where the program is doing
+real philosophy, where it is doing suggestive metaphor, and where a sharp critic should press.</p>
+
+<div class="pump" style="margin-top:0.4em"><span class="boxtitle">A note on fairness</span>
+<p>The program is, to its great credit, <em>deliberately deflationary about its own reach</em>. Its
+repeated refusals — "we do not claim consciousness" — are not throat-clearing; they are load-bearing to
+its credibility, and this book treats them as seriously as its claims. The
+<span class="chip">Thesis</span> boxes state what the program asserts; the
+<span class="chip">Tension</span> boxes press where a philosopher should; the
+<span class="chip">Intuition pump</span> boxes supply the picture. The aim is neither to debunk nor to
+celebrate, but to make you a fair and demanding reader.</p></div>
+
+<h3 style="margin-top:1.1em">Contents</h3>
+<ul>
+<li class="tocpart">Part I · The Central Theses</li>
+<li>1 · Meaning Is Geometry Under Concern</li>
+<li>2 · Weakness and the Metaphysics of Generalization</li>
+<li>3 · Objects Form From Concern</li>
+<li class="tocpart">Part II · The Hard Problems</li>
+<li>4 · What Is Concern, Really?</li>
+<li>5 · The Self/World Gauge Problem</li>
+<li>6 · Availability Is Not Use</li>
+<li>7 · The Consciousness Question</li>
+<li class="tocpart">Part III · A Mature Verdict</li>
+<li>8 · The Deflationary Counterargument</li>
+<li>9 · How to Build On It Philosophically</li>
+</ul>
+</div>
+
+<h1 class="part"><span class="kicker">Part I</span>The Central Theses</h1>
+
+<p>The program has a philosophical spine — a small set of theses about meaning, generalization, and
+objecthood that its experiments are built to test. This part states each one plainly, in the program's
+own terms, and gives the picture that makes it intelligible. Part II then turns to the hard problems
+they run into.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 1</span>Meaning Is Geometry Under Concern</h2>
+
+<h3>1.1 The founding axiom</h3>
+
+<p>At the base of the program sits a single sentence, repeated in various forms across its documents:
+<strong>meaning is geometry under concern.</strong> Unpacked into its steps, the claim is a chain:
+nothing appears without <em>difference</em>; organized difference is <em>geometry</em>; geometry becomes
+<em>meaning</em> when some differences are <em>salient</em> — when they matter to a system that has
+stakes; and a system has stakes when it has <em>concern</em>, a caring about its own continuation. So
+meaning, on this view, is not a property of symbols or a relation of resemblance. It is what structured
+difference <em>becomes</em> for a system that can be helped or harmed.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the map that only means something to a traveler</span>
+<p>A contour map is just ink until someone needs to cross the terrain. To a traveler on foot, the
+tight contour lines <em>mean</em> "exhausting climb"; to a helicopter pilot they mean almost nothing.
+The marks are identical; the meaning is supplied by whose stakes are in play. The program's axiom
+generalizes this: the geometry of a representation is inert structure until a system with something to
+lose reads it under concern. "Meaning is geometry under concern" says the meaning was never in the
+geometry alone — it was in the meeting of geometry with a stake. This is why the program insists that to
+study meaning you must study systems that can <em>die</em> (or fail, or be harmed), because only there
+does concern, and therefore meaning, get a grip.</p></div>
+
+<h3>1.2 The lineage the axiom compresses</h3>
+
+<p>This is not a new idea so much as a <em>synthesis</em> of an old and honorable tradition. It descends
+from <strong>phenomenology</strong> (Heidegger's <em>care</em> as the basic structure of a being for
+whom its own existence is at issue), from <strong>ecological psychology</strong> (Gibson's affordances —
+the world shows up in terms of what it offers <em>for action</em>), from <strong>Uexküll's Umwelt</strong>
+(each creature inhabits a world carved by what matters to it), and from <strong>enactivism</strong>
+(meaning as sense-making by a self-maintaining organism). The program's own honest positioning is that
+these traditions "predicted the shape" — that meaning is care-laden, action-oriented, embodied,
+boundary-maintaining — while the program supplies the <em>mechanism</em> and the <em>measurement</em>.
+It is philosophy's intuition rendered as an experiment.</p>
+
+<h3>1.3 The two-part structure: meaning, then agency</h3>
+
+<p>The axiom has a second half that is easy to miss and does most of the program's work. <em>Meaning</em>
+appears when differences become salient under concern; <em>agency</em> appears when that concern is
+"coupled to action, self-maintenance, boundary preservation, repair, and time." So the program draws a
+line between two grades of structure. A system can have <em>meaning-like</em> structure — a geometry
+organized by what matters — without yet being an <em>agent</em>. It becomes agent-like only when the
+concern-organized geometry starts to <em>act to preserve itself</em>. This distinction — passive
+meaning-geometry versus active self-maintaining agency — is the hinge of the entire program, and it
+recurs in every part of this book.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the thermostat that started defending itself</span>
+<p>A thermostat has a kind of minimal "concern" — a setpoint it works to maintain. But it is not an
+agent in any robust sense; it is a passive loop. Now imagine a thermostat that, when you tried to break
+it, rewired itself to keep regulating; that treated its own continued functioning as something to
+protect; that, over time, reorganized its sensors around what threatened it. Somewhere along that
+escalation, "a device with a setpoint" starts to feel like "a thing that cares about persisting." The
+program's central bet is that this escalation is <em>real and measurable</em> — that there is a
+threshold where passive concern-geometry becomes active self-maintenance — and that finding and
+characterizing that threshold is the deep prize. Whether the threshold is a genuine transition or a
+gradual metaphor is a question Part II and the complexity primer both press.</p></div>
+
+<h3>1.4 Why "under concern" is the load-bearing phrase</h3>
+
+<p>Strip "concern" out of the axiom and you are left with "meaning is geometry" — which is just the
+observation that representations have structure, true but empty. The whole content is in "under
+concern": the claim that <em>what a system cares about</em> is what turns its structure into meaning.
+This is what makes the axiom a <em>substantive</em> and <em>testable</em> claim rather than a
+definition. If it is right, then changing what a system cares about should reorganize its geometry —
+which is exactly the experiment Chapter 3 describes. And if concern turns out to be something the
+experimenter simply <em>supplies</em> rather than something the system <em>has</em>, the axiom risks
+collapsing into "geometry follows whatever we weight" — the central tension of Chapter 4. So the axiom's
+whole fate rides on one word, and Part II is largely the interrogation of that word.</p>
+
+<h3>1.5 What to carry forward</h3>
+<p class="small">The founding axiom is "meaning is geometry under concern" — structured difference
+becomes meaning for a system with stakes; it synthesizes phenomenology, affordances, Umwelt, and
+enactivism into a mechanism-and-measurement program; it distinguishes passive meaning-geometry from
+active self-maintaining agency (the program's central hinge); and everything rides on the word
+"concern," whose status — genuinely the system's, or merely the experimenter's — is the tension the rest
+of the book pursues.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 2</span>Weakness and the Metaphysics of Generalization</h2>
+
+<h3>2.1 A philosophical claim disguised as a machine-learning result</h3>
+
+<p>The program's most famous result — that "weakness" predicts generalization better than simplicity —
+looks like a technical finding in machine learning. It is also a philosophical thesis about
+<strong>induction</strong>: about what makes one extrapolation from evidence better than another. That
+problem — Hume's problem, the problem of why any inference from the observed to the unobserved is
+justified — is among the oldest in philosophy, and the program takes a definite side in it.</p>
+
+<div class="def"><span class="boxtitle">Thesis — the weakest hypothesis, not the shortest</span>
+<p>Faced with many rules that fit the evidence equally well, the classical answer (Occam, and its
+precise modern form, Minimum Description Length) is: prefer the <em>simplest</em> — the shortest
+description. The program, following Bennett, asserts a rival: prefer the <em>weakest</em> — the
+hypothesis compatible with the most possibilities while still fitting. The slogan, inherited from
+Bennett: <em>simplicity is a property of form, but generalization is a property of function.</em> A
+short description can be brittle; a weak hypothesis, having committed to less, travels further when the
+world shifts.</p></div>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the overconfident witness</span>
+<p>Two witnesses describe a suspect. The first gives an extremely specific account: exactly this
+height, this jacket, this gait, this scar. The second says only: "left-handed." The specific account is
+<em>simpler</em> in one sense — it is a single crisp hypothesis — and it fits the evidence seen so far
+perfectly. But when a new detail emerges that the first witness couldn't have known, their
+over-committed story is often simply <em>wrong</em>, while the second witness's minimal, broadly-
+compatible claim survives. The program's wager is that under distribution shift — when deployment
+differs from training — the weak, under-committed hypothesis generalizes because it never bet the farm
+on the training set's accidents. Weakness is disciplined humility about what you have not yet seen. This
+is a genuine philosophical position on induction, not merely an engineering trick.</p></div>
+
+<h3>2.2 What the program adds to the philosophy</h3>
+
+<p>Bennett's claim that weakness beats simplicity was, before this program, an argument. The program's
+contribution is to make it an <em>experiment</em> — and this is philosophically significant in its own
+right. It constructs situations where a simple shortcut and a weak symmetric rule both fit the training
+data, then measures which one generalizes. The result (weakness wins near-universally; every simplicity
+measure loses) does something philosophy rarely can: it turns a dispute about the nature of good
+inference into a decidable question with an answer. That a metaphysical thesis about induction can be
+operationalized and tested at all is part of what makes the program interesting to a philosopher,
+independent of whether one accepts the specific result.</p>
+
+<h3>2.3 The reparameterization worry, and why weakness answers it</h3>
+
+<p>A deep objection to simplicity-based induction is that "shortest" depends on your <em>language</em>:
+a rule that is short in one coding scheme is long in another, so "prefer the shortest" secretly smuggles
+in a choice of description language. Weakness has a partial answer: it is defined in terms of
+<em>which possibilities a hypothesis permits</em> — a property of the function's behavior, not its
+notation — and so is invariant under relabeling. This is the substantive content of "generalization is
+a property of function, not form": weakness sidesteps the language-dependence that has always haunted
+Occam's razor. Whether it fully escapes it (you still must choose which <em>symmetry group</em> to count
+against) is a real question, and one the program itself surfaces.</p>
+
+<div class="warn"><span class="boxtitle">Tension — is the weakness result a discovery or a near-tautology?</span>
+<p>A mature reader should hold two deflationary worries the program half-concedes. First, the bridge
+theorems connecting weakness, symmetry, and concern are, in the program's own words, "almost
+tautological" — they show where concern <em>enters</em> the bookkeeping rather than deriving a
+surprising fact. The empirical bite is entirely in the measured correlation, not the proofs. Second, and
+more seriously: the external "hard-kill" (weakness failing to predict generalization on a model the lab
+didn't build) suggests the result may be bound to the specific regime the program constructs — tasks
+where a symmetry genuinely generates the deployment data. Weakness may be less a universal law of
+induction than a correct principle <em>within a class of problems the program is good at building</em>.
+The philosophical thesis (weakness over simplicity) is genuine and interesting; its scope is narrower
+and more contested than the headline suggests, and the program's own reframe — "weakness is a footprint,
+compatibility is the cause" — is the admission of exactly this.</p></div>
+
+<h3>2.4 The metaphysical upshot</h3>
+
+<p>Step back from the machinery and the thesis is this: <em>good generalization is under-commitment to
+what you have seen, in favor of compatibility with a structure that generates what you haven't.</em> It
+reframes induction from a search for the simplest story to a search for the story that keeps the most
+futures open while still fitting the past. This is a substantive and attractive position in the
+philosophy of induction — arguably a sharpening of the intuition behind "robustness" and "invariance"
+that a good scientific hypothesis should have. The program's service to philosophy here is less the
+specific correlation than the demonstration that this ancient dispute can be dragged onto experimental
+ground at all.</p>
+
+<h3>2.5 What to carry forward</h3>
+<p class="small">The weakness result is a philosophical thesis about induction: prefer the weakest
+(most broadly-compatible) hypothesis, not the shortest, because "generalization is a property of
+function, not form"; the program's contribution is turning a metaphysical dispute into a decidable
+experiment; weakness partly escapes the language-dependence that haunts Occam; but the bridge theorems
+are near-tautological and the external hard-kill suggests the result's scope is narrower than the
+headline — the thesis is genuine, its universality contested.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 3</span>Objects Form From Concern</h2>
+
+<h3>3.1 A claim about natural kinds</h3>
+
+<p>The program's third central thesis is the most metaphysically ambitious: that a system carves the
+world into <em>objects</em> — natural kinds, categories, "things" — not by <strong>sensory
+similarity</strong> but by <strong>causal-valence role</strong>: by what matters for its viability. Two
+items that look completely different but affect the agent's survival the same way get grouped together;
+two that look identical but have opposite consequences get split apart. The world's joints, on this
+view, are carved by concern, not by appearance.</p>
+
+<div class="def"><span class="boxtitle">Thesis — carving by role, not resemblance</span>
+<p>"Meaning is not sensory resemblance; meaning is action-relevant, valenced causal structure. Objects
+can form from concern." The program's cleanest experiment: three identical networks are trained with
+different objectives on the same inputs. The one whose objective is coupled to the agent's viability
+organizes its internal space almost entirely around the <em>reward axis</em> (the thing that determines
+the right action) and <em>discards</em> the sensory features — even under a task (XOR) where neither
+sensory feature alone predicts reward. The measured geometry is stark: the reward-axis organization is
+hundreds of times stronger than the sensory-axis organization.</p></div>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the forager's ontology</span>
+<p>A forager does not sort the forest by color or leaf shape; she sorts it into <em>food, medicine,
+poison, useless</em> — categories defined entirely by what each plant does to a body that eats it. Two
+unrelated-looking berries that both nourish are, to her ontology, "the same kind of thing"; a nourishing
+berry and its poisonous look-alike are opposites, however similar to the eye. Her world is carved by
+consequence, not appearance. The program's claim is that <em>any</em> viability-coupled learner carves
+this way — that concern is the knife that finds the joints. It is a striking and, in the toy setting,
+genuinely measured phenomenon: give a network stakes, and its categories reorganize around the stakes.</p></div>
+
+<h3>3.2 The philosophical stakes: a theory of content</h3>
+
+<p>This is, whether or not the program names it as such, a contribution to the philosophy of
+<strong>mental content</strong> — the question of what makes an internal state be <em>about</em>
+something. The dominant naturalistic answer, <strong>teleosemantics</strong> (Millikan, Dretske,
+Papineau), holds that a state's content is grounded in its <em>function</em> — what it was selected or
+learned <em>to do</em> for the organism. "Objects form from concern" is a computational teleosemantics:
+the content of the network's categories is grounded in their function for viability. This connection is
+the program's most promising unexploited opening — because teleosemantics comes with forty years of
+sharpened objections and defenses (the Swampman problem, the indeterminacy of function) that would let
+the program state its claim precisely and defend it against known attacks. That the program reaches this
+territory without naming it is a scholarly gap; that it reaches it at all is a real contribution.</p>
+
+<h3>3.3 The natural-kinds connection</h3>
+
+<p>"Carving by causal role" is also a position on the ancient question of <strong>natural kinds</strong>
+— whether the world's categories are <em>discovered</em> (real joints, out there) or <em>constituted</em>
+(useful groupings we impose). The most sophisticated modern view, Boyd's <strong>homeostatic property
+cluster</strong> theory, holds that natural kinds are exactly clusters of properties held together by an
+underlying causal mechanism — which is remarkably close to "objects are clusters held together by shared
+causal-valence role." The program's kinds are neither purely discovered nor purely imposed: they are
+<em>real relative to a system's viability</em> — the joints a creature-with-stakes must find to survive.
+This is a defensible and interesting middle position, and naming Boyd would let the program claim it
+precisely.</p>
+
+<div class="warn"><span class="boxtitle">Tension — is the carving discovered, or installed by supervision?</span>
+<p>Here is the sharpest philosophical worry, and it is the same one that stalks the whole program
+(Chapter 4). In the cleanest object-formation experiment, the "valence-coupled" network is trained to
+predict the <em>optimal action</em> under the reward function — which is a <em>supervised</em> signal.
+So a deflationary reading is available: the network reorganizes around the reward axis because the
+experimenter <em>told it to</em> predict a reward-derived label. On this reading, "objects form from
+concern" is really "objects form from supervised labels of concern" — which is far less surprising, and
+much weaker as a metaphysics. The program's attempts to make concern <em>self-organize</em> from the
+agent's own experience (rather than be supervised) only partly succeed — they work on easy reward
+structures and fail on the hard (XOR) case. So the strong, exciting form of the thesis — that a system's
+<em>own</em> stakes spontaneously carve its world — remains, at the frontier, only partly demonstrated.
+The forager really does carve by consequence; whether the network does so <em>on its own</em>, or only
+when handed the consequences as labels, is not yet settled.</p></div>
+
+<h3>3.4 What is genuinely shown, and what is aspired to</h3>
+
+<p>To be fair to both sides: the program has genuinely shown, with clean controls, that <em>if</em> a
+learner's objective is coupled to viability, its representational geometry reorganizes around causal
+role and discards sensory similarity — a real, measured dissociation between appearance-based and
+consequence-based representation. That is a solid result and a nice illustration of a teleosemantic
+mechanism. What it has <em>not</em> yet shown is the stronger claim the vocabulary implies: that a system
+carves the world this way from its <em>own</em> concern, discovered through its <em>own</em> interaction,
+without the experimenter supplying the consequence as a training target. The gap between these two — the
+supervised demonstration and the self-organizing aspiration — is exactly where the philosophical action
+is, and it is the frontier of the program's theory of content.</p>
+
+<h3>3.5 What to carry forward</h3>
+<p class="small">The thesis "objects form from concern" claims the world is carved into kinds by
+causal-valence role, not sensory resemblance — a measured dissociation in the repo; philosophically it
+is a computational teleosemantics (content grounded in function-for-viability) and a Boyd-style
+homeostatic-cluster theory of natural kinds, both unnamed but reached; and the standing tension is that
+the cleanest demonstration uses <em>supervised</em> concern-labels, so the strong "a system carves its
+own world from its own stakes" claim is only partly earned.</p>
+
+<h1 class="part"><span class="kicker">Part II</span>The Hard Problems</h1>
+
+<p>The theses of Part I run, on contact with hard cases, into four deep problems: what concern really
+is, whether the self is even determinate, when a representation is genuinely used, and whether any of
+this touches consciousness. These are not weaknesses to be embarrassed by; they are where the program is
+doing its most interesting philosophical work, and where a demanding reader should engage most closely.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 4</span>What Is Concern, Really?</h2>
+
+<h3>4.1 The word doing the most work, defined the most thinly</h3>
+
+<p>"Concern" is the keystone of the whole program — meaning is geometry <em>under concern</em>, objects
+form <em>from concern</em> — and it is also the term whose definition is most contested. The program is
+admirably explicit that it does <em>not</em> mean concern in the felt, phenomenal sense. It means
+something operational: <em>a nonnegative weighting over the distinctions that matter for a system's
+future control, viability, action, or evaluation.</em> In the experiments, this cashes out concretely as
+a loss weight, or as the predicted change in the agent's energy, or as the sign of a reward. Concern is,
+operationally, a number the system assigns to outcomes.</p>
+
+<div class="def"><span class="boxtitle">The program's own guard</span>
+<p>The program states the deflation itself, in several papers: "The phrase 'concern' here is not used
+as a folk-psychological attitude. It is a nonnegative measure over distinctions that matter for the
+system's future control." And, bluntly, about the gap between the operational and the felt: "Loss-weight
+≠ hunger/wound/life. No consciousness, subjectivity, biological realism." The program knows the word is
+carrying more than the math, and says so.</p></div>
+
+<h3>4.2 The imported-versus-derived problem</h3>
+
+<p>Here is the deepest philosophical tension in the entire program, and it is worth stating with care
+because everything downstream depends on it. If concern is <em>defined</em> as a weighting the
+experimenter supplies, then "meaning is geometry under concern" is in danger of reducing to "geometry
+follows whatever we weight." The <em>mattering</em> — the thing that was supposed to make geometry into
+meaning — would be <strong>imported</strong> by the researcher, not <strong>derived</strong> from the
+system. A network reorganizing around a reward axis <em>because we trained it to predict reward</em> is
+not obviously a system whose <em>own</em> concern shapes its <em>own</em> meaning; it is a system doing
+what its loss function selects.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the puppet's values</span>
+<p>A puppeteer can make a puppet "flinch from fire" and "reach for food." Watching, you might say the
+puppet cares about survival. But the caring is entirely the puppeteer's — pull the strings differently
+and the puppet "cares" about the opposite. Nothing in the puppet <em>has</em> the value; the value is
+imposed from outside. The worry about concern is precisely this: when the experimenter sets the reward
+and trains the network to track it, is the resulting "concern-geometry" the network's, or the
+experimenter's, ventriloquized through it? The program's grand thesis needs concern to be the puppet's,
+not the puppeteer's — and the honest state of the evidence is that, in most experiments, the strings are
+visible.</p></div>
+
+<h3>4.3 The bootstrap attempt, and its partial failure</h3>
+
+<p>The program sees this problem clearly and tries to solve it. Its "concern-bootstrap" experiments
+attempt to make concern <strong>self-organize</strong> — to have the agent learn what matters from its
+<em>own</em> observed experience (the energy changes it actually undergoes) rather than from a supervised
+reward-label. This is exactly the right move philosophically: it is the attempt to cut the puppeteer's
+strings and let the system's stakes emerge from its own interaction with the world. And it
+<em>partly</em> works: on simple reward structures, the agent does self-organize a concern-aligned
+geometry without being handed the labels. But on the harder case (where the relevant structure is a
+non-linear XOR), it fails. So the strong form of the program's central claim — that a system's own
+concern spontaneously shapes its own meaning — is, at the frontier, demonstrated only for easy cases and
+open for hard ones.</p>
+
+<h3>4.4 The three senses of concern, and why disentangling them would help</h3>
+
+<p>A constructive diagnosis: the program conflates three genuinely different things under one word, and
+its arguments would sharpen enormously if it separated them:</p>
+
+<table class="plain">
+<tr><th>Sense</th><th>What it is</th><th>Status</th></tr>
+<tr><td><strong>(i) Supplied weight</strong></td><td>a loss weighting the experimenter chooses</td><td>clearly in play; unproblematic but philosophically thin</td></tr>
+<tr><td><strong>(ii) Self-observed viability signal</strong></td><td>the agent's own registered change in its energy/damage — a value it computes from its own state</td><td>the interesting case; partly demonstrated by the bootstrap work</td></tr>
+<tr><td><strong>(iii) Phenomenal mattering</strong></td><td>felt care, the "what it is like" to have stakes</td><td>explicitly out of scope; the program disclaims it</td></tr>
+</table>
+
+<p>The program's credibility would improve if it committed publicly that only (i) and (ii) are in play,
+that (iii) is disowned, and that the whole force of "meaning is geometry under concern" depends on
+pushing results from (i) toward (ii). Its scattered disclaimers already imply this; consolidating them
+into a single definition would convert an ambiguity that critics can exploit into a precise, defensible
+claim.</p>
+
+<div class="warn"><span class="boxtitle">Tension — the honest one-line objection</span>
+<p>A hard-nosed philosopher's summary, which the program must answer: <em>"You showed that if you
+weight a loss by X, representations reorganize around X. That is expected, not a discovery about
+meaning."</em> The program's best reply is not to deny it but to point at sense (ii) and the load-bearing
+standard of Chapter 6: the claim is not merely that weighting reorganizes geometry, but that only geometry
+which <em>survives to causally control the decision under intervention</em> counts as meaningful — and
+that this criterion is doing real work, filtering honorific relabeling from earned attribution. Whether
+that reply fully rescues the grand thesis is genuinely open. But the reply exists, and it is where the
+program's philosophical action really lives.</p></div>
+
+<h3>4.5 What to carry forward</h3>
+<p class="small">Concern is the keystone term, defined operationally as a nonnegative weighting (a loss
+weight, an energy change, a reward sign), with felt concern explicitly disclaimed; the deep tension is
+whether concern is imported by the experimenter or derived from the system — "geometry follows whatever
+we weight" versus a system's own stakes; the bootstrap experiments try to derive it and partly succeed;
+and the fix is to disentangle supplied-weight, self-observed-viability, and phenomenal senses, committing
+publicly to the first two and building toward the second.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 5</span>The Self/World Gauge Problem</h2>
+
+<h3>5.1 The program's most genuinely novel philosophical result</h3>
+
+<p>Of all the program's philosophical contributions, this is the one a philosopher of mind should take
+most seriously, because it is a <em>proof</em> — a clean, formal result — about the determinacy of the
+self. The claim: <strong>a system can be behaviorally a perfect agent while having no fact of the matter
+about which changes in the world are "its own."</strong> The self, on this result, is not something a
+system reads off from its experience; it is structurally under-determined by any amount of passive
+observation, and can only be fixed by intervention.</p>
+
+<h3>5.2 The setup, in plain terms</h3>
+
+<p>Give an agent the task of splitting each change it observes into two parts: the part <em>it</em>
+caused (the "self" contribution) and the part the <em>world</em> caused (the "world" contribution). The
+architecture is built to do exactly this — two sub-networks, one for self, one for world, summing to
+predict the total. Here is the problem: the environment only ever reveals the <em>total</em> change. And
+you can add any constant to the "self" estimate and subtract it from the "world" estimate without
+changing the total by one iota — so the training signal, which only sees the total, is completely
+<em>blind</em> to where the boundary falls. The network settles on <em>some</em> split, but which one is
+determined by its random initialization, not by any fact about what it actually caused.</p>
+
+<div class="def"><span class="boxtitle">Definition — a gauge symmetry (borrowed from physics)</span>
+<p>In physics, a <strong>gauge symmetry</strong> is a change in your <em>description</em> that leaves
+every observable quantity unchanged — like adding a constant to all altitudes: no dropped ball falls
+differently, because only altitude <em>differences</em> are real. The choice of "zero altitude" is a
+gauge: pure convention, carrying no physical content. The program's result is that the self/world split
+is exactly such a gauge. The "self" and "world" labels are like the choice of zero — you can slide the
+boundary freely without changing anything the system does. The program states the resulting no-go
+theorem crisply: if observations are invariant under a gauge, no procedure using only those observations
+can identify which description is the "true" one.</p></div>
+
+<div class="pump"><span class="boxtitle">Intuition pump — splitting a restaurant bill you never itemized</span>
+<p>Two friends share a $60 dinner and want to split it into "what I ordered" and "what you ordered" —
+but the receipt shows only the $60 total. Any split that sums to $60 is consistent with the receipt:
+$40/$20, $30/$30, $50/$10. The data simply does not contain the answer. No amount of <em>staring</em> at
+the receipt will fix it; the information isn't there. The only way to learn who ordered what is to
+<em>intervene</em> — to have one friend order nothing next time and see what the bill becomes. The
+self/world boundary is this bill. The program's insight is that a network asked to itemize a total it
+can only observe as a sum is in a genuinely hopeless position — and that the escape is not more
+observation but <em>action</em>: the agent deliberately doing nothing, to see the world's contribution
+alone.</p></div>
+
+<h3>5.3 Why this is a real philosophy-of-mind result</h3>
+
+<p>The philosophical payload is substantial. A long tradition — running from Kant through Hume to modern
+predictive-processing theorists like Metzinger — has argued that the self is not <em>given</em> in
+experience but is a structural <em>posit</em>, a construction the mind imposes rather than a datum it
+finds. The program's gauge result is a <strong>precise, computational vindication of this ancient
+worry</strong>. It shows, in a concrete trainable system, that "which part of this is me?" is not
+answerable from the inside by observation alone — that the self is a gauge choice, fixable only by
+intervening on the world. That a philosophical intuition about the constructed, non-given nature of the
+self can be turned into a formal identifiability theorem in a neural network is genuinely new, and it is
+the program's strongest claim to have contributed something to philosophy rather than merely borrowed
+from it.</p>
+
+<h3>5.4 The resolution: the self is known by not acting</h3>
+
+<p>The program's fix is as philosophically resonant as the problem. The gauge is broken by the
+<em>null action</em> — the agent deliberately doing nothing — which lets it observe the world's
+contribution in isolation and thereby pin down the previously-free boundary. This connects directly to
+the neuroscience of <strong>reafference</strong> (von Holst, Sperry): the brain distinguishes
+self-caused from world-caused sensation by predicting the consequences of its own actions
+("corollary discharge"). The program's result generalizes this into a principle:
+<em>the self is learned by intervention, not observation — the agent learns its own boundary by
+deliberately not acting.</em> There is something philosophically satisfying in the conclusion that
+selfhood is grounded in agency (in what one does and refrains from doing) rather than in introspection.</p>
+
+<div class="warn"><span class="boxtitle">Tension — does intervention recover a real self, or just a chosen frame?</span>
+<p>One genuine unresolved tension a philosopher should press. The program says two things that are in
+mild tension. On one hand: the architectural prior that there <em>is</em> a self/world split is "a frame,
+not a fact" — the boundary is under-determined, a construction. On the other: the null-action
+intervention "recovers the true decomposition." But if the boundary was genuinely a gauge (mere
+convention), what makes the intervention-fixed version <em>true</em> rather than just another,
+practically-useful choice of frame? Is the self that intervention reveals a <em>real</em> self that was
+there all along, or a <em>useful</em> self that intervention <em>constructs</em>? This is the deep
+question — realism versus instrumentalism about the self — and the program's result sharpens it without
+settling it. That is not a flaw; sharpening a genuine question to the point where it becomes decidable is
+exactly what good philosophy of mind does, and this result does it.</p></div>
+
+<h3>5.5 What to carry forward</h3>
+<p class="small">The gauge result proves a system can be a perfect agent with no fact of the matter
+about which changes are its own — the self/world split is a gauge symmetry, under-determined by
+observation, a no-go theorem for passive identification; it is a computational vindication of the
+Kant-to-Metzinger view that the self is posited, not given; the fix is that the self is learned by
+intervention (the null action) — selfhood grounded in agency, echoing reafference; and it leaves open a
+sharpened realism-versus-instrumentalism question about whether intervention reveals or constructs the
+self.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 6</span>Availability Is Not Use</h2>
+
+<h3>6.1 The distinction that may be the program's most durable idea</h3>
+
+<p>Running through the whole program is a distinction so important that it survives every one of the
+program's own negative results — indeed, it <em>produces</em> them. The distinction is between a
+representation being <strong>available</strong> and being <strong>used</strong>. That a concept can be
+<em>decoded</em> from a system's internal states — that a probe can read it off with high accuracy — does
+<em>not</em> establish that the system <em>uses</em> the concept to make its decisions. Availability is
+cheap and common; use is what matters, and it must be shown separately.</p>
+
+<div class="def"><span class="boxtitle">Thesis — the load-bearing standard</span>
+<p>A representation is "load-bearing" for a decision only if intervening on it — surgically corrupting
+or removing it — actually changes the decision at the point where the decision is made (the "commitment
+surface"). The program even proves an impossibility result: two features can have <em>identical</em>
+decodability (identical probe accuracy) while their <em>causal</em> effects on the decision differ
+arbitrarily. Therefore decodability can never, in principle, establish use. Only intervention can.</p></div>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the books on the shelf you never read</span>
+<p>Your bookshelf makes a great deal of information "available" — every fact in every volume is right
+there, decodable by anyone who opens a book. But which of it do <em>you</em> actually <em>use</em> to
+make decisions? Only the small fraction you have read and internalized. An observer cataloguing your
+shelf would badly overestimate your knowledge if they assumed availability equals use. Now run the test
+properly: <em>remove</em> a book and see if your behavior changes. If it does, that book was
+load-bearing; if not, it was decoration. The program insists on running exactly this test on a neural
+network's internal features — not "can we read it off?" (the shelf) but "does removing it change the
+decision?" (the reading). A probe reading a feature is finding a book on the shelf; only patching it
+proves the system ever read it.</p></div>
+
+<h3>6.2 Why this matters beyond the program</h3>
+
+<p>This is a genuine contribution to the philosophy of mind and to the young field of AI
+interpretability, and it is worth appreciating why. A great deal of interpretability research
+implicitly assumes that if a concept is decodable from a model's activations, the model "represents and
+uses" it. The program's result says this inference is <em>invalid</em> — decodability and use are
+logically independent, provably so. This reconstructs, in a modern computational setting, a distinction
+the philosopher Fred Dretske drew decades ago between a <strong>structuring cause</strong> (what actually
+makes a system do what it does) and a <strong>triggering cause</strong> (what merely correlates with the
+occasion). The program reaches Dretske's distinction without naming him — another of its unmarked
+scholarly debts — but reaching it, and turning it into a measurable gate, is real philosophical work.</p>
+
+<h3>6.3 The other edge: success without representation</h3>
+
+<p>The distinction cuts both ways, and the program is honest about the uncomfortable direction. Just as
+a representation can be available without being used, a system can <em>succeed</em> at a task without
+representing the thing you thought it needed to represent. In one experiment, an agent solves its
+viability problem <em>without representing its viability axis at all</em> — it has, in the program's
+words, "acquired a functional disposition, not a representational structure." This is the deflationary
+mirror of the load-bearing standard: behavioral success is not evidence of the intended internal
+structure. It is the empirical form of a very old debate — <strong>behaviorism versus
+cognitivism</strong> — and the program lands, with measurements, on the side that says: getting the
+right answer tells you nothing, by itself, about what is going on inside.</p>
+
+<h3>6.4 The criterion of representational reality</h3>
+
+<p>Assembled, availability-is-not-use gives the program what may be its single most defensible and
+general philosophical thesis: a <strong>criterion of representational reality</strong>. It says: for any
+attribution of a mental or representational property to a system, you must exhibit the <em>proxy</em>
+that would pass the behavioral test <em>without</em> the property, and then show the property is
+<em>load-bearing</em> at the surface where the decision is made. In the program's own words: "Do not ask
+only whether the agent succeeded; ask whether the future-controlling structure reached the surface where
+success was chosen." This is a rule for when the intentional, representational vocabulary is <em>earned</em>
+rather than merely projected — and it is exactly the discipline that generates all the program's honest
+negatives, because it keeps catching cases where the vocabulary was projected.</p>
+
+<div class="warn"><span class="boxtitle">Tension — a criterion still needs a threshold, and a judge</span>
+<p>Two honest limits. First, "load-bearing" is stated as a threshold (the intervention changes the
+decision by <em>some</em> amount), but the philosophically interesting quantity is a <em>degree</em>: how
+<em>much</em> of the decision does this structure explain? A binary "used / not used" is a coarse rendering
+of what is really a graded notion of representational involvement, and the program would deepen by
+formalizing the degree. Second, like every criterion in an AI-generated program, the judgment of whether
+a given intervention "counts" as reaching the commitment surface is applied by the same kind of system
+being judged. The criterion is genuinely general and genuinely valuable; making it graded, and having it
+applied by an independent hand, is what would turn a sharp idea into a settled tool.</p></div>
+
+<h3>6.5 What to carry forward</h3>
+<p class="small">Availability (decodability) is provably independent of use (causal effect at the
+decision) — two features can have identical probe accuracy and arbitrarily different causal impact, so
+only intervention establishes use; this reconstructs Dretske's structuring-versus-triggering cause and
+corrects a common interpretability fallacy; it cuts both ways (systems succeed without the expected
+representation); and assembled it yields a general "criterion of representational reality" — the
+program's most durable philosophical thesis — which would deepen by becoming graded and being externally
+judged.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 7</span>The Consciousness Question</h2>
+
+<h3>7.1 The elephant the vocabulary keeps summoning</h3>
+
+<p>A program that talks about concern, valence, selves, and care is a program constantly gesturing
+toward consciousness, whether it wants to or not. These are the words we use for beings with inner
+lives. So the reader inevitably asks: is any of this a theory of consciousness? Does a system that
+"maintains its self/world boundary" and "carves the world by concern" have — or approach having —
+subjective experience? The program's answer is a firm, systematic, repeated <strong>no</strong>, and how
+it handles this refusal is one of its most philosophically disciplined features.</p>
+
+<h3>7.2 The systematic refusal</h3>
+
+<p>Nearly every paper carries a near-verbatim disclaimer: "We study minimal computational precursors of
+concern-like agency. We do not claim consciousness, full agency, or general intelligence." Selfhood
+results are labeled "a selfhood ingredient, not a consciousness certificate." A standing list enumerates
+what is explicitly <em>not</em> claimed: consciousness, sentience, subjective experience, moral status,
+human cognitive validity, neural validity. This is not scattered hedging; it is a policy, applied
+consistently, and it is load-bearing to the program's credibility precisely <em>because</em> the
+vocabulary invites the opposite reading. A program using the word "concern" while refusing the
+consciousness inference is doing something harder than either using neutral jargon or making the bold
+claim — it is holding a suggestive vocabulary and declining to cash the suggestion.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — naming the storm "Concern" without believing it feels</span>
+<p>Meteorologists name hurricanes with human names — Katrina, Sandy — and describe them as "angry,"
+"unpredictable," "seeking the coast." No one thinks the storm has feelings; the names are handles for
+tracking and reasoning, and the anthropomorphism is understood as a convenience. The program's use of
+"concern" and "self" aspires to the same status: technical handles for real structures (viability
+weightings, causal-attribution boundaries), borrowed from mentalistic vocabulary because that vocabulary
+carved the right joints first, but explicitly <em>not</em> claiming the inner life the words usually
+imply. The discipline is in never letting the handle quietly become the claim — and the repeated
+disclaimers are how the program enforces that on itself.</p></div>
+
+<h3>7.3 The one place consciousness is engaged — and how carefully</h3>
+
+<p>There is exactly one thread where the program lets consciousness in, and even there it is fenced. In
+engaging the "geometry of consciousness" work (the ring and torus attractors of head-direction and grid
+cells, and how their topology <em>degrades</em> across brain states — intact in waking and REM sleep,
+collapsing in deep non-REM), the program floats a <em>candidate correlate</em>: preserved topology plus
+ordered dynamics might mark conscious-like states, degraded topology their absence. But it flags this
+explicitly as "a candidate operationalization, not a claim." This is the right posture: a
+<em>deflationary structural correlate</em> — a measurable geometric signature that <em>accompanies</em>
+conscious states in the one system (brains) where we independently know consciousness is present — offered
+as a research hypothesis, not a theory of why there is something it is like to be anything.</p>
+
+<h3>7.4 The tapestry of valence, and an honest negative</h3>
+
+<p>The program inherits from Bennett a striking speculative idea: that <em>qualia</em> — the felt
+qualities of experience — might be "tapestries of valence," patterns of how things help or harm across an
+organism's many internal variables. This is a genuine (if highly speculative) proposal about the nature
+of felt experience. And here the program does something admirable: it tests the geometric form of the
+claim and reports that it is <strong>not supported</strong> — the network does not visibly cluster its
+representations by valence-effect role the way the theory predicts. The program carries the tapestry idea
+in its <em>functional</em> form (agents do track multi-dimensional consequences) but honestly reports
+that its <em>geometric</em> form (the tapestry is visible in the representation) failed. It declines to
+claim the qualia theory its vocabulary would license, on the strength of its own measurement.</p>
+
+<div class="warn"><span class="boxtitle">Tension — the hard problem is untouched, and that is fine</span>
+<p>A philosopher should be clear about what none of this addresses: the <strong>hard problem of
+consciousness</strong> — why any physical process is accompanied by subjective experience at all. The
+program's structural correlates, even if they held perfectly, would tell you <em>which</em> physical
+configurations accompany consciousness (in brains), not <em>why</em> they do, nor whether the same
+configuration in silicon would be accompanied by anything. This is not a criticism of the program — it
+explicitly disclaims the territory — but it is a boundary the reader must hold. When the program is at
+its best on this topic, it is offering deflationary <em>correlates</em> and honest <em>negatives</em>, not
+a theory of experience. A reader who comes away thinking the program has said anything about whether these
+systems <em>feel</em> has misread it, and the program has worked hard to prevent that misreading.</p></div>
+
+<h3>7.5 The is/ought seam</h3>
+
+<p>One further philosophical fault-line deserves flagging: the program occasionally drifts toward
+<strong>normativity</strong>. It inherits from the autopoietic tradition the idea of a "cosmic ought" —
+that life-like self-maintenance is a formal consequence of the setup, not a contingency — and it floats an
+"ethical analogue of weakness" (good constraint as generative coherence) and even an explicit open
+question about "what ethical threshold follows if self-maintaining geometry appears in artificial
+systems." This is the ancient <strong>is/ought</strong> problem: the program can derive what a viable
+system <em>must</em> preserve to keep existing (a hypothetical imperative — "if you want to persist,
+then…"), but it never bridges to genuine <em>categorical</em> normativity ("you ought, full stop"). The
+equivocation between concern as descriptive weighting and concern as prescriptive mattering is the
+sharpest place a moral philosopher should press — and, to the program's credit, it flags the ethical
+question as explicitly open rather than pretending to have answered it.</p>
+
+<h3>7.6 What to carry forward</h3>
+<p class="small">The program's mentalistic vocabulary constantly summons consciousness, and it
+systematically, repeatedly refuses the inference — a load-bearing discipline, not throat-clearing; the
+one engagement (geometry-of-consciousness) offers a deflationary structural <em>correlate</em>, explicitly
+not a claim; it tests and honestly rejects the geometric form of the "qualia as tapestries of valence"
+idea; the hard problem of consciousness is untouched and disclaimed; and the is/ought seam — descriptive
+versus prescriptive concern, and the flagged-but-open ethical threshold — is where moral philosophy
+should press.</p>
+
+<h1 class="part"><span class="kicker">Part III</span>A Mature Verdict</h1>
+
+<p>Having stated the theses and worked the hard problems, this final part gives the reader what a
+philosophy primer owes: the strongest case <em>against</em> the program, an honest accounting of its
+scholarly gaps, and a constructive map of how to build on what is genuinely valuable.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 8</span>The Deflationary Counterargument</h2>
+
+<h3>8.1 Steelmanning the skeptic</h3>
+
+<p>Intellectual honesty requires stating the hardest case against the program in its strongest form. A
+determined deflationist — someone who thinks the whole edifice of "concern, meaning, self, agency" is
+honorific relabeling of ordinary machine learning — can run the entire program down to something
+deflating. Here is that argument at full strength:</p>
+
+<div class="warn"><span class="boxtitle">The deflationary reading, stated fairly</span>
+<p><em>"A finite optimizer allocates its capacity to whatever its loss function rewards. Its
+representations reorganize around the rewarded axis — of course they do; that is what training is. The
+'self' is an under-identified latent variable that intervention can pin, like any latent. None of this
+is about meaning, care, or life. 'Concern' is a relabeling of reward-weighting; 'objects from concern'
+is a relabeling of supervised feature selection; 'the self/world boundary' is a relabeling of a
+credit-assignment ambiguity; 'agency' is a relabeling of homeostatic control. Strip the mentalistic
+vocabulary and what remains is competent, unremarkable machine learning wearing philosophy's
+clothes."</em></p></div>
+
+<p>This is a serious argument, and a philosopher must not wave it away. Much of the program's language
+<em>does</em> exceed what its toy experiments strictly show, and the deflationist is right that in most
+experiments the "concern" is supplied and the reorganization is unsurprising given the training signal.
+A reader who cannot feel the force of this objection is not reading critically.</p>
+
+<h3>8.2 The program's best reply</h3>
+
+<p>The program's answer is not a refutation but a <strong>methodological wager</strong>, and it is
+better than it might first appear. The wager is this: the load-bearing standard of Chapter 6 is
+<em>precisely</em> what separates honorific relabeling from earned attribution. The deflationist says
+"you just relabeled reward-weighting as concern"; the program replies "then apply my own criterion —
+show me that the relabeled structure <em>causally reaches the decision surface under intervention</em>,
+because if it does not, I will <em>also</em> refuse to call it concern." The program is not claiming the
+vocabulary is always earned; it is offering a test for <em>when</em> it is, and using that test to reject
+its own overreaches (this is what produces the honest negatives). The deflationist and the program, in
+other words, largely agree on the danger — and the program's contribution is a discipline for policing
+it, applied first to itself.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the counterfeit detector that flags its own bills</span>
+<p>Imagine accusing a mint of printing fake money, and the mint replies: "Here is the exact test I use
+to distinguish real bills from fakes — and watch, I will run it on my own recent output and burn the
+ones that fail." That is a strong response, because it converts the accusation ("your currency is fake")
+into a shared standard ("here is how we both tell") and then demonstrates the standard has teeth by
+failing its own bills. The program's reply to the deflationist has this structure. It does not insist all
+its concern-talk is genuine; it hands you the load-bearing test, invites you to apply it, and points to
+the many places it has failed its own claims by that test. Whether the surviving claims are "really"
+about meaning remains contestable — but the program has moved the argument from name-calling to a shared,
+falsifiable criterion, which is progress.</p></div>
+
+<h3>8.3 The scholarly gaps that would strengthen the reply</h3>
+
+<p>The program's response to the deflationist would be far stronger if it engaged the philosophical
+literatures it currently reinvents unnamed. This is a constructive criticism, not a dismissal: naming
+these traditions would give the program forty years of pre-built objections and defenses to sharpen its
+claims against.</p>
+
+<table class="plain">
+<tr><th>Program idea</th><th>The literature it reinvents</th><th>What naming it would buy</th></tr>
+<tr><td>content grounded in function-for-viability</td><td><strong>Teleosemantics</strong> (Millikan, Dretske, Papineau)</td><td>the Swampman and function-indeterminacy debates, which directly test "objects from concern"; and the program's own "false beliefs can be load-bearing" line is a ready entry into the indeterminacy problem</td></tr>
+<tr><td>objects carved by causal role</td><td><strong>Natural kinds</strong> (Boyd's homeostatic property clusters)</td><td>a principled middle between discovered and constructed kinds, exactly the program's position</td></tr>
+<tr><td>availability is not use</td><td>Dretske's <strong>structuring vs triggering cause</strong></td><td>a precise vocabulary for a distinction the program states informally</td></tr>
+<tr><td>the load-bearing standard; non-uniqueness worries</td><td>Dennett's <strong>real patterns / intentional stance</strong></td><td>a framework for exactly when mentalistic attribution is more than instrumental — which is what the load-bearing criterion is trying to be</td></tr>
+<tr><td>the self as constructed, fixed by intervention</td><td>Metzinger, Hohwy, Seth on <strong>self-models</strong></td><td>the gauge result becomes a sharpening of the "transparent self-model" thesis rather than a lone finding</td></tr>
+</table>
+
+<h3>8.4 The honest bottom line</h3>
+
+<p>Where does a fair philosopher land? Somewhere deliberately between the deflationist and the true
+believer. The soft metaphysics of concern — "meaning is geometry under concern" — is best read as
+<em>motivation</em>, not established result: it is a suggestive frame that the experiments illustrate but
+do not prove, and the deflationist is right to resist taking it as demonstrated. The theorems (the
+weakness bridges, the concern-weighting identities) are, by the program's own admission, closer to
+bookkeeping than to deep discovery. But two things survive the deflationary acid: the <strong>self/world
+gauge result</strong> (a genuine, novel, formal contribution to the philosophy of the self) and the
+<strong>load-bearing criterion of representational reality</strong> (a general, defensible discipline for
+when mentalistic vocabulary is earned). These are not honorific relabelings; they are real philosophical
+work that would stand even if every grand claim around them were withdrawn. The mature verdict is: hold
+the grand metaphysics lightly, take the gauge result and the load-bearing criterion seriously, and read
+the rest as a disciplined attempt — often self-defeating by design — to find out which is which.</p>
+
+<h3>8.5 What to carry forward</h3>
+<p class="small">The deflationist's strong case — concern/self/agency as honorific relabelings of
+reward-weighting, credit-assignment, and homeostatic control — must be taken seriously and is partly
+right; the program's best reply is a methodological wager: apply its own load-bearing criterion, which it
+uses to reject its own overreaches; that reply would strengthen by naming the teleosemantics,
+natural-kinds, Dretske, Dennett, and self-model literatures it reinvents; and the honest verdict is to
+hold the grand metaphysics lightly while taking the gauge result and the load-bearing criterion as
+genuine, surviving contributions.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 9</span>How to Build On It Philosophically</h2>
+
+<h3>9.1 From critique to construction</h3>
+
+<p>A philosophy primer that only judged would be half a book. This closing chapter is constructive: given
+everything Parts I and II established, what are the sharpest moves that would deepen the program's
+philosophy? These are not vague exhortations but specific distinctions to draw and experiments to run —
+the ones that would settle, rather than merely restate, the program's open conceptual questions.</p>
+
+<h3>9.2 Three definitions to sharpen</h3>
+
+<ul>
+<li><strong>Split "concern" into its three senses and commit publicly.</strong> As Chapter 4 argued,
+the program conflates supplied-weight, self-observed-viability, and phenomenal concern. Naming all three,
+disowning the third, and stating that the whole thesis depends on migrating results from the first toward
+the second would convert an exploitable ambiguity into a precise claim.</li>
+<li><strong>Make "use" a degree, not a threshold.</strong> The load-bearing standard currently asks a
+binary question (does intervention change the decision?). The philosophically real object is a
+<em>magnitude</em>: how much of the decision does this structure explain? A graded notion of
+representational involvement — and its relation to Dretske's structuring cause — would turn a sharp
+criterion into a measuring instrument.</li>
+<li><strong>State weakness's form/function claim directly.</strong> The program paraphrases Bennett's
+"simplicity is form, generalization is function" but never states and defends it as a thesis in its own
+right. Making it explicit invites the philosophical scrutiny that would test its scope — exactly the
+scrutiny the external hard-kill suggests it needs.</li>
+</ul>
+
+<h3>9.3 Three distinctions to add</h3>
+
+<ul>
+<li><strong>Descriptive versus prescriptive concern.</strong> Is the concern-weighting a <em>fact
+about</em> the agent or a <em>norm the agent is subject to</em>? This is the is/ought seam of Chapter 7,
+and Canguilhem's "life defines norms" plus the program's own "ethical analogue of weakness" are the hooks
+for developing it.</li>
+<li><strong>Realism versus instrumentalism about the self.</strong> The gauge result (Chapter 5) leaves
+open whether intervention <em>reveals</em> a real self or <em>constructs</em> a useful one. Committing to
+one horn — or arguing the distinction dissolves — is a genuine philosophical contribution waiting to be
+made, and Dennett's "real patterns" is the natural arena.</li>
+<li><strong>Causal-role realism versus pragmatism about kinds.</strong> "Objects form from concern"
+needs to say whether reward-axis kinds are <em>discovered</em> or <em>constituted</em>. Boyd's
+homeostatic-property-cluster theory offers a defensible middle the program is already standing on without
+claiming.</li>
+</ul>
+
+<h3>9.4 Four experiments that would settle conceptual questions</h3>
+
+<div class="prog"><span class="boxtitle">The decisive tests</span>
+<ol>
+<li><strong>The concern-weighting load-bearing test.</strong> The program has <em>designed</em> but not
+decisively run the cleanest test of whether concern adds anything beyond weakness: pit concern-weighted
+against unweighted weakness on deployment where consequences are <em>unequal</em>, with wrong-weight and
+wrong-group controls. This directly answers the deflationist's core charge.</li>
+<li><strong>Learned-from-interaction valence at the hard boundary.</strong> Until concern
+<em>self-organizes</em> on the difficult (XOR) case rather than being supervised, "objects form from
+concern" remains "objects form from supervised labels of concern." Closing the bootstrap gap is the single
+experiment that would most strengthen the program's theory of content.</li>
+<li><strong>A self that intervention cannot recover.</strong> Deliberately construct a world where even
+intervention leaves the self/world boundary under-identified. A self that is <em>in principle</em>
+unrecoverable — not just hard to find — would be the philosophically decisive case, sharpening the
+realism/instrumentalism question to the point of decision.</li>
+<li><strong>Decode the discarded.</strong> When "objects form from concern" discards sensory features, are
+those features <em>erased</em> from the representation or merely <em>un-clustered</em>? Settling this
+decides whether the carving is informational (strong) or merely organizational (weak) — a clean, runnable
+test of how deep the concern-carving goes.</li>
+</ol></div>
+
+<h3>9.5 The single most defensible core to build around</h3>
+
+<p>If the program were to organize its philosophical identity around one durable thesis — one that
+survives every deflationary attack and all of its own negatives — it should not be the soft metaphysics
+of concern (too contestable) nor the near-tautological theorems (too thin). It should be the
+<strong>criterion of representational reality</strong> itself: the discipline that says, for any
+mental or agential attribution to any system, you must first exhibit the proxy that would pass the
+behavioral test without the property, and then show the property is load-bearing at the surface where the
+decision is made. Stated generally, this is a real, novel, and broadly applicable contribution to the
+philosophy of mind and to the epistemology of interpretability — a rule for when intentional vocabulary
+is earned rather than projected. It is, not coincidentally, the exact discipline that generates the
+program's most trustworthy feature, its honest negatives. The mature recommendation: use the metaphysics
+of concern as motivation, the toy experiments as illustration, the gauge result as the flagship
+discovery, and the load-bearing criterion as the durable thesis the whole enterprise should be
+remembered for.</p>
+
+<div class="pump"><span class="boxtitle">A closing thought</span>
+<p>The deepest thing this program may be teaching is not a theory of meaning but a <em>method</em> for
+doing philosophy of mind in the age of artificial systems: stop arguing about whether a system "really"
+has a property, and instead build the strongest impostor that would fake it, then demand a causal
+intervention proving the property does work the impostor cannot. That method turns interminable
+disputes — does it understand? does it have a self? does it care? — into decidable experiments. Whether
+or not its grand metaphysics of concern is right, the program has modeled how such questions might
+finally be settled rather than merely debated. For a field as old and as stuck as the philosophy of
+mind, that may be the more valuable gift.</p></div>
+
+<h3>9.6 What to carry forward</h3>
+<p class="small">Sharpen three definitions (split concern into its senses; make use a degree; state the
+form/function claim), add three distinctions (descriptive vs prescriptive concern; realism vs
+instrumentalism about the self; realism vs pragmatism about kinds), and run four decisive experiments
+(concern-weighting load-bearing; learned valence at the hard boundary; an in-principle-unrecoverable
+self; decode-the-discarded); and organize the program's philosophical identity around its most durable
+contribution — the load-bearing criterion of representational reality, and the method it embodies for
+turning philosophy-of-mind disputes into decidable experiments.</p>
+
+</body></html>

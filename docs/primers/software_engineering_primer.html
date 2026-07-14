@@ -1,0 +1,997 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Mathematics of the Research Program — A Primer from First Principles</title>
+<style>
+/* ---------- page setup ---------- */
+@page { size: letter; margin: 0.9in 0.85in; }
+:root {
+  --ink: #1a1a1e;
+  --muted: #55555e;
+  --rule: #d8d8de;
+  --def-bg: #eef4fb;  --def-edge: #2c6cb0;   /* definitions */
+  --pump-bg: #fdf6e8; --pump-edge: #c98a1b;  /* intuition pumps */
+  --vis-bg: #f4effa;  --vis-edge: #7a4fb5;   /* visual proofs */
+  --prog-bg: #edf7ee; --prog-edge: #35854a;  /* in our papers */
+  --warn-bg: #fbeeee; --warn-edge: #b04040;  /* pitfalls */
+  --eq-bg: #f7f7f9;
+}
+* { box-sizing: border-box; }
+html { font-size: 10.4pt; }
+body {
+  font-family: Georgia, 'Times New Roman', serif;
+  color: var(--ink);
+  line-height: 1.52;
+  margin: 0;
+}
+p { margin: 0.55em 0 0.75em; text-align: justify; hyphens: auto; }
+ul, ol { margin: 0.4em 0 0.8em; padding-left: 1.4em; }
+li { margin-bottom: 0.28em; text-align: justify; }
+strong { color: #000; }
+
+/* ---------- headings ---------- */
+h1, h2, h3, h4 { font-family: Georgia, serif; line-height: 1.22; page-break-after: avoid; }
+h1.part {
+  page-break-before: always;
+  font-size: 2.05em; margin: 2.2em 0 0.2em;
+  color: #17314f;
+}
+h1.part .kicker {
+  display: block; font-size: 0.42em; letter-spacing: 0.18em;
+  text-transform: uppercase; color: #8a6a2f; margin-bottom: 0.9em;
+  font-weight: normal;
+}
+h2.chapter {
+  page-break-before: always;
+  font-size: 1.62em; margin: 1.4em 0 0.25em; color: #17314f;
+  border-bottom: 2.5px solid #17314f; padding-bottom: 0.22em;
+}
+h2.chapter .chnum {
+  display: block; font-size: 0.58em; letter-spacing: 0.14em;
+  text-transform: uppercase; color: #8a6a2f; margin-bottom: 0.25em;
+}
+h3 { font-size: 1.18em; margin: 1.35em 0 0.35em; color: #1f3a5c; }
+h4 { font-size: 1.02em; margin: 1.1em 0 0.3em; color: #33333a; font-style: italic; }
+
+/* ---------- math ---------- */
+.m { font-family: 'Georgia', serif; font-style: italic; white-space: nowrap; }
+.m b, .mrm { font-style: normal; }
+.eq {
+  display: block; text-align: center; font-family: Georgia, serif;
+  font-style: italic; font-size: 1.09em; margin: 0.85em auto;
+  page-break-inside: avoid;
+}
+.eqbox {
+  background: var(--eq-bg); border: 1px solid var(--rule); border-radius: 6px;
+  padding: 0.6em 1em; margin: 0.9em 0; page-break-inside: avoid;
+}
+.frac { display: inline-block; vertical-align: -0.9em; text-align: center; margin: 0 0.12em; }
+.frac .top { display: block; padding: 0 0.25em 0.08em; border-bottom: 1px solid currentColor; }
+.frac .bot { display: block; padding: 0.08em 0.25em 0; }
+sub, sup { font-size: 0.68em; }
+.big { font-size: 1.35em; font-style: normal; vertical-align: -0.12em; }
+.rm { font-style: normal; }
+
+/* equation decoder tables */
+table.decoder {
+  width: 100%; border-collapse: collapse; margin: 0.7em 0 1em;
+  font-size: 0.93em; page-break-inside: avoid;
+}
+table.decoder th, table.decoder td {
+  border: 1px solid var(--rule); padding: 0.32em 0.55em; text-align: left; vertical-align: top;
+}
+table.decoder th { background: #eef1f5; font-size: 0.9em; letter-spacing: 0.04em; }
+table.decoder td:first-child { font-family: Georgia, serif; font-style: italic; white-space: nowrap; }
+
+table.plain {
+  width: 100%; border-collapse: collapse; margin: 0.7em 0 1em; font-size: 0.93em;
+}
+table.plain th, table.plain td {
+  border: 1px solid var(--rule); padding: 0.3em 0.5em; text-align: left; vertical-align: top;
+}
+table.plain th { background: #eef1f5; }
+
+/* ---------- callout boxes ---------- */
+.box {
+  border-radius: 7px; padding: 0.7em 0.95em 0.55em; margin: 1em 0;
+  page-break-inside: avoid; border-left: 4.5px solid;
+}
+.box .boxtitle {
+  display: block; font-size: 0.78em; font-weight: bold; letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 0.35em; font-family: Helvetica, Arial, sans-serif;
+}
+.box p:last-child { margin-bottom: 0.25em; }
+.def  { background: var(--def-bg);  border-color: var(--def-edge); }
+.def .boxtitle { color: var(--def-edge); }
+.pump { background: var(--pump-bg); border-color: var(--pump-edge); }
+.pump .boxtitle { color: var(--pump-edge); }
+.vis  { background: var(--vis-bg);  border-color: var(--vis-edge); }
+.vis .boxtitle { color: var(--vis-edge); }
+.prog { background: var(--prog-bg); border-color: var(--prog-edge); }
+.prog .boxtitle { color: var(--prog-edge); }
+.warn { background: var(--warn-bg); border-color: var(--warn-edge); }
+.warn .boxtitle { color: var(--warn-edge); }
+
+/* ---------- figures ---------- */
+figure {
+  margin: 1.1em auto; text-align: center; page-break-inside: avoid;
+}
+figcaption {
+  font-size: 0.86em; color: var(--muted); margin-top: 0.45em;
+  text-align: justify; padding: 0 1.2em;
+}
+figcaption b { color: #333; }
+svg { max-width: 100%; }
+svg text { font-family: Helvetica, Arial, sans-serif; }
+.svglabel { font-size: 11px; fill: #333; }
+
+/* ---------- misc ---------- */
+code, .code {
+  font-family: 'Courier New', monospace; font-size: 0.9em;
+  background: #f2f2f4; padding: 0.05em 0.3em; border-radius: 3px;
+}
+.titlepage { text-align: center; padding-top: 2.4in; }
+.titlepage h1 { font-size: 2.5em; color: #17314f; margin-bottom: 0.2em; border: none; }
+.titlepage .subtitle { font-size: 1.25em; color: var(--muted); font-style: italic; margin: 0.6em 0 2em; }
+.titlepage .meta { font-size: 0.95em; color: var(--muted); margin-top: 3.2em; line-height: 1.9; }
+.toc { page-break-before: always; }
+.toc h2 { font-size: 1.5em; color: #17314f; }
+.toc ul { list-style: none; padding-left: 0; column-count: 2; column-gap: 2.2em; font-size: 0.92em; }
+.toc ul li { margin-bottom: 0.32em; }
+.toc .tocpart { font-weight: bold; margin-top: 0.7em; color: #17314f; break-after: avoid; }
+.chip {
+  display: inline-block; font-family: Helvetica, Arial, sans-serif; font-size: 0.7em;
+  background: #e7edf5; color: #2c4a72; border-radius: 9px; padding: 0.1em 0.65em;
+  margin-right: 0.3em; letter-spacing: 0.03em; vertical-align: 0.15em;
+}
+.small { font-size: 0.88em; color: var(--muted); }
+hr.sep { border: none; border-top: 1px solid var(--rule); margin: 1.6em 15%; }
+</style>
+</head>
+<body>
+
+<div class="titlepage">
+  <h1>The Instrument</h1>
+  <p class="subtitle">A Software-Engineering Primer on How the<br>Research Codebase Is Built, Run, and Kept Honest</p>
+  <svg width="320" height="140" viewBox="0 0 320 140">
+    <rect x="20" y="40" width="70" height="60" rx="4" fill="#eef4fb" stroke="#2c6cb0"/>
+    <text x="55" y="74" text-anchor="middle" font-size="9" fill="#2c6cb0">experiment</text>
+    <path d="M90 70 L120 70" stroke="#888" stroke-width="1.4" marker-end="url(#a)"/>
+    <rect x="122" y="40" width="70" height="60" rx="4" fill="#fdf6e8" stroke="#c98a1b"/>
+    <text x="157" y="66" text-anchor="middle" font-size="9" fill="#c98a1b">artifacts</text>
+    <text x="157" y="80" text-anchor="middle" font-size="8" fill="#55555e">(local)</text>
+    <path d="M192 70 L222 70" stroke="#888" stroke-width="1.4" marker-end="url(#a)"/>
+    <rect x="224" y="40" width="76" height="60" rx="4" fill="#edf7ee" stroke="#35854a"/>
+    <text x="262" y="66" text-anchor="middle" font-size="9" fill="#35854a">paper.pdf</text>
+    <text x="262" y="80" text-anchor="middle" font-size="8" fill="#55555e">(public)</text>
+    <defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#888"/></marker></defs>
+  </svg>
+  <p class="meta">
+    A companion to <em>The Mathematics of Constraint</em>.<br>
+    This repository is not an application. It is a scientific instrument<br>
+    and a publishing pipeline — engineered to keep machine-made science honest.
+  </p>
+</div>
+
+<div class="toc">
+<h2>Reading a Codebase as an Argument</h2>
+<p>Most software exists to <em>do</em> something — serve a page, process a payment, drive a car. This
+codebase exists to <em>establish</em> something: trustworthy, reproducible scientific records, generated
+by AI agents under one human director's review. Almost every engineering decision in it — the way raw
+data is split from published summaries, the script that regenerates provenance, the guard that blocks
+unsafe commits, the pinned GPU images — is downstream of a single requirement: <strong>how do you keep
+science honest when a machine wrote the code and a machine ran the experiment?</strong></p>
+
+<p>Read this way, the repository becomes legible. Its unusual choices stop looking arbitrary and start
+looking like answers to that question. This book is a guided tour of the instrument — its architecture,
+how it runs experiments locally and on rented GPUs, how results become papers, and the quality and
+provenance machinery that lets a suspicious outsider verify a result without trusting the AI that
+produced it. It closes, as an honest engineering review must, with the smells, the tech debt, and a
+concrete plan for what to refactor.</p>
+
+<div class="pump" style="margin-top:0.4em"><span class="boxtitle">Who this is for</span>
+<p>You need to know what a function, a file, and a commit are — roughly, that you have written or read
+some code. You do <em>not</em> need to know research infrastructure, GPUs, or the specific tools
+(Modal, Doppler, Haskell, reportlab) involved; each is explained where it appears. Boxes work as in the
+other primers: <span class="chip">Definition</span>, <span class="chip">Intuition pump</span>,
+<span class="chip">In the code</span> (pointing at real files), and <span class="chip">Smell</span>
+(where an engineer should wince, constructively).</p></div>
+
+<h3 style="margin-top:1.1em">Contents</h3>
+<ul>
+<li class="tocpart">Part I · The Shape of the Codebase</li>
+<li>1 · Not an App — a Scientific Instrument</li>
+<li>2 · The Experiment Package and the Pipeline</li>
+<li>3 · Public-Safe by Construction</li>
+<li class="tocpart">Part II · Running the Science</li>
+<li>4 · Two Execution Regimes</li>
+<li>5 · The Modal Maturity Gradient</li>
+<li>6 · From Markdown to PDF: the Paper Toolchain</li>
+<li class="tocpart">Part III · Keeping Code Honest</li>
+<li>7 · The Quality and Provenance System</li>
+<li>8 · Types as Contracts, and the Polyglot Boundary</li>
+<li class="tocpart">Part IV · A Mature Verdict</li>
+<li>9 · Strengths, Smells, and the Refactor Path</li>
+</ul>
+</div>
+
+<h1 class="part"><span class="kicker">Part I</span>The Shape of the Codebase</h1>
+
+<p>Before the running and the tooling comes the layout — what lives where, and why. This part maps the
+repository's structure, its central "experiment package" convention, and the safety split that keeps it
+publishable. The organizing insight, which unlocks everything: this is an instrument for making honest
+records, not an app for doing a task.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 1</span>Not an App — a Scientific Instrument</h2>
+
+<h3>1.1 The framing that explains everything</h3>
+
+<p>The single most useful thing to know before opening a single file: <strong>this is not an
+application.</strong> An application has users, features, a runtime it serves. This repository has none
+of those as its purpose. Its "product" is a body of <em>scientific records</em> — experiment code,
+result summaries, papers, and the provenance that proves how they were made — that must remain
+observable, attributable, and reproducible even though an AI agent generated them. Every design choice
+that would look strange in an app makes sense once you hold this frame.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — a lab bench, not a product</span>
+<p>Walk into a chemistry lab and you do not find "an app." You find benches, labeled reagent shelves, a
+logbook, a fume hood, and a strict protocol for what may leave the room. The organization serves
+<em>reproducible, safe, documented experiments</em>, not a customer. This repository is a lab bench
+rendered in code: experiments are the benchtop apparatus, the raw-data folders are the reagent shelves
+(some kept in the locked cabinet, never shipped), the provenance files are the logbook, and the
+publication guard is the protocol at the door deciding what may leave. If you go looking for an app's
+architecture — a server, a UI, a main loop — you will be confused. Look instead for the shape of a
+well-run lab, and it snaps into focus.</p></div>
+
+<h3>1.2 The top-level map</h3>
+
+<p>The repository is large — well over a thousand tracked files, some fifty experiments, as many papers
+— but its top level is a small, legible set of rooms:</p>
+
+<table class="plain">
+<tr><th>Directory</th><th>What lives there</th></tr>
+<tr><td><code>experiments/</code></td><td>~50 self-contained research units — the harness code, the GPU-sweep entry points, committed result summaries, and a provenance card each</td></tr>
+<tr><td><code>papers/</code></td><td>~55 paper directories, each a <code>paper.md</code> plus figures, rendered to <code>paper.pdf</code>; a <code>pdf/</code> folder of shareable copies</td></tr>
+<tr><td><code>scripts/</code></td><td>~85 operational scripts: the quality gate, the provenance generator, and dozens of one-off paper- and figure-builders</td></tr>
+<tr><td><code>tests/</code></td><td>~55 test files, one per experiment or module</td></tr>
+<tr><td><code>formal/ontology-hs/</code></td><td>a Haskell program — a typed "ontology gate" for one arc of experiments (Chapter 8)</td></tr>
+<tr><td><code>docs/</code></td><td>the two canonical design docs, the verification index, and a dense archive of plans, reviews, and handoffs</td></tr>
+<tr><td><code>data/</code>, <code>artifacts/</code></td><td>raw data and raw outputs — <em>gitignored</em>, never shipped (with one small committed exception)</td></tr>
+<tr><td><code>references/</code></td><td>the full-text citation archive — also gitignored</td></tr>
+</table>
+
+<h3>1.3 The surprising absence: no installable package, no lockfile</h3>
+
+<p>An experienced engineer opening the project's configuration finds something startling. The
+<code>pyproject.toml</code> — the file that usually declares a Python project's dependencies — declares
+<em>almost nothing</em>: a name, a Python version, and linter settings. No dependency list. No lockfile
+pinning exact versions. There is <strong>no monolithic installable package</strong> at all. This looks,
+at first, like a serious omission.</p>
+
+<p>It is a deliberate choice, and understanding it is the first real lesson in the codebase's philosophy.
+Dependencies are not installed once and shared; they are pulled <em>ephemerally, per invocation</em>. A
+command that needs PyTorch and NumPy spins up a throwaway environment with exactly those, runs, and
+disappears (via a tool called <code>uvx</code>, Chapter 4). The GPU sweeps bake their dependencies into
+per-experiment cloud images instead. The reasoning: the author's local machine runs an old Python, but
+the experiments need a newer one, so every entry point forces its own fresh, correct environment rather
+than relying on a shared install that might be wrong. It trades the convenience of "install once" for the
+guarantee that each experiment declares and gets exactly what it needs.</p>
+
+<div class="warn"><span class="boxtitle">Smell — the version-pinning is scattered, and mostly loose</span>
+<p>A mature engineer should flag the cost of this choice, which the codebase itself acknowledges. Because
+there is no central lockfile, the exact versions of dependencies live scattered across many call sites —
+the quality-check script, the reproduce script, and each GPU image, sometimes as loose ranges rather than
+exact pins. Two consequences: the same experiment could resolve to slightly different library versions in
+different places (a reproducibility risk), and there is no single place to audit or update the dependency
+set. Only the most recent, most careful experiments pin exact versions; the older ones drift. Chapter 9's
+refactor plan puts "pin dependencies once" near the top for exactly this reason.</p></div>
+
+<h3>1.4 Why the framing matters for you as a reader</h3>
+
+<p>Hold the instrument framing as you read on, because it is the key that decodes the rest. When you
+meet a script that regenerates provenance from committed files, ask "what honesty problem does this
+solve?" — not "what feature does this ship?" When you meet the split between gitignored raw data and
+committed summaries, read it as the lab's rule about what leaves the room. When you meet the elaborate
+GPU-launch safety checks of Chapter 5, read them as a lab's protocol against an expensive mistake. The
+repository is an argument, made in code, that AI-generated science can be trustworthy — and every file is
+a sentence in that argument.</p>
+
+<h3>1.5 What to carry forward</h3>
+<p class="small">The repository is a scientific instrument, not an app — its product is trustworthy,
+reproducible records; the top level is a legible set of "rooms" (experiments, papers, scripts, tests,
+formal, docs, and gitignored raw-data cabinets); there is deliberately no installable package or central
+lockfile — dependencies are pulled ephemerally per run, which guarantees correctness but scatters version
+pins (a real smell); and the way to read every subsequent choice is to ask which honesty or
+reproducibility problem it solves.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 2</span>The Experiment Package and the Pipeline</h2>
+
+<h3>2.1 One convention, repeated fifty times</h3>
+
+<p>The codebase's coherence comes from a single repeated convention: the <strong>experiment
+package</strong>. Nearly every research unit under <code>experiments/</code> follows the same internal
+shape, so once you can read one, you can read all fifty. A typical package contains a hypothesis note,
+the harness code (the Python that actually runs the experiment), one or more GPU-sweep entry points,
+committed result summaries in a <code>results/</code> folder, an auto-generated provenance card, and
+sometimes a benchmark card.</p>
+
+<div class="def"><span class="boxtitle">Definition — the experiment package contract</span>
+<p>An experiment package is expected to carry: a <em>hypothesis manifest</em> (what is being tested),
+<em>deterministic seeds</em> (so runs reproduce), a <em>positive target plus negative controls plus
+stress tests</em> (Chapter 3 of the science primer), <em>both accepted and rejected artifacts</em>
+(failures preserved, not deleted), a <em>discovery-regime audit</em> after each meaningful run, and the
+rule that <em>raw outputs stay in the gitignored artifact folder until they are summarized</em> into a
+committed, public-safe report. The package is a lab protocol expressed as a directory layout.</p></div>
+
+<h3>2.2 The pipeline: the spine of the whole repository</h3>
+
+<p>Data flows through every experiment along the same path, and this pipeline is the single most
+important thing to internalize about the codebase's operation:</p>
+
+<figure>
+<svg width="640" height="200" viewBox="0 0 640 200">
+  <rect x="20" y="20" width="120" height="46" rx="5" fill="#eef4fb" stroke="#2c6cb0"/>
+  <text x="80" y="40" text-anchor="middle" class="svglabel" font-size="10">experiment code</text>
+  <text x="80" y="55" text-anchor="middle" class="svglabel" font-size="8" fill="#666">runs the science</text>
+  <path d="M80 66 L80 92" stroke="#555" stroke-width="1.4" marker-end="url(#p)"/>
+  <rect x="20" y="94" width="120" height="46" rx="5" fill="#fdf6e8" stroke="#c98a1b"/>
+  <text x="80" y="114" text-anchor="middle" class="svglabel" font-size="10">artifacts/*.json</text>
+  <text x="80" y="129" text-anchor="middle" class="svglabel" font-size="8" fill="#b04040">raw · gitignored · local</text>
+  <path d="M140 117 L200 117" stroke="#555" stroke-width="1.4" marker-end="url(#p)"/>
+  <text x="170" y="110" text-anchor="middle" class="svglabel" font-size="8">summarize</text>
+  <rect x="202" y="94" width="140" height="46" rx="5" fill="#edf7ee" stroke="#35854a"/>
+  <text x="272" y="114" text-anchor="middle" class="svglabel" font-size="9.5">results/*.md</text>
+  <text x="272" y="129" text-anchor="middle" class="svglabel" font-size="8" fill="#35854a">committed · public-safe</text>
+  <path d="M342 117 L402 117" stroke="#555" stroke-width="1.4" marker-end="url(#p)"/>
+  <rect x="404" y="94" width="120" height="46" rx="5" fill="#eef4fb" stroke="#2c6cb0"/>
+  <text x="464" y="118" text-anchor="middle" class="svglabel" font-size="10">papers/paper.md</text>
+  <path d="M524 117 L560 117" stroke="#555" stroke-width="1.4" marker-end="url(#p)"/>
+  <rect x="490" y="150" width="130" height="40" rx="5" fill="#f4effa" stroke="#7a4fb5"/>
+  <text x="555" y="167" text-anchor="middle" class="svglabel" font-size="9.5">paper.pdf</text>
+  <text x="555" y="181" text-anchor="middle" class="svglabel" font-size="8" fill="#7a4fb5">figures + tables</text>
+  <path d="M560 128 L560 150" stroke="#555" stroke-width="1.2" marker-end="url(#p)"/>
+  <defs><marker id="p" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#555"/></marker></defs>
+</svg>
+<figcaption><b>The experiment-to-paper pipeline.</b> Experiment code produces raw JSON dumps into the
+gitignored <code>artifacts/</code> cabinet; a summarizer reduces them to committed, public-safe
+Markdown in <code>results/</code>; the paper draws its numbers from those summaries; and a build script
+renders the paper (with figures and tables) to PDF. The load-bearing rule: <em>raw data never ships;
+only its vetted summary does.</em></figcaption>
+</figure>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the darkroom and the gallery</span>
+<p>Think of an old photographer's workflow. The negatives (raw, fragile, private) live in the darkroom;
+they never go on the wall. From them the photographer produces prints — curated, finished, safe to
+display — and those go in the gallery. You could not run the gallery without the darkroom, but the two
+are strictly separated, and only prints cross the threshold. The repository's <code>artifacts/</code>
+folder is the darkroom (raw JSON, gitignored, local-only); <code>results/</code> and the papers are the
+gallery (summarized, committed, public). The summarizer is the printing step. This separation is not
+tidiness — it is the mechanism that lets the whole thing be a <em>public</em> repository without ever
+leaking a raw negative.</p></div>
+
+<h3>2.3 A subtlety: "paper-primary" experiments</h3>
+
+<p>Not every experiment produces a committed <code>results/</code> summary. A large class of the newer
+"concern" experiments are <em>paper-primary</em>: one GPU sweep feeds directly into one paper, with
+<em>no</em> committed intermediate summary — the paper itself is the public record, and the raw JSON
+stays local. The provenance system encodes this distinction directly, tagging each experiment's status
+as "paper," "results," or "scaffold" depending on what public artifact it has reached. This is worth
+knowing because it means "where do I find this experiment's numbers?" has two different answers depending
+on the experiment's maturity — sometimes a results file, sometimes only the paper.</p>
+
+<h3>2.4 What the convention buys, and what it costs</h3>
+
+<p>The upside of one repeated package shape is enormous: any contributor (human or AI) can navigate an
+unfamiliar experiment instantly, because it looks like every other one; tooling can operate on all
+experiments uniformly (the provenance generator scrapes every package the same way); and the pipeline's
+darkroom/gallery split is enforced everywhere at once. The cost, which Chapter 9 develops, is
+<em>duplication</em>: because each package re-implements the same scaffolding by hand — the same seeding
+logic, the same "dict of pass/fail gates," the same summarization — the convention is maintained by
+copying rather than by a shared library. It is a convention held together by discipline, not by
+abstraction, and that is both its robustness and its debt.</p>
+
+<h3>2.5 What to carry forward</h3>
+<p class="small">The codebase's coherence comes from one repeated "experiment package" shape (hypothesis,
+seeds, positive/controls/stress, accepted-and-rejected artifacts, provenance); the universal pipeline
+runs experiment code → gitignored raw JSON → committed summary → paper → PDF, with the load-bearing rule
+that raw data never ships; "paper-primary" experiments skip the summary and let the paper be the record;
+and the convention buys uniform navigability and tooling at the cost of hand-copied duplication rather
+than shared abstraction.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 3</span>Public-Safe by Construction</h2>
+
+<h3>3.1 The problem a public research repo must solve</h3>
+
+<p>This repository is <em>public</em> — anyone can read it. But the science it runs touches things that
+must not be public: raw model outputs, full-text copies of copyrighted papers, API keys, large data
+dumps. A single careless commit could leak a secret or a gigabyte of raw logs. The naive solution — "be
+careful" — fails, because in a repository where an AI agent commits at high volume, "be careful" is not a
+mechanism. The codebase instead makes safety <strong>structural</strong>: it arranges things so that
+leaking is <em>hard by construction</em>, not merely against the rules.</p>
+
+<div class="def"><span class="boxtitle">Definition — defense in depth</span>
+<p><strong>Defense in depth</strong> is the security principle of stacking independent barriers, so that
+a failure of any one is caught by the next. The repository stacks three for public safety: (1) the
+<code>.gitignore</code> that prevents raw-data folders and secrets from being tracked at all; (2) a
+<em>publication guard</em> that re-checks every tracked file and fails the build if something unsafe
+slipped through; and (3) <em>export scripts</em> that whitelist exactly which fields of a raw sweep may
+become public. Three walls, each independent, guarding one boundary.</p></div>
+
+<h3>3.2 The three walls</h3>
+
+<p><strong>Wall one — the ignore list.</strong> The <code>.gitignore</code> blocks the raw-data
+directories, the full-text citation archive, and every kind of credential file from ever entering
+version control. This is the first and cheapest barrier: files it covers are invisible to git.</p>
+
+<p><strong>Wall two — the publication guard.</strong> A small, dependency-free script scans every
+<em>tracked</em> file and fails if it finds a forbidden path, a file over ten megabytes, or anything
+matching a credential signature (the shapes of API keys and tokens). This catches what the ignore list
+missed — a raw file committed by mistake, a secret pasted into a source file. It runs as part of the
+quality gate, so a violation blocks the build.</p>
+
+<div class="prog"><span class="boxtitle">In the code — the guard's detector is itself unit-tested</span>
+<p>A detail that signals real engineering seriousness: the secret-detecting function is exposed as a
+testable unit and locked down by its own test. The test asserts the detector <em>flags</em> real vendor
+tokens and <code>api_key='...'</code> assignments, but does <em>not</em> flag innocent fixture credential
+<em>names</em> used in test code. In other words, the guard against missing a real secret is itself
+guarded against crying wolf on test fixtures. The safety net has a safety net. This is the texture of a
+codebase that treats its trust infrastructure as first-class, tested code rather than a hopeful
+afterthought.</p></div>
+
+<p><strong>Wall three — field-allowlist exporters.</strong> The most sophisticated barrier. When a raw
+GPU sweep (say, a 200-kilobyte JSON of every cell's full internal state) needs to become a public
+appendix, an export script does not copy it — it <em>rebuilds</em> a compact artifact containing only an
+explicit whitelist of safe fields. It even records the raw source's cryptographic hash and lists exactly
+which fields were <em>omitted</em>, so the reduction is itself auditable. A reader can reconstruct the
+paper's tables from the compact public artifact without ever seeing the raw logs, and can verify nothing
+was hidden that shouldn't be.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the classified document and the redaction stamp</span>
+<p>When a government releases a classified document, it does not hand over the original and trust the
+reader to look away from the secrets. It produces a <em>redacted</em> copy: specific passages blacked
+out, and often a note saying how many lines were removed and why. The field-allowlist exporter is a
+redaction machine for scientific data. It starts from the raw, sensitive negative and emits a copy
+containing only the pre-approved fields, stamped with a note of what was left out and a hash proving it
+came from the real original. The difference from ordinary "just don't commit the secret": redaction is a
+<em>positive whitelist</em> — only named-safe fields survive — so a newly-added sensitive field is
+excluded by default rather than leaked by oversight.</p></div>
+
+<h3>3.3 Why "by construction" beats "by policy"</h3>
+
+<p>The deep move here, and the reason it belongs in a book about honest AI-generated science, is the
+shift from <em>policy</em> to <em>construction</em>. A policy ("don't commit secrets") is a rule that
+depends on every contributor following it every time — and with a high-volume AI committer, "every time"
+is a lot of chances to fail. A construction (an ignore list plus an automated guard plus a whitelist
+exporter) makes the safe path the <em>default</em> and the unsafe path <em>blocked</em>. You do not have
+to remember to be safe; you have to actively defeat three independent barriers to be unsafe. For a
+repository whose commits come from a machine, this is the only kind of safety that actually holds.</p>
+
+<h3>3.4 What to carry forward</h3>
+<p class="small">A public research repo must never leak raw outputs, full-text sources, secrets, or huge
+dumps; the codebase makes safety structural via defense in depth — the gitignore (blocks tracking), the
+publication guard (re-scans tracked files for forbidden paths/sizes/credential patterns, with its
+detector itself unit-tested), and field-allowlist exporters (redact raw sweeps to whitelisted fields,
+recording hashes and omissions); and the principle is safety by construction, not by policy — the only
+kind that holds when a machine is committing at volume.</p>
+
+<h1 class="part"><span class="kicker">Part II</span>Running the Science</h1>
+
+<p>An instrument is defined by how it runs. This part covers the two execution regimes — deterministic
+local runs and large rented-GPU sweeps — the striking spectrum of engineering maturity across the cloud
+sweeps, and the toolchain that turns a Markdown draft into a finished PDF without a heavyweight
+publishing system.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 4</span>Two Execution Regimes</h2>
+
+<h3>4.1 Local, deterministic, and seeded</h3>
+
+<p>Small experiments and all "pure" analysis run <strong>locally, on the CPU, deterministically</strong>.
+"Deterministic" is the key word: given the same inputs and the same random seed, the code produces
+<em>byte-for-byte</em> the same result, every time, on any machine. This is not automatic — randomness in
+software is a common source of irreproducibility — and the codebase achieves it through unusual
+discipline.</p>
+
+<div class="prog"><span class="boxtitle">In the code — no global randomness, ever</span>
+<p>The determinism discipline is remarkably consistent: <strong>there is no global random-number
+generator anywhere</strong>. Every function that needs randomness is <em>handed</em> its own generator,
+seeded explicitly, rather than reaching for a shared global one. Several modules go further with a
+second layer: a top-level generator draws a per-trial seed, and each trial is then built from a fresh
+generator seeded with <em>that</em> — so a trial's content is independent of how many other things ran
+before it. Some experiments even run the whole thing <em>twice</em> and assert the two runs produced
+identical results, gating on "deterministic replay." The payoff: an experiment tagged "local" can be
+re-run by anyone with one command and will reproduce exactly, which is the bedrock of the reproducibility
+pillar (Chapter 7).</p></div>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the recipe that always yields the same cake</span>
+<p>An ordinary recipe says "a pinch of salt, bake until done" — and two cooks get two different cakes.
+A <em>deterministic</em> recipe specifies every gram and every second, so any cook, any kitchen, gets the
+identical cake. Software randomness is the "pinch of salt": if the program grabs whatever random state
+happens to be lying around (a global generator), results wobble run to run. The codebase's rule — hand
+every function its own precisely-seeded generator — is the specified-to-the-gram recipe. It is more work
+to write, and it is why "reproduce this experiment" is a real promise here rather than a hope.</p></div>
+
+<h3>4.2 Ephemeral dependencies with uvx</h3>
+
+<p>Recall from Chapter 1 that there is no shared installed environment. Local runs get their
+dependencies through <code>uvx</code>, a tool that spins up a <em>throwaway</em> Python environment with
+exactly the requested libraries, runs the command inside it, and discards it. A quality-check run, for
+instance, invokes the tests inside a fresh environment carrying PyTorch, NumPy, scikit-learn, and the
+test framework — pinned to a specific Python version the code requires. The benefit is that each entry
+point declares and receives precisely its own needs, immune to whatever happens to be installed on the
+machine. The cost, flagged in Chapter 1, is that those declarations are scattered rather than centralized.</p>
+
+<h3>4.3 The cloud regime: Modal GPU sweeps</h3>
+
+<p>Anything large — training hundreds of neural networks, sweeping thousands of trials — cannot run on a
+laptop. These go to <strong>Modal</strong>, a service that runs your code on rented cloud machines,
+including GPUs, on demand. The pattern is uniform: a command dispatches a "sweep" — many independent runs
+across seeds and conditions — to Modal, which fans them out across many cloud workers, runs them in
+parallel, and collects the results. A typical dispatch wraps the Modal command in <strong>Doppler</strong>
+(a secrets manager that injects the necessary cloud credentials into the local environment just for that
+command) and <code>uvx</code> (for the ephemeral dependencies), then names the experiment's sweep file
+and its output location.</p>
+
+<div class="def"><span class="boxtitle">Definition — a sweep, and sharding</span>
+<p>A <strong>sweep</strong> is a batch of many experiment runs across a grid of settings — for example,
+256 neural networks across 8 conditions and many seeds. Because the runs are independent, they can be
+<strong>sharded</strong>: split into groups, each group ("shard") sent to a separate cloud worker to run
+in parallel, with the results merged at the end. Sharding is what turns a computation that would take
+days on one machine into one that finishes in minutes across many — and how it is orchestrated safely is
+the subject of the next chapter.</p></div>
+
+<h3>4.4 The firewall between the regimes</h3>
+
+<p>The two regimes are kept strictly separate, and the boundary is a stated rule: local is for
+lightweight work (searching the code, running tests, linting, making figures); the cloud is required for
+anything heavy (multi-seed sweeps, neural training, architecture search). This protects the human
+director's laptop from being asked to do a supercomputer's job, and it keeps the expensive, credentialed,
+non-deterministic work in one clearly-marked place. The reproduce tooling (Chapter 7) respects this
+firewall: for local experiments it re-runs them outright; for cloud sweeps it prints the exact command to
+dispatch from an authorized machine, rather than pretending a laptop could reproduce a GPU sweep.</p>
+
+<h3>4.5 What to carry forward</h3>
+<p class="small">Two execution regimes: local CPU runs are deterministic and seeded (no global RNG,
+per-trial seed isolation, double-run replay gates) so they reproduce byte-for-byte, with dependencies
+pulled ephemerally via <code>uvx</code>; and large work goes to Modal cloud GPUs as sharded sweeps
+wrapped in Doppler (secrets) and <code>uvx</code>. A firewall keeps light work local and heavy work in
+the cloud, and the reproduce tooling respects it.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 5</span>The Modal Maturity Gradient</h2>
+
+<h3>5.1 A codebase caught in the act of growing up</h3>
+
+<p>One of the most instructive things about this repository — for anyone learning research
+infrastructure — is that its cloud-sweep code exists at three visibly different levels of maturity, all
+at once. You can watch the engineering learn, from a simple fan-out to a battle-hardened orchestrator,
+across the experiments. This chapter walks the three tiers, because each solves a real problem the
+previous one exposed, and the progression is a compact course in building reliable distributed compute.</p>
+
+<h3>5.2 Tier one — the simple fan-out</h3>
+
+<p>The earliest and simplest pattern: define one function that runs a shard of work, build a list of
+shard arguments differing only by a shard number, and map the function over the list. Modal runs them in
+parallel; the driver merges the results. Reproducibility comes from pure seed arithmetic (each shard's
+seed is derived from a base seed plus its shard number). The worker is deliberately self-contained — it
+re-implements the sweep inline rather than importing the repository — so there is nothing to synchronize.
+This is clean, legible, and entirely adequate for a bounded CPU sweep. Its limitation: if a worker dies
+partway, or the local machine disconnects, the work is lost — there is no memory of what finished.</p>
+
+<h3>5.3 Tier two — sharded GPU work</h3>
+
+<p>The next level adds GPUs and larger, longer runs. Each shard now handles all the cells for one model
+size, runs on a rented GPU with a time limit, and shares a cache for downloaded model weights. Dependency
+versions are range-pinned; the model weights ride the worker's environment. This handles real neural
+sweeps, but still has no checkpointing: a six-hour GPU shard that fails at hour five starts over from
+zero. For an occasional sweep that is tolerable; for the program's most important, most expensive
+experiments, it is not.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the difference between a to-do list and a save point</span>
+<p>Tier one and two are like doing a long task with no way to save your progress: interrupt it and you
+begin again. Anyone who has played a video game knows the difference a <em>save point</em> makes — you
+can be knocked out and resume from the last checkpoint rather than the start. The leap to tier three is
+the addition of save points, plus the coordination needed when many players work the same dungeon at
+once: a way to record which rooms are cleared, to claim a room so two players don't redo it, and to keep
+going even if one player's console crashes. That coordination is exactly what an expensive, resumable,
+parallel GPU sweep needs, and it is what the mature tier provides.</p></div>
+
+<h3>5.4 Tier three — the leased, checkpointed, resumable orchestrator</h3>
+
+<p>The reference implementation — worth studying as the codebase's engineering high-water mark —
+concentrates all the hard-won reliability machinery in one place, so the rest of the experiments can stay
+simple. It does several things at once, each answering a specific failure of the earlier tiers:</p>
+
+<table class="plain">
+<tr><th>Mechanism</th><th>The problem it solves</th></tr>
+<tr><td><strong>"Exactly one action" gating</strong></td><td>Accidental GPU spend. The launcher requires exactly one of dry-run / inspect / execute, requires a positive cost cap to execute, and — for confirmatory runs — requires the caller to paste back a "manifest id" that must byte-match the frozen configuration. You cannot fat-finger a thousand dollars of compute.</td></tr>
+<tr><td><strong>Exact version freeze</strong></td><td>Silent dependency drift. Dependencies are read from an exact lockfile; the Modal client version is pinned and the run <em>refuses to start</em> if it differs; model weights are pinned to specific git revisions; and a pre-flight step re-checks the installed versions on the worker before any GPU spins up.</td></tr>
+<tr><td><strong>Checkpointing to a cloud volume</strong></td><td>Lost work on failure. Each finished cell is written atomically to a persistent cloud volume; a re-run reuses any cell whose result passes an integrity check, so a failed sweep resumes instead of restarting.</td></tr>
+<tr><td><strong>Distributed leases</strong></td><td>Two workers redoing the same cell. Workers claim a cell via an atomic "put-if-absent" operation on a shared dictionary — a lease — with expired leases carefully reclaimable, so parallel workers never duplicate work.</td></tr>
+<tr><td><strong>A remote orchestrator</strong></td><td>The local machine disconnecting mid-sweep. Rather than the laptop driving the workers, a cloud function spawns and collects them, so closing the laptop cannot cancel the run.</td></tr>
+</table>
+
+<div class="prog"><span class="boxtitle">In the code — safety proportional to stakes</span>
+<p>Notice the design wisdom here: the elaborate machinery lives only where the stakes justify it. The
+cheap CPU sweeps stay at tier one — no checkpointing, no leases, because a failed CPU shard costs pennies
+and seconds. The expensive, confirmatory GPU experiments get the full tier-three treatment, because a
+failed run there costs real money and a botched launch could corrupt a headline result. This is exactly
+the right instinct: <em>don't pay the complexity tax where the risk doesn't warrant it.</em> A less
+mature codebase would either over-engineer everything or under-engineer the important thing; this one
+matches the armor to the threat.</p></div>
+
+<h3>5.5 The scientific-integrity payload of the launch gates</h3>
+
+<p>One feature of the tier-three launcher deserves special emphasis because it is where engineering meets
+epistemics (the science primer's territory). The "exactly one action" gating enforces a rule that a
+<em>smoke test can never promote a verdict</em>: a small calibration run is structurally prevented from
+being mistaken for the real confirmatory sweep, and the confirmatory sweep refuses to run unless its
+frozen configuration matches exactly what was pre-registered. The launch code, in other words, is not
+just protecting money — it is protecting the pre-registration discipline (science primer, Chapter 2) from
+being accidentally undermined by a rushed or misconfigured run. The gate against overclaiming lives
+partly in the deploy script.</p>
+
+<h3>5.6 What to carry forward</h3>
+<p class="small">The cloud-sweep code spans three maturity tiers: a simple parallel fan-out (fine for
+cheap CPU work, but loses progress on failure); sharded GPU runs (handles neural sweeps, no
+checkpointing); and a leased, checkpointed, resumable orchestrator that adds accidental-spend gating,
+exact version freezing, cloud-volume checkpoints, distributed leases, and a remote driver — with the
+crucial wisdom that this armor is applied only where the stakes justify it, and that its launch gates also
+protect the pre-registration discipline from being undermined.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 6</span>From Markdown to PDF: the Paper Toolchain</h2>
+
+<h3>6.1 Publishing without a publishing system</h3>
+
+<p>Academic papers are usually typeset in LaTeX — a powerful but heavy system, awkward to run in
+automated pipelines and on machines without a full installation. This repository takes a different route:
+it builds its PDFs with a lightweight, LaTeX-free toolchain, so a paper can be rendered anywhere Python
+runs, including on a cloud worker with nothing pre-installed. Understanding this toolchain matters because
+it is where the science becomes the shareable artifact — the last mile of the pipeline from Chapter 2.</p>
+
+<h3>6.2 The building blocks</h3>
+
+<p>At the toolchain's center is a small in-house library that wraps two mature tools:
+<strong>reportlab</strong> (a Python library that assembles PDFs programmatically — paragraphs, tables,
+images, page layout) and <strong>matplotlib</strong> (the standard Python plotting library, which
+produces the figures). The library offers a paper object with methods like "title," "abstract,"
+"section," "paragraph," "figure," and "table," plus a house style (fonts, colors, zebra-striped tables)
+so every paper looks consistent. A figure-maker script reads an experiment's committed result JSON and
+emits the plots; a build script composes the document — prose, figures, tables — and writes the PDF, often
+to two locations at once (the paper's own folder and a shared shareable folder).</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — a page layout program versus a print shop</span>
+<p>LaTeX is like sending your manuscript to a full print shop: enormously capable, but you need the whole
+shop installed and running. The repository's approach is more like a focused page-layout program you carry
+on a USB stick: it does less, but it runs anywhere, needs no external installation, and fits inside an
+automated pipeline. For a codebase whose papers must sometimes be rendered on a bare cloud machine — and
+whose author wants "reproduce this paper" to be one command — the portable page-layout tool is the right
+trade. You give up LaTeX's typographic sophistication; you gain the ability to rebuild any paper anywhere,
+deterministically.</p></div>
+
+<h3>6.3 The most important distinction: where the numbers come from</h3>
+
+<p>Here is the detail that most repays attention, because it reveals the codebase's engineering maturity
+gradient in a single dimension — <em>where a paper's numbers originate.</em> There are two patterns, and
+the contrast between them is the clearest "old versus new" fault line in the repository:</p>
+
+<table class="plain">
+<tr><th>Pattern</th><th>How numbers reach the PDF</th><th>Consequence</th></tr>
+<tr><td><strong>Mature (JSON-driven)</strong></td><td>The build script reads the experiment's committed result JSON and renders figures and tables <em>from that data</em>.</td><td>A clean clone reproduces the paper's numbers from the committed evidence. The paper cannot silently disagree with the results.</td></tr>
+<tr><td><strong>Legacy (hardcoded)</strong></td><td>The numbers are typed as literal values <em>inside the build script itself</em> — copied from the paper text by hand.</td><td>The build script <em>is</em> the source of truth; nothing links it to the underlying results, so the two can drift apart undetected.</td></tr>
+</table>
+
+<div class="warn"><span class="boxtitle">Smell — the flagship paper's numbers are welded into its build script</span>
+<p>A mature engineer should note, with some alarm, that the <em>flagship</em> weakness paper's build
+script is of the legacy kind: it states outright that its numbers are "taken verbatim from the paper
+text," and inlines every value as a Python literal. Nothing is loaded from a result file; the script is
+the data. This means the single most important paper in the repository has no machine-checkable link
+between its published numbers and any experimental artifact — the exact gap the observability apparatus
+(Chapter 7) exists to close, left open in the most consequential place. The newer commitment-surface
+papers do it right, reading from committed JSON. The repository is visibly mid-migration from the legacy
+pattern to the mature one, and this is the highest-value migration still incomplete.</p></div>
+
+<h3>6.4 Why this is more than a style nit</h3>
+
+<p>It would be easy to dismiss "hardcoded numbers in a build script" as a minor untidiness. It is not,
+and seeing why sharpens the whole book's theme. The entire trust argument of this repository (Chapter 7,
+and the science primer) rests on <em>traceability</em>: every published claim should trace back through
+committed artifacts to the run that produced it. A paper whose numbers are hand-typed into its renderer
+breaks that chain at the last step — the PDF a reader sees is no longer provably derived from the
+evidence; it is derived from a human (or AI) transcription that could contain an error or a drift no tool
+would catch. For a program built to make AI-generated science verifiable, a hardcoded flagship is a crack
+in the foundation, and Chapter 9's top refactor recommendation — a declarative paper manifest that forces
+every number to originate in committed data — is aimed squarely at it.</p>
+
+<h3>6.5 What to carry forward</h3>
+<p class="small">Papers are built LaTeX-free with a small in-house library over reportlab and
+matplotlib, so any paper renders anywhere Python runs; the crucial distinction is where numbers originate
+— the mature pattern reads them from committed result JSON (traceable), the legacy pattern hardcodes them
+in the build script (drift-prone); the flagship weakness paper is legacy, breaking the traceability chain
+at its most consequential point; and closing that gap — every number from committed data — is the
+repository's highest-value incomplete migration.</p>
+
+<h1 class="part"><span class="kicker">Part III</span>Keeping Code Honest</h1>
+
+<p>The instrument's credibility rests on its self-checking machinery: the quality gate, the provenance
+system, and the type-level guards that make a scientific mistake a compile error. This part covers how
+the codebase polices itself — and where that policing has gaps.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 7</span>The Quality and Provenance System</h2>
+
+<h3>7.1 One command, five checks</h3>
+
+<p>Before committing substantive changes, a contributor runs a single quality-check wrapper that
+executes five stages in order: the full test suite (in a fresh, correctly-versioned environment); a
+byte-compile pass over all the code (which catches syntax errors even in files the type-checker skips);
+the publication guard (Chapter 3); a linter; and a type-checker. Any stage failing aborts the whole gate.
+This is a conventional continuous-integration battery — but with two unconventional twists worth noting.</p>
+
+<div class="prog"><span class="boxtitle">In the code — the type-checker is declawed exactly where risk is highest</span>
+<p>Here is a genuine tension a careful reader should sit with. The linter and type-checker are
+deliberately relaxed on the "experiment notebook" scripts and — critically — on <em>every</em> Modal
+GPU-sweep file. The rationale is understandable: these are research scripts, written fast, full of the
+mess that exploratory code accumulates. But the consequence is uncomfortable: the largest,
+<em>most expensive, most operationally dangerous</em> surface in the codebase — the scripts that spend
+real money on GPUs — has the <em>weakest</em> automated checking. A typo in a sweep's dispatch logic is
+exactly the kind of error a type-checker catches, and exactly the kind that is turned off there. Chapter 9
+recommends narrowing this exclusion to at least cover the launch-and-dispatch logic, even if the
+inner GPU code stays unchecked.</p></div>
+
+<h3>7.2 The missing wall: no continuous integration</h3>
+
+<div class="warn"><span class="boxtitle">Smell — the quality gate is opt-in, not enforced</span>
+<p>The single most consequential engineering gap in the repository: <strong>there is no automated
+continuous-integration workflow that runs the quality gate on every change.</strong> The gate exists and
+is excellent; but running it depends on the contributor <em>choosing</em> to run it locally before
+committing. The only automated GitHub workflow deploys the public websites. This means a change that
+breaks a test, leaks a secret past the guard, or fails the linter can be merged with a green appearance,
+because nothing automatically checked it. For a repository where an AI agent commits at high volume — the
+very situation where you most want an unbypassable gate — the gate is bypassable by omission. This is the
+first thing an incoming engineer should fix, and it is cheap: the gate is already written; it simply is
+not wired to run on pull requests.</p></div>
+
+<h3>7.3 Provenance: the lab notebook that regenerates itself</h3>
+
+<p>The provenance system is the codebase's answer to the trust problem, rendered as tooling. A generator
+script scrapes every experiment package and writes a provenance card recording its attribution, the exact
+run command, the seed, the pre-registration link, extracted gate signals, and a one-command reproduce
+recipe. The crucial property: the cards are <em>generated, not hand-written</em>, and the generator is
+"itself the reproducible artifact" — re-run it and every card is rebuilt from the committed files, so
+provenance cannot silently drift out of sync with reality. The generator also emits a machine-readable
+manifest of all experiments (mirrored into the public website) and a human-readable index.</p>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the git of scientific claims</span>
+<p>Version control (git) works because it does not <em>ask</em> you what the code's history is — it
+<em>computes</em> the history from the commits themselves, so the record cannot lie about what happened.
+The provenance generator applies the same idea to scientific claims: it does not ask the experimenter to
+describe how a result was made; it computes the description from the committed files. A hand-written lab
+notebook is a claim about the work; a generated provenance card is a <em>derivation</em> from the work. In
+a program where the "scientist" is an AI, this shift — from asking to deriving — is what lets a reader
+trust the record without trusting the machine that wrote it.</p></div>
+
+<h3>7.4 One-command reproduce</h3>
+
+<p>The reproducibility pillar is made concrete by a dispatcher script: name an experiment and it either
+re-runs it locally (for deterministic CPU experiments, checking the output matches), rebuilds its paper
+PDF from committed numbers, or — for GPU/secret sweeps a laptop cannot run — prints the exact documented
+command to dispatch from an authorized machine. Its stated purpose is that "a wiped environment never
+forces a manual re-run." This is the tooling that makes the abstract promise "our science is
+reproducible" into a literal command a skeptic can type.</p>
+
+<div class="warn"><span class="boxtitle">Smell — the audit layer can itself mislead</span>
+<p>An honest accounting must note a subtle failure mode the program itself caught. The provenance
+generator extracts "gate signals" from result reports using pattern-matching over prose — and that
+scraper has been observed <em>misfiring</em>, misreading careful hedging language as a passing gate. This
+is the audit layer producing a false positive about its own subject. It is a small bug, but a
+philosophically loaded one: the machinery meant to make the science verifiable can, itself, be wrong about
+the science. The fix the program identifies — emit structured, machine-readable gate verdicts and score
+from <em>those</em>, rather than scraping human prose — is the right one, and it generalizes: trust
+infrastructure should read structured data, not natural language, wherever possible.</p></div>
+
+<h3>7.5 The honest ceiling of the whole system</h3>
+
+<p>Assemble the quality gate, the guard, the provenance generator, and the reproduce dispatcher, and you
+have a genuinely impressive trust apparatus — better than most research codebases possess. But its ceiling
+must be stated plainly, because it is the same ceiling the science and history primers reach: this
+machinery proves <em>the recipe</em> (what command was recorded, from what committed files), not
+<em>the meal</em> (that the numbers reflect an unbiased execution). The committed summaries are AI-written
+condensations of raw outputs that are themselves gitignored, so a reader usually cannot recompute a result
+from the raw rows. The tooling makes the process observable; it does not, by itself, make the results
+independently checkable. Closing that final gap — committing raw rows for flagship experiments, scoring
+from structured records, and inviting outside replication — is engineering the program has scoped but not
+finished.</p>
+
+<h3>7.6 What to carry forward</h3>
+<p class="small">A one-command quality gate runs tests, compile-check, publication guard, linter, and
+type-checker — but the type-checker is relaxed exactly on the risky GPU-spend scripts, and, worst, the
+gate is opt-in with no CI enforcing it; the provenance system generates (not writes) self-reproducing
+cards, a machine manifest, and one-command reproduce, applying "derive, don't ask" to scientific claims;
+and the honest ceiling is that this proves the recipe, not the meal — the audit layer can even misread
+prose — so committing raw rows and inviting external replication is the unfinished work.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 8</span>Types as Contracts, and the Polyglot Boundary</h2>
+
+<h3>8.1 Making a scientific mistake a compile error</h3>
+
+<p>The most sophisticated engineering idea in the codebase is one it uses sparingly but brilliantly:
+encoding a <em>scientific integrity requirement</em> as a <em>type</em>, so that violating it becomes a
+programming error the tools catch before the code ever runs. This deserves careful explanation, because it
+is where software engineering and the science primer's methodology fuse into one thing.</p>
+
+<div class="def"><span class="boxtitle">Definition — types as contracts</span>
+<p>A <strong>type</strong> in a program is a promise about what kind of value something is — a number, a
+string, a specific structured object. A type-checker verifies these promises without running the code. The
+powerful move: define <em>distinct types for things that must never be confused</em>, so that mixing them
+is not a subtle runtime bug but an immediate, un-runnable type error. The type system becomes a
+<em>contract</em> the compiler enforces.</p></div>
+
+<div class="prog"><span class="boxtitle">In the code — a leakage a scientist fears, made a type error</span>
+<p>The reference example is a pure, dependency-free core module underlying one of the flagship
+experiments. Its stated purpose: to have "no Modal, torch, transformers, or PEFT dependency, so a
+regularizer cannot accidentally acquire held-out truth labels." Read that again — the module is designed
+so that a specific <em>scientific</em> mistake (a training component secretly gaining access to the
+answer it is supposed to predict, invalidating the result) is <em>structurally impossible</em>, because
+the code that would need to touch the forbidden data simply cannot import it. It goes further, defining
+<em>distinct types</em> for a "supervised exposure" and a "consistency exposure" — two things that must
+never be mixed — so that confusing them is a <strong>type error, not a runtime bug</strong>. The
+data-leakage a scientist lies awake worrying about is caught by the type-checker at author time. And the
+experiment's tests re-declare the frozen constants independently and cross-check them, so the test suite
+is itself a witness that the integrity conditions hold.</p></div>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the blood-bank labels that can't be mixed up</span>
+<p>A blood bank does not rely on technicians being careful not to mix incompatible blood types; it
+engineers the incompatibility into the process — different labels, different fridges, checks that
+physically refuse a mismatched transfusion. The catastrophe is designed out, not policed. The codebase's
+distinct types for "supervised" and "consistency" data are blood-bank labels: the compiler physically
+refuses to let the two touch, so the catastrophe (a leak that silently invalidates a headline result)
+cannot occur by oversight. This is the highest form of the "safe by construction" principle from
+Chapter 3, applied not to secrets but to scientific validity itself. Where the codebase does this, it is
+genuinely excellent engineering.</p></div>
+
+<h3>8.2 The polyglot boundary: Python meets Haskell</h3>
+
+<p>One arc of experiments needed to check whether a candidate agent "body" (a set of architectural
+components) is <em>admissible</em> under a web of dependency and resource rules. The codebase makes an
+interesting language choice here: it writes this checker not in Python but in <strong>Haskell</strong>, a
+language whose exhaustive pattern-matching and algebraic data types make such rule-checking natural and
+hard to get wrong. The Haskell program models a body as a set of components, computes rule violations from
+a dependency table, and emits its verdict as JSON — one line per checked body.</p>
+
+<div class="prog"><span class="boxtitle">In the code — a clean, degradable foreign-language boundary</span>
+<p>How the two languages talk is a small model of good engineering. The Python side locates the Haskell
+program, runs it as a subprocess, and parses its line-delimited JSON output into strongly-typed,
+validated objects — checking, for instance, that a "resource cost" is genuinely an integer and not
+accidentally a boolean. Crucially, it distinguishes two failure modes with separate exceptions: "the
+checker could not run at all" (Haskell isn't installed) versus "the checker ran but returned garbage."
+And when the Haskell toolchain is simply absent, the Python side <em>soft-degrades</em> — it returns a
+"cannot verify" result rather than crashing, and refuses to silently convert a missing checker into a
+passing verdict. The interchange contract — line-delimited JSON, strictly validated on the Python side,
+with the foreign toolchain treated as optionally-absent — is a clean, testable model for crossing a
+language boundary, and the test suite can stub the subprocess to exercise it without Haskell present.</p></div>
+
+<h3>8.3 Why the polyglot choice is defensible</h3>
+
+<p>Reaching for a second language is a decision that should always be questioned — each language added is a
+tax on every future contributor. Here it is defensible for a specific reason: the admissibility rules are
+exactly the kind of thing (exhaustive case analysis over a fixed set of components, with the compiler
+guaranteeing no case is missed) that Haskell's type system makes <em>safer</em> than the equivalent Python
+would be. The rules are a formal specification, and Haskell lets that specification be machine-checked for
+completeness. The clean JSON boundary and the soft-degradation keep the tax bounded: the rest of the
+codebase does not need to know Haskell exists, and works fine when it is absent. It is a considered
+trade, not a whim — though a mature reviewer would still ask whether the same guarantees could be had in
+Python with less operational complexity, and the honest answer is "mostly, but less cleanly."</p>
+
+<h3>8.4 What to carry forward</h3>
+<p class="small">The codebase's most sophisticated idea is encoding scientific-integrity requirements as
+types — a pure core that <em>cannot import</em> forbidden data, and distinct types for exposures that must
+never mix, so a result-invalidating leak becomes a compile error (safe-by-construction applied to validity
+itself); and it crosses into Haskell for one arc's admissibility checker, connected by a clean,
+strictly-validated, soft-degrading JSON boundary — a defensible polyglot choice where the type-level
+completeness guarantee earns its operational tax.</p>
+
+<h1 class="part"><span class="kicker">Part IV</span>A Mature Verdict</h1>
+
+<p>An honest engineering review ends with a balance sheet: what to imitate, what to fix, and a concrete
+plan. This final chapter delivers it — the genuine strengths worth copying into your own projects, the
+smells and debt a new engineer should expect, and a prioritized refactor path toward a codebase that
+scales without multiplying its one-off scripts.</p>
+
+<h2 class="chapter"><span class="chnum">Chapter 9</span>Strengths, Smells, and the Refactor Path</h2>
+
+<h3>9.1 What to imitate</h3>
+
+<p>Set aside the research and judge purely as engineering: several patterns here are worth stealing for
+any project that values correctness.</p>
+
+<ul>
+<li><strong>Reproducibility as a first-class feature.</strong> No global randomness, per-trial seed
+isolation, double-run replay gates, and a self-regenerating provenance system. "Reproduce this" is a real
+command, not a hope.</li>
+<li><strong>Safety by construction.</strong> The three-wall public-safety stack (ignore list, tested
+guard, whitelist exporters) makes leaking hard rather than merely forbidden — the right model whenever a
+high-volume or automated committer is involved.</li>
+<li><strong>Types that enforce the domain's real invariants.</strong> Making a data-leak a compile error
+is the single best idea in the codebase and generalizes far beyond research: encode the mistake you most
+fear as a type.</li>
+<li><strong>Safety proportional to stakes.</strong> The Modal maturity gradient — simple fan-out for
+cheap work, a hardened orchestrator only for expensive confirmatory runs — is disciplined engineering
+judgment, neither over- nor under-building.</li>
+<li><strong>Test-the-test.</strong> Adversarial fixtures that must make gates <em>fail</em>, and a
+publication-guard detector with its own false-positive test. The safety nets have safety nets.</li>
+</ul>
+
+<h3>9.2 The smells, ranked by how much they matter</h3>
+
+<table class="plain">
+<tr><th>Smell</th><th>Why it matters</th></tr>
+<tr><td><strong>1. No CI enforcing the quality gate</strong></td><td>The excellent gate is opt-in; a broken or unsafe change can merge green. The highest-value, lowest-effort fix — the gate already exists, it just isn't wired to run on pull requests.</td></tr>
+<tr><td><strong>2. Hardcoded numbers in build scripts (esp. the flagship)</strong></td><td>Breaks the traceability chain from published number to committed evidence at the last step — the exact thing the trust apparatus exists to prevent, left open in the most important paper.</td></tr>
+<tr><td><strong>3. The 50+ one-off paper/figure scripts</strong></td><td>Each new paper spawns a new ~300-line bespoke script with no shared schema; numbers can drift, and the surface grows linearly with the science.</td></tr>
+<tr><td><strong>4. No dependency lockfile</strong></td><td>Version pins scattered across call sites, mostly loose; the same experiment can resolve to different library versions in different places.</td></tr>
+<tr><td><strong>5. Weakest static checking on the riskiest (GPU-spend) scripts</strong></td><td>The money-spending dispatch logic is exactly where a type error is costly, and exactly where the type-checker is turned off.</td></tr>
+<tr><td><strong>6. Hand-copied duplication across experiments</strong></td><td>The gate idiom, the seeding helpers, the candidate-construction logic are re-implemented per experiment rather than shared — robustness by discipline, not abstraction.</td></tr>
+<tr><td><strong>7. Machine-specific config in many files</strong></td><td>Hardcoded local paths and deploy IDs scattered through docstrings and workflows; portability requires editing many files.</td></tr>
+</table>
+
+<div class="pump"><span class="boxtitle">Intuition pump — the difference between a workshop and a factory</span>
+<p>A brilliant craftsperson's workshop produces superb one-off pieces, each made bespoke, tools and jigs
+improvised per job. It works because the craftsperson holds the standards in their head. A factory
+produces the same quality <em>repeatably</em> by encoding the standards into shared jigs, fixtures, and a
+line — so the hundredth piece is as good as the first without heroics. This codebase is a superb
+workshop: its individual experiments are excellent, but its quality lives in discipline (and in the AI
+agents' consistency) rather than in shared abstractions. The refactor path is the workshop-to-factory
+transition: turn the repeated hand-work — the gate idiom, the paper-building, the seeding, the
+dependency pins — into shared fixtures, so that scaling to the next fifty experiments does not mean
+writing the same scaffolding fifty more times.</p></div>
+
+<h3>9.3 The refactor path, in priority order</h3>
+
+<div class="prog"><span class="boxtitle">A concrete plan</span>
+<ol>
+<li><strong>Wire the quality gate into CI.</strong> Run the existing gate on every pull request. Start
+cheap (guard + compile-check + a fast test subset). This is the biggest trust improvement for the least
+effort — it makes the whole quality system unbypassable.</li>
+<li><strong>A declarative paper manifest.</strong> Replace the 50+ bespoke build/figure scripts with one
+generic renderer that consumes a small per-paper config (source JSON paths, figure specs, table specs,
+prose). This kills smells 2 and 3 at once: every number is <em>forced</em> to originate in committed data,
+and the script count collapses toward one engine plus N configs.</li>
+<li><strong>A shared "Gate" abstraction.</strong> One small type for a named pass/fail gate carrying its
+evidence, plus a standard serialization. Migrate the hand-rolled per-experiment gate dicts onto it, so
+gates become uniformly machine-readable — which also fixes the provenance scraper's prose-misreading
+(Chapter 7) by giving it structured records to read.</li>
+<li><strong>A shared experiment scaffold.</strong> Extract the duplicated seeding, summarization, and
+candidate-construction helpers into a base module every experiment builds on. Robustness by abstraction,
+not by copying.</li>
+<li><strong>Pin dependencies once.</strong> A single lockfile that the quality gate, the reproduce
+script, and the cloud images all read, replacing the scattered loose pins. Adopt the exact-pin discipline
+the newest experiments already use, repository-wide.</li>
+<li><strong>Type-check the launch logic.</strong> Narrow the static-analysis exclusion so that at least
+the argument-parsing and dispatch-gating of the GPU scripts are checked, even if the inner numeric code
+stays excluded. The money-spending logic is where a type error hurts most.</li>
+<li><strong>Externalize machine-specific config.</strong> Move local paths and deploy IDs into one
+config file, so run commands are host-agnostic.</li>
+</ol></div>
+
+<h3>9.4 The honest bottom line</h3>
+
+<p>As engineering, this is a strong, unusual codebase whose best ideas — reproducibility as a feature,
+safety by construction, types enforcing scientific validity, armor proportional to stakes — are genuinely
+worth imitating, and are more disciplined than a great deal of production software. Its weaknesses are the
+characteristic weaknesses of a fast-moving research workshop authored by AI agents: an opt-in rather than
+enforced quality gate, a flagship paper whose numbers aren't traceable, and a proliferation of one-off
+scripts held together by discipline rather than abstraction. None of these is deep; all are the kind of
+debt that accumulates when a small team (here, a human plus tireless agents) moves fast and prioritizes
+results over infrastructure. The refactor path is clear, incremental, and mostly cheap — and the first
+step, wiring the existing quality gate into CI, would do more for the codebase's trustworthiness than any
+new feature. The instrument is well-built; it now needs the factory fixtures that let it stay well-built
+across the next hundred experiments.</p>
+
+<h3>9.5 What to carry forward</h3>
+<p class="small">Imitate: reproducibility-as-feature, safety-by-construction, types-enforce-validity,
+armor-proportional-to-stakes, test-the-test. Fix, in order: wire the quality gate into CI (biggest win,
+least effort); a declarative paper manifest to force numbers from committed data and collapse the one-off
+scripts; a shared Gate abstraction and experiment scaffold to replace hand-copied duplication; a single
+dependency lockfile; type-checking on the GPU launch logic; and externalized config. The instrument is
+excellent; it needs the workshop-to-factory transition to scale.</p>
+
+</body></html>
