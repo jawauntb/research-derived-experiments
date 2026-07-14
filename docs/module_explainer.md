@@ -13,7 +13,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `experiments/` | 54 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
 | `papers/` | Paper sources (`paper.md`), figures, shareable PDFs |
 | `scripts/` | 91 Python ops modules: quality, contracts, provenance, PDF/figure builders, summarizers |
-| `tests/` | 69 root test files collected together by pytest (`unittest`-style and pytest-native) |
+| `tests/` | 70 root test files collected together by pytest (`unittest`-style and pytest-native) |
 | `docs/` | Design docs, verification, handoffs, plans, reviews, solutions |
 | `docs/primers/backlogs/` | Six article-specific, source-anchored research TODOs derived from the primer PDFs |
 | `notes/` | Program-level research synthesis |
@@ -27,7 +27,8 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `README.md` | Human entrypoint |
 | `TODO.md` | Active research ledger |
 | `AGENTS.md` | Agent/contributor rules (incl. doc sync) |
-| `pyproject.toml` | Python ≥3.12 project metadata plus Ruff and ty configuration; runtime dependencies remain call-site/Modal specific |
+| `pyproject.toml` | Python ≥3.12 project metadata; locked root `quality` dependency group; explicit CPU-only PyTorch index; Ruff and ty configuration; experiment/Modal runtime dependencies remain call-site specific |
+| `uv.lock` | Cross-platform lock for the root `quality` dependency group, including CPU-only Torch resolution |
 
 ---
 
@@ -83,13 +84,30 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_causal_use.py` | Shared mass-normalized causal-use dose curves, bootstrap uncertainty, and cross-surface transport |
 | `test_experiment_manifest.py`, `test_gate_verdict.py`, `test_evidence_registry.py`, `test_claim_registry.py` | Fail-closed research-contract adapters, discovery, references, supersession, and bidirectional edges |
 | `test_research_contract_schema_parity.py`, `test_gen_provenance.py` | Shared vocabulary/schema parity, support-directory exclusion, non-mutating provenance freshness |
+| `test_run_quality_checks.py` | Locked quality-command order, local serial default, bounded xdist worker parsing, `loadscope` scheduling, and native-thread caps |
 
 ```bash
-uvx --python 3.12 --with torch --with numpy --with scikit-learn \
-  --with matplotlib --with reportlab --with pytest \
-  python -m pytest -q tests
-# or: python3 scripts/run_quality_checks.py
+python3 scripts/run_quality_checks.py
+# Optional local parity with CI's bounded parallel pytest path:
+QUALITY_PYTEST_WORKERS=auto python3 scripts/run_quality_checks.py
 ```
+
+The wrapper performs one
+`uv sync --locked --only-group quality --python 3.12`, then runs pytest and
+every downstream gate through `uv run --no-sync` in the same environment.
+Local pytest is serial unless `QUALITY_PYTEST_WORKERS` is set to `auto` or an
+integer from 1 through 4. CI sets `auto`; the wrapper respects usable CPU
+affinity, caps the result at four workers, uses xdist `loadscope`, disables
+worker restarts, and sets OMP, MKL, OpenBLAS, NumExpr, and vecLib thread counts
+to one for the parallel pytest process. PyTorch resolves only from its explicit
+CPU wheel index, avoiding CUDA, Triton, and NVIDIA packages on CPU runners.
+
+Root-gate scope is unchanged: it covers `tests/` plus the Python compile,
+publication, research-contract, primer-metadata, provenance, Ruff, and ty
+checks below. Inquiry, `coherence-testbench`, Haskell/Cabal, and site-specific
+suites retain their own workflows. Other documented `uvx` commands, including
+Modal and standalone tool workflows, remain independent of this root quality
+environment.
 
 ### 2.3 Docs inventory
 
@@ -516,7 +534,7 @@ Raw outputs stay under `artifacts/` until summarized.
 | `validate_gate_verdict.py` | Discover per-gate verdicts, require registered claim IDs/canonical tiers/statuses, and resolve evidence paths | Reads `experiments/*/results/gate_verdicts/*.json` + `docs/claim_registry.json` |
 | `check_primer_metadata.py` | Require matching titles across all six primer HTML `<title>` values and PDF metadata | Needs `pdfinfo` (`poppler-utils` in CI) |
 | `regen.py` | List/reproduce experiments or print documented Modal commands | `list`, `<name>`, `--deps` |
-| `run_quality_checks.py` | pytest → compileall → publication guard → four research-contract validators → primer metadata → provenance freshness → Ruff → ty (uvx 3.12) | Exit code; canonical local/CI root gate |
+| `run_quality_checks.py` | Locked `quality` sync → pytest → compileall → publication guard → four research-contract validators → primer metadata → provenance freshness → Ruff → ty; all post-sync commands use `uv run --no-sync` | Exit code; canonical local/CI root gate; local pytest serial by default, CI/opt-in local pytest bounded to four `loadscope` xdist workers with native math-library thread caps |
 | `publication_guard.py` | Block tracked secrets, forbidden paths, oversized files; exposes a tested text-signature helper | Exit code |
 | `env_probe.py` | Report env var presence/length only | `--json` |
 
@@ -848,11 +866,12 @@ python3 scripts/run_phase0.py --smoke
 
 | File | Role |
 |---|---|
-| `.github/workflows/quality.yml` | Required push/PR workflow: installs uv + `poppler-utils`, then runs the single full pytest-based root quality wrapper |
+| `.github/workflows/quality.yml` | Required push/PR workflow: installs uv with cache keys derived from `uv.lock`, installs `poppler-utils`, sets `QUALITY_PYTEST_WORKERS=auto`, then runs the canonical root quality wrapper |
 | `.github/workflows/railway-deploy.yml` | Deploy atlas + Inquiry landing on `main` |
 | `schemas/{experiment_manifest,program_evidence_registry,claim_registry,gate_verdict}.schema.json` | Portable JSON Schema contracts for package intent, evidence, claims, and gate outcomes |
 | `templates/experiment/{manifest,gate_verdict}.example.json` | Copyable version-1 examples validated by the same adapters used in CI |
-| `pyproject.toml` | Project meta, Ruff, ty excludes |
+| `pyproject.toml` | Project metadata; root `quality` dependency group (pytest/xdist, scientific/PDF, Ruff, ty); explicit CPU-only PyTorch source; existing Ruff rules and ty exclusions |
+| `uv.lock` | Locked Python 3.12 root-quality graph used by `uv sync --locked`; records platform-specific CPU-only Torch wheels and excludes CUDA/Triton/NVIDIA packages |
 | `pyrightconfig.json` | Editor typecheck: missing imports silenced |
 | `.gitignore` | Secrets, `artifacts/`, `data/`, reference full texts, caches |
 

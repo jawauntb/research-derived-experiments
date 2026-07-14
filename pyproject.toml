@@ -3,6 +3,28 @@ name = "research-derived-experiments"
 version = "0.0.0"
 requires-python = ">=3.12"
 
+[dependency-groups]
+quality = [
+    "matplotlib",
+    "numpy",
+    "pytest",
+    "pytest-xdist",
+    "reportlab",
+    "ruff",
+    "scikit-learn",
+    "scipy",
+    "torch",
+    "ty",
+]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
 [tool.ruff]
 target-version = "py312"
 
@@ -36,4 +58,3 @@ exclude = [
     "tests/test_rotation_weakness.py",
     "tests/test_symbolic_neural.py",
 ]
-
