@@ -42,7 +42,7 @@
         },
         "frozen_legacy_packages_sha256": {
           "type": "string",
-          "const": "86703ca46bc2a759a5f054247512c9c0df558404711db5c564ca58dfc76f2c77"
+          "const": "a7a41a68393e136f408e2b7f4e73ef49efdfe49cb3f39a3c1279fb3964382d91"
         }
       }
     },
