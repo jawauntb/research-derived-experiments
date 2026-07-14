@@ -7,6 +7,9 @@
 - **Run command:** `python3 -m experiments.structure_compatible_generalization.summarize_suite \`
 - **Seed:** 20260706
 - **Reproduce (one command):** `python scripts/regen.py structure_compatible_generalization`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `structure_compatible_generalization` / `structure_compatible_generalization`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: `papers/structure_compatible_generalization/language_template_substitution_preregistration.md`

@@ -7,6 +7,9 @@
 - **Run command:** `python experiments/weakness_temporal/temporal.py --n-models 240`
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py weakness_temporal`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `weakness_temporal` / `weakness_temporal`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: _none_

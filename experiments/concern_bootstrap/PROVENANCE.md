@@ -7,6 +7,9 @@
 - **Run command:** _(not auto-detected — see README/result reports)_
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py concern_bootstrap`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `concern_bootstrap` / `concern_bootstrap`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: _none_

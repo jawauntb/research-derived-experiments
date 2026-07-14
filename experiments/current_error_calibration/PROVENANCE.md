@@ -7,6 +7,9 @@
 - **Run command:** _(not auto-detected — see README/result reports)_
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py current_error_calibration`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `current_error_calibration` / `current_error_calibration`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: `papers/current_error_calibration/preregistration.md`

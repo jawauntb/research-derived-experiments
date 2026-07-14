@@ -7,6 +7,9 @@
 - **Run command:** _(not auto-detected — see README/result reports)_
 - **Seed:** 20260706
 - **Reproduce (one command):** `python scripts/regen.py virtual_governor_stress_signal`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `virtual_governor_stress_signal` / `virtual_governor_stress_signal`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: _none_

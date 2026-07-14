@@ -240,7 +240,12 @@ docs/experiment_contract_registry.json
       `gate_verdict_paths`; that means no committed verdict file is bound yet,
       not that gates passed. Only E5 currently binds a verdict path. Do not
       fabricate verdict files or treat manifest `gates[]` as verdicts.
-      `gen_provenance.py` does not yet consume these run records (U3).
+      `gen_provenance.py` consumes the package primary run for structured
+      cards: artifact `status`, noncanonical `manifest_status`,
+      `integrity_state`, `run_coverage`, and claim-registry
+      `scientific_adjudications[]`. `commitment_surface` primary is M5
+      (`runtime_package: world_responds`) while package-root coverage remains
+      the E5 manifest and broader history stays `partial`.
 
 experiments/*/experiment_manifest.json
     → scripts/validate_experiment_manifest.py → pass/fail

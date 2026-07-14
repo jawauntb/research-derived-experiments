@@ -7,6 +7,9 @@
 - **Run command:** `python3 -m experiments.rotation_weakness.neural --n-models 96 --n-rotations 8 --train-per-class 3 --epochs 250 --base-seed 20260609`
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py rotation_weakness`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `rotation_weakness` / `rotation_weakness`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: _none_

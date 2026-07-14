@@ -66,6 +66,37 @@ def _inferred_manifest(path: Path) -> Path | None:
     return None
 
 
+def _registry_bound_manifest(path: Path, *, root: Path) -> Path | None:
+    registry_path = root / "docs" / "experiment_contract_registry.json"
+    try:
+        payload = json.loads(registry_path.read_text())
+    except (OSError, json.JSONDecodeError):
+        return None
+    packages = payload.get("packages")
+    if not isinstance(packages, list):
+        return None
+    try:
+        relative = str(path.resolve().relative_to(root.resolve()))
+    except ValueError:
+        return None
+    for record in packages:
+        if not isinstance(record, dict):
+            continue
+        runs = record.get("runs")
+        if not isinstance(runs, list):
+            continue
+        for run in runs:
+            if not isinstance(run, dict):
+                continue
+            gate_paths = run.get("gate_verdict_paths") or []
+            if relative not in gate_paths:
+                continue
+            manifest_rel = run.get("manifest_path")
+            if isinstance(manifest_rel, str):
+                return root / manifest_rel
+    return None
+
+
 def validate(
     path: Path,
     *,
@@ -100,7 +131,11 @@ def validate(
         fail(f"claim_id has invalid format: {claim_id}")
     if claims is not None and claim_id not in claims:
         fail(f"claim_id is not registered: {claim_id}")
-    linked_manifest = manifest_path or _inferred_manifest(path)
+    linked_manifest = (
+        manifest_path
+        or _registry_bound_manifest(path, root=root)
+        or _inferred_manifest(path)
+    )
     if linked_manifest is not None:
         try:
             manifest = validate_manifest(linked_manifest)

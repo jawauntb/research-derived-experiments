@@ -7,6 +7,9 @@
 - **Run command:** _(not auto-detected — see README/result reports)_
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py online_identifying_interventions`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `online_identifying_interventions` / `online_identifying_interventions`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: `papers/online_identifying_interventions/preregistration.md`

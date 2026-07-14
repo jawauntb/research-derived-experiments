@@ -7,6 +7,9 @@
 - **Run command:** _(not auto-detected — see README/result reports)_
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py role_specific_identifiability`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `role_specific_identifiability` / `role_specific_identifiability`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: `papers/role_specific_identifiability/preregistration.md`

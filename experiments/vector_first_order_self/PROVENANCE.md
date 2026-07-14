@@ -7,6 +7,9 @@
 - **Run command:** _(not auto-detected — see README/result reports)_
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py vector_first_order_self`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `vector_first_order_self` / `vector_first_order_self`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: `papers/vector_first_order_self/preregistration.md`

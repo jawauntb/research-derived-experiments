@@ -7,6 +7,9 @@
 - **Run command:** `python3 experiments/weakness_vs_simplicity/experiment.py --trials 500 --seed 7 --out artifacts/weakness_vs_simplicity/pilot.json`
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py weakness_vs_simplicity`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `weakness_vs_simplicity` / `weakness_vs_simplicity`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: _none_

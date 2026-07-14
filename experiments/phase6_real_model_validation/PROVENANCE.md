@@ -7,6 +7,9 @@
 - **Run command:** `python3 experiments/phase6_real_model_validation/summarize.py \`
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py phase6_real_model_validation`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `phase6_real_model_validation` / `phase6_real_model_validation`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: _none_

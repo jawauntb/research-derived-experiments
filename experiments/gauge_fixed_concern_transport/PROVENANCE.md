@@ -7,6 +7,9 @@
 - **Run command:** `python -m experiments.gauge_fixed_concern_transport.core \`
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py gauge_fixed_concern_transport`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `gauge_fixed_concern_transport` / `gauge_fixed_concern_transport`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: _none_

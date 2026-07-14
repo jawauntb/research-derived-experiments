@@ -419,7 +419,11 @@ def _validate_run_record(
     if provenance_mode == "structured_manifest" and "manifest_path" not in run:
         fail(f"structured run is missing manifest_path: {run_id}")
     if "manifest_path" in run:
-        _safe_repo_file(run["manifest_path"], f"{label}.manifest_path", root=root)
+        _, resolved_manifest = _safe_repo_file(
+            run["manifest_path"], f"{label}.manifest_path", root=root
+        )
+        if provenance_mode == "structured_manifest":
+            validate(resolved_manifest)
 
     for path_label in ("report_paths", "gate_verdict_paths"):
         paths = require_string_list(run[path_label], f"{label}.{path_label}")

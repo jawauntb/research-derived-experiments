@@ -7,6 +7,9 @@
 - **Run command:** `doppler --scope /Users/jawaun/superoptimizers run -- uvx --python 3.12 --from modal modal run experiments/learned_symmetry/modal_sweep.py --n-shards 8 --models-per-shard 32 --epochs 250 --candidates 24 --threshold 0.5 --base-seed 20260609 --out artifacts/learned_symmetry/modal_sweep_v1.json`
 - **Seed:** 20260609
 - **Reproduce (one command):** `python scripts/regen.py learned_symmetry`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `learned_symmetry` / `learned_symmetry`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: _none_

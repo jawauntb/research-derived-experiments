@@ -7,6 +7,9 @@
 - **Run command:** _(not auto-detected — see README/result reports)_
 - **Seed:** 20260618
 - **Reproduce (one command):** `python scripts/regen.py external_contact`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `external_contact` / `external_contact`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: _none_

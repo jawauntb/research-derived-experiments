@@ -7,6 +7,9 @@
 - **Run command:** _(not auto-detected — see README/result reports)_
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py scale_normalized_vprobe`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `scale_normalized_vprobe` / `scale_normalized_vprobe`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: `papers/scale_normalized_vprobe/preregistration.md`

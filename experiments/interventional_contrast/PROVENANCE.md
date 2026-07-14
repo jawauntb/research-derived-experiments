@@ -7,6 +7,9 @@
 - **Run command:** _(not auto-detected — see README/result reports)_
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py interventional_contrast`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `interventional_contrast` / `interventional_contrast`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: `papers/interventional_contrast/preregistration.md`

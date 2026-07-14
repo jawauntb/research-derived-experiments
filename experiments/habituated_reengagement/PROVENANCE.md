@@ -7,6 +7,9 @@
 - **Run command:** _(not auto-detected — see README/result reports)_
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py habituated_reengagement`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `habituated_reengagement` / `habituated_reengagement`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: `papers/habituated_reengagement/preregistration.md`

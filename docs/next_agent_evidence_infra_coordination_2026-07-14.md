@@ -2,7 +2,7 @@
 title: Evidence Infrastructure Coordination Note
 date: 2026-07-14
 status: active
-owner_agent: cursor/u2-contract-registry (this session)
+owner_agent: cursor/u3-run-provenance (this session)
 peer_warning: another agent may edit shared paths; rebase/merge carefully
 ---
 
@@ -17,71 +17,60 @@ Ship the six-PR evidence substrate from
 `docs/next_agent_evidence_infrastructure_handoff_2026-07-14.md`, merging each
 green PR before starting the next tranche from fresh `origin/main`.
 
+Execution state is refreshed by
+`docs/next_agent_evidence_infrastructure_remaining_handoff_2026-07-14.md`
+(PR #366), except that **U2 / PR1 is now merged** (see below). Do not recover
+the superseded remote branch `claude/evidence-infrastructure-handoff-r7h0h3`.
+
 | Unit | PR theme | Branch / worktree | Status |
 |---|---|---|---|
-| U2 / PR1 | Unified contract registry + coverage gate | `codex/u2-experiment-contract-registry` in `~/.codex/worktrees/d3a3/...` | **in progress now** |
-| U3 / PR2 | Exact run provenance + adjudication | fresh worktree after U2 merges | blocked on U2 |
+| U2 / PR1 | Unified contract registry + coverage gate | `codex/u2-experiment-contract-registry` | **merged [#365](https://github.com/jawauntb/research-derived-experiments/pull/365)** at `9587eb8` |
+| U3 / PR2 | Exact run provenance + adjudication | `codex/u3-run-provenance` in `~/.codex/worktrees/u3-run-provenance/...` | **in progress now** |
 | U4 / PR3 | External Contact + Phase 5 migrations | fresh after U3 | blocked |
 | U5 / PR4 | Public-envelope framework + E5 | fresh after U4 | blocked |
 | U6 / PR5 | E4 producer + envelope | fresh after U5 | blocked |
 | U7 / PR6 | Structured regen + clean-clone CI | fresh after U6 | blocked |
 
-Do **not** implement U3+ on the U2 branch.
+Do **not** implement U4+ on the U3 branch.
 
-## Files this agent owns during U2
+## Files this agent owns during U3
 
-Treat these as hot. Prefer not to edit them until U2 merges:
+Treat these as hot until U3 merges:
 
-- `docs/experiment_contract_registry.json` (new)
-- `schemas/experiment_contract_registry.schema.json` (new)
-- `scripts/validate_experiment_manifest.py`
-- `tests/test_experiment_manifest.py`
-- `tests/test_research_contract_schema_parity.py`
-- `docs/system_design.md`
-- `docs/module_explainer.md`
-- `TODO.md`
-- `docs/primers/backlogs/software_engineering_todo.md`
-- this coordination note / U2 handoff docs under `docs/next_agent_*`
-
-`scripts/run_quality_checks.py` is **not** intentionally changed by U2; the
-existing no-argument manifest validator step becomes the coverage gate.
+- `docs/experiment_contract_registry.json`
+- `scripts/gen_provenance.py`
+- `scripts/validate_gate_verdict.py`
+- `experiments/commitment_surface/manifests/m5/experiment_manifest.json` (new)
+- focused provenance / gate-verdict tests
+- generated provenance outputs when `gen_provenance.py` is run
+- `docs/system_design.md`, `docs/module_explainer.md`, `TODO.md`, SE backlog
 
 ## Safer surfaces for a parallel agent
 
-These are lower conflict risk while U2 lands:
-
-- Scientific experiment code under packages that are not schema/validator work
-- Paper/PDF builders unrelated to contract registries
+- Unrelated scientific experiment packages
+- Paper/PDF builders that do not touch contract registries or provenance generators
 - App / coherence / site lanes
-- Read-only audits and review comments
+- Read-only audits
 
-Avoid simultaneous edits to shared schemas, validators, generated provenance
-indexes, or the root quality wrapper unless you rebase onto the merged U2 tip.
+Avoid simultaneous edits to shared schemas, validators, `gen_provenance.py`,
+generated verification indexes, or root quality wiring.
 
-## Known peer worktree
+## Already landed today
 
-- `~/.codex/worktrees/0364/...` on `codex/faster-cpu-quality-gate` currently
-  sits **behind** `main` (`e541978` ancestor of `befa8be`). If that branch is
-  revived, rebase after U2 merges and watch `scripts/run_quality_checks.py` /
-  quality tests.
+- PR [#364](https://github.com/jawauntb/research-derived-experiments/pull/364): PAC-Bayes weakness sketch (unrelated docs)
+- PR [#366](https://github.com/jawauntb/research-derived-experiments/pull/366): remaining-work handoff doc
+- PR [#365](https://github.com/jawauntb/research-derived-experiments/pull/365): U2 contract registry
 
 ## Constraints
 
-- U2 verification is Modal-only for pytest/Ruff/ty/full quality
-  (`tmp/modal_u2_quality.py`, untracked, delete after U2 ships).
-- Do not launch GPU experiments (E6/E5-L/E7/M5).
-- Do not adjudicate M5 claims in U2.
-- Do not mark broad migration TODOs complete while 49 exceptions remain.
+- U3+ follows the remaining handoff: CPU-only repository work; do not launch GPU
+  experiments (E6/E5-L/E7/M5) or change scientific verdicts.
+- Do not mark broad migration TODOs complete while exceptions / partial histories remain.
+- Do not adjudicate M5 claims; keep M5 rejected/valid/unadjudicated.
 
-## After U2 merges
+## After each merge
 
 1. Fetch/prune `origin`.
-2. Confirm U2 PR is closed/merged and no open PR owns the registry schema.
-3. Create a **new** worktree/branch from `origin/main` for U3.
-4. Update this coordination table with PR numbers and SHAs.
-5. Continue U3→U7 the same way: one tranche, Modal/full quality, review, merge.
-
-## Handoff sources
-
-- Controlling plan: `docs/next_agent_evidence_infrastructure_handoff_2026-07-14.md`
-- U2 resume detail: `docs/next_agent_u2_contract_registry_handoff_2026-07-14.md`
+2. Confirm the PR is closed/merged.
+3. Create a **new** worktree/branch from `origin/main` for the next unit.
+4. Update this table with PR numbers and SHAs.

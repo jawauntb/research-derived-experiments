@@ -7,6 +7,9 @@
 - **Run command:** _(not auto-detected — see README/result reports)_
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py valence_object_formation`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `valence_object_formation` / `valence_object_formation`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: _none_

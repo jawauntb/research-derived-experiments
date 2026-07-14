@@ -7,6 +7,9 @@
 - **Run command:** _(not auto-detected — see README/result reports)_
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py regime_sensitive_de`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `regime_sensitive_de` / `regime_sensitive_de`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: _none_

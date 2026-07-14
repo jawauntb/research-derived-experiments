@@ -7,6 +7,9 @@
 - **Run command:** `python3 experiments/concept_geometry/openai_embedding_probe.py --concepts experiments/concept_geometry/concept_set.json --out artifacts/concept_geometry/openai_embedding_probe.json`
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py concept_geometry`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `concept_geometry` / `concept_geometry`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: _none_

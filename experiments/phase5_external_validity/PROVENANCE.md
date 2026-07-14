@@ -7,6 +7,9 @@
 - **Run command:** `python -m experiments.phase5_external_validity.core \`
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py phase5_external_validity`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `phase5_external_validity` / `phase5_external_validity`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: _none_
