@@ -13,6 +13,13 @@ summarize honestly, and update the paper + docs. Read this whole note before act
 > G1–G4 are withheld; there is no scientific verdict. See
 > `experiments/commitment_surface/results/e7_selective_subspace_2026_07_13.md`.
 > Treat the original “not yet built” language below as the historical handoff state.
+>
+> **M5 update (2026-07-14):** the five-arm, eight-seed CPU grid is complete
+> with a byte-identical rerun. Strict verdict **FAIL**: F0/F1/F4/F5 pass; F2
+> fails because periodic reopening ties commitment latency at zero, and F3
+> fails because the normalized trigger ties zero false-reopen by never firing.
+> Canonical result:
+> `experiments/commitment_surface/results/m5_suite_c_reopen_reset_trigger_2026_07_14.md`.
 
 > Human director: **Jawaun Brown**. All code/results are AI-agent-generated under his
 > direction and review. Keep provenance honest, report negatives, do not overclaim, and

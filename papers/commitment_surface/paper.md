@@ -44,7 +44,7 @@ anti-correlation; this calibration does not retroactively pass the original
 gate. E4 is directionally decisive but its strict gate did not pass. Because
 cyclic-orbit augmentation places correctly labeled examples on held-out
 deployment support, E5 directly tests *generator learning* against *labeled
-orbit coverage* (Section 6.6).
+orbit coverage* (Section 6.7).
 <!-- E5_ABSTRACT_START -->
 The exact 135-cell E5 grid returns strict verdict **coverage**: G-reg/Cov/B-ref mean canonical OOD is 0.063/0.741/0.741; generator/coverage/transport gates are False/True/False.
 <!-- E5_ABSTRACT_END -->
@@ -62,6 +62,13 @@ review finds that its original shared-closing-barrier timing audit could not
 detect per-arm divergence. The recorded per-arm estimator fails 6 of 32
 matched groups (maximum 8.53% versus the frozen 2% limit), so E7 is
 integrity-invalid and produces no scientific verdict.
+M5 then compares five Suite C reopen triggers at exact per-seed probe budgets.
+Its strict verdict is **FAIL**: commitment reopening passes 8/8 with zero
+false reopen, but the periodic trigger ties its zero-step latency (failing F2)
+and the self-normalized trigger ties its zero false-reopen rate while never
+reopening (failing F3). The strong claim that commitment change is strictly
+better than every internal trigger is therefore rejected in this finite
+harness.
 
 ## 1. Introduction
 
@@ -133,10 +140,11 @@ Contributions.
   reduces probes, but its terminal-pass effect is 0; `cool` is null on both
   terminal success and the reported trajectory metrics. We therefore reject
   the strong load-bearing subset `{allocate, cool, reopen}` in this harness.
-- **C5.** A mechanism/behavior separation under continual learning: selective
-  compatibility-subspace protection changes the retained patch metric but
-  yields no retained-OOD advantage over EWC, rejecting its pre-registered
-  frontier-dominance claim at both widths.
+- **C5.** Two fail-closed follow-ups. E7's shared-barrier timing verifier is
+  rejected before its scientific gates, so no continual-learning verdict is
+  claimed. M5 exact-matches Suite C probe budgets and rejects strict trigger
+  superiority: periodic reopening ties commitment latency, while the
+  normalized trigger ties commitment specificity by never reopening.
 - **C6.** A pre-registered failure calculus (Section 4). We list the exact
   observations that would retract the reframe — several are non-trivial to
   satisfy — and report each experiment's verdict at its pre-declared gate.
@@ -434,6 +442,14 @@ linked below.
   patch-CE, match EWC final-task OOD within −0.02, beat EWC retained
   earlier-task OOD by +0.03, and beat the wrong-subspace control by +0.05 at
   both widths. All four gates are jointly necessary.
+- **M5 reopen-trigger addendum.** Five paired trigger arms must retain exact
+  per-seed actual probe counts and transported Suite C controls. Commitment
+  reopening must pass 8/8, beat every internal trigger's paired median latency
+  by at least one step and false-reopen occupancy by at least 0.10, remain
+  jointly Pareto-undominated, and preserve a 0/8 never-reopen floor. A
+  timestamped pre-run implementation contract freezes the originally omitted
+  internal statistics, threshold calibration, routing, censoring, and
+  no-change counterfactual before any M5 outcome cell.
 
 ## 5. Results
 
@@ -479,6 +495,47 @@ The strict disposition is therefore **INVALID — NO SCIENTIFIC VERDICT**.
 G1–G4 are not evaluated, and the all-stream mechanism and OOD margins are
 diagnostic only. They cannot accept or reject `H_subspace` and must not be
 used for post-hoc tuning.
+
+### 5.7 M5 — Commitment change vs internal reset triggers
+
+The CPU grid contains all five frozen trigger arms over eight paired seeds,
+with actual probe counts exactly matched per seed from the immutable M4
+`allocate=0, cool=0, reopen=1` cell. The unmodified reference suite retains
+C1–C6, fixed-surprise remains rejected, matched-random remains less selective,
+and a second same-platform execution is byte-identical. F0, F1, F4, and F5
+pass.
+
+A post-run adversarial audit invalidated two precursor payloads because fallback
+collisions changed sequential random-number consumption at eight `T_commit`
+steps in the coupled no-change run. The corrected replacement pre-indexes
+initial, shift, probe-token, and drift variates, while retaining the frozen
+arms, seeds, calibration, budgets, and gates. F0 now binds the corrected rows,
+M4 plans, transported reference, config, and receipt through a frozen integrity
+manifest. Point estimates changed slightly; no gate disposition changed.
+
+A subsequent Linux CI replay exposed a portability defect in that first
+corrected receipt: NumPy normal draws differed from macOS only below
+`1e-14`, but exact raw-float hashes made F0 fail despite identical plans,
+metrics, and F1–F5 decisions. The final manifest declares 12-decimal semantic
+hashing only for schedules and the transported reference, while final rows keep
+an exact digest. Those digests match across macOS/Linux; the mac-only receipt is
+superseded, while all scientific point estimates and gate dispositions remain
+unchanged.
+
+The strict verdict is **FAIL** because two universal superiority gates fail.
+`T_commit` passes 8/8, has median latency 0, and false-reopen occupancy 0.
+`T_periodic` also has median latency 0, so commitment change does not beat it by
+the frozen one-step F2 margin; periodic pays a 0.667 false-reopen cost.
+`T_norm` never reopens, giving latency 12 and 0/8 terminal success, but its
+false-reopen occupancy is also 0, so commitment change does not beat it by the
+frozen 0.10 F3 margin. `T_util` has median latency 1, false-reopen 0.656, and
+0/8 terminal success. `T_none` remains the required 0/8 floor.
+
+This rejects the conjunctive claim that the commitment trigger is strictly
+faster *and* more specific than every internal trigger. The surviving result is
+a trade-off: commitment reopening combines periodic-speed response with
+never-reopen specificity and is Pareto-undominated, but those component-wise
+ties make the preregistered stronger wording false.
 
 ## 6. Discussion
 
@@ -598,7 +655,35 @@ and behavioral margins remain diagnostics only. Any replacement run requires
 a new preregistration with its timing or operation-budget verifier frozen in
 advance; λ=1.0 and the observed cells must not be tuned post hoc.
 
-### 6.5 Limitations
+<!-- PAGEBREAK -->
+
+### 6.5 M5: strict trigger superiority fails on component-wise ties
+
+M4 established only that explicit second-shift reopening is necessary. M5 asks
+whether the external commitment-change event is a universally better reopening
+criterion than internal or scheduled alternatives. Before execution, audit
+found that the preregistration named utility and normalization triggers without
+operational formulas and demanded exact actual probe equality without a routing
+rule. The timestamped implementation contract repaired those gaps using only
+pre-first-shift M4 dynamics, froze the numeric receipt, and routed one common
+probe plan through each arm. No outcome was inspected during that repair.
+
+The result separates useful composition from strict component dominance.
+Commitment change reopens immediately and only when the world changes. Periodic
+reset reopens equally quickly because its frozen 24-step period coincides with
+the 24/48 shifts, but it stays falsely open for 8/12 no-change steps.
+Self-normalized reset never crosses after the second shift, so it is maximally
+slow and behaviorally useless, yet exactly ties commitment's zero false-reopen
+rate. Those ties fail F2 and F3 even though neither internal trigger
+Pareto-dominates commitment and the never-reopen floor remains intact.
+
+We therefore retract “better than every internal trigger” as a conjunctive
+claim. The bounded result is that commitment change supplies the best observed
+latency/specificity combination in this finite Suite C schedule, without strict
+dominance on each separate axis. Neural continual-learning transport remains
+unanswered.
+
+### 6.6 Limitations
 
 - Modular addition is one commitment surface; language- and vision-scale
   commitment surfaces are gestured at (via passive→active and paraphrase
@@ -641,12 +726,12 @@ advance; λ=1.0 and the observed cells must not be tuned post hoc.
   policies, and detect/saturate were frozen rather than ablated.
 - Extension to non-group deployment generators (e.g., semantic
   distribution shifts with no clean group action) is open.
-- E5 resolves the label-exposure confound of Section 6.6 in this frozen
+- E5 resolves the label-exposure confound of Section 6.7 in this frozen
   Pythia modular-addition regime in favor of coverage. Whether a different
   train-support-only objective can learn a transportable generator remains
   open; E4 itself cannot support that stronger mechanism claim.
 
-### 6.6 Resolved E4 confound: labeled orbit coverage vs generator learning
+### 6.7 Resolved E4 confound: labeled orbit coverage vs generator learning
 
 E4's compatibility augmentation generates, for each train pair
 `(x, y = (x + offset) mod n)`, the pair `((x+k) mod n, (y+k) mod n)`
@@ -990,7 +1075,7 @@ recover, and E4 does — at n=13 in smoke, at scale in the full grid.
 This is exactly the kind of *pre-registered directional prediction on
 a system the lab did not build* the prior program's critique
 identified as missing. It is not the last word on external contact —
-we say so in Section 6.5 — but it is a genuine one.
+we say so in Section 6.6 — but it is a genuine one.
 
 **R2. "Patch-CE is confounded with total LoRA effect; you're just
 measuring that the model uses fine-tuning."**
@@ -1016,7 +1101,7 @@ with correct labels and — as expected — also produced OOD
 generalization. That result answers a different question ("does
 adding correct-labeled coverage help?" — yes) and, importantly, keeps
 the coverage explanation of Arm B live: the reviewer's confound is
-real, not hypothetical. Section 6.6 reports the exact 135-cell severe
+real, not hypothetical. Section 6.7 reports the exact 135-cell severe
 follow-up. Coverage-matched labels reproduce B-ref (0.741 vs 0.741 mean
 canonical OOD), while G-reg remains near A-ref (0.063 vs 0.069);
 generator, group-specificity, and transport gates fail. We therefore retract

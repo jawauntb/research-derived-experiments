@@ -15,6 +15,7 @@ Writes:
 - papers/commitment_surface/figures/fig4_e4_pythia_arms.png
 - papers/commitment_surface/figures/fig5_frame_taxonomy.png
 - papers/commitment_surface/figures/fig6_e7_selective_subspace.png
+- papers/commitment_surface/figures/fig7_m5_reopen_trigger.png
 - papers/commitment_surface/figures/summary_metrics.json
     (summary of headline numbers for the PDF builder)
 """
@@ -39,6 +40,10 @@ E2E3_JSON = ROOT / "experiments" / "commitment_surface" / "results" / "e2_e3_neu
 E7_JSON = (
     ROOT / "experiments" / "commitment_surface" / "results"
     / "e7_selective_subspace_2026_07_13.json"
+)
+M5_JSON = (
+    ROOT / "experiments" / "commitment_surface" / "results"
+    / "m5_suite_c_reopen_reset_trigger_2026_07_14.json"
 )
 E4_JSON_CANDIDATES = [
     ROOT
@@ -449,6 +454,49 @@ def _repo_relative(path: str) -> str:
     return str(Path(path).relative_to(ROOT))
 
 
+def make_m5_figure(m5: dict) -> tuple[str, dict]:
+    """Plot the latency/specificity trade-off that determines M5."""
+    arms = m5["arm_summaries"]
+    labels = [row["arm"].removeprefix("T_").replace("periodic", "periodic\nP=24") for row in arms]
+    latency = [row["latency"]["point"] for row in arms]
+    false_reopen = [row["false_reopen_rate"]["point"] for row in arms]
+    colors = [
+        PALETTE["B"], PALETTE["D"], PALETTE["C"], PALETTE["A"],
+        PALETTE["unweighted"],
+    ]
+    xs = list(range(len(arms)))
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7.6, 3.5))
+    ax1.bar(xs, latency, color=colors)
+    ax1.set_xticks(xs)
+    ax1.set_xticklabels(labels, fontsize=8)
+    ax1.set_ylabel("Median steps to affected probe")
+    f2_status = "passes" if m5["gates"]["F2_latency_dominance"]["pass"] else "fails"
+    periodic_delta = m5["gates"]["F2_latency_dominance"]["contrasts"][
+        "T_periodic"
+    ]["median_internal_minus_commit"]
+    ax1.set_title(f"F2 {f2_status}: periodic delta {periodic_delta:.1f} steps")
+
+    ax2.bar(xs, false_reopen, color=colors)
+    ax2.set_xticks(xs)
+    ax2.set_xticklabels(labels, fontsize=8)
+    ax2.set_ylabel("No-change open-window occupancy")
+    f3_status = "passes" if m5["gates"]["F3_specificity"]["pass"] else "fails"
+    norm_margin = m5["gates"]["F3_specificity"]["contrasts"]["T_norm"][
+        "internal_minus_commit"
+    ]
+    ax2.set_title(f"F3 {f3_status}: normalized margin {norm_margin:.2f}")
+    ax2.set_ylim(0.0, max(false_reopen + [0.1]) * 1.15)
+
+    path = PAPER_FIG / "fig7_m5_reopen_trigger.png"
+    _save(fig, path)
+    return str(path), {
+        "strict_verdict": m5["strict_verdict"],
+        "gates": {name: gate["pass"] for name, gate in m5["gates"].items()},
+        "calibration_receipt": m5["calibration"]["receipt_sha256"],
+    }
+
+
 def main() -> None:
     summary = {"figures": {}, "headline": {}}
 
@@ -491,6 +539,14 @@ def main() -> None:
         summary["headline"]["e7"] = e7_meta
     else:
         print(f"skip E7 fig (missing {E7_JSON})")
+
+    if M5_JSON.exists():
+        m5 = json.loads(M5_JSON.read_text())
+        fig7_path, m5_meta = make_m5_figure(m5)
+        summary["figures"]["fig7"] = _repo_relative(fig7_path)
+        summary["headline"]["m5"] = m5_meta
+    else:
+        print(f"skip M5 fig (missing {M5_JSON})")
 
     out = PAPER_FIG / "summary_metrics.json"
     out.write_text(json.dumps(summary, indent=2))

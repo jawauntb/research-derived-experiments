@@ -65,6 +65,10 @@ E7_JSON = (
     ROOT / "experiments" / "commitment_surface" / "results"
     / "e7_selective_subspace_2026_07_13.json"
 )
+M5_JSON = (
+    ROOT / "experiments" / "commitment_surface" / "results"
+    / "m5_suite_c_reopen_reset_trigger_2026_07_14.json"
+)
 E4_JSON_CANDIDATES = [
     ROOT
     / "experiments"
@@ -222,6 +226,11 @@ def markdown_to_flow(text: str, st: dict[str, ParagraphStyle]) -> list[Any]:
             continue
         if in_code:
             code_lines.append(line)
+            continue
+        if line.strip() == "<!-- PAGEBREAK -->":
+            flush_paragraph(para_lines, flow, st)
+            flush_list(list_items, flow, st)
+            flow.append(PageBreak())
             continue
         if line.startswith("<!--"):
             # Skip HTML comments -- they are placeholder markers for the
@@ -516,6 +525,38 @@ def build_appendix_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
             rows,
             [0.5 * inch, 0.65 * inch, 0.6 * inch, 0.8 * inch,
              0.8 * inch, 0.7 * inch, 0.7 * inch, 0.7 * inch],
+        ))
+
+    if M5_JSON.exists():
+        m5 = json.loads(M5_JSON.read_text(encoding="utf-8"))
+        flow.append(Spacer(1, 8))
+        flow.append(para(
+            "**A.2.6 M5.** Public-safe aggregates from the five-arm, "
+            "eight-seed trigger grid. Raw probe and trigger traces remain "
+            "gitignored; all arms consume exact per-seed actual probe budgets.",
+            st["Body"],
+        ))
+        rows = [[
+            "Arm", "Pass", "Latency", "False reopen", "Selectivity",
+            "Reopen ratio", "Final MAE", "Probes",
+        ]]
+        rows.extend([
+            [
+                arm["arm"],
+                _fmt(arm["terminal_pass_rate"]["point"], 3),
+                _fmt(arm["latency"]["point"], 2),
+                _fmt(arm["false_reopen_rate"]["point"], 3),
+                _fmt(arm["selectivity"]["point"], 2),
+                _fmt(arm["reopen_ratio"]["point"], 2),
+                _fmt(arm["final_mae"]["point"], 3),
+                _fmt(arm["probe_cost"]["point"], 1),
+            ]
+            for arm in m5["arm_summaries"]
+        ])
+        flow.append(_appendix_table(
+            rows,
+            [0.65 * inch, 0.5 * inch, 0.65 * inch, 0.8 * inch,
+             0.75 * inch, 0.8 * inch, 0.65 * inch, 0.6 * inch],
         ))
 
     return flow
@@ -888,6 +929,81 @@ def build_results_flow(st: dict[str, ParagraphStyle]) -> list[Any]:
             ))
     else:
         flow.append(para("E7 result JSON not yet available.", st["Body"]))
+
+    # --- M5 ---
+    flow.append(PageBreak())
+    flow.append(para(
+        "5.7 M5 — Commitment change vs internal reset triggers",
+        st["H3"],
+    ))
+    if M5_JSON.exists():
+        m5 = json.loads(M5_JSON.read_text(encoding="utf-8"))
+        f2 = m5["gates"]["F2_latency_dominance"]
+        f3 = m5["gates"]["F3_specificity"]
+        periodic_delta = f2["contrasts"]["T_periodic"][
+            "median_internal_minus_commit"
+        ]
+        norm_margin = f3["contrasts"]["T_norm"]["internal_minus_commit"]
+        add_image(
+            flow,
+            FIG_DIR / "fig7_m5_reopen_trigger.png",
+            "Figure 7. M5 latency and false-reopen trade-off. The periodic "
+            f"paired latency delta is {periodic_delta:.1f} steps; the "
+            f"normalized false-reopen margin is {norm_margin:.2f}.",
+            st,
+        )
+        rows = [["Arm", "Pass", "Latency", "False reopen", "Final MAE"]]
+        rows.extend([
+            [
+                arm["arm"],
+                _fmt(arm["terminal_pass_rate"]["point"], 3),
+                _fmt(arm["latency"]["point"], 2),
+                _fmt(arm["false_reopen_rate"]["point"], 3),
+                _fmt(arm["final_mae"]["point"], 3),
+            ]
+            for arm in m5["arm_summaries"]
+        ])
+        table = Table(
+            rows,
+            colWidths=[1.1 * inch, 0.8 * inch, 0.8 * inch,
+                       1.0 * inch, 0.9 * inch],
+        )
+        table.setStyle(_table_style())
+        flow.append(table)
+        flow.append(Spacer(1, 4))
+        flow.append(para(
+            f"**Strict verdict: {m5['strict_verdict']}.** F2 is "
+            f"{'PASS' if f2['pass'] else 'FAIL'} at periodic delta "
+            f"{periodic_delta:.1f}; F3 is "
+            f"{'PASS' if f3['pass'] else 'FAIL'} at normalized margin "
+            f"{norm_margin:.2f}. See the table and public JSON for the "
+            "remaining frozen gates.",
+            st["Body"],
+        ))
+        history = m5["integrity_history"]
+        flow.append(para(
+            "**Integrity replacement.** Post-run review invalidated two "
+            "precursor payloads after fallback collisions desynchronized the "
+            "coupled no-change RNG stream. The corrected run pre-indexes all "
+            "variates and binds its rows, M4 plans, transported reference, "
+            "config, seeds, and receipt in a frozen manifest. Point estimates "
+            "were recomputed; no gate disposition changed. Invalidated hashes: "
+            f"{', '.join(history['invalidated_raw_payload_sha256'])}.",
+            st["Body"],
+        ))
+        flow.append(para(
+            "**Cross-platform receipt.** Linux CI later showed sub-1e-14 "
+            "variation in NumPy normal draws, so the first corrected macOS "
+            "raw receipt was superseded. The manifest now uses declared "
+            "12-decimal semantic hashes only for schedules and the transported "
+            "reference, while the final-row digest stays exact; macOS/Linux "
+            "digests match and no plan, point estimate, or gate disposition "
+            "changed. Superseded hash: "
+            f"{', '.join(history['superseded_portability_raw_payload_sha256'])}.",
+            st["Body"],
+        ))
+    else:
+        flow.append(para("M5 result JSON not yet available.", st["Body"]))
 
     flow.append(para("Frame-taxonomy schematic (Figure 5).", st["H3"]))
     add_image(flow, FIG_DIR / "fig5_frame_taxonomy.png",

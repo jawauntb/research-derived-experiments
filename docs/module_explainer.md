@@ -403,9 +403,13 @@ python3 -m experiments.viable_computational_bodies.search \
 |---|---|
 | `modal_world_responds_sweep.py` | Paper 22: action-correlated shocks + regime shift |
 | `suite_c_contract.py` | Shared Suite C condition constants |
-| `suite_c_reengagement.py` | Deterministic Suite C re-engagement (silence/anxiety/false-calm/cost), with typed allocate/cool/reopen action-gate interventions that default to the unchanged policy |
+| `suite_c_reengagement.py` | Deterministic Suite C re-engagement (silence/anxiety/false-calm/cost), with typed allocate/cool/reopen action-gate interventions that default to the unchanged policy and an opt-in probe trace used to freeze M5 budgets |
 | `suite_c_factorial_ablation.py` | Local deterministic 2^3 allocate × cool × reopen runner using the real burst/refractory workflow; paired bootstrap contrasts, transported controls, strict gates, idempotent raw/public artifacts |
 | `suite_c_factorial_ablation_preregistration_2026_07_09.md` | Timestamped follow-up addendum frozen before implementation/run; exact component semantics, seeds, gates, kill criteria, rejected alternatives |
+| `suite_c_reopen_reset_trigger.py` | M5 CPU runner comparing commitment, utility/age, robust-normalized, periodic, and never-reopen triggers over a common exact M4 probe plan; hash-pinned M4-only calibration, frozen eight-seed integrity, coupled no-change occupancy, paired bootstrap summaries, strict F0–F5 gates, and idempotent raw/public artifacts |
+| `suite_c_reopen_reset_trigger_preregistration_2026-07-13.md` / `suite_c_reopen_reset_trigger_implementation_contract_2026-07-14.md` | Frozen M5 question/gates plus the timestamped pre-outcome repair that operationalizes missing trigger, budget-routing, latency, and false-calm details |
+| `suite_c_reopen_reset_trigger_calibration_2026_07_14.json` | Outcome-blind pre-first-shift M4 calibration receipt binding the two internal-trigger thresholds before M5 cells |
+| `suite_c_reopen_reset_trigger_integrity_manifest_2026_07_14.json` | Post-audit frozen digest manifest binding the corrected M5 rows, exact per-seed M4 plans/budgets, transported reference suite, config, seeds, and calibration receipt after invalidating branch-desynchronized precursor payloads; schedules/reference use a declared 12-decimal semantic digest for macOS/Linux stability while the final-row digest remains exact |
 | `modal_suite_c_reengagement.py` | Modal Suite C dispatch |
 | `suite_c_neural_transfer.py` | Learned probe-head transfer on held-out seeds |
 | `modal_suite_c_neural_transfer.py` | Modal neural-transfer sweep |
@@ -527,7 +531,7 @@ Raw outputs stay under `artifacts/` until summarized.
 | Script | Purpose | Flags / I/O |
 |---|---|---|
 | `research_contracts.py` | Shared schema version, identifier patterns, claim tiers/statuses, and evidence statuses used by registry/verdict adapters | Library; parity-tested against JSON Schemas |
-| `gen_provenance.py` | Validate registries, regenerate all experiment `PROVENANCE.md` files + `docs/verification.{md,json}` + site mirror; `--check` compares expected bytes without writing | In: 54 experiment dirs + claim/evidence registries; excludes `experiments/common` |
+| `gen_provenance.py` | Validate registries, regenerate all experiment `PROVENANCE.md` files + `docs/verification.{md,json}` + site mirror; `--check` compares expected bytes without writing; an exact-config result can bind its own command/preregistration to the latest verification signal | In: 54 experiment dirs + claim/evidence registries; excludes `experiments/common` |
 | `validate_evidence_registry.py` | Validate canonical evidence IDs, gate statuses, artifact refs, and supersession shape | `docs/program_evidence_registry.json` |
 | `validate_claim_registry.py` | Validate exact claim shape/tiers/states and bidirectional claim↔evidence edges | Reads `docs/claim_registry.json` + `docs/program_evidence_registry.json`; never writes either |
 | `validate_experiment_manifest.py` | Discover and dependency-free validate every v1 experiment-package contract | Reads `experiments/**/experiment_manifest.json`; portable contract in `schemas/experiment_manifest.schema.json` |

@@ -5,7 +5,8 @@
     "fig3": "papers/commitment_surface/figures/fig3_e3_readout_vs_patch.png",
     "fig4": "papers/commitment_surface/figures/fig4_e4_pythia_arms.png",
     "fig5": "papers/commitment_surface/figures/fig5_frame_taxonomy.png",
-    "fig6": "papers/commitment_surface/figures/fig6_e7_selective_subspace.png"
+    "fig6": "papers/commitment_surface/figures/fig6_e7_selective_subspace.png",
+    "fig7": "papers/commitment_surface/figures/fig7_m5_reopen_trigger.png"
   },
   "headline": {
     "e1": {
@@ -103,6 +104,18 @@
       "total_matched_groups": 32,
       "valid_streams": 12,
       "max_relative_wall_clock_range": 0.085251646436262
+    },
+    "m5": {
+      "strict_verdict": "FAIL",
+      "gates": {
+        "F0_integrity": true,
+        "F1_commit_8_of_8": true,
+        "F2_latency_dominance": false,
+        "F3_specificity": false,
+        "F4_joint_non_domination": true,
+        "F5_none_floor": true
+      },
+      "calibration_receipt": "741efa930978a0de622b4fbea4deed82e250535b0b0b37ecaf3f9043136d992b"
     }
   }
 }

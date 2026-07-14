@@ -28,8 +28,9 @@
 - [x] Complete and audit the E7 selective-subspace continual-learning grid
   (integrity INVALID: 6/32 matched groups exceed the frozen 2% timing gate;
   G1–G4 withheld, no scientific verdict).
-- [ ] Build and run frozen M5 Suite C reopen-trigger experiment after confirming
-  no other agent has queued it.
+- [x] Build and run frozen M5 Suite C reopen-trigger experiment (strict FAIL:
+  F2 periodic latency tie and F3 normalized-trigger specificity tie reject the
+  universal trigger-superiority claim; F0/F1/F4/F5 pass).
 
 ## Phase / Arc 2A: Concerned Syntax
 

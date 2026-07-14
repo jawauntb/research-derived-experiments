@@ -109,6 +109,43 @@ class ProvenanceGenerationTests(unittest.TestCase):
                 "experiments/local_artifacts/PREREGISTRATION.md",
             )
 
+    def test_commitment_surface_exact_result_binds_command_and_preregistration(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            experiment = root / "experiments" / "commitment_surface"
+            results = experiment / "results"
+            paper_root = root / "papers"
+            preregistration = experiment / "m5_preregistration.md"
+            results.mkdir(parents=True)
+            paper_root.mkdir()
+            preregistration.write_text("# Frozen M5 design\n")
+            (experiment / "README.md").write_text(
+                "Legacy run: `python3 -m experiments.commitment_surface.run_e1`.\n"
+            )
+            exact_command = (
+                "uvx --python 3.12 --with numpy python -m "
+                "experiments.world_responds.suite_c_reopen_reset_trigger"
+            )
+            (results / "m5.md").write_text(
+                "# M5\n\n"
+                "## Exact run config\n\n"
+                f"```bash\n{exact_command}\n```\n\n"
+                "Pre-registration: "
+                "`experiments/commitment_surface/m5_preregistration.md`.\n"
+            )
+
+            with (
+                patch.object(gen_provenance, "ROOT", root),
+                patch.object(gen_provenance, "PAPERS", paper_root),
+            ):
+                record = gen_provenance.collect(experiment)
+
+            self.assertEqual(record["run_command"], exact_command)
+            self.assertEqual(
+                record["preregistration"],
+                "experiments/commitment_surface/m5_preregistration.md",
+            )
+
     def test_committed_outputs_are_current(self) -> None:
         self.assertEqual(gen_provenance.main(["--check"]), 0)
 

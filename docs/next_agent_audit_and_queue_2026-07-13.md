@@ -13,6 +13,12 @@ executing or already queued.
 > so E7 is integrity-invalid and G1–G4 have no scientific verdict. Canonical result:
 > `experiments/commitment_surface/results/e7_selective_subspace_2026_07_13.md`.
 > The audit table below preserves the earlier snapshot for provenance.
+>
+> **M5 update (2026-07-14):** M5 is complete and no longer queueable. The
+> exact-budget five-arm run is byte-stable and strictly **FAILS** F2/F3 on
+> periodic-latency and normalized-specificity ties. No active experiment from
+> this handoff remains unexecuted; E6 remains preregistration-blocked and E5-L
+> is a historical frozen follow-up, not an automatically active queue item.
 
 > Paste everything below the line into the receiving agent. It is self-contained.
 
