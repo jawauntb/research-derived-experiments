@@ -37,9 +37,10 @@ structures, uses namespaced independent fixed-cardinality assignments, and
 audits exchangeability before applying a one-sided randomization gate. The
 result distinguishes the candidate-score expectation identity from the
 nonlinear selected-performance distribution. Pre-registered misses remain
-failures in committed summaries, and the current Pythia result retains an
-explicit labeled-orbit-coverage confound until the train-support-only generator
-intervention passes its severe follow-up. That E5 follow-up is split into a
+failures in committed summaries. E5 resolves the Pythia
+labeled-orbit-coverage confound in favor of coverage: G-reg remains near A-ref
+(0.063 vs 0.069 canonical OOD), while Cov reproduces B-ref (0.741 vs 0.741);
+generator, group-specificity, and transport gates fail. That E5 follow-up is split into a
 dependency-free design/audit layer and a Modal Pythia-LoRA runner. Typed
 exposure plans keep supervised labels distinct from consistency pairs, record
 support exposure counts, reserve disjoint novel shifts, and reject leakage
@@ -48,9 +49,8 @@ removes a fixed spectral-mass fraction from each effective LoRA update for a
 rank-comparable patch. Candidate rows are bounded in microbatches and the
 consistency objective backpropagates a weighted average one pair-microbatch at a
 time; this preserves the frozen loss while avoiding graph accumulation on
-410m/L4. The minimum Modal smoke passed its integrity gate; E5
-remains scientifically pending until the confirmatory grid passes the frozen
-post-hoc gates. The confirmatory launcher now hard-locks the frozen run
+410m/L4. The exact 135-cell grid passed all integrity checks and produced the
+strict `coverage` verdict. The confirmatory launcher hard-locks the frozen run
 configuration, expands it into an exact 135-cell manifest, and refuses a
 verdict unless every expected `(size, modulus, seed, arm)` key appears exactly
 once with finite metrics and passing integrity. Separately, E2/E3 now fit a

@@ -1,4 +1,4 @@
-# The Commitment Surface: Weakness Is a Footprint, Compatibility Is the Cause
+# The Commitment Surface: Weakness Is a Footprint, and Labeled Coverage Can Mimic Generator Learning
 
 **Author.** Jawaun Brown, with agent-generated code and drafts under human
 direction.
@@ -41,13 +41,12 @@ conditional randomization follow-up (2,048 draws) finds the observed −0.054
 gap typical of the frozen candidate/deployment design (null mean −0.0589;
 lower-tail probability 0.620), so it does not indicate systematic
 anti-correlation; this calibration does not retroactively pass the original
-gate. E4 is directionally decisive but its strict gate did not pass. One confound remains open and is
-pre-registered for a follow-up: cyclic-orbit augmentation places correctly
-labeled examples on held-out deployment support, so E4 does not yet
-separate *generator learning* from *labeled orbit coverage* (Section 6.5).
+gate. E4 is directionally decisive but its strict gate did not pass. Because
+cyclic-orbit augmentation places correctly labeled examples on held-out
+deployment support, E5 directly tests *generator learning* against *labeled
+orbit coverage* (Section 6.5).
 <!-- E5_ABSTRACT_START -->
-The exact 135-cell E5 confirmatory grid is running; no E5 mechanism verdict is
-reported until all cells pass the frozen integrity gate.
+The exact 135-cell E5 grid returns strict verdict **coverage**: G-reg/Cov/B-ref mean canonical OOD is 0.063/0.741/0.741; generator/coverage/transport gates are False/True/False.
 <!-- E5_ABSTRACT_END -->
 We recover the old-frame positives — cyclic and dihedral
 100%-vs-0% weakness sweeps — as the boundary case where the probe group and
@@ -105,7 +104,7 @@ Contributions.
   optimality statement requires `G_probe = G_dep` (or weakness restricted
   to `G_dep`); a strict superset probe group does *not* suffice
   (Section 3.4).
-- **C3.** Four severe experiments (Section 5). E1 shows within-lab that
+- **C3.** Five severe experiments (Section 5). E1 shows within-lab that
   well-specified concern beats unweighted by +0.24; the misspecification
   arm lands at −0.054 vs unweighted, *outside* the pre-registered ±0.05
   equivalence band, so that sub-gate strictly fails. The pre-registered
@@ -118,6 +117,9 @@ Contributions.
   non-degenerate external contact on Pythia 70m/160m/410m LoRA:
   directionally decisive, strict pre-registered gate narrowly failed
   (Arm A mean OOD 0.113 vs the required ≤ 0.10).
+  E5 then resolves E4's mechanism confound in favor of labeled coverage:
+  G-reg/Cov/B-ref canonical OOD is 0.063/0.741/0.741, with the coverage
+  gate passing and generator, group-specificity, and transport gates failing.
 - **C4.** A severe negative result for the proposed anti-Goodhart
   compression of Papers 5–25 (Section 6): in a pre-registered 2^3 Suite C
   ablation, only `reopen` is necessary for the existing terminal criterion.
@@ -589,12 +591,12 @@ cells is prohibited. Canonical results are in
   policies, and detect/saturate were frozen rather than ablated.
 - Extension to non-group deployment generators (e.g., semantic
   distribution shifts with no clean group action) is open.
-- The highest-priority methodological issue is the label-exposure
-  confound of Section 6.5: cyclic-orbit augmentation places correctly
-  labeled examples on the held-out deployment support, so E2/E4 do not
-  yet separate *generator learning* from *labeled orbit coverage*.
+- E5 resolves the label-exposure confound of Section 6.5 in this frozen
+  Pythia modular-addition regime in favor of coverage. Whether a different
+  train-support-only objective can learn a transportable generator remains
+  open; E4 itself cannot support that stronger mechanism claim.
 
-### 6.5 Open confound: labeled orbit coverage vs generator learning
+### 6.5 Resolved E4 confound: labeled orbit coverage vs generator learning
 
 E4's compatibility augmentation generates, for each train pair
 `(x, y = (x + offset) mod n)`, the pair `((x+k) mod n, (y+k) mod n)`
@@ -654,10 +656,7 @@ is materially weakened if any of:
 - patch-CE fails to predict transfer to a novel commitment surface.
 
 <!-- E5_CLAIM_UPDATE_START -->
-Until the exact E5 grid completes, the E4 claim remains: *train-time aligned
-intervention recovers external OOD where readout selection does not* — with
-the mechanism (transportable generator vs labeled coverage) not yet isolated.
-The validation smoke passed integrity but is not confirmatory evidence.
+**E5 confirmatory verdict: coverage.** E5 resolves the frozen mechanism contrast in favor of labeled coverage: train-support-only generator regularization remains near the readout baseline while coverage-matched labels perform with the E4-style orbit-label arm. This materially weakens the claim that E4 demonstrated a transportable generator; E4 remains evidence that aligned labeled intervention beats post-hoc readout selection. Mean canonical OOD for G-reg/Cov/B-ref/A-ref is 0.063/0.741/0.741/0.069. Generator, coverage, group-specificity, and transport gates are False, True, False, and False, respectively. The claim remains bounded to the frozen Pythia modular-addition grid.
 <!-- E5_CLAIM_UPDATE_END -->
 
 ## 7. Conclusion
@@ -665,14 +664,14 @@ The validation smoke passed integrity but is not confirmatory evidence.
 <!-- Section 7 -->
 
 Availability is not use; probe AUC is not causal path; portable weakness
-is not portable simplicity. Structure-in-representation is a starting
-point, not the discovery. The discovery — the thing you would defend to a
-skeptical reviewer three moves out — is *commitment-surface survival*:
-did the causal effect of the identified mechanism survive transport,
-gauge-fix, and change of commitment on a system you did not build? If
-yes, the geometry story becomes an aligned-generator special case with
-clean group theory. If no, the geometry story was a footprint of the
-prior. Both are useful, but only the first is science.
+is not portable simplicity; and aligned augmentation is not by itself
+generator learning. E5 applies the paper's own discipline to E4 and rejects
+the stronger mechanism reading: train-support-only regularization remains at
+the readout floor, while coverage-matched labels reproduce the orbit-label
+arm. The surviving result is narrower but firmer: aligned labeled
+intervention recovers OOD where readout selection does not, and causal
+mechanism claims require survival under coverage controls, novel shifts, and
+change of commitment.
 
 ## 8. Author's stance
 
@@ -933,7 +932,7 @@ external contact is still on modular addition, so this isn't external."**
 Response. The E4 external is *not* another synthetic world. It uses a
 public open-weights model family (Pythia 70m/160m/410m) trained on
 The Pile, and asks whether a LoRA fine-tune with cyclic-orbit
-augmentation produces load-bearing OOD generalization. The old-frame
+augmentation produces OOD generalization. The old-frame
 reading of our own prior program predicted a yes on weakness readout;
 our P1 hard-kill and E4 Arm A both said no. The commitment-first
 reframe predicted that Arm B (train-time compat intervention) would
@@ -957,9 +956,8 @@ training set with its true label, Arm C's augmentation is *inconsistent*
 with the cyclic rule, so the model cannot fit both without choosing.
 If patch-CE were only measuring "the LoRA update is used", Arms B and C
 would have similar patch-CE and similar OOD. Empirically the anti-cheat
-holds: LoRA is only load-bearing when the augmentation *group* matches
-the deployment generator, not merely when augmentation *volume* is
-present. However, Arm C controls volume, **not label exposure**: Arm B's
+shows that generic augmentation volume is insufficient. However, Arm C
+controls volume, **not label exposure**: Arm B's
 cyclic augmentation places correctly labeled examples on the held-out
 deployment support, while Arm C places incorrectly labeled ones there.
 An earlier revision of Arm C used the labeled coverage augmentation
@@ -968,12 +966,13 @@ with correct labels and — as expected — also produced OOD
 generalization. That result answers a different question ("does
 adding correct-labeled coverage help?" — yes) and, importantly, keeps
 the coverage explanation of Arm B live: the reviewer's confound is
-real, not hypothetical. Section 6.5 states the confound explicitly and
-pre-registers the severe follow-up (generator regularization confined
-to train support, tested on a novel group element or modulus) with
-kill criteria. Until it runs, R2's strongest defensible reading of E4
-is "aligned train-time intervention recovers external OOD where
-readout selection does not," with the mechanism not yet isolated.
+real, not hypothetical. Section 6.5 reports the exact 135-cell severe
+follow-up. Coverage-matched labels reproduce B-ref (0.741 vs 0.741 mean
+canonical OOD), while G-reg remains near A-ref (0.063 vs 0.069);
+generator, group-specificity, and transport gates fail. We therefore retract
+the claim that E4 demonstrated a transportable generator. Its strongest
+defensible reading is "aligned labeled intervention recovers external OOD
+where readout selection does not."
 
 **R3. "The anti-Goodhart control loop reads like a philosophical
 compression, not an empirical result."**
