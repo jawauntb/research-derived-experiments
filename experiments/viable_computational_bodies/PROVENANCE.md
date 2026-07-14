@@ -7,6 +7,9 @@
 - **Run command:** `python3 -m experiments.viable_computational_bodies.search \`
 - **Seed:** 20260616
 - **Reproduce (one command):** `python scripts/regen.py viable_computational_bodies`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `viable_computational_bodies` / `viable_computational_bodies`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: `papers/viable_computational_bodies/preregistration.md`

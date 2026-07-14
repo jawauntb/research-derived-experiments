@@ -7,6 +7,9 @@
 - **Run command:** `doppler --scope /Users/jawaun/superoptimizers run -- uvx --python 3.12 --from modal modal run experiments/activation_geometry/modal_activation_probe.py --model-id EleutherAI/pythia-70m-deduped --layer -1 --out artifacts/activation_geometry/modal_pythia_70m_layer_last.json`
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py activation_geometry`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `activation_geometry` / `activation_geometry`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: _none_

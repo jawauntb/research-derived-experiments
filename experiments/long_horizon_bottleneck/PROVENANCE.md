@@ -7,6 +7,9 @@
 - **Run command:** `python3 -m experiments.long_horizon_bottleneck.eval \`
 - **Seed:** 20261050
 - **Reproduce (one command):** `python scripts/regen.py long_horizon_bottleneck`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `long_horizon_bottleneck` / `long_horizon_bottleneck`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: `papers/long_horizon_bottleneck/api_blackbox_preregistration.md`

@@ -7,6 +7,9 @@
 - **Run command:** _(not auto-detected — see README/result reports)_
 - **Seed:** 9999
 - **Reproduce (one command):** `python scripts/regen.py neural_group_generator`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `neural_group_generator` / `neural_group_generator`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: _none_

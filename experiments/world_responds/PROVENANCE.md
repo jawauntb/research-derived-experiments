@@ -7,6 +7,9 @@
 - **Run command:** `python3 -m experiments.world_responds.suite_c_factorial_ablation --seeds 20260709,20261712,20262715,20263718,20264721,20265724,20266727,20267730 --out artifacts/world_responds/suite_c_factorial_ablation_2026_07_09.json --summary-json experiments/commitment_surface/results/m4_suite_c_factorial_ablation_2026_07_09.json --summary-md experiments/commitment_surface/results/m4_suite_c_factorial_ablation_2026_07_09.md`
 - **Seed:** 20260706
 - **Reproduce (one command):** `python scripts/regen.py world_responds`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `world_responds` / `world_responds`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: `experiments/world_responds/suite_c_factorial_ablation_preregistration_2026_07_09.md`

@@ -7,6 +7,9 @@
 - **Run command:** `python3 -m experiments.symbolic_weakness.benchmark \`
 - **Seed:** 20260609
 - **Reproduce (one command):** `python scripts/regen.py symbolic_weakness`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `symbolic_weakness` / `symbolic_weakness`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: _none_

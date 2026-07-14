@@ -7,6 +7,9 @@
 - **Run command:** `python -m experiments.phase4_metaphysics.core \`
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py phase4_metaphysics`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `phase4_metaphysics` / `phase4_metaphysics`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: _none_

@@ -7,6 +7,9 @@
 - **Run command:** _(not auto-detected — see README/result reports)_
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py off_policy_state_coverage`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `off_policy_state_coverage` / `off_policy_state_coverage`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: _none_

@@ -9,7 +9,8 @@
 - [x] Correct the mathematics primer's Lagrangian/KKT signs, VOI sign, and discount arithmetic with regression tests.
 - [ ] Migrate experiment families to structured manifests and replace prose-only provenance extraction.
   - [x] Partition all 54 research packages in `docs/experiment_contract_registry.json`: 5 structured manifests and 49 time-bounded legacy exceptions.
-  - [ ] Replace the 49 exceptions and partial run histories with exact structured run bindings.
+  - [x] Make provenance consume exact primary-run bindings for structured packages (commitment_surface primary is M5; E5/E6/E7 remain explicit partial history).
+  - [ ] Replace the remaining legacy exceptions and partial run histories with exact structured run bindings.
 - [ ] Add CI lanes for manifest coverage, public-artifact envelopes, and clean-clone reproduction.
   - [x] Enforce manifest-or-active-exception package coverage in the required root quality gate.
   - [ ] Enforce public-artifact envelopes and clean-clone reproduction.

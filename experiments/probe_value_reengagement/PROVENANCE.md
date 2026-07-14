@@ -7,6 +7,9 @@
 - **Run command:** _(not auto-detected — see README/result reports)_
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py probe_value_reengagement`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `probe_value_reengagement` / `probe_value_reengagement`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: `papers/probe_value_reengagement/preregistration.md`

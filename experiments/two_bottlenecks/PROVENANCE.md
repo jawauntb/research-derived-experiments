@@ -7,6 +7,9 @@
 - **Run command:** _(not auto-detected — see README/result reports)_
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py two_bottlenecks`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `two_bottlenecks` / `two_bottlenecks`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: _none_

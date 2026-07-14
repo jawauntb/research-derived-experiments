@@ -7,6 +7,9 @@
 - **Run command:** `python scripts/summarize_semantic_concern_sweep.py \`
 - **Seed:** 20260702
 - **Reproduce (one command):** `python scripts/regen.py semantic_concern_geometry`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `semantic_concern_geometry` / `semantic_concern_geometry`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: `papers/semantic_concern_geometry/preregistration.md`

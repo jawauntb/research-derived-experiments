@@ -24,9 +24,11 @@ from pathlib import Path
 try:
     from scripts.validate_claim_registry import validate as validate_claim_registry
     from scripts.validate_evidence_registry import validate as validate_evidence_registry
+    from scripts.validate_experiment_manifest import validate as validate_manifest
 except ModuleNotFoundError:  # Direct execution: python scripts/gen_provenance.py
     from validate_claim_registry import validate as validate_claim_registry
     from validate_evidence_registry import validate as validate_evidence_registry
+    from validate_experiment_manifest import validate as validate_manifest
 
 ROOT = Path(__file__).resolve().parent.parent
 EXP = ROOT / "experiments"
@@ -35,6 +37,7 @@ DOCS = ROOT / "docs"
 SITE = ROOT / "sites" / "reafference_attribution"
 PROGRAM_EVIDENCE = DOCS / "program_evidence_registry.json"
 CLAIMS = DOCS / "claim_registry.json"
+CONTRACT_REGISTRY = DOCS / "experiment_contract_registry.json"
 
 ATTRIBUTION = (
     "Human author & director: Jawaun Brown. "
@@ -135,8 +138,10 @@ def registry_summary() -> dict:
     summary = {
         "program_evidence_registry": str(PROGRAM_EVIDENCE.relative_to(ROOT)),
         "claim_registry": str(CLAIMS.relative_to(ROOT)),
+        "experiment_contract_registry": str(CONTRACT_REGISTRY.relative_to(ROOT)),
         "n_evidence_records": 0,
         "n_claims": 0,
+        "n_contract_packages": 0,
     }
     try:
         evidence = json.loads(PROGRAM_EVIDENCE.read_text())
@@ -148,10 +153,75 @@ def registry_summary() -> dict:
         summary["n_claims"] = len(claims.get("claims", []))
     except (OSError, json.JSONDecodeError):
         summary["claim_registry"] = None
+    try:
+        contracts = json.loads(CONTRACT_REGISTRY.read_text())
+        summary["n_contract_packages"] = len(contracts.get("packages", []))
+    except (OSError, json.JSONDecodeError):
+        summary["experiment_contract_registry"] = None
     return summary
 
 
-def collect(d: Path) -> dict:
+def _load_contract_packages() -> dict[str, dict]:
+    registry_path = ROOT / "docs" / "experiment_contract_registry.json"
+    try:
+        payload = json.loads(registry_path.read_text())
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"cannot read experiment contract registry: {exc}") from exc
+    packages = payload.get("packages")
+    if not isinstance(packages, list):
+        raise ValueError("experiment contract registry packages must be a list")
+    by_name: dict[str, dict] = {}
+    for item in packages:
+        if not isinstance(item, dict) or not isinstance(item.get("package"), str):
+            raise ValueError("contract registry package records must name a package")
+        by_name[item["package"]] = item
+    return by_name
+
+
+def _claim_status_by_id() -> dict[str, str]:
+    claims_path = ROOT / "docs" / "claim_registry.json"
+    try:
+        payload = json.loads(claims_path.read_text())
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"cannot read claim registry: {exc}") from exc
+    claims = payload.get("claims")
+    if not isinstance(claims, list):
+        raise ValueError("claim registry claims must be a list")
+    statuses: dict[str, str] = {}
+    for claim in claims:
+        if not isinstance(claim, dict):
+            continue
+        claim_id = claim.get("claim_id")
+        status = claim.get("status")
+        if isinstance(claim_id, str) and isinstance(status, str):
+            statuses[claim_id] = status
+    return statuses
+
+
+def _scientific_adjudications(run: dict) -> list[dict[str, str]]:
+    claim_ids = run.get("claim_ids") or []
+    if not isinstance(claim_ids, list) or not claim_ids:
+        return [{"status": "unadjudicated"}]
+    known = _claim_status_by_id()
+    adjudications: list[dict[str, str]] = []
+    for claim_id in claim_ids:
+        if not isinstance(claim_id, str):
+            raise ValueError(f"claim_ids must contain strings: {claim_id!r}")
+        if claim_id not in known:
+            raise ValueError(f"unknown claim_id in contract registry run: {claim_id}")
+        adjudications.append({"claim_id": claim_id, "status": known[claim_id]})
+    return adjudications
+
+
+def _command_string(command: object) -> str | None:
+    if not isinstance(command, list) or not command:
+        return None
+    if not all(isinstance(part, str) for part in command):
+        raise ValueError("manifest runtime.command must be a list of strings")
+    return " ".join(command)
+
+
+def _collect_legacy_heuristic(d: Path) -> dict:
     name = d.name
     readme = d / "README.md"
     readme_txt = read(readme)
@@ -195,25 +265,9 @@ def collect(d: Path) -> dict:
     )
     prereg = prereg_candidates[0] if prereg_candidates else None
 
-    latest_prereg = PREREG_HINT.search(latest_result)
-    latest_exact_contract = bool(
-        name == "commitment_surface"
-        and latest_prereg
-        and "## Exact run config" in latest_result
-    )
-    if latest_exact_contract:
-        candidate = ROOT / latest_prereg.group(1)
-        if candidate.exists():
-            prereg = candidate
-
-    run_cmd = (
-        first_match([EXACT_RUN_PATTERN], latest_result)
-        if latest_exact_contract
-        else first_match(RUN_PATTERNS, readme_txt, modal_txt, latest_result, py_txt)
-    )
+    run_cmd = first_match(RUN_PATTERNS, readme_txt, modal_txt, latest_result, py_txt)
     seed = first_match(SEED_PATTERNS, modal_txt, py_txt, readme_txt)
 
-    # verification signal: pull the most gate-like lines from the latest result report
     gate_lines = []
     for line in latest_result.splitlines():
         s = line.strip().strip("|").strip()
@@ -229,6 +283,7 @@ def collect(d: Path) -> dict:
         attribution=ATTRIBUTION,
         run_command=run_cmd,
         seed=seed,
+        seeds=[],
         n_result_reports=len(results),
         result_reports=[str(r.relative_to(ROOT)) for r in results],
         n_modal_entrypoints=len(modal_scripts),
@@ -240,12 +295,155 @@ def collect(d: Path) -> dict:
         + ([str(paper.relative_to(ROOT))] if paper.exists() else []),
         artifacts_local="artifacts/ (gitignored raw outputs; see result reports for summaries)",
         regen=f"python scripts/regen.py {name}",
+        provenance_mode="legacy_heuristic",
+        manifest_status=None,
+        integrity_state=None,
+        run_coverage=None,
+        run_id=None,
+        experiment_id=None,
+        publication_package=name,
+        runtime_package=name,
+        scientific_adjudications=[{"status": "unadjudicated"}],
     )
+
+
+def _collect_structured(d: Path, record: dict) -> dict:
+    name = d.name
+    runs = record.get("runs")
+    if not isinstance(runs, list) or not runs:
+        raise ValueError(f"structured package is missing runs: {name}")
+    by_run_id = {
+        run["run_id"]: run
+        for run in runs
+        if isinstance(run, dict) and isinstance(run.get("run_id"), str)
+    }
+    primary_run_id = record.get("primary_run_id")
+    if not isinstance(primary_run_id, str) or primary_run_id not in by_run_id:
+        raise ValueError(f"structured package is missing resolvable primary_run_id: {name}")
+    run = by_run_id[primary_run_id]
+    provenance_mode = run.get("provenance_mode")
+    integrity_state = run.get("integrity_state")
+    if provenance_mode not in {"structured_manifest", "legacy_report"}:
+        raise ValueError(f"unsupported provenance_mode for {name}: {provenance_mode}")
+    if integrity_state not in {"valid", "invalid", "not_assessed"}:
+        raise ValueError(f"unsupported integrity_state for {name}: {integrity_state}")
+
+    paper_dir = PAPERS / name
+    paper = paper_dir / "paper.md"
+    modal_scripts = sorted(d.glob("modal_*.py"))
+    py_scripts = sorted(p for p in d.glob("*.py") if p.name != "__init__.py")
+
+    report_paths = run.get("report_paths") or []
+    if not isinstance(report_paths, list):
+        raise ValueError(f"run report_paths must be a list: {primary_run_id}")
+    result_reports = [str(path) for path in report_paths if isinstance(path, str)]
+
+    manifest_status = None
+    experiment_id = None
+    run_command = None
+    seeds: list[int] = []
+    seed: str | None = None
+    preregistration = None
+    artifacts_committed = list(result_reports)
+
+    if provenance_mode == "structured_manifest":
+        manifest_rel = run.get("manifest_path")
+        if not isinstance(manifest_rel, str):
+            raise ValueError(f"structured run is missing manifest_path: {primary_run_id}")
+        manifest_path = ROOT / manifest_rel
+        try:
+            manifest = validate_manifest(manifest_path)
+        except ValueError as exc:
+            raise ValueError(
+                f"structured provenance binding failed for {name}/{primary_run_id}: {exc}"
+            ) from exc
+        manifest_status = str(manifest["status"])
+        experiment_id = str(manifest["experiment_id"])
+        run_command = _command_string(manifest["runtime"]["command"])
+        seeds = [int(value) for value in manifest["seeds"]]
+        seed = ",".join(str(value) for value in seeds)
+        for artifact in manifest.get("artifacts", []):
+            if not isinstance(artifact, dict):
+                continue
+            path = artifact.get("path")
+            if isinstance(path, str) and path not in artifacts_committed:
+                artifacts_committed.append(path)
+        package_preregs = _package_preregistrations(d)
+        paper_preregs = sorted(
+            path
+            for path in paper_dir.glob("*prereg*")
+            if path.is_file() and path.suffix.lower() in {".json", ".md"}
+        )
+        prereg_candidates = list(dict.fromkeys(package_preregs + paper_preregs))
+        preregistration = (
+            str(prereg_candidates[0].relative_to(ROOT)) if prereg_candidates else None
+        )
+    else:
+        # Explicit legacy_report run inside a partially structured package.
+        heuristic = _collect_legacy_heuristic(d)
+        run_command = heuristic["run_command"]
+        seed = heuristic["seed"]
+        if not result_reports:
+            result_reports = heuristic["result_reports"]
+            artifacts_committed = heuristic["artifacts_committed"]
+        preregistration = heuristic["preregistration"]
+
+    status = "paper" if paper.exists() else ("results" if result_reports else "scaffold")
+    return dict(
+        name=name,
+        status=status,
+        attribution=ATTRIBUTION,
+        run_command=run_command,
+        seed=seed,
+        seeds=seeds,
+        n_result_reports=len(result_reports),
+        result_reports=result_reports,
+        n_modal_entrypoints=len(modal_scripts),
+        n_scripts=len(py_scripts),
+        paper=str(paper.relative_to(ROOT)) if paper.exists() else None,
+        preregistration=preregistration,
+        verification_signals=[],
+        artifacts_committed=artifacts_committed
+        + ([str(paper.relative_to(ROOT))] if paper.exists() else []),
+        artifacts_local="artifacts/ (gitignored raw outputs; see result reports for summaries)",
+        regen=f"python scripts/regen.py {name}",
+        provenance_mode=provenance_mode,
+        manifest_status=manifest_status,
+        integrity_state=integrity_state,
+        run_coverage=record.get("run_coverage"),
+        run_id=primary_run_id,
+        experiment_id=experiment_id,
+        publication_package=run.get("publication_package", name),
+        runtime_package=run.get("runtime_package", name),
+        scientific_adjudications=_scientific_adjudications(run),
+    )
+
+
+def collect(d: Path) -> dict:
+    name = d.name
+    contracts = _load_contract_packages()
+    record = contracts.get(name)
+    if record is None:
+        raise ValueError(f"unregistered experiment package: {name}")
+    coverage_mode = record.get("coverage_mode")
+    if coverage_mode == "structured_manifest":
+        return _collect_structured(d, record)
+    if coverage_mode == "legacy_exception":
+        return _collect_legacy_heuristic(d)
+    raise ValueError(f"unsupported coverage_mode for {name}: {coverage_mode}")
 
 
 def card_md(e: dict) -> str:
     def val(x):
         return x if x else "_(not auto-detected — see README/result reports)_"
+
+    adjudications = e.get("scientific_adjudications") or [{"status": "unadjudicated"}]
+    adjudication_bits = []
+    for item in adjudications:
+        if item.get("claim_id"):
+            adjudication_bits.append(f"`{item['claim_id']}`={item['status']}")
+        else:
+            adjudication_bits.append(item.get("status", "unadjudicated"))
 
     lines = [
         f"# Provenance — `{e['name']}`",
@@ -261,6 +459,30 @@ def card_md(e: dict) -> str:
         else f"- **Run command:** {val(e['run_command'])}",
         f"- **Seed:** {val(e['seed'])}",
         f"- **Reproduce (one command):** `{e['regen']}`",
+    ]
+    if e.get("run_id"):
+        lines.append(f"- **Primary run:** `{e['run_id']}`")
+    if e.get("experiment_id"):
+        lines.append(f"- **Experiment ID:** `{e['experiment_id']}`")
+    if e.get("manifest_status"):
+        lines.append(
+            f"- **Manifest status (noncanonical):** `{e['manifest_status']}`"
+        )
+    if e.get("integrity_state"):
+        lines.append(f"- **Integrity state:** `{e['integrity_state']}`")
+    if e.get("run_coverage"):
+        lines.append(f"- **Run coverage:** `{e['run_coverage']}`")
+    if e.get("provenance_mode"):
+        lines.append(f"- **Provenance mode:** `{e['provenance_mode']}`")
+    if e.get("publication_package") and e.get("runtime_package"):
+        lines.append(
+            "- **Publication/runtime packages:** "
+            f"`{e['publication_package']}` / `{e['runtime_package']}`"
+        )
+    lines.append(
+        "- **Scientific adjudications:** " + ", ".join(adjudication_bits)
+    )
+    lines += [
         "",
         "## Verification",
         f"- Pre-registration: {('`' + e['preregistration'] + '`') if e['preregistration'] else '_none_'}",

@@ -7,6 +7,9 @@
 - **Run command:** `python3 -m experiments.concerned_syntax.benchmark \`
 - **Seed:** 20260616
 - **Reproduce (one command):** `python scripts/regen.py concerned_syntax`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `concerned_syntax` / `concerned_syntax`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: `papers/concerned_syntax/preregistration.md`

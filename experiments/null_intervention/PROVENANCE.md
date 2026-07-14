@@ -7,6 +7,9 @@
 - **Run command:** _(not auto-detected — see README/result reports)_
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py null_intervention`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `null_intervention` / `null_intervention`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: _none_

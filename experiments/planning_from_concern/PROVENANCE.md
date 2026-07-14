@@ -7,6 +7,9 @@
 - **Run command:** _(not auto-detected — see README/result reports)_
 - **Seed:** _(not auto-detected — see README/result reports)_
 - **Reproduce (one command):** `python scripts/regen.py planning_from_concern`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `planning_from_concern` / `planning_from_concern`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: _none_

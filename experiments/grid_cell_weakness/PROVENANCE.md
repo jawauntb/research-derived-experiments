@@ -7,6 +7,9 @@
 - **Run command:** `python experiments/grid_cell_weakness/pilot.py`
 - **Seed:** 20260628
 - **Reproduce (one command):** `python scripts/regen.py grid_cell_weakness`
+- **Provenance mode:** `legacy_heuristic`
+- **Publication/runtime packages:** `grid_cell_weakness` / `grid_cell_weakness`
+- **Scientific adjudications:** unadjudicated
 
 ## Verification
 - Pre-registration: `papers/grid_cell_weakness/preregistration.md`
