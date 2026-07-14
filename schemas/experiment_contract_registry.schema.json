@@ -1,0 +1,273 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-derived-experiments.example/schemas/experiment_contract_registry.schema.json",
+  "title": "Research package contract coverage registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "legacy_policy", "packages"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "legacy_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "frozen_package_cutoff",
+        "warning_days",
+        "max_exception_horizon_days",
+        "frozen_legacy_packages",
+        "frozen_legacy_packages_sha256"
+      ],
+      "properties": {
+        "frozen_package_cutoff": {
+          "type": "string",
+          "format": "date"
+        },
+        "warning_days": {
+          "type": "integer",
+          "const": 30
+        },
+        "max_exception_horizon_days": {
+          "type": "integer",
+          "const": 180
+        },
+        "frozen_legacy_packages": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/package_name"
+          }
+        },
+        "frozen_legacy_packages_sha256": {
+          "type": "string",
+          "const": "86703ca46bc2a759a5f054247512c9c0df558404711db5c564ca58dfc76f2c77"
+        }
+      }
+    },
+    "packages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/package_record"
+      }
+    }
+  },
+  "$defs": {
+    "package_name": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$"
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$"
+    },
+    "repo_path": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "claim_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z][A-Z0-9_-]{2,63}$"
+      }
+    },
+    "evidence_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^EVID-[A-Z0-9][A-Z0-9_-]{2,63}$"
+      }
+    },
+    "paths": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/repo_path"
+      }
+    },
+    "run_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "publication_package",
+        "runtime_package",
+        "provenance_mode",
+        "integrity_state",
+        "report_paths",
+        "claim_ids",
+        "evidence_ids",
+        "gate_verdict_paths"
+      ],
+      "properties": {
+        "run_id": {
+          "$ref": "#/$defs/run_id"
+        },
+        "publication_package": {
+          "$ref": "#/$defs/package_name"
+        },
+        "runtime_package": {
+          "$ref": "#/$defs/package_name"
+        },
+        "provenance_mode": {
+          "type": "string",
+          "enum": ["structured_manifest", "legacy_report"]
+        },
+        "integrity_state": {
+          "type": "string",
+          "enum": ["valid", "invalid", "not_assessed"]
+        },
+        "manifest_path": {
+          "$ref": "#/$defs/repo_path"
+        },
+        "report_paths": {
+          "$ref": "#/$defs/paths"
+        },
+        "claim_ids": {
+          "$ref": "#/$defs/claim_ids"
+        },
+        "evidence_ids": {
+          "$ref": "#/$defs/evidence_ids"
+        },
+        "gate_verdict_paths": {
+          "$ref": "#/$defs/paths"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "provenance_mode": {
+                "const": "structured_manifest"
+              }
+            },
+            "required": ["provenance_mode"]
+          },
+          "then": {
+            "required": ["manifest_path"]
+          }
+        }
+      ]
+    },
+    "structured_package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "package",
+        "coverage_mode",
+        "manifest_path",
+        "run_coverage",
+        "runs"
+      ],
+      "properties": {
+        "package": {
+          "$ref": "#/$defs/package_name"
+        },
+        "coverage_mode": {
+          "const": "structured_manifest"
+        },
+        "manifest_path": {
+          "$ref": "#/$defs/repo_path"
+        },
+        "run_coverage": {
+          "type": "string",
+          "enum": ["complete", "partial"]
+        },
+        "primary_run_id": {
+          "$ref": "#/$defs/run_id"
+        },
+        "runs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/run_record"
+          }
+        }
+      }
+    },
+    "legacy_exception": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "owner",
+        "reason_code",
+        "explanation",
+        "next_action",
+        "review_date",
+        "expiry_date",
+        "frozen_legacy_cutoff",
+        "adjudicates_claims"
+      ],
+      "properties": {
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reason_code": {
+          "type": "string",
+          "enum": [
+            "ambiguous_run_history",
+            "missing_package_manifest",
+            "multi_execution_contract_needed",
+            "scheduled_manifest_migration"
+          ]
+        },
+        "explanation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "next_action": {
+          "type": "string",
+          "minLength": 1
+        },
+        "review_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "expiry_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "frozen_legacy_cutoff": {
+          "type": "string",
+          "format": "date"
+        },
+        "adjudicates_claims": {
+          "const": false
+        }
+      }
+    },
+    "legacy_package": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["package", "coverage_mode", "legacy_exception"],
+      "properties": {
+        "package": {
+          "$ref": "#/$defs/package_name"
+        },
+        "coverage_mode": {
+          "const": "legacy_exception"
+        },
+        "legacy_exception": {
+          "$ref": "#/$defs/legacy_exception"
+        }
+      }
+    },
+    "package_record": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/structured_package"
+        },
+        {
+          "$ref": "#/$defs/legacy_package"
+        }
+      ]
+    }
+  }
+}

@@ -145,8 +145,9 @@ Each experiment directory is a self-contained research unit. Typical contents:
 | Research experiment packages | **54** |
 | Shared non-experiment support packages | **1** — `experiments/common` |
 | Contain one or more `modal_*.py` entrypoints | **46** |
-| Canonical `experiment_manifest.json` files | **5** |
-| Canonical per-gate verdict files | **1** |
+| Canonical package-root `experiment_manifest.json` files | **5** |
+| Authoritative package-contract records | **54** = **5** `structured_manifest` + **49** time-bounded `legacy_exception` in `docs/experiment_contract_registry.json` |
+| Canonical per-gate verdict files | **1** (E5). Ten evidence rows declare gate IDs; only E5 currently has a committed verdict file. Manifest gate declarations are not verdicts. |
 | Canonical claim records | **12** |
 | Canonical evidence records | **12** |
 | Generated provenance/verification output | **54** experiment cards and index rows; `common` is excluded |
@@ -205,7 +206,7 @@ result is relabeled by the derivation.
 | Provenance | `gen_provenance.py`, `regen.py` |
 | Structured research vocabulary | `research_contracts.py`, `schemas/{program_evidence_registry,claim_registry,gate_verdict}.schema.json` |
 | Claim/evidence validation | `validate_evidence_registry.py`, `validate_claim_registry.py` |
-| Experiment/gate contracts | `validate_experiment_manifest.py`, `validate_gate_verdict.py`, `schemas/{experiment_manifest,gate_verdict}.schema.json`, `templates/experiment/*` |
+| Experiment/gate contracts | `docs/experiment_contract_registry.json`, `validate_experiment_manifest.py`, `validate_gate_verdict.py`, `schemas/{experiment_contract_registry,experiment_manifest,gate_verdict}.schema.json`, `templates/experiment/*` |
 | Secrets hygiene | `env_probe.py` |
 | Publication | `build_*_pdf.py`, `make_*_figures.py`, `paperkit.py` |
 | Summarization | `summarize_*.py` |
@@ -230,8 +231,20 @@ docs/claim_registry.json + docs/program_evidence_registry.json
     → scripts/validate_claim_registry.py → pass/fail
       (claim/evidence edges must resolve in both directions)
 
+docs/experiment_contract_registry.json
+    → scripts/validate_experiment_manifest.py (no-argument mode) → pass/fail
+      Exact 54-package XOR partition: root manifest XOR active legacy exception.
+      Frozen legacy-package set + SHA-256 digest reject ungrounded new exceptions.
+      Normal CI warns ≤30 days before expiry and fails on expiry (≤180-day renewals).
+      Structured run records may list claim/evidence IDs with empty
+      `gate_verdict_paths`; that means no committed verdict file is bound yet,
+      not that gates passed. Only E5 currently binds a verdict path. Do not
+      fabricate verdict files or treat manifest `gates[]` as verdicts.
+      `gen_provenance.py` does not yet consume these run records (U3).
+
 experiments/*/experiment_manifest.json
     → scripts/validate_experiment_manifest.py → pass/fail
+      Explicit path args remain registry-independent and backward compatible.
 
 experiments/*/results/gate_verdicts/*.json + docs/claim_registry.json
     → scripts/validate_gate_verdict.py → pass/fail
@@ -522,7 +535,7 @@ command reuses that environment through `uv run --no-sync`:
 3. `publication_guard.py`
 4. `validate_evidence_registry.py`
 5. `validate_claim_registry.py` (including bidirectional claim/evidence edges)
-6. `validate_experiment_manifest.py` (auto-discovers all canonical manifests)
+6. `validate_experiment_manifest.py` (registry coverage gate, then every discovered manifest)
 7. `validate_gate_verdict.py` (auto-discovers canonical verdicts)
 8. `check_primer_metadata.py` for all six HTML/PDF pairs
 9. `gen_provenance.py --check` (non-mutating freshness check)
@@ -715,7 +728,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 - **No universal research dependency specification.** The root quality gate has a complete locked dependency group, but experiment and Modal runtimes still rely on command-specific `uvx` sets or explicit Modal images.
 - **Machine-specific paths** in docs/handoffs (Doppler scope, local archives).
 - **Result fidelity depends on summarization discipline.** Gitignored JSON vs committed Markdown can drift.
-- **Structured-contract coverage is early.** Only 5 of 54 experiment packages have canonical manifests, and only one gate has a canonical verdict file.
+- **Structured-contract coverage is early but fail-closed.** All 54 research packages are partitioned in `docs/experiment_contract_registry.json` (5 structured roots + 49 bounded legacy exceptions). Only one gate currently has a committed verdict file. Registry run records are ready for provenance consumption, but `gen_provenance.py` does not yet read them.
 - **Paper-primary experiments** may have no committed `results/*.md`; evidence lives in the paper + local artifacts.
 - **Coherence / Inquiry / Cabal / site tests** are outside the root Python quality gate.
 - **Scientific claims are gate-bound.** Fixture smokes do not settle the program thesis.
