@@ -483,7 +483,10 @@ Raw outputs stay under `artifacts/` until summarized.
 
 | Script | Purpose | Flags / I/O |
 |---|---|---|
-| `gen_provenance.py` | Regenerate all auto `PROVENANCE.md` + `docs/verification.{md,json}` + site mirror | In: experiment dirs |
+| `gen_provenance.py` | Regenerate all auto `PROVENANCE.md` + `docs/verification.{md,json}` + site mirror; include structured registry counts | In: experiment dirs + claim/evidence registries |
+| `validate_evidence_registry.py` | Validate canonical evidence IDs, gate statuses, artifact refs, and supersession shape | `docs/program_evidence_registry.json` |
+| `validate_claim_registry.py` | Validate claim tiers/states and resolve every claim to known evidence IDs | `docs/claim_registry.json`, `docs/program_evidence_registry.json` |
+| `validate_experiment_manifest.py` | Dependency-free validator for the v1 experiment-package contract | manifest JSON; `schemas/experiment_manifest.schema.json` |
 | `regen.py` | List/reproduce experiments or print documented Modal commands | `list`, `<name>`, `--deps` |
 | `run_quality_checks.py` | unittest → compileall → publication_guard → ruff → ty (uvx 3.12) | Exit code |
 | `publication_guard.py` | Block tracked secrets, forbidden paths, oversized files; exposes a tested text-signature helper | Exit code |

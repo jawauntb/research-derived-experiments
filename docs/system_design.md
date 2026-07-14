@@ -168,6 +168,8 @@ committed `results/*.md` (status `paper` in verification).
 |---|---|
 | Quality gate | `run_quality_checks.py`, `publication_guard.py` |
 | Provenance | `gen_provenance.py`, `regen.py` |
+| Structured claim/evidence status | `docs/program_evidence_registry.json`, `docs/claim_registry.json`, `schemas/*registry*.schema.json` |
+| Experiment package contract | `schemas/experiment_manifest.schema.json`, `templates/experiment/manifest.example.json` |
 | Secrets hygiene | `env_probe.py` |
 | Publication | `build_*_pdf.py`, `make_*_figures.py`, `paperkit.py` |
 | Summarization | `summarize_*.py` |
@@ -183,6 +185,13 @@ scripts/gen_provenance.py
     → docs/verification.json
     → docs/verification.md
     → sites/reafference_attribution/verification.json
+
+scripts/validate_evidence_registry.py + scripts/validate_claim_registry.py
+    → docs/program_evidence_registry.json (stable evidence IDs and gate states)
+    → docs/claim_registry.json (claim tiers and explicit supported/rejected/open states)
+
+scripts/validate_experiment_manifest.py
+    → schemas/experiment_manifest.schema.json + templates/experiment/manifest.example.json
 ```
 
 `scripts/regen.py` is the one-command reproducer/dispatcher:

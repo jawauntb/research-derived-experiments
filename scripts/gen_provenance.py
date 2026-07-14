@@ -25,6 +25,8 @@ EXP = ROOT / "experiments"
 PAPERS = ROOT / "papers"
 DOCS = ROOT / "docs"
 SITE = ROOT / "sites" / "reafference_attribution"
+PROGRAM_EVIDENCE = DOCS / "program_evidence_registry.json"
+CLAIMS = DOCS / "claim_registry.json"
 
 ATTRIBUTION = (
     "Human author & director: Jawaun Brown. "
@@ -64,6 +66,33 @@ def first_match(patterns, *texts):
 
 def experiment_dirs():
     return sorted(d for d in EXP.iterdir() if d.is_dir())
+
+
+def registry_summary() -> dict:
+    """Expose structured claim/evidence coverage beside the legacy manifest.
+
+    The experiment cards remain backward-compatible while the new registries
+    become the canonical place for adjudicated claim status.  Missing registries
+    are reported explicitly so a partial checkout cannot look complete.
+    """
+
+    summary = {
+        "program_evidence_registry": str(PROGRAM_EVIDENCE.relative_to(ROOT)),
+        "claim_registry": str(CLAIMS.relative_to(ROOT)),
+        "n_evidence_records": 0,
+        "n_claims": 0,
+    }
+    try:
+        evidence = json.loads(PROGRAM_EVIDENCE.read_text())
+        summary["n_evidence_records"] = len(evidence.get("records", []))
+    except (OSError, json.JSONDecodeError):
+        summary["program_evidence_registry"] = None
+    try:
+        claims = json.loads(CLAIMS.read_text())
+        summary["n_claims"] = len(claims.get("claims", []))
+    except (OSError, json.JSONDecodeError):
+        summary["claim_registry"] = None
+    return summary
 
 
 def collect(d: Path) -> dict:
@@ -171,6 +200,7 @@ def main():
         criteria="observability + attribution + reproducibility (Mo, ICML 2026)",
         attribution=ATTRIBUTION,
         n_experiments=len(manifest),
+        structured_registries=registry_summary(),
         experiments=manifest,
     )
     (DOCS / "verification.json").write_text(json.dumps(payload, indent=2) + "\n")
@@ -193,6 +223,11 @@ def main():
         "",
         f"**{len(manifest)} experiments** — "
         + ", ".join(f"{k}: {len(v)}" for k, v in sorted(by_status.items())),
+        "",
+        "**Structured adjudication.** "
+        f"`{PROGRAM_EVIDENCE.relative_to(ROOT)}` and `{CLAIMS.relative_to(ROOT)}` "
+        "are validated before publication; they carry stable evidence IDs, claim tiers, "
+        "and explicit `pass`/`fail`/`inconclusive`/`open` states.",
         "",
         "| Experiment | Status | Reports | Paper | Provenance |",
         "| --- | --- | ---: | :--: | --- |",

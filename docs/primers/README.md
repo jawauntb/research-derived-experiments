@@ -32,3 +32,19 @@ The companion [primer-derived backlog index](backlogs/README.md) converts every
 criticism, tension, limitation, and constructive idea in the six primers into a
 page-anchored, gated TODO list. It links one backlog per article and records
 which items are new, partial, or already evidenced in the repository.
+
+## Execution contracts
+
+The implementation work uses one shared contract instead of six competing article-specific schemas:
+
+- `schemas/gate_verdict.schema.json` and `docs/program_evidence_registry.json` define stable evidence IDs,
+  gate statuses, claim tiers, and supersession states.
+- `schemas/claim_registry.schema.json` and `docs/claim_registry.json` link article/paper claims to those
+  evidence IDs and make `supported`, `rejected`, `open`, and `inconclusive` explicit.
+- `schemas/experiment_manifest.schema.json` and `templates/experiment/manifest.example.json` define the
+  minimum hypothesis, controls, seeds, runtime, dependencies, gates, artifact, and status contract for
+  new experiment packages.
+
+These files are validated by `scripts/run_quality_checks.py` before generated provenance views are
+published. Article-local corrections can therefore proceed in parallel without inventing incompatible
+status vocabularies.
