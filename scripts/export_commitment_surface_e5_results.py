@@ -18,6 +18,11 @@ DEFAULT_INPUT = (
 RESULTS_DIR = ROOT / "experiments" / "commitment_surface" / "results"
 DEFAULT_JSON = RESULTS_DIR / "e5_generator_vs_coverage.json"
 DEFAULT_MARKDOWN = RESULTS_DIR / "e5_generator_vs_coverage.md"
+DEFAULT_ENVELOPE = RESULTS_DIR / "e5_generator_vs_coverage.json.envelope.json"
+E5_PRODUCER_MANIFEST = (
+    "experiments/commitment_surface/experiment_manifest.json"
+)
+E5_GENERATOR_VERSION = "commitment_surface.e5_public_export.v1"
 PAPER = ROOT / "papers" / "commitment_surface" / "paper.md"
 ABSTRACT_MARKERS = ("<!-- E5_ABSTRACT_START -->", "<!-- E5_ABSTRACT_END -->")
 CLAIM_MARKERS = (
@@ -281,24 +286,71 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--input", type=Path, default=DEFAULT_INPUT)
     parser.add_argument("--json-output", type=Path, default=DEFAULT_JSON)
     parser.add_argument("--markdown-output", type=Path, default=DEFAULT_MARKDOWN)
+    parser.add_argument("--envelope-output", type=Path, default=DEFAULT_ENVELOPE)
     parser.add_argument("--paper", type=Path, default=PAPER)
     return parser.parse_args()
+
+
+def write_envelope(
+    public_bytes: bytes,
+    output: Path,
+    *,
+    artifact_path: str,
+) -> dict[str, object]:
+    try:
+        from scripts.validate_public_artifact_envelopes import (
+            build_envelope_from_public_artifact,
+        )
+    except ModuleNotFoundError:  # Direct execution
+        from validate_public_artifact_envelopes import (  # type: ignore[no-redef]
+            build_envelope_from_public_artifact,
+        )
+
+    envelope = build_envelope_from_public_artifact(
+        artifact_path=artifact_path,
+        public_bytes=public_bytes,
+        producer_manifest_path=E5_PRODUCER_MANIFEST,
+        claim_ids=["COMMITMENT_GENERATOR_GENERALIZATION"],
+        evidence_ids=["EVID-COMMITMENT-E5-COVERAGE"],
+        gate_verdict_paths=[
+            "experiments/commitment_surface/results/gate_verdicts/e5_strict_coverage.json"
+        ],
+        generator_version=E5_GENERATOR_VERSION,
+        included_fields=list(PUBLIC_CELL_FIELDS),
+        public_safety_notes=(
+            "Public-safe E5 confirmatory aggregate and per-cell metrics. "
+            "Raw prompts, support lists, and model internals remain omitted; "
+            "raw-source bytes are validated by embedded receipt only."
+        ),
+    )
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(envelope, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return envelope
 
 
 def main() -> int:
     args = parse_args()
     public = build_public_artifact(args.input.read_bytes())
     args.json_output.parent.mkdir(parents=True, exist_ok=True)
-    args.json_output.write_text(
-        json.dumps(public, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
+    public_text = json.dumps(public, indent=2, sort_keys=True) + "\n"
+    args.json_output.write_text(public_text, encoding="utf-8")
     args.markdown_output.write_text(render_markdown(public), encoding="utf-8")
+    try:
+        artifact_path = str(args.json_output.resolve().relative_to(ROOT))
+    except ValueError:
+        artifact_path = str(DEFAULT_JSON.relative_to(ROOT))
+    envelope = write_envelope(
+        public_text.encode("utf-8"),
+        args.envelope_output,
+        artifact_path=artifact_path,
+    )
     args.paper.write_text(
         update_paper(public, args.paper.read_text(encoding="utf-8")),
         encoding="utf-8",
     )
     print(f"Wrote {args.json_output} ({len(public['cells'])} cells)")
     print(f"Wrote {args.markdown_output}")
+    print(f"Wrote {args.envelope_output} ({envelope['artifact_sha256'][:12]}…)")
     print(f"Updated {args.paper}")
     return 0
 

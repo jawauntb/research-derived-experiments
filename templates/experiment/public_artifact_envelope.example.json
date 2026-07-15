@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "artifact_path": "experiments/example_replay_gate/results/summary.json",
+  "artifact_sha256": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+  "artifact_bytes": 128,
+  "producer_manifest_path": "templates/experiment/manifest.example.json",
+  "source_verification": "receipt_only",
+  "raw_source_receipt": {
+    "artifact": "artifacts/example_replay_gate/raw.json",
+    "sha256": "abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789",
+    "bytes": 2048,
+    "public_safe_export": true
+  },
+  "included_fields": ["metric", "seed", "status"],
+  "omitted_fields": ["prompts", "raw_logits"],
+  "expected_rows": 3,
+  "exported_rows": 3,
+  "generator_version": "example.public_export.v1",
+  "public_safety": {
+    "classification": "public_safe_summary",
+    "notes": "Example envelope template. Replace digests before committing a real sidecar."
+  },
+  "claim_ids": [],
+  "evidence_ids": [],
+  "gate_verdict_paths": [],
+  "adjudication": "unadjudicated"
+}

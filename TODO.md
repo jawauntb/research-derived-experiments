@@ -14,7 +14,8 @@
   - [ ] Replace the remaining legacy exceptions and partial run histories with exact structured run bindings (Phase 5 deferred).
 - [ ] Add CI lanes for manifest coverage, public-artifact envelopes, and clean-clone reproduction.
   - [x] Enforce manifest-or-active-exception package coverage in the required root quality gate.
-  - [ ] Enforce public-artifact envelopes and clean-clone reproduction.
+  - [x] Enforce public-artifact digest envelopes for declared payloads (E5 vertical slice; receipt-only raw lineage).
+  - [ ] Enforce clean-clone reproduction.
 
 ## Now
 

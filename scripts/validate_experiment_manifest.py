@@ -338,7 +338,7 @@ def validate_artifacts(value: object) -> None:
     for index, item in enumerate(artifacts):
         label = f"artifacts[{index}]"
         artifact = require_object(item, label)
-        require_fields(artifact, label, {"kind", "path", "public"})
+        require_fields(artifact, label, {"kind", "path", "public"}, {"envelope_path"})
         kind = require_string(artifact["kind"], f"{label}.kind")
         if kind not in ARTIFACT_KINDS:
             fail(f"{label}.kind is not canonical: {kind}")
@@ -346,6 +346,21 @@ def validate_artifacts(value: object) -> None:
         public = artifact["public"]
         if not isinstance(public, bool):
             fail(f"{label}.public must be a boolean")
+        if "envelope_path" in artifact:
+            if kind in {"provenance", "raw"}:
+                fail(f"{label}.envelope_path is forbidden for kind={kind}")
+            if path.endswith(".envelope.json"):
+                fail(f"{label} cannot recursively envelope an envelope sidecar")
+            envelope_path = require_string(artifact["envelope_path"], f"{label}.envelope_path")
+            envelope = Path(envelope_path)
+            if envelope.is_absolute() or ".." in envelope.parts:
+                fail(f"{label}.envelope_path must be a safe repository-relative path")
+            if not envelope_path.endswith(".envelope.json"):
+                fail(f"{label}.envelope_path must end with .envelope.json")
+            if envelope_path == path:
+                fail(f"{label}.envelope_path cannot equal path")
+            if not public:
+                fail(f"{label}.envelope_path requires public=true")
         identity = (kind, path, public)
         if identity in seen:
             fail(f"artifacts contains duplicate entry: {path}")

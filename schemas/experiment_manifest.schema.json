@@ -187,6 +187,11 @@
         },
         "public": {
           "type": "boolean"
+        },
+        "envelope_path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+\\.envelope\\.json$"
         }
       }
     }

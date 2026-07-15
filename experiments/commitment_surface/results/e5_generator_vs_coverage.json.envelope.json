@@ -1,0 +1,72 @@
+{
+  "adjudication": "bound",
+  "artifact_bytes": 109516,
+  "artifact_path": "experiments/commitment_surface/results/e5_generator_vs_coverage.json",
+  "artifact_sha256": "27305249a991a224b417950af241939ed0c1a4aff5d135a1b105f78d5876f943",
+  "claim_ids": [
+    "COMMITMENT_GENERATOR_GENERALIZATION"
+  ],
+  "evidence_ids": [
+    "EVID-COMMITMENT-E5-COVERAGE"
+  ],
+  "expected_rows": 135,
+  "exported_rows": 135,
+  "gate_verdict_paths": [
+    "experiments/commitment_surface/results/gate_verdicts/e5_strict_coverage.json"
+  ],
+  "generator_version": "commitment_surface.e5_public_export.v1",
+  "included_fields": [
+    "cell_id",
+    "arm",
+    "size",
+    "n",
+    "seed",
+    "offset",
+    "canonical_ood_accuracy",
+    "canonical_ood_nll",
+    "paraphrase_ood_accuracy",
+    "paraphrase_ood_nll",
+    "novel_k_equivariance_accuracy",
+    "canonical_normalized_patch_ce",
+    "paraphrase_normalized_patch_ce",
+    "full_adapter_disable_ce",
+    "final_supervised_loss",
+    "final_consistency_loss",
+    "exposure_integrity_pass",
+    "patch_integrity_pass",
+    "integrity_pass",
+    "worker_elapsed_seconds"
+  ],
+  "omitted_fields": [
+    "all_arm_exposure_ledger",
+    "attempt",
+    "cell_runtime_seconds",
+    "execution_environment",
+    "exposure_audit",
+    "exposure_plan",
+    "lora_rank",
+    "lora_targets",
+    "model_revision",
+    "paraphrase_templates",
+    "resource_request",
+    "run_config",
+    "run_manifest_id",
+    "spectral_patch",
+    "split"
+  ],
+  "producer_manifest_path": "experiments/commitment_surface/experiment_manifest.json",
+  "public_safety": {
+    "classification": "public_safe_summary",
+    "notes": "Public-safe E5 confirmatory aggregate and per-cell metrics. Raw prompts, support lists, and model internals remain omitted; raw-source bytes are validated by embedded receipt only."
+  },
+  "raw_source_receipt": {
+    "artifact": "artifacts/commitment_surface/e5_generator_vs_coverage.json",
+    "bytes": 5619830,
+    "implementation_fingerprint": "32bfe0fd782ebb1e88cda7ae39c7e1d81dd4b230e3c61a08195a502fb7a5a473",
+    "manifest_id": "f7af4f65f5a402886002dac9a65faaefd8e6ffc845efe6ebce8a20c9bc710e9e",
+    "public_safe_export": true,
+    "sha256": "402cb833fd0091e5143f745e1a980842567e814e45004fa5aa62204dc003613a"
+  },
+  "schema_version": "1.0",
+  "source_verification": "receipt_only"
+}
