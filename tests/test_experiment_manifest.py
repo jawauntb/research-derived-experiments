@@ -181,8 +181,10 @@ class ExperimentContractRegistryTests(unittest.TestCase):
         package: str,
         *,
         manifest_path: str | None = None,
+        run_manifest_path: str | None = None,
     ) -> dict:
         manifest_path = manifest_path or f"experiments/{package}/experiment_manifest.json"
+        run_manifest_path = run_manifest_path or manifest_path
         run_id = f"{package}_registered"
         return {
             "package": package,
@@ -197,7 +199,7 @@ class ExperimentContractRegistryTests(unittest.TestCase):
                     "runtime_package": package,
                     "provenance_mode": "structured_manifest",
                     "integrity_state": "valid",
-                    "manifest_path": manifest_path,
+                    "manifest_path": run_manifest_path,
                     "report_paths": [],
                     "claim_ids": [],
                     "evidence_ids": [],
@@ -693,6 +695,69 @@ class ExperimentContractRegistryTests(unittest.TestCase):
             registry, warnings = self.validate_registry(path, root=root)
             self.assertEqual(len(registry["packages"]), 2)
             self.assertEqual(warnings, [])
+
+    def test_run_manifest_path_must_name_experiment_manifest_json(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_manifest(root, "structured")
+            (root / "experiments" / "legacy").mkdir(parents=True)
+            wrong = (
+                root / "experiments" / "structured" / "manifests" / "m5" / "run.json"
+            )
+            wrong.parent.mkdir(parents=True)
+            payload = valid_manifest()
+            payload["experiment_id"] = "structured_m5_run"
+            wrong.write_text(json.dumps(payload))
+            registry = self.registry_payload(
+                [
+                    self.structured_record(
+                        "structured",
+                        run_manifest_path=str(wrong.relative_to(root)),
+                    ),
+                    self.legacy_record("legacy"),
+                ],
+                frozen_packages=["legacy"],
+            )
+            registry_path = self.write_registry(root, registry)
+            with self.assertRaisesRegex(
+                ValueError,
+                r"manifest_path must name an experiment_manifest\.json file",
+            ):
+                self.validate_registry(registry_path, root=root)
+
+    def test_run_manifest_path_must_live_inside_publication_package(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_manifest(root, "structured")
+            (root / "experiments" / "legacy").mkdir(parents=True)
+            outside = (
+                root
+                / "experiments"
+                / "legacy"
+                / "manifests"
+                / "m5"
+                / "experiment_manifest.json"
+            )
+            outside.parent.mkdir(parents=True)
+            payload = valid_manifest()
+            payload["experiment_id"] = "legacy_m5_run"
+            outside.write_text(json.dumps(payload))
+            registry = self.registry_payload(
+                [
+                    self.structured_record(
+                        "structured",
+                        run_manifest_path=str(outside.relative_to(root)),
+                    ),
+                    self.legacy_record("legacy"),
+                ],
+                frozen_packages=["legacy"],
+            )
+            registry_path = self.write_registry(root, registry)
+            with self.assertRaisesRegex(
+                ValueError,
+                r"manifest_path must live inside experiments/structured/",
+            ):
+                self.validate_registry(registry_path, root=root)
 
     def test_historical_cli_flag_misuse_and_labeled_success(self) -> None:
         with TemporaryDirectory() as directory:
