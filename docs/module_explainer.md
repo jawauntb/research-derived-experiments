@@ -42,7 +42,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | Find an experiment’s purpose & modules | §3 below + `experiments/<name>/PROVENANCE.md` |
 | Reproduce or get the dispatch command | `python scripts/regen.py list` / `regen.py <name>` |
 | Refresh provenance index | `python scripts/gen_provenance.py` |
-| Validate research contracts | `python3 scripts/validate_{evidence_registry,claim_registry,experiment_manifest,gate_verdict}.py` (manifest validator also enforces `docs/experiment_contract_registry.json` coverage) |
+| Validate research contracts | `python3 scripts/validate_{evidence_registry,claim_registry,experiment_manifest,gate_verdict,public_artifact_envelopes}.py` (manifest validator also enforces `docs/experiment_contract_registry.json` coverage) |
 | Run the quality gate | `python3 scripts/run_quality_checks.py` |
 | Check API/Modal env without leaking secrets | `python3 scripts/env_probe.py` |
 | Public agent benchmark package | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) |
@@ -540,6 +540,7 @@ Raw outputs stay under `artifacts/` until summarized.
 | `validate_claim_registry.py` | Validate exact claim shape/tiers/states and bidirectional claim↔evidence edges | Reads `docs/claim_registry.json` + `docs/program_evidence_registry.json`; never writes either |
 | `validate_experiment_manifest.py` | Enforce the authoritative package-contract registry (54 = 6 structured + 48 legacy), then discover and dependency-free validate every v1 experiment-package contract | Reads `docs/experiment_contract_registry.json` and `experiments/**/experiment_manifest.json`; portable contracts in `schemas/experiment_contract_registry.schema.json` and `schemas/experiment_manifest.schema.json` |
 | `validate_gate_verdict.py` | Discover per-gate verdicts, require registered claim IDs/canonical tiers/statuses, and resolve evidence paths | Reads `experiments/*/results/gate_verdicts/*.json` + `docs/claim_registry.json` |
+| `validate_public_artifact_envelopes.py` | Validate declared public digest sidecars against tracked public bytes and embedded raw-source receipts | Reads manifest `envelope_path` entries and `*.envelope.json`; portable contract in `schemas/public_artifact_envelope.schema.json` |
 | `check_primer_metadata.py` | Require matching titles across all six primer HTML `<title>` values and PDF metadata | Needs `pdfinfo` (`poppler-utils` in CI) |
 | `regen.py` | List/reproduce experiments or print documented Modal commands | `list`, `<name>`, `--deps` |
 | `run_quality_checks.py` | Locked `quality` sync → pytest → compileall → publication guard → four research-contract validators → primer metadata → provenance freshness → Ruff → ty; all post-sync commands use `uv run --no-sync` | Exit code; canonical local/CI root gate; local pytest serial by default, CI/opt-in local pytest bounded to four `loadscope` xdist workers with native math-library thread caps |
@@ -880,7 +881,7 @@ python3 scripts/run_phase0.py --smoke
 |---|---|
 | `.github/workflows/quality.yml` | Required push/PR workflow: installs uv with cache keys derived from `uv.lock`, installs `poppler-utils`, sets `QUALITY_PYTEST_WORKERS=auto`, then runs the canonical root quality wrapper |
 | `.github/workflows/railway-deploy.yml` | Deploy atlas + Inquiry landing on `main` |
-| `schemas/{experiment_contract_registry,experiment_manifest,program_evidence_registry,claim_registry,gate_verdict}.schema.json` | Portable JSON Schema contracts for package coverage, package intent, evidence, claims, and gate outcomes |
+| `schemas/{experiment_contract_registry,experiment_manifest,program_evidence_registry,claim_registry,gate_verdict,public_artifact_envelope}.schema.json` | Portable JSON Schema contracts for package coverage, package intent, evidence, claims, gate outcomes, and public-artifact envelopes |
 | `templates/experiment/{manifest,gate_verdict}.example.json` | Copyable version-1 examples validated by the same adapters used in CI |
 | `pyproject.toml` | Project metadata; root `quality` dependency group (pytest/xdist, scientific/PDF, Ruff, ty); explicit CPU-only PyTorch source; existing Ruff rules and ty exclusions |
 | `uv.lock` | Locked Python 3.12 root-quality graph used by `uv sync --locked`; records platform-specific CPU-only Torch wheels and excludes CUDA/Triton/NVIDIA packages |

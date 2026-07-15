@@ -44,7 +44,12 @@
     {"gate_id": "E5_STRICT_COVERAGE", "criterion": "The derived strict generator verdict requires the generator-learning, group-specificity, and transport gates to pass together; otherwise the positive generator claim fails."}
   ],
   "artifacts": [
-    {"kind": "summary", "path": "experiments/commitment_surface/results/e5_generator_vs_coverage.json", "public": true},
+    {
+      "kind": "summary",
+      "path": "experiments/commitment_surface/results/e5_generator_vs_coverage.json",
+      "public": true,
+      "envelope_path": "experiments/commitment_surface/results/e5_generator_vs_coverage.json.envelope.json"
+    },
     {"kind": "paper", "path": "experiments/commitment_surface/results/e5_generator_vs_coverage.md", "public": true}
   ],
   "status": "rejected"

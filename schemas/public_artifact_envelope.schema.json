@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-derived-experiments.example/schemas/public_artifact_envelope.schema.json",
+  "title": "Public artifact digest envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "artifact_path",
+    "artifact_sha256",
+    "artifact_bytes",
+    "producer_manifest_path",
+    "source_verification",
+    "raw_source_receipt",
+    "included_fields",
+    "omitted_fields",
+    "expected_rows",
+    "exported_rows",
+    "generator_version",
+    "public_safety",
+    "claim_ids",
+    "evidence_ids",
+    "gate_verdict_paths",
+    "adjudication"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "artifact_path": {
+      "$ref": "#/$defs/repo_path"
+    },
+    "artifact_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "artifact_bytes": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "producer_manifest_path": {
+      "$ref": "#/$defs/repo_path"
+    },
+    "source_verification": {
+      "type": "string",
+      "const": "receipt_only"
+    },
+    "raw_source_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact", "sha256", "bytes"],
+      "properties": {
+        "artifact": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "manifest_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "implementation_fingerprint": {
+          "type": "string",
+          "minLength": 1
+        },
+        "public_safe_export": {
+          "type": "boolean"
+        }
+      }
+    },
+    "included_fields": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "omitted_fields": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "expected_rows": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "exported_rows": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "generator_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "public_safety": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classification", "notes"],
+      "properties": {
+        "classification": {
+          "type": "string",
+          "enum": ["public_safe_summary", "public_safe_appendix"]
+        },
+        "notes": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "claim_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z][A-Z0-9_-]{2,63}$"
+      }
+    },
+    "evidence_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^EVID-[A-Z0-9][A-Z0-9_-]{2,63}$"
+      }
+    },
+    "gate_verdict_paths": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/repo_path"
+      }
+    },
+    "adjudication": {
+      "type": "string",
+      "enum": ["bound", "unadjudicated"]
+    }
+  },
+  "$defs": {
+    "repo_path": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "adjudication": {
+            "const": "unadjudicated"
+          }
+        },
+        "required": ["adjudication"]
+      },
+      "then": {
+        "properties": {
+          "claim_ids": {
+            "maxItems": 0
+          },
+          "evidence_ids": {
+            "maxItems": 0
+          },
+          "gate_verdict_paths": {
+            "maxItems": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "adjudication": {
+            "const": "bound"
+          }
+        },
+        "required": ["adjudication"]
+      },
+      "then": {
+        "properties": {
+          "claim_ids": {
+            "minItems": 1
+          },
+          "evidence_ids": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ]
+}

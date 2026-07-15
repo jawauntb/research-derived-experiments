@@ -81,6 +81,7 @@ def quality_steps(
         (UV_PYTHON + ["scripts/validate_claim_registry.py"], None),
         (UV_PYTHON + ["scripts/validate_experiment_manifest.py"], None),
         (UV_PYTHON + ["scripts/validate_gate_verdict.py"], None),
+        (UV_PYTHON + ["scripts/validate_public_artifact_envelopes.py"], None),
         (UV_PYTHON + ["scripts/check_primer_metadata.py"], None),
         (UV_PYTHON + ["scripts/gen_provenance.py", "--check"], None),
         (UV_TOOL + ["ruff", "check", "."], None),

@@ -206,7 +206,7 @@ result is relabeled by the derivation.
 | Provenance | `gen_provenance.py`, `regen.py` |
 | Structured research vocabulary | `research_contracts.py`, `schemas/{program_evidence_registry,claim_registry,gate_verdict}.schema.json` |
 | Claim/evidence validation | `validate_evidence_registry.py`, `validate_claim_registry.py` |
-| Experiment/gate contracts | `docs/experiment_contract_registry.json`, `validate_experiment_manifest.py`, `validate_gate_verdict.py`, `schemas/{experiment_contract_registry,experiment_manifest,gate_verdict}.schema.json`, `templates/experiment/*` |
+| Experiment/gate/public contracts | `docs/experiment_contract_registry.json`, `validate_experiment_manifest.py`, `validate_gate_verdict.py`, `validate_public_artifact_envelopes.py`, `schemas/{experiment_contract_registry,experiment_manifest,gate_verdict,public_artifact_envelope}.schema.json`, `templates/experiment/*` |
 | Secrets hygiene | `env_probe.py` |
 | Publication | `build_*_pdf.py`, `make_*_figures.py`, `paperkit.py` |
 | Summarization | `summarize_*.py` |
@@ -254,6 +254,13 @@ experiments/*/experiment_manifest.json
 experiments/*/results/gate_verdicts/*.json + docs/claim_registry.json
     → scripts/validate_gate_verdict.py → pass/fail
       (registered claim ID + resolving evidence paths)
+
+manifest artifacts with envelope_path + *.envelope.json
+    → scripts/validate_public_artifact_envelopes.py → pass/fail
+      Hash tracked public payloads; preserve embedded raw-source receipts as
+      receipt_only. Envelope sidecars bind to the exact producer manifest (E5
+      for the E5 public JSON even when M5 is the package card primary).
+      Envelope/provenance artifacts are never recursively enveloped.
 
 scripts/research_contracts.py + schemas/*.schema.json
     ↔ tests/test_research_contract_schema_parity.py
@@ -542,10 +549,11 @@ command reuses that environment through `uv run --no-sync`:
 5. `validate_claim_registry.py` (including bidirectional claim/evidence edges)
 6. `validate_experiment_manifest.py` (registry coverage gate, then every discovered manifest)
 7. `validate_gate_verdict.py` (auto-discovers canonical verdicts)
-8. `check_primer_metadata.py` for all six HTML/PDF pairs
-9. `gen_provenance.py --check` (non-mutating freshness check)
-10. `ruff check .`
-11. `ty check` on `scripts`, `experiments`, and `tests` (configured exclusions remain in `pyproject.toml`)
+8. `validate_public_artifact_envelopes.py` (declared public digest sidecars)
+9. `check_primer_metadata.py` for all six HTML/PDF pairs
+10. `gen_provenance.py --check` (non-mutating freshness check)
+11. `ruff check .`
+12. `ty check` on `scripts`, `experiments`, and `tests` (configured exclusions remain in `pyproject.toml`)
 
 GitHub sets `QUALITY_PYTEST_WORKERS=auto`; the wrapper caps pytest-xdist at four
 workers, uses `--dist loadscope`, disables worker restarts, and sets OpenMP,
@@ -733,7 +741,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 - **No universal research dependency specification.** The root quality gate has a complete locked dependency group, but experiment and Modal runtimes still rely on command-specific `uvx` sets or explicit Modal images.
 - **Machine-specific paths** in docs/handoffs (Doppler scope, local archives).
 - **Result fidelity depends on summarization discipline.** Gitignored JSON vs committed Markdown can drift.
-- **Structured-contract coverage is early but fail-closed.** All 54 research packages are partitioned in `docs/experiment_contract_registry.json` (6 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction.
+- **Structured-contract coverage is early but fail-closed.** All 54 research packages are partitioned in `docs/experiment_contract_registry.json` (6 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction. Public-artifact digest envelopes start with the E5 payload only; clean-clone reproduction remains open.
 - **Paper-primary experiments** may have no committed `results/*.md`; evidence lives in the paper + local artifacts.
 - **Coherence / Inquiry / Cabal / site tests** are outside the root Python quality gate.
 - **Scientific claims are gate-bound.** Fixture smokes do not settle the program thesis.

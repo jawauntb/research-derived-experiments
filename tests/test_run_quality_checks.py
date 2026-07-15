@@ -52,6 +52,13 @@ def test_quality_commands_sync_once_and_reuse_locked_environment() -> None:
             "python",
             "scripts/validate_gate_verdict.py",
         ],
+        [
+            "uv",
+            "run",
+            "--no-sync",
+            "python",
+            "scripts/validate_public_artifact_envelopes.py",
+        ],
         ["uv", "run", "--no-sync", "python", "scripts/check_primer_metadata.py"],
         [
             "uv",
