@@ -127,7 +127,9 @@ environment.
 | [paper_readiness.md](paper_readiness.md) | Paper readiness tracking |
 | [discovery_regime_audit.md](discovery_regime_audit.md) | Regime audit ledger |
 | [next_agent_modal_handoff.md](next_agent_modal_handoff.md) | Modal handoff |
-| [next_agent_evidence_infrastructure_remaining_handoff_2026-07-14.md](next_agent_evidence_infrastructure_remaining_handoff_2026-07-14.md) | Current-main recovery and six-PR landing plan for package coverage, run provenance, public envelopes, and clean-clone reproduction |
+| [next_agent_evidence_infra_peer_status_2026-07-15.md](next_agent_evidence_infra_peer_status_2026-07-15.md) | Post-tranche peer status after U2–U7 (#365–#371): counts, hot files, deferred Phase 5, safe parallel work |
+| [next_agent_evidence_infra_coordination_2026-07-14.md](next_agent_evidence_infra_coordination_2026-07-14.md) | Live merge table for the six evidence-infra PRs |
+| [next_agent_evidence_infrastructure_remaining_handoff_2026-07-14.md](next_agent_evidence_infrastructure_remaining_handoff_2026-07-14.md) | Historical six-PR landing plan (execution state superseded by peer-status doc after #371) |
 | [railway-autodeploy.md](railway-autodeploy.md) | Railway deploy |
 | [external_contact_preregistration.md](external_contact_preregistration.md) / [runbook](external_contact_runbook.md) | External-contact |
 | [phase2_*.md](phase2_next_phase_research_handoff.md) | Phase 2 research handoffs (6 files) |

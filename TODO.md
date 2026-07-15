@@ -12,7 +12,7 @@
   - [x] Make provenance consume exact primary-run bindings for structured packages (commitment_surface primary is M5; E5/E6/E7 remain explicit partial history).
   - [x] Migrate External Contact LoRA run to a structured root manifest (`rejected` / `valid`) bound to `WEAKNESS_EXTERNAL_PORTABILITY`.
   - [ ] Replace the remaining legacy exceptions and partial run histories with exact structured run bindings (Phase 5 deferred).
-- [ ] Add CI lanes for manifest coverage, public-artifact envelopes, and clean-clone reproduction.
+- [x] Add CI lanes for manifest coverage, public-artifact envelopes, and clean-clone reproduction.
   - [x] Enforce manifest-or-active-exception package coverage in the required root quality gate.
   - [x] Enforce public-artifact digest envelopes for declared payloads (E5 confirmatory JSON and E4 appendix; receipt-only raw lineage).
   - [x] Enforce clean-clone reproduction for allowlisted CPU packages (`bayesian_voi`, `mathematical_claims`).
