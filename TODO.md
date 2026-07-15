@@ -9,6 +9,7 @@
 - [x] Correct the mathematics primer's Lagrangian/KKT signs, VOI sign, and discount arithmetic with regression tests.
 - [ ] Migrate experiment families to structured manifests and replace prose-only provenance extraction.
   - [x] Partition all 54 research packages in `docs/experiment_contract_registry.json`: 5 structured manifests and 49 time-bounded legacy exceptions.
+  - [x] Enforce that every registered run `manifest_path` names an `experiment_manifest.json` inside its publication package and validates as a schema-v1 contract by content, so nested run manifests can be bound without opening path traversal or arbitrary-file references.
   - [ ] Replace the 49 exceptions and partial run histories with exact structured run bindings.
 - [ ] Add CI lanes for manifest coverage, public-artifact envelopes, and clean-clone reproduction.
   - [x] Enforce manifest-or-active-exception package coverage in the required root quality gate.

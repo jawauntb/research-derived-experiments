@@ -728,7 +728,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 - **No universal research dependency specification.** The root quality gate has a complete locked dependency group, but experiment and Modal runtimes still rely on command-specific `uvx` sets or explicit Modal images.
 - **Machine-specific paths** in docs/handoffs (Doppler scope, local archives).
 - **Result fidelity depends on summarization discipline.** Gitignored JSON vs committed Markdown can drift.
-- **Structured-contract coverage is early but fail-closed.** All 54 research packages are partitioned in `docs/experiment_contract_registry.json` (5 structured roots + 49 bounded legacy exceptions). Only one gate currently has a committed verdict file. Registry run records are ready for provenance consumption, but `gen_provenance.py` does not yet read them.
+- **Structured-contract coverage is early but fail-closed.** All 54 research packages are partitioned in `docs/experiment_contract_registry.json` (5 structured roots + 49 bounded legacy exceptions). Only one gate currently has a committed verdict file. Registry run records are ready for provenance consumption, but `gen_provenance.py` does not yet read them. A run's `manifest_path` must be named `experiment_manifest.json`, live inside `experiments/<publication_package>/`, and validate as a schema-v1 contract by content — nested run manifests are safe to bind without opening path traversal or arbitrary-file references.
 - **Paper-primary experiments** may have no committed `results/*.md`; evidence lives in the paper + local artifacts.
 - **Coherence / Inquiry / Cabal / site tests** are outside the root Python quality gate.
 - **Scientific claims are gate-bound.** Fixture smokes do not settle the program thesis.
