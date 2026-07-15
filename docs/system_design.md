@@ -279,8 +279,14 @@ mode compares expected bytes without writing files.
 ```bash
 python scripts/regen.py list
 python scripts/regen.py <experiment_name>
+python scripts/regen.py verify-clean-clone
 ```
 
+Allowlisted CPU packages (`bayesian_voi`, `mathematical_claims`) execute
+structured `runtime.command` argv without a shell. `verify-clean-clone`
+materializes a tracked-file checkout, deletes the declared outputs, reruns the
+recipes, and byte-compares newly created files to committed oracles. Modal and
+other documented commands remain inspect-only and are not dispatched.
 | Mode | Behavior |
 |---|---|
 | `local-cpu` | Runs deterministic CPU chains (e.g. `grid_cell_weakness`, `weakness_temporal`) |
@@ -742,7 +748,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 - **No universal research dependency specification.** The root quality gate has a complete locked dependency group, but experiment and Modal runtimes still rely on command-specific `uvx` sets or explicit Modal images.
 - **Machine-specific paths** in docs/handoffs (Doppler scope, local archives).
 - **Result fidelity depends on summarization discipline.** Gitignored JSON vs committed Markdown can drift.
-- **Structured-contract coverage is early but fail-closed.** All 54 research packages are partitioned in `docs/experiment_contract_registry.json` (6 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction. Public-artifact digest envelopes cover the E5 confirmatory JSON and E4 appendix; clean-clone reproduction remains open.
+- **Structured-contract coverage is early but fail-closed.** All 54 research packages are partitioned in `docs/experiment_contract_registry.json` (6 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction. Public-artifact digest envelopes cover the E5 confirmatory JSON and E4 appendix. Clean-clone CPU reproduction is allowlisted for `bayesian_voi` and `mathematical_claims` only.
 - **Paper-primary experiments** may have no committed `results/*.md`; evidence lives in the paper + local artifacts.
 - **Coherence / Inquiry / Cabal / site tests** are outside the root Python quality gate.
 - **Scientific claims are gate-bound.** Fixture smokes do not settle the program thesis.
