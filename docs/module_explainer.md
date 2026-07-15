@@ -40,7 +40,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 |---|---|
 | Understand how the system runs | [system_design.md](system_design.md) |
 | Find an experiment’s purpose & modules | §3 below + `experiments/<name>/PROVENANCE.md` |
-| Reproduce or get the dispatch command | `python scripts/regen.py list` / `regen.py <name>` |
+| Reproduce or get the dispatch command | `python scripts/regen.py list` / `regen.py <name>` / `regen.py verify-clean-clone` |
 | Refresh provenance index | `python scripts/gen_provenance.py` |
 | Validate research contracts | `python3 scripts/validate_{evidence_registry,claim_registry,experiment_manifest,gate_verdict,public_artifact_envelopes}.py` (manifest validator also enforces `docs/experiment_contract_registry.json` coverage) |
 | Run the quality gate | `python3 scripts/run_quality_checks.py` |
@@ -542,7 +542,7 @@ Raw outputs stay under `artifacts/` until summarized.
 | `validate_gate_verdict.py` | Discover per-gate verdicts, require registered claim IDs/canonical tiers/statuses, and resolve evidence paths | Reads `experiments/*/results/gate_verdicts/*.json` + `docs/claim_registry.json` |
 | `validate_public_artifact_envelopes.py` | Validate declared public digest sidecars against tracked public bytes and embedded raw-source receipts | Reads manifest `envelope_path` entries and `*.envelope.json`; portable contract in `schemas/public_artifact_envelope.schema.json` |
 | `check_primer_metadata.py` | Require matching titles across all six primer HTML `<title>` values and PDF metadata | Needs `pdfinfo` (`poppler-utils` in CI) |
-| `regen.py` | List/reproduce experiments or print documented Modal commands | `list`, `<name>`, `--deps` |
+| `regen.py` | List/reproduce experiments, print documented Modal commands, or verify allowlisted clean-clone CPU recipes | `list`, `<name>`, `--deps`, `verify-clean-clone`, `--verify-clean-clone` |
 | `run_quality_checks.py` | Locked `quality` sync → pytest → compileall → publication guard → four research-contract validators → primer metadata → provenance freshness → Ruff → ty; all post-sync commands use `uv run --no-sync` | Exit code; canonical local/CI root gate; local pytest serial by default, CI/opt-in local pytest bounded to four `loadscope` xdist workers with native math-library thread caps |
 | `publication_guard.py` | Block tracked secrets, forbidden paths, oversized files; exposes a tested text-signature helper | Exit code |
 | `env_probe.py` | Report env var presence/length only | `--json` |

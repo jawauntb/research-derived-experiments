@@ -15,7 +15,7 @@
 - [ ] Add CI lanes for manifest coverage, public-artifact envelopes, and clean-clone reproduction.
   - [x] Enforce manifest-or-active-exception package coverage in the required root quality gate.
   - [x] Enforce public-artifact digest envelopes for declared payloads (E5 confirmatory JSON and E4 appendix; receipt-only raw lineage).
-  - [ ] Enforce clean-clone reproduction.
+  - [x] Enforce clean-clone reproduction for allowlisted CPU packages (`bayesian_voi`, `mathematical_claims`).
 
 ## Now
 

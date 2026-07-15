@@ -34,3 +34,22 @@ jobs:
         env:
           QUALITY_PYTEST_WORKERS: auto
         run: python3 scripts/run_quality_checks.py
+
+  clean-clone-cpu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Sync quality/runtime Python environment
+        run: uv sync --locked --only-group quality --python 3.12
+
+      - name: Verify allowlisted clean-clone CPU recipes
+        run: uv run --no-sync python scripts/regen.py verify-clean-clone
