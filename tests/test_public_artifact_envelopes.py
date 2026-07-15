@@ -28,6 +28,11 @@ E5_ENVELOPE = ROOT / (
 )
 E5_MANIFEST = "experiments/commitment_surface/experiment_manifest.json"
 M5_MANIFEST = "experiments/commitment_surface/manifests/m5/experiment_manifest.json"
+E4_PUBLIC = ROOT / "experiments/commitment_surface/results/e4_pythia_lora_v2_appendix.json"
+E4_ENVELOPE = ROOT / (
+    "experiments/commitment_surface/results/e4_pythia_lora_v2_appendix.json.envelope.json"
+)
+E4_MANIFEST = "experiments/commitment_surface/manifests/e4/experiment_manifest.json"
 
 
 def _raw_payload() -> bytes:
@@ -123,6 +128,50 @@ class PublicArtifactEnvelopeTests(unittest.TestCase):
         self.assertEqual(envelope["adjudication"], "bound")
         self.assertNotEqual(envelope["producer_manifest_path"], M5_MANIFEST)
         self.assertEqual(main([]), 0)
+
+    def test_committed_e4_envelope_is_unadjudicated_and_run_specific(self) -> None:
+        envelope = validate_envelope(E4_ENVELOPE)
+        self.assertEqual(envelope["producer_manifest_path"], E4_MANIFEST)
+        self.assertEqual(envelope["expected_rows"], 108)
+        self.assertEqual(envelope["adjudication"], "unadjudicated")
+        self.assertEqual(envelope["claim_ids"], [])
+        self.assertEqual(envelope["evidence_ids"], [])
+        self.assertEqual(envelope["gate_verdict_paths"], [])
+        self.assertNotEqual(envelope["producer_manifest_path"], E5_MANIFEST)
+        self.assertNotEqual(envelope["producer_manifest_path"], M5_MANIFEST)
+        self.assertEqual(main([]), 0)
+
+    def test_e4_wrong_primary_producer_fails_closed(self) -> None:
+        payload = json.loads(E4_ENVELOPE.read_text())
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            artifact_rel = "experiments/demo/results/public.json"
+            manifest_rel = "experiments/demo/manifests/e4/experiment_manifest.json"
+            envelope_rel = "experiments/demo/results/public.json.envelope.json"
+            artifact = root / artifact_rel
+            envelope_path = root / envelope_rel
+            artifact.parent.mkdir(parents=True, exist_ok=True)
+            (root / manifest_rel).parent.mkdir(parents=True, exist_ok=True)
+            (root / manifest_rel).write_text("{}")
+            (root / E5_MANIFEST).parent.mkdir(parents=True, exist_ok=True)
+            (root / E5_MANIFEST).write_text("{}")
+            artifact.write_bytes(E4_PUBLIC.read_bytes())
+            payload["artifact_path"] = artifact_rel
+            payload["producer_manifest_path"] = E5_MANIFEST
+            payload["artifact_sha256"] = hashlib.sha256(artifact.read_bytes()).hexdigest()
+            payload["artifact_bytes"] = artifact.stat().st_size
+            envelope_path.write_text(json.dumps(payload))
+            with self.assertRaisesRegex(
+                ValueError,
+                "producer_manifest_path does not match declaring manifest",
+            ):
+                validate_envelope(
+                    envelope_path,
+                    root=root,
+                    tracked={artifact_rel, E5_MANIFEST, envelope_rel},
+                    expected_artifact_path=artifact_rel,
+                    expected_producer_manifest=manifest_rel,
+                )
 
     def test_m5_producer_is_rejected_for_e5_declaration(self) -> None:
         with TemporaryDirectory() as directory:

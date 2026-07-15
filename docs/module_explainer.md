@@ -553,8 +553,8 @@ Raw outputs stay under `artifacts/` until summarized.
 |---|---|
 | `paperkit.py` | Shared reportlab/matplotlib PDF helpers (library) |
 | `render_paper_pdf.py` | Markdown → PDF via markdown-pdf (`--in`, `--out`, `--title`, …) |
-| `export_commitment_surface_e4_appendix.py` | Raw E4 sweep → compact public-safe 108-cell/aggregate JSON (`--input`, `--output`) |
-| `export_commitment_surface_e5_results.py` | Complete raw E5 grid → validated public-safe JSON/Markdown plus bounded abstract/discussion claim update |
+| `export_commitment_surface_e4_appendix.py` | Raw E4 sweep → compact public-safe 108-cell/aggregate JSON plus receipt-only envelope sidecar (`--input`, `--output`, `--envelope-output`) |
+| `export_commitment_surface_e5_results.py` | Complete raw E5 grid → validated public-safe JSON/Markdown/envelope plus bounded abstract/discussion claim update |
 | `build_commitment_surface_pdf.py` | Commitment-surface reframe paper PDF with repeating-header Appendix A.2 tables (E1–E5); synchronizes both PDF destinations |
 | `build_weakness_pdf.py` | Flagship weakness→OOD PDF |
 | `build_gridcell_pdf.py` | Paper A PDF |

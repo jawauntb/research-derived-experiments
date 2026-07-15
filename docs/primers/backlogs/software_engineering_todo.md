@@ -13,7 +13,7 @@ The primer's durable thesis is that this repository should be treated as a scien
 | E-SE-023 | partial | Required PR/push workflow runs the full root-Python quality gate; app, coherence, Haskell, and site lane inventory remains. |
 | E-SE-028 | partial | Versioned gate-verdict schema, example, validator, claim link, and one E5 FAIL migration exist; PASS and inconclusive migrations remain. |
 | E-SE-029 | partial | Authoritative registry partitions 54 packages into 6 structured manifests and 48 bounded legacy exceptions after External Contact migration; scaffolder and remaining legacy/partial histories remain. |
-| E-SE-030 | partial | Public-artifact envelope schema/validator and E5 receipt-only sidecar are enforced in the root quality gate; E4 and broader exporter migrations remain. |
+| E-SE-030 | partial | Public-artifact envelope schema/validator plus E5 and E4 receipt-only sidecars are enforced in the root quality gate; broader exporter migrations remain. |
 | E-SE-033 | partial | Provenance consumes structured primary-run bindings from the contract registry; legacy packages still scrape prose and completeness migration remains. |
 | E-SE-037 | partial | Exact package inventory and frozen legacy digest exist in the contract registry; generated doc fragments and stale-count injection checks remain. |
 

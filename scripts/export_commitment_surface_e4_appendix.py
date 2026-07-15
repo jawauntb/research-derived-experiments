@@ -19,6 +19,17 @@ DEFAULT_OUTPUT = (
     / "results"
     / "e4_pythia_lora_v2_appendix.json"
 )
+DEFAULT_ENVELOPE = (
+    ROOT
+    / "experiments"
+    / "commitment_surface"
+    / "results"
+    / "e4_pythia_lora_v2_appendix.json.envelope.json"
+)
+E4_PRODUCER_MANIFEST = (
+    "experiments/commitment_surface/manifests/e4/experiment_manifest.json"
+)
+E4_GENERATOR_VERSION = "commitment_surface.e4_public_export.v1"
 
 PUBLIC_CONFIG_FIELDS = (
     "sizes",
@@ -110,7 +121,44 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=Path, default=DEFAULT_INPUT)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--envelope-output", type=Path, default=DEFAULT_ENVELOPE)
     return parser.parse_args()
+
+
+def write_envelope(
+    public_bytes: bytes,
+    output: Path,
+    *,
+    artifact_path: str,
+) -> dict[str, object]:
+    try:
+        from scripts.validate_public_artifact_envelopes import (
+            build_envelope_from_public_artifact,
+        )
+    except ModuleNotFoundError:  # Direct execution
+        from validate_public_artifact_envelopes import (  # type: ignore[no-redef]
+            build_envelope_from_public_artifact,
+        )
+
+    envelope = build_envelope_from_public_artifact(
+        artifact_path=artifact_path,
+        public_bytes=public_bytes,
+        producer_manifest_path=E4_PRODUCER_MANIFEST,
+        claim_ids=[],
+        evidence_ids=[],
+        gate_verdict_paths=[],
+        generator_version=E4_GENERATOR_VERSION,
+        included_fields=list(PUBLIC_CELL_FIELDS),
+        public_safety_classification="public_safe_appendix",
+        public_safety_notes=(
+            "Public-safe E4 appendix metrics. Raw function tables and input "
+            "lists remain omitted; raw-source bytes are validated by embedded "
+            "receipt only."
+        ),
+    )
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(envelope, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return envelope
 
 
 def main() -> int:
@@ -118,14 +166,22 @@ def main() -> int:
     raw_bytes = args.input.read_bytes()
     public_artifact = build_public_artifact(raw_bytes)
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(
-        json.dumps(public_artifact, indent=2, sort_keys=True) + "\n",
-        encoding="utf-8",
+    public_text = json.dumps(public_artifact, indent=2, sort_keys=True) + "\n"
+    args.output.write_text(public_text, encoding="utf-8")
+    try:
+        artifact_path = str(args.output.resolve().relative_to(ROOT))
+    except ValueError:
+        artifact_path = str(DEFAULT_OUTPUT.relative_to(ROOT))
+    envelope = write_envelope(
+        public_text.encode("utf-8"),
+        args.envelope_output,
+        artifact_path=artifact_path,
     )
     print(
         f"Wrote {args.output} "
         f"({public_artifact['coverage']['exported_cells']} cells)"
     )
+    print(f"Wrote {args.envelope_output} ({envelope['artifact_sha256'][:12]}…)")
     return 0
 
 
