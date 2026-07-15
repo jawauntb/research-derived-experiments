@@ -1,0 +1,59 @@
+{
+  "adjudication": "unadjudicated",
+  "artifact_bytes": 77480,
+  "artifact_path": "experiments/commitment_surface/results/e4_pythia_lora_v2_appendix.json",
+  "artifact_sha256": "58b98a379f84c4c0672ce07252aa44f9ffef6172a0844752b416d7cf0272539a",
+  "claim_ids": [],
+  "evidence_ids": [],
+  "expected_rows": 108,
+  "exported_rows": 108,
+  "gate_verdict_paths": [],
+  "generator_version": "commitment_surface.e4_public_export.v1",
+  "included_fields": [
+    "arm",
+    "size",
+    "n",
+    "seed",
+    "offset",
+    "train_frac",
+    "n_augmented_train_pairs",
+    "epochs",
+    "final_train_loss",
+    "train_accuracy",
+    "ood_accuracy",
+    "ablated_ood_accuracy",
+    "ood_nll",
+    "ablated_ood_nll",
+    "patch_ce_delta",
+    "weakness_oracle_norm",
+    "weakness_wrong_group_norm",
+    "trainable_lora_l2",
+    "head_sharpness_proxy",
+    "lora_rank"
+  ],
+  "omitted_fields": [
+    "ablated_function_table",
+    "function_table",
+    "lora_targets",
+    "ood_inputs",
+    "pythia_l2",
+    "pythia_param_count",
+    "train_inputs",
+    "truth",
+    "weakness_oracle",
+    "weakness_wrong_group"
+  ],
+  "producer_manifest_path": "experiments/commitment_surface/manifests/e4/experiment_manifest.json",
+  "public_safety": {
+    "classification": "public_safe_appendix",
+    "notes": "Public-safe E4 appendix metrics. Raw function tables and input lists remain omitted; raw-source bytes validated by embedded receipt only."
+  },
+  "raw_source_receipt": {
+    "artifact": "artifacts/commitment_surface/e4_pythia_lora_v2.json",
+    "bytes": 209612,
+    "public_safe_export": true,
+    "sha256": "67e86aef888540ba70d013de6a2be2def1871aa0970134bd3d115e2f2dbc5428"
+  },
+  "schema_version": "1.0",
+  "source_verification": "receipt_only"
+}

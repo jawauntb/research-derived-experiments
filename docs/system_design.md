@@ -259,8 +259,9 @@ manifest artifacts with envelope_path + *.envelope.json
     → scripts/validate_public_artifact_envelopes.py → pass/fail
       Hash tracked public payloads; preserve embedded raw-source receipts as
       receipt_only. Envelope sidecars bind to the exact producer manifest (E5
-      for the E5 public JSON even when M5 is the package card primary).
-      Envelope/provenance artifacts are never recursively enveloped.
+      for the E5 public JSON and E4 for the E4 appendix, even when M5 is the
+      package card primary). Envelope/provenance artifacts are never
+      recursively enveloped.
 
 scripts/research_contracts.py + schemas/*.schema.json
     ↔ tests/test_research_contract_schema_parity.py
@@ -741,7 +742,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 - **No universal research dependency specification.** The root quality gate has a complete locked dependency group, but experiment and Modal runtimes still rely on command-specific `uvx` sets or explicit Modal images.
 - **Machine-specific paths** in docs/handoffs (Doppler scope, local archives).
 - **Result fidelity depends on summarization discipline.** Gitignored JSON vs committed Markdown can drift.
-- **Structured-contract coverage is early but fail-closed.** All 54 research packages are partitioned in `docs/experiment_contract_registry.json` (6 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction. Public-artifact digest envelopes start with the E5 payload only; clean-clone reproduction remains open.
+- **Structured-contract coverage is early but fail-closed.** All 54 research packages are partitioned in `docs/experiment_contract_registry.json` (6 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction. Public-artifact digest envelopes cover the E5 confirmatory JSON and E4 appendix; clean-clone reproduction remains open.
 - **Paper-primary experiments** may have no committed `results/*.md`; evidence lives in the paper + local artifacts.
 - **Coherence / Inquiry / Cabal / site tests** are outside the root Python quality gate.
 - **Scientific claims are gate-bound.** Fixture smokes do not settle the program thesis.

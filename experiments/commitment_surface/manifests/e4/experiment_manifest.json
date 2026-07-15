@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "commitment_surface_e4_pythia_lora_v2",
+  "hypothesis": "A train-support-only generator intervention yields a transportable OOD lift that survives coverage and ablation controls on the frozen Pythia modular-addition grid.",
+  "claim_tier": "internal",
+  "controls": [
+    {
+      "control_id": "coverage_arm",
+      "description": "Labeled coverage arm that exposes deployment-support structure."
+    },
+    {
+      "control_id": "ablation_arm",
+      "description": "Ablated LoRA / matched control arm used to reject non-specific lifts."
+    }
+  ],
+  "seeds": [20260709, 20260809, 20260909],
+  "runtime": {
+    "execution_class": "modal_gpu",
+    "command": [
+      "uvx",
+      "--python",
+      "3.12",
+      "--from",
+      "modal",
+      "modal",
+      "run",
+      "experiments/commitment_surface/modal_e4_pythia_lora_v2.py",
+      "--sizes",
+      "70m,160m,410m",
+      "--ns",
+      "13,17,23",
+      "--seeds",
+      "3",
+      "--arms",
+      "A,B,C,D",
+      "--epochs",
+      "160",
+      "--train-frac",
+      "0.5",
+      "--aug-multiplier",
+      "3",
+      "--base-seed",
+      "20260709",
+      "--out",
+      "artifacts/commitment_surface/e4_pythia_lora_v2.json"
+    ],
+    "estimated_minutes": 180
+  },
+  "dependencies": [
+    {
+      "name": "torch",
+      "version": ">=2.2,<2.5"
+    }
+  ],
+  "gates": [
+    {
+      "gate_id": "E4_NEW_FRAME",
+      "criterion": "Frozen new-frame confirmatory gates pass on the compact public appendix."
+    },
+    {
+      "gate_id": "E4_OLD_FRAME",
+      "criterion": "Frozen old-frame confirmatory gates pass on the compact public appendix."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/commitment_surface/results/e4_pythia_lora_v2_appendix.json",
+      "public": true,
+      "envelope_path": "experiments/commitment_surface/results/e4_pythia_lora_v2_appendix.json.envelope.json"
+    },
+    {
+      "kind": "paper",
+      "path": "experiments/commitment_surface/results/e4_pythia_lora_v2_summary.md",
+      "public": true
+    }
+  ],
+  "status": "rejected"
+}

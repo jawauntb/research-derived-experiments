@@ -134,6 +134,21 @@
       "primary_run_id": "commitment_surface_m5_2026_07_14",
       "runs": [
         {
+          "run_id": "commitment_surface_e4_2026_07_09",
+          "publication_package": "commitment_surface",
+          "runtime_package": "commitment_surface",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/commitment_surface/manifests/e4/experiment_manifest.json",
+          "report_paths": [
+            "experiments/commitment_surface/results/e4_pythia_lora_v2_appendix.json",
+            "experiments/commitment_surface/results/e4_pythia_lora_v2_summary.md"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": []
+        },
+        {
           "run_id": "commitment_surface_e5_2026_07_10",
           "publication_package": "commitment_surface",
           "runtime_package": "commitment_surface",
