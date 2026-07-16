@@ -16,7 +16,7 @@
 - [x] Add CI lanes for manifest coverage, public-artifact envelopes, and clean-clone reproduction.
   - [x] Enforce manifest-or-active-exception package coverage in the required root quality gate.
   - [x] Enforce public-artifact digest envelopes for declared payloads (E5 confirmatory JSON and E4 appendix; receipt-only raw lineage).
-  - [x] Enforce clean-clone reproduction for allowlisted deterministic CPU packages (`bayesian_voi`, `mathematical_claims`, `passive_active_phase_map`, `seed_bootstrap_calibration`).
+  - [x] Enforce clean-clone reproduction for allowlisted deterministic CPU packages (`bayesian_voi`, `mathematical_claims`, `seed_bootstrap_calibration`; `passive_active_phase_map` deferred pending a pinned-numpy path — Ubuntu vs macOS drifted 5 bytes on uvx-resolved wheels).
 - [ ] Autonomous-agent integrity contracts on structured run records.
   - [x] Optional `preregistration_digest` + `preregistration_path` on run records (SHA-256 of a tracked pre-registration file, validated by content).
   - [x] Optional `producing_agent` on run records (`identity` + `session_ref`, both non-empty).

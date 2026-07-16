@@ -283,8 +283,8 @@ python scripts/regen.py verify-clean-clone
 ```
 
 Allowlisted deterministic CPU packages (`bayesian_voi`, `mathematical_claims`,
-`passive_active_phase_map`, `seed_bootstrap_calibration`) execute structured
-`runtime.command` argv without a shell. `verify-clean-clone` materializes a
+`seed_bootstrap_calibration`) execute structured `runtime.command` argv without
+a shell. `verify-clean-clone` materializes a
 tracked-file checkout, deletes the declared outputs, reruns the recipes, and
 byte-compares newly created files to committed oracles. Modal and other
 documented commands remain inspect-only and are not dispatched. Run records may

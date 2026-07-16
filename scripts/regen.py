@@ -74,13 +74,14 @@ PDF_OUTPUTS = {
 }
 
 # Exact clean-clone allowlist (R15 extended). Output paths are repo-relative.
+# passive_active_phase_map was in this list briefly but drifted 5 bytes between
+# macOS and Ubuntu (uvx-installed numpy resolves to different platform wheels
+# with slightly different last-digit floating-point behavior). Reproducibility
+# there needs a pinned numpy version before it can join a byte-oracle lane.
 CLEAN_CLONE_ALLOWLIST: dict[str, str] = {
     "bayesian_voi": "experiments/bayesian_voi/results/bayesian_voi_summary.json",
     "mathematical_claims": (
         "experiments/mathematical_claims/results/mathematical_claims_summary.json"
-    ),
-    "passive_active_phase_map": (
-        "experiments/passive_active_phase_map/results/registered_summary.json"
     ),
     "seed_bootstrap_calibration": (
         "experiments/seed_bootstrap_calibration/results/summary.json"
