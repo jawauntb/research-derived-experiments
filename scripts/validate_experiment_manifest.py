@@ -97,6 +97,7 @@ GATE_ID = CLAIM_ID
 RUN_ID = EXPERIMENT_ID
 
 CONTRACT_ROOT_FIELDS = {"schema_version", "legacy_policy", "packages"}
+CONTRACT_ROOT_OPTIONAL_FIELDS = {"preregistration_policy"}
 LEGACY_POLICY_FIELDS = {
     "frozen_package_cutoff",
     "warning_days",
@@ -104,6 +105,7 @@ LEGACY_POLICY_FIELDS = {
     "frozen_legacy_packages",
     "frozen_legacy_packages_sha256",
 }
+PREREGISTRATION_POLICY_FIELDS = {"required_after_run_date"}
 STRUCTURED_PACKAGE_FIELDS = {
     "package",
     "coverage_mode",
@@ -123,6 +125,13 @@ RUN_FIELDS = {
     "evidence_ids",
     "gate_verdict_paths",
 }
+RUN_OPTIONAL_FIELDS = {
+    "manifest_path",
+    "preregistration_digest",
+    "preregistration_path",
+    "producing_agent",
+}
+AGENT_FIELDS = {"identity", "session_ref"}
 LEGACY_EXCEPTION_FIELDS = {
     "owner",
     "reason_code",
@@ -133,6 +142,7 @@ LEGACY_EXCEPTION_FIELDS = {
     "frozen_legacy_cutoff",
     "adjudicates_claims",
 }
+RUN_ID_DATE_SUFFIX = re.compile(r"_(\d{4})_(\d{2})_(\d{2})$")
 
 
 def fail(message: str) -> Never:
@@ -399,6 +409,54 @@ def validate(path: Path) -> dict[str, object]:
     return manifest
 
 
+def _run_id_date(run_id: str) -> date | None:
+    """Extract a trailing ``_YYYY_MM_DD`` date suffix from ``run_id``."""
+
+    match = RUN_ID_DATE_SUFFIX.search(run_id)
+    if match is None:
+        return None
+    try:
+        return date(int(match.group(1)), int(match.group(2)), int(match.group(3)))
+    except ValueError:
+        return None
+
+
+def _validate_producing_agent(value: object, label: str) -> None:
+    agent = require_object(value, label)
+    require_fields(agent, label, AGENT_FIELDS)
+    for field in sorted(AGENT_FIELDS):
+        require_string(agent[field], f"{label}.{field}")
+
+
+def _validate_preregistration_binding(
+    run: dict[str, object],
+    *,
+    label: str,
+    root: Path,
+) -> None:
+    digest = run.get("preregistration_digest")
+    path_value = run.get("preregistration_path")
+    if digest is None and path_value is None:
+        return
+    if digest is None or path_value is None:
+        fail(
+            f"{label} preregistration binding must include both "
+            "preregistration_digest and preregistration_path"
+        )
+    digest_str = require_string(digest, f"{label}.preregistration_digest")
+    if SHA256.fullmatch(digest_str) is None:
+        fail(f"{label}.preregistration_digest must be a SHA-256 digest")
+    relative, resolved = _safe_repo_file(
+        path_value, f"{label}.preregistration_path", root=root
+    )
+    computed = hashlib.sha256(resolved.read_bytes()).hexdigest()
+    if computed != digest_str:
+        fail(
+            f"{label}.preregistration_digest mismatch for {relative}: "
+            f"expected {digest_str} got {computed}"
+        )
+
+
 def _validate_run_record(
     value: object,
     *,
@@ -406,10 +464,11 @@ def _validate_run_record(
     packages: set[str],
     root: Path,
     index: int,
+    preregistration_cutoff: date | None,
 ) -> str:
     label = f"packages[{package}].runs[{index}]"
     run = require_object(value, label)
-    require_fields(run, label, RUN_FIELDS, {"manifest_path"})
+    require_fields(run, label, RUN_FIELDS, RUN_OPTIONAL_FIELDS)
 
     run_id = require_string(run["run_id"], f"{label}.run_id")
     if RUN_ID.fullmatch(run_id) is None:
@@ -457,6 +516,21 @@ def _validate_run_record(
             _safe_repo_file(path, f"{label}.{path_label}[{path_index}]", root=root)
     _validate_identifier_list(run["claim_ids"], f"{label}.claim_ids", CLAIM_ID)
     _validate_identifier_list(run["evidence_ids"], f"{label}.evidence_ids", EVIDENCE_ID)
+
+    if "producing_agent" in run:
+        _validate_producing_agent(run["producing_agent"], f"{label}.producing_agent")
+    _validate_preregistration_binding(run, label=label, root=root)
+
+    if preregistration_cutoff is not None:
+        run_date = _run_id_date(run_id)
+        if run_date is not None and run_date >= preregistration_cutoff:
+            for required in ("preregistration_digest", "preregistration_path", "producing_agent"):
+                if required not in run:
+                    fail(
+                        f"{label} run_id date {run_date.isoformat()} is on or after "
+                        f"preregistration cutoff {preregistration_cutoff.isoformat()} "
+                        f"and requires {required}"
+                    )
     return run_id
 
 
@@ -466,6 +540,7 @@ def _validate_structured_package(
     package: str,
     packages: set[str],
     root: Path,
+    preregistration_cutoff: date | None,
 ) -> None:
     require_fields(record, f"package record {package}", STRUCTURED_PACKAGE_FIELDS, {"primary_run_id"})
     expected_manifest = f"experiments/{package}/{MANIFEST_NAME}"
@@ -491,6 +566,7 @@ def _validate_structured_package(
             packages=packages,
             root=root,
             index=index,
+            preregistration_cutoff=preregistration_cutoff,
         )
         if run_id in run_ids:
             fail(f"duplicate run_id in package {package}: {run_id}")
@@ -562,9 +638,29 @@ def validate_contract_registry(
     except (OSError, json.JSONDecodeError) as exc:
         fail(f"cannot read {path}: {exc}")
     registry = require_object(payload, "contract registry")
-    require_fields(registry, "contract registry", CONTRACT_ROOT_FIELDS)
+    require_fields(
+        registry,
+        "contract registry",
+        CONTRACT_ROOT_FIELDS,
+        CONTRACT_ROOT_OPTIONAL_FIELDS,
+    )
     if registry["schema_version"] != SCHEMA_VERSION:
         fail(f"contract registry schema_version must be '{SCHEMA_VERSION}'")
+
+    preregistration_cutoff: date | None = None
+    if "preregistration_policy" in registry:
+        prereg_policy = require_object(
+            registry["preregistration_policy"], "preregistration_policy"
+        )
+        require_fields(
+            prereg_policy,
+            "preregistration_policy",
+            PREREGISTRATION_POLICY_FIELDS,
+        )
+        preregistration_cutoff = require_iso_date(
+            prereg_policy["required_after_run_date"],
+            "preregistration_policy.required_after_run_date",
+        )
 
     policy = require_object(registry["legacy_policy"], "legacy_policy")
     require_fields(policy, "legacy_policy", LEGACY_POLICY_FIELDS)
@@ -658,6 +754,7 @@ def validate_contract_registry(
                 package=package,
                 packages=actual_packages,
                 root=root,
+                preregistration_cutoff=preregistration_cutoff,
             )
         else:
             if root_manifest.is_file():

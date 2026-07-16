@@ -73,11 +73,17 @@ PDF_OUTPUTS = {
     ],
 }
 
-# Exact first clean-clone allowlist (R15). Output paths are repo-relative.
+# Exact clean-clone allowlist (R15 extended). Output paths are repo-relative.
 CLEAN_CLONE_ALLOWLIST: dict[str, str] = {
     "bayesian_voi": "experiments/bayesian_voi/results/bayesian_voi_summary.json",
     "mathematical_claims": (
         "experiments/mathematical_claims/results/mathematical_claims_summary.json"
+    ),
+    "passive_active_phase_map": (
+        "experiments/passive_active_phase_map/results/registered_summary.json"
+    ),
+    "seed_bootstrap_calibration": (
+        "experiments/seed_bootstrap_calibration/results/summary.json"
     ),
 }
 

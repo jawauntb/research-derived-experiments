@@ -282,11 +282,19 @@ python scripts/regen.py <experiment_name>
 python scripts/regen.py verify-clean-clone
 ```
 
-Allowlisted CPU packages (`bayesian_voi`, `mathematical_claims`) execute
-structured `runtime.command` argv without a shell. `verify-clean-clone`
-materializes a tracked-file checkout, deletes the declared outputs, reruns the
-recipes, and byte-compares newly created files to committed oracles. Modal and
-other documented commands remain inspect-only and are not dispatched.
+Allowlisted deterministic CPU packages (`bayesian_voi`, `mathematical_claims`,
+`passive_active_phase_map`, `seed_bootstrap_calibration`) execute structured
+`runtime.command` argv without a shell. `verify-clean-clone` materializes a
+tracked-file checkout, deletes the declared outputs, reruns the recipes, and
+byte-compares newly created files to committed oracles. Modal and other
+documented commands remain inspect-only and are not dispatched. Run records may
+also declare `preregistration_digest` + `preregistration_path` (SHA-256 of a
+tracked pre-registration file, content-verified) and `producing_agent`
+(`identity` + `session_ref`); a registry-level
+`preregistration_policy.required_after_run_date` cutoff promotes those fields
+from optional to required for any run whose `run_id` ends with a date on or
+after the cutoff, so future autonomous-agent-produced runs cannot skip
+attribution or pre-registration binding.
 | Mode | Behavior |
 |---|---|
 | `local-cpu` | Runs deterministic CPU chains (e.g. `grid_cell_weakness`, `weakness_temporal`) |

@@ -1,5 +1,8 @@
 {
   "schema_version": "1.0",
+  "preregistration_policy": {
+    "required_after_run_date": "2026-08-01"
+  },
   "legacy_policy": {
     "frozen_package_cutoff": "2026-07-14",
     "warning_days": 30,
