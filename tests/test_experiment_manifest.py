@@ -182,30 +182,39 @@ class ExperimentContractRegistryTests(unittest.TestCase):
         *,
         manifest_path: str | None = None,
         run_manifest_path: str | None = None,
+        run_id: str | None = None,
+        preregistration_digest: str | None = None,
+        preregistration_path: str | None = None,
+        producing_agent: dict | None = None,
     ) -> dict:
         manifest_path = manifest_path or f"experiments/{package}/experiment_manifest.json"
         run_manifest_path = run_manifest_path or manifest_path
-        run_id = f"{package}_registered"
+        run_id = run_id or f"{package}_registered"
+        run: dict = {
+            "run_id": run_id,
+            "publication_package": package,
+            "runtime_package": package,
+            "provenance_mode": "structured_manifest",
+            "integrity_state": "valid",
+            "manifest_path": run_manifest_path,
+            "report_paths": [],
+            "claim_ids": [],
+            "evidence_ids": [],
+            "gate_verdict_paths": [],
+        }
+        if preregistration_digest is not None:
+            run["preregistration_digest"] = preregistration_digest
+        if preregistration_path is not None:
+            run["preregistration_path"] = preregistration_path
+        if producing_agent is not None:
+            run["producing_agent"] = producing_agent
         return {
             "package": package,
             "coverage_mode": "structured_manifest",
             "manifest_path": manifest_path,
             "run_coverage": "complete",
             "primary_run_id": run_id,
-            "runs": [
-                {
-                    "run_id": run_id,
-                    "publication_package": package,
-                    "runtime_package": package,
-                    "provenance_mode": "structured_manifest",
-                    "integrity_state": "valid",
-                    "manifest_path": run_manifest_path,
-                    "report_paths": [],
-                    "claim_ids": [],
-                    "evidence_ids": [],
-                    "gate_verdict_paths": [],
-                }
-            ],
+            "runs": [run],
         }
 
     def legacy_record(
@@ -235,8 +244,9 @@ class ExperimentContractRegistryTests(unittest.TestCase):
         records: list[dict],
         *,
         frozen_packages: list[str],
+        preregistration_required_after: str | None = None,
     ) -> dict:
-        return {
+        payload: dict = {
             "schema_version": "1.0",
             "legacy_policy": {
                 "frozen_package_cutoff": "2026-07-14",
@@ -247,6 +257,11 @@ class ExperimentContractRegistryTests(unittest.TestCase):
             },
             "packages": records,
         }
+        if preregistration_required_after is not None:
+            payload["preregistration_policy"] = {
+                "required_after_run_date": preregistration_required_after,
+            }
+        return payload
 
     def write_registry(self, root: Path, payload: dict) -> Path:
         path = root / "docs" / "experiment_contract_registry.json"
@@ -758,6 +773,153 @@ class ExperimentContractRegistryTests(unittest.TestCase):
                 r"manifest_path must live inside experiments/structured/",
             ):
                 self.validate_registry(registry_path, root=root)
+
+    def _write_prereg_and_get_digest(
+        self, root: Path, package: str, body: bytes = b"pre-registered content\n"
+    ) -> tuple[str, str]:
+        prereg = root / "experiments" / package / "PREREGISTRATION.md"
+        prereg.parent.mkdir(parents=True, exist_ok=True)
+        prereg.write_bytes(body)
+        return (
+            str(prereg.relative_to(root)),
+            hashlib.sha256(body).hexdigest(),
+        )
+
+    def test_preregistration_binding_validates_digest_and_path(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_manifest(root, "structured")
+            (root / "experiments" / "legacy").mkdir(parents=True)
+            prereg_path, digest = self._write_prereg_and_get_digest(root, "structured")
+            registry = self.registry_payload(
+                [
+                    self.structured_record(
+                        "structured",
+                        preregistration_digest=digest,
+                        preregistration_path=prereg_path,
+                        producing_agent={
+                            "identity": "claude-opus-4-7",
+                            "session_ref": "session_test_ok",
+                        },
+                    ),
+                    self.legacy_record("legacy"),
+                ],
+                frozen_packages=["legacy"],
+            )
+            registry_path = self.write_registry(root, registry)
+            result, warnings = self.validate_registry(registry_path, root=root)
+            self.assertEqual(len(result["packages"]), 2)
+            self.assertEqual(warnings, [])
+
+    def test_preregistration_digest_mismatch_fails_closed(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_manifest(root, "structured")
+            (root / "experiments" / "legacy").mkdir(parents=True)
+            prereg_path, _real_digest = self._write_prereg_and_get_digest(root, "structured")
+            registry = self.registry_payload(
+                [
+                    self.structured_record(
+                        "structured",
+                        preregistration_digest="0" * 64,
+                        preregistration_path=prereg_path,
+                    ),
+                    self.legacy_record("legacy"),
+                ],
+                frozen_packages=["legacy"],
+            )
+            registry_path = self.write_registry(root, registry)
+            with self.assertRaisesRegex(
+                ValueError, r"preregistration_digest mismatch"
+            ):
+                self.validate_registry(registry_path, root=root)
+
+    def test_preregistration_requires_both_digest_and_path(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_manifest(root, "structured")
+            (root / "experiments" / "legacy").mkdir(parents=True)
+            registry = self.registry_payload(
+                [
+                    self.structured_record(
+                        "structured",
+                        preregistration_digest="a" * 64,
+                    ),
+                    self.legacy_record("legacy"),
+                ],
+                frozen_packages=["legacy"],
+            )
+            registry_path = self.write_registry(root, registry)
+            with self.assertRaisesRegex(
+                ValueError,
+                r"preregistration binding must include both",
+            ):
+                self.validate_registry(registry_path, root=root)
+
+    def test_producing_agent_requires_identity_and_session_ref(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_manifest(root, "structured")
+            (root / "experiments" / "legacy").mkdir(parents=True)
+            registry = self.registry_payload(
+                [
+                    self.structured_record(
+                        "structured",
+                        producing_agent={"identity": "claude", "session_ref": ""},
+                    ),
+                    self.legacy_record("legacy"),
+                ],
+                frozen_packages=["legacy"],
+            )
+            registry_path = self.write_registry(root, registry)
+            with self.assertRaisesRegex(
+                ValueError,
+                r"producing_agent\.session_ref must be a non-empty string",
+            ):
+                self.validate_registry(registry_path, root=root)
+
+    def test_preregistration_cutoff_enforces_new_runs_only(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_manifest(root, "structured")
+            (root / "experiments" / "legacy").mkdir(parents=True)
+            registry = self.registry_payload(
+                [
+                    self.structured_record(
+                        "structured",
+                        run_id="structured_2026_08_15",
+                    ),
+                    self.legacy_record("legacy"),
+                ],
+                frozen_packages=["legacy"],
+                preregistration_required_after="2026-08-01",
+            )
+            registry_path = self.write_registry(root, registry)
+            with self.assertRaisesRegex(
+                ValueError,
+                r"requires preregistration_digest",
+            ):
+                self.validate_registry(registry_path, root=root)
+
+    def test_preregistration_cutoff_ignores_dateless_and_pre_cutoff_runs(self) -> None:
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.write_manifest(root, "structured")
+            (root / "experiments" / "legacy").mkdir(parents=True)
+            registry = self.registry_payload(
+                [
+                    self.structured_record(
+                        "structured",
+                        run_id="structured_2026_07_31",
+                    ),
+                    self.legacy_record("legacy"),
+                ],
+                frozen_packages=["legacy"],
+                preregistration_required_after="2026-08-01",
+            )
+            registry_path = self.write_registry(root, registry)
+            result, _warnings = self.validate_registry(registry_path, root=root)
+            self.assertEqual(len(result["packages"]), 2)
 
     def test_historical_cli_flag_misuse_and_labeled_success(self) -> None:
         with TemporaryDirectory() as directory:

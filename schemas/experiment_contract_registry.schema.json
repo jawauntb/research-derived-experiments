@@ -10,6 +10,17 @@
       "type": "string",
       "const": "1.0"
     },
+    "preregistration_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required_after_run_date"],
+      "properties": {
+        "required_after_run_date": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
     "legacy_policy": {
       "type": "object",
       "additionalProperties": false,
@@ -137,6 +148,28 @@
         },
         "gate_verdict_paths": {
           "$ref": "#/$defs/paths"
+        },
+        "preregistration_digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "preregistration_path": {
+          "$ref": "#/$defs/repo_path"
+        },
+        "producing_agent": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["identity", "session_ref"],
+          "properties": {
+            "identity": {
+              "type": "string",
+              "minLength": 1
+            },
+            "session_ref": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
         }
       },
       "allOf": [
@@ -151,6 +184,22 @@
           },
           "then": {
             "required": ["manifest_path"]
+          }
+        },
+        {
+          "if": {
+            "required": ["preregistration_digest"]
+          },
+          "then": {
+            "required": ["preregistration_path"]
+          }
+        },
+        {
+          "if": {
+            "required": ["preregistration_path"]
+          },
+          "then": {
+            "required": ["preregistration_digest"]
           }
         }
       ]

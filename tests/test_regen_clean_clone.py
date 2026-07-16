@@ -13,14 +13,25 @@ ROOT = Path(__file__).resolve().parent.parent
 
 
 class RegenCleanCloneTests(unittest.TestCase):
+    EXPECTED_ALLOWLIST = {
+        "bayesian_voi",
+        "mathematical_claims",
+        "passive_active_phase_map",
+        "seed_bootstrap_calibration",
+    }
+
+    def test_allowlist_is_exactly_the_expected_deterministic_cpu_set(self) -> None:
+        self.assertEqual(set(regen.CLEAN_CLONE_ALLOWLIST), self.EXPECTED_ALLOWLIST)
+
     def test_allowlist_recipes_are_local_cpu_argv(self) -> None:
-        for package in ("bayesian_voi", "mathematical_claims"):
-            argv, output_rel = regen.load_structured_recipe(package)
-            self.assertIsInstance(argv, list)
-            self.assertTrue(all(isinstance(part, str) for part in argv))
-            self.assertFalse(any("&&" in part or ";" in part for part in argv))
-            self.assertTrue((ROOT / output_rel).is_file())
-            self.assertEqual(argv[0], "python3")
+        for package in sorted(self.EXPECTED_ALLOWLIST):
+            with self.subTest(package=package):
+                argv, output_rel = regen.load_structured_recipe(package)
+                self.assertIsInstance(argv, list)
+                self.assertTrue(all(isinstance(part, str) for part in argv))
+                self.assertFalse(any("&&" in part or ";" in part for part in argv))
+                self.assertTrue((ROOT / output_rel).is_file())
+                self.assertIn(argv[0], {"python3", "uvx"})
 
     def test_unknown_or_non_allowlisted_package_fails_closed(self) -> None:
         with self.assertRaisesRegex(ValueError, "not in the clean-clone allowlist"):
