@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parent.parent
 class RegenCleanCloneTests(unittest.TestCase):
     EXPECTED_ALLOWLIST = {
         "bayesian_voi",
+        "grounded_statecharts",
         "mathematical_claims",
         "seed_bootstrap_calibration",
     }

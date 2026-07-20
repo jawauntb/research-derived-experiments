@@ -403,6 +403,36 @@
       }
     },
     {
+      "package": "grounded_statecharts",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/grounded_statecharts/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "grounded_statecharts_fixture_2026_07_20",
+      "runs": [
+        {
+          "run_id": "grounded_statecharts_fixture_2026_07_20",
+          "publication_package": "grounded_statecharts",
+          "runtime_package": "grounded_statecharts",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/grounded_statecharts/experiment_manifest.json",
+          "report_paths": [
+            "experiments/grounded_statecharts/results/summary.json",
+            "experiments/grounded_statecharts/results/replay.html"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_digest": "196ab8142eeea6dcb7235053e8d34ed77168fc9b966fef586ce570dce2ee51e1",
+          "preregistration_path": "experiments/grounded_statecharts/PREREGISTRATION.md",
+          "producing_agent": {
+            "identity": "OpenAI Codex",
+            "session_ref": "PR 378 implementation follow-up"
+          }
+        }
+      ]
+    },
+    {
       "package": "habituated_reengagement",
       "coverage_mode": "legacy_exception",
       "legacy_exception": {

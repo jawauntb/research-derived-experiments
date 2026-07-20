@@ -1,0 +1,48 @@
+{
+  "episode_id": "false-success-missing-artifact-001",
+  "event_prefix": [
+    {
+      "actor": "executor",
+      "constraint_refs": [
+        "constraint://artifact-must-exist-before-commit"
+      ],
+      "episode_id": "false-success-missing-artifact-001",
+      "event_index": 0,
+      "event_type": "task_loaded",
+      "evidence_refs": [
+        "task://false-success-missing-artifact-001"
+      ],
+      "guard_results": [],
+      "intervention": null,
+      "proposed_transition": "observe->act",
+      "run_id": "false-success-missing-artifact-001:minimal_grounded_statechart:1.0",
+      "state_after": "act",
+      "state_before": "observe",
+      "timestamp_logical": 0
+    },
+    {
+      "actor": "fixture_tool",
+      "constraint_refs": [
+        "constraint://artifact-must-exist-before-commit"
+      ],
+      "episode_id": "false-success-missing-artifact-001",
+      "event_index": 1,
+      "event_type": "tool_reported_success",
+      "evidence_refs": [
+        "tool-report://success"
+      ],
+      "guard_results": [],
+      "intervention": null,
+      "proposed_transition": "act->verify",
+      "run_id": "false-success-missing-artifact-001:minimal_grounded_statechart:1.0",
+      "state_after": "verify",
+      "state_before": "act",
+      "timestamp_logical": 1
+    }
+  ],
+  "next_event_index": 2,
+  "next_logical_timestamp": 2,
+  "run_id": "false-success-missing-artifact-001:minimal_grounded_statechart:1.0",
+  "state": "verify",
+  "workspace_snapshot": {}
+}

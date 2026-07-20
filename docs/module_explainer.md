@@ -10,10 +10,10 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 
 | Path | Responsibility |
 |---|---|
-| `experiments/` | 54 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
+| `experiments/` | 55 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
 | `papers/` | Paper sources (`paper.md`), figures, shareable PDFs |
 | `scripts/` | 91 Python ops modules: quality, contracts, provenance, PDF/figure builders, summarizers |
-| `tests/` | 72 root test files collected together by pytest (`unittest`-style and pytest-native) |
+| `tests/` | 73 root test files collected together by pytest (`unittest`-style and pytest-native) |
 | `docs/` | Design docs, verification, handoffs, plans, reviews, solutions |
 | `docs/primers/backlogs/` | Six article-specific, source-anchored research TODOs derived from the primer PDFs |
 | `notes/` | Program-level research synthesis |
@@ -81,6 +81,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_mathematical_claims.py`, `test_bayesian_voi.py` | Executable theorem-assumption examples/failure cases and exact Bayesian VOI regimes |
 | `test_seed_bootstrap_calibration.py` | Deterministic seed-floor grid, correct resampling unit, negative-regime retention, exact summary regeneration |
 | `test_passive_active_phase_map.py` | Phase-map model comparison, matched-budget path controls, public aggregate contract |
+| `test_grounded_statecharts.py` | Exact checkpoint replay, single-component guard intervention, false-completion repair path, typed event surface, and byte-stable public bundle |
 | `test_causal_use.py` | Shared mass-normalized causal-use dose curves, bootstrap uncertainty, and cross-surface transport |
 | `test_experiment_manifest.py`, `test_gate_verdict.py`, `test_evidence_registry.py`, `test_claim_registry.py` | Fail-closed research-contract adapters, package-coverage registry partition, discovery, references, supersession, and bidirectional edges |
 | `test_research_contract_schema_parity.py`, `test_gen_provenance.py` | Shared vocabulary/schema parity, support-directory exclusion, non-mutating provenance freshness |
@@ -116,15 +117,15 @@ environment.
 |---|---|
 | [system_design.md](system_design.md) | End-to-end design & operating model |
 | [module_explainer.md](module_explainer.md) | This catalog |
-| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 54 research packages; `experiments/common` excluded) |
-| `experiment_contract_registry.json` | Authoritative 54-package coverage partition: 6 structured roots + 48 time-bounded legacy exceptions with frozen digest |
+| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 55 research packages; `experiments/common` excluded) |
+| `experiment_contract_registry.json` | Authoritative 55-package coverage partition: 7 structured roots + 48 time-bounded legacy exceptions with frozen digest |
 | `program_evidence_registry.json` | 12 canonical evidence records with stable IDs, states, artifact refs, and claim links |
 | `claim_registry.json` | 12 canonical claim records with tiers, states, source refs, and bidirectional evidence links |
 | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) | Benchmark umbrella |
 | [causally_grounded_agents_release_schema.md](causally_grounded_agents_release_schema.md) (+ `.json`) | Shared release schema |
 | [causally_grounded_agents_next_gap.md](causally_grounded_agents_next_gap.md) | Suite C transfer gaps |
 | [harness_research/README.md](harness_research/README.md) | Design-only grounded-harness portfolio: shared runtime, benchmark, replay, statistics, and release contract |
-| `harness_research/grounded_statecharts.md` | Independent transition-guard runtime and Grounded Transitions Benchmark design |
+| `harness_research/grounded_statecharts.md` | Independent transition-guard design plus links to the implemented deterministic fixture runtime |
 | `harness_research/constraint_transport.md` | Recursive constraint-envelope and externally enforced transition-guard benchmark design |
 | `harness_research/counterfactual_harness_search.md` | Paired intervention, causal-credit, and equal-budget harness-search design |
 | `harness_research/harness_unlearning.md` | Provenance-aware quarantine, commitment-level suppression, and revalidation design |
@@ -155,9 +156,9 @@ environment.
 
 **Legend:** **P** = `PROVENANCE.md`, **B** = `BENCHMARK_CARD.md`, **R** = `README.md`, **res** = committed `results/`.
 
-**Verification reconciliation:** 54 research packages on disk plus one shared
+**Verification reconciliation:** 55 research packages on disk plus one shared
 support package, `experiments/common`. `gen_provenance.py` intentionally excludes
-the support package and derives 54 cards/index rows; `gen_provenance.py --check`
+the support package and derives 55 cards/index rows; `gen_provenance.py --check`
 fails if any generated card, either verification index, or the site mirror drifts.
 The structured registries currently contain 12 claims and 12 evidence records.
 
@@ -456,7 +457,24 @@ python3 -m experiments.viable_computational_bodies.search \
 python3 -m experiments.long_horizon_bottleneck.eval --provider fixture --models fixture ...
 ```
 
-#### 3.3.3 Related reengagement packages
+#### 3.3.3 `grounded_statecharts` — replay bedrock
+
+**Artifacts:** P · R · res · typed JSONL replay bundle.
+
+| Module / artifact | Purpose |
+|---|---|
+| `runtime.py` | Minimal Observe/Act/Verify/Commit/Repair interpreter, typed events, serializable checkpoint, and single-component replay enforcement |
+| `run_fixture.py` | One-command deterministic fixture runner and static HTML replay generator |
+| `manifests/*.json` | Matched G0 self-report and G3 artifact-digest harness conditions; only `guard` differs |
+| `fixtures/false_success.json` | Registered missing-artifact false-success task and deterministic repair payload |
+| `schemas/event.schema.json` | Public append-only event contract |
+| `results/` | Checkpoint, original/no-op/guarded event streams, compact gate summary, and browser-readable replay |
+
+```bash
+python3 -m experiments.grounded_statecharts.run_fixture
+```
+
+#### 3.3.4 Related reengagement packages
 
 | Package | Purpose | Entrypoint |
 |---|---|---|
@@ -542,10 +560,10 @@ Raw outputs stay under `artifacts/` until summarized.
 | Script | Purpose | Flags / I/O |
 |---|---|---|
 | `research_contracts.py` | Shared schema version, identifier patterns, claim tiers/statuses, and evidence statuses used by registry/verdict adapters | Library; parity-tested against JSON Schemas |
-| `gen_provenance.py` | Validate registries, resolve structured primary-run bindings from the contract registry, regenerate all experiment `PROVENANCE.md` files + `docs/verification.{md,json}` + site mirror; `--check` compares expected bytes without writing; legacy packages still use labeled heuristic extraction | In: 54 experiment dirs + claim/evidence/contract registries; excludes `experiments/common` |
+| `gen_provenance.py` | Validate registries, resolve structured primary-run bindings from the contract registry, regenerate all experiment `PROVENANCE.md` files + `docs/verification.{md,json}` + site mirror; `--check` compares expected bytes without writing; legacy packages still use labeled heuristic extraction | In: 55 experiment dirs + claim/evidence/contract registries; excludes `experiments/common` |
 | `validate_evidence_registry.py` | Validate canonical evidence IDs, gate statuses, artifact refs, and supersession shape | `docs/program_evidence_registry.json` |
 | `validate_claim_registry.py` | Validate exact claim shape/tiers/states and bidirectional claim↔evidence edges | Reads `docs/claim_registry.json` + `docs/program_evidence_registry.json`; never writes either |
-| `validate_experiment_manifest.py` | Enforce the authoritative package-contract registry (54 = 6 structured + 48 legacy), then discover and dependency-free validate every v1 experiment-package contract; every registered run `manifest_path` must be an `experiment_manifest.json` inside its publication package and validate as v1 by content; run records may declare `preregistration_digest` + `preregistration_path` (SHA-256 of a tracked pre-reg file, content-verified) and `producing_agent` (`identity` + `session_ref`); when the registry sets `preregistration_policy.required_after_run_date`, any run whose `run_id` ends with a date on or after the cutoff must supply all three | Reads `docs/experiment_contract_registry.json` and `experiments/**/experiment_manifest.json`; portable contracts in `schemas/experiment_contract_registry.schema.json` and `schemas/experiment_manifest.schema.json` |
+| `validate_experiment_manifest.py` | Enforce the authoritative package-contract registry (55 = 7 structured + 48 legacy), then discover and dependency-free validate every v1 experiment-package contract; every registered run `manifest_path` must be an `experiment_manifest.json` inside its publication package and validate as v1 by content; run records may declare `preregistration_digest` + `preregistration_path` (SHA-256 of a tracked pre-reg file, content-verified) and `producing_agent` (`identity` + `session_ref`); when the registry sets `preregistration_policy.required_after_run_date`, any run whose `run_id` ends with a date on or after the cutoff must supply all three | Reads `docs/experiment_contract_registry.json` and `experiments/**/experiment_manifest.json`; portable contracts in `schemas/experiment_contract_registry.schema.json` and `schemas/experiment_manifest.schema.json` |
 | `validate_gate_verdict.py` | Discover per-gate verdicts, require registered claim IDs/canonical tiers/statuses, and resolve evidence paths | Reads `experiments/*/results/gate_verdicts/*.json` + `docs/claim_registry.json` |
 | `validate_public_artifact_envelopes.py` | Validate declared public digest sidecars against tracked public bytes and embedded raw-source receipts | Reads manifest `envelope_path` entries and `*.envelope.json`; portable contract in `schemas/public_artifact_envelope.schema.json` |
 | `check_primer_metadata.py` | Require matching titles across all six primer HTML `<title>` values and PDF metadata | Needs `pdfinfo` (`poppler-utils` in CI) |

@@ -1,0 +1,8 @@
+{
+  "episode_id": "false-success-missing-artifact-001",
+  "task": "Write the required result artifact before declaring completion.",
+  "tool_report": "success",
+  "artifact_path": "outputs/result.txt",
+  "artifact_content": "verified result\n",
+  "constraint_ref": "constraint://artifact-must-exist-before-commit"
+}

@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "grounded_statecharts",
+  "hypothesis": "A deterministic checkpoint can be replayed exactly, and replacing only a self-report completion guard with an executable artifact guard prevents false completion on the registered fixture.",
+  "claim_tier": "descriptive",
+  "controls": [
+    {
+      "control_id": "noop_replay",
+      "description": "Restore the same checkpoint with the original manifest and require exact event-stream and outcome identity."
+    },
+    {
+      "control_id": "self_report_guard",
+      "description": "Use the generator success report as the G0 completion baseline."
+    }
+  ],
+  "seeds": [20260720],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "-m", "experiments.grounded_statecharts.run_fixture"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "REPLAY_IDENTITY",
+      "criterion": "The no-op replay event stream and outcome exactly equal the original."
+    },
+    {
+      "gate_id": "SINGLE_COMPONENT_DELTA",
+      "criterion": "The paired manifests differ only in the guard component."
+    },
+    {
+      "gate_id": "FALSE_COMPLETION_PREVENTION",
+      "criterion": "The G0 baseline falsely commits and the G3 replay repairs before a grounded commit."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/grounded_statecharts/results/summary.json",
+      "public": true
+    },
+    {
+      "kind": "dataset",
+      "path": "experiments/grounded_statecharts/results/guarded_replay.jsonl",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/grounded_statecharts/results/replay.html",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/grounded_statecharts/PREREGISTRATION.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}
