@@ -81,7 +81,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_mathematical_claims.py`, `test_bayesian_voi.py` | Executable theorem-assumption examples/failure cases and exact Bayesian VOI regimes |
 | `test_seed_bootstrap_calibration.py` | Deterministic seed-floor grid, correct resampling unit, negative-regime retention, exact summary regeneration |
 | `test_passive_active_phase_map.py` | Phase-map model comparison, matched-budget path controls, public aggregate contract |
-| `test_grounded_statecharts.py` | Exact checkpoint replay, single-component guard intervention, false-completion repair path, typed event surface, and byte-stable public bundle |
+| `test_grounded_statecharts.py` | Exact checkpoint replay, false-completion repair, typed event surface, depth 1–4 constraint lineage, tamper rejection, joint-success separation, and byte-stable bundles |
 | `test_causal_use.py` | Shared mass-normalized causal-use dose curves, bootstrap uncertainty, and cross-surface transport |
 | `test_experiment_manifest.py`, `test_gate_verdict.py`, `test_evidence_registry.py`, `test_claim_registry.py` | Fail-closed research-contract adapters, package-coverage registry partition, discovery, references, supersession, and bidirectional edges |
 | `test_research_contract_schema_parity.py`, `test_gen_provenance.py` | Shared vocabulary/schema parity, support-directory exclusion, non-mutating provenance freshness |
@@ -124,7 +124,7 @@ environment.
 | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) | Benchmark umbrella |
 | [causally_grounded_agents_release_schema.md](causally_grounded_agents_release_schema.md) (+ `.json`) | Shared release schema |
 | [causally_grounded_agents_next_gap.md](causally_grounded_agents_next_gap.md) | Suite C transfer gaps |
-| [harness_research/README.md](harness_research/README.md) | Design-only grounded-harness portfolio: shared runtime, benchmark, replay, statistics, and release contract |
+| [harness_research/README.md](harness_research/README.md) | Staged grounded-harness portfolio with implemented D1 replay and D2 deterministic transport fixtures |
 | `harness_research/grounded_statecharts.md` | Independent transition-guard design plus links to the implemented deterministic fixture runtime |
 | `harness_research/constraint_transport.md` | Recursive constraint-envelope and externally enforced transition-guard benchmark design |
 | `harness_research/counterfactual_harness_search.md` | Paired intervention, causal-credit, and equal-budget harness-search design |
@@ -457,21 +457,25 @@ python3 -m experiments.viable_computational_bodies.search \
 python3 -m experiments.long_horizon_bottleneck.eval --provider fixture --models fixture ...
 ```
 
-#### 3.3.3 `grounded_statecharts` — replay bedrock
+#### 3.3.3 `grounded_statecharts` — replay and constraint-transport bedrock
 
-**Artifacts:** P · R · res · typed JSONL replay bundle.
+**Artifacts:** P · R · res · typed replay and delegation JSONL bundles.
 
 | Module / artifact | Purpose |
 |---|---|
 | `runtime.py` | Minimal Observe/Act/Verify/Commit/Repair interpreter, typed events, serializable checkpoint, and single-component replay enforcement |
 | `run_fixture.py` | One-command deterministic fixture runner and static HTML replay generator |
+| `constraint_transport.py` | Versioned constraint envelopes, hash-linked derivation, capability narrowing, tamper rejection, and deterministic depth 1–4 evaluator |
+| `run_constraint_transport.py` | Two-family benchmark runner, joint-success scorer, known-fault export, and compact static replay |
 | `manifests/*.json` | Matched G0 self-report and G3 artifact-digest harness conditions; only `guard` differs |
-| `fixtures/false_success.json` | Registered missing-artifact false-success task and deterministic repair payload |
-| `schemas/event.schema.json` | Public append-only event contract |
-| `results/` | Checkpoint, original/no-op/guarded event streams, compact gate summary, and browser-readable replay |
+| `manifests/constraint_transport/experiment_manifest.json` | Separate structured run contract for the deterministic transport diagnostic |
+| `fixtures/*.json` | Registered false-success task plus approval/evidence transport families |
+| `schemas/*.json` | Public append-only event and constraint-envelope contracts |
+| `results/` | Replay bedrock plus transport summaries, episode rows, lineage rows, and browser-readable replays |
 
 ```bash
 python3 -m experiments.grounded_statecharts.run_fixture
+python3 -m experiments.grounded_statecharts.run_constraint_transport
 ```
 
 #### 3.3.4 Related reengagement packages
@@ -567,7 +571,7 @@ Raw outputs stay under `artifacts/` until summarized.
 | `validate_gate_verdict.py` | Discover per-gate verdicts, require registered claim IDs/canonical tiers/statuses, and resolve evidence paths | Reads `experiments/*/results/gate_verdicts/*.json` + `docs/claim_registry.json` |
 | `validate_public_artifact_envelopes.py` | Validate declared public digest sidecars against tracked public bytes and embedded raw-source receipts | Reads manifest `envelope_path` entries and `*.envelope.json`; portable contract in `schemas/public_artifact_envelope.schema.json` |
 | `check_primer_metadata.py` | Require matching titles across all six primer HTML `<title>` values and PDF metadata | Needs `pdfinfo` (`poppler-utils` in CI) |
-| `regen.py` | List/reproduce experiments, print documented Modal commands, or verify allowlisted clean-clone CPU recipes | `list`, `<name>`, `--deps`, `verify-clean-clone`, `--verify-clean-clone` |
+| `regen.py` | List/reproduce experiments from the registered primary run, print documented Modal commands, or verify allowlisted clean-clone CPU recipes | `list`, `<name>`, `--deps`, `verify-clean-clone`, `--verify-clean-clone` |
 | `run_quality_checks.py` | Locked `quality` sync → pytest → compileall → publication guard → four research-contract validators → primer metadata → provenance freshness → Ruff → ty; all post-sync commands use `uv run --no-sync` | Exit code; canonical local/CI root gate; local pytest serial by default, CI/opt-in local pytest bounded to four `loadscope` xdist workers with native math-library thread caps |
 | `publication_guard.py` | Block tracked secrets, forbidden paths, oversized files; exposes a tested text-signature helper | Exit code |
 | `env_probe.py` | Report env var presence/length only | `--json` |

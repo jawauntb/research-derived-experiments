@@ -1,7 +1,8 @@
 # Grounded Harness Research Portfolio
 
-Status: D1 deterministic fixture passed and the minimal statechart mechanism is
-implemented; D2 and later research claims remain untested.
+Status: D1 deterministic replay and the D2 deterministic Constraint Transport
+diagnostic passed; live-model, stochastic, and later research claims remain
+untested.
 
 Last updated: 2026-07-20.
 
@@ -27,8 +28,9 @@ The first executable package now lives at
 [`experiments/grounded_statecharts`](../../experiments/grounded_statecharts/README.md).
 It publishes the typed event schema, serialized checkpoint, paired manifests,
 exact no-op replay, one G3 artifact guard, and a static false-completion replay.
-This passes the deterministic fixture exit gate only; it is not evidence for
-the portfolio's task-level or OOD claims.
+It also publishes typed constraint lineage and task/violation metrics for two
+fixture families at depths one through four. These pass deterministic exit
+gates only; they are not evidence for task-population, model, or OOD claims.
 
 ## Why This Is a Real Transition
 

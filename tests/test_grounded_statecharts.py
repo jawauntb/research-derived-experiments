@@ -6,6 +6,16 @@ from pathlib import Path
 
 import pytest
 
+from experiments.grounded_statecharts.constraint_transport import (
+    ConstraintEnvelope,
+    ConstraintTransportBenchmark,
+    TransportTask,
+    tamper_controls,
+    validate_lineage,
+)
+from experiments.grounded_statecharts.run_constraint_transport import (
+    generate_results as generate_transport_results,
+)
 from experiments.grounded_statecharts.run_fixture import generate_results
 from experiments.grounded_statecharts.runtime import Fixture, HarnessManifest, ReplayEngine
 
@@ -97,3 +107,55 @@ def test_committed_replay_bundle_regenerates_byte_for_byte(tmp_path: Path) -> No
         "replay.html",
     ):
         assert (tmp_path / name).read_bytes() == (PACKAGE_ROOT / "results" / name).read_bytes()
+
+
+def load_transport_tasks() -> tuple[TransportTask, ...]:
+    return TransportTask.load_many(PACKAGE_ROOT / "fixtures" / "constraint_transport.json")
+
+
+def test_typed_constraint_lineage_survives_four_levels_and_rejects_tampering() -> None:
+    task = load_transport_tasks()[0]
+    root = ConstraintEnvelope.root(
+        envelope_id="env-test-root",
+        objective=task.objective,
+        constraints=(task.constraint,),
+        capability_grants=task.capability_grants,
+    )
+    lineage = [root]
+    for depth in range(1, 5):
+        lineage.append(lineage[-1].derive(envelope_id=f"env-test-d{depth}"))
+
+    schema = json.loads(
+        (PACKAGE_ROOT / "schemas" / "constraint-envelope.schema.json").read_text()
+    )
+    assert validate_lineage(tuple(lineage)) is True
+    assert all(set(envelope.to_dict()) == set(schema["required"]) for envelope in lineage)
+    assert all(envelope.constraints == (task.constraint,) for envelope in lineage)
+    assert all(tamper_controls(task).values())
+
+
+def test_constraint_transport_reports_joint_success_separately_from_raw_utility() -> None:
+    outcomes = ConstraintTransportBenchmark(load_transport_tasks()).run_all()
+    typed = [outcome for outcome in outcomes if outcome.condition == "typed_guarded"]
+    baseline = [outcome for outcome in outcomes if outcome.condition == "lossy_prompt"]
+
+    assert len(outcomes) == 16
+    assert {outcome.delegation_depth for outcome in outcomes} == {1, 2, 3, 4}
+    assert all(outcome.task_success and outcome.joint_success for outcome in typed)
+    assert all(not outcome.critical_violation for outcome in typed)
+    assert all(outcome.task_success for outcome in baseline)
+    assert sum(outcome.joint_success for outcome in baseline) == 2
+    assert {
+        outcome.first_loss_depth for outcome in baseline if outcome.delegation_depth > 1
+    } == {2}
+
+
+def test_committed_constraint_transport_bundle_regenerates_byte_for_byte(
+    tmp_path: Path,
+) -> None:
+    summary = generate_transport_results(tmp_path)
+
+    assert all(summary["gates"].values())
+    for name in ("summary.json", "episodes.jsonl", "lineage.jsonl", "replay.html"):
+        committed = PACKAGE_ROOT / "results" / "constraint_transport" / name
+        assert (tmp_path / name).read_bytes() == committed.read_bytes()

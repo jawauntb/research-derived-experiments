@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "constraint_transport_fixture",
+  "hypothesis": "Typed guarded envelopes preserve immutable constraints through one to four deterministic delegation levels and maintain task success without critical violations under a registered summary-loss fault.",
+  "claim_tier": "descriptive",
+  "controls": [
+    {
+      "control_id": "lossy_prompt",
+      "description": "A deterministic second-level prompt summary drops the registered constraint while holding tasks, trees, and capabilities fixed."
+    },
+    {
+      "control_id": "lineage_tamper",
+      "description": "Attempts to drop an immutable constraint or widen a child capability scope must fail closed."
+    }
+  ],
+  "seeds": [20260720],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python3",
+      "-m",
+      "experiments.grounded_statecharts.run_constraint_transport"
+    ],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [
+    {
+      "name": "grounded_statecharts",
+      "version": "1.0"
+    }
+  ],
+  "gates": [
+    {
+      "gate_id": "CT_FIXTURE_DEPTH_COVERAGE",
+      "criterion": "Both registered task families run at delegation depths one through four in both conditions."
+    },
+    {
+      "gate_id": "CT_FIXTURE_TYPED_SURVIVAL",
+      "criterion": "Every typed guarded lineage retains its immutable constraint and validates its parent-digest chain."
+    },
+    {
+      "gate_id": "CT_FIXTURE_JOINT_SUCCESS",
+      "criterion": "Every typed guarded episode completes its task with zero critical violations and without lower raw task success."
+    },
+    {
+      "gate_id": "CT_FIXTURE_TAMPER_REJECTION",
+      "criterion": "Dropping an immutable constraint and widening child capabilities are both rejected."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/grounded_statecharts/results/constraint_transport/summary.json",
+      "public": true
+    },
+    {
+      "kind": "dataset",
+      "path": "experiments/grounded_statecharts/results/constraint_transport/episodes.jsonl",
+      "public": true
+    },
+    {
+      "kind": "dataset",
+      "path": "experiments/grounded_statecharts/results/constraint_transport/lineage.jsonl",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/grounded_statecharts/results/constraint_transport/replay.html",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/grounded_statecharts/CONSTRAINT_TRANSPORT_PREREGISTRATION.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}
