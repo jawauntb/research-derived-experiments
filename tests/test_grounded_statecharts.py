@@ -13,6 +13,16 @@ from experiments.grounded_statecharts.constraint_transport import (
     tamper_controls,
     validate_lineage,
 )
+from experiments.grounded_statecharts.counterfactual_search import (
+    COMPONENTS,
+    CounterfactualHarnessPilot,
+    DeterministicHarnessEvaluator,
+    FaultCase,
+    HarnessConfig,
+)
+from experiments.grounded_statecharts.run_counterfactual_search import (
+    generate_results as generate_counterfactual_results,
+)
 from experiments.grounded_statecharts.run_constraint_transport import (
     generate_results as generate_transport_results,
 )
@@ -158,4 +168,43 @@ def test_committed_constraint_transport_bundle_regenerates_byte_for_byte(
     assert all(summary["gates"].values())
     for name in ("summary.json", "episodes.jsonl", "lineage.jsonl", "replay.html"):
         committed = PACKAGE_ROOT / "results" / "constraint_transport" / name
+        assert (tmp_path / name).read_bytes() == committed.read_bytes()
+
+
+def load_fault_cases() -> tuple[FaultCase, ...]:
+    return FaultCase.load_many(PACKAGE_ROOT / "fixtures" / "counterfactual_faults.json")
+
+
+def test_counterfactual_fault_fixtures_cover_surfaces_and_change_outcomes() -> None:
+    cases = load_fault_cases()
+    evaluator = DeterministicHarnessEvaluator()
+
+    assert {case.responsible_component for case in cases} == set(COMPONENTS)
+    for case in cases:
+        assert evaluator.evaluate(case, HarnessConfig.clean()).joint_success is True
+        assert (
+            evaluator.evaluate(case, HarnessConfig.faulted(case)).joint_success is False
+        )
+
+
+def test_counterfactual_search_recovers_faults_and_beats_equal_budget_trace() -> None:
+    results = CounterfactualHarnessPilot().run_all(load_fault_cases())
+
+    assert len(results) == 6
+    assert all(result.evaluation_budget == 7 for result in results)
+    assert all(result.noop_identity and result.attribution_correct for result in results)
+    assert all(result.counterfactual_repair_success for result in results)
+    assert not any(result.trace_repair_success for result in results)
+    assert not any(result.placebo_credit for result in results)
+    assert all(sum(item.accepted_credit for item in result.interventions) == 1 for result in results)
+
+
+def test_committed_counterfactual_search_bundle_regenerates_byte_for_byte(
+    tmp_path: Path,
+) -> None:
+    summary = generate_counterfactual_results(tmp_path)
+
+    assert all(summary["gates"].values())
+    for name in ("summary.json", "cases.jsonl", "interventions.jsonl", "replay.html"):
+        committed = PACKAGE_ROOT / "results" / "counterfactual_search" / name
         assert (tmp_path / name).read_bytes() == committed.read_bytes()

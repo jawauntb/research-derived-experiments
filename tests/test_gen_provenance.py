@@ -184,7 +184,7 @@ class ProvenanceGenerationTests(unittest.TestCase):
         )
 
         self.assertIn("OpenAI Codex", record["attribution"])
-        self.assertIn("PR 378 Constraint Transport follow-up", record["attribution"])
+        self.assertIn("PR 378 Counterfactual Harness Search follow-up", record["attribution"])
 
     def test_malformed_bound_manifest_fails_closed(self) -> None:
         with TemporaryDirectory() as directory:

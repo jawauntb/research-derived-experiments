@@ -407,7 +407,7 @@
       "coverage_mode": "structured_manifest",
       "manifest_path": "experiments/grounded_statecharts/experiment_manifest.json",
       "run_coverage": "complete",
-      "primary_run_id": "constraint_transport_fixture_2026_07_20",
+      "primary_run_id": "counterfactual_harness_pilot_2026_07_20",
       "runs": [
         {
           "run_id": "grounded_statecharts_fixture_2026_07_20",
@@ -449,6 +449,27 @@
           "producing_agent": {
             "identity": "OpenAI Codex",
             "session_ref": "PR 378 Constraint Transport follow-up"
+          }
+        },
+        {
+          "run_id": "counterfactual_harness_pilot_2026_07_20",
+          "publication_package": "grounded_statecharts",
+          "runtime_package": "grounded_statecharts",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/grounded_statecharts/manifests/counterfactual_search/experiment_manifest.json",
+          "report_paths": [
+            "experiments/grounded_statecharts/results/counterfactual_search/summary.json",
+            "experiments/grounded_statecharts/results/counterfactual_search/replay.html"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_digest": "87b2d44d3e73c72cf5d350d9cdc96d8a5eed46faf0cbb300912af309f20f9f8a",
+          "preregistration_path": "experiments/grounded_statecharts/COUNTERFACTUAL_SEARCH_PREREGISTRATION.md",
+          "producing_agent": {
+            "identity": "OpenAI Codex",
+            "session_ref": "PR 378 Counterfactual Harness Search follow-up"
           }
         }
       ]

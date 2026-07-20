@@ -1,0 +1,115 @@
+{
+  "allowed_claim": "On six committed deterministic single-fault fixtures, isolated component replay recovered every injected harness surface and selected six valid repairs versus zero for the narrow trace diagnosis baseline at equal budget.",
+  "case_results": [
+    {
+      "attribution_correct": true,
+      "counterfactual_repair_success": true,
+      "fault_id": "fault-context-summary-drop",
+      "recovered_component": "context",
+      "responsible_component": "context",
+      "trace_repair_success": false,
+      "trace_suspect": "memory"
+    },
+    {
+      "attribution_correct": true,
+      "counterfactual_repair_success": true,
+      "fault_id": "fault-tools-schema-alias",
+      "recovered_component": "tools",
+      "responsible_component": "tools",
+      "trace_repair_success": false,
+      "trace_suspect": "output"
+    },
+    {
+      "attribution_correct": true,
+      "counterfactual_repair_success": true,
+      "fault_id": "fault-generation-truncation",
+      "recovered_component": "generation",
+      "responsible_component": "generation",
+      "trace_repair_success": false,
+      "trace_suspect": "context"
+    },
+    {
+      "attribution_correct": true,
+      "counterfactual_repair_success": true,
+      "fault_id": "fault-orchestration-bypass",
+      "recovered_component": "orchestration",
+      "responsible_component": "orchestration",
+      "trace_repair_success": false,
+      "trace_suspect": "output"
+    },
+    {
+      "attribution_correct": true,
+      "counterfactual_repair_success": true,
+      "fault_id": "fault-memory-stale-receipt",
+      "recovered_component": "memory",
+      "responsible_component": "memory",
+      "trace_repair_success": false,
+      "trace_suspect": "context"
+    },
+    {
+      "attribution_correct": true,
+      "counterfactual_repair_success": true,
+      "fault_id": "fault-output-lax-validator",
+      "recovered_component": "output",
+      "responsible_component": "output",
+      "trace_repair_success": false,
+      "trace_suspect": "generation"
+    }
+  ],
+  "cases": 6,
+  "evaluation_budget_per_case": {
+    "counterfactual_search": 7,
+    "trace_diagnosis": 7
+  },
+  "fault_surfaces": [
+    "context",
+    "tools",
+    "generation",
+    "orchestration",
+    "memory",
+    "output"
+  ],
+  "gates": {
+    "clean_pass_faulted_fail": true,
+    "constraint_transport_fault_reused": true,
+    "counterfactual_repairs_beat_trace_diagnosis": true,
+    "equal_evaluation_budget": true,
+    "exact_top1_attribution": true,
+    "noop_replay_identity": true,
+    "placebo_false_credit_zero": true,
+    "responsible_repairs_restore_joint_success": true,
+    "six_surface_fault_coverage": true
+  },
+  "metrics": {
+    "counterfactual_repair_success": 1.0,
+    "counterfactual_top1_attribution": 1.0,
+    "placebo_false_credit_rate": 0.0,
+    "trace_diagnosis_repair_success": 0.0,
+    "trace_diagnosis_top1_attribution": 0.0,
+    "unidentified_rate": 0.0
+  },
+  "non_claims": [
+    "Fault labels are committed, not sealed from the repository author.",
+    "The trace baseline is deterministic and is not a strong learned diagnostic model.",
+    "No live model, stochastic replay, interaction fault, OOD case, or confidence interval was evaluated.",
+    "The result does not satisfy CHS1-CHS6."
+  ],
+  "regime_transition": {
+    "new_operation": "paired single-component repair and matched-placebo replay",
+    "old_regime": "passive deterministic traces plus a heuristic suspect",
+    "preserved_gates": [
+      "exact no-op replay",
+      "separate task and violation outcomes",
+      "registered Constraint Transport fault source"
+    ],
+    "rejected_alternatives": [
+      "natural-language diagnosis as causal proof",
+      "bundled multi-component repairs",
+      "credit without a matched placebo"
+    ],
+    "residual_finding": "isolated replay distinguishes the injected surface from a plausible non-causal trace suspect on every committed fixture"
+  },
+  "run_id": "counterfactual_harness_pilot_2026_07_20",
+  "schema_version": "1.0",
+  "tier": "synthetic-identifiable"
+}

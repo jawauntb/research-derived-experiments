@@ -16,6 +16,11 @@ to four delegation levels, checks hash-linked envelope lineage, rejects
 constraint removal and capability widening, and reports raw task success
 separately from zero-violation joint success.
 
+The Counterfactual Harness Search pilot adds one injected fault on each of six
+harness surfaces. It evaluates isolated repairs and a placebo, recovers the
+responsible surface, and compares repair selection with passive trace diagnosis
+at the same deterministic evaluation budget.
+
 ## Run
 
 From the repository root:
@@ -23,6 +28,7 @@ From the repository root:
 ```bash
 python3 -m experiments.grounded_statecharts.run_fixture
 python3 -m experiments.grounded_statecharts.run_constraint_transport
+python3 -m experiments.grounded_statecharts.run_counterfactual_search
 ```
 
 The command has no third-party or provider dependency. It regenerates the
@@ -44,6 +50,10 @@ The transport command writes `results/constraint_transport/`:
 - `lineage.jsonl`: per-delegation envelope lineage and known fault locations;
 - `replay.html`: compact depth-wise comparison, not a general dashboard.
 
+The counterfactual command writes `results/counterfactual_search/` with a gate
+summary, six case rows, 42 component/placebo intervention rows, and one compact
+static replay.
+
 ## Verify
 
 ```bash
@@ -52,9 +62,8 @@ python3 -m pytest -q tests/test_grounded_statecharts.py
 
 ## Scope boundary
 
-These are deterministic fixture results, not estimates over live agents or a
-confirmatory Constraint Transport benchmark. The controlled prompt condition
-contains a registered summary-loss fault and does not represent optimized
-verbatim copying. Its six localized failures are suitable inputs for the thin
-Counterfactual Harness Search pilot; unlearning remains deferred until
-causal-use testing is operational.
+These are deterministic fixture results, not estimates over live agents or
+confirmatory CT/CHS benchmarks. The prompt and trace baselines are controlled
+diagnostics, not optimized learned competitors. Counterfactual search has not
+yet been tested with sealed labels, stochastic replays, interactions, or OOD
+faults; unlearning remains deferred until causal-use testing is operational.

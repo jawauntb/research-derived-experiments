@@ -24,7 +24,8 @@ Raw outputs should stay under `artifacts/` until summarized and intentionally co
 - `passive_active_phase_map`: matched-budget transition and hysteresis diagnostics for passive-to-active coupling.
 - `grounded_statecharts`: dependency-free typed event log, checkpoint replay,
   minimal completion guard, and deterministic depth 1–4 typed-constraint
-  transport diagnostic with static visual replays.
+  transport plus six-surface counterfactual-attribution diagnostics with static
+  visual replays.
 
 Shared experiment utilities live under `common/` and are excluded from provenance experiment counts.
 The first shared utility implements a mass-normalized, intervention-relative causal-use score.
