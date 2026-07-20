@@ -363,6 +363,14 @@ live provider, and state their synthetic/mechanics claim boundary. The sealed
 label bridge is not CHS1: publishable attribution still requires genuinely
 withheld labels on real failures.
 
+For already-sanitized live D2 rows, `live_replay.py` can write one matched
+metadata-only failure/contrast replay under `artifacts/`; public output is an
+explicit opt-in that rejects any row outside the exact public schema.
+`chs_from_live.py` writes a separate artifact-only ledger of declared
+outcome-pattern component hypotheses. Its mapping is a triage heuristic with
+abstention, not an oracle or CHS score, and requires independent sealed labels
+before any attribution claim.
+
 The adjacent draft scaffolds remain equally non-evidential: the multi-shift
 unlearning runner reuses the committed memory ledger for tool-schema and
 environment-policy semantic shifts while retaining a model/version-identical

@@ -2,7 +2,8 @@
 
 **Date:** 2026-07-20  
 **Basis:** held-out live D2 freeze (`gpt-4.1-mini`, 12 tasks/family, 1 repeat)  
-**Status:** planned confirmatory design; not yet executed
+**Status:** paused — D2 weak-prompt ablation killed CT escalation (δ = 0).
+Do not execute confirmatory spend until the prompt contract is redesigned.
 
 ## Targets
 

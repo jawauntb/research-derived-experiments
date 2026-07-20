@@ -41,6 +41,8 @@ python3 -m experiments.grounded_statecharts.run_unified_replay
 python3 -m experiments.grounded_statecharts.run_statechart_pilot_smoke
 python3 -m experiments.grounded_statecharts.run_constraint_pilot_smoke
 python3 -m experiments.grounded_statecharts.run_chs_sealed_smoke
+python3 -m experiments.grounded_statecharts.run_live_failure_replay --rows /path/to/rows.jsonl
+python3 -m experiments.grounded_statecharts.run_chs_from_live_smoke --rows /path/to/rows.jsonl
 ```
 
 The command has no third-party or provider dependency. It regenerates the
@@ -181,3 +183,35 @@ python3 -m experiments.grounded_statecharts.run_d2_pilot --adapter fixture
 
 Live held-out runs require `GROUNDED_HARNESS_LIVE=1` and write under
 `artifacts/grounded_statecharts/d2_pilot/` only.
+
+## Live failure replay and CHS harvest
+
+`run_live_failure_replay` selects one authentic matched failure/contrast pair
+from D2 rows, preferring artifact-family G0 false completion versus G3 joint
+success, and writes a metadata-only static replay to
+`artifacts/grounded_statecharts/live_failure_replay/`. It never renders prompts,
+transcripts, or provider payloads. `--publish-public` writes instead under
+`results/live_failure_replay/`, but fails closed unless every input row already
+matches the exact sanitized public-row schema.
+
+`run_chs_from_live_smoke` consumes only those sanitized public rows and writes
+an unsealed, outcome-pattern heuristic candidate ledger to
+`artifacts/grounded_statecharts/chs_from_live/`. Its component mapping is a
+triage aid for independent future adjudication, not an oracle, causal
+attribution, or a CHS1 score.
+
+
+## Weak-prompt ablation and live harvest
+
+```bash
+GROUNDED_HARNESS_LIVE=1 GROUNDED_HARNESS_WEAK_PROMPT=1 \
+GROUNDED_HARNESS_PROVIDER=openai GROUNDED_HARNESS_MODEL=gpt-4.1-mini \
+doppler run --config dev -- \
+  python3 -m experiments.grounded_statecharts.run_weak_prompt_ablation
+
+python3 -m experiments.grounded_statecharts.run_live_failure_replay
+python3 -m experiments.grounded_statecharts.run_chs_from_live_smoke
+```
+
+Live harvest/replay tools default to `artifacts/` and never require a provider
+call when sanitized rows already exist.

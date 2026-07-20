@@ -16,6 +16,7 @@ import urllib.request
 from collections.abc import Callable, Mapping
 from typing import Any
 
+from experiments.grounded_statecharts.adapters.live_ablation import build_weak_live_prompt
 from experiments.grounded_statecharts.adapters.protocol import (
     ExecutorRequest,
     ExecutorResponse,
@@ -29,6 +30,7 @@ LIVE_BASE_URL_ENV = "GROUNDED_HARNESS_BASE_URL"
 LIVE_API_KEY_ENV = "GROUNDED_HARNESS_API_KEY_ENV"
 LIVE_MAX_TOKENS_ENV = "GROUNDED_HARNESS_MAX_OUTPUT_TOKENS"
 LIVE_TIMEOUT_ENV = "GROUNDED_HARNESS_TIMEOUT_SECONDS"
+LIVE_WEAK_PROMPT_ENV = "GROUNDED_HARNESS_WEAK_PROMPT"
 
 HttpTransport = Callable[[str, dict[str, str], dict[str, Any], float], dict[str, Any]]
 
@@ -118,11 +120,39 @@ def parse_live_action(text: str) -> dict[str, Any]:
     action = str(payload.get("action") or "").strip()
     if not action:
         raise ValueError("action must be a non-empty string")
-    claimed = payload.get("claimed_complete")
-    created = payload.get("artifact_created")
-    if not isinstance(claimed, bool) or not isinstance(created, bool):
-        raise ValueError("claimed_complete and artifact_created must be booleans")
+
+    def _as_bool(value: object, name: str, *, path_means_true: bool = False) -> bool:
+        if value is None:
+            return False
+        if isinstance(value, bool):
+            return value
+        if isinstance(value, int) and value in {0, 1}:
+            return bool(value)
+        if isinstance(value, float) and value in {0.0, 1.0}:
+            return bool(int(value))
+        if isinstance(value, str):
+            normalized = value.strip().lower()
+            if normalized in {"true", "yes", "1"}:
+                return True
+            if normalized in {"false", "no", "0", ""}:
+                return False
+            # Weak prompts often return an artifact path instead of a boolean.
+            if path_means_true and normalized not in {"none", "null"}:
+                return True
+        raise ValueError(f"{name} must be a boolean (got {value!r})")
+
+    claimed = _as_bool(payload.get("claimed_complete"), "claimed_complete")
+    created = _as_bool(
+        payload.get("artifact_created"),
+        "artifact_created",
+        path_means_true=True,
+    )
     capabilities_raw = payload.get("capability_used", [])
+    if capabilities_raw is None:
+        capabilities_raw = []
+    if isinstance(capabilities_raw, str):
+        pieces = [part.strip() for part in capabilities_raw.replace(";", ",").split(",")]
+        capabilities_raw = [part for part in pieces if part]
     if not isinstance(capabilities_raw, list) or not all(
         isinstance(item, str) and item for item in capabilities_raw
     ):
@@ -260,7 +290,10 @@ class LiveExecutor:
 
     def complete(self, request: ExecutorRequest) -> ExecutorResponse:
         started = time.perf_counter()
-        messages = build_live_prompt(request)
+        if os.environ.get(LIVE_WEAK_PROMPT_ENV, "").strip() == "1":
+            messages = build_weak_live_prompt(request)
+        else:
+            messages = build_live_prompt(request)
         raw = self._call_provider(messages)
         latency_ms = max(0, int((time.perf_counter() - started) * 1000))
         text = self._extract_text(raw)

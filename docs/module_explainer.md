@@ -485,9 +485,13 @@ python3 -m experiments.long_horizon_bottleneck.eval --provider fixture --models 
 | `run_live_smoke.py` | Clean-clone-safe smoke bundle under `results/live_evaluation/` |
 | `run_live_credentialed_smoke.py` / `modal_live_credentialed_smoke.py` | Opt-in credentialed mechanics smoke writing only under gitignored `artifacts/`; smoke rows discarded from held-out D2 |
 | `d2_tasks.py` / `run_d2_pilot.py` | Frozen held-out D2 task bank loader and fixture/live matrix runner |
+| `run_weak_prompt_ablation.py` / `live_ablation.py` | Weaker-instruction sensitivity path without condition labels in prompts |
+| `live_replay.py` / `chs_from_live.py` | Artifact-first live failure replay and heuristic CHS candidate harvest from sanitized rows |
 | `manifests/d2_pilot/experiment_manifest.json` | Planned two-family D2 pilot contract (status=`planned` until held-out freeze) |
 | `statechart_pilot.py` / `run_statechart_pilot_smoke.py` | D2 mechanics bridge: ReplayEngine-backed artifact G0/G3 and wrong-edge conditions, fixture-executor constraint delegation, matched-budget public rows, and non-held-out smoke entrypoint |
 | `replay_viewer.py` / `run_unified_replay.py` | Fixture-only public failure replay renderer and runner under `results/unified_replay/`, with observations, intervention, causal-credit scope, uncertainty, cost, and claim boundary separated |
+| `live_replay.py` / `run_live_failure_replay.py` | Selects one matched authentic live failure/contrast pair and renders a metadata-only replay under `artifacts/`; explicit public mode fails closed unless every source row already matches the sanitized public schema |
+| `chs_from_live.py` / `run_chs_from_live_smoke.py` | Converts sanitized live-row outcome patterns into an artifact-only, unsealed heuristic component-candidate ledger for later independent adjudication; it does not score CHS |
 | `STATECHART_D2_PREREGISTRATION.md` | Draft/mechanics-only two-family D2 gate, controls, matched ceilings, kill criteria, and held-out claim boundary |
 | `CONSTRAINT_TRANSPORT_D2_PREREGISTRATION.md` / `CHS_SEALED_PREREGISTRATION.md` | Draft bridge assumptions, discriminating tests, kill criteria, and strict non-publishable claim boundaries |
 | `UNLEARNING_MULTISHIFT_PREREGISTRATION.md` | Draft three-family semantic-shift assumptions, causal-use prerequisite, identical-semantics control, kill criteria, and claim boundary |
@@ -507,6 +511,8 @@ python3 -m experiments.grounded_statecharts.run_unified_replay
 python3 -m experiments.grounded_statecharts.run_statechart_pilot_smoke
 python3 -m experiments.grounded_statecharts.run_constraint_pilot_smoke
 python3 -m experiments.grounded_statecharts.run_chs_sealed_smoke
+python3 -m experiments.grounded_statecharts.run_live_failure_replay --rows /path/to/rows.jsonl
+python3 -m experiments.grounded_statecharts.run_chs_from_live_smoke --rows /path/to/rows.jsonl
 ```
 
 #### 3.3.4 Related reengagement packages
