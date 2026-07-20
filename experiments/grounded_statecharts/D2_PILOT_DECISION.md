@@ -58,3 +58,17 @@ Weak-prompt ablation:
 2. Finish the 3-repeat labeled matrix only as a variance characterization, not
    as confirmatory evidence.
 3. Independently seal CHS candidates from live failure harvest before CHS1.
+
+## 3-repeat labeled variance slice
+
+Path: `artifacts/grounded_statecharts/d2_pilot_r3/` (432/432 publishable; 0 provider failures).
+
+| Contrast | Point estimate (3 repeats nested) | Notes |
+|---|---|---|
+| artifact false_completion: G3 − G0 | −0.167 | Matches 1-repeat planning slice |
+| artifact task_success: G3 − G0 | +0.167 | Still no raw-success loss |
+| constraint joint_success: external − envelope_only | +1.000 | Still labeled-prompt only; weak-prompt kill stands |
+
+This 3-repeat matrix is variance characterization under the labeled prompt contract.
+It does **not** reverse the weak-prompt kill of CT escalation.
+
