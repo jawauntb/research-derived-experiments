@@ -127,7 +127,12 @@ into agent-harness research. `experiments/grounded_statecharts/` implements the
 D1 replay substrate, minimal independent-guard mechanism, a D2 deterministic
 Constraint Transport diagnostic, and a thin deterministic Counterfactual
 Harness Search pilot. A final deterministic fixture gates memory lifecycle on
-commitment-level causal-use evidence; live-model and production claims remain
+commitment-level causal-use evidence. The same package now also freezes the
+shared live-evaluation contract (provider-neutral adapters, normalized
+task/episode/result schemas, matched budgets, sanitization, and task-clustered
+bootstrap). A fixture-only unified replay renders the false-completion pair with
+observations, intervention, causal-credit scope, uncertainty, cost, and claim
+boundary kept separate. Credentialed live-model pilots remain opt-in and
 unimplemented.
 
 | Design | Intended surface | Dependency order |
@@ -564,6 +569,8 @@ python3 -m experiments.grounded_statecharts.run_fixture
 python3 -m experiments.grounded_statecharts.run_constraint_transport
 python3 -m experiments.grounded_statecharts.run_counterfactual_search
 python3 -m experiments.grounded_statecharts.run_harness_unlearning
+python3 -m experiments.grounded_statecharts.run_live_smoke
+python3 -m experiments.grounded_statecharts.run_unified_replay
 
 python scripts/regen.py grid_cell_weakness
 python scripts/regen.py weakness_temporal

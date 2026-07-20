@@ -1,0 +1,46 @@
+{
+  "adapter_id": "fixture",
+  "allowed_claim": "Clean-clone smoke confirms the shared live-evaluation contract: normalized rows, matched budgets, sanitization, fixture replay integrity, and task-clustered bootstrap utilities. This is not a live-agent D2 pilot result.",
+  "bootstrap": {
+    "false_completion_g3_minus_g0": {
+      "bootstrap_samples": 500,
+      "ci_high": -1.0,
+      "ci_low": -1.0,
+      "clustering": "task",
+      "control": "statechart_g0",
+      "metric": "false_completion",
+      "nested_repeats": true,
+      "point_estimate": -1.0,
+      "seed": 20260720,
+      "task_count": 2,
+      "treatment": "statechart_g3"
+    },
+    "joint_success_external_minus_envelope": {
+      "bootstrap_samples": 500,
+      "ci_high": 1.0,
+      "ci_low": 0.0,
+      "clustering": "task",
+      "control": "envelope_only",
+      "metric": "joint_success",
+      "nested_repeats": true,
+      "point_estimate": 0.5,
+      "seed": 20260720,
+      "task_count": 2,
+      "treatment": "envelope_external_guards"
+    }
+  },
+  "episode_count": 48,
+  "gates": {
+    "adapter_is_fixture": true,
+    "all_publishable": true,
+    "budget_ok": true,
+    "replay_ok": true,
+    "sanitized": true
+  },
+  "non_claims": [
+    "No live provider was contacted.",
+    "Smoke tasks are mechanics checks, not held-out D2 evidence.",
+    "No commercial usefulness or confirmatory CT/CHS claim is authorized."
+  ],
+  "publishable_rows": 48
+}

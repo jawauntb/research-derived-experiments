@@ -42,6 +42,10 @@ functional harness control on one fixture, not neural unlearning or HU1–HU7.
 The concrete post-fixture build order, live-pilot gate, six-lane parallelization
 contract, and release definition are frozen in the
 [Grounded Harness Build and Experiment Handoff](../next_agent_grounded_harness_experiments_handoff_2026-07-20.md).
+Tranche 1 of that handoff — the shared live-evaluation contract — is now
+implemented under `experiments/grounded_statecharts/` as schemas, a fixture
+adapter, budgets, sanitization, task-clustered bootstrap utilities, and a
+clean-clone smoke bundle. Credentialed D2 pilots remain next.
 
 ## Why This Is a Real Transition
 

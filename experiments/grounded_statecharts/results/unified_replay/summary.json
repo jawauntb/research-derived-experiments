@@ -1,0 +1,17 @@
+{
+  "fixture": "false-success-missing-artifact-001",
+  "primary_run_id": "grounded_statecharts_fixture_2026_07_20",
+  "required_sections": [
+    "Observed events",
+    "Intervention",
+    "Inferred causal credit",
+    "Uncertainty",
+    "Cost / budget",
+    "Claim boundary"
+  ],
+  "source_digests": {
+    "guarded_replay.jsonl": "0265ca09185726110f0be90b427ad33bb72b89adee86b652493c043213863583",
+    "original.jsonl": "6a02c64d593f429a522c1613fe5b46dab5706c2f95fbda3e8ceaafa58e0b50ce",
+    "summary.json": "5cf22181acf4e5d1928b4ffc10497e72fb3af5dbe29ed3c5b7c5a8d723ea093d"
+  }
+}

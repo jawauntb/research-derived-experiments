@@ -852,7 +852,7 @@
         "experiments/grounded_statecharts/results/harness_unlearning/replay.html"
       ],
       "n_modal_entrypoints": 0,
-      "n_scripts": 8,
+      "n_scripts": 14,
       "paper": null,
       "preregistration": "experiments/grounded_statecharts/CONSTRAINT_TRANSPORT_PREREGISTRATION.md",
       "verification_signals": [],

@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "grounded_live_evaluation_smoke",
+  "hypothesis": "A provider-neutral live-evaluation contract can emit schema-valid sanitized public rows with matched budgets, fixture replay integrity, and task-clustered bootstrap intervals without contacting a live provider.",
+  "claim_tier": "descriptive",
+  "controls": [
+    {
+      "control_id": "fixture_adapter",
+      "description": "Default executor is the deterministic fixture adapter; live adapters require explicit opt-in and are unused in this smoke."
+    },
+    {
+      "control_id": "budget_fail_closed",
+      "description": "Planned calls above the frozen ceiling refuse dispatch before any executor call."
+    },
+    {
+      "control_id": "sanitizer_fail_closed",
+      "description": "Raw provider fields are blocked from public rows."
+    }
+  ],
+  "seeds": [20260720],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python3",
+      "-m",
+      "experiments.grounded_statecharts.run_live_smoke"
+    ],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [
+    {
+      "name": "grounded_statecharts",
+      "version": "1.0"
+    }
+  ],
+  "gates": [
+    {
+      "gate_id": "LIVE_CONTRACT_SCHEMA",
+      "criterion": "Every smoke row validates against the frozen public result schema."
+    },
+    {
+      "gate_id": "LIVE_CONTRACT_FIXTURE_ONLY",
+      "criterion": "The smoke bundle uses only the fixture adapter and never imports a provider SDK."
+    },
+    {
+      "gate_id": "LIVE_CONTRACT_INTEGRITY",
+      "criterion": "All rows pass sanitization, budget, and fixture replay integrity receipts."
+    },
+    {
+      "gate_id": "LIVE_CONTRACT_BOOTSTRAP",
+      "criterion": "Task-clustered bootstrap summaries are reproducible from frozen public rows."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/grounded_statecharts/results/live_evaluation/summary.json",
+      "public": true
+    },
+    {
+      "kind": "dataset",
+      "path": "experiments/grounded_statecharts/results/live_evaluation/rows.jsonl",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/grounded_statecharts/LIVE_EVALUATION_PREREGISTRATION.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-derived-experiments.local/grounded_live_task.schema.json",
+  "title": "Grounded harness live task",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "task_id",
+    "family",
+    "title",
+    "instruction",
+    "check_kind",
+    "check_spec",
+    "environment_digest",
+    "task_digest",
+    "held_out"
+  ],
+  "properties": {
+    "task_id": {"type": "string", "minLength": 1},
+    "family": {
+      "enum": ["artifact_completion", "recursive_constrained_tool_use"]
+    },
+    "title": {"type": "string", "minLength": 1},
+    "instruction": {"type": "string", "minLength": 1},
+    "check_kind": {
+      "enum": ["artifact_digest", "constraint_compliance", "composite"]
+    },
+    "check_spec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required_artifact", "required_capabilities", "forbidden_capabilities"],
+      "properties": {
+        "required_artifact": {"type": ["string", "null"]},
+        "required_capabilities": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        },
+        "forbidden_capabilities": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1},
+          "uniqueItems": true
+        }
+      }
+    },
+    "environment_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "task_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "held_out": {"type": "boolean"}
+  }
+}

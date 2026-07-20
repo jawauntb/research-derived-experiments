@@ -35,6 +35,7 @@ python3 -m experiments.grounded_statecharts.run_fixture
 python3 -m experiments.grounded_statecharts.run_constraint_transport
 python3 -m experiments.grounded_statecharts.run_counterfactual_search
 python3 -m experiments.grounded_statecharts.run_harness_unlearning
+python3 -m experiments.grounded_statecharts.run_unified_replay
 ```
 
 The command has no third-party or provider dependency. It regenerates the
@@ -64,11 +65,37 @@ The unlearning command writes `results/harness_unlearning/` with the paired
 causal-use receipt, typed lifecycle ledger/events, phase outcomes, summary, and
 static shift/recurrence replay.
 
+The unified replay command writes `results/unified_replay/`. It renders a
+compact public failure replay from the committed false-completion summary and
+paired event rows, separately labeling observed events, intervention, inferred
+causal credit, uncertainty, cost/budget, and the claim boundary. It has no
+provider or network path.
+
 ## Verify
 
 ```bash
 python3 -m pytest -q tests/test_grounded_statecharts.py
 ```
+
+## Live-evaluation contract (Tranche 1)
+
+The package now freezes the shared live-evaluation substrate used by later D2
+pilots:
+
+- `schemas/task.schema.json`, `episode.schema.json`, `intervention.schema.json`,
+  and `result.schema.json`
+- `adapters/` provider-neutral boundary with a deterministic `fixture` executor
+  and an opt-in `live` stub that requires `GROUNDED_HARNESS_LIVE=1`
+- `budgets.py`, `sanitization.py`, and `evaluation.py` for matched ceilings,
+  fail-closed public rows, integrity receipts, and task-clustered bootstrap
+
+```bash
+python3 -m experiments.grounded_statecharts.run_live_smoke
+python3 -m pytest -q tests/test_grounded_live_evaluation.py
+```
+
+The smoke path never imports a provider SDK, reads an API key, or writes raw
+transcripts into `results/`. Credentialed live backends remain a later opt-in.
 
 ## Scope boundary
 
@@ -77,4 +104,6 @@ confirmatory CT/CHS benchmarks. The prompt and trace baselines are controlled
 diagnostics, not optimized learned competitors. Counterfactual search has not
 yet been tested with sealed labels, stochastic replays, interactions, or OOD
 faults. Functional unlearning is demonstrated on one deterministic regime
-shift only; it is not neural unlearning, erasure, or an HU1–HU7 result.
+shift only; it is not neural unlearning, erasure, or an HU1–HU7 result. The
+live-evaluation smoke bundle validates the shared contract only; it is not a
+D2 pilot, commercial demo, or publishable population claim.

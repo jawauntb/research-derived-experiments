@@ -21,3 +21,6 @@ __all__ = [
     "ReplayEngine",
     "State",
 ]
+
+# Live-evaluation helpers are imported from submodules explicitly so the
+# default package import path stays free of provider adapters.

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-derived-experiments.local/grounded_live_episode.schema.json",
+  "title": "Grounded harness live episode",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "episode_id",
+    "run_id",
+    "task_id",
+    "family",
+    "condition",
+    "repeat_index",
+    "model_id",
+    "provider_id",
+    "adapter_id",
+    "environment_digest",
+    "harness_digest",
+    "budget_digest",
+    "task_digest",
+    "seed"
+  ],
+  "properties": {
+    "episode_id": {"type": "string", "minLength": 1},
+    "run_id": {"type": "string", "minLength": 1},
+    "task_id": {"type": "string", "minLength": 1},
+    "family": {
+      "enum": ["artifact_completion", "recursive_constrained_tool_use"]
+    },
+    "condition": {
+      "enum": [
+        "direct_self_report",
+        "statechart_g0",
+        "statechart_g3",
+        "envelope_only",
+        "envelope_external_guards",
+        "wrong_edge_guard"
+      ]
+    },
+    "repeat_index": {"type": "integer", "minimum": 0},
+    "model_id": {"type": "string", "minLength": 1},
+    "provider_id": {"type": "string", "minLength": 1},
+    "adapter_id": {"enum": ["fixture", "live"]},
+    "environment_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "harness_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "budget_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "task_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "seed": {"type": "integer", "minimum": 0}
+  }
+}
