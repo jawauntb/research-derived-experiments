@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "memory_items": [
+    {
+      "content_action": "legacy_name",
+      "descendant_ids": ["mem-tool-v2-summary"],
+      "kind": "tool_pattern",
+      "memory_id": "mem-tool-v2",
+      "provenance": ["run-v2-acquisition", "intervention-tool-pattern"],
+      "valid_regimes": ["v2"]
+    },
+    {
+      "content_action": "legacy_name",
+      "descendant_ids": [],
+      "kind": "derived_summary",
+      "memory_id": "mem-tool-v2-summary",
+      "provenance": ["mem-tool-v2"],
+      "valid_regimes": ["v2"]
+    },
+    {
+      "content_action": null,
+      "descendant_ids": [],
+      "kind": "preference",
+      "memory_id": "mem-color-placebo",
+      "provenance": ["run-unrelated"],
+      "valid_regimes": ["v2", "v3"]
+    }
+  ],
+  "regimes": {
+    "v2": {"default_action": "current_name", "required_action": "legacy_name"},
+    "v3": {"default_action": "current_name", "required_action": "current_name"}
+  }
+}

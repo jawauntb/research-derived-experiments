@@ -1,4 +1,4 @@
-# Grounded Statecharts and Constraint Transport Fixtures
+# Grounded Harness Deterministic Fixture Release
 
 This package is the first executable slice of the grounded-harness portfolio.
 It records a typed append-only event stream, captures a pre-commit checkpoint,
@@ -21,6 +21,11 @@ harness surfaces. It evaluates isolated repairs and a placebo, recovers the
 responsible surface, and compares repair selection with passive trace diagnosis
 at the same deterministic evaluation budget.
 
+The functional Harness Unlearning fixture then proves that a stale tool-pattern
+memory and its descendant change commitment before allowing lifecycle changes.
+It quarantines and retires that family under a v3 shift, preserves the audit
+record, and revalidates/reactivates it when v2 recurs.
+
 ## Run
 
 From the repository root:
@@ -29,6 +34,7 @@ From the repository root:
 python3 -m experiments.grounded_statecharts.run_fixture
 python3 -m experiments.grounded_statecharts.run_constraint_transport
 python3 -m experiments.grounded_statecharts.run_counterfactual_search
+python3 -m experiments.grounded_statecharts.run_harness_unlearning
 ```
 
 The command has no third-party or provider dependency. It regenerates the
@@ -54,6 +60,10 @@ The counterfactual command writes `results/counterfactual_search/` with a gate
 summary, six case rows, 42 component/placebo intervention rows, and one compact
 static replay.
 
+The unlearning command writes `results/harness_unlearning/` with the paired
+causal-use receipt, typed lifecycle ledger/events, phase outcomes, summary, and
+static shift/recurrence replay.
+
 ## Verify
 
 ```bash
@@ -66,4 +76,5 @@ These are deterministic fixture results, not estimates over live agents or
 confirmatory CT/CHS benchmarks. The prompt and trace baselines are controlled
 diagnostics, not optimized learned competitors. Counterfactual search has not
 yet been tested with sealed labels, stochastic replays, interactions, or OOD
-faults; unlearning remains deferred until causal-use testing is operational.
+faults. Functional unlearning is demonstrated on one deterministic regime
+shift only; it is not neural unlearning, erasure, or an HU1–HU7 result.

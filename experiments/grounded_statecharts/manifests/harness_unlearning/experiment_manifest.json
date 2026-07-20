@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "harness_unlearning_fixture",
+  "hypothesis": "After commitment-level causal-use evidence passes, a reversible memory lifecycle stops stale memory influence under a deterministic world shift and restores useful memory after recurrence.",
+  "claim_tier": "descriptive",
+  "controls": [
+    {
+      "control_id": "placebo_memory_suppression",
+      "description": "Suppress an unrelated active memory and require the shifted commitment to remain unchanged."
+    },
+    {
+      "control_id": "append_only",
+      "description": "Keep the stale target family active after the v3 shift."
+    },
+    {
+      "control_id": "full_reset",
+      "description": "Keep the preserved memory unavailable when v2 recurs."
+    },
+    {
+      "control_id": "matched_nonshift",
+      "description": "Suppress the still-valid target family under v2 and require no quarantine decision."
+    }
+  ],
+  "seeds": [20260720],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python3",
+      "-m",
+      "experiments.grounded_statecharts.run_harness_unlearning"
+    ],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [
+    {
+      "name": "grounded_statecharts",
+      "version": "1.0"
+    }
+  ],
+  "gates": [
+    {
+      "gate_id": "HU_FIXTURE_CAUSAL_USE",
+      "criterion": "Target-family suppression repairs commitment while target-only and placebo suppression do not."
+    },
+    {
+      "gate_id": "HU_FIXTURE_SHIFT_RECOVERY",
+      "criterion": "Quarantine and retirement stop stale target and descendant influence after the v3 shift."
+    },
+    {
+      "gate_id": "HU_FIXTURE_RECURRENCE",
+      "criterion": "A bounded v2 recurrence probe reactivates the preserved memory family and restores success."
+    },
+    {
+      "gate_id": "HU_FIXTURE_AUDIT",
+      "criterion": "Every family status change has a contiguous typed evidence receipt and all four persistent states are observed."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/grounded_statecharts/results/harness_unlearning/summary.json",
+      "public": true
+    },
+    {
+      "kind": "dataset",
+      "path": "experiments/grounded_statecharts/results/harness_unlearning/events.jsonl",
+      "public": true
+    },
+    {
+      "kind": "dataset",
+      "path": "experiments/grounded_statecharts/results/harness_unlearning/phases.jsonl",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/grounded_statecharts/results/harness_unlearning/causal_use.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/grounded_statecharts/results/harness_unlearning/replay.html",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/grounded_statecharts/HARNESS_UNLEARNING_PREREGISTRATION.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

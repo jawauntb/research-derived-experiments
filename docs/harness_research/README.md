@@ -1,8 +1,9 @@
 # Grounded Harness Research Portfolio
 
 Status: D1 deterministic replay, D2 deterministic Constraint Transport, and a
-thin six-surface Counterfactual Harness Search pilot passed; live-model,
-stochastic, and later research claims remain untested.
+thin six-surface Counterfactual Harness Search pilot passed. A deterministic
+causal-use-gated memory shift/recurrence fixture also passed; live-model,
+stochastic, and confirmatory claims remain untested.
 
 Last updated: 2026-07-20.
 
@@ -34,6 +35,9 @@ gates only; they are not evidence for task-population, model, or OOD claims.
 The same package now publishes paired single-component repair/placebo evidence
 for six injected harness surfaces at an equal seven-evaluation budget. That
 pilot is synthetic-identifiable and does not satisfy CHS1–CHS6.
+The memory fixture suppresses a stale item plus its derived summary, records
+quarantine/retirement receipts, and restores it after recurrence. It is
+functional harness control on one fixture, not neural unlearning or HU1–HU7.
 
 ## Why This Is a Real Transition
 

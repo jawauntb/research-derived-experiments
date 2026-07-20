@@ -126,14 +126,16 @@ repository's intervention, commitment, re-engagement, and anti-cheat methods
 into agent-harness research. `experiments/grounded_statecharts/` implements the
 D1 replay substrate, minimal independent-guard mechanism, a D2 deterministic
 Constraint Transport diagnostic, and a thin deterministic Counterfactual
-Harness Search pilot; live-model and production claims remain unimplemented.
+Harness Search pilot. A final deterministic fixture gates memory lifecycle on
+commitment-level causal-use evidence; live-model and production claims remain
+unimplemented.
 
 | Design | Intended surface | Dependency order |
 |---|---|---|
 | Grounded Statecharts | Implemented minimal typed states, independent transition guard, append-only events, checkpoint, and replay | Shared runtime substrate; D1 fixture passed |
 | Constraint Transport | Implemented typed envelope lineage, capability narrowing, tamper rejection, depth 1–4 fixture metrics, and effect/commit guards | Reuses D1 substrate; D2 deterministic diagnostic passed |
 | Counterfactual Harness Search | Implemented six-surface paired repair/placebo pilot and equal-budget trace comparison | Reuses exact replay and one Constraint Transport fault source; confirmatory search remains open |
-| Harness Unlearning | Provenance-aware quarantine, retirement, and revalidation of experience | Uses replay, guards, and causal credit |
+| Harness Unlearning | Implemented descendant-aware causal-use gate and active/quarantined/retired/revalidating shift/recurrence fixture | Reuses replay and paired attribution; HU1–HU7 remain open |
 
 All four designs share a proposed benchmark-event schema, paired statistical
 protocol, OOD matrix, two-minute sanitized replay, and public release contract.
@@ -558,6 +560,7 @@ python3 -m experiments.long_horizon_bottleneck.eval \
 python3 -m experiments.grounded_statecharts.run_fixture
 python3 -m experiments.grounded_statecharts.run_constraint_transport
 python3 -m experiments.grounded_statecharts.run_counterfactual_search
+python3 -m experiments.grounded_statecharts.run_harness_unlearning
 
 python scripts/regen.py grid_cell_weakness
 python scripts/regen.py weakness_temporal
@@ -789,8 +792,9 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 - **Grounded harness evidence is fixture-only.** The typed event/replay runtime,
   minimal guard, deterministic false-completion replay, two-family Constraint
   Transport diagnostic, and six-surface counterfactual pilot are implemented,
-  but no live-model estimate, stochastic effect, sealed-label/OOD result, or
-  confirmatory GS/CT/CHS gate exists.
+  along with one causal-use-gated memory shift/recurrence fixture, but no
+  live-model estimate, stochastic effect, sealed-label/OOD result, or
+  confirmatory GS/CT/CHS/HU gate exists.
 
 ---
 

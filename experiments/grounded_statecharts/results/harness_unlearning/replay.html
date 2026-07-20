@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Functional Harness Unlearning Replay</title>
+<style>
+:root { color-scheme: dark; font-family: ui-sans-serif, system-ui, sans-serif; }
+body { margin: 0; background: #111713; color: #f0fdf4; }
+main { max-width: 980px; margin: auto; padding: 44px 22px; }
+.eyebrow { color: #86efac; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+h1 { font-size: clamp(2rem, 6vw, 4.2rem); line-height: 1; margin: 12px 0 18px; }
+p { color: #d1d5db; max-width: 780px; line-height: 1.6; }
+.card { background: #17251c; border: 1px solid #3f6149; border-radius: 16px; padding: 20px; overflow: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { border-bottom: 1px solid #3f6149; padding: 11px; text-align: left; }
+th { color: #bbf7d0; } .claim { border-left: 3px solid #facc15; padding-left: 14px; margin-top: 24px; color: #fef08a; }
+</style></head><body><main>
+<div class="eyebrow">Deterministic shift and recurrence fixture</div>
+<h1>Stop stale use. Keep the receipt.</h1>
+<p>Paired replay first proves that the v2 memory family controls the wrong v3 commitment. The ledger then quarantines, probes, retires, and restores the preserved memory when v2 recurs.</p>
+<section class="card"><table><thead><tr><th>Phase</th><th>World</th><th>Memory state</th><th>Committed action</th><th>Outcome</th></tr></thead><tbody><tr><td>acquisition</td><td>v2</td><td>active</td><td>legacy_name</td><td>pass</td></tr><tr><td>stable_use</td><td>v2</td><td>active</td><td>legacy_name</td><td>pass</td></tr><tr><td>world_shift_append_only</td><td>v3</td><td>active</td><td>legacy_name</td><td>fail</td></tr><tr><td>quarantined_shift_recovery</td><td>v3</td><td>quarantined</td><td>current_name</td><td>pass</td></tr><tr><td>v3_revalidation_probe</td><td>v3</td><td>revalidating</td><td>legacy_name</td><td>fail</td></tr><tr><td>retired_shift</td><td>v3</td><td>retired</td><td>current_name</td><td>pass</td></tr><tr><td>v2_recurrence_full_reset</td><td>v2</td><td>retired</td><td>current_name</td><td>fail</td></tr><tr><td>v2_recurrence_probe</td><td>v2</td><td>revalidating</td><td>legacy_name</td><td>pass</td></tr><tr><td>v2_restored</td><td>v2</td><td>active</td><td>legacy_name</td><td>pass</td></tr></tbody></table></section>
+<div class="claim"><strong>Claim boundary:</strong> On one committed deterministic v2-to-v3-to-v2 fixture, paired replay showed that the stale memory family changed commitment; quarantine and retirement stopped that influence, and bounded recurrence revalidation restored the preserved memory and task success.</div>
+</main></body></html>
