@@ -176,21 +176,16 @@ def main() -> None:
         output_dir=output,
         repeats=args.repeats,
     )
-    gates = summary["gates"]
-    provider_failures = gates["provider_failures"] if isinstance(gates, dict) else 0
-    print(
-        json.dumps(
-            {
-                "output_dir": str(output),
-                "adapter_id": summary["adapter_id"],
-                "episode_count": summary["episode_count"],
-                "publishable_rows": summary["publishable_rows"],
-                "provider_failures": provider_failures,
-            },
-            indent=2,
-            sort_keys=True,
-        )
-    )
+    payload = {
+        "output_dir": str(output),
+        "adapter_id": summary["adapter_id"],
+        "episode_count": summary["episode_count"],
+        "publishable_rows": summary["publishable_rows"],
+        "provider_failures": summary.get("provider_failures", []),
+    }
+    if isinstance(payload["provider_failures"], list):
+        payload["provider_failures"] = len(payload["provider_failures"])
+    print(json.dumps(payload, indent=2, sort_keys=True))
 
 
 if __name__ == "__main__":
