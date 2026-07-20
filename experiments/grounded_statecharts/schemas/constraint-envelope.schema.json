@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-derived-experiments.local/constraint-envelope.schema.json",
+  "additionalProperties": false,
+  "properties": {
+    "capability_grants": {
+      "items": {"minLength": 1, "type": "string"},
+      "type": "array",
+      "uniqueItems": true
+    },
+    "constraints": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "constraint_id": {"minLength": 1, "type": "string"},
+          "enforcer": {"enum": ["commit_guard", "effect_guard"]},
+          "kind": {"enum": ["approval", "obligation", "prohibition"]},
+          "predicate": {"minLength": 1, "type": "string"},
+          "priority": {"enum": ["immutable", "required"]}
+        },
+        "required": ["constraint_id", "kind", "priority", "predicate", "enforcer"],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "depth": {"minimum": 0, "type": "integer"},
+    "derivation_receipt": {"minLength": 1, "type": "string"},
+    "envelope_id": {"minLength": 1, "type": "string"},
+    "lineage_digest": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "objective": {"minLength": 1, "type": "string"},
+    "parent_id": {"type": ["string", "null"]}
+  },
+  "required": [
+    "envelope_id",
+    "parent_id",
+    "objective",
+    "constraints",
+    "capability_grants",
+    "depth",
+    "lineage_digest",
+    "derivation_receipt"
+  ],
+  "title": "ConstraintEnvelope",
+  "type": "object"
+}

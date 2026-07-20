@@ -123,14 +123,15 @@ explicit Modal images and independent research commands may still use `uvx`.
 
 `docs/harness_research/` defines the staged portfolio for transporting the
 repository's intervention, commitment, re-engagement, and anti-cheat methods
-into agent-harness research. `experiments/grounded_statecharts/` now implements
-the D1 replay substrate and minimal independent-guard mechanism; later
-benchmarks and production claims remain unimplemented.
+into agent-harness research. `experiments/grounded_statecharts/` implements the
+D1 replay substrate, minimal independent-guard mechanism, and a D2 deterministic
+Constraint Transport diagnostic; live-model and production claims remain
+unimplemented.
 
 | Design | Intended surface | Dependency order |
 |---|---|---|
 | Grounded Statecharts | Implemented minimal typed states, independent transition guard, append-only events, checkpoint, and replay | Shared runtime substrate; D1 fixture passed |
-| Constraint Transport | Recursive constraint envelopes, capability scopes, and effect guards | Uses statechart/guard substrate |
+| Constraint Transport | Implemented typed envelope lineage, capability narrowing, tamper rejection, depth 1–4 fixture metrics, and effect/commit guards | Reuses D1 substrate; D2 deterministic diagnostic passed |
 | Counterfactual Harness Search | Paired harness interventions, causal credit, and equal-budget search | Uses replay; consumes constraint faults |
 | Harness Unlearning | Provenance-aware quarantine, retirement, and revalidation of experience | Uses replay, guards, and causal credit |
 
@@ -304,8 +305,8 @@ python scripts/regen.py verify-clean-clone
 ```
 
 Allowlisted deterministic CPU packages (`bayesian_voi`, `grounded_statecharts`,
-`mathematical_claims`, `seed_bootstrap_calibration`) execute structured
-`runtime.command` argv without a shell. `verify-clean-clone` materializes a
+`mathematical_claims`, `seed_bootstrap_calibration`) execute the structured
+primary run's `runtime.command` argv without a shell. `verify-clean-clone` materializes a
 tracked-file checkout, deletes the declared outputs, reruns the recipes, and
 byte-compares newly created files to committed oracles. Modal and other
 documented commands remain inspect-only and are not dispatched. Run records may
@@ -555,6 +556,7 @@ python3 -m experiments.long_horizon_bottleneck.eval \
   --jsonl artifacts/long_horizon_bottleneck/fixture_public_smoke_rows.jsonl
 
 python3 -m experiments.grounded_statecharts.run_fixture
+python3 -m experiments.grounded_statecharts.run_constraint_transport
 
 python scripts/regen.py grid_cell_weakness
 python scripts/regen.py weakness_temporal
@@ -784,8 +786,9 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 - **Coherence / Inquiry / Cabal / site tests** are outside the root Python quality gate.
 - **Scientific claims are gate-bound.** Fixture smokes do not settle the program thesis.
 - **Grounded harness evidence is fixture-only.** The typed event/replay runtime,
-  minimal guard, and deterministic false-completion replay are implemented,
-  but no multi-task benchmark, live-model estimate, or GS1–GS6 result exists.
+  minimal guard, deterministic false-completion replay, and two-family
+  Constraint Transport diagnostic are implemented, but no live-model estimate,
+  stochastic effect, OOD result, or confirmatory GS/CT gate exists.
 
 ---
 

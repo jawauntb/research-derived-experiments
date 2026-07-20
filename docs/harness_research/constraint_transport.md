@@ -1,8 +1,14 @@
 # Constraint Transport Through Recursive Harnesses
 
-Status: experimental design; no implementation or empirical claim yet.
+Status: deterministic two-family diagnostic implemented; confirmatory benchmark
+and empirical model claim remain untested.
 
 Portfolio role: strongest immediate reliability improvement.
+
+Implementation: [`experiments/grounded_statecharts`](../../experiments/grounded_statecharts/README.md)
+now provides versioned envelopes, capability narrowing, lineage/tamper checks,
+depth 1–4 fixtures, joint-success scoring, and six known summary-loss cases.
+The result is deliberately below the CT1–CT6 confirmatory gates in this design.
 
 ## One-Sentence Thesis
 

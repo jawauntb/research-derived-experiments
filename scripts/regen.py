@@ -80,7 +80,9 @@ PDF_OUTPUTS = {
 # there needs a pinned numpy version before it can join a byte-oracle lane.
 CLEAN_CLONE_ALLOWLIST: dict[str, str] = {
     "bayesian_voi": "experiments/bayesian_voi/results/bayesian_voi_summary.json",
-    "grounded_statecharts": "experiments/grounded_statecharts/results/summary.json",
+    "grounded_statecharts": (
+        "experiments/grounded_statecharts/results/constraint_transport/summary.json"
+    ),
     "mathematical_claims": (
         "experiments/mathematical_claims/results/mathematical_claims_summary.json"
     ),
@@ -136,6 +138,22 @@ def load_structured_recipe(package: str, *, root: Path = ROOT) -> tuple[list[str
     if not isinstance(record, dict) or record.get("coverage_mode") != "structured_manifest":
         raise ValueError(f"clean-clone package lacks structured coverage: {package}")
     manifest_rel = record.get("manifest_path")
+    primary_run_id = record.get("primary_run_id")
+    if isinstance(primary_run_id, str):
+        runs = record.get("runs")
+        if not isinstance(runs, list):
+            raise ValueError(f"structured package is missing runs: {package}")
+        primary_run = next(
+            (
+                item
+                for item in runs
+                if isinstance(item, dict) and item.get("run_id") == primary_run_id
+            ),
+            None,
+        )
+        if not isinstance(primary_run, dict):
+            raise ValueError(f"structured package primary run is unresolved: {package}")
+        manifest_rel = primary_run.get("manifest_path", manifest_rel)
     if not isinstance(manifest_rel, str):
         raise ValueError(f"structured package is missing manifest_path: {package}")
     manifest = json.loads((root / manifest_rel).read_text())
