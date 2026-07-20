@@ -119,6 +119,25 @@ explicit Modal images and independent research commands may still use `uvx`.
 | Inquiry Black Box app | `apps/inquiry-black-box/` | Bun workspaces: Electron desktop, Chrome MV3, optional Bun cloud API | Local package; cloud on Railway; batch on Modal | Local-first; privacy-gated sync |
 | Coherence testbench | `coherence-testbench/` | Own Python 3.12 project + Modal jobs | Modal for gates; optional Railway site | **Not** in root `run_quality_checks.py`; Phase 3 **frozen** |
 
+### 2.2 Proposed grounded-harness research surfaces
+
+`docs/harness_research/` is a design-only portfolio for transporting the
+repository's intervention, commitment, re-engagement, and anti-cheat methods
+into agent-harness research. It adds no runtime, experiment package, benchmark
+result, dependency, or production claim yet.
+
+| Design | Intended surface | Dependency order |
+|---|---|---|
+| Grounded Statecharts | Typed agent states, independent transition guards, append-only events, and replay | Shared runtime substrate |
+| Constraint Transport | Recursive constraint envelopes, capability scopes, and effect guards | Uses statechart/guard substrate |
+| Counterfactual Harness Search | Paired harness interventions, causal credit, and equal-budget search | Uses replay; consumes constraint faults |
+| Harness Unlearning | Provenance-aware quarantine, retirement, and revalidation of experience | Uses replay, guards, and causal credit |
+
+All four designs share a proposed benchmark-event schema, paired statistical
+protocol, OOD matrix, two-minute sanitized replay, and public release contract.
+Their stage gate begins with deterministic fixture replay; API-backed claims are
+deferred until no-op replay variance and public-safe artifact handling pass.
+
 ---
 
 ## 3. Major components and how they interact
@@ -760,6 +779,9 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 - **Paper-primary experiments** may have no committed `results/*.md`; evidence lives in the paper + local artifacts.
 - **Coherence / Inquiry / Cabal / site tests** are outside the root Python quality gate.
 - **Scientific claims are gate-bound.** Fixture smokes do not settle the program thesis.
+- **Grounded harness work is design-only.** `docs/harness_research/` specifies
+  future runtimes, datasets, and gates; none of those designs currently has an
+  implementation, released benchmark, or empirical result in this repository.
 
 ---
 
@@ -782,6 +804,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 | [module_explainer.md](module_explainer.md) | Full package/script/test/doc catalog |
 | [verification.md](verification.md) | Human provenance index |
 | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) | Benchmark umbrella |
+| [harness_research/README.md](harness_research/README.md) | Shared contract and dependency order for the grounded-harness research portfolio |
 | [publication_sharing_map.md](publication_sharing_map.md) | What to share publicly |
 | [next_agent_modal_handoff.md](next_agent_modal_handoff.md) | Modal operator handoff |
 | [next_agent_evidence_infrastructure_remaining_handoff_2026-07-14.md](next_agent_evidence_infrastructure_remaining_handoff_2026-07-14.md) | Audited recovery and dependency order for the remaining evidence-infrastructure work |

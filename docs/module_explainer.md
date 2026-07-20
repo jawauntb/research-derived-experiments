@@ -123,6 +123,11 @@ environment.
 | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) | Benchmark umbrella |
 | [causally_grounded_agents_release_schema.md](causally_grounded_agents_release_schema.md) (+ `.json`) | Shared release schema |
 | [causally_grounded_agents_next_gap.md](causally_grounded_agents_next_gap.md) | Suite C transfer gaps |
+| [harness_research/README.md](harness_research/README.md) | Design-only grounded-harness portfolio: shared runtime, benchmark, replay, statistics, and release contract |
+| `harness_research/grounded_statecharts.md` | Independent transition-guard runtime and Grounded Transitions Benchmark design |
+| `harness_research/constraint_transport.md` | Recursive constraint-envelope and externally enforced transition-guard benchmark design |
+| `harness_research/counterfactual_harness_search.md` | Paired intervention, causal-credit, and equal-budget harness-search design |
+| `harness_research/harness_unlearning.md` | Provenance-aware quarantine, commitment-level suppression, and revalidation design |
 | [publication_sharing_map.md](publication_sharing_map.md) | What to share publicly |
 | [paper_readiness.md](paper_readiness.md) | Paper readiness tracking |
 | [discovery_regime_audit.md](discovery_regime_audit.md) | Regime audit ledger |
