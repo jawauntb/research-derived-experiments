@@ -35,6 +35,8 @@ python3 -m experiments.grounded_statecharts.run_fixture
 python3 -m experiments.grounded_statecharts.run_constraint_transport
 python3 -m experiments.grounded_statecharts.run_counterfactual_search
 python3 -m experiments.grounded_statecharts.run_harness_unlearning
+python3 -m experiments.grounded_statecharts.run_unlearning_multishift_smoke
+python3 -m experiments.grounded_statecharts.run_constraint_ood_smoke
 python3 -m experiments.grounded_statecharts.run_unified_replay
 python3 -m experiments.grounded_statecharts.run_statechart_pilot_smoke
 python3 -m experiments.grounded_statecharts.run_constraint_pilot_smoke
@@ -67,6 +69,14 @@ static replay.
 The unlearning command writes `results/harness_unlearning/` with the paired
 causal-use receipt, typed lifecycle ledger/events, phase outcomes, summary, and
 static shift/recurrence replay.
+
+The multi-shift unlearning smoke command writes
+`results/unlearning_multishift/`. It registers deterministic tool-schema and
+environment-policy semantic shifts plus a model/version-identical-semantics
+negative control, reusing the causal-use and ledger mechanics without live
+calls. The Constraint Transport OOD smoke command writes
+`results/constraint_ood/` with planned held-out-wording and depth-5/6 contracts;
+it executes neither probe and makes no OOD claim.
 
 The unified replay command writes `results/unified_replay/`. It renders a
 compact public failure replay from the committed false-completion summary and
@@ -157,7 +167,8 @@ confirmatory CT/CHS benchmarks. The prompt and trace baselines are controlled
 diagnostics, not optimized learned competitors. Counterfactual search has not
 yet been tested with sealed labels, stochastic replays, interactions, or OOD
 faults. Functional unlearning is demonstrated on one deterministic regime
-shift only; it is not neural unlearning, erasure, or an HU1–HU7 result. The
+shift plus draft multi-shift scaffolding only; it is not neural unlearning,
+erasure, OOD evidence, or an HU1–HU7 result. The
 live-evaluation smoke bundle validates the shared contract only; it is not a
 D2 pilot, commercial demo, or publishable population claim.
 

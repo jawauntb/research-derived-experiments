@@ -363,6 +363,14 @@ live provider, and state their synthetic/mechanics claim boundary. The sealed
 label bridge is not CHS1: publishable attribution still requires genuinely
 withheld labels on real failures.
 
+The adjacent draft scaffolds remain equally non-evidential: the multi-shift
+unlearning runner reuses the committed memory ledger for tool-schema and
+environment-policy semantic shifts while retaining a model/version-identical
+semantics false-forgetting control; the Constraint Transport OOD runner freezes
+held-out-wording and depth-5/6 probe contracts without executing them. Both
+write only public-safe summaries and rows, make no provider call, and require
+separate matched execution before any OOD or unlearning generalization claim.
+
 ### 3.7 Public sites & CI deploy
 
 On push to `main`, `.github/workflows/railway-deploy.yml` deploys:

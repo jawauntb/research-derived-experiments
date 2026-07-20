@@ -1,0 +1,67 @@
+{
+  "allowed_claim": "This artifact freezes two OOD probe contracts against the existing Constraint Transport task machinery. It reports no OOD execution, effect, or live-agent result.",
+  "committed_fixture_depth_range": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "gates": {
+    "all_probes_planned_not_observed": true,
+    "deeper_probe_exceeds_committed_depth_range": true,
+    "held_out_wording_uses_committed_depth_range": true,
+    "no_live_calls": true,
+    "two_ood_probes_registered": true,
+    "two_source_families_bound": true
+  },
+  "next_best_test": "Implement matched held-out wording and depth-5/6 fixture mechanics, then run all conditions with the registered lineage and scoring checks.",
+  "probes": [
+    {
+      "execution_status": "planned",
+      "kill_criterion": "Kill transport interpretation if task scoring or constraint identity changes with wording.",
+      "observed": false,
+      "perturbation": "Replace surface wording while preserving the typed constraint fields.",
+      "planned_depths": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "prediction": "Typed lineage preserves constraints despite held-out instruction wording.",
+      "probe_id": "held_out_wording",
+      "source_conditions": [
+        "lossy_prompt",
+        "typed_guarded"
+      ],
+      "source_task_count": 2,
+      "source_task_families": [
+        "approval_before_publish",
+        "test_before_commit"
+      ]
+    },
+    {
+      "execution_status": "planned",
+      "kill_criterion": "Kill depth-transport interpretation if a typed chain loses lineage or constraints at depth 5 or 6.",
+      "observed": false,
+      "perturbation": "Extend matched typed/prose delegation beyond the committed depth-1..4 fixture.",
+      "planned_depths": [
+        5,
+        6
+      ],
+      "prediction": "Typed lineage remains valid and constraint survival does not degrade solely from depth.",
+      "probe_id": "deeper_delegation_depth",
+      "source_conditions": [
+        "lossy_prompt",
+        "typed_guarded"
+      ],
+      "source_task_count": 2,
+      "source_task_families": [
+        "approval_before_publish",
+        "test_before_commit"
+      ]
+    }
+  ],
+  "run_id": "constraint_ood_draft_specs_2026_07_20",
+  "schema_version": "1.0",
+  "tier": "preregistered-stub"
+}
