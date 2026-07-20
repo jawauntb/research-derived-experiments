@@ -141,6 +141,9 @@ All four designs share a proposed benchmark-event schema, paired statistical
 protocol, OOD matrix, two-minute sanitized replay, and public release contract.
 Their stage gate begins with deterministic fixture replay; API-backed claims are
 deferred until no-op replay variance and public-safe artifact handling pass.
+The dependency-ordered implementation plan, D2 live-pilot gate, safe parallel
+work lanes, and completion definition are recorded in
+[`next_agent_grounded_harness_experiments_handoff_2026-07-20.md`](next_agent_grounded_harness_experiments_handoff_2026-07-20.md).
 
 ---
 
