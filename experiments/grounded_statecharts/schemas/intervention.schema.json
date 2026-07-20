@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-derived-experiments.local/grounded_live_intervention.schema.json",
+  "title": "Grounded harness live intervention",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "intervention_id",
+    "episode_id",
+    "kind",
+    "component",
+    "original_digest",
+    "replacement_digest",
+    "reason"
+  ],
+  "properties": {
+    "intervention_id": {"type": "string", "minLength": 1},
+    "episode_id": {"type": "string", "minLength": 1},
+    "kind": {
+      "enum": [
+        "none",
+        "exact_noop",
+        "matched_cost_random",
+        "passive_log",
+        "isolated_repair",
+        "matched_placebo",
+        "wrong_edge",
+        "wrong_evidence"
+      ]
+    },
+    "component": {
+      "enum": [
+        "none",
+        "guard",
+        "context",
+        "tools",
+        "generation",
+        "orchestration",
+        "memory",
+        "output"
+      ]
+    },
+    "original_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "replacement_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "reason": {"type": "string", "minLength": 1}
+  }
+}

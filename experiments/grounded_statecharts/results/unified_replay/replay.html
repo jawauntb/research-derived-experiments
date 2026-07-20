@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Grounded Harness Failure Replay</title>
+<style>
+:root { color-scheme: dark; font-family: ui-sans-serif, system-ui, sans-serif; }
+body { margin: 0; background: #0b1020; color: #eef2ff; }
+main { max-width: 1120px; margin: auto; padding: 40px 22px 60px; }
+.eyebrow { color: #93c5fd; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+h1 { font-size: clamp(2rem, 5vw, 4rem); line-height: 1; margin: 10px 0 16px; }
+h2 { margin: 0 0 12px; font-size: 1.15rem; }
+.lede, .muted { color: #cbd5e1; max-width: 820px; }
+.chart { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 30px 0; }
+.state { border: 1px solid #475569; border-radius: 999px; padding: 8px 13px; background: #111827; }
+.arrow { color: #60a5fa; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; }
+.card { background: #111827; border: 1px solid #334155; border-radius: 16px; padding: 20px; overflow: auto; }
+.card + .card { margin-top: 18px; }
+.bad { color: #fda4af; } .good { color: #86efac; }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+th, td { border-bottom: 1px solid #334155; padding: 10px 8px; text-align: left; vertical-align: top; }
+th { color: #93c5fd; } code { color: #fde68a; overflow-wrap: anywhere; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+.fact { border-left: 3px solid #60a5fa; padding-left: 12px; }
+.boundary { border-left-color: #fbbf24; }
+ul { margin: 8px 0 0; padding-left: 20px; }
+</style>
+</head>
+<body><main>
+<div class="eyebrow">Deterministic fixture · public failure replay</div>
+<h1>A success report is not a completion receipt.</h1>
+<p class="lede">The same committed checkpoint is replayed twice. The original self-report guard commits without the required artifact; an independently checked artifact guard routes to repair before commit.</p>
+<div class="chart"><span class="state">Observe</span><span class="arrow">→</span><span class="state">Act</span><span class="arrow">→</span><span class="state">Verify</span><span class="arrow">→</span><span class="state">Commit</span><span>or</span><span class="state">Repair</span></div>
+<section class="card"><div class="eyebrow">Observed events</div>
+<div class="grid">
+<article><h2 class="bad">Original · false completion</h2><table><thead><tr><th>#</th><th>Edge</th><th>Event</th><th>Guard receipt</th></tr></thead><tbody><tr><td>0</td><td><code>observe-&gt;act</code></td><td>task_loaded</td><td>—</td></tr><tr><td>1</td><td><code>act-&gt;verify</code></td><td>tool_reported_success</td><td>—</td></tr><tr><td>2</td><td><code>verify-&gt;commit</code></td><td>transition_authorized</td><td>PASS · G0 · generator tool report claimed success</td></tr></tbody></table></article>
+<article><h2 class="good">Guarded replay · grounded commit</h2><table><thead><tr><th>#</th><th>Edge</th><th>Event</th><th>Guard receipt</th></tr></thead><tbody><tr><td>0</td><td><code>observe-&gt;act</code></td><td>task_loaded</td><td>—</td></tr><tr><td>1</td><td><code>act-&gt;verify</code></td><td>tool_reported_success</td><td>—</td></tr><tr><td>2</td><td><code>verify-&gt;repair</code></td><td>transition_rejected</td><td>FAIL · G3 · required artifact was missing or had the wrong digest</td></tr><tr><td>3</td><td><code>repair-&gt;act</code></td><td>repair_applied</td><td>—</td></tr><tr><td>4</td><td><code>act-&gt;verify</code></td><td>artifact_emitted</td><td>—</td></tr><tr><td>5</td><td><code>verify-&gt;commit</code></td><td>transition_authorized</td><td>PASS · G3 · artifact digest matched the task receipt</td></tr></tbody></table></article>
+</div></section>
+<section class="card"><div class="eyebrow">Intervention</div>
+<p><strong>Changed component:</strong> <code>guard</code> only.</p>
+<p class="muted">replace generator self-report with independent artifact evidence</p>
+<p><strong>Original receipt:</strong> <code>789882aa3d909135d5786594ad53a9bd2e4115447da2e93641d3167b922b428e</code><br><strong>Replacement receipt:</strong> <code>72484bbc7b9d31c46b4de81595ba4f71918d1b1543e217314ba1ccb52d1b68d9</code></p>
+</section>
+<section class="card"><div class="eyebrow">Inferred causal credit</div>
+<p>Within this paired deterministic fixture, changing only the guard changes the terminal outcome from false completion to grounded commit. This is causal credit for the registered guard intervention in this fixture, not a general attribution claim.</p>
+<div class="facts"><div class="fact"><strong>Original</strong><br>commit; false completion = True</div><div class="fact"><strong>Guarded</strong><br>commit; false completion = False</div><div class="fact"><strong>No-op identity</strong><br>true</div></div>
+</section>
+<section class="card"><div class="eyebrow">Uncertainty</div>
+<p>This replay has one committed deterministic fixture, no sampling distribution, and no confidence interval. Its uncertainty is external validity: no live model, provider, stochastic replay, or OOD reliability was evaluated.</p>
+</section>
+<section class="card"><div class="eyebrow">Cost / budget</div>
+<div class="facts"><div class="fact"><strong>Provider calls</strong><br>0</div><div class="fact"><strong>Original event budget</strong><br>3 logical events</div><div class="fact"><strong>Guarded event budget</strong><br>6 logical events; 1 repair</div></div>
+<p class="muted">The public replay is rendered only from committed summary and event rows; it does not invoke a live provider or network.</p>
+</section>
+<section class="card boundary"><div class="eyebrow">Claim boundary</div>
+<p>On the committed deterministic false-success fixture, no-op replay is exact and replacing only a G0 self-report guard with a G3 artifact-digest guard prevents premature commit and triggers a successful repair.</p><ul><li>No live model or provider was evaluated.</li><li>One deterministic fixture does not estimate a population effect.</li><li>The result does not establish Constraint Transport, counterfactual search, or unlearning claims.</li></ul>
+</section>
+</main></body></html>
