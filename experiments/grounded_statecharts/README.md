@@ -36,6 +36,7 @@ python3 -m experiments.grounded_statecharts.run_constraint_transport
 python3 -m experiments.grounded_statecharts.run_counterfactual_search
 python3 -m experiments.grounded_statecharts.run_harness_unlearning
 python3 -m experiments.grounded_statecharts.run_unified_replay
+python3 -m experiments.grounded_statecharts.run_statechart_pilot_smoke
 ```
 
 The command has no third-party or provider dependency. It regenerates the
@@ -96,6 +97,20 @@ python3 -m pytest -q tests/test_grounded_live_evaluation.py
 
 The smoke path never imports a provider SDK, reads an API key, or writes raw
 transcripts into `results/`. Credentialed live backends remain a later opt-in.
+
+## Statechart D2 pilot mechanics bridge
+
+`statechart_pilot.py` routes artifact-completion smoke conditions through the
+existing deterministic `ReplayEngine`, the committed false-success fixture, and
+the existing G0/G3 manifests. `direct_self_report` and `statechart_g0` retain
+the false completion; `statechart_g3` routes through repair before a grounded
+commit; `wrong_edge_guard` is an explicit no-credit control. Constraint-family
+conditions remain delegated to the fixture executor until their transport pilot
+is frozen. All smoke rows use the matched `DEFAULT_PILOT_BUDGET`, are
+sanitized, and are discarded from held-out D2 analysis.
+
+The draft two-family gate is
+[`STATECHART_D2_PREREGISTRATION.md`](STATECHART_D2_PREREGISTRATION.md).
 
 ## Scope boundary
 
