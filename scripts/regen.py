@@ -6,9 +6,9 @@ where that is possible on CPU without secrets (deterministic, seeded), and
 otherwise prints the documented run command (many sweeps require Modal/GPU or
 Doppler-scoped secrets and must be dispatched from an authed machine).
 
-Allowlisted clean-clone recipes (`bayesian_voi`, `mathematical_claims`) execute
-structured argv from the package manifest without a shell, optionally verifying
-fresh creation against committed oracles in an isolated checkout.
+Allowlisted clean-clone recipes execute structured argv from package manifests
+without a shell, optionally verifying fresh creation against committed oracles
+in an isolated checkout.
 
   python scripts/regen.py list
   python scripts/regen.py <name>
@@ -26,7 +26,7 @@ import sys
 import tarfile
 from pathlib import Path
 from tempfile import TemporaryDirectory
-from typing import Any
+from typing import Any, cast
 
 ROOT = Path(__file__).resolve().parent.parent
 CPU_DEPS = [
@@ -80,6 +80,7 @@ PDF_OUTPUTS = {
 # there needs a pinned numpy version before it can join a byte-oracle lane.
 CLEAN_CLONE_ALLOWLIST: dict[str, str] = {
     "bayesian_voi": "experiments/bayesian_voi/results/bayesian_voi_summary.json",
+    "grounded_statecharts": "experiments/grounded_statecharts/results/summary.json",
     "mathematical_claims": (
         "experiments/mathematical_claims/results/mathematical_claims_summary.json"
     ),
@@ -153,7 +154,7 @@ def load_structured_recipe(package: str, *, root: Path = ROOT) -> tuple[list[str
         raise ValueError(f"manifest runtime.command must be a non-empty argv list: {package}")
     if any(";" in part or "|" in part or "&&" in part for part in command):
         raise ValueError(f"manifest runtime.command looks shell-interpolated: {package}")
-    return list(command), output_rel
+    return list(cast(list[str], command)), output_rel
 
 
 def materialize_clean_checkout(root: Path, dest: Path) -> None:

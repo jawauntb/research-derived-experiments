@@ -22,6 +22,8 @@ Raw outputs should stay under `artifacts/` until summarized and intentionally co
 - `bayesian_voi`: exact finite Bayesian comparison of error, information, assumed EVSI, true regret reduction, and oracle EVSI.
 - `seed_bootstrap_calibration`: preregistered seed-count and hierarchical-resampling calibration for promotion decisions.
 - `passive_active_phase_map`: matched-budget transition and hysteresis diagnostics for passive-to-active coupling.
+- `grounded_statecharts`: dependency-free typed event log, checkpoint replay,
+  and minimal independent completion-guard fixture with a static visual replay.
 
 Shared experiment utilities live under `common/` and are excluded from provenance experiment counts.
 The first shared utility implements a mass-normalized, intervention-relative causal-use score.

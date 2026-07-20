@@ -178,6 +178,14 @@ class ProvenanceGenerationTests(unittest.TestCase):
             ],
         )
 
+    def test_structured_run_uses_its_declared_producing_agent(self) -> None:
+        record = gen_provenance.collect(
+            gen_provenance.ROOT / "experiments" / "grounded_statecharts"
+        )
+
+        self.assertIn("OpenAI Codex", record["attribution"])
+        self.assertIn("PR 378 implementation follow-up", record["attribution"])
+
     def test_malformed_bound_manifest_fails_closed(self) -> None:
         with TemporaryDirectory() as directory:
             root = Path(directory)

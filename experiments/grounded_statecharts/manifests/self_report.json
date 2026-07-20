@@ -1,0 +1,20 @@
+{
+  "manifest_id": "minimal_grounded_statechart",
+  "version": "1.0",
+  "chart": {
+    "observe": ["act"],
+    "act": ["verify"],
+    "verify": ["commit", "repair"],
+    "commit": [],
+    "repair": ["act"]
+  },
+  "guard": {
+    "name": "completion_guard",
+    "kind": "self_report",
+    "version": "1.0",
+    "independence_level": "G0"
+  },
+  "repair": {
+    "kind": "write_expected_artifact"
+  }
+}

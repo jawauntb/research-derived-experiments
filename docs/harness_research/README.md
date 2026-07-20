@@ -1,6 +1,7 @@
 # Grounded Harness Research Portfolio
 
-Status: design only; no result is claimed by this document.
+Status: D1 deterministic fixture passed and the minimal statechart mechanism is
+implemented; D2 and later research claims remain untested.
 
 Last updated: 2026-07-20.
 
@@ -21,6 +22,13 @@ typed event log, transition receipts, deterministic replay, fault injection,
 dataset schema, statistical protocol, and public-release contract. Each design
 still has an independent hypothesis and a stop condition, so failure in one
 does not automatically invalidate the others.
+
+The first executable package now lives at
+[`experiments/grounded_statecharts`](../../experiments/grounded_statecharts/README.md).
+It publishes the typed event schema, serialized checkpoint, paired manifests,
+exact no-op replay, one G3 artifact guard, and a static false-completion replay.
+This passes the deterministic fixture exit gate only; it is not evidence for
+the portfolio's task-level or OOD claims.
 
 ## Why This Is a Real Transition
 
@@ -270,6 +278,10 @@ and paper artifacts.
 | D2 Pilot | At least two task families and all required controls | Directional primary effect without integrity failure |
 | D3 Confirmatory | Frozen manifests, adequate task count, 95% CIs, OOD tests | Pre-registered practical and statistical gates pass |
 | D4 Release | Dataset, benchmark card, preprint, article, replay, clean clone | Independent clean-clone reproduction |
+
+Current status: D1 passes exactly on the registered missing-artifact fixture;
+the minimal D2 mechanism path is demonstrated but D2 remains open until two
+task families and all required controls are evaluated.
 
 ### Portfolio stop rule
 

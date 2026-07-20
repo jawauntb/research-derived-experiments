@@ -1,0 +1,78 @@
+{
+  "allowed_claim": "On the committed deterministic false-success fixture, no-op replay is exact and replacing only a G0 self-report guard with a G3 artifact-digest guard prevents premature commit and triggers a successful repair.",
+  "changed_components": [
+    "guard"
+  ],
+  "checkpoint_digest": "115fb158da1c81bcb3edcda6976383b1ef3f728743390e7f57c294430d4e9d95",
+  "fixture": "false-success-missing-artifact-001",
+  "gates": {
+    "false_completion_prevented": true,
+    "manifest_single_component_delta": true,
+    "minimal_statechart": true,
+    "noop_replay_identity": true,
+    "repair_reaches_grounded_commit": true,
+    "typed_event_schema": true
+  },
+  "manifest_digests": {
+    "independent_artifact": "b00ad1b400603292e5c324e15ab3e0b82fbc9a265c19be531248e87392b65911",
+    "self_report": "1ce500a9b03ddcecee542e7ae6a265c9f9e12136ab5899a1a18fe82d2cc90453"
+  },
+  "metrics": {
+    "guarded_false_completion": 0,
+    "guarded_repairs": 1,
+    "guarded_task_success": 1,
+    "original_false_completion": 1,
+    "original_task_success": 0
+  },
+  "non_claims": [
+    "No live model or provider was evaluated.",
+    "One deterministic fixture does not estimate a population effect.",
+    "The result does not establish Constraint Transport, counterfactual search, or unlearning claims."
+  ],
+  "outcomes": {
+    "guarded_replay": {
+      "artifact_digest": "db095dd5d3123eae56051704b1a97ad1fb51bd17c9f4cef481e43cffdaca26dd",
+      "event_count": 6,
+      "event_digest": "0738c213ae664b37dd75085c9d1d18910305553fcf6302227f70116260bfb8a0",
+      "false_completion": false,
+      "repair_count": 1,
+      "task_success": true,
+      "terminal_state": "commit"
+    },
+    "noop_replay": {
+      "artifact_digest": null,
+      "event_count": 3,
+      "event_digest": "85feae9b5478eb1efef093d715ce029c59ae233eaee1a808deb33ccd7194dc63",
+      "false_completion": true,
+      "repair_count": 0,
+      "task_success": false,
+      "terminal_state": "commit"
+    },
+    "original": {
+      "artifact_digest": null,
+      "event_count": 3,
+      "event_digest": "85feae9b5478eb1efef093d715ce029c59ae233eaee1a808deb33ccd7194dc63",
+      "false_completion": true,
+      "repair_count": 0,
+      "task_success": false,
+      "terminal_state": "commit"
+    }
+  },
+  "paths": {
+    "guarded_replay": [
+      "observe->act",
+      "act->verify",
+      "verify->repair",
+      "repair->act",
+      "act->verify",
+      "verify->commit"
+    ],
+    "original": [
+      "observe->act",
+      "act->verify",
+      "verify->commit"
+    ]
+  },
+  "run_id": "grounded_statecharts_fixture_2026_07_20",
+  "schema_version": "1.0"
+}

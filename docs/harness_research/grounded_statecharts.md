@@ -1,9 +1,16 @@
 # Grounded Statecharts with Independent Verification Guards
 
-Status: experimental design; no implementation or empirical claim yet.
+Status: deterministic fixture runtime implemented; no task-level empirical
+claim yet.
 
 Portfolio role: fastest route to commercial usefulness and a legible public
 demonstration.
+
+Implementation: [`experiments/grounded_statecharts`](../../experiments/grounded_statecharts/README.md)
+now provides the minimal chart, typed public events, a serialized checkpoint,
+exact no-op replay, paired G0/G3 guard manifests, compact result summary, and
+static replay viewer. The fixture result demonstrates mechanism integrity, not
+the confirmatory GS1–GS6 claims below.
 
 ## One-Sentence Thesis
 

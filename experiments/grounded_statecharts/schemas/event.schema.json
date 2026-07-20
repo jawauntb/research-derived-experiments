@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://research-derived-experiments.example/schemas/grounded_statechart_event.schema.json",
+  "title": "Grounded statechart public event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "run_id",
+    "episode_id",
+    "event_index",
+    "state_before",
+    "proposed_transition",
+    "actor",
+    "event_type",
+    "evidence_refs",
+    "constraint_refs",
+    "guard_results",
+    "intervention",
+    "state_after",
+    "timestamp_logical"
+  ],
+  "properties": {
+    "run_id": {"type": "string", "minLength": 1},
+    "episode_id": {"type": "string", "minLength": 1},
+    "event_index": {"type": "integer", "minimum": 0},
+    "state_before": {"enum": ["observe", "act", "verify", "commit", "repair"]},
+    "proposed_transition": {"type": "string", "pattern": "^[a-z]+->[a-z]+$"},
+    "actor": {"type": "string", "minLength": 1},
+    "event_type": {"type": "string", "minLength": 1},
+    "evidence_refs": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "constraint_refs": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "guard_results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["guard", "guard_version", "independence_level", "passed", "evidence_refs", "explanation"],
+        "properties": {
+          "guard": {"type": "string", "minLength": 1},
+          "guard_version": {"type": "string", "minLength": 1},
+          "independence_level": {"type": "string", "pattern": "^G[0-5]$"},
+          "passed": {"type": "boolean"},
+          "evidence_refs": {"type": "array", "items": {"type": "string", "minLength": 1}},
+          "explanation": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "intervention": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["component", "original_digest", "replacement_digest", "reason"],
+          "properties": {
+            "component": {"const": "guard"},
+            "original_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+            "replacement_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+            "reason": {"type": "string", "minLength": 1}
+          }
+        }
+      ]
+    },
+    "state_after": {"enum": ["observe", "act", "verify", "commit", "repair"]},
+    "timestamp_logical": {"type": "integer", "minimum": 0}
+  }
+}

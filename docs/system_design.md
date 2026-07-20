@@ -119,16 +119,17 @@ explicit Modal images and independent research commands may still use `uvx`.
 | Inquiry Black Box app | `apps/inquiry-black-box/` | Bun workspaces: Electron desktop, Chrome MV3, optional Bun cloud API | Local package; cloud on Railway; batch on Modal | Local-first; privacy-gated sync |
 | Coherence testbench | `coherence-testbench/` | Own Python 3.12 project + Modal jobs | Modal for gates; optional Railway site | **Not** in root `run_quality_checks.py`; Phase 3 **frozen** |
 
-### 2.2 Proposed grounded-harness research surfaces
+### 2.2 Grounded-harness research surfaces
 
-`docs/harness_research/` is a design-only portfolio for transporting the
+`docs/harness_research/` defines the staged portfolio for transporting the
 repository's intervention, commitment, re-engagement, and anti-cheat methods
-into agent-harness research. It adds no runtime, experiment package, benchmark
-result, dependency, or production claim yet.
+into agent-harness research. `experiments/grounded_statecharts/` now implements
+the D1 replay substrate and minimal independent-guard mechanism; later
+benchmarks and production claims remain unimplemented.
 
 | Design | Intended surface | Dependency order |
 |---|---|---|
-| Grounded Statecharts | Typed agent states, independent transition guards, append-only events, and replay | Shared runtime substrate |
+| Grounded Statecharts | Implemented minimal typed states, independent transition guard, append-only events, checkpoint, and replay | Shared runtime substrate; D1 fixture passed |
 | Constraint Transport | Recursive constraint envelopes, capability scopes, and effect guards | Uses statechart/guard substrate |
 | Counterfactual Harness Search | Paired harness interventions, causal credit, and equal-budget search | Uses replay; consumes constraint faults |
 | Harness Unlearning | Provenance-aware quarantine, retirement, and revalidation of experience | Uses replay, guards, and causal credit |
@@ -161,20 +162,21 @@ Each experiment directory is a self-contained research unit. Typical contents:
 
 | Set | Count |
 |---|---|
-| Research experiment packages | **54** |
+| Research experiment packages | **55** |
 | Shared non-experiment support packages | **1** — `experiments/common` |
 | Contain one or more `modal_*.py` entrypoints | **46** |
-| Canonical package-root `experiment_manifest.json` files | **6** |
-| Authoritative package-contract records | **54** = **6** `structured_manifest` + **48** time-bounded `legacy_exception` in `docs/experiment_contract_registry.json` |
+| Canonical package-root `experiment_manifest.json` files | **7** |
+| Authoritative package-contract records | **55** = **7** `structured_manifest` + **48** time-bounded `legacy_exception` in `docs/experiment_contract_registry.json` |
 | Canonical per-gate verdict files | **1** (E5). Ten evidence rows declare gate IDs; only E5 currently has a committed verdict file. Manifest gate declarations are not verdicts. |
 | Canonical claim records | **12** |
 | Canonical evidence records | **12** |
-| Generated provenance/verification output | **54** experiment cards and index rows; `common` is excluded |
+| Generated provenance/verification output | **55** experiment cards and index rows; `common` is excluded |
 
 `scripts/gen_provenance.py --check` makes the generated count a derived invariant
 rather than a second hand-maintained inventory. The four new local packages—
-`mathematical_claims`, `bayesian_voi`, `seed_bootstrap_calibration`, and
-`passive_active_phase_map`—are present in the regenerated 54-package index.
+`mathematical_claims`, `bayesian_voi`, `seed_bootstrap_calibration`,
+`passive_active_phase_map`, and `grounded_statecharts`—are present in the
+regenerated 55-package index.
 
 Raw run outputs go to **gitignored** `artifacts/<experiment>/`. Only summarized
 reports and intentionally public tables/PDFs are committed.
@@ -252,7 +254,7 @@ docs/claim_registry.json + docs/program_evidence_registry.json
 
 docs/experiment_contract_registry.json
     → scripts/validate_experiment_manifest.py (no-argument mode) → pass/fail
-      Exact 54-package XOR partition: root manifest XOR active legacy exception.
+      Exact 55-package XOR partition: root manifest XOR active legacy exception.
       Frozen legacy-package set + SHA-256 digest reject ungrounded new exceptions.
       Normal CI warns ≤30 days before expiry and fails on expiry (≤180-day renewals).
       Structured run records may list claim/evidence IDs with empty
@@ -301,9 +303,9 @@ python scripts/regen.py <experiment_name>
 python scripts/regen.py verify-clean-clone
 ```
 
-Allowlisted deterministic CPU packages (`bayesian_voi`, `mathematical_claims`,
-`seed_bootstrap_calibration`) execute structured `runtime.command` argv without
-a shell. `verify-clean-clone` materializes a
+Allowlisted deterministic CPU packages (`bayesian_voi`, `grounded_statecharts`,
+`mathematical_claims`, `seed_bootstrap_calibration`) execute structured
+`runtime.command` argv without a shell. `verify-clean-clone` materializes a
 tracked-file checkout, deletes the declared outputs, reruns the recipes, and
 byte-compares newly created files to committed oracles. Modal and other
 documented commands remain inspect-only and are not dispatched. Run records may
@@ -552,6 +554,8 @@ python3 -m experiments.long_horizon_bottleneck.eval \
   --out artifacts/long_horizon_bottleneck/fixture_public_smoke_summary.json \
   --jsonl artifacts/long_horizon_bottleneck/fixture_public_smoke_rows.jsonl
 
+python3 -m experiments.grounded_statecharts.run_fixture
+
 python scripts/regen.py grid_cell_weakness
 python scripts/regen.py weakness_temporal
 
@@ -575,7 +579,7 @@ pins the PEP 735 quality environment, and the explicit `pytorch-cpu` source
 keeps Linux CI from resolving CUDA, NVIDIA, or Triton packages. Every remaining
 command reuses that environment through `uv run --no-sync`:
 
-1. `pytest -q tests` over all 72 root test files (torch, numpy, scikit-learn,
+1. `pytest -q tests` over all 73 root test files (torch, numpy, scikit-learn,
    matplotlib, reportlab, pytest)
 2. `compileall` on `scripts`, `experiments`, `tests`
 3. `publication_guard.py`
@@ -775,13 +779,13 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 - **No universal research dependency specification.** The root quality gate has a complete locked dependency group, but experiment and Modal runtimes still rely on command-specific `uvx` sets or explicit Modal images.
 - **Machine-specific paths** in docs/handoffs (Doppler scope, local archives).
 - **Result fidelity depends on summarization discipline.** Gitignored JSON vs committed Markdown can drift.
-- **Structured-contract coverage is early but fail-closed.** All 54 research packages are partitioned in `docs/experiment_contract_registry.json` (6 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction. Public-artifact digest envelopes cover the E5 confirmatory JSON and E4 appendix. Clean-clone CPU reproduction is allowlisted for `bayesian_voi` and `mathematical_claims` only.
+- **Structured-contract coverage is early but fail-closed.** All 55 research packages are partitioned in `docs/experiment_contract_registry.json` (7 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction. Public-artifact digest envelopes cover the E5 confirmatory JSON and E4 appendix. Clean-clone CPU reproduction is allowlisted for `bayesian_voi`, `grounded_statecharts`, `mathematical_claims`, and `seed_bootstrap_calibration`.
 - **Paper-primary experiments** may have no committed `results/*.md`; evidence lives in the paper + local artifacts.
 - **Coherence / Inquiry / Cabal / site tests** are outside the root Python quality gate.
 - **Scientific claims are gate-bound.** Fixture smokes do not settle the program thesis.
-- **Grounded harness work is design-only.** `docs/harness_research/` specifies
-  future runtimes, datasets, and gates; none of those designs currently has an
-  implementation, released benchmark, or empirical result in this repository.
+- **Grounded harness evidence is fixture-only.** The typed event/replay runtime,
+  minimal guard, and deterministic false-completion replay are implemented,
+  but no multi-task benchmark, live-model estimate, or GS1–GS6 result exists.
 
 ---
 
