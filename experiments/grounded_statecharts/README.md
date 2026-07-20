@@ -112,6 +112,16 @@ doppler run --config dev -- \
 
 Smoke outcomes are discarded from held-out D2 pilots.
 
+## Frozen D2 held-out task bank
+
+`fixtures/d2_held_out_tasks.json` freezes 24 public task contracts: 12
+artifact-completion tasks requiring fresh local verification and 12 recursive
+delegation tasks requiring an approval, evidence, or capability constraint to
+survive. `d2_tasks.py` validates their closed task-schema shape, constructs
+`LiveTask` records, verifies frozen task digests, and rejects smoke rows. The
+fixture contains no answer keys or hidden fault labels; execution guards must
+use declared artifact and capability receipts.
+
 ## Statechart D2 pilot mechanics bridge
 
 `statechart_pilot.py` routes artifact-completion smoke conditions through the

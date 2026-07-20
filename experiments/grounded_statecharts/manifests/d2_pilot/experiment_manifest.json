@@ -79,6 +79,11 @@
       "kind": "other",
       "path": "experiments/grounded_statecharts/manifests/d2_pilot/experiment_manifest.json",
       "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/grounded_statecharts/fixtures/d2_held_out_tasks.json",
+      "public": true
     }
   ],
   "status": "planned"

@@ -479,6 +479,7 @@ python3 -m experiments.long_horizon_bottleneck.eval --provider fixture --models 
 | `budgets.py` | Matched call/token/tool/latency/cost ceilings with fail-closed planning receipts |
 | `sanitization.py` | Fail-closed public-row projection that blocks raw provider material |
 | `evaluation.py` | Normalized live task/episode/result records, smoke matrix, integrity receipts, and task-clustered bootstrap |
+| `d2_tasks.py` / `fixtures/d2_held_out_tasks.json` | Frozen 24-task D2 bank (12 fresh-verification artifact tasks + 12 constrained-delegation tasks), closed-schema/`LiveTask` loader, and task-digest validation; no answer keys or hidden labels |
 | `run_live_smoke.py` | Clean-clone-safe smoke bundle under `results/live_evaluation/` |
 | `run_live_credentialed_smoke.py` / `modal_live_credentialed_smoke.py` | Opt-in credentialed mechanics smoke writing only under gitignored `artifacts/`; smoke rows discarded from held-out D2 |
 | `manifests/d2_pilot/experiment_manifest.json` | Planned two-family D2 pilot contract (status=`planned` until held-out freeze) |
@@ -488,7 +489,7 @@ python3 -m experiments.long_horizon_bottleneck.eval --provider fixture --models 
 | `CONSTRAINT_TRANSPORT_D2_PREREGISTRATION.md` / `CHS_SEALED_PREREGISTRATION.md` | Draft bridge assumptions, discriminating tests, kill criteria, and strict non-publishable claim boundaries |
 | `manifests/*.json` | Matched G0 self-report and G3 artifact-digest harness conditions; only `guard` differs |
 | `manifests/constraint_transport/experiment_manifest.json` | Separate structured run contract for the deterministic transport diagnostic |
-| `fixtures/*.json` | Registered replay/transport/fault cases plus one versioned memory shift/recurrence episode |
+| `fixtures/*.json` | Registered replay/transport/fault cases, a versioned memory shift/recurrence episode, and the held-out D2 task bank |
 | `schemas/*.json` | Public event, constraint-envelope, and live task/episode/intervention/result contracts |
 | `results/` | Replay, transport, attribution, functional-memory, and live-smoke summaries with row-level evidence |
 
