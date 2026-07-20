@@ -1,48 +1,60 @@
 # D2 Pilot Decision Freeze — 2026-07-20
 
-**Status:** escalate to D3 planning for Constraint Transport joint-success;
-narrow Grounded Statecharts false-completion claim; keep CHS/HU pending.
+**Status:** revise — stop product/scientific escalation for Constraint Transport
+until weaker-instruction effects return; narrow Grounded Statecharts; keep
+CHS/HU pending.
 
 **Model:** `openai` / `gpt-4.1-mini`  
 **Adapter:** live  
 **Held-out tasks:** 12 per family  
-**Repeats in this freeze slice:** 1 (variance estimation; full 3-repeat confirmatory still required for D3)  
-**Artifact path:** `artifacts/grounded_statecharts/d2_pilot/` (not committed)
+**Repeats in labeled-prompt freeze slice:** 1  
+**Weak-prompt ablation:** 4 tasks/family, 1 repeat (`artifacts/.../weak_prompt_ablation/`)  
+**Artifact paths:** `artifacts/grounded_statecharts/` (not committed)
 
 ## Integrity
+
+Labeled D2 (1 repeat):
 
 - all_publishable: true
 - budget_ok: true
 - held_out_only: true
 - provider_failures: 0
 
+Weak-prompt ablation:
+
+- n_rows: 16
+- failures: 0 after parser coercion for path/CSV schema drift
+
 ## Directional results (task-clustered)
 
-| Contrast | Point estimate | Notes |
+| Contrast | Labeled prompt | Weak prompt (no condition labels) |
 |---|---|---|
-| artifact false_completion: G3 − G0 | −0.167 | Directional improvement; G0 false-completion was already low (0.167) |
-| artifact task_success: G3 − G0 | +0.250 | No raw-success loss; G3 higher |
-| constraint joint_success: external − envelope_only | +1.000 | Strong directional separation on this prompt/scoring contract |
-| wrong_edge joint_success mean | 0.25 | Control still receives some success; do not over-claim uniqueness |
+| artifact false_completion: G3 − G0 | −0.167 | 0.0 |
+| constraint joint_success: external − envelope_only | +1.000 | 0.0 |
+| artifact task_success: G3 − G0 | +0.250 | (not primary) |
+| wrong_edge joint_success mean | 0.25 | (not re-estimated) |
 
-## Decisions
+## Decisions (revised after ablation)
 
-1. **Constraint Transport:** escalate. Typed+external guards dominate envelope-only
-   on held-out recursive tasks under this scoring contract. Freeze a D3 sample-size
-   plan and add OOD wording/depth probes before confirmatory claims.
-2. **Grounded Statecharts:** narrow. G3 reduces false completion without success
-   loss, but base false-completion rate is modest on this model/prompt pair.
-   Keep G3 as a candidate; enlarge repeats and harden temptation before product
-   claims.
-3. **CHS / Unlearning:** do not escalate from this slice. Continue sealed-label
-   plumbing and wait for authentic failure rows with withheld labels.
-4. **Smoke rows:** remain discarded. This freeze uses held-out tasks only.
+1. **Constraint Transport:** stop escalation. The +1.0 joint-success effect
+   collapses to 0 under weaker instructions without condition labels. Treat the
+   labeled-prompt D2 effect as a prompt/scaffold artifact, not mechanism
+   evidence. Rebuild the prompt contract and re-run before any D3 CT claim.
+2. **Grounded Statecharts:** keep narrowed. Labeled G3 helped modestly; weak
+   prompt wiped the false-completion delta. Do not ship a product claim.
+3. **CHS / Unlearning:** still do not escalate. Heuristic harvest from live rows
+   exists under `artifacts/.../chs_from_live/` but labels remain unsealed.
+4. **Smoke rows:** remain discarded.
 
-## Kill / caution flags
+## Kill criteria fired
 
-- Prompt-scaffolded action JSON may inflate condition compliance; D3 must include
-  a weaker-instruction ablation.
-- One repeat is insufficient for confirmatory intervals; treat bootstrap CIs here
-  as planning inputs only.
-- Wrong-edge still shows non-zero joint success; attribution uniqueness is not
-  established.
+- Pre-registered D3 gate: escalate CT only if weak-prompt joint_success
+  δ ≥ 0.15 with ≥4 tasks. Observed δ = 0.0 → **kill CT escalation**.
+
+## Next best tests
+
+1. Redesign live prompts so condition identity is harness-enforced, not
+   instruction-named.
+2. Finish the 3-repeat labeled matrix only as a variance characterization, not
+   as confirmatory evidence.
+3. Independently seal CHS candidates from live failure harvest before CHS1.

@@ -26,6 +26,20 @@ performed after label access, if faults are not independently verified, if
 multi-fault cases are silently treated as single-fault, or if clean cases receive
 spurious component credit.
 
+## Model-mediated harvest
+
+Sanitized live D2 rows may be harvested into an artifact-only candidate ledger
+before adjudication. The declared mapping is a heuristic: artifact false
+completion under G0/direct self-report and constraint joint failure without
+external guards map to orchestration; wrong-edge transitions map to output;
+budget exhaustion maps to tools; and otherwise unexplained refusal maps to
+generation. These are surface hypotheses, not oracle labels or causal
+attributions. The harvest must abstain on unmatched patterns, preserve the
+source result digest, and remain unsealed until an independent scorer commits
+labels. Kill any stronger claim if the mapping changes after label access, if
+raw provider material enters the ledger, or if heuristic agreement is reported
+as a CHS score without independently sealed labels.
+
 ## Claim boundary and next test
 
 This result supports synthetic-to-sealed plumbing only. Publishable CHS1 still
