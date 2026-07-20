@@ -176,6 +176,8 @@ def main() -> None:
         output_dir=output,
         repeats=args.repeats,
     )
+    gates = summary["gates"]
+    provider_failures = gates["provider_failures"] if isinstance(gates, dict) else 0
     print(
         json.dumps(
             {
@@ -183,7 +185,7 @@ def main() -> None:
                 "adapter_id": summary["adapter_id"],
                 "episode_count": summary["episode_count"],
                 "publishable_rows": summary["publishable_rows"],
-                "provider_failures": summary["gates"]["provider_failures"],
+                "provider_failures": provider_failures,
             },
             indent=2,
             sort_keys=True,
