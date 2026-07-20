@@ -852,7 +852,7 @@
         "experiments/grounded_statecharts/results/harness_unlearning/replay.html"
       ],
       "n_modal_entrypoints": 1,
-      "n_scripts": 24,
+      "n_scripts": 28,
       "paper": null,
       "preregistration": "experiments/grounded_statecharts/CHS_SEALED_PREREGISTRATION.md",
       "verification_signals": [],

@@ -1,0 +1,59 @@
+{
+  "allowed_claim": "These three deterministic draft cases exercise the existing memory ledger's causal-use and quarantine mechanics under two semantic shifts and one identical-semantics negative control. They are not live, OOD, stochastic, or neural-unlearning evidence.",
+  "cases": [
+    {
+      "append_only_shift_success": false,
+      "case_id": "tool_schema_v2_to_v3",
+      "causal_use_prerequisite": true,
+      "false_forgetting": false,
+      "lifecycle_applied": true,
+      "mechanism": "The accepted tool field changes from legacy_name to current_name.",
+      "post_lifecycle_success": true,
+      "prior_regime": "v2",
+      "prior_success": true,
+      "semantics_changed": true,
+      "shift_family": "tool-schema",
+      "shifted_regime": "v3"
+    },
+    {
+      "append_only_shift_success": false,
+      "case_id": "environment_policy_v2_to_v3",
+      "causal_use_prerequisite": true,
+      "false_forgetting": false,
+      "lifecycle_applied": true,
+      "mechanism": "A policy-enforced environment now rejects the legacy field.",
+      "post_lifecycle_success": true,
+      "prior_regime": "v2",
+      "prior_success": true,
+      "semantics_changed": true,
+      "shift_family": "environment-policy",
+      "shifted_regime": "v3"
+    },
+    {
+      "append_only_shift_success": true,
+      "case_id": "model_version_identical_semantics",
+      "causal_use_prerequisite": false,
+      "false_forgetting": false,
+      "lifecycle_applied": false,
+      "mechanism": "The model identifier changes while the required commitment remains identical.",
+      "post_lifecycle_success": true,
+      "prior_regime": "v2",
+      "prior_success": true,
+      "semantics_changed": false,
+      "shift_family": "model/version-identical-semantics",
+      "shifted_regime": "model-v2-same-semantics"
+    }
+  ],
+  "gates": {
+    "changed_semantics_fail_append_only": true,
+    "changed_semantics_pass_causal_use": true,
+    "changed_semantics_recover_after_quarantine": true,
+    "identical_semantics_preserves_use": true,
+    "no_live_calls": true,
+    "three_shift_families_registered": true
+  },
+  "next_best_test": "Freeze independently generated shift instances and evaluate matched live agents only after pre-registering false-forgetting and recovery gates.",
+  "run_id": "unlearning_multishift_draft_fixture_2026_07_20",
+  "schema_version": "1.0",
+  "tier": "deterministic-draft-scaffold"
+}

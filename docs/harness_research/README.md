@@ -45,7 +45,7 @@ contract, and release definition are frozen in the
 Tranche 1 of that handoff — the shared live-evaluation contract — is now
 implemented under `experiments/grounded_statecharts/` as schemas, a fixture
 adapter, budgets, sanitization, task-clustered bootstrap utilities, and a
-clean-clone smoke bundle. Credentialed D2 pilots remain next.
+clean-clone smoke bundle. Credentialed held-out D2 mechanics have started; see `experiments/grounded_statecharts/D2_PILOT_DECISION.md` for the freeze decision.
 
 ## Why This Is a Real Transition
 

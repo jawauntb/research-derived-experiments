@@ -475,6 +475,8 @@ python3 -m experiments.long_horizon_bottleneck.eval --provider fixture --models 
 | `chs_sealed.py` / `run_chs_sealed_smoke.py` | Credential-free synthetic-to-sealed-label plumbing for one clean and six single-fault cases, scored against a separate label artifact |
 | `harness_unlearning.py` | Scoped memory ledger, descendant families, commitment harness, paired causal-use gate, and legal lifecycle transitions |
 | `run_harness_unlearning.py` | Fail-closed causal prerequisite plus deterministic shift, quarantine, retirement, recurrence, restoration, and replay bundle |
+| `unlearning_multishift.py` / `run_unlearning_multishift_smoke.py` | Credential-free draft extension with tool-schema and environment-policy semantic shifts plus a model/version-identical-semantics false-forgetting control; writes compact summary/rows only |
+| `constraint_ood.py` / `run_constraint_ood_smoke.py` | Credential-free planned-only OOD matrix for held-out wording and depth-5/6 delegation probes bound to existing Constraint Transport task families |
 | `adapters/` | Provider-neutral executor boundary; deterministic `fixture` adapter plus opt-in OpenAI/Anthropic `live` backend |
 | `budgets.py` | Matched call/token/tool/latency/cost ceilings with fail-closed planning receipts |
 | `sanitization.py` | Fail-closed public-row projection that blocks raw provider material |
@@ -488,6 +490,7 @@ python3 -m experiments.long_horizon_bottleneck.eval --provider fixture --models 
 | `replay_viewer.py` / `run_unified_replay.py` | Fixture-only public failure replay renderer and runner under `results/unified_replay/`, with observations, intervention, causal-credit scope, uncertainty, cost, and claim boundary separated |
 | `STATECHART_D2_PREREGISTRATION.md` | Draft/mechanics-only two-family D2 gate, controls, matched ceilings, kill criteria, and held-out claim boundary |
 | `CONSTRAINT_TRANSPORT_D2_PREREGISTRATION.md` / `CHS_SEALED_PREREGISTRATION.md` | Draft bridge assumptions, discriminating tests, kill criteria, and strict non-publishable claim boundaries |
+| `UNLEARNING_MULTISHIFT_PREREGISTRATION.md` | Draft three-family semantic-shift assumptions, causal-use prerequisite, identical-semantics control, kill criteria, and claim boundary |
 | `manifests/*.json` | Matched G0 self-report and G3 artifact-digest harness conditions; only `guard` differs |
 | `manifests/constraint_transport/experiment_manifest.json` | Separate structured run contract for the deterministic transport diagnostic |
 | `fixtures/*.json` | Registered replay/transport/fault cases, a versioned memory shift/recurrence episode, and the held-out D2 task bank |

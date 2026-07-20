@@ -38,3 +38,18 @@ contrast is explained by a known injected summary fault alone.
 
 This bridge may claim only deterministic reuse and explicit non-identification
 of factorial effects. The next best test is the matched four-cell pilot above.
+
+## Draft OOD addendum
+
+Two credential-free probe contracts are now frozen without execution:
+
+1. **Held-out wording:** rephrase instructions while retaining the exact typed
+   constraint identity, task scorer, two source families, and depth 1–4 matrix.
+2. **Deeper delegation depth:** extend matched prose and typed chains to depth 5
+   and 6 with the same lineage and capability-narrowing checks.
+
+The current frame predicts typed constraint survival and valid lineage should
+not depend on wording or the committed depth-1–4 ceiling. Kill either transport
+interpretation if a wording change changes the scorer/constraint identity, or a
+typed depth-5/6 chain drops lineage or a required constraint. The emitted OOD
+artifact records planned probes only; it contains no OOD result or provider call.
