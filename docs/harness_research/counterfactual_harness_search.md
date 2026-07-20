@@ -2,10 +2,17 @@
 
 ## Causal Credit Assignment for Self-Improving Agents
 
-Status: experimental design; no implementation or empirical claim yet.
+Status: deterministic six-surface pilot implemented; confirmatory attribution
+and model-level empirical claims remain untested.
 
 Portfolio role: flagship publication and largest long-run improvement to
 self-improving harnesses.
+
+Implementation: [`experiments/grounded_statecharts`](../../experiments/grounded_statecharts/README.md)
+now provides six single-fault fixtures, isolated repair and placebo replay,
+outcome-vector credit, exact localization, and an equal-budget comparison with
+a narrow passive trace baseline. This diagnostic is deliberately below the
+CHS1–CHS6 gates in this design.
 
 ## One-Sentence Thesis
 

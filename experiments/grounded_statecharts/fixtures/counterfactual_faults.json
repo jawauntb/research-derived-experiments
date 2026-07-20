@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "cases": [
+    {
+      "fault_id": "fault-context-summary-drop",
+      "responsible_component": "context",
+      "source_episode_id": "ct:lossy_prompt:approval_before_publish:d2",
+      "symptom": "constraint identity absent after delegation summary",
+      "task_family": "recursive_constraint",
+      "trace_suspect": "memory"
+    },
+    {
+      "fault_id": "fault-tools-schema-alias",
+      "responsible_component": "tools",
+      "source_episode_id": "synthetic:structured_tool",
+      "symptom": "tool returned a schema-valid but unusable field alias",
+      "task_family": "structured_tool",
+      "trace_suspect": "output"
+    },
+    {
+      "fault_id": "fault-generation-truncation",
+      "responsible_component": "generation",
+      "source_episode_id": "synthetic:terminal_generation",
+      "symptom": "terminal answer ends before the required receipt",
+      "task_family": "terminal_generation",
+      "trace_suspect": "context"
+    },
+    {
+      "fault_id": "fault-orchestration-bypass",
+      "responsible_component": "orchestration",
+      "source_episode_id": "grounded_statecharts:false_success_missing_artifact",
+      "symptom": "verify transitions directly to commit without repair",
+      "task_family": "statechart_repair",
+      "trace_suspect": "output"
+    },
+    {
+      "fault_id": "fault-memory-stale-receipt",
+      "responsible_component": "memory",
+      "source_episode_id": "synthetic:stale_memory",
+      "symptom": "a prior receipt is reused after the fixture version changes",
+      "task_family": "memory_under_shift",
+      "trace_suspect": "context"
+    },
+    {
+      "fault_id": "fault-output-lax-validator",
+      "responsible_component": "output",
+      "source_episode_id": "synthetic:output_validation",
+      "symptom": "validator accepts a missing critical field",
+      "task_family": "structured_output",
+      "trace_suspect": "generation"
+    }
+  ]
+}

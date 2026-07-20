@@ -1,8 +1,8 @@
 # Grounded Harness Research Portfolio
 
-Status: D1 deterministic replay and the D2 deterministic Constraint Transport
-diagnostic passed; live-model, stochastic, and later research claims remain
-untested.
+Status: D1 deterministic replay, D2 deterministic Constraint Transport, and a
+thin six-surface Counterfactual Harness Search pilot passed; live-model,
+stochastic, and later research claims remain untested.
 
 Last updated: 2026-07-20.
 
@@ -31,6 +31,9 @@ exact no-op replay, one G3 artifact guard, and a static false-completion replay.
 It also publishes typed constraint lineage and task/violation metrics for two
 fixture families at depths one through four. These pass deterministic exit
 gates only; they are not evidence for task-population, model, or OOD claims.
+The same package now publishes paired single-component repair/placebo evidence
+for six injected harness surfaces at an equal seven-evaluation budget. That
+pilot is synthetic-identifiable and does not satisfy CHS1–CHS6.
 
 ## Why This Is a Real Transition
 

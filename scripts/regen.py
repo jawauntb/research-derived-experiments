@@ -81,7 +81,7 @@ PDF_OUTPUTS = {
 CLEAN_CLONE_ALLOWLIST: dict[str, str] = {
     "bayesian_voi": "experiments/bayesian_voi/results/bayesian_voi_summary.json",
     "grounded_statecharts": (
-        "experiments/grounded_statecharts/results/constraint_transport/summary.json"
+        "experiments/grounded_statecharts/results/counterfactual_search/summary.json"
     ),
     "mathematical_claims": (
         "experiments/mathematical_claims/results/mathematical_claims_summary.json"

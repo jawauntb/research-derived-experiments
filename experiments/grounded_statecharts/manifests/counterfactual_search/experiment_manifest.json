@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "counterfactual_harness_pilot",
+  "hypothesis": "Paired single-component replay recovers known injected harness faults and selects more valid repairs than passive trace diagnosis at the same deterministic evaluation budget.",
+  "claim_tier": "descriptive",
+  "controls": [
+    {
+      "control_id": "noop_trace_replay",
+      "description": "Repeat the unchanged faulted harness and require exact outcome identity."
+    },
+    {
+      "control_id": "matched_placebo",
+      "description": "Edit unused metadata and require zero accepted causal credit."
+    },
+    {
+      "control_id": "trace_diagnosis",
+      "description": "Use six passive no-op replays plus one trace-selected repair at the same seven-evaluation budget."
+    }
+  ],
+  "seeds": [20260720],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python3",
+      "-m",
+      "experiments.grounded_statecharts.run_counterfactual_search"
+    ],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [
+    {
+      "name": "grounded_statecharts",
+      "version": "1.0"
+    }
+  ],
+  "gates": [
+    {
+      "gate_id": "CHS_FIXTURE_INTEGRITY",
+      "criterion": "Each clean reference passes, each single-fault manifest fails, and no-op replay is exact."
+    },
+    {
+      "gate_id": "CHS_FIXTURE_ATTRIBUTION",
+      "criterion": "Paired interventions recover the responsible component on all six harness surfaces with zero placebo credit."
+    },
+    {
+      "gate_id": "CHS_FIXTURE_EQUAL_BUDGET_REPAIR",
+      "criterion": "Counterfactual repair success exceeds trace-diagnosis repair success at seven evaluations per case."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/grounded_statecharts/results/counterfactual_search/summary.json",
+      "public": true
+    },
+    {
+      "kind": "dataset",
+      "path": "experiments/grounded_statecharts/results/counterfactual_search/cases.jsonl",
+      "public": true
+    },
+    {
+      "kind": "dataset",
+      "path": "experiments/grounded_statecharts/results/counterfactual_search/interventions.jsonl",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/grounded_statecharts/results/counterfactual_search/replay.html",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/grounded_statecharts/COUNTERFACTUAL_SEARCH_PREREGISTRATION.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

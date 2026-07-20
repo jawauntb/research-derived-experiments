@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Counterfactual Harness Search Pilot</title>
+<style>
+:root { color-scheme: dark; font-family: ui-sans-serif, system-ui, sans-serif; }
+body { margin: 0; background: #11101b; color: #f5f3ff; }
+main { max-width: 980px; margin: auto; padding: 44px 22px; }
+.eyebrow { color: #c4b5fd; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+h1 { font-size: clamp(2rem, 6vw, 4.2rem); line-height: 1; margin: 12px 0 18px; }
+p { color: #d6d3d1; max-width: 780px; line-height: 1.6; }
+.card { background: #1c1830; border: 1px solid #4c3f74; border-radius: 16px; padding: 20px; overflow: auto; }
+table { width: 100%; border-collapse: collapse; }
+th, td { border-bottom: 1px solid #4c3f74; padding: 11px; text-align: left; }
+th { color: #ddd6fe; } .claim { border-left: 3px solid #fb7185; padding-left: 14px; margin-top: 24px; color: #fecdd3; }
+</style></head><body><main>
+<div class="eyebrow">Synthetic-identifiable pilot · equal budget 7</div>
+<h1>Intervene before assigning blame.</h1>
+<p>Each row starts from one faulted harness surface. Six isolated repairs and one placebo are compared against six passive no-op replays plus one trace-selected repair.</p>
+<section class="card"><table><thead><tr><th>Injected surface</th><th>Trace suspect</th><th>Recovered</th><th>Counterfactual repair</th><th>Trace repair</th></tr></thead><tbody><tr><td>context</td><td>memory</td><td>context</td><td>yes</td><td>no</td></tr><tr><td>tools</td><td>output</td><td>tools</td><td>yes</td><td>no</td></tr><tr><td>generation</td><td>context</td><td>generation</td><td>yes</td><td>no</td></tr><tr><td>orchestration</td><td>output</td><td>orchestration</td><td>yes</td><td>no</td></tr><tr><td>memory</td><td>context</td><td>memory</td><td>yes</td><td>no</td></tr><tr><td>output</td><td>generation</td><td>output</td><td>yes</td><td>no</td></tr></tbody></table></section>
+<div class="claim"><strong>Claim boundary:</strong> On six committed deterministic single-fault fixtures, isolated component replay recovered every injected harness surface and selected six valid repairs versus zero for the narrow trace diagnosis baseline at equal budget.</div>
+</main></body></html>
