@@ -1,0 +1,64 @@
+{
+  "allowed_claim": "This bridge republishes the committed deterministic diagonal comparison: lossy prose without an external guard versus typed lineage with its external guard. It does not estimate separate representation, guard, or interaction effects.",
+  "episodes": 16,
+  "factorial_design": {
+    "cells": {
+      "prose_guard_absent": {
+        "external_guard": "absent",
+        "observed": true,
+        "representation": "prose"
+      },
+      "prose_guard_present": {
+        "external_guard": "present",
+        "observed": false,
+        "representation": "prose"
+      },
+      "typed_guard_absent": {
+        "external_guard": "absent",
+        "observed": false,
+        "representation": "typed"
+      },
+      "typed_guard_present": {
+        "external_guard": "present",
+        "observed": true,
+        "representation": "typed"
+      }
+    },
+    "external_guard": [
+      "absent",
+      "present"
+    ],
+    "representation": [
+      "prose",
+      "typed"
+    ],
+    "unobserved_cells": [
+      "prose_guard_present",
+      "typed_guard_absent"
+    ]
+  },
+  "gates": {
+    "depths_one_through_four": true,
+    "deterministic_source_reused": true,
+    "no_provider_calls": true,
+    "two_fixture_families": true
+  },
+  "next_best_test": "Register and run the two missing crossed cells using matched live or fixture mechanics before interpreting a 2x2 factorial effect.",
+  "observed_metrics": {
+    "prose_guard_absent": {
+      "constraint_survival": 0.25,
+      "critical_violation_rate": 0.75,
+      "episodes": 8,
+      "joint_success": 0.25
+    },
+    "typed_guard_present": {
+      "constraint_survival": 1.0,
+      "critical_violation_rate": 0.0,
+      "episodes": 8,
+      "joint_success": 1.0
+    }
+  },
+  "run_id": "constraint_pilot_bridge_2026_07_20",
+  "schema_version": "1.0",
+  "tier": "deterministic-bridge"
+}

@@ -434,13 +434,17 @@ def run_episode(
             "logical_time": 0,
         }
     )
-    # Exact fixture no-op: re-running the same request must yield the same public action.
-    replay = active.complete(request)
-    replay_ok = (
-        replay.action == response.action
-        and replay.claimed_complete == response.claimed_complete
-        and replay.artifact_created == response.artifact_created
-    )
+    # Exact fixture no-op only: live adapters are stochastic, so do not spend a
+    # second provider call here. Live replay variance is characterized offline.
+    if active.adapter_id == "fixture":
+        replay = active.complete(request)
+        replay_ok = (
+            replay.action == response.action
+            and replay.claimed_complete == response.claimed_complete
+            and replay.artifact_created == response.artifact_created
+        )
+    else:
+        replay_ok = True
     candidate: dict[str, object] = {
         "episode_id": episode.episode_id,
         "run_id": episode.run_id,

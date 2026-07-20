@@ -137,7 +137,9 @@ smoke conditions through the same `ReplayEngine`, committed false-success
 fixture, and G0/G3 manifests; constraint conditions still use the fixture
 executor path. The bridge emits only sanitized public-contract rows under the
 matched default pilot budget and its smoke outcomes are not held-out evidence.
-Credentialed live-model pilots remain opt-in and unimplemented.
+Credentialed live-model mechanics smoke is opt-in via
+`GROUNDED_HARNESS_LIVE=1` and writes only under gitignored `artifacts/`; held-out
+D2 pilots remain planned until their freeze gate passes.
 
 | Design | Intended surface | Dependency order |
 |---|---|---|
@@ -346,7 +348,22 @@ Python calls it via `experiments/viable_computational_bodies/haskell_gate.py`.
 cd formal/ontology-hs && cabal test all && cabal run ontology-check
 ```
 
-### 3.6 Public sites & CI deploy
+### 3.6 Grounded-statechart pilot bridges
+
+`experiments/grounded_statecharts` keeps its clean-clone D2 and CHS bridge
+paths deterministic and credential-free. `constraint_pilot.py` republishes the
+committed Constraint Transport diagonal as prose/no-guard and typed/guarded
+rows, while recording the crossed 2x2 cells as unobserved rather than inferring
+main effects. `chs_sealed.py` loads a separate synthetic label artifact and
+scores the clean reference plus six single-fault component cases through the
+existing counterfactual repair machinery.
+
+Both runners write only compact summaries and rows under `results/`, call no
+live provider, and state their synthetic/mechanics claim boundary. The sealed
+label bridge is not CHS1: publishable attribution still requires genuinely
+withheld labels on real failures.
+
+### 3.7 Public sites & CI deploy
 
 On push to `main`, `.github/workflows/railway-deploy.yml` deploys:
 
