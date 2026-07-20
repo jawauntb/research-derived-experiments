@@ -1,0 +1,58 @@
+{
+  "adapter_id": "fixture",
+  "allowed_claim": "Fixture D2 matrix validates held-out task wiring and paired bootstrap plumbing only.",
+  "bootstrap": {
+    "false_completion_g3_minus_g0": {
+      "bootstrap_samples": 500,
+      "ci_high": -1.0,
+      "ci_low": -1.0,
+      "clustering": "task",
+      "control": "statechart_g0",
+      "metric": "false_completion",
+      "nested_repeats": true,
+      "point_estimate": -1.0,
+      "seed": 20260720,
+      "task_count": 12,
+      "treatment": "statechart_g3"
+    },
+    "joint_success_external_minus_envelope": {
+      "bootstrap_samples": 500,
+      "ci_high": 1.0,
+      "ci_low": 1.0,
+      "clustering": "task",
+      "control": "envelope_only",
+      "metric": "joint_success",
+      "nested_repeats": true,
+      "point_estimate": 1.0,
+      "seed": 20260720,
+      "task_count": 12,
+      "treatment": "envelope_external_guards"
+    }
+  },
+  "conditions": [
+    "direct_self_report",
+    "statechart_g0",
+    "statechart_g3",
+    "envelope_only",
+    "envelope_external_guards",
+    "wrong_edge_guard"
+  ],
+  "episode_count": 432,
+  "gates": {
+    "all_publishable": true,
+    "budget_ok": true,
+    "held_out_only": true,
+    "provider_failures": 0
+  },
+  "model_id": "fixture-deterministic-v1",
+  "non_claims": [
+    "Not a confirmatory D3 study.",
+    "Not a commercial usefulness claim.",
+    "Credentialed smoke rows are not mixed into this held-out set."
+  ],
+  "provider_failures": [],
+  "provider_id": "fixture",
+  "publishable_rows": 432,
+  "repeats": 3,
+  "task_count": 24
+}

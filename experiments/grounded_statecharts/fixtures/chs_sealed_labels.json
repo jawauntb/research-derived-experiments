@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "labels": [
+    {
+      "case_id": "clean-reference",
+      "fault_id": null,
+      "responsible_component": null
+    },
+    {
+      "case_id": "fault-context-summary-drop",
+      "fault_id": "fault-context-summary-drop",
+      "responsible_component": "context"
+    },
+    {
+      "case_id": "fault-tools-schema-alias",
+      "fault_id": "fault-tools-schema-alias",
+      "responsible_component": "tools"
+    },
+    {
+      "case_id": "fault-generation-truncation",
+      "fault_id": "fault-generation-truncation",
+      "responsible_component": "generation"
+    },
+    {
+      "case_id": "fault-orchestration-bypass",
+      "fault_id": "fault-orchestration-bypass",
+      "responsible_component": "orchestration"
+    },
+    {
+      "case_id": "fault-memory-stale-receipt",
+      "fault_id": "fault-memory-stale-receipt",
+      "responsible_component": "memory"
+    },
+    {
+      "case_id": "fault-output-lax-validator",
+      "fault_id": "fault-output-lax-validator",
+      "responsible_component": "output"
+    }
+  ]
+}

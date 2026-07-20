@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "grounded_harness_d2_pilot",
+  "hypothesis": "On two held-out task families, G3 executable guards and typed envelopes with external guards directionally improve false-completion and joint-success outcomes versus matched self-report and prose baselines at fixed budget, without granting credit to wrong-edge or matched-cost controls.",
+  "claim_tier": "internal",
+  "controls": [
+    {
+      "control_id": "direct_self_report",
+      "description": "Direct agent loop with final self-report."
+    },
+    {
+      "control_id": "statechart_g0",
+      "description": "Explicit statechart with G0 self-guard."
+    },
+    {
+      "control_id": "wrong_edge_guard",
+      "description": "Matched wrong-edge or wrong-evidence guard control."
+    },
+    {
+      "control_id": "exact_noop",
+      "description": "Exact no-op replay characterization within pre-registered stochastic tolerance."
+    }
+  ],
+  "seeds": [20260720],
+  "runtime": {
+    "execution_class": "external",
+    "command": [
+      "python3",
+      "-m",
+      "experiments.grounded_statecharts.run_live_credentialed_smoke"
+    ],
+    "estimated_minutes": 30,
+    "max_cost_usd": 25
+  },
+  "dependencies": [
+    {
+      "name": "grounded_statecharts",
+      "version": "1.1"
+    }
+  ],
+  "gates": [
+    {
+      "gate_id": "D2_SCHEMA_INTEGRITY",
+      "criterion": "Every row validates against the public result schema with resolvable digests."
+    },
+    {
+      "gate_id": "D2_FIXTURE_PARITY",
+      "criterion": "Deterministic fixture parity remains byte-stable."
+    },
+    {
+      "gate_id": "D2_NOOP_TOLERANCE",
+      "criterion": "No-op replay differences remain inside pre-registered stochastic tolerance or are modeled explicitly."
+    },
+    {
+      "gate_id": "D2_G3_DIRECTION",
+      "criterion": "G3 guards directionally reduce false completion without more than a 10pp raw-success loss."
+    },
+    {
+      "gate_id": "D2_TRANSPORT_DIRECTION",
+      "criterion": "Typed envelopes plus external guards directionally improve zero-violation joint success over prose and envelope-only controls."
+    },
+    {
+      "gate_id": "D2_CONTROL_CREDIT",
+      "criterion": "Wrong-edge and matched-cost controls do not receive candidate-mechanism credit."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "other",
+      "path": "experiments/grounded_statecharts/STATECHART_D2_PREREGISTRATION.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/grounded_statecharts/CONSTRAINT_TRANSPORT_D2_PREREGISTRATION.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/grounded_statecharts/manifests/d2_pilot/experiment_manifest.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/grounded_statecharts/fixtures/d2_held_out_tasks.json",
+      "public": true
+    }
+  ],
+  "status": "planned"
+}

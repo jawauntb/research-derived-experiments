@@ -1,0 +1,32 @@
+{
+  "allowed_claim": "The separate label-loading and scoring path correctly scores the committed synthetic clean and six single-fault fixtures. It is a plumbing bridge, not a sealed evaluation of real failures.",
+  "cases": 7,
+  "fault_surfaces": [
+    "context",
+    "tools",
+    "generation",
+    "orchestration",
+    "memory",
+    "output"
+  ],
+  "gates": {
+    "no_provider_calls": true,
+    "one_no_fault_case": true,
+    "sealed_fixture_alignment": true,
+    "six_single_fault_cases": true
+  },
+  "metrics": {
+    "no_fault_correct": true,
+    "single_fault_top1_attribution": 1.0,
+    "top1_attribution": 1.0
+  },
+  "next_best_test": "Score precommitted labels withheld from the diagnosis author on real failure episodes before making a CHS1 claim.",
+  "non_claims": [
+    "Labels remain synthetic and repository-visible to the fixture author.",
+    "No real failure, stochastic replay, interaction fault, or OOD attribution was evaluated.",
+    "This does not satisfy publishable CHS1."
+  ],
+  "run_id": "chs_sealed_bridge_2026_07_20",
+  "schema_version": "1.0",
+  "tier": "synthetic-sealed-label-bridge"
+}

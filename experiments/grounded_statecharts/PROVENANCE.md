@@ -17,7 +17,7 @@
 - **Scientific adjudications:** unadjudicated
 
 ## Verification
-- Pre-registration: `experiments/grounded_statecharts/CONSTRAINT_TRANSPORT_PREREGISTRATION.md`
+- Pre-registration: `experiments/grounded_statecharts/CHS_SEALED_PREREGISTRATION.md`
 - Result reports (2):
   - `experiments/grounded_statecharts/results/harness_unlearning/summary.json`
   - `experiments/grounded_statecharts/results/harness_unlearning/replay.html`

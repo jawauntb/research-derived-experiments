@@ -37,6 +37,8 @@ python3 -m experiments.grounded_statecharts.run_counterfactual_search
 python3 -m experiments.grounded_statecharts.run_harness_unlearning
 python3 -m experiments.grounded_statecharts.run_unified_replay
 python3 -m experiments.grounded_statecharts.run_statechart_pilot_smoke
+python3 -m experiments.grounded_statecharts.run_constraint_pilot_smoke
+python3 -m experiments.grounded_statecharts.run_chs_sealed_smoke
 ```
 
 The command has no third-party or provider dependency. It regenerates the
@@ -86,17 +88,39 @@ pilots:
 - `schemas/task.schema.json`, `episode.schema.json`, `intervention.schema.json`,
   and `result.schema.json`
 - `adapters/` provider-neutral boundary with a deterministic `fixture` executor
-  and an opt-in `live` stub that requires `GROUNDED_HARNESS_LIVE=1`
+  and an opt-in `live` OpenAI/Anthropic backend (`GROUNDED_HARNESS_LIVE=1`)
 - `budgets.py`, `sanitization.py`, and `evaluation.py` for matched ceilings,
   fail-closed public rows, integrity receipts, and task-clustered bootstrap
 
 ```bash
 python3 -m experiments.grounded_statecharts.run_live_smoke
-python3 -m pytest -q tests/test_grounded_live_evaluation.py
+python3 -m pytest -q tests/test_grounded_live_evaluation.py tests/test_grounded_live_provider.py
 ```
 
-The smoke path never imports a provider SDK, reads an API key, or writes raw
-transcripts into `results/`. Credentialed live backends remain a later opt-in.
+The default smoke path never imports a provider SDK, reads an API key, or
+writes raw transcripts into `results/`.
+
+Credentialed mechanics smoke (writes only under gitignored `artifacts/`):
+
+```bash
+GROUNDED_HARNESS_LIVE=1 \
+GROUNDED_HARNESS_PROVIDER=openai \
+GROUNDED_HARNESS_MODEL=gpt-4.1-mini \
+doppler run --config dev -- \
+  python3 -m experiments.grounded_statecharts.run_live_credentialed_smoke
+```
+
+Smoke outcomes are discarded from held-out D2 pilots.
+
+## Frozen D2 held-out task bank
+
+`fixtures/d2_held_out_tasks.json` freezes 24 public task contracts: 12
+artifact-completion tasks requiring fresh local verification and 12 recursive
+delegation tasks requiring an approval, evidence, or capability constraint to
+survive. `d2_tasks.py` validates their closed task-schema shape, constructs
+`LiveTask` records, verifies frozen task digests, and rejects smoke rows. The
+fixture contains no answer keys or hidden fault labels; execution guards must
+use declared artifact and capability receipts.
 
 ## Statechart D2 pilot mechanics bridge
 
@@ -112,6 +136,20 @@ sanitized, and are discarded from held-out D2 analysis.
 The draft two-family gate is
 [`STATECHART_D2_PREREGISTRATION.md`](STATECHART_D2_PREREGISTRATION.md).
 
+## Constraint and attribution bridge smoke paths
+
+`run_constraint_pilot_smoke` writes `results/constraint_pilot/` by reusing the
+committed Constraint Transport outcomes. It maps the observed deterministic
+diagonal to prose/no external guard and typed/external guard, while marking the
+two crossed 2x2 cells as unobserved; it makes no factorial-effect claim.
+
+`run_chs_sealed_smoke` writes `results/chs_sealed/` by loading a separate
+synthetic label artifact for one clean reference and six single-fault surfaces,
+then scoring top-1 attribution from the existing counterfactual pilot. It is
+synthetic-to-sealed plumbing only: real failures with genuinely withheld labels
+remain required for publishable CHS1. Both runners are credential-free and
+never call a live provider.
+
 ## Scope boundary
 
 These are deterministic fixture results, not estimates over live agents or
@@ -122,3 +160,13 @@ faults. Functional unlearning is demonstrated on one deterministic regime
 shift only; it is not neural unlearning, erasure, or an HU1–HU7 result. The
 live-evaluation smoke bundle validates the shared contract only; it is not a
 D2 pilot, commercial demo, or publishable population claim.
+
+
+## Held-out D2 pilot runner
+
+```bash
+python3 -m experiments.grounded_statecharts.run_d2_pilot --adapter fixture
+```
+
+Live held-out runs require `GROUNDED_HARNESS_LIVE=1` and write under
+`artifacts/grounded_statecharts/d2_pilot/` only.

@@ -82,7 +82,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_seed_bootstrap_calibration.py` | Deterministic seed-floor grid, correct resampling unit, negative-regime retention, exact summary regeneration |
 | `test_passive_active_phase_map.py` | Phase-map model comparison, matched-budget path controls, public aggregate contract |
 | `test_grounded_statecharts.py` | Exact replay, depth 1–4 constraint lineage, six-surface fault attribution, descendant-aware memory causal use, legal lifecycle transitions, and byte-stable bundles |
-| `test_grounded_live_evaluation.py`, `test_grounded_statechart_pilot.py` | Shared live-eval schemas, fixture adapter replay integrity, ReplayEngine-backed artifact D2 mechanics, G0/G3/wrong-edge controls, matched-budget fail-closed planning, sanitization, live opt-in gate, and task-clustered bootstrap stability |
+| `test_grounded_live_evaluation.py`, `test_grounded_live_provider.py`, `test_grounded_statechart_pilot.py` | Shared live-eval schemas, fixture/live adapters, injectible provider transport, ReplayEngine-backed artifact D2 mechanics, budgets/sanitization, and bootstrap stability |
 | `test_causal_use.py` | Shared mass-normalized causal-use dose curves, bootstrap uncertainty, and cross-surface transport |
 | `test_experiment_manifest.py`, `test_gate_verdict.py`, `test_evidence_registry.py`, `test_claim_registry.py` | Fail-closed research-contract adapters, package-coverage registry partition, discovery, references, supersession, and bidirectional edges |
 | `test_research_contract_schema_parity.py`, `test_gen_provenance.py` | Shared vocabulary/schema parity, support-directory exclusion, non-mutating provenance freshness |
@@ -469,21 +469,28 @@ python3 -m experiments.long_horizon_bottleneck.eval --provider fixture --models 
 | `run_fixture.py` | One-command deterministic fixture runner and static HTML replay generator |
 | `constraint_transport.py` | Versioned constraint envelopes, hash-linked derivation, capability narrowing, tamper rejection, and deterministic depth 1–4 evaluator |
 | `run_constraint_transport.py` | Two-family benchmark runner, joint-success scorer, known-fault export, and compact static replay |
+| `constraint_pilot.py` / `run_constraint_pilot_smoke.py` | Credential-free D2 bridge that maps the committed prose/no-guard and typed/guarded diagonal into compact rows while explicitly marking the two crossed factorial cells unobserved |
 | `counterfactual_search.py` | Six-surface fault manifests, deterministic outcome vectors, isolated repair/placebo replay, attribution credit, and equal-budget trace baseline |
 | `run_counterfactual_search.py` | Pilot runner, fault-integrity gates, attribution/repair metrics, and compact static replay |
+| `chs_sealed.py` / `run_chs_sealed_smoke.py` | Credential-free synthetic-to-sealed-label plumbing for one clean and six single-fault cases, scored against a separate label artifact |
 | `harness_unlearning.py` | Scoped memory ledger, descendant families, commitment harness, paired causal-use gate, and legal lifecycle transitions |
 | `run_harness_unlearning.py` | Fail-closed causal prerequisite plus deterministic shift, quarantine, retirement, recurrence, restoration, and replay bundle |
-| `adapters/` | Provider-neutral executor boundary; deterministic `fixture` adapter plus opt-in `live` stub |
+| `adapters/` | Provider-neutral executor boundary; deterministic `fixture` adapter plus opt-in OpenAI/Anthropic `live` backend |
 | `budgets.py` | Matched call/token/tool/latency/cost ceilings with fail-closed planning receipts |
 | `sanitization.py` | Fail-closed public-row projection that blocks raw provider material |
 | `evaluation.py` | Normalized live task/episode/result records, smoke matrix, integrity receipts, and task-clustered bootstrap |
+| `d2_tasks.py` / `fixtures/d2_held_out_tasks.json` | Frozen 24-task D2 bank (12 fresh-verification artifact tasks + 12 constrained-delegation tasks), closed-schema/`LiveTask` loader, and task-digest validation; no answer keys or hidden labels |
 | `run_live_smoke.py` | Clean-clone-safe smoke bundle under `results/live_evaluation/` |
+| `run_live_credentialed_smoke.py` / `modal_live_credentialed_smoke.py` | Opt-in credentialed mechanics smoke writing only under gitignored `artifacts/`; smoke rows discarded from held-out D2 |
+| `d2_tasks.py` / `run_d2_pilot.py` | Frozen held-out D2 task bank loader and fixture/live matrix runner |
+| `manifests/d2_pilot/experiment_manifest.json` | Planned two-family D2 pilot contract (status=`planned` until held-out freeze) |
 | `statechart_pilot.py` / `run_statechart_pilot_smoke.py` | D2 mechanics bridge: ReplayEngine-backed artifact G0/G3 and wrong-edge conditions, fixture-executor constraint delegation, matched-budget public rows, and non-held-out smoke entrypoint |
 | `replay_viewer.py` / `run_unified_replay.py` | Fixture-only public failure replay renderer and runner under `results/unified_replay/`, with observations, intervention, causal-credit scope, uncertainty, cost, and claim boundary separated |
 | `STATECHART_D2_PREREGISTRATION.md` | Draft/mechanics-only two-family D2 gate, controls, matched ceilings, kill criteria, and held-out claim boundary |
+| `CONSTRAINT_TRANSPORT_D2_PREREGISTRATION.md` / `CHS_SEALED_PREREGISTRATION.md` | Draft bridge assumptions, discriminating tests, kill criteria, and strict non-publishable claim boundaries |
 | `manifests/*.json` | Matched G0 self-report and G3 artifact-digest harness conditions; only `guard` differs |
 | `manifests/constraint_transport/experiment_manifest.json` | Separate structured run contract for the deterministic transport diagnostic |
-| `fixtures/*.json` | Registered replay/transport/fault cases plus one versioned memory shift/recurrence episode |
+| `fixtures/*.json` | Registered replay/transport/fault cases, a versioned memory shift/recurrence episode, and the held-out D2 task bank |
 | `schemas/*.json` | Public event, constraint-envelope, and live task/episode/intervention/result contracts |
 | `results/` | Replay, transport, attribution, functional-memory, and live-smoke summaries with row-level evidence |
 
@@ -495,6 +502,8 @@ python3 -m experiments.grounded_statecharts.run_harness_unlearning
 python3 -m experiments.grounded_statecharts.run_live_smoke
 python3 -m experiments.grounded_statecharts.run_unified_replay
 python3 -m experiments.grounded_statecharts.run_statechart_pilot_smoke
+python3 -m experiments.grounded_statecharts.run_constraint_pilot_smoke
+python3 -m experiments.grounded_statecharts.run_chs_sealed_smoke
 ```
 
 #### 3.3.4 Related reengagement packages

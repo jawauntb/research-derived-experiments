@@ -165,20 +165,41 @@ def test_live_adapter_requires_explicit_opt_in(monkeypatch: pytest.MonkeyPatch) 
     monkeypatch.setenv(LIVE_OPT_IN_ENV, "1")
     monkeypatch.setenv("GROUNDED_HARNESS_PROVIDER", "openai")
     monkeypatch.setenv("GROUNDED_HARNESS_MODEL", "gpt-test")
-    executor = build_executor("live")
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+
+    def fake_transport(url, headers, payload, timeout_seconds):
+        del url, headers, payload, timeout_seconds
+        return {
+            "choices": [
+                {
+                    "message": {
+                        "content": (
+                            '{"action":"create_artifact_and_commit",'
+                            '"claimed_complete":true,"artifact_created":true,'
+                            '"capability_used":["write_artifact"],"text":"ok"}'
+                        )
+                    }
+                }
+            ],
+            "usage": {"prompt_tokens": 1, "completion_tokens": 1},
+        }
+
+    from experiments.grounded_statecharts.adapters.live import LiveExecutor as Live
+
+    executor = Live.from_env(transport=fake_transport)
     assert isinstance(executor, LiveExecutor)
-    with pytest.raises(RuntimeError, match="not wired"):
-        executor.complete(
-            ExecutorRequest(
-                episode_id="x",
-                task_id="t",
-                family="artifact_completion",
-                condition="statechart_g3",
-                instruction="do it",
-                seed=0,
-                step_index=0,
-            )
+    response = executor.complete(
+        ExecutorRequest(
+            episode_id="x",
+            task_id="t",
+            family="artifact_completion",
+            condition="statechart_g3",
+            instruction="do it",
+            seed=0,
+            step_index=0,
         )
+    )
+    assert response.artifact_created is True
 
 
 def test_task_clustered_bootstrap_is_seed_stable() -> None:
