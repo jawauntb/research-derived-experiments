@@ -160,3 +160,13 @@ faults. Functional unlearning is demonstrated on one deterministic regime
 shift only; it is not neural unlearning, erasure, or an HU1–HU7 result. The
 live-evaluation smoke bundle validates the shared contract only; it is not a
 D2 pilot, commercial demo, or publishable population claim.
+
+
+## Held-out D2 pilot runner
+
+```bash
+python3 -m experiments.grounded_statecharts.run_d2_pilot --adapter fixture
+```
+
+Live held-out runs require `GROUNDED_HARNESS_LIVE=1` and write under
+`artifacts/grounded_statecharts/d2_pilot/` only.
