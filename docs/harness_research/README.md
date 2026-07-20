@@ -39,6 +39,10 @@ The memory fixture suppresses a stale item plus its derived summary, records
 quarantine/retirement receipts, and restores it after recurrence. It is
 functional harness control on one fixture, not neural unlearning or HU1–HU7.
 
+The concrete post-fixture build order, live-pilot gate, six-lane parallelization
+contract, and release definition are frozen in the
+[Grounded Harness Build and Experiment Handoff](../next_agent_grounded_harness_experiments_handoff_2026-07-20.md).
+
 ## Why This Is a Real Transition
 
 The existing harness literature establishes that orchestration and control
