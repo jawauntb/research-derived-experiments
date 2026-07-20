@@ -1,0 +1,236 @@
+{
+  "allowed_claim": "On one committed deterministic v2-to-v3-to-v2 fixture, paired replay showed that the stale memory family changed commitment; quarantine and retirement stopped that influence, and bounded recurrence revalidation restored the preserved memory and task success.",
+  "causal_use": {
+    "descendant_leak_detected": true,
+    "observed": {
+      "action": "legacy_name",
+      "critical_violation": true,
+      "joint_success": false,
+      "regime_id": "v3",
+      "required_action": "current_name",
+      "retrieved_memory_ids": [
+        "mem-tool-v2",
+        "mem-tool-v2-summary"
+      ],
+      "task_success": false
+    },
+    "passed": true,
+    "placebo_effect": 0,
+    "placebo_suppressed": {
+      "action": "legacy_name",
+      "critical_violation": true,
+      "joint_success": false,
+      "regime_id": "v3",
+      "required_action": "current_name",
+      "retrieved_memory_ids": [
+        "mem-tool-v2",
+        "mem-tool-v2-summary"
+      ],
+      "task_success": false
+    },
+    "target_effect": 1,
+    "target_family_suppressed": {
+      "action": "current_name",
+      "critical_violation": false,
+      "joint_success": true,
+      "regime_id": "v3",
+      "required_action": "current_name",
+      "retrieved_memory_ids": [],
+      "task_success": true
+    },
+    "target_only_suppressed": {
+      "action": "legacy_name",
+      "critical_violation": true,
+      "joint_success": false,
+      "regime_id": "v3",
+      "required_action": "current_name",
+      "retrieved_memory_ids": [
+        "mem-tool-v2-summary"
+      ],
+      "task_success": false
+    }
+  },
+  "gates": {
+    "all_memory_states_observed": true,
+    "audit_receipts_complete": true,
+    "causal_use_prerequisite": true,
+    "descendant_suppression_required": true,
+    "descendant_transitions_match_parent": true,
+    "matched_nonshift_not_forgotten": true,
+    "recurrence_revalidation_restores_utility": true,
+    "retired_memory_excluded_from_commitment": true,
+    "shift_recovery_after_quarantine": true
+  },
+  "metrics": {
+    "append_only_post_shift_joint_success": 0,
+    "false_forgetting_rate": 0.0,
+    "full_reset_recurrence_success": 0,
+    "ledger_events": 10,
+    "post_shift_joint_success": 1,
+    "recurrence_recovery": 1,
+    "time_to_stop_causal_use": 1
+  },
+  "non_claims": [
+    "This is functional harness memory control, not neural unlearning or legal erasure.",
+    "One deterministic fixture does not estimate false-forgetting or recovery rates.",
+    "No live model, stochastic replay, sealed shift, or OOD regime was evaluated.",
+    "The result does not satisfy HU1-HU7."
+  ],
+  "phase_results": [
+    {
+      "action": "legacy_name",
+      "critical_violation": false,
+      "descendant_status": "active",
+      "joint_success": true,
+      "phase": "acquisition",
+      "regime_id": "v2",
+      "required_action": "legacy_name",
+      "retrieved_memory_ids": [
+        "mem-tool-v2",
+        "mem-tool-v2-summary"
+      ],
+      "target_status": "active",
+      "task_success": true
+    },
+    {
+      "action": "legacy_name",
+      "critical_violation": false,
+      "descendant_status": "active",
+      "joint_success": true,
+      "phase": "stable_use",
+      "regime_id": "v2",
+      "required_action": "legacy_name",
+      "retrieved_memory_ids": [
+        "mem-tool-v2",
+        "mem-tool-v2-summary"
+      ],
+      "target_status": "active",
+      "task_success": true
+    },
+    {
+      "action": "legacy_name",
+      "critical_violation": true,
+      "descendant_status": "active",
+      "joint_success": false,
+      "phase": "world_shift_append_only",
+      "regime_id": "v3",
+      "required_action": "current_name",
+      "retrieved_memory_ids": [
+        "mem-tool-v2",
+        "mem-tool-v2-summary"
+      ],
+      "target_status": "active",
+      "task_success": false
+    },
+    {
+      "action": "current_name",
+      "critical_violation": false,
+      "descendant_status": "quarantined",
+      "joint_success": true,
+      "phase": "quarantined_shift_recovery",
+      "regime_id": "v3",
+      "required_action": "current_name",
+      "retrieved_memory_ids": [],
+      "target_status": "quarantined",
+      "task_success": true
+    },
+    {
+      "action": "legacy_name",
+      "critical_violation": true,
+      "descendant_status": "revalidating",
+      "joint_success": false,
+      "phase": "v3_revalidation_probe",
+      "regime_id": "v3",
+      "required_action": "current_name",
+      "retrieved_memory_ids": [
+        "mem-tool-v2",
+        "mem-tool-v2-summary"
+      ],
+      "target_status": "revalidating",
+      "task_success": false
+    },
+    {
+      "action": "current_name",
+      "critical_violation": false,
+      "descendant_status": "retired",
+      "joint_success": true,
+      "phase": "retired_shift",
+      "regime_id": "v3",
+      "required_action": "current_name",
+      "retrieved_memory_ids": [],
+      "target_status": "retired",
+      "task_success": true
+    },
+    {
+      "action": "current_name",
+      "critical_violation": true,
+      "descendant_status": "retired",
+      "joint_success": false,
+      "phase": "v2_recurrence_full_reset",
+      "regime_id": "v2",
+      "required_action": "legacy_name",
+      "retrieved_memory_ids": [],
+      "target_status": "retired",
+      "task_success": false
+    },
+    {
+      "action": "legacy_name",
+      "critical_violation": false,
+      "descendant_status": "revalidating",
+      "joint_success": true,
+      "phase": "v2_recurrence_probe",
+      "regime_id": "v2",
+      "required_action": "legacy_name",
+      "retrieved_memory_ids": [
+        "mem-tool-v2",
+        "mem-tool-v2-summary"
+      ],
+      "target_status": "revalidating",
+      "task_success": true
+    },
+    {
+      "action": "legacy_name",
+      "critical_violation": false,
+      "descendant_status": "active",
+      "joint_success": true,
+      "phase": "v2_restored",
+      "regime_id": "v2",
+      "required_action": "legacy_name",
+      "retrieved_memory_ids": [
+        "mem-tool-v2",
+        "mem-tool-v2-summary"
+      ],
+      "target_status": "active",
+      "task_success": true
+    }
+  ],
+  "regime_transition": {
+    "new_artifacts": [
+      "paired target-family/placebo suppression receipt",
+      "scoped reversible memory-state ledger",
+      "shift and recurrence commitment outcomes"
+    ],
+    "old_regime": "retrieval status and task score without commitment influence proof",
+    "preserved_gates": [
+      "exact deterministic replay",
+      "single-component memory intervention",
+      "separate task and critical-violation outcomes"
+    ],
+    "rejected_alternatives": [
+      "lower retrieval as proof of unlearning",
+      "deletion after one bad outcome",
+      "permanent full reset without recurrence"
+    ],
+    "residual_finding": "suppressing only the parent memory leaves a causally active derived summary, so lifecycle changes must cover declared descendants"
+  },
+  "run_id": "harness_unlearning_fixture_2026_07_20",
+  "schema_version": "1.0",
+  "shift": "tool regime v2 -> v3 -> v2 recurrence",
+  "states": [
+    "active",
+    "quarantined",
+    "retired",
+    "revalidating"
+  ],
+  "target_memory_id": "mem-tool-v2"
+}

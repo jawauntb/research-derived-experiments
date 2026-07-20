@@ -1,0 +1,139 @@
+{
+  "events": [
+    {
+      "event_index": 0,
+      "evidence_ref": "causal-use://v3-target-vs-placebo",
+      "memory_id": "mem-tool-v2",
+      "reason": "target-family suppression repaired shifted commitment",
+      "status_after": "quarantined",
+      "status_before": "active",
+      "timestamp_logical": 0
+    },
+    {
+      "event_index": 1,
+      "evidence_ref": "causal-use://v3-target-vs-placebo",
+      "memory_id": "mem-tool-v2-summary",
+      "reason": "target-family suppression repaired shifted commitment",
+      "status_after": "quarantined",
+      "status_before": "active",
+      "timestamp_logical": 1
+    },
+    {
+      "event_index": 2,
+      "evidence_ref": "probe://v3",
+      "memory_id": "mem-tool-v2",
+      "reason": "bounded probe under current shifted regime",
+      "status_after": "revalidating",
+      "status_before": "quarantined",
+      "timestamp_logical": 2
+    },
+    {
+      "event_index": 3,
+      "evidence_ref": "probe://v3",
+      "memory_id": "mem-tool-v2-summary",
+      "reason": "bounded probe under current shifted regime",
+      "status_after": "revalidating",
+      "status_before": "quarantined",
+      "timestamp_logical": 3
+    },
+    {
+      "event_index": 4,
+      "evidence_ref": "probe://v3#failed",
+      "memory_id": "mem-tool-v2",
+      "reason": "controlled v3 probe confirmed stale causal effect",
+      "status_after": "retired",
+      "status_before": "revalidating",
+      "timestamp_logical": 4
+    },
+    {
+      "event_index": 5,
+      "evidence_ref": "probe://v3#failed",
+      "memory_id": "mem-tool-v2-summary",
+      "reason": "controlled v3 probe confirmed stale causal effect",
+      "status_after": "retired",
+      "status_before": "revalidating",
+      "timestamp_logical": 5
+    },
+    {
+      "event_index": 6,
+      "evidence_ref": "probe://v2",
+      "memory_id": "mem-tool-v2",
+      "reason": "declared v2 recurrence opened bounded probe",
+      "status_after": "revalidating",
+      "status_before": "retired",
+      "timestamp_logical": 6
+    },
+    {
+      "event_index": 7,
+      "evidence_ref": "probe://v2",
+      "memory_id": "mem-tool-v2-summary",
+      "reason": "declared v2 recurrence opened bounded probe",
+      "status_after": "revalidating",
+      "status_before": "retired",
+      "timestamp_logical": 7
+    },
+    {
+      "event_index": 8,
+      "evidence_ref": "probe://v2#passed",
+      "memory_id": "mem-tool-v2",
+      "reason": "controlled v2 probe restored useful effect",
+      "status_after": "active",
+      "status_before": "revalidating",
+      "timestamp_logical": 8
+    },
+    {
+      "event_index": 9,
+      "evidence_ref": "probe://v2#passed",
+      "memory_id": "mem-tool-v2-summary",
+      "reason": "controlled v2 probe restored useful effect",
+      "status_after": "active",
+      "status_before": "revalidating",
+      "timestamp_logical": 9
+    }
+  ],
+  "items": [
+    {
+      "content_action": "legacy_name",
+      "descendant_ids": [
+        "mem-tool-v2-summary"
+      ],
+      "kind": "tool_pattern",
+      "memory_id": "mem-tool-v2",
+      "provenance": [
+        "run-v2-acquisition",
+        "intervention-tool-pattern"
+      ],
+      "status": "active",
+      "valid_regimes": [
+        "v2"
+      ]
+    },
+    {
+      "content_action": "legacy_name",
+      "descendant_ids": [],
+      "kind": "derived_summary",
+      "memory_id": "mem-tool-v2-summary",
+      "provenance": [
+        "mem-tool-v2"
+      ],
+      "status": "active",
+      "valid_regimes": [
+        "v2"
+      ]
+    },
+    {
+      "content_action": null,
+      "descendant_ids": [],
+      "kind": "preference",
+      "memory_id": "mem-color-placebo",
+      "provenance": [
+        "run-unrelated"
+      ],
+      "status": "active",
+      "valid_regimes": [
+        "v2",
+        "v3"
+      ]
+    }
+  ]
+}

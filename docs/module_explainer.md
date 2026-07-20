@@ -81,7 +81,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_mathematical_claims.py`, `test_bayesian_voi.py` | Executable theorem-assumption examples/failure cases and exact Bayesian VOI regimes |
 | `test_seed_bootstrap_calibration.py` | Deterministic seed-floor grid, correct resampling unit, negative-regime retention, exact summary regeneration |
 | `test_passive_active_phase_map.py` | Phase-map model comparison, matched-budget path controls, public aggregate contract |
-| `test_grounded_statecharts.py` | Exact checkpoint replay, typed event surface, depth 1–4 constraint lineage, tamper rejection, six-surface fault attribution, equal-budget repair comparison, and byte-stable bundles |
+| `test_grounded_statecharts.py` | Exact replay, depth 1–4 constraint lineage, six-surface fault attribution, descendant-aware memory causal use, legal lifecycle transitions, and byte-stable bundles |
 | `test_causal_use.py` | Shared mass-normalized causal-use dose curves, bootstrap uncertainty, and cross-surface transport |
 | `test_experiment_manifest.py`, `test_gate_verdict.py`, `test_evidence_registry.py`, `test_claim_registry.py` | Fail-closed research-contract adapters, package-coverage registry partition, discovery, references, supersession, and bidirectional edges |
 | `test_research_contract_schema_parity.py`, `test_gen_provenance.py` | Shared vocabulary/schema parity, support-directory exclusion, non-mutating provenance freshness |
@@ -124,7 +124,7 @@ environment.
 | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) | Benchmark umbrella |
 | [causally_grounded_agents_release_schema.md](causally_grounded_agents_release_schema.md) (+ `.json`) | Shared release schema |
 | [causally_grounded_agents_next_gap.md](causally_grounded_agents_next_gap.md) | Suite C transfer gaps |
-| [harness_research/README.md](harness_research/README.md) | Staged grounded-harness portfolio with implemented D1 replay, D2 transport fixtures, and a thin counterfactual pilot |
+| [harness_research/README.md](harness_research/README.md) | Staged grounded-harness portfolio with deterministic replay, transport, counterfactual, and functional-unlearning fixtures |
 | `harness_research/grounded_statecharts.md` | Independent transition-guard design plus links to the implemented deterministic fixture runtime |
 | `harness_research/constraint_transport.md` | Recursive constraint-envelope and externally enforced transition-guard benchmark design |
 | `harness_research/counterfactual_harness_search.md` | Paired intervention, causal-credit, and equal-budget harness-search design |
@@ -457,9 +457,9 @@ python3 -m experiments.viable_computational_bodies.search \
 python3 -m experiments.long_horizon_bottleneck.eval --provider fixture --models fixture ...
 ```
 
-#### 3.3.3 `grounded_statecharts` — replay, transport, and attribution bedrock
+#### 3.3.3 `grounded_statecharts` — shared grounded-harness bedrock
 
-**Artifacts:** P · R · res · typed replay and delegation JSONL bundles.
+**Artifacts:** P · R · res · typed replay, delegation, intervention, and memory-ledger bundles.
 
 | Module / artifact | Purpose |
 |---|---|
@@ -469,16 +469,19 @@ python3 -m experiments.long_horizon_bottleneck.eval --provider fixture --models 
 | `run_constraint_transport.py` | Two-family benchmark runner, joint-success scorer, known-fault export, and compact static replay |
 | `counterfactual_search.py` | Six-surface fault manifests, deterministic outcome vectors, isolated repair/placebo replay, attribution credit, and equal-budget trace baseline |
 | `run_counterfactual_search.py` | Pilot runner, fault-integrity gates, attribution/repair metrics, and compact static replay |
+| `harness_unlearning.py` | Scoped memory ledger, descendant families, commitment harness, paired causal-use gate, and legal lifecycle transitions |
+| `run_harness_unlearning.py` | Fail-closed causal prerequisite plus deterministic shift, quarantine, retirement, recurrence, restoration, and replay bundle |
 | `manifests/*.json` | Matched G0 self-report and G3 artifact-digest harness conditions; only `guard` differs |
 | `manifests/constraint_transport/experiment_manifest.json` | Separate structured run contract for the deterministic transport diagnostic |
-| `fixtures/*.json` | Registered false-success task, approval/evidence transport families, and one synthetic fault per harness surface |
+| `fixtures/*.json` | Registered replay/transport/fault cases plus one versioned memory shift/recurrence episode |
 | `schemas/*.json` | Public append-only event and constraint-envelope contracts |
-| `results/` | Replay bedrock plus transport and counterfactual summaries, row-level evidence, and browser-readable replays |
+| `results/` | Replay, transport, attribution, and functional-memory summaries with row-level evidence and browser-readable replays |
 
 ```bash
 python3 -m experiments.grounded_statecharts.run_fixture
 python3 -m experiments.grounded_statecharts.run_constraint_transport
 python3 -m experiments.grounded_statecharts.run_counterfactual_search
+python3 -m experiments.grounded_statecharts.run_harness_unlearning
 ```
 
 #### 3.3.4 Related reengagement packages

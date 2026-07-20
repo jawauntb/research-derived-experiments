@@ -1,0 +1,50 @@
+{
+  "descendant_leak_detected": true,
+  "observed": {
+    "action": "legacy_name",
+    "critical_violation": true,
+    "joint_success": false,
+    "regime_id": "v3",
+    "required_action": "current_name",
+    "retrieved_memory_ids": [
+      "mem-tool-v2",
+      "mem-tool-v2-summary"
+    ],
+    "task_success": false
+  },
+  "passed": true,
+  "placebo_effect": 0,
+  "placebo_suppressed": {
+    "action": "legacy_name",
+    "critical_violation": true,
+    "joint_success": false,
+    "regime_id": "v3",
+    "required_action": "current_name",
+    "retrieved_memory_ids": [
+      "mem-tool-v2",
+      "mem-tool-v2-summary"
+    ],
+    "task_success": false
+  },
+  "target_effect": 1,
+  "target_family_suppressed": {
+    "action": "current_name",
+    "critical_violation": false,
+    "joint_success": true,
+    "regime_id": "v3",
+    "required_action": "current_name",
+    "retrieved_memory_ids": [],
+    "task_success": true
+  },
+  "target_only_suppressed": {
+    "action": "legacy_name",
+    "critical_violation": true,
+    "joint_success": false,
+    "regime_id": "v3",
+    "required_action": "current_name",
+    "retrieved_memory_ids": [
+      "mem-tool-v2-summary"
+    ],
+    "task_success": false
+  }
+}

@@ -27,6 +27,14 @@ from experiments.grounded_statecharts.run_constraint_transport import (
     generate_results as generate_transport_results,
 )
 from experiments.grounded_statecharts.run_fixture import generate_results
+from experiments.grounded_statecharts.harness_unlearning import (
+    MemoryLedger,
+    MemoryStatus,
+    evaluate_causal_use,
+)
+from experiments.grounded_statecharts.run_harness_unlearning import (
+    generate_results as generate_unlearning_results,
+)
 from experiments.grounded_statecharts.runtime import Fixture, HarnessManifest, ReplayEngine
 
 
@@ -207,4 +215,52 @@ def test_committed_counterfactual_search_bundle_regenerates_byte_for_byte(
     assert all(summary["gates"].values())
     for name in ("summary.json", "cases.jsonl", "interventions.jsonl", "replay.html"):
         committed = PACKAGE_ROOT / "results" / "counterfactual_search" / name
+        assert (tmp_path / name).read_bytes() == committed.read_bytes()
+
+
+def test_memory_causal_use_requires_suppressing_declared_descendants() -> None:
+    ledger, regimes = MemoryLedger.load(
+        PACKAGE_ROOT / "fixtures" / "harness_unlearning.json"
+    )
+    gate = evaluate_causal_use(
+        ledger,
+        regimes["v3"],
+        target_memory_id="mem-tool-v2",
+        placebo_memory_id="mem-color-placebo",
+    )
+
+    assert gate.passed is True
+    assert gate.observed.joint_success is False
+    assert gate.target_only_suppressed.joint_success is False
+    assert gate.target_family_suppressed.joint_success is True
+    assert gate.placebo_suppressed == gate.observed
+
+
+def test_memory_ledger_rejects_skipping_quarantine() -> None:
+    ledger, _ = MemoryLedger.load(PACKAGE_ROOT / "fixtures" / "harness_unlearning.json")
+
+    with pytest.raises(ValueError, match="illegal memory transition"):
+        ledger.transition_family(
+            "mem-tool-v2",
+            MemoryStatus.RETIRED,
+            reason="skip required influence gate",
+            evidence_ref="test://invalid",
+        )
+
+
+def test_committed_harness_unlearning_bundle_regenerates_byte_for_byte(
+    tmp_path: Path,
+) -> None:
+    summary = generate_unlearning_results(tmp_path)
+
+    assert all(summary["gates"].values())
+    for name in (
+        "summary.json",
+        "causal_use.json",
+        "ledger.json",
+        "events.jsonl",
+        "phases.jsonl",
+        "replay.html",
+    ):
+        committed = PACKAGE_ROOT / "results" / "harness_unlearning" / name
         assert (tmp_path / name).read_bytes() == committed.read_bytes()

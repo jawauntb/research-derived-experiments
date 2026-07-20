@@ -25,7 +25,7 @@ Raw outputs should stay under `artifacts/` until summarized and intentionally co
 - `grounded_statecharts`: dependency-free typed event log, checkpoint replay,
   minimal completion guard, and deterministic depth 1–4 typed-constraint
   transport plus six-surface counterfactual-attribution diagnostics with static
-  visual replays.
+  visual replays and one causal-use-gated functional-memory lifecycle fixture.
 
 Shared experiment utilities live under `common/` and are excluded from provenance experiment counts.
 The first shared utility implements a mass-normalized, intervention-relative causal-use score.

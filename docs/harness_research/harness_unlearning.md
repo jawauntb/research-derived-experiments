@@ -2,10 +2,17 @@
 
 ## Causal Retirement and Revalidation of Agent Experience
 
-Status: experimental design; no implementation or empirical claim yet.
+Status: deterministic causal-use-gated lifecycle fixture implemented;
+confirmatory adaptive-memory and model-level claims remain untested.
 
 Portfolio role: most interesting follow-up after replay and credit assignment
 are validated.
+
+Implementation: [`experiments/grounded_statecharts`](../../experiments/grounded_statecharts/README.md)
+now provides descendant-aware target/placebo suppression, typed reversible
+memory states and receipts, one v2→v3→v2 shift/recurrence episode, and
+append-only/full-reset controls. This diagnostic is deliberately below the
+HU1–HU7 gates in this design.
 
 ## One-Sentence Thesis
 
