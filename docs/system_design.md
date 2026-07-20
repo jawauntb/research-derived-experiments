@@ -132,8 +132,12 @@ shared live-evaluation contract (provider-neutral adapters, normalized
 task/episode/result schemas, matched budgets, sanitization, and task-clustered
 bootstrap). A fixture-only unified replay renders the false-completion pair with
 observations, intervention, causal-credit scope, uncertainty, cost, and claim
-boundary kept separate. Credentialed live-model pilots remain opt-in and
-unimplemented.
+boundary kept separate. Its D2 mechanics bridge now routes artifact-completion
+smoke conditions through the same `ReplayEngine`, committed false-success
+fixture, and G0/G3 manifests; constraint conditions still use the fixture
+executor path. The bridge emits only sanitized public-contract rows under the
+matched default pilot budget and its smoke outcomes are not held-out evidence.
+Credentialed live-model pilots remain opt-in and unimplemented.
 
 | Design | Intended surface | Dependency order |
 |---|---|---|

@@ -82,7 +82,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_seed_bootstrap_calibration.py` | Deterministic seed-floor grid, correct resampling unit, negative-regime retention, exact summary regeneration |
 | `test_passive_active_phase_map.py` | Phase-map model comparison, matched-budget path controls, public aggregate contract |
 | `test_grounded_statecharts.py` | Exact replay, depth 1–4 constraint lineage, six-surface fault attribution, descendant-aware memory causal use, legal lifecycle transitions, and byte-stable bundles |
-| `test_grounded_live_evaluation.py` | Shared live-eval schemas, fixture adapter replay integrity, budget fail-closed planning, sanitizer blocked fields, live opt-in gate, and task-clustered bootstrap stability |
+| `test_grounded_live_evaluation.py`, `test_grounded_statechart_pilot.py` | Shared live-eval schemas, fixture adapter replay integrity, ReplayEngine-backed artifact D2 mechanics, G0/G3/wrong-edge controls, matched-budget fail-closed planning, sanitization, live opt-in gate, and task-clustered bootstrap stability |
 | `test_causal_use.py` | Shared mass-normalized causal-use dose curves, bootstrap uncertainty, and cross-surface transport |
 | `test_experiment_manifest.py`, `test_gate_verdict.py`, `test_evidence_registry.py`, `test_claim_registry.py` | Fail-closed research-contract adapters, package-coverage registry partition, discovery, references, supersession, and bidirectional edges |
 | `test_research_contract_schema_parity.py`, `test_gen_provenance.py` | Shared vocabulary/schema parity, support-directory exclusion, non-mutating provenance freshness |
@@ -478,7 +478,9 @@ python3 -m experiments.long_horizon_bottleneck.eval --provider fixture --models 
 | `sanitization.py` | Fail-closed public-row projection that blocks raw provider material |
 | `evaluation.py` | Normalized live task/episode/result records, smoke matrix, integrity receipts, and task-clustered bootstrap |
 | `run_live_smoke.py` | Clean-clone-safe smoke bundle under `results/live_evaluation/` |
+| `statechart_pilot.py` / `run_statechart_pilot_smoke.py` | D2 mechanics bridge: ReplayEngine-backed artifact G0/G3 and wrong-edge conditions, fixture-executor constraint delegation, matched-budget public rows, and non-held-out smoke entrypoint |
 | `replay_viewer.py` / `run_unified_replay.py` | Fixture-only public failure replay renderer and runner under `results/unified_replay/`, with observations, intervention, causal-credit scope, uncertainty, cost, and claim boundary separated |
+| `STATECHART_D2_PREREGISTRATION.md` | Draft/mechanics-only two-family D2 gate, controls, matched ceilings, kill criteria, and held-out claim boundary |
 | `manifests/*.json` | Matched G0 self-report and G3 artifact-digest harness conditions; only `guard` differs |
 | `manifests/constraint_transport/experiment_manifest.json` | Separate structured run contract for the deterministic transport diagnostic |
 | `fixtures/*.json` | Registered replay/transport/fault cases plus one versioned memory shift/recurrence episode |
@@ -492,6 +494,7 @@ python3 -m experiments.grounded_statecharts.run_counterfactual_search
 python3 -m experiments.grounded_statecharts.run_harness_unlearning
 python3 -m experiments.grounded_statecharts.run_live_smoke
 python3 -m experiments.grounded_statecharts.run_unified_replay
+python3 -m experiments.grounded_statecharts.run_statechart_pilot_smoke
 ```
 
 #### 3.3.4 Related reengagement packages
