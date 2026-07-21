@@ -469,8 +469,15 @@ can run the identical wrapper before opening a PR.
 | **Causally grounded agents benchmark** | `world_responds` (Suite C), `long_horizon_bottleneck` (Suite D/E) | Behavior + structure-specific gate; proxy-resistant agent evaluation |
 | **External contact / phases 4–6** | `external_contact`, `phase4_metaphysics`, `phase5_external_validity`, `phase6_real_model_validation`, `gauge_fixed_concern_transport` | Transport claims beyond in-lab harnesses toward real models |
 
-Process wrapper: discovery-regime audit (pre-register gates, preserve rejects,
-distinguish retrieval/search/discovery). Ledger: root `TODO.md`. Audit cards:
+Process wrapper: `AGENTS.md` requires the `scientific-discovery-regime-audit`
+skill at experiment creation/preregistration, before large sweeps, and during
+result promotion or discovery claims. The compact intake records the target,
+representation/data clock, assumptions, fatal gates, decisive controls, and
+evidence paths; failed or unknown necessary gates are noncompensatory. The full
+unified reviewer remains an on-demand reference for relevant domain modules,
+not a routine coding gate. The process preserves rejects, distinguishes
+retrieval/search/discovery, and resolves conflicts without deleting either
+claim. Ledger: root `TODO.md`. Audit cards:
 [discovery_regime_audit.md](discovery_regime_audit.md).
 
 The six primer-derived backlogs under

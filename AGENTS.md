@@ -30,6 +30,13 @@ python scripts/gen_provenance.py
 - Run `python3 scripts/run_quality_checks.py` before merging substantive Python changes.
 - Attribution: human director Jawaun Brown; agent-generated code/papers under review — keep provenance honest.
 
+## Experiment review routing (required)
+
+- Run the `scientific-discovery-regime-audit` skill when creating or preregistering an experiment, before a large sweep, and when interpreting results for promotion or a discovery claim. Do not run the full unified reviewer for routine code or documentation work.
+- Before execution, record the target object and decision, representation and data clock, material assumptions, fatal gates, decisive controls, and evidence/provenance paths in the preregistration or audit card. Keep this compact and use only the relevant domain modules from `papers/unified_citation_grounded_review/paper.md`.
+- Treat fatal gates as noncompensatory: a failed or unknown necessary gate cannot be averaged away by strong downstream scores. Withhold or reject the affected claim while preserving supported subclaims.
+- When sources or results conflict, preserve both claims and resolve the tension by object, scope, conditions, representation, validity layer, and evidence. Never erase a conflicting or rejected artifact to simplify the narrative.
+
 ## Start-here pointers
 
 - System design: `docs/system_design.md`
