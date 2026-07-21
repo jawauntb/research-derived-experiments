@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "grounded_harness_d3_ct_confirmatory",
+  "status": "running",
+  "adapter_id": "live",
+  "provider_id": "openai",
+  "model_id": "gpt-4.1-mini",
+  "prompt_contract": "name_free_default",
+  "harness_contract": "condition_policy_v2",
+  "families": ["recursive_constrained_tool_use"],
+  "conditions": ["envelope_only", "envelope_external_guards"],
+  "tasks": "fixtures/d2_held_out_tasks.json (constraint family only)",
+  "repeats": 5,
+  "primary_contrast": {
+    "metric": "joint_success",
+    "treatment": "envelope_external_guards",
+    "control": "envelope_only",
+    "clustering": "task",
+    "nested_repeats": true
+  },
+  "budget_ceiling_usd": 75,
+  "kill_criteria": [
+    "name_free joint_success delta collapses below practical threshold",
+    "labeled prompts used",
+    "integrity/publishable gates fail",
+    "spend exceeds $75 without gate pass"
+  ],
+  "allowed_claim": "External guards recover joint success after widenings under name-free prompts (harness enforcement).",
+  "non_claims": [
+    "model-side constraint learning",
+    "Grounded Statecharts product readiness",
+    "CHS1 six-surface attribution",
+    "HU1-HU7"
+  ]
+}
