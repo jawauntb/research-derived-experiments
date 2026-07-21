@@ -1,67 +1,68 @@
 {
-  "allowed_claim": "This artifact freezes two OOD probe contracts against the existing Constraint Transport task machinery. It reports no OOD execution, effect, or live-agent result.",
-  "committed_fixture_depth_range": [
-    1,
-    2,
-    3,
-    4
-  ],
+  "allowed_claim": "Held-out paraphrased instructions run through the real condition_policy-enforced harness produce the same publishable episode mechanics as the committed wording under the deterministic fixture adapter, and typed constraint lineage and critical-violation avoidance survive delegation depths 5 and 6 on the committed deterministic task bank, beyond the frozen depth-1..4 ceiling.",
   "gates": {
-    "all_probes_planned_not_observed": true,
-    "deeper_probe_exceeds_committed_depth_range": true,
-    "held_out_wording_uses_committed_depth_range": true,
+    "depth_probe_constraint_survival": true,
+    "depth_probe_exceeds_committed_ceiling": true,
+    "depth_probe_lineage_valid": true,
     "no_live_calls": true,
-    "two_ood_probes_registered": true,
-    "two_source_families_bound": true
+    "paraphrase_all_episodes_publishable": true,
+    "paraphrase_no_provider_failures": true,
+    "paraphrase_preserves_constraint_identity": true,
+    "paraphrase_probe_used_fixture_adapter": true
   },
-  "next_best_test": "Implement matched held-out wording and depth-5/6 fixture mechanics, then run all conditions with the registered lineage and scoring checks.",
-  "probes": [
-    {
-      "execution_status": "planned",
-      "kill_criterion": "Kill transport interpretation if task scoring or constraint identity changes with wording.",
-      "observed": false,
-      "perturbation": "Replace surface wording while preserving the typed constraint fields.",
-      "planned_depths": [
-        1,
-        2,
-        3,
-        4
-      ],
-      "prediction": "Typed lineage preserves constraints despite held-out instruction wording.",
-      "probe_id": "held_out_wording",
-      "source_conditions": [
-        "lossy_prompt",
-        "typed_guarded"
-      ],
-      "source_task_count": 2,
-      "source_task_families": [
-        "approval_before_publish",
-        "test_before_commit"
-      ]
-    },
-    {
-      "execution_status": "planned",
-      "kill_criterion": "Kill depth-transport interpretation if a typed chain loses lineage or constraints at depth 5 or 6.",
-      "observed": false,
-      "perturbation": "Extend matched typed/prose delegation beyond the committed depth-1..4 fixture.",
-      "planned_depths": [
+  "kill_criteria": {
+    "deeper_depth_probe_kill_triggered": false,
+    "fixture_paraphrase_note": "FixtureExecutor selects behavior from (family, condition) only and never reads instruction text, so this fixture-run paraphrase delta cannot demonstrate wording sensitivity in either direction. It only proves the paraphrase/harness mechanics run end to end. Run run_constraint_ood_live_smoke.py under GROUNDED_HARNESS_LIVE=1 for a real name-free wording-sensitivity signal.",
+    "metric": "joint_success delta (envelope_external_guards vs envelope_only / typed_guarded vs lossy_prompt)",
+    "threshold": 0.15
+  },
+  "next_best_test": "GROUNDED_HARNESS_LIVE=1 python3 -m experiments.grounded_statecharts.run_constraint_ood_live_smoke to measure the live, name-free joint_success delta against the 0.15 kill threshold.",
+  "non_claims": [
+    "No live model, provider, or stochastic agent was evaluated in this bundle.",
+    "The fixture-run paraphrase delta is mechanical, not evidence of wording-invariant model behavior; see run_constraint_ood_live_smoke.py.",
+    "This bundle does not satisfy D3 confirmatory Constraint Transport."
+  ],
+  "probes": {
+    "deeper_delegation_depth": {
+      "baseline_joint_success": 0.0,
+      "depths": [
         5,
         6
       ],
-      "prediction": "Typed lineage remains valid and constraint survival does not degrade solely from depth.",
+      "episode_count": 8,
+      "joint_success_delta": 1.0,
+      "kill_triggered": false,
       "probe_id": "deeper_delegation_depth",
-      "source_conditions": [
-        "lossy_prompt",
-        "typed_guarded"
-      ],
-      "source_task_count": 2,
-      "source_task_families": [
+      "task_families": [
         "approval_before_publish",
         "test_before_commit"
-      ]
+      ],
+      "typed_constraint_survival_beyond_ceiling": true,
+      "typed_joint_success": 1.0,
+      "typed_lineage_valid_beyond_ceiling": true
+    },
+    "held_out_paraphrase": {
+      "adapter_id": "fixture",
+      "control": "envelope_only",
+      "episode_count": 8,
+      "family": "recursive_constrained_tool_use",
+      "joint_success_effect": {
+        "ci_high": 1.0,
+        "ci_low": 1.0,
+        "point_estimate": 1.0,
+        "task_count": 4
+      },
+      "model_id": "fixture-deterministic-v1",
+      "preserves_constraint_identity": true,
+      "probe_id": "held_out_paraphrase",
+      "provider_failures": [],
+      "provider_id": "fixture",
+      "publishable_rows": 8,
+      "task_count_attempted": 4,
+      "treatment": "envelope_external_guards"
     }
-  ],
-  "run_id": "constraint_ood_draft_specs_2026_07_20",
+  },
+  "run_id": "constraint_ood_fixture_2026_07_20",
   "schema_version": "1.0",
-  "tier": "preregistered-stub"
+  "tier": "fixture-executed"
 }

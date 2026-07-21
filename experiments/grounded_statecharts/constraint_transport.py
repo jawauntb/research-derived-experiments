@@ -364,6 +364,24 @@ class ConstraintTransportBenchmark:
             for depth in range(1, 5)
         )
 
+    def run_ood_depth(self, condition: str, task: TransportTask, depth: int) -> TransportOutcome:
+        """Extend matched typed/prose delegation beyond the committed ceiling.
+
+        This is an OOD-only escape hatch: `run`/`run_all` keep the frozen
+        depth-1..4 confirmatory ceiling untouched. Depths 5 and 6 reuse the
+        same typed-derivation and lossy-summary-fault mechanics to probe
+        whether lineage validity and constraint survival hold beyond the
+        committed fixture, without changing any committed cell.
+        """
+
+        if condition not in CONDITIONS:
+            raise ValueError(f"unsupported transport condition: {condition}")
+        if depth <= 4:
+            raise ValueError("OOD depth probe requires depth greater than the committed ceiling (4)")
+        if condition == "typed_guarded":
+            return self._run_typed(task, depth)
+        return self._run_lossy_prompt(task, depth)
+
     def _run_lossy_prompt(self, task: TransportTask, depth: int) -> TransportOutcome:
         active = (task.constraint.constraint_id,)
         rows: list[dict[str, object]] = []
