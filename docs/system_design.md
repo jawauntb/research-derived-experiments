@@ -127,7 +127,11 @@ repository's intervention, commitment, re-engagement, and anti-cheat methods
 into agent-harness research. `experiments/grounded_statecharts/` implements the
 D1 replay substrate, minimal independent-guard mechanism, a D2 deterministic
 Constraint Transport diagnostic, and a thin deterministic Counterfactual
-Harness Search pilot. A final deterministic fixture gates memory lifecycle on
+Harness Search pilot. `experiments/load_bearing_prose_test/` (plan and
+preregistration frozen 2026-07-21; scaffolding follows) is the fifth
+project in the portfolio: a bridge-theorem-audited test of whether prose
+produced by LLM planners has a non-trivial, gauge-stable, κ-aligned
+load-bearing subset detectable against the CT commitment-surface oracle. A final deterministic fixture gates memory lifecycle on
 commitment-level causal-use evidence. The same package now also freezes the
 shared live-evaluation contract (provider-neutral adapters, normalized
 task/episode/result schemas, matched budgets, sanitization, and task-clustered

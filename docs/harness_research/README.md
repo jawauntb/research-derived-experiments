@@ -9,7 +9,7 @@ Last updated: 2026-07-20.
 
 ## Decision
 
-This portfolio turns four related ideas into one staged research program:
+This portfolio turns five related ideas into one staged research program:
 
 1. **Grounded Statecharts** is the first product and instrumentation layer.
 2. **Constraint Transport** is the first reliability benchmark built on that
@@ -18,6 +18,12 @@ This portfolio turns four related ideas into one staged research program:
    publication target.
 4. **Harnesses That Know When to Unlearn** is the follow-up on persistent
    experience under world, tool, and model change.
+5. **Load-Bearing Prose Test** is the shortest-path move to test whether the
+   concern-transport bridge theorem extends one substrate above CT — from
+   actions to the prose that authorizes actions — using the CT κ and the
+   CT commitment-surface oracle. Plan and preregistration frozen
+   2026-07-21; scaffolding follows; no empirical claim yet. See
+   [`load_bearing_prose_test.md`](load_bearing_prose_test.md).
 
 The four projects should not begin as separate implementations. They share a
 typed event log, transition receipts, deterministic replay, fault injection,
