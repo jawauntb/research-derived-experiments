@@ -394,3 +394,8 @@ Done on `main`:
 
 Remaining optional programs (not CT blockers): author-blind live six-surface CHS1; powered multi-model/OOD confirmatory; real HU pilot.
 
+**Next handoff (active):** see
+[`docs/next_agent_envelope_guard_product_ct_chs_handoff_2026-07-21.md`](next_agent_envelope_guard_product_ct_chs_handoff_2026-07-21.md)
+for detailed Track 1 (Envelope Guard product), Track 2 (CT stress), and Track 3
+(CHS1) implement / run / learn / report-back plans.
+
