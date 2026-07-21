@@ -32,6 +32,106 @@
           "kappa_mentioning_claims": 2,
           "plan_digest": "2fc79c58f62eb68047529f6fe5e1c87f6483ffda22e5ad831a7f6af275464676",
           "plan_id": "ac002"
+        },
+        {
+          "ablation_count": 9,
+          "ablation_set_digest": "fa015a6c5fef5b8dc56bb4e0cf84dbcb697bb77adbcb3130dabbd3e22ea86a61",
+          "bundle_digest": "89b635527c40db9eaf849f9749bd8143ce601f89d012765a75acafb302e7a8c0",
+          "claim_count": 3,
+          "expected_claim_count": 3,
+          "kappa_mentioning_claims": 3,
+          "plan_digest": "cf84a448b596430fa35cd00fc38f67035849db8d59078b30207f75e0e3bab69b",
+          "plan_id": "ac003"
+        },
+        {
+          "ablation_count": 9,
+          "ablation_set_digest": "f7b41224d02ed03b4054d0b544c22995b70f5756cff98b07efe99cca80afd532",
+          "bundle_digest": "d2d92f417cc18df1d94932d483f8f6d7b795e6b6c8df47bf7d83ddc8c8e7370a",
+          "claim_count": 3,
+          "expected_claim_count": 3,
+          "kappa_mentioning_claims": 2,
+          "plan_digest": "db9d5d19234ce202ea5f9fa6a803d104fc0bde9d369468d9a3032c68fcb58697",
+          "plan_id": "ac004"
+        },
+        {
+          "ablation_count": 9,
+          "ablation_set_digest": "3e37e0d31c86097393a61e2cfe24863dbdcd7c02e440ba53924c10c305ee97ef",
+          "bundle_digest": "3b055a208038b21fc4cee1ae9a3151f481423f5a81093c013894cc87bf4c4763",
+          "claim_count": 3,
+          "expected_claim_count": 3,
+          "kappa_mentioning_claims": 2,
+          "plan_digest": "8eb4fe117147982bb2530c5e8ef80cebe62405404adf4c995ea6a9551196fd5a",
+          "plan_id": "ac005"
+        },
+        {
+          "ablation_count": 9,
+          "ablation_set_digest": "61627c1b6b3296a174ded051fcd35bc664d8a9d4cbb9295af9f35e8a42c0788e",
+          "bundle_digest": "527c7c56f952e29d27e77a990d1c7aa8397402e6a7d403c1cfe5693940b65f34",
+          "claim_count": 3,
+          "expected_claim_count": 3,
+          "kappa_mentioning_claims": 1,
+          "plan_digest": "5854d0cd578d9f32b61b35f0979a919ec78a4757750ebb1c5f1efa92e516a7a4",
+          "plan_id": "ac006"
+        },
+        {
+          "ablation_count": 9,
+          "ablation_set_digest": "49044fd1bbfe4f9a8dd052ef5559b3ba1b5909d7a68d2e34202c61f70a237c47",
+          "bundle_digest": "c2b03bc2350c152f7292ea7c5a21fd989e4c77886c77754d92f9dfadcf2188c7",
+          "claim_count": 3,
+          "expected_claim_count": 3,
+          "kappa_mentioning_claims": 2,
+          "plan_digest": "98cd722c31ed69bd15d51033c8a1006194d72bfc0da8093f5ffc59e0c7089e5e",
+          "plan_id": "ac007"
+        },
+        {
+          "ablation_count": 9,
+          "ablation_set_digest": "29cbe76299436999b446275a4c150122dd2dbe833cfb966519cc325660403726",
+          "bundle_digest": "bee26af9ac721c9a2bc7d512d654aed13a420312749e7b7dbe38167ab5751acd",
+          "claim_count": 3,
+          "expected_claim_count": 3,
+          "kappa_mentioning_claims": 3,
+          "plan_digest": "81c689af96e9cada55f29addadaafcf663ce619e9384cf40f48e187c0bb1ccfd",
+          "plan_id": "ac008"
+        },
+        {
+          "ablation_count": 9,
+          "ablation_set_digest": "2e9837be4b677e388896dda06936d4006b9ea594d40186edd751690afc46a8c5",
+          "bundle_digest": "872f40c753bbd9f743bf2ca1d9ae797846951558b0e7f8dd387e82a1ea553967",
+          "claim_count": 3,
+          "expected_claim_count": 3,
+          "kappa_mentioning_claims": 2,
+          "plan_digest": "5707d5a5266e286bb5c9dcf070a642667bdeb1e7cfd5bfa23bef96241ee5e012",
+          "plan_id": "ac009"
+        },
+        {
+          "ablation_count": 9,
+          "ablation_set_digest": "0d4c34b7c57ffc3519493c4f8ee2a0a2af5503fa7f33e4407d967fb0a47e6698",
+          "bundle_digest": "012a9c8ad23aa42b9eaaba60f5baaf400bd459daef37666018a5ce58deb5a047",
+          "claim_count": 3,
+          "expected_claim_count": 3,
+          "kappa_mentioning_claims": 2,
+          "plan_digest": "5b182211d58cb775da11a38d2738c8e1e55ad9af97590b6938384c7a0064d140",
+          "plan_id": "ac010"
+        },
+        {
+          "ablation_count": 9,
+          "ablation_set_digest": "834760dfba05fa8e1f6cbb032316038c9475a8a133d83bddd91acd14e38c285c",
+          "bundle_digest": "f9a435443a749c3fe80b401dfe4b9ca8b9b8048ceef52f6f8493d7d593022d23",
+          "claim_count": 3,
+          "expected_claim_count": 3,
+          "kappa_mentioning_claims": 3,
+          "plan_digest": "dbe83feb4a6fe2f2b2d49bad65fcc9c711dc6d02d707196ac275f67248693504",
+          "plan_id": "ac011"
+        },
+        {
+          "ablation_count": 9,
+          "ablation_set_digest": "622592870cc97582d414871a20269bf105a050957ad9a891bcc387a3edecbc13",
+          "bundle_digest": "0a5cff5b40cf0a09c398a49194f3f5908ca591e5b5f9f1c9045180337a0ac8f4",
+          "claim_count": 3,
+          "expected_claim_count": 3,
+          "kappa_mentioning_claims": 3,
+          "plan_digest": "d20f2d367cac4f06dc20bd0cb2665ff5ff98c23728368741e28964f7feb7392e",
+          "plan_id": "ac012"
         }
       ]
     },
@@ -67,6 +167,106 @@
           "kappa_mentioning_claims": 3,
           "plan_digest": "61957a08f6799cc4eb61f037f9499cf6d32cfbb382408e27cf57d7afffa80124",
           "plan_id": "rct002"
+        },
+        {
+          "ablation_count": 12,
+          "ablation_set_digest": "ce673c3c6f057722889beede31eb86f493a5b99f6ba11ffdb31e933daad82932",
+          "bundle_digest": "10fde3f0802e959451cd3a5f811fbdc68bd1802e340ebdf34cc280ae789635c9",
+          "claim_count": 4,
+          "expected_claim_count": 4,
+          "kappa_mentioning_claims": 4,
+          "plan_digest": "111bd49c356373fa5f9e81df7940d036889f30ece9a0abc0d327b37fe4ba8457",
+          "plan_id": "rct003"
+        },
+        {
+          "ablation_count": 12,
+          "ablation_set_digest": "09a92063e2fec6322f98b0a2511d28ada0735cde14655a8afb6f1381177be56d",
+          "bundle_digest": "30cd301f5c8389e48be2c138a63a5f361461b526e21f50c5f78c0e217263aa89",
+          "claim_count": 4,
+          "expected_claim_count": 4,
+          "kappa_mentioning_claims": 3,
+          "plan_digest": "1bed5739499e58d4debbb966b477801284934c0b8218aa9489c0208e6b893016",
+          "plan_id": "rct004"
+        },
+        {
+          "ablation_count": 12,
+          "ablation_set_digest": "a28e1a26d177185bf1df07763270d8c1843fe6aabebc63d548dbbdc98c1710c3",
+          "bundle_digest": "283cdcba91c50ea996c12f7136ed9592c4581d890d4cd42ad3aaccf96bcadb25",
+          "claim_count": 4,
+          "expected_claim_count": 4,
+          "kappa_mentioning_claims": 4,
+          "plan_digest": "58a7bc862c93633114b6eea7fdac0fd36d72918bda6c5150379d7e18013e26d9",
+          "plan_id": "rct005"
+        },
+        {
+          "ablation_count": 12,
+          "ablation_set_digest": "7527738d642015c0044a893e62b098035e6fcb514383eaf35ee7926efd51867b",
+          "bundle_digest": "08b49353cd9ad87330eae6f4277c1567ca2a974231d8524439b12828befaf0be",
+          "claim_count": 4,
+          "expected_claim_count": 4,
+          "kappa_mentioning_claims": 4,
+          "plan_digest": "50c0ec34b16b9afb4e844b6a309686ae2c86c9ff50a6081ad3312167b567ee4c",
+          "plan_id": "rct006"
+        },
+        {
+          "ablation_count": 12,
+          "ablation_set_digest": "3934ab45bbb457b61ea540f7afb438c97ec40042330c9835d2bb18767bdcd8ad",
+          "bundle_digest": "1ab708a9c036d3193cb3fdecc6cbffefba312edca27cdc2bc21a8a440aa63fd6",
+          "claim_count": 4,
+          "expected_claim_count": 4,
+          "kappa_mentioning_claims": 4,
+          "plan_digest": "a318e9ed0cafac7a04796f1bcb30e3e3ca79b218a1c3c8f7ee556f6b84a0f488",
+          "plan_id": "rct007"
+        },
+        {
+          "ablation_count": 12,
+          "ablation_set_digest": "9988c4a337264525cc9b2abcee591b63e823378b5b9afa1c98acdc670a444eb1",
+          "bundle_digest": "080378b8eed79a0de5be47c981c645dd4f4ce730b4bafbd6df9a94758d8e9bd0",
+          "claim_count": 4,
+          "expected_claim_count": 4,
+          "kappa_mentioning_claims": 4,
+          "plan_digest": "c5f23537d9f0360fe750dc4a4dca59126e3ab8c173784e2cda61fe33608d7f6a",
+          "plan_id": "rct008"
+        },
+        {
+          "ablation_count": 9,
+          "ablation_set_digest": "4d34f6e6aebc89bc6a092d06d6f25595399f2ece495d7583d1e50e23bac72c09",
+          "bundle_digest": "179d7fdb24a611be34a4a7d18b583d3d4a9d2bca807d80d46b83511ae5b3a53b",
+          "claim_count": 3,
+          "expected_claim_count": 3,
+          "kappa_mentioning_claims": 3,
+          "plan_digest": "a904feb196b19c90232302796aa9813b8d2528eb09230201ce991a06c1634fbb",
+          "plan_id": "rct009"
+        },
+        {
+          "ablation_count": 12,
+          "ablation_set_digest": "2072b9f35b97fd31c4bfb3e86b87c5d62e985443496cdd70c978b155a2ab8a3a",
+          "bundle_digest": "e425f30b11c891c279758db695e2c6b744627d3c6a1461e9d75dc0fb4330edbd",
+          "claim_count": 4,
+          "expected_claim_count": 4,
+          "kappa_mentioning_claims": 4,
+          "plan_digest": "f1160293b7a9e958e4a3a9a278896821842096f7e4b2bf7f0ef744338e0caea5",
+          "plan_id": "rct010"
+        },
+        {
+          "ablation_count": 12,
+          "ablation_set_digest": "4fb2c3aa9c4f2a58507c83701cdda4a9d26b39c4d0008b2a7ee98d1f3328826d",
+          "bundle_digest": "7a742ae88d2f318d115764778bb37ebd468b60325864e2ad9a32d82d80163056",
+          "claim_count": 4,
+          "expected_claim_count": 4,
+          "kappa_mentioning_claims": 4,
+          "plan_digest": "01fed072fcceb4804e1af4f0640959048d8e47a75f6c86ce1d146127fbb56db7",
+          "plan_id": "rct011"
+        },
+        {
+          "ablation_count": 12,
+          "ablation_set_digest": "b1141b5724492aa3242d74cbbaa287bbb75b26d015515e64268218f66f4ed24a",
+          "bundle_digest": "569f7ef1cd91bf648b83fc5491dc287fb1cd6842fb06b9aff8f267d4b97bdd65",
+          "claim_count": 4,
+          "expected_claim_count": 4,
+          "kappa_mentioning_claims": 4,
+          "plan_digest": "124261b1981ecda11241037210d68170922a57b3290c0c5e076aee1be8ab4588",
+          "plan_id": "rct012"
         }
       ]
     }
@@ -74,5 +274,5 @@
   "package": "load_bearing_prose_test",
   "run_id": "load_bearing_prose_test_scaffold_2026_07_21",
   "schema_version": "1.0",
-  "summary_digest": "bc4087d3922296970896bed0e9a46fd4140e92e1db5affe2deb74a28cc97181b"
+  "summary_digest": "7de4adec21c0a6e81f60c89021391cdb10cf541fb8dc64b4fd671193de15a7e7"
 }

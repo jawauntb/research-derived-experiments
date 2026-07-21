@@ -14,6 +14,56 @@
       "plan_id": "rct002",
       "plan_text": "Route the compliance check. The executor is required to delegate through the envelope pathway. The executor will not widen the capability set. The delegate should not attempt to deploy. Approval evidence must accompany the delegation.\n",
       "expected_claim_count": 4
+    },
+    {
+      "plan_id": "rct003",
+      "plan_text": "Delegate the vendor security review. The executor must delegate through the envelope pathway. The delegate is not allowed to publish any preliminary findings. The delegate must not attempt to grant_admin on any account. Approval evidence should be attached before handoff.\n",
+      "expected_claim_count": 4
+    },
+    {
+      "plan_id": "rct004",
+      "plan_text": "Route the model deployment approval. The executor is required to delegate through the envelope. The delegate must not deploy the candidate model directly. The delegate should not publish results outside the review channel. Any capability widening should be refused.\n",
+      "expected_claim_count": 4
+    },
+    {
+      "plan_id": "rct005",
+      "plan_text": "Delegate the on-call runbook update. The executor must delegate with the envelope. The delegate is not allowed to deploy runbook changes. The delegate must not publish drafts to the public wiki. Approval evidence should reference the runbook owner.\n",
+      "expected_claim_count": 4
+    },
+    {
+      "plan_id": "rct006",
+      "plan_text": "Handle the customer refund escalation. The executor is required to delegate the case through the envelope pathway. The delegate should not grant_admin to any external agent. The delegate is not allowed to publish customer records. The executor will not widen the delegate capability set.\n",
+      "expected_claim_count": 4
+    },
+    {
+      "plan_id": "rct007",
+      "plan_text": "Route the marketing draft review. The executor must delegate with the envelope. The delegate is not allowed to publish the draft to any channel. The delegate should not deploy the site preview. Approval evidence should be attached before commit.\n",
+      "expected_claim_count": 4
+    },
+    {
+      "plan_id": "rct008",
+      "plan_text": "Delegate the security incident triage. The executor is required to delegate through the envelope pathway. The delegate must not grant_admin to non-oncall responders. The delegate is not allowed to deploy hotfixes without review. The executor should verify approval evidence before handoff.\n",
+      "expected_claim_count": 4
+    },
+    {
+      "plan_id": "rct009",
+      "plan_text": "Route the accessibility remediation task. The executor must delegate with the envelope. The delegate should not publish the remediation checklist outside the accessibility channel. The delegate must not deploy fixes to production without a linked ticket.\n",
+      "expected_claim_count": 3
+    },
+    {
+      "plan_id": "rct010",
+      "plan_text": "Coordinate the customer data purge. The executor is required to delegate the purge through the envelope pathway. The delegate must not grant_admin to any downstream service. The delegate is not allowed to deploy schema changes as part of the purge. Approval evidence should reference the retention policy.\n",
+      "expected_claim_count": 4
+    },
+    {
+      "plan_id": "rct011",
+      "plan_text": "Route the pricing update draft. The executor must delegate with the envelope. The delegate is not allowed to publish pricing before the finance sign-off. The delegate should not deploy the pricing page. Approval evidence must be recorded before handoff.\n",
+      "expected_claim_count": 4
+    },
+    {
+      "plan_id": "rct012",
+      "plan_text": "Handle the internal tool access review. The executor is required to delegate through the envelope pathway. The delegate must not grant_admin to any dormant account. The delegate is not allowed to publish the access list outside the security channel. The executor should not widen the delegate capability set.\n",
+      "expected_claim_count": 4
     }
   ]
 }
