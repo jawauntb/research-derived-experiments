@@ -143,7 +143,10 @@ prompts default to name-free instructions; condition effects are applied by
 `condition_policy.py` (G3 artifact repair; external envelope enforcement) and
 scored from evidence rather than condition-name membership. Labeled prompts
 remain diagnostic-only (`GROUNDED_HARNESS_LABELED_PROMPT=1`). Held-out D2
-escalation stays gated on harness-enforced, name-free effects.
+escalation stays gated on harness-enforced, name-free effects. Paired-contrast
+CHS seals (`chs_adjudication.py`) and sanitized public-dataset export
+(`publish_public_dataset.py`) keep labels and raw provider material out of
+episode rows.
 
 | Design | Intended surface | Dependency order |
 |---|---|---|
