@@ -91,3 +91,18 @@ Public copy: `results/d3_ct_confirmatory_public/`.
 Confirmatory result matches the held-out D2 planning slice under the same
 harness-enforced name-free contract. Claim remains: external guards recover
 joint success after widenings — not model-side constraint learning.
+
+## Cross-model name-free CT smoke (Anthropic Haiku)
+
+Path: `artifacts/grounded_statecharts/weak_prompt_ablation_anthropic_haiku/`  
+Model: `anthropic` / `claude-haiku-4-5-20251001` (16 planned; 14 rows; 2 provider failures).
+
+| Contrast | Point estimate | Tasks |
+|---|---|---|
+| constraint joint_success: external − envelope_only | **+1.000** | 4 |
+| artifact false_completion: G3 − G0 | **0.0** | 3 |
+
+Same harness-enforced name-free claim boundary as OpenAI confirmatory: external
+guards recover joint success after widenings. Not powered multi-model D3;
+failures mean incomplete matrix. GS remains narrowed.
+
