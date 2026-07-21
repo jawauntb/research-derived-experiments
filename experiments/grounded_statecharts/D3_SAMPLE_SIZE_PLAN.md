@@ -3,9 +3,9 @@
 **Date:** 2026-07-20 (revised)  
 **Basis:** harness-v2 name-free re-ablation (`weak_prompt_ablation_harness_v2`,
 `gpt-4.1-mini`, 4 tasks/family) plus held-out harness-v2 D2 matrix  
-**Status:** open for Constraint Transport confirmatory planning under the
-harness-enforced, name-free contract. Grounded Statecharts remains secondary /
-narrowed (false_completion δ = 0 in the re-ablation).
+**Status:** CT confirmatory slice completed under the harness-enforced name-free
+contract (120/120 publishable; δ=+1.0; CI [1.0,1.0]). Grounded Statecharts remains
+secondary / narrowed (false_completion δ ≈ −0.083 on held-out D2).
 
 ## Targets
 

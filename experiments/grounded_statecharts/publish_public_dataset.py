@@ -62,25 +62,29 @@ def load_sanitized_rows(path: Path) -> list[dict[str, object]]:
 def build_summary(rows: list[dict[str, object]], *, source_path: Path) -> dict[str, Any]:
     constraint_rows = [row for row in rows if row["family"] == "recursive_constrained_tool_use"]
     artifact_rows = [row for row in rows if row["family"] == "artifact_completion"]
-    ct = bootstrap_paired_effect(
-        constraint_rows,
-        treatment="envelope_external_guards",
-        control="envelope_only",
-        metric="joint_success",
-        bootstrap_samples=500,
-        seed=20260720,
-    )
-    gs = bootstrap_paired_effect(
-        artifact_rows,
-        treatment="statechart_g3",
-        control="statechart_g0",
-        metric="false_completion",
-        bootstrap_samples=500,
-        seed=20260720,
-    )
+    bootstrap: dict[str, object] = {}
+    if len({str(row["task_id"]) for row in constraint_rows}) >= 2:
+        bootstrap["joint_success_external_minus_envelope"] = bootstrap_paired_effect(
+            constraint_rows,
+            treatment="envelope_external_guards",
+            control="envelope_only",
+            metric="joint_success",
+            bootstrap_samples=500,
+            seed=20260720,
+        ).to_dict()
+    if len({str(row["task_id"]) for row in artifact_rows}) >= 2:
+        bootstrap["false_completion_g3_minus_g0"] = bootstrap_paired_effect(
+            artifact_rows,
+            treatment="statechart_g3",
+            control="statechart_g0",
+            metric="false_completion",
+            bootstrap_samples=500,
+            seed=20260720,
+        ).to_dict()
+    confirmatory = any(row.get("condition") for row in rows) and not artifact_rows
     return {
         "schema_version": "1.0",
-        "tier": "public-live-d2-dataset",
+        "tier": "public-live-ct-confirmatory" if confirmatory else "public-live-d2-dataset",
         "source_path": str(source_path),
         "row_count": len(rows),
         "publishable_rows": sum(
@@ -93,14 +97,17 @@ def build_summary(rows: list[dict[str, object]], *, source_path: Path) -> dict[s
             "excludes_raw_provider_material": True,
             "excludes_chs_sealed_labels": True,
         },
-        "bootstrap": {
-            "joint_success_external_minus_envelope": ct.to_dict(),
-            "false_completion_g3_minus_g0": gs.to_dict(),
-        },
+        "bootstrap": bootstrap,
         "allowed_claim": (
-            "Public sanitized held-out D2 rows under the harness-enforced "
-            "name-free contract, with task-clustered uncertainty. Not a D3 "
-            "confirmatory result and not a CHS1 sealed-label benchmark."
+            "Public sanitized CT confirmatory rows under the harness-enforced "
+            "name-free contract, with task-clustered uncertainty. External-guard "
+            "joint-success recovery only — not model-side constraint learning."
+            if confirmatory
+            else (
+                "Public sanitized held-out D2 rows under the harness-enforced "
+                "name-free contract, with task-clustered uncertainty. Not a D3 "
+                "confirmatory result and not a CHS1 sealed-label benchmark."
+            )
         ),
         "non_claims": [
             "model-side constraint learning",

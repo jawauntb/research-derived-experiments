@@ -1,0 +1,41 @@
+{
+  "allowed_claim": "Public sanitized CT confirmatory rows under the harness-enforced name-free contract, with task-clustered uncertainty. External-guard joint-success recovery only \u2014 not model-side constraint learning.",
+  "bootstrap": {
+    "joint_success_external_minus_envelope": {
+      "bootstrap_samples": 500,
+      "ci_high": 1.0,
+      "ci_low": 1.0,
+      "clustering": "task",
+      "control": "envelope_only",
+      "metric": "joint_success",
+      "nested_repeats": true,
+      "point_estimate": 1.0,
+      "seed": 20260720,
+      "task_count": 12,
+      "treatment": "envelope_external_guards"
+    }
+  },
+  "checksums": {
+    "DATASET.md": "7ef734ec04d10de4c25c1122be3b8cbe682ddfb6c84714c7c8348853e4163bbd",
+    "rows.jsonl": "eb8a30448499bc9488b3bfda1c7f8fabbc22b994962aedb8071c05cad879ede7",
+    "summary.json": "7559e5da78acd973301ba818f199de216e1f27be042de78dc93de48feda0c7bc"
+  },
+  "contract": {
+    "excludes_chs_sealed_labels": true,
+    "excludes_raw_provider_material": true,
+    "harness_enforced_conditions": true,
+    "labeled_prompts_diagnostic_only": true,
+    "name_free_prompts_default": true
+  },
+  "non_claims": [
+    "model-side constraint learning",
+    "Grounded Statecharts product readiness",
+    "CHS1 attribution on sealed real failures",
+    "HU1\u2013HU7 unlearning"
+  ],
+  "publishable_rows": 120,
+  "row_count": 120,
+  "schema_version": "1.0",
+  "source_path": "artifacts/grounded_statecharts/d3_ct_confirmatory/rows.jsonl",
+  "tier": "public-live-ct-confirmatory"
+}
