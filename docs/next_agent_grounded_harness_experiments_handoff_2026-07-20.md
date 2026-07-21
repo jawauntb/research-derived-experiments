@@ -379,3 +379,18 @@ The handoff is complete only when the program has:
 Fixture success alone does not satisfy this completion definition.
 
 Make this a goal. Work till complete. Do whatever you can in parallel with up to 6 parallel agents.
+
+## Completion status (2026-07-20 night)
+
+**Constraint Transport / live-eval / D4 packaging: shipped.**
+
+Done on `main`:
+- Harness-enforced name-free CT (D2 + D3 confirmatory; OOD paraphrase live smoke; Haiku replication)
+- Public datasets (`results/d2_pilot_public/`, `results/d3_ct_confirmatory_public/`), failure replay
+- Claim-bounded preprint + brief: `docs/papers/grounded_harness_ct_preprint_2026-07-20.md` (+ PDFs)
+- CHS bridges (injected seals, equal-budget repair search, withheld-at-score-time) — not author-blind CHS1
+- HU fixture bank + live kill-criteria smoke — not HU1–HU7
+- GS remains narrowed
+
+Remaining optional programs (not CT blockers): author-blind live six-surface CHS1; powered multi-model/OOD confirmatory; real HU pilot.
+

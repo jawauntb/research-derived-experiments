@@ -770,7 +770,7 @@ Notable bundles:
 
 Claim-bounded grounded-harness writeups also live under `docs/papers/`:
 
-- [`docs/papers/grounded_harness_ct_preprint_2026-07-20.md`](papers/grounded_harness_ct_preprint_2026-07-20.md)
+- [`docs/papers/grounded_harness_ct_preprint_2026-07-20.md`](papers/grounded_harness_ct_preprint_2026-07-20.md) (+ PDF `papers/33_Grounded_Harness_CT_NameFree_2026_07_20.pdf`, brief PDF `papers/33b_Grounded_Harness_Brief_2026_07_20.pdf`)
   — name-free / harness-enforced Constraint Transport preprint (D2 + D3 CT)
 - [`docs/papers/grounded_harness_brief_2026-07-20.md`](papers/grounded_harness_brief_2026-07-20.md)
   — one-paragraph executive brief for the same slice
