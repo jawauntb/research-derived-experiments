@@ -1,10 +1,9 @@
 # Load-Bearing Prose Test — Preregistration
 
 **Frozen design date.** 2026-07-21
-**Package (planned).** `experiments/load_bearing_prose_test/` (created by
-Week 1 with a root manifest and structured-manifest registry entry in the
-same commit; planning docs live here at
-`docs/harness_research/load_bearing_prose_test/` until then)
+**Package.** `experiments/load_bearing_prose_test/` (this file lives in
+the package alongside the root manifest so the provenance tooling and
+the registry `preregistration_path` both resolve to a single authority)
 **Declared model (live slices).** `openai` / `gpt-4.1-mini`
 **Parent theory.** `papers/gauge_fixed_concern_transport/paper.md`
 (bridge theorem), `papers/commitment_surface/paper.md`
@@ -144,8 +143,8 @@ substrate).
 
 ## Related documents
 
-- Plan: [`../../plans/2026-07-21-001-feat-load-bearing-prose-test-plan.md`](../../plans/2026-07-21-001-feat-load-bearing-prose-test-plan.md)
-- Thesis: [`../load_bearing_prose_test.md`](../load_bearing_prose_test.md)
+- Plan: [`../../docs/plans/2026-07-21-001-feat-load-bearing-prose-test-plan.md`](../../docs/plans/2026-07-21-001-feat-load-bearing-prose-test-plan.md)
+- Thesis: [`../../docs/harness_research/load_bearing_prose_test.md`](../../docs/harness_research/load_bearing_prose_test.md)
 - κ source: `experiments/grounded_statecharts/condition_policy.py`
 - Bridge theorem: `papers/gauge_fixed_concern_transport/paper.md`
 - Availability/load-bearing framing: `papers/commitment_surface/paper.md`

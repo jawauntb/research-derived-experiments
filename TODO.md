@@ -2,8 +2,8 @@
 
 ## Load-Bearing Prose Test (2026-07-21)
 
-- [ ] Land plan + preregistration + thesis (this PR).
-- [ ] Week 1: scaffold `experiments/load_bearing_prose_test/` package (`claims.py`, `extraction.py`, `ablation.py`, `fixtures/`, deterministic tests, `run_lbpt_smoke.py`).
+- [x] Land plan + preregistration + thesis (PR #404, merged 2026-07-21).
+- [x] Week 1: scaffold `experiments/load_bearing_prose_test/` package (`claims.py`, `extraction.py`, `ablation.py`, `fixtures/`, deterministic tests, `run_lbpt_smoke.py`, root manifest + structured-manifest registry entry, preregistration moved into package alongside manifest).
 - [ ] Week 2: `executor.py` + `scoring.py` + `run_lbpt_pilot.py`; pilot slice on both CT task families with matched budgets.
 - [ ] Week 3: paraphrase-invariance gauge check; κ concordance measurement; CHS-style injected-fault sealing.
 - [ ] Week 4: held-out confirmatory slice; public sanitized dataset at `experiments/load_bearing_prose_test/results/lbpt_public/`; preprint at `docs/papers/lbpt_preprint_YYYY-MM-DD.md`.

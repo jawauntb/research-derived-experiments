@@ -1,0 +1,78 @@
+{
+  "extractor": "rule_based_obligation_shape",
+  "families": [
+    {
+      "family": "artifact_completion",
+      "kappa": {
+        "forbidden_capabilities": [
+          "deploy"
+        ],
+        "required_artifact": "reports/out.md",
+        "required_capabilities": [
+          "write_artifact"
+        ]
+      },
+      "plans": [
+        {
+          "ablation_count": 12,
+          "ablation_set_digest": "ad17d5bbd39b9175517d3f50599a61b63bfd06d7d457a53b165d379a4e785318",
+          "bundle_digest": "334b6f31b3e64de7f8d80eda1a23d91033e569b4a78360af43c568e735c20171",
+          "claim_count": 4,
+          "expected_claim_count": 4,
+          "kappa_mentioning_claims": 4,
+          "plan_digest": "8f2657c9d82235d454b544e63f3a6f377b1d5428fe6211ab307d285d3f8ff2b3",
+          "plan_id": "ac001"
+        },
+        {
+          "ablation_count": 6,
+          "ablation_set_digest": "01c7f8e62ec8b857669ca9e9ae27d02de4e2f20418d8729a5b23b74ca8065242",
+          "bundle_digest": "f9ca0daa3b493d2a2c7547b68abd676397f52af438966495cf5478ab7ea9ccdf",
+          "claim_count": 2,
+          "expected_claim_count": 2,
+          "kappa_mentioning_claims": 2,
+          "plan_digest": "2fc79c58f62eb68047529f6fe5e1c87f6483ffda22e5ad831a7f6af275464676",
+          "plan_id": "ac002"
+        }
+      ]
+    },
+    {
+      "family": "recursive_constrained_tool_use",
+      "kappa": {
+        "forbidden_capabilities": [
+          "publish",
+          "deploy",
+          "grant_admin"
+        ],
+        "required_capabilities": [
+          "delegate"
+        ]
+      },
+      "plans": [
+        {
+          "ablation_count": 12,
+          "ablation_set_digest": "6b3beb615c54808d4e928bc99e699beea0d1e16f754b6ff8f2eb007958c5cff8",
+          "bundle_digest": "d7814d8c9684085b22102242c1d7f4198c63e752702737bd33373b2569295234",
+          "claim_count": 4,
+          "expected_claim_count": 4,
+          "kappa_mentioning_claims": 4,
+          "plan_digest": "2ea0fa5e7bddc0eb7848b2dea42055795fa5f2cca8c93d2729f099fa6a81be5f",
+          "plan_id": "rct001"
+        },
+        {
+          "ablation_count": 12,
+          "ablation_set_digest": "85e78563c10ab80a23fedbf0d50453c29150fec339f3aa9a38c33a8698972044",
+          "bundle_digest": "0c1d3506f15006e258debb4b02bc4e67eea755905c82cfa6df31a64ecfc5610b",
+          "claim_count": 4,
+          "expected_claim_count": 4,
+          "kappa_mentioning_claims": 3,
+          "plan_digest": "61957a08f6799cc4eb61f037f9499cf6d32cfbb382408e27cf57d7afffa80124",
+          "plan_id": "rct002"
+        }
+      ]
+    }
+  ],
+  "package": "load_bearing_prose_test",
+  "run_id": "load_bearing_prose_test_scaffold_2026_07_21",
+  "schema_version": "1.0",
+  "summary_digest": "bc4087d3922296970896bed0e9a46fd4140e92e1db5affe2deb74a28cc97181b"
+}
