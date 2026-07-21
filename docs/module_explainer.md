@@ -1030,6 +1030,14 @@ python3 scripts/run_phase0.py --smoke
 
 ## 9. Maintenance checklist for this catalog
 
+Root `AGENTS.md` routes experiment-boundary work through
+`scientific-discovery-regime-audit` and the relevant modules in
+`papers/unified_citation_grounded_review/paper.md`. It deliberately does not run
+the full reviewer on routine code/docs work. Preregistrations or audit cards
+carry the compact target, representation/data-clock, assumption, fatal-gate,
+control, and evidence-path record; failed or unknown necessary gates cannot be
+offset by aggregate scores.
+
 When you add or materially change code:
 
 1. Update [system_design.md](system_design.md) if runtime flow, deps, deploy, or capabilities/limitations change.
