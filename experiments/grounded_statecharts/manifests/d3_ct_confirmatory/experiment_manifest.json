@@ -13,7 +13,9 @@
       "description": "Labeled prompts are banned; condition identity is applied by condition_policy.py."
     }
   ],
-  "seeds": [20260720],
+  "seeds": [
+    20260720
+  ],
   "runtime": {
     "execution_class": "external",
     "command": [
@@ -74,7 +76,7 @@
       "public": true
     },
     {
-      "kind": "metrics",
+      "kind": "summary",
       "path": "experiments/grounded_statecharts/results/d3_ct_confirmatory_public/summary.json",
       "public": true
     },
@@ -89,5 +91,5 @@
       "public": true
     }
   ],
-  "status": "completed"
+  "status": "accepted"
 }
