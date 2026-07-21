@@ -20,53 +20,56 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_OUTPUT = REPO_ROOT / "artifacts" / "grounded_statecharts" / "chs_sealed_live"
 
 PROTOCOL_VERSION = "paired-contrast-seal-1"
-PROTOCOL = {
+
+SEAL_RULES: tuple[dict[str, Any], ...] = (
+    {
+        "rule_id": "ct_external_recovers_envelope_fail",
+        "family": "recursive_constrained_tool_use",
+        "fail_condition": "envelope_only",
+        "recover_condition": "envelope_external_guards",
+        "fail_requires": {"joint_success": False},
+        "recover_requires": {"joint_success": True},
+        "responsible_component": "orchestration",
+        "rationale": (
+            "Matched external-guard recovery after envelope-only joint failure "
+            "attributes the failure to missing external orchestration guards."
+        ),
+    },
+    {
+        "rule_id": "gs_g3_repairs_g0_false_completion",
+        "family": "artifact_completion",
+        "fail_condition": "statechart_g0",
+        "recover_condition": "statechart_g3",
+        "fail_requires": {"false_completion": True},
+        "recover_requires": {"false_completion": False, "joint_success": True},
+        "responsible_component": "orchestration",
+        "rationale": (
+            "Matched G3 recovery after G0 false completion attributes the "
+            "failure to self-report orchestration without artifact guards."
+        ),
+    },
+    {
+        "rule_id": "wrong_edge_output_surface",
+        "family": None,
+        "fail_condition": "wrong_edge_guard",
+        "recover_condition": None,
+        "fail_requires": {"invalid_transition": True, "joint_success": False},
+        "recover_requires": None,
+        "responsible_component": "output",
+        "rationale": (
+            "Wrong-edge invalid transitions are sealed to the output surface "
+            "by construction of the wrong_edge_guard condition."
+        ),
+    },
+)
+
+PROTOCOL: dict[str, Any] = {
     "version": PROTOCOL_VERSION,
     "independence": (
         "Labels are produced from matched public-row condition contrasts only. "
         "The heuristic harvest predicted_component is never consulted."
     ),
-    "rules": (
-        {
-            "rule_id": "ct_external_recovers_envelope_fail",
-            "family": "recursive_constrained_tool_use",
-            "fail_condition": "envelope_only",
-            "recover_condition": "envelope_external_guards",
-            "fail_requires": {"joint_success": False},
-            "recover_requires": {"joint_success": True},
-            "responsible_component": "orchestration",
-            "rationale": (
-                "Matched external-guard recovery after envelope-only joint failure "
-                "attributes the failure to missing external orchestration guards."
-            ),
-        },
-        {
-            "rule_id": "gs_g3_repairs_g0_false_completion",
-            "family": "artifact_completion",
-            "fail_condition": "statechart_g0",
-            "recover_condition": "statechart_g3",
-            "fail_requires": {"false_completion": True},
-            "recover_requires": {"false_completion": False, "joint_success": True},
-            "responsible_component": "orchestration",
-            "rationale": (
-                "Matched G3 recovery after G0 false completion attributes the "
-                "failure to self-report orchestration without artifact guards."
-            ),
-        },
-        {
-            "rule_id": "wrong_edge_output_surface",
-            "family": None,
-            "fail_condition": "wrong_edge_guard",
-            "recover_condition": None,
-            "fail_requires": {"invalid_transition": True, "joint_success": False},
-            "recover_requires": None,
-            "responsible_component": "output",
-            "rationale": (
-                "Wrong-edge invalid transitions are sealed to the output surface "
-                "by construction of the wrong_edge_guard condition."
-            ),
-        },
-    ),
+    "rules": SEAL_RULES,
     "kill_criteria": (
         "Do not treat heuristic harvest agreement as CHS1.",
         "Do not write responsible_component into public episode rows.",
@@ -105,20 +108,26 @@ def seal_from_paired_contrasts(rows: Sequence[Mapping[str, Any]]) -> list[dict[s
 
     sealed: list[dict[str, object]] = []
     for (task_id, repeat_index), conditions in sorted(by_key.items()):
-        for rule in PROTOCOL["rules"]:
+        for rule in SEAL_RULES:
             family = rule["family"]
-            fail_condition = rule["fail_condition"]
-            fail_row = conditions.get(str(fail_condition))
+            fail_condition = str(rule["fail_condition"])
+            fail_row = conditions.get(fail_condition)
             if fail_row is None:
                 continue
             if family is not None and fail_row.get("family") != family:
                 continue
-            if not _matches(fail_row, rule["fail_requires"]):
+            fail_requires = rule["fail_requires"]
+            if not isinstance(fail_requires, Mapping) or not _matches(fail_row, fail_requires):
                 continue
             recover_condition = rule["recover_condition"]
             if recover_condition is not None:
                 recover_row = conditions.get(str(recover_condition))
-                if recover_row is None or not _matches(recover_row, rule["recover_requires"]):
+                recover_requires = rule["recover_requires"]
+                if (
+                    recover_row is None
+                    or not isinstance(recover_requires, Mapping)
+                    or not _matches(recover_row, recover_requires)
+                ):
                     continue
                 evidence = {
                     "fail_result_digest": fail_row["result_digest"],

@@ -10,6 +10,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+from collections.abc import Mapping
 from typing import Any
 
 from experiments.grounded_statecharts.evaluation import bootstrap_paired_effect
@@ -25,6 +26,11 @@ DEFAULT_OUTPUT = PACKAGE_ROOT / "results" / "d2_pilot_public"
 
 def _sha256_bytes(payload: bytes) -> str:
     return hashlib.sha256(payload).hexdigest()
+
+
+def _is_publishable(row: Mapping[str, object]) -> bool:
+    integrity = row.get("integrity")
+    return isinstance(integrity, Mapping) and integrity.get("publishable") is True
 
 
 def load_sanitized_rows(path: Path) -> list[dict[str, object]]:
@@ -87,9 +93,7 @@ def build_summary(rows: list[dict[str, object]], *, source_path: Path) -> dict[s
         "tier": "public-live-ct-confirmatory" if confirmatory else "public-live-d2-dataset",
         "source_path": str(source_path),
         "row_count": len(rows),
-        "publishable_rows": sum(
-            1 for row in rows if (row.get("integrity") or {}).get("publishable") is True
-        ),
+        "publishable_rows": sum(1 for row in rows if _is_publishable(row)),
         "contract": {
             "name_free_prompts_default": True,
             "harness_enforced_conditions": True,
@@ -122,7 +126,7 @@ def generate_results(*, source_rows: Path, output_dir: Path = DEFAULT_OUTPUT) ->
     rows = load_sanitized_rows(source_rows)
     if not rows:
         raise ValueError("no rows to publish")
-    if not all((row.get("integrity") or {}).get("publishable") is True for row in rows):
+    if not all(_is_publishable(row) for row in rows):
         raise ValueError("refusing to publish integrity-invalid rows")
     summary = build_summary(rows, source_path=source_rows)
     output_dir.mkdir(parents=True, exist_ok=True)
