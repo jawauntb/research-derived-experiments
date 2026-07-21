@@ -71,3 +71,17 @@ and 6 via `ConstraintTransportBenchmark.run_ood_depth`; it has no live
 variant. See `experiments/grounded_statecharts/constraint_ood.py` and
 `results/constraint_ood/summary.json` for the executed contract and current
 (fixture-only) outcome.
+
+## Live OOD paraphrase smoke (2026-07-20)
+
+Path: `artifacts/grounded_statecharts/constraint_ood_live_smoke/` (8/8 publishable;
+`gpt-4.1-mini`; name-free harness-v2).
+
+| Contrast | Point estimate | Bootstrap CI | Kill (<0.15) |
+|---|---|---|---|
+| joint_success: external − envelope_only | **+1.000** | **[1.0, 1.0]** | not triggered |
+
+Claim boundary: one credentialed smoke on 4 held-out paraphrased tasks — not
+powered D3 confirmatory. Effect survived rewording under the same harness-
+enforced contract.
+
