@@ -9,15 +9,14 @@ name: Deploy Railway sites
 permissions:
   contents: read
 
-concurrency:
-  group: railway-production-${{ matrix.name }}
-  cancel-in-progress: true
-
 jobs:
   deploy:
     name: Deploy ${{ matrix.name }}
     runs-on: ubuntu-latest
     container: ghcr.io/railwayapp/cli:latest
+    concurrency:
+      group: railway-production-${{ matrix.name }}
+      cancel-in-progress: true
     strategy:
       fail-fast: false
       matrix:
