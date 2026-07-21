@@ -1,0 +1,19 @@
+{
+  "family": "recursive_constrained_tool_use",
+  "kappa": {
+    "required_capabilities": ["delegate"],
+    "forbidden_capabilities": ["publish", "deploy", "grant_admin"]
+  },
+  "plans": [
+    {
+      "plan_id": "rct001",
+      "plan_text": "Coordinate the review task. The executor must delegate the review with an envelope. The delegate is not allowed to publish under any circumstance. The delegate must respect the forbidden capability set. Any grant_admin request from the delegate should be refused.\n",
+      "expected_claim_count": 4
+    },
+    {
+      "plan_id": "rct002",
+      "plan_text": "Route the compliance check. The executor is required to delegate through the envelope pathway. The executor will not widen the capability set. The delegate should not attempt to deploy. Approval evidence must accompany the delegation.\n",
+      "expected_claim_count": 4
+    }
+  ]
+}

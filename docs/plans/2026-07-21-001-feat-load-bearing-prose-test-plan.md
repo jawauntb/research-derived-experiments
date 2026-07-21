@@ -27,7 +27,7 @@ execution: code
   we have the first real oracle for prose. If it collapses, we have a
   bounded null result for a specific claim about the bridge theorem's reach.
 - **Authority.** `docs/harness_research/load_bearing_prose_test.md` (thesis),
-  `docs/harness_research/load_bearing_prose_test/PREREGISTRATION.md` (gates and kills; planning docs live under `docs/` until Week 1 creates the runtime package with its root manifest and structured-manifest registry entry in the same commit),
+  `experiments/load_bearing_prose_test/PREREGISTRATION.md` (gates and kills; moved into the package during Week 1 alongside the root manifest so provenance tooling and the registry `preregistration_path` both resolve to one authority),
   `papers/commitment_surface/paper.md` (availability vs. load-bearing),
   `papers/gauge_fixed_concern_transport/paper.md` (bridge theorem),
   `experiments/grounded_statecharts/condition_policy.py` (κ substrate reused
@@ -252,7 +252,7 @@ registry edit are non-optional even for scaffolding.
 ## Publication Surface
 
 - **Package (planned):** `experiments/load_bearing_prose_test/` (created in Week 1 with a root manifest and registry entry)
-- **Preregistration:** `docs/harness_research/load_bearing_prose_test/PREREGISTRATION.md`
+- **Preregistration:** `experiments/load_bearing_prose_test/PREREGISTRATION.md`
 - **Public dataset target:** `experiments/load_bearing_prose_test/results/lbpt_public/`
 - **Preprint target:** `docs/papers/lbpt_preprint_YYYY-MM-DD.md`
 - **Thesis:** `docs/harness_research/load_bearing_prose_test.md`

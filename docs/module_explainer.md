@@ -547,24 +547,31 @@ python3 -m experiments.grounded_statecharts.run_chs_live_withheld_score_smoke \
   --rows /path/to/rows.jsonl
 ```
 
-#### 3.3.4 `load_bearing_prose_test` — prose commitment-surface test (planning docs only)
+#### 3.3.4 `load_bearing_prose_test` — prose commitment-surface test (Week 1 scaffolding)
 
-Plan and preregistration frozen 2026-07-21; runtime package
-`experiments/load_bearing_prose_test/` will be created together with
-its root manifest and structured-manifest registry entry by Week 1
-(package-coverage guard requires this pair). Reuses the CT κ substrate
+Week 1 (Step 1) scaffolding for the concern-transport bridge-theorem
+test on LLM-produced prose. Deterministic rule-based extractor,
+atomic-alternation ablation transforms (`delete` / `negate` /
+`paraphrase`), typed claim/ablation dataclasses with SHA-256 digest
+receipts, and a byte-stable CI smoke. No live-provider paths yet; the
+Week-2 executor adapter reuses the CT κ substrate
 (`experiments/grounded_statecharts/condition_policy.py`) and the CT
-commitment-surface oracle to classify atomic claims in LLM-produced
-plans as load-bearing (Δ ≠ 0 on the executor's commitment surface
-under deletion or negation, Δ = 0 under paraphrase) or available
-but not load-bearing.
+commitment-surface oracle to score ablations.
 
 | Path | Purpose |
 |---|---|
-| [`harness_research/load_bearing_prose_test/PREREGISTRATION.md`](harness_research/load_bearing_prose_test/PREREGISTRATION.md) | Fatal gates, kill criteria, escalation sequence |
-| [`harness_research/load_bearing_prose_test/README.md`](harness_research/load_bearing_prose_test/README.md) | Package contract and non-claims |
+| `experiments/load_bearing_prose_test/PREREGISTRATION.md` | Fatal gates, kill criteria, escalation sequence |
+| `experiments/load_bearing_prose_test/experiment_manifest.json` | Root manifest bound in `docs/experiment_contract_registry.json` as `structured_manifest` (partial run coverage; primary run `load_bearing_prose_test_scaffold_2026_07_21`) |
+| `experiments/load_bearing_prose_test/claims.py` | Typed `Claim`, `ClaimBundle`, `Ablation`, `AblationSet`, `Verdict` dataclasses with canonical digests |
+| `experiments/load_bearing_prose_test/extraction.py` | `ClaimExtractor` protocol plus `RuleBasedExtractor` (deterministic obligation-shape extractor) and `KappaVocabulary` |
+| `experiments/load_bearing_prose_test/ablation.py` | Atomic-alternation `delete_claim`, `negate_claim`, `paraphrase_claim`, and `ablate_bundle` transforms |
+| `experiments/load_bearing_prose_test/fixtures/{artifact_completion,recursive_constrained_tool_use}_plans.json` | Frozen seed plans mirroring the two CT task families, with κ vocabulary and expected claim counts |
+| `experiments/load_bearing_prose_test/run_lbpt_smoke.py` | Deterministic CI runner that emits `results/summary.json` with per-plan digests |
+| `tests/test_lbpt_{claims,extraction,ablation,smoke}.py` | 26 deterministic tests covering type invariants, extractor determinism, atomic-transform round-trip safety, and smoke byte-stability |
+| [`harness_research/load_bearing_prose_test/README.md`](harness_research/load_bearing_prose_test/README.md) | Package contract and non-claims (planning surface only; the prereg lives with the package) |
 
-No runtime code yet; no live spend; no empirical claim.
+Runtime executor adapter, scoring rules, live paraphrase auditing, and
+public dataset land in Weeks 2–4 per the plan.
 
 #### 3.3.5 Related reengagement packages
 

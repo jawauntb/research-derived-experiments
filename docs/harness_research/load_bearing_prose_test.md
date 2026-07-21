@@ -65,7 +65,7 @@ agent-produced prose is an open empirical question.
 The primary published claim is bounded: it is a statement about *this*
 substrate under *this* model with *these* task families. Publication
 requires all three fatal gates in
-[`load_bearing_prose_test/PREREGISTRATION.md`](load_bearing_prose_test/PREREGISTRATION.md)
+[`../../experiments/load_bearing_prose_test/PREREGISTRATION.md`](../../experiments/load_bearing_prose_test/PREREGISTRATION.md)
 to pass.
 
 ## Relation to Existing Work

@@ -27,7 +27,7 @@ substrate. A negative result publishes as a bounded null.
 ## Contracts
 
 - **Plan:** [`../../plans/2026-07-21-001-feat-load-bearing-prose-test-plan.md`](../../plans/2026-07-21-001-feat-load-bearing-prose-test-plan.md)
-- **Preregistration:** [`PREREGISTRATION.md`](PREREGISTRATION.md)
+- **Preregistration:** [`../../../experiments/load_bearing_prose_test/PREREGISTRATION.md`](../../../experiments/load_bearing_prose_test/PREREGISTRATION.md) (moved into the package alongside the manifest for provenance tooling)
 - **Thesis:** [`../load_bearing_prose_test.md`](../load_bearing_prose_test.md)
 
 ## Layout (planned)

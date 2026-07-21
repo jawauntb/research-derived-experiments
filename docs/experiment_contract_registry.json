@@ -552,6 +552,35 @@
       }
     },
     {
+      "package": "load_bearing_prose_test",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/load_bearing_prose_test/experiment_manifest.json",
+      "run_coverage": "partial",
+      "primary_run_id": "load_bearing_prose_test_scaffold_2026_07_21",
+      "runs": [
+        {
+          "run_id": "load_bearing_prose_test_scaffold_2026_07_21",
+          "publication_package": "load_bearing_prose_test",
+          "runtime_package": "load_bearing_prose_test",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/load_bearing_prose_test/experiment_manifest.json",
+          "report_paths": [
+            "experiments/load_bearing_prose_test/results/summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_digest": "b6a0da45c67e7922a7fe69211648cb036b6186a428e6b6e0f65aff6096684b17",
+          "preregistration_path": "experiments/load_bearing_prose_test/PREREGISTRATION.md",
+          "producing_agent": {
+            "identity": "Claude Opus 4.7",
+            "session_ref": "load-bearing-prose-test Step 1 scaffold PR"
+          }
+        }
+      ]
+    },
+    {
       "package": "long_horizon_bottleneck",
       "coverage_mode": "legacy_exception",
       "legacy_exception": {

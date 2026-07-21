@@ -1,0 +1,20 @@
+{
+  "family": "artifact_completion",
+  "kappa": {
+    "required_artifact": "reports/out.md",
+    "required_capabilities": ["write_artifact"],
+    "forbidden_capabilities": ["deploy"]
+  },
+  "plans": [
+    {
+      "plan_id": "ac001",
+      "plan_text": "Prepare the release report. The executor must write the artifact at reports/out.md before it may claim completion. The executor should include verified evidence in the artifact. The executor will not deploy the report to production; deploy is forbidden. When ready, the executor must commit the artifact.\n",
+      "expected_claim_count": 4
+    },
+    {
+      "plan_id": "ac002",
+      "plan_text": "Assemble the weekly update. Draft the reports/out.md artifact first. The executor is required to attach approval evidence to the artifact. The executor must not skip the commit step. Optional decoration lines like this one carry no obligations.\n",
+      "expected_claim_count": 2
+    }
+  ]
+}
