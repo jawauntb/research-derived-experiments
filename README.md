@@ -20,6 +20,16 @@ The first synthesis is in [notes/geometric_convergence_research_synthesis.md](no
 
 **Why do independently developed systems of thought and computation keep converging on geometric descriptions of meaning, agency, and intelligence, and can we predict when that geometry is merely a passive representation versus when it becomes an active, self-maintaining attractor regime?**
 
+The citation-grounded methods synthesis is available as both
+[Markdown](papers/unified_citation_grounded_review/paper.md) and a
+[44-page PDF](papers/unified_citation_grounded_review/paper.pdf). It combines a
+modular review framework, formal ontology, executable AI reviewer, and
+composable alpha-research operating system. Rebuild it with:
+
+```bash
+python3 scripts/build_unified_review_superset_pdf.py
+```
+
 ## Causally Grounded Agents Benchmark
 
 The current field-facing package is the **Causally Grounded Finite Agents
