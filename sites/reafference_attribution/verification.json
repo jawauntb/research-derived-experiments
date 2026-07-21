@@ -1033,7 +1033,7 @@
         "experiments/load_bearing_prose_test/results/summary.json"
       ],
       "n_modal_entrypoints": 0,
-      "n_scripts": 8,
+      "n_scripts": 10,
       "paper": null,
       "preregistration": "experiments/load_bearing_prose_test/PREREGISTRATION.md",
       "verification_signals": [],
