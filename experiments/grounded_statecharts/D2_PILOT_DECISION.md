@@ -53,11 +53,24 @@ Weak-prompt ablation:
 
 ## Next best tests
 
-1. Redesign live prompts so condition identity is harness-enforced, not
-   instruction-named.
+1. ~~Redesign live prompts so condition identity is harness-enforced, not
+   instruction-named.~~ Implemented in `condition_policy.py` with name-free
+   default prompts; re-run weak-prompt ablation under harness v2 before any
+   CT/GS escalation.
 2. Finish the 3-repeat labeled matrix only as a variance characterization, not
    as confirmatory evidence.
 3. Independently seal CHS candidates from live failure harvest before CHS1.
+
+## Harness-enforced contract (v2)
+
+As of the harness-enforced redesign:
+
+- Default live prompts omit condition names (`build_live_prompt` == weak prompt).
+- `GROUNDED_HARNESS_LABELED_PROMPT=1` is diagnostic-only.
+- Scoring uses post-policy evidence: G3 repair can clear false completion;
+  external envelope enforcement can clear capability widenings.
+- Escalation still requires name-free joint_success δ ≥ 0.15 (CT) or a
+  preregistered false-completion improvement (GS) under this contract.
 
 ## 3-repeat labeled variance slice
 

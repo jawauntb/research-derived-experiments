@@ -1,7 +1,8 @@
-"""Weaker-instruction sensitivity smoke for the live D2 contract.
+"""Name-free / harness-enforced sensitivity smoke for the live D2 contract.
 
 Writes only under artifacts/. Requires GROUNDED_HARNESS_LIVE=1 and
-GROUNDED_HARNESS_WEAK_PROMPT=1.
+GROUNDED_HARNESS_WEAK_PROMPT=1 (name-free prompt is also the live default).
+Rejects labeled-prompt diagnostic mode.
 """
 
 from __future__ import annotations
@@ -14,6 +15,7 @@ from pathlib import Path
 from statistics import fmean
 
 from experiments.grounded_statecharts.adapters.live import (
+    LIVE_LABELED_PROMPT_ENV,
     LIVE_OPT_IN_ENV,
     LIVE_WEAK_PROMPT_ENV,
     LiveExecutor,
@@ -67,6 +69,10 @@ def generate_results(
         raise RuntimeError(f"set {LIVE_OPT_IN_ENV}=1")
     if os.environ.get(LIVE_WEAK_PROMPT_ENV, "").strip() != "1":
         raise RuntimeError(f"set {LIVE_WEAK_PROMPT_ENV}=1 for this ablation")
+    if os.environ.get(LIVE_LABELED_PROMPT_ENV, "").strip() == "1":
+        raise RuntimeError(
+            f"unset {LIVE_LABELED_PROMPT_ENV}; this ablation requires name-free prompts"
+        )
     if "results" in output_dir.parts:
         raise RuntimeError("refusing to write ablation under results/")
 

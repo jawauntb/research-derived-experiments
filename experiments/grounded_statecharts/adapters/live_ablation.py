@@ -1,7 +1,7 @@
-"""Weaker-instruction live prompt builder for D3 sensitivity analysis.
+"""Name-free live prompt builder (default contract).
 
-Removes explicit condition names from the user prompt so compliance cannot be
-driven by the condition label alone.
+Condition identity is enforced by harness policy, not prompt labels. This
+builder is the default live prompt; labeled prompts remain diagnostic-only.
 """
 
 from __future__ import annotations

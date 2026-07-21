@@ -138,8 +138,12 @@ fixture, and G0/G3 manifests; constraint conditions still use the fixture
 executor path. The bridge emits only sanitized public-contract rows under the
 matched default pilot budget and its smoke outcomes are not held-out evidence.
 Credentialed live-model mechanics smoke is opt-in via
-`GROUNDED_HARNESS_LIVE=1` and writes only under gitignored `artifacts/`; held-out
-D2 pilots remain planned until their freeze gate passes.
+`GROUNDED_HARNESS_LIVE=1` and writes only under gitignored `artifacts/`. Live
+prompts default to name-free instructions; condition effects are applied by
+`condition_policy.py` (G3 artifact repair; external envelope enforcement) and
+scored from evidence rather than condition-name membership. Labeled prompts
+remain diagnostic-only (`GROUNDED_HARNESS_LABELED_PROMPT=1`). Held-out D2
+escalation stays gated on harness-enforced, name-free effects.
 
 | Design | Intended surface | Dependency order |
 |---|---|---|

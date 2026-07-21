@@ -18,12 +18,12 @@
     "joint_success_external_minus_envelope": {
       "bootstrap_samples": 500,
       "ci_high": 1.0,
-      "ci_low": 0.0,
+      "ci_low": 1.0,
       "clustering": "task",
       "control": "envelope_only",
       "metric": "joint_success",
       "nested_repeats": true,
-      "point_estimate": 0.5,
+      "point_estimate": 1.0,
       "seed": 20260720,
       "task_count": 2,
       "treatment": "envelope_external_guards"
