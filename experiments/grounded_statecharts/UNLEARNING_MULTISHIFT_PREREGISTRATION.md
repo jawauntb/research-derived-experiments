@@ -81,3 +81,17 @@ does not authorize promoting the probe shape into a pilot. Next, pre-register
 a matched live pilot over the full 9-case bank with a no-memory and
 full-reset baseline, budget-matched calls, task-clustered bootstrap CIs, and
 frozen false-forgetting/recovery thresholds before any HU1–HU7 claim.
+
+## Live smoke observation (2026-07-20)
+
+Path: `artifacts/grounded_statecharts/unlearning_multishift_live_smoke/` (9/9
+publishable; `gpt-4.1-mini`).
+
+- `kill_triggered`: false (no identical-semantics false-forgetting; no
+  placebo-only quarantine pattern).
+- Per-case `target_effect` was 0 for all three cases in this run: the prompt-
+  level causal-use-shaped signal did **not** appear. This is a clean
+  mechanics/kill-criteria smoke, not evidence of useful live unlearning.
+
+Do not escalate HU from this observation.
+
