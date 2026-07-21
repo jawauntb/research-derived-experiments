@@ -1,50 +1,93 @@
 {
-  "adapter_id": "live",
-  "allowed_claim": "External guards recover joint success after widenings under name-free prompts (harness enforcement).",
-  "budget_ceiling_usd": 75,
-  "conditions": [
-    "envelope_only",
-    "envelope_external_guards"
-  ],
-  "experiment_id": "grounded_harness_d3_ct_confirmatory",
-  "families": [
-    "recursive_constrained_tool_use"
-  ],
-  "harness_contract": "condition_policy_v2",
-  "kill_criteria": [
-    "name_free joint_success delta collapses below practical threshold",
-    "labeled prompts used",
-    "integrity/publishable gates fail",
-    "spend exceeds $75 without gate pass"
-  ],
-  "model_id": "gpt-4.1-mini",
-  "non_claims": [
-    "model-side constraint learning",
-    "Grounded Statecharts product readiness",
-    "CHS1 six-surface attribution",
-    "HU1-HU7"
-  ],
-  "primary_contrast": {
-    "clustering": "task",
-    "control": "envelope_only",
-    "metric": "joint_success",
-    "nested_repeats": true,
-    "treatment": "envelope_external_guards"
-  },
-  "prompt_contract": "name_free_default",
-  "provider_id": "openai",
-  "repeats": 5,
-  "result_summary": {
-    "ci": [
-      1.0,
-      1.0
-    ],
-    "episode_count": 120,
-    "joint_success_delta": 1.0,
-    "provider_failures": 0,
-    "publishable_rows": 120
-  },
   "schema_version": "1.0",
-  "status": "completed",
-  "tasks": "fixtures/d2_held_out_tasks.json (constraint family only)"
+  "experiment_id": "grounded_harness_d3_ct_confirmatory",
+  "hypothesis": "Under harness-enforced name-free prompts, envelope_external_guards recovers zero-violation joint success versus envelope_only on held-out constraint tasks, with task-clustered confirmatory evidence.",
+  "claim_tier": "internal",
+  "controls": [
+    {
+      "control_id": "envelope_only",
+      "description": "Name-free prompt with soft envelope scoring and no external capability enforcement."
+    },
+    {
+      "control_id": "name_free_prompt_contract",
+      "description": "Labeled prompts are banned; condition identity is applied by condition_policy.py."
+    }
+  ],
+  "seeds": [20260720],
+  "runtime": {
+    "execution_class": "external",
+    "command": [
+      "python3",
+      "-m",
+      "experiments.grounded_statecharts.run_d2_pilot",
+      "--adapter",
+      "live",
+      "--repeats",
+      "5",
+      "--confirmatory",
+      "--family",
+      "recursive_constrained_tool_use",
+      "--condition",
+      "envelope_only",
+      "--condition",
+      "envelope_external_guards",
+      "--output-dir",
+      "artifacts/grounded_statecharts/d3_ct_confirmatory"
+    ],
+    "estimated_minutes": 20,
+    "max_cost_usd": 75
+  },
+  "dependencies": [
+    {
+      "name": "grounded_statecharts",
+      "version": "1.2"
+    }
+  ],
+  "gates": [
+    {
+      "gate_id": "D3_CT_INTEGRITY",
+      "criterion": "All confirmatory rows are publishable with zero provider failures under the name-free prompt contract."
+    },
+    {
+      "gate_id": "D3_CT_EFFECT",
+      "criterion": "Task-clustered joint_success for envelope_external_guards minus envelope_only remains directionally positive with nested repeats."
+    },
+    {
+      "gate_id": "D3_CT_CLAIM_BOUNDARY",
+      "criterion": "Allowed claim is harness-enforced recovery only; model-side constraint learning is not claimed."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "other",
+      "path": "experiments/grounded_statecharts/D3_SAMPLE_SIZE_PLAN.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/grounded_statecharts/D2_PILOT_DECISION.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/grounded_statecharts/manifests/d3_ct_confirmatory/experiment_manifest.json",
+      "public": true
+    },
+    {
+      "kind": "metrics",
+      "path": "experiments/grounded_statecharts/results/d3_ct_confirmatory_public/summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/grounded_statecharts/results/d3_ct_confirmatory_public/rows.jsonl",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/grounded_statecharts/results/d3_ct_confirmatory_public/checksums.json",
+      "public": true
+    }
+  ],
+  "status": "completed"
 }
