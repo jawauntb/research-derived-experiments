@@ -83,6 +83,8 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_passive_active_phase_map.py` | Phase-map model comparison, matched-budget path controls, public aggregate contract |
 | `test_grounded_statecharts.py` | Exact replay, depth 1–4 constraint lineage, six-surface fault attribution, descendant-aware memory causal use, legal lifecycle transitions, and byte-stable bundles |
 | `test_grounded_live_evaluation.py`, `test_grounded_live_provider.py`, `test_grounded_statechart_pilot.py`, `test_grounded_condition_policy.py`, `test_grounded_chs_adjudication.py`, `test_grounded_public_dataset.py` | Shared live-eval schemas, fixture/live adapters, injectible provider transport, harness condition policies, paired-contrast CHS seals, public dataset export, ReplayEngine-backed artifact D2 mechanics, budgets/sanitization, and bootstrap stability |
+| `test_grounded_chs_withheld_seal_search.py` | `BlindFaultCase`/`BlindSearchResult` carry no `responsible_component`; the blind pilot matches the original pilot case-by-case; withheld-seal writing/loading gates; end-to-end withheld equal-budget search-vs-seal scoring, including a corrupted-label failure case |
+| `test_grounded_chs_live_withheld_score.py` | Harvest-vs-seal join by result digest only (agree/disagree/no-coverage cases); refuses `results/` output; end-to-end fresh seal+harvest+join on fixture-deterministic live rows |
 | `test_causal_use.py` | Shared mass-normalized causal-use dose curves, bootstrap uncertainty, and cross-surface transport |
 | `test_experiment_manifest.py`, `test_gate_verdict.py`, `test_evidence_registry.py`, `test_claim_registry.py` | Fail-closed research-contract adapters, package-coverage registry partition, discovery, references, supersession, and bidirectional edges |
 | `test_research_contract_schema_parity.py`, `test_gen_provenance.py` | Shared vocabulary/schema parity, support-directory exclusion, non-mutating provenance freshness |
@@ -471,10 +473,12 @@ python3 -m experiments.long_horizon_bottleneck.eval --provider fixture --models 
 | `constraint_transport.py` | Versioned constraint envelopes, hash-linked derivation, capability narrowing, tamper rejection, and deterministic depth 1–4 evaluator |
 | `run_constraint_transport.py` | Two-family benchmark runner, joint-success scorer, known-fault export, and compact static replay |
 | `constraint_pilot.py` / `run_constraint_pilot_smoke.py` | Credential-free D2 bridge that maps the committed prose/no-guard and typed/guarded diagonal into compact rows while explicitly marking the two crossed factorial cells unobserved |
-| `counterfactual_search.py` | Six-surface fault manifests, deterministic outcome vectors, isolated repair/placebo replay, attribution credit, and equal-budget trace baseline |
+| `counterfactual_search.py` | Six-surface fault manifests, deterministic outcome vectors, isolated repair/placebo replay, attribution credit, and equal-budget trace baseline; also `BlindFaultCase`/`BlindCounterfactualHarnessPilot`/`BlindSearchResult`, a structurally label-free variant with no `responsible_component` attribute on either the case or the result, used by the withheld-at-score-time CHS tier |
 | `run_counterfactual_search.py` | Pilot runner, fault-integrity gates, attribution/repair metrics, and compact static replay |
 | `chs_sealed.py` / `run_chs_sealed_smoke.py` | Credential-free synthetic-to-sealed-label plumbing for one clean and six single-fault cases, scored against a separate label artifact |
 | `chs_repair_search.py` / `run_chs_repair_search.py` | Re-runs the equal-budget (identical per-arm cost) counterfactual repair/placebo search fresh and scores it against both the adjudicated injected-fault seal tier (`results/chs_injected_faults/labels.jsonl`) and the hand-authored fixture label file (`fixtures/chs_sealed_labels.json`); gates on zero placebo credit, exact budget parity, and cross-source label agreement; writes `results/chs_repair_search/`; explicitly not CHS1 on naturalistic live failures |
+| `chs_repair_search.py`'s withheld tier / `run_chs_withheld_seal_search.py` | `seal_withheld_labels`/`generate_withheld_seals` write a separate label store (`results/chs_withheld_seals/labels.jsonl`); `score_withheld_repair_search`/`generate_withheld_results` (`--sealed-labels`) run `BlindCounterfactualHarnessPilot` over `BlindFaultCase` (no `responsible_component` attribute) and join `recovered_component` to that store by `fault_id` only, after the search has already returned; gates assert both `BlindFaultCase` and `BlindSearchResult` have no label attribute; writes `results/chs_withheld_seal_search/`; a CHS1-bridge, not author-blind human adjudication CHS1 |
+| `chs_live_withheld_score.py` / `run_chs_live_withheld_score_smoke.py` | Joins the already-mutually-blind live heuristic harvest (`chs_from_live.harvest_candidates`, never sees `responsible_component`) against the paired-contrast seal (`chs_adjudication.seal_from_paired_contrasts`, never sees `predicted_component`) by `source_result_digest` only, after writing and re-reading both from disk; writes under gitignored `artifacts/grounded_statecharts/chs_live_withheld_score/`; on `d2_pilot_harness_v2` rows this covers 12 of 144 rows (orchestration/output-only seal) with 100% top-1 agreement, and is explicitly not an equal-budget repair/placebo search or CHS1 |
 | `harness_unlearning.py` | Scoped memory ledger, descendant families, commitment harness, paired causal-use gate, and legal lifecycle transitions |
 | `run_harness_unlearning.py` | Fail-closed causal prerequisite plus deterministic shift, quarantine, retirement, recurrence, restoration, and replay bundle |
 | `unlearning_multishift.py` / `run_unlearning_multishift_smoke.py` | Credential-free draft extension with nine independently authored shift instances (distinct memory ids, content actions, and regime ids) across three families — three tool-schema variants, three environment-policy variants, three model/version-identical-semantics false-forgetting-control variants; writes compact summary/rows only, no live calls |
@@ -522,6 +526,7 @@ python3 -m experiments.grounded_statecharts.run_constraint_pilot_smoke
 python3 -m experiments.grounded_statecharts.run_chs_sealed_smoke
 python3 -m experiments.grounded_statecharts.run_chs_injected_faults_smoke
 python3 -m experiments.grounded_statecharts.run_chs_repair_search
+python3 -m experiments.grounded_statecharts.run_chs_withheld_seal_search
 python3 -m experiments.grounded_statecharts.run_unlearning_multishift_smoke
 # Opt-in credentialed HU live-adapter smoke (writes under artifacts/ only):
 # GROUNDED_HARNESS_LIVE=1 GROUNDED_HARNESS_PROVIDER=... GROUNDED_HARNESS_MODEL=... \
@@ -533,6 +538,9 @@ python3 -m experiments.grounded_statecharts.run_constraint_ood_smoke
 python3 -m experiments.grounded_statecharts.run_live_failure_replay --rows /path/to/rows.jsonl
 python3 -m experiments.grounded_statecharts.run_chs_from_live_smoke --rows /path/to/rows.jsonl
 python3 -m experiments.grounded_statecharts.run_chs_adjudication --with-injected \
+  --rows /path/to/rows.jsonl
+# Live withheld-at-score-time harvest-vs-seal join (writes under artifacts/ only):
+python3 -m experiments.grounded_statecharts.run_chs_live_withheld_score_smoke \
   --rows /path/to/rows.jsonl
 ```
 

@@ -402,6 +402,59 @@ labels remain repository-visible constructions, not labels withheld from the
 diagnosis author on real failures — so this still is not a six-surface CHS1
 claim (see `CHS_SEALED_PREREGISTRATION.md`).
 
+`chs_repair_search.py` adds an explicit scoring pass on top of the injected-
+fault tier: `score_equal_budget_repair_search` (`run_chs_repair_search.py`,
+`--sealed-labels`) reruns the unmodified equal-budget search — every repair
+candidate and the placebo control cost exactly one evaluation, so no arm
+gets a search advantage — fresh against the six fixtures, and checks the
+result against both `results/chs_injected_faults/labels.jsonl` and the
+hand-authored `fixtures/chs_sealed_labels.json`. It writes
+`results/chs_repair_search/` only when every gate passes: exact per-arm cost
+parity, zero placebo credit, the fresh search matching both label sources,
+and both label sources agreeing with each other.
+
+The same module also hosts a strictly stronger, structurally-blind tier.
+`CounterfactualHarnessPilot.run` is still handed the full `FaultCase`
+(including `responsible_component`) in the tier above, so even though its
+decision logic never branches on that field, the deterministic evaluator
+inside the search still reads it. `BlindFaultCase` /
+`BlindCounterfactualHarnessPilot` / `BlindSearchResult`
+(`counterfactual_search.py`) remove the field from the search entirely:
+`BlindFaultCase` is built once from a `FaultCase` (using the label only to
+place the fault in a `HarnessConfig`, then discarding it) and has no
+`responsible_component` attribute; `BlindCounterfactualHarnessPilot`
+determines "broken" purely from `HarnessConfig` state; `BlindSearchResult`
+has no label or `attribution_correct` field. `seal_withheld_labels` /
+`generate_withheld_seals` write a separate label store under
+`results/chs_withheld_seals/` (public-safe, same fixture bank);
+`score_withheld_repair_search` / `generate_withheld_results`
+(`run_chs_withheld_seal_search.py`, `--sealed-labels`) run the blind search
+and join its `recovered_component` to that store by `fault_id` only, after
+the search has already returned, gating explicitly on both `BlindFaultCase`
+and `BlindSearchResult` having no `responsible_component` field. This is a
+CHS1-bridge, not author-blind human adjudication CHS1: labels remain
+synthetic and repository-visible; what is new is that "withheld from the
+search" is a structural property of the types, not just a claim about how
+the scoring code is written.
+
+`chs_live_withheld_score.py` (`run_chs_live_withheld_score_smoke.py`) adds
+the analogous join on real live rows: `chs_from_live.harvest_candidates`
+(reads only sanitized public rows, which never carry
+`responsible_component`) and `chs_adjudication.seal_from_paired_contrasts`
+(never reads `predicted_component`) already run blind to each other; this
+module writes the sealed labels and harvest candidates to disk, re-reads
+both, and joins by `source_result_digest` only. Output stays under
+`artifacts/grounded_statecharts/chs_live_withheld_score/` (never `results/`,
+since it is derived from real D2 episodes). Run against
+`artifacts/grounded_statecharts/d2_pilot_harness_v2/rows.jsonl` (144 real
+rows), it seals 12 orchestration labels and the harvest agrees on all 12 —
+but this is not CHS1: coverage is 12 of 144 rows (paired-contrast seals
+cover only orchestration/output), and the heuristic harvest is a
+symptom-pattern classifier, not an equal-budget repair/placebo search (no
+placebo arm, no evaluation-budget notion). See
+`CHS_SEALED_PREREGISTRATION.md` for the full claim boundary of every CHS
+tier.
+
 For already-sanitized live D2 rows, `live_replay.py` can write one matched
 metadata-only failure/contrast replay under `artifacts/`; public output is an
 explicit opt-in that rejects any row outside the exact public schema.
