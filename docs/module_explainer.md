@@ -474,6 +474,7 @@ python3 -m experiments.long_horizon_bottleneck.eval --provider fixture --models 
 | `counterfactual_search.py` | Six-surface fault manifests, deterministic outcome vectors, isolated repair/placebo replay, attribution credit, and equal-budget trace baseline |
 | `run_counterfactual_search.py` | Pilot runner, fault-integrity gates, attribution/repair metrics, and compact static replay |
 | `chs_sealed.py` / `run_chs_sealed_smoke.py` | Credential-free synthetic-to-sealed-label plumbing for one clean and six single-fault cases, scored against a separate label artifact |
+| `chs_repair_search.py` / `run_chs_repair_search.py` | Re-runs the equal-budget (identical per-arm cost) counterfactual repair/placebo search fresh and scores it against both the adjudicated injected-fault seal tier (`results/chs_injected_faults/labels.jsonl`) and the hand-authored fixture label file (`fixtures/chs_sealed_labels.json`); gates on zero placebo credit, exact budget parity, and cross-source label agreement; writes `results/chs_repair_search/`; explicitly not CHS1 on naturalistic live failures |
 | `harness_unlearning.py` | Scoped memory ledger, descendant families, commitment harness, paired causal-use gate, and legal lifecycle transitions |
 | `run_harness_unlearning.py` | Fail-closed causal prerequisite plus deterministic shift, quarantine, retirement, recurrence, restoration, and replay bundle |
 | `unlearning_multishift.py` / `run_unlearning_multishift_smoke.py` | Credential-free draft extension with nine independently authored shift instances (distinct memory ids, content actions, and regime ids) across three families — three tool-schema variants, three environment-policy variants, three model/version-identical-semantics false-forgetting-control variants; writes compact summary/rows only, no live calls |
@@ -519,6 +520,7 @@ python3 -m experiments.grounded_statecharts.run_statechart_pilot_smoke
 python3 -m experiments.grounded_statecharts.run_constraint_pilot_smoke
 python3 -m experiments.grounded_statecharts.run_chs_sealed_smoke
 python3 -m experiments.grounded_statecharts.run_chs_injected_faults_smoke
+python3 -m experiments.grounded_statecharts.run_chs_repair_search
 python3 -m experiments.grounded_statecharts.run_unlearning_multishift_smoke
 # Opt-in credentialed HU live-adapter smoke (writes under artifacts/ only):
 # GROUNDED_HARNESS_LIVE=1 GROUNDED_HARNESS_PROVIDER=... GROUNDED_HARNESS_MODEL=... \

@@ -162,6 +162,19 @@ synthetic-to-sealed plumbing only: real failures with genuinely withheld labels
 remain required for publishable CHS1. Both runners are credential-free and
 never call a live provider.
 
+`run_chs_repair_search` writes `results/chs_repair_search/`. It re-runs the
+equal-budget counterfactual repair/placebo search (`counterfactual_search.py`,
+unchanged: every repair candidate and the placebo control cost exactly one
+evaluation) fresh against the six committed single-fault fixtures, then scores
+it against two independently produced label sources -- the adjudicated
+injected-fault seal tier (`chs_adjudication.seal_from_injected_faults`,
+`results/chs_injected_faults/labels.jsonl`) and the hand-authored
+`fixtures/chs_sealed_labels.json` used by `chs_sealed.py`. It gates on zero
+placebo credit, exact per-arm budget parity, and agreement between both label
+sources, and its `allowed_claim`/`non_claims` are explicit that this is still a
+constructed, repository-visible fixture bridge, not CHS1 on naturalistic live
+failures.
+
 ## Scope boundary
 
 These are deterministic fixture results, not estimates over live agents or
