@@ -1,8 +1,8 @@
 # D2 Pilot Decision Freeze — 2026-07-20
 
-**Status:** revise — stop product/scientific escalation for Constraint Transport
-until weaker-instruction effects return; narrow Grounded Statecharts; keep
-CHS/HU pending.
+**Status:** revise — Constraint Transport may resume under the harness-enforced
+contract after name-free re-ablation; keep Grounded Statecharts narrowed;
+CHS/HU still pending.
 
 **Model:** `openai` / `gpt-4.1-mini`  
 **Adapter:** live  
@@ -53,11 +53,53 @@ Weak-prompt ablation:
 
 ## Next best tests
 
-1. Redesign live prompts so condition identity is harness-enforced, not
-   instruction-named.
+1. ~~Redesign live prompts so condition identity is harness-enforced, not
+   instruction-named.~~ Implemented in `condition_policy.py` with name-free
+   default prompts; re-run weak-prompt ablation under harness v2 before any
+   CT/GS escalation.
 2. Finish the 3-repeat labeled matrix only as a variance characterization, not
    as confirmatory evidence.
 3. Independently seal CHS candidates from live failure harvest before CHS1.
+
+## Harness-enforced contract (v2)
+
+As of the harness-enforced redesign:
+
+- Default live prompts omit condition names (`build_live_prompt` == weak prompt).
+- `GROUNDED_HARNESS_LABELED_PROMPT=1` is diagnostic-only.
+- Scoring uses post-policy evidence: G3 repair can clear false completion;
+  external envelope enforcement can clear capability widenings.
+- Escalation still requires name-free joint_success δ ≥ 0.15 (CT) or a
+  preregistered false-completion improvement (GS) under this contract.
+
+## Harness-v2 name-free re-ablation (2026-07-20)
+
+Path: `artifacts/grounded_statecharts/weak_prompt_ablation_harness_v2/`  
+(16/16 rows; 0 failures; `gpt-4.1-mini`)
+
+| Contrast | Point estimate | Gate |
+|---|---|---|
+| constraint joint_success: external − envelope_only | **+1.000** | ≥ 0.15 with ≥4 tasks → **pass** |
+| artifact false_completion: G3 − G0 | **0.0** | no GS improvement |
+
+Mechanism read (bounded):
+
+- CT: under the same name-free prompt, `envelope_only` stays at joint_success 0
+  while `envelope_external_guards` reaches 1 after harness capability narrowing.
+  This is harness enforcement of constraints, not prompt-label compliance and
+  not a claim that the model internalized the envelope.
+- GS: both G0 and G3 show false_completion 0 in this slice (model rarely takes
+  the false-complete path), so G3 repair has nothing to fix → null.
+
+### Revised decisions after harness-v2 ablation
+
+1. **Constraint Transport:** reopen D3 planning under the harness-enforced,
+   name-free contract. Keep the claim boundary: external guards recover joint
+   success after attempted widenings; do not claim model-side constraint
+   learning from this slice alone.
+2. **Grounded Statecharts:** remain narrowed. No false-completion delta under
+   name-free + harness repair in this ablation.
+3. **CHS / Unlearning:** still do not escalate.
 
 ## 3-repeat labeled variance slice
 

@@ -201,13 +201,27 @@ triage aid for independent future adjudication, not an oracle, causal
 attribution, or a CHS1 score.
 
 
+## Harness-enforced conditions (default live contract)
+
+Live prompts are name-free by default. Condition identity is applied in
+`condition_policy.py` after the provider returns an action:
+
+- `statechart_g3`: repair missing artifacts before scoring
+- `envelope_external_guards` / constrained `statechart_g3`: strip forbidden
+  capabilities and force a constrained delegate action
+- self-report / `envelope_only`: leave model claims unchanged
+
+Labeled prompts (`GROUNDED_HARNESS_LABELED_PROMPT=1`) are diagnostic-only and
+must not be used for escalation gates.
+
 ## Weak-prompt ablation and live harvest
 
 ```bash
 GROUNDED_HARNESS_LIVE=1 GROUNDED_HARNESS_WEAK_PROMPT=1 \
 GROUNDED_HARNESS_PROVIDER=openai GROUNDED_HARNESS_MODEL=gpt-4.1-mini \
 doppler run --config dev -- \
-  python3 -m experiments.grounded_statecharts.run_weak_prompt_ablation
+  python3 -m experiments.grounded_statecharts.run_weak_prompt_ablation \
+  --output-dir artifacts/grounded_statecharts/weak_prompt_ablation_harness_v2
 
 python3 -m experiments.grounded_statecharts.run_live_failure_replay
 python3 -m experiments.grounded_statecharts.run_chs_from_live_smoke

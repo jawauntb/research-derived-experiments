@@ -31,6 +31,7 @@ LIVE_API_KEY_ENV = "GROUNDED_HARNESS_API_KEY_ENV"
 LIVE_MAX_TOKENS_ENV = "GROUNDED_HARNESS_MAX_OUTPUT_TOKENS"
 LIVE_TIMEOUT_ENV = "GROUNDED_HARNESS_TIMEOUT_SECONDS"
 LIVE_WEAK_PROMPT_ENV = "GROUNDED_HARNESS_WEAK_PROMPT"
+LIVE_LABELED_PROMPT_ENV = "GROUNDED_HARNESS_LABELED_PROMPT"
 
 HttpTransport = Callable[[str, dict[str, str], dict[str, Any], float], dict[str, Any]]
 
@@ -59,8 +60,8 @@ def estimate_cost_usd(*, provider_id: str, input_tokens: int, output_tokens: int
     return input_tokens * input_rate + output_tokens * output_rate
 
 
-def build_live_prompt(request: ExecutorRequest) -> list[dict[str, str]]:
-    """Build a short structured-action prompt for one harness step."""
+def build_labeled_live_prompt(request: ExecutorRequest) -> list[dict[str, str]]:
+    """Diagnostic prompt that names the condition (opt-in only)."""
 
     system = (
         "You are an agent step inside a grounded harness evaluation. "
@@ -100,6 +101,12 @@ def build_live_prompt(request: ExecutorRequest) -> list[dict[str, str]]:
         {"role": "system", "content": system},
         {"role": "user", "content": user},
     ]
+
+
+def build_live_prompt(request: ExecutorRequest) -> list[dict[str, str]]:
+    """Default name-free prompt; condition effects come from harness policy."""
+
+    return build_weak_live_prompt(request)
 
 
 def parse_live_action(text: str) -> dict[str, Any]:
@@ -290,8 +297,10 @@ class LiveExecutor:
 
     def complete(self, request: ExecutorRequest) -> ExecutorResponse:
         started = time.perf_counter()
-        if os.environ.get(LIVE_WEAK_PROMPT_ENV, "").strip() == "1":
-            messages = build_weak_live_prompt(request)
+        # Default prompts are name-free. Labeled prompts are diagnostic-only.
+        # WEAK_PROMPT=1 remains accepted for backward-compatible ablation runs.
+        if os.environ.get(LIVE_LABELED_PROMPT_ENV, "").strip() == "1":
+            messages = build_labeled_live_prompt(request)
         else:
             messages = build_live_prompt(request)
         raw = self._call_provider(messages)

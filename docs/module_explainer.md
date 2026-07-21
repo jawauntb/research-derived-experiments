@@ -82,7 +82,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_seed_bootstrap_calibration.py` | Deterministic seed-floor grid, correct resampling unit, negative-regime retention, exact summary regeneration |
 | `test_passive_active_phase_map.py` | Phase-map model comparison, matched-budget path controls, public aggregate contract |
 | `test_grounded_statecharts.py` | Exact replay, depth 1–4 constraint lineage, six-surface fault attribution, descendant-aware memory causal use, legal lifecycle transitions, and byte-stable bundles |
-| `test_grounded_live_evaluation.py`, `test_grounded_live_provider.py`, `test_grounded_statechart_pilot.py` | Shared live-eval schemas, fixture/live adapters, injectible provider transport, ReplayEngine-backed artifact D2 mechanics, budgets/sanitization, and bootstrap stability |
+| `test_grounded_live_evaluation.py`, `test_grounded_live_provider.py`, `test_grounded_statechart_pilot.py`, `test_grounded_condition_policy.py` | Shared live-eval schemas, fixture/live adapters, injectible provider transport, harness condition policies, ReplayEngine-backed artifact D2 mechanics, budgets/sanitization, and bootstrap stability |
 | `test_causal_use.py` | Shared mass-normalized causal-use dose curves, bootstrap uncertainty, and cross-surface transport |
 | `test_experiment_manifest.py`, `test_gate_verdict.py`, `test_evidence_registry.py`, `test_claim_registry.py` | Fail-closed research-contract adapters, package-coverage registry partition, discovery, references, supersession, and bidirectional edges |
 | `test_research_contract_schema_parity.py`, `test_gen_provenance.py` | Shared vocabulary/schema parity, support-directory exclusion, non-mutating provenance freshness |
@@ -481,11 +481,12 @@ python3 -m experiments.long_horizon_bottleneck.eval --provider fixture --models 
 | `budgets.py` | Matched call/token/tool/latency/cost ceilings with fail-closed planning receipts |
 | `sanitization.py` | Fail-closed public-row projection that blocks raw provider material |
 | `evaluation.py` | Normalized live task/episode/result records, smoke matrix, integrity receipts, and task-clustered bootstrap |
+| `condition_policy.py` | Harness-enforced condition policies: G3 artifact repair, external envelope capability narrowing, evidence-based scoring |
 | `d2_tasks.py` / `fixtures/d2_held_out_tasks.json` | Frozen 24-task D2 bank (12 fresh-verification artifact tasks + 12 constrained-delegation tasks), closed-schema/`LiveTask` loader, and task-digest validation; no answer keys or hidden labels |
 | `run_live_smoke.py` | Clean-clone-safe smoke bundle under `results/live_evaluation/` |
 | `run_live_credentialed_smoke.py` / `modal_live_credentialed_smoke.py` | Opt-in credentialed mechanics smoke writing only under gitignored `artifacts/`; smoke rows discarded from held-out D2 |
 | `d2_tasks.py` / `run_d2_pilot.py` | Frozen held-out D2 task bank loader and fixture/live matrix runner |
-| `run_weak_prompt_ablation.py` / `live_ablation.py` | Weaker-instruction sensitivity path without condition labels in prompts |
+| `run_weak_prompt_ablation.py` / `live_ablation.py` | Name-free default prompt contract and sensitivity path; labeled prompts are diagnostic-only |
 | `live_replay.py` / `chs_from_live.py` | Artifact-first live failure replay and heuristic CHS candidate harvest from sanitized rows |
 | `manifests/d2_pilot/experiment_manifest.json` | Planned two-family D2 pilot contract (status=`planned` until held-out freeze) |
 | `statechart_pilot.py` / `run_statechart_pilot_smoke.py` | D2 mechanics bridge: ReplayEngine-backed artifact G0/G3 and wrong-edge conditions, fixture-executor constraint delegation, matched-budget public rows, and non-held-out smoke entrypoint |

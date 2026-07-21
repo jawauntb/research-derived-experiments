@@ -7,6 +7,7 @@ import pytest
 from experiments.grounded_statecharts.adapters.live import (
     LIVE_OPT_IN_ENV,
     LiveExecutor,
+    build_labeled_live_prompt,
     build_live_prompt,
     parse_live_action,
 )
@@ -132,7 +133,13 @@ def test_live_episode_public_row_excludes_raw(monkeypatch: pytest.MonkeyPatch) -
     assert sanitize_public_row({**result.public_row, "raw": {"x": 1}}).ok is False
 
 
-def test_build_live_prompt_mentions_condition() -> None:
+def test_default_live_prompt_omits_condition_label() -> None:
     messages = build_live_prompt(_request())
     assert messages[0]["role"] == "system"
+    assert "statechart_g3" not in messages[1]["content"]
+    assert "create the artifact" in messages[1]["content"]
+
+
+def test_labeled_live_prompt_mentions_condition() -> None:
+    messages = build_labeled_live_prompt(_request())
     assert "statechart_g3" in messages[1]["content"]
