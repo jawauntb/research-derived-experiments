@@ -139,6 +139,27 @@ That can deploy the latest commit once, but it does not prove the persistent tri
 was restored. Always verify `serviceInstanceAutoDeployStatus` and `deploymentTriggers`
 after reconnecting.
 
+## Envelope Guard
+
+Public Constraint Transport product demo:
+
+- Project: `envelope-guard`
+- Project ID: `31f7bc34-f4f0-4782-8a95-7ca3f4d8b5cb`
+- Environment: `production`
+- Environment ID: `94ccae54-a7b2-4436-9093-17f82d3b605a`
+- Service: `envelope-guard`
+- Service ID: `7f247461-7ddc-4cb6-8d85-6966b1dce6d0`
+- Domain: `https://envelope-guard-production.up.railway.app`
+- Root directory: `sites/envelope_guard`
+- Start command: `node server.js`
+- Actions matrix name: `envelope guard site`
+
+Verify:
+
+```bash
+curl -fsS -D - https://envelope-guard-production.up.railway.app/ -o /tmp/envelope-guard.html
+```
+
 ## Sources
 
 - Railway GitHub autodeploy docs: `https://docs.railway.com/deployments/github-autodeploys`

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Envelope Guard — child contracts with receipts</title>
+  <meta name="description" content="Try Constraint Transport: external capability envelopes recover joint success after widenings, with machine-checkable receipts. Research demo from grounded harness experiments.">
+  <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="atmosphere" aria-hidden="true"></div>
+
+  <header class="masthead">
+    <a class="brand" href="#top">
+      <img src="assets/mark.svg" alt="" width="36" height="36">
+      <span>Envelope Guard</span>
+    </a>
+    <nav aria-label="Primary">
+      <a href="#bench">Try it</a>
+      <a href="#research">Research</a>
+      <a href="#product">Product</a>
+      <a href="https://github.com/jawauntb/research-derived-experiments/blob/main/docs/papers/grounded_harness_brief_2026-07-20.md">Brief</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <p class="eyebrow">Live research product · Constraint Transport</p>
+      <h1>Envelope Guard</h1>
+      <p class="lede">A usable bench for child-agent contracts: widen a capability envelope, then watch external guards recover joint success — with a receipt you can audit.</p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#bench">Run the bench</a>
+        <a class="btn ghost" href="#research">Read the claim</a>
+      </div>
+    </section>
+
+    <section id="bench" class="bench" aria-labelledby="bench-title">
+      <div class="bench-head">
+        <h2 id="bench-title">Interactive bench</h2>
+        <p>No API key. Same policy logic as the live harness: identity in code, score from evidence, not prompt labels.</p>
+      </div>
+
+      <div class="bench-controls">
+        <label>
+          Scenario
+          <select id="scenario-select"></select>
+        </label>
+        <fieldset class="mode-toggle">
+          <legend>Contract mode</legend>
+          <label><input type="radio" name="mode" value="soft_prompt" checked> Soft prompt only</label>
+          <label><input type="radio" name="mode" value="external_guards"> External envelope guards</label>
+        </fieldset>
+        <fieldset class="action-toggle">
+          <legend>Child action</legend>
+          <div id="action-buttons" class="chip-row"></div>
+        </fieldset>
+        <button type="button" id="run-btn" class="btn primary wide">Score episode</button>
+      </div>
+
+      <div class="scenario-blurb" id="scenario-blurb"></div>
+
+      <div class="compare" id="compare-panel" hidden>
+        <article class="result-panel" id="result-soft">
+          <h3>Soft prompt</h3>
+          <div class="metrics"></div>
+          <pre class="receipt"></pre>
+        </article>
+        <article class="result-panel" id="result-guard">
+          <h3>External guards</h3>
+          <div class="metrics"></div>
+          <pre class="receipt"></pre>
+        </article>
+      </div>
+    </section>
+
+    <section id="research" class="section">
+      <h2>What the research found</h2>
+      <p class="section-lede">We tested Constraint Transport under a name-free live harness. Labeled prompts looked strong, then collapsed under weak-prompt ablation. After harness-v2 (external enforcement + evidence scoring), CT joint-success returned.</p>
+      <div class="stat-row" role="list">
+        <div role="listitem"><span>CT δ</span><strong id="stat-delta">+1.0</strong></div>
+        <div role="listitem"><span>D2 / D3</span><strong id="stat-n">144 / 120</strong></div>
+        <div role="listitem"><span>CI</span><strong id="stat-ci">[1.0, 1.0]</strong></div>
+        <div role="listitem"><span>Models</span><strong id="stat-models">gpt-4.1-mini · Haiku</strong></div>
+      </div>
+      <p class="claim-box" id="claim-box"></p>
+      <p class="kill" id="kill-note"></p>
+      <p class="links">
+        <a href="https://github.com/jawauntb/research-derived-experiments/blob/main/docs/papers/33_Grounded_Harness_CT_NameFree_2026_07_20.pdf">Preprint PDF</a>
+        ·
+        <a href="https://github.com/jawauntb/research-derived-experiments/blob/main/docs/papers/33b_Grounded_Harness_Brief_2026_07_20.pdf">Exec brief PDF</a>
+        ·
+        <a href="https://github.com/jawauntb/research-derived-experiments/tree/main/experiments/grounded_statecharts">Experiment code</a>
+      </p>
+    </section>
+
+    <section id="product" class="section product">
+      <h2>Useful product people can use</h2>
+      <ol class="use-list">
+        <li><strong>Contract editor</strong> — declare required vs forbidden capabilities for a child agent before it runs.</li>
+        <li><strong>Envelope enforcement</strong> — strip widenings at the harness boundary, not by hoping the model obeys a label.</li>
+        <li><strong>Receipts</strong> — every episode emits policy digest, applied evidence, and joint-success score for audit logs.</li>
+        <li><strong>Regression bench</strong> — replay the same widen/claim scenarios when you change prompts, models, or orchestrators.</li>
+      </ol>
+      <p>This site is the public try-it surface. The production policy lives in <code>condition_policy.py</code> and the live adapters under <code>experiments/grounded_statecharts/</code>.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Envelope Guard · grounded harness research · Jawaun Brown / agent-assisted</p>
+  </footer>
+
+  <script src="policy.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

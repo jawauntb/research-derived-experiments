@@ -116,6 +116,7 @@ explicit Modal images and independent research commands may still use `uvx`.
 |---|---|---|---|---|
 | Research Mechanism Atlas | `sites/reafference_attribution/` | Node static (`server.js`), port `PORT` default **3000** | Railway (Actions) | Open static tree: HTML/JS/CSS, `verification.json`, `papers/*.pdf` |
 | Inquiry landing | `sites/inquiry_black_box/` | Node **whitelist** static, port default **3010** | Railway (Actions) | Only landing + brand assets; hardened vs atlas |
+| Envelope Guard | `sites/envelope_guard/` | Node **whitelist** static, port default **3020** | Railway (Actions) | Interactive Constraint Transport bench + research explainer; domain `envelope-guard-production.up.railway.app` |
 | Inquiry Black Box app | `apps/inquiry-black-box/` | Bun workspaces: Electron desktop, Chrome MV3, optional Bun cloud API | Local package; cloud on Railway; batch on Modal | Local-first; privacy-gated sync |
 | Coherence testbench | `coherence-testbench/` | Own Python 3.12 project + Modal jobs | Modal for gates; optional Railway site | **Not** in root `run_quality_checks.py`; Phase 3 **frozen** |
 
@@ -519,6 +520,7 @@ On push to `main`, `.github/workflows/railway-deploy.yml` deploys:
 
 1. **Reafference atlas** (working directory `.` → atlas service)
 2. **Inquiry Black Box landing** (`sites/inquiry_black_box`)
+3. **Envelope Guard** (`sites/envelope_guard` → `https://envelope-guard-production.up.railway.app`)
 
 Requires GitHub secret `RAILWAY_TOKEN`. Native Railway GitHub autodeploy has
 historically been unreliable; Actions is the supported path. See
@@ -966,7 +968,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 - Reproduce a subset of experiments on CPU with one command (`regen.py`).
 - Dispatch documented Modal commands for the rest.
 - Build shareable PDFs/figures from committed evidence.
-- Deploy a public research atlas and Inquiry landing site via Railway.
+- Deploy a public research atlas, Inquiry landing, and Envelope Guard product demo via Railway.
 - Host adjacent product/testbench code without forcing them into the root Python quality gate.
 - Ship a local-first Inquiry capture product with optional redacted cloud/Modal analysis.
 - Run a pre-registered GO/KILL EEG/eyetrack bench (currently frozen after KILL/INCONCLUSIVE).

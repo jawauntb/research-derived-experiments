@@ -32,6 +32,11 @@ jobs:
             environment_id: b10dfd06-42ea-4e30-bdfa-3576253047fb
             service_id: c2f71d20-10ec-48d8-bc87-60c61e8a7b14
             working_directory: sites/inquiry_black_box
+          - name: envelope guard site
+            project_id: 31f7bc34-f4f0-4782-8a95-7ca3f4d8b5cb
+            environment_id: 94ccae54-a7b2-4436-9093-17f82d3b605a
+            service_id: 7f247461-7ddc-4cb6-8d85-6966b1dce6d0
+            working_directory: sites/envelope_guard
     env:
       RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
     steps:
