@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import cast
+
 import pytest
 
 from experiments.load_bearing_prose_test.claims import (
@@ -98,11 +100,14 @@ def test_claim_bundle_digest_is_deterministic_and_reflects_claims() -> None:
 
 
 def test_ablation_rejects_wrong_kind_type() -> None:
+    # The type system rules this out at real callers; cast exercises the
+    # runtime defensive check that guards against untyped construction
+    # paths (e.g. record deserializers).
     with pytest.raises(ValueError):
         Ablation(
             plan_id="p001",
             claim_id="p1::c1",
-            kind="delete",  # type: ignore[arg-type]
+            kind=cast(AblationKind, "delete"),
             modified_plan="x",
         )
 
