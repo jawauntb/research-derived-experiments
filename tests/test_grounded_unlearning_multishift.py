@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 
+from experiments.grounded_statecharts.run_unlearning_multishift_smoke import main
 from experiments.grounded_statecharts.unlearning_multishift import (
     draft_shift_cases,
     generate_results,
@@ -65,3 +66,14 @@ def test_multishift_cases_do_not_reuse_a_single_ledger(tmp_path) -> None:
     }
     assert len(target_ids) == 9
     assert len(regime_pairs) == 9
+
+
+def test_run_unlearning_multishift_smoke_cli_writes_passing_bundle(tmp_path) -> None:
+    """The documented credential-free CLI entry point must actually exist and
+    run to a passing bundle (docs/module_explainer.md and README.md both
+    document `run_unlearning_multishift_smoke`)."""
+
+    exit_code = main(["--out-dir", str(tmp_path)])
+    assert exit_code == 0
+    summary = json.loads((tmp_path / "summary.json").read_text())
+    assert all(summary["gates"].values())

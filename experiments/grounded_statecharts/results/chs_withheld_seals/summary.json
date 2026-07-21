@@ -1,0 +1,21 @@
+{
+  "claim_boundary": "Labels here remain repository-visible synthetic fixture constructions, authored alongside the code that scores them -- not labels withheld from a diagnosis author on real failures. The 'withheld' property this tier demonstrates is structural: the label store is a separate file the search procedure never opens, and the search's own case/result types (BlindFaultCase / BlindSearchResult) have no responsible_component attribute to leak.",
+  "components_covered": [
+    "context",
+    "generation",
+    "memory",
+    "orchestration",
+    "output",
+    "tools"
+  ],
+  "gates": {
+    "public_safe_synthetic_output": true,
+    "six_surface_coverage": true
+  },
+  "no_provider_calls": true,
+  "protocol_version": "withheld-at-score-time-seal-1",
+  "schema_version": "1.0",
+  "sealed_count": 6,
+  "source_cases": "experiments/grounded_statecharts/fixtures/counterfactual_faults.json",
+  "tier": "withheld-at-score-time-seal"
+}

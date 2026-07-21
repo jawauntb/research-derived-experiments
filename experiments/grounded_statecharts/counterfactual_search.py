@@ -289,3 +289,177 @@ class CounterfactualHarnessPilot:
             "joint_success": int(replay.joint_success) - int(original.joint_success),
             "task_success": int(replay.task_success) - int(original.task_success),
         }
+
+
+@dataclass(frozen=True)
+class BlindFaultCase:
+    """Search-visible fault representation carrying no responsible_component.
+
+    Built once, at seal-authoring time, from a `FaultCase` whose
+    ``responsible_component`` is used only to place the injected fault into a
+    `HarnessConfig` (`HarnessConfig.faulted`) -- the equivalent of nature
+    already having broken a real system before a diagnostician arrives. After
+    construction the label itself is discarded: `BlindFaultCase` has no
+    attribute anywhere that names the responsible component, and neither
+    `BlindCounterfactualHarnessPilot` nor `_evaluate_faulted_config` ever
+    reads one.
+    """
+
+    fault_id: str
+    faulted_config: HarnessConfig
+    trace_suspect: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.fault_id, str) or not self.fault_id:
+            raise ValueError("blind fault case fault_id must be a non-empty string")
+        if self.trace_suspect not in COMPONENTS:
+            raise ValueError("blind fault case trace_suspect is not a harness surface")
+
+    @classmethod
+    def from_fault_case(cls, case: FaultCase) -> Self:
+        return cls(
+            fault_id=case.fault_id,
+            faulted_config=HarnessConfig.faulted(case),
+            trace_suspect=case.trace_suspect,
+        )
+
+
+def _evaluate_faulted_config(config: HarnessConfig) -> OutcomeVector:
+    """Physics keyed only on which `HarnessConfig` slot is unhealthy.
+
+    Reproduces `DeterministicHarnessEvaluator.evaluate`'s outcome table
+    exactly, but reads no `responsible_component` label: "broken" is
+    whichever component's version differs from "healthy" in `config` itself
+    -- the state an intervention actually observes -- never a ground-truth
+    attribute handed in alongside the config.
+    """
+
+    broken = [name for name, version in config.components if version != "healthy"]
+    if len(broken) > 1:
+        raise ValueError("blind evaluator supports only single-fault configs")
+    if not broken:
+        return OutcomeVector(
+            task_success=True,
+            critical_violation=False,
+            false_completion=False,
+            joint_success=True,
+        )
+    component = broken[0]
+    task_success = component in CRITICAL_SURFACES
+    critical_violation = component in CRITICAL_SURFACES
+    false_completion = component in FALSE_COMPLETION_SURFACES
+    return OutcomeVector(
+        task_success=task_success,
+        critical_violation=critical_violation,
+        false_completion=false_completion,
+        joint_success=False,
+    )
+
+
+@dataclass(frozen=True)
+class BlindSearchResult:
+    """Equal-budget search output with no responsible_component field.
+
+    Deliberately omits `responsible_component` / `attribution_correct`:
+    correctness can only be computed by a scorer that separately loads a
+    sealed label store, after this result has already been returned.
+    """
+
+    fault_id: str
+    trace_suspect: str
+    recovered_component: str | None
+    evaluation_budget: int
+    counterfactual_repair_success: bool
+    trace_repair_success: bool
+    noop_identity: bool
+    placebo_credit: bool
+    original_outcome: OutcomeVector
+    interventions: tuple[InterventionResult, ...]
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "fault_id": self.fault_id,
+            "trace_suspect": self.trace_suspect,
+            "recovered_component": self.recovered_component,
+            "evaluation_budget": self.evaluation_budget,
+            "counterfactual_repair_success": self.counterfactual_repair_success,
+            "trace_repair_success": self.trace_repair_success,
+            "noop_identity": self.noop_identity,
+            "placebo_credit": self.placebo_credit,
+            "original_outcome": self.original_outcome.to_dict(),
+            "interventions": [intervention.to_dict() for intervention in self.interventions],
+        }
+
+
+class BlindCounterfactualHarnessPilot:
+    """Same equal-budget repair/placebo search as `CounterfactualHarnessPilot`,
+    but over a case/result representation with no `responsible_component`
+    attribute at all.
+
+    Every repair candidate and the placebo control still cost exactly one
+    evaluation. Physics comes from `_evaluate_faulted_config`, which reads
+    only `HarnessConfig` state. Neither `BlindFaultCase` nor
+    `BlindSearchResult` has an attribute that could carry a ground-truth
+    label into a public row, because neither type defines one.
+    """
+
+    evaluation_budget = len(COMPONENTS) + 1
+
+    def run(self, case: BlindFaultCase) -> BlindSearchResult:
+        faulted = case.faulted_config
+        original = _evaluate_faulted_config(faulted)
+        noops = tuple(_evaluate_faulted_config(faulted) for _ in range(6))
+        noop_identity = all(outcome == original for outcome in noops)
+
+        provisional: list[InterventionResult] = []
+        for component in COMPONENTS:
+            outcome = _evaluate_faulted_config(faulted.replace(component, "healthy"))
+            delta = CounterfactualHarnessPilot._delta(original, outcome)
+            provisional.append(
+                InterventionResult(
+                    intervention_id=f"repair:{component}",
+                    kind="repair",
+                    target_component=component,
+                    cost=1,
+                    outcome=outcome,
+                    delta=delta,
+                    accepted_credit=delta["joint_success"] == 1,
+                )
+            )
+        placebo_outcome = _evaluate_faulted_config(faulted)
+        placebo_delta = CounterfactualHarnessPilot._delta(original, placebo_outcome)
+        placebo = InterventionResult(
+            intervention_id="placebo:unused_metadata",
+            kind="placebo",
+            target_component=None,
+            cost=1,
+            outcome=placebo_outcome,
+            delta=placebo_delta,
+            accepted_credit=placebo_delta["joint_success"] == 1,
+        )
+        interventions = (*provisional, placebo)
+        credited = [
+            result
+            for result in provisional
+            if result.accepted_credit and not placebo.accepted_credit
+        ]
+        recovered = credited[0].target_component if len(credited) == 1 else None
+        counterfactual_success = len(credited) == 1 and credited[0].outcome.joint_success
+
+        trace_repair = faulted.replace(case.trace_suspect, "healthy")
+        trace_outcome = _evaluate_faulted_config(trace_repair)
+        return BlindSearchResult(
+            fault_id=case.fault_id,
+            trace_suspect=case.trace_suspect,
+            recovered_component=recovered,
+            evaluation_budget=self.evaluation_budget,
+            counterfactual_repair_success=counterfactual_success,
+            trace_repair_success=trace_outcome.joint_success,
+            noop_identity=noop_identity,
+            placebo_credit=placebo.accepted_credit,
+            original_outcome=original,
+            interventions=interventions,
+        )
+
+    def run_all(self, cases: tuple[BlindFaultCase, ...]) -> tuple[BlindSearchResult, ...]:
+        return tuple(self.run(case) for case in cases)

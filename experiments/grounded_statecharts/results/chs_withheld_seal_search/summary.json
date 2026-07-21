@@ -1,0 +1,40 @@
+{
+  "allowed_claim": "On the six committed synthetic single-fault fixtures, an equal-budget search -- run over a case/result representation (BlindFaultCase / BlindSearchResult) that has no responsible_component attribute at all, so the search procedure itself cannot read one -- freshly recovers a label loaded only from a separate sealed-label store at score time, for every surface, with zero placebo credit and exact per-arm budget parity.",
+  "cases": 6,
+  "fault_surfaces": [
+    "context",
+    "tools",
+    "generation",
+    "orchestration",
+    "memory",
+    "output"
+  ],
+  "gates": {
+    "all_cases_repaired": true,
+    "equal_budget_every_case": true,
+    "every_surface_covered": true,
+    "no_placebo_credit": true,
+    "no_provider_calls": true,
+    "search_case_type_has_no_label_attribute": true,
+    "search_result_type_has_no_label_attribute": true,
+    "six_single_fault_cases_scored": true,
+    "withheld_matches_search": true
+  },
+  "metrics": {
+    "mean_evaluation_budget": 7.0,
+    "placebo_false_credit_rate": 0.0,
+    "withheld_top1_attribution": 1.0
+  },
+  "next_best_test": "Apply this same structurally-blind equal-budget repair/placebo search to a case representation built from live D2/D3 failure episodes, scored against labels withheld from the diagnosis author and stored separately, before making any CHS1 claim.",
+  "no_provider_calls": true,
+  "non_claims": [
+    "Labels remain synthetic, repository-visible fixture constructions authored alongside the code that scores them, not labels withheld from a diagnosis author on real failures.",
+    "This is a CHS1-bridge demonstrating the withheld-at-score-time plumbing property, not author-blind human adjudication CHS1.",
+    "No live D2/D3 episode, stochastic replay, multi-fault interaction, or OOD case was scored by this runner.",
+    "This is not CHS1 on naturalistic live failures."
+  ],
+  "schema_version": "1.0",
+  "source_cases": "experiments/grounded_statecharts/fixtures/counterfactual_faults.json",
+  "source_sealed_labels": "experiments/grounded_statecharts/results/chs_withheld_seals/labels.jsonl",
+  "tier": "withheld-at-score-time-equal-budget-repair-search"
+}

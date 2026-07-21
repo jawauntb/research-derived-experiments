@@ -1,4 +1,12 @@
-"""Generate the credential-free Harness Unlearning multi-shift draft bundle."""
+"""Generate the credential-free Harness Unlearning multi-shift draft bundle.
+
+Runs the nine independently authored shift-instance fixtures in
+`unlearning_multishift.py` against the deterministic memory ledger and
+commitment harness. No network access, no live model calls; safe to run in
+any clean clone. See `run_unlearning_multishift_live_smoke.py` for the
+optional credentialed live-adapter mechanics smoke over a subset of this
+bank.
+"""
 
 from __future__ import annotations
 
