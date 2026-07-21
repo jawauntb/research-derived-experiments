@@ -55,9 +55,54 @@ reads harvest `predicted_component`, never writes labels into episode rows, and
 explicitly refuses a six-surface CHS1 claim from orchestration/output-only
 coverage.
 
+## Injected-fault seal (six-surface constructed bridge)
+
+Independently of both the live paired-contrast rules above and the heuristic
+harvest (`chs_from_live.py`), `chs_adjudication.py`'s
+`seal_from_injected_faults` seals one label per surface directly from the
+committed single-fault fixtures in `fixtures/counterfactual_faults.json`
+(context, tools, generation, orchestration, memory, output — the same bank
+`counterfactual_search.py` and `chs_sealed.py` already use).
+
+The rule is: run the isolated counterfactual search
+(`CounterfactualHarnessPilot.run`, unchanged from `counterfactual_search.py`)
+against the injected fixture; seal `responsible_component` — the fixture's
+declared ground truth, fixed at construction time — only when the search
+recovers exactly one credited repair, that repair restores joint success, and
+it matches the declared component. Ambiguous, unrepaired, or
+placebo-credited cases abstain rather than seal a guessed label. Output is a
+public-safe synthetic summary/label ledger written under
+`results/chs_injected_faults/` (`run_chs_injected_faults_smoke.py`), never
+under `artifacts/`, since no live episode or provider call is involved.
+
+This closes the "orchestration/output-only" gap in surface coverage of the
+*sealing protocol*: `seal_from_paired_contrasts` (live D2 rows) plus
+`seal_from_injected_faults` (injected fixtures) together seal at least one
+label for every one of the six surfaces. It does **not** close the CHS1 gap
+itself. The injected-fault labels remain repository-visible constructions
+authored alongside the code that scores them — the same limitation already
+flagged for `chs_sealed.py` — not labels withheld from the diagnosis author
+on real failures. `chs_adjudication.summarize_combined_coverage` reports both
+tiers separately and always sets `six_surface_live_withheld_chs1: False`.
+
+Kill criteria specific to this tier: do not seal a label when the search
+finds zero or more than one credited repair, or when the placebo receives
+credit; do not treat heuristic-harvest agreement as this tier's seal; do not
+report `six_surface_any_tier_protocol_coverage: True` as if it were a
+six-surface CHS1 result.
+
 ## Claim boundary and next test
 
-Synthetic-to-sealed plumbing and paired-contrast live seals support a narrow
-bridge only. Publishable six-surface CHS1 still requires withheld labels across
-all surfaces, matched repair/placebo search, and pre-specified abstention
-handling.
+Synthetic-to-sealed plumbing, paired-contrast live seals, and the injected-fault
+seal tier together are still a narrow bridge, not CHS1. Live paired-contrast
+seals cover only orchestration and output on real D2 episodes. The
+injected-fault tier now covers all six surfaces, but on constructed,
+repository-visible fixtures rather than withheld real-failure labels.
+Publishable six-surface CHS1 still requires labels withheld from the
+diagnosis author across all six surfaces **on real failures**, matched
+repair/placebo search over those real failures, and pre-specified abstention
+handling — none of which the injected-fault tier provides on its own. The
+next best test is extending live-episode surface coverage itself (context,
+tools, generation, memory conditions in the live D2/D3 harness) so that the
+withheld-label seal, not only the constructed-fixture seal, can eventually
+reach all six surfaces.

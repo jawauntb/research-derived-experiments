@@ -12,14 +12,23 @@ import json
 from collections import defaultdict
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any
+from typing import Any, Protocol
 
+from experiments.grounded_statecharts.counterfactual_search import (
+    COMPONENTS,
+    CounterfactualHarnessPilot,
+    FaultCase,
+)
 from experiments.grounded_statecharts.sanitization import sanitize_public_row
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+PACKAGE_ROOT = Path(__file__).resolve().parent
 DEFAULT_OUTPUT = REPO_ROOT / "artifacts" / "grounded_statecharts" / "chs_sealed_live"
+DEFAULT_INJECTED_CASES = PACKAGE_ROOT / "fixtures" / "counterfactual_faults.json"
+DEFAULT_INJECTED_OUTPUT = PACKAGE_ROOT / "results" / "chs_injected_faults"
 
 PROTOCOL_VERSION = "paired-contrast-seal-1"
+INJECTED_SEAL_PROTOCOL_VERSION = "injected-fault-seal-1"
 
 SEAL_RULES: tuple[dict[str, Any], ...] = (
     {
@@ -77,6 +86,36 @@ PROTOCOL: dict[str, Any] = {
         "Do not claim six-surface CHS1 from orchestration/output-only seals.",
     ),
 }
+
+INJECTED_FAULT_PROTOCOL: dict[str, Any] = {
+    "version": INJECTED_SEAL_PROTOCOL_VERSION,
+    "independence": (
+        "Labels are the injected/deterministic fixture's declared "
+        "responsible_component, sealed only when the isolated counterfactual "
+        "search (counterfactual_search.py) recovers exactly one credited "
+        "repair and it matches that declared component. The live heuristic "
+        "harvest (chs_from_live.py) and its predicted_component are never "
+        "consulted, and no live D2 row is read."
+    ),
+    "kill_criteria": (
+        "Do not treat heuristic harvest agreement as CHS1.",
+        "Do not seal a label when the search finds zero or more than one "
+        "credited repair, or when placebo receives credit.",
+        "Do not write responsible_component into live public episode rows.",
+        "Do not claim six-surface CHS1 from injected/deterministic fixture "
+        "seals alone: labels remain repository-visible constructions, not "
+        "labels withheld from the diagnosis author on real failures.",
+    ),
+}
+
+
+def _repo_relative(path: Path) -> str:
+    """Render a repo-relative path string; never leak a local absolute path."""
+
+    try:
+        return str(path.resolve().relative_to(REPO_ROOT))
+    except ValueError:
+        return str(path)
 
 
 def _load_rows(path: Path) -> list[dict[str, Any]]:
@@ -175,7 +214,7 @@ def generate_results(
         "tier": "live-paired-contrast-seal",
         "protocol_version": PROTOCOL_VERSION,
         "protocol": PROTOCOL,
-        "source_rows": str(rows_path),
+        "source_rows": _repo_relative(rows_path),
         "source_row_count": len(rows),
         "sealed_count": len(sealed),
         "components_covered": components,
@@ -198,3 +237,148 @@ def generate_results(
         "".join(json.dumps(item, sort_keys=True) + "\n" for item in sealed)
     )
     return summary
+
+
+class _RepairSearchPilot(Protocol):
+    """Structural contract for the search used to seal an injected-fault label.
+
+    `CounterfactualHarnessPilot` satisfies this by construction; tests may
+    substitute a stub pilot to exercise abstention without depending on the
+    deterministic evaluator's internals.
+    """
+
+    def run(self, case: FaultCase) -> Any: ...
+
+
+def seal_from_injected_faults(
+    cases: Sequence[FaultCase],
+    *,
+    pilot: _RepairSearchPilot | None = None,
+) -> list[dict[str, object]]:
+    """Seal one label per injected/deterministic single-fault fixture.
+
+    Ground truth is the fixture's declared ``responsible_component``, fixed
+    at fixture-construction time -- independent of the live heuristic
+    harvest (`chs_from_live.py`) and independent of any live D2 episode. A
+    label seals only when the isolated counterfactual search
+    (`counterfactual_search.py`) recovers exactly one credited repair, that
+    repair restores joint success, and it matches the declared component.
+    Ambiguous, unrepaired, or placebo-credited cases abstain rather than
+    seal a guessed label.
+    """
+
+    active_pilot = pilot or CounterfactualHarnessPilot()
+    sealed: list[dict[str, object]] = []
+    for case in cases:
+        result = active_pilot.run(case)
+        if (
+            not result.counterfactual_repair_success
+            or result.placebo_credit
+            or result.recovered_component != case.responsible_component
+        ):
+            continue
+        sealed.append(
+            {
+                "case_id": f"seal:{case.fault_id}",
+                "source_episode_id": case.source_episode_id,
+                "fault_id": case.fault_id,
+                "task_family": case.task_family,
+                "responsible_component": case.responsible_component,
+                "rule_id": "injected_single_component_search_repair",
+                "protocol_version": INJECTED_SEAL_PROTOCOL_VERSION,
+                "label_status": "sealed_by_injected_fault_construction",
+                "evidence": {
+                    "recovered_component": result.recovered_component,
+                    "trace_suspect": result.trace_suspect,
+                    "trace_repair_success": result.trace_repair_success,
+                    "noop_identity": result.noop_identity,
+                    "placebo_credit": result.placebo_credit,
+                    "evaluation_budget": result.evaluation_budget,
+                },
+            }
+        )
+    return sealed
+
+
+def generate_injected_results(
+    *,
+    cases_path: Path = DEFAULT_INJECTED_CASES,
+    output_dir: Path = DEFAULT_INJECTED_OUTPUT,
+) -> dict[str, Any]:
+    """Write the injected-fault seal tier under results/ (public-safe, synthetic)."""
+
+    if "artifacts" in output_dir.parts:
+        raise RuntimeError(
+            "injected-fault seals are public-safe synthetic fixture labels; "
+            "write under results/, never under artifacts/"
+        )
+    cases = FaultCase.load_many(cases_path)
+    sealed = seal_from_injected_faults(cases)
+    components = sorted({str(item["responsible_component"]) for item in sealed})
+    summary: dict[str, Any] = {
+        "schema_version": "1.0",
+        "tier": "injected-fault-seal",
+        "protocol_version": INJECTED_SEAL_PROTOCOL_VERSION,
+        "protocol": INJECTED_FAULT_PROTOCOL,
+        "source_cases": _repo_relative(cases_path),
+        "source_case_count": len(cases),
+        "sealed_count": len(sealed),
+        "components_covered": components,
+        "gates": {
+            "public_safe_synthetic_output": "artifacts" not in output_dir.parts,
+            "heuristic_harvest_not_used": True,
+            "search_verified_unique_recovery_for_every_case": len(sealed) == len(cases),
+            "six_surface_chs1_claim": False,
+            "claim_boundary": (
+                "Injected/deterministic single-fault fixtures with a "
+                "search-verified unique repair seal one label per surface. "
+                "Labels are constructed and repository-visible, not withheld "
+                "real-failure labels, so this tier alone is not a "
+                "publishable six-surface CHS1 result."
+            ),
+        },
+        "no_provider_calls": True,
+    }
+    output_dir.mkdir(parents=True, exist_ok=True)
+    (output_dir / "summary.json").write_text(
+        json.dumps(summary, indent=2, sort_keys=True) + "\n"
+    )
+    (output_dir / "labels.jsonl").write_text(
+        "".join(json.dumps(item, sort_keys=True) + "\n" for item in sealed)
+    )
+    return summary
+
+
+def summarize_combined_coverage(
+    live_sealed: Sequence[Mapping[str, Any]],
+    injected_sealed: Sequence[Mapping[str, Any]],
+) -> dict[str, Any]:
+    """Report per-tier and combined surface coverage without conflating tiers.
+
+    This never claims six-surface CHS1: CHS1 as pre-registered requires
+    labels withheld from the diagnosis author across all six surfaces on
+    real failures, plus matched repair/placebo search and pre-specified
+    abstention handling. Combining a live-episode tier with a synthetic
+    injected-fixture tier only shows that the *sealing protocol* now spans
+    all six surfaces, not that a real-failure evaluation does.
+    """
+
+    live_components = sorted({str(item["responsible_component"]) for item in live_sealed})
+    injected_components = sorted(
+        {str(item["responsible_component"]) for item in injected_sealed}
+    )
+    any_tier_components = sorted(set(live_components) | set(injected_components))
+    return {
+        "live_paired_contrast_components": live_components,
+        "injected_fault_seal_components": injected_components,
+        "any_tier_sealed_components": any_tier_components,
+        "six_surface_any_tier_protocol_coverage": set(any_tier_components) == set(COMPONENTS),
+        "six_surface_live_withheld_chs1": False,
+        "claim_boundary": (
+            "Any-tier surface coverage combines live paired-contrast seals "
+            "(real D2 episodes, orchestration/output only so far) with "
+            "injected/deterministic fault-construction seals (synthetic, "
+            "repository-visible fixtures, all six surfaces). It is not "
+            "six-surface CHS1."
+        ),
+    }

@@ -162,6 +162,13 @@ deferred until no-op replay variance and public-safe artifact handling pass.
 The dependency-ordered implementation plan, D2 live-pilot gate, safe parallel
 work lanes, and completion definition are recorded in
 [`next_agent_grounded_harness_experiments_handoff_2026-07-20.md`](next_agent_grounded_harness_experiments_handoff_2026-07-20.md).
+A claim-bounded research preprint and executive brief for the harness-enforced,
+name-free Constraint Transport program (held-out D2 + D3 CT confirmatory) are
+in [`papers/grounded_harness_ct_preprint_2026-07-20.md`](papers/grounded_harness_ct_preprint_2026-07-20.md)
+and [`papers/grounded_harness_brief_2026-07-20.md`](papers/grounded_harness_brief_2026-07-20.md),
+with public sanitized datasets under
+`experiments/grounded_statecharts/results/d2_pilot_public/` and
+`experiments/grounded_statecharts/results/d3_ct_confirmatory_public/`.
 
 ---
 
@@ -370,6 +377,24 @@ live provider, and state their synthetic/mechanics claim boundary. The sealed
 label bridge is not CHS1: publishable attribution still requires genuinely
 withheld labels on real failures.
 
+`chs_adjudication.py` now hosts two independent, non-conflated sealing tiers.
+`seal_from_paired_contrasts` seals orchestration/output labels from matched
+live D2 row contrasts under `artifacts/chs_sealed_live/`, unchanged.
+`seal_from_injected_faults` (new) seals one label per surface — context,
+tools, generation, orchestration, memory, output — directly from the
+committed single-fault fixtures already used by `counterfactual_search.py`
+and `chs_sealed.py`: it reruns `CounterfactualHarnessPilot.run` and seals the
+fixture's declared component only when the isolated search recovers exactly
+one credited repair that matches it, abstaining otherwise. Because this tier
+runs no live episode, its public-safe summary/labels write under
+`results/chs_injected_faults/` (`run_chs_injected_faults_smoke.py`), never
+`artifacts/`. `summarize_combined_coverage` and `run_chs_adjudication
+--with-injected` report both tiers side by side without conflating them: the
+*sealing protocol* now spans all six surfaces, but the injected-fault tier's
+labels remain repository-visible constructions, not labels withheld from the
+diagnosis author on real failures — so this still is not a six-surface CHS1
+claim (see `CHS_SEALED_PREREGISTRATION.md`).
+
 For already-sanitized live D2 rows, `live_replay.py` can write one matched
 metadata-only failure/contrast replay under `artifacts/`; public output is an
 explicit opt-in that rejects any row outside the exact public schema.
@@ -379,12 +404,26 @@ abstention, not an oracle or CHS score, and requires independent sealed labels
 before any attribution claim.
 
 The adjacent draft scaffolds remain equally non-evidential: the multi-shift
-unlearning runner reuses the committed memory ledger for tool-schema and
-environment-policy semantic shifts while retaining a model/version-identical
-semantics false-forgetting control; the Constraint Transport OOD runner freezes
-held-out-wording and depth-5/6 probe contracts without executing them. Both
-write only public-safe summaries and rows, make no provider call, and require
-separate matched execution before any OOD or unlearning generalization claim.
+unlearning runner (`unlearning_multishift.py`) now registers nine
+independently authored shift instances — three tool-schema variants, three
+environment-policy variants, and three model/version-identical-semantics
+false-forgetting-control variants, each with its own memory ids, content
+actions, and regime ids rather than one ledger replayed under relabeled case
+ids — while the Constraint Transport OOD runner freezes held-out-wording and
+depth-5/6 probe contracts without executing them. Both write only public-safe
+summaries and rows, make no provider call, and require separate matched
+execution before any OOD or unlearning generalization claim.
+
+An opt-in credentialed smoke, `run_unlearning_multishift_live_smoke.py`,
+exercises the live adapter's shared `complete_messages` path against a
+natural-language memory-sensitivity probe (observed / target-suppressed /
+placebo-suppressed conditions) for 3 of the 9 draft cases. It validates only
+that prompt building, provider dispatch, response parsing, and budget
+accounting work end to end for this probe shape; it is not the mechanistic
+`evaluate_causal_use` causal-use test, is not budget-matched against a
+baseline, and authorizes no HU1–HU7 claim. It writes only under gitignored
+`artifacts/` and never reuses smoke outcomes as evidence in a later
+pre-registered live Harness Unlearning pilot.
 
 ### 3.7 Public sites & CI deploy
 
