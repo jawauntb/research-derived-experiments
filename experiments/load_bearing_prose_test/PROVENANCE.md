@@ -22,6 +22,6 @@
   - `experiments/load_bearing_prose_test/results/summary.json`
 
 ## Artifacts
-- Committed: `experiments/load_bearing_prose_test/results/summary.json`, `docs/harness_research/load_bearing_prose_test/PREREGISTRATION.md`, `docs/harness_research/load_bearing_prose_test/README.md`, `docs/harness_research/load_bearing_prose_test.md`
+- Committed: `experiments/load_bearing_prose_test/results/summary.json`, `experiments/load_bearing_prose_test/results/pilot/summary.json`, `experiments/load_bearing_prose_test/results/pilot/rows.jsonl`, `experiments/load_bearing_prose_test/PREREGISTRATION.md`, `docs/harness_research/load_bearing_prose_test/README.md`, `docs/harness_research/load_bearing_prose_test.md`
 - Local-only: artifacts/ (gitignored raw outputs; see result reports for summaries)
 - Paper: _none_

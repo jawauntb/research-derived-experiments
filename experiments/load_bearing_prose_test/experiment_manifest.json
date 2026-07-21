@@ -42,8 +42,18 @@
       "public": true
     },
     {
+      "kind": "summary",
+      "path": "experiments/load_bearing_prose_test/results/pilot/summary.json",
+      "public": true
+    },
+    {
+      "kind": "dataset",
+      "path": "experiments/load_bearing_prose_test/results/pilot/rows.jsonl",
+      "public": true
+    },
+    {
       "kind": "other",
-      "path": "docs/harness_research/load_bearing_prose_test/PREREGISTRATION.md",
+      "path": "experiments/load_bearing_prose_test/PREREGISTRATION.md",
       "public": true
     },
     {
