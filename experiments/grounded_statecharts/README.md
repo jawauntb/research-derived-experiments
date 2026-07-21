@@ -76,9 +76,21 @@ The multi-shift unlearning smoke command writes
 `results/unlearning_multishift/`. It registers deterministic tool-schema and
 environment-policy semantic shifts plus a model/version-identical-semantics
 negative control, reusing the causal-use and ledger mechanics without live
-calls. The Constraint Transport OOD smoke command writes
-`results/constraint_ood/` with planned held-out-wording and depth-5/6 contracts;
-it executes neither probe and makes no OOD claim.
+calls.
+
+The Constraint Transport OOD smoke command writes `results/constraint_ood/`.
+It runs two probes for real, credential-free: a held-out paraphrase of four
+`recursive_constrained_tool_use` D2 tasks through the actual
+`condition_policy`-enforced harness (`envelope_only` vs
+`envelope_external_guards`, name-free prompts, deterministic fixture
+adapter), and a deterministic depth-5/6 extension of the typed/lossy
+Constraint Transport benchmark beyond the committed depth-1..4 ceiling. The
+fixture adapter never reads instruction text, so the paraphrase slice is
+mechanics-only; `run_constraint_ood_live_smoke` (opt-in,
+`GROUNDED_HARNESS_LIVE=1`, writes only under `artifacts/`) reruns the same
+paraphrase probe against a live provider and reports the joint_success
+effect against a 0.15 kill threshold, honestly recording a collapse instead
+of reinterpreting it as support.
 
 The unified replay command writes `results/unified_replay/`. It renders a
 compact public failure replay from the committed false-completion summary and
@@ -162,6 +174,19 @@ synthetic-to-sealed plumbing only: real failures with genuinely withheld labels
 remain required for publishable CHS1. Both runners are credential-free and
 never call a live provider.
 
+`run_chs_repair_search` writes `results/chs_repair_search/`. It re-runs the
+equal-budget counterfactual repair/placebo search (`counterfactual_search.py`,
+unchanged: every repair candidate and the placebo control cost exactly one
+evaluation) fresh against the six committed single-fault fixtures, then scores
+it against two independently produced label sources -- the adjudicated
+injected-fault seal tier (`chs_adjudication.seal_from_injected_faults`,
+`results/chs_injected_faults/labels.jsonl`) and the hand-authored
+`fixtures/chs_sealed_labels.json` used by `chs_sealed.py`. It gates on zero
+placebo credit, exact per-arm budget parity, and agreement between both label
+sources, and its `allowed_claim`/`non_claims` are explicit that this is still a
+constructed, repository-visible fixture bridge, not CHS1 on naturalistic live
+failures.
+
 ## Scope boundary
 
 These are deterministic fixture results, not estimates over live agents or
@@ -244,3 +269,23 @@ python3 -m experiments.grounded_statecharts.run_chs_from_live_smoke
 
 Live harvest/replay tools default to `artifacts/` and never require a provider
 call when sanitized rows already exist.
+
+## Constraint Transport OOD live smoke
+
+```bash
+python3 -m experiments.grounded_statecharts.run_constraint_ood_smoke
+
+GROUNDED_HARNESS_LIVE=1 \
+GROUNDED_HARNESS_PROVIDER=openai GROUNDED_HARNESS_MODEL=gpt-4.1-mini \
+doppler run --config dev -- \
+  python3 -m experiments.grounded_statecharts.run_constraint_ood_live_smoke
+```
+
+The fixture-only command above always runs and writes `results/constraint_ood/`
+(safe to commit, no network). The live command reruns the same held-out
+paraphrase probe against a declared provider/model, requires name-free
+prompts (`GROUNDED_HARNESS_LABELED_PROMPT=1` is rejected), and writes only
+under `artifacts/grounded_statecharts/constraint_ood_live_smoke/`. Its
+`kill_triggered` flag is `true` whenever the live joint_success delta for
+`envelope_external_guards` vs `envelope_only` falls below 0.15 -- this is
+reported as a finding, not suppressed.

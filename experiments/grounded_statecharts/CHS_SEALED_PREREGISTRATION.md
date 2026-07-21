@@ -91,18 +91,49 @@ credit; do not treat heuristic-harvest agreement as this tier's seal; do not
 report `six_surface_any_tier_protocol_coverage: True` as if it were a
 six-surface CHS1 result.
 
+## Equal-budget repair search scored against sealed labels
+
+`chs_repair_search.py`'s `score_equal_budget_repair_search`
+(`run_chs_repair_search.py`) adds an explicit scoring pass over the same six
+committed single-fault fixtures. It re-runs the unmodified equal-budget
+search (`CounterfactualHarnessPilot.run` — every repair candidate and the
+placebo control cost exactly one evaluation, so no arm gets a budget
+advantage) fresh, never reusing the `evidence` already stored in a sealed
+label row, and checks the fresh result against two independently produced
+label sources: the adjudicated injected-fault seal tier
+(`results/chs_injected_faults/labels.jsonl`) and the hand-authored
+`fixtures/chs_sealed_labels.json` fixture that `chs_sealed.py` already scores
+against.
+
+It gates on: exact per-arm cost parity (`equal_budget_repair_vs_placebo`) on
+every case; zero placebo credit across all six cases; the fresh search
+matching both label sources on every surface; and both label sources
+agreeing with each other. `results/chs_repair_search/` is written only when
+every gate passes, so a mismatched attribution, a credited placebo, or an
+unequal per-arm budget fails the run rather than silently publishing a
+passing summary.
+
+Kill criteria specific to this tier: do not treat agreement between the
+injected-fault seal tier and the fixture label file as independent
+triangulation across data sources — both trace back to the same committed
+fixture bank; do not claim CHS1 from this tier; do not report
+`equal_budget_repair_vs_placebo: true` if any repair or placebo arm's cost
+ever diverges.
+
 ## Claim boundary and next test
 
-Synthetic-to-sealed plumbing, paired-contrast live seals, and the injected-fault
-seal tier together are still a narrow bridge, not CHS1. Live paired-contrast
-seals cover only orchestration and output on real D2 episodes. The
-injected-fault tier now covers all six surfaces, but on constructed,
-repository-visible fixtures rather than withheld real-failure labels.
-Publishable six-surface CHS1 still requires labels withheld from the
-diagnosis author across all six surfaces **on real failures**, matched
-repair/placebo search over those real failures, and pre-specified abstention
-handling — none of which the injected-fault tier provides on its own. The
-next best test is extending live-episode surface coverage itself (context,
-tools, generation, memory conditions in the live D2/D3 harness) so that the
-withheld-label seal, not only the constructed-fixture seal, can eventually
-reach all six surfaces.
+Synthetic-to-sealed plumbing, paired-contrast live seals, the injected-fault
+seal tier, and the equal-budget repair-search scorer together are still a
+narrow bridge, not CHS1. Live paired-contrast seals cover only orchestration
+and output on real D2 episodes. The injected-fault tier and the equal-budget
+scorer now cover all six surfaces, but on constructed, repository-visible
+fixtures rather than withheld real-failure labels. Publishable six-surface
+CHS1 still requires labels withheld from the diagnosis author across all six
+surfaces **on real failures**, matched repair/placebo search over those real
+failures at equal budget, and pre-specified abstention handling — none of
+which the injected-fault tier or the equal-budget scorer provide on their
+own. The next best test is extending live-episode surface coverage itself
+(context, tools, generation, memory conditions in the live D2/D3 harness) so
+that the withheld-label seal, not only the constructed-fixture seal, can
+eventually reach all six surfaces and be scored by this same equal-budget
+repair/placebo search.

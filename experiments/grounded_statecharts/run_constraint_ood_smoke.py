@@ -1,4 +1,11 @@
-"""Generate the credential-free Constraint Transport OOD probe stub bundle."""
+"""Generate the credential-free Constraint Transport OOD probe bundle.
+
+Runs the held-out paraphrase probe against the deterministic fixture
+adapter and the deeper-delegation-depth probe against the deterministic
+typed/lossy transport benchmark. No network access; safe to run in any
+clean clone. See `run_constraint_ood_live_smoke.py` for the optional
+credentialed rerun.
+"""
 
 from __future__ import annotations
 

@@ -474,11 +474,13 @@ python3 -m experiments.long_horizon_bottleneck.eval --provider fixture --models 
 | `counterfactual_search.py` | Six-surface fault manifests, deterministic outcome vectors, isolated repair/placebo replay, attribution credit, and equal-budget trace baseline |
 | `run_counterfactual_search.py` | Pilot runner, fault-integrity gates, attribution/repair metrics, and compact static replay |
 | `chs_sealed.py` / `run_chs_sealed_smoke.py` | Credential-free synthetic-to-sealed-label plumbing for one clean and six single-fault cases, scored against a separate label artifact |
+| `chs_repair_search.py` / `run_chs_repair_search.py` | Re-runs the equal-budget (identical per-arm cost) counterfactual repair/placebo search fresh and scores it against both the adjudicated injected-fault seal tier (`results/chs_injected_faults/labels.jsonl`) and the hand-authored fixture label file (`fixtures/chs_sealed_labels.json`); gates on zero placebo credit, exact budget parity, and cross-source label agreement; writes `results/chs_repair_search/`; explicitly not CHS1 on naturalistic live failures |
 | `harness_unlearning.py` | Scoped memory ledger, descendant families, commitment harness, paired causal-use gate, and legal lifecycle transitions |
 | `run_harness_unlearning.py` | Fail-closed causal prerequisite plus deterministic shift, quarantine, retirement, recurrence, restoration, and replay bundle |
 | `unlearning_multishift.py` / `run_unlearning_multishift_smoke.py` | Credential-free draft extension with nine independently authored shift instances (distinct memory ids, content actions, and regime ids) across three families — three tool-schema variants, three environment-policy variants, three model/version-identical-semantics false-forgetting-control variants; writes compact summary/rows only, no live calls |
 | `run_unlearning_multishift_live_smoke.py` | Opt-in credentialed live-adapter mechanics smoke for a memory-sensitivity probe shape (observed/target-suppressed/placebo-suppressed prompt conditions) over 3 of the 9 draft cases; validates prompt/parse/budget plumbing only, writes under gitignored `artifacts/`, and is explicitly not a HU1–HU7 result |
-| `constraint_ood.py` / `run_constraint_ood_smoke.py` | Credential-free planned-only OOD matrix for held-out wording and depth-5/6 delegation probes bound to existing Constraint Transport task families |
+| `constraint_ood.py` / `run_constraint_ood_smoke.py` | Runs two Constraint Transport OOD probes for real, credential-free: a held-out paraphrase of 4 `recursive_constrained_tool_use` D2 tasks through the real `condition_policy`-enforced harness (fixture adapter; `envelope_only` vs `envelope_external_guards`), and a deterministic depth-5/6 extension of the typed/lossy transport benchmark beyond the committed depth-1..4 ceiling; the fixture-adapter paraphrase slice is mechanics-only (FixtureExecutor never reads instruction text) |
+| `run_constraint_ood_live_smoke.py` | Opt-in credentialed rerun of the held-out paraphrase probe against a live, name-free provider (rejects `GROUNDED_HARNESS_LABELED_PROMPT=1`); reports the joint_success paired effect for `envelope_external_guards` vs `envelope_only` against a 0.15 kill threshold and records a collapse honestly instead of reinterpreting it; writes only under gitignored `artifacts/` |
 | `adapters/` | Provider-neutral executor boundary; deterministic `fixture` adapter plus opt-in OpenAI/Anthropic `live` backend |
 | `budgets.py` | Matched call/token/tool/latency/cost ceilings with fail-closed planning receipts |
 | `sanitization.py` | Fail-closed public-row projection that blocks raw provider material |
@@ -519,10 +521,15 @@ python3 -m experiments.grounded_statecharts.run_statechart_pilot_smoke
 python3 -m experiments.grounded_statecharts.run_constraint_pilot_smoke
 python3 -m experiments.grounded_statecharts.run_chs_sealed_smoke
 python3 -m experiments.grounded_statecharts.run_chs_injected_faults_smoke
+python3 -m experiments.grounded_statecharts.run_chs_repair_search
 python3 -m experiments.grounded_statecharts.run_unlearning_multishift_smoke
 # Opt-in credentialed HU live-adapter smoke (writes under artifacts/ only):
 # GROUNDED_HARNESS_LIVE=1 GROUNDED_HARNESS_PROVIDER=... GROUNDED_HARNESS_MODEL=... \
 #   python3 -m experiments.grounded_statecharts.run_unlearning_multishift_live_smoke
+python3 -m experiments.grounded_statecharts.run_constraint_ood_smoke
+# Opt-in credentialed CT OOD held-out-paraphrase smoke (writes under artifacts/ only):
+# GROUNDED_HARNESS_LIVE=1 GROUNDED_HARNESS_PROVIDER=... GROUNDED_HARNESS_MODEL=... \
+#   python3 -m experiments.grounded_statecharts.run_constraint_ood_live_smoke
 python3 -m experiments.grounded_statecharts.run_live_failure_replay --rows /path/to/rows.jsonl
 python3 -m experiments.grounded_statecharts.run_chs_from_live_smoke --rows /path/to/rows.jsonl
 python3 -m experiments.grounded_statecharts.run_chs_adjudication --with-injected \

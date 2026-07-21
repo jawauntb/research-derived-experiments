@@ -410,16 +410,15 @@ outcome-pattern component hypotheses. Its mapping is a triage heuristic with
 abstention, not an oracle or CHS score, and requires independent sealed labels
 before any attribution claim.
 
-The adjacent draft scaffolds remain equally non-evidential: the multi-shift
-unlearning runner (`unlearning_multishift.py`) now registers nine
-independently authored shift instances — three tool-schema variants, three
+The adjacent draft scaffold remains non-evidential: the multi-shift
+unlearning runner (`unlearning_multishift.py`) registers nine independently
+authored shift instances — three tool-schema variants, three
 environment-policy variants, and three model/version-identical-semantics
 false-forgetting-control variants, each with its own memory ids, content
 actions, and regime ids rather than one ledger replayed under relabeled case
-ids — while the Constraint Transport OOD runner freezes held-out-wording and
-depth-5/6 probe contracts without executing them. Both write only public-safe
-summaries and rows, make no provider call, and require separate matched
-execution before any OOD or unlearning generalization claim.
+ids. It writes only public-safe summaries and rows, makes no provider call,
+and requires separate matched execution before any unlearning generalization
+claim.
 
 An opt-in credentialed smoke, `run_unlearning_multishift_live_smoke.py`,
 exercises the live adapter's shared `complete_messages` path against a
@@ -431,6 +430,35 @@ accounting work end to end for this probe shape; it is not the mechanistic
 baseline, and authorizes no HU1–HU7 claim. It writes only under gitignored
 `artifacts/` and never reuses smoke outcomes as evidence in a later
 pre-registered live Harness Unlearning pilot.
+
+The Constraint Transport OOD runner (`constraint_ood.py`,
+`run_constraint_ood_smoke.py`) moved past planned-only scaffolding: it now
+executes both registered probes for real. The held-out paraphrase probe
+reruns 4 of the frozen D2 `recursive_constrained_tool_use` held-out tasks
+with paraphrased (still name-free) instruction wording through the actual
+harness-v2 contract — `LiveEpisode`/`run_episode` with `condition_policy.py`
+enforcement, `envelope_only` vs `envelope_external_guards` — against the
+deterministic fixture adapter by default. Because `FixtureExecutor` selects
+its behavior from `(family, condition)` alone and never reads instruction
+text, this fixture-run slice only proves the paraphrase/harness mechanics run
+end to end; it cannot demonstrate wording sensitivity in either direction,
+and the module says so in its own summary rather than presenting the
+guaranteed-trivial fixture delta as a transport result. The deeper
+delegation-depth probe extends `ConstraintTransportBenchmark` (a new
+`run_ood_depth` method) to delegation depths 5 and 6, beyond the committed,
+still-frozen depth-1..4 confirmatory ceiling; this half is fully
+deterministic with no live analogue.
+
+`run_constraint_ood_live_smoke.py` (opt-in, `GROUNDED_HARNESS_LIVE=1`,
+rejects `GROUNDED_HARNESS_LABELED_PROMPT=1`) reruns the held-out paraphrase
+probe against a declared live provider/model and reports the task-clustered
+joint_success paired effect for `envelope_external_guards` vs
+`envelope_only`. Its kill criterion is explicit and literal: if that live
+delta falls below 0.15 (the D3 sample-size plan's own escalation threshold),
+`kill_triggered` is `true` and the emitted `allowed_claim` states the
+collapse plainly rather than reframing it as support. It writes only under
+gitignored `artifacts/grounded_statecharts/constraint_ood_live_smoke/` and is
+not a D3 confirmatory result.
 
 ### 3.7 Public sites & CI deploy
 

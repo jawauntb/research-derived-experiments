@@ -1,0 +1,43 @@
+{
+  "allowed_claim": "On the six committed synthetic single-fault fixtures, an equal-budget search -- identical per-arm cost across every repair candidate and the placebo control -- freshly recovers the adjudicated injected-fault sealed label and the independently authored fixture label for every surface, with zero placebo credit and exact per-arm budget parity.",
+  "cases": 6,
+  "fault_surfaces": [
+    "context",
+    "tools",
+    "generation",
+    "orchestration",
+    "memory",
+    "output"
+  ],
+  "gates": {
+    "all_cases_repaired": true,
+    "equal_budget_every_case": true,
+    "every_surface_covered": true,
+    "fixture_matches_search": true,
+    "no_placebo_credit": true,
+    "no_provider_calls": true,
+    "sealed_and_fixture_labels_agree": true,
+    "sealed_matches_search": true,
+    "six_single_fault_cases_scored": true
+  },
+  "metrics": {
+    "fixture_top1_attribution": 1.0,
+    "label_source_agreement_rate": 1.0,
+    "mean_evaluation_budget": 7.0,
+    "placebo_false_credit_rate": 0.0,
+    "sealed_top1_attribution": 1.0
+  },
+  "next_best_test": "Apply this same equal-budget repair/placebo scorer to labels withheld from the diagnosis author on live D2/D3 failure episodes across all six surfaces before making any CHS1 claim.",
+  "no_provider_calls": true,
+  "non_claims": [
+    "Labels remain synthetic, repository-visible fixture constructions authored alongside the code that scores them, not labels withheld from the diagnosis author on real failures.",
+    "No live D2/D3 episode, stochastic replay, multi-fault interaction, or OOD case was scored by this runner.",
+    "Agreement between the injected-fault seal tier and the fixture label file is not independent triangulation across data sources: both trace back to the same committed fixture bank.",
+    "This is not CHS1 on naturalistic live failures."
+  ],
+  "schema_version": "1.0",
+  "source_cases": "experiments/grounded_statecharts/fixtures/counterfactual_faults.json",
+  "source_fixture_labels": "experiments/grounded_statecharts/fixtures/chs_sealed_labels.json",
+  "source_sealed_labels": "experiments/grounded_statecharts/results/chs_injected_faults/labels.jsonl",
+  "tier": "equal-budget-repair-search-on-sealed-labels"
+}

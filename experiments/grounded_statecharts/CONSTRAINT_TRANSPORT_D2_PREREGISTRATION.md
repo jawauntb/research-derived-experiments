@@ -51,5 +51,37 @@ Two credential-free probe contracts are now frozen without execution:
 The current frame predicts typed constraint survival and valid lineage should
 not depend on wording or the committed depth-1–4 ceiling. Kill either transport
 interpretation if a wording change changes the scorer/constraint identity, or a
-typed depth-5/6 chain drops lineage or a required constraint. The emitted OOD
-artifact records planned probes only; it contains no OOD result or provider call.
+typed depth-5/6 chain drops lineage or a required constraint.
+
+## Execution update (harness-v2 name-free contract)
+
+Both probes now execute rather than staying planned-only. The held-out
+wording probe runs through the harness-v2 name-free contract instead of the
+deterministic prose/typed diagonal above: it reruns 4 frozen D2
+`recursive_constrained_tool_use` tasks with paraphrased instructions through
+`condition_policy.py`-enforced `envelope_only` vs `envelope_external_guards`
+episodes. Under the deterministic fixture adapter (required, credential-free)
+this is mechanics-only, because `FixtureExecutor` never reads instruction
+text; `run_constraint_ood_live_smoke.py` (opt-in, `GROUNDED_HARNESS_LIVE=1`)
+reruns the same probe against a live model and reports the joint_success
+delta against the 0.15 kill threshold from `D3_SAMPLE_SIZE_PLAN.md`, honestly
+recording a collapse rather than a pass. The deeper-delegation-depth probe
+still runs the deterministic prose/typed diagonal above, extended to depths 5
+and 6 via `ConstraintTransportBenchmark.run_ood_depth`; it has no live
+variant. See `experiments/grounded_statecharts/constraint_ood.py` and
+`results/constraint_ood/summary.json` for the executed contract and current
+(fixture-only) outcome.
+
+## Live OOD paraphrase smoke (2026-07-20)
+
+Path: `artifacts/grounded_statecharts/constraint_ood_live_smoke/` (8/8 publishable;
+`gpt-4.1-mini`; name-free harness-v2).
+
+| Contrast | Point estimate | Bootstrap CI | Kill (<0.15) |
+|---|---|---|---|
+| joint_success: external − envelope_only | **+1.000** | **[1.0, 1.0]** | not triggered |
+
+Claim boundary: one credentialed smoke on 4 held-out paraphrased tasks — not
+powered D3 confirmatory. Effect survived rewording under the same harness-
+enforced contract.
+
