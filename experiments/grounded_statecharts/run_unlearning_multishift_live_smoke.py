@@ -5,11 +5,30 @@ in `unlearning_multishift.py` tests the memory ledger's own code path: a
 Python object is suppressed and the harness recomputes deterministically.
 This smoke instead asks a live model, in natural language, to choose a field
 or action under a shifted regime with and without a textual memory reminder
-present in the prompt. It checks only that the live-adapter mechanics work
-end to end (prompt building, provider dispatch, response parsing, budget
-accounting) for a memory-sensitivity probe shape. It is not a causal-use
-test in the mechanistic sense `evaluate_causal_use` performs, is not
-budget-matched against a baseline, and authorizes no HU1-HU7 claim.
+present in the prompt (observed / target_suppressed / placebo_suppressed).
+Prompts never name the condition, case id, or shift family; only the regime
+id and the memory sentences vary, so the model cannot infer which arm it is
+in from a label.
+
+It checks that the live-adapter mechanics work end to end (prompt building,
+provider dispatch, response parsing, budget accounting) for a
+memory-sensitivity probe shape, AND it applies two explicit kill criteria to
+a derived, prompt-level behavioral signal (`_live_quarantine_signal`) shaped
+like `evaluate_causal_use` (target-specific effect, placebo unaffected):
+
+1. Identical-semantics kill: a `model/version-identical-semantics` case
+   (required action unchanged) must never show the quarantine-worthy
+   pattern. If it does, this smoke records that as a false-forgetting risk
+   signature rather than reinterpreting it as useful lifecycle behavior.
+2. Specificity-before-quarantine kill: the signal is only ever raised when
+   removing the target memory helps AND removing the unrelated placebo
+   memory does not; a generic "less context helps" effect (placebo also
+   helps) never counts as quarantine-worthy on its own.
+
+This derived signal is still NOT the mechanistic `evaluate_causal_use`
+intervention -- it is a natural-language behavioral probe, not a retrieval
+suppression on an internal memory system, is not budget-matched against a
+baseline, and authorizes no HU1-HU7 claim by itself.
 
 Writes only under gitignored artifacts/. Smoke outcomes must not be reused as
 evidence in a later pre-registered live Harness Unlearning pilot.
@@ -113,6 +132,105 @@ def build_memory_probe_messages(
     ]
 
 
+def _matched_by_condition(
+    rows: list[dict[str, Any]], case_id: str
+) -> dict[str, bool] | None:
+    """Return per-condition `matched_expected` for one case, or None if
+    any of the three conditions is missing a publishable row (e.g. a
+    provider failure)."""
+
+    by_condition = {
+        row["condition"]: bool(row["matched_expected"])
+        for row in rows
+        if row["case_id"] == case_id
+    }
+    if set(by_condition) != set(CONDITIONS):
+        return None
+    return by_condition
+
+
+def _live_quarantine_signal(matched: dict[str, bool]) -> dict[str, Any]:
+    """Derive a prompt-level, causal-use-shaped signal from one case's three
+    conditions. This is NOT `evaluate_causal_use`: it never suppresses a
+    memory retrieval mechanism, it only edits the prompt text handed to a
+    live model. `target_effect` and `placebo_effect` are the change in
+    matched-expected accuracy when the target or placebo memory sentence is
+    removed from the prompt, relative to the observed (both-present)
+    condition.
+    """
+
+    observed = int(matched["observed"])
+    target_effect = int(matched["target_suppressed"]) - observed
+    placebo_effect = int(matched["placebo_suppressed"]) - observed
+    quarantine_signal = target_effect > 0 and placebo_effect <= 0
+    return {
+        "target_effect": target_effect,
+        "placebo_effect": placebo_effect,
+        "quarantine_signal": quarantine_signal,
+    }
+
+
+def evaluate_kill_criteria(
+    rows: list[dict[str, Any]], cases: tuple[ShiftCase, ...]
+) -> dict[str, Any]:
+    """Apply the two live-smoke kill criteria to the derived quarantine signal.
+
+    Kill criterion 1 (identical-semantics must not quarantine): an
+    identical-semantics case must never show `quarantine_signal=True`.
+    Kill criterion 2 (semantic shifts require the causal-use-shaped pattern
+    before quarantine): `quarantine_signal` is only ever True when the
+    placebo suppression did not also help (`placebo_effect <= 0`); this is
+    enforced structurally by `_live_quarantine_signal` and re-checked here
+    as a regression guard, not re-derived independently.
+    """
+
+    per_case: dict[str, Any] = {}
+    insufficient_data_cases: list[str] = []
+    for case in cases:
+        matched = _matched_by_condition(rows, case.case_id)
+        if matched is None:
+            insufficient_data_cases.append(case.case_id)
+            continue
+        per_case[case.case_id] = {
+            "semantics_changed": case.semantics_changed,
+            **_live_quarantine_signal(matched),
+        }
+
+    identical_semantics_violations = [
+        case_id
+        for case_id, pattern in per_case.items()
+        if not pattern["semantics_changed"] and pattern["quarantine_signal"]
+    ]
+    target_specificity_violations = [
+        case_id
+        for case_id, pattern in per_case.items()
+        if pattern["quarantine_signal"] and pattern["placebo_effect"] > 0
+    ]
+    kill_triggered = bool(identical_semantics_violations) or bool(
+        target_specificity_violations
+    )
+    return {
+        "per_case": per_case,
+        "insufficient_data_cases": insufficient_data_cases,
+        "identical_semantics_violations": identical_semantics_violations,
+        "target_specificity_violations": target_specificity_violations,
+        "kill_triggered": kill_triggered,
+        "description": (
+            "Kill criterion 1: an identical-semantics case (required action "
+            "unchanged under the shift) must never show a target-specific "
+            "quarantine-worthy pattern; if one does, it is recorded here as "
+            "a false-forgetting risk signature, not reinterpreted as useful "
+            "lifecycle behavior. Kill criterion 2: a quarantine-worthy "
+            "pattern must never be raised from a generic 'any suppression "
+            "helps' effect (placebo_effect > 0); it requires the "
+            "causal-use-shaped pattern (target-specific recovery, placebo "
+            "unaffected) before it is raised at all. Both criteria evaluate "
+            "a prompt-level behavioral signal, not the mechanistic "
+            "`evaluate_causal_use` intervention."
+        ),
+    }
+
+
 def generate_results(
     output_dir: Path, *, executor: LiveExecutor | None = None
 ) -> dict[str, Any]:
@@ -172,6 +290,8 @@ def generate_results(
                 }
             )
     rows = sorted(rows, key=lambda row: canonical_json(row))
+    kill_criteria = evaluate_kill_criteria(rows, _selected_cases())
+    kill_triggered = kill_criteria["kill_triggered"]
 
     summary = {
         "adapter_id": "live",
@@ -181,13 +301,31 @@ def generate_results(
         "episode_count": len(SMOKE_CASE_IDS) * len(CONDITIONS),
         "publishable_rows": len(rows),
         "provider_failures": failures,
+        "kill_criteria": kill_criteria,
         "allowed_claim": (
-            "Credentialed smoke validates live-adapter prompt/parse/budget "
-            "mechanics for a memory-sensitivity probe shape only. It reports "
-            "whether the model's stated action matched the shifted regime's "
-            "required action under observed/target-suppressed/placebo- "
-            "suppressed prompt conditions, but does not authorize any "
-            "scientific or commercial claim."
+            (
+                "Credentialed smoke validates live-adapter prompt/parse/budget "
+                "mechanics for a memory-sensitivity probe shape. It reports "
+                "whether the model's stated action matched the shifted regime's "
+                "required action under observed/target-suppressed/placebo- "
+                "suppressed prompt conditions, and neither live-smoke kill "
+                "criterion fired: no identical-semantics case showed a "
+                "target-specific quarantine-worthy pattern, and no "
+                "quarantine-worthy pattern was raised without the "
+                "causal-use-shaped placebo contrast. This does not authorize "
+                "any scientific or commercial claim."
+            )
+            if not kill_triggered
+            else (
+                "KILL: at least one live-smoke kill criterion fired -- either "
+                "an identical-semantics case showed a target-specific "
+                "quarantine-worthy pattern (false-forgetting risk signature) "
+                "or a quarantine-worthy pattern was raised without the "
+                "required placebo contrast. This is recorded as evidence "
+                "against this probe shape being ready to inform quarantine "
+                "decisions for this model/run, not reinterpreted as a pass. "
+                "See kill_criteria for the violating case ids."
+            )
         ),
         "non_claims": [
             "Not a HU1-HU7 result.",
@@ -198,6 +336,10 @@ def generate_results(
             "Not powered: 3 cases x 3 conditions x 1 repeat.",
             "Raw provider transcripts remain outside public results/ and "
             "outside this artifacts/ bundle's rows.",
+            "A clean kill_criteria pass on 3 cases x 1 repeat does not "
+            "authorize promoting this probe shape into a pre-registered "
+            "pilot; it only means the mechanics and the derived signal did "
+            "not misfire on this run.",
         ],
         "gates": {
             "opt_in": True,
@@ -205,6 +347,7 @@ def generate_results(
             "all_episodes_parsed": len(rows) == len(SMOKE_CASE_IDS) * len(CONDITIONS),
             "budget_ok": all(bool(row["budget_ok"]) for row in rows) if rows else False,
             "provider_failures": len(failures),
+            "kill_triggered": kill_triggered,
         },
         "next_live_gate": (
             "Before any HU1-HU7 claim: pre-register a matched live pilot "
@@ -247,7 +390,17 @@ def main() -> None:
         json.dumps(
             {
                 "output_dir": str(args.output_dir),
-                **{k: summary[k] for k in ("episode_count", "publishable_rows", "provider_id", "model_id", "gates")},
+                **{
+                    k: summary[k]
+                    for k in (
+                        "episode_count",
+                        "publishable_rows",
+                        "provider_id",
+                        "model_id",
+                        "gates",
+                        "kill_criteria",
+                    )
+                },
             },
             indent=2,
             sort_keys=True,

@@ -43,17 +43,41 @@ memory id or a regime-id pair (independence gates in
 
 An opt-in credentialed smoke, `run_unlearning_multishift_live_smoke.py`,
 additionally exercises the live adapter's prompt/parse/budget mechanics for a
-natural-language memory-sensitivity probe over 3 of the 9 cases. It is a
+name-free natural-language memory-sensitivity probe over 3 of the 9 cases
+(one tool-schema case, one environment-policy case, and the
+model/version-identical-semantics negative control), under
+observed/target-suppressed/placebo-suppressed prompt conditions. It is a
 mechanics smoke, not a pre-registered pilot: it is not budget-matched against
 a baseline and does not perform the mechanistic `evaluate_causal_use`
-intervention.
+intervention — suppression there is a prompt edit, not an intervention on a
+retrieval mechanism.
+
+The smoke additionally derives a prompt-level, causal-use-shaped signal
+(`_live_quarantine_signal`: target-specific recovery with the placebo
+unaffected) from the three conditions and applies two explicit kill
+criteria before any result is read as encouraging:
+
+1. **Identical-semantics kill:** the model/version-identical-semantics case
+   must never show the quarantine-worthy pattern. If it does, that is
+   recorded as a false-forgetting risk signature, not a useful signal.
+2. **Specificity-before-quarantine kill:** the pattern is only ever raised
+   when suppressing the target memory helps *and* suppressing the placebo
+   memory does not; a generic "any suppression helps" effect never counts
+   as quarantine-worthy by itself.
+
+Cases with a provider failure on any of the three conditions are excluded
+from both criteria as `insufficient_data`, not silently scored as a pass.
 
 ## Claim boundary and next best test
 
 Passing produces only deterministic multi-shift scaffolding plus (opt-in)
-evidence that the live-adapter mechanics work for this probe shape. Neither
+evidence that the live-adapter mechanics work for this probe shape and that
+neither live-smoke kill criterion fired on one credentialed run. Neither
 authorizes evidence of neural unlearning, OOD generalization, real
-live-provider unlearning behavior, or HU1–HU7. Next, pre-register a matched
-live pilot over the full 9-case bank with a no-memory and full-reset
-baseline, budget-matched calls, task-clustered bootstrap CIs, and frozen
-false-forgetting/recovery thresholds before any HU1–HU7 claim.
+live-provider unlearning behavior, or HU1–HU7 — do not claim HU1–HU7 from
+this design at any tier. A clean kill-criteria pass on 3 cases x 1 repeat
+means the mechanics and the derived signal did not misfire on this run; it
+does not authorize promoting the probe shape into a pilot. Next, pre-register
+a matched live pilot over the full 9-case bank with a no-memory and
+full-reset baseline, budget-matched calls, task-clustered bootstrap CIs, and
+frozen false-forgetting/recovery thresholds before any HU1–HU7 claim.
