@@ -480,6 +480,15 @@ retrieval/search/discovery, and resolves conflicts without deleting either
 claim. Ledger: root `TODO.md`. Audit cards:
 [discovery_regime_audit.md](discovery_regime_audit.md).
 
+Mathematical claims have a conditional upstream gate. New or materially changed
+theorems, derivations, stochastic models, geometric constructions, estimators,
+tests, and objectives must record their objects/types, domain or support, units,
+quantifiers, assumptions, proof dependencies, representation choices, and
+edge/null/limiting cases. Analytic review is paired with proportionate symbolic
+or numerical checks, but empirical fit cannot substitute for proof. A failed or
+unknown mathematical prerequisite blocks dependent scientific claims while
+valid subclaims and rejected derivations remain in the record.
+
 The six primer-derived backlogs under
 [`docs/primers/backlogs/`](primers/backlogs/README.md) are the program's
 source-anchored planning layer. They keep article corrections, old-experiment

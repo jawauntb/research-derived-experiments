@@ -37,6 +37,13 @@ python scripts/gen_provenance.py
 - Treat fatal gates as noncompensatory: a failed or unknown necessary gate cannot be averaged away by strong downstream scores. Withhold or reject the affected claim while preserving supported subclaims.
 - When sources or results conflict, preserve both claims and resolve the tension by object, scope, conditions, representation, validity layer, and evidence. Never erase a conflicting or rejected artifact to simplify the narrative.
 
+## Mathematical claim routing (required)
+
+- Apply this gate when adding or materially changing a theorem, derivation, stochastic model, geometric construction, estimator, statistical test, or optimization objective. Do not run it for routine arithmetic or implementation-only changes.
+- Before promotion, record the mathematical objects, types, domains/support and units; exact claim and quantifiers; assumptions and identification conditions; derivation/proof dependencies; coordinate or invariance choices; and edge, limiting, and null cases. Use only the relevant domain modules from `papers/unified_citation_grounded_review/paper.md`.
+- Pair analytic review with proportionate executable checks such as symbolic identities, dimensional checks, limiting cases, toy counterexamples, or numerical agreement. Simulation and empirical fit are sanity checks, not substitutes for a proof when the claim is theorem-level.
+- A failed or unknown mathematical prerequisite blocks the mathematical claim and every downstream claim that depends on it. Preserve valid subclaims and rejected derivations; do not waive or average away the failure.
+
 ## Start-here pointers
 
 - System design: `docs/system_design.md`

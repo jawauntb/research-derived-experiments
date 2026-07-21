@@ -1038,6 +1038,13 @@ carry the compact target, representation/data-clock, assumption, fatal-gate,
 control, and evidence-path record; failed or unknown necessary gates cannot be
 offset by aggregate scores.
 
+The adjacent mathematical-claim rule is conditional rather than always-on. It
+applies to new or materially changed theorems, derivations, stochastic models,
+geometric constructions, estimators, statistical tests, and objectives. The
+claim record fixes objects/types, domains/support, units, quantifiers,
+assumptions, proof dependencies, representation choices, and boundary cases;
+symbolic or numerical checks supplement but never replace theorem-level proof.
+
 When you add or materially change code:
 
 1. Update [system_design.md](system_design.md) if runtime flow, deps, deploy, or capabilities/limitations change.
