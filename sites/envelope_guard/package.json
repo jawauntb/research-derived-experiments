@@ -1,0 +1,14 @@
+{
+  "name": "envelope-guard-site",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Envelope Guard — interactive Constraint Transport demo and research explainer.",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "PORT=3020 node server.js",
+    "test": "node --test tests/policy.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

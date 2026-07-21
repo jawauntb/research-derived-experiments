@@ -19,7 +19,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `notes/` | Program-level research synthesis |
 | `references/` | Public source list; local-only full texts (gitignored subdirs) |
 | `formal/ontology-hs/` | Haskell typed ontology gate (Arc 2B) |
-| `sites/` | Public static sites (atlas, Inquiry landing) |
+| `sites/` | Public static sites (atlas, Inquiry landing, Envelope Guard) |
 | `apps/inquiry-black-box/` | Local-first Inquiry product monorepo (Bun/Electron/MV3) |
 | `coherence-testbench/` | Separate EEG/eyetrack Phase-0 GO/KILL project |
 | `data/` | Gitignored raw data; committed exception `data/paper_b/` |
@@ -837,6 +837,19 @@ cd formal/ontology-hs && cabal test all && cabal run ontology-check
 | Server behavior | Explicit `isPublicPath()` whitelist; other paths → 404 |
 | Deploy | Separate Railway service in same Actions matrix |
 
+### 6.2b `sites/envelope_guard/` — Envelope Guard
+
+| Item | Detail |
+|---|---|
+| Role | Interactive Constraint Transport product demo + research explainer |
+| Stack | Whitelist static Node server; browser port of `condition_policy.py` in `policy.js` |
+| Served | `index.html`, `styles.css`, `app.js`, `policy.js`, `scenarios.json`, `assets/mark.svg` |
+| Port | `PORT` (default 3020) |
+| Product | Compare soft-prompt vs external envelope guards; emit audit receipts |
+| Domain | `https://envelope-guard-production.up.railway.app` |
+| Deploy | Railway project `envelope-guard` via `.github/workflows/railway-deploy.yml` |
+| Tests | `npm test` → Node test runner on `tests/policy.test.js` |
+
 ### 6.3 `apps/inquiry-black-box/` — full catalog
 
 Local-first Neurophenom cockpit: pair extension → record → replay → daily review → export/delete.
@@ -984,7 +997,7 @@ python3 scripts/run_phase0.py --smoke
 | File | Role |
 |---|---|
 | `.github/workflows/quality.yml` | Required push/PR workflow: installs uv with cache keys derived from `uv.lock`, installs `poppler-utils`, sets `QUALITY_PYTEST_WORKERS=auto`, then runs the canonical root quality wrapper |
-| `.github/workflows/railway-deploy.yml` | Deploy atlas + Inquiry landing on `main` |
+| `.github/workflows/railway-deploy.yml` | Deploy atlas + Inquiry landing + Envelope Guard on `main` |
 | `schemas/{experiment_contract_registry,experiment_manifest,program_evidence_registry,claim_registry,gate_verdict,public_artifact_envelope}.schema.json` | Portable JSON Schema contracts for package coverage, package intent, evidence, claims, gate outcomes, and public-artifact envelopes |
 | `templates/experiment/{manifest,gate_verdict}.example.json` | Copyable version-1 examples validated by the same adapters used in CI |
 | `pyproject.toml` | Project metadata; root `quality` dependency group (pytest/xdist, scientific/PDF, Ruff, ty); explicit CPU-only PyTorch source; existing Ruff rules and ty exclusions |
