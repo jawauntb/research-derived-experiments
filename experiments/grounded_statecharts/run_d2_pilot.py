@@ -52,18 +52,32 @@ def generate_results(
     adapter_id: str,
     output_dir: Path,
     repeats: int = REPEATS,
+    families: tuple[str, ...] | None = None,
+    conditions: tuple[str, ...] | None = None,
+    confirmatory: bool = False,
 ) -> dict[str, object]:
     if adapter_id == "live":
         if os.environ.get("GROUNDED_HARNESS_LIVE", "").strip() != "1":
             raise RuntimeError("live D2 pilot requires GROUNDED_HARNESS_LIVE=1")
         if "results" in output_dir.parts and "artifacts" not in output_dir.parts:
             raise RuntimeError("refusing to write live D2 rows under results/")
+    selected_conditions = tuple(conditions or CORE_CONDITIONS)
+    unknown = set(selected_conditions) - set(CORE_CONDITIONS)
+    if unknown:
+        raise ValueError(f"unsupported conditions: {sorted(unknown)}")
+    if os.environ.get("GROUNDED_HARNESS_LABELED_PROMPT", "").strip() == "1" and confirmatory:
+        raise RuntimeError("confirmatory runs ban GROUNDED_HARNESS_LABELED_PROMPT=1")
     executor = build_executor(adapter_id)
     results = []
     failures: list[dict[str, object]] = []
     tasks = load_d2_held_out_tasks()
+    if families is not None:
+        allowed = set(families)
+        tasks = tuple(task for task in tasks if task.family in allowed)
+        if not tasks:
+            raise ValueError("no held-out tasks match the requested families")
     for task in tasks:
-        for condition in CORE_CONDITIONS:
+        for condition in selected_conditions:
             for repeat_index in range(repeats):
                 episode = LiveEpisode(
                     episode_id=f"d2:{task.task_id}:{condition}:r{repeat_index}",
@@ -128,7 +142,9 @@ def generate_results(
         "episode_count": len(results),
         "publishable_rows": len(rows),
         "repeats": repeats,
-        "conditions": list(CORE_CONDITIONS),
+        "conditions": list(selected_conditions),
+        "families": sorted({task.family for task in tasks}),
+        "confirmatory": confirmatory,
         "bootstrap": bootstrap,
         "provider_failures": failures,
         "gates": {
@@ -136,20 +152,36 @@ def generate_results(
             "all_publishable": bool(results) and len(rows) == len(results),
             "budget_ok": all(r.budget_receipt.ok for r in results) if results else False,
             "provider_failures": len(failures),
+            "name_free_prompt_contract": os.environ.get(
+                "GROUNDED_HARNESS_LABELED_PROMPT", ""
+            ).strip()
+            != "1",
         },
         "allowed_claim": (
             "Fixture D2 matrix validates held-out task wiring and paired "
             "bootstrap plumbing only."
             if adapter_id == "fixture"
             else (
-                "Live D2 pilot rows are exploratory internal evidence pending "
-                "integrity review; smoke outcomes remain excluded."
+                "Confirmatory CT slice under harness-enforced name-free prompts; "
+                "claim external-guard joint-success recovery, not model learning."
+                if confirmatory
+                else (
+                    "Live D2 pilot rows are exploratory internal evidence pending "
+                    "integrity review; smoke outcomes remain excluded."
+                )
             )
         ),
         "non_claims": [
-            "Not a confirmatory D3 study.",
-            "Not a commercial usefulness claim.",
+            *(
+                ["Not a commercial usefulness claim."]
+                if confirmatory
+                else [
+                    "Not a confirmatory D3 study.",
+                    "Not a commercial usefulness claim.",
+                ]
+            ),
             "Credentialed smoke rows are not mixed into this held-out set.",
+            "Not model-side constraint internalization.",
         ],
     }
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -167,6 +199,25 @@ def main() -> None:
     parser.add_argument("--adapter", choices=("fixture", "live"), default="fixture")
     parser.add_argument("--repeats", type=int, default=REPEATS)
     parser.add_argument("--output-dir", type=Path, default=None)
+    parser.add_argument(
+        "--family",
+        action="append",
+        dest="families",
+        choices=("artifact_completion", "recursive_constrained_tool_use"),
+        default=None,
+    )
+    parser.add_argument(
+        "--condition",
+        action="append",
+        dest="conditions",
+        choices=tuple(CORE_CONDITIONS),
+        default=None,
+    )
+    parser.add_argument(
+        "--confirmatory",
+        action="store_true",
+        help="Mark the slice as confirmatory and ban labeled prompts.",
+    )
     args = parser.parse_args()
     output = args.output_dir or (
         DEFAULT_LIVE_OUTPUT if args.adapter == "live" else DEFAULT_FIXTURE_OUTPUT
@@ -175,6 +226,9 @@ def main() -> None:
         adapter_id=args.adapter,
         output_dir=output,
         repeats=args.repeats,
+        families=tuple(args.families) if args.families else None,
+        conditions=tuple(args.conditions) if args.conditions else None,
+        confirmatory=args.confirmatory,
     )
     payload = {
         "output_dir": str(output),

@@ -201,6 +201,21 @@ triage aid for independent future adjudication, not an oracle, causal
 attribution, or a CHS1 score.
 
 
+## Public dataset and paired-contrast CHS seals
+
+```bash
+# After a live harness-v2 D2 matrix lands under artifacts/:
+python3 -m experiments.grounded_statecharts.publish_public_dataset \
+  --source-rows artifacts/grounded_statecharts/d2_pilot_harness_v2/rows.jsonl
+
+python3 -m experiments.grounded_statecharts.run_chs_adjudication \
+  --rows artifacts/grounded_statecharts/d2_pilot_harness_v2/rows.jsonl \
+  --output-dir artifacts/grounded_statecharts/chs_sealed_live
+```
+
+Public export writes `results/d2_pilot_public/` (rows, summary, checksums,
+DATASET.md) and refuses raw/label fields. CHS seals stay under `artifacts/`.
+
 ## Harness-enforced conditions (default live contract)
 
 Live prompts are name-free by default. Condition identity is applied in

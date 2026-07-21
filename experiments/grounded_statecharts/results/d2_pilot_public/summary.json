@@ -1,0 +1,54 @@
+{
+  "allowed_claim": "Public sanitized held-out D2 rows under the harness-enforced name-free contract, with task-clustered uncertainty. Not a D3 confirmatory result and not a CHS1 sealed-label benchmark.",
+  "bootstrap": {
+    "false_completion_g3_minus_g0": {
+      "bootstrap_samples": 500,
+      "ci_high": 0.0,
+      "ci_low": -0.25,
+      "clustering": "task",
+      "control": "statechart_g0",
+      "metric": "false_completion",
+      "nested_repeats": true,
+      "point_estimate": -0.08333333333333333,
+      "seed": 20260720,
+      "task_count": 12,
+      "treatment": "statechart_g3"
+    },
+    "joint_success_external_minus_envelope": {
+      "bootstrap_samples": 500,
+      "ci_high": 1.0,
+      "ci_low": 1.0,
+      "clustering": "task",
+      "control": "envelope_only",
+      "metric": "joint_success",
+      "nested_repeats": true,
+      "point_estimate": 1.0,
+      "seed": 20260720,
+      "task_count": 12,
+      "treatment": "envelope_external_guards"
+    }
+  },
+  "checksums": {
+    "DATASET.md": "7ef734ec04d10de4c25c1122be3b8cbe682ddfb6c84714c7c8348853e4163bbd",
+    "rows.jsonl": "555dcf8a176690885ccf78a9cbdd83475cdfa87bdedb5af2ef9c1761a51f851b",
+    "summary.json": "37d33beaf0f56f8f003da0d5e86efbdf6874cf9018b403c39dd24403eaceeef6"
+  },
+  "contract": {
+    "excludes_chs_sealed_labels": true,
+    "excludes_raw_provider_material": true,
+    "harness_enforced_conditions": true,
+    "labeled_prompts_diagnostic_only": true,
+    "name_free_prompts_default": true
+  },
+  "non_claims": [
+    "model-side constraint learning",
+    "Grounded Statecharts product readiness",
+    "CHS1 attribution on sealed real failures",
+    "HU1\u2013HU7 unlearning"
+  ],
+  "publishable_rows": 144,
+  "row_count": 144,
+  "schema_version": "1.0",
+  "source_path": "artifacts/grounded_statecharts/d2_pilot_harness_v2/rows.jsonl",
+  "tier": "public-live-d2-dataset"
+}

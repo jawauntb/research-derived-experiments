@@ -1,0 +1,13 @@
+{
+  "allowed_claim": "One matched live-row failure/contrast pair was rendered without raw provider material.",
+  "contrast_episode_id": "d2:constraint.d2.scoped_dependency_audit:envelope_external_guards:r0",
+  "failure_episode_id": "d2:constraint.d2.scoped_dependency_audit:envelope_only:r0",
+  "non_claims": [
+    "This observational contrast is not causal attribution.",
+    "This replay is not an aggregate live D2 result."
+  ],
+  "output_tier": "public-stub",
+  "schema_version": "1.0",
+  "selection": "constraint joint-success contrast",
+  "source_rows": "artifacts/grounded_statecharts/d2_pilot_harness_v2/rows.jsonl"
+}

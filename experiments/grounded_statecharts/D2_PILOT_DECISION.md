@@ -1,116 +1,93 @@
 # D2 Pilot Decision Freeze — 2026-07-20
 
-**Status:** revise — Constraint Transport may resume under the harness-enforced
-contract after name-free re-ablation; keep Grounded Statecharts narrowed;
-CHS/HU still pending.
+**Status:** revise — Constraint Transport escalates to D3 planning under the
+harness-enforced name-free contract; Grounded Statecharts remains narrowed;
+CHS has a paired-contrast seal bridge (orchestration/output only); HU pending.
 
 **Model:** `openai` / `gpt-4.1-mini`  
 **Adapter:** live  
 **Held-out tasks:** 12 per family  
-**Repeats in labeled-prompt freeze slice:** 1  
-**Weak-prompt ablation:** 4 tasks/family, 1 repeat (`artifacts/.../weak_prompt_ablation/`)  
+**Contracts:** name-free prompts default; `condition_policy.py` enforces
+conditions in code; labeled prompts diagnostic-only  
 **Artifact paths:** `artifacts/grounded_statecharts/` (not committed)
 
 ## Integrity
 
-Labeled D2 (1 repeat):
-
-- all_publishable: true
-- budget_ok: true
-- held_out_only: true
-- provider_failures: 0
-
-Weak-prompt ablation:
-
-- n_rows: 16
-- failures: 0 after parser coercion for path/CSV schema drift
+| Slice | Publishable | Provider failures |
+|---|---|---|
+| Labeled D2 (1 repeat, diagnostic) | yes | 0 |
+| Labeled D2 (3 repeats, variance only) | 432/432 | 0 |
+| Weak-prompt pre-harness ablation | 16/16 | 0 |
+| Harness-v2 name-free ablation | 16/16 | 0 |
+| Harness-v2 held-out D2 (1 repeat, 144 eps) | 144/144 | 0 |
 
 ## Directional results (task-clustered)
 
-| Contrast | Labeled prompt | Weak prompt (no condition labels) |
-|---|---|---|
-| artifact false_completion: G3 − G0 | −0.167 | 0.0 |
-| constraint joint_success: external − envelope_only | +1.000 | 0.0 |
-| artifact task_success: G3 − G0 | +0.250 | (not primary) |
-| wrong_edge joint_success mean | 0.25 | (not re-estimated) |
+| Contrast | Labeled prompt | Weak (pre-harness) | Harness-v2 ablation | Harness-v2 held-out D2 |
+|---|---|---|---|---|
+| artifact false_completion: G3 − G0 | −0.167 | 0.0 | 0.0 | **−0.083** (CI −0.25..0.0) |
+| constraint joint_success: external − envelope_only | +1.000 | 0.0 | +1.000 | **+1.000** (CI 1.0..1.0) |
 
-## Decisions (revised after ablation)
+Surprising held-out read: under name-free prompts, `envelope_only` joint_success
+is **0/12 tasks** and `envelope_external_guards` is **12/12** after harness
+enforcement — a perfect task-level separation with nested bootstrap CI pinned
+at +1.0. Artifact false-completion shows only a small G3 edge (−0.083) with
+no raw task-success loss (G3−G0 = 0.0).
 
-1. **Constraint Transport:** stop escalation. The +1.0 joint-success effect
-   collapses to 0 under weaker instructions without condition labels. Treat the
-   labeled-prompt D2 effect as a prompt/scaffold artifact, not mechanism
-   evidence. Rebuild the prompt contract and re-run before any D3 CT claim.
-2. **Grounded Statecharts:** keep narrowed. Labeled G3 helped modestly; weak
-   prompt wiped the false-completion delta. Do not ship a product claim.
-3. **CHS / Unlearning:** still do not escalate. Heuristic harvest from live rows
-   exists under `artifacts/.../chs_from_live/` but labels remain unsealed.
-4. **Smoke rows:** remain discarded.
+## Decisions (authoritative)
 
-## Kill criteria fired
+1. **Constraint Transport:** escalate to D3 planning. The labeled-only effect was
+   a prompt artifact under the old contract; under harness-enforced name-free
+   prompts the joint-success δ returns to +1.0. Claim boundary: external guards
+   recover joint success after widenings — **not** model-side constraint learning.
+2. **Grounded Statecharts:** remain narrowed. No false-completion delta under
+   name-free + harness repair in the ablation (model rarely false-completes).
+3. **CHS:** paired-contrast seals from public rows are allowed under
+   `artifacts/.../chs_sealed_live/` for orchestration/output only. Heuristic
+   harvest stays unsealed triage. Full six-surface CHS1 remains open.
+4. **HU:** still do not escalate beyond stronger fixture banks / live pilots.
+5. **Smoke rows:** remain discarded.
 
-- Pre-registered D3 gate: escalate CT only if weak-prompt joint_success
-  δ ≥ 0.15 with ≥4 tasks. Observed δ = 0.0 → **kill CT escalation**.
+## Kill criteria
+
+- Pre-harness weak-prompt CT δ = 0.0 killed the **old labeled-prompt** escalation path.
+- Harness-v2 name-free CT δ = +1.0 with ≥4 tasks **passes** the redesigned gate.
+- GS still fails its improvement gate (δ = 0.0).
+
+## Public dataset and CHS seal status
+
+- Public sanitized dataset: `results/d2_pilot_public/` (144 rows, checksums,
+  claim boundary).
+- Paired-contrast seals: `artifacts/.../chs_sealed_live/` (12 orchestration
+  seals from CT contrasts; no six-surface CHS1 claim).
 
 ## Next best tests
 
-1. ~~Redesign live prompts so condition identity is harness-enforced, not
-   instruction-named.~~ Implemented in `condition_policy.py` with name-free
-   default prompts; re-run weak-prompt ablation under harness v2 before any
-   CT/GS escalation.
-2. Finish the 3-repeat labeled matrix only as a variance characterization, not
-   as confirmatory evidence.
-3. Independently seal CHS candidates from live failure harvest before CHS1.
-
-## Harness-enforced contract (v2)
-
-As of the harness-enforced redesign:
-
-- Default live prompts omit condition names (`build_live_prompt` == weak prompt).
-- `GROUNDED_HARNESS_LABELED_PROMPT=1` is diagnostic-only.
-- Scoring uses post-policy evidence: G3 repair can clear false completion;
-  external envelope enforcement can clear capability widenings.
-- Escalation still requires name-free joint_success δ ≥ 0.15 (CT) or a
-  preregistered false-completion improvement (GS) under this contract.
-
-## Harness-v2 name-free re-ablation (2026-07-20)
-
-Path: `artifacts/grounded_statecharts/weak_prompt_ablation_harness_v2/`  
-(16/16 rows; 0 failures; `gpt-4.1-mini`)
-
-| Contrast | Point estimate | Gate |
-|---|---|---|
-| constraint joint_success: external − envelope_only | **+1.000** | ≥ 0.15 with ≥4 tasks → **pass** |
-| artifact false_completion: G3 − G0 | **0.0** | no GS improvement |
-
-Mechanism read (bounded):
-
-- CT: under the same name-free prompt, `envelope_only` stays at joint_success 0
-  while `envelope_external_guards` reaches 1 after harness capability narrowing.
-  This is harness enforcement of constraints, not prompt-label compliance and
-  not a claim that the model internalized the envelope.
-- GS: both G0 and G3 show false_completion 0 in this slice (model rarely takes
-  the false-complete path), so G3 repair has nothing to fix → null.
-
-### Revised decisions after harness-v2 ablation
-
-1. **Constraint Transport:** reopen D3 planning under the harness-enforced,
-   name-free contract. Keep the claim boundary: external guards recover joint
-   success after attempted widenings; do not claim model-side constraint
-   learning from this slice alone.
-2. **Grounded Statecharts:** remain narrowed. No false-completion delta under
-   name-free + harness repair in this ablation.
-3. **CHS / Unlearning:** still do not escalate.
+1. ~~Complete held-out harness-v2 D2 matrix and publish sanitized public dataset.~~
+2. ~~Seal paired-contrast CHS labels from that matrix.~~
+3. Freeze and execute D3 CT confirmatory spend per `D3_SAMPLE_SIZE_PLAN.md`
+   (5 nested repeats; labeled prompts banned).
+4. Expand CHS seals beyond orchestration/output with injected surface coverage.
+5. Replace HU replicated fixture replays with independently generated corpora
+   before any live HU claim.
 
 ## 3-repeat labeled variance slice
 
-Path: `artifacts/grounded_statecharts/d2_pilot_r3/` (432/432 publishable; 0 provider failures).
+Path: `artifacts/grounded_statecharts/d2_pilot_r3/` (432/432 publishable).
 
-| Contrast | Point estimate (3 repeats nested) | Notes |
+Variance characterization under the **old labeled** prompt contract only.
+Escalation authority is the harness-v2 name-free ablation, not this slice.
+
+## D3 CT confirmatory (harness-v2 name-free)
+
+Path: `artifacts/grounded_statecharts/d3_ct_confirmatory/` (120/120 publishable;
+5 nested repeats; CT cells only).  
+Public copy: `results/d3_ct_confirmatory_public/`.
+
+| Contrast | Point estimate | Bootstrap CI |
 |---|---|---|
-| artifact false_completion: G3 − G0 | −0.167 | Matches 1-repeat planning slice |
-| artifact task_success: G3 − G0 | +0.167 | Still no raw-success loss |
-| constraint joint_success: external − envelope_only | +1.000 | Still labeled-prompt only; weak-prompt kill stands |
+| joint_success: external − envelope_only | **+1.000** | **[1.0, 1.0]** |
 
-This 3-repeat matrix is variance characterization under the labeled prompt contract.
-It does **not** reverse the weak-prompt kill of CT escalation.
-
+Confirmatory result matches the held-out D2 planning slice under the same
+harness-enforced name-free contract. Claim remains: external guards recover
+joint success after widenings — not model-side constraint learning.

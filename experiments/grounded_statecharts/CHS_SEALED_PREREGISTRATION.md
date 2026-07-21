@@ -40,8 +40,24 @@ labels. Kill any stronger claim if the mapping changes after label access, if
 raw provider material enters the ledger, or if heuristic agreement is reported
 as a CHS score without independently sealed labels.
 
+## Paired-contrast live seal (narrow bridge)
+
+Independently of the heuristic harvest, public-row matched condition contrasts
+may seal a subset of failures under `artifacts/.../chs_sealed_live/`:
+
+- envelope_only joint failure recovered by envelope_external_guards →
+  `orchestration`
+- statechart_g0 false completion recovered by statechart_g3 → `orchestration`
+- wrong_edge_guard invalid transition → `output`
+
+The protocol (`chs_adjudication.py`, version `paired-contrast-seal-1`) never
+reads harvest `predicted_component`, never writes labels into episode rows, and
+explicitly refuses a six-surface CHS1 claim from orchestration/output-only
+coverage.
+
 ## Claim boundary and next test
 
-This result supports synthetic-to-sealed plumbing only. Publishable CHS1 still
-requires real failures with genuinely withheld labels, matched interventions,
-and pre-specified failure and abstention handling.
+Synthetic-to-sealed plumbing and paired-contrast live seals support a narrow
+bridge only. Publishable six-surface CHS1 still requires withheld labels across
+all surfaces, matched repair/placebo search, and pre-specified abstention
+handling.

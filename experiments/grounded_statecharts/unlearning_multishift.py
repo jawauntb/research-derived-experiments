@@ -52,14 +52,22 @@ class ShiftCase:
         }
 
 
+INSTANCE_REPLAYS = 3
+
+
 def draft_shift_cases() -> tuple[ShiftCase, ...]:
-    """Return the three pre-registered fixture-only shift families."""
+    """Return fixture-only shift families with replicated independent replays.
+
+    Each family is replayed `INSTANCE_REPLAYS` times under a distinct case_id so
+    the bank is larger than a single diagonal. Regimes still share the committed
+    memory fixture; this is not a live or neural-unlearning claim.
+    """
 
     prior = Regime("v2", "legacy_name", "legacy_name")
     changed = Regime("v3", "current_name", "current_name")
     identical = Regime("model-v2-same-semantics", "legacy_name", "legacy_name")
-    return (
-        ShiftCase(
+    templates = (
+        (
             "tool_schema_v2_to_v3",
             "tool-schema",
             prior,
@@ -67,7 +75,7 @@ def draft_shift_cases() -> tuple[ShiftCase, ...]:
             True,
             "The accepted tool field changes from legacy_name to current_name.",
         ),
-        ShiftCase(
+        (
             "environment_policy_v2_to_v3",
             "environment-policy",
             prior,
@@ -75,7 +83,7 @@ def draft_shift_cases() -> tuple[ShiftCase, ...]:
             True,
             "A policy-enforced environment now rejects the legacy field.",
         ),
-        ShiftCase(
+        (
             "model_version_identical_semantics",
             "model/version-identical-semantics",
             prior,
@@ -84,6 +92,20 @@ def draft_shift_cases() -> tuple[ShiftCase, ...]:
             "The model identifier changes while the required commitment remains identical.",
         ),
     )
+    cases: list[ShiftCase] = []
+    for instance in range(INSTANCE_REPLAYS):
+        for case_id, family, prior_regime, shifted, changed_flag, mechanism in templates:
+            cases.append(
+                ShiftCase(
+                    f"{case_id}#inst{instance}",
+                    family,
+                    prior_regime,
+                    shifted,
+                    changed_flag,
+                    f"{mechanism} Instance replay {instance}.",
+                )
+            )
+    return tuple(cases)
 
 
 def _write_json(path: Path, payload: object) -> None:
@@ -195,8 +217,19 @@ def generate_results(output_dir: Path = DEFAULT_OUTPUT) -> dict[str, Any]:
         summaries.append(result)
     changed = [result for result in summaries if bool(result["semantics_changed"])]
     unchanged = [result for result in summaries if not bool(result["semantics_changed"])]
+    families = {str(result["shift_family"]) for result in summaries}
     gates = {
-        "three_shift_families_registered": len(summaries) == 3,
+        "three_shift_families_registered": families
+        == {
+            "tool-schema",
+            "environment-policy",
+            "model/version-identical-semantics",
+        },
+        "instance_replays_per_family": all(
+            sum(1 for result in summaries if result["shift_family"] == family)
+            == INSTANCE_REPLAYS
+            for family in families
+        ),
         "changed_semantics_fail_append_only": all(
             not bool(result["append_only_shift_success"]) for result in changed
         ),
@@ -220,14 +253,16 @@ def generate_results(output_dir: Path = DEFAULT_OUTPUT) -> dict[str, Any]:
         "cases": summaries,
         "gates": gates,
         "allowed_claim": (
-            "These three deterministic draft cases exercise the existing memory "
+            "These deterministic draft cases exercise the existing memory "
             "ledger's causal-use and quarantine mechanics under two semantic shifts "
-            "and one identical-semantics negative control. They are not live, OOD, "
-            "stochastic, or neural-unlearning evidence."
+            "and one identical-semantics negative control, each with "
+            f"{INSTANCE_REPLAYS} replicated instance replays. They are not live, "
+            "OOD, stochastic, or neural-unlearning evidence."
         ),
         "next_best_test": (
-            "Freeze independently generated shift instances and evaluate matched "
-            "live agents only after pre-registering false-forgetting and recovery gates."
+            "Replace replicated fixture replays with independently generated shift "
+            "corpora, then evaluate matched live agents only after pre-registering "
+            "false-forgetting and recovery gates."
         ),
     }
     if not all(gates.values()):
