@@ -77,3 +77,17 @@ Path: `artifacts/grounded_statecharts/d2_pilot_r3/` (432/432 publishable).
 
 Variance characterization under the **old labeled** prompt contract only.
 Escalation authority is the harness-v2 name-free ablation, not this slice.
+
+## D3 CT confirmatory (harness-v2 name-free)
+
+Path: `artifacts/grounded_statecharts/d3_ct_confirmatory/` (120/120 publishable;
+5 nested repeats; CT cells only).  
+Public copy: `results/d3_ct_confirmatory_public/`.
+
+| Contrast | Point estimate | Bootstrap CI |
+|---|---|---|
+| joint_success: external − envelope_only | **+1.000** | **[1.0, 1.0]** |
+
+Confirmatory result matches the held-out D2 planning slice under the same
+harness-enforced name-free contract. Claim remains: external guards recover
+joint success after widenings — not model-side constraint learning.
