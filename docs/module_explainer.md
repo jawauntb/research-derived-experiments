@@ -12,8 +12,8 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 |---|---|
 | `experiments/` | 55 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
 | `papers/` | Paper sources (`paper.md`), figures, shareable PDFs |
-| `scripts/` | 91 Python ops modules: quality, contracts, provenance, PDF/figure builders, summarizers |
-| `tests/` | 73 root test files collected together by pytest (`unittest`-style and pytest-native) |
+| `scripts/` | 94 Python ops modules: quality, contracts, provenance, PDF/figure builders, summarizers |
+| `tests/` | 89 root test files collected together by pytest (`unittest`-style and pytest-native) |
 | `docs/` | Design docs, verification, handoffs, plans, reviews, solutions |
 | `docs/primers/backlogs/` | Six article-specific, source-anchored research TODOs derived from the primer PDFs |
 | `notes/` | Program-level research synthesis |
@@ -88,6 +88,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_research_contract_schema_parity.py`, `test_gen_provenance.py` | Shared vocabulary/schema parity, support-directory exclusion, non-mutating provenance freshness |
 | `test_run_quality_checks.py` | Locked quality-command order, local serial default, bounded xdist worker parsing, `loadscope` scheduling, and native-thread caps |
 | `test_build_primer_residuals_pdf.py` | Required six-article residual source sections plus reproducible ReportLab PDF build |
+| `test_build_unified_review_superset_pdf.py` | Required four-part review synthesis, fatal-gate semantics, and deterministic ReportLab PDF build |
 
 ```bash
 python3 scripts/run_quality_checks.py
@@ -657,6 +658,7 @@ Raw outputs stay under `artifacts/` until summarized.
 | `build_exhaustive_literature_audit_pdf.py` | Render exhaustive audit PDF |
 | `build_external_citation_review.py` | External scholarly metadata enrichment |
 | `build_external_citation_review_pdf.py` | Render external citation review PDF |
+| `build_unified_review_superset_pdf.py` | Validate and render `papers/unified_citation_grounded_review/paper.md` to its deterministic shareable PDF |
 
 ### 4.3 Figure makers
 
@@ -744,6 +746,7 @@ Notable bundles:
 
 - `papers/icml_publication_package_2026/` — submission packages
 - Synthesis: `metaphysics_synthesis`, `metric_stack_synthesis`, literature audits/reviews
+- Review methods: `unified_citation_grounded_review` (framework, ontology, executable reviewer, and alpha-research operating system)
 - Benchmark framing: `causally_grounded_agents_benchmark`, `weakness_invariance_neurips`
 - `papers/weakness_invariance_neurips/pac_bayes_weakness_sketch.md` — finite
   compatibility-class PAC-Bayes derivation, assumption ledger, severe

@@ -240,6 +240,13 @@ Many maintained-concern experiments are **paper-primary**: the Modal sweep embed
 the experiment, and the public record is `papers/<name>/paper.md` with zero
 committed `results/*.md` (status `paper` in verification).
 
+`papers/unified_citation_grounded_review/` is a methods-synthesis bundle rather
+than an experiment result. Its `paper.md` and deterministic `paper.pdf` preserve
+the four-part review framework, formal ontology, executable reviewer, and
+alpha-research operating system together. Rebuild it with
+`scripts/build_unified_review_superset_pdf.py`; the builder validates the
+required parts and fatal-gate semantics before rendering.
+
 The weakness paper also carries a theory-only companion,
 `papers/weakness_invariance_neurips/pac_bayes_weakness_sketch.md`. It derives a
 finite, prior-dependent compatibility-class KL certificate and keeps that
@@ -250,7 +257,7 @@ result is relabeled by the derivation.
 
 ### 3.3 Scripts (`scripts/`)
 
-**91** Python modules. Operational spine:
+**94** Python modules. Operational spine:
 
 | Concern | Key scripts |
 |---|---|
@@ -678,7 +685,7 @@ pins the PEP 735 quality environment, and the explicit `pytorch-cpu` source
 keeps Linux CI from resolving CUDA, NVIDIA, or Triton packages. Every remaining
 command reuses that environment through `uv run --no-sync`:
 
-1. `pytest -q tests` over all 73 root test files (torch, numpy, scikit-learn,
+1. `pytest -q tests` over all 89 root test files (torch, numpy, scikit-learn,
    matplotlib, reportlab, pytest)
 2. `compileall` on `scripts`, `experiments`, `tests`
 3. `publication_guard.py`
