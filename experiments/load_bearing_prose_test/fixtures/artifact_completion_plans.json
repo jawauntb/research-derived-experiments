@@ -15,6 +15,56 @@
       "plan_id": "ac002",
       "plan_text": "Assemble the weekly update. Draft the reports/out.md artifact first. The executor is required to attach approval evidence to the artifact. The executor must not skip the commit step. Optional decoration lines like this one carry no obligations.\n",
       "expected_claim_count": 2
+    },
+    {
+      "plan_id": "ac003",
+      "plan_text": "Produce the audit summary. The executor must write reports/out.md before committing anything. The executor should verify each source line against the evidence log. The executor is required to include a signed approval reference in the artifact. Deployment is out of scope.\n",
+      "expected_claim_count": 3
+    },
+    {
+      "plan_id": "ac004",
+      "plan_text": "Compile the incident postmortem. The executor must commit the reports/out.md artifact only after all mandatory sections are filled. The executor should verify timestamps against the shared log. The executor will not modify the deploy pipeline as part of this task.\n",
+      "expected_claim_count": 3
+    },
+    {
+      "plan_id": "ac005",
+      "plan_text": "Draft the vendor evaluation memo. The executor is required to write the reports/out.md artifact before commit. The executor must attach source citations to every scoring row. The executor should not deploy the memo to any public channel.\n",
+      "expected_claim_count": 3
+    },
+    {
+      "plan_id": "ac006",
+      "plan_text": "Prepare the migration status update. The executor must commit reports/out.md after evidence is attached. The executor is required to include a rollback statement. The executor should verify the checklist against the change registry. Optional narrative sentences carry no obligations.\n",
+      "expected_claim_count": 3
+    },
+    {
+      "plan_id": "ac007",
+      "plan_text": "Assemble the reliability review. The executor must write the reports/out.md artifact and commit it before informing stakeholders. The executor should reference the on-call log as evidence. The executor is required to note any outstanding follow-ups.\n",
+      "expected_claim_count": 3
+    },
+    {
+      "plan_id": "ac008",
+      "plan_text": "Write the compliance attestation. The executor must produce reports/out.md and commit it after verification. The executor is required to attach approval evidence from the compliance officer. The executor should not deploy the attestation.\n",
+      "expected_claim_count": 3
+    },
+    {
+      "plan_id": "ac009",
+      "plan_text": "Prepare the quarterly retrospective. The executor must write reports/out.md and commit the artifact once every section is filled. The executor should include verified metrics. The executor is required to attach approval evidence from the retro chair.\n",
+      "expected_claim_count": 3
+    },
+    {
+      "plan_id": "ac010",
+      "plan_text": "Draft the security posture update. The executor must commit reports/out.md before notifying the security team. The executor is required to verify each control reference. The executor will not deploy the artifact outside the compliance channel.\n",
+      "expected_claim_count": 3
+    },
+    {
+      "plan_id": "ac011",
+      "plan_text": "Compose the customer incident brief. The executor must write and commit reports/out.md before any external message is drafted. The executor should include verified timeline evidence. The executor is required to attach approval evidence from support leadership.\n",
+      "expected_claim_count": 3
+    },
+    {
+      "plan_id": "ac012",
+      "plan_text": "Prepare the annual accessibility audit. The executor must commit the reports/out.md artifact after every finding is documented. The executor is required to verify each finding against source evidence. The executor should not deploy the audit externally.\n",
+      "expected_claim_count": 3
     }
   ]
 }
