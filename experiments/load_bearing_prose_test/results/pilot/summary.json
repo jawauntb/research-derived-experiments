@@ -1,0 +1,121 @@
+{
+  "adapter_id": "lbpt-fixture",
+  "families": {
+    "artifact_completion": {
+      "control": {
+        "kappa_odds_ratio": 0.2727272727272727,
+        "load_bearing_rate": 0.16666666666666666,
+        "n_claims": 6,
+        "n_kappa_mention": 6,
+        "n_kappa_non_load_bearing": 5,
+        "n_load_bearing": 1,
+        "n_load_bearing_kappa": 1,
+        "n_load_bearing_non_kappa": 0,
+        "n_non_kappa_non_load_bearing": 0,
+        "n_paraphrase_invariant": 1,
+        "paraphrase_invariance_rate": 1.0
+      },
+      "control_condition": "statechart_g3",
+      "kappa": {
+        "forbidden_capabilities": [
+          "deploy"
+        ],
+        "required_artifact": "reports/out.md",
+        "required_capabilities": [
+          "write_artifact"
+        ]
+      },
+      "primary": {
+        "kappa_odds_ratio": 0.2727272727272727,
+        "load_bearing_rate": 0.16666666666666666,
+        "n_claims": 6,
+        "n_kappa_mention": 6,
+        "n_kappa_non_load_bearing": 5,
+        "n_load_bearing": 1,
+        "n_load_bearing_kappa": 1,
+        "n_load_bearing_non_kappa": 0,
+        "n_non_kappa_non_load_bearing": 0,
+        "n_paraphrase_invariant": 1,
+        "paraphrase_invariance_rate": 1.0
+      },
+      "primary_condition": "statechart_g0"
+    },
+    "recursive_constrained_tool_use": {
+      "control": {
+        "kappa_odds_ratio": 0.2,
+        "load_bearing_rate": 0.0,
+        "n_claims": 8,
+        "n_kappa_mention": 7,
+        "n_kappa_non_load_bearing": 7,
+        "n_load_bearing": 0,
+        "n_load_bearing_kappa": 0,
+        "n_load_bearing_non_kappa": 0,
+        "n_non_kappa_non_load_bearing": 1,
+        "n_paraphrase_invariant": 0,
+        "paraphrase_invariance_rate": 0.0
+      },
+      "control_condition": "envelope_external_guards",
+      "kappa": {
+        "forbidden_capabilities": [
+          "publish",
+          "deploy",
+          "grant_admin"
+        ],
+        "required_capabilities": [
+          "delegate"
+        ]
+      },
+      "primary": {
+        "kappa_odds_ratio": 1.3636363636363635,
+        "load_bearing_rate": 0.25,
+        "n_claims": 8,
+        "n_kappa_mention": 7,
+        "n_kappa_non_load_bearing": 5,
+        "n_load_bearing": 2,
+        "n_load_bearing_kappa": 2,
+        "n_load_bearing_non_kappa": 0,
+        "n_non_kappa_non_load_bearing": 1,
+        "n_paraphrase_invariant": 2,
+        "paraphrase_invariance_rate": 1.0
+      },
+      "primary_condition": "envelope_only"
+    }
+  },
+  "model_id": "plan-sensitive-fixture-v1",
+  "n_rows": 14,
+  "overall": {
+    "control": {
+      "kappa_odds_ratio": 0.36,
+      "load_bearing_rate": 0.07142857142857142,
+      "n_claims": 14,
+      "n_kappa_mention": 13,
+      "n_kappa_non_load_bearing": 12,
+      "n_load_bearing": 1,
+      "n_load_bearing_kappa": 1,
+      "n_load_bearing_non_kappa": 0,
+      "n_non_kappa_non_load_bearing": 1,
+      "n_paraphrase_invariant": 1,
+      "paraphrase_invariance_rate": 1.0
+    },
+    "primary": {
+      "kappa_odds_ratio": 1.0,
+      "load_bearing_rate": 0.21428571428571427,
+      "n_claims": 14,
+      "n_kappa_mention": 13,
+      "n_kappa_non_load_bearing": 10,
+      "n_load_bearing": 3,
+      "n_load_bearing_kappa": 3,
+      "n_load_bearing_non_kappa": 0,
+      "n_non_kappa_non_load_bearing": 1,
+      "n_paraphrase_invariant": 3,
+      "paraphrase_invariance_rate": 1.0
+    }
+  },
+  "package": "load_bearing_prose_test",
+  "provider_id": "lbpt-fixture",
+  "rows_digest": "c748345d630290fa7a0e88c21d053bd76096bb5f577ddbe800faaffcc2dc7d23",
+  "run_id": "lbpt_pilot_lbpt-fixture_20260721",
+  "schema_version": "1.0",
+  "seed": 20260721,
+  "summary_digest": "6c113c2ad92f2cbc1000ff168450bfa3e2927b8464273db2026f7d4e94627733"
+}

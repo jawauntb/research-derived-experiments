@@ -1033,13 +1033,15 @@
         "experiments/load_bearing_prose_test/results/summary.json"
       ],
       "n_modal_entrypoints": 0,
-      "n_scripts": 4,
+      "n_scripts": 8,
       "paper": null,
       "preregistration": "experiments/load_bearing_prose_test/PREREGISTRATION.md",
       "verification_signals": [],
       "artifacts_committed": [
         "experiments/load_bearing_prose_test/results/summary.json",
-        "docs/harness_research/load_bearing_prose_test/PREREGISTRATION.md",
+        "experiments/load_bearing_prose_test/results/pilot/summary.json",
+        "experiments/load_bearing_prose_test/results/pilot/rows.jsonl",
+        "experiments/load_bearing_prose_test/PREREGISTRATION.md",
         "docs/harness_research/load_bearing_prose_test/README.md",
         "docs/harness_research/load_bearing_prose_test.md"
       ],
