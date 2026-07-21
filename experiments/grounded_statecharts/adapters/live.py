@@ -296,13 +296,24 @@ class LiveExecutor:
         )
 
     def complete(self, request: ExecutorRequest) -> ExecutorResponse:
-        started = time.perf_counter()
         # Default prompts are name-free. Labeled prompts are diagnostic-only.
         # WEAK_PROMPT=1 remains accepted for backward-compatible ablation runs.
         if os.environ.get(LIVE_LABELED_PROMPT_ENV, "").strip() == "1":
             messages = build_labeled_live_prompt(request)
         else:
             messages = build_live_prompt(request)
+        return self.complete_messages(messages)
+
+    def complete_messages(self, messages: list[dict[str, str]]) -> ExecutorResponse:
+        """Run one provider call against caller-supplied chat messages.
+
+        This is the shared low-level path behind `complete()`. Other opt-in
+        pilots outside the statechart task/episode contract (e.g. Harness
+        Unlearning's live smoke) reuse it directly instead of duplicating
+        provider dispatch, retries, and response parsing.
+        """
+
+        started = time.perf_counter()
         raw = self._call_provider(messages)
         latency_ms = max(0, int((time.perf_counter() - started) * 1000))
         text = self._extract_text(raw)

@@ -1,0 +1,34 @@
+{
+  "components_covered": [
+    "context",
+    "generation",
+    "memory",
+    "orchestration",
+    "output",
+    "tools"
+  ],
+  "gates": {
+    "claim_boundary": "Injected/deterministic single-fault fixtures with a search-verified unique repair seal one label per surface. Labels are constructed and repository-visible, not withheld real-failure labels, so this tier alone is not a publishable six-surface CHS1 result.",
+    "heuristic_harvest_not_used": true,
+    "public_safe_synthetic_output": true,
+    "search_verified_unique_recovery_for_every_case": true,
+    "six_surface_chs1_claim": false
+  },
+  "no_provider_calls": true,
+  "protocol": {
+    "independence": "Labels are the injected/deterministic fixture's declared responsible_component, sealed only when the isolated counterfactual search (counterfactual_search.py) recovers exactly one credited repair and it matches that declared component. The live heuristic harvest (chs_from_live.py) and its predicted_component are never consulted, and no live D2 row is read.",
+    "kill_criteria": [
+      "Do not treat heuristic harvest agreement as CHS1.",
+      "Do not seal a label when the search finds zero or more than one credited repair, or when placebo receives credit.",
+      "Do not write responsible_component into live public episode rows.",
+      "Do not claim six-surface CHS1 from injected/deterministic fixture seals alone: labels remain repository-visible constructions, not labels withheld from the diagnosis author on real failures."
+    ],
+    "version": "injected-fault-seal-1"
+  },
+  "protocol_version": "injected-fault-seal-1",
+  "schema_version": "1.0",
+  "sealed_count": 6,
+  "source_case_count": 6,
+  "source_cases": "experiments/grounded_statecharts/fixtures/counterfactual_faults.json",
+  "tier": "injected-fault-seal"
+}

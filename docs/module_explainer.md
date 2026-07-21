@@ -475,14 +475,16 @@ python3 -m experiments.long_horizon_bottleneck.eval --provider fixture --models 
 | `chs_sealed.py` / `run_chs_sealed_smoke.py` | Credential-free synthetic-to-sealed-label plumbing for one clean and six single-fault cases, scored against a separate label artifact |
 | `harness_unlearning.py` | Scoped memory ledger, descendant families, commitment harness, paired causal-use gate, and legal lifecycle transitions |
 | `run_harness_unlearning.py` | Fail-closed causal prerequisite plus deterministic shift, quarantine, retirement, recurrence, restoration, and replay bundle |
-| `unlearning_multishift.py` / `run_unlearning_multishift_smoke.py` | Credential-free draft extension with tool-schema and environment-policy semantic shifts plus a model/version-identical-semantics false-forgetting control; writes compact summary/rows only |
+| `unlearning_multishift.py` / `run_unlearning_multishift_smoke.py` | Credential-free draft extension with nine independently authored shift instances (distinct memory ids, content actions, and regime ids) across three families — three tool-schema variants, three environment-policy variants, three model/version-identical-semantics false-forgetting-control variants; writes compact summary/rows only, no live calls |
+| `run_unlearning_multishift_live_smoke.py` | Opt-in credentialed live-adapter mechanics smoke for a memory-sensitivity probe shape (observed/target-suppressed/placebo-suppressed prompt conditions) over 3 of the 9 draft cases; validates prompt/parse/budget plumbing only, writes under gitignored `artifacts/`, and is explicitly not a HU1–HU7 result |
 | `constraint_ood.py` / `run_constraint_ood_smoke.py` | Credential-free planned-only OOD matrix for held-out wording and depth-5/6 delegation probes bound to existing Constraint Transport task families |
 | `adapters/` | Provider-neutral executor boundary; deterministic `fixture` adapter plus opt-in OpenAI/Anthropic `live` backend |
 | `budgets.py` | Matched call/token/tool/latency/cost ceilings with fail-closed planning receipts |
 | `sanitization.py` | Fail-closed public-row projection that blocks raw provider material |
 | `evaluation.py` | Normalized live task/episode/result records, smoke matrix, integrity receipts, and task-clustered bootstrap |
 | `condition_policy.py` | Harness-enforced condition policies: G3 artifact repair, external envelope capability narrowing, evidence-based scoring |
-| `chs_adjudication.py` / `run_chs_adjudication.py` | Paired-contrast live seal bridge (orchestration/output only) writing labels under `artifacts/` never into episode rows |
+| `chs_adjudication.py` / `run_chs_adjudication.py` | Two independent seal tiers: paired-contrast live seals (orchestration/output only, real D2 rows) writing labels under `artifacts/` never into episode rows, plus `seal_from_injected_faults`/`generate_injected_results` (six-surface, constructed single-fault fixtures reusing `counterfactual_search.py`'s search) writing public-safe labels under `results/chs_injected_faults/`; `summarize_combined_coverage` / `--with-injected` report both tiers without claiming six-surface CHS1 |
+| `run_chs_injected_faults_smoke.py` | Credential-free entrypoint for the injected-fault seal tier under `results/chs_injected_faults/` |
 | `publish_public_dataset.py` | Fail-closed sanitized public D2 dataset exporter with checksums and claim boundary |
 | `d2_tasks.py` / `fixtures/d2_held_out_tasks.json` | Frozen 24-task D2 bank (12 fresh-verification artifact tasks + 12 constrained-delegation tasks), closed-schema/`LiveTask` loader, and task-digest validation; no answer keys or hidden labels |
 | `run_live_smoke.py` | Clean-clone-safe smoke bundle under `results/live_evaluation/` |
@@ -515,8 +517,15 @@ python3 -m experiments.grounded_statecharts.run_unified_replay
 python3 -m experiments.grounded_statecharts.run_statechart_pilot_smoke
 python3 -m experiments.grounded_statecharts.run_constraint_pilot_smoke
 python3 -m experiments.grounded_statecharts.run_chs_sealed_smoke
+python3 -m experiments.grounded_statecharts.run_chs_injected_faults_smoke
+python3 -m experiments.grounded_statecharts.run_unlearning_multishift_smoke
+# Opt-in credentialed HU live-adapter smoke (writes under artifacts/ only):
+# GROUNDED_HARNESS_LIVE=1 GROUNDED_HARNESS_PROVIDER=... GROUNDED_HARNESS_MODEL=... \
+#   python3 -m experiments.grounded_statecharts.run_unlearning_multishift_live_smoke
 python3 -m experiments.grounded_statecharts.run_live_failure_replay --rows /path/to/rows.jsonl
 python3 -m experiments.grounded_statecharts.run_chs_from_live_smoke --rows /path/to/rows.jsonl
+python3 -m experiments.grounded_statecharts.run_chs_adjudication --with-injected \
+  --rows /path/to/rows.jsonl
 ```
 
 #### 3.3.4 Related reengagement packages
@@ -740,6 +749,13 @@ Notable bundles:
   compatibility-class PAC-Bayes derivation, assumption ledger, severe
   aligned/wrong-group enumeration, and kill criteria; analytic only
 - Most §3.4 experiment names have a matching `papers/<name>/paper.md`
+
+Claim-bounded grounded-harness writeups also live under `docs/papers/`:
+
+- [`docs/papers/grounded_harness_ct_preprint_2026-07-20.md`](papers/grounded_harness_ct_preprint_2026-07-20.md)
+  — name-free / harness-enforced Constraint Transport preprint (D2 + D3 CT)
+- [`docs/papers/grounded_harness_brief_2026-07-20.md`](papers/grounded_harness_brief_2026-07-20.md)
+  — one-paragraph executive brief for the same slice
 
 ### 5.2 `notes/`
 
