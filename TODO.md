@@ -4,10 +4,15 @@
 
 - [x] Land plan + preregistration + thesis (PR #404, merged 2026-07-21).
 - [x] Week 1: scaffold `experiments/load_bearing_prose_test/` package (`claims.py`, `extraction.py`, `ablation.py`, `fixtures/`, deterministic tests, `run_lbpt_smoke.py`, root manifest + structured-manifest registry entry, preregistration moved into package alongside manifest).
-- [ ] Week 2: `executor.py` + `scoring.py` + `run_lbpt_pilot.py`; pilot slice on both CT task families with matched budgets.
-- [ ] Week 3: paraphrase-invariance gauge check; κ concordance measurement; CHS-style injected-fault sealing.
-- [ ] Week 4: held-out confirmatory slice; public sanitized dataset at `experiments/load_bearing_prose_test/results/lbpt_public/`; preprint at `docs/papers/lbpt_preprint_YYYY-MM-DD.md`.
-- Fatal gates: load-bearing floor `L ≥ 0.15` (CI lower ≥ 0.05); paraphrase invariance `P ≥ 0.80` (CI lower ≥ 0.70); κ concordance CI excludes 1.0 by ≥ 0.2. Any failed gate publishes as a bounded null; no post-hoc threshold swaps.
+- [x] Week 2 code: `executor.py` + `scoring.py` + `run_lbpt_pilot.py` (fixture pilot) + `planner.py` + `run_lbpt_live_pilot.py` (live planner + live executor + concurrent fan-out).
+- [x] Week 2 live pilot on 24 CT held-out tasks (`results/live_pilot/`): 20 tasks reported (4 dropped on provider parse failure), 93 rows on `gpt-4.1-mini` at temperature=0.
+  - Primary L = 0.882 (**passes** floor 0.15).
+  - Primary P = 0.354 (**KILLS** floor 0.80 with lower CI ≥ 0.70).
+  - κ concordance: AC or=0.37 (unexpected), rct or=5.85 (as predicted).
+  - Per pre-registration: "primary claim killed; the null publishes as a bounded null."
+- [ ] Week 3: κ concordance bootstrap CI + CHS-style injected-fault pipeline seal. Report the paraphrase-invariance failure as a bounded null, not a kill of the theorem.
+- [ ] Week 4: held-out confirmatory (only if Week 3 seal validates the pipeline); public sanitized dataset at `experiments/load_bearing_prose_test/results/lbpt_public/`; preprint at `docs/papers/lbpt_preprint_YYYY-MM-DD.md` — **bounded-null framing**: prose has commitment surfaces (L high) but they do not survive the pre-registered paraphrase gauge check on this substrate. Discuss whether the failure reflects the theorem's discriminator or the specific gauge choice.
+- Fatal gates (frozen; do not adjust): load-bearing floor `L ≥ 0.15`; paraphrase invariance `P ≥ 0.80`; κ concordance odds ratio CI excludes 1.0 by ≥ 0.2.
 
 ## Primer-derived execution contracts (2026-07-14)
 
