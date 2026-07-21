@@ -130,6 +130,7 @@ environment.
 | [causally_grounded_agents_next_gap.md](causally_grounded_agents_next_gap.md) | Suite C transfer gaps |
 | [harness_research/README.md](harness_research/README.md) | Staged grounded-harness portfolio with deterministic replay, transport, counterfactual, and functional-unlearning fixtures |
 | [next_agent_grounded_harness_experiments_handoff_2026-07-20.md](next_agent_grounded_harness_experiments_handoff_2026-07-20.md) | Post-fixture execution handoff: shared live-evaluation contract, ordered D2–D4 experiments, six safe parallel lanes, pilot gates, kill conditions, and release definition |
+| [next_agent_envelope_guard_product_ct_chs_handoff_2026-07-21.md](next_agent_envelope_guard_product_ct_chs_handoff_2026-07-21.md) | Next tranche after CT ship: Envelope Guard product contract editor (Track 1), powered CT multi-model/OOD stress (Track 2), author-blind CHS1 (Track 3) — implement/run/learn/report |
 | `harness_research/grounded_statecharts.md` | Independent transition-guard design plus links to the implemented deterministic fixture runtime |
 | `harness_research/constraint_transport.md` | Recursive constraint-envelope and externally enforced transition-guard benchmark design |
 | `harness_research/counterfactual_harness_search.md` | Paired intervention, causal-credit, and equal-budget harness-search design |

@@ -147,7 +147,9 @@ remain diagnostic-only (`GROUNDED_HARNESS_LABELED_PROMPT=1`). Held-out D2
 escalation stays gated on harness-enforced, name-free effects. Paired-contrast
 CHS seals (`chs_adjudication.py`) and sanitized public-dataset export
 (`publish_public_dataset.py`) keep labels and raw provider material out of
-episode rows.
+episode rows. Post-CT next tranche (Envelope Guard product contract editor,
+powered CT multi-model/OOD stress, author-blind CHS1) is specified in
+[`docs/next_agent_envelope_guard_product_ct_chs_handoff_2026-07-21.md`](next_agent_envelope_guard_product_ct_chs_handoff_2026-07-21.md).
 
 | Design | Intended surface | Dependency order |
 |---|---|---|
