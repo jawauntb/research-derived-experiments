@@ -135,6 +135,8 @@ environment.
 | `harness_research/constraint_transport.md` | Recursive constraint-envelope and externally enforced transition-guard benchmark design |
 | `harness_research/counterfactual_harness_search.md` | Paired intervention, causal-credit, and equal-budget harness-search design |
 | `harness_research/harness_unlearning.md` | Provenance-aware quarantine, commitment-level suppression, and revalidation design |
+| [`harness_research/load_bearing_prose_test.md`](harness_research/load_bearing_prose_test.md) | Thesis for the concern-transport bridge-theorem test on LLM-produced prose over CT κ (plan and preregistration frozen 2026-07-21; scaffolding follows) |
+| [`plans/2026-07-21-001-feat-load-bearing-prose-test-plan.md`](plans/2026-07-21-001-feat-load-bearing-prose-test-plan.md) | Load-bearing prose test plan (Goal Capsule + Product Contract + weekly execution + kill criteria) |
 | [publication_sharing_map.md](publication_sharing_map.md) | What to share publicly |
 | [paper_readiness.md](paper_readiness.md) | Paper readiness tracking |
 | [discovery_regime_audit.md](discovery_regime_audit.md) | Regime audit ledger |
@@ -545,7 +547,26 @@ python3 -m experiments.grounded_statecharts.run_chs_live_withheld_score_smoke \
   --rows /path/to/rows.jsonl
 ```
 
-#### 3.3.4 Related reengagement packages
+#### 3.3.4 `load_bearing_prose_test` — prose commitment-surface test (planning docs only)
+
+Plan and preregistration frozen 2026-07-21; runtime package
+`experiments/load_bearing_prose_test/` will be created together with
+its root manifest and structured-manifest registry entry by Week 1
+(package-coverage guard requires this pair). Reuses the CT κ substrate
+(`experiments/grounded_statecharts/condition_policy.py`) and the CT
+commitment-surface oracle to classify atomic claims in LLM-produced
+plans as load-bearing (Δ ≠ 0 on the executor's commitment surface
+under deletion or negation, Δ = 0 under paraphrase) or available
+but not load-bearing.
+
+| Path | Purpose |
+|---|---|
+| [`harness_research/load_bearing_prose_test/PREREGISTRATION.md`](harness_research/load_bearing_prose_test/PREREGISTRATION.md) | Fatal gates, kill criteria, escalation sequence |
+| [`harness_research/load_bearing_prose_test/README.md`](harness_research/load_bearing_prose_test/README.md) | Package contract and non-claims |
+
+No runtime code yet; no live spend; no empirical claim.
+
+#### 3.3.5 Related reengagement packages
 
 | Package | Purpose | Entrypoint |
 |---|---|---|

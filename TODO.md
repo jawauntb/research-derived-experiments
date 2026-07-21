@@ -1,5 +1,14 @@
 # Research TODO
 
+## Load-Bearing Prose Test (2026-07-21)
+
+- [ ] Land plan + preregistration + thesis (this PR).
+- [ ] Week 1: scaffold `experiments/load_bearing_prose_test/` package (`claims.py`, `extraction.py`, `ablation.py`, `fixtures/`, deterministic tests, `run_lbpt_smoke.py`).
+- [ ] Week 2: `executor.py` + `scoring.py` + `run_lbpt_pilot.py`; pilot slice on both CT task families with matched budgets.
+- [ ] Week 3: paraphrase-invariance gauge check; κ concordance measurement; CHS-style injected-fault sealing.
+- [ ] Week 4: held-out confirmatory slice; public sanitized dataset at `experiments/load_bearing_prose_test/results/lbpt_public/`; preprint at `docs/papers/lbpt_preprint_YYYY-MM-DD.md`.
+- Fatal gates: load-bearing floor `L ≥ 0.15` (CI lower ≥ 0.05); paraphrase invariance `P ≥ 0.80` (CI lower ≥ 0.70); κ concordance CI excludes 1.0 by ≥ 0.2. Any failed gate publishes as a bounded null; no post-hoc threshold swaps.
+
 ## Primer-derived execution contracts (2026-07-14)
 
 - [x] Add one canonical program evidence registry with explicit gate/status states.
