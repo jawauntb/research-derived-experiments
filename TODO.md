@@ -17,10 +17,27 @@
   regimes, so multiplicative necessity is withheld; initial coincidence is
   already at ceiling, so the online-care pass is non-discriminating and does
   not support learned care or selfhood.
-- [ ] New preregistration only: replace role-authored edges with learned or
-  withheld graph structure, start from an adversarially misspecified care
-  prior, seal task utility from retrieval, and force non-ceiling additive vs
-  product and learned vs oracle contrasts.
+- [x] Preserve the full two-flashlight intuition, formal decomposition, claim
+  ladder, failure modes, applicability contract, and gated advancement
+  program in `docs/concern_gated_retrieval_research_program.md`.
+- [x] Add a pointer-first future-agent handoff at
+  `docs/next_agent_concern_gated_retrieval_handoff_2026-07-23.md`.
+- [ ] Preregister staged COGR-E2 before any confirmatory implementation or
+  sweep.
+  - [ ] Run a governed premise audit and calibration-only study; freeze effect
+    thresholds, sample size, features, hyperparameters, and analysis code.
+  - [ ] Run E2a concern-recovery screening on fixed withheld geometry with
+    randomized probes, logged propensities, and positive/negative updates.
+  - [ ] Run E2b with learned/random/oracle geometry crossed against
+    frozen-wrong/learned/oracle concern.
+  - [ ] Seal role labels, answer keys, and task utility behind the evaluator
+    boundary.
+  - [ ] Beat matched-budget semantic, additive, learned one-stage,
+    value/priority, larger-context, summary, and recurrent baselines.
+  - [ ] Add statistical feature-leakage, targeted poisoning, bounded-influence,
+    and rollback gates.
+  - [ ] Keep E2 synthetic; approve the data lifecycle, access/isolation, trust
+    boundary, and disclosure contracts before non-synthetic or public rows.
 
 ## Load-Bearing Prose Test (2026-07-21)
 

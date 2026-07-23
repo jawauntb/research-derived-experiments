@@ -46,6 +46,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | Run the quality gate | `python3 scripts/run_quality_checks.py` |
 | Check API/Modal env without leaking secrets | `python3 scripts/env_probe.py` |
 | Public agent benchmark package | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) |
+| Concern-gated retrieval theory and next experiments | [concern_gated_retrieval_research_program.md](concern_gated_retrieval_research_program.md) + [next-agent handoff](next_agent_concern_gated_retrieval_handoff_2026-07-23.md) |
 | Modal operator handoff | [next_agent_modal_handoff.md](next_agent_modal_handoff.md) |
 | Deploy atlas / Inquiry site | [railway-autodeploy.md](railway-autodeploy.md) |
 | Inquiry product work | `apps/inquiry-black-box/README.md` + `AGENTS.md` |
@@ -129,6 +130,8 @@ environment.
 | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) | Benchmark umbrella |
 | [causally_grounded_agents_release_schema.md](causally_grounded_agents_release_schema.md) (+ `.json`) | Shared release schema |
 | [causally_grounded_agents_next_gap.md](causally_grounded_agents_next_gap.md) | Suite C transfer gaps |
+| [concern_gated_retrieval_research_program.md](concern_gated_retrieval_research_program.md) | Canonical two-flashlight intuition, mechanism decomposition, split generic/concern claim ladder, staged COGR-E2, safety gates, and live-agent advancement program |
+| [next_agent_concern_gated_retrieval_handoff_2026-07-23.md](next_agent_concern_gated_retrieval_handoff_2026-07-23.md) | Pointer-first continuation contract for premise/calibration work, staged concern recovery and learned geometry, separate L1/L2 gates, and live-agent validation |
 | [harness_research/README.md](harness_research/README.md) | Staged grounded-harness portfolio with deterministic replay, transport, counterfactual, and functional-unlearning fixtures |
 | [next_agent_grounded_harness_experiments_handoff_2026-07-20.md](next_agent_grounded_harness_experiments_handoff_2026-07-20.md) | Post-fixture execution handoff: shared live-evaluation contract, ordered D2–D4 experiments, six safe parallel lanes, pilot gates, kill conditions, and release definition |
 | [next_agent_envelope_guard_product_ct_chs_handoff_2026-07-21.md](next_agent_envelope_guard_product_ct_chs_handoff_2026-07-21.md) | Next tranche after CT ship: Envelope Guard product contract editor (Track 1), powered CT multi-model/OOD stress (Track 2), author-blind CHS1 (Track 3) — implement/run/learn/report |
@@ -592,6 +595,8 @@ online care updates; graph roles and simulator utility remain authored.
 | `experiments/concern_gated_retrieval/results/{summary.json,pilot_2026_07_23.md}` | Machine receipt and claim-bounded interpretation; additive necessity and care-learning claims withheld |
 | `experiments/concern_gated_retrieval/experiment_manifest.json` | Structured local-CPU contract bound to the exact pilot run |
 | `tests/test_concern_gated_retrieval.py` | Numerical, invariance, selectivity, update, and frozen-receipt tests |
+| `docs/concern_gated_retrieval_research_program.md` | Canonical intuition, evidence ledger, split claim ladder, staged E2 design, safety gates, application boundary, and advancement program |
+| `docs/next_agent_concern_gated_retrieval_handoff_2026-07-23.md` | COGR-E2a/E2b preregistration target, dependency order, separate fatal gates, continuation constraints, and later live/transfer path |
 
 ```bash
 python3 -m experiments.concern_gated_retrieval.run_pilot

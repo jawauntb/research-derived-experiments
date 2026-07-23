@@ -5987,3 +5987,14 @@ Residual content:
 Next move: write a new preregistration with learned or withheld edges,
 adversarially misspecified care initialization, sealed task utility, and
 non-ceiling additive/product and learned/oracle contrasts.
+
+Program continuation:
+
+- Canonical theory, intuition, evidence boundary, split L0–L5 claim ladder,
+  failure modes, safety gates, applicability contract, and staged advancement:
+  `docs/concern_gated_retrieval_research_program.md`.
+- Pointer-first future-agent handoff for COGR-E2:
+  `docs/next_agent_concern_gated_retrieval_handoff_2026-07-23.md`.
+- The roadmap is planning evidence, not a promoted experiment result.
+  COGR-E2 requires a calibration-only boundary and new preregistration before
+  confirmatory implementation or evaluation.
