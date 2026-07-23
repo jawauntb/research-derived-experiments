@@ -576,6 +576,283 @@ privacy, isolation, poisoning, and data-lifecycle gates before non-synthetic
 memory or public rows. The continuation contract is
 [next_agent_concern_gated_retrieval_handoff_2026-07-23.md](next_agent_concern_gated_retrieval_handoff_2026-07-23.md).
 
+#### 4.a Concern-Gated Retrieval Wave 0
+
+The successor package `experiments/concern_gated_retrieval_e2/` implements
+the staged COGR-E2 program. Its `wave0/` subpackage is a calibration-only,
+premise-scaffolding step: it introduces three procedurally distinct
+calibration families (`delayed_commitments`, `maintenance_fault`,
+`resource_constrained`), a sealed environment interface
+(`wave0/sealed_env.py`; `EpisodeSpec` on the evaluator side, `EpisodeContext`
+on the policy side, `RetrievalChoice`/`SealedOutcome` as the wire types, and
+`SealedEnvironment.evaluate` enforced single-shot per episode), an
+anti-leakage guard (`IntegrityAudit` static AST walker raises `LeakageError`
+on any policy that dereferences the sealed `role`, `utility`, or
+`_answer_key` fields), and an adversarially misspecified concern prior that
+inflates a plausible alarm region and suppresses at least one true
+commitment region.
+Wave 0 imports (never edits) `WeightedGraph`, `personalized_pagerank`, and
+the Zhang-Levin epiplexity implementation from the frozen pilot at
+`experiments/concern_gated_retrieval/`; it does not fork those primitives.
+Wave 0 uses calibration seeds `100000-100999` and reserves confirmatory
+seeds `200000-201999` for Wave 1; a runtime guard enforces the
+`calibration` / `confirmatory` template-family split and refuses to expose
+evaluator-only fields (role labels, answer keys, future utilities, oracle
+concern, wrong-agent labels, and paraphrase-family ids) to policy code.
+The family-split half of that guard lives in
+`experiments/concern_gated_retrieval_e2/wave0/template_split.py`: a
+`TemplateRegistry` stores `template_id -> TemplateBucket` (deterministic in
+`(family, seed, bucket)` via SHA-256), and `load()` default-denies
+confirmatory rows. Surfacing a confirmatory row requires **both** an
+explicit `allow_confirmation=True` flag on the call and the caller-side
+`COGR_WAVE0_CONFIRMATORY_RUN` env token being truthy; either alone raises
+`LeakageError`. Every row leaves `load()` as a frozen `TemplateRow` whose
+`bucket` tag survives `dataclasses.replace`, and `assert_calibration_only`
+is the canonical runtime tripwire calibration entry points call on every
+incoming row.
+The fixed-withheld-geometry half of Wave 0 lives in
+`experiments/concern_gated_retrieval_e2/wave0/graph_learn.py`:
+`build_withheld_graph(seed, size, family)` emits a per-family procedural
+`WeightedGraph` whose topology is a pure function of `(seed, size, family)`
+and whose node names are `f"{family}_s{seed:06d}_n{index:03d}"`, so the
+generator has no channel through which a role label, answer key, or any
+other evaluator-only field (PREREGISTRATION.md §4.1) could reach the
+constructed graph. The three procedural rules are structurally distinct:
+`delayed_commitments` is a timeline chain with seeded modulo-anchor skip
+edges; `maintenance_fault` is a log-stream chain with a boilerplate hub
+plus early-to-late cross-links; `resource_constrained` is a bipartite
+left/right backbone with within-half constraint edges.
+`apply_concern_warp(graph, concern)` is a thin facade over the pilot's
+`WeightedGraph.concern_warped`; because the multiplier
+`1 + strength * (c_i + c_j) / 2` is >= 1 for non-negative concern, node
+support and edge sign are preserved. `rarity_scores(graphs_iter)`
+returns inverse-frequency per-node scores across a graph batch, matching
+the shape the pilot's rarity-corrected Hadamard product expects. The
+module imports `WeightedGraph` and `personalized_pagerank` from the
+frozen pilot at `experiments/concern_gated_retrieval/graph.py` and does
+not fork them; Wave 1 learned-geometry builders are explicitly out of
+scope for `wave0/`.
+The three Wave 0 procedural family generators live under
+`experiments/concern_gated_retrieval_e2/wave0/families/`. Each exposes an
+identical public API `generate_episode(seed, bucket, holdout=None) ->
+EpisodeSpec`, refuses seeds outside its declared bucket range
+(calibration `100000-100999`, confirmatory `200000-201999`), and refuses
+unknown paraphrase-family holdouts. `families/maintenance_fault.py`
+implements the maintenance-and-fault-response family: 16 calibration
+(`MF-C-01`..`MF-C-16`) plus 32 confirmatory (`MF-X-01`..`MF-X-32`)
+templates distributed over four paraphrase families (`system_logs`,
+`sensor_stream`, `warning_ledger`, `diagnostic_tape`). The off-context
+load-bearing node is the buried early observation whose signature
+explains the current symptom; distractors are context-only sensor noise
+that pattern-matches the symptom without explaining it, chronic
+critical-alert boilerplate that the misspecified prior loves, and
+neutral maintenance-log entries. Wave 0's wrong prior places
+`W_ALARM_INIT = 1.0` on the chronic-alarm region and
+`W_COMMIT_INIT = 0.05` on the load-bearing region, with a small
+positive uniform baseline in between so the prior is adversarial
+rather than a total inversion. The load-bearing utility differential
+over the best distractor is capped at `MAX_UTILITY_DIFF = 0.6`, keeping
+every family row below the non-ceiling gate the preregistration §6
+declares.
+`families/resource_constrained.py` implements the resource-constrained
+planning family: 32 calibration (`RC-C-01`..`RC-C-32`; seeds
+`100_200..100_231`) plus a 32-seed reserved confirmatory block
+(`RC-X-01`..`RC-X-32`; seeds `200_200..200_231`) over the bipartite
+ledger surface emitted by `graph_learn.build_withheld_graph`. Each
+template deterministically assigns eight roles via a per-seed layout
+PRNG: the load-bearing prior obligation and a care-only global
+obligation live in the left (obligation) half; the alarm distractor,
+a context-only alternate action, and the two currently-active pending
+actions live in the right (action) half; two neutral policy notes fill
+the remaining slots. The wrong prior places `W_ALARM_INIT = 1.0` on the
+alarm region and `W_COMMIT_SUPPRESSED_INIT = 0.05` on the load-bearing
+obligation, strictly below the uniform baseline `W_UNIFORM_INIT = 0.5`
+that the care-only global obligation keeps — so the prior is
+adversarial rather than a total inversion. Utility magnitudes
+(`U_OBLIGATION = 0.60`, `U_ALARM = 0.20`, `U_CONTEXT_ALT = 0.15`,
+`U_CARE_GLOBAL = 0.10`, `U_NEUTRAL_NOTE = 0.0`) keep the reward domain
+in `[-1, +1]` at `DEFAULT_BUDGET = 2` and leave strictly positive
+oracle-to-wrong-prior headroom on every calibration seed, satisfying
+PREREGISTRATION.md §6's non-ceiling constraint. `calibration_slate()`
+returns the 32 sealed episodes in ascending seed order; the family
+refuses seeds outside its declared calibration or confirmatory ranges
+and refuses any bucket not drawn from
+`experiments.concern_gated_retrieval_e2.wave0.template_split.TemplateBucket`.
+`families/delayed_commitments.py` implements the delayed-commitments
+family: 16 calibration (`DC-C-01`..`DC-C-16`) plus 32 confirmatory
+(`DC-X-01`..`DC-X-32`) templates over four paraphrase families
+(`partner_birthday`, `wedding_anniversary`, `child_school_deadline`,
+`friend_host_night`) on the `GRAPH_SIZE = 32` withheld timeline chain
+emitted by `graph_learn.build_withheld_graph`. The family carries its
+own role vocabulary (`off_context_commitment`, `current_day_trending`,
+`calendar_trivia`, `adjacent_commitment_lookalike`, `neutral_filler`,
+`busy_day_context_item`) disjoint from the frozen L0 pilot's
+`commitment` / `family` / `global_alarm` labels, honoring the Wave 0
+"own vocabulary" boundary. The load-bearing off-context commitment sits
+in a dedicated commitment zone many chain hops away from the
+active-context zone, so a plain context-only PPR on the withheld
+geometry cannot trivially hit@1 = 1 on every seed; a wrong-prior
+care-only PPR is similarly non-ceiling because the alarm zone dominates
+the diffusion. Wave 0's wrong prior places `W_ALARM_INIT = 1.0` on the
+current-day trending region and `W_COMMIT_INIT = 0.05` on the
+date-anchored commitment, with `W_UNIFORM_INIT = 0.20` on every other
+node so the commitment-neighbor region and the busy-day context stay at
+a positive uniform baseline (adversarial, not a total inversion).
+Utility magnitudes (`U_LOAD_BEARING = 0.55`, `U_ALARM = 0.15`,
+`U_CONTEXT_DISTRACTOR = 0.10`, `U_COMMITMENT_NEIGHBOR = 0.10`,
+`U_NEUTRAL = 0.0`) plus a per-episode `MAX_UTILITY_DIFF = 0.6` clamp
+keep the reward domain in `[-1, +1]` at `DEFAULT_BUDGET = 2`. Holdout
+accepts either a paraphrase-family name in `PARAPHRASE_FAMILIES` or a
+whole template id in `TEMPLATE_IDS`; the generator raises `ValueError`
+on any other string. `calibration_template_ids()` and
+`confirmatory_template_ids()` expose the ordered id tuples so the
+calibration receipt can enumerate them without touching confirmatory
+episodes.
+Wave 0 also carries the exploratory concern-update scaffolding used by the
+Wave 1 COGR-E2a screen. `experiments/concern_gated_retrieval_e2/wave0/concern_update.py`
+introduces `LoggedProbePolicy` (an epsilon-greedy wrapper around a
+caller-supplied nomination policy that writes one `ProbeReceipt` — a
+`(episode_id, candidate, selection_propensity, source_id,
+template_family_split, exploratory)` tuple — per selection with the
+closed-form logging-policy propensity `(1 - epsilon) * 1[candidate is
+greedy] + epsilon / |candidates|`) and `update_concern`, which takes an
+IPS or doubly-robust value estimate over anchor node ids and applies a
+multiplicative (exponentiated) mirror-descent step on non-negative
+concern weights. The DR baseline is a per-candidate mean of
+`SealedOutcome.realized_reward` with a global-mean fallback for
+singletons. A typed poisoning guard bounds any single `source_id`'s
+aggregate contribution magnitude to `max_source_influence` (Wave 0
+default `1.0`), so per-update per-anchor weight movement stays within a
+`exp(eta * max_source_influence)` factor per source; the tolerance shape
+is documented in `wave0/PREREGISTRATION.md` §4.4. The learner refuses
+confirmatory receipts at calibration entry points, never dereferences
+the sealed `role` / `utility` / `_answer_key` fields, and does not fork
+PPR or the pilot's rarity-corrected fusion. Wave 0 is exploratory only —
+Wave 0 does not update the wrong prior at evaluation time, and this
+scaffolding cannot be described as evidence for concern recovery. Wave 1
+freezes or replaces the mirror-descent step and takes primary
+responsibility for the L2 recovery claim.
+Wave 0 also carries the baseline slate declared by PREREGISTRATION.md §7.
+`experiments/concern_gated_retrieval_e2/wave0/baselines.py` exposes every
+required baseline as a `rank(context, budget) -> tuple[str, ...]`
+callable: structural floors (`no_retrieval`, `random_rank`, `freq_only`
+via `graph_learn.rarity_scores`), single-source diffusion
+(`context_only_ppr`, `care_only_ppr`), two-source fusion (`additive_ppr`
+and the **candidate mechanism** `multiplicative_ppr`, which reuses the
+frozen pilot's rarity-corrected Hadamard rule), a semantic reference
+(`embedding_similarity` — frozen `all-MiniLM-L6-v2` when importable,
+otherwise a deterministic SHA-256 pseudo-embedding recorded in
+`EMBEDDING_PROVENANCE`), a matched-capacity learned reference
+(`learned_one_stage`, a frozen single-hidden-layer MLP over eight
+policy-visible per-candidate features whose parameter count is within
+5% of the declared `CANDIDATE_MECHANISM_PARAM_COUNT = 128`),
+information-matched second-signal proxies (`info_matched_value`,
+`info_matched_priority`, `info_matched_recency`, all derived only from
+`context.care_anchors`), a concern-specificity control
+(`wrong_agent_concern`, which deterministically permutes the concern
+anchors per episode and reruns the multiplicative fusion), and a
+diagnostic ceiling (`oracle_ceiling`, flagged `is_ceiling_only=True`
+and refused by `promotion_admit`; it consumes a pre-registered oracle
+answer via `register_oracle_answer` so its callable body never
+dereferences a sealed `role` / `utility` / `_answer_key` field). Every
+rank callable passes `IntegrityAudit.assert_clean` at module import so a
+leaky baseline fails CI at collection time. `match_budget(baseline,
+target_flops)` returns a wrapper that reports and enforces matched
+FLOPs against the candidate mechanism's `CANDIDATE_MECHANISM_FLOPS`
+estimate; overruns raise `BudgetExceeded`. All PPR baselines run on a
+family-agnostic local graph built from the sealed context view; the
+underlying `WeightedGraph` and `personalized_pagerank` primitives are
+imported from the frozen L0 pilot and are not forked.
+Wave 0 is executed on Modal L4 GPUs only, at or below 35% of the equivalent
+H100 rate, with deploy before spawn. Its committed deliverables are the
+signed preregistration, the frozen promotion contract
+(`PROMOTION_CONTRACT.md`, gates G0–G6, non-compensatory), and a provenance
+skeleton (`PROVENANCE.md`) that the Modal calibration step fills to turn
+`TBD` variance rows and the `WAVE0_ANALYSIS_HASH` code-freeze into numeric
+receipts. Wave 0 does not touch confirmatory templates, does not ingest
+non-synthetic history (the premise audit is future work with a stub
+receipt), and cannot be described as evidence for learned memory geometry,
+concern recovery, semantic meaning, or selfhood — those questions belong
+to Wave 1 and later.
+The Wave 0 calibration harness lives in
+`experiments/concern_gated_retrieval_e2/wave0/calibrate.py` and
+`experiments/concern_gated_retrieval_e2/wave0/modal_l4_sweep.py`. The
+orchestrator (`calibrate.py`) sweeps four dimensions declared by the
+build brief — `family` in `{delayed_commitments, maintenance_fault,
+resource_constrained}`, `retrieval_budget` in `{1, 2}`,
+`distractor_density` in `{light, medium, heavy}` (encoded as disjoint
+calibration-seed sub-slices per family), and `epsilon` for the
+`LoggedProbePolicy` exploration-coverage side channel — and, for every
+`(family, distractor_density, budget)` cell, runs the full Wave 0 baseline
+slate on a batch of calibration seeds, scores each rank against a
+single-shot `SealedEnvironment`, and emits one row per `(cell, seed,
+baseline)`. The aggregator produces per-family `mu_hat_multiplicative`,
+`sigma_hat_multiplicative`, `mu_hat_best_matched`,
+`sigma_hat_best_matched`, `mu_hat_oracle_ceiling`, `headroom_to_ceiling`,
+and `delta_thresh_L1 = max(2 * sigma_hat_best_matched, 0.10 *
+headroom_to_ceiling)` — the exact threshold row shape the
+`PREREGISTRATION.md` §8.1 freeze rule consumes — plus a non-ceiling
+integrity flag (`non_ceiling_ok`) sized against §9.2's `0.05 *
+BOUNDED_REWARD_RANGE` tolerance. The committed public summary is written
+to `experiments/concern_gated_retrieval_e2/wave0/results/calibration_summary.json`;
+raw per-episode receipts go under gitignored
+`artifacts/cogr_wave0/calibration.json` per `AGENTS.md`. The Modal
+fan-out (`modal_l4_sweep.py`) exposes a `modal.App` named
+`research-derived-cogr-wave0-calibration` on L4 GPUs with
+`max_containers=10`, `single_use_containers=True`, `retries=1`, `cpu=4`,
+`memory=16384 MB`, and `timeout=1800s` per the wave brief. Its local
+entrypoint prints the cell plan plus a conservative cost estimate
+(cells × timeout × $0.80/hr L4 rate) and refuses to dispatch if the
+estimate exceeds the `$10.0` hard cap; the default `calibration` preset
+sizes 18 cells at ~$7.20 conservative and ~$0.10 expected wall-clock
+cost. Dispatch is done outside the Python entrypoint via
+`scripts/deploy_and_run_cogr_wave0.sh`, which `modal deploy`s the file
+under the Doppler scope `/Users/jawaun/superoptimizers` before `modal
+run` fires; the deploy-before-spawn rule is enforced by that wrapper,
+not by the Python code.
+
+Report figures for Wave 0 live at
+`papers/concern_gated_retrieval_wave0/figures/`. The single builder
+`build_figures.py` renders six figures (`fig1_pipeline`,
+`fig2_wrong_prior`, `fig3_family_matrix`, `fig4_baseline_slate`,
+`fig5_leakage_barriers`, `fig6_calibration_grid`) as light/dark PNG
+pairs at 8×5 in @ 200 dpi. Aesthetics emulate the Dither Kit React
+retro-chart library (ordered categorical palette, hatch-fill overlays
+as an ordered-dither approximation, monospace typography, letter-spaced
+UPPERCASE titles) in matplotlib primitives with no JS runtime
+dependency. `fig6` reads
+`experiments/concern_gated_retrieval_e2/wave0/results/calibration_summary.json`
+when present and annotates cells with the per-family
+`sigma_hat_multiplicative` and per-cell `exploration_fraction`; when the
+JSON is absent every figure stamps a "placeholder" watermark and
+`fig6` swaps to "placeholder — replaced by Modal run". The script
+imports no evaluator-only field and does not run the sweep; it is a
+paper-side asset builder. `PLACEHOLDER_NOTICE.md` names the figures
+placeholder until the Modal calibration run signs the preregistration.
+
+The Wave 0 report PDF pipeline is
+`scripts/build_cogr_wave0_pdf.py`. It runs after the report-draft and
+report-figures steps have written `papers/concern_gated_retrieval_wave0/paper.md`
+and the six dark-mode PNGs, parses the markdown with the same
+minimalist ReportLab flow used by
+`scripts/build_gauge_fixed_concern_transport_pdf.py`, and embeds every
+`![...](...)` figure reference the paper markdown carries. The body is
+set in a monospace face (DejaVu Sans Mono when the matplotlib TTF is
+available, otherwise ReportLab's built-in Courier) so the report shares
+a single visual clock across prose, code, and receipts. Output is
+deterministic (`rl_config.invariant = True`), goes to
+`papers/concern_gated_retrieval_wave0/paper.pdf` plus a public copy at
+`papers/pdf/concern_gated_retrieval_wave0.pdf`, and mirrors to
+`/Users/jawaun/Metaphysics of Intelligence/Concern_Gated_Retrieval_Wave0_2026_07_23.pdf`
+only when that parent directory already exists — the script never
+creates it. The build reads nothing from the sealed environment or from
+evaluator-only fields. A smoke test at `tests/test_cogr_wave0_pdf.py`
+skips whenever `paper.md` has not been produced yet so the builder can
+land ahead of the upstream workflow steps without blocking green CI;
+when the markdown is present the test builds into a `tmp_path`,
+asserts the output is a valid PDF at least 30 KB, and never touches the
+committed PDF or the Metaphysics archive.
+
 Process wrapper: `AGENTS.md` requires the `scientific-discovery-regime-audit`
 skill at experiment creation/preregistration, before large sweeps, and during
 result promotion or discovery claims. The compact intake records the target,
