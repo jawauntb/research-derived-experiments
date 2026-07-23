@@ -853,6 +853,97 @@ when the markdown is present the test builds into a `tmp_path`,
 asserts the output is a valid PDF at least 30 KB, and never touches the
 committed PDF or the Metaphysics archive.
 
+Wave 1a (COGR-E2a concern-recovery screen) lives under
+`experiments/concern_gated_retrieval_e2/wave1a/`. The subpackage is a
+**screen** for the frozen Wave 0 concern-update rule
+(`LoggedProbePolicy` + `update_concern` with IPS and DR variants +
+poisoning guard) on fixed withheld geometry, under the Wave 0
+adversarially wrong prior, over the confirmatory seed range
+`200000..201999`, on the three procedural families. Wave 1a CAN reject
+the rule; it CANNOT establish learned memory geometry, an L1
+dual-source-retrieval claim, or an L2 history-derived-concern-recovery
+claim. Wave 1a's frozen preregistration
+(`wave1a/PREREGISTRATION.md`) and non-compensatory promotion contract
+(`wave1a/PROMOTION_CONTRACT.md`) declare seven fatal gates
+(anti-leakage, coverage, propensity accounting, specificity vs
+info-matched generic signals, per-family effect, seed independence,
+code freeze, and Modal budget); a single gate FAIL kills the wave. The
+first build task lands three scaffold modules and their tests: (1)
+`wave1a/conditions.py` — the enum-like registry of the six conditions
+`FROZEN_WRONG` / `ONLINE_IPS` / `ONLINE_DR` / `ORACLE_CEILING` /
+`SHUFFLED` / `WRONG_AGENT`, each carrying an evaluator-side
+`initial_concern_factory`, an `update_rule` tag in
+`{None, "ips", "dr"}`, and a `promotion_eligible` flag; the oracle is
+the sole non-promotable condition and `promotion_admit_condition`
+refuses it with `PromotionRefused`; (2) `wave1a/coverage_audit.py` —
+`propensity_weighted_coverage(receipts, target_region)` implementing
+the closed-form `PREREGISTRATION.md` §5.1 sum and
+`audit_coverage(receipts, target_region, floor)` returning a
+`CoverageVerdict` on pass and raising `CoverageAuditFailure` on floor
+breach; and (3) `wave1a/e2a_runner.py` — `run_e2a_episode(episode,
+condition, rng_seed)` composing the frozen Wave 0 primitives
+(condition factory → policy-side `IntegrityAudit` → `LoggedProbePolicy`
+→ single-shot `SealedEnvironment` → optional `update_concern` for
+learned variants) and returning an immutable `E2aEpisodeResult` whose
+`sealed_env_evaluate_calls == 1` regression-checks the single-shot
+invariant. A fourth scaffold module `wave1a/controls.py` lifts the
+four fixed-prior conditions (baseline `FROZEN_WRONG`, diagnostic
+`ORACLE_CEILING`, and specificity controls `SHUFFLED` / `WRONG_AGENT`)
+to a batch layer — `run_frozen_wrong` / `run_oracle_ceiling` /
+`run_shuffled` / `run_wrong_agent` each take `(family, seeds)` and
+return a byte-stable `ControlTrace(condition_name, family, seeds,
+results, mean_realized_reward, sealed_env_evaluate_calls,
+promotion_eligible)`; the oracle runner still executes for the
+ceiling-headroom receipt but `promotion_admit_condition` refuses the
+condition at the promotion boundary. Determinism is locked by using
+`rng_seed = seed` on the `LoggedProbePolicy` draw so a `(family, seed)`
+pair replays byte-identical on every host.
+
+The Modal L4 confirmatory sweep and its aggregator land as
+`wave1a/modal_l4_sweep.py` and `wave1a/run_confirmatory.py`. The
+sweep's `modal.App` is `research-derived-cogr-wave1a-e2a`, running on
+L4 GPUs with `max_containers=32` (Wave 1a §7 explicit authorization
+above Wave 0's `10` ceiling), `single_use_containers=True`,
+`retries=1`, `cpu=4`, `memory=16384`, `timeout=1800`, and Doppler scope
+`/Users/jawaun/superoptimizers`. `build_cells(...)` returns one cell
+per family covering the family's full confirmatory seed tuple —
+`delayed_commitments` (`200000..200299`) and `maintenance_fault`
+(`200300..200599`) per PREREGISTRATION.md §7, and `resource_constrained`
+clamped to the Wave 0 generator's actual 32-seed confirmatory range
+(`200200..200231`) because the §7 slice `200600..200899` is outside
+that family's accepted range (a scaffold gap that a redesigned Wave 0
+would close). Each cell walks its seeds sequentially, running
+`run_e2a_episode` on 10 arms per seed: the seven canonical specificity
+slots (`frozen_wrong`, `online_learned_ips`, `online_learned_dr`, the
+three info-matched baselines, and the ranker-level `wrong_agent`
+comparator) plus three condition-only arms
+(`condition::shuffled`, `condition::wrong_agent`,
+`condition::oracle_ceiling`) whose receipts feed the coverage audit
+and the diagnostic ceiling receipt. The on-line-learned variants
+carry a running concern-anchor prior across seeds and update it via a
+Wave 1a-owned helper `_apply_online_update` that mirrors
+`wave0.concern_update.update_concern`'s IPS / DR math for a
+single-receipt confirmatory batch — Wave 0's helper refuses
+confirmatory receipts at its calibration entry point, and Wave 1a
+§5.2 explicitly authorizes the confirmatory sweep to consume
+confirmatory batches, so the identical math is inlined here without
+editing any Wave 0 file. The local entrypoint refuses to dispatch
+when the conservative timeout-based cost estimate exceeds the `$20`
+hard cap. The aggregator loads the raw rows JSON, buckets by
+`(family, seed)`, builds a `SpecificityReport` per family, runs the
+propensity-weighted coverage audit against a per-family true
+commitment region resolved evaluator-side from the union of
+`EpisodeSpec._answer_key` node ids, scores every family through
+`promotion_harness.score_e2a_all`, and writes the non-compensatory
+verdict (aggregate `PASS` iff every family and every coverage audit
+PASSes; `KILL` with an enumerated list of per-gate kill reasons
+otherwise) to `wave1a/results/verdict.json`. Deploy + dispatch +
+aggregate is single-sourced through
+`scripts/deploy_and_run_cogr_wave1a.sh`, which sets
+`COGR_WAVE0_CONFIRMATORY_RUN=1` at the spawn boundary so the Wave 0
+template-split guard admits the confirmatory pool while calibration
+seeds `100000..100999` remain refused.
+
 Process wrapper: `AGENTS.md` requires the `scientific-discovery-regime-audit`
 skill at experiment creation/preregistration, before large sweeps, and during
 result promotion or discovery claims. The compact intake records the target,
