@@ -5900,3 +5900,90 @@ Next move: the active four-experiment handoff queue is exhausted. Do not tune
 M5. E6 requires a new preregistration before its blocked smoke can change, and
 E5-L should become active only through an explicit new queue decision and its
 required L4 calibration/cost audit.
+
+## Concern-Gated Retrieval: Synthetic Dual-Source Diagnostic
+
+Question: can a bounded retrieval policy use active context and persistent
+concern jointly to nominate an off-context load-bearing fact, then reject a
+dual-activated but useless candidate with a bounded-observer future score?
+
+Current regime:
+
+- Artifact types: seeded typed memory graphs, active-context and care restart
+  distributions, role-authored off-context candidates, goal-conditioned future
+  traces, PageRank fixed-point receipts, and a structured pilot summary.
+- Operations: concern-preserving edge warp, context/care/uniform personalized
+  PageRank, additive and rarity-corrected Hadamard ranking, top-three
+  nomination, Zhang-Levin reservoir/ridge epiplexity filtering, and
+  selected-probe utility updates.
+- Gates/verifiers: PPR normalization/fixed-point residual, support-preserving
+  concern warp, orthogonal-output invariance, constant/noise epiplexity
+  controls, one-sided/additive baselines, three graph regimes, byte-stable
+  receipt, and noncompensatory numerical/selectivity/utilization gates.
+- Known limitations: graph topology, node roles, goal-conditioned futures, and
+  simulator utility are authored; the online condition starts at a selection
+  ceiling; no learned memory, human, neural, interpretive, or operational
+  evidence exists.
+
+Action class:
+
+- Retrieval/search/discovery: a diagnostic regime transition, not an agent or
+  meaning discovery.
+- Why: the package adds a dual-restart artifact, coincidence operator, and
+  separate bounded-observer verifier that were absent from single-source
+  retrieval. Passing shows those typed operations execute and discriminate the
+  authored controls; it does not discover the representation from data.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/concern_gated_retrieval/experiment_manifest.json`;
+  `experiments/concern_gated_retrieval/PREREGISTRATION.md`;
+  `experiments/concern_gated_retrieval/results/summary.json`;
+  `experiments/concern_gated_retrieval/results/pilot_2026_07_23.md`.
+- Positive target: the candidate jointly attached to active context and the
+  episode-relevant concern, with a structured goal-conditioned future.
+- Negative controls: context-only, care-only, alarm, coincidence trap, neutral,
+  constant future, noise future, one-sided PPR, and additive PPR.
+- Stress tests: 64 held-out seeds in each of base, sparse, and noisy graph
+  regimes after 64 base-regime care-update episodes.
+
+Gate:
+
+- Acceptance rule: maximum PPR residual ≤`1e-10`; structured epiplexity margin
+  ≥`0.75` bits; coincidence hit@1 ≥`0.85`, aggregate one-sided gap ≥`0.20`,
+  per-regime gap ≥`0.10`; verifier precision and recall both ≥`0.90`.
+- Withheld/rejected rule: any fatal failure demotes the result to scaffold
+  only. Additive equality blocks a multiplicative-necessity claim. A
+  non-discriminating online-care comparison blocks learned-care/selfhood
+  promotion even if its exploratory gate passes.
+
+Results:
+
+- Accepted artifacts: all 192 episode receipts, fixed-point checks,
+  structured-vs-noise controls, and the narrow synthetic diagnostic.
+- Rejected or withheld artifacts: multiplicative necessity, learned-care
+  recovery, self-defined concern, human memory, semantic meaning, selfhood, and
+  general intelligence.
+- Key metrics: coincidence hit@1 `1.000`; best one-sided hit@1 `0.0052`;
+  additive hit@1 `0.9635`; verifier precision/recall `1.000/1.000`; maximum PPR
+  residual `7.83e-13`; worst registered structured-vs-control epiplexity margin
+  `1.7210` bits (seed 126, coincidence trap).
+- Variance or ablation: product and additive both score `1.000` in base and
+  sparse regimes; the product scores `1.000` versus additive `0.8906` only in
+  the noisy regime. Initial, learned, and oracle coincidence all score `1.000`.
+
+Residual content:
+
+- Explained by old regime: ordinary graph connectivity can explain most of the
+  additive result, and role-authored future structure explains the clean
+  epiplexity separation.
+- New content outside old regime: dual-source ranking strongly separates the
+  authored load-bearing bridge from each one-sided policy, and the independent
+  future filter rejects nominated constant/noise controls.
+- Retractions or supersessions: none. The original broad "selfhood as fixed
+  point" interpretation is not promoted by this experiment.
+
+Next move: write a new preregistration with learned or withheld edges,
+adversarially misspecified care initialization, sealed task utility, and
+non-ceiling additive/product and learned/oracle contrasts.

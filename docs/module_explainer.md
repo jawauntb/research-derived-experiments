@@ -10,10 +10,10 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 
 | Path | Responsibility |
 |---|---|
-| `experiments/` | 55 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
+| `experiments/` | 57 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
 | `papers/` | Paper sources (`paper.md`), figures, shareable PDFs |
 | `scripts/` | 94 Python ops modules: quality, contracts, provenance, PDF/figure builders, summarizers |
-| `tests/` | 89 root test files collected together by pytest (`unittest`-style and pytest-native) |
+| `tests/` | 103 root test files collected together by pytest (`unittest`-style and pytest-native) |
 | `docs/` | Design docs, verification, handoffs, plans, reviews, solutions |
 | `docs/primers/backlogs/` | Six article-specific, source-anchored research TODOs derived from the primer PDFs |
 | `notes/` | Program-level research synthesis |
@@ -62,6 +62,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_concept_geometry_*.py` | Embedding concept geometry |
 | `test_activation_geometry_*.py` (14 files) | Hidden-state probes, steering, patching, basins, gates |
 | `test_concerned_syntax.py` | Arc 2A concerned-syntax suite |
+| `test_concern_gated_retrieval.py` | PPR fixed points, concern warping, spectral epiplexity checks, two-sided retrieval controls, care updates, and byte-stable pilot receipt |
 | `test_viable_computational_bodies.py` | Arc 2B body search / gates |
 | `test_long_horizon_bottleneck.py` | Suite D/E long-horizon / tool eval |
 | `test_world_responds_suite_c*.py` (6 files) | Suite C reengagement + 2^3 component factorial + neural transfer + teacher-free |
@@ -121,8 +122,8 @@ environment.
 |---|---|
 | [system_design.md](system_design.md) | End-to-end design & operating model |
 | [module_explainer.md](module_explainer.md) | This catalog |
-| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 55 research packages; `experiments/common` excluded) |
-| `experiment_contract_registry.json` | Authoritative 55-package coverage partition: 7 structured roots + 48 time-bounded legacy exceptions with frozen digest |
+| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 57 research packages; `experiments/common` excluded) |
+| `experiment_contract_registry.json` | Authoritative 57-package coverage partition: 9 structured roots + 48 time-bounded legacy exceptions with frozen digest |
 | `program_evidence_registry.json` | 12 canonical evidence records with stable IDs, states, artifact refs, and claim links |
 | `claim_registry.json` | 12 canonical claim records with tiers, states, source refs, and bidirectional evidence links |
 | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) | Benchmark umbrella |
@@ -164,9 +165,9 @@ environment.
 
 **Legend:** **P** = `PROVENANCE.md`, **B** = `BENCHMARK_CARD.md`, **R** = `README.md`, **res** = committed `results/`.
 
-**Verification reconciliation:** 55 research packages on disk plus one shared
+**Verification reconciliation:** 57 research packages on disk plus one shared
 support package, `experiments/common`. `gen_provenance.py` intentionally excludes
-the support package and derives 55 cards/index rows; `gen_provenance.py --check`
+the support package and derives 57 cards/index rows; `gen_provenance.py --check`
 fails if any generated card, either verification index, or the site mirror drifts.
 The structured registries currently contain 12 claims and 12 evidence records.
 
@@ -574,7 +575,30 @@ injected-fault sealing) and Week-4 (held-out confirmatory + public
 dataset + preprint) are the remaining stages. Live provider spend
 requires `LBPT_LIVE=1` plus the CT live env vars.
 
-#### 3.3.5 Related reengagement packages
+#### 3.3.5 `concern_gated_retrieval` - two-sided off-context retrieval
+
+Deterministic synthetic diagnostic derived from the concern-weighted retrieval
+proposal and Zhang-Levin reservoir epiplexity estimator. It separates cheap
+graph nomination, goal-conditioned utilization verification, and exploratory
+online care updates; graph roles and simulator utility remain authored.
+
+| Path | Purpose |
+|---|---|
+| `experiments/concern_gated_retrieval/PREREGISTRATION.md` | Abstract, typed object/representation card, equations, controls, fatal gates, audit, and claim boundary |
+| `experiments/concern_gated_retrieval/graph.py` | Weighted graph, concern warp, personalized PageRank, fixed-point receipt, rarity-corrected Hadamard score |
+| `experiments/concern_gated_retrieval/epiplexity.py` | Frozen random reservoir, stable ridge readout, and spectral log-determinant epiplexity estimator |
+| `experiments/concern_gated_retrieval/benchmark.py` | Seeded base/sparse/noisy episodes, one-sided/additive/product policies, reachable-future controls, and selected-probe care update |
+| `experiments/concern_gated_retrieval/run_pilot.py` | Byte-stable 192-episode pilot and noncompensatory gate evaluation |
+| `experiments/concern_gated_retrieval/results/{summary.json,pilot_2026_07_23.md}` | Machine receipt and claim-bounded interpretation; additive necessity and care-learning claims withheld |
+| `experiments/concern_gated_retrieval/experiment_manifest.json` | Structured local-CPU contract bound to the exact pilot run |
+| `tests/test_concern_gated_retrieval.py` | Numerical, invariance, selectivity, update, and frozen-receipt tests |
+
+```bash
+python3 -m experiments.concern_gated_retrieval.run_pilot
+pytest -q tests/test_concern_gated_retrieval.py
+```
+
+#### 3.3.6 Related reengagement packages
 
 | Package | Purpose | Entrypoint |
 |---|---|---|
@@ -660,10 +684,10 @@ Raw outputs stay under `artifacts/` until summarized.
 | Script | Purpose | Flags / I/O |
 |---|---|---|
 | `research_contracts.py` | Shared schema version, identifier patterns, claim tiers/statuses, and evidence statuses used by registry/verdict adapters | Library; parity-tested against JSON Schemas |
-| `gen_provenance.py` | Validate registries, resolve structured primary-run bindings from the contract registry, regenerate all experiment `PROVENANCE.md` files + `docs/verification.{md,json}` + site mirror; `--check` compares expected bytes without writing; legacy packages still use labeled heuristic extraction | In: 55 experiment dirs + claim/evidence/contract registries; excludes `experiments/common` |
+| `gen_provenance.py` | Validate registries, resolve structured primary-run bindings from the contract registry, regenerate all experiment `PROVENANCE.md` files + `docs/verification.{md,json}` + site mirror; `--check` compares expected bytes without writing; legacy packages still use labeled heuristic extraction | In: 57 experiment dirs + claim/evidence/contract registries; excludes `experiments/common` |
 | `validate_evidence_registry.py` | Validate canonical evidence IDs, gate statuses, artifact refs, and supersession shape | `docs/program_evidence_registry.json` |
 | `validate_claim_registry.py` | Validate exact claim shape/tiers/states and bidirectional claim↔evidence edges | Reads `docs/claim_registry.json` + `docs/program_evidence_registry.json`; never writes either |
-| `validate_experiment_manifest.py` | Enforce the authoritative package-contract registry (55 = 7 structured + 48 legacy), then discover and dependency-free validate every v1 experiment-package contract; every registered run `manifest_path` must be an `experiment_manifest.json` inside its publication package and validate as v1 by content; run records may declare `preregistration_digest` + `preregistration_path` (SHA-256 of a tracked pre-reg file, content-verified) and `producing_agent` (`identity` + `session_ref`); when the registry sets `preregistration_policy.required_after_run_date`, any run whose `run_id` ends with a date on or after the cutoff must supply all three | Reads `docs/experiment_contract_registry.json` and `experiments/**/experiment_manifest.json`; portable contracts in `schemas/experiment_contract_registry.schema.json` and `schemas/experiment_manifest.schema.json` |
+| `validate_experiment_manifest.py` | Enforce the authoritative package-contract registry (57 = 9 structured + 48 legacy), then discover and dependency-free validate every v1 experiment-package contract; every registered run `manifest_path` must be an `experiment_manifest.json` inside its publication package and validate as v1 by content; run records may declare `preregistration_digest` + `preregistration_path` (SHA-256 of a tracked pre-reg file, content-verified) and `producing_agent` (`identity` + `session_ref`); when the registry sets `preregistration_policy.required_after_run_date`, any run whose `run_id` ends with a date on or after the cutoff must supply all three | Reads `docs/experiment_contract_registry.json` and `experiments/**/experiment_manifest.json`; portable contracts in `schemas/experiment_contract_registry.schema.json` and `schemas/experiment_manifest.schema.json` |
 | `validate_gate_verdict.py` | Discover per-gate verdicts, require registered claim IDs/canonical tiers/statuses, and resolve evidence paths | Reads `experiments/*/results/gate_verdicts/*.json` + `docs/claim_registry.json` |
 | `validate_public_artifact_envelopes.py` | Validate declared public digest sidecars against tracked public bytes and embedded raw-source receipts | Reads manifest `envelope_path` entries and `*.envelope.json`; portable contract in `schemas/public_artifact_envelope.schema.json` |
 | `check_primer_metadata.py` | Require matching titles across all six primer HTML `<title>` values and PDF metadata | Needs `pdfinfo` (`poppler-utils` in CI) |

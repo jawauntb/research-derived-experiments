@@ -1,0 +1,284 @@
+{
+  "allowed_claim": "synthetic diagnostic",
+  "by_regime_learned_care": {
+    "base": {
+      "distractor_at_1": {
+        "additive": 0.0,
+        "care": 0.0,
+        "coincidence": 0.0,
+        "context": 0.0,
+        "verified": 0.0
+      },
+      "episodes": 64,
+      "hit_at_1": {
+        "additive": 1.0,
+        "care": 0.0,
+        "coincidence": 1.0,
+        "context": 0.0,
+        "verified": 1.0
+      },
+      "max_ppr_residual": 7.830854020784983e-13,
+      "mean_reciprocal_rank": {
+        "additive": 1.0,
+        "care": 0.5,
+        "coincidence": 1.0,
+        "context": 0.5,
+        "verified": 1.0
+      },
+      "verifier_precision": 1.0,
+      "verifier_recall": 1.0
+    },
+    "noisy": {
+      "distractor_at_1": {
+        "additive": 0.0,
+        "care": 0.0,
+        "coincidence": 0.0,
+        "context": 0.0,
+        "verified": 0.0
+      },
+      "episodes": 64,
+      "hit_at_1": {
+        "additive": 0.890625,
+        "care": 0.0,
+        "coincidence": 1.0,
+        "context": 0.015625,
+        "verified": 1.0
+      },
+      "max_ppr_residual": 7.81388842518993e-13,
+      "mean_reciprocal_rank": {
+        "additive": 0.9453125,
+        "care": 0.5,
+        "coincidence": 1.0,
+        "context": 0.5078125,
+        "verified": 1.0
+      },
+      "verifier_precision": 1.0,
+      "verifier_recall": 1.0
+    },
+    "sparse": {
+      "distractor_at_1": {
+        "additive": 0.0,
+        "care": 0.0,
+        "coincidence": 0.0,
+        "context": 0.0,
+        "verified": 0.0
+      },
+      "episodes": 64,
+      "hit_at_1": {
+        "additive": 1.0,
+        "care": 0.0,
+        "coincidence": 1.0,
+        "context": 0.0,
+        "verified": 1.0
+      },
+      "max_ppr_residual": 7.831756076992491e-13,
+      "mean_reciprocal_rank": {
+        "additive": 1.0,
+        "care": 0.5,
+        "coincidence": 1.0,
+        "context": 0.5,
+        "verified": 1.0
+      },
+      "verifier_precision": 1.0,
+      "verifier_recall": 1.0
+    }
+  },
+  "care_learning": {
+    "initial_weights": {
+      "commitment": 1.0,
+      "family": 1.0,
+      "global_alarm": 1.0
+    },
+    "learned_weights": {
+      "commitment": 2.0,
+      "family": 2.0,
+      "global_alarm": 1.0
+    },
+    "mean_selected_utility": 1.0,
+    "selected_load_bearing_rate": 1.0
+  },
+  "claim_boundary": "A deterministic typed memory-graph benchmark can test whether rarity-corrected two-sided PPR plus a goal-conditioned bounded-observer filter distinguishes dual-relevant nodes from the registered synthetic controls. This is not human-memory, selfhood, semantic-meaning, or deployment evidence.",
+  "epiplexity_control_audit": {
+    "minimum_margin_bits": 1.721047256547,
+    "role_maximum_bits": {
+      "alarm": 0.59651903502,
+      "care_only": 0.0,
+      "coincidence_trap": 0.688044354238,
+      "context_only": 0.0,
+      "load_bearing": 2.409091610784,
+      "neutral": 0.0
+    },
+    "role_minimum_bits": {
+      "alarm": 0.174014407243,
+      "care_only": 0.0,
+      "coincidence_trap": 0.203454812628,
+      "context_only": 0.0,
+      "load_bearing": 2.409091610784,
+      "neutral": 0.0
+    },
+    "worst_control_role": "coincidence_trap",
+    "worst_regime": "base",
+    "worst_seed": 126
+  },
+  "epiplexity_controls_bits": {
+    "alarm": 0.558553011359,
+    "care_only": 0.0,
+    "coincidence_trap": 0.302430771996,
+    "context_only": 0.0,
+    "load_bearing": 2.409091610784,
+    "neutral": 0.0
+  },
+  "gates": {
+    "DUAL_ACTIVATION_SELECTIVITY": {
+      "criterion": "Coincidence hit@1 >= 0.85, aggregate gap over both one-sided controls >= 0.20, and each regime gap >= 0.10.",
+      "status": "pass",
+      "value": {
+        "aggregate_gap": 0.994791666667,
+        "best_single_sided_hit_at_1": 0.005208333333333333,
+        "coincidence_hit_at_1": 1.0,
+        "weakest_regime_gap": 0.984375
+      }
+    },
+    "NUMERICAL_VALIDITY": {
+      "criterion": "PPR residual <= 1e-10 and worst registered structured-vs-control epiplexity margin >= 0.75 bits.",
+      "status": "pass",
+      "value": {
+        "max_ppr_residual": 7.831756076992491e-13,
+        "minimum_structured_epiplexity_margin_bits": 1.721047256547,
+        "worst_control_role": "coincidence_trap",
+        "worst_regime": "base",
+        "worst_seed": 126
+      }
+    },
+    "ONLINE_CARE_RECOVERY": {
+      "criterion": "Exploratory: learned-care coincidence hit@1 does not regress from initialization and is within 0.05 of oracle care.",
+      "status": "pass",
+      "value": {
+        "initial_hit_at_1": 1.0,
+        "learned_hit_at_1": 1.0,
+        "oracle_hit_at_1": 1.0
+      }
+    },
+    "UTILIZATION_FILTER": {
+      "criterion": "Goal-conditioned epiplexity filter precision and recall are both >= 0.90 within the top-3 nominations.",
+      "status": "pass",
+      "value": {
+        "precision": 1.0,
+        "recall": 1.0
+      }
+    }
+  },
+  "initial_care": {
+    "distractor_at_1": {
+      "additive": 0.0,
+      "care": 0.109375,
+      "coincidence": 0.0,
+      "context": 0.0,
+      "verified": 0.0
+    },
+    "episodes": 192,
+    "hit_at_1": {
+      "additive": 0.760416666667,
+      "care": 0.0,
+      "coincidence": 1.0,
+      "context": 0.0,
+      "verified": 1.0
+    },
+    "max_ppr_residual": 7.860379014346108e-13,
+    "mean_reciprocal_rank": {
+      "additive": 0.880208333333,
+      "care": 0.341145833333,
+      "coincidence": 1.0,
+      "context": 0.5,
+      "verified": 1.0
+    },
+    "verifier_precision": 1.0,
+    "verifier_recall": 1.0
+  },
+  "learned_care": {
+    "distractor_at_1": {
+      "additive": 0.0,
+      "care": 0.0,
+      "coincidence": 0.0,
+      "context": 0.0,
+      "verified": 0.0
+    },
+    "episodes": 192,
+    "hit_at_1": {
+      "additive": 0.963541666667,
+      "care": 0.0,
+      "coincidence": 1.0,
+      "context": 0.005208333333,
+      "verified": 1.0
+    },
+    "max_ppr_residual": 7.831756076992491e-13,
+    "mean_reciprocal_rank": {
+      "additive": 0.981770833333,
+      "care": 0.5,
+      "coincidence": 1.0,
+      "context": 0.502604166667,
+      "verified": 1.0
+    },
+    "verifier_precision": 1.0,
+    "verifier_recall": 1.0
+  },
+  "oracle_care": {
+    "distractor_at_1": {
+      "additive": 0.0,
+      "care": 0.0,
+      "coincidence": 0.0,
+      "context": 0.0,
+      "verified": 0.0
+    },
+    "episodes": 192,
+    "hit_at_1": {
+      "additive": 0.96875,
+      "care": 0.0,
+      "coincidence": 1.0,
+      "context": 0.0,
+      "verified": 1.0
+    },
+    "max_ppr_residual": 7.876581331611732e-13,
+    "mean_reciprocal_rank": {
+      "additive": 0.984375,
+      "care": 0.5,
+      "coincidence": 1.0,
+      "context": 0.5,
+      "verified": 1.0
+    },
+    "verifier_precision": 1.0,
+    "verifier_recall": 1.0
+  },
+  "package": "concern_gated_retrieval",
+  "parameters": {
+    "care_learning_rate": 0.2,
+    "epiplexity_threshold_bits": 0.75,
+    "evaluation_seeds": [
+      64,
+      127
+    ],
+    "nomination_k": 3,
+    "ppr_alpha": 0.2,
+    "rarity_exponent": 0.25,
+    "regimes": [
+      "base",
+      "sparse",
+      "noisy"
+    ],
+    "train_seeds": [
+      0,
+      63
+    ],
+    "warp_strength": 0.45
+  },
+  "rejected_alternatives_preserved": [
+    "context-only PPR",
+    "care-only PPR",
+    "additive context-plus-care PPR",
+    "unverified coincidence ranking",
+    "noise and constant-future utilization controls"
+  ],
+  "run_id": "concern_gated_retrieval_pilot_2026_07_23",
+  "schema_version": "1.0",
+  "summary_digest": "72c5ab32d163c6672c726810ba00ade473cd1aa27ade59ea78994d97b1e2ecc8"
+}
