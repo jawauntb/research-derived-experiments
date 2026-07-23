@@ -280,6 +280,36 @@
       ]
     },
     {
+      "package": "concern_gated_retrieval_e2",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/concern_gated_retrieval_e2/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "concern_gated_retrieval_e2_wave0_calibration_2026_07_23",
+      "runs": [
+        {
+          "run_id": "concern_gated_retrieval_e2_wave0_calibration_2026_07_23",
+          "publication_package": "concern_gated_retrieval_e2",
+          "runtime_package": "concern_gated_retrieval_e2",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/concern_gated_retrieval_e2/experiment_manifest.json",
+          "report_paths": [
+            "experiments/concern_gated_retrieval_e2/wave0/results/calibration_summary.json",
+            "experiments/concern_gated_retrieval_e2/wave0/PROVENANCE.md"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_digest": "9aebdcc258d900d07b8fd7bff60c8c715c99564522e2a194affa2d290873e513",
+          "preregistration_path": "experiments/concern_gated_retrieval_e2/wave0/PREREGISTRATION.md",
+          "producing_agent": {
+            "identity": "Claude Code (Opus 4.7)",
+            "session_ref": "concern-gated-retrieval-e2-wave0 2026-07-23"
+          }
+        }
+      ]
+    },
+    {
       "package": "concerned_syntax",
       "coverage_mode": "legacy_exception",
       "legacy_exception": {

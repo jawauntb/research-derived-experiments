@@ -1,0 +1,146 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "concern_gated_retrieval_e2_wave0_calibration",
+  "hypothesis": "Under an adversarially misspecified concern prior on three procedurally distinct calibration families, the fourteen-baseline slate produces per-family variance estimates and strictly positive headroom to the oracle ceiling that are stable enough to freeze non-compensatory L1 promotion thresholds for Wave 1.",
+  "claim_tier": "descriptive",
+  "controls": [
+    {
+      "control_id": "no_retrieval",
+      "description": "The empty retrieval baseline."
+    },
+    {
+      "control_id": "random_rank",
+      "description": "Uniform random candidate selection."
+    },
+    {
+      "control_id": "freq_only",
+      "description": "Rarity-inverse retrieval that ignores context and concern."
+    },
+    {
+      "control_id": "context_only_ppr",
+      "description": "Personalized PageRank restarts only from the active context."
+    },
+    {
+      "control_id": "care_only_ppr",
+      "description": "Personalized PageRank restarts only from the wrong-prior concern anchors."
+    },
+    {
+      "control_id": "additive_ppr",
+      "description": "Context and concern PageRank summed rather than multiplied."
+    },
+    {
+      "control_id": "multiplicative_ppr",
+      "description": "Rarity-corrected Hadamard product of context and concern PageRank (candidate mechanism)."
+    },
+    {
+      "control_id": "embedding_similarity",
+      "description": "Frozen sentence-transformer similarity; falls back to a deterministic pseudo-embedding hash when the transformer is not available at import."
+    },
+    {
+      "control_id": "learned_one_stage",
+      "description": "A frozen small MLP scoring context+concern+node features at matched parameter count and compute."
+    },
+    {
+      "control_id": "info_matched_value",
+      "description": "Value/advantage second-signal proxy computed from concern anchors only."
+    },
+    {
+      "control_id": "info_matched_priority",
+      "description": "Task-priority second-signal proxy at matched information."
+    },
+    {
+      "control_id": "info_matched_recency",
+      "description": "Recency-weighted second-signal proxy at matched information."
+    },
+    {
+      "control_id": "wrong_agent_concern",
+      "description": "Concern anchors reassigned to a different agent's profile."
+    },
+    {
+      "control_id": "oracle_ceiling",
+      "description": "Ceiling-only diagnostic that consumes evaluator-side ground truth; refused by the promotion harness."
+    }
+  ],
+  "seeds": [100000, 100001, 100002, 100003, 100004, 100005, 100006, 100007, 100008, 100009, 100010, 100011, 100012, 100013, 100014, 100015, 100016, 100017, 100018, 100019, 100020, 100021, 100022, 100023],
+  "runtime": {
+    "execution_class": "modal_gpu",
+    "command": [
+      "bash",
+      "scripts/deploy_and_run_cogr_wave0.sh"
+    ],
+    "estimated_minutes": 30,
+    "max_cost_usd": 10
+  },
+  "dependencies": [
+    {
+      "name": "numpy",
+      "version": ">=1.26,<2.2"
+    },
+    {
+      "name": "sentence-transformers",
+      "version": ">=3.0,<6"
+    },
+    {
+      "name": "torch",
+      "version": ">=2.3,<2.8"
+    }
+  ],
+  "gates": [
+    {
+      "gate_id": "G0_ANTI_LEAKAGE",
+      "criterion": "The ten enumerated evaluator-only fields are unreachable from calibration policy code; the IntegrityAudit passes at import; the template-split guard raises LeakageError on any confirmatory-template access from calibration code."
+    },
+    {
+      "gate_id": "G1_WRONG_PRIOR",
+      "criterion": "Every calibration row uses the adversarial wrong-prior specification: alarm inflated to 1.0, designated commitment suppressed to 0.05, at least one other commitment left at uniform."
+    },
+    {
+      "gate_id": "G2_NON_CEILING",
+      "criterion": "Every family reports strictly positive headroom_to_ceiling; no promotable baseline saturates within 0.05 of the oracle ceiling on any family."
+    },
+    {
+      "gate_id": "G3_FAMILY_ROBUSTNESS",
+      "criterion": "Each of the three families produces an independent per-family variance estimate; the calibration receipt records per-family and not only aggregate statistics."
+    },
+    {
+      "gate_id": "G4_SEED_INDEPENDENCE",
+      "criterion": "Calibration seed range 100000..100999 is disjoint from the reserved confirmatory range 200000..201999; verified by the family generator's seed-range guard."
+    },
+    {
+      "gate_id": "G5_CODE_FREEZE",
+      "criterion": "WAVE0_ANALYSIS_HASH is a SHA-256 over every tracked file under experiments/concern_gated_retrieval_e2/wave0/ in sorted path order, matches the mirrored value in PROVENANCE.md, and is written only after the Modal run completes."
+    },
+    {
+      "gate_id": "G6_MODAL_BUDGET",
+      "criterion": "Modal execution used L4 GPUs only; realized effective GPU-hour cost is at or below 35% of the equivalent H100 rate; the deployed image hash is recorded in PROVENANCE.md and was produced before spawn."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/concern_gated_retrieval_e2/wave0/results/calibration_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/concern_gated_retrieval_e2/wave0/PREREGISTRATION.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/concern_gated_retrieval_e2/wave0/PROMOTION_CONTRACT.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/concern_gated_retrieval_e2/wave0/PROVENANCE.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/concern_gated_retrieval_e2/README.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}
