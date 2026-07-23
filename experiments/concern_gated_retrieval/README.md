@@ -40,3 +40,16 @@ pytest -q tests/test_concern_gated_retrieval.py
 
 The frozen design, fatal gates, mathematical objects, and claim boundary are
 in [`PREREGISTRATION.md`](PREREGISTRATION.md).
+
+## Theory and continuation
+
+The canonical two-flashlight intuition, evidence boundary, claim ladder,
+failure modes, cross-domain applicability contract, and staged advancement
+program are in
+[`docs/concern_gated_retrieval_research_program.md`](../../docs/concern_gated_retrieval_research_program.md).
+
+Future work should begin from the pointer-first
+[`COGR-E2 handoff`](../../docs/next_agent_concern_gated_retrieval_handoff_2026-07-23.md).
+It requires a new preregistration with learned or withheld graph structure,
+adversarially misspecified concern, sealed utility, non-ceiling comparisons,
+matched-budget alternatives, and separate L1/L2 promotion gates.

@@ -565,6 +565,17 @@ can run the identical wrapper before opening a PR.
 | **Causally grounded agents benchmark** | `world_responds` (Suite C), `long_horizon_bottleneck` (Suite D/E) | Behavior + structure-specific gate; proxy-resistant agent evaluation |
 | **External contact / phases 4–6** | `external_contact`, `phase4_metaphysics`, `phase5_external_validity`, `phase6_real_model_validation`, `gauge_fixed_concern_transport` | Transport claims beyond in-lab harnesses toward real models |
 
+Concern-gated retrieval has a separate canonical program note at
+[concern_gated_retrieval_research_program.md](concern_gated_retrieval_research_program.md).
+It treats the merged pilot as L0 executable evidence and requires learned
+geometry plus sealed outcomes (L1), separately gated recovery from
+adversarially wrong history-derived concern (L2), a narrow live-agent
+beachhead, and then cross-substrate transfer (L3–L4) before any cognitive or
+self-model interpretation (L5). The program keeps E2 synthetic and requires
+privacy, isolation, poisoning, and data-lifecycle gates before non-synthetic
+memory or public rows. The continuation contract is
+[next_agent_concern_gated_retrieval_handoff_2026-07-23.md](next_agent_concern_gated_retrieval_handoff_2026-07-23.md).
+
 Process wrapper: `AGENTS.md` requires the `scientific-discovery-regime-audit`
 skill at experiment creation/preregistration, before large sweeps, and during
 result promotion or discovery claims. The compact intake records the target,

@@ -22,6 +22,10 @@ Raw outputs should stay under `artifacts/` until summarized and intentionally co
 - `bayesian_voi`: exact finite Bayesian comparison of error, information, assumed EVSI, true regret reduction, and oracle EVSI.
 - `seed_bootstrap_calibration`: preregistered seed-count and hierarchical-resampling calibration for promotion decisions.
 - `passive_active_phase_map`: matched-budget transition and hysteresis diagnostics for passive-to-active coupling.
+- `concern_gated_retrieval`: two-sided active-context/persistent-concern
+  nomination plus bounded-observer utilization filtering; current evidence is
+  a synthetic diagnostic, with premise validation, concern recovery, learned
+  geometry, and safety-gated live validation deferred to staged COGR-E2.
 - `grounded_statecharts`: dependency-free typed event log, checkpoint replay,
   minimal completion guard, and deterministic depth 1–4 typed-constraint
   transport plus six-surface counterfactual-attribution diagnostics with static

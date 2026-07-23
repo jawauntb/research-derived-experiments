@@ -10,6 +10,7 @@ This repository tracks a research program around a recurring pattern:
 |---|---|
 | [docs/system_design.md](docs/system_design.md) | End-to-end system design and operating model: components, runtime flow, config, deps, env setup, deploy, assumptions, limitations |
 | [docs/module_explainer.md](docs/module_explainer.md) | Package catalog and module explainer: experiments, scripts, tests, docs, and a script/test/doc map |
+| [docs/concern_gated_retrieval_research_program.md](docs/concern_gated_retrieval_research_program.md) | Canonical intuition, evidence boundary, split claim ladder, safety gates, and staged E2-to-live-agent advancement program for concern-gated off-context retrieval |
 | [AGENTS.md](AGENTS.md) | Contributor/agent rules, including the requirement to keep the two docs above in sync with meaningful code changes |
 
 > **Picking this up on a Modal machine?** Start with [docs/next_agent_modal_handoff.md](docs/next_agent_modal_handoff.md) — it covers all three experiments, the rate-distortion "Newton" test to run next, and the parallel Modal commands.
@@ -126,7 +127,7 @@ We use the `scientific-discovery-regime-audit` skill as the process wrapper:
 4. Distinguish retrieval, search, and discovery.
 5. Record residual content that the current regime cannot explain.
 
-The current ledger is [TODO.md](TODO.md). Audit cards live in [docs/discovery_regime_audit.md](docs/discovery_regime_audit.md). The Phase 2 breakthrough trajectory is [docs/phase2_breakthrough_trajectory.md](docs/phase2_breakthrough_trajectory.md). The latest integrated start-here handoff is [docs/phase2_next_phase_research_handoff.md](docs/phase2_next_phase_research_handoff.md), with the longer breakthrough brief at [docs/phase2_next_breakthrough_handoff.md](docs/phase2_next_breakthrough_handoff.md) and the historical continuation brief at [docs/phase2_next_agent_handoff.md](docs/phase2_next_agent_handoff.md).
+The current ledger is [TODO.md](TODO.md). Audit cards live in [docs/discovery_regime_audit.md](docs/discovery_regime_audit.md). The concern-gated retrieval continuation starts with the [canonical research program](docs/concern_gated_retrieval_research_program.md) and [COGR-E2 handoff](docs/next_agent_concern_gated_retrieval_handoff_2026-07-23.md). The Phase 2 breakthrough trajectory is [docs/phase2_breakthrough_trajectory.md](docs/phase2_breakthrough_trajectory.md). The latest integrated start-here handoff is [docs/phase2_next_phase_research_handoff.md](docs/phase2_next_phase_research_handoff.md), with the longer breakthrough brief at [docs/phase2_next_breakthrough_handoff.md](docs/phase2_next_breakthrough_handoff.md) and the historical continuation brief at [docs/phase2_next_agent_handoff.md](docs/phase2_next_agent_handoff.md).
 
 Primer-derived reading is converted into operational claim boundaries in the
 [philosophy dossier](references/philosophy_claim_boundaries.md) and
@@ -145,6 +146,7 @@ Current experiment families:
 - [experiments/mathematical_claims](experiments/mathematical_claims): executable satisfying examples and paired assumption/predicate failures for seven theorem-bridge assumptions; this audit does not establish theorem necessity or minimality.
 - [experiments/bayesian_voi](experiments/bayesian_voi): exact finite-state value-of-information benchmark separating current error and printed heuristics from oracle EVSI and true regret reduction.
 - [experiments/seed_bootstrap_calibration](experiments/seed_bootstrap_calibration): deterministic seed-floor simulation comparing naive row resampling with paired seed-cluster intervals across IID, hierarchical, null, and weak-signal regimes.
+- [experiments/concern_gated_retrieval](experiments/concern_gated_retrieval): preregistered synthetic diagnostic for two-sided context/care retrieval plus bounded-observer utilization filtering; the additive-necessity and learned-care claims remain withheld.
 - [experiments/concerned_syntax](experiments/concerned_syntax): Arc 2A benchmark for causal constituency and concern-gated intervention invention. Paper draft at [papers/concerned_syntax/paper.md](papers/concerned_syntax/paper.md).
 - [experiments/viable_computational_bodies](experiments/viable_computational_bodies): Arc 2B typed architecture/body evolution under viability, formal, and concerned-syntax gates. Paper draft at [papers/viable_computational_bodies/paper.md](papers/viable_computational_bodies/paper.md).
 
