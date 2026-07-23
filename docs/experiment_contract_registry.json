@@ -306,6 +306,27 @@
             "identity": "Claude Code (Opus 4.7)",
             "session_ref": "concern-gated-retrieval-e2-wave0 2026-07-23"
           }
+        },
+        {
+          "run_id": "concern_gated_retrieval_e2_wave1a_e2a_screen_2026_07_23",
+          "publication_package": "concern_gated_retrieval_e2",
+          "runtime_package": "concern_gated_retrieval_e2",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/concern_gated_retrieval_e2/experiment_manifest.json",
+          "report_paths": [
+            "experiments/concern_gated_retrieval_e2/wave1a/results/verdict.json",
+            "experiments/concern_gated_retrieval_e2/wave1a/PROVENANCE.md"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_digest": "6780ed27fde6214ec6cad239d2e2934e15463f79f0fbd7dd9dc7ff8231b79940",
+          "preregistration_path": "experiments/concern_gated_retrieval_e2/wave1a/PREREGISTRATION.md",
+          "producing_agent": {
+            "identity": "Claude Code (Opus 4.7)",
+            "session_ref": "concern-gated-retrieval-e2-wave1a 2026-07-23"
+          }
         }
       ]
     },
