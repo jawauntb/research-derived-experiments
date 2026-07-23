@@ -250,6 +250,36 @@
       }
     },
     {
+      "package": "concern_gated_retrieval",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/concern_gated_retrieval/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "concern_gated_retrieval_pilot_2026_07_23",
+      "runs": [
+        {
+          "run_id": "concern_gated_retrieval_pilot_2026_07_23",
+          "publication_package": "concern_gated_retrieval",
+          "runtime_package": "concern_gated_retrieval",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/concern_gated_retrieval/experiment_manifest.json",
+          "report_paths": [
+            "experiments/concern_gated_retrieval/results/summary.json",
+            "experiments/concern_gated_retrieval/results/pilot_2026_07_23.md"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_digest": "5e45d5c6a0d2fbf75a3acac6cf4491609648881a3115e02e5766cd9b800139b6",
+          "preregistration_path": "experiments/concern_gated_retrieval/PREREGISTRATION.md",
+          "producing_agent": {
+            "identity": "OpenAI Codex (GPT-5)",
+            "session_ref": "concern-gated-retrieval 2026-07-23"
+          }
+        }
+      ]
+    },
+    {
       "package": "concerned_syntax",
       "coverage_mode": "legacy_exception",
       "legacy_exception": {

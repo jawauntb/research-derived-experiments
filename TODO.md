@@ -1,5 +1,27 @@
 # Research TODO
 
+## Concern-Gated Off-Context Retrieval (2026-07-23)
+
+- [x] Verify the Zhang-Levin closed-form reservoir/ridge epiplexity estimator
+  from arXiv:2607.18433v1 and bound its role to goal-conditioned utilization.
+- [x] Freeze the target object, graph representation/data clock, mathematical
+  assumptions, controls, fatal gates, and claim boundary before the public
+  pilot receipt.
+- [x] Implement deterministic context-only, care-only, additive,
+  coincidence-product, and coincidence-plus-verifier policies across base,
+  sparse, and noisy graph regimes.
+- [x] Run the 192-episode local pilot. All three fatal implementation gates
+  pass: coincidence hit@1 `1.000` versus best one-sided `0.0052`; verifier
+  precision/recall `1.000/1.000`; maximum PPR residual `7.83e-13`.
+- [x] Preserve the two bounded residuals: additive matches the product in two
+  regimes, so multiplicative necessity is withheld; initial coincidence is
+  already at ceiling, so the online-care pass is non-discriminating and does
+  not support learned care or selfhood.
+- [ ] New preregistration only: replace role-authored edges with learned or
+  withheld graph structure, start from an adversarially misspecified care
+  prior, seal task utility from retrieval, and force non-ceiling additive vs
+  product and learned vs oracle contrasts.
+
 ## Load-Bearing Prose Test (2026-07-21)
 
 - [x] Land plan + preregistration + thesis (PR #404, merged 2026-07-21).

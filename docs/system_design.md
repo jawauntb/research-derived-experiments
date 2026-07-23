@@ -205,21 +205,22 @@ Each experiment directory is a self-contained research unit. Typical contents:
 
 | Set | Count |
 |---|---|
-| Research experiment packages | **55** |
+| Research experiment packages | **57** |
 | Shared non-experiment support packages | **1** — `experiments/common` |
-| Contain one or more `modal_*.py` entrypoints | **46** |
-| Canonical package-root `experiment_manifest.json` files | **7** |
-| Authoritative package-contract records | **55** = **7** `structured_manifest` + **48** time-bounded `legacy_exception` in `docs/experiment_contract_registry.json` |
+| Contain one or more `modal_*.py` entrypoints | **47** |
+| Canonical package-root `experiment_manifest.json` files | **9** |
+| Authoritative package-contract records | **57** = **9** `structured_manifest` + **48** time-bounded `legacy_exception` in `docs/experiment_contract_registry.json` |
 | Canonical per-gate verdict files | **1** (E5). Ten evidence rows declare gate IDs; only E5 currently has a committed verdict file. Manifest gate declarations are not verdicts. |
 | Canonical claim records | **12** |
 | Canonical evidence records | **12** |
-| Generated provenance/verification output | **55** experiment cards and index rows; `common` is excluded |
+| Generated provenance/verification output | **57** experiment cards and index rows; `common` is excluded |
 
 `scripts/gen_provenance.py --check` makes the generated count a derived invariant
 rather than a second hand-maintained inventory. The four new local packages—
 `mathematical_claims`, `bayesian_voi`, `seed_bootstrap_calibration`,
-`passive_active_phase_map`, and `grounded_statecharts`—are present in the
-regenerated 55-package index.
+`passive_active_phase_map`, `grounded_statecharts`,
+`load_bearing_prose_test`, and `concern_gated_retrieval`—are present in the
+regenerated 57-package index.
 
 Raw run outputs go to **gitignored** `artifacts/<experiment>/`. Only summarized
 reports and intentionally public tables/PDFs are committed.
@@ -304,7 +305,7 @@ docs/claim_registry.json + docs/program_evidence_registry.json
 
 docs/experiment_contract_registry.json
     → scripts/validate_experiment_manifest.py (no-argument mode) → pass/fail
-      Exact 55-package XOR partition: root manifest XOR active legacy exception.
+      Exact 57-package XOR partition: root manifest XOR active legacy exception.
       Frozen legacy-package set + SHA-256 digest reject ungrounded new exceptions.
       Normal CI warns ≤30 days before expiry and fails on expiry (≤180-day renewals).
       Structured run records may list claim/evidence IDs with empty
@@ -558,6 +559,7 @@ can run the identical wrapper before opening a PR.
 | **Concept / activation geometry** | `concept_geometry`, `activation_geometry`, `paraphrase_weakness`, `passive_to_active` | Bridge geometry in embeddings and hidden states; when it becomes causally load-bearing |
 | **Primer-derived calibration** | `mathematical_claims`, `bayesian_voi`, `seed_bootstrap_calibration`, `passive_active_phase_map`; shared `experiments/common/causal_use.py` | Make theorem assumptions executable; separate value of information from error; calibrate seed/bootstrap policies; distinguish smooth crossover from bifurcation/path dependence; measure causal use across commitment surfaces |
 | **Maintained concern / metric stack** | Papers 5–25 family (valence → homeostatic → planning → first-order self → world responds → …) | Concern/ΔE geometry as control substrate; self/world attribution; re-engagement |
+| **Concern-gated retrieval** | `concern_gated_retrieval` | Two-sided context/care graph nomination plus goal-conditioned bounded-observer utilization filtering; synthetic diagnostic only |
 | **Arc 2A Concerned syntax** | `concerned_syntax` | Causal constituency + concern-gated intervention invention (symbolic → vector → pixel → searched programs → discovered profiles) |
 | **Arc 2B Viable bodies** | `viable_computational_bodies` + `formal/ontology-hs` | Typed architecture search under viability + formal + syntax gates |
 | **Causally grounded agents benchmark** | `world_responds` (Suite C), `long_horizon_bottleneck` (Suite D/E) | Behavior + structure-specific gate; proxy-resistant agent evaluation |
@@ -771,6 +773,7 @@ python3 -m experiments.grounded_statecharts.run_counterfactual_search
 python3 -m experiments.grounded_statecharts.run_harness_unlearning
 python3 -m experiments.grounded_statecharts.run_live_smoke
 python3 -m experiments.grounded_statecharts.run_unified_replay
+python3 -m experiments.concern_gated_retrieval.run_pilot
 
 python scripts/regen.py grid_cell_weakness
 python scripts/regen.py weakness_temporal
@@ -795,7 +798,7 @@ pins the PEP 735 quality environment, and the explicit `pytorch-cpu` source
 keeps Linux CI from resolving CUDA, NVIDIA, or Triton packages. Every remaining
 command reuses that environment through `uv run --no-sync`:
 
-1. `pytest -q tests` over all 89 root test files (torch, numpy, scikit-learn,
+1. `pytest -q tests` over all 103 root test files (torch, numpy, scikit-learn,
    matplotlib, reportlab, pytest)
 2. `compileall` on `scripts`, `experiments`, `tests`
 3. `publication_guard.py`
@@ -995,7 +998,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 - **No universal research dependency specification.** The root quality gate has a complete locked dependency group, but experiment and Modal runtimes still rely on command-specific `uvx` sets or explicit Modal images.
 - **Machine-specific paths** in docs/handoffs (Doppler scope, local archives).
 - **Result fidelity depends on summarization discipline.** Gitignored JSON vs committed Markdown can drift.
-- **Structured-contract coverage is early but fail-closed.** All 55 research packages are partitioned in `docs/experiment_contract_registry.json` (7 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction. Public-artifact digest envelopes cover the E5 confirmatory JSON and E4 appendix. Clean-clone CPU reproduction is allowlisted for `bayesian_voi`, `grounded_statecharts`, `mathematical_claims`, and `seed_bootstrap_calibration`.
+- **Structured-contract coverage is early but fail-closed.** All 57 research packages are partitioned in `docs/experiment_contract_registry.json` (9 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction. Public-artifact digest envelopes cover the E5 confirmatory JSON and E4 appendix. Clean-clone CPU reproduction is allowlisted for `bayesian_voi`, `grounded_statecharts`, `mathematical_claims`, and `seed_bootstrap_calibration`.
 - **Paper-primary experiments** may have no committed `results/*.md`; evidence lives in the paper + local artifacts.
 - **Coherence / Inquiry / Cabal / site tests** are outside the root Python quality gate.
 - **Scientific claims are gate-bound.** Fixture smokes do not settle the program thesis.

@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "concern_gated_retrieval_pilot",
+  "hypothesis": "On the registered typed synthetic memory graphs, rarity-corrected two-sided personalized PageRank selects the jointly context-and-care-connected load-bearing node more often than either one-sided walk, and a goal-conditioned reservoir/ridge epiplexity filter rejects residual constant/noise controls within the top-three nominations.",
+  "claim_tier": "descriptive",
+  "controls": [
+    {
+      "control_id": "context_only_ppr",
+      "description": "Personalized PageRank restarts only from the active representation."
+    },
+    {
+      "control_id": "care_only_ppr",
+      "description": "Personalized PageRank restarts only from persistent care anchors."
+    },
+    {
+      "control_id": "additive_ppr",
+      "description": "Context and care PageRank probabilities are added rather than multiplied."
+    },
+    {
+      "control_id": "unverified_coincidence",
+      "description": "The rarity-corrected Hadamard product nominates candidates without the reachable-future utilization filter."
+    },
+    {
+      "control_id": "constant_and_noise_futures",
+      "description": "Constant and seed-shuffled noise targets test the bounded observer's dark-room and noisy-TV limits."
+    }
+  ],
+  "seeds": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 20260723],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python3",
+      "-m",
+      "experiments.concern_gated_retrieval.run_pilot"
+    ],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [
+    {
+      "name": "numpy",
+      "version": "==2.5.1"
+    }
+  ],
+  "gates": [
+    {
+      "gate_id": "NUMERICAL_VALIDITY",
+      "criterion": "Maximum PPR fixed-point L1 residual is <= 1e-10 and structured futures exceed every constant/noise epiplexity control by >= 0.75 bits."
+    },
+    {
+      "gate_id": "DUAL_ACTIVATION_SELECTIVITY",
+      "criterion": "Coincidence hit@1 is >= 0.85, exceeds the better one-sided policy by >= 0.20 in aggregate, and exceeds it by >= 0.10 in each graph regime."
+    },
+    {
+      "gate_id": "UTILIZATION_FILTER",
+      "criterion": "The goal-conditioned epiplexity filter has precision and recall >= 0.90 for load-bearing nodes within the top-three coincidence nominations."
+    },
+    {
+      "gate_id": "ONLINE_CARE_RECOVERY",
+      "criterion": "Exploratory only: learned-care coincidence hit@1 does not regress from uniform initialization and is within 0.05 of oracle care."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/concern_gated_retrieval/results/summary.json",
+      "public": true
+    },
+    {
+      "kind": "summary",
+      "path": "experiments/concern_gated_retrieval/results/pilot_2026_07_23.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/concern_gated_retrieval/PREREGISTRATION.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/concern_gated_retrieval/README.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}
