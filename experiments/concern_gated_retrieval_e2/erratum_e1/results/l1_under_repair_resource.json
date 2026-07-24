@@ -1,0 +1,30 @@
+{
+  "delta_thresh_L1": 0.05,
+  "family": "resource_constrained",
+  "kill_confirmed_on_clean_data": true,
+  "kind": "cogr_erratum_e1_l1_under_repair",
+  "original_prior": {
+    "ci_hi": 0.016916666666666667,
+    "ci_lo": -0.023291666666666665,
+    "l1_verdict": "KILL",
+    "mean_delta": -0.003208333333333333,
+    "mean_learned": 0.003124999999999998,
+    "mean_random": 0.0063333333333333314,
+    "n_pairs": 300.0
+  },
+  "repaired_prior": {
+    "ci_hi": 0.026291666666666668,
+    "ci_lo": -0.015375,
+    "l1_verdict": "KILL",
+    "mean_delta": 0.004833333333333334,
+    "mean_learned": 0.008666666666666666,
+    "mean_random": 0.0038333333333333314,
+    "n_pairs": 300.0
+  },
+  "seed_range": [
+    200600,
+    200899
+  ],
+  "suppressed_set_size_k": 4,
+  "verdict_unchanged_by_repair": true
+}
