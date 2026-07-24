@@ -395,6 +395,35 @@
       }
     },
     {
+      "package": "deletion_repair",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/deletion_repair/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "deletion_repair_dr1_2026_07_24",
+      "runs": [
+        {
+          "run_id": "deletion_repair_dr1_2026_07_24",
+          "publication_package": "deletion_repair",
+          "runtime_package": "deletion_repair",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/deletion_repair/experiment_manifest.json",
+          "report_paths": [
+            "experiments/deletion_repair/results/dr1_verdict.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_digest": "c9ff3bd2231e298628ec3f2a5ef35dea9f31417a8595f1b88883633b89e79e9c",
+          "preregistration_path": "experiments/deletion_repair/PREREGISTRATION.md",
+          "producing_agent": {
+            "identity": "Claude Code (Opus 5)",
+            "session_ref": "deletion-repair-dr1 2026-07-24"
+          }
+        }
+      ]
+    },
+    {
       "package": "ensemble_uncertainty",
       "coverage_mode": "legacy_exception",
       "legacy_exception": {

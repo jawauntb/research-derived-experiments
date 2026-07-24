@@ -1,0 +1,276 @@
+{
+  "H1_no_single_nominator_wins_both": {
+    "decision": "NO_GO",
+    "tk_weakness_yes_cost_no": true,
+    "tt_cost_yes_weakness_no": false
+  },
+  "H2_disjunctive_at_least_best_single": {
+    "decision": "NO_GO",
+    "toy_kinematics": true,
+    "toy_transduction": false
+  },
+  "k": 3,
+  "kind": "dr1_verdict",
+  "overall_decision": "NO_GO",
+  "sanity_beats_controls": true,
+  "toys": {
+    "toy_kinematics": {
+      "load_bearing": [
+        [
+          "absolute_simultaneity",
+          "no_length_contraction"
+        ]
+      ],
+      "n_candidates": 21,
+      "nominators": {
+        "cost": {
+          "hits_at_k": 0,
+          "rank_of_first_load_bearing": 7,
+          "recall_at_k": 0.0,
+          "recall_denominator": 1,
+          "silent": true,
+          "simple_regret": 1,
+          "tie_fraction": 1.0,
+          "top_k": [
+            [
+              "invariant_mass",
+              "velocity_in_range"
+            ],
+            [
+              "velocity_in_range"
+            ],
+            [
+              "invariant_mass",
+              "preferred_rest_frame"
+            ]
+          ]
+        },
+        "disjunctive": {
+          "hits_at_k": 1,
+          "rank_of_first_load_bearing": 1,
+          "recall_at_k": 1.0,
+          "recall_denominator": 1,
+          "silent": false,
+          "simple_regret": 0,
+          "tie_fraction": 0.6666666666666666,
+          "top_k": [
+            [
+              "absolute_simultaneity",
+              "no_length_contraction"
+            ],
+            [
+              "preferred_rest_frame",
+              "velocity_in_range"
+            ],
+            [
+              "invariant_mass",
+              "preferred_rest_frame"
+            ]
+          ]
+        },
+        "random": {
+          "hits_at_k": 0,
+          "rank_of_first_load_bearing": 19,
+          "recall_at_k": 0.0,
+          "recall_denominator": 1,
+          "silent": false,
+          "simple_regret": 1,
+          "tie_fraction": 0.047619047619047616,
+          "top_k": [
+            [
+              "no_length_contraction"
+            ],
+            [
+              "absolute_simultaneity"
+            ],
+            [
+              "no_length_contraction",
+              "orientation_preserving"
+            ]
+          ]
+        },
+        "size_only": {
+          "hits_at_k": 0,
+          "rank_of_first_load_bearing": 5,
+          "recall_at_k": 0.0,
+          "recall_denominator": 1,
+          "silent": false,
+          "simple_regret": 1,
+          "tie_fraction": 0.7142857142857143,
+          "top_k": [
+            [
+              "absolute_simultaneity",
+              "velocity_in_range"
+            ],
+            [
+              "orientation_preserving",
+              "preferred_rest_frame"
+            ],
+            [
+              "no_length_contraction",
+              "velocity_in_range"
+            ]
+          ]
+        },
+        "weakness": {
+          "hits_at_k": 1,
+          "rank_of_first_load_bearing": 1,
+          "recall_at_k": 1.0,
+          "recall_denominator": 1,
+          "silent": false,
+          "simple_regret": 0,
+          "tie_fraction": 0.6666666666666666,
+          "top_k": [
+            [
+              "absolute_simultaneity",
+              "no_length_contraction"
+            ],
+            [
+              "preferred_rest_frame",
+              "velocity_in_range"
+            ],
+            [
+              "invariant_mass",
+              "preferred_rest_frame"
+            ]
+          ]
+        }
+      }
+    },
+    "toy_transduction": {
+      "load_bearing": [
+        [
+          "bounded_state",
+          "sequential_state_update"
+        ],
+        [
+          "causal_masking",
+          "sequential_state_update"
+        ],
+        [
+          "no_positional_input",
+          "sequential_state_update"
+        ],
+        [
+          "sequential_state_update"
+        ]
+      ],
+      "n_candidates": 10,
+      "nominators": {
+        "cost": {
+          "hits_at_k": 3,
+          "rank_of_first_load_bearing": 1,
+          "recall_at_k": 1.0,
+          "recall_denominator": 3,
+          "silent": false,
+          "simple_regret": 0,
+          "tie_fraction": 0.6,
+          "top_k": [
+            [
+              "causal_masking",
+              "sequential_state_update"
+            ],
+            [
+              "bounded_state",
+              "sequential_state_update"
+            ],
+            [
+              "no_positional_input",
+              "sequential_state_update"
+            ]
+          ]
+        },
+        "disjunctive": {
+          "hits_at_k": 2,
+          "rank_of_first_load_bearing": 1,
+          "recall_at_k": 0.6666666666666666,
+          "recall_denominator": 3,
+          "silent": false,
+          "simple_regret": 0,
+          "tie_fraction": 0.7,
+          "top_k": [
+            [
+              "bounded_state",
+              "sequential_state_update"
+            ],
+            [
+              "no_positional_input",
+              "sequential_state_update"
+            ],
+            [
+              "bounded_state",
+              "no_positional_input"
+            ]
+          ]
+        },
+        "random": {
+          "hits_at_k": 2,
+          "rank_of_first_load_bearing": 2,
+          "recall_at_k": 0.6666666666666666,
+          "recall_denominator": 3,
+          "silent": false,
+          "simple_regret": 1,
+          "tie_fraction": 0.1,
+          "top_k": [
+            [
+              "causal_masking"
+            ],
+            [
+              "sequential_state_update"
+            ],
+            [
+              "bounded_state",
+              "sequential_state_update"
+            ]
+          ]
+        },
+        "size_only": {
+          "hits_at_k": 2,
+          "rank_of_first_load_bearing": 1,
+          "recall_at_k": 0.6666666666666666,
+          "recall_denominator": 3,
+          "silent": false,
+          "simple_regret": 0,
+          "tie_fraction": 0.6,
+          "top_k": [
+            [
+              "no_positional_input",
+              "sequential_state_update"
+            ],
+            [
+              "bounded_state",
+              "no_positional_input"
+            ],
+            [
+              "bounded_state",
+              "sequential_state_update"
+            ]
+          ]
+        },
+        "weakness": {
+          "hits_at_k": 2,
+          "rank_of_first_load_bearing": 1,
+          "recall_at_k": 0.6666666666666666,
+          "recall_denominator": 3,
+          "silent": false,
+          "simple_regret": 0,
+          "tie_fraction": 0.6,
+          "top_k": [
+            [
+              "no_positional_input",
+              "sequential_state_update"
+            ],
+            [
+              "bounded_state",
+              "no_positional_input"
+            ],
+            [
+              "bounded_state",
+              "sequential_state_update"
+            ]
+          ]
+        }
+      }
+    }
+  }
+}

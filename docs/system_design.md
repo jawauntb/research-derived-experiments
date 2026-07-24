@@ -1042,6 +1042,38 @@ all families fall 1.0000 -> 0.06-0.38, below the 0.8 gate). The reusable gate
 is `erratum_e1/inverted_signal_audit.py`, and the standing rule it enforces is:
 at fixture-freeze time, audit every policy-visible signal in BOTH orderings.
 
+## Deletion-repair nomination (DR1)
+
+`experiments/deletion_repair/` is a new, separate programme from concern-gated
+retrieval. It models a discovery-shaped move as: hold a representation `R` that
+works on a child task, delete an over-specification `D`, repair, and thereby
+cover a parent task `R` could not. Both canonical cases fit -- relativity
+(absolute simultaneity was free at low velocity) and attention (recurrence was
+free at short sequence length) -- and in both the *repair* already existed, so
+the deletion was the move.
+
+DR1 is the smallest working example: two toy systems in one harness (`TK`
+relativity-shaped, `TT` attention-shaped), an exhaustive oracle over
+`|D| <= 2` with negatives by construction, and five execution-free nominators
+(`weakness`, `cost`, `disjunctive`, plus `random` and `size_only` controls).
+Local CPU, seconds, no Modal.
+
+**Both preregistered hypotheses returned NO_GO.** H1 (no single nominator wins
+both toys) failed on its binary framing -- "weakness is silent" is almost never
+true, since extension size grows for nearly any non-vacuous deletion -- though
+the graded claim holds (weakness 1.00 vs cost 0.00 on TK; cost 1.00 vs weakness
+0.67 on TT). H2 failed outright: the `max`-disjunction is *worse* than cost on
+TT (0.67 vs 1.00), because `max` lets a high-weakness-useless deletion tie a
+high-cost-correct one. Fix named: combine by sum or lexicographically, not max.
+
+Notably, the erratum-E1 leakage gate -- built for a different programme --
+fired during DR1's construction: alphabetical tie-breaking gave a *completely
+silent* nominator (`cost` on TK, `tie_fraction = 1.00`) a load-bearing deletion
+at rank 3, scoring `recall@3 = 1.00` on zero information. Corrected to a seeded
+tie-shuffle before freezing and pinned by a regression test. Paper:
+`papers/deletion_repair_dr1/`; builder `scripts/build_dr1_pdf.py`; tests
+`tests/test_dr1_deletion_repair.py`.
+
 Process wrapper: `AGENTS.md` requires the `scientific-discovery-regime-audit`
 skill at experiment creation/preregistration, before large sweeps, and during
 result promotion or discovery claims. The compact intake records the target,
