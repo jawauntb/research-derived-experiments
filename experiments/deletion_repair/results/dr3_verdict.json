@@ -1,0 +1,136 @@
+{
+  "H1_independence_restored": {
+    "cost_positive_weakness_zero_on_costly_toy": 363,
+    "decision": "GO"
+  },
+  "H2_complementarity": {
+    "best_single_per_toy": {
+      "costly_transduction": "cost",
+      "restrictive_kinematics": "weakness"
+    },
+    "decision": "GO"
+  },
+  "H3_combiner_matches_best_single_on_both": {
+    "decision": "GO",
+    "matching_combiners": [
+      "sum_disjunction",
+      "minrank_disjunction",
+      "max_disjunction"
+    ]
+  },
+  "H4_speedup_retained": {
+    "decision": "NO_GO"
+  },
+  "kind": "dr3_verdict",
+  "overall_decision": "NO_GO",
+  "toys": {
+    "costly_transduction": {
+      "expected_random_verifications": 7.036458333333333,
+      "independence": {
+        "both_positive": 0,
+        "cost_positive_weakness_zero": 363,
+        "weakness_positive_cost_zero": 0
+      },
+      "n_candidates": 1350,
+      "n_load_bearing": 191,
+      "nominators": {
+        "cost": {
+          "silent": false,
+          "speedup_vs_random": 7.036458333333333,
+          "tie_fraction": 0.7311111111111112,
+          "verifications_to_first_hit": 1
+        },
+        "max_disjunction": {
+          "silent": false,
+          "speedup_vs_random": 7.036458333333333,
+          "tie_fraction": 0.7311111111111112,
+          "verifications_to_first_hit": 1
+        },
+        "minrank_disjunction": {
+          "silent": false,
+          "speedup_vs_random": 7.036458333333333,
+          "tie_fraction": 0.0014814814814814814,
+          "verifications_to_first_hit": 1
+        },
+        "random": {
+          "silent": false,
+          "speedup_vs_random": 1.0052083333333333,
+          "tie_fraction": 0.0007407407407407407,
+          "verifications_to_first_hit": 7
+        },
+        "size_only": {
+          "silent": false,
+          "speedup_vs_random": 7.036458333333333,
+          "tie_fraction": 0.8444444444444444,
+          "verifications_to_first_hit": 1
+        },
+        "sum_disjunction": {
+          "silent": false,
+          "speedup_vs_random": 7.036458333333333,
+          "tie_fraction": 0.7311111111111112,
+          "verifications_to_first_hit": 1
+        },
+        "weakness": {
+          "silent": true,
+          "speedup_vs_random": 0.7818287037037037,
+          "tie_fraction": 1.0,
+          "verifications_to_first_hit": 9
+        }
+      }
+    },
+    "restrictive_kinematics": {
+      "expected_random_verifications": 675.5,
+      "independence": {
+        "both_positive": 0,
+        "cost_positive_weakness_zero": 0,
+        "weakness_positive_cost_zero": 1
+      },
+      "n_candidates": 1350,
+      "n_load_bearing": 1,
+      "nominators": {
+        "cost": {
+          "silent": true,
+          "speedup_vs_random": 0.9804063860667634,
+          "tie_fraction": 1.0,
+          "verifications_to_first_hit": 689
+        },
+        "max_disjunction": {
+          "silent": false,
+          "speedup_vs_random": 675.5,
+          "tie_fraction": 0.9992592592592593,
+          "verifications_to_first_hit": 1
+        },
+        "minrank_disjunction": {
+          "silent": false,
+          "speedup_vs_random": 675.5,
+          "tie_fraction": 0.0014814814814814814,
+          "verifications_to_first_hit": 1
+        },
+        "random": {
+          "silent": false,
+          "speedup_vs_random": 0.6830131445904954,
+          "tie_fraction": 0.0007407407407407407,
+          "verifications_to_first_hit": 989
+        },
+        "size_only": {
+          "silent": false,
+          "speedup_vs_random": 2.568441064638783,
+          "tie_fraction": 0.8444444444444444,
+          "verifications_to_first_hit": 263
+        },
+        "sum_disjunction": {
+          "silent": false,
+          "speedup_vs_random": 675.5,
+          "tie_fraction": 0.9992592592592593,
+          "verifications_to_first_hit": 1
+        },
+        "weakness": {
+          "silent": false,
+          "speedup_vs_random": 675.5,
+          "tie_fraction": 0.9992592592592593,
+          "verifications_to_first_hit": 1
+        }
+      }
+    }
+  }
+}

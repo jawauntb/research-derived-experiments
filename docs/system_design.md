@@ -1099,6 +1099,33 @@ extension (onto the search procedure or the representation's description
 length) rather than to build a better cost signal within it. Pinned by
 `tests/test_dr2_deletion_repair.py`. Paper: `papers/deletion_repair_dr2/`.
 
+DR3 (`experiments/deletion_repair/dr3_toys.py`, `run_dr3.py`,
+`DR3_PREREGISTRATION.md`) implements the fix DR2's theorem named: cost attaches
+to **propositions** as a resource commitment paid for holding a constraint,
+never as a minimum over the extension. A proposition may be restrictive,
+costly, both, or neither -- the real transformer case, where a sequential
+schedule commits you to O(n) depth whether or not it changes what is
+expressible.
+
+**The fix works.** On the costly toy, 363 of 1350 candidates have
+`cost_relief > 0` with `weakness_gain == 0` -- the cell DR2 proved empty.
+**H2'' GO**: with the coupling severed, the two-nominator claim finally holds --
+`weakness` is best on the restrictive toy and silent on the costly one, `cost`
+vice versa (each `tie_fraction = 1.00` on the other's toy). **H3'' GO**: all
+three combiners match the best single nominator on both toys, and
+`minrank_disjunction` is the one to keep because it alone has
+`tie_fraction = 0.00` on both, never deferring to a tie-break.
+
+**H4'' NO_GO, and the failure is methodological.** `speedup_vs_random` is
+bounded above by `expected_random` since verifications >= 1, so the costly
+toy's 14% base rate caps it at 7x and the 10x gate was unachievable the moment
+the toy was written. The nominators reached verifications = 1 on both toys --
+the theoretical optimum. DR2's base rates were calibrated before its gates were
+frozen; DR3's were not. A second slip is recorded alongside it: DR3's gates
+were frozen in code before execution but the preregistration document was
+written afterwards. Both are in `DR3_PREREGISTRATION.md` sections 0 and 5
+rather than quietly repaired. Paper: `papers/deletion_repair_dr3/`.
+
 Process wrapper: `AGENTS.md` requires the `scientific-discovery-regime-audit`
 skill at experiment creation/preregistration, before large sweeps, and during
 result promotion or discovery claims. The compact intake records the target,
