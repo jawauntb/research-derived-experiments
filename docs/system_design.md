@@ -990,6 +990,30 @@ reasoning-fault vs verifier-fault split, plus a care-independent
 exploration prior derived from verify-repair failure frequency), not as a
 new program; a program is justified only if that experiment survives.
 
+MX1 (de-risk probe, **not a wave**) lives at
+`experiments/concern_gated_retrieval_e2/mx1_repair_prior/`, with its paper at
+`papers/concern_gated_retrieval_mx1/` and builder
+`scripts/build_cogr_mx1_pdf.py` (tests: `tests/test_cogr_mx1.py`). It tests
+the two MIDAS-style transfers the synthesis paper scopes, at the smallest
+scale that answers GO/NO-GO: 600 episodes on one family
+(`wave1b.families.delayed_commitments_v2`), calibration bucket only, local
+CPU, no Modal, $0. Wave 1b's confirmatory pool is not touched. **Part A**
+(care-independent within-episode retain-and-re-pair repair rule) returned
+**NO_GO** -- it needed more attempts than both the concern and random rivals
+(3.218 vs 2.933 / 2.975), and the reported diagnostic shows it lost even on
+the 109 episodes containing the super-additive pair it targets. **Part B**
+(reasoning-fault vs verifier-fault split, ported from MIDAS's
+`VerificationStatus`) returned **GO** -- a marginal verifier mislabeled 109
+of 109 genuinely useful complementary pairs as useless while the split
+verifier mislabeled none, with zero false declines across 6,920 singleton
+controls. Overall `PARTIAL_GO_B_ONLY`, which per the frozen promotion
+semantics licenses verifier redesign only. Two design errors were caught and
+recorded *before* freezing (no persistent cross-episode memory; candidate
+position is a construction artifact that inverts across paraphrase families),
+and a third finding -- every candidate has identical withheld-geometry degree
+-- established that this substrate carries no care-independent *structural*
+signal at all.
+
 Process wrapper: `AGENTS.md` requires the `scientific-discovery-regime-audit`
 skill at experiment creation/preregistration, before large sweeps, and during
 result promotion or discovery claims. The compact intake records the target,
