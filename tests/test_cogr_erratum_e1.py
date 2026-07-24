@@ -102,3 +102,31 @@ def test_format_audit_table_renders_rows() -> None:
     text = format_audit_table([audit_care_anchors(_episodes())])
     assert "care_anchors" in text
     assert "LEAK" in text
+
+
+def test_repaired_generators_patch_is_reversible() -> None:
+    """The frozen wave1b dispatch table must be restored after the context exits."""
+    from experiments.concern_gated_retrieval_e2.wave1b import crossed
+    from experiments.concern_gated_retrieval_e2.erratum_e1.verify_l1_under_repair import (
+        repaired_generators,
+    )
+
+    before = dict(crossed._FAMILY_GENERATORS)
+    with repaired_generators(k=4):
+        assert crossed._FAMILY_GENERATORS != before, "patch did not take effect"
+        assert set(crossed._FAMILY_GENERATORS) == set(before)
+    assert crossed._FAMILY_GENERATORS == before, "frozen dispatch table not restored"
+
+
+def test_paired_contrast_is_deterministic() -> None:
+    from experiments.concern_gated_retrieval_e2.erratum_e1.verify_l1_under_repair import (
+        paired_contrast,
+    )
+
+    learned = {1: 0.4, 2: -0.1, 3: 0.2, 4: 0.0}
+    random_geom = {1: 0.1, 2: 0.3, 3: 0.2, 4: -0.2}
+
+    first = paired_contrast(learned, random_geom)
+    assert first == paired_contrast(learned, random_geom)
+    assert first["n_pairs"] == 4.0
+    assert first["ci_lo"] <= first["mean_delta"] <= first["ci_hi"]

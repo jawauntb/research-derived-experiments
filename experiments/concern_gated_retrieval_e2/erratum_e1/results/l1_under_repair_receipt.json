@@ -1,0 +1,30 @@
+{
+  "delta_thresh_L1": 0.04845,
+  "family": "delayed_commitments",
+  "kill_confirmed_on_clean_data": true,
+  "kind": "cogr_erratum_e1_l1_under_repair",
+  "original_prior": {
+    "ci_hi": 0.0009091862369179528,
+    "ci_lo": -0.04447058709302758,
+    "l1_verdict": "KILL",
+    "mean_delta": -0.02164888996333151,
+    "mean_learned": -0.012897164937651045,
+    "mean_random": 0.008751725025680463,
+    "n_pairs": 300.0
+  },
+  "repaired_prior": {
+    "ci_hi": 0.009115584689593665,
+    "ci_lo": -0.037704563816208354,
+    "l1_verdict": "KILL",
+    "mean_delta": -0.014521920764145678,
+    "mean_learned": -0.005472772634119359,
+    "mean_random": 0.00904914813002632,
+    "n_pairs": 300.0
+  },
+  "seed_range": [
+    200000,
+    200299
+  ],
+  "suppressed_set_size_k": 4,
+  "verdict_unchanged_by_repair": true
+}

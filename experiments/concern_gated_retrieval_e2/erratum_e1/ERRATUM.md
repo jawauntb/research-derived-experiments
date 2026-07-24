@@ -94,6 +94,47 @@ None asked "does something *permitted* already contain the answer?"
   weak second signal to be combined with context; it was an oracle used
   backwards.
 
+## 4b. The validity claim, measured rather than argued
+
+Section 4 argues that Wave 1b's L1 KILL survives because the contrast holds
+concern identical across both arms, so the leak cancels. That is an argument.
+`verify_l1_under_repair.py` measures it: it runs Wave 1b's **own**
+`crossed.run_cell` code path unchanged and swaps **only** the prior, by
+wrapping the in-memory `crossed._FAMILY_GENERATORS` dispatch table. Geometry
+construction, ranking, sealed scoring and seeds are byte-identical to the
+confirmatory run.
+
+Two results, on the confirmatory seeds Wave 1b actually used (300/family):
+
+**(a) The confirmatory run reproduces exactly.** With the original prior the
+contrast returns Wave 1b's published numbers to every reported digit — e.g.
+`delayed_commitments` `mean_delta = -0.02165`, `mean_learned = -0.01290`,
+`mean_random = +0.00875`, matching PR #413. That is an independent
+reproducibility check on the headline result, passed.
+
+**(b) The KILL survives the repaired prior on every family.**
+
+| family | prior | `mean_learned` | `mean_random` | `mean_delta` | verdict |
+|---|---|---:|---:|---:|---|
+| `delayed_commitments` | original | −0.01290 | +0.00875 | **−0.02165** | KILL |
+| `delayed_commitments` | repaired | −0.00547 | +0.00905 | **−0.01452** | **KILL** |
+| `maintenance_fault` | original | +0.00553 | +0.01035 | **−0.00482** | KILL |
+| `maintenance_fault` | repaired | +0.00864 | +0.01018 | **−0.00154** | **KILL** |
+| `resource_constrained` | original | +0.00312 | +0.00633 | **−0.00321** | KILL |
+| `resource_constrained` | repaired | +0.00867 | +0.00383 | **+0.00483** | **KILL** |
+
+Every `mean_delta` stays far below the frozen `delta_thresh_L1` of
+`0.04845 / 0.05340 / 0.05000`. `resource_constrained` flips sign under repair
+(`−0.0032` → `+0.0048`) but remains an order of magnitude short of its
+threshold, so the verdict is unchanged.
+
+**Conclusion.** Wave 1b's L1 KILL — learned geometry does not beat a
+degree-matched random null — is confirmed on a non-leaky prior. The program's
+one clean falsification is upgraded from *argued* to *measured*.
+
+Receipts: `results/l1_under_repair_receipt.json`,
+`l1_under_repair_maintenance.json`, `l1_under_repair_resource.json`.
+
 ## 5. The repair
 
 `prior_repair.repair_wrong_prior` suppresses a **set** of `k` candidates — the
