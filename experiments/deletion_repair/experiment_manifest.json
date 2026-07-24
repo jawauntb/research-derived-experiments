@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "deletion_repair_dr1_toy_nomination",
+  "hypothesis": "On two toy systems instantiating a discovery-shaped deletion-and-repair move, no single execution-free nominator ranks the load-bearing deletion highly on both, and a max-disjunction of weakness gain and cost attribution is at least as good as the better single nominator on each.",
+  "claim_tier": "descriptive",
+  "controls": [
+    {
+      "control_id": "random",
+      "description": "Seeded random ordering of candidate deletions."
+    },
+    {
+      "control_id": "size_only",
+      "description": "Degenerate nominator preferring larger deletions; should lose whenever ranking does real work."
+    },
+    {
+      "control_id": "negative_deletions",
+      "description": "Propositions whose deletion frees nothing (invariant mass, orientation, bounded state) are scored rather than filtered, so the recall denominator is meaningful."
+    },
+    {
+      "control_id": "alpha_non_discrimination",
+      "description": "The child task cannot separate the held representation from the target member; verified by a regression test."
+    },
+    {
+      "control_id": "seeded_tie_shuffle",
+      "description": "Ties broken by seeded shuffle rather than name, so a silent nominator scores at chance instead of inheriting alphabetical credit."
+    }
+  ],
+  "seeds": [20260724],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python",
+      "-m",
+      "experiments.deletion_repair.run_dr1"
+    ],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [
+    {
+      "name": "matplotlib",
+      "version": ">=3.7,<4"
+    }
+  ],
+  "gates": [
+    {
+      "gate_id": "H1_NO_SINGLE_NOMINATOR_WINS_BOTH",
+      "criterion": "On toy_kinematics weakness ranks a load-bearing deletion in its top-3 while cost does not, AND on toy_transduction cost does while weakness does not."
+    },
+    {
+      "gate_id": "H2_DISJUNCTIVE_AT_LEAST_BEST_SINGLE",
+      "criterion": "The disjunctive nominator attains D-recall@3 at least equal to the better of weakness and cost on both toys."
+    },
+    {
+      "gate_id": "SANITY_BEATS_CONTROLS",
+      "criterion": "At least one of weakness or cost strictly beats both the random and size_only controls on at least one toy."
+    },
+    {
+      "gate_id": "ANTI_LEAKAGE_TIE_BREAKING",
+      "criterion": "A nominator whose scores are entirely tied must score at chance; deterministic name-ordered tie-breaking is forbidden because it leaks whatever the sort key correlates with."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/deletion_repair/results/dr1_verdict.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/deletion_repair/PREREGISTRATION.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}
