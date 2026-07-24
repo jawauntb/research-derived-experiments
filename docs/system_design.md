@@ -944,6 +944,36 @@ aggregate is single-sourced through
 template-split guard admits the confirmatory pool while calibration
 seeds `100000..100999` remain refused.
 
+Wave 1b (COGR-E2b — crossed learned-geometry x concern confirmatory) lives at
+`experiments/concern_gated_retrieval_e2/wave1b/`. It runs the 3 x 3 x 3 = 27-
+cell crossed factorial preregistered in `wave1b/PREREGISTRATION.md` and issues
+an **L1 verdict** (representation contribution) and an **L2 verdict** (concern
+recovery + specificity) SEPARATELY per `wave1b/PROMOTION_CONTRACT_L1.md` and
+`wave1b/PROMOTION_CONTRACT_L2.md`. Wave 1a's E2a KILL withholds L2 but does not
+block L1; family redesign passing the wave1b §4 pre-run oracle-recall
+assertion is L2's second precondition. Sweep runner: `wave1b/modal_l4_sweep.py`
+— `modal.App` `research-derived-cogr-wave1b-e2b`, L4 GPUs with
+`gpu="L4"`, `timeout=1800`, `cpu=4`, `memory=16384`,
+`max_containers=64` (human-director-authorized), `single_use_containers=True`,
+`retries=1`; conservative timeout-based cost is refused above the `$30`
+hard cap and the 27-cell plan sits at `~$10.80`. `execute_cell` delegates
+each `(family, geometry, concern)` cell to `wave1b.crossed.run_cell`, enables
+the L1 edge-intervention diagnostic on the `LEARNED` cells, and returns a
+JSON-safe per-cell payload. Aggregator: `wave1b/run_confirmatory.py` reads
+`artifacts/cogr_wave1b/rows.json` and writes verdicts to
+`wave1b/results/verdict_L1.json` and `wave1b/results/verdict_L2.json`; it
+composes the L1 gates (G0 integrity, G1 paired candidate vs frequency-matched
+random null against the frozen Wave 0 `delta_thresh_L1`, G2 learned-edge
+intervention direction fraction >= 0.70 on active seeds, G5 non-ceiling
+headroom >= 0.05, G9 label-permutation + randomized-generator leakage audit
+against `learn_graph`), and the L2 gates (L1 precondition, G0 integrity, G3
+paired online-learned vs frozen-wrong recovery lower bound >= 0 AND positive
+mean concern shift), and explicitly marks G4/G6/G7 as `UNVERIFIED` because
+they need baseline arms the crossed sweep does not carry. Deploy + dispatch +
+aggregate is single-sourced through `scripts/deploy_and_run_cogr_wave1b.sh`
+(same Doppler scope, same env boundary as Wave 1a) with `--dry-run`, `--smoke`,
+and `--no-aggregate` presets.
+
 Process wrapper: `AGENTS.md` requires the `scientific-discovery-regime-audit`
 skill at experiment creation/preregistration, before large sweeps, and during
 result promotion or discovery claims. The compact intake records the target,

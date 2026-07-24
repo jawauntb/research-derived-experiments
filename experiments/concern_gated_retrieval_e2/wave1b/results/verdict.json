@@ -1,0 +1,1604 @@
+{
+ "aggregate_decision": "KILL",
+ "aggregate_kill_reasons": [
+  "delayed_commitments::G1_L1_behavior: paired lower bound -0.4318 < delta_L1 0.0484",
+  "delayed_commitments::G2_L1_representation: intervention direction fraction 0.506 < required 0.700 (n_active=83)",
+  "maintenance_fault::G1_L1_behavior: paired lower bound -0.4209 < delta_L1 0.0534",
+  "maintenance_fault::G2_L1_representation: intervention direction fraction 0.438 < required 0.700 (n_active=73)",
+  "resource_constrained::G1_L1_behavior: paired lower bound -0.3588 < delta_L1 0.0500",
+  "resource_constrained::G2_L1_representation: intervention direction fraction 0.630 < required 0.700 (n_active=46)"
+ ],
+ "cell_receipts": [
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 0.07333333333333333,
+    "mean_misretrieval_cost": 1.9266666666666667,
+    "mean_reward": -0.012897164937651045,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::delayed_commitments::LEARNED::FROZEN_WRONG::seeds200000-200299",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 1.121274709701538,
+   "plan": {
+    "cell_id": "cogr-wave1b::delayed_commitments::LEARNED::FROZEN_WRONG::seeds200000-200299",
+    "concern": "FROZEN_WRONG",
+    "family": "delayed_commitments",
+    "geometry": "LEARNED",
+    "n_seeds": 300,
+    "seed_range": [
+     200000,
+     200299
+    ]
+   },
+   "sealed_env_evaluate_calls": 401,
+   "wall_seconds": 1.1211376190185547
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 0.11,
+    "mean_misretrieval_cost": 1.89,
+    "mean_reward": 0.005532325837192291,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::maintenance_fault::LEARNED::FROZEN_WRONG::seeds200300-200599",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 1.10286283493042,
+   "plan": {
+    "cell_id": "cogr-wave1b::maintenance_fault::LEARNED::FROZEN_WRONG::seeds200300-200599",
+    "concern": "FROZEN_WRONG",
+    "family": "maintenance_fault",
+    "geometry": "LEARNED",
+    "n_seeds": 300,
+    "seed_range": [
+     200300,
+     200599
+    ]
+   },
+   "sealed_env_evaluate_calls": 391,
+   "wall_seconds": 1.1026952266693115
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 0.07,
+    "mean_misretrieval_cost": 1.93,
+    "mean_reward": 0.003124999999999998,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::resource_constrained::LEARNED::FROZEN_WRONG::seeds200600-200899",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 1.0474627017974854,
+   "plan": {
+    "cell_id": "cogr-wave1b::resource_constrained::LEARNED::FROZEN_WRONG::seeds200600-200899",
+    "concern": "FROZEN_WRONG",
+    "family": "resource_constrained",
+    "geometry": "LEARNED",
+    "n_seeds": 300,
+    "seed_range": [
+     200600,
+     200899
+    ]
+   },
+   "sealed_env_evaluate_calls": 382,
+   "wall_seconds": 1.0473408699035645
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 0.16333333333333333,
+    "mean_misretrieval_cost": 1.8366666666666667,
+    "mean_reward": 0.04649713714986202,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::delayed_commitments::LEARNED::ONLINE_LEARNED::seeds200000-200299",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 0.9876124858856201,
+   "plan": {
+    "cell_id": "cogr-wave1b::delayed_commitments::LEARNED::ONLINE_LEARNED::seeds200000-200299",
+    "concern": "ONLINE_LEARNED",
+    "family": "delayed_commitments",
+    "geometry": "LEARNED",
+    "n_seeds": 300,
+    "seed_range": [
+     200000,
+     200299
+    ]
+   },
+   "sealed_env_evaluate_calls": 442,
+   "wall_seconds": 0.9874534606933594
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 0.21333333333333335,
+    "mean_misretrieval_cost": 1.7866666666666666,
+    "mean_reward": 0.07350855299930928,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::maintenance_fault::LEARNED::ONLINE_LEARNED::seeds200300-200599",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 0.9653306007385254,
+   "plan": {
+    "cell_id": "cogr-wave1b::maintenance_fault::LEARNED::ONLINE_LEARNED::seeds200300-200599",
+    "concern": "ONLINE_LEARNED",
+    "family": "maintenance_fault",
+    "geometry": "LEARNED",
+    "n_seeds": 300,
+    "seed_range": [
+     200300,
+     200599
+    ]
+   },
+   "sealed_env_evaluate_calls": 426,
+   "wall_seconds": 0.9651675224304199
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 0.18,
+    "mean_misretrieval_cost": 1.82,
+    "mean_reward": 0.07404166666666666,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::resource_constrained::LEARNED::ONLINE_LEARNED::seeds200600-200899",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 1.2927954196929932,
+   "plan": {
+    "cell_id": "cogr-wave1b::resource_constrained::LEARNED::ONLINE_LEARNED::seeds200600-200899",
+    "concern": "ONLINE_LEARNED",
+    "family": "resource_constrained",
+    "geometry": "LEARNED",
+    "n_seeds": 300,
+    "seed_range": [
+     200600,
+     200899
+    ]
+   },
+   "sealed_env_evaluate_calls": 386,
+   "wall_seconds": 1.292637825012207
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 0.5233333333333333,
+    "mean_misretrieval_cost": 1.4766666666666666,
+    "mean_reward": 0.25227003883567795,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::delayed_commitments::LEARNED::ORACLE::seeds200000-200299",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 1.264268398284912,
+   "plan": {
+    "cell_id": "cogr-wave1b::delayed_commitments::LEARNED::ORACLE::seeds200000-200299",
+    "concern": "ORACLE",
+    "family": "delayed_commitments",
+    "geometry": "LEARNED",
+    "n_seeds": 300,
+    "seed_range": [
+     200000,
+     200299
+    ]
+   },
+   "sealed_env_evaluate_calls": 413,
+   "wall_seconds": 1.2640972137451172
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 0.5333333333333333,
+    "mean_misretrieval_cost": 1.4666666666666666,
+    "mean_reward": 0.2567146856707195,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::maintenance_fault::LEARNED::ORACLE::seeds200300-200599",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 1.0205187797546387,
+   "plan": {
+    "cell_id": "cogr-wave1b::maintenance_fault::LEARNED::ORACLE::seeds200300-200599",
+    "concern": "ORACLE",
+    "family": "maintenance_fault",
+    "geometry": "LEARNED",
+    "n_seeds": 300,
+    "seed_range": [
+     200300,
+     200599
+    ]
+   },
+   "sealed_env_evaluate_calls": 402,
+   "wall_seconds": 1.0203571319580078
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 0.43333333333333335,
+    "mean_misretrieval_cost": 1.5666666666666667,
+    "mean_reward": 0.23079166666666664,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::resource_constrained::LEARNED::ORACLE::seeds200600-200899",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 1.0597496032714844,
+   "plan": {
+    "cell_id": "cogr-wave1b::resource_constrained::LEARNED::ORACLE::seeds200600-200899",
+    "concern": "ORACLE",
+    "family": "resource_constrained",
+    "geometry": "LEARNED",
+    "n_seeds": 300,
+    "seed_range": [
+     200600,
+     200899
+    ]
+   },
+   "sealed_env_evaluate_calls": 384,
+   "wall_seconds": 1.0596163272857666
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 0.11,
+    "mean_misretrieval_cost": 1.89,
+    "mean_reward": 0.008751725025680463,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::delayed_commitments::FREQ_MATCHED_RANDOM::FROZEN_WRONG::seeds200000-200299",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 0.9350705146789551,
+   "plan": {
+    "cell_id": "cogr-wave1b::delayed_commitments::FREQ_MATCHED_RANDOM::FROZEN_WRONG::seeds200000-200299",
+    "concern": "FROZEN_WRONG",
+    "family": "delayed_commitments",
+    "geometry": "FREQ_MATCHED_RANDOM",
+    "n_seeds": 300,
+    "seed_range": [
+     200000,
+     200299
+    ]
+   },
+   "sealed_env_evaluate_calls": 300,
+   "wall_seconds": 0.9348347187042236
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 0.11666666666666667,
+    "mean_misretrieval_cost": 1.8833333333333333,
+    "mean_reward": 0.010347973187393092,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::maintenance_fault::FREQ_MATCHED_RANDOM::FROZEN_WRONG::seeds200300-200599",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 1.2534070014953613,
+   "plan": {
+    "cell_id": "cogr-wave1b::maintenance_fault::FREQ_MATCHED_RANDOM::FROZEN_WRONG::seeds200300-200599",
+    "concern": "FROZEN_WRONG",
+    "family": "maintenance_fault",
+    "geometry": "FREQ_MATCHED_RANDOM",
+    "n_seeds": 300,
+    "seed_range": [
+     200300,
+     200599
+    ]
+   },
+   "sealed_env_evaluate_calls": 300,
+   "wall_seconds": 1.2531919479370117
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 0.07666666666666666,
+    "mean_misretrieval_cost": 1.9233333333333333,
+    "mean_reward": 0.0063333333333333314,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::resource_constrained::FREQ_MATCHED_RANDOM::FROZEN_WRONG::seeds200600-200899",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 0.8878238201141357,
+   "plan": {
+    "cell_id": "cogr-wave1b::resource_constrained::FREQ_MATCHED_RANDOM::FROZEN_WRONG::seeds200600-200899",
+    "concern": "FROZEN_WRONG",
+    "family": "resource_constrained",
+    "geometry": "FREQ_MATCHED_RANDOM",
+    "n_seeds": 300,
+    "seed_range": [
+     200600,
+     200899
+    ]
+   },
+   "sealed_env_evaluate_calls": 300,
+   "wall_seconds": 0.8876926898956299
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 0.22666666666666666,
+    "mean_misretrieval_cost": 1.7733333333333334,
+    "mean_reward": 0.08250144478532069,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::delayed_commitments::FREQ_MATCHED_RANDOM::ONLINE_LEARNED::seeds200000-200299",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 1.0029113292694092,
+   "plan": {
+    "cell_id": "cogr-wave1b::delayed_commitments::FREQ_MATCHED_RANDOM::ONLINE_LEARNED::seeds200000-200299",
+    "concern": "ONLINE_LEARNED",
+    "family": "delayed_commitments",
+    "geometry": "FREQ_MATCHED_RANDOM",
+    "n_seeds": 300,
+    "seed_range": [
+     200000,
+     200299
+    ]
+   },
+   "sealed_env_evaluate_calls": 300,
+   "wall_seconds": 1.0027191638946533
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 0.19333333333333333,
+    "mean_misretrieval_cost": 1.8066666666666666,
+    "mean_reward": 0.0622023657352565,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::maintenance_fault::FREQ_MATCHED_RANDOM::ONLINE_LEARNED::seeds200300-200599",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 0.9163477420806885,
+   "plan": {
+    "cell_id": "cogr-wave1b::maintenance_fault::FREQ_MATCHED_RANDOM::ONLINE_LEARNED::seeds200300-200599",
+    "concern": "ONLINE_LEARNED",
+    "family": "maintenance_fault",
+    "geometry": "FREQ_MATCHED_RANDOM",
+    "n_seeds": 300,
+    "seed_range": [
+     200300,
+     200599
+    ]
+   },
+   "sealed_env_evaluate_calls": 300,
+   "wall_seconds": 0.9161458015441895
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 0.17666666666666667,
+    "mean_misretrieval_cost": 1.8233333333333333,
+    "mean_reward": 0.07266666666666667,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::resource_constrained::FREQ_MATCHED_RANDOM::ONLINE_LEARNED::seeds200600-200899",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 1.2090933322906494,
+   "plan": {
+    "cell_id": "cogr-wave1b::resource_constrained::FREQ_MATCHED_RANDOM::ONLINE_LEARNED::seeds200600-200899",
+    "concern": "ONLINE_LEARNED",
+    "family": "resource_constrained",
+    "geometry": "FREQ_MATCHED_RANDOM",
+    "n_seeds": 300,
+    "seed_range": [
+     200600,
+     200899
+    ]
+   },
+   "sealed_env_evaluate_calls": 300,
+   "wall_seconds": 1.2088572978973389
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 0.55,
+    "mean_misretrieval_cost": 1.45,
+    "mean_reward": 0.26751817224612723,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::delayed_commitments::FREQ_MATCHED_RANDOM::ORACLE::seeds200000-200299",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 0.9862966537475586,
+   "plan": {
+    "cell_id": "cogr-wave1b::delayed_commitments::FREQ_MATCHED_RANDOM::ORACLE::seeds200000-200299",
+    "concern": "ORACLE",
+    "family": "delayed_commitments",
+    "geometry": "FREQ_MATCHED_RANDOM",
+    "n_seeds": 300,
+    "seed_range": [
+     200000,
+     200299
+    ]
+   },
+   "sealed_env_evaluate_calls": 300,
+   "wall_seconds": 0.9860639572143555
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 0.5433333333333333,
+    "mean_misretrieval_cost": 1.4566666666666668,
+    "mean_reward": 0.2638481034847578,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::maintenance_fault::FREQ_MATCHED_RANDOM::ORACLE::seeds200300-200599",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 0.8351376056671143,
+   "plan": {
+    "cell_id": "cogr-wave1b::maintenance_fault::FREQ_MATCHED_RANDOM::ORACLE::seeds200300-200599",
+    "concern": "ORACLE",
+    "family": "maintenance_fault",
+    "geometry": "FREQ_MATCHED_RANDOM",
+    "n_seeds": 300,
+    "seed_range": [
+     200300,
+     200599
+    ]
+   },
+   "sealed_env_evaluate_calls": 300,
+   "wall_seconds": 0.8350052833557129
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 0.52,
+    "mean_misretrieval_cost": 1.48,
+    "mean_reward": 0.284375,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::resource_constrained::FREQ_MATCHED_RANDOM::ORACLE::seeds200600-200899",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 1.1597909927368164,
+   "plan": {
+    "cell_id": "cogr-wave1b::resource_constrained::FREQ_MATCHED_RANDOM::ORACLE::seeds200600-200899",
+    "concern": "ORACLE",
+    "family": "resource_constrained",
+    "geometry": "FREQ_MATCHED_RANDOM",
+    "n_seeds": 300,
+    "seed_range": [
+     200600,
+     200899
+    ]
+   },
+   "sealed_env_evaluate_calls": 300,
+   "wall_seconds": 1.159639835357666
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 1.0,
+    "mean_misretrieval_cost": 1.0,
+    "mean_reward": 0.5262288334940023,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::delayed_commitments::ORACLE_WITHHELD::FROZEN_WRONG::seeds200000-200299",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 1.0321574211120605,
+   "plan": {
+    "cell_id": "cogr-wave1b::delayed_commitments::ORACLE_WITHHELD::FROZEN_WRONG::seeds200000-200299",
+    "concern": "FROZEN_WRONG",
+    "family": "delayed_commitments",
+    "geometry": "ORACLE_WITHHELD",
+    "n_seeds": 300,
+    "seed_range": [
+     200000,
+     200299
+    ]
+   },
+   "sealed_env_evaluate_calls": 300,
+   "wall_seconds": 1.0319762229919434
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 1.0,
+    "mean_misretrieval_cost": 1.0,
+    "mean_reward": 0.5257867980500187,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::maintenance_fault::ORACLE_WITHHELD::FROZEN_WRONG::seeds200300-200599",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 0.7381935119628906,
+   "plan": {
+    "cell_id": "cogr-wave1b::maintenance_fault::ORACLE_WITHHELD::FROZEN_WRONG::seeds200300-200599",
+    "concern": "FROZEN_WRONG",
+    "family": "maintenance_fault",
+    "geometry": "ORACLE_WITHHELD",
+    "n_seeds": 300,
+    "seed_range": [
+     200300,
+     200599
+    ]
+   },
+   "sealed_env_evaluate_calls": 300,
+   "wall_seconds": 0.7380492687225342
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 1.0,
+    "mean_misretrieval_cost": 1.0,
+    "mean_reward": 0.575,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::resource_constrained::ORACLE_WITHHELD::FROZEN_WRONG::seeds200600-200899",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 0.5578432083129883,
+   "plan": {
+    "cell_id": "cogr-wave1b::resource_constrained::ORACLE_WITHHELD::FROZEN_WRONG::seeds200600-200899",
+    "concern": "FROZEN_WRONG",
+    "family": "resource_constrained",
+    "geometry": "ORACLE_WITHHELD",
+    "n_seeds": 300,
+    "seed_range": [
+     200600,
+     200899
+    ]
+   },
+   "sealed_env_evaluate_calls": 300,
+   "wall_seconds": 0.5576810836791992
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 1.0,
+    "mean_misretrieval_cost": 1.0,
+    "mean_reward": 0.5259230208421348,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::delayed_commitments::ORACLE_WITHHELD::ONLINE_LEARNED::seeds200000-200299",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 1.0403540134429932,
+   "plan": {
+    "cell_id": "cogr-wave1b::delayed_commitments::ORACLE_WITHHELD::ONLINE_LEARNED::seeds200000-200299",
+    "concern": "ONLINE_LEARNED",
+    "family": "delayed_commitments",
+    "geometry": "ORACLE_WITHHELD",
+    "n_seeds": 300,
+    "seed_range": [
+     200000,
+     200299
+    ]
+   },
+   "sealed_env_evaluate_calls": 300,
+   "wall_seconds": 1.0401439666748047
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 1.0,
+    "mean_misretrieval_cost": 1.0,
+    "mean_reward": 0.5261144639695607,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::maintenance_fault::ORACLE_WITHHELD::ONLINE_LEARNED::seeds200300-200599",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 0.9095125198364258,
+   "plan": {
+    "cell_id": "cogr-wave1b::maintenance_fault::ORACLE_WITHHELD::ONLINE_LEARNED::seeds200300-200599",
+    "concern": "ONLINE_LEARNED",
+    "family": "maintenance_fault",
+    "geometry": "ORACLE_WITHHELD",
+    "n_seeds": 300,
+    "seed_range": [
+     200300,
+     200599
+    ]
+   },
+   "sealed_env_evaluate_calls": 300,
+   "wall_seconds": 0.9092462062835693
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 1.0,
+    "mean_misretrieval_cost": 1.0,
+    "mean_reward": 0.5747916666666667,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::resource_constrained::ORACLE_WITHHELD::ONLINE_LEARNED::seeds200600-200899",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 0.49890995025634766,
+   "plan": {
+    "cell_id": "cogr-wave1b::resource_constrained::ORACLE_WITHHELD::ONLINE_LEARNED::seeds200600-200899",
+    "concern": "ONLINE_LEARNED",
+    "family": "resource_constrained",
+    "geometry": "ORACLE_WITHHELD",
+    "n_seeds": 300,
+    "seed_range": [
+     200600,
+     200899
+    ]
+   },
+   "sealed_env_evaluate_calls": 300,
+   "wall_seconds": 0.49875521659851074
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 1.0,
+    "mean_misretrieval_cost": 1.0,
+    "mean_reward": 0.5255592738739433,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::delayed_commitments::ORACLE_WITHHELD::ORACLE::seeds200000-200299",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 1.106229305267334,
+   "plan": {
+    "cell_id": "cogr-wave1b::delayed_commitments::ORACLE_WITHHELD::ORACLE::seeds200000-200299",
+    "concern": "ORACLE",
+    "family": "delayed_commitments",
+    "geometry": "ORACLE_WITHHELD",
+    "n_seeds": 300,
+    "seed_range": [
+     200000,
+     200299
+    ]
+   },
+   "sealed_env_evaluate_calls": 300,
+   "wall_seconds": 1.1060643196105957
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 1.0,
+    "mean_misretrieval_cost": 1.0,
+    "mean_reward": 0.5259205011764813,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::maintenance_fault::ORACLE_WITHHELD::ORACLE::seeds200300-200599",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 0.7960433959960938,
+   "plan": {
+    "cell_id": "cogr-wave1b::maintenance_fault::ORACLE_WITHHELD::ORACLE::seeds200300-200599",
+    "concern": "ORACLE",
+    "family": "maintenance_fault",
+    "geometry": "ORACLE_WITHHELD",
+    "n_seeds": 300,
+    "seed_range": [
+     200300,
+     200599
+    ]
+   },
+   "sealed_env_evaluate_calls": 300,
+   "wall_seconds": 0.7958540916442871
+  },
+  {
+   "aggregate": {
+    "mean_constraint_preserved": 1.0,
+    "mean_misretrieval_cost": 1.0,
+    "mean_reward": 0.5752083333333333,
+    "n_rows": 300.0
+   },
+   "cell_id": "cogr-wave1b::resource_constrained::ORACLE_WITHHELD::ORACLE::seeds200600-200899",
+   "integrity_audit_passed": true,
+   "n_rows": 300,
+   "outer_wall_seconds": 0.5706799030303955,
+   "plan": {
+    "cell_id": "cogr-wave1b::resource_constrained::ORACLE_WITHHELD::ORACLE::seeds200600-200899",
+    "concern": "ORACLE",
+    "family": "resource_constrained",
+    "geometry": "ORACLE_WITHHELD",
+    "n_seeds": 300,
+    "seed_range": [
+     200600,
+     200899
+    ]
+   },
+   "sealed_env_evaluate_calls": 300,
+   "wall_seconds": 0.5705323219299316
+  }
+ ],
+ "confirmatory_seed_range": [
+  200000,
+  201999
+ ],
+ "families": {
+  "delayed_commitments": {
+   "contrast_learned_vs_random": {
+    "lower_bound_2sigma": -0.4318004796384049,
+    "mean_delta": -0.02164888996333151,
+    "mean_left": -0.012897164937651045,
+    "mean_right": 0.008751725025680463,
+    "n_pairs": 300,
+    "std_delta": 0.20507579483753668
+   },
+   "family": "delayed_commitments",
+   "gate_results": {
+    "G0_integrity": true,
+    "G1_L1_behavior": false,
+    "G2_L1_representation": false,
+    "G5_non_ceiling": true,
+    "G9_leakage_audit": true
+   },
+   "integrity_ok": true,
+   "intervention_diagnostic": {
+    "direction_fraction": 0.5060240963855421,
+    "mean_delta_active": 0.002218429657356603,
+    "n_active": 83,
+    "n_direction_matched": 42
+   },
+   "kill_reasons": [
+    "G1_L1_behavior: paired lower bound -0.4318 < delta_L1 0.0484",
+    "G2_L1_representation: intervention direction fraction 0.506 < required 0.700 (n_active=83)"
+   ],
+   "leakage": {
+    "label_permutation": {
+     "audit": "label_permutation",
+     "n_permutations": 100,
+     "n_samples": 20,
+     "null_mean": 0.2505,
+     "null_std": 0.09414554603582603,
+     "observed_stat": 0.25,
+     "p_value": 0.594059405940594,
+     "passed": true,
+     "reason": "observed_hit_rate=0.2500 vs null_mean=0.2505 (std=0.0941); p=0.5941 (tolerance=0.0100); n_samples=20, n_permutations=100",
+     "tolerance": 0.01,
+     "z_score": -0.005310925700189057
+    },
+    "randomized_generator": {
+     "audit": "randomized_generator",
+     "n_permutations": 100,
+     "n_samples": 40,
+     "null_mean": 0.2695,
+     "null_std": 0.09042408501895471,
+     "observed_stat": 0.4,
+     "p_value": 0.1485148514851485,
+     "passed": true,
+     "reason": "worst offset=200: observed_max=0.4000; p_min=0.1485 (tolerance=0.0100); offsets_swept=[0, 200]; per_offset_p=[0.6337, 0.1485]; n_samples=40",
+     "tolerance": 0.01,
+     "z_score": 1.443199563176609
+    }
+   },
+   "n_seeds": 300,
+   "non_ceiling_headroom": 0.5391259984316533,
+   "passed": false,
+   "thresholds": {
+    "delta_L1": 0.0484,
+    "headroom": 0.4845,
+    "mu_best": 0.5314,
+    "sigma_best": 0.0218
+   }
+  },
+  "maintenance_fault": {
+   "contrast_learned_vs_random": {
+    "lower_bound_2sigma": -0.420933663475401,
+    "mean_delta": -0.004815647350200802,
+    "mean_left": 0.005532325837192291,
+    "mean_right": 0.010347973187393092,
+    "n_pairs": 300,
+    "std_delta": 0.2080590080626001
+   },
+   "family": "maintenance_fault",
+   "gate_results": {
+    "G0_integrity": true,
+    "G1_L1_behavior": false,
+    "G2_L1_representation": false,
+    "G5_non_ceiling": true,
+    "G9_leakage_audit": true
+   },
+   "integrity_ok": true,
+   "intervention_diagnostic": {
+    "direction_fraction": 0.4383561643835616,
+    "mean_delta_active": 0.0013814836611681332,
+    "n_active": 73,
+    "n_direction_matched": 32
+   },
+   "kill_reasons": [
+    "G1_L1_behavior: paired lower bound -0.4209 < delta_L1 0.0534",
+    "G2_L1_representation: intervention direction fraction 0.438 < required 0.700 (n_active=73)"
+   ],
+   "leakage": {
+    "label_permutation": {
+     "audit": "label_permutation",
+     "n_permutations": 100,
+     "n_samples": 20,
+     "null_mean": 0.2735,
+     "null_std": 0.10111874208078342,
+     "observed_stat": 0.35,
+     "p_value": 0.36633663366336633,
+     "passed": true,
+     "reason": "observed_hit_rate=0.3500 vs null_mean=0.2735 (std=0.1011); p=0.3663 (tolerance=0.0100); n_samples=20, n_permutations=100",
+     "tolerance": 0.01,
+     "z_score": 0.7565363099442473
+    },
+    "randomized_generator": {
+     "audit": "randomized_generator",
+     "n_permutations": 100,
+     "n_samples": 40,
+     "null_mean": 0.2545,
+     "null_std": 0.09484037626294493,
+     "observed_stat": 0.35,
+     "p_value": 0.2376237623762376,
+     "passed": true,
+     "reason": "worst offset=0: observed_max=0.3500; p_min=0.2376 (tolerance=0.0100); offsets_swept=[0, 200]; per_offset_p=[0.2376, 0.9901]; n_samples=40",
+     "tolerance": 0.01,
+     "z_score": 1.006955094054311
+    }
+   },
+   "n_seeds": 300,
+   "non_ceiling_headroom": 0.5202544722128264,
+   "passed": false,
+   "thresholds": {
+    "delta_L1": 0.0534,
+    "headroom": 0.4548,
+    "mu_best": 0.5029,
+    "sigma_best": 0.0267
+   }
+  },
+  "resource_constrained": {
+   "contrast_learned_vs_random": {
+    "lower_bound_2sigma": -0.3587874827415466,
+    "mean_delta": -0.003208333333333333,
+    "mean_left": 0.003124999999999998,
+    "mean_right": 0.0063333333333333314,
+    "n_pairs": 300,
+    "std_delta": 0.17778957470410664
+   },
+   "family": "resource_constrained",
+   "gate_results": {
+    "G0_integrity": true,
+    "G1_L1_behavior": false,
+    "G2_L1_representation": false,
+    "G5_non_ceiling": true,
+    "G9_leakage_audit": true
+   },
+   "integrity_ok": true,
+   "intervention_diagnostic": {
+    "direction_fraction": 0.6304347826086957,
+    "mean_delta_active": -0.045923913043478266,
+    "n_active": 46,
+    "n_direction_matched": 29
+   },
+   "kill_reasons": [
+    "G1_L1_behavior: paired lower bound -0.3588 < delta_L1 0.0500",
+    "G2_L1_representation: intervention direction fraction 0.630 < required 0.700 (n_active=46)"
+   ],
+   "leakage": {
+    "label_permutation": {
+     "audit": "label_permutation",
+     "n_permutations": 100,
+     "n_samples": 16,
+     "null_mean": 0.221875,
+     "null_std": 0.10220694433206078,
+     "observed_stat": 0.25,
+     "p_value": 0.5148514851485149,
+     "passed": true,
+     "reason": "observed_hit_rate=0.2500 vs null_mean=0.2219 (std=0.1022); p=0.5149 (tolerance=0.0100); n_samples=16, n_permutations=100",
+     "tolerance": 0.01,
+     "z_score": 0.2751769968645626
+    },
+    "randomized_generator": {
+     "audit": "randomized_generator",
+     "n_permutations": 100,
+     "n_samples": 32,
+     "null_mean": 0.21375,
+     "null_std": 0.10629640994726382,
+     "observed_stat": 0.5,
+     "p_value": 0.0297029702970297,
+     "passed": true,
+     "reason": "worst offset=10: observed_max=0.5000; p_min=0.0297 (tolerance=0.0100); offsets_swept=[0, 10]; per_offset_p=[0.4257, 0.0297]; n_samples=32",
+     "tolerance": 0.01,
+     "z_score": 2.6929413716043227
+    }
+   },
+   "n_seeds": 300,
+   "non_ceiling_headroom": 0.5718749999999999,
+   "passed": false,
+   "thresholds": {
+    "delta_L1": 0.05,
+    "headroom": 0.4291,
+    "mu_best": 0.575,
+    "sigma_best": 0.025
+   }
+  }
+ },
+ "kind": "cogr_wave1b_e2b_L1_verdict",
+ "leakage_audit_summary": {
+  "delayed_commitments": {
+   "label_permutation": {
+    "audit": "label_permutation",
+    "n_permutations": 100,
+    "n_samples": 20,
+    "null_mean": 0.2505,
+    "null_std": 0.09414554603582603,
+    "observed_stat": 0.25,
+    "p_value": 0.594059405940594,
+    "passed": true,
+    "reason": "observed_hit_rate=0.2500 vs null_mean=0.2505 (std=0.0941); p=0.5941 (tolerance=0.0100); n_samples=20, n_permutations=100",
+    "tolerance": 0.01,
+    "z_score": -0.005310925700189057
+   },
+   "randomized_generator": {
+    "audit": "randomized_generator",
+    "n_permutations": 100,
+    "n_samples": 40,
+    "null_mean": 0.2695,
+    "null_std": 0.09042408501895471,
+    "observed_stat": 0.4,
+    "p_value": 0.1485148514851485,
+    "passed": true,
+    "reason": "worst offset=200: observed_max=0.4000; p_min=0.1485 (tolerance=0.0100); offsets_swept=[0, 200]; per_offset_p=[0.6337, 0.1485]; n_samples=40",
+    "tolerance": 0.01,
+    "z_score": 1.443199563176609
+   }
+  },
+  "maintenance_fault": {
+   "label_permutation": {
+    "audit": "label_permutation",
+    "n_permutations": 100,
+    "n_samples": 20,
+    "null_mean": 0.2735,
+    "null_std": 0.10111874208078342,
+    "observed_stat": 0.35,
+    "p_value": 0.36633663366336633,
+    "passed": true,
+    "reason": "observed_hit_rate=0.3500 vs null_mean=0.2735 (std=0.1011); p=0.3663 (tolerance=0.0100); n_samples=20, n_permutations=100",
+    "tolerance": 0.01,
+    "z_score": 0.7565363099442473
+   },
+   "randomized_generator": {
+    "audit": "randomized_generator",
+    "n_permutations": 100,
+    "n_samples": 40,
+    "null_mean": 0.2545,
+    "null_std": 0.09484037626294493,
+    "observed_stat": 0.35,
+    "p_value": 0.2376237623762376,
+    "passed": true,
+    "reason": "worst offset=0: observed_max=0.3500; p_min=0.2376 (tolerance=0.0100); offsets_swept=[0, 200]; per_offset_p=[0.2376, 0.9901]; n_samples=40",
+    "tolerance": 0.01,
+    "z_score": 1.006955094054311
+   }
+  },
+  "resource_constrained": {
+   "label_permutation": {
+    "audit": "label_permutation",
+    "n_permutations": 100,
+    "n_samples": 16,
+    "null_mean": 0.221875,
+    "null_std": 0.10220694433206078,
+    "observed_stat": 0.25,
+    "p_value": 0.5148514851485149,
+    "passed": true,
+    "reason": "observed_hit_rate=0.2500 vs null_mean=0.2219 (std=0.1022); p=0.5149 (tolerance=0.0100); n_samples=16, n_permutations=100",
+    "tolerance": 0.01,
+    "z_score": 0.2751769968645626
+   },
+   "randomized_generator": {
+    "audit": "randomized_generator",
+    "n_permutations": 100,
+    "n_samples": 32,
+    "null_mean": 0.21375,
+    "null_std": 0.10629640994726382,
+    "observed_stat": 0.5,
+    "p_value": 0.0297029702970297,
+    "passed": true,
+    "reason": "worst offset=10: observed_max=0.5000; p_min=0.0297 (tolerance=0.0100); offsets_swept=[0, 10]; per_offset_p=[0.4257, 0.0297]; n_samples=32",
+    "tolerance": 0.01,
+    "z_score": 2.6929413716043227
+   }
+  }
+ },
+ "manifest": {
+  "app": "research-derived-cogr-wave1b-e2b",
+  "cells": [
+   {
+    "cell_id": "cogr-wave1b::delayed_commitments::LEARNED::FROZEN_WRONG::seeds200000-200299",
+    "concern": "FROZEN_WRONG",
+    "family": "delayed_commitments",
+    "geometry": "LEARNED",
+    "n_seeds": 300,
+    "seed_range": [
+     200000,
+     200299
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::maintenance_fault::LEARNED::FROZEN_WRONG::seeds200300-200599",
+    "concern": "FROZEN_WRONG",
+    "family": "maintenance_fault",
+    "geometry": "LEARNED",
+    "n_seeds": 300,
+    "seed_range": [
+     200300,
+     200599
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::resource_constrained::LEARNED::FROZEN_WRONG::seeds200600-200899",
+    "concern": "FROZEN_WRONG",
+    "family": "resource_constrained",
+    "geometry": "LEARNED",
+    "n_seeds": 300,
+    "seed_range": [
+     200600,
+     200899
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::delayed_commitments::LEARNED::ONLINE_LEARNED::seeds200000-200299",
+    "concern": "ONLINE_LEARNED",
+    "family": "delayed_commitments",
+    "geometry": "LEARNED",
+    "n_seeds": 300,
+    "seed_range": [
+     200000,
+     200299
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::maintenance_fault::LEARNED::ONLINE_LEARNED::seeds200300-200599",
+    "concern": "ONLINE_LEARNED",
+    "family": "maintenance_fault",
+    "geometry": "LEARNED",
+    "n_seeds": 300,
+    "seed_range": [
+     200300,
+     200599
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::resource_constrained::LEARNED::ONLINE_LEARNED::seeds200600-200899",
+    "concern": "ONLINE_LEARNED",
+    "family": "resource_constrained",
+    "geometry": "LEARNED",
+    "n_seeds": 300,
+    "seed_range": [
+     200600,
+     200899
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::delayed_commitments::LEARNED::ORACLE::seeds200000-200299",
+    "concern": "ORACLE",
+    "family": "delayed_commitments",
+    "geometry": "LEARNED",
+    "n_seeds": 300,
+    "seed_range": [
+     200000,
+     200299
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::maintenance_fault::LEARNED::ORACLE::seeds200300-200599",
+    "concern": "ORACLE",
+    "family": "maintenance_fault",
+    "geometry": "LEARNED",
+    "n_seeds": 300,
+    "seed_range": [
+     200300,
+     200599
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::resource_constrained::LEARNED::ORACLE::seeds200600-200899",
+    "concern": "ORACLE",
+    "family": "resource_constrained",
+    "geometry": "LEARNED",
+    "n_seeds": 300,
+    "seed_range": [
+     200600,
+     200899
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::delayed_commitments::FREQ_MATCHED_RANDOM::FROZEN_WRONG::seeds200000-200299",
+    "concern": "FROZEN_WRONG",
+    "family": "delayed_commitments",
+    "geometry": "FREQ_MATCHED_RANDOM",
+    "n_seeds": 300,
+    "seed_range": [
+     200000,
+     200299
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::maintenance_fault::FREQ_MATCHED_RANDOM::FROZEN_WRONG::seeds200300-200599",
+    "concern": "FROZEN_WRONG",
+    "family": "maintenance_fault",
+    "geometry": "FREQ_MATCHED_RANDOM",
+    "n_seeds": 300,
+    "seed_range": [
+     200300,
+     200599
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::resource_constrained::FREQ_MATCHED_RANDOM::FROZEN_WRONG::seeds200600-200899",
+    "concern": "FROZEN_WRONG",
+    "family": "resource_constrained",
+    "geometry": "FREQ_MATCHED_RANDOM",
+    "n_seeds": 300,
+    "seed_range": [
+     200600,
+     200899
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::delayed_commitments::FREQ_MATCHED_RANDOM::ONLINE_LEARNED::seeds200000-200299",
+    "concern": "ONLINE_LEARNED",
+    "family": "delayed_commitments",
+    "geometry": "FREQ_MATCHED_RANDOM",
+    "n_seeds": 300,
+    "seed_range": [
+     200000,
+     200299
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::maintenance_fault::FREQ_MATCHED_RANDOM::ONLINE_LEARNED::seeds200300-200599",
+    "concern": "ONLINE_LEARNED",
+    "family": "maintenance_fault",
+    "geometry": "FREQ_MATCHED_RANDOM",
+    "n_seeds": 300,
+    "seed_range": [
+     200300,
+     200599
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::resource_constrained::FREQ_MATCHED_RANDOM::ONLINE_LEARNED::seeds200600-200899",
+    "concern": "ONLINE_LEARNED",
+    "family": "resource_constrained",
+    "geometry": "FREQ_MATCHED_RANDOM",
+    "n_seeds": 300,
+    "seed_range": [
+     200600,
+     200899
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::delayed_commitments::FREQ_MATCHED_RANDOM::ORACLE::seeds200000-200299",
+    "concern": "ORACLE",
+    "family": "delayed_commitments",
+    "geometry": "FREQ_MATCHED_RANDOM",
+    "n_seeds": 300,
+    "seed_range": [
+     200000,
+     200299
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::maintenance_fault::FREQ_MATCHED_RANDOM::ORACLE::seeds200300-200599",
+    "concern": "ORACLE",
+    "family": "maintenance_fault",
+    "geometry": "FREQ_MATCHED_RANDOM",
+    "n_seeds": 300,
+    "seed_range": [
+     200300,
+     200599
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::resource_constrained::FREQ_MATCHED_RANDOM::ORACLE::seeds200600-200899",
+    "concern": "ORACLE",
+    "family": "resource_constrained",
+    "geometry": "FREQ_MATCHED_RANDOM",
+    "n_seeds": 300,
+    "seed_range": [
+     200600,
+     200899
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::delayed_commitments::ORACLE_WITHHELD::FROZEN_WRONG::seeds200000-200299",
+    "concern": "FROZEN_WRONG",
+    "family": "delayed_commitments",
+    "geometry": "ORACLE_WITHHELD",
+    "n_seeds": 300,
+    "seed_range": [
+     200000,
+     200299
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::maintenance_fault::ORACLE_WITHHELD::FROZEN_WRONG::seeds200300-200599",
+    "concern": "FROZEN_WRONG",
+    "family": "maintenance_fault",
+    "geometry": "ORACLE_WITHHELD",
+    "n_seeds": 300,
+    "seed_range": [
+     200300,
+     200599
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::resource_constrained::ORACLE_WITHHELD::FROZEN_WRONG::seeds200600-200899",
+    "concern": "FROZEN_WRONG",
+    "family": "resource_constrained",
+    "geometry": "ORACLE_WITHHELD",
+    "n_seeds": 300,
+    "seed_range": [
+     200600,
+     200899
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::delayed_commitments::ORACLE_WITHHELD::ONLINE_LEARNED::seeds200000-200299",
+    "concern": "ONLINE_LEARNED",
+    "family": "delayed_commitments",
+    "geometry": "ORACLE_WITHHELD",
+    "n_seeds": 300,
+    "seed_range": [
+     200000,
+     200299
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::maintenance_fault::ORACLE_WITHHELD::ONLINE_LEARNED::seeds200300-200599",
+    "concern": "ONLINE_LEARNED",
+    "family": "maintenance_fault",
+    "geometry": "ORACLE_WITHHELD",
+    "n_seeds": 300,
+    "seed_range": [
+     200300,
+     200599
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::resource_constrained::ORACLE_WITHHELD::ONLINE_LEARNED::seeds200600-200899",
+    "concern": "ONLINE_LEARNED",
+    "family": "resource_constrained",
+    "geometry": "ORACLE_WITHHELD",
+    "n_seeds": 300,
+    "seed_range": [
+     200600,
+     200899
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::delayed_commitments::ORACLE_WITHHELD::ORACLE::seeds200000-200299",
+    "concern": "ORACLE",
+    "family": "delayed_commitments",
+    "geometry": "ORACLE_WITHHELD",
+    "n_seeds": 300,
+    "seed_range": [
+     200000,
+     200299
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::maintenance_fault::ORACLE_WITHHELD::ORACLE::seeds200300-200599",
+    "concern": "ORACLE",
+    "family": "maintenance_fault",
+    "geometry": "ORACLE_WITHHELD",
+    "n_seeds": 300,
+    "seed_range": [
+     200300,
+     200599
+    ]
+   },
+   {
+    "cell_id": "cogr-wave1b::resource_constrained::ORACLE_WITHHELD::ORACLE::seeds200600-200899",
+    "concern": "ORACLE",
+    "family": "resource_constrained",
+    "geometry": "ORACLE_WITHHELD",
+    "n_seeds": 300,
+    "seed_range": [
+     200600,
+     200899
+    ]
+   }
+  ],
+  "confirmatory_seed_range": [
+   200000,
+   201999
+  ],
+  "cpu": 4,
+  "estimate": {
+   "conservative_cost_usd": 10.8,
+   "wallclock_upper_bound_cost_usd": 10.8,
+   "wallclock_upper_bound_seconds": 1800.0,
+   "within_hard_cap": true
+  },
+  "gpu": "L4",
+  "gpu_rate_per_second": 0.00022222222222222223,
+  "hard_cap_usd": 30.0,
+  "kind": "cogr_wave1b_modal_manifest",
+  "max_containers": 64,
+  "memory_mb": 16384,
+  "n_cells": 27,
+  "preset": "confirmatory",
+  "replay_reserve_range": [
+   200900,
+   201999
+  ],
+  "timeout_seconds": 1800
+ },
+ "n_cells": 27,
+ "n_rows_total": 8100,
+ "target": "COGR-E2b L1 (representation contribution)",
+ "wave": "1b",
+ "l1": {
+  "aggregate_decision": "KILL",
+  "families": {
+   "delayed_commitments": {
+    "contrast_learned_vs_random": {
+     "lower_bound_2sigma": -0.4318004796384049,
+     "mean_delta": -0.02164888996333151,
+     "mean_left": -0.012897164937651045,
+     "mean_right": 0.008751725025680463,
+     "n_pairs": 300,
+     "std_delta": 0.20507579483753668
+    },
+    "family": "delayed_commitments",
+    "gate_results": {
+     "G0_integrity": true,
+     "G1_L1_behavior": false,
+     "G2_L1_representation": false,
+     "G5_non_ceiling": true,
+     "G9_leakage_audit": true
+    },
+    "integrity_ok": true,
+    "intervention_diagnostic": {
+     "direction_fraction": 0.5060240963855421,
+     "mean_delta_active": 0.002218429657356603,
+     "n_active": 83,
+     "n_direction_matched": 42
+    },
+    "kill_reasons": [
+     "G1_L1_behavior: paired lower bound -0.4318 < delta_L1 0.0484",
+     "G2_L1_representation: intervention direction fraction 0.506 < required 0.700 (n_active=83)"
+    ],
+    "leakage": {
+     "label_permutation": {
+      "audit": "label_permutation",
+      "n_permutations": 100,
+      "n_samples": 20,
+      "null_mean": 0.2505,
+      "null_std": 0.09414554603582603,
+      "observed_stat": 0.25,
+      "p_value": 0.594059405940594,
+      "passed": true,
+      "reason": "observed_hit_rate=0.2500 vs null_mean=0.2505 (std=0.0941); p=0.5941 (tolerance=0.0100); n_samples=20, n_permutations=100",
+      "tolerance": 0.01,
+      "z_score": -0.005310925700189057
+     },
+     "randomized_generator": {
+      "audit": "randomized_generator",
+      "n_permutations": 100,
+      "n_samples": 40,
+      "null_mean": 0.2695,
+      "null_std": 0.09042408501895471,
+      "observed_stat": 0.4,
+      "p_value": 0.1485148514851485,
+      "passed": true,
+      "reason": "worst offset=200: observed_max=0.4000; p_min=0.1485 (tolerance=0.0100); offsets_swept=[0, 200]; per_offset_p=[0.6337, 0.1485]; n_samples=40",
+      "tolerance": 0.01,
+      "z_score": 1.443199563176609
+     }
+    },
+    "n_seeds": 300,
+    "non_ceiling_headroom": 0.5391259984316533,
+    "passed": false,
+    "thresholds": {
+     "delta_L1": 0.0484,
+     "headroom": 0.4845,
+     "mu_best": 0.5314,
+     "sigma_best": 0.0218
+    }
+   },
+   "maintenance_fault": {
+    "contrast_learned_vs_random": {
+     "lower_bound_2sigma": -0.420933663475401,
+     "mean_delta": -0.004815647350200802,
+     "mean_left": 0.005532325837192291,
+     "mean_right": 0.010347973187393092,
+     "n_pairs": 300,
+     "std_delta": 0.2080590080626001
+    },
+    "family": "maintenance_fault",
+    "gate_results": {
+     "G0_integrity": true,
+     "G1_L1_behavior": false,
+     "G2_L1_representation": false,
+     "G5_non_ceiling": true,
+     "G9_leakage_audit": true
+    },
+    "integrity_ok": true,
+    "intervention_diagnostic": {
+     "direction_fraction": 0.4383561643835616,
+     "mean_delta_active": 0.0013814836611681332,
+     "n_active": 73,
+     "n_direction_matched": 32
+    },
+    "kill_reasons": [
+     "G1_L1_behavior: paired lower bound -0.4209 < delta_L1 0.0534",
+     "G2_L1_representation: intervention direction fraction 0.438 < required 0.700 (n_active=73)"
+    ],
+    "leakage": {
+     "label_permutation": {
+      "audit": "label_permutation",
+      "n_permutations": 100,
+      "n_samples": 20,
+      "null_mean": 0.2735,
+      "null_std": 0.10111874208078342,
+      "observed_stat": 0.35,
+      "p_value": 0.36633663366336633,
+      "passed": true,
+      "reason": "observed_hit_rate=0.3500 vs null_mean=0.2735 (std=0.1011); p=0.3663 (tolerance=0.0100); n_samples=20, n_permutations=100",
+      "tolerance": 0.01,
+      "z_score": 0.7565363099442473
+     },
+     "randomized_generator": {
+      "audit": "randomized_generator",
+      "n_permutations": 100,
+      "n_samples": 40,
+      "null_mean": 0.2545,
+      "null_std": 0.09484037626294493,
+      "observed_stat": 0.35,
+      "p_value": 0.2376237623762376,
+      "passed": true,
+      "reason": "worst offset=0: observed_max=0.3500; p_min=0.2376 (tolerance=0.0100); offsets_swept=[0, 200]; per_offset_p=[0.2376, 0.9901]; n_samples=40",
+      "tolerance": 0.01,
+      "z_score": 1.006955094054311
+     }
+    },
+    "n_seeds": 300,
+    "non_ceiling_headroom": 0.5202544722128264,
+    "passed": false,
+    "thresholds": {
+     "delta_L1": 0.0534,
+     "headroom": 0.4548,
+     "mu_best": 0.5029,
+     "sigma_best": 0.0267
+    }
+   },
+   "resource_constrained": {
+    "contrast_learned_vs_random": {
+     "lower_bound_2sigma": -0.3587874827415466,
+     "mean_delta": -0.003208333333333333,
+     "mean_left": 0.003124999999999998,
+     "mean_right": 0.0063333333333333314,
+     "n_pairs": 300,
+     "std_delta": 0.17778957470410664
+    },
+    "family": "resource_constrained",
+    "gate_results": {
+     "G0_integrity": true,
+     "G1_L1_behavior": false,
+     "G2_L1_representation": false,
+     "G5_non_ceiling": true,
+     "G9_leakage_audit": true
+    },
+    "integrity_ok": true,
+    "intervention_diagnostic": {
+     "direction_fraction": 0.6304347826086957,
+     "mean_delta_active": -0.045923913043478266,
+     "n_active": 46,
+     "n_direction_matched": 29
+    },
+    "kill_reasons": [
+     "G1_L1_behavior: paired lower bound -0.3588 < delta_L1 0.0500",
+     "G2_L1_representation: intervention direction fraction 0.630 < required 0.700 (n_active=46)"
+    ],
+    "leakage": {
+     "label_permutation": {
+      "audit": "label_permutation",
+      "n_permutations": 100,
+      "n_samples": 16,
+      "null_mean": 0.221875,
+      "null_std": 0.10220694433206078,
+      "observed_stat": 0.25,
+      "p_value": 0.5148514851485149,
+      "passed": true,
+      "reason": "observed_hit_rate=0.2500 vs null_mean=0.2219 (std=0.1022); p=0.5149 (tolerance=0.0100); n_samples=16, n_permutations=100",
+      "tolerance": 0.01,
+      "z_score": 0.2751769968645626
+     },
+     "randomized_generator": {
+      "audit": "randomized_generator",
+      "n_permutations": 100,
+      "n_samples": 32,
+      "null_mean": 0.21375,
+      "null_std": 0.10629640994726382,
+      "observed_stat": 0.5,
+      "p_value": 0.0297029702970297,
+      "passed": true,
+      "reason": "worst offset=10: observed_max=0.5000; p_min=0.0297 (tolerance=0.0100); offsets_swept=[0, 10]; per_offset_p=[0.4257, 0.0297]; n_samples=32",
+      "tolerance": 0.01,
+      "z_score": 2.6929413716043227
+     }
+    },
+    "n_seeds": 300,
+    "non_ceiling_headroom": 0.5718749999999999,
+    "passed": false,
+    "thresholds": {
+     "delta_L1": 0.05,
+     "headroom": 0.4291,
+     "mu_best": 0.575,
+     "sigma_best": 0.025
+    }
+   }
+  }
+ },
+ "l2": {
+  "aggregate_decision": "WITHHELD",
+  "families": {
+   "delayed_commitments": {
+    "contrast_recovery": {
+     "lower_bound_2sigma": -0.2900769336369419,
+     "mean_delta": 0.05939430208751306,
+     "mean_left": 0.04649713714986202,
+     "mean_right": -0.012897164937651045,
+     "n_pairs": 300,
+     "std_delta": 0.1747356178622275
+    },
+    "family": "delayed_commitments",
+    "gate_results": {
+     "G0_integrity": true,
+     "G3_L2_recovery": false,
+     "G4_L2_specificity": false,
+     "G6_bundle_awareness": false,
+     "G7_adversarial": false,
+     "L1_precondition": false
+    },
+    "integrity_ok": true,
+    "kill_reasons": [
+     "L1_precondition: L1 verdict for family 'delayed_commitments' did not pass; L2 withheld per PROMOTION_CONTRACT_L2.md.",
+     "G3_L2_recovery: paired lower bound -0.2901 < 0.0000 or mean_concern_shift 0.0000 <= 0",
+     "L2 UNVERIFIED: G4 specificity, G6 bundle awareness, and G7 adversarial are scored against a fuller baseline sweep than the crossed cells; this receipt reports L1 pre-condition + G3 recovery only.  Full L2 promotion requires those gates to be scored by their respective harnesses before this verdict can be signed."
+    ],
+    "mean_concern_shift_l1": 3.90306839183822e-06,
+    "n_seeds": 300,
+    "passed": false,
+    "withheld": true
+   },
+   "maintenance_fault": {
+    "contrast_recovery": {
+     "lower_bound_2sigma": -0.30868232363523596,
+     "mean_delta": 0.06797622716211699,
+     "mean_left": 0.07350855299930928,
+     "mean_right": 0.005532325837192291,
+     "n_pairs": 300,
+     "std_delta": 0.18832927539867647
+    },
+    "family": "maintenance_fault",
+    "gate_results": {
+     "G0_integrity": true,
+     "G3_L2_recovery": false,
+     "G4_L2_specificity": false,
+     "G6_bundle_awareness": false,
+     "G7_adversarial": false,
+     "L1_precondition": false
+    },
+    "integrity_ok": true,
+    "kill_reasons": [
+     "L1_precondition: L1 verdict for family 'maintenance_fault' did not pass; L2 withheld per PROMOTION_CONTRACT_L2.md.",
+     "G3_L2_recovery: paired lower bound -0.3087 < 0.0000 or mean_concern_shift 0.0000 <= 0",
+     "L2 UNVERIFIED: G4 specificity, G6 bundle awareness, and G7 adversarial are scored against a fuller baseline sweep than the crossed cells; this receipt reports L1 pre-condition + G3 recovery only.  Full L2 promotion requires those gates to be scored by their respective harnesses before this verdict can be signed."
+    ],
+    "mean_concern_shift_l1": 1.4443836408032744e-05,
+    "n_seeds": 300,
+    "passed": false,
+    "withheld": true
+   },
+   "resource_constrained": {
+    "contrast_recovery": {
+     "lower_bound_2sigma": -0.317755464622709,
+     "mean_delta": 0.07091666666666666,
+     "mean_left": 0.07404166666666666,
+     "mean_right": 0.003124999999999998,
+     "n_pairs": 300,
+     "std_delta": 0.1943360656446878
+    },
+    "family": "resource_constrained",
+    "gate_results": {
+     "G0_integrity": true,
+     "G3_L2_recovery": false,
+     "G4_L2_specificity": false,
+     "G6_bundle_awareness": false,
+     "G7_adversarial": false,
+     "L1_precondition": false
+    },
+    "integrity_ok": true,
+    "kill_reasons": [
+     "L1_precondition: L1 verdict for family 'resource_constrained' did not pass; L2 withheld per PROMOTION_CONTRACT_L2.md.",
+     "G3_L2_recovery: paired lower bound -0.3178 < 0.0000 or mean_concern_shift 0.0000 <= 0",
+     "L2 UNVERIFIED: G4 specificity, G6 bundle awareness, and G7 adversarial are scored against a fuller baseline sweep than the crossed cells; this receipt reports L1 pre-condition + G3 recovery only.  Full L2 promotion requires those gates to be scored by their respective harnesses before this verdict can be signed."
+    ],
+    "mean_concern_shift_l1": 8.716204711712306e-06,
+    "n_seeds": 300,
+    "passed": false,
+    "withheld": true
+   }
+  }
+ }
+}
