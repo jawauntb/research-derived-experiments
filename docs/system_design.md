@@ -1014,6 +1014,34 @@ and a third finding -- every candidate has identical withheld-geometry degree
 -- established that this substrate carries no care-independent *structural*
 signal at all.
 
+Erratum E1 (`experiments/concern_gated_retrieval_e2/erratum_e1/`) records a
+**program-wide fixture defect found after the arc's five papers merged**:
+sorting candidates by *ascending* `care_anchors` and taking the first achieves
+**hit@1 = 1.000** on every family tested, including the confirmatory pool Wave
+1b ran on (300/300). `care_anchors` is a policy-visible field on
+`EpisodeContext`, so a one-line policy outperforms every mechanism the program
+built. Root cause: Wave 0 PREREGISTRATION section 5 was implemented as
+`prior[load_bearing] = W_COMMIT_INIT`, suppressing exactly one node -- the
+answer -- so the suppressed value uniquely identifies the target. Every gate
+missed it because each asked whether a policy could reach something
+*forbidden*; none asked whether something *permitted* already contained the
+answer. G0 IntegrityAudit only guards `role`/`utility`/`_answer_key`; G9
+audited the learned geometry, not the hand-authored prior; Wave 1a's
+specificity slate never tested an *inverted* reading.
+
+Validity: **Wave 1b's L1 KILL stands** (the contrast holds concern identical
+across both arms, so the leak cancels in the paired difference), as do Wave 1b
+G2 and **MX1 Part B**. Wave 0's "10x below baseline" is *re-explained* rather
+than invalidated -- `multiplicative_ppr` upweights concern, so it used a
+perfect signal with inverted sign. Every *absolute* number in the program was
+measured on a substrate where one line scores 1.000. The frozen `wave0/` and
+`wave1b/` packages are deliberately **not edited**, so their analysis hashes
+stay valid and the defect stays visible; the repair lives alongside in
+`erratum_e1/prior_repair.py` (suppress a *set* of k=4 including non-answers:
+all families fall 1.0000 -> 0.06-0.38, below the 0.8 gate). The reusable gate
+is `erratum_e1/inverted_signal_audit.py`, and the standing rule it enforces is:
+at fixture-freeze time, audit every policy-visible signal in BOTH orderings.
+
 Process wrapper: `AGENTS.md` requires the `scientific-discovery-regime-audit`
 skill at experiment creation/preregistration, before large sweeps, and during
 result promotion or discovery claims. The compact intake records the target,

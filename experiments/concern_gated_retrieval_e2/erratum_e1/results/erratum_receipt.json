@@ -1,0 +1,82 @@
+{
+  "all_leaked_before": true,
+  "expected_post_repair_hit_at_1": 0.25,
+  "families": [
+    {
+      "after_repair": {
+        "ascending_hit_at_1": 0.06333333333333334,
+        "descending_hit_at_1": 0.0,
+        "direction": "none",
+        "leaks": false,
+        "worst": 0.06333333333333334
+      },
+      "before": {
+        "ascending_hit_at_1": 1.0,
+        "descending_hit_at_1": 0.0,
+        "direction": "ascending (INVERTED)",
+        "leaks": true,
+        "worst": 1.0
+      },
+      "family": "wave0/delayed_commitments",
+      "n_episodes": 300
+    },
+    {
+      "after_repair": {
+        "ascending_hit_at_1": 0.18666666666666668,
+        "descending_hit_at_1": 0.0,
+        "direction": "none",
+        "leaks": false,
+        "worst": 0.18666666666666668
+      },
+      "before": {
+        "ascending_hit_at_1": 1.0,
+        "descending_hit_at_1": 0.0,
+        "direction": "ascending (INVERTED)",
+        "leaks": true,
+        "worst": 1.0
+      },
+      "family": "wave0/maintenance_fault",
+      "n_episodes": 300
+    },
+    {
+      "after_repair": {
+        "ascending_hit_at_1": 0.37666666666666665,
+        "descending_hit_at_1": 0.0,
+        "direction": "none",
+        "leaks": false,
+        "worst": 0.37666666666666665
+      },
+      "before": {
+        "ascending_hit_at_1": 1.0,
+        "descending_hit_at_1": 0.0,
+        "direction": "ascending (INVERTED)",
+        "leaks": true,
+        "worst": 1.0
+      },
+      "family": "wave1b/delayed_commitments_v2",
+      "n_episodes": 300
+    },
+    {
+      "after_repair": {
+        "ascending_hit_at_1": 0.3,
+        "descending_hit_at_1": 0.0,
+        "direction": "none",
+        "leaks": false,
+        "worst": 0.3
+      },
+      "before": {
+        "ascending_hit_at_1": 1.0,
+        "descending_hit_at_1": 0.0,
+        "direction": "ascending (INVERTED)",
+        "leaks": true,
+        "worst": 1.0
+      },
+      "family": "wave1b/maintenance_fault_v2",
+      "n_episodes": 300
+    }
+  ],
+  "kind": "cogr_erratum_e1_receipt",
+  "leak_threshold": 0.8,
+  "none_leak_after": true,
+  "suppressed_set_size_k": 4
+}
