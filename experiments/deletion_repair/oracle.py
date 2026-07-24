@@ -58,11 +58,13 @@ class OracleResult:
         return tuple(r.deletion for r in self.rows if r.load_bearing)
 
 
-def enumerate_deletions(toy: ToySystem) -> tuple[tuple[str, ...], ...]:
-    """Every ``D`` with ``1 <= |D| <= MAX_DELETION_SIZE``, in a stable order."""
+def enumerate_deletions(
+    toy: ToySystem, max_size: int = MAX_DELETION_SIZE
+) -> tuple[tuple[str, ...], ...]:
+    """Every ``D`` with ``1 <= |D| <= max_size``, in a stable order."""
     names = [p.name for p in toy.deletable]
     out: list[tuple[str, ...]] = []
-    for size in range(1, MAX_DELETION_SIZE + 1):
+    for size in range(1, max_size + 1):
         out.extend(tuple(sorted(combo)) for combo in itertools.combinations(names, size))
     return tuple(out)
 
@@ -73,10 +75,10 @@ def _min_cost(toy: ToySystem, members: Sequence) -> float:
     return min(float(toy.cost(h)) for h in members)
 
 
-def build_oracle(toy: ToySystem) -> OracleResult:
+def build_oracle(toy: ToySystem, max_size: int = MAX_DELETION_SIZE) -> OracleResult:
     """Label every candidate deletion by execution."""
     rows: list[DeletionRow] = []
-    for deletion in enumerate_deletions(toy):
+    for deletion in enumerate_deletions(toy, max_size):
         ext = toy.extension(frozenset(deletion))
         valid = any(toy.fits_alpha(h) for h in ext)
         covers = any(

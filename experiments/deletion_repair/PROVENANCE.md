@@ -17,7 +17,7 @@
 - **Scientific adjudications:** unadjudicated
 
 ## Verification
-- Pre-registration: `experiments/deletion_repair/PREREGISTRATION.md`
+- Pre-registration: `experiments/deletion_repair/DR2_PREREGISTRATION.md`
 - Result reports (1):
   - `experiments/deletion_repair/results/dr1_verdict.json`
 

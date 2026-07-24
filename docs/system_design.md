@@ -1074,6 +1074,31 @@ tie-shuffle before freezing and pinned by a regression test. Paper:
 `papers/deletion_repair_dr1/`; builder `scripts/build_dr1_pdf.py`; tests
 `tests/test_dr1_deletion_repair.py`.
 
+DR2 (`experiments/deletion_repair/dr2_toys.py`, `run_dr2.py`,
+`DR2_PREREGISTRATION.md`) scales DR1 until a nominator is actually necessary:
+20 deletable propositions, `|D| <= 3`, **1350 candidates**, base rates 0.07%
+and 1.41%, so a random ordering needs 675 and 68 expensive verifications. The
+primary metric becomes `verifications_to_first_hit` rather than recall@k.
+
+**H3' GO, decisively**: the best nominator hits on the FIRST verification on
+both toys -- 675x and 68x faster than random. Execution-free ranking converts a
+675-verification search into a 1-verification one, so cost-ordered filtering is
+worth one to two orders of magnitude once verification is the expensive step.
+**H2' GO**: both `sum_disjunction` and `minrank_disjunction` match the best
+single nominator on both toys while DR1's `max_disjunction` still fails, so the
+defect DR1 named and both fixes it proposed all replicate.
+
+**H1' NO_GO, and provably so.** Across all 2700 candidates the set
+`{cost > 0 and weakness = 0}` is EMPTY, and it must be: `ext(R)` is a subset of
+`ext(R\D)` for every `D`, so a minimum taken over the extension can improve
+only if the extension grew -- hence `cost_attribution > 0` implies
+`weakness_gain > 0`. Cost attribution's support is a subset of weakness gain's.
+The two-nominator hypothesis is therefore unreachable in this formalisation,
+not merely unsupported, and the actionable fix is to move cost OFF the
+extension (onto the search procedure or the representation's description
+length) rather than to build a better cost signal within it. Pinned by
+`tests/test_dr2_deletion_repair.py`. Paper: `papers/deletion_repair_dr2/`.
+
 Process wrapper: `AGENTS.md` requires the `scientific-discovery-regime-audit`
 skill at experiment creation/preregistration, before large sweeps, and during
 result promotion or discovery claims. The compact intake records the target,

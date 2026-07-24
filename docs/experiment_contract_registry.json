@@ -420,6 +420,26 @@
             "identity": "Claude Code (Opus 5)",
             "session_ref": "deletion-repair-dr1 2026-07-24"
           }
+        },
+        {
+          "run_id": "deletion_repair_dr2_2026_07_24",
+          "publication_package": "deletion_repair",
+          "runtime_package": "deletion_repair",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/deletion_repair/experiment_manifest.json",
+          "report_paths": [
+            "experiments/deletion_repair/results/dr2_verdict.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_digest": "e0fbf9a73854285c2b09b9c020b46dc33a85054a0dcc890e704b07b8019b94c0",
+          "preregistration_path": "experiments/deletion_repair/DR2_PREREGISTRATION.md",
+          "producing_agent": {
+            "identity": "Claude Code (Opus 5)",
+            "session_ref": "deletion-repair-dr2 2026-07-24"
+          }
         }
       ]
     },
