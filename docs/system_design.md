@@ -974,6 +974,22 @@ aggregate is single-sourced through `scripts/deploy_and_run_cogr_wave1b.sh`
 (same Doppler scope, same env boundary as Wave 1a) with `--dry-run`, `--smoke`,
 and `--no-aggregate` presets.
 
+Program synthesis (arc closure) lives at
+`papers/concern_gated_retrieval_synthesis/`, rendered by
+`scripts/build_cogr_synthesis_pdf.py` (smoke test:
+`tests/test_cogr_synthesis_pdf.py`). It is the cumulative corrective map
+across L0 pilot -> Wave 0 -> Wave 1a -> Wave 1b, and it records the arc's
+terminus: **Wave 1b L1 KILL / L2 WITHHELD**, reached with the G9 leakage
+audits PASSING on all three redesigned families, so the null is honest
+rather than a fixture artifact. Because L1 is falsified, the roadmap's
+Waves 2-4 (live-agent beachhead, substrate transfer, safety/scaling) do
+**not** open — the noncompensatory rules forbid building on a falsified L1.
+The synthesis paper's §7 scopes the successor work as a single de-risking
+minimal experiment (a MIDAS-style symbolic verifier with a
+reasoning-fault vs verifier-fault split, plus a care-independent
+exploration prior derived from verify-repair failure frequency), not as a
+new program; a program is justified only if that experiment survives.
+
 Process wrapper: `AGENTS.md` requires the `scientific-discovery-regime-audit`
 skill at experiment creation/preregistration, before large sweeps, and during
 result promotion or discovery claims. The compact intake records the target,
