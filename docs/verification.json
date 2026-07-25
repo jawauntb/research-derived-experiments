@@ -805,7 +805,7 @@
         "experiments/deletion_repair/results/dr1_verdict.json"
       ],
       "n_modal_entrypoints": 0,
-      "n_scripts": 8,
+      "n_scripts": 10,
       "paper": null,
       "preregistration": "experiments/deletion_repair/DR2_PREREGISTRATION.md",
       "verification_signals": [],
