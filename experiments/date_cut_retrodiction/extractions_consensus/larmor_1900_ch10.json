@@ -1,0 +1,315 @@
+{
+  "doc_id": "larmor_1900_ch10",
+  "propositions": [
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "aether_pervaded_by_electrons",
+      "quote": "We shall now consider the material system as consisting of free aether pervaded by a system of electrons which are to be treated individually",
+      "statement": "The material system consists of free aether pervaded by a system of electrons which are to be treated individually.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "electrons_grouped_into_molecules",
+      "quote": "but the great majority of them grouped into material molecules",
+      "statement": "The great majority of electrons are grouped into material molecules.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "aether_dynamics_independently_ascertained",
+      "quote": "whose dynamical equations have been definitely ascertained in quite independent ways from consideration of both the optical side and the electrodynamic side of its activity",
+      "statement": "The dynamical equations of the aether have been definitely ascertained in independent ways from consideration of both the optical side and the electrodynamic side of its activity.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "electron_as_singular_point",
+      "quote": "An electron e will occur in this analysis as a singular point in the aether, on approaching which the elastic strain constituting the aethereal displacement",
+      "statement": "An electron occurs in the analysis as a singular point in the aether at which the elastic strain constituting the aethereal displacement increases indefinitely.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "singularity_is_definite_structure",
+      "quote": "It is assumed that this singularity represents a definite structure, forming a nucleus of strain in the aether, which is capable of transference across that medium independently of motion of the aether itself",
+      "statement": "The singularity of the electron represents a definite structure, forming a nucleus of strain in the aether which is capable of transference across the aether independently of motion of the aether itself.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "strain_nucleus_carried_with_electron",
+      "quote": "which is associated with the electron and is carried along with the electron in its motion, being as above",
+      "statement": "The strain associated with the electron is carried along with the electron in its motion.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "electron_energy_concentrated",
+      "quote": "the energy of this part of the displacement is closely concentrated around the nucleus of the electron, and not widely diffused as might at first sight appear",
+      "statement": "The energy of the displacement associated with the electron is closely concentrated around the nucleus of the electron and not widely diffused.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "stream_condition_except_at_electrons",
+      "quote": "except where there are electrons in the effective element of volume: these are analogous to the so-called sources and sinks in the abstract theory of liquid flow",
+      "statement": "The aethereal displacement satisfies the stream-condition except where there are electrons in the effective element of volume, analogous to sources and sinks in the theory of liquid flow.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "electron_charge_as_flux_integral",
+      "quote": "the integral of the normal component of the aethereal displacement over the boundary of any region, instead of being null, is equal to the quantity \u03a3e of electrons existing in the region",
+      "statement": "When electrons are present, the integral of the normal component of the aethereal displacement over the boundary of any region is equal to the quantity of electrons existing in the region.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "magnetic_induction_no_simple_poles",
+      "quote": "namely the magnetic induction ( a, b, c ), also possesses the stream property; but singular points in its distribution, of the nature of simple poles, do not exist",
+      "statement": "The magnetic induction possesses the stream property, but singular points of the nature of simple poles do not exist in its distribution.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "electron_motion_causes_rotational_singularity",
+      "quote": "The motion of an electron involves however a singularity in ( a, b, c ), of a rotational type, with its nucleus at the moving electron",
+      "statement": "The motion of an electron involves a singularity in the magnetic induction, of a rotational type, with its nucleus at the moving electron.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "orbital_motion_as_magnetic_doublet",
+      "quote": "the time-average of this singularity for a very rapid minute steady orbital motion of an electron is analytically equivalent, at distances considerable compared with the dimensions of the orbit, to a magnetic doublet",
+      "statement": "The time-average of the rotational singularity for a rapid minute steady orbital motion of an electron is analytically equivalent, at distances considerable compared with the dimensions of the orbit, to a magnetic doublet.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "aether_elements_sensibly_at_rest",
+      "quote": "the various parts of the aether are supposed to be sensibly at rest, so that for example the time-rate of change of the strain of any element of the aether is represented by differentiation with respect to the time",
+      "statement": "The various parts of the aether are supposed to be sensibly at rest, so the time-rate of change of the strain of any element of the aether is represented by differentiation with respect to time.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "aether_equations_linear",
+      "quote": "in this respect the equations of the aether are much simpler than those of the dynamics of fluid motion, being in fact linear",
+      "statement": "The equations of the aether are much simpler than those of the dynamics of fluid motion, being in fact linear.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "aether_stagnant",
+      "quote": "The aether is stagnant on this theory, while the molecules constituting the Earth and all other material bodies flit through it without producing any finite flow in it",
+      "statement": "The aether is stagnant, and the molecules constituting the Earth and all other material bodies flit through it without producing any finite flow in it.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "doppler_change_holds_good",
+      "quote": "the Doppler change of wave-length of radiation from a moving source holds good",
+      "statement": "The Doppler change of wave-length of radiation from a moving source holds good.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "terrestrial_optics_unaffected_by_earth_motion",
+      "quote": "but it will appear that all purely terrestrial optical phenomena are unaffected by the Earth's motion",
+      "statement": "All purely terrestrial optical phenomena are unaffected by the Earth's motion.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "c_single_physical_constant",
+      "quote": "c is the single physical constant of the aether, being the velocity of propagation of elastic disturbances through it",
+      "statement": "c is the single physical constant of the aether, being the velocity of propagation of elastic disturbances through it.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "state_determines_future_state",
+      "quote": "from a knowledge of the state of the system at any time t the state at the time t + \u03b4t can be immediately expressed",
+      "statement": "From a knowledge of the state of the system at any time t, the state at the time t plus a small interval can be immediately expressed.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "presupposed",
+      "n_passes": 2,
+      "name": "electron_nucleus_labile",
+      "quote": "This however presupposes that the nucleus of the electron is quite labile as regards displacement through the aether, in other words that its movement is not influenced by any inertia or forces",
+      "statement": "The nucleus of the electron is quite labile as regards displacement through the aether, its movement not influenced by any inertia or forces except such as are the expression of its relation to the aether.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "electron_treated_as_point",
+      "quote": "so long as the actual dimensions of their nuclei are extremely small in comparison with the distances between them, it will suffice for the theory to consider them as points",
+      "statement": "So long as the actual dimensions of the nuclei of electrons are extremely small in comparison with the distances between them, it will suffice for the theory to consider them as points.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "atoms_are_electron_aggregations",
+      "quote": "in which atoms of matter are constituted of aggregations of electrons, the only actions between atoms are what may be described as electric forces",
+      "statement": "Atoms of matter are constituted of aggregations of electrons, and the only actions between atoms are electric forces.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "vortex_ring_dynamical_properties",
+      "quote": "the atom of matter possesses all the dynamical properties of a vortex ring in a frictionless fluid, so that everything that can be done in the domain of vortex-ring illustration is implicitly attached to the present scheme",
+      "statement": "The atom of matter possesses all the dynamical properties of a vortex ring in a frictionless fluid.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "identical_system_in_motion_exists",
+      "quote": "given any system of electrified bodies at rest, in equilibrium under their mutual electric influences and imposed constraints, there will be a precisely identical system in equilibrium under the same constraints, and in uniform translatory motion through the aether",
+      "statement": "Given any system of electrified bodies at rest in equilibrium under their mutual electric influences and imposed constraints, there is a precisely identical system in equilibrium under the same constraints in uniform translatory motion through the aether.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "motion_no_first_order_effect_on_distributions",
+      "quote": "uniform translatory motion through the aether does not produce any alteration in electric distributions as far as the first order of the ratio of the velocity of the system to the velocity of radiation is concerned",
+      "statement": "Uniform translatory motion through the aether does not produce any alteration in electric distributions as far as the first order of the ratio of the velocity of the system to the velocity of radiation is concerned.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "result_independent_of_molecular_force_theory",
+      "quote": "this result is independent of any theory as to the nature of the forces between material molecules: the structure of the matter being assumed unaltered to the first order by motion through the aether",
+      "statement": "The result that motion through the aether does not alter electric distributions to the first order is independent of any theory as to the nature of the forces between material molecules.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "no_new_forces_required_for_moving_configuration",
+      "quote": "if any configuration of ionic charges is the natural one in a material system at rest, the maintenance of the same configuration as regards the system in uniform motion will not require the aid of any new forces",
+      "statement": "If a configuration of ionic charges is the natural one in a material system at rest, the maintenance of the same configuration in the system in uniform motion will not require the aid of any new forces.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "electron_is_simple_singularity_on_any_theory",
+      "quote": "The electron taken by itself must be on any conceivable theory a simple singularity of the aether whose movements when it is free, and interactions with other electrons if it can be constrained by matter",
+      "statement": "The electron taken by itself must be, on any conceivable theory, a simple singularity of the aether whose movements when free, and interactions with other electrons when constrained by matter, are governed through the aether.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "displacements_differ_to_first_order",
+      "quote": "though the fixed and the moving system of electrons of this correlation are at corresponding instants identical, yet the electric and magnetic displacements belonging to them differ by terms of the first order",
+      "statement": "Though the fixed and the moving system of electrons are at corresponding instants identical, the electric and magnetic displacements belonging to them differ by terms of the first order.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "dielectric_transformation_media_dependent",
+      "quote": "the above analytical transformation of the equations applies to any isotropic dielectric medium as well as to free aether: we have only to alter c into the velocity of radiation in that medium, and all will be as above",
+      "statement": "The transformation of the equations applies to any isotropic dielectric medium as well as to free aether, altering c into the velocity of radiation in that medium, and the transformation is different for different media.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch10",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "electrons_equal_strength_across_systems",
+      "quote": "these electrons are of equal strengths: for, very near an electron, fixed or moving, the values of ( f, g, h ) and ( a, b, c ) are practically those due to it,",
+      "statement": "The electrons in the two compared systems are of equal strengths, since very near an electron, fixed or moving, the values of the vectors are practically those due to it.",
+      "support": 2
+    }
+  ]
+}

@@ -1,0 +1,278 @@
+{
+  "doc_id": "poincare_1898_time",
+  "propositions": [
+    {
+      "name": "conscious_anteriority_known",
+      "statement": "We know what we mean when we say that of two conscious phenomena which we remember, one was anterior to the other.",
+      "quote": "we know perfectly well what we mean when we say that of two conscious phenomena which we remember, one was anterior to the other",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "simultaneity_conscious_interpenetration",
+      "statement": "To say that two conscious facts are simultaneous means that they profoundly interpenetrate so that analysis can not separate them without mutilating them.",
+      "quote": "When we say that two conscious facts are simultaneous, we mean that they profoundly interpenetrate, so that analysis can not separate them without mutilating them.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "conscious_order_not_arbitrary",
+      "statement": "The order in which we arrange conscious phenomena does not admit of any arbitrariness and is imposed upon us.",
+      "quote": "The order in which we arrange conscious phenomena does not admit of any arbitrariness. It is imposed upon us and of it we can change nothing.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "memory_requires_loss_of_actuality",
+      "statement": "For an aggregate of sensations to have become a remembrance capable of classification in time, it must have ceased to be actual.",
+      "quote": "For an aggregate of sensations to have become a remembrance capable of classification in time, it must have ceased to be actual",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "finite_labels_discontinuous_time",
+      "statement": "The labels around which memories crystallize can only be finite in number, so psychologic time should be discontinuous.",
+      "quote": "these labels can only be finite in number. On that score, psychologic time should be discontinuous.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "time_form_preexistent_in_mind",
+      "statement": "Time is a form pre-existent in our minds.",
+      "quote": "How could that be, if time were not a form pre-existent in our minds?",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "physical_facts_unseen_by_consciousness",
+      "statement": "Physical facts are things with which we people space and which no consciousness sees directly.",
+      "quote": "we wish to put there physical facts, these I know not what with which we people space and which no consciousness sees directly",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "psychologic_time_creates_physical_time",
+      "statement": "Psychologic time is given to us and must create scientific and physical time.",
+      "quote": "psychologic time is given to us and must needs create scientific and physical time",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "science_requires_physical_time",
+      "statement": "Without physical time, science could not exist.",
+      "quote": "This is necessary because without it science could not exist.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "anteriority_known_without_magnitude",
+      "statement": "We know perhaps that some fact is anterior to some other, but not by how much it is anterior.",
+      "quote": "We know perhaps that some fact is anterior to some other, but not by how much it is anterior.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_direct_intuition_equal_durations",
+      "statement": "We have not a direct intuition of the equality of two intervals of time.",
+      "quote": "We have not a direct intuition of the equality of two intervals of time",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "duration_equality_defined_arbitrarily",
+      "statement": "The equality of two intervals of time has meaning only through a definition which possesses a certain degree of arbitrariness.",
+      "quote": "It will only have that which I choose to give it, by a definition which will certainly possess a certain degree of arbitrariness.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "pendulum_beats_equal_by_definition",
+      "statement": "Physicists suppose by definition that all the beats of the pendulum are of equal duration.",
+      "quote": "To measure time they use the pendulum and they suppose by definition that all the beats of this pendulum are of equal duration.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "pendulum_pace_varies_physically",
+      "statement": "The temperature, the resistance of the air, and the barometric pressure make the pace of the pendulum vary.",
+      "quote": "the temperature, the resistance of the air, the barometric pressure, make the pace of the pendulum vary",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "sidereal_day_constant_unit",
+      "statement": "The duration of the rotation of the earth, the sidereal day, is the constant unit of time.",
+      "quote": "it is the sidereal day, that is, the duration of the rotation of the earth, which is the constant unit of time",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "earth_rotations_equal_by_definition",
+      "statement": "It is supposed by a new definition that two complete rotations of the earth about its axis have the same duration.",
+      "quote": "It is supposed, by a new definition substituted for that based on the beats of the pendulum, that two complete rotations of the earth about its axis have the same duration.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "tides_slow_earth_rotation",
+      "statement": "The tides act as a check on the globe and the rotation of the earth is becoming slower and slower.",
+      "quote": "the tides act as a check on our globe, and that the rotation of the earth is becoming slower and slower",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "same_causes_same_time_postulate",
+      "statement": "The duration of two identical phenomena is the same, that is, the same causes take the same time to produce the same effects.",
+      "quote": "the duration of two identical phenomena is the same; or, if you prefer, that the same causes take the same time to produce the same effects",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "postulate_could_be_contradicted",
+      "statement": "It is not impossible that experiment may some day contradict the postulate that the same causes take the same time to produce the same effects.",
+      "quote": "Is it impossible that experiment may some day contradict our postulate?",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "multiple_causes_produce_effect",
+      "statement": "In physical reality one cause does not produce a given effect, but a multitude of distinct causes contribute to produce it.",
+      "quote": "In physical reality one cause does not produce a given effect, but a multitude of distinct causes contribute to produce it, without our having any means of discriminating the part of each of them.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "sirius_attraction_acts_on_pendulum",
+      "statement": "In all rigor every attraction, even of Sirius, acts on the pendulum.",
+      "quote": "in all rigor every attraction, even of Sirius, acts on the pendulum",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "revised_postulate_approximate_causes",
+      "statement": "Causes almost identical take almost the same time to produce almost the same effects.",
+      "quote": "Causes almost identical take almost the same time to produce almost the same effects.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rotation_velocity_is_circumstance",
+      "statement": "The velocity of the earth's rotation is one of the circumstances of any phenomenon.",
+      "quote": "One of the circumstances of any phenomenon is the velocity of the earth’s rotation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "constant_rotation_presupposes_time_measurement",
+      "statement": "To suppose the velocity of rotation constant is to suppose that we already know how to measure time.",
+      "quote": "to suppose this velocity of rotation constant is to suppose that we know how to measure time",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "tidal_friction_destroys_vis_viva",
+      "statement": "The friction of the tides producing heat must destroy vis viva.",
+      "quote": "the friction of the tides producing heat must destroy vis viva",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "lunar_acceleration_needs_rotation_correction",
+      "statement": "The secular acceleration of the moon, calculated according to Newton's law, would be less than that deduced from observations unless the correction relative to the slowing down of the terrestrial rotation were made.",
+      "quote": "the secular acceleration of the moon, calculated according to Newton’s law, would be less than that deduced from observations unless the correction relative to the slowing down of the terrestrial rotation were made",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "newtons_law_experimental_approximate",
+      "statement": "Newton's law is an experimental truth and as such it is only approximate.",
+      "quote": "Newton’s law is an experimental truth; as such it is only approximate, which shows that we still have only a definition by approximation.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "time_defined_for_simplicity",
+      "statement": "Time should be so defined that the equations of mechanics may be as simple as possible.",
+      "quote": "Time should be so defined that the equations of mechanics may be as simple as possible.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "starlight_takes_finite_time",
+      "statement": "At least two hundred years were necessary for the light from a distant star to reach our earth.",
+      "quote": "at least two hundred years were necessary for the light from that star to reach our earth",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "crossworld_affirmations_need_convention",
+      "statement": "Affirmations about which is anterior between a physical phenomenon and a phenomenon in a different consciousness have by themselves no meaning and can have meaning only as the outcome of a convention.",
+      "quote": "all these affirmations have by themselves no meaning. They can have one only as the outcome of a convention.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "infinite_intelligence_imperfect_recollection",
+      "statement": "An infinite intelligence which should see all and classify all in its time would have only an imperfect recollection of the past.",
+      "quote": "this supreme intelligence would be only a demigod; infinite in one sense, it would be limited in another, since it would have only an imperfect recollection of the past",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "reversibility_unsuited_to_distant_facts",
+      "statement": "The definition of simultaneity by reversibility of the order of succession would not suit two physical facts which happen far from one another.",
+      "quote": "this definition would not suit two physical facts which happen far from one another, and that, in what concerns them, we no longer even understand what this reversibility would be",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "cause_and_time_mutually_defined",
+      "statement": "When a phenomenon appears to us as the cause of another, we regard it as anterior, so it is by cause that we define time.",
+      "quote": "when a phenomenon appears to us as the cause of another, we regard it as anterior. It is therefore by cause that we define time",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "witnessed_order_extended_unwitnessed",
+      "statement": "When two phenomena, witnessed, happen in a certain order, and analogous phenomena happen without witness, there is no reason to invert this order.",
+      "quote": "These two phenomena, when witnessed, happen in a certain order; when analogous phenomena happen without witness, there is no reason to invert this order.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "distant_lightning_precedes_near",
+      "statement": "Of two flashes of lightning, the one distant, the other near, the first may be anterior to the second even though the sound of the second comes to us before that of the first.",
+      "quote": "can not the first be anterior to the second, even though the sound of the second comes to us before that of the first?",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "three_bodies_determinism",
+      "statement": "The positions and the velocities of three bodies at a given instant suffice to determine their positions and velocities at the following instant, and consequently at any instant.",
+      "quote": "The positions and the velocities of three bodies at a given instant suffice to determine their positions and velocities at the following instant, and consequently at any instant.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_velocity_constant_isotropic_postulate",
+      "statement": "Light has a constant velocity, and in particular its velocity is the same in all directions.",
+      "quote": "He has begun by supposing that light has a constant velocity, and in particular that its velocity is the same in all directions.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_propagation_not_instantaneous",
+      "statement": "The propagation of light is not instantaneous.",
+      "quote": "That is not altogether true, since the propagation of light is not instantaneous",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rules_chosen_for_convenience",
+      "statement": "The simultaneity of two events, the order of their succession, and the equality of two durations are to be so defined that the enunciation of the natural laws may be as simple as possible.",
+      "quote": "The simultaneity of two events, or the order of their succession, the equality of two durations, are to be so defined that the enunciation of the natural laws may be as simple as possible.",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

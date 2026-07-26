@@ -1,0 +1,245 @@
+{
+  "doc_id": "poincare_1898_time",
+  "propositions": [
+    {
+      "definitional": true,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "conscious_phenomena_ordered",
+      "quote": "we know perfectly well what we mean when we say that of two conscious phenomena which we remember, one was anterior to the other",
+      "statement": "Of two conscious phenomena which we remember, one was anterior to the other.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "simultaneity_as_interpenetration",
+      "quote": "When we say that two conscious facts are simultaneous, we mean that they profoundly interpenetrate, so that analysis can not separate them without mutilating them.",
+      "statement": "Two conscious facts are simultaneous when they profoundly interpenetrate, so that analysis can not separate them without mutilating them.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "order_of_conscious_phenomena_imposed",
+      "quote": "The order in which we arrange conscious phenomena does not admit of any arbitrariness. It is imposed upon us and of it we can change nothing.",
+      "statement": "The order in which we arrange conscious phenomena does not admit of any arbitrariness; it is imposed upon us.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "labels_finite_time_discontinuous",
+      "quote": "these labels can only be finite in number. On that score, psychologic time should be discontinuous.",
+      "statement": "These labels can only be finite in number, so psychologic time should be discontinuous.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "presupposed",
+      "n_passes": 2,
+      "name": "time_pre_existent_form_of_mind",
+      "quote": "How could that be, if time were not a form pre-existent in our minds?",
+      "statement": "Time is a form pre-existent in our minds.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "physical_facts_unseen_by_consciousness",
+      "quote": "we wish to put there physical facts, these I know not what with which we people space and which no consciousness sees directly",
+      "statement": "Physical facts are those with which we people space and which no consciousness sees directly.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "no_direct_intuition_equality_of_durations",
+      "quote": "We have not a direct intuition of the equality of two intervals of time .",
+      "statement": "We have not a direct intuition of the equality of two intervals of time.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "pendulum_beats_assumed_equal",
+      "quote": "To measure time they use the pendulum and they suppose by definition that all the beats of this pendulum are of equal duration.",
+      "statement": "To measure time, physicists and astronomers use the pendulum and suppose that all the beats of this pendulum are of equal duration.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "pendulum_perturbed_by_physical_causes",
+      "quote": "the temperature, the resistance of the air, the barometric pressure, make the pace of the pendulum vary",
+      "statement": "The temperature, the resistance of the air, the barometric pressure, and other causes such as electric or magnetic perturbations make the pace of the pendulum vary.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "sidereal_day_constant_unit",
+      "quote": "it is the sidereal day, that is, the duration of the rotation of the earth, which is the constant unit of time",
+      "statement": "The sidereal day, the duration of the rotation of the earth, is the constant unit of time, and two complete rotations of the earth are supposed to have the same duration.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "earth_rotation_slowing",
+      "quote": "the tides act as a check on our globe, and that the rotation of the earth is becoming slower and slower",
+      "statement": "The tides act as a check on the globe, and the rotation of the earth is becoming slower and slower.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "postulate_same_causes_same_time",
+      "quote": "It is that the duration of two identical phenomena is the same; or, if you prefer, that the same causes take the same time to produce the same effects.",
+      "statement": "The duration of two identical phenomena is the same: the same causes take the same time to produce the same effects.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "postulate_could_be_contradicted_by_experiment",
+      "quote": "Is it impossible that experiment may some day contradict our postulate?",
+      "statement": "It is not impossible that experiment may some day contradict this postulate.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "multitude_of_causes_produce_effect",
+      "quote": "In physical reality one cause does not produce a given effect, but a multitude of distinct causes contribute to produce it, without our having any means of discriminating the part of each of them.",
+      "statement": "In physical reality one cause does not produce a given effect, but a multitude of distinct causes contribute to produce it.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "causes_never_reproduced_exactly",
+      "quote": "Instead of saying: \u2018The same causes take the same time to produce the same effects,\u2019 we should say: \u2018Causes almost identical take almost the same time to produce almost the same effects.\u2019",
+      "statement": "Causes almost identical take almost the same time to produce almost the same effects, since the causes which have produced an effect will never be reproduced except approximately.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "tidal_friction_destroys_vis_viva",
+      "quote": "They say first that the friction of the tides producing heat must destroy vis viva . They invoke therefore the principle of vis viva , or of the conservation of energy.",
+      "statement": "The friction of the tides producing heat must destroy vis viva, by the principle of vis viva, or of the conservation of energy.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "newtons_law_used_for_moon_acceleration",
+      "quote": "They say next that the secular acceleration of the moon, calculated according to Newton\u2019s law, would be less than that deduced from observations unless the correction relative to the slowing down of the terrestrial rotation were made.",
+      "statement": "The secular acceleration of the moon, calculated according to Newton's law, would be less than that deduced from observations unless the correction for the slowing down of the terrestrial rotation is made.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "newtons_law_approximate_experimental_truth",
+      "quote": "Newton\u2019s law is an experimental truth; as such it is only approximate, which shows that we still have only a definition by approximation.",
+      "statement": "Newton's law is an experimental truth, and as such it is only approximate.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "star_light_takes_time_to_reach_earth",
+      "quote": "at least two hundred years were necessary for the light from that star to reach our earth",
+      "statement": "At least two hundred years were necessary for the light from that star to reach our earth.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "physical_facts_succession_not_invertible_at_will",
+      "quote": "It is evident that this definition would not suit two physical facts which happen far from one another, and that, in what concerns them, we no longer even understand what this reversibility would be",
+      "statement": "This definition would not suit two physical facts which happen far from one another; we no longer understand what this reversibility would be.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "cause_defines_anteriority",
+      "quote": "when a phenomenon appears to us as the cause of another, we regard it as anterior. It is therefore by cause that we define time",
+      "statement": "When a phenomenon appears to us as the cause of another, we regard it as anterior; it is by cause that we define time.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "distant_lightning_flash_can_precede_near_one_despite_later_sound",
+      "quote": "can not the first be anterior to the second, even though the sound of the second comes to us before that of the first?",
+      "statement": "Of two flashes of lightning, the one distant, the other near, the first can be anterior to the second, even though the sound of the second comes to us before that of the first.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "positions_velocities_determine_future_and_past",
+      "quote": "The positions and the velocities of three bodies at a given instant suffice to determine their positions and velocities at the following instant, and consequently at any instant.",
+      "statement": "The positions and the velocities of three bodies at a given instant suffice to determine their positions and velocities at the following instant, and at any instant.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "velocity_of_light_constant_postulate",
+      "quote": "He has begun by supposing that light has a constant velocity, and in particular that its velocity is the same in all directions.",
+      "statement": "Light has a constant velocity, and its velocity is the same in all directions; this postulate is necessary for any measurement of this velocity.",
+      "support": 2
+    }
+  ]
+}

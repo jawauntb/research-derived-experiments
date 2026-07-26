@@ -1,0 +1,175 @@
+{
+  "doc_id": "fitzgerald_1889",
+  "propositions": [
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "presupposed",
+      "n_passes": 2,
+      "name": "ether_exists_carried_by_earth",
+      "quote": "the important question as to how far the ether is carried along by the earth",
+      "statement": "The ether is carried along by the earth.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "ether_carried_inappreciable_extent_air",
+      "quote": "the ether in the air can be carried along only to an inappreciable extent",
+      "statement": "The ether in the air can be carried along only to an inappreciable extent.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "mm_result_opposed_other_experiments",
+      "quote": "Their result seems opposed to other experiments showing that the ether in the air",
+      "statement": "Their result seems opposed to other experiments showing that the ether in the air can be carried along.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "length_changes_with_motion_through_ether",
+      "quote": "the length of material bodies changes, according as they are moving through the ether or across it",
+      "statement": "The length of material bodies changes according as they are moving through the ether or across it.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "length_change_depends_on_velocity_squared_ratio_to_light",
+      "quote": "by an amount depending on the square of the ratio of their velocity to that of light",
+      "statement": "The length of material bodies changes by an amount depending on the square of the ratio of their velocity to that of light.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "presupposed",
+      "n_passes": 2,
+      "name": "bodies_move_through_or_across_ether",
+      "quote": "according as they are moving through the ether or across it",
+      "statement": "Material bodies are moving through the ether or across it.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "presupposed",
+      "n_passes": 2,
+      "name": "light_has_velocity",
+      "quote": "on the square of the ratio of their velocity to that of light",
+      "statement": "There is a velocity of light.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "electric_forces_affected_by_motion_relative_to_ether",
+      "quote": "electric forces are affected by the motion of the electrified bodies relative to the ether",
+      "statement": "Electric forces are affected by the motion of the electrified bodies relative to the ether.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "molecular_forces_affected_by_motion",
+      "quote": "supposition that the molecular forces are affected by the motion",
+      "statement": "The molecular forces are affected by the motion.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "size_of_body_alters_from_molecular_force_change",
+      "quote": "the molecular forces are affected by the motion, and that the size of a body alters consequently",
+      "statement": "The size of a body alters consequently.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "presupposed",
+      "n_passes": 2,
+      "name": "electrical_attraction_exists_between_electrified_bodies",
+      "quote": "secular experiments on electrical attractions between permanently electrified bodies, such as in a very delicate quadrant electrometer",
+      "statement": "There are electrical attractions between permanently electrified bodies.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "diurnal_variation_of_attraction_due_to_rotation",
+      "quote": "diurnal due to the rotation of the earth being added and subtracted from its orbital velocity",
+      "statement": "There is diurnal variation of attraction due to the rotation of the earth being added and subtracted from its orbital velocity.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "presupposed",
+      "n_passes": 2,
+      "name": "earth_rotates",
+      "quote": "the rotation of the earth being added and subtracted from its orbital velocity",
+      "statement": "There is rotation of the earth.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "presupposed",
+      "n_passes": 2,
+      "name": "earth_has_orbital_velocity",
+      "quote": "being added and subtracted from its orbital velocity; and annual similarly for its orbital velocity",
+      "statement": "There is orbital velocity of the earth.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "presupposed",
+      "n_passes": 2,
+      "name": "solar_system_has_motion",
+      "quote": "its orbital velocity and the motion of the solar system",
+      "statement": "There is motion of the solar system.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "presupposed",
+      "n_passes": 2,
+      "name": "velocity_relative_to_ether_determines_physical_effects",
+      "quote": "electric forces are affected by the motion of the electrified bodies relative to the ether",
+      "statement": "Electric forces, molecular forces, and length are affected by motion relative to the ether.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "fitzgerald_1889",
+      "kind": "presupposed",
+      "n_passes": 2,
+      "name": "material_bodies_have_length",
+      "quote": "is that the length of material bodies changes, according as they are moving",
+      "statement": "Material bodies have length.",
+      "support": 2
+    }
+  ]
+}

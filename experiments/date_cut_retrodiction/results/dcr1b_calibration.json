@@ -1,0 +1,364 @@
+{
+  "cuts": {
+    "1880_all": {
+      "allow_provenance_risk": true,
+      "cut_year": 1880,
+      "facet_counts_v1": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 0,
+        "T3_local_time_artifice": 0
+      },
+      "facet_counts_v2": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 0,
+        "T3_local_time_artifice": 0
+      },
+      "facets_v1": [],
+      "facets_v2": [],
+      "is_placebo": true,
+      "n_documents": 3,
+      "n_propositions": 85,
+      "n_residue_types_v2": 21,
+      "residue_rate_v1": 0.06306306306306306,
+      "residue_rate_v2": 0.0379746835443038,
+      "residue_types_v2": [
+        "bidirectionally",
+        "conversion",
+        "converts",
+        "definition",
+        "drag",
+        "electromagnetism",
+        "em",
+        "emf",
+        "endorsed",
+        "frequency",
+        "incomplete",
+        "invisible",
+        "mediates",
+        "metal",
+        "needed",
+        "nontransverse",
+        "possibly",
+        "rate",
+        "ratio",
+        "speed",
+        "transfer"
+      ]
+    },
+    "1880_norisk": {
+      "allow_provenance_risk": false,
+      "cut_year": 1880,
+      "facet_counts_v1": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 0,
+        "T3_local_time_artifice": 0
+      },
+      "facet_counts_v2": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 0,
+        "T3_local_time_artifice": 0
+      },
+      "facets_v1": [],
+      "facets_v2": [],
+      "is_placebo": true,
+      "n_documents": 3,
+      "n_propositions": 85,
+      "n_residue_types_v2": 21,
+      "residue_rate_v1": 0.06306306306306306,
+      "residue_rate_v2": 0.0379746835443038,
+      "residue_types_v2": [
+        "bidirectionally",
+        "conversion",
+        "converts",
+        "definition",
+        "drag",
+        "electromagnetism",
+        "em",
+        "emf",
+        "endorsed",
+        "frequency",
+        "incomplete",
+        "invisible",
+        "mediates",
+        "metal",
+        "needed",
+        "nontransverse",
+        "possibly",
+        "rate",
+        "ratio",
+        "speed",
+        "transfer"
+      ]
+    },
+    "1897_all": {
+      "allow_provenance_risk": true,
+      "cut_year": 1897,
+      "facet_counts_v1": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 11,
+        "T3_local_time_artifice": 0
+      },
+      "facet_counts_v2": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 11,
+        "T3_local_time_artifice": 0
+      },
+      "facets_v1": [
+        "T2_privileged_frame"
+      ],
+      "facets_v2": [
+        "T2_privileged_frame"
+      ],
+      "is_placebo": true,
+      "n_documents": 8,
+      "n_propositions": 196,
+      "n_residue_types_v2": 23,
+      "residue_rate_v1": 0.049554013875123884,
+      "residue_rate_v2": 0.022977022977022976,
+      "residue_types_v2": [
+        "bidirectionally",
+        "cold",
+        "contraction",
+        "contracts",
+        "conversion",
+        "converts",
+        "electromagnetism",
+        "em",
+        "emf",
+        "endorsed",
+        "entrainment",
+        "fluctuation",
+        "frequency",
+        "implies",
+        "incomplete",
+        "nontransverse",
+        "predicted",
+        "reorientation",
+        "shrinking",
+        "signal",
+        "splits",
+        "threshold",
+        "via"
+      ]
+    },
+    "1897_norisk": {
+      "allow_provenance_risk": false,
+      "cut_year": 1897,
+      "facet_counts_v1": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 11,
+        "T3_local_time_artifice": 0
+      },
+      "facet_counts_v2": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 11,
+        "T3_local_time_artifice": 0
+      },
+      "facets_v1": [
+        "T2_privileged_frame"
+      ],
+      "facets_v2": [
+        "T2_privileged_frame"
+      ],
+      "is_placebo": true,
+      "n_documents": 8,
+      "n_propositions": 196,
+      "n_residue_types_v2": 23,
+      "residue_rate_v1": 0.049554013875123884,
+      "residue_rate_v2": 0.022977022977022976,
+      "residue_types_v2": [
+        "bidirectionally",
+        "cold",
+        "contraction",
+        "contracts",
+        "conversion",
+        "converts",
+        "electromagnetism",
+        "em",
+        "emf",
+        "endorsed",
+        "entrainment",
+        "fluctuation",
+        "frequency",
+        "implies",
+        "incomplete",
+        "nontransverse",
+        "predicted",
+        "reorientation",
+        "shrinking",
+        "signal",
+        "splits",
+        "threshold",
+        "via"
+      ]
+    },
+    "1904_all": {
+      "allow_provenance_risk": true,
+      "cut_year": 1904,
+      "facet_counts_v1": {
+        "T1_absolute_simultaneity": 3,
+        "T2_privileged_frame": 14,
+        "T3_local_time_artifice": 1
+      },
+      "facet_counts_v2": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 14,
+        "T3_local_time_artifice": 1
+      },
+      "facets_v1": [
+        "T1_absolute_simultaneity",
+        "T2_privileged_frame",
+        "T3_local_time_artifice"
+      ],
+      "facets_v2": [
+        "T2_privileged_frame",
+        "T3_local_time_artifice"
+      ],
+      "is_placebo": false,
+      "n_documents": 15,
+      "n_propositions": 383,
+      "n_residue_types_v2": 37,
+      "residue_rate_v1": 0.05012224938875306,
+      "residue_rate_v2": 0.02279728897104128,
+      "residue_types_v2": [
+        "additive",
+        "bidirectionally",
+        "cold",
+        "conversion",
+        "converts",
+        "despite",
+        "electromagnetism",
+        "em",
+        "emf",
+        "endorsed",
+        "entrainment",
+        "existent",
+        "fluctuation",
+        "inconclusive",
+        "indeterminate",
+        "interelectron",
+        "interpenetration",
+        "invalid",
+        "invariant",
+        "invertible",
+        "nonlinear",
+        "nontransverse",
+        "onset",
+        "pre",
+        "predicted",
+        "quasistationary",
+        "radium",
+        "relevant",
+        "reorientation",
+        "sensitivity",
+        "shrinking",
+        "spectroscopy",
+        "splits",
+        "tidal",
+        "undetectable",
+        "via",
+        "vs"
+      ]
+    },
+    "1904_norisk": {
+      "allow_provenance_risk": false,
+      "cut_year": 1904,
+      "facet_counts_v1": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 14,
+        "T3_local_time_artifice": 1
+      },
+      "facet_counts_v2": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 14,
+        "T3_local_time_artifice": 1
+      },
+      "facets_v1": [
+        "T2_privileged_frame",
+        "T3_local_time_artifice"
+      ],
+      "facets_v2": [
+        "T2_privileged_frame",
+        "T3_local_time_artifice"
+      ],
+      "is_placebo": false,
+      "n_documents": 13,
+      "n_propositions": 331,
+      "n_residue_types_v2": 35,
+      "residue_rate_v1": 0.04979253112033195,
+      "residue_rate_v2": 0.02437325905292479,
+      "residue_types_v2": [
+        "additive",
+        "bidirectionally",
+        "cold",
+        "conversion",
+        "converts",
+        "electromagnetism",
+        "em",
+        "emf",
+        "endorsed",
+        "entrainment",
+        "fluctuation",
+        "future",
+        "inconclusive",
+        "indeterminate",
+        "interelectron",
+        "invalid",
+        "invariant",
+        "nonlinear",
+        "nontransverse",
+        "onset",
+        "orientation",
+        "predicted",
+        "prediction",
+        "quasistationary",
+        "radium",
+        "relevant",
+        "reorientation",
+        "sensitivity",
+        "shrinking",
+        "signal",
+        "spectroscopy",
+        "splits",
+        "undetectable",
+        "via",
+        "vs"
+      ]
+    }
+  },
+  "extraction_dir": "extractions_consensus",
+  "kind": "dcr1b_calibration",
+  "matcher_comparison_1904": {
+    "dropped_by_repair": {
+      "T1_absolute_simultaneity": [
+        "The duration of two identical phenomena is the same: the same causes take the same time to produce the same effects.",
+        "Causes almost identical take almost the same time to produce almost the same effects, since the causes which have produced an effect will never be reproduced except approximately.",
+        "The ether is a medium that transmits at the same time the optical perturbations and the electrical perturbations."
+      ],
+      "T2_privileged_frame": [],
+      "T3_local_time_artifice": []
+    },
+    "v1_counts": {
+      "T1_absolute_simultaneity": 3,
+      "T2_privileged_frame": 14,
+      "T3_local_time_artifice": 1
+    },
+    "v1_facets_present": [
+      "T1_absolute_simultaneity",
+      "T2_privileged_frame",
+      "T3_local_time_artifice"
+    ],
+    "v2_counts": {
+      "T1_absolute_simultaneity": 0,
+      "T2_privileged_frame": 14,
+      "T3_local_time_artifice": 1
+    },
+    "v2_facets_present": [
+      "T2_privileged_frame",
+      "T3_local_time_artifice"
+    ]
+  },
+  "n_documents": 15,
+  "n_propositions": 383,
+  "note": "Measured before DCR1B_PREREGISTRATION.md was written. No thresholds are set here."
+}
