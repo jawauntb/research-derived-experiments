@@ -1,0 +1,187 @@
+{
+  "doc_id": "poincare_1904_stlouis",
+  "propositions": [
+    {
+      "name": "universe_composed_of_masses",
+      "statement": "The astronomic universe is formed of masses separated by intervals so immense that they appear to us only as material points.",
+      "quote": "The astronomic universe is formed of masses, very great, no doubt, but separated by intervals so immense that they appear to us only as material points.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "gravitational_inverse_square_law",
+      "statement": "The masses of the astronomic universe attract each other inversely as the square of the distance.",
+      "quote": "These points attract each other inversely as the square of the distance, and this attraction is the sole force which influences their movements.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "gravity_sole_force_on_masses",
+      "statement": "The attraction inversely as the square of the distance is the sole force which influences the movements of the masses of the astronomic universe.",
+      "quote": "These points attract each other inversely as the square of the distance, and this attraction is the sole force which influences their movements.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "micro_macro_structural_analogy",
+      "statement": "If our senses were sufficiently keen to show us all the details of the bodies which the physicist studies, the spectacle would scarcely differ from the one the astronomer contemplates.",
+      "quote": "if our senses were sufficiently keen to show us all the details of the bodies which the physicist studies, the spectacle thus disclosed would scarcely differ from the one the astronomer contemplates.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "matter_composed_of_material_points",
+      "statement": "Matter is composed of material points separated from one another by intervals enormous in comparison with their dimensions, describing orbits according to regular laws.",
+      "quote": "There also we should see material points, separated from one another by intervals, enormous in comparison with their dimensions, and describing orbits according to regular laws.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "atoms_are_material_points",
+      "statement": "The infinitesimal material points describing orbits according to regular laws are the atoms.",
+      "quote": "and describing orbits according to regular laws. These infinitesimal stars are the atoms.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "atoms_attract_or_repel_by_distance",
+      "statement": "Atoms attract or repel each other, following the straight line which joins them, depending only on the distance.",
+      "quote": "Like the stars proper, they attract or repel each other, and this attraction or this repulsion, following the straight line which joins them, depends only on the distance.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "atomic_force_power_law",
+      "statement": "The force between atoms varies as function of the distance according to a law analogous to the law of Newton, with an exponent different from the exponent −2.",
+      "quote": "The law according to which this force varies as function of the distance is perhaps not the law of Newton, but it is an analogous law; in place of the exponent −2, we have probably a different exponent",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "exponent_explains_diversity_of_phenomena",
+      "statement": "The change of exponent is what gives rise to all the diversity of physical phenomena, the variety of qualities and of sensations, and all nature.",
+      "quote": "it is from this change of exponent that arises all the diversity of physical phenomena, the variety of qualities and of sensations, all the world, colored and sonorous, which surrounds us; in a word, all nature.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "energy_conservation_principle",
+      "statement": "The principle of the conservation of energy, or Mayer's principle, is among the general principles of physics.",
+      "quote": "The principle of the conservation of energy, or Mayer's principle, is certainly the most important, but it is not the only one; there are others from which we can derive the same advantage.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "energy_degradation_principle",
+      "statement": "Energy degrades, according to Carnot's principle, the principle of the degradation of energy.",
+      "quote": "Carnot's principle, or the principle of the degradation of energy.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "action_reaction_equality",
+      "statement": "Action and reaction are equal, according to Newton's principle, the principle of the equality of action and reaction.",
+      "quote": "Newton's principle, or the principle of the equality of action and reaction.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "relativity_same_laws",
+      "statement": "The laws of physical phenomena must be the same for a stationary observer as for an observer carried along in a uniform motion of translation.",
+      "quote": "The principle of relativity, according to which the laws of physical phenomena must be the same for a stationary observer as for an observer carried along in a uniform motion of translation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_detection_of_uniform_motion",
+      "statement": "We have not and can not have any means of discerning whether or not we are carried along in a uniform motion of translation.",
+      "quote": "so that we have not and can not have any means of discerning whether or not we are carried along in such a motion.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "mass_conservation_principle",
+      "statement": "Mass is conserved, according to the principle of the conservation of mass, or Lavoisier's principle.",
+      "quote": "The principle of the conservation of mass, or Lavoisier's principle.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "least_action_principle",
+      "statement": "Physical phenomena conform to the principle of least action.",
+      "quote": "I will add the principle of least action. The application of these five or six general principles to the different physical phenomena is sufficient for our learning",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "principles_sufficient_for_knowledge",
+      "statement": "The application of the five or six general principles to the different physical phenomena is sufficient for our learning of them all that we could reasonably hope to know of them.",
+      "quote": "The application of these five or six general principles to the different physical phenomena is sufficient for our learning of them all that we could reasonably hope to know of them.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "maxwell_theory_of_light",
+      "statement": "Maxwell's electromagnetic theory of light is the most remarkable example of the new mathematical physics built on general principles.",
+      "quote": "The most remarkable example of this new mathematical physics is, beyond question, Maxwell's electromagnetic theory of light.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_has_unknown_molecular_structure",
+      "statement": "The ether has molecules, though we know nothing as to what the ether is, how its molecules are disposed, or whether they attract or repel each other.",
+      "quote": "We know nothing as to what the ether is, how its molecules are disposed, whether they attract or repel each other",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "ether_transmits_perturbations",
+      "statement": "The ether transmits at the same time the optical perturbations and the electrical perturbations.",
+      "quote": "we know that this medium transmits at the same time the optical perturbations and the electrical perturbations",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_transmission_conforms_to_mechanics",
+      "statement": "The transmission of perturbations in the ether must take place in conformity with the general principles of mechanics.",
+      "quote": "we know that this transmission must take place in conformity with the general principles of mechanics, and that suffices us for the establishment of the equations of the electromagnetic field.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "universe_as_hidden_machine",
+      "statement": "The universe is a machine, much more complicated than all those of industry, of which almost all the parts are profoundly hidden from us.",
+      "quote": "The universe is also a machine, much more complicated than all those of industry, of which almost all the parts are profoundly hidden from us",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "conclusions_valid_regardless_of_hidden_mechanism",
+      "statement": "Conclusions drawn by the aid of the principle remain true whatever may be the details of the invisible mechanism which animates the parts of the universe.",
+      "quote": "we are able, by the aid of this principle, to draw conclusions which remain true whatever may be the details of the invisible mechanism which animates them.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "law_is_differential_equation",
+      "statement": "A physical law is a constant relation between the phenomenon of to-day and that of to-morrow, that is, a differential equation.",
+      "quote": "For us a law is something quite different; it is a constant relation between the phenomenon of to-day and that of to-morrow; in a word, it is a differential equation.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "central_force_hypothesis_implies_principles",
+      "statement": "The hypothesis of central forces involved the conservation of energy, the conservation of masses, the equality of action and reaction, and the law of least action as necessary consequences.",
+      "quote": "The hypothesis of central forces contained all the principles; it involved them as necessary consequences; it involved both the conservation of energy and that of masses, and the equality of action and reaction, and the law of least action",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electromagnetic_field_equations_established_by_principles",
+      "statement": "The equations of the electromagnetic field are established from the general principles of mechanics applied to the transmission in the ether.",
+      "quote": "and that suffices us for the establishment of the equations of the electromagnetic field.",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

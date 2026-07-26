@@ -1,0 +1,250 @@
+{
+  "doc_id": "michelson_1881",
+  "propositions": [
+    {
+      "name": "ether_exists",
+      "statement": "The undulatory theory of light assumes the existence of a medium called the ether.",
+      "quote": "The undulatory theory of light assumes the existence of a medium called the ether, whose vibrations produce the phenomena of heat and light, and which is supposed to fill all space.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_vibrations_cause_heat_and_light",
+      "statement": "The vibrations of the ether produce the phenomena of heat and light.",
+      "quote": "whose vibrations produce the phenomena of heat and light, and which is supposed to fill all space",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_fills_all_space",
+      "statement": "The ether is supposed to fill all space.",
+      "quote": "produce the phenomena of heat and light, and which is supposed to fill all space",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fresnel_ether_drag_in_optical_media",
+      "statement": "The ether enclosed in optical media partakes of the motion of these media, to an extent depending on their indices of refraction.",
+      "quote": "According to Fresnel, the ether, which is enclosed in optical media, partakes of the motion of these media, to an extent depending on their indices of refraction.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "air_ether_drag_negligible",
+      "statement": "For air, the motion of the ether is but a small fraction of that of the air itself and can be neglected.",
+      "quote": "For air, this motion would be but a small fraction of that of the air itself and will be neglected.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_at_rest_earth_moves_through_it",
+      "statement": "The ether is assumed to be at rest while the earth moves through it.",
+      "quote": "Assuming then that the ether is at rest, the earth moving through it, the time required for light to pass from one point to another on the earth’s surface, would depend on the direction in which it travels.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_travel_time_depends_on_direction",
+      "statement": "Under the assumption that the ether is at rest, the time required for light to pass from one point to another on the earth's surface depends on the direction in which it travels.",
+      "quote": "the time required for light to pass from one point to another on the earth’s surface, would depend on the direction in which it travels",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "jupiter_eclipse_method_for_time_difference",
+      "statement": "The difference in time could be calculated by measuring the velocity of light by means of the eclipses of Jupiter's satellites at periods when that planet lay in different directions from earth.",
+      "quote": "could be calculated by measuring the velocity of light by means of the eclipses of Jupiter’s satellites at periods when that planet lay in different directions from earth",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_one_way_light_velocity_method",
+      "statement": "There is thus far no method for measuring the velocity of light which does not involve the necessity of returning the light over its path.",
+      "quote": "we have thus far no method for measuring the velocity of light which does not involve the necessity of returning the light over its path, whereby it would lose nearly as much as was gained in going",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "maxwell_effect_too_small_to_measure",
+      "statement": "The difference depending on the square of the ratio of the two velocities is, according to Maxwell, far too small to measure.",
+      "quote": "The difference depending on the square of the ratio of the two velocities, according to Maxwell, is far too small to measure.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "yellow_light_standard_makes_quantity_measurable",
+      "statement": "With a wave-length of yellow light as a standard, the quantity is easily measurable.",
+      "quote": "with a wave-length of yellow light as a standard, the quantity — if it exists — is easily measurable",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "right_angle_light_unaffected",
+      "statement": "Light traveling at right angles to the earth's motion would be entirely unaffected, and the time of going and returning would equal the time were the earth at rest.",
+      "quote": "If, however, the light had traveled in a direction at right angles to the earth's motion it would be entirely unaffected and the time of going and returning would be, therefore,",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "path_length_increased_by_motion",
+      "statement": "The actual distance the light travels when moving in the direction of the earth's motion is greater than the distance traveled at right angles, by a definite quantity.",
+      "quote": "That is, the actual distance the light travels in the first case is greater than in the second, by the quantity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "distance_expressible_in_wave_lengths_of_yellow_light",
+      "statement": "A distance D can be expressed in terms of wave-lengths of yellow light as a unit.",
+      "quote": ". If D = 1200 millimeters, or in wave-lengths of yellow light, 2 000 000, then in terms of the same unit,",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "apparatus_permits_interference_of_perpendicular_pencils",
+      "statement": "An apparatus can be so constructed as to permit two pencils of light, which have traveled over paths at right angles to each other, to interfere.",
+      "quote": "an apparatus is so constructed as to permit two pencils of light, which have traveled over paths at right angles to each other, to interfere, the pencil which has traveled in the direction of the earth's motion, will in reality travel",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "pencil_at_right_angles_not_affected",
+      "statement": "The pencil of light traveling in the direction of the earth's motion travels farther than it would were the earth at rest, while the other pencil, at right angles to the motion, would not be affected.",
+      "quote": "of a wave-length farther than it would have done, were the earth at rest. The other pencil being at right angles to the motion would not be affected.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rotation_lengthens_second_pencil_path",
+      "statement": "If the apparatus is revolved through 90° so that the second pencil is brought into the direction of the earth's motion, its path will have lengthened.",
+      "quote": "If, now, the apparatus be revolved through 90° so that the second pencil is brought into the direction of the earth's motion, its path will have lengthened",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "total_fringe_displacement_from_rotation",
+      "statement": "Revolving the apparatus produces a total change in the position of the interference bands.",
+      "quote": "wave-lengths. The total change in the position of the interference bands would be",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "equal_paths_condition_for_interference",
+      "statement": "When two rays have traveled over equal paths, they are in condition to interfere.",
+      "quote": "the two rays will have traveled over equal paths and are in condition to interfere",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "sodium_flame_produces_interference_bands",
+      "statement": "A sodium flame placed at the source produced the interference bands at once.",
+      "quote": "Then a sodium flame placed at a produced at once the interference bands.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "instrument_sensitive_to_vibrations",
+      "statement": "The instrument was extremely sensitive to vibrations, such that the work could not be carried on during the day.",
+      "quote": "owing to the extreme sensitiveness of the instrument to vibrations, the work could not be carried on during the day",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "pavement_stamping_disturbs_fringes",
+      "statement": "The stamping of the pavement about 100 meters from the observatory made the fringes disappear entirely.",
+      "quote": "so extraordinarily sensitive was the instrument that the stamping of the pavement, about 100 meters from the observatory, made the fringes disappear entirely",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "solar_system_moves_toward_hercules",
+      "statement": "The estimated direction of the motion of the solar system is toward the constellation Hercules.",
+      "quote": "the estimated direction of the motion of the solar system — namely, toward the constellation Hercules",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "resultant_of_earth_and_solar_motion",
+      "statement": "The nearer the two components of motion are in magnitude to each other, the more nearly their resultant would coincide with the plane of the equator.",
+      "quote": "The nearer the two components are in magnitude to each other, the more nearly would their resultant coincide with the plane of the equator.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "expected_displacement_near_one_tenth",
+      "statement": "The displacement to be looked for is not far from one-tenth the distance between the fringes.",
+      "quote": "we may say that the displacement to be looked for is not far from one-tenth the distance between the fringes",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "temperature_difference_displaces_fringes",
+      "statement": "If one arm had a temperature only one one-hundredth of a degree higher than the other, the fringes would experience a displacement three times as great as that which would result from the rotation.",
+      "quote": "if one arm should have a temperature only one one-hundredth of a degree higher than the other, the fringes would thereby experience a displacement three times as great as that which would result from the rotation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "brass_coefficient_of_expansion",
+      "statement": "Brass has a coefficient of expansion of 0.000019.",
+      "quote": "These being of brass whose coefficient of expansion is 0.000019 and having a length of about 1000 mm. or 1 700 000 wave-lengths",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "temperature_effect_independent_of_arm_direction",
+      "statement": "The changes of temperature are independent of the direction of the arms, so if these changes were not too great their effect could be eliminated.",
+      "quote": "since the changes of temperature are independent of the direction of the arms, if these changes were not too great their effect could be eliminated",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "displacement_from_bending_due_to_support",
+      "statement": "The large displacement observed in one particular direction was due entirely to the support, as proved by turning the support through 90 degrees, which changed the direction of the displacement by 90 degrees.",
+      "quote": "That this was due entirely to the support was proved by turning the latter through 90°, when the direction in which the displacement appeared was also changed 90°.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "gradual_change_produces_outstanding_error",
+      "statement": "A gradual change in the readings, which should not affect the periodic variation being searched for, would itself necessitate an outstanding error.",
+      "quote": "This gradual change, which should not in the least affect the periodic variation for which we are searching, would of itself necessitate an outstanding error",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_displacement_of_bands_observed",
+      "statement": "The interpretation of the results is that there is no displacement of the interference bands.",
+      "quote": "The interpretation of these results is that there is no displacement of the interference bands.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "stationary_ether_hypothesis_shown_incorrect",
+      "statement": "The result of the hypothesis of a stationary ether is shown to be incorrect, and the hypothesis is erroneous.",
+      "quote": "The result of the hypothesis of a stationary ether is thus shown to be incorrect, and the necessary conclusion follows that the hypothesis is erroneous.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aberration_presupposes_earth_moving_through_ether",
+      "statement": "The explanation of aberration presupposes that the earth moves through the ether, the ether remaining at rest.",
+      "quote": "This conclusion directly contradicts the explanation of the phenomenon of aberration which has been hitherto generally accepted, and which presupposes that the earth moves through the ether, the latter remaining at rest.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "two_theories_of_aberration_run_parallel",
+      "statement": "Two totally different theories can run parallel to each other in the explanation of the phenomena of aberration.",
+      "quote": "This affords a curious instance of two totally different theories running parallel to each other in the explanation of phenomena.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_may_not_move_freely_through_earth",
+      "statement": "It is not to be believed, without good evidence, that the ether moved quite freely through the solid mass of the earth.",
+      "quote": "we would not be disposed to believe, without good evidence, that the ether moved quite freely through the solid mass of the earth",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

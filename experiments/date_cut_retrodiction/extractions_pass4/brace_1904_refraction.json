@@ -1,0 +1,215 @@
+{
+  "doc_id": "brace_1904_refraction",
+  "propositions": [
+    {
+      "name": "contraction_hypothesis_explains_null_result",
+      "statement": "The Michelson-Morley experiment gave negative results, which are interference between two rays at right angles and parallel to the earth's motion, and the contraction hypothesis is meant to explain these negative results.",
+      "quote": "THE FitzGerald-Lorentz \"Contraction\" Hypothesis to explain the negative results of the Michelson-Morley experiment of interference between two rays, at right angles and parallel to the earth's motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "index_proportional_to_density_assumption",
+      "statement": "The excess of the index above unity is proportional to the density.",
+      "quote": "the excess of the index above unity to be proportional to the density",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_mediates_em_forces",
+      "statement": "Intermolecular forces are analogous to the interaction, through the mediation of the æther, of electric and magnetic forces.",
+      "quote": "considerations in regard to intermolecular forces analogous to the interaction, through the mediation of the æther, of electric and magnetic forces",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "earth_orbital_velocity_conspires",
+      "statement": "The earth's orbital velocity conspires approximately with that of the solar system in space.",
+      "quote": "These experiments were repeated during the early part of February, 1904, when the earth's orbital velocity conspires approximately with that of the solar system in space.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "mascart_water_compression_result",
+      "statement": "In the case of water under compression, the increment in the excess of the index above unity is nearly proportional to the increment of density.",
+      "quote": "Mascart has shown that in the case of water under compression the increment in the excess of the index above unity is nearly proportional to the increment of its density.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "density_increase_changes_molecular_frequency",
+      "statement": "If, in the movement of matter through the æther, an increase in density in the direction of motion took place, this would produce a change in the natural frequency of the molecular systems similar to that which occurs in glass.",
+      "quote": "an increase in density in this direction took place, producing a change in the natural frequency of the molecular systems similar to that which occurs in glass",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "index_depends_on_frequency",
+      "statement": "A fractional increase in frequency gives a fractional increase in index.",
+      "quote": "This gives for a fractional increase in frequency of 4/3 a fractional increase in index of",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "earth_field_rotates_polarization_water",
+      "statement": "Water has a Verdet's constant, and light passing through water in the earth's field over a length gives a rotation of the plane of polarization.",
+      "quote": "if we take 0°.015 as Verdet's constant for water and 0.2 as the earth's field and a length of 30 m. we find about 0°.15 for the rotation.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "magnetic_rotation_direction_fixed",
+      "statement": "The rotation of the plane of polarization due to a magnetic field is always in a definite direction, independent of the direction of the ray, so such a rotation would be reversed with respect to an observer moving with the trough.",
+      "quote": "the rotation due to a magnetic field is always in a definite direction and independent of the direction of the ray, such a rotation of the plane of polarization would be reversed with respect to an observer moving",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "quarter_wave_plate_ratio",
+      "statement": "The component vibrations of the resultant ellipse in the quarter-wave plate are in the ratio of tan θ to 1, where θ is the angle the plane of polarization makes with a principal axis of the mica.",
+      "quote": "the component vibrations or the principal axes of the resultant ellipse in the quarter-wave plate are in the ratio of tan θ to 1",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "crossed_nicols_extinction",
+      "statement": "With the mica sections removed, the nicols can be adjusted for extinction.",
+      "quote": "With the mica sections removed the nicols were adjusted for extinction, which was fairly complete.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "water_refractive_index_133",
+      "statement": "The index of water is 1.33.",
+      "quote": "The total path of the light in the water was 2856 cms. Taking its index as 1.33, the number of waves is",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "flint_glass_refractive_index_177",
+      "statement": "The flint-glass cylinders have a mean index of 1.77.",
+      "quote": "Two cylinders of flint-glass, each 22.3 cms. long and 2.4 cms. in diameter, and of mean index n D =1.77, were mounted on adjustable supports",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_double_refraction_water_detected",
+      "statement": "To this order of sensibility there is no double refraction in the water due to its motion through the æther.",
+      "quote": "Hence, we may conclude that to this order of sensibility there is no double refraction in the water due to its motion through the æther.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_double_refraction_glass_detected",
+      "statement": "When the greatest care was exercised, no change could be detected in the glass.",
+      "quote": "When the greatest care was exercised no change could be detected.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_effect_february_repeat",
+      "statement": "When the experiments were repeated in February 1904 under favourable conditions, no effect could be detected.",
+      "quote": "The conditions for observation were quite as favourable as before; but no effect could be detected.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "double_refraction_velocity_difference",
+      "statement": "The greatest difference in velocity or in index between two components represents double refraction.",
+      "quote": "This represents the greatest difference in velocity or in index between the two components which could exist referred to that of water for green light",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "contraction_hypothesis_predicts_definite_change",
+      "statement": "The contraction hypothesis predicts a definite change, against which the change obtained with water and glass can be compared.",
+      "quote": "the change to be expected on the \"contraction\" hypothesis, and is 30 times less than the sensibility obtained with water.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "hicks_alternative_prediction",
+      "statement": "Hicks, in a more rigorous discussion than that of Lorentz of the effect to be expected in the Michelson-Morley experiment, finds that instead of a contraction in the direction of drift there should be an elongation.",
+      "quote": "Hicks , in a more rigorous discussion than that of Lorentz, of the effect to be expected in the Michelson-Morley experiment, shows that instead of a contraction of",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "experiment_should_disprove_hypothesis",
+      "statement": "The experiment itself should disprove the FitzGerald-Lorentz hypothesis.",
+      "quote": "The experiment itself should thus disprove the FitzGerald-Lorentz hypothesis.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "lorentz_alternative_suppositions",
+      "statement": "On Lorentz's point of view, there is contraction along the drift and zero change at right angles, or no contraction but extension at right angles to the drift, or elongation along and at right angles to the drift.",
+      "quote": "contraction along the drift and zero change at right angles, no contraction but extension at right angles to the drift or elongation along and at right angles to the drift",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "effect_same_regardless_of_supposition",
+      "statement": "On any of these suppositions, the effect to be observed by means of double refraction would be the same.",
+      "quote": "the effect to be observed by means of double refraction in the preceding experiments would be the same",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "test_validity_implies_hypothesis_false",
+      "statement": "If the test is a valid one, the contraction hypothesis cannot explain the negative results of the interference experiments.",
+      "quote": "if the test is a valid one, the \"contraction\" hypothesis cannot explain the negative results of the interference experiments",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_moves_with_matter",
+      "statement": "Either the aether moves with the embedded matter, or the effect of the relative motion on the intermolecular forces and the possible consequent relative change in dimensions is very small.",
+      "quote": "we also conclude either that the aether moves with the embedded matter, or that the effect of the relative motion on the intermolecular forces and the possible consequent relative change in dimensions are very small",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "strain_produces_double_refraction_glass",
+      "statement": "A small piece of glass compressed vertically shows a sharp change of intensity at the bounding line, indicating double refraction produced by strain.",
+      "quote": "A small piece of glass compressed vertically to the slightest degree with the fingers placed after the polarizer 4 showed a sharp change of intensity at this bounding line.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "weight_proportional_to_retardation_shift",
+      "statement": "The shift on the micrometer-screw produced by a weight on the vertical glass strip is proportional to the weight.",
+      "quote": "500 gms. on the vertical glass strip gave a reading of 36 on the micrometer-screw and 200 gms. gave 14, thus showing the proportionality.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "compensator_rotation_proportional_quarterwave",
+      "statement": "For small angles, the rotation of the compensator is proportional to the rotation of the quarter-wave plate.",
+      "quote": "It was found that the rotation of the compensator was proportional to that of the quarter-wave plate approximately for these small angles.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "water_contains_air_causing_bubbles",
+      "statement": "Water contains air, which if not driven out forms minute bubbles causing diffused light.",
+      "quote": "Water which had been heated to drive out air and prevent minute bubbles forming in it and upon the mirrors and thus causing diffused light was then flowed into the trough",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "title_matter_moving_through_aether",
+      "statement": "Matter moving through the æther can show double refraction.",
+      "quote": "XXXVII. On Double Reafraction in Matter moving through the Æther. By D. B. Brace .",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "lens_converges_light",
+      "statement": "A lens converges rays of light.",
+      "quote": "The lens 1 (fig. 1) of about 2 m focus converged the sun's rays, from a carefully adjusted heliostat, within the nicol 4, after reflexion from 2 and 3.",
+      "kind": "presupposed",
+      "definitional": true
+    }
+  ]
+}

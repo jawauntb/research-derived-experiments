@@ -1,0 +1,275 @@
+{
+  "doc_id": "lorentz_1904",
+  "propositions": [
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "aether_deforms_solid_bodies",
+      "quote": "the dimensions of solid bodies are slightly altered by their motion through the aether",
+      "statement": "The dimensions of solid bodies are slightly altered by their motion through the aether.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "michelson_experiment_negative_result",
+      "quote": "Michelson 's well known interference-experiment , the negative result of which has led FitzGerald and myself",
+      "statement": "Michelson's interference-experiment had a negative result.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "trouton_noble_no_effect_observed",
+      "quote": "In the apparatus of Trouton and Noble the condenser was fixed to the beam of a torsion-balance, sufficiently delicate to be deflected by a couple of the above order of magnitude. No effect could however be observed.",
+      "statement": "No effect could be observed on the condenser fixed to the torsion-balance in the apparatus of Trouton and Noble.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "electron_theory_requires_couple",
+      "quote": "The theory of electrons, unless it be modified by some new hypothesis, would undoubtedly require the existence of such a couple.",
+      "statement": "The theory of electrons, unless modified by a new hypothesis, requires the existence of a couple acting on a moving charged condenser.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "earth_annual_motion_translation",
+      "quote": "such as all systems have in virtue of the Earth's annual motion, admits of a comparatively simple solution, so long as only those terms",
+      "statement": "All systems have a translation in virtue of the Earth's annual motion.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "actions_independent_of_motion",
+      "quote": "that many electromagnetic actions are entirely independent of the motion of the system",
+      "statement": "Many electromagnetic actions are entirely independent of the motion of the system.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "aether_force_on_electron",
+      "quote": "the electric force, i.e. the force, reckoned per unit charge, which is exerted by the aether on a volume-element of an electron.",
+      "statement": "The electric force is the force, reckoned per unit charge, exerted by the aether on a volume-element of an electron.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "local_time_named",
+      "quote": "The variable t' may be called the local time ; indeed, for k=1, l=1 it becomes identical with what I have formerly understood by this name.",
+      "statement": "The transformed time variable t' may be called the local time.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "electron_sphere_contraction",
+      "quote": "I shall now suppose that the electrons, which I take to be spheres of radius R in the state of rest, have their dimensions changed by the effect of a translation",
+      "statement": "The electrons are spheres of radius R in the state of rest and have their dimensions changed by the effect of a translation.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "no_material_mass_only_electromagnetic",
+      "quote": "I shall suppose that there is no other, no \"true\" or \"material\" mass",
+      "statement": "The electron has no true or material mass other than its electromagnetic mass.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "longitudinal_transverse_mass_distinct",
+      "quote": "the electron behaves as if it had a mass m 1 , those in which the acceleration is normal to the path, as if the mass were m 2",
+      "statement": "The electron behaves as if it had one mass for acceleration in the direction of motion and a different mass for acceleration normal to the path.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "molecular_masses_influenced_like_electron",
+      "quote": "the masses of all particles are influenced by a translation to the same degree as the electromagnetic masses of the electrons",
+      "statement": "The masses of all particles are influenced by a translation to the same degree as the electromagnetic masses of the electrons.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "radium_ray_deflexion_measured",
+      "quote": "the results of Abraham have been confirmed in a most remarkable way by Kaufmann 's measurements of the deflexion of radium-rays in electric and magnetic fields.",
+      "statement": "Kaufmann's measurements of the deflexion of radium-rays in electric and magnetic fields confirm the results of Abraham for the transverse mass.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "electron_diameter_small_vs_wavelength",
+      "quote": "the diameter of an electron is extremely small in comparison with the wave-length.",
+      "statement": "The diameter of an electron is extremely small in comparison with the wave-length.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "electron_motion_quasistationary",
+      "quote": "the motion of an electron may be treated as quasi-stationary if it changes very little during the time a light-wave takes to travel over a distance equal to the diameter.",
+      "statement": "The motion of an electron may be treated as quasi-stationary if it changes very little during the time a light-wave takes to travel over a distance equal to the diameter.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "earth_motion_undetectable_light_darkness",
+      "quote": "It will therefore be impossible to detect an influence of the Earth's motion on any optical experiment, made with a terrestrial source of light, in which the geometrical distribution of light and darkness is observed.",
+      "statement": "It is impossible to detect an influence of the Earth's motion on an optical experiment in which the geometrical distribution of light and darkness is observed.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "amplitude_ratio_invariant_translation",
+      "quote": "if in two points of a system, rays of light of the same state of polarization are propagated in the same direction, the ratio between the amplitudes in these points may be shown not to be altered by a translation.",
+      "statement": "The ratio between the amplitudes of rays of light of the same state of polarization propagated in the same direction is not altered by a translation.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "michelson_prediction_ponderable_body",
+      "quote": "One of these is that the result of MICHELSON'S experiment must remain negative, if the interfering rays of light are made to travel through some ponderable transparent body.",
+      "statement": "The result of Michelson's experiment must remain negative if the interfering rays of light are made to travel through a ponderable transparent body.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "trouton_noble_explained_contraction",
+      "quote": "the only effect of the translation must have been a contraction of the whole system of electrons and other particles constituting the charged condenser and the beam and thread of the torsion-balance.",
+      "statement": "The only effect of the translation on the charged condenser and the torsion-balance was a contraction of the whole system of electrons and other particles.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "condenser_energy_increase_motion",
+      "quote": "Representing, as before, by U the energy of the charged condenser in the state of rest, and by U+U' the energy in the state of motion, we have by the formulae of this paper",
+      "statement": "The charged condenser has an energy U in the state of rest and a different energy U+U' in the state of motion.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "condenser_impulse_charge_discharge",
+      "quote": "This momentum being produced at the moment of charging, and disappearing at that of discharging, the condenser must experience in the first case an impulse",
+      "statement": "The condenser must experience an impulse at the moment of charging and at the moment of discharging.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "earth_velocity_value",
+      "quote": "the velocity of the Earth's motion is 3 \u00d7 10 c.M. per sec.",
+      "statement": "The velocity of the Earth's motion is 3 x 10 c.M. per sec.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "solid_body_equilibrium_deformation",
+      "quote": "we suppose each particle of a solid body to be in equilibrium under the action of the attractions and repulsions exerted be its neighbours, and if we take for granted that there is but one configuration of equilibrium",
+      "statement": "Each particle of a solid body is in equilibrium under the attractions and repulsions exerted by its neighbours, there is but one configuration of equilibrium, and the system will of itself change into the deformed system under a translation.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "forces_uncharged_particles_like_electric",
+      "quote": "I shall suppose that the forces between uncharged particles, as well as those between such particles and electrons, are influenced by a translation in quite the same way as the electric forces in an electrostatic system",
+      "statement": "The forces between uncharged particles, and between such particles and electrons, are influenced by a translation in the same way as the electric forces in an electrostatic system.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "couple_axis_perpendicular_translation",
+      "quote": "These expressions show that the axis of the couple lies in the plane of the plates, perpendicular to the translation.",
+      "statement": "The axis of the couple lies in the plane of the plates, perpendicular to the translation.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "electron_charge_uniform_surface_distribution",
+      "quote": "For simplicity's sake I shall suppose the charge e to be uniformly distributed over the surface, so long as the electron remains at rest.",
+      "statement": "The charge of the electron is uniformly distributed over the surface, so long as the electron remains at rest.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "momentum_change_requires_force",
+      "quote": "every change in the motion of a system will entail a corresponding change in the electromagnetic momentum and will therefore require a certain force",
+      "statement": "Every change in the motion of a system entails a corresponding change in the electromagnetic momentum and requires a certain force.",
+      "support": 3
+    }
+  ]
+}

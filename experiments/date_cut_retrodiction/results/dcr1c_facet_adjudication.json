@@ -1,0 +1,113 @@
+{
+  "kind": "dcr1c_facet_adjudication",
+  "extraction": "consensus 2-of-3 over three sandboxed passes",
+  "matcher": "target_v3 (T2 polarity and referent vetoes)",
+  "cut_year": 1904,
+  "method": "H5 requires every consensus proposition matched to a facet at the target cut to be read individually and actually state that facet. All 12 were read. Applied at the same strictness as DCR1b, which failed 4 of 15: a proposition that reports the commitment as false, describes the rival theory, or matched on a technical label is a false positive.",
+  "all_hits_genuine": true,
+  "n_hits": 12,
+  "n_genuine": 12,
+  "n_false_positive": 0,
+  "false_positive_rate": 0.0,
+  "comparison_to_dcr1b": {
+    "dcr1b": "15 hits, 4 false positives (26.7%), H5 NO_GO",
+    "dcr1c": "12 hits, 0 false positives, H5 GO",
+    "what_changed": "The v3 vetoes removed all four adjudicated false positives and nothing else. On the 2-of-3 consensus the v2 matcher finds 15 T2 hits and v3 finds 11; the four dropped are the same failure modes DCR1b named."
+  },
+  "T2_privileged_frame": {
+    "n_matched": 11,
+    "n_genuine": 11,
+    "hits": [
+      {
+        "doc_id": "larmor_1897_medium3",
+        "name": "absolute_space_is_aether",
+        "statement": "The spacial framework in absolute rest introduced by Newton is in fact the quiescent underlying æther.",
+        "genuine": true,
+        "note": "The strongest statement of the facet anywhere in the corpus -- a direct identification of Newtonian absolute rest with the aether. It is NEW at 2-of-3: DCR1b's 2-of-2 consensus dropped it, and the third sandboxed pass rescued it. Direct evidence that the consensus repair did work the previous filter could not."
+      },
+      {
+        "doc_id": "michelson_1881",
+        "name": "stationary_ether_hypothesis",
+        "statement": "The ether is at rest while the earth moves through it, so the time required for light to pass from one point to another on the earth's surface depends on the direction in which it travels.",
+        "genuine": true
+      },
+      {
+        "doc_id": "michelson_1881",
+        "name": "aberration_presupposes_earth_moves_through_ether",
+        "statement": "The generally accepted explanation of the phenomenon of aberration presupposes that the earth moves through the ether, the ether remaining at rest.",
+        "genuine": true
+      },
+      {
+        "doc_id": "michelson_morley_1887",
+        "name": "fresnel_ether_at_rest_outside_media",
+        "statement": "The ether is supposed to be at rest except in the interior of transparent media.",
+        "genuine": true,
+        "note": "Fresnel's partially-dragged aether. Still a privileged frame: at rest in absolute space outside matter, not at rest relative to the earth."
+      },
+      {
+        "doc_id": "michelson_morley_1887",
+        "name": "apparatus_motion_through_stationary_ether_alters_paths",
+        "statement": "If the ether is at rest and the apparatus moves with the velocity of the earth in its orbit, the directions and distances traversed by the rays are altered.",
+        "genuine": true,
+        "form": "conditional",
+        "note": "Conditional in form. Counted genuine because the antecedent states the theory's commitment and the consequent draws a physical consequence -- it is not a reductio. The reductio case, 'then Lorentz's own theory also fails', was correctly vetoed."
+      },
+      {
+        "doc_id": "fitzgerald_1889",
+        "name": "velocity_relative_to_ether_determines_physical_effects",
+        "statement": "Electric forces, molecular forces, and length are affected by motion relative to the ether.",
+        "genuine": true,
+        "note": "Motion relative to the aether has physical effects, which is what makes the aether frame privileged."
+      },
+      {
+        "doc_id": "larmor_1897_medium3",
+        "name": "dynamics_needs_absolute_positions",
+        "statement": "It has not been found possible to construct a system of dynamics which has respect only to the relative positions of moving bodies.",
+        "genuine": true,
+        "note": "A negative sentence whose content is the absolute-space commitment. This is exactly why the polarity veto fires on targeted refutation markers and never on bare negation."
+      },
+      {
+        "doc_id": "lodge_1897_absence",
+        "name": "no_disk_motion_effect_implies_stationary_ether",
+        "statement": "Since a motion of the disks relatively to the observer and the light causes no effect, the ether is stationary, and it follows that a motion of the light and observer would produce an effect.",
+        "genuine": true
+      },
+      {
+        "doc_id": "lodge_1897_absence",
+        "name": "stationary_ether_large_square_shift",
+        "statement": "If the ether is stationary near the earth, a single interference square of sufficient size would show a shift of more than one band width due to the rotation of the earth.",
+        "genuine": true,
+        "form": "conditional",
+        "note": "Conditional; the consequent is a prediction, not a refutation of the antecedent."
+      },
+      {
+        "doc_id": "rayleigh_1902_refraction",
+        "name": "stellar_aberration_favours_stationary_aether",
+        "statement": "Stellar aberration favours the theory of a stationary aether.",
+        "genuine": true
+      },
+      {
+        "doc_id": "rayleigh_1902_refraction",
+        "name": "earth_orbital_motion_relevant",
+        "statement": "According to the theory of a stationary aether, we have to do with the motion of the earth in its orbit and with the motion of the sun in space.",
+        "genuine": true
+      }
+    ]
+  },
+  "T3_local_time_artifice": {
+    "n_matched": 1,
+    "n_genuine": 1,
+    "exemplar": "The transformed time variable t' may be called the local time.",
+    "caveat": "Still one proposition, and still thin: it establishes local time as a named commitment rather than as an artifice. The 1904 cut therefore clears quorum by a single proposition, exactly as DCR1 did, and that fragility has not been repaired by anything in DCR1b or DCR1c."
+  },
+  "T1_absolute_simultaneity": {
+    "n_matched": 0,
+    "n_genuine": 0,
+    "note": "Zero at every cut under v2 and v3. On this corpus, under this extraction, absolute simultaneity is never surfaced as an explicit commitment -- which is itself worth stating, since it is the facet Einstein actually deleted."
+  },
+  "consequence": {
+    "H5_decision": "GO",
+    "residual_fragility": "T3 rests on one proposition. Quorum is met by a margin of one, and no gate measures that margin.",
+    "conditional_form_judgments": 2
+  }
+}
