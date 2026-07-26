@@ -1,0 +1,250 @@
+{
+  "doc_id": "lodge_1897_absence",
+  "propositions": [
+    {
+      "name": "light_velocity_unchanged_by_moving_plates",
+      "statement": "The velocity of light between two steel plates moving together in their own plane is not increased or diminished by so much as a hundredth part of their velocity.",
+      "quote": "The velocity of light between two steel plates moving together in their own plane, an inch apart, is not increased or diminished by so much as",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_first_order_irrotational_optical_effect",
+      "statement": "No first-order effect of purely irrotational etherial motion can ever be optically detected.",
+      "quote": "The chief conclusion of the theoretical part of the former paper (p. 752) is that no first-order effect of purely irrotational etherial motion can ever be optically detected",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ray_path_independent_of_potential_motion",
+      "statement": "As long as the motion of a medium is characterised everywhere by a single-valued potential function, the course of all observable rays through it is independent of the motion.",
+      "quote": "that as long as the motion of a medium is characterised everywhere by a single-valued potential function, the course of all observable rays through it, however reflected and refracted they may be, is independent of the motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "journey_time_independent_except_second_order",
+      "statement": "The time of journey along any given path through any kind of material is independent of the motion, except for experiments directed to the second order of aberration-magnitude.",
+      "quote": "the time of journey along any given path through any kind of material is likewise perfectly definite, and independent of the motion, except for experiments directed to the second order of aberration-magnitude",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "possible_ether_viscosity",
+      "statement": "There might exist a trace of something akin to viscosity by which the ether could be got hold of.",
+      "quote": "unless there existed a trace of something akin to viscosity by which the medium could be got hold of",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "viscosity_could_carry_ether_along",
+      "statement": "If a trace of viscosity exists, ether in the immediate neighbourhood of moving matter should sooner or later be more or less carried along by it.",
+      "quote": "whereby ether in the immediate neighbourhood of moving matter should sooner or later be more or less carried along by it",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "bifurcated_beam_interference_reveals_motion_effect",
+      "statement": "The effect of motion on a bifurcated beam of light was observed by making the two half beams interfere, so that a shift of the central band of the system by so much as the hundredth part of the width of a band could be seen.",
+      "quote": "the two half beams were made to interfere in the field of view of a micrometer eye-piece, and a shift of the central band of the system by so much as the hundredth part of the width of a band",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "gravitation_as_distinct_connexion_mode",
+      "statement": "Even though a viscous connexion between ether and matter were disproved, there might be another mode of connexion, the unknown kind of connexion which is concerned in gravitation.",
+      "quote": "it did not follow that there was not another mode of connexion competent to transmit motion from one to the other, viz.: the unknown kind of connexion which is concerned in gravitation",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "large_mass_needed_for_gravitational_connexion",
+      "statement": "To display any effect of the gravitational kind of connexion, a large mass must be used.",
+      "quote": "and to display any effect on this, a large mass must be used",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "earth_rotation_shift_if_ether_carried",
+      "statement": "It is arithmetically possible to arrange for a perceptible shift of the bands due to the rotation of the earth, if the earth carries ether round with it.",
+      "quote": "it is arithmetically quite possible to arrange for a perceptible shift of the bands due to the rotation of the earth, if it carries ether round with it",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_disk_motion_effect_implies_stationary_ether",
+      "statement": "Since a motion of the disks relatively to the observer and the light causes no effect, the ether is stationary, and it follows that a motion of the light and observer would produce an effect.",
+      "quote": "since a motion of the disks relatively to the observer and the light causes no effect, the ether being stationary, it follows that a motion of the light and observer would produce an effect",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rotating_apparatus_should_show_reversible_shift",
+      "statement": "If the whole apparatus, lantern, optical frame, telescope and observer were mounted on a turntable and caused to rotate, a reversible shift of the bands should be seen.",
+      "quote": "the whole apparatus, lantern, optical frame, telescope, observer and all were mounted on a turntable and caused to rotate, a reversible shift of the bands should be seen",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "stationary_ether_large_square_shift",
+      "statement": "If the ether is stationary near the earth, a single interference square of sufficient size would show a shift of more than one band width due to the rotation of the earth.",
+      "quote": "then a single interference square, 1 kilometre in the side, would show a shift of rather more than one band width, due to the earth’s rotation in these latitudes",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "matter_might_drag_ether_by_mass",
+      "statement": "Matter might conceivably drag the ether with it in proportion to its mass, though an ordinary lump of matter can hardly be expected to shift it.",
+      "quote": "If matter conceivably drags the ether with it in proportion to its mass, an ordinary lump of matter can hardly be expected to cope with the heart and to shift it in opposition to that body",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "magnetic_field_measured_by_exploring_coil",
+      "statement": "The magnetic field excited by a current can be measured by snatching out a small exploring coil and comparing its throw with that caused by an earth inductor.",
+      "quote": "by the common method of suddenly snatching out a small exploring coil and comparing the galvamometer throw with that caused by an earth inductor in the same circuit thrown over two right angles",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "no_shift_iron_mass_spinning_magnetized",
+      "statement": "There was not a trace of shift when the iron mass was spinning, either with or without its magnetising current.",
+      "quote": "there was not a trace of shift when the mass was spinning, either with or without its magnetising current",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_effect_switching_reversing_current",
+      "statement": "The current was switched on and off and reversed many times, both when the mass was stationary and when it was revolving, but there was no effect.",
+      "quote": "The 110 volts of the town main were switched on and off and reversed many times, both when the mass was stationary and when it was revolving five times a second, but there was no effect",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_shift_at_speed_1000",
+      "statement": "Neither motion nor magnetisation of the heavy iron mass ever caused the slightest real shift of the bands at the speed of 1000.",
+      "quote": "never found either motion or magnetisation of the heavy iron mass cause the slightest real shift of the bands at the speed of 1000",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "flicker_is_heat_convection_not_ether_effect",
+      "statement": "The bands only flickered when the motor was used, and this flicker was plainly a heat convection effect.",
+      "quote": "Starting and stopping the iron by hand did not cause the bands to flicker; they only flickered when the motor was used. It was plainly a heat convection effect.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "bands_sensitive_to_density_fluctuation",
+      "statement": "The bands were manifestly extremely sensitive to fluctuating density, and the flicker was traced to hot air from the carbon rheostat.",
+      "quote": "They were manifestly extremely sensitive to fluctuating density, and hence we traced the previous flicker to hot air from the carbon rheostat which regulated the driving current",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "air_effect_distinct_from_ether_effect",
+      "statement": "The true air effect is a hitherto unobserved small quantity distinct from the ether effect, and its detection would emphasise the truly negative character of the ether effect.",
+      "quote": "This labour was undertaken not only because it was thought of interest to observe this hitherto unobserved small quantity, but also because its detection would emphasise the truly negative character of the ether effect",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "time_has_no_effect_on_shift",
+      "statement": "Time has nothing to do with the matter of producing a shift.",
+      "quote": "We conclude that time has nothing to do with the matter.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "air_density_gradation_from_centrifugal_force",
+      "statement": "The gradation of density in the air between the disks, due to centrifugal force, is a possible reason for the concertina effect and the slight residual irreversible shift.",
+      "quote": "A possible reason for the concertina effect, and for the slight residual irreversible shift sometimes observed, suggests itself in the gradation of density in the air between the disks, due to centrifugal force",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "odd_number_paths_needed_for_density_effect",
+      "statement": "The gradation of density could cause a distinct effect if the beam of light had an odd number of paths between the disks.",
+      "quote": "The gradation of density could therefore cause a distinct effect if the beam of light had an odd number of paths between the disks",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electrification_might_grip_ether_via_radiation",
+      "statement": "It was thought possible that electrification might grip the ether, because an oscillatory charge certainly radiates wave motion into the ether.",
+      "quote": "yet it was thought possible that electrification might do it; because an oscillatory charge certainly radiates wave motion into the ether",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "radiation_not_mechanical_disturbance",
+      "statement": "Radiation is not any known kind of mechanical disturbance, but is concerned with the ether's electrical properties, and need not involve etherial viscosity.",
+      "quote": "radiation is not any known kind of mechanical disturbance, but is concerned with the ether's electrical properties, end need not necessarily involve anything analogous to etherial viscosity even in the neighbourhood of matter",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electric_charge_might_confer_gripping_power",
+      "statement": "Electric charge, being the connexion between ether and matter, might confer upon a material body some power of gripping and rotationally carrying forward the ether in a quasi-viscous manner.",
+      "quote": "electric charge, being as it were the connexion between ether and matter, might confer upon a material body some power of gripping and rotationally carrying forward the ether in a quasi-viscous manner",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "electric_tension_near_air_breakdown",
+      "statement": "The difference of potential concerned was not far short of 40,000 volts, and the electric tension was about as much as common air can stand.",
+      "quote": "It may be taken that the difference of potential concerned was not far short of 40,000 volts., and that the electric tension was about as much as common air can stand",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_difference_electrified_or_not",
+      "statement": "There was not the slightest difference whether the plates were electrified or not.",
+      "quote": "there was not the slightest difference whether the plates were electrified or not",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_effect_from_sparks_at_any_speed",
+      "statement": "There was not a wink of shift when the sparks occurred, whatever the speed.",
+      "quote": "There was not a wink when the sparks occurred, whatever the speed.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "neither_field_confers_viscosity",
+      "statement": "Neither an electric nor a magnetic transverse field confers viscosity upon the ether, nor enables moving matter to grip and move it rotationally.",
+      "quote": "I conclude that neither an electric nor a magnetic transverse field confers viscosity upon the ether, nor enables moving matter to grip and move it rotationally",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "matter_incompetent_to_disturb_ether_rotationally",
+      "statement": "Such masses of matter as had been dealt with are incompetent to disturb the ether in a rotational manner.",
+      "quote": "such messes of matter as we had been dealing with are incompetent to disturb the ether in e rotational manner",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "magnetic_field_conveyance_no_gripping_power",
+      "statement": "The conveyance of a magnetic field by moving matter confers no power of gripping the ether.",
+      "quote": "it has now been shown that the conveyance of a magnetic field by moving matter confers; no power of gripping the ether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "torque_effect_could_mimic_ether_result",
+      "statement": "Any torque effect, however minute, being of a reversible character, might easily have been mistaken for a result of the kind that was being looked for.",
+      "quote": "Any torque effect, however minute, being of a reversible character, was peculiarly dangerous, for it might easily have been mistaken for a result of the kind that was being looked for",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "ether_matter_connexion_is_the_question",
+      "statement": "The subject of these experiments is the absence of mechanical connexion between ether and matter.",
+      "quote": "Experiments on the Absence of Mechanical Connexion between Ether and Matter.",
+      "kind": "presupposed",
+      "definitional": true
+    }
+  ]
+}

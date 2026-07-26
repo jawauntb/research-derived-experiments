@@ -1,0 +1,285 @@
+{
+  "doc_id": "larmor_1900_ch11",
+  "propositions": [
+    {
+      "name": "aethereal_vectors_two_frames",
+      "statement": "There are equations for aethereal vectors referred to axes at rest in the aether and a time, and equations for related aethereal vectors referred to axes in uniform translatory motion and a time.",
+      "quote": "and those for related aethereal vectors represented by ( f, g, h) and ( a, b, c ) referred to axes (x', y', z') in uniform translatory motion and a time t'.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "second_order_correspondence",
+      "statement": "By a more complete transformation a correspondence can be instituted between the equations for the two systems which is correct to the second order.",
+      "quote": "by aid of a more complete transformation institute a correspondence which will be correct to the second order",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "moving_scheme_matches_maxwell",
+      "statement": "The scheme of equations referred to moving axes, which connects together the new variables with subscripts, is identical in form with the Maxwellian scheme of relations for the aethereal vectors referred to fixed axes.",
+      "quote": "the scheme of equations, referred to moving axes, which connects together the new variables with subscripts, is identical in form with the Maxwellian scheme of relations for the aethereal vectors referred to fixed axes",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_positions_correspond",
+      "statement": "The corresponding positions of the electrons of the two systems, established up to the first order of v/c, are true up to the second order when the moving system is contracted in comparison with the fixed system.",
+      "quote": "the conclusions as to the corresponding positions of the electrons of the two systems, which had been previously established up to the first order of v/c , are true up to the second order",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "motion_preserves_electron_strength",
+      "statement": "Motion of a material system containing electrons cannot alter the strengths of the electrons.",
+      "quote": "since motion of a material system containing electrons cannot alter their strengths",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "dynamical_similarity_construction",
+      "statement": "A correlative system devoid of the translatory motion in which the strengths of the electrons are equal instead of proportional can be constructed by the principle of dynamical similarity.",
+      "quote": "We require however to construct a correlative system devoid of the translatory motion in which the strengths of the electrons shall be equal instead of proportional",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "contraction_from_electric_forces",
+      "statement": "If the internal forces of a material system arise wholly from electrodynamic actions between the systems of electrons which constitute the atoms, then imparting to the system a uniform velocity of translation produces a uniform contraction of the system in the direction of the motion.",
+      "quote": "if the internal forces of a material system arise wholly from electrodynamic actions between the systems of electrons which constitute the atoms, then an effect of imparting to a steady material system a uniform velocity of translation is to produce a uniform contraction of the system in the direction of the motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "displacements_do_not_correspond",
+      "statement": "The electrons occupy corresponding positions in the contracted system, but the aethereal displacements in the space around them do not correspond.",
+      "quote": "The electrons will occupy corresponding positions in this contracted system, but the aethereal displacements in the space around them will not correspond",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "radiation_vectors_in_wavefront",
+      "statement": "Both the electric and magnetic vectors of radiation lie in the wave-front.",
+      "quote": "As both the electric and magnetic vectors of radiation lie in the wave-front",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "wavefronts_and_rays_correspond",
+      "statement": "In the two correlated systems, fixed and moving, the relative wave-fronts of radiation correspond, as also do the rays which are the paths of the radiant energy relative to the systems.",
+      "quote": "it follows that in the two correlated systems, fixed and moving, the relative wave-fronts of radiation correspond, as also do the rays which are the paths of the radiant energy relative to the systems",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "doppler_from_time_change",
+      "statement": "The change of the time variable, in the comparison of radiations in the fixed and moving systems, involves the Doppler effect on the wave-length.",
+      "quote": "The change of the time variable, in the comparison of radiations in the fixed and moving systems, involves the Doppler effect on the wave-length",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "refractive_index_wave_velocity",
+      "statement": "A plane wave-train advances with velocity V, or c/mu where mu is refractive index.",
+      "quote": "which belongs to a plane wave-train advancing, along the direction ( l, m, n ) with velocity V , or c/μ where μ is refractive index",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "fresnel_effect_michelson_correction",
+      "statement": "The second term in the expression for the velocity of the wave-train relative to the moving medium is the Fresnel effect, and the remaining term is its second order correction on the hypothesis which includes Michelson's negative result.",
+      "quote": "The second term in this expression is the Fresnel effect, and the remaining term is its second order correction on our hypothesis which includes Michelson's negative result",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "doppler_wavelength_shortening",
+      "statement": "The wave-length in the train of radiation relative to the moving material system is shorter by a quantity of the first order, which represents the Doppler effect on wave-length because the period is the same up to that order.",
+      "quote": "it is thus shorter by a quantity of the first order, which represents the Doppler effect on wave-length because the period is the same up to that order",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "null_disturbance_regions_correspond",
+      "statement": "When one of the vectors is null so is the other, so that regions where there is no disturbance in the one system correspond to regions where there is no disturbance in the other system.",
+      "quote": "when one of them is null so is the other: hence in any experimental arrangement, regions where there is no disturbance in the one system correspond to regions where there is no disturbance in the other",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_earth_motion_optical_effect",
+      "statement": "There is a general absence of effect of the Earth's motion in optical experiments, up to the second order of small quantities.",
+      "quote": "this result carries the general absence of effect of the Earth's motion in optical experiments, up to the second order of small quantities",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "orbit_flattening_by_motion",
+      "statement": "When a pair of electrons of opposite signs describing steady circular orbits is moving through the aether, their orbits relative to the translatory motion will be flattened along the direction of the motion.",
+      "quote": "these orbits relative to the translatory motion will be flattened along the direction of v to ellipticity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "period_unchanged_second_order",
+      "statement": "There will be a first-order retardation of phase in each orbital motion when the electron is in front of the mean position combined with acceleration when behind it, so that on the whole the period will be changed only in the second-order ratio.",
+      "quote": "there will be a first-order retardation of phase in each orbital motion when the electron is in front of the mean position combined with acceleration when behind it so that on the whole the period will be changed only in the second-order ratio",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_nucleus_singular_point",
+      "statement": "The nucleus of the electron is merely a singular point in the aether, and there is nothing involved in it of the nature of inertia foreign to the aether.",
+      "quote": "the nucleus of the electron is merely a singular point in the aether, that there is nothing involved in it of the nature of inertia foreign to the aether",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "only_electric_interelectron_forces",
+      "statement": "There are no forces between the electrons other than those that exist through the mediation of the aether, that is other than electric forces.",
+      "quote": "there are no forces between the electrons other than those that exist through the mediation of the aether as here defined, that is other than electric forces",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "molecular_period_change_spectroscopy",
+      "statement": "The changes of the free periods of the molecules, arising from convection of the molecules through the aether, are of the second order in v/c, which is vital for the theory of the spectroscopic measurement of celestial velocities in the line of sight.",
+      "quote": "the changes of their free periods, arising from convection of the molecules through the aether, are of the second order in v/c , is of course vital for the theory of the spectroscopic measurement of celestial velocities in the line of sight",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fore_aft_symmetry_no_effect",
+      "statement": "The aethereal fields of the moving electric charges existing in the molecule are symmetrical fore and aft and unaltered to the first order by the motion, so that the periods of free vibration cannot involve the first power of the velocity.",
+      "quote": "the aethereal fields of the moving electric charges, free or constrained, existing in the molecule, will be symmetrical fore and aft and unaltered to the first order by the motion, and therefore a change of sign of the velocity of translation will not affect them, so that the periods of free vibration cannot involve the first power of this velocity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "energy_internal_plus_translation",
+      "statement": "When steady motion is established the mean kinetic energy of the system consists of the internal energy of the molecule, which is the same as when it is at rest, together with the sum of the energies belonging to the motions of translation of its separate electrons.",
+      "quote": "the mean kinetic energy of the system consists of the internal energy of the molecule, which is the same as when it is at rest, together with the sum of the energies belonging to the motions of translation of its separate electrons",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "mass_additive_over_electrons",
+      "statement": "The electric inertia of the molecule is equal to the sum of those of the electrons which compose it, and the fundamental chemical law of the constancy of mass throughout molecular transformations is verified for that part of the mass that is of electric origin.",
+      "quote": "its electric inertia is equal to the sum of those of the electrons which compose it; and the fundamental chemical law of the constancy of mass throughout molecular transformations is verified for that part of the mass (whether it be all of it or not) that is of electric origin",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "inertia_defined_energy_coefficient",
+      "statement": "The inertia is by definition the coefficient of half the square of the velocity in the expression for the translatory energy of the molecule.",
+      "quote": "Now the inertia is by definition the coefficient of half the square of the velocity in the expression for the translatory energy of the molecule",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "electric_forces_prevail_gravitative",
+      "statement": "In the constitution of the molecule electric forces or agencies prevail enormously over gravitative ones, so that inertia is mainly of electric, or rather of aethereal, origin.",
+      "quote": "electric forces or agencies prevail enormously over gravitative ones: it seems fair to conclude that of its energy the electric part prevails equally over the gravitative part: but this is simply asserting that inertia is mainly of electric, or rather of aethereal, origin",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "gravity_speed_much_greater",
+      "statement": "The velocity of propagation of gravitation is enormously greater than c, the velocity of radiation, and mass is not to any considerable degree an attribute of gravitation.",
+      "quote": "where c' is the velocity of propagation of gravitation and is enormously greater than c . On neither ground does it appear likely that mass is to any considerable degree an attribute of gravitation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "dimensional_change_electric_forces",
+      "statement": "If all molecular forces are electric forces, motion of a material system through the aether alters its dimensions in a minute but definite manner.",
+      "quote": "if we assume all molecular forces to be electric forces, motion of a material system through the aether alters its dimensions in a minute but definite manner",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "conductor_structure_unaffected_current",
+      "statement": "The mechanical structure of a conductor is not sensibly affected when it carries a current.",
+      "quote": "we know in fact that the mechanical structure of a conductor is not sensibly affected when it carries a current",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "earth_motion_affects_conductivity",
+      "statement": "The change of conductivity of the electrolyte due to convective motion is a unilateral effect, being reversed when the direction of the current is reversed, of at most the second order of small quantities, and vanishing when the velocities of the positive and negative ions are the same.",
+      "quote": "This change of conductivity is a unilateral one, being reversed when the direction of the current is reversed: it is at most of the second order of small quantities: it vanishes altogether, or rather becomes of two orders higher, when the velocities of the positive and negative ions are the same",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "intermolecular_forces_via_aether",
+      "statement": "The translation of the matter alters the action between two molecules or atoms in a manner similar to that in which it alters the attraction or repulsion between electrically charged particles.",
+      "quote": "the translation of the matter will most likely alter the action between two molecules or atoms in a manner similar to that in which it alters the attraction or repulsion between electrically charged particles",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_equations_are_linear",
+      "statement": "The equations of the free aether are linear equations, and they must be so if all kinds of radiations are to travel with the same speed in the celestial spaces.",
+      "quote": "The equations of the free aether, as revealed by MacCullagh's optical analysis, are linear equations: they in fact must be so if all kinds of radiations are to travel with the same speed in the celestial spaces",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "dispersion_if_nonlinear_terms",
+      "statement": "If second-order non-linear terms existed in the equations of the aether, a train of radiation from a distant star would change its form as it advanced across space, that is there would be optical dispersion in the free aether.",
+      "quote": "a train of radiation from a distant star would change its form as it advanced across space, that there would in fact be optical dispersion in the free aether if such second-order terms existed",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "eclipse_no_colour_change",
+      "statement": "Celestial bodies on emerging from eclipse or occupation show no changes of colour.",
+      "quote": "the circumstance that celestial bodies on emerging from eclipse or occupation show no changes of colour",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "inverse_square_law_gravity_electric",
+      "statement": "Gravity and electric force both obey the same law of the inverse square of the distance, a law which belongs to the steady permanent interactions between molecular nuclei of elastic or motional disturbance in an extended medium, which are of the type of simple poles.",
+      "quote": "gravity and electric force both obey the same law of the inverse square of the distance, a law which in fact belongs, of mathematical necessity, to the steady permanent interactions between any kinds of molecular nuclei of elastic or motional disturbance in an extended medium, which are of the type of simple poles",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "gravity_speed_transcends_light",
+      "statement": "The speed of transmission of gravitation, if finite at all, enormously transcends that of radiation.",
+      "quote": "The knowledge that the speed of transmission of gravitation, if finite at all, enormously transcends that of radiation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_scale_indeterminate_electric",
+      "statement": "Given any existing steady system of electrons, the same system altered to any other scale of linear magnitude is possible if there are none but electric actions.",
+      "quote": "given any existing steady system of electrons, the same system altered to any other scale of linear magnitude is possible if there are none but electric actions",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "vortex_atom_scale_indeterminate",
+      "statement": "A similar deficiency of definite scale would be expected to exist in any hydrodynamical theory or illustration which would construct an atom out of vortex rings.",
+      "quote": "A similar deficiency of definite scale would also be expected to exist in any hydrodynamical theory or illustration which would construct an atom out of vortex rings",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "uniformity_of_matter_evidence",
+      "statement": "The constancy of inertia and gravity throughout all chemical transformations forms evidence that all matter is built up out of the same primordial stuff.",
+      "quote": "The constancy of inertia and gravity throughout all chemical transformations forms practically sufficient evidence for the physicist that all matter is built up out of the same primordial stuff",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "atomic_inertia_only_aether",
+      "statement": "Atomic inertia other than that which comes from the aether in some way seems impossible to conceive.",
+      "quote": "Atomic inertia other than that which comes from the aether in some way it seems impossible to conceive",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

@@ -1,0 +1,278 @@
+{
+  "doc_id": "michelson_morley_1887",
+  "propositions": [
+    {
+      "name": "aberration_explained_by_velocity_composition",
+      "statement": "The aberration of light is explained by a composition of the velocity of light with the velocity of the earth in its orbit.",
+      "quote": "The effect was attributed to a simple composition of the velocity of light with the velocity of the earth in its orbit.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aberration_unaffected_by_water_telescope",
+      "statement": "The aberration of light is unchanged when observations are made with a telescope filled with water.",
+      "quote": "the aberration was unchanged when observations were made with a telescope filled with water",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_slower_in_water",
+      "statement": "The velocity of light in water is three-fourths its velocity in a vacuum.",
+      "quote": "since the latter velocity in water is three-fourths its velocity in a vacuum, the aberration observed with a water telescope should be four-thirds of its true value.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_rest_except_in_media",
+      "statement": "The ether is at rest except in the interior of transparent media.",
+      "quote": "the ether is supposed to be at rest except in the interior of transparent media",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_partially_dragged_in_media",
+      "statement": "In transparent media the ether moves with a velocity less than the velocity of the medium.",
+      "quote": "it is supposed to move with a velocity less than the velocity of the medium in the ratio",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "index_of_refraction_defined",
+      "statement": "n is the index of refraction.",
+      "quote": "where n is the index of refraction . These two hypotheses give a complete and satisfactory explanation of aberration.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "fresnel_hypotheses_explain_aberration",
+      "statement": "The two hypotheses give a complete and satisfactory explanation of aberration.",
+      "quote": "where n is the index of refraction . These two hypotheses give a complete and satisfactory explanation of aberration.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fresnel_coefficient_proved_by_fizeau",
+      "statement": "The second hypothesis is proved by the experiment of Fizeau and by confirmation of work.",
+      "quote": "The second hypothesis, notwithstanding its seeming improbability, must be considered as fully proved, first, by the celebrated experiment of Fizeau , and secondly, by the ample confirmation of our own work.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_rest_in_space_transparent",
+      "statement": "If the earth were a transparent body, the inter-molecular ether was at rest in space, notwithstanding the motion of the earth in its orbit.",
+      "quote": "the inter-molecular ether was at rest in space, notwithstanding the motion of the earth in its orbit",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_passes_through_metals",
+      "statement": "The ether can and does pass through metals.",
+      "quote": "there can hardly be question that the ether can and does pass through metals",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_incompressible",
+      "statement": "The ether above the mercury in an inclined tube is forced out because the ether is incompressible.",
+      "quote": "When the tube is inclined the ether in the space above the mercury is certainly forced out, for it is imcompressible",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "resistance_ether_through_opaque_bodies",
+      "statement": "There may be resistance to the ether passing through an opaque body such as the whole earth.",
+      "quote": "if there be any resistance, however slight, we certainly could not assume an opaque body such as the whole earth to offer free passage through its entire mass",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "earth_motion_through_ether_path",
+      "statement": "The motion of the earth through the ether affects the path of the ray at right angles to this motion.",
+      "quote": "the effect of the motion of the earth through the ether on the path of the ray at right angles to this motion was overlooked",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "lorentz_correction_halves_measured_quantity",
+      "statement": "The quantity to be measured had in fact but one-half the value supposed.",
+      "quote": "In consequence, the quantity to be measured had in fact but one-half the value supposed, and as it was already barely beyond the limits of errors of experiment",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_partly_reflected_partly_transmitted",
+      "statement": "A ray of light is partly reflected and partly transmitted at a surface.",
+      "quote": "Let sa , fig. 1, be a ray of light which is partly reflected in ab , and partly transmitted in ac , being returned by the mirrors b and c , along ba and ca .",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "rays_interfere_when_paths_equal",
+      "statement": "When the paths are equal, the two rays interfere.",
+      "quote": "and ca is partly reflected along ad . If then the paths ab and ac are equal, the two rays interfere along ad .",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "ether_rest_apparatus_moves_earth",
+      "statement": "Supposing the ether at rest, the whole apparatus moves in the direction of the velocity of the earth in its orbit.",
+      "quote": "Suppose now, the ether being at rest, that the whole apparatus moves in the direction sc , with the velocity of the earth in its orbit, the directions and distances traversed by the rays will be altered thus",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "rotating_apparatus_reverses_path_difference",
+      "statement": "If the whole apparatus be turned through 90 degrees, the difference will be in the opposite direction and the displacement of the interference fringes should be affected.",
+      "quote": "If now the whole apparatus be turned through 90°, the difference will be in the opposite direction, hence the displacement of the interference fringes should be",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_significant_fringe_displacement_observed",
+      "statement": "Any displacement due to the relative motion of the earth and the luminiferous ether cannot be much greater than 0.01 of the distance between the fringes.",
+      "quote": "due to the relative motion of the earth and the luminiferous ether, this cannot be much greater than 0.01 of the distance between the fringes.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "displacement_proportional_to_velocity_squared",
+      "statement": "The displacement is proportional to the square of the velocity.",
+      "quote": "since the displacement is proportional to the square of the velocity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "relative_velocity_less_than_sixth",
+      "statement": "The relative velocity of the earth and the ether is probably less than one sixth the earth's orbital velocity, and certainly less than one-fourth.",
+      "quote": "the relative velocity of the earth and the ether is probably less than one sixth the earth's orbital velocity, and certainly less than one-fourth.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "solar_system_motion_modifies_result",
+      "statement": "If the orbital motion of the earth is combined with the motion of the solar system, the result would have to be modified.",
+      "quote": "If this is combined with the motion of the solar system, concerning which but little is known with certainty, the result would have to be modified",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "repeat_experiment_quarterly_for_certainty",
+      "statement": "The experiment will be repeated at intervals of three months so that all uncertainty will be avoided.",
+      "quote": "The experiment will therefore be repeated at intervals of three months, and thus all uncertainty will be avoided.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "relative_motion_small_refutes_fresnel",
+      "statement": "Any relative motion between the earth and the luminiferous ether must be small enough entirely to refute Fresnel's explanation of aberration.",
+      "quote": "if there be any relative motion between the earth and the luminiferous ether, it must be small; quite small enough entirely to refute Fresnel's explanation of aberration.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "stokes_theory_ether_rest_potential",
+      "statement": "Stokes' theory of aberration assumes the ether at the earth's surface is at rest with regard to the earth, with the relative velocity having a potential.",
+      "quote": "Stokes has given a theory of aberration which assumes the ether at the earth's surface to be at rest with regard to the latter, and only requires in addition that the relative velocity have a potential",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "lorentz_shows_stokes_conditions_incompatible",
+      "statement": "Lorentz shows that an ether at rest at the earth's surface together with a relative velocity having a potential are incompatible conditions.",
+      "quote": "and only requires in addition that the relative velocity have a potential; but Lorentz shows that these conditions are incompatible.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "lorentz_modification_combines_stokes_fresnel",
+      "statement": "Lorentz proposes a modification combining ideas of Stokes and Fresnel, assuming a potential together with Fresnel's coefficient.",
+      "quote": "Lorentz then proposes a modification which combines some ideas of Stokes and Fresnel, and assumes the existence of a potential, together with Fresnel's coefficient.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_rest_fails_lorentz_theory",
+      "statement": "If the ether is at rest with regard to the earth's surface, there could not be a velocity potential, so Lorentz's own theory also fails.",
+      "quote": "If now it were legitimate to conclude from the present work that the ether is at rest with regard to the earth's surface, according to Lorentz there could not be a velocity potential, and his own theory also fails.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "mirror_reflection_varies_ordinary_laws",
+      "statement": "Reflection from surfaces in motion varies from the ordinary laws of reflection.",
+      "quote": "This is founded on the fact that reflection from surfaces in motion varies from the ordinary laws of reflection.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_velocity_in_stationary_ether",
+      "statement": "V is the velocity of light in the ether, which is supposed stationary.",
+      "quote": "Let V be the velocity of light in the ether supposed stationary, and let cd be the increase in the distance the light has to travel to reach d",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "one_way_light_speed_reveals",
+      "statement": "Measuring the velocity of light without returning the ray to its starting point would give the first power of the relative velocity of the earth with respect to the ether.",
+      "quote": "If it were possible to measure with sufficient accuracy the velocity of light without returning the ray to its starting point, the problem of measuring the first power of the relative velocity of the earth with respect to the ether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rotating_mirrors_form_stationary_images",
+      "statement": "Light will form a stationary image when reflected by mirrors revolving with equal velocity in opposite directions.",
+      "quote": "It is evident that light from s will form a stationary image at s / and similarly light from s / will form a stationary image at s",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "deflection_proportional_to_velocity_difference",
+      "statement": "The difference of phase of the mirrors is proportional to the difference of velocity of light in the two directions.",
+      "quote": "this will evidently be proportional to the difference of velocity in the two directions",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "earth_rotation_substitutes_revolving_apparatus",
+      "statement": "The apparatus need not be mounted so as to revolve, as the earth's rotation would be sufficient.",
+      "quote": "the apparatus need not be mounted so as to revolve, as the earth's rotation would be sufficient",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "proper_motion_gives_solar_direction",
+      "statement": "The telescopic observation of the proper motions of the stars gives the direction of the motion of the solar system, but only a guess as to its amount.",
+      "quote": "The telescopic observation of the proper motions of the stars. This has given us a highly probably determination of the direction of this motion, but only a guess as to its amount.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "spectroscopic_observation_of_stellar_motion",
+      "statement": "The spectroscopic observation of the motion of stars in the line of sight can furnish data for the relative motions of stars.",
+      "quote": "The spectroscopic observation of the motion of stars in the line of sight. This could furnish data for the relative motions only, though it seems likely that by the immense improvements in the photography of stellar spectra",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "jupiter_eclipses_reveal_ether_motion",
+      "statement": "The difference in the velocity of light found when Jupiter is nearest to and farthest from the line of motion will give the motion of the solar system with reference to the luminiferous ether.",
+      "quote": "the velocity of light when Jupiter is nearest to and farthest from the line of motion will give, not merely the motion of the solar system with reference to the stars, but with reference to the luminiferous ether itself.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "sodium_light_produces_interference_bands",
+      "statement": "Sodium light substituted for white light makes the interference bands appear.",
+      "quote": "sodium light was substituted for white light, when the interference bands appeared",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aberration_tangent_equals_velocity_ratio",
+      "statement": "The tangent of the angle of aberration is the ratio of the velocity of the earth to the velocity of light.",
+      "quote": "if the tangent of the angle of aberration is the ratio of the velocity of the earth to the velocity of light",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

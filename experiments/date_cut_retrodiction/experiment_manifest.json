@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "date_cut_retrodiction_dcr1_extractor_leak",
+  "hypothesis": "A cut-blind language-model extractor run over a public-domain pre-1905 electrodynamics corpus surfaces the absolute-simultaneity / privileged-frame / local-time-artifice family at the 1904 cut and not at the 1880 deep-placebo cut, indicating the extraction tracks the corpus rather than the model's own knowledge of what happened in 1905.",
+  "claim_tier": "descriptive",
+  "controls": [
+    {
+      "control_id": "deep_placebo_1880",
+      "description": "Identical pipeline over Maxwell-only sources, predating any ether-drift null result. A target-family hit here cannot come from the corpus."
+    },
+    {
+      "control_id": "near_placebo_1897",
+      "description": "Null results present, Lorentz 1904 and Poincare 1904 absent. Recorded as a graded observation with no gate, because no calibrated expectation exists for it."
+    },
+    {
+      "control_id": "cut_blind_extraction",
+      "description": "Extraction runs per document with a byte-identical prompt; the extractor never sees the year, the cut, another document, or the research question. Cuts are composed afterwards, so any leakage is introduced equally at all three cuts."
+    },
+    {
+      "control_id": "verbatim_quote_verification",
+      "description": "Every extracted proposition carries a source span that is mechanically checked against the document. No agent is trusted to have copied accurately."
+    },
+    {
+      "control_id": "relational_vocabulary_residue",
+      "description": "A term is residue iff the extractor emits it and the corpus at that cut lacks it. Replaces a blocklist, which was shown to fail in both directions on this corpus."
+    },
+    {
+      "control_id": "provenance_risk_dual_run",
+      "description": "The two Poincare documents reached via Halsted's 1913 compilation carry every sentinel term at the 1904 cut. Every analysis runs with and without them; the French originals were checked independently."
+    },
+    {
+      "control_id": "structural_chrome_removal",
+      "description": "Wikisource header templates link every source to Portal:Relativity. Chrome is stripped structurally at fetch time rather than by keyword."
+    }
+  ],
+  "seeds": [20260725],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python",
+      "-m",
+      "experiments.date_cut_retrodiction.run_dcr1"
+    ],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [
+    {
+      "name": "matplotlib",
+      "version": ">=3.7,<4"
+    }
+  ],
+  "gates": [
+    {
+      "gate_id": "G1_QUOTE_FIDELITY",
+      "criterion": "At least 90% of extracted propositions carry a quote present in the source document under whitespace normalisation."
+    },
+    {
+      "gate_id": "G2_VOCABULARY_RESIDUE",
+      "criterion": "Residue rate below 5% of output word types at every cut."
+    },
+    {
+      "gate_id": "G3_DEEP_PLACEBO_SILENT",
+      "criterion": "The 1880 cut does not surface the target family, i.e. fewer than two of the three facets are present."
+    },
+    {
+      "gate_id": "G4_TARGET_CUT_NOT_SILENT",
+      "criterion": "The 1904 cut surfaces the target family, i.e. at least two of the three facets are present."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/date_cut_retrodiction/results/dcr1_verdict.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/date_cut_retrodiction/DCR1_PREREGISTRATION.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/date_cut_retrodiction/EXTRACTION_PROMPT.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}
