@@ -1,0 +1,73 @@
+{
+  "kind": "dcr1b_facet_adjudication",
+  "extraction": "consensus over sandboxed passes",
+  "cut_year": 1904,
+  "method": "H5 requires that every consensus proposition matched to a facet at the target cut be read individually and actually state that facet. All 15 hits were read. Applied strictly: a proposition that reports the commitment as false, or that describes the rival theory, or that matched on a technical label rather than a claim, is a false positive.",
+  "all_hits_genuine": false,
+  "n_hits": 15,
+  "n_genuine": 11,
+  "n_false_positive": 4,
+  "false_positive_rate": 0.2667,
+  "corrects_prior_record": {
+    "file": "experiments/date_cut_retrodiction/results/dcr1_facet_adjudication.json",
+    "claimed": "T2_privileged_frame: n_matched 17, n_genuine 17, verdict GENUINE",
+    "problem": "That entry was written after reading only the exemplar, not all 17 hits, while the T1 entry was written after reading every hit. The T2 claim of 17/17 was therefore not supported by the work actually done, and it overstated the thoroughness of its own adjudication.",
+    "correction": "On a full read of the equivalent consensus hits, roughly a quarter of T2 matches are false positives. DCR1's headline verdict is unaffected -- 1904 still clears quorum on genuine hits, and the 1880 cut matched nothing at all -- but the adjudication artifact was overstated and is corrected here."
+  },
+  "T2_privileged_frame": {
+    "n_matched": 14,
+    "n_genuine": 10,
+    "false_positives": [
+      {
+        "doc_id": "michelson_1881",
+        "name": "stationary_ether_hypothesis_erroneous",
+        "statement": "The hypothesis of a stationary ether is shown to be incorrect, and the hypothesis is erroneous.",
+        "why": "States the DENIAL of the facet. The pattern cannot tell assertion from refutation."
+      },
+      {
+        "doc_id": "michelson_morley_1887",
+        "name": "stokes_ether_at_rest_at_earth_surface",
+        "statement": "Stokes gives a theory of aberration which assumes the ether at the earth's surface to be at rest with regard to the earth's surface.",
+        "why": "Ether at rest RELATIVE TO THE EARTH is the dragged-ether rival, which denies a privileged frame rather than asserting one. 'at rest' matched without regard to what it is at rest with respect to."
+      },
+      {
+        "doc_id": "michelson_morley_1887",
+        "name": "lorentz_theory_fails_if_ether_at_rest",
+        "statement": "If the ether is at rest with regard to the earth's surface, then according to Lorentz there could not be a velocity potential, and Lorentz's own theory also fails.",
+        "why": "Same dragged-ether reading, and stated as a reductio: the antecedent is entertained in order to reject it."
+      },
+      {
+        "doc_id": "larmor_1900_ch11",
+        "name": "electron_positions_correspond",
+        "statement": "The corresponding positions of the electrons of the two systems, established up to the first order of v/c, are true up to the second order when the moving system is contracted in comparison with the fixed system.",
+        "why": "Matched on 'fixed system', a coordinate label in the corresponding-states theorem, not a claim that any frame is privileged."
+      }
+    ],
+    "genuine_exemplars": [
+      "The ether is at rest while the earth moves through it, so the time required for light to pass from one point to another on the earth's surface depends on the direction in which it travels.",
+      "It has not been found possible to construct a system of dynamics which has respect only to the relative positions of moving bodies.",
+      "Electric forces, molecular forces, and length are affected by motion relative to the ether.",
+      "Stellar aberration favours the theory of a stationary aether."
+    ]
+  },
+  "T3_local_time_artifice": {
+    "n_matched": 1,
+    "n_genuine": 1,
+    "exemplar": "The transformed time variable t' may be called the local time.",
+    "caveat": "Genuine but thin: one proposition, and it establishes that local time is a named commitment rather than that it is an artifice."
+  },
+  "T1_absolute_simultaneity": {
+    "n_matched": 0,
+    "n_genuine": 0,
+    "note": "The v2 pattern drops all three of v1's false positives and finds no genuine replacement. On this corpus, under this extraction, absolute simultaneity is not surfaced as an explicit commitment at any cut."
+  },
+  "consequence": {
+    "H5_decision": "NO_GO",
+    "why": "H5 was frozen as: any false positive fails. Four of fifteen are false positives, so it fails. Loosening it now to 'mostly genuine' would be exactly the post-hoc threshold move the programme forbids.",
+    "affects_H3": false,
+    "why_H3_unaffected": "The 1880 cut matched zero propositions to any facet, so no false-positive correction can move it. The gate carrying the scientific weight is untouched.",
+    "affects_H4": false,
+    "why_H4_unaffected": "Ten genuine T2 hits and one genuine T3 hit remain at 1904, so the quorum of two distinct facets is still met on genuine hits alone.",
+    "named_repair": "T2 needs a polarity and referent test: reject statements whose time or rest claim is negated, entertained as a reductio, or made relative to the earth rather than to absolute space. That is a matcher repair for a successor, not an amendment to this run."
+  }
+}

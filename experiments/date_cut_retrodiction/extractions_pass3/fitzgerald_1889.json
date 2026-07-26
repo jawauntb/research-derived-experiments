@@ -1,0 +1,166 @@
+{
+  "doc_id": "fitzgerald_1889",
+  "propositions": [
+    {
+      "name": "ether_carried_by_earth",
+      "statement": "The ether is carried along by the earth to some extent.",
+      "quote": "the important question as to how far the ether is carried along by the earth",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "experiment_is_delicate",
+      "statement": "The Michelson and Morley experiment is a wonderfully delicate experiment.",
+      "quote": "Messrs. Michelson and Morley 's wonderfully delicate experiment attempting to decide the important question",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "experiment_could_decide_ether_drag",
+      "statement": "The experiment is attempting to decide how far the ether is carried along by the earth.",
+      "quote": "wonderfully delicate experiment attempting to decide the important question as to how far the ether is carried along by the earth",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "mm_result_opposes_experiments",
+      "statement": "Their result seems opposed to other experiments.",
+      "quote": "Their result seems opposed to other experiments showing that the ether in the air can be carried along",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "air_ether_barely_carried",
+      "statement": "The ether in the air can be carried along only to an inappreciable extent.",
+      "quote": "the ether in the air can be carried along only to an inappreciable extent",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "hypothesis_reconciles_opposition",
+      "statement": "The hypothesis that the length of material bodies changes can reconcile this opposition.",
+      "quote": "I would suggest that almost the only hypothesis that can reconcile this opposition is that the length of material bodies changes",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "body_length_changes_with_motion",
+      "statement": "The length of material bodies changes according as they are moving through the ether or across it.",
+      "quote": "the length of material bodies changes, according as they are moving through the ether or across it",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "length_change_depends_on_velocity_squared",
+      "statement": "The length changes by an amount depending on the square of the ratio of velocity to that of light.",
+      "quote": "by an amount depending on the square of the ratio of their velocity to that of light",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "length_change_direction_dependent",
+      "statement": "The length changes according as a body is moving through the ether or across it.",
+      "quote": "according as they are moving through the ether or across it",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_has_velocity",
+      "statement": "There is a velocity of light.",
+      "quote": "on the square of the ratio of their velocity to that of light",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "electric_forces_affected_by_motion",
+      "statement": "Electric forces are affected by the motion of electrified bodies relative to the ether.",
+      "quote": "We know that electric forces are affected by the motion of the electrified bodies relative to the ether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "molecular_forces_affected_by_motion",
+      "statement": "The molecular forces are affected by the motion.",
+      "quote": "it seems a not improbable supposition that the molecular forces are affected by the motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "body_size_alters_with_forces",
+      "statement": "The size of a body alters consequently.",
+      "quote": "the molecular forces are affected by the motion, and that the size of a body alters consequently",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electrified_bodies_have_motion",
+      "statement": "The electrified bodies have motion relative to the ether.",
+      "quote": "the motion of the electrified bodies relative to the ether",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "electrified_bodies_attract_each_other",
+      "statement": "There are electrical attractions between permanently electrified bodies.",
+      "quote": "secular experiments on electrical attractions between permanently electrified bodies, such as in a very delicate quadrant electrometer",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "electrometer_measures_attraction_delicately",
+      "statement": "A very delicate quadrant electrometer can be instituted in the equatorial parts of the earth.",
+      "quote": "such as in a very delicate quadrant electrometer, were instituted in some of the equatorial parts of the earth",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "attraction_shows_diurnal_annual_variation",
+      "statement": "There is a diurnal and annual variation of attraction.",
+      "quote": "to observe whether there is any diurnal and annual variation of attraction",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "earth_rotates",
+      "statement": "The earth has a rotation.",
+      "quote": "diurnal due to the rotation of the earth being added and subtracted from its orbital velocity",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "earth_has_orbital_velocity",
+      "statement": "The earth has an orbital velocity.",
+      "quote": "its orbital velocity; and annual similarly for its orbital velocity and the motion of the solar system.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "rotation_combines_with_orbital_velocity",
+      "statement": "The rotation of the earth is added and subtracted from its orbital velocity.",
+      "quote": "diurnal due to the rotation of the earth being added and subtracted from its orbital velocity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "solar_system_is_in_motion",
+      "statement": "The solar system has motion.",
+      "quote": "and annual similarly for its orbital velocity and the motion of the solar system.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "equatorial_location_suits_observation",
+      "statement": "Experiments were instituted in the equatorial parts of the earth to observe the variation.",
+      "quote": "were instituted in some of the equatorial parts of the earth to observe whether there is any diurnal",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "material_bodies_have_length",
+      "statement": "Material bodies have a length.",
+      "quote": "the length of material bodies changes, according as they are moving through the ether or across it",
+      "kind": "presupposed",
+      "definitional": true
+    }
+  ]
+}

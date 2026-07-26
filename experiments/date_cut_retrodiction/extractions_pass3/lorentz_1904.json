@@ -1,0 +1,285 @@
+{
+  "doc_id": "lorentz_1904",
+  "propositions": [
+    {
+      "name": "aether_exists",
+      "statement": "The electric force on a volume-element of an electron is exerted by the aether.",
+      "quote": "the force, reckoned per unit charge, which is exerted by the aether on a volume-element of an electron",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "earth_translation_through_aether",
+      "statement": "All systems have a translation in virtue of the Earth's annual motion.",
+      "quote": "such as all systems have in virtue of the Earth's annual motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "velocity_of_light_limit",
+      "statement": "A system may move with any velocity smaller than that of light.",
+      "quote": "Electromagnetic phenomena in a system moving with any velocity smaller than that of light",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "michelson_negative_result",
+      "statement": "Michelson's interference-experiment had a negative result.",
+      "quote": "Michelson 's well known interference-experiment , the negative result of which has led FitzGerald and myself to the conclusion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "length_contraction_hypothesis",
+      "statement": "The dimensions of solid bodies are slightly altered by their motion through the aether.",
+      "quote": "the dimensions of solid bodies are slightly altered by their motion through the aether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rayleigh_brace_no_double_refraction",
+      "statement": "Rayleigh and Brace found that the Earth's motion does not cause a body to become doubly refracting.",
+      "quote": "at first sight this might be expected, if the just mentioned change of dimensions is admitted. Both physicists have however come to a negative result.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "trouton_noble_no_couple",
+      "statement": "No effect could be observed in the apparatus of Trouton and Noble.",
+      "quote": "the condenser was fixed to the beam of a torsion-balance, sufficiently delicate to be deflected by a couple of the above order of magnitude. No effect could however be observed.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_theory_predicts_couple",
+      "statement": "The theory of electrons would require the existence of a couple acting on the condenser, unless it be modified by some new hypothesis.",
+      "quote": "The theory of electrons, unless it be modified by some new hypothesis, would undoubtedly require the existence of such a couple.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electromagnetic_momentum_in_moving_system",
+      "statement": "If the apparatus is charged, there will be an electromagnetic momentum.",
+      "quote": "Now, if the apparatus is charged, there will be (§ 1) an electromagnetic momentum",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "theory_of_electrons_fundamental_equations",
+      "statement": "The theory of electrons has fundamental equations relating the dielectric displacement, the magnetic force, the charge, the velocity, and the electric force.",
+      "quote": "I shall start from the fundamental equations of the theory of electrons.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "uniform_translation_velocity",
+      "statement": "A system as a whole moves in the direction of x with a constant velocity.",
+      "quote": "I shall now suppose that the system as a whole moves in the direction of x with a constant velocity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "local_time_variable",
+      "statement": "The variable t' may be called the local time.",
+      "quote": "The variable t' may be called the local time ; indeed, for k=1, l=1 it becomes identical with what I have formerly understood by this name.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "electron_shape_at_rest",
+      "statement": "The electrons are spheres of radius R in the state of rest.",
+      "quote": "I shall now suppose that the electrons, which I take to be spheres of radius R in the state of rest, have their dimensions changed by the effect of a translation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_contraction_under_translation",
+      "statement": "The dimensions of electrons in the direction of motion become kl times smaller, and those in the perpendicular direction become l times smaller, by the effect of a translation.",
+      "quote": "the dimensions in the direction of motion becoming kl times and those in perpendicular direction l times smaller",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "volume_element_preserves_charge",
+      "statement": "Each element of volume preserves its charge in the deformation.",
+      "quote": "each element of volume is understood to preserve its charge",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "uncharged_particle_forces_like_electric",
+      "statement": "The forces between uncharged particles are influenced by a translation in the same way as the electric forces in an electrostatic system.",
+      "quote": "I shall suppose that the forces between uncharged particles, as well as those between such particles and electrons, are influenced by a translation in quite the same way as the electric forces in an electrostatic system",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "solid_body_equilibrium_configuration",
+      "statement": "Each particle of a solid body is in equilibrium under the action of the attractions and repulsions exerted by its neighbours, and there is but one configuration of equilibrium.",
+      "quote": "we suppose each particle of a solid body to be in equilibrium under the action of the attractions and repulsions exerted be its neighbours, and if we take for granted that there is but one configuration of equilibrium",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "translation_causes_body_deformation",
+      "statement": "A translation imparted to a system at rest will of itself change it, by producing the deformation, into the moving system.",
+      "quote": "we may draw the conclusion that the system Σ' , if the velocity w is imparted to it, will of itself change into the system Σ . In other terms, the translation will produce the deformation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_mass_purely_electromagnetic",
+      "statement": "There is no other, no true or material mass of the electron besides its electromagnetic masses.",
+      "quote": "I shall suppose that there is no other, no \"true\" or \"material\" mass",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "force_equals_momentum_change_rate",
+      "statement": "Every change in the motion of a system entails a change in the electromagnetic momentum and requires a certain force.",
+      "quote": "every change in the motion of a system will entail a corresponding change in the electromagnetic momentum and will therefore require a certain force",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "quasi_stationary_approximation",
+      "statement": "If the changes in the state of motion are sufficiently slow, a satisfactory approximation is obtained by treating the translation as quasi-stationary at every instant.",
+      "quote": "provided the changes in the state of motion be sufficiently slow, we shall get a satisfactory approximation by using (28) at every instant",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "longitudinal_transverse_mass_distinct",
+      "statement": "In acceleration in the direction of motion the electron behaves as if it had the longitudinal mass, and in acceleration normal to the path as if it had the transverse mass.",
+      "quote": "in phenomena in which there is an acceleration in the direction of motion, the electron behaves as if it had a mass m 1 , those in which the acceleration is normal to the path, as if the mass were m 2",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_diameter_small_vs_wavelength",
+      "statement": "The diameter of an electron is extremely small in comparison with the wave-length.",
+      "quote": "the diameter of an electron is extremely small in comparison with the wave-length",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "quasi_stationary_valid_for_light",
+      "statement": "The motion of an electron may be treated as quasi-stationary because it changes very little during the time a light-wave takes to travel over a distance equal to the diameter.",
+      "quote": "the motion of an electron may be treated as quasi-stationary if it changes very little during the time a light-wave takes to travel over a distance equal to the diameter",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "dark_regions_stay_dark",
+      "statement": "Parts of the system that are dark while the system is at rest will remain dark after the system has been put in motion.",
+      "quote": "it appears that those parts which are dark while the system is at rest, will remain so after it has been put in motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "earth_motion_undetectable_geometrically",
+      "statement": "It is impossible to detect an influence of the Earth's motion on an optical experiment made with a terrestrial source of light in which the geometrical distribution of light and darkness is observed.",
+      "quote": "It will therefore be impossible to detect an influence of the Earth's motion on any optical experiment, made with a terrestrial source of light, in which the geometrical distribution of light and darkness is observed",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "amplitude_ratio_unaltered",
+      "statement": "The ratio between the amplitudes of rays of light of the same state of polarization propagated in the same direction is not altered by a translation.",
+      "quote": "the ratio between the amplitudes in these points may be shown not to be altered by a translation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "trouton_noble_explained_by_contraction",
+      "statement": "The negative result of the Trouton and Noble experiment is explained by a contraction of the system of electrons and particles constituting the condenser and the torsion-balance.",
+      "quote": "the only effect of the translation must have been a contraction of the whole system of electrons and other particles constituting the charged condenser and the beam and thread of the torsion-balance",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "michelson_negative_with_transparent_body",
+      "statement": "The result of Michelson's experiment must remain negative even if the interfering rays of light are made to travel through a ponderable transparent body.",
+      "quote": "the result of MICHELSON'S experiment must remain negative, if the interfering rays of light are made to travel through some ponderable transparent body",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_charge_uniform_at_rest",
+      "statement": "The charge of an electron is uniformly distributed over the surface so long as the electron remains at rest.",
+      "quote": "I shall suppose the charge e to be uniformly distributed over the surface, so long as the electron remains at rest",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "kaufmann_measurements_confirm_transverse_mass",
+      "statement": "Kaufmann's measurements of the deflexion of radium-rays in electric and magnetic fields confirm the results of Abraham as regards the transverse mass.",
+      "quote": "the results of Abraham have been confirmed in a most remarkable way by Kaufmann 's measurements of the deflexion of radium-rays in electric and magnetic fields",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "molecular_masses_influenced_like_electromagnetic",
+      "statement": "The masses of all particles are influenced by a translation to the same degree as the electromagnetic masses of the electrons.",
+      "quote": "we suppose that the masses of all particles are influenced by a translation to the same degree as the electromagnetic masses of the electrons",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_rotation_elliptic_paths",
+      "statement": "In the moving system the points of a rotating electron describe elliptic paths, corresponding to the circular paths described when there is no translation.",
+      "quote": "the points of the electrons in the moving system will describe elliptic paths, corresponding, in the manner specified in § 10, to the circular paths described in the other case",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "molecular_forces_short_range",
+      "statement": "The molecular forces are limited to such small distances that the difference of local times of particles acting on each other may be neglected.",
+      "quote": "we suppose these forces to be limited to such small distances that, for particles acting on each other, the difference of local times may be neglected",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "condenser_impulse_on_charge_discharge",
+      "statement": "The condenser experiences an impulse at the moment of charging, produced by the appearance of the electromagnetic momentum, and an impulse at the moment of discharging, produced by its disappearing.",
+      "quote": "This momentum being produced at the moment of charging, and disappearing at that of discharging, the condenser must experience in the first case an impulse",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "condenser_energy_increases_with_motion",
+      "statement": "The energy of the charged condenser in the state of motion exceeds its energy in the state of rest.",
+      "quote": "by U the energy of the charged condenser in the state of rest, and by U+U' the energy in the state of motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "earth_velocity_value",
+      "statement": "The velocity of the Earth's motion is 3 times 10 c.M. per sec.",
+      "quote": "the velocity of the Earth's motion is 3 × 10 c.M. per sec.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fixed_system_of_coordinates",
+      "statement": "The fundamental equations of the theory of electrons may be referred to a fixed system of coordinates.",
+      "quote": "which is exerted by the aether on a volume-element of an electron. Then, if we use a fixed system of coordinates,",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "contraction_confined_to_motion_direction",
+      "statement": "The influence of a translation on the dimensions of the electrons and of a ponderable body is confined to the dimensions that have the direction of the motion.",
+      "quote": "We are therefore led to suppose that the influence of a translation on the dimensions (of the separate electrons and of a ponderable body as a whole) is confined to those that have the direction of the motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electromagnetic_actions_independent_of_motion",
+      "statement": "Many electromagnetic actions are entirely independent of the motion of the system.",
+      "quote": "many electromagnetic actions are entirely independent of the motion of the system",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

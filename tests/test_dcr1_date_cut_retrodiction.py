@@ -196,3 +196,121 @@ def test_quorum_requires_two_distinct_facets() -> None:
 def test_three_facets_are_defined() -> None:
     assert len(TARGET_FACETS) == 3
     assert len({f.key for f in TARGET_FACETS}) == 3
+
+
+# --- DCR1b: the repaired instruments --------------------------------------
+
+
+def test_v2_t1_rejects_every_known_false_positive() -> None:
+    """The three hits DCR1's adjudication proved spurious must not fire."""
+    from experiments.date_cut_retrodiction.target_v2 import match_facets_v2
+
+    spurious = [
+        "The duration of two identical phenomena is the same: the same causes "
+        "take the same time to produce the same effects.",
+        "Causes almost identical take almost the same time to produce almost "
+        "the same effects.",
+        "The ether is a medium that transmits at the same time the optical "
+        "perturbations and the electrical perturbations.",
+    ]
+    for statement in spurious:
+        hits = match_facets_v2([{"name": "p", "statement": statement, "doc_id": "d"}])
+        assert not hits["T1_absolute_simultaneity"], statement
+
+
+def test_v2_t1_still_matches_genuine_phrasings() -> None:
+    from experiments.date_cut_retrodiction.target_v2 import match_facets_v2
+
+    genuine = [
+        "There is an absolute time common to all systems.",
+        "Simultaneity is absolute.",
+        "One single time for every observer everywhere.",
+        "The time is the same for a stationary observer as for an observer "
+        "carried along in uniform motion.",
+    ]
+    for statement in genuine:
+        hits = match_facets_v2([{"name": "p", "statement": statement, "doc_id": "d"}])
+        assert hits["T1_absolute_simultaneity"], statement
+
+
+def test_v2_t1_declines_the_relativity_principle() -> None:
+    """Poincaré states the principle without deleting absolute simultaneity.
+
+    Conflating the two would make the corpus appear to contain the repair it
+    conspicuously did not make.
+    """
+    from experiments.date_cut_retrodiction.target_v2 import match_facets_v2
+
+    hits = match_facets_v2(
+        [
+            {
+                "name": "principle_of_relativity",
+                "statement": (
+                    "The laws of physical phenomena must be the same for a "
+                    "stationary observer as for an observer carried along in a "
+                    "uniform motion of translation."
+                ),
+                "doc_id": "poincare_1904_stlouis",
+            }
+        ]
+    )
+    assert not hits["T1_absolute_simultaneity"]
+
+
+def test_residue_v2_folds_accents() -> None:
+    """`poincare` against a corpus writing `Poincaré` is an artefact, not residue."""
+    from experiments.date_cut_retrodiction.residue_v2 import audit_residue_v2
+
+    report = audit_residue_v2(
+        ["poincare states the principle"],
+        ["Poincaré states the principle of relativity."],
+        cut_year=1904,
+    )
+    assert "poincare" not in report.residue_types
+
+
+def test_residue_v2_strips_possessives_and_stems() -> None:
+    from experiments.date_cut_retrodiction.residue_v2 import audit_residue_v2
+
+    report = audit_residue_v2(
+        ["abraham's theory communicates motion"],
+        ["Abraham gives a theory in which bodies communicate their motion."],
+        cut_year=1904,
+    )
+    assert report.clean, report.residue_types
+
+
+def test_residue_v2_still_flags_genuinely_absent_vocabulary() -> None:
+    """The repair must not blunt the measure into uselessness."""
+    from experiments.date_cut_retrodiction.residue_v2 import audit_residue_v2
+
+    report = audit_residue_v2(
+        ["spacetime is a minkowski manifold"],
+        ["The luminiferous aether is at rest in absolute space."],
+        cut_year=1880,
+    )
+    assert "spacetime" in report.residue_types
+    assert "minkowski" in report.residue_types
+
+
+def test_consensus_requires_agreement_across_passes() -> None:
+    from experiments.date_cut_retrodiction.consensus import PASS_DIRS, SUPPORT_THRESHOLD
+
+    assert SUPPORT_THRESHOLD == len(PASS_DIRS)
+    assert all("blind" in d.name or "pass3" in d.name for d in PASS_DIRS)
+
+
+def test_consensus_excludes_the_unblinded_pass() -> None:
+    """Pass 1's prompt did not forbid reading other repository files."""
+    from experiments.date_cut_retrodiction.consensus import PASS_DIRS
+
+    assert not any(d.name == "extractions" for d in PASS_DIRS)
+
+
+def test_v1_matcher_is_not_edited_by_the_repair() -> None:
+    """DCR1's published numbers must stay reproducible."""
+    from experiments.date_cut_retrodiction.target import TARGET_FACETS as V1
+
+    t1 = next(f for f in V1 if f.key == "T1_absolute_simultaneity")
+    # The defect is preserved on purpose: v1 accepted a bare "same ... time".
+    assert "same" in t1.pattern

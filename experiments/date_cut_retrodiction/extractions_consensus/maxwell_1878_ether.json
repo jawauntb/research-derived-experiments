@@ -1,0 +1,285 @@
+{
+  "doc_id": "maxwell_1878_ether",
+  "propositions": [
+    {
+      "definitional": true,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "ether_material_substance",
+      "quote": "a material substance of a more subtle kind than visible bodies, supposed to exist in those parts of space which are apparently empty",
+      "statement": "Ether is a material substance of a more subtle kind than visible bodies, existing in parts of space which are apparently empty.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "aether_explains_electromagnetism",
+      "quote": "the properties of this medium, as deduced from the phenomena of light, have been found to be precisely those required to explain electromagnetic phenomena",
+      "statement": "The properties of the medium deduced from the phenomena of light are precisely those required to explain electromagnetic phenomena.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "light_is_process_in_substance",
+      "quote": "We therefore conclude that light is not a substance but a process going on in a substance",
+      "statement": "Light is not a substance but a process going on in a substance.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "light_finite_velocity",
+      "quote": "light is known to be propagated with a certain velocity (3.004 x 10 centimetres per second in vacuum, according to Cornu)",
+      "statement": "Light is propagated with a certain velocity.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "light_process_is_wave",
+      "quote": "The configuration at a given instant is called a wave , and the distance 2 \u03c0 / P is called the wave-length . The velocity of propagation is n / p.",
+      "statement": "The configuration of the process at a given instant is called a wave, with a wave-length and a velocity of propagation.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "process_is_transverse_vector",
+      "quote": "the physical process involved in the propagation of light must not only be a directed quantity or vector capable of having its direction reversed, but this vector must be at right angles to the ray",
+      "statement": "The physical process of the propagation of light is a vector at right angles to the ray.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "light_process_possibly_electromagnetic",
+      "quote": "The process may, however, be an electromagnetic one, and as in this case the electric displacement and the magnetic disturbance are perpendicular to each other",
+      "statement": "The process of light may be electromagnetic, with the electric displacement and the magnetic disturbance perpendicular to each other.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "invisible_radiations_same_phenomena",
+      "quote": "All that has been said with respect to the radiations which affect our eyes, and which we call light, applies also to those radiations which do not produce a luminous impression on our eyes",
+      "statement": "Radiations which do not produce a luminous impression on the eyes show the same phenomena of interference as light.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "energy_not_instantaneous",
+      "quote": "this energy is not transmitted instantaneously from the radiating body to the absorbing body, but exists for a certain time in the medium",
+      "statement": "The energy of radiation is not transmitted instantaneously from the radiating body to the absorbing body but exists for a certain time in the medium.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "aether_elastic_and_dense",
+      "quote": "We must therefore regard the aether as possessing elasticity similar to that of a solid body, and also as having a finite density.",
+      "statement": "The aether possesses elasticity similar to that of a solid body and has a finite density.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "energy_half_potential_half_kinetic",
+      "quote": "half of this energy is in the form of potential energy, due to the distortion of elementary portions of the medium, and half in the form of kinetic energy, due to the motion of the medium",
+      "statement": "Half of the energy of light in the medium is potential energy due to distortion of the medium and half is kinetic energy due to motion of the medium.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "aether_density_greater_than_atmosphere",
+      "quote": "In the regions of interplanetary space the density of the aether is therefore very great compared with that of the attenuated atmosphere of interplanetary space",
+      "statement": "In interplanetary space the density of the aether is very great compared with the density of the attenuated atmosphere of interplanetary space.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "light_medium_distinct_from_air",
+      "quote": "it is manifest that the medium through which the light is propagated is not the air itself, for in the first place the air cannot transmit transverse vibrations",
+      "statement": "The medium through which light is propagated is not the air itself.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "aether_interpenetrates_bodies",
+      "quote": "the medium through which light is propagated is something distinct from the transparent medium known to us, though it interpenetrates all transparent bodies and probably opaque bodies too",
+      "statement": "The medium through which light is propagated interpenetrates all transparent bodies and probably opaque bodies too.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "presupposed",
+      "n_passes": 2,
+      "name": "aether_relative_motion_question",
+      "quote": "when these dense bodies are in motion through the great ocean of aether, they carry along with them the aether they contain, or whether the aether passes through them",
+      "statement": "When dense bodies are in motion through the aether, they may carry the aether they contain along with them, or the aether may pass through them.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "fizeau_partial_aether_drag",
+      "quote": "he has observed that the propagation of light in a stream of water takes place with greater velocity in the direction in which the water moves than in the opposite direction",
+      "statement": "The propagation of light in a stream of water takes place with greater velocity in the direction in which the water moves than in the opposite direction.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "faraday_conjecture_endorsed",
+      "quote": "the same medium which is concerned in the propagation of light might also be the agent in electromagnetic phenomena",
+      "statement": "The same medium which is concerned in the propagation of light might also be the agent in electromagnetic phenomena.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "electrostatic_energy_medium_property",
+      "quote": "the former depends on a property of the medium, in virtue of which an electric displacement elicits an electromotive force in the opposite direction",
+      "statement": "Electrostatic energy depends on a property of the medium by which an electric displacement elicits an electromotive force in the opposite direction.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "electrokinetic_energy_medium_motion",
+      "quote": "The electrokinetic energy, on the other hand, is simply the energy of the motion set up in the medium by electric currents and magnets, this motion not being confined to the wires",
+      "statement": "Electrokinetic energy is the energy of the motion set up in the medium by electric currents and magnets.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "em_and_luminiferous_media_identical",
+      "quote": "If this should be equal to the velocity of light, we would have strong reason to believe that the two media, occupying as they do the same space, are really identical.",
+      "statement": "If the velocity of an electromagnetic disturbance equals the velocity of light, the two media, occupying the same space, are really identical.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "inductive_capacity_equals_refractive_index_squared",
+      "quote": "in non-magnetic media the specific inductive capacity should be equal to the square of the index of refraction",
+      "statement": "In non-magnetic media the specific inductive capacity should be equal to the square of the index of refraction.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "aether_incompressible",
+      "quote": "The only way of accounting for the fact that the optical phenomena which would arise from these waves do not take place is to assume that the aether is incompressible.",
+      "statement": "The aether must be assumed to be incompressible to account for the fact that the optical phenomena of normal vibrations do not take place.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "aether_transmits_without_dissipation",
+      "quote": "We know that the aether transmits transverse vibrations to very great distances without sensible loss of energy by dissipation.",
+      "statement": "The aether transmits transverse vibrations to very great distances without sensible loss of energy by dissipation.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "aether_not_like_a_gas",
+      "quote": "We cannot therefore suppose the constitution of the aether to be like that of a gas, in which the molecules are always in a state of irregular agitation",
+      "statement": "The constitution of the aether cannot be like that of a gas in which the molecules are always in a state of irregular agitation.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "aether_probably_molecular",
+      "quote": "The ather, if it is the medium of electromagnetic phenomena, is probably molecular, at least in this sense.",
+      "statement": "The aether, if it is the medium of electromagnetic phenomena, is probably molecular.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "magnetic_field_indicates_rotation",
+      "quote": "that it indicates a rotational motion in the medium when magnetized",
+      "statement": "The magnetic influence on light indicates a rotational motion in the medium when magnetized.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "molecular_vortices_no_continual_work",
+      "quote": "we conclude that the molecular vortices do not require a continual expenditure of work in order to maintain their motion, and that therefore this motion does not necessarily involve dissipation of energy.",
+      "statement": "The molecular vortices do not require a continual expenditure of work in order to maintain their motion.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "interplanetary_space_not_empty",
+      "quote": "there can be no doubt that the interplanetary and interstellar spaces are not empty, but are occupied by a material substance or body",
+      "statement": "The interplanetary and interstellar spaces are not empty but are occupied by a material substance or body.",
+      "support": 2
+    }
+  ]
+}

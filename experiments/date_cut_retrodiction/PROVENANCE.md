@@ -17,7 +17,7 @@
 - **Scientific adjudications:** unadjudicated
 
 ## Verification
-- Pre-registration: `experiments/date_cut_retrodiction/DCR1_PREREGISTRATION.md`
+- Pre-registration: `experiments/date_cut_retrodiction/DCR1B_PREREGISTRATION.md`
 - Result reports (1):
   - `experiments/date_cut_retrodiction/results/dcr1_verdict.json`
 

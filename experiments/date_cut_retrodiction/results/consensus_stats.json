@@ -1,0 +1,134 @@
+{
+  "equivalence_threshold": 0.5,
+  "n_anchor_propositions": 553,
+  "n_consensus_propositions": 383,
+  "n_passes": 2,
+  "overall_retention_rate": 0.6925858951175407,
+  "pass_dirs": [
+    "extractions_blind",
+    "extractions_pass3"
+  ],
+  "per_document": {
+    "brace_1904_refraction": {
+      "n_consensus": 20,
+      "n_per_pass": [
+        40,
+        35
+      ],
+      "retention_rate": 0.5
+    },
+    "fitzgerald_1889": {
+      "n_consensus": 17,
+      "n_per_pass": [
+        23,
+        23
+      ],
+      "retention_rate": 0.7391304347826086
+    },
+    "larmor_1897_medium3": {
+      "n_consensus": 24,
+      "n_per_pass": [
+        39,
+        40
+      ],
+      "retention_rate": 0.6153846153846154
+    },
+    "larmor_1900_ch10": {
+      "n_consensus": 31,
+      "n_per_pass": [
+        40,
+        39
+      ],
+      "retention_rate": 0.775
+    },
+    "larmor_1900_ch11": {
+      "n_consensus": 29,
+      "n_per_pass": [
+        40,
+        42
+      ],
+      "retention_rate": 0.725
+    },
+    "lodge_1897_absence": {
+      "n_consensus": 20,
+      "n_per_pass": [
+        35,
+        30
+      ],
+      "retention_rate": 0.5714285714285714
+    },
+    "lorentz_1904": {
+      "n_consensus": 24,
+      "n_per_pass": [
+        36,
+        40
+      ],
+      "retention_rate": 0.6666666666666666
+    },
+    "maxwell_1865_part1": {
+      "n_consensus": 28,
+      "n_per_pass": [
+        40,
+        40
+      ],
+      "retention_rate": 0.7
+    },
+    "maxwell_1865_part6": {
+      "n_consensus": 29,
+      "n_per_pass": [
+        40,
+        40
+      ],
+      "retention_rate": 0.725
+    },
+    "maxwell_1878_ether": {
+      "n_consensus": 28,
+      "n_per_pass": [
+        39,
+        40
+      ],
+      "retention_rate": 0.717948717948718
+    },
+    "michelson_1881": {
+      "n_consensus": 24,
+      "n_per_pass": [
+        32,
+        33
+      ],
+      "retention_rate": 0.75
+    },
+    "michelson_morley_1887": {
+      "n_consensus": 26,
+      "n_per_pass": [
+        39,
+        36
+      ],
+      "retention_rate": 0.6666666666666666
+    },
+    "poincare_1898_time": {
+      "n_consensus": 24,
+      "n_per_pass": [
+        40,
+        39
+      ],
+      "retention_rate": 0.6
+    },
+    "poincare_1904_stlouis": {
+      "n_consensus": 28,
+      "n_per_pass": [
+        31,
+        28
+      ],
+      "retention_rate": 0.9032258064516129
+    },
+    "rayleigh_1902_refraction": {
+      "n_consensus": 31,
+      "n_per_pass": [
+        39,
+        38
+      ],
+      "retention_rate": 0.7948717948717948
+    }
+  },
+  "support_threshold": 2
+}

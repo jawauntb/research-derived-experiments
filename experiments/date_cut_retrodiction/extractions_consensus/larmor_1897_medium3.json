@@ -1,0 +1,245 @@
+{
+  "doc_id": "larmor_1897_medium3",
+  "propositions": [
+    {
+      "definitional": true,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "aether_continuous_medium",
+      "quote": "the \u00e6ther to be a continuous, homogeneous, and incompressible medium, endowed with inertia and with elasticity purely rotational",
+      "statement": "The \u00e6ther is a continuous, homogeneous, and incompressible medium endowed with inertia and with elasticity purely rotational.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "electrons_point_singularities",
+      "quote": "unitary electric charges, or electrons, exist as point-singularities, or centres of intrinsic strain, which can move about under their mutual actions",
+      "statement": "Unitary electric charges, or electrons, exist as point-singularities, or centres of intrinsic strain, which can move about under their mutual actions.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "atoms_aggregations_of_electrons",
+      "quote": "atoms of matter are in whole or in part aggregations of electrons in stable orbital motion",
+      "statement": "Atoms of matter are in whole or in part aggregations of electrons in stable orbital motion.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "actions_propagated_in_time",
+      "quote": "the key-stone of electrodynamics will be found in an action propagated in time from one \"electric particle\" to another",
+      "statement": "The key-stone of electrodynamics will be found in an action propagated in time from one electric particle to another.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "aether_perfect_fluid",
+      "quote": "The \u00e6ther is a perfect fluid endowed with rotational elasticity",
+      "statement": "The \u00e6ther is a perfect fluid endowed with rotational elasticity.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "aether_no_volume_elasticity",
+      "quote": "no phenomenon has been discovered which would allow us to assume that the property of elasticity of volume, which necessarily exists in any molecularly constituted medium such as matter, is present in the \u00e6ther at all",
+      "statement": "No phenomenon has been discovered which would allow us to assume that the property of elasticity of volume, which necessarily exists in any molecularly constituted medium such as matter, is present in the \u00e6ther at all.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "presupposed",
+      "n_passes": 2,
+      "name": "velocity_of_radiation_ascertained",
+      "quote": "we have been compelled to assume a high coefficient of inertia of the medium, and therefore an extremely high elasticity in order to conserve the ascertained velocity of radiation",
+      "statement": "The velocity of radiation is an ascertained quantity that the medium must conserve, which compels a high coefficient of inertia and an extremely high elasticity of the medium.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "electric_force_causes_rotation",
+      "quote": "the motion of our rotational \u00e6ther in the previous papers is irrotational except where electric force exists which produces rotation proportional to its intensity",
+      "statement": "The motion of the rotational \u00e6ther is irrotational except where electric force exists, which produces rotation proportional to its intensity.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "ponderomotive_force_equals_charge_field",
+      "quote": "this force is equal to its charge multiplied by the intensity of the electric field where it is situated",
+      "statement": "For each electron at rest, the ponderomotive force on it is equal to its charge multiplied by the intensity of the electric field where it is situated.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "aether_not_matter_different_laws",
+      "quote": "The \u00e6ther not being matter, it need not obey the laws of the dynamics of matter, provided it obey another scheme of dynamical laws consistent among themselves",
+      "statement": "The \u00e6ther, not being matter, need not obey the laws of the dynamics of matter, provided it obeys another scheme of dynamical laws consistent among themselves.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "euclidean_space_relations",
+      "quote": "the existing Euclidean relations of measurements in space (which also might a priori be different from what they are) as part of the ultimate scheme of mental representation of the actual physical world",
+      "statement": "The existing Euclidean relations of measurements in space are part of the ultimate scheme of mental representation of the actual physical world.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "matter_molecular_constitution",
+      "quote": "The elastic and other characteristics of ordinary matter, including its viscous relations, are on the other hand a direct consequence of its molecular constitution",
+      "statement": "The elastic and other characteristics of ordinary matter, including its viscous relations, are a direct consequence of its molecular constitution.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "gravitation_not_statical_stress",
+      "quote": "gravitation cannot be transmitted by any action of the nature of statical stress; for then the approach of two atoms would increase the strain, and therefore also the stress",
+      "statement": "Gravitation cannot be transmitted by any action of the nature of statical stress, for then the approach of two atoms would increase the strain and the stress.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "gravitation_isotropic_at_electrons",
+      "quote": "gravitation must belong to the ultimate constituents of matter, that is on this theory to the electrons, and must be isotropic all round each of them",
+      "statement": "Gravitation must belong to the ultimate constituents of matter, that is to the electrons, and must be isotropic all round each of them.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "maxwell_equations_verified_experimentally",
+      "quote": "they may be based directly on Maxwell 's equations of the electric field in free space , which form a sufficient description of the free \u00e6ther, and have been verified by experiment",
+      "statement": "Maxwell's equations of the electric field in free space form a sufficient description of the free \u00e6ther and have been verified by experiment.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "dynamics_needs_absolute_positions",
+      "quote": "it has not been found possible to construct a system of dynamics which has respect only to the relative positions of moving bodies",
+      "statement": "It has not been found possible to construct a system of dynamics which has respect only to the relative positions of moving bodies.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "internal_energy_orbital_motion",
+      "quote": "the energy of the steady orbital motions in the molecule (including therein slow free precessions) makes up both the energy of chemical constitution and the internal thermal energy",
+      "statement": "The energy of the steady orbital motions in the molecule makes up both the energy of chemical constitution and the internal thermal energy.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "temperature_no_spectral_influence",
+      "quote": "this explains why change of temperature has no influence on the positions of the lines in a spectrum",
+      "statement": "Change of temperature has no influence on the positions of the lines in a spectrum.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "maxwell_boltzmann_theorem_fails",
+      "quote": "the postulates of the Maxwell-Boltzmann theorem on the distribution of the internal energy in gases would not obtain, for the thermal energy of the molecule would not be expressible as a sum of squares",
+      "statement": "The postulates of the Maxwell-Boltzmann theorem on the distribution of the internal energy in gases would not obtain, because the thermal energy of the molecule would not be expressible as a sum of squares.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "chemical_affinity_persists_cold",
+      "quote": "the energies of affinity exist all the time in probably undiminished strength, while the forces of cohesion are modified by the fall of temperature but not necessarily in the direction of extinction",
+      "statement": "The energies of affinity exist all the time in probably undiminished strength, while the forces of cohesion are modified by the fall of temperature but not necessarily toward extinction.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "electric_force_null_steady_conductor",
+      "quote": "the electric force (P, Q, R) must be null throughout its substance",
+      "statement": "When a conducting system is in steady motion with no conduction current flowing into it, the electric force must be null throughout its substance.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "moving_body_contracts",
+      "quote": "the body is shrunk in the direction of its velocity v in the ratio",
+      "statement": "A body in uniform motion is shrunk in the direction of its velocity v.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "contraction_confirms_fitzgerald_lorentz",
+      "quote": "it will confirm the hypothesis of FitzGerald and Lorentz , to which they were led as the ultimate resource for the explanation of the negative result of Michelson 's optical experiments",
+      "statement": "The shrinking of a moving body confirms the hypothesis of FitzGerald and Lorentz, to which they were led as the ultimate resource for the explanation of the negative result of Michelson's optical experiments.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "molecule_constitution_wholly_electric",
+      "quote": "it will involve evidence that the constitution of a molecule is wholly electric, as here represented",
+      "statement": "The constitution of a molecule is wholly electric, as represented in this theory.",
+      "support": 2
+    }
+  ]
+}

@@ -1,0 +1,265 @@
+{
+  "doc_id": "michelson_morley_1887",
+  "propositions": [
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "emission_theory_velocity_composition",
+      "quote": "The effect was attributed to a simple composition of the velocity of light with the velocity of the earth in its orbit.",
+      "statement": "On the emission theory, the effect of aberration is a simple composition of the velocity of light with the velocity of the earth in its orbit.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "water_telescope_aberration_unchanged",
+      "quote": "the aberration was unchanged when observations were made with a telescope filled with water.",
+      "statement": "The aberration was unchanged when observations were made with a telescope filled with water.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "light_slower_in_water",
+      "quote": "the latter velocity in water is three-fourths its velocity in a vacuum",
+      "statement": "The velocity of light in water is three-fourths its velocity in a vacuum.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "emission_aberration_tangent_ratio",
+      "quote": "if the tangent of the angle of aberration is the ratio of the velocity of the earth to the velocity of light",
+      "statement": "The tangent of the angle of aberration is the ratio of the velocity of the earth to the velocity of light.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "fresnel_ether_at_rest_outside_media",
+      "quote": "the ether is supposed to be at rest except in the interior of transparent media",
+      "statement": "The ether is supposed to be at rest except in the interior of transparent media.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "fresnel_partial_ether_drag",
+      "quote": "it is supposed to move with a velocity less than the velocity of the medium in the ratio",
+      "statement": "Inside transparent media the ether is supposed to move with a velocity less than the velocity of the medium, in a fixed ratio.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "ether_passes_through_metals",
+      "quote": "there can hardly be question that the ether can and does pass through metals.",
+      "statement": "The ether can and does pass through metals.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "ether_is_incompressible",
+      "quote": "the ether in the space above the mercury is certainly forced out, for it is imcompressible.",
+      "statement": "The ether in the space above the mercury in an inclined tube is certainly forced out, because the ether is incompressible.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "earth_motion_through_ether_affects_ray_path",
+      "quote": "the effect of the motion of the earth through the ether on the path of the ray at right angles to this motion was overlooked.",
+      "statement": "The motion of the earth through the ether affects the path of a ray of light at right angles to this motion.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "quantity_measured_halved_by_oversight",
+      "quote": "the quantity to be measured had in fact but one-half the value supposed",
+      "statement": "The quantity to be measured had in fact but one-half the value supposed.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "light_partly_reflected_partly_transmitted",
+      "quote": "be a ray of light which is partly reflected in ab , and partly transmitted in ac",
+      "statement": "A ray of light is partly reflected and partly transmitted at a mirror.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "equal_paths_produce_interference",
+      "quote": "If then the paths ab and ac are equal, the two rays interfere along ad .",
+      "statement": "If the two paths of the rays are equal, the two rays interfere.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "apparatus_motion_through_stationary_ether_alters_paths",
+      "quote": "the ether being at rest, that the whole apparatus moves in the direction sc , with the velocity of the earth in its orbit, the directions and distances traversed by the rays will be altered",
+      "statement": "If the ether is at rest and the apparatus moves with the velocity of the earth in its orbit, the directions and distances traversed by the rays are altered.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "rotating_apparatus_reverses_path_difference",
+      "quote": "If now the whole apparatus be turned through 90\u00b0, the difference will be in the opposite direction, hence the displacement of the interference fringes should be",
+      "statement": "If the whole apparatus is turned through 90 degrees, the difference in path is in the opposite direction, so the interference fringes are displaced.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "observed_displacement_below_threshold",
+      "quote": "due to the relative motion of the earth and the luminiferous ether, this cannot be much greater than 0.01 of the distance between the fringes.",
+      "statement": "If there is any displacement due to the relative motion of the earth and the luminiferous ether, this displacement cannot be much greater than 0.01 of the distance between the fringes.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "displacement_proportional_to_velocity_squared",
+      "quote": "since the displacement is proportional to the square of the velocity",
+      "statement": "The displacement of the interference fringes is proportional to the square of the velocity.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "earth_ether_relative_velocity_small",
+      "quote": "the relative velocity of the earth and the ether is probably less than one sixth the earth's orbital velocity, and certainly less than one-fourth.",
+      "statement": "The relative velocity of the earth and the ether is probably less than one sixth the earth's orbital velocity, and certainly less than one-fourth.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "result_refutes_fresnel_aberration_explanation",
+      "quote": "if there be any relative motion between the earth and the luminiferous ether, it must be small; quite small enough entirely to refute Fresnel's explanation of aberration.",
+      "statement": "Any relative motion between the earth and the luminiferous ether must be small, small enough to refute Fresnel's explanation of aberration.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "stokes_ether_at_rest_at_earth_surface",
+      "quote": "Stokes has given a theory of aberration which assumes the ether at the earth's surface to be at rest with regard to the latter",
+      "statement": "Stokes gives a theory of aberration which assumes the ether at the earth's surface to be at rest with regard to the earth's surface.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "lorentz_theory_fails_if_ether_at_rest",
+      "quote": "If now it were legitimate to conclude from the present work that the ether is at rest with regard to the earth's surface, according to Lorentz there could not be a velocity potential, and his own theory also fails.",
+      "statement": "If the ether is at rest with regard to the earth's surface, then according to Lorentz there could not be a velocity potential, and Lorentz's own theory also fails.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "reflection_from_moving_surface_differs",
+      "quote": "This is founded on the fact that reflection from surfaces in motion varies from the ordinary laws of reflection.",
+      "statement": "Reflection from surfaces in motion varies from the ordinary laws of reflection.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "earths_rotation_provides_reorientation",
+      "quote": "the apparatus need not be mounted so as to revolve, as the earth's rotation would be sufficient.",
+      "statement": "The apparatus need not be mounted so as to revolve, because the earth's rotation would be sufficient.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "motion_of_solar_system_affects_result",
+      "quote": "If this is combined with the motion of the solar system, concerning which but little is known with certainty, the result would have to be modified",
+      "statement": "If the orbital motion of the earth is combined with the motion of the solar system, the result would have to be modified.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "spectroscopic_observation_gives_relative_motion",
+      "quote": "The spectroscopic observation of the motion of stars in the line of sight. This could furnish data for the relative motions only",
+      "statement": "The spectroscopic observation of the motion of stars in the line of sight could furnish data for the relative motions of the solar system.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "jupiter_eclipses_determine_velocity_of_light",
+      "quote": "Finally there remains the determination of the velocity of light by observations of the eclipses of Jupiter's satellites.",
+      "statement": "The velocity of light can be determined by observations of the eclipses of Jupiter's satellites.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "jupiter_method_gives_motion_relative_to_ether",
+      "quote": "will give, not merely the motion of the solar system with reference to the stars, but with reference to the luminiferous ether itself.",
+      "statement": "The difference in the velocity of light found when Jupiter is nearest to and farthest from the line of motion will give the motion of the solar system with reference to the luminiferous ether.",
+      "support": 2
+    }
+  ]
+}

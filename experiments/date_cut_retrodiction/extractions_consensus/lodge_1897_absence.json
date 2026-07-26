@@ -1,0 +1,205 @@
+{
+  "doc_id": "lodge_1897_absence",
+  "propositions": [
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "light_velocity_unchanged_by_moving_plates",
+      "quote": "The velocity of light between two steel plates moving together in their own plane, an inch apart, is not increased or diminished by so much as",
+      "statement": "The velocity of light between two steel plates moving together in their own plane is not increased or diminished by so much as a hundredth part of their velocity.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "no_first_order_irrotational_optical_effect",
+      "quote": "The chief conclusion of the theoretical part of the former paper (p. 752) is that no first-order effect of purely irrotational etherial motion can ever be optically detected",
+      "statement": "No first-order effect of purely irrotational etherial motion can ever be optically detected.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "ray_path_independent_of_potential_motion",
+      "quote": "that as long as the motion of a medium is characterised everywhere by a single-valued potential function, the course of all observable rays through it, however reflected and refracted they may be, is independent of the motion",
+      "statement": "As long as the motion of a medium is characterised everywhere by a single-valued potential function, the course of all observable rays through it is independent of the motion.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "journey_time_independent_except_second_order",
+      "quote": "the time of journey along any given path through any kind of material is likewise perfectly definite, and independent of the motion, except for experiments directed to the second order of aberration-magnitude",
+      "statement": "The time of journey along any given path through any kind of material is independent of the motion, except for experiments directed to the second order of aberration-magnitude.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "presupposed",
+      "n_passes": 2,
+      "name": "possible_ether_viscosity",
+      "quote": "unless there existed a trace of something akin to viscosity by which the medium could be got hold of",
+      "statement": "There might exist a trace of something akin to viscosity by which the ether could be got hold of.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "earth_rotation_shift_if_ether_carried",
+      "quote": "it is arithmetically quite possible to arrange for a perceptible shift of the bands due to the rotation of the earth, if it carries ether round with it",
+      "statement": "It is arithmetically possible to arrange for a perceptible shift of the bands due to the rotation of the earth, if the earth carries ether round with it.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "no_disk_motion_effect_implies_stationary_ether",
+      "quote": "since a motion of the disks relatively to the observer and the light causes no effect, the ether being stationary, it follows that a motion of the light and observer would produce an effect",
+      "statement": "Since a motion of the disks relatively to the observer and the light causes no effect, the ether is stationary, and it follows that a motion of the light and observer would produce an effect.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "rotating_apparatus_should_show_reversible_shift",
+      "quote": "the whole apparatus, lantern, optical frame, telescope, observer and all were mounted on a turntable and caused to rotate, a reversible shift of the bands should be seen",
+      "statement": "If the whole apparatus, lantern, optical frame, telescope and observer were mounted on a turntable and caused to rotate, a reversible shift of the bands should be seen.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "stationary_ether_large_square_shift",
+      "quote": "then a single interference square, 1 kilometre in the side, would show a shift of rather more than one band width, due to the earth\u2019s rotation in these latitudes",
+      "statement": "If the ether is stationary near the earth, a single interference square of sufficient size would show a shift of more than one band width due to the rotation of the earth.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "presupposed",
+      "n_passes": 2,
+      "name": "matter_might_drag_ether_by_mass",
+      "quote": "If matter conceivably drags the ether with it in proportion to its mass, an ordinary lump of matter can hardly be expected to cope with the heart and to shift it in opposition to that body",
+      "statement": "Matter might conceivably drag the ether with it in proportion to its mass, though an ordinary lump of matter can hardly be expected to shift it.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "no_shift_iron_mass_spinning_magnetized",
+      "quote": "there was not a trace of shift when the mass was spinning, either with or without its magnetising current",
+      "statement": "There was not a trace of shift when the iron mass was spinning, either with or without its magnetising current.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "no_shift_at_speed_1000",
+      "quote": "never found either motion or magnetisation of the heavy iron mass cause the slightest real shift of the bands at the speed of 1000",
+      "statement": "Neither motion nor magnetisation of the heavy iron mass ever caused the slightest real shift of the bands at the speed of 1000.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "bands_sensitive_to_density_fluctuation",
+      "quote": "They were manifestly extremely sensitive to fluctuating density, and hence we traced the previous flicker to hot air from the carbon rheostat which regulated the driving current",
+      "statement": "The bands were manifestly extremely sensitive to fluctuating density, and the flicker was traced to hot air from the carbon rheostat.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "air_density_gradation_from_centrifugal_force",
+      "quote": "A possible reason for the concertina effect, and for the slight residual irreversible shift sometimes observed, suggests itself in the gradation of density in the air between the disks, due to centrifugal force",
+      "statement": "The gradation of density in the air between the disks, due to centrifugal force, is a possible reason for the concertina effect and the slight residual irreversible shift.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "presupposed",
+      "n_passes": 2,
+      "name": "electrification_might_grip_ether_via_radiation",
+      "quote": "yet it was thought possible that electrification might do it; because an oscillatory charge certainly radiates wave motion into the ether",
+      "statement": "It was thought possible that electrification might grip the ether, because an oscillatory charge certainly radiates wave motion into the ether.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "radiation_not_mechanical_disturbance",
+      "quote": "radiation is not any known kind of mechanical disturbance, but is concerned with the ether's electrical properties, end need not necessarily involve anything analogous to etherial viscosity even in the neighbourhood of matter",
+      "statement": "Radiation is not any known kind of mechanical disturbance, but is concerned with the ether's electrical properties, and need not involve etherial viscosity.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "presupposed",
+      "n_passes": 2,
+      "name": "electric_charge_might_confer_gripping_power",
+      "quote": "electric charge, being as it were the connexion between ether and matter, might confer upon a material body some power of gripping and rotationally carrying forward the ether in a quasi-viscous manner",
+      "statement": "Electric charge, being the connexion between ether and matter, might confer upon a material body some power of gripping and rotationally carrying forward the ether in a quasi-viscous manner.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "no_difference_electrified_or_not",
+      "quote": "there was not the slightest difference whether the plates were electrified or not",
+      "statement": "There was not the slightest difference whether the plates were electrified or not.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "neither_field_confers_viscosity",
+      "quote": "I conclude that neither an electric nor a magnetic transverse field confers viscosity upon the ether, nor enables moving matter to grip and move it rotationally",
+      "statement": "Neither an electric nor a magnetic transverse field confers viscosity upon the ether, nor enables moving matter to grip and move it rotationally.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "magnetic_field_conveyance_no_gripping_power",
+      "quote": "it has now been shown that the conveyance of a magnetic field by moving matter confers; no power of gripping the ether",
+      "statement": "The conveyance of a magnetic field by moving matter confers no power of gripping the ether.",
+      "support": 2
+    }
+  ]
+}

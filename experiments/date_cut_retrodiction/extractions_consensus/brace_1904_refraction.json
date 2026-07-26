@@ -1,0 +1,205 @@
+{
+  "doc_id": "brace_1904_refraction",
+  "propositions": [
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "index_excess_proportional_density",
+      "quote": "and also the excess of the index above unity to be proportional to the density.",
+      "statement": "The excess of the index above unity is proportional to the density.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "proportionality_invalid_for_glass",
+      "quote": "The second assumption does not seem to be entirely valid for glass, at least, when compared with the double refraction produced by a given strain.",
+      "statement": "The assumption that the excess of the index above unity is proportional to density does not seem entirely valid for glass.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "rayleigh_test_inconclusive",
+      "quote": "the method of Rayleigh cannot be regarded by any means as a conclusive test of the hypothesis, it is the only experimental one attempted and can be extended so as to give a safe margin for a solid like glass.",
+      "statement": "The method of Rayleigh is not a conclusive test of the hypothesis, though it is the only experimental one attempted.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "contraction_from_intermolecular_forces",
+      "quote": "This suggestion of the \"contraction\" hypothesis by Lorentz, from considerations in regard to intermolecular forces analogous to the interaction, through the mediation of the \u00e6ther, of electric and magnetic forces, is certainly plausible enough to warrant further examinations and extension experimentally.",
+      "statement": "The contraction hypothesis arises from considerations of intermolecular forces analogous to the interaction of electric and magnetic forces mediated through the \u00e6ther.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "presupposed",
+      "n_passes": 2,
+      "name": "earth_orbital_motion",
+      "quote": "the other a similar system rotating about a horizontal axis so as to shift the plane of polarization from a position at 45\u00b0 to the earth's orbital motion through an angle of 90\u00b0.",
+      "statement": "The earth has an orbital motion through which the plane of polarization can be shifted relative to it.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "glass_strain_produces_double_refraction",
+      "quote": "A small piece of glass compressed vertically to the slightest degree with the fingers placed after the polarizer 4 showed a sharp change of intensity at this bounding line.",
+      "statement": "A piece of glass compressed to the slightest degree shows a sharp change of intensity, that is, double refraction produced by strain.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "no_double_refraction_water_orbital_motion",
+      "quote": "Hence, we may conclude that to this order of sensibility there is no double refraction in the water due to its motion through the \u00e6ther.",
+      "statement": "There is no double refraction in the water due to its motion through the \u00e6ther, to the order of sensibility attained.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "earth_magnetic_field_rotates_polarization",
+      "quote": "It is evident that a rotation of the plane of polarization due to the earth's field of force would not affect this match, as both portions of the field would vary in intensity by the same amount.",
+      "statement": "The earth's field of force could produce a rotation of the plane of polarization.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "magnetic_rotation_direction_fixed",
+      "quote": "It is evident that since the rotation due to a magnetic field is always in a definite direction and independent of the direction of the ray, such a rotation of the plane of polarization would be reversed with respect to an observer moving with the trough.",
+      "statement": "The rotation of the plane of polarization due to a magnetic field is always in a definite direction independent of the direction of the ray, and is reversed with respect to an observer moving with the trough.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "quarter_wave_plate_order",
+      "quote": "The order of the mica quarter-wave plate was found to be approximately \u00bc for green light, \u03bb=0.00005 cm., by comparison in the usual way with a quartz or selenite wedge.",
+      "statement": "The mica quarter-wave plate has an order of approximately one quarter for green light, as found by comparison with a quartz or selenite wedge.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "water_index_value",
+      "quote": "The total path of the light in the water was 2856 cms. Taking its index as 1.33, the number of waves is",
+      "statement": "Water has an index of 1.33.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "double_refraction_velocity_difference",
+      "quote": "This represents the greatest difference in velocity or in index between the two components which could exist referred to that of water for green light, \u03bb = .00005 cm.",
+      "statement": "Double refraction is the difference in velocity or in index between two components of light.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "mascart_density_index_water",
+      "quote": "Mascart has shown that in the case of water under compression the increment in the excess of the index above unity is nearly proportional to the increment of its density.",
+      "statement": "In water under compression the increment in the excess of the index above unity is nearly proportional to the increment of its density.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "motion_through_aether_increases_density",
+      "quote": "If in the movement of matter through \u00e6ther an increase in density in this direction took place, producing a change in the natural frequency of the molecular systems similar to that which occurs in glass",
+      "statement": "Movement of matter through \u00e6ther could produce an increase in density in the direction of motion, producing a change in the natural frequency of the molecular systems similar to that which occurs in glass.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "contraction_effect_larger_than_sensitivity",
+      "quote": "or about 1600 times greater than the smallest effect which could be observed.",
+      "statement": "The greatest change expected on the contraction hypothesis is about 1600 times greater than the smallest effect which could be observed.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "magnetic_field_double_refraction",
+      "quote": "These cylinders were especially well annealed Jena glass used a number of years ago in experiments on the double refraction of light propagated at right angles to the lines of force in a magnetic field .",
+      "statement": "Double refraction of light can be produced by propagation at right angles to the lines of force in a magnetic field.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "poisson_ratio_correction",
+      "quote": "If we correct by \u00bc for Poisson's ratio, as we should if the interference problem were done on a glass support, the calculated contraction becomes",
+      "statement": "A correction by a factor involving Poisson's ratio should be applied if the interference problem were done on a glass support.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "contraction_hypothesis_cannot_explain_or_aether_moves_with_matter",
+      "quote": "Hence, if the test is a valid one, the \"contraction\" hypothesis cannot explain the negative results of the interference experiments; and, with the same reasoning, we also conclude either that the aether moves with the embedded matter, or that the effect of the relative motion on the intermolecular forces and the possible consequent relative change in dimensions are very small.",
+      "statement": "If the test is valid, the contraction hypothesis cannot explain the negative results of the interference experiments, and either the \u00e6ther moves with the embedded matter, or the effect of the relative motion on the intermolecular forces and the possible consequent relative change in dimensions is very small.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "february_repeat_earth_velocity_conspires",
+      "quote": "These experiments were repeated during the early part of February, 1904, when the earth's orbital velocity conspires approximately with that of the solar system in space.",
+      "statement": "The earth's orbital velocity conspires approximately with that of the solar system in space at a particular time of year.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 2,
+      "name": "hicks_elongation_alternative",
+      "quote": "Hicks , in a more rigorous discussion than that of Lorentz, of the effect to be expected in the Michelson-Morley experiment, shows that instead of a contraction of",
+      "statement": "A more rigorous discussion than that of Lorentz shows that instead of a contraction in the direction of drift there should be an elongation.",
+      "support": 2
+    }
+  ]
+}
