@@ -1,0 +1,201 @@
+{
+  "all_cuts_agree_on_facets": true,
+  "kind": "dcr1_pass_comparison",
+  "mean_name_jaccard": 0.07020260986255103,
+  "mean_statement_vocab_jaccard": 0.646841837183615,
+  "overall_semantic_match_rate": 0.6774193548387096,
+  "per_cut": {
+    "1880": {
+      "blind": {
+        "facets_present": [],
+        "n_propositions": 119
+      },
+      "cut_year": 1880,
+      "facets_agree": true,
+      "is_placebo": true,
+      "unblinded": {
+        "facets_present": [],
+        "n_propositions": 114
+      }
+    },
+    "1897": {
+      "blind": {
+        "facets_present": [
+          "T2_privileged_frame"
+        ],
+        "n_propositions": 287
+      },
+      "cut_year": 1897,
+      "facets_agree": true,
+      "is_placebo": true,
+      "unblinded": {
+        "facets_present": [
+          "T2_privileged_frame"
+        ],
+        "n_propositions": 297
+      }
+    },
+    "1904": {
+      "blind": {
+        "facets_present": [
+          "T1_absolute_simultaneity",
+          "T2_privileged_frame",
+          "T3_local_time_artifice"
+        ],
+        "n_propositions": 553
+      },
+      "cut_year": 1904,
+      "facets_agree": true,
+      "is_placebo": false,
+      "unblinded": {
+        "facets_present": [
+          "T1_absolute_simultaneity",
+          "T2_privileged_frame",
+          "T3_local_time_artifice"
+        ],
+        "n_propositions": 558
+      }
+    }
+  },
+  "per_document": {
+    "brace_1904_refraction": {
+      "n_blind": 40,
+      "n_unblinded": 39,
+      "name_jaccard": 0.05333333333333334,
+      "semantic_match_rate": 0.6153846153846154,
+      "semantic_matched": 24,
+      "semantic_total": 39,
+      "statement_vocab_jaccard": 0.5767195767195767
+    },
+    "fitzgerald_1889": {
+      "n_blind": 23,
+      "n_unblinded": 25,
+      "name_jaccard": 0.14285714285714285,
+      "semantic_match_rate": 0.68,
+      "semantic_matched": 17,
+      "semantic_total": 25,
+      "statement_vocab_jaccard": 0.7586206896551724
+    },
+    "larmor_1897_medium3": {
+      "n_blind": 39,
+      "n_unblinded": 46,
+      "name_jaccard": 0.0759493670886076,
+      "semantic_match_rate": 0.5,
+      "semantic_matched": 23,
+      "semantic_total": 46,
+      "statement_vocab_jaccard": 0.5497835497835498
+    },
+    "larmor_1900_ch10": {
+      "n_blind": 40,
+      "n_unblinded": 40,
+      "name_jaccard": 0.03896103896103896,
+      "semantic_match_rate": 0.7,
+      "semantic_matched": 28,
+      "semantic_total": 40,
+      "statement_vocab_jaccard": 0.6738095238095239
+    },
+    "larmor_1900_ch11": {
+      "n_blind": 40,
+      "n_unblinded": 40,
+      "name_jaccard": 0.02564102564102564,
+      "semantic_match_rate": 0.725,
+      "semantic_matched": 29,
+      "semantic_total": 40,
+      "statement_vocab_jaccard": 0.6556603773584906
+    },
+    "lodge_1897_absence": {
+      "n_blind": 35,
+      "n_unblinded": 33,
+      "name_jaccard": 0.014925373134328358,
+      "semantic_match_rate": 0.6060606060606061,
+      "semantic_matched": 20,
+      "semantic_total": 33,
+      "statement_vocab_jaccard": 0.5833333333333334
+    },
+    "lorentz_1904": {
+      "n_blind": 36,
+      "n_unblinded": 32,
+      "name_jaccard": 0.0625,
+      "semantic_match_rate": 0.5625,
+      "semantic_matched": 18,
+      "semantic_total": 32,
+      "statement_vocab_jaccard": 0.5684523809523809
+    },
+    "maxwell_1865_part1": {
+      "n_blind": 40,
+      "n_unblinded": 41,
+      "name_jaccard": 0.038461538461538464,
+      "semantic_match_rate": 0.6341463414634146,
+      "semantic_matched": 26,
+      "semantic_total": 41,
+      "statement_vocab_jaccard": 0.6198979591836735
+    },
+    "maxwell_1865_part6": {
+      "n_blind": 40,
+      "n_unblinded": 34,
+      "name_jaccard": 0.1044776119402985,
+      "semantic_match_rate": 0.7647058823529411,
+      "semantic_matched": 26,
+      "semantic_total": 34,
+      "statement_vocab_jaccard": 0.6626865671641791
+    },
+    "maxwell_1878_ether": {
+      "n_blind": 39,
+      "n_unblinded": 39,
+      "name_jaccard": 0.08333333333333333,
+      "semantic_match_rate": 0.7435897435897436,
+      "semantic_matched": 29,
+      "semantic_total": 39,
+      "statement_vocab_jaccard": 0.6371191135734072
+    },
+    "michelson_1881": {
+      "n_blind": 32,
+      "n_unblinded": 40,
+      "name_jaccard": 0.058823529411764705,
+      "semantic_match_rate": 0.55,
+      "semantic_matched": 22,
+      "semantic_total": 40,
+      "statement_vocab_jaccard": 0.6231884057971014
+    },
+    "michelson_morley_1887": {
+      "n_blind": 39,
+      "n_unblinded": 39,
+      "name_jaccard": 0.08333333333333333,
+      "semantic_match_rate": 0.7692307692307693,
+      "semantic_matched": 30,
+      "semantic_total": 39,
+      "statement_vocab_jaccard": 0.6631944444444444
+    },
+    "poincare_1898_time": {
+      "n_blind": 40,
+      "n_unblinded": 40,
+      "name_jaccard": 0.03896103896103896,
+      "semantic_match_rate": 0.675,
+      "semantic_matched": 27,
+      "semantic_total": 40,
+      "statement_vocab_jaccard": 0.6691919191919192
+    },
+    "poincare_1904_stlouis": {
+      "n_blind": 31,
+      "n_unblinded": 31,
+      "name_jaccard": 0.14814814814814814,
+      "semantic_match_rate": 0.8387096774193549,
+      "semantic_matched": 26,
+      "semantic_total": 31,
+      "statement_vocab_jaccard": 0.7717041800643086
+    },
+    "rayleigh_1902_refraction": {
+      "n_blind": 39,
+      "n_unblinded": 39,
+      "name_jaccard": 0.08333333333333333,
+      "semantic_match_rate": 0.8461538461538461,
+      "semantic_matched": 33,
+      "semantic_total": 39,
+      "statement_vocab_jaccard": 0.6892655367231638
+    }
+  },
+  "quote_fidelity": {
+    "blind": 0.9981916817359855,
+    "unblinded": 1.0
+  }
+}

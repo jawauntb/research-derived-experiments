@@ -1,0 +1,278 @@
+{
+  "doc_id": "maxwell_1878_ether",
+  "propositions": [
+    {
+      "name": "ether_material_substance",
+      "statement": "Ether is a material substance of a more subtle kind than visible bodies, existing in parts of space which are apparently empty.",
+      "quote": "a material substance of a more subtle kind than visible bodies, supposed to exist in those parts of space which are apparently empty",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "luminiferous_aether_exists",
+      "statement": "The aether which explains the propagation of light is the aether which has survived.",
+      "quote": "The only aether which has survived is that which was invented by Huygens to explain the propagation of light.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_explains_electromagnetism",
+      "statement": "The properties of the medium deduced from the phenomena of light are precisely those required to explain electromagnetic phenomena.",
+      "quote": "the properties of this medium, as deduced from the phenomena of light, have been found to be precisely those required to explain electromagnetic phenomena",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_not_a_substance",
+      "statement": "Light is not itself a substance.",
+      "quote": "That light is not itself a substance may be proved from the phenomenon of interference.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_is_process_in_substance",
+      "statement": "Light is not a substance but a process going on in a substance.",
+      "quote": "We therefore conclude that light is not a substance but a process going on in a substance",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_finite_velocity",
+      "statement": "Light is propagated with a certain velocity.",
+      "quote": "light is known to be propagated with a certain velocity (3.004 x 10 centimetres per second in vacuum, according to Cornu)",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_process_is_wave",
+      "statement": "The configuration of the process at a given instant is called a wave, with a wave-length and a velocity of propagation.",
+      "quote": "The configuration at a given instant is called a wave , and the distance 2 π / P is called the wave-length . The velocity of propagation is n / p.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "process_is_transverse_vector",
+      "statement": "The physical process of the propagation of light is a vector at right angles to the ray.",
+      "quote": "the physical process involved in the propagation of light must not only be a directed quantity or vector capable of having its direction reversed, but this vector must be at right angles to the ray",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_process_possibly_electromagnetic",
+      "statement": "The process of light may be electromagnetic, with the electric displacement and the magnetic disturbance perpendicular to each other.",
+      "quote": "The process may, however, be an electromagnetic one, and as in this case the electric displacement and the magnetic disturbance are perpendicular to each other",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "invisible_radiations_same_phenomena",
+      "statement": "Radiations which do not produce a luminous impression on the eyes show the same phenomena of interference as light.",
+      "quote": "All that has been said with respect to the radiations which affect our eyes, and which we call light, applies also to those radiations which do not produce a luminous impression on our eyes",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_transmits_energy",
+      "statement": "The aether is capable of transmitting energy.",
+      "quote": "In the first place, it is capable of transmitting energy.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "energy_not_instantaneous",
+      "statement": "The energy of radiation is not transmitted instantaneously from the radiating body to the absorbing body but exists for a certain time in the medium.",
+      "quote": "this energy is not transmitted instantaneously from the radiating body to the absorbing body, but exists for a certain time in the medium",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_elastic_and_dense",
+      "statement": "The aether possesses elasticity similar to that of a solid body and has a finite density.",
+      "quote": "We must therefore regard the aether as possessing elasticity similar to that of a solid body, and also as having a finite density.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "energy_half_potential_half_kinetic",
+      "statement": "Half of the energy of light in the medium is potential energy due to distortion of the medium and half is kinetic energy due to motion of the medium.",
+      "quote": "half of this energy is in the form of potential energy, due to the distortion of elementary portions of the medium, and half in the form of kinetic energy, due to the motion of the medium",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_density_greater_than_atmosphere",
+      "statement": "In interplanetary space the density of the aether is very great compared with the density of the attenuated atmosphere of interplanetary space.",
+      "quote": "In the regions of interplanetary space the density of the aether is therefore very great compared with that of the attenuated atmosphere of interplanetary space",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_medium_distinct_from_air",
+      "statement": "The medium through which light is propagated is not the air itself.",
+      "quote": "it is manifest that the medium through which the light is propagated is not the air itself, for in the first place the air cannot transmit transverse vibrations",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_interpenetrates_bodies",
+      "statement": "The medium through which light is propagated interpenetrates all transparent bodies and probably opaque bodies too.",
+      "quote": "the medium through which light is propagated is something distinct from the transparent medium known to us, though it interpenetrates all transparent bodies and probably opaque bodies too",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "gross_particles_vibrate_with_light",
+      "statement": "The particles of transparent media vibrate along with the aether in the propagation of light, but the energy of their vibrations is much smaller than that of the aether.",
+      "quote": "their particles are vibrating as well as those of the aether, but the energy of the vibrations of the gross particles must be very much smaller than that of the aether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_loosely_connected_to_dense_bodies",
+      "statement": "The aether within dense bodies is somewhat loosely connected with the dense bodies.",
+      "quote": "We must therefore consider the aether within dense bodies as somewhat loosely connected with the dense bodies",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_relative_motion_question",
+      "statement": "When dense bodies are in motion through the aether, they may carry the aether they contain along with them, or the aether may pass through them.",
+      "quote": "when these dense bodies are in motion through the great ocean of aether, they carry along with them the aether they contain, or whether the aether passes through them",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "aberration_unaffected_by_aether_motion",
+      "statement": "On a probable hypothesis of the motion of the aether, the amount of aberration would not be sensibly affected by that motion.",
+      "quote": "on a very probable hypothesis with respect to the motion of the aether, the amount of aberration would not be sensibly affected by that motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fizeau_partial_aether_drag",
+      "statement": "The propagation of light in a stream of water takes place with greater velocity in the direction in which the water moves than in the opposite direction.",
+      "quote": "he has observed that the propagation of light in a stream of water takes place with greater velocity in the direction in which the water moves than in the opposite direction",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "faraday_conjecture_endorsed",
+      "statement": "The same medium which is concerned in the propagation of light might also be the agent in electromagnetic phenomena.",
+      "quote": "the same medium which is concerned in the propagation of light might also be the agent in electromagnetic phenomena",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electrostatic_energy_medium_property",
+      "statement": "Electrostatic energy depends on a property of the medium by which an electric displacement elicits an electromotive force in the opposite direction.",
+      "quote": "the former depends on a property of the medium, in virtue of which an electric displacement elicits an electromotive force in the opposite direction",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electrokinetic_energy_medium_motion",
+      "statement": "Electrokinetic energy is the energy of the motion set up in the medium by electric currents and magnets.",
+      "quote": "The electrokinetic energy, on the other hand, is simply the energy of the motion set up in the medium by electric currents and magnets, this motion not being confined to the wires",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electromagnetic_velocity_equals_light_velocity",
+      "statement": "The velocity of propagation of an electromagnetic disturbance in air does not differ more from the velocity of light in air than the calculated values differ among each other.",
+      "quote": "The velocity of propagation of an electromagnetic disturbance in air, as calculated from different sets of data, does not differ more from the velocity of light in air",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "em_and_luminiferous_media_identical",
+      "statement": "If the velocity of an electromagnetic disturbance equals the velocity of light, the two media, occupying the same space, are really identical.",
+      "quote": "If this should be equal to the velocity of light, we would have strong reason to believe that the two media, occupying as they do the same space, are really identical.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "inductive_capacity_equals_refractive_index_squared",
+      "statement": "In non-magnetic media the specific inductive capacity should be equal to the square of the index of refraction.",
+      "quote": "in non-magnetic media the specific inductive capacity should be equal to the square of the index of refraction",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_incompressible",
+      "statement": "The aether must be assumed to be incompressible to account for the fact that the optical phenomena of normal vibrations do not take place.",
+      "quote": "The only way of accounting for the fact that the optical phenomena which would arise from these waves do not take place is to assume that the aether is incompressible.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electric_displacement_perpendicular_to_polarization",
+      "statement": "The electromagnetic theory of light rests on the hypothesis that the electric displacement is perpendicular to the plane of polarization.",
+      "quote": "The electromagnetic theory of light satisfies all these requirements by the single hypothesis that the electric displacement is perpendicular to the plane of polarization.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_transmits_without_dissipation",
+      "statement": "The aether transmits transverse vibrations to very great distances without sensible loss of energy by dissipation.",
+      "quote": "We know that the aether transmits transverse vibrations to very great distances without sensible loss of energy by dissipation.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_not_like_a_gas",
+      "statement": "The constitution of the aether cannot be like that of a gas in which the molecules are always in a state of irregular agitation.",
+      "quote": "We cannot therefore suppose the constitution of the aether to be like that of a gas, in which the molecules are always in a state of irregular agitation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "elastic_medium_may_be_continuous",
+      "statement": "Elasticity or compressibility may be properties of every portion of a medium, in which case the medium would be strictly continuous.",
+      "quote": "there is nothing inconsistent with experience in supposing elasticity or compressibility to be properties of every portion, however small, into which the medium can be conceived to be divided, in which case the medium would be strictly continuous.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_probably_molecular",
+      "statement": "The aether, if it is the medium of electromagnetic phenomena, is probably molecular.",
+      "quote": "The ather, if it is the medium of electromagnetic phenomena, is probably molecular, at least in this sense.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "magnetic_field_indicates_rotation",
+      "statement": "The magnetic influence on light indicates a rotational motion in the medium when magnetized.",
+      "quote": "that it indicates a rotational motion in the medium when magnetized",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "medium_broken_into_molecular_vortices",
+      "statement": "The rotation of the medium in a magnetic field must be a rotation of very small portions of the medium each about its own axis, so the medium must be broken up into molecular vortices.",
+      "quote": "it must be a rotation of very small portions of the medium each about its own axis, so that the medium must be broken up into a number of molecular vortices.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "molecular_vortices_no_continual_work",
+      "statement": "The molecular vortices do not require a continual expenditure of work in order to maintain their motion.",
+      "quote": "we conclude that the molecular vortices do not require a continual expenditure of work in order to maintain their motion, and that therefore this motion does not necessarily involve dissipation of energy.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "interplanetary_space_not_empty",
+      "statement": "The interplanetary and interstellar spaces are not empty but are occupied by a material substance or body.",
+      "quote": "there can be no doubt that the interplanetary and interstellar spaces are not empty, but are occupied by a material substance or body",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_largest_most_uniform_body",
+      "statement": "The aether is certainly the largest, and probably the most uniform body of which we have any knowledge.",
+      "quote": "which is certainly the largest, and probably the most uniform body of which we have any knowledge.",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

@@ -1,0 +1,327 @@
+{
+  "doc_id": "larmor_1897_medium3",
+  "propositions": [
+    {
+      "name": "aether_continuous_incompressible",
+      "statement": "The aether is a continuous, homogeneous, incompressible medium endowed with inertia and elasticity purely rotational.",
+      "quote": "the æther to be a continuous, homogeneous, and incompressible medium, endowed with inertia and with elasticity purely rotational",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electrons_point_singularities",
+      "statement": "Electrons exist as point-singularities or centres of intrinsic strain in the medium which can move about under mutual actions.",
+      "quote": "point-singularities in the uniform æther which are taken to be the basis of matter, and at any rate are the basis of its electrical phenomena",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "atoms_aggregations_of_electrons",
+      "statement": "Atoms of matter are aggregations of electrons in stable orbital motion.",
+      "quote": "atoms of matter are in whole or in part aggregations of electrons in stable orbital motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "actions_transmitted_through_medium",
+      "statement": "Actions between material atoms take place through the intervention of a medium rather than as bare forces at a distance.",
+      "quote": "a medium through whose intervention these actions between the material atoms take place",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_inertia_same_kind",
+      "statement": "The aether has the property of inertia, of the same kind as ordinary matter possesses.",
+      "quote": "the same kind as ordinary matter possesses, for there can hardly be a more general kind",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_rotational_elasticity_no_shape",
+      "statement": "The aether has perfect fluidity as regards form, but elastic resistance to rotational displacement.",
+      "quote": "there is perfect fluidity as regards form, but elastic resistance to rotational displacement",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_no_volume_elasticity",
+      "statement": "The aether does not possess the property of elasticity of volume that exists in molecularly constituted matter.",
+      "quote": "no phenomenon has been discovered which would allow us to assume that the property of elasticity of volume, which necessarily exists in any molecularly constituted medium such as matter, is present in the æther at all",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "absolute_space_necessary",
+      "statement": "A definite spacial framework, fixed or moving, to which motion is referred, is a necessary part of any dynamical theory.",
+      "quote": "a definite space, or spacial framework fixed or moving, to which motion is referred, is a necessary part of any dynamical theory",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "electric_force_produces_rotation",
+      "statement": "Electric force produces rotation of the aether proportional to its intensity, the motion of the aether being otherwise irrotational.",
+      "quote": "the motion of our rotational æther in the previous papers is irrotational except where electric force exists which produces rotation proportional to its intensity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_inertia_elasticity_tuned_to_radiation_speed",
+      "statement": "The medium has a high coefficient of inertia and an extremely high elasticity in order to conserve the ascertained velocity of radiation.",
+      "quote": "we have been compelled to assume a high coefficient of inertia of the medium, and therefore an extremely high elasticity in order to conserve the ascertained velocity of radiation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electrons_persist_until_destroyed",
+      "statement": "Electrons persist until destroyed by an extraneous process, and mutual destruction of two complementary electrons by direct impact has infinitely small probability.",
+      "quote": "mutual destruction of two complementary electrons by direct impact is an occurrence of infinitely small probability",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "actual_optical_reflexion_laws_fixed",
+      "statement": "There are actual laws of optical reflexion that a valid theory must reproduce, and an ordinary elastic solid medium would give different laws.",
+      "quote": "the laws of optical reflexion would be different from the actual ones",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "electron_force_equals_charge_times_field",
+      "statement": "For each electron at rest, the ponderomotive force on it is equal to its charge multiplied by the intensity of the electric field where it is situated.",
+      "quote": "for each electron at rest, this force is equal to its charge multiplied by the intensity of the electric field where it is situated",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "forces_not_ordinary_solid_transmission",
+      "statement": "The attractions between material bodies are not transmitted by the aether in the way that mechanical tractions are transmitted by an ordinary solid.",
+      "quote": "The attractions between material bodies are therefore not transmitted by the æther in the way that mechanical tractions are transmitted by an ordinary solid",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "forces_not_action_at_distance",
+      "statement": "The attractions between material bodies are not direct actions at a distance either.",
+      "quote": "for it is electric force that is so transmitted: but neither are they direct actions at a distance",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "mutual_forces_from_potential_energy_function",
+      "statement": "The mutual forces of a steady system are derived from a single analytical function which is its available potential energy.",
+      "quote": "the mutual forces of such a system are derived from a single analytical function which is its available potential energy",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_simple_homogeneous",
+      "statement": "The aether is a presumably simple and homogeneous medium, unlike matter which is complicated in its ultimate dynamical constitution.",
+      "quote": "our best chance is to try to approach it through the presumably simple and homogeneous æther in which it subsists",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_transmits_electric_force_across_vacuum",
+      "statement": "Displacement of the aether transmits electric force across a vacuum, and this in turn produces polarization in the molecules of a material dielectric.",
+      "quote": "the displacement of the æther which transmits electric force across a vacuum as producing polarization in the molecules of a material dielectric",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_not_matter",
+      "statement": "The aether is not matter and need not obey the laws of the dynamics of matter, provided it obeys another scheme of dynamical laws consistent among themselves.",
+      "quote": "The æther not being matter, it need not obey the laws of the dynamics of matter, provided it obey another scheme of dynamical laws consistent among themselves",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "absolute_rest_frame_is_aether",
+      "statement": "The spacial framework in absolute rest, introduced by Newton, is in fact the quiescent underlying aether.",
+      "quote": "the spacial framework in absolute rest, which was introduced by Newton and was probably a main source of the great advance in abstract dynamics originated by the Principia , is in fact the quiescent underlying æther",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "euclidean_space_relations",
+      "statement": "The Euclidean relations of measurements in space are part of the ultimate scheme of mental representation of the actual physical world.",
+      "quote": "the existing Euclidean relations of measurements in space (which also might a priori be different from what they are) as part of the ultimate scheme of mental representation of the actual physical world",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "action_reaction_balance",
+      "statement": "The energy principle involves the principle of the balance of action and reaction, in its most general form.",
+      "quote": "the energy principle thus involves the principle of the balance of action and reaction, in its most general form",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "stress_self_conjugate_for_molecular_matter",
+      "statement": "For a rectangular element of ordinary solid matter, the tangential components of internal tractions must be self-conjugate, as in the ordinary theory of elasticity.",
+      "quote": "for a rectangular element of ordinary solid matter the tangential components of these tractions must be self-conjugate, as they are taken to be in the ordinary theory of elasticity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "propagation_requires_inertia_and_elasticity",
+      "statement": "Propagation of an effect in time requires inertia and elasticity for its mathematical expression.",
+      "quote": "This propagation in time requires inertia and elasticity for its mathematical expression",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "gravitation_needs_medium_explanation",
+      "statement": "A theory that explains atoms of matter as singularities in the aether must look for an explanation of gravitation by means of the properties of that medium, not as fundamental action at a distance.",
+      "quote": "it cannot avail itself of Cotes 's dogma that gravitation at a distance is itself as fundamental and intelligible as any explanation thereof could be",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "gravitation_not_static_stress",
+      "statement": "Gravitation cannot be transmitted by statical stress, because that would make the mutual forces of the atoms resist approach rather than produce attraction.",
+      "quote": "and hence the mutual forces of the atoms would resist approach",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "gravitation_isotropic_electron_property",
+      "statement": "Gravitation must belong to the ultimate constituents of matter, the electrons, and must be isotropic all round each of them.",
+      "quote": "As gravitation must belong to the ultimate constituents of matter, that is on this theory to the electrons, and must be isotropic all round each of them",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "maxwell_equations_verified_by_experiment",
+      "statement": "Maxwell's equations of the electric field in free space form a sufficient description of the free aether and have been verified by experiment.",
+      "quote": "so far as they are electric they may be based directly on Maxwell 's equations of the electric field in free space , which form a sufficient description of the free æther, and have been verified by experiment",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "polarization_deduced_from_molecules_relation_to_aether",
+      "statement": "The polarization of material bodies with the resulting forcive is deduced from the relation of their molecules to the aethereal medium in which they have their being.",
+      "quote": "the polarization of material bodies with the resulting forcive are deduced from the relation of their molecules to this medium in which they have their being",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "faraday_law_holds",
+      "statement": "The line integral of electric force round a circuit in uniform motion with the matter is equal to the time-rate of diminution of the magnetic flux through its aperture.",
+      "quote": "the line integral of electric force round a circuit in uniform motion with the matter is equal to the time-rate of diminution of the magnetic flux through its aperture",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ampere_law_holds",
+      "statement": "The line integral of the magnetic force round any circuit is equal to 4 pi times the total current that flows through its aperture.",
+      "quote": "the line integral of the magnetic force round any circuit is equal to 4π times the total current that flows through its aperture",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "convection_no_charge_separation",
+      "statement": "Mere convection of the polarized medium does not produce separation of free electricity.",
+      "quote": "mere convection of the polarized medium does not produce separation of free electricity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "charge_carried_by_matter_in_steady_state",
+      "statement": "The electrons constituting electric densities are wholly carried on by the matter whenever a steady state is attained.",
+      "quote": "the electrons constituting electric densities being wholly carried on by the matter whenever a steady state is attained",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rowland_experiment_consistency",
+      "statement": "The carrying of electric densities by moving matter in a steady state is a necessary consequence of the theory that agrees with Rowland's experiments on convection currents.",
+      "quote": "This necessary consequence of the theory is in keeping with Rowland's classical experiments on convection currents",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fresnel_law_velocity_alteration",
+      "statement": "The alteration of the velocity of propagation of radiation in a moving material medium follows Fresnel's law.",
+      "quote": "leading to Fresnel's law of alteration of the velocity of propagation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "body_shrinks_in_direction_of_motion",
+      "statement": "A body in uniform motion through the aether is shrunk in the direction of its velocity, in a ratio depending on the velocity.",
+      "quote": "one consequence of the motion thus being that the body is shrunk in the direction of its velocity v in the ratio",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "contraction_explains_michelson_null_result",
+      "statement": "The shrinking of a moving body confirms the hypothesis of FitzGerald and Lorentz, put forward to explain the negative result of Michelson's optical experiments.",
+      "quote": "it will confirm the hypothesis of FitzGerald and Lorentz , to which they were led as the ultimate resource for the explanation of the negative result of Michelson 's optical experiments",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "molecule_constitution_wholly_electric",
+      "statement": "The constitution of a molecule is wholly electric, as represented by the theory of electrons.",
+      "quote": "and conversely it will involve evidence that the constitution of a molecule is wholly electric, as here represented",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_mechanical_force_at_electron_level",
+      "statement": "In the complete survey of individual atoms there is no such entity as mechanical force, any more than there is on a free vortex ring in fluid.",
+      "quote": "for in the present complete survey of the individual atoms there is no such entity as mechanical force, any more than there is on a free vortex ring in fluid",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "like_magnetic_poles_repel",
+      "statement": "Two steady magnetic poles of like sign repel each other.",
+      "quote": "Two steady magnetic poles of like sign would repel each other",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "internal_disturbance_causes_radiation",
+      "statement": "It is only when the steady orbital motions of the molecule are disturbed that the resulting vibration gives rise to radiation by which internal energy is lost.",
+      "quote": "it is only when these steady motions are disturbed that the resulting vibration gives rise to radiation by which some of the internal energy is lost",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "spectral_lines_independent_of_temperature",
+      "statement": "Change of temperature has no influence on the positions of the lines in a spectrum.",
+      "quote": "this explains why change of temperature has no influence on the positions of the lines in a spectrum",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "specific_heat_ratio_bound",
+      "statement": "The ratio of the specific heats in a gas must lie between 1 and five-thirds.",
+      "quote": "The ratio of the specific heats in a gas must still lie between 1 and",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "maxwell_boltzmann_distribution_fails",
+      "statement": "On this view the postulates of the Maxwell-Boltzmann theorem on the distribution of internal energy in gases would not obtain, since the thermal energy of the molecule would not be expressible as a sum of squares.",
+      "quote": "On this view the postulates of the Maxwell-Boltzmann theorem on the distribution of the internal energy in gases would not obtain, for the thermal energy of the molecule would not be expressible as a sum of squares",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "convection_more_efficient_than_radiation",
+      "statement": "Convection by a gas, even when highly rarefied, is much more efficient in the transfer of heat than radiation.",
+      "quote": "it would not appear why convection by a gas, even when highly rarefied, is so much more efficient in the transfer of heat than radiation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "chemical_affinity_persists_near_zero_temperature",
+      "statement": "The energies of chemical affinity exist all the time in probably undiminished strength even as translatory motion diminishes toward the zero of temperature.",
+      "quote": "the energies of affinity exist all the time in probably undiminished strength",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

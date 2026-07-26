@@ -1,0 +1,57 @@
+{
+  "kind": "dcr1_facet_adjudication",
+  "pass": "blind",
+  "cut_year": 1904,
+  "method": "Every proposition the frozen regex matcher assigned to a target facet was read individually and judged for whether it actually states the facet. Recorded here rather than used to silently amend target.py, because the matcher was frozen before any output was read and amending it after the fact would destroy that guarantee.",
+  "T1_absolute_simultaneity": {
+    "n_matched": 3,
+    "n_genuine": 0,
+    "verdict": "ALL FALSE POSITIVES",
+    "defect": "The pattern (absolute|universal|same|common|true)\\s+\\w*\\s*(time|simultaneit|instant|epoch) matches the ordinary English phrase 'the same time', which carries no commitment to observer-independent simultaneity.",
+    "items": [
+      {
+        "doc_id": "poincare_1898_time",
+        "name": "postulate_same_causes_same_time",
+        "statement": "The duration of two identical phenomena is the same: the same causes take the same time to produce the same effects.",
+        "genuine": false,
+        "why": "A causal postulate about durations of repeated phenomena, not a claim that simultaneity is observer-independent."
+      },
+      {
+        "doc_id": "poincare_1898_time",
+        "name": "causes_never_reproduced_exactly",
+        "statement": "Causes almost identical take almost the same time to produce almost the same effects, since the causes which have produced an effect will never be reproduced except approximately.",
+        "genuine": false,
+        "why": "Same causal postulate, hedged. Still says nothing about simultaneity across frames."
+      },
+      {
+        "doc_id": "poincare_1904_stlouis",
+        "name": "ether_transmits_optical_electrical",
+        "statement": "The ether is a medium that transmits at the same time the optical perturbations and the electrical perturbations.",
+        "genuine": false,
+        "why": "'at the same time' here means 'both at once', an idiom for joint transmission. This is a claim about what the ether carries, not about time."
+      }
+    ]
+  },
+  "T2_privileged_frame": {
+    "n_matched": 17,
+    "n_genuine": 17,
+    "verdict": "GENUINE",
+    "exemplar": "The ether is at rest while the earth moves through it, so the time required for light to pass from one point to another on the earth's surface depends on the direction in which it travels."
+  },
+  "T3_local_time_artifice": {
+    "n_matched": 1,
+    "n_genuine": 1,
+    "verdict": "GENUINE BUT THIN",
+    "exemplar": "The transformed time variable t' may be called the local time.",
+    "caveat": "One proposition, drawn from Lorentz's own naming of the variable. It establishes that local time is present as a named commitment; it does not by itself establish the 'artifice' reading."
+  },
+  "consequence": {
+    "reported_facets_at_1904": ["T1_absolute_simultaneity", "T2_privileged_frame", "T3_local_time_artifice"],
+    "adjudicated_facets_at_1904": ["T2_privileged_frame", "T3_local_time_artifice"],
+    "quorum": 2,
+    "G4_survives_adjudication": true,
+    "margin": "One proposition. T3 rests on a single extracted commitment; had that one been missed, the 1904 cut would have fallen to a single facet and G4 would have failed.",
+    "G3_affected": false,
+    "why_G3_unaffected": "The 1880 cut matched zero propositions to any facet, so no false-positive correction can change its verdict. The gate that matters most is the one adjudication leaves untouched."
+  }
+}

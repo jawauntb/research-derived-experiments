@@ -1,0 +1,229 @@
+{
+  "doc_id": "michelson_1881",
+  "propositions": [
+    {
+      "name": "ether_medium_exists",
+      "statement": "The ether is a medium that exists, called the ether, whose vibrations produce the phenomena of heat and light.",
+      "quote": "The undulatory theory of light assumes the existence of a medium called the ether, whose vibrations produce the phenomena of heat and light, and which is supposed to fill all space.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_fills_all_space",
+      "statement": "The ether fills all space.",
+      "quote": "and which is supposed to fill all space. According to Fresnel, the ether, which is enclosed in optical media, partakes",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fresnel_ether_entrainment",
+      "statement": "The ether enclosed in optical media partakes of the motion of these media, to an extent depending on their indices of refraction.",
+      "quote": "the ether, which is enclosed in optical media, partakes of the motion of these media, to an extent depending on their indices of refraction.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "air_ether_drag_negligible",
+      "statement": "For air the motion of the ether is a small fraction of the motion of the air itself and can be neglected.",
+      "quote": "For air, this motion would be but a small fraction of that of the air itself and will be neglected.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "stationary_ether_hypothesis",
+      "statement": "The ether is at rest while the earth moves through it, so the time required for light to pass from one point to another on the earth's surface depends on the direction in which it travels.",
+      "quote": "Assuming then that the ether is at rest, the earth moving through it, the time required for light to pass from one point to another on the earth’s surface, would depend on the direction in which it travels.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_return_free_light_velocity_method",
+      "statement": "There is no method for measuring the velocity of light which does not involve returning the light over its path, whereby it would lose nearly as much as was gained in going.",
+      "quote": "we have thus far no method for measuring the velocity of light which does not involve the necessity of returning the light over its path, whereby it would lose nearly as much as was gained in going.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "jupiter_eclipses_light_velocity_method",
+      "statement": "The velocity of light could be calculated by measuring it by means of the eclipses of Jupiter's satellites at periods when that planet lay in different directions from earth.",
+      "quote": "could be calculated by measuring the velocity of light by means of the eclipses of Jupiter’s satellites at periods when that planet lay in different directions from earth",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "maxwell_second_order_too_small",
+      "statement": "The difference depending on the square of the ratio of the two velocities is far too small to measure.",
+      "quote": "The difference depending on the square of the ratio of the two velocities, according to Maxwell, is far too small to measure.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "yellow_light_quantity_measurable",
+      "statement": "With a wave-length of yellow light as a standard, the quantity, if it exists, is easily measurable.",
+      "quote": "with a wave-length of yellow light as a standard, the quantity — if it exists — is easily measurable.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "perpendicular_light_unaffected",
+      "statement": "Light traveling in a direction at right angles to the earth's motion would be entirely unaffected by that motion.",
+      "quote": "the light had traveled in a direction at right angles to the earth's motion it would be entirely unaffected",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_splits_at_glass_plate",
+      "statement": "Light from a lamp passed through a glass plate, with part going to one mirror and part being reflected to another mirror.",
+      "quote": "Light from a lamp a , fig. 1, passed through the plane parallel glass plate b , part going to the mirror c , and part being reflected to the mirror d .",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "equal_paths_condition_for_interference",
+      "statement": "Two rays that have traveled over equal paths are in condition to interfere.",
+      "quote": "the two rays will have traveled over equal paths and are in condition to interfere.",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "sodium_flame_produces_interference_bands",
+      "statement": "A sodium flame placed at the source produced at once the interference bands.",
+      "quote": "a sodium flame placed at a produced at once the interference bands",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "lamp_light_produces_colored_fringes",
+      "statement": "With the lamp restored, the bands were colored, except the central band, which was nearly black.",
+      "quote": "They were then of course colored, except the central band, which was nearly black.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "yellow_light_definite_wavelength",
+      "statement": "A distance of 1200 millimeters equals 2 000 000 wave-lengths of yellow light.",
+      "quote": "If D = 1200 millimeters, or in wave-lengths of yellow light, 2 000 000, then in terms of the same unit,",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "earth_has_orbital_velocity",
+      "statement": "The earth has a velocity in its orbit.",
+      "quote": "Considering only the velocity of the earth in its orbit, the ratio",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "solar_system_moves_toward_hercules",
+      "statement": "The earth's motion in its orbit coincides roughly in longitude with the estimated direction of the motion of the solar system, namely toward the constellation Hercules.",
+      "quote": "the earth's motion in its orbit coincides roughly in longitude with the estimated direction of the motion of the solar system — namely, toward the constellation Hercules",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "solar_motion_angle_to_equator",
+      "statement": "The direction of the solar system's motion is inclined at an angle of about +26 degrees to the plane of the equator.",
+      "quote": "The direction of this motion is inclined at an angle of about +26° to the plane of the equator",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "resultant_motion_near_equator",
+      "statement": "The resultant of the earth's orbital motion and the solar system's motion would lie within 25 degrees of the equator.",
+      "quote": "hence we may say the resultant would lie within 25° of the equator.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "motions_combine_as_components",
+      "statement": "The earth's orbital motion and the solar system's motion combine as components, and the nearer the two components are in magnitude, the more nearly their resultant coincides with the plane of the equator.",
+      "quote": "The nearer the two components are in magnitude to each other, the more nearly would their resultant coincide with the plane of the equator.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "predicted_fringe_displacement_one_tenth",
+      "statement": "The displacement to be looked for is not far from one-tenth the distance between the fringes.",
+      "quote": "we may say that the displacement to be looked for is not far from one-tenth the distance between the fringes.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "temperature_difference_displaces_fringes",
+      "statement": "If one arm has a temperature only one one-hundredth of a degree higher than the other, the fringes experience a displacement three times as great as that which would result from the rotation.",
+      "quote": "if one arm should have a temperature only one one-hundredth of a degree higher than the other, the fringes would thereby experience a displacement three times as great as that which would result from the rotation.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "temperature_effect_independent_of_direction",
+      "statement": "Changes of temperature are independent of the direction of the arms, so if these changes were not too great their effect could be eliminated.",
+      "quote": "since the changes of temperature are independent of the direction of the arms, if these changes were not too great their effect could be eliminated.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "instrument_sensitive_to_vibration",
+      "statement": "The instrument was so extraordinarily sensitive that the stamping of the pavement, about 100 meters from the observatory, made the fringes disappear entirely.",
+      "quote": "so extraordinarily sensitive was the instrument that the stamping of the pavement, about 100 meters from the observatory, made the fringes disappear entirely",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "bending_of_arms_displaces_fringes",
+      "statement": "The displacement on account of bending of the arms during rotation was so considerable that the instrument had to be returned to the maker.",
+      "quote": "the displacement on account of bending of the arms during rotation was so considerable that the instrument had to be returned to the maker",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "gradual_drift_distinct_from_periodic_signal",
+      "statement": "A gradual change in the fringe positions, which should not affect the periodic variation being searched for, would of itself necessitate an outstanding error.",
+      "quote": "This gradual change, which should not in the least affect the periodic variation for which we are searching, would of itself necessitate an outstanding error",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_displacement_observed",
+      "statement": "There is no displacement of the interference bands.",
+      "quote": "The interpretation of these results is that there is no displacement of the interference bands.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "stationary_ether_hypothesis_erroneous",
+      "statement": "The hypothesis of a stationary ether is shown to be incorrect, and the hypothesis is erroneous.",
+      "quote": "The result of the hypothesis of a stationary ether is thus shown to be incorrect, and the necessary conclusion follows that the hypothesis is erroneous.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aberration_presupposes_earth_moves_through_ether",
+      "statement": "The generally accepted explanation of the phenomenon of aberration presupposes that the earth moves through the ether, the ether remaining at rest.",
+      "quote": "This conclusion directly contradicts the explanation of the phenomenon of aberration which has been hitherto generally accepted, and which presupposes that the earth moves through the ether, the latter remaining at rest.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_not_free_through_earth",
+      "statement": "The ether does not move quite freely through the solid mass of the earth.",
+      "quote": "we would not be disposed to believe, without good evidence, that the ether moved quite freely through the solid mass of the earth.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_is_vibration_undulatory_theory",
+      "statement": "Light is a phenomenon of vibrations, as assumed by the undulatory theory of light.",
+      "quote": "The undulatory theory of light assumes the existence of a medium called the ether, whose vibrations produce the phenomena of heat and light",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "fringe_position_measurable_quantity",
+      "statement": "The center of the dark fringe has a position that can be given in twelfths of the distance between the fringes.",
+      "quote": "The numbers in the columns are the positions of the center of the dark fringe in twelfths of the distance between the fringes.",
+      "kind": "presupposed",
+      "definitional": true
+    }
+  ]
+}

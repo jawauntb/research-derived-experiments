@@ -1,0 +1,180 @@
+{
+  "doc_id": "fitzgerald_1889",
+  "propositions": [
+    {
+      "name": "ether_exists",
+      "statement": "How far the ether is carried along by the earth is an important question that experiment can decide.",
+      "quote": "the important question as to how far the ether is carried along by the earth",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "michelson_morley_experiment_exists",
+      "statement": "The experiment of Michelson and Morley is a wonderfully delicate experiment attempting to decide the important question.",
+      "quote": "I have read with much interest Messrs. Michelson and Morley 's wonderfully delicate experiment attempting to decide the important question",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "michelson_morley_result_opposed",
+      "statement": "Their result seems opposed to other experiments.",
+      "quote": "Their result seems opposed to other experiments showing that the ether in the air can be carried along only to an inappreciable extent.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_in_air_carried_inappreciably",
+      "statement": "The ether in the air can be carried along only to an inappreciable extent.",
+      "quote": "the ether in the air can be carried along only to an inappreciable extent",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "hypothesis_needed_to_reconcile_opposition",
+      "statement": "Almost the only hypothesis that can reconcile this opposition is that the length of material bodies changes.",
+      "quote": "I would suggest that almost the only hypothesis that can reconcile this opposition is that the length of material bodies changes",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "material_bodies_have_length",
+      "statement": "Material bodies have length.",
+      "quote": "the length of material bodies changes, according as they are moving through the ether or across it",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "length_changes_with_motion",
+      "statement": "The length of material bodies changes according as they are moving through the ether or across it.",
+      "quote": "the length of material bodies changes, according as they are moving through the ether or across it",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "contraction_direction_dependent",
+      "statement": "The amount the length changes depending on whether bodies are moving through the ether or across it.",
+      "quote": "according as they are moving through the ether or across it, by an amount depending on the square",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "contraction_quadratic_in_velocity",
+      "statement": "The amount changes depending on the square of the ratio of their velocity to that of light.",
+      "quote": "by an amount depending on the square of the ratio of their velocity to that of light",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_has_velocity",
+      "statement": "There is a ratio of velocity to that of light.",
+      "quote": "the square of the ratio of their velocity to that of light",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "bodies_have_velocity_relative_to_ether",
+      "statement": "Bodies have a velocity as they are moving through the ether.",
+      "quote": "moving through the ether or across it, by an amount depending on the square of the ratio of their velocity",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "electric_forces_affected_by_motion",
+      "statement": "We know that electric forces are affected by the motion of the electrified bodies relative to the ether.",
+      "quote": "We know that electric forces are affected by the motion of the electrified bodies relative to the ether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electrified_bodies_exist",
+      "statement": "There are electrified bodies, and their motion is relative to the ether.",
+      "quote": "the motion of the electrified bodies relative to the ether",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "molecular_forces_affected_by_motion",
+      "statement": "It seems a not improbable supposition that the molecular forces are affected by the motion.",
+      "quote": "it seems a not improbable supposition that the molecular forces are affected by the motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "size_alters_due_to_motion",
+      "statement": "The size of a body alters consequently.",
+      "quote": "the molecular forces are affected by the motion, and that the size of a body alters consequently",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electrical_attraction_experiments_important",
+      "statement": "It would be very important if secular experiments on electrical attractions between permanently electrified bodies were instituted.",
+      "quote": "secular experiments on electrical attractions between permanently electrified bodies, such as in a very delicate quadrant electrometer, were instituted",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "quadrant_electrometer_delicate",
+      "statement": "There is a very delicate quadrant electrometer.",
+      "quote": "such as in a very delicate quadrant electrometer, were instituted in some of the equatorial parts of the earth",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "equatorial_regions_suitable_for_experiment",
+      "statement": "The experiments were instituted in some of the equatorial parts of the earth.",
+      "quote": "were instituted in some of the equatorial parts of the earth to observe whether there is any diurnal and annual variation of attraction",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "attraction_varies_diurnally_and_annually",
+      "statement": "There is any diurnal and annual variation of attraction.",
+      "quote": "to observe whether there is any diurnal and annual variation of attraction",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "diurnal_variation_due_to_rotation_and_orbital_velocity",
+      "statement": "The diurnal variation is due to the rotation of the earth being added and subtracted from its orbital velocity.",
+      "quote": "diurnal due to the rotation of the earth being added and subtracted from its orbital velocity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "earth_rotates",
+      "statement": "There is a rotation of the earth.",
+      "quote": "due to the rotation of the earth being added and subtracted from its orbital velocity",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "earth_has_orbital_velocity",
+      "statement": "The rotation of the earth is added and subtracted from its orbital velocity.",
+      "quote": "the rotation of the earth being added and subtracted from its orbital velocity; and annual similarly for its orbital velocity",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "solar_system_has_motion",
+      "statement": "There is a motion of the solar system.",
+      "quote": "annual similarly for its orbital velocity and the motion of the solar system",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "annual_variation_due_to_orbital_and_solar_motion",
+      "statement": "The annual variation is similarly due to its orbital velocity and the motion of the solar system.",
+      "quote": "and annual similarly for its orbital velocity and the motion of the solar system",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "attraction_variation_would_indicate_motion_through_ether",
+      "statement": "A diurnal and annual variation of attraction would show that the electric forces are affected by the motion of the electrified bodies relative to the ether.",
+      "quote": "to observe whether there is any diurnal and annual variation of attraction, — diurnal due to the rotation of the earth being added and subtracted from its orbital velocity",
+      "kind": "presupposed",
+      "definitional": false
+    }
+  ]
+}
