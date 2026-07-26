@@ -1,0 +1,265 @@
+{
+  "doc_id": "michelson_1881",
+  "propositions": [
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "ether_medium_exists",
+      "quote": "The undulatory theory of light assumes the existence of a medium called the ether, whose vibrations produce the phenomena of heat and light, and which is supposed to fill all space.",
+      "statement": "The ether is a medium that exists, called the ether, whose vibrations produce the phenomena of heat and light.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "ether_fills_all_space",
+      "quote": "and which is supposed to fill all space. According to Fresnel, the ether, which is enclosed in optical media, partakes",
+      "statement": "The ether fills all space.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "fresnel_ether_entrainment",
+      "quote": "the ether, which is enclosed in optical media, partakes of the motion of these media, to an extent depending on their indices of refraction.",
+      "statement": "The ether enclosed in optical media partakes of the motion of these media, to an extent depending on their indices of refraction.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "air_ether_drag_negligible",
+      "quote": "For air, this motion would be but a small fraction of that of the air itself and will be neglected.",
+      "statement": "For air the motion of the ether is a small fraction of the motion of the air itself and can be neglected.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "stationary_ether_hypothesis",
+      "quote": "Assuming then that the ether is at rest, the earth moving through it, the time required for light to pass from one point to another on the earth\u2019s surface, would depend on the direction in which it travels.",
+      "statement": "The ether is at rest while the earth moves through it, so the time required for light to pass from one point to another on the earth's surface depends on the direction in which it travels.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "no_return_free_light_velocity_method",
+      "quote": "we have thus far no method for measuring the velocity of light which does not involve the necessity of returning the light over its path, whereby it would lose nearly as much as was gained in going.",
+      "statement": "There is no method for measuring the velocity of light which does not involve returning the light over its path, whereby it would lose nearly as much as was gained in going.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "jupiter_eclipses_light_velocity_method",
+      "quote": "could be calculated by measuring the velocity of light by means of the eclipses of Jupiter\u2019s satellites at periods when that planet lay in different directions from earth",
+      "statement": "The velocity of light could be calculated by measuring it by means of the eclipses of Jupiter's satellites at periods when that planet lay in different directions from earth.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "maxwell_second_order_too_small",
+      "quote": "The difference depending on the square of the ratio of the two velocities, according to Maxwell, is far too small to measure.",
+      "statement": "The difference depending on the square of the ratio of the two velocities is far too small to measure.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "yellow_light_quantity_measurable",
+      "quote": "with a wave-length of yellow light as a standard, the quantity \u2014 if it exists \u2014 is easily measurable.",
+      "statement": "With a wave-length of yellow light as a standard, the quantity, if it exists, is easily measurable.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "perpendicular_light_unaffected",
+      "quote": "the light had traveled in a direction at right angles to the earth's motion it would be entirely unaffected",
+      "statement": "Light traveling in a direction at right angles to the earth's motion would be entirely unaffected by that motion.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "light_splits_at_glass_plate",
+      "quote": "Light from a lamp a , fig. 1, passed through the plane parallel glass plate b , part going to the mirror c , and part being reflected to the mirror d .",
+      "statement": "Light from a lamp passed through a glass plate, with part going to one mirror and part being reflected to another mirror.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "michelson_1881",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "equal_paths_condition_for_interference",
+      "quote": "the two rays will have traveled over equal paths and are in condition to interfere.",
+      "statement": "Two rays that have traveled over equal paths are in condition to interfere.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "sodium_flame_produces_interference_bands",
+      "quote": "a sodium flame placed at a produced at once the interference bands",
+      "statement": "A sodium flame placed at the source produced at once the interference bands.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "lamp_light_produces_colored_fringes",
+      "quote": "They were then of course colored, except the central band, which was nearly black.",
+      "statement": "With the lamp restored, the bands were colored, except the central band, which was nearly black.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "solar_system_moves_toward_hercules",
+      "quote": "the earth's motion in its orbit coincides roughly in longitude with the estimated direction of the motion of the solar system \u2014 namely, toward the constellation Hercules",
+      "statement": "The earth's motion in its orbit coincides roughly in longitude with the estimated direction of the motion of the solar system, namely toward the constellation Hercules.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "motions_combine_as_components",
+      "quote": "The nearer the two components are in magnitude to each other, the more nearly would their resultant coincide with the plane of the equator.",
+      "statement": "The earth's orbital motion and the solar system's motion combine as components, and the nearer the two components are in magnitude, the more nearly their resultant coincides with the plane of the equator.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "predicted_fringe_displacement_one_tenth",
+      "quote": "we may say that the displacement to be looked for is not far from one-tenth the distance between the fringes.",
+      "statement": "The displacement to be looked for is not far from one-tenth the distance between the fringes.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "temperature_difference_displaces_fringes",
+      "quote": "if one arm should have a temperature only one one-hundredth of a degree higher than the other, the fringes would thereby experience a displacement three times as great as that which would result from the rotation.",
+      "statement": "If one arm has a temperature only one one-hundredth of a degree higher than the other, the fringes experience a displacement three times as great as that which would result from the rotation.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "temperature_effect_independent_of_direction",
+      "quote": "since the changes of temperature are independent of the direction of the arms, if these changes were not too great their effect could be eliminated.",
+      "statement": "Changes of temperature are independent of the direction of the arms, so if these changes were not too great their effect could be eliminated.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "instrument_sensitive_to_vibration",
+      "quote": "so extraordinarily sensitive was the instrument that the stamping of the pavement, about 100 meters from the observatory, made the fringes disappear entirely",
+      "statement": "The instrument was so extraordinarily sensitive that the stamping of the pavement, about 100 meters from the observatory, made the fringes disappear entirely.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "bending_of_arms_displaces_fringes",
+      "quote": "the displacement on account of bending of the arms during rotation was so considerable that the instrument had to be returned to the maker",
+      "statement": "The displacement on account of bending of the arms during rotation was so considerable that the instrument had to be returned to the maker.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "gradual_drift_distinct_from_periodic_signal",
+      "quote": "This gradual change, which should not in the least affect the periodic variation for which we are searching, would of itself necessitate an outstanding error",
+      "statement": "A gradual change in the fringe positions, which should not affect the periodic variation being searched for, would of itself necessitate an outstanding error.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "no_displacement_observed",
+      "quote": "The interpretation of these results is that there is no displacement of the interference bands.",
+      "statement": "There is no displacement of the interference bands.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "stationary_ether_hypothesis_erroneous",
+      "quote": "The result of the hypothesis of a stationary ether is thus shown to be incorrect, and the necessary conclusion follows that the hypothesis is erroneous.",
+      "statement": "The hypothesis of a stationary ether is shown to be incorrect, and the hypothesis is erroneous.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "aberration_presupposes_earth_moves_through_ether",
+      "quote": "This conclusion directly contradicts the explanation of the phenomenon of aberration which has been hitherto generally accepted, and which presupposes that the earth moves through the ether, the latter remaining at rest.",
+      "statement": "The generally accepted explanation of the phenomenon of aberration presupposes that the earth moves through the ether, the ether remaining at rest.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_1881",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "ether_not_free_through_earth",
+      "quote": "we would not be disposed to believe, without good evidence, that the ether moved quite freely through the solid mass of the earth.",
+      "statement": "The ether does not move quite freely through the solid mass of the earth.",
+      "support": 2
+    }
+  ]
+}

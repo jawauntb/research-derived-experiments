@@ -1,0 +1,285 @@
+{
+  "doc_id": "maxwell_1865_part1",
+  "propositions": [
+    {
+      "name": "bodies_at_distance_set_in_motion",
+      "statement": "Bodies in certain electrical or magnetical states set each other in motion while still at a sensible distance from each other.",
+      "quote": "bodies in certain states set each other in motion while still at a sensible distance from each other",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "force_depends_on_position_and_state",
+      "statement": "The force acting between bodies depends on the relative position of the bodies and on their electric or magnetic condition.",
+      "quote": "this force depends in a certain way upon the relative position of the bodies and on their electric or magnetic condition",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "weber_particles_act_at_distance",
+      "statement": "Some theories assume the existence of substances whose particles act on one another at a distance by attraction or repulsion.",
+      "quote": "the existence of substances the particles of which have the property of acting on one another at a distance by attraction or repulsion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "weber_force_depends_on_velocity",
+      "statement": "In this kind of theory the force between two particles depends on their relative velocity as well as on their distance.",
+      "quote": "the force between two particles depends on their relative velocity, as well as on their distance",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "reject_action_at_distance_as_ultimate",
+      "statement": "The assumption of particles acting at a distance with forces depending on their velocities cannot be considered an ultimate theory.",
+      "quote": "such as to prevent me from considering this theory as an ultimate one though it may have been, and may yet be useful",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "actions_in_surrounding_medium",
+      "statement": "Electric and magnetic phenomena are produced by actions which go on in the surrounding medium as well as in the excited bodies.",
+      "quote": "supposing them to be produced by actions which go on in the surrounding medium as well as in the excited bodies",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "field_is_matter_in_motion",
+      "statement": "In the space of the electromagnetic field there is matter in motion, by which the observed electromagnetic phenomena are produced.",
+      "quote": "it assumes that in that space there is matter in motion, by which the observed electromagnetic phenomena are produced",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "field_defined_as_surrounding_space",
+      "statement": "The electromagnetic field is that part of space which contains and surrounds bodies in electric or magnetic conditions.",
+      "quote": "The electromagnetic field is that part of space which contains and surrounds bodies in electric or magnetic conditions.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "undulations_are_ethereal_not_gross_matter",
+      "statement": "The undulations of light and heat are undulations of an ethereal substance and not of the gross matter.",
+      "quote": "we are obliged to admit that the undulations are those of an ethereal substance, and not of the gross matter",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ethereal_medium_fills_space",
+      "statement": "There is an ethereal medium filling space and permeating bodies, capable of being set in motion and of transmitting that motion from one part to another.",
+      "quote": "there is an ethereal medium filling space and permeating bodies, capable of being set in motion and of transmitting that motion from one part to another",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "medium_communicates_motion_to_gross_matter",
+      "statement": "The ethereal medium is capable of communicating motion to gross matter so as to heat it and affect it in various ways.",
+      "quote": "of communicating that motion to gross matter so as to heat it and affect it in various ways",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "heat_energy_preexisted_in_medium",
+      "statement": "The energy communicated to a body in heating it must have formerly existed in the moving medium.",
+      "quote": "the energy communicated to the body in heating it must have formerly existed in the moving medium",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "medium_has_density_comparable_to_gross_matter",
+      "statement": "The medium must have a density capable of comparison with that of gross matter.",
+      "quote": "the medium must have a density capable of comparison with that of gross matter",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "medium_has_finite_velocity_of_transmission",
+      "statement": "The pervading medium is capable of being set in motion and of transmitting motion from one part to another with great, but not infinite, velocity.",
+      "quote": "capable of being set in motion, and of transmitting motion from one part to another with great, but not infinite, velocity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "parts_of_medium_interconnected",
+      "statement": "The parts of the medium must be so connected that the motion of one part depends in some way on the motion of the rest.",
+      "quote": "the parts of this medium must be so connected that the motion of one part depends in some way on the motion of the rest",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "connections_elastically_yielding",
+      "statement": "The connections between parts of the medium must be capable of a certain kind of elastic yielding since the communication of motion is not instantaneous.",
+      "quote": "these connections must be capable of a certain kind of elastic yielding, since the communication of motion is not instantaneous, but occupies time",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "medium_stores_two_energy_forms",
+      "statement": "The medium is capable of receiving and storing up actual energy depending on the motions of its parts and potential energy consisting of the work the medium does in recovering from displacement.",
+      "quote": "The medium is therefore capable of receiving and storing up two kinds of energy, namely, the “actual” energy depending on the motions of its parts, and “potential” energy",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "undulation_propagation_transforms_energy",
+      "statement": "The propagation of undulations consists in the continual transformation of one form of energy into the other, and at any instant the energy in the whole medium is equally divided between motion and elastic resilience.",
+      "quote": "at any instant the amount of energy in the whole medium is equally divided, so that half is energy of motion, and half is elastic resilience",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "magnetism_acts_on_luminiferous_medium",
+      "statement": "The luminiferous medium is in certain cases acted on by magnetism.",
+      "quote": "we know that the luminiferous medium is in certain cases acted on by magnetism",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "magnetic_rotation_of_polarization_plane",
+      "statement": "When a plane polarized ray traverses a transparent diamagnetic medium in the direction of the lines of magnetic force, the plane of polarization is caused to rotate.",
+      "quote": "when a plane polarized ray traverses a transparent diamagnetic medium in the direction of the lines of magnetic force produced by magnets or currents in the neighbourhood, the plane of polarization is caused to rotate",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "paramagnetic_rotation_opposite_direction",
+      "statement": "When a paramagnetic body is substituted for the diamagnetic body, the rotation of the plane of polarization is in the opposite direction.",
+      "quote": "if a paramagnetic body, such as solution of perchloride of iron in ether, be substituted for the diamagnetic body, the rotation is in the opposite direction",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "medium_motion_depends_on_magnetization",
+      "statement": "There must be admitted a motion in the medium depending on the magnetization, in addition to the vibratory motion which constitutes light.",
+      "quote": "we must admit the existence of a motion in the medium depending on the magnetization, in addition to the vibratory motion which constitutes light",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "magnetic_motion_is_rotation",
+      "statement": "The motion of the ethereal medium under magnetic effects is one of rotation, having the direction of the magnetic force as its axis.",
+      "quote": "we have some reason to suppose that this motion is one of rotation, having the direction of the magnetic force as its axis",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "motion_across_lines_causes_electromotive_force",
+      "statement": "When a body is moved across the lines of magnetic force it experiences what is called an electromotive force.",
+      "quote": "When a body is moved across the lines of magnetic force it experiences what is called an electromotive force",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electromotive_force_decomposes_compounds",
+      "statement": "When sufficiently powerful and acting on certain compound bodies, electromotive force decomposes them and causes their components to pass in opposite directions.",
+      "quote": "it decomposes them, and causes one of their components to pass towards on extremity of the body, and the other in the opposite direction",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electric_polarization_state_of_constraint",
+      "statement": "Electric polarization is a state of constraint in which opposite extremities of a body are oppositely electrified, from which the body tends to relieve itself as soon as the disturbing force is removed.",
+      "quote": "a state of constraint in which opposite extremities are oppositely electrified, and from which the body tends to relieve itself as soon as the disturbing force is removed",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "electromotive_force_is_medium_motion_communication",
+      "statement": "Electromotive force is the force called into play during the communication of motion from one part of the medium to another.",
+      "quote": "this \"electromotive force\" is the force called into play during the communication of motion from one part of the medium to another",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "resistance_converts_electrical_energy_to_heat_irreversibly",
+      "statement": "When electromotive force produces a current that meets with resistance, this occasions a continual transformation of electrical energy into heat which is incapable of being restored again to electrical energy by reversal of the process.",
+      "quote": "occasions a continual transformation of electrical energy into heat, which is incapable of being restored again to the form of electrical energy by an reversal of the process",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "dielectric_polarization_similar_to_magnet",
+      "statement": "When electromotive force acts on a dielectric it produces a state of polarization of its parts similar in distribution to the polarity of the parts of a mass of iron under the influence of a magnet.",
+      "quote": "it produces a state of polarization of its parts similar in distribution to the polarity of the parts of a mass of iron under the influence of a magnet",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electricity_displaced_within_molecule",
+      "statement": "In a dielectric under electromotive force, the electricity in each molecule is displaced so that one side is positively and the other negatively electrical, while the electricity remains connected with the molecule and does not pass from one molecule to another.",
+      "quote": "the electricity in each molecule is so displaced that one side is rendered positively and the other negatively electrical, but that the electricity remains entirely connected with the molecule, and does not pass from one molecule to another",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electric_displacement_is_elastic_yielding",
+      "statement": "Electric displacement is a kind of elastic yielding to the action of electromotive force.",
+      "quote": "electric displacement, which according to our theory is a kind of elastic yielding to the action of the force",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "electric_absorption_gradual_change",
+      "statement": "In electric absorption, the electric displacement gradually increases under electromotive force, and when the force is removed the dielectric does not instantly return to its primitive state but only discharges a portion of its electrification.",
+      "quote": "the electric displacement gradually increases, and when the electromotive force is removed, the dielectric does not instantly return to its primitive state, but only discharges a portion of its electrification",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "medium_set_in_motion_by_currents_and_magnets",
+      "statement": "The parts of the ethereal medium are capable of being set in motion by electric currents and magnets.",
+      "quote": "the parts of this medium are capable of being set in motion by electric currents and magnets",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "mechanism_subject_to_dynamics",
+      "statement": "The complicated mechanism of connected moving parts constituting the medium must be subject to the general laws of Dynamics.",
+      "quote": "Such a mechanism must be subject to the general laws of Dynamics, and we ought to be able to work out all the consequences of its motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "current_produces_magnetic_properties_in_field",
+      "statement": "When an electric current is established in a conducting circuit, the neighbouring part of the field is characterized by certain magnetic properties.",
+      "quote": "when an electric current is established in a conducting circuit, the neighbouring part of the field is characterized by certain magnetic properties",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "only_transverse_disturbances_propagated",
+      "statement": "The only magnetic disturbances which can be propagated through a non-conductive field are those which are transverse to the direction of propagation.",
+      "quote": "it is shown that the only disturbances which can be so propagated are those which are transverse to the direction of propagation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "velocity_of_propagation_equals_electrical_ratio",
+      "statement": "The velocity of propagation of the magnetic disturbance is the velocity found from experiments which expresses the number of electrostatic units of electricity contained in one electromagnetic unit.",
+      "quote": "the velocity of propagation is the velocity v , found from experiments such as those of Weber , which expresses the number of electrostatic units of electricity which are contained in one electromagnetic unit",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_is_electromagnetic_disturbance",
+      "statement": "Light itself, including radiant heat and other radiations, is an electromagnetic disturbance in the form of waves propagated through the electromagnetic field according to electromagnetic laws.",
+      "quote": "light itself (including radiant heat, and other radiations if any) is an electromagnetic disturbance in the form of waves propagated through the electromagnetic field according to electromagnetic laws",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "refraction_index_equals_capacity_product",
+      "statement": "The square of the index of refraction is equal to the product of the specific dielectric capacity and the specific magnetic capacity.",
+      "quote": "the square of the index of refraction is equal to the product of the specific dielectric capacity and the specific magnetic capacity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "conducting_media_are_opaque",
+      "statement": "Conducting media absorb radiations rapidly and are therefore generally opaque.",
+      "quote": "Conducting media are shown to absorb such radiations rapidly, and therefore to be generally opaque.",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

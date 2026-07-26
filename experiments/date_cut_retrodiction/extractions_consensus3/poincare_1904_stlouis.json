@@ -1,0 +1,295 @@
+{
+  "doc_id": "poincare_1904_stlouis",
+  "propositions": [
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "astronomic_universe_of_masses",
+      "quote": "The astronomic universe is formed of masses, very great, no doubt, but separated by intervals so immense that they appear to us only as material points.",
+      "statement": "The astronomic universe is formed of masses separated by intervals so immense that they appear to us only as material points.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "inverse_square_sole_force",
+      "quote": "These points attract each other inversely as the square of the distance, and this attraction is the sole force which influences their movements.",
+      "statement": "The material points of the astronomic universe attract each other inversely as the square of the distance, and this attraction is the sole force which influences their movements.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "matter_resembles_astronomic_spectacle",
+      "quote": "There also we should see material points, separated from one another by intervals, enormous in comparison with their dimensions, and describing orbits according to regular laws.",
+      "statement": "If our senses were keen enough to show us the details of the bodies the physicist studies, we should see material points separated by intervals enormous in comparison with their dimensions, describing orbits according to regular laws.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "infinitesimal_stars_are_atoms",
+      "quote": "These infinitesimal stars are the atoms. Like the stars proper, they attract or repel each other,",
+      "statement": "The infinitesimal stars found among the details of bodies are the atoms, and like the stars proper they attract or repel each other.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "atoms_attract_repel_by_distance",
+      "quote": "and this attraction or this repulsion, following the straight line which joins them, depends only on the distance.",
+      "statement": "The attraction or repulsion between atoms, following the straight line which joins them, depends only on the distance.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "force_law_power_of_distance",
+      "quote": "The law according to which this force varies as function of the distance is perhaps not the law of Newton, but it is an analogous law; in place of the exponent \u22122, we have probably a different exponent",
+      "statement": "The law according to which the force between atoms varies as a function of the distance is an analogous law to that of Newton, with probably a different exponent in place of the exponent \u22122.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "exponent_change_yields_diversity",
+      "quote": "it is from this change of exponent that arises all the diversity of physical phenomena, the variety of qualities and of sensations, all the world, colored and sonorous, which surrounds us",
+      "statement": "It is from the change of exponent that arises all the diversity of physical phenomena, the variety of qualities and of sensations, all the world, colored and sonorous, which surrounds us.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "capillarity_case_of_attraction",
+      "quote": "he regards it only as a particular case of attraction, or, as he says, of universal gravitation, and no one is astonished to find it in the middle of one of the five volumes",
+      "statement": "Capillarity is only a particular case of attraction, or of universal gravitation.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "ether_atoms_sixth_power_attraction",
+      "quote": "the atoms of ether attract each other in the inverse ratio of the sixth power of the distance; and Maxwell himself, does he not say somewhere that",
+      "statement": "The atoms of ether attract each other in the inverse ratio of the sixth power of the distance.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "gas_atoms_fifth_power_repulsion",
+      "quote": "the atoms of gases repel each other in the inverse ratio of the fifth power of the distance?",
+      "statement": "The atoms of gases repel each other in the inverse ratio of the fifth power of the distance.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "fourier_atoms_transmit_heat",
+      "quote": "in it are indeed atoms acting at a distance one upon the other; they mutually transmit heat, but they do not attract, they never budge.",
+      "statement": "In Fourier's theory, atoms act at a distance one upon the other and mutually transmit heat, but they do not attract and they never budge.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "matter_has_ultimate_elements",
+      "quote": "they know that one will attain the ultimate elements of things only by patiently disentangling the complicated skein that our senses give us",
+      "statement": "One will attain the ultimate elements of things only by patiently disentangling the complicated skein that our senses give us.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "law_as_differential_equation",
+      "quote": "For us a law is something quite different; it is a constant relation between the phenomenon of to-day and that of to-morrow; in a word, it is a differential equation.",
+      "statement": "For us a law is a constant relation between the phenomenon of to-day and that of to-morrow, that is, a differential equation.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "conservation_of_energy_principle",
+      "quote": "The principle of the conservation of energy, or Mayer's principle, is certainly the most important, but it is not the only one",
+      "statement": "The principle of the conservation of energy, or Mayer's principle, is certainly the most important of the general principles.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "carnot_degradation_of_energy",
+      "quote": "Carnot's principle, or the principle of the degradation of energy.",
+      "statement": "Carnot's principle is the principle of the degradation of energy.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "newtons_principle_action_reaction",
+      "quote": "Newton's principle, or the principle of the equality of action and reaction.",
+      "statement": "Newton's principle is the principle of the equality of action and reaction.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "principle_of_relativity",
+      "quote": "The principle of relativity, according to which the laws of physical phenomena must be the same for a stationary observer as for an observer carried along in a uniform motion of translation",
+      "statement": "The principle of relativity holds that the laws of physical phenomena must be the same for a stationary observer as for an observer carried along in a uniform motion of translation.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "no_detection_of_uniform_motion",
+      "quote": "so that we have not and can not have any means of discerning whether or not we are carried along in such a motion.",
+      "statement": "We have not and can not have any means of discerning whether or not we are carried along in a uniform motion of translation.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "conservation_of_mass",
+      "quote": "The principle of the conservation of mass, or Lavoisier's principle.",
+      "statement": "The principle of the conservation of mass is Lavoisier's principle.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "principle_of_least_action",
+      "quote": "I will add the principle of least action. The application of these five or six general principles to the different physical phenomena is sufficient for our learning of them all that we could reasonably hope to know of them.",
+      "statement": "There is a principle of least action, and the application of these general principles to the different physical phenomena is sufficient for our learning of them all that we could reasonably hope to know of them.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "principles_sufficient_for_knowledge",
+      "quote": "The application of these five or six general principles to the different physical phenomena is sufficient for our learning of them all that we could reasonably hope to know of them.",
+      "statement": "The application of these five or six general principles to the different physical phenomena is sufficient for our learning of them all that we could reasonably hope to know of them.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "maxwell_electromagnetic_theory_of_light",
+      "quote": "The most remarkable example of this new mathematical physics is, beyond question, Maxwell's electromagnetic theory of light.",
+      "statement": "The most remarkable example of the new mathematical physics is Maxwell's electromagnetic theory of light.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "ether_transmits_optical_electrical",
+      "quote": "we know that this medium transmits at the same time the optical perturbations and the electrical perturbations",
+      "statement": "The ether is a medium that transmits at the same time the optical perturbations and the electrical perturbations.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "ether_has_unknown_molecules",
+      "quote": "We know nothing as to what the ether is, how its molecules are disposed, whether they attract or repel each other; but we know that this medium transmits",
+      "statement": "The ether has molecules that are disposed in some way and that may attract or repel each other, though we know nothing as to what the ether is or how they are disposed.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "transmission_conforms_to_mechanics",
+      "quote": "we know that this transmission must take place in conformity with the general principles of mechanics, and that suffices us for the establishment of the equations of the electromagnetic field.",
+      "statement": "The transmission of the optical and electrical perturbations by the ether must take place in conformity with the general principles of mechanics.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "principles_derive_certainty_from_generality",
+      "quote": "These principles are results of experiments boldly generalized; but they seem to derive from their very generality a high degree of certainty.",
+      "statement": "These principles are results of experiments boldly generalized, and they seem to derive from their very generality a high degree of certainty.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "central_forces_entail_principles",
+      "quote": "The hypothesis of central forces contained all the principles; it involved them as necessary consequences; it involved both the conservation of energy and that of masses, and the equality of action and reaction, and the law of least action",
+      "statement": "The hypothesis of central forces contained all the principles and involved them as necessary consequences, including the conservation of energy, the conservation of masses, the equality of action and reaction, and the law of least action.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "universe_is_a_machine",
+      "quote": "The universe is also a machine, much more complicated than all those of industry, of which almost all the parts are profoundly hidden from us",
+      "statement": "The universe is a machine, much more complicated than all those of industry, of which almost all the parts are profoundly hidden from us.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "conservation_of_energy_true_conclusions",
+      "quote": "we are able, by the aid of this principle, to draw conclusions which remain true whatever may be the details of the invisible mechanism which animates them.",
+      "statement": "By the aid of the principle of the conservation of energy, we are able to draw conclusions about the universe which remain true whatever may be the details of the invisible mechanism which animates the parts we cannot see.",
+      "support": 2
+    }
+  ]
+}

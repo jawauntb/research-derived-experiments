@@ -1,0 +1,836 @@
+{
+  "H1_quote_fidelity": {
+    "decision": "GO",
+    "threshold": 0.9,
+    "value": 0.9977324263038548
+  },
+  "H2_vocabulary_residue_v2": {
+    "decision": "GO",
+    "max_rate": 0.03671328671328671,
+    "threshold": 0.05
+  },
+  "H3_deep_placebo_silent": {
+    "decision": "GO",
+    "facets_present_1880": []
+  },
+  "H4_target_cut_not_silent": {
+    "decision": "GO",
+    "facets_present_1904": [
+      "T2_privileged_frame",
+      "T3_local_time_artifice"
+    ]
+  },
+  "H5_matcher_soundness": {
+    "adjudication_present": true,
+    "all_hits_genuine": true,
+    "decision": "GO"
+  },
+  "H6_robustness_across_passes": {
+    "consensus": {
+      "1880": [],
+      "1897": [
+        "T2_privileged_frame"
+      ],
+      "1904": [
+        "T2_privileged_frame",
+        "T3_local_time_artifice"
+      ]
+    },
+    "decision": "GO",
+    "per_pass": {
+      "extractions_blind": {
+        "1880": [],
+        "1897": [
+          "T2_privileged_frame"
+        ],
+        "1904": [
+          "T2_privileged_frame",
+          "T3_local_time_artifice"
+        ]
+      },
+      "extractions_pass3": {
+        "1880": [],
+        "1897": [
+          "T2_privileged_frame"
+        ],
+        "1904": [
+          "T2_privileged_frame",
+          "T3_local_time_artifice"
+        ]
+      },
+      "extractions_pass4": {
+        "1880": [],
+        "1897": [
+          "T2_privileged_frame"
+        ],
+        "1904": [
+          "T2_privileged_frame",
+          "T3_local_time_artifice"
+        ]
+      }
+    }
+  },
+  "consensus_facets": {
+    "1880": [],
+    "1897": [
+      "T2_privileged_frame"
+    ],
+    "1904": [
+      "T2_privileged_frame",
+      "T3_local_time_artifice"
+    ]
+  },
+  "consensus_stats": {
+    "equivalence_threshold": 0.5,
+    "n_anchor_propositions": 553,
+    "n_consensus_propositions": 441,
+    "n_passes": 3,
+    "overall_retention_rate": 0.7974683544303798,
+    "pass_dirs": [
+      "extractions_blind",
+      "extractions_pass3",
+      "extractions_pass4"
+    ],
+    "per_document": {
+      "brace_1904_refraction": {
+        "n_consensus": 25,
+        "n_per_pass": [
+          40,
+          35,
+          30
+        ],
+        "retention_rate": 0.625
+      },
+      "fitzgerald_1889": {
+        "n_consensus": 19,
+        "n_per_pass": [
+          23,
+          23,
+          24
+        ],
+        "retention_rate": 0.8260869565217391
+      },
+      "larmor_1897_medium3": {
+        "n_consensus": 29,
+        "n_per_pass": [
+          39,
+          40,
+          40
+        ],
+        "retention_rate": 0.7435897435897436
+      },
+      "larmor_1900_ch10": {
+        "n_consensus": 35,
+        "n_per_pass": [
+          40,
+          39,
+          40
+        ],
+        "retention_rate": 0.875
+      },
+      "larmor_1900_ch11": {
+        "n_consensus": 33,
+        "n_per_pass": [
+          40,
+          42,
+          40
+        ],
+        "retention_rate": 0.825
+      },
+      "lodge_1897_absence": {
+        "n_consensus": 27,
+        "n_per_pass": [
+          35,
+          30,
+          38
+        ],
+        "retention_rate": 0.7714285714285715
+      },
+      "lorentz_1904": {
+        "n_consensus": 27,
+        "n_per_pass": [
+          36,
+          40,
+          38
+        ],
+        "retention_rate": 0.75
+      },
+      "maxwell_1865_part1": {
+        "n_consensus": 30,
+        "n_per_pass": [
+          40,
+          40,
+          40
+        ],
+        "retention_rate": 0.75
+      },
+      "maxwell_1865_part6": {
+        "n_consensus": 34,
+        "n_per_pass": [
+          40,
+          40,
+          39
+        ],
+        "retention_rate": 0.85
+      },
+      "maxwell_1878_ether": {
+        "n_consensus": 32,
+        "n_per_pass": [
+          39,
+          40,
+          40
+        ],
+        "retention_rate": 0.8205128205128205
+      },
+      "michelson_1881": {
+        "n_consensus": 26,
+        "n_per_pass": [
+          32,
+          33,
+          35
+        ],
+        "retention_rate": 0.8125
+      },
+      "michelson_morley_1887": {
+        "n_consensus": 30,
+        "n_per_pass": [
+          39,
+          36,
+          36
+        ],
+        "retention_rate": 0.7692307692307693
+      },
+      "poincare_1898_time": {
+        "n_consensus": 33,
+        "n_per_pass": [
+          40,
+          39,
+          38
+        ],
+        "retention_rate": 0.825
+      },
+      "poincare_1904_stlouis": {
+        "n_consensus": 29,
+        "n_per_pass": [
+          31,
+          28,
+          26
+        ],
+        "retention_rate": 0.9354838709677419
+      },
+      "rayleigh_1902_refraction": {
+        "n_consensus": 32,
+        "n_per_pass": [
+          39,
+          38,
+          32
+        ],
+        "retention_rate": 0.8205128205128205
+      }
+    },
+    "support_threshold": 2
+  },
+  "cuts": {
+    "1880_all": {
+      "allow_provenance_risk": true,
+      "cut_year": 1880,
+      "facet_counts": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 0,
+        "T3_local_time_artifice": 0
+      },
+      "facet_hits": {},
+      "facets_present": [],
+      "is_placebo": true,
+      "label": "deep placebo",
+      "n_documents": 3,
+      "n_propositions": 96,
+      "residue_rate": 0.03671328671328671,
+      "residue_types": [
+        "bidirectionally",
+        "conversion",
+        "converts",
+        "definition",
+        "drag",
+        "electromagnetism",
+        "em",
+        "emf",
+        "endorsed",
+        "frequency",
+        "incomplete",
+        "invisible",
+        "mediates",
+        "metal",
+        "needed",
+        "nontransverse",
+        "possibly",
+        "rate",
+        "ratio",
+        "speed",
+        "transfer"
+      ],
+      "surfaces_target": false
+    },
+    "1880_norisk": {
+      "allow_provenance_risk": false,
+      "cut_year": 1880,
+      "facet_counts": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 0,
+        "T3_local_time_artifice": 0
+      },
+      "facet_hits": {},
+      "facets_present": [],
+      "is_placebo": true,
+      "label": "deep placebo",
+      "n_documents": 3,
+      "n_propositions": 96,
+      "residue_rate": 0.03671328671328671,
+      "residue_types": [
+        "bidirectionally",
+        "conversion",
+        "converts",
+        "definition",
+        "drag",
+        "electromagnetism",
+        "em",
+        "emf",
+        "endorsed",
+        "frequency",
+        "incomplete",
+        "invisible",
+        "mediates",
+        "metal",
+        "needed",
+        "nontransverse",
+        "possibly",
+        "rate",
+        "ratio",
+        "speed",
+        "transfer"
+      ],
+      "surfaces_target": false
+    },
+    "1897_all": {
+      "allow_provenance_risk": true,
+      "cut_year": 1897,
+      "facet_counts": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 9,
+        "T3_local_time_artifice": 0
+      },
+      "facet_hits": {
+        "T2_privileged_frame": [
+          {
+            "doc_id": "michelson_1881",
+            "name": "stationary_ether_hypothesis",
+            "statement": "The ether is at rest while the earth moves through it, so the time required for light to pass from one point to another on the earth's surface depends on the direction in which it travels."
+          },
+          {
+            "doc_id": "michelson_1881",
+            "name": "aberration_presupposes_earth_moves_through_ether",
+            "statement": "The generally accepted explanation of the phenomenon of aberration presupposes that the earth moves through the ether, the ether remaining at rest."
+          },
+          {
+            "doc_id": "michelson_morley_1887",
+            "name": "fresnel_ether_at_rest_outside_media",
+            "statement": "The ether is supposed to be at rest except in the interior of transparent media."
+          },
+          {
+            "doc_id": "michelson_morley_1887",
+            "name": "apparatus_motion_through_stationary_ether_alters_paths",
+            "statement": "If the ether is at rest and the apparatus moves with the velocity of the earth in its orbit, the directions and distances traversed by the rays are altered."
+          },
+          {
+            "doc_id": "fitzgerald_1889",
+            "name": "velocity_relative_to_ether_determines_physical_effects",
+            "statement": "Electric forces, molecular forces, and length are affected by motion relative to the ether."
+          },
+          {
+            "doc_id": "larmor_1897_medium3",
+            "name": "absolute_space_is_aether",
+            "statement": "The spacial framework in absolute rest introduced by Newton is in fact the quiescent underlying \u00e6ther."
+          },
+          {
+            "doc_id": "larmor_1897_medium3",
+            "name": "dynamics_needs_absolute_positions",
+            "statement": "It has not been found possible to construct a system of dynamics which has respect only to the relative positions of moving bodies."
+          },
+          {
+            "doc_id": "lodge_1897_absence",
+            "name": "no_disk_motion_effect_implies_stationary_ether",
+            "statement": "Since a motion of the disks relatively to the observer and the light causes no effect, the ether is stationary, and it follows that a motion of the light and observer would produce an effect."
+          },
+          {
+            "doc_id": "lodge_1897_absence",
+            "name": "stationary_ether_large_square_shift",
+            "statement": "If the ether is stationary near the earth, a single interference square of sufficient size would show a shift of more than one band width due to the rotation of the earth."
+          }
+        ]
+      },
+      "facets_present": [
+        "T2_privileged_frame"
+      ],
+      "is_placebo": true,
+      "label": "near placebo",
+      "n_documents": 8,
+      "n_propositions": 227,
+      "residue_rate": 0.023169601482854494,
+      "residue_types": [
+        "bidirectionally",
+        "breakdown",
+        "cold",
+        "contraction",
+        "contracts",
+        "conversion",
+        "converts",
+        "electromagnetism",
+        "em",
+        "emf",
+        "endorsed",
+        "entrainment",
+        "fluctuation",
+        "frequency",
+        "implies",
+        "incomplete",
+        "mimic",
+        "nontransverse",
+        "predicted",
+        "reorientation",
+        "shrinking",
+        "signal",
+        "splits",
+        "threshold",
+        "via"
+      ],
+      "surfaces_target": false
+    },
+    "1897_norisk": {
+      "allow_provenance_risk": false,
+      "cut_year": 1897,
+      "facet_counts": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 9,
+        "T3_local_time_artifice": 0
+      },
+      "facet_hits": {
+        "T2_privileged_frame": [
+          {
+            "doc_id": "michelson_1881",
+            "name": "stationary_ether_hypothesis",
+            "statement": "The ether is at rest while the earth moves through it, so the time required for light to pass from one point to another on the earth's surface depends on the direction in which it travels."
+          },
+          {
+            "doc_id": "michelson_1881",
+            "name": "aberration_presupposes_earth_moves_through_ether",
+            "statement": "The generally accepted explanation of the phenomenon of aberration presupposes that the earth moves through the ether, the ether remaining at rest."
+          },
+          {
+            "doc_id": "michelson_morley_1887",
+            "name": "fresnel_ether_at_rest_outside_media",
+            "statement": "The ether is supposed to be at rest except in the interior of transparent media."
+          },
+          {
+            "doc_id": "michelson_morley_1887",
+            "name": "apparatus_motion_through_stationary_ether_alters_paths",
+            "statement": "If the ether is at rest and the apparatus moves with the velocity of the earth in its orbit, the directions and distances traversed by the rays are altered."
+          },
+          {
+            "doc_id": "fitzgerald_1889",
+            "name": "velocity_relative_to_ether_determines_physical_effects",
+            "statement": "Electric forces, molecular forces, and length are affected by motion relative to the ether."
+          },
+          {
+            "doc_id": "larmor_1897_medium3",
+            "name": "absolute_space_is_aether",
+            "statement": "The spacial framework in absolute rest introduced by Newton is in fact the quiescent underlying \u00e6ther."
+          },
+          {
+            "doc_id": "larmor_1897_medium3",
+            "name": "dynamics_needs_absolute_positions",
+            "statement": "It has not been found possible to construct a system of dynamics which has respect only to the relative positions of moving bodies."
+          },
+          {
+            "doc_id": "lodge_1897_absence",
+            "name": "no_disk_motion_effect_implies_stationary_ether",
+            "statement": "Since a motion of the disks relatively to the observer and the light causes no effect, the ether is stationary, and it follows that a motion of the light and observer would produce an effect."
+          },
+          {
+            "doc_id": "lodge_1897_absence",
+            "name": "stationary_ether_large_square_shift",
+            "statement": "If the ether is stationary near the earth, a single interference square of sufficient size would show a shift of more than one band width due to the rotation of the earth."
+          }
+        ]
+      },
+      "facets_present": [
+        "T2_privileged_frame"
+      ],
+      "is_placebo": true,
+      "label": "near placebo",
+      "n_documents": 8,
+      "n_propositions": 227,
+      "residue_rate": 0.023169601482854494,
+      "residue_types": [
+        "bidirectionally",
+        "breakdown",
+        "cold",
+        "contraction",
+        "contracts",
+        "conversion",
+        "converts",
+        "electromagnetism",
+        "em",
+        "emf",
+        "endorsed",
+        "entrainment",
+        "fluctuation",
+        "frequency",
+        "implies",
+        "incomplete",
+        "mimic",
+        "nontransverse",
+        "predicted",
+        "reorientation",
+        "shrinking",
+        "signal",
+        "splits",
+        "threshold",
+        "via"
+      ],
+      "surfaces_target": false
+    },
+    "1904_all": {
+      "allow_provenance_risk": true,
+      "cut_year": 1904,
+      "facet_counts": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 11,
+        "T3_local_time_artifice": 1
+      },
+      "facet_hits": {
+        "T2_privileged_frame": [
+          {
+            "doc_id": "michelson_1881",
+            "name": "stationary_ether_hypothesis",
+            "statement": "The ether is at rest while the earth moves through it, so the time required for light to pass from one point to another on the earth's surface depends on the direction in which it travels."
+          },
+          {
+            "doc_id": "michelson_1881",
+            "name": "aberration_presupposes_earth_moves_through_ether",
+            "statement": "The generally accepted explanation of the phenomenon of aberration presupposes that the earth moves through the ether, the ether remaining at rest."
+          },
+          {
+            "doc_id": "michelson_morley_1887",
+            "name": "fresnel_ether_at_rest_outside_media",
+            "statement": "The ether is supposed to be at rest except in the interior of transparent media."
+          },
+          {
+            "doc_id": "michelson_morley_1887",
+            "name": "apparatus_motion_through_stationary_ether_alters_paths",
+            "statement": "If the ether is at rest and the apparatus moves with the velocity of the earth in its orbit, the directions and distances traversed by the rays are altered."
+          },
+          {
+            "doc_id": "fitzgerald_1889",
+            "name": "velocity_relative_to_ether_determines_physical_effects",
+            "statement": "Electric forces, molecular forces, and length are affected by motion relative to the ether."
+          },
+          {
+            "doc_id": "larmor_1897_medium3",
+            "name": "absolute_space_is_aether",
+            "statement": "The spacial framework in absolute rest introduced by Newton is in fact the quiescent underlying \u00e6ther."
+          },
+          {
+            "doc_id": "larmor_1897_medium3",
+            "name": "dynamics_needs_absolute_positions",
+            "statement": "It has not been found possible to construct a system of dynamics which has respect only to the relative positions of moving bodies."
+          },
+          {
+            "doc_id": "lodge_1897_absence",
+            "name": "no_disk_motion_effect_implies_stationary_ether",
+            "statement": "Since a motion of the disks relatively to the observer and the light causes no effect, the ether is stationary, and it follows that a motion of the light and observer would produce an effect."
+          },
+          {
+            "doc_id": "lodge_1897_absence",
+            "name": "stationary_ether_large_square_shift",
+            "statement": "If the ether is stationary near the earth, a single interference square of sufficient size would show a shift of more than one band width due to the rotation of the earth."
+          },
+          {
+            "doc_id": "rayleigh_1902_refraction",
+            "name": "stellar_aberration_favours_stationary_aether",
+            "statement": "Stellar aberration favours the theory of a stationary aether."
+          },
+          {
+            "doc_id": "rayleigh_1902_refraction",
+            "name": "earth_orbital_motion_relevant",
+            "statement": "According to the theory of a stationary aether, we have to do with the motion of the earth in its orbit and with the motion of the sun in space."
+          }
+        ],
+        "T3_local_time_artifice": [
+          {
+            "doc_id": "lorentz_1904",
+            "name": "local_time_named",
+            "statement": "The transformed time variable t' may be called the local time."
+          }
+        ]
+      },
+      "facets_present": [
+        "T2_privileged_frame",
+        "T3_local_time_artifice"
+      ],
+      "is_placebo": false,
+      "label": "target",
+      "n_documents": 15,
+      "n_propositions": 441,
+      "residue_rate": 0.023742227247032222,
+      "residue_types": [
+        "additive",
+        "bidirectionally",
+        "breakdown",
+        "cold",
+        "conversion",
+        "converts",
+        "despite",
+        "electromagnetism",
+        "em",
+        "emf",
+        "endorsed",
+        "entrainment",
+        "existent",
+        "fluctuation",
+        "inconclusive",
+        "indeterminate",
+        "interelectron",
+        "interpenetration",
+        "invalid",
+        "invariant",
+        "invertible",
+        "memory",
+        "mimic",
+        "nonlinear",
+        "nontransverse",
+        "onset",
+        "pre",
+        "predicted",
+        "quasistationary",
+        "radium",
+        "relevant",
+        "reorientation",
+        "sensitivity",
+        "shrinking",
+        "spectroscopy",
+        "splits",
+        "tidal",
+        "undetectable",
+        "unsurpassed",
+        "via",
+        "vs",
+        "wavefronts"
+      ],
+      "surfaces_target": true
+    },
+    "1904_norisk": {
+      "allow_provenance_risk": false,
+      "cut_year": 1904,
+      "facet_counts": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 11,
+        "T3_local_time_artifice": 1
+      },
+      "facet_hits": {
+        "T2_privileged_frame": [
+          {
+            "doc_id": "michelson_1881",
+            "name": "stationary_ether_hypothesis",
+            "statement": "The ether is at rest while the earth moves through it, so the time required for light to pass from one point to another on the earth's surface depends on the direction in which it travels."
+          },
+          {
+            "doc_id": "michelson_1881",
+            "name": "aberration_presupposes_earth_moves_through_ether",
+            "statement": "The generally accepted explanation of the phenomenon of aberration presupposes that the earth moves through the ether, the ether remaining at rest."
+          },
+          {
+            "doc_id": "michelson_morley_1887",
+            "name": "fresnel_ether_at_rest_outside_media",
+            "statement": "The ether is supposed to be at rest except in the interior of transparent media."
+          },
+          {
+            "doc_id": "michelson_morley_1887",
+            "name": "apparatus_motion_through_stationary_ether_alters_paths",
+            "statement": "If the ether is at rest and the apparatus moves with the velocity of the earth in its orbit, the directions and distances traversed by the rays are altered."
+          },
+          {
+            "doc_id": "fitzgerald_1889",
+            "name": "velocity_relative_to_ether_determines_physical_effects",
+            "statement": "Electric forces, molecular forces, and length are affected by motion relative to the ether."
+          },
+          {
+            "doc_id": "larmor_1897_medium3",
+            "name": "absolute_space_is_aether",
+            "statement": "The spacial framework in absolute rest introduced by Newton is in fact the quiescent underlying \u00e6ther."
+          },
+          {
+            "doc_id": "larmor_1897_medium3",
+            "name": "dynamics_needs_absolute_positions",
+            "statement": "It has not been found possible to construct a system of dynamics which has respect only to the relative positions of moving bodies."
+          },
+          {
+            "doc_id": "lodge_1897_absence",
+            "name": "no_disk_motion_effect_implies_stationary_ether",
+            "statement": "Since a motion of the disks relatively to the observer and the light causes no effect, the ether is stationary, and it follows that a motion of the light and observer would produce an effect."
+          },
+          {
+            "doc_id": "lodge_1897_absence",
+            "name": "stationary_ether_large_square_shift",
+            "statement": "If the ether is stationary near the earth, a single interference square of sufficient size would show a shift of more than one band width due to the rotation of the earth."
+          },
+          {
+            "doc_id": "rayleigh_1902_refraction",
+            "name": "stellar_aberration_favours_stationary_aether",
+            "statement": "Stellar aberration favours the theory of a stationary aether."
+          },
+          {
+            "doc_id": "rayleigh_1902_refraction",
+            "name": "earth_orbital_motion_relevant",
+            "statement": "According to the theory of a stationary aether, we have to do with the motion of the earth in its orbit and with the motion of the sun in space."
+          }
+        ],
+        "T3_local_time_artifice": [
+          {
+            "doc_id": "lorentz_1904",
+            "name": "local_time_named",
+            "statement": "The transformed time variable t' may be called the local time."
+          }
+        ]
+      },
+      "facets_present": [
+        "T2_privileged_frame",
+        "T3_local_time_artifice"
+      ],
+      "is_placebo": false,
+      "label": "target",
+      "n_documents": 13,
+      "n_propositions": 379,
+      "residue_rate": 0.025226390685640362,
+      "residue_types": [
+        "additive",
+        "bidirectionally",
+        "breakdown",
+        "cold",
+        "conversion",
+        "converts",
+        "electromagnetism",
+        "em",
+        "emf",
+        "endorsed",
+        "entrainment",
+        "fluctuation",
+        "future",
+        "inconclusive",
+        "indeterminate",
+        "interelectron",
+        "invalid",
+        "invariant",
+        "mimic",
+        "nonlinear",
+        "nontransverse",
+        "onset",
+        "orientation",
+        "predicted",
+        "prediction",
+        "quasistationary",
+        "radium",
+        "relevant",
+        "reorientation",
+        "sensitivity",
+        "shrinking",
+        "signal",
+        "spectroscopy",
+        "splits",
+        "undetectable",
+        "unsurpassed",
+        "via",
+        "vs",
+        "wavefronts"
+      ],
+      "surfaces_target": true
+    }
+  },
+  "dcr2_licensed": true,
+  "extraction": "consensus 2-of-3 over sandboxed passes",
+  "facet_definitions": {
+    "T1_absolute_simultaneity": "Time or simultaneity is observer-independent: one universal time, with 'at the same time' meaning the same thing for everyone.",
+    "T2_privileged_frame": "The aether defines absolute rest or a privileged frame of reference.",
+    "T3_local_time_artifice": "Local time is a mathematical auxiliary, not the time clocks read."
+  },
+  "kind": "dcr1c_verdict",
+  "matcher_v2_v3_at_1904": {
+    "dropped_by_veto": {
+      "T2_privileged_frame": [
+        "The hypothesis of a stationary ether is shown to be incorrect, and the hypothesis is erroneous.",
+        "Stokes gives a theory of aberration which assumes the ether at the earth's surface to be at rest with regard to the earth's surface.",
+        "If the ether is at rest with regard to the earth's surface, then according to Lorentz there could not be a velocity potential, and Lorentz's own theory also fails.",
+        "The corresponding positions of the electrons of the two systems, established up to the first order of v/c, are true up to the second order when the moving system is contracted in comparison with the fixed system."
+      ],
+      "T3_local_time_artifice": []
+    },
+    "v2_counts": {
+      "T1_absolute_simultaneity": 0,
+      "T2_privileged_frame": 15,
+      "T3_local_time_artifice": 1
+    },
+    "v2_facets_present": [
+      "T2_privileged_frame",
+      "T3_local_time_artifice"
+    ],
+    "v3_counts": {
+      "T1_absolute_simultaneity": 0,
+      "T2_privileged_frame": 11,
+      "T3_local_time_artifice": 1
+    },
+    "v3_facets_present": [
+      "T2_privileged_frame",
+      "T3_local_time_artifice"
+    ]
+  },
+  "n_documents": 15,
+  "n_propositions": 441,
+  "overall_decision": "GO",
+  "per_pass_facets": {
+    "extractions_blind": {
+      "1880": [],
+      "1897": [
+        "T2_privileged_frame"
+      ],
+      "1904": [
+        "T2_privileged_frame",
+        "T3_local_time_artifice"
+      ]
+    },
+    "extractions_pass3": {
+      "1880": [],
+      "1897": [
+        "T2_privileged_frame"
+      ],
+      "1904": [
+        "T2_privileged_frame",
+        "T3_local_time_artifice"
+      ]
+    },
+    "extractions_pass4": {
+      "1880": [],
+      "1897": [
+        "T2_privileged_frame"
+      ],
+      "1904": [
+        "T2_privileged_frame",
+        "T3_local_time_artifice"
+      ]
+    }
+  },
+  "quote_audit": {
+    "fidelity": 0.9977324263038548,
+    "n_exact": 438,
+    "n_normalised": 440,
+    "n_total": 441
+  }
+}

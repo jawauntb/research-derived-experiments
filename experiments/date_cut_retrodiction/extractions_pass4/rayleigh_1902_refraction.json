@@ -1,0 +1,229 @@
+{
+  "doc_id": "rayleigh_1902_refraction",
+  "propositions": [
+    {
+      "name": "aether_deformation_double_refraction",
+      "statement": "Deformation of matter when moving through the aether might be accompanied by a sensible double refraction.",
+      "quote": "It occurred to me that such a deformation of matter when moving through the rather might be accompanied by a sensible double refraction",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "michelson_morley_negative_result",
+      "statement": "The Michelson-Morley experiment gave a negative result in which interference takes place between two rays, one travelling to and fro in the direction of the earth's motion and the other to and fro in a perpendicular direction.",
+      "quote": "well-known negative result of the Michelson-Morley experiment in which interference takes place between two rays, one travelling to and fro in the direction of the earth's motion, and the other to and fro in a perpendicular direction",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_shares_earth_motion",
+      "statement": "The negative result is most naturally interpreted as proving that the aether in the laboratory shares the earth's motion.",
+      "quote": "is most naturally interpreted as proving that the aether in the laboratory shares the earth's motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aberration_favours_stationary_aether",
+      "statement": "Stellar aberration favours the opposite theory of a stationary aether.",
+      "quote": "other phenomena, especially stellar aberration, favour the opposite theory of a stationary aether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fitzgerald_lorentz_contraction",
+      "statement": "Solid bodies, such as the stone platform of Michelson's apparatus, alter their relative dimensions when rotated in such a way as to compensate the optical change that might naturally be looked for.",
+      "quote": "solid bodies, such as the stone platform of Michelson's apparatus, alter their relative dimensions, when rotated, in such a way as to compensate the optical change that might naturally be looked for",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "double_refraction_delicately_testable",
+      "statement": "The beginning of double refraction can be tested with extraordinary delicacy.",
+      "quote": "the beginning of double refraction can be tested with extraordinary delicacy",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "liquids_show_no_expected_double_refraction",
+      "statement": "There is no double refraction in liquids of the order to be expected, comparable with the single refraction.",
+      "quote": "the conclusion may be stated that there is no double refraction of the order to be expected, that is comparable with 10 of the single refraction",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "kerr_electric_double_refraction",
+      "statement": "The liquid condition is no obstacle to the development of double refraction under electric stress.",
+      "quote": "the liquid condition is no obstacle to the development of double refraction under electric stress, as is shown in Dr. Kerr's experiments",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_polarized_by_nicol",
+      "statement": "Light was polarized by the first nicol in a plane inclined to the horizontal at 45 degrees.",
+      "quote": "was polarized by the first nicol in a plane inclined to the horizontal at 45°",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "parallel_transverse_vibration_hypothesis",
+      "statement": "Luminous vibrations parallel to the earth's motion might be propagated a little differently from those whose direction is transverse to the earth's motion.",
+      "quote": "luminous vibrations parallel to the earth's motion, i. e. east and west, are propagated a little differently from those whose direction is transverse to the earth's motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "transverse_orientation_eliminates_double_refraction",
+      "statement": "When both directions of vibration for light passing the tube are transverse to the earth's motion, no double refraction could manifest itself.",
+      "quote": "both directions of vibration for light passing the tube are transverse to the earth's motion, and therefore no double refraction could manifest itself",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rotation_180_no_effect",
+      "statement": "No effect is to be expected from a rotation through 180 degrees.",
+      "quote": "In no case is any effect to be expected from a rotation through 180°",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "effect_second_order_velocity_ratio",
+      "statement": "Such effect as a rotation through 90 degrees may entail must be of the second order in the ratio which expresses the velocity of the earth relatively to that of light.",
+      "quote": "such effect as a rotation through 90° may entail must be of the second order in the ratio which expresses the velocity of the earth relatively to that of light",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "earth_orbital_and_solar_motion",
+      "statement": "According to the theory of a stationary aether, we have to do with the motion of the earth in its orbit and also with the motion of the sun in space.",
+      "quote": "we have to do not only with the motion of the earth in its orbit, but also with that of the sun in space",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "sun_motion_toward_hercules",
+      "statement": "The motion of the sun is supposed to be much the smaller and to lie directed towards the constellation Hercules.",
+      "quote": "The latter is supposed to be much the smaller, and to lie directed towards the constellation Hercules",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "april_motions_conspire",
+      "statement": "In the month of April, when successful experiments were first made, the two motions would approximately conspire.",
+      "quote": "In the month of April, when successful experiments were first made, the two motions would approximately conspire",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "strained_glass_produces_double_refraction",
+      "statement": "The strained condition of the glass produces just such a double refraction as might be caused by the motion of the liquid through the aether.",
+      "quote": "the strained condition of the glass produces just such a double refraction as might be caused by the motion of the liquid through the aether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_band_shift_observed",
+      "statement": "In neither case could the slightest shift of the band be seen on rotation of the board from the north-south position to the east-west position, whether at noon or at 6 p.m.",
+      "quote": "In neither case could the slightest shift of the band be seen on rotation of the board from the north-south position to the east-west position, whether at noon or at 6 p.m.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "earth_magnetism_rotates_polarization",
+      "statement": "In consequence of the earth's magnetism there must be a rotation of the plane of polarization when the light traverses the bisulphide of carbon in the north and south position.",
+      "quote": "In consequence of the earth's magnetism there must be a rotation of the plane of polarization when the light traverses the bisulphide of carbon in the north and south position",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "magnetic_rotation_constant",
+      "statement": "For one C.G.S. unit of magnetic potential the rotation in bisulphide of carbon at 18 degrees is .042 minute of angle.",
+      "quote": "For one C.G.S. unit of magnetic potential the rotation in CS 2 at 18° is .042 minute of angle",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "small_rotation_below_observation_limit",
+      "statement": "A rotation of the plane, which would show itself by a fading and not by a displacement of the band, is below the limit of observation.",
+      "quote": "which would show itself, if at all, by a fading and not by a displacement of the band, is below the limit of observation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "nicol_rotation_revived_light_law",
+      "statement": "If theta be the angle of rotation of the nicol, the revived light is sin squared theta, expressed as a fraction of the maximum obtainable with parallel nicols.",
+      "quote": "If θ be this angle, the revived light is sin²θ, expressed as a fraction of the maximum obtainable with parallel nicols",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "retardation_phase_revival_law",
+      "statement": "A retardation of phase epsilon gives a revival of light measured by sin squared of half epsilon.",
+      "quote": "a retardation of phase ε, in place of π, gives a revival of light measured by sin²(½ε)",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "strip_double_refraction_matches_tested_character",
+      "statement": "The double refraction due to the loads on the strip is of exactly the character to be tested for.",
+      "quote": "The double refraction due to the loads is of exactly the character to be tested for, and accordingly this method affords a very direct check",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "load_effect_independent_length_inverse_width",
+      "statement": "If the load be given, the effect is independent of the length of the strip and of its thickness along the line of vision, but is inversely as the width.",
+      "quote": "If the load be given, the effect is independent of the length of the strip and of its thickness along the line of vision, but is inversely as the width",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "wertheim_load_retardation_relation",
+      "statement": "A load of 10 kilograms per millimetre of width gives a relative retardation of half a wave-length.",
+      "quote": "it requires a load of 10 kilograms per millimetre of width to give a relative retardation of ½λ",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "bisulphide_wavelength_count",
+      "statement": "In the length of the bisulphide of carbon tube there are contained 1,200,000 wave-lengths of yellow light, or 2,400,000 half wave-lengths.",
+      "quote": "In this length there are contained 1,200,000 wave-lengths of yellow light, or 2,400,000 half wave-lengths",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "detection_margin_sufficient",
+      "statement": "The effect to be expected is of the order such that there is nearly 100 times to spare.",
+      "quote": "The effect to be expected is of the order 10 , so that there is nearly 100 times to spare",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "solid_internal_strain_causes_double_refraction",
+      "statement": "A sufficient thickness of glass in one piece is liable to exhibit too much double refraction from the effect of internal strains.",
+      "quote": "A sufficient thickness in one piece is liable to exhibit too much double refraction from the effect of internal strains",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_double_refraction_in_solids",
+      "statement": "Even in solids there is no double refraction, of the order to be expected, due to motion through the aether.",
+      "quote": "enough remains to justify us in concluding that even here there is no double refraction (of the order to be expected) due to motion through the aether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "delicacy_less_for_water",
+      "statement": "With the water the delicacy of the test was somewhat less.",
+      "quote": "With the water the delicacy of the test was somewhat less.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "solid_test_loses_delicacy",
+      "statement": "As compared with the observations upon liquid there was a loss of delicacy of four times when solid matter was used.",
+      "quote": "so that as compared with the observations upon liquid there was a loss of delicacy of four times",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

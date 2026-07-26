@@ -314,3 +314,122 @@ def test_v1_matcher_is_not_edited_by_the_repair() -> None:
     t1 = next(f for f in V1 if f.key == "T1_absolute_simultaneity")
     # The defect is preserved on purpose: v1 accepted a bare "same ... time".
     assert "same" in t1.pattern
+
+
+# --- DCR1c: the polarity and referent vetoes -------------------------------
+
+
+def test_v3_rejects_every_dcr1b_false_positive() -> None:
+    """The four hits DCR1b's H5 failed on must not fire under v3."""
+    from experiments.date_cut_retrodiction.target_v3 import match_facets_v3
+
+    spurious = [
+        ("stationary_ether_hypothesis_erroneous",
+         "The hypothesis of a stationary ether is shown to be incorrect, and "
+         "the hypothesis is erroneous."),
+        ("stokes_ether_at_rest_at_earth_surface",
+         "Stokes gives a theory of aberration which assumes the ether at the "
+         "earth's surface to be at rest with regard to the earth's surface."),
+        ("lorentz_theory_fails_if_ether_at_rest",
+         "If the ether is at rest with regard to the earth's surface, then "
+         "according to Lorentz there could not be a velocity potential, and "
+         "Lorentz's own theory also fails."),
+        ("electron_positions_correspond",
+         "The corresponding positions of the electrons of the two systems, "
+         "established up to the first order of v/c, are true up to the second "
+         "order when the moving system is contracted in comparison with the "
+         "fixed system."),
+    ]
+    for name, statement in spurious:
+        hits = match_facets_v3(
+            [{"name": name, "statement": statement, "doc_id": "d"}]
+        )
+        assert not hits["T2_privileged_frame"], name
+
+
+def test_v3_keeps_every_dcr1b_genuine_hit() -> None:
+    from experiments.date_cut_retrodiction.target_v3 import match_facets_v3
+
+    genuine = [
+        ("stationary_ether_hypothesis",
+         "The ether is at rest while the earth moves through it."),
+        ("aberration_presupposes_earth_moves_through_ether",
+         "The generally accepted explanation of the phenomenon of aberration "
+         "presupposes that the earth moves through the ether, the ether "
+         "remaining at rest."),
+        ("fresnel_ether_at_rest_outside_media",
+         "The ether is supposed to be at rest except in the interior of "
+         "transparent media."),
+        ("velocity_relative_to_ether_determines_physical_effects",
+         "Electric forces, molecular forces, and length are affected by motion "
+         "relative to the ether."),
+        ("dynamics_needs_absolute_positions",
+         "It has not been found possible to construct a system of dynamics "
+         "which has respect only to the relative positions of moving bodies."),
+        ("stellar_aberration_favours_stationary_aether",
+         "Stellar aberration favours the theory of a stationary aether."),
+    ]
+    for name, statement in genuine:
+        hits = match_facets_v3(
+            [{"name": name, "statement": statement, "doc_id": "d"}]
+        )
+        assert hits["T2_privileged_frame"], name
+
+
+def test_polarity_veto_never_fires_on_bare_negation() -> None:
+    """Larmor's absolute-space commitment is stated as "it has NOT been…".
+
+    A naive negation veto would delete the strongest evidence the corpus offers.
+    """
+    from experiments.date_cut_retrodiction.target_v3 import match_facets_v3
+
+    hits = match_facets_v3(
+        [
+            {
+                "name": "dynamics_needs_absolute_positions",
+                "statement": (
+                    "It has not been found possible to construct a system of "
+                    "dynamics which has respect only to the relative positions "
+                    "of moving bodies."
+                ),
+                "doc_id": "larmor_1897_medium3",
+            }
+        ]
+    )
+    assert hits["T2_privileged_frame"]
+
+
+def test_v3_leaves_t1_and_t3_patterns_untouched() -> None:
+    """Vetoes apply to T2 only; the other facets had no false positives."""
+    from experiments.date_cut_retrodiction.target_v2 import TARGET_FACETS_V2
+    from experiments.date_cut_retrodiction.target_v3 import TARGET_FACETS_V3
+
+    v2 = {f.key: f.pattern for f in TARGET_FACETS_V2}
+    v3 = {f.key: f.pattern for f in TARGET_FACETS_V3}
+    assert v2["T1_absolute_simultaneity"] == v3["T1_absolute_simultaneity"]
+    assert v2["T3_local_time_artifice"] == v3["T3_local_time_artifice"]
+    assert v2["T2_privileged_frame"] != v3["T2_privileged_frame"]
+
+
+def test_dcr1c_uses_three_sandboxed_passes() -> None:
+    from experiments.date_cut_retrodiction.run_dcr1c import (
+        PASS_DIRS_V3,
+        SUPPORT_THRESHOLD_V3,
+    )
+
+    assert len(PASS_DIRS_V3) == 3
+    assert SUPPORT_THRESHOLD_V3 == 2
+    assert not any(d.name == "extractions" for d in PASS_DIRS_V3)
+
+
+def test_dcr1c_imports_thresholds_rather_than_restating_them() -> None:
+    """The one guarantee the late preregistration still buys."""
+    from experiments.date_cut_retrodiction import run_dcr1, run_dcr1c
+
+    source = (
+        __import__("pathlib").Path(run_dcr1c.__file__).read_text(encoding="utf-8")
+    )
+    assert "QUOTE_FIDELITY_GATE" in source
+    assert "RESIDUE_RATE_GATE" in source
+    assert run_dcr1.QUOTE_FIDELITY_GATE == 0.90
+    assert run_dcr1.RESIDUE_RATE_GATE == 0.05

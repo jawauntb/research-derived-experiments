@@ -1,0 +1,305 @@
+{
+  "doc_id": "maxwell_1865_part1",
+  "propositions": [
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "medium_mediates_distant_action",
+      "quote": "supposing them to be produced by actions which go on in the surrounding medium as well as in the excited bodies",
+      "statement": "The action between distant bodies is produced by actions which go on in the surrounding medium, not by forces acting directly at a distance.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "field_is_matter_in_motion",
+      "quote": "it may be called a Dynamical Theory, because it assumes that in that space there is matter in motion, by which the observed electromagnetic phenomena are produced.",
+      "statement": "In the space of the electromagnetic field there is matter in motion, by which the observed electromagnetic phenomena are produced.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "field_definition",
+      "quote": "The electromagnetic field is that part of space which contains and surrounds bodies in electric or magnetic conditions.",
+      "statement": "The electromagnetic field is that part of space which contains and surrounds bodies in electric or magnetic conditions.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "vacuum_still_has_matter_for_light",
+      "quote": "There is always, however, enough of matter left to receive and transmit the undulations of light and heat",
+      "statement": "Even in a so-called vacuum there is always enough matter left to receive and transmit the undulations of light and heat.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "light_heat_are_ether_undulations",
+      "quote": "we are obliged to admit that the undulations are those of an ethereal substance, and not of the gross matter",
+      "statement": "The undulations of light and heat are undulations of an ethereal substance, and not of the gross matter.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "gross_matter_modifies_ether_motion",
+      "quote": "the presence of which merely modifies in some way the motion of the ether",
+      "statement": "The presence of gross matter merely modifies the motion of the ether.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "ether_fills_space_permeates_bodies",
+      "quote": "there is an ethereal medium filling space and permeating bodies, capable of being set in motion and of transmitting that motion from one part to another",
+      "statement": "There is an ethereal medium filling space and permeating bodies, capable of being set in motion and of transmitting that motion from one part to another.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "ether_communicates_motion_heats_matter",
+      "quote": "of communicating that motion to gross matter so as to heat it and affect it in various ways",
+      "statement": "The medium is capable of communicating its motion to gross matter so as to heat it and affect it in various ways.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "medium_has_density",
+      "quote": "the medium must have a density capable of comparison with that of gross matter, and has even assigned an inferior limit to that density",
+      "statement": "The medium must have a density capable of comparison with that of gross matter, with an inferior limit that can be assigned to that density.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "medium_finite_velocity",
+      "quote": "of transmitting motion from one part to another with great, but not infinite, velocity",
+      "statement": "The medium transmits motion from one part to another with great, but not infinite, velocity.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "two_energy_forms",
+      "quote": "The medium is therefore capable of receiving and storing up two kinds of energy, namely, the \u201cactual\u201d energy depending on the motions of its parts, and \u201cpotential\u201d energy",
+      "statement": "The medium is capable of storing two kinds of energy, actual energy depending on the motions of its parts, and potential energy consisting of the work the medium will do in recovering from displacement.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "magnetism_rotates_polarization",
+      "quote": "when a plane polarized ray traverses a transparent diamagnetic medium in the direction of the lines of magnetic force produced by magnets or currents in the neighbourhood, the plane of polarization is caused to rotate",
+      "statement": "When a plane polarized ray traverses a transparent diamagnetic medium in the direction of the lines of magnetic force, the plane of polarization is caused to rotate.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "medium_motion_from_magnetization",
+      "quote": "we must admit the existence of a motion in the medium depending on the magnetization, in addition to the vibratory motion which constitutes light",
+      "statement": "There is a motion in the medium depending on the magnetization, in addition to the vibratory motion which constitutes light.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "ether_rotation_axis_magnetic_force",
+      "quote": "we have some reason to suppose that this motion is one of rotation, having the direction of the magnetic force as its axis",
+      "statement": "The motion of the ethereal medium wherever magnetic effects are observed is one of rotation, having the direction of the magnetic force as its axis.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "motion_across_lines_causes_emf",
+      "quote": "When a body is moved across the lines of magnetic force it experiences what is called an electromotive force; the two extremities of the body tend to become oppositely electrified",
+      "statement": "When a body is moved across the lines of magnetic force it experiences an electromotive force, and the two extremities of the body tend to become oppositely electrified.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "emf_decomposes_compounds",
+      "quote": "it decomposes them, and causes one of their components to pass towards on extremity of the body, and the other in the opposite direction",
+      "statement": "When electromotive force is sufficiently powerful and acts on certain compound bodies, it decomposes them and causes their components to pass in opposite directions.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "emf_definition_medium_motion",
+      "quote": "this \"electromotive force\" is the force called into play during the communication of motion from one part of the medium to another",
+      "statement": "Electromotive force is the force called into play during the communication of motion from one part of the medium to another.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "current_resistance_heat_conversion",
+      "quote": "occasions a continual transformation of electrical energy into heat, which is incapable of being restored again to the form of electrical energy by an reversal of the process",
+      "statement": "Resistance in a current occasions a continual transformation of electrical energy into heat, which is incapable of being restored again to the form of electrical energy by reversal of the process.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "dielectric_polarization",
+      "quote": "it produces a state of polarization of its parts similar in distribution to the polarity of the parts of a mass of iron under the influence of a magnet",
+      "statement": "When electromotive force acts on a dielectric it produces a state of polarization of its parts similar to the polarity of the parts of a mass of iron under the influence of a magnet.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "molecular_displacement_no_transfer",
+      "quote": "the electricity in each molecule is so displaced that one side is rendered positively and the other negatively electrical, but that the electricity remains entirely connected with the molecule, and does not pass from one molecule to another",
+      "statement": "In a dielectric under electromotive force the electricity in each molecule is displaced so that one side is positive and the other negative, but the electricity remains connected with the molecule and does not pass from one molecule to another.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "displacement_not_current_but_variations_are",
+      "quote": "This displacement does not amount to a current, because when it has attained to a certain value it remains constant, but it is the commencement of a current, and its variations constitute currents",
+      "statement": "Electric displacement does not amount to a current because it remains constant once it attains a certain value, but its variations constitute currents.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "displacement_is_elastic_yielding",
+      "quote": "electric displacement, which according to our theory is a kind of elastic yielding to the action of the force, similar to that which takes place in structures and machines owing to the want of perfect rigidity of the connections",
+      "statement": "Electric displacement is a kind of elastic yielding to the action of electromotive force, similar to the yielding that takes place in structures and machines from want of perfect rigidity of the connections.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "electric_absorption_phenomenon",
+      "quote": "when the dielectric is exposed to electromotive force, the electric displacement gradually increases, and when the electromotive force is removed, the dielectric does not instantly return to its primitive state",
+      "statement": "In electric absorption, when a dielectric is exposed to electromotive force the electric displacement gradually increases, and when the electromotive force is removed the dielectric does not instantly return to its primitive state.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "field_energy_depends_on_polarization",
+      "quote": "the intrinsic energy of the Electromagnetic Field as depending partly on its magnetic and partly on its electric polarization at every point",
+      "statement": "The intrinsic energy of the Electromagnetic Field depends partly on its magnetic and partly on its electric polarization at every point.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "only_transverse_disturbances_propagate",
+      "quote": "it is shown that the only disturbances which can be so propagated are those which are transverse to the direction of propagation",
+      "statement": "The only magnetic disturbances which can be propagated through a non-conductive field are those which are transverse to the direction of propagation.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "velocity_v_electrostatic_electromagnetic_ratio",
+      "quote": "the velocity of propagation is the velocity v , found from experiments such as those of Weber , which expresses the number of electrostatic units of electricity which are contained in one electromagnetic unit",
+      "statement": "The velocity of propagation is a velocity which expresses the number of electrostatic units of electricity which are contained in one electromagnetic unit.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "light_is_electromagnetic_disturbance",
+      "quote": "light itself (including radiant heat, and other radiations if any) is an electromagnetic disturbance in the form of waves propagated through the electromagnetic field according to electromagnetic laws",
+      "statement": "Light itself, including radiant heat, is an electromagnetic disturbance in the form of waves propagated through the electromagnetic field according to electromagnetic laws.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "refraction_index_relation",
+      "quote": "the square of the index of refraction is equal to the product of the specific dielectric capacity and the specific magnetic capacity",
+      "statement": "The square of the index of refraction is equal to the product of the specific dielectric capacity and the specific magnetic capacity.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "conducting_media_opaque",
+      "quote": "Conducting media are shown to absorb such radiations rapidly, and therefore to be generally opaque.",
+      "statement": "Conducting media absorb such radiations rapidly, and are therefore generally opaque.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "force_depends_on_position_condition",
+      "quote": "this force depends in a certain way upon the relative position of the bodies and on their electric or magnetic condition",
+      "statement": "The force between bodies depends in a certain way upon the relative position of the bodies and on their electric or magnetic condition.",
+      "support": 3
+    }
+  ]
+}

@@ -1,0 +1,285 @@
+{
+  "doc_id": "larmor_1900_ch10",
+  "propositions": [
+    {
+      "name": "aether_pervaded_by_electrons",
+      "statement": "The material system consists of free aether pervaded by electrons, most of which are grouped into material molecules.",
+      "quote": "the material system as consisting of free aether pervaded by a system of electrons which are to be treated individually, some of them free or isolated, but the great majority of them grouped into material molecules",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_equations_from_optics_and_electrodynamics",
+      "statement": "The dynamical equations of the free aether have been ascertained independently from both the optical side and the electrodynamic side of its activity.",
+      "quote": "whose dynamical equations have been definitely ascertained in quite independent ways from consideration of both the optical side and the electrodynamic side of its activity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_as_singular_point",
+      "statement": "An electron occurs as a singular point in the aether at which the aethereal displacement increases indefinitely.",
+      "quote": "An electron e will occur in this analysis as a singular point in the aether, on approaching which the elastic strain constituting the aethereal displacement ( f, g, h ) increases indefinitely",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "electron_nucleus_of_strain",
+      "statement": "The singularity of the electron represents a definite structure, forming a nucleus of strain in the aether, capable of transference across the aether independently of motion of the aether itself.",
+      "quote": "this singularity represents a definite structure, forming a nucleus of strain in the aether, which is capable of transference across that medium independently of motion of the aether itself",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "strain_carried_with_electron",
+      "statement": "The portion of aethereal strain associated with the electron is carried along with the electron in its motion.",
+      "quote": "the portion of the surrounding aethereal strain, of which the displacement-vector ( f, g, h ) is the expression, which is associated with the electron and is carried along with the electron in its motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "energy_concentrated_at_nucleus",
+      "statement": "The energy of the displacement associated with the electron is closely concentrated around the nucleus of the electron and not widely diffused.",
+      "quote": "the energy of this part of the displacement is closely concentrated around the nucleus of the electron, and not widely diffused as might at first sight appear",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electrons_as_sources_and_sinks",
+      "statement": "Where electrons are present, the integral of the normal component of the aethereal displacement over the boundary of any region is equal to the quantity of electrons existing in the region.",
+      "quote": "when electrons are present the integral of the normal component of the aethereal displacement over the boundary of any region, instead of being null, is equal to the quantity Σe of electrons existing in the region",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_magnetic_singular_points",
+      "statement": "The magnetic induction possesses the stream property, but singular points of the nature of simple poles do not exist in its distribution.",
+      "quote": "the magnetic induction ( a, b, c ), also possesses the stream property; but singular points in its distribution, of the nature of simple poles, do not exist",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "moving_electron_rotational_singularity",
+      "statement": "The motion of an electron involves a singularity in the magnetic induction, of a rotational type, with its nucleus at the moving electron.",
+      "quote": "The motion of an electron involves however a singularity in ( a, b, c ), of a rotational type, with its nucleus at the moving electron",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "orbital_motion_as_magnetic_doublet",
+      "statement": "The time-average of the rotational singularity for a rapid steady orbital motion of an electron is analytically equivalent, at distances considerable compared with the dimensions of the orbit, to a magnetic doublet.",
+      "quote": "the time-average of this singularity for a very rapid minute steady orbital motion of an electron is analytically equivalent, at distances considerable compared with the dimensions of the orbit, to a magnetic doublet",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_sensibly_at_rest",
+      "statement": "The various parts of the aether are supposed to be sensibly at rest, so that the time-rate of change of the strain of any element of the aether is represented by differentiation with respect to time.",
+      "quote": "the various parts of the aether are supposed to be sensibly at rest, so that for example the time-rate of change of the strain of any element of the aether is represented by differentiation with respect to the time",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_equations_linear",
+      "statement": "The equations of the aether are much simpler than those of the dynamics of fluid motion, being in fact linear.",
+      "quote": "in this respect the equations of the aether are much simpler than those of the dynamics of fluid motion, being in fact linear.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_stagnant",
+      "statement": "The aether is stagnant, while the molecules constituting the Earth and all other material bodies flit through it without producing any finite flow in it.",
+      "quote": "The aether is stagnant on this theory, while the molecules constituting the Earth and all other material bodies flit through it without producing any finite flow in it",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aberration_and_doppler_hold",
+      "statement": "Because the aether is stagnant, the law of the astronomical aberration of light is rigorously maintained and the Doppler change of wave-length of radiation from a moving source holds good.",
+      "quote": "hence the law of the astronomical aberration of light is rigorously maintained, and the Doppler change of wave-length of radiation from a moving source holds good",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "terrestrial_optics_unaffected_by_earths_motion",
+      "statement": "All purely terrestrial optical phenomena are unaffected by the Earth's motion.",
+      "quote": "all purely terrestrial optical phenomena are unaffected by the Earth's motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "c_is_velocity_of_propagation",
+      "statement": "c is the single physical constant of the aether, being the velocity of propagation of elastic disturbances through the aether.",
+      "quote": "c is the single physical constant of the aether, being the velocity of propagation of elastic disturbances through it",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "optical_and_electric_equations_coincide",
+      "statement": "The equations of the dynamics of free aether are the same as the equations arrived at earlier in the formulation of the dynamics of optical media.",
+      "quote": "they are the same as the equations arrived at by MacCullagh a quarter of a century earlier in his formulation of the dynamics of optical media",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_dynamics_exceptionally_precise",
+      "statement": "The analytical formulation of the dynamical relations of free aether has an exactness and precision not surpassed in any other department of physics, even the theory of gravitation.",
+      "quote": "have imparted to this analytical formulation of the dynamical relations of free aether an exactness and precision which is not surpassed in any other department of physics, even in the theory of gravitation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "state_determines_future_state",
+      "statement": "From a knowledge of the state of the system at any time, the state at a later time can be immediately expressed, and by successive steps the state at any further time can be derived.",
+      "quote": "from a knowledge of the state of the system at any time t the state at the time t + δt can be immediately expressed, and so by successive steps",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "initial_state_determines_electron_motions",
+      "statement": "The solution of the aether equations in terms of a given initial state of the system determines the motions of the electrons through the medium as well as the changes of strain in the medium itself.",
+      "quote": "the solution of these equations in terms of a given initial state of the system determines the motions of the electrons or strain-nuclei through the medium, as well as the changes of strain in the medium itself",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_labile_through_aether",
+      "statement": "The nucleus of the electron is quite labile as regards displacement through the aether, its movement not influenced by any inertia or forces except such as are the expression of its relation to the aether.",
+      "quote": "the nucleus of the electron is quite labile as regards displacement through the aether, in other words that its movement is not influenced by any inertia or forces except such as are the expression of its relation to the aether",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "electron_as_volume_distribution",
+      "statement": "The infinite values of the vectors at the nucleus may be removed by considering the nucleus to consist of a volume distribution of electricity of finite but very great density, distributed through a very small space instead of being concentrated in a point.",
+      "quote": "by considering the nucleus to consist of a volume distribution of electricity of finite but very great density, distributed through a very small space instead of being absolutely concentrated in a point",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electrons_treated_as_points",
+      "statement": "Nothing is assumed of the detailed structure of electrons; so long as the dimensions of their nuclei are extremely small compared with the distances between them, it suffices for the theory to consider them as points.",
+      "quote": "so long as the actual dimensions of their nuclei are extremely small in comparison with the distances between them, it will suffice for the theory to consider them as points",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "method_incomplete_for_electron_self_energy",
+      "statement": "The method of treating electrons as points is incomplete as regards those portions of the energy and other quantities associated with the mutual actions of the parts of the electron itself.",
+      "quote": "This method is incomplete only as regards those portions of the energy and other quantities that are associated with the mutual actions of the parts of the electron itself",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "atoms_are_aggregations_of_electrons",
+      "statement": "Atoms of matter are constituted of aggregations of electrons, and the only actions between atoms are electric forces.",
+      "quote": "atoms of matter are constituted of aggregations of electrons, the only actions between atoms are what may be described as electric forces",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "chemical_affinity_is_electric",
+      "statement": "The electric character of the forces of chemical affinity is an accepted hypothesis.",
+      "quote": "The electric character of the forces of chemical affinity was an accepted part of the chemical views of Davy, Berzelius, and Faraday",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "cohesion_forces_undeveloped",
+      "statement": "The mode in which the ordinary forces of cohesion could be included in the view that atoms are aggregations of electrons is still quite undeveloped.",
+      "quote": "The mode in which the ordinary forces of cohesion could be included in such a view is still quite undeveloped.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "atom_as_vortex_ring",
+      "statement": "In the concrete realization of the theory of the aether, the atom of matter possesses all the dynamical properties of a vortex ring in a frictionless fluid.",
+      "quote": "the atom of matter possesses all the dynamical properties of a vortex ring in a frictionless fluid, so that everything that can be done in the domain of vortex-ring illustration is implicitly attached to the present scheme",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "mind_as_part_of_nature",
+      "statement": "The mental apparatus with which the search for explanation is conducted is itself in one of its aspects a part of the scheme of Nature which it attempts to unravel.",
+      "quote": "the mental apparatus with which we conduct the search is itself in one of its aspects a part of the scheme of Nature which it attempts to unravel",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_stationary_relative_to_observer_motion",
+      "statement": "Phenomena are altered when the observer and his apparatus are in uniform motion through the stationary aether.",
+      "quote": "how phenomena are altered when the observer and his apparatus are in uniform motion through the stationary aether",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "epsilon_second_order_small",
+      "statement": "The factor epsilon differs from unity only by a quantity of the second order of small quantities, an order that is neglected in the correspondence between the two systems.",
+      "quote": "which is of the second order of small quantities; hence we have the following correspondence when that order is neglected",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "transformation_applies_to_dielectric_media",
+      "statement": "The analytical transformation of the equations applies to any isotropic dielectric medium as well as to free aether, altering c into the velocity of radiation in that medium.",
+      "quote": "the above analytical transformation of the equations applies to any isotropic dielectric medium as well as to free aether: we have only to alter c into the velocity of radiation in that medium",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "moving_dielectric_alters_current_type",
+      "statement": "Comparison of a moving material system, treated as continuous, with the same system at rest is obstructed because the motion of the polarized dielectric matter has altered the mathematical type of the electric current.",
+      "quote": "we are arrested if we attempt to proceed to compare a moving material system, treated as continuous, with the same system at rest; for the motion of the polarized dielectric matter has altered the mathematical type of the electric current",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "steady_system_electron_distribution_matches",
+      "statement": "When the system at rest is steady, the distribution of electrons in the moving system is at each instant precisely the same as in the system at rest, while the moving system accompanies its axes of reference in their uniform motion through the aether.",
+      "quote": "the distribution of electrons in the second system will be at each instant precisely the same as that in the first, while the second system accompanies its axes of reference in their uniform motion through the aether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "equilibrium_preserved_in_uniform_motion",
+      "statement": "Given any system of electrified bodies at rest in equilibrium under their mutual electric influences and imposed constraints, there is a precisely identical system in equilibrium under the same constraints in uniform translatory motion through the aether.",
+      "quote": "given any system of electrified bodies at rest, in equilibrium under their mutual electric influences and imposed constraints, there will be a precisely identical system in equilibrium under the same constraints, and in uniform translatory motion through the aether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "uniform_motion_no_first_order_effect",
+      "statement": "Uniform translatory motion through the aether does not produce any alteration in electric distributions as far as the first order of the ratio of the velocity of the system to the velocity of radiation is concerned.",
+      "quote": "uniform translatory motion through the aether does not produce any alteration in electric distributions as far as the first order of the ratio of the velocity of the system to the velocity of radiation is concerned",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "result_independent_of_molecular_force_theory",
+      "statement": "The result that uniform motion does not alter electric distributions to the first order is independent of any theory as to the nature of the forces between material molecules, so long as the structure of matter is unaltered to the first order by motion through the aether.",
+      "quote": "this result is independent of any theory as to the nature of the forces between material molecules: the structure of the matter being assumed unaltered to the first order by motion through the aether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_new_forces_needed_in_motion",
+      "statement": "If a configuration of ionic charges is the natural one in a material system at rest, the maintenance of the same configuration in a system in uniform motion will not require the aid of any new forces.",
+      "quote": "if any configuration of ionic charges is the natural one in a material system at rest, the maintenance of the same configuration as regards the system in uniform motion will not require the aid of any new forces",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_movements_traceable_through_aether_equations",
+      "statement": "The electron taken by itself must be on any conceivable theory a simple singularity of the aether whose movements when free, and interactions with other electrons if constrained by matter, are traceable through the differential equations of the surrounding free aether.",
+      "quote": "a simple singularity of the aether whose movements when it is free, and interactions with other electrons if it can be constrained by matter, are traceable through the differential equations of the surrounding free aether alone",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "displacements_differ_to_first_order",
+      "statement": "Though the fixed and the moving system of electrons of this correlation are at corresponding instants identical, the electric and magnetic displacements belonging to them differ by terms of the first order.",
+      "quote": "though the fixed and the moving system of electrons of this correlation are at corresponding instants identical, yet the electric and magnetic displacements belonging to them differ by terms of the first order",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}
