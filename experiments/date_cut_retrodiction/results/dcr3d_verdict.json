@@ -1,0 +1,166 @@
+{
+  "T1_rank_1880": 1,
+  "T1_rank_1904": 2,
+  "T1_ratio_1880": 4.5,
+  "T1_ratio_1904": 1.25,
+  "cuts": {
+    "1880": {
+      "T1_rank": 1,
+      "cut_year": 1880,
+      "discussion_count": {
+        "T1": 1,
+        "T2": 19,
+        "T3": 0
+      },
+      "n_documents": 3,
+      "n_propositions": 51,
+      "ranking": [
+        {
+          "class": "T1",
+          "discussion_count": 1,
+          "ratio": 4.5,
+          "use_count": 9
+        },
+        {
+          "class": "T2",
+          "discussion_count": 19,
+          "ratio": 1.0,
+          "use_count": 20
+        },
+        {
+          "class": "T3",
+          "discussion_count": 0,
+          "ratio": 0.0,
+          "use_count": 0
+        }
+      ],
+      "ratios": {
+        "T1": 4.5,
+        "T2": 1.0,
+        "T3": 0.0
+      },
+      "use_count": {
+        "T1": 9,
+        "T2": 20,
+        "T3": 0
+      }
+    },
+    "1897": {
+      "T1_rank": 1,
+      "cut_year": 1897,
+      "discussion_count": {
+        "T1": 1,
+        "T2": 55,
+        "T3": 1
+      },
+      "n_documents": 8,
+      "n_propositions": 135,
+      "ranking": [
+        {
+          "class": "T1",
+          "discussion_count": 1,
+          "ratio": 1.5,
+          "use_count": 3
+        },
+        {
+          "class": "T3",
+          "discussion_count": 1,
+          "ratio": 0.5,
+          "use_count": 1
+        },
+        {
+          "class": "T2",
+          "discussion_count": 55,
+          "ratio": 0.4642857142857143,
+          "use_count": 26
+        }
+      ],
+      "ratios": {
+        "T1": 1.5,
+        "T2": 0.4642857142857143,
+        "T3": 0.5
+      },
+      "use_count": {
+        "T1": 3,
+        "T2": 26,
+        "T3": 1
+      }
+    },
+    "1904": {
+      "T1_rank": 2,
+      "cut_year": 1904,
+      "discussion_count": {
+        "T1": 7,
+        "T2": 25,
+        "T3": 4
+      },
+      "n_documents": 15,
+      "n_propositions": 254,
+      "ranking": [
+        {
+          "class": "T2",
+          "discussion_count": 25,
+          "ratio": 1.9230769230769231,
+          "use_count": 50
+        },
+        {
+          "class": "T1",
+          "discussion_count": 7,
+          "ratio": 1.25,
+          "use_count": 10
+        },
+        {
+          "class": "T3",
+          "discussion_count": 4,
+          "ratio": 0.4,
+          "use_count": 2
+        }
+      ],
+      "ratios": {
+        "T1": 1.25,
+        "T2": 1.9230769230769231,
+        "T3": 0.4
+      },
+      "use_count": {
+        "T1": 10,
+        "T2": 50,
+        "T3": 2
+      }
+    }
+  },
+  "gates": {
+    "M1_T1_first_at_1904": {
+      "T1_rank": 2,
+      "decision": "NO_GO",
+      "top_class": "T2",
+      "top_ratio": 1.9230769230769231
+    },
+    "M2_T1_not_first_at_1880": {
+      "T1_rank": 1,
+      "decision": "NO_GO",
+      "top_class": "T1"
+    },
+    "M3_beats_random_null": {
+      "decision": "NO_GO",
+      "n_trials": 10000,
+      "p_value": 0.3291,
+      "threshold": 0.01
+    },
+    "M4_prompt_committed": {
+      "decision": "GO",
+      "sha256": "24384377bfab8dfe87cc72ce01d0908da992cddb2e39d11781cb42f432dbea05"
+    }
+  },
+  "kind": "dcr3d_verdict",
+  "licensed_reading": "fifth_serial_null: T1 rank 2 even under use/discussion ratio scoring. Silent-but-load-bearing intuition correct in spirit but this specific operationalisation does not invert T2's dominance. Structural implication for DR9-theorem.",
+  "n_null_trials": 10000,
+  "null_probability_T1_first_at_1904": 0.3291,
+  "overall_decision": "NO_GO",
+  "prompt_sha256": "24384377bfab8dfe87cc72ce01d0908da992cddb2e39d11781cb42f432dbea05",
+  "purpose": "Test whether use/(discussion+1) ratio -- rewarding commitments that are load-bearing but not community-discussed -- ranks T1 first at 1904 target cut AND NOT first at 1880 placebo cut.",
+  "verifiers": [
+    "A",
+    "B",
+    "C"
+  ]
+}
