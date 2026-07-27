@@ -1,0 +1,18 @@
+{
+  "kind": "dr6g_verifier_scores",
+  "verifier_id": "C",
+  "scores": {
+    "R1_utcnow_direct": 9,
+    "R2_replace_tzinfo_none": 9,
+    "R3_time_fromtimestamp": 9,
+    "R4_iso_parse_no_tz": 8,
+    "R5_combine_utc_convention": 9,
+    "P1_pytz_localize": 2,
+    "P2_now_with_timezone_utc": 1,
+    "P3_zoneinfo_user_tz": 2,
+    "P4_no_datetime_arithmetic": 0,
+    "P5_arrow_aware": 2,
+    "R6_json_field_no_tz": 10
+  },
+  "reasoning": "R1 uses datetime.utcnow() returning naive datetimes and silently assumes the system clock and stored created_at are both UTC-naive. R2 calls astimezone().replace(tzinfo=None) which implicitly depends on the machine's local timezone to define 'UTC' storage. R3 wraps time.time() in datetime.fromtimestamp which implicitly uses the local timezone yet is compared as if UTC. R4 parses log timestamps without a timezone and assumes the log producer's clock convention matches the consumer. R5 combines a date with midnight and comments 'assumed UTC by fleet convention' but produces a naive datetime relying on that unwritten convention. P1 explicitly localizes via pytz.utc; the only mild implicit assumption is that naive input actually represents UTC. P2 requires tz-aware input, uses timezone.utc explicitly, and makes no environmental assumption. P3 accepts a user tz name and requires aware input, making its assumptions explicit via ValueError. P4 is pure numerical code with no environmental dependency. P5 uses arrow and requires tz-aware input, with only trivial reliance on arrow.utcnow being correct. R6 constructs a naive datetime from JSON integer fields relying entirely on the unstated 'fleet-wide UTC' convention embedded only in a docstring."
+}

@@ -1,0 +1,177 @@
+{
+  "gates": {
+    "G1_median_below_DR6f": {
+      "decision": "NO_GO",
+      "value": 9.0
+    },
+    "G2_gap_below_DR6f": {
+      "decision": "NO_GO",
+      "value": 6
+    },
+    "G3_R6_below_DR6f": {
+      "decision": "NO_GO",
+      "value": 10
+    },
+    "G4_wall_direct": {
+      "decision": "NO_GO",
+      "max_p": 2,
+      "min_r": 8
+    }
+  },
+  "gradient_comparison": {
+    "DR6e_D_specified": {
+      "R6": 10,
+      "overlap_gap": 7,
+      "r_median": 9.5
+    },
+    "DR6f_D_adjacent": {
+      "R6": 8,
+      "overlap_gap": 6,
+      "r_median": 9.0
+    },
+    "DR6g_domain_blind": {
+      "R6": 10,
+      "overlap_gap": 6,
+      "r_median": 9.0
+    }
+  },
+  "kind": "dr6g_verdict",
+  "licensed_reading": "domain_blind_still_discriminates: Claude preserved discrimination even without domain framing. LLM verifier is doing more than semantic reasoning about D \u2014 possibly recognising implicit-vs-explicit style as a domain-independent signal.",
+  "n_snippets": 11,
+  "overall_decision": "NO_GO",
+  "per_snippet": {
+    "P1_pytz_localize": {
+      "consensus": 2,
+      "kind": "placebo",
+      "per_verifier": [
+        3,
+        2,
+        2
+      ],
+      "surface_form": "pytz.utc.localize()"
+    },
+    "P2_now_with_timezone_utc": {
+      "consensus": 1,
+      "kind": "placebo",
+      "per_verifier": [
+        1,
+        1,
+        1
+      ],
+      "surface_form": "datetime.now(timezone.utc)"
+    },
+    "P3_zoneinfo_user_tz": {
+      "consensus": 2,
+      "kind": "placebo",
+      "per_verifier": [
+        2,
+        2,
+        2
+      ],
+      "surface_form": "zoneinfo user-supplied timezone"
+    },
+    "P4_no_datetime_arithmetic": {
+      "consensus": 0,
+      "kind": "placebo",
+      "per_verifier": [
+        0,
+        0,
+        0
+      ],
+      "surface_form": "no datetime, arithmetic only"
+    },
+    "P5_arrow_aware": {
+      "consensus": 2,
+      "kind": "placebo",
+      "per_verifier": [
+        2,
+        2,
+        2
+      ],
+      "surface_form": "arrow / third-party timezone-aware"
+    },
+    "R1_utcnow_direct": {
+      "consensus": 9,
+      "kind": "realisation",
+      "per_verifier": [
+        9,
+        9,
+        9
+      ],
+      "surface_form": "datetime.utcnow() direct use"
+    },
+    "R2_replace_tzinfo_none": {
+      "consensus": 9,
+      "kind": "realisation",
+      "per_verifier": [
+        8,
+        9,
+        9
+      ],
+      "surface_form": ".replace(tzinfo=None) to strip timezone"
+    },
+    "R3_time_fromtimestamp": {
+      "consensus": 9,
+      "kind": "realisation",
+      "per_verifier": [
+        9,
+        10,
+        9
+      ],
+      "surface_form": "time.time() \u2192 fromtimestamp yields naive"
+    },
+    "R4_iso_parse_no_tz": {
+      "consensus": 8,
+      "kind": "realisation",
+      "per_verifier": [
+        8,
+        9,
+        8
+      ],
+      "surface_form": "ISO parse without timezone"
+    },
+    "R5_combine_utc_convention": {
+      "consensus": 9,
+      "kind": "realisation",
+      "per_verifier": [
+        9,
+        9,
+        9
+      ],
+      "surface_form": "combine(date, time) \u2014 UTC by convention"
+    },
+    "R6_json_field_no_tz": {
+      "consensus": 10,
+      "kind": "realisation",
+      "per_verifier": [
+        9,
+        10,
+        10
+      ],
+      "surface_form": "datetime from JSON dict integer fields, no tz"
+    }
+  },
+  "purpose": "Fully domain-blind Claude verifier \u2014 extreme end of semantic-access gradient.",
+  "summary": {
+    "R6_score": 10,
+    "overlap_gap": 6,
+    "placebo_max": 2,
+    "placebo_median": 2,
+    "placebo_scores": [
+      2,
+      1,
+      2,
+      0,
+      2
+    ],
+    "realisation_median": 9.0,
+    "realisation_scores": [
+      9,
+      9,
+      9,
+      8,
+      9,
+      10
+    ]
+  }
+}
