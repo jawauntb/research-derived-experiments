@@ -17,7 +17,7 @@
 - **Scientific adjudications:** unadjudicated
 
 ## Verification
-- Pre-registration: `experiments/dr6_code_correctness_corollary/DR6_PREREGISTRATION.md`
+- Pre-registration: `experiments/dr6_code_correctness_corollary/DR6C_PREREGISTRATION.md`
 - Result reports (1):
   - `experiments/dr6_code_correctness_corollary/results/dr6_verdict.json`
 
