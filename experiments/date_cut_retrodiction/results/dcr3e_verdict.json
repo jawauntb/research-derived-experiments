@@ -1,0 +1,62 @@
+{
+  "T1_rank_by_full_drop": 1,
+  "T1_rank_by_recent_drop": 1,
+  "drop_1880_to_1904": {
+    "T1": 3.25,
+    "T2": -0.9230769230769231,
+    "T3": -0.4
+  },
+  "drop_1897_to_1904": {
+    "T1": 0.25,
+    "T2": -1.458791208791209,
+    "T3": 0.09999999999999998
+  },
+  "honest_status": "POST-HOC: DCR3e is an analytic quantification of DCR3d's trajectory finding, not a fresh preregistered test. The scoring rule was chosen AFTER seeing DCR3d's cross-cut ratios. Any 'GO' outcome here cannot be counted as an independent empirical success. DCR4 (Einstein 1905 as oracle) is the preregistered companion for actual falsification.",
+  "kind": "dcr3e_verdict",
+  "purpose": "Quantify DCR3d's trajectory finding: measure the DROP in each class's use/discussion ratio across the three cuts. Under DCR3d's interpretation, the class with the largest drop is the one being brought into discussion \u2014 the deletability-transition signal.",
+  "ranking_by_full_drop_1880_1904": [
+    {
+      "class": "T1",
+      "drop": 3.25
+    },
+    {
+      "class": "T3",
+      "drop": -0.4
+    },
+    {
+      "class": "T2",
+      "drop": -0.9230769230769231
+    }
+  ],
+  "ranking_by_recent_drop_1897_1904": [
+    {
+      "class": "T1",
+      "drop": 0.25
+    },
+    {
+      "class": "T3",
+      "drop": 0.09999999999999998
+    },
+    {
+      "class": "T2",
+      "drop": -1.458791208791209
+    }
+  ],
+  "ratios_per_cut": {
+    "T1": {
+      "1880": 4.5,
+      "1897": 1.5,
+      "1904": 1.25
+    },
+    "T2": {
+      "1880": 1.0,
+      "1897": 0.4642857142857143,
+      "1904": 1.9230769230769231
+    },
+    "T3": {
+      "1880": 0.0,
+      "1897": 0.5,
+      "1904": 0.4
+    }
+  }
+}
