@@ -1,0 +1,189 @@
+{
+  "electrodynamics_cuts": {
+    "1880": {
+      "T1_hits": [
+        {
+          "doc_id": "maxwell_1865_part1",
+          "name": "instant_across_whole_medium",
+          "statement": "There is an instant at which the amount of energy in the whole medium is a definite quantity equally divided."
+        }
+      ],
+      "T2_count": 0,
+      "T3_count": 0,
+      "cut_year": 1880,
+      "is_placebo": true,
+      "label": "deep placebo",
+      "n_propositions": 51
+    },
+    "1897": {
+      "T1_hits": [
+        {
+          "doc_id": "maxwell_1865_part1",
+          "name": "instant_across_whole_medium",
+          "statement": "There is an instant at which the amount of energy in the whole medium is a definite quantity equally divided."
+        },
+        {
+          "doc_id": "lodge_1897_absence",
+          "name": "time_of_journey_perfectly_definite",
+          "statement": "The time of journey of light along any given path through any kind of material is perfectly definite and independent of the motion of the material."
+        }
+      ],
+      "T2_count": 8,
+      "T3_count": 0,
+      "cut_year": 1897,
+      "is_placebo": true,
+      "label": "near placebo",
+      "n_propositions": 135
+    },
+    "1904": {
+      "T1_hits": [
+        {
+          "doc_id": "maxwell_1865_part1",
+          "name": "instant_across_whole_medium",
+          "statement": "There is an instant at which the amount of energy in the whole medium is a definite quantity equally divided."
+        },
+        {
+          "doc_id": "lodge_1897_absence",
+          "name": "time_of_journey_perfectly_definite",
+          "statement": "The time of journey of light along any given path through any kind of material is perfectly definite and independent of the motion of the material."
+        },
+        {
+          "doc_id": "poincare_1898_time",
+          "name": "same_causes_take_same_time",
+          "statement": "The duration of two identical phenomena is the same, so the same causes take the same time to produce the same effects."
+        },
+        {
+          "doc_id": "poincare_1898_time",
+          "name": "eclipse_perceived_simultaneously_over_earth",
+          "statement": "The astronomers suppose that an eclipse of the moon is perceived simultaneously from all points of the earth."
+        },
+        {
+          "doc_id": "poincare_1898_time",
+          "name": "transmission_duration_practically_neglected",
+          "statement": "In general the duration of the transmission of a signal is neglected and the two events are regarded as simultaneous."
+        },
+        {
+          "doc_id": "larmor_1900_ch11",
+          "name": "common_time_across_two_systems",
+          "statement": "There is a common time t in which the position of an electron in the moving medium can be compared to its position in the medium at rest at time t minus vx over c squared."
+        },
+        {
+          "doc_id": "lorentz_1904",
+          "name": "true_time_defines_corresponding_instants",
+          "statement": "Corresponding instants at two points are defined by equating the true time at one point to the local time at the other."
+        }
+      ],
+      "T2_count": 11,
+      "T3_count": 2,
+      "cut_year": 1904,
+      "is_placebo": false,
+      "label": "target",
+      "n_propositions": 254
+    }
+  },
+  "gates": {
+    "R1_heldout_well_formed": {
+      "decision": "GO",
+      "n_negative": 40,
+      "n_positive": 40
+    },
+    "R2_T1_positive_accuracy": {
+      "decision": "NO_GO",
+      "threshold": 0.7,
+      "value": 0.325
+    },
+    "R3_T1_negative_rejection": {
+      "decision": "GO",
+      "threshold": 0.85,
+      "value": 0.875
+    },
+    "R4_T1_fires_at_1897": {
+      "decision": "GO",
+      "n_hits": 2
+    },
+    "R5_T1_silent_at_1880": {
+      "decision": "NO_GO",
+      "n_hits": 1
+    },
+    "R6_newton_sanity": {
+      "decision": "GO",
+      "n_hits": 3
+    }
+  },
+  "heldout_digest": "8acdee3b9a4ede612a57a9efb37449337db38e889b2124f86992b5b1e49dc003",
+  "heldout_expected_digest": "8acdee3b9a4ede612a57a9efb37449337db38e889b2124f86992b5b1e49dc003",
+  "heldout_validation": {
+    "R2_positive_accuracy": {
+      "decision": "NO_GO",
+      "threshold": 0.7,
+      "value": 0.325
+    },
+    "R3_negative_accuracy": {
+      "decision": "GO",
+      "threshold": 0.85,
+      "value": 0.875
+    },
+    "digest": "8acdee3b9a4ede612a57a9efb37449337db38e889b2124f86992b5b1e49dc003",
+    "n_negative": 40,
+    "n_positive": 40,
+    "neg_accuracy": 0.875,
+    "neg_correct": 35,
+    "pos_accuracy": 0.325,
+    "pos_correct": 13
+  },
+  "kind": "dcr1f_verdict",
+  "licensed_reading": "reading_B_confirmed: extractor is projecting. T1 fired at 1880 deep placebo where the arguments requiring it do not exist. Stronger DR2-shaped framework limit.",
+  "matcher_v3_v4_at_1904": {
+    "new_in_v4": {
+      "T1_absolute_simultaneity": [
+        "There is an instant at which the amount of energy in the whole medium is a definite quantity equally divided.",
+        "The time of journey of light along any given path through any kind of material is perfectly definite and independent of the motion of the material.",
+        "The duration of two identical phenomena is the same, so the same causes take the same time to produce the same effects.",
+        "The astronomers suppose that an eclipse of the moon is perceived simultaneously from all points of the earth.",
+        "In general the duration of the transmission of a signal is neglected and the two events are regarded as simultaneous.",
+        "There is a common time t in which the position of an electron in the moving medium can be compared to its position in the medium at rest at time t minus vx over c squared.",
+        "Corresponding instants at two points are defined by equating the true time at one point to the local time at the other."
+      ],
+      "T2_privileged_frame": [],
+      "T3_local_time_artifice": []
+    },
+    "v3_counts": {
+      "T1_absolute_simultaneity": 0,
+      "T2_privileged_frame": 11,
+      "T3_local_time_artifice": 2
+    },
+    "v3_facets_present": [
+      "T2_privileged_frame",
+      "T3_local_time_artifice"
+    ],
+    "v4_counts": {
+      "T1_absolute_simultaneity": 7,
+      "T2_privileged_frame": 11,
+      "T3_local_time_artifice": 2
+    },
+    "v4_facets_present": [
+      "T1_absolute_simultaneity",
+      "T2_privileged_frame",
+      "T3_local_time_artifice"
+    ]
+  },
+  "newton_sanity": {
+    "T1_hits": [
+      {
+        "name": "absolute_time_flows_equably",
+        "statement": "Absolute time, of itself and from its own nature, flows equably without regard to anything external."
+      },
+      {
+        "name": "duration_independent_of_motion",
+        "statement": "The duration of the existence of things remains the same whether motions are swift, slow, or none at all."
+      },
+      {
+        "name": "no_equable_motion_may_exist",
+        "statement": "There may be no equable motion in nature, yet the progress of absolute time is liable to no change."
+      }
+    ],
+    "n_propositions": 22
+  },
+  "overall_decision": "NO_GO",
+  "purpose": "Test whether target_v4 (widened for presuppositional phrasings) resolves the DCR1e recognizer gap. Held-out validation then score on DCR1e outputs."
+}
