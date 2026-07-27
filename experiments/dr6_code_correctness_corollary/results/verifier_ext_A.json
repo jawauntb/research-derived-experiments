@@ -1,0 +1,18 @@
+{
+  "kind": "dr6e_verifier_scores",
+  "verifier_id": "A",
+  "scores": {
+    "R1_utcnow_direct": 10,
+    "R2_replace_tzinfo_none": 9,
+    "R3_time_fromtimestamp": 8,
+    "R4_iso_parse_no_tz": 9,
+    "R5_combine_utc_convention": 10,
+    "P1_pytz_localize": 1,
+    "P2_now_with_timezone_utc": 0,
+    "P3_zoneinfo_user_tz": 0,
+    "P4_no_datetime_arithmetic": 0,
+    "P5_arrow_aware": 0,
+    "R6_json_field_no_tz": 10
+  },
+  "reasoning": "R1 uses datetime.utcnow() producing naive datetimes treated as UTC by convention — textbook D. R2 explicitly strips tzinfo to store as naive UTC, strong D though the astimezone() call converts to local first, which is a bug but still assumes naive=UTC downstream. R3 uses datetime.fromtimestamp(time.time()) which produces naive local time interpreted as UTC by convention — strong D (technically uses local, but the code treats it as if UTC). R4 parses ISO strings without tz and compares them, clearly assuming a UTC convention on naive datetimes. R5 combines date+time into a naive datetime with an explicit comment about UTC-by-convention — canonical D. P1 uses pytz.localize to make datetimes UTC-aware, opposite of D. P2 uses datetime.now(timezone.utc) and rejects naive inputs — opposite of D. P3 uses zoneinfo and requires aware datetimes — opposite of D. P4 doesn't use datetime at all — not applicable, 0. P5 uses arrow with explicit tz-aware checks — opposite of D. R6 constructs a naive datetime from JSON fields with a docstring explicitly stating UTC-by-convention — canonical D."
+}

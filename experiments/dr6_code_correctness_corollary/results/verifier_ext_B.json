@@ -1,0 +1,18 @@
+{
+  "kind": "dr6e_verifier_scores",
+  "verifier_id": "B",
+  "scores": {
+    "R1_utcnow_direct": 10,
+    "R2_replace_tzinfo_none": 9,
+    "R3_time_fromtimestamp": 8,
+    "R4_iso_parse_no_tz": 8,
+    "R5_combine_utc_convention": 10,
+    "P1_pytz_localize": 1,
+    "P2_now_with_timezone_utc": 0,
+    "P3_zoneinfo_user_tz": 0,
+    "P4_no_datetime_arithmetic": 0,
+    "P5_arrow_aware": 1,
+    "R6_json_field_no_tz": 10
+  },
+  "reasoning": "R1 uses datetime.utcnow() producing naive datetimes treated as UTC by convention, textbook D. R2 explicitly strips tzinfo to store in a naive-UTC column, strongly embodies D. R3 uses datetime.fromtimestamp(time.time()) which is naive local (though comment/intent implies UTC convention), embodies D but slightly off since fromtimestamp returns local not UTC. R4 parses ISO strings without tz into naive datetimes and compares them, implicit UTC convention. R5 explicitly documents 'assumed UTC by fleet convention' with naive datetime.combine, unambiguous D. P1 explicitly localizes to UTC with pytz, produces aware datetimes, does not embody D. P2 uses datetime.now(timezone.utc) and requires aware inputs, opposite of D. P3 works only on aware datetimes with explicit zoneinfo, opposite of D. P4 has no datetime code at all, does not embody D. P5 uses arrow and rejects naive input, opposite of D. R6 constructs a naive datetime from JSON integers with docstring explicitly relying on a UTC convention, textbook D."
+}
