@@ -26,25 +26,61 @@ the **intervention algebra** — the family of interventions under
 which behavior changes — not inside the visible representation. Three
 tests. All three failed at their strictest preregistered gate.
 
-Each fails at exactly the same structural feature: **the object is
-outside the visible representation the measurement can access.**
+**Correction (2026-07-27, after human-director critique).** An
+earlier version of this section wrote *"the object is outside the
+visible representation the measurement can access"* and treated the
+three failures as instances of the *same* structural feature. That
+was too strong on two counts and I'm correcting both:
 
-- DCR3: outside because T1 is not in the corpus at high frequency.
-- DCR3b: outside because T1 is not cited as a premise by other
-  propositions in the corpus, so LLM within-corpus counterfactual
-  scoring can't detect it either.
-- Constraint Swap reanalysis: near-zero cross-condition
-  correlation *is* directionally consistent with the reframe, but 32
-  seeds does not have the statistical power to distinguish it from a
-  moderately-correlated shared-artifact null.
+1. **Different failure mechanisms.** DCR fails because 1900
+   physicists didn't write down what they globally presupposed —
+   a linguistic/pragmatic phenomenon. Constraint Swap fails because
+   a specific hypothesized geometric structure didn't manifest in
+   that specific agent class under that specific design — an
+   architectural/statistical phenomenon. Collapsing them into "the
+   same failure" was cleaner as narrative than as evidence supports.
+
+2. **Underdetermined between (B)/(C)/(D), not established as (A).**
+   The tests establish that the measurement operators failed to
+   recover the target. They do NOT distinguish among:
+
+   - **(A)** The object literally lies outside the representation.
+   - **(B)** The representation exists, but these operators cannot
+     identify it.
+   - **(C)** The object is distributed across representations.
+   - **(D)** The target ontology is wrong.
+
+   For DCR, T1's realisations ARE in the DCR1e consensus (Lodge's
+   *"time of journey… definite and independent of the motion,"*
+   Larmor's `common_time_across_two_systems`, etc.) — the operators
+   rank them low because they compete against T2 realisations that
+   are more numerous and more explicitly cited. That's (B)/(C), not
+   (A). For Constraint Swap, "geometry can't contain the object"
+   overstates; the honest claim is "this particular geometric
+   hypothesis was not supported in this agent class under this
+   design" — again (B), possibly (D).
+
+The narrower, defensible reading of the three nulls:
+
+- **DCR3 and DCR3b agree on rank order** (T2 > T1 under both
+  frequency and LLM within-corpus counterfactual scoring). That
+  agreement IS a real pattern about the corpus: T2 is more
+  explicitly cited than T1. It does not entail that T1 is
+  irrecoverable from the corpus — only that these operators can't
+  distinguish it from T2.
+- **Constraint Swap reanalysis** shows correlations directionally
+  consistent with the reframe but underpowered at 32 seeds.
+  Directionally supportive of intervention-algebra reasoning; not a
+  positive confirmation.
 
 ## Why this is more informative than one null
 
 Two independent scoring methods on the DCR corpus (frequency;
 LLM-judged counterfactual dependence) agree that T2 outweighs T1.
 They agree because they're both measuring quantities that live
-inside the corpus's explicit argument structure. T1 lives outside
-that structure — presupposed globally, cited locally by nothing.
+inside the corpus's explicit *citation* structure. T1 realisations
+exist in the corpus but are presupposed globally and cited locally
+by nothing.
 
 For a scoring method to reach T1, it would need access to something
 neither DCR3 nor DCR3b provided: **inference about what each
