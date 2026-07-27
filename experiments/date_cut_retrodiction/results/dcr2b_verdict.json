@@ -1,0 +1,143 @@
+{
+  "T1_at_1880_placebo": {
+    "multidoc_rank": 2,
+    "multidoc_score": 0,
+    "n_documents": 1,
+    "n_members": 1
+  },
+  "T1_at_1904": {
+    "beats_proposition_blind_by": 1,
+    "multidoc_rank": 3,
+    "n_documents": 5,
+    "n_members": 7,
+    "proposition_blind_best_rank": 4
+  },
+  "aggregation_rule": {
+    "definition": "score(class) = cardinality if n_documents >= min_docs else 0",
+    "min_docs": 2,
+    "name": "multidoc"
+  },
+  "cuts": {
+    "1880": {
+      "class_coverage": {
+        "T1_absolute_simultaneity": 1,
+        "T2_privileged_frame": 0,
+        "T3_local_time_artifice": 0,
+        "unclassified": 3
+      },
+      "class_sizes": {
+        "T1_absolute_simultaneity": 1,
+        "T2_privileged_frame": 0,
+        "T3_local_time_artifice": 0,
+        "unclassified": 50
+      },
+      "cut_year": 1880,
+      "multidoc_ranks": {
+        "T1_absolute_simultaneity": 2,
+        "T2_privileged_frame": 3,
+        "T3_local_time_artifice": 4,
+        "unclassified": 1
+      },
+      "multidoc_scores": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 0,
+        "T3_local_time_artifice": 0,
+        "unclassified": 50
+      },
+      "n_documents": 3,
+      "n_propositions": 51,
+      "proposition_blind_best_T1_rank": 23
+    },
+    "1897": {
+      "class_coverage": {
+        "T1_absolute_simultaneity": 2,
+        "T2_privileged_frame": 5,
+        "T3_local_time_artifice": 0,
+        "unclassified": 8
+      },
+      "class_sizes": {
+        "T1_absolute_simultaneity": 2,
+        "T2_privileged_frame": 8,
+        "T3_local_time_artifice": 0,
+        "unclassified": 125
+      },
+      "cut_year": 1897,
+      "multidoc_ranks": {
+        "T1_absolute_simultaneity": 3,
+        "T2_privileged_frame": 2,
+        "T3_local_time_artifice": 4,
+        "unclassified": 1
+      },
+      "multidoc_scores": {
+        "T1_absolute_simultaneity": 2,
+        "T2_privileged_frame": 8,
+        "T3_local_time_artifice": 0,
+        "unclassified": 125
+      },
+      "n_documents": 8,
+      "n_propositions": 135,
+      "proposition_blind_best_T1_rank": 22
+    },
+    "1904": {
+      "class_coverage": {
+        "T1_absolute_simultaneity": 5,
+        "T2_privileged_frame": 8,
+        "T3_local_time_artifice": 2,
+        "unclassified": 15
+      },
+      "class_sizes": {
+        "T1_absolute_simultaneity": 7,
+        "T2_privileged_frame": 11,
+        "T3_local_time_artifice": 2,
+        "unclassified": 235
+      },
+      "cut_year": 1904,
+      "multidoc_ranks": {
+        "T1_absolute_simultaneity": 3,
+        "T2_privileged_frame": 2,
+        "T3_local_time_artifice": 4,
+        "unclassified": 1
+      },
+      "multidoc_scores": {
+        "T1_absolute_simultaneity": 7,
+        "T2_privileged_frame": 11,
+        "T3_local_time_artifice": 2,
+        "unclassified": 235
+      },
+      "n_documents": 15,
+      "n_propositions": 254,
+      "proposition_blind_best_T1_rank": 4
+    }
+  },
+  "gates": {
+    "N1_class_assignment_complete": {
+      "decision": "GO"
+    },
+    "N2_T1_class_non_empty_at_1904": {
+      "decision": "GO",
+      "n_members": 7,
+      "threshold": 5
+    },
+    "N3_multidoc_beats_proposition_blind": {
+      "decision": "GO",
+      "multidoc_rank": 3,
+      "proposition_blind_rank": 4
+    },
+    "N4_T1_demoted_at_1880": {
+      "decision": "GO",
+      "rank_at_1880": 2
+    },
+    "N5_comparison_table": {
+      "decision": "GO"
+    },
+    "N6_T1_at_1904_not_over_demoted": {
+      "coverage": 5,
+      "decision": "GO",
+      "min_docs": 2
+    }
+  },
+  "kind": "dcr2b_verdict",
+  "licensed_reading": "multidoc_fixes_placebo_failure: DCR2a's N4 defect is resolved. T1 at 1880 demoted by multi-document requirement; T1 at 1904 unchanged (has coverage across multiple docs). DCR2 pipeline can adopt multidoc as the aggregation rule.",
+  "overall_decision": "GO",
+  "purpose": "Test whether the multi-document coverage aggregation rule (preregistered in DCR2A \u00a73 decision table) fixes the placebo failure that made DCR2a NO_GO on N4."
+}
