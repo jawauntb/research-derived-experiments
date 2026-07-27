@@ -54,7 +54,7 @@ DEPOSIT_PDF = (
     / "Gauge_Fixed_Concern_Transport_2026_07_07.pdf"
 )
 FIG_DIR = PAPER_DIR / "figures"
-rl_config.invariant = True
+setattr(rl_config, "invariant", True)
 
 
 def register_fonts() -> tuple[str, str, str, str]:
@@ -515,8 +515,14 @@ def render_table(
     flow.append(Spacer(1, 5))
 
 
-def markdown_to_flow(text: str, st: dict[str, ParagraphStyle]) -> list[Any]:
+def markdown_to_flow(
+    text: str,
+    st: dict[str, ParagraphStyle],
+    *,
+    paper_dir: Path | None = None,
+) -> list[Any]:
     flow: list[Any] = []
+    resolved_paper_dir = PAPER_DIR if paper_dir is None else paper_dir
     para_lines: list[str] = []
     list_items: list[tuple[str, str]] = []
     code_lines: list[str] = []
@@ -581,7 +587,12 @@ def markdown_to_flow(text: str, st: dict[str, ParagraphStyle]) -> list[Any]:
         image_match = re.match(r"!\[([^\]]*)\]\(([^)]+)\)", line)
         if image_match:
             flush_all()
-            add_image(flow, PAPER_DIR / image_match.group(2), image_match.group(1), st)
+            add_image(
+                flow,
+                resolved_paper_dir / image_match.group(2),
+                image_match.group(1),
+                st,
+            )
             continue
         if line.startswith("> "):
             flush_all()

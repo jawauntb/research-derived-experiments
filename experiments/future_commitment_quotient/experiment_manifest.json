@@ -1,0 +1,181 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "future_commitment_quotient",
+  "hypothesis": "For registered finite deterministic agents, future-commitment equivalence is invariant to destructive coordinate recoding but changes under a delayed load-bearing transition mutation that preserves coordinates and depth-one commitment observations.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "identity_clone",
+      "description": "Coordinates and transition constraints are both preserved."
+    },
+    {
+      "control_id": "scrambled_conjugate",
+      "description": "Coordinates and geometry are destroyed while transition and commitment structure are preserved exactly by conjugacy."
+    },
+    {
+      "control_id": "coordinate_preserved_mutant",
+      "description": "Coordinates and every depth-one commitment response are preserved while one delayed load-bearing transition changes."
+    },
+    {
+      "control_id": "scrambled_mutant",
+      "description": "The same coordinate scramble is crossed with the altered transition constraint to complete the factorial."
+    },
+    {
+      "control_id": "prior_null_preservation",
+      "description": "The paper must preserve the earlier Constraint-Swap rejection and cannot use this exact quotient construction to rescue the failed hidden-geometry mechanism."
+    }
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63
+  ],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "uv",
+      "run",
+      "--no-sync",
+      "python",
+      "-m",
+      "experiments.future_commitment_quotient.run_experiment"
+    ],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [
+    {
+      "name": "numpy",
+      "version": ">=2.0,<3"
+    }
+  ],
+  "gates": [
+    {
+      "gate_id": "F0_CONSTRUCTION_PROVENANCE",
+      "criterion": "The frozen design, digest, seed sets, family cells, scramble integrity, and 768-row confirmatory schedule are exact."
+    },
+    {
+      "gate_id": "F1_FORMAL_IMPLEMENTATION",
+      "criterion": "Exhaustive quotient and product-search checks match T1 through T4 for every registered pair."
+    },
+    {
+      "gate_id": "G1_REPRESENTATION_NON_NECESSITY",
+      "criterion": "Every coordinate-destroyed conjugate preserves the exact quotient and all registered future commitments."
+    },
+    {
+      "gate_id": "G2_REPRESENTATION_NON_SUFFICIENCY",
+      "criterion": "Every coordinate-preserved delayed mutant preserves depth-one commitments but changes the exact quotient with a witness of depth at least two."
+    },
+    {
+      "gate_id": "G3_FACTORIAL_PREDICTOR_SEPARATION",
+      "criterion": "Quotient agreement reaches leave-one-family-out balanced accuracy 1.0 while coordinate, current-output, and depth-one baselines are at most 0.5."
+    },
+    {
+      "gate_id": "G4_FAMILY_TRANSFER",
+      "criterion": "The non-necessity, non-sufficiency, and predictor gates pass separately in parity, modulo-three, and order families."
+    },
+    {
+      "gate_id": "G5_CLAIM_CALIBRATION",
+      "criterion": "The paper treats the theorem as an automata/bisimulation specialization, preserves the prior geometry null, and withholds learned, stochastic, real-network, and universal claims."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "raw",
+      "path": "artifacts/future_commitment_quotient/registered_run.json",
+      "public": false
+    },
+    {
+      "kind": "dataset",
+      "path": "experiments/future_commitment_quotient/results/registered_rows.jsonl",
+      "public": true
+    },
+    {
+      "kind": "summary",
+      "path": "experiments/future_commitment_quotient/results/summary.json",
+      "public": true
+    },
+    {
+      "kind": "summary",
+      "path": "experiments/future_commitment_quotient/results/summary.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/future_commitment_quotient/PREREGISTRATION.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/future_commitment_quotient/claim_calibration.json",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/future_commitment_quotient/paper.pdf",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

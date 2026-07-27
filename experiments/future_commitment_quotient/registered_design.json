@@ -1,0 +1,52 @@
+{
+  "artifact_contract": "future-commitment-quotient-design/v1",
+  "frozen_at": "2026-07-27T15:14:00-04:00",
+  "alphabet": [
+    "zero",
+    "one",
+    "advance",
+    "reset"
+  ],
+  "outputs": [
+    "defer",
+    "reject",
+    "accept"
+  ],
+  "families": [
+    "parity",
+    "modulo_three",
+    "order"
+  ],
+  "conditions": [
+    "RP_CP",
+    "RD_CP",
+    "RP_CA",
+    "RD_CA"
+  ],
+  "smoke_seeds": [
+    1000,
+    1001,
+    1002,
+    1003
+  ],
+  "confirmatory_seeds": {
+    "start": 0,
+    "stop_exclusive": 64
+  },
+  "coordinate_dimension": 8,
+  "expected_confirmatory_rows": 768,
+  "prediction": {
+    "target": "constraint_preserved",
+    "protocol": "leave_one_family_out_threshold",
+    "metric": "balanced_accuracy"
+  },
+  "fatal_gates": [
+    "F0_CONSTRUCTION_PROVENANCE",
+    "F1_FORMAL_IMPLEMENTATION",
+    "G1_REPRESENTATION_NON_NECESSITY",
+    "G2_REPRESENTATION_NON_SUFFICIENCY",
+    "G3_FACTORIAL_PREDICTOR_SEPARATION",
+    "G4_FAMILY_TRANSFER",
+    "G5_CLAIM_CALIBRATION"
+  ]
+}
