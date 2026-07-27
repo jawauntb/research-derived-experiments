@@ -1,0 +1,215 @@
+{
+  "doc_id": "larmor_1900_ch10",
+  "propositions": [
+    {
+      "name": "absolute_rest_frame_of_aether",
+      "statement": "There is a definite fact of the matter as to whether a material system possesses translatory motion through the aether.",
+      "quote": "we shall attempt to compare the relative motions of these electrons when they form, or belong to, a material system devoid of translatory motion through the aether, with what it would be when a translatory velocity is superposed",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "aether_parts_sensibly_at_rest",
+      "statement": "The various parts of the aether are at rest, so the time-rate of change of the strain is represented by differentiation with respect to the time without additional convective terms.",
+      "quote": "Finally, the various parts of the aether are supposed to be sensibly at rest, so that for example the time-rate of change of the strain of any element of the aether is represented by differentiation with respect to the time",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_stagnant_matter_flits",
+      "statement": "The aether is stagnant while material bodies flit through it without producing any finite flow in it.",
+      "quote": "The aether is stagnant on this theory, while the molecules constituting the Earth and all other material bodies flit through it without producing any finite flow in it",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aberration_and_doppler_maintained",
+      "statement": "The law of astronomical aberration of light is rigorously maintained and the Doppler change of wave-length of radiation from a moving source holds good.",
+      "quote": "hence the law of the astronomical aberration of light is rigorously maintained, and the Doppler change of wave-length of radiation from a moving source holds good",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "terrestrial_optics_unaffected_by_motion",
+      "statement": "All purely terrestrial optical phenomena are unaffected by the Earth's motion through the aether.",
+      "quote": "but it will appear that all purely terrestrial optical phenomena are unaffected by the Earth's motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "c_single_physical_constant",
+      "statement": "The aether has one physical constant c, the velocity of propagation of elastic disturbances through it.",
+      "quote": "and in which c is the single physical constant of the aether, being the velocity of propagation of elastic disturbances through it",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_is_singular_point",
+      "statement": "An electron occurs as a singular point in the aether where the elastic strain of the aethereal displacement increases indefinitely.",
+      "quote": "An electron e will occur in this analysis as a singular point in the aether, on approaching which the elastic strain constituting the aethereal displacement ( f, g, h ) increases indefinitely",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "electron_transferable_independent_of_aether",
+      "statement": "The electron singularity is capable of transference across the aether independently of motion of the aether itself.",
+      "quote": "It is assumed that this singularity represents a definite structure, forming a nucleus of strain in the aether, which is capable of transference across that medium independently of motion of the aether itself",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "displacement_integral_equals_charge",
+      "statement": "The integral of the normal component of the aethereal displacement over the boundary of any region equals the quantity of electrons existing in the region.",
+      "quote": "when electrons are present the integral of the normal component of the aethereal displacement over the boundary of any region, instead of being null, is equal to the quantity Σe of electrons existing in the region",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "initial_state_determines_evolution",
+      "statement": "Given the state of the system at any time t, the state at time t plus δt is immediately expressed by the equations, and successive steps yield the state at any further time.",
+      "quote": "so that from a knowledge of the state of the system at any time t the state at the time t + δt can be immediately expressed",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "universal_time_variable",
+      "statement": "There is a single time variable t applicable throughout the system, whose value is unique at each instant of the state's evolution.",
+      "quote": "so that from a knowledge of the state of the system at any time t the state at the time t + δt can be immediately expressed",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "electron_nucleus_labile_through_aether",
+      "statement": "The nucleus of the electron is quite labile as regards displacement through the aether and moves under no inertia or forces except those expressing its relation to the aether.",
+      "quote": "This however presupposes that the nucleus of the electron is quite labile as regards displacement through the aether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aethereal_scheme_complete",
+      "statement": "The aethereal scheme of relations is assumed complete, so that all motion of electrons is traceable through the differential equations of the surrounding free aether alone.",
+      "quote": "we in fact assume the completeness of the aethereal scheme of relations as above given",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_dimensions_negligible",
+      "statement": "The actual dimensions of electron nuclei are extremely small in comparison with the distances between them, so they may be treated as points.",
+      "quote": "so long as the actual dimensions of their nuclei are extremely small in comparison with the distances between them, it will suffice for the theory to consider them as points",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "only_electric_forces_between_atoms",
+      "statement": "The only actions between atoms are what may be described as electric forces.",
+      "quote": "the only actions between atoms are what may be described as electric forces",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "observer_moves_through_stationary_aether",
+      "statement": "It is meaningful to say that the observer and his apparatus are in uniform motion through the stationary aether.",
+      "quote": "so as thereby to be in a position to examine how phenomena are altered when the observer and his apparatus are in uniform motion through the stationary aether",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "axes_at_rest_in_the_aether",
+      "statement": "There exist axes (x, y, z) at rest in the aether from which axes (x', y', z') moving with translatory velocity v can be distinguished.",
+      "quote": "We now recall the equations of the free aether, with a view to changing from axes ( x, y, z ) at rest in the aether to axes (x', y', z') moving with translatory velocity v parallel to the axis of x",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "t_prime_is_ordinary_time",
+      "statement": "The variable t' is the time measured in the ordinary manner, as distinct from the derived time-variable t\".",
+      "quote": "expressed as functions of x', y', z' and t', the latter being the time measured in the ordinary manner",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "t_double_prime_change_of_variable",
+      "statement": "The passage from t' to t\" is a change of the time-variable that leaves the scheme of equations reverting to the same type as when referred to axes at rest, except for the factors ε.",
+      "quote": "thus the scheme of equations reverts to the same type as when it was referred to axes at rest, except as regards the factors ε on the left-hand sides",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "v_over_c_squared_negligible",
+      "statement": "The factor ε differs from unity by v^2/c^2, which is of the second order of small quantities and may be neglected in the correspondence.",
+      "quote": "which is of the second order of small quantities; hence we have the following correspondence when that order is neglected",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electrons_at_corresponding_positions",
+      "statement": "In the two systems compared, the electrons are situated at the singular points at which the concentration of the electric displacement ceases to vanish, and therefore occupy corresponding positions.",
+      "quote": "Thus the electrons in the two systems here compared, being situated at the singular points at which the concentration of the electric displacement ceases to vanish, occupy corresponding positions",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "electron_strengths_equal_first_order",
+      "statement": "The strengths of the corresponding electrons in the moving and rest systems are the same to first order in v/c.",
+      "quote": "it follows by taking a very contracted boundary that the strengths of the corresponding electrons in the two systems are the same, to this order of approximation",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "different_media_require_different_c",
+      "statement": "For an isotropic dielectric medium the transformation applies with c altered to the velocity of radiation in that medium, so the transformation will be different for different media.",
+      "quote": "we have only to alter c into the velocity of radiation in that medium, and all will be as above. The transformation will thus be different for different media",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "moving_dielectric_alters_current_type",
+      "statement": "The motion of polarized dielectric matter alters the mathematical type of the electric current, so a direct general transformation of the equations of a material medium is arrested.",
+      "quote": "for the motion of the polarized dielectric matter has altered the mathematical type of the electric current",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "structure_of_matter_unaltered_first_order",
+      "statement": "The structure of matter is assumed unaltered to the first order by motion through the aether, so all electric distributions are likewise unaltered to that order.",
+      "quote": "the structure of the matter being assumed unaltered to the first order by motion through the aether, so too must be all electric distributions",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "steady_state_identical_at_rest_and_moving",
+      "statement": "Given any system of electrified bodies at rest in equilibrium, there exists a precisely identical system in equilibrium under the same constraints in uniform translatory motion through the aether.",
+      "quote": "there will be a precisely identical system in equilibrium under the same constraints, and in uniform translatory motion through the aether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_new_forces_needed_for_motion",
+      "statement": "If any configuration of ionic charges is the natural one in a material system at rest, maintenance of the same configuration in uniform motion requires no new forces.",
+      "quote": "if any configuration of ionic charges is the natural one in a material system at rest, the maintenance of the same configuration as regards the system in uniform motion will not require the aid of any new forces",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_singularity_on_any_theory",
+      "statement": "The electron taken by itself must be on any conceivable theory a simple singularity of the aether.",
+      "quote": "The electron taken by itself must be on any conceivable theory a simple singularity of the aether",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "corresponding_instants_meaningful",
+      "statement": "It is meaningful to speak of the fixed and moving systems of electrons as being at corresponding instants identical, even though their displacements differ by first-order terms.",
+      "quote": "though the fixed and the moving system of electrons of this correlation are at corresponding instants identical, yet the electric and magnetic displacements belonging to them differ by terms of the first order",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "maxwell_equations_experimentally_verified",
+      "statement": "The analytical formulation of the dynamical relations of free aether has, through Maxwell's investigations and Hertz's experimental verifications, been imparted an exactness and precision unsurpassed in physics.",
+      "quote": "the theoretical investigations of Maxwell, in combination with the experimental verifications of Hertz and his successors in that field, have imparted to this analytical formulation of the dynamical relations of free aether an exactness and precision",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

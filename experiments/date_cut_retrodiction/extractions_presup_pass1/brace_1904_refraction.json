@@ -1,0 +1,194 @@
+{
+  "doc_id": "brace_1904_refraction",
+  "propositions": [
+    {
+      "name": "ether_exists_as_medium",
+      "statement": "The æther exists as a medium through which matter can move and which mediates intermolecular forces.",
+      "quote": "This suggestion of the \"contraction\" hypothesis by Lorentz, from considerations in regard to intermolecular forces analogous to the interaction, through the mediation of the æther, of electric and magnetic forces",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "earth_moves_through_ether",
+      "statement": "The earth is in motion through the æther and this motion could in principle produce double refraction in the water.",
+      "quote": "Hence, we may conclude that to this order of sensibility there is no double refraction in the water due to its motion through the æther.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "definite_direction_earths_motion",
+      "statement": "The earth's orbital motion has a definite direction with respect to which the plane of polarization can be set at 45°.",
+      "quote": "the one, a system rotating about a vertical axis, the other a similar system rotating about a horizontal axis so as to shift the plane of polarization from a position at 45° to the earth's orbital motion through an angle of 90°",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "orbital_and_light_velocities_definite",
+      "statement": "The orbital velocity and the light-velocity each have definite values used in calculating the expected effect.",
+      "quote": "or about 1600 times greater than the smallest effect which could be observed.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "rotating_trough_changes_position_relative_to_ether",
+      "statement": "Rotating the trough through 90° brings the optical path from the meridian into the direction of the earth's orbital motion.",
+      "quote": "A match was obtained with, say, the trough in the meridian at noon, this was then turned through 90° into the direction of the earth's orbital motion.",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "orbital_and_solar_velocities_conspire",
+      "statement": "The earth's orbital velocity and the velocity of the solar system in space conspire to give the earth's net velocity through the æther.",
+      "quote": "These experiments were repeated during the early part of February, 1904, when the earth's orbital velocity conspires approximately with that of the solar system in space.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "null_result_across_positions",
+      "statement": "The absence of any change in the compensator match as the trough is rotated indicates no double refraction due to motion through the æther.",
+      "quote": "In no case could a change be observed, i.e. there was still a match indicating no double refraction.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "match_transferable_between_positions",
+      "statement": "A compensator match obtained in one position of the trough remains a valid reference for observations made in another position.",
+      "quote": "The entire system was mounted on a common base, so that once a match was obtained it could be moved without disturbing it.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "contraction_would_produce_double_refraction",
+      "statement": "A contraction of the matter in the direction of motion would produce observable double refraction in the water or glass.",
+      "quote": "If in the movement of matter through æther an increase in density in this direction took place, producing a change in the natural frequency of the molecular systems similar to that which occurs in glass",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "density_change_alters_index",
+      "statement": "An increase in density produces a proportional increment in the excess of the index above unity.",
+      "quote": "Mascart has shown that in the case of water under compression the increment in the excess of the index above unity is nearly proportional to the increment of its density.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "strain_calibrates_expected_effect",
+      "statement": "The relative retardation produced in glass by a known weight and width calibrates the sensibility for the ether-motion effect.",
+      "quote": "From this can be calculated the relative retardation produced in glass per unit weight and unit width.",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "path_length_same_in_every_position",
+      "statement": "The path of the light through the water is the same length whatever the position of the trough.",
+      "quote": "sunlight was so thrown into the trough as to keep its path the same whatever its position",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "magnetic_rotation_reversed_for_observer_moving_with_trough",
+      "statement": "A magnetic-field rotation of the plane of polarization would be reversed with respect to an observer moving with the trough, so it cannot mask an ether-motion effect.",
+      "quote": "since the rotation due to a magnetic field is always in a definite direction and independent of the direction of the ray, such a rotation of the plane of polarization would be reversed with respect to an observer moving with the trough",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "contraction_magnitude_v2_over_2V2",
+      "statement": "The change expected on the contraction hypothesis is of order v squared over 2 V squared, seven times greater than the observed limit in glass.",
+      "quote": "which is seven times smaller than that expected on the \"contraction\" hypothesis.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "poisson_ratio_gives_transverse_change",
+      "statement": "A contraction along the direction of drift is accompanied by a change at right angles related by Poisson's ratio.",
+      "quote": "If we correct by ¼ for Poisson's ratio, as we should if the interference problem were done on a glass support, the calculated contraction becomes",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "null_dichotomy_conclusion",
+      "statement": "The negative result implies either that the æther moves with the embedded matter or that the relative motion produces very little change in intermolecular forces and dimensions.",
+      "quote": "we also conclude either that the aether moves with the embedded matter, or that the effect of the relative motion on the intermolecular forces and the possible consequent relative change in dimensions are very small",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "intermolecular_forces_mediated_by_ether",
+      "statement": "Intermolecular forces are through the mediation of the æther, analogous to the interaction of electric and magnetic forces.",
+      "quote": "from considerations in regard to intermolecular forces analogous to the interaction, through the mediation of the æther, of electric and magnetic forces",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "number_of_waves_from_path_index_wavelength",
+      "statement": "The number of waves of light in the path equals the path length times the index divided by the wavelength.",
+      "quote": "The total path of the light in the water was 2856 cms. Taking its index as 1.33, the number of waves is",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "sensibility_valid_in_all_positions",
+      "statement": "The sensibility of the compensator determined in one setting applies unchanged when the trough is turned into any other position.",
+      "quote": "Under the most favourable conditions a rotation of the compensator of 0°.2 approximately could be detected.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "limit_on_difference_in_velocity_or_index",
+      "statement": "The observed limit on retardation gives the greatest difference in velocity or in index between the two components which could exist in the medium.",
+      "quote": "This represents the greatest difference in velocity or in index between the two components which could exist referred to that of water for green light",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "observer_moves_with_trough_without_disturbing_optics",
+      "statement": "The observer can move with the trough so that the observer's motion does not disturb the optical measurement.",
+      "quote": "a seat was mounted so that the observer could move undisturbed with the trough, the head being steadied by means of a clamp",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "different_times_give_different_ether_directions",
+      "statement": "Observations made at noon and at 6 P.M. correspond to different directions of the earth's motion through the æther.",
+      "quote": "Observations were made at noon and at 6 P. M. in the early part of December.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "rotation_180_reverses_direction",
+      "statement": "Rotating the trough through 180° into the meridian reverses the direction of the arrangement with respect to any fixed direction in space.",
+      "quote": "To make sure of this the trough was rotated through 180° into the meridian so as to reverse the direction: but no effect could be observed.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "density_change_alters_natural_frequency",
+      "statement": "A change in density in the direction of motion produces a change in the natural frequency of the molecular systems, and hence in the index.",
+      "quote": "producing a change in the natural frequency of the molecular systems similar to that which occurs in glass, say, then, to determine how great it might be from these results",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "contraction_and_elongation_give_same_double_refraction",
+      "statement": "Whether the theory predicts contraction along drift, elongation along drift, or extension at right angles, the effect observed by double refraction would be the same.",
+      "quote": "the effect to be observed by means of double refraction in the preceding experiments would be the same",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "matter_has_definite_motion_through_ether",
+      "statement": "There is a definite fact of the matter about whether the water is moving through the æther and about the direction of that motion.",
+      "quote": "no double refraction in the water due to its motion through the æther",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "michelson_morley_null_motivates_contraction",
+      "statement": "The FitzGerald-Lorentz contraction hypothesis was proposed to explain the negative results of the Michelson-Morley experiment on interference between two rays at right angles and parallel to the earth's motion.",
+      "quote": "The FitzGerald-Lorentz \"Contraction\" Hypothesis to explain the negative results of the Michelson-Morley experiment of interference between two rays, at right angles and parallel to the earth's motion, has been tested by Rayleigh",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

@@ -531,3 +531,120 @@ def test_t1_v3_pattern_fires_on_newtons_own_sentence() -> None:
     ]
     hits = match_facets_v3(scholium_proposition)
     assert hits["T1_absolute_simultaneity"]
+
+
+# --- DCR1e: presupposition-inferring extractor -------------------------
+#
+# DCR1e adds a new prompt targeting presuppositions rather than stated
+# commitments. Same additive discipline as DCR1d: dcr1e.py composes its own
+# source list; DCR1c's SOURCES/CUTS are untouched.
+
+
+def test_dcr1e_source_list_includes_newton_and_matches_dcr1c_size() -> None:
+    from experiments.date_cut_retrodiction.corpus import SOURCES
+    from experiments.date_cut_retrodiction.dcr1e import DCR1E_SOURCES
+
+    assert len(DCR1E_SOURCES) == len(SOURCES) + 1
+    assert any(s.doc_id == "newton_1687_scholium" for s in DCR1E_SOURCES)
+
+
+def test_dcr1e_pass_dirs_are_distinct_from_dcr1c_and_dcr1d() -> None:
+    from experiments.date_cut_retrodiction.dcr1d import NEWTON_PASS_DIRS
+    from experiments.date_cut_retrodiction.dcr1e import (
+        PRESUP_CONSENSUS_DIR,
+        PRESUP_PASS_DIRS,
+    )
+    from experiments.date_cut_retrodiction.run_dcr1c import PASS_DIRS_V3
+
+    assert len(PRESUP_PASS_DIRS) == 3
+    assert set(PRESUP_PASS_DIRS).isdisjoint(set(PASS_DIRS_V3))
+    assert set(PRESUP_PASS_DIRS).isdisjoint(set(NEWTON_PASS_DIRS))
+    assert PRESUP_CONSENSUS_DIR not in PASS_DIRS_V3
+    assert PRESUP_CONSENSUS_DIR not in NEWTON_PASS_DIRS
+
+
+def test_dcr1e_imports_thresholds_rather_than_restating_them() -> None:
+    """Same guarantee DCR1c and DCR1d carry: no threshold-fitting possible."""
+    from experiments.date_cut_retrodiction import run_dcr1, run_dcr1e
+
+    source = (
+        __import__("pathlib").Path(run_dcr1e.__file__).read_text(encoding="utf-8")
+    )
+    assert "QUOTE_FIDELITY_GATE" in source
+    assert "RESIDUE_RATE_GATE" in source
+    assert run_dcr1.QUOTE_FIDELITY_GATE == 0.90
+    assert run_dcr1.RESIDUE_RATE_GATE == 0.05
+
+
+def test_dcr1e_prompt_file_names_multiple_facet_classes() -> None:
+    """Load-bearing property: the presupposition prompt names four classes of
+    commitment to look at, not just time/simultaneity. Naming only the target
+    facet would be a candidate-selection leak; the 1880 placebo cannot
+    correctly detect the leak if the prompt has secretly already answered."""
+    from pathlib import Path
+
+    package = Path(__file__).resolve().parent.parent / "experiments" / "date_cut_retrodiction"
+    prompt = (package / "EXTRACTION_PROMPT_PRESUPPOSITION.md").read_text(encoding="utf-8")
+    lowered = prompt.lower()
+    for facet_class in ("time and simultaneity", "space and rest", "measurement", "coordinate"):
+        assert facet_class in lowered, f"Missing facet class hint: {facet_class!r}"
+
+
+def test_dcr1e_recognizer_gap_is_real() -> None:
+    """DCR1e's headline finding: the extractor surfaced T1 content in five
+    documents and target_v3 rejected all five. This test freezes that observation
+    as a regression: if DCR1f's target_v4 ever passes these into T1, this test
+    should flip to ``assert hits``."""
+    from experiments.date_cut_retrodiction.target_v3 import match_facets_v3
+
+    dcr1e_t1_content = [
+        {
+            "doc_id": "larmor_1900_ch11",
+            "name": "common_time_across_two_systems",
+            "statement": (
+                "There is a common time t in which the position of an electron "
+                "in the moving medium can be compared to its position in the "
+                "medium at rest at time t minus vx over c squared."
+            ),
+        },
+        {
+            "doc_id": "lodge_1897_absence",
+            "name": "time_of_journey_perfectly_definite",
+            "statement": (
+                "The time of journey of light along any given path through any "
+                "kind of material is perfectly definite and independent of the "
+                "motion of the material."
+            ),
+        },
+        {
+            "doc_id": "maxwell_1865_part1",
+            "name": "instant_across_whole_medium",
+            "statement": (
+                "There is an instant at which the amount of energy in the whole "
+                "medium is a definite quantity equally divided."
+            ),
+        },
+        {
+            "doc_id": "poincare_1898_time",
+            "name": "eclipse_perceived_simultaneously_over_earth",
+            "statement": (
+                "The astronomers suppose that an eclipse of the moon is "
+                "perceived simultaneously from all points of the earth."
+            ),
+        },
+        {
+            "doc_id": "poincare_1898_time",
+            "name": "transmission_duration_practically_neglected",
+            "statement": (
+                "In general the duration of the transmission of a signal is "
+                "neglected and the two events are regarded as simultaneous."
+            ),
+        },
+    ]
+    hits = match_facets_v3(dcr1e_t1_content)
+    assert not hits["T1_absolute_simultaneity"], (
+        "DCR1e's finding was that target_v3 fires on none of these T1-content "
+        "propositions. If this test starts failing, the matcher has changed "
+        "and DCR1e's diagnostic is no longer current -- and probably means "
+        "target_v4 has been introduced without preregistration."
+    )

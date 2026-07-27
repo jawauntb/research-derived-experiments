@@ -1,0 +1,195 @@
+{
+  "doc_id": "poincare_1898_time",
+  "propositions": [
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "conscious_order_not_arbitrary",
+      "quote": "The order in which we arrange conscious phenomena does not admit of any arbitrariness. It is imposed upon us and of it we can change nothing.",
+      "statement": "The order in which we arrange conscious phenomena is imposed upon us and does not admit of any arbitrariness.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "no_direct_duration_equality_intuition",
+      "quote": "We have not a direct intuition of the equality of two intervals of time",
+      "statement": "We have not a direct intuition of the equality of two intervals of time.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "same_causes_take_same_time",
+      "quote": "It is that the duration of two identical phenomena is the same; or, if you prefer, that the same causes take the same time to produce the same effects.",
+      "statement": "The duration of two identical phenomena is the same, so the same causes take the same time to produce the same effects.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "pendulum_beats_equal_by_definition",
+      "quote": "To measure time they use the pendulum and they suppose by definition that all the beats of this pendulum are of equal duration.",
+      "statement": "All the beats of the pendulum are supposed by definition to be of equal duration.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "tides_slow_earth_rotation",
+      "quote": "Many of them think that the tides act as a check on our globe, and that the rotation of the earth is becoming slower and slower.",
+      "statement": "The tides act as a check on the earth so that the rotation of the earth is becoming slower and slower.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "time_defined_for_law_simplicity",
+      "quote": "So that the definition implicitly adopted by the astronomers may be summed up thus: Time should be so defined that the equations of mechanics may be as simple as possible.",
+      "statement": "Time should be so defined that the equations of mechanics may be as simple as possible.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "light_velocity_constant_all_directions",
+      "quote": "He has begun by supposing that light has a constant velocity, and in particular that its velocity is the same in all directions.",
+      "statement": "Light has a constant velocity and its velocity is the same in all directions.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "cause_defines_temporal_anteriority",
+      "quote": "Behold then the rule we follow, and the only one we can follow: when a phenomenon appears to us as the cause of another, we regard it as anterior.",
+      "statement": "When a phenomenon appears as the cause of another we regard it as anterior.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "thunder_sound_after_electric_discharge",
+      "quote": "We hear the sound of the thunder only some seconds after the electric discharge of the cloud.",
+      "statement": "We hear the sound of the thunder only some seconds after the electric discharge of the cloud.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "light_propagation_not_instantaneous",
+      "quote": "That is not altogether true, since the propagation of light is not instantaneous; if absolute exactitude were desired, there would be a correction to make according to a complicated rule.",
+      "statement": "The propagation of light is not instantaneous.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "positions_velocities_determine_evolution",
+      "quote": "The positions and the velocities of three bodies at a given instant suffice to determine their positions and velocities at the following instant, and consequently at any instant.",
+      "statement": "The positions and the velocities of three bodies at a given instant suffice to determine their positions and velocities at any instant.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "rules_chosen_because_most_convenient",
+      "quote": "We therefore choose these rules, not because they are true, but because they are the most convenient",
+      "statement": "The rules for simultaneity and duration are chosen not because they are true but because they are the most convenient.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "experiment_could_contradict_postulate",
+      "quote": "Is it impossible that experiment may some day contradict our postulate?",
+      "statement": "Experiment may some day contradict the postulate that the same causes take the same time.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "star_light_takes_time_to_reach_earth",
+      "quote": "at least two hundred years were necessary for the light from that star to reach our earth",
+      "statement": "At least two hundred years were necessary for the light from that star to reach our earth.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "eclipse_perceived_simultaneously_over_earth",
+      "quote": "Or else they observe an astronomic phenomenon, such as an eclipse of the moon, and they suppose that this phenomenon is perceived simultaneously from all points of the earth.",
+      "statement": "The astronomers suppose that an eclipse of the moon is perceived simultaneously from all points of the earth.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "telegraph_reception_after_sending",
+      "quote": "It is clear first that the reception of the signal at Berlin, for instance, is after the sending of this same signal from Paris.",
+      "statement": "The reception of the signal at Berlin is after the sending of this same signal from Paris.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "newton_law_experimental_truth",
+      "quote": "Newton\u2019s law is an experimental truth; as such it is only approximate",
+      "statement": "Newton\u2019s law is an experimental truth and as such is only approximate.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "transmission_duration_practically_neglected",
+      "quote": "In general, the duration of the transmission is neglected and the two events are regarded as simultaneous.",
+      "statement": "In general the duration of the transmission of a signal is neglected and the two events are regarded as simultaneous.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1898_time",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "stellar_event_has_definite_epoch",
+      "quote": "When an astronomer tells me that some stellar phenomenon, which his telescope reveals to him at this moment, happened, nevertheless, fifty years ago, I seek his meaning",
+      "statement": "A stellar phenomenon which the telescope reveals at this moment happened a definite time before, such as fifty years ago.",
+      "support": 2
+    }
+  ]
+}

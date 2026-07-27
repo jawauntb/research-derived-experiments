@@ -1,0 +1,165 @@
+{
+  "doc_id": "lorentz_1904",
+  "propositions": [
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "aether_is_medium",
+      "quote": "the negative result of which has led FitzGerald and myself to the conclusion that the dimensions of solid bodies are slightly altered by their motion through the aether",
+      "statement": "There is an aether through which solid bodies move and whose motion relative to a body alters that body's dimensions.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "absolute_translation_of_system",
+      "quote": "I shall now suppose that the system as a whole moves in the direction of x with a constant velocity w , and I shall denote by",
+      "statement": "A system as a whole possesses a definite translation with a constant velocity w in a chosen direction.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "fixed_coordinate_system_exists",
+      "quote": "the electric force, i.e. the force, reckoned per unit charge, which is exerted by the aether on a volume-element of an electron. Then, if we use a fixed system of coordinates,",
+      "statement": "There exists a fixed system of coordinates in which the fundamental equations of the theory of electrons hold.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "true_time_defines_corresponding_instants",
+      "quote": "the true time at the first instant is equal to the local time, as determined by (5) for the point P , at the second instant",
+      "statement": "Corresponding instants at two points are defined by equating the true time at one point to the local time at the other.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "earth_annual_motion",
+      "quote": "The problem of determining the influence exerted on electric and optical phenomena by a translation, such as all systems have in virtue of the Earth's annual motion",
+      "statement": "The Earth possesses a translation shared by all terrestrial systems in virtue of its annual motion.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "velocity_smaller_than_light",
+      "quote": "The only restriction as regards the velocity will be that it be smaller than that of light.",
+      "statement": "The velocity of translation must be smaller than the velocity of light, so that c^2 \u2212 w^2 remains positive.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "galilean_velocity_composition",
+      "quote": "I shall now suppose that the system as a whole moves in the direction of x with a constant velocity w , and I shall denote by",
+      "statement": "The velocity of a point of an electron in the fixed frame is the sum of the translation velocity w of the system and any additional velocity u the point may have.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "electron_deformation_by_motion",
+      "quote": "I shall now suppose that the electrons, which I take to be spheres of radius R in the state of rest, have their dimensions changed by the effect of a translation",
+      "statement": "Electrons that are spheres of radius R in the state of rest have their dimensions in the direction of motion contracted by k when translated.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "charge_preserved_under_deformation",
+      "quote": "each element of volume is understood to preserve its charge",
+      "statement": "Under the deformation each element of volume preserves its charge.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "molecular_forces_transform_like_electric",
+      "quote": "the forces between uncharged particles, as well as those between such particles and electrons, are influenced by a translation in quite the same way as the electric forces in an electrostatic system",
+      "statement": "Forces between uncharged particles and between them and electrons are influenced by translation in the same way as electric forces in an electrostatic system.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "no_material_mass_of_electron",
+      "quote": "I shall suppose that there is no other, no \"true\" or \"material\" mass",
+      "statement": "The electron has no true or material mass; its only inertia is the electromagnetic longitudinal and transverse mass.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "all_particle_masses_affected_by_translation",
+      "quote": "if we suppose that the masses of all particles are influenced by a translation to the same degree as the electromagnetic masses of the electrons",
+      "statement": "The masses of all particles are influenced by translation in the same degree as the electromagnetic masses of the electrons.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "electromagnetic_momentum_from_translation",
+      "quote": "It may be shown that in every electrostatic system, moving with a velocity",
+      "statement": "Every electrostatic system moving with a velocity possesses a definite electromagnetic momentum.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "uniform_surface_charge_at_rest",
+      "quote": "For simplicity's sake I shall suppose the charge e to be uniformly distributed over the surface, so long as the electron remains at rest.",
+      "statement": "The charge of an electron is uniformly distributed over its surface so long as the electron remains at rest.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "michelson_null_explained_by_contraction",
+      "quote": "the negative result of which has led FitzGerald and myself to the conclusion that the dimensions of solid bodies are slightly altered by their motion through the aether",
+      "statement": "The negative result of Michelson's interference-experiment is explained by the alteration of dimensions of solid bodies produced by their motion through the aether.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lorentz_1904",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "optical_earth_motion_undetectable_geometrically",
+      "quote": "It will therefore be impossible to detect an influence of the Earth's motion on any optical experiment, made with a terrestrial source of light, in which the geometrical distribution of light and darkness is observed.",
+      "statement": "In experiments observing the geometrical distribution of light and darkness with a terrestrial source, the Earth's motion cannot produce a detectable influence.",
+      "support": 2
+    }
+  ]
+}

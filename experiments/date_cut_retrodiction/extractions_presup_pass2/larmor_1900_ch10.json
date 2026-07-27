@@ -1,0 +1,208 @@
+{
+  "doc_id": "larmor_1900_ch10",
+  "propositions": [
+    {
+      "name": "aether_medium_ascertained",
+      "statement": "The free aether is the medium in which the activity occurs and its dynamical equations have been definitely ascertained.",
+      "quote": "The medium in which the activity occurs is for our present purpose the free aether itself, whose dynamical equations have been definitely ascertained in quite independent ways",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "absolute_translatory_motion",
+      "statement": "There is a definite fact of the matter whether a material system is devoid of translatory motion through the aether or has a translatory velocity superposed.",
+      "quote": "compare the relative motions of these electrons when they form, or belong to, a material system devoid of translatory motion through the aether, with what it would be when a translatory velocity is superposed",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "aether_parts_sensibly_at_rest",
+      "statement": "The various parts of the aether are supposed to be sensibly at rest.",
+      "quote": "Finally, the various parts of the aether are supposed to be sensibly at rest, so that for example the time-rate of change of the strain of any element of the aether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_convective_term_for_aether",
+      "statement": "The time-rate of change of the strain of an aether element is given by differentiation with respect to the time without any additional term for the element being carried to a new position.",
+      "quote": "the time-rate of change of the strain of any element of the aether is represented by differentiation with respect to the time without any additional terms to represent the change due to the element of aether being carried on in the meantime to a new position",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_stagnant_matter_flits",
+      "statement": "The aether is stagnant while the molecules constituting the Earth and other material bodies flit through it without producing any finite flow.",
+      "quote": "The aether is stagnant on this theory, while the molecules constituting the Earth and all other material bodies flit through it without producing any finite flow in it",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "c_single_physical_constant",
+      "statement": "c is the single physical constant of the aether, being the velocity of propagation of elastic disturbances through it.",
+      "quote": "c is the single physical constant of the aether, being the velocity of propagation of elastic disturbances through it",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_equations_linear",
+      "statement": "The equations of the aether are linear, in contrast to the dynamics of fluid motion.",
+      "quote": "in this respect the equations of the aether are much simpler than those of the dynamics of fluid motion, being in fact linear",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electrons_are_displacement_sources",
+      "statement": "Electrons are singularities analogous to sources and sinks in the abstract theory of liquid flow, with the integral of the normal component of aethereal displacement over a boundary equal to the enclosed quantity of electrons.",
+      "quote": "these are analogous to the so-called sources and sinks in the abstract theory of liquid flow, so that when electrons are present the integral of the normal component of the aethereal displacement over the boundary of any region",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_singularity_transportable",
+      "statement": "The electron is a definite structure forming a nucleus of strain in the aether that is capable of transference across the aether independently of motion of the aether itself.",
+      "quote": "this singularity represents a definite structure, forming a nucleus of strain in the aether, which is capable of transference across that medium independently of motion of the aether itself",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_labile_no_extra_inertia",
+      "statement": "The nucleus of the electron is quite labile as regards displacement through the aether and its movement is not influenced by any inertia or forces except those expressing its relation to the aether.",
+      "quote": "the nucleus of the electron is quite labile as regards displacement through the aether, in other words that its movement is not influenced by any inertia",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "electron_permanence_and_free_mobility",
+      "statement": "The electron has permanence and characteristic properties and free mobility through the aether.",
+      "quote": "the permanence and characteristic properties of an electron and its free mobility through the aether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "initial_state_determines_evolution",
+      "statement": "From knowledge of the state of the system at any time t, the state at time t plus delta t can be immediately expressed and the state at any further time derived.",
+      "quote": "from a knowledge of the state of the system at any time t the state at the time t + δt can be immediately expressed, and so by successive steps",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "atoms_aggregations_of_electrons",
+      "statement": "Atoms of matter are constituted of aggregations of electrons and the only actions between atoms are electric forces.",
+      "quote": "on the view here being developed, in which atoms of matter are constituted of aggregations of electrons, the only actions between atoms are what may be described as electric forces",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "cartesian_axes_at_rest_in_aether",
+      "statement": "Rectangular axes (x, y, z) can be taken as at rest in the aether, and other axes (x', y', z') can move with translatory velocity v parallel to the axis of x through the aether.",
+      "quote": "changing from axes ( x, y, z ) at rest in the aether to axes (x', y', z') moving with translatory velocity v parallel to the axis of x",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "observer_moves_through_stationary_aether",
+      "statement": "The observer and his apparatus can be in uniform motion through the stationary aether in a way that alters phenomena.",
+      "quote": "so as thereby to be in a position to examine how phenomena are altered when the observer and his apparatus are in uniform motion through the stationary aether",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "galilean_time_measured_ordinary_manner",
+      "statement": "The time t' in the axes moving uniformly through the aether is the time measured in the ordinary manner, i.e. the same time as in the aether-fixed axes.",
+      "quote": "expressed as functions of x', y', z' and t', the latter being the time measured in the ordinary manner",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "vectors_combinable_across_frames",
+      "statement": "The unaccented vectors (f, g, h) and (a, b, c) can be linearly combined with velocity v and eliminated in favour of the accented vectors by substitution.",
+      "quote": "We can complete the elimination of ( f, g, h ) and ( a, b, c ) so that only the vectors denoted by accented symbols shall remain, by substituting from these latter formulae",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "equations_revert_to_rest_form",
+      "statement": "After the change of time-variable, the scheme of equations reverts to the same type as when it was referred to axes at rest, except as regards the factors epsilon on the left-hand sides.",
+      "quote": "thus the scheme of equations reverts to the same type as when it was referred to axes at rest, except as regards the factors ε on the left-hand sides",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "epsilon_second_order_small",
+      "statement": "The factor epsilon only differs from unity by (v/c) squared, which is of the second order of small quantities.",
+      "quote": "It is to be observed that this factor ε only differs from unity by",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "correspondence_neglects_second_order",
+      "statement": "The correspondence between the rest and moving systems holds when terms of the second order in v/c are neglected.",
+      "quote": "which is of the second order of small quantities; hence we have the following correspondence when that order is neglected",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "first_order_no_alteration_of_distributions",
+      "statement": "Uniform translatory motion through the aether does not produce any alteration in electric distributions as far as the first order of the ratio of the velocity of the system to the velocity of radiation is concerned.",
+      "quote": "uniform translatory motion through the aether does not produce any alteration in electric distributions as far as the first order of the ratio of the velocity of the system to the velocity of radiation is concerned",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "structure_of_matter_unaltered_first_order",
+      "statement": "The structure of the matter is assumed unaltered to the first order by motion through the aether, so all electric distributions must also be unaltered.",
+      "quote": "the structure of the matter being assumed unaltered to the first order by motion through the aether, so too must be all electric distributions",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "corresponding_electron_positions",
+      "statement": "The electrons in the two systems compared, being situated at the singular points of the electric displacement, occupy corresponding positions.",
+      "quote": "the electrons in the two systems here compared, being situated at the singular points at which the concentration of the electric displacement ceases to vanish, occupy corresponding positions",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "corresponding_electron_strengths_equal",
+      "statement": "Corresponding electrons in the two systems are of equal strengths, since very near an electron the aethereal displacement is practically that due to it alone.",
+      "quote": "Again, these electrons are of equal strengths: for, very near an electron, fixed or moving, the values of ( f, g, h ) and ( a, b, c ) are practically those due to it",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aberration_and_doppler_hold",
+      "statement": "The law of the astronomical aberration of light is rigorously maintained and the Doppler change of wave-length of radiation from a moving source holds good.",
+      "quote": "hence the law of the astronomical aberration of light is rigorously maintained, and the Doppler change of wave-length of radiation from a moving source holds good",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "terrestrial_optics_unaffected",
+      "statement": "All purely terrestrial optical phenomena are unaffected by the Earth's motion.",
+      "quote": "but it will appear that all purely terrestrial optical phenomena are unaffected by the Earth's motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_treated_as_point",
+      "statement": "So long as the dimensions of the nuclei of electrons are extremely small compared with the distances between them, it suffices for the theory to consider them as points.",
+      "quote": "so long as the actual dimensions of their nuclei are extremely small in comparison with the distances between them, it will suffice for the theory to consider them as points",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "theory_holds_until_contradiction",
+      "statement": "A theory which gives an adequate correlation of a portion of the field of phenomena maintains its place until it is proved to be in definite contradiction, not removable by suitable modification, with another portion.",
+      "quote": "a theory which gives an adequate correlation of a portion of this field maintains its place until it is proved to be in definite contradiction, not removable by suitable modification",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "displacements_differ_at_first_order",
+      "statement": "Though the fixed and moving systems of electrons in the correlation are at corresponding instants identical, the electric and magnetic displacements belonging to them differ by terms of the first order.",
+      "quote": "though the fixed and the moving system of electrons of this correlation are at corresponding instants identical, yet the electric and magnetic displacements belonging to them differ by terms of the first order",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

@@ -1,0 +1,229 @@
+{
+  "doc_id": "maxwell_1865_part1",
+  "propositions": [
+    {
+      "name": "force_magnitude_and_direction",
+      "statement": "The magnitude and direction of the force acting between two bodies can be ascertained as a definite physical quantity.",
+      "quote": "The first step, therefore, in reducing these phenomena into scientific form, is to ascertain the magnitude and direction of the force acting between the bodies",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "relative_position_definite",
+      "statement": "Two bodies have a definite relative position on which the force between them depends.",
+      "quote": "the force acting between the two bodies is treated with reference only to the condition of the bodies and their relative position, and without any express consideration of the surrounding medium",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "body_at_rest_or_in_motion",
+      "statement": "It is meaningful to say that something inside each body is either at rest or in motion as a matter of fact.",
+      "quote": "it seems at first sight natural to explain the facts by assuming the existence of something either at rest or in motion in each body, constituting its electric or magnetic state",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "relative_velocity_of_particles",
+      "statement": "Two particles have a well-defined relative velocity that a force can depend upon.",
+      "quote": "he has found it necessary to assume that the force between two particles depends on their relative velocity, as well as on their distance",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ethereal_medium_fills_space",
+      "statement": "There is an ethereal medium filling space and permeating bodies, capable of being set in motion and of transmitting that motion.",
+      "quote": "there is an ethereal medium filling space and permeating bodies, capable of being set in motion and of transmitting that motion from one part to another",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_has_real_density",
+      "statement": "The pervading medium has a small but real density comparable to that of gross matter.",
+      "quote": "the existence of a pervading medium of small but real density, capable of being set in motion, and of transmitting motion from one part to another with great, but not infinite, velocity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "finite_propagation_velocity",
+      "statement": "Motion through the medium propagates with a great but finite velocity rather than instantaneously.",
+      "quote": "transmitting motion from one part to another with great, but not infinite, velocity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "communication_of_motion_occupies_time",
+      "statement": "The communication of motion from one part of the medium to another is not instantaneous but occupies a definite time.",
+      "quote": "these connections must be capable of a certain kind of elastic yielding, since the communication of motion is not instantaneous, but occupies time",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "transit_time_between_source_and_body",
+      "statement": "There is a definite interval of time between when undulations leave a source and when they reach a receiving body.",
+      "quote": "the energy communicated to the body in heating it must have formerly existed in the moving medium, for the undulations had left the source of heat some time before they reached the body",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "energy_split_during_transit",
+      "statement": "During the transit of undulations half the energy is in the form of motion of the medium and half in the form of elastic resilience.",
+      "quote": "during that time the energy must have been half in the form of motion of the medium and half in the form of elastic resilience",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "global_instant_of_total_energy",
+      "statement": "At any given instant the amount of energy in the whole medium is a determinate quantity equally divided between motion and resilience.",
+      "quote": "at any instant the amount of energy in the whole medium is equally divided, so that half is energy of motion, and half is elastic resilience",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "propagation_alternates_energy_forms",
+      "statement": "The propagation of undulations consists in the continual transformation of one form of energy into the other alternately.",
+      "quote": "The propagation of undulations consists in the continual transformation of one of these forms of energy into the other alternately",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "connected_parts_of_medium",
+      "statement": "The parts of the medium are so connected that the motion of one part depends on the motion of the rest.",
+      "quote": "the parts of this medium must be so connected that the motion of one part depends in some way on the motion of the rest",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "actual_and_potential_energy",
+      "statement": "The medium can receive and store two kinds of energy, actual energy of motion of its parts and potential energy of elastic displacement.",
+      "quote": "The medium is therefore capable of receiving and storing up two kinds of energy, namely, the",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "gross_matter_only_modifies_ether",
+      "statement": "The presence of gross matter merely modifies in some way the motion of the ether without replacing it.",
+      "quote": "we are obliged to admit that the undulations are those of an ethereal substance, and not of the gross matter, the presence of which merely modifies in some way the motion of the ether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rotation_axis_along_magnetic_force",
+      "statement": "The motion of the ethereal medium where magnetic effects are observed is a rotation having the direction of the magnetic force as its axis.",
+      "quote": "we have some reason to suppose that this motion is one of rotation, having the direction of the magnetic force as its axis",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "field_is_a_part_of_space",
+      "statement": "The electromagnetic field is that part of space which contains and surrounds bodies in electric or magnetic conditions.",
+      "quote": "The electromagnetic field is that part of space which contains and surrounds bodies in electric or magnetic conditions",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "motion_through_the_field",
+      "statement": "A body has a definite motion through the electromagnetic field that gives rise to an electromotive force upon it.",
+      "quote": "this, then, is a force acting on a body caused by its motion through the electromagnetic field, or by changes occurring in that field itself",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "body_has_two_extremities",
+      "statement": "A body has two distinguishable extremities that can be oppositely electrified by an electromotive force.",
+      "quote": "the two extremities of the body tend to become oppositely electrified, and an electric current tends to flow through the body",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "displacement_is_elastic_yielding",
+      "statement": "Electric displacement is a kind of elastic yielding of the medium to the action of the electromotive force.",
+      "quote": "another effect of electromotive force, namely, electric displacement, which according to our theory is a kind of elastic yielding to the action of the force",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "mechanism_obeys_dynamics",
+      "statement": "The connected mechanism of the medium must be subject to the general laws of Dynamics.",
+      "quote": "Such a mechanism must be subject to the general laws of Dynamics, and we ought to be able to work out all the consequences of its motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "lines_of_force_laid_down",
+      "statement": "Systems of lines of magnetic force can be laid down in the field to indicate its magnetic properties in space.",
+      "quote": "I then apply the phenomena of induction and attraction of currents to the exploration of the electromagnetic field, and the laying down systems of lines of magnetic force which indicate its magnetic properties",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "displacement_and_conduction_compounded",
+      "statement": "Electric displacement and true conduction may be compounded together into a total current.",
+      "quote": "(A) The relation between electric displacement, true conduction, and the total current, compounded of both",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ratio_of_units_is_a_velocity",
+      "statement": "The relation between the electrostatic and electromagnetic units of electricity is a velocity, namely the number of electrostatic units in one electromagnetic unit.",
+      "quote": "the velocity of propagation is the velocity v , found from experiments such as those of Weber , which expresses the number of electrostatic units of electricity which are contained in one electromagnetic unit",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "only_transverse_disturbances_propagate",
+      "statement": "In a non-conductive field the only magnetic disturbances that can be propagated are those transverse to the direction of propagation.",
+      "quote": "the only disturbances which can be so propagated are those which are transverse to the direction of propagation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_is_electromagnetic_disturbance",
+      "statement": "The velocity v is so nearly that of light that light itself is an electromagnetic disturbance propagated through the field.",
+      "quote": "This velocity is so nearly that of light, that it seems we have strong reason to conclude that light itself (including radiant heat, and other radiations if any) is an electromagnetic disturbance",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "elasticity_agrees_across_methods",
+      "statement": "The elasticity of the medium calculated from rapid luminous vibrations agrees with that found by the slow process of electrical experiments.",
+      "quote": "the agreement between the elasticity of the medium as calculated from the rapid alternations of luminous vibrations, and as found by the slow process of electrical experiments",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "refractive_index_squared_relation",
+      "statement": "The square of the index of refraction is equal to the product of the specific dielectric capacity and the specific magnetic capacity.",
+      "quote": "the square of the index of refraction is equal to the product of the specific dielectric capacity and the specific magnetic capacity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "conductors_are_opaque",
+      "statement": "Conducting media absorb such radiations rapidly and therefore are generally opaque.",
+      "quote": "Conducting media are shown to absorb such radiations rapidly, and therefore to be generally opaque",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "equipotential_surfaces_at_right_angles",
+      "statement": "Equipotential magnetic surfaces of the field cut the lines of magnetic force at right angles.",
+      "quote": "By exploring the same field with a magnet, I show the distribution of its equipotential magnetic surfaces, cutting the lines of force at right angles",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "field_property_independent_of_medium",
+      "statement": "The properties of the magnetic field are not so much altered by substituting one medium or a vacuum that dense media do more than modify the motion of the ether.",
+      "quote": "the properties of the magnetic field are not so much altered by the substitution of one medium for another, or for a vacuum, as to allow us to suppose that the dense medium does anything more than merely modify the motion of the ether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "energy_transformation_irreversible_in_conductor",
+      "statement": "In a conducting circuit electromotive force produces a current whose meeting with resistance transforms electrical energy into heat irreversibly.",
+      "quote": "it produces a current, which, as it meets with resistance, occasions a continual transformation of electrical energy into heat, which is incapable of being restored again to the form of electrical energy by an reversal of the process",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

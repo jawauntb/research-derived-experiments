@@ -1,0 +1,229 @@
+{
+  "doc_id": "maxwell_1865_part1",
+  "propositions": [
+    {
+      "name": "ethereal_medium_fills_space",
+      "statement": "There is an ethereal medium filling space and permeating bodies capable of being set in motion.",
+      "quote": "there is an ethereal medium filling space and permeating bodies, capable of being set in motion and of transmitting that motion from one part to another",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "medium_has_real_density",
+      "statement": "The pervading medium has small but real density.",
+      "quote": "the existence of a pervading medium of small but real density, capable of being set in motion, and of transmitting motion from one part to another with great, but not infinite, velocity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "propagation_finite_velocity",
+      "statement": "Motion transmitted through the medium propagates with a great but not infinite velocity.",
+      "quote": "capable of being set in motion, and of transmitting motion from one part to another with great, but not infinite, velocity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "communication_occupies_time",
+      "statement": "The communication of motion through the medium is not instantaneous but occupies time.",
+      "quote": "these connections must be capable of a certain kind of elastic yielding, since the communication of motion is not instantaneous, but occupies time",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "instant_across_whole_medium",
+      "statement": "There is an instant at which the amount of energy in the whole medium is a definite quantity equally divided.",
+      "quote": "at any instant the amount of energy in the whole medium is equally divided, so that half is energy of motion, and half is elastic resilience",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "energy_existed_in_medium_before",
+      "statement": "The energy that heats the body must have formerly existed in the moving medium before the undulations reached the body.",
+      "quote": "the energy communicated to the body in heating it must have formerly existed in the moving medium, for the undulations had left the source of heat some time before they reached the body",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "time_of_transit_defined",
+      "statement": "There is a time during which the undulations travel from the source of heat to the body.",
+      "quote": "the undulations had left the source of heat some time before they reached the body, and during that time the energy must have been half in the form of motion of the medium",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "body_motion_through_field",
+      "statement": "A body has a definite motion through the electromagnetic field which produces electromotive force.",
+      "quote": "This, then, is a force acting on a body caused by its motion through the electromagnetic field, or by changes occurring in that field itself",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "mechanism_subject_to_dynamics",
+      "statement": "The mechanism of the medium is subject to the general laws of Dynamics.",
+      "quote": "Such a mechanism must be subject to the general laws of Dynamics, and we ought to be able to work out all the consequences of its motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "two_kinds_of_energy_only",
+      "statement": "The medium stores two kinds of energy: actual energy depending on motion of its parts and potential energy of elastic connections.",
+      "quote": "The medium is therefore capable of receiving and storing up two kinds of energy, namely, the \"actual\" energy depending on the motions of its parts, and \"potential\" energy",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "half_and_half_energy_division",
+      "statement": "At any instant half the energy in the whole medium is energy of motion and half is elastic resilience.",
+      "quote": "at any instant the amount of energy in the whole medium is equally divided, so that half is energy of motion, and half is elastic resilience",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "transparent_bodies_do_not_alter_transmission",
+      "statement": "Transmission of light and heat is not greatly altered when transparent bodies of measurable density are substituted for the vacuum.",
+      "quote": "the transmission of these radiations is not greatly altered when transparent bodies of measurable density are substituted for the so-called vacuum",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "parts_of_medium_connected",
+      "statement": "The parts of the medium are so connected that the motion of one part depends on the motion of the rest.",
+      "quote": "the parts of this medium must be so connected that the motion of one part depends in some way on the motion of the rest",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "connections_elastic_yielding",
+      "statement": "The connections between parts of the medium are capable of a certain kind of elastic yielding.",
+      "quote": "these connections must be capable of a certain kind of elastic yielding, since the communication of motion is not instantaneous, but occupies time",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "magnetic_force_direction_as_axis",
+      "statement": "The direction of the magnetic force serves as the axis of a rotation of the ethereal medium.",
+      "quote": "we have some reason to suppose that this motion is one of rotation, having the direction of the magnetic force as its axis",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "direction_of_propagation_defined",
+      "statement": "A propagated disturbance has a direction of propagation to which its motion may be transverse.",
+      "quote": "the only disturbances which can be so propagated are those which are transverse to the direction of propagation",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "electrical_velocity_matches_light",
+      "statement": "The velocity of propagation from electrical experiments is so nearly that of light that light itself is an electromagnetic disturbance.",
+      "quote": "This velocity is so nearly that of light, that it seems we have strong reason to conclude that light itself (including radiant heat, and other radiations if any) is an electromagnetic disturbance",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ratio_of_units_is_velocity",
+      "statement": "The number of electrostatic units of electricity contained in one electromagnetic unit is the velocity of propagation.",
+      "quote": "the velocity of propagation is the velocity v , found from experiments such as those of Weber , which expresses the number of electrostatic units of electricity which are contained in one electromagnetic unit",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_has_single_velocity",
+      "statement": "Light has one velocity that can be compared with the velocity of propagation deduced from electrical experiments.",
+      "quote": "This velocity is so nearly that of light, that it seems we have strong reason to conclude that light itself (including radiant heat, and other radiations if any) is an electromagnetic disturbance",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "refraction_squared_equals_product",
+      "statement": "In dense transparent bodies the square of the index of refraction equals the product of the specific dielectric capacity and the specific magnetic capacity.",
+      "quote": "the square of the index of refraction is equal to the product of the specific dielectric capacity and the specific magnetic capacity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "relative_velocity_well_defined",
+      "statement": "The force between two particles depends on their relative velocity, which is treated as a definite quantity.",
+      "quote": "he has found it necessary to assume that the force between two particles depends on their relative velocity, as well as on their distance",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "body_motion_causes_electromotive_force",
+      "statement": "When a body is moved across the lines of magnetic force it experiences an electromotive force.",
+      "quote": "When a body is moved across the lines of magnetic force it experiences what is called an electromotive force",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "actions_in_surrounding_medium",
+      "statement": "Electromagnetic actions go on in the surrounding medium as well as in the excited bodies rather than at a distance.",
+      "quote": "supposing them to be produced by actions which go on in the surrounding medium as well as in the excited bodies, and endeavouring to explain the action between distant bodies",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "lines_of_force_locatable_in_space",
+      "statement": "The lines of magnetic force have positions in space definite enough that a body can be moved across them.",
+      "quote": "When a body is moved across the lines of magnetic force it experiences what is called an electromotive force",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "only_transverse_disturbances_propagate",
+      "statement": "The only disturbances which can be propagated through a non-conductive field are those transverse to the direction of propagation.",
+      "quote": "the only disturbances which can be so propagated are those which are transverse to the direction of propagation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electric_displacement_is_elastic_yielding",
+      "statement": "Electric displacement is a kind of elastic yielding to the action of electromotive force.",
+      "quote": "electric displacement, which according to our theory is a kind of elastic yielding to the action of the force, similar to that which takes place in structures and machines",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "plane_of_polarization_definite",
+      "statement": "A plane polarized ray has a plane of polarization that can be caused to rotate when traversing a medium.",
+      "quote": "when a plane polarized ray traverses a transparent diamagnetic medium in the direction of the lines of magnetic force produced by magnets or currents in the neighbourhood, the plane of polarization is caused to rotate",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "elasticity_agrees_across_processes",
+      "statement": "The elasticity of the medium calculated from rapid luminous vibrations agrees with that found by the slow process of electrical experiments.",
+      "quote": "the agreement between the elasticity of the medium as calculated from the rapid alternations of luminous vibrations, and as found by the slow process of electrical experiments",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ethereal_medium_can_be_in_motion",
+      "statement": "The ethereal medium can be in a definite motion of rotation wherever magnetic effects are observed.",
+      "quote": "there may not be a motion of the ethereal medium going on wherever magnetic effects are observed, and we have some reason to suppose that this motion is one of rotation",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "energy_alternates_between_forms",
+      "statement": "The propagation of undulations consists in the continual transformation of one form of energy into the other alternately.",
+      "quote": "The propagation of undulations consists in the continual transformation of one of these forms of energy into the other alternately",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "magnetic_field_properties_medium_independent",
+      "statement": "The properties of the magnetic field are not much altered by substitution of one medium for another or for a vacuum.",
+      "quote": "the properties of the magnetic field are not so much altered by the substitution of one medium for another, or for a vacuum, as to allow us to suppose that the dense medium does anything more than merely modify the motion of the ether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "state_of_rest_or_motion_definite",
+      "statement": "A body may be either at rest or in motion in a way that mathematical theories can treat as a definite state.",
+      "quote": "it seems at first sight natural to explain the facts by assuming the existence of something either at rest or in motion in each body, constituting its electric or magnetic state",
+      "kind": "presupposed",
+      "definitional": false
+    }
+  ]
+}

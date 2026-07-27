@@ -1,0 +1,250 @@
+{
+  "doc_id": "larmor_1900_ch11",
+  "propositions": [
+    {
+      "name": "aether_provides_absolute_rest",
+      "statement": "The aether provides a definite state of rest against which axes and material systems can be said to be at rest or moving with uniform translatory velocity.",
+      "quote": "will represent the course of change of the aethereal vectors ( f, g, h ) and ( a, b, c ) of a correlated system of moving electrons referred to axes of (x', y', z') moving through the aether with uniform translatory velocity ( v , 0, 0)",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "absolute_time_of_rest_system",
+      "statement": "There is a well-defined time t belonging to the medium at rest against which the position of an electron in the moving medium at that same time t can be compared to its position in the rest medium at time t minus vx over c squared.",
+      "quote": "In the theorem the position of each electron in the material medium in motion, at time t , corresponds with that which it would occupy in the medium at rest at time",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "definite_velocity_through_aether",
+      "statement": "A material body has a definite velocity v of translation through the aether, in a specific direction.",
+      "quote": "when this pair is moving through the aether with velocity v in a direction lying in the plane of their orbits, these orbits relative to the translatory motion will be flattened along the direction of v to ellipticity",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "physical_contraction_from_motion",
+      "statement": "Imparting a uniform velocity of translation to a steady material system produces a uniform contraction of the system in the direction of the motion.",
+      "quote": "then an effect of imparting to a steady material system a uniform velocity of translation is to produce a uniform contraction of the system in the direction of the motion, of amount",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "molecular_forces_electric_only",
+      "statement": "All internal forces of a material system arise wholly from electrodynamic actions between the systems of electrons which constitute the atoms.",
+      "quote": "if the internal forces of a material system arise wholly from electrodynamic actions between the systems of electrons which constitute the atoms",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "no_forces_other_than_electric",
+      "statement": "There are no forces between the electrons other than those that exist through the mediation of the aether, that is, other than electric forces.",
+      "quote": "it also implies that there are no forces between the electrons other than those that exist through the mediation of the aether as here defined, that is other than electric forces",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_strength_invariant",
+      "statement": "Motion of a material system containing electrons cannot alter the strengths of its electrons.",
+      "quote": "We require however to construct a correlative system devoid of the translatory motion in which the strengths of the electrons shall be equal instead of proportional, since motion of a material system containing electrons cannot alter their strengths",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_nucleus_singular_point",
+      "statement": "The nucleus of the electron is merely a singular point in the aether, with nothing in it of the nature of inertia foreign to the aether.",
+      "quote": "the nucleus of the electron is merely a singular point in the aether, that there is nothing involved in it of the nature of inertia foreign to the aether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "radiation_common_speed_in_aether",
+      "statement": "All kinds of radiations travel with the same speed in the celestial spaces of the free aether.",
+      "quote": "The equations of the free aether, as revealed by MacCullagh's optical analysis, are linear equations: they in fact must be so if all kinds of radiations are to travel with the same speed in the celestial spaces",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_equations_linear",
+      "statement": "The equations of the free aether are linear equations.",
+      "quote": "The equations of the free aether, as revealed by MacCullagh's optical analysis, are linear equations",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "gravity_speed_exceeds_radiation",
+      "statement": "The speed of transmission of gravitation, if finite at all, enormously transcends that of radiation.",
+      "quote": "The knowledge that the speed of transmission of gravitation, if finite at all, enormously transcends that of radiation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "doppler_from_time_variable_change",
+      "statement": "The change of the time variable in the comparison of radiations in the fixed and moving systems produces the Doppler effect on the wave-length.",
+      "quote": "The change of the time variable, in the comparison of radiations in the fixed and moving systems, involves the Doppler effect on the wave-length.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "wave_vectors_lie_in_wavefront",
+      "statement": "The electric and magnetic vectors of radiation both lie in the wave-front, so wave-fronts and rays correspond between fixed and moving correlated systems.",
+      "quote": "As both the electric and magnetic vectors of radiation lie in the wave-front, it follows that in the two correlated systems, fixed and moving, the relative wave-fronts of radiation correspond",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "michelson_null_result_covered",
+      "statement": "The second-order correction of the Fresnel expression on this hypothesis includes Michelson's negative result.",
+      "quote": "The second term in this expression is the Fresnel effect, and the remaining term is its second order correction on our hypothesis which includes Michelson's negative result.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "null_method_gives_earth_motion_absence",
+      "statement": "Because optical measurements are usually made by the null method of adjusting the apparatus so the disturbance vanishes, the general absence of effect of the Earth's motion in optical experiments up to the second order follows.",
+      "quote": "As optical measurements are usually made by the null method of adjusting the apparatus so that the disturbance vanishes, this result carries the general absence of effect of the Earth's motion in optical experiments, up to the second order of small quantities.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "spectroscopic_celestial_velocity_valid",
+      "statement": "The changes of free periods of molecules from convection through the aether are of the second order in v over c, which is vital for spectroscopic measurement of celestial velocities in the line of sight.",
+      "quote": "The circumstance that the changes of their free periods, arising from convection of the molecules through the aether, are of the second order in v/c , is of course vital for the theory of the spectroscopic measurement of celestial velocities in the line of sight.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "kinetic_energy_decomposes",
+      "statement": "The kinetic energy of a moving molecule is made up of an internal energy (the same as at rest, to first order in v over c) together with the energy of translation of its electrons.",
+      "quote": "the kinetic energy of the moving molecule is made up of an internal energy, the same up to the first order of the ratio of its velocity to that of radiation as if it were at rest",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "inertia_defined_as_energy_coefficient",
+      "statement": "Inertia is by definition the coefficient of half the square of the velocity in the expression for the translatory energy of the molecule.",
+      "quote": "the inertia is by definition the coefficient of half the square of the velocity in the expression for the translatory energy of the molecule",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "inertia_of_aethereal_origin",
+      "statement": "Inertia is mainly of electric, or rather of aethereal, origin.",
+      "quote": "it seems fair to conclude that of its energy the electric part prevails equally over the gravitative part: but this is simply asserting that inertia is mainly of electric, or rather of aethereal, origin",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "kinetic_energy_from_aethereal_square",
+      "statement": "The total kinetic energy of the system equals the mean value of the volume-integral of the square of the aethereal disturbance.",
+      "quote": "in estimating the mean value of the volume-integral of the square of the aethereal disturbance, which is the total kinetic energy",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aethereal_fields_fore_aft_symmetric",
+      "statement": "The aethereal fields of the moving electric charges in the molecule are symmetrical fore and aft and unaltered to the first order by the motion.",
+      "quote": "the aethereal fields of the moving electric charges, free or constrained, existing in the molecule, will be symmetrical fore and aft and unaltered to the first order by the motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "strength_as_surface_integral",
+      "statement": "The strength of an electron is the value of a surface integral of the electric vectors extended over any surface closely surrounding its nucleus.",
+      "quote": "But the strength of the electron in the moving system is the value of the integral",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "adjacent_electron_dominates_near_surface",
+      "statement": "If the surface be taken to surround an electron very closely, the wholly preponderating part of each vector is that which belongs to the adjacent electron.",
+      "quote": "if the surface be taken to surround the electron under consideration very closely, because then the wholly preponderating part of each vector is that which belongs to the adjacent electron",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "conductor_structure_unaffected_by_current",
+      "statement": "The mechanical structure of a conductor is not sensibly affected when it carries a current.",
+      "quote": "we know in fact that the mechanical structure of a conductor is not sensibly affected when it carries a current",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ion_migration_velocity_minute",
+      "statement": "When a considerable proportion of electrons take part in carrying a current, their velocity of migration is excessively minute.",
+      "quote": "their velocity of migration is excessively minute, as for instance follows from the phenomena of migration in electrolysis",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "intermolecular_forces_via_aether",
+      "statement": "The intermolecular forces act through the mediation of the aether in a manner similar to electric and magnetic forces.",
+      "quote": "if we assume that the intermolecular forces act through the mediation of the aether in a manner similar to that which we know to be the case in regard to electric and magnetic forces",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "translation_alters_molecular_action",
+      "statement": "The translation of matter will alter the action between two molecules or atoms in a manner similar to that in which it alters the attraction or repulsion between electrically charged particles.",
+      "quote": "the translation of the matter will most likely alter the action between two molecules or atoms in a manner similar to that in which it alters the attraction or repulsion between electrically charged particles",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_dispersion_in_free_aether",
+      "statement": "Celestial bodies on emerging from eclipse or occupation show no changes of colour, indicating there is no appreciable optical dispersion in free aether.",
+      "quote": "the circumstance that celestial bodies on emerging from eclipse or occupation show no changes of colour",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electric_prevails_over_gravitative",
+      "statement": "In the constitution of the molecule, electric forces or agencies prevail enormously over gravitative ones.",
+      "quote": "it is admitted, from electrolytic considerations, that electric forces or agencies prevail enormously over gravitative ones",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "chemical_constancy_of_mass_electric",
+      "statement": "The fundamental chemical law of the constancy of mass throughout molecular transformations is verified for the part of the mass that is of electric origin.",
+      "quote": "the fundamental chemical law of the constancy of mass throughout molecular transformations is verified for that part of the mass (whether it be all of it or not) that is of electric origin",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "maxwell_form_invariance_required",
+      "statement": "The scheme of equations referred to moving axes, connecting the new subscripted variables, is identical in form with the Maxwellian scheme of relations for the aethereal vectors referred to fixed axes.",
+      "quote": "the scheme of equations, referred to moving axes, which connects together the new variables with subscripts, is identical in form with the Maxwellian scheme of relations for the aethereal vectors referred to fixed axes",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "transformation_elongates_space",
+      "statement": "The transformation from primed to subscripted coordinates signifies an elongation of the space of the problem in a definite ratio along the direction of the motion of the axes of coordinates.",
+      "quote": "signifies an elongation of the space of the problem in the ratio",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "time_scale_rescaling_permitted",
+      "statement": "In the correlation of radiations between the fixed and moving systems, the scale of time is enlarged in the ratio epsilon to the one-half, as a coordinate rescaling.",
+      "quote": "before the instant considered when the scale of time is enlarged in the ratio",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "vortex_circulation_unalterable",
+      "statement": "The circulation of the vortex is in the dynamical theory an unalterable constant, so one vortex system cannot be changed by natural processes into a rescaled version of the other.",
+      "quote": "The circulation of the vortex is however in the dynamical theory an unalterable constant, so that the one system cannot be changed by natural processes into the other",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "point_nuclei_leave_scale_undetermined",
+      "statement": "If the atoms of matter were constituted electrically with point nuclei and forces wholly of electric origin, there would be nothing to determine the scale of an isolated system as regards time and space.",
+      "quote": "if the atoms of matter were constituted electrically, and the forces between them were wholly of electric origin, there would be nothing to determine the scale of an isolated system as regards time and space",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

@@ -1,0 +1,208 @@
+{
+  "doc_id": "maxwell_1865_part6",
+  "propositions": [
+    {
+      "name": "optical_medium_is_electromagnetic_field",
+      "statement": "The elastic medium through which the vibrations of light are propagated is the same substance as the field in which electromagnetic phenomena take place.",
+      "quote": "At the commencement of this paper we made use of the optical hypothesis of an elastic medium through which the vibrations of light are propagated, in order to show that we have warrantable grounds for seeking, in the same medium, the cause of other phenomena as well as those of light.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_and_magnetism_same_substance",
+      "statement": "Light and magnetism are affections of the same substance, and light is an electromagnetic disturbance propagated through the field according to electromagnetic laws.",
+      "quote": "The agreement of the results seems to show that light and magnetism are affections of the same substance, and that light is an electromagnetic disturbance propagated through the field according to electromagnetic laws.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "wave_has_definite_velocity",
+      "statement": "A plane wave through the field has one definite velocity V that is the same in either direction of propagation.",
+      "quote": "The other equations give the same value for V, so that the wave is propagated in either direction with a velocity V.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "wave_has_definite_direction_at_any_point",
+      "statement": "A propagated wave has a definite direction of propagation and a definite disturbance at any point, so that direction of propagation is a fact of the same kind everywhere in the field.",
+      "quote": "Hence magnetic disturbances propagated through the electromagnetic field agree with light in this, that the disturbance at any point is transverse to the direction of propagation, and such waves may have all the properties of polarized light.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "magnetization_in_plane_of_wave",
+      "statement": "The direction of the magnetization in a propagated wave must be in the plane of the wave.",
+      "quote": "which shows that the direction of the magnetization must be in the plane of the wave.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "transverse_vibrations_only",
+      "statement": "The equations of the electromagnetic field, deduced from experimental evidence, show that only transversal vibrations can be propagated.",
+      "quote": "The equations of the electromagnetic field, deduced from purely experimental evidence, show that transversal vibrations only can be propagated.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electromagnetic_and_optical_agree_on_transversality",
+      "statement": "Electromagnetic science and optical science both affirm the propagation of transverse vibrations through the field and give the same velocity of propagation.",
+      "quote": "Hence electromagnetic science leads to exactly the same conclusions as optical science with respect to the direction of the disturbances which can be propagated through the field; both affirm the propagation of transverse vibrations, and both give the same velocity of propagation.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "v_equals_velocity_of_light_in_vacuum",
+      "statement": "The number of electrostatic units in one electromagnetic unit of electricity should be equal to the velocity of light in air or vacuum.",
+      "quote": "is the number of electrostatic units in one electromagnetic unit of electricity, and this, according to our result, should be equal to the velocity of light in air or vacuum.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "weber_kohlrausch_ratio_applies_to_vacuum",
+      "statement": "The value of v obtained from the electromagnetic experiments of Weber and Kohlrausch is the same quantity as the velocity of light in air or vacuum, so that a ratio of units measured in one experiment gives a velocity applicable in vacuum.",
+      "quote": "is the number of electrostatic units in one electromagnetic unit of electricity, and this, according to our result, should be equal to the velocity of light in air or vacuum.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "aberration_yields_light_velocity_in_surrounding_space",
+      "statement": "The velocity of light in the space surrounding the earth can be deduced from the coefficient of aberration and the received value of the radius of the earth's orbit.",
+      "quote": "The velocity of light in the space surrounding the earth, deduced from the coefficient of aberration and the received value of the radius of the earth's orbit, is",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "earth_moves_through_field_of_light_propagation",
+      "statement": "The earth moves in an orbit through the space in which light is propagated with velocity V, and this motion together with the orbit radius gives the coefficient of aberration.",
+      "quote": "The velocity of light in the space surrounding the earth, deduced from the coefficient of aberration and the received value of the radius of the earth's orbit, is",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "one_velocity_of_light_across_experiments",
+      "statement": "The velocity of light deduced from Fizeau's and Foucault's optical experiments and from aberration is a single quantity that agrees with the value of v from the electromagnetic experiments.",
+      "quote": "(97) Hence the velocity of light deduced from experiment agrees sufficiently well with the value of",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "foucault_revolving_mirror_gives_velocity",
+      "statement": "The velocity of light V can be obtained by determining the angle through which a revolving mirror turned while the reflected light went and returned along a measured course.",
+      "quote": "The value of V found by M. Foucault was obtained by determining the angle through which a revolving mirror turned, while the light reflected from it went and returned along a measured course.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "measured_course_and_round_trip_time_classical",
+      "statement": "The measured course over which the light went and returned has a definite length, and the angle turned by the revolving mirror gives the time of that round trip, so that length divided by time yields the velocity of light.",
+      "quote": "The value of V found by M. Foucault was obtained by determining the angle through which a revolving mirror turned, while the light reflected from it went and returned along a measured course.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "electrical_v_and_optical_V_directly_combinable",
+      "statement": "A value of v determined from purely electrical experiments (with no use of light except to see the instruments) and a value of V determined from purely optical experiments (with no use of electricity or magnetism) are values of the same physical velocity and can be equated.",
+      "quote": "No use whatever was made of electricity or magnetism.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "perfect_dielectric_has_no_true_conduction",
+      "statement": "If the medium in the field is a perfect dielectric, there is no true conduction and the currents are only variations in the electric displacement.",
+      "quote": "If the medium in the field is a perfect dielectric there is no true conduction, and the currents",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "displacements_caused_by_electromotive_forces",
+      "statement": "Electric displacements are caused by electromotive forces according to the equations of Electric Elasticity.",
+      "quote": "But these electric displacements are caused by electromotive forces, and by the equations of Electric Elasticity (E),",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_motion_of_conductors_in_wave_setup",
+      "statement": "In the wave-propagation setup there is no motion of conductors in the field, so that electromotive forces are due only to variations of the electromagnetic or the electrostatic functions.",
+      "quote": "These electromotive forces are due to the variations either of the electromagnetic or the electrostatic functions, as there is no motion of conductors in the field",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "field_defines_state_relative_to_which_motion_is_definite",
+      "statement": "The phrase 'no motion of conductors in the field' presupposes that the field defines a state with respect to which motion of a conductor is a definite fact.",
+      "quote": "These electromotive forces are due to the variations either of the electromagnetic or the electrostatic functions, as there is no motion of conductors in the field",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "free_electricity_immoveable_in_perfect_insulator",
+      "statement": "In a perfect insulator the free electricity is immoveable, so that J is either constant, zero, or uniformly increasing or diminishing with the time, and no disturbance depending on J can be propagated as a wave.",
+      "quote": ", and the value of J is either constant or zero, or uniformly increasing or diminishing with the time; so that no disturbance depending on J can be propagated as a wave.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "conductor_transforms_electrical_energy_to_heat",
+      "statement": "If the medium is a conductor with resistance per unit volume ρ, true currents of conduction transform electrical energy into heat and thereby weaken the undulation.",
+      "quote": "If the medium, instead of being a perfect insulator, is a conductor whose resistance per unit of volume is",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "insulators_transparent_conductors_opaque",
+      "statement": "Most transparent solid bodies are good insulators, whereas all good conductors are very opaque.",
+      "quote": "(107) Most transparent solid bodies are good insulators, whereas all good conductors are very opaque.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "gold_transparency_requires_frequency_dependent_loss",
+      "statement": "The observation that gold-leaf transmits some green light cannot be reconciled with the electromagnetic theory of light unless there is less loss of energy when electromotive forces are reversed with the rapidity of the vibrations of light than when they act for sensible times.",
+      "quote": "This result cannot be reconciled with the electromagnetic theory of light, unless we suppose that there is less loss of energy when the electromotive forces are reversed with the rapidity of the vibrations of light than when they act for sensible times, as in our experiments.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "crystal_axes_of_induction_align_with_electric_elasticity",
+      "statement": "In a crystallized medium, the axes of magnetic induction are assumed to coincide in direction with those of electric elasticity, in order to make the propagation calculation tractable.",
+      "quote": "Further experiments on the magnetic and dielectric properties of crystals are required before we can decide whether the relation of these bodies to magnetic and electric forces is the same, when these forces are permanent as when they are alternating with the rapidity of the vibrations of light.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "principal_plane_polarized_ray_has_same_velocity_all_directions",
+      "statement": "In each principal plane of a crystal, the ray polarized in that plane obeys the ordinary law of refraction, so that its velocity is the same in whatever direction in that plane it is propagated.",
+      "quote": "Now we know that in each principal plane of a crystal the ray polarized in that plane obeys the ordinary law of refraction, and therefore its velocity is the same in whatever direction in that plane it is propagated.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "half_energy_electric_half_magnetic",
+      "statement": "In a propagated light wave, half of the energy per unit of volume consists of magnetic and half of electric energy.",
+      "quote": "where P represents the greatest value of the electromotive force. Half of this consists of magnetic and half of electric energy.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "forces_reversed_twice_per_vibration_of_light",
+      "statement": "The electromotive and magnetic forces in light must be conceived to be reversed twice in every vibration of light, more than a thousand million million times in a second.",
+      "quote": "These electromotive and magnetic forces must be conceived to be reversed twice in every vibration of light; that is, more than a thousand million million times in a second.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "sunlight_mechanical_value_at_earth_is_definite",
+      "statement": "The mechanical value of direct sunlight at the Earth has a definite value that can be used with the electromagnetic equations to compute the greatest value of the electromotive force P in sunlight.",
+      "quote": "According to Pouillet 's data, as calculated by Professor W. Thomson , the mechanical value of direct sunlight at the Earth is",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "field_and_equations_extend_from_earth_to_sun",
+      "statement": "The equations relating electromotive force, magnetic force, and energy of light hold in the field at the Sun's surface as well as at the Earth's distance from the Sun, so that P at the Sun can be scaled from P at the Earth.",
+      "quote": "This gives the maximum value of P in direct sunlight at the Earth's distance from the Sun,",
+      "kind": "presupposed",
+      "definitional": false
+    }
+  ]
+}

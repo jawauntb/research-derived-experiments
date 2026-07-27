@@ -1,0 +1,175 @@
+{
+  "doc_id": "poincare_1904_stlouis",
+  "propositions": [
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "atoms_as_material_points",
+      "quote": "There also we should see material points, separated from one another by intervals, enormous in comparison with their dimensions, and describing orbits according to regular laws. These infinitesimal stars are the atoms.",
+      "statement": "The bodies studied by the physicist are ultimately composed of material points separated by intervals enormous in comparison with their dimensions.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "central_forces_along_line",
+      "quote": "Like the stars proper, they attract or repel each other, and this attraction or this repulsion, following the straight line which joins them, depends only on the distance.",
+      "statement": "The attraction or repulsion between atoms acts following the straight line which joins them and depends only on the distance.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "distance_between_atoms_definite",
+      "quote": "the atoms of ether attract each other in the inverse ratio of the sixth power of the distance; and Maxwell himself, does he not say somewhere that the atoms of gases repel each other in the inverse ratio of the fifth power of the distance?",
+      "statement": "There is a definite distance between any two atoms that determines the force between them.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "law_is_differential_equation",
+      "quote": "For us a law is something quite different; it is a constant relation between the phenomenon of to-day and that of to-morrow; in a word, it is a differential equation.",
+      "statement": "A physical law is a constant relation between the phenomenon of to-day and that of to-morrow, expressible as a differential equation.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "conservation_of_energy",
+      "quote": "the principle of the conservation of energy suffices to determine for us the most interesting point.",
+      "statement": "The principle of the conservation of energy, or Mayer's principle, holds for the universe considered as a machine.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "action_equals_reaction",
+      "quote": "Newton's principle, or the principle of the equality of action and reaction.",
+      "statement": "Newton's principle of the equality of action and reaction is a general principle of physics.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "principle_of_relativity",
+      "quote": "The principle of relativity, according to which the laws of physical phenomena must be the same for a stationary observer as for an observer carried along in a uniform motion of translation",
+      "statement": "The laws of physical phenomena must be the same for a stationary observer as for an observer carried along in a uniform motion of translation.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "no_means_to_detect_translation",
+      "quote": "so that we have not and can not have any means of discerning whether or not we are carried along in such a motion.",
+      "statement": "There is no means of discerning whether or not one is carried along in a uniform motion of translation.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "conservation_of_mass",
+      "quote": "The principle of the conservation of mass, or Lavoisier's principle.",
+      "statement": "The principle of the conservation of mass, or Lavoisier's principle, is a general principle of physics.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "few_principles_suffice",
+      "quote": "The application of these five or six general principles to the different physical phenomena is sufficient for our learning of them all that we could reasonably hope to know of them.",
+      "statement": "Application of five or six general principles to the different physical phenomena suffices to learn all that we could reasonably hope to know of them.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "ether_transmits_both",
+      "quote": "we know that this medium transmits at the same time the optical perturbations and the electrical perturbations",
+      "statement": "The ether transmits at the same time the optical perturbations and the electrical perturbations.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "simultaneous_transmission_meaningful",
+      "quote": "we know that this medium transmits at the same time the optical perturbations and the electrical perturbations",
+      "statement": "It is meaningful to say that the ether transmits optical and electrical perturbations at the same time.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "transmission_follows_mechanics",
+      "quote": "we know that this transmission must take place in conformity with the general principles of mechanics, and that suffices us for the establishment of the equations of the electromagnetic field.",
+      "statement": "The transmission of perturbations by the ether must take place in conformity with the general principles of mechanics.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "principles_are_generalized_experiments",
+      "quote": "These principles are results of experiments boldly generalized; but they seem to derive from their very generality a high degree of certainty.",
+      "statement": "The general principles of physics are results of experiments boldly generalized and derive their certainty from that generality.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "central_forces_imply_principles",
+      "quote": "it involved both the conservation of energy and that of masses, and the equality of action and reaction, and the law of least action, which appeared, it is true, not as experimental truths, but as theorems",
+      "statement": "The hypothesis of central forces contained the conservation of energy, the conservation of masses, the equality of action and reaction, and the law of least action as necessary consequences.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "gear_ratio_from_visible_wheels",
+      "quote": "We easily ascertain that the final wheel turns ten times less quickly than the initial wheel, since these two wheels are visible; we are able thence to conclude that a couple applied to the one will be balanced by a couple ten times greater applied to the other.",
+      "statement": "By observing that the final wheel turns ten times less quickly than the initial wheel one can conclude that a couple applied to the one will be balanced by a couple ten times greater applied to the other.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "poincare_1904_stlouis",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "couples_compensate_in_interior",
+      "quote": "For that there is no need to penetrate the mechanism of this equilibrium and to know how the forces compensate each other in the interior of the machine; it suffices to be assured that this compensation can not fail to occur.",
+      "statement": "Whatever the interior mechanism of a machine, the compensation of forces required by conservation of energy can not fail to occur.",
+      "support": 2
+    }
+  ]
+}

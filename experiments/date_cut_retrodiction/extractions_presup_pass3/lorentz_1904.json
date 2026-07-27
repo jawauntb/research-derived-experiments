@@ -1,0 +1,215 @@
+{
+  "doc_id": "lorentz_1904",
+  "propositions": [
+    {
+      "name": "aether_is_medium",
+      "statement": "There exists an aether through which solid bodies move and which can alter their dimensions.",
+      "quote": "the negative result of which has led FitzGerald and myself to the conclusion that the dimensions of solid bodies are slightly altered by their motion through the aether.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "earth_has_translation",
+      "statement": "The Earth's annual motion is a translation shared by all systems on it, and it can influence electric and optical phenomena.",
+      "quote": "The problem of determining the influence exerted on electric and optical phenomena by a translation, such as all systems have in virtue of the Earth's annual motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fixed_coordinate_system_exists",
+      "statement": "There is a fixed system of coordinates in which the fundamental equations of the theory of electrons hold.",
+      "quote": "Then, if we use a fixed system of coordinates,",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "system_has_definite_velocity",
+      "statement": "A system as a whole possesses a definite constant velocity w in a definite direction relative to the fixed coordinate system.",
+      "quote": "I shall now suppose that the system as a whole moves in the direction of x with a constant velocity w",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "additive_velocity_composition",
+      "statement": "The velocity of a point of an electron is the sum of the system velocity w and any additional velocity u the point may have.",
+      "quote": "any velocity a point of an electron may have in addition to this, so that",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "true_time_versus_local_time",
+      "statement": "There is a true time t of which the local time t' is a derived, distinct quantity that depends on position.",
+      "quote": "The variable t' may be called the local time ; indeed, for k=1, l=1 it becomes identical with what I have formerly understood by this name.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "simultaneity_across_frames_defined",
+      "statement": "A moment in the moving system is put into correspondence with a moment in the resting system by equating true time in one with local time in the other.",
+      "quote": "we shall define corresponding instants, the one belonging to P' , the other to P , by stating that the true time at the first instant is equal to the local time",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "restriction_velocity_below_c",
+      "statement": "The velocity of translation must be smaller than the velocity of light for the theory to apply.",
+      "quote": "The only restriction as regards the velocity will be that it be smaller than that of light.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fundamental_electron_equations",
+      "statement": "The fundamental equations of the theory of electrons are taken as the starting point for describing all electromagnetic phenomena.",
+      "quote": "I shall start from the fundamental equations of the theory of electrons.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electrons_are_spheres_at_rest",
+      "statement": "Electrons are spheres of radius R when in the state of rest and have their dimensions changed by the effect of a translation.",
+      "quote": "the electrons, which I take to be spheres of radius R in the state of rest, have their dimensions changed by the effect of a translation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "state_of_rest_is_absolute",
+      "statement": "There is a definite state of rest of an electron, relative to which its true spherical shape and radius are defined.",
+      "quote": "the electrons, which I take to be spheres of radius R in the state of rest, have their dimensions changed by the effect of a translation",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "contraction_only_along_motion",
+      "statement": "A translation influences the dimensions of separate electrons and of a ponderable body only in the direction of the motion.",
+      "quote": "the influence of a translation on the dimensions (of the separate electrons and of a ponderable body as a whole) is confined to those that have the direction of the motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "charge_preserved_under_deformation",
+      "statement": "Each element of volume preserves its charge when the electron is deformed by translation.",
+      "quote": "each element of volume is understood to preserve its charge.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "all_forces_transform_like_electric",
+      "statement": "Forces between uncharged particles and between such particles and electrons are altered by translation in the same way as electric forces in an electrostatic system.",
+      "quote": "In the second place I shall suppose that the forces between uncharged particles, as well as those between such particles and electrons, are influenced by a translation in quite the same way as the electric forces in an electrostatic system",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "unique_equilibrium_configuration",
+      "statement": "For a solid body under the attractions and repulsions of its particles there is but one configuration of equilibrium.",
+      "quote": "if we take for granted that there is but one configuration of equilibrium",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_true_material_mass",
+      "statement": "An electron has no mass other than its electromagnetic mass; there is no true or material mass.",
+      "quote": "I shall suppose that there is no other, no \"true\" or \"material\" mass",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "longitudinal_transverse_mass",
+      "statement": "An electron behaves as if it had a longitudinal mass m1 when accelerated along its motion and a transverse mass m2 when accelerated perpendicularly.",
+      "quote": "in phenomena in which there is an acceleration in the direction of motion, the electron behaves as if it had a mass m 1",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "molecular_masses_transform_electromagnetically",
+      "statement": "The masses of all particles are influenced by a translation to the same degree as the electromagnetic masses of the electrons.",
+      "quote": "we suppose that the masses of all particles are influenced by a translation to the same degree as the electromagnetic masses of the electrons",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "molecular_forces_depend_on_position_only",
+      "statement": "Molecular forces are determined by the relative positions of particles independently of the velocities of molecular motion.",
+      "quote": "the molecular forces may be taken to be determined by the relative positions, independently of the velocities of molecular motion.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electrostatic_system_has_electromagnetic_momentum",
+      "statement": "Every electrostatic system moving with a velocity possesses a certain amount of electromagnetic momentum.",
+      "quote": "It may be shown that in every electrostatic system, moving with a velocity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "unmodified_theory_requires_couple",
+      "statement": "The theory of electrons, unless modified, requires the existence of a turning couple on a charged condenser moving through the aether.",
+      "quote": "the theory of electrons, unless it be modified by some new hypothesis, would undoubtedly require the existence of such a couple.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "condenser_orientation_definite",
+      "statement": "The condenser plates have a definite orientation relative to the velocity of translation, so the axis of z can be chosen perpendicular to them.",
+      "quote": "if the axis of z is chosen perpendicular to the condenser plates, the velocity w having any direction we like",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "electromagnetic_momentum_in_direction_of_motion",
+      "statement": "The electromagnetic momentum of a moving electrostatic system has a component in the direction of the motion, calculable from the deformed system.",
+      "quote": "we can easily calculate the electromagnetic momentum in the moving system, or rather its component in the direction of the motion.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "resting_and_moving_indices_distinguished",
+      "statement": "The two systems Σ and Σ' are distinguished as one that moves and one that remains at rest, with primed quantities referring to the resting system.",
+      "quote": "referring by the index Σ to a moving system and by Σ' to one that remains at rest",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "no_translation_recovers_true_time",
+      "statement": "For a system without translation the primed quantities become identical with the unprimed ones, and k and l become 1.",
+      "quote": "For such a system the quantities with accents become identical to the corresponding ones without accents; also k=1 and l=1.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_fills_space_between_particles",
+      "statement": "The aether occupies the regions between the particles of a body and surrounds ponderable bodies.",
+      "quote": "In corresponding points that are situated either in the aether between the particles, or in that surrounding the ponderable bodies",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "corresponding_positions_between_systems",
+      "statement": "For each particle in the resting system at an instant there is a corresponding particle in the moving system at the corresponding instant occupying the corresponding position.",
+      "quote": "if a particle in Σ' has a certain position at a definite instant, a particle in Σ occupies at the corresponding instant the corresponding position",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "quasi_stationary_form_uncertain",
+      "statement": "It is hardly probable that the form of the electron will be determined solely by the velocity existing at the moment considered.",
+      "quote": "It is even hardly probable that the form of the electron will be determined solely by the velocity existing at the moment considered.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "resting_system_formulae_are_recovered",
+      "statement": "The formulae for a system without translation are implied by the general formulae of the theory.",
+      "quote": "It is to be remarked that the formulae for a system without translation are implied in what precedes.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fundamental_assumptions_yield_independence",
+      "statement": "It should be possible from certain fundamental assumptions to show that many electromagnetic actions are entirely independent of the motion of the system.",
+      "quote": "It would be more satisfactory, if it were possible to show, by means of certain fundamental assumptions, and without neglecting terms of one order of magnitude or another, that many electromagnetic actions are entirely independent of the motion of the system.",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

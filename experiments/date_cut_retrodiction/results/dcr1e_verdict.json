@@ -1,0 +1,547 @@
+{
+  "T1_hits_by_cut": {
+    "1880": [],
+    "1897": [],
+    "1904": []
+  },
+  "consensus_stats": {
+    "equivalence_threshold": 0.5,
+    "n_anchor_propositions": 496,
+    "n_consensus_propositions": 276,
+    "n_passes": 3,
+    "overall_retention_rate": 0.5564516129032258,
+    "pass_dirs": [
+      "extractions_presup_pass1",
+      "extractions_presup_pass2",
+      "extractions_presup_pass3"
+    ],
+    "per_document": {
+      "brace_1904_refraction": {
+        "n_consensus": 7,
+        "n_per_pass": [
+          27,
+          33,
+          32
+        ],
+        "retention_rate": 0.25925925925925924
+      },
+      "fitzgerald_1889": {
+        "n_consensus": 26,
+        "n_per_pass": [
+          30,
+          30,
+          25
+        ],
+        "retention_rate": 0.8666666666666667
+      },
+      "larmor_1897_medium3": {
+        "n_consensus": 16,
+        "n_per_pass": [
+          37,
+          34,
+          30
+        ],
+        "retention_rate": 0.43243243243243246
+      },
+      "larmor_1900_ch10": {
+        "n_consensus": 24,
+        "n_per_pass": [
+          28,
+          29,
+          30
+        ],
+        "retention_rate": 0.8571428571428571
+      },
+      "larmor_1900_ch11": {
+        "n_consensus": 22,
+        "n_per_pass": [
+          32,
+          28,
+          35
+        ],
+        "retention_rate": 0.6875
+      },
+      "lodge_1897_absence": {
+        "n_consensus": 13,
+        "n_per_pass": [
+          28,
+          32,
+          30
+        ],
+        "retention_rate": 0.4642857142857143
+      },
+      "lorentz_1904": {
+        "n_consensus": 16,
+        "n_per_pass": [
+          32,
+          35,
+          30
+        ],
+        "retention_rate": 0.5
+      },
+      "maxwell_1865_part1": {
+        "n_consensus": 22,
+        "n_per_pass": [
+          32,
+          38,
+          32
+        ],
+        "retention_rate": 0.6875
+      },
+      "maxwell_1865_part6": {
+        "n_consensus": 18,
+        "n_per_pass": [
+          31,
+          31,
+          29
+        ],
+        "retention_rate": 0.5806451612903226
+      },
+      "maxwell_1878_ether": {
+        "n_consensus": 11,
+        "n_per_pass": [
+          32,
+          34,
+          31
+        ],
+        "retention_rate": 0.34375
+      },
+      "michelson_1881": {
+        "n_consensus": 17,
+        "n_per_pass": [
+          26,
+          25,
+          30
+        ],
+        "retention_rate": 0.6538461538461539
+      },
+      "michelson_morley_1887": {
+        "n_consensus": 12,
+        "n_per_pass": [
+          30,
+          25,
+          26
+        ],
+        "retention_rate": 0.4
+      },
+      "newton_1687_scholium": {
+        "n_consensus": 22,
+        "n_per_pass": [
+          32,
+          34,
+          35
+        ],
+        "retention_rate": 0.6875
+      },
+      "poincare_1898_time": {
+        "n_consensus": 19,
+        "n_per_pass": [
+          30,
+          36,
+          36
+        ],
+        "retention_rate": 0.6333333333333333
+      },
+      "poincare_1904_stlouis": {
+        "n_consensus": 17,
+        "n_per_pass": [
+          39,
+          31,
+          31
+        ],
+        "retention_rate": 0.4358974358974359
+      },
+      "rayleigh_1902_refraction": {
+        "n_consensus": 14,
+        "n_per_pass": [
+          30,
+          32,
+          29
+        ],
+        "retention_rate": 0.4666666666666667
+      }
+    },
+    "support_threshold": 2
+  },
+  "electrodynamics_cuts": {
+    "1880_all": {
+      "allow_provenance_risk": true,
+      "cut_year": 1880,
+      "facet_counts": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 0,
+        "T3_local_time_artifice": 0
+      },
+      "facet_hits": {},
+      "is_placebo": true,
+      "label": "deep placebo",
+      "n_documents": 3,
+      "n_propositions": 51,
+      "residue_rate": 0.053824362606232294
+    },
+    "1880_norisk": {
+      "allow_provenance_risk": false,
+      "cut_year": 1880,
+      "facet_counts": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 0,
+        "T3_local_time_artifice": 0
+      },
+      "facet_hits": {},
+      "is_placebo": true,
+      "label": "deep placebo",
+      "n_documents": 3,
+      "n_propositions": 51,
+      "residue_rate": 0.053824362606232294
+    },
+    "1897_all": {
+      "allow_provenance_risk": true,
+      "cut_year": 1897,
+      "facet_counts": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 8,
+        "T3_local_time_artifice": 0
+      },
+      "facet_hits": {
+        "T2_privileged_frame": [
+          {
+            "doc_id": "michelson_1881",
+            "name": "ether_at_rest_earth_moves",
+            "statement": "The ether is at rest and the earth is moving through it."
+          },
+          {
+            "doc_id": "michelson_morley_1887",
+            "name": "light_velocity_in_stationary_ether",
+            "statement": "V is the velocity of light in the ether supposed stationary."
+          },
+          {
+            "doc_id": "michelson_morley_1887",
+            "name": "apparatus_moves_through_resting_ether",
+            "statement": "When the ether is at rest and the whole apparatus moves in the direction sc with the velocity of the earth, the directions and distances traversed by the rays are altered."
+          },
+          {
+            "doc_id": "fitzgerald_1889",
+            "name": "bodies_have_motion_relative_to_ether",
+            "statement": "Material bodies have a motion relative to the ether."
+          },
+          {
+            "doc_id": "fitzgerald_1889",
+            "name": "secular_experiments_can_observe_variation",
+            "statement": "Secular experiments on electrical attractions between permanently electrified bodies can observe a variation of attraction due to motion relative to the ether."
+          },
+          {
+            "doc_id": "larmor_1897_medium3",
+            "name": "quiescent_aether_is_newtonian_rest",
+            "statement": "The spacial framework in absolute rest introduced by Newton is in fact the quiescent underlying \u00e6ther."
+          },
+          {
+            "doc_id": "lodge_1897_absence",
+            "name": "earth_rotation_shifts_bands",
+            "statement": "The earth's rotation through a stationary ether would produce a shift of the bands proportional to the area of the interference square."
+          },
+          {
+            "doc_id": "lodge_1897_absence",
+            "name": "turntable_rotation_shifts_bands",
+            "statement": "Rotating the whole apparatus, telescope, and observer on a turntable through a stationary ether would produce a reversible shift of the bands."
+          }
+        ]
+      },
+      "is_placebo": true,
+      "label": "near placebo",
+      "n_documents": 8,
+      "n_propositions": 135,
+      "residue_rate": 0.03526093088857546
+    },
+    "1897_norisk": {
+      "allow_provenance_risk": false,
+      "cut_year": 1897,
+      "facet_counts": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 8,
+        "T3_local_time_artifice": 0
+      },
+      "facet_hits": {
+        "T2_privileged_frame": [
+          {
+            "doc_id": "michelson_1881",
+            "name": "ether_at_rest_earth_moves",
+            "statement": "The ether is at rest and the earth is moving through it."
+          },
+          {
+            "doc_id": "michelson_morley_1887",
+            "name": "light_velocity_in_stationary_ether",
+            "statement": "V is the velocity of light in the ether supposed stationary."
+          },
+          {
+            "doc_id": "michelson_morley_1887",
+            "name": "apparatus_moves_through_resting_ether",
+            "statement": "When the ether is at rest and the whole apparatus moves in the direction sc with the velocity of the earth, the directions and distances traversed by the rays are altered."
+          },
+          {
+            "doc_id": "fitzgerald_1889",
+            "name": "bodies_have_motion_relative_to_ether",
+            "statement": "Material bodies have a motion relative to the ether."
+          },
+          {
+            "doc_id": "fitzgerald_1889",
+            "name": "secular_experiments_can_observe_variation",
+            "statement": "Secular experiments on electrical attractions between permanently electrified bodies can observe a variation of attraction due to motion relative to the ether."
+          },
+          {
+            "doc_id": "larmor_1897_medium3",
+            "name": "quiescent_aether_is_newtonian_rest",
+            "statement": "The spacial framework in absolute rest introduced by Newton is in fact the quiescent underlying \u00e6ther."
+          },
+          {
+            "doc_id": "lodge_1897_absence",
+            "name": "earth_rotation_shifts_bands",
+            "statement": "The earth's rotation through a stationary ether would produce a shift of the bands proportional to the area of the interference square."
+          },
+          {
+            "doc_id": "lodge_1897_absence",
+            "name": "turntable_rotation_shifts_bands",
+            "statement": "Rotating the whole apparatus, telescope, and observer on a turntable through a stationary ether would produce a reversible shift of the bands."
+          }
+        ]
+      },
+      "is_placebo": true,
+      "label": "near placebo",
+      "n_documents": 8,
+      "n_propositions": 135,
+      "residue_rate": 0.03526093088857546
+    },
+    "1904_all": {
+      "allow_provenance_risk": true,
+      "cut_year": 1904,
+      "facet_counts": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 11,
+        "T3_local_time_artifice": 2
+      },
+      "facet_hits": {
+        "T2_privileged_frame": [
+          {
+            "doc_id": "michelson_1881",
+            "name": "ether_at_rest_earth_moves",
+            "statement": "The ether is at rest and the earth is moving through it."
+          },
+          {
+            "doc_id": "michelson_morley_1887",
+            "name": "light_velocity_in_stationary_ether",
+            "statement": "V is the velocity of light in the ether supposed stationary."
+          },
+          {
+            "doc_id": "michelson_morley_1887",
+            "name": "apparatus_moves_through_resting_ether",
+            "statement": "When the ether is at rest and the whole apparatus moves in the direction sc with the velocity of the earth, the directions and distances traversed by the rays are altered."
+          },
+          {
+            "doc_id": "fitzgerald_1889",
+            "name": "bodies_have_motion_relative_to_ether",
+            "statement": "Material bodies have a motion relative to the ether."
+          },
+          {
+            "doc_id": "fitzgerald_1889",
+            "name": "secular_experiments_can_observe_variation",
+            "statement": "Secular experiments on electrical attractions between permanently electrified bodies can observe a variation of attraction due to motion relative to the ether."
+          },
+          {
+            "doc_id": "larmor_1897_medium3",
+            "name": "quiescent_aether_is_newtonian_rest",
+            "statement": "The spacial framework in absolute rest introduced by Newton is in fact the quiescent underlying \u00e6ther."
+          },
+          {
+            "doc_id": "lodge_1897_absence",
+            "name": "earth_rotation_shifts_bands",
+            "statement": "The earth's rotation through a stationary ether would produce a shift of the bands proportional to the area of the interference square."
+          },
+          {
+            "doc_id": "lodge_1897_absence",
+            "name": "turntable_rotation_shifts_bands",
+            "statement": "Rotating the whole apparatus, telescope, and observer on a turntable through a stationary ether would produce a reversible shift of the bands."
+          },
+          {
+            "doc_id": "larmor_1900_ch10",
+            "name": "observer_apparatus_uniformly_moving",
+            "statement": "An observer and his apparatus can be in uniform motion through the stationary aether while phenomena are examined."
+          },
+          {
+            "doc_id": "larmor_1900_ch11",
+            "name": "current_same_in_matter_or_aether_frame",
+            "statement": "The specification of the current of conduction with reference to moving matter is just the same as with reference to the stationary aether."
+          },
+          {
+            "doc_id": "rayleigh_1902_refraction",
+            "name": "stellar_aberration_favours_stationary",
+            "statement": "Stellar aberration favours the theory of a stationary aether over one that shares the earth's motion."
+          }
+        ],
+        "T3_local_time_artifice": [
+          {
+            "doc_id": "larmor_1900_ch10",
+            "name": "auxiliary_time_variable_device",
+            "statement": "A change of the time-variable makes the equations revert to the same type as those referred to axes at rest, apart from the factor \u03b5."
+          },
+          {
+            "doc_id": "lorentz_1904",
+            "name": "true_time_defines_corresponding_instants",
+            "statement": "Corresponding instants at two points are defined by equating the true time at one point to the local time at the other."
+          }
+        ]
+      },
+      "is_placebo": false,
+      "label": "target",
+      "n_documents": 15,
+      "n_propositions": 254,
+      "residue_rate": 0.027312775330396475
+    },
+    "1904_norisk": {
+      "allow_provenance_risk": false,
+      "cut_year": 1904,
+      "facet_counts": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 11,
+        "T3_local_time_artifice": 2
+      },
+      "facet_hits": {
+        "T2_privileged_frame": [
+          {
+            "doc_id": "michelson_1881",
+            "name": "ether_at_rest_earth_moves",
+            "statement": "The ether is at rest and the earth is moving through it."
+          },
+          {
+            "doc_id": "michelson_morley_1887",
+            "name": "light_velocity_in_stationary_ether",
+            "statement": "V is the velocity of light in the ether supposed stationary."
+          },
+          {
+            "doc_id": "michelson_morley_1887",
+            "name": "apparatus_moves_through_resting_ether",
+            "statement": "When the ether is at rest and the whole apparatus moves in the direction sc with the velocity of the earth, the directions and distances traversed by the rays are altered."
+          },
+          {
+            "doc_id": "fitzgerald_1889",
+            "name": "bodies_have_motion_relative_to_ether",
+            "statement": "Material bodies have a motion relative to the ether."
+          },
+          {
+            "doc_id": "fitzgerald_1889",
+            "name": "secular_experiments_can_observe_variation",
+            "statement": "Secular experiments on electrical attractions between permanently electrified bodies can observe a variation of attraction due to motion relative to the ether."
+          },
+          {
+            "doc_id": "larmor_1897_medium3",
+            "name": "quiescent_aether_is_newtonian_rest",
+            "statement": "The spacial framework in absolute rest introduced by Newton is in fact the quiescent underlying \u00e6ther."
+          },
+          {
+            "doc_id": "lodge_1897_absence",
+            "name": "earth_rotation_shifts_bands",
+            "statement": "The earth's rotation through a stationary ether would produce a shift of the bands proportional to the area of the interference square."
+          },
+          {
+            "doc_id": "lodge_1897_absence",
+            "name": "turntable_rotation_shifts_bands",
+            "statement": "Rotating the whole apparatus, telescope, and observer on a turntable through a stationary ether would produce a reversible shift of the bands."
+          },
+          {
+            "doc_id": "larmor_1900_ch10",
+            "name": "observer_apparatus_uniformly_moving",
+            "statement": "An observer and his apparatus can be in uniform motion through the stationary aether while phenomena are examined."
+          },
+          {
+            "doc_id": "larmor_1900_ch11",
+            "name": "current_same_in_matter_or_aether_frame",
+            "statement": "The specification of the current of conduction with reference to moving matter is just the same as with reference to the stationary aether."
+          },
+          {
+            "doc_id": "rayleigh_1902_refraction",
+            "name": "stellar_aberration_favours_stationary",
+            "statement": "Stellar aberration favours the theory of a stationary aether over one that shares the earth's motion."
+          }
+        ],
+        "T3_local_time_artifice": [
+          {
+            "doc_id": "larmor_1900_ch10",
+            "name": "auxiliary_time_variable_device",
+            "statement": "A change of the time-variable makes the equations revert to the same type as those referred to axes at rest, apart from the factor \u03b5."
+          },
+          {
+            "doc_id": "lorentz_1904",
+            "name": "true_time_defines_corresponding_instants",
+            "statement": "Corresponding instants at two points are defined by equating the true time at one point to the local time at the other."
+          }
+        ]
+      },
+      "is_placebo": false,
+      "label": "target",
+      "n_documents": 13,
+      "n_propositions": 218,
+      "residue_rate": 0.03125
+    }
+  },
+  "gates": {
+    "Q1_quote_fidelity": {
+      "decision": "GO",
+      "threshold": 0.9,
+      "value": 0.9855072463768116
+    },
+    "Q2_vocabulary_residue_v2": {
+      "decision": "NO_GO",
+      "threshold": 0.05,
+      "value_max_electrodynamics": 0.053824362606232294,
+      "value_newton": 0.0594059405940594
+    },
+    "Q3_T1_fires_at_1897": {
+      "decision": "NO_GO",
+      "n_hits": 0
+    },
+    "Q4_T1_silent_at_1880": {
+      "decision": "GO",
+      "n_hits": 0
+    },
+    "Q5_T1_hit_adjudicated_genuine": {
+      "adjudication_present": false,
+      "all_hits_genuine": null,
+      "decision": "N/A (Q3 NO_GO; nothing to adjudicate)"
+    },
+    "Q6_newton_sanity": {
+      "decision": "GO",
+      "n_hits": 2
+    }
+  },
+  "kind": "dcr1e_verdict",
+  "licensed_reading": "mixed_or_inconclusive: see per-gate decisions",
+  "n_documents": 16,
+  "n_propositions": 276,
+  "newton_sanity": {
+    "T1_hits": [
+      {
+        "name": "absolute_time_flows_equably",
+        "statement": "Absolute time, of itself and from its own nature, flows equably without regard to anything external."
+      },
+      {
+        "name": "no_equable_motion_may_exist",
+        "statement": "There may be no equable motion in nature, yet the progress of absolute time is liable to no change."
+      }
+    ],
+    "cut_year": 1687,
+    "facet_counts": {
+      "T1_absolute_simultaneity": 2,
+      "T2_privileged_frame": 3,
+      "T3_local_time_artifice": 0
+    },
+    "n_documents": 1,
+    "n_propositions": 22,
+    "residue_rate": 0.0594059405940594
+  },
+  "overall_decision": "NO_GO",
+  "purpose": "Can a presupposition-inferring extractor surface T1 (absolute simultaneity) from the electrodynamics corpus, where it is used but never stated?",
+  "quote_audit": {
+    "fidelity": 0.9855072463768116,
+    "n_exact": 271,
+    "n_normalised": 272,
+    "n_total": 276
+  }
+}

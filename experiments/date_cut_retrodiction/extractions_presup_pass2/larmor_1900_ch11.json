@@ -1,0 +1,201 @@
+{
+  "doc_id": "larmor_1900_ch11",
+  "propositions": [
+    {
+      "name": "aether_defines_rest_frame",
+      "statement": "There exists a definite state of rest in the aether relative to which axes and a time can be referred.",
+      "quote": "referred to the axes (x', y', z') at rest in the aether and a time t\"",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "uniform_translation_absolute",
+      "statement": "A material system has a definite uniform translatory motion relative to the aether with velocity v.",
+      "quote": "referred to axes (x', y', z') in uniform translatory motion and a time t'.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "length_contraction_is_physical",
+      "statement": "Imparting a uniform velocity of translation to a material system produces a uniform contraction of the system in the direction of the motion.",
+      "quote": "an effect of imparting to a steady material system a uniform velocity of translation is to produce a uniform contraction of the system in the direction of the motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_strength_motion_invariant",
+      "statement": "Motion of a material system containing electrons cannot alter the strengths of those electrons.",
+      "quote": "motion of a material system containing electrons cannot alter their strengths.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "internal_forces_wholly_electrodynamic",
+      "statement": "The internal forces of a material system arise wholly from electrodynamic actions between the systems of electrons which constitute the atoms.",
+      "quote": "if the internal forces of a material system arise wholly from electrodynamic actions between the systems of electrons which constitute the atoms",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "michelson_null_by_contraction",
+      "statement": "Michelson's negative result is accounted for by the second order correction that the contraction hypothesis supplies to the Fresnel effect.",
+      "quote": "The second term in this expression is the Fresnel effect, and the remaining term is its second order correction on our hypothesis which includes Michelson's negative result.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "null_method_hides_earth_motion",
+      "statement": "Because optical measurements use the null method of adjusting the apparatus so the disturbance vanishes, no effect of the Earth's motion appears in optical experiments.",
+      "quote": "As optical measurements are usually made by the null method of adjusting the apparatus so that the disturbance vanishes, this result carries the general absence of effect of the Earth's motion in optical experiments",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "earths_motion_is_definite",
+      "statement": "The Earth has a definite motion through the aether whose effect on optical experiments is meaningfully absent to the second order.",
+      "quote": "the general absence of effect of the Earth's motion in optical experiments, up to the second order of small quantities.",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "convection_is_motion_through_aether",
+      "statement": "Convection of molecules is their motion through the aether with velocity v.",
+      "quote": "the changes of their free periods, arising from convection of the molecules through the aether, are of the second order in v/c",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "aethereal_symmetry_fore_and_aft",
+      "statement": "The aethereal fields of moving electric charges are symmetrical fore and aft and unaltered to the first order by the motion.",
+      "quote": "the aethereal fields of the moving electric charges, free or constrained, existing in the molecule, will be symmetrical fore and aft and unaltered to the first order by the motion",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "single_time_variable_t",
+      "statement": "There is a single time t at which the position of an electron in a moving medium is defined and can be compared with its position in the medium at rest at a different time value.",
+      "quote": "the position of each electron in the material medium in motion, at time t , corresponds with that which it would occupy in the medium at rest at time",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "velocities_combine_by_sum",
+      "statement": "The electric current is determined by the sum of the velocities of the positive and negative ions relative to the moving matter.",
+      "quote": "The electric current, being determined by the sum of these velocities, is altered as regards these ions in the ratio of",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "current_referable_to_stationary_aether",
+      "statement": "The specification of the current with reference to moving matter is the same as with reference to the stationary aether.",
+      "quote": "the specification of that current with reference to moving matter is just the same as with reference to the stationary aether.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "radiations_share_speed_in_celestial_spaces",
+      "statement": "All kinds of radiations travel with the same speed in the celestial spaces.",
+      "quote": "The equations of the free aether, as revealed by MacCullagh's optical analysis, are linear equations: they in fact must be so if all kinds of radiations are to travel with the same speed in the celestial spaces.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "radiation_advances_across_space",
+      "statement": "A train of radiation from a distant star advances across space and would change its form during that advance if the aether equations were not linear.",
+      "quote": "a train of radiation from a distant star would change its form as it advanced across space",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "gravity_has_definite_propagation_speed",
+      "statement": "The speed of transmission of gravitation is a definite quantity, enormously transcending that of radiation.",
+      "quote": "The knowledge that the speed of transmission of gravitation, if finite at all, enormously transcends that of radiation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "dynamical_similarity_applies",
+      "statement": "The principle of dynamical similarity applies to systems of electrons and can be used to reduce the scale of electric charges.",
+      "quote": "The principle of dynamical similarity will effect this.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "mass_of_electric_origin",
+      "statement": "The constancy of mass throughout molecular transformations is verified for that part of the mass that is of electric origin.",
+      "quote": "the fundamental chemical law of the constancy of mass throughout molecular transformations is verified for that part of the mass (whether it be all of it or not) that is of electric origin.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "strength_defined_by_surface_integral",
+      "statement": "The strength of a moving electron is the value of a surface integral of the aethereal vectors evaluated over a surface surrounding its nucleus at an instant.",
+      "quote": "But the strength of the electron in the moving system is the value of the integral",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "body_has_definite_rest_state",
+      "statement": "A material system has a definite state at rest whose internal energy is the same as the internal energy when steady motion has been imparted.",
+      "quote": "when steady motion is established the mean kinetic energy of the system consists of the internal energy of the molecule, which is the same as when it is at rest",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "translation_alters_intermolecular_forces",
+      "statement": "The translation of matter alters the action between two molecules or atoms similarly to how it alters the attraction or repulsion between electrically charged particles.",
+      "quote": "the translation of the matter will most likely alter the action between two molecules or atoms in a manner similar to that in which it alters the attraction or repulsion between electrically charged particles.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "body_form_determined_by_molecular_forces",
+      "statement": "The form and dimensions of a solid body are determined in the last resort by the intensity of the molecular forces.",
+      "quote": "as the form and the dimensions of a solid body are determined in the last resort by the intensity of the molecular forces, an alteration of the dimensions cannot well be left out of consideration.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "same_aether_for_all_systems",
+      "statement": "There is one same aether in which any existing system of electrons and its correlated system are alike embedded.",
+      "quote": "given any one existing system of electrons with pointnuclei, another system is possible in the same aether having all distances and times reduced in any the same ratio",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "atomic_scale_is_permanent",
+      "statement": "There is a permanent definite scale of magnitude of the material atoms of various types.",
+      "quote": "The permanence of scale of magnitude of the material atoms of various types involves the presence of actions depending on the magnitude and structure of the electric nuclei",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "maxwellian_form_under_moving_axes",
+      "statement": "In the new subscripted variables, the scheme of equations referred to moving axes is identical in form with the Maxwellian scheme of relations referred to fixed axes.",
+      "quote": "the scheme of equations, referred to moving axes, which connects together the new variables with subscripts, is identical in form with the Maxwellian scheme of relations for the aethereal vectors referred to fixed axes.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "time_variable_change_yields_doppler",
+      "statement": "Changing the time variable in the comparison of radiations in the fixed and moving systems produces the Doppler effect on the wave-length.",
+      "quote": "The change of the time variable, in the comparison of radiations in the fixed and moving systems, involves the Doppler effect on the wave-length.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_nucleus_is_singular_point",
+      "statement": "The nucleus of the electron is merely a singular point in the aether with nothing of the nature of inertia foreign to the aether.",
+      "quote": "this statement implies that the nucleus of the electron is merely a singular point in the aether, that there is nothing involved in it of the nature of inertia foreign to the aether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "instant_considered_is_definite",
+      "statement": "There is a definite instant considered relative to which vectors of the moving system are evaluated when the scale of time is enlarged.",
+      "quote": "before the instant considered when the scale of time is enlarged in the ratio",
+      "kind": "presupposed",
+      "definitional": true
+    }
+  ]
+}

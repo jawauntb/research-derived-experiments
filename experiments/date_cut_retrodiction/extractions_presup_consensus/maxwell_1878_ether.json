@@ -1,0 +1,115 @@
+{
+  "doc_id": "maxwell_1878_ether",
+  "propositions": [
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "second_order_aether_wind_effect",
+      "quote": "the increase of this time on account of a relative velocity of the aether equal to that of the earth in its orbit would be only about one hundred millionth part of the whole time of transmission",
+      "statement": "A relative velocity of the aether equal to the earth's orbital velocity would increase the round-trip transmission time by about one hundred-millionth of the whole.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "medium_distinct_from_gross_matter",
+      "quote": "We are therefore obliged to suppose that the medium through which light is propagated is something distinct from the transparent medium known to us, though it interpenetrates all transparent bodies and probably opaque bodies too",
+      "statement": "The medium through which light is propagated is distinct from the transparent gross matter known to us.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "energy_resides_in_medium",
+      "quote": "this energy is not transmitted instantaneously from the radiating body to the absorbing body, but exists for a certain time in the medium",
+      "statement": "The energy of radiation is not transmitted instantaneously but exists for a certain time in the medium during transit.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "aether_elasticity_and_density",
+      "quote": "We must therefore regard the aether as possessing elasticity similar to that of a solid body, and also as having a finite density",
+      "statement": "The aether possesses elasticity similar to that of a solid body and has a finite density.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "substances_do_not_annihilate",
+      "quote": "we cannot suppose that two bodies when put together can annihilate each other; therefore light cannot be a substance",
+      "statement": "Two bodies put together cannot annihilate each other.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "light_is_process_in_substance",
+      "quote": "light is not a substance but a process going on in a substance, the process going on in the first portion of light being always the exact opposite of the process going on in the other at the same instant",
+      "statement": "Light is not itself a substance but a process going on in a substance.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "phase_defined_at_x_and_t",
+      "quote": "which gives u , the phase of the process, at a point whose distance measured from a fixed point in the beam is x , and at a time t",
+      "statement": "The phase of the process is a well-defined function of a distance x from a fixed point and a time t.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "interplanetary_space_filled_with_aether",
+      "quote": "the interplanetary and interstellar spaces are not empty, but are occupied by a material substance or body, which is certainly the largest, and probably the most uniform body of which we have any knowledge",
+      "statement": "The interplanetary and interstellar spaces are not empty but are occupied by a material substance.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "aether_velocity_relative_to_solar_system",
+      "quote": "The only practicable method of determining directly the relative velocity of the aether with respect to the solar system is to compare the values of the velocity of light deduced from the observation of the eclipses of Jupiter's satellites",
+      "statement": "The aether has a definite relative velocity with respect to the solar system that can in principle be determined.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "direction_of_earths_orbital_motion",
+      "quote": "The apparatus was first turned so that the direction of the light in first passing through the second prism was that of the earth's motion in its orbit",
+      "statement": "The earth's motion in its orbit has a definite direction in space that a laboratory apparatus can be aligned with.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1878_ether",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "vector_process_perpendicular_to_ray",
+      "quote": "the physical process involved in the propagation of light must not only be a directed quantity or vector capable of having its direction reversed, but this vector must be at right angles to the ray",
+      "statement": "The physical process in the propagation of light is a directed vector quantity at right angles to the ray.",
+      "support": 3
+    }
+  ]
+}

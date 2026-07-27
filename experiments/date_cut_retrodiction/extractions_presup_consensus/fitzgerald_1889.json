@@ -1,0 +1,265 @@
+{
+  "doc_id": "fitzgerald_1889",
+  "propositions": [
+    {
+      "definitional": true,
+      "doc_id": "fitzgerald_1889",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "ether_exists",
+      "quote": "attempting to decide the important question as to how far the ether is carried along by the earth",
+      "statement": "There is an ether.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "ether_carried_by_earth_question",
+      "quote": "attempting to decide the important question as to how far the ether is carried along by the earth",
+      "statement": "How far the ether is carried along by the earth is an important question with an answer.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "fitzgerald_1889",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "bodies_have_motion_relative_to_ether",
+      "quote": "the length of material bodies changes, according as they are moving through the ether or across it, by an amount depending on the square of the ratio of their velocity to that of light",
+      "statement": "Material bodies have a motion relative to the ether.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "through_or_across_ether_distinct",
+      "quote": "the length of material bodies changes, according as they are moving through the ether or across it",
+      "statement": "It is a matter for the ether whether a material body is moving through it or across it.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "fitzgerald_1889",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "material_bodies_have_length",
+      "quote": "almost the only hypothesis that can reconcile this opposition is that the length of material bodies changes",
+      "statement": "Material bodies have a length that can change.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "length_changes_with_motion",
+      "quote": "the length of material bodies changes, according as they are moving through the ether or across it, by an amount depending on the square of the ratio of their velocity to that of light",
+      "statement": "The length of material bodies changes according as they are moving through the ether or across it.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "length_change_depends_on_v_squared",
+      "quote": "by an amount depending on the square of the ratio of their velocity to that of light",
+      "statement": "The change in length depends on the square of the ratio of the velocity of a body to that of light.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "fitzgerald_1889",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "light_has_velocity",
+      "quote": "by an amount depending on the square of the ratio of their velocity to that of light",
+      "statement": "There is a velocity of light.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "ratio_of_velocity_to_light_meaningful",
+      "quote": "by an amount depending on the square of the ratio of their velocity to that of light",
+      "statement": "There is a ratio of the velocity of a body to the velocity of light.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "electric_forces_affected_by_ether_motion",
+      "quote": "We know that electric forces are affected by the motion of the electrified bodies relative to the ether",
+      "statement": "Electric forces are affected by the motion of the electrified bodies relative to the ether.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "molecular_forces_affected_by_motion",
+      "quote": "it seems a not improbable supposition that the molecular forces are affected by the motion, and that the size of a body alters consequently",
+      "statement": "The molecular forces are affected by the motion of a body relative to the ether.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "body_size_from_molecular_forces",
+      "quote": "it seems a not improbable supposition that the molecular forces are affected by the motion, and that the size of a body alters consequently",
+      "statement": "The size of a body alters when the molecular forces are affected by the motion.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "length_change_hypothesis_is_unique",
+      "quote": "almost the only hypothesis that can reconcile this opposition is that the length of material bodies changes",
+      "statement": "The changing of the length of material bodies is almost the only hypothesis that can reconcile the opposition between the experiments.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "MM_result_opposed_other_experiments",
+      "quote": "Their result seems opposed to other experiments showing that the ether in the air can be carried along only to an inappreciable extent",
+      "statement": "The Michelson and Morley result seems opposed to other experiments showing the ether in the air can be carried along only to an inappreciable extent.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "ether_in_air_carried_inappreciably",
+      "quote": "other experiments showing that the ether in the air can be carried along only to an inappreciable extent",
+      "statement": "The ether in the air can be carried along only to an inappreciable extent.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "experiments_on_same_ether",
+      "quote": "Their result seems opposed to other experiments showing that the ether in the air can be carried along only to an inappreciable extent",
+      "statement": "The Michelson and Morley experiment and the other experiments are on the same ether, so their results can be reconciled by one hypothesis.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "earth_has_orbital_velocity",
+      "quote": "diurnal due to the rotation of the earth being added and subtracted from its orbital velocity",
+      "statement": "The earth is moving with an orbital velocity.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "earth_has_rotation",
+      "quote": "diurnal due to the rotation of the earth being added and subtracted from its orbital velocity",
+      "statement": "The earth is in rotation with a velocity.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "solar_system_has_motion",
+      "quote": "annual similarly for its orbital velocity and the motion of the solar system",
+      "statement": "The solar system is in motion.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "rotation_velocity_adds_to_orbital",
+      "quote": "diurnal due to the rotation of the earth being added and subtracted from its orbital velocity",
+      "statement": "The velocity of the rotation of the earth is added to and subtracted from its orbital velocity.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "orbital_velocity_adds_to_solar_motion",
+      "quote": "annual similarly for its orbital velocity and the motion of the solar system",
+      "statement": "The orbital velocity of the earth is added to and subtracted from the motion of the solar system.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "rotation_alternates_diurnally",
+      "quote": "diurnal due to the rotation of the earth being added and subtracted from its orbital velocity",
+      "statement": "The velocity of the rotation of the earth is added to the orbital velocity at some parts of a diurnal period and subtracted at others.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "equatorial_parts_relevant",
+      "quote": "were instituted in some of the equatorial parts of the earth to observe whether there is any diurnal and annual variation of attraction",
+      "statement": "The equatorial parts of the earth are where the rotation of the earth can be added to and subtracted from the orbital velocity most importantly.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "electrometer_can_observe_variation",
+      "quote": "such as in a very delicate quadrant electrometer, were instituted in some of the equatorial parts of the earth to observe whether there is any diurnal and annual variation of attraction",
+      "statement": "A very delicate quadrant electrometer can observe a diurnal and annual variation of attraction.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "permanent_electrification_possible",
+      "quote": "secular experiments on electrical attractions between permanently electrified bodies, such as in a very delicate quadrant electrometer",
+      "statement": "Bodies can be permanently electrified so that electrical attractions between them can be observed by secular experiments.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "fitzgerald_1889",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "secular_experiments_can_observe_variation",
+      "quote": "It would be very important if secular experiments on electrical attractions between permanently electrified bodies, such as in a very delicate quadrant electrometer, were instituted",
+      "statement": "Secular experiments on electrical attractions between permanently electrified bodies can observe a variation of attraction due to motion relative to the ether.",
+      "support": 2
+    }
+  ]
+}

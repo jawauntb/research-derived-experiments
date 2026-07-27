@@ -1,0 +1,257 @@
+{
+  "doc_id": "poincare_1898_time",
+  "propositions": [
+    {
+      "name": "no_intuition_of_equal_intervals",
+      "statement": "We have no direct intuition of the equality of two intervals of time.",
+      "quote": "When I say, from noon to one the same time passes as from two to three, what meaning has this affirmation?",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "pendulum_beats_equal_duration",
+      "statement": "By definition all the beats of the pendulum are supposed to be of equal duration.",
+      "quote": "To measure time they use the pendulum and they suppose by definition that all the beats of this pendulum are of equal duration.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "sidereal_day_equal_duration",
+      "statement": "It is supposed that two complete rotations of the earth about its axis have the same duration.",
+      "quote": "It is supposed, by a new definition substituted for that based on the beats of the pendulum, that two complete rotations of the earth about its axis have the same duration.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "same_causes_same_duration",
+      "statement": "The same causes take the same time to produce the same effects.",
+      "quote": "It is that the duration of two identical phenomena is the same; or, if you prefer, that the same causes take the same time to produce the same effects.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "causes_never_exactly_reproduced",
+      "statement": "The causes which have produced a certain effect will never be reproduced except approximately.",
+      "quote": "Under these conditions, it is clear that the causes which have produced a certain effect will never be reproduced except approximately.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "time_defined_for_simplest_mechanics",
+      "statement": "Time is to be so defined that the equations of mechanics may be as simple as possible.",
+      "quote": "So that the definition implicitly adopted by the astronomers may be summed up thus: Time should be so defined that the equations of mechanics may be as simple as possible.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "newtons_law_only_approximate",
+      "statement": "Newton's law is an experimental truth and only approximate.",
+      "quote": "Newton’s law is an experimental truth; as such it is only approximate, which shows that we still have only a definition by approximation.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_true_watch_only_convenient",
+      "statement": "There is no watch that goes true or wrong; we can only say one is more convenient than another.",
+      "quote": "Of two watches, we have no right to say that the one goes true, the other wrong; we can only say that it is advantageous to conform to the indications of the first.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "distant_simultaneity_by_convention",
+      "statement": "Affirmations of the antecedence of a physical phenomenon before a psychological one have meaning only as the outcome of a convention.",
+      "quote": "A little reflection is sufficient to understand that all these affirmations have by themselves no meaning. They can have one only as the outcome of a convention.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "light_took_two_hundred_years",
+      "statement": "At least two hundred years were necessary for the light from the new star to reach our earth.",
+      "quote": "An immense conflagration had happened in some far distant heavenly body; but it had happened long before; at least two hundred years were necessary for the light from that star to reach our earth.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "cause_defines_anteriority",
+      "statement": "When a phenomenon appears as the cause of another, we regard it as anterior.",
+      "quote": "Behold then the rule we follow, and the only one we can follow: when a phenomenon appears to us as the cause of another, we regard it as anterior.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "determinism_of_positions_velocities",
+      "statement": "The positions and velocities of three bodies at a given instant determine their positions and velocities at any instant.",
+      "quote": "The positions and the velocities of three bodies at a given instant suffice to determine their positions and velocities at the following instant, and consequently at any instant.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "shared_instant_across_bodies",
+      "statement": "There is a single instant at which the positions and velocities of three distant bodies are all well-defined.",
+      "quote": "The positions and the velocities of three bodies at a given instant suffice to determine their positions and velocities at the following instant, and consequently at any instant.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "light_has_constant_velocity",
+      "statement": "Light has a constant velocity.",
+      "quote": "He has begun by supposing that light has a constant velocity, and in particular that its velocity is the same in all directions.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_velocity_same_all_directions",
+      "statement": "The velocity of light is the same in all directions.",
+      "quote": "He has begun by supposing that light has a constant velocity, and in particular that its velocity is the same in all directions.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "isotropy_unverifiable_directly",
+      "statement": "The postulate that the velocity of light is the same in all directions could never be verified directly by experiment.",
+      "quote": "That is a postulate without which no measurement of this velocity could be attempted. This postulate could never be verified directly by experiment; it might be contradicted by it if the results of different measurements were not concordant.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_value_chosen_for_simplicity",
+      "statement": "The value adopted for the velocity of light is chosen so that the astronomic laws may be as simple as possible.",
+      "quote": "So for the velocity of light a value is adopted, such that the astronomic laws compatible with this value may be as simple as possible.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "signal_reception_after_sending",
+      "statement": "The reception of a telegraph signal at Berlin is after the sending of the same signal from Paris.",
+      "quote": "It is clear first that the reception of the signal at Berlin, for instance, is after the sending of this same signal from Paris.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "chronometer_carries_paris_time",
+      "statement": "A chronometer set for Paris can be carried by navigators or geographers to calculate Paris time elsewhere.",
+      "quote": "When navigators or geographers determine a longitude, they have to solve just the problem we are discussing; they must, without being at Paris, calculate Paris time. How do they accomplish it? They carry a chronometer set for Paris.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "chronometer_rate_transport_invariant",
+      "statement": "The rate of a chronometer set for Paris is not altered by being carried to another place.",
+      "quote": "They carry a chronometer set for Paris. The qualitative problem of simultaneity is made to depend upon the quantitative problem of the measurement of time.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "propagation_of_light_not_instantaneous",
+      "statement": "The propagation of light is not instantaneous, so an eclipse of the moon is not perceived simultaneously from all points of the earth.",
+      "quote": "Or else they observe an astronomic phenomenon, such as an eclipse of the moon, and they suppose that this phenomenon is perceived simultaneously from all points of the earth. That is not altogether true, since the propagation of light is not instantaneous",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_intuition_of_simultaneity",
+      "statement": "We have no direct intuition of simultaneity, nor of the equality of two durations.",
+      "quote": "To conclude: We have not a direct intuition of simultaneity, nor of the equality of two durations. If we think we have this intuition, this is an illusion.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "tides_slow_earth_rotation",
+      "statement": "The tides act as a check on our globe and the rotation of the earth is becoming slower and slower.",
+      "quote": "Many of them think that the tides act as a check on our globe, and that the rotation of the earth is becoming slower and slower.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "sirius_attracts_the_pendulum",
+      "statement": "In all rigor every attraction, even of Sirius, acts on the pendulum.",
+      "quote": "It is approximately true that the motion of the pendulum is due solely to the earth’s attraction; but in all rigor every attraction, even of Sirius, acts on the pendulum.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "psychologic_creates_physical_time",
+      "statement": "Psychologic time is given to us and must create scientific and physical time.",
+      "quote": "In a word, psychologic time is given to us and must needs create scientific and physical time.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "conscious_order_not_arbitrary",
+      "statement": "The order in which we arrange conscious phenomena is imposed on us and admits of no arbitrariness.",
+      "quote": "The order in which we arrange conscious phenomena does not admit of any arbitrariness. It is imposed upon us and of it we can change nothing.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "roemer_used_jupiter_eclipses",
+      "statement": "Roemer used eclipses of the satellites of Jupiter and sought how much the event fell behind its prediction.",
+      "quote": "You know that Roemer used eclipses of the satellites of Jupiter, and sought how much the event fell behind its prediction.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "universe_interchained",
+      "statement": "All the parts of the universe are interchained in a certain measure, so any one phenomenon is the resultant of causes infinitely numerous.",
+      "quote": "If all the parts of the universe are interchained in a certain measure, any one phenomenon will not be the effect of a single cause, but the resultant of causes infinitely numerous",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "physical_facts_outside_consciousness",
+      "statement": "Physical phenomena happen outside of every consciousness.",
+      "quote": "When I say that a physical phenomenon, which happens outside of every consciousness, is before or after a psychological phenomenon, what do I mean?",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "distant_flash_can_be_anterior",
+      "statement": "Of two flashes of lightning, the distant one can be anterior to the near one even though the sound of the near one reaches us first.",
+      "quote": "Of two flashes of lightning, the one distant, the other near, can not the first be anterior to the second, even though the sound of the second comes to us before that of the first?",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "distant_conditions_reproducible",
+      "statement": "A phenomenon can be reproduced at a very distant place in the world under almost the same circumstances as before.",
+      "quote": "Later, the phenomenon",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "durations_comparable_across_distance",
+      "statement": "Durations of phenomena occurring at very distant places can be compared as equal or unequal.",
+      "quote": "The equality and the inequality deduced from experience would be incompatible with the two equalities deduced from the postulate.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "sensations_preserve_order_of_causes",
+      "statement": "We suppose that the physical phenomena succeed one another in the same order as the sensations they produce in our consciousness.",
+      "quote": "These two phenomena, when witnessed, happen in a certain order; when analogous phenomena happen without witness, there is no reason to invert this order.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "sound_of_thunder_lags_discharge",
+      "statement": "We hear the sound of the thunder only some seconds after the electric discharge of the cloud.",
+      "quote": "This rule appears in fact very natural, and yet we are often led to depart from it. We hear the sound of the thunder only some seconds after the electric discharge of the cloud.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "same_star_meridian_reproducible",
+      "statement": "Arrangements can be made so that the sidereal clock marks the same hour when the same star passes the meridian.",
+      "quote": "In fact, the best chronometers must be corrected from time to time, and the corrections are made by the aid of astronomic observations; arrangements are made so that the sidereal clock marks the same hour when the same star passes the meridian.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rules_not_imposed_but_chosen",
+      "statement": "The rules for defining simultaneity and duration are not imposed on us but chosen because they are the most convenient.",
+      "quote": "These rules are not imposed upon us and we might amuse ourselves in inventing others; but they could not be cast aside without greatly complicating the enunciation of the laws of physics, mechanics and astronomy.",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}
