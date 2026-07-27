@@ -1,0 +1,42 @@
+[
+  {
+    "snippet_id": "RH1_readmodifywrite",
+    "code": "from pathlib import Path\n\n\ndef increment_counter(path: Path) -> int:\n    current = int(path.read_text().strip() or '0')\n    new = current + 1\n    path.write_text(f'{new}\\n')\n    return new\n"
+  },
+  {
+    "snippet_id": "RH2_seek_write",
+    "code": "def patch_offset(fd, offset: int, replacement: bytes) -> None:\n    fd.seek(offset)\n    old = fd.read(len(replacement))\n    fd.seek(offset)\n    fd.write(replacement)\n    return old\n"
+  },
+  {
+    "snippet_id": "RH3_append_log",
+    "code": "def audit_event(path, event: str) -> None:\n    with open(path, 'a') as fd:\n        fd.write(event + '\\n')\n"
+  },
+  {
+    "snippet_id": "RH4_rename_after_write",
+    "code": "import os\nfrom pathlib import Path\n\n\ndef atomic_replace(final: Path, contents: str) -> None:\n    tmp = final.with_suffix(final.suffix + '.tmp')\n    tmp.write_text(contents)\n    os.rename(tmp, final)\n"
+  },
+  {
+    "snippet_id": "RH5_json_load_modify_dump",
+    "code": "import json\nfrom pathlib import Path\n\n\ndef add_entry(path: Path, key: str, value: object) -> None:\n    data = json.loads(path.read_text())\n    data[key] = value\n    path.write_text(json.dumps(data, indent=2))\n"
+  },
+  {
+    "snippet_id": "PH1_fcntl_lock",
+    "code": "import fcntl\n\n\ndef increment_counter_locked(path: str) -> int:\n    with open(path, 'r+') as fd:\n        fcntl.flock(fd.fileno(), fcntl.LOCK_EX)\n        try:\n            current = int(fd.read().strip() or '0')\n            fd.seek(0)\n            fd.truncate()\n            fd.write(f'{current + 1}\\n')\n            return current + 1\n        finally:\n            fcntl.flock(fd.fileno(), fcntl.LOCK_UN)\n"
+  },
+  {
+    "snippet_id": "PH2_filelock_library",
+    "code": "from filelock import FileLock\nfrom pathlib import Path\n\n\ndef append_line_safely(path: Path, line: str) -> None:\n    lock = FileLock(str(path) + '.lock')\n    with lock:\n        with open(path, 'a') as fd:\n            fd.write(line + '\\n')\n"
+  },
+  {
+    "snippet_id": "PH3_no_file_access",
+    "code": "def rolling_average(values: list[float], window: int) -> list[float]:\n    output = []\n    for i in range(len(values)):\n        window_slice = values[max(0, i - window + 1):i + 1]\n        output.append(sum(window_slice) / len(window_slice))\n    return output\n"
+  },
+  {
+    "snippet_id": "PH4_read_only_open",
+    "code": "from pathlib import Path\n\n\ndef word_count(path: Path) -> int:\n    total = 0\n    with open(path) as fd:\n        for line in fd:\n            total += len(line.split())\n    return total\n"
+  },
+  {
+    "snippet_id": "PH5_lockfile_context",
+    "code": "import time\nfrom pathlib import Path\n\n\ndef with_pidlock(pidlock: Path, timeout: float = 10.0):\n    deadline = time.monotonic() + timeout\n    while True:\n        try:\n            fd = open(pidlock, 'x')\n            fd.write(str(9999))\n            fd.close()\n            return True\n        except FileExistsError:\n            if time.monotonic() >= deadline:\n                return False\n            time.sleep(0.05)\n"
+  }
+]
