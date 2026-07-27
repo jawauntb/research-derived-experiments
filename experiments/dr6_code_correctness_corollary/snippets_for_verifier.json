@@ -1,0 +1,42 @@
+[
+  {
+    "snippet_id": "R1_utcnow_direct",
+    "code": "from datetime import datetime, timedelta\n\ndef rate_limit_key(user_id: str, window_seconds: int = 60) -> str:\n    \"\"\"Return a rate-limit bucket key for the current window.\"\"\"\n    now = datetime.utcnow()\n    bucket = now.replace(microsecond=0, second=(now.second // window_seconds) * window_seconds)\n    key = f\"rate:{user_id}:{bucket.isoformat()}\"\n    return key\n\n\ndef is_expired(created_at: datetime, ttl: timedelta) -> bool:\n    now = datetime.utcnow()\n    return (now - created_at) > ttl\n"
+  },
+  {
+    "snippet_id": "R2_replace_tzinfo_none",
+    "code": "from datetime import datetime\n\ndef normalise_for_storage(dt: datetime) -> datetime:\n    \"\"\"Prepare a datetime for storage in a naive-UTC-only column.\"\"\"\n    if dt.tzinfo is not None:\n        dt = dt.astimezone().replace(tzinfo=None)\n    return dt\n\n\ndef compare_windows(a: datetime, b: datetime) -> int:\n    a = normalise_for_storage(a)\n    b = normalise_for_storage(b)\n    if a < b:\n        return -1\n    if a > b:\n        return 1\n    return 0\n"
+  },
+  {
+    "snippet_id": "R3_time_fromtimestamp",
+    "code": "import time\nfrom datetime import datetime, timedelta\n\ndef stamp_event(payload: dict) -> dict:\n    \"\"\"Attach a timestamp to an event payload.\"\"\"\n    stamped = dict(payload)\n    stamped[\"ts\"] = datetime.fromtimestamp(time.time())\n    return stamped\n\n\ndef is_recent(event: dict, cutoff: timedelta) -> bool:\n    ts = event.get(\"ts\")\n    if ts is None:\n        return False\n    return datetime.fromtimestamp(time.time()) - ts < cutoff\n"
+  },
+  {
+    "snippet_id": "R4_iso_parse_no_tz",
+    "code": "from datetime import datetime\n\ndef parse_log_line(line: str) -> tuple[datetime, str]:\n    \"\"\"Parse a log line of the form 'YYYY-MM-DDTHH:MM:SS message'.\"\"\"\n    ts_str, _, message = line.partition(\" \")\n    ts = datetime.strptime(ts_str, \"%Y-%m-%dT%H:%M:%S\")\n    return ts, message\n\n\ndef latest_timestamp(lines: list[str]) -> datetime:\n    timestamps = [parse_log_line(line)[0] for line in lines]\n    return max(timestamps)\n"
+  },
+  {
+    "snippet_id": "R5_combine_utc_convention",
+    "code": "from datetime import datetime, date, time, timedelta\n\nDEFAULT_CUTOFF = time(hour=0, minute=0, second=0)\n\n\ndef day_boundary(d: date) -> datetime:\n    \"\"\"Return the cutoff datetime for day d, assumed UTC by fleet convention.\"\"\"\n    return datetime.combine(d, DEFAULT_CUTOFF)\n\n\ndef days_between(a: date, b: date) -> int:\n    dt_a = day_boundary(a)\n    dt_b = day_boundary(b)\n    return (dt_b - dt_a).days\n"
+  },
+  {
+    "snippet_id": "P1_pytz_localize",
+    "code": "from datetime import datetime\nimport pytz\n\ndef to_utc_aware(dt: datetime) -> datetime:\n    \"\"\"Convert a naive datetime to a timezone-aware UTC datetime.\"\"\"\n    if dt.tzinfo is not None:\n        return dt.astimezone(pytz.utc)\n    return pytz.utc.localize(dt)\n\n\ndef render_iso(dt: datetime) -> str:\n    return to_utc_aware(dt).isoformat()\n"
+  },
+  {
+    "snippet_id": "P2_now_with_timezone_utc",
+    "code": "from datetime import datetime, timedelta, timezone\n\ndef is_stale(created_at: datetime, max_age: timedelta) -> bool:\n    now = datetime.now(timezone.utc)\n    if created_at.tzinfo is None:\n        raise ValueError(\"created_at must be timezone-aware\")\n    return (now - created_at) > max_age\n\n\ndef freshness_score(created_at: datetime, half_life: timedelta) -> float:\n    now = datetime.now(timezone.utc)\n    age = now - created_at\n    return 0.5 ** (age / half_life)\n"
+  },
+  {
+    "snippet_id": "P3_zoneinfo_user_tz",
+    "code": "from datetime import datetime\nfrom zoneinfo import ZoneInfo\n\n\ndef local_time_of(user_tz_name: str, ts: datetime) -> datetime:\n    \"\"\"Convert a timezone-aware ts to the user's local wall-clock time.\"\"\"\n    tz = ZoneInfo(user_tz_name)\n    if ts.tzinfo is None:\n        raise ValueError(\"ts must carry its own timezone\")\n    return ts.astimezone(tz)\n\n\ndef format_for_user(user_tz_name: str, ts: datetime) -> str:\n    return local_time_of(user_tz_name, ts).strftime(\"%Y-%m-%d %H:%M:%S %Z\")\n"
+  },
+  {
+    "snippet_id": "P4_no_datetime_arithmetic",
+    "code": "def compound_interest(principal: float, rate: float, periods: int) -> float:\n    balance = principal\n    for _ in range(periods):\n        balance *= (1 + rate)\n    return balance\n\n\ndef median(values: list[float]) -> float:\n    ordered = sorted(values)\n    n = len(ordered)\n    if n == 0:\n        raise ValueError(\"empty list\")\n    if n % 2 == 1:\n        return ordered[n // 2]\n    return (ordered[n // 2 - 1] + ordered[n // 2]) / 2.0\n"
+  },
+  {
+    "snippet_id": "P5_arrow_aware",
+    "code": "import arrow\n\ndef next_hour_boundary(now: 'arrow.Arrow') -> 'arrow.Arrow':\n    \"\"\"Return the next top-of-the-hour after ``now``, timezone-aware.\"\"\"\n    if now.tzinfo is None:\n        raise ValueError(\"now must be timezone-aware\")\n    return now.shift(hours=+1).replace(minute=0, second=0, microsecond=0)\n\n\ndef format_since(then: 'arrow.Arrow') -> str:\n    now = arrow.utcnow()\n    return (now - then).humanize()\n"
+  }
+]

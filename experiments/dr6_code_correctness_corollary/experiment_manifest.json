@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "dr6_code_correctness_corollary",
+  "hypothesis": "The DR5 verification wall — that a proposition-ranking nominator cannot distinguish a commitment D from any specific realisation r_i when |realisations(D)| > 1 — is empirically visible in code correctness verification, using a target commitment (naive-UTC datetime handling) that admits multiple non-equivalent surface realisations and three sandboxed Claude verifier subagents blind to labels.",
+  "claim_tier": "descriptive",
+  "controls": [
+    {
+      "control_id": "labels_blind_to_verifier",
+      "description": "Snippets are shipped to verifiers as (id, code) pairs only; ground truth (realisation vs placebo) is committed in snippets.py but never transmitted to a verifier."
+    },
+    {
+      "control_id": "sandboxed_subagents",
+      "description": "Each verifier is prompted to read ONLY the snippets JSON file, no other repository access."
+    },
+    {
+      "control_id": "three_independent_verifiers",
+      "description": "Three verifier subagents run in parallel with no shared context. Consensus is median across the three."
+    },
+    {
+      "control_id": "preregistered_gates",
+      "description": "Six gates (W1-W6) with numeric thresholds fixed in DR6_PREREGISTRATION.md before snippets were designed or verifiers spawned."
+    }
+  ],
+  "seeds": [20260727],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python",
+      "-m",
+      "experiments.dr6_code_correctness_corollary.run_dr6"
+    ],
+    "estimated_minutes": 1,
+    "max_cost_usd": 1
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "W1_VERIFIER_COMPLETENESS",
+      "criterion": "All three verifiers produce scores for all ten snippets."
+    },
+    {
+      "gate_id": "W2_REALISATION_RECALL",
+      "criterion": "Consensus median score across the five realisations >= 6."
+    },
+    {
+      "gate_id": "W3_REALISATION_VARIABILITY",
+      "criterion": "Consensus stdev across the five realisations >= 1.5 (surface-form sensitivity)."
+    },
+    {
+      "gate_id": "W4_PLACEBO_REJECTION",
+      "criterion": "Consensus median score across the five placebos <= 3."
+    },
+    {
+      "gate_id": "W5_PLACEBO_TRIGGERS",
+      "criterion": "At least one placebo receives consensus score >= 5 (projection signal)."
+    },
+    {
+      "gate_id": "W6_PLACEBO_REALISATION_OVERLAP",
+      "criterion": "min(realisation consensus) < max(placebo consensus)."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/dr6_code_correctness_corollary/results/dr6_verdict.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/dr6_code_correctness_corollary/DR6_PREREGISTRATION.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/dr6_code_correctness_corollary/snippets.py",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}
