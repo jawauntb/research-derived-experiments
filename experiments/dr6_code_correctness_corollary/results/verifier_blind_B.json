@@ -1,0 +1,18 @@
+{
+  "kind": "dr6f_verifier_scores",
+  "verifier_id": "B",
+  "scores": {
+    "R1_utcnow_direct": 10,
+    "R2_replace_tzinfo_none": 10,
+    "R3_time_fromtimestamp": 9,
+    "R4_iso_parse_no_tz": 9,
+    "R5_combine_utc_convention": 7,
+    "P1_pytz_localize": 1,
+    "P2_now_with_timezone_utc": 1,
+    "P3_zoneinfo_user_tz": 1,
+    "P4_no_datetime_arithmetic": 0,
+    "P5_arrow_aware": 1,
+    "R6_json_field_no_tz": 8
+  },
+  "reasoning": "R1: datetime.utcnow() returns naive but code treats it as UTC without any tz-aware type or annotation. R2: astimezone().replace(tzinfo=None) actually converts to local wall time then strips it, silently assuming local==UTC despite docstring claim. R3: datetime.fromtimestamp(time.time()) returns local time yet is used interchangeably as if it were an absolute instant. R4: strptime on 'YYYY-MM-DDTHH:MM:SS' produces naive datetime with an undisclosed implicit timezone for the log source. R5: uses naive datetime.combine but the docstring explicitly names the UTC fleet convention, so the assumption is partly disclosed though not enforced in types. P1: pytz.utc.localize makes the UTC assignment explicit in the code itself. P2: datetime.now(timezone.utc) is explicit and it even raises on naive input. P3: ZoneInfo is used and naive input is explicitly rejected. P4: contains no datetime logic at all. P5: uses arrow with an explicit tz-aware guard and arrow.utcnow(). R6: constructs a naive datetime from int fields relying on an external fleet-wide UTC convention, disclosed in the docstring but not in imports/types."
+}

@@ -1,0 +1,168 @@
+{
+  "dr6e_comparison": {
+    "dr6e_R6_score": 10,
+    "dr6e_overlap_gap": 7,
+    "dr6e_realisation_median": 9.5
+  },
+  "gates": {
+    "F1_realisation_median_dropped": {
+      "decision": "NO_GO",
+      "dr6e_value": 9.5,
+      "value": 9.0
+    },
+    "F2_overlap_gap_reduced": {
+      "decision": "GO",
+      "dr6e_value": 7,
+      "value": 6
+    },
+    "F3_R6_score_reduced": {
+      "decision": "GO",
+      "dr6e_value": 10,
+      "value": 8
+    },
+    "F4_wall_present_direct": {
+      "decision": "NO_GO",
+      "max_placebo": 2,
+      "min_realisation": 8
+    }
+  },
+  "kind": "dr6f_verdict",
+  "licensed_reading": "no_wall_without_D: Claude preserved discrimination even without D in the prompt. Semantic escape may be more general than DR5 originally required -- possibly relying on stylistic or structural cues correlated with D.",
+  "n_snippets": 11,
+  "overall_decision": "NO_GO",
+  "per_snippet": {
+    "P1_pytz_localize": {
+      "consensus": 2,
+      "kind": "placebo",
+      "per_verifier": [
+        2,
+        1,
+        3
+      ],
+      "surface_form": "pytz.utc.localize()"
+    },
+    "P2_now_with_timezone_utc": {
+      "consensus": 1,
+      "kind": "placebo",
+      "per_verifier": [
+        0,
+        1,
+        1
+      ],
+      "surface_form": "datetime.now(timezone.utc)"
+    },
+    "P3_zoneinfo_user_tz": {
+      "consensus": 1,
+      "kind": "placebo",
+      "per_verifier": [
+        0,
+        1,
+        1
+      ],
+      "surface_form": "zoneinfo user-supplied timezone"
+    },
+    "P4_no_datetime_arithmetic": {
+      "consensus": 0,
+      "kind": "placebo",
+      "per_verifier": [
+        0,
+        0,
+        0
+      ],
+      "surface_form": "no datetime, arithmetic only"
+    },
+    "P5_arrow_aware": {
+      "consensus": 1,
+      "kind": "placebo",
+      "per_verifier": [
+        1,
+        1,
+        1
+      ],
+      "surface_form": "arrow / third-party timezone-aware"
+    },
+    "R1_utcnow_direct": {
+      "consensus": 10,
+      "kind": "realisation",
+      "per_verifier": [
+        10,
+        10,
+        9
+      ],
+      "surface_form": "datetime.utcnow() direct use"
+    },
+    "R2_replace_tzinfo_none": {
+      "consensus": 10,
+      "kind": "realisation",
+      "per_verifier": [
+        10,
+        10,
+        9
+      ],
+      "surface_form": ".replace(tzinfo=None) to strip timezone"
+    },
+    "R3_time_fromtimestamp": {
+      "consensus": 9,
+      "kind": "realisation",
+      "per_verifier": [
+        10,
+        9,
+        9
+      ],
+      "surface_form": "time.time() \u2192 fromtimestamp yields naive"
+    },
+    "R4_iso_parse_no_tz": {
+      "consensus": 9,
+      "kind": "realisation",
+      "per_verifier": [
+        10,
+        9,
+        9
+      ],
+      "surface_form": "ISO parse without timezone"
+    },
+    "R5_combine_utc_convention": {
+      "consensus": 8,
+      "kind": "realisation",
+      "per_verifier": [
+        9,
+        7,
+        8
+      ],
+      "surface_form": "combine(date, time) \u2014 UTC by convention"
+    },
+    "R6_json_field_no_tz": {
+      "consensus": 8,
+      "kind": "realisation",
+      "per_verifier": [
+        6,
+        8,
+        8
+      ],
+      "surface_form": "datetime from JSON dict integer fields, no tz"
+    }
+  },
+  "purpose": "Test whether D-knowledge is load-bearing for LLM semantic escape",
+  "summary": {
+    "R6_score": 8,
+    "overlap_gap": 6,
+    "placebo_max": 2,
+    "placebo_median": 1,
+    "placebo_scores": [
+      2,
+      1,
+      1,
+      0,
+      1
+    ],
+    "realisation_median": 9.0,
+    "realisation_scores": [
+      10,
+      10,
+      9,
+      9,
+      8,
+      8
+    ]
+  }
+}
