@@ -1,0 +1,1243 @@
+{
+  "kind": "dcr3c_inferred_assumptions",
+  "cut_year": 1904,
+  "verifier_id": "C",
+  "per_proposition": {
+    "maxwell_1865_part1:ethereal_medium_fills_space": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1865_part1:medium_has_real_density": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1865_part1:propagation_finite_velocity": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "maxwell_1865_part1:communication_occupies_time": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "maxwell_1865_part1:instant_across_whole_medium": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1865_part1:energy_existed_in_medium_before": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1865_part1:time_of_transit_defined": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1865_part1:body_motion_through_field": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1865_part1:mechanism_subject_to_dynamics": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1865_part1:two_kinds_of_energy_only": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1865_part1:half_and_half_energy_division": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1865_part1:parts_of_medium_connected": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1865_part1:magnetic_force_direction_as_axis": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1865_part1:electrical_velocity_matches_light": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "maxwell_1865_part1:ratio_of_units_is_velocity": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "maxwell_1865_part1:refraction_squared_equals_product": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "maxwell_1865_part1:relative_velocity_well_defined": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1865_part1:body_motion_causes_electromotive_force": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "maxwell_1865_part1:only_transverse_disturbances_propagate": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "maxwell_1865_part1:electric_displacement_is_elastic_yielding": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1865_part1:elasticity_agrees_across_processes": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "maxwell_1865_part1:energy_alternates_between_forms": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1865_part6:same_medium_for_light_and_em": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1865_part6:unit_ratio_equals_light_velocity": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "maxwell_1865_part6:orbit_radius_combines_with_aberration": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "maxwell_1865_part6:wave_propagates_same_in_either_direction": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "maxwell_1865_part6:only_transverse_vibrations_propagate": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "maxwell_1865_part6:em_and_optics_give_same_velocity": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "maxwell_1865_part6:specific_inductive_capacity_equals_index_squared": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "maxwell_1865_part6:magnetic_and_elastic_axes_coincide": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "maxwell_1865_part6:principal_plane_ray_isotropic_velocity": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "maxwell_1865_part6:conduction_transforms_energy_to_heat": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "maxwell_1865_part6:gold_transparency_requires_reduced_optical_loss": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1865_part6:magnetization_direction_in_plane_of_wave": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "maxwell_1865_part6:vibrations_countable_per_second": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "maxwell_1865_part6:energy_half_magnetic_half_electric": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "maxwell_1865_part6:agreement_implies_common_substance": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1865_part6:electromotive_force_from_time_variation": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1865_part6:no_evidence_for_density_of_electricity": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1865_part6:perfect_dielectric_no_true_conduction": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1878_ether:second_order_aether_wind_effect": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "maxwell_1878_ether:medium_distinct_from_gross_matter": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1878_ether:energy_resides_in_medium": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1878_ether:aether_elasticity_and_density": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1878_ether:substances_do_not_annihilate": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1878_ether:light_is_process_in_substance": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1878_ether:phase_defined_at_x_and_t": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1878_ether:interplanetary_space_filled_with_aether": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1878_ether:aether_velocity_relative_to_solar_system": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "maxwell_1878_ether:direction_of_earths_orbital_motion": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "maxwell_1878_ether:vector_process_perpendicular_to_ray": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "michelson_1881:ether_fills_all_space": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "michelson_1881:ether_at_rest_earth_moves": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "michelson_1881:time_required_is_a_quantity": {
+      "is_prediction": true,
+      "required_categories": [
+        "T1",
+        "T2"
+      ]
+    },
+    "michelson_1881:fresnel_drag_in_optical_media": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "michelson_1881:air_drag_negligible": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "michelson_1881:squared_ratio_effect_too_small_without_wavelength": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "michelson_1881:wavelength_yellow_light_as_standard": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "michelson_1881:perpendicular_light_unaffected": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "michelson_1881:rotation_lengthens_second_pencil_path": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "michelson_1881:equal_geometric_paths_between_arms": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "michelson_1881:earth_orbital_motion_toward_hercules": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "michelson_1881:motions_combine_as_components_with_resultant": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "michelson_1881:arm_pointing_east_coincides_with_resultant": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "michelson_1881:brass_arms_expand_with_temperature": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "michelson_1881:temperature_changes_direction_independent": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "michelson_1881:null_displacement_refutes_stationary_ether": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "michelson_1881:aberration_previously_required_moving_earth_still_ether": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "michelson_morley_1887:light_velocity_in_stationary_ether": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "michelson_morley_1887:apparatus_moves_through_resting_ether": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "michelson_morley_1887:path_difference_causes_fringe_shift": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "michelson_morley_1887:rigid_apparatus_under_rotation": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "michelson_morley_1887:wooden_rod_measures_optical_path": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "michelson_morley_1887:two_equal_paths_interfere": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "michelson_morley_1887:aberration_tangent_equals_ratio": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "michelson_morley_1887:fresnel_partial_ether_drag": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "michelson_morley_1887:ether_passes_through_metals": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "michelson_morley_1887:solar_motion_combines_with_orbital": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "michelson_morley_1887:displacement_proportional_to_square_velocity": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "michelson_morley_1887:first_power_measurable_in_principle": {
+      "is_prediction": true,
+      "required_categories": [
+        "T1",
+        "T2"
+      ]
+    },
+    "fitzgerald_1889:ether_exists": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "fitzgerald_1889:ether_carried_by_earth_question": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "fitzgerald_1889:bodies_have_motion_relative_to_ether": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "fitzgerald_1889:through_or_across_ether_distinct": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "fitzgerald_1889:material_bodies_have_length": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "fitzgerald_1889:length_changes_with_motion": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "fitzgerald_1889:length_change_depends_on_v_squared": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "fitzgerald_1889:light_has_velocity": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "fitzgerald_1889:ratio_of_velocity_to_light_meaningful": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "fitzgerald_1889:electric_forces_affected_by_ether_motion": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "fitzgerald_1889:molecular_forces_affected_by_motion": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "fitzgerald_1889:body_size_from_molecular_forces": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "fitzgerald_1889:length_change_hypothesis_is_unique": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "fitzgerald_1889:MM_result_opposed_other_experiments": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "fitzgerald_1889:ether_in_air_carried_inappreciably": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "fitzgerald_1889:experiments_on_same_ether": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "fitzgerald_1889:earth_has_orbital_velocity": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "fitzgerald_1889:earth_has_rotation": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "fitzgerald_1889:solar_system_has_motion": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "fitzgerald_1889:rotation_velocity_adds_to_orbital": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "fitzgerald_1889:orbital_velocity_adds_to_solar_motion": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "fitzgerald_1889:rotation_alternates_diurnally": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "fitzgerald_1889:equatorial_parts_relevant": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "fitzgerald_1889:electrometer_can_observe_variation": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "fitzgerald_1889:permanent_electrification_possible": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "fitzgerald_1889:secular_experiments_can_observe_variation": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "larmor_1897_medium3:aether_continuous_incompressible": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1897_medium3:electrons_are_point_singularities": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1897_medium3:atoms_are_electron_orbits": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1897_medium3:spatial_framework_required": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1897_medium3:quiescent_aether_is_newtonian_rest": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1897_medium3:aether_not_dynamics_of_matter": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1897_medium3:stagnant_aether_reference_frame": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1897_medium3:electrons_carried_on_by_matter": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1897_medium3:actual_forms_change_with_motion": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "larmor_1897_medium3:moving_body_shrunk_by_factor": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "larmor_1897_medium3:electron_orbits_shorter_in_moving_system": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2",
+        "T3"
+      ]
+    },
+    "larmor_1897_medium3:corresponding_states_persist_at_each_instant": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1897_medium3:circuital_relations_determine_evolution": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1897_medium3:molecule_is_wholly_electric": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1897_medium3:gravitation_from_electrons": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1897_medium3:steady_state_confines_to_uniform_spiral": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "lodge_1897_absence:ether_has_definite_motion": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "lodge_1897_absence:time_of_journey_perfectly_definite": {
+      "is_prediction": true,
+      "required_categories": [
+        "T1"
+      ]
+    },
+    "lodge_1897_absence:velocity_of_light_between_plates_definite": {
+      "is_prediction": true,
+      "required_categories": [
+        "T1",
+        "T2"
+      ]
+    },
+    "lodge_1897_absence:galilean_addition_of_light_and_matter": {
+      "is_prediction": true,
+      "required_categories": [
+        "T1",
+        "T2"
+      ]
+    },
+    "lodge_1897_absence:bifurcated_beam_in_two_directions": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "lodge_1897_absence:ether_may_possess_viscosity": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "lodge_1897_absence:magnetic_field_may_grip_ether": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "lodge_1897_absence:electric_charge_may_grip_ether": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "lodge_1897_absence:earth_rotation_shifts_bands": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "lodge_1897_absence:turntable_rotation_shifts_bands": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "lodge_1897_absence:absence_of_shift_implies_no_drag": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "lodge_1897_absence:irrotational_motion_undetectable_by_optics": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "lodge_1897_absence:single_valued_potential_no_ray_effect": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "poincare_1898_time:conscious_order_not_arbitrary": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1898_time:no_direct_duration_equality_intuition": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1898_time:same_causes_take_same_time": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1898_time:pendulum_beats_equal_by_definition": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1898_time:tides_slow_earth_rotation": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "poincare_1898_time:time_defined_for_law_simplicity": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1898_time:light_velocity_constant_all_directions": {
+      "is_prediction": true,
+      "required_categories": [
+        "T1",
+        "T2"
+      ]
+    },
+    "poincare_1898_time:cause_defines_temporal_anteriority": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1898_time:thunder_sound_after_electric_discharge": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "poincare_1898_time:light_propagation_not_instantaneous": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "poincare_1898_time:positions_velocities_determine_evolution": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1898_time:rules_chosen_because_most_convenient": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1898_time:experiment_could_contradict_postulate": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1898_time:star_light_takes_time_to_reach_earth": {
+      "is_prediction": true,
+      "required_categories": [
+        "T1"
+      ]
+    },
+    "poincare_1898_time:eclipse_perceived_simultaneously_over_earth": {
+      "is_prediction": true,
+      "required_categories": [
+        "T1"
+      ]
+    },
+    "poincare_1898_time:telegraph_reception_after_sending": {
+      "is_prediction": true,
+      "required_categories": [
+        "T1"
+      ]
+    },
+    "poincare_1898_time:newton_law_experimental_truth": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1898_time:transmission_duration_practically_neglected": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1898_time:stellar_event_has_definite_epoch": {
+      "is_prediction": true,
+      "required_categories": [
+        "T1"
+      ]
+    },
+    "larmor_1900_ch10:aether_is_stagnant": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch10:axes_at_rest_in_aether": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch10:definite_translatory_velocity_through_aether": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch10:time_measured_in_ordinary_manner": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch10:observer_apparatus_uniformly_moving": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch10:auxiliary_time_variable_device": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch10:c_is_single_aether_constant": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch10:aether_dynamical_equations_definite": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch10:aether_elements_sensibly_at_rest": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch10:astronomical_aberration_rigorously_maintained": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "larmor_1900_ch10:terrestrial_optical_phenomena_unaffected": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "larmor_1900_ch10:electron_singular_point_in_aether": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch10:electron_transferable_independently_of_aether": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch10:electron_nucleus_labile_no_inertia": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch10:structure_of_matter_unaltered_first_order": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "larmor_1900_ch10:only_electric_forces_between_atoms": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch10:deterministic_evolution_from_initial_state": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch10:electrons_occupy_corresponding_positions": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch10:electron_strengths_equal_across_systems": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch10:first_order_null_effect_on_distributions": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "larmor_1900_ch10:displacements_differ_by_first_order": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "larmor_1900_ch10:epsilon_second_order_negligible": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch10:free_mobility_of_electron": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch10:maxwell_equations_experimentally_verified": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch11:absolute_translatory_velocity": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch11:common_time_across_two_systems": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch11:space_elongation_is_physical": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch11:physical_contraction_of_moving_matter": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "larmor_1900_ch11:molecular_forces_are_electric": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch11:electron_is_singular_point_in_aether": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch11:no_forces_except_through_aether": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch11:electron_strength_invariant": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "larmor_1900_ch11:electron_strength_is_surface_integral": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch11:body_form_from_molecular_forces": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch11:translation_alters_electric_action": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "larmor_1900_ch11:aether_equations_are_linear": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch11:all_radiations_travel_at_same_speed": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "larmor_1900_ch11:kinetic_energy_from_aethereal_disturbance": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch11:inertia_is_of_aethereal_origin": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch11:conservation_of_mass_holds_for_electric_mass": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "larmor_1900_ch11:gravitation_speed_exceeds_radiation_speed": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "larmor_1900_ch11:doppler_effect_from_time_change": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch11:null_method_yields_null_earth_motion_effect": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "larmor_1900_ch11:michelson_negative_result_included": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "larmor_1900_ch11:conductor_structure_unchanged_by_current": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "larmor_1900_ch11:current_same_in_matter_or_aether_frame": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "rayleigh_1902_refraction:aether_is_a_medium": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "rayleigh_1902_refraction:stellar_aberration_favours_stationary": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "rayleigh_1902_refraction:solid_bodies_alter_dimensions": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "rayleigh_1902_refraction:deformation_may_cause_double_refraction": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "rayleigh_1902_refraction:effect_is_second_order": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "rayleigh_1902_refraction:sun_has_definite_motion": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "rayleigh_1902_refraction:motions_combine_by_addition": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "rayleigh_1902_refraction:retardation_phase_gives_sinsquared": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "rayleigh_1902_refraction:load_induced_matches_motion_induced": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "rayleigh_1902_refraction:wertheim_result_transfers": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "rayleigh_1902_refraction:wavelengths_count_along_path": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "rayleigh_1902_refraction:no_double_refraction_in_liquids": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "rayleigh_1902_refraction:no_double_refraction_in_solids": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "rayleigh_1902_refraction:band_position_tracks_retardation": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "brace_1904_refraction:ether_exists_as_medium": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "brace_1904_refraction:definite_direction_earths_motion": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "brace_1904_refraction:orbital_and_solar_velocities_conspire": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "brace_1904_refraction:density_change_alters_index": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "brace_1904_refraction:intermolecular_forces_mediated_by_ether": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "brace_1904_refraction:rotation_180_reverses_direction": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "brace_1904_refraction:contraction_and_elongation_give_same_double_refraction": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1904_stlouis:atoms_as_material_points": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1904_stlouis:central_forces_along_line": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1904_stlouis:distance_between_atoms_definite": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1904_stlouis:law_is_differential_equation": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1904_stlouis:conservation_of_energy": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1904_stlouis:action_equals_reaction": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1904_stlouis:principle_of_relativity": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1904_stlouis:no_means_to_detect_translation": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "poincare_1904_stlouis:conservation_of_mass": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1904_stlouis:few_principles_suffice": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1904_stlouis:ether_transmits_both": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1904_stlouis:simultaneous_transmission_meaningful": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1904_stlouis:transmission_follows_mechanics": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1904_stlouis:principles_are_generalized_experiments": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1904_stlouis:central_forces_imply_principles": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "poincare_1904_stlouis:gear_ratio_from_visible_wheels": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "poincare_1904_stlouis:couples_compensate_in_interior": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "lorentz_1904:aether_is_medium": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "lorentz_1904:absolute_translation_of_system": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "lorentz_1904:fixed_coordinate_system_exists": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "lorentz_1904:true_time_defines_corresponding_instants": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "lorentz_1904:earth_annual_motion": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "lorentz_1904:velocity_smaller_than_light": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "lorentz_1904:galilean_velocity_composition": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "lorentz_1904:electron_deformation_by_motion": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "lorentz_1904:charge_preserved_under_deformation": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "lorentz_1904:molecular_forces_transform_like_electric": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "lorentz_1904:no_material_mass_of_electron": {
+      "is_prediction": true,
+      "required_categories": [
+        "OTHER"
+      ]
+    },
+    "lorentz_1904:all_particle_masses_affected_by_translation": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "lorentz_1904:electromagnetic_momentum_from_translation": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    },
+    "lorentz_1904:uniform_surface_charge_at_rest": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "lorentz_1904:michelson_null_explained_by_contraction": {
+      "is_prediction": false,
+      "required_categories": []
+    },
+    "lorentz_1904:optical_earth_motion_undetectable_geometrically": {
+      "is_prediction": true,
+      "required_categories": [
+        "T2"
+      ]
+    }
+  }
+}
