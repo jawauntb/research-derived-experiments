@@ -1,0 +1,236 @@
+{
+  "doc_id": "brace_1904_refraction",
+  "propositions": [
+    {
+      "name": "aether_is_real_medium",
+      "statement": "There is an aether which is a real medium through which matter can move.",
+      "quote": "Hence, we may conclude that to this order of sensibility there is no double refraction in the water due to its motion through the æther.",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "earth_has_orbital_motion_through_aether",
+      "statement": "The earth has an orbital motion through the aether with a definite direction at any given moment.",
+      "quote": "A match was obtained with, say, the trough in the meridian at noon, this was then turned through 90° into the direction of the earth's orbital motion.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "direction_of_motion_is_definite",
+      "statement": "There is a definite direction in which matter moves through the aether at any moment.",
+      "quote": "If in the movement of matter through æther an increase in density in this direction took place, producing a change in the natural frequency of the molecular systems similar to that which occurs in glass",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "orbital_velocity_is_v_in_formula",
+      "statement": "The v appearing in the contraction formula is the orbital velocity of matter through the aether.",
+      "quote": "The greatest change which could be expected is the difference between unity and",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "light_velocity_is_single_scalar",
+      "statement": "Light-velocity V is a single well-defined quantity that can be compared with the orbital velocity.",
+      "quote": "where v is orbital velocity and V is light-velocity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "contraction_specific_magnitude",
+      "statement": "The contraction to be expected on the contraction hypothesis has magnitude 0.5 times (10 to the -4) squared.",
+      "quote": ", the change to be expected on the \"contraction\" hypothesis, and is 30 times less than the sensibility obtained with water.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "contraction_implies_double_refraction",
+      "statement": "If matter contracts in the direction of its motion through the aether, the matter becomes doubly refracting.",
+      "quote": "From the above data we may calculate the least change in the index which could be observed if the water had become doubly refracting.",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "index_proportional_to_density",
+      "statement": "The excess of the index of refraction above unity is nearly proportional to the density.",
+      "quote": "Mascart has shown that in the case of water under compression the increment in the excess of the index above unity is nearly proportional to the increment of its density.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "two_components_have_definable_velocities",
+      "statement": "The two components of polarized light in a medium each have a definite velocity that can be compared.",
+      "quote": "This represents the greatest difference in velocity or in index between the two components which could exist referred to that of water for green light, λ = .00005 cm.",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "path_length_invariant_under_rotation",
+      "statement": "The total path of the light in the water is a fixed length in centimeters regardless of the trough's orientation.",
+      "quote": "The total path of the light in the water was 2856 cms. Taking its index as 1.33, the number of waves is",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "wavelength_is_well_defined",
+      "statement": "The wavelength of green light is a well-defined quantity (λ = .00005 cm) usable to count waves along the path.",
+      "quote": "referred to that of water for green light, λ = .00005 cm.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "frequency_is_well_defined",
+      "statement": "The frequency of light is a well-defined quantity for which the index of water is a definite number.",
+      "quote": "Thus the index of water for frequency",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "compensator_measures_relative_retardation",
+      "statement": "The relative retardation between the two components of light can be measured by rotating the compensator.",
+      "quote": "In this way the retardation of the compensator could be at once determined in terms of that of the quarter-wave plate.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "phase_change_proportional_to_angle",
+      "statement": "For small angles the ratio of the change of phase to the total is proportional to the angle theta.",
+      "quote": "For small angles then the ratio of the change of phase to the total or",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "observer_moves_with_trough",
+      "statement": "There is a definite sense in which an observer can be considered to move with the trough.",
+      "quote": "such a rotation of the plane of polarization would be reversed with respect to an observer moving with the trough.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "magnetic_rotation_direction_independent_of_ray",
+      "statement": "The rotation of the plane of polarization due to a magnetic field is always in a definite direction independent of the direction of the ray.",
+      "quote": "It is evident that since the rotation due to a magnetic field is always in a definite direction and independent of the direction of the ray, such a rotation of the plane of polarization would be reversed with respect to an observer moving with the trough.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rotation_180_reverses_direction",
+      "statement": "Rotating the trough through 180 degrees into the meridian reverses the direction with respect to the aether.",
+      "quote": "To make sure of this the trough was rotated through 180° into the meridian so as to reverse the direction: but no effect could be observed.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "meridian_defines_reference_direction",
+      "statement": "The meridian provides a definite spatial reference direction in the lab against which the trough's orientation can be described.",
+      "quote": "Various positions were taken in and at right angles to the meridian with the same result.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "intermolecular_forces_aether_mediated",
+      "statement": "Intermolecular forces are analogous to electric and magnetic forces interacting through the mediation of the aether.",
+      "quote": "considerations in regard to intermolecular forces analogous to the interaction, through the mediation of the æther, of electric and magnetic forces",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "relative_motion_may_change_dimensions",
+      "statement": "Relative motion between matter and aether can affect intermolecular forces and thereby change the dimensions of matter.",
+      "quote": "the effect of the relative motion on the intermolecular forces and the possible consequent relative change in dimensions are very small.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "density_can_change_with_direction_of_motion",
+      "statement": "The motion of matter through the aether could produce an increase in density in the direction of motion.",
+      "quote": "If in the movement of matter through æther an increase in density in this direction took place, producing a change in the natural frequency of the molecular systems",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "moving_molecules_interact_with_aether_impulses",
+      "statement": "Moving molecular vibrations interact with aether impulses in the direction of motion, changing their frequency.",
+      "quote": "on the index of the moving molecular vibrations relatively to the aether impulses in the direction of motion, is far too small to be observed.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_may_be_dragged_by_matter",
+      "statement": "An alternative to the contraction hypothesis is that the aether moves with the embedded matter.",
+      "quote": "we also conclude either that the aether moves with the embedded matter, or that the effect of the relative motion on the intermolecular forces and the possible consequent relative change in dimensions are very small.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "solar_system_has_motion_in_space",
+      "statement": "The solar system has a definite velocity in space that can conspire with earth's orbital velocity.",
+      "quote": "These experiments were repeated during the early part of February, 1904, when the earth's orbital velocity conspires approximately with that of the solar system in space.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "seasonal_repetition_probes_different_velocity",
+      "statement": "Repeating the experiments at different times of year probes different values of the earth's motion through the aether.",
+      "quote": "These experiments were repeated during the early part of February, 1904, when the earth's orbital velocity conspires approximately with that of the solar system in space.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "different_times_of_day_probe_different_directions",
+      "statement": "Observations at noon and at 6 P.M. probe different orientations of the apparatus relative to the direction of drift.",
+      "quote": "Observations were made at noon and at 6 P. M. in the early part of December.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "any_lorentz_supposition_yields_same_effect",
+      "statement": "Under any Lorentz supposition (contraction along drift, extension at right angles, or elongation both), the double refraction effect would be the same.",
+      "quote": "contraction along the drift and zero change at right angles, no contraction but extension at right angles to the drift or elongation along and at right angles to the drift",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "hicks_analysis_predicts_elongation",
+      "statement": "A more rigorous discussion by Hicks shows an elongation of v squared over 2 V squared in the direction of drift rather than a contraction.",
+      "quote": "Hicks, in a more rigorous discussion than that of Lorentz, of the effect to be expected in the Michelson-Morley experiment, shows that instead of a contraction of",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "poisson_correction_applies",
+      "statement": "The calculated contraction should be corrected by one-quarter for Poisson's ratio if the interference problem were done on a glass support.",
+      "quote": "If we correct by ¼ for Poisson's ratio, as we should if the interference problem were done on a glass support, the calculated contraction becomes",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "test_validity_permits_conclusion_against_contraction",
+      "statement": "If the test is a valid one, the contraction hypothesis cannot explain the negative results of the interference experiments.",
+      "quote": "Hence, if the test is a valid one, the \"contraction\" hypothesis cannot explain the negative results of the interference experiments;",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "double_refraction_same_across_suppositions",
+      "statement": "The double refraction effect observable in these experiments would be the same under any of the enumerated aether-drift suppositions.",
+      "quote": "the effect to be observed by means of double refraction in the preceding experiments would be the same.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "sensibility_setting_defines_detection_limit",
+      "statement": "The rotation of the compensator at which a change can just be detected is a measure of the sensibility of the system.",
+      "quote": "By noting the position of the pointer for a match and then shifting the same until such a change could just be detected, a measure of the sensibility of the system could be obtained.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "index_of_water_isotropic_at_rest",
+      "statement": "In the absence of motion through the aether the index of water for green light is a single value 1.33 in all directions.",
+      "quote": "Taking its index as 1.33, the number of waves is",
+      "kind": "presupposed",
+      "definitional": false
+    }
+  ]
+}

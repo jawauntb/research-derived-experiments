@@ -1,0 +1,222 @@
+{
+  "doc_id": "poincare_1904_stlouis",
+  "propositions": [
+    {
+      "name": "bodies_as_material_points",
+      "statement": "The bodies the physicist studies can be described as material points separated from one another by intervals enormous in comparison with their dimensions.",
+      "quote": "There also we should see material points, separated from one another by intervals, enormous in comparison with their dimensions, and describing orbits according to regular laws.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "atoms_analog_of_stars",
+      "statement": "Atoms are infinitesimal stars that attract or repel each other along the straight line which joins them.",
+      "quote": "These infinitesimal stars are the atoms. Like the stars proper, they attract or repel each other, and this attraction or this repulsion, following the straight line which joins them, depends only on the distance.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "straight_line_joins_atoms",
+      "statement": "There is a straight line which joins any two atoms and along which their attraction or repulsion acts.",
+      "quote": "and this attraction or this repulsion, following the straight line which joins them, depends only on the distance.",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "force_depends_only_on_distance",
+      "statement": "The attraction or repulsion between two atoms depends only on the distance between them.",
+      "quote": "this attraction or this repulsion, following the straight line which joins them, depends only on the distance.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "exponent_change_yields_diversity",
+      "statement": "The diversity of physical phenomena arises from a change of exponent in the distance-law of atomic force.",
+      "quote": "in place of the exponent −2, we have probably a different exponent, and it is from this change of exponent that arises all the diversity of physical phenomena",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "atoms_describe_regular_orbits",
+      "statement": "The atoms describe orbits according to regular laws.",
+      "quote": "There also we should see material points, separated from one another by intervals, enormous in comparison with their dimensions, and describing orbits according to regular laws.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "atoms_can_never_budge",
+      "statement": "It is meaningful to say that atoms transmit heat one to another and yet never budge.",
+      "quote": "in it are indeed atoms acting at a distance one upon the other; they mutually transmit heat, but they do not attract, they never budge.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "law_is_differential_equation",
+      "statement": "A physical law is a constant relation between the phenomenon of to-day and that of to-morrow, that is, a differential equation.",
+      "quote": "For us a law is something quite different; it is a constant relation between the phenomenon of to-day and that of to-morrow; in a word, it is a differential equation.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "shared_today_tomorrow_ordering",
+      "statement": "The distinction between the phenomenon of to-day and that of to-morrow is definite in the same way for anyone applying the law.",
+      "quote": "it is a constant relation between the phenomenon of to-day and that of to-morrow; in a word, it is a differential equation.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "universe_is_machine",
+      "statement": "The universe is also a machine, much more complicated than all those of industry.",
+      "quote": "The universe is also a machine, much more complicated than all those of industry, of which almost all the parts are profoundly hidden from us",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "energy_conservation_universal",
+      "statement": "The principle of the conservation of energy applies to the universe as it does to any machine.",
+      "quote": "Well, in regard to the universe, the principle of the conservation of energy is able to render us the same service.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "visible_wheels_speed_comparable",
+      "statement": "The rotation of two visible wheels can be compared to determine that one turns ten times less quickly than the other.",
+      "quote": "We easily ascertain that the final wheel turns ten times less quickly than the initial wheel, since these two wheels are visible",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "couple_ratio_from_speed_ratio",
+      "statement": "A couple applied to one wheel is balanced by a couple ten times greater applied to the other when their speeds differ by ten.",
+      "quote": "we are able thence to conclude that a couple applied to the one will be balanced by a couple ten times greater applied to the other.",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "compensation_cannot_fail",
+      "statement": "In a machine, the compensation of forces in the interior can not fail to occur.",
+      "quote": "For that there is no need to penetrate the mechanism of this equilibrium and to know how the forces compensate each other in the interior of the machine; it suffices to be assured that this compensation can not fail to occur.",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "visible_motion_constrains_hidden_mechanism",
+      "statement": "Observing the motion of visible parts lets us draw conclusions which remain true whatever the invisible mechanism.",
+      "quote": "in observing the motion of those that we can see, we are able, by the aid of this principle, to draw conclusions which remain true whatever may be the details of the invisible mechanism which animates them.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "carnot_degradation_of_energy",
+      "statement": "There is a principle of the degradation of energy, called Carnot's principle.",
+      "quote": "Carnot's principle, or the principle of the degradation of energy.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "equality_of_action_and_reaction",
+      "statement": "Action and reaction are equal, as stated by Newton's principle.",
+      "quote": "Newton's principle, or the principle of the equality of action and reaction.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "relativity_of_physical_laws",
+      "statement": "The laws of physical phenomena must be the same for a stationary observer as for an observer carried along in a uniform motion of translation.",
+      "quote": "the laws of physical phenomena must be the same for a stationary observer as for an observer carried along in a uniform motion of translation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "uniform_translation_undetectable",
+      "statement": "We have not and can not have any means of discerning whether or not we are carried along in a uniform motion of translation.",
+      "quote": "so that we have not and can not have any means of discerning whether or not we are carried along in such a motion.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "stationary_and_carried_distinguishable",
+      "statement": "The category of a stationary observer and the category of an observer carried along in a uniform motion of translation are conceptually distinct conditions.",
+      "quote": "The principle of relativity, according to which the laws of physical phenomena must be the same for a stationary observer as for an observer carried along in a uniform motion of translation",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "laws_comparable_between_observers",
+      "statement": "What counts as a law of physical phenomena is comparable between a stationary observer and an observer carried along in a uniform motion of translation.",
+      "quote": "the laws of physical phenomena must be the same for a stationary observer as for an observer carried along in a uniform motion of translation",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "conservation_of_mass",
+      "statement": "There is a principle of the conservation of mass, called Lavoisier's principle.",
+      "quote": "The principle of the conservation of mass, or Lavoisier's principle.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "principle_of_least_action",
+      "statement": "The law of least action stands among the general principles of physics.",
+      "quote": "it involved both the conservation of energy and that of masses, and the equality of action and reaction, and the law of least action, which appeared, it is true, not as experimental truths, but as theorems",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "principles_sufficient_for_knowledge",
+      "statement": "Application of these five or six general principles to the different physical phenomena is sufficient for our learning of them all that we could reasonably hope to know.",
+      "quote": "The application of these five or six general principles to the different physical phenomena is sufficient for our learning of them all that we could reasonably hope to know of them.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_exists_as_medium",
+      "statement": "There is a medium, the ether, whose molecules are disposed in some manner.",
+      "quote": "We know nothing as to what the ether is, how its molecules are disposed, whether they attract or repel each other; but we know that this medium transmits at the same time the optical perturbations and the electrical perturbations",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_transmits_two_perturbations",
+      "statement": "The ether transmits at the same time the optical perturbations and the electrical perturbations.",
+      "quote": "we know that this medium transmits at the same time the optical perturbations and the electrical perturbations",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "same_time_transmission_meaningful",
+      "statement": "It is meaningful to say the ether transmits the optical and the electrical perturbations at the same time.",
+      "quote": "but we know that this medium transmits at the same time the optical perturbations and the electrical perturbations; we know that this transmission must take place in conformity with the general principles of mechanics",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "transmission_conforms_to_mechanics",
+      "statement": "The transmission through the ether must take place in conformity with the general principles of mechanics.",
+      "quote": "we know that this transmission must take place in conformity with the general principles of mechanics, and that suffices us for the establishment of the equations of the electromagnetic field.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "generalization_yields_certainty",
+      "statement": "The general principles seem to derive from their very generality a high degree of certainty.",
+      "quote": "These principles are results of experiments boldly generalized; but they seem to derive from their very generality a high degree of certainty.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "verifications_end_doubt",
+      "statement": "Verifications multiplying in the most varied and unexpected forms end by no longer leaving place for doubt.",
+      "quote": "the more general they are, the more frequent are the opportunities to check them, and the verifications multiplying, taking the most varied, the most unexpected forms, end by no longer leaving place for doubt.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "central_forces_contain_principles",
+      "statement": "The hypothesis of central forces contained all the principles as necessary consequences.",
+      "quote": "The hypothesis of central forces contained all the principles; it involved them as necessary consequences; it involved both the conservation of energy and that of masses, and the equality of action and reaction",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

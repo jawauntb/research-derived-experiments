@@ -1,0 +1,215 @@
+{
+  "doc_id": "michelson_morley_1887",
+  "propositions": [
+    {
+      "name": "luminiferous_ether_exists",
+      "statement": "There is a luminiferous ether between the earth and light, relative to which the earth may have motion.",
+      "quote": "if there be any relative motion between the earth and the luminiferous ether, it must be small; quite small enough entirely to refute Fresnel's explanation of aberration",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "ether_at_rest_or_in_motion",
+      "statement": "The ether at the earth's surface is either at rest with regard to the earth or has some relative velocity with respect to it.",
+      "quote": "Stokes has given a theory of aberration which assumes the ether at the earth's surface to be at rest with regard to the latter, and only requires in addition that the relative velocity have a potential",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "light_velocity_in_stationary_ether",
+      "statement": "V is the velocity of light in the ether supposed stationary.",
+      "quote": "Let V be the velocity of light in the ether supposed stationary, and let cd be the increase in the distance the light has to travel to reach d .",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "earth_moves_through_ether",
+      "statement": "The earth has a motion through the ether, and the effect of this motion on the path of a ray can be considered.",
+      "quote": "In deducing the formula for the quantity to be measured, the effect of the motion of the earth through the ether on the path of the ray at right angles to this motion was overlooked.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "apparatus_moves_through_resting_ether",
+      "statement": "When the ether is at rest and the whole apparatus moves in the direction sc with the velocity of the earth, the directions and distances traversed by the rays are altered.",
+      "quote": "Suppose now, the ether being at rest, that the whole apparatus moves in the direction sc , with the velocity of the earth in its orbit, the directions and distances traversed by the rays will be altered thus",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "transit_time_well_defined",
+      "statement": "T is the time light occupies to pass from a to c and is a single quantity used in the calculation.",
+      "quote": "T=time light occupies to pass from a to c . \n T =time light occupies to return from c to a / , (fig. 2.)",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "second_order_offset_does_not_matter",
+      "statement": "The two returning rays not meeting exactly at the same point, the difference being of the second order, does not affect the validity of the reasoning.",
+      "quote": "It may be remarked that the rays ba / and ca / , do not now meet exactly in the same point a / , though the difference is of the second order; this does not affect the validity of the reasoning.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rotation_reverses_path_difference",
+      "statement": "When the whole apparatus is turned through 90°, the path difference is in the opposite direction, so the displacement of the interference fringes should double.",
+      "quote": "If now the whole apparatus be turned through 90°, the difference will be in the opposite direction, hence the displacement of the interference fringes should be",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "path_difference_causes_fringe_shift",
+      "statement": "A difference between the two paths produces a displacement of the interference fringes that is proportional to the difference.",
+      "quote": "if there is any displacement\ndue to the relative motion of the earth and the luminiferous ether, this cannot be much greater than 0.01 of the distance between the fringes.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "arms_equal_in_apparatus",
+      "statement": "The distances ab and ac are equal in the apparatus, both of length D.",
+      "quote": "The paths being now approximately equal, the two images of the source of light or of some well-defined object placed in front of the condensing lens, were made to coincide",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "perpendicular_path_length_formula",
+      "statement": "The length of the path of the ray at right angles to the motion has a term in v squared over V squared and is treated by the same degree of accuracy as the other path.",
+      "quote": "In deducing the formula for the quantity to be measured, the effect of the motion of the earth through the ether on the path of the ray at right angles to this motion was overlooked.",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "rigid_apparatus_under_rotation",
+      "statement": "The apparatus can be revolved without producing distortion in the geometry of the paths.",
+      "quote": "In the first experiment one of the principal difficulties encountered was that of revolving the apparatus without producing distortion; and another was its extreme sensitiveness to vibration.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "wooden_rod_measures_optical_path",
+      "statement": "The lengths of the two optical paths can be measured by a light wooden rod reaching diagonally from mirror to mirror.",
+      "quote": "the lengths of the two paths were measured by a light wooden rod reaching diagonally from mirror to mirror, the distance being read from a small steel scale to tenths of millimeters.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "two_equal_paths_interfere",
+      "statement": "When the paths ab and ac are equal, the two rays interfere along ad.",
+      "quote": "If then the paths ab and ac are equal, the two rays interfere along ad .",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aberration_tangent_equals_ratio",
+      "statement": "The tangent of the angle of aberration is the ratio of the velocity of the earth to the velocity of light.",
+      "quote": "if the tangent of the angle of aberration is the ratio of the velocity of the earth to the velocity of light, then, since the latter velocity in water is three-fourths its velocity in a vacuum",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "water_reduces_light_velocity",
+      "statement": "The velocity of light in water is three-fourths its velocity in a vacuum, so the aberration observed with a water telescope should be four-thirds of its true value.",
+      "quote": "since the latter velocity in water is three-fourths its velocity in a vacuum, the aberration observed with a water telescope should be four-thirds of its true value.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fresnel_partial_ether_drag",
+      "statement": "The ether in the interior of a transparent medium is supposed to move with a velocity less than the velocity of the medium in the ratio (n²-1)/n².",
+      "quote": "the ether is supposed to be at rest except in the interior of transparent media , in which secondly, it is supposed to move with a velocity less than the velocity of the medium in the ratio",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_passes_through_metals",
+      "statement": "The ether can and does pass through metals, though we cannot assume opaque bodies offer free passage.",
+      "quote": "But there can hardly be question that the ether can and does pass through metals. Lorentz cites the illustration of a metallic barometer tube .",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_imcompressible",
+      "statement": "The ether is imcompressible, so when a tube is inclined the ether above the mercury is forced out.",
+      "quote": "When the tube is inclined the ether in the space above the mercury is certainly forced out, for it is imcompressible.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "noon_evening_observations_comparable",
+      "statement": "Observations made near noon and observations made near six o'clock in the evening are means of six readings that are expressed graphically for comparison.",
+      "quote": "The following tables give the means of the six readings ; the first, for observations made near noon, the second, those near six o'clock in the evening.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "orbital_motion_is_motion_through_ether",
+      "statement": "The motion of the earth in its orbit gives the displacement to be expected, so orbital motion is treated as motion through the ether.",
+      "quote": "Considering only the velocity of the earth in its orbit, this would be",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "solar_motion_combines_with_orbital",
+      "statement": "The orbital motion of the earth may be combined with the motion of the solar system to yield a resultant velocity through the ether.",
+      "quote": "If this is combined with the motion of the solar system, concerning which but little is known with certainty, the result would have to be modified",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "displacement_proportional_to_square_velocity",
+      "statement": "The displacement of the fringes is proportional to the square of the velocity of the earth relative to the ether.",
+      "quote": "But since the displacement is proportional to the square of the velocity, the relative velocity of the earth and the ether is probably less than one sixth the earth's orbital velocity, and certainly less than one-fourth.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "first_power_measurable_in_principle",
+      "statement": "The first power of the relative velocity of the earth with respect to the ether could be measured, if the velocity of light could be measured without returning the ray to its starting point.",
+      "quote": "If it were possible to measure with sufficient accuracy the velocity of light without returning the ray to its starting point, the problem of measuring the first power of the relative velocity of the earth",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "jupiter_eclipses_measure_ether_velocity",
+      "statement": "Observations of the eclipses of Jupiter's satellites can give the motion of the solar system with reference to the luminiferous ether itself.",
+      "quote": "will give, not merely the motion of the solar system with reference to the stars, but with reference to the luminiferous ether itself.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "mercury_float_permits_free_rotation",
+      "statement": "Mounting the apparatus on a massive stone floating on mercury overcomes the difficulty of revolving the apparatus without producing distortion.",
+      "quote": "The first named difficulties were entirely overcome by mounting the apparatus on a massive stone floating on mercury; and the second by increasing, by repeated reflection, the path of the light to about ten times its former value.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "repeated_reflection_multiplies_shift",
+      "statement": "Increasing by repeated reflection the path of the light to ten times its former value multiplies the expected fringe displacement by the same factor.",
+      "quote": "the second by increasing, by repeated reflection, the path of the light to about ten times its former value.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "sixteen_marks_give_direction_reference",
+      "statement": "The sixteen equidistant marks around the cast-iron trough serve as reference positions relative to which the changing direction of motion through the ether is recorded.",
+      "quote": "The observations were conducted as follows: Around the cast-iron trough were sixteen equidistant marks. The apparatus was revolved very slowly (one turn in six minutes)",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "uniform_slow_rotation_avoids_strain",
+      "statement": "Keeping the apparatus in slow uniform motion gives more uniform and consistent results, as the effects of strains and change of temperature would otherwise come into action.",
+      "quote": "for the effects of strains could be noted for at least half a minute after the stone came to rest, and during this time effects of change of temperature came into action.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "resultant_velocity_at_observation_meaningful",
+      "statement": "There is a resultant velocity of the earth through the ether at the time of the observations, and repeating the experiment at intervals of three months removes the chance that this resultant is small.",
+      "quote": "and it is just possible that the resultant velocity at the time of the observations was small though the chances are much against it. The experiment will therefore be repeated at intervals of three months, and thus all uncertainty will be avoided.",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

@@ -1,0 +1,225 @@
+{
+  "doc_id": "larmor_1900_ch11",
+  "propositions": [
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch11",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "absolute_translatory_velocity",
+      "quote": "referred to axes of (x', y', z') moving through the aether with uniform translatory velocity ( v , 0, 0)",
+      "statement": "A material system possesses a definite uniform translatory velocity v through the aether.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch11",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "common_time_across_two_systems",
+      "quote": "the position of each electron in the material medium in motion, at time t , corresponds with that which it would occupy in the medium at rest at time",
+      "statement": "There is a common time t in which the position of an electron in the moving medium can be compared to its position in the medium at rest at time t minus vx over c squared.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch11",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "space_elongation_is_physical",
+      "quote": "signifies an elongation of the space of the problem in the ratio",
+      "statement": "The transformation of coordinates signifies an elongation of the space of the problem along the direction of the motion of the axes.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch11",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "physical_contraction_of_moving_matter",
+      "quote": "an effect of imparting to a steady material system a uniform velocity of translation is to produce a uniform contraction of the system in the direction of the motion",
+      "statement": "Imparting a uniform velocity of translation to a steady material system produces a uniform contraction of the system in the direction of the motion.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch11",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "molecular_forces_are_electric",
+      "quote": "if we assume all molecular forces to be electric forces, motion of a material system through the aether alters its dimensions in a minute but definite manner",
+      "statement": "All the internal forces of a material system arise wholly from electrodynamic actions between the electrons that constitute its atoms.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch11",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "electron_is_singular_point_in_aether",
+      "quote": "But this statement implies that the nucleus of the electron is merely a singular point in the aether",
+      "statement": "The nucleus of the electron is merely a singular point in the aether with no inertia foreign to the aether.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch11",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "no_forces_except_through_aether",
+      "quote": "that there are no forces between the electrons other than those that exist through the mediation of the aether as here defined, that is other than electric forces",
+      "statement": "There are no forces between the electrons except those that exist through the mediation of the aether.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch11",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "electron_strength_invariant",
+      "quote": "motion of a material system containing electrons cannot alter their strengths",
+      "statement": "The strength of an electron cannot be altered by the translatory motion of the material system containing it.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "larmor_1900_ch11",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "electron_strength_is_surface_integral",
+      "quote": "the strength of the electron in the moving system is the value of the integral",
+      "statement": "The strength of an electron is defined as the value of the surface integral of aethereal vectors taken over a surface surrounding its nucleus.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch11",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "body_form_from_molecular_forces",
+      "quote": "As then the form and the dimensions of a solid body are determined in the last resort by the intensity of the molecular forces",
+      "statement": "The form and dimensions of a solid body are determined in the last resort by the intensity of the molecular forces.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch11",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "translation_alters_electric_action",
+      "quote": "the translation of the matter will most likely alter the action between two molecules or atoms in a manner similar to that in which it alters the attraction or repulsion between electrically charged particles",
+      "statement": "The translation of matter alters the action between two molecules or atoms in the same manner as it alters the attraction or repulsion between electrically charged particles.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch11",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "aether_equations_are_linear",
+      "quote": "The equations of the free aether, as revealed by MacCullagh's optical analysis, are linear equations",
+      "statement": "The equations of the free aether are linear equations.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch11",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "all_radiations_travel_at_same_speed",
+      "quote": "they in fact must be so if all kinds of radiations are to travel with the same speed in the celestial spaces",
+      "statement": "All kinds of radiations travel with the same speed in the celestial spaces.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "larmor_1900_ch11",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "kinetic_energy_from_aethereal_disturbance",
+      "quote": "in estimating the mean value of the volume-integral of the square of the aethereal disturbance, which is the total kinetic energy",
+      "statement": "The total kinetic energy of a system is the mean value of the volume-integral of the square of the aethereal disturbance.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch11",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "inertia_is_of_aethereal_origin",
+      "quote": "but this is simply asserting that inertia is mainly of electric, or rather of aethereal, origin",
+      "statement": "The inertia of a molecule is mainly of electric, or rather of aethereal, origin.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch11",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "conservation_of_mass_holds_for_electric_mass",
+      "quote": "the fundamental chemical law of the constancy of mass throughout molecular transformations is verified for that part of the mass",
+      "statement": "The fundamental chemical law of the constancy of mass throughout molecular transformations is verified for that part of the mass that is of electric origin.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch11",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "gravitation_speed_exceeds_radiation_speed",
+      "quote": "The knowledge that the speed of transmission of gravitation, if finite at all, enormously transcends that of radiation",
+      "statement": "The speed of transmission of gravitation, if finite at all, enormously transcends that of radiation.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch11",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "doppler_effect_from_time_change",
+      "quote": "The change of the time variable, in the comparison of radiations in the fixed and moving systems, involves the Doppler effect on the wave-length",
+      "statement": "The change of the time variable between the fixed and moving systems involves the Doppler effect on wave-length.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch11",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "null_method_yields_null_earth_motion_effect",
+      "quote": "As optical measurements are usually made by the null method of adjusting the apparatus so that the disturbance vanishes",
+      "statement": "Because optical measurements are made by the null method of adjusting the apparatus so the disturbance vanishes, there is a general absence of effect of the Earth's motion up to the second order.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch11",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "michelson_negative_result_included",
+      "quote": "The second term in this expression is the Fresnel effect, and the remaining term is its second order correction on our hypothesis which includes Michelson's negative result",
+      "statement": "The second-order correction to the Fresnel effect derived on this hypothesis includes Michelson's negative result.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch11",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "conductor_structure_unchanged_by_current",
+      "quote": "the mechanical structure of a conductor is not sensibly affected when it carries a current",
+      "statement": "The mechanical structure of a conductor is not sensibly affected when it carries a current.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1900_ch11",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "current_same_in_matter_or_aether_frame",
+      "quote": "the specification of that current with reference to moving matter is just the same as with reference to the stationary aether",
+      "statement": "The specification of the current of conduction with reference to moving matter is just the same as with reference to the stationary aether.",
+      "support": 2
+    }
+  ]
+}

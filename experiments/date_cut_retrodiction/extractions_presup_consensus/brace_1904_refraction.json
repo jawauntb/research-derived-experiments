@@ -1,0 +1,75 @@
+{
+  "doc_id": "brace_1904_refraction",
+  "propositions": [
+    {
+      "definitional": true,
+      "doc_id": "brace_1904_refraction",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "ether_exists_as_medium",
+      "quote": "This suggestion of the \"contraction\" hypothesis by Lorentz, from considerations in regard to intermolecular forces analogous to the interaction, through the mediation of the \u00e6ther, of electric and magnetic forces",
+      "statement": "The \u00e6ther exists as a medium through which matter can move and which mediates intermolecular forces.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "definite_direction_earths_motion",
+      "quote": "the one, a system rotating about a vertical axis, the other a similar system rotating about a horizontal axis so as to shift the plane of polarization from a position at 45\u00b0 to the earth's orbital motion through an angle of 90\u00b0",
+      "statement": "The earth's orbital motion has a definite direction with respect to which the plane of polarization can be set at 45\u00b0.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "orbital_and_solar_velocities_conspire",
+      "quote": "These experiments were repeated during the early part of February, 1904, when the earth's orbital velocity conspires approximately with that of the solar system in space.",
+      "statement": "The earth's orbital velocity and the velocity of the solar system in space conspire to give the earth's net velocity through the \u00e6ther.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "density_change_alters_index",
+      "quote": "Mascart has shown that in the case of water under compression the increment in the excess of the index above unity is nearly proportional to the increment of its density.",
+      "statement": "An increase in density produces a proportional increment in the excess of the index above unity.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "intermolecular_forces_mediated_by_ether",
+      "quote": "from considerations in regard to intermolecular forces analogous to the interaction, through the mediation of the \u00e6ther, of electric and magnetic forces",
+      "statement": "Intermolecular forces are through the mediation of the \u00e6ther, analogous to the interaction of electric and magnetic forces.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "rotation_180_reverses_direction",
+      "quote": "To make sure of this the trough was rotated through 180\u00b0 into the meridian so as to reverse the direction: but no effect could be observed.",
+      "statement": "Rotating the trough through 180\u00b0 into the meridian reverses the direction of the arrangement with respect to any fixed direction in space.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "brace_1904_refraction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "contraction_and_elongation_give_same_double_refraction",
+      "quote": "the effect to be observed by means of double refraction in the preceding experiments would be the same",
+      "statement": "Whether the theory predicts contraction along drift, elongation along drift, or extension at right angles, the effect observed by double refraction would be the same.",
+      "support": 3
+    }
+  ]
+}

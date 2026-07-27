@@ -1,0 +1,145 @@
+{
+  "doc_id": "rayleigh_1902_refraction",
+  "propositions": [
+    {
+      "definitional": true,
+      "doc_id": "rayleigh_1902_refraction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "aether_is_a_medium",
+      "quote": "is most naturally interpreted as proving that the aether in the laboratory shares the earth's motion. But other phenomena, especially stellar aberration, favour the opposite theory of a stationary aether.",
+      "statement": "There exists an aether that either shares the earth's motion or is stationary while the earth moves through it.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "rayleigh_1902_refraction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "stellar_aberration_favours_stationary",
+      "quote": "But other phenomena, especially stellar aberration, favour the opposite theory of a stationary aether.",
+      "statement": "Stellar aberration favours the theory of a stationary aether over one that shares the earth's motion.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "rayleigh_1902_refraction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "solid_bodies_alter_dimensions",
+      "quote": "solid bodies, such as the stone platform of Michelson's apparatus, alter their relative dimensions, when rotated, in such a way as to compensate the optical change that might naturally be looked for.",
+      "statement": "Solid bodies alter their relative dimensions when rotated so as to compensate the optical change expected from motion through the aether.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "rayleigh_1902_refraction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "deformation_may_cause_double_refraction",
+      "quote": "It occurred to me that such a deformation of matter when moving through the rather might be accompanied by a sensible double refraction; and as the beginning of double refraction can be tested with extraordinary delicacy",
+      "statement": "Deformation of matter moving through the aether might be accompanied by a sensible double refraction.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "rayleigh_1902_refraction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "effect_is_second_order",
+      "quote": "In no case is any effect to be expected from a rotation through 180\u00b0, and such effect as a rotation through 90\u00b0 may entail must be of the second order in the ratio which expresses the velocity of the earth relatively to that of light.",
+      "statement": "The effect of a 90\u00b0 rotation must be of the second order in the ratio of the earth's velocity to that of light, and a 180\u00b0 rotation yields no effect.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "rayleigh_1902_refraction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "sun_has_definite_motion",
+      "quote": "according to the theory of a stationary aether, we have to do not only with the motion of the earth in its orbit, but also with that of the sun in space. The latter is supposed to be much the smaller, and to lie directed towards the constellation Hercules.",
+      "statement": "The sun has a definite motion in space directed towards the constellation Hercules, additional to the earth's orbital motion.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "rayleigh_1902_refraction",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "motions_combine_by_addition",
+      "quote": "In the month of April, when successful experiments were first made, the two motions would approximately conspire.",
+      "statement": "The motion of the earth in its orbit and the motion of the sun in space combine such that in April they approximately conspire.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "rayleigh_1902_refraction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "retardation_phase_gives_sinsquared",
+      "quote": "In general, a retardation of phase \u03b5, in place of \u03c0, gives a revival of light measured by sin\u00b2(\u00bd\u03b5).",
+      "statement": "A retardation of phase \u03b5 produces a revival of light measured by sin squared of half \u03b5 as a fraction of the maximum.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "rayleigh_1902_refraction",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "load_induced_matches_motion_induced",
+      "quote": "The double refraction due to the loads is of exactly the character to be tested for, and accordingly this method affords a very direct check.",
+      "statement": "Double refraction produced by loading an upright strip of glass has exactly the same character as double refraction that would be caused by motion through the aether.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "rayleigh_1902_refraction",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "wertheim_result_transfers",
+      "quote": "who found that it requires a load of 10 kilograms per millimetre of width to give a relative retardation of \u00bd\u03bb, so that with the actual strip the load would need to be 150 kilograms.",
+      "statement": "Wertheim's finding that 10 kilograms per millimetre of width gives a retardation of half a wavelength applies to the calibration strip in this experiment.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "rayleigh_1902_refraction",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "wavelengths_count_along_path",
+      "quote": "In this length there are contained 1,200,000 wave-lengths of yellow light, or 2,400,000 half wave-lengths.",
+      "statement": "The 76 cm path in bisulphide of carbon contains a definite integer count of 1,200,000 wavelengths of yellow light.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "rayleigh_1902_refraction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "no_double_refraction_in_liquids",
+      "quote": "In neither case could the slightest shift of the band be seen on rotation of the board from the north-south position to the east-west position, whether at noon or at 6 p.m.",
+      "statement": "In bisulphide of carbon and water there is no double refraction of the order to be expected from motion through the aether.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "rayleigh_1902_refraction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "no_double_refraction_in_solids",
+      "quote": "enough remains to justify us in concluding that even here there is no double refraction (of the order to be expected) due to motion through the aether.",
+      "statement": "Even in built-up plate glass there is no double refraction of the order to be expected due to motion through the aether.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "rayleigh_1902_refraction",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "band_position_tracks_retardation",
+      "quote": "Above and below this hand the strained condition of the glass produces just such a double refraction as might be caused by the motion of the liquid through the aether, so that the existence of the latter would be evidenced by a displacement of the dark band upwards or downwards.",
+      "statement": "A displacement of the dark band upwards or downwards would evidence the double refraction produced by motion of the liquid through the aether.",
+      "support": 2
+    }
+  ]
+}

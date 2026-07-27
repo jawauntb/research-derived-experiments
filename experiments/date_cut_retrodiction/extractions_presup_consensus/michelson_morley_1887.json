@@ -1,0 +1,125 @@
+{
+  "doc_id": "michelson_morley_1887",
+  "propositions": [
+    {
+      "definitional": true,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "light_velocity_in_stationary_ether",
+      "quote": "Let V be the velocity of light in the ether supposed stationary, and let cd be the increase in the distance the light has to travel to reach d .",
+      "statement": "V is the velocity of light in the ether supposed stationary.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "apparatus_moves_through_resting_ether",
+      "quote": "Suppose now, the ether being at rest, that the whole apparatus moves in the direction sc , with the velocity of the earth in its orbit, the directions and distances traversed by the rays will be altered thus",
+      "statement": "When the ether is at rest and the whole apparatus moves in the direction sc with the velocity of the earth, the directions and distances traversed by the rays are altered.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "path_difference_causes_fringe_shift",
+      "quote": "if there is any displacement\ndue to the relative motion of the earth and the luminiferous ether, this cannot be much greater than 0.01 of the distance between the fringes.",
+      "statement": "A difference between the two paths produces a displacement of the interference fringes that is proportional to the difference.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "rigid_apparatus_under_rotation",
+      "quote": "In the first experiment one of the principal difficulties encountered was that of revolving the apparatus without producing distortion; and another was its extreme sensitiveness to vibration.",
+      "statement": "The apparatus can be revolved without producing distortion in the geometry of the paths.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "wooden_rod_measures_optical_path",
+      "quote": "the lengths of the two paths were measured by a light wooden rod reaching diagonally from mirror to mirror, the distance being read from a small steel scale to tenths of millimeters.",
+      "statement": "The lengths of the two optical paths can be measured by a light wooden rod reaching diagonally from mirror to mirror.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "two_equal_paths_interfere",
+      "quote": "If then the paths ab and ac are equal, the two rays interfere along ad .",
+      "statement": "When the paths ab and ac are equal, the two rays interfere along ad.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "aberration_tangent_equals_ratio",
+      "quote": "if the tangent of the angle of aberration is the ratio of the velocity of the earth to the velocity of light, then, since the latter velocity in water is three-fourths its velocity in a vacuum",
+      "statement": "The tangent of the angle of aberration is the ratio of the velocity of the earth to the velocity of light.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "fresnel_partial_ether_drag",
+      "quote": "the ether is supposed to be at rest except in the interior of transparent media , in which secondly, it is supposed to move with a velocity less than the velocity of the medium in the ratio",
+      "statement": "The ether in the interior of a transparent medium is supposed to move with a velocity less than the velocity of the medium in the ratio (n\u00b2-1)/n\u00b2.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "ether_passes_through_metals",
+      "quote": "But there can hardly be question that the ether can and does pass through metals. Lorentz cites the illustration of a metallic barometer tube .",
+      "statement": "The ether can and does pass through metals, though we cannot assume opaque bodies offer free passage.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "solar_motion_combines_with_orbital",
+      "quote": "If this is combined with the motion of the solar system, concerning which but little is known with certainty, the result would have to be modified",
+      "statement": "The orbital motion of the earth may be combined with the motion of the solar system to yield a resultant velocity through the ether.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "displacement_proportional_to_square_velocity",
+      "quote": "But since the displacement is proportional to the square of the velocity, the relative velocity of the earth and the ether is probably less than one sixth the earth's orbital velocity, and certainly less than one-fourth.",
+      "statement": "The displacement of the fringes is proportional to the square of the velocity of the earth relative to the ether.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "michelson_morley_1887",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "first_power_measurable_in_principle",
+      "quote": "If it were possible to measure with sufficient accuracy the velocity of light without returning the ray to its starting point, the problem of measuring the first power of the relative velocity of the earth",
+      "statement": "The first power of the relative velocity of the earth with respect to the ether could be measured, if the velocity of light could be measured without returning the ray to its starting point.",
+      "support": 3
+    }
+  ]
+}

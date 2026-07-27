@@ -1,0 +1,201 @@
+{
+  "doc_id": "lodge_1897_absence",
+  "propositions": [
+    {
+      "name": "ether_exists_as_medium",
+      "statement": "There exists an ether that occupies the space between moving matter and can be disturbed or dragged by it.",
+      "quote": "no first-order effect of purely irrotational etherial motion can ever be optically detected",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "ether_has_definite_motion",
+      "statement": "The ether is either stationary or carried along by moving matter, and its motion is a definite matter.",
+      "quote": "such messes of matter as we had been dealing with are incompetent to disturb the ether in e rotational manner",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "motion_relative_to_ether_meaningful",
+      "statement": "Motion of the light and observer relatively to the ether would produce a definite effect on the bands.",
+      "quote": "a motion of the light and observer would produce an effect, since they would be moving relatively to the ether.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "time_of_journey_perfectly_definite",
+      "statement": "The time of journey of light along any given path through any kind of material is perfectly definite and independent of the motion of the material.",
+      "quote": "the time of journey along any given path through any kind of material is likewise perfectly definite, and independent of the motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "velocity_of_light_between_plates_definite",
+      "statement": "The velocity of light between two plates moving together in their own plane is a definite quantity that could be increased or diminished by the plates' velocity.",
+      "quote": "The velocity of light between two steel plates moving together in their own plane, an inch apart, is not increased or diminished by so much as",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "galilean_addition_of_light_and_matter",
+      "statement": "If the ether were dragged by the moving plates, the velocity of light through the space between them would be increased or diminished by a fraction of the plates' velocity.",
+      "quote": "not increased or diminished by so much as",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "bifurcated_beam_in_two_directions",
+      "statement": "A beam of light can be bifurcated so its two halves travel in opposite directions round the space between moving disks and be observed to interfere.",
+      "quote": "the effect of the motion on a bifurcated beam of light, whose two halves travelled in opposite directions several times round in the space between the disks, was observed.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "band_shift_measures_path_difference",
+      "statement": "A shift of the central band of the interference system by a small fraction of a band width measures a difference in the paths or times of the two half beams.",
+      "quote": "a shift of the central band of the system by so much as the hundredth part of the width of a band could be observed.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "reversible_shift_diagnoses_ether_effect",
+      "statement": "A shift of the bands that reverses with the direction of spin shows a true ether effect, while an irreversible shift shows a spurious disturbing cause.",
+      "quote": "It repeated itself each time without regard to the direction of spin, and disappeared, though not instantly, when the disks stopped.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "ether_may_possess_viscosity",
+      "statement": "The ether may possess a trace of something akin to viscosity by which the medium could be got hold of by moving matter.",
+      "quote": "unless there existed a trace of something akin to viscosity by which the medium could be got hold of",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "mass_may_drag_ether_gravitationally",
+      "statement": "Matter may drag the ether with it in proportion to its mass, through an unknown kind of connexion akin to gravitation.",
+      "quote": "If matter conceivably drags the ether with it in proportion to its mass, an ordinary lump of matter can hardly be expected to cope with the heart",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "magnetic_field_may_grip_ether",
+      "statement": "A magnetic field carried by moving matter might confer upon it the power of gripping and rotationally carrying the ether.",
+      "quote": "the conveyance of a magnetic field by moving matter confers; no power of gripping the ether",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "electric_charge_may_grip_ether",
+      "statement": "Electric charge on moving matter might confer upon a material body some power of gripping and rotationally carrying forward the ether in a quasi-viscous manner.",
+      "quote": "electric charge, being as it were the connexion between ether and matter, might confer upon a material body some power of gripping and rotationally carrying forward the ether in a quasi-viscous manner.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "earth_may_carry_ether",
+      "statement": "It is a question whether the ether near the earth is stationary or is carried round or along by that body.",
+      "quote": "If the ether is stationary near the earth, that is, if it be neither carried round nor along by that body",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "earth_rotation_shifts_bands",
+      "statement": "The earth's rotation through a stationary ether would produce a shift of the bands proportional to the area of the interference square.",
+      "quote": "a single interference square, 1 kilometre in the side, would show a shift of rather more than one band width",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "observer_frame_independent_of_earth",
+      "statement": "To observe terrestrial ether drift the observer and his apparatus must be made independent of the earth's rotation.",
+      "quote": "unless some method could be devised of making the observer and his apparatus independent of the rotation.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "turntable_rotation_shifts_bands",
+      "statement": "Rotating the whole apparatus, telescope, and observer on a turntable through a stationary ether would produce a reversible shift of the bands.",
+      "quote": "the whole apparatus, lantern, optical frame, telescope, observer and all were mounted on a turntable and caused to rotate, a reversible shift of the bands should be seen.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "beams_return_after_many_reflexions",
+      "statement": "Two half beams of light that have undergone many reflexions and transmissions through panes of glass return to a common plate and interfere.",
+      "quote": "each half of the beam had to undergo not only 11 reflexions as usual, before returning to the semi-transparent plate, but also 24 transmissions through panes of glass",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "drag_may_accumulate_with_time",
+      "statement": "Any effect of moving matter on the ether might develop or increase with time of continued rotation.",
+      "quote": "kept the disks spinning for three hours at 1900 revolutions, to see if any shift developed with time.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "band_shift_depends_on_speed_and_path",
+      "statement": "The observable band shift depends on the refractive index of the air, the angular speed of the disks, and the number of light-journeys round the optical square.",
+      "quote": "must be 300, in order to show the air effect, that is, the speed must rise to 6000 revolutions a minute with a light-journey of three times round.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "refractive_index_proportional_to_density",
+      "statement": "The quantity μ − 1 for air is proportional to the density ρ of the air.",
+      "quote": "The gradation of density could therefore cause a distinct effect if the beam of light had an odd number of paths between the disks",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "centrifugal_density_gradient_causes_shift",
+      "statement": "The gradation of air density from centrifugal force during rotation can account for part of the residual irreversible shift observable at high speeds.",
+      "quote": "This cause may therefore account for part of the residual irreversible shift observable at high speeds, when all kinds of mechanical and thermal disturbance have been apparently eliminated.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "absence_of_shift_implies_no_drag",
+      "statement": "Absence of a reversible shift of the bands when moving matter is spun demonstrates that neither electric nor magnetic field enables moving matter to grip and move the ether rotationally.",
+      "quote": "neither an electric nor a magnetic transverse field confers viscosity upon the ether, nor enables moving matter to grip and move it rotationally.",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "irrotational_motion_undetectable_by_optics",
+      "statement": "Irrotational motion of a single-valued kind in a medium cannot be detected by interference or any other optical experiment.",
+      "quote": "irrotational motion of a single-valued kind could not be detected by interference or any other optical experiments, since such motion in no way effects either the path or the speed of a ray",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "half_beams_interfere_in_common_eyepiece",
+      "statement": "The two half beams are made to interfere in the field of view of a micrometer eye-piece where a shift of the central band can be observed.",
+      "quote": "The two half beams were made to interfere in the field of view of a micrometer eye-piece",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "concertina_action_distinct_from_shift",
+      "statement": "A concertina action, a moving of the lateral bands in or out from the central one as the speed varied, is a phenomenon distinct from a shift of the middle band.",
+      "quote": "still the bands showed, what we call a concertina action, that is, a slight moving of the lateral bands in or out from the central one, as the speed varied.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "disturbing_causes_traceable_and_eliminable",
+      "statement": "Disturbing causes such as blast, heat, and vibration can be traced and eliminated so as not to be mistaken for the true ether effect.",
+      "quote": "any effect of that magnitude would be certainly masked by the residual slight disturbing causes present.",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "single_valued_potential_no_ray_effect",
+      "statement": "As long as the motion of a medium is characterised by a single-valued potential function, the course of observable rays through it is independent of the motion.",
+      "quote": "as long as the motion of a medium is characterised everywhere by a single-valued potential function, the course of all observable rays through it, however reflected and refracted they may be, is independent of the motion",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

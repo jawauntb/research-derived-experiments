@@ -1,0 +1,229 @@
+{
+  "doc_id": "maxwell_1878_ether",
+  "propositions": [
+    {
+      "name": "same_instant_at_distant_points",
+      "statement": "The same instant is well-defined at different points in the axis of a beam of light.",
+      "quote": "If we consider what is going on at different points in the axis of a beam of light at the same instant, we shall find that if the distance between the points is a multiple of a wave-length the same process is going on at the two points at the same instant",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "aether_defines_rest",
+      "statement": "The aether has a definite velocity with respect to which terrestrial stations can be said to move.",
+      "quote": "we might, by comparing the observed velocities in opposite directions, determine the velocity of the aether with respect to these terrestrial stations",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "direction_dependent_velocity_of_light",
+      "statement": "The observed velocity of light in opposite directions can differ when the aether has a relative velocity with respect to the observer.",
+      "quote": "if the aether were moving swiftly through the prism, the deviation might be expected to be different when the direction of the light was the same as that of the aether, and when these directions were opposite",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "double_journey_measurement_only",
+      "statement": "Terrestrial determinations of the velocity of light depend on the time required for a round-trip between two stations.",
+      "quote": "All methods, however, by which it is practicable to determine the velocity of light from terrestrial experiments depend on the measurement of the time required for the double journey from one station to the other and back",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "second_order_aether_wind_effect",
+      "statement": "A relative velocity of the aether equal to the earth's orbital velocity would increase the round-trip transmission time by about one hundred-millionth of the whole.",
+      "quote": "the increase of this time on account of a relative velocity of the aether equal to that of the earth in its orbit would be only about one hundred millionth part of the whole time of transmission",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "dense_bodies_move_through_aether",
+      "statement": "Dense bodies including the earth are in motion through a great ocean of aether that either passes through them or is carried along.",
+      "quote": "when these dense bodies are in motion through the great ocean of aether, they carry along with them the aether they contain, or whether the aether passes through them as the water of the sea passes through the meshes of a net when it is towed along by a boat",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "medium_distinct_from_gross_matter",
+      "statement": "The medium through which light is propagated is distinct from the transparent gross matter known to us.",
+      "quote": "We are therefore obliged to suppose that the medium through which light is propagated is something distinct from the transparent medium known to us, though it interpenetrates all transparent bodies and probably opaque bodies too",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "transverse_vibrations_need_solid_like_medium",
+      "statement": "A medium that transmits transverse vibrations must have elastic properties similar to those of a solid body.",
+      "quote": "the air cannot transmit transverse vibrations, and the normal vibrations which the air does transmit travel about a million times slower than light",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "energy_resides_in_medium",
+      "statement": "The energy of radiation is not transmitted instantaneously but exists for a certain time in the medium during transit.",
+      "quote": "this energy is not transmitted instantaneously from the radiating body to the absorbing body, but exists for a certain time in the medium",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_elasticity_and_density",
+      "statement": "The aether possesses elasticity similar to that of a solid body and has a finite density.",
+      "quote": "We must therefore regard the aether as possessing elasticity similar to that of a solid body, and also as having a finite density",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "substances_do_not_annihilate",
+      "statement": "Two bodies put together cannot annihilate each other.",
+      "quote": "we cannot suppose that two bodies when put together can annihilate each other; therefore light cannot be a substance",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_is_process_in_substance",
+      "statement": "Light is not itself a substance but a process going on in a substance.",
+      "quote": "light is not a substance but a process going on in a substance, the process going on in the first portion of light being always the exact opposite of the process going on in the other at the same instant",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "signed_physical_quantities_exist",
+      "statement": "Some physical quantities are capable of having their signs reversed while others are not.",
+      "quote": "Among physical quantities we find some which are capable of having their signs reversed, and others which are not",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "wave_length_is_definite_distance",
+      "statement": "The half wave-length is a definite small distance against which path differences can be compared.",
+      "quote": "the light is extinguished when the difference of the length of the paths is an odd multiple of a certain small distance called a half wave-length",
+      "kind": "required_by_argument",
+      "definitional": true
+    },
+    {
+      "name": "finite_measurable_velocity_of_light",
+      "statement": "Light is propagated with a certain finite velocity that can be measured.",
+      "quote": "light is known to be propagated with a certain velocity (3.004 x 10 centimetres per second in vacuum, according to Cornu)",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "phase_defined_at_x_and_t",
+      "statement": "The phase of the process is a well-defined function of a distance x from a fixed point and a time t.",
+      "quote": "which gives u , the phase of the process, at a point whose distance measured from a fixed point in the beam is x , and at a time t",
+      "kind": "required_by_argument",
+      "definitional": true
+    },
+    {
+      "name": "interplanetary_space_filled_with_aether",
+      "statement": "The interplanetary and interstellar spaces are not empty but are occupied by a material substance.",
+      "quote": "the interplanetary and interstellar spaces are not empty, but are occupied by a material substance or body, which is certainly the largest, and probably the most uniform body of which we have any knowledge",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "energy_density_from_flux_over_velocity",
+      "statement": "Dividing an energy flux by the velocity of light gives the energy in a cubic centimetre of the medium.",
+      "quote": "Dividing this by 3.004x10 , the velocity of light in centimetres per second, we get for the energy in a cubic centimetre 4.1x10 ergs",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "earth_supposed_at_rest_for_atmosphere",
+      "statement": "The earth can be supposed at rest for the purpose of computing atmospheric equilibrium and density at infinite distance.",
+      "quote": "if it were in equilibrium about the earth supposed at rest, its density at an infinite distance from the earth would be",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_velocity_relative_to_solar_system",
+      "statement": "The aether has a definite relative velocity with respect to the solar system that can in principle be determined.",
+      "quote": "The only practicable method of determining directly the relative velocity of the aether with respect to the solar system is to compare the values of the velocity of light deduced from the observation of the eclipses of Jupiter's satellites",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "opposite_points_of_the_ecliptic",
+      "statement": "The earth occupies definite opposite points of the ecliptic at which its motion relative to Jupiter differs.",
+      "quote": "compare the values of the velocity of light deduced from the observation of the eclipses of Jupiter's satellites when Jupiter is seen from the earth at nearly opposite points of the ecliptic",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "direction_of_earths_orbital_motion",
+      "statement": "The earth's motion in its orbit has a definite direction in space that a laboratory apparatus can be aligned with.",
+      "quote": "The apparatus was first turned so that the direction of the light in first passing through the second prism was that of the earth's motion in its orbit",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "movable_point_can_travel_at_light_velocity",
+      "statement": "A movable point may be supposed to travel along the ray with the velocity of light and see the same process at every point.",
+      "quote": "if we suppose a movable point to travel along the ray with this velocity, we shall find the same process going on at every point of the ray as the moving point reaches it",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "period_equals_wavelength_over_velocity",
+      "statement": "The interval of time between similar processes at a fixed point equals the time light takes to travel a wave-length.",
+      "quote": "we shall observe a rapid alternation of these opposite processes, the interval of time between similar processes being the time light takes to travel a wave-length",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "aberration_depends_on_aether_motion",
+      "statement": "The aberration of light depends on the motion of the aether relative to the earth.",
+      "quote": "Professor Stokes, however, has shown that, on a very probable hypothesis with respect to the motion of the aether, the amount of aberration would not be sensibly affected by that motion",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "electromagnetic_disturbance_has_definite_velocity",
+      "statement": "An electromagnetic disturbance is propagated through the medium at a definite velocity that can be calculated from experiment.",
+      "quote": "the best way to compare them is to determine the velocity with which an electromagnetic disturbance would be propagated through the medium",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "coincident_media_identified_by_velocity",
+      "statement": "Two media occupying the same space are likely identical when the velocity of propagation is the same in both.",
+      "quote": "If this should be equal to the velocity of light, we would have strong reason to believe that the two media, occupying as they do the same space, are really identical",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_velocity_adds_to_water_velocity",
+      "statement": "Light in a stream of water travels faster in the direction the water moves than in the opposite direction, by an amount related to the water's velocity.",
+      "quote": "he has observed that the propagation of light in a stream of water takes place with greater velocity in the direction in which the water moves than in the opposite direction",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "velocity_of_light_varies_by_medium",
+      "statement": "The velocity of light differs in different transparent media and depends on their particles taking part in the process.",
+      "quote": "The velocity of light, however, is different in different transparent media, and we must therefore suppose that these media take some part in the process",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "path_length_difference_is_absolute",
+      "statement": "The difference between the lengths of two optical paths is a definite quantity that determines whether interference produces darkness.",
+      "quote": "we alter the length of the path of one or both of the two portions of the beam, and we find that the light is extinguished when the difference of the length of the paths is an odd multiple of a certain small distance",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "vector_process_perpendicular_to_ray",
+      "statement": "The physical process in the propagation of light is a directed vector quantity at right angles to the ray.",
+      "quote": "the physical process involved in the propagation of light must not only be a directed quantity or vector capable of having its direction reversed, but this vector must be at right angles to the ray",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_incompressible_to_suppress_normal_waves",
+      "statement": "The aether must be assumed incompressible to prevent normal undulations that are not observed.",
+      "quote": "The only way of accounting for the fact that the optical phenomena which would arise from these waves do not take place is to assume that the aether is incompressible",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

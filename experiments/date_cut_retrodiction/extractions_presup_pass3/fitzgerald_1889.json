@@ -1,0 +1,180 @@
+{
+  "doc_id": "fitzgerald_1889",
+  "propositions": [
+    {
+      "name": "ether_exists",
+      "statement": "There is an ether.",
+      "quote": "attempting to decide the important question as to how far the ether is carried along by the earth",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "ether_can_be_carried",
+      "statement": "The ether can be carried along by material bodies such as the earth or the air.",
+      "quote": "other experiments showing that the ether in the air can be carried along only to an inappreciable extent",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "motion_relative_to_ether",
+      "statement": "Electrified bodies are moving relative to the ether.",
+      "quote": "We know that electric forces are affected by the motion of the electrified bodies relative to the ether",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "earth_moves_through_ether",
+      "statement": "The earth is moving through the ether.",
+      "quote": "diurnal due to the rotation of the earth being added and subtracted from its orbital velocity",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "material_bodies_have_length",
+      "statement": "Material bodies have a length.",
+      "quote": "the length of material bodies changes, according as they are moving through the ether or across it",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "length_changes_with_motion",
+      "statement": "The length of material bodies changes according as they are moving through the ether or across it.",
+      "quote": "the length of material bodies changes, according as they are moving through the ether or across it",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "length_direction_dependent",
+      "statement": "The length of material bodies is affected by whether they are moving through the ether or across it.",
+      "quote": "the length of material bodies changes, according as they are moving through the ether or across it, by an amount depending on the square of the ratio of their velocity to that of light",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "length_depends_on_v_over_c_squared",
+      "statement": "The length changes by an amount depending on the square of the ratio of the velocity to that of light.",
+      "quote": "by an amount depending on the square of the ratio of their velocity to that of light",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "velocity_of_light_is_a_quantity",
+      "statement": "There is a velocity of light.",
+      "quote": "an amount depending on the square of the ratio of their velocity to that of light",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "electric_forces_affected_by_ether_motion",
+      "statement": "Electric forces are affected by the motion of the electrified bodies relative to the ether.",
+      "quote": "We know that electric forces are affected by the motion of the electrified bodies relative to the ether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "molecular_forces_affected_by_motion",
+      "statement": "The molecular forces are affected by the motion of bodies relative to the ether.",
+      "quote": "it seems a not improbable supposition that the molecular forces are affected by the motion, and that the size of a body alters consequently",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "size_alters_from_molecular_forces",
+      "statement": "The size of a body alters as the molecular forces are affected.",
+      "quote": "the molecular forces are affected by the motion, and that the size of a body alters consequently",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "velocities_added_and_subtracted",
+      "statement": "The rotation of the earth is added and subtracted from its orbital velocity.",
+      "quote": "diurnal due to the rotation of the earth being added and subtracted from its orbital velocity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "earth_has_orbital_velocity",
+      "statement": "The earth is moving with an orbital velocity.",
+      "quote": "diurnal due to the rotation of the earth being added and subtracted from its orbital velocity",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "earth_rotates",
+      "statement": "The earth is in rotation.",
+      "quote": "diurnal due to the rotation of the earth being added and subtracted from its orbital velocity",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "solar_system_in_motion",
+      "statement": "The solar system is in motion.",
+      "quote": "annual similarly for its orbital velocity and the motion of the solar system",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "variation_of_attraction_observable",
+      "statement": "Experiments can observe diurnal and annual variation of attraction.",
+      "quote": "to observe whether there is any diurnal and annual variation of attraction",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "equatorial_parts_important",
+      "statement": "It is important that experiments in the equatorial parts of the earth observe the variation of attraction.",
+      "quote": "were instituted in some of the equatorial parts of the earth to observe whether there is any diurnal and annual variation of attraction",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "hypothesis_reconciles_opposition",
+      "statement": "This hypothesis can reconcile the opposition between the Michelson and Morley experiment and other experiments on the ether in the air.",
+      "quote": "I would suggest that almost the only hypothesis that can reconcile this opposition is that the length of material bodies changes",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "permanent_electrification_possible",
+      "statement": "Bodies can be permanently electrified.",
+      "quote": "electrical attractions between permanently electrified bodies, such as in a very delicate quadrant electrometer",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "electrical_attractions_between_bodies",
+      "statement": "There are electrical attractions between electrified bodies.",
+      "quote": "secular experiments on electrical attractions between permanently electrified bodies",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "electrified_bodies_have_definite_motion",
+      "statement": "There is a motion of the electrified bodies relative to the ether.",
+      "quote": "electric forces are affected by the motion of the electrified bodies relative to the ether",
+      "kind": "required_by_argument",
+      "definitional": true
+    },
+    {
+      "name": "ratio_of_velocity_to_light_meaningful",
+      "statement": "There is a ratio of the velocity of a body to that of light.",
+      "quote": "an amount depending on the square of the ratio of their velocity to that of light",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "michelson_morley_probes_ether_drag",
+      "statement": "The Michelson and Morley experiment is attempting to decide how far the ether is carried along by the earth.",
+      "quote": "wonderfully delicate experiment attempting to decide the important question as to how far the ether is carried along by the earth",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "secular_experiments_possible",
+      "statement": "Secular experiments on electrical attractions can be instituted.",
+      "quote": "secular experiments on electrical attractions between permanently electrified bodies, such as in a very delicate quadrant electrometer, were instituted",
+      "kind": "presupposed",
+      "definitional": false
+    }
+  ]
+}

@@ -1,0 +1,229 @@
+{
+  "doc_id": "rayleigh_1902_refraction",
+  "propositions": [
+    {
+      "name": "aether_is_physical_medium",
+      "statement": "There exists an aether through which matter moves and which can be shared with the earth or stationary.",
+      "quote": "is most naturally interpreted as proving that the aether in the laboratory shares the earth's motion. But other phenomena, especially stellar aberration, favour the opposite theory of a stationary aether.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "earth_has_definite_motion",
+      "statement": "The earth has a definite motion whose direction and velocity relative to the aether are well-defined quantities.",
+      "quote": "such effect as a rotation through 90° may entail must be of the second order in the ratio which expresses the velocity of the earth relatively to that of light.",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "stationary_aether_possible",
+      "statement": "It is possible that the aether is stationary, providing a definite reference for motion.",
+      "quote": "But other phenomena, especially stellar aberration, favour the opposite theory of a stationary aether. The difficulty thus arising has been met by the at first sight startling hypothesis of FitzGerald and Lorentz",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fitzgerald_lorentz_deformation",
+      "statement": "Solid bodies alter their relative dimensions when rotated in a way that compensates the optical change expected from motion through the aether.",
+      "quote": "solid bodies, such as the stone platform of Michelson's apparatus, alter their relative dimensions, when rotated, in such a way as to compensate the optical change that might naturally be looked for.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "deformation_might_cause_double_refraction",
+      "statement": "Deformation of matter moving through the aether might be accompanied by a sensible double refraction detectable with great delicacy.",
+      "quote": "such a deformation of matter when moving through the rather might be accompanied by a sensible double refraction; and as the beginning of double refraction can be tested with extraordinary delicacy",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "motion_direction_defines_transverse",
+      "statement": "The earth's motion has a definite direction, so \"transverse\" and \"parallel\" to that motion are well-defined at any moment.",
+      "quote": "When at 12 o'clock the board stands north and south, the earth's motion is transverse and the situation is such as to exhibit any double refraction which may ensue.",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "vibrations_direction_dependent",
+      "statement": "Luminous vibrations parallel to the earth's motion may be propagated differently from those transverse to it.",
+      "quote": "luminous vibrations parallel to the earth's motion, i. e. east and west, are propagated a little differently from those whose direction is transverse to the earth's motion, i. e. vertical.",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "rotation_180_yields_no_effect",
+      "statement": "A rotation of the apparatus through 180° cannot produce any effect due to motion through the aether.",
+      "quote": "In no case is any effect to be expected from a rotation through 180°, and such effect as a rotation through 90° may entail must be of the second order",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "effect_scales_as_second_order",
+      "statement": "Any effect from a 90° rotation must be of the second order in the ratio of the earth's velocity to that of light.",
+      "quote": "such effect as a rotation through 90° may entail must be of the second order in the ratio which expresses the velocity of the earth relatively to that of light.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "earth_orbital_motion_is_definite",
+      "statement": "The earth's motion in its orbit is a definite motion that must be reckoned with in a stationary-aether theory.",
+      "quote": "according to the theory of a stationary aether, we have to do not only with the motion of the earth in its orbit, but also with that of the sun in space.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "sun_has_definite_direction_in_space",
+      "statement": "The sun has a definite motion in space directed towards the constellation Hercules.",
+      "quote": "The latter is supposed to be much the smaller, and to lie directed towards the constellation Hercules. In the month of April, when successful experiments were first made, the two motions would approximately conspire.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "motions_combine_additively",
+      "statement": "The motion of the earth in its orbit and the motion of the sun in space combine so that they can approximately conspire.",
+      "quote": "In the month of April, when successful experiments were first made, the two motions would approximately conspire.",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "board_rotation_is_rigid_operation",
+      "statement": "Turning the board through a right angle is a well-defined operation that reorients the apparatus relative to the earth's motion.",
+      "quote": "if the board be turned through a right angle so as to point east and west, both directions of vibration for light passing the tube are transverse to the earth's motion",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "liquid_moves_through_aether",
+      "statement": "The liquid in the tube is moving through the aether so that any resulting double refraction could be evidenced.",
+      "quote": "the strained condition of the glass produces just such a double refraction as might be caused by the motion of the liquid through the aether, so that the existence of the latter would be evidenced by a displacement of the dark band upwards or downwards.",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "strain_analogous_to_aether_motion",
+      "statement": "The double refraction produced by strain in glass is of the same character as the double refraction that would be caused by motion of matter through the aether.",
+      "quote": "the strained condition of the glass produces just such a double refraction as might be caused by the motion of the liquid through the aether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "polarization_plane_well_defined",
+      "statement": "Light has a definite plane of polarization that can be set to an angle inclined to the horizontal.",
+      "quote": "was polarized by the first nicol in a plane inclined to the horizontal at 45°.",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "times_of_day_meaningful_for_test",
+      "statement": "Observations made at noon and at 6 p.m. sample different orientations of the apparatus relative to the earth's motion.",
+      "quote": "In neither case could the slightest shift of the band be seen on rotation of the board from the north-south position to the east-west position, whether at noon or at 6 p.m.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "null_shift_bounds_effect",
+      "statement": "Absence of any observable shift of the band on rotating the board bounds any real double refraction from above.",
+      "quote": "In neither case could the slightest shift of the band be seen on rotation of the board from the north-south position to the east-west position, whether at noon or at 6 p.m.",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "magnetic_rotation_computed_multiplicatively",
+      "statement": "The rotation of the plane of polarization due to earth's magnetism is obtained by multiplying length, horizontal force, and a coefficient.",
+      "quote": "For one C.G.S. unit of magnetic potential the rotation in CS 2 at 18° is .042 minute of angle. In the present case the length is 76 cms. and the earth's horizontal force is .18",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "retardation_scaled_to_half_wavelength",
+      "statement": "A retardation equal to half a wave-length produces the same effect as a rotation of the nicol through 90°.",
+      "quote": "If this retardation amounted to ½λ, λ being the wave-length, the effect would be the same as of a rotation of the nicol through 90°.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "phase_retardation_gives_sin_squared_law",
+      "statement": "A retardation of phase ε produces a revival of light measured by sin²(½ε).",
+      "quote": "In general, a retardation of phase ε, in place of π, gives a revival of light measured by sin²(½ε). If the revivals of light in the two cases be the same, we may equate θ to ½ε.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "strip_load_scaling_law",
+      "statement": "The double refraction produced by loading a strip is independent of its length and thickness along the line of vision, but inversely as its width.",
+      "quote": "the effect is independent of the length of the strip and of its thickness along the line of vision, but is inversely as the width.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "wertheim_load_transferable",
+      "statement": "Wertheim's result that a load of 10 kilograms per millimetre of width gives a retardation of ½λ can be applied to the actual strip.",
+      "quote": "who found that it requires a load of 10 kilograms per millimetre of width to give a relative retardation of ½λ, so that with the actual strip the load would need to be 150 kilograms.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "wavelengths_countable_in_path",
+      "statement": "A definite number of wave-lengths of yellow light is contained in the 76 cm path of bisulphide of carbon.",
+      "quote": "In this length there are contained 1,200,000 wave-lengths of yellow light, or 2,400,000 half wave-lengths.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "refraction_gives_retardation_fraction",
+      "statement": "The retardation due to the refraction of the medium may be reckoned as a fixed fraction of the number of half wave-lengths in the path.",
+      "quote": "The retardation due to the refraction may be reckoned at .6 of this, or 1,440,000 half wave-lengths.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "effect_proportional_to_path_length",
+      "statement": "The effect to be expected is proportional to the length of path traversed by the light in the medium.",
+      "quote": "the effect to be expected is reduced in the proportion of 7:1, that being the ratio of lengths traversed by the light.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "liquid_result_bears_on_question",
+      "statement": "Experiments on liquids can settle the question of double refraction due to motion through the aether, since liquids are not obstacles to double refraction.",
+      "quote": "But the question arises whether experiments upon liquids really settle the matter. Probably no complete answer can be given, unless in the light of some particular theory of these relations. But it may be remarked that the liquid condition is no obstacle to the development of double refraction",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "apparatus_length_definite",
+      "statement": "The lengths of the tubes containing the liquids have definite values of 76 cms. and 73½ cms.",
+      "quote": "Observations were made upon bisulphide of carbon in a tube 76 cms. long, and upon water in a tube 73½ cms. long.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "delicacy_bound_yields_null_conclusion",
+      "statement": "The calculated margin of delicacy over the effect to be expected justifies concluding that no double refraction of that order exists.",
+      "quote": "Thus the double refraction that might be detected, estimated as a fraction of the whole refraction, is 1.2 × 10 . The effect to be expected is of the order 10 , so that there is nearly 100 times to spare.",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "solid_null_result_valid",
+      "statement": "The observations upon solid built-up plate-glass also justify concluding no double refraction of the expected order due to motion through the aether.",
+      "quote": "enough remains to justify us in concluding that even here there is no double refraction (of the order to be expected) due to motion through the aether.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "michelson_morley_indicates_shared_motion",
+      "statement": "The negative result of the Michelson-Morley experiment is most naturally interpreted as proving that the aether in the laboratory shares the earth's motion.",
+      "quote": "T HE well-known negative result of the Michelson-Morley experiment in which interference takes place between two rays, one travelling to and fro in the direction of the earth's motion, and the other to and fro in a perpendicular direction, is most naturally interpreted as proving that the aether in the laboratory shares the earth's motion.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "stellar_aberration_favors_stationary_aether",
+      "statement": "Phenomena of stellar aberration favour the theory that the aether is stationary.",
+      "quote": "But other phenomena, especially stellar aberration, favour the opposite theory of a stationary aether.",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

@@ -1,0 +1,187 @@
+{
+  "doc_id": "michelson_morley_1887",
+  "propositions": [
+    {
+      "name": "luminiferous_ether_exists",
+      "statement": "There exists a luminiferous ether whose relative motion with respect to the earth is a real physical quantity that can be tested.",
+      "quote": "reasonably certain that if there be any relative motion between the earth and the luminiferous ether, it must be small",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "ether_has_definite_state",
+      "statement": "The ether at the earth's surface is in a definite state of rest or of motion, and experiment can determine which.",
+      "quote": "de s'addresser a l'expérience pour apprendre à connaitre l'état, de repos ou de mouvement, dans lequel se trouve l'ether à la surface terrestre",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "earth_moves_with_definite_velocity_through_ether",
+      "statement": "The earth moves in a definite direction with the velocity of its orbit relative to an ether supposed at rest.",
+      "quote": "Suppose now, the ether being at rest, that the whole apparatus moves in the direction sc , with the velocity of the earth in its orbit",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "velocity_of_light_defined_in_stationary_ether",
+      "statement": "The velocity of light V has a definite value in the ether supposed stationary.",
+      "quote": "Let V be the velocity of light in the ether supposed stationary, and let cd be the increase in the distance the light has to travel to reach d",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "light_velocity_and_earth_velocity_combine",
+      "statement": "The velocity of light and the velocity of the earth combine, so that the directions and distances traversed by the rays are altered by the motion of the apparatus.",
+      "quote": "the whole apparatus moves in the direction sc , with the velocity of the earth in its orbit, the directions and distances traversed by the rays will be altered thus",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "time_of_flight_is_single_valued_quantity",
+      "statement": "The time light occupies to pass between two points of the apparatus is a single well-defined quantity that can be entered into the formula and compared.",
+      "quote": "Let it now be required to find the difference in the two paths aba / , and aca / .",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "motion_affects_perpendicular_ray_path",
+      "statement": "The motion of the earth through the ether affects the path of the ray at right angles to this motion, in a way that cannot be disregarded.",
+      "quote": "the effect of the motion of the earth through the ether on the path of the ray at right angles to this motion was overlooked",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "path_lengths_measured_by_rigid_rod",
+      "statement": "The lengths of the two light paths can be determined by measuring with a light wooden rod and a small steel scale.",
+      "quote": "the lengths of the two paths were measured by a light wooden rod reaching diagonally from mirror to mirror, the distance being read from a small steel scale to tenths of millimeters",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "distances_unchanged_under_rotation",
+      "statement": "The distance D between mirrors is the same after the whole apparatus is turned through 90 degrees, so the difference reverses without changing in magnitude.",
+      "quote": "If now the whole apparatus be turned through 90°, the difference will be in the opposite direction, hence the displacement of the interference fringes should be",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "apparatus_can_be_revolved_without_distortion",
+      "statement": "The apparatus can be revolved without producing distortion in its geometry.",
+      "quote": "In the first experiment one of the principal difficulties encountered was that of revolving the apparatus without producing distortion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rays_interfere_when_paths_equal",
+      "statement": "When the paths ab and ac are equal the two rays interfere along ad, that is, they meet as a common wave at that point.",
+      "quote": "If then the paths ab and ac are equal, the two rays interfere along ad .",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fringe_displacement_measures_path_difference",
+      "statement": "The displacement of the interference fringes, read as divisions of the screw-head, measures the difference in the two paths in wave-lengths.",
+      "quote": "The width of the fringes varied from 40 to 60 divisions, the mean value being near 50, so that one division means 0.02 wave-length",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "wavelength_is_stable_length_standard",
+      "statement": "The wave-length of yellow light provides a stable standard for expressing the distance D and the expected displacement in fringes.",
+      "quote": "The distance D was about eleven meters, or 2×10 wave-lengths of yellow light; hence the displacement to be expected was 0•4 fringe",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "displacement_proportional_to_square_of_velocity",
+      "statement": "The fringe displacement is proportional to the square of the relative velocity of the earth and the ether.",
+      "quote": "But since the displacement is proportional to the square of the velocity, the relative velocity of the earth and the ether is probably less than one sixth the earth's orbital velocity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aberration_tangent_equals_v_over_V",
+      "statement": "The tangent of the angle of aberration equals the ratio of the velocity of the earth to the velocity of light.",
+      "quote": "For if the tangent of the angle of aberration is the ratio of the velocity of the earth to the velocity of light",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_passes_through_metals",
+      "statement": "The ether can and does pass through metals and cannot be assumed to be entirely dragged by opaque bodies such as the earth.",
+      "quote": "But there can hardly be question that the ether can and does pass through metals.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_is_incompressible",
+      "statement": "The ether is incompressible, so if a sealed tube is inclined the ether in the enclosed space is forced out.",
+      "quote": "When the tube is inclined the ether in the space above the mercury is certainly forced out, for it is imcompressible.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fresnel_partial_drag_in_transparent_media",
+      "statement": "In the interior of transparent media the ether moves with a velocity less than the velocity of the medium, in a ratio depending on the index of refraction.",
+      "quote": "the ether is supposed to be at rest except in the interior of transparent media , in which secondly, it is supposed to move with a velocity less than the velocity of the medium",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "reflection_from_moving_mirrors_deviates",
+      "statement": "Reflection from surfaces in motion varies from the ordinary laws of reflection.",
+      "quote": "This is founded on the fact that reflection from surfaces in motion varies from the ordinary laws of reflection.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "orbital_and_solar_motions_combine",
+      "statement": "The orbital motion of the earth can be combined with the motion of the solar system to give the resultant velocity through the ether.",
+      "quote": "If this is combined with the motion of the solar system, concerning which but little is known with certainty, the result would have to be modified",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "stokes_ether_at_rest_at_surface",
+      "statement": "It is coherent to assume that the ether at the earth's surface is at rest with regard to the earth.",
+      "quote": "Stokes has given a theory of aberration which assumes the ether at the earth's surface to be at rest with regard to the latter",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "one_way_light_measures_first_power",
+      "statement": "If the velocity of light could be measured without returning the ray to its starting point, the first power of the relative velocity of the earth with respect to the ether would be measurable.",
+      "quote": "If it were possible to measure with sufficient accuracy the velocity of light without returning the ray to its starting point",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "phase_of_moving_mirrors_simultaneously_measurable",
+      "statement": "The difference of phase of two mirrors moving in opposite directions can be simultaneously measured and is proportional to the difference of velocity of light in the two directions.",
+      "quote": "if the two deflections are made equal, and the difference of phase of the mirrors be simultaneously measured, this will evidently be proportional to the difference of velocity in the two directions",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "earth_transparent_hypothetical",
+      "statement": "Were the earth transparent, the inter-molecular ether could be at rest in space notwithstanding the motion of the earth in its orbit.",
+      "quote": "If the earth were a transparent body, it might perhaps be conceded, in view of the experiments just cited, that the inter-molecular ether was at rest in space",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "jupiter_eclipses_reveal_ether_motion",
+      "statement": "The difference in the velocity of light found when Jupiter is nearest to and farthest from the line of motion gives the motion of the solar system with reference to the luminiferous ether.",
+      "quote": "the difference in the results found for the velocity of light when Jupiter is nearest to and farthest from the line of motion will give, not merely the motion of the solar system with reference to the stars",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fringe_reading_at_definite_instant",
+      "statement": "The cross wire of the micrometer can be set on the clearest interference fringe at the instant of passing a mark, so that a fringe reading and a mark passage share a definite moment.",
+      "quote": "the cross wire of the micrometer was set on the clearest of the interference fringes at the instant of passing one of the marks",
+      "kind": "presupposed",
+      "definitional": true
+    }
+  ]
+}

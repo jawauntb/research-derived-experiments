@@ -1,0 +1,215 @@
+{
+  "doc_id": "larmor_1897_medium3",
+  "propositions": [
+    {
+      "name": "aether_is_absolute_rest_frame",
+      "statement": "The quiescent underlying aether is the spacial framework in absolute rest introduced by Newton for dynamics.",
+      "quote": "the spacial framework in absolute rest, which was introduced by Newton and was probably a main source of the great advance in abstract dynamics originated by the Principia , is in fact the quiescent underlying æther",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "space_of_reference_fixed_to_aether",
+      "statement": "The space of reference for the electric equations is fixed with respect to the stagnant aether, so matter has a definite velocity (p, q, r) relative to it.",
+      "quote": "let the space of reference be fixed with respect to the stagnant æther, and ( p, q, r ) be the velocity with which the matter situated at the point ( x, y, z ) is moving",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "euclidean_relations_of_space",
+      "statement": "The measurements in space obey Euclidean relations which are part of the ultimate scheme of physical representation.",
+      "quote": "The sole spacial relations of the æther itself, on which its dynamics depend, those namely of incompressibility and rotational elasticity, are thus to be classed along with the existing Euclidean relations of measurements in space",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "spacial_framework_required_for_dynamics",
+      "statement": "A definite spacial framework, fixed or moving, to which motion is referred is a necessary part of any dynamical theory.",
+      "quote": "The objection that rotational elasticity postulates absolute directions in space need hardly have weight when it is considered that a definite space, or spacial framework fixed or moving, to which motion is referred",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "matter_moves_across_aether_with_definite_velocity",
+      "statement": "A material body has a definite uniform velocity v moving across the aether.",
+      "quote": "let us consider the free æther for which K and μ are unity, containing a definite system of electrons which are grouped into the molecules of a material body moving across the æther with uniform velocity v parallel to the axis of x",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "atoms_composed_of_electrons",
+      "statement": "Atoms of matter are aggregations of electrons in stable orbital motion in the aether.",
+      "quote": "atoms of matter are in whole or in part aggregations of electrons in stable orbital motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "molecular_constitution_wholly_electric",
+      "statement": "The constitution of a molecule is wholly electric, so the correspondence argument between moving and rest systems carries through.",
+      "quote": "conversely it will involve evidence that the constitution of a molecule is wholly electric, as here represented",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "body_shrunk_in_direction_of_motion",
+      "statement": "A body in uniform motion is shrunk in the direction of its velocity v in the derived ratio.",
+      "quote": "one consequence of the motion thus being that the body is shrunk in the direction of its velocity v in the ratio",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "time_variable_change_is_mathematical",
+      "statement": "The primed time t', equal to t minus vx over c-squared, is a mathematical change of variable used to reduce the moving-system equations to a rest-system form.",
+      "quote": "Now change the time variable from t to t', equal to",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "reduced_form_is_medium_at_rest",
+      "statement": "After the change of time variable, the equations assume the form of an electric scheme for a crystalline medium at rest, so the primed system is treated as a rest system in true time.",
+      "quote": "and these equations assume the form of an electric scheme for a crystalline medium at rest",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "difference_of_time_reckoning_across_positions",
+      "statement": "Because of the change of time variable, electrons at different positions in the direction of v are slightly further on in their orbits on account of the difference of time-reckoning.",
+      "quote": "while those less advanced in the direction of v are also relatively very slightly further on in their orbits on account of the difference of time-reckoning",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "corresponding_states_at_each_instant",
+      "statement": "If two aethereal systems are set free at any instant in corresponding states, they will be in corresponding states at each subsequent instant, so there is a single sequence of instants shared across both systems.",
+      "quote": "if these two æthereal systems are set free at any instant in corresponding states, they will be in corresponding states at each subsequent instant",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "instantaneous_transmission_through_incompressible_medium",
+      "statement": "A disturbance can be instantaneously communicated throughout the incompressible aether to the vacuous nuclei of the electrons.",
+      "quote": "instantaneously communicated throughout the incompressible medium to the only places that can respond to it, the vacuous nuclei of the electrons",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "magnetic_force_instantaneously_transmitted_gravitation",
+      "statement": "The electron is a centre of alternating intrinsic magnetic force instantaneously transmitted, because a finite transmission time would involve condensation of the incompressible medium.",
+      "quote": "postulating that the electron is not only a centre of steady intrinsic electric force, but also a centre of alternating intrinsic magnetic force, instantaneously transmitted because it would otherwise involve condensation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ascertained_velocity_of_radiation",
+      "statement": "There is a definite ascertained velocity of radiation to which the elasticity and inertia of the aether are calibrated.",
+      "quote": "we have been compelled to assume a high coefficient of inertia of the medium, and therefore an extremely high elasticity in order to conserve the ascertained velocity of radiation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "steady_motion_requires_configuration_fixed_to_aether",
+      "statement": "For a steady state without conduction currents the matter's configuration must be permanent and its motion the same at all times relative to that configuration and to the aether.",
+      "quote": "it is necessary that the configuration of the matter shall be permanent, and that its motion shall be the same at all times relative to this configuration and to the æther",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "circuital_relations_determine_subsequent_stages",
+      "statement": "The circuital relations form a first-order differential scheme which determines the subsequent stages of a system step by step from its initial state.",
+      "quote": "Inasmuch as the circuital relations form a differential scheme of the first order which determines step by step the subsequent stages of a system when its initial state is given",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_and_matter_have_distinct_dynamics",
+      "statement": "The aether, not being matter, need not obey the laws of the dynamics of matter but must obey another scheme of dynamical laws consistent among themselves.",
+      "quote": "The æther not being matter, it need not obey the laws of the dynamics of matter, provided it obey another scheme of dynamical laws consistent among themselves",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "free_charge_carried_with_matter",
+      "statement": "In a steady state the electrons that constitute electric densities are wholly carried on by the matter.",
+      "quote": "will lead to the electrons constituting electric densities being wholly carried on by the matter whenever a steady state is attained",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_continuous_homogeneous_incompressible",
+      "statement": "The aether is a continuous, homogeneous, incompressible medium endowed with inertia and rotational elasticity.",
+      "quote": "the æther to be a continuous, homogeneous, and incompressible medium, endowed with inertia and with elasticity purely rotational",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "aether_isotropic_and_irrotational_apart_from_electric_force",
+      "statement": "The rotational aether is irrotational except where electric force exists, which produces rotation proportional to its intensity.",
+      "quote": "the motion of our rotational æther in the previous papers is irrotational except where electric force exists which produces rotation proportional to its intensity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electrons_are_persistent_singularities",
+      "statement": "Permanent conjugate electrons persist in the medium and can be moved about through it until destroyed by a reverse process.",
+      "quote": "We shall thus have created two permanent conjugate electrons A and B; each of them can be moved about through the medium, but they will both persist until they are destroyed by an extraneous process",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "gravitation_requires_aethereal_transmission",
+      "statement": "A theory that explains atoms as singularities of strain and motion in the aether is bound to look for an explanation of gravitation by means of the properties of that medium.",
+      "quote": "explains atoms of matter as made up of singularities of strain and motion in the æther, is bound to look for an explanation of gravitation by means of the properties of that medium",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "field_around_moving_system_maps_to_rest_system",
+      "statement": "The distribution of electric force around a system moving through the aether is precisely the same as if the system were at rest, with the surrounding space's isotropic constant replaced by an aeolotropic one.",
+      "quote": "The distribution of electric force is therefore precisely the same as if the system were at rest, and the isotropic dielectric constant unity of the surrounding space changed into an aeolotropic one",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "force_derived_from_energy_function",
+      "statement": "The scientific method of describing transmission of force by a medium is to assign the mathematical energy function and derive stresses from it by the principle of virtual work.",
+      "quote": "the scientific method of describing them is to assign the mathematical function which represents its energy of strain, and thence derive its relations of stress by the principle of virtual work",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "faradays_law_holds_for_circuit_moving_with_matter",
+      "statement": "The line integral of electric force round a circuit in uniform motion with the matter equals the time-rate of diminution of the magnetic flux through its aperture.",
+      "quote": "Faraday's law follows that the line integral of electric force round a circuit in uniform motion with the matter is equal to the time-rate of diminution of the magnetic flux through its aperture",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "actual_form_of_bodies_changes_with_motion",
+      "statement": "Conductors put in motion through the aether change their actual forms to a slight extent depending on (v/c) squared.",
+      "quote": "change their actual forms to a slight extent depending on (v/c)² when they are put in motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "single_time_defined_at_every_point",
+      "statement": "There is a single time t used in d/dt at every point of the aether, in which the fundamental circuital equations hold.",
+      "quote": "the alteration thus produced in the fundamental æthereal equations",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "positions_matter_relative_to_extraneous_spacial_framework",
+      "statement": "The kinetic part of the energy is specified in terms of the rate of change of configuration of a material system relative to an extraneous spacial framework.",
+      "quote": "The other main division of the energy is the kinetic part, which is specified in terms of the rate of change of configuration of the material system with respect to an extraneous spacial framework to which its position is referred",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "convective_derivative_uses_vector_addition_of_velocity",
+      "statement": "The operator delta over dt combines the partial time derivative with the components p, q, r of the matter's velocity through space by simple addition.",
+      "quote": "let ρ denote density of free electric charge",
+      "kind": "presupposed",
+      "definitional": false
+    }
+  ]
+}

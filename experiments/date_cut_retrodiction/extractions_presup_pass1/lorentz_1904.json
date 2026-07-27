@@ -1,0 +1,229 @@
+{
+  "doc_id": "lorentz_1904",
+  "propositions": [
+    {
+      "name": "aether_is_medium",
+      "statement": "There is an aether through which solid bodies move and whose motion relative to a body alters that body's dimensions.",
+      "quote": "the negative result of which has led FitzGerald and myself to the conclusion that the dimensions of solid bodies are slightly altered by their motion through the aether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "absolute_translation_of_system",
+      "statement": "A system as a whole possesses a definite translation with a constant velocity w in a chosen direction.",
+      "quote": "I shall now suppose that the system as a whole moves in the direction of x with a constant velocity w , and I shall denote by",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fixed_coordinate_system_exists",
+      "statement": "There exists a fixed system of coordinates in which the fundamental equations of the theory of electrons hold.",
+      "quote": "the electric force, i.e. the force, reckoned per unit charge, which is exerted by the aether on a volume-element of an electron. Then, if we use a fixed system of coordinates,",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "state_of_rest_is_definite",
+      "statement": "A system can be in a definite state of rest, distinct from the state of a system with translation.",
+      "quote": "if we compare the moving system Σ with which we are concerned, to another electrostatic system Σ' which remains at rest",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "true_time_distinct_from_local_time",
+      "statement": "There is a general time distinct from the auxiliary variable t' called the local time, the two coinciding only when k=1 and l=1.",
+      "quote": "The variable t' may be called the local time ; indeed, for k=1, l=1 it becomes identical with what I have formerly understood by this name.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "true_time_defines_corresponding_instants",
+      "statement": "Corresponding instants at two points are defined by equating the true time at one point to the local time at the other.",
+      "quote": "the true time at the first instant is equal to the local time, as determined by (5) for the point P , at the second instant",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "instant_shared_across_points",
+      "statement": "There is a definite instant t_0 at which the density in an element dS existing at (x,y,z) has a determinate value, shared across the whole system.",
+      "quote": "the value of the density existing in the element dS at the point (x, y, z) , at the instant t 0 at which the local time of A is",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "velocity_of_light_reference",
+      "statement": "There is a velocity of light c against which the velocity of translation w is compared as a ratio.",
+      "quote": "which are proportional to the first power of the ratio between the velocity of translation w and the velocity of light c",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "earth_annual_motion",
+      "statement": "The Earth possesses a translation shared by all terrestrial systems in virtue of its annual motion.",
+      "quote": "The problem of determining the influence exerted on electric and optical phenomena by a translation, such as all systems have in virtue of the Earth's annual motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "velocity_smaller_than_light",
+      "statement": "The velocity of translation must be smaller than the velocity of light, so that c^2 − w^2 remains positive.",
+      "quote": "The only restriction as regards the velocity will be that it be smaller than that of light.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "galilean_velocity_composition",
+      "statement": "The velocity of a point of an electron in the fixed frame is the sum of the translation velocity w of the system and any additional velocity u the point may have.",
+      "quote": "I shall now suppose that the system as a whole moves in the direction of x with a constant velocity w , and I shall denote by",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "axes_moving_with_system",
+      "statement": "The fundamental equations may be referred to axes moving with the system, transforming time derivatives by the operator ∂/∂t − w ∂/∂x.",
+      "quote": "If the equations (2) are at the same time referred to axes moving with the system, they become",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "aether_exerts_force_on_electron",
+      "statement": "The aether exerts an electric force per unit charge on volume-elements of electrons.",
+      "quote": "the electric force, i.e. the force, reckoned per unit charge, which is exerted by the aether on a volume-element of an electron",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_deformation_by_motion",
+      "statement": "Electrons that are spheres of radius R in the state of rest have their dimensions in the direction of motion contracted by k when translated.",
+      "quote": "I shall now suppose that the electrons, which I take to be spheres of radius R in the state of rest, have their dimensions changed by the effect of a translation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "contraction_confined_to_motion_direction",
+      "statement": "The translation only affects dimensions along the direction of motion, shortening them by the factor k relative to the state of rest.",
+      "quote": "the influence of a translation on the dimensions (of the separate electrons and of a ponderable body as a whole) is confined to those that have the direction of the motion, these becoming k times smaller than they are in the state of rest",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "charge_preserved_under_deformation",
+      "statement": "Under the deformation each element of volume preserves its charge.",
+      "quote": "each element of volume is understood to preserve its charge",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "molecular_forces_transform_like_electric",
+      "statement": "Forces between uncharged particles and between them and electrons are influenced by translation in the same way as electric forces in an electrostatic system.",
+      "quote": "the forces between uncharged particles, as well as those between such particles and electrons, are influenced by a translation in quite the same way as the electric forces in an electrostatic system",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "single_configuration_of_equilibrium",
+      "statement": "For a given system of attractions and repulsions there is only one configuration of equilibrium.",
+      "quote": "if we take for granted that there is but one configuration of equilibrium",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_material_mass_of_electron",
+      "statement": "The electron has no true or material mass; its only inertia is the electromagnetic longitudinal and transverse mass.",
+      "quote": "I shall suppose that there is no other, no \"true\" or \"material\" mass",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "all_particle_masses_affected_by_translation",
+      "statement": "The masses of all particles are influenced by translation in the same degree as the electromagnetic masses of the electrons.",
+      "quote": "if we suppose that the masses of all particles are influenced by a translation to the same degree as the electromagnetic masses of the electrons",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "corresponding_state_is_realizable",
+      "statement": "A state defined in the moving system by transforming a state that really exists in the system at rest must itself be a physically possible state.",
+      "quote": "The question remains however, whether this state will likewise be a possible one.",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "d_prime_has_different_meaning_in_two_systems",
+      "statement": "The vector d' represents the electric force in the system at rest but in the moving system it is only related to that force by an anisotropic factor.",
+      "quote": "In Σ' it represents the electric force, in Σ it is related to this force in the way expressed by (20).",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electromagnetic_momentum_from_translation",
+      "statement": "Every electrostatic system moving with a velocity possesses a definite electromagnetic momentum.",
+      "quote": "It may be shown that in every electrostatic system, moving with a velocity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "condenser_energy_calculable_ordinary_way",
+      "statement": "The energy U of a condenser has a definite value calculated in the ordinary way, independent of translation.",
+      "quote": "if U is the energy of the condenser, calculated on the ordinary way, the components of",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "torsion_balance_registers_couple",
+      "statement": "A torsion balance sufficiently delicate would be deflected by the couple predicted for a moving charged condenser.",
+      "quote": "In the apparatus of Trouton and Noble the condenser was fixed to the beam of a torsion-balance, sufficiently delicate to be deflected by a couple of the above order of magnitude.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "uniform_surface_charge_at_rest",
+      "statement": "The charge of an electron is uniformly distributed over its surface so long as the electron remains at rest.",
+      "quote": "For simplicity's sake I shall suppose the charge e to be uniformly distributed over the surface, so long as the electron remains at rest.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "retardation_by_r_over_c",
+      "statement": "Potentials at a point are evaluated with source quantities taken at the earlier instant whose local time differs from t' by r'/c.",
+      "quote": "a formula in which all the enclosed quantities are to be taken for the instant at which the local time of the centre of the particle is",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "quasi_stationary_valid_for_optics",
+      "statement": "The motion of an electron may be treated as quasi-stationary in optical phenomena because the electron's diameter is very small compared with the wavelength.",
+      "quote": "This condition is fulfilled in optical phenomena, because the diameter of an electron is extremely small in comparison with the wave-length.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "michelson_null_explained_by_contraction",
+      "statement": "The negative result of Michelson's interference-experiment is explained by the alteration of dimensions of solid bodies produced by their motion through the aether.",
+      "quote": "the negative result of which has led FitzGerald and myself to the conclusion that the dimensions of solid bodies are slightly altered by their motion through the aether",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "optical_earth_motion_undetectable_geometrically",
+      "statement": "In experiments observing the geometrical distribution of light and darkness with a terrestrial source, the Earth's motion cannot produce a detectable influence.",
+      "quote": "It will therefore be impossible to detect an influence of the Earth's motion on any optical experiment, made with a terrestrial source of light, in which the geometrical distribution of light and darkness is observed.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "new_hypothesis_for_each_null_is_defect",
+      "statement": "Requiring a new hypothesis to explain each fresh null experimental result is an unsatisfactory feature of the existing theory that fundamental assumptions ought to remove.",
+      "quote": "in order to explain Michelsons 's negative result, the introduction of a new hypothesis has been required, and that the same necessity may occur each time new facts will be brought to light",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "kaufmann_deflexions_yield_beta",
+      "statement": "The reduced electric and magnetic deflexions η and ζ measured by Kaufmann fix the ratio β = w/c for each measurement.",
+      "quote": "the \"reduced\" electric and magnetic deflexions, which are related as follows to the ratio",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

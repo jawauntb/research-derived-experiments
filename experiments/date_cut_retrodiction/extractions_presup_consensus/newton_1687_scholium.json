@@ -1,0 +1,225 @@
+{
+  "doc_id": "newton_1687_scholium",
+  "propositions": [
+    {
+      "definitional": true,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "absolute_time_flows_equably",
+      "quote": "Absolute, true, and mathematical time, of itself, and from its own nature flows equably without regard to anything external, and by another name is called duration",
+      "statement": "Absolute time, of itself and from its own nature, flows equably without regard to anything external.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "duration_independent_of_motion",
+      "quote": "The duration or perseverance of the existence of things remains the same, whether the motions are swift or slow, or none at all",
+      "statement": "The duration of the existence of things remains the same whether motions are swift, slow, or none at all.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "no_equable_motion_may_exist",
+      "quote": "It may be, that there is no such thing as an equable motion, whereby time may be accurately measured. All motions may be accelerated and retarded, but the true, or equable, progress of absolute time is liable to no change.",
+      "statement": "There may be no equable motion in nature, yet the progress of absolute time is liable to no change.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "absolute_space_immovable",
+      "quote": "Absolute space, in its own nature, without regard to anything external, remains always similar and immovable.",
+      "statement": "Absolute space, in its own nature, remains always similar and immovable.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "immovable_places_from_infinity",
+      "quote": "Now no other places are immovable but those that, from infinity to infinity, do all retain the same given position one to another; and upon this account must ever remain unmoved; and do thereby constitute immovable space.",
+      "statement": "Immovable places are those which, from infinity to infinity, retain the same given position one to another.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "order_of_parts_immutable",
+      "quote": "As the order of the parts of time is immutable, so also is the order of the parts of space.",
+      "statement": "The order of the parts of time is immutable, and so also is the order of the parts of space.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "absolute_motion_translation_between_places",
+      "quote": "Absolute motion is the translation of a body from one absolute place into another; and relative motion, the translation from one relative place into another.",
+      "statement": "Absolute motion is the translation of a body from one absolute place into another.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "motion_of_whole_sum_of_parts",
+      "quote": "The motion of the whole is the same thing with the sum of the motions of the parts; that is, the translation of the whole, out of its place, is the same thing with the sum of the translations of the parts out of their places",
+      "statement": "The motion of the whole is the same thing with the sum of the motions of the parts.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "quantity_matter_from_density_and_bulk",
+      "quote": "The quantity of matter is the measure of the same, arising from its density and bulk conjunctly.",
+      "statement": "The quantity of matter arises from density and bulk conjunctly.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "mass_proportional_to_weight",
+      "quote": "And the same is known by the weight of each body; for it is proportional to the weight, as I have found by experiments on pendulums, very accurately made",
+      "statement": "The quantity of matter of a body is proportional to its weight, as found by pendulum experiments.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "body_persists_in_rest_or_right_line",
+      "quote": "endeavours to persevere in its present state, whether it be of rest, or of moving uniformly forward in a right line.",
+      "statement": "Every body endeavours to persevere in its present state of rest or of moving uniformly forward in a right line.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "newton_1687_scholium",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "right_line_uniform_motion_meaningful",
+      "quote": "were it not for the opposition of a contrary force which restrains them to, and detains them in their orbits, which I therefore call centripetal, would fly off in right lines, with an uniform motion.",
+      "statement": "A body without impressed force would fly off in a right line with uniform motion.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "true_motion_only_altered_by_force",
+      "quote": "True motion is neither generated nor altered, but by some force impressed upon the body moved; but relative motion may be generated or altered without any force impressed upon the body.",
+      "statement": "True motion is neither generated nor altered but by some force impressed upon the body moved.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "gravity_accelerates_all_bodies_equally",
+      "quote": "at equal distances, it is the same everywhere; because (taking away, or allowing for, the resistance of the air), it equally accelerates all falling bodies, whether heavy or light, great or small.",
+      "statement": "At equal distances from the earth, gravity equally accelerates all falling bodies, whether heavy or light, great or small.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "motive_force_sums_from_accelerative",
+      "quote": "For the sum of the actions of the accelerative force, upon the several articles of the body, is the motive force of the whole.",
+      "statement": "The motive force of a whole body is the sum of the actions of the accelerative force upon its several parts.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "circular_motion_yields_recession_forces",
+      "quote": "For there are no such forces in a circular motion purely relative, but in a true and absolute circular motion, they are greater or less, according to the quantity of the motion.",
+      "statement": "Absolute circular motion produces forces of receding from the axis; purely relative circular motion does not.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "bucket_water_ascent_reveals_rotation",
+      "quote": "This ascent of the water shows its endeavour to recede from the axis of its motion; and the true and absolute circular motion of the water, which is here directly contrary to the relative, discovers itself, and may be measured by this endeavour.",
+      "statement": "The ascent of the water toward the sides of the vessel proves its true circular motion and measures its endeavour to recede from the axis.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "cord_tension_measures_globe_rotation",
+      "quote": "we might, from the tension of the cord, discover the endeavour of the globes to recede from the axis of their motion, and from thence we might compute the quantity of their circular motions.",
+      "statement": "The tension of a cord connecting two revolved globes discloses their absolute circular motion.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "rotation_detectable_in_immense_vacuum",
+      "quote": "And thus we might find both the quantity and the determination of this circular motion, even in an immense vacuum, where there was nothing external or sensible with which the globes could be compared.",
+      "statement": "The quantity and determination of circular motion can be found even in an immense vacuum with nothing external or sensible for comparison.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "remote_body_may_be_at_absolute_rest",
+      "quote": "in the remote regions of the fixed stars, or perhaps far beyond them, there may be some body absolutely at rest",
+      "statement": "In the remote regions of the fixed stars, or perhaps beyond them, there may be some body absolutely at rest.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "astronomical_equation_yields_true_time",
+      "quote": "The necessity of which equation, for determining the times of a phenomenon, is evinced as well from the experiments of the pendulum clock, as by eclipses of the satellites of Jupiter .",
+      "statement": "The astronomical equation, evinced by pendulum clocks and Jupiter satellite eclipses, is necessary for determining the times of a phenomenon.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "one_real_circular_motion_per_body",
+      "quote": "There is only one real circular motion of any one revolving body, corresponding to only one power of endeavouring to recede from its axis of motion, as its proper and adequate effect",
+      "statement": "There is only one real circular motion of any one revolving body, corresponding to only one power of endeavouring to recede from its axis.",
+      "support": 3
+    }
+  ]
+}

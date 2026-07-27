@@ -1,0 +1,243 @@
+{
+  "doc_id": "newton_1687_scholium",
+  "propositions": [
+    {
+      "name": "quantity_of_matter_definition",
+      "statement": "The quantity of matter of a body is fixed by the product of its density and its bulk.",
+      "quote": "The quantity of matter is the measure of the same, arising from its density and bulk conjunctly.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "mass_proportional_to_weight",
+      "statement": "The quantity of matter of a body is proportional to its weight.",
+      "quote": "for it is proportional to the weight, as I have found by experiments on pendulums, very accurately made, which shall be shewn hereafter.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "quantity_of_motion_definition",
+      "statement": "The quantity of motion of a body is fixed by the product of its velocity and its quantity of matter.",
+      "quote": "The quantity of motion is the measure of the same, arising from the velocity and quantity of matter conjunctly.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "motion_of_whole_sums_parts",
+      "statement": "The motion of a whole body equals the arithmetic sum of the motions of its parts.",
+      "quote": "The motion of the whole is the sum of the motions of all the parts; and therefore in a body double in quantity, with equal velocity, the motion is double",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "vis_insita_persists_state",
+      "statement": "Every body has an innate power of resisting by which it endeavours to persevere in its present state of rest or uniform right-line motion.",
+      "quote": "The vis insita, or innate force of matter, is a power of resisting, by which every body, as much as in it lies, endeavours to persevere in its present state",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "impressed_force_changes_state",
+      "statement": "An impressed force is an action exerted upon a body to change its state of rest or uniform right-line motion.",
+      "quote": "An impressed force is an action exerted upon a body, in order to change its state, either of rest, or of moving uniformly forward in a right line.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "centripetal_force_toward_centre",
+      "statement": "A centripetal force is one by which bodies are drawn or tend toward a point as a centre.",
+      "quote": "A centripetal force is that by which bodies are drawn or impelled, or any way tend, towards a point as to a centre.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "accelerative_force_generates_velocity",
+      "statement": "The accelerative quantity of a centripetal force is proportional to the velocity it generates in a given time.",
+      "quote": "The accelerative quantity of a centripetal force is the measure of the same, proportional to the velocity which it generates in a given time.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "weight_measured_by_counter_force",
+      "statement": "The weight of a body is known by the equal and contrary force just sufficient to hinder its descent.",
+      "quote": "it is always known by the quantity of an equal and contrary force just sufficient to hinder the descent of the body.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "absolute_time_flows_equably",
+      "statement": "Absolute time, of itself and from its own nature, flows equably without regard to anything external.",
+      "quote": "Absolute, true, and mathematical time, of itself, and from its own nature flows equably without regard to anything external, and by another name is called duration",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "absolute_space_immovable",
+      "statement": "Absolute space in its own nature remains always similar and immovable.",
+      "quote": "Absolute space, in its own nature, without regard to anything external, remains always similar and immovable.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "space_uniform_in_figure_and_magnitude",
+      "statement": "Absolute and relative spaces are the same in figure and magnitude, so geometric relations do not depend on which space is meant.",
+      "quote": "Absolute and relative space, are the same in figure and magnitude; but they do not remain always numerically the same.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_perfectly_equable_motion_exists",
+      "statement": "There may be no equable motion by which time can be accurately measured.",
+      "quote": "It may be, that there is no such thing as an equable motion, whereby time may be accurately measured.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "duration_independent_of_motion",
+      "statement": "The duration of the existence of things remains the same whether motions are swift, slow, or none at all.",
+      "quote": "The duration or perseverance of the existence of things remains the same, whether the motions are swift or slow, or none at all",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "natural_days_truly_unequal",
+      "statement": "The natural days are truly unequal though commonly used as equal measures of time.",
+      "quote": "For the natural days are truly unequal, though they are commonly considered as equal, and used for a measure of time",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "eclipses_and_pendulums_calibrate_time",
+      "statement": "The correction from apparent to absolute time is evinced by pendulum clock experiments and by eclipses of the satellites of Jupiter.",
+      "quote": "The necessity of which equation, for determining the times of a phenomenon, is evinced as well from the experiments of the pendulum clock, as by eclipses of the satellites of Jupiter",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "order_of_time_and_space_immutable",
+      "statement": "The order of the parts of time and the order of the parts of space are immutable.",
+      "quote": "As the order of the parts of time is immutable, so also is the order of the parts of space.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "primary_places_are_immovable",
+      "statement": "The primary places of things must be immovable, since it is absurd that they should be moveable.",
+      "quote": "It is from their essence or nature that they are places; and that the primary places of things should be moveable, is absurd.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "immovable_places_span_infinity",
+      "statement": "The only immovable places are those which from infinity to infinity retain the same given position one to another.",
+      "quote": "Now no other places are immovable but those that, from infinity to infinity, do all retain the same given position one to another",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "true_motion_requires_impressed_force",
+      "statement": "True motion is neither generated nor altered except by some force impressed upon the body moved.",
+      "quote": "True motion is neither generated nor altered, but by some force impressed upon the body moved",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "relative_motion_alters_without_force",
+      "statement": "Relative motion may be generated or altered without any force impressed on the body itself, by acting on bodies to which it is compared.",
+      "quote": "relative motion may be generated or altered without any force impressed upon the body. For it is sufficient only to impress some force on other bodies with which the former is compared",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rectilinear_uniform_inertial_motion",
+      "statement": "A body free of impressed force would move in a right line with a uniform motion.",
+      "quote": "would not deviate towards the earth, but would go off from it in a right line, and that with an uniform motion, if the resistance of the air was taken away.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "right_line_frame_invariant",
+      "statement": "There is a definite fact of the matter about what counts as a right line for a body free of impressed force.",
+      "quote": "were it not for the opposition of a contrary force which restrains them to, and detains them in their orbits, which I therefore call centripetal, would fly off in right lines, with an uniform motion.",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "velocities_add_arithmetically",
+      "statement": "Velocities of a body, a vehicle carrying it, and the earth carrying the vehicle combine by simple arithmetic addition and subtraction.",
+      "quote": "but a sailor walks in the ship towards the east, with 1 part of the said velocity; then the sailor will be moved truly in immovable space towards the east",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "simultaneous_velocities_across_bodies",
+      "statement": "The velocities of the earth, the ship, and the sailor can all be evaluated at the same instant and combined into one true velocity in immovable space.",
+      "quote": "the sailor will be moved truly in immovable space towards the east, with a velocity of 10001 parts, and relatively on the earth towards the west, with a velocity of 9 of those parts.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "rest_is_mutual_among_truly_resting_bodies",
+      "statement": "It is a property of rest that bodies really at rest are at rest in respect to one another.",
+      "quote": "It is a property of rest, that bodies really at rest do rest in respect to one another.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "surroundings_carry_included_bodies",
+      "statement": "If a surrounding whole is moved, the bodies included within it partake of the motion, as a kernel moves with its shell.",
+      "quote": "if the shell moves, the kernel will also move, as being part of the whole, without any removal from near the shell.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "possible_body_absolutely_at_rest",
+      "statement": "It is possible that in the remote regions of the fixed stars, or beyond them, some body is absolutely at rest.",
+      "quote": "as it is possible, that in the remote regions of the fixed stars, or perhaps far beyond them, there may be some body absolutely at rest",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "axis_recession_effect_distinguishes_absolute",
+      "statement": "The forces of receding from the axis of circular motion are the effects that distinguish absolute from relative motion.",
+      "quote": "The effects which distinguish absolute from relative motion are, the forces of receding from the axis of circular motion.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "true_circular_motion_produces_ascent",
+      "statement": "The absolute circular motion of the water shows itself by the ascent of the water up the sides of the vessel.",
+      "quote": "This ascent of the water shows its endeavour to recede from the axis of its motion; and the true and absolute circular motion of the water, which is here directly contrary to the relative, discovers itself",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "recession_independent_of_ambient_translation",
+      "statement": "The endeavour of the water to recede from the axis does not depend on any translation of the water with respect to the ambient bodies.",
+      "quote": "this endeavour does not depend upon any translation of the water in respect of the ambient bodies, nor can true circular motion be defined by such translation.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "one_real_circular_motion_per_body",
+      "statement": "Any one revolving body has only one real circular motion, with only one corresponding power of receding from its axis as its proper and adequate effect.",
+      "quote": "There is only one real circular motion of any one revolving body, corresponding to only one power of endeavouring to recede from its axis of motion, as its proper and adequate effect",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "cord_tension_measures_true_rotation",
+      "statement": "The tension of a cord connecting two revolving globes discovers the endeavour of the globes to recede from the axis and permits computation of their circular motions.",
+      "quote": "we might, from the tension of the cord, discover the endeavour of the globes to recede from the axis of their motion, and from thence we might compute the quantity of their circular motions.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "true_rotation_detectable_in_vacuum",
+      "statement": "Both the quantity and the determination of a true circular motion can be found even in an immense vacuum with nothing external to compare against.",
+      "quote": "And thus we might find both the quantity and the determination of this circular motion, even in an immense vacuum, where there was nothing external or sensible with which the globes could be compared.",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

@@ -1,0 +1,165 @@
+{
+  "doc_id": "larmor_1897_medium3",
+  "propositions": [
+    {
+      "definitional": true,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "aether_continuous_incompressible",
+      "quote": "assuming the \u00e6ther to be a continuous, homogeneous, and incompressible medium, endowed with inertia and with elasticity purely rotational",
+      "statement": "The \u00e6ther is a continuous, homogeneous, and incompressible medium endowed with inertia and rotational elasticity.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "electrons_are_point_singularities",
+      "quote": "In this medium unitary electric charges, or electrons, exist as point-singularities, or centres of intrinsic strain, which can move about under their mutual actions",
+      "statement": "Electrons exist in the \u00e6ther as point-singularities or centres of intrinsic strain.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "atoms_are_electron_orbits",
+      "quote": "atoms of matter are in whole or in part aggregations of electrons in stable orbital motion",
+      "statement": "Atoms of matter are aggregations of electrons in stable orbital motion.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "spatial_framework_required",
+      "quote": "a definite space, or spacial framework fixed or moving, to which motion is referred, is a necessary part of any dynamical theory",
+      "statement": "A definite spacial framework, fixed or moving, to which motion is referred is a necessary part of any dynamical theory.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "quiescent_aether_is_newtonian_rest",
+      "quote": "the spacial framework in absolute rest, which was introduced by Newton and was probably a main source of the great advance in abstract dynamics originated by the Principia , is in fact the quiescent underlying \u00e6ther.",
+      "statement": "The spacial framework in absolute rest introduced by Newton is in fact the quiescent underlying \u00e6ther.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "aether_not_dynamics_of_matter",
+      "quote": "The \u00e6ther not being matter, it need not obey the laws of the dynamics of matter, provided it obey another scheme of dynamical laws consistent among themselves",
+      "statement": "The \u00e6ther, not being matter, need not obey the laws of the dynamics of matter, provided it obey another consistent scheme of dynamical laws.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "stagnant_aether_reference_frame",
+      "quote": "let the space of reference be fixed with respect to the stagnant \u00e6ther, and ( p, q, r ) be the velocity with which the matter situated at the point ( x, y, z ) is moving",
+      "statement": "The space of reference is taken fixed with respect to the stagnant \u00e6ther, and matter has a velocity ( p, q, r ) at each point ( x, y, z ) relative to it.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "electrons_carried_on_by_matter",
+      "quote": "will lead to the electrons constituting electric densities being wholly carried on by the matter whenever a steady state is attained",
+      "statement": "In a steady state, the electrons constituting electric densities are wholly carried on by the matter through viscous diffusion of momentum.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "actual_forms_change_with_motion",
+      "quote": "The conductors on which these charges are situated will, however, if the results of the more fundamental analysis of \u00a716 are admitted, change their actual forms to a slight extent depending on (v/c)\u00b2",
+      "statement": "Conductors change their actual forms to a slight extent depending on (v/c)\u00b2 when they are put in motion.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "moving_body_shrunk_by_factor",
+      "quote": "one consequence of the motion thus being that the body is shrunk in the direction of its velocity v in the ratio",
+      "statement": "A body in uniform motion through the \u00e6ther is shrunk in the direction of its velocity v in the ratio 1 \u2212 \u00bdv\u00b2/c\u00b2.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "electron_orbits_shorter_in_moving_system",
+      "quote": "the individual electrons describe corresponding parts of their orbits in times shorter for the latter system in the ratio",
+      "statement": "Individual electrons in the moving system describe corresponding parts of their orbits in times shorter, by \u03b5^(\u2212\u00bd), than those of the corresponding system at rest.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "corresponding_states_persist_at_each_instant",
+      "quote": "if these two \u00e6thereal systems are set free at any instant in corresponding states, they will be in corresponding states at each subsequent instant, their electrons or singularities being at corresponding points",
+      "statement": "If two \u00e6thereal systems are set free at any instant in corresponding states, they will be in corresponding states at each subsequent instant.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "circuital_relations_determine_evolution",
+      "quote": "the circuital relations form a differential scheme of the first order which determines step by step the subsequent stages of a system when its initial state is given",
+      "statement": "The circuital relations form a differential scheme of the first order which determines step by step the subsequent stages of a system when its initial state is given.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "molecule_is_wholly_electric",
+      "quote": "and conversely it will involve evidence that the constitution of a molecule is wholly electric, as here represented",
+      "statement": "The constitution of a molecule is wholly electric, as here represented.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "gravitation_from_electrons",
+      "quote": "As gravitation must belong to the ultimate constituents of matter, that is on this theory to the electrons, and must be isotropic all round each of them",
+      "statement": "Gravitation must belong to the electrons, the ultimate constituents of matter, and must be isotropic all round each of them.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "larmor_1897_medium3",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "steady_state_confines_to_uniform_spiral",
+      "quote": "this confines it to uniform spiral motion on a definite axis fixed in the \u00e6ther",
+      "statement": "The requirement of a steady state confines the motion of the matter to uniform spiral motion on a definite axis fixed in the \u00e6ther.",
+      "support": 2
+    }
+  ]
+}

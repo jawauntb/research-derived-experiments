@@ -1,0 +1,135 @@
+{
+  "doc_id": "lodge_1897_absence",
+  "propositions": [
+    {
+      "definitional": true,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "ether_has_definite_motion",
+      "quote": "such messes of matter as we had been dealing with are incompetent to disturb the ether in e rotational manner",
+      "statement": "The ether is either stationary or carried along by moving matter, and its motion is a definite matter.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "time_of_journey_perfectly_definite",
+      "quote": "the time of journey along any given path through any kind of material is likewise perfectly definite, and independent of the motion",
+      "statement": "The time of journey of light along any given path through any kind of material is perfectly definite and independent of the motion of the material.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "velocity_of_light_between_plates_definite",
+      "quote": "The velocity of light between two steel plates moving together in their own plane, an inch apart, is not increased or diminished by so much as",
+      "statement": "The velocity of light between two plates moving together in their own plane is a definite quantity that could be increased or diminished by the plates' velocity.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "galilean_addition_of_light_and_matter",
+      "quote": "not increased or diminished by so much as",
+      "statement": "If the ether were dragged by the moving plates, the velocity of light through the space between them would be increased or diminished by a fraction of the plates' velocity.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "bifurcated_beam_in_two_directions",
+      "quote": "the effect of the motion on a bifurcated beam of light, whose two halves travelled in opposite directions several times round in the space between the disks, was observed.",
+      "statement": "A beam of light can be bifurcated so its two halves travel in opposite directions round the space between moving disks and be observed to interfere.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "ether_may_possess_viscosity",
+      "quote": "unless there existed a trace of something akin to viscosity by which the medium could be got hold of",
+      "statement": "The ether may possess a trace of something akin to viscosity by which the medium could be got hold of by moving matter.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "magnetic_field_may_grip_ether",
+      "quote": "the conveyance of a magnetic field by moving matter confers; no power of gripping the ether",
+      "statement": "A magnetic field carried by moving matter might confer upon it the power of gripping and rotationally carrying the ether.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "electric_charge_may_grip_ether",
+      "quote": "electric charge, being as it were the connexion between ether and matter, might confer upon a material body some power of gripping and rotationally carrying forward the ether in a quasi-viscous manner.",
+      "statement": "Electric charge on moving matter might confer upon a material body some power of gripping and rotationally carrying forward the ether in a quasi-viscous manner.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "earth_rotation_shifts_bands",
+      "quote": "a single interference square, 1 kilometre in the side, would show a shift of rather more than one band width",
+      "statement": "The earth's rotation through a stationary ether would produce a shift of the bands proportional to the area of the interference square.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "turntable_rotation_shifts_bands",
+      "quote": "the whole apparatus, lantern, optical frame, telescope, observer and all were mounted on a turntable and caused to rotate, a reversible shift of the bands should be seen.",
+      "statement": "Rotating the whole apparatus, telescope, and observer on a turntable through a stationary ether would produce a reversible shift of the bands.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "absence_of_shift_implies_no_drag",
+      "quote": "neither an electric nor a magnetic transverse field confers viscosity upon the ether, nor enables moving matter to grip and move it rotationally.",
+      "statement": "Absence of a reversible shift of the bands when moving matter is spun demonstrates that neither electric nor magnetic field enables moving matter to grip and move the ether rotationally.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "irrotational_motion_undetectable_by_optics",
+      "quote": "irrotational motion of a single-valued kind could not be detected by interference or any other optical experiments, since such motion in no way effects either the path or the speed of a ray",
+      "statement": "Irrotational motion of a single-valued kind in a medium cannot be detected by interference or any other optical experiment.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "lodge_1897_absence",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "single_valued_potential_no_ray_effect",
+      "quote": "as long as the motion of a medium is characterised everywhere by a single-valued potential function, the course of all observable rays through it, however reflected and refracted they may be, is independent of the motion",
+      "statement": "As long as the motion of a medium is characterised by a single-valued potential function, the course of observable rays through it is independent of the motion.",
+      "support": 2
+    }
+  ]
+}

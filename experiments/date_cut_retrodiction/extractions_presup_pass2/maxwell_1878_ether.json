@@ -1,0 +1,243 @@
+{
+  "doc_id": "maxwell_1878_ether",
+  "propositions": [
+    {
+      "name": "aether_is_material_substance",
+      "statement": "The aether is a material substance existing in those parts of space which are apparently empty.",
+      "quote": "a material substance of a more subtle kind than visible bodies, supposed to exist in those parts of space which are apparently empty.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "bodies_cannot_annihilate_each_other",
+      "statement": "Two bodies when put together cannot annihilate each other.",
+      "quote": "Now, we cannot suppose that two bodies when put together can annihilate each other; therefore light cannot be a substance.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "process_admits_exact_opposite",
+      "statement": "One portion of light can be the exact opposite of another portion, just as +a is the exact opposite of -a.",
+      "quote": "one portion of light can be the exact opposite of another portion, just as +a is the exact opposite of -a , whatever a may be.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_is_process_in_substance",
+      "statement": "Light is not a substance but a process going on in a substance.",
+      "quote": "light is not a substance but a process going on in a substance, the process going on in the first portion of light being always the exact opposite of the process going on in the other at the same instant",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "half_wave_length_extinction",
+      "statement": "Light is extinguished when the difference of the path lengths is an odd multiple of a half wave-length.",
+      "quote": "the light is extinguished when the difference of the length of the paths is an odd multiple of a certain small distance called a half wave-length.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "same_instant_at_distant_points",
+      "statement": "It is well-defined for the same process to be going on at two different points at the same instant.",
+      "quote": "if the distance between the points is a multiple of a wave-length the same process is going on at the two points at the same instant",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "single_time_for_beam_process",
+      "statement": "A single time t and a single distance x from a fixed point in the beam describe the phase of the process at every point.",
+      "quote": "which gives u , the phase of the process, at a point whose distance measured from a fixed point in the beam is x , and at a time t .",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "fixed_point_in_beam_reference",
+      "statement": "There is a fixed point in the beam from which distances are measured.",
+      "quote": "the interval of time between similar processes being the time light takes to travel a wave-length.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "light_velocity_has_definite_value",
+      "statement": "Light is propagated with a certain velocity of 3.004 x 10 centimetres per second in vacuum.",
+      "quote": "Now, light is known to be propagated with a certain velocity (3.004 x 10 centimetres per second in vacuum, according to Cornu).",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "energy_persists_in_medium",
+      "statement": "Energy is not transmitted instantaneously but exists for a certain time in the medium between the radiating and absorbing body.",
+      "quote": "this energy is not transmitted instantaneously from the radiating body to the absorbing body, but exists for a certain time in the medium.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "energy_split_kinetic_potential",
+      "statement": "Half of the energy in the medium is potential energy of distortion and half is kinetic energy of motion.",
+      "quote": "half of this energy is in the form of potential energy, due to the distortion of elementary portions of the medium, and half in the form of kinetic energy, due to the motion of the medium.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_has_finite_density",
+      "statement": "The aether has elasticity similar to that of a solid body and a finite density.",
+      "quote": "We must therefore regard the aether as possessing elasticity similar to that of a solid body, and also as having a finite density.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_is_incompressible",
+      "statement": "The aether must be incompressible so that normal vibrations do not occur.",
+      "quote": "The only way of accounting for the fact that the optical phenomena which would arise from these waves do not take place is to assume that the aether is incompressible.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "energy_from_heat_measurement",
+      "statement": "The energy of the radiation can be calculated by measuring the heat communicated to bodies which absorb it.",
+      "quote": "by measuring the heat communicated to such bodies, the energy of the radiation may be calculated.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "process_is_transverse_vector",
+      "statement": "The physical process in the propagation of light is a directed quantity or vector at right angles to the ray.",
+      "quote": "the physical process involved in the propagation of light must not only be a directed quantity or vector capable of having its direction reversed, but this vector must be at right angles to the ray",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_distinct_from_gross_matter",
+      "statement": "The medium through which light is propagated is distinct from the transparent medium known to us.",
+      "quote": "the medium through which light is propagated is something distinct from the transparent medium known to us, though it interpenetrates all transparent bodies and probably opaque bodies too.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_interpenetrates_all_bodies",
+      "statement": "The aether interpenetrates all transparent bodies and probably all opaque bodies too.",
+      "quote": "We are therefore obliged to suppose that the medium through which light is propagated is something distinct from the transparent medium known to us, though it interpenetrates all transparent bodies",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "dense_bodies_move_through_aether",
+      "statement": "Dense bodies are in motion through the great ocean of aether, as a definite matter of fact.",
+      "quote": "when these dense bodies are in motion through the great ocean of aether, they carry along with them the aether they contain",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "aether_velocity_to_stations_meaningful",
+      "statement": "There is a velocity of the aether with respect to terrestrial stations that could be determined by comparison of observed velocities.",
+      "quote": "we might, by comparing the observed velocities in opposite directions, determine the velocity of the aether with respect to these terrestrial stations.",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "double_journey_time_is_measurable",
+      "statement": "The time required for a light double journey from one station to another and back is a definite measurable quantity.",
+      "quote": "All methods, however, by which it is practicable to determine the velocity of light from terrestrial experiments depend on the measurement of the time required for the double journey from one station to the other and back",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "galilean_velocity_composition",
+      "statement": "A relative velocity of the aether equal to the earth's orbital velocity would increase the double journey time by a calculable fraction of the whole time of transmission.",
+      "quote": "the increase of this time on account of a relative velocity of the aether equal to that of the earth in its orbit would be only about one hundred millionth part of the whole time of transmission",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "earth_definite_velocity_through_aether",
+      "statement": "The earth has a definite relative velocity with respect to the aether.",
+      "quote": "The apparatus was first turned so that the direction of the light in first passing through the second prism was that of the earth's motion in its orbit.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "solar_system_velocity_to_aether",
+      "statement": "There is a relative velocity of the aether with respect to the solar system that could be determined directly.",
+      "quote": "The only practicable method of determining directly the relative velocity of the aether with respect to the solar system is to compare the values of the velocity of light deduced from the observation of the eclipses of Jupiter's satellites",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "direction_of_ray_in_space_meaningful",
+      "statement": "The direction of the ray in space is a well-defined physical quantity whose change can produce a difference in the result.",
+      "quote": "obtained what he supposed to be evidence of a difference in the result when the direction of the ray in space was different",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "moving_water_carries_light_partially",
+      "statement": "The propagation of light in a stream of water takes place with greater velocity in the direction in which the water moves than in the opposite direction.",
+      "quote": "the propagation of light in a stream of water takes place with greater velocity in the direction in which the water moves than in the opposite direction",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_transmits_energy",
+      "statement": "The aether is capable of transmitting energy.",
+      "quote": "In the first place, it is capable of transmitting energy. The radiations which it transmits are able not only to act on our senses, which of itself is evidence of work done",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "em_disturbance_velocity_equals_light",
+      "statement": "The velocity of propagation of an electromagnetic disturbance in air does not differ from the velocity of light in air more than the calculated values differ among each other.",
+      "quote": "the velocity of propagation of an electromagnetic disturbance in air, as calculated from different sets of data, does not differ more from the velocity of light in air",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "em_and_luminiferous_media_identical",
+      "statement": "If the electromagnetic and luminiferous velocities are equal, the two media occupying the same space are really identical.",
+      "quote": "If this should be equal to the velocity of light, we would have strong reason to believe that the two media, occupying as they do the same space, are really identical.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "inductive_capacity_equals_index_squared",
+      "statement": "In non-magnetic media the specific inductive capacity should be equal to the square of the index of refraction.",
+      "quote": "If the velocity of propagation of an electromagnetic disturbance is equal to that of light in other transparent media, then in non-magnetic media the specific inductive capacity should be equal to the square of the index of refraction.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "magnetic_influence_indicates_rotation",
+      "statement": "The magnetic influence on light indicates a rotational motion in the medium when magnetized.",
+      "quote": "the magnetic influence on light discovered by Faraday depends on the direction of motion of moving particles, and that it indicates a rotational motion in the medium when magnetized.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "molecular_vortices_in_aether",
+      "statement": "The medium must be broken up into a number of molecular vortices, each portion rotating about its own axis.",
+      "quote": "If there is any motion of rotation, it must be a rotation of very small portions of the medium each about its own axis, so that the medium must be broken up into a number of molecular vortices.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "interplanetary_space_not_empty",
+      "statement": "The interplanetary and interstellar spaces are not empty but are occupied by a material substance.",
+      "quote": "there can be no doubt that the interplanetary and interstellar spaces are not empty, but are occupied by a material substance or body",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "aether_grouping_preserved_for_transmission",
+      "statement": "If the aether is molecular, the grouping of its molecules must remain of the same type during the motion so that regular vibrations are not frittered away into heat.",
+      "quote": "If the aether is molecular, the grouping of the molecules must remain of the same type, the configuration of the groups being only slightly altered during the motion.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "vortex_motion_without_dissipation",
+      "statement": "The molecular vortices maintain their motion without a continual expenditure of work and without dissipation of energy.",
+      "quote": "we conclude that the molecular vortices do not require a continual expenditure of work in order to maintain their motion, and that therefore this motion does not necessarily involve dissipation of energy.",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

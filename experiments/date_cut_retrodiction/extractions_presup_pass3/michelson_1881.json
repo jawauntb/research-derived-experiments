@@ -1,0 +1,215 @@
+{
+  "doc_id": "michelson_1881",
+  "propositions": [
+    {
+      "name": "ether_medium_exists",
+      "statement": "A medium called the ether exists, and its vibrations produce the phenomena of heat and light, and it fills all space.",
+      "quote": "The undulatory theory of light assumes the existence of a medium called the ether, whose vibrations produce the phenomena of heat and light, and which is supposed to fill all space.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fresnel_optical_media_dragging",
+      "statement": "The ether enclosed in optical media partakes of the motion of these media to an extent depending on their indices of refraction.",
+      "quote": "According to Fresnel, the ether, which is enclosed in optical media, partakes of the motion of these media, to an extent depending on their indices of refraction.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "air_dragging_negligible",
+      "statement": "For air, the ether's partaking of the motion of the medium is a small fraction of the air's motion and can be neglected.",
+      "quote": "For air, this motion would be but a small fraction of that of the air itself and will be neglected.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_at_rest_earth_moves",
+      "statement": "The ether is at rest while the earth moves through it.",
+      "quote": "Assuming then that the ether is at rest, the earth moving through it, the time required for light to pass from one point to another on the earth’s surface, would depend on the direction in which it travels.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "absolute_time_of_flight",
+      "statement": "The time required for light to pass from one point to another is a quantity that has the same value for the earth and for the ether.",
+      "quote": "the time required for light to pass from one point to another on the earth’s surface, would depend on the direction in which it travels.",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "ether_provides_frame_of_rest",
+      "statement": "The ether provides a state of rest with respect to which the speed of the earth is a definite quantity.",
+      "quote": "= the speed of the earth with respect to the ether.",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "earth_has_velocity_through_ether",
+      "statement": "The earth has a velocity of motion through the ether that could be found from measurement.",
+      "quote": "If now it were possible to measure",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "classical_velocity_composition",
+      "statement": "The speed of light and the speed of the earth combine so that the light travels the distance D plus the distance d in time T at velocity V.",
+      "quote": "the pencil which has traveled in the direction of the earth's motion, will in reality travel",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "perpendicular_light_unaffected",
+      "statement": "Light traveling at right angles to the earth's motion is entirely unaffected by that motion.",
+      "quote": "If, however, the light had traveled in a direction at right angles to the earth's motion it would be entirely unaffected and the time of going and returning would be, therefore,",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "distance_D_independent_of_motion",
+      "statement": "The distance D between the two points on the earth's surface is the same whether the earth is at rest or moving through the ether.",
+      "quote": "of a wave-length farther than it would have done, were the earth at rest. The other pencil being at right angles to the motion would not be affected.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "actual_light_path_differs_from_D",
+      "statement": "The actual distance the light travels when the earth moves is greater than the distance between the two points by a definite quantity.",
+      "quote": "That is, the actual distance the light travels in the first case is greater than in the second, by the quantity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "wave_length_yellow_light_standard",
+      "statement": "A wave-length of yellow light serves as a standard against which small distances can be measured.",
+      "quote": "The following is intended to show that, with a wave-length of yellow light as a standard, the quantity — if it exists — is easily measurable.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "path_difference_shifts_fringes",
+      "statement": "A difference in path lengths between the two pencils produces a displacement of the interference bands proportional to the difference in wave-lengths.",
+      "quote": "The total change in the position of the interference bands would be",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "rotation_reorients_arms",
+      "statement": "Revolving the apparatus through ninety degrees brings the second pencil into the direction of the earth's motion.",
+      "quote": "If, now, the apparatus be revolved through 90° so that the second pencil is brought into the direction of the earth's motion, its path will have lengthened",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "arm_lengths_stable_under_rotation",
+      "statement": "The lengths of the two arms of the instrument are the same before and after the apparatus is revolved.",
+      "quote": "The distance bc being made equal to bd , and a plate of glass g being interposed in the path of the ray bc , to compensate for the thickness of the glass b , which is traversed by the ray bd , the two rays will have traveled over equal paths and are in condition to interfere.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "equal_paths_produce_interference",
+      "statement": "Two pencils of light that have traveled over equal paths are in condition to interfere.",
+      "quote": "the two rays will have traveled over equal paths and are in condition to interfere.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "periodic_variation_is_signature",
+      "statement": "The effect of the earth's motion through the ether would appear as a periodic variation of the fringe position with the direction of the arms.",
+      "quote": "This gradual change, which should not in the least affect the periodic variation for which we are searching, would of itself necessitate an outstanding error",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "temperature_effects_direction_independent",
+      "statement": "Changes of temperature of the arms of the instrument are independent of the direction of the arms.",
+      "quote": "since the changes of temperature are independent of the direction of the arms, if these changes were not too great their effect could be eliminated.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "brass_coefficient_of_expansion",
+      "statement": "Brass has a coefficient of expansion of 0.000019.",
+      "quote": "These being of brass whose coefficient of expansion is 0.000019 and having a length of about 1000 mm. or 1 700 000 wave-lengths",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "earth_orbital_direction_in_april",
+      "statement": "In early April, the earth's motion in its orbit coincides roughly in longitude with the direction of the solar system's motion.",
+      "quote": "At this time of the year, early in April, the earth's motion in its orbit coincides roughly in longitude with the estimated direction of the motion of the solar system",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "solar_system_moves_toward_hercules",
+      "statement": "The solar system moves toward the constellation Hercules.",
+      "quote": "the estimated direction of the motion of the solar system — namely, toward the constellation Hercules.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "two_motions_combine_as_resultant",
+      "statement": "The earth's orbital motion and the sun's proper motion combine as a resultant with a definite direction and magnitude.",
+      "quote": "The nearer the two components are in magnitude to each other, the more nearly would their resultant coincide with the plane of the equator.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "arms_can_align_with_resultant",
+      "statement": "If the apparatus is placed so that the arms point north and east at noon, the arm pointing east will coincide with the resultant motion.",
+      "quote": "if the apparatus be so placed that the arms point north and east at noon, the arm pointing east would coincide with the resultant motion, and the other would be at right angles.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "maxwell_first_order_too_small",
+      "statement": "The difference depending on the square of the ratio of the two velocities is far too small to measure by ordinary means.",
+      "quote": "The difference depending on the square of the ratio of the two velocities, according to Maxwell, is far too small to measure.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "return_path_masks_first_order",
+      "statement": "No method for measuring the velocity of light at the earth's surface exists that does not require returning the light over its path, whereby the effect of motion is lost.",
+      "quote": "we have thus far no method for measuring the velocity of light which does not involve the necessity of returning the light over its path, whereby it would lose nearly as much as was gained in going.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "eclipse_method_could_measure_first_order",
+      "statement": "T − T_1 could be calculated by measuring the velocity of light by means of the eclipses of Jupiter's satellites at periods when that planet lay in different directions from earth.",
+      "quote": "could be calculated by measuring the velocity of light by means of the eclipses of Jupiter's satellites at periods when that planet lay in different directions from earth",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_displacement_falsifies_stationary_ether",
+      "statement": "The absence of a displacement of the interference bands shows that the hypothesis of a stationary ether is erroneous.",
+      "quote": "The interpretation of these results is that there is no displacement of the interference bands. The result of the hypothesis of a stationary ether is thus shown to be incorrect, and the necessary conclusion follows that the hypothesis is erroneous.",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "aberration_requires_earth_through_ether",
+      "statement": "The accepted explanation of aberration presupposes that the earth moves through the ether while the ether remains at rest.",
+      "quote": "This conclusion directly contradicts the explanation of the phenomenon of aberration which has been hitherto generally accepted, and which presupposes that the earth moves through the ether, the latter remaining at rest.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "direction_of_earth_motion_definite",
+      "statement": "The direction of the earth's motion has a definite orientation that a line joining two points on the earth's surface can coincide with.",
+      "quote": "Suppose the direction of the line joining the two points to coincide with the direction of earth’s motion",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "round_trip_time_is_sum",
+      "statement": "The whole time occupied in going and returning is the sum of the time in each direction.",
+      "quote": "The whole time occupied therefore in going and returning",
+      "kind": "presupposed",
+      "definitional": false
+    }
+  ]
+}

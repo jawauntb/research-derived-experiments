@@ -1,0 +1,185 @@
+{
+  "doc_id": "maxwell_1865_part6",
+  "propositions": [
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part6",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "same_medium_for_light_and_em",
+      "quote": "At the commencement of this paper we made use of the optical hypothesis of an elastic medium through which the vibrations of light are propagated, in order to show that we have warrantable grounds for seeking, in the same medium, the cause of other phenomena as well as those of light.",
+      "statement": "The elastic medium through which the vibrations of light are propagated is the same medium in which the cause of other electromagnetic phenomena is to be sought.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part6",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "unit_ratio_equals_light_velocity",
+      "quote": "is the number of electrostatic units in one electromagnetic unit of electricity, and this, according to our result, should be equal to the velocity of light in air or vacuum.",
+      "statement": "The number of electrostatic units in one electromagnetic unit of electricity should be equal to the velocity of light in air or vacuum.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part6",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "orbit_radius_combines_with_aberration",
+      "quote": "The velocity of light in the space surrounding the earth, deduced from the coefficient of aberration and the received value of the radius of the earth's orbit, is",
+      "statement": "The coefficient of aberration and the received value of the radius of the earth's orbit may be combined to yield the velocity of light in the space surrounding the earth.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part6",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "wave_propagates_same_in_either_direction",
+      "quote": "The other equations give the same value for V, so that the wave is propagated in either direction with a velocity V. This wave consists entirely of magnetic disturbances, the direction of magnetization being in the plane of the wave.",
+      "statement": "The wave is propagated in either direction through the field with the same value of the velocity V.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part6",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "only_transverse_vibrations_propagate",
+      "quote": "The equations of the electromagnetic field, deduced from purely experimental evidence, show that transversal vibrations only can be propagated. If we were to go beyond our experimental knowledge and to assign a definite density to a substance which we should call the electric fluid, and select either vitreous or resinous electricity as the representative of that fluid, then we might have normal vibrations propagated with a velocity depending on this density.",
+      "statement": "The equations of the electromagnetic field, deduced from purely experimental evidence, show that transversal vibrations only can be propagated.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part6",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "em_and_optics_give_same_velocity",
+      "quote": "Hence electromagnetic science leads to exactly the same conclusions as optical science with respect to the direction of the disturbances which can be propagated through the field; both affirm the propagation of transverse vibrations, and both give the same velocity of propagation.",
+      "statement": "Electromagnetic science and optical science both affirm the propagation of transverse vibrations and both give the same velocity of propagation.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part6",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "specific_inductive_capacity_equals_index_squared",
+      "quote": "or the Specific Inductive Capacity is equal to the square of the index of refraction divided by the coefficient of magnetic induction.",
+      "statement": "The Specific Inductive Capacity is equal to the square of the index of refraction divided by the coefficient of magnetic induction.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part6",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "magnetic_and_elastic_axes_coincide",
+      "quote": "As we do not propose to give a complete investigation of the question in the present imperfect state of the theory as extended to disturbances of short period, we shall assume that the axes of magnetic induction coincide in direction with those of electric elasticity.",
+      "statement": "In a crystallized medium the axes of magnetic induction coincide in direction with those of electric elasticity.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part6",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "principal_plane_ray_isotropic_velocity",
+      "quote": "Now we know that in each principal plane of a crystal the ray polarized in that plane obeys the ordinary law of refraction, and therefore its velocity is the same in whatever direction in that plane it is propagated.",
+      "statement": "In each principal plane of a crystal the ray polarized in that plane has the same velocity in whatever direction in that plane it is propagated.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part6",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "conduction_transforms_energy_to_heat",
+      "quote": "there will be not only electric displacements, but true currents of conduction in which electrical energy is transformed into heat, and the undulation is thereby weakened.",
+      "statement": "In a conductor, true currents of conduction transform electrical energy into heat, and the undulation is thereby weakened.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part6",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "gold_transparency_requires_reduced_optical_loss",
+      "quote": "This result cannot be reconciled with the electromagnetic theory of light, unless we suppose that there is less loss of energy when the electromotive forces are reversed with the rapidity of the vibrations of light than when they act for sensible times, as in our experiments.",
+      "statement": "The observed transmission of light through gold-leaf cannot be reconciled with the electromagnetic theory unless there is less loss of energy when electromotive forces reverse with the rapidity of the vibrations of light than when they act for sensible times.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part6",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "magnetization_direction_in_plane_of_wave",
+      "quote": "which shows that the direction of the magnetization must be in the plane of the wave.",
+      "statement": "The direction of the magnetization must be in the plane of the wave.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part6",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "vibrations_countable_per_second",
+      "quote": "These electromotive and magnetic forces must be conceived to be reversed twice in every vibration of light; that is, more than a thousand million million times in a second.",
+      "statement": "The electromotive and magnetic forces of light are reversed a definite number of times per second, more than a thousand million million.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part6",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "energy_half_magnetic_half_electric",
+      "quote": "where P represents the greatest value of the electromotive force. Half of this consists of magnetic and half of electric energy.",
+      "statement": "Half of the energy per unit of volume in the light wave consists of magnetic and half of electric energy.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part6",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "agreement_implies_common_substance",
+      "quote": "The agreement of the results seems to show that light and magnetism are affections of the same substance, and that light is an electromagnetic disturbance propagated through the field according to electromagnetic laws.",
+      "statement": "The agreement of the electromagnetic and optical results shows that light and magnetism are affections of the same substance and that light is an electromagnetic disturbance propagated through the field according to electromagnetic laws.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part6",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "electromotive_force_from_time_variation",
+      "quote": "These electromotive forces are due to the variations either of the electromagnetic or the electrostatic functions, as there is no motion of conductors in the field; so that the equations of electromotive force (D) are",
+      "statement": "The electromotive forces in the field are due to the variations either of the electromagnetic or the electrostatic functions, since there is no motion of conductors in the field.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "maxwell_1865_part6",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "no_evidence_for_density_of_electricity",
+      "quote": "We have, however, no evidence as to the density of electricity, as we do not even know whether to consider vitreous electricity as a substance or as the absence of a substance.",
+      "statement": "There is no evidence as to the density of electricity, and it is not known whether to consider vitreous electricity as a substance or as the absence of a substance.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "maxwell_1865_part6",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "perfect_dielectric_no_true_conduction",
+      "quote": "If the medium in the field is a perfect dielectric there is no true conduction, and the currents",
+      "statement": "In a perfect dielectric there is no true conduction, and the currents p prime, q prime, r prime are only variations in the electric displacement.",
+      "support": 3
+    }
+  ]
+}

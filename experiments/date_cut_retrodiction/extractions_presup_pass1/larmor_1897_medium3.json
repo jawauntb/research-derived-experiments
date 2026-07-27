@@ -1,0 +1,264 @@
+{
+  "doc_id": "larmor_1897_medium3",
+  "propositions": [
+    {
+      "name": "aether_continuous_incompressible",
+      "statement": "The æther is a continuous, homogeneous, and incompressible medium endowed with inertia and rotational elasticity.",
+      "quote": "assuming the æther to be a continuous, homogeneous, and incompressible medium, endowed with inertia and with elasticity purely rotational",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "electrons_are_point_singularities",
+      "statement": "Electrons exist in the æther as point-singularities or centres of intrinsic strain.",
+      "quote": "In this medium unitary electric charges, or electrons, exist as point-singularities, or centres of intrinsic strain, which can move about under their mutual actions",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "atoms_are_electron_orbits",
+      "statement": "Atoms of matter are aggregations of electrons in stable orbital motion.",
+      "quote": "atoms of matter are in whole or in part aggregations of electrons in stable orbital motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "spatial_framework_required",
+      "statement": "A definite spacial framework, fixed or moving, to which motion is referred is a necessary part of any dynamical theory.",
+      "quote": "a definite space, or spacial framework fixed or moving, to which motion is referred, is a necessary part of any dynamical theory",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rotational_elasticity_needs_absolute_directions",
+      "statement": "Rotational elasticity of the æther postulates absolute directions in space.",
+      "quote": "The objection that rotational elasticity postulates absolute directions in space need hardly have weight when it is considered that a definite space, or spacial framework fixed or moving",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "quiescent_aether_is_newtonian_rest",
+      "statement": "The spacial framework in absolute rest introduced by Newton is in fact the quiescent underlying æther.",
+      "quote": "the spacial framework in absolute rest, which was introduced by Newton and was probably a main source of the great advance in abstract dynamics originated by the Principia , is in fact the quiescent underlying æther.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "euclidean_relations_of_space",
+      "statement": "Space obeys the existing Euclidean relations of measurement.",
+      "quote": "are thus to be classed along with the existing Euclidean relations of measurements in space (which also might a priori be different from what they are) as part of the ultimate scheme of mental representation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_not_dynamics_of_matter",
+      "statement": "The æther, not being matter, need not obey the laws of the dynamics of matter, provided it obey another consistent scheme of dynamical laws.",
+      "quote": "The æther not being matter, it need not obey the laws of the dynamics of matter, provided it obey another scheme of dynamical laws consistent among themselves",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aether_is_supersensual",
+      "statement": "The æther itself is entirely supersensual, and we must refrain from attempting to analyse it further.",
+      "quote": "But this medium itself, as being entirely supersensual, we must refrain from attempting to analyse further.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "instantaneous_communication_in_aether",
+      "statement": "A pulsation applied at the outside boundary of the æthereal universe is instantaneously communicated throughout the incompressible medium.",
+      "quote": "we can (ideally) imagine the pulsation to have been applied initially over the outside boundary of the æthereal universe, and thence instantaneously communicated throughout the incompressible medium to the only places that can respond to it",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ascertained_velocity_of_radiation",
+      "statement": "There is an ascertained velocity of radiation which the elasticity of the medium must be assumed high enough to conserve.",
+      "quote": "we have been compelled to assume a high coefficient of inertia of the medium, and therefore an extremely high elasticity in order to conserve the ascertained velocity of radiation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "stagnant_aether_reference_frame",
+      "statement": "The space of reference is taken fixed with respect to the stagnant æther, and matter has a velocity ( p, q, r ) at each point ( x, y, z ) relative to it.",
+      "quote": "let the space of reference be fixed with respect to the stagnant æther, and ( p, q, r ) be the velocity with which the matter situated at the point ( x, y, z ) is moving",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "matter_has_definite_velocity_through_aether",
+      "statement": "The matter of a steady system has a definite motion relative to the æther, the same at all times.",
+      "quote": "it is necessary that the configuration of the matter shall be permanent, and that its motion shall be the same at all times relative to this configuration and to the æther",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "field_quantities_definite_at_each_point",
+      "statement": "The æthereal elastic displacement ( f, g, h ) and the polarization ( f', g', h' ) have definite values at each point of the space of reference at each time.",
+      "quote": "let ( f', g', h') denote the electric polarization of the material, and ( f, g, h ) the æthereal elastic displacement, so that the total circuital displacement of Maxwell 's theory is their sum",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "free_charge_moves_with_matter",
+      "statement": "When there is no conductivity, the free charge must move along with the matter.",
+      "quote": "When there is no conductivity, the free charge must move along with the matter",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electrons_carried_on_by_matter",
+      "statement": "In a steady state, the electrons constituting electric densities are wholly carried on by the matter through viscous diffusion of momentum.",
+      "quote": "will lead to the electrons constituting electric densities being wholly carried on by the matter whenever a steady state is attained",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "perpetual_motion_forbidden",
+      "statement": "A perpetual motion could not be maintained by moving an electron along one side of an interface and back along the other side.",
+      "quote": "a perpetual motion could arise by moving an electron along one side of the interface and back again along the other side. But this reasoning requires that ( p, q, r ) shall be continuous across the interface",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "rigid_motion_no_work",
+      "statement": "Any displacement of a system as a single rigid whole, whether translational or rotational, can involve no expenditure of work.",
+      "quote": "any displacement of them as a single rigid system, whether translational or rotational, can involve no expenditure of work",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "energy_from_mutual_configuration",
+      "statement": "The potential energy from which the forces are derived is a function of the mutual configurations of the parts of the material system.",
+      "quote": "The potential energy, from which the forces are derived, is a function of the mutual configurations of the parts of the material system.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "actual_forms_change_with_motion",
+      "statement": "Conductors change their actual forms to a slight extent depending on (v/c)² when they are put in motion.",
+      "quote": "The conductors on which these charges are situated will, however, if the results of the more fundamental analysis of §16 are admitted, change their actual forms to a slight extent depending on (v/c)²",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "neglect_v_over_c_cubed",
+      "statement": "In the derivation, terms of order (v/c)³ may be neglected.",
+      "quote": "from which eliminating the unaccented letters, neglecting (v/c)³, and writing as before ε for",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "auxiliary_time_variable",
+      "statement": "The time variable is changed from t to t', equal to t − vx/c², as a mathematical substitution.",
+      "quote": "Now change the time variable from t to t', equal to",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "moving_body_shrunk_by_factor",
+      "statement": "A body in uniform motion through the æther is shrunk in the direction of its velocity v in the ratio 1 − ½v²/c².",
+      "quote": "one consequence of the motion thus being that the body is shrunk in the direction of its velocity v in the ratio",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_orbits_shorter_in_moving_system",
+      "statement": "Individual electrons in the moving system describe corresponding parts of their orbits in times shorter, by ε^(−½), than those of the corresponding system at rest.",
+      "quote": "the individual electrons describe corresponding parts of their orbits in times shorter for the latter system in the ratio",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "corresponding_states_persist_at_each_instant",
+      "statement": "If two æthereal systems are set free at any instant in corresponding states, they will be in corresponding states at each subsequent instant.",
+      "quote": "if these two æthereal systems are set free at any instant in corresponding states, they will be in corresponding states at each subsequent instant, their electrons or singularities being at corresponding points",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "simultaneity_of_instant_across_field",
+      "statement": "The phrase 'at any instant' applies meaningfully to a spatially extended æthereal system as a whole, so that its state at that instant is well-defined at all points at once.",
+      "quote": "if these two æthereal systems are set free at any instant in corresponding states, they will be in corresponding states at each subsequent instant",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "circuital_relations_determine_evolution",
+      "statement": "The circuital relations form a differential scheme of the first order which determines step by step the subsequent stages of a system when its initial state is given.",
+      "quote": "the circuital relations form a differential scheme of the first order which determines step by step the subsequent stages of a system when its initial state is given",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "molecule_is_wholly_electric",
+      "statement": "The constitution of a molecule is wholly electric, as here represented.",
+      "quote": "and conversely it will involve evidence that the constitution of a molecule is wholly electric, as here represented",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "michelson_negative_result_is_fact",
+      "statement": "Michelson's optical experiments have a negative result, requiring explanation.",
+      "quote": "the hypothesis of FitzGerald and Lorentz , to which they were led as the ultimate resource for the explanation of the negative result of Michelson 's optical experiments",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fitzgerald_lorentz_hypothesis_confirmed",
+      "statement": "The present argument, if valid, confirms the hypothesis of FitzGerald and Lorentz.",
+      "quote": "If this argument is valid, it will confirm the hypothesis of FitzGerald and Lorentz , to which they were led as the ultimate resource for the explanation of the negative result of Michelson 's optical experiments",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "correspondence_pushed_to_molecules",
+      "statement": "The correlation between the moving and the at-rest system must be pushed to their individual molecules for the argument to succeed.",
+      "quote": "The reasoning given in Part II., § 13, was insufficient, because the correlation between the two systems was not there pushed to their individual molecules.",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "gravitation_from_electrons",
+      "statement": "Gravitation must belong to the electrons, the ultimate constituents of matter, and must be isotropic all round each of them.",
+      "quote": "As gravitation must belong to the ultimate constituents of matter, that is on this theory to the electrons, and must be isotropic all round each of them",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "steady_state_confines_to_uniform_spiral",
+      "statement": "The requirement of a steady state confines the motion of the matter to uniform spiral motion on a definite axis fixed in the æther.",
+      "quote": "this confines it to uniform spiral motion on a definite axis fixed in the æther",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "matter_configuration_electron_positions",
+      "statement": "The state of a material system corresponds to the positions of its constituent electrons in the æther, so a system 'pulled out uniformly in the ratio ε^(½)' means one whose electrons are at correspondingly displaced positions.",
+      "quote": "the æthereal field for a correlative system of electrons forming the molecules of another material system at rest in the æther, of the form of the original one pulled out uniformly in the ratio",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "convection_no_free_electricity_separation",
+      "statement": "Mere convection of the polarized medium does not produce separation of free electricity.",
+      "quote": "which asserts (for the case of uniform motion that is contemplated) that mere convection of the polarized medium does not produce separation of free electricity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "traction_continuous_across_interface",
+      "statement": "Across an interface, the traction in the æther must be continuous, so the tangential component of the æthereal force must be continuous.",
+      "quote": "Across an interface the traction in the tether must be continuous, so that the tangential component of the æthereal force (P', Q', R') must be continuous",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electric_force_definite_on_electron",
+      "statement": "For each electron at rest, the force on it is equal to its charge multiplied by the intensity of the electric field where it is situated.",
+      "quote": "for each electron at rest, this force is equal to its charge multiplied by the intensity of the electric field where it is situated",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

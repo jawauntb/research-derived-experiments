@@ -1,0 +1,180 @@
+{
+  "doc_id": "michelson_morley_1887",
+  "propositions": [
+    {
+      "name": "luminiferous_ether_exists",
+      "statement": "There exists a luminiferous ether whose relative motion with the earth is a well-defined quantity.",
+      "quote": "It appears, from all that precedes, reasonably certain that if there be any relative motion between the earth and the luminiferous ether, it must be small; quite small enough entirely to refute Fresnel's explanation of aberration.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "definite_light_velocity_in_ether",
+      "statement": "The velocity V of light has a definite value in the ether supposed stationary.",
+      "quote": "Let V be the velocity of light in the ether supposed stationary, and let cd be the increase in the distance the light has to travel to reach d .",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "earth_motion_through_ether_real",
+      "statement": "The earth has a definite motion through the ether that affects the paths of light rays.",
+      "quote": "In deducing the formula for the quantity to be measured, the effect of the motion of the earth through the ether on the path of the ray at right angles to this motion was overlooked.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ether_at_surface_has_definite_state",
+      "statement": "The ether at the earth's surface is in a determinate state of rest or motion that competing theories may specify.",
+      "quote": "Stokes has given a theory of aberration which assumes the ether at the earth's surface to be at rest with regard to the latter, and only requires in addition that the relative velocity have a potential",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "velocities_compose_by_addition",
+      "statement": "The velocity of light with respect to the apparatus is obtained by composing V with the velocity v of the apparatus moving through the ether.",
+      "quote": "Suppose now, the ether being at rest, that the whole apparatus moves in the direction sc , with the velocity of the earth in its orbit, the directions and distances traversed by the rays will be altered thus:—",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "absolute_time_of_light_transit",
+      "statement": "The time light occupies to pass between two points is a single quantity applicable both in the ether and in the moving apparatus.",
+      "quote": "The ray sa is reflected along ab , fig. 2; the angle bab , being equal to the aberration = a , is returned along ba / , ( aba / =2 a ), and goes to the focus of the telescope, whose direction is unaltered.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "path_times_are_additive",
+      "statement": "The whole time of going and coming along a path is the sum of the two segment times.",
+      "quote": "Let it now be required to find the difference in the two paths aba / , and aca / .",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "distance_D_orientation_independent",
+      "statement": "The distance D between mirrors is the same for both arms and is preserved as the apparatus moves and is rotated.",
+      "quote": "the lengths of the two paths were measured by a light wooden rod reaching diagonally from mirror to mirror, the distance being read from a small steel scale to tenths of millimeters.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "rotation_reverses_path_difference",
+      "statement": "Turning the whole apparatus through 90° reverses the difference between the two paths without altering its magnitude.",
+      "quote": "If now the whole apparatus be turned through 90°, the difference will be in the opposite direction, hence the displacement of the interference fringes should be",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "perpendicular_path_geometry_computable",
+      "statement": "The effect of the motion of the earth through the ether on the ray at right angles to that motion is not negligible and can be computed from the geometry.",
+      "quote": "The discussion of this oversight and of the entire experiment forms the subject of a very searching analysis by H. A. Lorentz , who finds that this effect can by no means be disregarded.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fringe_shift_measures_path_difference",
+      "statement": "A displacement of the interference fringes is a measure of the difference between the two optical paths.",
+      "quote": "Finally, as before remarked, the quantity to be observed, namely, a displacement of something less than a twentieth of the distance between the interference fringes may have been too small to be detected when masked by experimental errors.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "rays_interfere_when_paths_equal",
+      "statement": "When the paths ab and ac are equal, the two rays interfere along ad.",
+      "quote": "If then the paths ab and ac are equal, the two rays interfere along ad .",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "displacement_proportional_to_v_squared",
+      "statement": "The fringe displacement is proportional to the square of the relative velocity of the earth and the ether.",
+      "quote": "But since the displacement is proportional to the square of the velocity, the relative velocity of the earth and the ether is probably less than one sixth the earth's orbital velocity, and certainly less than one-fourth.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "orbital_velocity_supplies_v",
+      "statement": "The velocity of the earth in its orbit contributes to v, the earth's velocity through the ether.",
+      "quote": "In what precedes, only the orbital motion of the earth is considered. If this is combined with the motion of the solar system, concerning which but little is known with certainty, the result would have to be modified",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "seasonal_repetition_covers_directions",
+      "statement": "Repeating the experiment at intervals of three months removes uncertainty about the direction of the earth's resultant velocity.",
+      "quote": "The experiment will therefore be repeated at intervals of three months, and thus all uncertainty will be avoided.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "small_shift_bounds_relative_velocity",
+      "statement": "The small observed fringe displacement bounds any relative motion of the earth and the luminiferous ether.",
+      "quote": "due to the relative motion of the earth and the luminiferous ether, this cannot be much greater than 0.01 of the distance between the fringes.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "undulatory_theory_of_light",
+      "statement": "Light propagates as waves in the ether.",
+      "quote": "On the undulatory theory , according to Fresnel , first, the ether is supposed to be at rest except in the interior of transparent media",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "aberration_tangent_equals_v_over_V",
+      "statement": "The tangent of the angle of aberration equals the ratio of the velocity of the earth to the velocity of light.",
+      "quote": "if the tangent of the angle of aberration is the ratio of the velocity of the earth to the velocity of light",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "water_reduces_light_velocity",
+      "statement": "The velocity of light in water is three-fourths its velocity in a vacuum.",
+      "quote": "since the latter velocity in water is three-fourths its velocity in a vacuum, the aberration observed with a water telescope should be four-thirds of its true value.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "wavelength_calibrates_fringe_divisions",
+      "statement": "One division of the screw-head corresponds to a stable 0.02 wave-length of the light used.",
+      "quote": "The width of the fringes varied from 40 to 60 divisions, the mean value being near 50, so that one division means 0.02 wave-length.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "first_power_measurement_would_solve",
+      "statement": "Measuring the velocity of light without returning the ray to its starting point would give the first power of the relative velocity of the earth with respect to the ether.",
+      "quote": "If it were possible to measure with sufficient accuracy the velocity of light without returning the ray to its starting point, the problem of measuring the first power of the relative velocity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "jupiter_eclipses_probe_ether",
+      "statement": "The difference in the observed velocity of light for Jupiter at different positions can reveal motion with respect to the luminiferous ether.",
+      "quote": "the difference in the results found for the velocity of light when Jupiter is nearest to and farthest from the line of motion will give",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "apparatus_carried_by_earth",
+      "statement": "The source, telescope, and mirrors are rigidly carried with the stone and hence with the earth.",
+      "quote": "Both f and a revolved with the stone. The mirrors were of speculum metal carefully worked to optically plane surfaces five centimeters in diameter",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "uniform_motion_preserves_measurement",
+      "statement": "Keeping the apparatus in slow uniform motion yields more consistent readings than bringing it to rest between observations.",
+      "quote": "It was found that by keeping the apparatus in slow uniform motion, the results were much more uniform and consistent than when the stone was brought to rest for every observation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "hypothesis_testable_by_present_method",
+      "statement": "The hypothesis that the ether is at rest can be put to experimental trial by the method of this paper.",
+      "quote": "The experimental trial of the first hypothesis forms the subject of the present paper.",
+      "kind": "asserted",
+      "definitional": true
+    }
+  ]
+}
