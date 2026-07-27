@@ -1,0 +1,131 @@
+{
+  "gates": {
+    "W1_verifier_completeness": {
+      "decision": "GO"
+    },
+    "W2_realisation_median_gte_6": {
+      "decision": "NO_GO",
+      "threshold": 6,
+      "value": 2
+    },
+    "W3_realisation_variability_gte_1p5": {
+      "decision": "NO_GO",
+      "threshold": 1.5,
+      "value": 0.0
+    },
+    "W4_placebo_median_lte_3": {
+      "decision": "GO",
+      "threshold": 3,
+      "value": 0
+    },
+    "W5_at_least_one_placebo_triggers": {
+      "decision": "NO_GO",
+      "n_placebos_at_or_above_5": 0
+    },
+    "W6_placebo_realisation_overlap": {
+      "decision": "NO_GO",
+      "max_placebo": 0,
+      "min_realisation": 2
+    }
+  },
+  "kind": "dr6c_verdict",
+  "licensed_reading": "regex_missed_realisations: patterns too narrow; median realisation score below threshold.",
+  "n_placebos": 5,
+  "n_realisations": 5,
+  "n_snippets": 10,
+  "overall_decision": "NO_GO",
+  "per_snippet": {
+    "P1_pytz_localize": {
+      "kind": "placebo",
+      "score": 0,
+      "surface_form": "pytz.utc.localize()"
+    },
+    "P2_now_with_timezone_utc": {
+      "kind": "placebo",
+      "score": 0,
+      "surface_form": "datetime.now(timezone.utc)"
+    },
+    "P3_zoneinfo_user_tz": {
+      "kind": "placebo",
+      "score": 0,
+      "surface_form": "zoneinfo user-supplied timezone"
+    },
+    "P4_no_datetime_arithmetic": {
+      "kind": "placebo",
+      "score": 0,
+      "surface_form": "no datetime, arithmetic only"
+    },
+    "P5_arrow_aware": {
+      "kind": "placebo",
+      "score": 0,
+      "surface_form": "arrow / third-party timezone-aware"
+    },
+    "R1_utcnow_direct": {
+      "kind": "realisation",
+      "score": 2,
+      "surface_form": "datetime.utcnow() direct use"
+    },
+    "R2_replace_tzinfo_none": {
+      "kind": "realisation",
+      "score": 2,
+      "surface_form": ".replace(tzinfo=None) to strip timezone"
+    },
+    "R3_time_fromtimestamp": {
+      "kind": "realisation",
+      "score": 2,
+      "surface_form": "time.time() \u2192 fromtimestamp yields naive"
+    },
+    "R4_iso_parse_no_tz": {
+      "kind": "realisation",
+      "score": 2,
+      "surface_form": "ISO parse without timezone"
+    },
+    "R5_combine_utc_convention": {
+      "kind": "realisation",
+      "score": 2,
+      "surface_form": "combine(date, time) \u2014 UTC by convention"
+    }
+  },
+  "purpose": "Same D and snippets as DR6, but a proposition-independent regex verifier. Tests DR5's condition (b): does flipping only the verifier from Claude to regex flip the wall from absent to present?",
+  "summary": {
+    "overlap_gap_min_realisation_minus_max_placebo": 2,
+    "placebo_max": 0,
+    "placebo_median": 0,
+    "placebo_scores": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "realisation_max": 2,
+    "realisation_median": 2,
+    "realisation_min": 2,
+    "realisation_scores": [
+      2,
+      2,
+      2,
+      2,
+      2
+    ],
+    "realisation_stdev": 0.0
+  },
+  "target_commitment_D": "This Python code implicitly assumes that all datetime values are timezone-naive and represent UTC.",
+  "verifier": {
+    "kind": "regex",
+    "negative_patterns": [
+      "PYTZ_UTC",
+      "TIMEZONE_UTC_ARG",
+      "ZONEINFO",
+      "ARROW"
+    ],
+    "positive_patterns": [
+      "R1_utcnow",
+      "R2_replace_tzinfo_none",
+      "R3_time_fromtimestamp",
+      "R4_iso_parse_no_tz",
+      "R5_combine_datetime"
+    ],
+    "score_rule": "+2 per positive pattern hit, -3 per negative pattern hit, clamped to [0, 10]"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "kind": "dr6e_verifier_scores",
+  "verifier_id": "C",
+  "scores": {
+    "R1_utcnow_direct": 10,
+    "R2_replace_tzinfo_none": 9,
+    "R3_time_fromtimestamp": 4,
+    "R4_iso_parse_no_tz": 7,
+    "R5_combine_utc_convention": 10,
+    "P1_pytz_localize": 0,
+    "P2_now_with_timezone_utc": 0,
+    "P3_zoneinfo_user_tz": 0,
+    "P4_no_datetime_arithmetic": 0,
+    "P5_arrow_aware": 0,
+    "R6_json_field_no_tz": 10
+  },
+  "reasoning": "R1 uses datetime.utcnow() producing naive datetimes treated as UTC by convention — textbook D. R2 explicitly strips tzinfo via replace(tzinfo=None) for a 'naive-UTC-only column' — very strong D. R3 uses naive datetime.fromtimestamp(time.time()) which is actually local time, not UTC by convention, so only weakly embodies D. R4 parses ISO strings via strptime with no tzinfo — plausibly naive-UTC log convention but not stated. R5 docstring explicitly says 'assumed UTC by fleet convention' with combine returning naive datetimes — canonical D. P1 explicitly attaches UTC tzinfo via pytz.utc.localize, contradicting D. P2 uses datetime.now(timezone.utc) and rejects naive inputs, contradicting D. P3 uses ZoneInfo and requires tz-aware inputs, contradicting D. P4 contains no datetime code at all. P5 uses arrow with an explicit timezone-aware requirement, contradicting D. R6 docstring states 'all such payloads are already in UTC' and the datetime is 'intentionally naive' — canonical D."
+}

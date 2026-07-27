@@ -1,0 +1,18 @@
+{
+  "kind": "dr6_verifier_scores",
+  "verifier_id": "A",
+  "target_commitment_D": "This Python code implicitly assumes that all datetime values are timezone-naive and represent UTC.",
+  "scores": {
+    "R1_utcnow_direct": 10,
+    "R2_replace_tzinfo_none": 9,
+    "R3_time_fromtimestamp": 8,
+    "R4_iso_parse_no_tz": 8,
+    "R5_combine_utc_convention": 10,
+    "P1_pytz_localize": 1,
+    "P2_now_with_timezone_utc": 0,
+    "P3_zoneinfo_user_tz": 0,
+    "P4_no_datetime_arithmetic": 0,
+    "P5_arrow_aware": 0
+  },
+  "reasoning": "R1 uses datetime.utcnow() which returns a naive datetime treated as UTC by convention, a textbook embodiment of D. R2 explicitly strips tzinfo to store as naive in a 'naive-UTC-only column', embodying D via convention but the astimezone() call converts to local time first, slightly muddying the UTC assumption. R3 uses datetime.fromtimestamp(time.time()) producing naive local-time datetimes treated as UTC by convention; strongly embodies D though technically fromtimestamp uses local tz. R4 parses ISO strings without any tz info yielding naive datetimes compared and max'd as if UTC, embodying D. R5 explicitly documents 'assumed UTC by fleet convention' while producing naive datetimes via datetime.combine, the clearest embodiment of D. P1 explicitly attaches pytz.utc, producing timezone-aware datetimes, the opposite of D. P2 uses datetime.now(timezone.utc) and requires tz-aware inputs, explicitly rejecting D. P3 uses ZoneInfo and requires tz-aware inputs, explicitly rejecting D. P4 has no datetime code at all, so cannot embody D. P5 uses arrow with explicit tz-awareness checks, rejecting D."
+}
