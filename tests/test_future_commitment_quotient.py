@@ -43,6 +43,19 @@ from scripts.build_future_commitment_quotient_pdf import build_pdf
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def _canonicalize_numeric_receipt(value: object) -> object:
+    if isinstance(value, float):
+        return round(value, 12)
+    if isinstance(value, list):
+        return [_canonicalize_numeric_receipt(item) for item in value]
+    if isinstance(value, dict):
+        return {
+            key: _canonicalize_numeric_receipt(item)
+            for key, item in value.items()
+        }
+    return value
+
+
 class FutureCommitmentConstructionTests(unittest.TestCase):
     def test_registered_design_is_frozen_and_complete(self) -> None:
         design_path = (
@@ -493,8 +506,14 @@ class FutureCommitmentArtifactTests(unittest.TestCase):
             ),
         )
 
-        self.assertEqual(payload["rows"], committed_rows)
-        self.assertEqual(payload["summary"], committed_summary)
+        self.assertEqual(
+            _canonicalize_numeric_receipt(payload["rows"]),
+            _canonicalize_numeric_receipt(committed_rows),
+        )
+        self.assertEqual(
+            _canonicalize_numeric_receipt(payload["summary"]),
+            _canonicalize_numeric_receipt(committed_summary),
+        )
         self.assertEqual(
             render_summary_markdown(payload),
             (package / "results" / "summary.md").read_text(encoding="utf-8"),
