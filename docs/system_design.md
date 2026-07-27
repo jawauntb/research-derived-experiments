@@ -205,22 +205,23 @@ Each experiment directory is a self-contained research unit. Typical contents:
 
 | Set | Count |
 |---|---|
-| Research experiment packages | **63** |
+| Research experiment packages | **64** |
 | Shared non-experiment support packages | **1** — `experiments/common` |
 | Contain one or more `modal_*.py` entrypoints | **47** |
-| Canonical package-root `experiment_manifest.json` files | **15** |
-| Authoritative package-contract records | **63** = **15** `structured_manifest` + **48** time-bounded `legacy_exception` in `docs/experiment_contract_registry.json` |
+| Canonical package-root `experiment_manifest.json` files | **16** |
+| Authoritative package-contract records | **64** = **16** `structured_manifest` + **48** time-bounded `legacy_exception` in `docs/experiment_contract_registry.json` |
 | Canonical per-gate verdict files | **1** (E5). Ten evidence rows declare gate IDs; only E5 currently has a committed verdict file. Manifest gate declarations are not verdicts. |
 | Canonical claim records | **12** |
 | Canonical evidence records | **12** |
-| Generated provenance/verification output | **63** experiment cards and index rows; `common` is excluded |
+| Generated provenance/verification output | **64** experiment cards and index rows; `common` is excluded |
 
 `scripts/gen_provenance.py --check` makes the generated count a derived invariant
 rather than a second hand-maintained inventory. Recent local packages including
 `mathematical_claims`, `bayesian_voi`, `seed_bootstrap_calibration`,
 `passive_active_phase_map`, `grounded_statecharts`,
 `load_bearing_prose_test`, `concern_gated_retrieval`, and
-`constraint_swap_causal_geometry`, and `future_commitment_quotient` are present in the regenerated 63-package
+`constraint_swap_causal_geometry`, `future_commitment_quotient`, and
+`relative_identifiability` are present in the regenerated 64-package
 index.
 
 `experiments/future_commitment_quotient/` is the exact finite-state successor
@@ -234,6 +235,18 @@ accepted 768-row run shows that coordinates are neither necessary nor
 sufficient for registered future behavior while exact quotient agreement
 separates all cells. This is a white-box deterministic diagnostic and does not
 claim learned constraint discovery, stochastic generalization, or repair.
+
+`experiments/relative_identifiability/` generalizes the exact failure question
+from future-word behavior to an arbitrary declared target and experiment
+family. It groups equal complete transcripts, returns either a target
+factorization certificate or a target-distinct obstruction pair, compares
+nested-family quotients, and exhaustively searches for every minimum identifying
+family. A four-realization fixture shows external behavioral equivalence being
+strictly refined by an internal patch experiment, while a redundant experiment
+leaves the quotient unchanged. The quantified quotient/factorization and
+refinement statements are checked in a dependency-free Lean 4 package. The
+mathematics is explicitly prior art; the new repository surface is the typed
+counterexample receipt and theorem-to-MIDAS regression contract.
 
 Raw run outputs go to **gitignored** `artifacts/<experiment>/`. Only summarized
 reports and intentionally public tables/PDFs are committed.
@@ -380,8 +393,9 @@ python scripts/regen.py verify-clean-clone
 ```
 
 Allowlisted deterministic CPU packages (`bayesian_voi`, `grounded_statecharts`,
-`mathematical_claims`, `seed_bootstrap_calibration`) execute the structured
-primary run's `runtime.command` argv without a shell. `verify-clean-clone` materializes a
+`mathematical_claims`, `relative_identifiability`,
+`seed_bootstrap_calibration`) execute the structured primary run's
+`runtime.command` argv without a shell. `verify-clean-clone` materializes a
 tracked-file checkout, deletes the declared outputs, reruns the recipes, and
 byte-compares newly created files to committed oracles. Modal and other
 documented commands remain inspect-only and are not dispatched. Run records may
@@ -566,6 +580,9 @@ historically been unreliable; Actions is the supported path. See
 The required `quality.yml` GitHub Actions workflow installs `uv` and
 `poppler-utils`, restores the uv cache with a key derived from `uv.lock`, then
 runs `scripts/run_quality_checks.py` on every push and pull request to `main`.
+An independent Lean job uses the official `leanprover/lean-action` against the
+pinned `formal/relative-identifiability/lean-toolchain` and must complete
+`lake build`; the Python source-presence checks are not treated as a proof gate.
 The wrapper syncs the locked PEP 735 `quality` group once and runs every gate
 through `uv run --no-sync`. CI opts into pytest-xdist with at most four workers,
 scope-based distribution, and one native math-library thread per worker; local
@@ -582,7 +599,7 @@ can run the identical wrapper before opening a PR.
 |---|---|---|
 | **Weakness → OOD** | `weakness_vs_simplicity`, `symbolic_weakness`, `rotation_weakness`, `learned_symmetry`, `grid_cell_weakness`, `structure_compatible_generalization` | Structure-/symmetry-compatible hypothesis weakness predicts OOD where simplicity/MDL/flatness do not |
 | **Concept / activation geometry** | `concept_geometry`, `activation_geometry`, `paraphrase_weakness`, `passive_to_active`, `constraint_swap_causal_geometry` | Bridge geometry in embeddings and hidden states; test when geometry becomes causally load-bearing and preserve scoped counterexamples when behavior succeeds without the registered geometry |
-| **Future commitment / constraint repair** | `future_commitment_quotient` | Separate coordinate realizations from exact future constraints in deterministic finite agents; provide an oracle target and adversarial controls for later partial-access discovery and minimal-repair research |
+| **Relative identifiability / future commitment** | `future_commitment_quotient`, `relative_identifiability`; proof package `formal/relative-identifiability` | Separate coordinate realizations from exact future constraints, emit target-relative obstruction certificates, and refine experiment families without claiming the standard quotient theorem as novel |
 | **Primer-derived calibration** | `mathematical_claims`, `bayesian_voi`, `seed_bootstrap_calibration`, `passive_active_phase_map`; shared `experiments/common/causal_use.py` | Make theorem assumptions executable; separate value of information from error; calibrate seed/bootstrap policies; distinguish smooth crossover from bifurcation/path dependence; measure causal use across commitment surfaces |
 | **Maintained concern / metric stack** | Papers 5–25 family (valence → homeostatic → planning → first-order self → world responds → …) | Concern/ΔE geometry as control substrate; self/world attribution; re-engagement |
 | **Concern-gated retrieval** | `concern_gated_retrieval` | Two-sided context/care graph nomination plus goal-conditioned bounded-observer utilization filtering; synthetic diagnostic only |
@@ -1362,6 +1379,7 @@ python3 -m experiments.grounded_statecharts.run_live_smoke
 python3 -m experiments.grounded_statecharts.run_unified_replay
 python3 -m experiments.concern_gated_retrieval.run_pilot
 uv run --no-sync python -m experiments.future_commitment_quotient.run_experiment
+uv run --no-sync python -m experiments.relative_identifiability.run_regressions
 
 python scripts/regen.py grid_cell_weakness
 python scripts/regen.py weakness_temporal
@@ -1554,6 +1572,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 | PDF rebuild | reportlab/matplotlib via uvx or Modal paper tasks | Prefer committed numbers as source of truth |
 | Atlas / inquiry sites | Push to `main` + `RAILWAY_TOKEN` | Actions matrix deploy |
 | Formal ontology | GHC/Cabal | Optional for most contributors |
+| Relative-identifiability proof | Lean 4.31.0 via Elan/Lake | Required only for the theorem package; Python regressions remain dependency-free |
 | API-backed probes | OpenAI/Anthropic (and optional HF) keys | `concept_geometry`, some agent evals |
 | Inquiry app | Bun 1.x, Node 22, macOS for desktop package | Cloud optional |
 | Coherence full gate | Modal + BBBD volume + scientific stack | Smoke is local/synthetic |
@@ -1568,6 +1587,8 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 - Keep the public GitHub surface **safe by construction** (summaries in, raw dumps out).
 - Regenerate provenance cards and a verification index for agent-generated science.
 - Reproduce a subset of experiments on CPU with one command (`regen.py`).
+- Replay a counterexample-first identifiability benchmark and typecheck its
+  quotient/factorization theorem in Lean.
 - Dispatch documented Modal commands for the rest.
 - Build shareable PDFs/figures from committed evidence.
 - Deploy a public research atlas, Inquiry landing, and Envelope Guard product demo via Railway.

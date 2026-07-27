@@ -86,6 +86,9 @@ CLEAN_CLONE_ALLOWLIST: dict[str, str] = {
     "mathematical_claims": (
         "experiments/mathematical_claims/results/mathematical_claims_summary.json"
     ),
+    "relative_identifiability": (
+        "experiments/relative_identifiability/results/summary.json"
+    ),
     "seed_bootstrap_calibration": (
         "experiments/seed_bootstrap_calibration/results/summary.json"
     ),

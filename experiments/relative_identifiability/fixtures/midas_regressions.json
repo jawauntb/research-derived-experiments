@@ -1,0 +1,141 @@
+{
+  "schema_version": "relative-identifiability-regression/v1",
+  "systems": {
+    "mechanistic_refinement": {
+      "realizations": [
+        "behavior_0_mechanism_a",
+        "behavior_0_mechanism_b",
+        "behavior_1_mechanism_a",
+        "behavior_1_mechanism_b"
+      ],
+      "experiments": [
+        "external_readout",
+        "external_duplicate",
+        "internal_patch"
+      ],
+      "outcomes": [
+        [0, 0, "a"],
+        [0, 0, "b"],
+        [1, 1, "a"],
+        [1, 1, "b"]
+      ],
+      "targets": {
+        "behavior": [0, 0, 1, 1],
+        "mechanism": ["a", "b", "a", "b"],
+        "coordinate_label": ["north", "east", "south", "west"],
+        "constant": ["same", "same", "same", "same"]
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "behavior_from_external_readout",
+      "system": "mechanistic_refinement",
+      "family": ["external_readout"],
+      "target": "behavior",
+      "expected": {
+        "status": "identifiable",
+        "quotient_blocks": [
+          ["behavior_0_mechanism_a", "behavior_0_mechanism_b"],
+          ["behavior_1_mechanism_a", "behavior_1_mechanism_b"]
+        ],
+        "block_targets": [0, 1]
+      }
+    },
+    {
+      "id": "mechanism_obstructed_externally",
+      "system": "mechanistic_refinement",
+      "family": ["external_readout"],
+      "target": "mechanism",
+      "expected": {
+        "status": "obstructed",
+        "pair": ["behavior_0_mechanism_a", "behavior_0_mechanism_b"],
+        "shared_transcript": [0],
+        "target_values": ["a", "b"]
+      }
+    },
+    {
+      "id": "mechanism_identified_by_internal_patch",
+      "system": "mechanistic_refinement",
+      "family": ["external_readout", "internal_patch"],
+      "target": "mechanism",
+      "expected": {
+        "status": "identifiable",
+        "quotient_blocks": [
+          ["behavior_0_mechanism_a"],
+          ["behavior_0_mechanism_b"],
+          ["behavior_1_mechanism_a"],
+          ["behavior_1_mechanism_b"]
+        ],
+        "block_targets": ["a", "b", "a", "b"]
+      }
+    },
+    {
+      "id": "coordinate_gauge_obstructed_externally",
+      "system": "mechanistic_refinement",
+      "family": ["external_readout"],
+      "target": "coordinate_label",
+      "expected": {
+        "status": "obstructed",
+        "pair": ["behavior_0_mechanism_a", "behavior_0_mechanism_b"],
+        "shared_transcript": [0],
+        "target_values": ["north", "east"]
+      }
+    },
+    {
+      "id": "constant_target_needs_no_experiments",
+      "system": "mechanistic_refinement",
+      "family": [],
+      "target": "constant",
+      "expected": {
+        "status": "identifiable",
+        "quotient_blocks": [
+          [
+            "behavior_0_mechanism_a",
+            "behavior_0_mechanism_b",
+            "behavior_1_mechanism_a",
+            "behavior_1_mechanism_b"
+          ]
+        ],
+        "block_targets": ["same"]
+      }
+    }
+  ],
+  "refinements": [
+    {
+      "id": "internal_patch_strictly_refines_external_behavior",
+      "system": "mechanistic_refinement",
+      "coarse_family": ["external_readout"],
+      "rich_family": ["external_readout", "internal_patch"],
+      "expected": {
+        "is_refinement": true,
+        "strict": true,
+        "added_experiments": ["internal_patch"],
+        "split_blocks": [
+          [
+            ["behavior_0_mechanism_a"],
+            ["behavior_0_mechanism_b"]
+          ],
+          [
+            ["behavior_1_mechanism_a"],
+            ["behavior_1_mechanism_b"]
+          ]
+        ],
+        "separating_experiments": ["internal_patch"]
+      }
+    },
+    {
+      "id": "duplicate_readout_is_redundant",
+      "system": "mechanistic_refinement",
+      "coarse_family": ["external_readout"],
+      "rich_family": ["external_readout", "external_duplicate"],
+      "expected": {
+        "is_refinement": true,
+        "strict": false,
+        "added_experiments": ["external_duplicate"],
+        "split_blocks": [],
+        "separating_experiments": []
+      }
+    }
+  ]
+}

@@ -17,6 +17,7 @@ class RegenCleanCloneTests(unittest.TestCase):
         "bayesian_voi",
         "grounded_statecharts",
         "mathematical_claims",
+        "relative_identifiability",
         "seed_bootstrap_calibration",
     }
 

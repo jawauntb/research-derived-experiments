@@ -1,0 +1,6 @@
+name = "relative-identifiability"
+version = "0.1.0"
+defaultTargets = ["RelativeIdentifiability"]
+
+[[lean_lib]]
+name = "RelativeIdentifiability"
