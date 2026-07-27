@@ -1,0 +1,157 @@
+{
+  "gates": {
+    "W1": {
+      "decision": "GO"
+    },
+    "W2_realisation_median": {
+      "decision": "GO",
+      "value": 9
+    },
+    "W3_stdev": {
+      "decision": "GO",
+      "value": 2.345207879911715
+    },
+    "W4_placebo_median": {
+      "decision": "GO",
+      "value": 1
+    },
+    "W5_placebo_trigger": {
+      "decision": "NO_GO",
+      "n_placebos_ge_5": 0
+    },
+    "W6_direct_overlap": {
+      "decision": "NO_GO",
+      "max_p": 3,
+      "min_r": 5
+    }
+  },
+  "kind": "dr6h_verdict",
+  "licensed_reading": "clean_discrimination_despite_no_obvious_proxy: LLM semantic reasoning succeeded even without an obvious implicit-vs-explicit proxy. DR5* is refuted for this target; some deeper reasoning about the code's SEMANTIC intent is happening.",
+  "n_snippets": 10,
+  "overall_decision": "NO_GO",
+  "per_snippet": {
+    "PH1_fcntl_lock": {
+      "consensus": 1,
+      "kind": "placebo",
+      "per_verifier": [
+        1,
+        1,
+        1
+      ],
+      "surface_form": "fcntl exclusive lock"
+    },
+    "PH2_filelock_library": {
+      "consensus": 0,
+      "kind": "placebo",
+      "per_verifier": [
+        0,
+        1,
+        0
+      ],
+      "surface_form": "filelock library, explicit"
+    },
+    "PH3_no_file_access": {
+      "consensus": 0,
+      "kind": "placebo",
+      "per_verifier": [
+        0,
+        0,
+        0
+      ],
+      "surface_form": "in-memory only, no file access"
+    },
+    "PH4_read_only_open": {
+      "consensus": 3,
+      "kind": "placebo",
+      "per_verifier": [
+        2,
+        3,
+        6
+      ],
+      "surface_form": "read-only open, side-effect free"
+    },
+    "PH5_lockfile_context": {
+      "consensus": 1,
+      "kind": "placebo",
+      "per_verifier": [
+        1,
+        2,
+        1
+      ],
+      "surface_form": "hand-rolled lockfile w/ retry"
+    },
+    "RH1_readmodifywrite": {
+      "consensus": 10,
+      "kind": "realisation",
+      "per_verifier": [
+        10,
+        10,
+        10
+      ],
+      "surface_form": "read-modify-write with no locking"
+    },
+    "RH2_seek_write": {
+      "consensus": 9,
+      "kind": "realisation",
+      "per_verifier": [
+        9,
+        9,
+        9
+      ],
+      "surface_form": "seek+write pattern, single handle"
+    },
+    "RH3_append_log": {
+      "consensus": 6,
+      "kind": "realisation",
+      "per_verifier": [
+        6,
+        6,
+        7
+      ],
+      "surface_form": "append to log without lock"
+    },
+    "RH4_rename_after_write": {
+      "consensus": 5,
+      "kind": "realisation",
+      "per_verifier": [
+        7,
+        5,
+        4
+      ],
+      "surface_form": "write-then-rename, no coordination"
+    },
+    "RH5_json_load_modify_dump": {
+      "consensus": 10,
+      "kind": "realisation",
+      "per_verifier": [
+        10,
+        10,
+        10
+      ],
+      "surface_form": "load-modify-dump JSON file"
+    }
+  },
+  "purpose": "Test DR5*'s prediction that targets without domain-general proxies hit the wall for LLM verifiers even with D specified.",
+  "summary": {
+    "overlap_gap": 2,
+    "placebo_max": 3,
+    "placebo_median": 1,
+    "placebo_scores": [
+      1,
+      0,
+      0,
+      3,
+      1
+    ],
+    "realisation_median": 9,
+    "realisation_scores": [
+      10,
+      9,
+      6,
+      5,
+      10
+    ],
+    "realisation_stdev": 2.345207879911715
+  },
+  "target_D_h": "This code assumes exclusive access to files it reads or writes."
+}

@@ -669,6 +669,26 @@
             "identity": "Claude Code (Opus 4.7)",
             "session_ref": "dr6g-domain-blind-no-wall 2026-07-27"
           }
+        },
+        {
+          "run_id": "dr6h_no_proxy_target_2026_07_27",
+          "publication_package": "dr6_code_correctness_corollary",
+          "runtime_package": "dr6_code_correctness_corollary",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/dr6_code_correctness_corollary/experiment_manifest.json",
+          "report_paths": [
+            "experiments/dr6_code_correctness_corollary/results/dr6h_verdict.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_digest": "c78f57b1ff71e3c19557a91ceb396d434aadbf32e4c8afe2027e4ab18000ece8",
+          "preregistration_path": "experiments/dr6_code_correctness_corollary/DR6H_PREREGISTRATION.md",
+          "producing_agent": {
+            "identity": "Claude Code (Opus 4.7)",
+            "session_ref": "dr6h-no-proxy-target 2026-07-27"
+          }
         }
       ]
     },
