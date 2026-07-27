@@ -1,0 +1,156 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "constraint_swap_causal_geometry",
+  "hypothesis": "Switching a hidden successful-future constraint induces the registered policy-free reachability geometry in a meta-GRU and a matched low-rank transport of that deformation selectively changes behavior.",
+  "claim_tier": "causal",
+  "controls": [
+    {
+      "control_id": "matched_constraint_marginals",
+      "description": "Constraints A, B, and D each contain exactly 648 accept and 648 reject units under identical observation, feedback, timing, and magnitude schedules."
+    },
+    {
+      "control_id": "randomized_label_sham",
+      "description": "A randomized-label sham must remain at chance while all three deterministic rules are learned above their registered competence thresholds."
+    },
+    {
+      "control_id": "injected_geometry_positive_control",
+      "description": "A known reachability geometry is injected into held-out representations to verify that the registered residualized crossnobis analysis can recover it."
+    },
+    {
+      "control_id": "counterbalanced_no_swap",
+      "description": "Both A-to-B and B-to-A swaps are adjusted by matched no-swap drift under identical observation clocks."
+    },
+    {
+      "control_id": "matched_latent_nulls",
+      "description": "Targeted rank-four transports must beat anchor-permuted and sixteen rank-, norm-, and covariance-matched random controls while preserving nuisance competence."
+    },
+    {
+      "control_id": "untouched_topology_transfer",
+      "description": "All confirmatory gates must transfer without refitting from the 6 by 6 torus to an untouched 7 by 7 cylinder."
+    }
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31
+  ],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "uv",
+      "run",
+      "--no-sync",
+      "python",
+      "-m",
+      "experiments.constraint_swap_causal_geometry.run_experiment",
+      "--seeds",
+      "32",
+      "--workers",
+      "4"
+    ],
+    "estimated_minutes": 20,
+    "max_cost_usd": 0
+  },
+  "dependencies": [
+    {
+      "name": "numpy",
+      "version": ">=2.0,<3"
+    },
+    {
+      "name": "torch",
+      "version": ">=2.0,<3"
+    }
+  ],
+  "gates": [
+    {
+      "gate_id": "F0_INTEGRITY_IDENTIFIABILITY",
+      "criterion": "Schedules and action marginals match exactly; reachability RDMs are non-collinear; nuisance design is full rank with VIF below 10; and transport calibration and test units are disjoint."
+    },
+    {
+      "gate_id": "F1_COMPETENCE_MEASUREMENT_SENSITIVITY",
+      "criterion": "A and B mean accuracy is at least 0.85 with at least 28 of 32 seeds above 0.80; D is at least 0.75; sham is at most 0.60; and the one-sided lower bound for injected-geometry lift exceeds 0.20."
+    },
+    {
+      "gate_id": "G1_CONSTRAINT_SPECIFIC_GEOMETRY",
+      "criterion": "Both active-minus-inactive constraint-specific reachability-alignment one-sided lower bounds exceed 0.05."
+    },
+    {
+      "gate_id": "G2_SWAP_TRACKING",
+      "criterion": "Both counterbalanced swap-effect one-sided lower bounds exceed 0.05 and no-swap drift remains below 0.05."
+    },
+    {
+      "gate_id": "G3_SELECTIVE_IMPAIRMENT",
+      "criterion": "Both targeted undo transports selectively impair active behavior beyond all matched controls while satisfying decoding, norm, covariance, and dose-response bounds."
+    },
+    {
+      "gate_id": "G4_SELECTIVE_RESCUE",
+      "criterion": "Both targeted impose transports selectively rescue compatible early-swap behavior beyond all matched controls while satisfying decoding, norm, covariance, and dose-response bounds."
+    },
+    {
+      "gate_id": "G5_TOPOLOGY_TRANSPORT",
+      "criterion": "F1 through G4 pass without refitting on the untouched cylinder topology."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "raw",
+      "path": "artifacts/constraint_swap_causal_geometry/registered_run.json",
+      "public": false
+    },
+    {
+      "kind": "dataset",
+      "path": "experiments/constraint_swap_causal_geometry/results/registered_seed_rows.jsonl",
+      "public": true
+    },
+    {
+      "kind": "summary",
+      "path": "experiments/constraint_swap_causal_geometry/results/summary.json",
+      "public": true
+    },
+    {
+      "kind": "summary",
+      "path": "experiments/constraint_swap_causal_geometry/results/summary.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/constraint_swap_causal_geometry/PREREGISTRATION.md",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/constraint_swap_causal_geometry/paper.pdf",
+      "public": true
+    }
+  ],
+  "status": "rejected"
+}

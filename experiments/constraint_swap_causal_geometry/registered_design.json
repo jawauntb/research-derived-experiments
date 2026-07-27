@@ -1,0 +1,118 @@
+{
+  "artifact_contract": "constraint-swap-causal-geometry/v1",
+  "claim": "A constraint-conditioned, reachability-aligned hidden subspace is causally relevant to behavior in the registered finite navigation regime.",
+  "frozen_at": "2026-07-27T03:41:10-04:00",
+  "implementation_smoke_seeds": [
+    1000,
+    1001,
+    1002,
+    1003
+  ],
+  "confirmatory_seeds": {
+    "start": 0,
+    "stop_exclusive": 32
+  },
+  "environment": {
+    "primary_topology": {
+      "kind": "torus",
+      "width": 6,
+      "height": 6
+    },
+    "transfer_topology": {
+      "kind": "cylinder_x",
+      "width": 7,
+      "height": 7
+    },
+    "constraints": {
+      "A": "checkerboard_parity_equality",
+      "B": "horizontal_stripe_parity_equality",
+      "D": "vertical_stripe_parity_equality"
+    },
+    "future_horizon": 4,
+    "suffix_actions": [
+      "north",
+      "south",
+      "east",
+      "west",
+      "stay"
+    ],
+    "behavior_actions": [
+      "accept",
+      "reject"
+    ]
+  },
+  "amendments": [
+    {
+      "at": "2026-07-27T03:48:00-04:00",
+      "before_model_training": true,
+      "rejected_design": "vertical_fiber_vs_horizontal_fiber",
+      "reason": "Reachability RDMs were automorphic under action-axis relabeling and marginal behavior-action counts were unmatched.",
+      "replacement": "Balanced checkerboard-parity versus horizontal-stripe-parity future admissibility with binary accept/reject behavior."
+    },
+    {
+      "at": "2026-07-27T04:10:00-04:00",
+      "before_confirmatory_seeds": true,
+      "analysis_clarification": "history_identity and probe_frequency are zero-variance integrity controls and are not entered as nuisance regression columns",
+      "threshold_changes": false
+    },
+    {
+      "at": "2026-07-27T08:35:00-04:00",
+      "before_confirmatory_rerun": true,
+      "analysis_correction": "The first implementation used a 6 by 6 cylinder and refit its crossnobis precision. That provisional run is invalidated. The complete confirmatory run is repeated on the preregistered 7 by 7 cylinder with the primary calibration precision frozen.",
+      "threshold_changes": false
+    }
+  ],
+  "model": {
+    "family": "single_layer_gru",
+    "hidden_size": 48,
+    "mature_demonstrations": 12,
+    "early_swap_demonstrations": 1,
+    "probe_histories": 8,
+    "training_steps": 1200,
+    "batch_size": 96,
+    "sequence_length": 16,
+    "learning_rate": 0.003,
+    "weight_decay": 0.0001
+  },
+  "representation": {
+    "metric": "split_crossnobis",
+    "covariance_shrinkage": 0.1,
+    "nuisances": [
+      "sensory_distance",
+      "physical_distance",
+      "history_identity",
+      "reachability_volume_difference",
+      "oracle_action_equality",
+      "probe_frequency"
+    ]
+  },
+  "transport": {
+    "calibration_fraction": 0.6,
+    "stable_split_salt": "constraint-swap-transport-v1",
+    "rank": 4,
+    "ridge": 0.001,
+    "doses": [
+      0.0,
+      0.5,
+      1.0,
+      1.5
+    ],
+    "random_controls_per_seed": 16
+  },
+  "inference": {
+    "unit": "independently_trained_seed",
+    "bootstrap_resamples": 10000,
+    "positive_alpha_one_sided": 0.05,
+    "equivalence_alpha_two_sided": 0.1
+  },
+  "fatal_gates": [
+    "F0_integrity_identifiability",
+    "F1_competence_measurement_sensitivity",
+    "G1_constraint_specific_geometry",
+    "G2_swap_tracking",
+    "G3_selective_impairment",
+    "G4_selective_rescue",
+    "G5_topology_transport"
+  ],
+  "raw_artifact_policy": "Raw per-seed checkpoints and probe tensors stay under gitignored artifacts/. Compact seed rows, summaries, gates, figures, and paper are public."
+}

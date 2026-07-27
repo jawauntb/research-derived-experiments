@@ -10,7 +10,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 
 | Path | Responsibility |
 |---|---|
-| `experiments/` | 57 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
+| `experiments/` | 61 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
 | `papers/` | Paper sources (`paper.md`), figures, shareable PDFs |
 | `scripts/` | 94 Python ops modules: quality, contracts, provenance, PDF/figure builders, summarizers |
 | `tests/` | 103 root test files collected together by pytest (`unittest`-style and pytest-native) |
@@ -127,8 +127,8 @@ environment.
 |---|---|
 | [system_design.md](system_design.md) | End-to-end design & operating model |
 | [module_explainer.md](module_explainer.md) | This catalog |
-| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 57 research packages; `experiments/common` excluded) |
-| `experiment_contract_registry.json` | Authoritative 57-package coverage partition: 9 structured roots + 48 time-bounded legacy exceptions with frozen digest |
+| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 61 research packages; `experiments/common` excluded) |
+| `experiment_contract_registry.json` | Authoritative 61-package coverage partition: 13 structured roots + 48 time-bounded legacy exceptions with frozen digest |
 | `program_evidence_registry.json` | 12 canonical evidence records with stable IDs, states, artifact refs, and claim links |
 | `claim_registry.json` | 12 canonical claim records with tiers, states, source refs, and bidirectional evidence links |
 | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) | Benchmark umbrella |
@@ -172,9 +172,9 @@ environment.
 
 **Legend:** **P** = `PROVENANCE.md`, **B** = `BENCHMARK_CARD.md`, **R** = `README.md`, **res** = committed `results/`.
 
-**Verification reconciliation:** 57 research packages on disk plus one shared
+**Verification reconciliation:** 61 research packages on disk plus one shared
 support package, `experiments/common`. `gen_provenance.py` intentionally excludes
-the support package and derives 57 cards/index rows; `gen_provenance.py --check`
+the support package and derives 61 cards/index rows; `gen_provenance.py --check`
 fails if any generated card, either verification index, or the site mirror drifts.
 The structured registries currently contain 12 claims and 12 evidence records.
 
@@ -195,6 +195,7 @@ Universal dispatcher: `python scripts/regen.py <name>`.
 | `weakness_temporal` | P | Early-checkpoint weakness as temporal OOD early-warning | `temporal.py` |
 | `paraphrase_weakness` | P R res | Paraphrase-invariance of hidden states vs behavior | `modal_paraphrase_probe.py`, `modal_learned_substitution.py`, `summarize.py` |
 | `concept_geometry` | P R res | Cross-domain concepts in embedding space | `openai_embedding_probe.py`, `paraphrase_stability_probe.py` |
+| `constraint_swap_causal_geometry` | P R res | Registered 32-seed counterexample with a frozen primary-calibration crossnobis metric and untouched 7-by-7-cylinder transfer: perfect hidden-rule behavior without the proposed reachability-aligned geometry or selective low-rank causal transport | `core.py`, `model.py`, `analysis.py`, `run_experiment.py`, `summarize.py`, `experiment_manifest.json`, `registered_design.json` |
 | `activation_geometry` | P R res (58) | Hidden-state bridges, steering, patching, label-free gates | See §3.1.4 |
 | `passive_to_active` | P R res | Action coupling makes paraphrase geometry causally load-bearing | `modal_passive_to_active.py`, `modal_replication_sweep.py` |
 | `passive_active_phase_map` | P R res | Registered local coupling sweep: bifurcation not supported; controlled path dependence passed | `core.py`, `preregistration.md`, `experiment_manifest.json` |
@@ -787,10 +788,10 @@ Raw outputs stay under `artifacts/` until summarized.
 | Script | Purpose | Flags / I/O |
 |---|---|---|
 | `research_contracts.py` | Shared schema version, identifier patterns, claim tiers/statuses, and evidence statuses used by registry/verdict adapters | Library; parity-tested against JSON Schemas |
-| `gen_provenance.py` | Validate registries, resolve structured primary-run bindings from the contract registry, regenerate all experiment `PROVENANCE.md` files + `docs/verification.{md,json}` + site mirror; `--check` compares expected bytes without writing; legacy packages still use labeled heuristic extraction | In: 57 experiment dirs + claim/evidence/contract registries; excludes `experiments/common` |
+| `gen_provenance.py` | Validate registries, resolve structured primary-run bindings from the contract registry, regenerate all experiment `PROVENANCE.md` files + `docs/verification.{md,json}` + site mirror; `--check` compares expected bytes without writing; legacy packages still use labeled heuristic extraction | In: 61 experiment dirs + claim/evidence/contract registries; excludes `experiments/common` |
 | `validate_evidence_registry.py` | Validate canonical evidence IDs, gate statuses, artifact refs, and supersession shape | `docs/program_evidence_registry.json` |
 | `validate_claim_registry.py` | Validate exact claim shape/tiers/states and bidirectional claim↔evidence edges | Reads `docs/claim_registry.json` + `docs/program_evidence_registry.json`; never writes either |
-| `validate_experiment_manifest.py` | Enforce the authoritative package-contract registry (57 = 9 structured + 48 legacy), then discover and dependency-free validate every v1 experiment-package contract; every registered run `manifest_path` must be an `experiment_manifest.json` inside its publication package and validate as v1 by content; run records may declare `preregistration_digest` + `preregistration_path` (SHA-256 of a tracked pre-reg file, content-verified) and `producing_agent` (`identity` + `session_ref`); when the registry sets `preregistration_policy.required_after_run_date`, any run whose `run_id` ends with a date on or after the cutoff must supply all three | Reads `docs/experiment_contract_registry.json` and `experiments/**/experiment_manifest.json`; portable contracts in `schemas/experiment_contract_registry.schema.json` and `schemas/experiment_manifest.schema.json` |
+| `validate_experiment_manifest.py` | Enforce the authoritative package-contract registry (61 = 13 structured + 48 legacy), then discover and dependency-free validate every v1 experiment-package contract; every registered run `manifest_path` must be an `experiment_manifest.json` inside its publication package and validate as v1 by content; run records may declare `preregistration_digest` + `preregistration_path` (SHA-256 of a tracked pre-reg file, content-verified) and `producing_agent` (`identity` + `session_ref`); when the registry sets `preregistration_policy.required_after_run_date`, any run whose `run_id` ends with a date on or after the cutoff must supply all three | Reads `docs/experiment_contract_registry.json` and `experiments/**/experiment_manifest.json`; portable contracts in `schemas/experiment_contract_registry.schema.json` and `schemas/experiment_manifest.schema.json` |
 | `validate_gate_verdict.py` | Discover per-gate verdicts, require registered claim IDs/canonical tiers/statuses, and resolve evidence paths | Reads `experiments/*/results/gate_verdicts/*.json` + `docs/claim_registry.json` |
 | `validate_public_artifact_envelopes.py` | Validate declared public digest sidecars against tracked public bytes and embedded raw-source receipts | Reads manifest `envelope_path` entries and `*.envelope.json`; portable contract in `schemas/public_artifact_envelope.schema.json` |
 | `check_primer_metadata.py` | Require matching titles across all six primer HTML `<title>` values and PDF metadata | Needs `pdfinfo` (`poppler-utils` in CI) |
@@ -814,6 +815,7 @@ Raw outputs stay under `artifacts/` until summarized.
 | `build_effective_dimension_pdf.py` | Rate-distortion effective-dimension PDF |
 | `build_concern_weighted_weakness_pdf.py` | Concern-weighted weakness note |
 | `build_gauge_fixed_concern_transport_pdf.py` | GFC transport PDF; always writes repository copies and optionally mirrors to an injected external archive path (the CLI uses it only when the local archive exists) |
+| `build_constraint_swap_causal_geometry_pdf.py` | Deterministic eight-page constraint-swap counterexample PDF from committed results and figures; writes both repository copies and mirrors to the local Metaphysics archive only when it exists |
 | `build_cogr_wave0_pdf.py` | Concern-Gated Retrieval Wave 0 report PDF. Reads `papers/concern_gated_retrieval_wave0/paper.md` (produced upstream by report-draft) and embeds the six dark-mode figures referenced by the markdown (produced upstream by report-figures). Uses a monospace body font (DejaVu Sans Mono when the matplotlib TTF is available; otherwise ReportLab's built-in Courier). Deterministic (`rl_config.invariant = True`). Writes `papers/concern_gated_retrieval_wave0/paper.pdf` and `papers/pdf/concern_gated_retrieval_wave0.pdf`; mirrors to `/Users/jawaun/Metaphysics of Intelligence/Concern_Gated_Retrieval_Wave0_2026_07_23.pdf` only when that parent directory already exists (never creates it). |
 | `build_cogr_wave1a_pdf.py` | Concern-Gated Retrieval Wave 1a (COGR-E2a) report PDF. Reads `papers/concern_gated_retrieval_e2a/paper.md` and embeds the dark-mode figures. Same deterministic monospace ReportLab build as the Wave 0 builder. Writes `papers/concern_gated_retrieval_e2a/paper.pdf` and `papers/pdf/concern_gated_retrieval_e2a.pdf`; mirrors to the Metaphysics archive only when that parent directory already exists. |
 | `build_cogr_wave1b_pdf.py` | Concern-Gated Retrieval Wave 1b (COGR-E2b) report PDF. Reads `papers/concern_gated_retrieval_e2b/paper.md` and embeds the dark-mode figures; auto-resolves `fig<N>_*_dark.png` when the markdown references a bare stem. Writes `papers/concern_gated_retrieval_e2b/paper.pdf` and `papers/pdf/concern_gated_retrieval_e2b.pdf`; mirrors to the Metaphysics archive only when that parent directory already exists. |
@@ -882,6 +884,7 @@ Raw outputs stay under `artifacts/` until summarized.
 | `make_metric_stack_synthesis_figures.py` | Metric-stack synthesis (Papers 16b–25) |
 | `make_synthesis_anchor_figures.py` | Per-anchor synthesis figures |
 | `make_gauge_fixed_concern_transport_figures.py` | GFC figures (`--in`, `--out-dir`) |
+| `make_constraint_swap_causal_geometry_figures.py` | Four constraint-swap figures for the registered chain, geometry/swap intervals, matched latent transports, and noncompensatory gates |
 | `_patch_figure_titles.py` | One-off PNG title renumbering |
 
 ### 4.4 Summarizers & helpers
@@ -926,6 +929,7 @@ Pattern: `papers/<topic>/paper.md` (+ optional prereg/runbook/figures).
 Notable bundles:
 
 - `papers/icml_publication_package_2026/` — submission packages
+- `papers/constraint_swap_causal_geometry/` — citation-grounded source, four figures, and deterministic PDF for the registered scoped counterexample
 - Synthesis: `metaphysics_synthesis`, `metric_stack_synthesis`, literature audits/reviews
 - Review methods: `unified_citation_grounded_review` (framework, ontology, executable reviewer, and alpha-research operating system)
 - Benchmark framing: `causally_grounded_agents_benchmark`, `weakness_invariance_neurips`
