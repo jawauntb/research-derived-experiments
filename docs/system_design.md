@@ -205,23 +205,35 @@ Each experiment directory is a self-contained research unit. Typical contents:
 
 | Set | Count |
 |---|---|
-| Research experiment packages | **61** |
+| Research experiment packages | **63** |
 | Shared non-experiment support packages | **1** — `experiments/common` |
 | Contain one or more `modal_*.py` entrypoints | **47** |
-| Canonical package-root `experiment_manifest.json` files | **13** |
-| Authoritative package-contract records | **61** = **13** `structured_manifest` + **48** time-bounded `legacy_exception` in `docs/experiment_contract_registry.json` |
+| Canonical package-root `experiment_manifest.json` files | **15** |
+| Authoritative package-contract records | **63** = **15** `structured_manifest` + **48** time-bounded `legacy_exception` in `docs/experiment_contract_registry.json` |
 | Canonical per-gate verdict files | **1** (E5). Ten evidence rows declare gate IDs; only E5 currently has a committed verdict file. Manifest gate declarations are not verdicts. |
 | Canonical claim records | **12** |
 | Canonical evidence records | **12** |
-| Generated provenance/verification output | **61** experiment cards and index rows; `common` is excluded |
+| Generated provenance/verification output | **63** experiment cards and index rows; `common` is excluded |
 
 `scripts/gen_provenance.py --check` makes the generated count a derived invariant
 rather than a second hand-maintained inventory. Recent local packages including
 `mathematical_claims`, `bayesian_voi`, `seed_bootstrap_calibration`,
 `passive_active_phase_map`, `grounded_statecharts`,
 `load_bearing_prose_test`, `concern_gated_retrieval`, and
-`constraint_swap_causal_geometry` are present in the regenerated 61-package
+`constraint_swap_causal_geometry`, and `future_commitment_quotient` are present in the regenerated 63-package
 index.
+
+`experiments/future_commitment_quotient/` is the exact finite-state successor
+to the Constraint-Swap null. It preregisters a 2×2 crossing of coordinate
+preservation with delayed-transition preservation, computes maximal
+future-commitment bisimulation by partition refinement, and searches the
+product machine for finite distinguishing words. Its fail-closed runner checks
+the exact family/seed/cell Cartesian product, family-local predictor separation,
+strict JSON output, and a paper-digest-bound independent G5 adjudication. The
+accepted 768-row run shows that coordinates are neither necessary nor
+sufficient for registered future behavior while exact quotient agreement
+separates all cells. This is a white-box deterministic diagnostic and does not
+claim learned constraint discovery, stochastic generalization, or repair.
 
 Raw run outputs go to **gitignored** `artifacts/<experiment>/`. Only summarized
 reports and intentionally public tables/PDFs are committed.
@@ -318,7 +330,7 @@ docs/claim_registry.json + docs/program_evidence_registry.json
 
 docs/experiment_contract_registry.json
     → scripts/validate_experiment_manifest.py (no-argument mode) → pass/fail
-      Exact 61-package XOR partition: root manifest XOR active legacy exception.
+      Exact 63-package XOR partition: root manifest XOR active legacy exception.
       Frozen legacy-package set + SHA-256 digest reject ungrounded new exceptions.
       Normal CI warns ≤30 days before expiry and fails on expiry (≤180-day renewals).
       Structured run records may list claim/evidence IDs with empty
@@ -570,6 +582,7 @@ can run the identical wrapper before opening a PR.
 |---|---|---|
 | **Weakness → OOD** | `weakness_vs_simplicity`, `symbolic_weakness`, `rotation_weakness`, `learned_symmetry`, `grid_cell_weakness`, `structure_compatible_generalization` | Structure-/symmetry-compatible hypothesis weakness predicts OOD where simplicity/MDL/flatness do not |
 | **Concept / activation geometry** | `concept_geometry`, `activation_geometry`, `paraphrase_weakness`, `passive_to_active`, `constraint_swap_causal_geometry` | Bridge geometry in embeddings and hidden states; test when geometry becomes causally load-bearing and preserve scoped counterexamples when behavior succeeds without the registered geometry |
+| **Future commitment / constraint repair** | `future_commitment_quotient` | Separate coordinate realizations from exact future constraints in deterministic finite agents; provide an oracle target and adversarial controls for later partial-access discovery and minimal-repair research |
 | **Primer-derived calibration** | `mathematical_claims`, `bayesian_voi`, `seed_bootstrap_calibration`, `passive_active_phase_map`; shared `experiments/common/causal_use.py` | Make theorem assumptions executable; separate value of information from error; calibrate seed/bootstrap policies; distinguish smooth crossover from bifurcation/path dependence; measure causal use across commitment surfaces |
 | **Maintained concern / metric stack** | Papers 5–25 family (valence → homeostatic → planning → first-order self → world responds → …) | Concern/ΔE geometry as control substrate; self/world attribution; re-engagement |
 | **Concern-gated retrieval** | `concern_gated_retrieval` | Two-sided context/care graph nomination plus goal-conditioned bounded-observer utilization filtering; synthetic diagnostic only |
@@ -1348,6 +1361,7 @@ python3 -m experiments.grounded_statecharts.run_harness_unlearning
 python3 -m experiments.grounded_statecharts.run_live_smoke
 python3 -m experiments.grounded_statecharts.run_unified_replay
 python3 -m experiments.concern_gated_retrieval.run_pilot
+uv run --no-sync python -m experiments.future_commitment_quotient.run_experiment
 
 python scripts/regen.py grid_cell_weakness
 python scripts/regen.py weakness_temporal
@@ -1372,7 +1386,7 @@ pins the PEP 735 quality environment, and the explicit `pytorch-cpu` source
 keeps Linux CI from resolving CUDA, NVIDIA, or Triton packages. Every remaining
 command reuses that environment through `uv run --no-sync`:
 
-1. `pytest -q tests` over all 103 root test files (torch, numpy, scikit-learn,
+1. `pytest -q tests` over all 139 root test files (torch, numpy, scikit-learn,
    matplotlib, reportlab, pytest)
 2. `compileall` on `scripts`, `experiments`, `tests`
 3. `publication_guard.py`
@@ -1572,7 +1586,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 - **No universal research dependency specification.** The root quality gate has a complete locked dependency group, but experiment and Modal runtimes still rely on command-specific `uvx` sets or explicit Modal images.
 - **Machine-specific paths** in docs/handoffs (Doppler scope, local archives).
 - **Result fidelity depends on summarization discipline.** Gitignored JSON vs committed Markdown can drift.
-- **Structured-contract coverage is early but fail-closed.** All 61 research packages are partitioned in `docs/experiment_contract_registry.json` (13 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction. Public-artifact digest envelopes cover the E5 confirmatory JSON and E4 appendix. Clean-clone CPU reproduction is allowlisted for `bayesian_voi`, `grounded_statecharts`, `mathematical_claims`, and `seed_bootstrap_calibration`.
+- **Structured-contract coverage is early but fail-closed.** All 63 research packages are partitioned in `docs/experiment_contract_registry.json` (15 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction. Public-artifact digest envelopes cover the E5 confirmatory JSON and E4 appendix. Clean-clone CPU reproduction is allowlisted for `bayesian_voi`, `grounded_statecharts`, `mathematical_claims`, and `seed_bootstrap_calibration`.
 - **Paper-primary experiments** may have no committed `results/*.md`; evidence lives in the paper + local artifacts.
 - **Coherence / Inquiry / Cabal / site tests** are outside the root Python quality gate.
 - **Scientific claims are gate-bound.** Fixture smokes do not settle the program thesis.

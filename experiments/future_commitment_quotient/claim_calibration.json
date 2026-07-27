@@ -1,0 +1,55 @@
+{
+  "artifact_contract": "future-commitment-quotient-claim-calibration/v2",
+  "paper_sha256": "6d7474100f13459bc7a1143cab902970a666e01aa21b48448ee0398101ff4224",
+  "independent_review": {
+    "status": "approved",
+    "reviewer": "Independent OpenAI Codex agent reviewer (/root/g5_independent_adjudication)",
+    "reviewed_at": "2026-07-27T20:04:07Z"
+  },
+  "human_review": {
+    "status": "pending",
+    "reviewer": null,
+    "reviewed_at": null
+  },
+  "checks": {
+    "prior_art_citations": {
+      "adjudication": "approved",
+      "evidence_anchor": "## 9. Relation to prior work",
+      "required_content": [
+        "Model minimization and bisimulation already establish coordinate-free state equivalence for planning and transition systems",
+        "Unsupervised disentanglement is not identifiable without inductive biases",
+        "Causal abstraction and distributed alignment work use interventions to connect neural states to high-level causal models"
+      ]
+    },
+    "bounded_interaction_prior_art": {
+      "adjudication": "approved",
+      "evidence_anchor": "## 9. Relation to prior work",
+      "required_content": [
+        "the 2026 bounded-interaction theorem extends that logic to agent-limited POMDP probes",
+        "Our deterministic finite result is a simpler specialization"
+      ]
+    },
+    "theorem_novelty_calibration": {
+      "adjudication": "approved",
+      "evidence_anchor": "## 3. Theorems",
+      "required_content": [
+        "Theorems 1--4 are proved finite specializations or corollaries of classical automata-minimization, bisimulation, and distinguishing-sequence results; they are not presented as novel theorems."
+      ]
+    },
+    "prior_constraint_swap_null_preserved": {
+      "adjudication": "approved",
+      "evidence_anchor": "## 8. Resolution of the earlier Constraint-Swap null",
+      "required_content": [
+        "This paper does not rescue that mechanism.",
+        "The null remains evidence against the geometry-mediated mechanism."
+      ]
+    },
+    "unsupported_claims_withheld": {
+      "adjudication": "approved",
+      "evidence_anchor": "## 7. What has not been proved",
+      "required_content": [
+        "It withholds claims about learned constraint discovery, stochastic agents, real networks, natural tasks, and general intelligence."
+      ]
+    }
+  }
+}

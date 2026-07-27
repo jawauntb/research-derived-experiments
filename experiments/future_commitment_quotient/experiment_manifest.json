@@ -167,10 +167,15 @@
       "public": true
     },
     {
+      "kind": "other",
+      "path": "experiments/future_commitment_quotient/claim_calibration.json",
+      "public": true
+    },
+    {
       "kind": "paper",
       "path": "papers/future_commitment_quotient/paper.pdf",
       "public": true
     }
   ],
-  "status": "planned"
+  "status": "accepted"
 }

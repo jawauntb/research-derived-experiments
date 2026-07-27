@@ -1,0 +1,687 @@
+{
+  "artifact_contract": "future-commitment-quotient-summary/v1",
+  "condition_metrics": {
+    "RD_CA": {
+      "behavioral_disagreement_max": 1.0,
+      "behavioral_disagreement_mean": 1.0,
+      "behavioral_disagreement_min": 1.0,
+      "coordinate_equality_max": 0.0,
+      "coordinate_equality_mean": 0.0,
+      "coordinate_equality_min": 0.0,
+      "coordinate_geometry_correlation_max": 0.7717522900528034,
+      "coordinate_geometry_correlation_mean": -0.0042345005907350325,
+      "coordinate_geometry_correlation_min": -0.5259905856218142,
+      "current_output_agreement_max": 1.0,
+      "current_output_agreement_mean": 1.0,
+      "current_output_agreement_min": 1.0,
+      "depth_one_agreement_max": 1.0,
+      "depth_one_agreement_mean": 1.0,
+      "depth_one_agreement_min": 1.0,
+      "n": 192,
+      "quotient_agreement_max": 0.0,
+      "quotient_agreement_mean": 0.0,
+      "quotient_agreement_min": 0.0,
+      "shortest_witness_length_max": 3.0,
+      "shortest_witness_length_mean": 3.0,
+      "shortest_witness_length_min": 3.0
+    },
+    "RD_CP": {
+      "behavioral_disagreement_max": 0.0,
+      "behavioral_disagreement_mean": 0.0,
+      "behavioral_disagreement_min": 0.0,
+      "coordinate_equality_max": 0.0,
+      "coordinate_equality_mean": 0.0,
+      "coordinate_equality_min": 0.0,
+      "coordinate_geometry_correlation_max": 0.7717522900528034,
+      "coordinate_geometry_correlation_mean": -0.0042345005907350325,
+      "coordinate_geometry_correlation_min": -0.5259905856218142,
+      "current_output_agreement_max": 1.0,
+      "current_output_agreement_mean": 1.0,
+      "current_output_agreement_min": 1.0,
+      "depth_one_agreement_max": 1.0,
+      "depth_one_agreement_mean": 1.0,
+      "depth_one_agreement_min": 1.0,
+      "n": 192,
+      "quotient_agreement_max": 1.0,
+      "quotient_agreement_mean": 1.0,
+      "quotient_agreement_min": 1.0,
+      "shortest_witness_length_max": null,
+      "shortest_witness_length_mean": null,
+      "shortest_witness_length_min": null
+    },
+    "RP_CA": {
+      "behavioral_disagreement_max": 1.0,
+      "behavioral_disagreement_mean": 1.0,
+      "behavioral_disagreement_min": 1.0,
+      "coordinate_equality_max": 1.0,
+      "coordinate_equality_mean": 1.0,
+      "coordinate_equality_min": 1.0,
+      "coordinate_geometry_correlation_max": 1.0,
+      "coordinate_geometry_correlation_mean": 1.0,
+      "coordinate_geometry_correlation_min": 0.9999999999999998,
+      "current_output_agreement_max": 1.0,
+      "current_output_agreement_mean": 1.0,
+      "current_output_agreement_min": 1.0,
+      "depth_one_agreement_max": 1.0,
+      "depth_one_agreement_mean": 1.0,
+      "depth_one_agreement_min": 1.0,
+      "n": 192,
+      "quotient_agreement_max": 0.0,
+      "quotient_agreement_mean": 0.0,
+      "quotient_agreement_min": 0.0,
+      "shortest_witness_length_max": 3.0,
+      "shortest_witness_length_mean": 3.0,
+      "shortest_witness_length_min": 3.0
+    },
+    "RP_CP": {
+      "behavioral_disagreement_max": 0.0,
+      "behavioral_disagreement_mean": 0.0,
+      "behavioral_disagreement_min": 0.0,
+      "coordinate_equality_max": 1.0,
+      "coordinate_equality_mean": 1.0,
+      "coordinate_equality_min": 1.0,
+      "coordinate_geometry_correlation_max": 1.0,
+      "coordinate_geometry_correlation_mean": 1.0,
+      "coordinate_geometry_correlation_min": 0.9999999999999998,
+      "current_output_agreement_max": 1.0,
+      "current_output_agreement_mean": 1.0,
+      "current_output_agreement_min": 1.0,
+      "depth_one_agreement_max": 1.0,
+      "depth_one_agreement_mean": 1.0,
+      "depth_one_agreement_min": 1.0,
+      "n": 192,
+      "quotient_agreement_max": 1.0,
+      "quotient_agreement_mean": 1.0,
+      "quotient_agreement_min": 1.0,
+      "shortest_witness_length_max": null,
+      "shortest_witness_length_mean": null,
+      "shortest_witness_length_min": null
+    }
+  },
+  "gates": {
+    "F0_CONSTRUCTION_PROVENANCE": {
+      "observed": {
+        "condition_counts": {
+          "RD_CA": 192,
+          "RD_CP": 192,
+          "RP_CA": 192,
+          "RP_CP": 192
+        },
+        "expected_rows": 768,
+        "expected_seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63
+        ],
+        "expected_seeds_supplied": true,
+        "factorial_cells_exact": true,
+        "family_counts": {
+          "modulo_three": 256,
+          "order": 256,
+          "parity": 256
+        },
+        "rows": 768,
+        "seed_sets": {
+          "modulo_three": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63
+          ],
+          "order": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63
+          ],
+          "parity": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63
+          ]
+        }
+      },
+      "pass": true
+    },
+    "F1_FORMAL_IMPLEMENTATION": {
+      "observed": "all per-row exhaustive checks pass",
+      "pass": true
+    },
+    "G1_REPRESENTATION_NON_NECESSITY": {
+      "observed": "all RD-CP rows preserve quotient and behavior",
+      "pass": true
+    },
+    "G2_REPRESENTATION_NON_SUFFICIENCY": {
+      "observed": "all RP-CA rows preserve local observations and diverge later",
+      "pass": true
+    },
+    "G3_FACTORIAL_PREDICTOR_SEPARATION": {
+      "observed": {
+        "coordinate_geometry": {
+          "balanced_accuracy": 0.5,
+          "folds": {
+            "modulo_three": {
+              "prediction_rule": {
+                "kind": "constant_prediction",
+                "prediction": true
+              },
+              "test_balanced_accuracy": 0.5,
+              "train_balanced_accuracy": 0.5
+            },
+            "order": {
+              "prediction_rule": {
+                "kind": "constant_prediction",
+                "prediction": true
+              },
+              "test_balanced_accuracy": 0.5,
+              "train_balanced_accuracy": 0.5
+            },
+            "parity": {
+              "prediction_rule": {
+                "kind": "constant_prediction",
+                "prediction": true
+              },
+              "test_balanced_accuracy": 0.5,
+              "train_balanced_accuracy": 0.5
+            }
+          }
+        },
+        "current_output_agreement": {
+          "balanced_accuracy": 0.5,
+          "folds": {
+            "modulo_three": {
+              "prediction_rule": {
+                "kind": "constant_prediction",
+                "prediction": true
+              },
+              "test_balanced_accuracy": 0.5,
+              "train_balanced_accuracy": 0.5
+            },
+            "order": {
+              "prediction_rule": {
+                "kind": "constant_prediction",
+                "prediction": true
+              },
+              "test_balanced_accuracy": 0.5,
+              "train_balanced_accuracy": 0.5
+            },
+            "parity": {
+              "prediction_rule": {
+                "kind": "constant_prediction",
+                "prediction": true
+              },
+              "test_balanced_accuracy": 0.5,
+              "train_balanced_accuracy": 0.5
+            }
+          }
+        },
+        "depth_one_agreement": {
+          "balanced_accuracy": 0.5,
+          "folds": {
+            "modulo_three": {
+              "prediction_rule": {
+                "kind": "constant_prediction",
+                "prediction": true
+              },
+              "test_balanced_accuracy": 0.5,
+              "train_balanced_accuracy": 0.5
+            },
+            "order": {
+              "prediction_rule": {
+                "kind": "constant_prediction",
+                "prediction": true
+              },
+              "test_balanced_accuracy": 0.5,
+              "train_balanced_accuracy": 0.5
+            },
+            "parity": {
+              "prediction_rule": {
+                "kind": "constant_prediction",
+                "prediction": true
+              },
+              "test_balanced_accuracy": 0.5,
+              "train_balanced_accuracy": 0.5
+            }
+          }
+        },
+        "quotient_agreement": {
+          "balanced_accuracy": 1.0,
+          "folds": {
+            "modulo_three": {
+              "prediction_rule": {
+                "kind": "finite_threshold",
+                "threshold": 1.0
+              },
+              "test_balanced_accuracy": 1.0,
+              "train_balanced_accuracy": 1.0
+            },
+            "order": {
+              "prediction_rule": {
+                "kind": "finite_threshold",
+                "threshold": 1.0
+              },
+              "test_balanced_accuracy": 1.0,
+              "train_balanced_accuracy": 1.0
+            },
+            "parity": {
+              "prediction_rule": {
+                "kind": "finite_threshold",
+                "threshold": 1.0
+              },
+              "test_balanced_accuracy": 1.0,
+              "train_balanced_accuracy": 1.0
+            }
+          }
+        }
+      },
+      "pass": true
+    },
+    "G4_FAMILY_TRANSFER": {
+      "observed": {
+        "modulo_three": {
+          "predictor_separation": true,
+          "representation_non_necessity": true,
+          "representation_non_sufficiency": true
+        },
+        "order": {
+          "predictor_separation": true,
+          "representation_non_necessity": true,
+          "representation_non_sufficiency": true
+        },
+        "parity": {
+          "predictor_separation": true,
+          "representation_non_necessity": true,
+          "representation_non_sufficiency": true
+        }
+      },
+      "pass": true
+    },
+    "G5_CLAIM_CALIBRATION": {
+      "observed": "paper calibration audit passed",
+      "pass": true
+    }
+  },
+  "n_rows": 768,
+  "per_family": {
+    "modulo_three": {
+      "predictor_separation": true,
+      "representation_non_necessity": true,
+      "representation_non_sufficiency": true
+    },
+    "order": {
+      "predictor_separation": true,
+      "representation_non_necessity": true,
+      "representation_non_sufficiency": true
+    },
+    "parity": {
+      "predictor_separation": true,
+      "representation_non_necessity": true,
+      "representation_non_sufficiency": true
+    }
+  },
+  "predictors": {
+    "coordinate_geometry": {
+      "balanced_accuracy": 0.5,
+      "folds": {
+        "modulo_three": {
+          "prediction_rule": {
+            "kind": "constant_prediction",
+            "prediction": true
+          },
+          "test_balanced_accuracy": 0.5,
+          "train_balanced_accuracy": 0.5
+        },
+        "order": {
+          "prediction_rule": {
+            "kind": "constant_prediction",
+            "prediction": true
+          },
+          "test_balanced_accuracy": 0.5,
+          "train_balanced_accuracy": 0.5
+        },
+        "parity": {
+          "prediction_rule": {
+            "kind": "constant_prediction",
+            "prediction": true
+          },
+          "test_balanced_accuracy": 0.5,
+          "train_balanced_accuracy": 0.5
+        }
+      }
+    },
+    "current_output_agreement": {
+      "balanced_accuracy": 0.5,
+      "folds": {
+        "modulo_three": {
+          "prediction_rule": {
+            "kind": "constant_prediction",
+            "prediction": true
+          },
+          "test_balanced_accuracy": 0.5,
+          "train_balanced_accuracy": 0.5
+        },
+        "order": {
+          "prediction_rule": {
+            "kind": "constant_prediction",
+            "prediction": true
+          },
+          "test_balanced_accuracy": 0.5,
+          "train_balanced_accuracy": 0.5
+        },
+        "parity": {
+          "prediction_rule": {
+            "kind": "constant_prediction",
+            "prediction": true
+          },
+          "test_balanced_accuracy": 0.5,
+          "train_balanced_accuracy": 0.5
+        }
+      }
+    },
+    "depth_one_agreement": {
+      "balanced_accuracy": 0.5,
+      "folds": {
+        "modulo_three": {
+          "prediction_rule": {
+            "kind": "constant_prediction",
+            "prediction": true
+          },
+          "test_balanced_accuracy": 0.5,
+          "train_balanced_accuracy": 0.5
+        },
+        "order": {
+          "prediction_rule": {
+            "kind": "constant_prediction",
+            "prediction": true
+          },
+          "test_balanced_accuracy": 0.5,
+          "train_balanced_accuracy": 0.5
+        },
+        "parity": {
+          "prediction_rule": {
+            "kind": "constant_prediction",
+            "prediction": true
+          },
+          "test_balanced_accuracy": 0.5,
+          "train_balanced_accuracy": 0.5
+        }
+      }
+    },
+    "quotient_agreement": {
+      "balanced_accuracy": 1.0,
+      "folds": {
+        "modulo_three": {
+          "prediction_rule": {
+            "kind": "finite_threshold",
+            "threshold": 1.0
+          },
+          "test_balanced_accuracy": 1.0,
+          "train_balanced_accuracy": 1.0
+        },
+        "order": {
+          "prediction_rule": {
+            "kind": "finite_threshold",
+            "threshold": 1.0
+          },
+          "test_balanced_accuracy": 1.0,
+          "train_balanced_accuracy": 1.0
+        },
+        "parity": {
+          "prediction_rule": {
+            "kind": "finite_threshold",
+            "threshold": 1.0
+          },
+          "test_balanced_accuracy": 1.0,
+          "train_balanced_accuracy": 1.0
+        }
+      }
+    }
+  },
+  "verdict": {
+    "all_gates_pass": true,
+    "decision": "ACCEPT_SCOPED_FINITE_QUOTIENT_CLAIM",
+    "failed_gates": []
+  }
+}

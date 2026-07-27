@@ -936,6 +936,39 @@
       }
     },
     {
+      "package": "future_commitment_quotient",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/future_commitment_quotient/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "future_commitment_quotient_2026_07_27",
+      "runs": [
+        {
+          "run_id": "future_commitment_quotient_2026_07_27",
+          "publication_package": "future_commitment_quotient",
+          "runtime_package": "future_commitment_quotient",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/future_commitment_quotient/experiment_manifest.json",
+          "report_paths": [
+            "experiments/future_commitment_quotient/claim_calibration.json",
+            "experiments/future_commitment_quotient/results/registered_rows.jsonl",
+            "experiments/future_commitment_quotient/results/summary.json",
+            "experiments/future_commitment_quotient/results/summary.md",
+            "papers/future_commitment_quotient/paper.pdf"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_digest": "179afa61ba7052ab202533309bc9d4a74d3ea8d88a07ec2bc0008d02669e99c6",
+          "preregistration_path": "experiments/future_commitment_quotient/PREREGISTRATION.md",
+          "producing_agent": {
+            "identity": "OpenAI Codex (GPT-5)",
+            "session_ref": "future-commitment-quotient 2026-07-27"
+          }
+        }
+      ]
+    },
+    {
       "package": "gauge_fixed_concern_transport",
       "coverage_mode": "legacy_exception",
       "legacy_exception": {
