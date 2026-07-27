@@ -1,0 +1,169 @@
+{
+  "T1_rank_1880": 2,
+  "T1_rank_1904": 3,
+  "cuts": {
+    "1880": {
+      "T1_rank": 2,
+      "class_documents": {
+        "T1_absolute_simultaneity": 1,
+        "T2_privileged_frame": 0,
+        "T3_local_time_artifice": 0,
+        "unclassified": 3
+      },
+      "class_scores": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 0,
+        "T3_local_time_artifice": 0,
+        "unclassified": 65
+      },
+      "class_sizes": {
+        "T1_absolute_simultaneity": 1,
+        "T2_privileged_frame": 0,
+        "T3_local_time_artifice": 0,
+        "unclassified": 50
+      },
+      "cut_year": 1880,
+      "n_documents": 3,
+      "n_propositions": 51,
+      "ranking": [
+        {
+          "class": "unclassified",
+          "score": 65
+        },
+        {
+          "class": "T1_absolute_simultaneity",
+          "score": 0
+        },
+        {
+          "class": "T2_privileged_frame",
+          "score": 0
+        },
+        {
+          "class": "T3_local_time_artifice",
+          "score": 0
+        }
+      ]
+    },
+    "1897": {
+      "T1_rank": 3,
+      "class_documents": {
+        "T1_absolute_simultaneity": 2,
+        "T2_privileged_frame": 5,
+        "T3_local_time_artifice": 0,
+        "unclassified": 8
+      },
+      "class_scores": {
+        "T1_absolute_simultaneity": 3,
+        "T2_privileged_frame": 11,
+        "T3_local_time_artifice": 0,
+        "unclassified": 167
+      },
+      "class_sizes": {
+        "T1_absolute_simultaneity": 2,
+        "T2_privileged_frame": 8,
+        "T3_local_time_artifice": 0,
+        "unclassified": 125
+      },
+      "cut_year": 1897,
+      "n_documents": 8,
+      "n_propositions": 135,
+      "ranking": [
+        {
+          "class": "unclassified",
+          "score": 167
+        },
+        {
+          "class": "T2_privileged_frame",
+          "score": 11
+        },
+        {
+          "class": "T1_absolute_simultaneity",
+          "score": 3
+        },
+        {
+          "class": "T3_local_time_artifice",
+          "score": 0
+        }
+      ]
+    },
+    "1904": {
+      "T1_rank": 3,
+      "class_documents": {
+        "T1_absolute_simultaneity": 5,
+        "T2_privileged_frame": 8,
+        "T3_local_time_artifice": 2,
+        "unclassified": 15
+      },
+      "class_scores": {
+        "T1_absolute_simultaneity": 9,
+        "T2_privileged_frame": 15,
+        "T3_local_time_artifice": 2,
+        "unclassified": 302
+      },
+      "class_sizes": {
+        "T1_absolute_simultaneity": 7,
+        "T2_privileged_frame": 11,
+        "T3_local_time_artifice": 2,
+        "unclassified": 235
+      },
+      "cut_year": 1904,
+      "n_documents": 15,
+      "n_propositions": 254,
+      "ranking": [
+        {
+          "class": "unclassified",
+          "score": 302
+        },
+        {
+          "class": "T2_privileged_frame",
+          "score": 15
+        },
+        {
+          "class": "T1_absolute_simultaneity",
+          "score": 9
+        },
+        {
+          "class": "T3_local_time_artifice",
+          "score": 2
+        }
+      ]
+    }
+  },
+  "gates": {
+    "M1_T1_first_at_1904": {
+      "T1_rank": 3,
+      "decision": "NO_GO",
+      "top_class": "unclassified",
+      "top_score": 302
+    },
+    "M2_T1_not_first_at_1880": {
+      "T1_rank": 2,
+      "decision": "GO",
+      "top_class": "unclassified"
+    },
+    "M3_beats_random_null": {
+      "decision": "NO_GO",
+      "n_trials": 10000,
+      "p_value": 0.2512,
+      "threshold": 0.01
+    },
+    "M4_scoring_function_committed": {
+      "decision": "GO",
+      "sha256": "bef69991ee199e32746acd994fbab7dab61ee6d238939d0fc4438d967664209b"
+    }
+  },
+  "ground_truth_class": "T1_absolute_simultaneity",
+  "kind": "dcr3_verdict",
+  "kind_weight": {
+    "asserted": 1,
+    "presupposed": 2,
+    "required_by_argument": 3
+  },
+  "licensed_reading": "DR_arc_does_not_solve_its_load_bearing_question: T1 does not rank first at 1904 under the preregistered execution-free scoring. Combined with DR5/DR7 predictions, this is a clean structural falsification: the DR-arc as designed cannot identify multi-realisation commitments even with correct class grouping and placebo-clean aggregation.",
+  "multidoc_min_docs": 2,
+  "n_null_trials": 10000,
+  "nominate_module_sha256": "bef69991ee199e32746acd994fbab7dab61ee6d238939d0fc4438d967664209b",
+  "null_probability_T1_first_at_1904": 0.2512,
+  "overall_decision": "NO_GO",
+  "purpose": "The DR-arc's original load-bearing question: does an execution-free nominator rank Einstein's deletion (T1) first on real pre-1905 material, at a level that beats random?"
+}
