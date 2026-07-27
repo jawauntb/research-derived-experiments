@@ -500,6 +500,26 @@
             "identity": "Claude Code (Opus 4.7)",
             "session_ref": "date-cut-retrodiction-dcr1e 2026-07-27"
           }
+        },
+        {
+          "run_id": "date_cut_retrodiction_dcr1f_2026_07_27",
+          "publication_package": "date_cut_retrodiction",
+          "runtime_package": "date_cut_retrodiction",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/date_cut_retrodiction/experiment_manifest.json",
+          "report_paths": [
+            "experiments/date_cut_retrodiction/results/dcr1f_verdict.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_digest": "48a6055b4e3642b8482bc7295e07aa511311a55e7fa91fefe53ace4a828e4bd8",
+          "preregistration_path": "experiments/date_cut_retrodiction/DCR1F_PREREGISTRATION.md",
+          "producing_agent": {
+            "identity": "Claude Code (Opus 4.7)",
+            "session_ref": "date-cut-retrodiction-dcr1f 2026-07-27"
+          }
         }
       ]
     },

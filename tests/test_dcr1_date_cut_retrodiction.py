@@ -648,3 +648,109 @@ def test_dcr1e_recognizer_gap_is_real() -> None:
         "and DCR1e's diagnostic is no longer current -- and probably means "
         "target_v4 has been introduced without preregistration."
     )
+
+
+# --- DCR1f: target_v4 matcher + held-out validation ---------------------
+
+
+def test_dcr1f_target_v4_carries_v3_alternatives_forward() -> None:
+    """target_v4 must not lose Newton coverage: R6 of the DCR1f prereg."""
+    from experiments.date_cut_retrodiction.target_v4 import match_facets_v4
+
+    newton = [
+        {
+            "doc_id": "newton_1687_scholium",
+            "name": "absolute_time_flows_equably",
+            "statement": (
+                "Absolute, true, and mathematical time, of itself, and from "
+                "its own nature, flows equably without regard to anything "
+                "external, and by another name is called duration."
+            ),
+        }
+    ]
+    assert match_facets_v4(newton)["T1_absolute_simultaneity"]
+
+
+def test_dcr1f_target_v4_fires_on_the_dcr1e_recognizer_gap() -> None:
+    """The 5 DCR1e T1-content propositions that target_v3 rejected are exactly
+    the propositions target_v4 was drafted to catch. If v4 stops firing on
+    them, its point disappears."""
+    from experiments.date_cut_retrodiction.target_v4 import match_facets_v4
+
+    for name, statement in [
+        (
+            "common_time_across_two_systems",
+            "There is a common time t in which the position of an electron in "
+            "the moving medium can be compared to its position in the medium "
+            "at rest at time t minus vx over c squared.",
+        ),
+        (
+            "time_of_journey_perfectly_definite",
+            "The time of journey of light along any given path through any "
+            "kind of material is perfectly definite and independent of the "
+            "motion of the material.",
+        ),
+        (
+            "instant_across_whole_medium",
+            "There is an instant at which the amount of energy in the whole "
+            "medium is a definite quantity equally divided.",
+        ),
+        (
+            "eclipse_perceived_simultaneously_over_earth",
+            "The astronomers suppose that an eclipse of the moon is "
+            "perceived simultaneously from all points of the earth.",
+        ),
+        (
+            "transmission_duration_practically_neglected",
+            "In general the duration of the transmission of a signal is "
+            "neglected and the two events are regarded as simultaneous.",
+        ),
+    ]:
+        hits = match_facets_v4([{"doc_id": "x", "name": name, "statement": statement}])
+        assert hits["T1_absolute_simultaneity"], f"target_v4 lost coverage on {name!r}"
+
+
+def test_dcr1f_target_v4_rejects_a_relativity_of_simultaneity_denial() -> None:
+    """target_v4's polarity veto: obvious relativity-of-simultaneity denials
+    must not fire T1. The DCR1f R3 threshold was 85%; this checks the
+    strongest denial form, which the veto is designed to catch."""
+    from experiments.date_cut_retrodiction.target_v4 import match_facets_v4
+
+    denials = [
+        {
+            "doc_id": "denial",
+            "name": "",
+            "statement": (
+                "Two events that are simultaneous in one frame need not be "
+                "simultaneous in another."
+            ),
+        },
+        {
+            "doc_id": "denial",
+            "name": "",
+            "statement": (
+                "There is no absolute simultaneity: whether two events happen "
+                "at the same time depends on the frame of reference."
+            ),
+        },
+    ]
+    for d in denials:
+        assert not match_facets_v4([d])["T1_absolute_simultaneity"], (
+            f"polarity veto missed: {d['statement']!r}"
+        )
+
+
+def test_dcr1f_heldout_digest_is_stable() -> None:
+    """The held-out validation set is committed to disk; its SHA-256 must
+    match the digest the DCR1f runner and the DCR1f preregistration both
+    reference. Any drift is a discipline failure that invalidates the
+    'target_v4 drafted before seeing the held-out set' guarantee."""
+    import hashlib
+    from pathlib import Path
+
+    package = Path(__file__).resolve().parent.parent / "experiments" / "date_cut_retrodiction"
+    payload = (package / "heldout_simultaneity_validation.json").read_bytes()
+    assert (
+        hashlib.sha256(payload).hexdigest()
+        == "8acdee3b9a4ede612a57a9efb37449337db38e889b2124f86992b5b1e49dc003"
+    )
