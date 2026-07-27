@@ -882,7 +882,7 @@
         "experiments/dr6_code_correctness_corollary/results/dr6_verdict.json"
       ],
       "n_modal_entrypoints": 0,
-      "n_scripts": 6,
+      "n_scripts": 7,
       "paper": null,
       "preregistration": "experiments/dr6_code_correctness_corollary/DR6C_PREREGISTRATION.md",
       "verification_signals": [],

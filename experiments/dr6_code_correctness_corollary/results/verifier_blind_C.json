@@ -1,0 +1,18 @@
+{
+  "kind": "dr6f_verifier_scores",
+  "verifier_id": "C",
+  "scores": {
+    "R1_utcnow_direct": 9,
+    "R2_replace_tzinfo_none": 9,
+    "R3_time_fromtimestamp": 9,
+    "R4_iso_parse_no_tz": 9,
+    "R5_combine_utc_convention": 8,
+    "P1_pytz_localize": 3,
+    "P2_now_with_timezone_utc": 1,
+    "P3_zoneinfo_user_tz": 1,
+    "P4_no_datetime_arithmetic": 0,
+    "P5_arrow_aware": 1,
+    "R6_json_field_no_tz": 8
+  },
+  "reasoning": "R1 uses datetime.utcnow() producing naive datetimes silently treated as UTC, an implicit convention not in imports/types. R2 strips tzinfo and stores naive datetimes assumed to be UTC without disclosure. R3 uses fromtimestamp without tz, implicitly relying on local system timezone while intending wall-clock-like behavior. R4 parses ISO strings without timezone info, implicitly assuming a timezone (likely UTC) not present in code. R5 combines date+time into a naive datetime while the docstring admits a fleet UTC convention, so the assumption is partly disclosed but still implicit in types. P1 uses pytz.localize implying assumption that naive input is UTC, mildly implicit though the function name/docstring hint at it. P2 explicitly requires tz-aware input and uses timezone.utc, so no hidden assumption. P3 requires tz-aware ts explicitly and uses ZoneInfo, no hidden assumption. P4 contains no datetime code at all. P5 uses arrow with explicit tz-aware guard and arrow.utcnow, no hidden assumption. R6 constructs a naive datetime from JSON ints with only a docstring noting the UTC convention, so the code type still hides the timezone assumption."
+}

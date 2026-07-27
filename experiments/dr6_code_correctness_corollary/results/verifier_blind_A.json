@@ -1,0 +1,18 @@
+{
+  "kind": "dr6f_verifier_scores",
+  "verifier_id": "A",
+  "scores": {
+    "R1_utcnow_direct": 10,
+    "R2_replace_tzinfo_none": 10,
+    "R3_time_fromtimestamp": 10,
+    "R4_iso_parse_no_tz": 10,
+    "R5_combine_utc_convention": 9,
+    "P1_pytz_localize": 2,
+    "P2_now_with_timezone_utc": 0,
+    "P3_zoneinfo_user_tz": 0,
+    "P4_no_datetime_arithmetic": 0,
+    "P5_arrow_aware": 1,
+    "R6_json_field_no_tz": 6
+  },
+  "reasoning": "R1 uses datetime.utcnow() and produces a naive datetime silently treated as UTC, an undisclosed implicit assumption. R2 strips tzinfo after astimezone() with no argument, implicitly relying on the local system timezone to define 'UTC-normalised' storage. R3 uses datetime.fromtimestamp() which silently converts epoch seconds to local wall-clock time despite the code reading as UTC-neutral. R4 parses timestamps with strptime and no timezone, implicitly assuming a fleet convention about which zone the log strings are in. R5 explicitly names a UTC convention in the docstring but the returned datetime is naive, so downstream arithmetic still carries an unstated assumption not enforced by types. P1 explicitly localises naive input to UTC via pytz, making the timezone handling explicit rather than implicit. P2 uses datetime.now(timezone.utc) and validates tz-awareness, leaving no implicit assumption. P3 uses ZoneInfo and rejects naive input, making the zone handling fully explicit. P4 does not touch datetime at all. P5 uses arrow and explicitly enforces tz-awareness; arrow.utcnow() is explicit, only a trivial implicit assumption about arithmetic semantics remains. R6 constructs a datetime from integer fields with a docstring-declared UTC convention but a naive result, which is documented in prose yet not enforced by imports or types."
+}
