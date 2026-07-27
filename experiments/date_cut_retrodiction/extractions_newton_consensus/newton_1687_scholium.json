@@ -1,0 +1,385 @@
+{
+  "doc_id": "newton_1687_scholium",
+  "propositions": [
+    {
+      "definitional": true,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "quantity_of_matter_from_density_bulk",
+      "quote": "The quantity of matter is the measure of the same, arising from its density and bulk conjunctly.",
+      "statement": "The quantity of matter is the measure of the same, arising from its density and bulk conjunctly.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "quantity_of_matter_proportional_to_weight",
+      "quote": "for it is proportional to the weight, as I have found by experiments on pendulums, very accurately made",
+      "statement": "The quantity of matter of a body is proportional to the weight, as found by experiments on pendulums.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "quantity_of_motion_from_velocity_matter",
+      "quote": "The quantity of motion is the measure of the same, arising from the velocity and quantity of matter conjunctly.",
+      "statement": "The quantity of motion is the measure of the same, arising from the velocity and quantity of matter conjunctly.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "motion_of_whole_sum_of_parts",
+      "quote": "The motion of the whole is the sum of the motions of all the parts",
+      "statement": "The motion of the whole is the sum of the motions of all the parts.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "innate_force_of_matter",
+      "quote": "The vis insita, or innate force of matter, is a power of resisting, by which every body, as much as in it lies, endeavours to persevere in its present state",
+      "statement": "The innate force of matter is a power of resisting by which every body endeavours to persevere in its present state of rest or of moving uniformly forward in a right line.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "innate_force_proportional_to_body",
+      "quote": "This force is ever proportional to the body whose force it is; and differs nothing from the inactivity of the mass",
+      "statement": "The innate force is ever proportional to the body whose force it is and differs nothing from the inactivity of the mass.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "motion_and_rest_only_relatively_distinguished",
+      "quote": "motion and rest, as commonly conceived, are only relatively distinguished; nor are those bodies always truly at rest, which commonly are taken to be so.",
+      "statement": "Motion and rest, as commonly conceived, are only relatively distinguished, and bodies commonly taken to be at rest are not always truly at rest.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "impressed_force_definition",
+      "quote": "An impressed force is an action exerted upon a body, in order to change its state, either of rest, or of moving uniformly forward in a right line.",
+      "statement": "An impressed force is an action exerted upon a body in order to change its state of rest or of moving uniformly forward in a right line.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "impressed_force_transient",
+      "quote": "This force consists in the action only; and remains no longer in the body, when the action is over.",
+      "statement": "An impressed force consists in the action only and remains no longer in the body when the action is over.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "impressed_force_origins",
+      "quote": "Impressed forces are of different origins as from percussion, from pressure, from centripetal force.",
+      "statement": "Impressed forces are of different origins as from percussion, from pressure, from centripetal force.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "centripetal_force_definition",
+      "quote": "A centripetal force is that by which bodies are drawn or impelled, or any way tend, towards a point as to a centre.",
+      "statement": "A centripetal force is that by which bodies are drawn or impelled, or any way tend, towards a point as to a centre.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "gravity_toward_centre_of_earth",
+      "quote": "Of this sort is gravity, by which bodies tend to the centre of the earth",
+      "statement": "Gravity is a centripetal force by which bodies tend to the centre of the earth.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "magnetism_iron_to_loadstone",
+      "quote": "magnetism, by which iron tends to the loadstone; and that force, what ever it is, by which the planets are perpetually drawn",
+      "statement": "Magnetism is a centripetal force by which iron tends to the loadstone.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "planets_drawn_from_rectilinear_orbits",
+      "quote": "that force, what ever it is, by which the planets are perpetually drawn aside from the rectilinear motions, which otherwise they would pursue, and made to revolve in curvilinear orbits.",
+      "statement": "The planets are perpetually drawn aside from the rectilinear motions which otherwise they would pursue and made to revolve in curvilinear orbits.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "projectile_without_gravity_goes_straight",
+      "quote": "A projectile, if it was not for the force of gravity, would not deviate towards the earth, but would go off from it in a right line, and that with an uniform motion",
+      "statement": "A projectile, if not for the force of gravity, would not deviate towards the earth but would go off from it in a right line with an uniform motion.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "moon_needs_force_to_stay_in_orbit",
+      "quote": "nor could the moon with out some such force, be retained in its orbit.",
+      "statement": "The moon could not without some such force be retained in its orbit.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "gravity_accelerates_all_bodies_equally",
+      "quote": "at equal distances, it is the same everywhere; because (taking away, or allowing for, the resistance of the air), it equally accelerates all falling bodies, whether heavy or light, great or small.",
+      "statement": "At equal distances the force of gravity, allowing for the resistance of the air, equally accelerates all falling bodies whether heavy or light, great or small.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "gravity_less_at_higher_altitudes",
+      "quote": "also the force of gravity is greater in valleys, less on tops of exceeding high mountains; and yet less (as shall hereafter be shown), at greater distances from the body of the earth",
+      "statement": "The force of gravity is greater in valleys, less on tops of exceeding high mountains, and yet less at greater distances from the body of the earth.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "weight_scales_with_body_and_distance",
+      "quote": "Thus the weight is greater in a greater body, less in a less body; and, in the same body, it is greater near to the earth, and less at remoter distances.",
+      "statement": "The weight is greater in a greater body, less in a less body, and in the same body it is greater near to the earth and less at remoter distances.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "absolute_time_flows_equably",
+      "quote": "Absolute, true, and mathematical time, of itself, and from its own nature flows equably without regard to anything external, and by another name is called duration",
+      "statement": "Absolute, true, and mathematical time, of itself and from its own nature, flows equably without regard to anything external, and by another name is called duration.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "relative_time_measure_by_motion",
+      "quote": "relative, apparent, and common time, is some sensible and external (whether accurate or unequable) measure of duration by the means of motion, which is commonly used instead of true time",
+      "statement": "Relative, apparent, and common time is some sensible and external measure of duration by the means of motion, commonly used instead of true time.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "absolute_space_similar_and_immovable",
+      "quote": "Absolute space, in its own nature, without regard to anything external, remains always similar and immovable.",
+      "statement": "Absolute space, in its own nature, without regard to anything external, remains always similar and immovable.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "place_is_part_of_space",
+      "quote": "Place is a part of space which a body takes up, and is according to the space, either absolute or relative.",
+      "statement": "Place is a part of space which a body takes up, and is according to the space either absolute or relative.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "absolute_and_relative_motion_defined",
+      "quote": "Absolute motion is the translation of a body from one absolute place into another; and relative motion, the translation from one relative place into another.",
+      "statement": "Absolute motion is the translation of a body from one absolute place into another, and relative motion is the translation from one relative place into another.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "natural_days_truly_unequal",
+      "quote": "For the natural days are truly unequal, though they are commonly considered as equal, and used for a measure of time",
+      "statement": "The natural days are truly unequal, though they are commonly considered as equal and used for a measure of time.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "maybe_no_equable_motion_for_time",
+      "quote": "It may be, that there is no such thing as an equable motion, whereby time may be accurately measured.",
+      "statement": "It may be that there is no such thing as an equable motion whereby time may be accurately measured.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "absolute_time_liable_to_no_change",
+      "quote": "All motions may be accelerated and retarded, but the true, or equable, progress of absolute time is liable to no change.",
+      "statement": "All motions may be accelerated and retarded, but the true or equable progress of absolute time is liable to no change.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "astronomical_equation_evinced_by_experiments",
+      "quote": "The necessity of which equation, for determining the times of a phenomenon, is evinced as well from the experiments of the pendulum clock, as by eclipses of the satellites of Jupiter",
+      "statement": "The necessity of the astronomical equation for determining the times of a phenomenon is evinced from the experiments of the pendulum clock and by eclipses of the satellites of Jupiter.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "order_of_time_and_space_immutable",
+      "quote": "As the order of the parts of time is immutable, so also is the order of the parts of space.",
+      "statement": "As the order of the parts of time is immutable, so also is the order of the parts of space.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "maybe_no_body_really_at_rest",
+      "quote": "For it may be that there is no body really at rest, to which the places and motions of others may be referred.",
+      "statement": "It may be that there is no body really at rest to which the places and motions of others may be referred.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "bodies_at_rest_rest_together",
+      "quote": "It is a property of rest, that bodies really at rest do rest in respect to one another.",
+      "statement": "It is a property of rest that bodies really at rest do rest in respect to one another.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "body_absolutely_at_rest_may_exist",
+      "quote": "it is possible, that in the remote regions of the fixed stars, or perhaps far beyond them, there may be some body absolutely at rest",
+      "statement": "It is possible that in the remote regions of the fixed stars, or perhaps far beyond them, there may be some body absolutely at rest.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "parts_partake_of_wholes_motions",
+      "quote": "the parts, which retain given positions to their wholes, do partake of the motions of those wholes.",
+      "statement": "The parts which retain given positions to their wholes do partake of the motions of those wholes.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "immovable_places_from_infinity_to_infinity",
+      "quote": "Now no other places are immovable but those that, from infinity to infinity, do all retain the same given position one to another",
+      "statement": "No other places are immovable but those that from infinity to infinity do all retain the same given position one to another.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "true_motion_requires_impressed_force",
+      "quote": "True motion is neither generated nor altered, but by some force impressed upon the body moved; but relative motion may be generated or altered without any force impressed upon the body.",
+      "statement": "True motion is neither generated nor altered but by some force impressed upon the body moved, while relative motion may be generated or altered without any force impressed upon the body.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "absolute_circular_motion_has_receding_forces",
+      "quote": "The effects which distinguish absolute from relative motion are, the forces of receding from the axis of circular motion.",
+      "statement": "The effects which distinguish absolute from relative motion are the forces of receding from the axis of circular motion.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "one_real_circular_motion_per_body",
+      "quote": "There is only one real circular motion of any one revolving body, corresponding to only one power of endeavouring to recede from its axis of motion",
+      "statement": "There is only one real circular motion of any one revolving body, corresponding to only one power of endeavouring to recede from its axis of motion.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "newton_1687_scholium",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "globes_cord_tension_reveals_circular_motion",
+      "quote": "if two globes, kept at a given distance one from the other by means of a cord that connects them, were revolved about their common centre of gravity, we might, from the tension of the cord, discover",
+      "statement": "From the tension of a cord connecting two globes revolved about their common centre of gravity, we might discover the endeavour of the globes to recede from the axis of their motion.",
+      "support": 3
+    }
+  ]
+}

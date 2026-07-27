@@ -1,0 +1,195 @@
+{
+  "T1_v2_hits": [
+    {
+      "name": "absolute_time_flows_equably",
+      "statement": "Absolute, true, and mathematical time, of itself and from its own nature, flows equably without regard to anything external, and by another name is called duration."
+    },
+    {
+      "name": "relative_time_measure_by_motion",
+      "statement": "Relative, apparent, and common time is some sensible and external measure of duration by the means of motion, commonly used instead of true time."
+    },
+    {
+      "name": "absolute_time_liable_to_no_change",
+      "statement": "All motions may be accelerated and retarded, but the true or equable progress of absolute time is liable to no change."
+    }
+  ],
+  "T1_v3_hits": [
+    {
+      "name": "absolute_time_flows_equably",
+      "statement": "Absolute, true, and mathematical time, of itself and from its own nature, flows equably without regard to anything external, and by another name is called duration."
+    },
+    {
+      "name": "relative_time_measure_by_motion",
+      "statement": "Relative, apparent, and common time is some sensible and external measure of duration by the means of motion, commonly used instead of true time."
+    },
+    {
+      "name": "absolute_time_liable_to_no_change",
+      "statement": "All motions may be accelerated and retarded, but the true or equable progress of absolute time is liable to no change."
+    }
+  ],
+  "T2_v3_hits": [
+    {
+      "name": "absolute_space_similar_and_immovable",
+      "statement": "Absolute space, in its own nature, without regard to anything external, remains always similar and immovable."
+    },
+    {
+      "name": "absolute_and_relative_motion_defined",
+      "statement": "Absolute motion is the translation of a body from one absolute place into another, and relative motion is the translation from one relative place into another."
+    }
+  ],
+  "T3_v3_hits": [
+    {
+      "name": "absolute_time_flows_equably",
+      "statement": "Absolute, true, and mathematical time, of itself and from its own nature, flows equably without regard to anything external, and by another name is called duration."
+    }
+  ],
+  "consensus_stats": {
+    "equivalence_threshold": 0.5,
+    "n_anchor_propositions": 51,
+    "n_consensus_propositions": 38,
+    "n_passes": 3,
+    "overall_retention_rate": 0.7450980392156863,
+    "pass_dirs": [
+      "extractions_newton_pass1",
+      "extractions_newton_pass2",
+      "extractions_newton_pass3"
+    ],
+    "per_document": {
+      "newton_1687_scholium": {
+        "n_consensus": 38,
+        "n_per_pass": [
+          51,
+          44,
+          40
+        ],
+        "retention_rate": 0.7450980392156863
+      }
+    },
+    "support_threshold": 2
+  },
+  "cut_year": 1687,
+  "dcr1c_absence_reading": "historical (matcher works, corpus stays silent)",
+  "document": {
+    "author": "Isaac Newton (Motte 1729 translation)",
+    "chars": 28896,
+    "doc_id": "newton_1687_scholium",
+    "wikisource_title": "The Mathematical Principles of Natural Philosophy (1846)/Definitions"
+  },
+  "gates": {
+    "P1_quote_fidelity": {
+      "decision": "GO",
+      "threshold": 0.9,
+      "value": 1.0
+    },
+    "P2_vocabulary_residue_v2": {
+      "decision": "GO",
+      "threshold": 0.05,
+      "value": 0.034013605442176874
+    },
+    "P3_T1_fires": {
+      "decision": "GO",
+      "n_hits_v2": 3,
+      "n_hits_v3": 3
+    }
+  },
+  "kind": "dcr1d_verdict",
+  "matcher_v2_v3": {
+    "dropped_by_veto": {
+      "T1_absolute_simultaneity": [],
+      "T2_privileged_frame": [],
+      "T3_local_time_artifice": []
+    },
+    "v2_counts": {
+      "T1_absolute_simultaneity": 3,
+      "T2_privileged_frame": 2,
+      "T3_local_time_artifice": 1
+    },
+    "v2_facets_present": [
+      "T1_absolute_simultaneity",
+      "T2_privileged_frame",
+      "T3_local_time_artifice"
+    ],
+    "v3_counts": {
+      "T1_absolute_simultaneity": 3,
+      "T2_privileged_frame": 2,
+      "T3_local_time_artifice": 1
+    },
+    "v3_facets_present": [
+      "T1_absolute_simultaneity",
+      "T2_privileged_frame",
+      "T3_local_time_artifice"
+    ]
+  },
+  "n_propositions": 38,
+  "overall_decision": "GO",
+  "per_pass_facets": {
+    "extractions_newton_pass1": {
+      "T1_v3": [
+        "Absolute, true, and mathematical time, of itself and from its own nature, flows equably without regard to anything external, and by another name is called duration.",
+        "Relative, apparent, and common time is some sensible and external measure of duration by the means of motion, commonly used instead of true time.",
+        "All motions may be accelerated and retarded, but the true or equable progress of absolute time is liable to no change."
+      ],
+      "T2_v3": [
+        "Absolute space, in its own nature, without regard to anything external, remains always similar and immovable.",
+        "Relative space is some movable dimension or measure of the absolute spaces which our senses determine by its position to bodies.",
+        "The earth may move, so that a space of our air which remains the same relative to the earth will at one time be one part of the absolute space and at another time another part.",
+        "Absolute motion is the translation of a body from one absolute place into another, and relative motion is the translation from one relative place into another."
+      ],
+      "T3_v3": [
+        "Absolute, true, and mathematical time, of itself and from its own nature, flows equably without regard to anything external, and by another name is called duration."
+      ],
+      "n_propositions": 51
+    },
+    "extractions_newton_pass2": {
+      "T1_v3": [
+        "Absolute, true, and mathematical time flows equably of itself without regard to anything external, and is by another name called duration.",
+        "Relative, apparent, and common time is a sensible and external measure of duration by the means of motion, such as an hour, a day, a month, a year.",
+        "It may be that there is no such thing as an equable motion whereby time may be accurately measured, though absolute time is liable to no change."
+      ],
+      "T2_v3": [
+        "Absolute space in its own nature, without regard to anything external, remains always similar and immovable.",
+        "Absolute motion is the translation of a body from one absolute place into another, and relative motion is the translation from one relative place into another."
+      ],
+      "T3_v3": [
+        "Absolute, true, and mathematical time flows equably of itself without regard to anything external, and is by another name called duration."
+      ],
+      "n_propositions": 44
+    },
+    "extractions_newton_pass3": {
+      "T1_v3": [
+        "Absolute, true, and mathematical time, of itself and from its own nature, flows equably without regard to anything external.",
+        "All motions may be accelerated and retarded, but the true or equable progress of absolute time is liable to no change."
+      ],
+      "T2_v3": [
+        "Absolute space, in its own nature, without regard to anything external, remains always similar and immovable.",
+        "Absolute rest cannot be determined from the position of bodies in our regions."
+      ],
+      "T3_v3": [
+        "Absolute, true, and mathematical time, of itself and from its own nature, flows equably without regard to anything external."
+      ],
+      "n_propositions": 40
+    }
+  },
+  "purpose": "Positive control for the T1 matcher on Newton's Scholium. DCR1c's T1 absence is either a matcher artifact or a fact about the electrodynamics corpus; this run decides.",
+  "quote_audit": {
+    "fidelity": 1.0,
+    "n_exact": 38,
+    "n_normalised": 38,
+    "n_total": 38
+  },
+  "residue": {
+    "residue_rate": 0.034013605442176874,
+    "residue_types": [
+      "altitudes",
+      "goes",
+      "maybe",
+      "needs",
+      "per",
+      "reveals",
+      "scales",
+      "stay",
+      "straight",
+      "transient"
+    ]
+  }
+}

@@ -1,0 +1,313 @@
+{
+  "doc_id": "newton_1687_scholium",
+  "propositions": [
+    {
+      "name": "matter_from_density_bulk",
+      "statement": "The quantity of matter of a body arises from its density and bulk conjunctly.",
+      "quote": "The quantity of matter is the measure of the same, arising from its density and bulk conjunctly.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "mass_proportional_to_weight",
+      "statement": "The quantity of matter of a body is proportional to its weight, as found by experiments on pendulums.",
+      "quote": "And the same is known by the weight of each body; for it is proportional to the weight, as I have found by experiments on pendulums, very accurately made",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "motion_from_velocity_matter",
+      "statement": "The quantity of motion arises from the velocity and the quantity of matter conjunctly.",
+      "quote": "The quantity of motion is the measure of the same, arising from the velocity and quantity of matter conjunctly.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "motion_of_whole_sums_parts",
+      "statement": "The motion of the whole body is the sum of the motions of all its parts.",
+      "quote": "The motion of the whole is the sum of the motions of all the parts; and therefore in a body double in quantity, with equal velocity, the motion is double; with twice the velocity, it is quadruple.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "innate_force_persevering",
+      "statement": "Every body has an innate force of matter by which it endeavours to persevere in its state of rest or uniform motion in a right line.",
+      "quote": "The vis insita, or innate force of matter, is a power of resisting, by which every body, as much as in it lies, endeavours to persevere in its present state, whether it be of rest, or of moving uniformly forward in a right line.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "vis_insita_proportional_to_body",
+      "statement": "The innate force of a body is ever proportional to the body whose force it is.",
+      "quote": "This force is ever proportional to the body whose force it is; and differs nothing from the inactivity of the mass, but in our manner of conceiving it.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rest_and_motion_only_relative",
+      "statement": "Motion and rest as commonly conceived are only relatively distinguished, and bodies commonly taken as at rest are not always truly at rest.",
+      "quote": "motion and rest, as commonly conceived, are only relatively distinguished; nor are those bodies always truly at rest, which commonly are taken to be so.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "impressed_force_changes_state",
+      "statement": "An impressed force is an action exerted upon a body to change its state of rest or uniform motion in a right line.",
+      "quote": "An impressed force is an action exerted upon a body, in order to change its state, either of rest, or of moving uniformly forward in a right line.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "impressed_force_not_persisting",
+      "statement": "An impressed force consists in the action only and remains no longer in the body when the action is over.",
+      "quote": "This force consists in the action only; and remains no longer in the body, when the action is over. For a body maintains every new state it acquires, by its vis inertiæ only.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "impressed_force_origins",
+      "statement": "Impressed forces are of different origins, namely from percussion, from pressure, and from centripetal force.",
+      "quote": "Impressed forces are of different origins as from percussion, from pressure, from centripetal force.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "centripetal_force_toward_centre",
+      "statement": "A centripetal force is that by which bodies are drawn or impelled, or any way tend, towards a point as to a centre.",
+      "quote": "A centripetal force is that by which bodies are drawn or impelled, or any way tend, towards a point as to a centre.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "gravity_is_centripetal",
+      "statement": "Gravity is a centripetal force by which bodies tend to the centre of the earth.",
+      "quote": "Of this sort is gravity, by which bodies tend to the centre of the earth magnetism, by which iron tends to the loadstone",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "magnetism_is_centripetal",
+      "statement": "Magnetism is a centripetal force by which iron tends to the loadstone.",
+      "quote": "gravity, by which bodies tend to the centre of the earth magnetism, by which iron tends to the loadstone; and that force, what ever it is, by which the planets are perpetually drawn aside from the rectilinear motions",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "planets_drawn_into_curvilinear_orbits",
+      "statement": "The planets are perpetually drawn aside from the rectilinear motions they would otherwise pursue and made to revolve in curvilinear orbits by some force.",
+      "quote": "that force, what ever it is, by which the planets are perpetually drawn aside from the rectilinear motions, which otherwise they would pursue, and made to revolve in curvilinear orbits.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "revolving_bodies_recede_from_centre",
+      "statement": "Bodies revolved in any orbits all endeavour to recede from the centres of their orbits, and without a contrary force would fly off in right lines with uniform motion.",
+      "quote": "They all endeavour to recede from the centres of their orbits; and were it not for the opposition of a contrary force which restrains them to, and detains them in their orbits, which I therefore call centripetal, would fly off in right lines, with an uniform motion.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "projectile_without_gravity_rectilinear",
+      "statement": "A projectile without the force of gravity and without air resistance would go off from the earth in a right line with uniform motion.",
+      "quote": "A projectile, if it was not for the force of gravity, would not deviate towards the earth, but would go off from it in a right line, and that with an uniform motion, if the resistance of the air was taken away.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "sufficient_velocity_orbits_earth",
+      "statement": "By increasing the velocity of a projectile it may be made to go round the whole earth, or never fall, and proceed into the celestial spaces in infinitum.",
+      "quote": "till at last it should fall at the distance of 10, 30, or 90 degrees, or even might go quite round the whole earth before it falls; or lastly, so that it might never fall to the earth, but go forward into the celestial spaces, and proceed in its motion in infinitum",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "moon_requires_force_for_orbit",
+      "statement": "The moon could not be retained in its orbit without some force drawing it aside from the rectilinear way its innate force would pursue.",
+      "quote": "would be made to revolve in the orbit which it now describes; nor could the moon with out some such force, be retained in its orbit.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "magnetic_force_varies_by_stone",
+      "statement": "The magnetic force is greater in one loadstone and less in another according to their sizes and strength of intensity.",
+      "quote": "Thus the magnetic force is greater in one load-stone and less in another according to their sizes and strength of intensity.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "gravity_varies_with_distance",
+      "statement": "The force of gravity is greater in valleys, less on tops of exceeding high mountains, and yet less at greater distances from the body of the earth.",
+      "quote": "the force of gravity is greater in valleys, less on tops of exceeding high mountains; and yet less (as shall hereafter be shown), at greater distances from the body of the earth",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "gravity_equally_accelerates_all",
+      "statement": "At equal distances gravity equally accelerates all falling bodies, whether heavy or light, great or small, allowing for air resistance.",
+      "quote": "but at equal distances, it is the same everywhere; because (taking away, or allowing for, the resistance of the air), it equally accelerates all falling bodies, whether heavy or light, great or small.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "weight_scales_with_body_and_distance",
+      "statement": "Weight is greater in a greater body, less in a less body, and in the same body greater near the earth and less at remoter distances.",
+      "quote": "Thus the weight is greater in a greater body, less in a less body; and, in the same body, it is greater near to the earth, and less at remoter distances.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "motive_force_from_accelerative_and_matter",
+      "statement": "The motive force arises from the accelerative force drawn into the quantity of matter, as motion arises from celerity drawn into quantity of matter.",
+      "quote": "For the quantity of motion arises from the celerity drawn into the quantity of matter; and the motive force arises from the accelerative force drawn into the same quantity of matter.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "absolute_time_flows_equably",
+      "statement": "Absolute, true, and mathematical time flows equably of itself without regard to anything external, and is by another name called duration.",
+      "quote": "Absolute, true, and mathematical time, of itself, and from its own nature flows equably without regard to anything external, and by another name is called duration",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "relative_time_measured_by_motion",
+      "statement": "Relative, apparent, and common time is a sensible and external measure of duration by the means of motion, such as an hour, a day, a month, a year.",
+      "quote": "relative, apparent, and common time, is some sensible and external (whether accurate or unequable) measure of duration by the means of motion, which is commonly used instead of true time; such as an hour, a day, a month, a year.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "absolute_space_similar_immovable",
+      "statement": "Absolute space in its own nature, without regard to anything external, remains always similar and immovable.",
+      "quote": "Absolute space, in its own nature, without regard to anything external, remains always similar and immovable.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "place_part_of_space",
+      "statement": "Place is a part of space which a body takes up, and is according to the space either absolute or relative.",
+      "quote": "Place is a part of space which a body takes up, and is according to the space, either absolute or relative.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "absolute_motion_between_absolute_places",
+      "statement": "Absolute motion is the translation of a body from one absolute place into another, and relative motion is the translation from one relative place into another.",
+      "quote": "Absolute motion is the translation of a body from one absolute place into another; and relative motion, the translation from one relative place into another.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "natural_days_truly_unequal",
+      "statement": "The natural days are truly unequal, though they are commonly considered as equal and used for a measure of time.",
+      "quote": "For the natural days are truly unequal, though they are commonly considered as equal, and used for a measure of time; astronomers correct this inequality for their more accurate deducing of the celestial motions.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_equable_motion_may_exist",
+      "statement": "It may be that there is no such thing as an equable motion whereby time may be accurately measured, though absolute time is liable to no change.",
+      "quote": "It may be, that there is no such thing as an equable motion, whereby time may be accurately measured. All motions may be accelerated and retarded, but the true, or equable, progress of absolute time is liable to no change.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "equation_evinced_by_pendulum_jupiter",
+      "statement": "The necessity of the astronomical equation for determining the times of a phenomenon is evinced from experiments of the pendulum clock and eclipses of the satellites of Jupiter.",
+      "quote": "The necessity of which equation, for determining the times of a phenomenon, is evinced as well from the experiments of the pendulum clock, as by eclipses of the satellites of Jupiter",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "order_of_time_and_space_immutable",
+      "statement": "As the order of the parts of time is immutable, so also is the order of the parts of space.",
+      "quote": "As the order of the parts of time is immutable, so also is the order of the parts of space. Suppose those parts to be moved out of their places, and they will be moved (if the expression may be allowed) out of themselves.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "parts_of_space_not_sensible",
+      "statement": "The parts of space cannot be seen or distinguished from one another by our senses.",
+      "quote": "But because the parts of space cannot be seen, or distinguished from one another by our senses, therefore in their stead we use sensible measures of them.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_body_certainly_at_rest",
+      "statement": "It may be that there is no body really at rest to which the places and motions of others may be referred.",
+      "quote": "For it may be that there is no body really at rest, to which the places and motions of others may be referred.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "resting_bodies_rest_together",
+      "statement": "It is a property of rest that bodies really at rest do rest in respect to one another.",
+      "quote": "It is a property of rest, that bodies really at rest do rest in respect to one another.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "possible_resting_body_in_remote_regions",
+      "statement": "It is possible that in the remote regions of the fixed stars, or perhaps far beyond them, there may be some body absolutely at rest.",
+      "quote": "as it is possible, that in the remote regions of the fixed stars, or perhaps far beyond them, there may be some body absolutely at rest; but impossible to know, from the position of bodies to one another in our regions whether any of these do keep the same position to that remote body",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "parts_of_revolving_bodies_recede",
+      "statement": "All the parts of revolving bodies endeavour to recede from the axis of motion.",
+      "quote": "For all the parts of revolving bodies endeavour to recede from the axis of motion; and the impetus of bodies moving forward, arises from the joint impetus of all the parts.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "immovable_places_from_infinity",
+      "statement": "No other places are immovable but those that from infinity to infinity retain the same given position one to another and constitute immovable space.",
+      "quote": "Now no other places are immovable but those that, from infinity to infinity, do all retain the same given position one to another; and upon this account must ever remain unmoved; and do thereby constitute immovable space.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "true_motion_only_from_force",
+      "statement": "True motion is neither generated nor altered but by some force impressed upon the body moved, whereas relative motion may be generated or altered without any force impressed upon the body.",
+      "quote": "True motion is neither generated nor altered, but by some force impressed upon the body moved; but relative motion may be generated or altered without any force impressed upon the body.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "receding_forces_distinguish_absolute_circular",
+      "statement": "The effects which distinguish absolute from relative motion are the forces of receding from the axis of circular motion, and there are no such forces in a purely relative circular motion.",
+      "quote": "The effects which distinguish absolute from relative motion are, the forces of receding from the axis of circular motion. For there are no such forces in a circular motion purely relative, but in a true and absolute circular motion, they are greater or less, according to the quantity of the motion.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "vessel_water_endeavours_recede",
+      "statement": "In the whirled vessel the ascent of the water shows its endeavour to recede from the axis of its motion, and this discovers the true and absolute circular motion.",
+      "quote": "This ascent of the water shows its endeavour to recede from the axis of its motion; and the true and absolute circular motion of the water, which is here directly contrary to the relative, discovers itself, and may be measured by this endeavour.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "one_real_circular_motion",
+      "statement": "There is only one real circular motion of any one revolving body, corresponding to only one power of endeavouring to recede from its axis of motion.",
+      "quote": "There is only one real circular motion of any one revolving body, corresponding to only one power of endeavouring to recede from its axis of motion, as its proper and adequate effect; but relative motions, in one and the same body, are innumerable",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "globes_cord_tension_measures_circular",
+      "statement": "From the tension of a cord connecting two globes revolved about their common centre of gravity we might discover the endeavour of the globes to recede from the axis of their motion.",
+      "quote": "if two globes, kept at a given distance one from the other by means of a cord that connects them, were revolved about their common centre of gravity, we might, from the tension of the cord, discover the endeavour of the globes to recede from the axis of their motion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fixed_stars_keep_position",
+      "statement": "The fixed stars in our regions keep always a given position one to another.",
+      "quote": "if in that space some remote bodies were placed that kept always a given position one to another, as the fixed stars do in our regions",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

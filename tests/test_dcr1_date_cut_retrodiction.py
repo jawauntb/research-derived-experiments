@@ -433,3 +433,101 @@ def test_dcr1c_imports_thresholds_rather_than_restating_them() -> None:
     assert "RESIDUE_RATE_GATE" in source
     assert run_dcr1.QUOTE_FIDELITY_GATE == 0.90
     assert run_dcr1.RESIDUE_RATE_GATE == 0.05
+
+
+# --- DCR1d: positive control on Newton's Scholium ------------------------
+#
+# The whole point of DCR1d is that the positive control is *outside* the DCR1c
+# corpus of record. If Newton ends up in ``SOURCES`` or the 1687 cut ends up in
+# ``CUTS``, DCR1c's numbers change and the guarantee that its published paper is
+# still reproducible dies. These tests are the guardrail.
+
+
+def test_dcr1d_positive_control_is_not_in_main_sources() -> None:
+    from experiments.date_cut_retrodiction.corpus import SOURCES
+    from experiments.date_cut_retrodiction.dcr1d import NEWTON_SOURCE
+
+    ids = {s.doc_id for s in SOURCES}
+    assert NEWTON_SOURCE.doc_id not in ids, (
+        "Newton belongs to DCR1d only. Adding it to SOURCES would drop it into "
+        "the 1880/1897/1904 cuts and DCR1c's numbers would no longer reproduce."
+    )
+
+
+def test_dcr1d_positive_control_cut_is_not_in_main_cuts() -> None:
+    from experiments.date_cut_retrodiction.cuts import CUTS
+    from experiments.date_cut_retrodiction.dcr1d import POSITIVE_CONTROL_CUT
+
+    years = {c.year for c in CUTS}
+    assert POSITIVE_CONTROL_CUT.year not in years
+    assert POSITIVE_CONTROL_CUT.is_placebo is False
+    assert POSITIVE_CONTROL_CUT.label == "positive control"
+
+
+def test_dcr1d_uses_three_sandboxed_passes_named_apart_from_dcr1c() -> None:
+    from experiments.date_cut_retrodiction.dcr1d import (
+        NEWTON_CONSENSUS_DIR,
+        NEWTON_PASS_DIRS,
+    )
+    from experiments.date_cut_retrodiction.run_dcr1c import PASS_DIRS_V3
+
+    assert len(NEWTON_PASS_DIRS) == 3
+    assert NEWTON_CONSENSUS_DIR not in PASS_DIRS_V3
+    assert set(NEWTON_PASS_DIRS).isdisjoint(set(PASS_DIRS_V3))
+
+
+def test_dcr1d_imports_thresholds_rather_than_restating_them() -> None:
+    """DCR1d carries every threshold as an imported constant, same discipline
+    as DCR1c: what P3 measures is whether the matcher fires, not whether some
+    knob can be turned to make it fire."""
+    from experiments.date_cut_retrodiction import run_dcr1, run_dcr1d
+
+    source = (
+        __import__("pathlib").Path(run_dcr1d.__file__).read_text(encoding="utf-8")
+    )
+    assert "QUOTE_FIDELITY_GATE" in source
+    assert "RESIDUE_RATE_GATE" in source
+    assert run_dcr1.QUOTE_FIDELITY_GATE == 0.90
+    assert run_dcr1.RESIDUE_RATE_GATE == 0.05
+
+
+def test_t1_v2_pattern_fires_on_newtons_own_sentence() -> None:
+    """The positive-control assumption stated as a test: if this ever fails,
+    the whole DCR1d design is void and the T1 matcher was never going to work
+    on Newton's scholium either."""
+    from experiments.date_cut_retrodiction.target_v2 import match_facets_v2
+
+    scholium_proposition = [
+        {
+            "doc_id": "newton_1687_scholium",
+            "name": "absolute_time_flows_equably",
+            "statement": (
+                "Absolute, true, and mathematical time, of itself, and from "
+                "its own nature, flows equably without regard to anything "
+                "external, and by another name is called duration."
+            ),
+        }
+    ]
+    hits = match_facets_v2(scholium_proposition)
+    assert hits["T1_absolute_simultaneity"], (
+        "target_v2's T1 pattern is supposed to fire on 'absolute time'. "
+        "If this ever fails, DCR1d cannot answer its question."
+    )
+
+
+def test_t1_v3_pattern_fires_on_newtons_own_sentence() -> None:
+    from experiments.date_cut_retrodiction.target_v3 import match_facets_v3
+
+    scholium_proposition = [
+        {
+            "doc_id": "newton_1687_scholium",
+            "name": "absolute_time_flows_equably",
+            "statement": (
+                "Absolute, true, and mathematical time, of itself, and from "
+                "its own nature, flows equably without regard to anything "
+                "external, and by another name is called duration."
+            ),
+        }
+    ]
+    hits = match_facets_v3(scholium_proposition)
+    assert hits["T1_absolute_simultaneity"]
