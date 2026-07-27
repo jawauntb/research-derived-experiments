@@ -772,7 +772,7 @@
         "papers/constraint_swap_causal_geometry/paper.pdf"
       ],
       "n_modal_entrypoints": 0,
-      "n_scripts": 5,
+      "n_scripts": 6,
       "paper": "papers/constraint_swap_causal_geometry/paper.md",
       "preregistration": "experiments/constraint_swap_causal_geometry/PREREGISTRATION.md",
       "verification_signals": [],
@@ -880,7 +880,7 @@
         "experiments/date_cut_retrodiction/results/dcr1_verdict.json"
       ],
       "n_modal_entrypoints": 0,
-      "n_scripts": 27,
+      "n_scripts": 28,
       "paper": null,
       "preregistration": "experiments/date_cut_retrodiction/DCR1B_PREREGISTRATION.md",
       "verification_signals": [],

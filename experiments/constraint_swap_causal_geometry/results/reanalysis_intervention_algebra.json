@@ -1,0 +1,57 @@
+{
+  "descriptive_statistics": {
+    "rescue_A_specific_gain": {
+      "max": 0.2596153846153846,
+      "mean": -0.013521634615384621,
+      "min": -0.26923076923076916,
+      "std": 0.12820696707164816
+    },
+    "rescue_B_specific_gain": {
+      "max": 0.37179487179487175,
+      "mean": -0.056690705128205135,
+      "min": -0.27564102564102566,
+      "std": 0.1397368758586986
+    },
+    "undo_A_specific_harm": {
+      "max": 0.0,
+      "mean": -0.22455929487179485,
+      "min": -0.5993589743589745,
+      "std": 0.1965999643927735
+    },
+    "undo_B_specific_harm": {
+      "max": 0.0,
+      "mean": -0.18729967948717943,
+      "min": -0.5128205128205128,
+      "std": 0.11894906555115209
+    }
+  },
+  "gates": {
+    "R1_r_undo_below_0p30": {
+      "abs_value": 0.23399989554773934,
+      "decision": "GO",
+      "threshold": 0.3,
+      "value": -0.23399989554773934
+    },
+    "R2_r_rescue_below_0p30": {
+      "abs_value": 0.07927782053294945,
+      "decision": "GO",
+      "threshold": 0.3,
+      "value": 0.07927782053294945
+    },
+    "R3_permutation_test_rejects": {
+      "alpha": 0.05,
+      "decision": "NO_GO",
+      "p_rescue": 0.0972,
+      "p_undo": 0.0965
+    }
+  },
+  "kind": "constraint_swap_intervention_algebra_reanalysis",
+  "licensed_reading": "correlations below 0.30 but permutation test does not reject",
+  "n_seeds": 32,
+  "overall_decision": "NO_GO",
+  "permutation_test_p_rescue": 0.0972,
+  "permutation_test_p_undo": 0.0965,
+  "purpose": "Test whether preregistered A-side and B-side intervention effects on the frozen 32-seed data are approximately uncorrelated across seeds, as the intervention-algebra reframe would predict for constraint-specific structure invisible to univariate G3/G4 gates.",
+  "r_rescue": 0.07927782053294945,
+  "r_undo": -0.23399989554773934
+}
