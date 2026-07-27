@@ -1,0 +1,644 @@
+{
+  "artifact_contract": "constraint-swap-causal-geometry-summary/v1",
+  "raw_run_path": "artifacts/constraint_swap_causal_geometry/registered_run.json",
+  "rows_path": "experiments/constraint_swap_causal_geometry/results/registered_seed_rows.jsonl",
+  "summary": {
+    "bootstrap_samples": 10000,
+    "n_seeds": 32,
+    "primary_intervals": {
+      "accuracy_A": {
+        "lower": 1.0,
+        "mean": 1.0,
+        "n": 32,
+        "upper": 1.0
+      },
+      "accuracy_B": {
+        "lower": 1.0,
+        "mean": 1.0,
+        "n": 32,
+        "upper": 1.0
+      },
+      "accuracy_D": {
+        "lower": 1.0,
+        "mean": 1.0,
+        "n": 32,
+        "upper": 1.0
+      },
+      "geometry_A_over_action": {
+        "lower": -1.1406628047675853,
+        "mean": -1.1060321154836448,
+        "n": 32,
+        "upper": -1.0724360131384891
+      },
+      "geometry_A_over_physical": {
+        "lower": -0.3161712192401422,
+        "mean": -0.27419104900891345,
+        "n": 32,
+        "upper": -0.2297026437944544
+      },
+      "geometry_A_over_sensory": {
+        "lower": -0.6195120464353191,
+        "mean": -0.5720248516539077,
+        "n": 32,
+        "upper": -0.5204522839320448
+      },
+      "geometry_A_over_sham": {
+        "lower": -0.25743347659357535,
+        "mean": -0.20999567373297068,
+        "n": 32,
+        "upper": -0.1636973807916493
+      },
+      "geometry_A_specific": {
+        "lower": -0.4363319396767129,
+        "mean": -0.36278955426223136,
+        "n": 32,
+        "upper": -0.28060055604574285
+      },
+      "geometry_B_over_action": {
+        "lower": -1.128625596645777,
+        "mean": -1.0943493541575848,
+        "n": 32,
+        "upper": -1.059043533536824
+      },
+      "geometry_B_over_physical": {
+        "lower": -0.22301911402082272,
+        "mean": -0.17986335686328161,
+        "n": 32,
+        "upper": -0.13423332410558428
+      },
+      "geometry_B_over_sensory": {
+        "lower": -0.5200288399830139,
+        "mean": -0.4746305036978645,
+        "n": 32,
+        "upper": -0.4279260272707552
+      },
+      "geometry_B_over_sham": {
+        "lower": -0.35025416071309623,
+        "mean": -0.29820388077936294,
+        "n": 32,
+        "upper": -0.24586243293106866
+      },
+      "geometry_B_specific": {
+        "lower": -0.315080905591763,
+        "mean": -0.23667142813391434,
+        "n": 32,
+        "upper": -0.1567162057273988
+      },
+      "known_geometry_lift": {
+        "lower": 0.8642742793955165,
+        "mean": 0.906720307505262,
+        "n": 32,
+        "upper": 0.9472121918055755
+      },
+      "no_swap_drift": {
+        "lower": 0.03583329575942583,
+        "mean": 0.0499754058321752,
+        "n": 32,
+        "upper": 0.0672708872946822
+      },
+      "rescue_A_compatible_shift": {
+        "lower": -0.05038060897435896,
+        "mean": -0.013521634615384621,
+        "n": 32,
+        "upper": 0.02353766025641025
+      },
+      "rescue_A_cov_drift": {
+        "lower": 0.7344901911436854,
+        "mean": 0.7779066467812248,
+        "n": 32,
+        "upper": 0.8244128613894838
+      },
+      "rescue_A_decode_loss": {
+        "lower": 1.3744688423876994,
+        "mean": 1.3966427187695012,
+        "n": 32,
+        "upper": 1.4199409297273138
+      },
+      "rescue_A_geometry_shift": {
+        "lower": -0.6326429745121122,
+        "mean": -0.541721685343886,
+        "n": 32,
+        "upper": -0.4507589808242667
+      },
+      "rescue_A_monotone": {
+        "lower": 0.40625,
+        "mean": 0.5625,
+        "n": 32,
+        "upper": 0.71875
+      },
+      "rescue_A_norm_drift": {
+        "lower": 0.9508195756718987,
+        "mean": 1.239793774358282,
+        "n": 32,
+        "upper": 1.5887494226135066
+      },
+      "rescue_A_specific_gain": {
+        "lower": -0.05078124999999999,
+        "mean": -0.013521634615384621,
+        "n": 32,
+        "upper": 0.023838141025641024
+      },
+      "rescue_B_compatible_shift": {
+        "lower": -0.09635416666666667,
+        "mean": -0.05669070512820513,
+        "n": 32,
+        "upper": -0.015024038461538458
+      },
+      "rescue_B_cov_drift": {
+        "lower": 0.723446946488234,
+        "mean": 0.7861421950978787,
+        "n": 32,
+        "upper": 0.8523374112785572
+      },
+      "rescue_B_decode_loss": {
+        "lower": 1.3972436310050347,
+        "mean": 1.417170141536928,
+        "n": 32,
+        "upper": 1.4364171030394735
+      },
+      "rescue_B_geometry_shift": {
+        "lower": -0.5187817861652806,
+        "mean": -0.4048926534952808,
+        "n": 32,
+        "upper": -0.29487089779563663
+      },
+      "rescue_B_monotone": {
+        "lower": 0.5,
+        "mean": 0.625,
+        "n": 32,
+        "upper": 0.75
+      },
+      "rescue_B_norm_drift": {
+        "lower": 1.2109254336235222,
+        "mean": 1.6040335651610869,
+        "n": 32,
+        "upper": 2.054988640416176
+      },
+      "rescue_B_specific_gain": {
+        "lower": -0.0960536858974359,
+        "mean": -0.056690705128205135,
+        "n": 32,
+        "upper": -0.014423076923076926
+      },
+      "sham_accuracy": {
+        "lower": 0.4996337890625,
+        "mean": 0.5090738932291667,
+        "n": 32,
+        "upper": 0.5183512369791667
+      },
+      "swap_tau_AB": {
+        "lower": -0.6824091181685236,
+        "mean": -0.5943252306508648,
+        "n": 32,
+        "upper": -0.504108997999686
+      },
+      "swap_tau_BA": {
+        "lower": -0.6798220033496287,
+        "mean": -0.5932546840115602,
+        "n": 32,
+        "upper": -0.5081759528810594
+      },
+      "undo_A_cov_drift": {
+        "lower": 0.6804454456687309,
+        "mean": 0.7291845634104772,
+        "n": 32,
+        "upper": 0.777748263460918
+      },
+      "undo_A_decode_loss": {
+        "lower": 1.3930016380424095,
+        "mean": 1.4141024934980515,
+        "n": 32,
+        "upper": 1.4359271666813314
+      },
+      "undo_A_geometry_shift": {
+        "lower": -0.37583430205950985,
+        "mean": -0.2807096922882762,
+        "n": 32,
+        "upper": -0.18956369937253673
+      },
+      "undo_A_monotone": {
+        "lower": 1.0,
+        "mean": 1.0,
+        "n": 32,
+        "upper": 1.0
+      },
+      "undo_A_norm_drift": {
+        "lower": 1.1833423422259222,
+        "mean": 1.4363591290270206,
+        "n": 32,
+        "upper": 1.7064969759766029
+      },
+      "undo_A_opposite_shift": {
+        "lower": -0.26817255434782605,
+        "mean": -0.20516304347826086,
+        "n": 32,
+        "upper": -0.14521059782608697
+      },
+      "undo_A_specific_harm": {
+        "lower": -0.2816556490384615,
+        "mean": -0.22455929487179485,
+        "n": 32,
+        "upper": -0.16756810897435895
+      },
+      "undo_B_cov_drift": {
+        "lower": 0.6741106709038089,
+        "mean": 0.7230048688098091,
+        "n": 32,
+        "upper": 0.7727275505434674
+      },
+      "undo_B_decode_loss": {
+        "lower": 1.361854582982725,
+        "mean": 1.3830042266987759,
+        "n": 32,
+        "upper": 1.4041993940838104
+      },
+      "undo_B_geometry_shift": {
+        "lower": -0.5811094699723175,
+        "mean": -0.47871115882362353,
+        "n": 32,
+        "upper": -0.3775489358097258
+      },
+      "undo_B_monotone": {
+        "lower": 1.0,
+        "mean": 1.0,
+        "n": 32,
+        "upper": 1.0
+      },
+      "undo_B_norm_drift": {
+        "lower": 0.9367192202371308,
+        "mean": 1.1647532090576658,
+        "n": 32,
+        "upper": 1.4170767981888477
+      },
+      "undo_B_opposite_shift": {
+        "lower": -0.14249320652173914,
+        "mean": -0.10343070652173914,
+        "n": 32,
+        "upper": -0.0677649456521739
+      },
+      "undo_B_specific_harm": {
+        "lower": -0.22215544871794868,
+        "mean": -0.18729967948717943,
+        "n": 32,
+        "upper": -0.15254407051282048
+      }
+    },
+    "transfer_intervals": {
+      "accuracy_A": {
+        "lower": 1.0,
+        "mean": 1.0,
+        "n": 32,
+        "upper": 1.0
+      },
+      "accuracy_B": {
+        "lower": 1.0,
+        "mean": 1.0,
+        "n": 32,
+        "upper": 1.0
+      },
+      "accuracy_D": {
+        "lower": 1.0,
+        "mean": 1.0,
+        "n": 32,
+        "upper": 1.0
+      },
+      "geometry_A_over_action": {
+        "lower": -1.0025403428007913,
+        "mean": -0.9741145283342307,
+        "n": 32,
+        "upper": -0.9446301844406778
+      },
+      "geometry_A_over_physical": {
+        "lower": -0.17209276643926313,
+        "mean": -0.15287063053483851,
+        "n": 32,
+        "upper": -0.13162455180212046
+      },
+      "geometry_A_over_sensory": {
+        "lower": -0.47575626522411174,
+        "mean": -0.4495650927933692,
+        "n": 32,
+        "upper": -0.4224403799644801
+      },
+      "geometry_A_over_sham": {
+        "lower": -0.1337407521296698,
+        "mean": -0.1084087589585219,
+        "n": 32,
+        "upper": -0.0842299071258834
+      },
+      "geometry_A_specific": {
+        "lower": -0.26094979101949256,
+        "mean": -0.22168708067564935,
+        "n": 32,
+        "upper": -0.17771623614778737
+      },
+      "geometry_B_over_action": {
+        "lower": -1.0030153875268846,
+        "mean": -0.9815994386980671,
+        "n": 32,
+        "upper": -0.9604930773243644
+      },
+      "geometry_B_over_physical": {
+        "lower": -0.09824173416907722,
+        "mean": -0.07234909453886068,
+        "n": 32,
+        "upper": -0.046699523244225036
+      },
+      "geometry_B_over_sensory": {
+        "lower": -0.40850317094617833,
+        "mean": -0.37838761642370344,
+        "n": 32,
+        "upper": -0.348218271354848
+      },
+      "geometry_B_over_sham": {
+        "lower": -0.1899188764653149,
+        "mean": -0.16072730369318217,
+        "n": 32,
+        "upper": -0.13304990787008275
+      },
+      "geometry_B_specific": {
+        "lower": -0.12476208842518527,
+        "mean": -0.07864979458563404,
+        "n": 32,
+        "upper": -0.031760758101334455
+      },
+      "known_geometry_lift": {
+        "lower": 0.5350182132366351,
+        "mean": 0.5592272310243886,
+        "n": 32,
+        "upper": 0.582658730126923
+      },
+      "no_swap_drift": {
+        "lower": 0.02561004195507434,
+        "mean": 0.03194192885175838,
+        "n": 32,
+        "upper": 0.03876836944876429
+      },
+      "rescue_A_compatible_shift": {
+        "lower": -0.028027343750000003,
+        "mean": -0.00019531250000000278,
+        "n": 32,
+        "upper": 0.027836914062499933
+      },
+      "rescue_A_cov_drift": {
+        "lower": 2.7783514858686793,
+        "mean": 5.7210327205706335,
+        "n": 32,
+        "upper": 9.448976107898362
+      },
+      "rescue_A_decode_loss": {
+        "lower": 1.436075266250248,
+        "mean": 1.4579119525649236,
+        "n": 32,
+        "upper": 1.4801990371496807
+      },
+      "rescue_A_geometry_shift": {
+        "lower": -0.17745135829553016,
+        "mean": -0.15500329379225036,
+        "n": 32,
+        "upper": -0.1318836639305524
+      },
+      "rescue_A_monotone": {
+        "lower": 0.53125,
+        "mean": 0.65625,
+        "n": 32,
+        "upper": 0.78125
+      },
+      "rescue_A_norm_drift": {
+        "lower": 1.0454770657083676,
+        "mean": 1.347713324563621,
+        "n": 32,
+        "upper": 1.7113343525535416
+      },
+      "rescue_A_specific_gain": {
+        "lower": -0.02822265625,
+        "mean": -0.00019531250000000278,
+        "n": 32,
+        "upper": 0.02734863281249993
+      },
+      "rescue_B_compatible_shift": {
+        "lower": -0.0728515625,
+        "mean": -0.0341796875,
+        "n": 32,
+        "upper": 0.005664062499999987
+      },
+      "rescue_B_cov_drift": {
+        "lower": 3.3621496698814677,
+        "mean": 8.602015849859807,
+        "n": 32,
+        "upper": 16.397303053194218
+      },
+      "rescue_B_decode_loss": {
+        "lower": 1.4423178068175415,
+        "mean": 1.4619595484640233,
+        "n": 32,
+        "upper": 1.4821968733372375
+      },
+      "rescue_B_geometry_shift": {
+        "lower": -0.16822136593077117,
+        "mean": -0.1395471087776033,
+        "n": 32,
+        "upper": -0.10991623788861198
+      },
+      "rescue_B_monotone": {
+        "lower": 0.4375,
+        "mean": 0.59375,
+        "n": 32,
+        "upper": 0.75
+      },
+      "rescue_B_norm_drift": {
+        "lower": 1.319496274800806,
+        "mean": 1.7629754508231155,
+        "n": 32,
+        "upper": 2.283348845656509
+      },
+      "rescue_B_specific_gain": {
+        "lower": -0.0722705078125,
+        "mean": -0.0341796875,
+        "n": 32,
+        "upper": 0.005566406250000003
+      },
+      "sham_accuracy": {
+        "lower": 0.49117024739583337,
+        "mean": 0.49947102864583337,
+        "n": 32,
+        "upper": 0.5078125
+      },
+      "swap_tau_AB": {
+        "lower": -0.35434330863863556,
+        "mean": -0.30548191284246917,
+        "n": 32,
+        "upper": -0.2557627993460178
+      },
+      "swap_tau_BA": {
+        "lower": -0.34616306961181326,
+        "mean": -0.2971145190699146,
+        "n": 32,
+        "upper": -0.24786772448485567
+      },
+      "undo_A_cov_drift": {
+        "lower": 1.0169208971631991,
+        "mean": 1.1864557181332909,
+        "n": 32,
+        "upper": 1.3787510657225495
+      },
+      "undo_A_decode_loss": {
+        "lower": 1.4458349902793932,
+        "mean": 1.46722792252642,
+        "n": 32,
+        "upper": 1.489005446332204
+      },
+      "undo_A_geometry_shift": {
+        "lower": -0.10965026620525639,
+        "mean": -0.08151078796449585,
+        "n": 32,
+        "upper": -0.05515509277278763
+      },
+      "undo_A_monotone": {
+        "lower": 1.0,
+        "mean": 1.0,
+        "n": 32,
+        "upper": 1.0
+      },
+      "undo_A_norm_drift": {
+        "lower": 1.2112548599263775,
+        "mean": 1.4582506449916508,
+        "n": 32,
+        "upper": 1.7366718685267584
+      },
+      "undo_A_opposite_shift": {
+        "lower": -0.22358630952380953,
+        "mean": -0.16964285714285715,
+        "n": 32,
+        "upper": -0.11886160714285716
+      },
+      "undo_A_specific_harm": {
+        "lower": -0.294921875,
+        "mean": -0.24658203125000006,
+        "n": 32,
+        "upper": -0.19931640625000002
+      },
+      "undo_B_cov_drift": {
+        "lower": 1.0691468439427179,
+        "mean": 1.396328402066866,
+        "n": 32,
+        "upper": 1.7592856596971778
+      },
+      "undo_B_decode_loss": {
+        "lower": 1.4260090394383937,
+        "mean": 1.4503166045764864,
+        "n": 32,
+        "upper": 1.4747419140865357
+      },
+      "undo_B_geometry_shift": {
+        "lower": -0.19712596243819344,
+        "mean": -0.16709600263549879,
+        "n": 32,
+        "upper": -0.13610092411927863
+      },
+      "undo_B_monotone": {
+        "lower": 1.0,
+        "mean": 1.0,
+        "n": 32,
+        "upper": 1.0
+      },
+      "undo_B_norm_drift": {
+        "lower": 0.9786180078681865,
+        "mean": 1.2068306182678272,
+        "n": 32,
+        "upper": 1.4568349807442442
+      },
+      "undo_B_opposite_shift": {
+        "lower": -0.17857142857142858,
+        "mean": -0.13932291666666669,
+        "n": 32,
+        "upper": -0.10342261904761905
+      },
+      "undo_B_specific_harm": {
+        "lower": -0.24267578125,
+        "mean": -0.2037109375,
+        "n": 32,
+        "upper": -0.16445312499999998
+      }
+    },
+    "verdict": {
+      "all_pass": false,
+      "decision": "REJECT_CONSTRAINT_SPECIFIC_DEFORMATION",
+      "failed_gates": [
+        "G1_constraint_specific_geometry",
+        "G2_swap_tracking",
+        "G3_selective_impairment",
+        "G4_selective_rescue",
+        "G5_topology_transport"
+      ],
+      "gates": {
+        "F0_integrity_identifiability": {
+          "failed_checks": [],
+          "pass": true
+        },
+        "F1_competence_measurement_sensitivity": {
+          "both_task_seed_count": 32,
+          "components": {
+            "pass": true,
+            "rule": "accuracy/control/positive-control thresholds"
+          },
+          "pass": true,
+          "required_count": 28
+        },
+        "G1_constraint_specific_geometry": {
+          "direction_counts": {
+            "A": 5,
+            "B": 7
+          },
+          "pass": false,
+          "required_count": 28,
+          "rule": "both active-specific lower bounds > 0.05, 28/32 positive directions, and all comparator lower bounds > 0"
+        },
+        "G2_swap_tracking": {
+          "pass": false,
+          "rule": "both swap lower bounds > 0.05 and no-swap drift < 0.05"
+        },
+        "G3_selective_impairment": {
+          "pass": false,
+          "rule": "both selective-impairment directions and preservation controls"
+        },
+        "G4_selective_rescue": {
+          "pass": false,
+          "rule": "both selective-rescue directions and preservation controls"
+        },
+        "G5_topology_transport": {
+          "components": {
+            "competence": {
+              "pass": true,
+              "rule": "transfer accuracy/control/positive-control thresholds"
+            },
+            "geometry": {
+              "direction_counts": {
+                "A": 3,
+                "B": 9
+              },
+              "pass": false,
+              "required_count": 28,
+              "rule": "transfer both active-specific lower bounds > 0.05, 28/32 positive directions, and all comparator lower bounds > 0"
+            },
+            "impairment": {
+              "pass": false,
+              "rule": "transfer both selective-impairment directions and preservation controls"
+            },
+            "rescue": {
+              "pass": false,
+              "rule": "transfer both selective-rescue directions and preservation controls"
+            },
+            "swap": {
+              "pass": false,
+              "rule": "transfer both swap lower bounds > 0.05 and no-swap drift < 0.05"
+            }
+          },
+          "pass": false,
+          "rule": "all transfer competence, geometry, swap, impairment, and rescue gates"
+        }
+      },
+      "unknown_gates": []
+    }
+  }
+}

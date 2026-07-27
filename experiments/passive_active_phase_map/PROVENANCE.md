@@ -23,6 +23,6 @@
   - `experiments/passive_active_phase_map/results/registered_summary.md`
 
 ## Artifacts
-- Committed: `experiments/passive_active_phase_map/results/registered_summary.json`, `experiments/passive_active_phase_map/results/registered_summary.md`, `artifacts/passive_active_phase_map/registered_cells.json`, `experiments/passive_active_phase_map/preregistration.md`
+- Committed: `experiments/passive_active_phase_map/results/registered_summary.json`, `experiments/passive_active_phase_map/results/registered_summary.md`, `experiments/passive_active_phase_map/preregistration.md`
 - Local-only: artifacts/ (gitignored raw outputs; see result reports for summaries)
 - Paper: _none_

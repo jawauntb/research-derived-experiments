@@ -46,6 +46,17 @@ def write_legacy_registry(root: Path, package: str) -> None:
 
 
 class ProvenanceGenerationTests(unittest.TestCase):
+    def test_structured_provenance_excludes_nonpublic_raw_artifacts(self) -> None:
+        record = gen_provenance.collect(
+            gen_provenance.ROOT
+            / "experiments"
+            / "constraint_swap_causal_geometry"
+        )
+        self.assertNotIn(
+            "artifacts/constraint_swap_causal_geometry/registered_run.json",
+            record["artifacts_committed"],
+        )
+
     def test_shared_support_packages_are_not_counted_as_experiments(self) -> None:
         names = {path.name for path in gen_provenance.experiment_dirs()}
         self.assertNotIn("common", names)

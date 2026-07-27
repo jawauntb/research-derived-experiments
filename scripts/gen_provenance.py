@@ -377,7 +377,7 @@ def _collect_structured(d: Path, record: dict) -> dict:
         seed = ",".join(str(value) for value in seeds)
         artifacts = cast(list[object], manifest.get("artifacts", []))
         for artifact in artifacts:
-            if not isinstance(artifact, dict):
+            if not isinstance(artifact, dict) or artifact.get("public") is not True:
                 continue
             path = artifact.get("path")
             if isinstance(path, str) and path not in artifacts_committed:

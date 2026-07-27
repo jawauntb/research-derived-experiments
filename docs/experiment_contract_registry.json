@@ -367,6 +367,37 @@
       }
     },
     {
+      "package": "constraint_swap_causal_geometry",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/constraint_swap_causal_geometry/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "constraint_swap_causal_geometry_2026_07_27",
+      "runs": [
+        {
+          "run_id": "constraint_swap_causal_geometry_2026_07_27",
+          "publication_package": "constraint_swap_causal_geometry",
+          "runtime_package": "constraint_swap_causal_geometry",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/constraint_swap_causal_geometry/experiment_manifest.json",
+          "report_paths": [
+            "experiments/constraint_swap_causal_geometry/results/summary.json",
+            "experiments/constraint_swap_causal_geometry/results/summary.md",
+            "papers/constraint_swap_causal_geometry/paper.pdf"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_digest": "8a669e29f6499718de5aa2d967f892c6229c7944c5ed16ad0d4b97710fed96be",
+          "preregistration_path": "experiments/constraint_swap_causal_geometry/PREREGISTRATION.md",
+          "producing_agent": {
+            "identity": "OpenAI Codex (GPT-5)",
+            "session_ref": "constraint-swap-causal-geometry 2026-07-27"
+          }
+        }
+      ]
+    },
+    {
       "package": "costly_null_probes",
       "coverage_mode": "legacy_exception",
       "legacy_exception": {
