@@ -19,6 +19,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `notes/` | Program-level research synthesis |
 | `references/` | Public source list; local-only full texts (gitignored subdirs) |
 | `formal/ontology-hs/` | Haskell typed ontology gate (Arc 2B) |
+| `formal/relative-identifiability/` | Dependency-free Lean 4 proofs for observational quotient factorization, obstruction, and experiment-family refinement |
 | `sites/` | Public static sites (atlas, Inquiry landing, Envelope Guard) |
 | `apps/inquiry-black-box/` | Local-first Inquiry product monorepo (Bun/Electron/MV3) |
 | `coherence-testbench/` | Separate EEG/eyetrack Phase-0 GO/KILL project |
@@ -87,6 +88,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_seed_bootstrap_calibration.py` | Deterministic seed-floor grid, correct resampling unit, negative-regime retention, exact summary regeneration |
 | `test_passive_active_phase_map.py` | Phase-map model comparison, matched-budget path controls, public aggregate contract |
 | `test_future_commitment_quotient.py` | Exact partition refinement, conjugacy invariance, delayed witnesses, malformed-schedule and family-local gate rejection, hash-bound G5 calibration, strict-JSON 768-row receipt reproduction, and PDF smoke verification |
+| `test_relative_identifiability.py` | Construction failures, exact factorization/obstruction certificates, strict and redundant nested-family refinement, minimum-family ties, MIDAS contract integrity, replayable public receipts, and all 32,768 target/family cases across 512 binary observation tables |
 | `test_grounded_statecharts.py` | Exact replay, depth 1–4 constraint lineage, six-surface fault attribution, descendant-aware memory causal use, legal lifecycle transitions, and byte-stable bundles |
 | `test_grounded_live_evaluation.py`, `test_grounded_live_provider.py`, `test_grounded_statechart_pilot.py`, `test_grounded_condition_policy.py`, `test_grounded_chs_adjudication.py`, `test_grounded_public_dataset.py` | Shared live-eval schemas, fixture/live adapters, injectible provider transport, harness condition policies, paired-contrast CHS seals, public dataset export, ReplayEngine-backed artifact D2 mechanics, budgets/sanitization, and bootstrap stability |
 | `test_grounded_chs_withheld_seal_search.py` | `BlindFaultCase`/`BlindSearchResult` carry no `responsible_component`; the blind pilot matches the original pilot case-by-case; withheld-seal writing/loading gates; end-to-end withheld equal-budget search-vs-seal scoring, including a corrupted-label failure case |
@@ -173,9 +175,9 @@ environment.
 
 **Legend:** **P** = `PROVENANCE.md`, **B** = `BENCHMARK_CARD.md`, **R** = `README.md`, **res** = committed `results/`.
 
-**Verification reconciliation:** 63 research packages on disk plus one shared
+**Verification reconciliation:** 64 research packages on disk plus one shared
 support package, `experiments/common`. `gen_provenance.py` intentionally excludes
-the support package and derives 63 cards/index rows; `gen_provenance.py --check`
+the support package and derives 64 cards/index rows; `gen_provenance.py --check`
 fails if any generated card, either verification index, or the site mirror drifts.
 The structured registries currently contain 12 claims and 12 evidence records.
 
@@ -198,6 +200,7 @@ Universal dispatcher: `python scripts/regen.py <name>`.
 | `concept_geometry` | P R res | Cross-domain concepts in embedding space | `openai_embedding_probe.py`, `paraphrase_stability_probe.py` |
 | `constraint_swap_causal_geometry` | P R res | Registered 32-seed counterexample with a frozen primary-calibration crossnobis metric and untouched 7-by-7-cylinder transfer: perfect hidden-rule behavior without the proposed reachability-aligned geometry or selective low-rank causal transport | `core.py`, `model.py`, `analysis.py`, `run_experiment.py`, `summarize.py`, `experiment_manifest.json`, `registered_design.json` |
 | `future_commitment_quotient` | P R res | Registered 64-seed, three-family finite-agent double dissociation: destructive coordinate recoding preserves the exact quotient, while a coordinate-preserved delayed transition mutation changes future commitments; all seven scoped gates pass | `core.py`, `analysis.py`, `run_experiment.py`, `experiment_manifest.json`, `registered_design.json` |
+| `relative_identifiability` | P R res | Exact target-relative quotient factorization or obstruction certificate; nested-family refinement, minimum identifying-family search, mechanistic patch/redundancy controls, Lean proof, and versioned MIDAS theorem contract | `core.py`, `fixtures.py`, `run_regressions.py`, `midas_contract.json`, `experiment_manifest.json` |
 | `activation_geometry` | P R res (58) | Hidden-state bridges, steering, patching, label-free gates | See §3.1.4 |
 | `passive_to_active` | P R res | Action coupling makes paraphrase geometry causally load-bearing | `modal_passive_to_active.py`, `modal_replication_sweep.py` |
 | `passive_active_phase_map` | P R res | Registered local coupling sweep: bifurcation not supported; controlled path dependence passed | `core.py`, `preregistration.md`, `experiment_manifest.json` |
@@ -388,6 +391,34 @@ Run and render:
 uv run --no-sync python -m experiments.future_commitment_quotient.run_experiment
 uv run --no-sync python scripts/make_future_commitment_quotient_figures.py
 uv run --no-sync python scripts/build_future_commitment_quotient_pdf.py
+```
+
+#### 3.1.7 `relative_identifiability` modules
+
+Target-relative finite experiment-family theorem benchmark. The package
+consolidates standard quotient/factorization mathematics into explicit
+counterexample receipts and a MIDAS theorem-to-test contract; it does not claim
+the mathematical core as novel.
+
+| Module / artifact | Purpose |
+|---|---|
+| `core.py` | Total finite experiment tables, stable transcript quotients, `FactorizationCertificate` / `ObstructionCertificate`, nested-family `RefinementCertificate`, and exhaustive minimum identifying-family search |
+| `fixtures.py` | Strict loader and executor for versioned MIDAS regression suites |
+| `lean_gate.py` | Local executable bridge that runs the pinned `lake build` and emits a compact machine-readable proof receipt; CI enforces the same build through `leanprover/lean-action` |
+| `run_regressions.py` | Deterministic CLI that replays registered success, obstruction, strict-refinement, redundancy, gauge, and empty-family controls; binds receipts to the fixture digest and requires explicit outputs for custom fixtures |
+| `fixtures/midas_regressions.json` | Four-realization behavior/mechanism fixture with external, redundant, and internal-patch experiments plus five target cases and two family-refinement cases |
+| `midas_contract.json` | Stable T1–T4 mapping from preregistered theorem statements to Lean declarations and Python regression names |
+| `PREREGISTRATION.md` | Frozen object/type/assumption ledger, fatal proof/novelty/control gates, smallest-breaker stress plan, and discovery-regime audit |
+| `experiment_manifest.json` | Structured theoretical run contract, controls, gates, dependencies, and public artifact boundary |
+| `results/summary.{json,md}` | Replayed public fixture verdicts; expected obstruction cases pass when the registered counterexample is recovered |
+
+Run:
+
+```bash
+uv run --no-sync python -m experiments.relative_identifiability.run_regressions
+uv run --no-sync python -m experiments.relative_identifiability.lean_gate
+uv run --no-sync python -m pytest -q tests/test_relative_identifiability.py
+cd formal/relative-identifiability && lake build
 ```
 
 ### 3.2 Arc 2A / 2B (deep)
@@ -815,10 +846,10 @@ Raw outputs stay under `artifacts/` until summarized.
 | Script | Purpose | Flags / I/O |
 |---|---|---|
 | `research_contracts.py` | Shared schema version, identifier patterns, claim tiers/statuses, and evidence statuses used by registry/verdict adapters | Library; parity-tested against JSON Schemas |
-| `gen_provenance.py` | Validate registries, resolve structured primary-run bindings from the contract registry, regenerate all experiment `PROVENANCE.md` files + `docs/verification.{md,json}` + site mirror; `--check` compares expected bytes without writing; legacy packages still use labeled heuristic extraction | In: 63 experiment dirs + claim/evidence/contract registries; excludes `experiments/common` |
+| `gen_provenance.py` | Validate registries, resolve structured primary-run bindings from the contract registry, regenerate all experiment `PROVENANCE.md` files + `docs/verification.{md,json}` + site mirror; `--check` compares expected bytes without writing; legacy packages still use labeled heuristic extraction | In: 64 experiment dirs + claim/evidence/contract registries; excludes `experiments/common` |
 | `validate_evidence_registry.py` | Validate canonical evidence IDs, gate statuses, artifact refs, and supersession shape | `docs/program_evidence_registry.json` |
 | `validate_claim_registry.py` | Validate exact claim shape/tiers/states and bidirectional claim↔evidence edges | Reads `docs/claim_registry.json` + `docs/program_evidence_registry.json`; never writes either |
-| `validate_experiment_manifest.py` | Enforce the authoritative package-contract registry (63 = 15 structured + 48 legacy), then discover and dependency-free validate every v1 experiment-package contract; every registered run `manifest_path` must be an `experiment_manifest.json` inside its publication package and validate as v1 by content; run records may declare `preregistration_digest` + `preregistration_path` (SHA-256 of a tracked pre-reg file, content-verified) and `producing_agent` (`identity` + `session_ref`); when the registry sets `preregistration_policy.required_after_run_date`, any run whose `run_id` ends with a date on or after the cutoff must supply all three | Reads `docs/experiment_contract_registry.json` and `experiments/**/experiment_manifest.json`; portable contracts in `schemas/experiment_contract_registry.schema.json` and `schemas/experiment_manifest.schema.json` |
+| `validate_experiment_manifest.py` | Enforce the authoritative package-contract registry (64 = 16 structured + 48 legacy), then discover and dependency-free validate every v1 experiment-package contract; every registered run `manifest_path` must be an `experiment_manifest.json` inside its publication package and validate as v1 by content; run records may declare `preregistration_digest` + `preregistration_path` (SHA-256 of a tracked pre-reg file, content-verified) and `producing_agent` (`identity` + `session_ref`); when the registry sets `preregistration_policy.required_after_run_date`, any run whose `run_id` ends with a date on or after the cutoff must supply all three | Reads `docs/experiment_contract_registry.json` and `experiments/**/experiment_manifest.json`; portable contracts in `schemas/experiment_contract_registry.schema.json` and `schemas/experiment_manifest.schema.json` |
 | `validate_gate_verdict.py` | Discover per-gate verdicts, require registered claim IDs/canonical tiers/statuses, and resolve evidence paths | Reads `experiments/*/results/gate_verdicts/*.json` + `docs/claim_registry.json` |
 | `validate_public_artifact_envelopes.py` | Validate declared public digest sidecars against tracked public bytes and embedded raw-source receipts | Reads manifest `envelope_path` entries and `*.envelope.json`; portable contract in `schemas/public_artifact_envelope.schema.json` |
 | `check_primer_metadata.py` | Require matching titles across all six primer HTML `<title>` values and PDF metadata | Needs `pdfinfo` (`poppler-utils` in CI) |
@@ -960,6 +991,7 @@ Notable bundles:
 - `papers/icml_publication_package_2026/` — submission packages
 - `papers/constraint_swap_causal_geometry/` — citation-grounded source, four figures, and deterministic PDF for the registered scoped counterexample
 - `papers/future_commitment_quotient/` — theorem, preregistered 2×2 result, two figures, calibrated limitations, and deterministic nine-page PDF
+- `papers/relative_identifiability/` — calibrated theorem note and prior-art map for the obstruction/factorization benchmark; Markdown is the publication artifact
 - Synthesis: `metaphysics_synthesis`, `metric_stack_synthesis`, literature audits/reviews
 - Review methods: `unified_citation_grounded_review` (framework, ontology, executable reviewer, and alpha-research operating system)
 - Benchmark framing: `causally_grounded_agents_benchmark`, `weakness_invariance_neurips`
@@ -1000,7 +1032,24 @@ Python bridge: `experiments/viable_computational_bodies/haskell_gate.py`.
 cd formal/ontology-hs && cabal test all && cabal run ontology-check
 ```
 
-### 5.4 `references/`
+### 5.4 `formal/relative-identifiability/`
+
+| Path | Role |
+|---|---|
+| `RelativeIdentifiability.lean` | Typed experiment system, observational setoid, quotient factorization iff fiber constancy, obstruction iff non-factorization, richer-to-coarser quotient map and surjectivity, empty-family and constant-target checks |
+| `lakefile.toml` | Dependency-free Lean library target |
+| `lean-toolchain` | Reproducible `leanprover/lean4:v4.31.0` pin |
+| `README.md` | Proof boundary and `lake build` instructions |
+
+The proof imports no Mathlib dependency. Classical choice appears only in the
+negated-existential direction of the obstruction equivalence; Lean's quotient
+soundness is the remaining reported kernel axiom.
+
+```bash
+cd formal/relative-identifiability && lake build
+```
+
+### 5.5 `references/`
 
 | Path | Role |
 |---|---|
@@ -1196,7 +1245,7 @@ python3 scripts/run_phase0.py --smoke
 
 | File | Role |
 |---|---|
-| `.github/workflows/quality.yml` | Required push/PR workflow: installs uv with cache keys derived from `uv.lock`, installs `poppler-utils`, sets `QUALITY_PYTEST_WORKERS=auto`, then runs the canonical root quality wrapper |
+| `.github/workflows/quality.yml` | Required push/PR workflow: runs the cached locked Python quality gate, deterministic clean-clone CPU byte-oracles (including Relative Identifiability), and an independent pinned Lean `lake build` through `leanprover/lean-action` |
 | `.github/workflows/railway-deploy.yml` | Deploy atlas + Inquiry landing + Envelope Guard on `main` |
 | `schemas/{experiment_contract_registry,experiment_manifest,program_evidence_registry,claim_registry,gate_verdict,public_artifact_envelope}.schema.json` | Portable JSON Schema contracts for package coverage, package intent, evidence, claims, gate outcomes, and public-artifact envelopes |
 | `templates/experiment/{manifest,gate_verdict}.example.json` | Copyable version-1 examples validated by the same adapters used in CI |

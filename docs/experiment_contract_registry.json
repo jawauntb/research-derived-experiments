@@ -1469,6 +1469,37 @@
       }
     },
     {
+      "package": "relative_identifiability",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/relative_identifiability/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "relative_identifiability_2026_07_27",
+      "runs": [
+        {
+          "run_id": "relative_identifiability_2026_07_27",
+          "publication_package": "relative_identifiability",
+          "runtime_package": "relative_identifiability",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/relative_identifiability/experiment_manifest.json",
+          "report_paths": [
+            "experiments/relative_identifiability/results/summary.json",
+            "experiments/relative_identifiability/results/summary.md",
+            "papers/relative_identifiability/paper.md"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_digest": "0c11a72bd914ae2c56e42c6836561c1b89b474e4186d1d76e9ac3cd9afcb6cdd",
+          "preregistration_path": "experiments/relative_identifiability/PREREGISTRATION.md",
+          "producing_agent": {
+            "identity": "OpenAI Codex (GPT-5)",
+            "session_ref": "relative-identifiability 2026-07-27"
+          }
+        }
+      ]
+    },
+    {
       "package": "role_specific_identifiability",
       "coverage_mode": "legacy_exception",
       "legacy_exception": {
