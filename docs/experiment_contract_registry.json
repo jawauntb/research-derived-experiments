@@ -544,6 +544,35 @@
       ]
     },
     {
+      "package": "dr6_code_correctness_corollary",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/dr6_code_correctness_corollary/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "dr6_code_correctness_corollary_2026_07_27",
+      "runs": [
+        {
+          "run_id": "dr6_code_correctness_corollary_2026_07_27",
+          "publication_package": "dr6_code_correctness_corollary",
+          "runtime_package": "dr6_code_correctness_corollary",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/dr6_code_correctness_corollary/experiment_manifest.json",
+          "report_paths": [
+            "experiments/dr6_code_correctness_corollary/results/dr6_verdict.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_digest": "9f248b526c35c802fbe63e77ed54c821b712c7bfbb1c674f41e638ad70f18cfe",
+          "preregistration_path": "experiments/dr6_code_correctness_corollary/DR6_PREREGISTRATION.md",
+          "producing_agent": {
+            "identity": "Claude Code (Opus 4.7)",
+            "session_ref": "dr6-code-correctness-corollary 2026-07-27"
+          }
+        }
+      ]
+    },
+    {
       "package": "deletion_repair",
       "coverage_mode": "structured_manifest",
       "manifest_path": "experiments/deletion_repair/experiment_manifest.json",

@@ -1,0 +1,174 @@
+{
+  "gates": {
+    "W1_verifier_completeness": {
+      "decision": "GO"
+    },
+    "W2_realisation_median_gte_6": {
+      "decision": "GO",
+      "threshold": 6,
+      "value": 9
+    },
+    "W3_realisation_variability_gte_1p5": {
+      "decision": "NO_GO",
+      "threshold": 1.5,
+      "value": 1.0
+    },
+    "W4_placebo_median_lte_3": {
+      "decision": "GO",
+      "threshold": 3,
+      "value": 0
+    },
+    "W5_at_least_one_placebo_triggers": {
+      "decision": "NO_GO",
+      "n_placebos_at_or_above_5": 0
+    },
+    "W6_placebo_realisation_overlap": {
+      "decision": "NO_GO",
+      "max_placebo": 1,
+      "min_realisation": 8
+    }
+  },
+  "kind": "dr6_verdict",
+  "licensed_reading": "verifier_saturated: scores too uniform across realisations. Try harder snippets or a stricter D.",
+  "n_placebos": 5,
+  "n_realisations": 5,
+  "n_snippets": 10,
+  "overall_decision": "NO_GO",
+  "per_snippet": {
+    "P1_pytz_localize": {
+      "consensus": 1,
+      "kind": "placebo",
+      "per_verifier": [
+        1,
+        1,
+        1
+      ],
+      "surface_form": "pytz.utc.localize()",
+      "verifier_stdev": 0.0
+    },
+    "P2_now_with_timezone_utc": {
+      "consensus": 0,
+      "kind": "placebo",
+      "per_verifier": [
+        0,
+        0,
+        0
+      ],
+      "surface_form": "datetime.now(timezone.utc)",
+      "verifier_stdev": 0.0
+    },
+    "P3_zoneinfo_user_tz": {
+      "consensus": 0,
+      "kind": "placebo",
+      "per_verifier": [
+        0,
+        0,
+        0
+      ],
+      "surface_form": "zoneinfo user-supplied timezone",
+      "verifier_stdev": 0.0
+    },
+    "P4_no_datetime_arithmetic": {
+      "consensus": 0,
+      "kind": "placebo",
+      "per_verifier": [
+        0,
+        0,
+        0
+      ],
+      "surface_form": "no datetime, arithmetic only",
+      "verifier_stdev": 0.0
+    },
+    "P5_arrow_aware": {
+      "consensus": 0,
+      "kind": "placebo",
+      "per_verifier": [
+        0,
+        0,
+        0
+      ],
+      "surface_form": "arrow / third-party timezone-aware",
+      "verifier_stdev": 0.0
+    },
+    "R1_utcnow_direct": {
+      "consensus": 10,
+      "kind": "realisation",
+      "per_verifier": [
+        10,
+        10,
+        10
+      ],
+      "surface_form": "datetime.utcnow() direct use",
+      "verifier_stdev": 0.0
+    },
+    "R2_replace_tzinfo_none": {
+      "consensus": 9,
+      "kind": "realisation",
+      "per_verifier": [
+        9,
+        9,
+        9
+      ],
+      "surface_form": ".replace(tzinfo=None) to strip timezone",
+      "verifier_stdev": 0.0
+    },
+    "R3_time_fromtimestamp": {
+      "consensus": 8,
+      "kind": "realisation",
+      "per_verifier": [
+        8,
+        8,
+        8
+      ],
+      "surface_form": "time.time() \u2192 fromtimestamp yields naive",
+      "verifier_stdev": 0.0
+    },
+    "R4_iso_parse_no_tz": {
+      "consensus": 8,
+      "kind": "realisation",
+      "per_verifier": [
+        8,
+        7,
+        9
+      ],
+      "surface_form": "ISO parse without timezone",
+      "verifier_stdev": 1.0
+    },
+    "R5_combine_utc_convention": {
+      "consensus": 10,
+      "kind": "realisation",
+      "per_verifier": [
+        10,
+        9,
+        10
+      ],
+      "surface_form": "combine(date, time) \u2014 UTC by convention",
+      "verifier_stdev": 0.5773502691896257
+    }
+  },
+  "purpose": "Empirical test of DR5's verification wall on code correctness. 3 sandboxed verifier subagents score 5 realisations + 5 placebos of a naive-UTC datetime commitment.",
+  "summary": {
+    "overlap_gap_min_realisation_minus_max_placebo": 7,
+    "placebo_max": 1,
+    "placebo_median": 0,
+    "placebo_scores": [
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "realisation_max": 10,
+    "realisation_median": 9,
+    "realisation_min": 8,
+    "realisation_scores": [
+      10,
+      9,
+      8,
+      8,
+      10
+    ],
+    "realisation_stdev": 1.0
+  },
+  "target_commitment_D": "This Python code implicitly assumes that all datetime values are timezone-naive and represent UTC."
+}
