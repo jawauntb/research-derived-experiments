@@ -1,0 +1,204 @@
+{
+  "T1_at_1880_placebo": {
+    "class_rank_by_rule": {
+      "cardinality": 2,
+      "coverage": 2,
+      "spread": 2
+    },
+    "n_members": 1
+  },
+  "T1_at_1904": {
+    "best_realisation_rank_proposition_blind": 4,
+    "class_beats_proposition_by": {
+      "cardinality": 1,
+      "coverage": 1,
+      "spread": 1
+    },
+    "class_rank_by_rule": {
+      "cardinality": 3,
+      "coverage": 3,
+      "spread": 3
+    },
+    "n_documents": 5,
+    "n_members": 7
+  },
+  "cuts": {
+    "1880": {
+      "class_coverage": {
+        "T1_absolute_simultaneity": 1,
+        "T2_privileged_frame": 0,
+        "T3_local_time_artifice": 0,
+        "unclassified": 3
+      },
+      "class_ranks_by_rule": {
+        "T1_absolute_simultaneity": {
+          "cardinality": 2,
+          "coverage": 2,
+          "spread": 2
+        },
+        "T2_privileged_frame": {
+          "cardinality": 3,
+          "coverage": 3,
+          "spread": 3
+        },
+        "T3_local_time_artifice": {
+          "cardinality": 4,
+          "coverage": 4,
+          "spread": 4
+        },
+        "unclassified": {
+          "cardinality": 1,
+          "coverage": 1,
+          "spread": 1
+        }
+      },
+      "class_sizes": {
+        "T1_absolute_simultaneity": 1,
+        "T2_privileged_frame": 0,
+        "T3_local_time_artifice": 0,
+        "unclassified": 50
+      },
+      "cut_year": 1880,
+      "n_documents": 3,
+      "n_propositions": 51,
+      "proposition_blind_baseline": {
+        "best_rank_per_class": {
+          "T1_absolute_simultaneity": 23,
+          "T2_privileged_frame": -1,
+          "T3_local_time_artifice": -1
+        },
+        "n_propositions_ranked": 51
+      }
+    },
+    "1897": {
+      "class_coverage": {
+        "T1_absolute_simultaneity": 2,
+        "T2_privileged_frame": 5,
+        "T3_local_time_artifice": 0,
+        "unclassified": 8
+      },
+      "class_ranks_by_rule": {
+        "T1_absolute_simultaneity": {
+          "cardinality": 3,
+          "coverage": 3,
+          "spread": 3
+        },
+        "T2_privileged_frame": {
+          "cardinality": 2,
+          "coverage": 2,
+          "spread": 2
+        },
+        "T3_local_time_artifice": {
+          "cardinality": 4,
+          "coverage": 4,
+          "spread": 4
+        },
+        "unclassified": {
+          "cardinality": 1,
+          "coverage": 1,
+          "spread": 1
+        }
+      },
+      "class_sizes": {
+        "T1_absolute_simultaneity": 2,
+        "T2_privileged_frame": 8,
+        "T3_local_time_artifice": 0,
+        "unclassified": 125
+      },
+      "cut_year": 1897,
+      "n_documents": 8,
+      "n_propositions": 135,
+      "proposition_blind_baseline": {
+        "best_rank_per_class": {
+          "T1_absolute_simultaneity": 22,
+          "T2_privileged_frame": 7,
+          "T3_local_time_artifice": -1
+        },
+        "n_propositions_ranked": 135
+      }
+    },
+    "1904": {
+      "class_coverage": {
+        "T1_absolute_simultaneity": 5,
+        "T2_privileged_frame": 8,
+        "T3_local_time_artifice": 2,
+        "unclassified": 15
+      },
+      "class_ranks_by_rule": {
+        "T1_absolute_simultaneity": {
+          "cardinality": 3,
+          "coverage": 3,
+          "spread": 3
+        },
+        "T2_privileged_frame": {
+          "cardinality": 2,
+          "coverage": 2,
+          "spread": 2
+        },
+        "T3_local_time_artifice": {
+          "cardinality": 4,
+          "coverage": 4,
+          "spread": 4
+        },
+        "unclassified": {
+          "cardinality": 1,
+          "coverage": 1,
+          "spread": 1
+        }
+      },
+      "class_sizes": {
+        "T1_absolute_simultaneity": 7,
+        "T2_privileged_frame": 11,
+        "T3_local_time_artifice": 2,
+        "unclassified": 235
+      },
+      "cut_year": 1904,
+      "n_documents": 15,
+      "n_propositions": 254,
+      "proposition_blind_baseline": {
+        "best_rank_per_class": {
+          "T1_absolute_simultaneity": 4,
+          "T2_privileged_frame": 13,
+          "T3_local_time_artifice": 38
+        },
+        "n_propositions_ranked": 254
+      }
+    }
+  },
+  "gates": {
+    "N1_class_assignment_complete": {
+      "decision": "GO",
+      "n_propositions_1904": 254,
+      "unclassified_at_1904": 235
+    },
+    "N2_T1_class_non_empty_at_1904": {
+      "decision": "GO",
+      "n_members": 7,
+      "threshold": 5
+    },
+    "N3_class_rank_beats_proposition_rank": {
+      "class_rank_by_rule": {
+        "cardinality": 3,
+        "coverage": 3,
+        "spread": 3
+      },
+      "decision": "GO",
+      "proposition_blind_best_rank": 4
+    },
+    "N4_placebo_T1_class_ranks_low_at_1880": {
+      "decision": "NO_GO",
+      "rank_at_1880_by_rule": {
+        "cardinality": 2,
+        "coverage": 2,
+        "spread": 2
+      }
+    },
+    "N5_comparison_table_produced": {
+      "decision": "GO"
+    }
+  },
+  "kind": "dcr2a_verdict",
+  "licensed_reading": "class_scoring_fails_placebo: T1 outranks other classes at 1880 under some rule, meaning cardinality-1 hits inflate the class rank. Aggregation rule must require multi-document coverage.",
+  "overall_decision": "NO_GO",
+  "purpose": "Empirical companion to DR5: does class-based scoring surface T1 in a way proposition-based scoring cannot?"
+}
