@@ -1,0 +1,149 @@
+{
+  "T1_rank_1880": 2,
+  "T1_rank_1904": 3,
+  "cuts": {
+    "1880": {
+      "T1_rank": 2,
+      "class_scores": {
+        "T1_absolute_simultaneity": 0,
+        "T2_privileged_frame": 0,
+        "T3_local_time_artifice": 0,
+        "unclassified": 260
+      },
+      "class_sizes": {
+        "T1_absolute_simultaneity": 1,
+        "T2_privileged_frame": 0,
+        "T3_local_time_artifice": 0,
+        "unclassified": 50
+      },
+      "cut_year": 1880,
+      "n_documents": 3,
+      "n_propositions": 51,
+      "ranking": [
+        {
+          "class": "unclassified",
+          "score": 260
+        },
+        {
+          "class": "T1_absolute_simultaneity",
+          "score": 0
+        },
+        {
+          "class": "T2_privileged_frame",
+          "score": 0
+        },
+        {
+          "class": "T3_local_time_artifice",
+          "score": 0
+        }
+      ]
+    },
+    "1897": {
+      "T1_rank": 3,
+      "class_scores": {
+        "T1_absolute_simultaneity": 7,
+        "T2_privileged_frame": 38,
+        "T3_local_time_artifice": 0,
+        "unclassified": 447
+      },
+      "class_sizes": {
+        "T1_absolute_simultaneity": 2,
+        "T2_privileged_frame": 8,
+        "T3_local_time_artifice": 0,
+        "unclassified": 125
+      },
+      "cut_year": 1897,
+      "n_documents": 8,
+      "n_propositions": 135,
+      "ranking": [
+        {
+          "class": "unclassified",
+          "score": 447
+        },
+        {
+          "class": "T2_privileged_frame",
+          "score": 38
+        },
+        {
+          "class": "T1_absolute_simultaneity",
+          "score": 7
+        },
+        {
+          "class": "T3_local_time_artifice",
+          "score": 0
+        }
+      ]
+    },
+    "1904": {
+      "T1_rank": 3,
+      "class_scores": {
+        "T1_absolute_simultaneity": 20,
+        "T2_privileged_frame": 39,
+        "T3_local_time_artifice": 6,
+        "unclassified": 725
+      },
+      "class_sizes": {
+        "T1_absolute_simultaneity": 7,
+        "T2_privileged_frame": 11,
+        "T3_local_time_artifice": 2,
+        "unclassified": 235
+      },
+      "cut_year": 1904,
+      "n_documents": 15,
+      "n_propositions": 254,
+      "ranking": [
+        {
+          "class": "unclassified",
+          "score": 725
+        },
+        {
+          "class": "T2_privileged_frame",
+          "score": 39
+        },
+        {
+          "class": "T1_absolute_simultaneity",
+          "score": 20
+        },
+        {
+          "class": "T3_local_time_artifice",
+          "score": 6
+        }
+      ]
+    }
+  },
+  "gates": {
+    "M1_T1_first_at_1904": {
+      "T1_rank": 3,
+      "decision": "NO_GO",
+      "top_class": "unclassified",
+      "top_score": 725
+    },
+    "M2_T1_not_first_at_1880": {
+      "T1_rank": 2,
+      "decision": "GO",
+      "top_class": "unclassified"
+    },
+    "M3_beats_random_null": {
+      "decision": "NO_GO",
+      "n_trials": 10000,
+      "p_value": 0.2512,
+      "threshold": 0.01
+    },
+    "M4_prompt_committed": {
+      "decision": "GO",
+      "sha256": "c5440337f71ebe54f5a941284831ea3c9bc47351d0a4045e0cc46229d97291b4"
+    }
+  },
+  "kind": "dcr3b_verdict",
+  "licensed_reading": "counterfactual_scoring_still_missed_T1: even LLM-based counterfactual dependence puts T1 at rank 3. Third serial null on the intervention-algebra reframe on this arc.",
+  "n_null_trials": 10000,
+  "null_probability_T1_first_at_1904": 0.2512,
+  "overall_decision": "NO_GO",
+  "prompt_sha256": "c5440337f71ebe54f5a941284831ea3c9bc47351d0a4045e0cc46229d97291b4",
+  "purpose": "Test the intervention-algebra reframe on DCR: does LLM-based counterfactual dependence scoring rank Einstein's actual deletion (T1) first where DCR3's corpus-frequency scoring did not?",
+  "verifiers": [
+    "A",
+    "B",
+    "C"
+  ]
+}
