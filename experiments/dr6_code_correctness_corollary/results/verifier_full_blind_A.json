@@ -1,0 +1,18 @@
+{
+  "kind": "dr6g_verifier_scores",
+  "verifier_id": "A",
+  "scores": {
+    "R1_utcnow_direct": 9,
+    "R2_replace_tzinfo_none": 8,
+    "R3_time_fromtimestamp": 9,
+    "R4_iso_parse_no_tz": 8,
+    "R5_combine_utc_convention": 9,
+    "P1_pytz_localize": 3,
+    "P2_now_with_timezone_utc": 1,
+    "P3_zoneinfo_user_tz": 2,
+    "P4_no_datetime_arithmetic": 0,
+    "P5_arrow_aware": 2,
+    "R6_json_field_no_tz": 9
+  },
+  "reasoning": "R1: silently assumes the process/host clock is UTC and that comparisons against created_at share that convention. R2: assumes a naive-UTC storage column and uses astimezone() which implicitly relies on the local system timezone. R3: mixes time.time() (epoch) with fromtimestamp() (local zone) and assumes recipients interpret naive dt in the same zone. R4: parses log timestamps with no timezone, implicitly assuming a single convention across all producers. R5: hard-codes midnight and states the UTC convention only in a docstring, assuming fleet-wide agreement. P1: pytz is explicit about UTC, only minor assumption that inputs are meaningful UTC when naive. P2: fully explicit timezone.utc usage and rejects naive inputs. P3: takes tz as an explicit parameter and requires aware ts, minimal implicit assumption. P4: pure numeric code with no environmental dependency. P5: arrow with an explicit aware-check; only minor assumption that utcnow() is comparable to `then`. R6: docstring itself flags a fleet-wide UTC convention that is not enforced in code."
+}
