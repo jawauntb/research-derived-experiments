@@ -16,6 +16,7 @@ class RegenCleanCloneTests(unittest.TestCase):
     EXPECTED_ALLOWLIST = {
         "bayesian_voi",
         "grounded_statecharts",
+        "information_limited_discovery",
         "mathematical_claims",
         "relative_identifiability",
         "seed_bootstrap_calibration",

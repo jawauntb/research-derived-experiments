@@ -1,5 +1,73 @@
 # Discovery-Regime Audit Ledger
 
+## Information-Limited Discovery V0
+
+Question: can MIDAS evaluate whether a declared experiment family identifies a
+target, rather than rewarding only an answer, proof, or generic abstention?
+
+Current regime:
+
+- Artifact types: exact finite candidate-world tables, public target queries,
+  permitted experiment families, scoped obstruction certificates, episode
+  traces, matched coarse/rich task pairs, and deterministic receipts.
+- Operations: version-space filtering, terminal-pair search, target-aware
+  experiment selection, certificate validation, paired-family comparison, and
+  baseline scoring.
+- Gates/verifiers: frozen preregistration, independent certificate validation,
+  invalid-certificate mutations, label permutations, all-hidden-world
+  enumeration, direct factorization comparison, and public receipt replay.
+- Known limitations: closed candidate sets, exact deterministic outcomes,
+  hand-authored domain semantics, no natural-agent run, and no policy-optimality
+  claim.
+
+Action class:
+
+- Retrieval/search/discovery: proposed discovery-regime change with V0
+  mechanics validation.
+- Why: the package adds certified impossibility and local-versus-terminal
+  obstruction as explicit benchmark outcomes, rather than treating uncertainty
+  or task failure as a sufficient scientific artifact.
+
+Gate:
+
+- Acceptance rule: all three coarse task families yield valid terminal
+  obstructions; all three enriched families recover every hidden world under
+  the obstruction-first reference policy; lucky guesses remain overclaims;
+  unsupported and unnecessary abstentions receive no impossibility credit; and
+  certificate mutations fail closed.
+- Withheld/rejected rule: any invalid emitted certificate rejects the
+  obstruction claim. Synthetic results cannot be promoted to cross-domain
+  scientific-discovery evidence.
+
+Results:
+
+- Accepted artifacts:
+  `experiments/information_limited_discovery/results/summary.{json,md}`,
+  the versioned task table, and the calibrated paper.
+- Key metrics: 90 policy/world episodes over six tasks; the reference policy
+  produced nine certified recoveries and nine certified terminal obstructions
+  with zero budget failures; the always-guess baseline was correct on 8/18
+  episodes but overclaimed on all 18; the always-abstain baseline was
+  unsupported on all 18 and unnecessary on the nine recoverable variants.
+- Controls: all invalid-certificate mutations rejected; 18 label-permutation
+  comparisons passed; all five outcome classes were exercised; the registered
+  small finite sweep agreed with direct factorization.
+
+Residual content:
+
+- Explained by old regime: quotient/factorization, counterexample-guided
+  refinement, experiment comparison, and falsification are established prior
+  art.
+- New content under test: the combined MIDAS contract of experiment-relative
+  obstruction pairs, matched family transitions, and noncompensatory
+  recovery/impossibility/overclaim/abstention scoring.
+- Retractions or supersessions: none. Relative Identifiability remains the
+  mathematical kernel and is not replaced.
+
+Next move: add exact adaptive-policy oracles and natural, stochastic,
+misspecified task adapters under a separate preregistration. Until then, the
+strongest result is “deterministic finite benchmark mechanics validated.”
+
 ## Project Regime: Initial Publication
 
 Question: how do we turn the paper synthesis into a public, reproducible research workspace without publishing local-only source archives or secrets?

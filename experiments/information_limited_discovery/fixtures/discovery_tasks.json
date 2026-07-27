@@ -1,0 +1,170 @@
+{
+  "schema_version": "1.0",
+  "description": "Paired exact finite tasks. Domain labels describe the encoded fixture semantics, not natural-domain evidence.",
+  "tasks": [
+    {
+      "problem_id": "mechanism_external_only",
+      "pair_id": "mechanism",
+      "variant": "coarse",
+      "domain": "mechanistic_interpretability_toy",
+      "system": {
+        "name": "behavior_and_patch_table",
+        "realizations": ["mechanism_a_action_0", "mechanism_b_action_0", "mechanism_a_action_1", "mechanism_b_action_1"],
+        "experiments": ["external_readout", "internal_patch", "redundant_readout"],
+        "outcomes": [
+          [0, "A", 0],
+          [0, "B", 0],
+          [1, "A", 1],
+          [1, "B", 1]
+        ]
+      },
+      "target": {
+        "name": "mechanism",
+        "values": ["A", "B", "A", "B"]
+      },
+      "allowed_family": ["external_readout", "redundant_readout"],
+      "budget": 1,
+      "experiment_costs": {
+        "external_readout": 1,
+        "internal_patch": 1,
+        "redundant_readout": 1
+      }
+    },
+    {
+      "problem_id": "mechanism_with_internal_patch",
+      "pair_id": "mechanism",
+      "variant": "rich",
+      "domain": "mechanistic_interpretability_toy",
+      "system": {
+        "name": "behavior_and_patch_table",
+        "realizations": ["mechanism_a_action_0", "mechanism_b_action_0", "mechanism_a_action_1", "mechanism_b_action_1"],
+        "experiments": ["external_readout", "internal_patch", "redundant_readout"],
+        "outcomes": [
+          [0, "A", 0],
+          [0, "B", 0],
+          [1, "A", 1],
+          [1, "B", 1]
+        ]
+      },
+      "target": {
+        "name": "mechanism",
+        "values": ["A", "B", "A", "B"]
+      },
+      "allowed_family": ["external_readout", "internal_patch", "redundant_readout"],
+      "budget": 1,
+      "experiment_costs": {
+        "external_readout": 1,
+        "internal_patch": 1,
+        "redundant_readout": 1
+      }
+    },
+    {
+      "problem_id": "causal_observation_only",
+      "pair_id": "causal_structure",
+      "variant": "coarse",
+      "domain": "causal_discovery_toy",
+      "system": {
+        "name": "observationally_equivalent_causal_models",
+        "realizations": ["latent_common_cause", "x_causes_y", "y_causes_x"],
+        "experiments": ["observe_xy", "intervene_x", "intervene_y", "redundant_observation"],
+        "outcomes": [
+          ["correlated", "y_stable", "x_stable", "correlated"],
+          ["correlated", "y_changes", "x_stable", "correlated"],
+          ["correlated", "y_stable", "x_changes", "correlated"]
+        ]
+      },
+      "target": {
+        "name": "causal_structure",
+        "values": ["common_cause", "x_to_y", "y_to_x"]
+      },
+      "allowed_family": ["observe_xy", "redundant_observation"],
+      "budget": 1,
+      "experiment_costs": {
+        "observe_xy": 1,
+        "intervene_x": 1,
+        "intervene_y": 1,
+        "redundant_observation": 1
+      }
+    },
+    {
+      "problem_id": "causal_with_interventions",
+      "pair_id": "causal_structure",
+      "variant": "rich",
+      "domain": "causal_discovery_toy",
+      "system": {
+        "name": "observationally_equivalent_causal_models",
+        "realizations": ["latent_common_cause", "x_causes_y", "y_causes_x"],
+        "experiments": ["observe_xy", "intervene_x", "intervene_y", "redundant_observation"],
+        "outcomes": [
+          ["correlated", "y_stable", "x_stable", "correlated"],
+          ["correlated", "y_changes", "x_stable", "correlated"],
+          ["correlated", "y_stable", "x_changes", "correlated"]
+        ]
+      },
+      "target": {
+        "name": "causal_structure",
+        "values": ["common_cause", "x_to_y", "y_to_x"]
+      },
+      "allowed_family": ["observe_xy", "intervene_x", "intervene_y", "redundant_observation"],
+      "budget": 2,
+      "experiment_costs": {
+        "observe_xy": 1,
+        "intervene_x": 1,
+        "intervene_y": 1,
+        "redundant_observation": 1
+      }
+    },
+    {
+      "problem_id": "automata_short_probes",
+      "pair_id": "automata_delay",
+      "variant": "coarse",
+      "domain": "automata_learning_toy",
+      "system": {
+        "name": "delayed_acceptance_table",
+        "realizations": ["accepts_after_two", "never_accepts"],
+        "experiments": ["one_symbol_probe", "two_symbol_probe", "redundant_short_probe"],
+        "outcomes": [
+          ["reject", "accept", "reject"],
+          ["reject", "reject", "reject"]
+        ]
+      },
+      "target": {
+        "name": "eventual_acceptance",
+        "values": ["eventually_accepts", "never_accepts"]
+      },
+      "allowed_family": ["one_symbol_probe", "redundant_short_probe"],
+      "budget": 1,
+      "experiment_costs": {
+        "one_symbol_probe": 1,
+        "two_symbol_probe": 1,
+        "redundant_short_probe": 1
+      }
+    },
+    {
+      "problem_id": "automata_with_delayed_probe",
+      "pair_id": "automata_delay",
+      "variant": "rich",
+      "domain": "automata_learning_toy",
+      "system": {
+        "name": "delayed_acceptance_table",
+        "realizations": ["accepts_after_two", "never_accepts"],
+        "experiments": ["one_symbol_probe", "two_symbol_probe", "redundant_short_probe"],
+        "outcomes": [
+          ["reject", "accept", "reject"],
+          ["reject", "reject", "reject"]
+        ]
+      },
+      "target": {
+        "name": "eventual_acceptance",
+        "values": ["eventually_accepts", "never_accepts"]
+      },
+      "allowed_family": ["one_symbol_probe", "two_symbol_probe", "redundant_short_probe"],
+      "budget": 1,
+      "experiment_costs": {
+        "one_symbol_probe": 1,
+        "two_symbol_probe": 1,
+        "redundant_short_probe": 1
+      }
+    }
+  ]
+}

@@ -1192,6 +1192,38 @@
       }
     },
     {
+      "package": "information_limited_discovery",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/information_limited_discovery/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "information_limited_discovery_2026_07_27",
+      "runs": [
+        {
+          "run_id": "information_limited_discovery_2026_07_27",
+          "publication_package": "information_limited_discovery",
+          "runtime_package": "information_limited_discovery",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/information_limited_discovery/experiment_manifest.json",
+          "report_paths": [
+            "experiments/information_limited_discovery/results/summary.json",
+            "experiments/information_limited_discovery/results/summary.md",
+            "papers/information_limited_discovery/paper.md",
+            "papers/information_limited_discovery/paper.pdf"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_digest": "0cc534a7980d82c9ea25703045fa8aa398dc2c1a77e79e4e59685b2efd250f2a",
+          "preregistration_path": "experiments/information_limited_discovery/PREREGISTRATION.md",
+          "producing_agent": {
+            "identity": "OpenAI Codex (GPT-5)",
+            "session_ref": "information-limited-discovery 2026-07-27"
+          }
+        }
+      ]
+    },
+    {
       "package": "learned_symmetry",
       "coverage_mode": "legacy_exception",
       "legacy_exception": {

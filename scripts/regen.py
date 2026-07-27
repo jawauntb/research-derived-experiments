@@ -83,6 +83,9 @@ CLEAN_CLONE_ALLOWLIST: dict[str, str] = {
     "grounded_statecharts": (
         "experiments/grounded_statecharts/results/harness_unlearning/summary.json"
     ),
+    "information_limited_discovery": (
+        "experiments/information_limited_discovery/results/summary.json"
+    ),
     "mathematical_claims": (
         "experiments/mathematical_claims/results/mathematical_claims_summary.json"
     ),
