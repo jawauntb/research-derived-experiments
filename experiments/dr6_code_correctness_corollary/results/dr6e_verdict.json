@@ -1,0 +1,183 @@
+{
+  "gates": {
+    "U6e_R6_caught_semantically": {
+      "R6_consensus": 10,
+      "decision": "GO",
+      "threshold": 6
+    },
+    "W1": {
+      "decision": "GO"
+    },
+    "W2_realisation_median_gte_6": {
+      "decision": "GO",
+      "value": 9.5
+    },
+    "W3_stdev_gte_1p5": {
+      "decision": "NO_GO",
+      "value": 0.983192080250175
+    },
+    "W4_placebo_median_lte_3": {
+      "decision": "GO",
+      "value": 0
+    },
+    "W5_placebo_trigger": {
+      "decision": "NO_GO"
+    },
+    "W6_overlap": {
+      "decision": "NO_GO",
+      "max_placebo": 1,
+      "min_realisation": 8
+    }
+  },
+  "kind": "dr6e_verdict",
+  "licensed_reading": "wall_absent_under_open_enumeration_with_semantic_reasoning: sharpened DR5 confirmed on the (a)-open, (b)-satisfied corner. Claude caught R6 semantically. Escape via condition (b) is real.",
+  "n_snippets": 11,
+  "overall_decision": "GO",
+  "per_snippet": {
+    "P1_pytz_localize": {
+      "consensus": 1,
+      "kind": "placebo",
+      "per_verifier": [
+        1,
+        1,
+        0
+      ],
+      "surface_form": "pytz.utc.localize()",
+      "verifier_stdev": 0.5773502691896257
+    },
+    "P2_now_with_timezone_utc": {
+      "consensus": 0,
+      "kind": "placebo",
+      "per_verifier": [
+        0,
+        0,
+        0
+      ],
+      "surface_form": "datetime.now(timezone.utc)",
+      "verifier_stdev": 0.0
+    },
+    "P3_zoneinfo_user_tz": {
+      "consensus": 0,
+      "kind": "placebo",
+      "per_verifier": [
+        0,
+        0,
+        0
+      ],
+      "surface_form": "zoneinfo user-supplied timezone",
+      "verifier_stdev": 0.0
+    },
+    "P4_no_datetime_arithmetic": {
+      "consensus": 0,
+      "kind": "placebo",
+      "per_verifier": [
+        0,
+        0,
+        0
+      ],
+      "surface_form": "no datetime, arithmetic only",
+      "verifier_stdev": 0.0
+    },
+    "P5_arrow_aware": {
+      "consensus": 0,
+      "kind": "placebo",
+      "per_verifier": [
+        0,
+        1,
+        0
+      ],
+      "surface_form": "arrow / third-party timezone-aware",
+      "verifier_stdev": 0.5773502691896257
+    },
+    "R1_utcnow_direct": {
+      "consensus": 10,
+      "kind": "realisation",
+      "per_verifier": [
+        10,
+        10,
+        10
+      ],
+      "surface_form": "datetime.utcnow() direct use",
+      "verifier_stdev": 0.0
+    },
+    "R2_replace_tzinfo_none": {
+      "consensus": 9,
+      "kind": "realisation",
+      "per_verifier": [
+        9,
+        9,
+        9
+      ],
+      "surface_form": ".replace(tzinfo=None) to strip timezone",
+      "verifier_stdev": 0.0
+    },
+    "R3_time_fromtimestamp": {
+      "consensus": 8,
+      "kind": "realisation",
+      "per_verifier": [
+        8,
+        8,
+        4
+      ],
+      "surface_form": "time.time() \u2192 fromtimestamp yields naive",
+      "verifier_stdev": 2.309401076758503
+    },
+    "R4_iso_parse_no_tz": {
+      "consensus": 8,
+      "kind": "realisation",
+      "per_verifier": [
+        9,
+        8,
+        7
+      ],
+      "surface_form": "ISO parse without timezone",
+      "verifier_stdev": 1.0
+    },
+    "R5_combine_utc_convention": {
+      "consensus": 10,
+      "kind": "realisation",
+      "per_verifier": [
+        10,
+        10,
+        10
+      ],
+      "surface_form": "combine(date, time) \u2014 UTC by convention",
+      "verifier_stdev": 0.0
+    },
+    "R6_json_field_no_tz": {
+      "consensus": 10,
+      "kind": "realisation",
+      "per_verifier": [
+        10,
+        10,
+        10
+      ],
+      "surface_form": "datetime from JSON dict integer fields, no tz",
+      "verifier_stdev": 0.0
+    }
+  },
+  "purpose": "Claude verifier on DR6d's extended set (11 snippets). Tests whether semantic reasoning escapes the wall under open enumeration.",
+  "summary": {
+    "R6_consensus": 10,
+    "overlap_gap": 7,
+    "placebo_max": 1,
+    "placebo_scores": [
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    "realisation_median": 9.5,
+    "realisation_min": 8,
+    "realisation_scores": [
+      10,
+      9,
+      8,
+      8,
+      10,
+      10
+    ],
+    "realisation_stdev": 0.983192080250175
+  }
+}
