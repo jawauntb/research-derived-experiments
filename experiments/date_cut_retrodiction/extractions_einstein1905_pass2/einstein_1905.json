@@ -1,0 +1,285 @@
+{
+  "doc_id": "einstein_1905",
+  "propositions": [
+    {
+      "name": "relative_motion_alone_matters",
+      "statement": "The observed phenomena in the mutual action between a magnet and a conductor depend only on the relative motion of the two bodies, not on which body is in motion.",
+      "quote": "The observed phenomena in this case depend only on the relative motion of the conductor and the magnet",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_absolute_rest",
+      "statement": "No properties of observed facts correspond to a concept of absolute rest, in mechanics or in electrodynamics.",
+      "quote": "no properties of observed facts correspond to a concept of absolute rest",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_speed_independent_of_source",
+      "statement": "Light is propagated in vacant space with a velocity c which is independent of the nature of motion of the emitting body.",
+      "quote": "light is propagated in vacant space, with a velocity c which is independent of the nature of motion of the emitting body",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_medium_superfluous",
+      "statement": "The introduction of a Lightäther is superfluous, since neither a space absolutely at rest nor a velocity-vector at each point is required.",
+      "quote": "The introduction of a \"Lightäther\" will be proved to be superfluous, for according to the conceptions which will be developed",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "theory_rests_on_rigid_kinematics",
+      "statement": "Every theory in electrodynamics is based on the kinematics of rigid bodies, involving relations between rigid bodies (co-ordinate system), clocks, and electromagnetic processes.",
+      "quote": "the theory is based on the kinematics of rigid bodies; in the enunciation of every theory, we have to do with relations between rigid bodies (co-ordinate system), clocks, and electromagnetic processes",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "newtonian_equations_hold_in_K",
+      "statement": "There is a co-ordinate system, called the stationary system, in which the Newtonian equations hold.",
+      "quote": "Let us have a co-ordinate system, in which the Newtonian equations hold.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rest_position_by_measuring_rod",
+      "statement": "A material point at rest in the stationary system has its position found out by a measuring rod and expressed by the methods of Euclidean Geometry.",
+      "quote": "its position in this system can be found out by a measuring rod, and can be expressed by the methods of Euclidean Geometry",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "time_conceptions_are_synchronism",
+      "statement": "Our conceptions in which time plays a part are always conceptions of synchronism.",
+      "quote": "those of our conceptions, in which time plays a part, are always conceptions of synchronism",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "local_clock_only_local_time",
+      "statement": "A clock at a station suffices to define time exclusively for the place at which the clock is stationed.",
+      "quote": "Such a definition is in fact sufficient, when it is required to define time exclusively for the place at which the clock is stationed",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "light_symmetric_out_and_back",
+      "statement": "By definition the time which light requires in travelling from A to B is equivalent to the time which light requires in travelling from B to A.",
+      "quote": "the time which light requires in travelling from A to B is equivalent to the time which light requires in travelling from B to A",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "synchronism_consistent_for_any_points",
+      "statement": "The definition of synchronism is possible without involving any inconsistency for any number of points.",
+      "quote": "We assume that this definition of synchronism is possible without involving any inconsistency, for any number of points",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "clocks_of_same_nature",
+      "statement": "The clock at B is of the same nature as the clock at A.",
+      "quote": "we should add that the clock is of the same nature as the one at A",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "principle_of_relativity_formal",
+      "statement": "The laws according to which the nature of physical systems alter are independent of the manner in which these changes are referred to two co-ordinate systems having a uniform translatory motion relative to each other.",
+      "quote": "The laws according to which the nature of physical systems alter are independent of the manner in which these changes are referred to two co-ordinate systems which have a uniform translatory motion relative to each other.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "constancy_of_light_velocity",
+      "statement": "Every ray of light moves in the stationary co-ordinate system with the same velocity c, independent of whether the ray is emitted by a body at rest or in motion.",
+      "quote": "Every ray of light moves in the \"stationary co-ordinate system\" with the same velocity c , the velocity being independent of the condition whether this ray of light is emitted by a body at rest or in motion.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "classical_length_ops_silently_equal",
+      "statement": "In the generally recognised kinematics it is silently assumed that a moving rigid body is geometrically replaceable at an epoch of time by the same body in the condition of rest.",
+      "quote": "In the generally recognised kinematics, we silently assume that the lengths defined by these two operations are equal, or in other words, that at an epoch of time t , a moving rigid body is geometrically replaceable",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "length_of_moving_rod_simultaneous_ends",
+      "statement": "The length of the moving rod measured from the stationary system is the distance between the points of the stationary system where the ends of the rod occur at a particular time t.",
+      "quote": "the points of this system where the ends of the rod to be measured occur at a particular time t",
+      "kind": "required_by_argument",
+      "definitional": true
+    },
+    {
+      "name": "light_c_minus_v_in_K",
+      "statement": "In the stationary system, the time light requires in travelling from A to B along a rod moving with velocity v equals r_AB divided by c minus v.",
+      "quote": "Taking into consideration the principle of constancy of the velocity of light, we have",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "frame_relative_synchronism",
+      "statement": "Two events which are synchronous when viewed from one system will not be synchronous when viewed from a system moving relatively to this system.",
+      "quote": "two events which are synchronous when viewed from one system, will not be synchronous when viewed from a system moving relatively to this system",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "homogeneity_yields_linearity",
+      "statement": "On account of the property of homogeneity ascribed to time and space, the transformation equations connecting stationary and moving co-ordinates must be linear.",
+      "quote": "on account of the property of homogeneity which we ascribe to time and space, the equations must be linear",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "transverse_light_velocity_in_K",
+      "statement": "Light when viewed from the stationary system is always propagated along the y- and z-axes with the velocity square root of c squared minus v squared.",
+      "quote": "light when viewed from the stationary system, is always propagated along those axes with the velocity",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "two_principles_reconcilable",
+      "statement": "The principle of relativity is reconcilable with the principle of constant light-velocity, since a spherical wave in K transforms into a spherical wave propagated in the moving system with the same velocity c.",
+      "quote": "Therefore the wave is propagated in the moving system with the same velocity c , and as a spherical wave. Therefore we show that the two principles are mutually reconcilable.",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "two_fold_transformation_returns_identity",
+      "statement": "By a two-fold application of the transformation-equations, first with velocity v and then with velocity minus v, the systems K and k' come out identical.",
+      "quote": "the relations between ( x' , y' , z' , t' ), and ( x , y , z , t ) do not contain time explicitly, therefore K and k' are relatively at rest.",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "symmetry_of_phi",
+      "statement": "For a rod moving perpendicular to its axis, symmetry gives that phi of v equals phi of minus v, so that phi of v equals 1.",
+      "quote": "For the system moving with velocity (- v ), we have on grounds of symmetry",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "x_dimension_shortened",
+      "statement": "The y and z dimensions of a moving rigid body do not appear to be modified by the motion, but the x dimension is shortened in the ratio 1 to square root of 1 minus v squared over c squared.",
+      "quote": "the y and z dimensions of the sphere (therefore of any figure also) do not appear to be modified by the motion, but the x dimension is shortened in the ratio",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "c_is_limit_velocity",
+      "statement": "For a velocity larger than the velocity of light our propositions become meaningless; in our theory c plays the part of infinite velocity.",
+      "quote": "For a velocity larger than the velocity of light, our propositions become meaningless ; in our theory c plays the part of infinite velocity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "moving_clock_lags",
+      "statement": "The clock which was set in motion from A will lag behind the clock which had been all along at B by an amount one-half t times v squared over c squared, where t is the time required for the journey.",
+      "quote": "the clock which was set in motion from A will lag behind the clock which had been all along at B by an amount",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "polygonal_curve_extension",
+      "statement": "The clock-lag result holds also when the clock moves from A to B by a polygonal line, and also when we set in motion one of them with a constant velocity along a closed curve till it comes back to A.",
+      "quote": "if we set in motion one of them with a constant velocity along a closed curve till it comes back to A",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "equator_clock_slower_than_pole",
+      "statement": "A clock placed at the equator must be slower by a very small amount than a similarly constructed clock which is placed at the pole.",
+      "quote": "a clock placed at the equator must be slower by a very small amount than a similarly constructed clock which is placed at the pole",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "velocity_addition_below_c",
+      "statement": "By combining two velocities each of which is smaller than c we obtain a velocity which is always smaller than c.",
+      "quote": "by combining two velocities, each of which is smaller than c , we obtain a velocity which is always smaller than c",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "parallel_transformation_forms_group",
+      "statement": "The parallel transformation of coordinates between systems moving with velocities along the x-axis forms a group.",
+      "quote": "We see that such a parallel transformation forms a group.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "maxwell_hertz_holds_in_K",
+      "statement": "The Maxwell-Hertz equations for pure vacuum hold for the stationary system K.",
+      "quote": "The Maxwell-Hertz equations for pure vacuum may hold for the stationary system K",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "maxwell_hertz_holds_in_k_too",
+      "statement": "The principle of Relativity requires that the Maxwell-Hertzian equations for pure vacuum shall hold also for the moving system k if they hold for the system K.",
+      "quote": "The principle of Relativity requires that the Maxwell-Hertzian equations for pure vacuum shall hold also for the system k, if they hold for the system K",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "electric_magnetic_forces_frame_dependent",
+      "statement": "The electric and magnetic forces possess no existence independent of the nature of motion of the co-ordinate system.",
+      "quote": "the electric and magnetic forces possess no existence independent of the nature of motion of the co-ordinate system",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "charge_invariance",
+      "statement": "If an electrically charged body moves in any manner in space, and if its charge does not change when regarded from a system moving along with it, then the charge remains constant even when regarded from the stationary system K.",
+      "quote": "if an electrically charged body moves in any manner in space, and if its charge does not change thereby, when regarded from a system moving along with it, then the charge remains constant even when it is regarded from the stationary system K",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "electron_at_rest_newton_law",
+      "statement": "If the electron be at rest at any definite epoch, then in the next particle of time the motion takes place according to the equations m d squared x by dt squared equals eX.",
+      "quote": "If the electron be at rest at any definite epoch, then in the next \"particle of time, \" the motion takes place according to the equations",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "kinetic_energy_infinite_at_c",
+      "statement": "For v equal to c the kinetic energy W is infinitely great, and velocities exceeding that of light can have no possibility of existence.",
+      "quote": "For v=c , W is infinitely great. As our former result shows, velocities exceeding that of light can have no possibility of existence",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "energy_frequency_same_law",
+      "statement": "The energy and the frequency of a light-complex vary according to the same law with the state of motion of the observer.",
+      "quote": "It is to be noticed that the energy and the frequency of a light-complex vary according to the same law with the state of motion of the observer.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "energy_principle_gives_pressure",
+      "statement": "The difference between the amount of energy falling upon the mirror per unit of time and the amount going away is, according to the Energy principle, the work exerted by the pressure of light per unit of time.",
+      "quote": "The difference of these two expressions is, according to the Energy principle, the amount of work exerted, by the pressure of light per unit of time.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rigid_rods_and_clocks_alike",
+      "statement": "The rigid measuring rod and the number of clocks in each of the two systems are exactly alike each other.",
+      "quote": "Let a rigid measuring rod, and a number of clocks be given to each of the systems, and let the rods and clocks in each be exactly alike each other.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "spherical_wave_in_K_isotropic",
+      "statement": "A spherical wave sent out from the common origin spreads with velocity c in the system K, so light propagates in K with the same velocity c in all directions.",
+      "quote": "let a spherical wave be sent out from the common origin of the two systems of co-ordinates, and let it spread with a velocity c in the system K",
+      "kind": "presupposed",
+      "definitional": false
+    }
+  ]
+}

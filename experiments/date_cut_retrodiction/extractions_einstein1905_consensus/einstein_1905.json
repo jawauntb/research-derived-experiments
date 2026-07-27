@@ -1,0 +1,315 @@
+{
+  "doc_id": "einstein_1905",
+  "propositions": [
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "relative_motion_only",
+      "quote": "The observed phenomena in this case depend only on the relative motion of the conductor and the magnet, while according to the usual conception, a distinction must be made",
+      "statement": "The observed phenomena in the magnet and conductor case depend only on the relative motion of the two bodies, not on which one is in motion.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "no_absolute_rest",
+      "quote": "no properties of observed facts correspond to a concept of absolute rest ; but that for all coordinate systems for which the mechanical equations hold, the equivalent electrodynamical and optical equations hold also",
+      "statement": "No properties of observed facts correspond to a concept of absolute rest, in mechanics or in electrodynamics.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "light_velocity_independent_of_source",
+      "quote": "light is propagated in vacant space, with a velocity c which is independent of the nature of motion of the emitting body",
+      "statement": "Light is propagated in vacant space with a velocity c which is independent of the motion of the emitting body.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "no_absolute_space_no_point_velocity",
+      "quote": "we shall introduce neither a space absolutely at rest, and endowed with special properties, nor shall we associate a velocity-vector with a point in which electro-magnetic processes take place",
+      "statement": "No space absolutely at rest with special properties is introduced, and no velocity-vector is associated with a point where electro-magnetic processes take place.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "theory_rests_on_rigid_body_kinematics",
+      "quote": "Like every other theory in electrodynamics, the theory is based on the kinematics of rigid bodies; in the enunciation of every theory, we have to do with relations between rigid bodies (co-ordinate system), clocks, and electromagnetic processes",
+      "statement": "The theory is based on the kinematics of rigid bodies and on relations between rigid bodies, clocks, and electromagnetic processes.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "stationary_system_is_newtonian",
+      "quote": "Let us have a co-ordinate system, in which the Newtonian equations hold. For distinguishing this system from another which will be introduced hereafter, we shall always call it \"the stationary system.\"",
+      "statement": "The stationary co-ordinate system is defined as one in which the Newtonian equations hold.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "rest_position_by_measuring_rod",
+      "quote": "If a material point be at rest in this system, then its position in this system can be found out by a measuring rod, and can be expressed by the methods of Euclidean Geometry, or in Cartesian co-ordinates",
+      "statement": "The position of a material point at rest in the stationary system can be found by a measuring rod and expressed by Euclidean Geometry or Cartesian co-ordinates.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "time_conceptions_are_synchronism",
+      "quote": "those of our conceptions, in which time plays a part, are always conceptions of synchronism . For example, we say that a train arrives here at 7 o'clock",
+      "statement": "Every conception in which time plays a part is a conception of synchronism.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "clocks_of_same_nature",
+      "quote": "If an observer be stationed at B with a clock, \u2014we should add that the clock is of the same nature as the one at A,\u2014 he can estimate the time of events occurring about B",
+      "statement": "The clock at B is taken to be of the same nature as the one at A.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "common_time_by_light_symmetry_definition",
+      "quote": "This last time (i.e., common time) can be defined, if we establish by definition that the time which light requires in travelling from A to B is equivalent to the time which light requires in travelling from B to A",
+      "statement": "Common time between A and B is established by definition that the time light requires from A to B equals the time light requires from B to A.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "synchronism_definition_consistent",
+      "quote": "We assume that this definition of synchronism is possible without involving any inconsistency, for any number of points, therefore the following relations hold",
+      "statement": "The definition of synchronism is assumed to be free of inconsistency for any number of points.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "principle_of_relativity",
+      "quote": "The laws according to which the nature of physical systems alter are independent of the manner in which these changes are referred to two co-ordinate systems which have a uniform translatory motion relative to each other",
+      "statement": "The laws of physical systems are independent of the choice among two co-ordinate systems which have a uniform translatory motion relative to each other.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "constancy_of_light_in_stationary",
+      "quote": "Every ray of light moves in the \"stationary co-ordinate system\" with the same velocity c , the velocity being independent of the condition whether this ray of light is emitted by a body at rest or in motion",
+      "statement": "Every ray of light moves in the stationary co-ordinate system with the same velocity c, independent of whether emitted by a body at rest or in motion.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "length_of_moving_rod_by_sync_clocks",
+      "quote": "by means of clocks placed in a system at rest (the clocks being synchronous as defined in \u00a7 1), the points of this system where the ends of the rod to be measured occur at a particular time t",
+      "statement": "The length of a moving rod is found by clocks at rest, synchronous as in section 1, marking the points of the stationary system where the ends occur at a particular time t.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "silent_geometric_replaceability_rejected",
+      "quote": "we silently assume that the lengths defined by these two operations are equal, or in other words, that at an epoch of time t , a moving rigid body is geometrically replaceable by the same body",
+      "statement": "Ordinary kinematics silently assumes that the two operational lengths are equal, i.e. that at an epoch of time t a moving rigid body is geometrically replaceable by the same body at rest.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "synchronism_has_no_absolute_significance",
+      "quote": "we can attach no absolute significance to the concept of synchronism ; but two events which are synchronous when viewed from one system, will not be synchronous when viewed from a system moving relatively to this system",
+      "statement": "Two events synchronous when viewed from one system are not synchronous when viewed from a system moving relatively to it, so synchronism has no absolute significance.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "rods_and_clocks_identical_across_systems",
+      "quote": "Let a rigid measuring rod, and a number of clocks be given to each of the systems, and let the rods and clocks in each be exactly alike each other",
+      "statement": "The rigid measuring rod and clocks given to each of the two systems are exactly alike each other.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "homogeneity_forces_linearity",
+      "quote": "on account of the property of homogeneity which we ascribe to time and space, the equations must be linear",
+      "statement": "Because time and space are homogeneous, the transformation equations must be linear.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "light_relative_to_moving_origin_c_minus_v",
+      "quote": "the ray of light moves relative to the origin of k with a velocity c-v , measured in the stationary system",
+      "statement": "The ray of light moves relative to the origin of the moving system k with velocity c minus v, measured in the stationary system.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "spherical_wave_stays_spherical_at_c",
+      "quote": "the wave is propagated in the moving system with the same velocity c , and as a spherical wave. Therefore we show that the two principles are mutually reconcilable",
+      "statement": "A spherical wave in system K is propagated in the moving system with the same velocity c and as a spherical wave, showing the two principles are reconcilable.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "c_plays_part_of_infinite_velocity",
+      "quote": "For a velocity larger than the velocity of light, our propositions become meaningless ; in our theory c plays the part of infinite velocity",
+      "statement": "For a velocity larger than the velocity of light the propositions become meaningless, and c plays the part of infinite velocity.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "equator_clock_slower_than_pole",
+      "quote": "a clock placed at the equator must be slower by a very small amount than a similarly constructed clock which is placed at the pole, all other conditions being identical",
+      "statement": "A clock placed at the equator must be slower by a very small amount than a similarly constructed clock at the pole, all other conditions being identical.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "velocity_composition_bounded_by_c",
+      "quote": "by combining two velocities, each of which is smaller than c , we obtain a velocity which is always smaller than c",
+      "statement": "Combining two velocities each smaller than c yields a velocity which is always smaller than c.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "parallel_transformation_forms_group",
+      "quote": "We see that such a parallel transformation forms a group",
+      "statement": "The parallel transformation of coordinates forms a group.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "maxwell_equations_hold_in_moving_system",
+      "quote": "The principle of Relativity requires that the Maxwell-Hertzian equations for pure vacuum shall hold also for the system k, if they hold for the system K",
+      "statement": "The Principle of Relativity requires the Maxwell-Hertzian equations for pure vacuum to hold also in system k if they hold in system K.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "fields_not_independent_of_frame_motion",
+      "quote": "the electric and magnetic forces possess no existence independent of the nature of motion of the co-ordinate system",
+      "statement": "The electric and magnetic forces possess no existence independent of the nature of motion of the co-ordinate system.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "seat_of_electromagnetic_energy_meaningless",
+      "quote": "Also the question about the seat of electromagnetic energy is seen to be without any meaning",
+      "statement": "The question about the seat of electromagnetic energy is seen to be without any meaning.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "charge_invariant_across_systems",
+      "quote": "if its charge does not change thereby, when regarded from a system moving along with it, then the charge remains constant even when it is regarded from the stationary system K",
+      "statement": "If a charge does not change when regarded from a co-moving system, the charge remains constant when regarded from the stationary system K.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "no_velocity_exceeding_light",
+      "quote": "For v=c , W is infinitely great. As our former result shows, velocities exceeding that of light can have no possibility of existence",
+      "statement": "For v equal to c the electron's kinetic energy is infinitely great, so velocities exceeding that of light can have no possibility of existence.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "mass_result_extends_to_ponderable",
+      "quote": "for in our sense, a ponderable material point may be made into an electron by the addition of an electrical charge which may be as small as possible",
+      "statement": "A ponderable material point can be made into an electron by adding an arbitrarily small charge, so the mass result also holds for ponderable material mass.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "einstein_1905",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "energy_principle_bounds_radiation_pressure",
+      "quote": "The difference of these two expressions is, according to the Energy principle, the amount of work exerted, by the pressure of light per unit of time",
+      "statement": "The difference between energy falling on and leaving the mirror equals, by the Energy principle, the work done by the pressure of light per unit time.",
+      "support": 2
+    }
+  ]
+}
