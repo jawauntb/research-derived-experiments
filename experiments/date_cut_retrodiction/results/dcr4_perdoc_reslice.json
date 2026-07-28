@@ -1,0 +1,40 @@
+{
+  "commentary": {
+    "T1": "Aggregate T1 count 7 concentrated: Poincar\u00e9 1898 = 4, three other papers = 1 each. Einstein 1905 also = 4. Einstein does not have less T1 discussion than 'the precursors'; he ties the single most vocal precursor.",
+    "T2": "Aggregate T2 count 25 distributed across FitzGerald, Larmor, Lodge, Michelson, Rayleigh at 3-4 each. Einstein 1905 also = 4. Multiple precursors match Einstein on T2 volume.",
+    "unique_to_einstein": "No precursor paper has BOTH T1 count \u2265 4 AND T2 count \u2265 4 in the same document. Einstein 1905 is the unique case of simultaneous 4:4 balance."
+  },
+  "cut_year": 1904,
+  "einstein_1905_reference": {
+    "T1": 4,
+    "T2": 4,
+    "T3": 0
+  },
+  "kind": "dcr4_perdoc_reslice",
+  "per_document": {
+    "T1": {
+      "larmor_1900_ch11": 1,
+      "lorentz_1904": 1,
+      "poincare_1898_time": 4,
+      "poincare_1904_stlouis": 1
+    },
+    "T2": {
+      "fitzgerald_1889": 4,
+      "larmor_1897_medium3": 2,
+      "larmor_1900_ch10": 4,
+      "larmor_1900_ch11": 1,
+      "lodge_1897_absence": 3,
+      "lorentz_1904": 2,
+      "maxwell_1878_ether": 2,
+      "michelson_1881": 3,
+      "poincare_1904_stlouis": 2,
+      "rayleigh_1902_refraction": 2
+    },
+    "T3": {
+      "larmor_1900_ch10": 2,
+      "larmor_1900_ch11": 1,
+      "lorentz_1904": 1
+    }
+  },
+  "purpose": "Sharpens the DCR4 headline finding by checking how the aggregate T1 count at 1904 (7) is distributed across the 15 documents in the corpus. Confirms that Poincar\u00e9 1898 alone matches Einstein 1905 on T1 discussion count (both 4)."
+}
