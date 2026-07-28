@@ -1192,6 +1192,33 @@
       }
     },
     {
+      "package": "lavoisier_phlogiston_corpus",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/lavoisier_phlogiston_corpus/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "lavoisier_phlogiston_corpus_scaffold_2026_07_27",
+      "runs": [
+        {
+          "run_id": "lavoisier_phlogiston_corpus_scaffold_2026_07_27",
+          "publication_package": "lavoisier_phlogiston_corpus",
+          "runtime_package": "lavoisier_phlogiston_corpus",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/lavoisier_phlogiston_corpus/experiment_manifest.json",
+          "report_paths": [
+            "experiments/lavoisier_phlogiston_corpus/results/fetch_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "producing_agent": {
+            "identity": "Claude Code (Opus 4.7)",
+            "session_ref": "lavoisier-phlogiston-corpus scaffolding 2026-07-27"
+          }
+        }
+      ]
+    },
+    {
       "package": "learned_symmetry",
       "coverage_mode": "legacy_exception",
       "legacy_exception": {
