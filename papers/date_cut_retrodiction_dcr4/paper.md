@@ -1,10 +1,10 @@
-# DCR4: Einstein 1905 Was Not The Discussion Spike. The Precursors Were.
+# DCR4: Einstein 1905 Ties Poincaré 1898 On T1 Discussion Count. What Makes The Revolutionary Paper Structurally Distinct Is Something Else.
 
 **Human director:** Jawaun Brown
 **Producing agent:** Claude Code, directed
 **Program:** Date-Cut Retrodiction — DCR4 (Einstein 1905 as oracle corpus)
-**Status:** Overall **NO_GO** on the DCR3d trajectory-framing prediction. Q1 GO, Q4 GO, but Q2 NO_GO and Q3 NO_GO. Einstein 1905 discusses T1 (synchronism) exactly 4 times and T2 (privileged frame) exactly 4 times under unanimous three-verifier consensus. That is FEWER T1 discussions than the 1904 pre-cut corpus (7). The trajectory reframe predicted the revolutionary paper would be the discussion spike; the fresh test says the discussion spike was the *precursor* literature (Poincaré 1898/1904, Larmor 1900, Lorentz 1904), and Einstein's paper is characteristically quiet — it *concludes* the discussion rather than *continuing* it.
-**Date:** 2026-07-27
+**Status:** Overall **NO_GO** on the DCR3d trajectory-framing prediction. Q1 GO, Q4 GO, but Q2 NO_GO and Q3 NO_GO. The retracted-and-corrected finding is stronger than the original: Einstein 1905's T1 discussion count (4) is not lower than "the precursor era" — it is EQUAL to Poincaré 1898 alone (4). Einstein's revolutionary paper is not quieter than the precursor era; it matches the single most vocal precursor. What IS structurally unique to Einstein 1905 is (i) simultaneous 4:4 balance of T1 and T2 discussion, matched by no other document in the corpus, and (ii) zero prediction-dependence on T1/T2/T3 — every derivation reconstructed to avoid the deleted commitments as premises.
+**Date:** 2026-07-27 (correction 2026-07-27, in the same day; the per-document reslice was done immediately after the paper landed and its result substantively updates the reading)
 
 ---
 
@@ -35,30 +35,48 @@ document normalisation the direction reverses (Einstein: 4 per document;
 NO_GO (raw T1 count falls, not rises), Q4 GO (ratio collapses because
 use collapses). Overall NO_GO.
 
-**Sharpest new finding:** the discussion spike was not the revolutionary
-paper. It was the precursor era. The revolutionary paper is characterised
-by two structural moves DCR3d did not predict:
+**Sharpest new finding (as originally written and now corrected):**
+initially reported as "the discussion spike was the precursor era, not
+the revolutionary paper." That framing is misleading. The per-document
+reslice done immediately after this paper landed (§4.4) shows that the
+aggregate 1904 T1 count of 7 is not distributed across "the precursors"
+— it is 4 in a single paper (Poincaré 1898 "The Measure of Time"), 1
+in Larmor 1900 ch11, 1 in Lorentz 1904, and 1 in Poincaré 1904. Every
+other 1904-cut document has T1 discussion count zero. **Einstein 1905
+does not have less T1 discussion than the precursors; it ties Poincaré
+1898.**
+
+What survives that correction — sharper than the original — is that
+the revolutionary paper is characterised by two structural moves DCR3d
+did not predict, and that survive the per-doc reslice as uniquely
+Einstein among all 15 documents in the corpus:
 
 1. **Symmetric equalisation.** Einstein discusses T1 and T2 exactly the
-   same number of times (4/4). In the 1904 pre-cut corpus, T2 was
-   discussed 25 times to T1's 7 — asymmetric focus on the aether
-   question, with simultaneity a minor sideline. Einstein's paper cuts
-   that ratio to 1:1 by treating T1 and T2 as *the same problem*: two
-   postulates with matched structure, each denying an absolute quantity.
+   same number of times (4/4). Under the per-doc reslice: Poincaré 1898
+   is 4:0 (T1 alone); FitzGerald 1889 is 0:4 (T2 alone); Larmor 1900
+   ch10 is 0:4 (T2 alone). No other document in the corpus has both T1
+   and T2 discussion counts ≥ 4 in the same paper. Einstein's paper is
+   unique in treating T1 and T2 as *the same problem*: two postulates
+   with matched structure, each denying an absolute quantity. Every
+   precursor addresses one commitment or the other, not both together.
 
 2. **Prediction-independence.** Zero of Einstein's 31 propositions use
    T1, T2, or T3 as a background premise for a prediction. Under the
-   1904 corpus, at least one prediction per major document requires T1
-   or T2 as background. Einstein rebuilds the derivations so that no
-   prediction depends on either. That is what the deletion actually is —
-   not more discussion, but reconstructed derivations that no longer
-   need the assumption.
+   1904 corpus, every major document has some prediction-dependence on
+   T1 or T2. Einstein rebuilds the derivations so that no prediction
+   depends on either. That is what the deletion actually is — not more
+   discussion, but reconstructed derivations that no longer need the
+   assumption.
 
-If the pattern generalises, revolutionary papers are quieter than their
-precursors and reconstruct derivations rather than expanding argumentation.
-The precursor era owns the discussion. That distinction is a real
-sharpening of DCR3d's finding, obtained by paying the cost of the fresh
-preregistered test.
+If the pattern generalises, revolutionary papers do not necessarily
+have more or less discussion than their most focused precursors — they
+have *unique structural properties*. Simultaneous discussion of both
+paired commitments; reconstruction of every derivation to eliminate
+prediction-dependence on either. The precursor Poincaré 1898 matches
+Einstein 1905 on T1 discussion volume; FitzGerald 1889 matches Einstein
+on T2 volume. What no precursor matches Einstein on is doing BOTH at
+once while also removing every dependence from the predictions. That is
+what makes the revolutionary paper structurally distinctive.
 
 ---
 
@@ -171,15 +189,20 @@ not capture.
 ### 4.1 Einstein equalises T1 and T2 discussion
 
 The 1904 pre-cut corpus discusses T2 (aether / privileged frame) 25
-times and T1 (simultaneity / common time) 7 times. The precursor era
-was heavily focused on the aether question, with simultaneity treated
-as a subtopic — Poincaré wrote philosophy about it, Larmor wrote
-common-time into the Lorentz transformation, but the bulk of the
-literature was arguing about which form of aether-drag was correct.
+times and T1 (simultaneity / common time) 7 times, in aggregate. This
+section originally read that aggregate as "the precursor era was
+heavily focused on the aether question, with simultaneity treated as
+a subtopic." The §4.4 per-doc reslice sharpens this: the aggregate T1
+count of 7 is not distributed across the corpus — it is 4 in Poincaré
+1898 alone and 1 each in three other papers. The bulk of the corpus
+does not discuss T1 at all. And the T2 total of 25 is concentrated in
+several papers (FitzGerald, Larmor, Lodge, Michelson, Rayleigh),
+none of which also discusses T1.
 
-Einstein's 1905 paper cuts that ratio to 1:1. He treats T1 and T2 as
-*the same problem*: two postulates of matched structural form, each
-denying an absolute quantity.
+Einstein's 1905 paper is the first document in the corpus with both
+T1 and T2 discussion counts at ≥ 4. He treats T1 and T2 as *the same
+problem*: two postulates of matched structural form, each denying an
+absolute quantity.
 
 - The **principle of relativity** denies that there is a privileged
   rest frame — negates T2.
@@ -194,8 +217,10 @@ with another and both dispatched together."
 
 DCR3d's trajectory framing predicted asymmetric spike on T1 because
 that was Einstein's specific move. What Einstein actually did was
-*symmetrise* the two commitments; the T1 vs T2 asymmetry in the
-precursor literature is what he removed, not what he acted on.
+*symmetrise* the two commitments; the per-paper T1-only-or-T2-only
+asymmetry across the precursor literature (Poincaré 1898 on T1;
+FitzGerald / Larmor 1900 ch10 / Lodge on T2) is what he removed, not
+what he acted on.
 
 ### 4.2 Zero prediction-dependence on T1, T2, or T3
 
@@ -237,6 +262,68 @@ the discussion. Per-document normalisation would say the revolutionary
 paper is more intensely focused. Both are true statements about
 different quantities; neither is the natural one to preregister for the
 follow-on tests.
+
+### 4.4 Per-document reslice (correction to §4.1 and §4.3)
+
+Immediately after DCR4 landed, the human director requested a per-document
+reslice of the DCR3d discussion tags at 1904, on the specific concern that
+the aggregate 1904 T1 count (7) could be dominated by one paper and the
+"revolutionary paper is quieter than the precursors" framing might be an
+averaging artifact. It was.
+
+**T1 discussion counts per document at 1904 (≥ 2-of-3 verifier consensus):**
+
+| document | T1 discussion count |
+|---|---:|
+| **poincare_1898_time** | **4** |
+| poincare_1904_stlouis | 1 |
+| larmor_1900_ch11 | 1 |
+| lorentz_1904 | 1 |
+| all other 11 documents | 0 |
+| — total across corpus | 7 |
+
+**T2 discussion counts per document at 1904:**
+
+| document | T2 discussion count |
+|---|---:|
+| **fitzgerald_1889** | **4** |
+| **larmor_1900_ch10** | **4** |
+| lodge_1897_absence | 3 |
+| michelson_1881 | 3 |
+| others (2 each or less) | ≤ 2 |
+| — total across corpus | 25 |
+
+**Einstein 1905 for comparison:** T1 = 4, T2 = 4.
+
+Three implications for the paper's original claims:
+
+- **The "quieter than the precursors" claim is retracted.** Einstein
+  1905 does not have less T1 discussion than the precursor era; it has
+  the same T1 discussion count as Poincaré 1898 alone (both = 4). The
+  aggregate 7 was one paper of Poincaré's plus three single-mention
+  papers. The paper's original abstract and section 4 framed this as if
+  the precursors collectively created a discussion spike Einstein was
+  quieter than; that framing is not supported by the reslice.
+
+- **"Symmetric equalisation" claim is strengthened.** Einstein 1905's
+  4:4 T1:T2 balance is unique in the entire corpus. Poincaré 1898 is
+  4:0 (T1 alone). FitzGerald 1889 and Larmor 1900 ch10 are 0:4 (T2
+  alone). No single precursor paper discusses both commitments at
+  ≥ 4 counts each. Einstein does. That is a real per-paper structural
+  signature that survives the reslice.
+
+- **"Prediction-independence" claim is unaffected.** No precursor
+  paper has zero T1/T2/T3 use in predictions (the raw counts in DCR3c
+  are not zero for any of the 13 documents). Einstein 1905 has zero.
+  This structural property does not depend on aggregation and is
+  independently confirmed by the reslice.
+
+Net effect on the paper's headline: the "quieter than the precursors"
+finding is retracted. The two structural moves (equalisation and
+prediction-independence) are sharpened, not weakened. What the paper
+actually established is that these two per-paper structural moves are
+unique to Einstein 1905 in the pre-1905 corpus, and that the aggregate
+count comparison the original abstract leaned on was misleading.
 
 ## 5. What DCR4 does not license
 
