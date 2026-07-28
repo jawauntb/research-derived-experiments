@@ -148,15 +148,26 @@ def compute_model_gates(
     *,
     model_aggregates: dict[str, AggregateScores],
     oracle_separator_accuracy: float = 1.0,
+    oracle_final_accuracy: float = 1.0,
     material_gap: float = 0.10,
 ) -> dict[str, bool]:
-    """G5 capability gap; G7 is assessed by a separate reshuffle run when provided."""
+    """G5 capability gap; G7 is assessed by a separate reshuffle run when provided.
+
+    A material gap may appear in separator choice, weakness regret, false certainty,
+    or final/post-intervention identification (update-after-evidence failures).
+    """
     g5 = any(
         (agg.separator_accuracy <= oracle_separator_accuracy - material_gap)
         or (
             agg.mean_weakness_regret is not None and agg.mean_weakness_regret >= 0.25
         )
         or (agg.false_certainty_rate >= 0.20)
+        or (agg.final_accuracy <= oracle_final_accuracy - material_gap)
+        or (
+            agg.post_intervention_identification is not None
+            and agg.post_intervention_identification
+            <= oracle_final_accuracy - material_gap
+        )
         for agg in model_aggregates.values()
     )
     return {"G5_capability_gap": g5}

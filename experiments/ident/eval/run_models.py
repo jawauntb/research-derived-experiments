@@ -9,7 +9,8 @@ import random
 from pathlib import Path
 from typing import Any
 
-from experiments.ident.eval.openrouter import DEFAULT_MODELS, OpenRouterChatModel
+from experiments.ident.eval.openrouter import DEFAULT_MODELS
+from experiments.ident.eval.providers import make_chat_model
 from experiments.ident.eval.reports import write_report
 from experiments.ident.eval.runner import (
     RESULTS_DIR,
@@ -23,6 +24,10 @@ from experiments.ident.schemas import IdentItem
 from experiments.ident.validation import validate_split
 
 DATA_DIR = ROOT / "splits"
+FRONTIER_MODELS = (
+    "openai:gpt-5.6-sol",
+    "anthropic:claude-opus-5",
+)
 
 
 def _shuffle_surface(item: IdentItem, rng: random.Random) -> IdentItem:
@@ -80,7 +85,7 @@ def run_openrouter_eval(
     all_transcripts: dict[str, Any] = {}
 
     for model_name in models:
-        client = OpenRouterChatModel(model=model_name)
+        client = make_chat_model(model_name)
         scores, agg, transcripts = evaluate_model(
             items, client, model_name=model_name
         )
@@ -104,6 +109,7 @@ def run_openrouter_eval(
     gates = compute_model_gates(
         model_aggregates=model_aggs,
         oracle_separator_accuracy=oracle_agg.separator_accuracy,
+        oracle_final_accuracy=oracle_agg.final_accuracy,
     )
     # Aggregate G7 across models if robustness pass ran.
     if robustness_pass:
@@ -111,8 +117,13 @@ def run_openrouter_eval(
             bool(model_summaries[m].get("robustness_pass")) for m in models
         )
 
+    provider_kind = (
+        "frontier_direct"
+        if any(m.startswith(("openai:", "anthropic:")) for m in models)
+        else "openrouter"
+    )
     summary = {
-        "experiment_id": "ident_openrouter",
+        "experiment_id": f"ident_{provider_kind}",
         "schema_version": "1.0",
         "split": split,
         "n_items": len(items),
@@ -123,11 +134,16 @@ def run_openrouter_eval(
         "status": "pass" if gates.get("G5_capability_gap") else "inconclusive",
         "models_scored": model_summaries,
     }
-    write_report(out / "model_summary.json", summary)
-    (out / "model_summary.md").write_text(
-        _model_markdown(summary), encoding="utf-8"
+    summary_name = "frontier_summary.json" if provider_kind == "frontier_direct" else "model_summary.json"
+    md_name = summary_name.replace(".json", ".md")
+    write_report(out / summary_name, summary)
+    (out / md_name).write_text(_model_markdown(summary), encoding="utf-8")
+    transcript_name = (
+        f"frontier_transcripts_{split}.json"
+        if provider_kind == "frontier_direct"
+        else f"model_transcripts_{split}.json"
     )
-    (raw_dir / f"model_transcripts_{split}.json").write_text(
+    (raw_dir / transcript_name).write_text(
         json.dumps(all_transcripts, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
@@ -173,7 +189,15 @@ def main(argv: list[str] | None = None) -> int:
         "--models",
         nargs="+",
         default=list(DEFAULT_MODELS),
-        help="OpenRouter model IDs",
+        help=(
+            "Model specs: openai:gpt-5.6, anthropic:claude-opus-5, "
+            "or OpenRouter slugs like openai/gpt-4o-mini"
+        ),
+    )
+    parser.add_argument(
+        "--frontier",
+        action="store_true",
+        help=f"Use frontier defaults: {' '.join(FRONTIER_MODELS)}",
     )
     parser.add_argument("--split", default="test", choices=["train", "dev", "test"])
     parser.add_argument("--limit", type=int, default=40)
@@ -185,8 +209,9 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--out-dir", type=Path, default=None)
     args = parser.parse_args(argv)
+    models = list(FRONTIER_MODELS) if args.frontier else list(args.models)
     summary = run_openrouter_eval(
-        models=list(args.models),
+        models=models,
         split=args.split,
         limit=None if args.limit <= 0 else args.limit,
         seed=args.seed,
