@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "ident",
+  "hypothesis": "Passive observational learners are bounded by the live equivalence-class chance rate, while an exact weakest identifying separator recovers the true mechanism in one step; models that conflate prediction with identification will show false certainty or high weakness regret.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "more_of_same_distractor",
+      "description": "Each item includes a high-cost intervention that resamples the already-observed support and cannot separate the live class."
+    },
+    {
+      "control_id": "answer_now_passive_bound",
+      "description": "The answer-now baseline must remain within sampling slack of the computed 1/|S| chance bound."
+    },
+    {
+      "control_id": "oracle_weakest_identifying_separator",
+      "description": "An exact oracle that selects a minimum-cost identifying separator must reach at least 99% final identification."
+    },
+    {
+      "control_id": "label_order_randomization",
+      "description": "Hypothesis labels and candidate ordering are shuffled per item so position does not encode truth."
+    }
+  ],
+  "seeds": [20260727],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/ident/experiment.py"],
+    "estimated_minutes": 5,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "IDENT_G1_FORMAL_AMBIGUITY",
+      "criterion": "Every test item has initial equivalence class size at least 2."
+    },
+    {
+      "gate_id": "IDENT_G2_SEPARABILITY",
+      "criterion": "Every test item has at least one one-step identifying separator among candidates."
+    },
+    {
+      "gate_id": "IDENT_G3_PASSIVE_BOUND",
+      "criterion": "Answer-now final accuracy does not exceed the mean passive chance bound plus a Hoeffding sampling-error slack (approx. 95%)."
+    },
+    {
+      "gate_id": "IDENT_G4_ORACLE_SOLVABILITY",
+      "criterion": "Oracle weakest identifying separator reaches at least 99% final identification on the test split."
+    },
+    {
+      "gate_id": "IDENT_G6_NONTRIVIALITY",
+      "criterion": "Expected-information-gain baseline does not record perfect separator accuracy with zero weakness regret on every domain variant."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "dataset",
+      "path": "experiments/ident/splits/test.jsonl",
+      "public": true
+    },
+    {
+      "kind": "summary",
+      "path": "experiments/ident/results/baseline_summary.json",
+      "public": true
+    },
+    {
+      "kind": "summary",
+      "path": "experiments/ident/results/model_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/ident/preregistration.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/ident/theory/impossibility_theorem.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

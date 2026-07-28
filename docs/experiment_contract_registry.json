@@ -695,6 +695,75 @@
       ]
     },
     {
+      "package": "deletion_repair",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/deletion_repair/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "deletion_repair_dr1_2026_07_24",
+      "runs": [
+        {
+          "run_id": "deletion_repair_dr1_2026_07_24",
+          "publication_package": "deletion_repair",
+          "runtime_package": "deletion_repair",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/deletion_repair/experiment_manifest.json",
+          "report_paths": [
+            "experiments/deletion_repair/results/dr1_verdict.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_digest": "c9ff3bd2231e298628ec3f2a5ef35dea9f31417a8595f1b88883633b89e79e9c",
+          "preregistration_path": "experiments/deletion_repair/PREREGISTRATION.md",
+          "producing_agent": {
+            "identity": "Claude Code (Opus 5)",
+            "session_ref": "deletion-repair-dr1 2026-07-24"
+          }
+        },
+        {
+          "run_id": "deletion_repair_dr2_2026_07_24",
+          "publication_package": "deletion_repair",
+          "runtime_package": "deletion_repair",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/deletion_repair/experiment_manifest.json",
+          "report_paths": [
+            "experiments/deletion_repair/results/dr2_verdict.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_digest": "e0fbf9a73854285c2b09b9c020b46dc33a85054a0dcc890e704b07b8019b94c0",
+          "preregistration_path": "experiments/deletion_repair/DR2_PREREGISTRATION.md",
+          "producing_agent": {
+            "identity": "Claude Code (Opus 5)",
+            "session_ref": "deletion-repair-dr2 2026-07-24"
+          }
+        },
+        {
+          "run_id": "deletion_repair_dr3_2026_07_24",
+          "publication_package": "deletion_repair",
+          "runtime_package": "deletion_repair",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/deletion_repair/experiment_manifest.json",
+          "report_paths": [
+            "experiments/deletion_repair/results/dr3_verdict.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_digest": "03c01ca0aeccb7c18800db83a5672c1d75a42612de4bfe06c68d89fa175a04a3",
+          "preregistration_path": "experiments/deletion_repair/DR3_PREREGISTRATION.md",
+          "producing_agent": {
+            "identity": "Claude Code (Opus 5)",
+            "session_ref": "deletion-repair-dr3 2026-07-24"
+          }
+        }
+      ]
+    },
+    {
       "package": "dr6_code_correctness_corollary",
       "coverage_mode": "structured_manifest",
       "manifest_path": "experiments/dr6_code_correctness_corollary/experiment_manifest.json",
@@ -839,75 +908,6 @@
           "producing_agent": {
             "identity": "Claude Code (Opus 4.7)",
             "session_ref": "dr6h-no-proxy-target 2026-07-27"
-          }
-        }
-      ]
-    },
-    {
-      "package": "deletion_repair",
-      "coverage_mode": "structured_manifest",
-      "manifest_path": "experiments/deletion_repair/experiment_manifest.json",
-      "run_coverage": "complete",
-      "primary_run_id": "deletion_repair_dr1_2026_07_24",
-      "runs": [
-        {
-          "run_id": "deletion_repair_dr1_2026_07_24",
-          "publication_package": "deletion_repair",
-          "runtime_package": "deletion_repair",
-          "provenance_mode": "structured_manifest",
-          "integrity_state": "valid",
-          "manifest_path": "experiments/deletion_repair/experiment_manifest.json",
-          "report_paths": [
-            "experiments/deletion_repair/results/dr1_verdict.json"
-          ],
-          "claim_ids": [],
-          "evidence_ids": [],
-          "gate_verdict_paths": [],
-          "preregistration_digest": "c9ff3bd2231e298628ec3f2a5ef35dea9f31417a8595f1b88883633b89e79e9c",
-          "preregistration_path": "experiments/deletion_repair/PREREGISTRATION.md",
-          "producing_agent": {
-            "identity": "Claude Code (Opus 5)",
-            "session_ref": "deletion-repair-dr1 2026-07-24"
-          }
-        },
-        {
-          "run_id": "deletion_repair_dr2_2026_07_24",
-          "publication_package": "deletion_repair",
-          "runtime_package": "deletion_repair",
-          "provenance_mode": "structured_manifest",
-          "integrity_state": "valid",
-          "manifest_path": "experiments/deletion_repair/experiment_manifest.json",
-          "report_paths": [
-            "experiments/deletion_repair/results/dr2_verdict.json"
-          ],
-          "claim_ids": [],
-          "evidence_ids": [],
-          "gate_verdict_paths": [],
-          "preregistration_digest": "e0fbf9a73854285c2b09b9c020b46dc33a85054a0dcc890e704b07b8019b94c0",
-          "preregistration_path": "experiments/deletion_repair/DR2_PREREGISTRATION.md",
-          "producing_agent": {
-            "identity": "Claude Code (Opus 5)",
-            "session_ref": "deletion-repair-dr2 2026-07-24"
-          }
-        },
-        {
-          "run_id": "deletion_repair_dr3_2026_07_24",
-          "publication_package": "deletion_repair",
-          "runtime_package": "deletion_repair",
-          "provenance_mode": "structured_manifest",
-          "integrity_state": "valid",
-          "manifest_path": "experiments/deletion_repair/experiment_manifest.json",
-          "report_paths": [
-            "experiments/deletion_repair/results/dr3_verdict.json"
-          ],
-          "claim_ids": [],
-          "evidence_ids": [],
-          "gate_verdict_paths": [],
-          "preregistration_digest": "03c01ca0aeccb7c18800db83a5672c1d75a42612de4bfe06c68d89fa175a04a3",
-          "preregistration_path": "experiments/deletion_repair/DR3_PREREGISTRATION.md",
-          "producing_agent": {
-            "identity": "Claude Code (Opus 5)",
-            "session_ref": "deletion-repair-dr3 2026-07-24"
           }
         }
       ]
@@ -1176,6 +1176,48 @@
         "frozen_legacy_cutoff": "2026-07-14",
         "adjudicates_claims": false
       }
+    },
+    {
+      "package": "ident",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/ident/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "ident_baselines_2026_07_27",
+      "runs": [
+        {
+          "run_id": "ident_baselines_2026_07_27",
+          "publication_package": "ident",
+          "runtime_package": "ident",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/ident/experiment_manifest.json",
+          "report_paths": [
+            "experiments/ident/results/baseline_summary.json",
+            "experiments/ident/results/baseline_summary.md",
+            "experiments/ident/results/model_summary.json",
+            "experiments/ident/results/model_summary.md"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": []
+        },
+        {
+          "run_id": "ident_openrouter_2026_07_27",
+          "publication_package": "ident",
+          "runtime_package": "ident",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/ident/experiment_manifest.json",
+          "report_paths": [
+            "experiments/ident/results/model_summary.json",
+            "experiments/ident/results/model_summary.md",
+            "experiments/ident/results/g7/model_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": []
+        }
+      ]
     },
     {
       "package": "interventional_contrast",
