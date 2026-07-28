@@ -43,16 +43,23 @@ python3 -m pytest tests/test_ident.py -q
 
 Strict one-tool JSON protocol (see `eval/model_adapters.py`). The model may answer immediately or spend exactly one menu intervention, then answer. Score structured fields only.
 
-### OpenRouter eval
+### Model eval
 
 ```bash
+# Mid-tier OpenRouter slice
 doppler run --project cofounder --config dev -- \
   python3 -m experiments.ident.eval.run_models \
   --models openai/gpt-4o-mini anthropic/claude-sonnet-4 google/gemini-2.5-flash \
   --limit 40 --no-robustness
+
+# Frontier direct APIs (GPT-5.6 Sol + Claude Opus 5)
+doppler run --project cofounder --config stg_superoptimizers -- \
+  python3 -m experiments.ident.eval.run_models --frontier \
+  --limit 40 --no-robustness --out-dir experiments/ident/results/frontier
 ```
 
-Public summary: `results/model_summary.json`. Raw transcripts: `artifacts/ident/` (gitignored).
+Public summaries: `results/model_summary.json`, `results/frontier/frontier_summary.json`.  
+Raw transcripts: `artifacts/ident/` (gitignored).
 
 ## Pre-registered gates
 

@@ -116,9 +116,21 @@ Frozen protocol; temperature 0; one permitted intervention.
 
 G7 reshuffle (n=15) leaves separator accuracy within 0.07 for Claude and GPT-4o-mini.
 
-### 5.3 Failure shape
+### 5.3 Frontier scale-up (direct APIs, n=40)
 
-Models usually intervene. The dominant residual is **update-after-evidence**: Claude matches oracle separator accuracy yet reaches only 0.55 final identification. Weaker models also choose non-separating or invalid menu actions. This matches the plan’s interpretation that the capability gap can lie in experiment use and hypothesis bookkeeping, not only in refusing to act.
+Same frozen protocol via Doppler `cofounder/stg_superoptimizers` (`openai:gpt-5.6-sol`, `anthropic:claude-opus-5`).
+
+| System | Separator | False certainty | Post-intervention ID | Final acc |
+|---|---:|---:|---:|---:|
+| oracle | 1.00 | 0.00 | 1.00 | 1.00 |
+| openai/gpt-5.6-sol | 1.00 | 0.00 | 0.55 | 0.55 |
+| anthropic/claude-opus-5 | 1.00 | 0.00 | 0.58 | 0.58 |
+
+Frontier models close the separator-choice gap (both 1.00, near-zero weakness regret) but **do not** close final identification. Result is essentially unchanged from Claude Sonnet 4 on final ID. G5 still passes once final/post-intervention accuracy is treated as a first-class gap (not only separator accuracy).
+
+### 5.4 Failure shape
+
+Models usually intervene. At mid-tier strength the gap mixes separator errors and update failures; at frontier strength the residual collapses to **update-after-evidence**: perfect or near-perfect separator choice with final identification stuck near 0.55–0.58. Expanding surface complexity is not required to preserve a publishable gap.
 
 ## 6. What this does not show
 
