@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "darwin_species_fixity_corpus_scaffold",
+  "hypothesis": "This package is corpus scaffolding, not an experiment. It fetches and caches the pre-1859 biology, natural history, geology, and philosophy-of-science documents named for Case 2 of the multi-case retrospective test in papers/dynamics_of_conceptual_deletion/paper.md (Darwin / species fixity, 1859). It makes no scientific claim; success is defined as every named Wikisource source fetching to substantive text.",
+  "claim_tier": "descriptive",
+  "controls": [
+    {
+      "control_id": "throttled_wikisource_fetch",
+      "description": "Every source is pulled through the same throttled Wikisource api.php pipeline used by experiments/date_cut_retrodiction/fetch.py and experiments/lavoisier_phlogiston_corpus/fetch.py; the container-extraction and chrome-removal logic is imported, not copied, so all three corpora share provenance."
+    },
+    {
+      "control_id": "sha256_pinning",
+      "description": "results/fetch_summary.json records the character count and SHA-256 of every cached document, so a re-fetch that silently produces different bytes is detectable."
+    },
+    {
+      "control_id": "substantive_content_threshold",
+      "description": "Any cached document below 2000 characters is flagged as non-substantive in the summary. All 32 sources in the corpus cleared this threshold on the 2026-07-27 fetch (smallest was the Zoonomia Preface at 4200 characters); the threshold is preserved as a safety net for any regression."
+    },
+    {
+      "control_id": "provenance_risk_flagging",
+      "description": "Three pre-1859 documents carry provenance_risk=True in corpus.py: darwin_1845_beagle_ch8 and darwin_1845_beagle_ch17 (Wikisource transcription drawn from the 1860 John Murray reprint of the 1845 second edition of Journal of Researches; content year 1845, vehicle year 1860 which postdates Origin by one year, and author had privately abandoned species fixity by 1845), and wallace_darwin_1858_linnean (the 1858 Linnean Society joint communication that first publicly names natural selection; content and vehicle both 1858, one year before Origin). CORPUS_MANIFEST.md documents the structural reason and requires any downstream analysis to run with and without these three sources."
+    },
+    {
+      "control_id": "gap_disclosure",
+      "description": "CORPUS_MANIFEST.md enumerates every pre-1859 author named in the DCD paper's Case 2 sketch (Lyell, Chambers, Cuvier, Lamarck, Whewell, Owen, Buffon) that is absent from Wikisource main namespace, with the specific reason (missing author page, empty author page, or only later / biographical works listed). No fabricated substitutes; no silent substitution of later editions."
+    }
+  ],
+  "seeds": [20260727],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python",
+      "-m",
+      "experiments.darwin_species_fixity_corpus.fetch"
+    ],
+    "estimated_minutes": 3,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "G1_ALL_NAMED_SOURCES_FETCHED",
+      "criterion": "Every SourceSpec in experiments.darwin_species_fixity_corpus.corpus.SOURCES fetches to a cached text file, and each cached file passes the 2000-character substantive-content threshold, as recorded in results/fetch_summary.json."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/darwin_species_fixity_corpus/results/fetch_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/darwin_species_fixity_corpus/CORPUS_MANIFEST.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}
