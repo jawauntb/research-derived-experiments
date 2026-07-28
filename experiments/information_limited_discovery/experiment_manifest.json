@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "information_limited_discovery",
+  "hypothesis": "A finite obstruction-first benchmark can distinguish sound recovery, certified terminal impossibility, budget exhaustion, lucky overclaiming, and unsupported or unnecessary abstention, while matched experiment-family enrichments switch registered tasks from impossible to recoverable.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "matched_family_transitions",
+      "description": "Mechanistic, causal, and automata task pairs share worlds and targets while the enriched family adds the registered separating experiments."
+    },
+    {
+      "control_id": "lucky_guess_overclaim",
+      "description": "An always-guess baseline receives raw accuracy but not certified-recovery credit when its transcript leaves target-distinct worlds."
+    },
+    {
+      "control_id": "unsupported_abstention",
+      "description": "An always-abstain baseline receives no certified-impossibility credit without a valid terminal obstruction."
+    },
+    {
+      "control_id": "invalid_certificate_rejection",
+      "description": "Target-equal, transcript-inconsistent, and permitted-experiment-separable pairs fail terminal-certificate validation."
+    },
+    {
+      "control_id": "label_permutation",
+      "description": "World and target-label permutations preserve benchmark outcome classes."
+    }
+  ],
+  "seeds": [
+    0
+  ],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python3",
+      "-m",
+      "experiments.information_limited_discovery.run_benchmark"
+    ],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "G1_CERTIFICATE_VALIDITY",
+      "criterion": "Every emitted terminal pair is transcript-consistent, target-distinct, and equal under all permitted experiments."
+    },
+    {
+      "gate_id": "G2_OUTCOME_SEPARATION",
+      "criterion": "Recovery, terminal obstruction, budget exhaustion, guessing, and unsupported abstention remain distinct result classes."
+    },
+    {
+      "gate_id": "G3_MATCHED_TRANSITIONS",
+      "criterion": "All registered coarse task families are terminally obstructed and all enriched families recover every hidden world within budget."
+    },
+    {
+      "gate_id": "G4_NEGATIVE_CONTROLS",
+      "criterion": "Lucky guesses are scored as overclaims and unsupported or unnecessary abstentions receive no certified-impossibility credit."
+    },
+    {
+      "gate_id": "G5_EXHAUSTIVE_FINITE",
+      "criterion": "Small finite-system classifications agree with direct enumeration."
+    },
+    {
+      "gate_id": "G6_PRIOR_ART_AND_SCOPE",
+      "criterion": "The paper identifies the mathematical and counterexample-guided precedents and limits V0 to synthetic benchmark mechanics."
+    },
+    {
+      "gate_id": "G8_REPRODUCIBILITY",
+      "criterion": "The public fixture and local command reproduce the committed JSON receipt without secrets or network access."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "dataset",
+      "path": "experiments/information_limited_discovery/fixtures/discovery_tasks.json",
+      "public": true
+    },
+    {
+      "kind": "summary",
+      "path": "experiments/information_limited_discovery/results/summary.json",
+      "public": true
+    },
+    {
+      "kind": "summary",
+      "path": "experiments/information_limited_discovery/results/summary.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/information_limited_discovery/PREREGISTRATION.md",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/information_limited_discovery/paper.md",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/information_limited_discovery/paper.pdf",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}
