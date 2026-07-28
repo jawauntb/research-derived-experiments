@@ -671,6 +671,26 @@
             "identity": "Claude Code (Opus 4.7)",
             "session_ref": "date-cut-retrodiction-dcr3d 2026-07-27"
           }
+        },
+        {
+          "run_id": "date_cut_retrodiction_dcr4_2026_07_27",
+          "publication_package": "date_cut_retrodiction",
+          "runtime_package": "date_cut_retrodiction",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/date_cut_retrodiction/experiment_manifest.json",
+          "report_paths": [
+            "experiments/date_cut_retrodiction/results/dcr4_verdict.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_digest": "5907269c61681008273c66ee71b96faa456e5191ad2c7258723372550ef7211c",
+          "preregistration_path": "experiments/date_cut_retrodiction/DCR4_PREREGISTRATION.md",
+          "producing_agent": {
+            "identity": "Claude Code (Opus 4.7)",
+            "session_ref": "date-cut-retrodiction-dcr4 2026-07-27"
+          }
         }
       ]
     },
@@ -1214,6 +1234,38 @@
       }
     },
     {
+      "package": "information_limited_discovery",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/information_limited_discovery/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "information_limited_discovery_2026_07_27",
+      "runs": [
+        {
+          "run_id": "information_limited_discovery_2026_07_27",
+          "publication_package": "information_limited_discovery",
+          "runtime_package": "information_limited_discovery",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/information_limited_discovery/experiment_manifest.json",
+          "report_paths": [
+            "experiments/information_limited_discovery/results/summary.json",
+            "experiments/information_limited_discovery/results/summary.md",
+            "papers/information_limited_discovery/paper.md",
+            "papers/information_limited_discovery/paper.pdf"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_digest": "0cc534a7980d82c9ea25703045fa8aa398dc2c1a77e79e4e59685b2efd250f2a",
+          "preregistration_path": "experiments/information_limited_discovery/PREREGISTRATION.md",
+          "producing_agent": {
+            "identity": "OpenAI Codex (GPT-5)",
+            "session_ref": "information-limited-discovery 2026-07-27"
+          }
+        }
+      ]
+    },
+    {
       "package": "learned_symmetry",
       "coverage_mode": "legacy_exception",
       "legacy_exception": {
@@ -1509,6 +1561,37 @@
         "frozen_legacy_cutoff": "2026-07-14",
         "adjudicates_claims": false
       }
+    },
+    {
+      "package": "relative_identifiability",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/relative_identifiability/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "relative_identifiability_2026_07_27",
+      "runs": [
+        {
+          "run_id": "relative_identifiability_2026_07_27",
+          "publication_package": "relative_identifiability",
+          "runtime_package": "relative_identifiability",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/relative_identifiability/experiment_manifest.json",
+          "report_paths": [
+            "experiments/relative_identifiability/results/summary.json",
+            "experiments/relative_identifiability/results/summary.md",
+            "papers/relative_identifiability/paper.md"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_digest": "0c11a72bd914ae2c56e42c6836561c1b89b474e4186d1d76e9ac3cd9afcb6cdd",
+          "preregistration_path": "experiments/relative_identifiability/PREREGISTRATION.md",
+          "producing_agent": {
+            "identity": "OpenAI Codex (GPT-5)",
+            "session_ref": "relative-identifiability 2026-07-27"
+          }
+        }
+      ]
     },
     {
       "package": "role_specific_identifiability",

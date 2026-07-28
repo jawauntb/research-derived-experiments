@@ -1,0 +1,70 @@
+{
+  "schema_version": "midas-relative-identifiability/v1",
+  "project": "experiment-relative-identifiability",
+  "loop": [
+    "define_system_family_and_target",
+    "state_factorization_conjecture",
+    "search_for_obstruction_certificate",
+    "refine_experiment_family_or_assumptions",
+    "typecheck_proof_and_replay_regressions"
+  ],
+  "certificate_types": {
+    "success": "FactorizationCertificate",
+    "failure": "ObstructionCertificate",
+    "family_change": "RefinementCertificate"
+  },
+  "theorems": [
+    {
+      "id": "T1",
+      "claim": "Observational indistinguishability is an equivalence relation and induces a quotient.",
+      "lean_declarations": [
+        "observationalSetoid",
+        "QuotientBy"
+      ],
+      "python_regressions": [
+        "test_empty_family_and_constant_target",
+        "test_all_three_by_three_binary_tables"
+      ]
+    },
+    {
+      "id": "T2",
+      "claim": "A target factors through the quotient iff no target-distinct observational collision exists.",
+      "lean_declarations": [
+        "factorsThrough_iff_fiberConstant",
+        "obstruction_iff_not_factors"
+      ],
+      "python_regressions": [
+        "test_obstruction_certificate_is_small_and_deterministic",
+        "test_full_family_collision_is_terminal_obstruction",
+        "test_all_three_by_three_binary_tables"
+      ]
+    },
+    {
+      "id": "T3",
+      "claim": "A richer experiment family induces a refinement and a canonical surjection to the coarser quotient.",
+      "lean_declarations": [
+        "indistinguishable_of_richer",
+        "forgetExperiments",
+        "forgetExperiments_surjective"
+      ],
+      "python_regressions": [
+        "test_richer_family_refines_and_redundant_experiment_does_not",
+        "test_refinement_requires_nested_families",
+        "test_all_three_by_three_binary_tables"
+      ]
+    },
+    {
+      "id": "T4",
+      "claim": "Finite exhaustive search returns every minimum identifying family or a full-family obstruction.",
+      "lean_declarations": [],
+      "python_regressions": [
+        "test_minimum_identifying_families_include_all_ties",
+        "test_full_family_collision_is_terminal_obstruction",
+        "test_all_three_by_three_binary_tables"
+      ]
+    }
+  ],
+  "fixture_path": "experiments/relative_identifiability/fixtures/midas_regressions.json",
+  "proof_path": "formal/relative-identifiability/RelativeIdentifiability.lean",
+  "preregistration_path": "experiments/relative_identifiability/PREREGISTRATION.md"
+}

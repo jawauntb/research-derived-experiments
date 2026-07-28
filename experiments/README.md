@@ -30,6 +30,14 @@ Raw outputs should stay under `artifacts/` until summarized and intentionally co
   minimal completion guard, and deterministic depth 1–4 typed-constraint
   transport plus six-surface counterfactual-attribution diagnostics with static
   visual replays and one causal-use-gated functional-memory lifecycle fixture.
+- `relative_identifiability`: exact target-factorization and obstruction
+  certificates for finite experiment families, minimum separating-family
+  search, internal-intervention refinement controls, and Lean-backed MIDAS
+  theorem regressions.
+- `information_limited_discovery`: paired finite discovery tasks that separate
+  certified recovery, terminal obstruction, budget exhaustion, lucky
+  overclaiming, and unsupported or unnecessary abstention; V0 validates
+  benchmark mechanics, not natural-domain scientific discovery.
 
 Shared experiment utilities live under `common/` and are excluded from provenance experiment counts.
 The first shared utility implements a mass-normalized, intervention-relative causal-use score.

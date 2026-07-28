@@ -1,0 +1,362 @@
+{
+  "all_passed": true,
+  "cases": [
+    {
+      "expected": {
+        "block_targets": [
+          0,
+          1
+        ],
+        "quotient_blocks": [
+          [
+            "behavior_0_mechanism_a",
+            "behavior_0_mechanism_b"
+          ],
+          [
+            "behavior_1_mechanism_a",
+            "behavior_1_mechanism_b"
+          ]
+        ],
+        "status": "identifiable"
+      },
+      "id": "behavior_from_external_readout",
+      "observed": {
+        "block_targets": [
+          0,
+          1
+        ],
+        "family": [
+          "external_readout"
+        ],
+        "quotient_blocks": [
+          [
+            "behavior_0_mechanism_a",
+            "behavior_0_mechanism_b"
+          ],
+          [
+            "behavior_1_mechanism_a",
+            "behavior_1_mechanism_b"
+          ]
+        ],
+        "status": "identifiable",
+        "system": "mechanistic_refinement",
+        "target": "behavior"
+      },
+      "passed": true
+    },
+    {
+      "expected": {
+        "pair": [
+          "behavior_0_mechanism_a",
+          "behavior_0_mechanism_b"
+        ],
+        "shared_transcript": [
+          0
+        ],
+        "status": "obstructed",
+        "target_values": [
+          "a",
+          "b"
+        ]
+      },
+      "id": "mechanism_obstructed_externally",
+      "observed": {
+        "family": [
+          "external_readout"
+        ],
+        "pair": [
+          "behavior_0_mechanism_a",
+          "behavior_0_mechanism_b"
+        ],
+        "shared_transcript": [
+          0
+        ],
+        "status": "obstructed",
+        "system": "mechanistic_refinement",
+        "target": "mechanism",
+        "target_values": [
+          "a",
+          "b"
+        ]
+      },
+      "passed": true
+    },
+    {
+      "expected": {
+        "block_targets": [
+          "a",
+          "b",
+          "a",
+          "b"
+        ],
+        "quotient_blocks": [
+          [
+            "behavior_0_mechanism_a"
+          ],
+          [
+            "behavior_0_mechanism_b"
+          ],
+          [
+            "behavior_1_mechanism_a"
+          ],
+          [
+            "behavior_1_mechanism_b"
+          ]
+        ],
+        "status": "identifiable"
+      },
+      "id": "mechanism_identified_by_internal_patch",
+      "observed": {
+        "block_targets": [
+          "a",
+          "b",
+          "a",
+          "b"
+        ],
+        "family": [
+          "external_readout",
+          "internal_patch"
+        ],
+        "quotient_blocks": [
+          [
+            "behavior_0_mechanism_a"
+          ],
+          [
+            "behavior_0_mechanism_b"
+          ],
+          [
+            "behavior_1_mechanism_a"
+          ],
+          [
+            "behavior_1_mechanism_b"
+          ]
+        ],
+        "status": "identifiable",
+        "system": "mechanistic_refinement",
+        "target": "mechanism"
+      },
+      "passed": true
+    },
+    {
+      "expected": {
+        "pair": [
+          "behavior_0_mechanism_a",
+          "behavior_0_mechanism_b"
+        ],
+        "shared_transcript": [
+          0
+        ],
+        "status": "obstructed",
+        "target_values": [
+          "north",
+          "east"
+        ]
+      },
+      "id": "coordinate_gauge_obstructed_externally",
+      "observed": {
+        "family": [
+          "external_readout"
+        ],
+        "pair": [
+          "behavior_0_mechanism_a",
+          "behavior_0_mechanism_b"
+        ],
+        "shared_transcript": [
+          0
+        ],
+        "status": "obstructed",
+        "system": "mechanistic_refinement",
+        "target": "coordinate_label",
+        "target_values": [
+          "north",
+          "east"
+        ]
+      },
+      "passed": true
+    },
+    {
+      "expected": {
+        "block_targets": [
+          "same"
+        ],
+        "quotient_blocks": [
+          [
+            "behavior_0_mechanism_a",
+            "behavior_0_mechanism_b",
+            "behavior_1_mechanism_a",
+            "behavior_1_mechanism_b"
+          ]
+        ],
+        "status": "identifiable"
+      },
+      "id": "constant_target_needs_no_experiments",
+      "observed": {
+        "block_targets": [
+          "same"
+        ],
+        "family": [],
+        "quotient_blocks": [
+          [
+            "behavior_0_mechanism_a",
+            "behavior_0_mechanism_b",
+            "behavior_1_mechanism_a",
+            "behavior_1_mechanism_b"
+          ]
+        ],
+        "status": "identifiable",
+        "system": "mechanistic_refinement",
+        "target": "constant"
+      },
+      "passed": true
+    }
+  ],
+  "fixture": {
+    "path": "experiments/relative_identifiability/fixtures/midas_regressions.json",
+    "sha256": "800c76501a2b810779c13741d3820e446fd4dfd2b300c697c845dcea4f9b35c7"
+  },
+  "refinements": [
+    {
+      "expected": {
+        "added_experiments": [
+          "internal_patch"
+        ],
+        "is_refinement": true,
+        "separating_experiments": [
+          "internal_patch"
+        ],
+        "split_blocks": [
+          [
+            [
+              "behavior_0_mechanism_a"
+            ],
+            [
+              "behavior_0_mechanism_b"
+            ]
+          ],
+          [
+            [
+              "behavior_1_mechanism_a"
+            ],
+            [
+              "behavior_1_mechanism_b"
+            ]
+          ]
+        ],
+        "strict": true
+      },
+      "id": "internal_patch_strictly_refines_external_behavior",
+      "observed": {
+        "added_experiments": [
+          "internal_patch"
+        ],
+        "coarse_blocks": [
+          [
+            "behavior_0_mechanism_a",
+            "behavior_0_mechanism_b"
+          ],
+          [
+            "behavior_1_mechanism_a",
+            "behavior_1_mechanism_b"
+          ]
+        ],
+        "coarse_family": [
+          "external_readout"
+        ],
+        "is_refinement": true,
+        "rich_blocks": [
+          [
+            "behavior_0_mechanism_a"
+          ],
+          [
+            "behavior_0_mechanism_b"
+          ],
+          [
+            "behavior_1_mechanism_a"
+          ],
+          [
+            "behavior_1_mechanism_b"
+          ]
+        ],
+        "rich_family": [
+          "external_readout",
+          "internal_patch"
+        ],
+        "separating_experiments": [
+          "internal_patch"
+        ],
+        "split_blocks": [
+          [
+            [
+              "behavior_0_mechanism_a"
+            ],
+            [
+              "behavior_0_mechanism_b"
+            ]
+          ],
+          [
+            [
+              "behavior_1_mechanism_a"
+            ],
+            [
+              "behavior_1_mechanism_b"
+            ]
+          ]
+        ],
+        "strict": true,
+        "system": "mechanistic_refinement"
+      },
+      "passed": true
+    },
+    {
+      "expected": {
+        "added_experiments": [
+          "external_duplicate"
+        ],
+        "is_refinement": true,
+        "separating_experiments": [],
+        "split_blocks": [],
+        "strict": false
+      },
+      "id": "duplicate_readout_is_redundant",
+      "observed": {
+        "added_experiments": [
+          "external_duplicate"
+        ],
+        "coarse_blocks": [
+          [
+            "behavior_0_mechanism_a",
+            "behavior_0_mechanism_b"
+          ],
+          [
+            "behavior_1_mechanism_a",
+            "behavior_1_mechanism_b"
+          ]
+        ],
+        "coarse_family": [
+          "external_readout"
+        ],
+        "is_refinement": true,
+        "rich_blocks": [
+          [
+            "behavior_0_mechanism_a",
+            "behavior_0_mechanism_b"
+          ],
+          [
+            "behavior_1_mechanism_a",
+            "behavior_1_mechanism_b"
+          ]
+        ],
+        "rich_family": [
+          "external_readout",
+          "external_duplicate"
+        ],
+        "separating_experiments": [],
+        "split_blocks": [],
+        "strict": false,
+        "system": "mechanistic_refinement"
+      },
+      "passed": true
+    }
+  ],
+  "schema_version": "relative-identifiability-regression/v1"
+}

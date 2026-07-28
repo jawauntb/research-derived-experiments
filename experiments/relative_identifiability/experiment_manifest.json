@@ -1,0 +1,119 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "relative_identifiability",
+  "hypothesis": "For an exact finite experiment system, target identifiability is equivalent to target constancy on observational quotient blocks; target-distinct collisions are complete obstruction certificates, and nested richer experiment families can only refine the quotient.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "behavior_positive",
+      "description": "An external readout identifies the registered behavioral target."
+    },
+    {
+      "control_id": "mechanism_obstruction",
+      "description": "The external family leaves a target-distinct mechanism pair observationally identical."
+    },
+    {
+      "control_id": "internal_refinement",
+      "description": "An internal patch experiment strictly refines the external quotient and identifies the mechanism target."
+    },
+    {
+      "control_id": "redundant_experiment",
+      "description": "A duplicate external readout enlarges the family without strictly refining the quotient."
+    },
+    {
+      "control_id": "coordinate_gauge",
+      "description": "External observations do not identify the registered coordinate labels."
+    },
+    {
+      "control_id": "prior_art_calibration",
+      "description": "The paper treats quotient factorization and experiment-family refinement as prior art rather than a novel foundation."
+    }
+  ],
+  "seeds": [
+    0
+  ],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python3",
+      "-m",
+      "experiments.relative_identifiability.run_regressions"
+    ],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [
+    {
+      "name": "lean",
+      "version": "4.31.0"
+    }
+  ],
+  "gates": [
+    {
+      "gate_id": "G1_LEAN_PROOF",
+      "criterion": "The pinned dependency-free Lean package builds with no sorry, admit, or package-introduced axiom."
+    },
+    {
+      "gate_id": "G2_STATEMENT_ALIGNMENT",
+      "criterion": "The Python and Lean definitions agree on target, family, transcript equality, factorization, obstruction, and refinement direction."
+    },
+    {
+      "gate_id": "G3_EXHAUSTIVE_FINITE",
+      "criterion": "All 32,768 target/family cases across all 512 three-realization by three-experiment binary tables satisfy the registered factorization criterion, with all nested-family refinement checks passing."
+    },
+    {
+      "gate_id": "G4_CONTROL_LADDER",
+      "criterion": "Behavior-positive, mechanism-obstruction, internal-refinement, redundancy, constant-target, and coordinate-gauge fixtures reproduce their registered verdicts."
+    },
+    {
+      "gate_id": "G5_PRIOR_ART",
+      "criterion": "The theorem note cites the direct quotient/refinement precedents and makes no novelty claim for the mathematical core."
+    },
+    {
+      "gate_id": "G6_MIDAS_CONTRACT",
+      "criterion": "Every theorem is mapped to a Lean declaration, an executable regression, or both in the versioned MIDAS contract."
+    },
+    {
+      "gate_id": "G7_CROSS_DOMAIN_CALIBRATION",
+      "criterion": "DCR, Constraint Swap, activation geometry, and mechanistic interpretability are presented only as conditional instantiations of the schema."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "dataset",
+      "path": "experiments/relative_identifiability/fixtures/midas_regressions.json",
+      "public": true
+    },
+    {
+      "kind": "summary",
+      "path": "experiments/relative_identifiability/results/summary.json",
+      "public": true
+    },
+    {
+      "kind": "summary",
+      "path": "experiments/relative_identifiability/results/summary.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/relative_identifiability/PREREGISTRATION.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/relative_identifiability/midas_contract.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "formal/relative-identifiability/RelativeIdentifiability.lean",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/relative_identifiability/paper.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

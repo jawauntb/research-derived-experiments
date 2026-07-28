@@ -53,3 +53,20 @@ jobs:
 
       - name: Verify allowlisted clean-clone CPU recipes
         run: uv run --no-sync python scripts/regen.py verify-clean-clone
+
+  lean:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Build Relative Identifiability proofs
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: true
+          test: false
+          lint: false
+          use-mathlib-cache: false
+          lake-package-directory: formal/relative-identifiability

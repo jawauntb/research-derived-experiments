@@ -1,0 +1,62 @@
+{
+  "einstein_1905": {
+    "discussion_count": {
+      "T1": 4,
+      "T2": 4,
+      "T3": 0
+    },
+    "n_propositions": 31,
+    "ratios": {
+      "T1": 0.0,
+      "T2": 0.0,
+      "T3": 0.0
+    },
+    "use_count": {
+      "T1": 0,
+      "T2": 0,
+      "T3": 0
+    }
+  },
+  "gates": {
+    "Q1_extraction_sanity": {
+      "decision": "GO",
+      "n_propositions": 31,
+      "threshold": 15
+    },
+    "Q2_T1_dominates_discussion": {
+      "T1_discussion": 4,
+      "T2_discussion": 4,
+      "decision": "NO_GO"
+    },
+    "Q3_T1_discussion_spike": {
+      "decision": "NO_GO",
+      "einstein_T1_disc": 4,
+      "pre_cut_1904_T1_disc": 7
+    },
+    "Q4_ratio_inversion": {
+      "decision": "GO",
+      "einstein_T1_ratio": 0.0,
+      "min_pre_cut_T1_ratio": 1.25
+    }
+  },
+  "kind": "dcr4_verdict",
+  "licensed_reading": "t1_not_dominant_in_einstein_1905: Einstein's paper does not discuss T1 more than T2 under our consensus tagging. Would falsify the trajectory framing's specific prediction that Einstein's move IS the T1 discussion spike.",
+  "overall_decision": "NO_GO",
+  "pre_cut_reference": {
+    "T1_discussion_count_1904": 7,
+    "T1_ratio_1880": 4.5,
+    "T1_ratio_1897": 1.5,
+    "T1_ratio_1904": 1.25,
+    "min_pre_cut_T1_ratio": 1.25
+  },
+  "prompt_sha256": {
+    "discussion": "24384377bfab8dfe87cc72ce01d0908da992cddb2e39d11781cb42f432dbea05",
+    "extraction": "a3e01ef0d6793cdc16692f7e5ec03e75ef67c326e277460490e33f21eed64b61"
+  },
+  "purpose": "Fresh preregistered test of DCR3d's trajectory interpretation: does Einstein 1905 show the T1 discussion spike DCR3d predicted the deletion cut should show?",
+  "verifiers": [
+    "A",
+    "B",
+    "C"
+  ]
+}
