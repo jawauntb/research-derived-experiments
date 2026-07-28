@@ -89,6 +89,8 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_passive_active_phase_map.py` | Phase-map model comparison, matched-budget path controls, public aggregate contract |
 | `test_future_commitment_quotient.py` | Exact partition refinement, conjugacy invariance, delayed witnesses, malformed-schedule and family-local gate rejection, hash-bound G5 calibration, strict-JSON 768-row receipt reproduction, and PDF smoke verification |
 | `test_relative_identifiability.py` | Construction failures, exact factorization/obstruction certificates, strict and redundant nested-family refinement, minimum-family ties, MIDAS contract integrity, replayable public receipts, and all 32,768 target/family cases across 512 binary observation tables |
+| `test_obstruction_aware_admission.py` | Exact-versus-independent continuation cost, the minimum greedy counterexample, typed recovery/terminal/budget decisions, fail-closed certificates, all-hidden-world recovery, and deterministic reduced-run receipts |
+| `test_obstruction_aware_admission_pdf.py` | Parseability, page/size floor, exact benchmark numbers, scope language, terminal-obstruction wording, and references for the rendered admission paper |
 | `test_information_limited_discovery.py` | Local-versus-terminal obstruction scope, target-aware experiment choice, lucky-guess and abstention controls, fail-closed certificate mutations, every hidden world in three matched coarse/rich pairs, public receipt replay, and 2,048 direct-factorization finite cases |
 | `test_information_limited_discovery_pdf.py` | Deterministic ReportLab build smoke, Poppler parse, page floor, result/scope/reference text presence, and isolated output path |
 | `test_grounded_statecharts.py` | Exact replay, depth 1–4 constraint lineage, six-surface fault attribution, descendant-aware memory causal use, legal lifecycle transitions, and byte-stable bundles |
@@ -204,6 +206,7 @@ Universal dispatcher: `python scripts/regen.py <name>`.
 | `future_commitment_quotient` | P R res | Registered 64-seed, three-family finite-agent double dissociation: destructive coordinate recoding preserves the exact quotient, while a coordinate-preserved delayed transition mutation changes future commitments; all seven scoped gates pass | `core.py`, `analysis.py`, `run_experiment.py`, `experiment_manifest.json`, `registered_design.json` |
 | `relative_identifiability` | P R res | Exact target-relative quotient factorization or obstruction certificate; nested-family refinement, minimum identifying-family search, mechanistic patch/redundancy controls, Lean proof, and versioned MIDAS theorem contract | `core.py`, `fixtures.py`, `run_regressions.py`, `midas_contract.json`, `experiment_manifest.json` |
 | `information_limited_discovery` | P R res | Deterministic finite benchmark with local/terminal obstruction certificates, three matched impossible/recoverable experiment-family pairs, target-aware and non-target-aware policies, and separate recovery/impossibility/budget/overclaim/abstention scores | `core.py`, `fixtures.py`, `run_benchmark.py`, `fixtures/discovery_tasks.json`, `experiment_manifest.json` |
+| `obstruction_aware_admission` | P R res | Exact finite minimum-worst-case target-identification controller; typed recovery, terminal obstruction, budget infeasibility, and admission outcomes; exhaustive greedy counterexample screen over 500,912 systems | `core.py`, `run_benchmark.py`, `fixtures/minimal_greedy_counterexample.json`, `experiment_manifest.json` |
 | `activation_geometry` | P R res (58) | Hidden-state bridges, steering, patching, label-free gates | See §3.1.4 |
 | `passive_to_active` | P R res | Action coupling makes paraphrase geometry causally load-bearing | `modal_passive_to_active.py`, `modal_replication_sweep.py` |
 | `passive_active_phase_map` | P R res | Registered local coupling sweep: bifurcation not supported; controlled path dependence passed | `core.py`, `preregistration.md`, `experiment_manifest.json` |
@@ -446,6 +449,34 @@ uv run --no-sync python -m \
   experiments.information_limited_discovery.run_benchmark
 uv run --no-sync python -m pytest -q \
   tests/test_information_limited_discovery.py
+```
+
+#### 3.1.9 `obstruction_aware_admission` modules
+
+Exact finite control layer over Information-Limited Discovery. The package
+uses the standard optimal decision-tree recurrence as a small-instance oracle;
+its contribution is the typed obstruction/budget/admission contract,
+exhaustive counterexample search, and replayable MIDAS regression.
+
+| Module / artifact | Purpose |
+|---|---|
+| `core.py` | Exact minimum worst-case continuation cost, independent non-memoized enumeration, target-pair/all-pair/fixed comparators, typed admission decisions, and hidden-world policy episodes |
+| `run_benchmark.py` | Exhausts 500,912 binary systems and 1,975,104 hidden-world episodes; runs mathematical, recovery, certificate, dominance, termination, invariance, redundancy, and legacy-evidence gates |
+| `fixtures/minimal_greedy_counterexample.json` | Registered minimum four-world/two-experiment witness: exact cost 2 versus immediate target-pair greedy cost 3 |
+| `PREREGISTRATION.md` | Frozen objects, recurrence, policies, enumeration order, controls, noncompensatory gates, and claim ceiling |
+| `experiment_manifest.json` | Accepted local-CPU theoretical contract and public artifact boundary |
+| `results/summary.{json,md}` | Deterministic complete receipt; preserves 26,304 strict target-greedy counterexamples and zero exact-control failures |
+| `papers/obstruction_aware_admission/` | Calibrated manuscript, source/contradiction ledger, three figures, deterministic PDF, and paper-local README |
+
+Run:
+
+```bash
+uv run --no-sync python -m \
+  experiments.obstruction_aware_admission.run_benchmark
+uv run --no-sync python -m pytest -q \
+  tests/test_obstruction_aware_admission.py
+uv run --no-sync python \
+  scripts/build_obstruction_aware_admission_pdf.py
 ```
 
 ### 3.2 Arc 2A / 2B (deep)
@@ -885,6 +916,7 @@ Raw outputs stay under `artifacts/` until summarized.
 | `publication_guard.py` | Block tracked secrets, forbidden paths, oversized files; exposes a tested text-signature helper | Exit code |
 | `env_probe.py` | Report env var presence/length only | `--json` |
 | `build_information_limited_discovery_pdf.py` | Deterministic ReportLab renderer for the Information-Limited Discovery paper; normalizes the paper's finite LaTeX vocabulary, adds page furniture, and mirrors exact bytes to the paper archive locations | In: `papers/information_limited_discovery/paper.md`; out: paper-local PDF, `papers/pdf/` copy, optional existing local Metaphysics archive |
+| `build_obstruction_aware_admission_pdf.py` | Deterministic ReportLab renderer for the Obstruction-Aware Admission paper; normalizes the finite recurrence, embeds three verified figures, adds page furniture, and mirrors exact bytes to the paper archive locations | In: `papers/obstruction_aware_admission/paper.md`; out: paper-local PDF, `papers/pdf/` copy, optional existing local Metaphysics archive |
 
 ### 4.2 PDF toolkit & builders
 
@@ -1021,6 +1053,7 @@ Notable bundles:
 - `papers/future_commitment_quotient/` — theorem, preregistered 2×2 result, two figures, calibrated limitations, and deterministic nine-page PDF
 - `papers/relative_identifiability/` — calibrated theorem note and prior-art map for the obstruction/factorization benchmark; Markdown is the publication artifact
 - `papers/information_limited_discovery/` — calibrated counterexample-first benchmark paper, prior-art ledger, and rendered PDF; Relative Identifiability remains its standard mathematical kernel
+- `papers/obstruction_aware_admission/` — exact finite control paper, prior-art/contradiction ledger, minimum greedy counterexample, three figures, and rendered PDF; optimal decision-tree mathematics is explicitly treated as prior art
 - Synthesis: `metaphysics_synthesis`, `metric_stack_synthesis`, literature audits/reviews
 - Review methods: `unified_citation_grounded_review` (framework, ontology, executable reviewer, and alpha-research operating system)
 - Benchmark framing: `causally_grounded_agents_benchmark`, `weakness_invariance_neurips`

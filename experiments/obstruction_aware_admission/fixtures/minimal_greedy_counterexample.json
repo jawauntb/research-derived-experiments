@@ -1,0 +1,61 @@
+{
+  "exact_first_experiment": "e1",
+  "experiment_costs": [
+    1,
+    2
+  ],
+  "experiments": [
+    "e0",
+    "e1"
+  ],
+  "greedy_first_experiment": "e0",
+  "interpretation": "The cheaper experiment separates more target-distinct pairs per unit cost immediately, but its hard branch still requires the expensive experiment. The exact policy buys the expensive experiment first and identifies the target in one step.",
+  "minimality_order": {
+    "costs": [
+      1,
+      2
+    ],
+    "experiment_count": 2,
+    "outcome_integer": 7,
+    "target_integer": 1,
+    "world_count": 4
+  },
+  "outcomes": [
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "policy_worst_case_costs": {
+    "exact": 2,
+    "fixed_order": 3,
+    "greedy_all_pairs": 3,
+    "greedy_target_pairs": 3
+  },
+  "problem_id": "screen_w4_e2_o7_t1_c12",
+  "realizations": [
+    "r0",
+    "r1",
+    "r2",
+    "r3"
+  ],
+  "strict_regret": 1,
+  "target_values": [
+    1,
+    0,
+    0,
+    0
+  ]
+}
