@@ -10,10 +10,10 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 
 | Path | Responsibility |
 |---|---|
-| `experiments/` | 65 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
+| `experiments/` | 66 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
 | `papers/` | Paper sources (`paper.md`), figures, shareable PDFs |
-| `scripts/` | 137 Python ops modules: quality, contracts, provenance, PDF/figure builders, summarizers |
-| `tests/` | 142 root test files collected together by pytest (`unittest`-style and pytest-native) |
+| `scripts/` | 138 Python ops modules: quality, contracts, provenance, PDF/figure builders, summarizers |
+| `tests/` | 143 root test files collected together by pytest (`unittest`-style and pytest-native) |
 | `docs/` | Design docs, verification, handoffs, plans, reviews, solutions |
 | `docs/primers/backlogs/` | Six article-specific, source-anchored research TODOs derived from the primer PDFs |
 | `notes/` | Program-level research synthesis |
@@ -84,7 +84,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_commitment_surface_core.py`, `test_e1_misspecification_variance.py` | E1 concern selectors plus conditional-randomization reconstruction, seed, assignment, and statistics contracts |
 | `test_summarize_label_free_dose_response.py` | Label-free dose-response summarizer |
 | `test_virtual_governor_stress_signal.py` | Virtual governor diagnostic |
-| `test_mathematical_claims.py`, `test_bayesian_voi.py` | Executable theorem-assumption examples/failure cases and exact Bayesian VOI regimes |
+| `test_mathematical_claims.py`, `test_bayesian_voi.py`, `test_ident.py` | Executable theorem-assumption examples/failure cases, exact Bayesian VOI regimes, and IDENT passive-bound / separator oracle gates |
 | `test_seed_bootstrap_calibration.py` | Deterministic seed-floor grid, correct resampling unit, negative-regime retention, exact summary regeneration |
 | `test_passive_active_phase_map.py` | Phase-map model comparison, matched-budget path controls, public aggregate contract |
 | `test_future_commitment_quotient.py` | Exact partition refinement, conjugacy invariance, delayed witnesses, malformed-schedule and family-local gate rejection, hash-bound G5 calibration, strict-JSON 768-row receipt reproduction, and PDF smoke verification |
@@ -879,6 +879,7 @@ Figures for these papers are produced by matching `scripts/make_*_figures.py`
 |---|---|---|
 | `mathematical_claims` | M-201 theorem-assumption matrix: seven finite satisfying examples plus paired assumption/predicate failures; accepted audit that does not establish theorem necessity or minimality | `core.py`, `experiment.py`, `theorem_assumption_matrix.json`, `results/mathematical_claims_summary.json`, `experiment_manifest.json` |
 | `bayesian_voi` | M-208 exact two-state outcome enumeration across learnable, irreducible-noise, and misspecified-signal regimes; accepted gates separate oracle EVSI/true regret reduction from error heuristics | `core.py`, `experiment.py`, `preregistration.json`, `results/bayesian_voi_summary.json`, `experiment_manifest.json` |
+| `ident` | One-shot IDENT benchmark: observationally equivalent mechanisms, exact weakest identifying separators, passive impossibility note, 1000-item boolean/DFA/program splits, trivial+EIG+oracle baselines, OpenRouter frontier slice (G5/G7) | `schemas.py`, `equivalence.py`, `separators.py`, `domains/*`, `eval/{runner,openrouter,run_models}.py`, `theory/*`, `splits/{train,dev,test}.jsonl`, `results/{baseline,model}_summary.{json,md}`, `preregistration.md`, `experiment_manifest.json` |
 | `seed_bootstrap_calibration` | S-022 simulation over 3/5/8/10/16/64 seeds and five effect/noise/hierarchy regimes; compares naive row percentile with paired seed-cluster resampling and emits 30 pilot/promotion decisions | `simulation.py`, `PREREGISTRATION.md`, `results/summary.{json,md}`, `experiment_manifest.json` |
 | `passive_active_phase_map` | T-SYS-011/012 NumPy phase map with held-out segmented-vs-smooth fits and matched-budget continuation/reinit/washout paths; registered outcome is bifurcation not supported with path dependence | `core.py`, `preregistration.md`, `results/registered_summary.{json,md}`, `experiment_manifest.json` |
 | `common/causal_use.py` | Shared non-experiment utility: mass-normalized target-minus-wrong-subspace dose curves, positive AUC, replicate bootstrap interval, and minimum transport across surfaces | Imported by experiment/test code; excluded from provenance inventory |

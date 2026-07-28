@@ -27,7 +27,10 @@ active, self-maintaining attractor regime.
 Operationally, the repo is designed for **AI-agent-generated science that remains
 observable**: attribution, one-command regeneration where possible, committed
 summaries instead of raw dumps, and discovery-regime audits that preserve
-accepted *and* rejected alternatives.
+accepted *and* rejected alternatives. The `ident` package adds a one-shot
+benchmark where passive prediction is provably bounded by experiment-relative
+equivalence while a minimum-cost identifying intervention recovers the latent
+mechanism; construction gates and trivial/oracle baselines are local-CPU.
 
 The commitment-surface research path additionally distinguishes probe
 availability from causal use. Its formal contract is non-identification by
@@ -205,23 +208,23 @@ Each experiment directory is a self-contained research unit. Typical contents:
 
 | Set | Count |
 |---|---|
-| Research experiment packages | **65** |
+| Research experiment packages | **66** |
 | Shared non-experiment support packages | **1** — `experiments/common` |
 | Contain one or more `modal_*.py` entrypoints | **47** |
-| Canonical package-root `experiment_manifest.json` files | **17** |
-| Authoritative package-contract records | **65** = **17** `structured_manifest` + **48** time-bounded `legacy_exception` in `docs/experiment_contract_registry.json` |
+| Canonical package-root `experiment_manifest.json` files | **18** |
+| Authoritative package-contract records | **66** = **18** `structured_manifest` + **48** time-bounded `legacy_exception` in `docs/experiment_contract_registry.json` |
 | Canonical per-gate verdict files | **1** (E5). Ten evidence rows declare gate IDs; only E5 currently has a committed verdict file. Manifest gate declarations are not verdicts. |
 | Canonical claim records | **12** |
 | Canonical evidence records | **12** |
-| Generated provenance/verification output | **65** experiment cards and index rows; `common` is excluded |
+| Generated provenance/verification output | **66** experiment cards and index rows; `common` is excluded |
 
 `scripts/gen_provenance.py --check` makes the generated count a derived invariant
 rather than a second hand-maintained inventory. Recent local packages including
-`mathematical_claims`, `bayesian_voi`, `seed_bootstrap_calibration`,
+`mathematical_claims`, `bayesian_voi`, `ident`, `seed_bootstrap_calibration`,
 `passive_active_phase_map`, `grounded_statecharts`,
 `load_bearing_prose_test`, `concern_gated_retrieval`, and
-`constraint_swap_causal_geometry`, `future_commitment_quotient`, and
-`relative_identifiability` and `information_limited_discovery` are present in the regenerated 65-package
+`constraint_swap_causal_geometry`, `future_commitment_quotient`,
+`relative_identifiability`, `information_limited_discovery`, and `ident` are present in the regenerated 66-package
 index.
 
 `experiments/future_commitment_quotient/` is the exact finite-state successor
@@ -611,8 +614,8 @@ can run the identical wrapper before opening a PR.
 |---|---|---|
 | **Weakness → OOD** | `weakness_vs_simplicity`, `symbolic_weakness`, `rotation_weakness`, `learned_symmetry`, `grid_cell_weakness`, `structure_compatible_generalization` | Structure-/symmetry-compatible hypothesis weakness predicts OOD where simplicity/MDL/flatness do not |
 | **Concept / activation geometry** | `concept_geometry`, `activation_geometry`, `paraphrase_weakness`, `passive_to_active`, `constraint_swap_causal_geometry` | Bridge geometry in embeddings and hidden states; test when geometry becomes causally load-bearing and preserve scoped counterexamples when behavior succeeds without the registered geometry |
-| **Information-limited discovery / relative identifiability / admission** | `future_commitment_quotient`, `relative_identifiability`, `information_limited_discovery`, `obstruction_aware_admission`; proof package `formal/relative-identifiability` | Separate coordinate realizations from exact future constraints; emit target-relative local or terminal obstruction certificates; distinguish structural impossibility from budget infeasibility; and choose the next finite experiment by minimum worst-case continuation cost |
-| **Primer-derived calibration** | `mathematical_claims`, `bayesian_voi`, `seed_bootstrap_calibration`, `passive_active_phase_map`; shared `experiments/common/causal_use.py` | Make theorem assumptions executable; separate value of information from error; calibrate seed/bootstrap policies; distinguish smooth crossover from bifurcation/path dependence; measure causal use across commitment surfaces |
+| **Information-limited discovery / relative identifiability / admission** | `future_commitment_quotient`, `relative_identifiability`, `information_limited_discovery`, `ident`, `obstruction_aware_admission`; proof package `formal/relative-identifiability` | Separate coordinate realizations from exact future constraints; emit target-relative local or terminal obstruction certificates; isolate prediction from identification with exact separators; distinguish structural impossibility from budget infeasibility; and choose the next finite experiment by minimum worst-case continuation cost |
+| **Primer-derived calibration** | `mathematical_claims`, `bayesian_voi`, `ident`, `seed_bootstrap_calibration`, `passive_active_phase_map`; shared `experiments/common/causal_use.py` | Make theorem assumptions executable; separate value of information from error; calibrate seed/bootstrap policies; distinguish smooth crossover from bifurcation/path dependence; measure causal use across commitment surfaces; isolate prediction-vs-identification with exact separators (`ident`) |
 | **Maintained concern / metric stack** | Papers 5–25 family (valence → homeostatic → planning → first-order self → world responds → …) | Concern/ΔE geometry as control substrate; self/world attribution; re-engagement |
 | **Concern-gated retrieval** | `concern_gated_retrieval` | Two-sided context/care graph nomination plus goal-conditioned bounded-observer utilization filtering; synthetic diagnostic only |
 | **Arc 2A Concerned syntax** | `concerned_syntax` | Causal constituency + concern-gated intervention invention (symbolic → vector → pixel → searched programs → discovered profiles) |
@@ -1631,7 +1634,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 - **No universal research dependency specification.** The root quality gate has a complete locked dependency group, but experiment and Modal runtimes still rely on command-specific `uvx` sets or explicit Modal images.
 - **Machine-specific paths** in docs/handoffs (Doppler scope, local archives).
 - **Result fidelity depends on summarization discipline.** Gitignored JSON vs committed Markdown can drift.
-- **Structured-contract coverage is early but fail-closed.** All 65 research packages are partitioned in `docs/experiment_contract_registry.json` (17 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction. Public-artifact digest envelopes cover the E5 confirmatory JSON and E4 appendix. Clean-clone CPU reproduction is allowlisted for `bayesian_voi`, `grounded_statecharts`, `information_limited_discovery`, `mathematical_claims`, `relative_identifiability`, and `seed_bootstrap_calibration`.
+- **Structured-contract coverage is early but fail-closed.** All 66 research packages are partitioned in `docs/experiment_contract_registry.json` (18 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction. Public-artifact digest envelopes cover the E5 confirmatory JSON and E4 appendix. Clean-clone CPU reproduction is allowlisted for `bayesian_voi`, `grounded_statecharts`, `information_limited_discovery`, `mathematical_claims`, `relative_identifiability`, and `seed_bootstrap_calibration`.
 - **Paper-primary experiments** may have no committed `results/*.md`; evidence lives in the paper + local artifacts.
 - **Coherence / Inquiry / Cabal / site tests** are outside the root Python quality gate.
 - **Scientific claims are gate-bound.** Fixture smokes do not settle the program thesis.
