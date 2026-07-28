@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "copernicus_geocentrism_corpus_scaffold",
+  "hypothesis": "This package is corpus scaffolding, not an experiment. It fetches and caches the pre-1543 astronomy and cosmology documents named for Case 1 of the multi-case retrospective test in papers/dynamics_of_conceptual_deletion/paper.md (Copernicus / geocentric priority, 1543). It makes no scientific claim; success is defined as every named Wikisource source with a transcribed English text fetching to substantive text, and every source not on Wikisource being explicitly documented as such rather than silently substituted. The intended oracle (Copernicus De Revolutionibus Book I) is not on English Wikisource; the fetch failure is recorded in results/fetch_summary.json and no oracle substitution is performed.",
+  "claim_tier": "descriptive",
+  "controls": [
+    {
+      "control_id": "throttled_wikisource_fetch",
+      "description": "Every source is pulled through the same throttled Wikisource api.php pipeline used by experiments/date_cut_retrodiction/fetch.py, experiments/lavoisier_phlogiston_corpus/fetch.py, and experiments/darwin_species_fixity_corpus/fetch.py; the container-extraction and chrome-removal logic is imported, not copied, so all four corpora share provenance."
+    },
+    {
+      "control_id": "sha256_pinning",
+      "description": "results/fetch_summary.json records the character count and SHA-256 of every cached document, so a re-fetch that silently produces different bytes is detectable."
+    },
+    {
+      "control_id": "substantive_content_threshold",
+      "description": "Any cached document below 2000 characters is flagged as non-substantive in the summary. Eleven of the twelve sources cleared this threshold on the 2026-07-27 fetch; the twelfth is the oracle placeholder (see missing_oracle control). The threshold is preserved as a safety net for any regression."
+    },
+    {
+      "control_id": "missing_oracle",
+      "description": "The intended oracle -- Copernicus's De Revolutionibus Book I in English -- is not transcribed on English Wikisource main namespace. Author:Nicolaus Copernicus links only to Latin Wikisource and to an 1879 German translation; no English translation exists on English Wikisource. The oracle SourceSpec is included in ORACLE_SOURCES with the best-guess English title, the fetch attempts it, and the failure is recorded verbatim in results/fetch_summary.json (n_oracle_substantive=0, fetch_error='KeyError: parse'). Any downstream P(t) test on this corpus must first source the oracle outside Wikisource (Wallis 1939 Great Books or Rosen 1978, both in copyright) or skip this case. No silent substitution of a later edition or secondary summary has been performed."
+    },
+    {
+      "control_id": "translation_vintage_disclosure",
+      "description": "Unlike Darwin (native English), Lavoisier (Kerr 1790 one year after 1789), and DCR electrodynamics (Halsted 1913 nine years after Poincare 1904), every source here is a 19th- or 20th-century English translation of an ancient or medieval text (Aristotle: Stocks 1922 tr. of c.350 BCE Greek; Boethius: James 1897 tr. of c.524 Latin; Maimonides: Friedlander 1904 tr. of c.1190 Judeo-Arabic; Chaucer: Skeat 1894 edition of 1391 Middle English). The translation vintage sits post-1543 by 351 to 379 years and could introduce anachronistic astronomical vocabulary. The three Boethius excerpts carry provenance_risk=True in corpus.py; the Aristotle / Maimonides / Chaucer sources are documented but not flagged (the length of each source dilutes single-word translation choices, and Chaucer's Middle English is itself pre-1543). CORPUS_MANIFEST.md discusses the risk and names two reasonable preregistration positions for handling it."
+    },
+    {
+      "control_id": "gap_disclosure",
+      "description": "CORPUS_MANIFEST.md enumerates every pre-1543 author named in the DCD paper's Case 1 sketch (Ptolemy, Sacrobosco, Peurbach, Regiomontanus, Cusa, Alhazen, al-Tusi, ibn al-Shatir, Aristarchus, Rheticus, Copernicus's own Commentariolus) that is absent from Wikisource main namespace, with the specific reason for each gap (missing author page, empty author page, external-link-only listing, or only later biographical works transcribed). The corpus dominant strata are canonical pre-Renaissance sources (Aristotle, Boethius, Maimonides, Chaucer); the Renaissance mathematical-astronomy tradition (Peurbach, Regiomontanus, Alhazen's Doubts on Ptolemy, Cusa's speculative cosmology, Rheticus 1540) has zero representation and any downstream analysis requiring that layer must extend beyond Wikisource."
+    }
+  ],
+  "seeds": [20260728],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python",
+      "-m",
+      "experiments.copernicus_geocentrism_corpus.fetch"
+    ],
+    "estimated_minutes": 3,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "G1_ALL_TRANSCRIBED_SOURCES_FETCHED",
+      "criterion": "Every SourceSpec in experiments.copernicus_geocentrism_corpus.corpus.PRE_REVOLUTIONARY_SOURCES fetches to a cached text file that passes the 2000-character substantive-content threshold, as recorded in results/fetch_summary.json. The oracle source (ORACLE_SOURCES) is expected to fail because Copernicus's De Revolutionibus is not on English Wikisource; the failure is recorded, not silenced."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/copernicus_geocentrism_corpus/results/fetch_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/copernicus_geocentrism_corpus/CORPUS_MANIFEST.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}
