@@ -1406,6 +1406,38 @@
       }
     },
     {
+      "package": "obstruction_aware_admission",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/obstruction_aware_admission/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "obstruction_aware_admission_2026_07_27",
+      "runs": [
+        {
+          "run_id": "obstruction_aware_admission_2026_07_27",
+          "publication_package": "obstruction_aware_admission",
+          "runtime_package": "obstruction_aware_admission",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/obstruction_aware_admission/experiment_manifest.json",
+          "report_paths": [
+            "experiments/obstruction_aware_admission/results/summary.json",
+            "experiments/obstruction_aware_admission/results/summary.md",
+            "papers/obstruction_aware_admission/paper.md",
+            "papers/obstruction_aware_admission/paper.pdf"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_digest": "bd6c8cd83b868ecd314e9caf69d61106c31ae97fbf6f0ba191f0c0fa9df6c9d3",
+          "preregistration_path": "experiments/obstruction_aware_admission/PREREGISTRATION.md",
+          "producing_agent": {
+            "identity": "OpenAI Codex (GPT-5)",
+            "session_ref": "obstruction-aware-admission 2026-07-27"
+          }
+        }
+      ]
+    },
+    {
       "package": "off_policy_state_coverage",
       "coverage_mode": "legacy_exception",
       "legacy_exception": {

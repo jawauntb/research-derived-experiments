@@ -614,7 +614,7 @@ can run the identical wrapper before opening a PR.
 |---|---|---|
 | **Weakness → OOD** | `weakness_vs_simplicity`, `symbolic_weakness`, `rotation_weakness`, `learned_symmetry`, `grid_cell_weakness`, `structure_compatible_generalization` | Structure-/symmetry-compatible hypothesis weakness predicts OOD where simplicity/MDL/flatness do not |
 | **Concept / activation geometry** | `concept_geometry`, `activation_geometry`, `paraphrase_weakness`, `passive_to_active`, `constraint_swap_causal_geometry` | Bridge geometry in embeddings and hidden states; test when geometry becomes causally load-bearing and preserve scoped counterexamples when behavior succeeds without the registered geometry |
-| **Information-limited discovery / relative identifiability** | `future_commitment_quotient`, `relative_identifiability`, `information_limited_discovery`, `ident`; proof package `formal/relative-identifiability` | Separate coordinate realizations from exact future constraints; emit target-relative local or terminal obstruction certificates; test matched impossible/recoverable experiment families; score recovery/budget/overclaim/abstention; and isolate prediction-vs-identification with exact separators (`ident`) |
+| **Information-limited discovery / relative identifiability / admission** | `future_commitment_quotient`, `relative_identifiability`, `information_limited_discovery`, `ident`, `obstruction_aware_admission`; proof package `formal/relative-identifiability` | Separate coordinate realizations from exact future constraints; emit target-relative local or terminal obstruction certificates; isolate prediction from identification with exact separators; distinguish structural impossibility from budget infeasibility; and choose the next finite experiment by minimum worst-case continuation cost |
 | **Primer-derived calibration** | `mathematical_claims`, `bayesian_voi`, `ident`, `seed_bootstrap_calibration`, `passive_active_phase_map`; shared `experiments/common/causal_use.py` | Make theorem assumptions executable; separate value of information from error; calibrate seed/bootstrap policies; distinguish smooth crossover from bifurcation/path dependence; measure causal use across commitment surfaces; isolate prediction-vs-identification with exact separators (`ident`) |
 | **Maintained concern / metric stack** | Papers 5–25 family (valence → homeostatic → planning → first-order self → world responds → …) | Concern/ΔE geometry as control substrate; self/world attribution; re-engagement |
 | **Concern-gated retrieval** | `concern_gated_retrieval` | Two-sided context/care graph nomination plus goal-conditioned bounded-observer utilization filtering; synthetic diagnostic only |
@@ -622,6 +622,17 @@ can run the identical wrapper before opening a PR.
 | **Arc 2B Viable bodies** | `viable_computational_bodies` + `formal/ontology-hs` | Typed architecture search under viability + formal + syntax gates |
 | **Causally grounded agents benchmark** | `world_responds` (Suite C), `long_horizon_bottleneck` (Suite D/E) | Behavior + structure-specific gate; proxy-resistant agent evaluation |
 | **External contact / phases 4–6** | `external_contact`, `phase4_metaphysics`, `phase5_external_validity`, `phase6_real_model_validation`, `gauge_fixed_concern_transport` | Transport claims beyond in-lab harnesses toward real models |
+
+`obstruction_aware_admission` is the control layer above
+`information_limited_discovery`. Its exact dynamic program operates on the
+same finite world/experiment/target objects and returns one of four typed
+results: recovered target, validated terminal obstruction, finite
+budget-infeasible cost, or an experiment on a minimum-worst-case-cost branch.
+The registered screen exhausts 500,912 binary systems and preserves the first
+four-world/two-experiment counterexample where immediate target-pair gain costs
+3 and exact admission costs 2. The exact solver is a small-instance oracle and
+regression kernel, not a scalable natural-agent planner; heuristic relevance or
+concern may nominate candidates but cannot license recovery or impossibility.
 
 Concern-gated retrieval has a separate canonical program note at
 [concern_gated_retrieval_research_program.md](concern_gated_retrieval_research_program.md).

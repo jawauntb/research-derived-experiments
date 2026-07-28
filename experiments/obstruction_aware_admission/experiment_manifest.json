@@ -1,0 +1,121 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "obstruction_aware_admission",
+  "hypothesis": "An exact target-relative continuation-cost controller can distinguish recovery, terminal structural obstruction, and finite budget infeasibility while returning a minimum-worst-case-cost next experiment; immediate target-pair gain is not universally cost-optimal.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "independent_decision_tree_enumeration",
+      "description": "A non-memoized recursive enumeration must agree with the memoized dynamic program on every registered finite system."
+    },
+    {
+      "control_id": "all_hidden_worlds",
+      "description": "The exact policy tree accounts for every candidate world as the hidden actual world and verifies target-correct recovery or a valid terminal obstruction."
+    },
+    {
+      "control_id": "certificate_mutations",
+      "description": "Target-equal, transcript-inconsistent, unknown-world, and forged-separator certificates must fail closed."
+    },
+    {
+      "control_id": "typed_termination",
+      "description": "Root recovery, terminal impossibility, and finite over-budget recovery produce three distinct statuses."
+    },
+    {
+      "control_id": "label_and_redundancy_invariance",
+      "description": "World, target, and experiment relabeling preserve costs; a duplicate experiment cannot improve the optimum."
+    },
+    {
+      "control_id": "legacy_negative_evidence",
+      "description": "The benchmark verifies that the local COGR synthesis and repaired-prior erratum preserve the L1 null rather than transporting failed geometry as support."
+    }
+  ],
+  "seeds": [
+    0
+  ],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python3",
+      "-m",
+      "experiments.obstruction_aware_admission.run_benchmark"
+    ],
+    "estimated_minutes": 5,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "G0_OBJECT_INTEGRITY",
+      "criterion": "Every finite task has aligned nonempty worlds, outcomes, targets, permitted experiments, and positive integer costs."
+    },
+    {
+      "gate_id": "G1_MATHEMATICAL_AGREEMENT",
+      "criterion": "Memoized and independent exact worst-case costs agree on all 500,912 systems."
+    },
+    {
+      "gate_id": "G2_RECOVERY_SOUNDNESS",
+      "criterion": "Every one of 1,975,104 hidden-world episodes ends in target-correct recovery or a valid terminal obstruction."
+    },
+    {
+      "gate_id": "G3_CERTIFICATE_SOUNDNESS",
+      "criterion": "Every emitted terminal certificate validates and every registered invalid mutation is rejected."
+    },
+    {
+      "gate_id": "G4_ORACLE_DOMINANCE",
+      "criterion": "Exact worst-case cost is no greater than target-greedy, all-pair-greedy, or fixed-order cost on every recoverable system."
+    },
+    {
+      "gate_id": "G5_TERMINATION_SEPARATION",
+      "criterion": "Recovery, terminal obstruction, and finite budget infeasibility remain distinct outcomes."
+    },
+    {
+      "gate_id": "G6_INVARIANCE",
+      "criterion": "Relabeling preserves policy costs and a redundant experiment cannot lower the exact optimum."
+    },
+    {
+      "gate_id": "G7_GREEDY_FALSIFIER",
+      "criterion": "A strict greedy counterexample is replayable, or the paper reports a bounded null and withholds universal optimality."
+    },
+    {
+      "gate_id": "G8_LEGACY_EVIDENCE_INTEGRITY",
+      "criterion": "The paper preserves the COGR learned-geometry KILL and makes no positive concern-geometry claim."
+    },
+    {
+      "gate_id": "G9_PROVENANCE",
+      "criterion": "The manifest, source digest, results, counterexample fixture, tests, paper, and PDF are replayable public artifacts."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "dataset",
+      "path": "experiments/obstruction_aware_admission/fixtures/minimal_greedy_counterexample.json",
+      "public": true
+    },
+    {
+      "kind": "summary",
+      "path": "experiments/obstruction_aware_admission/results/summary.json",
+      "public": true
+    },
+    {
+      "kind": "summary",
+      "path": "experiments/obstruction_aware_admission/results/summary.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/obstruction_aware_admission/PREREGISTRATION.md",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/obstruction_aware_admission/paper.md",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/obstruction_aware_admission/paper.pdf",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

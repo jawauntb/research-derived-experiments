@@ -1,5 +1,24 @@
 # Research TODO
 
+## Obstruction-Aware Admission (2026-07-27)
+
+- [x] Freeze the exact finite target-identification recurrence, typed outcomes,
+  exhaustive boundary, controls, fatal gates, and claim ceiling before
+  implementation.
+- [x] Implement recovery, terminal obstruction, budget-infeasible, and exact
+  admission decisions over finite version spaces.
+- [x] Exhaust all 500,912 registered binary systems and 1,975,104 hidden-world
+  episodes; record zero mathematical, recovery, certificate, and oracle-
+  dominance failures.
+- [x] Preserve the first strict greedy counterexample: four worlds, two
+  experiments, exact worst-case cost 2 versus target-pair greedy cost 3.
+- [x] Write and render the calibrated paper; keep optimal decision-tree
+  mathematics, natural-domain performance, large-scale efficiency, universal
+  agency, and Concern-Gated Retrieval validation outside the claim.
+- [ ] Preregister a natural finite adapter using independently generated
+  program-repair or theorem-countermodel tasks, open-world detection, and
+  held-out oracle regret.
+
 ## Concern-Gated Off-Context Retrieval (2026-07-23)
 
 - [x] Verify the Zhang-Levin closed-form reservoir/ridge epiplexity estimator

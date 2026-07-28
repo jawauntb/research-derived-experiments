@@ -1,5 +1,88 @@
 # Discovery-Regime Audit Ledger
 
+## Obstruction-Aware Admission V0
+
+Question: can a finite bounded agent choose the next permitted experiment by
+exact remaining target-identification cost, while distinguishing recovery,
+structural impossibility, and resource insufficiency?
+
+Current regime:
+
+- Artifact types: finite candidate worlds, deterministic outcome tables,
+  target maps, positive experiment costs, version spaces, adaptive policy
+  trees, obstruction certificates, and typed admission receipts.
+- Operations: memoized dynamic programming, independent non-memoized
+  decision-tree enumeration, hidden-world tree traversal, comparator scoring,
+  exhaustive finite enumeration, and fail-closed certificate validation.
+- Gates/verifiers: frozen preregistration; mathematical agreement; recovery
+  soundness; certificate mutations; exact-oracle dominance; typed termination;
+  label/redundancy invariance; greedy falsifier; legacy-evidence integrity; and
+  public provenance.
+- Known limitations: closed worlds, exact deterministic outcomes, binary
+  registered boundary, worst-case objective, exponential exact search, and no
+  natural-agent adapter.
+
+Action class:
+
+- Retrieval/search/discovery: verifier and artifact-class addition within the
+  Information-Limited Discovery regime.
+- Why: the package adds exact cost-to-identification and a distinct
+  budget-infeasible witness; the old regime had safe obstruction semantics but
+  no policy-optimality oracle.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/obstruction_aware_admission/{PREREGISTRATION.md,experiment_manifest.json,results/summary.json}`.
+- Positive targets: exact and independent costs agree; exact recovery is
+  correct for every hidden world; all typed stops are valid.
+- Negative controls: target-pair greedy, all-pair greedy, fixed order,
+  certificate mutations, terminal collisions, over-budget recoverable tasks,
+  redundant experiments, and prior COGR negative-evidence anchors.
+- Stress tests: all 500,912 binary systems with 2-4 worlds, 1-3 experiments,
+  every nonconstant binary target, and costs in `{1,2}`.
+
+Gate:
+
+- Acceptance rule: G0-G9 pass noncompensatorily; exact cost never exceeds a
+  comparator; no recovery or certificate failure occurs; the smallest greedy
+  witness is preserved if found.
+- Withheld/rejected rule: any false recovery or invalid terminal certificate
+  rejects the controller. Natural discovery, scalable planning, universal
+  agency, new decision-tree mathematics, and Concern-Gated Retrieval
+  validation remain withheld regardless of finite results.
+
+Results:
+
+- Accepted artifacts: exact controller and typed receipt; complete JSON/Markdown
+  results; minimum greedy counterexample; calibrated paper and PDF.
+- Rejected or withheld artifacts: immediate target-pair gain as a universal
+  cost-optimal rule; generic all-pair reduction; fixed order; positive
+  transport of learned concern geometry.
+- Key metrics: 500,912 systems; 1,975,104 hidden-world episodes; 317,432
+  recoverable; 183,480 terminally obstructed; zero mathematical disagreements,
+  recovery failures, certificate failures, and oracle-dominance failures.
+- Variance or ablation: deterministic exhaustive study rather than sampling;
+  target-greedy is strictly worse on 26,304 recoverable systems (8.29%),
+  all-pair greedy on 110,208 (34.72%), and fixed order on 145,288 (45.77%).
+
+Residual content:
+
+- Explained by old regime: finite quotient/factorization, obstruction pairs,
+  optimal decision trees, active experiment selection, and rational
+  metareasoning are prior art.
+- New content outside old regime: one typed interface joins exact continuation
+  cost, terminal pair certificates, budget infeasibility, and minimum
+  counterexample regression.
+- Retractions or supersessions: the Information-Limited Discovery greedy
+  target-pair policy remains a useful heuristic but loses any implicit
+  optimality reading. COGR learned geometry remains falsified.
+
+Next move: preregister an independently generated program-repair or
+theorem-countermodel adapter with open-world detection, measured experiment
+costs, exact small-instance oracle regret, and held-out transfer. Until then,
+the strongest result is “exact finite control contract validated.”
+
 ## Information-Limited Discovery V0
 
 Question: can MIDAS evaluate whether a declared experiment family identifies a
@@ -64,9 +147,9 @@ Residual content:
 - Retractions or supersessions: none. Relative Identifiability remains the
   mathematical kernel and is not replaced.
 
-Next move: add exact adaptive-policy oracles and natural, stochastic,
-misspecified task adapters under a separate preregistration. Until then, the
-strongest result is “deterministic finite benchmark mechanics validated.”
+Next move completed in part: `obstruction_aware_admission` adds the separately
+preregistered exact adaptive-policy oracle and preserves the greedy
+counterexample. Natural, stochastic, and misspecified adapters remain open.
 
 ## Project Regime: Initial Publication
 
