@@ -1,0 +1,3710 @@
+{
+  "all_passed": true,
+  "benchmark": "information_limited_discovery_v0",
+  "claim_scope": "deterministic finite benchmark mechanics",
+  "controls": {
+    "emitted_certificates_valid": true,
+    "invalid_certificate_controls": {
+      "separable_terminal_rejected": true,
+      "target_equal_rejected": true,
+      "valid_terminal_accepted": true,
+      "wrong_transcript_rejected": true
+    },
+    "invalid_certificate_mutations_passed": true,
+    "label_permutation": {
+      "comparisons": 18,
+      "passed": true
+    },
+    "lucky_guesses_remain_overclaims": true,
+    "outcome_class_counts": {
+      "budget_exhausted": 12,
+      "guess": 18,
+      "recovered": 15,
+      "terminal_obstruction": 27,
+      "unsupported_abstention": 18
+    },
+    "outcome_classes_observed": true,
+    "recoverable_task_abstentions_marked_unnecessary": true,
+    "unsupported_abstentions_not_certified": true
+  },
+  "episode_count": 90,
+  "episodes": [
+    {
+      "episode": {
+        "actual_realization": "mechanism_a_action_0",
+        "actual_target": "A",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "mechanism_a_action_0",
+            "mechanism_b_action_0"
+          ],
+          "problem_id": "mechanism_external_only",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "A",
+            "B"
+          ]
+        },
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "mechanism",
+        "policy": "obstruction_first",
+        "predicted_target": null,
+        "problem_id": "mechanism_external_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_b_action_0",
+        "actual_target": "B",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "mechanism_a_action_0",
+            "mechanism_b_action_0"
+          ],
+          "problem_id": "mechanism_external_only",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "A",
+            "B"
+          ]
+        },
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "mechanism",
+        "policy": "obstruction_first",
+        "predicted_target": null,
+        "problem_id": "mechanism_external_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_a_action_1",
+        "actual_target": "A",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "mechanism_a_action_0",
+            "mechanism_b_action_0"
+          ],
+          "problem_id": "mechanism_external_only",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "A",
+            "B"
+          ]
+        },
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "mechanism",
+        "policy": "obstruction_first",
+        "predicted_target": null,
+        "problem_id": "mechanism_external_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_b_action_1",
+        "actual_target": "B",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "mechanism_a_action_0",
+            "mechanism_b_action_0"
+          ],
+          "problem_id": "mechanism_external_only",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "A",
+            "B"
+          ]
+        },
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "mechanism",
+        "policy": "obstruction_first",
+        "predicted_target": null,
+        "problem_id": "mechanism_external_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_a_action_0",
+        "actual_target": "A",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "mechanism_a_action_0",
+            "mechanism_b_action_0"
+          ],
+          "problem_id": "mechanism_external_only",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "A",
+            "B"
+          ]
+        },
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "mechanism",
+        "policy": "uncertainty_first",
+        "predicted_target": null,
+        "problem_id": "mechanism_external_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_b_action_0",
+        "actual_target": "B",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "mechanism_a_action_0",
+            "mechanism_b_action_0"
+          ],
+          "problem_id": "mechanism_external_only",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "A",
+            "B"
+          ]
+        },
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "mechanism",
+        "policy": "uncertainty_first",
+        "predicted_target": null,
+        "problem_id": "mechanism_external_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_a_action_1",
+        "actual_target": "A",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "mechanism_a_action_0",
+            "mechanism_b_action_0"
+          ],
+          "problem_id": "mechanism_external_only",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "A",
+            "B"
+          ]
+        },
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "mechanism",
+        "policy": "uncertainty_first",
+        "predicted_target": null,
+        "problem_id": "mechanism_external_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_b_action_1",
+        "actual_target": "B",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "mechanism_a_action_0",
+            "mechanism_b_action_0"
+          ],
+          "problem_id": "mechanism_external_only",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "A",
+            "B"
+          ]
+        },
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "mechanism",
+        "policy": "uncertainty_first",
+        "predicted_target": null,
+        "problem_id": "mechanism_external_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_a_action_0",
+        "actual_target": "A",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "mechanism_a_action_0",
+            "mechanism_b_action_0"
+          ],
+          "problem_id": "mechanism_external_only",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "A",
+            "B"
+          ]
+        },
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "mechanism",
+        "policy": "fixed_order",
+        "predicted_target": null,
+        "problem_id": "mechanism_external_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_b_action_0",
+        "actual_target": "B",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "mechanism_a_action_0",
+            "mechanism_b_action_0"
+          ],
+          "problem_id": "mechanism_external_only",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "A",
+            "B"
+          ]
+        },
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "mechanism",
+        "policy": "fixed_order",
+        "predicted_target": null,
+        "problem_id": "mechanism_external_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_a_action_1",
+        "actual_target": "A",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "mechanism_a_action_0",
+            "mechanism_b_action_0"
+          ],
+          "problem_id": "mechanism_external_only",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "A",
+            "B"
+          ]
+        },
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "mechanism",
+        "policy": "fixed_order",
+        "predicted_target": null,
+        "problem_id": "mechanism_external_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_b_action_1",
+        "actual_target": "B",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "mechanism_a_action_0",
+            "mechanism_b_action_0"
+          ],
+          "problem_id": "mechanism_external_only",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "A",
+            "B"
+          ]
+        },
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "mechanism",
+        "policy": "fixed_order",
+        "predicted_target": null,
+        "problem_id": "mechanism_external_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_a_action_0",
+        "actual_target": "A",
+        "certificate": null,
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "guess",
+        "pair_id": "mechanism",
+        "policy": "always_guess",
+        "predicted_target": "A",
+        "problem_id": "mechanism_external_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": true,
+        "overclaim": true,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_b_action_0",
+        "actual_target": "B",
+        "certificate": null,
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "guess",
+        "pair_id": "mechanism",
+        "policy": "always_guess",
+        "predicted_target": "A",
+        "problem_id": "mechanism_external_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": true,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_a_action_1",
+        "actual_target": "A",
+        "certificate": null,
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "guess",
+        "pair_id": "mechanism",
+        "policy": "always_guess",
+        "predicted_target": "A",
+        "problem_id": "mechanism_external_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": true,
+        "overclaim": true,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_b_action_1",
+        "actual_target": "B",
+        "certificate": null,
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "guess",
+        "pair_id": "mechanism",
+        "policy": "always_guess",
+        "predicted_target": "A",
+        "problem_id": "mechanism_external_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": true,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_a_action_0",
+        "actual_target": "A",
+        "certificate": null,
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "unsupported_abstention",
+        "pair_id": "mechanism",
+        "policy": "always_abstain",
+        "predicted_target": null,
+        "problem_id": "mechanism_external_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": true
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_b_action_0",
+        "actual_target": "B",
+        "certificate": null,
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "unsupported_abstention",
+        "pair_id": "mechanism",
+        "policy": "always_abstain",
+        "predicted_target": null,
+        "problem_id": "mechanism_external_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": true
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_a_action_1",
+        "actual_target": "A",
+        "certificate": null,
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "unsupported_abstention",
+        "pair_id": "mechanism",
+        "policy": "always_abstain",
+        "predicted_target": null,
+        "problem_id": "mechanism_external_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": true
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_b_action_1",
+        "actual_target": "B",
+        "certificate": null,
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "unsupported_abstention",
+        "pair_id": "mechanism",
+        "policy": "always_abstain",
+        "predicted_target": null,
+        "problem_id": "mechanism_external_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": true
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_a_action_0",
+        "actual_target": "A",
+        "certificate": null,
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_a_action_1"
+        ],
+        "observations": [
+          {
+            "experiment": "internal_patch",
+            "outcome": "A"
+          }
+        ],
+        "outcome": "recovered",
+        "pair_id": "mechanism",
+        "policy": "obstruction_first",
+        "predicted_target": "A",
+        "problem_id": "mechanism_with_internal_patch",
+        "steps": 1,
+        "total_cost": 1,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": true,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_b_action_0",
+        "actual_target": "B",
+        "certificate": null,
+        "final_candidates": [
+          "mechanism_b_action_0",
+          "mechanism_b_action_1"
+        ],
+        "observations": [
+          {
+            "experiment": "internal_patch",
+            "outcome": "B"
+          }
+        ],
+        "outcome": "recovered",
+        "pair_id": "mechanism",
+        "policy": "obstruction_first",
+        "predicted_target": "B",
+        "problem_id": "mechanism_with_internal_patch",
+        "steps": 1,
+        "total_cost": 1,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": true,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_a_action_1",
+        "actual_target": "A",
+        "certificate": null,
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_a_action_1"
+        ],
+        "observations": [
+          {
+            "experiment": "internal_patch",
+            "outcome": "A"
+          }
+        ],
+        "outcome": "recovered",
+        "pair_id": "mechanism",
+        "policy": "obstruction_first",
+        "predicted_target": "A",
+        "problem_id": "mechanism_with_internal_patch",
+        "steps": 1,
+        "total_cost": 1,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": true,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_b_action_1",
+        "actual_target": "B",
+        "certificate": null,
+        "final_candidates": [
+          "mechanism_b_action_0",
+          "mechanism_b_action_1"
+        ],
+        "observations": [
+          {
+            "experiment": "internal_patch",
+            "outcome": "B"
+          }
+        ],
+        "outcome": "recovered",
+        "pair_id": "mechanism",
+        "policy": "obstruction_first",
+        "predicted_target": "B",
+        "problem_id": "mechanism_with_internal_patch",
+        "steps": 1,
+        "total_cost": 1,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": true,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_a_action_0",
+        "actual_target": "A",
+        "certificate": {
+          "observed_transcript": [
+            {
+              "experiment": "external_readout",
+              "outcome": 0
+            }
+          ],
+          "pair": [
+            "mechanism_a_action_0",
+            "mechanism_b_action_0"
+          ],
+          "problem_id": "mechanism_with_internal_patch",
+          "scope": "local",
+          "separating_experiments": [
+            "internal_patch"
+          ],
+          "target_values": [
+            "A",
+            "B"
+          ]
+        },
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0"
+        ],
+        "observations": [
+          {
+            "experiment": "external_readout",
+            "outcome": 0
+          }
+        ],
+        "outcome": "budget_exhausted",
+        "pair_id": "mechanism",
+        "policy": "uncertainty_first",
+        "predicted_target": null,
+        "problem_id": "mechanism_with_internal_patch",
+        "steps": 1,
+        "total_cost": 1,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": true,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_b_action_0",
+        "actual_target": "B",
+        "certificate": {
+          "observed_transcript": [
+            {
+              "experiment": "external_readout",
+              "outcome": 0
+            }
+          ],
+          "pair": [
+            "mechanism_a_action_0",
+            "mechanism_b_action_0"
+          ],
+          "problem_id": "mechanism_with_internal_patch",
+          "scope": "local",
+          "separating_experiments": [
+            "internal_patch"
+          ],
+          "target_values": [
+            "A",
+            "B"
+          ]
+        },
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0"
+        ],
+        "observations": [
+          {
+            "experiment": "external_readout",
+            "outcome": 0
+          }
+        ],
+        "outcome": "budget_exhausted",
+        "pair_id": "mechanism",
+        "policy": "uncertainty_first",
+        "predicted_target": null,
+        "problem_id": "mechanism_with_internal_patch",
+        "steps": 1,
+        "total_cost": 1,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": true,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_a_action_1",
+        "actual_target": "A",
+        "certificate": {
+          "observed_transcript": [
+            {
+              "experiment": "external_readout",
+              "outcome": 1
+            }
+          ],
+          "pair": [
+            "mechanism_a_action_1",
+            "mechanism_b_action_1"
+          ],
+          "problem_id": "mechanism_with_internal_patch",
+          "scope": "local",
+          "separating_experiments": [
+            "internal_patch"
+          ],
+          "target_values": [
+            "A",
+            "B"
+          ]
+        },
+        "final_candidates": [
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [
+          {
+            "experiment": "external_readout",
+            "outcome": 1
+          }
+        ],
+        "outcome": "budget_exhausted",
+        "pair_id": "mechanism",
+        "policy": "uncertainty_first",
+        "predicted_target": null,
+        "problem_id": "mechanism_with_internal_patch",
+        "steps": 1,
+        "total_cost": 1,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": true,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_b_action_1",
+        "actual_target": "B",
+        "certificate": {
+          "observed_transcript": [
+            {
+              "experiment": "external_readout",
+              "outcome": 1
+            }
+          ],
+          "pair": [
+            "mechanism_a_action_1",
+            "mechanism_b_action_1"
+          ],
+          "problem_id": "mechanism_with_internal_patch",
+          "scope": "local",
+          "separating_experiments": [
+            "internal_patch"
+          ],
+          "target_values": [
+            "A",
+            "B"
+          ]
+        },
+        "final_candidates": [
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [
+          {
+            "experiment": "external_readout",
+            "outcome": 1
+          }
+        ],
+        "outcome": "budget_exhausted",
+        "pair_id": "mechanism",
+        "policy": "uncertainty_first",
+        "predicted_target": null,
+        "problem_id": "mechanism_with_internal_patch",
+        "steps": 1,
+        "total_cost": 1,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": true,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_a_action_0",
+        "actual_target": "A",
+        "certificate": {
+          "observed_transcript": [
+            {
+              "experiment": "external_readout",
+              "outcome": 0
+            }
+          ],
+          "pair": [
+            "mechanism_a_action_0",
+            "mechanism_b_action_0"
+          ],
+          "problem_id": "mechanism_with_internal_patch",
+          "scope": "local",
+          "separating_experiments": [
+            "internal_patch"
+          ],
+          "target_values": [
+            "A",
+            "B"
+          ]
+        },
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0"
+        ],
+        "observations": [
+          {
+            "experiment": "external_readout",
+            "outcome": 0
+          }
+        ],
+        "outcome": "budget_exhausted",
+        "pair_id": "mechanism",
+        "policy": "fixed_order",
+        "predicted_target": null,
+        "problem_id": "mechanism_with_internal_patch",
+        "steps": 1,
+        "total_cost": 1,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": true,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_b_action_0",
+        "actual_target": "B",
+        "certificate": {
+          "observed_transcript": [
+            {
+              "experiment": "external_readout",
+              "outcome": 0
+            }
+          ],
+          "pair": [
+            "mechanism_a_action_0",
+            "mechanism_b_action_0"
+          ],
+          "problem_id": "mechanism_with_internal_patch",
+          "scope": "local",
+          "separating_experiments": [
+            "internal_patch"
+          ],
+          "target_values": [
+            "A",
+            "B"
+          ]
+        },
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0"
+        ],
+        "observations": [
+          {
+            "experiment": "external_readout",
+            "outcome": 0
+          }
+        ],
+        "outcome": "budget_exhausted",
+        "pair_id": "mechanism",
+        "policy": "fixed_order",
+        "predicted_target": null,
+        "problem_id": "mechanism_with_internal_patch",
+        "steps": 1,
+        "total_cost": 1,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": true,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_a_action_1",
+        "actual_target": "A",
+        "certificate": {
+          "observed_transcript": [
+            {
+              "experiment": "external_readout",
+              "outcome": 1
+            }
+          ],
+          "pair": [
+            "mechanism_a_action_1",
+            "mechanism_b_action_1"
+          ],
+          "problem_id": "mechanism_with_internal_patch",
+          "scope": "local",
+          "separating_experiments": [
+            "internal_patch"
+          ],
+          "target_values": [
+            "A",
+            "B"
+          ]
+        },
+        "final_candidates": [
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [
+          {
+            "experiment": "external_readout",
+            "outcome": 1
+          }
+        ],
+        "outcome": "budget_exhausted",
+        "pair_id": "mechanism",
+        "policy": "fixed_order",
+        "predicted_target": null,
+        "problem_id": "mechanism_with_internal_patch",
+        "steps": 1,
+        "total_cost": 1,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": true,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_b_action_1",
+        "actual_target": "B",
+        "certificate": {
+          "observed_transcript": [
+            {
+              "experiment": "external_readout",
+              "outcome": 1
+            }
+          ],
+          "pair": [
+            "mechanism_a_action_1",
+            "mechanism_b_action_1"
+          ],
+          "problem_id": "mechanism_with_internal_patch",
+          "scope": "local",
+          "separating_experiments": [
+            "internal_patch"
+          ],
+          "target_values": [
+            "A",
+            "B"
+          ]
+        },
+        "final_candidates": [
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [
+          {
+            "experiment": "external_readout",
+            "outcome": 1
+          }
+        ],
+        "outcome": "budget_exhausted",
+        "pair_id": "mechanism",
+        "policy": "fixed_order",
+        "predicted_target": null,
+        "problem_id": "mechanism_with_internal_patch",
+        "steps": 1,
+        "total_cost": 1,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": true,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_a_action_0",
+        "actual_target": "A",
+        "certificate": null,
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "guess",
+        "pair_id": "mechanism",
+        "policy": "always_guess",
+        "predicted_target": "A",
+        "problem_id": "mechanism_with_internal_patch",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": true,
+        "overclaim": true,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_b_action_0",
+        "actual_target": "B",
+        "certificate": null,
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "guess",
+        "pair_id": "mechanism",
+        "policy": "always_guess",
+        "predicted_target": "A",
+        "problem_id": "mechanism_with_internal_patch",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": true,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_a_action_1",
+        "actual_target": "A",
+        "certificate": null,
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "guess",
+        "pair_id": "mechanism",
+        "policy": "always_guess",
+        "predicted_target": "A",
+        "problem_id": "mechanism_with_internal_patch",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": true,
+        "overclaim": true,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_b_action_1",
+        "actual_target": "B",
+        "certificate": null,
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "guess",
+        "pair_id": "mechanism",
+        "policy": "always_guess",
+        "predicted_target": "A",
+        "problem_id": "mechanism_with_internal_patch",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": true,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_a_action_0",
+        "actual_target": "A",
+        "certificate": null,
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "unsupported_abstention",
+        "pair_id": "mechanism",
+        "policy": "always_abstain",
+        "predicted_target": null,
+        "problem_id": "mechanism_with_internal_patch",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": true,
+        "unsupported_abstention": true
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_b_action_0",
+        "actual_target": "B",
+        "certificate": null,
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "unsupported_abstention",
+        "pair_id": "mechanism",
+        "policy": "always_abstain",
+        "predicted_target": null,
+        "problem_id": "mechanism_with_internal_patch",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": true,
+        "unsupported_abstention": true
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_a_action_1",
+        "actual_target": "A",
+        "certificate": null,
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "unsupported_abstention",
+        "pair_id": "mechanism",
+        "policy": "always_abstain",
+        "predicted_target": null,
+        "problem_id": "mechanism_with_internal_patch",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": true,
+        "unsupported_abstention": true
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "mechanism_b_action_1",
+        "actual_target": "B",
+        "certificate": null,
+        "final_candidates": [
+          "mechanism_a_action_0",
+          "mechanism_b_action_0",
+          "mechanism_a_action_1",
+          "mechanism_b_action_1"
+        ],
+        "observations": [],
+        "outcome": "unsupported_abstention",
+        "pair_id": "mechanism",
+        "policy": "always_abstain",
+        "predicted_target": null,
+        "problem_id": "mechanism_with_internal_patch",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": true,
+        "unsupported_abstention": true
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "latent_common_cause",
+        "actual_target": "common_cause",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "latent_common_cause",
+            "x_causes_y"
+          ],
+          "problem_id": "causal_observation_only",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "common_cause",
+            "x_to_y"
+          ]
+        },
+        "final_candidates": [
+          "latent_common_cause",
+          "x_causes_y",
+          "y_causes_x"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "causal_structure",
+        "policy": "obstruction_first",
+        "predicted_target": null,
+        "problem_id": "causal_observation_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "x_causes_y",
+        "actual_target": "x_to_y",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "latent_common_cause",
+            "x_causes_y"
+          ],
+          "problem_id": "causal_observation_only",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "common_cause",
+            "x_to_y"
+          ]
+        },
+        "final_candidates": [
+          "latent_common_cause",
+          "x_causes_y",
+          "y_causes_x"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "causal_structure",
+        "policy": "obstruction_first",
+        "predicted_target": null,
+        "problem_id": "causal_observation_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "y_causes_x",
+        "actual_target": "y_to_x",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "latent_common_cause",
+            "x_causes_y"
+          ],
+          "problem_id": "causal_observation_only",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "common_cause",
+            "x_to_y"
+          ]
+        },
+        "final_candidates": [
+          "latent_common_cause",
+          "x_causes_y",
+          "y_causes_x"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "causal_structure",
+        "policy": "obstruction_first",
+        "predicted_target": null,
+        "problem_id": "causal_observation_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "latent_common_cause",
+        "actual_target": "common_cause",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "latent_common_cause",
+            "x_causes_y"
+          ],
+          "problem_id": "causal_observation_only",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "common_cause",
+            "x_to_y"
+          ]
+        },
+        "final_candidates": [
+          "latent_common_cause",
+          "x_causes_y",
+          "y_causes_x"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "causal_structure",
+        "policy": "uncertainty_first",
+        "predicted_target": null,
+        "problem_id": "causal_observation_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "x_causes_y",
+        "actual_target": "x_to_y",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "latent_common_cause",
+            "x_causes_y"
+          ],
+          "problem_id": "causal_observation_only",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "common_cause",
+            "x_to_y"
+          ]
+        },
+        "final_candidates": [
+          "latent_common_cause",
+          "x_causes_y",
+          "y_causes_x"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "causal_structure",
+        "policy": "uncertainty_first",
+        "predicted_target": null,
+        "problem_id": "causal_observation_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "y_causes_x",
+        "actual_target": "y_to_x",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "latent_common_cause",
+            "x_causes_y"
+          ],
+          "problem_id": "causal_observation_only",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "common_cause",
+            "x_to_y"
+          ]
+        },
+        "final_candidates": [
+          "latent_common_cause",
+          "x_causes_y",
+          "y_causes_x"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "causal_structure",
+        "policy": "uncertainty_first",
+        "predicted_target": null,
+        "problem_id": "causal_observation_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "latent_common_cause",
+        "actual_target": "common_cause",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "latent_common_cause",
+            "x_causes_y"
+          ],
+          "problem_id": "causal_observation_only",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "common_cause",
+            "x_to_y"
+          ]
+        },
+        "final_candidates": [
+          "latent_common_cause",
+          "x_causes_y",
+          "y_causes_x"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "causal_structure",
+        "policy": "fixed_order",
+        "predicted_target": null,
+        "problem_id": "causal_observation_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "x_causes_y",
+        "actual_target": "x_to_y",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "latent_common_cause",
+            "x_causes_y"
+          ],
+          "problem_id": "causal_observation_only",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "common_cause",
+            "x_to_y"
+          ]
+        },
+        "final_candidates": [
+          "latent_common_cause",
+          "x_causes_y",
+          "y_causes_x"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "causal_structure",
+        "policy": "fixed_order",
+        "predicted_target": null,
+        "problem_id": "causal_observation_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "y_causes_x",
+        "actual_target": "y_to_x",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "latent_common_cause",
+            "x_causes_y"
+          ],
+          "problem_id": "causal_observation_only",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "common_cause",
+            "x_to_y"
+          ]
+        },
+        "final_candidates": [
+          "latent_common_cause",
+          "x_causes_y",
+          "y_causes_x"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "causal_structure",
+        "policy": "fixed_order",
+        "predicted_target": null,
+        "problem_id": "causal_observation_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "latent_common_cause",
+        "actual_target": "common_cause",
+        "certificate": null,
+        "final_candidates": [
+          "latent_common_cause",
+          "x_causes_y",
+          "y_causes_x"
+        ],
+        "observations": [],
+        "outcome": "guess",
+        "pair_id": "causal_structure",
+        "policy": "always_guess",
+        "predicted_target": "common_cause",
+        "problem_id": "causal_observation_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": true,
+        "overclaim": true,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "x_causes_y",
+        "actual_target": "x_to_y",
+        "certificate": null,
+        "final_candidates": [
+          "latent_common_cause",
+          "x_causes_y",
+          "y_causes_x"
+        ],
+        "observations": [],
+        "outcome": "guess",
+        "pair_id": "causal_structure",
+        "policy": "always_guess",
+        "predicted_target": "common_cause",
+        "problem_id": "causal_observation_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": true,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "y_causes_x",
+        "actual_target": "y_to_x",
+        "certificate": null,
+        "final_candidates": [
+          "latent_common_cause",
+          "x_causes_y",
+          "y_causes_x"
+        ],
+        "observations": [],
+        "outcome": "guess",
+        "pair_id": "causal_structure",
+        "policy": "always_guess",
+        "predicted_target": "common_cause",
+        "problem_id": "causal_observation_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": true,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "latent_common_cause",
+        "actual_target": "common_cause",
+        "certificate": null,
+        "final_candidates": [
+          "latent_common_cause",
+          "x_causes_y",
+          "y_causes_x"
+        ],
+        "observations": [],
+        "outcome": "unsupported_abstention",
+        "pair_id": "causal_structure",
+        "policy": "always_abstain",
+        "predicted_target": null,
+        "problem_id": "causal_observation_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": true
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "x_causes_y",
+        "actual_target": "x_to_y",
+        "certificate": null,
+        "final_candidates": [
+          "latent_common_cause",
+          "x_causes_y",
+          "y_causes_x"
+        ],
+        "observations": [],
+        "outcome": "unsupported_abstention",
+        "pair_id": "causal_structure",
+        "policy": "always_abstain",
+        "predicted_target": null,
+        "problem_id": "causal_observation_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": true
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "y_causes_x",
+        "actual_target": "y_to_x",
+        "certificate": null,
+        "final_candidates": [
+          "latent_common_cause",
+          "x_causes_y",
+          "y_causes_x"
+        ],
+        "observations": [],
+        "outcome": "unsupported_abstention",
+        "pair_id": "causal_structure",
+        "policy": "always_abstain",
+        "predicted_target": null,
+        "problem_id": "causal_observation_only",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": true
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "latent_common_cause",
+        "actual_target": "common_cause",
+        "certificate": null,
+        "final_candidates": [
+          "latent_common_cause"
+        ],
+        "observations": [
+          {
+            "experiment": "intervene_x",
+            "outcome": "y_stable"
+          },
+          {
+            "experiment": "intervene_y",
+            "outcome": "x_stable"
+          }
+        ],
+        "outcome": "recovered",
+        "pair_id": "causal_structure",
+        "policy": "obstruction_first",
+        "predicted_target": "common_cause",
+        "problem_id": "causal_with_interventions",
+        "steps": 2,
+        "total_cost": 2,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": true,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "x_causes_y",
+        "actual_target": "x_to_y",
+        "certificate": null,
+        "final_candidates": [
+          "x_causes_y"
+        ],
+        "observations": [
+          {
+            "experiment": "intervene_x",
+            "outcome": "y_changes"
+          }
+        ],
+        "outcome": "recovered",
+        "pair_id": "causal_structure",
+        "policy": "obstruction_first",
+        "predicted_target": "x_to_y",
+        "problem_id": "causal_with_interventions",
+        "steps": 1,
+        "total_cost": 1,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": true,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "y_causes_x",
+        "actual_target": "y_to_x",
+        "certificate": null,
+        "final_candidates": [
+          "y_causes_x"
+        ],
+        "observations": [
+          {
+            "experiment": "intervene_x",
+            "outcome": "y_stable"
+          },
+          {
+            "experiment": "intervene_y",
+            "outcome": "x_changes"
+          }
+        ],
+        "outcome": "recovered",
+        "pair_id": "causal_structure",
+        "policy": "obstruction_first",
+        "predicted_target": "y_to_x",
+        "problem_id": "causal_with_interventions",
+        "steps": 2,
+        "total_cost": 2,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": true,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "latent_common_cause",
+        "actual_target": "common_cause",
+        "certificate": null,
+        "final_candidates": [
+          "latent_common_cause"
+        ],
+        "observations": [
+          {
+            "experiment": "intervene_x",
+            "outcome": "y_stable"
+          },
+          {
+            "experiment": "intervene_y",
+            "outcome": "x_stable"
+          }
+        ],
+        "outcome": "recovered",
+        "pair_id": "causal_structure",
+        "policy": "uncertainty_first",
+        "predicted_target": "common_cause",
+        "problem_id": "causal_with_interventions",
+        "steps": 2,
+        "total_cost": 2,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": true,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "x_causes_y",
+        "actual_target": "x_to_y",
+        "certificate": null,
+        "final_candidates": [
+          "x_causes_y"
+        ],
+        "observations": [
+          {
+            "experiment": "intervene_x",
+            "outcome": "y_changes"
+          }
+        ],
+        "outcome": "recovered",
+        "pair_id": "causal_structure",
+        "policy": "uncertainty_first",
+        "predicted_target": "x_to_y",
+        "problem_id": "causal_with_interventions",
+        "steps": 1,
+        "total_cost": 1,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": true,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "y_causes_x",
+        "actual_target": "y_to_x",
+        "certificate": null,
+        "final_candidates": [
+          "y_causes_x"
+        ],
+        "observations": [
+          {
+            "experiment": "intervene_x",
+            "outcome": "y_stable"
+          },
+          {
+            "experiment": "intervene_y",
+            "outcome": "x_changes"
+          }
+        ],
+        "outcome": "recovered",
+        "pair_id": "causal_structure",
+        "policy": "uncertainty_first",
+        "predicted_target": "y_to_x",
+        "problem_id": "causal_with_interventions",
+        "steps": 2,
+        "total_cost": 2,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": true,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "latent_common_cause",
+        "actual_target": "common_cause",
+        "certificate": {
+          "observed_transcript": [
+            {
+              "experiment": "observe_xy",
+              "outcome": "correlated"
+            },
+            {
+              "experiment": "intervene_x",
+              "outcome": "y_stable"
+            }
+          ],
+          "pair": [
+            "latent_common_cause",
+            "y_causes_x"
+          ],
+          "problem_id": "causal_with_interventions",
+          "scope": "local",
+          "separating_experiments": [
+            "intervene_y"
+          ],
+          "target_values": [
+            "common_cause",
+            "y_to_x"
+          ]
+        },
+        "final_candidates": [
+          "latent_common_cause",
+          "y_causes_x"
+        ],
+        "observations": [
+          {
+            "experiment": "observe_xy",
+            "outcome": "correlated"
+          },
+          {
+            "experiment": "intervene_x",
+            "outcome": "y_stable"
+          }
+        ],
+        "outcome": "budget_exhausted",
+        "pair_id": "causal_structure",
+        "policy": "fixed_order",
+        "predicted_target": null,
+        "problem_id": "causal_with_interventions",
+        "steps": 2,
+        "total_cost": 2,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": true,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "x_causes_y",
+        "actual_target": "x_to_y",
+        "certificate": null,
+        "final_candidates": [
+          "x_causes_y"
+        ],
+        "observations": [
+          {
+            "experiment": "observe_xy",
+            "outcome": "correlated"
+          },
+          {
+            "experiment": "intervene_x",
+            "outcome": "y_changes"
+          }
+        ],
+        "outcome": "recovered",
+        "pair_id": "causal_structure",
+        "policy": "fixed_order",
+        "predicted_target": "x_to_y",
+        "problem_id": "causal_with_interventions",
+        "steps": 2,
+        "total_cost": 2,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": true,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "y_causes_x",
+        "actual_target": "y_to_x",
+        "certificate": {
+          "observed_transcript": [
+            {
+              "experiment": "observe_xy",
+              "outcome": "correlated"
+            },
+            {
+              "experiment": "intervene_x",
+              "outcome": "y_stable"
+            }
+          ],
+          "pair": [
+            "latent_common_cause",
+            "y_causes_x"
+          ],
+          "problem_id": "causal_with_interventions",
+          "scope": "local",
+          "separating_experiments": [
+            "intervene_y"
+          ],
+          "target_values": [
+            "common_cause",
+            "y_to_x"
+          ]
+        },
+        "final_candidates": [
+          "latent_common_cause",
+          "y_causes_x"
+        ],
+        "observations": [
+          {
+            "experiment": "observe_xy",
+            "outcome": "correlated"
+          },
+          {
+            "experiment": "intervene_x",
+            "outcome": "y_stable"
+          }
+        ],
+        "outcome": "budget_exhausted",
+        "pair_id": "causal_structure",
+        "policy": "fixed_order",
+        "predicted_target": null,
+        "problem_id": "causal_with_interventions",
+        "steps": 2,
+        "total_cost": 2,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": true,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "latent_common_cause",
+        "actual_target": "common_cause",
+        "certificate": null,
+        "final_candidates": [
+          "latent_common_cause",
+          "x_causes_y",
+          "y_causes_x"
+        ],
+        "observations": [],
+        "outcome": "guess",
+        "pair_id": "causal_structure",
+        "policy": "always_guess",
+        "predicted_target": "common_cause",
+        "problem_id": "causal_with_interventions",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": true,
+        "overclaim": true,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "x_causes_y",
+        "actual_target": "x_to_y",
+        "certificate": null,
+        "final_candidates": [
+          "latent_common_cause",
+          "x_causes_y",
+          "y_causes_x"
+        ],
+        "observations": [],
+        "outcome": "guess",
+        "pair_id": "causal_structure",
+        "policy": "always_guess",
+        "predicted_target": "common_cause",
+        "problem_id": "causal_with_interventions",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": true,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "y_causes_x",
+        "actual_target": "y_to_x",
+        "certificate": null,
+        "final_candidates": [
+          "latent_common_cause",
+          "x_causes_y",
+          "y_causes_x"
+        ],
+        "observations": [],
+        "outcome": "guess",
+        "pair_id": "causal_structure",
+        "policy": "always_guess",
+        "predicted_target": "common_cause",
+        "problem_id": "causal_with_interventions",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": true,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "latent_common_cause",
+        "actual_target": "common_cause",
+        "certificate": null,
+        "final_candidates": [
+          "latent_common_cause",
+          "x_causes_y",
+          "y_causes_x"
+        ],
+        "observations": [],
+        "outcome": "unsupported_abstention",
+        "pair_id": "causal_structure",
+        "policy": "always_abstain",
+        "predicted_target": null,
+        "problem_id": "causal_with_interventions",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": true,
+        "unsupported_abstention": true
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "x_causes_y",
+        "actual_target": "x_to_y",
+        "certificate": null,
+        "final_candidates": [
+          "latent_common_cause",
+          "x_causes_y",
+          "y_causes_x"
+        ],
+        "observations": [],
+        "outcome": "unsupported_abstention",
+        "pair_id": "causal_structure",
+        "policy": "always_abstain",
+        "predicted_target": null,
+        "problem_id": "causal_with_interventions",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": true,
+        "unsupported_abstention": true
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "y_causes_x",
+        "actual_target": "y_to_x",
+        "certificate": null,
+        "final_candidates": [
+          "latent_common_cause",
+          "x_causes_y",
+          "y_causes_x"
+        ],
+        "observations": [],
+        "outcome": "unsupported_abstention",
+        "pair_id": "causal_structure",
+        "policy": "always_abstain",
+        "predicted_target": null,
+        "problem_id": "causal_with_interventions",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": true,
+        "unsupported_abstention": true
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "accepts_after_two",
+        "actual_target": "eventually_accepts",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "accepts_after_two",
+            "never_accepts"
+          ],
+          "problem_id": "automata_short_probes",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "eventually_accepts",
+            "never_accepts"
+          ]
+        },
+        "final_candidates": [
+          "accepts_after_two",
+          "never_accepts"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "automata_delay",
+        "policy": "obstruction_first",
+        "predicted_target": null,
+        "problem_id": "automata_short_probes",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "never_accepts",
+        "actual_target": "never_accepts",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "accepts_after_two",
+            "never_accepts"
+          ],
+          "problem_id": "automata_short_probes",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "eventually_accepts",
+            "never_accepts"
+          ]
+        },
+        "final_candidates": [
+          "accepts_after_two",
+          "never_accepts"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "automata_delay",
+        "policy": "obstruction_first",
+        "predicted_target": null,
+        "problem_id": "automata_short_probes",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "accepts_after_two",
+        "actual_target": "eventually_accepts",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "accepts_after_two",
+            "never_accepts"
+          ],
+          "problem_id": "automata_short_probes",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "eventually_accepts",
+            "never_accepts"
+          ]
+        },
+        "final_candidates": [
+          "accepts_after_two",
+          "never_accepts"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "automata_delay",
+        "policy": "uncertainty_first",
+        "predicted_target": null,
+        "problem_id": "automata_short_probes",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "never_accepts",
+        "actual_target": "never_accepts",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "accepts_after_two",
+            "never_accepts"
+          ],
+          "problem_id": "automata_short_probes",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "eventually_accepts",
+            "never_accepts"
+          ]
+        },
+        "final_candidates": [
+          "accepts_after_two",
+          "never_accepts"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "automata_delay",
+        "policy": "uncertainty_first",
+        "predicted_target": null,
+        "problem_id": "automata_short_probes",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "accepts_after_two",
+        "actual_target": "eventually_accepts",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "accepts_after_two",
+            "never_accepts"
+          ],
+          "problem_id": "automata_short_probes",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "eventually_accepts",
+            "never_accepts"
+          ]
+        },
+        "final_candidates": [
+          "accepts_after_two",
+          "never_accepts"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "automata_delay",
+        "policy": "fixed_order",
+        "predicted_target": null,
+        "problem_id": "automata_short_probes",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "never_accepts",
+        "actual_target": "never_accepts",
+        "certificate": {
+          "observed_transcript": [],
+          "pair": [
+            "accepts_after_two",
+            "never_accepts"
+          ],
+          "problem_id": "automata_short_probes",
+          "scope": "terminal",
+          "separating_experiments": [],
+          "target_values": [
+            "eventually_accepts",
+            "never_accepts"
+          ]
+        },
+        "final_candidates": [
+          "accepts_after_two",
+          "never_accepts"
+        ],
+        "observations": [],
+        "outcome": "terminal_obstruction",
+        "pair_id": "automata_delay",
+        "policy": "fixed_order",
+        "predicted_target": null,
+        "problem_id": "automata_short_probes",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": true,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "accepts_after_two",
+        "actual_target": "eventually_accepts",
+        "certificate": null,
+        "final_candidates": [
+          "accepts_after_two",
+          "never_accepts"
+        ],
+        "observations": [],
+        "outcome": "guess",
+        "pair_id": "automata_delay",
+        "policy": "always_guess",
+        "predicted_target": "eventually_accepts",
+        "problem_id": "automata_short_probes",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": true,
+        "overclaim": true,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "never_accepts",
+        "actual_target": "never_accepts",
+        "certificate": null,
+        "final_candidates": [
+          "accepts_after_two",
+          "never_accepts"
+        ],
+        "observations": [],
+        "outcome": "guess",
+        "pair_id": "automata_delay",
+        "policy": "always_guess",
+        "predicted_target": "eventually_accepts",
+        "problem_id": "automata_short_probes",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": true,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "accepts_after_two",
+        "actual_target": "eventually_accepts",
+        "certificate": null,
+        "final_candidates": [
+          "accepts_after_two",
+          "never_accepts"
+        ],
+        "observations": [],
+        "outcome": "unsupported_abstention",
+        "pair_id": "automata_delay",
+        "policy": "always_abstain",
+        "predicted_target": null,
+        "problem_id": "automata_short_probes",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": true
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "never_accepts",
+        "actual_target": "never_accepts",
+        "certificate": null,
+        "final_candidates": [
+          "accepts_after_two",
+          "never_accepts"
+        ],
+        "observations": [],
+        "outcome": "unsupported_abstention",
+        "pair_id": "automata_delay",
+        "policy": "always_abstain",
+        "predicted_target": null,
+        "problem_id": "automata_short_probes",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "coarse"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": true
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "accepts_after_two",
+        "actual_target": "eventually_accepts",
+        "certificate": null,
+        "final_candidates": [
+          "accepts_after_two"
+        ],
+        "observations": [
+          {
+            "experiment": "two_symbol_probe",
+            "outcome": "accept"
+          }
+        ],
+        "outcome": "recovered",
+        "pair_id": "automata_delay",
+        "policy": "obstruction_first",
+        "predicted_target": "eventually_accepts",
+        "problem_id": "automata_with_delayed_probe",
+        "steps": 1,
+        "total_cost": 1,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": true,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "never_accepts",
+        "actual_target": "never_accepts",
+        "certificate": null,
+        "final_candidates": [
+          "never_accepts"
+        ],
+        "observations": [
+          {
+            "experiment": "two_symbol_probe",
+            "outcome": "reject"
+          }
+        ],
+        "outcome": "recovered",
+        "pair_id": "automata_delay",
+        "policy": "obstruction_first",
+        "predicted_target": "never_accepts",
+        "problem_id": "automata_with_delayed_probe",
+        "steps": 1,
+        "total_cost": 1,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": true,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "accepts_after_two",
+        "actual_target": "eventually_accepts",
+        "certificate": null,
+        "final_candidates": [
+          "accepts_after_two"
+        ],
+        "observations": [
+          {
+            "experiment": "two_symbol_probe",
+            "outcome": "accept"
+          }
+        ],
+        "outcome": "recovered",
+        "pair_id": "automata_delay",
+        "policy": "uncertainty_first",
+        "predicted_target": "eventually_accepts",
+        "problem_id": "automata_with_delayed_probe",
+        "steps": 1,
+        "total_cost": 1,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": true,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "never_accepts",
+        "actual_target": "never_accepts",
+        "certificate": null,
+        "final_candidates": [
+          "never_accepts"
+        ],
+        "observations": [
+          {
+            "experiment": "two_symbol_probe",
+            "outcome": "reject"
+          }
+        ],
+        "outcome": "recovered",
+        "pair_id": "automata_delay",
+        "policy": "uncertainty_first",
+        "predicted_target": "never_accepts",
+        "problem_id": "automata_with_delayed_probe",
+        "steps": 1,
+        "total_cost": 1,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": true,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "accepts_after_two",
+        "actual_target": "eventually_accepts",
+        "certificate": {
+          "observed_transcript": [
+            {
+              "experiment": "one_symbol_probe",
+              "outcome": "reject"
+            }
+          ],
+          "pair": [
+            "accepts_after_two",
+            "never_accepts"
+          ],
+          "problem_id": "automata_with_delayed_probe",
+          "scope": "local",
+          "separating_experiments": [
+            "two_symbol_probe"
+          ],
+          "target_values": [
+            "eventually_accepts",
+            "never_accepts"
+          ]
+        },
+        "final_candidates": [
+          "accepts_after_two",
+          "never_accepts"
+        ],
+        "observations": [
+          {
+            "experiment": "one_symbol_probe",
+            "outcome": "reject"
+          }
+        ],
+        "outcome": "budget_exhausted",
+        "pair_id": "automata_delay",
+        "policy": "fixed_order",
+        "predicted_target": null,
+        "problem_id": "automata_with_delayed_probe",
+        "steps": 1,
+        "total_cost": 1,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": true,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "never_accepts",
+        "actual_target": "never_accepts",
+        "certificate": {
+          "observed_transcript": [
+            {
+              "experiment": "one_symbol_probe",
+              "outcome": "reject"
+            }
+          ],
+          "pair": [
+            "accepts_after_two",
+            "never_accepts"
+          ],
+          "problem_id": "automata_with_delayed_probe",
+          "scope": "local",
+          "separating_experiments": [
+            "two_symbol_probe"
+          ],
+          "target_values": [
+            "eventually_accepts",
+            "never_accepts"
+          ]
+        },
+        "final_candidates": [
+          "accepts_after_two",
+          "never_accepts"
+        ],
+        "observations": [
+          {
+            "experiment": "one_symbol_probe",
+            "outcome": "reject"
+          }
+        ],
+        "outcome": "budget_exhausted",
+        "pair_id": "automata_delay",
+        "policy": "fixed_order",
+        "predicted_target": null,
+        "problem_id": "automata_with_delayed_probe",
+        "steps": 1,
+        "total_cost": 1,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": true,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": true,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "accepts_after_two",
+        "actual_target": "eventually_accepts",
+        "certificate": null,
+        "final_candidates": [
+          "accepts_after_two",
+          "never_accepts"
+        ],
+        "observations": [],
+        "outcome": "guess",
+        "pair_id": "automata_delay",
+        "policy": "always_guess",
+        "predicted_target": "eventually_accepts",
+        "problem_id": "automata_with_delayed_probe",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": true,
+        "overclaim": true,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "never_accepts",
+        "actual_target": "never_accepts",
+        "certificate": null,
+        "final_candidates": [
+          "accepts_after_two",
+          "never_accepts"
+        ],
+        "observations": [],
+        "outcome": "guess",
+        "pair_id": "automata_delay",
+        "policy": "always_guess",
+        "predicted_target": "eventually_accepts",
+        "problem_id": "automata_with_delayed_probe",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": true,
+        "unnecessary_abstention": false,
+        "unsupported_abstention": false
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "accepts_after_two",
+        "actual_target": "eventually_accepts",
+        "certificate": null,
+        "final_candidates": [
+          "accepts_after_two",
+          "never_accepts"
+        ],
+        "observations": [],
+        "outcome": "unsupported_abstention",
+        "pair_id": "automata_delay",
+        "policy": "always_abstain",
+        "predicted_target": null,
+        "problem_id": "automata_with_delayed_probe",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": true,
+        "unsupported_abstention": true
+      }
+    },
+    {
+      "episode": {
+        "actual_realization": "never_accepts",
+        "actual_target": "never_accepts",
+        "certificate": null,
+        "final_candidates": [
+          "accepts_after_two",
+          "never_accepts"
+        ],
+        "observations": [],
+        "outcome": "unsupported_abstention",
+        "pair_id": "automata_delay",
+        "policy": "always_abstain",
+        "predicted_target": null,
+        "problem_id": "automata_with_delayed_probe",
+        "steps": 0,
+        "total_cost": 0,
+        "variant": "rich"
+      },
+      "score": {
+        "budget_exhausted": false,
+        "certified_recovery": false,
+        "certified_terminal_obstruction": false,
+        "emitted_certificate_valid": null,
+        "guess_correct": false,
+        "overclaim": false,
+        "unnecessary_abstention": true,
+        "unsupported_abstention": true
+      }
+    }
+  ],
+  "fixture": {
+    "path": "experiments/information_limited_discovery/fixtures/discovery_tasks.json",
+    "sha256": "48803806c5f4a07fb0b2b7f9846cb3b9b481be9e877a8fbbd04269e5e73e46d2"
+  },
+  "matched_transitions": [
+    {
+      "coarse_episode_count": 2,
+      "coarse_terminal_obstruction": true,
+      "pair_id": "automata_delay",
+      "passed": true,
+      "rich_episode_count": 2,
+      "rich_recovery": true
+    },
+    {
+      "coarse_episode_count": 3,
+      "coarse_terminal_obstruction": true,
+      "pair_id": "causal_structure",
+      "passed": true,
+      "rich_episode_count": 3,
+      "rich_recovery": true
+    },
+    {
+      "coarse_episode_count": 4,
+      "coarse_terminal_obstruction": true,
+      "pair_id": "mechanism",
+      "passed": true,
+      "rich_episode_count": 4,
+      "rich_recovery": true
+    }
+  ],
+  "policy_summaries": {
+    "always_abstain": {
+      "counts": {
+        "budget_exhausted": 0,
+        "certified_recovery": 0,
+        "certified_terminal_obstruction": 0,
+        "guess_correct": 0,
+        "overclaim": 0,
+        "unnecessary_abstention": 9,
+        "unsupported_abstention": 18
+      },
+      "episodes": 18,
+      "mean_cost": null,
+      "mean_steps": null,
+      "rates": {
+        "budget_exhausted": 0.0,
+        "certified_recovery": 0.0,
+        "certified_terminal_obstruction": 0.0,
+        "guess_correct": 0.0,
+        "overclaim": 0.0,
+        "unnecessary_abstention": 0.5,
+        "unsupported_abstention": 1.0
+      }
+    },
+    "always_guess": {
+      "counts": {
+        "budget_exhausted": 0,
+        "certified_recovery": 0,
+        "certified_terminal_obstruction": 0,
+        "guess_correct": 8,
+        "overclaim": 18,
+        "unnecessary_abstention": 0,
+        "unsupported_abstention": 0
+      },
+      "episodes": 18,
+      "mean_cost": null,
+      "mean_steps": null,
+      "rates": {
+        "budget_exhausted": 0.0,
+        "certified_recovery": 0.0,
+        "certified_terminal_obstruction": 0.0,
+        "guess_correct": 0.4444444444444444,
+        "overclaim": 1.0,
+        "unnecessary_abstention": 0.0,
+        "unsupported_abstention": 0.0
+      }
+    },
+    "fixed_order": {
+      "counts": {
+        "budget_exhausted": 8,
+        "certified_recovery": 1,
+        "certified_terminal_obstruction": 9,
+        "guess_correct": 0,
+        "overclaim": 0,
+        "unnecessary_abstention": 0,
+        "unsupported_abstention": 0
+      },
+      "episodes": 18,
+      "mean_cost": 0.6666666666666666,
+      "mean_steps": 0.6666666666666666,
+      "rates": {
+        "budget_exhausted": 0.4444444444444444,
+        "certified_recovery": 0.05555555555555555,
+        "certified_terminal_obstruction": 0.5,
+        "guess_correct": 0.0,
+        "overclaim": 0.0,
+        "unnecessary_abstention": 0.0,
+        "unsupported_abstention": 0.0
+      }
+    },
+    "obstruction_first": {
+      "counts": {
+        "budget_exhausted": 0,
+        "certified_recovery": 9,
+        "certified_terminal_obstruction": 9,
+        "guess_correct": 0,
+        "overclaim": 0,
+        "unnecessary_abstention": 0,
+        "unsupported_abstention": 0
+      },
+      "episodes": 18,
+      "mean_cost": 0.6111111111111112,
+      "mean_steps": 0.6111111111111112,
+      "rates": {
+        "budget_exhausted": 0.0,
+        "certified_recovery": 0.5,
+        "certified_terminal_obstruction": 0.5,
+        "guess_correct": 0.0,
+        "overclaim": 0.0,
+        "unnecessary_abstention": 0.0,
+        "unsupported_abstention": 0.0
+      }
+    },
+    "uncertainty_first": {
+      "counts": {
+        "budget_exhausted": 4,
+        "certified_recovery": 5,
+        "certified_terminal_obstruction": 9,
+        "guess_correct": 0,
+        "overclaim": 0,
+        "unnecessary_abstention": 0,
+        "unsupported_abstention": 0
+      },
+      "episodes": 18,
+      "mean_cost": 0.6111111111111112,
+      "mean_steps": 0.6111111111111112,
+      "rates": {
+        "budget_exhausted": 0.2222222222222222,
+        "certified_recovery": 0.2777777777777778,
+        "certified_terminal_obstruction": 0.5,
+        "guess_correct": 0.0,
+        "overclaim": 0.0,
+        "unnecessary_abstention": 0.0,
+        "unsupported_abstention": 0.0
+      }
+    }
+  },
+  "schema_version": "1.0",
+  "task_count": 6
+}
