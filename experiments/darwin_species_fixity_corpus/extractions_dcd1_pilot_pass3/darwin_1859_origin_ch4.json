@@ -1,0 +1,264 @@
+{
+  "doc_id": "darwin_1859_origin_ch4",
+  "propositions": [
+    {
+      "name": "selection_principle_extends_to_nature",
+      "statement": "The principle of selection observed in the hands of man applies in nature.",
+      "quote": "Can the principle of selection, which we have seen is so potent in the hands of man, apply in nature?",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "organic_beings_vary",
+      "statement": "Domestic productions and, to a lesser degree, beings under nature vary, and the hereditary tendency is strong.",
+      "quote": "our domestic productions, and, in a lesser degree, those under nature, vary; and how strong the hereditary tendency is",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "beings_relate_complexly",
+      "statement": "The mutual relations of all organic beings to each other and to their physical conditions of life are infinitely complex and close-fitting.",
+      "quote": "how infinitely complex and close-fitting are the mutual relations of all organic beings to each other and to their physical conditions of life",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "more_born_than_survive",
+      "statement": "Many more individuals are born than can possibly survive.",
+      "quote": "remembering that many more individuals are born than can possibly survive",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "advantaged_individuals_survive",
+      "statement": "Individuals with any advantage, however slight, have the best chance of surviving and procreating their kind.",
+      "quote": "individuals having any advantage, however slight, over others, would have the best chance of surviving and of procreating their kind",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "injurious_variations_destroyed",
+      "statement": "Any variation in the least degree injurious would be rigidly destroyed.",
+      "quote": "we may feel sure that any variation in the least degree injurious would be rigidly destroyed",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "natural_selection_defined",
+      "statement": "The preservation of favourable variations and the rejection of injurious variations is called Natural Selection.",
+      "quote": "This preservation of favourable variations and the rejection of injurious variations, I call Natural Selection",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "neutral_variations_unaffected",
+      "statement": "Variations neither useful nor injurious are not affected by natural selection and remain a fluctuating element.",
+      "quote": "Variations neither useful nor injurious would not be affected by natural selection, and would be left a fluctuating element",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "species_can_become_extinct",
+      "statement": "Under changing conditions the proportional numbers of inhabitants change and some species may become extinct.",
+      "quote": "The proportional numbers of its inhabitants would almost immediately undergo a change, and some species might become extinct",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "conditions_increase_variability",
+      "statement": "A change in the conditions of life, by acting on the reproductive system, causes or increases variability.",
+      "quote": "a change in the conditions of life, by specially acting on the reproductive system, causes or increases variability",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "without_variations_nothing",
+      "statement": "Unless profitable variations occur, natural selection can do nothing.",
+      "quote": "unless profitable variations do occur, natural selection can do nothing",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "nature_has_vast_time",
+      "statement": "Nature has incomparably longer time at her disposal than man for producing results by selection.",
+      "quote": "so could Nature, but far more easily, from having incomparably longer time at her disposal",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "nature_selects_for_being",
+      "statement": "Man selects only for his own good, but Nature selects only for the good of the being she tends.",
+      "quote": "Man selects only for his own good; Nature only for that of the being which she tends",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "selection_scrutinises_continually",
+      "statement": "Natural selection is daily and hourly scrutinising every variation, rejecting the bad and preserving the good.",
+      "quote": "natural selection is daily and hourly scrutinising, throughout the world, every variation, even the slightest; rejecting that which is bad, preserving and adding up all that is good",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "changes_invisible_in_short_time",
+      "statement": "We see nothing of these slow changes in progress until the long lapse of ages has passed.",
+      "quote": "We see nothing of these slow changes in progress, until the hand of time has marked the long lapse of ages",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "forms_of_life_have_changed",
+      "statement": "The forms of life are now different from what they formerly were.",
+      "quote": "we only see that the forms of life are now different from what they formerly were",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "selection_only_for_the_being",
+      "statement": "Natural selection can act only through and for the good of each being.",
+      "quote": "natural selection can act only through and for the good of each being",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "correlation_of_growth",
+      "statement": "Unknown laws of correlation of growth cause modification of one part, when accumulated by natural selection, to produce other modifications.",
+      "quote": "there are many unknown laws of correlation of growth, which, when one part of the organisation is modified through variation, and the modifications are accumulated by natural selection for the good of the being, will cause other modifications",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "inheritance_at_corresponding_age",
+      "statement": "Natural selection can modify beings at any age by accumulation of profitable variations at that age and their inheritance at a corresponding age.",
+      "quote": "natural selection will be enabled to act on and modify organic beings at any age, by the accumulation of profitable variations at that age, and by their inheritance at a corresponding age",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_modification_for_other_species",
+      "statement": "Natural selection cannot modify the structure of one species solely for the good of another species.",
+      "quote": "What natural selection cannot do, is to modify the structure of one species, without giving it any advantage, for the good of another species",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "sexual_selection_defined",
+      "statement": "Sexual selection depends on a struggle between males for possession of the females rather than on the struggle for existence.",
+      "quote": "This depends, not on a struggle for existence, but on a struggle between the males for possession of the females",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "sexual_selection_less_rigorous",
+      "statement": "Sexual selection results in few or no offspring rather than death and is less rigorous than natural selection.",
+      "quote": "the result is not death to the unsuccessful competitor, but few or no offspring. Sexual selection is, therefore, less rigorous than natural selection",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "female_choice_can_modify",
+      "statement": "Female birds selecting the most attractive males across thousands of generations can produce a marked effect.",
+      "quote": "female birds, by selecting, during thousands of generations, the most melodious or beautiful males, according to their standard of beauty, might produce a marked effect",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "young_inherit_habits",
+      "statement": "Offspring inherit habits or structure from parents, and repetition of this process may form a new variety.",
+      "quote": "Some of its young would probably inherit the same habits or structure, and by the repetition of this process, a new variety might be formed",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "modifications_infinitesimally_small",
+      "statement": "Natural selection acts only by preservation and accumulation of infinitesimally small inherited modifications, each profitable to the preserved being.",
+      "quote": "Natural selection can act only by the preservation and accumulation of infinitesimally small inherited modifications, each profitable to the preserved being",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "banish_continued_creation",
+      "statement": "Natural selection, if true, banishes belief in the continued creation of new organic beings or great and sudden modification.",
+      "quote": "so will natural selection, if it be a true principle, banish the belief of the continued creation of new organic beings, or of any great and sudden modification in their structure",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "crossing_gives_vigour",
+      "statement": "A cross between different varieties or strains of animals and plants gives vigour and fertility to the offspring.",
+      "quote": "with animals and plants a cross between different varieties, or between individuals of the same variety but of another strain, gives vigour and fertility to the offspring",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "inbreeding_diminishes_vigour",
+      "statement": "Close interbreeding diminishes vigour and fertility.",
+      "quote": "on the other hand, that close interbreeding diminishes vigour and fertility",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_perpetual_self_fertilisation",
+      "statement": "No organic being self-fertilises for an eternity of generations; an occasional cross with another individual is indispensable.",
+      "quote": "no organic being self-fertilises itself for an eternity of generations; but that a cross with another individual is occasionally—perhaps at very long intervals—indispensable",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "species_must_keep_up_or_die",
+      "statement": "If a species does not become modified and improved with its competitors, it will soon be exterminated.",
+      "quote": "if any one species does not become modified and improved in a corresponding degree with its competitors, it will soon be exterminated",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "isolation_important_to_selection",
+      "statement": "Isolation is an important element in the process of natural selection.",
+      "quote": "Isolation, also, is an important element in the process of natural selection",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rarity_precursor_to_extinction",
+      "statement": "Rarity is the precursor to extinction.",
+      "quote": "Rarity, as geology tells us, is the precursor to extinction",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "new_species_replace_old",
+      "statement": "As new species are formed through natural selection, others become rarer and finally extinct.",
+      "quote": "as new species in the course of time are formed through natural selection, others will become rarer and rarer, and finally extinct",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "closely_allied_forms_compete",
+      "statement": "Each new variety or species presses hardest on its nearest kindred and tends to exterminate them.",
+      "quote": "each new variety or species, during the progress of its formation, will generally press hardest on its nearest kindred, and tend to exterminate them",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "varieties_are_incipient_species",
+      "statement": "Varieties are species in the process of formation, or incipient species.",
+      "quote": "varieties are species in the process of formation, or are, as I have called them, incipient species",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "divergence_enables_more_places",
+      "statement": "The more diversified the descendants of a species become, the better they can seize many diversified places in the polity of nature.",
+      "quote": "the more diversified the descendants from any one species become in structure, constitution, and habits, by so much will they be better enabled to seize on many and widely diversified places in the polity of nature",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "descent_from_common_parent",
+      "statement": "Natural selection, through divergence of character and extinction, acts on the descendants from a common parent.",
+      "quote": "Action of Natural Selection, through Divergence of Character and Extinction, on the descendants from a common parent",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

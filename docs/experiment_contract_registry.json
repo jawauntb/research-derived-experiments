@@ -447,7 +447,27 @@
           "gate_verdict_paths": [],
           "producing_agent": {
             "identity": "Claude Code (Opus 4.7)",
-            "session_ref": "darwin-species-fixity-corpus scaffolding 2026-07-27"
+            "session_ref": "darwin corpus scaffold 2026-07-27"
+          }
+        },
+        {
+          "run_id": "dcd1_pilot_darwin_replication_2026_07_27",
+          "publication_package": "darwin_species_fixity_corpus",
+          "runtime_package": "darwin_species_fixity_corpus",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/darwin_species_fixity_corpus/experiment_manifest.json",
+          "report_paths": [
+            "experiments/darwin_species_fixity_corpus/results/dcd1_pilot_verdict.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_digest": "e1affd8f89de3bc5aa188a55d2ef8ba66280941efcd4377b2e187667db2d8252",
+          "preregistration_path": "experiments/darwin_species_fixity_corpus/DCD1_PILOT_PREREGISTRATION.md",
+          "producing_agent": {
+            "identity": "Claude Code (Opus 4.7)",
+            "session_ref": "dcd1-pilot-darwin-replication 2026-07-27"
           }
         }
       ]

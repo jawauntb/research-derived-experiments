@@ -1,0 +1,225 @@
+{
+  "doc_id": "darwin_1845_beagle_ch17",
+  "propositions": [
+    {
+      "definitional": false,
+      "doc_id": "darwin_1845_beagle_ch17",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "first_appearance_new_beings",
+      "quote": "we seem to be brought somewhat near to that great fact\u2014that mystery of mysteries\u2014the first appearance of new beings on this earth",
+      "statement": "The first appearance of new beings on this earth is the great fact, the mystery of mysteries, toward which the Galapagos facts bring the observer near.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1845_beagle_ch17",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "aboriginal_creations_exist",
+      "quote": "Most of the organic productions are aboriginal creations, found nowhere else",
+      "statement": "Most organic productions of the archipelago are aboriginal creations found nowhere else.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1845_beagle_ch17",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "climate_food_soil_produce_variety",
+      "quote": "this rat is merely a variety, produced by the new and peculiar climate, food, and soil, to which it has been subjected",
+      "statement": "New and peculiar climate, food, and soil can produce a variety of a species from an imported stock.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1845_beagle_ch17",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "species_taken_and_modified",
+      "quote": "one might really fancy that from an original paucity of birds in this archipelago, one species had been taken and modified for different ends",
+      "statement": "From an original paucity of birds one species may have been taken and modified for different ends.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1845_beagle_ch17",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "buzzard_induced_to_office",
+      "quote": "it might be fancied that a bird originally a buzzard, had been induced here to undertake the office of the carrion-feeding Polybori of the American continent",
+      "statement": "A bird originally a buzzard may have been induced here to undertake the office of the carrion-feeding Polybori.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1845_beagle_ch17",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "islands_geologically_recent_seabed",
+      "quote": "within a period, geologically recent, the unbroken ocean was here spread out",
+      "statement": "Within a geologically recent period the unbroken ocean spread over the sites now occupied by the islands.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1845_beagle_ch17",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "created_on_american_types",
+      "quote": "why were they created on American types of organization? It is probable that the islands of the Cape de Verd group resemble",
+      "statement": "The aboriginal inhabitants were created on American types of organization though placed physically far from America.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1845_beagle_ch17",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "fixed_hereditary_instinct_refuge",
+      "quote": "urged by a fixed and hereditary instinct that the shore is its place of safety, whatever the emergency may be, it there takes refuge",
+      "statement": "A fixed and hereditary instinct directs the marine lizard to the shore as its place of safety.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1845_beagle_ch17",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "wildness_becomes_hereditary",
+      "quote": "it is not acquired by individual birds in a short time, even when much persecuted; but that in the course of successive generations it becomes hereditary",
+      "statement": "Wildness toward man is not acquired by individual birds in a short time but becomes hereditary over successive generations.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1845_beagle_ch17",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "domesticated_habits_hereditary",
+      "quote": "With domesticated animals we are accustomed to see new mental habits or instincts acquired and rendered hereditary",
+      "statement": "In domesticated animals new mental habits or instincts are commonly acquired and rendered hereditary.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1845_beagle_ch17",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "islands_never_united",
+      "quote": "the profound depth of the ocean between the islands, and their apparently recent (in a geological sense) volcanic origin, render it highly unlikely that they were ever united",
+      "statement": "The profound ocean depth and recent volcanic origin make it highly unlikely the islands were ever united to the continent.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1845_beagle_ch17",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "currents_separate_islands",
+      "quote": "very strong currents of the sea running in a westerly and W.N.W. direction must separate, as far as transportal by the sea is concerned, the southern islands from the northern ones",
+      "statement": "Strong sea currents separate the islands so far as transportal by the sea is concerned.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1845_beagle_ch17",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "creative_force_on_islands",
+      "quote": "one is astonished at the amount of creative force, if such an expression may be used, displayed on these small, barren, and rocky islands",
+      "statement": "An astonishing amount of creative force has been displayed on these small, barren, and rocky islands.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1845_beagle_ch17",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "different_islands_different_beings",
+      "quote": "the different islands to a considerable extent are inhabited by a different set of beings",
+      "statement": "The different islands to a considerable extent are inhabited by a different set of beings.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1845_beagle_ch17",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "species_may_be_only_races",
+      "quote": "It may be suspected that some of these representative species, at least in the case of the tortoise and of some of the birds, may hereafter prove to be only well-marked races",
+      "statement": "Some representative species, at least among tortoises and birds, may hereafter prove to be only well-marked races.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1845_beagle_ch17",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "eggs_shells_transported_salt_water",
+      "quote": "by the greater facility with which the eggs of lizards, protected by calcareous shells, might be transported through salt-water, than could the slimy spawn of frogs",
+      "statement": "Calcareous-shelled lizard eggs can be transported through salt-water more easily than the slimy spawn of frogs, explaining the absence of frogs on oceanic islands.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1845_beagle_ch17",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "aquatic_forms_less_peculiar",
+      "quote": "this law of aquatic forms, whether marine or fresh-water, being less peculiar at any given point of the earth's surface than the terrestrial forms of the same classes",
+      "statement": "Aquatic forms, marine or fresh-water, are less peculiar at any given point of the earth's surface than terrestrial forms of the same classes.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1845_beagle_ch17",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "archipelago_zoologically_america",
+      "quote": "we see that this archipelago, though standing in the Pacific Ocean, is zoologically part of America",
+      "statement": "The archipelago, though in the Pacific Ocean, is zoologically part of America.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1845_beagle_ch17",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "satellite_receiving_stray_colonists",
+      "quote": "The archipelago is a little world within itself, or rather a satellite attached to America, whence it has derived a few stray colonists",
+      "statement": "The archipelago is a satellite attached to America whence it has derived a few stray colonists.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1845_beagle_ch17",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "created_in_center_and_dispersed",
+      "quote": "It would appear as if it had been created in the centre of the archipelago, and thence had been dispersed only to a certain distance",
+      "statement": "The terrestrial Amblyrhynchus appears as if created in the centre of the archipelago and thence dispersed only to a certain distance.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1845_beagle_ch17",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "wildness_is_particular_instinct",
+      "quote": "the wildness of birds with regard to man, is a particular instinct directed against him",
+      "statement": "The wildness of birds toward man is a particular instinct directed against him and not general caution.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1845_beagle_ch17",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "new_beast_of_prey_havoc",
+      "quote": "what havoc the introduction of any new beast of prey must cause in a country, before the instincts of the indigenous inhabitants have become adapted to the stranger's craft or power",
+      "statement": "Introduction of a new beast of prey must cause havoc before the instincts of indigenous inhabitants become adapted to it.",
+      "support": 2
+    }
+  ]
+}

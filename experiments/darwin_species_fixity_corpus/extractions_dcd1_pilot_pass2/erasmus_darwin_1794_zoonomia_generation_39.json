@@ -1,0 +1,257 @@
+{
+  "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+  "propositions": [
+    {
+      "name": "embryon_branch_of_parent",
+      "statement": "The offspring is not entirely new but is a branch or elongation of the parent, retaining part of the parent-system.",
+      "quote": "the offspring is termed a new animal, but is in truth a branch or elongation of the parent; since a part of the embryon-animal is, or was, a part of the parent",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "embryon_from_male_only",
+      "statement": "The embryon is produced by the male and the nutriment by the female.",
+      "quote": "the embryon is produced by the male, and the nutriment by the female",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rudiment_is_living_filament",
+      "statement": "The embryon as secreted from the male's blood consists of a living filament endued with irritation, sensation, volition, and association.",
+      "quote": "the embryon, as secreted from the blood of the male, would seem to consist of a living filament with certain capabilities of irritation, sensation, volition, and association",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "parts_by_apposition_not_distention",
+      "statement": "New parts of the embryon are acquired by addition of matter, not by distention of pre-existing parts.",
+      "quote": "Hence new parts are acquired by addition not by distention",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "reject_embryons_within_embryons",
+      "statement": "Embryons were not originally created within other embryons because organized matter cannot be so minute.",
+      "quote": "Embryons not originally created within other embryons. Organized matter is not so minute",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "mules_refute_preformation",
+      "statement": "Mule-animals partake the forms of both parents, which could not occur if the embryon were a preformed miniature in the male's semen.",
+      "quote": "how could mule-animals be produced, which partake of the forms of both the parents, if the original embryon was a miniature existing in the semen of the male parent?",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "regeneration_refutes_preformation",
+      "statement": "Regeneration of limbs, heads, and tails in crabs, worms, and snails shows new parts can be formed anew, not merely unfolded from a miniature.",
+      "quote": "some animals, as the crab-fish, can reproduce a whole limb, as a leg which has been broken off; others, as worms and snails, can reproduce a head, or a tail",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "new_vessels_in_disease_refute_preformation",
+      "statement": "New parts and vessels formed in wens, cancers, and inflammations cannot have had a prototype in the original embryon-miniature.",
+      "quote": "there are new parts or new vessels produced in many diseases, as on the cornea of the eye in ophthalmy, in wens and cancers, which cannot be supposed to have had a prototype",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "warm_blooded_one_filament",
+      "statement": "All warm-blooded animals were derived from one living filament, and cold-blooded animals, insects, worms, and vegetables from one living filament also.",
+      "quote": "All warm-blooded animals derived from one living filament. Cold-blooded animals, insects, worms, vegetables, derived also from one living filament",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "first_cause_endued_filament",
+      "statement": "All warm-blooded animals have arisen from one living filament which the Great First Cause endued with animality and the power of acquiring new parts.",
+      "quote": "all warm-blooded animals have arisen from one living filament, which THE GREAT First Cause endued with animality, with the power of acquiring new parts",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "millions_of_ages",
+      "statement": "The transformation of animals occurred over the great length of time since the earth began, perhaps millions of ages before the history of mankind.",
+      "quote": "in the great length of time, since the earth began to exist, perhaps millions of ages before the commencement of the history of mankind",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "improvement_transmitted_by_generation",
+      "statement": "The living filament possesses the faculty of continuing to improve by its own inherent activity and delivering those improvements to its posterity by generation.",
+      "quote": "possessing the faculty of continuing to improve by its own inherent activity, and of delivering down those improvements by generation to its posterity, world without end!",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "species_from_mixture_of_orders",
+      "statement": "The great variety of species of animals now on earth may have had their origin from the mixture of a few natural orders.",
+      "quote": "the great variety of species of animals, which now tenant the earth, may have had their origin from the mixture of a few natural orders",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fertile_mules_constitute_species",
+      "statement": "Those animal and vegetable mules which could continue their species have done so and constitute the numerous families of animals and vegetables now existing.",
+      "quote": "those animal and vegetable mules, which could continue their species, have done so, and constitute the numerous families of animals and vegetables which now exist",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "sterile_mules_perish",
+      "statement": "Mules produced with imperfect organs of generation perished without reproduction, according to Aristotle's observation.",
+      "quote": "those mules, which were produced with imperfect organs of generation, perished without reproduction, according to the observation of Aristotle",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "lust_hunger_security_drive_change",
+      "statement": "The three great objects of desire that have changed the forms of many animals by their exertions to gratify them are lust, hunger, and security.",
+      "quote": "the three great objects of desire, which have changed the forms of many animals by their exertions to gratify them, are those of lust, hunger, and security",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "gradual_improvement_by_endeavour",
+      "statement": "The diverse forms of animals were gradually produced during many generations by the perpetual endeavour of creatures to supply their wants, and delivered to posterity with constant improvement.",
+      "quote": "seem to have been gradually produced during many generations by the perpetual endeavour of the creatures to supply the want of food, and to have been delivered to their posterity with constant improvement",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "acquired_forms_transmitted",
+      "statement": "Many acquired forms or propensities of animals are transmitted to their posterity.",
+      "quote": "many of these acquired forms or propensities are transmitted to their posterity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "buds_resemble_parent_exactly",
+      "statement": "The paternal offspring of vegetables, their buds and bulbs, exactly resemble their parents, as seen in grafting fruit-trees.",
+      "quote": "This paternal offspring of vegetables, I mean their buds and bulbs, is attended with a very curious circumstance; and that is, that they exactly resemble their parents",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "seminal_offspring_variable",
+      "statement": "The seminal offspring of plants, being supplied with nutriment by the mother, is liable to perpetual variation.",
+      "quote": "whereas the seminal offspring of plants, being supplied with nutriment by the mother, is liable to perpetual variation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "domestication_transforms_species",
+      "statement": "Great changes have been introduced into animals by artificial or accidental cultivation, as in horses exercised for strength or swiftness.",
+      "quote": "the great changes introduced into various animals by artificial or accidental cultivation, as in horses, which we have exercised for the different purposes of strength or swiftness",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "male_imagination_marks_sex",
+      "statement": "The imagination of the male at the time of copulation may so affect the seminal secretion by association as to cause the sex and features of the offspring.",
+      "quote": "the imagination of the male at the time of copulation, or at the time of the secretion of the semen, may so affect this secretion by irritative or sensitive association",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "female_imagination_limited",
+      "statement": "The imagination of the female may affect the embryon only through the early nutriment; no such power can affect it after it has obtained a placenta.",
+      "quote": "the imagination of the female may be supposed to affect the embryon by producing a difference in its early nutriment; yet that no such power can affect it after it has obtained a placenta",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "appetency_like_affinity",
+      "statement": "Animal appetencies are analogous to chemical affinities and change with every new combination.",
+      "quote": "the animal appetencies are not only perhaps less numerous originally than the chemical affinities; but that like these latter, they change with every new combination",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "new_organs_new_irritabilities",
+      "statement": "With every new change of organic form or addition of organic parts, a new kind of irritability or sensibility is produced.",
+      "quote": "with every new change, therefore, of organic form, or addition of organic parts, I suppose a new kind of irritability or of sensibility to be produced",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "world_itself_generated",
+      "statement": "The world itself might have been generated rather than created, gradually produced from very small beginnings.",
+      "quote": "the world itself might have been generated, rather than created; that is, it might have been gradually produced from very small beginnings",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "analogy_licenses_conjecture",
+      "statement": "In this intricate subject nothing but loose analogical conjectures can be had, which may however lead to future discoveries.",
+      "quote": "In this intricate subject nothing but loose analogical conjectures can be had, which may however lead to future discoveries",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "generation_impenetrably_obscure",
+      "statement": "The process of generation is still involved in impenetrable obscurity, though conjectures may nevertheless be formed concerning some of its circumstances.",
+      "quote": "The process of generation is still involved in impenetrable obscurity, conjectures may nevertheless be formed concerning some of its circumstances",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "semen_not_mere_stimulus",
+      "statement": "The idea that the male semen only stimulates the female egg into life has no support from experiment or analogy.",
+      "quote": "the idea of the semen of the male constituting only a stimulus to the egg of the female, exciting it into life, (as held by some philosophers) has no support from experiment or analogy",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "progressive_improvement_ongoing",
+      "statement": "From the beginning of this terraqueous globe, the animals which inhabit it have constantly improved and are still in a state of progressive improvement.",
+      "quote": "the animals, which inhabit it, have constantly improved, and are still in a state of progressive improvement",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "koelreuter_species_metamorphosis",
+      "statement": "Koelreuter's experiment demonstrated a complete metamorphosis of one natural species of plants into another by successive impregnation.",
+      "quote": "a complete metamorphosis of one natural species of plants into another",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "state_of_probation",
+      "statement": "The idea of progressive improvement is consonant with our present situation being a state of probation, for which we are responsible.",
+      "quote": "our present situation being a state of probation, which by our exertions we may improve, and are consequently responsible for our actions",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "chain_of_causes_from_god",
+      "statement": "The perpetual chain of causes and effects has its first link rivetted to the throne of God and divides into innumerable diverging branches.",
+      "quote": "This perpetual chain of causes and effects, whose first link is rivetted to the throne of God, divides itself into innumerable diverging branches",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "vis_fabricatrix_of_nature",
+      "statement": "The irritabilities, sensibilities, and volitions of the fetus constitute the vis fabricatrix, vis conservatrix, and vis medicatrix of nature.",
+      "quote": "All these faculties then constitute the vis fabricatrix, and the vis conservatrix, as well as the vis medicatrix of nature, so much spoken of, but so little understood",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "polypus_generation_without_mother",
+      "statement": "The tape-worm shows a power of reproduction without any maternal apparatus for supplying nutriment and oxygenation, remaining attached to its father until maturity.",
+      "quote": "In this animal there evidently appears a power of reproduction without any maternal apparatus for the purpose of supplying nutriment and oxygenation to the embryon, as it remains attached to its father",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "sex_not_by_accident",
+      "statement": "The sex of the embryon is not owing to accident; whatever is produced has a cause, and the peculiar actions of the seminal glands govern it.",
+      "quote": "is the sex of the embryon produced by accident? Certainly whatever is produced has a cause; but when this cause is too minute for our comprehension, the effect is said in common language to happen by chance",
+      "kind": "presupposed",
+      "definitional": false
+    }
+  ]
+}

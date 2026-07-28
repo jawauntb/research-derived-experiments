@@ -1,0 +1,255 @@
+{
+  "doc_id": "darwin_1859_origin_ch14",
+  "propositions": [
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "organs_and_instincts_variable",
+      "quote": "all organs and instincts are, in ever so slight a degree, variable",
+      "statement": "All organs and instincts are, in ever so slight a degree, variable.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "struggle_preserves_deviation",
+      "quote": "there is a struggle for existence leading to the preservation of each profitable deviation of structure or instinct",
+      "statement": "There is a struggle for existence that leads to the preservation of each profitable deviation of structure or instinct.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "common_descent_within_groups",
+      "quote": "All the individuals of the same species, and all the species of the same genus, or even higher group, must have descended from common parents",
+      "statement": "All the individuals of the same species and all the species of the same genus or higher group must have descended from common parents.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "intermediates_supplanted_and_exterminated",
+      "quote": "the intermediate varieties will, in the long run, be supplanted and exterminated",
+      "statement": "The intermediate varieties will, in the long run, be supplanted and exterminated by the more numerous allied forms.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "geological_record_extremely_imperfect",
+      "quote": "the geological record is far more imperfect than most geologists believe",
+      "statement": "The geological record is far more imperfect than most geologists believe.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "lapse_of_time_inappreciable",
+      "quote": "the lapse of time has been so great as to be utterly inappreciable by the human intellect",
+      "statement": "The lapse of time has been so great as to be utterly inappreciable by the human intellect.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "all_species_have_changed",
+      "quote": "geology plainly declares that all species have changed; and they have changed in the manner which my theory requires, for they have changed slowly and in a graduated manner",
+      "statement": "Over long enough intervals of time, geology plainly declares that all species have changed, slowly and in a graduated manner.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "variability_due_to_reproductive_system",
+      "quote": "This seems to be mainly due to the reproductive system being eminently susceptible to changes in the conditions of life; so that this system, when not rendered impotent, fails to reproduce offspring exactly like the parent-form",
+      "statement": "Variability under domestication is mainly due to the reproductive system being eminently susceptible to changes in the conditions of life.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "struggle_from_geometrical_increase",
+      "quote": "The struggle for existence inevitably follows from the high geometrical ratio of increase which is common to all organic beings",
+      "statement": "The struggle for existence inevitably follows from the high geometrical ratio of increase common to all organic beings.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "more_born_than_survive",
+      "quote": "More individuals are born than can possibly survive. A grain in the balance will determine which individual shall live and which shall die",
+      "statement": "More individuals are born than can possibly survive, and a grain in the balance determines which individual shall live and which shall die.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "species_are_permanent_varieties",
+      "quote": "species are only strongly marked and permanent varieties, and that each species first existed as a variety",
+      "statement": "Species are only strongly marked and permanent varieties, and each species first existed as a variety.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "divergence_of_character_preserved",
+      "quote": "there will be a constant tendency in natural selection to preserve the most divergent offspring of any one species",
+      "statement": "There will be a constant tendency in natural selection to preserve the most divergent offspring of any one species.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "grouping_inexplicable_by_creation",
+      "quote": "This grand fact of the grouping of all organic beings seems to me utterly inexplicable on the theory of creation",
+      "statement": "The grand fact of the grouping of all organic beings in groups subordinate to groups seems utterly inexplicable on the theory of creation.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "selection_acts_by_slight_steps",
+      "quote": "As natural selection acts solely by accumulating slight, successive, favourable variations, it can produce no great or sudden modification; it can act only by very short and slow steps",
+      "statement": "Natural selection acts solely by accumulating slight, successive, favourable variations, and can produce no great or sudden modification.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "use_and_disuse_produces_effect",
+      "quote": "In both varieties and species, use and disuse seem to have produced some effect",
+      "statement": "In both varieties and species, use and disuse seem to have produced some effect on structure.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "extinction_follows_from_selection",
+      "quote": "The extinction of species and of whole groups of species, which has played so conspicuous a part in the history of the organic world, almost inevitably follows on the principle of natural selection",
+      "statement": "The extinction of species and whole groups almost inevitably follows on the principle of natural selection, for old forms will be supplanted by new and improved forms.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "generation_never_broken",
+      "quote": "Neither single species nor groups of species reappear when the chain of ordinary generation has once been broken",
+      "statement": "Neither single species nor groups of species reappear when the chain of ordinary generation has once been broken.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "affinities_from_community_of_descent",
+      "quote": "The real affinities of all organic beings are due to inheritance or community of descent",
+      "statement": "The real affinities of all organic beings are due to inheritance or community of descent.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "natural_system_is_genealogical",
+      "quote": "The natural system is a genealogical arrangement, in which we have to discover the lines of descent by the most permanent characters, however slight their vital importance may be",
+      "statement": "The natural system is a genealogical arrangement, in which we discover lines of descent by the most permanent characters.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "organism_to_organism_relation_most_important",
+      "quote": "the relation of organism to organism is the most important of all relations",
+      "statement": "The relation of organism to organism is the most important of all relations.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "disuse_reduces_useless_organs",
+      "quote": "Disuse, aided sometimes by natural selection, will often tend to reduce an organ, when it has become useless by changed habits or under changed conditions of life",
+      "statement": "Disuse, aided sometimes by natural selection, will often tend to reduce an organ when it has become useless by changed habits or conditions of life.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "animals_from_few_progenitors",
+      "quote": "I believe that animals have descended from at most only four or five progenitors, and plants from an equal or lesser number",
+      "statement": "Animals have descended from at most only four or five progenitors, and plants from an equal or lesser number.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "life_from_one_primordial_form",
+      "quote": "probably all the organic beings which have ever lived on this earth have descended from some one primordial form, into which life was first breathed",
+      "statement": "Probably all organic beings which have ever lived on this earth have descended from some one primordial form into which life was first breathed.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "no_clear_distinction_species_varieties",
+      "quote": "no clear distinction has been, or can be, drawn between species and well-marked varieties",
+      "statement": "No clear distinction has been, or can be, drawn between species and well-marked varieties.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch14",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "species_slowly_changing_by_accumulation",
+      "quote": "species have changed, and are still slowly changing by the preservation and accumulation of successive slight favourable variations",
+      "statement": "Species have changed, and are still slowly changing, by the preservation and accumulation of successive slight favourable variations.",
+      "support": 3
+    }
+  ]
+}

@@ -1,0 +1,236 @@
+{
+  "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+  "propositions": [
+    {
+      "name": "offspring_branch_of_parent",
+      "statement": "The offspring is not entirely new but a branch or elongation of the parent, since part of the embryon was part of the parent.",
+      "quote": "the offspring is termed a new animal, but is in truth a branch or elongation of the parent; since a part of the embryon-animal is, or was, a part of the parent",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "embryon_is_living_filament",
+      "statement": "The embryon, as secreted from the blood of the male, consists initially of a living filament with capabilities of irritation, sensation, volition, and association.",
+      "quote": "the embryon, as secreted from the blood of the male, would seem to consist of a living filament with certain capabilities of irritation, sensation, volition, and association",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "embryon_produced_by_male",
+      "statement": "The embryon is produced by the male, while the female supplies only the proper food and nidus.",
+      "quote": "the embryon is produced by the male, and the proper food and nidus by the female",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "primordium_simple_living_filament",
+      "statement": "The primordium or rudiment of the embryon consists of a simple living filament resembling a muscular fibre.",
+      "quote": "I conceive the primordium, or rudiment of the embryon, as secreted from the blood of the parent, to consist of a simple living filament as a muscular fibre",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "growth_by_apposition_not_distention",
+      "statement": "Changes in the embryon are formed not by elongation or distention of primeval stamina but by apposition of parts.",
+      "quote": "These changes I conceive to be formed not by elongation or distention of primeval stamina, but by apposition of parts",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "warm_blooded_from_one_filament",
+      "statement": "All warm-blooded animals have arisen from one living filament which the Great First Cause endued with animality.",
+      "quote": "would it be too bold to imagine, that all warm-blooded animals have arisen from one living filament, which THE GREAT First Cause endued with animality",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "similar_structure_common_origin",
+      "statement": "The similarity of structure of warm-blooded animals leads to the conclusion that they have been produced from a similar living filament.",
+      "quote": "one is led to conclude, that they have alike been produced from a similar living filament. In some this filament in its advance to maturity has acquired hands and fingers",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "perpetual_transformation_by_exertion",
+      "statement": "All animals undergo perpetual transformations produced in part by their own exertions in consequence of their desires, aversions, pleasures, and pains.",
+      "quote": "all animals undergo perpetual transformations; which are in part produced by their own exertions in consequence of their desires and aversions, of their pleasures and their pains",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "acquired_traits_transmitted",
+      "statement": "Many acquired forms or propensities are transmitted to posterity.",
+      "quote": "many of these acquired forms or propensities are transmitted to their posterity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "three_wants_shape_forms",
+      "statement": "The three great objects of desire that have changed the forms of animals by their exertions are lust, hunger, and security.",
+      "quote": "the three great objects of desire, which have changed the forms of many animals by their exertions to gratify them, are those of lust, hunger, and security",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "species_variety_from_mixture",
+      "statement": "The great variety of species now tenanting the earth may have originated from the mixture of a few natural orders.",
+      "quote": "it is not impossible, but the great variety of species of animals, which now tenant the earth, may have had their origin from the mixture of a few natural orders",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "prolific_mules_constitute_families",
+      "statement": "Animal and vegetable mules capable of continuing their species have done so and constitute the numerous families of animals and vegetables now existing.",
+      "quote": "those animal and vegetable mules, which could continue their species, have done so, and constitute the numerous families of animals and vegetables which now exist",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "imagination_belongs_to_male",
+      "statement": "The real power of imagination in the act of generation belongs solely to the male.",
+      "quote": "the real power of imagination, in the act of generation, belongs solely to the male",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "appetency_like_chemical_affinity",
+      "statement": "Animal appetencies are as essential to living organization as chemical affinities are to combinations of inanimate matter.",
+      "quote": "animal appetencies; which exist in every gland, and in every moving organ of the body, and are as essential to living organization as chemical affinities are to certain combinations of inanimate matter",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "new_irritability_with_organization",
+      "statement": "With each new organization or accretion of parts, a new kind of irritability commences.",
+      "quote": "With this new organization, or accretion of parts, new kinds of irritability may commence",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "world_gradually_generated",
+      "statement": "The world itself may have been generated rather than created, produced gradually from very small beginnings by the activity of its inherent principles.",
+      "quote": "the world itself might have been generated, rather than created; that is, it might have been gradually produced from very small beginnings, increasing by the activity of its inherent principles",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "female_supplies_nidus_sustenance",
+      "statement": "The embryon is produced solely by the male, while the female supplies nidus, sustenance, and oxygenation.",
+      "quote": "the embryon is produced solely by the male, and that the female supplies it with a proper nidus, with sustenance, and with oxygenation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "method_is_analogical_conjecture",
+      "statement": "On this intricate subject nothing but loose analogical conjectures can be had, which may nevertheless lead to future discoveries.",
+      "quote": "In this intricate subject nothing but loose analogical conjectures can be had, which may however lead to future discoveries",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "preformation_unsupported_by_analogy",
+      "statement": "The preformationist idea of miniature embryons is unsupported by any analogy and ascribes an inadmissible tenuity to organized matter.",
+      "quote": "This idea, besides its being unsupported by any analogy we are acquainted with, ascribes a greater tenuity to organized matter, than we can readily admit",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "mules_refute_preformation",
+      "statement": "Mule-animals partaking of both parents could not exist if the original embryon were a miniature preformed in the male semen.",
+      "quote": "how could mule-animals be produced, which partake of the forms of both the parents, if the original embryon was a miniature existing in the semen of the male parent",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "regeneration_shows_new_parts",
+      "statement": "Crab-fish reproduce whole limbs, and worms and snails reproduce heads or tails, showing parts can be formed anew rather than preexisting in miniature.",
+      "quote": "some animals, as the crab-fish, can reproduce a whole limb, as a leg which has been broken off; others, as worms and snails, can reproduce a head, or a tail",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "gradual_improvement_over_generations",
+      "statement": "Forms have been gradually produced during many generations by the creatures' perpetual endeavour to supply their wants and delivered to posterity with constant improvement.",
+      "quote": "All which seem to have been gradually produced during many generations by the perpetual endeavour of the creatures to supply the want of food, and to have been delivered to their posterity with constant improvement",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "deep_time_of_earth",
+      "statement": "The earth has existed for a great length of time, perhaps millions of ages before the commencement of the history of mankind.",
+      "quote": "in the great length of time, since the earth began to exist, perhaps millions of ages before the commencement of the history of mankind",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "domestication_alters_animals",
+      "statement": "Great changes have been introduced into animals by artificial or accidental cultivation, as in horses exercised for strength or swiftness.",
+      "quote": "the great changes introduced into various animals by artificial or accidental cultivation, as in horses, which we have exercised for the different purposes of strength or swiftness",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "total_transformation_of_livestock",
+      "statement": "Camels and sheep have undergone so total a transformation that we are ignorant from what species of wild animals they had their origin.",
+      "quote": "camels, and sheep; which have undergone so total a transformation, that we are now ignorant from what species of wild animals they had their origin",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "maternal_particles_confer_resemblance",
+      "statement": "The ultimate particles of animal matter prepared by the mother's glands resemble those prepared for her own nourishment, and so the embryon partly resembles the mother.",
+      "quote": "these ultimate particles of animal matter prepared by the glands of the mother may be supposed to resemble the similar ultimate particles, which were prepared for her own nourishment",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "one_filament_all_organic_life",
+      "statement": "One and the same kind of living filaments is and has been the cause of all organic life.",
+      "quote": "shall we conjecture that one and the same kind of living filaments is and has been the cause of all organic life?",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "sexual_generation_enables_change",
+      "statement": "Hermaphrodite insects that could reproduce without a mother would not have been capable of the change or improvement seen in all other animals.",
+      "quote": "hence those hermaphrodite insects, if they could have produced young without a mother, would not have been, capable of that change or improvement, which is seen in all other animals",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "buds_exactly_resemble_parents",
+      "statement": "The paternal offspring of vegetables, their buds and bulbs, exactly resemble their parents.",
+      "quote": "This paternal offspring of vegetables, I mean their buds and bulbs, is attended with a very curious circumstance; and that is, that they exactly resemble their parents",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "combat_selects_strongest_to_improve",
+      "statement": "The final cause of male contest is that the strongest and most active animal should propagate the species, which should thence become improved.",
+      "quote": "The final cause of this contest amongst the males seems to be, that the strongest and most active animal should propagate the species, which should thence become improved",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "inherent_activity_yields_improvement",
+      "statement": "The living filament possesses the faculty of continuing to improve by its own inherent activity and of delivering those improvements down by generation to its posterity.",
+      "quote": "possessing the faculty of continuing to improve by its own inherent activity, and of delivering down those improvements by generation to its posterity, world without end",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "chain_of_causes_from_creator",
+      "statement": "The progressive motions of objects form a chain of causes whose first link proceeded from the great Creator.",
+      "quote": "we may consider the progressive motions of objects as a chain of causes only; whose first link proceeded from the great Creator",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "unrestrained_parts_grow",
+      "statement": "All the parts of the body endeavour to grow or make additional parts throughout our lives but are restrained by the parts immediately containing them.",
+      "quote": "all the parts of the body endeavour to grow, or to make additional parts to themselves throughout our lives; but are restrained by the parts immediately containing them",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

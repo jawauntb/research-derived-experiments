@@ -1,0 +1,292 @@
+{
+  "doc_id": "darwin_1859_origin_ch14",
+  "propositions": [
+    {
+      "name": "descent_with_modification",
+      "statement": "Species arose by descent with modification through natural selection.",
+      "quote": "many and grave objections may be advanced against the theory of descent with modification through natural selection, I do not deny",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "organs_and_instincts_variable",
+      "statement": "All organs and instincts are variable to at least a slight degree.",
+      "quote": "that all organs and instincts are, in ever so slight a degree, variable",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "struggle_preserves_deviations",
+      "statement": "The struggle for existence leads to preservation of each profitable deviation of structure or instinct.",
+      "quote": "that there is a struggle for existence leading to the preservation of each profitable deviation of structure or instinct",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "natura_non_facit_saltum",
+      "statement": "Any organ, instinct, or being may have arrived at its present state by many graduated steps.",
+      "quote": "we ought to be extremely cautious in saying that any organ or instinct, or any whole being, could not have arrived at its present state by many graduated steps",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "hybrid_sterility_incidental",
+      "statement": "Sterility of first crosses between species is not a special endowment but incidental on constitutional differences in reproductive systems.",
+      "quote": "this sterility is no more a special endowment than is the incapacity of two trees to be grafted together, but that it is incidental on constitutional differences in the reproductive systems of the intercrossed species",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "domestication_eliminates_sterility",
+      "statement": "Domestication apparently tends to eliminate sterility.",
+      "quote": "most of the varieties which have been experimentised on have been produced under domestication; and as domestication apparently tends to eliminate sterility",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "common_descent_across_range",
+      "statement": "All individuals of a species and all species of a genus must have descended from common parents.",
+      "quote": "All the individuals of the same species, and all the species of the same genus, or even higher group, must have descended from common parents",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "intermediates_supplanted",
+      "statement": "Intermediate varieties are, in the long run, supplanted and exterminated by allied forms existing in greater numbers.",
+      "quote": "the intermediate varieties will, in the long run, be supplanted and exterminated",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "geological_record_imperfect",
+      "statement": "The geological record is far more imperfect than most geologists believe.",
+      "quote": "I can answer these questions and grave objections only on the supposition that the geological record is far more imperfect than most geologists believe",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "immense_lapse_of_time",
+      "statement": "The lapse of time has been so great as to be utterly inappreciable by the human intellect.",
+      "quote": "for the lapse of time has been so great as to be utterly inappreciable by the human intellect",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "all_species_have_changed",
+      "statement": "Geology declares that all species have changed slowly and in a graduated manner.",
+      "quote": "geology plainly declares that all species have changed; and they have changed in the manner which my theory requires, for they have changed slowly and in a graduated manner",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "reproductive_system_susceptible",
+      "statement": "Variability under domestication is due mainly to the reproductive system being susceptible to changes in the conditions of life.",
+      "quote": "This seems to be mainly due to the reproductive system being eminently susceptible to changes in the conditions of life",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "variability_governed_by_laws",
+      "statement": "Variability is governed by complex laws including correlation of growth, use and disuse, and direct action of physical conditions.",
+      "quote": "Variability is governed by many complex laws,—by correlation of growth, by use and disuse, and by the direct action of the physical conditions of life",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "modifications_inherited_long",
+      "statement": "Modifications can be inherited for long periods.",
+      "quote": "we may safely infer that the amount has been large, and that modifications can be inherited for long periods",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "man_selects_natures_variations",
+      "statement": "Man selects the variations given by nature and accumulates them in any desired manner.",
+      "quote": "man can and does select the variations given to him by nature, and thus accumulate them in any desired manner",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "domestic_principles_act_in_nature",
+      "statement": "The principles that have acted efficiently under domestication have acted under nature also.",
+      "quote": "There is no obvious reason why the principles which have acted so efficiently under domestication should not have acted under nature",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "geometrical_increase_universal",
+      "statement": "A high geometrical ratio of increase is common to all organic beings and inevitably produces a struggle for existence.",
+      "quote": "The struggle for existence inevitably follows from the high geometrical ratio of increase which is common to all organic beings",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "more_born_than_survive",
+      "statement": "More individuals are born than can possibly survive, so a grain in the balance decides which shall live.",
+      "quote": "More individuals are born than can possibly survive. A grain in the balance will determine which individual shall live and which shall die",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "individual_differences_exist",
+      "statement": "Individual differences exist among species under nature.",
+      "quote": "every one admits that there are at least individual differences in species under nature",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "variation_not_strictly_limited",
+      "statement": "The claim that variation under nature is strictly limited is incapable of proof.",
+      "quote": "It has often been asserted, but the assertion is quite incapable of proof, that the amount of variation under nature is a strictly limited quantity",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "species_are_permanent_varieties",
+      "statement": "Species are only strongly marked and permanent varieties, each first existing as a variety.",
+      "quote": "species are only strongly marked and permanent varieties, and that each species first existed as a variety",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "no_line_species_variety",
+      "statement": "No clear line of demarcation has been or can be drawn between species and well-marked varieties.",
+      "quote": "no clear distinction has been, or can be, drawn between species and well-marked varieties",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "new_varieties_supplant_older",
+      "statement": "New and improved varieties inevitably supplant and exterminate older, less improved, and intermediate varieties.",
+      "quote": "New and improved varieties will inevitably supplant and exterminate the older, less improved and intermediate varieties; and thus species are rendered to a large extent defined and distinct objects",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "dominant_groups_diverge",
+      "statement": "Dominant species of larger groups give birth to new dominant forms, so each large group tends to grow larger and more divergent.",
+      "quote": "Dominant species belonging to the larger groups tend to give birth to new and dominant forms; so that each large group tends to become still larger, and at the same time more divergent in character",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "grouping_inexplicable_by_creation",
+      "statement": "The grouping of all organic beings in groups subordinate to groups is inexplicable on the theory of creation.",
+      "quote": "This grand fact of the grouping of all organic beings seems to me utterly inexplicable on the theory of creation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "selection_slow_and_stepwise",
+      "statement": "Natural selection acts only by accumulating slight, successive, favourable variations and produces no great or sudden modification.",
+      "quote": "As natural selection acts solely by accumulating slight, successive, favourable variations, it can produce no great or sudden modification; it can act only by very short and slow steps",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "extinction_follows_selection",
+      "statement": "Extinction of species and whole groups follows almost inevitably from the principle of natural selection.",
+      "quote": "The extinction of species and of whole groups of species, which has played so conspicuous a part in the history of the organic world, almost inevitably follows on the principle of natural selection",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "generation_never_broken",
+      "statement": "Neither single species nor groups of species reappear once the chain of ordinary generation has been broken.",
+      "quote": "Neither single species nor groups of species reappear when the chain of ordinary generation has once been broken",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "affinities_from_common_descent",
+      "statement": "The real affinities of all organic beings are due to inheritance or community of descent.",
+      "quote": "The real affinities of all organic beings are due to inheritance or community of descent",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "natural_system_is_genealogical",
+      "statement": "The natural system is a genealogical arrangement whose lines of descent must be discovered by the most permanent characters.",
+      "quote": "The natural system is a genealogical arrangement, in which we have to discover the lines of descent by the most permanent characters, however slight their vital importance may be",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "homologous_bone_framework",
+      "statement": "The identical framework of bones across man, bat, porpoise, and horse is explained by descent with slight successive modifications.",
+      "quote": "The framework of bones being the same in the hand of a man, wing of a bat, fin of the porpoise, and leg of the horse,—the same number of vertebræ forming the neck of the giraffe and of the elephant",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rudimentary_organs_reveal_progenitors",
+      "statement": "Organs in a rudimentary condition show that an early progenitor had the organ in a fully developed state.",
+      "quote": "Organs in a rudimentary condition plainly show that an early progenitor had the organ in a fully developed state; and this in some instances necessarily implies an enormous amount of modification in the descendants",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "disuse_reduces_organs",
+      "statement": "Disuse, aided sometimes by natural selection, tends to reduce an organ when changed habits or conditions make it useless.",
+      "quote": "Disuse, aided sometimes by natural selection, will often tend to reduce an organ, when it has become useless by changed habits or under changed conditions of life",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "species_still_slowly_changing",
+      "statement": "Species have changed and are still slowly changing by the preservation and accumulation of successive slight favourable variations.",
+      "quote": "species have changed, and are still slowly changing by the preservation and accumulation of successive slight favourable variations",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "few_original_progenitors",
+      "statement": "Animals have descended from at most four or five progenitors, and plants from an equal or lesser number.",
+      "quote": "I believe that animals have descended from at most only four or five progenitors, and plants from an equal or lesser number",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "one_primordial_form",
+      "statement": "By analogy, all organic beings that ever lived on earth probably descended from some one primordial form into which life was first breathed.",
+      "quote": "probably all the organic beings which have ever lived on this earth have descended from some one primordial form, into which life was first breathed",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_cataclysm_broke_succession",
+      "statement": "The ordinary succession by generation has never once been broken and no cataclysm has desolated the whole world.",
+      "quote": "we may feel certain that the ordinary succession by generation has never once been broken, and that no cataclysm has desolated the whole world",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "species_produced_by_secondary_causes",
+      "statement": "Species are produced and exterminated by slowly acting and still existing causes, not by miraculous acts of creation or catastrophes.",
+      "quote": "As species are produced and exterminated by slowly acting and still existing causes, and not by miraculous acts of creation and by catastrophes",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "organism_relation_most_important",
+      "statement": "The mutual relation of organism to organism is the most important of all causes of organic change.",
+      "quote": "the most important of all causes of organic change is one which is almost independent of altered and perhaps suddenly altered physical conditions, namely, the mutual relation of organism to organism",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "consecutive_fossils_more_related",
+      "statement": "Fossils from consecutive formations are invariably more closely related to each other than to fossils from formations distant in time.",
+      "quote": "We clearly see this in the fossil remains from consecutive formations invariably being much more closely related to each other, than are the fossils from formations distant from each other in time",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "endless_forms_evolved",
+      "statement": "From so simple a beginning endless forms most beautiful and most wonderful have been and are being evolved.",
+      "quote": "from so simple a beginning endless forms most beautiful and most wonderful have been, and are being, evolved",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

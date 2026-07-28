@@ -1,0 +1,250 @@
+{
+  "doc_id": "darwin_1859_origin_introduction",
+  "propositions": [
+    {
+      "name": "species_not_immutable",
+      "statement": "Species are not immutable.",
+      "quote": "I am fully convinced that species are not immutable; but that those belonging to what are called the same genera are lineal descendants of some other and generally extinct species",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "congeneric_share_ancestor",
+      "statement": "Species of the same genus are lineal descendants of some other, generally extinct, species.",
+      "quote": "those belonging to what are called the same genera are lineal descendants of some other and generally extinct species, in the same manner as the acknowledged varieties of any one species are the descendants of that species",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "varieties_descend_from_species",
+      "statement": "Acknowledged varieties of a species are descendants of that species.",
+      "quote": "in the same manner as the acknowledged varieties of any one species are the descendants of that species",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "independent_creation_erroneous",
+      "statement": "The view that each species has been independently created is erroneous.",
+      "quote": "the view which most naturalists entertain, and which I formerly entertained—namely, that each species has been independently created—is erroneous",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "natural_selection_main_means",
+      "statement": "Natural Selection has been the main but not exclusive means of modification.",
+      "quote": "I am convinced that Natural Selection has been the main but not exclusive means of modification",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "species_descend_like_varieties",
+      "statement": "Each species has descended, like varieties, from other species rather than being independently created.",
+      "quote": "each species had not been independently created, but had descended, like varieties, from other species",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "external_conditions_insufficient",
+      "statement": "External conditions alone cannot account for adapted structure such as that of the woodpecker.",
+      "quote": "it is preposterous to attribute to mere external conditions, the structure, for instance, of the woodpecker, with its feet, tail, beak, and tongue, so admirably adapted to catch insects under the bark of trees",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "coadaptation_needs_explanation",
+      "statement": "The perfection of structure and coadaptation of species must itself be explained.",
+      "quote": "how the innumerable species inhabiting this world have been modified, so as to acquire that perfection of structure and coadaptation which most justly excites our admiration",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "mistletoe_multi_relations",
+      "statement": "The mistletoe's structure depends on relations with several distinct organic beings, not on external conditions alone.",
+      "quote": "the misseltoe, which draws its nourishment from certain trees, which has seeds that must be transported by certain birds, and which has flowers with separate sexes",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "vestiges_no_explanation",
+      "statement": "Sudden birth of perfected forms leaves coadaptations unexplained.",
+      "quote": "this assumption seems to me to be no explanation, for it leaves the case of the coadaptations of organic beings to each other and to their physical conditions of life, untouched and unexplained",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "hereditary_modification_possible",
+      "statement": "A large amount of hereditary modification is at least possible.",
+      "quote": "We shall thus see that a large amount of hereditary modification is at least possible; and, what is equally or more important, we shall see how great is the power of man",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "mans_selection_accumulates_variations",
+      "statement": "Man can accumulate successive slight variations by Selection.",
+      "quote": "we shall see how great is the power of man in accumulating by his Selection successive slight variations",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "species_variable_in_nature",
+      "statement": "Species are variable in a state of nature.",
+      "quote": "I will then pass on to the variability of species in a state of nature; but I shall, unfortunately, be compelled to treat this subject far too briefly",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "struggle_from_geometrical_increase",
+      "statement": "A struggle for existence inevitably follows from the high geometrical powers of increase of organic beings.",
+      "quote": "the Struggle for Existence amongst all organic beings throughout the world, which inevitably follows from their high geometrical powers of increase",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "malthus_applied_universally",
+      "statement": "The doctrine of Malthus applies to the whole animal and vegetable kingdoms.",
+      "quote": "This is the doctrine of Malthus, applied to the whole animal and vegetable kingdoms",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "overproduction_of_offspring",
+      "statement": "Many more individuals of each species are born than can possibly survive.",
+      "quote": "As many more individuals of each species are born than can possibly survive; and as, consequently, there is a frequently recurring struggle for existence",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "profitable_variation_selected",
+      "statement": "Any being that varies slightly in a manner profitable to itself under complex conditions has a better chance of surviving, and is thus naturally selected.",
+      "quote": "any being, if it vary however slightly in any manner profitable to itself, under the complex and sometimes varying conditions of life, will have a better chance of surviving, and thus be naturally selected",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "inheritance_propagates_variety",
+      "statement": "By the strong principle of inheritance, any selected variety tends to propagate its new and modified form.",
+      "quote": "From the strong principle of inheritance, any selected variety will tend to propagate its new and modified form",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "selection_causes_extinction",
+      "statement": "Natural Selection almost inevitably causes much Extinction of the less improved forms of life.",
+      "quote": "we shall then see how Natural Selection almost inevitably causes much Extinction of the less improved forms of life, and induces what I have called Divergence of Character",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "selection_induces_divergence",
+      "statement": "Natural Selection induces Divergence of Character.",
+      "quote": "Natural Selection almost inevitably causes much Extinction of the less improved forms of life, and induces what I have called Divergence of Character",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "laws_of_variation_exist",
+      "statement": "There are complex and little known laws of variation and of correlation of growth.",
+      "quote": "In the next chapter I shall discuss the complex and little known laws of variation and of correlation of growth",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "transitions_simple_to_complex",
+      "statement": "A simple being or simple organ can be changed and perfected into a highly developed being or elaborately constructed organ.",
+      "quote": "the difficulties of transitions, or in understanding how a simple being or a simple organ can be changed and perfected into a highly developed being or elaborately constructed organ",
+      "kind": "required_by_argument",
+      "definitional": true
+    },
+    {
+      "name": "instinct_is_mental_power",
+      "statement": "Instinct is the mental powers of animals.",
+      "quote": "secondly, the subject of Instinct, or the mental powers of animals; thirdly, Hybridism, or the infertility of species and the fertility of varieties when intercrossed",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "hybridism_distinguishes_species_varieties",
+      "statement": "Species are infertile and varieties are fertile when intercrossed.",
+      "quote": "Hybridism, or the infertility of species and the fertility of varieties when intercrossed",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "geological_record_imperfect",
+      "statement": "The Geological Record is imperfect.",
+      "quote": "fourthly, the imperfection of the Geological Record. In the next chapter I shall consider the geological succession of organic beings throughout time",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "geological_succession_of_beings",
+      "statement": "Organic beings have a geological succession throughout time.",
+      "quote": "In the next chapter I shall consider the geological succession of organic beings throughout time; in the eleventh and twelfth, their geographical distribution throughout space",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "beings_have_geographical_distribution",
+      "statement": "Organic beings have geographical distribution throughout space.",
+      "quote": "in the eleventh and twelfth, their geographical distribution throughout space; in the thirteenth, their classification or mutual affinities, both when mature and in an embryonic condition",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "classification_reflects_affinities",
+      "statement": "Classification of organic beings reflects mutual affinities, both when mature and embryonic.",
+      "quote": "in the thirteenth, their classification or mutual affinities, both when mature and in an embryonic condition",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "embryological_relations_exist",
+      "statement": "Organic beings stand in embryological relations to one another.",
+      "quote": "a naturalist, reflecting on the mutual affinities of organic beings, on their embryological relations, their geographical distribution, geological succession, and other such facts",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "species_ranges_vary",
+      "statement": "One species may range widely and be numerous while another allied species has a narrow range and is rare.",
+      "quote": "Who can explain why one species ranges widely and is very numerous, and why another allied species has a narrow range and is rare",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "relations_determine_future_modification",
+      "statement": "Mutual relations among beings determine the present welfare and future modification of every inhabitant of the world.",
+      "quote": "these relations are of the highest importance, for they determine the present welfare, and, as I believe, the future success and modification of every inhabitant of this world",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "domestication_clue_to_modification",
+      "statement": "Study of domesticated animals and cultivated plants offers the best clue to the problem of modification.",
+      "quote": "a careful study of domesticated animals and of cultivated plants would offer the best chance of making out this obscure problem",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "origin_of_species_investigable",
+      "statement": "The origin of species is a question on which facts can throw light.",
+      "quote": "These facts seemed to me to throw some light on the origin of species—that mystery of mysteries, as it has been called by one of our greatest philosophers",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "past_present_geologically_related",
+      "statement": "Present and past inhabitants of a continent stand in geological relations to one another.",
+      "quote": "certain facts in the distribution of the inhabitants of South America, and in the geological relations of the present to the past inhabitants of that continent",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "wallace_same_conclusions",
+      "statement": "Wallace has arrived at almost exactly the same general conclusions on the origin of species.",
+      "quote": "Mr. Wallace, who is now studying the natural history of the Malay archipelago , has arrived at almost exactly the same general conclusions that I have on the origin of species",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

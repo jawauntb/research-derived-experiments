@@ -1,0 +1,243 @@
+{
+  "doc_id": "wallace_1855_sarawak",
+  "propositions": [
+    {
+      "name": "law_of_new_species",
+      "statement": "Every species has come into existence coincident both in space and time with a pre-existing closely allied species.",
+      "quote": "Every species has come into existence coincident both in space and time with a pre-existing closely allied species.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "earth_undergone_successive_changes",
+      "statement": "During an immense unknown period the surface of the earth has undergone successive changes, land sinking and rising.",
+      "quote": "during an immense, but unknown period, the surface of the earth has undergone successive changes; land has sunk beneath the ocean, while fresh land has risen up from it",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "organic_life_gradual_alteration",
+      "statement": "The organic life of the earth has undergone a corresponding gradual but complete alteration during geological change.",
+      "quote": "during the whole series the organic life of the earth has undergone a corresponding alteration. This alteration also has been gradual, but complete",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "complete_species_turnover",
+      "statement": "After a certain interval not a single species from the commencement survives, and this renewal has occurred several times.",
+      "quote": "after a certain interval not a single species existing which had lived at the commencement of the period. This complete renewal of the forms of life also appears to have occurred several times",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "gradual_extinction_and_creation",
+      "statement": "The present organic world is derived by a natural process of gradual extinction and creation of species from the latest geological periods.",
+      "quote": "the present condition of the organic world is clearly derived by a natural process of gradual extinction and creation of species from that of the latest geological periods",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "affinity_tracks_geography",
+      "statement": "The most closely allied species are found in the same or adjoining localities so the natural sequence by affinity is geographical.",
+      "quote": "the most closely allied species are found in the same locality or in closely adjoing localities; and that therefore the natural sequence of the species by affinity is also geographical",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "time_distribution_mirrors_space",
+      "statement": "The distribution of the organic world in time is very similar to its present distribution in space.",
+      "quote": "The distribution of the organic world in time is very similar to its present distribution in space.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_species_appears_twice",
+      "statement": "The life of a species or genus in geology has not been interrupted; no group or species has come into existence twice.",
+      "quote": "in geology the life of a species or genus has not been interrupted. In other words, no group or species has come into existence twice",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "each_species_has_antitype",
+      "statement": "Each species had for its immediate antitype a closely allied species existing at the time of its origin.",
+      "quote": "each one having had for its immediate antitype a closely allied species existing at the time of its origin",
+      "kind": "required_by_argument",
+      "definitional": true
+    },
+    {
+      "name": "single_descendant_line_simple",
+      "statement": "So long as each species has had but one new species formed on its model, the line of affinities will be simple and straight.",
+      "quote": "so long as each species has had but one new species formed on its model, the line of affinities will be simple, and may be represented by placing the several species in direct succession in a straight line",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "branched_line_from_common_antitype",
+      "statement": "If two or more species have been independently formed on the plan of a common antitype, the series of affinities is compound and forked.",
+      "quote": "if two or more species have been independently formed on the plan of a common antitype, then the series of affinities will be compound, and can only be represented by a forked or many-branched line",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "analogy_becomes_affinity_backward",
+      "statement": "Going back along parallel or divergent series toward the common antitype, the analogy between two groups becomes an affinity.",
+      "quote": "as we go back along the parallel or divergent series, towards the common antitype, the analogy which existed between the two groups becomes an affinity",
+      "kind": "required_by_argument",
+      "definitional": true
+    },
+    {
+      "name": "isolation_produces_peculiar_fauna",
+      "statement": "A country with peculiar species, genera, and families results from long isolation sufficient for many series of species to have been created.",
+      "quote": "A country having species, genera, and whole families peculiar to it, will be the necessary result of its having been isolated for a long period, sufficient for many series of species to have been created",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "galapagos_peopled_by_currents",
+      "statement": "The Galapagos were first peopled by winds and currents at a period remote enough for original species to die out and modified prototypes to remain.",
+      "quote": "They must have been first peopled, like other newly-formed islands, by the action of winds and currents, and at a period sufficiently remote to have had the original species die out, and the modified prototypes only remain",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "recent_islands_lack_peculiar_species",
+      "statement": "No geologically recent island is known to possess peculiar generic or family groups or many peculiar species.",
+      "quote": "no example is known of an island which can be proved geologically to be of very recent origin (late in the Tertiary, for instance), and yet possesses generic or family groups, or even many species peculiar to itself",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "sunda_shelf_former_continent",
+      "statement": "The shallow sea between Malacca, Java, Sumatra and Borneo was probably a continent in an early epoch and became submerged as volcanic ranges rose.",
+      "quote": "The shallow sea between the Peninsula of Malacca, Java, Sumatra and Borneo was probably a continent or large island at an early epoch, and may have become submerged as the volcanic ranges of Java and Sumatra were elevated",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "mountains_separate_faunas",
+      "statement": "When a mountain range has been elevated for a long geological period, the species of its two sides will often be very different.",
+      "quote": "When a range of mountains has attained a great elevation, and has so remained during a long geological period, the species of the two sides at and near their bases will be often very different",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "britain_recent_no_peculiar_species",
+      "statement": "Britain's separation from the continent is geologically very recent so scarcely a species is peculiar to it.",
+      "quote": "Our own island is an example of this, its separation from the continent being geologically very recent, and we have consequently scarcely a species which is peculiar to it",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "creation_regulated_by_law",
+      "statement": "The observed phenomena of allied species in geographical proximity could not exist without a law regulating their creation and dispersion.",
+      "quote": "They could not be as they are, had no law, regulated their creation and dispersion",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "law_necessitates_facts",
+      "statement": "The law not merely explains but necessitates the observed facts, while geological changes account for exceptions.",
+      "quote": "The law here enunciated not merely explains, but necessitates the facts we see to exist, while the vast and long-continued geological changes of the earth readily account for the exceptions",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "geological_analogy_with_geography",
+      "statement": "Geological distribution phenomena are exactly analogous to geographical ones, with closely allied species found in the same beds.",
+      "quote": "The phænomena of geological distribution are exactly analogous to those of geography. Closely allied species are found associated in the same beds",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "extinction_from_modified_conditions",
+      "statement": "Geological changes must occasionally have modified external conditions enough to render the existence of certain species impossible.",
+      "quote": "Geological changes, however gradual, must occasionally have modified external conditions to such an extent as to have rendered the existence of certain species impossible",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "gradual_dying_out_extinction",
+      "statement": "Extinction is mostly a gradual dying-out, though sometimes sudden destruction of a species of limited range occurs.",
+      "quote": "The extinction would in most cases be affected by a gradual dying-out, but in some instances there might have been a sudden destruction of a species of limited range",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "general_but_not_detailed_progression",
+      "statement": "The succession of life shows a general but not detailed progression, with Mollusca and Radiata existing before Vertebrata.",
+      "quote": "The admitted facts seem to show that there has been a general, but not a detailed progression. Mollusca and Radiata existed before Vertebrata",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "theory_of_gradual_change",
+      "statement": "The hypothesis is essentially not a theory of progression but a theory of gradual change.",
+      "quote": "though it may appear to some readers essentially a theory of progression, it is in reality only one of gradual change",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "lower_forms_survive_as_antitypes",
+      "statement": "When higher groups become extinct, lower forms that resisted the modified physical conditions serve as antitypes for new races.",
+      "quote": "whenever any of the higher groups have become nearly or quite extinct, the lower forms which have better resisted the modified physical conditions have served as the antitypes on which to found the new races",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "quiescence_favors_creation",
+      "statement": "A long period of quiescence or stability in physical conditions is most favourable to the abundance of organic life.",
+      "quote": "a long period of quiescence or stability in the physical conditions of a district would be most favourable to the existence of organic life in the greatest abundance",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rapid_change_unfavorable",
+      "statement": "A physical change of a district, if rapid or of great amount, would be highly unfavourable to the existence of individuals.",
+      "quote": "a change in the physical conditions of a district, even small in amount, if rapid, or even gradual, if to a great amount, would be highly unfavourable to the existence of individuals",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fossil_record_fragmentary",
+      "statement": "Our knowledge of the whole series of former inhabitants of the earth is necessarily most imperfect and fragmentary.",
+      "quote": "our knowledge of the whole series of the former inhabitants of the earth is necessarily most imperfect and fragmentary",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "formations_buried_beneath_ocean",
+      "statement": "Whole formations containing the records of vast geological periods are entirely buried beneath the ocean and beyond our reach.",
+      "quote": "whole formations containing the records of vast geological periods are: entirely buried beneath the ocean, and for ever beyond our reach",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rudiments_are_necessary_results",
+      "statement": "There must be a cause for rudimentary organs; they must be the necessary results of some great natural law.",
+      "quote": "There must be a cause for them; they must be the necessary results of some great natural law",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "law_of_gradual_change",
+      "statement": "The great law regulating the peopling of the earth is that every change shall be gradual, no new creature widely differing from anything before existing.",
+      "quote": "the great law which has regulated the peopling of the earth with animal and vegetable life is, that every change shall be gradual; that no new creature shall be formed widely differing from anything before existing",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "penguin_wing_antitypal_sketch",
+      "statement": "The scaly flapper of the penguin is a remaining antitypal sketch of a wing, and hidden limbs were necessary gradations before full locomotive limbs.",
+      "quote": "We still see remaining an antitypal sketch of a wing adapted for flight in the scaly flapper of the penguin, and limbs first concealed beneath the skin, and then weakly protruding from it",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "gaps_would_soften_with_intermediates",
+      "statement": "Great gaps between fishes, reptiles, birds and mammals would be softened by intermediate groups, showing an unbroken harmonious system.",
+      "quote": "The great gaps that exist between fishes, reptiles, birds and mammals would then, no doubt, be softened down by intermediate groups, and the whole organic world would be seen to be an unbroken and harmonious system",
+      "kind": "required_by_argument",
+      "definitional": false
+    }
+  ]
+}

@@ -1,0 +1,257 @@
+{
+  "doc_id": "darwin_1845_beagle_ch17",
+  "propositions": [
+    {
+      "name": "first_appearance_new_beings",
+      "statement": "The first appearance of new beings on this earth is the great fact, the mystery of mysteries, toward which the Galapagos facts bring the observer near.",
+      "quote": "we seem to be brought somewhat near to that great fact—that mystery of mysteries—the first appearance of new beings on this earth",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aboriginal_creations_exist",
+      "statement": "Most organic productions of the archipelago are aboriginal creations found nowhere else.",
+      "quote": "Most of the organic productions are aboriginal creations, found nowhere else",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "climate_food_soil_produce_variety",
+      "statement": "New and peculiar climate, food, and soil can produce a variety of a species from an imported stock.",
+      "quote": "this rat is merely a variety, produced by the new and peculiar climate, food, and soil, to which it has been subjected",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "species_taken_and_modified",
+      "statement": "From an original paucity of birds one species may have been taken and modified for different ends.",
+      "quote": "one might really fancy that from an original paucity of birds in this archipelago, one species had been taken and modified for different ends",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "buzzard_induced_to_office",
+      "statement": "A bird originally a buzzard may have been induced here to undertake the office of the carrion-feeding Polybori.",
+      "quote": "it might be fancied that a bird originally a buzzard, had been induced here to undertake the office of the carrion-feeding Polybori of the American continent",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "islands_geologically_recent_seabed",
+      "statement": "Within a geologically recent period the unbroken ocean spread over the sites now occupied by the islands.",
+      "quote": "within a period, geologically recent, the unbroken ocean was here spread out",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "created_on_american_types",
+      "statement": "The aboriginal inhabitants were created on American types of organization though placed physically far from America.",
+      "quote": "why were they created on American types of organization? It is probable that the islands of the Cape de Verd group resemble",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "similar_conditions_unlike_inhabitants",
+      "statement": "Islands with closely similar physical conditions bear totally unlike aboriginal inhabitants, so physical conditions do not determine the type.",
+      "quote": "the islands of the Cape de Verd group resemble, in all their physical conditions, far more closely the Galapagos Islands than these latter physically resemble the coast of America; yet the aboriginal inhabitants of the two groups are totally unlike",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fixed_hereditary_instinct_refuge",
+      "statement": "A fixed and hereditary instinct directs the marine lizard to the shore as its place of safety.",
+      "quote": "urged by a fixed and hereditary instinct that the shore is its place of safety, whatever the emergency may be, it there takes refuge",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "wildness_becomes_hereditary",
+      "statement": "Wildness toward man is not acquired by individual birds in a short time but becomes hereditary over successive generations.",
+      "quote": "it is not acquired by individual birds in a short time, even when much persecuted; but that in the course of successive generations it becomes hereditary",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "domesticated_habits_hereditary",
+      "statement": "In domesticated animals new mental habits or instincts are commonly acquired and rendered hereditary.",
+      "quote": "With domesticated animals we are accustomed to see new mental habits or instincts acquired and rendered hereditary",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "islands_never_united",
+      "statement": "The profound ocean depth and recent volcanic origin make it highly unlikely the islands were ever united to the continent.",
+      "quote": "the profound depth of the ocean between the islands, and their apparently recent (in a geological sense) volcanic origin, render it highly unlikely that they were ever united",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "currents_separate_islands",
+      "statement": "Strong sea currents separate the islands so far as transportal by the sea is concerned.",
+      "quote": "very strong currents of the sea running in a westerly and W.N.W. direction must separate, as far as transportal by the sea is concerned, the southern islands from the northern ones",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "creative_force_on_islands",
+      "statement": "An astonishing amount of creative force has been displayed on these small, barren, and rocky islands.",
+      "quote": "one is astonished at the amount of creative force, if such an expression may be used, displayed on these small, barren, and rocky islands",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "different_islands_different_beings",
+      "statement": "The different islands to a considerable extent are inhabited by a different set of beings.",
+      "quote": "the different islands to a considerable extent are inhabited by a different set of beings",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "representative_species_analogous_role",
+      "statement": "Representative species of the same genera occupy analogous situations, filling the same place in the natural economy of the archipelago.",
+      "quote": "these species having the same general habits, occupying analogous situations, and obviously filling the same place in the natural economy of this archipelago",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "halting_place_new_forms",
+      "statement": "The Galapagos Archipelago is a halting-place where many new forms have been created and where two conchological provinces have each sent colonists.",
+      "quote": "at the Galapagos Archipelago we have a halting-place, where many new forms have been created",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "species_may_be_only_races",
+      "statement": "Some representative species, at least among tortoises and birds, may hereafter prove to be only well-marked races.",
+      "quote": "It may be suspected that some of these representative species, at least in the case of the tortoise and of some of the birds, may hereafter prove to be only well-marked races",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aboriginal_inferred_from_distribution",
+      "statement": "Occurrence on all or nearly all the islands, including small waterless ones, is grounds to infer aboriginal status.",
+      "quote": "There can be little doubt that this tortoise is an aboriginal inhabitant of the Galapagos; for it is found on all, or nearly all, the islands, even on some of the smaller ones where there is no water",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "transportation_in_vessel",
+      "statement": "A native mouse could plausibly have been transported in a vessel, since analogous instances have been observed.",
+      "quote": "for I have seen, in a most unfrequented part of the Pampas, a native mouse living in the roof of a newly-built hovel, and therefore its transportation in a vessel is not improbable",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "eggs_shells_transported_salt_water",
+      "statement": "Calcareous-shelled lizard eggs can be transported through salt-water more easily than the slimy spawn of frogs, explaining the absence of frogs on oceanic islands.",
+      "quote": "by the greater facility with which the eggs of lizards, protected by calcareous shells, might be transported through salt-water, than could the slimy spawn of frogs",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aquatic_forms_less_peculiar",
+      "statement": "Aquatic forms, marine or fresh-water, are less peculiar at any given point of the earth's surface than terrestrial forms of the same classes.",
+      "quote": "this law of aquatic forms, whether marine or fresh-water, being less peculiar at any given point of the earth's surface than the terrestrial forms of the same classes",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "marked_relationship_to_america",
+      "statement": "Aboriginal inhabitants show a marked relationship with those of America despite 500-600 miles of open ocean.",
+      "quote": "yet all show a marked relationship with those of America, though separated from that continent by an open space of ocean, between 500 and 600 miles in width",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "archipelago_zoologically_america",
+      "statement": "The archipelago, though in the Pacific Ocean, is zoologically part of America.",
+      "quote": "we see that this archipelago, though standing in the Pacific Ocean, is zoologically part of America",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "satellite_receiving_stray_colonists",
+      "statement": "The archipelago is a satellite attached to America whence it has derived a few stray colonists.",
+      "quote": "The archipelago is a little world within itself, or rather a satellite attached to America, whence it has derived a few stray colonists",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "islands_formed_volcanic_rocks",
+      "statement": "All the islands are formed of volcanic rocks, with only trifling exceptions.",
+      "quote": "They are all formed of volcanic rocks; a few fragments of granite curiously glazed and altered by the heat, can hardly be considered as an exception",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "created_in_center_and_dispersed",
+      "statement": "The terrestrial Amblyrhynchus appears as if created in the centre of the archipelago and thence dispersed only to a certain distance.",
+      "quote": "It would appear as if it had been created in the centre of the archipelago, and thence had been dispersed only to a certain distance",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "wildness_is_particular_instinct",
+      "statement": "The wildness of birds toward man is a particular instinct directed against him and not general caution.",
+      "quote": "the wildness of birds with regard to man, is a particular instinct directed against him",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "new_beast_of_prey_havoc",
+      "statement": "Introduction of a new beast of prey must cause havoc before the instincts of indigenous inhabitants become adapted to it.",
+      "quote": "what havoc the introduction of any new beast of prey must cause in a country, before the instincts of the indigenous inhabitants have become adapted to the stranger's craft or power",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "perfect_gradation_of_beaks",
+      "statement": "There is a perfect gradation in the size of the beaks in the different species of Geospiza.",
+      "quote": "the perfect gradation in the size of the beaks in the different species of Geospiza",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "coloring_not_from_heat_or_light",
+      "statement": "The usual gaudy colouring of intertropical productions is not related to the heat or light of those zones but perhaps to conditions of existence being generally favourable to life.",
+      "quote": "the usual gaudy colouring of the intertropical productions, is not related either to the heat or light of those zones, but to some other cause, perhaps to the conditions of exbtence being generally favourable to life",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "secondary_epochs_lizards_swarmed",
+      "statement": "In the Secondary epochs herbivorous and carnivorous lizards of great dimensions swarmed on land and in the sea.",
+      "quote": "The geologist on hearing this will probably refer back in his mind to the Secondary epochs, when lizards, some herbivorous, some carnivorous, and of dimensions comparable only with our existing whales",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "species_versus_race_distinction",
+      "statement": "Some closely allied forms would be ranked only as well-marked races or varieties while others, like Mimus trifasciatus, are very distinct species.",
+      "quote": "These two latter species are closely allied, and would by some ornithologists be considered as only well-marked races or varieties; but the Mimus trifasciatus is very distinct",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "archipelago_distinct_botanical_province",
+      "statement": "The proportion of new flowering plants is sufficient to make the archipelago a distinct botanical province.",
+      "quote": "The proportion of 100 flowering plants out of 185 (or 175 excluding the imported weeds) being new, is sufficient, I conceive, to make the Galapagos Archipelago a distinct botanical province",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "satellites_organically_distinct",
+      "statement": "The islands form a group of satellites physically similar yet organically distinct, though intimately related to each other and to America.",
+      "quote": "a group of satellites, physically similar, organically distinct, yet intimately related to each other, and all related in a marked, though much lesser degree, to the great American continent",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "amblyrhynchus_confined_to_archipelago",
+      "statement": "The remarkable genus of lizards Amblyrhynchus is confined to this archipelago.",
+      "quote": "The Amblyrhynchus, a remarkable genus of lizards, is confined to this archipelago",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

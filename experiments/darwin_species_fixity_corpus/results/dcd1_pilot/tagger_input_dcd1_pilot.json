@@ -1,0 +1,1151 @@
+{
+  "cut_year": 1859,
+  "propositions": [
+    {
+      "id": "darwin_1845_beagle_ch17:first_appearance_new_beings",
+      "statement": "The first appearance of new beings on this earth is the great fact, the mystery of mysteries, toward which the Galapagos facts bring the observer near.",
+      "quote": "we seem to be brought somewhat near to that great fact\u2014that mystery of mysteries\u2014the first appearance of new beings on this earth",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1845_beagle_ch17:aboriginal_creations_exist",
+      "statement": "Most organic productions of the archipelago are aboriginal creations found nowhere else.",
+      "quote": "Most of the organic productions are aboriginal creations, found nowhere else",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1845_beagle_ch17:climate_food_soil_produce_variety",
+      "statement": "New and peculiar climate, food, and soil can produce a variety of a species from an imported stock.",
+      "quote": "this rat is merely a variety, produced by the new and peculiar climate, food, and soil, to which it has been subjected",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1845_beagle_ch17:species_taken_and_modified",
+      "statement": "From an original paucity of birds one species may have been taken and modified for different ends.",
+      "quote": "one might really fancy that from an original paucity of birds in this archipelago, one species had been taken and modified for different ends",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1845_beagle_ch17:buzzard_induced_to_office",
+      "statement": "A bird originally a buzzard may have been induced here to undertake the office of the carrion-feeding Polybori.",
+      "quote": "it might be fancied that a bird originally a buzzard, had been induced here to undertake the office of the carrion-feeding Polybori of the American continent",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1845_beagle_ch17:islands_geologically_recent_seabed",
+      "statement": "Within a geologically recent period the unbroken ocean spread over the sites now occupied by the islands.",
+      "quote": "within a period, geologically recent, the unbroken ocean was here spread out",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1845_beagle_ch17:created_on_american_types",
+      "statement": "The aboriginal inhabitants were created on American types of organization though placed physically far from America.",
+      "quote": "why were they created on American types of organization? It is probable that the islands of the Cape de Verd group resemble",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1845_beagle_ch17:fixed_hereditary_instinct_refuge",
+      "statement": "A fixed and hereditary instinct directs the marine lizard to the shore as its place of safety.",
+      "quote": "urged by a fixed and hereditary instinct that the shore is its place of safety, whatever the emergency may be, it there takes refuge",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1845_beagle_ch17:wildness_becomes_hereditary",
+      "statement": "Wildness toward man is not acquired by individual birds in a short time but becomes hereditary over successive generations.",
+      "quote": "it is not acquired by individual birds in a short time, even when much persecuted; but that in the course of successive generations it becomes hereditary",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1845_beagle_ch17:domesticated_habits_hereditary",
+      "statement": "In domesticated animals new mental habits or instincts are commonly acquired and rendered hereditary.",
+      "quote": "With domesticated animals we are accustomed to see new mental habits or instincts acquired and rendered hereditary",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1845_beagle_ch17:islands_never_united",
+      "statement": "The profound ocean depth and recent volcanic origin make it highly unlikely the islands were ever united to the continent.",
+      "quote": "the profound depth of the ocean between the islands, and their apparently recent (in a geological sense) volcanic origin, render it highly unlikely that they were ever united",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1845_beagle_ch17:currents_separate_islands",
+      "statement": "Strong sea currents separate the islands so far as transportal by the sea is concerned.",
+      "quote": "very strong currents of the sea running in a westerly and W.N.W. direction must separate, as far as transportal by the sea is concerned, the southern islands from the northern ones",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1845_beagle_ch17:creative_force_on_islands",
+      "statement": "An astonishing amount of creative force has been displayed on these small, barren, and rocky islands.",
+      "quote": "one is astonished at the amount of creative force, if such an expression may be used, displayed on these small, barren, and rocky islands",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1845_beagle_ch17:different_islands_different_beings",
+      "statement": "The different islands to a considerable extent are inhabited by a different set of beings.",
+      "quote": "the different islands to a considerable extent are inhabited by a different set of beings",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1845_beagle_ch17:species_may_be_only_races",
+      "statement": "Some representative species, at least among tortoises and birds, may hereafter prove to be only well-marked races.",
+      "quote": "It may be suspected that some of these representative species, at least in the case of the tortoise and of some of the birds, may hereafter prove to be only well-marked races",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1845_beagle_ch17:eggs_shells_transported_salt_water",
+      "statement": "Calcareous-shelled lizard eggs can be transported through salt-water more easily than the slimy spawn of frogs, explaining the absence of frogs on oceanic islands.",
+      "quote": "by the greater facility with which the eggs of lizards, protected by calcareous shells, might be transported through salt-water, than could the slimy spawn of frogs",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1845_beagle_ch17:aquatic_forms_less_peculiar",
+      "statement": "Aquatic forms, marine or fresh-water, are less peculiar at any given point of the earth's surface than terrestrial forms of the same classes.",
+      "quote": "this law of aquatic forms, whether marine or fresh-water, being less peculiar at any given point of the earth's surface than the terrestrial forms of the same classes",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1845_beagle_ch17:archipelago_zoologically_america",
+      "statement": "The archipelago, though in the Pacific Ocean, is zoologically part of America.",
+      "quote": "we see that this archipelago, though standing in the Pacific Ocean, is zoologically part of America",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1845_beagle_ch17:satellite_receiving_stray_colonists",
+      "statement": "The archipelago is a satellite attached to America whence it has derived a few stray colonists.",
+      "quote": "The archipelago is a little world within itself, or rather a satellite attached to America, whence it has derived a few stray colonists",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1845_beagle_ch17:created_in_center_and_dispersed",
+      "statement": "The terrestrial Amblyrhynchus appears as if created in the centre of the archipelago and thence dispersed only to a certain distance.",
+      "quote": "It would appear as if it had been created in the centre of the archipelago, and thence had been dispersed only to a certain distance",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1845_beagle_ch17:wildness_is_particular_instinct",
+      "statement": "The wildness of birds toward man is a particular instinct directed against him and not general caution.",
+      "quote": "the wildness of birds with regard to man, is a particular instinct directed against him",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1845_beagle_ch17:new_beast_of_prey_havoc",
+      "statement": "Introduction of a new beast of prey must cause havoc before the instincts of indigenous inhabitants become adapted to it.",
+      "quote": "what havoc the introduction of any new beast of prey must cause in a country, before the instincts of the indigenous inhabitants have become adapted to the stranger's craft or power",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:organs_and_instincts_variable",
+      "statement": "All organs and instincts are, in ever so slight a degree, variable.",
+      "quote": "all organs and instincts are, in ever so slight a degree, variable",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:struggle_preserves_deviation",
+      "statement": "There is a struggle for existence that leads to the preservation of each profitable deviation of structure or instinct.",
+      "quote": "there is a struggle for existence leading to the preservation of each profitable deviation of structure or instinct",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:common_descent_within_groups",
+      "statement": "All the individuals of the same species and all the species of the same genus or higher group must have descended from common parents.",
+      "quote": "All the individuals of the same species, and all the species of the same genus, or even higher group, must have descended from common parents",
+      "kind": "required_by_argument"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:intermediates_supplanted_and_exterminated",
+      "statement": "The intermediate varieties will, in the long run, be supplanted and exterminated by the more numerous allied forms.",
+      "quote": "the intermediate varieties will, in the long run, be supplanted and exterminated",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:geological_record_extremely_imperfect",
+      "statement": "The geological record is far more imperfect than most geologists believe.",
+      "quote": "the geological record is far more imperfect than most geologists believe",
+      "kind": "required_by_argument"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:lapse_of_time_inappreciable",
+      "statement": "The lapse of time has been so great as to be utterly inappreciable by the human intellect.",
+      "quote": "the lapse of time has been so great as to be utterly inappreciable by the human intellect",
+      "kind": "presupposed"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:all_species_have_changed",
+      "statement": "Over long enough intervals of time, geology plainly declares that all species have changed, slowly and in a graduated manner.",
+      "quote": "geology plainly declares that all species have changed; and they have changed in the manner which my theory requires, for they have changed slowly and in a graduated manner",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:variability_due_to_reproductive_system",
+      "statement": "Variability under domestication is mainly due to the reproductive system being eminently susceptible to changes in the conditions of life.",
+      "quote": "This seems to be mainly due to the reproductive system being eminently susceptible to changes in the conditions of life; so that this system, when not rendered impotent, fails to reproduce offspring exactly like the parent-form",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:struggle_from_geometrical_increase",
+      "statement": "The struggle for existence inevitably follows from the high geometrical ratio of increase common to all organic beings.",
+      "quote": "The struggle for existence inevitably follows from the high geometrical ratio of increase which is common to all organic beings",
+      "kind": "required_by_argument"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:more_born_than_survive",
+      "statement": "More individuals are born than can possibly survive, and a grain in the balance determines which individual shall live and which shall die.",
+      "quote": "More individuals are born than can possibly survive. A grain in the balance will determine which individual shall live and which shall die",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:species_are_permanent_varieties",
+      "statement": "Species are only strongly marked and permanent varieties, and each species first existed as a variety.",
+      "quote": "species are only strongly marked and permanent varieties, and that each species first existed as a variety",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:divergence_of_character_preserved",
+      "statement": "There will be a constant tendency in natural selection to preserve the most divergent offspring of any one species.",
+      "quote": "there will be a constant tendency in natural selection to preserve the most divergent offspring of any one species",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:grouping_inexplicable_by_creation",
+      "statement": "The grand fact of the grouping of all organic beings in groups subordinate to groups seems utterly inexplicable on the theory of creation.",
+      "quote": "This grand fact of the grouping of all organic beings seems to me utterly inexplicable on the theory of creation",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:selection_acts_by_slight_steps",
+      "statement": "Natural selection acts solely by accumulating slight, successive, favourable variations, and can produce no great or sudden modification.",
+      "quote": "As natural selection acts solely by accumulating slight, successive, favourable variations, it can produce no great or sudden modification; it can act only by very short and slow steps",
+      "kind": "required_by_argument"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:use_and_disuse_produces_effect",
+      "statement": "In both varieties and species, use and disuse seem to have produced some effect on structure.",
+      "quote": "In both varieties and species, use and disuse seem to have produced some effect",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:extinction_follows_from_selection",
+      "statement": "The extinction of species and whole groups almost inevitably follows on the principle of natural selection, for old forms will be supplanted by new and improved forms.",
+      "quote": "The extinction of species and of whole groups of species, which has played so conspicuous a part in the history of the organic world, almost inevitably follows on the principle of natural selection",
+      "kind": "required_by_argument"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:generation_never_broken",
+      "statement": "Neither single species nor groups of species reappear when the chain of ordinary generation has once been broken.",
+      "quote": "Neither single species nor groups of species reappear when the chain of ordinary generation has once been broken",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:affinities_from_community_of_descent",
+      "statement": "The real affinities of all organic beings are due to inheritance or community of descent.",
+      "quote": "The real affinities of all organic beings are due to inheritance or community of descent",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:natural_system_is_genealogical",
+      "statement": "The natural system is a genealogical arrangement, in which we discover lines of descent by the most permanent characters.",
+      "quote": "The natural system is a genealogical arrangement, in which we have to discover the lines of descent by the most permanent characters, however slight their vital importance may be",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:organism_to_organism_relation_most_important",
+      "statement": "The relation of organism to organism is the most important of all relations.",
+      "quote": "the relation of organism to organism is the most important of all relations",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:disuse_reduces_useless_organs",
+      "statement": "Disuse, aided sometimes by natural selection, will often tend to reduce an organ when it has become useless by changed habits or conditions of life.",
+      "quote": "Disuse, aided sometimes by natural selection, will often tend to reduce an organ, when it has become useless by changed habits or under changed conditions of life",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:animals_from_few_progenitors",
+      "statement": "Animals have descended from at most only four or five progenitors, and plants from an equal or lesser number.",
+      "quote": "I believe that animals have descended from at most only four or five progenitors, and plants from an equal or lesser number",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:life_from_one_primordial_form",
+      "statement": "Probably all organic beings which have ever lived on this earth have descended from some one primordial form into which life was first breathed.",
+      "quote": "probably all the organic beings which have ever lived on this earth have descended from some one primordial form, into which life was first breathed",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:no_clear_distinction_species_varieties",
+      "statement": "No clear distinction has been, or can be, drawn between species and well-marked varieties.",
+      "quote": "no clear distinction has been, or can be, drawn between species and well-marked varieties",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch14:species_slowly_changing_by_accumulation",
+      "statement": "Species have changed, and are still slowly changing, by the preservation and accumulation of successive slight favourable variations.",
+      "quote": "species have changed, and are still slowly changing by the preservation and accumulation of successive slight favourable variations",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:natural_selection_defined",
+      "statement": "Natural Selection is the preservation of favourable variations and the rejection of injurious variations.",
+      "quote": "This preservation of favourable variations and the rejection of injurious variations, I call Natural Selection.",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:more_born_than_survive",
+      "statement": "Many more individuals are born than can possibly survive.",
+      "quote": "(remembering that many more individuals are born than can possibly survive)",
+      "kind": "presupposed"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:slight_advantage_best_chance",
+      "statement": "Individuals having any advantage, however slight, over others would have the best chance of surviving and procreating their kind.",
+      "quote": "individuals having any advantage, however slight, over others, would have the best chance of surviving and of procreating their kind",
+      "kind": "required_by_argument"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:injurious_variation_destroyed",
+      "statement": "Any variation in the least degree injurious would be rigidly destroyed.",
+      "quote": "we may feel sure that any variation in the least degree injurious would be rigidly destroyed",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:conditions_change_causes_variability",
+      "statement": "A change in the conditions of life, by acting on the reproductive system, causes or increases variability.",
+      "quote": "a change in the conditions of life, by specially acting on the reproductive system, causes or increases variability",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:nature_longer_time_than_man",
+      "statement": "Nature can produce great results from mere individual differences from having incomparably longer time at her disposal than man.",
+      "quote": "as man can certainly produce great results by adding up in any given direction mere individual differences, so could Nature, but far more easily, from having incomparably longer time at her disposal",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:nature_acts_on_internals",
+      "statement": "Nature can act on every internal organ and every shade of constitutional difference.",
+      "quote": "She can act on every internal organ, on every shade of constitutional difference, on the whole machinery of life",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:nature_selects_for_beings_good",
+      "statement": "Nature selects only for the good of the being which she tends.",
+      "quote": "Man selects only for his own good; Nature only for that of the being which she tends",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:selection_scrutinises_daily",
+      "statement": "Natural selection is daily and hourly scrutinising every variation, rejecting the bad and preserving the good.",
+      "quote": "natural selection is daily and hourly scrutinising, throughout the world, every variation, even the slightest; rejecting that which is bad, preserving and adding up all that is good",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:no_modification_for_other_species",
+      "statement": "Natural selection cannot modify the structure of one species without giving it any advantage, for the good of another species.",
+      "quote": "What natural selection cannot do, is to modify the structure of one species, without giving it any advantage, for the good of another species",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:correlation_of_growth",
+      "statement": "There are many unknown laws of correlation of growth by which modification of one part causes other modifications.",
+      "quote": "there are many unknown laws of correlation of growth, which, when one part of the organisation is modified through variation, and the modifications are accumulated by natural selection for the good of the being, will cause other modifications",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:inheritance_at_corresponding_age",
+      "statement": "Variations that appear at a particular period of life tend to reappear in the offspring at the same period.",
+      "quote": "those variations which under domestication appear at any particular period of life, tend to reappear in the offspring at the same period",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:sexual_selection_defined",
+      "statement": "Sexual selection depends on a struggle between the males for possession of the females; the result is few or no offspring, not death.",
+      "quote": "This depends, not on a struggle for existence, but on a struggle between the males for possession of the females; the result is not death to the unsuccessful competitor, but few or no offspring",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:female_choice_produces_effect",
+      "statement": "Female birds selecting the most melodious or beautiful males across thousands of generations might produce a marked effect.",
+      "quote": "female birds, by selecting, during thousands of generations, the most melodious or beautiful males, according to their standard of beauty, might produce a marked effect",
+      "kind": "required_by_argument"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:selection_infinitesimal_modifications",
+      "statement": "Natural selection acts only by the preservation and accumulation of infinitesimally small inherited modifications, each profitable to the preserved being.",
+      "quote": "Natural selection can act only by the preservation and accumulation of infinitesimally small inherited modifications, each profitable to the preserved being",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:banishes_continued_creation",
+      "statement": "Natural selection, if a true principle, will banish the belief of the continued creation of new organic beings or of any great and sudden modification.",
+      "quote": "so will natural selection, if it be a true principle, banish the belief of the continued creation of new organic beings, or of any great and sudden modification in their structure",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:cross_gives_vigour",
+      "statement": "A cross between different varieties or strains gives vigour and fertility to the offspring; close interbreeding diminishes vigour and fertility.",
+      "quote": "a cross between different varieties, or between individuals of the same variety but of another strain, gives vigour and fertility to the offspring; and on the other hand, that close interbreeding diminishes vigour and fertility",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:no_perpetual_self_fertilisation",
+      "statement": "No organic being self-fertilises itself for an eternity of generations; a cross with another individual is occasionally indispensable.",
+      "quote": "no organic being self-fertilises itself for an eternity of generations; but that a cross with another individual is occasionally\u2014perhaps at very long intervals\u2014indispensable",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:isolation_important",
+      "statement": "Isolation is an important element in the process of natural selection.",
+      "quote": "Isolation, also, is an important element in the process of natural selection",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:closely_allied_forms_compete",
+      "statement": "The most closely-allied forms come into the severest competition with each other.",
+      "quote": "it is the most closely-allied forms,\u2014varieties of the same species, and species of the same genus or of related genera,\u2014which, from having nearly the same structure, constitution, and habits, generally come into the severest competition with each other",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:varieties_are_incipient_species",
+      "statement": "Varieties are species in the process of formation, or incipient species.",
+      "quote": "according to my view, varieties are species in the process of formation, or are, as I have called them, incipient species",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:divergence_of_character",
+      "statement": "The more diversified the descendants from any one species become, the better enabled they will be to seize places in the polity of nature.",
+      "quote": "the more diversified the descendants from any one species become in structure, constitution, and habits, by so much will they be better enabled to seize on many and widely diversified places in the polity of nature",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:physiological_division_of_labour",
+      "statement": "The advantage of diversification is the same as that of the physiological division of labour in the organs of the same individual body.",
+      "quote": "The advantage of diversification in the inhabitants of the same region is, in fact, the same as that of the physiological division of labour in the organs of the same individual body",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:common_species_vary_more",
+      "statement": "The species which are commonest and most widely-diffused vary more than rare species with restricted ranges.",
+      "quote": "the species, which are the commonest and the most widely-diffused, vary more than rare species with restricted ranges",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:descent_from_common_parent",
+      "statement": "Natural selection acts through divergence of character and extinction on the descendants from a common parent.",
+      "quote": "Action of Natural Selection, through Divergence of Character and Extinction, on the descendants from a common parent",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:new_species_replace_old",
+      "statement": "As new species are formed through natural selection, others will become rarer and finally extinct.",
+      "quote": "as new species in the course of time are formed through natural selection, others will become rarer and rarer, and finally extinct",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:offspring_inherit_habits",
+      "statement": "Some young inherit the habits or structure of their parents, and by repetition a new variety might be formed.",
+      "quote": "Some of its young would probably inherit the same habits or structure, and by the repetition of this process, a new variety might be formed",
+      "kind": "presupposed"
+    },
+    {
+      "id": "darwin_1859_origin_ch4:mutual_relations_complex",
+      "statement": "The mutual relations of all organic beings to each other and to their physical conditions of life are infinitely complex and close-fitting.",
+      "quote": "how infinitely complex and close-fitting are the mutual relations of all organic beings to each other and to their physical conditions of life",
+      "kind": "presupposed"
+    },
+    {
+      "id": "darwin_1859_origin_introduction:species_descended_like_varieties",
+      "statement": "Each species has not been independently created but has descended, like varieties, from other species.",
+      "quote": "each species had not been independently created, but had descended, like varieties, from other species",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_introduction:external_conditions_inadequate_woodpecker",
+      "statement": "External conditions alone cannot account for the adaptive structure of the woodpecker's feet, tail, beak, and tongue for catching insects under bark.",
+      "quote": "it is preposterous to attribute to mere external conditions, the structure, for instance, of the woodpecker, with its feet, tail, beak, and tongue, so admirably adapted to catch insects under the bark of trees",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_introduction:domestication_best_clue",
+      "statement": "Careful study of domesticated animals and cultivated plants offers the best chance of understanding the means of modification.",
+      "quote": "a careful study of domesticated animals and of cultivated plants would offer the best chance of making out this obscure problem",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_introduction:hereditary_modification_possible",
+      "statement": "A large amount of hereditary modification is at least possible.",
+      "quote": "a large amount of hereditary modification is at least possible",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_introduction:mans_selection_accumulates_variations",
+      "statement": "Man has great power to accumulate successive slight variations by his Selection.",
+      "quote": "how great is the power of man in accumulating by his Selection successive slight variations",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_introduction:struggle_from_geometrical_increase",
+      "statement": "A struggle for existence among all organic beings follows inevitably from their high geometrical powers of increase.",
+      "quote": "the Struggle for Existence amongst all organic beings throughout the world, which inevitably follows from their high geometrical powers of increase",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_introduction:malthus_applies_to_all_life",
+      "statement": "The Malthusian doctrine applies to the whole animal and vegetable kingdoms.",
+      "quote": "This is the doctrine of Malthus, applied to the whole animal and vegetable kingdoms",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_introduction:overproduction_of_offspring",
+      "statement": "Many more individuals of each species are born than can possibly survive, so a struggle for existence recurs frequently.",
+      "quote": "As many more individuals of each species are born than can possibly survive; and as, consequently, there is a frequently recurring struggle for existence",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_introduction:profitable_variation_selected",
+      "statement": "Any being that varies however slightly in a manner profitable to itself will have a better chance of surviving and be naturally selected.",
+      "quote": "any being, if it vary however slightly in any manner profitable to itself, under the complex and sometimes varying conditions of life, will have a better chance of surviving, and thus be naturally selected",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_introduction:strong_principle_of_inheritance",
+      "statement": "By the strong principle of inheritance, any selected variety will tend to propagate its new and modified form.",
+      "quote": "From the strong principle of inheritance, any selected variety will tend to propagate its new and modified form",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_introduction:selection_causes_extinction_and_divergence",
+      "statement": "Natural Selection almost inevitably causes much Extinction of the less improved forms and induces Divergence of Character.",
+      "quote": "Natural Selection almost inevitably causes much Extinction of the less improved forms of life, and induces what I have called Divergence of Character",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_introduction:transitions_from_simple_to_complex",
+      "statement": "A simple being or organ must be capable of being changed and perfected into a highly developed being or elaborately constructed organ.",
+      "quote": "how a simple being or a simple organ can be changed and perfected into a highly developed being or elaborately constructed organ",
+      "kind": "required_by_argument"
+    },
+    {
+      "id": "darwin_1859_origin_introduction:hybridism_species_variety_distinction",
+      "statement": "Species are infertile and varieties fertile when intercrossed, and this Hybridism is a difficulty for the theory.",
+      "quote": "Hybridism, or the infertility of species and the fertility of varieties when intercrossed",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_introduction:geological_succession_of_beings",
+      "statement": "Organic beings exhibit a geological succession throughout time that must be accounted for.",
+      "quote": "In the next chapter I shall consider the geological succession of organic beings throughout time",
+      "kind": "presupposed"
+    },
+    {
+      "id": "darwin_1859_origin_introduction:classification_reflects_affinities",
+      "statement": "The classification or mutual affinities of organic beings, both mature and embryonic, are evidence to be explained.",
+      "quote": "their classification or mutual affinities, both when mature and in an embryonic condition",
+      "kind": "required_by_argument"
+    },
+    {
+      "id": "darwin_1859_origin_introduction:independent_creation_erroneous",
+      "statement": "The view that each species has been independently created is erroneous.",
+      "quote": "the view which most naturalists entertain, and which I formerly entertained\u2014namely, that each species has been independently created\u2014is erroneous",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_introduction:species_not_immutable",
+      "statement": "Species are not immutable; those of the same genera are lineal descendants of other and generally extinct species.",
+      "quote": "species are not immutable; but that those belonging to what are called the same genera are lineal descendants of some other and generally extinct species",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_introduction:natural_selection_main_not_exclusive",
+      "statement": "Natural Selection has been the main but not the exclusive means of modification.",
+      "quote": "Natural Selection has been the main but not exclusive means of modification",
+      "kind": "asserted"
+    },
+    {
+      "id": "darwin_1859_origin_introduction:present_relations_govern_future_modification",
+      "statement": "Mutual relations among beings determine present welfare and the future success and modification of every inhabitant of the world.",
+      "quote": "these relations are of the highest importance, for they determine the present welfare, and, as I believe, the future success and modification of every inhabitant of this world",
+      "kind": "asserted"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:offspring_is_branch_of_parent",
+      "statement": "The offspring is not entirely new but is a branch or elongation of the parent, retaining some habits of the parent-system.",
+      "quote": "the offspring is termed a new animal, but is in truth a branch or elongation of the parent",
+      "kind": "asserted"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:embryon_produced_by_male",
+      "statement": "The living embryon is produced by the male, while the female contributes only the food and nidus.",
+      "quote": "we may conclude, that the embryon is produced by the male, and the proper food and nidus by the female",
+      "kind": "asserted"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:buds_exactly_resemble_parent",
+      "statement": "Paternal offspring produced without a mother, as buds and bulbs, exactly resemble their parents.",
+      "quote": "This paternal offspring of vegetables, I mean their buds and bulbs, is attended with a very curious circumstance; and that is, that they exactly resemble their parents",
+      "kind": "asserted"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:growth_by_apposition_not_distention",
+      "statement": "The embryon acquires its parts by accretion of new parts, not by distention of pre-existing miniature parts.",
+      "quote": "the fetus or embryon is formed by apposition of new parts, and not by the distention of a primordial nest of germs",
+      "kind": "asserted"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:mules_disprove_preformation",
+      "statement": "The existence of mules resembling both parents refutes the doctrine that the embryon is a preformed miniature in the male semen.",
+      "quote": "how could mule-animals be produced, which partake of the forms of both the parents, if the original embryon was a miniature existing in the semen of the male parent",
+      "kind": "required_by_argument"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:new_organs_new_appetencies",
+      "statement": "Every new addition of an organic part to the embryon produces a new kind of irritability, sensibility, and animal appetency.",
+      "quote": "With every new change, therefore, of organic form, or addition of organic parts, I suppose a new kind of irritability or of sensibility to be produced",
+      "kind": "asserted"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:warm_blooded_common_descent",
+      "statement": "All warm-blooded animals descend from one original living filament endowed by the First Cause with animality.",
+      "quote": "all warm-blooded animals have arisen from one living filament, which THE GREAT First Cause endued with animality",
+      "kind": "asserted"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:all_organic_life_one_filament",
+      "statement": "One and the same kind of living filament is and has been the cause of all organic life, animal and vegetable alike.",
+      "quote": "one and the same kind of living filaments is and has been the cause of all organic life",
+      "kind": "asserted"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:species_from_mixture_of_orders",
+      "statement": "The great variety of species now on earth may have originated from the mixture of a few natural orders.",
+      "quote": "the great variety of species of animals, which now tenant the earth, may have had their origin from the mixture of a few natural orders",
+      "kind": "asserted"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:fertile_mules_founded_species",
+      "statement": "Those mules that could continue their species did so, and now constitute the numerous families of animals and vegetables in existence.",
+      "quote": "those animal and vegetable mules, which could continue their species, have done so, and constitute the numerous families of animals and vegetables which now exist",
+      "kind": "asserted"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:sterile_mules_perished",
+      "statement": "Mules produced with imperfect organs of generation perished without reproduction, filtering the surviving forms.",
+      "quote": "those mules, which were produced with imperfect organs of generation, perished without reproduction",
+      "kind": "asserted"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:acquired_forms_transmitted",
+      "statement": "Many acquired forms or propensities produced by an animal's own exertions are transmitted to its posterity.",
+      "quote": "many of these acquired forms or propensities are transmitted to their posterity",
+      "kind": "asserted"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:perpetual_transformation_by_exertion",
+      "statement": "All animals undergo perpetual transformations produced in part by their own exertions responding to desires and aversions.",
+      "quote": "all animals undergo perpetual transformations; which are in part produced by their own exertions in consequence of their desires and aversions",
+      "kind": "asserted"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:three_great_wants_shape_forms",
+      "statement": "The three great objects of desire that have changed the forms of many animals through their exertions are lust, hunger, and security.",
+      "quote": "the three great objects of desire, which have changed the forms of many animals by their exertions to gratify them, are those of lust, hunger, and security",
+      "kind": "asserted"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:combat_selects_strongest",
+      "statement": "The final cause of male combat for females is that the strongest and most active animal should propagate the species, which should thence become improved.",
+      "quote": "the strongest and most active animal should propagate the species, which should thence become improved",
+      "kind": "asserted"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:adaptations_gradually_produced",
+      "statement": "Adaptations for procuring food were gradually produced during many generations by the perpetual endeavour of the creatures to supply their want of food.",
+      "quote": "gradually produced during many generations by the perpetual endeavour of the creatures to supply the want of food",
+      "kind": "asserted"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:domestication_shows_plasticity",
+      "statement": "Great changes have been introduced into animals by artificial or accidental cultivation, as in horses and dogs bred for various purposes.",
+      "quote": "the great changes introduced into various animals by artificial or accidental cultivation, as in horses",
+      "kind": "asserted"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:progressive_improvement_ongoing",
+      "statement": "The animals inhabiting the earth have constantly improved and remain in a state of progressive improvement.",
+      "quote": "the animals, which inhabit it, have constantly improved, and are still in a state of progressive improvement",
+      "kind": "asserted"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:inheritance_faculty_perpetual",
+      "statement": "The living filament possesses the faculty of continuing to improve by its own inherent activity and of delivering those improvements down by generation to its posterity indefinitely.",
+      "quote": "possessing the faculty of continuing to improve by its own inherent activity, and of delivering down those improvements by generation to its posterity, world without end",
+      "kind": "asserted"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:world_generated_not_created",
+      "statement": "The world itself might have been generated rather than created, gradually produced from very small beginnings.",
+      "quote": "the world itself might have been generated, rather than created; that is, it might have been gradually produced from very small beginnings",
+      "kind": "asserted"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:state_of_probation_responsibility",
+      "statement": "Our present situation is a state of probation which by our exertions we may improve, and for which we are consequently responsible.",
+      "quote": "our present situation being a state of probation, which by our exertions we may improve, and are consequently responsible for our actions",
+      "kind": "asserted"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:male_imagination_marks_sex",
+      "statement": "The imagination of the male at the time of copulation may affect the secretion of the semen so as to produce the similarity of form, features, and sex of the child.",
+      "quote": "the imagination of the male at the time of copulation, or at the time of the secretion of the semen, may so affect this secretion by irritative or sensitive association",
+      "kind": "asserted"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:structural_similarity_implies_kinship",
+      "statement": "The great similarity of structure across warm-blooded animals leads to the conclusion that they have alike been produced from a similar living filament.",
+      "quote": "one is led to conclude, that they have alike been produced from a similar living filament",
+      "kind": "required_by_argument"
+    },
+    {
+      "id": "erasmus_darwin_1794_zoonomia_generation_39:causes_chain_from_creator",
+      "statement": "The progressive motions of objects form a chain of causes whose first link proceeded from the great Creator.",
+      "quote": "we may consider the progressive motions of objects as a chain of causes only; whose first link proceeded from the great Creator",
+      "kind": "asserted"
+    },
+    {
+      "id": "herschel_1830_prelim_p1c1:man_physically_inferior_to_animals",
+      "statement": "Regarded only in his physical constitution, man is in almost every respect inferior to other denizens of the globe.",
+      "quote": "he seems, if we regard only his physical constitution, in almost every respect their inferior, and equally unprovided for the supply of his natural wants and his defence against the innumerable enemies which surround him",
+      "kind": "asserted"
+    },
+    {
+      "id": "herschel_1830_prelim_p1c1:nature_denies_and_provides",
+      "statement": "Nature denies or grants indispensable coverings and provisions to warm-blooded animals.",
+      "quote": "To no other warm-blooded animal has nature denied that indispensable covering without which the vicissitudes of a temperate and the rigours of a cold climate are equally insupportable",
+      "kind": "presupposed"
+    },
+    {
+      "id": "herschel_1830_prelim_p1c1:species_can_become_extinct",
+      "statement": "A species left to mere instinct may, after a few generations, become altogether extinct.",
+      "quote": "till after a few generations his species would become altogether extinct, or, at best, would be restricted to a few islands in tropical regions",
+      "kind": "asserted"
+    },
+    {
+      "id": "herschel_1830_prelim_p1c1:climate_restricts_species_range",
+      "statement": "Warmth of climate, paucity of enemies, and abundance of vegetable food determine whether a species may linger in a region.",
+      "quote": "restricted to a few islands in tropical regions, where the warmth of the climate, the paucity of enemies, and the abundance of vegetable food, might permit it to linger",
+      "kind": "asserted"
+    },
+    {
+      "id": "herschel_1830_prelim_p1c1:contrivances_imply_superior_intelligence",
+      "statement": "Contemplation of contrivances leads to the conception of a Power and Intelligence superior to man and adequate to the production of all that he sees in nature.",
+      "quote": "Thus he is led to the conception of a Power and an Intelligence superior to his own, and adequate to the production and maintenance of all that he sees in nature",
+      "kind": "required_by_argument"
+    },
+    {
+      "id": "herschel_1830_prelim_p1c1:every_phenomenon_has_prior_cause",
+      "statement": "From the perception of any phenomenon within or without, man is impelled to infer the existence of something prior standing in the relation of a cause.",
+      "quote": "he is irresistibly impelled, from the perception of any phenomenon without or within him, to infer the existence of something prior which stands to it in the relation of a cause",
+      "kind": "required_by_argument"
+    },
+    {
+      "id": "herschel_1830_prelim_p1c1:causal_knowledge_determines_will",
+      "statement": "Knowledge of causes and consequences determines choice and will even where the agent is conscious of perfect freedom to act.",
+      "quote": "this knowledge of causes and their consequences is what, in almost every instance, determines his choice and will, in cases where he is nevertheless conscious of perfect freedom to act or not to act",
+      "kind": "asserted"
+    },
+    {
+      "id": "herschel_1830_prelim_p1c1:natural_reason_grounds_a_deity",
+      "statement": "Natural philosophy places the existence and principal attributes of a Deity on grounds that render doubt absurd and atheism ridiculous.",
+      "quote": "it places the existence and principal attributes of a Deity on such grounds as to render doubt absurd and atheism ridiculous",
+      "kind": "required_by_argument"
+    },
+    {
+      "id": "herschel_1830_prelim_p1c1:natural_reason_stops_short_of_revelation",
+      "statement": "The testimony of natural reason must of necessity stop short of the truths which revelation makes known.",
+      "quote": "the testimony of natural reason, on whatever exercised, must of necessity stop short of those truths which it is the object of revelation to make known",
+      "kind": "asserted"
+    },
+    {
+      "id": "herschel_1830_prelim_p1c1:free_enquiry_unfetters_the_mind",
+      "statement": "An unbounded spirit of enquiry cherished as a vital principle unfetters the mind from prejudices of every kind.",
+      "quote": "by cherishing as a vital principle an unbounded spirit of enquiry, and ardency of expectation, it unfetters the mind from prejudices of every kind",
+      "kind": "asserted"
+    },
+    {
+      "id": "herschel_1830_prelim_p1c1:philosopher_hopes_and_believes_reasonably",
+      "statement": "The true philosopher hopes all things not impossible and believes all things not unreasonable.",
+      "quote": "The character of the true philosopher is to hope all things not impossible, and to believe all things not unreasonable",
+      "kind": "asserted"
+    },
+    {
+      "id": "herschel_1830_prelim_p1c1:truth_cannot_oppose_truth",
+      "statement": "Truth can never be opposed to truth, and error is only effectually confounded by tracing it to its source.",
+      "quote": "truth can never be opposed to truth, and, on the other, that error is only to be effectually confounded by searching deep and tracing it to its source",
+      "kind": "presupposed"
+    },
+    {
+      "id": "herschel_1830_prelim_p1c1:truth_endures_universal_experience",
+      "statement": "The only character of truth is its capability of enduring the test of universal experience and coming unchanged out of every form of fair discussion.",
+      "quote": "the grand and indeed only character of truth is its capability of enduring the test of universal experience, and coming unchanged out of every possible form of fair discussion",
+      "kind": "asserted"
+    },
+    {
+      "id": "herschel_1830_prelim_p1c1:application_verifies_theory",
+      "statement": "Practical applications form the very criterions of the truth of speculative theories and afford the readiest verifications.",
+      "quote": "such applications form the very criterions of their truth, they afford the readiest and completest verifications of his theories",
+      "kind": "required_by_argument"
+    },
+    {
+      "id": "herschel_1830_prelim_p1c1:principles_not_phenomena_are_object",
+      "statement": "The objects of enquiry to the natural philosopher are principles and laws, not phenomena and insulated independent facts.",
+      "quote": "it is principles, not phenomena,\u2014laws, not insulated independent facts,\u2014which are the objects of enquiry to the natural philosopher",
+      "kind": "asserted"
+    },
+    {
+      "id": "herschel_1830_prelim_p1c1:truth_is_single_and_consistent",
+      "statement": "Truth is single and consistent with itself, so a principle may be as plainly elucidated by a simple fact as by an uncommon phenomenon.",
+      "quote": "As truth is single, and consistent with itself, a principle may be as completely and as plainly elucidated by the most familiar and simple fact, as by the most imposing and uncommon phenomenon",
+      "kind": "presupposed"
+    },
+    {
+      "id": "herschel_1830_prelim_p1c1:small_facts_reveal_universal_laws",
+      "statement": "The fall of an apple may raise thoughts to the laws which govern the revolutions of the planets in their orbits.",
+      "quote": "The fall of an apple to the ground may raise his thoughts to the laws which govern the revolutions of the planets in their orbits",
+      "kind": "asserted"
+    },
+    {
+      "id": "herschel_1830_prelim_p1c1:nature_operates_with_regular_ends",
+      "statement": "Nature operates with calm energetic regularity on an immense scale and with certainty in attaining her ends.",
+      "quote": "the observation of the calm, energetic regularity of nature, the immense scale of her operations, and the certainty with which her ends are attained",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:food_necessary_to_man",
+      "statement": "Food is necessary to the existence of man.",
+      "quote": "First, That food is necessary to the existence of man.",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:sexual_passion_necessary_and_constant",
+      "statement": "The passion between the sexes is necessary and will remain nearly in its present state.",
+      "quote": "Secondly, That the passion between the sexes is necessary, and will remain nearly in its present state.",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:two_laws_are_fixed_laws_of_nature",
+      "statement": "The two laws of food and sexual passion appear to have been fixed laws of our nature ever since we have had knowledge of mankind.",
+      "quote": "These two laws ever since we have had any knowledge of mankind, appear to have been fixed laws of our nature",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:unaltered_past_bars_future_alteration",
+      "statement": "Since we have not hitherto seen any alteration in these laws, we have no right to conclude that they will ever cease to be what they now are.",
+      "quote": "as we have not hitherto seen any alteration in them, we have no right to conclude that they will ever cease to be what they now are",
+      "kind": "presupposed"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:universe_arranged_and_executed_by_being",
+      "statement": "The Being who first arranged the system of the universe still executes all its various operations according to fixed laws for the advantage of his creatures.",
+      "quote": "that Being who first arranged the system of the universe; and for the advantage of his creatures, still executes, according to fixed laws, all its various operations",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:population_geometrical_when_unchecked",
+      "statement": "Population, when unchecked, increases in a geometrical ratio, while subsistence increases only in an arithmetical ratio.",
+      "quote": "Population, when unchecked, increases in a geometrical ratio. Subsistence increases only in an arithmetical ratio.",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:power_of_population_exceeds_earth",
+      "statement": "The power of population is indefinitely greater than the power in the earth to produce subsistence for man.",
+      "quote": "the power of population is indefinitely greater than the power in the earth to produce subsistence for man.",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:food_law_forces_effects_equal",
+      "statement": "By the law of our nature which makes food necessary to the life of man, the effects of the two unequal powers must be kept equal.",
+      "quote": "By that law of our nature which makes food necessary to the life of man, the effects of these two unequal powers must be kept equal.",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:strong_constant_check_on_population",
+      "statement": "There is a strong and constantly operating check on population from the difficulty of subsistence.",
+      "quote": "This implies a strong and constantly operating check on population from the difficulty of subsistence.",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:nature_profuse_with_seeds_of_life",
+      "statement": "Through the animal and vegetable kingdoms, nature has scattered the seeds of life abroad with the most profuse and liberal hand.",
+      "quote": "Through the animal and vegetable kingdoms, nature has scattered the seeds of life abroad with the most profuse and liberal hand.",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:nature_sparing_in_room_and_nourishment",
+      "statement": "Nature has been comparatively sparing in the room and the nourishment necessary to rear the seeds of life.",
+      "quote": "She has been comparatively sparing in the room, and the nourishment necessary to rear them.",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:germs_would_fill_millions_of_worlds",
+      "statement": "The germs of existence contained in this spot of earth, with ample food and ample room, would fill millions of worlds in the course of a few thousand years.",
+      "quote": "The germs of existence contained in this spot of earth, with ample food, and ample room to expand in, would fill millions of worlds in the course of a few thousand years.",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:necessity_restrains_germs_within_bounds",
+      "statement": "Necessity, an imperious all-pervading law of nature, restrains the germs of existence within the prescribed bounds.",
+      "quote": "Necessity, that imperious all pervading law of nature, restrains them within the prescribed bounds.",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:race_of_plants_animals_man_distinct",
+      "statement": "The race of plants, the race of animals, and the race of man are distinct races all subject to the great restrictive law.",
+      "quote": "The race of plants and the race of animals shrink under this great restrictive law. And the race of man cannot, by any efforts of reason, escape from it.",
+      "kind": "presupposed"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:man_cannot_escape_by_reason",
+      "statement": "The race of man cannot, by any efforts of reason, escape from the great restrictive law of necessity.",
+      "quote": "the race of man cannot, by any efforts of reason, escape from it",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:check_in_plants_animals_is_waste_sickness_death",
+      "statement": "Among plants and animals the effects of the restrictive law are waste of seed, sickness, and premature death.",
+      "quote": "Among plants and animals its effects are waste of seed, sickness, and premature death.",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:check_in_mankind_is_misery_and_vice",
+      "statement": "Among mankind the effects of the restrictive law are misery and vice, of which misery is an absolutely necessary consequence.",
+      "quote": "Among mankind, misery and vice. The former, misery, is an absolutely necessary consequence of it.",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:vice_probable_but_not_necessary",
+      "statement": "Vice is a highly probable consequence of the restrictive law but ought not, perhaps, to be called an absolutely necessary consequence.",
+      "quote": "Vice is a highly probable consequence, and we therefore see it abundantly prevail; but it ought not, perhaps, to be called an absolutely necessary consequence",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:law_pervades_all_animated_nature",
+      "statement": "Man cannot escape from the weight of the population law, which pervades all animated nature.",
+      "quote": "I see no way by which man can escape from the weight of this law which pervades all animated nature.",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:agrarian_equality_cannot_remove_pressure",
+      "statement": "No fancied equality and no agrarian regulations, in their utmost extent, could remove the pressure of the population law even for a single century.",
+      "quote": "No fancied equality, no agrarian regulations in their utmost extent, could remove the pressure of it even for a single century.",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:sexual_passion_unchanged_over_millennia",
+      "statement": "The passion between the sexes appears to exist in as much force at present as it did two thousand or four thousand years ago.",
+      "quote": "It appears to exist in as much force at present as it did two thousand or four thousand years ago.",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:individual_exceptions_always_existed",
+      "statement": "There are individual exceptions to the passion between the sexes now as there always have been, but they do not increase in number.",
+      "quote": "There are individual exceptions now as there always have been. But, as these exceptions do not appear to increase in number",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:just_theory_confirmed_by_experiment",
+      "statement": "It is an acknowledged truth in philosophy that a just theory will always be confirmed by experiment.",
+      "quote": "It is an acknowledged truth in philosophy, that a just theory will always be confirmed by experiment.",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:experience_true_foundation_of_knowledge",
+      "statement": "Experience is the true source and foundation of all knowledge and invariably confirms the truth of the argument.",
+      "quote": "experience, the true source and foundation of all knowledge, invariably confirms its truth",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:inference_requires_just_philosophical_grounds",
+      "statement": "Suppositions whose probable realization cannot be inferred upon any just philosophical grounds must be put out of the argument.",
+      "quote": "all suppositions, the probable realization of which cannot be inferred upon any just philosophical grounds",
+      "kind": "presupposed"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:progress_from_savage_state",
+      "statement": "The best arguments for the perfectibility of man are drawn from the great progress he has already made from the savage state, and the difficulty of saying where he is to stop.",
+      "quote": "the best arguments for the perfectibility of man, are drawn from a contemplation of the great progress that he has already made from the savage state, and the difficulty of saying where he is to stop",
+      "kind": "asserted"
+    },
+    {
+      "id": "malthus_1798_essay_ch1:plants_animals_shrink_under_law",
+      "statement": "The race of plants and the race of animals shrink under the great restrictive law of necessity.",
+      "quote": "The race of plants and the race of animals shrink under this great restrictive law.",
+      "kind": "asserted"
+    },
+    {
+      "id": "wallace_1855_sarawak:species_law_coincident",
+      "statement": "Every species has come into existence coincident in space and time with a pre-existing closely allied species.",
+      "quote": "Every species has come into existence coincident both in space and time with a pre-existing closely allied species.",
+      "kind": "asserted"
+    },
+    {
+      "id": "wallace_1855_sarawak:each_species_has_antitype",
+      "statement": "Each species has had for its immediate antitype a closely allied species existing at the time of its origin.",
+      "quote": "each one having had for its immediate antitype a closely allied species existing at the time of its origin",
+      "kind": "asserted"
+    },
+    {
+      "id": "wallace_1855_sarawak:no_species_appears_twice",
+      "statement": "No group or species has come into existence twice.",
+      "quote": "no group or species has come into existence twice",
+      "kind": "asserted"
+    },
+    {
+      "id": "wallace_1855_sarawak:complete_renewal_several_times",
+      "statement": "The complete renewal of the forms of life has occurred several times.",
+      "quote": "This complete renewal of the forms of life also appears to have occurred several times",
+      "kind": "asserted"
+    },
+    {
+      "id": "wallace_1855_sarawak:gradual_extinction_and_creation",
+      "statement": "The present organic world is derived by a natural process of gradual extinction and creation of species.",
+      "quote": "the present condition of the organic world is clearly derived by a natural process of gradual extinction and creation of species",
+      "kind": "asserted"
+    },
+    {
+      "id": "wallace_1855_sarawak:surface_of_earth_changes",
+      "statement": "The surface of the earth has undergone successive changes over an immense but unknown period.",
+      "quote": "during an immense, but unknown period, the surface of the earth has undergone successive changes",
+      "kind": "asserted"
+    },
+    {
+      "id": "wallace_1855_sarawak:affinities_branching_line",
+      "statement": "When multiple species share a common antitype, the series of affinities is compound and represented by a forked or many-branched line.",
+      "quote": "the series of affinities will be compound, and can only be represented by a forked or many-branched line",
+      "kind": "asserted"
+    },
+    {
+      "id": "wallace_1855_sarawak:isolation_produces_peculiar_groups",
+      "statement": "A country's peculiar species, genera, and families are the necessary result of long isolation permitting many series of species to form.",
+      "quote": "A country having species, genera, and whole families peculiar to it, will be the necessary result of its having been isolated for a long period",
+      "kind": "required_by_argument"
+    },
+    {
+      "id": "wallace_1855_sarawak:allied_species_geographically_near",
+      "statement": "Most closely allied species are found in the same or closely adjoining localities, so affinity sequence is also geographical.",
+      "quote": "the most closely allied species are found in the same locality or in closely adjoing localities; and that therefore the natural sequence of the species by affinity is also geographical",
+      "kind": "asserted"
+    },
+    {
+      "id": "wallace_1855_sarawak:representative_species_across_barriers",
+      "statement": "Similar climates separated by sea or mountains often have closely allied representative families, genera, and species peculiar to each.",
+      "quote": "In countries of a similar climate, but separated by a wide sea of lofty mountains, the families, genera and species of the one are often represented by closely allied families, genera and species peculiar to the other",
+      "kind": "asserted"
+    },
+    {
+      "id": "wallace_1855_sarawak:time_distribution_mirrors_space",
+      "statement": "The distribution of the organic world in time is very similar to its present distribution in space.",
+      "quote": "The distribution of the organic world in time is very similar to its present distribution in space",
+      "kind": "asserted"
+    },
+    {
+      "id": "wallace_1855_sarawak:same_period_species_more_allied",
+      "statement": "Species and genera of the same geological time are more closely allied than those separated in time.",
+      "quote": "Species of one genus, or genera of one family occurring in the same geological time are more closely allied than those separated in time",
+      "kind": "asserted"
+    },
+    {
+      "id": "wallace_1855_sarawak:conditions_render_species_impossible",
+      "statement": "Geological changes must occasionally have modified external conditions enough to render the existence of certain species impossible.",
+      "quote": "Geological changes, however gradual, must occasionally have modified external conditions to such an extent as to have rendered the existence of certain species impossible",
+      "kind": "asserted"
+    },
+    {
+      "id": "wallace_1855_sarawak:extinction_gradual_or_sudden",
+      "statement": "Extinction is usually a gradual dying-out but may sometimes be sudden for species of limited range.",
+      "quote": "The extinction would in most cases be affected by a gradual dying-out, but in some instances there might have been a sudden destruction of a species of limited range",
+      "kind": "asserted"
+    },
+    {
+      "id": "wallace_1855_sarawak:rudimentary_organs_no_function",
+      "statement": "Rudimentary organs really do exist and in most cases have no special function in the animal economy.",
+      "quote": "That these really do exist, and in most cases have no special function in the animal \u00e6conomy, is admitted by the first authorities in comparative anatomy",
+      "kind": "asserted"
+    },
+    {
+      "id": "wallace_1855_sarawak:every_change_must_be_gradual",
+      "statement": "The great law is that every change shall be gradual, so no new creature is formed widely differing from anything before existing.",
+      "quote": "the great law which has regulated the peopling of the earth with animal and vegetable life is, that every change shall be gradual; that no new creature shall be formed widely differing from anything before existing",
+      "kind": "required_by_argument"
+    },
+    {
+      "id": "wallace_1855_sarawak:fossil_knowledge_fragmentary",
+      "statement": "Our knowledge of the whole series of former inhabitants of the earth is necessarily most imperfect and fragmentary.",
+      "quote": "our knowledge of the whole series of the former inhabitants of the earth is necessarily most imperfect and fragmentary",
+      "kind": "presupposed"
+    },
+    {
+      "id": "wallace_1855_sarawak:formations_buried_beneath_ocean",
+      "statement": "Whole formations recording vast geological periods are entirely buried beneath the ocean and beyond our reach.",
+      "quote": "whole formations containing the records of vast geological periods are: entirely buried beneath the ocean, and for ever beyond our reach",
+      "kind": "asserted"
+    },
+    {
+      "id": "wallace_1855_sarawak:theory_of_gradual_change",
+      "statement": "The hypothesis is in reality only one of gradual change rather than essentially a theory of progression.",
+      "quote": "though it may appear to some readers essentially a theory of progression, it is in reality only one of gradual change",
+      "kind": "asserted"
+    },
+    {
+      "id": "wallace_1855_sarawak:recent_islands_lack_peculiars",
+      "statement": "No geologically very recent island possesses generic or family groups or many species peculiar to itself.",
+      "quote": "no example is known of an island which can be proved geologically to be of very recent origin (late in the Tertiary, for instance), and yet possesses generic or family groups, or even many species peculiar to itself",
+      "kind": "asserted"
+    },
+    {
+      "id": "wallace_1855_sarawak:galapagos_populated_by_dispersal",
+      "statement": "The Galapagos were first peopled by winds and currents at a period remote enough for original species to die out and modified prototypes to remain.",
+      "quote": "They must have been first peopled, like other newly-formed islands, by the action of winds and currents, and at a period sufficiently remote to have had the original species die out, and the modified prototypes only remain",
+      "kind": "asserted"
+    },
+    {
+      "id": "wallace_1855_sarawak:quiescence_favors_abundance",
+      "statement": "A long period of quiescence or stability in physical conditions is most favourable to the greatest abundance and variety of organic life.",
+      "quote": "a long period of quiescence or stability in the physical conditions of a district would be most favourable to the existence of organic life in the greatest abundance",
+      "kind": "asserted"
+    },
+    {
+      "id": "wallace_1855_sarawak:analogy_becomes_affinity_near_antitype",
+      "statement": "Going back along parallel or divergent series toward the common antitype, an analogy between two groups becomes an affinity.",
+      "quote": "as we go back along the parallel or divergent series, towards the common antitype, the analogy which existed between the two groups becomes an affinity",
+      "kind": "asserted"
+    },
+    {
+      "id": "wallace_1855_sarawak:facts_alone_to_disprove",
+      "statement": "The hypothesis expects facts alone to be brought to disprove it, not a priori arguments against its probability.",
+      "quote": "he expects facts alone to be brought to disprove it; not a \u00e0-priori arguments against its probabiliy",
+      "kind": "asserted"
+    },
+    {
+      "id": "wallace_1855_sarawak:widely_distributed_genera_local_groups",
+      "statement": "In widely distributed genera, well-marked groups of species are peculiar to each geographical district.",
+      "quote": "in widely distributed genera, well-marked groups of species are peculiar to each geographical district",
+      "kind": "asserted"
+    },
+    {
+      "id": "wallace_1855_sarawak:gaps_softened_by_intermediates",
+      "statement": "The great gaps between fishes, reptiles, birds and mammals would be softened by intermediate groups if all extinct forms were seen.",
+      "quote": "The great gaps that exist between fishes, reptiles, birds and mammals would then, no doubt, be softened down by intermediate groups",
+      "kind": "required_by_argument"
+    },
+    {
+      "id": "wallace_1855_sarawak:natural_series_is_order_of_creation",
+      "statement": "The natural series of affinities represents the order in which the several species came into existence.",
+      "quote": "it follows that the natural series of affinities will also represent the order in which the several species came into existence",
+      "kind": "required_by_argument"
+    },
+    {
+      "id": "wallace_1855_sarawak:lower_forms_survive_to_reseed",
+      "statement": "When higher groups have become nearly extinct, lower forms that have better resisted modified conditions serve as antitypes on which to found the new races.",
+      "quote": "whenever any of the higher groups have become nearly or quite extinct, the lower forms which have better resisted the modified physical conditions have served as the antitypes on which to found the new races",
+      "kind": "asserted"
+    }
+  ]
+}

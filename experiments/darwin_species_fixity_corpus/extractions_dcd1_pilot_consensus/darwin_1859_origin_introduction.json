@@ -1,0 +1,195 @@
+{
+  "doc_id": "darwin_1859_origin_introduction",
+  "propositions": [
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_introduction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "species_descended_like_varieties",
+      "quote": "each species had not been independently created, but had descended, like varieties, from other species",
+      "statement": "Each species has not been independently created but has descended, like varieties, from other species.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_introduction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "external_conditions_inadequate_woodpecker",
+      "quote": "it is preposterous to attribute to mere external conditions, the structure, for instance, of the woodpecker, with its feet, tail, beak, and tongue, so admirably adapted to catch insects under the bark of trees",
+      "statement": "External conditions alone cannot account for the adaptive structure of the woodpecker's feet, tail, beak, and tongue for catching insects under bark.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_introduction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "domestication_best_clue",
+      "quote": "a careful study of domesticated animals and of cultivated plants would offer the best chance of making out this obscure problem",
+      "statement": "Careful study of domesticated animals and cultivated plants offers the best chance of understanding the means of modification.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_introduction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "hereditary_modification_possible",
+      "quote": "a large amount of hereditary modification is at least possible",
+      "statement": "A large amount of hereditary modification is at least possible.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_introduction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "mans_selection_accumulates_variations",
+      "quote": "how great is the power of man in accumulating by his Selection successive slight variations",
+      "statement": "Man has great power to accumulate successive slight variations by his Selection.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "darwin_1859_origin_introduction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "struggle_from_geometrical_increase",
+      "quote": "the Struggle for Existence amongst all organic beings throughout the world, which inevitably follows from their high geometrical powers of increase",
+      "statement": "A struggle for existence among all organic beings follows inevitably from their high geometrical powers of increase.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_introduction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "malthus_applies_to_all_life",
+      "quote": "This is the doctrine of Malthus, applied to the whole animal and vegetable kingdoms",
+      "statement": "The Malthusian doctrine applies to the whole animal and vegetable kingdoms.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_introduction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "overproduction_of_offspring",
+      "quote": "As many more individuals of each species are born than can possibly survive; and as, consequently, there is a frequently recurring struggle for existence",
+      "statement": "Many more individuals of each species are born than can possibly survive, so a struggle for existence recurs frequently.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "darwin_1859_origin_introduction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "profitable_variation_selected",
+      "quote": "any being, if it vary however slightly in any manner profitable to itself, under the complex and sometimes varying conditions of life, will have a better chance of surviving, and thus be naturally selected",
+      "statement": "Any being that varies however slightly in a manner profitable to itself will have a better chance of surviving and be naturally selected.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_introduction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "strong_principle_of_inheritance",
+      "quote": "From the strong principle of inheritance, any selected variety will tend to propagate its new and modified form",
+      "statement": "By the strong principle of inheritance, any selected variety will tend to propagate its new and modified form.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_introduction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "selection_causes_extinction_and_divergence",
+      "quote": "Natural Selection almost inevitably causes much Extinction of the less improved forms of life, and induces what I have called Divergence of Character",
+      "statement": "Natural Selection almost inevitably causes much Extinction of the less improved forms and induces Divergence of Character.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_introduction",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "transitions_from_simple_to_complex",
+      "quote": "how a simple being or a simple organ can be changed and perfected into a highly developed being or elaborately constructed organ",
+      "statement": "A simple being or organ must be capable of being changed and perfected into a highly developed being or elaborately constructed organ.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "darwin_1859_origin_introduction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "hybridism_species_variety_distinction",
+      "quote": "Hybridism, or the infertility of species and the fertility of varieties when intercrossed",
+      "statement": "Species are infertile and varieties fertile when intercrossed, and this Hybridism is a difficulty for the theory.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_introduction",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "geological_succession_of_beings",
+      "quote": "In the next chapter I shall consider the geological succession of organic beings throughout time",
+      "statement": "Organic beings exhibit a geological succession throughout time that must be accounted for.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_introduction",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "classification_reflects_affinities",
+      "quote": "their classification or mutual affinities, both when mature and in an embryonic condition",
+      "statement": "The classification or mutual affinities of organic beings, both mature and embryonic, are evidence to be explained.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_introduction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "independent_creation_erroneous",
+      "quote": "the view which most naturalists entertain, and which I formerly entertained\u2014namely, that each species has been independently created\u2014is erroneous",
+      "statement": "The view that each species has been independently created is erroneous.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_introduction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "species_not_immutable",
+      "quote": "species are not immutable; but that those belonging to what are called the same genera are lineal descendants of some other and generally extinct species",
+      "statement": "Species are not immutable; those of the same genera are lineal descendants of other and generally extinct species.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_introduction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "natural_selection_main_not_exclusive",
+      "quote": "Natural Selection has been the main but not exclusive means of modification",
+      "statement": "Natural Selection has been the main but not the exclusive means of modification.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_introduction",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "present_relations_govern_future_modification",
+      "quote": "these relations are of the highest importance, for they determine the present welfare, and, as I believe, the future success and modification of every inhabitant of this world",
+      "statement": "Mutual relations among beings determine present welfare and the future success and modification of every inhabitant of the world.",
+      "support": 3
+    }
+  ]
+}

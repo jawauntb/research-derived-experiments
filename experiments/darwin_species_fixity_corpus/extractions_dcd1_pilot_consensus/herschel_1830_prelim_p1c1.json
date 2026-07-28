@@ -1,0 +1,185 @@
+{
+  "doc_id": "herschel_1830_prelim_p1c1",
+  "propositions": [
+    {
+      "definitional": false,
+      "doc_id": "herschel_1830_prelim_p1c1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "man_physically_inferior_to_animals",
+      "quote": "he seems, if we regard only his physical constitution, in almost every respect their inferior, and equally unprovided for the supply of his natural wants and his defence against the innumerable enemies which surround him",
+      "statement": "Regarded only in his physical constitution, man is in almost every respect inferior to other denizens of the globe.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "herschel_1830_prelim_p1c1",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "nature_denies_and_provides",
+      "quote": "To no other warm-blooded animal has nature denied that indispensable covering without which the vicissitudes of a temperate and the rigours of a cold climate are equally insupportable",
+      "statement": "Nature denies or grants indispensable coverings and provisions to warm-blooded animals.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "herschel_1830_prelim_p1c1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "species_can_become_extinct",
+      "quote": "till after a few generations his species would become altogether extinct, or, at best, would be restricted to a few islands in tropical regions",
+      "statement": "A species left to mere instinct may, after a few generations, become altogether extinct.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "herschel_1830_prelim_p1c1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "climate_restricts_species_range",
+      "quote": "restricted to a few islands in tropical regions, where the warmth of the climate, the paucity of enemies, and the abundance of vegetable food, might permit it to linger",
+      "statement": "Warmth of climate, paucity of enemies, and abundance of vegetable food determine whether a species may linger in a region.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "herschel_1830_prelim_p1c1",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "contrivances_imply_superior_intelligence",
+      "quote": "Thus he is led to the conception of a Power and an Intelligence superior to his own, and adequate to the production and maintenance of all that he sees in nature",
+      "statement": "Contemplation of contrivances leads to the conception of a Power and Intelligence superior to man and adequate to the production of all that he sees in nature.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "herschel_1830_prelim_p1c1",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "every_phenomenon_has_prior_cause",
+      "quote": "he is irresistibly impelled, from the perception of any phenomenon without or within him, to infer the existence of something prior which stands to it in the relation of a cause",
+      "statement": "From the perception of any phenomenon within or without, man is impelled to infer the existence of something prior standing in the relation of a cause.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "herschel_1830_prelim_p1c1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "causal_knowledge_determines_will",
+      "quote": "this knowledge of causes and their consequences is what, in almost every instance, determines his choice and will, in cases where he is nevertheless conscious of perfect freedom to act or not to act",
+      "statement": "Knowledge of causes and consequences determines choice and will even where the agent is conscious of perfect freedom to act.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "herschel_1830_prelim_p1c1",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "natural_reason_grounds_a_deity",
+      "quote": "it places the existence and principal attributes of a Deity on such grounds as to render doubt absurd and atheism ridiculous",
+      "statement": "Natural philosophy places the existence and principal attributes of a Deity on grounds that render doubt absurd and atheism ridiculous.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "herschel_1830_prelim_p1c1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "natural_reason_stops_short_of_revelation",
+      "quote": "the testimony of natural reason, on whatever exercised, must of necessity stop short of those truths which it is the object of revelation to make known",
+      "statement": "The testimony of natural reason must of necessity stop short of the truths which revelation makes known.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "herschel_1830_prelim_p1c1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "free_enquiry_unfetters_the_mind",
+      "quote": "by cherishing as a vital principle an unbounded spirit of enquiry, and ardency of expectation, it unfetters the mind from prejudices of every kind",
+      "statement": "An unbounded spirit of enquiry cherished as a vital principle unfetters the mind from prejudices of every kind.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "herschel_1830_prelim_p1c1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "philosopher_hopes_and_believes_reasonably",
+      "quote": "The character of the true philosopher is to hope all things not impossible, and to believe all things not unreasonable",
+      "statement": "The true philosopher hopes all things not impossible and believes all things not unreasonable.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "herschel_1830_prelim_p1c1",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "truth_cannot_oppose_truth",
+      "quote": "truth can never be opposed to truth, and, on the other, that error is only to be effectually confounded by searching deep and tracing it to its source",
+      "statement": "Truth can never be opposed to truth, and error is only effectually confounded by tracing it to its source.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "herschel_1830_prelim_p1c1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "truth_endures_universal_experience",
+      "quote": "the grand and indeed only character of truth is its capability of enduring the test of universal experience, and coming unchanged out of every possible form of fair discussion",
+      "statement": "The only character of truth is its capability of enduring the test of universal experience and coming unchanged out of every form of fair discussion.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "herschel_1830_prelim_p1c1",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "application_verifies_theory",
+      "quote": "such applications form the very criterions of their truth, they afford the readiest and completest verifications of his theories",
+      "statement": "Practical applications form the very criterions of the truth of speculative theories and afford the readiest verifications.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "herschel_1830_prelim_p1c1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "principles_not_phenomena_are_object",
+      "quote": "it is principles, not phenomena,\u2014laws, not insulated independent facts,\u2014which are the objects of enquiry to the natural philosopher",
+      "statement": "The objects of enquiry to the natural philosopher are principles and laws, not phenomena and insulated independent facts.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "herschel_1830_prelim_p1c1",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "truth_is_single_and_consistent",
+      "quote": "As truth is single, and consistent with itself, a principle may be as completely and as plainly elucidated by the most familiar and simple fact, as by the most imposing and uncommon phenomenon",
+      "statement": "Truth is single and consistent with itself, so a principle may be as plainly elucidated by a simple fact as by an uncommon phenomenon.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "herschel_1830_prelim_p1c1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "small_facts_reveal_universal_laws",
+      "quote": "The fall of an apple to the ground may raise his thoughts to the laws which govern the revolutions of the planets in their orbits",
+      "statement": "The fall of an apple may raise thoughts to the laws which govern the revolutions of the planets in their orbits.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "herschel_1830_prelim_p1c1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "nature_operates_with_regular_ends",
+      "quote": "the observation of the calm, energetic regularity of nature, the immense scale of her operations, and the certainty with which her ends are attained",
+      "statement": "Nature operates with calm energetic regularity on an immense scale and with certainty in attaining her ends.",
+      "support": 3
+    }
+  ]
+}
