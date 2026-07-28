@@ -1,0 +1,222 @@
+{
+  "doc_id": "malthus_1798_essay_ch1",
+  "propositions": [
+    {
+      "name": "food_necessary_for_man",
+      "statement": "Food is necessary to the existence of man.",
+      "quote": "First, That food is necessary to the existence of man.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "passion_between_sexes_necessary",
+      "statement": "The passion between the sexes is necessary and will remain nearly in its present state.",
+      "quote": "Secondly, That the passion between the sexes is necessary, and will remain nearly in its present state.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "two_laws_fixed_laws_of_nature",
+      "statement": "The two postulata appear to have been fixed laws of our nature ever since we have had any knowledge of mankind.",
+      "quote": "These two laws ever since we have had any knowledge of mankind, appear to have been fixed laws of our nature; and, as we have not hitherto seen any alteration in them",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_alteration_implies_continuation",
+      "statement": "Since we have seen no alteration in these laws, we have no right to conclude that they will ever cease to be what they now are.",
+      "quote": "as we have not hitherto seen any alteration in them, we have no right to conclude that they will ever cease to be what they now are",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "divine_being_arranged_universe",
+      "statement": "Only an immediate act of power by the Being who first arranged the system of the universe could alter these fixed laws, which He still executes for the advantage of His creatures.",
+      "quote": "an immediate act of power in that Being who first arranged the system of the universe; and for the advantage of his creatures, still executes, according to fixed laws, all its various operations.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "population_power_greater_than_earth",
+      "statement": "The power of population is indefinitely greater than the power in the earth to produce subsistence for man.",
+      "quote": "the power of population is indefinitely greater than the power in the earth to produce subsistence for man.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "population_geometric_subsistence_arithmetic",
+      "statement": "Population, when unchecked, increases in a geometrical ratio, while subsistence increases only in an arithmetical ratio.",
+      "quote": "Population, when unchecked, increases in a geometrical ratio. Subsistence increases only in an arithmetical ratio.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "effects_must_be_kept_equal",
+      "statement": "By the law of our nature that makes food necessary to the life of man, the effects of these two unequal powers must be kept equal.",
+      "quote": "By that law of our nature which makes food necessary to the life of man, the effects of these two unequal powers must be kept equal.",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "constant_check_on_population",
+      "statement": "The equalization of these powers implies a strong and constantly operating check on population from the difficulty of subsistence.",
+      "quote": "This implies a strong and constantly operating check on population from the difficulty of subsistence. This difficulty must fall somewhere; and must necessarily be severely felt by a large portion of mankind.",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "nature_scattered_seeds_profusely",
+      "statement": "Through the animal and vegetable kingdoms, nature has scattered the seeds of life abroad with the most profuse and liberal hand.",
+      "quote": "Through the animal and vegetable kingdoms, nature has scattered the seeds of life abroad with the most profuse and liberal hand.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "room_and_nourishment_sparing",
+      "statement": "Nature has been comparatively sparing in the room and the nourishment necessary to rear the seeds of life.",
+      "quote": "She has been comparatively sparing in the room, and the nourishment necessary to rear them.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "germs_would_fill_millions_worlds",
+      "statement": "The germs of existence contained in this spot of earth, with ample food and room, would fill millions of worlds in a few thousand years.",
+      "quote": "The germs of existence contained in this spot of earth, with ample food, and ample room to expand in, would fill millions of worlds in the course of a few thousand years.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "necessity_restrains_within_bounds",
+      "statement": "Necessity, an imperious all-pervading law of nature, restrains the germs of existence within the prescribed bounds.",
+      "quote": "Necessity, that imperious all pervading law of nature, restrains them within the prescribed bounds.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "race_plants_animals_shrink",
+      "statement": "The race of plants and the race of animals shrink under this great restrictive law.",
+      "quote": "The race of plants and the race of animals shrink under this great restrictive law.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "race_of_man_cannot_escape",
+      "statement": "The race of man cannot, by any efforts of reason, escape from this restrictive law.",
+      "quote": "And the race of man cannot, by any efforts of reason, escape from it.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "effects_seed_sickness_death_misery",
+      "statement": "Among plants and animals the law's effects are waste of seed, sickness, and premature death; among mankind, misery and vice.",
+      "quote": "Among plants and animals its effects are waste of seed, sickness, and premature death. Among mankind, misery and vice.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "misery_necessary_vice_probable",
+      "statement": "Misery is an absolutely necessary consequence of the law, while vice is a highly probable consequence that we see abundantly prevail.",
+      "quote": "The former, misery, is an absolutely necessary consequence of it. Vice is a highly probable consequence, and we therefore see it abundantly prevail",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "ordeal_of_virtue",
+      "statement": "The ordeal of virtue is to resist all temptation to evil.",
+      "quote": "The ordeal of virtue is to resist all temptation to evil.",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "law_pervades_animated_nature",
+      "statement": "There is no way by which man can escape from the weight of this law, which pervades all animated nature.",
+      "quote": "I see no way by which man can escape from the weight of this law which pervades all animated nature.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "equality_cannot_remove_pressure",
+      "statement": "No fancied equality and no agrarian regulations could remove the pressure of this law even for a single century.",
+      "quote": "No fancied equality, no agrarian regulations in their utmost extent, could remove the pressure of it even for a single century.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "argument_conclusive_if_premises_just",
+      "statement": "If the premises are just, the argument is conclusive against the perfectibility of the mass of mankind.",
+      "quote": "Consequently, if the premises are just, the argument is conclusive against the perfectibility of the mass of mankind.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "experience_source_of_knowledge",
+      "statement": "Experience is the true source and foundation of all knowledge and invariably confirms the truth of the argument.",
+      "quote": "experience, the true source and foundation of all knowledge, invariably confirms its truth.",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "just_theory_confirmed_by_experiment",
+      "statement": "It is an acknowledged truth in philosophy that a just theory will always be confirmed by experiment.",
+      "quote": "It is an acknowledged truth in philosophy, that a just theory will always be confirmed by experiment.",
+      "kind": "presupposed",
+      "definitional": true
+    },
+    {
+      "name": "untried_argument_requires_refutation",
+      "statement": "An untried argument cannot fairly be advanced as probable or just until all arguments against it have been maturely weighed and consistently refuted.",
+      "quote": "an untried argument cannot fairly be advanced as probable, much less as just, till all the arguments against it, have been maturely weighed, and clearly and consistently refuted.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "conjectures_excluded_from_argument",
+      "statement": "Mere conjectures whose probable realization cannot be inferred upon any just philosophical grounds are put out of the question.",
+      "quote": "I put out of the question, at present, all mere conjectures: that is, all suppositions, the probable realization of which cannot be inferred upon any just philosophical grounds.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "species_change_requires_gradual_evidence",
+      "statement": "Before claiming man will become an ostrich, one must show that the necks of mankind have been gradually elongating.",
+      "quote": "But before he can expect to bring any reasonable person over to his opinion, he ought to shew, that the necks of mankind have been gradually elongating",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "exception_cannot_become_rule",
+      "statement": "It would be very unphilosophical to infer merely from the existence of an exception that the exception would in time become the rule.",
+      "quote": "it would surely be a very unphilosophical mode of arguing, to infer merely from the existence of an exception, that the exception would, in time, become the rule, and the rule the exception.",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "passion_unchanged_over_millennia",
+      "statement": "The passion between the sexes appears to exist in as much force at present as it did two thousand or four thousand years ago.",
+      "quote": "It appears to exist in as much force at present as it did two thousand or four thousand years ago.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_progress_toward_extinguishing_passion",
+      "statement": "Toward the extinction of the passion between the sexes, no progress whatever has hitherto been made.",
+      "quote": "But towards the extinction of the passion between the sexes, no progress whatever has hitherto been made.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "progress_from_savage_state",
+      "statement": "The best arguments for the perfectibility of man are drawn from a contemplation of the great progress he has already made from the savage state.",
+      "quote": "the best arguments for the perfectibility of man, are drawn from a contemplation of the great progress that he has already made from the savage state, and the difficulty of saying where he is to stop.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "natural_inequality_insurmountable",
+      "statement": "The natural inequality of the two powers, and the law that keeps their effects equal, form the great difficulty insurmountable in the way to the perfectibility of society.",
+      "quote": "form the great difficulty that to me appears insurmountable in the way to the perfectibility of society. All other arguments are of slight and subordinate consideration in comparison of this.",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

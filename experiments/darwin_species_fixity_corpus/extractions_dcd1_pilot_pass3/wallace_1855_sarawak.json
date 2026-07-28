@@ -1,0 +1,285 @@
+{
+  "doc_id": "wallace_1855_sarawak",
+  "propositions": [
+    {
+      "name": "earth_undergone_successive_changes",
+      "statement": "The present state of the earth and its inhabitants is the last stage of a long, uninterrupted series of changes.",
+      "quote": "the present state of the earth, and the organisms now inhabiting it, are but the last stage of a long and uninterrupted series of changes which it has undergone",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "organic_life_gradually_altered",
+      "statement": "Throughout geological changes the organic life of the earth has undergone a corresponding gradual but complete alteration.",
+      "quote": "the organic life of the earth has undergone a corresponding alteration. This alteration also has been gradual, but complete",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "complete_species_turnover_per_period",
+      "statement": "After a sufficient interval no species existing at the commencement of a period still exists.",
+      "quote": "after a certain interval not a single species existing which had lived at the commencement of the period",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "renewal_of_forms_repeated",
+      "statement": "Complete renewal of the forms of life has occurred several times in the earth's history.",
+      "quote": "This complete renewal of the forms of life also appears to have occurred several times",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "gradual_extinction_and_creation",
+      "statement": "The present organic world derives from earlier geological periods by a natural process of gradual extinction and creation of species.",
+      "quote": "the present condition of the organic world is clearly derived by a natural process of gradual extinction and creation of species from that of the latest geological periods",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "large_groups_widespread",
+      "statement": "Large groups such as classes and orders are spread over the whole earth while smaller groups are confined to limited portions.",
+      "quote": "Large groups, such as classes and orders, are generally spread over the whole earth, while smaller ones, such as families and genera, are frequently confined to one portion",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "widespread_family_limited_genera",
+      "statement": "In widely distributed families the genera are often limited in range and well-marked groups of species are peculiar to each district.",
+      "quote": "In widely distributed families the genera are often limited in range; in widely distributed genera, well-marked groups of species are peculiar to each geographical district",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "affinity_sequence_is_geographical",
+      "statement": "The most closely allied species tend to be found in the same or closely adjoining localities so affinity tracks geography.",
+      "quote": "the most closely allied species are found in the same locality or in closely adjoing localities; and that therefore the natural sequence of the species by affinity is also geographical",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "similar_climates_representative_species",
+      "statement": "Countries of similar climate but separated by barriers have families genera and species represented by closely allied peculiar ones.",
+      "quote": "In countries of a similar climate, but separated by a wide sea of lofty mountains, the families, genera and species of the one are often represented by closely allied families, genera and species peculiar to the other",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "distribution_in_time_like_space",
+      "statement": "The distribution of the organic world in time is very similar to its present distribution in space.",
+      "quote": "The distribution of the organic world in time is very similar to its present distribution in space",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "cotemporal_taxa_more_allied",
+      "statement": "Species and genera occurring in the same geological time are more closely allied than those separated in time.",
+      "quote": "Species of one genus, or genera of one family occurring in the same geological time are more closely allied than those separated in time",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_species_appears_twice",
+      "statement": "The life of a species or genus has not been interrupted and no group or species has come into existence twice.",
+      "quote": "the life of a species or genus has not been interrupted. In other words, no group or species has come into existence twice",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "sarawak_law",
+      "statement": "Every species has come into existence coincident in space and time with a pre-existing closely allied species.",
+      "quote": "Every species has come into existence coincident both in space and time with a pre-existing closely allied species",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "affinities_reveal_creation_order",
+      "statement": "The natural series of affinities represents the order in which species came into existence each with an immediate antitype.",
+      "quote": "the natural series of affinities will also represent the order in which the several species came into existence, each one having had for its immediate antitype a closely allied species existing at the time of its origin",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "common_antitype_multiple_descendants",
+      "statement": "Two or three distinct species may have shared a common antitype and each may itself become antitype to further species.",
+      "quote": "It is evidently possible that two or three distinct species may have had a common antitype, and that each of these may again have become the antitypes from which other closely allied species were created",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "forked_line_of_affinities",
+      "statement": "When multiple species are independently formed on a common antitype the series of affinities becomes a forked many-branched line.",
+      "quote": "if two or more species have been independently formed on the plan of a common antitype, then the series of affinities will be compound, and can only be represented by a forked or many-branched line",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "branching_tree_of_creation",
+      "statement": "A branching tree is the best mode of representing the natural arrangement of species and their successive creation.",
+      "quote": "Returning to the analogy of a branching tree, as the best mode of representing the natural arrangement of species and their successive creation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "isolation_yields_peculiar_taxa",
+      "statement": "A country isolated long enough for many series of species to be created on pre-existing types will have peculiar taxa.",
+      "quote": "A country having species, genera, and whole families peculiar to it, will be the necessary result of its having been isolated for a long period",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "galapagos_allied_to_south_america",
+      "statement": "The Galapagos Islands contain groups of plants and animals peculiar to themselves yet most nearly allied to those of South America.",
+      "quote": "the Galapagos Islands, which contain little groups of plants and animals peculiar to themselves, but most nearly allied to those of South America",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "islands_peopled_by_winds_currents",
+      "statement": "Newly-formed islands are first peopled by the action of winds and currents at a period remote enough for original species to die out.",
+      "quote": "They must have been first peopled, like other newly-formed islands, by the action of winds and currents, and at a period sufficiently remote to have had the original species die out",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "recent_islands_lack_peculiar_groups",
+      "statement": "No geologically very recent island is known to possess generic or family groups or many species peculiar to itself.",
+      "quote": "no example is known of an island which can be proved geologically to be of very recent origin (late in the Tertiary, for instance), and yet possesses generic or family groups, or even many species peculiar to itself",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "mountain_range_representative_species",
+      "statement": "A long-elevated mountain range produces very different species and representative genera on its two sides.",
+      "quote": "When a range of mountains has attained a great elevation, and has so remained during a long geological period, the species of the two sides at and near their bases will be often very different",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "malacca_borneo_early_continent",
+      "statement": "The shallow sea between Malacca Java Sumatra and Borneo was probably a continent or large island at an early epoch.",
+      "quote": "The shallow sea between the Peninsula of Malacca, Java, Sumatra and Borneo was probably a continent or large island at an early epoch",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "britain_recent_no_peculiar_species",
+      "statement": "Britain shows recent geological separation from the continent and has scarcely a species peculiar to it.",
+      "quote": "Our own island is an example of this, its separation from the continent being geologically very recent, and we have consequently scarcely a species which is peculiar to it",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "extinction_from_altered_conditions",
+      "statement": "Gradual geological changes have occasionally modified external conditions enough to render certain species impossible.",
+      "quote": "Geological changes, however gradual, must occasionally have modified external conditions to such an extent as to have rendered the existence of certain species impossible",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "general_progression_of_organization",
+      "statement": "Mollusca and Radiata existed before Vertebrata and progression from Fishes to Reptiles to Mammalia and lower to higher mammals is indisputable.",
+      "quote": "Mollusca and Radiata existed before Vertebrata, and the progression from Fishes to Reptiles and Mammalia, and also from the lower mammals to the higher, is indisputable",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "theory_is_gradual_change_not_progression",
+      "statement": "The hypothesis though appearing progressive is in reality only a theory of gradual change.",
+      "quote": "though it may appear to some readers essentially a theory of progression, it is in reality only one of gradual change",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "lower_forms_serve_as_antitypes",
+      "statement": "When higher groups become extinct the lower forms that resisted altered conditions serve as antitypes on which new races are founded.",
+      "quote": "whenever any of the higher groups have become nearly or quite extinct, the lower forms which have better resisted the modified physical conditions have served as the antitypes on which to found the new races",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "quiescence_favors_abundance",
+      "statement": "A long period of quiescence or stability in physical conditions is most favourable to the greatest abundance of organic life.",
+      "quote": "a long period of quiescence or stability in the physical conditions of a district would be most favourable to the existence of organic life in the greatest abundance",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rapid_or_large_change_unfavorable",
+      "statement": "A change in physical conditions if rapid or if gradual but to a great amount is highly unfavourable to individuals.",
+      "quote": "a change in the physical conditions of a district, even small in amount, if rapid, or even gradual, if to a great amount, would be highly unfavourable to the existence of individuals",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "geological_activity_extinction_exceeds_creation",
+      "statement": "In a period of geological activity extinctions may exceed creations so the number of species diminishes.",
+      "quote": "In a period of geological activity, on the other hand, it, seems probable that the extinctions might exceed the creations, and the number of species consequently diminish",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "knowledge_of_past_life_fragmentary",
+      "statement": "Our knowledge of the former inhabitants of the earth is necessarily most imperfect and fragmentary.",
+      "quote": "our knowledge of the whole series of the former inhabitants of the earth is necessarily most imperfect and fragmentary",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rudimentary_organs_have_no_function",
+      "statement": "Rudimentary organs really exist and in most cases have no special function in the animal economy.",
+      "quote": "these really do exist, and in most cases have no special function in the animal æconomy, is admitted by the first authorities in comparative anatomy",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rudimentary_organ_examples",
+      "statement": "Familiar rudimentary organs include hidden limbs in snake-like lizards anal hooks of the boa constrictor and finger-bones in Manatus and whale paddles.",
+      "quote": "The minute limbs hidden beneath the skin in many of the snake-like lizards, the anal hooks of the boa constrictor, the complete series of jointed finger-bones in the paddle of the Manatus and whale",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "independent_creation_leaves_rudiments_unexplained",
+      "statement": "If each species were created independently without relation to pre-existing species rudimentary organs would be inexplicable.",
+      "quote": "If each species has been created independently, and without any necessary relations with pre-existing species, what do these rudiments, these apparent imperfections mean?",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "every_change_shall_be_gradual",
+      "statement": "The great law regulating the peopling of the earth is that every change shall be gradual and no new creature widely differs from anything before existing.",
+      "quote": "the great law which has regulated the peopling of the earth with animal and vegetable life is, that every change shall be gradual; that no new creature shall be formed widely differing from anything before existing",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "penguin_flapper_antitype_of_wing",
+      "statement": "The scaly flapper of the penguin remains as an antitypal sketch of a wing adapted for flight.",
+      "quote": "We still see remaining an antitypal sketch of a wing adapted for flight in the scaly flapper of the penguin",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "gaps_softened_by_intermediates",
+      "statement": "The great gaps between fishes reptiles birds and mammals would be softened down by intermediate groups if all extinct forms were known.",
+      "quote": "The great gaps that exist between fishes, reptiles, birds and mammals would then, no doubt, be softened down by intermediate groups",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "law_necessitates_facts",
+      "statement": "The hypothesis is superior because it not merely explains but necessitates what exists.",
+      "quote": "It also claims a superiority over previous hypotheses, on the ground that it not merely explains, but necessitates what exists",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "facts_alone_should_disprove",
+      "statement": "The hypothesis should be disproved by facts alone and not by a-priori arguments against its probability.",
+      "quote": "he expects facts alone to be brought to disprove it; not a à-priori arguments against its probabiliy",
+      "kind": "presupposed",
+      "definitional": false
+    }
+  ]
+}

@@ -1,0 +1,245 @@
+{
+  "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+  "propositions": [
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "offspring_is_branch_of_parent",
+      "quote": "the offspring is termed a new animal, but is in truth a branch or elongation of the parent",
+      "statement": "The offspring is not entirely new but is a branch or elongation of the parent, retaining some habits of the parent-system.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "embryon_produced_by_male",
+      "quote": "we may conclude, that the embryon is produced by the male, and the proper food and nidus by the female",
+      "statement": "The living embryon is produced by the male, while the female contributes only the food and nidus.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "buds_exactly_resemble_parent",
+      "quote": "This paternal offspring of vegetables, I mean their buds and bulbs, is attended with a very curious circumstance; and that is, that they exactly resemble their parents",
+      "statement": "Paternal offspring produced without a mother, as buds and bulbs, exactly resemble their parents.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "growth_by_apposition_not_distention",
+      "quote": "the fetus or embryon is formed by apposition of new parts, and not by the distention of a primordial nest of germs",
+      "statement": "The embryon acquires its parts by accretion of new parts, not by distention of pre-existing miniature parts.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "mules_disprove_preformation",
+      "quote": "how could mule-animals be produced, which partake of the forms of both the parents, if the original embryon was a miniature existing in the semen of the male parent",
+      "statement": "The existence of mules resembling both parents refutes the doctrine that the embryon is a preformed miniature in the male semen.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "new_organs_new_appetencies",
+      "quote": "With every new change, therefore, of organic form, or addition of organic parts, I suppose a new kind of irritability or of sensibility to be produced",
+      "statement": "Every new addition of an organic part to the embryon produces a new kind of irritability, sensibility, and animal appetency.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "warm_blooded_common_descent",
+      "quote": "all warm-blooded animals have arisen from one living filament, which THE GREAT First Cause endued with animality",
+      "statement": "All warm-blooded animals descend from one original living filament endowed by the First Cause with animality.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "all_organic_life_one_filament",
+      "quote": "one and the same kind of living filaments is and has been the cause of all organic life",
+      "statement": "One and the same kind of living filament is and has been the cause of all organic life, animal and vegetable alike.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "species_from_mixture_of_orders",
+      "quote": "the great variety of species of animals, which now tenant the earth, may have had their origin from the mixture of a few natural orders",
+      "statement": "The great variety of species now on earth may have originated from the mixture of a few natural orders.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "fertile_mules_founded_species",
+      "quote": "those animal and vegetable mules, which could continue their species, have done so, and constitute the numerous families of animals and vegetables which now exist",
+      "statement": "Those mules that could continue their species did so, and now constitute the numerous families of animals and vegetables in existence.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "sterile_mules_perished",
+      "quote": "those mules, which were produced with imperfect organs of generation, perished without reproduction",
+      "statement": "Mules produced with imperfect organs of generation perished without reproduction, filtering the surviving forms.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "acquired_forms_transmitted",
+      "quote": "many of these acquired forms or propensities are transmitted to their posterity",
+      "statement": "Many acquired forms or propensities produced by an animal's own exertions are transmitted to its posterity.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "perpetual_transformation_by_exertion",
+      "quote": "all animals undergo perpetual transformations; which are in part produced by their own exertions in consequence of their desires and aversions",
+      "statement": "All animals undergo perpetual transformations produced in part by their own exertions responding to desires and aversions.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "three_great_wants_shape_forms",
+      "quote": "the three great objects of desire, which have changed the forms of many animals by their exertions to gratify them, are those of lust, hunger, and security",
+      "statement": "The three great objects of desire that have changed the forms of many animals through their exertions are lust, hunger, and security.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "combat_selects_strongest",
+      "quote": "the strongest and most active animal should propagate the species, which should thence become improved",
+      "statement": "The final cause of male combat for females is that the strongest and most active animal should propagate the species, which should thence become improved.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "adaptations_gradually_produced",
+      "quote": "gradually produced during many generations by the perpetual endeavour of the creatures to supply the want of food",
+      "statement": "Adaptations for procuring food were gradually produced during many generations by the perpetual endeavour of the creatures to supply their want of food.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "domestication_shows_plasticity",
+      "quote": "the great changes introduced into various animals by artificial or accidental cultivation, as in horses",
+      "statement": "Great changes have been introduced into animals by artificial or accidental cultivation, as in horses and dogs bred for various purposes.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "progressive_improvement_ongoing",
+      "quote": "the animals, which inhabit it, have constantly improved, and are still in a state of progressive improvement",
+      "statement": "The animals inhabiting the earth have constantly improved and remain in a state of progressive improvement.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "inheritance_faculty_perpetual",
+      "quote": "possessing the faculty of continuing to improve by its own inherent activity, and of delivering down those improvements by generation to its posterity, world without end",
+      "statement": "The living filament possesses the faculty of continuing to improve by its own inherent activity and of delivering those improvements down by generation to its posterity indefinitely.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "world_generated_not_created",
+      "quote": "the world itself might have been generated, rather than created; that is, it might have been gradually produced from very small beginnings",
+      "statement": "The world itself might have been generated rather than created, gradually produced from very small beginnings.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "state_of_probation_responsibility",
+      "quote": "our present situation being a state of probation, which by our exertions we may improve, and are consequently responsible for our actions",
+      "statement": "Our present situation is a state of probation which by our exertions we may improve, and for which we are consequently responsible.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "male_imagination_marks_sex",
+      "quote": "the imagination of the male at the time of copulation, or at the time of the secretion of the semen, may so affect this secretion by irritative or sensitive association",
+      "statement": "The imagination of the male at the time of copulation may affect the secretion of the semen so as to produce the similarity of form, features, and sex of the child.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "structural_similarity_implies_kinship",
+      "quote": "one is led to conclude, that they have alike been produced from a similar living filament",
+      "statement": "The great similarity of structure across warm-blooded animals leads to the conclusion that they have alike been produced from a similar living filament.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "erasmus_darwin_1794_zoonomia_generation_39",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "causes_chain_from_creator",
+      "quote": "we may consider the progressive motions of objects as a chain of causes only; whose first link proceeded from the great Creator",
+      "statement": "The progressive motions of objects form a chain of causes whose first link proceeded from the great Creator.",
+      "support": 2
+    }
+  ]
+}

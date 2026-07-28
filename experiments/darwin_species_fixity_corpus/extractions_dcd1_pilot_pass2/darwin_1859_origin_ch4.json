@@ -1,0 +1,229 @@
+{
+  "doc_id": "darwin_1859_origin_ch4",
+  "propositions": [
+    {
+      "name": "natural_selection_defined",
+      "statement": "Natural selection is the preservation of favourable variations and the rejection of injurious variations.",
+      "quote": "This preservation of favourable variations and the rejection of injurious variations, I call Natural Selection",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "more_born_than_survive",
+      "statement": "Many more individuals are born than can possibly survive.",
+      "quote": "remembering that many more individuals are born than can possibly survive",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "slight_advantage_favors_survival",
+      "statement": "Individuals with any slight advantage have the best chance of surviving and procreating their kind.",
+      "quote": "individuals having any advantage, however slight, over others, would have the best chance of surviving and of procreating their kind",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "injurious_variations_destroyed",
+      "statement": "Any variation in the least degree injurious would be rigidly destroyed.",
+      "quote": "any variation in the least degree injurious would be rigidly destroyed",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "mutual_relations_complex",
+      "statement": "The mutual relations of all organic beings to each other and to their physical conditions of life are infinitely complex and close-fitting.",
+      "quote": "how infinitely complex and close-fitting are the mutual relations of all organic beings to each other and to their physical conditions of life",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "conditions_alter_variability",
+      "statement": "A change in the conditions of life, acting on the reproductive system, causes or increases variability.",
+      "quote": "a change in the conditions of life, by specially acting on the reproductive system, causes or increases variability",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "requires_profitable_variations",
+      "statement": "Unless profitable variations occur, natural selection can do nothing.",
+      "quote": "unless profitable variations do occur, natural selection can do nothing",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "nature_acts_on_internals",
+      "statement": "Nature can act on every internal organ, every shade of constitutional difference, and the whole machinery of life.",
+      "quote": "She can act on every internal organ, on every shade of constitutional difference, on the whole machinery of life",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "selection_works_silently",
+      "statement": "Natural selection works silently and insensibly at the improvement of each organic being in relation to its organic and inorganic conditions of life.",
+      "quote": "silently and insensibly working, whenever and wherever opportunity offers, at the improvement of each organic being in relation to its organic and inorganic conditions of life",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "trifling_characters_selected",
+      "statement": "Characters and structures apt to be considered of very trifling importance may be acted on by natural selection.",
+      "quote": "characters and structures, which we are apt to consider as of very trifling importance, may thus be acted on",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "correlation_of_growth",
+      "statement": "Unknown laws of correlation of growth cause modification of one part to produce other modifications when accumulated by natural selection.",
+      "quote": "there are many unknown laws of correlation of growth, which, when one part of the organisation is modified through variation, and the modifications are accumulated by natural selection for the good of the being, will cause other modifications",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "age_specific_inheritance",
+      "statement": "Variations appearing at a particular period of life tend to reappear in the offspring at the same period.",
+      "quote": "variations which under domestication appear at any particular period of life, tend to reappear in the offspring at the same period",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_altruism_across_species",
+      "statement": "Natural selection cannot modify the structure of one species, without advantage to it, for the good of another species.",
+      "quote": "What natural selection cannot do, is to modify the structure of one species, without giving it any advantage, for the good of another species",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "sexual_selection_defined",
+      "statement": "Sexual selection depends on a struggle between the males for possession of the females rather than on the struggle for existence.",
+      "quote": "This depends, not on a struggle for existence, but on a struggle between the males for possession of the females",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "female_choice_modifies_males",
+      "statement": "Female birds selecting the most melodious or beautiful males across thousands of generations can produce a marked effect.",
+      "quote": "female birds, by selecting, during thousands of generations, the most melodious or beautiful males, according to their standard of beauty, might produce a marked effect",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "no_perpetual_self_fertilisation",
+      "statement": "No organic being self-fertilises itself for an eternity of generations; a cross with another individual is occasionally indispensable.",
+      "quote": "no organic being self-fertilises itself for an eternity of generations; but that a cross with another individual is occasionally—perhaps at very long intervals—indispensable",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "cross_gives_vigour",
+      "statement": "A cross between different varieties, or between individuals of the same variety but of another strain, gives vigour and fertility to the offspring.",
+      "quote": "a cross between different varieties, or between individuals of the same variety but of another strain, gives vigour and fertility to the offspring",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "isolation_important",
+      "statement": "Isolation is an important element in the process of natural selection.",
+      "quote": "Isolation, also, is an important element in the process of natural selection",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "rarity_precedes_extinction",
+      "statement": "Rarity is the precursor to extinction.",
+      "quote": "Rarity, as geology tells us, is the precursor to extinction",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "new_forms_imply_extinctions",
+      "statement": "As new forms are continually produced, unless the number of specific forms increases indefinitely, numbers must inevitably become extinct.",
+      "quote": "as new forms are continually and slowly being produced, unless we believe that the number of specific forms goes on perpetually and almost indefinitely increasing, numbers inevitably must become extinct",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "varieties_are_incipient_species",
+      "statement": "Varieties are species in the process of formation, or incipient species.",
+      "quote": "varieties are species in the process of formation, or are, as I have called them, incipient species",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "common_species_vary_more",
+      "statement": "The commonest and most widely-diffused species vary more than rare species with restricted ranges.",
+      "quote": "the species, which are the commonest and the most widely-diffused, vary more than rare species with restricted ranges",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "closest_kindred_compete_most",
+      "statement": "The most closely-allied forms, sharing structure, constitution, and habits, generally come into the severest competition with each other.",
+      "quote": "the most closely-allied forms,—varieties of the same species, and species of the same genus or of related genera,—which, from having nearly the same structure, constitution, and habits, generally come into the severest competition with each other",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "divergence_yields_advantage",
+      "statement": "The more diversified in structure, constitution, and habits the descendants become, the better they can seize widely diversified places in the polity of nature.",
+      "quote": "the more diversified the descendants from any one species become in structure, constitution, and habits, by so much will they be better enabled to seize on many and widely diversified places in the polity of nature",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "selection_accumulates_small_modifications",
+      "statement": "Natural selection acts only by the preservation and accumulation of infinitesimally small inherited modifications, each profitable to the preserved being.",
+      "quote": "Natural selection can act only by the preservation and accumulation of infinitesimally small inherited modifications, each profitable to the preserved being",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "banishes_continued_creation",
+      "statement": "Natural selection, if a true principle, banishes the belief of the continued creation of new organic beings or of any great and sudden modification in their structure.",
+      "quote": "will natural selection, if it be a true principle, banish the belief of the continued creation of new organic beings, or of any great and sudden modification in their structure",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "places_better_filled_by_modification",
+      "statement": "Places in the economy of nature would be better filled up if some of the original inhabitants were in some manner modified.",
+      "quote": "places in the economy of nature which would assuredly be better filled up, if some of the original inhabitants were in some manner modified",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "geometrical_increase_fills_area",
+      "statement": "From the high geometrical powers of increase of all organic beings, each area is already fully stocked with inhabitants.",
+      "quote": "as from the high geometrical powers of increase of all organic beings, each area is already fully stocked with inhabitants",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "diversification_as_division_of_labour",
+      "statement": "The advantage of diversification in the inhabitants of the same region is the same as that of the physiological division of labour in the organs of the same individual body.",
+      "quote": "The advantage of diversification in the inhabitants of the same region is, in fact, the same as that of the physiological division of labour in the organs of the same individual body",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "offspring_inherit_habits_structure",
+      "statement": "Offspring inherit the habits or structure of the parent, and repetition of this process may form a new variety that supplants or coexists with the parent-form.",
+      "quote": "Some of its young would probably inherit the same habits or structure, and by the repetition of this process, a new variety might be formed which would either supplant or coexist with the parent-form",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "divergence_from_common_parent",
+      "statement": "The breeds diverge in character both from each other and from their common parent as differences increase.",
+      "quote": "causing differences, at first barely appreciable, steadily to increase, and the breeds to diverge in character both from each other and from their common parent",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "selection_acts_slowly",
+      "statement": "Natural selection will always act with extreme slowness.",
+      "quote": "That natural selection will always act with extreme slowness, I fully admit",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

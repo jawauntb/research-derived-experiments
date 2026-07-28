@@ -1,0 +1,275 @@
+{
+  "doc_id": "malthus_1798_essay_ch1",
+  "propositions": [
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "food_necessary_to_man",
+      "quote": "First, That food is necessary to the existence of man.",
+      "statement": "Food is necessary to the existence of man.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "sexual_passion_necessary_and_constant",
+      "quote": "Secondly, That the passion between the sexes is necessary, and will remain nearly in its present state.",
+      "statement": "The passion between the sexes is necessary and will remain nearly in its present state.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "two_laws_are_fixed_laws_of_nature",
+      "quote": "These two laws ever since we have had any knowledge of mankind, appear to have been fixed laws of our nature",
+      "statement": "The two laws of food and sexual passion appear to have been fixed laws of our nature ever since we have had knowledge of mankind.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "unaltered_past_bars_future_alteration",
+      "quote": "as we have not hitherto seen any alteration in them, we have no right to conclude that they will ever cease to be what they now are",
+      "statement": "Since we have not hitherto seen any alteration in these laws, we have no right to conclude that they will ever cease to be what they now are.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "universe_arranged_and_executed_by_being",
+      "quote": "that Being who first arranged the system of the universe; and for the advantage of his creatures, still executes, according to fixed laws, all its various operations",
+      "statement": "The Being who first arranged the system of the universe still executes all its various operations according to fixed laws for the advantage of his creatures.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "population_geometrical_when_unchecked",
+      "quote": "Population, when unchecked, increases in a geometrical ratio. Subsistence increases only in an arithmetical ratio.",
+      "statement": "Population, when unchecked, increases in a geometrical ratio, while subsistence increases only in an arithmetical ratio.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "power_of_population_exceeds_earth",
+      "quote": "the power of population is indefinitely greater than the power in the earth to produce subsistence for man.",
+      "statement": "The power of population is indefinitely greater than the power in the earth to produce subsistence for man.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "food_law_forces_effects_equal",
+      "quote": "By that law of our nature which makes food necessary to the life of man, the effects of these two unequal powers must be kept equal.",
+      "statement": "By the law of our nature which makes food necessary to the life of man, the effects of the two unequal powers must be kept equal.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "strong_constant_check_on_population",
+      "quote": "This implies a strong and constantly operating check on population from the difficulty of subsistence.",
+      "statement": "There is a strong and constantly operating check on population from the difficulty of subsistence.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "nature_profuse_with_seeds_of_life",
+      "quote": "Through the animal and vegetable kingdoms, nature has scattered the seeds of life abroad with the most profuse and liberal hand.",
+      "statement": "Through the animal and vegetable kingdoms, nature has scattered the seeds of life abroad with the most profuse and liberal hand.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "nature_sparing_in_room_and_nourishment",
+      "quote": "She has been comparatively sparing in the room, and the nourishment necessary to rear them.",
+      "statement": "Nature has been comparatively sparing in the room and the nourishment necessary to rear the seeds of life.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "germs_would_fill_millions_of_worlds",
+      "quote": "The germs of existence contained in this spot of earth, with ample food, and ample room to expand in, would fill millions of worlds in the course of a few thousand years.",
+      "statement": "The germs of existence contained in this spot of earth, with ample food and ample room, would fill millions of worlds in the course of a few thousand years.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "necessity_restrains_germs_within_bounds",
+      "quote": "Necessity, that imperious all pervading law of nature, restrains them within the prescribed bounds.",
+      "statement": "Necessity, an imperious all-pervading law of nature, restrains the germs of existence within the prescribed bounds.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "race_of_plants_animals_man_distinct",
+      "quote": "The race of plants and the race of animals shrink under this great restrictive law. And the race of man cannot, by any efforts of reason, escape from it.",
+      "statement": "The race of plants, the race of animals, and the race of man are distinct races all subject to the great restrictive law.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "man_cannot_escape_by_reason",
+      "quote": "the race of man cannot, by any efforts of reason, escape from it",
+      "statement": "The race of man cannot, by any efforts of reason, escape from the great restrictive law of necessity.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "check_in_plants_animals_is_waste_sickness_death",
+      "quote": "Among plants and animals its effects are waste of seed, sickness, and premature death.",
+      "statement": "Among plants and animals the effects of the restrictive law are waste of seed, sickness, and premature death.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "check_in_mankind_is_misery_and_vice",
+      "quote": "Among mankind, misery and vice. The former, misery, is an absolutely necessary consequence of it.",
+      "statement": "Among mankind the effects of the restrictive law are misery and vice, of which misery is an absolutely necessary consequence.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "vice_probable_but_not_necessary",
+      "quote": "Vice is a highly probable consequence, and we therefore see it abundantly prevail; but it ought not, perhaps, to be called an absolutely necessary consequence",
+      "statement": "Vice is a highly probable consequence of the restrictive law but ought not, perhaps, to be called an absolutely necessary consequence.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "law_pervades_all_animated_nature",
+      "quote": "I see no way by which man can escape from the weight of this law which pervades all animated nature.",
+      "statement": "Man cannot escape from the weight of the population law, which pervades all animated nature.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "agrarian_equality_cannot_remove_pressure",
+      "quote": "No fancied equality, no agrarian regulations in their utmost extent, could remove the pressure of it even for a single century.",
+      "statement": "No fancied equality and no agrarian regulations, in their utmost extent, could remove the pressure of the population law even for a single century.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "sexual_passion_unchanged_over_millennia",
+      "quote": "It appears to exist in as much force at present as it did two thousand or four thousand years ago.",
+      "statement": "The passion between the sexes appears to exist in as much force at present as it did two thousand or four thousand years ago.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "individual_exceptions_always_existed",
+      "quote": "There are individual exceptions now as there always have been. But, as these exceptions do not appear to increase in number",
+      "statement": "There are individual exceptions to the passion between the sexes now as there always have been, but they do not increase in number.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "just_theory_confirmed_by_experiment",
+      "quote": "It is an acknowledged truth in philosophy, that a just theory will always be confirmed by experiment.",
+      "statement": "It is an acknowledged truth in philosophy that a just theory will always be confirmed by experiment.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "experience_true_foundation_of_knowledge",
+      "quote": "experience, the true source and foundation of all knowledge, invariably confirms its truth",
+      "statement": "Experience is the true source and foundation of all knowledge and invariably confirms the truth of the argument.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "inference_requires_just_philosophical_grounds",
+      "quote": "all suppositions, the probable realization of which cannot be inferred upon any just philosophical grounds",
+      "statement": "Suppositions whose probable realization cannot be inferred upon any just philosophical grounds must be put out of the argument.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "progress_from_savage_state",
+      "quote": "the best arguments for the perfectibility of man, are drawn from a contemplation of the great progress that he has already made from the savage state, and the difficulty of saying where he is to stop",
+      "statement": "The best arguments for the perfectibility of man are drawn from the great progress he has already made from the savage state, and the difficulty of saying where he is to stop.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "malthus_1798_essay_ch1",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "plants_animals_shrink_under_law",
+      "quote": "The race of plants and the race of animals shrink under this great restrictive law.",
+      "statement": "The race of plants and the race of animals shrink under the great restrictive law of necessity.",
+      "support": 3
+    }
+  ]
+}

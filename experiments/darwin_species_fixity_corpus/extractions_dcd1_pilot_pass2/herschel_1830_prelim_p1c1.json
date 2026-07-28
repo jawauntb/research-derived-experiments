@@ -1,0 +1,229 @@
+{
+  "doc_id": "herschel_1830_prelim_p1c1",
+  "propositions": [
+    {
+      "name": "principles_not_phenomena",
+      "statement": "The objects of enquiry to the natural philosopher are principles and laws, not phenomena or insulated independent facts.",
+      "quote": "it is principles, not phenomena,—laws, not insulated independent facts,—which are the objects of enquiry to the natural philosopher",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "truth_is_single",
+      "statement": "Truth is single and consistent with itself.",
+      "quote": "As truth is single, and consistent with itself, a principle may be as completely and as plainly elucidated by the most familiar and simple fact",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "truth_endures_universal_experience",
+      "statement": "The grand and only character of truth is its capability of enduring the test of universal experience and coming unchanged out of every possible form of fair discussion.",
+      "quote": "the grand and indeed only character of truth is its capability of enduring the test of universal experience, and coming unchanged out of every possible form of fair discussion",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "applications_criterion_of_truth",
+      "statement": "Practical applications form the very criterions of the truth of the natural philosopher's theories and afford the readiest and completest verifications.",
+      "quote": "such applications form the very criterions of their truth, they afford the readiest and completest verifications of his theories",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "infer_prior_cause",
+      "statement": "From the perception of any phenomenon man is irresistibly impelled to infer the existence of something prior standing to it in the relation of a cause.",
+      "quote": "he is irresistibly impelled, from the perception of any phenomenon without or within him, to infer the existence of something prior which stands to it in the relation of a cause",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "speculations_grounded_have_application",
+      "statement": "Speculations of the natural philosopher, being grounded in the realities of nature, have of necessity a practical application.",
+      "quote": "The speculations of the natural philosopher, however remote they may for a time lead him from beaten tracks and every-day uses, being grounded in the realities of nature, have all, of necessity, a practical application",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "verification_by_particular_cases",
+      "statement": "A cautious geometer verifies general theorems by particular cases, as an arithmetician proves his sums, and the natural philosopher verifies theories likewise.",
+      "quote": "an arithmetician would omit to prove his sums, or a cautious geometer to try his general theorems by particular cases",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "change_of_viewpoint_reveals",
+      "statement": "The most barren and unpromising fields of enquiry are converted into rich springs of knowledge on a simple change of our point of view.",
+      "quote": "the most barren and unpromising fields of enquiry converted, as if by inspiration, into rich and inexhaustible springs of knowledge and power on a simple change of our point of view",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "truth_cannot_oppose_truth",
+      "statement": "Truth can never be opposed to truth, and error is only to be effectually confounded by searching deep and tracing it to its source.",
+      "quote": "truth can never be opposed to truth, and, on the other, that error is only to be effectually confounded by searching deep and tracing it to its source",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "hope_believe_maxim",
+      "statement": "The character of the true philosopher is to hope all things not impossible and to believe all things not unreasonable.",
+      "quote": "The character of the true philosopher is to hope all things not impossible, and to believe all things not unreasonable",
+      "kind": "asserted",
+      "definitional": true
+    },
+    {
+      "name": "investigation_guards_self_deception",
+      "statement": "Science guards against enthusiasm and self-deception by a habit of strict investigation.",
+      "quote": "guarding only against enthusiasm and self-deception by a habit of strict investigation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "enquiry_has_no_actual_limit",
+      "statement": "There is no actual limit to the instances in which Power and Intelligence are manifested; the farther one enquires the more they open in increasing abundance.",
+      "quote": "he not only sees no actual limit to the instances in which they are manifested, but finds, on the contrary, that the farther he enquires, and the wider his sphere of observation extends, they continually open upon him in increasing abundance",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "natural_reason_stops_short",
+      "statement": "The testimony of natural reason must of necessity stop short of those truths which it is the object of revelation to make known.",
+      "quote": "the testimony of natural reason, on whatever exercised, must of necessity stop short of those truths which it is the object of revelation to make known",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "reason_grounds_deity",
+      "statement": "Natural reason places the existence and principal attributes of a Deity on such grounds as to render doubt absurd and atheism ridiculous.",
+      "quote": "it places the existence and principal attributes of a Deity on such grounds as to render doubt absurd and atheism ridiculous",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "causes_determine_choice",
+      "statement": "Knowledge of causes and their consequences in almost every instance determines man's choice and will even where he is conscious of perfect freedom.",
+      "quote": "this knowledge of causes and their consequences is what, in almost every instance, determines his choice and will, in cases where he is nevertheless conscious of perfect freedom to act or not to act",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "attention_is_voluntary",
+      "statement": "The degree of attention by which one acquires knowledge of causes and effects is in great measure a voluntary act.",
+      "quote": "it is in his power to acquire more or less knowledge of causes and effects according to the degree of attention he bestows upon them, which attention is again in great measure a voluntary act",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "man_physically_inferior",
+      "statement": "Compared with the other denizens of the globe, in physical constitution man is in almost every respect their inferior.",
+      "quote": "Compared with its other denizens, he seems, if we regard only his physical constitution, in almost every respect their inferior",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "nature_denied_man_covering",
+      "statement": "To no other warm-blooded animal has nature denied the indispensable covering that man lacks against temperate vicissitudes and cold rigours.",
+      "quote": "To no other warm-blooded animal has nature denied that indispensable covering without which the vicissitudes of a temperate and the rigours of a cold climate are equally insupportable",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "instinct_alone_insufficient",
+      "statement": "If abandoned to mere instinct, man would be of all creatures the most destitute and miserable.",
+      "quote": "man, if abandoned to mere instinct, would be of all creatures the most destitute and miserable",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "species_would_become_extinct",
+      "statement": "After a few generations man's species would become altogether extinct, or at best restricted to a few islands in tropical regions.",
+      "quote": "till after a few generations his species would become altogether extinct, or, at best, would be restricted to a few islands in tropical regions",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "species_hunted_to_extinction",
+      "statement": "Man would be disregarded by some creatures and hunted down by others until after a few generations his species would become altogether extinct.",
+      "quote": "he would be disregarded by some, and hunted down by others, till after a few generations his species would become altogether extinct",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "tropical_refugia_permit_lingering",
+      "statement": "Warmth of climate, paucity of enemies, and abundance of vegetable food in tropical islands might permit the species to linger.",
+      "quote": "would be restricted to a few islands in tropical regions, where the warmth of the climate, the paucity of enemies, and the abundance of vegetable food, might permit it to linger",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "man_lord_of_creation",
+      "statement": "Man is the undisputed lord of the creation, and the strongest and fiercest fellow-creatures are slaughtered by him.",
+      "quote": "Yet man is the undisputed lord of the creation. The strongest and fiercest of his fellow-creatures,—the whale, the elephant, the eagle, and the tiger,—are slaughtered by him",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "species_late_denizen_of_globe",
+      "statement": "The globe existed myriads of ages ago in a state prior to man's species becoming its denizens.",
+      "quote": "the situation of a pebble may afford him evidence of the state of the globe he inhabits, myriads of ages ago, before his species became its denizens",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "system_disposed_with_design",
+      "statement": "Man contemplates the world as a system disposed with order and design and admires the harmony of its parts.",
+      "quote": "as a system disposed with order and design. He approves and feels the highest admiration for the harmony of its parts",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "design_implies_superior_intelligence",
+      "statement": "Man is led to the conception of a Power and an Intelligence superior to his own and adequate to the production and maintenance of all he sees in nature.",
+      "quote": "Thus he is led to the conception of a Power and an Intelligence superior to his own, and adequate to the production and maintenance of all that he sees in nature",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "nature_is_regular",
+      "statement": "Nature exhibits calm, energetic regularity, immense scale of operations, and certainty with which her ends are attained.",
+      "quote": "the observation of the calm, energetic regularity of nature, the immense scale of her operations, and the certainty with which her ends are attained",
+      "kind": "presupposed",
+      "definitional": false
+    },
+    {
+      "name": "man_imitates_contrivances",
+      "statement": "Some of nature's contrivances man can trace and understand and attempts to imitate, though rudely and imperfectly.",
+      "quote": "Some of these which he can best trace and understand he attempts to imitate, and finds that to a certain extent, though rudely and imperfectly, he can succeed",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "contrivances_beyond_imitation",
+      "statement": "In some cases man can comprehend the nature of the contrivance but is totally destitute of all means of imitation.",
+      "quote": "in others, that although he can comprehend the nature of the contrivance, he is totally destitute of all means of imitation",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "reason_source_of_predominance",
+      "statement": "Insight into man's internal sphere of thought and feeling is the source of all his power and the fountain of his predominance over external nature.",
+      "quote": "the insight he is enabled to obtain into this internal sphere of thought and feeling is in reality the source of all his power, the very fountain of his predominance over external nature",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "spoils_of_nature_yielded_to_man",
+      "statement": "The spoils of all nature are in daily requisition for man's common uses, yielded or wrested from the mine, forest, ocean, and air.",
+      "quote": "The spoils of all nature are in daily requisition for his most common uses, yielded with more or less readiness, or wrested with reluctance, from the mine, the forest, the ocean, and the air",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "man_is_speculative_being",
+      "statement": "Man is constituted a speculative being who contemplates the world and the objects around him.",
+      "quote": "Independent of the pleasures of fancy and imagination, and social converse, man is constituted a speculative being; he contemplates the world",
+      "kind": "asserted",
+      "definitional": true
+    }
+  ]
+}

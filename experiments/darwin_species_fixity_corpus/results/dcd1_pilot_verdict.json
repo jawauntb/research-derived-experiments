@@ -1,0 +1,207 @@
+{
+  "aggregates": {
+    "oracle": {
+      "D1_disc": 10,
+      "D1_use": 0,
+      "D2_disc": 12,
+      "D2_use": 0,
+      "D3_disc": 5,
+      "D3_use": 0
+    },
+    "pre_origin": {
+      "D1_disc": 15,
+      "D2_disc": 19,
+      "D3_disc": 1
+    }
+  },
+  "d_categories_sha256": "828cda78c58803a25d29461d8824537ea59db545f3b7885908c1f034973f04d0",
+  "gates": {
+    "P1_extraction_sanity": {
+      "avg_props_per_doc": 23.875,
+      "decision": "GO",
+      "threshold": 5
+    },
+    "P2_d_signal_exists": {
+      "D1_total": 25,
+      "D2_total": 31,
+      "D3_total": 6,
+      "decision": "GO"
+    },
+    "P3_d1_signal_concentrated_in_origin": {
+      "decision": "NO_GO",
+      "oracle_D1_disc": 10,
+      "pre_origin_D1_disc": 15
+    },
+    "P4_prediction_independence_preview": {
+      "decision": "GO",
+      "oracle_D1_use": 0
+    },
+    "P5_equalisation_preview": {
+      "decision": "GO",
+      "oracle_D1_disc": 10,
+      "oracle_D2_disc": 12
+    }
+  },
+  "kind": "dcd1_pilot_verdict",
+  "licensed_reading": "Same shape as DCR4. P3 fails (discussion spike is in precursor era, not revolutionary paper); P4 and P5 fire, replicating the two structural signatures DCR4 named as uniquely characterising the revolutionary paper.",
+  "oracle_docs": [
+    "darwin_1859_origin_introduction",
+    "darwin_1859_origin_ch4",
+    "darwin_1859_origin_ch14"
+  ],
+  "overall_core_decision": "NO_GO",
+  "per_document": {
+    "darwin_1845_beagle_ch17": {
+      "D1": {
+        "disc": 3,
+        "use": 0
+      },
+      "D2": {
+        "disc": 6,
+        "use": 0
+      },
+      "D3": {
+        "disc": 1,
+        "use": 0
+      },
+      "n_pred": 20,
+      "n_props": 22
+    },
+    "darwin_1859_origin_ch14": {
+      "D1": {
+        "disc": 4,
+        "use": 0
+      },
+      "D2": {
+        "disc": 7,
+        "use": 0
+      },
+      "D3": {
+        "disc": 3,
+        "use": 0
+      },
+      "n_pred": 17,
+      "n_props": 25
+    },
+    "darwin_1859_origin_ch4": {
+      "D1": {
+        "disc": 3,
+        "use": 0
+      },
+      "D2": {
+        "disc": 2,
+        "use": 0
+      },
+      "D3": {
+        "disc": 1,
+        "use": 0
+      },
+      "n_pred": 16,
+      "n_props": 28
+    },
+    "darwin_1859_origin_introduction": {
+      "D1": {
+        "disc": 3,
+        "use": 0
+      },
+      "D2": {
+        "disc": 3,
+        "use": 0
+      },
+      "D3": {
+        "disc": 1,
+        "use": 0
+      },
+      "n_pred": 12,
+      "n_props": 19
+    },
+    "erasmus_darwin_1794_zoonomia_generation_39": {
+      "D1": {
+        "disc": 7,
+        "use": 0
+      },
+      "D2": {
+        "disc": 5,
+        "use": 0
+      },
+      "D3": {
+        "disc": 0,
+        "use": 0
+      },
+      "n_pred": 11,
+      "n_props": 24
+    },
+    "herschel_1830_prelim_p1c1": {
+      "D1": {
+        "disc": 0,
+        "use": 0
+      },
+      "D2": {
+        "disc": 0,
+        "use": 0
+      },
+      "D3": {
+        "disc": 0,
+        "use": 0
+      },
+      "n_pred": 4,
+      "n_props": 18
+    },
+    "malthus_1798_essay_ch1": {
+      "D1": {
+        "disc": 0,
+        "use": 0
+      },
+      "D2": {
+        "disc": 0,
+        "use": 0
+      },
+      "D3": {
+        "disc": 0,
+        "use": 0
+      },
+      "n_pred": 22,
+      "n_props": 27
+    },
+    "wallace_1855_sarawak": {
+      "D1": {
+        "disc": 5,
+        "use": 0
+      },
+      "D2": {
+        "disc": 8,
+        "use": 0
+      },
+      "D3": {
+        "disc": 0,
+        "use": 0
+      },
+      "n_pred": 22,
+      "n_props": 28
+    }
+  },
+  "pilot_docs": [
+    "malthus_1798_essay_ch1",
+    "herschel_1830_prelim_p1c1",
+    "erasmus_darwin_1794_zoonomia_generation_39",
+    "wallace_1855_sarawak",
+    "darwin_1845_beagle_ch17",
+    "darwin_1859_origin_introduction",
+    "darwin_1859_origin_ch4",
+    "darwin_1859_origin_ch14"
+  ],
+  "pre_origin_docs": [
+    "malthus_1798_essay_ch1",
+    "herschel_1830_prelim_p1c1",
+    "erasmus_darwin_1794_zoonomia_generation_39",
+    "wallace_1855_sarawak",
+    "darwin_1845_beagle_ch17"
+  ],
+  "preregistration_sha256": "e1affd8f89de3bc5aa188a55d2ef8ba66280941efcd4377b2e187667db2d8252",
+  "purpose": "Cheap sanity-check pilot for the Darwin case of the DCD multi-case test. Verifies the pipeline works on biology text and previews the two DCR4 structural signatures (prediction-independence, equalisation) on Darwin's Origin.",
+  "verifiers": [
+    "A",
+    "B",
+    "C"
+  ]
+}

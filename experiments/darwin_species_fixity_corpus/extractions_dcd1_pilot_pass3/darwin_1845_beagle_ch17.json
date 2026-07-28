@@ -1,0 +1,229 @@
+{
+  "doc_id": "darwin_1845_beagle_ch17",
+  "propositions": [
+    {
+      "name": "new_beings_first_appear",
+      "statement": "The first appearance of new beings on this earth is a great fact and a mystery of mysteries.",
+      "quote": "we seem to be brought somewhat near to that great fact—that mystery of mysteries—the first appearance of new beings on this earth.",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aboriginal_creations_found_nowhere_else",
+      "statement": "Most of the organic productions of the archipelago are aboriginal creations found nowhere else.",
+      "quote": "Most of the organic productions are aboriginal creations, found nowhere else; there is even a difference between the inhabitants of the different islands",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "islands_geologically_recent",
+      "statement": "The islands were, within a geologically recent period, covered by the unbroken ocean.",
+      "quote": "we are led to believe that within a period, geologically recent, the unbroken ocean was here spread out",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "islands_never_united",
+      "statement": "The profound depth of ocean and recent volcanic origin make it highly unlikely the islands were ever united.",
+      "quote": "the profound depth of the ocean between the islands, and their apparently recent (in a geological sense) volcanic origin, render it highly unlikely that they were ever united",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "created_on_american_types",
+      "statement": "The aboriginal inhabitants of the Galapagos were created on American types of organization.",
+      "quote": "why were they created on American types of organization? It is probable that the islands of the Cape de Verd group resemble",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "rat_variety_produced_by_conditions",
+      "statement": "The James Island rat is merely a variety produced by the new and peculiar climate, food, and soil.",
+      "quote": "this rat is merely a variety, produced by the new and peculiar climate, food, and soil, to which it has been subjected",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "created_in_centre_then_dispersed",
+      "statement": "The terrestrial Amblyrhynchus appears created in the centre of the archipelago and thence dispersed only a certain distance.",
+      "quote": "It would appear as if it had been created in the centre of the archipelago, and thence had been dispersed only to a certain distance",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "instinct_becomes_hereditary_over_generations",
+      "statement": "An instinct not acquired by individuals in a short time becomes hereditary in the course of successive generations.",
+      "quote": "it is not acquired by individual birds in a short time, even when much persecuted; but that in the course of successive generations it becomes hereditary",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "acquired_habits_rendered_hereditary",
+      "statement": "In domesticated animals new mental habits or instincts are acquired and rendered hereditary.",
+      "quote": "With domesticated animals we are accustomed to see new mental habits or instincts acquired and rendered hereditary",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "fixed_hereditary_instinct_governs_lizard",
+      "statement": "The marine Amblyrhynchus is urged by a fixed and hereditary instinct that the shore is its place of safety.",
+      "quote": "urged by a fixed and hereditary instinct that the shore is its place of safety, whatever the emergency may be, it there takes refuge",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "wildness_particular_instinct_against_man",
+      "statement": "The wildness of birds with regard to man is a particular instinct directed against him, not general caution.",
+      "quote": "the wildness of birds with regard to man, is a particular instinct directed against him , and not dependent on any general degree of caution arising from other sources of danger",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "creative_force_displayed_on_islands",
+      "statement": "An amount of creative force is displayed on these small, barren, and rocky islands.",
+      "quote": "one is astonished at the amount of creative force, if such an expression may be used, displayed on these small, barren, and rocky islands",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "different_islands_different_beings",
+      "statement": "The different islands are to a considerable extent inhabited by a different set of beings.",
+      "quote": "the different islands to a considerable extent are inhabited by a different set of beings. My attention was first called to this fact",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "physical_conditions_similar_across_islands",
+      "statement": "Soil, height, climate, and associated beings cannot differ much among the different islands.",
+      "quote": "neither the nature of the soil, nor height of the land, nor the climate, nor the general character of the associated beings, and therefore their action one on another, can differ much in the different islands",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "species_may_be_only_races",
+      "statement": "Some representative species may hereafter prove to be only well-marked races, of equally great interest.",
+      "quote": "may hereafter prove to be only well-marked races; but this would be of equally great interest to the philosophical naturalist",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "beaks_insensibly_graduated",
+      "statement": "The finch genus Geospiza contains six species with insensibly graduated beaks rather than one intermediate species.",
+      "quote": "instead of there being only one intermediate species, with a beak, of the size shown in Fig. 2, there are no less than six species with insensibly graduated beaks",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "one_species_modified_for_different_ends",
+      "statement": "One might fancy that from an original paucity of birds one species had been taken and modified for different ends.",
+      "quote": "one might really fancy that from an original paucity of birds in this archipelago, one species had been taken and modified for different ends",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "calcareous_eggs_transported_more_easily",
+      "statement": "Lizard eggs protected by calcareous shells might be transported through salt-water more easily than the slimy spawn of frogs.",
+      "quote": "May this difference not be caused, by the greater facility with which the eggs of lizards, protected by calcareous shells, might be transported through salt-water, than could the slimy spawn of frogs?",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "archipelago_zoologically_american",
+      "statement": "The archipelago, though in the Pacific Ocean, is zoologically part of America.",
+      "quote": "we see that this archipelago, though standing in the Pacific Ocean, is zoologically part of America. If this character were owing merely to immigrants from America",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "cape_verde_stamped_with_africa",
+      "statement": "Cape de Verd inhabitants bear the impress of Africa as Galapagos inhabitants are stamped with that of America.",
+      "quote": "those of the Cape de Verd Islands bearing the impress of Africa, as the inhabitants of the Galapagos Archipelago are stamped with that of America",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "physical_similarity_does_not_determine_biota",
+      "statement": "Cape de Verd islands resemble the Galapagos physically more than the Galapagos resemble America, yet their inhabitants differ.",
+      "quote": "the islands of the Cape de Verd group resemble, in all their physical conditions, far more closely the Galapagos Islands than these latter physically resemble the coast of America",
+      "kind": "required_by_argument",
+      "definitional": false
+    },
+    {
+      "name": "ocean_currents_separate_islands",
+      "statement": "Strong westerly and W.N.W. sea currents separate the southern islands from the northern ones as far as transportal by the sea is concerned.",
+      "quote": "very strong currents of the sea running in a westerly and W.N.W. direction must separate, as far as transportal by the sea is concerned, the southern islands from the northern ones",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "reptiles_replace_herbivorous_mammalia",
+      "statement": "The order of reptiles replaces the herbivorous mammalia in this archipelago as in no other quarter of the world.",
+      "quote": "there is no other quarter of the world where this Order replaces the herbivorous mammalia in so extraordinary a manner",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "mouth_form_adaptation_to_herbivory",
+      "statement": "The tortoise-like form of the Amblyrhynchus mouth is an adaptation to their herbivorous appetites.",
+      "quote": "the form of the mouth may almost be compared to that of the tortoise: one is led to suppose that this is an adaptation to their herbivorous appetites",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "buzzard_induced_to_new_office",
+      "statement": "One might fancy a bird originally a buzzard had been induced to undertake the office of the American carrion-feeding Polybori.",
+      "quote": "it might be fancied that a bird originally a buzzard, had been induced here to undertake the office of the carrion-feeding Polybori of the American continent",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "tortoise_aboriginal_to_galapagos",
+      "statement": "The tortoise is an aboriginal inhabitant of the Galapagos, found on all or nearly all the islands.",
+      "quote": "There can be little doubt that this tortoise is an aboriginal inhabitant of the Galapagos; for it is found on all, or nearly all, the islands",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "aquatic_forms_less_peculiar",
+      "statement": "Aquatic forms, marine or fresh-water, are less peculiar at any given point of the earth's surface than terrestrial forms of the same classes.",
+      "quote": "this law of aquatic forms, whether marine or fresh-water, being less peculiar at any given point of the earth's surface than the terrestrial forms of the same classes",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "same_causes_make_species_smaller_duskier",
+      "statement": "The same causes that make immigrant species smaller here also make the peculiar Galapageian species smaller and duskier coloured.",
+      "quote": "the same causes which here make the immigrants of some species smaller, make most of the peculiar Galapageian species also smaller, as well as very generally more dusky coloured",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "representative_species_fill_same_place",
+      "statement": "Several islands possess their own species of tortoise, mocking-thrush, finches, and plants having the same habits and occupying analogous situations.",
+      "quote": "several of the islands possess their own species of the tortoise, mocking-thrush, finches, and numerous plants, these species having the same general habits, occupying analogous situations",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "archipelago_derived_stray_colonists",
+      "statement": "The archipelago is a satellite attached to America whence it has derived a few stray colonists.",
+      "quote": "The archipelago is a little world within itself, or rather a satellite attached to America, whence it has derived a few stray colonists",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "plants_confined_to_single_islands",
+      "statement": "Of thirty-eight Galapageian plants in James Island, thirty are exclusively confined to that one island.",
+      "quote": "in James Island, of the thirty-eight Galapageian plants, or those found in no other part of the world, thirty are exclusively confined to this one island",
+      "kind": "asserted",
+      "definitional": false
+    },
+    {
+      "name": "driftwood_washed_from_continent",
+      "statement": "Drift-wood, bamboos, canes, and palm nuts are often washed onto the south-eastern shores of the archipelago.",
+      "quote": "drift-wood, bamboos, canes, and the nuts of a palm, are often washed on the south-eastern shores",
+      "kind": "asserted",
+      "definitional": false
+    }
+  ]
+}

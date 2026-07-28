@@ -1,0 +1,285 @@
+{
+  "doc_id": "darwin_1859_origin_ch4",
+  "propositions": [
+    {
+      "definitional": true,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "natural_selection_defined",
+      "quote": "This preservation of favourable variations and the rejection of injurious variations, I call Natural Selection.",
+      "statement": "Natural Selection is the preservation of favourable variations and the rejection of injurious variations.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "more_born_than_survive",
+      "quote": "(remembering that many more individuals are born than can possibly survive)",
+      "statement": "Many more individuals are born than can possibly survive.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "slight_advantage_best_chance",
+      "quote": "individuals having any advantage, however slight, over others, would have the best chance of surviving and of procreating their kind",
+      "statement": "Individuals having any advantage, however slight, over others would have the best chance of surviving and procreating their kind.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "injurious_variation_destroyed",
+      "quote": "we may feel sure that any variation in the least degree injurious would be rigidly destroyed",
+      "statement": "Any variation in the least degree injurious would be rigidly destroyed.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "conditions_change_causes_variability",
+      "quote": "a change in the conditions of life, by specially acting on the reproductive system, causes or increases variability",
+      "statement": "A change in the conditions of life, by acting on the reproductive system, causes or increases variability.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "nature_longer_time_than_man",
+      "quote": "as man can certainly produce great results by adding up in any given direction mere individual differences, so could Nature, but far more easily, from having incomparably longer time at her disposal",
+      "statement": "Nature can produce great results from mere individual differences from having incomparably longer time at her disposal than man.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "nature_acts_on_internals",
+      "quote": "She can act on every internal organ, on every shade of constitutional difference, on the whole machinery of life",
+      "statement": "Nature can act on every internal organ and every shade of constitutional difference.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "nature_selects_for_beings_good",
+      "quote": "Man selects only for his own good; Nature only for that of the being which she tends",
+      "statement": "Nature selects only for the good of the being which she tends.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "selection_scrutinises_daily",
+      "quote": "natural selection is daily and hourly scrutinising, throughout the world, every variation, even the slightest; rejecting that which is bad, preserving and adding up all that is good",
+      "statement": "Natural selection is daily and hourly scrutinising every variation, rejecting the bad and preserving the good.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "no_modification_for_other_species",
+      "quote": "What natural selection cannot do, is to modify the structure of one species, without giving it any advantage, for the good of another species",
+      "statement": "Natural selection cannot modify the structure of one species without giving it any advantage, for the good of another species.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "correlation_of_growth",
+      "quote": "there are many unknown laws of correlation of growth, which, when one part of the organisation is modified through variation, and the modifications are accumulated by natural selection for the good of the being, will cause other modifications",
+      "statement": "There are many unknown laws of correlation of growth by which modification of one part causes other modifications.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "inheritance_at_corresponding_age",
+      "quote": "those variations which under domestication appear at any particular period of life, tend to reappear in the offspring at the same period",
+      "statement": "Variations that appear at a particular period of life tend to reappear in the offspring at the same period.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "sexual_selection_defined",
+      "quote": "This depends, not on a struggle for existence, but on a struggle between the males for possession of the females; the result is not death to the unsuccessful competitor, but few or no offspring",
+      "statement": "Sexual selection depends on a struggle between the males for possession of the females; the result is few or no offspring, not death.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "required_by_argument",
+      "n_passes": 3,
+      "name": "female_choice_produces_effect",
+      "quote": "female birds, by selecting, during thousands of generations, the most melodious or beautiful males, according to their standard of beauty, might produce a marked effect",
+      "statement": "Female birds selecting the most melodious or beautiful males across thousands of generations might produce a marked effect.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "selection_infinitesimal_modifications",
+      "quote": "Natural selection can act only by the preservation and accumulation of infinitesimally small inherited modifications, each profitable to the preserved being",
+      "statement": "Natural selection acts only by the preservation and accumulation of infinitesimally small inherited modifications, each profitable to the preserved being.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "banishes_continued_creation",
+      "quote": "so will natural selection, if it be a true principle, banish the belief of the continued creation of new organic beings, or of any great and sudden modification in their structure",
+      "statement": "Natural selection, if a true principle, will banish the belief of the continued creation of new organic beings or of any great and sudden modification.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "cross_gives_vigour",
+      "quote": "a cross between different varieties, or between individuals of the same variety but of another strain, gives vigour and fertility to the offspring; and on the other hand, that close interbreeding diminishes vigour and fertility",
+      "statement": "A cross between different varieties or strains gives vigour and fertility to the offspring; close interbreeding diminishes vigour and fertility.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "no_perpetual_self_fertilisation",
+      "quote": "no organic being self-fertilises itself for an eternity of generations; but that a cross with another individual is occasionally\u2014perhaps at very long intervals\u2014indispensable",
+      "statement": "No organic being self-fertilises itself for an eternity of generations; a cross with another individual is occasionally indispensable.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "isolation_important",
+      "quote": "Isolation, also, is an important element in the process of natural selection",
+      "statement": "Isolation is an important element in the process of natural selection.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "closely_allied_forms_compete",
+      "quote": "it is the most closely-allied forms,\u2014varieties of the same species, and species of the same genus or of related genera,\u2014which, from having nearly the same structure, constitution, and habits, generally come into the severest competition with each other",
+      "statement": "The most closely-allied forms come into the severest competition with each other.",
+      "support": 2
+    },
+    {
+      "definitional": true,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "varieties_are_incipient_species",
+      "quote": "according to my view, varieties are species in the process of formation, or are, as I have called them, incipient species",
+      "statement": "Varieties are species in the process of formation, or incipient species.",
+      "support": 3
+    },
+    {
+      "definitional": true,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "divergence_of_character",
+      "quote": "the more diversified the descendants from any one species become in structure, constitution, and habits, by so much will they be better enabled to seize on many and widely diversified places in the polity of nature",
+      "statement": "The more diversified the descendants from any one species become, the better enabled they will be to seize places in the polity of nature.",
+      "support": 3
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "physiological_division_of_labour",
+      "quote": "The advantage of diversification in the inhabitants of the same region is, in fact, the same as that of the physiological division of labour in the organs of the same individual body",
+      "statement": "The advantage of diversification is the same as that of the physiological division of labour in the organs of the same individual body.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "common_species_vary_more",
+      "quote": "the species, which are the commonest and the most widely-diffused, vary more than rare species with restricted ranges",
+      "statement": "The species which are commonest and most widely-diffused vary more than rare species with restricted ranges.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "descent_from_common_parent",
+      "quote": "Action of Natural Selection, through Divergence of Character and Extinction, on the descendants from a common parent",
+      "statement": "Natural selection acts through divergence of character and extinction on the descendants from a common parent.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "asserted",
+      "n_passes": 3,
+      "name": "new_species_replace_old",
+      "quote": "as new species in the course of time are formed through natural selection, others will become rarer and rarer, and finally extinct",
+      "statement": "As new species are formed through natural selection, others will become rarer and finally extinct.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "offspring_inherit_habits",
+      "quote": "Some of its young would probably inherit the same habits or structure, and by the repetition of this process, a new variety might be formed",
+      "statement": "Some young inherit the habits or structure of their parents, and by repetition a new variety might be formed.",
+      "support": 2
+    },
+    {
+      "definitional": false,
+      "doc_id": "darwin_1859_origin_ch4",
+      "kind": "presupposed",
+      "n_passes": 3,
+      "name": "mutual_relations_complex",
+      "quote": "how infinitely complex and close-fitting are the mutual relations of all organic beings to each other and to their physical conditions of life",
+      "statement": "The mutual relations of all organic beings to each other and to their physical conditions of life are infinitely complex and close-fitting.",
+      "support": 3
+    }
+  ]
+}
