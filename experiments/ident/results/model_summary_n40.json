@@ -1,0 +1,138 @@
+{
+  "experiment_id": "ident_openrouter",
+  "gates": {
+    "G5_capability_gap": true
+  },
+  "models": [
+    "openai/gpt-4o-mini",
+    "anthropic/claude-sonnet-4",
+    "google/gemini-2.5-flash"
+  ],
+  "models_scored": {
+    "anthropic/claude-sonnet-4": {
+      "by_domain": {
+        "boolean_causal": {
+          "false_certainty_rate": 0.07142857142857142,
+          "final_accuracy": 0.5,
+          "n": 28.0,
+          "separator_accuracy": 1.0
+        },
+        "finite_state": {
+          "false_certainty_rate": 0.0,
+          "final_accuracy": 0.6666666666666666,
+          "n": 9.0,
+          "separator_accuracy": 1.0
+        },
+        "small_programs": {
+          "false_certainty_rate": 0.0,
+          "final_accuracy": 0.6666666666666666,
+          "n": 3.0,
+          "separator_accuracy": 1.0
+        }
+      },
+      "false_certainty_rate": 0.05,
+      "final_accuracy": 0.55,
+      "gates": {},
+      "mean_efficiency": 0.5466165413533834,
+      "mean_weakness_regret": 0.013157894736842105,
+      "n_items": 40,
+      "post_intervention_identification": 0.5789473684210527,
+      "separator_accuracy": 1.0
+    },
+    "google/gemini-2.5-flash": {
+      "by_domain": {
+        "boolean_causal": {
+          "false_certainty_rate": 0.0,
+          "final_accuracy": 0.10714285714285714,
+          "n": 28.0,
+          "separator_accuracy": 0.7142857142857143
+        },
+        "finite_state": {
+          "false_certainty_rate": 0.0,
+          "final_accuracy": 0.4444444444444444,
+          "n": 9.0,
+          "separator_accuracy": 1.0
+        },
+        "small_programs": {
+          "false_certainty_rate": 0.0,
+          "final_accuracy": 0.6666666666666666,
+          "n": 3.0,
+          "separator_accuracy": 1.0
+        }
+      },
+      "false_certainty_rate": 0.0,
+      "final_accuracy": 0.225,
+      "gates": {},
+      "mean_efficiency": 0.23125,
+      "mean_weakness_regret": 0.0125,
+      "n_items": 40,
+      "post_intervention_identification": 0.25,
+      "separator_accuracy": 0.8
+    },
+    "openai/gpt-4o-mini": {
+      "by_domain": {
+        "boolean_causal": {
+          "false_certainty_rate": 0.0,
+          "final_accuracy": 0.4642857142857143,
+          "n": 28.0,
+          "separator_accuracy": 0.7857142857142857
+        },
+        "finite_state": {
+          "false_certainty_rate": 0.0,
+          "final_accuracy": 0.3333333333333333,
+          "n": 9.0,
+          "separator_accuracy": 0.5555555555555556
+        },
+        "small_programs": {
+          "false_certainty_rate": 0.3333333333333333,
+          "final_accuracy": 0.6666666666666666,
+          "n": 3.0,
+          "separator_accuracy": 1.0
+        }
+      },
+      "false_certainty_rate": 0.025,
+      "final_accuracy": 0.45,
+      "gates": {},
+      "mean_efficiency": 0.40689655172413797,
+      "mean_weakness_regret": 0.08974358974358974,
+      "n_items": 40,
+      "post_intervention_identification": 0.41379310344827586,
+      "separator_accuracy": 0.7435897435897436
+    }
+  },
+  "n_items": 40,
+  "oracle_on_slice": {
+    "by_domain": {
+      "boolean_causal": {
+        "false_certainty_rate": 0.0,
+        "final_accuracy": 1.0,
+        "n": 28.0,
+        "separator_accuracy": 1.0
+      },
+      "finite_state": {
+        "false_certainty_rate": 0.0,
+        "final_accuracy": 1.0,
+        "n": 9.0,
+        "separator_accuracy": 1.0
+      },
+      "small_programs": {
+        "false_certainty_rate": 0.0,
+        "final_accuracy": 1.0,
+        "n": 3.0,
+        "separator_accuracy": 1.0
+      }
+    },
+    "false_certainty_rate": 0.0,
+    "final_accuracy": 1.0,
+    "gates": {},
+    "mean_efficiency": 0.9716666666666667,
+    "mean_weakness_regret": 0.0,
+    "n_items": 40,
+    "post_intervention_identification": 1.0,
+    "separator_accuracy": 1.0
+  },
+  "schema_version": "1.0",
+  "seed": 0,
+  "split": "test",
+  "status": "pass"
+}

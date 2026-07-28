@@ -1,0 +1,18 @@
+{
+  "counts": {
+    "dev": 150,
+    "test": 150,
+    "train": 700
+  },
+  "domain_mix": {
+    "boolean_causal": 0.6,
+    "finite_state": 0.2,
+    "small_programs": 0.2
+  },
+  "paths": {
+    "dev": "experiments/ident/splits/dev.jsonl",
+    "test": "experiments/ident/splits/test.jsonl",
+    "train": "experiments/ident/splits/train.jsonl"
+  },
+  "seed": 20260727
+}
