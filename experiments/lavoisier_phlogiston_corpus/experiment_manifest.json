@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "lavoisier_phlogiston_corpus_scaffold",
+  "hypothesis": "This package is corpus scaffolding, not an experiment. It fetches and caches the eighteenth-century chemistry documents named for Case 3 of the multi-case retrospective test in papers/dynamics_of_conceptual_deletion/paper.md (Lavoisier / phlogiston, 1783-1789). It makes no scientific claim; success is defined as every named Wikisource source fetching to substantive text.",
+  "claim_tier": "descriptive",
+  "controls": [
+    {
+      "control_id": "throttled_wikisource_fetch",
+      "description": "Every source is pulled through the same throttled Wikisource api.php pipeline used by experiments/date_cut_retrodiction/fetch.py; the container-extraction and chrome-removal logic is imported, not copied, so both corpora share provenance."
+    },
+    {
+      "control_id": "sha256_pinning",
+      "description": "results/fetch_summary.json records the character count and SHA-256 of every cached document, so a re-fetch that silently produces different bytes is detectable."
+    },
+    {
+      "control_id": "substantive_content_threshold",
+      "description": "Any cached document below 2000 characters is flagged as non-substantive in the summary. The one-off Fulhame 1789 'Letter to Joseph Black' fetched to 114 characters (cover-page only) and is excluded from corpus.SOURCES for that reason; the threshold catches any regression."
+    },
+    {
+      "control_id": "gap_disclosure",
+      "description": "CORPUS_MANIFEST.md enumerates every author named in the paper (Stahl, Priestley, Cavendish, Scheele, Kirwan, Black, Hales, Fulhame) that is absent, with the specific reason (no author page, empty author page, scan-only Index, cover-page-only transclusion, or wrong-author reprint). No fabricated substitutes."
+    }
+  ],
+  "seeds": [20260727],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python",
+      "-m",
+      "experiments.lavoisier_phlogiston_corpus.fetch"
+    ],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "G1_ALL_NAMED_SOURCES_FETCHED",
+      "criterion": "Every SourceSpec in experiments.lavoisier_phlogiston_corpus.corpus.SOURCES fetches to a cached text file, and each cached file passes the 2000-character substantive-content threshold, as recorded in results/fetch_summary.json."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/lavoisier_phlogiston_corpus/results/fetch_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/lavoisier_phlogiston_corpus/CORPUS_MANIFEST.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

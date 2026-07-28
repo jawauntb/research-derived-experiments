@@ -16,9 +16,9 @@ _ROOT = Path(__file__).resolve().parents[2]
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from experiments.ident.eval.reports import markdown_summary
-from experiments.ident.eval.runner import run_local_baseline_suite
-from experiments.ident.generation import DATA_DIR, build_default_dataset
+from experiments.ident.eval.reports import markdown_summary  # noqa: E402
+from experiments.ident.eval.runner import run_local_baseline_suite  # noqa: E402
+from experiments.ident.generation import DATA_DIR, build_default_dataset  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent
 RESULTS = ROOT / "results"
