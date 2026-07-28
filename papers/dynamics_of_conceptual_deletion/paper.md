@@ -3,8 +3,8 @@
 **Human director:** Jawaun Brown
 **Producing agent:** Claude Code, directed
 **Program:** Framework pivot from the DR / DCR arc
-**Status:** Framework paper. No new experiment. Reframes DCR3d's empirical finding as a candidate hypothesis about the shape of pre-revolutionary conceptual dynamics, and names the multi-case test that would raise it from candidate to supported.
-**Date:** 2026-07-27
+**Status:** Framework paper. Original version (2026-07-27) named a candidate hypothesis and a multi-case test. Post-publication updates (2026-07-27 to 2026-07-28) report what happened when the multi-case test began to run: the paper's original central hypothesis (a discussion spike in the revolutionary paper) failed on TWO independent cases; two different structural signatures (prediction-independence and equalisation) fired on both. **See §10 for the update; the original text is preserved as written.**
+**Date:** 2026-07-27 (original); 2026-07-28 (§10 update)
 
 ---
 
@@ -163,6 +163,169 @@ The AI-recovery question is a much smaller and less interesting question than th
 - If the multi-case test fails: a scoping paper describing what DID work about DCR3d — that in this ONE case a specific measurement produced a specific pre-deletion peak — and what did not generalise, treated as a domain-restricted finding.
 
 None of these follow-ons is authorised by this paper. This paper's job is to name the framework and be explicit about what would raise it from candidate to supported.
+
+---
+
+## 10. What happened when the multi-case test began (post-publication update, 2026-07-28)
+
+Two things happened in the ~24 hours after this paper was first
+merged. Both change the reading in ways worth naming at the top of the
+paper rather than in a comment thread.
+
+### 10.1 DCR4 (Einstein 1905 as oracle)
+
+DCR4 (`papers/date_cut_retrodiction_dcr4/paper.md`, PR #452 + correction
+PR #454) fetched Einstein's 1905 *Elektrodynamik bewegter Körper*,
+applied the same DCR3d rubric (extraction + use tag + discussion tag,
+3-verifier consensus), and preregistered four gates against it:
+
+- Q1: extraction sanity (≥ 15 propositions from Einstein 1905)
+- Q2: T1 discussion count > T2 discussion count in Einstein 1905
+- Q3: T1 discussion count in Einstein 1905 > 7 (the 1904 pre-cut count)
+- Q4: T1 use/discussion ratio in Einstein 1905 < 1.25
+
+The result was Q1 GO, Q4 GO, Q2 NO_GO, Q3 NO_GO. The four verifiers
+unanimously agreed on 4 T1-discussion propositions and 4 T2-discussion
+propositions in Einstein 1905. Zero of Einstein's ~12 predictions
+required T1/T2/T3 as background — every prediction required only
+OTHER (electromagnetic principles, kinematic definitions).
+
+An immediate per-document reslice (PR #454) further clarified: the
+aggregate 1904 T1 count of 7 was concentrated in one paper — Poincaré
+1898 alone accounts for 4 of the 7, matching Einstein 1905 exactly.
+Einstein does not have less T1 discussion than "the precursor era";
+he ties the single most vocal precursor.
+
+**Three findings from DCR4 that were not preregistered by this
+framework paper:**
+
+- **Discussion spike is a precursor phenomenon, not a
+  revolutionary-paper phenomenon.** The "spike in the revolutionary
+  paper" reading anticipated in §5 fails at 1905 on the Einstein case.
+- **Prediction-independence.** Every one of Einstein's ~12 predictions
+  is reconstructed so that no derivation depends on T1/T2/T3 as a
+  premise. Every pre-1905 paper in the corpus has some
+  prediction-dependence on either T1 or T2. Only Einstein has zero.
+- **Symmetric equalisation.** Einstein 1905's T1:T2 discussion count
+  is exactly 4:4. Under the per-doc reslice, no precursor paper has
+  both T1 ≥ 4 AND T2 ≥ 4 in the same document (Poincaré 1898 is 4:0;
+  FitzGerald 1889 and Larmor 1900 ch10 are 0:4; nobody balances both).
+
+### 10.2 DCD1 pilot on Darwin (PR #460)
+
+The Darwin case's pre-1859 biology corpus shipped as PR #459 (Malthus,
+Herschel, Wallace, Erasmus Darwin, Darwin's 1845 Beagle journal, plus
+15 chapters of *Origin* 1859 as oracle). The DCD1 pilot (PR #460) ran
+the same DCR arc extraction and tagging pipeline on a subset — 5
+pre-1859 + 3 Origin chapters, 191 consensus propositions, 3 use taggers,
+3 discussion taggers, unanimous where reported. Categories D1 (species
+fixity), D2 (separate creation), D3 (species essence) substituted for
+T1/T2/T3.
+
+Preregistered pilot gates and outcomes:
+
+- P1 (extraction sanity, ≥ 5 props/doc average) — GO (23.9)
+- P2 (D-categories discriminate: D1 ≥ 3, D2 ≥ 1, D3 ≥ 1) — GO (25, 31, 6)
+- P3 (D1 in Origin > D1 in pre-Origin) — **NO_GO** (Origin 10 <
+  pre-Origin 15)
+- P4 (D1 use in Origin = 0, exploratory) — GO
+- P5 (Origin D1:D2 within 2×, exploratory) — GO (10:12)
+
+The core P3 gate — the analogue of the "spike in revolutionary paper"
+hypothesis this paper anticipated — failed on Darwin as well. Erasmus
+Darwin 1794 alone contributes D1 = 7, close to Origin's total D1 = 10
+across three chapters. The precursor era owns the discussion again.
+
+But P4 and P5 both fired. Darwin's Origin discusses D1 and D2 in
+balanced measure (10:12) and reconstructs every one of its ~45
+predictions across the three chapters so that no derivation depends on
+D1/D2/D3. **Both DCR4 structural signatures replicated on Darwin.**
+
+### 10.3 What the update changes about this paper
+
+The original central hypothesis — a P(t)-shaped discussion spike whose
+peak is close to the revolutionary paper — has now failed in two
+independent cases (Einstein physics 1905, Darwin biology 1859). It is
+possible the P(t) shape holds at a longer time-scale that we are
+misresolving with only three or four pre-revolutionary cuts; but as
+stated in §2 and §5, the framework's core prediction is refuted for
+this operationalisation on two cases.
+
+Two different structural signatures fired on both cases. Neither was
+named in the original paper. They are stated here for the first time
+in the framework paper's voice:
+
+1. **Prediction-independence.** A revolutionary paper reconstructs
+   every one of its predictions so that no derivation depends on the
+   deleted commitment. Precursor papers, even the ones that discuss
+   the deleted commitment intensely (Poincaré 1898, Erasmus Darwin
+   1794), continue to USE it as background elsewhere in their
+   arguments. The revolutionary paper achieves not "more discussion"
+   but "zero use." This is a per-paper property that survives per-doc
+   reslicing.
+
+2. **Symmetric equalisation.** A revolutionary paper discusses the
+   deleted commitment and its structurally paired partner (T2 for
+   Einstein, D2 for Darwin) in balanced measure. Precursor papers are
+   T-only or D-only: they engage one commitment and ignore the other,
+   or engage them at very different intensities. The revolutionary
+   paper treats them as one problem with two symmetric horns and
+   dispatches both together.
+
+These are candidate signatures now supported at N = 2. That is not the
+same as "supported as a general law of scientific revolutions." Both
+cases are natural sciences. Both involve a well-defined structural
+partner for the deleted commitment (T2 for T1 in physics; D2 for D1
+in biology). Whether Copernicus, Lavoisier, plate tectonics, or the
+quantum revolution have similar structural pairings — or whether
+prediction-independence + equalisation only makes sense when such
+pairings exist — is what a third and fourth case would decide.
+
+The Lavoisier corpus (PR #455) turned out too thin on Wikisource to
+run the pilot on. The Darwin case did work, and shipped as DCD1 pilot.
+A Copernicus corpus attempt is in flight as of this update; a Copernicus
+result would give N = 3 across three centuries and three domains.
+
+### 10.4 What the update leaves standing
+
+- Everything in §§1-4 about deletability vs susceptibility. The
+  moment-versus-state distinction survives the update; the P(t) shape
+  we hypothesised for the susceptibility signal is what the data
+  refuted, not the vocabulary of susceptibility itself.
+- §7's diagnosis that this program has moved from AI-recovery
+  ("can an LLM recover Einstein's deletion?") to scientometrics
+  ("what dynamics do published corpora show around scientific
+  revolutions?"). If anything the update makes that diagnosis
+  stronger: what replicated in Darwin was not about LLMs and not about
+  Einstein; it was about the structural properties of two revolutionary
+  papers written 54 years apart.
+- §8's caution. Verifier variance, dependence on the USE / DISCUSSION
+  rubric, corpus availability, N = 1 (now N = 2) — every listed
+  caution still applies.
+
+### 10.5 What the update revises
+
+- §5's decision table. "GO if P(t) for the target commitment peaks at
+  least a decade before the revolution ... is higher at its peak than
+  any other candidate commitment in the corpus" — the second half of
+  that condition has now failed on both cases we've run. The multi-case
+  test's decision criterion needs revising to test the two structural
+  signatures found in DCR4 in addition to the P(t) shape originally
+  proposed.
+- §9's "what comes next" list. DCR4 is done, not in flight. DCD1
+  pilot is done. Lavoisier failed at corpus stage; Darwin succeeded;
+  Copernicus is being attempted; plate tectonics and quantum remain
+  future work. The instrument-building paper and the Kuhn/Lakatos
+  companion remain future work.
+
+### 10.6 Attribution note
+
+The DCR4 correction (§4.4 of that paper) and this update section were
+written in response to the human director's request to check whether
+the DCR4 aggregate claim was an averaging artifact. It was. The
+per-doc reslice that revealed Poincaré 1898's contribution is a
+cheap-but-load-bearing check that any future multi-case work should
+run before publishing an aggregate claim.
 
 ---
 
