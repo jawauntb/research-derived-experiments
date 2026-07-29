@@ -880,7 +880,7 @@
         "experiments/darwin_species_fixity_corpus/results/fetch_summary.json"
       ],
       "n_modal_entrypoints": 0,
-      "n_scripts": 3,
+      "n_scripts": 4,
       "paper": null,
       "preregistration": "experiments/darwin_species_fixity_corpus/DCD1_PILOT_PREREGISTRATION.md",
       "verification_signals": [],
