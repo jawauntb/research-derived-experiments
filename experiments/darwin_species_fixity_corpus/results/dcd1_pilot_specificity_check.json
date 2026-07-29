@@ -1,0 +1,318 @@
+{
+  "darwin_both_signature_hits": [
+    "erasmus_darwin_1794_zoonomia_generation_39",
+    "darwin_1859_origin_introduction",
+    "darwin_1845_beagle_ch17",
+    "darwin_1859_origin_ch14",
+    "wallace_1855_sarawak"
+  ],
+  "darwin_per_doc": {
+    "darwin_1845_beagle_ch17": {
+      "both_signatures": true,
+      "d1": 3,
+      "d2": 6,
+      "eq_ratio": 0.5,
+      "equalisation": true,
+      "n_pred": 20,
+      "prediction_independence": true,
+      "u_c1": 0,
+      "u_c2": 0,
+      "u_c3": 0
+    },
+    "darwin_1859_origin_ch14": {
+      "both_signatures": true,
+      "d1": 4,
+      "d2": 7,
+      "eq_ratio": 0.5714285714285714,
+      "equalisation": true,
+      "n_pred": 17,
+      "prediction_independence": true,
+      "u_c1": 0,
+      "u_c2": 0,
+      "u_c3": 0
+    },
+    "darwin_1859_origin_ch4": {
+      "both_signatures": false,
+      "d1": 3,
+      "d2": 2,
+      "eq_ratio": 0.6666666666666666,
+      "equalisation": false,
+      "n_pred": 16,
+      "prediction_independence": true,
+      "u_c1": 0,
+      "u_c2": 0,
+      "u_c3": 0
+    },
+    "darwin_1859_origin_introduction": {
+      "both_signatures": true,
+      "d1": 3,
+      "d2": 3,
+      "eq_ratio": 1.0,
+      "equalisation": true,
+      "n_pred": 12,
+      "prediction_independence": true,
+      "u_c1": 0,
+      "u_c2": 0,
+      "u_c3": 0
+    },
+    "erasmus_darwin_1794_zoonomia_generation_39": {
+      "both_signatures": true,
+      "d1": 7,
+      "d2": 5,
+      "eq_ratio": 0.7142857142857143,
+      "equalisation": true,
+      "n_pred": 11,
+      "prediction_independence": true,
+      "u_c1": 0,
+      "u_c2": 0,
+      "u_c3": 0
+    },
+    "herschel_1830_prelim_p1c1": {
+      "both_signatures": false,
+      "d1": 0,
+      "d2": 0,
+      "eq_ratio": 0.0,
+      "equalisation": false,
+      "n_pred": 4,
+      "prediction_independence": true,
+      "u_c1": 0,
+      "u_c2": 0,
+      "u_c3": 0
+    },
+    "malthus_1798_essay_ch1": {
+      "both_signatures": false,
+      "d1": 0,
+      "d2": 0,
+      "eq_ratio": 0.0,
+      "equalisation": false,
+      "n_pred": 22,
+      "prediction_independence": true,
+      "u_c1": 0,
+      "u_c2": 0,
+      "u_c3": 0
+    },
+    "wallace_1855_sarawak": {
+      "both_signatures": true,
+      "d1": 5,
+      "d2": 8,
+      "eq_ratio": 0.625,
+      "equalisation": true,
+      "n_pred": 22,
+      "prediction_independence": true,
+      "u_c1": 0,
+      "u_c2": 0,
+      "u_c3": 0
+    }
+  },
+  "darwin_pre_origin_both_signature_hits": [
+    "erasmus_darwin_1794_zoonomia_generation_39",
+    "darwin_1845_beagle_ch17",
+    "wallace_1855_sarawak"
+  ],
+  "dcr_arc_both_signature_hits": [
+    "einstein_1905"
+  ],
+  "dcr_arc_per_doc": {
+    "brace_1904_refraction": {
+      "both_signatures": false,
+      "d1": 0,
+      "d2": 0,
+      "eq_ratio": 0.0,
+      "equalisation": false,
+      "n_pred": 2,
+      "prediction_independence": false,
+      "u_c1": 0,
+      "u_c2": 1,
+      "u_c3": 0
+    },
+    "einstein_1905": {
+      "both_signatures": true,
+      "d1": 4,
+      "d2": 4,
+      "eq_ratio": 1.0,
+      "equalisation": true,
+      "n_pred": 13,
+      "prediction_independence": true,
+      "u_c1": 0,
+      "u_c2": 0,
+      "u_c3": 0
+    },
+    "fitzgerald_1889": {
+      "both_signatures": false,
+      "d1": 0,
+      "d2": 4,
+      "eq_ratio": 0.0,
+      "equalisation": false,
+      "n_pred": 7,
+      "prediction_independence": false,
+      "u_c1": 0,
+      "u_c2": 7,
+      "u_c3": 0
+    },
+    "larmor_1897_medium3": {
+      "both_signatures": false,
+      "d1": 0,
+      "d2": 2,
+      "eq_ratio": 0.0,
+      "equalisation": false,
+      "n_pred": 3,
+      "prediction_independence": false,
+      "u_c1": 0,
+      "u_c2": 3,
+      "u_c3": 1
+    },
+    "larmor_1900_ch10": {
+      "both_signatures": false,
+      "d1": 0,
+      "d2": 4,
+      "eq_ratio": 0.0,
+      "equalisation": false,
+      "n_pred": 5,
+      "prediction_independence": false,
+      "u_c1": 0,
+      "u_c2": 5,
+      "u_c3": 0
+    },
+    "larmor_1900_ch11": {
+      "both_signatures": false,
+      "d1": 1,
+      "d2": 1,
+      "eq_ratio": 1.0,
+      "equalisation": false,
+      "n_pred": 11,
+      "prediction_independence": false,
+      "u_c1": 1,
+      "u_c2": 6,
+      "u_c3": 1
+    },
+    "lodge_1897_absence": {
+      "both_signatures": false,
+      "d1": 0,
+      "d2": 3,
+      "eq_ratio": 0.0,
+      "equalisation": false,
+      "n_pred": 7,
+      "prediction_independence": false,
+      "u_c1": 2,
+      "u_c2": 4,
+      "u_c3": 0
+    },
+    "lorentz_1904": {
+      "both_signatures": false,
+      "d1": 1,
+      "d2": 2,
+      "eq_ratio": 0.5,
+      "equalisation": false,
+      "n_pred": 6,
+      "prediction_independence": false,
+      "u_c1": 0,
+      "u_c2": 6,
+      "u_c3": 0
+    },
+    "maxwell_1865_part1": {
+      "both_signatures": false,
+      "d1": 0,
+      "d2": 0,
+      "eq_ratio": 0.0,
+      "equalisation": false,
+      "n_pred": 6,
+      "prediction_independence": true,
+      "u_c1": 0,
+      "u_c2": 0,
+      "u_c3": 0
+    },
+    "maxwell_1865_part6": {
+      "both_signatures": false,
+      "d1": 0,
+      "d2": 0,
+      "eq_ratio": 0.0,
+      "equalisation": false,
+      "n_pred": 10,
+      "prediction_independence": false,
+      "u_c1": 0,
+      "u_c2": 1,
+      "u_c3": 0
+    },
+    "maxwell_1878_ether": {
+      "both_signatures": false,
+      "d1": 0,
+      "d2": 2,
+      "eq_ratio": 0.0,
+      "equalisation": false,
+      "n_pred": 1,
+      "prediction_independence": false,
+      "u_c1": 0,
+      "u_c2": 1,
+      "u_c3": 0
+    },
+    "michelson_1881": {
+      "both_signatures": false,
+      "d1": 0,
+      "d2": 3,
+      "eq_ratio": 0.0,
+      "equalisation": false,
+      "n_pred": 5,
+      "prediction_independence": false,
+      "u_c1": 1,
+      "u_c2": 4,
+      "u_c3": 0
+    },
+    "michelson_morley_1887": {
+      "both_signatures": false,
+      "d1": 0,
+      "d2": 0,
+      "eq_ratio": 0.0,
+      "equalisation": false,
+      "n_pred": 7,
+      "prediction_independence": false,
+      "u_c1": 1,
+      "u_c2": 5,
+      "u_c3": 0
+    },
+    "poincare_1898_time": {
+      "both_signatures": false,
+      "d1": 4,
+      "d2": 0,
+      "eq_ratio": 0.0,
+      "equalisation": false,
+      "n_pred": 8,
+      "prediction_independence": false,
+      "u_c1": 5,
+      "u_c2": 0,
+      "u_c3": 0
+    },
+    "poincare_1904_stlouis": {
+      "both_signatures": false,
+      "d1": 1,
+      "d2": 2,
+      "eq_ratio": 0.5,
+      "equalisation": false,
+      "n_pred": 2,
+      "prediction_independence": true,
+      "u_c1": 0,
+      "u_c2": 0,
+      "u_c3": 0
+    },
+    "rayleigh_1902_refraction": {
+      "both_signatures": false,
+      "d1": 0,
+      "d2": 2,
+      "eq_ratio": 0.0,
+      "equalisation": false,
+      "n_pred": 8,
+      "prediction_independence": false,
+      "u_c1": 0,
+      "u_c2": 7,
+      "u_c3": 0
+    }
+  },
+  "einstein_unique_among_pre_1905_docs": true,
+  "kind": "dcd1_pilot_specificity_check",
+  "origin_unique_among_pre_1859_docs": false,
+  "purpose": "Test whether the two DCR4 structural signatures (prediction-independence, symmetric equalisation) are UNIQUE to the revolutionary paper on each case, or whether pre-revolutionary papers also hit them.",
+  "signature_definitions": {
+    "equalisation": "disc(c1) >= 3 AND disc(c2) >= 3 AND min/max >= 0.5",
+    "prediction_independence": "n_pred >= 1 AND sum of T1/T2/T3 (or D1/D2/D3) use in predictions == 0"
+  },
+  "verdict": "MIXED. Einstein 1905 is the UNIQUE document in the DCR arc corpus with both signatures firing meaningfully (T1=4, T2=4, pred_indep=YES). But on the Darwin corpus, THREE pre-Origin documents (Erasmus Darwin 1794, Wallace 1855 Sarawak, Beagle 1845 ch17) also hit both signatures at the same thresholds as Origin chapters. On Darwin, the 'unique to revolutionary paper' claim FAILS. The signatures fire on any paper that has predictions independent of the D-categories AND discusses D1 and D2 at similar counts \u2014 which includes speculative pre-revolutionary work like Zoonomia. This substantially weakens the DCD1 pilot paper's 'replication' claim: the signatures replicate in count, but not in uniqueness."
+}

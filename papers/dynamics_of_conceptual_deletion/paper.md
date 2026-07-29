@@ -318,7 +318,70 @@ result would give N = 3 across three centuries and three domains.
   future work. The instrument-building paper and the Kuhn/Lakatos
   companion remain future work.
 
-### 10.6 Attribution note
+### 10.6 Specificity check (2026-07-29): the two signatures are Einstein-unique in DCR arc but NOT Origin-unique in Darwin
+
+The §10.3 claim that the two signatures characterise the revolutionary
+paper implicitly assumes they are UNIQUE to the revolutionary paper.
+A per-document specificity check on already-committed verifier tags
+(`experiments/darwin_species_fixity_corpus/run_specificity_check.py`,
+verdict at `results/dcd1_pilot_specificity_check.json`) tested that
+assumption on both cases.
+
+**DCR arc (physics):** Einstein 1905 is the UNIQUE document with both
+signatures firing meaningfully. Among 15 pre-Einstein documents, none
+has both prediction_independence AND equalisation
+(disc(T1) ≥ 3 AND disc(T2) ≥ 3 AND ratio ≥ 0.5). The signatures are
+distinctive of Einstein against the physics corpus.
+
+**Darwin (biology):** Origin is NOT unique. Three pre-1859 documents
+also hit both signatures at the same substantive thresholds:
+
+- Erasmus Darwin 1794 Zoonomia XXXIX: D1=7, D2=5, no D-use in
+  predictions
+- Wallace 1855 Sarawak law: D1=5, D2=8, no D-use in predictions
+- Darwin 1845 Beagle ch17: D1=3, D2=6, no D-use in predictions
+
+Origin chapters do hit (intro 3:3, ch14 4:7; ch4 hits pred_indep only
+at 3:2 which fails the equalisation floor). But so do the three
+pre-Origin documents listed. **On the Darwin corpus, the "unique to
+revolutionary paper" claim fails.**
+
+The signatures fire whenever a paper (a) has predictions but (b) does
+not require the deleted commitment as background AND (c) discusses
+both paired commitments at balanced counts. Zoonomia hits all three
+because Erasmus Darwin discusses transmutation speculatively but his
+concrete predictions are about mechanisms of generation and heredity,
+which don't require D1 as premise. That reads as "prediction-
+independence" even though the paper is deeply committed to a stance
+on D1.
+
+**What survives the specificity check:**
+- The two signatures are real, stable observables. Not a scoring
+  artifact.
+- Einstein 1905 remains distinctive against the DCR arc's 15 physics
+  documents. The N=1 physics uniqueness claim holds.
+- The Erasmus/Wallace/Beagle triple hitting the same signatures as
+  Origin is itself a finding: it identifies a class of speculative
+  precursor papers that "look like" revolutionary papers on these
+  two metrics.
+
+**What the specificity check falsifies:**
+- The N=2 uniqueness claim. On Darwin, the signatures do not
+  distinguish Origin from Zoonomia, Sarawak, or Beagle ch17.
+- The framing "the revolutionary paper is uniquely characterised by
+  these two features." That framing survives on physics; it does
+  not survive on biology.
+
+**What the framework paper should therefore claim going forward:**
+The two signatures may be a useful COMPONENT of a revolutionary-paper
+identification pipeline, but they are not by themselves sufficient.
+Distinguishing a revolutionary paper (Origin) from a speculative
+precursor (Zoonomia) requires additional criteria — perhaps something
+like "reconstructed derivations to eliminate a previously-required
+premise" (which Einstein did but Erasmus Darwin did not) rather than
+just "no derivations happen to use the premise" (which both do).
+
+### 10.7 Attribution note
 
 The DCR4 correction (§4.4 of that paper) and this update section were
 written in response to the human director's request to check whether

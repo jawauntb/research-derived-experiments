@@ -1,10 +1,10 @@
-# DCD1 Pilot: The Two DCR4 Structural Signatures Replicate On Darwin. The "Discussion Spike In The Revolutionary Paper" Prediction Fails Again.
+# DCD1 Pilot: The Two DCR4 Signatures Replicate By COUNT On Darwin, But NOT By UNIQUENESS. (Correction 2026-07-29.)
 
 **Human director:** Jawaun Brown
 **Producing agent:** Claude Code, directed
 **Program:** Dynamics of Conceptual Deletion — DCD1 Darwin pilot
-**Status:** Core preregistered gates: **NO_GO** on P3 (discussion spike is in the pre-Origin corpus, not the revolutionary paper). Exploratory previews P4 and P5 both fire, **replicating the two structural signatures** DCR4 found for Einstein 1905. Second independent case, same three findings.
-**Date:** 2026-07-27
+**Status:** Original claim (2026-07-27): "the two DCR4 structural signatures replicate on Origin." **Correction (2026-07-29, per-doc specificity check):** signatures replicate in COUNT — Origin does show both — but they are NOT UNIQUE to Origin. Three pre-Origin documents (Erasmus Darwin 1794 Zoonomia, Wallace 1855 Sarawak, Beagle 1845 ch17) also hit both signatures at the same thresholds. On Einstein's DCR arc corpus the signatures ARE unique to Einstein 1905 (15 pre-Einstein documents, none hit both). On Darwin they are not. **The 'replication' claim survives; the 'uniquely revolutionary' claim does not.** See §6 for the specificity check.
+**Date:** 2026-07-27 (original); 2026-07-29 (§6 specificity-check correction)
 
 ---
 
@@ -178,7 +178,115 @@ Origin ch14 at 4:7 (ratio 0.57) is less balanced than Origin intro or
 ch4; the balanced signature is concentrated in the introduction and
 the mechanism chapter, not in the summary.
 
-## 5. What DCD1-pilot licenses
+## 5. The specificity check (correction added 2026-07-29)
+
+The original version of this paper (2026-07-27) claimed the two DCR4
+signatures "replicate" on Darwin. That claim implicitly rests on the
+signatures being uniquely revolutionary — if any pre-1859 document also
+hits both, "the revolutionary paper has these features" ceases to be a
+meaningful statement.
+
+Two days after the pilot landed, the human director requested a
+per-document specificity check on the already-committed verifier tags.
+The runner is at
+`experiments/darwin_species_fixity_corpus/run_specificity_check.py`
+and its verdict is at
+`experiments/darwin_species_fixity_corpus/results/dcd1_pilot_specificity_check.json`.
+
+Signature definitions used:
+- **prediction_independence(doc)** = doc has ≥ 1 prediction AND zero of
+  its predictions require the deleted-category-family as background.
+- **equalisation(doc)** = disc(primary) ≥ 3 AND disc(paired) ≥ 3 AND
+  ratio min/max ≥ 0.5.
+- **BOTH_SIGNATURES(doc)** = both fire.
+
+**DCR arc result (15 physics documents plus Einstein 1905):** Einstein
+1905 is the UNIQUE document with both signatures firing (T1=4, T2=4,
+prediction_independence=YES). No pre-Einstein document matches. The
+"unique to revolutionary paper" claim holds on the physics case.
+
+**Darwin corpus result (5 pre-Origin documents plus 3 Origin
+chapters):**
+
+| document | n_pred | D1 disc | D2 disc | D-use in pred | pred_indep | eq | BOTH |
+|---|---:|---:|---:|---:|---|---:|---|
+| erasmus_darwin_1794_zoonomia | 11 | 7 | 5 | 0 | YES | 0.71 | **★★★** |
+| wallace_1855_sarawak | 22 | 5 | 8 | 0 | YES | 0.62 | **★★★** |
+| darwin_1845_beagle_ch17 | 20 | 3 | 6 | 0 | YES | 0.50 | **★★★** |
+| darwin_1859_origin_introduction | 12 | 3 | 3 | 0 | YES | 1.00 | **★★★** |
+| darwin_1859_origin_ch14 | 17 | 4 | 7 | 0 | YES | 0.57 | **★★★** |
+| darwin_1859_origin_ch4 | 16 | 3 | 2 | 0 | YES | 0.67 | ★ pred_indep only |
+| malthus_1798_essay_ch1 | 22 | 0 | 0 | 0 | YES | 0.00 | trivial |
+| herschel_1830_prelim_p1c1 | 4 | 0 | 0 | 0 | YES | 0.00 | trivial |
+
+**Five pre-Origin documents plus two Origin chapters hit both
+signatures at the same substantive thresholds.** The signatures do NOT
+distinguish Origin from Erasmus Darwin's Zoonomia, Wallace's Sarawak
+paper, or Darwin's own 1845 Galápagos chapter. On the Darwin corpus,
+"the revolutionary paper is uniquely characterised by these two
+features" is false.
+
+### Why the signatures fired on pre-Origin documents
+
+The signatures fire whenever a paper (a) has predictions but (b) does
+not require the deleted commitment as background AND (c) discusses
+both paired commitments at balanced counts.
+
+Erasmus Darwin's Zoonomia discusses D1 (species change / transmutation
+possible) and D2 (common ancestry vs independent creation) speculatively
+(7:5 counts) but his predictions are about mechanisms of generation and
+heredity, not about species change itself. His predictions therefore
+don't require D1 as premise — they'd go through either way. That reads
+as "prediction-independence" under the operational definition even
+though the paper is deeply committed to a specific stance on D1.
+
+This is a different kind of prediction-independence than Einstein
+achieves. Einstein RECONSTRUCTS every derivation to eliminate T1 as
+premise (he acts on the commitment). Erasmus Darwin never LEANS on
+D1 to derive any of his predictions in the first place (D1 is a
+speculative topic he discusses on the side while making other-topic
+predictions). Under this specific operationalisation they look
+identical.
+
+### What the correction changes about this paper's claims
+
+- **"The two DCR4 signatures replicate on Origin"** — TRUE by count.
+  Origin does hit both. This part of the pilot's finding survives.
+- **"The revolutionary paper is uniquely characterised by these two
+  features"** — FALSE on Darwin. Three pre-Origin documents also hit
+  both signatures at the same substantive thresholds. The specificity
+  claim does not survive.
+- **"N=2 supports the pattern as not-Einstein-specific"** — WEAKENED.
+  What the pattern generalises to on the Darwin case is not "unique
+  to the revolutionary paper" but "papers that don't lean on the
+  deleted commitment for their derivations while discussing both
+  paired commitments." That is a much less pointed structural claim
+  and covers speculative precursors as much as revolutionary papers.
+
+### What this DOES leave standing
+
+- Einstein 1905 remains unique in the DCR arc corpus. The physics
+  case still shows the signatures as distinctive of the revolutionary
+  paper against 15 alternatives.
+- The two signatures are real observables. They are stable across
+  three-verifier consensus and the per-doc arithmetic is not the issue.
+- The Erasmus/Wallace/Beagle triple hitting the same signatures is
+  itself a substantive finding: it identifies a class of precursor
+  papers that "look like" revolutionary papers on these two metrics.
+  A future revision of the framework would need to distinguish
+  "papers with reconstructed derivations that avoid using the deleted
+  commitment" from "papers that never happened to need the deleted
+  commitment for their predictions in the first place." The current
+  operationalisation collapses that distinction.
+
+The correction pattern here matches the DCR4 correction pattern
+(`papers/date_cut_retrodiction_dcr4/paper.md` §4.4): the check that
+falsifies part of the paper's headline was requested by the human
+director and run immediately, and it revealed the same kind of
+artifact — an aggregate or category-level claim that fails when
+you look at individual documents.
+
+## 6. What DCD1-pilot licenses
 
 - **The DCR4 pattern is not Einstein-specific.** N=2 cases from
   different domains show the same three findings. Not proof of
@@ -193,7 +301,7 @@ the mechanism chapter, not in the summary.
   hypothesis needs revision to account for the precursor-heavy
   distribution of discussion counts.
 
-## 6. What DCD1-pilot does not license
+## 7. What DCD1-pilot does not license
 
 - Full DCD1 on Darwin. This is 8 documents of the corpus's 32; the
   full run (17 pre-1859 + 15 Origin chapters) may sharpen or overturn
@@ -208,7 +316,7 @@ the mechanism chapter, not in the summary.
   the pattern extends to mathematics, social sciences, or humanities
   remains open.
 
-## 7. What comes next
+## 8. What comes next
 
 Two directions worth spending on:
 
