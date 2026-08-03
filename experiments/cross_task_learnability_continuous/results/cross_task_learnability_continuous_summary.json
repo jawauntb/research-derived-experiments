@@ -1,0 +1,99 @@
+{
+  "N_bound_ratio_d_Z2_over_d_Z1": [
+    {
+      "r": 4,
+      "ratio": 5.166667
+    },
+    {
+      "r": 8,
+      "ratio": 11.170732
+    },
+    {
+      "r": 16,
+      "ratio": 23.516129
+    }
+  ],
+  "ambient_side": 16,
+  "ambient_size": 256,
+  "d_Z_values": [
+    1,
+    2
+  ],
+  "eps_rel": 0.05,
+  "gates": {
+    "exponential_in_d_Z_scaling_strict": true,
+    "ratio_exceeds_r_over_two_at_all_r": true,
+    "recovery_monotone_up_to_bound": true,
+    "recovery_zero_below_M_at_all_grid_points": true,
+    "theorem6_bound_meets_target_at_all_grid_points": true
+  },
+  "r_values": [
+    4,
+    8,
+    16
+  ],
+  "scaling_points": [
+    {
+      "M": 4,
+      "N_bound": 18,
+      "d_z": 1,
+      "exact_recovery_at_bound": 0.977472047671,
+      "fibre_size_in_ambient": 64,
+      "meets_target": true,
+      "r": 4,
+      "recovery_zero_below_M": true
+    },
+    {
+      "M": 8,
+      "N_bound": 41,
+      "d_z": 1,
+      "exact_recovery_at_bound": 0.966681982803,
+      "fibre_size_in_ambient": 32,
+      "meets_target": true,
+      "r": 8,
+      "recovery_zero_below_M": true
+    },
+    {
+      "M": 16,
+      "N_bound": 93,
+      "d_z": 1,
+      "exact_recovery_at_bound": 0.96090538458,
+      "fibre_size_in_ambient": 16,
+      "meets_target": true,
+      "r": 16,
+      "recovery_zero_below_M": true
+    },
+    {
+      "M": 16,
+      "N_bound": 93,
+      "d_z": 2,
+      "exact_recovery_at_bound": 0.96090538458,
+      "fibre_size_in_ambient": 16,
+      "meets_target": true,
+      "r": 4,
+      "recovery_zero_below_M": true
+    },
+    {
+      "M": 64,
+      "N_bound": 458,
+      "d_z": 2,
+      "exact_recovery_at_bound": 0.953788083283,
+      "fibre_size_in_ambient": 4,
+      "meets_target": true,
+      "r": 8,
+      "recovery_zero_below_M": true
+    },
+    {
+      "M": 256,
+      "N_bound": 2187,
+      "d_z": 2,
+      "exact_recovery_at_bound": 0.952072773246,
+      "fibre_size_in_ambient": 1,
+      "meets_target": true,
+      "r": 16,
+      "recovery_zero_below_M": true
+    }
+  ],
+  "status": "pass",
+  "theorem_bound_form": "N >= c * (D_Z / eps)^{d_Z} * ... = c * M * ln(M / eps_rel)"
+}

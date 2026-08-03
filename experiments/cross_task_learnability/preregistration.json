@@ -1,0 +1,41 @@
+{
+  "experiment_id": "cross_task_learnability",
+  "schema_version": "1.0",
+  "hypothesis": "For a task family that separates a discrete latent Z on a finite X with min-fibre probability p_min = 1/(cM), the exact recovery probability of empirical common-sufficient clustering is at least 1 - eps whenever the sample count N is at least the Theorem-5 bound ceil(c * M * ln(M / eps)). Below M samples, recovery is impossible (pigeonhole). The recovery curve is monotone in N.",
+  "primary_metric": "distributions[i].exact_recovery_at_theorem_bound",
+  "gates": {
+    "CTL_EXACT_RECOVERY_AT_THEOREM_BOUND_SHARED_UNIFORM": "For the uniform distribution on X = {0,1}^4 (fibre-balance constant c = 1, M = 4) with eps = 0.05, the exact recovery probability at N = ceil(c * M * ln(M / eps)) = 18 is at least 1 - eps = 0.95.",
+    "CTL_EXACT_RECOVERY_AT_THEOREM_BOUND_SHARED_SKEWED": "For the skewed distribution (fibre masses (0.625, 0.125, 0.125, 0.125), c = 2, M = 4) with eps = 0.05, the exact recovery probability at N = ceil(c * M * ln(M / eps)) = 36 is at least 1 - eps = 0.95.",
+    "CTL_RECOVERY_ZERO_BELOW_M": "For every N < M = 4, the exact recovery probability is exactly zero (pigeonhole).",
+    "CTL_RECOVERY_MONOTONE_IN_N": "The exact recovery curve is nondecreasing in N up to the Theorem-5 bound for both distributions."
+  },
+  "metrics": [
+    "exact_recovery_at_theorem_bound",
+    "theorem_bound_N",
+    "p_min",
+    "c_from_p_min",
+    "curve"
+  ],
+  "distributions": [
+    {
+      "name": "uniform",
+      "c_from_p_min": 1.0
+    },
+    {
+      "name": "skewed",
+      "c_from_p_min": 2.0
+    }
+  ],
+  "controls": [
+    "exact_inclusion_exclusion_over_fibre_partition",
+    "pigeonhole_lower_bound",
+    "monotonicity_sanity_check",
+    "separation_verified_for_shared_task_family"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": null,
+    "sampling": "exact inclusion-exclusion over all subsets of the fibre partition of X; no Monte Carlo",
+    "raw_data": false
+  }
+}

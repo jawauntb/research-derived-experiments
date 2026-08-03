@@ -284,5 +284,112 @@
       }
     ],
     "status": "pass"
+  },
+  "cross_task_sufficiency": {
+    "gates": {
+      "family_css_strictly_finer_than_some_single_task_mss": true,
+      "not_shared_css_equals_identity": true,
+      "shared_css_equals_latent_Z": true,
+      "shared_css_strictly_coarser_than_identity": true
+    },
+    "latent_Z_definition": "joint(parity{0,1}, parity{2,3}) on a 4-bit Boolean world",
+    "status": "pass",
+    "families": [
+      {
+        "family": "shared_through_Z",
+        "coarsest_common_sufficient": {
+          "quotient": "joint(parity{0,1},parity{2,3})",
+          "image_size": 4,
+          "description_length": 2.0
+        },
+        "tasks": [
+          { "name": "shared_p01", "description": "parity{0,1} = first coordinate of Z." },
+          { "name": "shared_p23", "description": "parity{2,3} = second coordinate of Z." },
+          { "name": "shared_global_parity", "description": "parity{0,1,2,3} = XOR of the two coordinates of Z." }
+        ],
+        "per_task_minimal_sufficient": [
+          { "task": "shared_p01", "minimal_sufficient": "parity{0,1}", "minimal_sufficient_image_size": 2 },
+          { "task": "shared_p23", "minimal_sufficient": "parity{2,3}", "minimal_sufficient_image_size": 2 },
+          { "task": "shared_global_parity", "minimal_sufficient": "parity{0,1,2,3}", "minimal_sufficient_image_size": 2 }
+        ]
+      },
+      {
+        "family": "not_shared_beyond_Z",
+        "coarsest_common_sufficient": {
+          "quotient": "identity",
+          "image_size": 16,
+          "description_length": 4.0
+        },
+        "tasks": [
+          { "name": "notshared_bit_0", "description": "Reveals bit 0 individually (not a function of Z)." },
+          { "name": "notshared_bit_1", "description": "Reveals bit 1 individually." },
+          { "name": "notshared_bit_2", "description": "Reveals bit 2 individually." },
+          { "name": "notshared_bit_3", "description": "Reveals bit 3 individually." }
+        ],
+        "per_task_minimal_sufficient": [
+          { "task": "notshared_bit_0", "minimal_sufficient": "parity{0}", "minimal_sufficient_image_size": 2 },
+          { "task": "notshared_bit_1", "minimal_sufficient": "parity{1}", "minimal_sufficient_image_size": 2 },
+          { "task": "notshared_bit_2", "minimal_sufficient": "parity{2}", "minimal_sufficient_image_size": 2 },
+          { "task": "notshared_bit_3", "minimal_sufficient": "parity{3}", "minimal_sufficient_image_size": 2 }
+        ]
+      }
+    ]
+  },
+  "cross_task_learnability": {
+    "gates": {
+      "exact_recovery_at_theorem_bound_shared_skewed": true,
+      "exact_recovery_at_theorem_bound_shared_uniform": true,
+      "recovery_monotone_in_N": true,
+      "recovery_zero_below_M": true
+    },
+    "status": "pass",
+    "eps": 0.05,
+    "M": 4,
+    "theorem_bound_form": "N >= c * M * ln(M / eps)",
+    "distributions": [
+      {
+        "distribution": "uniform",
+        "c_from_p_min": 1.0,
+        "p_min": 0.25,
+        "theorem_bound_N": 18,
+        "exact_recovery_at_theorem_bound": 0.9775,
+        "exact_recovery_meets_target": true
+      },
+      {
+        "distribution": "skewed",
+        "c_from_p_min": 2.0,
+        "p_min": 0.125,
+        "theorem_bound_N": 36,
+        "exact_recovery_at_theorem_bound": 0.9756,
+        "exact_recovery_meets_target": true
+      }
+    ]
+  },
+  "cross_task_learnability_continuous": {
+    "gates": {
+      "theorem6_bound_meets_target_at_all_grid_points": true,
+      "recovery_zero_below_M_at_all_grid_points": true,
+      "recovery_monotone_up_to_bound": true,
+      "exponential_in_d_Z_scaling_strict": true,
+      "ratio_exceeds_r_over_two_at_all_r": true
+    },
+    "status": "pass",
+    "eps_rel": 0.05,
+    "ambient_side": 16,
+    "ambient_size": 256,
+    "theorem_bound_form": "N >= c * (D_Z / eps)^{d_Z} * ... = c * M * ln(M / eps_rel)",
+    "scaling_points": [
+      { "d_z": 1, "r": 4, "M": 4, "N_bound": 18, "exact_recovery_at_bound": 0.9775, "meets_target": true },
+      { "d_z": 1, "r": 8, "M": 8, "N_bound": 41, "exact_recovery_at_bound": 0.9667, "meets_target": true },
+      { "d_z": 1, "r": 16, "M": 16, "N_bound": 93, "exact_recovery_at_bound": 0.9609, "meets_target": true },
+      { "d_z": 2, "r": 4, "M": 16, "N_bound": 93, "exact_recovery_at_bound": 0.9609, "meets_target": true },
+      { "d_z": 2, "r": 8, "M": 64, "N_bound": 458, "exact_recovery_at_bound": 0.9538, "meets_target": true },
+      { "d_z": 2, "r": 16, "M": 256, "N_bound": 2187, "exact_recovery_at_bound": 0.9521, "meets_target": true }
+    ],
+    "N_bound_ratio_d_Z2_over_d_Z1": [
+      { "r": 4, "ratio": 5.166667 },
+      { "r": 8, "ratio": 11.170732 },
+      { "r": 16, "ratio": 23.516129 }
+    ]
   }
 }

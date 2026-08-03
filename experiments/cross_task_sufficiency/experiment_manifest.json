@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "cross_task_sufficiency",
+  "hypothesis": "A task family whose members all factor through a shared latent Z admits Z as the coarsest common sufficient statistic; a family whose members reveal individual coordinates instead admits only the identity as a common sufficient statistic; and the family CSS is strictly finer than any single task's minimal sufficient statistic.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "latent_z_in_quotient_library",
+      "description": "The generative latent Z = joint(parity{0,1}, parity{2,3}) is explicitly in the enumerated quotient library, so the coarsest common sufficient statistic is representable."
+    },
+    {
+      "control_id": "not_shared_family_counterfactual",
+      "description": "A parallel task family that reveals individual bits (not shared through Z) makes the coarsest common sufficient statistic collapse to the identity, exhibiting the dissociation."
+    },
+    {
+      "control_id": "exact_population_enumeration",
+      "description": "All 2^4 = 16 worlds and all quotients in the lattice are enumerated, so every entropy is exact and no sampling error appears."
+    }
+  ],
+  "seeds": [
+    0
+  ],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python3",
+      "experiments/cross_task_sufficiency/experiment.py"
+    ],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "CTS_SHARED_CSS_EQUALS_LATENT_Z",
+      "criterion": "The coarsest common sufficient statistic of the shared family equals the latent Z (joint of the two disjoint pair-parities, image size 4)."
+    },
+    {
+      "gate_id": "CTS_SHARED_CSS_STRICTLY_COARSER_THAN_IDENTITY",
+      "criterion": "The coarsest common sufficient statistic of the shared family has image size strictly less than 2^4 = 16."
+    },
+    {
+      "gate_id": "CTS_NOT_SHARED_CSS_EQUALS_IDENTITY",
+      "criterion": "The coarsest common sufficient statistic of the not-shared family is the identity map (image size 16)."
+    },
+    {
+      "gate_id": "CTS_FAMILY_CSS_STRICTLY_FINER_THAN_SOME_SINGLE_TASK_MSS",
+      "criterion": "The family CSS's image size for the shared family is strictly greater than the largest per-task minimal sufficient statistic image size."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/cross_task_sufficiency/results/cross_task_sufficiency_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/cross_task_sufficiency/preregistration.json",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

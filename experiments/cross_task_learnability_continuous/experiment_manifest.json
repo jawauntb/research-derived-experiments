@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "cross_task_learnability_continuous",
+  "hypothesis": "Theorem 6's ceil(c * M * ln(M / eps_rel)) sample bound is achieved at every (d_Z, r) in {1, 2} x {4, 8, 16} on the ambient 16x16 X-grid with balanced fibres, and the ratio N_bound(d_Z=2) / N_bound(d_Z=1) grows with r as the exponential-in-d_Z scaling predicts.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "dp_recursion_replaces_inclusion_exclusion_for_stability",
+      "description": "Recovery probability is computed by the O(N*M) DP recursion on f(n, k), which is numerically stable for M as large as 256 (where the log-domain inclusion-exclusion form suffers catastrophic cancellation)."
+    },
+    {
+      "control_id": "ambient_side_divides_every_r_for_exact_balance",
+      "description": "The 16x16 ambient X-grid divides each r in {4, 8, 16} exactly, so every fibre of the r x r Z-partition contains the same number of ambient cells and fibre balance c = 1 holds exactly."
+    },
+    {
+      "control_id": "pigeonhole_lower_bound",
+      "description": "For each (d_Z, r) the recovery probability is verified to be exactly zero for every N < M."
+    },
+    {
+      "control_id": "closed_form_m4_agreement_check",
+      "description": "For M = 4 the DP recursion is checked against the closed form 1 - 4*(3/4)^N + 6*(1/2)^N - 4*(1/4)^N at multiple N values (matches to 10 places)."
+    }
+  ],
+  "seeds": [
+    0
+  ],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python3",
+      "experiments/cross_task_learnability_continuous/experiment.py"
+    ],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "CTLC_THEOREM6_BOUND_MEETS_TARGET_AT_ALL_GRID_POINTS",
+      "criterion": "Exact recovery probability at the Theorem 6 bound is at least 0.95 for every (d_Z, r) in {1, 2} x {4, 8, 16}."
+    },
+    {
+      "gate_id": "CTLC_RECOVERY_ZERO_BELOW_M_AT_ALL_GRID_POINTS",
+      "criterion": "Exact recovery probability is 0 for every N < M at every grid point (pigeonhole)."
+    },
+    {
+      "gate_id": "CTLC_RECOVERY_MONOTONE_UP_TO_BOUND",
+      "criterion": "Sampled recovery probabilities at N in {0, 1, M-1, M, M+1, N_bound/2, N_bound, N_bound+1} are nondecreasing at every grid point."
+    },
+    {
+      "gate_id": "CTLC_EXPONENTIAL_IN_D_Z_SCALING_STRICT",
+      "criterion": "N_bound(d_Z=2, r) strictly exceeds N_bound(d_Z=1, r) for every r in {4, 8, 16}."
+    },
+    {
+      "gate_id": "CTLC_RATIO_EXCEEDS_R_OVER_TWO_AT_ALL_R",
+      "criterion": "N_bound(d_Z=2, r) / N_bound(d_Z=1, r) exceeds r/2 for every r in {4, 8, 16}."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/cross_task_learnability_continuous/results/cross_task_learnability_continuous_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/cross_task_learnability_continuous/preregistration.json",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

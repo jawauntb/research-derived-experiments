@@ -7,12 +7,19 @@ three exact instruments (`representation_search`, `structure_compiler`,
 agent architecture.
 
 - Manuscript: [`paper.md`](paper.md)
+- Rendered: [`paper.pdf`](paper.pdf)
 - Formal development: [`notes/structural_intelligence_conjecture.md`](../../notes/structural_intelligence_conjecture.md)
 - Source synthesis: [`notes/latent_structures_meta_framework.md`](../../notes/latent_structures_meta_framework.md)
-- Interactive demo: [`sites/structural_observatory`](../../sites/structural_observatory)
+- Interactive demo: [`sites/structural_observatory`](../../sites/structural_observatory) — live at https://structural-observatory-production.up.railway.app
 
 Status: conjecture + three exact executable instruments. The instruments
 establish dissociations on solvable cases; the general conjecture, the
 conditional rate–distortion control limit, and the alignment claim remain open.
-No PDF is committed yet; render with the repo's ReportLab paper pipeline when a
-figure set is added.
+
+Rebuild the PDF with:
+
+```bash
+uvx --from markdown-pdf python scripts/render_paper_pdf.py \
+  --in papers/structural_intelligence/paper.md \
+  --out papers/structural_intelligence/paper.pdf
+```

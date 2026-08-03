@@ -1,0 +1,366 @@
+{
+  "M": 4,
+  "distributions": [
+    {
+      "M": 4,
+      "c_from_p_min": 1.0,
+      "curve": [
+        {
+          "n_samples": 0,
+          "p_recover": 0.0
+        },
+        {
+          "n_samples": 1,
+          "p_recover": 0.0
+        },
+        {
+          "n_samples": 2,
+          "p_recover": 0.0
+        },
+        {
+          "n_samples": 3,
+          "p_recover": 0.0
+        },
+        {
+          "n_samples": 4,
+          "p_recover": 0.09375
+        },
+        {
+          "n_samples": 5,
+          "p_recover": 0.234375
+        },
+        {
+          "n_samples": 6,
+          "p_recover": 0.380859375
+        },
+        {
+          "n_samples": 7,
+          "p_recover": 0.5126953125
+        },
+        {
+          "n_samples": 8,
+          "p_recover": 0.622924804688
+        },
+        {
+          "n_samples": 9,
+          "p_recover": 0.711364746094
+        },
+        {
+          "n_samples": 10,
+          "p_recover": 0.780601501465
+        },
+        {
+          "n_samples": 11,
+          "p_recover": 0.833988189697
+        },
+        {
+          "n_samples": 12,
+          "p_recover": 0.874759197235
+        },
+        {
+          "n_samples": 13,
+          "p_recover": 0.905703306198
+        },
+        {
+          "n_samples": 14,
+          "p_recover": 0.929094403982
+        },
+        {
+          "n_samples": 15,
+          "p_recover": 0.946729257703
+        },
+        {
+          "n_samples": 16,
+          "p_recover": 0.960001168773
+        },
+        {
+          "n_samples": 17,
+          "p_recover": 0.969977988862
+        },
+        {
+          "n_samples": 18,
+          "p_recover": 0.977472047671
+        },
+        {
+          "n_samples": 19,
+          "p_recover": 0.983098313736
+        },
+        {
+          "n_samples": 20,
+          "p_recover": 0.987320874287
+        },
+        {
+          "n_samples": 21,
+          "p_recover": 0.990489225205
+        },
+        {
+          "n_samples": 22,
+          "p_recover": 0.992866203649
+        },
+        {
+          "n_samples": 23,
+          "p_recover": 0.994649295109
+        }
+      ],
+      "distribution": "uniform",
+      "eps": 0.05,
+      "exact_recovery_at_theorem_bound": 0.9774720476707444,
+      "exact_recovery_meets_target": true,
+      "fibre_mass_distribution": [
+        {
+          "mass": 0.25,
+          "z": [
+            0,
+            0
+          ]
+        },
+        {
+          "mass": 0.25,
+          "z": [
+            0,
+            1
+          ]
+        },
+        {
+          "mass": 0.25,
+          "z": [
+            1,
+            0
+          ]
+        },
+        {
+          "mass": 0.25,
+          "z": [
+            1,
+            1
+          ]
+        }
+      ],
+      "monotone_up_to_bound": true,
+      "p_min": 0.25,
+      "recovery_zero_below_M": true,
+      "theorem_bound_N": 18
+    },
+    {
+      "M": 4,
+      "c_from_p_min": 2.0,
+      "curve": [
+        {
+          "n_samples": 0,
+          "p_recover": 0.0
+        },
+        {
+          "n_samples": 1,
+          "p_recover": 0.0
+        },
+        {
+          "n_samples": 2,
+          "p_recover": 0.0
+        },
+        {
+          "n_samples": 3,
+          "p_recover": 0.0
+        },
+        {
+          "n_samples": 4,
+          "p_recover": 0.029296875
+        },
+        {
+          "n_samples": 5,
+          "p_recover": 0.0732421875
+        },
+        {
+          "n_samples": 6,
+          "p_recover": 0.125885009766
+        },
+        {
+          "n_samples": 7,
+          "p_recover": 0.18424987793
+        },
+        {
+          "n_samples": 8,
+          "p_recover": 0.245883464813
+        },
+        {
+          "n_samples": 9,
+          "p_recover": 0.308593511581
+        },
+        {
+          "n_samples": 10,
+          "p_recover": 0.370566733181
+        },
+        {
+          "n_samples": 11,
+          "p_recover": 0.430427771062
+        },
+        {
+          "n_samples": 12,
+          "p_recover": 0.487217073678
+        },
+        {
+          "n_samples": 13,
+          "p_recover": 0.540328240895
+        },
+        {
+          "n_samples": 14,
+          "p_recover": 0.589434770382
+        },
+        {
+          "n_samples": 15,
+          "p_recover": 0.63442117505
+        },
+        {
+          "n_samples": 16,
+          "p_recover": 0.675324272889
+        },
+        {
+          "n_samples": 17,
+          "p_recover": 0.71228586667
+        },
+        {
+          "n_samples": 18,
+          "p_recover": 0.74551601014
+        },
+        {
+          "n_samples": 19,
+          "p_recover": 0.775265317865
+        },
+        {
+          "n_samples": 20,
+          "p_recover": 0.801804638412
+        },
+        {
+          "n_samples": 21,
+          "p_recover": 0.825410535159
+        },
+        {
+          "n_samples": 22,
+          "p_recover": 0.84635524017
+        },
+        {
+          "n_samples": 23,
+          "p_recover": 0.864899985779
+        },
+        {
+          "n_samples": 24,
+          "p_recover": 0.881290840707
+        },
+        {
+          "n_samples": 25,
+          "p_recover": 0.895756369363
+        },
+        {
+          "n_samples": 26,
+          "p_recover": 0.90850659156
+        },
+        {
+          "n_samples": 27,
+          "p_recover": 0.919732847366
+        },
+        {
+          "n_samples": 28,
+          "p_recover": 0.929608272183
+        },
+        {
+          "n_samples": 29,
+          "p_recover": 0.938288664917
+        },
+        {
+          "n_samples": 30,
+          "p_recover": 0.945913591684
+        },
+        {
+          "n_samples": 31,
+          "p_recover": 0.952607612519
+        },
+        {
+          "n_samples": 32,
+          "p_recover": 0.958481552291
+        },
+        {
+          "n_samples": 33,
+          "p_recover": 0.963633762063
+        },
+        {
+          "n_samples": 34,
+          "p_recover": 0.968151335478
+        },
+        {
+          "n_samples": 35,
+          "p_recover": 0.972111258058
+        },
+        {
+          "n_samples": 36,
+          "p_recover": 0.97558147685
+        },
+        {
+          "n_samples": 37,
+          "p_recover": 0.978621884538
+        },
+        {
+          "n_samples": 38,
+          "p_recover": 0.981285216791
+        },
+        {
+          "n_samples": 39,
+          "p_recover": 0.983617864681
+        },
+        {
+          "n_samples": 40,
+          "p_recover": 0.98566060604
+        },
+        {
+          "n_samples": 41,
+          "p_recover": 0.987449260776
+        }
+      ],
+      "distribution": "skewed",
+      "eps": 0.05,
+      "exact_recovery_at_theorem_bound": 0.975581476850043,
+      "exact_recovery_meets_target": true,
+      "fibre_mass_distribution": [
+        {
+          "mass": 0.625,
+          "z": [
+            0,
+            0
+          ]
+        },
+        {
+          "mass": 0.125,
+          "z": [
+            0,
+            1
+          ]
+        },
+        {
+          "mass": 0.125,
+          "z": [
+            1,
+            0
+          ]
+        },
+        {
+          "mass": 0.125,
+          "z": [
+            1,
+            1
+          ]
+        }
+      ],
+      "monotone_up_to_bound": true,
+      "p_min": 0.125,
+      "recovery_zero_below_M": true,
+      "theorem_bound_N": 36
+    }
+  ],
+  "eps": 0.05,
+  "gates": {
+    "exact_recovery_at_theorem_bound_shared_skewed": true,
+    "exact_recovery_at_theorem_bound_shared_uniform": true,
+    "recovery_monotone_in_N": true,
+    "recovery_zero_below_M": true
+  },
+  "status": "pass",
+  "theorem_bound_form": "N >= c * M * ln(M / eps)"
+}

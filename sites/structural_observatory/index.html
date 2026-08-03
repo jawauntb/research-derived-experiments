@@ -6,7 +6,7 @@
     <title>Structural Observatory</title>
     <meta
       name="description"
-      content="The Structural Intelligence Conjecture and its three exact instruments: representation search, cross-substrate compilation, and agency measurement."
+      content="The Structural Intelligence Conjecture derived: four theorems, one conditional theorem, and six exact instruments — representation search, cross-substrate compilation, agency measurement, cross-task sufficiency, cross-task learnability (Theorem 5's sample-complexity witness), and continuous-case cross-task learnability (Theorem 6's ε-covering scaling witness across d_Z ∈ {1, 2} and r ∈ {4, 8, 16})."
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -28,6 +28,25 @@
         level at which the world becomes both <em>compressible</em> and
         <em>controllable</em> &mdash; the quotient in which a hidden invariant becomes a
         coordinate axis.
+      </p>
+      <p class="claim">
+        The master fibration is now <em>derived</em>: <strong>Theorem&nbsp;1</strong>
+        (Halmos&ndash;Savage minimal sufficiency) gives it as the sufficient-statistic
+        pair for any well-posed task; <strong>Theorem&nbsp;2</strong>
+        (Shannon rate&ndash;distortion) parameterises it by distortion budget;
+        <strong>Theorem&nbsp;4</strong> (conditional) makes cross-task stability
+        equivalent to the task family sharing a Markov screen;
+        <strong>Theorem&nbsp;5</strong> proves discrete-case learnability at
+        sample complexity <code>N&nbsp;&ge;&nbsp;&lceil;c&sdot;M&sdot;ln(M/&epsilon;)&rceil;</code>;
+        and <strong>Theorem&nbsp;6</strong> extends the bound to the continuous
+        case at any resolution <code>&epsilon;</code>, giving
+        <code>N&nbsp;=&nbsp;O(c(D<sub>Z</sub>/&epsilon;)<sup>d<sub>Z</sub></sup>&sdot;d<sub>Z</sub>&sdot;log(&hellip;))</code>
+        &mdash; polynomial in <code>1/&epsilon;</code> at fixed <em>d<sub>Z</sub></em>,
+        provably exponential in <em>d<sub>Z</sub></em> at fixed <code>&epsilon;</code>.
+        Only <strong>SIC-C-c</strong> (uniform polynomial-in-<em>d<sub>Z</sub></em>
+        learnability under a specific inductive-bias hypothesis class) remains
+        open &mdash; that boundary is a consequence of &epsilon;-covering
+        lower bounds and Locatello (2019), not of our framework.
       </p>
     </header>
 
@@ -91,18 +110,122 @@
         <div class="table-wrap" data-body></div>
       </section>
 
+      <section class="instrument" id="cross_task_sufficiency">
+        <div class="instrument-head">
+          <span class="badge">Instrument 4</span>
+          <h2>Cross-task Sufficiency &mdash; Theorem&nbsp;4 witness</h2>
+        </div>
+        <p class="instrument-blurb">
+          On a 4-bit Boolean world with latent
+          <code>Z = joint(parity{0,1},&nbsp;parity{2,3})</code>, enumerate a rich
+          quotient lattice for two task families exactly. For the family whose members
+          all factor through <em>Z</em>, the <strong>coarsest common sufficient
+          statistic</strong> is exactly <em>Z</em> (image 4, strictly smaller than
+          <code>|X| = 16</code>). For the family that reveals individual bits, it
+          collapses to the <strong>identity</strong>. Combining tasks strictly
+          tightens the required partition: family CSS is finer than any single task's
+          minimal sufficient statistic. Cross-task stability is a property of the
+          task family, not of the system.
+        </p>
+        <div class="gates" data-gates></div>
+        <div class="table-wrap" data-body></div>
+      </section>
+
+      <section class="instrument" id="cross_task_learnability">
+        <div class="instrument-head">
+          <span class="badge">Instrument 5</span>
+          <h2>Cross-task Learnability &mdash; Theorem&nbsp;5 witness</h2>
+        </div>
+        <p class="instrument-blurb">
+          Same 4-bit world, same shared task family, now measuring
+          <strong>sample complexity</strong>. Recovery of <em>Z</em> under
+          empirical common-sufficient clustering reduces to a coupon-collector
+          question on the fibre partition; its exact probability is computed by
+          inclusion&ndash;exclusion over all <code>2<sup>M</sup>&nbsp;=&nbsp;16</code>
+          subsets (no Monte Carlo, no seed). At Theorem&nbsp;5's bound
+          <code>N&nbsp;&ge;&nbsp;&lceil;c&sdot;M&sdot;ln(M/&epsilon;)&rceil;</code>
+          with <code>&epsilon;=0.05</code>, exact recovery is <strong>0.9775</strong>
+          (uniform, <em>c</em>=1, <em>N</em>=18) and <strong>0.9756</strong>
+          (skewed, <em>c</em>=2, <em>N</em>=36) &mdash; both above
+          <code>1&nbsp;&minus;&nbsp;&epsilon;=0.95</code>. Recovery is zero below
+          <em>M</em>=4 (pigeonhole) and monotone in <em>N</em>. Discrete-case
+          learnability is a theorem with a numerically sharp constant.
+        </p>
+        <div class="gates" data-gates></div>
+        <div class="table-wrap" data-body></div>
+      </section>
+
+      <section class="instrument" id="cross_task_learnability_continuous">
+        <div class="instrument-head">
+          <span class="badge">Instrument 6</span>
+          <h2>Continuous-case Learnability &mdash; Theorem&nbsp;6 witness</h2>
+        </div>
+        <p class="instrument-blurb">
+          Ambient <code>X&nbsp;=&nbsp;[0,1]<sup>2</sup></code> quantised to a
+          16&times;16 grid; latent <em>Z</em> a coarser <em>r</em>&times;<em>r</em>
+          (for <em>d<sub>Z</sub></em>&nbsp;=&nbsp;2) or <em>r</em>&times;1 (for
+          <em>d<sub>Z</sub></em>&nbsp;=&nbsp;1) grid at resolutions
+          <em>r</em>&nbsp;&isin;&nbsp;{4,&nbsp;8,&nbsp;16}. Exact recovery
+          probability at Theorem&nbsp;6's bound is computed by an <em>O(N&sdot;M)</em>
+          DP recursion, numerically stable up to <em>M</em>&nbsp;=&nbsp;256 where the
+          log-domain inclusion&ndash;exclusion form fails. All six grid points meet
+          the <code>1&nbsp;&minus;&nbsp;&epsilon;<sub>rel</sub>&nbsp;=&nbsp;0.95</code>
+          target; the ratio
+          <code>N<sub>bound</sub>(d<sub>Z</sub>=2)/N<sub>bound</sub>(d<sub>Z</sub>=1)</code>
+          grows <em>5.17</em>, <em>11.17</em>, <em>23.52</em> at <em>r</em>&nbsp;=&nbsp;4,&nbsp;8,&nbsp;16
+          &mdash; the exponential-in-<em>d<sub>Z</sub></em> scaling made numerical.
+          Empirical common-sufficient clustering saturates the &epsilon;-covering
+          lower bound; escaping the curse requires inductive bias.
+        </p>
+        <div class="gates" data-gates></div>
+        <div class="table-wrap" data-body></div>
+      </section>
+
       <section class="closing">
         <h2>What this is and is not</h2>
         <ul>
           <li>
-            <strong>Is:</strong> three exact dissociations, plus a formal program
-            (concern-as-fiber-geometry, a conditional rate&ndash;distortion control limit,
-            abstraction frontiers, fiber audits, compiler tomography, ensemble-governance
-            alignment, autocatalytic art).
+            <strong>Is (derived):</strong> the master fibration exists as a mathematical
+            object for any well-posed task (Halmos&ndash;Savage minimal sufficiency,
+            Theorem&nbsp;1) or, under a distortion budget, as the Shannon
+            rate&ndash;distortion pair (Theorem&nbsp;2), with the categorical
+            restatement as an adjunction (Proposition&nbsp;3). Cross-task stability
+            is a conditional theorem (Theorem&nbsp;4): a single quotient is sufficient
+            for a task family if and only if the family shares a Markov screen.
+            Instruments&nbsp;1 and&nbsp;4 are exact witnesses.
           </li>
           <li>
-            <strong>Is not:</strong> a proof of the general conjecture. The instruments are
-            toys by design; the master fibration is posited, not derived.
+            <strong>Is (derived, discrete case):</strong> Theorem&nbsp;5 proves
+            that under separation and fibre balance, empirical common-sufficient
+            clustering recovers <em>Z</em> with probability
+            <code>&ge;&nbsp;1&nbsp;&minus;&nbsp;&epsilon;</code> from
+            <code>N&nbsp;&ge;&nbsp;&lceil;c&sdot;M&sdot;ln(M/&epsilon;)&rceil;</code>
+            samples. Instrument&nbsp;5 verifies the bound exactly.
+          </li>
+          <li>
+            <strong>Is (derived, continuous case at resolution &epsilon;):</strong>
+            Theorem&nbsp;6 reduces to Theorem&nbsp;5 via &epsilon;-covering:
+            <code>N&nbsp;=&nbsp;O(c(D<sub>Z</sub>/&epsilon;)<sup>d<sub>Z</sub></sup>&sdot;d<sub>Z</sub>&sdot;log(&hellip;))</code>,
+            polynomial in <code>1/&epsilon;</code> at fixed <em>d<sub>Z</sub></em>,
+            provably exponential in <em>d<sub>Z</sub></em> at fixed <code>&epsilon;</code>
+            (&epsilon;-covering lower bound). Instrument&nbsp;6 verifies the bound at
+            every point of a <em>(d<sub>Z</sub>,&nbsp;r)</em>&nbsp;&isin;&nbsp;{1,2}&times;{4,8,16}
+            grid.
+          </li>
+          <li>
+            <strong>Is (open):</strong> SIC-C-c &mdash; uniform polynomial-in-<em>d<sub>Z</sub></em>
+            learnability under a specific inductive-bias hypothesis class. This
+            is where the identifiable-representation-learning line (linear ICA,
+            iVAE 2020, interventional CRL 2022, sparse-mechanism analysis) does
+            its work; a theorem for a specific such class is the natural next
+            piece of the Observatory.
+          </li>
+          <li>
+            <strong>Is not:</strong> a proof of universal agency or of infallibility.
+            Cross-task stability holds only insofar as the world's tasks share a common
+            latent generator (Theorem&nbsp;4's antecedent); C1 is unproven; instrument&nbsp;2's
+            fidelity is unity by construction; nothing here licenses a claim of subjective
+            experience.
           </li>
           <li>
             <strong>On conscious / reliable agents:</strong> the honest target is a

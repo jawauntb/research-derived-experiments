@@ -2,12 +2,33 @@
 
 Date: August 3, 2026
 
-Status: **research program + three working instruments.** The conjecture and the
-extended formalism (§2–§4) are speculative theory, not established results; they
-are held to the `AGENTS.md` mathematical-claim gate and are **not** promoted to
-theorems. The three instruments in §5 are exact, deterministic, and tested — they
-establish *dissociations on solvable toy cases*, not the general claims. Retrieval
-provenance for the six source works and the underlying meta-object is in
+Status: **four theorems + one conditional theorem + six working
+instruments.** The master stochastic fibration (§2) is now *derived* —
+Theorems 1 and 2 give it as the minimal-sufficient-statistic pair or the
+Shannon rate–distortion pair, Proposition 3 gives the categorical restatement;
+these appear in §2 of the umbrella paper
+([`papers/structural_intelligence/paper.md`](../papers/structural_intelligence/paper.md)).
+Cross-task stability (clause (5) of the conjecture below) is a *conditional
+theorem* — Theorem 4 — equivalent to the task family admitting a common Markov
+screen. Discrete-case learnability is *also* a theorem — Theorem 5 — with
+sample complexity `N ≥ ⌈c · M · ln(M/ε)⌉` for empirical common-sufficient
+clustering under a separating task family and fibre-balance constant `c`.
+Continuous-case learnability at resolution `ε` is Theorem 6, obtained by
+reducing to Theorem 5 via ε-covering: `N ≥ O(c · (D_Z/ε)^{d_Z} · d_Z · log(...))`,
+polynomial in `1/ε` at fixed `d_Z` and (provably) exponential in `d_Z` at
+fixed `ε` — the second is the ε-covering lower bound and cannot be improved
+without additional inductive bias on `q`. The only residual conjectural
+content is (a) Theorem 4's antecedent as an empirical claim about the world,
+and (b) SIC-C-c: uniform polynomial-in-`d_Z` learnability under some
+inductive-bias hypothesis class (linear ICA, sparse ICA, iVAE, interventional
+CRL). SIC-C-c is a mainstream research-programme question rather than
+something intrinsic to our framework. The extended formalism (§3–§4) is
+still speculative theory and is held to the `AGENTS.md` mathematical-claim
+gate; it is **not** promoted to theorems. The six instruments in §5 are
+exact, deterministic, and tested — instruments 1, 4, 5, and 6 are
+computational witnesses of Theorems 1, 4, 5, and 6; instruments 2 and 3
+establish auxiliary dissociations. Retrieval provenance for the six source
+works and the underlying meta-object is in
 [`latent_structures_meta_framework.md`](latent_structures_meta_framework.md).
 
 This note continues that meta-framework. There the shared latent object was an
@@ -76,6 +97,72 @@ relations among these works are **adjunctions, simulations, and shared diagram
 shapes**, not object-level isomorphisms. Every proposed connection must answer:
 *exactly what kind of sameness is this, what does the map forget, and what would
 have to be proved to make the analogy a theorem?*
+
+**Derivations.** The stochastic-fibration formulation is itself derivable — see
+§2 of the umbrella paper for the four results. In brief:
+
+- **Theorem 1 (Existence via minimal sufficiency).** For any dominated
+  statistical family on a standard Borel `X` and any task `Y`, the minimal
+  sufficient σ-algebra `T` (Halmos–Savage, Bahadur) induces the quotient
+  `q : X → Z := X/∼_T` and the regular-conditional compiler
+  `K(· | z) := P(· | T)(x)`, `x ∈ q⁻¹(z)`. `(q, K)` is a stochastic fibration
+  with `supp K(·|z) ⊆ q⁻¹(z)`, and clauses (1)–(4) of the SIC below hold as
+  theorems (task-relevance descends, fiber-confined variation, compact
+  specification, re-instantiation via `K`).
+- **Theorem 2 (RD parameterisation).** For any `p_X` and distortion `d`, the
+  Shannon rate–distortion pair `(q_D, K_D)` is a stochastic fibration
+  parameterised by distortion budget `D`; at `D = 0` it reduces to Theorem 1.
+  The biology paper's `C*` is the special case `R(D_bio)` for its distortion
+  measure.
+- **Proposition 3 (Adjunction).** `C(μ) = q_*μ` and `R(ν) = ∫ K(·|z)ν(dz)` form
+  an adjunction `C ⊣ R` on categories of probability measures; `(q, K)` is its
+  unit/counit pair.
+- **Theorem 4 (Cross-task stability, conditional).** For a task family
+  `{Y_α}`, the σ-algebra `σ(Z)` is a common sufficient statistic iff every
+  `Y_α ⫫ X | Z`; equivalently, `X = g(Z, η)` with `Z ⫫ η` and each `Y_α`
+  factoring through `Z`. Instrument 4 (§5.4) is the exact witness.
+- **Theorem 5 (Discrete learnability).** For finite `X`, deterministic tasks
+  that jointly *separate* the true partition `q : X → Z` (`|Z| = M`), and a
+  distribution on `X` with min-fibre mass `p_min ≥ 1/(cM)`, empirical
+  common-sufficient clustering recovers `q̂ = q` with probability `≥ 1 − ε`
+  from `N ≥ ⌈c · M · ln(M/ε)⌉` samples. Time complexity is `O(N · K + |X| · K)`.
+  Instrument 5 (§5.5) is the exact numerical witness via inclusion–exclusion.
+- **Theorem 6 (Continuous-case learnability at resolution ε).** For any `ε > 0`
+  and any Z with ε-covering number `N_ε`, the same algorithm recovers `q_ε`
+  (the ε-quantised true partition) with probability `≥ 1 − ε_rel` from
+  `N ≥ c · N_ε · ln(N_ε / ε_rel)` samples. For `Z ⊂ ℝ^{d_Z}` bounded,
+  `N_ε = O((D_Z/ε)^{d_Z})`, giving `N = O(c (D_Z/ε)^{d_Z} d_Z log(D_Z/(ε ε_rel)))`
+  — polynomial in `1/ε` at fixed `d_Z`, exponential in `d_Z` at fixed `ε`.
+  This exponential-in-`d_Z` rate is provably tight against the ε-covering
+  lower bound; no algorithm can escape it without additional inductive bias.
+  Instrument 6 (§5.6) is the exact numerical witness across a
+  `(d_Z, r) ∈ {1, 2} × {4, 8, 16}` grid on the standard ε-quantised
+  `[0, 1]^2` world.
+
+The **only** residual open question is **SIC-C-c**: uniform polynomial-in-
+`d_Z` learnability *within* a specific inductive-bias hypothesis class
+(linear ICA, sparse ICA, iVAE, interventional causal representation
+learning). Each such class is where identifiable-representation-learning
+theory does its work; a theorem for a specific class is future work but
+not intrinsic to our framework.
+
+**SIC in the honest split.** The conjecture below is stated in its
+full-strength form for continuity with the source works, but the honest
+factorisation the theorems permit is:
+
+- **SIC-A (existence):** Theorem 1 + Proposition 3 — the master fibration
+  exists as a mathematical object for any well-posed task. *Not conjectural.*
+- **SIC-B (cross-task stability):** Theorem 4 conditional on a shared Markov
+  screen. *Theorem given the antecedent; the antecedent is empirical about the
+  world.*
+- **SIC-C-a (learnability, discrete):** Theorem 5. *Theorem, with a numerically
+  sharp constant (Instrument 5).*
+- **SIC-C-b (learnability, continuous at resolution ε):** Theorem 6.
+  *Theorem; polynomial in `1/ε` at fixed `d_Z`, provably exponential in `d_Z`
+  at fixed `ε` (Instrument 6).*
+- **SIC-C-c (uniform polynomial in `d_Z` under inductive bias):** Open in
+  general; theorem for specific hypothesis classes in the identifiable-
+  representation-learning line — not proved here.
 
 ---
 
@@ -178,11 +265,13 @@ its status and its relation to the instruments in §5.
 
 ---
 
-## 5. The three built instruments
+## 5. The six built instruments
 
 Each is exact, deterministic, tested, and public-safe (summaries in `results/`,
-no raw dumps). They are the first three instruments of the Observatory and
-establish the dissociations the program rests on.
+no raw dumps). They are the first six instruments of the Observatory.
+Instruments 1, 4, 5, and 6 are computational witnesses of Theorems 1, 4, 5,
+and 6; instruments 2 and 3 establish the auxiliary dissociations the extended
+program rests on.
 
 ### Instrument 1 — `experiments/representation_search` (Fiber Finder)
 Over a Boolean world with a known invariant, it enumerates a lattice of quotients
@@ -214,6 +303,53 @@ controls but does not transfer. **Establishes** that no single scalar
 ("behavioural influence") identifies agency — the measurement core for concern
 geometry (extension 1), causal semantics (7), and ensemble-governance alignment
 (9). Connects to `experiments/common/causal_use.py` and `experiments/world_responds`.
+
+### Instrument 4 — `experiments/cross_task_sufficiency` (Theorem 4 witness)
+On the 4-bit Boolean world with latent
+`Z(x) = (parity{0,1}(x), parity{2,3}(x))`, enumerate a rich lattice of
+quotients (single-bit reads, subset parities, joint pair-parities including
+`Z` itself, joint bit reads, identity) and two task families: **shared**
+(three tasks that all factor through `Z`) and **not shared** (four tasks that
+reveal individual bits). Compute the coarsest common sufficient statistic
+(CSS) for each family exactly. **Establishes** that the shared family's
+coarsest CSS is exactly `Z` (image size 4, strictly smaller than `|X| = 16`),
+the not-shared family's coarsest CSS is the identity (image size 16, no
+compression), and combining tasks strictly tightens the required partition
+(each single task's minimal sufficient statistic has image size 2 — half the
+family CSS). This is the computational witness of Theorem 4: cross-task
+stability is a property of the task family, not of the system that faces it.
+Extends the fiber audit (extension 4) to task ensembles.
+
+### Instrument 5 — `experiments/cross_task_learnability` (Theorem 5 witness)
+Same 4-bit world, same shared task family (verified to satisfy Theorem 5's
+separation assumption). Compute the *exact* recovery probability `P[q̂ = q]`
+of empirical common-sufficient clustering as a function of sample count `N`,
+via inclusion–exclusion over the fibre partition (no Monte Carlo, no seed).
+Two distributions: `uniform` (`c = 1`) and `skewed` with fibre masses
+`(0.625, 0.125, 0.125, 0.125)` (`c = 2`). **Establishes** that at Theorem 5's
+sample bound `N ≥ ⌈c · M · ln(M / ε)⌉` with `ε = 0.05`, exact recovery is
+`0.9775` (uniform, `N = 18`) and `0.9756` (skewed, `N = 36`) — both strictly
+above `1 − ε = 0.95`. Recovery is zero for `N < M = 4` (pigeonhole),
+monotone in `N`, and degrades exactly as `c` predicts under compiler
+imbalance. This is the numerical witness of Theorem 5's discrete-case sample
+complexity, and the endpoint of the "learnability" claim in the finite case.
+
+### Instrument 6 — `experiments/cross_task_learnability_continuous` (Theorem 6 witness)
+Ambient `X = [0, 1]^2` quantised into a `16 × 16` grid (256 cells); latent
+`Z` is a coarser `r × r` (for `d_Z = 2`) or `r × 1` (for `d_Z = 1`) grid,
+with `r ∈ {4, 8, 16}` chosen to divide `16` exactly (so fibres are exactly
+balanced). Compute the exact recovery probability at Theorem 6's bound
+`N = ⌈c · M · ln(M / ε_rel)⌉` for every `(d_Z, r)`, using the numerically
+stable `O(N · M)` DP recursion (the naive inclusion–exclusion form suffers
+catastrophic cancellation at `M = 256`). **Establishes** at `ε_rel = 0.05`
+that every one of the six grid points meets the target: recovery ranges from
+`0.9521` (d_Z=2, r=16, M=256, N=2187) to `0.9775` (d_Z=1, r=4, M=4, N=18).
+Recovery is zero below `M` (pigeonhole) and monotone in `N`. The ratio
+`N_bound(d_Z=2, r) / N_bound(d_Z=1, r)` grows `5.17, 11.17, 23.52` at
+`r = 4, 8, 16` — the exponential-in-`d_Z` scaling made numerical. This is
+the computational witness of Theorem 6 and of its fundamental limit:
+empirical common-sufficient clustering saturates the ε-covering lower bound,
+so no algorithm can do better without inductive bias on `q`.
 
 ---
 
@@ -265,27 +401,41 @@ infallibility`, kept as two separate, non-inflated claims.
 One system that, given a problem, theory, agent, organism, or artwork, returns:
 its candidate quotient maps, realization fibers, automorphisms, abstraction
 frontier, fiber-audit results, inferred compiler, and possible cross-substrate
-embodiments. The three instruments above are its first three modules
-(quotient search, cross-substrate compiler, causal/agency measurement); §4 lists
-the remaining modules as pre-registered future instruments.
+embodiments. The six instruments above are its first six modules
+(quotient search, cross-substrate compiler, causal/agency measurement,
+cross-task sufficiency, cross-task learnability, cross-task learnability
+continuous); §4 lists the remaining modules as pre-registered future
+instruments.
 
 ---
 
 ## 8. Limitations and rejected alternatives
 
-- **The instruments are toys by design.** They establish dissociations on
-  exactly-solvable cases (finite Boolean worlds, tiny MDPs, lossless encoders).
-  They do **not** establish the general conjecture, the conditional
-  rate–distortion limit (extension 2), or the alignment claim (extension 9), all
-  of which remain conjectural. Instrument 2's fidelity is 1.0 *by construction*:
-  it tests that the compilers are faithful functors, not that faithful
-  compilation is hard.
-- **The master object is posited.** The stochastic fibration `(q, K)` organizes
-  the corpus; that the sources' relations are genuine adjunctions/simulations
-  rather than looser analogies is exactly what §2's sameness question demands be
-  proved case by case. Do not cite the fibration as if it were any source's
-  theorem — only the biology paper proves a specialized version (its `C*`
-  threshold and "no fourth category" accounting).
+- **The instruments are toys by design.** They establish dissociations and
+  witness Theorems 1, 4, 5, and 6 on exactly-solvable cases (finite Boolean
+  worlds, finite-quantised `[0, 1]^2`, tiny MDPs, lossless encoders).
+  Theorems 5 and 6 cover discrete and continuous-at-resolution-`ε`
+  learnability; the residual (SIC-C-c) is uniform polynomial-in-`d_Z`
+  learnability under a specific inductive-bias hypothesis class — mainstream
+  identifiable-representation-learning territory, not intrinsic to our
+  framework, and provably impossible in full generality without the
+  hypothesis class. The conditional rate–distortion control limit
+  (extension 2) and the alignment claim (extension 9) also remain
+  conjectural. Instrument 2's fidelity is 1.0 *by construction*: it tests
+  that the compilers are faithful functors, not that faithful compilation is
+  hard.
+- **The master object is derived.** The stochastic fibration `(q, K)` is now
+  given as a mathematical object by Theorem 1 (minimal-sufficient factorisation
+  of Halmos–Savage) and Theorem 2 (Shannon rate–distortion), with the
+  categorical restatement in Proposition 3. The organizing analogy across the
+  source works — that they are all instances of `(q, K)` in different guises —
+  is still an *analogy* that must be checked case by case (see §2 on rigor).
+  What is *not* an analogy is the mathematical existence of the object itself.
+- **Cross-task stability is a claim about the world.** Theorem 4 makes clause
+  (5) equivalent to the existence of a shared Markov screen across the task
+  family; whether the world's task ensemble admits one is empirical, and this
+  is the antecedent that SIC-B rests on. Do not restate it as if it were a
+  claim about intelligence.
 - **Rejected — collapse to one scalar.** "Just measure behavioural influence /
   compression / prediction." Rejected: instruments 1 and 3 exhibit exactly the
   cases where a single scalar misidentifies the target (MDL collapses the
