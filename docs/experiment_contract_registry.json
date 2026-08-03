@@ -61,6 +61,35 @@
   },
   "packages": [
     {
+      "package": "antecedent_taxonomy_pair",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/antecedent_taxonomy_pair/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "antecedent_taxonomy_pair_2026_08_03",
+      "runs": [
+        {
+          "run_id": "antecedent_taxonomy_pair_2026_08_03",
+          "publication_package": "antecedent_taxonomy_pair",
+          "runtime_package": "antecedent_taxonomy_pair",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/antecedent_taxonomy_pair/experiment_manifest.json",
+          "report_paths": [
+            "experiments/antecedent_taxonomy_pair/results/antecedent_taxonomy_pair_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/antecedent_taxonomy_pair/preregistration.json",
+          "preregistration_digest": "22cc7434556aa727c7ce213d736a77c199085965854cfee8f3df32a13d0dd183",
+          "producing_agent": {
+            "identity": "Claude Code (agent, under J. Brown direction)",
+            "session_ref": "claude/hero-viz-and-more-instruments"
+          }
+        }
+      ]
+    },
+    {
       "package": "activation_geometry",
       "coverage_mode": "legacy_exception",
       "legacy_exception": {

@@ -3,12 +3,16 @@ import StructuralIntelligence.UnionBound
 import StructuralIntelligence.Pigeonhole
 import StructuralIntelligence.CouponCollector
 import StructuralIntelligence.CommonSuffScreen
+import StructuralIntelligence.Refinement
+import StructuralIntelligence.CompilerTomography
 
 /-!
 # Structural Intelligence — Lean 4 formalisation
 
-The Lean-checked ingredients of Theorems 4 and 5 of the *Structural
-Intelligence* paper (`papers/structural_intelligence/paper.md`):
+The Lean-checked ingredients of Theorems 4, 5 and 6-core of the
+*Structural Intelligence* paper (`papers/structural_intelligence/paper.md`)
+plus the CT-1 core of the *Compiler Tomography* companion paper
+(`papers/compiler_tomography/paper.md`):
 
 *   `StructuralIntelligence.theorem5_union_bound` — the counting form
     of the union bound `Pr[⋃ᵢ Aᵢ] ≤ Σᵢ Pr[Aᵢ]`, formulated over lists
@@ -26,11 +30,29 @@ Intelligence* paper (`papers/structural_intelligence/paper.md`):
     common-sufficient-statistic corollary: adding the converse
     implication makes `q` maximally coarse among common-sufficient
     screens.
+*   `StructuralIntelligence.refinement_transitive` — refinement of
+    binary relations is transitive.
+*   `StructuralIntelligence.refinement_preserves_screen` — the
+    algebraic core of Theorem 6 (§2.5b, ε-covering reduction): if
+    `q₁ : X → Z₁` is a common sufficient screen for a task family
+    and `q₂ : X → Z₂` refines `q₁` (functionally, via
+    `q₁ = r ∘ q₂`), then `q₂` is also a common sufficient screen —
+    the ε-cover inherits the factorisation by composition.
+*   `StructuralIntelligence.identifiability_implies_unique_by_witness`
+    — CT-1 core: if every wrong parameter `θ ≠ θ*` is refuted by
+    the data set `D`, then `θ*` is the unique parameter consistent
+    with `D`.
+*   `StructuralIntelligence.identifiability_isolates_theta_star` —
+    CT-1 core in constructive form: for any finite list of
+    candidates, identifiability lets us build a `D` that isolates
+    `θ*` uniquely.
 
 Everything is proven in pure Lean 4 core (no `Mathlib`).  The analytic
 step `(1 - 1/(cM))^N ≤ exp(-N/(cM))` and the resulting
-`M · exp(-N/(cM)) ≤ ε` bound, together with the measure-theoretic
-lift of Theorem 4 to conditional independence, require real analysis /
+`M · exp(-N/(cM)) ≤ ε` bound, the measure-theoretic lift of
+Theorem 4 to conditional independence, the quantitative ε-covering
+rate `N ≥ c · N_ε · ln(N_ε / ε_rel)` of Theorem 6, and the
+Wald/BIC probabilistic rate of CT-1, all require real analysis /
 measure theory and are documented as future work in the package
 `README.md`.
 -/
@@ -42,3 +64,7 @@ measure theory and are documented as future work in the package
 #print axioms StructuralIntelligence.commonSuffScreen_refines
 #print axioms StructuralIntelligence.commonSuffScreen_coarsest
 #print axioms StructuralIntelligence.commonSuffScreen_eq_jointTaskQuotient_iff
+#print axioms StructuralIntelligence.refinement_transitive
+#print axioms StructuralIntelligence.refinement_preserves_screen
+#print axioms StructuralIntelligence.identifiability_implies_unique_by_witness
+#print axioms StructuralIntelligence.identifiability_isolates_theta_star

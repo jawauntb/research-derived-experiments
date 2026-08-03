@@ -9,7 +9,7 @@ Human author and research director
 Experiment code, analysis, and manuscript production under direction and review
 
 **Date:** August 3, 2026
-**Status:** five theorems + one conditional theorem + eleven instruments (seven exact + four fixed-seed Monte Carlo). SIC-C-c (uniform polynomial-in-`d_Z` learnability under an inductive-bias hypothesis class) is positively resolved for four distinct classes — linear ICA, sparse-*linear* ICA, auxiliary-variable iVAE, interventional CRL — each with its own numerical witness (Instruments 8–11). Two companion papers extend the framework: *Concern as Fiber Geometry* (Fisher-metric structure of concern on the fibration) and *Compiler Tomography* (MDL identifiability and ecology dynamics for the compiler kernel).
+**Status:** five theorems + one conditional theorem + eleven instruments (seven exact + four fixed-seed Monte Carlo). SIC-C-c (uniform polynomial-in-`d_Z` learnability under an inductive-bias hypothesis class) is positively resolved for four distinct classes — linear ICA, sparse-*linear* ICA, auxiliary-variable iVAE, interventional CRL — each with its own numerical witness (Instruments 8–11). Three companion papers extend the framework: *Concern as Fiber Geometry* (Fisher-metric structure of concern on the fibration), *Compiler Tomography* (MDL identifiability and ecology dynamics for the compiler kernel), and *Sufficient Antecedents for Cross-Task Stability* (Theorem SA-1: taxonomy showing each of the four SIC-C-c positive resolutions above is one way of populating Theorem 4's antecedent).
 
 ---
 

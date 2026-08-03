@@ -1,0 +1,34 @@
+{
+  "experiment_id": "antecedent_taxonomy_pair",
+  "schema_version": "1.0",
+  "hypothesis": "Theorem SA-1 (paper papers/sufficient_antecedents/paper.md) predicts that four canonical inductive-bias regimes (linear ICA, sparse-linear ICA, auxiliary-variable iVAE, interventional CRL) each satisfy Condition (I) local separation and Condition (II) cross-u coherence on the 4-bit Boolean world; the finest common refinement of each antecedent's local screens equals the latent Z-partition exactly (up to trivial refinement for the interventional case whose observational screen already gives Z).",
+  "primary_metric": "gates.sa1_nontrivial_intersections_equal_true_Z",
+  "gates": {
+    "ATP_SA1_LOCAL_SEPARATION_AT_EVERY_ANTECEDENT": "For every antecedent (LinearICA, SparseLinearICA, AuxIVAE, InterventionalCRL), each of its local screens is a non-trivial partition of X (strictly more than 1 block and strictly fewer than |X| = 16 blocks).",
+    "ATP_SA1_CROSS_U_INTERSECTION_REFINES_TRUE_Z": "The finest common refinement of every antecedent's local screens is at least as fine as the true Z-partition.",
+    "ATP_SA1_NONTRIVIAL_INTERSECTIONS_EQUAL_TRUE_Z": "For LinearICA, SparseLinearICA, and AuxIVAE, the intersection equals the true Z-partition exactly.",
+    "ATP_SA1_INTERVENTIONAL_INTERSECTION_REFINES_TRUE_Z": "For InterventionalCRL, the intersection refines the true Z-partition."
+  },
+  "metrics": [
+    "num_local_screens",
+    "local_screen_block_counts",
+    "intersection_block_count",
+    "true_Z_block_count",
+    "local_separation_holds",
+    "intersection_refines_true_Z",
+    "intersection_equals_true_Z",
+    "cross_u_coherence_holds"
+  ],
+  "antecedents": ["LinearICA", "SparseLinearICA", "AuxIVAE", "InterventionalCRL"],
+  "controls": [
+    "true_z_partition_from_direct_latent_map",
+    "partition_intersection_is_finest_common_refinement",
+    "partition_refines_reflexive_on_self"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": null,
+    "sampling": "exact enumeration of the 16-element Boolean world; no Monte Carlo",
+    "raw_data": false
+  }
+}
