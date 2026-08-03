@@ -2076,5 +2076,21 @@
     "cooccurrence_partition": [["m0", "m2", "m4"], ["m1", "m3", "m5"]],
     "psi_refines_cooccurrence": false,
     "cooccurrence_refines_psi": false
+  },
+  "antecedent_taxonomy_pair": {
+    "status": "pass",
+    "gates": {
+      "sa1_cross_u_intersection_refines_true_Z": true,
+      "sa1_interventional_intersection_refines_true_Z": true,
+      "sa1_local_separation_at_every_antecedent": true,
+      "sa1_nontrivial_intersections_equal_true_Z": true
+    },
+    "world": { "true_Z_block_count": 4 },
+    "records": [
+      { "name": "LinearICA", "num_local_screens": 1, "local_screen_block_counts": [4], "intersection_block_count": 4, "intersection_equals_true_Z": true, "local_separation_holds": true, "cross_u_coherence_holds": true },
+      { "name": "SparseLinearICA", "num_local_screens": 1, "local_screen_block_counts": [4], "intersection_block_count": 4, "intersection_equals_true_Z": true, "local_separation_holds": true, "cross_u_coherence_holds": true },
+      { "name": "AuxIVAE", "num_local_screens": 2, "local_screen_block_counts": [2, 2], "intersection_block_count": 4, "intersection_equals_true_Z": true, "local_separation_holds": true, "cross_u_coherence_holds": true },
+      { "name": "InterventionalCRL", "num_local_screens": 3, "local_screen_block_counts": [4, 2, 2], "intersection_block_count": 4, "intersection_equals_true_Z": true, "local_separation_holds": true, "cross_u_coherence_holds": true }
+    ]
   }
 }

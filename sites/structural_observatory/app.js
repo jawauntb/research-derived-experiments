@@ -736,6 +736,10 @@ function attachInteractiveViz(data) {
   // Companion: causal_semantics_pair (Ψ-quotient vs co-occurrence signature).
   const iCS = document.getElementById("causal_semantics_pair");
   if (iCS && data.causal_semantics_pair) mountCausalSemanticsViz(iCS, data.causal_semantics_pair);
+
+  // Companion: antecedent_taxonomy_pair (local screens intersect to true Z).
+  const iAT = document.getElementById("antecedent_taxonomy_pair");
+  if (iAT && data.antecedent_taxonomy_pair) mountAntecedentTaxonomyViz(iAT, data.antecedent_taxonomy_pair);
 }
 
 // ---- Instrument 2 viz: timeline scrubber for the abstract trajectory ----
@@ -1191,6 +1195,90 @@ function mountCausalSemanticsViz(section, data) {
     "psi",
     (v) => { current = v; draw(); }
   );
+  container.appendChild(radio);
+  draw();
+}
+
+// ---- Companion: antecedent_taxonomy_pair viz ----
+// Radio selects a class; draws each local screen as a segmented bar over the
+// four true-Z blocks, then the intersection bar (always 4 singletons = true Z).
+function mountAntecedentTaxonomyViz(section, data) {
+  const container = el("div", { class: "viz" }, [
+    el("h4", {}, ["Interactive: pick a class — watch its local screens intersect to true Z (4 blocks)"]),
+  ]);
+  section.appendChild(container);
+  const width = 380, height = 260;
+  const { canvas, ctx } = makeCanvas(width, height);
+  container.appendChild(canvas);
+  const records = data.records || [];
+  // Canonical partitions of {0,1,2,3} illustrating the block counts.
+  // The block counts themselves are the real data; the specific groupings
+  // below are canonical illustrative choices consistent with those counts.
+  function screensFor(blockCounts) {
+    if (blockCounts.length === 2 && blockCounts[0] === 2 && blockCounts[1] === 2) {
+      return [[[0, 1], [2, 3]], [[0, 2], [1, 3]]];
+    }
+    if (blockCounts.length === 3 && blockCounts[0] === 4) {
+      return [[[0], [1], [2], [3]], [[0, 1], [2, 3]], [[0, 2], [1, 3]]];
+    }
+    return blockCounts.map((k) => {
+      if (k === 4) return [[0], [1], [2], [3]];
+      if (k === 2) return [[0, 1], [2, 3]];
+      if (k === 1) return [[0, 1, 2, 3]];
+      return [[0, 1, 2, 3]];
+    });
+  }
+  let currentName = records.length ? records[0].name : "";
+
+  function drawBar(y, screen, label, extraColor) {
+    const barX = 16, barW = 320, barH = 24;
+    const cellW = barW / 4;
+    for (let z = 0; z < 4; z++) {
+      // find block containing z
+      let bIdx = 0;
+      for (let b = 0; b < screen.length; b++) {
+        if (screen[b].indexOf(z) !== -1) { bIdx = b; break; }
+      }
+      ctx.fillStyle = extraColor || Z_PALETTE[bIdx % Z_PALETTE.length];
+      ctx.fillRect(barX + z * cellW, y, cellW - 1, barH);
+      ctx.strokeStyle = "#22303d";
+      ctx.strokeRect(barX + z * cellW, y, cellW - 1, barH);
+      ctx.fillStyle = AMBIENT;
+      ctx.font = "12px ui-monospace, monospace";
+      ctx.fillText(`z=${z}`, barX + z * cellW + 10, y + 16);
+    }
+    ctx.fillStyle = MUTED;
+    ctx.font = "11px ui-monospace, monospace";
+    ctx.fillText(label, barX, y - 4);
+  }
+
+  function draw() {
+    ctx.fillStyle = AMBIENT;
+    ctx.fillRect(0, 0, width, height);
+    const rec = records.find((r) => r.name === currentName) || records[0];
+    if (!rec) return;
+    ctx.fillStyle = INK;
+    ctx.font = "13px ui-monospace, monospace";
+    ctx.fillText(`${rec.name} · ${rec.num_local_screens} local screen(s)`, 12, 20);
+    const screens = screensFor(rec.local_screen_block_counts);
+    let y = 46;
+    screens.forEach((s, i) => {
+      drawBar(y, s, `screen ${i + 1}  (${rec.local_screen_block_counts[i]} block${rec.local_screen_block_counts[i] === 1 ? "" : "s"})`);
+      y += 40;
+    });
+    // Intersection bar: always 4 singletons.
+    drawBar(y + 6, [[0], [1], [2], [3]], `⋂ intersection → true Z (${rec.intersection_block_count} blocks)`);
+    y += 46;
+    ctx.fillStyle = rec.intersection_equals_true_Z ? "#3fb27f" : "#e0525b";
+    ctx.font = "12px ui-monospace, monospace";
+    ctx.fillText(
+      `intersection equals true Z: ${rec.intersection_equals_true_Z ? "yes" : "no"}`,
+      16, y + 16
+    );
+  }
+
+  const options = records.map((r) => ({ value: r.name, label: r.name }));
+  const radio = makeRadio("class:", options, currentName, (v) => { currentName = v; draw(); });
   container.appendChild(radio);
   draw();
 }
