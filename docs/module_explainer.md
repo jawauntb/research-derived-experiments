@@ -1075,7 +1075,7 @@ Claim-bounded grounded-harness writeups also live under `docs/papers/`:
 | File | Role |
 |---|---|
 | `geometric_convergence_research_synthesis.md` | Master program synthesis |
-| `latent_structures_meta_framework.md` | Cross-work meta-framework: the Representation Adjunction (`R ⊣ C`) unifying CT-Design, Bio-Info-Limit, Ten-Advances, Wigner, and the discovery notes |
+| `latent_structures_meta_framework.md` | Cross-work meta-framework: the Representation Adjunction (`R ⊣ C`) unifying six sources — CT-Design, Bio-Info-Limit, Ten-Advances, Wigner, the discovery notes, and a structural-realist ontology; unit defect / counit gap / coarse-graining monad |
 | `webb_miolane_fit.md` | Geometry-of-consciousness talk fit |
 | `weakness_topology_program_synthesis.md` | Publication-strategy ranking |
 | `reward_deformation_ratedistortion.md` | Rate-distortion law for Paper B |
