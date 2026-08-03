@@ -160,6 +160,32 @@ Verify:
 curl -fsS -D - https://envelope-guard-production.up.railway.app/ -o /tmp/envelope-guard.html
 ```
 
+## Structural Observatory
+
+Public umbrella site for the Structural Intelligence Conjecture and its three exact instruments:
+
+- Project: `structural-observatory`
+- Project ID: `c17b4032-bbbe-474d-b701-a69479403070`
+- Environment: `production`
+- Environment ID: `733574f7-e2d4-45a2-88c4-87554df13560`
+- Service: `structural-observatory`
+- Service ID: `1028a3ea-bdbc-4ed4-99d5-945d45497bae`
+- Domain: `https://structural-observatory-production.up.railway.app`
+- Root directory: `sites/structural_observatory`
+- Start command: `node server.js`
+
+Initial deploy on 2026-08-03 was pushed via `railway up` from the site directory
+(the Railway GitHub App is still not installed on this repo — see the earlier
+sections). Container listens on `$PORT` (Railway currently sets 8080); the domain
+target port must match, so on domain generation set `port: 8080` explicitly (or
+update after the fact) — the site defaults to 3030 only for local dev.
+
+Verify:
+
+```bash
+curl -fsS -D - https://structural-observatory-production.up.railway.app/ -o /tmp/structural-observatory.html
+```
+
 ## Sources
 
 - Railway GitHub autodeploy docs: `https://docs.railway.com/deployments/github-autodeploys`
