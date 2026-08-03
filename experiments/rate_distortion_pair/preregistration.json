@@ -1,0 +1,49 @@
+{
+  "experiment_id": "rate_distortion_pair",
+  "schema_version": "1.0",
+  "hypothesis": "Theorem 2 (paper section 2.2) says the Shannon rate-distortion pair (q_D, K_D) is a stochastic fibration for every distortion budget D >= 0 -- a one-parameter deformation of the sufficiency fibration Theorem 1 provides, with q_0 minimal-sufficient and q_{D_max} the constant map. For two finite sources (uniform on n=4 symbols; Bernoulli(p=0.3)) under Hamming distortion, the RD function R(D) has an exact closed form; the RD-optimal test channel achieves I(X; X_hat) = R(D) at every distortion budget in the achievable regime; R(0) equals the source entropy (Theorem 1 anchor); R(D_max) = 0 (encoder collapses to a constant); R is monotone nonincreasing in D; and R is convex on the grid.",
+  "primary_metric": "sources[i].rate_matches_closed_form",
+  "gates": {
+    "RDP_UNIFORM_N4_RATE_MATCHES_CLOSED_FORM": "R(D) for uniform-on-4-symbols Hamming source matches log2(n) - h(D) - D*log2(n-1) exactly at every D in the pre-registered 10-point grid.",
+    "RDP_UNIFORM_N4_TEST_CHANNEL_ACHIEVES_RATE_BELOW_DMAX": "The symmetric error-D test channel achieves I(X; X_hat) = R(D) exactly for every D < 1 - 1/n = 0.75.",
+    "RDP_UNIFORM_N4_R_AT_ZERO_EQUALS_SOURCE_ENTROPY": "R(0) = log2(n) = 2 bits, matching the Theorem-1 minimal-sufficient identity partition.",
+    "RDP_UNIFORM_N4_R_AT_DMAX_IS_ZERO": "R(1 - 1/n) = R(0.75) = 0, matching the constant encoder.",
+    "RDP_UNIFORM_N4_R_MONOTONE_AND_CONVEX": "R is nonincreasing in D and satisfies the convexity midpoint inequality on the grid.",
+    "RDP_BERNOULLI_P03_RATE_MATCHES_CLOSED_FORM": "R(D) for Bernoulli(0.3) Hamming source matches H2(p) - h(D) exactly at every D in the pre-registered 9-point grid.",
+    "RDP_BERNOULLI_P03_TEST_CHANNEL_ACHIEVES_RATE_BELOW_DMAX": "The RD-optimal test channel achieves I(X; X_hat) = R(D) exactly for every D < min(p, 1-p) = 0.3.",
+    "RDP_BERNOULLI_P03_R_AT_ZERO_EQUALS_SOURCE_ENTROPY": "R(0) = H2(0.3) bits.",
+    "RDP_BERNOULLI_P03_R_AT_DMAX_IS_ZERO": "R(0.3) = 0.",
+    "RDP_BERNOULLI_P03_R_MONOTONE_AND_CONVEX": "R is nonincreasing in D and convex on the grid."
+  },
+  "metrics": [
+    "rate_matches_closed_form",
+    "test_channel_achieves_rate_below_dmax",
+    "r_at_zero_equals_source_entropy",
+    "r_at_dmax_is_zero",
+    "r_monotone_nonincreasing",
+    "r_convex_on_grid"
+  ],
+  "sources": [
+    {
+      "name": "uniform_n4_hamming",
+      "d_grid": [0.0, 0.05, 0.1, 0.2, 0.25, 0.4, 0.5, 0.7, 0.75, 0.8]
+    },
+    {
+      "name": "bernoulli_p03_hamming",
+      "d_grid": [0.0, 0.02, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.4]
+    }
+  ],
+  "controls": [
+    "closed_form_rate_matches_at_every_grid_point",
+    "test_channel_construction_matches_rate",
+    "theorem_1_anchor_at_d_equals_zero",
+    "boundary_zero_rate_at_d_max",
+    "convexity_midpoint_check_on_grid"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": null,
+    "sampling": "closed-form R(D) evaluation + explicit test-channel MI computation; no Monte Carlo",
+    "raw_data": false
+  }
+}

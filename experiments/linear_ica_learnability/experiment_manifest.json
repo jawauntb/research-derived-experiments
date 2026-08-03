@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "linear_ica_learnability",
+  "hypothesis": "Under the linear-ICA hypothesis class (Z with independent non-Gaussian marginals, X = A*Z with A square orthogonal), sklearn FastICA achieves Amari index <= 0.02 at N = 10000 for every d_Z in {2, 4, 6, 8}; the smallest N reaching Amari <= 0.03 grows only polynomially in d_Z with fitted log-log slope b << 3.0; the Amari(N) curve at each d_Z is nonincreasing modulo a 0.01 numerical wobble; and the linear-ICA sample complexity at d_Z = 8 is at least 20x below the Theorem 6 exponential bound (D_Z=1, eps=0.25, eps_rel=0.05, c=1), witnessing SIC-C-c's partial positive resolution for the linear-ICA inductive-bias class.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "deterministic_from_base_seed",
+      "description": "All randomness is derived from BASE_SEED = 0 via numpy SeedSequence keyed by (BASE_SEED, d_Z, trial), and sklearn FastICA random_state is set to the trial index; running twice yields identical Amari values at every grid point."
+    },
+    {
+      "control_id": "nested_prefix_sampling_within_trial",
+      "description": "Within each trial, one (A, Z_full) is drawn at max(N_VALUES) and every smaller N re-uses the first N samples as a prefix, so the sample-complexity curve varies only in N and not in the underlying random stream."
+    },
+    {
+      "control_id": "averaging_over_eight_trials_smooths_finite_sample_noise",
+      "description": "Amari is averaged over TRIALS = 8 independent (A, Z) draws per grid point; finite-sample FastICA variance is smoothed enough that monotonicity holds within a 0.01 tolerance and the sample-complexity fit is stable."
+    },
+    {
+      "control_id": "amari_of_identity_and_signed_permutation_is_zero",
+      "description": "The Amari index is verified to be exactly 0 on the identity matrix and on any signed permutation matrix (the ICA identifiability class), and > 0 on non-degenerate mixtures --- covered by the unit tests."
+    }
+  ],
+  "seeds": [
+    0
+  ],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python3",
+      "experiments/linear_ica_learnability/experiment.py"
+    ],
+    "estimated_minutes": 2,
+    "max_cost_usd": 0
+  },
+  "dependencies": [
+    {"name": "numpy", "version": "==2.5.1"},
+    {"name": "scikit-learn", "version": "==1.9.0"}
+  ],
+  "gates": [
+    {
+      "gate_id": "LICA_LINEAR_ICA_CONVERGES_AT_LARGEST_N",
+      "criterion": "Averaged Amari at N = 10000 is <= 0.02 for every d_Z in {2, 4, 6, 8}."
+    },
+    {
+      "gate_id": "LICA_SAMPLE_COMPLEXITY_POLYNOMIAL_IN_D_Z",
+      "criterion": "The smallest N in the sweep reaching averaged Amari <= 0.03 exists for every d_Z, and the linear regression log(N_needed) = a + b * log(d_Z) has fitted slope b <= 3.0."
+    },
+    {
+      "gate_id": "LICA_AMARI_MONOTONE_IN_N_AT_EVERY_D_Z",
+      "criterion": "For every d_Z, the averaged Amari curve is nonincreasing in N modulo a numerical tolerance of 0.01."
+    },
+    {
+      "gate_id": "LICA_ESCAPES_THEOREM_6_EXPONENTIAL",
+      "criterion": "At d_Z = 8, the linear-ICA sample complexity to reach Amari <= 0.03 is at least 20x below the Theorem 6 bound ceil(1 * (1/0.25)^{8} * ln((1/0.25)^{8} / 0.05)) = 923146."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/linear_ica_learnability/results/linear_ica_learnability_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/linear_ica_learnability/preregistration.json",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

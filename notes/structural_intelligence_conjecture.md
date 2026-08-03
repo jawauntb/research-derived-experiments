@@ -265,13 +265,14 @@ its status and its relation to the instruments in §5.
 
 ---
 
-## 5. The six built instruments
+## 5. The eight built instruments
 
 Each is exact, deterministic, tested, and public-safe (summaries in `results/`,
-no raw dumps). They are the first six instruments of the Observatory.
-Instruments 1, 4, 5, and 6 are computational witnesses of Theorems 1, 4, 5,
-and 6; instruments 2 and 3 establish the auxiliary dissociations the extended
-program rests on.
+no raw dumps). They are the first eight instruments of the Observatory.
+Instruments 1, 4, 5, 6, 7, and 8 are computational witnesses of Theorems 1,
+4, 5, 6, 2, and 7 respectively; instruments 2 and 3 establish the auxiliary
+dissociations the extended program rests on. Only Instrument 8 uses a
+fixed-seed Monte Carlo (sklearn FastICA); the other seven are exact.
 
 ### Instrument 1 — `experiments/representation_search` (Fiber Finder)
 Over a Boolean world with a known invariant, it enumerates a lattice of quotients
@@ -333,6 +334,30 @@ above `1 − ε = 0.95`. Recovery is zero for `N < M = 4` (pigeonhole),
 monotone in `N`, and degrades exactly as `c` predicts under compiler
 imbalance. This is the numerical witness of Theorem 5's discrete-case sample
 complexity, and the endpoint of the "learnability" claim in the finite case.
+
+### Instrument 8 — `experiments/linear_ica_learnability` (Theorem 7 / SIC-C-c witness)
+Fixed-seed FastICA on `X = A · Z` with `A` random-orthogonal and each
+`Z_i ~ Laplace(0, 1)`, across `(d_Z, N) ∈ {2, 4, 6, 8} × {200, 500, 1000,
+2000, 5000, 10000}`. Recovery measured by the Amari index on `Ŵ · A`; at
+`N = 10000`, mean Amari ≤ 0.02 for every `d_Z`; fitted `log N ↔ log d_Z`
+exponent is `b ≈ 0.06 ≪ 3`. **Establishes** that adding the linear-ICA
+inductive bias resolves SIC-C-c inside that hypothesis class — an escape
+from Theorem 6's ε-covering exponential-in-`d_Z` bound. The only Monte
+Carlo instrument in the Observatory; all others are exact enumerations.
+
+### Instrument 7 — `experiments/rate_distortion_pair` (Theorem 2 witness)
+Closed-form and test-channel verification of the Shannon rate–distortion
+function on two finite sources under Hamming distortion (uniform on 4
+symbols; Bernoulli(0.3)), across 10 and 9 D-grid points respectively. All
+ten pre-registered gates pass exactly to `1e-9`: closed-form R(D) matches at
+every grid point, the explicit RD-optimal test channel achieves I(X; X̂) =
+R(D) at every D in the achievable regime, R(0) equals the source entropy
+(Theorem 1 anchor: the D=0 encoder recovers the minimal-sufficient identity
+partition), R(D_max) = 0 (the encoder collapses to a constant), R is
+monotone nonincreasing, and R is convex on the grid. **Establishes** the
+one-parameter deformation Theorem 2 predicts: `(q_D, K_D)` interpolates
+between the Theorem-1 minimal-sufficient fibration (D = 0) and the trivial
+constant-encoder (D = D_max).
 
 ### Instrument 6 — `experiments/cross_task_learnability_continuous` (Theorem 6 witness)
 Ambient `X = [0, 1]^2` quantised into a `16 × 16` grid (256 cells); latent
@@ -401,11 +426,11 @@ infallibility`, kept as two separate, non-inflated claims.
 One system that, given a problem, theory, agent, organism, or artwork, returns:
 its candidate quotient maps, realization fibers, automorphisms, abstraction
 frontier, fiber-audit results, inferred compiler, and possible cross-substrate
-embodiments. The six instruments above are its first six modules
+embodiments. The eight instruments above are its first eight modules
 (quotient search, cross-substrate compiler, causal/agency measurement,
 cross-task sufficiency, cross-task learnability, cross-task learnability
-continuous); §4 lists the remaining modules as pre-registered future
-instruments.
+continuous, rate–distortion pair, linear-ICA learnability); §4 lists the
+remaining modules as pre-registered future instruments.
 
 ---
 

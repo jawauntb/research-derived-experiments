@@ -1,0 +1,6 @@
+name = "structural-intelligence"
+version = "0.1.0"
+defaultTargets = ["StructuralIntelligence"]
+
+[[lean_lib]]
+name = "StructuralIntelligence"

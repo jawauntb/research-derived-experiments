@@ -1468,6 +1468,35 @@
       }
     },
     {
+      "package": "linear_ica_learnability",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/linear_ica_learnability/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "linear_ica_learnability_2026_08_03",
+      "runs": [
+        {
+          "run_id": "linear_ica_learnability_2026_08_03",
+          "publication_package": "linear_ica_learnability",
+          "runtime_package": "linear_ica_learnability",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/linear_ica_learnability/experiment_manifest.json",
+          "report_paths": [
+            "experiments/linear_ica_learnability/results/linear_ica_learnability_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/linear_ica_learnability/preregistration.json",
+          "preregistration_digest": "a99e53f92ff169c7b3849e1f725ba8621766e0709177fa9aa3747f57c0774c59",
+          "producing_agent": {
+            "identity": "Claude Code (agent, under J. Brown direction)",
+            "session_ref": "claude/latent-structures-meta-framework-j9pkkd"
+          }
+        }
+      ]
+    },
+    {
       "package": "load_bearing_prose_test",
       "coverage_mode": "structured_manifest",
       "manifest_path": "experiments/load_bearing_prose_test/experiment_manifest.json",
@@ -1767,6 +1796,35 @@
         "frozen_legacy_cutoff": "2026-07-14",
         "adjudicates_claims": false
       }
+    },
+    {
+      "package": "rate_distortion_pair",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/rate_distortion_pair/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "rate_distortion_pair_2026_08_03",
+      "runs": [
+        {
+          "run_id": "rate_distortion_pair_2026_08_03",
+          "publication_package": "rate_distortion_pair",
+          "runtime_package": "rate_distortion_pair",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/rate_distortion_pair/experiment_manifest.json",
+          "report_paths": [
+            "experiments/rate_distortion_pair/results/rate_distortion_pair_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/rate_distortion_pair/preregistration.json",
+          "preregistration_digest": "d5204319470bb6cddbb6c4697a3efa7f6267d95371300ecb5cc0067e8327cb83",
+          "producing_agent": {
+            "identity": "Claude Code (agent, under J. Brown direction)",
+            "session_ref": "claude/site-papers-and-instruments-7-8"
+          }
+        }
+      ]
     },
     {
       "package": "regime_sensitive_de",

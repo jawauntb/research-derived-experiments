@@ -1,0 +1,144 @@
+{
+  "gates": {
+    "bernoulli_p03_r_at_dmax_is_zero": true,
+    "bernoulli_p03_r_at_zero_equals_source_entropy": true,
+    "bernoulli_p03_r_monotone_and_convex": true,
+    "bernoulli_p03_rate_matches_closed_form": true,
+    "bernoulli_p03_test_channel_achieves_rate_below_dmax": true,
+    "uniform_n4_r_at_dmax_is_zero": true,
+    "uniform_n4_r_at_zero_equals_source_entropy": true,
+    "uniform_n4_r_monotone_and_convex": true,
+    "uniform_n4_rate_matches_closed_form": true,
+    "uniform_n4_test_channel_achieves_rate_below_dmax": true
+  },
+  "sources": [
+    {
+      "curve": [
+        {
+          "D": 0.0,
+          "R": 2.0,
+          "test_channel_MI": 2.0
+        },
+        {
+          "D": 0.05,
+          "R": 1.634354917848,
+          "test_channel_MI": 1.634354917848
+        },
+        {
+          "D": 0.1,
+          "R": 1.372508156339,
+          "test_channel_MI": 1.372508156339
+        },
+        {
+          "D": 0.2,
+          "R": 0.961079404968,
+          "test_channel_MI": 0.961079404968
+        },
+        {
+          "D": 0.25,
+          "R": 0.792481250361,
+          "test_channel_MI": 0.792481250361
+        },
+        {
+          "D": 0.4,
+          "R": 0.395064405257,
+          "test_channel_MI": 0.395064405257
+        },
+        {
+          "D": 0.5,
+          "R": 0.207518749639,
+          "test_channel_MI": 0.207518749639
+        },
+        {
+          "D": 0.7,
+          "R": 0.009235350264,
+          "test_channel_MI": 0.009235350264
+        },
+        {
+          "D": 0.75,
+          "R": 0.0,
+          "test_channel_MI": 0.0
+        },
+        {
+          "D": 0.8,
+          "R": 0.0,
+          "test_channel_MI": 0.010101904536
+        }
+      ],
+      "d_max": 0.75,
+      "n_symbols": 4,
+      "r_at_dmax_is_zero": true,
+      "r_at_zero_equals_source_entropy": true,
+      "r_convex_on_grid": true,
+      "r_monotone_nonincreasing": true,
+      "rate_matches_closed_form": true,
+      "source": "uniform_n4_hamming",
+      "source_entropy_bits": 2.0,
+      "test_channel_achieves_rate_below_dmax": true
+    },
+    {
+      "curve": [
+        {
+          "D": 0.0,
+          "R": 0.881290899231,
+          "test_channel_MI": 0.881290899231
+        },
+        {
+          "D": 0.02,
+          "R": 0.739850356689,
+          "test_channel_MI": 0.739850356689
+        },
+        {
+          "D": 0.05,
+          "R": 0.594893942115,
+          "test_channel_MI": 0.594893942115
+        },
+        {
+          "D": 0.1,
+          "R": 0.412295305641,
+          "test_channel_MI": 0.412295305641
+        },
+        {
+          "D": 0.15,
+          "R": 0.271450594514,
+          "test_channel_MI": 0.271450594514
+        },
+        {
+          "D": 0.2,
+          "R": 0.159362804343,
+          "test_channel_MI": 0.159362804343
+        },
+        {
+          "D": 0.25,
+          "R": 0.070012774772,
+          "test_channel_MI": 0.070012774772
+        },
+        {
+          "D": 0.3,
+          "R": 0.0,
+          "test_channel_MI": 0.0
+        },
+        {
+          "D": 0.4,
+          "R": 0.0,
+          "test_channel_MI": -0.089659695224
+        }
+      ],
+      "d_max": 0.3,
+      "p": 0.3,
+      "r_at_dmax_is_zero": true,
+      "r_at_zero_equals_source_entropy": true,
+      "r_convex_on_grid": true,
+      "r_monotone_nonincreasing": true,
+      "rate_matches_closed_form": true,
+      "source": "bernoulli_p0.3_hamming",
+      "source_entropy_bits": 0.881290899231,
+      "test_channel_achieves_rate_below_dmax": true
+    }
+  ],
+  "status": "pass",
+  "theorem_2_forms": {
+    "bernoulli_hamming": "R(D) = H2(p) - h(D), D <= min(p, 1 - p)",
+    "uniform_hamming": "R(D) = log2(n) - h(D) - D * log2(n - 1), D <= 1 - 1/n"
+  }
+}
