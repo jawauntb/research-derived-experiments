@@ -123,6 +123,43 @@
             </span>
           </li>
           <li>
+            <a class="paper-download" href="https://github.com/jawauntb/research-derived-experiments/blob/main/papers/theory_atlas/paper.pdf">Theory-Atlas PDF</a>
+            <span class="paper-title">
+              <em>Theory Atlas</em>
+              (seventh companion paper; Theorems TA-1 and TA-2 &mdash; cocycle
+              condition iff gluing; failure taxonomy: glue / phase transition /
+              missing latent)
+            </span>
+          </li>
+          <li>
+            <a class="paper-download" href="https://github.com/jawauntb/research-derived-experiments/blob/main/papers/causal_semantics/paper.pdf">Causal-Semantics PDF</a>
+            <span class="paper-title">
+              <em>Causal Semantics</em>
+              (eighth companion paper; Theorems CS-1 and CS-2 &mdash;
+              &Psi;-equivalence is a congruence; meaning quotient is the
+              coarsest common sufficient statistic on messages, orthogonal to
+              co-occurrence embeddings)
+            </span>
+          </li>
+          <li>
+            <a class="paper-download" href="https://github.com/jawauntb/research-derived-experiments/blob/main/papers/representation_repair_calculus/paper.pdf">Representation-Repair-Calculus PDF</a>
+            <span class="paper-title">
+              <em>Representation-Repair Calculus</em>
+              (ninth companion paper; Theorems RR-1 and RR-2 &mdash; eight
+              canonical failure-signature &rarr; minimal-lift pairs are
+              well-defined; independent lifts compose)
+            </span>
+          </li>
+          <li>
+            <a class="paper-download" href="https://github.com/jawauntb/research-derived-experiments/blob/main/papers/autocatalytic_artwork/paper.pdf">Autocatalytic-Artwork PDF</a>
+            <span class="paper-title">
+              <em>Autocatalytic Artwork</em>
+              (tenth companion paper; Theorems AA-1 and AA-2 &mdash; Bayesian
+              audience competence is monotone under posterior update; the
+              autocatalytic dynamic is exactly the compiler-ecology of CT-2)
+            </span>
+          </li>
+          <li>
             <a href="https://github.com/jawauntb/research-derived-experiments/blob/main/notes/structural_intelligence_conjecture.md">Formal companion note</a>
             &mdash; the working development of the framework (concern-as-fiber-geometry,
             the ten constructs, Core &subset; Shell agent architecture) that the
@@ -149,6 +186,36 @@
             <code>experiments/</code> with <code>core.py</code>, <code>experiment.py</code>,
             a pre-registration, an experiment manifest, and a
             <code>PROVENANCE.md</code> card.
+          </li>
+        </ul>
+
+        <h3 style="margin-top: 24px; font-size: 16px; color: var(--ink);">Machine-checked Lean 4 proofs</h3>
+        <p style="color: var(--muted); font-size: 14px; margin: 6px 0 10px;">
+          <strong>Partial &mdash; four theorem-cores out of ~20 named theorems.</strong>
+          The <a href="https://github.com/jawauntb/research-derived-experiments/tree/main/formal/structural-intelligence">
+          <code>formal/structural-intelligence/</code></a> Lean 4 project uses pure Lean
+          core (no mathlib), builds in ~3&thinsp;s in CI, and has zero
+          <code>sorry</code>s. The other ~16 theorems have prose proofs only &mdash;
+          each Lean formalisation is a separate follow-up.
+        </p>
+        <ul class="paper-list">
+          <li>
+            <strong>Lean-verified</strong>: Theorem&nbsp;4-core
+            (common-sufficient-screen functional refinement,
+            <code>CommonSuffScreen.lean</code>);
+            Theorem&nbsp;5-core (union bound + coupon-collector pigeonhole,
+            <code>UnionBound.lean</code> + <code>Pigeonhole.lean</code> +
+            <code>CouponCollector.lean</code>);
+            Theorem&nbsp;6-core (refinement composition,
+            <code>Refinement.lean</code>);
+            Theorem&nbsp;CT-1-core (identifiability &rArr; uniqueness,
+            <code>CompilerTomography.lean</code>).
+          </li>
+          <li>
+            <strong>Prose proofs only</strong>: Theorems 1, 2, 3 (need mathlib
+            measure theory / rate&ndash;distortion / category theory); the
+            quantitative <em>rates</em> of Theorems 5 and 6 (need reals + exp);
+            CG-1/2, CT-2, SA-1, AF-1/2, AG-1/2, TA-1/2, CS-1/2, RR-1/2, AA-1/2.
           </li>
         </ul>
       </section>
