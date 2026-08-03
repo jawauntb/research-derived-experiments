@@ -1,0 +1,696 @@
+{
+  "ct1": {
+    "N_grid": [
+      50,
+      100,
+      200,
+      500,
+      1000,
+      2000
+    ],
+    "largest_N_recovery_meets_target": true,
+    "n_theta_candidates": 25,
+    "per_N": [
+      {
+        "N": 50,
+        "meets_0p95": false,
+        "n_seeds": 100,
+        "recovery_rate": 0.86
+      },
+      {
+        "N": 100,
+        "meets_0p95": true,
+        "n_seeds": 100,
+        "recovery_rate": 0.99
+      },
+      {
+        "N": 200,
+        "meets_0p95": true,
+        "n_seeds": 100,
+        "recovery_rate": 1.0
+      },
+      {
+        "N": 500,
+        "meets_0p95": true,
+        "n_seeds": 100,
+        "recovery_rate": 1.0
+      },
+      {
+        "N": 1000,
+        "meets_0p95": true,
+        "n_seeds": 100,
+        "recovery_rate": 1.0
+      },
+      {
+        "N": 2000,
+        "meets_0p95": true,
+        "n_seeds": 100,
+        "recovery_rate": 1.0
+      }
+    ],
+    "recovery_rate_broadly_monotone": true
+  },
+  "ct2": {
+    "beta_grid": [
+      0.1,
+      1.0,
+      4.0
+    ],
+    "large_beta_converges_to_argmax": true,
+    "monotone_at_every_beta": true,
+    "n_steps": 20,
+    "per_beta": [
+      {
+        "beta": 0.1,
+        "converged_to_argmax_if_large_beta": null,
+        "final_expected_reward": {
+          "z00": 1.761594,
+          "z01": 1.761594,
+          "z10": 1.761594,
+          "z11": 1.761594
+        },
+        "max_possible_reward_per_fiber": {
+          "z00": 2.0,
+          "z01": 2.0,
+          "z10": 2.0,
+          "z11": 2.0
+        },
+        "monotone_at_all_z": true,
+        "trajectory": [
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.0,
+              "z01": 1.0,
+              "z10": 1.0,
+              "z11": 1.0
+            },
+            "t": 0
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.049958,
+              "z01": 1.049958,
+              "z10": 1.049958,
+              "z11": 1.049958
+            },
+            "t": 1
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.099668,
+              "z01": 1.099668,
+              "z10": 1.099668,
+              "z11": 1.099668
+            },
+            "t": 2
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.148885,
+              "z01": 1.148885,
+              "z10": 1.148885,
+              "z11": 1.148885
+            },
+            "t": 3
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.197375,
+              "z01": 1.197375,
+              "z10": 1.197375,
+              "z11": 1.197375
+            },
+            "t": 4
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.244919,
+              "z01": 1.244919,
+              "z10": 1.244919,
+              "z11": 1.244919
+            },
+            "t": 5
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.291313,
+              "z01": 1.291313,
+              "z10": 1.291313,
+              "z11": 1.291313
+            },
+            "t": 6
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.336376,
+              "z01": 1.336376,
+              "z10": 1.336376,
+              "z11": 1.336376
+            },
+            "t": 7
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.379949,
+              "z01": 1.379949,
+              "z10": 1.379949,
+              "z11": 1.379949
+            },
+            "t": 8
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.421899,
+              "z01": 1.421899,
+              "z10": 1.421899,
+              "z11": 1.421899
+            },
+            "t": 9
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.462117,
+              "z01": 1.462117,
+              "z10": 1.462117,
+              "z11": 1.462117
+            },
+            "t": 10
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.50052,
+              "z01": 1.50052,
+              "z10": 1.50052,
+              "z11": 1.50052
+            },
+            "t": 11
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.53705,
+              "z01": 1.53705,
+              "z10": 1.53705,
+              "z11": 1.53705
+            },
+            "t": 12
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.57167,
+              "z01": 1.57167,
+              "z10": 1.57167,
+              "z11": 1.57167
+            },
+            "t": 13
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.604368,
+              "z01": 1.604368,
+              "z10": 1.604368,
+              "z11": 1.604368
+            },
+            "t": 14
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.635149,
+              "z01": 1.635149,
+              "z10": 1.635149,
+              "z11": 1.635149
+            },
+            "t": 15
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.664037,
+              "z01": 1.664037,
+              "z10": 1.664037,
+              "z11": 1.664037
+            },
+            "t": 16
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.691069,
+              "z01": 1.691069,
+              "z10": 1.691069,
+              "z11": 1.691069
+            },
+            "t": 17
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.716298,
+              "z01": 1.716298,
+              "z10": 1.716298,
+              "z11": 1.716298
+            },
+            "t": 18
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.739783,
+              "z01": 1.739783,
+              "z10": 1.739783,
+              "z11": 1.739783
+            },
+            "t": 19
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.761594,
+              "z01": 1.761594,
+              "z10": 1.761594,
+              "z11": 1.761594
+            },
+            "t": 20
+          }
+        ]
+      },
+      {
+        "beta": 1.0,
+        "converged_to_argmax_if_large_beta": null,
+        "final_expected_reward": {
+          "z00": 2.0,
+          "z01": 2.0,
+          "z10": 2.0,
+          "z11": 2.0
+        },
+        "max_possible_reward_per_fiber": {
+          "z00": 2.0,
+          "z01": 2.0,
+          "z10": 2.0,
+          "z11": 2.0
+        },
+        "monotone_at_all_z": true,
+        "trajectory": [
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.0,
+              "z01": 1.0,
+              "z10": 1.0,
+              "z11": 1.0
+            },
+            "t": 0
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.462117,
+              "z01": 1.462117,
+              "z10": 1.462117,
+              "z11": 1.462117
+            },
+            "t": 1
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.761594,
+              "z01": 1.761594,
+              "z10": 1.761594,
+              "z11": 1.761594
+            },
+            "t": 2
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.905148,
+              "z01": 1.905148,
+              "z10": 1.905148,
+              "z11": 1.905148
+            },
+            "t": 3
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.964028,
+              "z01": 1.964028,
+              "z10": 1.964028,
+              "z11": 1.964028
+            },
+            "t": 4
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.986614,
+              "z01": 1.986614,
+              "z10": 1.986614,
+              "z11": 1.986614
+            },
+            "t": 5
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.995055,
+              "z01": 1.995055,
+              "z10": 1.995055,
+              "z11": 1.995055
+            },
+            "t": 6
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.998178,
+              "z01": 1.998178,
+              "z10": 1.998178,
+              "z11": 1.998178
+            },
+            "t": 7
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.999329,
+              "z01": 1.999329,
+              "z10": 1.999329,
+              "z11": 1.999329
+            },
+            "t": 8
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.999753,
+              "z01": 1.999753,
+              "z10": 1.999753,
+              "z11": 1.999753
+            },
+            "t": 9
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.999909,
+              "z01": 1.999909,
+              "z10": 1.999909,
+              "z11": 1.999909
+            },
+            "t": 10
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.999967,
+              "z01": 1.999967,
+              "z10": 1.999967,
+              "z11": 1.999967
+            },
+            "t": 11
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.999988,
+              "z01": 1.999988,
+              "z10": 1.999988,
+              "z11": 1.999988
+            },
+            "t": 12
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.999995,
+              "z01": 1.999995,
+              "z10": 1.999995,
+              "z11": 1.999995
+            },
+            "t": 13
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.999998,
+              "z01": 1.999998,
+              "z10": 1.999998,
+              "z11": 1.999998
+            },
+            "t": 14
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.999999,
+              "z01": 1.999999,
+              "z10": 1.999999,
+              "z11": 1.999999
+            },
+            "t": 15
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 2.0,
+              "z01": 2.0,
+              "z10": 2.0,
+              "z11": 2.0
+            },
+            "t": 16
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 2.0,
+              "z01": 2.0,
+              "z10": 2.0,
+              "z11": 2.0
+            },
+            "t": 17
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 2.0,
+              "z01": 2.0,
+              "z10": 2.0,
+              "z11": 2.0
+            },
+            "t": 18
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 2.0,
+              "z01": 2.0,
+              "z10": 2.0,
+              "z11": 2.0
+            },
+            "t": 19
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 2.0,
+              "z01": 2.0,
+              "z10": 2.0,
+              "z11": 2.0
+            },
+            "t": 20
+          }
+        ]
+      },
+      {
+        "beta": 4.0,
+        "converged_to_argmax_if_large_beta": true,
+        "final_expected_reward": {
+          "z00": 2.0,
+          "z01": 2.0,
+          "z10": 2.0,
+          "z11": 2.0
+        },
+        "max_possible_reward_per_fiber": {
+          "z00": 2.0,
+          "z01": 2.0,
+          "z10": 2.0,
+          "z11": 2.0
+        },
+        "monotone_at_all_z": true,
+        "trajectory": [
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.0,
+              "z01": 1.0,
+              "z10": 1.0,
+              "z11": 1.0
+            },
+            "t": 0
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.964028,
+              "z01": 1.964028,
+              "z10": 1.964028,
+              "z11": 1.964028
+            },
+            "t": 1
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.999329,
+              "z01": 1.999329,
+              "z10": 1.999329,
+              "z11": 1.999329
+            },
+            "t": 2
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 1.999988,
+              "z01": 1.999988,
+              "z10": 1.999988,
+              "z11": 1.999988
+            },
+            "t": 3
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 2.0,
+              "z01": 2.0,
+              "z10": 2.0,
+              "z11": 2.0
+            },
+            "t": 4
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 2.0,
+              "z01": 2.0,
+              "z10": 2.0,
+              "z11": 2.0
+            },
+            "t": 5
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 2.0,
+              "z01": 2.0,
+              "z10": 2.0,
+              "z11": 2.0
+            },
+            "t": 6
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 2.0,
+              "z01": 2.0,
+              "z10": 2.0,
+              "z11": 2.0
+            },
+            "t": 7
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 2.0,
+              "z01": 2.0,
+              "z10": 2.0,
+              "z11": 2.0
+            },
+            "t": 8
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 2.0,
+              "z01": 2.0,
+              "z10": 2.0,
+              "z11": 2.0
+            },
+            "t": 9
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 2.0,
+              "z01": 2.0,
+              "z10": 2.0,
+              "z11": 2.0
+            },
+            "t": 10
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 2.0,
+              "z01": 2.0,
+              "z10": 2.0,
+              "z11": 2.0
+            },
+            "t": 11
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 2.0,
+              "z01": 2.0,
+              "z10": 2.0,
+              "z11": 2.0
+            },
+            "t": 12
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 2.0,
+              "z01": 2.0,
+              "z10": 2.0,
+              "z11": 2.0
+            },
+            "t": 13
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 2.0,
+              "z01": 2.0,
+              "z10": 2.0,
+              "z11": 2.0
+            },
+            "t": 14
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 2.0,
+              "z01": 2.0,
+              "z10": 2.0,
+              "z11": 2.0
+            },
+            "t": 15
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 2.0,
+              "z01": 2.0,
+              "z10": 2.0,
+              "z11": 2.0
+            },
+            "t": 16
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 2.0,
+              "z01": 2.0,
+              "z10": 2.0,
+              "z11": 2.0
+            },
+            "t": 17
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 2.0,
+              "z01": 2.0,
+              "z10": 2.0,
+              "z11": 2.0
+            },
+            "t": 18
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 2.0,
+              "z01": 2.0,
+              "z10": 2.0,
+              "z11": 2.0
+            },
+            "t": 19
+          },
+          {
+            "expected_reward_per_fiber": {
+              "z00": 2.0,
+              "z01": 2.0,
+              "z10": 2.0,
+              "z11": 2.0
+            },
+            "t": 20
+          }
+        ]
+      }
+    ]
+  },
+  "gates": {
+    "ct1_largest_N_recovers_true_theta_at_0p95": true,
+    "ct1_recovery_broadly_monotone_in_N": true,
+    "ct2_expected_reward_monotone_at_every_beta": true,
+    "ct2_large_beta_converges_to_fiber_argmax": true
+  },
+  "status": "pass"
+}

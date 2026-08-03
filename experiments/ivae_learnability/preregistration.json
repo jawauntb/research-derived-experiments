@@ -1,0 +1,52 @@
+{
+  "experiment_id": "ivae_learnability",
+  "schema_version": "1.0",
+  "hypothesis": "SIC-C-c asks whether restricting to a specific inductive-bias hypothesis class can restore uniform polynomial-in-d_Z sample complexity for the continuous-case learnability problem of paper section 2.5b (Theorem 6). Instrument 8 answered yes for linear ICA and instrument 9 answered yes for the sparse-mixing / independent-mechanism-analysis class; this instrument (instrument 10) answers the same for the auxiliary-variable identifiable-ICA / iVAE class of Khemakhem, Kingma, Monti, Hyvarinen 2020. Setup (simplified auxiliary-variable identifiable model): latent Z in R^{d_Z} with Z_i | U ~ Laplace(mu_i(U), 1), auxiliary variable U discrete in {0, ..., K-1} with K = 2 * d_Z, per-u offsets mu_i(u) drawn from Uniform([-3, 3])^{d_Z} once per (d_Z, trial), and linear mixing X = A * Z with A Haar-orthogonal on d_Z x d_Z. Algorithm: per-conditional linear-ICA fallback. For each u we run sklearn FastICA(parallel, logcosh, whiten='unit-variance', max_iter=2000, tol=1e-6, random_state=trial*1000+u) on the samples X | U = u; buckets with fewer than max(2*d_Z, 10) samples are skipped and the count is reported per grid cell. The global metric averages Amari(W_u * A) across the non-skipped u values (the Amari index is invariant to signed permutation, which absorbs the per-U rotation ambiguity of linear ICA). Predictions: (a) averaged Amari <= 0.10 at N = 10000 for every d_Z in {2, 4, 6}; (b) for every d_Z the Amari(N) curve is nonincreasing modulo a 0.02 wobble tolerance; (c) the smallest N in the sweep {200, 500, 1000, 2000, 5000, 10000} reaching averaged Amari <= 0.15 grows only polynomially in d_Z (fitted log-log slope b <= 4.0); (d) at d_Z = 6 the iVAE class sample complexity to reach Amari <= 0.15 is at least 5x below the Theorem 6 exponential bound ceil((D_Z / eps)^{d_Z} * ln((D_Z / eps)^{d_Z} / eps_rel)) with D_Z = 1, eps = 0.25, eps_rel = 0.05, c = 1 (= 46341 samples). Gates are looser than instruments 8/9 because per-conditional splitting at K = 2 * d_Z reduces the effective sample size per ICA fit; the honest thresholds match the realism budget spelled out in the prompt.",
+  "primary_metric": "sweep_points[i].amari_mean",
+  "gates": {
+    "IVAE_CONVERGES_AT_LARGEST_N": "At N = 10000, the Amari index averaged over 8 trials is <= 0.10 for every d_Z in {2, 4, 6}.",
+    "IVAE_MONOTONE_IN_N_AT_EVERY_D_Z": "For every d_Z in {2, 4, 6}, the averaged Amari curve is nonincreasing in N modulo a numerical tolerance of 0.02 (i.e. amari_mean at N_{i+1} <= amari_mean at N_i + 0.02).",
+    "IVAE_POLYNOMIAL_IN_D_Z": "For every d_Z in {2, 4, 6} there is a smallest N in the sweep {200, 500, 1000, 2000, 5000, 10000} with averaged Amari <= 0.15; the linear regression log(N_needed(d_Z)) = a + b * log(d_Z) has fitted slope b <= 4.0.",
+    "IVAE_ESCAPES_THEOREM_6": "At d_Z = 6, the iVAE N_needed to reach averaged Amari <= 0.15 is at most 1/5 of the Theorem 6 exponential bound ceil(1 * (1/0.25)^{6} * ln((1/0.25)^{6} / 0.05)) = 46341."
+  },
+  "metrics": [
+    "amari_mean",
+    "amari_trials",
+    "skipped_bucket_counts",
+    "N_needed_per_d_Z",
+    "fitted_exponent_b",
+    "escape_ratio"
+  ],
+  "grid": {
+    "d_Z_values": [2, 4, 6],
+    "N_values": [200, 500, 1000, 2000, 5000, 10000],
+    "auxiliary_K_formula": "K = 2 * d_Z",
+    "trials_per_grid_point": 8,
+    "final_amari_target": 0.10,
+    "poly_amari_target": 0.15,
+    "poly_exponent_max": 4.0,
+    "monotone_tolerance": 0.02,
+    "min_bucket_abs": 10,
+    "offset_min": -3.0,
+    "offset_max": 3.0,
+    "theorem6_D_Z_upper": 1.0,
+    "theorem6_eps": 0.25,
+    "theorem6_eps_rel": 0.05,
+    "theorem6_c": 1.0,
+    "escape_d_Z": 6,
+    "escape_factor_min": 5.0
+  },
+  "controls": [
+    "deterministic_from_base_seed",
+    "nested_prefix_sampling_within_trial",
+    "averaging_over_eight_trials_smooths_finite_sample_noise",
+    "amari_of_identity_and_signed_permutation_is_zero",
+    "skipped_bucket_count_logged_per_grid_point"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": 0,
+    "sampling": "Per (d_Z, trial) draw once: (i) K = 2 * d_Z per-u offset vectors from Uniform([-3, 3])^{d_Z}; (ii) a Haar-orthogonal mixing A via signed QR of a Gaussian; (iii) an auxiliary stream us of length max(N_VALUES) with us_i uniform in {0, ..., K-1}; (iv) Laplace(0, 1) noise of shape (max(N_VALUES), d_Z). The full latent stream is Z = noise + offsets[us]; observations X = Z * A^T. Every smaller N re-uses the first N samples as a prefix of the max-N draw. Per-conditional fit: sklearn FastICA(parallel, logcosh, whiten='unit-variance', max_iter=2000, tol=1e-6, random_state=trial*1000+u); u-buckets with fewer than max(2*d_Z, 10) samples are skipped and counted per (d_Z, N, trial). SeedSequence keyed by [BASE_SEED=0, d_Z, trial].",
+    "raw_data": false
+  }
+}

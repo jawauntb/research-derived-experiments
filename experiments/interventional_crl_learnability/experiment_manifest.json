@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "interventional_crl_learnability",
+  "hypothesis": "Under the interventional-causal-representation-learning inductive-bias class (Ahuja--Mahajan--Wang--Bengio 2022; Squires et al. 2023): latent Z with independent Laplace(0, 1) marginals plus d_Z single-node intervention environments (env i intervenes on Z_i as Laplace(mu_i, 0.5), other Z_j Laplace(0, 1)); nonlinear mixing X = W2 tanh(0.5 W1 Z) with W1, W2 Haar-orthogonal; simplified interventional-CRL algorithm (per-environment sklearn FastICA, mean-shift-max row alignment) achieves environment-consistency Amari index <= 0.20 at N_per_env = 10000 for every d_Z in {2, 3, 4}; environment-split strictly beats the pooled-no-environment FastICA control by more than 0.005 at every d_Z; the Amari(N_per_env) curve is nonincreasing modulo 0.03 at every d_Z; the smallest N_per_env reaching Amari <= 0.30 grows polynomially in d_Z with fitted log-log slope b <= 5.0. This is the interventional-CRL sibling of instruments 8 (linear ICA), 9 (sparse ICA / IMA), and 10 (iVAE) --- a fourth partial positive resolution of SIC-C-c.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "deterministic_from_base_seed",
+      "description": "All randomness derives from BASE_SEED = 0 via numpy SeedSequence keyed by (BASE_SEED, d_Z, trial); sklearn FastICA random_state = trial. Running twice yields identical Amari values at every grid point."
+    },
+    {
+      "control_id": "nested_prefix_sampling_within_trial",
+      "description": "Within each (d_Z, trial) pair, per-environment latents Z and observations X are drawn at max(N_per_env_values) and every smaller N_per_env reuses the first N_per_env rows as a prefix per environment, so the sample-complexity curve varies only in N_per_env."
+    },
+    {
+      "control_id": "averaging_over_four_trials_smooths_finite_sample_noise",
+      "description": "Amari is averaged over TRIALS = 4 independent (W1, W2, mu, Z, X) draws per grid point; finite-sample FastICA variance and alignment-heuristic noise are smoothed enough that monotonicity holds within a 0.03 tolerance."
+    },
+    {
+      "control_id": "amari_of_identity_and_signed_permutation_is_zero",
+      "description": "The Amari index is verified in the unit tests to be exactly 0 on the identity matrix and on any signed permutation matrix (the identifiability class), and > 0.5 on the all-ones mixture."
+    },
+    {
+      "control_id": "pooled_no_environment_control",
+      "description": "Every grid point also computes a pooled-Amari: fit a single FastICA on np.concatenate of every environment's X (ignoring the environment label). The 'environment-split helps' gate requires split_amari - pool_amari < -0.005 at N_per_env = 10000, so a spurious improvement from just having more data cannot pass on its own."
+    }
+  ],
+  "seeds": [
+    0
+  ],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python3",
+      "experiments/interventional_crl_learnability/experiment.py"
+    ],
+    "estimated_minutes": 5,
+    "max_cost_usd": 0
+  },
+  "dependencies": [
+    {"name": "numpy", "version": "==2.5.1"},
+    {"name": "scikit-learn", "version": "==1.9.0"}
+  ],
+  "gates": [
+    {
+      "gate_id": "ICRL_CONVERGES_AT_LARGEST_N",
+      "criterion": "Averaged environment-consistency Amari at N_per_env = 10000 is <= 0.20 for every d_Z in {2, 3, 4}."
+    },
+    {
+      "gate_id": "ICRL_ENVIRONMENT_SPLIT_HELPS",
+      "criterion": "At N_per_env = 10000, environment-split Amari minus pooled-control Amari is < -0.005 for every d_Z in {2, 3, 4}."
+    },
+    {
+      "gate_id": "ICRL_MONOTONE_IN_N_AT_EVERY_D_Z",
+      "criterion": "For every d_Z in {2, 3, 4}, the averaged environment-split Amari curve is nonincreasing in N_per_env modulo a numerical tolerance of 0.03."
+    },
+    {
+      "gate_id": "ICRL_POLYNOMIAL_IN_D_Z",
+      "criterion": "For every d_Z in {2, 3, 4} there is a smallest N_per_env reaching averaged environment-split Amari <= 0.30; the fitted log-log slope b of log(N_needed) = a + b log(d_Z) is <= 5.0."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/interventional_crl_learnability/results/interventional_crl_learnability_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/interventional_crl_learnability/preregistration.json",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

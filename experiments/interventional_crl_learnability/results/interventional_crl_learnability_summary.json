@@ -1,0 +1,322 @@
+{
+  "N_per_env_values": [
+    500,
+    1000,
+    2000,
+    5000,
+    10000
+  ],
+  "amari_thresholds": {
+    "final_amari_target": 0.2,
+    "poly_amari_target": 0.3,
+    "split_helps_tol": 0.005
+  },
+  "base_seed": 0,
+  "d_Z_values": [
+    2,
+    3,
+    4
+  ],
+  "gates": {
+    "ICRL_CONVERGES_AT_LARGEST_N": true,
+    "ICRL_ENVIRONMENT_SPLIT_HELPS": true,
+    "ICRL_MONOTONE_IN_N_AT_EVERY_D_Z": true,
+    "ICRL_POLYNOMIAL_IN_D_Z": true
+  },
+  "intervention": {
+    "mu_max": 2.0,
+    "mu_min": -2.0,
+    "sigma": 0.5
+  },
+  "monotone_tolerance": 0.03,
+  "nonlinear_activation_scale": 0.5,
+  "poly_exponent_gate": {
+    "N_needed_per_d_Z": {
+      "2": 500,
+      "3": 500,
+      "4": 500
+    },
+    "exponent_gate_max": 5.0,
+    "fitted_exponent_b": -0.0,
+    "target_amari": 0.3
+  },
+  "split_vs_pool_delta_at_N_max": {
+    "2": -0.117728,
+    "3": -0.186158,
+    "4": -0.362269
+  },
+  "status": "pass",
+  "sweep_points": [
+    {
+      "d_z": 2,
+      "n_per_env": 500,
+      "pool_amari_mean": 0.451092,
+      "pool_amari_trials": [
+        0.190672,
+        0.395527,
+        0.325789,
+        0.89238
+      ],
+      "split_amari_mean": 0.148963,
+      "split_amari_trials": [
+        0.391164,
+        0.093471,
+        0.066813,
+        0.044404
+      ]
+    },
+    {
+      "d_z": 2,
+      "n_per_env": 1000,
+      "pool_amari_mean": 0.504327,
+      "pool_amari_trials": [
+        0.157052,
+        0.39534,
+        0.962895,
+        0.50202
+      ],
+      "split_amari_mean": 0.094636,
+      "split_amari_trials": [
+        0.110396,
+        0.143235,
+        0.040672,
+        0.084242
+      ]
+    },
+    {
+      "d_z": 2,
+      "n_per_env": 2000,
+      "pool_amari_mean": 0.244021,
+      "pool_amari_trials": [
+        0.21506,
+        0.411337,
+        0.310074,
+        0.039614
+      ],
+      "split_amari_mean": 0.065994,
+      "split_amari_trials": [
+        0.088687,
+        0.101736,
+        0.021861,
+        0.05169
+      ]
+    },
+    {
+      "d_z": 2,
+      "n_per_env": 5000,
+      "pool_amari_mean": 0.303872,
+      "pool_amari_trials": [
+        0.155889,
+        0.430029,
+        0.589035,
+        0.040535
+      ],
+      "split_amari_mean": 0.055838,
+      "split_amari_trials": [
+        0.088969,
+        0.110229,
+        0.010698,
+        0.013457
+      ]
+    },
+    {
+      "d_z": 2,
+      "n_per_env": 10000,
+      "pool_amari_mean": 0.171332,
+      "pool_amari_trials": [
+        0.154392,
+        0.428668,
+        0.063021,
+        0.039247
+      ],
+      "split_amari_mean": 0.053604,
+      "split_amari_trials": [
+        0.08967,
+        0.103867,
+        0.00799,
+        0.012888
+      ]
+    },
+    {
+      "d_z": 3,
+      "n_per_env": 500,
+      "pool_amari_mean": 0.265346,
+      "pool_amari_trials": [
+        0.194409,
+        0.143886,
+        0.18792,
+        0.535168
+      ],
+      "split_amari_mean": 0.071797,
+      "split_amari_trials": [
+        0.025277,
+        0.133478,
+        0.098152,
+        0.030281
+      ]
+    },
+    {
+      "d_z": 3,
+      "n_per_env": 1000,
+      "pool_amari_mean": 0.429873,
+      "pool_amari_trials": [
+        0.495145,
+        0.111559,
+        0.570905,
+        0.541884
+      ],
+      "split_amari_mean": 0.082805,
+      "split_amari_trials": [
+        0.054384,
+        0.113966,
+        0.09665,
+        0.066221
+      ]
+    },
+    {
+      "d_z": 3,
+      "n_per_env": 2000,
+      "pool_amari_mean": 0.250114,
+      "pool_amari_trials": [
+        0.244355,
+        0.109255,
+        0.113439,
+        0.533408
+      ],
+      "split_amari_mean": 0.085736,
+      "split_amari_trials": [
+        0.050534,
+        0.109604,
+        0.12502,
+        0.057788
+      ]
+    },
+    {
+      "d_z": 3,
+      "n_per_env": 5000,
+      "pool_amari_mean": 0.447153,
+      "pool_amari_trials": [
+        0.567544,
+        0.118081,
+        0.57145,
+        0.531537
+      ],
+      "split_amari_mean": 0.102376,
+      "split_amari_trials": [
+        0.036807,
+        0.182261,
+        0.149211,
+        0.041226
+      ]
+    },
+    {
+      "d_z": 3,
+      "n_per_env": 10000,
+      "pool_amari_mean": 0.268445,
+      "pool_amari_trials": [
+        0.254523,
+        0.118427,
+        0.169707,
+        0.531124
+      ],
+      "split_amari_mean": 0.082287,
+      "split_amari_trials": [
+        0.044888,
+        0.158447,
+        0.078835,
+        0.046979
+      ]
+    },
+    {
+      "d_z": 4,
+      "n_per_env": 500,
+      "pool_amari_mean": 0.405967,
+      "pool_amari_trials": [
+        0.431154,
+        0.354537,
+        0.327665,
+        0.510515
+      ],
+      "split_amari_mean": 0.100629,
+      "split_amari_trials": [
+        0.044055,
+        0.073,
+        0.159828,
+        0.125633
+      ]
+    },
+    {
+      "d_z": 4,
+      "n_per_env": 1000,
+      "pool_amari_mean": 0.410628,
+      "pool_amari_trials": [
+        0.31298,
+        0.340754,
+        0.479791,
+        0.508988
+      ],
+      "split_amari_mean": 0.10029,
+      "split_amari_trials": [
+        0.057686,
+        0.076112,
+        0.19001,
+        0.077352
+      ]
+    },
+    {
+      "d_z": 4,
+      "n_per_env": 2000,
+      "pool_amari_mean": 0.338429,
+      "pool_amari_trials": [
+        0.123274,
+        0.338903,
+        0.384477,
+        0.507059
+      ],
+      "split_amari_mean": 0.056564,
+      "split_amari_trials": [
+        0.042497,
+        0.056098,
+        0.058142,
+        0.069519
+      ]
+    },
+    {
+      "d_z": 4,
+      "n_per_env": 5000,
+      "pool_amari_mean": 0.318023,
+      "pool_amari_trials": [
+        0.211283,
+        0.337908,
+        0.211833,
+        0.511071
+      ],
+      "split_amari_mean": 0.057226,
+      "split_amari_trials": [
+        0.042598,
+        0.066963,
+        0.041833,
+        0.07751
+      ]
+    },
+    {
+      "d_z": 4,
+      "n_per_env": 10000,
+      "pool_amari_mean": 0.426204,
+      "pool_amari_trials": [
+        0.42264,
+        0.336839,
+        0.439877,
+        0.505459
+      ],
+      "split_amari_mean": 0.063935,
+      "split_amari_trials": [
+        0.053711,
+        0.06813,
+        0.068401,
+        0.065499
+      ]
+    }
+  ],
+  "trials_per_grid_point": 4
+}

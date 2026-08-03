@@ -1,0 +1,36 @@
+{
+  "experiment_id": "compiler_tomography_pair",
+  "schema_version": "1.0",
+  "hypothesis": "For the concern-parameterised compiler family on the 4-bit Boolean world with hypothesis grid theta in {-1,-0.5,0,0.5,1}^2 and true theta*=(0,0), (a) MDL over the grid recovers theta* with probability >= 0.95 by N=2000 paired samples averaged over 100 seeds (Theorem CT-1); (b) under the Boltzmann ecology update K_{t+1} proportional to K_t * exp(beta * r) with reward r(x)=x_0+x_2 in {0,1,2}, expected reward per fiber is monotone non-decreasing over 20 steps at every beta in {0.1, 1.0, 4.0}, and converges within 0.05 of the fiber argmax at beta=4.0 (Theorem CT-2).",
+  "primary_metric": "ct1.per_N[-1].recovery_rate",
+  "gates": {
+    "CTP_CT1_LARGEST_N_RECOVERS_TRUE_THETA_AT_0P95": "At N=2000, empirical recovery rate of MDL for theta* over 100 seeds is at least 0.95.",
+    "CTP_CT1_RECOVERY_BROADLY_MONOTONE_IN_N": "Recovery rate is broadly non-decreasing across the N-grid (allowing 0.15 wiggle for finite-seed noise).",
+    "CTP_CT2_EXPECTED_REWARD_MONOTONE_AT_EVERY_BETA": "At every beta in {0.1, 1.0, 4.0} and every fiber z, expected reward under K_t is non-decreasing in t across 20 steps.",
+    "CTP_CT2_LARGE_BETA_CONVERGES_TO_FIBER_ARGMAX": "At beta=4.0 after 20 steps, expected reward on every fiber is within 0.05 of the fiber's argmax reward."
+  },
+  "metrics": [
+    "recovery_rate",
+    "expected_reward_per_fiber",
+    "max_possible_reward_per_fiber",
+    "monotone_at_all_z",
+    "converged_to_argmax_if_large_beta"
+  ],
+  "n_theta_candidates": 25,
+  "n_values": [50, 100, 200, 500, 1000, 2000],
+  "n_seeds": 100,
+  "beta_values": [0.1, 1.0, 4.0],
+  "n_steps": 20,
+  "controls": [
+    "grid_contains_true_theta_at_origin",
+    "sampling_deterministic_under_mulberry32_seed",
+    "ecology_step_preserves_probability_normalisation",
+    "monotone_check_at_every_step_and_fiber"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": null,
+    "sampling": "seeded Mulberry32 pseudo-random for CT-1 (100 seeds x 6 N-values); exact iteration for CT-2 (no randomness).",
+    "raw_data": false
+  }
+}

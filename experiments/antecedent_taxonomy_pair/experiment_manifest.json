@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "antecedent_taxonomy_pair",
+  "hypothesis": "Theorem SA-1 predicts that four canonical inductive-bias regimes each satisfy local-separation and cross-u coherence on the 4-bit Boolean world; the finest common refinement of each antecedent's local screens equals the true Z-partition.",
+  "claim_tier": "theoretical",
+  "controls": [
+    { "control_id": "true_z_partition_from_direct_latent_map", "description": "The reference partition Z is computed directly from the ground-truth latent map latent_z(x) = (x_0 ^ x_1, x_2 ^ x_3), independent of any candidate quotient." },
+    { "control_id": "partition_intersection_is_finest_common_refinement", "description": "The partition_intersection helper labels each world by the tuple of block indices across all input partitions and groups by that label; verified by construction to be the finest common refinement." },
+    { "control_id": "partition_refines_reflexive_on_self", "description": "partition_refines(P, P) returns True for every non-trivial P — a sanity check on the refinement predicate." }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/antecedent_taxonomy_pair/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    { "gate_id": "ATP_SA1_LOCAL_SEPARATION_AT_EVERY_ANTECEDENT", "criterion": "Every local screen for every antecedent is a non-trivial partition of X (2 <= |blocks| <= |X| - 1)." },
+    { "gate_id": "ATP_SA1_CROSS_U_INTERSECTION_REFINES_TRUE_Z", "criterion": "The finest common refinement of each antecedent's local screens refines the true Z-partition." },
+    { "gate_id": "ATP_SA1_NONTRIVIAL_INTERSECTIONS_EQUAL_TRUE_Z", "criterion": "For LinearICA, SparseLinearICA, and AuxIVAE, the intersection is exactly the Z-partition." },
+    { "gate_id": "ATP_SA1_INTERVENTIONAL_INTERSECTION_REFINES_TRUE_Z", "criterion": "For InterventionalCRL, the intersection refines the Z-partition." }
+  ],
+  "artifacts": [
+    { "kind": "summary", "path": "experiments/antecedent_taxonomy_pair/results/antecedent_taxonomy_pair_summary.json", "public": true },
+    { "kind": "other", "path": "experiments/antecedent_taxonomy_pair/preregistration.json", "public": true }
+  ],
+  "status": "accepted"
+}

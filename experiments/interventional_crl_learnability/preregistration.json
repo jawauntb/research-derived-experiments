@@ -1,0 +1,48 @@
+{
+  "experiment_id": "interventional_crl_learnability",
+  "schema_version": "1.0",
+  "hypothesis": "SIC-C-c asks whether restricting to a specific inductive-bias hypothesis class can restore uniform polynomial-in-d_Z sample complexity for the continuous-case learnability problem of paper section 2.5b (Theorem 6). Instruments 8, 9, and 10 answered yes for the linear-ICA, sparse-ICA / IMA, and iVAE classes. This instrument (interventional CRL, Ahuja--Mahajan--Wang--Bengio 2022; Squires et al. 2023) does the same for the interventional-causal-representation-learning class. Setup: latent Z with independent Laplace(0, 1) marginals under environment E = 0 (observational); for each i in {1, ..., d_Z}, environment E = i intervenes on Z_i by drawing it from Laplace(mu_i, 0.5) with the other Z_j (j != i) still Laplace(0, 1), where mu_i is drawn once per (seed, d_Z) uniformly on [-2, 2]. Nonlinear mixing X = W2 tanh(alpha W1 Z) with alpha = 0.5 and W1, W2 Haar-orthogonal via signed QR. Algorithm (simplified interventional CRL): fit sklearn FastICA per environment; align each intervention environment's unmixing by the mean-shift-max row heuristic (the row whose distribution shifts most between E = 0 and E = i is identified as recovering Z_i), stack d_Z aligned rows into a d_Z x d_Z environment-consistency unmixing; score by Amari(W_aligned @ A_linear) with A_linear = W2 @ W1 (the Jacobian of the MLP at Z = 0). Pooled control: fit FastICA on pooled X ignoring E; score by Amari(W_pool @ A_linear). Predictions: (a) environment-split Amari <= 0.20 at N_per_env = 10000 for every d_Z in {2, 3, 4}; (b) at N_per_env = 10000 the environment-split Amari is strictly less (by more than 0.005) than the pooled control for every d_Z; (c) at every d_Z the environment-split Amari(N_per_env) curve is nonincreasing modulo a 0.03 wobble; (d) log(N_per_env_needed) = a + b log(d_Z) fitted at target Amari 0.30 has slope b <= 5.0.",
+  "primary_metric": "sweep_points[i].split_amari_mean",
+  "gates": {
+    "ICRL_CONVERGES_AT_LARGEST_N": "At N_per_env = 10000, the environment-consistency Amari averaged over 4 trials is <= 0.20 for every d_Z in {2, 3, 4}.",
+    "ICRL_ENVIRONMENT_SPLIT_HELPS": "At N_per_env = 10000, environment-split Amari minus pooled-control Amari is < -0.005 for every d_Z in {2, 3, 4} (splitting by intervention environment strictly helps identifiability).",
+    "ICRL_MONOTONE_IN_N_AT_EVERY_D_Z": "For every d_Z in {2, 3, 4} the averaged environment-split Amari curve is nonincreasing in N_per_env modulo a numerical tolerance of 0.03.",
+    "ICRL_POLYNOMIAL_IN_D_Z": "For every d_Z in {2, 3, 4} there is a smallest N_per_env in the sweep {500, 1000, 2000, 5000, 10000} with averaged environment-split Amari <= 0.30; the linear regression log(N_needed(d_Z)) = a + b log(d_Z) has fitted slope b <= 5.0."
+  },
+  "metrics": [
+    "split_amari_mean",
+    "split_amari_trials",
+    "pool_amari_mean",
+    "pool_amari_trials",
+    "split_vs_pool_delta_at_N_max",
+    "N_needed_per_d_Z",
+    "fitted_exponent_b"
+  ],
+  "grid": {
+    "d_Z_values": [2, 3, 4],
+    "N_per_env_values": [500, 1000, 2000, 5000, 10000],
+    "trials_per_grid_point": 4,
+    "final_amari_target": 0.20,
+    "poly_amari_target": 0.30,
+    "poly_exponent_max": 5.0,
+    "monotone_tolerance": 0.03,
+    "split_helps_tolerance": 0.005,
+    "intervention_sigma": 0.5,
+    "intervention_mu_min": -2.0,
+    "intervention_mu_max": 2.0,
+    "nonlinear_activation_scale": 0.5
+  },
+  "controls": [
+    "deterministic_from_base_seed",
+    "nested_prefix_sampling_within_trial",
+    "averaging_over_four_trials_smooths_finite_sample_noise",
+    "amari_of_identity_and_signed_permutation_is_zero",
+    "pooled_no_environment_control"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": 0,
+    "sampling": "Per (d_Z, trial) draw two Haar-orthogonal d_Z x d_Z matrices W1, W2 via signed QR of independent Gaussians and per-component intervention offsets mu in [-2, 2]^{d_Z}; sample d_Z + 1 environments of Laplace latents (env 0 observational Laplace(0, 1); env i intervenes on Z_i with Laplace(mu[i - 1], 0.5)); form X = W2 tanh(0.5 W1 Z); every smaller N_per_env reuses the first N_per_env rows of the max(N_per_env_values) draw per environment. Environment-split: sklearn FastICA(parallel, logcosh, whiten='unit-variance', max_iter=2000, tol=1e-6, random_state=trial) per environment; row alignment by max |mean(W_i X_i) - mean(W_i X_0)| per row. Pooled control: same FastICA on np.concatenate of every environment's X. SeedSequence keyed by [BASE_SEED=0, d_Z, trial].",
+    "raw_data": false
+  }
+}

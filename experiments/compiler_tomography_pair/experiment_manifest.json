@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "compiler_tomography_pair",
+  "hypothesis": "MDL over a 25-point concern-parameter grid consistently recovers the true compiler theta*=(0,0) at N=2000 paired samples with recovery rate >= 0.95 (Theorem CT-1), and the Boltzmann ecology update K_{t+1} proportional to K_t exp(beta r) is monotone non-decreasing in expected reward at every beta in {0.1, 1.0, 4.0} and converges to the fiber argmax at beta=4.0 (Theorem CT-2), on the 4-bit Boolean world of Instrument 4.",
+  "claim_tier": "theoretical",
+  "controls": [
+    { "control_id": "grid_contains_true_theta_at_origin", "description": "The 5x5 concern grid contains theta*=(0,0), so MDL is not forced to pick a nearest-approximation." },
+    { "control_id": "sampling_deterministic_under_mulberry32_seed", "description": "All (s, x) sampling for CT-1 uses a seeded Mulberry32 PRNG; recovery rate is exact under the seed sequence." },
+    { "control_id": "ecology_step_preserves_probability_normalisation", "description": "Boltzmann update K_{t+1}(x|s) is normalised to sum 1 on every fiber; asserted in tests." },
+    { "control_id": "monotone_check_at_every_step_and_fiber", "description": "Reward monotonicity is checked at every t in 0..19 and every z in Z; failure at any one point flips the gate." }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/compiler_tomography_pair/experiment.py"],
+    "estimated_minutes": 3,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    { "gate_id": "CTP_CT1_LARGEST_N_RECOVERS_TRUE_THETA_AT_0P95", "criterion": "MDL over the 25-point concern-parameter grid recovers theta*=(0,0) with rate >= 0.95 at N=2000 across 100 seeds." },
+    { "gate_id": "CTP_CT1_RECOVERY_BROADLY_MONOTONE_IN_N", "criterion": "Recovery rate is non-decreasing across N in {50, 100, 200, 500, 1000, 2000} up to 0.15 finite-seed slack." },
+    { "gate_id": "CTP_CT2_EXPECTED_REWARD_MONOTONE_AT_EVERY_BETA", "criterion": "Expected reward per fiber is non-decreasing in t across 20 Boltzmann steps at every beta in {0.1, 1.0, 4.0}." },
+    { "gate_id": "CTP_CT2_LARGE_BETA_CONVERGES_TO_FIBER_ARGMAX", "criterion": "At beta=4.0 after 20 steps, expected reward is within 0.05 of the fiber argmax on every z." }
+  ],
+  "artifacts": [
+    { "kind": "summary", "path": "experiments/compiler_tomography_pair/results/compiler_tomography_pair_summary.json", "public": true },
+    { "kind": "other", "path": "experiments/compiler_tomography_pair/preregistration.json", "public": true }
+  ],
+  "status": "accepted"
+}

@@ -1,0 +1,66 @@
+{
+  "gates": {
+    "sa1_cross_u_intersection_refines_true_Z": true,
+    "sa1_interventional_intersection_refines_true_Z": true,
+    "sa1_local_separation_at_every_antecedent": true,
+    "sa1_nontrivial_intersections_equal_true_Z": true
+  },
+  "records": [
+    {
+      "cross_u_coherence_holds": true,
+      "intersection_block_count": 4,
+      "intersection_equals_true_Z": true,
+      "intersection_refines_true_Z": true,
+      "local_screen_block_counts": [
+        4
+      ],
+      "local_separation_holds": true,
+      "name": "LinearICA",
+      "num_local_screens": 1,
+      "true_Z_block_count": 4
+    },
+    {
+      "cross_u_coherence_holds": true,
+      "intersection_block_count": 4,
+      "intersection_equals_true_Z": true,
+      "intersection_refines_true_Z": true,
+      "local_screen_block_counts": [
+        4
+      ],
+      "local_separation_holds": true,
+      "name": "SparseLinearICA",
+      "num_local_screens": 1,
+      "true_Z_block_count": 4
+    },
+    {
+      "cross_u_coherence_holds": true,
+      "intersection_block_count": 4,
+      "intersection_equals_true_Z": true,
+      "intersection_refines_true_Z": true,
+      "local_screen_block_counts": [
+        2,
+        2
+      ],
+      "local_separation_holds": true,
+      "name": "AuxIVAE",
+      "num_local_screens": 2,
+      "true_Z_block_count": 4
+    },
+    {
+      "cross_u_coherence_holds": true,
+      "intersection_block_count": 4,
+      "intersection_equals_true_Z": true,
+      "intersection_refines_true_Z": true,
+      "local_screen_block_counts": [
+        4,
+        2,
+        2
+      ],
+      "local_separation_holds": true,
+      "name": "InterventionalCRL",
+      "num_local_screens": 3,
+      "true_Z_block_count": 4
+    }
+  ],
+  "status": "pass"
+}

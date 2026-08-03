@@ -160,7 +160,7 @@ factorisation the theorems permit is:
 - **SIC-C-b (learnability, continuous at resolution ε):** Theorem 6.
   *Theorem; polynomial in `1/ε` at fixed `d_Z`, provably exponential in `d_Z`
   at fixed `ε` (Instrument 6).*
-- **SIC-C-c (uniform polynomial in `d_Z` under inductive bias):** Open in
+- **SIC-C-c (uniform polynomial in `d_Z` under inductive bias):** *Positively resolved for four distinct hypothesis classes* — linear ICA, sparse-linear ICA, auxiliary-variable iVAE, interventional CRL (Instruments 8–11 in the paper). The companion paper *Sufficient Antecedents for Cross-Task Stability* (Theorem SA-1) shows these four are a taxonomy of *ways of populating Theorem 4's Markov-screen antecedent*, and gives the general form: local separation on an auxiliary `u` + cross-`u` coherence intersecting to a unique quotient class. Open only in the sense that new hypothesis classes (nonlinear IMA, contrastive-learning identifiability, etc.) can populate additional rows.
   general; theorem for specific hypothesis classes in the identifiable-
   representation-learning line — not proved here.
 

@@ -158,17 +158,28 @@ function renderRateDistortionPair(section, data) {
         `${source.source}: source entropy H = ${source.source_entropy_bits.toFixed(4)} bits · D_max = ${source.d_max.toFixed(4)}`,
       ])
     );
-    const rows = source.curve.map((pt) => [
-      { text: pt.D.toFixed(2), cls: "num" },
-      { text: pt.R.toFixed(4), cls: "num" },
-      {
-        node: pill(
-          pt.test_channel_MI.toFixed(4),
-          pt.D < source.d_max && Math.abs(pt.test_channel_MI - pt.R) < 1e-9 ? "yes" : (pt.D >= source.d_max ? "gold" : "no")
-        ),
-      },
-    ]);
+    const rows = source.curve.map((pt) => {
+      const beyondDmax = pt.D >= source.d_max;
+      const miClamped = beyondDmax ? "—" : pt.test_channel_MI.toFixed(4);
+      const kind = beyondDmax
+        ? "gold"
+        : Math.abs(pt.test_channel_MI - pt.R) < 1e-9
+          ? "yes"
+          : "no";
+      return [
+        { text: pt.D.toFixed(2), cls: "num" },
+        { text: pt.R.toFixed(4), cls: "num" },
+        {
+          node: pill(miClamped, kind),
+        },
+      ];
+    });
     body.appendChild(table(["D", "R(D)  [bits]", "I(X; X̂) via test channel"], rows));
+    body.appendChild(
+      el("p", { class: "status" }, [
+        "Note: the test-channel formula produces spurious values for D > D_max (the channel is not the RD-optimal one there). Those rows show '—' to avoid the misleading negative mutual-information display; only 0 <= D < D_max is meaningful.",
+      ])
+    );
   }
 }
 
@@ -679,6 +690,337 @@ function attachInteractiveViz(data) {
   if (i7) {
     mountRDViz(i7, data.rate_distortion_pair);
   }
+
+  // Instrument 2 (structure_compiler): timeline scrubber across 4 embodiments.
+  const i2 = document.getElementById("structure_compiler");
+  if (i2) {
+    mountStructureCompilerViz(i2, data.structure_compiler);
+  }
+
+  // Instrument 8 (linear ICA): Amari heat-grid.
+  const i8 = document.getElementById("linear_ica_learnability");
+  if (i8) {
+    mountIcaHeatViz(i8, data.linear_ica_learnability, { title: "Amari at each (d_Z, N)" });
+  }
+
+  // Instrument 9 (sparse ICA): Amari heat-grid faceted by sparsity.
+  const i9 = document.getElementById("sparse_ica_learnability");
+  if (i9) {
+    mountSparseIcaHeatViz(i9, data.sparse_ica_learnability);
+  }
+
+  // Instrument 10 (iVAE): Amari heat-grid.
+  const i10 = document.getElementById("ivae_learnability");
+  if (i10) {
+    mountIcaHeatViz(i10, data.ivae_learnability, { title: "iVAE Amari at each (d_Z, N)" });
+  }
+
+  // Instrument 11 (Interventional CRL): Amari heat-grid.
+  const i11 = document.getElementById("interventional_crl_learnability");
+  if (i11) {
+    mountIcaHeatViz(i11, data.interventional_crl_learnability, {
+      title: "Interv-CRL Amari at each (d_Z, N_per_env)",
+    });
+  }
+
+  // Companion instrument: compiler_tomography_pair (MDL recovery curve + ecology).
+  const iCT = document.getElementById("compiler_tomography_pair");
+  if (iCT) {
+    mountCompilerTomographyViz(iCT, data.compiler_tomography_pair);
+  }
+}
+
+// ---- Instrument 2 viz: timeline scrubber for the abstract trajectory ----
+function mountStructureCompilerViz(section, data) {
+  const container = el("div", { class: "viz" }, [
+    el("h4", {}, ["Interactive: scrub time — watch all four embodiments in sync"]),
+  ]);
+  section.appendChild(container);
+  const trajectory = data.abstract_trajectory || [];
+  const T = trajectory.length;
+  const width = 380, height = 220;
+  const { canvas, ctx } = makeCanvas(width, height);
+  container.appendChild(canvas);
+  let t = 0;
+  let playing = false;
+  let rafId = null;
+
+  function drawRow(row, y, height_px, colorFn, labelFn) {
+    const cellW = (width - 40) / T;
+    for (let i = 0; i < T; i++) {
+      const cx = 20 + i * cellW;
+      ctx.fillStyle = colorFn(trajectory[i], i);
+      ctx.fillRect(cx, y, cellW - 2, height_px);
+      if (i === t) {
+        ctx.strokeStyle = "#f2c14e";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(cx - 1, y - 1, cellW, height_px + 2);
+      }
+      if (labelFn) {
+        ctx.fillStyle = INK;
+        ctx.font = "9px ui-monospace, monospace";
+        ctx.fillText(labelFn(trajectory[i]), cx + 1, y + height_px - 2);
+      }
+    }
+  }
+
+  function draw() {
+    ctx.fillStyle = AMBIENT;
+    ctx.fillRect(0, 0, width, height);
+    ctx.fillStyle = MUTED;
+    ctx.font = "11px ui-monospace, monospace";
+    ctx.fillText("regime", 20, 24);
+    drawRow(null, 30, 28, (n) => n.regime === "high" ? "#f2c14e" : "#6ea8fe");
+    ctx.fillText("level", 20, 74);
+    drawRow(null, 80, 28, (n) => {
+      const s = 60 + Math.floor(n.level * 15);
+      return `rgb(${s}, ${s + 40}, ${s + 60})`;
+    });
+    ctx.fillText("music (pitch)", 20, 124);
+    drawRow(null, 130, 28, (n) => {
+      const s = 40 + Math.floor(n.level * 18);
+      return `rgb(${s + 60}, ${s}, ${s + 30})`;
+    });
+    ctx.fillText("spatial (x)", 20, 174);
+    drawRow(null, 180, 28, (n) => {
+      const px = n.level * 25;
+      return `rgb(${40 + px}, ${100 + px}, ${40})`;
+    });
+    // Current step numbers under all rows:
+    ctx.fillStyle = INK;
+    ctx.font = "12px ui-monospace, monospace";
+    const step = trajectory[t] || {};
+    ctx.fillText(`t=${t}: regime=${step.regime || "?"}, level=${step.level || "?"}`, 20, height - 4);
+  }
+
+  const slider = makeSlider("time step", 0, T - 1, 0, (v) => { t = v; draw(); });
+  container.appendChild(slider);
+  const btn = document.createElement("button");
+  btn.className = "viz-btn";
+  btn.textContent = "▶ play";
+  btn.addEventListener("click", () => {
+    playing = !playing;
+    btn.textContent = playing ? "⏸ pause" : "▶ play";
+    if (playing) {
+      function step() {
+        if (!playing) return;
+        t = (t + 1) % T;
+        const sliderInput = slider.querySelector("input[type=range]");
+        if (sliderInput) sliderInput.value = String(t);
+        slider.querySelector(".viz-value").textContent = String(t);
+        draw();
+        rafId = setTimeout(step, 500);
+      }
+      step();
+    } else if (rafId) clearTimeout(rafId);
+  });
+  container.appendChild(btn);
+  draw();
+}
+
+// ---- Instruments 8/10/11 viz: (d_Z, N) Amari heat-grid ----
+function mountIcaHeatViz(section, data, opts) {
+  const title = (opts && opts.title) || "Amari at each (d_Z, N)";
+  const container = el("div", { class: "viz" }, [
+    el("h4", {}, [title]),
+  ]);
+  section.appendChild(container);
+  const dZs = data.d_Z_values || [];
+  const Ns = data.N_values || [];
+  const points = data.sweep_points || [];
+  const cellW = 44, cellH = 32, marginL = 60, marginT = 28;
+  const width = marginL + Ns.length * cellW + 20;
+  const height = marginT + dZs.length * cellH + 40;
+  const { canvas, ctx } = makeCanvas(width, height);
+  container.appendChild(canvas);
+  function amariColor(v) {
+    // Green (good, low Amari) → Gold → Red (bad, high Amari). Range [0, 0.15].
+    const clamp = Math.max(0, Math.min(0.15, v));
+    const t = clamp / 0.15;
+    if (t < 0.5) {
+      const s = t / 0.5;
+      const r = Math.round(63 + (242 - 63) * s);
+      const g = Math.round(178 + (193 - 178) * s);
+      const b = Math.round(127 + (78 - 127) * s);
+      return `rgb(${r},${g},${b})`;
+    } else {
+      const s = (t - 0.5) / 0.5;
+      const r = Math.round(242 + (224 - 242) * s);
+      const g = Math.round(193 + (82 - 193) * s);
+      const b = Math.round(78 + (91 - 78) * s);
+      return `rgb(${r},${g},${b})`;
+    }
+  }
+  ctx.fillStyle = AMBIENT;
+  ctx.fillRect(0, 0, width, height);
+  ctx.fillStyle = MUTED;
+  ctx.font = "10px ui-monospace, monospace";
+  Ns.forEach((n, i) => {
+    ctx.fillText(`${n}`, marginL + i * cellW + 4, marginT - 6);
+  });
+  dZs.forEach((d, r) => {
+    ctx.fillText(`d_Z=${d}`, 4, marginT + r * cellH + 20);
+    Ns.forEach((n, c) => {
+      const pt = points.find((p) => p.d_z === d && p.n === n);
+      const val = pt ? pt.amari_mean : null;
+      ctx.fillStyle = val === null ? "#22303d" : amariColor(val);
+      ctx.fillRect(marginL + c * cellW + 1, marginT + r * cellH + 1, cellW - 2, cellH - 2);
+      ctx.fillStyle = INK;
+      ctx.font = "10px ui-monospace, monospace";
+      if (val !== null) {
+        ctx.fillText(val.toFixed(3), marginL + c * cellW + 4, marginT + r * cellH + cellH / 2 + 4);
+      }
+    });
+  });
+  ctx.fillStyle = MUTED;
+  ctx.font = "10px ui-monospace, monospace";
+  ctx.fillText("→ N samples", marginL, height - 20);
+  ctx.fillText("green = low Amari (good) · gold = medium · red = high (bad)", marginL, height - 6);
+}
+
+function mountSparseIcaHeatViz(section, data) {
+  const container = el("div", { class: "viz" }, [
+    el("h4", {}, ["Interactive: Amari at each (d_Z, N) per sparsity level"]),
+  ]);
+  section.appendChild(container);
+  const sparsities = Array.from(new Set((data.sweep_points || []).map((p) => p.s ?? p.sparsity))).sort();
+  const dZs = data.d_Z_values || [];
+  const Ns = data.N_values || [];
+  const cellW = 42, cellH = 28, marginL = 60, marginT = 24;
+  const facetH = marginT + dZs.length * cellH + 24;
+  const width = marginL + Ns.length * cellW + 20;
+  const height = sparsities.length * (facetH + 8);
+  const { canvas, ctx } = makeCanvas(width, height);
+  container.appendChild(canvas);
+  function amariColor(v) {
+    const clamp = Math.max(0, Math.min(0.15, v));
+    const t = clamp / 0.15;
+    if (t < 0.5) {
+      const s = t / 0.5;
+      return `rgb(${Math.round(63 + 179 * s)},${Math.round(178 + 15 * s)},${Math.round(127 - 49 * s)})`;
+    } else {
+      const s = (t - 0.5) / 0.5;
+      return `rgb(${Math.round(242 - 18 * s)},${Math.round(193 - 111 * s)},${Math.round(78 + 13 * s)})`;
+    }
+  }
+  ctx.fillStyle = AMBIENT;
+  ctx.fillRect(0, 0, width, height);
+  sparsities.forEach((s, si) => {
+    const yOff = si * (facetH + 8);
+    ctx.fillStyle = INK;
+    ctx.font = "12px ui-monospace, monospace";
+    ctx.fillText(`s = ${s}`, 4, yOff + 14);
+    dZs.forEach((d, r) => {
+      ctx.fillStyle = MUTED;
+      ctx.font = "10px ui-monospace, monospace";
+      ctx.fillText(`d_Z=${d}`, 4, yOff + marginT + r * cellH + 18);
+      Ns.forEach((n, c) => {
+        const pt = (data.sweep_points || []).find(
+          (p) => (p.s ?? p.sparsity) === s && p.d_z === d && p.n === n
+        );
+        const val = pt ? pt.amari_mean : null;
+        ctx.fillStyle = val === null ? "#22303d" : amariColor(val);
+        ctx.fillRect(marginL + c * cellW + 1, yOff + marginT + r * cellH + 1, cellW - 2, cellH - 2);
+        ctx.fillStyle = INK;
+        ctx.font = "9px ui-monospace, monospace";
+        if (val !== null) {
+          ctx.fillText(val.toFixed(3), marginL + c * cellW + 3, yOff + marginT + r * cellH + cellH / 2 + 3);
+        }
+      });
+      if (r === 0) {
+        Ns.forEach((n, c) => {
+          ctx.fillStyle = MUTED;
+          ctx.font = "9px ui-monospace, monospace";
+          ctx.fillText(`${n}`, marginL + c * cellW + 4, yOff + marginT - 4);
+        });
+      }
+    });
+  });
+}
+
+// ---- Compiler-tomography viz: MDL recovery curve + ecology trajectories ----
+function mountCompilerTomographyViz(section, data) {
+  const container = el("div", { class: "viz" }, [
+    el("h4", {}, ["Interactive: MDL recovery curve + ecology reward trajectories"]),
+  ]);
+  section.appendChild(container);
+  const width = 380, height = 260;
+  const { canvas, ctx } = makeCanvas(width, height);
+  container.appendChild(canvas);
+  ctx.fillStyle = AMBIENT;
+  ctx.fillRect(0, 0, width, height);
+  const ct1 = data.ct1 || {};
+  const ct2 = data.ct2 || {};
+  const perN = ct1.per_N || [];
+  // MDL recovery curve (left half)
+  const plotW = 160, plotH = 200, x0 = 30, y0 = 20;
+  ctx.strokeStyle = MUTED;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(x0, y0);
+  ctx.lineTo(x0, y0 + plotH);
+  ctx.lineTo(x0 + plotW, y0 + plotH);
+  ctx.stroke();
+  if (perN.length) {
+    const maxN = Math.max(...perN.map((p) => p.N));
+    ctx.strokeStyle = "#f2c14e";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    perN.forEach((pt, i) => {
+      const x = x0 + (pt.N / maxN) * plotW;
+      const y = y0 + plotH - pt.recovery_rate * plotH;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    ctx.fillStyle = "#f2c14e";
+    perN.forEach((pt) => {
+      const x = x0 + (pt.N / maxN) * plotW;
+      const y = y0 + plotH - pt.recovery_rate * plotH;
+      ctx.beginPath();
+      ctx.arc(x, y, 3, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.fillStyle = INK;
+    ctx.font = "10px ui-monospace, monospace";
+    ctx.fillText("CT-1 MDL recovery", x0, y0 - 6);
+    ctx.fillText("1.0", x0 - 22, y0 + 4);
+    ctx.fillText("N", x0 + plotW - 8, y0 + plotH + 14);
+  }
+  // Ecology trajectories (right half): per-fibre expected reward vs t at beta=4
+  const perBeta = ct2.per_beta || [];
+  const beta4 = perBeta.find((b) => b.beta === 4.0) || perBeta[perBeta.length - 1];
+  if (beta4 && beta4.trajectory) {
+    const px0 = 220, py0 = 20, pW = 140, pH = 200;
+    ctx.strokeStyle = MUTED;
+    ctx.beginPath();
+    ctx.moveTo(px0, py0);
+    ctx.lineTo(px0, py0 + pH);
+    ctx.lineTo(px0 + pW, py0 + pH);
+    ctx.stroke();
+    ctx.fillStyle = INK;
+    ctx.font = "10px ui-monospace, monospace";
+    ctx.fillText(`CT-2 β=${beta4.beta}`, px0, py0 - 6);
+    ctx.fillText("2.0", px0 - 22, py0 + 4);
+    ctx.fillText("t", px0 + pW - 4, py0 + pH + 14);
+    const traj = beta4.trajectory;
+    const maxT = traj.length - 1;
+    const keys = traj.length ? Object.keys(traj[0].expected_reward_per_fiber) : [];
+    const cols = ["#e0525b", "#f2c14e", "#6ea8fe", "#3fb27f"];
+    keys.forEach((k, ki) => {
+      ctx.strokeStyle = cols[ki % cols.length];
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      traj.forEach((row, i) => {
+        const x = px0 + (i / maxT) * pW;
+        const val = row.expected_reward_per_fiber[k];
+        const y = py0 + pH - (val / 2.0) * pH;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+    });
+  }
 }
 
 // ---- Instrument 4 viz: click a quotient, see the partition ----
@@ -951,11 +1293,16 @@ function mountRDViz(section, data) {
       else ctx.lineTo(x, y);
     });
     ctx.stroke();
-    // Test channel MI dots (should overlap R(D) in achievable regime)
+    // Test channel MI dots (should overlap R(D) in achievable regime).
+    // Clamp: only draw a dot when D < d_max (test channel is only the
+    // RD-optimal one in that regime; beyond it the formula would give a
+    // negative or spurious value we don't want to visualise).
     ctx.fillStyle = "#f2c14e";
     src.curve.forEach((pt) => {
+      if (pt.D >= src.d_max) return;
+      const mi = Math.max(0, pt.test_channel_MI);
       const x = x0 + (pt.D / dMax) * plotW;
-      const y = y0 + plotH - (pt.test_channel_MI / rMax) * plotH;
+      const y = y0 + plotH - (mi / rMax) * plotH;
       ctx.beginPath();
       ctx.arc(x, y, 3, 0, Math.PI * 2);
       ctx.fill();
@@ -990,8 +1337,191 @@ function mountRDViz(section, data) {
   draw();
 }
 
+// ================================================================
+// Hero WebGL shader: perpetual visual abstract of the fibration.
+// ================================================================
+
+const HERO_VERT = `
+attribute vec2 aPos;
+varying vec2 vUv;
+void main() {
+  vUv = aPos * 0.5 + 0.5;
+  gl_Position = vec4(aPos, 0.0, 1.0);
+}
+`;
+
+const HERO_FRAG = `
+precision highp float;
+varying vec2 vUv;
+uniform float uTime;
+uniform vec2 uResolution;
+
+// Fibre palette matches Instrument-4's 4-way latent Z coloring.
+const vec3 C0 = vec3(0.878, 0.322, 0.357);  // red   z=(0,0)
+const vec3 C1 = vec3(0.949, 0.757, 0.306);  // gold  z=(0,1)
+const vec3 C2 = vec3(0.431, 0.659, 0.996);  // blue  z=(1,0)
+const vec3 C3 = vec3(0.247, 0.698, 0.498);  // green z=(1,1)
+const vec3 BG = vec3(0.020, 0.031, 0.047);
+
+// Cheap 2D hash + noise.
+float hash(vec2 p) {
+  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+}
+float noise(vec2 p) {
+  vec2 i = floor(p);
+  vec2 f = fract(p);
+  vec2 u = f * f * (3.0 - 2.0 * f);
+  float a = hash(i);
+  float b = hash(i + vec2(1.0, 0.0));
+  float c = hash(i + vec2(0.0, 1.0));
+  float d = hash(i + vec2(1.0, 1.0));
+  return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
+}
+
+// Concern wave — deforms fibre boundaries over time.
+vec2 concernFlow(vec2 uv, float t) {
+  float wave = sin(uv.y * 3.1415 * 2.0 + t * 0.6) * 0.06;
+  float swirl = cos(uv.x * 3.1415 * 1.4 + t * 0.4) * 0.05;
+  return uv + vec2(wave, swirl);
+}
+
+vec3 pickFibre(vec2 uv) {
+  float qx = step(0.5, uv.x);
+  float qy = step(0.5, uv.y);
+  int idx = int(qx + 2.0 * qy);
+  if (idx == 0) return C0;
+  if (idx == 1) return C1;
+  if (idx == 2) return C2;
+  return C3;
+}
+
+void main() {
+  vec2 uv = vUv;
+  float aspect = uResolution.x / uResolution.y;
+  vec2 auv = vec2(uv.x * aspect, uv.y);
+  float t = uTime;
+
+  // 1) Latent Z partition (via warped coordinates).
+  vec2 warped = concernFlow(uv, t);
+  vec3 base = pickFibre(warped);
+
+  // 2) Fibre-internal "sample" particles: each fibre has a slow drift
+  //    plus a bright dot at a moving position.
+  vec3 accum = vec3(0.0);
+  for (int i = 0; i < 4; i++) {
+    float fi = float(i);
+    // Fibre center in canonical (u, v).
+    vec2 center = vec2(mod(fi, 2.0) * 0.5 + 0.25, floor(fi / 2.0) * 0.5 + 0.25);
+    // Drift within the fibre.
+    vec2 drift = vec2(
+      sin(t * 0.7 + fi * 1.9) * 0.15,
+      cos(t * 0.5 + fi * 2.3) * 0.15
+    );
+    vec2 pos = center + drift;
+    float d = length((uv - pos) * vec2(aspect, 1.0));
+    // Multiple soft dots per fibre, at harmonic times.
+    for (int k = 0; k < 3; k++) {
+      float fk = float(k);
+      vec2 subOff = vec2(
+        sin(t * 1.1 + fi * 0.7 + fk * 2.1) * 0.05,
+        cos(t * 0.9 + fi * 1.3 + fk * 1.7) * 0.05
+      );
+      float dd = length((uv - pos - subOff) * vec2(aspect, 1.0));
+      float glow = smoothstep(0.04, 0.0, dd);
+      accum += pickFibre(center) * glow * 0.6;
+    }
+    accum += pickFibre(center) * smoothstep(0.05, 0.0, d) * 0.4;
+  }
+
+  // 3) Compilation "rain": vertical streaks descending from top (Z) into
+  //    the corresponding fibre (X).
+  vec2 rainUv = uv * vec2(60.0, 12.0);
+  rainUv.y += t * 4.0;
+  float rain = smoothstep(0.95, 1.0, noise(rainUv)) * smoothstep(0.6, 0.1, uv.y);
+  accum += pickFibre(warped) * rain * 0.8;
+
+  // 4) Fibre-tinted base with subtle noise texture.
+  float bgnoise = noise(uv * 8.0 + t * 0.2) * 0.05;
+  vec3 col = mix(BG, base * 0.25 + bgnoise, 0.85) + accum;
+
+  // 5) Soft vignette.
+  vec2 vig = uv - 0.5;
+  float v = 1.0 - dot(vig, vig) * 0.7;
+  col *= v;
+
+  gl_FragColor = vec4(col, 1.0);
+}
+`;
+
+function initHero() {
+  const canvas = document.getElementById("hero-canvas");
+  if (!canvas || !canvas.getContext) return;
+  const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+  if (!gl) {
+    canvas.style.display = "none";
+    return;
+  }
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const resize = () => {
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = Math.floor(rect.width * dpr);
+    canvas.height = Math.floor(rect.height * dpr);
+    gl.viewport(0, 0, canvas.width, canvas.height);
+  };
+  resize();
+  window.addEventListener("resize", resize);
+
+  function compile(src, type) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+      console.error("hero shader:", gl.getShaderInfoLog(s));
+      return null;
+    }
+    return s;
+  }
+  const vs = compile(HERO_VERT, gl.VERTEX_SHADER);
+  const fs = compile(HERO_FRAG, gl.FRAGMENT_SHADER);
+  if (!vs || !fs) { canvas.style.display = "none"; return; }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, vs);
+  gl.attachShader(prog, fs);
+  gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+    console.error("hero link:", gl.getProgramInfoLog(prog));
+    canvas.style.display = "none";
+    return;
+  }
+  gl.useProgram(prog);
+
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(
+    gl.ARRAY_BUFFER,
+    new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]),
+    gl.STATIC_DRAW
+  );
+  const loc = gl.getAttribLocation(prog, "aPos");
+  gl.enableVertexAttribArray(loc);
+  gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, "uTime");
+  const uRes = gl.getUniformLocation(prog, "uResolution");
+
+  const start = performance.now();
+  function frame(now) {
+    const t = (now - start) * 0.001;
+    gl.uniform1f(uTime, t);
+    gl.uniform2f(uRes, canvas.width, canvas.height);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
 void GATE_LABELS;
 document.addEventListener("DOMContentLoaded", async () => {
+  initHero();
   await main();
   // Fetch data again once for the viz layer (same URL cached by browser).
   try {
