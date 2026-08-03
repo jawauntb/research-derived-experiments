@@ -1,0 +1,682 @@
+{
+  "composition": {
+    "broken_features": [
+      "z_a",
+      "current_b"
+    ],
+    "broken_misses_composite_invariant": true,
+    "broken_misses_scalar_operator_invariant": true,
+    "broken_misses_static_path_invariant": true,
+    "composite_lift_is_minimal": true,
+    "composite_minimality_drop_records": [
+      {
+        "captures_invariant": false,
+        "dropped": [
+          "x_a"
+        ],
+        "kept_names": [
+          "z_a",
+          "y_a",
+          "current_b",
+          "t0_b",
+          "t1_b"
+        ]
+      },
+      {
+        "captures_invariant": false,
+        "dropped": [
+          "y_a"
+        ],
+        "kept_names": [
+          "z_a",
+          "x_a",
+          "current_b",
+          "t0_b",
+          "t1_b"
+        ]
+      },
+      {
+        "captures_invariant": false,
+        "dropped": [
+          "t0_b"
+        ],
+        "kept_names": [
+          "z_a",
+          "x_a",
+          "y_a",
+          "current_b",
+          "t1_b"
+        ]
+      },
+      {
+        "captures_invariant": false,
+        "dropped": [
+          "t1_b"
+        ],
+        "kept_names": [
+          "z_a",
+          "x_a",
+          "y_a",
+          "current_b",
+          "t0_b"
+        ]
+      },
+      {
+        "captures_invariant": false,
+        "dropped": [
+          "x_a",
+          "y_a"
+        ],
+        "kept_names": [
+          "z_a",
+          "current_b",
+          "t0_b",
+          "t1_b"
+        ]
+      },
+      {
+        "captures_invariant": false,
+        "dropped": [
+          "x_a",
+          "t0_b"
+        ],
+        "kept_names": [
+          "z_a",
+          "y_a",
+          "current_b",
+          "t1_b"
+        ]
+      },
+      {
+        "captures_invariant": false,
+        "dropped": [
+          "x_a",
+          "t1_b"
+        ],
+        "kept_names": [
+          "z_a",
+          "y_a",
+          "current_b",
+          "t0_b"
+        ]
+      },
+      {
+        "captures_invariant": false,
+        "dropped": [
+          "y_a",
+          "t0_b"
+        ],
+        "kept_names": [
+          "z_a",
+          "x_a",
+          "current_b",
+          "t1_b"
+        ]
+      },
+      {
+        "captures_invariant": false,
+        "dropped": [
+          "y_a",
+          "t1_b"
+        ],
+        "kept_names": [
+          "z_a",
+          "x_a",
+          "current_b",
+          "t0_b"
+        ]
+      },
+      {
+        "captures_invariant": false,
+        "dropped": [
+          "t0_b",
+          "t1_b"
+        ],
+        "kept_names": [
+          "z_a",
+          "x_a",
+          "y_a",
+          "current_b"
+        ]
+      },
+      {
+        "captures_invariant": false,
+        "dropped": [
+          "x_a",
+          "y_a",
+          "t0_b"
+        ],
+        "kept_names": [
+          "z_a",
+          "current_b",
+          "t1_b"
+        ]
+      },
+      {
+        "captures_invariant": false,
+        "dropped": [
+          "x_a",
+          "y_a",
+          "t1_b"
+        ],
+        "kept_names": [
+          "z_a",
+          "current_b",
+          "t0_b"
+        ]
+      },
+      {
+        "captures_invariant": false,
+        "dropped": [
+          "x_a",
+          "t0_b",
+          "t1_b"
+        ],
+        "kept_names": [
+          "z_a",
+          "y_a",
+          "current_b"
+        ]
+      },
+      {
+        "captures_invariant": false,
+        "dropped": [
+          "y_a",
+          "t0_b",
+          "t1_b"
+        ],
+        "kept_names": [
+          "z_a",
+          "x_a",
+          "current_b"
+        ]
+      },
+      {
+        "captures_invariant": false,
+        "dropped": [
+          "x_a",
+          "y_a",
+          "t0_b",
+          "t1_b"
+        ],
+        "kept_names": [
+          "z_a",
+          "current_b"
+        ]
+      }
+    ],
+    "lifted_captures_composite_invariant": true,
+    "lifted_captures_scalar_operator_invariant": true,
+    "lifted_captures_static_path_invariant": true,
+    "lifted_features": [
+      "z_a",
+      "x_a",
+      "y_a",
+      "current_b",
+      "t0_b",
+      "t1_b"
+    ],
+    "lifts_commute_capture_agrees_across_orderings": true,
+    "product_world_size": 48
+  },
+  "gates": {
+    "rr1_every_canonical_pair_broken_representation_misses_invariant": true,
+    "rr1_every_lift_is_minimal": true,
+    "rr1_every_lifted_representation_captures_invariant": true,
+    "rr2_two_independent_lifts_compose": true
+  },
+  "num_pairs": 8,
+  "pair_records": [
+    {
+      "added_features": [
+        "x",
+        "y"
+      ],
+      "broken_features": [
+        "z"
+      ],
+      "broken_misses_invariant": true,
+      "description": "Broken: Pauli-Z expectation alone (a scalar observable). Lifted: full Bloch vector (an operator-valued representation).",
+      "key": "scalar_to_operator",
+      "lift_is_minimal": true,
+      "lifted_captures_invariant": true,
+      "lifted_features": [
+        "z",
+        "x",
+        "y"
+      ],
+      "minimality_drop_records": [
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "x"
+          ],
+          "kept_names": [
+            "z",
+            "y"
+          ]
+        },
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "y"
+          ],
+          "kept_names": [
+            "z",
+            "x"
+          ]
+        },
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "x",
+            "y"
+          ],
+          "kept_names": [
+            "z"
+          ]
+        }
+      ],
+      "num_states": 6
+    },
+    {
+      "added_features": [
+        "m0",
+        "m1",
+        "m2"
+      ],
+      "broken_features": [
+        "support_size"
+      ],
+      "broken_misses_invariant": true,
+      "description": "Broken: a single global scalar summary (support size, the number of nonzero cells). Lifted: the per-cell mass profile ``(m_0, m_1, m_2)`` -- a localized measure.",
+      "key": "global_norm_to_localized_measure",
+      "lift_is_minimal": true,
+      "lifted_captures_invariant": true,
+      "lifted_features": [
+        "support_size",
+        "m0",
+        "m1",
+        "m2"
+      ],
+      "minimality_drop_records": [
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "m0"
+          ],
+          "kept_names": [
+            "support_size",
+            "m1",
+            "m2"
+          ]
+        },
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "m1"
+          ],
+          "kept_names": [
+            "support_size",
+            "m0",
+            "m2"
+          ]
+        },
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "m2"
+          ],
+          "kept_names": [
+            "support_size",
+            "m0",
+            "m1"
+          ]
+        },
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "m0",
+            "m1"
+          ],
+          "kept_names": [
+            "support_size",
+            "m2"
+          ]
+        },
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "m0",
+            "m2"
+          ],
+          "kept_names": [
+            "support_size",
+            "m1"
+          ]
+        },
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "m1",
+            "m2"
+          ],
+          "kept_names": [
+            "support_size",
+            "m0"
+          ]
+        },
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "m0",
+            "m1",
+            "m2"
+          ],
+          "kept_names": [
+            "support_size"
+          ]
+        }
+      ],
+      "num_states": 6
+    },
+    {
+      "added_features": [
+        "x",
+        "y"
+      ],
+      "broken_features": [
+        "z"
+      ],
+      "broken_misses_invariant": true,
+      "description": "Broken: coarse quotient label ``z`` only (fibers collapsed). Lifted: ``(z, x, y)`` restoring the in-fiber coordinates.",
+      "key": "quotient_to_restored_fiber",
+      "lift_is_minimal": true,
+      "lifted_captures_invariant": true,
+      "lifted_features": [
+        "z",
+        "x",
+        "y"
+      ],
+      "minimality_drop_records": [
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "x"
+          ],
+          "kept_names": [
+            "z",
+            "y"
+          ]
+        },
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "y"
+          ],
+          "kept_names": [
+            "z",
+            "x"
+          ]
+        },
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "x",
+            "y"
+          ],
+          "kept_names": [
+            "z"
+          ]
+        }
+      ],
+      "num_states": 8
+    },
+    {
+      "added_features": [
+        "t0",
+        "t1"
+      ],
+      "broken_features": [
+        "current"
+      ],
+      "broken_misses_invariant": true,
+      "description": "Broken: current-step scalar (a static observable). Lifted: the full trajectory (path-space representation).",
+      "key": "static_to_path_space",
+      "lift_is_minimal": true,
+      "lifted_captures_invariant": true,
+      "lifted_features": [
+        "current",
+        "t0",
+        "t1"
+      ],
+      "minimality_drop_records": [
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "t0"
+          ],
+          "kept_names": [
+            "current",
+            "t1"
+          ]
+        },
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "t1"
+          ],
+          "kept_names": [
+            "current",
+            "t0"
+          ]
+        },
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "t0",
+            "t1"
+          ],
+          "kept_names": [
+            "current"
+          ]
+        }
+      ],
+      "num_states": 8
+    },
+    {
+      "added_features": [
+        "c"
+      ],
+      "broken_features": [
+        "a",
+        "b"
+      ],
+      "broken_misses_invariant": true,
+      "description": "Broken: affine chart ``(a, b)`` (the ``c = 1`` slice). Lifted: homogeneous coordinates ``(a, b, c)`` restoring points at infinity.",
+      "key": "affine_to_projective",
+      "lift_is_minimal": true,
+      "lifted_captures_invariant": true,
+      "lifted_features": [
+        "a",
+        "b",
+        "c"
+      ],
+      "minimality_drop_records": [
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "c"
+          ],
+          "kept_names": [
+            "a",
+            "b"
+          ]
+        }
+      ],
+      "num_states": 6
+    },
+    {
+      "added_features": [
+        "var",
+        "skew"
+      ],
+      "broken_features": [
+        "mean"
+      ],
+      "broken_misses_invariant": true,
+      "description": "Broken: point estimate (mean alone). Lifted: ensemble moment vector ``(mean, variance, skew)``.",
+      "key": "point_to_ensemble",
+      "lift_is_minimal": true,
+      "lifted_captures_invariant": true,
+      "lifted_features": [
+        "mean",
+        "var",
+        "skew"
+      ],
+      "minimality_drop_records": [
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "var"
+          ],
+          "kept_names": [
+            "mean",
+            "skew"
+          ]
+        },
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "skew"
+          ],
+          "kept_names": [
+            "mean",
+            "var"
+          ]
+        },
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "var",
+            "skew"
+          ],
+          "kept_names": [
+            "mean"
+          ]
+        }
+      ],
+      "num_states": 8
+    },
+    {
+      "added_features": [
+        "family",
+        "version"
+      ],
+      "broken_features": [
+        "m1",
+        "m2"
+      ],
+      "broken_misses_invariant": true,
+      "description": "Broken: raw module identity pair ``(m1, m2)`` with no protocol tag (composition is ill-defined). Lifted: ``(m1, m2, family, version)`` where the protocol tag is the explicit interface.",
+      "key": "non_composing_to_interface",
+      "lift_is_minimal": true,
+      "lifted_captures_invariant": true,
+      "lifted_features": [
+        "m1",
+        "m2",
+        "family",
+        "version"
+      ],
+      "minimality_drop_records": [
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "family"
+          ],
+          "kept_names": [
+            "m1",
+            "m2",
+            "version"
+          ]
+        },
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "version"
+          ],
+          "kept_names": [
+            "m1",
+            "m2",
+            "family"
+          ]
+        },
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "family",
+            "version"
+          ],
+          "kept_names": [
+            "m1",
+            "m2"
+          ]
+        }
+      ],
+      "num_states": 16
+    },
+    {
+      "added_features": [
+        "a_minus_b",
+        "a_minus_c"
+      ],
+      "broken_features": [
+        "a"
+      ],
+      "broken_misses_invariant": true,
+      "description": "Broken: gauge-dependent scalar ``a`` under translation symmetry ``(a, b, c) ~ (a+t, b+t, c+t)``. Lifted: gauge-invariant offsets ``(a, a-b, a-c)`` making the orbit label recoverable.",
+      "key": "symmetry_to_gauge_fix",
+      "lift_is_minimal": true,
+      "lifted_captures_invariant": true,
+      "lifted_features": [
+        "a",
+        "a_minus_b",
+        "a_minus_c"
+      ],
+      "minimality_drop_records": [
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "a_minus_b"
+          ],
+          "kept_names": [
+            "a",
+            "a_minus_c"
+          ]
+        },
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "a_minus_c"
+          ],
+          "kept_names": [
+            "a",
+            "a_minus_b"
+          ]
+        },
+        {
+          "captures_invariant": false,
+          "dropped": [
+            "a_minus_b",
+            "a_minus_c"
+          ],
+          "kept_names": [
+            "a"
+          ]
+        }
+      ],
+      "num_states": 6
+    }
+  ],
+  "status": "pass"
+}

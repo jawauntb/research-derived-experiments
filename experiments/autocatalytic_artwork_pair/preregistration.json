@@ -1,0 +1,46 @@
+{
+  "experiment_id": "autocatalytic_artwork_pair",
+  "schema_version": "1.0",
+  "hypothesis": "For the 6-step, 3-compiler autocatalytic-artwork world of the companion paper *Autocatalytic Artwork* (papers/autocatalytic_artwork/paper.md), with specification alphabet |S|=4, experience alphabet |E|=4, candidate compiler family {K_a (diagonal 0.85/0.05), K_b (shifted 0.85/0.05), K_c (uniform 0.25)}, true compiler K_a, uniform prior mu_0=(1/3,1/3,1/3), and 200 seeded Mulberry32 runs, Theorem AA-1 predicts (a) the audience's mean analytical expected one-step predictive log-likelihood LL_t = E_{s,e ~ P_S x K_a}[log K̄_μ_t(e|s)] is non-decreasing in t from t=0 through t=6, and (b) the mean posterior mass on the true compiler K_a at t=6 is at least 0.9. Theorem AA-2 predicts (c) the Bayesian update mu_{t+1}(theta) proportional to mu_t(theta) K_theta(e_t|s_t) is exactly the Boltzmann compiler-ecology update of Theorem CT-2 with reward r_t(theta)=log K_theta(e_t|s_t) and beta=1, so a parallel Boltzmann trajectory agrees with the Bayesian trajectory to 1e-12 on every (t, theta, seed). Companion gate (d): at t=6 the Bayesian-audience expected LL exceeds the frozen uniform-baseline expected LL by at least 0.1 nats.",
+  "primary_metric": "gates.aa1_predictive_log_likelihood_non_decreasing_in_expectation",
+  "gates": {
+    "AAP_AA1_PREDICTIVE_LOG_LIKELIHOOD_NON_DECREASING_IN_EXPECTATION": "Mean over 200 seeded runs of the analytical expected predictive log-likelihood LL_t = E_{s,e ~ P_S x K_a}[log K̄_μ_t(e|s)] is non-decreasing in t from t=0 through t=N_STEPS=6, with 1e-6 tolerance for finite-run noise on the per-posterior functional.",
+    "AAP_AA1_POSTERIOR_CONCENTRATES_ON_TRUE_COMPILER": "Mean over 200 runs of mu_6(K_a) is at least 0.9.",
+    "AAP_AA2_REDUCES_TO_COMPILER_ECOLOGY": "Maximum absolute per-theta gap between the Bayesian and Boltzmann-equivalent posteriors across all 200 runs and 7 belief snapshots is at most 1e-12.",
+    "AAP_AA_AUDIENCE_BEATS_UNIFORM_BASELINE": "At t=6, the mean Bayesian-audience expected LL exceeds the frozen uniform-baseline expected LL by at least 0.1 nats."
+  },
+  "metrics": [
+    "mean_analytical_expected_ll_per_t",
+    "mean_analytical_expected_ll_uniform_baseline_per_t",
+    "mean_held_out_ll_per_t_companion",
+    "mean_posterior_true_compiler_per_t",
+    "global_max_bayes_vs_boltzmann_posterior_gap",
+    "predictive_ll_gain_over_uniform_baseline_at_final_t"
+  ],
+  "world": {
+    "spec_alphabet_size": 4,
+    "experience_alphabet_size": 4,
+    "candidate_compilers": ["a", "b", "c"],
+    "true_compiler": "a",
+    "diagonal_prob": 0.85,
+    "off_diagonal_prob": 0.05,
+    "uniform_kernel_prob": 0.25,
+    "boltzmann_beta": 1.0,
+    "n_steps": 6,
+    "n_runs": 200,
+    "prior": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]
+  },
+  "controls": [
+    "compilers_are_probability_kernels",
+    "trajectory_sampling_deterministic_under_mulberry32_seed",
+    "bayes_boltzmann_agreement_on_every_run_and_step",
+    "true_compiler_in_candidate_family",
+    "analytical_ll_computed_in_closed_form"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": null,
+    "sampling": "seeded Mulberry32 pseudo-random for the trajectory (200 seeds x 7 held-out samples); exact analytical LL computation over the 16 (s,e) pairs per posterior; no Monte Carlo variance in the LL estimator's inner expectation.",
+    "raw_data": false
+  }
+}

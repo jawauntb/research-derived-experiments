@@ -1,0 +1,239 @@
+{
+  "all_rows_are_probability_distributions": true,
+  "class_conditional_distributions": {
+    "D_A": {
+      "c0": [
+        0.5,
+        0.5,
+        0.0,
+        0.0
+      ],
+      "c1": [
+        0.25,
+        0.25,
+        0.25,
+        0.25
+      ],
+      "c2": [
+        0.3,
+        0.3,
+        0.2,
+        0.2
+      ],
+      "c3": [
+        0.4,
+        0.1,
+        0.4,
+        0.1
+      ]
+    },
+    "D_B": {
+      "c0": [
+        0.0,
+        0.0,
+        0.5,
+        0.5
+      ],
+      "c1": [
+        0.7,
+        0.1,
+        0.1,
+        0.1
+      ],
+      "c2": [
+        0.2,
+        0.2,
+        0.3,
+        0.3
+      ],
+      "c3": [
+        0.1,
+        0.4,
+        0.1,
+        0.4
+      ]
+    },
+    "D_C": {
+      "c0": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "c1": [
+        0.1,
+        0.7,
+        0.1,
+        0.1
+      ],
+      "c2": [
+        0.5,
+        0.5,
+        0.0,
+        0.0
+      ],
+      "c3": [
+        0.25,
+        0.25,
+        0.25,
+        0.25
+      ]
+    },
+    "D_D": {
+      "c0": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "c1": [
+        0.1,
+        0.1,
+        0.7,
+        0.1
+      ],
+      "c2": [
+        0.0,
+        0.0,
+        0.5,
+        0.5
+      ],
+      "c3": [
+        0.1,
+        0.4,
+        0.4,
+        0.1
+      ]
+    }
+  },
+  "cooccurrence_partition": [
+    [
+      "m0",
+      "m2",
+      "m4"
+    ],
+    [
+      "m1",
+      "m3",
+      "m5"
+    ]
+  ],
+  "cooccurrence_refines_psi": false,
+  "cooccurrence_signatures": {
+    "m0": [
+      4,
+      4,
+      1,
+      1
+    ],
+    "m1": [
+      1,
+      1,
+      4,
+      4
+    ],
+    "m2": [
+      4,
+      4,
+      1,
+      1
+    ],
+    "m3": [
+      1,
+      1,
+      4,
+      4
+    ],
+    "m4": [
+      4,
+      4,
+      1,
+      1
+    ],
+    "m5": [
+      1,
+      1,
+      4,
+      4
+    ]
+  },
+  "expected_cooccurrence_partition": [
+    [
+      "m0",
+      "m2",
+      "m4"
+    ],
+    [
+      "m1",
+      "m3",
+      "m5"
+    ]
+  ],
+  "expected_psi_partition": [
+    [
+      "m0",
+      "m1"
+    ],
+    [
+      "m2",
+      "m3"
+    ],
+    [
+      "m4"
+    ],
+    [
+      "m5"
+    ]
+  ],
+  "gates": {
+    "cs1_psi_equivalence_is_reflexive_symmetric_transitive": true,
+    "cs2_psi_quotient_has_four_classes": true,
+    "cs2_psi_quotient_is_common_sufficient": true,
+    "cs_cooccurrence_partition_differs_from_psi_quotient": true
+  },
+  "psi_partition": [
+    [
+      "m0",
+      "m1"
+    ],
+    [
+      "m2",
+      "m3"
+    ],
+    [
+      "m4"
+    ],
+    [
+      "m5"
+    ]
+  ],
+  "psi_refines_cooccurrence": false,
+  "shared_cells_between_partitions": [],
+  "status": "pass",
+  "tolerance": 1e-12,
+  "world": {
+    "contexts": [
+      "c0",
+      "c1",
+      "c2",
+      "c3"
+    ],
+    "future_states": [
+      "x0",
+      "x1",
+      "x2",
+      "x3"
+    ],
+    "messages": [
+      "m0",
+      "m1",
+      "m2",
+      "m3",
+      "m4",
+      "m5"
+    ],
+    "num_contexts": 4,
+    "num_future_states": 4,
+    "num_messages": 6
+  }
+}

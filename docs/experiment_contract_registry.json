@@ -119,6 +119,35 @@
       ]
     },
     {
+      "package": "autocatalytic_artwork_pair",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/autocatalytic_artwork_pair/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "autocatalytic_artwork_pair_2026_08_03",
+      "runs": [
+        {
+          "run_id": "autocatalytic_artwork_pair_2026_08_03",
+          "publication_package": "autocatalytic_artwork_pair",
+          "runtime_package": "autocatalytic_artwork_pair",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/autocatalytic_artwork_pair/experiment_manifest.json",
+          "report_paths": [
+            "experiments/autocatalytic_artwork_pair/results/autocatalytic_artwork_pair_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/autocatalytic_artwork_pair/preregistration.json",
+          "preregistration_digest": "91dae72a315684e5d5f46fdd10302374575cba238c26dd95d68282274f047f66",
+          "producing_agent": {
+            "identity": "Claude Code (agent, under J. Brown direction)",
+            "session_ref": "claude/autocatalytic-artwork"
+          }
+        }
+      ]
+    },
+    {
       "package": "activation_geometry",
       "coverage_mode": "legacy_exception",
       "legacy_exception": {
@@ -213,6 +242,35 @@
             "EVID-BAYESIAN-VOI-MISSPEC"
           ],
           "gate_verdict_paths": []
+        }
+      ]
+    },
+    {
+      "package": "causal_semantics_pair",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/causal_semantics_pair/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "causal_semantics_pair_2026_08_03",
+      "runs": [
+        {
+          "run_id": "causal_semantics_pair_2026_08_03",
+          "publication_package": "causal_semantics_pair",
+          "runtime_package": "causal_semantics_pair",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/causal_semantics_pair/experiment_manifest.json",
+          "report_paths": [
+            "experiments/causal_semantics_pair/results/causal_semantics_pair_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/causal_semantics_pair/preregistration.json",
+          "preregistration_digest": "95358e75f7f8ae654aa7d75d5f350841d68dbfe3ffccc8244121b2de3507acb9",
+          "producing_agent": {
+            "identity": "Claude Code (agent, under J. Brown direction)",
+            "session_ref": "claude/causal-semantics"
+          }
         }
       ]
     },
@@ -2075,6 +2133,35 @@
       ]
     },
     {
+      "package": "representation_repair_pair",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/representation_repair_pair/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "representation_repair_pair_2026_08_03",
+      "runs": [
+        {
+          "run_id": "representation_repair_pair_2026_08_03",
+          "publication_package": "representation_repair_pair",
+          "runtime_package": "representation_repair_pair",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/representation_repair_pair/experiment_manifest.json",
+          "report_paths": [
+            "experiments/representation_repair_pair/results/representation_repair_pair_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/representation_repair_pair/preregistration.json",
+          "preregistration_digest": "8c91299e0714eae8f5d964c548b8d54a53daf40e04409fdd03a84d14e50367bb",
+          "producing_agent": {
+            "identity": "Claude Code (agent, under J. Brown direction)",
+            "session_ref": "claude/representation-repair-calculus"
+          }
+        }
+      ]
+    },
+    {
       "package": "representation_search",
       "coverage_mode": "structured_manifest",
       "manifest_path": "experiments/representation_search/experiment_manifest.json",
@@ -2315,6 +2402,35 @@
         "frozen_legacy_cutoff": "2026-07-14",
         "adjudicates_claims": false
       }
+    },
+    {
+      "package": "theory_atlas_pair",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/theory_atlas_pair/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "theory_atlas_pair_2026_08_03",
+      "runs": [
+        {
+          "run_id": "theory_atlas_pair_2026_08_03",
+          "publication_package": "theory_atlas_pair",
+          "runtime_package": "theory_atlas_pair",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/theory_atlas_pair/experiment_manifest.json",
+          "report_paths": [
+            "experiments/theory_atlas_pair/results/theory_atlas_pair_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/theory_atlas_pair/preregistration.json",
+          "preregistration_digest": "2399ef9287742028e1949735376ea2d2828a324daf19e4d4ead0ef75aff89544",
+          "producing_agent": {
+            "identity": "Claude Code (agent, under J. Brown direction)",
+            "session_ref": "claude/theory-atlas"
+          }
+        }
+      ]
     },
     {
       "package": "two_bottlenecks",

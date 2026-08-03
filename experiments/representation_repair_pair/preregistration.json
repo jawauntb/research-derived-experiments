@@ -1,0 +1,43 @@
+{
+  "experiment_id": "representation_repair_pair",
+  "schema_version": "1.0",
+  "hypothesis": "For each of the eight canonical (failure_signature, minimal_lift) pairs listed in Extended-Program section 5.8 of The Structural Intelligence Conjecture (scalar->operator, global norm->localized measure, quotient->restored fiber, static->path space, affine->projective, point->ensemble, non-composing->interface, symmetry->gauge-fix), there is a hand-designed finite toy world on which (a) the broken representation R misses the target invariant I (exists s != s' with R(s)=R(s') and I(s) != I(s')), (b) the lifted representation R' captures I (for every s, s', R'(s)=R'(s') implies I(s)=I(s')), and (c) R' is minimal in the sense that no strictly smaller enlargement of R also captures I (Theorem RR-1). Additionally, on the product of the scalar->operator world and the static->path-space world, the composition of their independent lifts captures the joint invariant, is itself minimal, and commutes across application orderings (Theorem RR-2).",
+  "primary_metric": "gates.rr1_every_lift_is_minimal",
+  "gates": {
+    "RRP_RR1_BROKEN_MISSES_INVARIANT": "For every one of the eight canonical (failure_signature, minimal_lift) pairs, the broken representation R misses the target invariant I on the pair's finite toy world. 8/8.",
+    "RRP_RR1_LIFTED_CAPTURES_INVARIANT": "For every one of the eight canonical pairs, the lifted representation R' captures the target invariant I on the pair's finite toy world. 8/8.",
+    "RRP_RR1_LIFT_IS_MINIMAL": "For every one of the eight canonical pairs, no strictly smaller enlargement of R also captures I: for every nonempty subset D of the added components, R combined with (added minus D) misses I. 8/8.",
+    "RRP_RR2_LIFTS_COMPOSE": "On the product world of the scalar->operator pair and the static->path-space pair, the composed lift (a) captures the scalar->operator invariant on the first slot, (b) captures the static->path-space invariant on the second slot, (c) captures the composite (joint) invariant, (d) is minimal (dropping any added feature breaks capture of the composite invariant), and (e) captures the composite invariant identically across two different application orderings of the two lifts."
+  },
+  "metrics": [
+    "broken_misses_invariant",
+    "lifted_captures_invariant",
+    "lift_is_minimal",
+    "minimality_drop_records",
+    "lifted_captures_composite_invariant",
+    "composite_lift_is_minimal",
+    "lifts_commute_capture_agrees_across_orderings"
+  ],
+  "canonical_pairs": [
+    "scalar_to_operator",
+    "global_norm_to_localized_measure",
+    "quotient_to_restored_fiber",
+    "static_to_path_space",
+    "affine_to_projective",
+    "point_to_ensemble",
+    "non_composing_to_interface",
+    "symmetry_to_gauge_fix"
+  ],
+  "controls": [
+    "factorability_check_is_pointwise_and_exact",
+    "minimality_iterates_over_every_nonempty_subset_of_added_components",
+    "composition_uses_two_pairs_on_disjoint_slots_of_a_product_world",
+    "no_randomness_all_arithmetic_is_finite_enumeration"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": null,
+    "sampling": "exact enumeration of every finite toy world (6-16 states per pair; 48 states in the composition world) and every subset of added components in the minimality check.",
+    "raw_data": false
+  }
+}

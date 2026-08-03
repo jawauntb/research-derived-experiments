@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "representation_repair_pair",
+  "hypothesis": "For each of the eight canonical (failure_signature, minimal_lift) pairs from Extended-Program section 5.8 of The Structural Intelligence Conjecture, there is a finite hand-designed world on which the broken representation misses the target invariant, the lifted representation captures it, and the lift is minimal (Theorem RR-1); and two independent lifts on a product world compose to a joint lift that captures both invariants (Theorem RR-2).",
+  "claim_tier": "theoretical",
+  "controls": [
+    { "control_id": "factorability_check_pointwise_exact", "description": "The check 'I factors through rep' iterates every pair of states and asserts rep(s)=rep(s') implies I(s)=I(s'); asserted in tests." },
+    { "control_id": "minimality_over_every_added_subset", "description": "The minimality gate exhaustively drops every nonempty subset of added components; if any strict enlargement of R (below R') captures I, the gate fails; asserted in tests." },
+    { "control_id": "composition_on_disjoint_product_slots", "description": "Theorem RR-2 is witnessed by composing the scalar->operator lift and the static->path-space lift on the product of the two toy worlds; the two lifts operate on disjoint slots and therefore commute by construction; asserted in tests." },
+    { "control_id": "no_randomness_finite_enumeration", "description": "There is no PRNG anywhere in the benchmark; every gate is a deterministic finite enumeration; asserted by the runtime signature (no seed field)." }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/representation_repair_pair/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    { "gate_id": "RRP_RR1_BROKEN_MISSES_INVARIANT", "criterion": "For every one of the eight canonical pairs, the broken representation R misses the target invariant I on the pair's finite toy world (8/8)." },
+    { "gate_id": "RRP_RR1_LIFTED_CAPTURES_INVARIANT", "criterion": "For every one of the eight canonical pairs, the lifted representation R' captures the target invariant I on the pair's finite toy world (8/8)." },
+    { "gate_id": "RRP_RR1_LIFT_IS_MINIMAL", "criterion": "For every one of the eight canonical pairs, no strictly smaller enlargement of R also captures I: for every nonempty subset D of the added components, R combined with (added minus D) misses I (8/8)." },
+    { "gate_id": "RRP_RR2_LIFTS_COMPOSE", "criterion": "On the product of the scalar->operator world and the static->path-space world, the composed lift captures both sub-invariants and the composite invariant, is minimal (dropping any added feature breaks capture), and produces identical capture regardless of the ordering of the two lifts." }
+  ],
+  "artifacts": [
+    { "kind": "summary", "path": "experiments/representation_repair_pair/results/representation_repair_pair_summary.json", "public": true },
+    { "kind": "other", "path": "experiments/representation_repair_pair/preregistration.json", "public": true }
+  ],
+  "status": "accepted"
+}

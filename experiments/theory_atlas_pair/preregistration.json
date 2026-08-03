@@ -1,0 +1,53 @@
+{
+  "experiment_id": "theory_atlas_pair",
+  "schema_version": "1.0",
+  "hypothesis": "Theorems TA-1 and TA-2 (paper papers/theory_atlas/paper.md) predict, on the 4-bit Boolean world with three context subsets U_1={x_0=0}, U_2={x_1=0}, U_3={x_2=0}, chart maps M_1(x)=g(x), M_2(x)=(g(x)+1) mod 4, M_3(x)=(g(x)+2) mod 4 for g(x)=(2*x_2+x_3) mod 4, and target label space T=Z/4, that (i) the good transitions T_12=+1, T_23=+1, T_13=+2 satisfy the cocycle T_23 ∘ T_12 = T_13 on the single triple (1,2,3) and glue to the global theory M=g; (ii) the bad transitions T_12=+1, T_23=+1, T_13=+3 violate the cocycle with rank-4 discrepancy (shift-by-3 on Z/4) and do not glue; and (iii) the bad-family failure has the missing-latent signature (rank >= 1 with all three T_ij non-identity), distinct from the phase-transition signature (rank >= 1 with exactly one T_ij non-identity) exhibited by a reference family (T_12=+1, T_23=id, T_13=id).",
+  "primary_metric": "gates.ta1_glue_iff_cocycle",
+  "gates": {
+    "TAP_TA1_GOOD_CHARTS_SATISFY_COCYCLE": "For the good chart family, the cocycle T_jk ∘ T_ij = T_ik holds on every triple (i,j,k) with pairwise overlap (cocycle_discrepancy = identity permutation on T).",
+    "TAP_TA1_BAD_CHARTS_VIOLATE_COCYCLE": "For the bad chart family, at least one triple (i,j,k) has non-zero cocycle discrepancy (rank >= 1 on T).",
+    "TAP_TA1_GLUE_IFF_COCYCLE": "The pivot-through-chart-1 gluing attempt is consistent for the good family (single-valued global M on U_1 ∪ U_2 ∪ U_3) and inconsistent for the bad family (some world in a pairwise overlap receives at least two distinct candidate values).",
+    "TAP_TA2_BAD_DISCREPANCY_MATCHES_MISSING_LATENT_SIGNATURE": "The bad family is classified as 'missing_latent' by Theorem TA-2's rank/support rule (cocycle fails and every pairwise T_ij is non-identity), the phase_boundary_reference family is classified as 'phase_transition' (cocycle fails and exactly one T_ij is non-identity), and the good family is classified as 'glue'."
+  },
+  "metrics": [
+    "cocycle_discrepancy_rank",
+    "cocycle_holds",
+    "transition_support_num_non_identity_edges",
+    "taxonomy_verdict",
+    "glue_attempt_consistent",
+    "glue_attempt_num_inconsistent_worlds"
+  ],
+  "world": {
+    "n_bits": 4,
+    "target_size": 4,
+    "contexts": {
+      "U_1": "{x : x_0 = 0} (8 worlds)",
+      "U_2": "{x : x_1 = 0} (8 worlds)",
+      "U_3": "{x : x_2 = 0} (8 worlds)"
+    },
+    "pairwise_overlaps": {
+      "U_12": "{x_0 = x_1 = 0} (4 worlds)",
+      "U_13": "{x_0 = x_2 = 0} (4 worlds)",
+      "U_23": "{x_1 = x_2 = 0} (4 worlds)"
+    },
+    "triple_overlap": "{x_0 = x_1 = x_2 = 0} (2 worlds)",
+    "context_union_size": 14
+  },
+  "chart_families": {
+    "good": {"T_12": "+1", "T_23": "+1", "T_13": "+2"},
+    "bad": {"T_12": "+1", "T_23": "+1", "T_13": "+3"},
+    "phase_boundary_reference": {"T_12": "+1", "T_23": "id", "T_13": "id"}
+  },
+  "controls": [
+    "target_permutations_are_bijections",
+    "chart_maps_shared_between_families",
+    "phase_boundary_reference_family_is_control",
+    "cocycle_discrepancy_and_glue_attempt_agree"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": null,
+    "sampling": "exact enumeration of the 16-element Boolean world and the 4-element target alphabet; no Monte Carlo.",
+    "raw_data": false
+  }
+}
