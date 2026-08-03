@@ -1,0 +1,11 @@
+name = "structural-intelligence-mathlib"
+version = "0.1.0"
+defaultTargets = ["StructuralIntelligenceMathlib"]
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+version = "git#v4.32.2"
+
+[[lean_lib]]
+name = "StructuralIntelligenceMathlib"
