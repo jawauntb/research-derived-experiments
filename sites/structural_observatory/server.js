@@ -11,6 +11,7 @@ const types = {
   ".css": "text/css; charset=utf-8",
   ".json": "application/json; charset=utf-8",
   ".svg": "image/svg+xml",
+  ".pdf": "application/pdf",
 };
 
 const server = http.createServer((request, response) => {
@@ -81,6 +82,7 @@ function isPublicPath(relativePath) {
     relativePath === "index.html" ||
     relativePath === "styles.css" ||
     relativePath === "app.js" ||
-    relativePath === "results.json"
+    relativePath === "results.json" ||
+    relativePath === "paper.pdf"
   );
 }
