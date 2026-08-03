@@ -38,7 +38,7 @@ World = tuple[Bit, Bit, Bit, Bit]
 
 
 def all_worlds() -> list[World]:
-    return [tuple(bits) for bits in product((0, 1), repeat=4)]  # type: ignore[misc]
+    return [(b0, b1, b2, b3) for b0, b1, b2, b3 in product((0, 1), repeat=4)]
 
 
 def latent_z(w: World) -> tuple[int, int]:
