@@ -30,6 +30,33 @@ python scripts/gen_provenance.py
 - Run `python3 scripts/run_quality_checks.py` before merging substantive Python changes.
 - Attribution: human director Jawaun Brown; agent-generated code/papers under review — keep provenance honest.
 
+## Pull requests and merging (required)
+
+Standing policy set by the human director (2026-07-28): agents ship work through
+pull requests and let them merge automatically. Do this on every substantive
+change without waiting to be asked again.
+
+1. **Always open a PR.** After pushing a working branch, open a pull request into
+   the default branch (`main`). Do not push directly to `main`. Fill the body
+   from any PR template if one exists; otherwise summarise the change, its
+   verification, and any known gaps.
+2. **Always enable auto-merge.** Immediately enable auto-merge (squash) on the PR
+   so it lands as soon as required checks pass. If the repo cannot enable
+   auto-merge (auto-merge disabled at the repo level, or no required checks /
+   branch protection configured so it would merge instantly), say so in the PR
+   and merge once the checks you can run are green — never leave a green,
+   review-clean PR sitting open.
+3. **One PR per change set; keep it green.** If you own the PR, drive it to a
+   mergeable state: fix failing CI or reply explaining why a failure is
+   pre-existing/out of scope. A merged PR is finished — start follow-up work from
+   a fresh branch off the latest `main`, never by reusing merged history.
+4. **Rebase, don't duplicate.** Before starting, fetch `main`; concurrent agents
+   may have shipped overlapping work. If a package/paper you were about to create
+   already exists, extend it rather than adding a near-duplicate under a new name.
+5. **Attribution stays honest.** Keep the Claude Code attribution footer on PR
+   bodies and comments, and keep the human-director / agent-author provenance
+   line intact.
+
 ## Experiment review routing (required)
 
 - Run the `scientific-discovery-regime-audit` skill when creating or preregistering an experiment, before a large sweep, and when interpreting results for promotion or a discovery claim. Do not run the full unified reviewer for routine code or documentation work.

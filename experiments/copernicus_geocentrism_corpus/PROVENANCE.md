@@ -11,17 +11,17 @@
 - **Experiment ID:** `copernicus_geocentrism_corpus_scaffold`
 - **Manifest status (noncanonical):** `accepted`
 - **Integrity state:** `valid`
-- **Run coverage:** `complete`
+- **Run coverage:** `partial`
 - **Provenance mode:** `structured_manifest`
 - **Publication/runtime packages:** `copernicus_geocentrism_corpus` / `copernicus_geocentrism_corpus`
 - **Scientific adjudications:** unadjudicated
 
 ## Verification
-- Pre-registration: _none_
+- Pre-registration: `experiments/copernicus_geocentrism_corpus/DCD2_COPERNICUS_PREREGISTRATION.md`
 - Result reports (1):
   - `experiments/copernicus_geocentrism_corpus/results/fetch_summary.json`
 
 ## Artifacts
-- Committed: `experiments/copernicus_geocentrism_corpus/results/fetch_summary.json`, `experiments/copernicus_geocentrism_corpus/CORPUS_MANIFEST.md`
+- Committed: `experiments/copernicus_geocentrism_corpus/results/fetch_summary.json`, `experiments/copernicus_geocentrism_corpus/CORPUS_MANIFEST.md`, `experiments/copernicus_geocentrism_corpus/DCD2_COPERNICUS_PREREGISTRATION.md`, `experiments/copernicus_geocentrism_corpus/DCD2_C_CATEGORIES.md`
 - Local-only: artifacts/ (gitignored raw outputs; see result reports for summaries)
 - Paper: _none_
