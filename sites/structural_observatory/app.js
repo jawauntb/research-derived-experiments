@@ -732,6 +732,10 @@ function attachInteractiveViz(data) {
   // Companion: concern_fisher_pair (CG-1 Fisher matching + CG-2 holonomy).
   const iCF = document.getElementById("concern_fisher_pair");
   if (iCF && data.concern_fisher_pair) mountConcernFisherViz(iCF, data.concern_fisher_pair);
+
+  // Companion: causal_semantics_pair (Ψ-quotient vs co-occurrence signature).
+  const iCS = document.getElementById("causal_semantics_pair");
+  if (iCS && data.causal_semantics_pair) mountCausalSemanticsViz(iCS, data.causal_semantics_pair);
 }
 
 // ---- Instrument 2 viz: timeline scrubber for the abstract trajectory ----
@@ -1103,6 +1107,91 @@ function mountConcernFisherViz(section, data) {
 
   const slider = makeSlider("c-index", 0, Math.max(0, records.length - 1), 0, (v) => { idx = v; draw(); });
   container.appendChild(slider);
+  draw();
+}
+
+// ---- Companion: causal_semantics_pair viz ----
+// Radio toggles between the Ψ-quotient (correct meaning) and the co-occurrence
+// signature partition (orthogonal, wrong). Each message chip is coloured by
+// the selected partition; status text reports whether it is common-sufficient.
+function mountCausalSemanticsViz(section, data) {
+  const container = el("div", { class: "viz" }, [
+    el("h4", {}, ["Interactive: toggle the partition — Ψ-quotient is common-sufficient, co-occurrence is not"]),
+  ]);
+  section.appendChild(container);
+  const width = 380, height = 220;
+  const { canvas, ctx } = makeCanvas(width, height);
+  container.appendChild(canvas);
+  const messages = (data.world && data.world.messages) || ["m0", "m1", "m2", "m3", "m4", "m5"];
+  const partitions = {
+    psi: { name: "Ψ-quotient (CS-2)", blocks: data.psi_partition, sufficient: true },
+    cooccur: { name: "co-occurrence signature", blocks: data.cooccurrence_partition, sufficient: false },
+  };
+  let current = "psi";
+
+  function blockOf(partition, msg) {
+    for (let i = 0; i < partition.length; i++) {
+      if (partition[i].indexOf(msg) !== -1) return i;
+    }
+    return -1;
+  }
+
+  function draw() {
+    ctx.fillStyle = AMBIENT;
+    ctx.fillRect(0, 0, width, height);
+    const p = partitions[current];
+    // Layout: one row of 6 chips, coloured by block index in selected partition.
+    const chipW = 46, chipH = 46, y0 = 60, x0 = 20, gap = 10;
+    messages.forEach((m, i) => {
+      const b = blockOf(p.blocks, m);
+      const x = x0 + i * (chipW + gap);
+      ctx.fillStyle = Z_PALETTE[b % Z_PALETTE.length] || "#888";
+      ctx.fillRect(x, y0, chipW, chipH);
+      ctx.strokeStyle = "#22303d";
+      ctx.strokeRect(x, y0, chipW, chipH);
+      ctx.fillStyle = AMBIENT;
+      ctx.font = "16px ui-monospace, monospace";
+      ctx.fillText(m, x + 10, y0 + chipH / 2 + 6);
+    });
+    // Draw block brackets underneath.
+    ctx.strokeStyle = "#5f7185";
+    ctx.lineWidth = 1;
+    ctx.font = "11px ui-monospace, monospace";
+    let bracketY = y0 + chipH + 12;
+    for (let b = 0; b < p.blocks.length; b++) {
+      const members = p.blocks[b];
+      const startI = messages.indexOf(members[0]);
+      const endI = messages.indexOf(members[members.length - 1]);
+      const startX = x0 + startI * (chipW + gap);
+      const endX = x0 + endI * (chipW + gap) + chipW;
+      ctx.beginPath();
+      ctx.moveTo(startX, bracketY);
+      ctx.lineTo(endX, bracketY);
+      ctx.stroke();
+      ctx.fillStyle = Z_PALETTE[b % Z_PALETTE.length];
+      ctx.fillText(`block ${b} (|·|=${members.length})`, startX, bracketY + 14);
+    }
+    // Title + status.
+    ctx.fillStyle = INK;
+    ctx.font = "13px ui-monospace, monospace";
+    ctx.fillText(p.name, 12, 24);
+    ctx.fillStyle = p.sufficient ? "#3fb27f" : "#e0525b";
+    ctx.font = "12px ui-monospace, monospace";
+    ctx.fillText(
+      p.sufficient
+        ? `→ ${p.blocks.length} classes, common-sufficient (coarsest CSS on messages)`
+        : `→ ${p.blocks.length} classes, NOT sufficient (orthogonal to Ψ)`,
+      12, 42
+    );
+  }
+
+  const radio = makeRadio(
+    "partition:",
+    [{ value: "psi", label: "Ψ-quotient" }, { value: "cooccur", label: "co-occurrence" }],
+    "psi",
+    (v) => { current = v; draw(); }
+  );
+  container.appendChild(radio);
   draw();
 }
 

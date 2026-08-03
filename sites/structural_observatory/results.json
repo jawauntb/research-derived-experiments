@@ -2057,5 +2057,24 @@
       "triangle_holonomy_predicted": 0.15,
       "rectangle_over_triangle_ratio": 2.0
     }
+  },
+  "causal_semantics_pair": {
+    "status": "pass",
+    "gates": {
+      "cs1_psi_equivalence_is_reflexive_symmetric_transitive": true,
+      "cs2_psi_quotient_has_four_classes": true,
+      "cs2_psi_quotient_is_common_sufficient": true,
+      "cs_cooccurrence_partition_differs_from_psi_quotient": true
+    },
+    "world": {
+      "num_messages": 6,
+      "num_contexts": 4,
+      "num_future_states": 4,
+      "messages": ["m0", "m1", "m2", "m3", "m4", "m5"]
+    },
+    "psi_partition": [["m0", "m1"], ["m2", "m3"], ["m4"], ["m5"]],
+    "cooccurrence_partition": [["m0", "m2", "m4"], ["m1", "m3", "m5"]],
+    "psi_refines_cooccurrence": false,
+    "cooccurrence_refines_psi": false
   }
 }
