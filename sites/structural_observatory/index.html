@@ -160,6 +160,26 @@
             </span>
           </li>
           <li>
+            <a class="paper-download" href="https://github.com/jawauntb/research-derived-experiments/blob/main/papers/structural_intelligence_foundations/paper.pdf">Foundations PDF</a>
+            <span class="paper-title">
+              <em>Structural Intelligence &mdash; Foundations</em>
+              (eleventh companion paper; derives SIC-A finite-discrete
+              existence from T1 + P3 + CS-2, turning the master fibration
+              from posit to theorem &mdash; Lean-verified as
+              <code>sic_a_finite_discrete</code>, zero new axioms)
+            </span>
+          </li>
+          <li>
+            <a class="paper-download" href="https://github.com/jawauntb/research-derived-experiments/blob/main/papers/structural_intelligence_covering_learnability/paper.pdf">Covering-Learnability PDF</a>
+            <span class="paper-title">
+              <em>Structural Intelligence &mdash; Covering Learnability</em>
+              (twelfth companion paper; SIC-C-c conditional meta-theorem
+              via T5-rate &compfn; T6 covering reduction; Locatello 2019
+              is the sharp boundary. Lean-verified as
+              <code>sicc_covering_meta</code>, zero new axioms)
+            </span>
+          </li>
+          <li>
             <a href="https://github.com/jawauntb/research-derived-experiments/blob/main/notes/structural_intelligence_conjecture.md">Formal companion note</a>
             &mdash; the working development of the framework (concern-as-fiber-geometry,
             the ten constructs, Core &subset; Shell agent architecture) that the
@@ -191,7 +211,7 @@
 
         <h3 style="margin-top: 24px; font-size: 16px; color: var(--ink);">Machine-checked Lean 4 proofs</h3>
         <p style="color: var(--muted); font-size: 14px; margin: 6px 0 10px;">
-          <strong>All named theorems in the ten-paper family are now Lean-formalised.</strong>
+          <strong>All named theorems in the twelve-paper family are now Lean-formalised, including the two conjectural residuals turned conditional theorems (SIC-A finite derivation, SIC-C-c covering meta-theorem).</strong>
           Two isolated Lean 4 projects: a fast pure-core lane
           (<a href="https://github.com/jawauntb/research-derived-experiments/tree/main/formal/structural-intelligence"><code>formal/structural-intelligence/</code></a>,
           no mathlib, builds in ~3&thinsp;s) covers the combinatorial and algebraic cores;
@@ -221,12 +241,15 @@
             Theorem&nbsp;CT-2 (Chebyshev-weighted correlation &rArr; Boltzmann raises expected reward),
             Theorem&nbsp;CG-1 (Fisher matrix = Cov[T] in exponential families),
             Theorem&nbsp;CG-2 (concern-form holonomy = &epsilon;&middot;A via discrete Green's theorem),
-            Theorem&nbsp;AA-1 (Bayes-mixture log-likelihood monotone under refinement).
-            All in <code>StructuralIntelligenceMathlib/*.lean</code>. 15 named-headline theorems total.
+            Theorem&nbsp;AA-1 (Bayes-mixture log-likelihood monotone under refinement),
+            <code>sic_a_finite_discrete</code> (SIC-A derivation from T1 + P3 + CS-2 in the finite discrete positive-support case),
+            <code>sicc_covering_meta</code> (SIC-C-c conditional meta-theorem from T5-rate &compfn; T6 covering reduction).
+            All in <code>StructuralIntelligenceMathlib/*.lean</code>. 19 named-headline theorems total.
           </li>
           <li>
             <strong>Axiom footprint (from <code>#print axioms</code> on every headline)</strong>:
-            29 of 32 headlines depend only on the mathlib-standard axiom set
+            33 of 36 headlines (SIC-A finite existence and the SIC-C-c meta-theorem contribute zero new axioms)
+            depend only on the mathlib-standard axiom set
             <code>[propext, Classical.choice, Quot.sound]</code>. Two headlines (T1 minimality, T2 converse)
             each add one explicitly-cited project axiom pointing to the classical result Mathlib does not yet expose.
             No hidden <code>sorry</code>s anywhere.

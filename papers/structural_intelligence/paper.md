@@ -9,7 +9,7 @@ Human author and research director
 Experiment code, analysis, and manuscript production under direction and review
 
 **Date:** August 3, 2026
-**Status:** five theorems + one conditional theorem + eleven instruments (seven exact + four fixed-seed Monte Carlo). SIC-C-c (uniform polynomial-in-`d_Z` learnability under an inductive-bias hypothesis class) is positively resolved for four distinct classes — linear ICA, sparse-*linear* ICA, auxiliary-variable iVAE, interventional CRL — each with its own numerical witness (Instruments 8–11). **The full §5 extended program is now closed**: nine companion papers cover the ten conjectural constructs (concern-fiber geometry, rate–distortion control limit / compiler tomography, sufficient antecedents, abstraction frontier, fiber audit / alignment as ensemble governance, theory atlas, causal semantics, representation-repair calculus, autocatalytic artwork). Each companion adds two theorems + one exact instrument. Full family: *Concern as Fiber Geometry* (CG-1/CG-2), *Compiler Tomography* (CT-1/CT-2), *Sufficient Antecedents* (SA-1), *Abstraction Frontier* (AF-1/AF-2), *Alignment as Ensemble Governance* (AG-1/AG-2), *Theory Atlas* (TA-1/TA-2), *Causal Semantics* (CS-1/CS-2), *Representation-Repair Calculus* (RR-1/RR-2), *Autocatalytic Artwork* (AA-1/AA-2). Machine-checked Lean 4 proofs now cover **every named theorem in the ten-paper family** across two isolated projects: pure-core (`formal/structural-intelligence/`, no mathlib, 17 headlines including T4/T5-core/T6/CT-1/CS-1/2/SA-1/AF-1/2/AG-2/TA-1/RR-2/AA-2) and mathlib companion (`formal/structural-intelligence-mathlib/`, mathlib v4.32.2, 15 real-analytic headlines including T5-rate, T1, T2, P3, AG-1, CT-2, CG-1, CG-2, AA-1). Zero `sorry`s across both projects; only two explicitly-cited project axioms (Halmos–Savage 1949 packaging for T1, Shannon 1959 KKT converse for T2).
+**Status:** five theorems + one conditional theorem + eleven instruments (seven exact + four fixed-seed Monte Carlo). SIC-C-c (uniform polynomial-in-`d_Z` learnability under an inductive-bias hypothesis class) is positively resolved for four distinct classes — linear ICA, sparse-*linear* ICA, auxiliary-variable iVAE, interventional CRL — each with its own numerical witness (Instruments 8–11), and is now a **conditional meta-theorem** for *any* class `H` with polynomial ε-covering (companion paper *Covering Learnability*, Lean-verified as `sicc_covering_meta`). SIC-A's master fibration, previously flagged as "posited, not derived", is now **derived** in the finite discrete positive-support case from T1 + P3 + CS-2 (companion paper *Foundations*, Lean-verified as `sic_a_finite_discrete`). **The full §5 extended program is now closed**: eleven companion papers cover the ten conjectural constructs plus the SIC-A finite derivation and the SIC-C-c covering meta-theorem (concern-fiber geometry, rate–distortion control limit / compiler tomography, sufficient antecedents, abstraction frontier, fiber audit / alignment as ensemble governance, theory atlas, causal semantics, representation-repair calculus, autocatalytic artwork). Each companion adds two theorems + one exact instrument. Full family: *Concern as Fiber Geometry* (CG-1/CG-2), *Compiler Tomography* (CT-1/CT-2), *Sufficient Antecedents* (SA-1), *Abstraction Frontier* (AF-1/AF-2), *Alignment as Ensemble Governance* (AG-1/AG-2), *Theory Atlas* (TA-1/TA-2), *Causal Semantics* (CS-1/CS-2), *Representation-Repair Calculus* (RR-1/RR-2), *Autocatalytic Artwork* (AA-1/AA-2), *Foundations* (SIC-A finite derivation), *Covering Learnability* (SIC-C-c meta-theorem). Machine-checked Lean 4 proofs now cover **every named theorem in the twelve-paper family** across two isolated projects: pure-core (`formal/structural-intelligence/`, no mathlib, 17 headlines) and mathlib companion (`formal/structural-intelligence-mathlib/`, mathlib v4.32.2, 19 headlines including T5-rate, T1, T2, P3, AG-1, CT-2, CG-1, CG-2, AA-1, `sic_a_finite_discrete`, `sicc_covering_meta`). Zero `sorry`s across both projects; only two explicitly-cited project axioms (Halmos–Savage 1949 packaging for T1, Shannon 1959 KKT converse for T2). The two new companion papers close the two residuals previously flagged as open in §5.
 
 ---
 
@@ -486,6 +486,13 @@ antecedent and one residual inductive-bias question:
 
 - **SIC-A — Existence.** Theorem 1 + Proposition 3. The master fibration
   exists as a mathematical object for any well-posed task. *Theorem.*
+  **Derived, not posited, in the finite discrete positive-support case**
+  by the *Foundations* companion paper: `q` is the LR-vector from T1,
+  `K` is the refine kernel from P3, minimality is CS-2. Machine-checked
+  in Lean 4 as `sic_a_finite_discrete` and `sic_a_finite_discrete_coarsest`
+  in `formal/structural-intelligence-mathlib/`. Zero new axioms.
+  General topological / measure-theoretic case remains open (requires
+  mathlib measure theory).
 - **SIC-B — Cross-task stability.** Theorem 4 (conditional). Stability of a
   single `q` across a task family is equivalent to the family admitting a
   shared Markov screen. *Conditional theorem; antecedent empirical about the
@@ -506,14 +513,24 @@ antecedent and one residual inductive-bias question:
   Hyvärinen–Oja machinery; Instrument 8 is the numerical witness. Other
   inductive-bias classes (sparse ICA, iVAE, interventional CRL) admit their
   own analogues; each is a separate theorem-instrument pair, and the
-  Observatory is set up to host them.
+  Observatory is set up to host them. **Meta-theorem** (*Covering
+  Learnability* companion paper): for any inductive-bias class `H` with
+  polynomial ε-covering number `N(ε, H) = O(poly(1/ε, d_Z))`, SIC-C-c
+  holds by direct composition of T6 (ε-covering reduction) and T5-rate
+  (quantitative sample bound). Machine-checked in Lean 4 as
+  `sicc_covering_meta` and `sicc_covering_poly`. Zero new axioms.
+  Locatello 2019's impossibility is now the *sharp boundary*: fully-
+  unsupervised nonlinear ICA has exponential covering and provably
+  violates the meta-theorem's precondition.
 
-What remains genuinely open is only SIC-C-c — the question of which
-inductive biases make polynomial-in-`d_Z` learnability possible for *which*
-continuous hypothesis classes. That is a mainstream question in
-representation-learning theory and is beyond this paper's scope; the paper's
-contribution is to identify the boundary precisely and prove learnability
-right up to it.
+What remains genuinely open, per class, is proving that a *specific*
+new inductive-bias class `H` has polynomial ε-covering — an isolated
+per-class problem sharpened by the covering meta-theorem's precondition.
+That is a mainstream question in representation-learning theory and is
+beyond this paper's scope; the paper's contribution is to identify the
+boundary precisely, prove learnability right up to it, and reduce the
+existence of the master fibration itself from posit to derived theorem
+in the finite discrete case.
 
 The remainder of the paper states the SIC in its full-strength form (§3),
 exhibits its eleven instruments (§4), sketches ten further constructs
