@@ -364,5 +364,32 @@
         "exact_recovery_meets_target": true
       }
     ]
+  },
+  "cross_task_learnability_continuous": {
+    "gates": {
+      "theorem6_bound_meets_target_at_all_grid_points": true,
+      "recovery_zero_below_M_at_all_grid_points": true,
+      "recovery_monotone_up_to_bound": true,
+      "exponential_in_d_Z_scaling_strict": true,
+      "ratio_exceeds_r_over_two_at_all_r": true
+    },
+    "status": "pass",
+    "eps_rel": 0.05,
+    "ambient_side": 16,
+    "ambient_size": 256,
+    "theorem_bound_form": "N >= c * (D_Z / eps)^{d_Z} * ... = c * M * ln(M / eps_rel)",
+    "scaling_points": [
+      { "d_z": 1, "r": 4, "M": 4, "N_bound": 18, "exact_recovery_at_bound": 0.9775, "meets_target": true },
+      { "d_z": 1, "r": 8, "M": 8, "N_bound": 41, "exact_recovery_at_bound": 0.9667, "meets_target": true },
+      { "d_z": 1, "r": 16, "M": 16, "N_bound": 93, "exact_recovery_at_bound": 0.9609, "meets_target": true },
+      { "d_z": 2, "r": 4, "M": 16, "N_bound": 93, "exact_recovery_at_bound": 0.9609, "meets_target": true },
+      { "d_z": 2, "r": 8, "M": 64, "N_bound": 458, "exact_recovery_at_bound": 0.9538, "meets_target": true },
+      { "d_z": 2, "r": 16, "M": 256, "N_bound": 2187, "exact_recovery_at_bound": 0.9521, "meets_target": true }
+    ],
+    "N_bound_ratio_d_Z2_over_d_Z1": [
+      { "r": 4, "ratio": 5.166667 },
+      { "r": 8, "ratio": 11.170732 },
+      { "r": 16, "ratio": 23.516129 }
+    ]
   }
 }

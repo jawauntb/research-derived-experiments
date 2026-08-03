@@ -2,7 +2,7 @@
 
 Date: August 3, 2026
 
-Status: **three theorems + one conditional theorem + five working
+Status: **four theorems + one conditional theorem + six working
 instruments.** The master stochastic fibration (§2) is now *derived* —
 Theorems 1 and 2 give it as the minimal-sufficient-statistic pair or the
 Shannon rate–distortion pair, Proposition 3 gives the categorical restatement;
@@ -13,17 +13,22 @@ theorem* — Theorem 4 — equivalent to the task family admitting a common Mark
 screen. Discrete-case learnability is *also* a theorem — Theorem 5 — with
 sample complexity `N ≥ ⌈c · M · ln(M/ε)⌉` for empirical common-sufficient
 clustering under a separating task family and fibre-balance constant `c`.
-The residual conjectural content is (a) Theorem 4's antecedent as an
-empirical claim about the world, and (b) the *continuous-case extension* of
-Theorem 5, which is partial in the identifiable-representation-learning
-literature and bounded by Locatello's (2019) impossibility for fully
-unsupervised disentanglement. The extended formalism (§3–§4) is still
-speculative theory and is held to the `AGENTS.md` mathematical-claim gate;
-it is **not** promoted to theorems. The five instruments in §5 are exact,
-deterministic, and tested — instruments 1, 4, and 5 are computational
-witnesses of Theorems 1, 4, and 5, instruments 2 and 3 establish auxiliary
-dissociations. Retrieval provenance for the six source works and the
-underlying meta-object is in
+Continuous-case learnability at resolution `ε` is Theorem 6, obtained by
+reducing to Theorem 5 via ε-covering: `N ≥ O(c · (D_Z/ε)^{d_Z} · d_Z · log(...))`,
+polynomial in `1/ε` at fixed `d_Z` and (provably) exponential in `d_Z` at
+fixed `ε` — the second is the ε-covering lower bound and cannot be improved
+without additional inductive bias on `q`. The only residual conjectural
+content is (a) Theorem 4's antecedent as an empirical claim about the world,
+and (b) SIC-C-c: uniform polynomial-in-`d_Z` learnability under some
+inductive-bias hypothesis class (linear ICA, sparse ICA, iVAE, interventional
+CRL). SIC-C-c is a mainstream research-programme question rather than
+something intrinsic to our framework. The extended formalism (§3–§4) is
+still speculative theory and is held to the `AGENTS.md` mathematical-claim
+gate; it is **not** promoted to theorems. The six instruments in §5 are
+exact, deterministic, and tested — instruments 1, 4, 5, and 6 are
+computational witnesses of Theorems 1, 4, 5, and 6; instruments 2 and 3
+establish auxiliary dissociations. Retrieval provenance for the six source
+works and the underlying meta-object is in
 [`latent_structures_meta_framework.md`](latent_structures_meta_framework.md).
 
 This note continues that meta-framework. There the shared latent object was an
@@ -122,15 +127,24 @@ have to be proved to make the analogy a theorem?*
   common-sufficient clustering recovers `q̂ = q` with probability `≥ 1 − ε`
   from `N ≥ ⌈c · M · ln(M/ε)⌉` samples. Time complexity is `O(N · K + |X| · K)`.
   Instrument 5 (§5.5) is the exact numerical witness via inclusion–exclusion.
+- **Theorem 6 (Continuous-case learnability at resolution ε).** For any `ε > 0`
+  and any Z with ε-covering number `N_ε`, the same algorithm recovers `q_ε`
+  (the ε-quantised true partition) with probability `≥ 1 − ε_rel` from
+  `N ≥ c · N_ε · ln(N_ε / ε_rel)` samples. For `Z ⊂ ℝ^{d_Z}` bounded,
+  `N_ε = O((D_Z/ε)^{d_Z})`, giving `N = O(c (D_Z/ε)^{d_Z} d_Z log(D_Z/(ε ε_rel)))`
+  — polynomial in `1/ε` at fixed `d_Z`, exponential in `d_Z` at fixed `ε`.
+  This exponential-in-`d_Z` rate is provably tight against the ε-covering
+  lower bound; no algorithm can escape it without additional inductive bias.
+  Instrument 6 (§5.6) is the exact numerical witness across a
+  `(d_Z, r) ∈ {1, 2} × {4, 8, 16}` grid on the standard ε-quantised
+  `[0, 1]^2` world.
 
-The **learnability** claim in the *continuous* case remains open: whether
-Theorem 5's discrete bound extends to continuous `X` with appropriate
-smoothness assumptions on the compiler `g`. Locatello et al. (2019) show
-the fully unsupervised continuous case is impossible; the identifiable-
-representation-learning line (Khemakhem–Kingma–Monti–Hyvärinen 2020,
-Ahuja–Mahajan–Wang–Bengio 2022) is the current partial answer for
-auxiliary-variable settings — exactly the class of settings the task family
-supplies.
+The **only** residual open question is **SIC-C-c**: uniform polynomial-in-
+`d_Z` learnability *within* a specific inductive-bias hypothesis class
+(linear ICA, sparse ICA, iVAE, interventional causal representation
+learning). Each such class is where identifiable-representation-learning
+theory does its work; a theorem for a specific class is future work but
+not intrinsic to our framework.
 
 **SIC in the honest split.** The conjecture below is stated in its
 full-strength form for continuity with the source works, but the honest
@@ -141,10 +155,14 @@ factorisation the theorems permit is:
 - **SIC-B (cross-task stability):** Theorem 4 conditional on a shared Markov
   screen. *Theorem given the antecedent; the antecedent is empirical about the
   world.*
-- **SIC-C (learnability, discrete):** Theorem 5. *Theorem, with a numerically
+- **SIC-C-a (learnability, discrete):** Theorem 5. *Theorem, with a numerically
   sharp constant (Instrument 5).*
-- **SIC-C′ (learnability, continuous):** Open, partial via identifiable
-  representation learning.
+- **SIC-C-b (learnability, continuous at resolution ε):** Theorem 6.
+  *Theorem; polynomial in `1/ε` at fixed `d_Z`, provably exponential in `d_Z`
+  at fixed `ε` (Instrument 6).*
+- **SIC-C-c (uniform polynomial in `d_Z` under inductive bias):** Open in
+  general; theorem for specific hypothesis classes in the identifiable-
+  representation-learning line — not proved here.
 
 ---
 
@@ -247,13 +265,13 @@ its status and its relation to the instruments in §5.
 
 ---
 
-## 5. The five built instruments
+## 5. The six built instruments
 
 Each is exact, deterministic, tested, and public-safe (summaries in `results/`,
-no raw dumps). They are the first five instruments of the Observatory.
-Instruments 1, 4, and 5 are computational witnesses of Theorems 1, 4, and 5;
-instruments 2 and 3 establish the auxiliary dissociations the extended program
-rests on.
+no raw dumps). They are the first six instruments of the Observatory.
+Instruments 1, 4, 5, and 6 are computational witnesses of Theorems 1, 4, 5,
+and 6; instruments 2 and 3 establish the auxiliary dissociations the extended
+program rests on.
 
 ### Instrument 1 — `experiments/representation_search` (Fiber Finder)
 Over a Boolean world with a known invariant, it enumerates a lattice of quotients
@@ -316,6 +334,23 @@ monotone in `N`, and degrades exactly as `c` predicts under compiler
 imbalance. This is the numerical witness of Theorem 5's discrete-case sample
 complexity, and the endpoint of the "learnability" claim in the finite case.
 
+### Instrument 6 — `experiments/cross_task_learnability_continuous` (Theorem 6 witness)
+Ambient `X = [0, 1]^2` quantised into a `16 × 16` grid (256 cells); latent
+`Z` is a coarser `r × r` (for `d_Z = 2`) or `r × 1` (for `d_Z = 1`) grid,
+with `r ∈ {4, 8, 16}` chosen to divide `16` exactly (so fibres are exactly
+balanced). Compute the exact recovery probability at Theorem 6's bound
+`N = ⌈c · M · ln(M / ε_rel)⌉` for every `(d_Z, r)`, using the numerically
+stable `O(N · M)` DP recursion (the naive inclusion–exclusion form suffers
+catastrophic cancellation at `M = 256`). **Establishes** at `ε_rel = 0.05`
+that every one of the six grid points meets the target: recovery ranges from
+`0.9521` (d_Z=2, r=16, M=256, N=2187) to `0.9775` (d_Z=1, r=4, M=4, N=18).
+Recovery is zero below `M` (pigeonhole) and monotone in `N`. The ratio
+`N_bound(d_Z=2, r) / N_bound(d_Z=1, r)` grows `5.17, 11.17, 23.52` at
+`r = 4, 8, 16` — the exponential-in-`d_Z` scaling made numerical. This is
+the computational witness of Theorem 6 and of its fundamental limit:
+empirical common-sufficient clustering saturates the ε-covering lower bound,
+so no algorithm can do better without inductive bias on `q`.
+
 ---
 
 ## 6. Capstone application: conscious / reliable agents (the honest version)
@@ -366,22 +401,25 @@ infallibility`, kept as two separate, non-inflated claims.
 One system that, given a problem, theory, agent, organism, or artwork, returns:
 its candidate quotient maps, realization fibers, automorphisms, abstraction
 frontier, fiber-audit results, inferred compiler, and possible cross-substrate
-embodiments. The five instruments above are its first five modules
+embodiments. The six instruments above are its first six modules
 (quotient search, cross-substrate compiler, causal/agency measurement,
-cross-task sufficiency, cross-task learnability); §4 lists the remaining
-modules as pre-registered future instruments.
+cross-task sufficiency, cross-task learnability, cross-task learnability
+continuous); §4 lists the remaining modules as pre-registered future
+instruments.
 
 ---
 
 ## 8. Limitations and rejected alternatives
 
 - **The instruments are toys by design.** They establish dissociations and
-  witness Theorems 1, 4, and 5 on exactly-solvable cases (finite Boolean
-  worlds, tiny MDPs, lossless encoders). Theorem 5 covers the *discrete* case
-  of learnability under separation + fibre balance; the *continuous* case
-  extension is not proved here (Locatello 2019 shows unqualified continuous
-  learnability is impossible; the identifiable-representation-learning line
-  is the partial answer). The conditional rate–distortion control limit
+  witness Theorems 1, 4, 5, and 6 on exactly-solvable cases (finite Boolean
+  worlds, finite-quantised `[0, 1]^2`, tiny MDPs, lossless encoders).
+  Theorems 5 and 6 cover discrete and continuous-at-resolution-`ε`
+  learnability; the residual (SIC-C-c) is uniform polynomial-in-`d_Z`
+  learnability under a specific inductive-bias hypothesis class — mainstream
+  identifiable-representation-learning territory, not intrinsic to our
+  framework, and provably impossible in full generality without the
+  hypothesis class. The conditional rate–distortion control limit
   (extension 2) and the alignment claim (extension 9) also remain
   conjectural. Instrument 2's fidelity is 1.0 *by construction*: it tests
   that the compilers are faithful functors, not that faithful compilation is

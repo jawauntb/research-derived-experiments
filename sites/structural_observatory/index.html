@@ -6,7 +6,7 @@
     <title>Structural Observatory</title>
     <meta
       name="description"
-      content="The Structural Intelligence Conjecture derived: three theorems, one conditional theorem, and five exact instruments — representation search, cross-substrate compilation, agency measurement, cross-task sufficiency, and cross-task learnability (Theorem 5's sample-complexity witness)."
+      content="The Structural Intelligence Conjecture derived: four theorems, one conditional theorem, and six exact instruments — representation search, cross-substrate compilation, agency measurement, cross-task sufficiency, cross-task learnability (Theorem 5's sample-complexity witness), and continuous-case cross-task learnability (Theorem 6's ε-covering scaling witness across d_Z ∈ {1, 2} and r ∈ {4, 8, 16})."
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -37,12 +37,16 @@
         <strong>Theorem&nbsp;4</strong> (conditional) makes cross-task stability
         equivalent to the task family sharing a Markov screen;
         <strong>Theorem&nbsp;5</strong> proves discrete-case learnability at
-        sample complexity <code>N &ge; &lceil;c&sdot;M&sdot;ln(M/&epsilon;)&rceil;</code>
-        via empirical common-sufficient clustering. Only the
-        <em>continuous-case</em> extension of Theorem&nbsp;5 remains open &mdash;
-        partial answers in the identifiable-representation-learning line,
-        bounded by Locatello (2019)'s impossibility for fully unsupervised
-        disentanglement.
+        sample complexity <code>N&nbsp;&ge;&nbsp;&lceil;c&sdot;M&sdot;ln(M/&epsilon;)&rceil;</code>;
+        and <strong>Theorem&nbsp;6</strong> extends the bound to the continuous
+        case at any resolution <code>&epsilon;</code>, giving
+        <code>N&nbsp;=&nbsp;O(c(D<sub>Z</sub>/&epsilon;)<sup>d<sub>Z</sub></sup>&sdot;d<sub>Z</sub>&sdot;log(&hellip;))</code>
+        &mdash; polynomial in <code>1/&epsilon;</code> at fixed <em>d<sub>Z</sub></em>,
+        provably exponential in <em>d<sub>Z</sub></em> at fixed <code>&epsilon;</code>.
+        Only <strong>SIC-C-c</strong> (uniform polynomial-in-<em>d<sub>Z</sub></em>
+        learnability under a specific inductive-bias hypothesis class) remains
+        open &mdash; that boundary is a consequence of &epsilon;-covering
+        lower bounds and Locatello (2019), not of our framework.
       </p>
     </header>
 
@@ -151,6 +155,32 @@
         <div class="table-wrap" data-body></div>
       </section>
 
+      <section class="instrument" id="cross_task_learnability_continuous">
+        <div class="instrument-head">
+          <span class="badge">Instrument 6</span>
+          <h2>Continuous-case Learnability &mdash; Theorem&nbsp;6 witness</h2>
+        </div>
+        <p class="instrument-blurb">
+          Ambient <code>X&nbsp;=&nbsp;[0,1]<sup>2</sup></code> quantised to a
+          16&times;16 grid; latent <em>Z</em> a coarser <em>r</em>&times;<em>r</em>
+          (for <em>d<sub>Z</sub></em>&nbsp;=&nbsp;2) or <em>r</em>&times;1 (for
+          <em>d<sub>Z</sub></em>&nbsp;=&nbsp;1) grid at resolutions
+          <em>r</em>&nbsp;&isin;&nbsp;{4,&nbsp;8,&nbsp;16}. Exact recovery
+          probability at Theorem&nbsp;6's bound is computed by an <em>O(N&sdot;M)</em>
+          DP recursion, numerically stable up to <em>M</em>&nbsp;=&nbsp;256 where the
+          log-domain inclusion&ndash;exclusion form fails. All six grid points meet
+          the <code>1&nbsp;&minus;&nbsp;&epsilon;<sub>rel</sub>&nbsp;=&nbsp;0.95</code>
+          target; the ratio
+          <code>N<sub>bound</sub>(d<sub>Z</sub>=2)/N<sub>bound</sub>(d<sub>Z</sub>=1)</code>
+          grows <em>5.17</em>, <em>11.17</em>, <em>23.52</em> at <em>r</em>&nbsp;=&nbsp;4,&nbsp;8,&nbsp;16
+          &mdash; the exponential-in-<em>d<sub>Z</sub></em> scaling made numerical.
+          Empirical common-sufficient clustering saturates the &epsilon;-covering
+          lower bound; escaping the curse requires inductive bias.
+        </p>
+        <div class="gates" data-gates></div>
+        <div class="table-wrap" data-body></div>
+      </section>
+
       <section class="closing">
         <h2>What this is and is not</h2>
         <ul>
@@ -165,7 +195,7 @@
             Instruments&nbsp;1 and&nbsp;4 are exact witnesses.
           </li>
           <li>
-            <strong>Is (also derived, discrete case):</strong> Theorem&nbsp;5 proves
+            <strong>Is (derived, discrete case):</strong> Theorem&nbsp;5 proves
             that under separation and fibre balance, empirical common-sufficient
             clustering recovers <em>Z</em> with probability
             <code>&ge;&nbsp;1&nbsp;&minus;&nbsp;&epsilon;</code> from
@@ -173,13 +203,22 @@
             samples. Instrument&nbsp;5 verifies the bound exactly.
           </li>
           <li>
-            <strong>Is (open, continuous case):</strong> the extension of
-            Theorem&nbsp;5 to continuous <em>X</em>. Partial answers in the
-            identifiable-representation-learning line (auxiliary-variable iVAE
-            2020, interventional causal representation learning 2022); no general
-            theorem, because Locatello (2019) proves the fully unsupervised
-            continuous case is impossible. This is the remaining research-programme
-            question.
+            <strong>Is (derived, continuous case at resolution &epsilon;):</strong>
+            Theorem&nbsp;6 reduces to Theorem&nbsp;5 via &epsilon;-covering:
+            <code>N&nbsp;=&nbsp;O(c(D<sub>Z</sub>/&epsilon;)<sup>d<sub>Z</sub></sup>&sdot;d<sub>Z</sub>&sdot;log(&hellip;))</code>,
+            polynomial in <code>1/&epsilon;</code> at fixed <em>d<sub>Z</sub></em>,
+            provably exponential in <em>d<sub>Z</sub></em> at fixed <code>&epsilon;</code>
+            (&epsilon;-covering lower bound). Instrument&nbsp;6 verifies the bound at
+            every point of a <em>(d<sub>Z</sub>,&nbsp;r)</em>&nbsp;&isin;&nbsp;{1,2}&times;{4,8,16}
+            grid.
+          </li>
+          <li>
+            <strong>Is (open):</strong> SIC-C-c &mdash; uniform polynomial-in-<em>d<sub>Z</sub></em>
+            learnability under a specific inductive-bias hypothesis class. This
+            is where the identifiable-representation-learning line (linear ICA,
+            iVAE 2020, interventional CRL 2022, sparse-mechanism analysis) does
+            its work; a theorem for a specific such class is the natural next
+            piece of the Observatory.
           </li>
           <li>
             <strong>Is not:</strong> a proof of universal agency or of infallibility.

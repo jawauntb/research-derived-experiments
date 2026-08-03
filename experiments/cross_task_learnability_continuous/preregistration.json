@@ -1,0 +1,39 @@
+{
+  "experiment_id": "cross_task_learnability_continuous",
+  "schema_version": "1.0",
+  "hypothesis": "Theorem 6 (paper section 2.5b) says that continuous-case learnability at resolution eps reduces to Theorem 5 via eps-covering: sample complexity is N >= c * N_eps * ln(N_eps / eps_rel) with N_eps = O((D_Z / eps)^d_Z), which is polynomial in 1/eps at fixed d_Z and exponential in d_Z at fixed eps. On an ambient X = [0,1]^2 quantised into a 16x16 grid, with a coarser r x r latent-Z grid (r in {4, 8, 16}) at intrinsic dimensions d_Z in {1, 2}: (a) at Theorem 6's bound N >= ceil(c * M * ln(M / eps_rel)) with c = 1 and eps_rel = 0.05, the exact recovery probability is at least 1 - eps_rel for every (d_Z, r); (b) recovery is zero below M samples (pigeonhole); (c) recovery is monotone in N up to the bound; (d) at fixed r, N_bound(d_Z=2, r) strictly exceeds N_bound(d_Z=1, r), with the ratio growing at least as r/2 (the exponential-in-d_Z scaling).",
+  "primary_metric": "scaling_points[i].exact_recovery_at_bound",
+  "gates": {
+    "CTLC_THEOREM6_BOUND_MEETS_TARGET_AT_ALL_GRID_POINTS": "For every (d_Z, r) in {1, 2} x {4, 8, 16}, the exact recovery probability at N = ceil(1 * M * ln(M / 0.05)), computed by the numerically stable DP recursion, is at least 1 - eps_rel = 0.95.",
+    "CTLC_RECOVERY_ZERO_BELOW_M_AT_ALL_GRID_POINTS": "For every grid point, exact recovery probability is 0 for every N < M (pigeonhole).",
+    "CTLC_RECOVERY_MONOTONE_UP_TO_BOUND": "For every grid point, sampled recovery probabilities at N in {0, 1, M-1, M, M+1, N_bound/2, N_bound, N_bound+1} are nondecreasing.",
+    "CTLC_EXPONENTIAL_IN_D_Z_SCALING_STRICT": "For every r in {4, 8, 16}, N_bound(d_Z=2, r) is strictly greater than N_bound(d_Z=1, r).",
+    "CTLC_RATIO_EXCEEDS_R_OVER_TWO_AT_ALL_R": "For every r in {4, 8, 16}, the ratio N_bound(d_Z=2, r) / N_bound(d_Z=1, r) is greater than r/2 (numerically observed to be 5.17, 11.17, 23.52 at r = 4, 8, 16)."
+  },
+  "metrics": [
+    "M",
+    "fibre_size_in_ambient",
+    "N_bound",
+    "exact_recovery_at_bound",
+    "meets_target",
+    "recovery_zero_below_M"
+  ],
+  "grid": {
+    "ambient_side": 16,
+    "d_Z_values": [1, 2],
+    "r_values": [4, 8, 16],
+    "eps_rel": 0.05
+  },
+  "controls": [
+    "dp_recursion_replaces_inclusion_exclusion_for_numerical_stability",
+    "ambient_side_divides_every_r_for_exact_balance",
+    "pigeonhole_lower_bound",
+    "closed_form_m4_agreement_check"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": null,
+    "sampling": "exact DP recursion on f(n, k) = P(exactly k distinct fibres seen after n samples); no Monte Carlo",
+    "raw_data": false
+  }
+}

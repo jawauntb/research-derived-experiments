@@ -87,6 +87,40 @@ function renderStructureCompiler(section, data) {
   body.appendChild(table(["medium", "q∘F = id", "fidelity", "steps"], rows));
 }
 
+function renderCrossTaskLearnabilityContinuous(section, data) {
+  renderGates(section, data.gates);
+  const body = section.querySelector("[data-body]");
+  body.appendChild(
+    el("p", { class: "status" }, [
+      `bound form: ${data.theorem_bound_form}; ε_rel = ${data.eps_rel}; ambient X = ${data.ambient_side}×${data.ambient_side} (${data.ambient_size} cells)`,
+    ])
+  );
+  const rows = data.scaling_points.map((pt) => [
+    { text: `${pt.d_z}`, cls: "num" },
+    { text: `${pt.r}`, cls: "num" },
+    { text: `${pt.M}`, cls: "num" },
+    { text: `${pt.N_bound}`, cls: "num" },
+    { node: pill(pt.exact_recovery_at_bound.toFixed(4), pt.meets_target ? "yes" : "no") },
+    { text: `${(1 - data.eps_rel).toFixed(2)}`, cls: "num" },
+  ]);
+  body.appendChild(
+    table(
+      ["d_Z", "r", "M = r^d_Z", "N (bound)", "P(recover @ N)", "target 1−ε"],
+      rows
+    )
+  );
+  const ratioRows = data.N_bound_ratio_d_Z2_over_d_Z1.map((row) => [
+    { text: `r = ${row.r}`, cls: "tag" },
+    { node: pill(row.ratio.toFixed(3) + "×", row.ratio > row.r / 2 ? "yes" : "no") },
+  ]);
+  body.appendChild(
+    el("p", { class: "status" }, [
+      "N_bound(d_Z=2) / N_bound(d_Z=1) — the exponential-in-d_Z scaling:",
+    ])
+  );
+  body.appendChild(table(["resolution", "N-bound ratio"], ratioRows));
+}
+
 function renderCrossTaskLearnability(section, data) {
   renderGates(section, data.gates);
   const body = section.querySelector("[data-body]");
@@ -194,6 +228,10 @@ async function main() {
     document.getElementById("cross_task_learnability"),
     data.cross_task_learnability
   );
+  renderCrossTaskLearnabilityContinuous(
+    document.getElementById("cross_task_learnability_continuous"),
+    data.cross_task_learnability_continuous
+  );
 
   const allPass = [
     "representation_search",
@@ -201,9 +239,10 @@ async function main() {
     "symbolic_causation",
     "cross_task_sufficiency",
     "cross_task_learnability",
+    "cross_task_learnability_continuous",
   ].every((k) => data[k].status === "pass");
   status.textContent = allPass
-    ? "All five instruments: status = pass. Every gate below is green."
+    ? "All six instruments: status = pass. Every gate below is green."
     : "One or more instruments did not pass — see gates below.";
 }
 
