@@ -728,6 +728,10 @@ function attachInteractiveViz(data) {
   if (iCT) {
     mountCompilerTomographyViz(iCT, data.compiler_tomography_pair);
   }
+
+  // Companion: concern_fisher_pair (CG-1 Fisher matching + CG-2 holonomy).
+  const iCF = document.getElementById("concern_fisher_pair");
+  if (iCF && data.concern_fisher_pair) mountConcernFisherViz(iCF, data.concern_fisher_pair);
 }
 
 // ---- Instrument 2 viz: timeline scrubber for the abstract trajectory ----
@@ -1021,6 +1025,85 @@ function mountCompilerTomographyViz(section, data) {
       ctx.stroke();
     });
   }
+}
+
+// ---- Companion: concern_fisher_pair viz ----
+// Slider selects one of the 4 c-values; shows predicted vs empirical 2x2 Fisher
+// diagonals and the CG-2 rectangle/triangle holonomy on the right.
+function mountConcernFisherViz(section, data) {
+  const container = el("div", { class: "viz" }, [
+    el("h4", {}, ["Interactive: pick c — see empirical Fisher match Cov[T], and the CG-2 holonomy loop"]),
+  ]);
+  section.appendChild(container);
+  const width = 380, height = 260;
+  const { canvas, ctx } = makeCanvas(width, height);
+  container.appendChild(canvas);
+  const records = data.cg1_records || [];
+  const cg2 = data.cg2 || { epsilon: 0.3, rectangle_holonomy_computed: 0.3, triangle_holonomy_computed: 0.15 };
+  let idx = 0;
+
+  function drawMatrix(diag, x0, y0, size, label, tint) {
+    const cell = size / 2;
+    for (let r = 0; r < 2; r++) {
+      for (let c = 0; c < 2; c++) {
+        const v = r === c ? diag[r] : 0;
+        const alpha = 0.15 + 0.75 * Math.max(0, Math.min(1, v));
+        ctx.fillStyle = r === c ? `rgba(${tint},${alpha})` : "#1a232f";
+        ctx.fillRect(x0 + c * cell, y0 + r * cell, cell - 1, cell - 1);
+        ctx.fillStyle = INK;
+        ctx.font = "11px ui-monospace, monospace";
+        ctx.fillText(v.toFixed(4), x0 + c * cell + 6, y0 + r * cell + cell / 2 + 4);
+      }
+    }
+    ctx.fillStyle = MUTED;
+    ctx.font = "11px ui-monospace, monospace";
+    ctx.fillText(label, x0, y0 - 4);
+  }
+
+  function draw() {
+    ctx.fillStyle = AMBIENT;
+    ctx.fillRect(0, 0, width, height);
+    const rec = records[idx] || { c: [0, 0], empirical_diag: [1, 1], predicted_diag: [1, 1], max_abs_diff: 0 };
+    ctx.fillStyle = INK;
+    ctx.font = "12px ui-monospace, monospace";
+    ctx.fillText(`c = (${rec.c[0].toFixed(2)}, ${rec.c[1].toFixed(2)})`, 12, 20);
+    drawMatrix(rec.predicted_diag, 12, 42, 96, "predicted (Cov[T])", "63,178,127");
+    drawMatrix(rec.empirical_diag, 12, 152, 96, "empirical (Fisher)", "110,168,254");
+    // Diff readout.
+    ctx.fillStyle = "#3fb27f";
+    ctx.font = "11px ui-monospace, monospace";
+    ctx.fillText(`max |Δ| = ${rec.max_abs_diff.toExponential(2)}`, 120, 108);
+    ctx.fillStyle = MUTED;
+    ctx.fillText("off-diagonal = 0", 120, 122);
+    // CG-2 holonomy loop on the right.
+    const rx = 200, ry = 40, rw = 150, rh = 120;
+    ctx.strokeStyle = "#f2c14e";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(rx, ry, rw, rh);
+    ctx.fillStyle = "rgba(242,193,78,0.10)";
+    ctx.fillRect(rx, ry, rw, rh);
+    // Triangle inscribed (bottom-left half).
+    ctx.beginPath();
+    ctx.moveTo(rx, ry + rh);
+    ctx.lineTo(rx + rw, ry + rh);
+    ctx.lineTo(rx, ry);
+    ctx.closePath();
+    ctx.strokeStyle = "#6ea8fe";
+    ctx.stroke();
+    ctx.fillStyle = INK;
+    ctx.font = "11px ui-monospace, monospace";
+    ctx.fillText(`ε = ${cg2.epsilon}`, rx, ry - 4);
+    ctx.fillStyle = "#f2c14e";
+    ctx.fillText(`rect A=1 → holonomy ${cg2.rectangle_holonomy_computed.toFixed(3)}`, rx, ry + rh + 16);
+    ctx.fillStyle = "#6ea8fe";
+    ctx.fillText(`tri  A=½ → holonomy ${cg2.triangle_holonomy_computed.toFixed(3)}`, rx, ry + rh + 32);
+    ctx.fillStyle = MUTED;
+    ctx.fillText(`ratio = ${(cg2.rectangle_over_triangle_ratio || 2.0).toFixed(2)}`, rx, ry + rh + 48);
+  }
+
+  const slider = makeSlider("c-index", 0, Math.max(0, records.length - 1), 0, (v) => { idx = v; draw(); });
+  container.appendChild(slider);
+  draw();
 }
 
 // ---- Instrument 4 viz: click a quotient, see the partition ----

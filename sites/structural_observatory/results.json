@@ -2028,5 +2028,34 @@
       }
     ],
     "trials_per_grid_point": 8
+  },
+  "concern_fisher_pair": {
+    "status": "pass",
+    "gates": {
+      "cg1_empirical_fisher_matches_predicted": true,
+      "cg1_fisher_is_diagonal_at_every_grid_point": true,
+      "cg2_rectangle_holonomy_matches_area_epsilon": true,
+      "cg2_triangle_holonomy_matches_half_epsilon": true
+    },
+    "world": {
+      "beta": 1.0,
+      "predicted_form": "g_{c,z} = beta^2 * diag(sech^2(beta c_1), sech^2(beta c_2))"
+    },
+    "cg1_records": [
+      { "c": [0.0, 0.0], "empirical_diag": [1.0, 1.0], "predicted_diag": [1.0, 1.0], "max_abs_diff": 0.0 },
+      { "c": [0.3, -0.2], "empirical_diag": [0.9151369618, 0.9610429830], "predicted_diag": [0.9151369618, 0.9610429830], "max_abs_diff": 1.11e-16 },
+      { "c": [0.8, 0.5], "empirical_diag": [0.5590551677, 0.7864477330], "predicted_diag": [0.5590551677, 0.7864477330], "max_abs_diff": 1.11e-16 },
+      { "c": [-0.4, 1.1], "empirical_diag": [0.8556387861, 0.3592013162], "predicted_diag": [0.8556387861, 0.3592013162], "max_abs_diff": 2.22e-16 }
+    ],
+    "cg2": {
+      "epsilon": 0.3,
+      "rectangle_area": 1.0,
+      "rectangle_holonomy_computed": 0.3,
+      "rectangle_holonomy_predicted": 0.3,
+      "triangle_area": 0.5,
+      "triangle_holonomy_computed": 0.15,
+      "triangle_holonomy_predicted": 0.15,
+      "rectangle_over_triangle_ratio": 2.0
+    }
   }
 }
