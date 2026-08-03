@@ -87,6 +87,32 @@ function renderStructureCompiler(section, data) {
   body.appendChild(table(["medium", "q∘F = id", "fidelity", "steps"], rows));
 }
 
+function renderCrossTaskLearnability(section, data) {
+  renderGates(section, data.gates);
+  const body = section.querySelector("[data-body]");
+  body.appendChild(
+    el("p", { class: "status" }, [
+      `bound form: ${data.theorem_bound_form}; ε = ${data.eps}; M = ${data.M}`,
+    ])
+  );
+  const rows = data.distributions.map((d) => [
+    { text: d.distribution, cls: "tag" },
+    { text: d.c_from_p_min.toFixed(2), cls: "num" },
+    { text: `${d.theorem_bound_N}`, cls: "num" },
+    { node: pill(
+        d.exact_recovery_at_theorem_bound.toFixed(4),
+        d.exact_recovery_meets_target ? "yes" : "no"
+      ) },
+    { text: `${(1 - data.eps).toFixed(2)}`, cls: "num" },
+  ]);
+  body.appendChild(
+    table(
+      ["distribution", "c", "N (bound)", "P(recover @ N)", "target 1−ε"],
+      rows
+    )
+  );
+}
+
 function renderCrossTaskSufficiency(section, data) {
   renderGates(section, data.gates);
   const body = section.querySelector("[data-body]");
@@ -164,15 +190,20 @@ async function main() {
     document.getElementById("cross_task_sufficiency"),
     data.cross_task_sufficiency
   );
+  renderCrossTaskLearnability(
+    document.getElementById("cross_task_learnability"),
+    data.cross_task_learnability
+  );
 
   const allPass = [
     "representation_search",
     "structure_compiler",
     "symbolic_causation",
     "cross_task_sufficiency",
+    "cross_task_learnability",
   ].every((k) => data[k].status === "pass");
   status.textContent = allPass
-    ? "All four instruments: status = pass. Every gate below is green."
+    ? "All five instruments: status = pass. Every gate below is green."
     : "One or more instruments did not pass — see gates below.";
 }
 

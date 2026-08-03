@@ -334,5 +334,35 @@
         ]
       }
     ]
+  },
+  "cross_task_learnability": {
+    "gates": {
+      "exact_recovery_at_theorem_bound_shared_skewed": true,
+      "exact_recovery_at_theorem_bound_shared_uniform": true,
+      "recovery_monotone_in_N": true,
+      "recovery_zero_below_M": true
+    },
+    "status": "pass",
+    "eps": 0.05,
+    "M": 4,
+    "theorem_bound_form": "N >= c * M * ln(M / eps)",
+    "distributions": [
+      {
+        "distribution": "uniform",
+        "c_from_p_min": 1.0,
+        "p_min": 0.25,
+        "theorem_bound_N": 18,
+        "exact_recovery_at_theorem_bound": 0.9775,
+        "exact_recovery_meets_target": true
+      },
+      {
+        "distribution": "skewed",
+        "c_from_p_min": 2.0,
+        "p_min": 0.125,
+        "theorem_bound_N": 36,
+        "exact_recovery_at_theorem_bound": 0.9756,
+        "exact_recovery_meets_target": true
+      }
+    ]
   }
 }

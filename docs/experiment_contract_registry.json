@@ -439,6 +439,35 @@
       }
     },
     {
+      "package": "cross_task_learnability",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/cross_task_learnability/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "cross_task_learnability_2026_08_03",
+      "runs": [
+        {
+          "run_id": "cross_task_learnability_2026_08_03",
+          "publication_package": "cross_task_learnability",
+          "runtime_package": "cross_task_learnability",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/cross_task_learnability/experiment_manifest.json",
+          "report_paths": [
+            "experiments/cross_task_learnability/results/cross_task_learnability_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/cross_task_learnability/preregistration.json",
+          "preregistration_digest": "9a224b659dfad541f0b69addae1080dbc759992fc646a73a2fc65a5674684531",
+          "producing_agent": {
+            "identity": "Claude Code (agent, under J. Brown direction)",
+            "session_ref": "claude/latent-structures-meta-framework-j9pkkd"
+          }
+        }
+      ]
+    },
+    {
       "package": "cross_task_sufficiency",
       "coverage_mode": "structured_manifest",
       "manifest_path": "experiments/cross_task_sufficiency/experiment_manifest.json",

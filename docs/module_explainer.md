@@ -196,6 +196,7 @@ Universal dispatcher: `python scripts/regen.py <name>`.
 | `structure_compiler` | R res | Structural Observatory instrument 2: one accumulation/phase-transition/hysteresis structure compiled into music/visual/text/spatial with verified structural identity (`q_i∘F_i=id`) | `core.py`, `experiment.py` |
 | `symbolic_causation` | R res | Structural Observatory instrument 3: exact finite-state agency benchmark separating signal / control / knowledge / agency; false-credit and brittle-transfer controls | `core.py`, `experiment.py` |
 | `cross_task_sufficiency` | R res | Structural Observatory instrument 4 (Theorem 4 witness): 4-bit Boolean world with latent Z = (parity{0,1}, parity{2,3}); for a task family that shares Z the coarsest common sufficient statistic is Z (image 4), for one that reveals bits individually it collapses to identity (image 16); combining tasks tightens the required partition | `core.py`, `experiment.py` |
+| `cross_task_learnability` | R res | Structural Observatory instrument 5 (Theorem 5 witness): exact coupon-collector recovery probability of empirical common-sufficient clustering via inclusion-exclusion; at Theorem 5's bound N = ceil(c·M·ln(M/ε)) with ε=0.05, recovery is 0.9775 (uniform, c=1) and 0.9756 (skewed, c=2), both above 1-ε | `core.py`, `experiment.py` |
 | `symbolic_weakness` | P R res | Flagship: symmetry-compatible weakness beats loss/MDL/flatness for OOD | See §3.1.1 |
 | `rotation_weakness` | P res | Vision rotation-group weakness correlation | `neural.py`, `dataset.py` |
 | `learned_symmetry` | P res | Data-inferred equivariance predicts OOD without oracle symmetry | `sweep.py`, `causal_validation.py`, `transform_generator.py`, `modal_sweep.py`, `modal_causal_validation.py` |
@@ -471,7 +472,7 @@ exhaustive counterexample search, and replayable MIDAS regression.
 | `experiment_manifest.json` | Accepted local-CPU theoretical contract and public artifact boundary |
 | `results/summary.{json,md}` | Deterministic complete receipt; preserves 26,304 strict target-greedy counterexamples and zero exact-control failures |
 | `papers/obstruction_aware_admission/` | Calibrated manuscript, source/contradiction ledger, three figures, deterministic PDF, and paper-local README |
-| `papers/structural_intelligence/` | Umbrella manuscript for the Structural Observatory: stochastic-fibration master object (now derived — Theorems 1, 2, 4 + Proposition 3 + Conjecture C1), the SIC-A/B/C honest split, four exact instruments, the ten-construct program, and the Core⊂Shell conscious/reliable-agent architecture (`paper.md`, `paper.pdf`, README) |
+| `papers/structural_intelligence/` | Umbrella manuscript for the Structural Observatory: stochastic-fibration master object (now derived — Theorems 1, 2, 4, 5 + Proposition 3, with only the continuous-case learnability extension residual), the SIC-A/B/C honest split, five exact instruments, the ten-construct program, and the Core⊂Shell conscious/reliable-agent architecture (`paper.md`, `paper.pdf`, README) |
 
 Run:
 
@@ -1081,7 +1082,7 @@ Claim-bounded grounded-harness writeups also live under `docs/papers/`:
 |---|---|
 | `geometric_convergence_research_synthesis.md` | Master program synthesis |
 | `latent_structures_meta_framework.md` | Cross-work meta-framework: the Representation Adjunction (`R ⊣ C`) unifying six sources — CT-Design, Bio-Info-Limit, Ten-Advances, Wigner, the discovery notes, and a structural-realist ontology; unit defect / counit gap / coarse-graining monad |
-| `structural_intelligence_conjecture.md` | Structural Intelligence Conjecture + Structural Observatory: the stochastic-fibration master object `X→qZ, K:Z⇝X` (now derived — Theorem 1 minimal-sufficiency, Theorem 2 rate–distortion, Proposition 3 adjunction, Theorem 4 cross-task stability conditional, Conjecture C1 learnability), concern-as-fiber-geometry, ten constructs, and the Core⊂Shell conscious/reliable-agent architecture; drives instruments `representation_search`, `structure_compiler`, `symbolic_causation`, `cross_task_sufficiency` |
+| `structural_intelligence_conjecture.md` | Structural Intelligence Conjecture + Structural Observatory: the stochastic-fibration master object `X→qZ, K:Z⇝X` (now derived — Theorem 1 minimal-sufficiency, Theorem 2 rate–distortion, Proposition 3 adjunction, Theorem 4 cross-task stability conditional, Theorem 5 discrete-case learnability with continuous-case residual), concern-as-fiber-geometry, ten constructs, and the Core⊂Shell conscious/reliable-agent architecture; drives instruments `representation_search`, `structure_compiler`, `symbolic_causation`, `cross_task_sufficiency`, `cross_task_learnability` |
 | `webb_miolane_fit.md` | Geometry-of-consciousness talk fit |
 | `weakness_topology_program_synthesis.md` | Publication-strategy ranking |
 | `reward_deformation_ratedistortion.md` | Rate-distortion law for Paper B |
@@ -1177,7 +1178,7 @@ cd formal/relative-identifiability && lake build
 | Stack | Whitelist static Node server (`server.js`); vanilla-JS `app.js` renders committed results |
 | Served | `index.html`, `styles.css`, `app.js`, `results.json` |
 | Port | `PORT` (default 3030) |
-| Data | `results.json` = combined summaries of `representation_search`, `structure_compiler`, `symbolic_causation`, `cross_task_sufficiency` |
+| Data | `results.json` = combined summaries of `representation_search`, `structure_compiler`, `symbolic_causation`, `cross_task_sufficiency`, `cross_task_learnability` |
 | Deploy | Railway-ready (`railway.json`); public deploy is a separate account step, currently gated on the GitHub app install (see `docs/railway-autodeploy.md`) |
 
 ### 6.3 `apps/inquiry-black-box/` — full catalog

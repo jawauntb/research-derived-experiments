@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "cross_task_learnability",
+  "hypothesis": "The Theorem-5 sample-complexity bound ceil(c * M * ln(M / eps)) is exactly sufficient: at that N, empirical common-sufficient clustering recovers the true partition with probability at least 1 - eps, for both a balanced (c = 1) and an unbalanced (c = 2) fibre distribution on X = {0,1}^4 with latent Z of size M = 4.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "exact_inclusion_exclusion_over_fibre_partition",
+      "description": "Recovery probability is computed by exact inclusion-exclusion over all 2^M subsets of the fibre partition of X; no Monte Carlo, no seed dependence."
+    },
+    {
+      "control_id": "pigeonhole_lower_bound",
+      "description": "For N < M, recovery is impossible by pigeonhole; this is checked explicitly against the exact computation."
+    },
+    {
+      "control_id": "monotonicity_sanity_check",
+      "description": "The exact recovery curve is monotone in N up to the theorem bound; departure would indicate an arithmetic bug."
+    },
+    {
+      "control_id": "separation_verified_for_shared_task_family",
+      "description": "The three shared-family tasks (parity{0,1}, parity{2,3}, parity{0,1,2,3}) are verified to inject the 4-valued latent Z into their joint response profile, matching Theorem 5's separation assumption."
+    }
+  ],
+  "seeds": [
+    0
+  ],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python3",
+      "experiments/cross_task_learnability/experiment.py"
+    ],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "CTL_EXACT_RECOVERY_AT_THEOREM_BOUND_SHARED_UNIFORM",
+      "criterion": "Exact recovery probability at the Theorem-5 bound N = ceil(1 * 4 * ln(4 / 0.05)) = 18 on the uniform distribution is at least 0.95."
+    },
+    {
+      "gate_id": "CTL_EXACT_RECOVERY_AT_THEOREM_BOUND_SHARED_SKEWED",
+      "criterion": "Exact recovery probability at the Theorem-5 bound N = ceil(2 * 4 * ln(4 / 0.05)) = 36 on the skewed distribution is at least 0.95."
+    },
+    {
+      "gate_id": "CTL_RECOVERY_ZERO_BELOW_M",
+      "criterion": "For every N < M = 4, the exact recovery probability is zero."
+    },
+    {
+      "gate_id": "CTL_RECOVERY_MONOTONE_IN_N",
+      "criterion": "Exact recovery curve is nondecreasing in N up to the theorem bound for both distributions."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/cross_task_learnability/results/cross_task_learnability_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/cross_task_learnability/preregistration.json",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

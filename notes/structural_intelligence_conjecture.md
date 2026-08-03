@@ -2,23 +2,28 @@
 
 Date: August 3, 2026
 
-Status: **two theorems + one conditional theorem + one conjecture + four
-working instruments.** The master stochastic fibration (§2) is now *derived*
-— Theorems 1 and 2 give it as the minimal-sufficient-statistic pair or the
+Status: **three theorems + one conditional theorem + five working
+instruments.** The master stochastic fibration (§2) is now *derived* —
+Theorems 1 and 2 give it as the minimal-sufficient-statistic pair or the
 Shannon rate–distortion pair, Proposition 3 gives the categorical restatement;
 these appear in §2 of the umbrella paper
 ([`papers/structural_intelligence/paper.md`](../papers/structural_intelligence/paper.md)).
 Cross-task stability (clause (5) of the conjecture below) is a *conditional
 theorem* — Theorem 4 — equivalent to the task family admitting a common Markov
-screen. The residual conjectural content is (a) that antecedent as an
-empirical claim about the world, and (b) Conjecture C1, that a finite adaptive
-system in fact discovers `q` from data with polynomial sample complexity. The
-extended formalism (§3–§4) is still speculative theory and is held to the
-`AGENTS.md` mathematical-claim gate; it is **not** promoted to theorems. The
-four instruments in §5 are exact, deterministic, and tested — instruments 1
-and 4 are computational witnesses of Theorems 1 and 4, instruments 2 and 3
-establish auxiliary dissociations. Retrieval provenance for the six source
-works and the underlying meta-object is in
+screen. Discrete-case learnability is *also* a theorem — Theorem 5 — with
+sample complexity `N ≥ ⌈c · M · ln(M/ε)⌉` for empirical common-sufficient
+clustering under a separating task family and fibre-balance constant `c`.
+The residual conjectural content is (a) Theorem 4's antecedent as an
+empirical claim about the world, and (b) the *continuous-case extension* of
+Theorem 5, which is partial in the identifiable-representation-learning
+literature and bounded by Locatello's (2019) impossibility for fully
+unsupervised disentanglement. The extended formalism (§3–§4) is still
+speculative theory and is held to the `AGENTS.md` mathematical-claim gate;
+it is **not** promoted to theorems. The five instruments in §5 are exact,
+deterministic, and tested — instruments 1, 4, and 5 are computational
+witnesses of Theorems 1, 4, and 5, instruments 2 and 3 establish auxiliary
+dissociations. Retrieval provenance for the six source works and the
+underlying meta-object is in
 [`latent_structures_meta_framework.md`](latent_structures_meta_framework.md).
 
 This note continues that meta-framework. There the shared latent object was an
@@ -111,14 +116,21 @@ have to be proved to make the analogy a theorem?*
   `{Y_α}`, the σ-algebra `σ(Z)` is a common sufficient statistic iff every
   `Y_α ⫫ X | Z`; equivalently, `X = g(Z, η)` with `Z ⫫ η` and each `Y_α`
   factoring through `Z`. Instrument 4 (§5.4) is the exact witness.
+- **Theorem 5 (Discrete learnability).** For finite `X`, deterministic tasks
+  that jointly *separate* the true partition `q : X → Z` (`|Z| = M`), and a
+  distribution on `X` with min-fibre mass `p_min ≥ 1/(cM)`, empirical
+  common-sufficient clustering recovers `q̂ = q` with probability `≥ 1 − ε`
+  from `N ≥ ⌈c · M · ln(M/ε)⌉` samples. Time complexity is `O(N · K + |X| · K)`.
+  Instrument 5 (§5.5) is the exact numerical witness via inclusion–exclusion.
 
-The **learnability** claim — that a finite adaptive system in fact *discovers*
-`q` from data — remains open (Conjecture C1 in the paper): whether the
-sufficient-statistic quotient of Theorem 1, guaranteed to exist, is
-efficiently recoverable under the low-dimensional-`Z` antecedent of Theorem 4
-at sample-complexity rate polynomial in `dim(Z)` and the identifiability gap.
-Best-known bounds for disentanglement and information bottleneck have
-exponential worst-case dependence on hypothesis-class complexity.
+The **learnability** claim in the *continuous* case remains open: whether
+Theorem 5's discrete bound extends to continuous `X` with appropriate
+smoothness assumptions on the compiler `g`. Locatello et al. (2019) show
+the fully unsupervised continuous case is impossible; the identifiable-
+representation-learning line (Khemakhem–Kingma–Monti–Hyvärinen 2020,
+Ahuja–Mahajan–Wang–Bengio 2022) is the current partial answer for
+auxiliary-variable settings — exactly the class of settings the task family
+supplies.
 
 **SIC in the honest split.** The conjecture below is stated in its
 full-strength form for continuity with the source works, but the honest
@@ -129,7 +141,10 @@ factorisation the theorems permit is:
 - **SIC-B (cross-task stability):** Theorem 4 conditional on a shared Markov
   screen. *Theorem given the antecedent; the antecedent is empirical about the
   world.*
-- **SIC-C (learnability):** Conjecture C1. *Open.*
+- **SIC-C (learnability, discrete):** Theorem 5. *Theorem, with a numerically
+  sharp constant (Instrument 5).*
+- **SIC-C′ (learnability, continuous):** Open, partial via identifiable
+  representation learning.
 
 ---
 
@@ -232,11 +247,11 @@ its status and its relation to the instruments in §5.
 
 ---
 
-## 5. The four built instruments
+## 5. The five built instruments
 
 Each is exact, deterministic, tested, and public-safe (summaries in `results/`,
-no raw dumps). They are the first four instruments of the Observatory.
-Instruments 1 and 4 are computational witnesses of Theorems 1 and 4;
+no raw dumps). They are the first five instruments of the Observatory.
+Instruments 1, 4, and 5 are computational witnesses of Theorems 1, 4, and 5;
 instruments 2 and 3 establish the auxiliary dissociations the extended program
 rests on.
 
@@ -286,6 +301,20 @@ compression), and combining tasks strictly tightens the required partition
 family CSS). This is the computational witness of Theorem 4: cross-task
 stability is a property of the task family, not of the system that faces it.
 Extends the fiber audit (extension 4) to task ensembles.
+
+### Instrument 5 — `experiments/cross_task_learnability` (Theorem 5 witness)
+Same 4-bit world, same shared task family (verified to satisfy Theorem 5's
+separation assumption). Compute the *exact* recovery probability `P[q̂ = q]`
+of empirical common-sufficient clustering as a function of sample count `N`,
+via inclusion–exclusion over the fibre partition (no Monte Carlo, no seed).
+Two distributions: `uniform` (`c = 1`) and `skewed` with fibre masses
+`(0.625, 0.125, 0.125, 0.125)` (`c = 2`). **Establishes** that at Theorem 5's
+sample bound `N ≥ ⌈c · M · ln(M / ε)⌉` with `ε = 0.05`, exact recovery is
+`0.9775` (uniform, `N = 18`) and `0.9756` (skewed, `N = 36`) — both strictly
+above `1 − ε = 0.95`. Recovery is zero for `N < M = 4` (pigeonhole),
+monotone in `N`, and degrades exactly as `c` predicts under compiler
+imbalance. This is the numerical witness of Theorem 5's discrete-case sample
+complexity, and the endpoint of the "learnability" claim in the finite case.
 
 ---
 
@@ -337,22 +366,26 @@ infallibility`, kept as two separate, non-inflated claims.
 One system that, given a problem, theory, agent, organism, or artwork, returns:
 its candidate quotient maps, realization fibers, automorphisms, abstraction
 frontier, fiber-audit results, inferred compiler, and possible cross-substrate
-embodiments. The four instruments above are its first four modules
+embodiments. The five instruments above are its first five modules
 (quotient search, cross-substrate compiler, causal/agency measurement,
-cross-task sufficiency); §4 lists the remaining modules as pre-registered
-future instruments.
+cross-task sufficiency, cross-task learnability); §4 lists the remaining
+modules as pre-registered future instruments.
 
 ---
 
 ## 8. Limitations and rejected alternatives
 
 - **The instruments are toys by design.** They establish dissociations and
-  witness Theorems 1 and 4 on exactly-solvable cases (finite Boolean worlds,
-  tiny MDPs, lossless encoders). They do **not** establish Conjecture C1
-  (learnability), the conditional rate–distortion control limit (extension 2),
-  or the alignment claim (extension 9), all of which remain conjectural.
-  Instrument 2's fidelity is 1.0 *by construction*: it tests that the
-  compilers are faithful functors, not that faithful compilation is hard.
+  witness Theorems 1, 4, and 5 on exactly-solvable cases (finite Boolean
+  worlds, tiny MDPs, lossless encoders). Theorem 5 covers the *discrete* case
+  of learnability under separation + fibre balance; the *continuous* case
+  extension is not proved here (Locatello 2019 shows unqualified continuous
+  learnability is impossible; the identifiable-representation-learning line
+  is the partial answer). The conditional rate–distortion control limit
+  (extension 2) and the alignment claim (extension 9) also remain
+  conjectural. Instrument 2's fidelity is 1.0 *by construction*: it tests
+  that the compilers are faithful functors, not that faithful compilation is
+  hard.
 - **The master object is derived.** The stochastic fibration `(q, K)` is now
   given as a mathematical object by Theorem 1 (minimal-sufficient factorisation
   of Halmos–Savage) and Theorem 2 (Shannon rate–distortion), with the

@@ -6,7 +6,7 @@
     <title>Structural Observatory</title>
     <meta
       name="description"
-      content="The Structural Intelligence Conjecture derived: two existence theorems, one conditional theorem, one open conjecture, and four exact instruments — representation search, cross-substrate compilation, agency measurement, and cross-task sufficiency."
+      content="The Structural Intelligence Conjecture derived: three theorems, one conditional theorem, and five exact instruments — representation search, cross-substrate compilation, agency measurement, cross-task sufficiency, and cross-task learnability (Theorem 5's sample-complexity witness)."
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -35,9 +35,14 @@
         pair for any well-posed task; <strong>Theorem&nbsp;2</strong>
         (Shannon rate&ndash;distortion) parameterises it by distortion budget;
         <strong>Theorem&nbsp;4</strong> (conditional) makes cross-task stability
-        equivalent to the task family sharing a Markov screen. Only
-        <strong>Conjecture&nbsp;C1</strong> (learnability &mdash; that a finite
-        adaptive system in fact discovers the quotient) remains open.
+        equivalent to the task family sharing a Markov screen;
+        <strong>Theorem&nbsp;5</strong> proves discrete-case learnability at
+        sample complexity <code>N &ge; &lceil;c&sdot;M&sdot;ln(M/&epsilon;)&rceil;</code>
+        via empirical common-sufficient clustering. Only the
+        <em>continuous-case</em> extension of Theorem&nbsp;5 remains open &mdash;
+        partial answers in the identifiable-representation-learning line,
+        bounded by Locatello (2019)'s impossibility for fully unsupervised
+        disentanglement.
       </p>
     </header>
 
@@ -122,6 +127,30 @@
         <div class="table-wrap" data-body></div>
       </section>
 
+      <section class="instrument" id="cross_task_learnability">
+        <div class="instrument-head">
+          <span class="badge">Instrument 5</span>
+          <h2>Cross-task Learnability &mdash; Theorem&nbsp;5 witness</h2>
+        </div>
+        <p class="instrument-blurb">
+          Same 4-bit world, same shared task family, now measuring
+          <strong>sample complexity</strong>. Recovery of <em>Z</em> under
+          empirical common-sufficient clustering reduces to a coupon-collector
+          question on the fibre partition; its exact probability is computed by
+          inclusion&ndash;exclusion over all <code>2<sup>M</sup>&nbsp;=&nbsp;16</code>
+          subsets (no Monte Carlo, no seed). At Theorem&nbsp;5's bound
+          <code>N&nbsp;&ge;&nbsp;&lceil;c&sdot;M&sdot;ln(M/&epsilon;)&rceil;</code>
+          with <code>&epsilon;=0.05</code>, exact recovery is <strong>0.9775</strong>
+          (uniform, <em>c</em>=1, <em>N</em>=18) and <strong>0.9756</strong>
+          (skewed, <em>c</em>=2, <em>N</em>=36) &mdash; both above
+          <code>1&nbsp;&minus;&nbsp;&epsilon;=0.95</code>. Recovery is zero below
+          <em>M</em>=4 (pigeonhole) and monotone in <em>N</em>. Discrete-case
+          learnability is a theorem with a numerically sharp constant.
+        </p>
+        <div class="gates" data-gates></div>
+        <div class="table-wrap" data-body></div>
+      </section>
+
       <section class="closing">
         <h2>What this is and is not</h2>
         <ul>
@@ -136,11 +165,21 @@
             Instruments&nbsp;1 and&nbsp;4 are exact witnesses.
           </li>
           <li>
-            <strong>Is (open):</strong> Conjecture&nbsp;C1 &mdash; whether a finite
-            adaptive system in fact <em>discovers</em> the quotient from data at
-            polynomial sample complexity in <code>dim(Z)</code> and the identifiability
-            gap. This is the load-bearing empirical question the Observatory is built
-            to test.
+            <strong>Is (also derived, discrete case):</strong> Theorem&nbsp;5 proves
+            that under separation and fibre balance, empirical common-sufficient
+            clustering recovers <em>Z</em> with probability
+            <code>&ge;&nbsp;1&nbsp;&minus;&nbsp;&epsilon;</code> from
+            <code>N&nbsp;&ge;&nbsp;&lceil;c&sdot;M&sdot;ln(M/&epsilon;)&rceil;</code>
+            samples. Instrument&nbsp;5 verifies the bound exactly.
+          </li>
+          <li>
+            <strong>Is (open, continuous case):</strong> the extension of
+            Theorem&nbsp;5 to continuous <em>X</em>. Partial answers in the
+            identifiable-representation-learning line (auxiliary-variable iVAE
+            2020, interventional causal representation learning 2022); no general
+            theorem, because Locatello (2019) proves the fully unsupervised
+            continuous case is impossible. This is the remaining research-programme
+            question.
           </li>
           <li>
             <strong>Is not:</strong> a proof of universal agency or of infallibility.
