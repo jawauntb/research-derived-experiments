@@ -87,6 +87,33 @@ function renderStructureCompiler(section, data) {
   body.appendChild(table(["medium", "q∘F = id", "fidelity", "steps"], rows));
 }
 
+function renderCrossTaskSufficiency(section, data) {
+  renderGates(section, data.gates);
+  const body = section.querySelector("[data-body]");
+  body.appendChild(
+    el("p", { class: "status" }, [`latent: ${data.latent_Z_definition}`])
+  );
+  const rows = data.families.map((f) => [
+    { text: f.family, cls: "tag" },
+    { text: `${f.tasks.length}`, cls: "num" },
+    { node: pill(f.coarsest_common_sufficient.quotient, f.coarsest_common_sufficient.quotient === "identity" ? "no" : "yes") },
+    { text: `${f.coarsest_common_sufficient.image_size}`, cls: "num" },
+    { text: f.coarsest_common_sufficient.description_length.toFixed(2), cls: "num" },
+    {
+      text: f.per_task_minimal_sufficient
+        .map((p) => `${p.minimal_sufficient}(${p.minimal_sufficient_image_size})`)
+        .join(", "),
+      cls: "tag",
+    },
+  ]);
+  body.appendChild(
+    table(
+      ["family", "tasks", "coarsest CSS", "|image|", "DL (bits)", "per-task MSS"],
+      rows
+    )
+  );
+}
+
 function renderSymbolicCausation(section, data) {
   renderGates(section, data.gates);
   const rows = data.rows.map((r) => {
@@ -133,12 +160,19 @@ async function main() {
     document.getElementById("symbolic_causation"),
     data.symbolic_causation
   );
-
-  const allPass = ["representation_search", "structure_compiler", "symbolic_causation"].every(
-    (k) => data[k].status === "pass"
+  renderCrossTaskSufficiency(
+    document.getElementById("cross_task_sufficiency"),
+    data.cross_task_sufficiency
   );
+
+  const allPass = [
+    "representation_search",
+    "structure_compiler",
+    "symbolic_causation",
+    "cross_task_sufficiency",
+  ].every((k) => data[k].status === "pass");
   status.textContent = allPass
-    ? "All three instruments: status = pass. Every gate below is green."
+    ? "All four instruments: status = pass. Every gate below is green."
     : "One or more instruments did not pass — see gates below.";
 }
 

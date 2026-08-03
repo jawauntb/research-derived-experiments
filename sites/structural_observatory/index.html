@@ -6,7 +6,7 @@
     <title>Structural Observatory</title>
     <meta
       name="description"
-      content="The Structural Intelligence Conjecture and its three exact instruments: representation search, cross-substrate compilation, and agency measurement."
+      content="The Structural Intelligence Conjecture derived: two existence theorems, one conditional theorem, one open conjecture, and four exact instruments — representation search, cross-substrate compilation, agency measurement, and cross-task sufficiency."
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -28,6 +28,16 @@
         level at which the world becomes both <em>compressible</em> and
         <em>controllable</em> &mdash; the quotient in which a hidden invariant becomes a
         coordinate axis.
+      </p>
+      <p class="claim">
+        The master fibration is now <em>derived</em>: <strong>Theorem&nbsp;1</strong>
+        (Halmos&ndash;Savage minimal sufficiency) gives it as the sufficient-statistic
+        pair for any well-posed task; <strong>Theorem&nbsp;2</strong>
+        (Shannon rate&ndash;distortion) parameterises it by distortion budget;
+        <strong>Theorem&nbsp;4</strong> (conditional) makes cross-task stability
+        equivalent to the task family sharing a Markov screen. Only
+        <strong>Conjecture&nbsp;C1</strong> (learnability &mdash; that a finite
+        adaptive system in fact discovers the quotient) remains open.
       </p>
     </header>
 
@@ -91,18 +101,53 @@
         <div class="table-wrap" data-body></div>
       </section>
 
+      <section class="instrument" id="cross_task_sufficiency">
+        <div class="instrument-head">
+          <span class="badge">Instrument 4</span>
+          <h2>Cross-task Sufficiency &mdash; Theorem&nbsp;4 witness</h2>
+        </div>
+        <p class="instrument-blurb">
+          On a 4-bit Boolean world with latent
+          <code>Z = joint(parity{0,1},&nbsp;parity{2,3})</code>, enumerate a rich
+          quotient lattice for two task families exactly. For the family whose members
+          all factor through <em>Z</em>, the <strong>coarsest common sufficient
+          statistic</strong> is exactly <em>Z</em> (image 4, strictly smaller than
+          <code>|X| = 16</code>). For the family that reveals individual bits, it
+          collapses to the <strong>identity</strong>. Combining tasks strictly
+          tightens the required partition: family CSS is finer than any single task's
+          minimal sufficient statistic. Cross-task stability is a property of the
+          task family, not of the system.
+        </p>
+        <div class="gates" data-gates></div>
+        <div class="table-wrap" data-body></div>
+      </section>
+
       <section class="closing">
         <h2>What this is and is not</h2>
         <ul>
           <li>
-            <strong>Is:</strong> three exact dissociations, plus a formal program
-            (concern-as-fiber-geometry, a conditional rate&ndash;distortion control limit,
-            abstraction frontiers, fiber audits, compiler tomography, ensemble-governance
-            alignment, autocatalytic art).
+            <strong>Is (derived):</strong> the master fibration exists as a mathematical
+            object for any well-posed task (Halmos&ndash;Savage minimal sufficiency,
+            Theorem&nbsp;1) or, under a distortion budget, as the Shannon
+            rate&ndash;distortion pair (Theorem&nbsp;2), with the categorical
+            restatement as an adjunction (Proposition&nbsp;3). Cross-task stability
+            is a conditional theorem (Theorem&nbsp;4): a single quotient is sufficient
+            for a task family if and only if the family shares a Markov screen.
+            Instruments&nbsp;1 and&nbsp;4 are exact witnesses.
           </li>
           <li>
-            <strong>Is not:</strong> a proof of the general conjecture. The instruments are
-            toys by design; the master fibration is posited, not derived.
+            <strong>Is (open):</strong> Conjecture&nbsp;C1 &mdash; whether a finite
+            adaptive system in fact <em>discovers</em> the quotient from data at
+            polynomial sample complexity in <code>dim(Z)</code> and the identifiability
+            gap. This is the load-bearing empirical question the Observatory is built
+            to test.
+          </li>
+          <li>
+            <strong>Is not:</strong> a proof of universal agency or of infallibility.
+            Cross-task stability holds only insofar as the world's tasks share a common
+            latent generator (Theorem&nbsp;4's antecedent); C1 is unproven; instrument&nbsp;2's
+            fidelity is unity by construction; nothing here licenses a claim of subjective
+            experience.
           </li>
           <li>
             <strong>On conscious / reliable agents:</strong> the honest target is a

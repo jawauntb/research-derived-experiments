@@ -1,0 +1,1441 @@
+{
+  "families": [
+    {
+      "coarsest_common_sufficient": {
+        "description_length": 2.0,
+        "image_size": 4,
+        "quotient": "joint(parity{0,1},parity{2,3})"
+      },
+      "family": "shared_through_Z",
+      "n_candidates": 23,
+      "n_tasks": 3,
+      "per_task_minimal_sufficient": [
+        {
+          "minimal_sufficient": "parity{0,1}",
+          "minimal_sufficient_image_size": 2,
+          "task": "shared_p01"
+        },
+        {
+          "minimal_sufficient": "parity{2,3}",
+          "minimal_sufficient_image_size": 2,
+          "task": "shared_p23"
+        },
+        {
+          "minimal_sufficient": "parity{0,1,2,3}",
+          "minimal_sufficient_image_size": 2,
+          "task": "shared_global_parity"
+        }
+      ],
+      "quotients": [
+        {
+          "common_sufficient": false,
+          "description_length": 0.0,
+          "image_size": 1,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p01"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p23"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_global_parity"
+            }
+          ],
+          "quotient": "constant"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p01"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p23"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_global_parity"
+            }
+          ],
+          "quotient": "parity{0}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p01"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p23"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_global_parity"
+            }
+          ],
+          "quotient": "parity{1}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p01"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p23"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_global_parity"
+            }
+          ],
+          "quotient": "parity{2}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p01"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p23"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_global_parity"
+            }
+          ],
+          "quotient": "parity{3}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "shared_p01"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p23"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_global_parity"
+            }
+          ],
+          "quotient": "parity{0,1}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p01"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p23"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_global_parity"
+            }
+          ],
+          "quotient": "parity{0,2}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p01"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p23"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_global_parity"
+            }
+          ],
+          "quotient": "parity{0,3}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p01"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p23"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_global_parity"
+            }
+          ],
+          "quotient": "parity{1,2}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p01"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p23"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_global_parity"
+            }
+          ],
+          "quotient": "parity{1,3}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p01"
+            },
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "shared_p23"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_global_parity"
+            }
+          ],
+          "quotient": "parity{2,3}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p01"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p23"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_global_parity"
+            }
+          ],
+          "quotient": "parity{0,1,2}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p01"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p23"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_global_parity"
+            }
+          ],
+          "quotient": "parity{0,1,3}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p01"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p23"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_global_parity"
+            }
+          ],
+          "quotient": "parity{0,2,3}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p01"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p23"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_global_parity"
+            }
+          ],
+          "quotient": "parity{1,2,3}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p01"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p23"
+            },
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "shared_global_parity"
+            }
+          ],
+          "quotient": "parity{0,1,2,3}"
+        },
+        {
+          "common_sufficient": true,
+          "description_length": 2.0,
+          "image_size": 4,
+          "per_task": [
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "shared_p01"
+            },
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "shared_p23"
+            },
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "shared_global_parity"
+            }
+          ],
+          "quotient": "joint(parity{0,1},parity{2,3})"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 2.0,
+          "image_size": 4,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p01"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p23"
+            },
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "shared_global_parity"
+            }
+          ],
+          "quotient": "joint(parity{0,2},parity{1,3})"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 2.0,
+          "image_size": 4,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p01"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p23"
+            },
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "shared_global_parity"
+            }
+          ],
+          "quotient": "joint(parity{0,3},parity{1,2})"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 2.0,
+          "image_size": 4,
+          "per_task": [
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "shared_p01"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p23"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_global_parity"
+            }
+          ],
+          "quotient": "joint(bit_0,bit_1)"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 2.0,
+          "image_size": 4,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p01"
+            },
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "shared_p23"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_global_parity"
+            }
+          ],
+          "quotient": "joint(bit_2,bit_3)"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 3.0,
+          "image_size": 8,
+          "per_task": [
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "shared_p01"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_p23"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "shared_global_parity"
+            }
+          ],
+          "quotient": "joint(bit_0,bit_1,bit_2)"
+        },
+        {
+          "common_sufficient": true,
+          "description_length": 4.0,
+          "image_size": 16,
+          "per_task": [
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "shared_p01"
+            },
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "shared_p23"
+            },
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "shared_global_parity"
+            }
+          ],
+          "quotient": "identity"
+        }
+      ],
+      "tasks": [
+        {
+          "description": "parity{0,1} = first coordinate of Z.",
+          "name": "shared_p01"
+        },
+        {
+          "description": "parity{2,3} = second coordinate of Z.",
+          "name": "shared_p23"
+        },
+        {
+          "description": "parity{0,1,2,3} = XOR of the two coordinates of Z.",
+          "name": "shared_global_parity"
+        }
+      ]
+    },
+    {
+      "coarsest_common_sufficient": {
+        "description_length": 4.0,
+        "image_size": 16,
+        "quotient": "identity"
+      },
+      "family": "not_shared_beyond_Z",
+      "n_candidates": 23,
+      "n_tasks": 4,
+      "per_task_minimal_sufficient": [
+        {
+          "minimal_sufficient": "parity{0}",
+          "minimal_sufficient_image_size": 2,
+          "task": "notshared_bit_0"
+        },
+        {
+          "minimal_sufficient": "parity{1}",
+          "minimal_sufficient_image_size": 2,
+          "task": "notshared_bit_1"
+        },
+        {
+          "minimal_sufficient": "parity{2}",
+          "minimal_sufficient_image_size": 2,
+          "task": "notshared_bit_2"
+        },
+        {
+          "minimal_sufficient": "parity{3}",
+          "minimal_sufficient_image_size": 2,
+          "task": "notshared_bit_3"
+        }
+      ],
+      "quotients": [
+        {
+          "common_sufficient": false,
+          "description_length": 0.0,
+          "image_size": 1,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_0"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_1"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_2"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_3"
+            }
+          ],
+          "quotient": "constant"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "notshared_bit_0"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_1"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_2"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_3"
+            }
+          ],
+          "quotient": "parity{0}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_0"
+            },
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "notshared_bit_1"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_2"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_3"
+            }
+          ],
+          "quotient": "parity{1}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_0"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_1"
+            },
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "notshared_bit_2"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_3"
+            }
+          ],
+          "quotient": "parity{2}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_0"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_1"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_2"
+            },
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "notshared_bit_3"
+            }
+          ],
+          "quotient": "parity{3}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_0"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_1"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_2"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_3"
+            }
+          ],
+          "quotient": "parity{0,1}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_0"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_1"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_2"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_3"
+            }
+          ],
+          "quotient": "parity{0,2}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_0"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_1"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_2"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_3"
+            }
+          ],
+          "quotient": "parity{0,3}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_0"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_1"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_2"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_3"
+            }
+          ],
+          "quotient": "parity{1,2}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_0"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_1"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_2"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_3"
+            }
+          ],
+          "quotient": "parity{1,3}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_0"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_1"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_2"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_3"
+            }
+          ],
+          "quotient": "parity{2,3}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_0"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_1"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_2"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_3"
+            }
+          ],
+          "quotient": "parity{0,1,2}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_0"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_1"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_2"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_3"
+            }
+          ],
+          "quotient": "parity{0,1,3}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_0"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_1"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_2"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_3"
+            }
+          ],
+          "quotient": "parity{0,2,3}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_0"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_1"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_2"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_3"
+            }
+          ],
+          "quotient": "parity{1,2,3}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 1.0,
+          "image_size": 2,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_0"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_1"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_2"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_3"
+            }
+          ],
+          "quotient": "parity{0,1,2,3}"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 2.0,
+          "image_size": 4,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_0"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_1"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_2"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_3"
+            }
+          ],
+          "quotient": "joint(parity{0,1},parity{2,3})"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 2.0,
+          "image_size": 4,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_0"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_1"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_2"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_3"
+            }
+          ],
+          "quotient": "joint(parity{0,2},parity{1,3})"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 2.0,
+          "image_size": 4,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_0"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_1"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_2"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_3"
+            }
+          ],
+          "quotient": "joint(parity{0,3},parity{1,2})"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 2.0,
+          "image_size": 4,
+          "per_task": [
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "notshared_bit_0"
+            },
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "notshared_bit_1"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_2"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_3"
+            }
+          ],
+          "quotient": "joint(bit_0,bit_1)"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 2.0,
+          "image_size": 4,
+          "per_task": [
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_0"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_1"
+            },
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "notshared_bit_2"
+            },
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "notshared_bit_3"
+            }
+          ],
+          "quotient": "joint(bit_2,bit_3)"
+        },
+        {
+          "common_sufficient": false,
+          "description_length": 3.0,
+          "image_size": 8,
+          "per_task": [
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "notshared_bit_0"
+            },
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "notshared_bit_1"
+            },
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "notshared_bit_2"
+            },
+            {
+              "conditional_entropy": 1.0,
+              "mutual_information": 0.0,
+              "sufficient": false,
+              "task": "notshared_bit_3"
+            }
+          ],
+          "quotient": "joint(bit_0,bit_1,bit_2)"
+        },
+        {
+          "common_sufficient": true,
+          "description_length": 4.0,
+          "image_size": 16,
+          "per_task": [
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "notshared_bit_0"
+            },
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "notshared_bit_1"
+            },
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "notshared_bit_2"
+            },
+            {
+              "conditional_entropy": 0.0,
+              "mutual_information": 1.0,
+              "sufficient": true,
+              "task": "notshared_bit_3"
+            }
+          ],
+          "quotient": "identity"
+        }
+      ],
+      "tasks": [
+        {
+          "description": "Reveals bit 0 individually (not a function of Z).",
+          "name": "notshared_bit_0"
+        },
+        {
+          "description": "Reveals bit 1 individually.",
+          "name": "notshared_bit_1"
+        },
+        {
+          "description": "Reveals bit 2 individually.",
+          "name": "notshared_bit_2"
+        },
+        {
+          "description": "Reveals bit 3 individually.",
+          "name": "notshared_bit_3"
+        }
+      ]
+    }
+  ],
+  "gates": {
+    "family_css_strictly_finer_than_some_single_task_mss": true,
+    "not_shared_css_equals_identity": true,
+    "shared_css_equals_latent_Z": true,
+    "shared_css_strictly_coarser_than_identity": true
+  },
+  "latent_Z_definition": "joint(parity{0,1}, parity{2,3}) on a 4-bit Boolean world",
+  "status": "pass"
+}

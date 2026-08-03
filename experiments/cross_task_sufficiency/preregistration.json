@@ -1,0 +1,46 @@
+{
+  "experiment_id": "cross_task_sufficiency",
+  "schema_version": "1.0",
+  "hypothesis": "On a 4-bit Boolean world with latent Z = (parity{0,1}, parity{2,3}), a task family whose members all factor through Z admits Z itself as the coarsest common sufficient statistic; a task family whose members instead reveal individual bits admits only the identity as a common sufficient statistic; and for the shared family the coarsest common sufficient statistic is strictly finer than the minimal sufficient statistic of any single task in the family.",
+  "primary_metric": "shared.coarsest_common_sufficient.quotient",
+  "gates": {
+    "CTS_SHARED_CSS_EQUALS_LATENT_Z": "For the shared task family (three tasks that all factor through Z = (parity{0,1}, parity{2,3})), the coarsest common sufficient statistic is exactly joint(parity{0,1}, parity{2,3}) with image size 4.",
+    "CTS_SHARED_CSS_STRICTLY_COARSER_THAN_IDENTITY": "The coarsest common sufficient statistic for the shared family has image size strictly less than 2^4 = 16.",
+    "CTS_NOT_SHARED_CSS_EQUALS_IDENTITY": "For the not-shared task family (four tasks that reveal the four bits individually), the coarsest common sufficient statistic is the identity map with image size 16.",
+    "CTS_FAMILY_CSS_STRICTLY_FINER_THAN_SOME_SINGLE_TASK_MSS": "For the shared family, the family's coarsest common sufficient statistic has image size strictly greater than the largest per-task minimal sufficient statistic image size."
+  },
+  "metrics": [
+    "conditional_entropy",
+    "mutual_information",
+    "sufficient",
+    "common_sufficient",
+    "image_size",
+    "description_length"
+  ],
+  "task_families": [
+    {
+      "name": "shared_through_Z",
+      "tasks": ["shared_p01", "shared_p23", "shared_global_parity"]
+    },
+    {
+      "name": "not_shared_beyond_Z",
+      "tasks": [
+        "notshared_bit_0",
+        "notshared_bit_1",
+        "notshared_bit_2",
+        "notshared_bit_3"
+      ]
+    }
+  ],
+  "controls": [
+    "latent_z_in_quotient_library",
+    "identity_in_quotient_library",
+    "exact_population_enumeration"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": null,
+    "sampling": "exact enumeration of all 2^4 = 16 worlds and all quotients in the lattice",
+    "raw_data": false
+  }
+}
