@@ -3,9 +3,12 @@
 Machine-checked artifact for the algebraic cores of Theorems 4
 (Cross-task stability, conditional), 5 (discrete learnability) and
 6 (ε-covering reduction) of the *Structural Intelligence* paper
-(`papers/structural_intelligence/paper.md`), plus the identifiability
+(`papers/structural_intelligence/paper.md`), the identifiability
 core of Theorem CT-1 (MDL identification) of the *Compiler
-Tomography* companion paper (`papers/compiler_tomography/paper.md`).
+Tomography* companion paper (`papers/compiler_tomography/paper.md`),
+and the algebraic cores of nine further theorems (CS-1, CS-2, SA-1,
+AF-1, AF-2, AG-2, TA-1 (two halves), RR-2, AA-2) spanning the
+remaining Structural-Intelligence companion papers.
 
 ## What is formalized
 
@@ -113,6 +116,158 @@ Tomography* companion paper (`papers/compiler_tomography/paper.md`).
   KL positivity + real logs and is left to `Mathlib` (see *What is
   not formalized*).
 
+### Causal Semantics CS-1 core — `StructuralIntelligence/CausalSemantics.lean`
+
+- `StructuralIntelligence.PsiEquiv` — Ψ-equivalence:
+  `PsiEquiv psi m₁ m₂ ↔ ∀ c, psi m₁ c = psi m₂ c`.
+- `psiEquiv_refl`, `psiEquiv_symm`, `psiEquiv_trans` — Ψ-equivalence is
+  an equivalence relation (three one-line lemmas).  Depend on
+  **no axioms**.
+- `StructuralIntelligence.psi_equiv_preserves_under_context` — **CS-1
+  core**: Ψ-equivalent messages yield the same list of context-slot
+  values under any list of contexts,
+  `cs.map (psi m₁) = cs.map (psi m₂)`.  Proof: list induction on
+  `cs`.  Depends on **no axioms**.
+
+### Causal Semantics CS-2 core — same file
+
+- `StructuralIntelligence.MessageQuotient`,
+  `StructuralIntelligence.messageQuotientMap` — the message
+  quotient, definitionally `PsiEquiv`, together with its canonical
+  map `M → (C → D)`.
+- `StructuralIntelligence.messageQuotient_is_common_sufficient` —
+  every context slot of `psi` factors through
+  `messageQuotientMap psi` (definitional).  No axioms.
+- `StructuralIntelligence.messageQuotientMap_eq_iff` — the
+  induced equivalence relation of `messageQuotientMap psi` is
+  exactly `PsiEquiv psi`.
+- `StructuralIntelligence.messageQuotient_is_coarsest` — **CS-2
+  core**: any other message screen `q : M → Q` in the "sufficient
+  direction" (`q m₁ = q m₂ → PsiEquiv m₁ m₂`) refines the Ψ-equivalence
+  relation, i.e., `Refines (PsiEquiv psi) (qRel q)`.  Depends on
+  **no axioms**.
+
+### Antecedent Taxonomy SA-1 core — `StructuralIntelligence/Antecedents.lean`
+
+- `StructuralIntelligence.IntersectionScreen` — the intersection
+  screen of a family `q : ∀ u : U, X → Z u`:
+  `IntersectionScreen q x₁ x₂ ↔ ∀ u, q u x₁ = q u x₂`.
+- `intersection_refines_each` — the intersection screen refines
+  every family member.  Definitional.
+- `StructuralIntelligence.LocallySufficient` — a task family is
+  locally sufficient for `{q u}` if every task is determined by
+  *some* family member.
+- `StructuralIntelligence.intersection_is_common_sufficient` —
+  **SA-1 core**: local sufficiency + intersection agreement implies
+  every task agrees.  Depends on **no axioms**.
+- `StructuralIntelligence.intersection_is_coarsest_over_family` —
+  **SA-1 coarsest corollary**: any competing screen `q'` that
+  captures every `q u` refines the intersection screen.  Depends on
+  **no axioms**.
+
+### Abstraction Frontier AF-1 and AF-2 core — `StructuralIntelligence/AbstractionFrontier.lean`
+
+- `StructuralIntelligence.Dominates` — componentwise `≤` on every
+  axis + strict `<` on some axis; axes modelled as `Fin n → Nat`
+  (integer proxies for real axes; lower is better).
+- `StructuralIntelligence.IsPareto` — no quotient dominates.
+- `StructuralIntelligence.pareto_set_is_antichain` — **AF-1 core**:
+  two Pareto-optimal quotients cannot dominate each other; direct
+  from the definition of `IsPareto`.  Depends on **no axioms**.
+- `StructuralIntelligence.pareto_contains_css_when_zero_sufficiency`
+  — **AF-2 core** (two-axis static case): any `q*` with zero task-
+  insufficiency (axis `0`) that minimises coding cost (axis `1`)
+  among common sufficient screens is Pareto.  Uses `[propext,
+  Quot.sound]` (via `omega` closing the impossible index case for
+  `Fin 2`).
+
+### Alignment Governance AG-2 core — `StructuralIntelligence/AlignmentGovernance.lean`
+
+- `StructuralIntelligence.ValidTrajectory` — a length-`T` path
+  `Fin (T+1) → Z` is `viable`-valid iff every visited state is
+  viable.
+- `StructuralIntelligence.viability_inherited_by_superset` — **AG-2
+  core**: enlarging the viability set (`V ⊆ V'`) preserves
+  trajectory validity.  One-line proof, no axioms.
+- `StructuralIntelligence.viability_valid_ext` — pointwise equality
+  of viability predicates yields identical valid-trajectory sets.
+
+  The **quantitative** AG-2 (probability of survival under a
+  probabilistic transition kernel) requires real-valued measures and
+  is out of scope for the Lean-core artifact.
+
+### Theory Atlas TA-1 core — `StructuralIntelligence/TheoryAtlas.lean`
+
+- `StructuralIntelligence.CocycleHolds` — the chart-transition
+  cocycle: `T j k (T i j q) = T i k q`.
+- `StructuralIntelligence.GluesTransitions` — a family `M` glues
+  transitions if `M j (T i j q) = M i q`.
+- `StructuralIntelligence.Injective` — local injectivity predicate
+  (avoids importing Mathlib).
+- `StructuralIntelligence.cocycle_implies_gluing` — **TA-1 forward
+  direction**: from cocycle + inhabited chart index, the family
+  `M i q := T i default q` glues the transitions and satisfies the
+  canonical-chart idempotency `M default (M i q) = M i q`.  No
+  axioms.
+- `StructuralIntelligence.injective_gluing_implies_cocycle` — **TA-1
+  reverse direction (under injectivity)**: any gluing family with
+  injective components forces the cocycle to hold.  Proof: apply
+  injectivity to `M k (T j k (T i j q)) = M k (T i k q)`.  No
+  axioms.
+
+  **Weakening from the paper's TA-1 ↔.**  The naked biconditional
+  as stated in the paper is not provable in pure core: the trivial
+  constant family `M := fun _ _ => q₀` satisfies the gluing equation
+  and idempotency for any `q₀ : Q`, without forcing the cocycle.
+  The honest content of TA-1 is the two-halves formulation above
+  (forward direction always; reverse direction under injective
+  components on the gluing family).  Recovering the full ↔ requires
+  either bijective chart transitions or an auxiliary quotient
+  construction, both beyond the pure-Lean-core scope.
+
+### Representation Repair RR-2 core — `StructuralIntelligence/RepresentationRepair.lean`
+
+- `StructuralIntelligence.LiftRepairs` — a lift repairs invariant
+  `I` if it makes previously-broken representations capture `I`.
+- `StructuralIntelligence.Preserves` — a lift preserves `I` if it
+  never breaks existing captures.
+- `StructuralIntelligence.LiftEnsures` — a lift ensures `I` if it
+  always produces something capturing `I`.
+- `StructuralIntelligence.Independent` — two lifts commute.
+- `StructuralIntelligence.liftEnsures_of_repairs_preserves` —
+  repair + preservation = ensures.  Uses `[propext, Classical.choice,
+  Quot.sound]` (via `by_cases` on `captures r I`).
+- `StructuralIntelligence.independent_lifts_compose_ensures` —
+  **RR-2 core (strong form)**: two commuting lifts that each ensure
+  their invariant compose to a lift that ensures both invariants.
+  Depends on **no axioms**.
+- `StructuralIntelligence.independent_lifts_compose` — **RR-2 core
+  (RR form)**: two independent lifts, each repairing and preserving
+  its invariant, compose to a lift repairing both.  Uses
+  `[propext, Classical.choice, Quot.sound]` (via the strong form
+  and case-split on captures).
+
+  The pure `LiftRepairs`-only hypothesis is not enough: if `lift₂`
+  breaks `I₁` on an input that captures it, no amount of
+  independence with `lift₁` will save it (because `lift₁` only
+  repairs *broken* `I₁`).  The paper implicitly assumes
+  preservation, as is standard in belief-revision literature; the
+  formalisation makes that hypothesis explicit.
+
+### Autocatalytic Artwork AA-2 core — `StructuralIntelligence/AutocatalyticArtwork.lean`
+
+- `StructuralIntelligence.bayesPosterior`,
+  `StructuralIntelligence.boltzmannUpdate` — unnormalised Bayesian
+  and Boltzmann update operators on `Nat`-valued weight functions
+  `Θ → Nat` (using `Nat` in place of `ℝ` since proportionality is
+  what matters; the extension to real-valued weights is orthogonal).
+- `StructuralIntelligence.bayes_equals_boltzmann_with_reward_as_likelihood`
+  — **AA-2 core**: the two update operators coincide pointwise once
+  the reward plays the role of the likelihood.  By `rfl`.  No
+  axioms.
+- `StructuralIntelligence.bayesPosterior_eq_boltzmannUpdate` —
+  function-level identity (not just pointwise).  Also by `rfl`.
+
 ### No `sorry`s
 
 Every checked-in proof compiles fully; there are no `sorry`s anywhere
@@ -167,6 +322,33 @@ family-specific axiom is added).
 - Theorems 1, 2 and the continuous-case Corollary — these need
   additional real analysis / measure theory, all beyond the Lean 4
   core.
+- The **quantitative half of AG-2** (survival probability under a
+  probabilistic transition kernel).  What is formalised is the
+  qualitative superset-inheritance: enlarging the viability set
+  cannot invalidate any trajectory.  The probability that a Markov
+  trajectory stays inside `V` for `T` steps needs real-valued
+  measures and lives in Mathlib territory.
+- The **naked `↔` form of TA-1** (cocycle exactly iff gluing, with
+  no injectivity hypothesis).  What is formalised are both halves
+  separately: cocycle ⟹ gluing (via canonical-chart projection),
+  and injective-gluing ⟹ cocycle.  The naked biconditional is not
+  provable without extra structure: the trivial constant family
+  `M := fun _ _ => q₀` glues any `T` and is idempotent for free.
+  Recovering the full ↔ needs either bijective transitions or an
+  auxiliary quotient construction.
+- The **`LiftRepairs`-only form of RR-2**.  What is formalised is
+  the "ensures" form (repair + preserve → ensures both invariants
+  compose under independence).  A pure `LiftRepairs`-only version
+  is false without a preservation hypothesis, because either lift
+  could break the other invariant on an input where it was already
+  present; the paper implicitly assumes preservation, and the
+  formalisation makes that hypothesis explicit.
+- The **normalisation constant of AA-2** (Bayes ↔ Boltzmann on the
+  actual probability simplex).  What is formalised is the pointwise
+  identity of the two update operators on unnormalised weights
+  (`Nat`-valued for pure-core provability).  Dividing by
+  `Σ_θ μ(θ) · lik(θ)` to obtain a probability distribution is
+  routine once real division is available (Mathlib).
 
 ## Design constraints
 
@@ -202,6 +384,14 @@ with the Theorem-6-core headlines `refinement_transitive` and
 `propext, Classical.choice, Quot.sound` triple (for the classical
 "either `θ = θ*` or the data refutes `θ`" case split).
 
+The CS-1/CS-2, SA-1, AF-1, AG-2, TA-1, RR-2-ensures, and AA-2 core
+headlines depend on **no axioms**.  `pareto_contains_css_when_zero_sufficiency`
+uses `[propext, Quot.sound]` (via `omega` closing the impossible
+`Fin 2` index case).  `independent_lifts_compose` (RR-2 form) uses
+`[propext, Classical.choice, Quot.sound]` (via `by_cases` on
+`captures r I`).  A full clean build (post-toolchain-download) takes
+~3 seconds.
+
 ## Files
 
 - `StructuralIntelligence.lean` — top-level module, re-exports and
@@ -227,6 +417,35 @@ with the Theorem-6-core headlines `refinement_transitive` and
   CT-1-core headlines `identifiability_implies_unique_by_witness`,
   `identifiability_yields_refuting_data`,
   `identifiability_isolates_theta_star`.
+- `StructuralIntelligence/CausalSemantics.lean` — `PsiEquiv`,
+  `MessageQuotient`, `messageQuotientMap`, and the CS-1/CS-2 core
+  headlines `psi_equiv_preserves_under_context`,
+  `messageQuotient_is_common_sufficient`,
+  `messageQuotient_is_coarsest`.
+- `StructuralIntelligence/Antecedents.lean` — `IntersectionScreen`,
+  `LocallySufficient`, and the SA-1 core headlines
+  `intersection_is_common_sufficient`,
+  `intersection_is_coarsest_over_family`.
+- `StructuralIntelligence/AbstractionFrontier.lean` — `Dominates`,
+  `IsPareto`, and the AF-1/AF-2 core headlines
+  `pareto_set_is_antichain`,
+  `pareto_contains_css_when_zero_sufficiency`.
+- `StructuralIntelligence/AlignmentGovernance.lean` —
+  `ValidTrajectory` and the AG-2 core headline
+  `viability_inherited_by_superset` (plus `viability_valid_ext`).
+- `StructuralIntelligence/TheoryAtlas.lean` — `CocycleHolds`,
+  `GluesTransitions`, `Injective`, and the TA-1 core headlines
+  `cocycle_implies_gluing`, `injective_gluing_implies_cocycle`
+  (both halves; the naked ↔ is weakened — see *What is not
+  formalized*).
+- `StructuralIntelligence/RepresentationRepair.lean` — `LiftRepairs`,
+  `Preserves`, `LiftEnsures`, `Independent`, and the RR-2 core
+  headlines `independent_lifts_compose_ensures`,
+  `independent_lifts_compose`.
+- `StructuralIntelligence/AutocatalyticArtwork.lean` —
+  `bayesPosterior`, `boltzmannUpdate`, and the AA-2 core headline
+  `bayes_equals_boltzmann_with_reward_as_likelihood` (plus the
+  function-level `bayesPosterior_eq_boltzmannUpdate`).
 
 ## Provenance
 
