@@ -1,0 +1,40 @@
+{
+  "experiment_id": "alignment_governance_pair",
+  "schema_version": "1.0",
+  "hypothesis": "Theorem AG-1 (paper papers/alignment_as_ensemble_governance/paper.md) predicts that on a 4-state Markov world with viable region V={0,1,2}, unviable state {3}, uniform random policy over actions {stay, move}, and per-step leakage rate beta=0.05 by construction, the survival probability Pr[q(X_t) in V for all t <= T] is at least (1-beta)^T at every T in {1, 3, 5, 10, 20}, computed exactly by matrix powers. On this world the bound is tight (equality) at every T because every row of the V-sub-kernel sums to exactly 1-beta. Theorem AG-2 predicts extending V to V'=Z gives survival 1.0 at every T (trivially, since beta_Z=0).",
+  "primary_metric": "gates.ag1_lower_bound_holds_at_every_T",
+  "gates": {
+    "AGP_AG1_LOWER_BOUND_HOLDS_AT_EVERY_T": "For every T in {1, 3, 5, 10, 20}, the exact survival probability under the coarse Markov kernel restricted to V is at least (1 - beta)^T, within 1e-12 numerical tolerance.",
+    "AGP_AG1_LOWER_BOUND_TIGHTNESS": "At T=1, exact survival probability equals (1 - beta) = 0.95 exactly (within 1e-12).",
+    "AGP_AG2_VIABILITY_INHERITED_BY_SUPERSET": "When V is extended to V'=Z (everything viable), exact survival is 1.0 at every T (within 1e-12).",
+    "AGP_AG_SURVIVAL_MONOTONE_DECREASING_IN_T": "Exact survival probability on V is weakly monotone non-increasing across the horizon sweep {1, 3, 5, 10, 20}."
+  },
+  "metrics": [
+    "exact_survival",
+    "ag1_lower_bound",
+    "bernoulli_linear_bound",
+    "tightness_gap",
+    "bound_holds"
+  ],
+  "world": {
+    "Z_states": [0, 1, 2, 3],
+    "V_states": [0, 1, 2],
+    "unviable_states": [3],
+    "actions": ["stay", "move"],
+    "beta": 0.05,
+    "policy": "uniform random over actions at every viable state",
+    "horizons": [1, 3, 5, 10, 20]
+  },
+  "controls": [
+    "kernel_rows_sum_to_one",
+    "state_3_absorbing",
+    "matrix_power_deterministic",
+    "row_sums_of_p_v_equal_1_minus_beta"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": null,
+    "sampling": "exact enumeration of the 4x4 coarse Markov kernel and its matrix powers up to T=20; no Monte Carlo.",
+    "raw_data": false
+  }
+}

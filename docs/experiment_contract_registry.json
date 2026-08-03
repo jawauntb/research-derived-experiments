@@ -61,6 +61,35 @@
   },
   "packages": [
     {
+      "package": "abstraction_frontier_pair",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/abstraction_frontier_pair/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "abstraction_frontier_pair_2026_08_03",
+      "runs": [
+        {
+          "run_id": "abstraction_frontier_pair_2026_08_03",
+          "publication_package": "abstraction_frontier_pair",
+          "runtime_package": "abstraction_frontier_pair",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/abstraction_frontier_pair/experiment_manifest.json",
+          "report_paths": [
+            "experiments/abstraction_frontier_pair/results/abstraction_frontier_pair_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/abstraction_frontier_pair/preregistration.json",
+          "preregistration_digest": "377b4a880e00ea7e49d0f8e4ebb29eee0435390b261e97b7b867465a78cfca8d",
+          "producing_agent": {
+            "identity": "Claude Code (agent, under J. Brown direction)",
+            "session_ref": "claude/abstraction-frontier"
+          }
+        }
+      ]
+    },
+    {
       "package": "antecedent_taxonomy_pair",
       "coverage_mode": "structured_manifest",
       "manifest_path": "experiments/antecedent_taxonomy_pair/experiment_manifest.json",
@@ -102,6 +131,35 @@
         "frozen_legacy_cutoff": "2026-07-14",
         "adjudicates_claims": false
       }
+    },
+    {
+      "package": "alignment_governance_pair",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/alignment_governance_pair/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "alignment_governance_pair_2026_08_03",
+      "runs": [
+        {
+          "run_id": "alignment_governance_pair_2026_08_03",
+          "publication_package": "alignment_governance_pair",
+          "runtime_package": "alignment_governance_pair",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/alignment_governance_pair/experiment_manifest.json",
+          "report_paths": [
+            "experiments/alignment_governance_pair/results/alignment_governance_pair_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/alignment_governance_pair/preregistration.json",
+          "preregistration_digest": "ce572b645922114d824523ca8df90315217aec6bcaf608639ef4fbc270a87f89",
+          "producing_agent": {
+            "identity": "Claude Code (agent, under J. Brown direction)",
+            "session_ref": "claude/alignment-as-ensemble-governance"
+          }
+        }
+      ]
     },
     {
       "package": "allostatic_control",

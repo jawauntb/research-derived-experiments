@@ -1,0 +1,241 @@
+{
+  "constant_record": {
+    "coding_cost": 0.0,
+    "quotient": "constant",
+    "task_sufficiency": 1.0
+  },
+  "gates": {
+    "af1_frontier_contains_constant": true,
+    "af1_frontier_contains_true_Z": true,
+    "af1_frontier_is_antichain": true,
+    "af1_identity_is_dominated_in_static_case": true,
+    "af2_no_pareto_strictly_finer_than_true_Z": true,
+    "af2_sufficient_frontier_is_true_Z_alone": true
+  },
+  "identity_record": {
+    "coding_cost": 4.0,
+    "quotient": "identity",
+    "task_sufficiency": 0.0
+  },
+  "latent_Z_definition": "joint(parity{0,1}, parity{2,3}) on a 4-bit Boolean world",
+  "num_quotients": 23,
+  "pareto_frontier": [
+    "constant",
+    "joint(parity{0,1},parity{2,3})"
+  ],
+  "quotients": [
+    {
+      "coding_cost": 0.0,
+      "control_regret": 0.0,
+      "dynamical_closure": 0.0,
+      "image_size": 1,
+      "pareto": true,
+      "quotient": "constant",
+      "task_sufficiency": 1.0
+    },
+    {
+      "coding_cost": 1.0,
+      "control_regret": 0.0,
+      "dynamical_closure": 0.0,
+      "image_size": 2,
+      "pareto": false,
+      "quotient": "parity{0}",
+      "task_sufficiency": 1.0
+    },
+    {
+      "coding_cost": 1.0,
+      "control_regret": 0.0,
+      "dynamical_closure": 0.0,
+      "image_size": 2,
+      "pareto": false,
+      "quotient": "parity{1}",
+      "task_sufficiency": 1.0
+    },
+    {
+      "coding_cost": 1.0,
+      "control_regret": 0.0,
+      "dynamical_closure": 0.0,
+      "image_size": 2,
+      "pareto": false,
+      "quotient": "parity{2}",
+      "task_sufficiency": 1.0
+    },
+    {
+      "coding_cost": 1.0,
+      "control_regret": 0.0,
+      "dynamical_closure": 0.0,
+      "image_size": 2,
+      "pareto": false,
+      "quotient": "parity{3}",
+      "task_sufficiency": 1.0
+    },
+    {
+      "coding_cost": 1.0,
+      "control_regret": 0.0,
+      "dynamical_closure": 0.0,
+      "image_size": 2,
+      "pareto": false,
+      "quotient": "parity{0,1}",
+      "task_sufficiency": 1.0
+    },
+    {
+      "coding_cost": 1.0,
+      "control_regret": 0.0,
+      "dynamical_closure": 0.0,
+      "image_size": 2,
+      "pareto": false,
+      "quotient": "parity{0,2}",
+      "task_sufficiency": 1.0
+    },
+    {
+      "coding_cost": 1.0,
+      "control_regret": 0.0,
+      "dynamical_closure": 0.0,
+      "image_size": 2,
+      "pareto": false,
+      "quotient": "parity{0,3}",
+      "task_sufficiency": 1.0
+    },
+    {
+      "coding_cost": 1.0,
+      "control_regret": 0.0,
+      "dynamical_closure": 0.0,
+      "image_size": 2,
+      "pareto": false,
+      "quotient": "parity{1,2}",
+      "task_sufficiency": 1.0
+    },
+    {
+      "coding_cost": 1.0,
+      "control_regret": 0.0,
+      "dynamical_closure": 0.0,
+      "image_size": 2,
+      "pareto": false,
+      "quotient": "parity{1,3}",
+      "task_sufficiency": 1.0
+    },
+    {
+      "coding_cost": 1.0,
+      "control_regret": 0.0,
+      "dynamical_closure": 0.0,
+      "image_size": 2,
+      "pareto": false,
+      "quotient": "parity{2,3}",
+      "task_sufficiency": 1.0
+    },
+    {
+      "coding_cost": 1.0,
+      "control_regret": 0.0,
+      "dynamical_closure": 0.0,
+      "image_size": 2,
+      "pareto": false,
+      "quotient": "parity{0,1,2}",
+      "task_sufficiency": 1.0
+    },
+    {
+      "coding_cost": 1.0,
+      "control_regret": 0.0,
+      "dynamical_closure": 0.0,
+      "image_size": 2,
+      "pareto": false,
+      "quotient": "parity{0,1,3}",
+      "task_sufficiency": 1.0
+    },
+    {
+      "coding_cost": 1.0,
+      "control_regret": 0.0,
+      "dynamical_closure": 0.0,
+      "image_size": 2,
+      "pareto": false,
+      "quotient": "parity{0,2,3}",
+      "task_sufficiency": 1.0
+    },
+    {
+      "coding_cost": 1.0,
+      "control_regret": 0.0,
+      "dynamical_closure": 0.0,
+      "image_size": 2,
+      "pareto": false,
+      "quotient": "parity{1,2,3}",
+      "task_sufficiency": 1.0
+    },
+    {
+      "coding_cost": 1.0,
+      "control_regret": 0.0,
+      "dynamical_closure": 0.0,
+      "image_size": 2,
+      "pareto": false,
+      "quotient": "parity{0,1,2,3}",
+      "task_sufficiency": 1.0
+    },
+    {
+      "coding_cost": 2.0,
+      "control_regret": 0.0,
+      "dynamical_closure": 0.0,
+      "image_size": 4,
+      "pareto": true,
+      "quotient": "joint(parity{0,1},parity{2,3})",
+      "task_sufficiency": 0.0
+    },
+    {
+      "coding_cost": 2.0,
+      "control_regret": 0.0,
+      "dynamical_closure": 0.0,
+      "image_size": 4,
+      "pareto": false,
+      "quotient": "joint(parity{0,2},parity{1,3})",
+      "task_sufficiency": 1.0
+    },
+    {
+      "coding_cost": 2.0,
+      "control_regret": 0.0,
+      "dynamical_closure": 0.0,
+      "image_size": 4,
+      "pareto": false,
+      "quotient": "joint(parity{0,3},parity{1,2})",
+      "task_sufficiency": 1.0
+    },
+    {
+      "coding_cost": 2.0,
+      "control_regret": 0.0,
+      "dynamical_closure": 0.0,
+      "image_size": 4,
+      "pareto": false,
+      "quotient": "joint(bit_0,bit_1)",
+      "task_sufficiency": 1.0
+    },
+    {
+      "coding_cost": 2.0,
+      "control_regret": 0.0,
+      "dynamical_closure": 0.0,
+      "image_size": 4,
+      "pareto": false,
+      "quotient": "joint(bit_2,bit_3)",
+      "task_sufficiency": 1.0
+    },
+    {
+      "coding_cost": 3.0,
+      "control_regret": 0.0,
+      "dynamical_closure": 0.0,
+      "image_size": 8,
+      "pareto": false,
+      "quotient": "joint(bit_0,bit_1,bit_2)",
+      "task_sufficiency": 1.0
+    },
+    {
+      "coding_cost": 4.0,
+      "control_regret": 0.0,
+      "dynamical_closure": 0.0,
+      "image_size": 16,
+      "pareto": false,
+      "quotient": "identity",
+      "task_sufficiency": 0.0
+    }
+  ],
+  "status": "pass",
+  "true_Z_record": {
+    "coding_cost": 2.0,
+    "quotient": "joint(parity{0,1},parity{2,3})",
+    "task_sufficiency": 0.0
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "experiment_id": "abstraction_frontier_pair",
+  "schema_version": "1.0",
+  "hypothesis": "Theorems AF-1 and AF-2 (paper papers/abstraction_frontier/paper.md) predict, on the 4-bit Boolean world with the shared-through-Z task family (parity{0,1}, parity{2,3}, parity{0,1,2,3}), that the Pareto frontier over the four axes (task-sufficiency = max_alpha H(Y_alpha | q(X)), coding cost = log2(|image(q)|), dynamical closure = 0, control regret = 0) is a two-element antichain: the constant map (min-coding-cost, max-task-sufficiency endpoint) and the true Z = joint(parity{0,1}, parity{2,3}) (unique zero-task-sufficiency frontier member). The identity is dominated by Z (same sufficiency 0, strictly higher coding cost 4 > 2) -- the static-case collapse of AF-2's 'segment from q* to identity' statement.",
+  "primary_metric": "gates.af2_sufficient_frontier_is_true_Z_alone",
+  "gates": {
+    "AF1_FRONTIER_IS_ANTICHAIN": "No two Pareto-set members weakly dominate each other on all four axes with strict inequality on at least one.",
+    "AF1_FRONTIER_CONTAINS_TRUE_Z": "joint(parity{0,1}, parity{2,3}) is a Pareto member.",
+    "AF1_FRONTIER_CONTAINS_CONSTANT": "The constant map is a Pareto member (min-coding-cost endpoint).",
+    "AF1_IDENTITY_IS_DOMINATED_IN_STATIC_CASE": "The identity is strictly dominated by joint(parity{0,1}, parity{2,3}) since both have task-sufficiency 0 and Z has strictly smaller coding cost.",
+    "AF2_SUFFICIENT_FRONTIER_IS_TRUE_Z_ALONE": "Among Pareto members with task-sufficiency 0, the only quotient is joint(parity{0,1}, parity{2,3}).",
+    "AF2_NO_PARETO_STRICTLY_FINER_THAN_TRUE_Z": "No Pareto member is strictly finer than joint(parity{0,1}, parity{2,3}) on the lattice."
+  },
+  "metrics": [
+    "task_sufficiency",
+    "coding_cost",
+    "dynamical_closure",
+    "control_regret",
+    "image_size",
+    "pareto"
+  ],
+  "quotient_library": [
+    "constant",
+    "parity{0}", "parity{1}", "parity{2}", "parity{3}",
+    "parity{0,1}", "parity{0,2}", "parity{0,3}",
+    "parity{1,2}", "parity{1,3}", "parity{2,3}",
+    "parity{0,1,2}", "parity{0,1,3}", "parity{0,2,3}", "parity{1,2,3}",
+    "parity{0,1,2,3}",
+    "joint(parity{0,1},parity{2,3})",
+    "joint(parity{0,2},parity{1,3})",
+    "joint(parity{0,3},parity{1,2})",
+    "joint(bit_0,bit_1)",
+    "joint(bit_2,bit_3)",
+    "joint(bit_0,bit_1,bit_2)",
+    "identity"
+  ],
+  "task_family": ["shared_p01", "shared_p23", "shared_global_parity"],
+  "controls": [
+    "true_z_partition_from_direct_latent_map",
+    "weak_dominance_is_transitive_and_irreflexive",
+    "static_axes_documented_as_convention"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": null,
+    "sampling": "exact enumeration of the 16-element Boolean world; no Monte Carlo",
+    "raw_data": false
+  }
+}
