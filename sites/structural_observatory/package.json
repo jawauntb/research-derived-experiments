@@ -1,0 +1,13 @@
+{
+  "name": "structural-observatory-site",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Structural Observatory — the Structural Intelligence Conjecture and its three exact instruments.",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "PORT=3030 node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -470,6 +470,7 @@ exhaustive counterexample search, and replayable MIDAS regression.
 | `experiment_manifest.json` | Accepted local-CPU theoretical contract and public artifact boundary |
 | `results/summary.{json,md}` | Deterministic complete receipt; preserves 26,304 strict target-greedy counterexamples and zero exact-control failures |
 | `papers/obstruction_aware_admission/` | Calibrated manuscript, source/contradiction ledger, three figures, deterministic PDF, and paper-local README |
+| `papers/structural_intelligence/` | Umbrella manuscript for the Structural Observatory: stochastic-fibration master object, the conjecture, the three exact instruments, the ten-construct program, and the Core⊂Shell conscious/reliable-agent architecture (`paper.md`, README; no committed PDF yet) |
 
 Run:
 
@@ -1166,6 +1167,17 @@ cd formal/relative-identifiability && lake build
 | Domain | `https://envelope-guard-production.up.railway.app` |
 | Deploy | Railway project `envelope-guard` via `.github/workflows/railway-deploy.yml` |
 | Tests | `npm test` → Node test runner on `tests/policy.test.js` |
+
+### 6.2c `sites/structural_observatory/` — Structural Observatory demo
+
+| Item | Detail |
+|---|---|
+| Role | Interactive explainer for the Structural Intelligence Conjecture and its three instruments |
+| Stack | Whitelist static Node server (`server.js`); vanilla-JS `app.js` renders committed results |
+| Served | `index.html`, `styles.css`, `app.js`, `results.json` |
+| Port | `PORT` (default 3030) |
+| Data | `results.json` = combined summaries of `representation_search`, `structure_compiler`, `symbolic_causation` |
+| Deploy | Railway-ready (`railway.json`); public deploy is a separate account step, currently gated on the GitHub app install (see `docs/railway-autodeploy.md`) |
 
 ### 6.3 `apps/inquiry-black-box/` — full catalog
 
