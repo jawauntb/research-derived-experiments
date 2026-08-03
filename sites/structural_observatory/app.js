@@ -87,6 +87,36 @@ function renderStructureCompiler(section, data) {
   body.appendChild(table(["medium", "q∘F = id", "fidelity", "steps"], rows));
 }
 
+function renderSparseIcaLearnability(section, data) {
+  renderGates(section, data.gates);
+  const body = section.querySelector("[data-body]");
+  const poly = data.poly_exponent_gate || {};
+  const perS = poly.per_sparsity || {};
+  const bStrs = Object.entries(perS).map(([s, v]) => `s=${s}: b≈${v.fitted_exponent_b?.toFixed(3) ?? "?"}`);
+  body.appendChild(
+    el("p", { class: "status" }, [
+      `fitted exponents ${bStrs.join(" · ")} (gate ≤ ${poly.exponent_gate_max ?? "?"})`,
+    ])
+  );
+  // Amari means per (d_Z, N, s) if available; else per (d_Z, N).
+  const rows = [];
+  const points = data.sweep_points || [];
+  const sparsities = Array.from(new Set(points.map((p) => p.s ?? p.sparsity ?? "?"))).sort();
+  const dZs = data.d_Z_values || [];
+  const Ns = data.N_values || [];
+  for (const s of sparsities) {
+    for (const dz of dZs) {
+      const cells = [{ text: `s=${s}, d_Z=${dz}`, cls: "tag" }];
+      for (const n of Ns) {
+        const pt = points.find((p) => (p.s ?? p.sparsity) === s && p.d_z === dz && p.n === n);
+        cells.push({ text: pt ? pt.amari_mean.toFixed(4) : "—", cls: "num" });
+      }
+      rows.push(cells);
+    }
+  }
+  body.appendChild(table(["(s, d_Z)", ...Ns.map((n) => `N=${n}`)], rows));
+}
+
 function renderLinearIcaLearnability(section, data) {
   renderGates(section, data.gates);
   const body = section.querySelector("[data-body]");
@@ -297,6 +327,12 @@ async function main() {
       data.linear_ica_learnability
     );
   }
+  if (data.sparse_ica_learnability) {
+    renderSparseIcaLearnability(
+      document.getElementById("sparse_ica_learnability"),
+      data.sparse_ica_learnability
+    );
+  }
 
   const allPass = [
     "representation_search",
@@ -307,9 +343,10 @@ async function main() {
     "cross_task_learnability_continuous",
     "rate_distortion_pair",
     "linear_ica_learnability",
+    "sparse_ica_learnability",
   ].every((k) => data[k] && data[k].status === "pass");
   status.textContent = allPass
-    ? "All eight instruments: status = pass. Every gate below is green."
+    ? "All nine instruments: status = pass. Every gate below is green."
     : "One or more instruments did not pass — see gates below.";
 }
 

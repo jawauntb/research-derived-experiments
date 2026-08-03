@@ -1,0 +1,45 @@
+{
+  "experiment_id": "sparse_ica_learnability",
+  "schema_version": "1.0",
+  "hypothesis": "SIC-C-c asks whether restricting to a specific inductive-bias hypothesis class can restore uniform polynomial-in-d_Z sample complexity for the continuous-case learnability problem of paper section 2.5b (Theorem 6). Instrument 8 answered yes for the linear-ICA class; this instrument (instrument 9) answers the same for the sparse-mixing / independent-mechanism analysis (IMA) class (Gresele et al. 2021). Setup: latent Z with independent Laplace(0, 1) marginals; mixing A drawn as (i) a Haar-orthogonal Q via signed QR, (ii) multiplied entry-wise by a Bernoulli(s) sparse mask with sparsity s in {0.5, 0.25} and rank-deficiency retries (or a keep-diagonal fallback), (iii) re-orthonormalised via a second signed QR; observation X = A * Z. Algorithm: sklearn FastICA (parallel, logcosh, whiten='unit-variance', max_iter=2000, tol=1e-6, random_state=trial). Metric: Amari index on P = W * A. Predictions: (a) averaged Amari <= 0.02 at N = 10000 for every d_Z in {2, 4, 6, 8} and every sparsity in {0.5, 0.25}; (b) sparser (s=0.25) recovery is at least as good as denser (s=0.5) modulo a 0.01 tolerance for every d_Z, witnessing that the independent-mechanism inductive bias is compatible with (or actively helps) recovery; (c) for each sparsity the smallest N reaching averaged Amari <= 0.03 grows only polynomially in d_Z (fitted log-log slope b <= 3.0); (d) at every (d_Z, s) the Amari(N) curve is nonincreasing modulo a 0.01 wobble tolerance.",
+  "primary_metric": "sweep_points[i].amari_mean",
+  "gates": {
+    "SICA_FASTICA_CONVERGES_AT_LARGEST_N_BOTH_SPARSITIES": "At N = 10000, the Amari index averaged over 8 trials is <= 0.02 for every d_Z in {2, 4, 6, 8} and every sparsity in {0.5, 0.25}.",
+    "SICA_SPARSER_MIXING_IMPROVES_OR_MATCHES_RECOVERY": "At N = 10000, averaged Amari at sparsity s = 0.25 minus averaged Amari at sparsity s = 0.5 is <= 0.01 for every d_Z in {2, 4, 6, 8} (sparser recovery is at least as good as denser, modulo the 0.01 finite-sample tolerance).",
+    "SICA_SAMPLE_COMPLEXITY_POLYNOMIAL_IN_D_Z": "For every sparsity in {0.5, 0.25} and every d_Z in {2, 4, 6, 8} there is a smallest N in the sweep {200, 500, 1000, 2000, 5000, 10000} with averaged Amari <= 0.03; the linear regression log(N_needed(d_Z)) = a + b * log(d_Z) has fitted slope b <= 3.0 for both sparsities.",
+    "SICA_AMARI_MONOTONE_IN_N_AT_EVERY_D_Z_AND_S": "For every (d_Z, sparsity) pair the averaged Amari curve is nonincreasing in N modulo a numerical tolerance of 0.01 (i.e. amari_mean at N_{i+1} <= amari_mean at N_i + 0.01)."
+  },
+  "metrics": [
+    "amari_mean",
+    "amari_trials",
+    "sparser_delta_at_N_max",
+    "N_needed_per_d_Z",
+    "fitted_exponent_b",
+    "scheme_counts"
+  ],
+  "grid": {
+    "d_Z_values": [2, 4, 6, 8],
+    "N_values": [200, 500, 1000, 2000, 5000, 10000],
+    "sparsity_values": [0.5, 0.25],
+    "trials_per_grid_point": 8,
+    "final_amari_target": 0.02,
+    "poly_amari_target": 0.03,
+    "poly_exponent_max": 3.0,
+    "sparser_improves_tolerance": 0.01,
+    "monotone_tolerance": 0.01,
+    "mask_retries": 32
+  },
+  "controls": [
+    "deterministic_from_base_seed",
+    "nested_prefix_sampling_within_trial",
+    "averaging_over_eight_trials_smooths_finite_sample_noise",
+    "amari_of_identity_and_signed_permutation_is_zero",
+    "sparse_mask_scheme_logged_per_grid_point"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": 0,
+    "sampling": "Per (d_Z, trial, sparsity) draw a Haar-orthogonal Q via signed QR, apply a Bernoulli(s) mask (retrying up to 32 times if the mask has an empty row/column or the masked matrix is rank-deficient; on persistent failure fall back to keep_diag which forces the diagonal mask to 1), re-orthonormalise via a second signed QR, and sample Laplace(0, 1) latents Z of size (max(N_VALUES), d_Z); every smaller N reuses the first N samples of the same draw as a prefix. sklearn FastICA(parallel, logcosh, whiten='unit-variance', max_iter=2000, tol=1e-6, random_state=trial). SeedSequence keyed by [BASE_SEED=0, d_Z, trial, int(round(s*1000))].",
+    "raw_data": false
+  }
+}

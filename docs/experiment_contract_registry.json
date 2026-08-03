@@ -250,6 +250,35 @@
       }
     },
     {
+      "package": "concern_fisher_pair",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/concern_fisher_pair/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "concern_fisher_pair_2026_08_03",
+      "runs": [
+        {
+          "run_id": "concern_fisher_pair_2026_08_03",
+          "publication_package": "concern_fisher_pair",
+          "runtime_package": "concern_fisher_pair",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/concern_fisher_pair/experiment_manifest.json",
+          "report_paths": [
+            "experiments/concern_fisher_pair/results/concern_fisher_pair_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/concern_fisher_pair/preregistration.json",
+          "preregistration_digest": "c9c672d1c805d7b7cde3dc41b8acdb92d0e4f02ea77b1ac204f3206edf0bf4ae",
+          "producing_agent": {
+            "identity": "Claude Code (agent, under J. Brown direction)",
+            "session_ref": "claude/site-papers-and-instruments-7-8"
+          }
+        }
+      ]
+    },
+    {
       "package": "concern_gated_retrieval",
       "coverage_mode": "structured_manifest",
       "manifest_path": "experiments/concern_gated_retrieval/experiment_manifest.json",
@@ -1983,6 +2012,35 @@
         "frozen_legacy_cutoff": "2026-07-14",
         "adjudicates_claims": false
       }
+    },
+    {
+      "package": "sparse_ica_learnability",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/sparse_ica_learnability/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "sparse_ica_learnability_2026_08_03",
+      "runs": [
+        {
+          "run_id": "sparse_ica_learnability_2026_08_03",
+          "publication_package": "sparse_ica_learnability",
+          "runtime_package": "sparse_ica_learnability",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/sparse_ica_learnability/experiment_manifest.json",
+          "report_paths": [
+            "experiments/sparse_ica_learnability/results/sparse_ica_learnability_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/sparse_ica_learnability/preregistration.json",
+          "preregistration_digest": "5282109597aef158a1d2144736936327e3cce53a9f2a1d7f7f64fb675d59ae28",
+          "producing_agent": {
+            "identity": "Claude Code (agent, under J. Brown direction)",
+            "session_ref": "session_01Xhh5R34zzvcN9gEqqhMTVm"
+          }
+        }
+      ]
     },
     {
       "package": "state_dependent_concern",

@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "concern_fisher_pair",
+  "hypothesis": "The exponential-family concern parameterisation on the 4-bit Boolean world of Instrument 4 obeys Theorem CG-1 (Fisher matrix = beta^2 * diag(sech^2(beta c_i)) on every fiber) and Theorem CG-2 (holonomy of the non-exact concern-1-form alpha + epsilon(-c_2 dc_1) around a loop equals epsilon times the signed enclosed area) exactly on the pre-registered grid.",
+  "claim_tier": "theoretical",
+  "controls": [
+    { "control_id": "closed_form_matches_at_every_grid_point", "description": "The empirical Fisher matrix computed by direct enumeration over the 4-element fiber is checked against the closed-form beta^2 * diag(sech^2(beta c_i)) at every (c, z) in the 4x4 grid; agreement to 1e-12 required." },
+    { "control_id": "independence_of_bit_pairs_forces_off_diagonal_zero", "description": "Because T_1 = 2 x_0 - 1 and T_2 = 2 x_2 - 1 read disjoint bit pairs, their covariance is zero on every fiber; verified directly for each grid point." },
+    { "control_id": "greens_theorem_matches_signed_area", "description": "The added 1-form -epsilon * c_2 dc_1 has curl +epsilon, so Green's theorem predicts holonomy = epsilon * (signed area enclosed). Rectangle and triangle both verified." },
+    { "control_id": "trapezoidal_quadrature_at_500_steps_per_edge", "description": "Line integrals are computed by trapezoidal quadrature with 500 steps per edge; error bound falls well within the 1e-3 gate tolerance." }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/concern_fisher_pair/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    { "gate_id": "CFP_CG1_EMPIRICAL_FISHER_MATCHES_PREDICTED", "criterion": "Maximum absolute difference between empirical Fisher and beta^2 * diag(sech^2(beta c_i)) over the 4x4 grid is below 1e-12." },
+    { "gate_id": "CFP_CG1_FISHER_IS_DIAGONAL_AT_EVERY_GRID_POINT", "criterion": "Off-diagonal entries of the empirical Fisher matrix are exactly zero at every grid point." },
+    { "gate_id": "CFP_CG2_RECTANGLE_HOLONOMY_MATCHES_AREA_EPSILON", "criterion": "Holonomy around the unit rectangle in c-space at z=(1,1) is within 1e-3 of epsilon = 0.3." },
+    { "gate_id": "CFP_CG2_TRIANGLE_HOLONOMY_MATCHES_HALF_EPSILON", "criterion": "Holonomy around the unit triangle at z=(1,1) is within 1e-3 of epsilon/2 = 0.15." }
+  ],
+  "artifacts": [
+    { "kind": "summary", "path": "experiments/concern_fisher_pair/results/concern_fisher_pair_summary.json", "public": true },
+    { "kind": "other", "path": "experiments/concern_fisher_pair/preregistration.json", "public": true }
+  ],
+  "status": "accepted"
+}
