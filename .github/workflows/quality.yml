@@ -80,3 +80,17 @@ jobs:
           lint: false
           use-mathlib-cache: false
           lake-package-directory: formal/structural-intelligence
+
+  lean-mathlib:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: true
+          test: false
+          lint: false
+          use-mathlib-cache: true
+          lake-package-directory: formal/structural-intelligence-mathlib
