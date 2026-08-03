@@ -198,6 +198,8 @@ Universal dispatcher: `python scripts/regen.py <name>`.
 | `cross_task_sufficiency` | R res | Structural Observatory instrument 4 (Theorem 4 witness): 4-bit Boolean world with latent Z = (parity{0,1}, parity{2,3}); for a task family that shares Z the coarsest common sufficient statistic is Z (image 4), for one that reveals bits individually it collapses to identity (image 16); combining tasks tightens the required partition | `core.py`, `experiment.py` |
 | `cross_task_learnability` | R res | Structural Observatory instrument 5 (Theorem 5 witness): exact coupon-collector recovery probability of empirical common-sufficient clustering via inclusion-exclusion; at Theorem 5's bound N = ceil(c·M·ln(M/ε)) with ε=0.05, recovery is 0.9775 (uniform, c=1) and 0.9756 (skewed, c=2), both above 1-ε | `core.py`, `experiment.py` |
 | `cross_task_learnability_continuous` | R res | Structural Observatory instrument 6 (Theorem 6 witness): continuous-case sample-complexity bound via ε-covering. On ambient X = [0,1]² quantised to a 16×16 grid, exact recovery at Theorem 6's bound is ≥ 0.95 for every (d_Z, r) ∈ {1,2}×{4,8,16}; ratios N_bound(d_Z=2)/N_bound(d_Z=1) grow 5.2→11.2→23.5 with r, exhibiting the exponential-in-d_Z scaling numerically | `core.py`, `experiment.py` |
+| `rate_distortion_pair` | R res | Structural Observatory instrument 7 (Theorem 2 witness): closed-form R(D) verification and explicit test-channel construction for uniform-on-4-symbols and Bernoulli(0.3) sources under Hamming distortion. All ten gates pass to 1e-9: R(0)=source entropy (Theorem 1 anchor), R(D_max)=0, RD-optimal test channel achieves I(X;X̂)=R(D) at every D<D_max, R monotone and convex on the grid | `core.py`, `experiment.py` |
+| `linear_ica_learnability` | R res | Structural Observatory instrument 8 (Theorem 7 / SIC-C-c witness for linear ICA): fixed-seed FastICA on X = A·Z with Laplace(0,1) latents, swept across (d_Z, N) ∈ {2,4,6,8}×{200..10000}. Amari ≤ 0.02 at N=10000 for every d_Z; fitted polynomial exponent b ≈ 0.06 ≪ 3; escapes Theorem 6's ε-covering exponential-in-d_Z bound. The only Monte Carlo instrument in the Observatory | `core.py`, `experiment.py` |
 | `symbolic_weakness` | P R res | Flagship: symmetry-compatible weakness beats loss/MDL/flatness for OOD | See §3.1.1 |
 | `rotation_weakness` | P res | Vision rotation-group weakness correlation | `neural.py`, `dataset.py` |
 | `learned_symmetry` | P res | Data-inferred equivariance predicts OOD without oracle symmetry | `sweep.py`, `causal_validation.py`, `transform_generator.py`, `modal_sweep.py`, `modal_causal_validation.py` |
@@ -473,7 +475,7 @@ exhaustive counterexample search, and replayable MIDAS regression.
 | `experiment_manifest.json` | Accepted local-CPU theoretical contract and public artifact boundary |
 | `results/summary.{json,md}` | Deterministic complete receipt; preserves 26,304 strict target-greedy counterexamples and zero exact-control failures |
 | `papers/obstruction_aware_admission/` | Calibrated manuscript, source/contradiction ledger, three figures, deterministic PDF, and paper-local README |
-| `papers/structural_intelligence/` | Umbrella manuscript for the Structural Observatory: stochastic-fibration master object (now derived — Theorems 1, 2, 4, 5, 6 + Proposition 3; only SIC-C-c uniform poly-in-d_Z learnability under inductive bias remains), the SIC-A/B/C-a/C-b/C-c honest split, six exact instruments, the ten-construct program, and the Core⊂Shell conscious/reliable-agent architecture (`paper.md`, `paper.pdf`, README) |
+| `papers/structural_intelligence/` | Umbrella manuscript for the Structural Observatory: stochastic-fibration master object (Theorems 1, 2, 4, 5, 6, 7 + Proposition 3), SIC-A/B/C-a/C-b/C-c honest split with C-c positively resolved for linear ICA (Theorem 7), eight exact instruments, the ten-construct program, and the Core⊂Shell conscious/reliable-agent architecture (`paper.md`, `paper.pdf`, README) |
 
 Run:
 
@@ -1179,7 +1181,7 @@ cd formal/relative-identifiability && lake build
 | Stack | Whitelist static Node server (`server.js`); vanilla-JS `app.js` renders committed results |
 | Served | `index.html`, `styles.css`, `app.js`, `results.json` |
 | Port | `PORT` (default 3030) |
-| Data | `results.json` = combined summaries of `representation_search`, `structure_compiler`, `symbolic_causation`, `cross_task_sufficiency`, `cross_task_learnability`, `cross_task_learnability_continuous` |
+| Data | `results.json` = combined summaries of `representation_search`, `structure_compiler`, `symbolic_causation`, `cross_task_sufficiency`, `cross_task_learnability`, `cross_task_learnability_continuous`, `rate_distortion_pair`, `linear_ica_learnability` |
 | Deploy | Railway-ready (`railway.json`); public deploy is a separate account step, currently gated on the GitHub app install (see `docs/railway-autodeploy.md`) |
 
 ### 6.3 `apps/inquiry-black-box/` — full catalog

@@ -1,0 +1,35 @@
+{
+  "experiment_id": "concern_fisher_pair",
+  "schema_version": "1.0",
+  "hypothesis": "For the exponential-family concern parameterisation of the 4-bit Boolean world with concern statistic T(x) = (2*x_0 - 1, 2*x_2 - 1), (a) the empirical Fisher information matrix on every fiber q^{-1}(z) matches the closed-form prediction g_{c,z} = beta^2 * diag(sech^2(beta c_1), sech^2(beta c_2)) at every point (c, z) in the pre-registered grid (Theorem CG-1); (b) the non-exact concern-1-form alpha + epsilon * (-c_2 dc_1) has holonomy epsilon along the unit rectangle in c-space and epsilon/2 along the unit triangle, both computed by trapezoidal quadrature on 500 steps per edge (Theorem CG-2 via Green's theorem).",
+  "primary_metric": "cg1.max_diff_across_grid",
+  "gates": {
+    "CFP_CG1_EMPIRICAL_FISHER_MATCHES_PREDICTED": "For every c in the 4-point concern grid and every z in {(0,0),(0,1),(1,0),(1,1)}, the maximum absolute difference between the empirical Fisher matrix (beta^2 * Cov[T]) and the closed form (beta^2 * diag(sech^2(beta c_i))) is below 1e-12.",
+    "CFP_CG1_FISHER_IS_DIAGONAL_AT_EVERY_GRID_POINT": "The off-diagonal entries of the empirical Fisher matrix are exactly zero at every grid point (independence of T_1 and T_2 under K_c(.|z)).",
+    "CFP_CG2_RECTANGLE_HOLONOMY_MATCHES_AREA_EPSILON": "Holonomy of alpha + epsilon * (-c_2 dc_1) around the unit rectangle in c-space (area 1) matches epsilon = 0.3 to within 1e-3 (trapezoidal quadrature on 500 steps per edge).",
+    "CFP_CG2_TRIANGLE_HOLONOMY_MATCHES_HALF_EPSILON": "Holonomy around the (0,0)->(1,0)->(1,1)->(0,0) triangle (area 1/2) matches epsilon/2 = 0.15 to within 1e-3."
+  },
+  "metrics": [
+    "empirical_fisher",
+    "predicted_fisher",
+    "max_abs_diff",
+    "off_diagonal_zero",
+    "holonomy_rectangle_computed",
+    "holonomy_triangle_computed"
+  ],
+  "concern_grid": [[0.0, 0.0], [0.3, -0.2], [0.8, 0.5], [-0.4, 1.1]],
+  "beta": 1.0,
+  "epsilon": 0.3,
+  "controls": [
+    "closed_form_matches_at_every_grid_point",
+    "independence_of_bit_pairs_forces_off_diagonal_zero",
+    "greens_theorem_matches_signed_area",
+    "trapezoidal_quadrature_at_500_steps_per_edge"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": null,
+    "sampling": "exact enumeration of the 16-element Boolean world; closed-form Fisher matches; trapezoidal quadrature for the holonomy line integral",
+    "raw_data": false
+  }
+}

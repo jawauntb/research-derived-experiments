@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "sparse_ica_learnability",
+  "hypothesis": "Under the sparse-mixing / independent-mechanism-analysis (IMA) inductive-bias class (Z with independent non-Gaussian marginals; A drawn as Haar orthogonal masked by Bernoulli(s) and re-orthonormalised, for s in {0.5, 0.25}), sklearn FastICA achieves Amari index <= 0.02 at N = 10000 for every d_Z in {2, 4, 6, 8} and every sparsity level; sparser (s=0.25) recovery is at least as good as denser (s=0.5) modulo a 0.01 tolerance at every d_Z; the smallest N reaching Amari <= 0.03 grows polynomially in d_Z (fitted log-log slope b <= 3.0) for both sparsities; and the Amari(N) curve at each (d_Z, s) is nonincreasing modulo 0.01. This is the sparse-mixing/IMA sibling of instrument 8 (linear-ICA) --- a second partial positive resolution of SIC-C-c.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "deterministic_from_base_seed",
+      "description": "All randomness derives from BASE_SEED = 0 via numpy SeedSequence keyed by (BASE_SEED, d_Z, trial, int(round(s*1000))); sklearn FastICA random_state = trial. Running twice yields identical Amari values at every grid point."
+    },
+    {
+      "control_id": "nested_prefix_sampling_within_trial",
+      "description": "Within each (d_Z, trial, sparsity) triple, one (A, Z_full) is drawn at max(N_VALUES) and every smaller N re-uses the first N samples as a prefix, so the sample-complexity curve varies only in N."
+    },
+    {
+      "control_id": "averaging_over_eight_trials_smooths_finite_sample_noise",
+      "description": "Amari is averaged over TRIALS = 8 independent (A, Z) draws per grid point; finite-sample FastICA variance is smoothed enough that monotonicity holds within a 0.01 tolerance."
+    },
+    {
+      "control_id": "amari_of_identity_and_signed_permutation_is_zero",
+      "description": "The Amari index is verified in the unit tests to be exactly 0 on the identity matrix and on any signed permutation matrix (the ICA identifiability class), and > 0.5 on the all-ones mixture."
+    },
+    {
+      "control_id": "sparse_mask_scheme_logged_per_grid_point",
+      "description": "The mask retry / keep-diagonal fallback path is tallied per (d_Z, sparsity) cell and emitted in the summary under 'scheme_counts', so any grid point that relied on the milder fallback is auditable."
+    }
+  ],
+  "seeds": [
+    0
+  ],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python3",
+      "experiments/sparse_ica_learnability/experiment.py"
+    ],
+    "estimated_minutes": 4,
+    "max_cost_usd": 0
+  },
+  "dependencies": [
+    {"name": "numpy", "version": "==2.5.1"},
+    {"name": "scikit-learn", "version": "==1.9.0"}
+  ],
+  "gates": [
+    {
+      "gate_id": "SICA_FASTICA_CONVERGES_AT_LARGEST_N_BOTH_SPARSITIES",
+      "criterion": "Averaged Amari at N = 10000 is <= 0.02 for every d_Z in {2, 4, 6, 8} and every sparsity in {0.5, 0.25}."
+    },
+    {
+      "gate_id": "SICA_SPARSER_MIXING_IMPROVES_OR_MATCHES_RECOVERY",
+      "criterion": "At N = 10000, amari(s=0.25) - amari(s=0.5) <= 0.01 for every d_Z (sparser recovery is at least as good as denser modulo the 0.01 finite-sample tolerance)."
+    },
+    {
+      "gate_id": "SICA_SAMPLE_COMPLEXITY_POLYNOMIAL_IN_D_Z",
+      "criterion": "For every sparsity and every d_Z there is a smallest N reaching averaged Amari <= 0.03; the fitted log-log slope b of log(N_needed) = a + b log(d_Z) is <= 3.0 for both sparsities."
+    },
+    {
+      "gate_id": "SICA_AMARI_MONOTONE_IN_N_AT_EVERY_D_Z_AND_S",
+      "criterion": "For every (d_Z, sparsity), the averaged Amari curve is nonincreasing in N modulo a numerical tolerance of 0.01."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/sparse_ica_learnability/results/sparse_ica_learnability_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/sparse_ica_learnability/preregistration.json",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

@@ -70,3 +70,13 @@ jobs:
           lint: false
           use-mathlib-cache: false
           lake-package-directory: formal/relative-identifiability
+
+      - name: Build Structural Intelligence proofs
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: true
+          test: false
+          lint: false
+          use-mathlib-cache: false
+          lake-package-directory: formal/structural-intelligence

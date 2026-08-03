@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "rate_distortion_pair",
+  "hypothesis": "For two finite sources (uniform on n=4 symbols, Bernoulli(0.3)) under Hamming distortion, the Shannon rate-distortion function R(D) matches its closed form at every point of the pre-registered D-grid, the explicit RD-optimal test channel achieves I(X;X_hat) = R(D), R(0) equals the source entropy (Theorem 1 anchor), R(D_max) = 0, and R is monotone nonincreasing and convex.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "closed_form_rate_matches_at_every_grid_point",
+      "description": "R(D) computed by the function under test is compared against the closed-form R(D) at every D-grid point; agreement to 1e-9 is required."
+    },
+    {
+      "control_id": "test_channel_construction_matches_rate",
+      "description": "The RD-optimal test channel is constructed explicitly (symmetric error-D channel for uniform, Bernoulli-flip channel for Bernoulli) and its I(X;X_hat) is checked to equal R(D) at every D below D_max."
+    },
+    {
+      "control_id": "theorem_1_anchor_at_d_equals_zero",
+      "description": "At D = 0 the RD encoder is minimal-sufficient and R(0) = source entropy; this recovers the Theorem 1 partition."
+    },
+    {
+      "control_id": "boundary_zero_rate_at_d_max",
+      "description": "At D = D_max (1 - 1/n for uniform, min(p,1-p) for Bernoulli) the RD encoder is constant and R(D_max) = 0."
+    },
+    {
+      "control_id": "convexity_midpoint_check_on_grid",
+      "description": "For each interior D_i the midpoint inequality R(D_i) <= chord along neighbours holds, verifying convexity along the grid."
+    }
+  ],
+  "seeds": [
+    0
+  ],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python3",
+      "experiments/rate_distortion_pair/experiment.py"
+    ],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    { "gate_id": "RDP_UNIFORM_N4_RATE_MATCHES_CLOSED_FORM", "criterion": "R(D) for the uniform-n=4 Hamming source matches log2(n) - h(D) - D*log2(n-1) at every D in the pre-registered 10-point grid, to 1e-9." },
+    { "gate_id": "RDP_UNIFORM_N4_TEST_CHANNEL_ACHIEVES_RATE_BELOW_DMAX", "criterion": "The symmetric error-D test channel for uniform-n=4 achieves I(X;X_hat) = R(D) for every D < 0.75, to 1e-9." },
+    { "gate_id": "RDP_UNIFORM_N4_R_AT_ZERO_EQUALS_SOURCE_ENTROPY", "criterion": "R(0) = log2(n) = 2 bits for the uniform-n=4 source." },
+    { "gate_id": "RDP_UNIFORM_N4_R_AT_DMAX_IS_ZERO", "criterion": "R(1 - 1/n) = R(0.75) = 0 for the uniform-n=4 source." },
+    { "gate_id": "RDP_UNIFORM_N4_R_MONOTONE_AND_CONVEX", "criterion": "R is nonincreasing in D and satisfies the midpoint convexity inequality on the grid for the uniform-n=4 source." },
+    { "gate_id": "RDP_BERNOULLI_P03_RATE_MATCHES_CLOSED_FORM", "criterion": "R(D) for Bernoulli(0.3) Hamming source matches H2(p) - h(D) at every D in the pre-registered 9-point grid, to 1e-9." },
+    { "gate_id": "RDP_BERNOULLI_P03_TEST_CHANNEL_ACHIEVES_RATE_BELOW_DMAX", "criterion": "The RD-optimal test channel for Bernoulli(0.3) achieves I(X;X_hat) = R(D) for every D < 0.3, to 1e-9." },
+    { "gate_id": "RDP_BERNOULLI_P03_R_AT_ZERO_EQUALS_SOURCE_ENTROPY", "criterion": "R(0) = H2(0.3) bits for Bernoulli(0.3)." },
+    { "gate_id": "RDP_BERNOULLI_P03_R_AT_DMAX_IS_ZERO", "criterion": "R(0.3) = 0 for Bernoulli(0.3)." },
+    { "gate_id": "RDP_BERNOULLI_P03_R_MONOTONE_AND_CONVEX", "criterion": "R is nonincreasing in D and convex on the grid for Bernoulli(0.3)." }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/rate_distortion_pair/results/rate_distortion_pair_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/rate_distortion_pair/preregistration.json",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

@@ -6,7 +6,7 @@
     <title>Structural Observatory</title>
     <meta
       name="description"
-      content="The Structural Intelligence Conjecture derived: four theorems, one conditional theorem, and six exact instruments — representation search, cross-substrate compilation, agency measurement, cross-task sufficiency, cross-task learnability (Theorem 5's sample-complexity witness), and continuous-case cross-task learnability (Theorem 6's ε-covering scaling witness across d_Z ∈ {1, 2} and r ∈ {4, 8, 16})."
+      content="The Structural Intelligence Conjecture derived: five theorems, one conditional theorem, and eight exact instruments — representation search, cross-substrate compilation, agency measurement, cross-task sufficiency, cross-task learnability, continuous-case cross-task learnability, rate–distortion pair, and linear-ICA learnability (SIC-C-c positive resolution)."
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -21,7 +21,7 @@
         <strong>stochastic fibration with a compiler</strong>.
       </p>
       <p class="formula">
-        X&nbsp;<span class="arrow">&mdash;q&rarr;</span>&nbsp;Z,&emsp;K&nbsp;:&nbsp;Z&nbsp;&rightsquigarrow&nbsp;X,&emsp;supp&nbsp;K(&middot;&nbsp;|&nbsp;z)&nbsp;&sube;&nbsp;q<sup>&minus;1</sup>(z)
+        X&nbsp;<span class="arrow">&mdash;q&rarr;</span>&nbsp;Z,&emsp;K&nbsp;:&nbsp;Z&nbsp;&#x21DD;&nbsp;X,&emsp;supp&nbsp;K(&middot;&nbsp;|&nbsp;z)&nbsp;&sube;&nbsp;q<sup>&minus;1</sup>(z)
       </p>
       <p class="claim">
         <strong>Structural Intelligence Conjecture.</strong> Intelligence finds the
@@ -43,22 +43,72 @@
         <code>N&nbsp;=&nbsp;O(c(D<sub>Z</sub>/&epsilon;)<sup>d<sub>Z</sub></sup>&sdot;d<sub>Z</sub>&sdot;log(&hellip;))</code>
         &mdash; polynomial in <code>1/&epsilon;</code> at fixed <em>d<sub>Z</sub></em>,
         provably exponential in <em>d<sub>Z</sub></em> at fixed <code>&epsilon;</code>.
-        Only <strong>SIC-C-c</strong> (uniform polynomial-in-<em>d<sub>Z</sub></em>
-        learnability under a specific inductive-bias hypothesis class) remains
-        open &mdash; that boundary is a consequence of &epsilon;-covering
-        lower bounds and Locatello (2019), not of our framework.
+        <strong>SIC-C-c</strong> (uniform polynomial-in-<em>d<sub>Z</sub></em>
+        learnability) is impossible without inductive bias per &epsilon;-covering
+        lower bounds and Locatello (2019); <strong>Theorem&nbsp;7</strong>
+        resolves it positively inside the linear-ICA class using the classical
+        Hyv&auml;rinen&ndash;Oja machinery (Instrument&nbsp;8 is the numerical
+        witness). Other inductive-bias classes (sparse ICA, iVAE, interventional
+        CRL) remain future work.
       </p>
     </header>
 
     <main>
       <section class="intro">
         <p>
-          The three panels below are <strong>exact, deterministic, and unit-tested</strong>
-          instruments in this repository. Each establishes a <em>dissociation</em> on a
-          solvable toy case &mdash; not the general conjecture. Results load live from the
-          committed experiment summaries.
+          The eight panels below are <strong>exact, deterministic, and unit-tested</strong>
+          instruments in this repository. Each establishes a <em>dissociation</em> or
+          witnesses one of Theorems&nbsp;1, 2, 4, 5, 6, or&nbsp;7 on a solvable case.
+          Results load live from the committed experiment summaries.
         </p>
         <p class="status" id="global-status">Loading results&hellip;</p>
+      </section>
+
+      <section class="papers">
+        <h2>Papers &amp; notes</h2>
+        <ul class="paper-list">
+          <li>
+            <a class="paper-download" href="paper.pdf" download>Download PDF</a>
+            <span class="paper-title">
+              <em>The Structural Intelligence Conjecture &mdash; Representation as a
+              Stochastic Fibration, with Six Exact Instruments</em>
+              (Aug 3, 2026, ~7pp)
+            </span>
+          </li>
+          <li>
+            <a href="https://github.com/jawauntb/research-derived-experiments/blob/main/papers/structural_intelligence/paper.md">Markdown source of the umbrella paper</a>
+            &mdash; the full derivation of Theorems 1&ndash;6, the SIC-A/B/C-a/C-b/C-c
+            honest split, and the extended ten-construct programme.
+          </li>
+          <li>
+            <a href="https://github.com/jawauntb/research-derived-experiments/blob/main/notes/structural_intelligence_conjecture.md">Formal companion note</a>
+            &mdash; the working development of the framework (concern-as-fiber-geometry,
+            the ten constructs, Core &subset; Shell agent architecture) that the
+            paper distils.
+          </li>
+          <li>
+            <a class="paper-download" href="https://github.com/jawauntb/research-derived-experiments/blob/main/papers/concern_as_fiber_geometry/paper.pdf">Concern-Fiber-Geometry PDF</a>
+            <span class="paper-title">
+              <em>Concern as Fiber Geometry</em>
+              (companion paper; Theorems CG-1 and CG-2 with an exact
+              worked example — the Fisher-metric machinery of concern
+              on top of the master fibration)
+            </span>
+          </li>
+          <li>
+            <a href="https://github.com/jawauntb/research-derived-experiments/blob/main/notes/latent_structures_meta_framework.md">Meta-framework note</a>
+            &mdash; the underlying synthesis across category-theoretic design, a proved
+            genomic specification limit, machine-found proofs, Wigner, and
+            structural realism, with retrieval provenance for every source.
+          </li>
+          <li>
+            <a href="https://github.com/jawauntb/research-derived-experiments/tree/main/experiments">Instrument source code</a>
+            &mdash; each of the six instruments below has a folder in
+            <code>experiments/</code> with <code>core.py</code>, <code>experiment.py</code>,
+            a pre-registration, an experiment manifest, and a
+            <code>PROVENANCE.md</code> card.
+          </li>
+        </ul>
       </section>
 
       <section class="instrument" id="representation_search">
@@ -176,6 +226,76 @@
           &mdash; the exponential-in-<em>d<sub>Z</sub></em> scaling made numerical.
           Empirical common-sufficient clustering saturates the &epsilon;-covering
           lower bound; escaping the curse requires inductive bias.
+        </p>
+        <div class="gates" data-gates></div>
+        <div class="table-wrap" data-body></div>
+      </section>
+
+      <section class="instrument" id="rate_distortion_pair">
+        <div class="instrument-head">
+          <span class="badge">Instrument 7</span>
+          <h2>Rate&ndash;Distortion Pair &mdash; Theorem&nbsp;2 witness</h2>
+        </div>
+        <p class="instrument-blurb">
+          Closed-form Shannon <code>R(D)</code> plus explicit RD-optimal
+          test-channel construction, verified exactly on two finite sources with
+          Hamming distortion: uniform on 4 symbols
+          (<code>R(D)&nbsp;=&nbsp;log<sub>2</sub>(n)&nbsp;&minus;&nbsp;h(D)&nbsp;&minus;&nbsp;D&sdot;log<sub>2</sub>(n&nbsp;&minus;&nbsp;1)</code>)
+          and Bernoulli(<em>p</em>&nbsp;=&nbsp;0.3)
+          (<code>R(D)&nbsp;=&nbsp;H<sub>2</sub>(p)&nbsp;&minus;&nbsp;h(D)</code>).
+          At <em>D&nbsp;=&nbsp;0</em> the encoder is minimal-sufficient and
+          <code>R(0)</code> equals the source entropy &mdash; the Theorem&nbsp;1
+          anchor; at <em>D&nbsp;=&nbsp;D<sub>max</sub></em> the encoder collapses
+          to a constant and <code>R(D<sub>max</sub>)&nbsp;=&nbsp;0</code>. The
+          test channel achieves <code>I(X;&nbsp;X&#770;)&nbsp;=&nbsp;R(D)</code> at
+          every point in the achievable regime. All ten gates pass to
+          <code>1e-9</code>.
+        </p>
+        <div class="gates" data-gates></div>
+        <div class="table-wrap" data-body></div>
+      </section>
+
+      <section class="instrument" id="sparse_ica_learnability">
+        <div class="instrument-head">
+          <span class="badge">Instrument 9</span>
+          <h2>Sparse-ICA (IMA) Learnability &mdash; SIC-C-c, second class</h2>
+        </div>
+        <p class="instrument-blurb">
+          Second positive resolution of SIC-C-c: the independent-mechanism
+          analysis / sparse-mixing class (Gresele et al. 2021). Same shape as
+          Instrument 8 but with the mixing matrix <em>A</em> sparse-orthogonal
+          at retention <em>s</em>&nbsp;&isin;&nbsp;{0.5, 0.25}. All four gates
+          pass: convergence at <em>N&nbsp;=&nbsp;10000</em>, sparser mixing
+          improves recovery (IMA prediction), fitted polynomial exponents
+          <em>b</em>&nbsp;=&nbsp;0.00 (<em>s</em>=0.5) and <em>b</em>&nbsp;=&nbsp;0.51
+          (<em>s</em>=0.25), both well inside the pre-registered <em>b</em>&nbsp;&le;&nbsp;3.
+          Confirms that two distinct inductive-bias classes each earn escape
+          from Theorem&nbsp;6's &epsilon;-covering bound.
+        </p>
+        <div class="gates" data-gates></div>
+        <div class="table-wrap" data-body></div>
+      </section>
+
+      <section class="instrument" id="linear_ica_learnability">
+        <div class="instrument-head">
+          <span class="badge">Instrument 8</span>
+          <h2>Linear-ICA Learnability &mdash; Theorem&nbsp;7 / SIC-C-c witness</h2>
+        </div>
+        <p class="instrument-blurb">
+          Positive resolution of SIC-C-c for the linear-ICA class. Fixed-seed
+          <code>sklearn.decomposition.FastICA</code> on
+          <code>X&nbsp;=&nbsp;A&sdot;Z</code> with random-orthogonal <em>A</em>
+          and independent Laplace(0,1) latents, swept across
+          <em>(d<sub>Z</sub>,&nbsp;N)</em>&nbsp;&isin;&nbsp;{2,4,6,8}&times;{200,500,1000,2000,5000,10000}.
+          Recovery measured by the Amari index on
+          <code>&Wcaron;&sdot;A</code>. At <em>N&nbsp;=&nbsp;10000</em> the mean
+          Amari over 8 trials is <strong>&le;&nbsp;0.009</strong> for every
+          <em>d<sub>Z</sub></em>; the fitted polynomial exponent is
+          <strong><em>b</em>&nbsp;&asymp;&nbsp;0.06</strong>, well inside the pre-registered
+          gate <em>b</em>&nbsp;&le;&nbsp;3. Adding the linear-ICA inductive
+          bias earns a <strong>462&times;</strong> escape from Theorem&nbsp;6's
+          &epsilon;-covering exponential-in-<em>d<sub>Z</sub></em> bound. The
+          only Monte Carlo instrument in the Observatory; all others are exact.
         </p>
         <div class="gates" data-gates></div>
         <div class="table-wrap" data-body></div>

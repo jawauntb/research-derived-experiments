@@ -1,0 +1,45 @@
+{
+  "experiment_id": "linear_ica_learnability",
+  "schema_version": "1.0",
+  "hypothesis": "SIC-C-c asks whether restricting to a specific inductive-bias hypothesis class can restore uniform polynomial-in-d_Z sample complexity for the continuous-case learnability problem of paper section 2.5b (Theorem 6). For the linear-ICA class --- latent Z with independent non-Gaussian marginals (Laplace(0, 1)), square orthogonal mixing matrix A, observation X = A * Z --- sklearn FastICA on N samples of X, evaluated by the Amari index amari(P) with P = W * A, is predicted to (a) achieve Amari <= 0.02 at N = 10000 for every d_Z in {2, 4, 6, 8}; (b) reach the polynomial-fit threshold Amari <= 0.03 with a smallest-N that grows only polynomially in d_Z (fitted log-log slope b <= 3.0); (c) yield a nonincreasing Amari(N) curve at every d_Z modulo a 0.01 numerical wobble; and (d) at d_Z = 8 land the linear-ICA sample complexity at least 20x below the Theorem 6 exponential bound ceil((D_Z / eps)^{d_Z} * ln((D_Z / eps)^{d_Z} / eps_rel)) with D_Z = 1, eps = 0.25, eps_rel = 0.05, c = 1.",
+  "primary_metric": "sweep_points[i].amari_mean",
+  "gates": {
+    "LICA_LINEAR_ICA_CONVERGES_AT_LARGEST_N": "At N = 10000, the Amari index averaged over 8 trials is <= 0.02 for every d_Z in {2, 4, 6, 8}.",
+    "LICA_SAMPLE_COMPLEXITY_POLYNOMIAL_IN_D_Z": "For every d_Z in {2, 4, 6, 8} there is a smallest N in the sweep {200, 500, 1000, 2000, 5000, 10000} with averaged Amari <= 0.03; the linear regression log(N_needed(d_Z)) = a + b * log(d_Z) has fitted slope b <= 3.0.",
+    "LICA_AMARI_MONOTONE_IN_N_AT_EVERY_D_Z": "For every d_Z, the averaged Amari curve is nonincreasing in N modulo a numerical tolerance of 0.01 (i.e. amari_mean at N_{i+1} <= amari_mean at N_i + 0.01).",
+    "LICA_ESCAPES_THEOREM_6_EXPONENTIAL": "At d_Z = 8, the linear-ICA N_needed to reach Amari <= 0.03 is at most 1/20 of the Theorem 6 exponential bound ceil(1 * (1/0.25)^{8} * ln((1/0.25)^{8} / 0.05)) = 923146; empirically N_needed(d_Z=8) = 2000, escape ratio 461.573x."
+  },
+  "metrics": [
+    "amari_mean",
+    "amari_trials",
+    "N_needed_per_d_Z",
+    "fitted_exponent_b",
+    "escape_ratio"
+  ],
+  "grid": {
+    "d_Z_values": [2, 4, 6, 8],
+    "N_values": [200, 500, 1000, 2000, 5000, 10000],
+    "trials_per_grid_point": 8,
+    "final_amari_target": 0.02,
+    "poly_amari_target": 0.03,
+    "poly_exponent_max": 3.0,
+    "monotone_tolerance": 0.01,
+    "theorem6_D_Z_upper": 1.0,
+    "theorem6_eps": 0.25,
+    "theorem6_eps_rel": 0.05,
+    "theorem6_c": 1.0,
+    "escape_factor_min": 20.0
+  },
+  "controls": [
+    "deterministic_from_base_seed",
+    "nested_prefix_sampling_within_trial",
+    "averaging_over_eight_trials_smooths_finite_sample_noise",
+    "amari_of_identity_and_signed_permutation_is_zero"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": 0,
+    "sampling": "Per (d_Z, trial) draw a Haar-orthogonal A via signed QR of a Gaussian and Laplace(0, 1) latents Z of size (max(N_VALUES), d_Z); every smaller N reuses the first N samples of the same draw as a prefix. sklearn FastICA(parallel, logcosh, whiten='unit-variance', max_iter=2000, tol=1e-6, random_state=trial).",
+    "raw_data": false
+  }
+}
