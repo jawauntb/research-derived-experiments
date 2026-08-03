@@ -2117,5 +2117,34 @@
     },
     "fibration_structure": { "n_disagreements": 0, "n_pairs_checked": 64 },
     "t1_characterisation": { "matched_pairs": 256, "n_disagreements": 0, "total_pairs": 256 }
+  },
+  "sicc_covering_meta_pair": {
+    "status": "pass",
+    "gates": {
+      "sicc_meta_above_pigeonhole_floor": true,
+      "sicc_meta_empirical_is_tight_by_one_sample": true,
+      "sicc_meta_empirical_meets_target": true,
+      "sicc_meta_fitted_c_stable_across_K": true
+    },
+    "world": {
+      "delta": 0.05,
+      "meta_theorem_form": "n >= c * K * log(K / delta)",
+      "stability_tol_pct": 0.2
+    },
+    "K_values": [8, 16, 32, 64, 128, 256],
+    "c_fitted": {
+      "min": 0.9359285362,
+      "max": 0.9952101451,
+      "mean": 0.9784830970,
+      "span_over_mean": 0.0605852151
+    },
+    "rows": [
+      { "K": 8, "c_fitted": 0.9359285362, "meta_bound_at_c1": 40.60139052, "n_emp": 38, "p_recover_at_n_emp": 0.9504505450, "p_recover_at_n_emp_minus_one": 0.9434669545 },
+      { "K": 16, "c_fitted": 0.9751537760, "meta_bound_at_c1": 92.29313593, "n_emp": 90, "p_recover_at_n_emp": 0.9526875380, "p_recover_at_n_emp_minus_one": 0.9495878561 },
+      { "K": 32, "c_fitted": 0.9817815126, "meta_bound_at_c1": 206.76698164, "n_emp": 203, "p_recover_at_n_emp": 0.9501718117, "p_recover_at_n_emp_minus_one": 0.9485985767 },
+      { "K": 64, "c_fitted": 0.9893089491, "meta_bound_at_c1": 457.89538284, "n_emp": 453, "p_recover_at_n_emp": 0.9500879271, "p_recover_at_n_emp_minus_one": 0.9493139238 },
+      { "K": 128, "c_fitted": 0.9935156629, "meta_bound_at_c1": 1004.51360480, "n_emp": 998, "p_recover_at_n_emp": 0.9501723809, "p_recover_at_n_emp_minus_one": 0.9497894638 },
+      { "K": 256, "c_fitted": 0.9952101451, "meta_bound_at_c1": 2186.47288782, "n_emp": 2176, "p_recover_at_n_emp": 0.9500161412, "p_recover_at_n_emp_minus_one": 0.9498249658 }
+    ]
   }
 }

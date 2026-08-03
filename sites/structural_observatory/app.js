@@ -744,6 +744,10 @@ function attachInteractiveViz(data) {
   // Companion: sica_finite_derivation_pair (LR-vector partition == joint-parity MSS).
   const iSICA = document.getElementById("sica_finite_derivation_pair");
   if (iSICA && data.sica_finite_derivation_pair) mountSicaFiniteDerivationViz(iSICA, data.sica_finite_derivation_pair);
+
+  // Companion: sicc_covering_meta_pair (fitted c vs K, meta-theorem constant band).
+  const iSICC = document.getElementById("sicc_covering_meta_pair");
+  if (iSICC && data.sicc_covering_meta_pair) mountSiccCoveringMetaViz(iSICC, data.sicc_covering_meta_pair);
 }
 
 // ---- Instrument 2 viz: timeline scrubber for the abstract trajectory ----
@@ -1354,6 +1358,102 @@ function mountSicaFiniteDerivationViz(section, data) {
     (v) => { current = v; draw(); }
   );
   container.appendChild(radio);
+  draw();
+}
+
+// ---- Companion: sicc_covering_meta_pair viz ----
+// Line plot: fitted c vs K on log-K axis. Slider selects K; the point is
+// highlighted and the meta-theorem bound / empirical n / p_recover for that K
+// print on the right.
+function mountSiccCoveringMetaViz(section, data) {
+  const container = el("div", { class: "viz" }, [
+    el("h4", {}, ["Interactive: scrub K — see fitted c stay inside the meta-theorem constant band"]),
+  ]);
+  section.appendChild(container);
+  const width = 380, height = 260;
+  const { canvas, ctx } = makeCanvas(width, height);
+  container.appendChild(canvas);
+  const rows = data.rows || [];
+  const Ks = data.K_values || rows.map((r) => r.K);
+  const cStats = data.c_fitted || { min: 0.9, max: 1.0, mean: 0.95 };
+  let idx = 0;
+
+  function draw() {
+    ctx.fillStyle = AMBIENT;
+    ctx.fillRect(0, 0, width, height);
+    // Plot area on the left.
+    const x0 = 40, y0 = 30, plotW = 220, plotH = 180;
+    const cMin = 0.85, cMax = 1.05;
+    const logKMin = Math.log2(Math.min(...Ks));
+    const logKMax = Math.log2(Math.max(...Ks));
+    const xFor = (K) => x0 + ((Math.log2(K) - logKMin) / (logKMax - logKMin)) * plotW;
+    const yFor = (c) => y0 + plotH - ((c - cMin) / (cMax - cMin)) * plotH;
+    // Axes.
+    ctx.strokeStyle = MUTED;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(x0, y0); ctx.lineTo(x0, y0 + plotH); ctx.lineTo(x0 + plotW, y0 + plotH);
+    ctx.stroke();
+    // Constant band [min, max].
+    ctx.fillStyle = "rgba(242,193,78,0.14)";
+    ctx.fillRect(x0, yFor(cStats.max), plotW, yFor(cStats.min) - yFor(cStats.max));
+    ctx.strokeStyle = "rgba(242,193,78,0.5)";
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(x0, yFor(cStats.mean)); ctx.lineTo(x0 + plotW, yFor(cStats.mean));
+    ctx.stroke();
+    ctx.setLineDash([]);
+    // Line + points.
+    ctx.strokeStyle = "#6ea8fe";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    rows.forEach((r, i) => {
+      const x = xFor(r.K), y = yFor(r.c_fitted);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    rows.forEach((r, i) => {
+      const x = xFor(r.K), y = yFor(r.c_fitted);
+      ctx.fillStyle = i === idx ? "#f2c14e" : "#6ea8fe";
+      ctx.beginPath();
+      ctx.arc(x, y, i === idx ? 5 : 3, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    // Axis labels.
+    ctx.fillStyle = MUTED;
+    ctx.font = "10px ui-monospace, monospace";
+    Ks.forEach((K) => {
+      ctx.fillText(`${K}`, xFor(K) - 8, y0 + plotH + 12);
+    });
+    ctx.fillText(`c=${cMin.toFixed(2)}`, 4, y0 + plotH + 4);
+    ctx.fillText(`c=${cMax.toFixed(2)}`, 4, y0 + 4);
+    ctx.fillStyle = INK;
+    ctx.font = "12px ui-monospace, monospace";
+    ctx.fillText("fitted c vs K (log₂ x)", x0, y0 - 10);
+    // Right-side readout for selected K.
+    const sel = rows[idx];
+    if (sel) {
+      const tx = x0 + plotW + 12;
+      let ty = y0 + 14;
+      ctx.fillStyle = "#f2c14e";
+      ctx.font = "13px ui-monospace, monospace";
+      ctx.fillText(`K = ${sel.K}`, tx, ty); ty += 18;
+      ctx.fillStyle = INK;
+      ctx.font = "11px ui-monospace, monospace";
+      ctx.fillText(`c = ${sel.c_fitted.toFixed(4)}`, tx, ty); ty += 14;
+      ctx.fillText(`bound(c=1) = ${sel.meta_bound_at_c1.toFixed(1)}`, tx, ty); ty += 14;
+      ctx.fillText(`n_emp = ${sel.n_emp}`, tx, ty); ty += 14;
+      ctx.fillStyle = sel.p_recover_at_n_emp >= 0.95 ? "#3fb27f" : "#e0525b";
+      ctx.fillText(`P(rec)= ${sel.p_recover_at_n_emp.toFixed(4)}`, tx, ty); ty += 20;
+      ctx.fillStyle = MUTED;
+      ctx.font = "10px ui-monospace, monospace";
+      ctx.fillText(`δ = ${data.world && data.world.delta}`, tx, ty); ty += 12;
+      ctx.fillText("band: [min, max] over K", tx, ty);
+    }
+  }
+
+  const slider = makeSlider("K-index", 0, Math.max(0, rows.length - 1), 0, (v) => { idx = v; draw(); });
+  container.appendChild(slider);
   draw();
 }
 

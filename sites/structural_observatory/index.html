@@ -581,6 +581,27 @@
         <div class="table-wrap" data-body></div>
       </section>
 
+      <section class="instrument" id="sicc_covering_meta_pair">
+        <div class="instrument-head">
+          <span class="badge">Companion</span>
+          <h2>SIC-C-c meta-theorem &mdash; c stable across K</h2>
+        </div>
+        <p class="instrument-blurb">
+          Companion to
+          <a href="https://github.com/jawauntb/research-derived-experiments/blob/main/papers/structural_intelligence_covering_learnability/paper.md">
+            <em>Structural Intelligence &mdash; Covering Learnability</em></a>. The
+          meta-theorem prediction <code>n&nbsp;&ge;&nbsp;c&sdot;K&sdot;log(K/&delta;)</code>
+          at <code>&delta;&nbsp;=&nbsp;0.05</code> is fitted across
+          <em>K</em>&nbsp;&in;&nbsp;{8, 16, 32, 64, 128, 256}; the fitted constant
+          <em>c</em> stays inside <code>[0.936, 0.995]</code> across all six <em>K</em>
+          (span/mean&nbsp;&asymp;&nbsp;6%), and the empirical <em>n<sub>emp</sub></em>
+          is tight to the bound by one sample. Lean-verified as
+          <code>sicc_covering_meta</code>, zero new axioms.
+        </p>
+        <div class="gates" data-gates></div>
+        <div class="table-wrap" data-body></div>
+      </section>
+
       <section class="closing">
         <h2>What this is and is not</h2>
         <ul>
