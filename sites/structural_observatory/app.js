@@ -711,13 +711,13 @@ function attachInteractiveViz(data) {
 
   // Instrument 10 (iVAE): Amari heat-grid.
   const i10 = document.getElementById("ivae_learnability");
-  if (i10) {
+  if (i10 && data.ivae_learnability) {
     mountIcaHeatViz(i10, data.ivae_learnability, { title: "iVAE Amari at each (d_Z, N)" });
   }
 
   // Instrument 11 (Interventional CRL): Amari heat-grid.
   const i11 = document.getElementById("interventional_crl_learnability");
-  if (i11) {
+  if (i11 && data.interventional_crl_learnability) {
     mountIcaHeatViz(i11, data.interventional_crl_learnability, {
       title: "Interv-CRL Amari at each (d_Z, N_per_env)",
     });
@@ -725,7 +725,7 @@ function attachInteractiveViz(data) {
 
   // Companion instrument: compiler_tomography_pair (MDL recovery curve + ecology).
   const iCT = document.getElementById("compiler_tomography_pair");
-  if (iCT) {
+  if (iCT && data.compiler_tomography_pair) {
     mountCompilerTomographyViz(iCT, data.compiler_tomography_pair);
   }
 
@@ -1456,6 +1456,442 @@ function mountSiccCoveringMetaViz(section, data) {
   container.appendChild(slider);
   draw();
 }
+function mountAbstractionFrontierViz(section, data) {
+  if (!data || !data.quotients) return;
+  const container = el("div", { class: "viz" }, [
+    el("h4", {}, ["Interactive: pick a quotient — watch the Pareto antichain"]),
+  ]);
+  section.appendChild(container);
+  const width = 380, height = 260;
+  const { canvas, ctx } = makeCanvas(width, height);
+  container.appendChild(canvas);
+  const quotients = data.quotients;
+  let current = quotients.findIndex((q) => q.quotient === "joint(parity{0,1},parity{2,3})");
+  if (current < 0) current = 0;
+
+  // Jitter for coincident points using a deterministic hash.
+  function jitter(i) { const s = Math.sin((i + 1) * 12.9898) * 43758.5453; return (s - Math.floor(s)) * 6 - 3; }
+
+  function draw() {
+    ctx.fillStyle = AMBIENT;
+    ctx.fillRect(0, 0, width, height);
+    const px0 = 60, py0 = 20, pW = 240, pH = 200;
+    // Axes: x = coding cost (0..4), y = sufficiency loss (0..1)
+    ctx.strokeStyle = MUTED; ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(px0, py0); ctx.lineTo(px0, py0 + pH);
+    ctx.lineTo(px0 + pW, py0 + pH); ctx.stroke();
+    ctx.fillStyle = MUTED; ctx.font = "10px ui-monospace, monospace";
+    ctx.fillText("coding cost (bits)", px0 + pW - 90, py0 + pH + 14);
+    ctx.save();
+    ctx.translate(px0 - 42, py0 + pH / 2 + 40); ctx.rotate(-Math.PI / 2);
+    ctx.fillText("sufficiency loss", 0, 0); ctx.restore();
+    ctx.fillText("0", px0 - 10, py0 + pH + 4);
+    ctx.fillText("4", px0 + pW - 4, py0 + pH + 14);
+    ctx.fillText("1", px0 - 12, py0 + 4);
+    // Plot all quotients.
+    quotients.forEach((q, i) => {
+      const cc = q.coding_cost, loss = 1 - q.task_sufficiency;
+      const x = px0 + (cc / 4) * pW + jitter(i);
+      const y = py0 + pH - loss * pH + jitter(i * 7);
+      const isPareto = q.pareto;
+      const isCurrent = i === current;
+      ctx.fillStyle = isPareto ? "#f2c14e" : "#6ea8fe";
+      ctx.strokeStyle = isCurrent ? INK : "transparent";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(x, y, isPareto ? 6 : 3.5, 0, Math.PI * 2);
+      ctx.fill();
+      if (isCurrent) ctx.stroke();
+    });
+    // Info panel.
+    const q = quotients[current];
+    ctx.fillStyle = INK; ctx.font = "12px ui-monospace, monospace";
+    let ty = py0 + 14;
+    ctx.fillText(q.quotient, px0 + pW + 10, ty); ty += 16;
+    ctx.fillStyle = MUTED; ctx.font = "11px ui-monospace, monospace";
+    ctx.fillText(`|image| = ${q.image_size}`, px0 + pW + 10, ty); ty += 14;
+    ctx.fillText(`coding = ${q.coding_cost}`, px0 + pW + 10, ty); ty += 14;
+    ctx.fillText(`suff loss = ${(1 - q.task_sufficiency).toFixed(2)}`, px0 + pW + 10, ty); ty += 14;
+    ctx.fillStyle = q.pareto ? "#f2c14e" : MUTED;
+    ctx.fillText(q.pareto ? "PARETO" : "dominated", px0 + pW + 10, ty); ty += 20;
+    // AF-2 collapse note.
+    if (q.quotient === "joint(parity{0,1},parity{2,3})") {
+      ctx.fillStyle = "#3fb27f"; ctx.font = "10px ui-monospace, monospace";
+      ctx.fillText("AF-2: this is CSS", px0 + pW + 10, ty); ty += 12;
+      ctx.fillText("(true Z, sufficient", px0 + pW + 10, ty); ty += 12;
+      ctx.fillText("frontier collapses)", px0 + pW + 10, ty);
+    }
+    // Legend at bottom.
+    ctx.fillStyle = "#f2c14e"; ctx.fillRect(px0, py0 + pH + 22, 8, 8);
+    ctx.fillStyle = MUTED; ctx.font = "10px ui-monospace, monospace";
+    ctx.fillText("Pareto", px0 + 12, py0 + pH + 30);
+    ctx.fillStyle = "#6ea8fe"; ctx.fillRect(px0 + 60, py0 + pH + 22, 8, 8);
+    ctx.fillStyle = MUTED;
+    ctx.fillText("dominated", px0 + 72, py0 + pH + 30);
+  }
+  const slider = makeSlider("quotient index", 0, quotients.length - 1, current, (v) => {
+    current = v; draw();
+  });
+  container.appendChild(slider);
+  draw();
+}
+
+// ---- Alignment-Governance viz: survival vs T with beta slider ----
+function mountAlignmentGovernanceViz(section, data) {
+  if (!data || !data.records_on_V) return;
+  const container = el("div", { class: "viz" }, [
+    el("h4", {}, ["Interactive: adjust β — (1−β)^T bound vs exact 4-state chain"]),
+  ]);
+  section.appendChild(container);
+  const width = 380, height = 260;
+  const { canvas, ctx } = makeCanvas(width, height);
+  container.appendChild(canvas);
+  const recV = data.records_on_V;
+  const recVprime = data.records_on_V_prime_equals_Z || [];
+  const Ts = recV.map((r) => r.T);
+  const Tmax = Math.max(...Ts, 20);
+  let betaTimes100 = Math.round((data.world?.beta ?? 0.05) * 100);
+
+  function draw() {
+    ctx.fillStyle = AMBIENT;
+    ctx.fillRect(0, 0, width, height);
+    const px0 = 50, py0 = 20, pW = 260, pH = 200;
+    ctx.strokeStyle = MUTED; ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(px0, py0); ctx.lineTo(px0, py0 + pH);
+    ctx.lineTo(px0 + pW, py0 + pH); ctx.stroke();
+    ctx.fillStyle = MUTED; ctx.font = "10px ui-monospace, monospace";
+    ctx.fillText("T (horizon)", px0 + pW - 60, py0 + pH + 14);
+    ctx.fillText("1.0", px0 - 22, py0 + 4);
+    ctx.fillText("0", px0 - 10, py0 + pH + 4);
+    ctx.fillText(`${Tmax}`, px0 + pW - 12, py0 + pH + 14);
+    const beta = betaTimes100 / 100;
+    // Curve 1: (1-β)^T bound (continuous over T = 0..Tmax).
+    ctx.strokeStyle = "#f2c14e"; ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (let T = 0; T <= Tmax; T++) {
+      const y = Math.pow(1 - beta, T);
+      const x = px0 + (T / Tmax) * pW;
+      const py = py0 + pH - y * pH;
+      if (T === 0) ctx.moveTo(x, py); else ctx.lineTo(x, py);
+    }
+    ctx.stroke();
+    // Dots: exact survival on V (at β=0.05 as recorded).
+    ctx.fillStyle = "#e0525b";
+    recV.forEach((r) => {
+      const x = px0 + (r.T / Tmax) * pW;
+      const y = py0 + pH - r.exact_survival * pH;
+      ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2); ctx.fill();
+    });
+    // Dots: exact survival on V' (coarsening) — should be 1.0.
+    ctx.fillStyle = "#3fb27f";
+    recVprime.forEach((r) => {
+      const x = px0 + (r.T / Tmax) * pW;
+      const y = py0 + pH - r.exact_survival * pH;
+      ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2); ctx.fill();
+    });
+    // Tightness band shading between bound and exact on V (only where β close to recorded 0.05).
+    if (Math.abs(beta - 0.05) < 0.001) {
+      ctx.fillStyle = "rgba(63,178,127,0.10)";
+      ctx.beginPath();
+      recV.forEach((r, i) => {
+        const x = px0 + (r.T / Tmax) * pW;
+        const bY = py0 + pH - Math.pow(1 - beta, r.T) * pH;
+        if (i === 0) ctx.moveTo(x, bY); else ctx.lineTo(x, bY);
+      });
+      recV.slice().reverse().forEach((r) => {
+        const x = px0 + (r.T / Tmax) * pW;
+        const eY = py0 + pH - r.exact_survival * pH;
+        ctx.lineTo(x, eY);
+      });
+      ctx.closePath(); ctx.fill();
+    }
+    // Legend + β value.
+    ctx.fillStyle = INK; ctx.font = "12px ui-monospace, monospace";
+    ctx.fillText(`β = ${beta.toFixed(2)}`, px0 + 6, py0 + 14);
+    ctx.fillStyle = "#f2c14e"; ctx.font = "10px ui-monospace, monospace";
+    ctx.fillText("(1−β)^T bound", px0 + 6, py0 + pH - 8);
+    ctx.fillStyle = "#e0525b";
+    ctx.fillText("● exact on V (β=0.05)", px0 + pW - 130, py0 + 14);
+    ctx.fillStyle = "#3fb27f";
+    ctx.fillText("● exact on V′⊇V", px0 + pW - 130, py0 + 28);
+    if (Math.abs(beta - 0.05) < 0.001) {
+      ctx.fillStyle = "#3fb27f"; ctx.font = "9px ui-monospace, monospace";
+      ctx.fillText("bound is TIGHT on V", px0 + pW - 130, py0 + pH - 6);
+    }
+  }
+  const slider = makeSlider("β × 100", 0, 50, betaTimes100, (v) => {
+    betaTimes100 = v; draw();
+  });
+  container.appendChild(slider);
+  draw();
+}
+
+// ---- Theory-Atlas viz: three charts + transition triangle + failure taxonomy toggle ----
+function mountTheoryAtlasViz(section, data) {
+  if (!data || !data.families) return;
+  const container = el("div", { class: "viz" }, [
+    el("h4", {}, ["Interactive: toggle family — cocycle triangle + verdict"]),
+  ]);
+  section.appendChild(container);
+  const width = 380, height = 260;
+  const { canvas, ctx } = makeCanvas(width, height);
+  container.appendChild(canvas);
+  const options = [
+    { value: "good", label: "glue (good)" },
+    { value: "phase_boundary_reference", label: "phase transition" },
+    { value: "bad", label: "missing latent (bad)" },
+  ];
+  let current = "good";
+
+  function draw() {
+    ctx.fillStyle = AMBIENT;
+    ctx.fillRect(0, 0, width, height);
+    const fam = data.families[current];
+    if (!fam) return;
+    // Draw triangle of three chart nodes.
+    const cx = 130, cy = 130;
+    const R = 90;
+    const nodes = [
+      { i: 1, x: cx, y: cy - R },
+      { i: 2, x: cx - R * 0.87, y: cy + R * 0.5 },
+      { i: 3, x: cx + R * 0.87, y: cy + R * 0.5 },
+    ];
+    // Edges (directed): T_12 (1→2), T_23 (2→3), T_13 (1→3).
+    const edges = [
+      { from: 0, to: 1, key: "T_12" },
+      { from: 1, to: 2, key: "T_23" },
+      { from: 0, to: 2, key: "T_13" },
+    ];
+    const perEdgeRank = fam.transition_support?.per_edge_rank || {};
+    edges.forEach((e) => {
+      const a = nodes[e.from], b = nodes[e.to];
+      const rank = perEdgeRank[e.key] ?? 0;
+      const active = rank > 0;
+      ctx.strokeStyle = active ? "#6ea8fe" : "#22303d";
+      ctx.lineWidth = active ? 2.5 : 1.5;
+      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+      // Arrowhead.
+      if (active) {
+        const dx = b.x - a.x, dy = b.y - a.y;
+        const len = Math.hypot(dx, dy);
+        const ux = dx / len, uy = dy / len;
+        const hx = b.x - ux * 16, hy = b.y - uy * 16;
+        const px = -uy, py = ux;
+        ctx.fillStyle = "#6ea8fe";
+        ctx.beginPath();
+        ctx.moveTo(b.x - ux * 8, b.y - uy * 8);
+        ctx.lineTo(hx + px * 5, hy + py * 5);
+        ctx.lineTo(hx - px * 5, hy - py * 5);
+        ctx.closePath(); ctx.fill();
+      }
+      // Edge label.
+      ctx.fillStyle = active ? INK : MUTED;
+      ctx.font = "10px ui-monospace, monospace";
+      ctx.fillText(`${e.key} (rk=${rank})`, (a.x + b.x) / 2 - 22, (a.y + b.y) / 2 - 4);
+    });
+    // Nodes.
+    nodes.forEach((n) => {
+      ctx.fillStyle = "#f2c14e";
+      ctx.beginPath(); ctx.arc(n.x, n.y, 14, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = AMBIENT; ctx.font = "13px ui-monospace, monospace";
+      ctx.fillText(`Ψ${n.i}`, n.x - 8, n.y + 4);
+    });
+    // Info panel on right.
+    const rx = 250;
+    let ty = 22;
+    ctx.fillStyle = INK; ctx.font = "12px ui-monospace, monospace";
+    ctx.fillText(`family: ${fam.family}`, rx, ty); ty += 18;
+    const triple = fam.triples?.[0] || {};
+    const cocycle = triple.cocycle_holds;
+    ctx.fillStyle = cocycle ? "#3fb27f" : "#e0525b";
+    ctx.fillText(cocycle ? "✓ cocycle holds" : "✗ cocycle broken", rx, ty); ty += 16;
+    ctx.fillStyle = MUTED; ctx.font = "11px ui-monospace, monospace";
+    ctx.fillText(`discrepancy rank: ${triple.discrepancy_rank ?? "?"}`, rx, ty); ty += 14;
+    ctx.fillText(`inconsistent: ${fam.glue_attempt_num_inconsistent_worlds}`, rx, ty); ty += 20;
+    ctx.fillStyle = "#f2c14e"; ctx.font = "12px ui-monospace, monospace";
+    ctx.fillText(`verdict:`, rx, ty); ty += 14;
+    ctx.fillText(fam.taxonomy_verdict, rx, ty); ty += 20;
+    ctx.fillStyle = MUTED; ctx.font = "9px ui-monospace, monospace";
+    ctx.fillText("blue = non-identity", rx, ty); ty += 10;
+    ctx.fillText("grey = identity edge", rx, ty);
+  }
+  const radio = makeRadio("family", options, current, (v) => { current = v; draw(); });
+  container.appendChild(radio);
+  draw();
+}
+
+// ---- Representation-Repair viz: 3x3 grid of the eight pairs; click to inspect ----
+function mountRepresentationRepairViz(section, data) {
+  if (!data || !data.pair_records) return;
+  const container = el("div", { class: "viz" }, [
+    el("h4", {}, ["Interactive: click a pair — signature → minimal lift; composition badge"]),
+  ]);
+  section.appendChild(container);
+  const width = 380, height = 300;
+  const { canvas, ctx } = makeCanvas(width, height);
+  container.appendChild(canvas);
+  const pairs = data.pair_records;
+  const comp = data.composition || {};
+  let current = 0;
+  // 3x3 grid with cell 8 empty. Cells 0..7 -> pairs 0..7.
+
+  function cellRect(i) {
+    const cellW = 90, cellH = 70, x0 = 12, y0 = 14, gap = 6;
+    const r = Math.floor(i / 3), c = i % 3;
+    return { x: x0 + c * (cellW + gap), y: y0 + r * (cellH + gap), w: cellW, h: cellH };
+  }
+  function draw() {
+    ctx.fillStyle = AMBIENT;
+    ctx.fillRect(0, 0, width, height);
+    // Draw 8 pair cells + one dead cell.
+    for (let i = 0; i < 9; i++) {
+      const r = cellRect(i);
+      if (i === 8) {
+        ctx.fillStyle = "#111820"; ctx.fillRect(r.x, r.y, r.w, r.h);
+        ctx.strokeStyle = "#22303d"; ctx.setLineDash([3, 3]);
+        ctx.strokeRect(r.x, r.y, r.w, r.h); ctx.setLineDash([]);
+        ctx.fillStyle = MUTED; ctx.font = "10px ui-monospace, monospace";
+        ctx.fillText("(dead cell)", r.x + 15, r.y + r.h / 2 + 3);
+        continue;
+      }
+      const p = pairs[i];
+      const isCurrent = i === current;
+      ctx.fillStyle = isCurrent ? "rgba(242,193,78,0.16)" : "#0e141d";
+      ctx.fillRect(r.x, r.y, r.w, r.h);
+      ctx.strokeStyle = isCurrent ? "#f2c14e" : "#22303d";
+      ctx.lineWidth = isCurrent ? 2 : 1;
+      ctx.strokeRect(r.x, r.y, r.w, r.h);
+      // Broken -> Lifted mini text.
+      ctx.fillStyle = "#e0525b"; ctx.font = "9px ui-monospace, monospace";
+      ctx.fillText(p.broken_features.join(","), r.x + 4, r.y + 14);
+      ctx.fillStyle = MUTED; ctx.fillText("→", r.x + r.w / 2 - 4, r.y + 28);
+      ctx.fillStyle = "#3fb27f";
+      const lift = p.lifted_features.join(",");
+      ctx.fillText(lift.length > 12 ? lift.slice(0, 11) + "…" : lift, r.x + 4, r.y + 42);
+      ctx.fillStyle = INK; ctx.font = "8px ui-monospace, monospace";
+      ctx.fillText(p.key.slice(0, 14), r.x + 4, r.y + r.h - 5);
+    }
+    // Details panel below grid.
+    const p = pairs[current];
+    const dy = 240;
+    ctx.fillStyle = INK; ctx.font = "12px ui-monospace, monospace";
+    ctx.fillText(p.key, 12, dy);
+    ctx.fillStyle = MUTED; ctx.font = "10px ui-monospace, monospace";
+    // Word-wrap description.
+    const words = p.description.split(" ");
+    let line = "", ty = dy + 14;
+    for (const w of words) {
+      if ((line + " " + w).length > 62) { ctx.fillText(line, 12, ty); ty += 12; line = w; }
+      else line = line ? line + " " + w : w;
+    }
+    if (line) ctx.fillText(line, 12, ty);
+    // Composition badge on the right side of the grid area.
+    ctx.fillStyle = comp.lifts_commute_capture_agrees_across_orderings ? "#3fb27f" : "#e0525b";
+    ctx.font = "10px ui-monospace, monospace";
+    ctx.fillText("RR-2: independent lifts", 280, 24);
+    ctx.fillText(`compose (|W|=${comp.product_world_size ?? "?"})`, 280, 38);
+    ctx.fillStyle = "#f2c14e"; ctx.fillRect(280, 46, 8, 8);
+    ctx.fillStyle = MUTED;
+    ctx.fillText("✓ commutes", 292, 54);
+  }
+  canvas.addEventListener("click", (ev) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = ev.clientX - rect.left, y = ev.clientY - rect.top;
+    for (let i = 0; i < 8; i++) {
+      const r = cellRect(i);
+      if (x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h) { current = i; draw(); return; }
+    }
+  });
+  draw();
+}
+
+// ---- Autocatalytic-Artwork viz: monotone log-lik curve; slider steps updates ----
+function mountAutocatalyticArtworkViz(section, data) {
+  if (!data || !data.mean_analytical_expected_ll_per_t) return;
+  const container = el("div", { class: "viz" }, [
+    el("h4", {}, ["Interactive: step posterior updates — AA-1 monotone log-lik; AA-2 = CT-2 ecology"]),
+  ]);
+  section.appendChild(container);
+  const width = 380, height = 260;
+  const { canvas, ctx } = makeCanvas(width, height);
+  container.appendChild(canvas);
+  const llTrue = data.mean_analytical_expected_ll_per_t;
+  const llUnif = data.mean_analytical_expected_ll_uniform_baseline_per_t;
+  const postTrue = data.mean_posterior_true_compiler_per_t;
+  const T = llTrue.length;
+  let step = T - 1;
+  const asymptote = data.analytical_asymptote_negative_conditional_entropy_under_true_compiler;
+
+  function draw() {
+    ctx.fillStyle = AMBIENT;
+    ctx.fillRect(0, 0, width, height);
+    const px0 = 50, py0 = 20, pW = 250, pH = 180;
+    // y-range for log-lik: min(all) to max(0). Ours are all negative, ~-1.1..-0.6.
+    const yMin = Math.min(-1.15, ...llTrue, asymptote);
+    const yMax = -0.4;
+    function mapY(v) { return py0 + pH - ((v - yMin) / (yMax - yMin)) * pH; }
+    // Axes.
+    ctx.strokeStyle = MUTED; ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(px0, py0); ctx.lineTo(px0, py0 + pH);
+    ctx.lineTo(px0 + pW, py0 + pH); ctx.stroke();
+    ctx.fillStyle = MUTED; ctx.font = "10px ui-monospace, monospace";
+    ctx.fillText("update t", px0 + pW - 40, py0 + pH + 14);
+    ctx.fillText("E[log p]", px0 - 42, py0 + 8);
+    ctx.fillText(`${yMax.toFixed(2)}`, px0 - 38, py0 + 4);
+    ctx.fillText(`${yMin.toFixed(2)}`, px0 - 38, py0 + pH + 4);
+    // Asymptote line (−H).
+    const asy = mapY(asymptote);
+    ctx.strokeStyle = "#3fb27f"; ctx.setLineDash([4, 4]); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(px0, asy); ctx.lineTo(px0 + pW, asy); ctx.stroke();
+    ctx.setLineDash([]);
+    // Uniform baseline (flat).
+    const bY = mapY(llUnif[0]);
+    ctx.strokeStyle = MUTED; ctx.setLineDash([2, 3]);
+    ctx.beginPath(); ctx.moveTo(px0, bY); ctx.lineTo(px0 + pW, bY); ctx.stroke();
+    ctx.setLineDash([]);
+    // AA-1 curve (analytical) up to `step`.
+    ctx.strokeStyle = "#f2c14e"; ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for (let i = 0; i <= step; i++) {
+      const x = px0 + (i / (T - 1)) * pW, y = mapY(llTrue[i]);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.fillStyle = "#f2c14e";
+    for (let i = 0; i <= step; i++) {
+      const x = px0 + (i / (T - 1)) * pW, y = mapY(llTrue[i]);
+      ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fill();
+    }
+    // Small side-plot: posterior on true compiler.
+    const sx0 = px0 + pW + 12, sy0 = py0 + 16, sH = pH - 20;
+    ctx.fillStyle = MUTED; ctx.font = "9px ui-monospace, monospace";
+    ctx.fillText("P(true|D_t)", sx0 - 4, sy0 - 4);
+    ctx.strokeStyle = MUTED; ctx.beginPath();
+    ctx.moveTo(sx0, sy0); ctx.lineTo(sx0, sy0 + sH); ctx.stroke();
+    const barW = 12;
+    for (let i = 0; i <= step; i++) {
+      const h = postTrue[i] * sH;
+      ctx.fillStyle = i === step ? "#f2c14e" : "#6ea8fe";
+      ctx.fillRect(sx0 + 2, sy0 + sH - h, barW, h);
+    }
+    ctx.fillStyle = INK; ctx.font = "10px ui-monospace, monospace";
+    ctx.fillText(postTrue[step].toFixed(2), sx0, sy0 + sH + 12);
+    // Legend.
+    ctx.fillStyle = "#f2c14e"; ctx.font = "10px ui-monospace, monospace";
+    ctx.fillText("● AA-1 E[log p(x_t)]", px0 + 6, py0 + 14);
+    ctx.fillStyle = MUTED;
+    ctx.fillText("- - uniform baseline", px0 + 6, py0 + 26);
+    ctx.fillStyle = "#3fb27f";
+    ctx.fillText(`− − asymptote H = ${asymptote.toFixed(3)}`, px0 + 6, py0 + 38);
+  }
+  const slider = makeSlider("update t", 0, T - 1, step, (v) => { step = v; draw(); });
+  container.appendChild(slider);
+  draw();
+}
+
 
 // ---- Instrument 4 viz: click a quotient, see the partition ----
 function mountSufficiencyViz(section, data) {

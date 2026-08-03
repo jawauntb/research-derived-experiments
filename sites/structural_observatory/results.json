@@ -2042,10 +2042,66 @@
       "predicted_form": "g_{c,z} = beta^2 * diag(sech^2(beta c_1), sech^2(beta c_2))"
     },
     "cg1_records": [
-      { "c": [0.0, 0.0], "empirical_diag": [1.0, 1.0], "predicted_diag": [1.0, 1.0], "max_abs_diff": 0.0 },
-      { "c": [0.3, -0.2], "empirical_diag": [0.9151369618, 0.9610429830], "predicted_diag": [0.9151369618, 0.9610429830], "max_abs_diff": 1.11e-16 },
-      { "c": [0.8, 0.5], "empirical_diag": [0.5590551677, 0.7864477330], "predicted_diag": [0.5590551677, 0.7864477330], "max_abs_diff": 1.11e-16 },
-      { "c": [-0.4, 1.1], "empirical_diag": [0.8556387861, 0.3592013162], "predicted_diag": [0.8556387861, 0.3592013162], "max_abs_diff": 2.22e-16 }
+      {
+        "c": [
+          0.0,
+          0.0
+        ],
+        "empirical_diag": [
+          1.0,
+          1.0
+        ],
+        "predicted_diag": [
+          1.0,
+          1.0
+        ],
+        "max_abs_diff": 0.0
+      },
+      {
+        "c": [
+          0.3,
+          -0.2
+        ],
+        "empirical_diag": [
+          0.9151369618,
+          0.961042983
+        ],
+        "predicted_diag": [
+          0.9151369618,
+          0.961042983
+        ],
+        "max_abs_diff": 1.11e-16
+      },
+      {
+        "c": [
+          0.8,
+          0.5
+        ],
+        "empirical_diag": [
+          0.5590551677,
+          0.786447733
+        ],
+        "predicted_diag": [
+          0.5590551677,
+          0.786447733
+        ],
+        "max_abs_diff": 1.11e-16
+      },
+      {
+        "c": [
+          -0.4,
+          1.1
+        ],
+        "empirical_diag": [
+          0.8556387861,
+          0.3592013162
+        ],
+        "predicted_diag": [
+          0.8556387861,
+          0.3592013162
+        ],
+        "max_abs_diff": 2.22e-16
+      }
     ],
     "cg2": {
       "epsilon": 0.3,
@@ -2070,10 +2126,43 @@
       "num_messages": 6,
       "num_contexts": 4,
       "num_future_states": 4,
-      "messages": ["m0", "m1", "m2", "m3", "m4", "m5"]
+      "messages": [
+        "m0",
+        "m1",
+        "m2",
+        "m3",
+        "m4",
+        "m5"
+      ]
     },
-    "psi_partition": [["m0", "m1"], ["m2", "m3"], ["m4"], ["m5"]],
-    "cooccurrence_partition": [["m0", "m2", "m4"], ["m1", "m3", "m5"]],
+    "psi_partition": [
+      [
+        "m0",
+        "m1"
+      ],
+      [
+        "m2",
+        "m3"
+      ],
+      [
+        "m4"
+      ],
+      [
+        "m5"
+      ]
+    ],
+    "cooccurrence_partition": [
+      [
+        "m0",
+        "m2",
+        "m4"
+      ],
+      [
+        "m1",
+        "m3",
+        "m5"
+      ]
+    ],
     "psi_refines_cooccurrence": false,
     "cooccurrence_refines_psi": false
   },
@@ -2085,12 +2174,57 @@
       "sa1_local_separation_at_every_antecedent": true,
       "sa1_nontrivial_intersections_equal_true_Z": true
     },
-    "world": { "true_Z_block_count": 4 },
+    "world": {
+      "true_Z_block_count": 4
+    },
     "records": [
-      { "name": "LinearICA", "num_local_screens": 1, "local_screen_block_counts": [4], "intersection_block_count": 4, "intersection_equals_true_Z": true, "local_separation_holds": true, "cross_u_coherence_holds": true },
-      { "name": "SparseLinearICA", "num_local_screens": 1, "local_screen_block_counts": [4], "intersection_block_count": 4, "intersection_equals_true_Z": true, "local_separation_holds": true, "cross_u_coherence_holds": true },
-      { "name": "AuxIVAE", "num_local_screens": 2, "local_screen_block_counts": [2, 2], "intersection_block_count": 4, "intersection_equals_true_Z": true, "local_separation_holds": true, "cross_u_coherence_holds": true },
-      { "name": "InterventionalCRL", "num_local_screens": 3, "local_screen_block_counts": [4, 2, 2], "intersection_block_count": 4, "intersection_equals_true_Z": true, "local_separation_holds": true, "cross_u_coherence_holds": true }
+      {
+        "name": "LinearICA",
+        "num_local_screens": 1,
+        "local_screen_block_counts": [
+          4
+        ],
+        "intersection_block_count": 4,
+        "intersection_equals_true_Z": true,
+        "local_separation_holds": true,
+        "cross_u_coherence_holds": true
+      },
+      {
+        "name": "SparseLinearICA",
+        "num_local_screens": 1,
+        "local_screen_block_counts": [
+          4
+        ],
+        "intersection_block_count": 4,
+        "intersection_equals_true_Z": true,
+        "local_separation_holds": true,
+        "cross_u_coherence_holds": true
+      },
+      {
+        "name": "AuxIVAE",
+        "num_local_screens": 2,
+        "local_screen_block_counts": [
+          2,
+          2
+        ],
+        "intersection_block_count": 4,
+        "intersection_equals_true_Z": true,
+        "local_separation_holds": true,
+        "cross_u_coherence_holds": true
+      },
+      {
+        "name": "InterventionalCRL",
+        "num_local_screens": 3,
+        "local_screen_block_counts": [
+          4,
+          2,
+          2
+        ],
+        "intersection_block_count": 4,
+        "intersection_equals_true_Z": true,
+        "local_separation_holds": true,
+        "cross_u_coherence_holds": true
+      }
     ]
   },
   "sica_finite_derivation_pair": {
@@ -2105,18 +2239,40 @@
       "world_size": 16,
       "n_theta": 4,
       "n_fibres": 4,
-      "fibre_sizes": [4, 4, 4, 4],
+      "fibre_sizes": [
+        4,
+        4,
+        4,
+        4
+      ],
       "latent_Z_definition": "joint(parity{0,1}, parity{2,3}) on a 4-bit Boolean world"
     },
     "partition_agreement": {
       "n_cells_lr": 4,
       "n_cells_joint_parity_mss": 4,
       "partitions_equal": true,
-      "cell_sizes_lr": [4, 4, 4, 4],
-      "cell_sizes_joint_parity_mss": [4, 4, 4, 4]
+      "cell_sizes_lr": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "cell_sizes_joint_parity_mss": [
+        4,
+        4,
+        4,
+        4
+      ]
     },
-    "fibration_structure": { "n_disagreements": 0, "n_pairs_checked": 64 },
-    "t1_characterisation": { "matched_pairs": 256, "n_disagreements": 0, "total_pairs": 256 }
+    "fibration_structure": {
+      "n_disagreements": 0,
+      "n_pairs_checked": 64
+    },
+    "t1_characterisation": {
+      "matched_pairs": 256,
+      "n_disagreements": 0,
+      "total_pairs": 256
+    }
   },
   "sicc_covering_meta_pair": {
     "status": "pass",
@@ -2131,20 +2287,938 @@
       "meta_theorem_form": "n >= c * K * log(K / delta)",
       "stability_tol_pct": 0.2
     },
-    "K_values": [8, 16, 32, 64, 128, 256],
+    "K_values": [
+      8,
+      16,
+      32,
+      64,
+      128,
+      256
+    ],
     "c_fitted": {
       "min": 0.9359285362,
       "max": 0.9952101451,
-      "mean": 0.9784830970,
+      "mean": 0.978483097,
       "span_over_mean": 0.0605852151
     },
     "rows": [
-      { "K": 8, "c_fitted": 0.9359285362, "meta_bound_at_c1": 40.60139052, "n_emp": 38, "p_recover_at_n_emp": 0.9504505450, "p_recover_at_n_emp_minus_one": 0.9434669545 },
-      { "K": 16, "c_fitted": 0.9751537760, "meta_bound_at_c1": 92.29313593, "n_emp": 90, "p_recover_at_n_emp": 0.9526875380, "p_recover_at_n_emp_minus_one": 0.9495878561 },
-      { "K": 32, "c_fitted": 0.9817815126, "meta_bound_at_c1": 206.76698164, "n_emp": 203, "p_recover_at_n_emp": 0.9501718117, "p_recover_at_n_emp_minus_one": 0.9485985767 },
-      { "K": 64, "c_fitted": 0.9893089491, "meta_bound_at_c1": 457.89538284, "n_emp": 453, "p_recover_at_n_emp": 0.9500879271, "p_recover_at_n_emp_minus_one": 0.9493139238 },
-      { "K": 128, "c_fitted": 0.9935156629, "meta_bound_at_c1": 1004.51360480, "n_emp": 998, "p_recover_at_n_emp": 0.9501723809, "p_recover_at_n_emp_minus_one": 0.9497894638 },
-      { "K": 256, "c_fitted": 0.9952101451, "meta_bound_at_c1": 2186.47288782, "n_emp": 2176, "p_recover_at_n_emp": 0.9500161412, "p_recover_at_n_emp_minus_one": 0.9498249658 }
+      {
+        "K": 8,
+        "c_fitted": 0.9359285362,
+        "meta_bound_at_c1": 40.60139052,
+        "n_emp": 38,
+        "p_recover_at_n_emp": 0.950450545,
+        "p_recover_at_n_emp_minus_one": 0.9434669545
+      },
+      {
+        "K": 16,
+        "c_fitted": 0.975153776,
+        "meta_bound_at_c1": 92.29313593,
+        "n_emp": 90,
+        "p_recover_at_n_emp": 0.952687538,
+        "p_recover_at_n_emp_minus_one": 0.9495878561
+      },
+      {
+        "K": 32,
+        "c_fitted": 0.9817815126,
+        "meta_bound_at_c1": 206.76698164,
+        "n_emp": 203,
+        "p_recover_at_n_emp": 0.9501718117,
+        "p_recover_at_n_emp_minus_one": 0.9485985767
+      },
+      {
+        "K": 64,
+        "c_fitted": 0.9893089491,
+        "meta_bound_at_c1": 457.89538284,
+        "n_emp": 453,
+        "p_recover_at_n_emp": 0.9500879271,
+        "p_recover_at_n_emp_minus_one": 0.9493139238
+      },
+      {
+        "K": 128,
+        "c_fitted": 0.9935156629,
+        "meta_bound_at_c1": 1004.5136048,
+        "n_emp": 998,
+        "p_recover_at_n_emp": 0.9501723809,
+        "p_recover_at_n_emp_minus_one": 0.9497894638
+      },
+      {
+        "K": 256,
+        "c_fitted": 0.9952101451,
+        "meta_bound_at_c1": 2186.47288782,
+        "n_emp": 2176,
+        "p_recover_at_n_emp": 0.9500161412,
+        "p_recover_at_n_emp_minus_one": 0.9498249658
+      }
+    ]
+  },
+  "abstraction_frontier_pair": {
+    "status": "pass",
+    "gates": {
+      "af1_frontier_contains_constant": true,
+      "af1_frontier_contains_true_Z": true,
+      "af1_frontier_is_antichain": true,
+      "af1_identity_is_dominated_in_static_case": true,
+      "af2_no_pareto_strictly_finer_than_true_Z": true,
+      "af2_sufficient_frontier_is_true_Z_alone": true
+    },
+    "latent_Z_definition": "joint(parity{0,1}, parity{2,3}) on a 4-bit Boolean world",
+    "num_quotients": 23,
+    "pareto_frontier": [
+      "constant",
+      "joint(parity{0,1},parity{2,3})"
+    ],
+    "true_Z_record": {
+      "coding_cost": 2.0,
+      "quotient": "joint(parity{0,1},parity{2,3})",
+      "task_sufficiency": 0.0
+    },
+    "constant_record": {
+      "coding_cost": 0.0,
+      "quotient": "constant",
+      "task_sufficiency": 1.0
+    },
+    "identity_record": {
+      "coding_cost": 4.0,
+      "quotient": "identity",
+      "task_sufficiency": 0.0
+    },
+    "quotients": [
+      {
+        "quotient": "constant",
+        "coding_cost": 0.0,
+        "control_regret": 0.0,
+        "dynamical_closure": 0.0,
+        "image_size": 1,
+        "pareto": true,
+        "task_sufficiency": 1.0
+      },
+      {
+        "quotient": "parity{0}",
+        "coding_cost": 1.0,
+        "control_regret": 0.0,
+        "dynamical_closure": 0.0,
+        "image_size": 2,
+        "pareto": false,
+        "task_sufficiency": 1.0
+      },
+      {
+        "quotient": "parity{1}",
+        "coding_cost": 1.0,
+        "control_regret": 0.0,
+        "dynamical_closure": 0.0,
+        "image_size": 2,
+        "pareto": false,
+        "task_sufficiency": 1.0
+      },
+      {
+        "quotient": "parity{2}",
+        "coding_cost": 1.0,
+        "control_regret": 0.0,
+        "dynamical_closure": 0.0,
+        "image_size": 2,
+        "pareto": false,
+        "task_sufficiency": 1.0
+      },
+      {
+        "quotient": "parity{3}",
+        "coding_cost": 1.0,
+        "control_regret": 0.0,
+        "dynamical_closure": 0.0,
+        "image_size": 2,
+        "pareto": false,
+        "task_sufficiency": 1.0
+      },
+      {
+        "quotient": "parity{0,1}",
+        "coding_cost": 1.0,
+        "control_regret": 0.0,
+        "dynamical_closure": 0.0,
+        "image_size": 2,
+        "pareto": false,
+        "task_sufficiency": 1.0
+      },
+      {
+        "quotient": "parity{0,2}",
+        "coding_cost": 1.0,
+        "control_regret": 0.0,
+        "dynamical_closure": 0.0,
+        "image_size": 2,
+        "pareto": false,
+        "task_sufficiency": 1.0
+      },
+      {
+        "quotient": "parity{0,3}",
+        "coding_cost": 1.0,
+        "control_regret": 0.0,
+        "dynamical_closure": 0.0,
+        "image_size": 2,
+        "pareto": false,
+        "task_sufficiency": 1.0
+      },
+      {
+        "quotient": "parity{1,2}",
+        "coding_cost": 1.0,
+        "control_regret": 0.0,
+        "dynamical_closure": 0.0,
+        "image_size": 2,
+        "pareto": false,
+        "task_sufficiency": 1.0
+      },
+      {
+        "quotient": "parity{1,3}",
+        "coding_cost": 1.0,
+        "control_regret": 0.0,
+        "dynamical_closure": 0.0,
+        "image_size": 2,
+        "pareto": false,
+        "task_sufficiency": 1.0
+      },
+      {
+        "quotient": "parity{2,3}",
+        "coding_cost": 1.0,
+        "control_regret": 0.0,
+        "dynamical_closure": 0.0,
+        "image_size": 2,
+        "pareto": false,
+        "task_sufficiency": 1.0
+      },
+      {
+        "quotient": "parity{0,1,2}",
+        "coding_cost": 1.0,
+        "control_regret": 0.0,
+        "dynamical_closure": 0.0,
+        "image_size": 2,
+        "pareto": false,
+        "task_sufficiency": 1.0
+      },
+      {
+        "quotient": "parity{0,1,3}",
+        "coding_cost": 1.0,
+        "control_regret": 0.0,
+        "dynamical_closure": 0.0,
+        "image_size": 2,
+        "pareto": false,
+        "task_sufficiency": 1.0
+      },
+      {
+        "quotient": "parity{0,2,3}",
+        "coding_cost": 1.0,
+        "control_regret": 0.0,
+        "dynamical_closure": 0.0,
+        "image_size": 2,
+        "pareto": false,
+        "task_sufficiency": 1.0
+      },
+      {
+        "quotient": "parity{1,2,3}",
+        "coding_cost": 1.0,
+        "control_regret": 0.0,
+        "dynamical_closure": 0.0,
+        "image_size": 2,
+        "pareto": false,
+        "task_sufficiency": 1.0
+      },
+      {
+        "quotient": "parity{0,1,2,3}",
+        "coding_cost": 1.0,
+        "control_regret": 0.0,
+        "dynamical_closure": 0.0,
+        "image_size": 2,
+        "pareto": false,
+        "task_sufficiency": 1.0
+      },
+      {
+        "quotient": "joint(parity{0,1},parity{2,3})",
+        "coding_cost": 2.0,
+        "control_regret": 0.0,
+        "dynamical_closure": 0.0,
+        "image_size": 4,
+        "pareto": true,
+        "task_sufficiency": 0.0
+      },
+      {
+        "quotient": "joint(parity{0,2},parity{1,3})",
+        "coding_cost": 2.0,
+        "control_regret": 0.0,
+        "dynamical_closure": 0.0,
+        "image_size": 4,
+        "pareto": false,
+        "task_sufficiency": 1.0
+      },
+      {
+        "quotient": "joint(parity{0,3},parity{1,2})",
+        "coding_cost": 2.0,
+        "control_regret": 0.0,
+        "dynamical_closure": 0.0,
+        "image_size": 4,
+        "pareto": false,
+        "task_sufficiency": 1.0
+      },
+      {
+        "quotient": "joint(bit_0,bit_1)",
+        "coding_cost": 2.0,
+        "control_regret": 0.0,
+        "dynamical_closure": 0.0,
+        "image_size": 4,
+        "pareto": false,
+        "task_sufficiency": 1.0
+      },
+      {
+        "quotient": "joint(bit_2,bit_3)",
+        "coding_cost": 2.0,
+        "control_regret": 0.0,
+        "dynamical_closure": 0.0,
+        "image_size": 4,
+        "pareto": false,
+        "task_sufficiency": 1.0
+      },
+      {
+        "quotient": "joint(bit_0,bit_1,bit_2)",
+        "coding_cost": 3.0,
+        "control_regret": 0.0,
+        "dynamical_closure": 0.0,
+        "image_size": 8,
+        "pareto": false,
+        "task_sufficiency": 1.0
+      },
+      {
+        "quotient": "identity",
+        "coding_cost": 4.0,
+        "control_regret": 0.0,
+        "dynamical_closure": 0.0,
+        "image_size": 16,
+        "pareto": false,
+        "task_sufficiency": 0.0
+      }
+    ]
+  },
+  "alignment_governance_pair": {
+    "status": "pass",
+    "gates": {
+      "ag1_lower_bound_holds_at_every_T": true,
+      "ag1_lower_bound_tightness": true,
+      "ag2_viability_inherited_by_superset": true,
+      "ag_survival_monotone_decreasing_in_T": true
+    },
+    "world": {
+      "V_states": [
+        0,
+        1,
+        2
+      ],
+      "Z_states": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "actions": [
+        "stay",
+        "move"
+      ],
+      "beta": 0.05,
+      "horizons": [
+        1,
+        3,
+        5,
+        10,
+        20
+      ],
+      "policy": "uniform random over actions on V",
+      "unviable_states": [
+        3
+      ]
+    },
+    "coarse_kernel_under_pi": [
+      [
+        0.475,
+        0.475,
+        0.0,
+        0.05
+      ],
+      [
+        0.0,
+        0.475,
+        0.475,
+        0.05
+      ],
+      [
+        0.475,
+        0.0,
+        0.475,
+        0.05
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "records_on_V": [
+      {
+        "T": 1,
+        "ag1_lower_bound": 0.95,
+        "bernoulli_linear_bound": 0.95,
+        "bound_holds": true,
+        "exact_survival": 0.95,
+        "tightness_gap": 0.0
+      },
+      {
+        "T": 3,
+        "ag1_lower_bound": 0.857375,
+        "bernoulli_linear_bound": 0.85,
+        "bound_holds": true,
+        "exact_survival": 0.857375,
+        "tightness_gap": 0.0
+      },
+      {
+        "T": 5,
+        "ag1_lower_bound": 0.7737809375,
+        "bernoulli_linear_bound": 0.75,
+        "bound_holds": true,
+        "exact_survival": 0.7737809375,
+        "tightness_gap": 0.0
+      },
+      {
+        "T": 10,
+        "ag1_lower_bound": 0.5987369392383787,
+        "bernoulli_linear_bound": 0.5,
+        "bound_holds": true,
+        "exact_survival": 0.5987369392383788,
+        "tightness_gap": 0.0
+      },
+      {
+        "T": 20,
+        "ag1_lower_bound": 0.3584859224085419,
+        "bernoulli_linear_bound": 0.0,
+        "bound_holds": true,
+        "exact_survival": 0.35848592240854216,
+        "tightness_gap": 0.0
+      }
+    ],
+    "records_on_V_prime_equals_Z": [
+      {
+        "T": 1,
+        "ag1_lower_bound": 0.95,
+        "bernoulli_linear_bound": 0.95,
+        "bound_holds": true,
+        "exact_survival": 1.0,
+        "tightness_gap": 0.05
+      },
+      {
+        "T": 3,
+        "ag1_lower_bound": 0.857375,
+        "bernoulli_linear_bound": 0.85,
+        "bound_holds": true,
+        "exact_survival": 1.0,
+        "tightness_gap": 0.142625
+      },
+      {
+        "T": 5,
+        "ag1_lower_bound": 0.7737809375,
+        "bernoulli_linear_bound": 0.75,
+        "bound_holds": true,
+        "exact_survival": 1.0,
+        "tightness_gap": 0.2262190625
+      },
+      {
+        "T": 10,
+        "ag1_lower_bound": 0.5987369392383787,
+        "bernoulli_linear_bound": 0.5,
+        "bound_holds": true,
+        "exact_survival": 1.0,
+        "tightness_gap": 0.4012630607616213
+      },
+      {
+        "T": 20,
+        "ag1_lower_bound": 0.3584859224085419,
+        "bernoulli_linear_bound": 0.0,
+        "bound_holds": true,
+        "exact_survival": 1.0,
+        "tightness_gap": 0.6415140775914581
+      }
+    ]
+  },
+  "theory_atlas_pair": {
+    "status": "pass",
+    "gates": {
+      "ta1_bad_charts_violate_cocycle": true,
+      "ta1_glue_iff_cocycle": true,
+      "ta1_good_charts_satisfy_cocycle": true,
+      "ta2_bad_discrepancy_matches_missing_latent_signature": true
+    },
+    "world": {
+      "context_indices": [
+        1,
+        2,
+        3
+      ],
+      "context_sizes": {
+        "1": 8,
+        "2": 8,
+        "3": 8
+      },
+      "context_union_size": 14,
+      "n_bits": 4,
+      "pairwise_overlap_sizes": {
+        "U_12": 4,
+        "U_13": 4,
+        "U_23": 4
+      },
+      "target_size": 4,
+      "triple_overlap_size": 2
+    },
+    "families": {
+      "good": {
+        "family": "good",
+        "taxonomy_verdict": "glue",
+        "glue_attempt_consistent": true,
+        "glue_attempt_num_inconsistent_worlds": 0,
+        "transitions": {
+          "T_12": [
+            1,
+            2,
+            3,
+            0
+          ],
+          "T_13": [
+            2,
+            3,
+            0,
+            1
+          ],
+          "T_23": [
+            1,
+            2,
+            3,
+            0
+          ]
+        },
+        "transition_support": {
+          "non_identity_edges": [
+            "T_12",
+            "T_13",
+            "T_23"
+          ],
+          "num_edges": 3,
+          "num_non_identity_edges": 3,
+          "per_edge_rank": {
+            "T_12": 4,
+            "T_13": 4,
+            "T_23": 4
+          }
+        },
+        "triples": [
+          {
+            "cocycle_holds": true,
+            "discrepancy_rank": 0,
+            "discrepancy_table": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "triple": [
+              1,
+              2,
+              3
+            ]
+          }
+        ]
+      },
+      "bad": {
+        "family": "bad",
+        "taxonomy_verdict": "missing_latent",
+        "glue_attempt_consistent": false,
+        "glue_attempt_num_inconsistent_worlds": 6,
+        "transitions": {
+          "T_12": [
+            1,
+            2,
+            3,
+            0
+          ],
+          "T_13": [
+            3,
+            0,
+            1,
+            2
+          ],
+          "T_23": [
+            1,
+            2,
+            3,
+            0
+          ]
+        },
+        "transition_support": {
+          "non_identity_edges": [
+            "T_12",
+            "T_13",
+            "T_23"
+          ],
+          "num_edges": 3,
+          "num_non_identity_edges": 3,
+          "per_edge_rank": {
+            "T_12": 4,
+            "T_13": 4,
+            "T_23": 4
+          }
+        },
+        "triples": [
+          {
+            "cocycle_holds": false,
+            "discrepancy_rank": 4,
+            "discrepancy_table": [
+              3,
+              0,
+              1,
+              2
+            ],
+            "triple": [
+              1,
+              2,
+              3
+            ]
+          }
+        ]
+      },
+      "phase_boundary_reference": {
+        "family": "phase_boundary",
+        "taxonomy_verdict": "phase_transition",
+        "glue_attempt_consistent": false,
+        "glue_attempt_num_inconsistent_worlds": 6,
+        "transitions": {
+          "T_12": [
+            1,
+            2,
+            3,
+            0
+          ],
+          "T_13": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "T_23": [
+            0,
+            1,
+            2,
+            3
+          ]
+        },
+        "transition_support": {
+          "non_identity_edges": [
+            "T_12"
+          ],
+          "num_edges": 3,
+          "num_non_identity_edges": 1,
+          "per_edge_rank": {
+            "T_12": 4,
+            "T_13": 0,
+            "T_23": 0
+          }
+        },
+        "triples": [
+          {
+            "cocycle_holds": false,
+            "discrepancy_rank": 4,
+            "discrepancy_table": [
+              1,
+              2,
+              3,
+              0
+            ],
+            "triple": [
+              1,
+              2,
+              3
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "representation_repair_pair": {
+    "status": "pass",
+    "gates": {
+      "rr1_every_canonical_pair_broken_representation_misses_invariant": true,
+      "rr1_every_lift_is_minimal": true,
+      "rr1_every_lifted_representation_captures_invariant": true,
+      "rr2_two_independent_lifts_compose": true
+    },
+    "num_pairs": 8,
+    "pair_records": [
+      {
+        "key": "scalar_to_operator",
+        "broken_features": [
+          "z"
+        ],
+        "added_features": [
+          "x",
+          "y"
+        ],
+        "lifted_features": [
+          "z",
+          "x",
+          "y"
+        ],
+        "num_states": 6,
+        "broken_misses_invariant": true,
+        "lift_is_minimal": true,
+        "lifted_captures_invariant": true,
+        "description": "Broken: Pauli-Z expectation alone (a scalar observable). Lifted: full Bloch vector (an operator-valued representation)."
+      },
+      {
+        "key": "global_norm_to_localized_measure",
+        "broken_features": [
+          "support_size"
+        ],
+        "added_features": [
+          "m0",
+          "m1",
+          "m2"
+        ],
+        "lifted_features": [
+          "support_size",
+          "m0",
+          "m1",
+          "m2"
+        ],
+        "num_states": 6,
+        "broken_misses_invariant": true,
+        "lift_is_minimal": true,
+        "lifted_captures_invariant": true,
+        "description": "Broken: a single global scalar summary (support size). Lifted: the per-cell mass profile (m_0, m_1, m_2) -- a localized measure."
+      },
+      {
+        "key": "quotient_to_restored_fiber",
+        "broken_features": [
+          "z"
+        ],
+        "added_features": [
+          "x",
+          "y"
+        ],
+        "lifted_features": [
+          "z",
+          "x",
+          "y"
+        ],
+        "num_states": 8,
+        "broken_misses_invariant": true,
+        "lift_is_minimal": true,
+        "lifted_captures_invariant": true,
+        "description": "Broken: coarse quotient label z only (fibers collapsed). Lifted: (z, x, y) restoring in-fiber coordinates."
+      },
+      {
+        "key": "static_to_path_space",
+        "broken_features": [
+          "current"
+        ],
+        "added_features": [
+          "t0",
+          "t1"
+        ],
+        "lifted_features": [
+          "current",
+          "t0",
+          "t1"
+        ],
+        "num_states": 8,
+        "broken_misses_invariant": true,
+        "lift_is_minimal": true,
+        "lifted_captures_invariant": true,
+        "description": "Broken: current-step scalar (a static observable). Lifted: the full trajectory (path-space representation)."
+      },
+      {
+        "key": "affine_to_projective",
+        "broken_features": [
+          "a",
+          "b"
+        ],
+        "added_features": [
+          "c"
+        ],
+        "lifted_features": [
+          "a",
+          "b",
+          "c"
+        ],
+        "num_states": 6,
+        "broken_misses_invariant": true,
+        "lift_is_minimal": true,
+        "lifted_captures_invariant": true,
+        "description": "Broken: affine chart (a, b) (the c = 1 slice). Lifted: homogeneous coordinates (a, b, c) restoring points at infinity."
+      },
+      {
+        "key": "point_to_ensemble",
+        "broken_features": [
+          "mean"
+        ],
+        "added_features": [
+          "var",
+          "skew"
+        ],
+        "lifted_features": [
+          "mean",
+          "var",
+          "skew"
+        ],
+        "num_states": 8,
+        "broken_misses_invariant": true,
+        "lift_is_minimal": true,
+        "lifted_captures_invariant": true,
+        "description": "Broken: point estimate (mean alone). Lifted: ensemble moment vector (mean, variance, skew)."
+      },
+      {
+        "key": "non_composing_to_interface",
+        "broken_features": [
+          "m1",
+          "m2"
+        ],
+        "added_features": [
+          "family",
+          "version"
+        ],
+        "lifted_features": [
+          "m1",
+          "m2",
+          "family",
+          "version"
+        ],
+        "num_states": 16,
+        "broken_misses_invariant": true,
+        "lift_is_minimal": true,
+        "lifted_captures_invariant": true,
+        "description": "Broken: raw module identity pair (m1, m2) with no protocol tag (composition is ill-defined). Lifted: (m1, m2, family, version) where the tag is the explicit interface."
+      },
+      {
+        "key": "symmetry_to_gauge_fix",
+        "broken_features": [
+          "a"
+        ],
+        "added_features": [
+          "a_minus_b",
+          "a_minus_c"
+        ],
+        "lifted_features": [
+          "a",
+          "a_minus_b",
+          "a_minus_c"
+        ],
+        "num_states": 6,
+        "broken_misses_invariant": true,
+        "lift_is_minimal": true,
+        "lifted_captures_invariant": true,
+        "description": "Broken: gauge-dependent scalar a under translation symmetry. Lifted: gauge-invariant offsets (a, a-b, a-c) making the orbit label recoverable."
+      }
+    ],
+    "composition": {
+      "broken_features": [
+        "z_a",
+        "current_b"
+      ],
+      "lifted_features": [
+        "z_a",
+        "x_a",
+        "y_a",
+        "current_b",
+        "t0_b",
+        "t1_b"
+      ],
+      "broken_misses_composite_invariant": true,
+      "broken_misses_scalar_operator_invariant": true,
+      "broken_misses_static_path_invariant": true,
+      "composite_lift_is_minimal": true,
+      "lifted_captures_composite_invariant": true,
+      "lifted_captures_scalar_operator_invariant": true,
+      "lifted_captures_static_path_invariant": true,
+      "lifts_commute_capture_agrees_across_orderings": true,
+      "product_world_size": 48
+    }
+  },
+  "autocatalytic_artwork_pair": {
+    "status": "pass",
+    "gates": {
+      "aa1_posterior_concentrates_on_true_compiler": true,
+      "aa1_predictive_log_likelihood_non_decreasing_in_expectation": true,
+      "aa2_reduces_to_compiler_ecology": true,
+      "aa_audience_beats_uniform_baseline": true
+    },
+    "world": {
+      "boltzmann_beta": 1.0,
+      "candidate_compilers": [
+        "a",
+        "b",
+        "c"
+      ],
+      "diagonal_prob": 0.85,
+      "experience_alphabet": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "n_runs": 200,
+      "n_steps": 6,
+      "off_diagonal_prob": 0.05,
+      "prior": {
+        "a": 0.3333333333333333,
+        "b": 0.3333333333333333,
+        "c": 0.3333333333333333
+      },
+      "spec_alphabet": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "true_compiler": "a"
+    },
+    "analytical_asymptote_negative_conditional_entropy_under_true_compiler": -0.5875009311062074,
+    "predictive_ll_gain_over_uniform_baseline_at_final_t": 0.4609487083216446,
+    "posterior_true_compiler_target_threshold": 0.9,
+    "uniform_baseline_gap_target": 0.1,
+    "compilers_are_probability_kernels": true,
+    "global_max_bayes_vs_boltzmann_posterior_gap": 2.220446049250313e-16,
+    "mean_analytical_expected_ll_per_t": [
+      -1.0778087529803322,
+      -0.7907422051219833,
+      -0.7085751251462692,
+      -0.6583924704084616,
+      -0.6509694766621819,
+      -0.6279761859919644,
+      -0.6168600446586876
+    ],
+    "mean_analytical_expected_ll_uniform_baseline_per_t": [
+      -1.0778087529803322,
+      -1.0778087529803322,
+      -1.0778087529803322,
+      -1.0778087529803322,
+      -1.0778087529803322,
+      -1.0778087529803322,
+      -1.0778087529803322
+    ],
+    "mean_posterior_true_compiler_per_t": [
+      0.333333333333334,
+      0.6387577639751555,
+      0.7669164388218374,
+      0.8451127763591334,
+      0.8681145803619884,
+      0.8980971539038417,
+      0.9262504022893957
+    ],
+    "mean_held_out_ll_per_t_companion": [
+      -1.0718608326459687,
+      -0.7042390980593286,
+      -0.7569845417341486,
+      -0.6272362298781249,
+      -0.6925502535611123,
+      -0.6165348094147491
     ]
   }
 }
