@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "causal_semantics_pair",
+  "hypothesis": "On the six-message, four-context, four-future-state world with the hand-built update operator Psi of paper section 4, Theorem CS-1 predicts ~_Psi is a proper equivalence relation on M; Theorem CS-2 predicts the quotient M/~_Psi is exactly {{m0,m1},{m2,m3},{m4},{m5}} and is a common sufficient statistic (Theorem-4 sense) for the family {Psi(., c) : c in C} on M; the distractor co-occurrence quotient M/~_kappa is {{m0,m2,m4},{m1,m3,m5}} and is distinct from M/~_Psi.",
+  "claim_tier": "theoretical",
+  "controls": [
+    { "control_id": "psi_rows_sum_to_one", "description": "Every Psi(m, c) row is a probability distribution over the four future states (nonnegative entries summing to 1 within 1e-12); verified in tests." },
+    { "control_id": "class_distributions_pairwise_distinct_at_c0", "description": "At context c0, the four class-conditional distributions D_A, D_B, D_C, D_D are pairwise distinct probability vectors (0.5, 0.5, 0, 0), (0, 0, 0.5, 0.5), (1, 0, 0, 0), (0, 0, 0, 1); ensures the four Psi-classes are pairwise distinct." },
+    { "control_id": "cooccurrence_signature_deterministic", "description": "The co-occurrence signature kappa is a fixed 6 x 4 integer table with row equality collapsing even-indexed and odd-indexed messages into two groups; no randomness, no clustering algorithm, no thresholds." },
+    { "control_id": "partition_construction_is_exhaustive", "description": "Equivalence classes are built by scanning every message against every other message under the relation callable; equivalent to the transitive closure of the pointwise-equality relation." }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/causal_semantics_pair/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    { "gate_id": "CSP_CS1_PSI_EQUIVALENCE_IS_REFLEXIVE_SYMMETRIC_TRANSITIVE", "criterion": "The relation ~_Psi on M is reflexive, symmetric, and transitive under exhaustive enumeration." },
+    { "gate_id": "CSP_CS2_PSI_QUOTIENT_HAS_FOUR_CLASSES", "criterion": "M/~_Psi equals {{m0,m1},{m2,m3},{m4},{m5}} exactly (as a set of frozensets of messages)." },
+    { "gate_id": "CSP_CS2_PSI_QUOTIENT_IS_COMMON_SUFFICIENT", "criterion": "For every c in C and every pair of messages in the same Psi-class, Psi(m, c) matches componentwise within 1e-12." },
+    { "gate_id": "CSP_CS_COOCCURRENCE_PARTITION_DIFFERS_FROM_PSI_QUOTIENT", "criterion": "The co-occurrence partition M/~_kappa differs from the Psi-quotient M/~_Psi as a set of cells." }
+  ],
+  "artifacts": [
+    { "kind": "summary", "path": "experiments/causal_semantics_pair/results/causal_semantics_pair_summary.json", "public": true },
+    { "kind": "other", "path": "experiments/causal_semantics_pair/preregistration.json", "public": true }
+  ],
+  "status": "accepted"
+}

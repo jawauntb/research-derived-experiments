@@ -1,0 +1,39 @@
+{
+  "experiment_id": "causal_semantics_pair",
+  "schema_version": "1.0",
+  "hypothesis": "Theorems CS-1 and CS-2 (paper papers/causal_semantics/paper.md) predict that for a message space M={m0,...,m5}, a context space C={c0,...,c3}, and the hand-built update operator Psi: M x C -> P(X) with X={x0,...,x3} of paper section 4, (a) the binary relation ~_Psi on M defined by 'Psi(m1, c) == Psi(m2, c) for every c in C' is a proper equivalence relation (reflexive, symmetric, transitive) on M; (b) its quotient M/~_Psi is exactly the four-class partition {{m0,m1},{m2,m3},{m4},{m5}}; (c) M/~_Psi is a common sufficient statistic (in the Theorem-4 sense) for the family {Psi(., c) : c in C} on M, meaning Psi(., c) is constant within each Psi-class for every c; and (d) the co-occurrence quotient M/~_kappa induced by the distractor signature kappa (even-indexed messages {m0,m2,m4} share signature (4,4,1,1); odd-indexed messages {m1,m3,m5} share signature (1,1,4,4)) is distinct from M/~_Psi -- neither partition refines the other and no cell coincides.",
+  "primary_metric": "gates.cs2_psi_quotient_is_common_sufficient",
+  "gates": {
+    "CSP_CS1_PSI_EQUIVALENCE_IS_REFLEXIVE_SYMMETRIC_TRANSITIVE": "The binary relation ~_Psi on M is verified reflexive, symmetric, and transitive by exhaustive enumeration of all 36 ordered pairs (reflexivity / symmetry) and all 216 ordered triples (transitivity).",
+    "CSP_CS2_PSI_QUOTIENT_HAS_FOUR_CLASSES": "The equivalence classes of ~_Psi on M are exactly {{m0,m1},{m2,m3},{m4},{m5}}.",
+    "CSP_CS2_PSI_QUOTIENT_IS_COMMON_SUFFICIENT": "For every context c in C, the downstream distribution Psi(., c) is constant within each Psi-class (within 1e-12 numerical tolerance).",
+    "CSP_CS_COOCCURRENCE_PARTITION_DIFFERS_FROM_PSI_QUOTIENT": "The co-occurrence quotient M/~_kappa (two classes {{m0,m2,m4},{m1,m3,m5}}) and the Psi-quotient M/~_Psi (four classes {{m0,m1},{m2,m3},{m4},{m5}}) are distinct partitions of M."
+  },
+  "metrics": [
+    "psi_partition",
+    "cooccurrence_partition",
+    "psi_refines_cooccurrence",
+    "cooccurrence_refines_psi",
+    "shared_cells_between_partitions",
+    "all_rows_are_probability_distributions"
+  ],
+  "world": {
+    "messages": ["m0", "m1", "m2", "m3", "m4", "m5"],
+    "contexts": ["c0", "c1", "c2", "c3"],
+    "future_states": ["x0", "x1", "x2", "x3"],
+    "expected_psi_partition": [["m0", "m1"], ["m2", "m3"], ["m4"], ["m5"]],
+    "expected_cooccurrence_partition": [["m0", "m2", "m4"], ["m1", "m3", "m5"]]
+  },
+  "controls": [
+    "psi_rows_sum_to_one",
+    "class_distributions_pairwise_distinct_at_c0",
+    "cooccurrence_signature_deterministic",
+    "partition_construction_is_exhaustive"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": null,
+    "sampling": "exact enumeration of the 6 x 4 Psi table and the 6-row co-occurrence matrix; no Monte Carlo.",
+    "raw_data": false
+  }
+}

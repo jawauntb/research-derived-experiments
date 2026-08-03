@@ -1,0 +1,82 @@
+{
+  "analytical_asymptote_negative_conditional_entropy_under_true_compiler": -0.5875009311062074,
+  "bayes_boltzmann_tolerance": 1e-12,
+  "compilers_are_probability_kernels": true,
+  "gates": {
+    "aa1_posterior_concentrates_on_true_compiler": true,
+    "aa1_predictive_log_likelihood_non_decreasing_in_expectation": true,
+    "aa2_reduces_to_compiler_ecology": true,
+    "aa_audience_beats_uniform_baseline": true
+  },
+  "global_max_bayes_vs_boltzmann_posterior_gap": 2.220446049250313e-16,
+  "mean_analytical_expected_ll_per_t": [
+    -1.0778087529803322,
+    -0.7907422051219833,
+    -0.7085751251462692,
+    -0.6583924704084616,
+    -0.6509694766621819,
+    -0.6279761859919644,
+    -0.6168600446586876
+  ],
+  "mean_analytical_expected_ll_uniform_baseline_per_t": [
+    -1.0778087529803322,
+    -1.0778087529803322,
+    -1.0778087529803322,
+    -1.0778087529803322,
+    -1.0778087529803322,
+    -1.0778087529803322,
+    -1.0778087529803322
+  ],
+  "mean_held_out_ll_per_t_companion": [
+    -1.0718608326459687,
+    -0.7042390980593286,
+    -0.7569845417341486,
+    -0.6272362298781249,
+    -0.6925502535611123,
+    -0.6165348094147491
+  ],
+  "mean_posterior_true_compiler_per_t": [
+    0.333333333333334,
+    0.6387577639751555,
+    0.7669164388218374,
+    0.8451127763591334,
+    0.8681145803619884,
+    0.8980971539038417,
+    0.9262504022893957
+  ],
+  "monotonicity_tolerance": 1e-06,
+  "posterior_true_compiler_target_threshold": 0.9,
+  "predictive_ll_gain_over_uniform_baseline_at_final_t": 0.4609487083216446,
+  "status": "pass",
+  "uniform_baseline_gap_target": 0.1,
+  "world": {
+    "boltzmann_beta": 1.0,
+    "candidate_compilers": [
+      "a",
+      "b",
+      "c"
+    ],
+    "diagonal_prob": 0.85,
+    "experience_alphabet": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "n_runs": 200,
+    "n_steps": 6,
+    "off_diagonal_prob": 0.05,
+    "prior": {
+      "a": 0.3333333333333333,
+      "b": 0.3333333333333333,
+      "c": 0.3333333333333333
+    },
+    "spec_alphabet": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "true_compiler": "a"
+  }
+}

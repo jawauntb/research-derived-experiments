@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "autocatalytic_artwork_pair",
+  "hypothesis": "Theorem AA-1 (paper papers/autocatalytic_artwork/paper.md) predicts, on a 6-step, 3-compiler world with specification alphabet |S|=4, experience alphabet |E|=4, and candidate compilers {K_a (diagonal 0.85/0.05), K_b (shifted 0.85/0.05), K_c (uniform 0.25)}, that the audience's expected one-step predictive log-likelihood (the analytical E_{s,e ~ P_S x K_a}[log K̄_μ_t(e|s)] averaged over 200 seeded runs) is monotone non-decreasing in t from t=0 through t=6, and that the mean posterior mass on the true compiler K_a at t=6 is at least 0.9. Theorem AA-2 predicts that the Bayesian update mu_{t+1}(theta) proportional to mu_t(theta) K_theta(e_t|s_t) is literally the Boltzmann compiler-ecology update of Theorem CT-2 with reward r_t(theta)=log K_theta(e_t|s_t) and beta=1, so a parallel Boltzmann-update trajectory agrees with the Bayesian trajectory on every (t, theta, seed) to numerical precision. Companion gate: at t=6 the Bayesian audience beats a frozen-uniform baseline by at least 0.1 nats.",
+  "claim_tier": "theoretical",
+  "controls": [
+    { "control_id": "compilers_are_probability_kernels", "description": "Every K_theta(. | s) sums to 1.0 across the |E|=4 experience alphabet; asserted in tests." },
+    { "control_id": "trajectory_sampling_deterministic_under_mulberry32_seed", "description": "Every (s_t, e_t) sample uses a seeded Mulberry32 PRNG; recovery is exact under the seed sequence 1..N_RUNS." },
+    { "control_id": "bayes_boltzmann_agreement_on_every_run_and_step", "description": "The maximum absolute per-theta gap between the Bayesian and Boltzmann posteriors across all 200 runs and 7 belief snapshots (t=0..6) is at most 1e-12." },
+    { "control_id": "true_compiler_in_candidate_family", "description": "The true compiler K_a is one of the three candidates in the finite family Theta={a,b,c}, so the AA-1 well-specified-prior assumption holds by construction." },
+    { "control_id": "analytical_ll_computed_in_closed_form", "description": "The per-posterior expected LL is computed analytically over the 16 (s,e) pairs, eliminating held-out sample variance and matching the theorem's E-notation." }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/autocatalytic_artwork_pair/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    { "gate_id": "AAP_AA1_PREDICTIVE_LOG_LIKELIHOOD_NON_DECREASING_IN_EXPECTATION", "criterion": "Mean over 200 seeded runs of the analytical expected predictive log-likelihood LL_t = E_{s,e ~ P_S x K_a}[log K̄_μ_t(e|s)] is non-decreasing in t from t=0 through t=N_STEPS=6, with 1e-6 tolerance for finite-run noise." },
+    { "gate_id": "AAP_AA1_POSTERIOR_CONCENTRATES_ON_TRUE_COMPILER", "criterion": "Mean over 200 runs of mu_6(K_a) is at least 0.9." },
+    { "gate_id": "AAP_AA2_REDUCES_TO_COMPILER_ECOLOGY", "criterion": "Maximum absolute per-theta gap between the Bayesian and Boltzmann-equivalent posteriors across all 200 runs and 7 belief snapshots is at most 1e-12." },
+    { "gate_id": "AAP_AA_AUDIENCE_BEATS_UNIFORM_BASELINE", "criterion": "At t=6, the mean Bayesian-audience expected LL exceeds the frozen uniform-baseline expected LL by at least 0.1 nats." }
+  ],
+  "artifacts": [
+    { "kind": "summary", "path": "experiments/autocatalytic_artwork_pair/results/autocatalytic_artwork_pair_summary.json", "public": true },
+    { "kind": "other", "path": "experiments/autocatalytic_artwork_pair/preregistration.json", "public": true }
+  ],
+  "status": "accepted"
+}

@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "theory_atlas_pair",
+  "hypothesis": "Theorems TA-1 and TA-2 predict, on the 4-bit Boolean world with three context subsets U_1={x_0=0}, U_2={x_1=0}, U_3={x_2=0} and target label space T=Z/4, that (i) the good chart family with transitions T_12=+1, T_23=+1, T_13=+2 satisfies the cocycle on the single triple (1,2,3) and glues to a global theory M(x) = (2*x_2+x_3) mod 4; (ii) the bad chart family with transitions T_12=+1, T_23=+1, T_13=+3 violates the cocycle (discrepancy = shift-by-3 on Z/4, rank 4) and does not glue; and (iii) the bad-family cocycle failure has the missing-latent signature (rank>=1 with all three T_ij non-identity), distinct from the phase-transition/boundary signature (rank>=1 with exactly one T_ij non-identity).",
+  "claim_tier": "theoretical",
+  "controls": [
+    { "control_id": "target_permutations_are_bijections", "description": "Every T_ij is constructed as a permutation of T (bijection on the 4-element target label space); permutation validity is enforced by construction and re-checked by tests." },
+    { "control_id": "chart_maps_shared_between_families", "description": "The chart maps M_i are identical between the good and bad families; only the transitions T_ij differ, so the gluing verdict is a pure function of the transition data and cannot be smuggled through the chart definitions." },
+    { "control_id": "phase_boundary_reference_family_is_control", "description": "A third phase_boundary_reference family (T_12=+1, T_23=id, T_13=id) is evaluated alongside the good and bad families as an explicit control that Theorem TA-2's rank/support taxonomy distinguishes the phase-transition case from the missing-latent case on identical machinery." },
+    { "control_id": "cocycle_discrepancy_and_glue_attempt_agree", "description": "The cocycle discrepancy identity check and the pivot-through-chart-1 gluing attempt are independent computations that must agree on both families -- an internal cross-check of Theorem TA-1's equivalence." }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/theory_atlas_pair/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    { "gate_id": "TAP_TA1_GOOD_CHARTS_SATISFY_COCYCLE", "criterion": "For the good chart family, the cocycle T_jk ∘ T_ij = T_ik holds on every triple (i,j,k) with pairwise overlap (equivalently, cocycle_discrepancy is the identity permutation on T)." },
+    { "gate_id": "TAP_TA1_BAD_CHARTS_VIOLATE_COCYCLE", "criterion": "For the bad chart family, at least one triple (i,j,k) has non-zero cocycle discrepancy (rank >= 1 on T)." },
+    { "gate_id": "TAP_TA1_GLUE_IFF_COCYCLE", "criterion": "The pivot-through-chart-1 gluing attempt is consistent (returns a single-valued global M) for the good family and inconsistent (assigns at least one world multiple candidate values on the overlaps) for the bad family." },
+    { "gate_id": "TAP_TA2_BAD_DISCREPANCY_MATCHES_MISSING_LATENT_SIGNATURE", "criterion": "The bad family is classified as 'missing_latent' by Theorem TA-2's rank/support rule (cocycle fails AND every pairwise T_ij is non-identity), while the phase_boundary_reference family is classified as 'phase_transition' (cocycle fails AND exactly one pairwise T_ij is non-identity), and the good family is classified as 'glue'." }
+  ],
+  "artifacts": [
+    { "kind": "summary", "path": "experiments/theory_atlas_pair/results/theory_atlas_pair_summary.json", "public": true },
+    { "kind": "other", "path": "experiments/theory_atlas_pair/preregistration.json", "public": true }
+  ],
+  "status": "accepted"
+}
