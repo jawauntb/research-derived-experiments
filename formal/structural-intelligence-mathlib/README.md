@@ -17,7 +17,7 @@ that the pure-core project cannot see.
 | Project                                | Depends on          | Theorems                                                                                 |
 | -------------------------------------- | ------------------- | ---------------------------------------------------------------------------------------- |
 | `formal/structural-intelligence/`      | Lean 4 core only    | Algebraic cores: Theorems 4, 5-union-bound, 5-pigeonhole, 6-refinement, CT-1, CS-1/2, SA-1, AF-1/2, AG-2, TA-1, RR-2, AA-2 |
-| `formal/structural-intelligence-mathlib/` (this)  | Lean 4 + mathlib    | Real-analytic: Theorem 5 quantitative rate, AG-1 survival bound, CT-2 monotone-reward core, Theorem 1 (Halmos–Savage minimal sufficient statistic), Theorem 2 (Shannon rate–distortion, uniform-Hamming closed form), Proposition 3 (Coarsen ⊣ Refine adjunction) |
+| `formal/structural-intelligence-mathlib/` (this)  | Lean 4 + mathlib    | Real-analytic: Theorem 5 quantitative rate, AG-1 survival bound, CT-2 monotone-reward core, Theorem 1 (Halmos–Savage minimal sufficient statistic), Theorem 2 (Shannon rate–distortion, uniform-Hamming closed form), Proposition 3 (Coarsen ⊣ Refine adjunction), Theorem CG-1 (Fisher information = covariance of sufficient statistic), Theorem CG-2 (concern holonomy = enclosed signed area), Theorem AA-1 (Bayes-mixture predictive log-likelihood lower bound) |
 
 Keeping the two projects separate lets the fast Lean CI job stay fast
 (around three seconds) while this project takes on the multi-minute
@@ -259,6 +259,148 @@ mathlib build in an isolated CI lane.
   level witness that `coarsen ⊣ refine` in the finite discrete
   distribution category.  **Zero axioms, zero `sorry`.**
 
+### Theorem CG-1 (Fisher information = covariance of sufficient statistic) — `StructuralIntelligenceMathlib/CG1FisherMatrix.lean`
+
+Theorem CG-1 from `papers/concern_as_fiber_geometry/paper.md`, §3.  For
+a finite-support exponential family
+`p_θ(x) = h(x) · exp(⟨θ, T(x)⟩ - A(θ))` on `Fintype α`, the Fisher
+information matrix `I(θ)` equals the covariance of the sufficient
+statistic under `p_θ`.
+
+* `StructuralIntelligenceMathlib.expFamZ`,
+  `StructuralIntelligenceMathlib.expFamA`,
+  `StructuralIntelligenceMathlib.expFamP`,
+  `StructuralIntelligenceMathlib.expFamMeanT`,
+  `StructuralIntelligenceMathlib.expFamScore`,
+  `StructuralIntelligenceMathlib.expFamFisher`,
+  `StructuralIntelligenceMathlib.expFamVarT` — the 1D
+  natural-parameter data: partition function, log-partition,
+  density, mean, score, Fisher information, and variance of the
+  sufficient statistic.  All `noncomputable`, all defined by
+  `Finset.sum` over `Fintype α`.
+
+* `StructuralIntelligenceMathlib.hasDerivAt_expFamZ` — the partition
+  function is pointwise-differentiable with the natural under-the-sum
+  derivative `∑ h(x) · T(x) · exp(θ · T(x))`.  Proof: apply
+  `HasDerivAt.fun_sum` and chain `HasDerivAt.mul_const`,
+  `HasDerivAt.exp`, `HasDerivAt.const_mul` term by term.
+
+* `StructuralIntelligenceMathlib.cg1_logpartition_deriv_eq_meanT` —
+  **the load-bearing analytic identity**.  Under `0 < Z(θ)`,
+  `(∂/∂θ) log Z(θ) = E_{p_θ}[T]`.  Proof: apply `HasDerivAt.log` to
+  the partition-function derivative, then reshape `Z'(θ) / Z(θ)` as
+  `∑ p_θ(x) · T(x)` via `Finset.sum_div` and pointwise algebraic
+  identity.
+
+* `StructuralIntelligenceMathlib.cg1_score_identity_scalar` —
+  **the score identity** in 1D natural-parameter form.  Under
+  positive `h` and positive `Z` at every `θ'`,
+  `(∂/∂θ') log p_{θ'}(x) |_{θ' = θ} = T(x) - E_{p_θ}[T]`.  Proof:
+  decompose `log p_{θ'}(x) = log h(x) + θ' · T(x) - A(θ')` via
+  `Real.log_div`, `Real.log_mul`, `Real.log_exp`, then differentiate
+  each term using `hasDerivAt_const`, `HasDerivAt.mul_const`, and
+  `cg1_logpartition_deriv_eq_meanT`.
+
+* `StructuralIntelligenceMathlib.cg1_fisher_eq_variance` — 1D scalar
+  form: `I(θ) = Var_{p_θ}[T]`.  Definitional once
+  `expFamScore h T θ x = T(x) - E_{p_θ}[T]` is fixed; the
+  substantive content is the score identity.
+
+* `StructuralIntelligenceMathlib.expFamZk`,
+  `StructuralIntelligenceMathlib.expFamPk`,
+  `StructuralIntelligenceMathlib.expFamMeanTk`,
+  `StructuralIntelligenceMathlib.expFamScorek`,
+  `StructuralIntelligenceMathlib.expFamFisherMatrix`,
+  `StructuralIntelligenceMathlib.expFamCovMatrix` — the multi-parameter
+  `Fin k` versions of the same objects, with `⟨θ, T x⟩` implemented
+  as `∑ i : Fin k, θ i · T x i`.
+
+* `StructuralIntelligenceMathlib.cg1_fisher_matrix_eq_covariance` —
+  **the matrix form the paper cites**: `I_{ij}(θ) = Cov_{p_θ}[T_i, T_j]`
+  entry-wise, on `Fintype α` and `Fin k`.  Definitional after the
+  score identity has fixed the definition of score; proved by
+  `Finset.sum_congr` + `ring`.
+
+* `StructuralIntelligenceMathlib.expFamScore_mean_zero` — auxiliary
+  lemma: the score has mean zero under `p_θ`, from `∑ p_θ = 1` +
+  linearity.  Not required by the main identity but useful for the
+  Cov = raw-second-moment reformulation.
+
+### Theorem CG-2 (concern holonomy = enclosed signed area) — `StructuralIntelligenceMathlib/CG2Holonomy.lean`
+
+Theorem CG-2 from `papers/concern_as_fiber_geometry/paper.md`, §4.
+For the paper's §4-corrected concern 1-form `α = -ε · c_2 · dc_1`
+(the earlier `ε(z_2 dc_1 - z_1 dc_2)` form was exact and had zero
+holonomy — a mistake caught by the instrument on first run), the
+counterclockwise line integral around the rectangle
+`[a, a+w] × [b, b+h]` equals `ε · w · h`, i.e., `ε` times the enclosed
+signed area.
+
+* `StructuralIntelligenceMathlib.holonomyRectangle` — the sum of the
+  four edge line-integrals of `α = -ε · c_2 · dc_1`.  Horizontal
+  edges give `∓ε · c_2 · w` (with `c_2` fixed and equal to `b` or
+  `b + h`); vertical edges contribute zero since `α` has no `dc_2`
+  component.
+
+* `StructuralIntelligenceMathlib.cg2_holonomy_equals_signed_area` —
+  the analytic identity `holonomyRectangle ε a b w h = ε · w · h`.
+  Proof: `ring`.  The base-point `(a, b)` and the horizontal offset
+  `b` all cancel — only the enclosed area matters.
+
+* `StructuralIntelligenceMathlib.cg2_discrete_greens_grid` — the
+  Riemann-sum "total curl" form.  On an `N × M` grid partition, the
+  per-cell curl `ε · (w/N) · (h/M)` summed over all `N · M` cells
+  equals `ε · w · h`.  Proof: collapse each inner sum via
+  `Finset.sum_const` + `Finset.card_range` + `nsmul_eq_mul`, then
+  cancel `N/N` and `M/M` using `div_self`.
+
+* `StructuralIntelligenceMathlib.cg2_discrete_greens_symmetric` —
+  square-grid corollary exhibiting `Finset.sum_comm` explicitly:
+  swapping the two grid axes leaves the total curl invariant.
+
+* `StructuralIntelligenceMathlib.cg2_bottom_edge_riemann`,
+  `StructuralIntelligenceMathlib.cg2_top_edge_riemann`,
+  `StructuralIntelligenceMathlib.cg2_boundary_riemann_equals_area`
+  — the Riemann-sum boundary form: on an `N`-subdivided rectangle,
+  bottom-edge Riemann sum evaluates to `-ε · b · w`, top-edge
+  (reversed) to `ε · (b+h) · w`, and vertical edges to zero; total
+  is `ε · w · h`, matching `cg2_discrete_greens_grid`.  This is the
+  discrete Green's theorem for the paper's specific `α`.
+
+### Theorem AA-1 (Bayes-mixture predictive log-likelihood lower bound) — `StructuralIntelligenceMathlib/AA1MonotoneCompetence.lean`
+
+Theorem AA-1 from `papers/autocatalytic_artwork/paper.md`.  For a
+finite prior `π : Fin n → ℝ` (nonneg, `∑ π = 1`) and a positive
+family of component predictives `p : Fin n → ℝ`, the log of the
+Bayes mixture `q = ∑ π_i · p_i` dominates the prior-weighted
+per-component log-mean:
+
+    log (∑ i, π i · p i)   ≥   ∑ i, π i · log (p i).
+
+Under the sample-likelihood reading where `p_i(x_{1:T})` is the
+per-hypothesis sample likelihood, the RHS is the prior-averaged
+per-hypothesis log-likelihood and the LHS is the mixture predictive
+log-likelihood; expectation under any generative distribution gives
+the Barron-1998 audience-competence bound.
+
+* `StructuralIntelligenceMathlib.aa1_log_mixture_ge_weighted_log` —
+  the core inequality.  Proof: apply `ConcaveOn.le_map_sum`
+  (`Mathlib.Analysis.Convex.Jensen`) to `Real.log` on `Set.Ioi 0`,
+  using `strictConcaveOn_log_Ioi.concaveOn`; convert `π i • p i`
+  to `π i * p i` via `smul_eq_mul`.
+
+* `StructuralIntelligenceMathlib.aa1_log_mixture_ge_weighted_log_sample`
+  — the sample-form specialisation, obtained by pointwise
+  application of the core inequality at each fixed observation `x`.
+
+* `StructuralIntelligenceMathlib.aa1_refinement_raises_lower_bound`
+  — the monotonicity-under-refinement corollary.  If `π' i · log(p i)
+  ≥ π i · log(p i)` for every hypothesis index (the operational
+  "refinement puts more mass on higher-log-likelihood components"
+  condition), then `∑ π i · log(p i) ≤ log(∑ π' i · p i)`.  Proof:
+  `Finset.sum_le_sum` for the RHS-boost, then the core Jensen
+  inequality closes to the mixture log-likelihood.
+
 ## Mathlib lemmas reused
 
 | Lemma                                     | Where                                                   | Used for                                    |
@@ -274,6 +416,17 @@ mathlib build in an isolated CI lane.
 | `one_add_mul_le_pow`                      | `Mathlib.Algebra.Order.Ring.Pow`                        | Bernoulli's inequality for `-2 ≤ a`         |
 | `Finset.prod_le_prod`                     | `Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset` | Monotonicity of finite products (nonneg reals) |
 | `Fin.prod_const`                          | `Mathlib.Algebra.BigOperators.Fin`                      | `∏ _ : Fin n, c = c ^ n`                     |
+| `HasDerivAt.fun_sum`                      | `Mathlib.Analysis.Calculus.Deriv.Add`                   | Differentiate `Z(θ) = ∑ x, h(x) · exp(θ · T(x))` under the finite sum for CG-1 |
+| `HasDerivAt.exp`, `HasDerivAt.const_mul`  | `Mathlib.Analysis.SpecialFunctions.ExpDeriv`            | Chain rule for `θ ↦ h(x) · exp(θ · T(x))` for CG-1 |
+| `HasDerivAt.log`                          | `Mathlib.Analysis.SpecialFunctions.Log.Deriv`           | `A'(θ) = Z'(θ) / Z(θ)` for CG-1              |
+| `HasDerivAt.congr_deriv`                  | `Mathlib.Analysis.Calculus.Deriv.Basic`                 | Rewrite derivative-value up to `ring`-equality in CG-1 |
+| `Finset.sum_div`                          | `Mathlib.Algebra.BigOperators.Field`                    | Distribute `1 / Z(θ)` under the sum for CG-1 mean identity |
+| `Real.log_div`, `Real.log_mul`, `Real.log_exp` | `Mathlib.Analysis.SpecialFunctions.Log.Basic`      | Decompose `log p_θ(x)` for CG-1 score identity |
+| `Finset.sum_const`, `Finset.card_range`, `nsmul_eq_mul` | `Mathlib.Algebra.BigOperators.Group.Finset.Basic` | Collapse the CG-2 constant-cell-curl grid sum   |
+| `Finset.sum_comm`                         | `Mathlib.Algebra.BigOperators.Group.Finset.Basic`       | Swap grid-axis sums in CG-2 symmetric-grid form |
+| `div_self`                                | `Mathlib.Algebra.Group.Basic` (via mathlib re-exports)  | Cancel `N/N`, `M/M` in CG-2 discrete-grid identity |
+| `strictConcaveOn_log_Ioi`, `ConcaveOn.le_map_sum` | `Mathlib.Analysis.Convex.SpecificFunctions.Basic`, `Mathlib.Analysis.Convex.Jensen` | Concave-log Jensen for AA-1 mixture inequality |
+| `Finset.sum_le_sum`                       | `Mathlib.Algebra.BigOperators.Order`                    | Pointwise monotonicity for AA-1 refinement corollary |
 
 ## What is not formalized
 
@@ -282,8 +435,17 @@ depend only on the standard Lean 4 axioms `propext`,
 `Classical.choice`, and `Quot.sound` (i.e. no extra axioms beyond
 what mathlib itself uses).
 
-Two theorems make honest use of an additional **project-local
-`axiom`** each, with an inline citation:
+Nine of the eleven theorem-family headlines depend only on Mathlib's
+axiom base (`propext`, `Classical.choice`, `Quot.sound`).  The three
+new headlines added in this second wave —
+`cg1_fisher_matrix_eq_covariance` and its scalar/derivative
+companions, `cg2_holonomy_equals_signed_area` and its Riemann-sum
+companions, and `aa1_log_mixture_ge_weighted_log` with its
+sample-form and refinement-monotonicity corollaries — introduce
+**zero** additional project-local axioms.
+
+Two theorems from the first wave make honest use of an additional
+**project-local `axiom`** each, with an inline citation:
 
 * `StructuralIntelligenceMathlib.HalmosSavage_minimality_h_extension`
   — packaging step needed by
