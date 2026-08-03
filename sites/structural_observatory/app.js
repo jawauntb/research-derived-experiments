@@ -728,6 +728,26 @@ function attachInteractiveViz(data) {
   if (iCT) {
     mountCompilerTomographyViz(iCT, data.compiler_tomography_pair);
   }
+
+  // Companion: concern_fisher_pair (CG-1 Fisher matching + CG-2 holonomy).
+  const iCF = document.getElementById("concern_fisher_pair");
+  if (iCF && data.concern_fisher_pair) mountConcernFisherViz(iCF, data.concern_fisher_pair);
+
+  // Companion: causal_semantics_pair (Ψ-quotient vs co-occurrence signature).
+  const iCS = document.getElementById("causal_semantics_pair");
+  if (iCS && data.causal_semantics_pair) mountCausalSemanticsViz(iCS, data.causal_semantics_pair);
+
+  // Companion: antecedent_taxonomy_pair (local screens intersect to true Z).
+  const iAT = document.getElementById("antecedent_taxonomy_pair");
+  if (iAT && data.antecedent_taxonomy_pair) mountAntecedentTaxonomyViz(iAT, data.antecedent_taxonomy_pair);
+
+  // Companion: sica_finite_derivation_pair (LR-vector partition == joint-parity MSS).
+  const iSICA = document.getElementById("sica_finite_derivation_pair");
+  if (iSICA && data.sica_finite_derivation_pair) mountSicaFiniteDerivationViz(iSICA, data.sica_finite_derivation_pair);
+
+  // Companion: sicc_covering_meta_pair (fitted c vs K, meta-theorem constant band).
+  const iSICC = document.getElementById("sicc_covering_meta_pair");
+  if (iSICC && data.sicc_covering_meta_pair) mountSiccCoveringMetaViz(iSICC, data.sicc_covering_meta_pair);
 }
 
 // ---- Instrument 2 viz: timeline scrubber for the abstract trajectory ----
@@ -1021,6 +1041,420 @@ function mountCompilerTomographyViz(section, data) {
       ctx.stroke();
     });
   }
+}
+
+// ---- Companion: concern_fisher_pair viz ----
+// Slider selects one of the 4 c-values; shows predicted vs empirical 2x2 Fisher
+// diagonals and the CG-2 rectangle/triangle holonomy on the right.
+function mountConcernFisherViz(section, data) {
+  const container = el("div", { class: "viz" }, [
+    el("h4", {}, ["Interactive: pick c — see empirical Fisher match Cov[T], and the CG-2 holonomy loop"]),
+  ]);
+  section.appendChild(container);
+  const width = 380, height = 260;
+  const { canvas, ctx } = makeCanvas(width, height);
+  container.appendChild(canvas);
+  const records = data.cg1_records || [];
+  const cg2 = data.cg2 || { epsilon: 0.3, rectangle_holonomy_computed: 0.3, triangle_holonomy_computed: 0.15 };
+  let idx = 0;
+
+  function drawMatrix(diag, x0, y0, size, label, tint) {
+    const cell = size / 2;
+    for (let r = 0; r < 2; r++) {
+      for (let c = 0; c < 2; c++) {
+        const v = r === c ? diag[r] : 0;
+        const alpha = 0.15 + 0.75 * Math.max(0, Math.min(1, v));
+        ctx.fillStyle = r === c ? `rgba(${tint},${alpha})` : "#1a232f";
+        ctx.fillRect(x0 + c * cell, y0 + r * cell, cell - 1, cell - 1);
+        ctx.fillStyle = INK;
+        ctx.font = "11px ui-monospace, monospace";
+        ctx.fillText(v.toFixed(4), x0 + c * cell + 6, y0 + r * cell + cell / 2 + 4);
+      }
+    }
+    ctx.fillStyle = MUTED;
+    ctx.font = "11px ui-monospace, monospace";
+    ctx.fillText(label, x0, y0 - 4);
+  }
+
+  function draw() {
+    ctx.fillStyle = AMBIENT;
+    ctx.fillRect(0, 0, width, height);
+    const rec = records[idx] || { c: [0, 0], empirical_diag: [1, 1], predicted_diag: [1, 1], max_abs_diff: 0 };
+    ctx.fillStyle = INK;
+    ctx.font = "12px ui-monospace, monospace";
+    ctx.fillText(`c = (${rec.c[0].toFixed(2)}, ${rec.c[1].toFixed(2)})`, 12, 20);
+    drawMatrix(rec.predicted_diag, 12, 42, 96, "predicted (Cov[T])", "63,178,127");
+    drawMatrix(rec.empirical_diag, 12, 152, 96, "empirical (Fisher)", "110,168,254");
+    // Diff readout.
+    ctx.fillStyle = "#3fb27f";
+    ctx.font = "11px ui-monospace, monospace";
+    ctx.fillText(`max |Δ| = ${rec.max_abs_diff.toExponential(2)}`, 120, 108);
+    ctx.fillStyle = MUTED;
+    ctx.fillText("off-diagonal = 0", 120, 122);
+    // CG-2 holonomy loop on the right.
+    const rx = 200, ry = 40, rw = 150, rh = 120;
+    ctx.strokeStyle = "#f2c14e";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(rx, ry, rw, rh);
+    ctx.fillStyle = "rgba(242,193,78,0.10)";
+    ctx.fillRect(rx, ry, rw, rh);
+    // Triangle inscribed (bottom-left half).
+    ctx.beginPath();
+    ctx.moveTo(rx, ry + rh);
+    ctx.lineTo(rx + rw, ry + rh);
+    ctx.lineTo(rx, ry);
+    ctx.closePath();
+    ctx.strokeStyle = "#6ea8fe";
+    ctx.stroke();
+    ctx.fillStyle = INK;
+    ctx.font = "11px ui-monospace, monospace";
+    ctx.fillText(`ε = ${cg2.epsilon}`, rx, ry - 4);
+    ctx.fillStyle = "#f2c14e";
+    ctx.fillText(`rect A=1 → holonomy ${cg2.rectangle_holonomy_computed.toFixed(3)}`, rx, ry + rh + 16);
+    ctx.fillStyle = "#6ea8fe";
+    ctx.fillText(`tri  A=½ → holonomy ${cg2.triangle_holonomy_computed.toFixed(3)}`, rx, ry + rh + 32);
+    ctx.fillStyle = MUTED;
+    ctx.fillText(`ratio = ${(cg2.rectangle_over_triangle_ratio || 2.0).toFixed(2)}`, rx, ry + rh + 48);
+  }
+
+  const slider = makeSlider("c-index", 0, Math.max(0, records.length - 1), 0, (v) => { idx = v; draw(); });
+  container.appendChild(slider);
+  draw();
+}
+
+// ---- Companion: causal_semantics_pair viz ----
+// Radio toggles between the Ψ-quotient (correct meaning) and the co-occurrence
+// signature partition (orthogonal, wrong). Each message chip is coloured by
+// the selected partition; status text reports whether it is common-sufficient.
+function mountCausalSemanticsViz(section, data) {
+  const container = el("div", { class: "viz" }, [
+    el("h4", {}, ["Interactive: toggle the partition — Ψ-quotient is common-sufficient, co-occurrence is not"]),
+  ]);
+  section.appendChild(container);
+  const width = 380, height = 220;
+  const { canvas, ctx } = makeCanvas(width, height);
+  container.appendChild(canvas);
+  const messages = (data.world && data.world.messages) || ["m0", "m1", "m2", "m3", "m4", "m5"];
+  const partitions = {
+    psi: { name: "Ψ-quotient (CS-2)", blocks: data.psi_partition, sufficient: true },
+    cooccur: { name: "co-occurrence signature", blocks: data.cooccurrence_partition, sufficient: false },
+  };
+  let current = "psi";
+
+  function blockOf(partition, msg) {
+    for (let i = 0; i < partition.length; i++) {
+      if (partition[i].indexOf(msg) !== -1) return i;
+    }
+    return -1;
+  }
+
+  function draw() {
+    ctx.fillStyle = AMBIENT;
+    ctx.fillRect(0, 0, width, height);
+    const p = partitions[current];
+    // Layout: one row of 6 chips, coloured by block index in selected partition.
+    const chipW = 46, chipH = 46, y0 = 60, x0 = 20, gap = 10;
+    messages.forEach((m, i) => {
+      const b = blockOf(p.blocks, m);
+      const x = x0 + i * (chipW + gap);
+      ctx.fillStyle = Z_PALETTE[b % Z_PALETTE.length] || "#888";
+      ctx.fillRect(x, y0, chipW, chipH);
+      ctx.strokeStyle = "#22303d";
+      ctx.strokeRect(x, y0, chipW, chipH);
+      ctx.fillStyle = AMBIENT;
+      ctx.font = "16px ui-monospace, monospace";
+      ctx.fillText(m, x + 10, y0 + chipH / 2 + 6);
+    });
+    // Draw block brackets underneath.
+    ctx.strokeStyle = "#5f7185";
+    ctx.lineWidth = 1;
+    ctx.font = "11px ui-monospace, monospace";
+    let bracketY = y0 + chipH + 12;
+    for (let b = 0; b < p.blocks.length; b++) {
+      const members = p.blocks[b];
+      const startI = messages.indexOf(members[0]);
+      const endI = messages.indexOf(members[members.length - 1]);
+      const startX = x0 + startI * (chipW + gap);
+      const endX = x0 + endI * (chipW + gap) + chipW;
+      ctx.beginPath();
+      ctx.moveTo(startX, bracketY);
+      ctx.lineTo(endX, bracketY);
+      ctx.stroke();
+      ctx.fillStyle = Z_PALETTE[b % Z_PALETTE.length];
+      ctx.fillText(`block ${b} (|·|=${members.length})`, startX, bracketY + 14);
+    }
+    // Title + status.
+    ctx.fillStyle = INK;
+    ctx.font = "13px ui-monospace, monospace";
+    ctx.fillText(p.name, 12, 24);
+    ctx.fillStyle = p.sufficient ? "#3fb27f" : "#e0525b";
+    ctx.font = "12px ui-monospace, monospace";
+    ctx.fillText(
+      p.sufficient
+        ? `→ ${p.blocks.length} classes, common-sufficient (coarsest CSS on messages)`
+        : `→ ${p.blocks.length} classes, NOT sufficient (orthogonal to Ψ)`,
+      12, 42
+    );
+  }
+
+  const radio = makeRadio(
+    "partition:",
+    [{ value: "psi", label: "Ψ-quotient" }, { value: "cooccur", label: "co-occurrence" }],
+    "psi",
+    (v) => { current = v; draw(); }
+  );
+  container.appendChild(radio);
+  draw();
+}
+
+// ---- Companion: antecedent_taxonomy_pair viz ----
+// Radio selects a class; draws each local screen as a segmented bar over the
+// four true-Z blocks, then the intersection bar (always 4 singletons = true Z).
+function mountAntecedentTaxonomyViz(section, data) {
+  const container = el("div", { class: "viz" }, [
+    el("h4", {}, ["Interactive: pick a class — watch its local screens intersect to true Z (4 blocks)"]),
+  ]);
+  section.appendChild(container);
+  const width = 380, height = 260;
+  const { canvas, ctx } = makeCanvas(width, height);
+  container.appendChild(canvas);
+  const records = data.records || [];
+  // Canonical partitions of {0,1,2,3} illustrating the block counts.
+  // The block counts themselves are the real data; the specific groupings
+  // below are canonical illustrative choices consistent with those counts.
+  function screensFor(blockCounts) {
+    if (blockCounts.length === 2 && blockCounts[0] === 2 && blockCounts[1] === 2) {
+      return [[[0, 1], [2, 3]], [[0, 2], [1, 3]]];
+    }
+    if (blockCounts.length === 3 && blockCounts[0] === 4) {
+      return [[[0], [1], [2], [3]], [[0, 1], [2, 3]], [[0, 2], [1, 3]]];
+    }
+    return blockCounts.map((k) => {
+      if (k === 4) return [[0], [1], [2], [3]];
+      if (k === 2) return [[0, 1], [2, 3]];
+      if (k === 1) return [[0, 1, 2, 3]];
+      return [[0, 1, 2, 3]];
+    });
+  }
+  let currentName = records.length ? records[0].name : "";
+
+  function drawBar(y, screen, label, extraColor) {
+    const barX = 16, barW = 320, barH = 24;
+    const cellW = barW / 4;
+    for (let z = 0; z < 4; z++) {
+      // find block containing z
+      let bIdx = 0;
+      for (let b = 0; b < screen.length; b++) {
+        if (screen[b].indexOf(z) !== -1) { bIdx = b; break; }
+      }
+      ctx.fillStyle = extraColor || Z_PALETTE[bIdx % Z_PALETTE.length];
+      ctx.fillRect(barX + z * cellW, y, cellW - 1, barH);
+      ctx.strokeStyle = "#22303d";
+      ctx.strokeRect(barX + z * cellW, y, cellW - 1, barH);
+      ctx.fillStyle = AMBIENT;
+      ctx.font = "12px ui-monospace, monospace";
+      ctx.fillText(`z=${z}`, barX + z * cellW + 10, y + 16);
+    }
+    ctx.fillStyle = MUTED;
+    ctx.font = "11px ui-monospace, monospace";
+    ctx.fillText(label, barX, y - 4);
+  }
+
+  function draw() {
+    ctx.fillStyle = AMBIENT;
+    ctx.fillRect(0, 0, width, height);
+    const rec = records.find((r) => r.name === currentName) || records[0];
+    if (!rec) return;
+    ctx.fillStyle = INK;
+    ctx.font = "13px ui-monospace, monospace";
+    ctx.fillText(`${rec.name} · ${rec.num_local_screens} local screen(s)`, 12, 20);
+    const screens = screensFor(rec.local_screen_block_counts);
+    let y = 46;
+    screens.forEach((s, i) => {
+      drawBar(y, s, `screen ${i + 1}  (${rec.local_screen_block_counts[i]} block${rec.local_screen_block_counts[i] === 1 ? "" : "s"})`);
+      y += 40;
+    });
+    // Intersection bar: always 4 singletons.
+    drawBar(y + 6, [[0], [1], [2], [3]], `⋂ intersection → true Z (${rec.intersection_block_count} blocks)`);
+    y += 46;
+    ctx.fillStyle = rec.intersection_equals_true_Z ? "#3fb27f" : "#e0525b";
+    ctx.font = "12px ui-monospace, monospace";
+    ctx.fillText(
+      `intersection equals true Z: ${rec.intersection_equals_true_Z ? "yes" : "no"}`,
+      16, y + 16
+    );
+  }
+
+  const options = records.map((r) => ({ value: r.name, label: r.name }));
+  const radio = makeRadio("class:", options, currentName, (v) => { currentName = v; draw(); });
+  container.appendChild(radio);
+  draw();
+}
+
+// ---- Companion: sica_finite_derivation_pair viz ----
+// 4x4 grid of the 16-state 4-bit world. Radio toggles between the LR-vector
+// partition, the joint-parity MSS partition, and the setwise "difference"
+// (empty — the two partitions are bit-exactly equal).
+function mountSicaFiniteDerivationViz(section, data) {
+  const container = el("div", { class: "viz" }, [
+    el("h4", {}, ["Interactive: toggle LR-vector vs joint-parity MSS — bit-exact match"]),
+  ]);
+  section.appendChild(container);
+  const width = 380, height = 260;
+  const { canvas, ctx } = makeCanvas(width, height);
+  container.appendChild(canvas);
+  const worlds = [];
+  for (let i = 0; i < 16; i++) worlds.push([(i >> 3) & 1, (i >> 2) & 1, (i >> 1) & 1, i & 1]);
+  function jointParity(w) { return (w[0] ^ w[1]) * 2 + (w[2] ^ w[3]); }
+  // The gate asserts LR partition == joint-parity partition, so we render them
+  // as the same 4-way coloring; "diff" shows the empty set (all cells muted).
+  const modes = {
+    lr: { name: "LR-vector partition (T1 + CS-2)", color: (w) => Z_PALETTE[jointParity(w)] },
+    mss: { name: "joint-parity MSS partition", color: (w) => Z_PALETTE[jointParity(w)] },
+    diff: { name: "difference (LR △ MSS) — empty by SIC-A derivation", color: () => "#22303d" },
+  };
+  let current = "lr";
+
+  function draw() {
+    ctx.fillStyle = AMBIENT;
+    ctx.fillRect(0, 0, width, height);
+    const mode = modes[current];
+    ctx.fillStyle = INK;
+    ctx.font = "13px ui-monospace, monospace";
+    ctx.fillText(mode.name, 12, 20);
+    const gridSize = 200, cellSize = gridSize / 4, x0 = 12, y0 = 34;
+    drawGridCells(ctx, {
+      rows: 4, cols: 4, cellSize, x0, y0,
+      colorAt: (r, c) => mode.color(worlds[r * 4 + c]),
+      borderAt: (r, c) => Z_PALETTE[jointParity(worlds[r * 4 + c])] + "cc",
+    });
+    // Right column of text.
+    const tx = x0 + gridSize + 16;
+    let ty = y0 + 14;
+    ctx.fillStyle = INK;
+    ctx.font = "12px ui-monospace, monospace";
+    ctx.fillText(`|world| = 16`, tx, ty); ty += 18;
+    ctx.fillText(`|fibres| = 4`, tx, ty); ty += 18;
+    ctx.fillText(`fibre sizes: 4,4,4,4`, tx, ty); ty += 24;
+    ctx.fillStyle = current === "diff" ? "#3fb27f" : MUTED;
+    ctx.font = "11px ui-monospace, monospace";
+    if (current === "diff") {
+      ctx.fillText("△ = ∅  (partitions equal)", tx, ty); ty += 14;
+      ctx.fillText("→ Lean: sic_a_finite_discrete", tx, ty);
+    } else {
+      ctx.fillText("border colour = joint-parity fibre", tx, ty); ty += 14;
+      ctx.fillText("fill colour = selected partition", tx, ty);
+    }
+  }
+
+  const radio = makeRadio(
+    "partition:",
+    [
+      { value: "lr", label: "LR-vector" },
+      { value: "mss", label: "joint-parity MSS" },
+      { value: "diff", label: "difference" },
+    ],
+    current,
+    (v) => { current = v; draw(); }
+  );
+  container.appendChild(radio);
+  draw();
+}
+
+// ---- Companion: sicc_covering_meta_pair viz ----
+// Line plot: fitted c vs K on log-K axis. Slider selects K; the point is
+// highlighted and the meta-theorem bound / empirical n / p_recover for that K
+// print on the right.
+function mountSiccCoveringMetaViz(section, data) {
+  const container = el("div", { class: "viz" }, [
+    el("h4", {}, ["Interactive: scrub K — see fitted c stay inside the meta-theorem constant band"]),
+  ]);
+  section.appendChild(container);
+  const width = 380, height = 260;
+  const { canvas, ctx } = makeCanvas(width, height);
+  container.appendChild(canvas);
+  const rows = data.rows || [];
+  const Ks = data.K_values || rows.map((r) => r.K);
+  const cStats = data.c_fitted || { min: 0.9, max: 1.0, mean: 0.95 };
+  let idx = 0;
+
+  function draw() {
+    ctx.fillStyle = AMBIENT;
+    ctx.fillRect(0, 0, width, height);
+    // Plot area on the left.
+    const x0 = 40, y0 = 30, plotW = 220, plotH = 180;
+    const cMin = 0.85, cMax = 1.05;
+    const logKMin = Math.log2(Math.min(...Ks));
+    const logKMax = Math.log2(Math.max(...Ks));
+    const xFor = (K) => x0 + ((Math.log2(K) - logKMin) / (logKMax - logKMin)) * plotW;
+    const yFor = (c) => y0 + plotH - ((c - cMin) / (cMax - cMin)) * plotH;
+    // Axes.
+    ctx.strokeStyle = MUTED;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(x0, y0); ctx.lineTo(x0, y0 + plotH); ctx.lineTo(x0 + plotW, y0 + plotH);
+    ctx.stroke();
+    // Constant band [min, max].
+    ctx.fillStyle = "rgba(242,193,78,0.14)";
+    ctx.fillRect(x0, yFor(cStats.max), plotW, yFor(cStats.min) - yFor(cStats.max));
+    ctx.strokeStyle = "rgba(242,193,78,0.5)";
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(x0, yFor(cStats.mean)); ctx.lineTo(x0 + plotW, yFor(cStats.mean));
+    ctx.stroke();
+    ctx.setLineDash([]);
+    // Line + points.
+    ctx.strokeStyle = "#6ea8fe";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    rows.forEach((r, i) => {
+      const x = xFor(r.K), y = yFor(r.c_fitted);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    rows.forEach((r, i) => {
+      const x = xFor(r.K), y = yFor(r.c_fitted);
+      ctx.fillStyle = i === idx ? "#f2c14e" : "#6ea8fe";
+      ctx.beginPath();
+      ctx.arc(x, y, i === idx ? 5 : 3, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    // Axis labels.
+    ctx.fillStyle = MUTED;
+    ctx.font = "10px ui-monospace, monospace";
+    Ks.forEach((K) => {
+      ctx.fillText(`${K}`, xFor(K) - 8, y0 + plotH + 12);
+    });
+    ctx.fillText(`c=${cMin.toFixed(2)}`, 4, y0 + plotH + 4);
+    ctx.fillText(`c=${cMax.toFixed(2)}`, 4, y0 + 4);
+    ctx.fillStyle = INK;
+    ctx.font = "12px ui-monospace, monospace";
+    ctx.fillText("fitted c vs K (log₂ x)", x0, y0 - 10);
+    // Right-side readout for selected K.
+    const sel = rows[idx];
+    if (sel) {
+      const tx = x0 + plotW + 12;
+      let ty = y0 + 14;
+      ctx.fillStyle = "#f2c14e";
+      ctx.font = "13px ui-monospace, monospace";
+      ctx.fillText(`K = ${sel.K}`, tx, ty); ty += 18;
+      ctx.fillStyle = INK;
+      ctx.font = "11px ui-monospace, monospace";
+      ctx.fillText(`c = ${sel.c_fitted.toFixed(4)}`, tx, ty); ty += 14;
+      ctx.fillText(`bound(c=1) = ${sel.meta_bound_at_c1.toFixed(1)}`, tx, ty); ty += 14;
+      ctx.fillText(`n_emp = ${sel.n_emp}`, tx, ty); ty += 14;
+      ctx.fillStyle = sel.p_recover_at_n_emp >= 0.95 ? "#3fb27f" : "#e0525b";
+      ctx.fillText(`P(rec)= ${sel.p_recover_at_n_emp.toFixed(4)}`, tx, ty); ty += 20;
+      ctx.fillStyle = MUTED;
+      ctx.font = "10px ui-monospace, monospace";
+      ctx.fillText(`δ = ${data.world && data.world.delta}`, tx, ty); ty += 12;
+      ctx.fillText("band: [min, max] over K", tx, ty);
+    }
+  }
+
+  const slider = makeSlider("K-index", 0, Math.max(0, rows.length - 1), 0, (v) => { idx = v; draw(); });
+  container.appendChild(slider);
+  draw();
 }
 
 // ---- Instrument 4 viz: click a quotient, see the partition ----

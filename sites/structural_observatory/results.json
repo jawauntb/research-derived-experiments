@@ -2028,5 +2028,123 @@
       }
     ],
     "trials_per_grid_point": 8
+  },
+  "concern_fisher_pair": {
+    "status": "pass",
+    "gates": {
+      "cg1_empirical_fisher_matches_predicted": true,
+      "cg1_fisher_is_diagonal_at_every_grid_point": true,
+      "cg2_rectangle_holonomy_matches_area_epsilon": true,
+      "cg2_triangle_holonomy_matches_half_epsilon": true
+    },
+    "world": {
+      "beta": 1.0,
+      "predicted_form": "g_{c,z} = beta^2 * diag(sech^2(beta c_1), sech^2(beta c_2))"
+    },
+    "cg1_records": [
+      { "c": [0.0, 0.0], "empirical_diag": [1.0, 1.0], "predicted_diag": [1.0, 1.0], "max_abs_diff": 0.0 },
+      { "c": [0.3, -0.2], "empirical_diag": [0.9151369618, 0.9610429830], "predicted_diag": [0.9151369618, 0.9610429830], "max_abs_diff": 1.11e-16 },
+      { "c": [0.8, 0.5], "empirical_diag": [0.5590551677, 0.7864477330], "predicted_diag": [0.5590551677, 0.7864477330], "max_abs_diff": 1.11e-16 },
+      { "c": [-0.4, 1.1], "empirical_diag": [0.8556387861, 0.3592013162], "predicted_diag": [0.8556387861, 0.3592013162], "max_abs_diff": 2.22e-16 }
+    ],
+    "cg2": {
+      "epsilon": 0.3,
+      "rectangle_area": 1.0,
+      "rectangle_holonomy_computed": 0.3,
+      "rectangle_holonomy_predicted": 0.3,
+      "triangle_area": 0.5,
+      "triangle_holonomy_computed": 0.15,
+      "triangle_holonomy_predicted": 0.15,
+      "rectangle_over_triangle_ratio": 2.0
+    }
+  },
+  "causal_semantics_pair": {
+    "status": "pass",
+    "gates": {
+      "cs1_psi_equivalence_is_reflexive_symmetric_transitive": true,
+      "cs2_psi_quotient_has_four_classes": true,
+      "cs2_psi_quotient_is_common_sufficient": true,
+      "cs_cooccurrence_partition_differs_from_psi_quotient": true
+    },
+    "world": {
+      "num_messages": 6,
+      "num_contexts": 4,
+      "num_future_states": 4,
+      "messages": ["m0", "m1", "m2", "m3", "m4", "m5"]
+    },
+    "psi_partition": [["m0", "m1"], ["m2", "m3"], ["m4"], ["m5"]],
+    "cooccurrence_partition": [["m0", "m2", "m4"], ["m1", "m3", "m5"]],
+    "psi_refines_cooccurrence": false,
+    "cooccurrence_refines_psi": false
+  },
+  "antecedent_taxonomy_pair": {
+    "status": "pass",
+    "gates": {
+      "sa1_cross_u_intersection_refines_true_Z": true,
+      "sa1_interventional_intersection_refines_true_Z": true,
+      "sa1_local_separation_at_every_antecedent": true,
+      "sa1_nontrivial_intersections_equal_true_Z": true
+    },
+    "world": { "true_Z_block_count": 4 },
+    "records": [
+      { "name": "LinearICA", "num_local_screens": 1, "local_screen_block_counts": [4], "intersection_block_count": 4, "intersection_equals_true_Z": true, "local_separation_holds": true, "cross_u_coherence_holds": true },
+      { "name": "SparseLinearICA", "num_local_screens": 1, "local_screen_block_counts": [4], "intersection_block_count": 4, "intersection_equals_true_Z": true, "local_separation_holds": true, "cross_u_coherence_holds": true },
+      { "name": "AuxIVAE", "num_local_screens": 2, "local_screen_block_counts": [2, 2], "intersection_block_count": 4, "intersection_equals_true_Z": true, "local_separation_holds": true, "cross_u_coherence_holds": true },
+      { "name": "InterventionalCRL", "num_local_screens": 3, "local_screen_block_counts": [4, 2, 2], "intersection_block_count": 4, "intersection_equals_true_Z": true, "local_separation_holds": true, "cross_u_coherence_holds": true }
+    ]
+  },
+  "sica_finite_derivation_pair": {
+    "status": "pass",
+    "gates": {
+      "fibration_structure_biconditional": true,
+      "fibre_normalisation_sums_to_one": true,
+      "lr_partition_equals_joint_parity_mss": true,
+      "t1_characterisation_biconditional": true
+    },
+    "world": {
+      "world_size": 16,
+      "n_theta": 4,
+      "n_fibres": 4,
+      "fibre_sizes": [4, 4, 4, 4],
+      "latent_Z_definition": "joint(parity{0,1}, parity{2,3}) on a 4-bit Boolean world"
+    },
+    "partition_agreement": {
+      "n_cells_lr": 4,
+      "n_cells_joint_parity_mss": 4,
+      "partitions_equal": true,
+      "cell_sizes_lr": [4, 4, 4, 4],
+      "cell_sizes_joint_parity_mss": [4, 4, 4, 4]
+    },
+    "fibration_structure": { "n_disagreements": 0, "n_pairs_checked": 64 },
+    "t1_characterisation": { "matched_pairs": 256, "n_disagreements": 0, "total_pairs": 256 }
+  },
+  "sicc_covering_meta_pair": {
+    "status": "pass",
+    "gates": {
+      "sicc_meta_above_pigeonhole_floor": true,
+      "sicc_meta_empirical_is_tight_by_one_sample": true,
+      "sicc_meta_empirical_meets_target": true,
+      "sicc_meta_fitted_c_stable_across_K": true
+    },
+    "world": {
+      "delta": 0.05,
+      "meta_theorem_form": "n >= c * K * log(K / delta)",
+      "stability_tol_pct": 0.2
+    },
+    "K_values": [8, 16, 32, 64, 128, 256],
+    "c_fitted": {
+      "min": 0.9359285362,
+      "max": 0.9952101451,
+      "mean": 0.9784830970,
+      "span_over_mean": 0.0605852151
+    },
+    "rows": [
+      { "K": 8, "c_fitted": 0.9359285362, "meta_bound_at_c1": 40.60139052, "n_emp": 38, "p_recover_at_n_emp": 0.9504505450, "p_recover_at_n_emp_minus_one": 0.9434669545 },
+      { "K": 16, "c_fitted": 0.9751537760, "meta_bound_at_c1": 92.29313593, "n_emp": 90, "p_recover_at_n_emp": 0.9526875380, "p_recover_at_n_emp_minus_one": 0.9495878561 },
+      { "K": 32, "c_fitted": 0.9817815126, "meta_bound_at_c1": 206.76698164, "n_emp": 203, "p_recover_at_n_emp": 0.9501718117, "p_recover_at_n_emp_minus_one": 0.9485985767 },
+      { "K": 64, "c_fitted": 0.9893089491, "meta_bound_at_c1": 457.89538284, "n_emp": 453, "p_recover_at_n_emp": 0.9500879271, "p_recover_at_n_emp_minus_one": 0.9493139238 },
+      { "K": 128, "c_fitted": 0.9935156629, "meta_bound_at_c1": 1004.51360480, "n_emp": 998, "p_recover_at_n_emp": 0.9501723809, "p_recover_at_n_emp_minus_one": 0.9497894638 },
+      { "K": 256, "c_fitted": 0.9952101451, "meta_bound_at_c1": 2186.47288782, "n_emp": 2176, "p_recover_at_n_emp": 0.9500161412, "p_recover_at_n_emp_minus_one": 0.9498249658 }
+    ]
   }
 }
