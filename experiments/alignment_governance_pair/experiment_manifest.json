@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "alignment_governance_pair",
+  "hypothesis": "On a 4-state Markov world with V={0,1,2}, unviable={3}, uniform random policy over actions {stay, move}, and per-step leakage rate beta=0.05 by construction, Theorem AG-1 predicts survival probability Pr[q(X_t) in V for all t <= T] >= (1-beta)^T at every T; on this world the bound is tight at every T. Theorem AG-2 predicts survival is trivially 1.0 when V is enlarged to Z (everything viable).",
+  "claim_tier": "theoretical",
+  "controls": [
+    { "control_id": "kernel_rows_sum_to_one", "description": "Every row of the induced 4x4 policy-averaged transition matrix sums to 1.0 (probability normalisation); checked in tests." },
+    { "control_id": "state_3_absorbing", "description": "The (3, 3) entry of the kernel equals 1.0 and all other entries in row 3 equal 0.0; the unviable state is absorbing so 'stays in V for all t' equals 'never visits 3'." },
+    { "control_id": "matrix_power_deterministic", "description": "Matrix powers are computed by repeated multiplication in pure Python; no randomness; identical output on every run." },
+    { "control_id": "row_sums_of_p_v_equal_1_minus_beta", "description": "Every row of the sub-matrix P_V on V sums to 1-beta=0.95 exactly (LEAK holds with equality uniformly), so the AG-1 bound is tight by construction on this world." }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/alignment_governance_pair/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    { "gate_id": "AGP_AG1_LOWER_BOUND_HOLDS_AT_EVERY_T", "criterion": "For every T in {1, 3, 5, 10, 20}, exact survival probability under the coarse Markov kernel restricted to V is >= (1 - beta)^T." },
+    { "gate_id": "AGP_AG1_LOWER_BOUND_TIGHTNESS", "criterion": "At T=1, exact survival probability equals (1 - beta) = 0.95 exactly (within 1e-12)." },
+    { "gate_id": "AGP_AG2_VIABILITY_INHERITED_BY_SUPERSET", "criterion": "When V is extended to V'=Z={0,1,2,3} (everything viable), the exact survival probability is 1.0 at every T (within 1e-12)." },
+    { "gate_id": "AGP_AG_SURVIVAL_MONOTONE_DECREASING_IN_T", "criterion": "Exact survival probability on V is weakly monotone non-increasing across the horizon sweep {1, 3, 5, 10, 20}." }
+  ],
+  "artifacts": [
+    { "kind": "summary", "path": "experiments/alignment_governance_pair/results/alignment_governance_pair_summary.json", "public": true },
+    { "kind": "other", "path": "experiments/alignment_governance_pair/preregistration.json", "public": true }
+  ],
+  "status": "accepted"
+}

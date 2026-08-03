@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "abstraction_frontier_pair",
+  "hypothesis": "Theorems AF-1 and AF-2 predict, on the 4-bit Boolean world with the shared-through-Z task family, that the Pareto frontier over (task-sufficiency, coding cost, dynamical closure, control regret) is a two-element antichain {constant, joint(parity{0,1}, parity{2,3})}: the constant map is the min-coding-cost endpoint, the CSS Z is the unique zero-task-sufficiency member on the frontier, and the identity is strictly dominated by Z in the static case where the two closure/regret axes are constant.",
+  "claim_tier": "theoretical",
+  "controls": [
+    { "control_id": "true_z_partition_from_direct_latent_map", "description": "The reference partition Z is computed directly from the ground-truth latent map latent_z(x) = (x_0 ^ x_1, x_2 ^ x_3), independent of any candidate quotient." },
+    { "control_id": "weak_dominance_is_transitive_and_irreflexive", "description": "weakly_dominates is verified by construction: it is irreflexive (a quotient never dominates itself since strict-on-one fails) and monotone under axis-wise inequalities." },
+    { "control_id": "static_axes_documented_as_convention", "description": "The dynamical_closure and control_regret axes are documented as constants (0) in this static example and cannot spuriously separate quotients; the effective Pareto reduces to (task_sufficiency, coding_cost)." }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/abstraction_frontier_pair/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    { "gate_id": "AF1_FRONTIER_IS_ANTICHAIN", "criterion": "No two Pareto-set members weakly dominate each other on all four axes with strict inequality on at least one." },
+    { "gate_id": "AF1_FRONTIER_CONTAINS_TRUE_Z", "criterion": "joint(parity{0,1}, parity{2,3}) is a member of the Pareto frontier." },
+    { "gate_id": "AF1_FRONTIER_CONTAINS_CONSTANT", "criterion": "The constant map is a member of the Pareto frontier." },
+    { "gate_id": "AF1_IDENTITY_IS_DOMINATED_IN_STATIC_CASE", "criterion": "The identity is strictly dominated by joint(parity{0,1}, parity{2,3}): both have task-sufficiency 0, and Z has strictly smaller coding cost." },
+    { "gate_id": "AF2_SUFFICIENT_FRONTIER_IS_TRUE_Z_ALONE", "criterion": "Among Pareto members with task-sufficiency 0, the only quotient is joint(parity{0,1}, parity{2,3})." },
+    { "gate_id": "AF2_NO_PARETO_STRICTLY_FINER_THAN_TRUE_Z", "criterion": "No Pareto member is strictly finer than joint(parity{0,1}, parity{2,3}) on the lattice; equivalently, the identity (the only strictly finer library element) is not on the frontier." }
+  ],
+  "artifacts": [
+    { "kind": "summary", "path": "experiments/abstraction_frontier_pair/results/abstraction_frontier_pair_summary.json", "public": true },
+    { "kind": "other", "path": "experiments/abstraction_frontier_pair/preregistration.json", "public": true }
+  ],
+  "status": "accepted"
+}
