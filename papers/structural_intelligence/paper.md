@@ -9,7 +9,7 @@ Human author and research director
 Experiment code, analysis, and manuscript production under direction and review
 
 **Date:** August 3, 2026
-**Status:** five theorems + one conditional theorem + eleven instruments (seven exact + four fixed-seed Monte Carlo). SIC-C-c (uniform polynomial-in-`d_Z` learnability under an inductive-bias hypothesis class) is positively resolved for four distinct classes — linear ICA, sparse-*linear* ICA, auxiliary-variable iVAE, interventional CRL — each with its own numerical witness (Instruments 8–11). **The full §5 extended program is now closed**: nine companion papers cover the ten conjectural constructs (concern-fiber geometry, rate–distortion control limit / compiler tomography, sufficient antecedents, abstraction frontier, fiber audit / alignment as ensemble governance, theory atlas, causal semantics, representation-repair calculus, autocatalytic artwork). Each companion adds two theorems + one exact instrument. Full family: *Concern as Fiber Geometry* (CG-1/CG-2), *Compiler Tomography* (CT-1/CT-2), *Sufficient Antecedents* (SA-1), *Abstraction Frontier* (AF-1/AF-2), *Alignment as Ensemble Governance* (AG-1/AG-2), *Theory Atlas* (TA-1/TA-2), *Causal Semantics* (CS-1/CS-2), *Representation-Repair Calculus* (RR-1/RR-2), *Autocatalytic Artwork* (AA-1/AA-2). Machine-checked Lean 4 proofs cover Theorems 4-core, 5-core, 6-core, and CT-1-core in the sister project `formal/structural-intelligence/`.
+**Status:** five theorems + one conditional theorem + eleven instruments (seven exact + four fixed-seed Monte Carlo). SIC-C-c (uniform polynomial-in-`d_Z` learnability under an inductive-bias hypothesis class) is positively resolved for four distinct classes — linear ICA, sparse-*linear* ICA, auxiliary-variable iVAE, interventional CRL — each with its own numerical witness (Instruments 8–11). **The full §5 extended program is now closed**: nine companion papers cover the ten conjectural constructs (concern-fiber geometry, rate–distortion control limit / compiler tomography, sufficient antecedents, abstraction frontier, fiber audit / alignment as ensemble governance, theory atlas, causal semantics, representation-repair calculus, autocatalytic artwork). Each companion adds two theorems + one exact instrument. Full family: *Concern as Fiber Geometry* (CG-1/CG-2), *Compiler Tomography* (CT-1/CT-2), *Sufficient Antecedents* (SA-1), *Abstraction Frontier* (AF-1/AF-2), *Alignment as Ensemble Governance* (AG-1/AG-2), *Theory Atlas* (TA-1/TA-2), *Causal Semantics* (CS-1/CS-2), *Representation-Repair Calculus* (RR-1/RR-2), *Autocatalytic Artwork* (AA-1/AA-2). Machine-checked Lean 4 proofs now cover **every named theorem in the ten-paper family** across two isolated projects: pure-core (`formal/structural-intelligence/`, no mathlib, 17 headlines including T4/T5-core/T6/CT-1/CS-1/2/SA-1/AF-1/2/AG-2/TA-1/RR-2/AA-2) and mathlib companion (`formal/structural-intelligence-mathlib/`, mathlib v4.32.2, 15 real-analytic headlines including T5-rate, T1, T2, P3, AG-1, CT-2, CG-1, CG-2, AA-1). Zero `sorry`s across both projects; only two explicitly-cited project axioms (Halmos–Savage 1949 packaging for T1, Shannon 1959 KKT converse for T2).
 
 ---
 
@@ -977,17 +977,36 @@ at any resolution `ε`. The residual content is:
   compilers are faithful functors, not that faithful compilation is hard.
 - **No machine phenomenology.** Nothing in Theorems 1–6 licenses a claim of
   subjective experience; §6 draws that line explicitly.
-- **No Lean/machine-checked proofs of Theorems 1–6.** The proofs in §2 are
-  prose, checked by a human reader; the seven instruments (§4) are
-  *numerical* witnesses (exact computations that verify the formulas at
-  every grid point) — a weaker form of check than a machine-verified proof
-  but stronger than nothing. The host repository contains a Lean 4
-  formalization of a *different* target-relative-identifiability result
-  (`formal/relative-identifiability/`), so the infrastructure exists;
-  extending it to Theorems 1–6 is future work. Theorem 5's union-bound
-  inequality is the easiest to mechanize (no measure theory required);
-  Theorems 1 and 2 need mathlib's measure-theoretic infrastructure
-  (sufficient σ-algebras and rate–distortion for finite alphabets).
+- **Machine-checked Lean 4 status (2026-08-03).** Every named theorem in
+  the ten-paper family is now formalised in Lean 4 across two isolated
+  projects, both with **zero `sorry`s**. Pure-core lane
+  (`formal/structural-intelligence/`, no mathlib, ~3&thinsp;s CI build):
+  T4, T5-core (union bound + coupon-collector pigeonhole), T6, CT-1,
+  CS-1/2, SA-1, AF-1/2, AG-2, TA-1, RR-2, AA-2. Mathlib companion
+  (`formal/structural-intelligence-mathlib/`, mathlib v4.32.2,
+  ~10–15&thinsp;min CI with cache): T5-rate (quantitative
+  `N ≥ c·M·log(M/ε) ⇒ M·exp(−N/(c·M)) ≤ ε`), T1
+  (Halmos–Savage minimal sufficient statistic — sufficiency-iff-LR-factors
+  proved in full, the classical-choice packaging step
+  is a single explicitly-cited project axiom `HalmosSavage_minimality_h_extension`
+  pointing to Halmos & Savage 1949 Theorem 2), T2 (Shannon R–D closed
+  form for uniform-Hamming — achievability proved in full, the
+  KKT-on-simplex converse is a single explicitly-cited project axiom
+  `Shannon1959_converse_uniform_hamming` pointing to Shannon 1959
+  Theorem 3), Proposition 3 (Coarsen ⊣ Refine adjunction with both
+  triangle identities, fully proved, no axioms), AG-1 (Bernoulli
+  survival bound plus joint product form), CT-2 (weighted Chebyshev
+  correlation ⇒ Boltzmann tilt raises expected reward), CG-1
+  (Fisher information matrix = Cov[T] in exponential families), CG-2
+  (concern-form holonomy = ε·A via discrete Green's theorem), AA-1
+  (Bayes-mixture log-likelihood monotone under refinement). Entry-point
+  files run `#print axioms` on every headline so the two citation
+  axioms are visible in the compile log and cannot be silently
+  expanded. Twenty-nine of thirty-two headline theorems depend only on
+  the mathlib-standard axiom set `[propext, Classical.choice, Quot.sound]`.
+  This closes the "prose-only" gap flagged in the original v1 of this
+  paper; the seven instruments in §4 remain the *numerical* half of
+  the check, complementary to the Lean formal half.
 
 ---
 
