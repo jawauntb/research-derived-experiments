@@ -1,0 +1,99 @@
+{
+  "classifications": {
+    "agent": "agency",
+    "baseline": "inert",
+    "brittle_controller": "brittle_control",
+    "control": "control",
+    "false_credit": "false_credit",
+    "knowledge_only": "knowledge",
+    "noise_signal": "signal_only"
+  },
+  "gates": {
+    "agency_transfers": true,
+    "brittle_control_does_not_transfer": true,
+    "false_credit_is_uncaused_and_miscalibrated": true,
+    "knowledge_dissociates_from_signal": true,
+    "signal_dissociates_from_control": true,
+    "taxonomy_recovered": true
+  },
+  "rows": [
+    {
+      "calibration_error": 0.0,
+      "claimed_goal_effect": 0.0,
+      "delta_kl": 0.0,
+      "intervention": "baseline",
+      "observed_goal_gain": 0.0,
+      "predictive_accuracy": 0.0,
+      "transfer": 0.0,
+      "true_goal_effect": 0.0,
+      "viability_gain": 0.0
+    },
+    {
+      "calibration_error": 0.0,
+      "claimed_goal_effect": 0.0,
+      "delta_kl": 2.535940001154,
+      "intervention": "noise_signal",
+      "observed_goal_gain": 0.0,
+      "predictive_accuracy": 0.0,
+      "transfer": 0.0,
+      "true_goal_effect": -0.0,
+      "viability_gain": 0.0
+    },
+    {
+      "calibration_error": 0.14,
+      "claimed_goal_effect": 0.18,
+      "delta_kl": 0.347591634269,
+      "intervention": "control",
+      "observed_goal_gain": 0.0,
+      "predictive_accuracy": 0.0,
+      "transfer": 0.385,
+      "true_goal_effect": 0.32,
+      "viability_gain": 0.27
+    },
+    {
+      "calibration_error": 0.0,
+      "claimed_goal_effect": 0.0,
+      "delta_kl": 0.0,
+      "intervention": "knowledge_only",
+      "observed_goal_gain": 0.0,
+      "predictive_accuracy": 1.0,
+      "transfer": 0.0,
+      "true_goal_effect": 0.0,
+      "viability_gain": 0.0
+    },
+    {
+      "calibration_error": 0.32,
+      "claimed_goal_effect": 0.32,
+      "delta_kl": 0.0,
+      "intervention": "false_credit",
+      "observed_goal_gain": 0.288,
+      "predictive_accuracy": 0.0,
+      "transfer": 0.0,
+      "true_goal_effect": 0.0,
+      "viability_gain": 0.0
+    },
+    {
+      "calibration_error": 0.0,
+      "claimed_goal_effect": 0.32,
+      "delta_kl": 0.347591634269,
+      "intervention": "agent",
+      "observed_goal_gain": 0.0,
+      "predictive_accuracy": 0.0,
+      "transfer": 0.385,
+      "true_goal_effect": 0.32,
+      "viability_gain": 0.27
+    },
+    {
+      "calibration_error": 0.0,
+      "claimed_goal_effect": 0.32,
+      "delta_kl": 0.347591634269,
+      "intervention": "brittle_controller",
+      "observed_goal_gain": 0.0,
+      "predictive_accuracy": 0.0,
+      "transfer": 0.0,
+      "true_goal_effect": 0.32,
+      "viability_gain": 0.27
+    }
+  ],
+  "status": "pass"
+}

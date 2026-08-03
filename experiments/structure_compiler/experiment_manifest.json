@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "structure_compiler",
+  "hypothesis": "One substrate-independent dynamical structure compiles into multiple media whose readbacks recover the identical abstract trajectory (verified structural identity).",
+  "claim_tier": "descriptive",
+  "controls": [
+    {
+      "control_id": "per_medium_readback_roundtrip",
+      "description": "Each medium's readback composed with its compiler must be the identity on the trajectory."
+    },
+    {
+      "control_id": "cross_medium_trajectory_equality",
+      "description": "All media must read back to the same abstract trajectory."
+    },
+    {
+      "control_id": "phase_transition_and_hysteresis_witness",
+      "description": "The structure must visit both regimes and show a mid-level in both regimes."
+    }
+  ],
+  "seeds": [
+    0
+  ],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python3",
+      "experiments/structure_compiler/experiment.py"
+    ],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "STRUCTCOMP_ALL_MEDIA_COMMUTE",
+      "criterion": "Every medium's readback-of-compile equals the identity on the trajectory."
+    },
+    {
+      "gate_id": "STRUCTCOMP_CROSS_MEDIUM_STRUCTURAL_IDENTITY",
+      "criterion": "All media read back to the same abstract trajectory."
+    },
+    {
+      "gate_id": "STRUCTCOMP_STRUCTURE_EXHIBITS_PHASE_TRANSITION",
+      "criterion": "The abstract structure visits both regimes."
+    },
+    {
+      "gate_id": "STRUCTCOMP_STRUCTURE_EXHIBITS_HYSTERESIS",
+      "criterion": "A level between the thresholds occurs in both regimes."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/structure_compiler/results/structure_compiler_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/structure_compiler/preregistration.json",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

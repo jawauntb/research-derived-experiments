@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "symbolic_causation",
+  "hypothesis": "Signal, control, knowledge, and agency dissociate; a false-credit intervention improves the outcome with zero true do-effect and miscalibrated self-attribution, and a brittle controller controls without transferring.",
+  "claim_tier": "causal",
+  "controls": [
+    {
+      "control_id": "baseline_identity_intervention",
+      "description": "An inert intervention anchoring zero signal and zero effect."
+    },
+    {
+      "control_id": "false_credit_exogenous_enrichment",
+      "description": "An inert intervention deployed under an exogenous environmental improvement, so observed gain is uncaused."
+    },
+    {
+      "control_id": "brittle_controller_perturbation_transfer",
+      "description": "A controller whose effect is measured under an environment perturbation it did not choose."
+    },
+    {
+      "control_id": "exact_trajectory_enumeration",
+      "description": "Finite-horizon trajectories are enumerated exactly, so every quantity is closed-form."
+    }
+  ],
+  "seeds": [
+    0
+  ],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python3",
+      "experiments/symbolic_causation/experiment.py"
+    ],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "SYMCAUSE_SIGNAL_DISSOCIATES_FROM_CONTROL",
+      "criterion": "noise_signal moves the distribution but does not raise goal_gain."
+    },
+    {
+      "gate_id": "SYMCAUSE_KNOWLEDGE_DISSOCIATES_FROM_SIGNAL",
+      "criterion": "knowledge_only predicts perfectly with delta_kl=0."
+    },
+    {
+      "gate_id": "SYMCAUSE_FALSE_CREDIT_UNCAUSED_MISCALIBRATED",
+      "criterion": "false_credit improves the observed outcome with zero true effect and large calibration error."
+    },
+    {
+      "gate_id": "SYMCAUSE_AGENCY_TRANSFERS",
+      "criterion": "The agent's effect survives the perturbation."
+    },
+    {
+      "gate_id": "SYMCAUSE_BRITTLE_CONTROL_NO_TRANSFER",
+      "criterion": "The brittle controller's effect does not survive the perturbation."
+    },
+    {
+      "gate_id": "SYMCAUSE_TAXONOMY_RECOVERED",
+      "criterion": "A fixed classifier assigns each condition its intended label."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/symbolic_causation/results/symbolic_causation_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/symbolic_causation/preregistration.json",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

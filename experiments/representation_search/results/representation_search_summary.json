@@ -1,0 +1,110 @@
+{
+  "gates": {
+    "accuracy_only_never_compresses": true,
+    "mdl_only_collapses_obstruction": true,
+    "minimal_sufficient_recovers_ground_truth": true,
+    "sufficiency_beats_accuracy_on_compression": true
+  },
+  "status": "pass",
+  "tasks": [
+    {
+      "description": "Target is the parity of three of six bits; the other three are pure noise.",
+      "ground_truth_quotient": "parity{0,1,2}",
+      "n_bits": 6,
+      "n_candidates": 65,
+      "selections": {
+        "accuracy_only": {
+          "chosen": "identity",
+          "description_length": 6.0,
+          "image_size": 64,
+          "mutual_information": 1.0,
+          "recovered_ground_truth": false,
+          "sufficient": true
+        },
+        "mdl_only": {
+          "chosen": "constant",
+          "description_length": 0.0,
+          "image_size": 1,
+          "mutual_information": 0.0,
+          "recovered_ground_truth": false,
+          "sufficient": false
+        },
+        "minimal_sufficient": {
+          "chosen": "parity{0,1,2}",
+          "description_length": 1.0,
+          "image_size": 2,
+          "mutual_information": 1.0,
+          "recovered_ground_truth": true,
+          "sufficient": true
+        }
+      },
+      "task": "three_bit_invariant"
+    },
+    {
+      "description": "Target is one coordinate; the minimal sufficient quotient reads one bit.",
+      "ground_truth_quotient": "parity{5}",
+      "n_bits": 6,
+      "n_candidates": 65,
+      "selections": {
+        "accuracy_only": {
+          "chosen": "identity",
+          "description_length": 6.0,
+          "image_size": 64,
+          "mutual_information": 1.0,
+          "recovered_ground_truth": false,
+          "sufficient": true
+        },
+        "mdl_only": {
+          "chosen": "constant",
+          "description_length": 0.0,
+          "image_size": 1,
+          "mutual_information": 0.0,
+          "recovered_ground_truth": false,
+          "sufficient": false
+        },
+        "minimal_sufficient": {
+          "chosen": "parity{5}",
+          "description_length": 1.0,
+          "image_size": 2,
+          "mutual_information": 1.0,
+          "recovered_ground_truth": true,
+          "sufficient": true
+        }
+      },
+      "task": "single_coordinate"
+    },
+    {
+      "description": "Target is global parity; sufficient quotient is one bit but needs every coordinate.",
+      "ground_truth_quotient": "parity{0,1,2,3,4,5}",
+      "n_bits": 6,
+      "n_candidates": 65,
+      "selections": {
+        "accuracy_only": {
+          "chosen": "identity",
+          "description_length": 6.0,
+          "image_size": 64,
+          "mutual_information": 1.0,
+          "recovered_ground_truth": false,
+          "sufficient": true
+        },
+        "mdl_only": {
+          "chosen": "constant",
+          "description_length": 0.0,
+          "image_size": 1,
+          "mutual_information": 0.0,
+          "recovered_ground_truth": false,
+          "sufficient": false
+        },
+        "minimal_sufficient": {
+          "chosen": "parity{0,1,2,3,4,5}",
+          "description_length": 1.0,
+          "image_size": 2,
+          "mutual_information": 1.0,
+          "recovered_ground_truth": true,
+          "sufficient": true
+        }
+      },
+      "task": "global_parity"
+    }
+  ]
+}

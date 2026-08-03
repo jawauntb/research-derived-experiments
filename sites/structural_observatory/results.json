@@ -1,0 +1,288 @@
+{
+  "representation_search": {
+    "gates": {
+      "accuracy_only_never_compresses": true,
+      "mdl_only_collapses_obstruction": true,
+      "minimal_sufficient_recovers_ground_truth": true,
+      "sufficiency_beats_accuracy_on_compression": true
+    },
+    "status": "pass",
+    "tasks": [
+      {
+        "description": "Target is the parity of three of six bits; the other three are pure noise.",
+        "ground_truth_quotient": "parity{0,1,2}",
+        "n_bits": 6,
+        "n_candidates": 65,
+        "selections": {
+          "accuracy_only": {
+            "chosen": "identity",
+            "description_length": 6.0,
+            "image_size": 64,
+            "mutual_information": 1.0,
+            "recovered_ground_truth": false,
+            "sufficient": true
+          },
+          "mdl_only": {
+            "chosen": "constant",
+            "description_length": 0.0,
+            "image_size": 1,
+            "mutual_information": 0.0,
+            "recovered_ground_truth": false,
+            "sufficient": false
+          },
+          "minimal_sufficient": {
+            "chosen": "parity{0,1,2}",
+            "description_length": 1.0,
+            "image_size": 2,
+            "mutual_information": 1.0,
+            "recovered_ground_truth": true,
+            "sufficient": true
+          }
+        },
+        "task": "three_bit_invariant"
+      },
+      {
+        "description": "Target is one coordinate; the minimal sufficient quotient reads one bit.",
+        "ground_truth_quotient": "parity{5}",
+        "n_bits": 6,
+        "n_candidates": 65,
+        "selections": {
+          "accuracy_only": {
+            "chosen": "identity",
+            "description_length": 6.0,
+            "image_size": 64,
+            "mutual_information": 1.0,
+            "recovered_ground_truth": false,
+            "sufficient": true
+          },
+          "mdl_only": {
+            "chosen": "constant",
+            "description_length": 0.0,
+            "image_size": 1,
+            "mutual_information": 0.0,
+            "recovered_ground_truth": false,
+            "sufficient": false
+          },
+          "minimal_sufficient": {
+            "chosen": "parity{5}",
+            "description_length": 1.0,
+            "image_size": 2,
+            "mutual_information": 1.0,
+            "recovered_ground_truth": true,
+            "sufficient": true
+          }
+        },
+        "task": "single_coordinate"
+      },
+      {
+        "description": "Target is global parity; sufficient quotient is one bit but needs every coordinate.",
+        "ground_truth_quotient": "parity{0,1,2,3,4,5}",
+        "n_bits": 6,
+        "n_candidates": 65,
+        "selections": {
+          "accuracy_only": {
+            "chosen": "identity",
+            "description_length": 6.0,
+            "image_size": 64,
+            "mutual_information": 1.0,
+            "recovered_ground_truth": false,
+            "sufficient": true
+          },
+          "mdl_only": {
+            "chosen": "constant",
+            "description_length": 0.0,
+            "image_size": 1,
+            "mutual_information": 0.0,
+            "recovered_ground_truth": false,
+            "sufficient": false
+          },
+          "minimal_sufficient": {
+            "chosen": "parity{0,1,2,3,4,5}",
+            "description_length": 1.0,
+            "image_size": 2,
+            "mutual_information": 1.0,
+            "recovered_ground_truth": true,
+            "sufficient": true
+          }
+        },
+        "task": "global_parity"
+      }
+    ]
+  },
+  "structure_compiler": {
+    "abstract_trajectory": [
+      {
+        "level": 0,
+        "regime": "low"
+      },
+      {
+        "level": 2,
+        "regime": "low"
+      },
+      {
+        "level": 4,
+        "regime": "low"
+      },
+      {
+        "level": 6,
+        "regime": "high"
+      },
+      {
+        "level": 5,
+        "regime": "high"
+      },
+      {
+        "level": 3,
+        "regime": "high"
+      },
+      {
+        "level": 1,
+        "regime": "low"
+      },
+      {
+        "level": 3,
+        "regime": "low"
+      },
+      {
+        "level": 6,
+        "regime": "high"
+      },
+      {
+        "level": 3,
+        "regime": "high"
+      },
+      {
+        "level": 4,
+        "regime": "high"
+      }
+    ],
+    "gates": {
+      "all_media_commute": true,
+      "cross_medium_structural_identity": true,
+      "structure_exhibits_hysteresis": true,
+      "structure_exhibits_phase_transition": true
+    },
+    "status": "pass",
+    "verification": {
+      "music": {
+        "commutes": true,
+        "fidelity": 1.0,
+        "length": 11
+      },
+      "spatial": {
+        "commutes": true,
+        "fidelity": 1.0,
+        "length": 11
+      },
+      "text": {
+        "commutes": true,
+        "fidelity": 1.0,
+        "length": 11
+      },
+      "visual": {
+        "commutes": true,
+        "fidelity": 1.0,
+        "length": 11
+      }
+    }
+  },
+  "symbolic_causation": {
+    "classifications": {
+      "agent": "agency",
+      "baseline": "inert",
+      "brittle_controller": "brittle_control",
+      "control": "control",
+      "false_credit": "false_credit",
+      "knowledge_only": "knowledge",
+      "noise_signal": "signal_only"
+    },
+    "gates": {
+      "agency_transfers": true,
+      "brittle_control_does_not_transfer": true,
+      "false_credit_is_uncaused_and_miscalibrated": true,
+      "knowledge_dissociates_from_signal": true,
+      "signal_dissociates_from_control": true,
+      "taxonomy_recovered": true
+    },
+    "rows": [
+      {
+        "calibration_error": 0.0,
+        "claimed_goal_effect": 0.0,
+        "delta_kl": 0.0,
+        "intervention": "baseline",
+        "observed_goal_gain": 0.0,
+        "predictive_accuracy": 0.0,
+        "transfer": 0.0,
+        "true_goal_effect": 0.0,
+        "viability_gain": 0.0
+      },
+      {
+        "calibration_error": 0.0,
+        "claimed_goal_effect": 0.0,
+        "delta_kl": 2.535940001154,
+        "intervention": "noise_signal",
+        "observed_goal_gain": 0.0,
+        "predictive_accuracy": 0.0,
+        "transfer": 0.0,
+        "true_goal_effect": -0.0,
+        "viability_gain": 0.0
+      },
+      {
+        "calibration_error": 0.14,
+        "claimed_goal_effect": 0.18,
+        "delta_kl": 0.347591634269,
+        "intervention": "control",
+        "observed_goal_gain": 0.0,
+        "predictive_accuracy": 0.0,
+        "transfer": 0.385,
+        "true_goal_effect": 0.32,
+        "viability_gain": 0.27
+      },
+      {
+        "calibration_error": 0.0,
+        "claimed_goal_effect": 0.0,
+        "delta_kl": 0.0,
+        "intervention": "knowledge_only",
+        "observed_goal_gain": 0.0,
+        "predictive_accuracy": 1.0,
+        "transfer": 0.0,
+        "true_goal_effect": 0.0,
+        "viability_gain": 0.0
+      },
+      {
+        "calibration_error": 0.32,
+        "claimed_goal_effect": 0.32,
+        "delta_kl": 0.0,
+        "intervention": "false_credit",
+        "observed_goal_gain": 0.288,
+        "predictive_accuracy": 0.0,
+        "transfer": 0.0,
+        "true_goal_effect": 0.0,
+        "viability_gain": 0.0
+      },
+      {
+        "calibration_error": 0.0,
+        "claimed_goal_effect": 0.32,
+        "delta_kl": 0.347591634269,
+        "intervention": "agent",
+        "observed_goal_gain": 0.0,
+        "predictive_accuracy": 0.0,
+        "transfer": 0.385,
+        "true_goal_effect": 0.32,
+        "viability_gain": 0.27
+      },
+      {
+        "calibration_error": 0.0,
+        "claimed_goal_effect": 0.32,
+        "delta_kl": 0.347591634269,
+        "intervention": "brittle_controller",
+        "observed_goal_gain": 0.0,
+        "predictive_accuracy": 0.0,
+        "transfer": 0.0,
+        "true_goal_effect": 0.32,
+        "viability_gain": 0.27
+      }
+    ],
+    "status": "pass"
+  }
+}

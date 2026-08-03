@@ -80,6 +80,17 @@ The downloaded PDFs, HTML snapshots, and extracted full text are intentionally l
 - **Real patterns** — Daniel Dennett, “Real Patterns” (1991): https://doi.org/10.2307/2027085 — motivates rival-pattern, compression, and held-out prediction tests for model-relative realism.
 - **Self-model theory** — Thomas Metzinger, *Being No One* (2003): https://mitpress.mit.edu/9780262633086/being-no-one/ — informs computational self-model comparisons while reinforcing the firewall against phenomenal-self claims.
 
+## Latent-Structures Meta-Framework Corpus
+
+Source set for [`notes/latent_structures_meta_framework.md`](../notes/latent_structures_meta_framework.md). Full-text PDFs and screenshots are local-only; links/IDs recorded here.
+
+- Category Theory Design (MIT LAMM): https://github.com/lamm-mit/CategoryTheoryDesign — functorial bio→engineered design pipeline (`Nat→Art→Spec→Comp`); assoc. *J. Mech. Phys. Solids* (2026).
+- Kiiskinen, Kivinen & Rivas, *Information-theoretic Limits on Programmatic Specification of Biological Systems*: bioRxiv https://doi.org/10.64898/2026.07.27.740886 (posted 2026-07-30) — coarse-graining threshold `C*`; genome as generator spec; physics substrate as "universal compiler"; specification as lossy compression. User-provided PDF, local-only.
+- OpenAI, *Ten Advances in Mathematics and Theoretical Computer Science* (Astra): https://openai.com/index/ten-advances-in-mathematics/ ; Lean certificates https://github.com/openai/ten-proofs
+- E. Wigner, *The Unreasonable Effectiveness of Mathematics in the Natural Sciences* (1960). User-provided PDF, local-only.
+- *How the Ideas Came Together: Mathematical Discovery Notes* — AI-authored reasoning-walkthrough companion to the OpenAI advances. User-provided PDF, local-only.
+- "Digital Rummage" (@feedfracture) structural-realism ontology thread (X, 2026-07-11), indebted to M. Levin — framing document / worldview, not peer-reviewed. User-provided screenshots, local-only.
+
 ## Local User-Provided Files
 
 These remain local-only:

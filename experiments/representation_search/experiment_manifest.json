@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "representation_search",
+  "hypothesis": "Sufficiency-then-compression recovers the ground-truth invariant where description-length minimization collapses the obstruction and accuracy maximization never compresses.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "mdl_only_selector",
+      "description": "A pure description-length-minimizing selector, which should collapse the obstruction."
+    },
+    {
+      "control_id": "accuracy_only_selector",
+      "description": "A pure mutual-information-maximizing selector, which should never compress."
+    },
+    {
+      "control_id": "exact_population_enumeration",
+      "description": "All 2**n worlds and all lattice quotients are enumerated, so metrics carry no sampling error."
+    }
+  ],
+  "seeds": [
+    0
+  ],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python3",
+      "experiments/representation_search/experiment.py"
+    ],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "REPSEARCH_MINIMAL_SUFFICIENT_RECOVERS_GROUND_TRUTH",
+      "criterion": "Sufficient-then-compress recovers the exact invariant in every task."
+    },
+    {
+      "gate_id": "REPSEARCH_MDL_ONLY_COLLAPSES_OBSTRUCTION",
+      "criterion": "Description-length minimization always selects an insufficient quotient."
+    },
+    {
+      "gate_id": "REPSEARCH_ACCURACY_ONLY_NEVER_COMPRESSES",
+      "criterion": "Mutual-information maximization always selects the identity."
+    },
+    {
+      "gate_id": "REPSEARCH_SUFFICIENCY_BEATS_ACCURACY_ON_COMPRESSION",
+      "criterion": "The minimal-sufficient quotient is strictly more compressed than the accuracy-only choice."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/representation_search/results/representation_search_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/representation_search/preregistration.json",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

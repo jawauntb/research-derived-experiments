@@ -1,0 +1,35 @@
+{
+  "experiment_id": "representation_search",
+  "schema_version": "1.0",
+  "hypothesis": "Over a Boolean world with a known invariant, a selector that keeps task information (H(Y|q(X))=0) and then minimizes description length recovers the ground-truth quotient, whereas pure description-length minimization collapses the obstruction and pure mutual-information maximization never compresses.",
+  "primary_metric": "minimal_sufficient.recovered_ground_truth",
+  "gates": {
+    "REPSEARCH_MINIMAL_SUFFICIENT_RECOVERS_GROUND_TRUTH": "The sufficient-then-compress selector recovers the exact ground-truth invariant in every task.",
+    "REPSEARCH_MDL_ONLY_COLLAPSES_OBSTRUCTION": "Pure description-length minimization always selects an insufficient quotient (H(Y|q(X))>0).",
+    "REPSEARCH_ACCURACY_ONLY_NEVER_COMPRESSES": "Pure mutual-information maximization always selects the identity (no compression).",
+    "REPSEARCH_SUFFICIENCY_BEATS_ACCURACY_ON_COMPRESSION": "The minimal-sufficient quotient is strictly more compressed than the accuracy-only choice."
+  },
+  "metrics": [
+    "mutual_information",
+    "conditional_entropy",
+    "description_length",
+    "image_size",
+    "sufficient"
+  ],
+  "tasks": [
+    "three_bit_invariant",
+    "single_coordinate",
+    "global_parity"
+  ],
+  "controls": [
+    "mdl_only_selector",
+    "accuracy_only_selector",
+    "exact_population_enumeration"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": null,
+    "sampling": "exact enumeration of all 2**n worlds and all quotients in the lattice",
+    "raw_data": false
+  }
+}

@@ -1294,20 +1294,6 @@
       ]
     },
     {
-      "package": "interventional_contrast",
-      "coverage_mode": "legacy_exception",
-      "legacy_exception": {
-        "owner": "Jawaun Brown",
-        "reason_code": "missing_package_manifest",
-        "explanation": "This legacy package predates package-root structured manifest coverage.",
-        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
-        "review_date": "2026-07-14",
-        "expiry_date": "2026-12-01",
-        "frozen_legacy_cutoff": "2026-07-14",
-        "adjudicates_claims": false
-      }
-    },
-    {
       "package": "information_limited_discovery",
       "coverage_mode": "structured_manifest",
       "manifest_path": "experiments/information_limited_discovery/experiment_manifest.json",
@@ -1338,6 +1324,20 @@
           }
         }
       ]
+    },
+    {
+      "package": "interventional_contrast",
+      "coverage_mode": "legacy_exception",
+      "legacy_exception": {
+        "owner": "Jawaun Brown",
+        "reason_code": "missing_package_manifest",
+        "explanation": "This legacy package predates package-root structured manifest coverage.",
+        "next_action": "Author a package-root manifest and exact run binding in a reviewed migration PR.",
+        "review_date": "2026-07-14",
+        "expiry_date": "2026-12-01",
+        "frozen_legacy_cutoff": "2026-07-14",
+        "adjudicates_claims": false
+      }
     },
     {
       "package": "lavoisier_phlogiston_corpus",
@@ -1727,6 +1727,35 @@
       ]
     },
     {
+      "package": "representation_search",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/representation_search/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "representation_search_2026_08_03",
+      "runs": [
+        {
+          "run_id": "representation_search_2026_08_03",
+          "publication_package": "representation_search",
+          "runtime_package": "representation_search",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/representation_search/experiment_manifest.json",
+          "report_paths": [
+            "experiments/representation_search/results/representation_search_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/representation_search/preregistration.json",
+          "preregistration_digest": "f5df041025e0b7a76b21d4118b1af9d8e8d68591f9b216835669cf534fd1d174",
+          "producing_agent": {
+            "identity": "Claude Code (agent, under J. Brown direction)",
+            "session_ref": "claude/latent-structures-meta-framework-j9pkkd"
+          }
+        }
+      ]
+    },
+    {
       "package": "role_specific_identifiability",
       "coverage_mode": "legacy_exception",
       "legacy_exception": {
@@ -1837,6 +1866,64 @@
         "frozen_legacy_cutoff": "2026-07-14",
         "adjudicates_claims": false
       }
+    },
+    {
+      "package": "structure_compiler",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/structure_compiler/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "structure_compiler_2026_08_03",
+      "runs": [
+        {
+          "run_id": "structure_compiler_2026_08_03",
+          "publication_package": "structure_compiler",
+          "runtime_package": "structure_compiler",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/structure_compiler/experiment_manifest.json",
+          "report_paths": [
+            "experiments/structure_compiler/results/structure_compiler_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/structure_compiler/preregistration.json",
+          "preregistration_digest": "9c5d3585def5d7e7ad139df0ced6ff3b9d66261c3f8ca119b2fff37eb6d593c3",
+          "producing_agent": {
+            "identity": "Claude Code (agent, under J. Brown direction)",
+            "session_ref": "claude/latent-structures-meta-framework-j9pkkd"
+          }
+        }
+      ]
+    },
+    {
+      "package": "symbolic_causation",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/symbolic_causation/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "symbolic_causation_2026_08_03",
+      "runs": [
+        {
+          "run_id": "symbolic_causation_2026_08_03",
+          "publication_package": "symbolic_causation",
+          "runtime_package": "symbolic_causation",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/symbolic_causation/experiment_manifest.json",
+          "report_paths": [
+            "experiments/symbolic_causation/results/symbolic_causation_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/symbolic_causation/preregistration.json",
+          "preregistration_digest": "a573f907fad862f44c5edf1204eff68cc273ab2f5ab21a6ef67df21a7705f4f5",
+          "producing_agent": {
+            "identity": "Claude Code (agent, under J. Brown direction)",
+            "session_ref": "claude/latent-structures-meta-framework-j9pkkd"
+          }
+        }
+      ]
     },
     {
       "package": "symbolic_weakness",
