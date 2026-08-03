@@ -192,6 +192,9 @@ Universal dispatcher: `python scripts/regen.py <name>`.
 | Package | Artifacts | Purpose | Modules / entrypoints |
 |---|---|---|---|
 | `weakness_vs_simplicity` | P R res | Toy Boolean worlds: weakness vs simplicity under memorizer / broad-negative stress | `experiment.py` |
+| `representation_search` | R res | Structural Observatory instrument 1 (Fiber Finder): exact quotient-lattice search; sufficiency-then-compress recovers the invariant where MDL and accuracy fail | `core.py`, `experiment.py` |
+| `structure_compiler` | R res | Structural Observatory instrument 2: one accumulation/phase-transition/hysteresis structure compiled into music/visual/text/spatial with verified structural identity (`q_i∘F_i=id`) | `core.py`, `experiment.py` |
+| `symbolic_causation` | R res | Structural Observatory instrument 3: exact finite-state agency benchmark separating signal / control / knowledge / agency; false-credit and brittle-transfer controls | `core.py`, `experiment.py` |
 | `symbolic_weakness` | P R res | Flagship: symmetry-compatible weakness beats loss/MDL/flatness for OOD | See §3.1.1 |
 | `rotation_weakness` | P res | Vision rotation-group weakness correlation | `neural.py`, `dataset.py` |
 | `learned_symmetry` | P res | Data-inferred equivariance predicts OOD without oracle symmetry | `sweep.py`, `causal_validation.py`, `transform_generator.py`, `modal_sweep.py`, `modal_causal_validation.py` |
@@ -1076,6 +1079,7 @@ Claim-bounded grounded-harness writeups also live under `docs/papers/`:
 |---|---|
 | `geometric_convergence_research_synthesis.md` | Master program synthesis |
 | `latent_structures_meta_framework.md` | Cross-work meta-framework: the Representation Adjunction (`R ⊣ C`) unifying six sources — CT-Design, Bio-Info-Limit, Ten-Advances, Wigner, the discovery notes, and a structural-realist ontology; unit defect / counit gap / coarse-graining monad |
+| `structural_intelligence_conjecture.md` | Structural Intelligence Conjecture + Structural Observatory: the stochastic-fibration master object `X→qZ, K:Z⇝X`, concern-as-fiber-geometry, ten constructs (rate–distortion control limit, abstraction frontier, fiber audit, theory atlas, compiler tomography, causal semantics, repair calculus, ensemble-governance alignment, autocatalytic art), and the Core⊂Shell conscious/reliable-agent architecture; drives instruments `representation_search`, `structure_compiler`, `symbolic_causation` |
 | `webb_miolane_fit.md` | Geometry-of-consciousness talk fit |
 | `weakness_topology_program_synthesis.md` | Publication-strategy ranking |
 | `reward_deformation_ratedistortion.md` | Rate-distortion law for Paper B |

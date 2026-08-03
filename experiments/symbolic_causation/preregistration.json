@@ -1,0 +1,44 @@
+{
+  "experiment_id": "symbolic_causation",
+  "schema_version": "1.0",
+  "hypothesis": "Treating a symbolic model as an operation on a system's future-trajectory distribution, signal (KL), control (goal gain), knowledge (predictive accuracy), and agency (control plus calibrated self-attribution plus transfer) dissociate: no single scalar identifies agency, a false-credit intervention improves the outcome with zero true do-effect and large calibration error, and a brittle controller controls without transferring.",
+  "primary_metric": "taxonomy_recovered",
+  "gates": {
+    "SYMCAUSE_SIGNAL_DISSOCIATES_FROM_CONTROL": "noise_signal moves the trajectory distribution (delta_kl>0) but does not raise goal_gain.",
+    "SYMCAUSE_KNOWLEDGE_DISSOCIATES_FROM_SIGNAL": "knowledge_only predicts outcomes with delta_kl=0.",
+    "SYMCAUSE_FALSE_CREDIT_UNCAUSED_MISCALIBRATED": "false_credit improves the observed outcome while its true do-effect is zero and calibration error is large.",
+    "SYMCAUSE_AGENCY_TRANSFERS": "The agent's do-effect survives an environment perturbation it did not choose.",
+    "SYMCAUSE_BRITTLE_CONTROL_NO_TRANSFER": "The brittle controller's effect does not survive the perturbation.",
+    "SYMCAUSE_TAXONOMY_RECOVERED": "A fixed threshold classifier assigns each condition its intended label."
+  },
+  "metrics": [
+    "delta_kl",
+    "true_goal_effect",
+    "observed_goal_gain",
+    "viability_gain",
+    "calibration_error",
+    "predictive_accuracy",
+    "transfer"
+  ],
+  "conditions": [
+    "baseline",
+    "noise_signal",
+    "control",
+    "knowledge_only",
+    "false_credit",
+    "agent",
+    "brittle_controller"
+  ],
+  "controls": [
+    "baseline_identity_intervention",
+    "false_credit_exogenous_enrichment",
+    "brittle_controller_perturbation_transfer",
+    "exact_trajectory_enumeration"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": null,
+    "sampling": "exact enumeration of finite-horizon trajectories; no sampling",
+    "raw_data": false
+  }
+}

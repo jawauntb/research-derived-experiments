@@ -1,0 +1,24 @@
+digraph navigation {
+  rankdir=LR;
+  s0 [label="n0/lower"];
+  s1 [label="n2/lower"];
+  s0 -> s1;
+  s2 [label="n4/lower"];
+  s1 -> s2;
+  s3 [label="n6/upper"];
+  s2 -> s3;
+  s4 [label="n5/upper"];
+  s3 -> s4;
+  s5 [label="n3/upper"];
+  s4 -> s5;
+  s6 [label="n1/lower"];
+  s5 -> s6;
+  s7 [label="n3/lower"];
+  s6 -> s7;
+  s8 [label="n6/upper"];
+  s7 -> s8;
+  s9 [label="n3/upper"];
+  s8 -> s9;
+  s10 [label="n4/upper"];
+  s9 -> s10;
+}

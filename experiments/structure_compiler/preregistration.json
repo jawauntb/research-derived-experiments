@@ -1,0 +1,35 @@
+{
+  "experiment_id": "structure_compiler",
+  "schema_version": "1.0",
+  "hypothesis": "A single substrate-independent dynamical structure (accumulation, phase transition, hysteresis) compiles into music, a visual field, text, and spatial navigation such that each medium's readback recovers the identical abstract trajectory, establishing verified cross-substrate structural identity rather than mood matching.",
+  "primary_metric": "verification.*.fidelity",
+  "gates": {
+    "STRUCTCOMP_ALL_MEDIA_COMMUTE": "For every medium the readback composed with the compiler is the identity on the trajectory (fidelity 1.0).",
+    "STRUCTCOMP_CROSS_MEDIUM_STRUCTURAL_IDENTITY": "All media read back to the same abstract trajectory.",
+    "STRUCTCOMP_STRUCTURE_EXHIBITS_PHASE_TRANSITION": "The abstract structure visits both regimes.",
+    "STRUCTCOMP_STRUCTURE_EXHIBITS_HYSTERESIS": "A level strictly between the two thresholds occurs in both regimes."
+  },
+  "metrics": [
+    "fidelity",
+    "commutes",
+    "length"
+  ],
+  "media": [
+    "music",
+    "visual",
+    "text",
+    "spatial"
+  ],
+  "controls": [
+    "per_medium_readback_roundtrip",
+    "cross_medium_trajectory_equality",
+    "phase_transition_witness",
+    "hysteresis_witness"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": null,
+    "sampling": "deterministic evolution of a fixed input schedule; no sampling",
+    "raw_data": false
+  }
+}

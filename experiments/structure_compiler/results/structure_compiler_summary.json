@@ -1,0 +1,77 @@
+{
+  "abstract_trajectory": [
+    {
+      "level": 0,
+      "regime": "low"
+    },
+    {
+      "level": 2,
+      "regime": "low"
+    },
+    {
+      "level": 4,
+      "regime": "low"
+    },
+    {
+      "level": 6,
+      "regime": "high"
+    },
+    {
+      "level": 5,
+      "regime": "high"
+    },
+    {
+      "level": 3,
+      "regime": "high"
+    },
+    {
+      "level": 1,
+      "regime": "low"
+    },
+    {
+      "level": 3,
+      "regime": "low"
+    },
+    {
+      "level": 6,
+      "regime": "high"
+    },
+    {
+      "level": 3,
+      "regime": "high"
+    },
+    {
+      "level": 4,
+      "regime": "high"
+    }
+  ],
+  "gates": {
+    "all_media_commute": true,
+    "cross_medium_structural_identity": true,
+    "structure_exhibits_hysteresis": true,
+    "structure_exhibits_phase_transition": true
+  },
+  "status": "pass",
+  "verification": {
+    "music": {
+      "commutes": true,
+      "fidelity": 1.0,
+      "length": 11
+    },
+    "spatial": {
+      "commutes": true,
+      "fidelity": 1.0,
+      "length": 11
+    },
+    "text": {
+      "commutes": true,
+      "fidelity": 1.0,
+      "length": 11
+    },
+    "visual": {
+      "commutes": true,
+      "fidelity": 1.0,
+      "length": 11
+    }
+  }
+}
