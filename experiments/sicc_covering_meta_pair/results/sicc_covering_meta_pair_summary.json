@@ -1,0 +1,76 @@
+{
+  "K_values": [
+    8,
+    16,
+    32,
+    64,
+    128,
+    256
+  ],
+  "c_fitted": {
+    "max": 0.995210145126909,
+    "mean": 0.9784830969985321,
+    "min": 0.9359285362290897,
+    "span_over_mean": 0.06058521509432701
+  },
+  "delta": 0.05,
+  "gates": {
+    "sicc_meta_above_pigeonhole_floor": true,
+    "sicc_meta_empirical_is_tight_by_one_sample": true,
+    "sicc_meta_empirical_meets_target": true,
+    "sicc_meta_fitted_c_stable_across_K": true
+  },
+  "meta_theorem_form": "n >= c * K * log(K / delta)",
+  "rows": [
+    {
+      "K": 8,
+      "c_fitted": 0.9359285362290897,
+      "meta_bound_at_c1": 40.60139052187061,
+      "n_emp": 38,
+      "p_recover_at_n_emp": 0.9504505449702444,
+      "p_recover_at_n_emp_minus_one": 0.9434669545233066
+    },
+    {
+      "K": 16,
+      "c_fitted": 0.9751537759604084,
+      "meta_bound_at_c1": 92.29313593270035,
+      "n_emp": 90,
+      "p_recover_at_n_emp": 0.9526875380094619,
+      "p_recover_at_n_emp_minus_one": 0.9495878560838182
+    },
+    {
+      "K": 32,
+      "c_fitted": 0.981781512631368,
+      "meta_bound_at_c1": 206.76698164331896,
+      "n_emp": 203,
+      "p_recover_at_n_emp": 0.9501718116873913,
+      "p_recover_at_n_emp_minus_one": 0.948598576660311
+    },
+    {
+      "K": 64,
+      "c_fitted": 0.9893089491051746,
+      "meta_bound_at_c1": 457.8953828424744,
+      "n_emp": 453,
+      "p_recover_at_n_emp": 0.9500879271489135,
+      "p_recover_at_n_emp_minus_one": 0.949313923775419
+    },
+    {
+      "K": 128,
+      "c_fitted": 0.993515662938243,
+      "meta_bound_at_c1": 1004.5136047966218,
+      "n_emp": 998,
+      "p_recover_at_n_emp": 0.9501723808653201,
+      "p_recover_at_n_emp_minus_one": 0.9497894637568316
+    },
+    {
+      "K": 256,
+      "c_fitted": 0.995210145126909,
+      "meta_bound_at_c1": 2186.4728878165897,
+      "n_emp": 2176,
+      "p_recover_at_n_emp": 0.9500161411750097,
+      "p_recover_at_n_emp_minus_one": 0.9498249657954377
+    }
+  ],
+  "stability_tol_pct": 0.2,
+  "status": "pass"
+}

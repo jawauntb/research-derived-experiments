@@ -1,0 +1,35 @@
+{
+  "experiment_id": "sicc_covering_meta_pair",
+  "schema_version": "1.0",
+  "hypothesis": "The SIC-C-c covering meta-theorem (StructuralIntelligenceMathlib.sicc_covering_meta) predicts n = c * K * log(K / delta) as the sample complexity to recover the fibration on an eps-cover of size K. On the coupon-collector realisation of eps-cover recovery in a K-cell rotational latent partition of a 2-D continuous space, the fitted constant c_fitted(K) = n_emp(K, delta) / (K * log(K / delta)) is stable to within 20% across K in {8, 16, 32, 64, 128, 256} with delta = 0.05, and each n_emp meets exact recovery probability >= 1 - delta while (n_emp - 1) does not (the empirical sample count is tight).",
+  "primary_metric": "c_fitted.span_over_mean",
+  "gates": {
+    "SICC_META_FITTED_C_STABLE_ACROSS_K": "The range (max c_fitted - min c_fitted) divided by mean c_fitted is <= 0.20 across the six K values {8, 16, 32, 64, 128, 256}. This is the sharp test: if c_fitted grows with K, the meta-theorem's constant c is not merely loose --- it has the wrong K-dependence and the composition (Theorem 6 * Theorem 5-rate) is empirically wrong for this controlled instance.",
+    "SICC_META_EMPIRICAL_MEETS_TARGET": "For every K in the sweep, exact inclusion-exclusion recovery probability at n_emp(K, delta) is >= 1 - delta = 0.95.",
+    "SICC_META_EMPIRICAL_IS_TIGHT_BY_ONE_SAMPLE": "For every K, exact recovery probability at (n_emp - 1) is strictly < 1 - delta, confirming the binary search returned the smallest N satisfying the target.",
+    "SICC_META_ABOVE_PIGEONHOLE_FLOOR": "For every K, n_emp >= K (pigeonhole on the coupon collector; recovering K distinct cells requires at least K samples)."
+  },
+  "metrics": [
+    "K",
+    "n_emp",
+    "meta_bound_at_c1",
+    "c_fitted",
+    "p_recover_at_n_emp",
+    "p_recover_at_n_emp_minus_one"
+  ],
+  "K_values": [8, 16, 32, 64, 128, 256],
+  "delta": 0.05,
+  "stability_tol_pct": 0.20,
+  "controls": [
+    "inclusion_exclusion_is_exact",
+    "binary_search_finds_tight_smallest_N",
+    "pigeonhole_floor_holds",
+    "monotonicity_of_recovery_in_N"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": null,
+    "sampling": "exact inclusion-exclusion on the coupon-collector recovery event; binary search for the smallest N meeting P(recovery) >= 1 - delta; no Monte Carlo",
+    "raw_data": false
+  }
+}

@@ -7,6 +7,8 @@ import StructuralIntelligenceMathlib.Proposition3Adjunction
 import StructuralIntelligenceMathlib.CG1FisherMatrix
 import StructuralIntelligenceMathlib.CG2Holonomy
 import StructuralIntelligenceMathlib.AA1MonotoneCompetence
+import StructuralIntelligenceMathlib.SICA_FiniteExistence
+import StructuralIntelligenceMathlib.SICC_CoveringMeta
 
 /-!
 # Structural Intelligence — Mathlib companion project
@@ -98,6 +100,36 @@ deferred:
   hypothesis-likelihood family and any finite prior — the arithmetic
   core of the Barron 1998 audience-competence bound.  No axioms.
 
+* `StructuralIntelligenceMathlib.sic_a_finite_discrete` and
+  `StructuralIntelligenceMathlib.sic_a_finite_discrete_coarsest` —
+  **SIC-A derived in the finite discrete positive-support case**
+  (companion paper: `papers/structural_intelligence_foundations/`).
+  Composes Theorem 1 (LR-vector as `q`) with Proposition 3's
+  fibre-supported / fibre-normalised kernel construction (uniform-on-
+  fibre `K`) to *derive* the master fibration `(q, K)` — reducing SIC-A
+  from a posit to a theorem in the finite discrete positive-support
+  case.  Coarsestness is inherited from T1's minimality
+  (`HalmosSavage_minimality_h_extension` remains the sole packaging
+  axiom; no new axioms).
+
+* `StructuralIntelligenceMathlib.sicc_covering_meta` and
+  `StructuralIntelligenceMathlib.sicc_covering_poly` —
+  **SIC-C-c covering meta-theorem (conditional)**: for any inductive-
+  bias hypothesis class `H` with ε-covering number `K` (resp.
+  `N(ε, H) ≤ f(1/ε)`), the sample complexity to recover the minimally
+  sufficient fibration on the finite ε-cover at accuracy ε with
+  confidence `1 − δ` is `N ≥ c · K · log(K/δ)` (resp.
+  `N ≥ c · f(1/ε) · log(f(1/ε)/δ)`).  Composition of
+  `theorem5_rate_bound` (quantitative rate on the finite cover) with
+  the pure-core ε-covering reduction
+  `StructuralIntelligence.refinement_preserves_screen`.  The
+  precondition — polynomial covering number `N(ε, H)` — separates
+  "H for which SIC-C-c holds" (poly-covered classes: linear ICA,
+  sparse-linear ICA, iVAE, interventional CRL) from
+  "H for which SIC-C-c provably fails" (Locatello 2019: fully-
+  unsupervised nonlinear ICA is exponentially-covered).  No new axioms
+  beyond those already used by `theorem5_rate_bound`.
+
 Why a separate project?  Mathlib introduces a heavy build (10–15 min
 first fetch) that would slow the pure-core CI job which currently
 compiles in seconds.  Keeping the two projects isolated lets the fast
@@ -130,3 +162,7 @@ lane stay fast while this project takes on the real-analysis work.
 #print axioms StructuralIntelligenceMathlib.aa1_log_mixture_ge_weighted_log
 #print axioms StructuralIntelligenceMathlib.aa1_log_mixture_ge_weighted_log_sample
 #print axioms StructuralIntelligenceMathlib.aa1_refinement_raises_lower_bound
+#print axioms StructuralIntelligenceMathlib.sic_a_finite_discrete
+#print axioms StructuralIntelligenceMathlib.sic_a_finite_discrete_coarsest
+#print axioms StructuralIntelligenceMathlib.sicc_covering_meta
+#print axioms StructuralIntelligenceMathlib.sicc_covering_poly

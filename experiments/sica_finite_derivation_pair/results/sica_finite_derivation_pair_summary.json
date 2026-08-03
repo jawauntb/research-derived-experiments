@@ -1,0 +1,73 @@
+{
+  "fibration_structure": {
+    "n_disagreements": 0,
+    "n_pairs_checked": 64
+  },
+  "fibre_normalisation": {
+    "n_z_checked": 4,
+    "per_z": [
+      {
+        "fibre_size": 4,
+        "sum_K": 1.0,
+        "sum_K_equals_one": true,
+        "z_index": 0
+      },
+      {
+        "fibre_size": 4,
+        "sum_K": 1.0,
+        "sum_K_equals_one": true,
+        "z_index": 1
+      },
+      {
+        "fibre_size": 4,
+        "sum_K": 1.0,
+        "sum_K_equals_one": true,
+        "z_index": 2
+      },
+      {
+        "fibre_size": 4,
+        "sum_K": 1.0,
+        "sum_K_equals_one": true,
+        "z_index": 3
+      }
+    ]
+  },
+  "fibre_sizes": [
+    4,
+    4,
+    4,
+    4
+  ],
+  "gates": {
+    "fibration_structure_biconditional": true,
+    "fibre_normalisation_sums_to_one": true,
+    "lr_partition_equals_joint_parity_mss": true,
+    "t1_characterisation_biconditional": true
+  },
+  "n_fibres": 4,
+  "n_theta": 4,
+  "partition_agreement": {
+    "cell_sizes_q": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "cell_sizes_reference": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "n_cells_q": 4,
+    "n_cells_reference": 4,
+    "partitions_equal": true
+  },
+  "status": "pass",
+  "t1_characterisation": {
+    "matched_pairs": 256,
+    "n_disagreements": 0,
+    "total_pairs": 256
+  },
+  "world_size": 16
+}
