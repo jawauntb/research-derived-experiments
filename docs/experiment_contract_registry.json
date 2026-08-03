@@ -222,6 +222,35 @@
       ]
     },
     {
+      "package": "compiler_tomography_pair",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/compiler_tomography_pair/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "compiler_tomography_pair_2026_08_03",
+      "runs": [
+        {
+          "run_id": "compiler_tomography_pair_2026_08_03",
+          "publication_package": "compiler_tomography_pair",
+          "runtime_package": "compiler_tomography_pair",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/compiler_tomography_pair/experiment_manifest.json",
+          "report_paths": [
+            "experiments/compiler_tomography_pair/results/compiler_tomography_pair_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/compiler_tomography_pair/preregistration.json",
+          "preregistration_digest": "55aedfb723978dac6c00f217a02f72212b47af26e822b05cc2d860823c87f665",
+          "producing_agent": {
+            "identity": "Claude Code (agent, under J. Brown direction)",
+            "session_ref": "claude/site-papers-and-instruments-7-8"
+          }
+        }
+      ]
+    },
+    {
       "package": "concept_geometry",
       "coverage_mode": "legacy_exception",
       "legacy_exception": {
@@ -1454,6 +1483,64 @@
         "frozen_legacy_cutoff": "2026-07-14",
         "adjudicates_claims": false
       }
+    },
+    {
+      "package": "interventional_crl_learnability",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/interventional_crl_learnability/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "interventional_crl_learnability_2026_08_03",
+      "runs": [
+        {
+          "run_id": "interventional_crl_learnability_2026_08_03",
+          "publication_package": "interventional_crl_learnability",
+          "runtime_package": "interventional_crl_learnability",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/interventional_crl_learnability/experiment_manifest.json",
+          "report_paths": [
+            "experiments/interventional_crl_learnability/results/interventional_crl_learnability_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/interventional_crl_learnability/preregistration.json",
+          "preregistration_digest": "66b43f4b5aeb44c550dd0da8f2847fdbade6088fd103d58a163e558eb2c12130",
+          "producing_agent": {
+            "identity": "Claude Code (agent, under J. Brown direction)",
+            "session_ref": "session_01Xhh5R34zzvcN9gEqqhMTVm"
+          }
+        }
+      ]
+    },
+    {
+      "package": "ivae_learnability",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/ivae_learnability/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "ivae_learnability_2026_08_03",
+      "runs": [
+        {
+          "run_id": "ivae_learnability_2026_08_03",
+          "publication_package": "ivae_learnability",
+          "runtime_package": "ivae_learnability",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/ivae_learnability/experiment_manifest.json",
+          "report_paths": [
+            "experiments/ivae_learnability/results/ivae_learnability_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/ivae_learnability/preregistration.json",
+          "preregistration_digest": "d80e5f7ec02730283b91437c58bea2a6749e67368995035c570866ec7aba3f8f",
+          "producing_agent": {
+            "identity": "Claude Code (agent, under J. Brown direction)",
+            "session_ref": "session_01Xhh5R34zzvcN9gEqqhMTVm"
+          }
+        }
+      ]
     },
     {
       "package": "lavoisier_phlogiston_corpus",

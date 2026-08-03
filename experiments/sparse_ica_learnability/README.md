@@ -1,18 +1,25 @@
-# Sparse-ICA Learnability (SIC-C-c second positive witness)
+# Sparse Linear-ICA Learnability (SIC-C-c second positive witness)
 
 Instrument 9 of the Structural Observatory (see
 [`notes/structural_intelligence_conjecture.md`](../../notes/structural_intelligence_conjecture.md)
 and [`papers/structural_intelligence/paper.md`](../../papers/structural_intelligence/paper.md) §2.5c).
 
 Hypothesis: paper §2.5c notes that after linear ICA (instrument 8)
-"other inductive-bias classes (sparse ICA, iVAE, interventional CRL)
-have their own analogues, each with its own sample-complexity theorem.
-A full SIC-C-c programme would add one more instrument per class."
-This is the sparse-mixing / **independent-mechanism analysis (IMA)**
-sibling (Gresele et al. 2021, *Independent Mechanism Analysis, a New
-Concept?*): a numerical witness that the IMA-style inductive bias also
-lifts Theorem 6's exponential-in-d_Z bound to uniform polynomial
-sample complexity.
+additional inductive-bias classes each earn their own SIC-C-c positive
+resolution. This instrument is the **sparse-linear-mixing** sibling:
+a numerical witness that adding sparsity to a linear mixing matrix keeps
+the sample-complexity uniformly polynomial in `d_Z`, matching Instrument
+8's rate.
+
+**Scope (important).** This is *sparse linear* ICA, not the full
+**nonlinear-mixing independent-mechanism analysis (IMA)** of
+[Gresele et al. 2021](https://arxiv.org/abs/2106.05200). Gresele's IMA
+concerns the geometry of the Jacobian columns of a *nonlinear* mixing
+function — a stronger identifiability construction than linear sparsity.
+Our setup captures the "sparser mixing → cleaner recovery" intuition
+inside the linear class, but does not exercise Gresele's nonlinear
+identification mechanism. A nonlinear-IMA instrument is a natural next
+addition to the Observatory.
 
 Method: for each `d_Z ∈ {2, 4, 6, 8}`, `N ∈ {200, 500, 1000, 2000,
 5000, 10000}`, and sparsity `s ∈ {0.5, 0.25}` we run `TRIALS = 8`

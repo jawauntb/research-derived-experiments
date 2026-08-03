@@ -12,6 +12,7 @@
   </head>
   <body>
     <header class="hero">
+      <canvas id="hero-canvas" width="1200" height="240"></canvas>
       <p class="eyebrow">Research demo · agent-generated, human-directed</p>
       <h1>The Structural Observatory</h1>
       <p class="lede">
@@ -56,9 +57,12 @@
     <main>
       <section class="intro">
         <p>
-          The eight panels below are <strong>exact, deterministic, and unit-tested</strong>
-          instruments in this repository. Each establishes a <em>dissociation</em> or
-          witnesses one of Theorems&nbsp;1, 2, 4, 5, 6, or&nbsp;7 on a solvable case.
+          The panels below are <strong>eleven Structural-Observatory instruments</strong>
+          plus a companion <em>Compiler Tomography</em> pair. Instruments 1&ndash;7 are
+          <strong>exact, deterministic</strong> witnesses of Theorems&nbsp;1, 2, 4, 5, 6
+          (or auxiliary dissociations). Instruments&nbsp;8&ndash;11 are
+          <strong>fixed-seed Monte Carlo</strong> witnesses of Theorem&nbsp;7
+          across four inductive-bias classes (linear, sparse-linear, iVAE, interventional).
           Results load live from the committed experiment summaries.
         </p>
         <p class="status" id="global-status">Loading results&hellip;</p>
@@ -71,14 +75,23 @@
             <a class="paper-download" href="paper.pdf" download>Download PDF</a>
             <span class="paper-title">
               <em>The Structural Intelligence Conjecture &mdash; Representation as a
-              Stochastic Fibration, with Six Exact Instruments</em>
+              Stochastic Fibration, with Eleven Instruments</em>
               (Aug 3, 2026, ~7pp)
             </span>
           </li>
           <li>
             <a href="https://github.com/jawauntb/research-derived-experiments/blob/main/papers/structural_intelligence/paper.md">Markdown source of the umbrella paper</a>
-            &mdash; the full derivation of Theorems 1&ndash;6, the SIC-A/B/C-a/C-b/C-c
-            honest split, and the extended ten-construct programme.
+            &mdash; the full derivation of Theorems 1&ndash;7, the SIC-A/B/C-a/C-b/C-c
+            honest split with C-c positively resolved for four inductive-bias
+            classes, and the extended ten-construct programme.
+          </li>
+          <li>
+            <a class="paper-download" href="https://github.com/jawauntb/research-derived-experiments/blob/main/papers/compiler_tomography/paper.pdf">Compiler-Tomography PDF</a>
+            <span class="paper-title">
+              <em>Compiler Tomography</em>
+              (third companion paper; Theorems CT-1 and CT-2 &mdash; MDL identifiability
+              of a shared compiler and monotone-reward ecology dynamics)
+            </span>
           </li>
           <li>
             <a href="https://github.com/jawauntb/research-derived-experiments/blob/main/notes/structural_intelligence_conjecture.md">Formal companion note</a>
@@ -255,47 +268,101 @@
         <div class="table-wrap" data-body></div>
       </section>
 
-      <section class="instrument" id="sparse_ica_learnability">
+      <section class="instrument" id="linear_ica_learnability">
         <div class="instrument-head">
-          <span class="badge">Instrument 9</span>
-          <h2>Sparse-ICA (IMA) Learnability &mdash; SIC-C-c, second class</h2>
+          <span class="badge">Instrument 8</span>
+          <h2>Linear-ICA Learnability &mdash; SIC-C-c, first class</h2>
         </div>
         <p class="instrument-blurb">
-          Second positive resolution of SIC-C-c: the independent-mechanism
-          analysis / sparse-mixing class (Gresele et al. 2021). Same shape as
-          Instrument 8 but with the mixing matrix <em>A</em> sparse-orthogonal
-          at retention <em>s</em>&nbsp;&isin;&nbsp;{0.5, 0.25}. All four gates
-          pass: convergence at <em>N&nbsp;=&nbsp;10000</em>, sparser mixing
-          improves recovery (IMA prediction), fitted polynomial exponents
-          <em>b</em>&nbsp;=&nbsp;0.00 (<em>s</em>=0.5) and <em>b</em>&nbsp;=&nbsp;0.51
-          (<em>s</em>=0.25), both well inside the pre-registered <em>b</em>&nbsp;&le;&nbsp;3.
-          Confirms that two distinct inductive-bias classes each earn escape
-          from Theorem&nbsp;6's &epsilon;-covering bound.
+          First positive resolution of SIC-C-c (linear ICA, Hyv&auml;rinen&ndash;Oja 1999,
+          restated in our framework as Theorem&nbsp;7). Fixed-seed
+          <code>sklearn.decomposition.FastICA</code> on <code>X&nbsp;=&nbsp;A&sdot;Z</code>
+          with random-orthogonal <em>A</em> and independent Laplace(0,1) latents, swept
+          <em>(d<sub>Z</sub>,&nbsp;N)</em>&nbsp;&isin;&nbsp;{2,4,6,8}&times;{200,500,1000,2000,5000,10000}.
+          Mean Amari at <em>N&nbsp;=&nbsp;10000</em> is <strong>&le;&nbsp;0.009</strong>
+          for every <em>d<sub>Z</sub></em>; fitted polynomial exponent
+          <strong><em>b</em>&nbsp;&asymp;&nbsp;0.06</strong>, gate <em>b</em>&nbsp;&le;&nbsp;3;
+          <strong>462&times;</strong> escape from Theorem&nbsp;6's &epsilon;-covering bound.
         </p>
         <div class="gates" data-gates></div>
         <div class="table-wrap" data-body></div>
       </section>
 
-      <section class="instrument" id="linear_ica_learnability">
+      <section class="instrument" id="sparse_ica_learnability">
         <div class="instrument-head">
-          <span class="badge">Instrument 8</span>
-          <h2>Linear-ICA Learnability &mdash; Theorem&nbsp;7 / SIC-C-c witness</h2>
+          <span class="badge">Instrument 9</span>
+          <h2>Sparse Linear-ICA Learnability &mdash; SIC-C-c, second class</h2>
         </div>
         <p class="instrument-blurb">
-          Positive resolution of SIC-C-c for the linear-ICA class. Fixed-seed
-          <code>sklearn.decomposition.FastICA</code> on
-          <code>X&nbsp;=&nbsp;A&sdot;Z</code> with random-orthogonal <em>A</em>
-          and independent Laplace(0,1) latents, swept across
-          <em>(d<sub>Z</sub>,&nbsp;N)</em>&nbsp;&isin;&nbsp;{2,4,6,8}&times;{200,500,1000,2000,5000,10000}.
-          Recovery measured by the Amari index on
-          <code>&Wcaron;&sdot;A</code>. At <em>N&nbsp;=&nbsp;10000</em> the mean
-          Amari over 8 trials is <strong>&le;&nbsp;0.009</strong> for every
-          <em>d<sub>Z</sub></em>; the fitted polynomial exponent is
-          <strong><em>b</em>&nbsp;&asymp;&nbsp;0.06</strong>, well inside the pre-registered
-          gate <em>b</em>&nbsp;&le;&nbsp;3. Adding the linear-ICA inductive
-          bias earns a <strong>462&times;</strong> escape from Theorem&nbsp;6's
-          &epsilon;-covering exponential-in-<em>d<sub>Z</sub></em> bound. The
-          only Monte Carlo instrument in the Observatory; all others are exact.
+          Second positive resolution of SIC-C-c: the <em>sparse-linear-mixing</em>
+          class. Same shape as Instrument 8 but with <em>A</em> a sparse-orthogonal
+          matrix at retention <em>s</em>&nbsp;&isin;&nbsp;{0.5, 0.25}. All four
+          gates pass; sparser mixing gives modestly better recovery (better
+          conditioning), fitted exponents <em>b</em>&nbsp;=&nbsp;0.00 (<em>s</em>=0.5)
+          and <em>b</em>&nbsp;=&nbsp;0.51 (<em>s</em>=0.25), gate
+          <em>b</em>&nbsp;&le;&nbsp;3. <strong>Caveat.</strong> This is
+          <em>sparse&nbsp;linear</em> ICA, not the full nonlinear-mixing
+          independent-mechanism analysis of Gresele&nbsp;et&nbsp;al.&nbsp;2021 (which
+          concerns the Jacobian-column geometry of a nonlinear mixing map). The
+          IMA nonlinear instrument is a natural next addition.
+        </p>
+        <div class="gates" data-gates></div>
+        <div class="table-wrap" data-body></div>
+      </section>
+
+      <section class="instrument" id="ivae_learnability">
+        <div class="instrument-head">
+          <span class="badge">Instrument 10</span>
+          <h2>iVAE Learnability &mdash; SIC-C-c, third class</h2>
+        </div>
+        <p class="instrument-blurb">
+          Third positive resolution of SIC-C-c: auxiliary-variable identifiable ICA
+          (Khemakhem&ndash;Kingma&ndash;Monti&ndash;Hyv&auml;rinen 2020). Latent
+          <em>Z<sub>i</sub></em>&nbsp;|&nbsp;<em>U</em>&nbsp;&sim;&nbsp;Laplace(&mu;<sub>i</sub>(U), 1)
+          conditional on a discrete auxiliary <em>U</em>; per-conditional FastICA
+          aggregated by global Amari. Amari&nbsp;&le;&nbsp;0.033 at
+          <em>N</em>&nbsp;=&nbsp;10000 for every <em>d<sub>Z</sub></em>&nbsp;&in;&nbsp;{2, 4, 6};
+          fitted polynomial exponent <em>b</em>&nbsp;&approx;&nbsp;1.23 (gate&nbsp;&le;&nbsp;4);
+          escape ratio &sim;&thinsp;23&times; from Theorem&nbsp;6's bound.
+        </p>
+        <div class="gates" data-gates></div>
+        <div class="table-wrap" data-body></div>
+      </section>
+
+      <section class="instrument" id="interventional_crl_learnability">
+        <div class="instrument-head">
+          <span class="badge">Instrument 11</span>
+          <h2>Interventional CRL &mdash; SIC-C-c, fourth class</h2>
+        </div>
+        <p class="instrument-blurb">
+          Fourth positive resolution of SIC-C-c: single-node interventional causal
+          representation learning (Ahuja&ndash;Mahajan&ndash;Wang&ndash;Bengio 2022).
+          For each latent component the observational distribution is replaced by a
+          shifted intervention distribution; per-environment FastICA with an
+          intervention-shift alignment achieves environment-consistency
+          Amari&nbsp;&le;&nbsp;0.20 at the largest per-environment N, and the
+          split strictly beats the pooled control &mdash; interventions carry
+          genuine identifying information.
+        </p>
+        <div class="gates" data-gates></div>
+        <div class="table-wrap" data-body></div>
+      </section>
+
+      <section class="instrument" id="compiler_tomography_pair">
+        <div class="instrument-head">
+          <span class="badge">Companion</span>
+          <h2>Compiler Tomography &mdash; Theorems CT-1, CT-2 witness</h2>
+        </div>
+        <p class="instrument-blurb">
+          Companion to
+          <a href="https://github.com/jawauntb/research-derived-experiments/blob/main/papers/compiler_tomography/paper.md">
+            <em>Compiler Tomography</em></a>. MDL over a 25-point concern-parameter
+          grid recovers the true compiler <em>&theta;*</em>&nbsp;=&nbsp;(0,&nbsp;0)
+          with rate&nbsp;&ge;&nbsp;0.95 by <em>N</em>&nbsp;=&nbsp;2000 paired samples
+          (Theorem CT-1); the Boltzmann ecology update <em>K<sub>t+1</sub></em>&nbsp;&prop;
+          <em>K<sub>t</sub></em>&sdot;exp(&beta;&thinsp;<em>r</em>) is monotone non-decreasing
+          in per-fiber expected reward at every <em>&beta;</em>&nbsp;&in;&nbsp;{0.1, 1.0, 4.0},
+          and converges to the fiber argmax at <em>&beta;</em>&nbsp;=&nbsp;4 (Theorem CT-2).
         </p>
         <div class="gates" data-gates></div>
         <div class="table-wrap" data-body></div>
@@ -333,12 +400,16 @@
             grid.
           </li>
           <li>
-            <strong>Is (open):</strong> SIC-C-c &mdash; uniform polynomial-in-<em>d<sub>Z</sub></em>
-            learnability under a specific inductive-bias hypothesis class. This
-            is where the identifiable-representation-learning line (linear ICA,
-            iVAE 2020, interventional CRL 2022, sparse-mechanism analysis) does
-            its work; a theorem for a specific such class is the natural next
-            piece of the Observatory.
+            <strong>Is (positively resolved for four inductive-bias classes so far):</strong>
+            SIC-C-c &mdash; uniform polynomial-in-<em>d<sub>Z</sub></em> learnability.
+            Impossible without inductive bias (&epsilon;-covering lower bounds +
+            Locatello 2019). Theorem&nbsp;7 in the paper restates the classical
+            positive resolutions inside four hypothesis classes, each with a
+            numerical instrument in the Observatory: linear ICA (I8), sparse
+            <em>linear</em> ICA (I9), auxiliary-variable iVAE (I10), and
+            interventional CRL (I11). Additional classes &mdash; the full nonlinear
+            IMA of Gresele et al. 2021, contrastive-learning identifiability, and
+            others &mdash; are natural next instruments.
           </li>
           <li>
             <strong>Is not:</strong> a proof of universal agency or of infallibility.

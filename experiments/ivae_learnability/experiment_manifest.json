@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "ivae_learnability",
+  "hypothesis": "Under the auxiliary-variable identifiable-ICA / iVAE class of Khemakhem, Kingma, Monti, Hyvarinen 2020 (Z with location-shift Laplace conditionals Z_i | U ~ Laplace(mu_i(U), 1) at K = 2 * d_Z auxiliary levels, mixing X = A * Z with A Haar-orthogonal), the per-conditional linear-ICA fallback --- sklearn FastICA per u-bucket, averaged Amari across non-skipped u values --- achieves Amari index <= 0.10 at N = 10000 for every d_Z in {2, 4, 6}; the Amari(N) curve is nonincreasing modulo a 0.02 wobble tolerance; the smallest N reaching Amari <= 0.15 grows only polynomially in d_Z with fitted log-log slope b <= 4.0; and the iVAE sample complexity at d_Z = 6 is at least 5x below the Theorem 6 exponential bound (D_Z=1, eps=0.25, eps_rel=0.05, c=1) = 46341. This is the third partial positive resolution of SIC-C-c after linear-ICA (instrument 8) and sparse-ICA / IMA (instrument 9), witnessing that the auxiliary-variable identifiability class also lifts Theorem 6's exponential-in-d_Z bound to uniform polynomial sample complexity.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "deterministic_from_base_seed",
+      "description": "All randomness derives from BASE_SEED = 0 via numpy SeedSequence keyed by (BASE_SEED, d_Z, trial); sklearn FastICA random_state = trial * 1000 + u so each per-conditional fit has a distinct but deterministic seed. Running twice yields identical Amari values at every grid point."
+    },
+    {
+      "control_id": "nested_prefix_sampling_within_trial",
+      "description": "Within each (d_Z, trial) pair, one (offsets, mixing, us-stream, noise-stream) tuple is drawn at max(N_VALUES) and every smaller N re-uses the first N samples as a prefix, so the sample-complexity curve varies only in N."
+    },
+    {
+      "control_id": "averaging_over_eight_trials_smooths_finite_sample_noise",
+      "description": "Amari is averaged over TRIALS = 8 independent draws per grid point; per-conditional FastICA variance is smoothed enough that monotonicity holds within a 0.02 tolerance."
+    },
+    {
+      "control_id": "amari_of_identity_and_signed_permutation_is_zero",
+      "description": "The Amari index is verified in the unit tests to be exactly 0 on the identity matrix and on any signed permutation matrix (the ICA identifiability class), and > 0.5 on the all-ones mixture."
+    },
+    {
+      "control_id": "skipped_bucket_count_logged_per_grid_point",
+      "description": "u-buckets with fewer than max(2*d_Z, 10) samples are skipped and the per-trial skipped-bucket count is emitted in the summary under 'skipped_bucket_counts', so any grid point where the per-conditional average was computed from a reduced set of u values is auditable."
+    }
+  ],
+  "seeds": [
+    0
+  ],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": [
+      "python3",
+      "experiments/ivae_learnability/experiment.py"
+    ],
+    "estimated_minutes": 2,
+    "max_cost_usd": 0
+  },
+  "dependencies": [
+    {"name": "numpy", "version": "==2.5.1"},
+    {"name": "scikit-learn", "version": "==1.9.0"}
+  ],
+  "gates": [
+    {
+      "gate_id": "IVAE_CONVERGES_AT_LARGEST_N",
+      "criterion": "Averaged Amari at N = 10000 is <= 0.10 for every d_Z in {2, 4, 6}."
+    },
+    {
+      "gate_id": "IVAE_MONOTONE_IN_N_AT_EVERY_D_Z",
+      "criterion": "For every d_Z in {2, 4, 6}, the averaged Amari curve is nonincreasing in N modulo a numerical tolerance of 0.02."
+    },
+    {
+      "gate_id": "IVAE_POLYNOMIAL_IN_D_Z",
+      "criterion": "For every d_Z in {2, 4, 6} there is a smallest N reaching averaged Amari <= 0.15; the fitted log-log slope b of log(N_needed) = a + b * log(d_Z) is <= 4.0."
+    },
+    {
+      "gate_id": "IVAE_ESCAPES_THEOREM_6",
+      "criterion": "At d_Z = 6, the iVAE sample complexity to reach Amari <= 0.15 is at least 5x below the Theorem 6 bound ceil(1 * (1/0.25)^{6} * ln((1/0.25)^{6} / 0.05)) = 46341."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/ivae_learnability/results/ivae_learnability_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/ivae_learnability/preregistration.json",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}
