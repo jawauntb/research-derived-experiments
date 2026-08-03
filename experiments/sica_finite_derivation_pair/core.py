@@ -58,7 +58,7 @@ arithmetic.
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from fractions import Fraction
 from itertools import product
 
@@ -316,7 +316,7 @@ def check_fibre_normalisation(
 
 
 def _partition_of(
-    worlds: Sequence[World], stat: dict[World, object]
+    worlds: Sequence[World], stat: Mapping[World, object]
 ) -> list[frozenset[World]]:
     """Return the fibre partition of a statistic (as a sorted list of frozensets)."""
 
@@ -346,7 +346,7 @@ def check_partition_agreement(
 ) -> dict:
     """Compare the LR-vector partition to the reference joint-parity partition, bit-exact."""
 
-    part_q = _partition_of(worlds, q)  # type: ignore[arg-type]
+    part_q = _partition_of(worlds, q)
     part_ref = known_joint_parity_partition(worlds)
     return {
         "n_cells_q": len(part_q),
