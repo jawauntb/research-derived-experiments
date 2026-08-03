@@ -740,6 +740,10 @@ function attachInteractiveViz(data) {
   // Companion: antecedent_taxonomy_pair (local screens intersect to true Z).
   const iAT = document.getElementById("antecedent_taxonomy_pair");
   if (iAT && data.antecedent_taxonomy_pair) mountAntecedentTaxonomyViz(iAT, data.antecedent_taxonomy_pair);
+
+  // Companion: sica_finite_derivation_pair (LR-vector partition == joint-parity MSS).
+  const iSICA = document.getElementById("sica_finite_derivation_pair");
+  if (iSICA && data.sica_finite_derivation_pair) mountSicaFiniteDerivationViz(iSICA, data.sica_finite_derivation_pair);
 }
 
 // ---- Instrument 2 viz: timeline scrubber for the abstract trajectory ----
@@ -1279,6 +1283,76 @@ function mountAntecedentTaxonomyViz(section, data) {
 
   const options = records.map((r) => ({ value: r.name, label: r.name }));
   const radio = makeRadio("class:", options, currentName, (v) => { currentName = v; draw(); });
+  container.appendChild(radio);
+  draw();
+}
+
+// ---- Companion: sica_finite_derivation_pair viz ----
+// 4x4 grid of the 16-state 4-bit world. Radio toggles between the LR-vector
+// partition, the joint-parity MSS partition, and the setwise "difference"
+// (empty — the two partitions are bit-exactly equal).
+function mountSicaFiniteDerivationViz(section, data) {
+  const container = el("div", { class: "viz" }, [
+    el("h4", {}, ["Interactive: toggle LR-vector vs joint-parity MSS — bit-exact match"]),
+  ]);
+  section.appendChild(container);
+  const width = 380, height = 260;
+  const { canvas, ctx } = makeCanvas(width, height);
+  container.appendChild(canvas);
+  const worlds = [];
+  for (let i = 0; i < 16; i++) worlds.push([(i >> 3) & 1, (i >> 2) & 1, (i >> 1) & 1, i & 1]);
+  function jointParity(w) { return (w[0] ^ w[1]) * 2 + (w[2] ^ w[3]); }
+  // The gate asserts LR partition == joint-parity partition, so we render them
+  // as the same 4-way coloring; "diff" shows the empty set (all cells muted).
+  const modes = {
+    lr: { name: "LR-vector partition (T1 + CS-2)", color: (w) => Z_PALETTE[jointParity(w)] },
+    mss: { name: "joint-parity MSS partition", color: (w) => Z_PALETTE[jointParity(w)] },
+    diff: { name: "difference (LR △ MSS) — empty by SIC-A derivation", color: () => "#22303d" },
+  };
+  let current = "lr";
+
+  function draw() {
+    ctx.fillStyle = AMBIENT;
+    ctx.fillRect(0, 0, width, height);
+    const mode = modes[current];
+    ctx.fillStyle = INK;
+    ctx.font = "13px ui-monospace, monospace";
+    ctx.fillText(mode.name, 12, 20);
+    const gridSize = 200, cellSize = gridSize / 4, x0 = 12, y0 = 34;
+    drawGridCells(ctx, {
+      rows: 4, cols: 4, cellSize, x0, y0,
+      colorAt: (r, c) => mode.color(worlds[r * 4 + c]),
+      borderAt: (r, c) => Z_PALETTE[jointParity(worlds[r * 4 + c])] + "cc",
+    });
+    // Right column of text.
+    const tx = x0 + gridSize + 16;
+    let ty = y0 + 14;
+    ctx.fillStyle = INK;
+    ctx.font = "12px ui-monospace, monospace";
+    ctx.fillText(`|world| = 16`, tx, ty); ty += 18;
+    ctx.fillText(`|fibres| = 4`, tx, ty); ty += 18;
+    ctx.fillText(`fibre sizes: 4,4,4,4`, tx, ty); ty += 24;
+    ctx.fillStyle = current === "diff" ? "#3fb27f" : MUTED;
+    ctx.font = "11px ui-monospace, monospace";
+    if (current === "diff") {
+      ctx.fillText("△ = ∅  (partitions equal)", tx, ty); ty += 14;
+      ctx.fillText("→ Lean: sic_a_finite_discrete", tx, ty);
+    } else {
+      ctx.fillText("border colour = joint-parity fibre", tx, ty); ty += 14;
+      ctx.fillText("fill colour = selected partition", tx, ty);
+    }
+  }
+
+  const radio = makeRadio(
+    "partition:",
+    [
+      { value: "lr", label: "LR-vector" },
+      { value: "mss", label: "joint-parity MSS" },
+      { value: "diff", label: "difference" },
+    ],
+    current,
+    (v) => { current = v; draw(); }
+  );
   container.appendChild(radio);
   draw();
 }

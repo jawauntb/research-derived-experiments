@@ -2092,5 +2092,30 @@
       { "name": "AuxIVAE", "num_local_screens": 2, "local_screen_block_counts": [2, 2], "intersection_block_count": 4, "intersection_equals_true_Z": true, "local_separation_holds": true, "cross_u_coherence_holds": true },
       { "name": "InterventionalCRL", "num_local_screens": 3, "local_screen_block_counts": [4, 2, 2], "intersection_block_count": 4, "intersection_equals_true_Z": true, "local_separation_holds": true, "cross_u_coherence_holds": true }
     ]
+  },
+  "sica_finite_derivation_pair": {
+    "status": "pass",
+    "gates": {
+      "fibration_structure_biconditional": true,
+      "fibre_normalisation_sums_to_one": true,
+      "lr_partition_equals_joint_parity_mss": true,
+      "t1_characterisation_biconditional": true
+    },
+    "world": {
+      "world_size": 16,
+      "n_theta": 4,
+      "n_fibres": 4,
+      "fibre_sizes": [4, 4, 4, 4],
+      "latent_Z_definition": "joint(parity{0,1}, parity{2,3}) on a 4-bit Boolean world"
+    },
+    "partition_agreement": {
+      "n_cells_lr": 4,
+      "n_cells_joint_parity_mss": 4,
+      "partitions_equal": true,
+      "cell_sizes_lr": [4, 4, 4, 4],
+      "cell_sizes_joint_parity_mss": [4, 4, 4, 4]
+    },
+    "fibration_structure": { "n_disagreements": 0, "n_pairs_checked": 64 },
+    "t1_characterisation": { "matched_pairs": 256, "n_disagreements": 0, "total_pairs": 256 }
   }
 }
