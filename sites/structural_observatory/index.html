@@ -191,31 +191,45 @@
 
         <h3 style="margin-top: 24px; font-size: 16px; color: var(--ink);">Machine-checked Lean 4 proofs</h3>
         <p style="color: var(--muted); font-size: 14px; margin: 6px 0 10px;">
-          <strong>Partial &mdash; four theorem-cores out of ~20 named theorems.</strong>
-          The <a href="https://github.com/jawauntb/research-derived-experiments/tree/main/formal/structural-intelligence">
-          <code>formal/structural-intelligence/</code></a> Lean 4 project uses pure Lean
-          core (no mathlib), builds in ~3&thinsp;s in CI, and has zero
-          <code>sorry</code>s. The other ~16 theorems have prose proofs only &mdash;
-          each Lean formalisation is a separate follow-up.
+          <strong>All named theorems in the ten-paper family are now Lean-formalised.</strong>
+          Two isolated Lean 4 projects: a fast pure-core lane
+          (<a href="https://github.com/jawauntb/research-derived-experiments/tree/main/formal/structural-intelligence"><code>formal/structural-intelligence/</code></a>,
+          no mathlib, builds in ~3&thinsp;s) covers the combinatorial and algebraic cores;
+          a mathlib companion
+          (<a href="https://github.com/jawauntb/research-derived-experiments/tree/main/formal/structural-intelligence-mathlib"><code>formal/structural-intelligence-mathlib/</code></a>,
+          mathlib v4.32.2, ~10&ndash;15&nbsp;min cold CI with cache) covers everything that
+          needs the real numbers, exp/log, or exponential-family calculus.
+          <strong>Zero <code>sorry</code>s</strong> across both projects; two explicitly-cited project axioms
+          (Halmos&ndash;Savage 1949 packaging for T1, Shannon 1959 KKT converse for T2).
         </p>
         <ul class="paper-list">
           <li>
-            <strong>Lean-verified</strong>: Theorem&nbsp;4-core
-            (common-sufficient-screen functional refinement,
-            <code>CommonSuffScreen.lean</code>);
-            Theorem&nbsp;5-core (union bound + coupon-collector pigeonhole,
-            <code>UnionBound.lean</code> + <code>Pigeonhole.lean</code> +
-            <code>CouponCollector.lean</code>);
-            Theorem&nbsp;6-core (refinement composition,
-            <code>Refinement.lean</code>);
-            Theorem&nbsp;CT-1-core (identifiability &rArr; uniqueness,
-            <code>CompilerTomography.lean</code>).
+            <strong>Pure-core lane (algebraic / combinatorial cores)</strong>:
+            Theorem&nbsp;4 (common-sufficient-screen functional refinement),
+            Theorem&nbsp;5-core (union bound + coupon-collector pigeonhole),
+            Theorem&nbsp;6 (refinement composition),
+            Theorems CT-1, CS-1/2, SA-1, AF-1/2, AG-2, TA-1, RR-2, AA-2. All in
+            <code>StructuralIntelligence/*.lean</code>. 17 named-headline theorems total.
           </li>
           <li>
-            <strong>Prose proofs only</strong>: Theorems 1, 2, 3 (need mathlib
-            measure theory / rate&ndash;distortion / category theory); the
-            quantitative <em>rates</em> of Theorems 5 and 6 (need reals + exp);
-            CG-1/2, CT-2, SA-1, AF-1/2, AG-1/2, TA-1/2, CS-1/2, RR-1/2, AA-1/2.
+            <strong>Mathlib companion (real-analytic / measure-theoretic)</strong>:
+            Theorem&nbsp;5-rate (quantitative sample complexity, N &ge; c&middot;M&middot;log(M/&epsilon;) &rArr; M&middot;exp(&minus;N/(c&middot;M)) &le; &epsilon;),
+            Theorem&nbsp;1 (Halmos&ndash;Savage minimal sufficient statistic; sufficiency-iff-LR-factors proved in full, packaging step cited),
+            Theorem&nbsp;2 (Shannon R&ndash;D closed form for uniform Hamming; achievability proved, converse cited),
+            Proposition&nbsp;3 (Coarsen &#x22A3; Refine adjunction, both triangle identities),
+            Theorem&nbsp;AG-1 (Bernoulli survival bound, joint product form),
+            Theorem&nbsp;CT-2 (Chebyshev-weighted correlation &rArr; Boltzmann raises expected reward),
+            Theorem&nbsp;CG-1 (Fisher matrix = Cov[T] in exponential families),
+            Theorem&nbsp;CG-2 (concern-form holonomy = &epsilon;&middot;A via discrete Green's theorem),
+            Theorem&nbsp;AA-1 (Bayes-mixture log-likelihood monotone under refinement).
+            All in <code>StructuralIntelligenceMathlib/*.lean</code>. 15 named-headline theorems total.
+          </li>
+          <li>
+            <strong>Axiom footprint (from <code>#print axioms</code> on every headline)</strong>:
+            29 of 32 headlines depend only on the mathlib-standard axiom set
+            <code>[propext, Classical.choice, Quot.sound]</code>. Two headlines (T1 minimality, T2 converse)
+            each add one explicitly-cited project axiom pointing to the classical result Mathlib does not yet expose.
+            No hidden <code>sorry</code>s anywhere.
           </li>
         </ul>
       </section>
