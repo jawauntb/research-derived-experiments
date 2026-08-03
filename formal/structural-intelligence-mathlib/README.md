@@ -17,7 +17,7 @@ that the pure-core project cannot see.
 | Project                                | Depends on          | Theorems                                                                                 |
 | -------------------------------------- | ------------------- | ---------------------------------------------------------------------------------------- |
 | `formal/structural-intelligence/`      | Lean 4 core only    | Algebraic cores: Theorems 4, 5-union-bound, 5-pigeonhole, 6-refinement, CT-1, CS-1/2, SA-1, AF-1/2, AG-2, TA-1, RR-2, AA-2 |
-| `formal/structural-intelligence-mathlib/` (this)  | Lean 4 + mathlib    | Real-analytic: Theorem 5 quantitative rate, AG-1 survival bound, CT-2 monotone-reward core, Theorem 1 (Halmos–Savage minimal sufficient statistic), Theorem 2 (Shannon rate–distortion, uniform-Hamming closed form), Proposition 3 (Coarsen ⊣ Refine adjunction), Theorem CG-1 (Fisher information = covariance of sufficient statistic), Theorem CG-2 (concern holonomy = enclosed signed area), Theorem AA-1 (Bayes-mixture predictive log-likelihood lower bound) |
+| `formal/structural-intelligence-mathlib/` (this)  | Lean 4 + mathlib    | Real-analytic: Theorem 5 quantitative rate, AG-1 survival bound, CT-2 monotone-reward core, Theorem 1 (Halmos–Savage minimal sufficient statistic), Theorem 2 (Shannon rate–distortion, uniform-Hamming closed form), Proposition 3 (Coarsen ⊣ Refine adjunction), Theorem CG-1 (Fisher information = covariance of sufficient statistic), Theorem CG-2 (concern holonomy = enclosed signed area), Theorem AA-1 (Bayes-mixture predictive log-likelihood lower bound), **SIC-A derived in the finite discrete positive-support case**, **SIC-C-c covering meta-theorem (conditional)** |
 
 Keeping the two projects separate lets the fast Lean CI job stay fast
 (around three seconds) while this project takes on the multi-minute
@@ -401,6 +401,75 @@ the Barron-1998 audience-competence bound.
   `Finset.sum_le_sum` for the RHS-boost, then the core Jensen
   inequality closes to the mixture log-likelihood.
 
+### SIC-A derived in the finite discrete positive-support case — `StructuralIntelligenceMathlib/SICA_FiniteExistence.lean`
+
+Companion paper: `papers/structural_intelligence_foundations/paper.md`.
+The Structural Intelligence Conjecture opens with SIC-A: the existence
+of a master fibration `(q : X → Z, K : Z ⇝ X)` with
+`supp K(·|z) ⊆ q⁻¹(z)`.  In the parent paper the fibration is
+*posited*; this file **derives** SIC-A in the finite discrete
+positive-support case by composing already-verified components.
+
+* `StructuralIntelligenceMathlib.sic_a_finite_discrete` — **the derived
+  SIC-A statement**.  Given a finite non-empty sample space `α`, a
+  finite parameter set `Θ`, a strictly-positive pmf family
+  `P : Θ → α → ℝ`, and any pivot `θ₀ ∈ Θ`, exhibits a finite target
+  type `Z` (with `Fintype` and `DecidableEq` instances), a partition
+  map `q : α → Z`, and a kernel `K : Z → α → ℝ` such that (a) `q` is
+  sufficient for `P` (from Theorem 1's
+  `likelihoodRatioVector_sufficient`), (b) `K` is fibre-supported
+  (`K z x = 0` whenever `q x ≠ z`, from Proposition 3's side
+  condition, made concrete for our uniform-on-fibre `K`), and (c) `K`
+  is fibre-normalised on the image of `q` (`∑ x, K z x = 1` for every
+  `z ∈ image(q)`, second-disjunct branch retained for signature
+  honesty for `z ∉ image(q)`).  Construction: `q :=
+  likelihoodRatioVector P θ₀`, `Z := image(q)` as a Finset-subtype of
+  `(Θ → ℝ)`, `K(z, x) := |q⁻¹(z)|⁻¹` if `q x = z` else `0`.  Axiom
+  footprint: `[propext, Classical.choice, Quot.sound]` — **zero new
+  project-local axioms**.
+
+* `StructuralIntelligenceMathlib.sic_a_finite_discrete_coarsest` — the
+  minimality corollary.  The LR-vector-induced quotient is coarsest
+  among common sufficient statistics — every other sufficient `T'`
+  refines it.  Direct call to
+  `exists_minimal_sufficient_finite_discrete`, so it *inherits*
+  `HalmosSavage_minimality_h_extension` (the Halmos–Savage 1949
+  packaging axiom).  No new axiom introduced here.
+
+### SIC-C-c covering meta-theorem (conditional) — `StructuralIntelligenceMathlib/SICC_CoveringMeta.lean`
+
+Companion paper:
+`papers/structural_intelligence_covering_learnability/paper.md`.
+The parent paper posits SIC-C-c (uniform polynomial-in-`d_Z`
+learnability of the minimally sufficient fibration `q`) as an
+unconditional conjecture, then splits it *per inductive-bias class*
+via Instruments 8–11.  This file **closes SIC-C-c conditionally** by
+composing Theorem 5-rate (`theorem5_rate_bound`) with the pure-core
+Theorem 6 ε-covering reduction
+(`StructuralIntelligence.refinement_preserves_screen`):
+
+* `StructuralIntelligenceMathlib.sicc_covering_meta` — for a
+  hypothesis class with ε-covering number `K` (`K ≥ 1`), any sample
+  count `N ≥ c · K · log(K / δ)` yields the family-level failure
+  probability bound `K · exp(- N / (c·K)) ≤ δ`.  Direct call to
+  `theorem5_rate_bound` with `M := K, ε := δ`.
+
+* `StructuralIntelligenceMathlib.sicc_covering_poly` — packaging
+  under the polynomial-covering hypothesis `N(ε, H) ≤ f(1/ε)`.  For
+  `K ≤ f(1/ε)`, `N ≥ c · f(1/ε) · log(f(1/ε) / δ)` gives the same
+  failure-probability bound.  Uses log-monotonicity
+  (`Real.log_le_log`) and `div_le_div_of_nonneg_right` to chain
+  `c · K · log(K/δ) ≤ c · f(1/ε) · log(f(1/ε)/δ) ≤ N`, then invokes
+  `sicc_covering_meta`.
+
+Axiom footprint: `[propext, Classical.choice, Quot.sound]` for both —
+**zero new project-local axioms**.  The precondition
+(polynomial ε-covering number) is sharp: it holds for linear ICA,
+sparse-linear ICA, iVAE, interventional CRL (each having
+`N(ε, H) ≤ (1/ε)^{poly(d_Z)}`), and provably fails for Locatello
+2019's fully-unsupervised nonlinear ICA (dense diffeomorphism cover,
+`N(ε, H) = exp(Ω(d_Z))`).
+
 ## Mathlib lemmas reused
 
 | Lemma                                     | Where                                                   | Used for                                    |
@@ -435,14 +504,25 @@ depend only on the standard Lean 4 axioms `propext`,
 `Classical.choice`, and `Quot.sound` (i.e. no extra axioms beyond
 what mathlib itself uses).
 
-Nine of the eleven theorem-family headlines depend only on Mathlib's
+Ten of the twelve theorem-family headlines depend only on Mathlib's
 axiom base (`propext`, `Classical.choice`, `Quot.sound`).  The three
-new headlines added in this second wave —
+new headlines added in the second wave —
 `cg1_fisher_matrix_eq_covariance` and its scalar/derivative
 companions, `cg2_holonomy_equals_signed_area` and its Riemann-sum
 companions, and `aa1_log_mixture_ge_weighted_log` with its
 sample-form and refinement-monotonicity corollaries — introduce
-**zero** additional project-local axioms.
+**zero** additional project-local axioms.  The third-wave headline
+`sic_a_finite_discrete` (SIC-A derived in the finite discrete
+positive-support case, `SICA_FiniteExistence.lean`) also introduces
+**zero** additional project-local axioms; only its coarsestness
+corollary `sic_a_finite_discrete_coarsest` inherits
+`HalmosSavage_minimality_h_extension` transitively from Theorem 1.
+The fourth-wave headlines `sicc_covering_meta` and
+`sicc_covering_poly` (SIC-C-c covering meta-theorem,
+`SICC_CoveringMeta.lean`) close the SIC-C-c conjecture *conditionally*
+by composing Theorem 5-rate (this project) with Theorem 6's
+ε-covering reduction (pure-core `refinement_preserves_screen`); both
+introduce **zero** additional project-local axioms.
 
 Two theorems from the first wave make honest use of an additional
 **project-local `axiom`** each, with an inline citation:

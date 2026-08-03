@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "sica_finite_derivation_pair",
+  "hypothesis": "On the 4-bit Boolean world with parameter set Theta = {(0,0), (0,1), (1,0), (1,1)} of joint-parity concentrations and Laplace-smoothed pmf P(theta, x) = (P_hat + 1/16) / 2 (P_hat concentrates mass 1/4 on the 4 worlds sharing theta's joint parity), the LR-vector construction q(x) := (theta |-> P(theta, x) / P(theta_0, x)) with theta_0 = (0, 0) and the uniform-on-fibre kernel K(z, x) := 1 / |q^{-1}(z)| * 1[q(x) = z] jointly realise SIC-A: (1) q(x) = q(x') iff the pmf cross-multiplication identity holds for every theta pair (Theorem 1); (2) K(z, x) > 0 iff q(x) = z (fibration structure); (3) sum_x K(z, x) = 1 for every z in image(q) (fibre normalisation, Proposition 3 side condition); (4) q's partition of X equals the joint-parity reference MSS x |-> (parity{0,1}(x), parity{2,3}(x)) bit-exact (four fibres of four worlds each).",
+  "claim_tier": "theoretical",
+  "controls": [
+    { "control_id": "exact_rational_arithmetic", "description": "Every entry uses Python's fractions.Fraction for bit-exact arithmetic; the smoothed pmf takes only the values 5/32 (on-fibre) and 1/32 (off-fibre), so both the LR-vector and its equality checks are exact." },
+    { "control_id": "positive_support_via_task_spec_laplace_smoothing", "description": "P(theta, x) = (P_hat + 1/16) / 2 is strictly positive on X for every theta (matches the T1 hypothesis 'forall theta x, 0 < P theta x'); the +1/16 value is the task-spec Laplace smoothing." },
+    { "control_id": "reference_mss_is_joint_parity_latent", "description": "The reference minimal sufficient statistic is the parent paper's known Instrument-4 joint-parity latent x |-> (parity{0,1}(x), parity{2,3}(x)); partition equality is checked as a set-of-frozensets identity, not via floating-point tolerance." }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/sica_finite_derivation_pair/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    { "gate_id": "SFDP_T1_CHARACTERISATION_BICONDITIONAL", "criterion": "For all pairs (x, x') in X * X (256 pairs on the 16-world cube), q(x) = q(x') <=> P(theta, x) * P(theta', x') = P(theta, x') * P(theta', x) for every (theta, theta') in Theta * Theta." },
+    { "gate_id": "SFDP_FIBRATION_STRUCTURE_BICONDITIONAL", "criterion": "For every (z, x) in image(q) * X, K(z, x) > 0 <=> q(x) = z." },
+    { "gate_id": "SFDP_FIBRE_NORMALISATION_SUMS_TO_ONE", "criterion": "For every z in image(q), sum_x K(z, x) = 1 exactly (rational arithmetic)." },
+    { "gate_id": "SFDP_LR_PARTITION_EQUALS_JOINT_PARITY_MSS", "criterion": "The LR-vector-induced fibre partition of X equals the joint-parity reference partition {x : (parity{0,1}(x), parity{2,3}(x)) = (i, j)} bit-exact (four fibres of four worlds each)." }
+  ],
+  "artifacts": [
+    { "kind": "summary", "path": "experiments/sica_finite_derivation_pair/results/sica_finite_derivation_pair_summary.json", "public": true },
+    { "kind": "other", "path": "experiments/sica_finite_derivation_pair/preregistration.json", "public": true }
+  ],
+  "status": "accepted"
+}

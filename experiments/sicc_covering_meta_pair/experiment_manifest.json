@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "sicc_covering_meta_pair",
+  "hypothesis": "The SIC-C-c covering meta-theorem (Lean-verified as StructuralIntelligenceMathlib.sicc_covering_meta and sicc_covering_poly) predicts n_emp(K, delta) = c * K * log(K / delta) for a single class-independent constant c. On the controlled continuous space (2-D Gaussian world with rotational latent quantised to a K-bin eps-cover), the coupon-collector recovery event (each of the K eps-cover cells hit at least once in N uniform iid samples) has smallest recovery-achieving N whose ratio n_emp / (K * log(K/delta)) is stable to within 20% across K in {8, 16, 32, 64, 128, 256}, and empirically approaches 1 from below at large K.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "inclusion_exclusion_is_exact",
+      "description": "Recovery probability P(all K cells hit in N iid samples) is computed by the classical inclusion-exclusion sum over K+1 terms; no Monte Carlo, no seed dependence, exact in double precision at K <= 256."
+    },
+    {
+      "control_id": "binary_search_finds_tight_smallest_n",
+      "description": "n_emp is defined as the smallest N with P(recovery) >= 1 - delta, verified by checking that P(recovery, n_emp - 1) < 1 - delta at every K in the sweep."
+    },
+    {
+      "control_id": "pigeonhole_floor_holds",
+      "description": "For every K, n_emp >= K (recovering K distinct cells requires at least K samples). Verified directly."
+    },
+    {
+      "control_id": "monotonicity_of_recovery_in_n",
+      "description": "P(recovery) is nondecreasing in N by a coupling argument (extra samples never uncollect a cell); the binary search relies on this monotonicity."
+    }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/sicc_covering_meta_pair/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "SICC_META_FITTED_C_STABLE_ACROSS_K",
+      "criterion": "(max c_fitted - min c_fitted) / mean c_fitted <= 0.20 across K in {8, 16, 32, 64, 128, 256}."
+    },
+    {
+      "gate_id": "SICC_META_EMPIRICAL_MEETS_TARGET",
+      "criterion": "For every K, exact recovery probability at n_emp is >= 1 - delta = 0.95."
+    },
+    {
+      "gate_id": "SICC_META_EMPIRICAL_IS_TIGHT_BY_ONE_SAMPLE",
+      "criterion": "For every K, exact recovery probability at n_emp - 1 is < 1 - delta = 0.95 (n_emp is not one larger than needed)."
+    },
+    {
+      "gate_id": "SICC_META_ABOVE_PIGEONHOLE_FLOOR",
+      "criterion": "For every K, n_emp >= K."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/sicc_covering_meta_pair/results/sicc_covering_meta_pair_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/sicc_covering_meta_pair/preregistration.json",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

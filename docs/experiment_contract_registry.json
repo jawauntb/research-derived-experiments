@@ -2275,6 +2275,64 @@
       }
     },
     {
+      "package": "sica_finite_derivation_pair",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/sica_finite_derivation_pair/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "sica_finite_derivation_pair_2026_08_03",
+      "runs": [
+        {
+          "run_id": "sica_finite_derivation_pair_2026_08_03",
+          "publication_package": "sica_finite_derivation_pair",
+          "runtime_package": "sica_finite_derivation_pair",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/sica_finite_derivation_pair/experiment_manifest.json",
+          "report_paths": [
+            "experiments/sica_finite_derivation_pair/results/sica_finite_derivation_pair_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/sica_finite_derivation_pair/preregistration.json",
+          "preregistration_digest": "064888a2a57e3bbdfb27cd0bb30969fa224cf3629d7af0a7838b5f6c3503a72f",
+          "producing_agent": {
+            "identity": "Claude Code (agent, under J. Brown direction)",
+            "session_ref": "session_01Xhh5R34zzvcN9gEqqhMTVm"
+          }
+        }
+      ]
+    },
+    {
+      "package": "sicc_covering_meta_pair",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/sicc_covering_meta_pair/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "sicc_covering_meta_pair_2026_08_03",
+      "runs": [
+        {
+          "run_id": "sicc_covering_meta_pair_2026_08_03",
+          "publication_package": "sicc_covering_meta_pair",
+          "runtime_package": "sicc_covering_meta_pair",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/sicc_covering_meta_pair/experiment_manifest.json",
+          "report_paths": [
+            "experiments/sicc_covering_meta_pair/results/sicc_covering_meta_pair_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/sicc_covering_meta_pair/preregistration.json",
+          "preregistration_digest": "df4c3116b23ccb015deea460db2dab9001e18b9604ec69580b53a74f7fcfb50b",
+          "producing_agent": {
+            "identity": "Claude Code (agent, under J. Brown direction)",
+            "session_ref": "session_01Xhh5R34zzvcN9gEqqhMTVm"
+          }
+        }
+      ]
+    },
+    {
       "package": "sparse_ica_learnability",
       "coverage_mode": "structured_manifest",
       "manifest_path": "experiments/sparse_ica_learnability/experiment_manifest.json",
