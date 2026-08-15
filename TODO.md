@@ -1,5 +1,21 @@
 # Research TODO
 
+## Dynamics of Conceptual Deletion — Copernicus (Case 1) DCD2 (2026-07-28)
+
+- [x] Freeze the DCD2 preregistration on the `copernicus_geocentrism_corpus`
+  package: S1 (equalisation) + S2 (prediction-independence) as PRIMARY gates
+  **with an explicit uniqueness clause** — the exact question PR #463 opened
+  (uniqueness held on Einstein, failed on Darwin) — plus N1 discussion-spike
+  negative control, C0 coverage STOP gate, and a verifier-variance guard
+  (`DCD2_COPERNICUS_PREREGISTRATION.md`, `DCD2_C_CATEGORIES.md`,
+  `run_dcd2_copernicus.py` scorer, synthetic-fixture verified).
+- [ ] **BLOCKED at C0:** the oracle (De Revolutionibus Book I) has no
+  public-domain English text on Wikisource (the committed `fetch_summary.json`
+  records 0 chars). Source a pre-1928 English Book I from Internet Archive /
+  HathiTrust under a fresh fetch note, then run the DCR-arc extraction + tagging
+  (3 passes/doc + 3 use + 3 discussion taggers) and score
+  `run_dcd2_copernicus.py`. Until then C0 STOPs and the test makes no claim.
+
 ## Obstruction-Aware Admission (2026-07-27)
 
 - [x] Freeze the exact finite target-identification recurrence, typed outcomes,

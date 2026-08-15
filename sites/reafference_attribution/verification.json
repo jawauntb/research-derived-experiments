@@ -1080,20 +1080,22 @@
         "experiments/copernicus_geocentrism_corpus/results/fetch_summary.json"
       ],
       "n_modal_entrypoints": 0,
-      "n_scripts": 2,
+      "n_scripts": 3,
       "paper": null,
-      "preregistration": null,
+      "preregistration": "experiments/copernicus_geocentrism_corpus/DCD2_COPERNICUS_PREREGISTRATION.md",
       "verification_signals": [],
       "artifacts_committed": [
         "experiments/copernicus_geocentrism_corpus/results/fetch_summary.json",
-        "experiments/copernicus_geocentrism_corpus/CORPUS_MANIFEST.md"
+        "experiments/copernicus_geocentrism_corpus/CORPUS_MANIFEST.md",
+        "experiments/copernicus_geocentrism_corpus/DCD2_COPERNICUS_PREREGISTRATION.md",
+        "experiments/copernicus_geocentrism_corpus/DCD2_C_CATEGORIES.md"
       ],
       "artifacts_local": "artifacts/ (gitignored raw outputs; see result reports for summaries)",
       "regen": "python scripts/regen.py copernicus_geocentrism_corpus",
       "provenance_mode": "structured_manifest",
       "manifest_status": "accepted",
       "integrity_state": "valid",
-      "run_coverage": "complete",
+      "run_coverage": "partial",
       "run_id": "copernicus_geocentrism_corpus_scaffold_2026_07_28",
       "experiment_id": "copernicus_geocentrism_corpus_scaffold",
       "publication_package": "copernicus_geocentrism_corpus",

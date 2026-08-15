@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "experiment_id": "copernicus_geocentrism_corpus_scaffold",
-  "hypothesis": "This package is corpus scaffolding, not an experiment. It fetches and caches the pre-1543 astronomy and cosmology documents named for Case 1 of the multi-case retrospective test in papers/dynamics_of_conceptual_deletion/paper.md (Copernicus / geocentric priority, 1543). It makes no scientific claim; success is defined as every named Wikisource source with a transcribed English text fetching to substantive text, and every source not on Wikisource being explicitly documented as such rather than silently substituted. The intended oracle (Copernicus De Revolutionibus Book I) is not on English Wikisource; the fetch failure is recorded in results/fetch_summary.json and no oracle substitution is performed.",
+  "hypothesis": "This package is corpus scaffolding, not an experiment. It fetches and caches the pre-1543 astronomy and cosmology documents named for Case 1 of the multi-case retrospective test in papers/dynamics_of_conceptual_deletion/paper.md (Copernicus / geocentric priority, 1543). It makes no scientific claim; success is defined as every named Wikisource source with a transcribed English text fetching to substantive text, and every source not on Wikisource being explicitly documented as such rather than silently substituted. The intended oracle (Copernicus De Revolutionibus Book I) is not on English Wikisource; the fetch failure is recorded in results/fetch_summary.json and no oracle substitution is performed. The package additionally carries the frozen DCD2 preregistration (DCD2_COPERNICUS_PREREGISTRATION.md, C-categories DCD2_C_CATEGORIES.md) and scorer (run_dcd2_copernicus.py) that run the two structural signatures S1 (equalisation) and S2 (prediction-independence) as PRIMARY gates with an explicit uniqueness clause -- the test PR #463 opened. That test is currently blocked at the C0 coverage gate because the oracle is unavailable; it makes no scientific claim until the oracle is sourced and tagged.",
   "claim_tier": "descriptive",
   "controls": [
     {
@@ -56,6 +56,16 @@
     {
       "kind": "other",
       "path": "experiments/copernicus_geocentrism_corpus/CORPUS_MANIFEST.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/copernicus_geocentrism_corpus/DCD2_COPERNICUS_PREREGISTRATION.md",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/copernicus_geocentrism_corpus/DCD2_C_CATEGORIES.md",
       "public": true
     }
   ],
