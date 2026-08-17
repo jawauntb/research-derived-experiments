@@ -7,7 +7,7 @@
 - [x] Constant-grammar EML spectrum enumerator through `k=6` (US-4′ withheld).
 - [x] Variable-`x` EML fiber spectrum without a 1-D invariant.
 - [x] Paper B swap-cell discriminator on the `{0,1}^4` harness.
-- [ ] Paper C: connection beyond `List Int` (licensed only after B).
+- [x] Paper C: connection beyond `List Int` (`Aff(1, Z/3)` 4-cycle).
 - [ ] Assumption-surgery agent benchmark (Paper E; licensed only after B–D).
 - [ ] Do not import OpenAI 2026 writeups as verified theorems.
 
@@ -20,7 +20,8 @@
 - [x] US-4′ unknown-skeleton half: all 80 size-3 trees, GD 7 vs 7 (`min_size_governs`). Φ does not transfer when the tree is unknown.
 - [x] US-4′ frozen-leaf half: extra basins 43 vs 28 (`phi_holds`). Exact 2-vs-1 stays the control.
 - [x] Paper B swap cell: typed repairs are not interchangeable (`taxonomy_holds`). Not new enumeration.
-- [ ] Paper C: connection beyond `List Int`. Do not start Paper E.
+- [x] Paper C: Aff(1, Z/3) 4-cycle escapes Kirchhoff (`cell3_holds`). Not Lorentz.
+- [ ] Paper D: a transfer that should fail across Lorentz / Lamport / PE. Do not start Paper E.
 - [ ] Do not import OpenAI 2026 writeups as verified theorems.
 
 ## Obstruction-Aware Admission (2026-07-27)

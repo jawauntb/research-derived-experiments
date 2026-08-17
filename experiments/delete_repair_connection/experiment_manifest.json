@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "delete_repair_connection",
+  "hypothesis": "Cell 3 is not idle Kirchhoff packaging: Aff(1, Z/3) path-ordered transport on a 4-cycle has additive cycles that still match integer cycle-sum and affine cycles that escape it. If every affine example matches the Kirchhoff prediction, or raw comparison works as well as transport, cell 3 is idle.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "kirchhoff_additive_cycles",
+      "description": "When every scale is 1, holonomy equals (1, sum b). That is the Paper A fact. If it fails, the instrument is broken."
+    },
+    {
+      "control_id": "group_laws",
+      "description": "Aff(1, Z/3) is checked exhaustively: 6 elements, identity, inverse, associativity."
+    },
+    {
+      "control_id": "kill_does_not_fail_ci",
+      "description": "A cell3_idle verdict is a valid passing run."
+    },
+    {
+      "control_id": "not_lorentz_or_cg2",
+      "description": "The run does not claim Lorentz geometry or concern holonomy."
+    }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/delete_repair_connection/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "CONN_GROUP_LAWS",
+      "criterion": "Aff(1, Z/3) identity, inverse, and associativity hold on all 6 elements."
+    },
+    {
+      "gate_id": "CONN_KIRCHHOFF_CONTROL",
+      "criterion": "Additive 4-cycles match the Kirchhoff prediction: flat when sum b = 0, curved when sum b = 1."
+    },
+    {
+      "gate_id": "CONN_ENUMERATION",
+      "criterion": "The group has exactly 6 elements."
+    },
+    {
+      "gate_id": "CONN_RANKING_RECORDED",
+      "criterion": "The verdict is cell3_holds or cell3_idle."
+    },
+    {
+      "gate_id": "CONN_CLAIM_BOUNDARY",
+      "criterion": "The run does not claim Lorentz, CG-2, Paper D/E/F."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/delete_repair_connection/results/delete_repair_connection_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/delete_repair_connection/preregistration.json",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/delete_repair_connection/paper.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}
