@@ -110,5 +110,5 @@ for both typed cells.
 
 ## Next best test
 
-C–E are now banked. Do not start Paper F. Do not reopen DR/DCR.
+C–F are now banked. The written κ is SIC. Do not reopen DR/DCR.
 Do not treat this swap as a universal calculus.

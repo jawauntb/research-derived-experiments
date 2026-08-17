@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "delete_repair_kappa",
+  "hypothesis": "A cheap five-field signature is not a function to gold. A menu-relative coarsest-representing map is a function and is Theorem 4 plus a total order. Uniqueness without that tie-break fails. Possibility 1 as a new master object dies.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "specified_before_fit",
+      "description": "κ_cheap, κ_screen, and κ_unique are written in core.py before evaluate_benchmark inspects gold."
+    },
+    {
+      "control_id": "cheap_collision_is_the_no_function_witness",
+      "description": "Two cases with the same cheap signature and different gold kill κ_cheap as a function."
+    },
+    {
+      "control_id": "screen_map_disclosed_as_theorem_4",
+      "description": "κ_screen is named as representability on a finite menu plus coarsest-by-fibres."
+    },
+    {
+      "control_id": "tie_break_is_named",
+      "description": "Fewest fibres, then lexicographic screen id."
+    },
+    {
+      "control_id": "relabel_0_3",
+      "description": "Swap of positions 0 and 3 must send first_bit repairs to last_bit repairs."
+    },
+    {
+      "control_id": "kill_does_not_fail_ci",
+      "description": "calculus_is_sic, calculus_holds, and no_function are valid passing runs."
+    }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/delete_repair_kappa/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "KAP_SPECIFIED",
+      "criterion": "The three maps are specified in the module before the run."
+    },
+    {
+      "gate_id": "KAP_ENUMERATION",
+      "criterion": "The registered suite has 11 cases."
+    },
+    {
+      "gate_id": "KAP_SCREEN_DEFINED",
+      "criterion": "κ_screen never returns broken."
+    },
+    {
+      "gate_id": "KAP_RELABEL",
+      "criterion": "The 0↔3 relabel of first_bit/last_bit is natural."
+    },
+    {
+      "gate_id": "KAP_RANKING_RECORDED",
+      "criterion": "The verdict is calculus_is_sic, calculus_holds, or no_function."
+    },
+    {
+      "gate_id": "KAP_CLAIM_BOUNDARY",
+      "criterion": "The run does not claim a new master object, an LLM eval, or text nomination."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/delete_repair_kappa/results/delete_repair_kappa_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/delete_repair_kappa/preregistration.json",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/delete_repair_kappa/paper.md",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/sic_dynamics/paper.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

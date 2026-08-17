@@ -100,7 +100,6 @@ order-sensitive task factors through the bag.
 
 ## Next best test
 
-Paper E is banked: the cheap taxonomy signature is not a
-complete one-shot agent rule. Do not start Paper F. Do not
-reopen DR/DCR. The conservative live reading remains
-Possibility 5: this is SIC's dynamics, not a new master object.
+Papers E–F are banked. The cheap signature is not a function.
+The written κ is SIC. Do not reopen DR/DCR. Possibility 5 is
+the close.

@@ -5,7 +5,7 @@
 **Status:** Possibility that the three-cell taxonomy is a cheap
 agent decision procedure is **dead on this harness**. Verdict
 `surgery_killed`. Not text nomination. Not an LLM eval. Paper F
-stays withheld.
+is now banked as `calculus_is_sic`.
 
 ## Current frame
 
@@ -122,9 +122,8 @@ not try repairs and still hits a larger held-out suite.
 
 ## Next best test
 
-Paper F stays withheld. Do not reopen DR/DCR. Do not train a
-net as a substitute. Do not turn this into an LLM leaderboard.
-Possibility 5 remains the conservative live reading. The
-phenomenon that would kill Possibility 5 is still missing: a
-delete–repair fact that cannot be written as a movement of
-`(q, K)`.
+Paper F is banked: the written function is SIC. Do not reopen
+DR/DCR. Do not train a net as a substitute. Do not turn this
+into an LLM leaderboard. Possibility 5 is the close. The
+phenomenon that would kill it is still missing: a delete–repair
+fact that cannot be written as a movement of `(q, K)`.

@@ -89,5 +89,5 @@ preserves the registered cycles.
 
 ## Next best test
 
-D–E are now banked. Do not start Paper F. Do not identify this
+D–F are now banked. The written κ is SIC. Do not identify this
 4-cycle with a boost.
