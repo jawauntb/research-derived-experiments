@@ -203,6 +203,59 @@ Residual content:
 - Old regime: shortest depth, or extra shells, as the access key.
 - New: min-shell multiplicity. Gradient recovery is still the next test.
 
+## EML US-4′ / master-formula gradient recovery
+
+Question: on the same min-size pair that splits truncated Gibbs mass,
+does master-formula GD still rank the fat zero target above the
+singleton, or does min-size still govern once the sampler is removed?
+
+Current regime:
+
+- Artifact types: size-3 EML skeletons; learnable positive `1`-leaves;
+  MSE on the registered six-point grid.
+- Operations: hand-derived reverse-mode GD; log-uniform blind inits;
+  perturbed-correct sanity on the all-ones zero skeleton.
+- Gates/verifiers: six fatal US4G gates; ranking rule frozen before
+  blind counts; perturbed-correct is noncompensatory.
+- Known limitations: matching skeleton, not formula search; eight
+  inits; local-CPU analogue only.
+
+Action class:
+
+- Frame diagnosis: Gibbs mass is not itself a GD law.
+- Why: sampling the census would recover `P=Φ/Z` by definition.
+
+Experiment:
+
+- Manifest/report paths: `experiments/eml_us4_gradient/`.
+- Positive targets: zero identity vs `e-ln(e-1)` singleton; both
+  `min_internal=3`.
+- Negative controls: not a Gibbs sampler; neural bootstrap not
+  claimed; same four-weight budget.
+- Stress tests: perturbed-correct must recover zero or the claim is
+  withheld, not rejected.
+
+Gate:
+
+- Acceptance: all six fatal gates pass, then apply the frozen rule.
+- Support `Φ`-predicts-GD if zero successes ≥ singleton + 1.
+- Reject if counts are equal (min-size still governs) or singleton
+  wins. Withhold if perturbed-correct fails.
+
+Results:
+
+- Accepted instrument: perturbed-correct 8/8; replay matches.
+- Ranking: zero blind 8/8, singleton blind 6/8, verdict `phi_holds`.
+- Key metrics: the two singleton misses are undefined (`MSE=1e6`),
+  not near-threshold losses. Same starts recover zero.
+
+Residual content:
+
+- Old regime: min-size, or Gibbs mass as a sampler tautology.
+- New: the zero identity has a larger/safer GD basin at this bound.
+- Withheld: Odrzywołek neural bootstrap; any general GD-tracks-`Φ`
+  law; formula search from a shared unknown skeleton.
+
 ## Obstruction-Aware Admission V0
 
 Question: can a finite bounded agent choose the next permitted experiment by

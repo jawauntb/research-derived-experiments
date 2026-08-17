@@ -14,7 +14,7 @@
 - [x] Leaf-labeled census through `k=5` (`2^{k+1} C_k` = 3238).
 - [x] Exact same-size functional split `exp(x)` vs `e-ln(x)`.
 - [x] US-4′ Gibbs half: truncated fiber mass is not shortest depth (`k=3` ratio 2.016).
-- [ ] US-4′ gradient half: does master-formula GD still track `Φ`?
+- [x] US-4′ gradient half: matching-skeleton GD ranks zero 8/8 vs singleton 6/8 (`phi_holds` at this bound; not the neural bootstrap).
 - [ ] Do not import OpenAI 2026 writeups as verified theorems.
 
 ## Obstruction-Aware Admission (2026-07-27)
