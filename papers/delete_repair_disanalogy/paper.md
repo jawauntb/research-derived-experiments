@@ -3,8 +3,8 @@
 **Jawaun Brown** (human director) and **Cursor Grok 4.6** (agent, under review)
 **Date:** August 17, 2026
 **Status:** Possibility 6 is **dead on this harness**. Not a functor.
-Not real Lorentz physics. Paper E stays unlicensed until someone
-wants an agent benchmark.
+Not real Lorentz physics. Paper E is now banked as a typed miss
+(`surgery_killed`), not as text nomination.
 
 ## Current frame
 
@@ -100,9 +100,7 @@ order-sensitive task factors through the bag.
 
 ## Next best test
 
-Paper E is now licensed by the letter sequence and is still the
-wrong next move if the goal is a better model. Do not start it
-as text nomination. Do not reopen DR/DCR. If an agent benchmark
-is wanted later, it has to be typed delete/repair, and it has
-to be able to die. The conservative live reading remains
+Paper E is banked: the cheap taxonomy signature is not a
+complete one-shot agent rule. Do not start Paper F. Do not
+reopen DR/DCR. The conservative live reading remains
 Possibility 5: this is SIC's dynamics, not a new master object.

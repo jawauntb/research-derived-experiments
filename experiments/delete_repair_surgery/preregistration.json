@@ -1,0 +1,93 @@
+{
+  "experiment_id": "delete_repair_surgery",
+  "schema_version": "1.0",
+  "run_id": "delete_repair_surgery_2026_08_17",
+  "producing_agent": {
+    "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+    "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+  },
+  "hypothesis": "A name-blind one-shot rule compiled from the three-cell taxonomy is not a complete agent decision procedure. Empirical gold is menu-relative representability. Unused symmetry (pair_eq on q_id) is leftover-looking and not quotientable on the registered menu. If every held-out row matches, surgery_holds. A miss is surgery_killed. Either verdict passes CI.",
+  "primary_metric": "ranking.verdict",
+  "decision": "Accept surgery_holds only if the signature rule matches empirical gold on every held-out row. Construction rows are disclosed authoring toys and cannot save a miss. A surgery_killed verdict is a valid passing run.",
+  "gates": {
+    "SUR_ENUMERATION": "At least four construction rows and four held-out rows.",
+    "SUR_MENU": "The repair menu has at least three screens.",
+    "SUR_GOLD_DEFINED": "No case has gold broken.",
+    "SUR_NAME_BLIND": "The policy input is only Signature: mixes, n_fibres, n_worlds, y_has_nontrivial_symmetry, connection_mismatch.",
+    "SUR_HELD_OUT_CONNECTION": "The held-out affine cycle mismatches Kirchhoff.",
+    "SUR_RANKING_RECORDED": "Verdict is surgery_holds or surgery_killed.",
+    "SUR_CLAIM_BOUNDARY": "No text nomination, no LLM eval, no Paper F."
+  },
+  "kill_criteria": {
+    "SUR_ENUMERATION": "Kill the instrument if the suite is too small.",
+    "SUR_MENU": "Kill the instrument if the menu is empty.",
+    "SUR_GOLD_DEFINED": "Kill the instrument if a case has no empirical repair.",
+    "SUR_NAME_BLIND": "Kill the instrument if the policy reads task or model names.",
+    "SUR_HELD_OUT_CONNECTION": "Kill the instrument if the held-out cycle is secretly Kirchhoff.",
+    "SUR_RANKING_RECORDED": "Kill the instrument if the verdict is missing.",
+    "SUR_CLAIM_BOUNDARY": "Kill the instrument if it claims an LLM result or a universal calculus.",
+    "one_shot_rule": "Kill the taxonomy-as-agent-rule claim if any held-out gold disagrees with decide(signature)."
+  },
+  "audit_card": {
+    "target_object": "Name-blind one-shot mapping from an obstruction signature to a menu action {restore, quotient, transport, noop}.",
+    "decision": "Accept or reject: the three-cell taxonomy is a complete cheap agent rule on this harness. Gold is empirical, not the cell we intended.",
+    "representation": "Paper A {0,1}^4 screens plus Aff(1, Z/3) 4-cycles. Features are mixes / fibre count / unused-or-used symmetry / Kirchhoff mismatch.",
+    "data_clock": "None. Finite enumeration. No sampling. No LLM.",
+    "material_assumptions": [
+      "The policy may not try the menu and may not read English names.",
+      "Gold is: transport if Kirchhoff mismatches; else restore if a finer menu screen represents; else quotient if a coarser menu screen represents; else noop.",
+      "Construction rows are the authoring toys and are not the kill.",
+      "pair_eq + q_id is unused symmetry: some g leaves Y invariant, but no cheaper registered screen represents.",
+      "A miss does not reopen Paper B. Typed repairs can still work when tried."
+    ],
+    "fatal_gates": [
+      "SUR_ENUMERATION",
+      "SUR_MENU",
+      "SUR_GOLD_DEFINED",
+      "SUR_NAME_BLIND",
+      "SUR_HELD_OUT_CONNECTION",
+      "SUR_RANKING_RECORDED",
+      "SUR_CLAIM_BOUNDARY"
+    ],
+    "decisive_controls": [
+      "name_blind_signature",
+      "empirical_gold_not_intended_cell",
+      "construction_disclosed_not_the_kill",
+      "held_out_includes_unused_symmetry",
+      "kill_does_not_fail_ci"
+    ],
+    "evidence_paths": [
+      "experiments/delete_repair_surgery/results/delete_repair_surgery_summary.json",
+      "experiments/delete_repair_surgery/preregistration.json",
+      "tests/test_delete_repair_surgery.py"
+    ]
+  },
+  "mathematical_claim": {
+    "objects": {
+      "Signature": "tuple of (mixes, n_fibres, n_worlds, y_has_nontrivial_symmetry, connection_mismatch)",
+      "decide": "Signature -> {restore, quotient, transport, noop}",
+      "gold": "menu-relative representability / Kirchhoff mismatch"
+    },
+    "types_domains_units": "Worlds are {0,1}^4. Fibre counts are dimensionless integers. Actions are a four-element discrete set. Holonomy is Aff(1, Z/3).",
+    "exact_claim": "There exists a held-out case whose empirical gold differs from decide(signature), or there does not. The instrument records which.",
+    "quantifiers": "Universal over the registered 11 cases. Existential for a grain miss if one occurs.",
+    "assumptions": "Menu is {q_id, q_rot, q_perm, q_stab0, q_stab_last}. Connection gold ignores the PE screen. No sampling.",
+    "identification_conditions": "Every case must have a defined gold or the instrument is empty.",
+    "derivation_dependencies": "Paper A representability. Paper B swap cell. Paper C Kirchhoff mismatch. Not a new group-theory theorem.",
+    "coordinate_invariance": "Task and screen names are labels; decide is forbidden to read them. Relabeling last_bit for first_bit is a disclosed held-out check, not a new ontology.",
+    "edge_limiting_null_cases": "If the held-out affine cycle matches Kirchhoff, the instrument is broken. If pair_eq + q_id becomes quotientable because a later menu screen is added, the grain miss can disappear; that is a menu change, not a rescue of the cheap rule on this menu."
+  },
+  "controls": [
+    "name_blind_signature",
+    "empirical_gold_not_intended_cell",
+    "construction_disclosed_not_the_kill",
+    "held_out_includes_unused_symmetry",
+    "kill_does_not_fail_ci"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": "none",
+    "sampling": "Finite {0,1}^4 enumeration and four-edge Aff(1, Z/3) cycles. No sampling."
+  },
+  "claim_boundary": "Accepted only as: on this harness, the cheap taxonomy signature is not a complete one-shot agent rule. Not text nomination. Not an LLM result. Not Paper F. Not a better LLM. Paper B is not reopened."
+}

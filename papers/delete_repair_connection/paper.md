@@ -89,6 +89,5 @@ preserves the registered cycles.
 
 ## Next best test
 
-Paper D only: a transfer that *should* fail across Lorentz /
-Lamport / positional encodings. Do not start Paper E. Do not
-identify this 4-cycle with a boost.
+D–E are now banked. Do not start Paper F. Do not identify this
+4-cycle with a boost.

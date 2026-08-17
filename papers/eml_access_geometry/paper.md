@@ -139,8 +139,8 @@ restated a control.
 **Still missing, therefore withheld**
 
 - Neural bootstrap (Odrzywołek's actual search).
-- Paper E (typed assumption-surgery for agents). Licensed by
-  letters B–D and still the wrong next move as text nomination.
+- Paper E is now banked as a typed miss (`surgery_killed`), not
+  as text nomination.
 - Paper F (universal `κ`). Untested.
 - Valence / concern. Not in `eml`.
 - A better LLM. Not shipped.
@@ -169,7 +169,8 @@ closes the `sq` gap without named macros.
 
 ## Next best test
 
-B–D are banked. Do not start Paper E as text nomination. Do not
-train a net as a substitute. Do not reopen DR/DCR. Possibility 5
-(SIC's dynamics) is the conservative live reading. If the next
-experiment cannot kill the preferred story, do not run it.
+A–E are banked. Paper E killed the one-shot agent rule. Do not
+start Paper F. Do not train a net as a substitute. Do not reopen
+DR/DCR. Possibility 5 (SIC's dynamics) is the conservative live
+reading. If the next experiment cannot kill the preferred story,
+do not run it.

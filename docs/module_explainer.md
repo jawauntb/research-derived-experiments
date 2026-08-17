@@ -10,7 +10,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 
 | Path | Responsibility |
 |---|---|
-| `experiments/` | 103 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
+| `experiments/` | 104 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
 | `papers/` | Paper sources (`paper.md`), figures, shareable PDFs |
 | `scripts/` | 138 Python ops modules: quality, contracts, provenance, PDF/figure builders, summarizers |
 | `tests/` | 174 root test files collected together by pytest (`unittest`-style and pytest-native) |
@@ -116,6 +116,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_delete_repair_swap.py` | Paper B swap cell: typed vs crossed repairs, kill does not fail CI |
 | `test_delete_repair_connection.py` | Paper C Aff(1, Z/3) 4-cycle: Kirchhoff control, affine escape, non-commute |
 | `test_delete_repair_disanalogy.py` | Paper D diamond fibre: 196 embeddings, four s² values, PE quotient disclosed as prior |
+| `test_delete_repair_surgery.py` | Paper E name-blind surgery: construction 4/4, held-out 6/7, unused-symmetry miss, kill does not fail CI |
 
 ```bash
 python3 scripts/run_quality_checks.py
@@ -146,8 +147,8 @@ environment.
 |---|---|
 | [system_design.md](system_design.md) | End-to-end design & operating model |
 | [module_explainer.md](module_explainer.md) | This catalog |
-| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 103 research packages; `experiments/common` excluded) |
-| `experiment_contract_registry.json` | Authoritative 103-package coverage partition: 55 structured roots + 48 time-bounded legacy exceptions with frozen digest |
+| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 104 research packages; `experiments/common` excluded) |
+| `experiment_contract_registry.json` | Authoritative 104-package coverage partition: 56 structured roots + 48 time-bounded legacy exceptions with frozen digest |
 | `program_evidence_registry.json` | 12 canonical evidence records with stable IDs, states, artifact refs, and claim links |
 | `claim_registry.json` | 12 canonical claim records with tiers, states, source refs, and bidirectional evidence links |
 | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) | Benchmark umbrella |
@@ -191,9 +192,9 @@ environment.
 
 **Legend:** **P** = `PROVENANCE.md`, **B** = `BENCHMARK_CARD.md`, **R** = `README.md`, **res** = committed `results/`.
 
-**Verification reconciliation:** 103 research packages on disk plus one shared
+**Verification reconciliation:** 104 research packages on disk plus one shared
 support package, `experiments/common`. `gen_provenance.py` intentionally excludes
-the support package and derives 103 cards/index rows; `gen_provenance.py --check`
+the support package and derives 104 cards/index rows; `gen_provenance.py --check`
 fails if any generated card, either verification index, or the site mirror drifts.
 The structured registries currently contain 12 claims and 12 evidence records.
 
@@ -250,6 +251,7 @@ Universal dispatcher: `python scripts/regen.py <name>`.
 | `delete_repair_swap` | P R res | Paper B swap cell on the Paper A harness. Typed repairs work; crossed over-repair fails; under-quotient cheaper. Verdict `taxonomy_holds`. Not new enumeration | `core.py`, `experiment.py` |
 | `delete_repair_connection` | P R res | Paper C: Aff(1, Z/3) 4-cycle. Additive cycles stay Kirchhoff; affine cycles escape. Verdict `cell3_holds`. Not Lorentz | `core.py`, `experiment.py` |
 | `delete_repair_disanalogy` | P R res | Paper D: 196 diamond embeddings; s²(e1,e2) takes -1/-3/-4/-8. Poset does not fix the metric. PE quotient fails. Verdict `disanalogy_holds` | `core.py`, `experiment.py` |
+| `delete_repair_surgery` | P R res | Paper E: name-blind one-shot rule. Construction 4/4, held-out 6/7. Miss is `pair_eq` on `q_id`. Verdict `surgery_killed` | `core.py`, `experiment.py` |
 
 #### 3.1.1 `symbolic_weakness` modules
 
@@ -517,11 +519,12 @@ exhaustive counterexample search, and replayable MIDAS regression.
 | `papers/delete_repair_swap/` | Paper B swap-cell discriminator; taxonomy holds on the Paper A harness; not new enumeration (`paper.md`); companion instrument `delete_repair_swap` |
 | `papers/delete_repair_connection/` | Paper C: cell 3 is not idle Kirchhoff packaging; Aff(1, Z/3) escapes sum-b (`paper.md`); companion instrument `delete_repair_connection` |
 | `papers/delete_repair_disanalogy/` | Paper D: shared cartoon is not a shared theorem; 196 diamonds, four intervals (`paper.md`); companion instrument `delete_repair_disanalogy` |
+| `papers/delete_repair_surgery/` | Paper E: taxonomy is not a one-shot agent rule; unused symmetry ≠ leftover privilege (`paper.md`); companion instrument `delete_repair_surgery` |
 | `papers/eml_access_geometry/` | Process-split synthesis: expressivity ≠ access, access is process-relative; LLM/SIC translation without a better-model claim |
 | `papers/sufficient_antecedents/` | Companion paper (Theorem SA-1): taxonomy of SIC-C-c positive resolutions — each of the four known identifiability escapes (linear ICA, sparse-linear ICA, iVAE, interventional CRL) is one way of populating Theorem 4's Markov-screen antecedent via local separation + cross-`u` coherence (`paper.md`, `paper.pdf`); companion instrument `antecedent_taxonomy_pair` |
 | `papers/structural_intelligence_covering_learnability/` | Companion paper (SIC-C-c covering meta-theorem): conditional closure of SIC-C-c under the polynomial-ε-covering hypothesis on `H`, composed from Theorem 6-core (ε-covering reduction, pure-core `refinement_preserves_screen`) and Theorem 5-rate (quantitative bound). Machine-checked as `StructuralIntelligenceMathlib.sicc_covering_meta` / `sicc_covering_poly` with zero new axioms. Isolates why linear ICA, sparse-linear ICA, iVAE, interventional CRL satisfy SIC-C-c and why Locatello 2019's fully-unsupervised nonlinear ICA does not (`paper.md`); companion instrument `sicc_covering_meta_pair` |
 | `papers/structural_intelligence_foundations/` | Companion paper (SIC-A derived, finite discrete positive-support case): reduces the master fibration `(q, K)` from a posit to a theorem by composing Theorem 1 (LR-vector as `q`) + Proposition 3 (`Coarsen ⊣ Refine`) with the uniform-on-fibre kernel + Theorem CS-2 (coarsest-CSS). Machine-checked as `StructuralIntelligenceMathlib.sic_a_finite_discrete` (no new axioms; `HalmosSavage_minimality_h_extension` inherited only through the coarsestness corollary). General topological / measure-theoretic case remains open (`paper.md`); companion instrument `sica_finite_derivation_pair` |
-| `papers/delete_the_absolute/` | Master-calculus paper: delete–obstruction–repair operator; over/under-invariance taxonomy; Lean core `DeleteRepair.lean`; instruments `delete_the_absolute` and `eml_fiber_spectrum`. Paper B swap cell now banked; Papers C–F and any universal cross-domain law withheld |
+| `papers/delete_the_absolute/` | Master-calculus paper: delete–obstruction–repair operator; over/under-invariance taxonomy; Lean core `DeleteRepair.lean`; instruments `delete_the_absolute` and `eml_fiber_spectrum`. Papers B–E banked; Paper F and any universal cross-domain law withheld |
 
 Run:
 
@@ -1118,6 +1121,7 @@ Notable bundles:
 - `papers/delete_repair_swap/` — Paper B: opposite repairs are not interchangeable
 - `papers/delete_repair_connection/` — Paper C: Aff(1, Z/3) holonomy is not integer cycle-sum
 - `papers/delete_repair_disanalogy/` — Paper D: poset does not determine Minkowski interval; PE quotient still fails
+- `papers/delete_repair_surgery/` — Paper E: name-blind one-shot rule dies on unused symmetry
 - `papers/eml_access_geometry/` — process-split synthesis and LLM/SIC translation
 - Synthesis: `metaphysics_synthesis`, `metric_stack_synthesis`, literature audits/reviews
 - Review methods: `unified_citation_grounded_review` (framework, ontology, executable reviewer, and alpha-research operating system)

@@ -9,7 +9,7 @@
 - [x] Paper B swap-cell discriminator on the `{0,1}^4` harness.
 - [x] Paper C: connection beyond `List Int` (`Aff(1, Z/3)` 4-cycle).
 - [x] Paper D: shared-diagram disanalogy (196 diamonds; four `s²` values).
-- [ ] Assumption-surgery agent benchmark (Paper E; licensed after B–D, still the wrong next move as text nomination).
+- [x] Paper E: name-blind one-shot surgery dies on unused symmetry (`pair_eq` / `q_id`; 6/7 held-out; `surgery_killed`).
 - [ ] Do not import OpenAI 2026 writeups as verified theorems.
 
 ## Variable-`x` EML spectrum (2026-08-17)
@@ -23,7 +23,8 @@
 - [x] Paper B swap cell: typed repairs are not interchangeable (`taxonomy_holds`). Not new enumeration.
 - [x] Paper C: Aff(1, Z/3) 4-cycle escapes Kirchhoff (`cell3_holds`). Not Lorentz.
 - [x] Paper D: a transfer that should fail across Lorentz / Lamport / PE (`disanalogy_holds`).
-- [ ] Do not start Paper E as text nomination.
+- [x] Paper E: typed surgery, not text nomination (`surgery_killed` on unused symmetry).
+- [ ] Do not start Paper F. Do not reopen DR/DCR. Do not turn E into an LLM leaderboard.
 - [ ] Do not import OpenAI 2026 writeups as verified theorems.
 
 ## Obstruction-Aware Admission (2026-07-27)
