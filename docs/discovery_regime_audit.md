@@ -256,6 +256,53 @@ Residual content:
 - Withheld: Odrzywołek neural bootstrap; any general GD-tracks-`Φ`
   law; formula search from a shared unknown skeleton.
 
+## US-4′ unknown-skeleton half
+
+Question: if the search process is *not* told the matching tree, does
+`Φ` still rank the fat zero target above the thin singleton?
+
+Current regime:
+
+- Artifact types: all 80 size-3 variable-`x` trees; same GD as
+  `eml_us4_gradient`.
+- Operations: four blind seeds per skeleton per target; exact
+  unweighted 2-vs-1 as the multiplicity control.
+- Gates/verifiers: seven fatal US4S gates.
+- Known limitations: `1`-leaves remain freely tunable; that can
+  retarget a tree.
+
+Action class:
+
+- Frame diagnosis: `Φ` is not automatically a search law.
+- Why: matching-skeleton GD and Gibbs sampling are different
+  processes from "find the tree."
+
+Experiment:
+
+- Manifest/report paths: `experiments/eml_us4_search/`.
+- Positive targets: same zero / singleton pair.
+- Negative controls: exact 2-vs-1 must hold; full census, not the
+  two known formulas only.
+- Stress tests: perturbed-correct on the true zero skeleton.
+
+Gate:
+
+- Acceptance: all fatal gates pass, then apply the frozen count rule.
+- Equal `n_gd_skeletons` rejects the transfer.
+
+Results:
+
+- Accepted instrument: 80 trees; exact 2 vs 1; optimizer works.
+- Ranking: zero 7, thin 7, extras 6 vs 6, verdict `min_size_governs`.
+- Key metrics: the two targets can weight-fit each other's matching
+  trees.
+
+Residual content:
+
+- Old regime: access is fiber mass for any process.
+- New: process-split. Gibbs and known-tree GD feel `Φ`. Unknown-tree
+  GD does not, at this bound.
+
 ## Obstruction-Aware Admission V0
 
 Question: can a finite bounded agent choose the next permitted experiment by
