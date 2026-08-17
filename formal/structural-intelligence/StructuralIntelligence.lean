@@ -14,6 +14,7 @@ import StructuralIntelligence.TheoryAtlas
 import StructuralIntelligence.RepresentationRepair
 import StructuralIntelligence.AutocatalyticArtwork
 import StructuralIntelligence.DeleteRepair
+import StructuralIntelligence.EmlZeroIdentity
 
 /-!
 # Structural Intelligence — Lean 4 formalisation
@@ -100,6 +101,10 @@ remaining Structural-Intelligence companion papers:
     — exact repair must split leftover fibre disagreement.
 *   `StructuralIntelligence.DeleteRepair.repair_paths_disagree`
     — delete-then-default and relative-then-drop disagree on a finite witness.
+*   `StructuralIntelligence.EmlZeroIdentity.ExpLn.eml_zero_identity`
+    — EML zero witness: `eml(a, eml(eml(a,1),1)) = 0` from
+    `eml(a,b) := exp(a)-ln(b)` plus `ln∘exp` / `exp∘ln` cancellation.
+    No `Real`, no `Float`, no `Complex.log`.
 
 Everything is proven in pure Lean 4 core (no `Mathlib`).  The analytic
 step `(1 - 1/(cM))^N ≤ exp(-N/(cM))` and the resulting
@@ -144,3 +149,6 @@ and are documented as future work in the package `README.md`.
 #print axioms StructuralIntelligence.DeleteRepair.potentials_unique_up_to_translation
 #print axioms StructuralIntelligence.DeleteRepair.repair_splits_disagreement
 #print axioms StructuralIntelligence.DeleteRepair.repair_paths_disagree
+#print axioms StructuralIntelligence.EmlZeroIdentity.ExpLn.eml_zero_identity
+#print axioms StructuralIntelligence.EmlZeroIdentity.ExpLn.eml_zero_identity_one
+#print axioms StructuralIntelligence.EmlZeroIdentity.ExpLn.eml_zero_identity_x

@@ -106,6 +106,27 @@ remaining Structural-Intelligence companion papers.
   Catalan counts and Gibbs fiber masses are the Python instrument
   `experiments/squaring_separation`, not this file.
 
+### EML zero identity — `StructuralIntelligence/EmlZeroIdentity.lean`
+
+- `StructuralIntelligence.EmlZeroIdentity.ExpLn` — Mathlib-free
+  exp/ln/subtraction fragment.  Class fields are the explicit
+  hypotheses `ln(exp x)=x`, `Pos x → exp(ln x)=x`, `exp 0 = 1`,
+  `Pos(exp x)`, `x-0=x`, and `x-x=0`.  Not environment `axiom`s.
+- `eml a b := exp a - ln b` — Odrzywołek's operator as a definition.
+- `ln_one` / `eml_right_one` / `eml_eml_right_one` — the rewrite
+  `ln 1 = 0`, `eml(a,1)=exp(a)`, `eml(eml(a,1),1)=exp(exp(a))`.
+- `middle_pos` / `exp_ln_middle` — the middle argument is in the
+  image of `exp`, so `ln 0` is off the path (Paper 0 is not used).
+- `StructuralIntelligence.EmlZeroIdentity.ExpLn.eml_zero_identity`
+  — **headline.**  `eml(a, eml(eml(a,1),1)) = 0` for any carrier
+  element `a`.  Depends on **no axioms**.
+- `eml_zero_identity_one` / `eml_zero_identity_x` — the two
+  registered leaves `a = 1` and `a = x`.  Also axiom-free.
+
+  Not claimed: a construction of `ℝ`, a proof that the usual real
+  `exp`/`ln` inhabit `ExpLn`, or identity of functions from a
+  numerical grid.
+
 ### Compiler-Tomography CT-1 core — `StructuralIntelligence/CompilerTomography.lean`
 
 - `StructuralIntelligence.IsIdentifiable` — a deterministic-support
@@ -535,6 +556,10 @@ uses `[propext, Quot.sound]` (via `omega` closing the impossible
   Mul/Sq trees, expand-preserves-degree, and the US-2/US-3 headlines
   `tree_size_separation`, `circuit_size_of_pow2`,
   `conservative_extension`, `squaring_separation`.
+- `StructuralIntelligence/EmlZeroIdentity.lean` — EML zero witness
+  `eml(a, eml(eml(a,1),1)) = 0` from `eml(a,b):=exp(a)-ln(b)` and
+  exp/ln cancellation.  Headlines `eml_zero_identity`,
+  `eml_zero_identity_one`, `eml_zero_identity_x`.
 
 ## Provenance
 

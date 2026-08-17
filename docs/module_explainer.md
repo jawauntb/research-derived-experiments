@@ -20,7 +20,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `references/` | Public source list; local-only full texts (gitignored subdirs) |
 | `formal/ontology-hs/` | Haskell typed ontology gate (Arc 2B) |
 | `formal/relative-identifiability/` | Dependency-free Lean 4 proofs for observational quotient factorization, obstruction, and experiment-family refinement |
-| `formal/structural-intelligence/` | Dependency-free Lean 4 cores for the SIC family, including `DeleteRepair.lean` and `Compiler/SquaringSeparation.lean` |
+| `formal/structural-intelligence/` | Dependency-free Lean 4 cores for the SIC family, including `DeleteRepair.lean`, `Compiler/SquaringSeparation.lean`, and `EmlZeroIdentity.lean` |
 | `sites/` | Public static sites (atlas, Inquiry landing, Envelope Guard) |
 | `apps/inquiry-black-box/` | Local-first Inquiry product monorepo (Bun/Electron/MV3) |
 | `coherence-testbench/` | Separate EEG/eyetrack Phase-0 GO/KILL project |
@@ -1140,7 +1140,8 @@ cd formal/ontology-hs && cabal test all && cabal run ontology-check
 | Path | Role |
 |---|---|
 | `StructuralIntelligence/Compiler/SquaringSeparation.lean` | Zero-analysis US-2/US-3 core, kernel-checked on Lean 4.31: Mul/Sq trees, `size+1=2·degree`, `sq^n(x)` size `n+1`, expand preserves degree, sharing circuits have max degree `≤ 2^k` |
-| `StructuralIntelligence.lean` | Root import and `#print axioms` for every named headline, including `squaring_separation` |
+| `StructuralIntelligence/EmlZeroIdentity.lean` | Mathlib-free rewrite `eml(a, eml(eml(a,1),1)) = 0` from exp/ln cancellation; `ln 0` is off the path |
+| `StructuralIntelligence.lean` | Root import and `#print axioms` for every named headline, including `squaring_separation` and `eml_zero_identity` |
 | `lakefile.toml` / `lean-toolchain` | Dependency-free Lean 4.31 library |
 
 ```bash

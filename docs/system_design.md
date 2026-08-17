@@ -282,6 +282,9 @@ split on that truncated language: same min-size, `Φ` ratio 2.016 from
 min-shell multiplicity of the exact zero identity. Extra shells add
 < 1% mass, so the Sq-toy shell story does not transfer at `k≤5`.
 Master-formula gradient recovery stays withheld.
+The algebraic zero rewrite is kernel-checked in
+`formal/structural-intelligence/StructuralIntelligence/EmlZeroIdentity.lean`
+(no Mathlib, no `Complex.log`, zero `sorry`).
 
 One directory per paper or synthesis topic, usually mirroring an experiment name.
 Common layout: `paper.md`, optional `preregistration.md` / `runbook.md`, figures,
