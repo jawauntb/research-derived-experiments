@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "eml_fiber_spectrum",
+  "hypothesis": "The homogeneous EML grammar S → 1 | eml(S,S) has no 1-D integer invariant like degree. Exhaustive enumeration through 6 internal nodes matches Catalan counts and exhibits same-size trees with different closed values. US-4′ is withheld.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "catalan_enumeration",
+      "description": "Tree counts by internal-node number must equal C_k. This is independent of evaluation."
+    },
+    {
+      "control_id": "real_domain_and_undefined",
+      "description": "Evaluation uses real exp/log. Nonpositive right-hand arguments and overflow are undefined, not coerced to a finite value."
+    },
+    {
+      "control_id": "rounding_disclosure",
+      "description": "10-decimal numerical fiber ids are disclosed as a computational clustering. This grammar is constant; a variable-EML spectrum is not claimed."
+    },
+    {
+      "control_id": "us4_prime_withheld",
+      "description": "The run must not claim that fiber mass predicts gradient recovery."
+    }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/eml_fiber_spectrum/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "EFS_SIZE_NOT_DENOTATION",
+      "criterion": "Two equal-internal-node trees have different closed real values; hand identities hold."
+    },
+    {
+      "gate_id": "EFS_ENUMERATION_COMPLETE",
+      "criterion": "Counts match Catalan C_k for k=0..6."
+    },
+    {
+      "gate_id": "EFS_GRID_COLLISION_DISCLOSED",
+      "criterion": "Summary records the finite-grid / rounding caveat."
+    },
+    {
+      "gate_id": "EFS_US4_PRIME_WITHHELD",
+      "criterion": "US-4′ is flagged untested."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/eml_fiber_spectrum/results/eml_fiber_spectrum_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/eml_fiber_spectrum/preregistration.json",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

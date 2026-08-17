@@ -12,6 +12,7 @@ import StructuralIntelligence.AlignmentGovernance
 import StructuralIntelligence.TheoryAtlas
 import StructuralIntelligence.RepresentationRepair
 import StructuralIntelligence.AutocatalyticArtwork
+import StructuralIntelligence.DeleteRepair
 
 /-!
 # Structural Intelligence — Lean 4 formalisation
@@ -84,6 +85,17 @@ remaining Structural-Intelligence companion papers:
 *   `StructuralIntelligence.bayes_equals_boltzmann_with_reward_as_likelihood`
     — AA-2 core: the Bayesian posterior and Boltzmann update coincide
     pointwise once the reward plays the role of the likelihood.
+*   `StructuralIntelligence.DeleteRepair.symmetry_mismatch_nogo` —
+    delete–repair core: an invariant screen cannot factor a
+    non-invariant target (over-invariance no-go).
+*   `StructuralIntelligence.DeleteRepair.cycle_integrates_iff_sum_zero`
+    — a closed walk of relative steps exists iff the steps sum to 0.
+*   `StructuralIntelligence.DeleteRepair.potentials_unique_up_to_translation`
+    — two discrete integrals of the same step field differ by a constant.
+*   `StructuralIntelligence.DeleteRepair.repair_splits_disagreement`
+    — exact repair must split leftover fibre disagreement.
+*   `StructuralIntelligence.DeleteRepair.repair_paths_disagree`
+    — delete-then-default and relative-then-drop disagree on a finite witness.
 
 Everything is proven in pure Lean 4 core (no `Mathlib`).  The analytic
 step `(1 - 1/(cM))^N ≤ exp(-N/(cM))` and the resulting
@@ -120,3 +132,8 @@ and are documented as future work in the package `README.md`.
 #print axioms StructuralIntelligence.independent_lifts_compose_ensures
 #print axioms StructuralIntelligence.independent_lifts_compose
 #print axioms StructuralIntelligence.bayes_equals_boltzmann_with_reward_as_likelihood
+#print axioms StructuralIntelligence.DeleteRepair.symmetry_mismatch_nogo
+#print axioms StructuralIntelligence.DeleteRepair.cycle_integrates_iff_sum_zero
+#print axioms StructuralIntelligence.DeleteRepair.potentials_unique_up_to_translation
+#print axioms StructuralIntelligence.DeleteRepair.repair_splits_disagreement
+#print axioms StructuralIntelligence.DeleteRepair.repair_paths_disagree

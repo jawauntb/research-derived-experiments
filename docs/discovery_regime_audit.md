@@ -1,5 +1,59 @@
 # Discovery-Regime Audit Ledger
 
+## Delete the Absolute / Obstruction–Repair
+
+Question: is representation-repair a catalog of eight lifts, or is the
+engine the delete–obstruction–repair operator with two directions
+(over-invariance vs under-invariance) plus covariant compensation?
+
+Current regime:
+
+- Artifact types: group actions on `{0,1}^4`, orbit-canonical screens,
+  EML constant trees, principal-branch complex values, prefix potentials.
+- Operations: finite enumeration; Catalan-complete tree generation;
+  structural induction in Lean 4.31.
+- Gates/verifiers: seven DTA gates; five EFS fatal gates; Lean headlines
+  with `#print axioms`.
+- Known limitations: no-go is CommonSuffScreen packaging; Shannon entropy
+  not banked; EML run is the constant grammar; US-4′ untested; OpenAI
+  2026 writeups used as method analogues only.
+
+Action class:
+
+- Frame diagnosis: “find a better representation” is the wrong slogan.
+- Why: RR-1 is existence of witnesses; DR/DCR cannot find the deletion;
+  EML and relativity are duals, not one ladder.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/delete_the_absolute/`, `experiments/eml_fiber_spectrum/`.
+- Positive targets: representability iff `G_M ⊆ G_Y`; same-size EML
+  trees with different values; cycle sum zero iff integrable.
+- Negative controls: constant dummy repair; Catalan counts; log0/overflow
+  marked undefined.
+- Stress tests: 16 vs 5 leftover-privilege fibres; cross-size fiber at 1
+  (computational).
+
+Gate:
+
+- Acceptance: all DTA gates and fatal EFS gates pass.
+- Withheld: US-4′; universal calculus; variable-`x` EML; relativity
+  isomorphism.
+
+Results:
+
+- Accepted: 7/7 DTA; Catalan 197 trees; size witness `e-1` vs `exp(e)`;
+  Lean core green.
+- Key metrics: `q_id` 16 fibres vs `q_perm` 5; 118 numerical EML fibres;
+  52 undefined; 5 exact cross-size identities.
+
+Residual content:
+
+- Old regime: denotational quotients; RR catalog; TA-1 cocycle.
+- New: three-way taxonomy; noncommutativity; constant-EML spectrum
+  without a degree invariant.
+
 ## Obstruction-Aware Admission V0
 
 Question: can a finite bounded agent choose the next permitted experiment by
