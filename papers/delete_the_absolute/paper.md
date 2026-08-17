@@ -9,7 +9,7 @@ Human author and research director
 Experiment code, Lean core, and manuscript under direction and review
 
 **Date:** August 17, 2026
-**Status:** Lean core kernel-checked (`formal/structural-intelligence/StructuralIntelligence/DeleteRepair.lean`, Lean 4.31, no Mathlib, zero `sorry`). Finite symmetry-matching instrument **banked** at `experiments/delete_the_absolute/` (7/7 preregistered gates; exact `n=4` enumeration, no SGD). That run is a Lean regression plus a leftover-privilege fibre count. It does **not** promote the taxonomy to a discriminator and it does **not** test Possibility 1. Companion constant-grammar EML census **banked** at `experiments/eml_fiber_spectrum/` (197 Catalan trees through `k=6`; size is not a denotation invariant). US-4′, variable-`x` EML, and the universal-calculus claim are **withheld**. This is not a victory lap.
+**Status:** Lean core kernel-checked (`formal/structural-intelligence/StructuralIntelligence/DeleteRepair.lean`, Lean 4.31, no Mathlib, zero `sorry`). Finite symmetry-matching instrument **banked** at `experiments/delete_the_absolute/` (7/7 preregistered gates; exact `n=4` enumeration, no SGD). Paper B swap cell **banked** at `experiments/delete_repair_swap/` (`taxonomy_holds` on this harness; pairing of A's matrix, not new enumeration). This manuscript still does **not** test Possibility 1. Companion constant-grammar EML census **banked** at `experiments/eml_fiber_spectrum/` (197 Catalan trees through `k=6`; size is not a denotation invariant). Papers C–F, Paper 0, and any universal calculus remain **withheld**. This is not a victory lap.
 
 ---
 
@@ -881,7 +881,7 @@ the previous letter's kill criteria. Three other objects are
 | Paper | Object | License | Status |
 |---|---|---|---|
 | **A** | Taxonomy + honesty ledger + Lean core + `n=4` regression | none; this document | Lean banked; instrument banked as regression |
-| **B** | Swap-cell instrument: EML-shaped restore vs relativity-shaped delete, same harness | A does not get to claim discrimination until the swap cell exists | not started |
+| **B** | Swap-cell instrument: EML-shaped restore vs relativity-shaped delete, same harness | A does not get to claim discrimination until the swap cell exists | banked (`papers/delete_repair_swap/`; `taxonomy_holds`; pairing of A's matrix, not new enumeration) |
 | **C** | Connection beyond `List Int` (graph 1-forms, chart transport) | B shows cell 3 is not idle Kirchhoff-packaging | not started |
 | **D** | Shared-diagram disanalogy: a transfer that *should* fail across Lorentz / Lamport / PE | B does not collapse to one arrow | not started |
 | **E** | Assumption-surgery benchmark for agents (typed delete/repair, not text nomination) | B–D survive; DR/DCR stay closed | not started |
@@ -1047,26 +1047,26 @@ and mild for the thesis. Kill criteria: the seven `DTA_*`
 gates. All passed. Interpretation bound: regression, not
 promotion.
 
-The **owed** severe experiment is the swap cell (§6.7). Kill
-the taxonomy if opposite repairs succeed on opposite toys, or
-if a catalog-only lookup predicts every winner without naming
-cells. Do not start Paper F until that cell exists.
+The **owed** severe experiment is the swap cell (§6.7). That
+cell is now banked at `papers/delete_repair_swap/`: opposite
+repairs are not interchangeable on this harness. Kill remains
+the same if a later cube makes the crossed cells work. Do not
+start Paper F. Paper C is next.
 
 ### Claim boundary
 
 §10. Lean algebra banked and prior-art-tagged. `n=4` regression
-banked. Taxonomy unpromoted. Possibility 1 untested.
-Possibility 5 preferred. US-4′, Paper 0, and the EML-native
-spectrum withheld.
+banked. Paper B swap cell banked as a discriminator contract
+on that matrix. Possibility 1 untested. Possibility 5
+preferred. Paper 0 withheld. US-4′ is process-split in
+companion notes, not this manuscript's claim.
 
 ### Next best test
 
-Build the swap-cell instrument (Paper B): one harness, an
-over-invariance toy and an under-invariance toy, frozen
-repairs, swapped application. Do not start Paper F. Do not
-start US-4′. Do not reopen DCR nomination. If the swap cell
-is null, publish that null and demote this manuscript to a
-reading of SIC.
+Paper C: connection beyond `List Int`. Do not start Paper E
+or F. Do not reopen DCR nomination. If a later harness makes
+the crossed Paper B cells work, demote the dual-instance
+claim back to a reading.
 
 ---
 

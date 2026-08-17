@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "delete_repair_swap",
+  "hypothesis": "On the Paper A {0,1}^4 harness, typed over-invariance repair (restore a distinction) and typed under-invariance repair (quotient leftover privilege) are not interchangeable. If the crossed repairs work as well as the typed ones, or if one screen is minimal-safe for both toys, kill the taxonomy as a discriminator.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "same_harness",
+      "description": "Worlds, screens, and tasks are the Paper A {0,1}^4 objects. No new cube."
+    },
+    {
+      "control_id": "contract_not_new_census",
+      "description": "The run discloses that the numbers are a pairing of already-enumerated representability facts."
+    },
+    {
+      "control_id": "kill_does_not_fail_ci",
+      "description": "A taxonomy_killed verdict is a valid passing run. Only a broken instrument fails status."
+    },
+    {
+      "control_id": "not_text_nomination",
+      "description": "No DR/DCR, no network, no Paper E/F."
+    }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/delete_repair_swap/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "SWAP_ENUMERATION",
+      "criterion": "The world is the 16-point cube."
+    },
+    {
+      "gate_id": "SWAP_TYPED_OVER_REPRESENTABLE",
+      "criterion": "q_stab0 and q_id represent first_bit. If this fails, the instrument is broken, not the taxonomy."
+    },
+    {
+      "gate_id": "SWAP_TYPED_UNDER_REPRESENTABLE",
+      "criterion": "q_perm represents bag. If this fails, the instrument is broken."
+    },
+    {
+      "gate_id": "SWAP_BOTH_CELLS_RECORDED",
+      "criterion": "Both toys are recorded with typed and crossed screens."
+    },
+    {
+      "gate_id": "SWAP_RANKING_RECORDED",
+      "criterion": "The verdict is taxonomy_holds or taxonomy_killed."
+    },
+    {
+      "gate_id": "SWAP_CLAIM_BOUNDARY",
+      "criterion": "The run does not claim Paper E, Paper F, text nomination, or Lorentz=Lamport=PE."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/delete_repair_swap/results/delete_repair_swap_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/delete_repair_swap/preregistration.json",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/delete_repair_swap/paper.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

@@ -1,0 +1,91 @@
+{
+  "experiment_id": "delete_repair_swap",
+  "schema_version": "1.0",
+  "run_id": "delete_repair_swap_2026_08_17",
+  "producing_agent": {
+    "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+    "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+  },
+  "hypothesis": "Typed restore-distinction and typed quotient-privilege are not interchangeable on the Paper A harness. Crossed success, or one minimal-safe screen for both toys, kills the taxonomy as a discriminator.",
+  "primary_metric": "ranking.verdict",
+  "decision": "Accept taxonomy_holds only if typed repairs work, the crossed over-repair fails representability, the under-quotient is strictly cheaper, and no single screen is minimal-safe for both. Otherwise taxonomy_killed. A kill is a valid passing run.",
+  "gates": {
+    "SWAP_ENUMERATION": "16 worlds.",
+    "SWAP_TYPED_OVER_REPRESENTABLE": "q_stab0 and q_id represent first_bit.",
+    "SWAP_TYPED_UNDER_REPRESENTABLE": "q_perm represents bag.",
+    "SWAP_BOTH_CELLS_RECORDED": "Both toys recorded.",
+    "SWAP_RANKING_RECORDED": "Verdict is taxonomy_holds or taxonomy_killed.",
+    "SWAP_CLAIM_BOUNDARY": "No Paper E/F, no text nomination, no Lorentz identification."
+  },
+  "kill_criteria": {
+    "SWAP_ENUMERATION": "Kill the instrument if the world is not 16 points.",
+    "SWAP_TYPED_OVER_REPRESENTABLE": "Kill the instrument if Paper A typed over-facts regress.",
+    "SWAP_TYPED_UNDER_REPRESENTABLE": "Kill the instrument if Paper A typed under-facts regress.",
+    "SWAP_BOTH_CELLS_RECORDED": "Kill the instrument if a cell is missing.",
+    "SWAP_RANKING_RECORDED": "Kill the instrument if the verdict is missing.",
+    "SWAP_CLAIM_BOUNDARY": "Kill the instrument if it claims Paper E/F or a shared theorem.",
+    "taxonomy": "Kill the taxonomy if crossed over-repair represents first_bit, or the under-quotient is not cheaper, or one screen is minimal-safe for both."
+  },
+  "audit_card": {
+    "target_object": "Swap of typed repairs on the Paper A first_bit and bag toys.",
+    "decision": "Accept or reject: the three-way taxonomy discriminates opposite toys. Paper A did not license that claim.",
+    "representation": "{0,1}^4; screens q_id, q_stab0, q_perm; tasks first_bit and bag.",
+    "data_clock": "None. Exact finite enumeration already performed by Paper A.",
+    "material_assumptions": [
+      "This is a pairing of Paper A facts, not a new census.",
+      "Over-invariance repair is restore-distinction.",
+      "Under-invariance repair is quotient-privilege.",
+      "A one-ladder reading predicts the crossed repairs should work as well."
+    ],
+    "fatal_gates": [
+      "SWAP_ENUMERATION",
+      "SWAP_TYPED_OVER_REPRESENTABLE",
+      "SWAP_TYPED_UNDER_REPRESENTABLE",
+      "SWAP_BOTH_CELLS_RECORDED",
+      "SWAP_RANKING_RECORDED",
+      "SWAP_CLAIM_BOUNDARY"
+    ],
+    "decisive_controls": [
+      "same_harness",
+      "contract_not_new_census",
+      "kill_does_not_fail_ci",
+      "not_text_nomination"
+    ],
+    "evidence_paths": [
+      "experiments/delete_repair_swap/results/delete_repair_swap_summary.json",
+      "experiments/delete_repair_swap/preregistration.json",
+      "tests/test_delete_repair_swap.py"
+    ]
+  },
+  "mathematical_claim": {
+    "objects": {
+      "World": "{0,1}^4",
+      "Screen": "orbit-canonical q_G",
+      "Representable": "Y constant on every q-fibre",
+      "TypedOver": "q_stab0 or q_id for first_bit",
+      "CrossedOver": "q_perm for first_bit",
+      "TypedUnder": "q_perm for bag",
+      "CrossedUnder": "q_id for bag"
+    },
+    "types_domains_units": "Representability is boolean. Fibre counts are dimensionless.",
+    "exact_claim": "The taxonomy discriminates these two toys iff typed repairs work, crossed over-repair fails, typed under-repair is strictly cheaper, and no screen is minimal-safe for both.",
+    "quantifiers": "Universal over the 16 worlds and the declared screens/tasks.",
+    "assumptions": "Paper A definitions of q_* and y_*. No new group.",
+    "identification_conditions": "Typed Paper A facts must still hold or the instrument is broken.",
+    "derivation_dependencies": "papers/delete_the_absolute/paper.md §6.7 and §9. CommonSuffScreen packaging disclosed in Paper A.",
+    "coordinate_invariance": "Orbit-canonical labels are a gauge. Representability is fibre-constancy.",
+    "edge_limiting_null_cases": "If q_perm represents first_bit, Possibility 3 lives. If q_id is fibre-minimal for bag, leftover privilege dies."
+  },
+  "controls": [
+    "same_harness",
+    "contract_not_new_census",
+    "kill_does_not_fail_ci",
+    "not_text_nomination"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": "none",
+    "sampling": "Exact 16-point enumeration. No sampling."
+  },
+  "claim_boundary": "Accepted only as the Paper B swap-cell discriminator on this harness. Not new enumeration. Not a universal calculus. Not text nomination. Not Paper C/D/E/F. Not Lorentz = Lamport = positional encodings."
+}

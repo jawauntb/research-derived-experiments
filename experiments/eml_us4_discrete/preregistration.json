@@ -1,0 +1,89 @@
+{
+  "experiment_id": "eml_us4_discrete",
+  "schema_version": "1.0",
+  "run_id": "eml_us4_discrete_2026_08_17",
+  "producing_agent": {
+    "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+    "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+  },
+  "hypothesis": "If unknown-skeleton GD tied because 1-leaves were free, greedy frozen-leaf rewrite should reopen a Φ gap on extra basins. Equal extra counts reject that transfer at this bound.",
+  "primary_metric": "ranking.verdict",
+  "decision": "Accept phi_holds only if zero_extra > thin_extra. Equal extras reject (min_size_governs). thin_extra > zero_extra kills. Exact 2-vs-1 is the control and cannot decide the claim.",
+  "gates": {
+    "US4D_ENUMERATION": "80 size-3 trees.",
+    "US4D_EXACT_CONTROL": "Unweighted exact hits are 2 vs 1.",
+    "US4D_FROZEN_LEAVES": "Leaves stay 1 or x.",
+    "US4D_NOT_GD": "Recovery is greedy rewrite, not GD or a Gibbs sampler.",
+    "US4D_RANKING_RECORDED": "The ranking uses extra basins.",
+    "US4D_CLAIM_BOUNDARY": "The run does not claim the neural bootstrap."
+  },
+  "kill_criteria": {
+    "US4D_ENUMERATION": "Kill if the size-3 count is not 80.",
+    "US4D_EXACT_CONTROL": "Kill if exact unweighted hits are not 2 vs 1.",
+    "US4D_FROZEN_LEAVES": "Kill if leaves are retuned.",
+    "US4D_NOT_GD": "Kill if the process is GD or a Gibbs sampler.",
+    "US4D_RANKING_RECORDED": "Kill if the verdict is missing or ranked on exact totals.",
+    "US4D_CLAIM_BOUNDARY": "Kill if the run claims the neural bootstrap."
+  },
+  "audit_card": {
+    "target_object": "Greedy frozen-leaf rewrite recovery of two registered size-3 EML functions from every labeled size-3 start.",
+    "decision": "Accept or reject: Φ still ranks frozen-leaf discrete search. Unknown-skeleton GD is a different process and is not reopened here.",
+    "representation": "All 80 VarTrees with 3 internal nodes; TEST_GRID from eml_variable_spectrum; leaves frozen to {1,x}.",
+    "data_clock": "None. Closed finite language fragment. Deterministic greedy descent.",
+    "material_assumptions": [
+      "The targets are the US-4′ zero identity and the same-size singleton.",
+      "Exact unweighted 2-vs-1 is multiplicity, not the frozen-leaf claim.",
+      "Ranking on total basins would fake a win if extras are 0 vs 0.",
+      "Unknown-skeleton GD is already banked and is not this test."
+    ],
+    "fatal_gates": [
+      "US4D_ENUMERATION",
+      "US4D_EXACT_CONTROL",
+      "US4D_FROZEN_LEAVES",
+      "US4D_NOT_GD",
+      "US4D_RANKING_RECORDED",
+      "US4D_CLAIM_BOUNDARY"
+    ],
+    "decisive_controls": [
+      "exact_multiplicity",
+      "rank_extras_not_totals",
+      "full_size_three_census",
+      "frozen_leaves",
+      "not_gd_or_gibbs"
+    ],
+    "evidence_paths": [
+      "experiments/eml_us4_discrete/results/eml_us4_discrete_summary.json",
+      "experiments/eml_us4_discrete/preregistration.json",
+      "tests/test_eml_us4_discrete.py"
+    ]
+  },
+  "mathematical_claim": {
+    "objects": {
+      "Start": "any size-3 EML tree in the variable-x grammar",
+      "Move": "flip one leaf in {1,x} or swap one internal pair",
+      "Recovery": "MSE < 1e-6 after greedy descent with frozen leaves",
+      "n_extra_basins": "number of non-exact starts that recover"
+    },
+    "types_domains_units": "Counts are dimensionless. Loss is MSE on the six-point grid.",
+    "exact_claim": "The banked ranking is the preregistered comparison of n_extra_basins. Exact unweighted hits remain 2 vs 1 and are not the claim.",
+    "quantifiers": "Universal over the 80 size-3 trees.",
+    "assumptions": "Real eml; leaves frozen; greedy first-improvement with pretty-print tie-break.",
+    "identification_conditions": "Exact 2-vs-1 must hold or the instrument is broken.",
+    "derivation_dependencies": "Odrzywołek arXiv:2603.21852. US-4′ Gibbs, matching-skeleton, and unknown-skeleton halves for the targets.",
+    "coordinate_invariance": "Pretty-print is a gauge. The grid is a registered representation.",
+    "edge_limiting_null_cases": "Equal n_extra_basins rejects the frozen-leaf transfer. thin > zero kills it. 0 vs 0 extras is a rejection, not a Φ win."
+  },
+  "controls": [
+    "exact_multiplicity",
+    "rank_extras_not_totals",
+    "full_size_three_census",
+    "frozen_leaves",
+    "not_gd_or_gibbs"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": "none; deterministic greedy",
+    "sampling": "Exhaustive size-3 starts. No tree sampling."
+  },
+  "claim_boundary": "Accepted only as the preregistered extra-basin ranking of frozen-leaf greedy rewrite. Not a Gibbs tautology. Not unknown-skeleton GD. Not the neural bootstrap. Not a general architecture law."
+}

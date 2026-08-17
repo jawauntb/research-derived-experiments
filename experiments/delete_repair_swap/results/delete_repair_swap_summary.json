@@ -1,0 +1,56 @@
+{
+  "experiment_id": "delete_repair_swap",
+  "gates": {
+    "SWAP_BOTH_CELLS_RECORDED": true,
+    "SWAP_CLAIM_BOUNDARY": true,
+    "SWAP_ENUMERATION": true,
+    "SWAP_RANKING_RECORDED": true,
+    "SWAP_TYPED_OVER_REPRESENTABLE": true,
+    "SWAP_TYPED_UNDER_REPRESENTABLE": true
+  },
+  "process_disclosure": "Exact finite swap cell on {0,1}^4.  Typed repairs are restore-distinction vs quotient-privilege.  Not text nomination, not a neural net, not Paper F.",
+  "producing_agent": {
+    "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+    "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+  },
+  "ranking": {
+    "crossed_fails_over": true,
+    "no_single_minimal_screen": true,
+    "rule": "Taxonomy holds iff typed repairs work, the crossed over-repair fails, the under-quotient is strictly cheaper than leftover privilege, and no single screen is minimal-safe for both toys. This is a discriminator contract on the Paper A matrix, not new enumeration.",
+    "typed_wins": true,
+    "under_quotient_cheaper": true,
+    "verdict": "taxonomy_holds"
+  },
+  "run_id": "delete_repair_swap_2026_08_17",
+  "status": "pass",
+  "toys": [
+    {
+      "cell": "over_invariance",
+      "crossed_fibres": 5,
+      "crossed_representable": false,
+      "crossed_screen": "q_perm",
+      "name": "first_bit",
+      "target": "first_bit",
+      "typed_fibres": 8,
+      "typed_representable": true,
+      "typed_screen": "q_stab0"
+    },
+    {
+      "cell": "under_invariance",
+      "crossed_fibres": 16,
+      "crossed_representable": true,
+      "crossed_screen": "q_id",
+      "name": "bag",
+      "target": "bag",
+      "typed_fibres": 5,
+      "typed_representable": true,
+      "typed_screen": "q_perm"
+    }
+  ],
+  "withheld": [
+    "Universal calculus (Paper F / Possibility 1)",
+    "Text nomination (DR/DCR)",
+    "Paper E agent benchmark (licensed only after B\u2013D)",
+    "Lorentz = Lamport = positional encodings"
+  ]
+}
