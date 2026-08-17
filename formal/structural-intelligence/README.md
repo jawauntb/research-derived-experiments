@@ -524,7 +524,6 @@ uses `[propext, Quot.sound]` (via `omega` closing the impossible
   `bayesPosterior`, `boltzmannUpdate`, and the AA-2 core headline
   `bayes_equals_boltzmann_with_reward_as_likelihood` (plus the
   function-level `bayesPosterior_eq_boltzmannUpdate`).
-<<<<<<< HEAD
 - `StructuralIntelligence/DeleteRepair.lean` — delete–obstruction–
   repair core: `Act` / `IsInvariant` / `FactorsThrough`,
   `prefixSum` / `sumInt`, `ExactRepair`, `pathA` / `pathB`, and the
@@ -532,12 +531,10 @@ uses `[propext, Quot.sound]` (via `omega` closing the impossible
   `cycle_integrates_iff_sum_zero`,
   `potentials_unique_up_to_translation`,
   `repair_splits_disagreement`, `repair_paths_disagree`.
-=======
 - `StructuralIntelligence/Compiler/SquaringSeparation.lean` —
   Mul/Sq trees, expand-preserves-degree, and the US-2/US-3 headlines
   `tree_size_separation`, `circuit_size_of_pow2`,
   `conservative_extension`, `squaring_separation`.
->>>>>>> b9ca7ef (formal(lean): kernel-check SquaringSeparation on Lean 4.31)
 
 ## Provenance
 
