@@ -377,11 +377,13 @@ held-out 6/7; `surgery_killed`).
 Paper F is `experiments/delete_repair_kappa/`: κ_cheap is not
 a function; κ_screen hits 11/11 and is Theorem 4 plus a total
 order; verdict `calculus_is_sic`.
-The close-out is `papers/sic_dynamics/`. The next licensed
-method is Lea (proved ≠ verified), not a new letter: see
-[`docs/next_agent_lea_handoff_2026-08-17.md`](next_agent_lea_handoff_2026-08-17.md)
+The close-out is `papers/sic_dynamics/`. Wave 2 P0/P1 lemmas are
+**proved** in `formal/structural-intelligence/` (`KappaCheap`,
+`KappaScreen`, `KappaUnique`, `KappaRelabel`, `Aff13`,
+`DiamondInterval`, `SurgeryMiss`) and **not verified**. Lea is
+installed locally (`docs/lea/ENV_STATUS.md`). Do not start Paper G.
+See [`docs/next_agent_lea_handoff_2026-08-17.md`](next_agent_lea_handoff_2026-08-17.md)
 and [`.cursor/skills/lea/SKILL.md`](../.cursor/skills/lea/SKILL.md).
-Project seed: [`docs/lea/`](lea/README.md).
 
 The weakness paper also carries a theory-only companion,
 `papers/weakness_invariance_neurips/pac_bayes_weakness_sketch.md`. It derives a

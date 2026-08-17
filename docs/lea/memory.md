@@ -50,6 +50,19 @@ screens; uniqueness is dead. Relabel `0↔3` sends `first_bit`/`q_stab0` to
 - Unknown-tree GD does not (7 vs 7).
 - Frozen-leaf extras 43 vs 28 feel `Φ` but are not the Gibbs ratio 2.016.
 
+## Wave 2 banked (2026-08-17)
+
+Append. Files are on `main` under `formal/structural-intelligence/`.
+Aggregator imports them. Label: **proved-not-verified**.
+
+- `KappaCheap.kappa_cheap_not_function`
+- `KappaScreen.kappa_screen_hits_suite`
+- `KappaUnique.bag_not_unique`
+- `KappaRelabel.kappa_relabel_natural`
+- `Aff13.affine_escapes_kirchhoff`
+- `DiamondInterval.poset_not_determine_interval`
+- `SurgeryMiss.surgery_miss_pair_eq`
+
 ## Off-limits
 
 - Paper 0 / `Complex.log 0`

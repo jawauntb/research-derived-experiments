@@ -87,6 +87,11 @@ example collapsing to a rewritten sum; a proof that `Aff(1, Z/3)`
 is secretly `(Z/3, +)` after a coordinate change that also
 preserves the registered cycles.
 
+## Lean status
+
+**Proved, not verified.** `Aff13.lean` (`affine_escapes_kirchhoff`).
+Not Lorentz.
+
 ## Next best test
 
 D–F are now banked. The written κ is SIC. Do not identify this

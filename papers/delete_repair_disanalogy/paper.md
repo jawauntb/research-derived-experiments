@@ -98,6 +98,12 @@ Paper F. A better LLM.
 on which every diamond has the same `s²`; a PE-shaped toy whose
 order-sensitive task factors through the bag.
 
+## Lean status
+
+**Proved, not verified.** `DiamondInterval.lean`
+(`poset_not_determine_interval`). Two registered witnesses, not
+the 196-count. Not continuum physics.
+
 ## Next best test
 
 Papers E–F are banked. The cheap signature is not a function.

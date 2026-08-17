@@ -560,6 +560,20 @@ uses `[propext, Quot.sound]` (via `omega` closing the impossible
   `eml(a, eml(eml(a,1),1)) = 0` from `eml(a,b):=exp(a)-ln(b)` and
   exp/ln cancellation.  Headlines `eml_zero_identity`,
   `eml_zero_identity_one`, `eml_zero_identity_x`.
+- `StructuralIntelligence/KappaCheap.lean` — Paper F
+  `kappa_cheap_not_function`.  **Proved, not verified.**
+- `StructuralIntelligence/KappaScreen.lean` — Paper F
+  `kappa_screen_hits_suite`.  Cites CommonSuffScreen.  **Proved, not verified.**
+- `StructuralIntelligence/KappaUnique.lean` — Paper F
+  `bag_not_unique`.  **Proved, not verified.**
+- `StructuralIntelligence/KappaRelabel.lean` — Paper F
+  `kappa_relabel_natural`.  **Proved, not verified.**
+- `StructuralIntelligence/Aff13.lean` — Paper C
+  `affine_escapes_kirchhoff`.  **Proved, not verified.**
+- `StructuralIntelligence/DiamondInterval.lean` — Paper D
+  `poset_not_determine_interval`.  **Proved, not verified.**
+- `StructuralIntelligence/SurgeryMiss.lean` — Paper E
+  `surgery_miss_pair_eq`.  **Proved, not verified.**
 
 ## Provenance
 
