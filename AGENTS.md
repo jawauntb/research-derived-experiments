@@ -29,8 +29,8 @@ for sibling lanes, or defer landing to a later integration agent.
 
 1. One branch, one concern, one check.
 2. Open a PR vs `main`. Draft only while the check is still running.
-3. When the check passes: `gh pr ready N` then `gh pr merge N --squash`
-   (or `--squash --auto` if required CI is still pending).
+3. When the check passes: `gh pr ready N` then `gh pr merge N --squash`.
+   This repo does not have GitHub auto-merge; squash immediately.
 4. Use GitHub squash merge. Do not check out `main` in a second local
    worktree (`/tmp/us4-search` already holds it).
 

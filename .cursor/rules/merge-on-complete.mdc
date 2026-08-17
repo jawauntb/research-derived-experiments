@@ -15,7 +15,7 @@ integration agent, or a batch of draft PRs.
 2. Run the check (`lake lean` for a Lean file, `python3 scripts/run_quality_checks.py` for Python).
 3. Open a PR vs `main`. Draft only while the check is still running.
 4. When the check passes: `gh pr ready N` then `gh pr merge N --squash`.
-   If required CI is still pending, `gh pr merge N --squash --auto`.
+   This repo does not have GitHub auto-merge. Squash immediately; do not wait.
 5. Do not leave a green PR sitting as draft.
 
 `/tmp/us4-search` already holds `main`. Use GitHub squash merge. Do not
