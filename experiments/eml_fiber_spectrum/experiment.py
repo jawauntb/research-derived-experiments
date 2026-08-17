@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the EML numerical fiber-spectrum enumerator (US-4' withheld)."""
+"""Run the EML constant-grammar fiber-spectrum enumerator."""
 
 from __future__ import annotations
 
@@ -27,16 +27,18 @@ def main() -> int:
     payload = evaluate_benchmark()
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
+    closed = payload["closed_spectrum"]
+    optional = payload["optional_gates"]["EFS_CROSS_SIZE_COLLISION"]
     print(
         json.dumps(
             {
                 "status": payload["status"],
                 "gates": payload["gates"],
-                "optional_gates": payload["optional_gates"],
-                "tree_counts_by_size": payload["tree_counts_by_size"],
-                "n_numerical_fibers": payload["closed_spectrum"]["n_numerical_fibers"],
-                "cross_size": payload["optional_gates"]["EFS_CROSS_SIZE_COLLISION"]["status"],
-                "us4_prime": "withheld",
+                "n_trees": payload["n_trees"],
+                "n_numerical_fibers": closed["n_numerical_fibers"],
+                "n_undefined": closed["n_undefined"],
+                "cross_size_status": optional["status"],
+                "us4_prime": "untested",
             },
             sort_keys=True,
         )

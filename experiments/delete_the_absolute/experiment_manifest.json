@@ -81,6 +81,11 @@
       "kind": "other",
       "path": "experiments/delete_the_absolute/preregistration.json",
       "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/delete_the_absolute/paper.md",
+      "public": true
     }
   ],
   "status": "accepted"

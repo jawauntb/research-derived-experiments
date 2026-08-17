@@ -1,157 +1,84 @@
 {
   "experiment_id": "eml_fiber_spectrum",
   "schema_version": "1.0",
-  "hypothesis": "Closed EML trees (S → 1 | eml(S,S), eml(x,y)=exp(x)-ln(y)) have no 1-D size/degree complete invariant of denotation. Exhaustive enumeration with n_internal ≤ 6 is Catalan-complete. Two equal-size trees disagree at a registered evaluation (exact witness). Spectrum counts from a rounded value tuple are computational: grid or rounding agreement is not function identity. US-4′ is withheld. Cross-size numerical collision is recorded if a well-resolved witness exists, otherwise withheld for that gate only.",
-  "primary_metric": "closed_spectrum.n_numerical_fibers",
-  "target_object": "The closed-term denotation map q: EmlTree → ℝ ∪ {⊥} on the homogeneous grammar S → 1 | eml(S,S). The fiber of a real z is q^{-1}(z). The first instrument is a numerical estimate of that spectrum at a registered depth, not a DP of the true fiber and not US-4′.",
-  "decision": "Accept the first instrument if and only if the four required noncompensatory gates pass. Do not promote US-4′. Do not treat size as a DP key. Do not fail the package if the optional cross-size gate is withheld.",
-  "representation_and_data_clock": "Finite full-binary EML trees. Size is n_internal (eml nodes); n_nodes = 2*n_internal+1. Closed denotation evaluates every leaf as 1 using math.exp/math.log over the reals (y>0). A secondary leaf-chirality probe substitutes left leaves := x and right leaves := y on a fixed grid; at (1,1) it coincides with the closed denotation. No sampling clock: exhaustive enumeration, not Monte Carlo. Numerical fiber id is a 10-decimal rounding of the value tuple.",
-  "material_assumptions": [
-    "Leaves are the constant 1; this is the closed grammar, not the variable-leaf calculator grammar.",
-    "Real evaluation: second arguments ≤ 0 or nonfinite intermediates are undefined (⊥), not complex.",
-    "Size/degree is the candidate 1-D invariant under test; it is expected to fail as a denotation invariant.",
-    "Rounding to 10 decimals and float64 evaluation can merge distinct reals; extreme magnitudes are resolution-suspect.",
-    "The leaf-chirality probe is a representation choice, not Odrzywołek's function language.",
-    "Gibbs base 4 truncated at D is a census statistic, not a derived free-energy law."
-  ],
-  "fatal_gates": [
-    "EFS_SIZE_NOT_DENOTATION",
-    "EFS_ENUMERATION_COMPLETE",
-    "EFS_GRID_COLLISION_DISCLOSED",
-    "EFS_US4_PRIME_WITHHELD"
-  ],
-  "optional_gates": [
-    "EFS_CROSS_SIZE_COLLISION"
-  ],
-  "decisive_controls": [
-    "catalan_count_equals_enumerated_trees_per_k",
-    "size_2_closed_values_disagree_at_witness_point",
-    "hand_trees_match_closed_forms",
-    "operator_grid_matches_exp_minus_log",
-    "grid_agreement_disclosed_as_not_identity",
-    "us4_prime_explicitly_untested",
-    "cross_size_uses_well_resolved_or_exact_identities_only"
-  ],
+  "run_id": "eml_fiber_spectrum_2026_08_17",
+  "producing_agent": {
+    "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+    "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+  },
+  "hypothesis": "The homogeneous EML grammar S → 1 | eml(S,S) has no 1-D integer invariant like polynomial degree. Exhaustive enumeration through 6 internal nodes matches Catalan counts. Two equal-size trees disagree at a registered closed evaluation. Size is therefore not a denotation invariant. US-4′ is not tested.",
+  "primary_metric": "gates.EFS_SIZE_NOT_DENOTATION",
+  "decision": "Accept the constant-grammar census if and only if Catalan enumeration matches and a same-size different-value witness exists. Do not promote US-4′. Cross-size collision is recorded if a well-resolved exact identity is observed and is not a fatal gate.",
   "gates": {
-    "EFS_SIZE_NOT_DENOTATION": "There exist two trees with equal n_internal whose closed evaluations (equivalently probe at the registered point (1,1)) differ. Registered witness: eml(1,eml(1,1))=e-1 versus eml(eml(1,1),1)=exp(e).",
-    "EFS_ENUMERATION_COMPLETE": "For each registered k in 0..6, the number of trees with k internal nodes equals Catalan C_k.",
-    "EFS_GRID_COLLISION_DISCLOSED": "The summary records that finite-grid or rounded agreement is not function identity.",
-    "EFS_US4_PRIME_WITHHELD": "The summary explicitly flags US-4′ untested.",
-    "EFS_CROSS_SIZE_COLLISION": "Optional. Pass if two well-resolved closed values at different sizes share a numerical fiber, witnessed by a registered algebraic identity. If not observed at this D, status=withheld; do not fail the package."
+    "EFS_SIZE_NOT_DENOTATION": "Two trees with the same number of internal nodes have different closed real values. Registered witness: k=2, eml(1,eml(1,1))=e-1 versus eml(eml(1,1),1)=exp(e). Hand identities eml(1,1)=e and leaf=1 must hold.",
+    "EFS_ENUMERATION_COMPLETE": "The number of trees with k internal nodes equals Catalan C_k for each k in {0,...,6}.",
+    "EFS_GRID_COLLISION_DISCLOSED": "The summary records that finite-grid / rounded agreement is not function identity.",
+    "EFS_US4_PRIME_WITHHELD": "The summary flags US-4′ untested. A truncated Gibbs mass is a census statistic, not that claim."
   },
-  "metrics": [
-    "tree_counts_by_size",
-    "closed_spectrum.n_numerical_fibers",
-    "closed_spectrum.max_fiber_size",
-    "closed_spectrum.n_well_resolved_cross_size_fibers",
-    "probe_spectrum.n_numerical_fibers"
-  ],
-  "max_internal": 6,
-  "round_digits": 10,
-  "witness_point": [1.0, 1.0],
-  "test_grid": [
-    [0.0, 1.0],
-    [1.0, 1.0],
-    [1.0, 2.0],
-    [0.5, 0.5],
-    [-1.0, 1.0],
-    [2.0, 2.718281828459045]
-  ],
-  "controls": [
-    "catalan_count_equals_enumerated_trees_per_k",
-    "size_2_closed_values_disagree_at_witness_point",
-    "hand_trees_match_closed_forms",
-    "operator_grid_matches_exp_minus_log",
-    "grid_agreement_disclosed_as_not_identity",
-    "us4_prime_explicitly_untested",
-    "cross_size_uses_well_resolved_or_exact_identities_only"
-  ],
-  "withheld": [
-    "US-4_prime_EML_gradient_recovery",
-    "true_function_identity_from_grid_agreement",
-    "size_as_a_DP_key_for_EML_fibers",
-    "Gibbs_base_4_as_canonical",
-    "leaf_chirality_probe_as_Odrzywolek_function_grammar"
-  ],
   "kill_criteria": {
-    "EFS_SIZE_NOT_DENOTATION": "Fails if every equal-size pair that is defined agrees at the registered point. That would mean this depth does not exhibit size-as-non-invariant; it would not prove a 1-D invariant exists.",
-    "EFS_ENUMERATION_COMPLETE": "Fails if any registered k has a count other than C_k.",
-    "EFS_CROSS_SIZE_COLLISION": "Withheld, not failed, if every well-resolved numerical fiber sits on a single size at this D."
+    "EFS_SIZE_NOT_DENOTATION": "Kill if the registered size-2 pair agrees, or if eml(1,1) is not e, or if the leaf is not 1.",
+    "EFS_ENUMERATION_COMPLETE": "Kill if any k in 0..6 has a tree count other than C_k.",
+    "EFS_GRID_COLLISION_DISCLOSED": "Kill if the disclosure string is missing.",
+    "EFS_US4_PRIME_WITHHELD": "Kill if the run claims US-4′ tested or passed."
   },
-  "current_frame": "After a Sheffer-style completeness result, expressivity is treated as the phenomenon and description complexity as invariant. The monomial toy then suggests: find a 1-D denotation invariant and DP the fiber, as degree does for x^(2^n).",
-  "assumption_ledger": [
-    {
-      "assumption": "EML denotations have a 1-D invariant like degree",
-      "type": "pragmatic",
-      "load_bearing": true,
-      "break_test": "Two equal-size trees with different closed values"
+  "optional_gates": {
+    "EFS_CROSS_SIZE_COLLISION": "If two different sizes share a well-resolved closed value via an exact algebraic identity, record it. If not observed, status=withheld. Not fatal."
+  },
+  "audit_card": {
+    "target_object": "Closed EML terms: full binary trees with every leaf equal to the constant 1, evaluated as exp(left)-ln(right) on the reals.",
+    "decision": "Accept or reject: Catalan-complete census through k=6; size is not a denotation invariant; US-4′ remains untested.",
+    "representation": "Dataclass trees; real eval with domain y>0; 10-decimal numerical fiber ids for spectrum counts only.",
+    "data_clock": "None. Closed finite language fragment, no sampling, no free variable x.",
+    "material_assumptions": [
+      "The grammar is Odrzywołek's constant grammar, not the variable-leaf calculator language.",
+      "Real principal log; nonpositive right-hand arguments and overflow are undefined, not coerced.",
+      "Rounded fiber ids are a computational clustering, not an identity theorem.",
+      "The leaf-chirality probe (left leaves:=x, right leaves:=y) is a registered representation, not variable-EML."
+    ],
+    "fatal_gates": [
+      "EFS_SIZE_NOT_DENOTATION",
+      "EFS_ENUMERATION_COMPLETE",
+      "EFS_GRID_COLLISION_DISCLOSED",
+      "EFS_US4_PRIME_WITHHELD"
+    ],
+    "decisive_controls": [
+      "catalan_enumeration_independent_of_eval",
+      "registered_size_2_witness",
+      "hand_identities_e_and_one",
+      "undefined_not_coerced",
+      "us4_prime_cannot_pass"
+    ],
+    "evidence_paths": [
+      "experiments/eml_fiber_spectrum/results/eml_fiber_spectrum_summary.json",
+      "experiments/eml_fiber_spectrum/preregistration.json",
+      "tests/test_eml_fiber_spectrum.py"
+    ]
+  },
+  "mathematical_claim": {
+    "objects": {
+      "Tree": "full binary trees; leaf denotes 1; internal node denotes eml",
+      "eml": "eml(x,y)=exp(x)-ln(y) on {y>0}",
+      "C_k": "Catalan number; count of trees with k internal nodes"
     },
-    {
-      "assumption": "Size is a complete invariant of numerical denotation",
-      "type": "measurement",
-      "load_bearing": false,
-      "break_test": "Two different sizes in one well-resolved numerical fiber"
-    },
-    {
-      "assumption": "Grid or rounded agreement is function identity",
-      "type": "computational",
-      "load_bearing": "true_for_spectrum_overclaim",
-      "break_test": "Disclosure plus resolution-suspect pairs at extreme magnitude"
-    },
-    {
-      "assumption": "Fiber free energy predicts EML gradient recovery",
-      "type": "causal",
-      "load_bearing": "true_for_US4_prime",
-      "break_test": "Not run; withheld"
-    }
+    "types_domains_units": "Closed denotations are real or undefined. No units. Support is the constant grammar through k=6.",
+    "exact_claim": "There exist two trees with 2 internal nodes whose closed values differ (e-1 vs exp(e)). For each k in 0..6 the enumerated count equals C_k. US-4′ is not a claim of this package.",
+    "quantifiers": "Existential for the size-2 witness; universal for Catalan counts on the registered bound.",
+    "assumptions": "Real evaluation; overflow/domain failures are undefined; rounding is disclosed and not used for the size witness.",
+    "identification_conditions": "The size witness uses exact algebraic values, not rounded fiber ids.",
+    "derivation_dependencies": "Odrzywołek arXiv:2603.21852 for the operator and grammar. No 1-D complete invariant is assumed or constructed.",
+    "coordinate_invariance": "Pretty-print is a gauge. Closed value is the denotation for this constant grammar.",
+    "edge_limiting_null_cases": "k=0 is the leaf 1. k=1 is eml(1,1)=e. Domain failures are undefined. Variable-x grammar is out of scope."
+  },
+  "controls": [
+    "catalan_enumeration",
+    "real_domain_and_undefined",
+    "rounding_disclosure",
+    "us4_prime_withheld"
   ],
-  "anomaly_map": [
-    {
-      "anomaly": "No 1-D invariant for closed EML terms",
-      "strain": "The squaring-separation DP does not transport",
-      "assumption": "EML denotations have a 1-D invariant like degree"
-    },
-    {
-      "anomaly": "Blind EML recovery collapses with depth while expressivity is constant (Odrzywołek §4.3)",
-      "strain": "Completeness is not access",
-      "assumption": "Expressivity is the phenomenon"
-    }
-  ],
-  "candidate_reframes": [
-    {
-      "reframe": "Access is a fiber spectrum, not a shortest-length or 1-D DP key",
-      "prediction": "Size fails as a denotation invariant; the spectrum must be estimated by enumeration or another complete invariant, not by degree-style DP"
-    }
-  ],
-  "discriminating_predictions": [
-    {
-      "condition": "n_internal = 2 closed terms",
-      "old_frame": "A size key would place both trees in one denotation class",
-      "new_frame": "eml(1,e)=e-1 and eml(e,1)=exp(e) disagree"
-    },
-    {
-      "condition": "Registered census n_internal ≤ 6",
-      "old_frame": "If size were complete, every numerical fiber would sit on one size",
-      "new_frame": "Exact identities (e.g. e-ln(exp(e-1))=1) place 1 on sizes 0 and 4"
-    }
-  ],
-  "severe_experiment": "Exhaustive Catalan-complete enumeration at MAX_INTERNAL=6; closed eval; probe grid; noncompensatory gates; optional cross-size withheld rather than failed.",
-  "claim_boundary": "Supported if gates pass: size is not a denotation invariant on this census; enumeration is Catalan-complete; spectrum counts are computational; US-4′ is untested. Not supported: true fiber masses, function identity from the grid, gradient-recovery prediction, a replacement complete invariant.",
-  "next_best_test": "Raise D or add the variable-leaf grammar and ask whether recovery rates on Odrzywołek master formulas track truncated fiber mass rather than shortest depth. That is US-4′, still withheld.",
   "compute": {
     "execution_class": "local_cpu",
     "random_seed": null,
-    "sampling": "none; exhaustive enumeration of all trees with n_internal ≤ 6",
-    "raw_data": false
+    "sampling": "exhaustive trees with k internal nodes for k<=6 (197 trees). Real eval; nonpositive right-hand side and overflow marked undefined."
   },
-  "mathematical_claim_card": {
-    "objects": "EmlTree (full binary trees, leaves=1), n_internal: Tree→ℕ, eval_closed: Tree→ℝ∪{⊥}, Catalan C_k, numerical fiber id (10-decimal rounding).",
-    "types_domains_units": "n_internal is a count of eml nodes. eval_closed is dimensionless real or undefined. Fiber ids are strings. Magnitudes are raw reals, not probabilities unless divided by truncated Z_hat.",
-    "claim_and_quantifiers": "∀ k∈{0,…,6} the number of trees with k internal nodes equals C_k. ∃ two trees with n_internal=2 and eval_closed distinct. Optional: ∃ two trees with distinct n_internal and equal well-resolved eval_closed. US-4′ is not claimed.",
-    "assumptions": "Real logarithm; no complex branch. Rounding is a computational surrogate for equality. Leaf-chirality probe is not the object.",
-    "derivation_dependencies": "Catalan enumeration of full binary trees. Direct evaluation of eml. Algebraic identities such as e-ln(exp(e-1))=1.",
-    "invariance": "Closed denotation is independent of pretty-print. Size is a syntactic invariant, not a denotation invariant. Fiber id depends on ROUND_DIGITS.",
-    "edge_cases": "n_internal=0 is the leaf 1. Right-child 0 (ln(1) tree used as y) is undefined. Overflow is ⊥.",
-    "executable_checks": "Counts match C_k; eml(1,1)=e; size-2 pair disagrees; registered cross-size identities evaluate to 1, e, 0, e-1, exp(e)."
-  }
+  "claim_boundary": "Accepted only as a constant-grammar census through k=6 plus an exact same-size disagreement. Not a variable-x spectrum. Not US-4′. Not an identity theorem for rounded collisions. Not a 1-D invariant."
 }
