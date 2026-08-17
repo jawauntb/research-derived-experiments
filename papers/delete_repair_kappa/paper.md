@@ -54,7 +54,15 @@ cheap signature is not that function. Uniqueness is false.
 **Not supported.** A new master object. A signature that does
 not look at the menu. An LLM. Paper 0. Valence.
 
+## Lean status
+
+**Proved, not verified.** `KappaCheap.lean` (`kappa_cheap_not_function`),
+`KappaScreen.lean` (`kappa_screen_hits_suite`), `KappaUnique.lean`
+(`bag_not_unique`), `KappaRelabel.lean` (`kappa_relabel_natural`).
+Python suite remains the empirical receipt.
+
 ## Next best test
 
 Stop. Possibility 5 is the close. Do not fit a fancier cheap
 signature to erase the collision. Do not reopen DR/DCR.
+SafeVerify the four files when banking a verified claim.

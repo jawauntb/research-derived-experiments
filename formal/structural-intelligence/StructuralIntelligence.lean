@@ -15,6 +15,13 @@ import StructuralIntelligence.RepresentationRepair
 import StructuralIntelligence.AutocatalyticArtwork
 import StructuralIntelligence.DeleteRepair
 import StructuralIntelligence.EmlZeroIdentity
+import StructuralIntelligence.KappaCheap
+import StructuralIntelligence.KappaScreen
+import StructuralIntelligence.KappaUnique
+import StructuralIntelligence.KappaRelabel
+import StructuralIntelligence.Aff13
+import StructuralIntelligence.DiamondInterval
+import StructuralIntelligence.SurgeryMiss
 
 /-!
 # Structural Intelligence — Lean 4 formalisation
@@ -105,6 +112,21 @@ remaining Structural-Intelligence companion papers:
     — EML zero witness: `eml(a, eml(eml(a,1),1)) = 0` from
     `eml(a,b) := exp(a)-ln(b)` plus `ln∘exp` / `exp∘ln` cancellation.
     No `Real`, no `Float`, no `Complex.log`.
+*   `StructuralIntelligence.KappaCheap.kappa_cheap_not_function`
+    — Paper F: the cheap 5-field signature is not a function to gold.
+*   `StructuralIntelligence.KappaScreen.kappa_screen_hits_suite`
+    — Paper F: κ_screen equals gold on the registered 11-row suite.
+    Cites CommonSuffScreen; adds only a named total order.
+*   `StructuralIntelligence.KappaUnique.bag_not_unique`
+    — Paper F: `bag` has five representing menu screens.
+*   `StructuralIntelligence.KappaRelabel.kappa_relabel_natural`
+    — Paper F: bit swap `0↔3` sends first_bit/q_stab0 to last_bit/q_stab_last.
+*   `StructuralIntelligence.Aff13.affine_escapes_kirchhoff`
+    — Paper C: Aff(1, Z/3) holonomy is not integer Kirchhoff.
+*   `StructuralIntelligence.DiamondInterval.poset_not_determine_interval`
+    — Paper D: two diamond embeddings, same poset, different `s²`.
+*   `StructuralIntelligence.SurgeryMiss.surgery_miss_pair_eq`
+    — Paper E: cheap `decide` says quotient on `pair_eq`/`q_id`; gold is noop.
 
 Everything is proven in pure Lean 4 core (no `Mathlib`).  The analytic
 step `(1 - 1/(cM))^N ≤ exp(-N/(cM))` and the resulting
@@ -152,3 +174,10 @@ and are documented as future work in the package `README.md`.
 #print axioms StructuralIntelligence.EmlZeroIdentity.ExpLn.eml_zero_identity
 #print axioms StructuralIntelligence.EmlZeroIdentity.ExpLn.eml_zero_identity_one
 #print axioms StructuralIntelligence.EmlZeroIdentity.ExpLn.eml_zero_identity_x
+#print axioms StructuralIntelligence.KappaCheap.kappa_cheap_not_function
+#print axioms StructuralIntelligence.KappaScreen.kappa_screen_hits_suite
+#print axioms StructuralIntelligence.KappaUnique.bag_not_unique
+#print axioms StructuralIntelligence.KappaRelabel.kappa_relabel_natural
+#print axioms StructuralIntelligence.Aff13.affine_escapes_kirchhoff
+#print axioms StructuralIntelligence.DiamondInterval.poset_not_determine_interval
+#print axioms StructuralIntelligence.SurgeryMiss.surgery_miss_pair_eq

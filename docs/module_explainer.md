@@ -20,7 +20,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `references/` | Public source list; local-only full texts (gitignored subdirs) |
 | `formal/ontology-hs/` | Haskell typed ontology gate (Arc 2B) |
 | `formal/relative-identifiability/` | Dependency-free Lean 4 proofs for observational quotient factorization, obstruction, and experiment-family refinement |
-| `formal/structural-intelligence/` | Dependency-free Lean 4 cores for the SIC family, including `DeleteRepair.lean`, `Compiler/SquaringSeparation.lean`, and `EmlZeroIdentity.lean` |
+| `formal/structural-intelligence/` | Dependency-free Lean 4 cores for the SIC family, including `DeleteRepair.lean`, `Compiler/SquaringSeparation.lean`, `EmlZeroIdentity.lean`, and Wave 2 `KappaCheap` / `KappaScreen` / `KappaUnique` / `KappaRelabel` / `Aff13` / `DiamondInterval` / `SurgeryMiss` (proved, not verified) |
 | `docs/lea/` | Seed instructions / memory / blueprint for a Lea project `Lea.SicDynamics` (not a Lake package) |
 | `.cursor/skills/lea/` | Repo skill for standing up Lea and banking proved vs verified Lean |
 | `sites/` | Public static sites (atlas, Inquiry landing, Envelope Guard) |

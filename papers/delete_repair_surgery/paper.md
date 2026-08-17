@@ -120,6 +120,11 @@ hits every held-out row. That would be a menu change, not a
 rescue of this rule on this menu. A name-blind rule that does
 not try repairs and still hits a larger held-out suite.
 
+## Lean status
+
+**Proved, not verified.** `SurgeryMiss.lean` (`surgery_miss_pair_eq`).
+The cheap signature was not refit.
+
 ## Next best test
 
 Paper F is banked: the written function is SIC. Do not reopen

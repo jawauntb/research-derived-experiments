@@ -454,22 +454,29 @@ Until then the honest title is the one on this page.
 
 ---
 
-## 13. Next method: Lea, not a new letter
+## 13. Lean status (Wave 2 banked)
 
-The remaining work is machine-checking the Python-only load-bearing
-bits. The tool is Lea (VIDA-NYU): a Lean 4 agent backbone that
-keeps proved (the file elaborates) distinct from verified
-(SafeVerify kernel replay, per-declaration match, axiom
-whitelist).
+P0/P1 nodes are **proved** (mathlib-free, zero `sorry`, in the
+`formal/structural-intelligence/` aggregator) and **not verified**
+(SafeVerify has not been run on these files). A green `lake build`
+is not an audit.
 
-That is a method, not Possibility 1 returning. Do not import
-Mathlib into the mathlib-free cores. Do not fight `Complex.log 0`.
-Do not re-prove Path A/B or CommonSuffScreen.
+| Node | File | Label |
+|---|---|---|
+| `kappa_cheap_not_function` | `KappaCheap.lean` | proved / not verified |
+| `kappa_screen_hits_suite` | `KappaScreen.lean` | proved / not verified |
+| `bag_not_unique` | `KappaUnique.lean` | proved / not verified |
+| `kappa_relabel_natural` | `KappaRelabel.lean` | proved / not verified |
+| `affine_escapes_kirchhoff` | `Aff13.lean` | proved / not verified |
+| `poset_not_determine_interval` | `DiamondInterval.lean` | proved / not verified |
+| `surgery_miss_pair_eq` | `SurgeryMiss.lean` | proved / not verified |
 
-Continuation contract:
-`docs/next_agent_lea_handoff_2026-08-17.md`.
-Skill: `.cursor/skills/lea/SKILL.md`.
-Project seed: `docs/lea/`.
+Still Python: empirical `Φ` ratios, GD 8/8, extras 43/28, the
+n=4 representability matrix, Paper B `swap_typed_wins`.
+
+Lea is installed locally (`docs/lea/ENV_STATUS.md`). `/verify` is
+available there. Do not import Mathlib into the mathlib-free cores.
+Do not fight `Complex.log 0`. Do not start Paper G.
 
 ---
 
@@ -488,9 +495,11 @@ Banked packages: `squaring_separation`, `delete_the_absolute`,
 `delete_repair_kappa`.
 
 Lean: `DeleteRepair.lean`, `EmlZeroIdentity.lean`,
-`Compiler/SquaringSeparation.lean`. No Mathlib in those
-cores. Zero `sorry`. Paper F itself is still Python; Lea is
-the next check, not a new object.
+`Compiler/SquaringSeparation.lean`, plus Wave 2
+`KappaCheap.lean`, `KappaScreen.lean`, `KappaUnique.lean`,
+`KappaRelabel.lean`, `Aff13.lean`, `DiamondInterval.lean`,
+`SurgeryMiss.lean`. No Mathlib in those cores. Zero `sorry`.
+Wave 2 headlines are **proved, not verified**.
 
 Reproduce Paper F:
 
