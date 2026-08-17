@@ -1748,6 +1748,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 | `output/pdf/primer_derived_research_residuals_2026_07_14.pdf` | Rendered 15-page residual-work register |
 | Root `README.md` | Entry commands and experiment inventory |
 | Root `TODO.md` | Active research ledger |
-| Root `AGENTS.md` | Agent/contributor documentation obligations |
+| Root `AGENTS.md` | Agent/contributor documentation obligations, including merge-on-complete |
+| `.cursor/rules/merge-on-complete.mdc` | Always-on: squash-merge a green PR immediately; do not stockpile drafts |
 | `apps/inquiry-black-box/AGENTS.md` | Inquiry-specific agent rules |
 | `coherence-testbench/POST_MORTEM.md` | Coherence Phase-0 verdict |

@@ -21,6 +21,23 @@ Also refresh provenance when experiment results or run commands change:
 python scripts/gen_provenance.py
 ```
 
+## Merge on complete (required)
+
+You are **allowed and compelled** to squash-merge finished work to `main`
+as soon as this task's check is green. Do not stockpile draft PRs, wait
+for sibling lanes, or defer landing to a later integration agent.
+
+1. One branch, one concern, one check.
+2. Open a PR vs `main`. Draft only while the check is still running.
+3. When the check passes: `gh pr ready N` then `gh pr merge N --squash`.
+   This repo does not have GitHub auto-merge; squash immediately.
+4. Use GitHub squash merge. Do not check out `main` in a second local
+   worktree (`/tmp/us4-search` already holds it).
+
+Do **not** merge PR **464**. Do not merge a failed check, secrets, or a
+new scientific letter this tranche did not ask for. Do not force-push
+`main`. Always-on Cursor rule: `.cursor/rules/merge-on-complete.mdc`.
+
 ## Research operating norms
 
 - Prefer small, reviewable commits; do not break local quality checks.
