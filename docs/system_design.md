@@ -380,7 +380,9 @@ order; verdict `calculus_is_sic`.
 The close-out is `papers/sic_dynamics/`. Wave 2 P0/P1 lemmas are
 **proved** in `formal/structural-intelligence/` (`KappaCheap`,
 `KappaScreen`, `KappaUnique`, `KappaRelabel`, `Aff13`,
-`DiamondInterval`, `SurgeryMiss`) and **not verified**. Lea is
+`DiamondInterval`, `SurgeryMiss`). Six are **verified**;
+`KappaScreen` stays **proved-not-verified** (`native_decide`).
+Receipt: `docs/lea/VERIFY_RECEIPT_2026-08-17.md`. Lea is
 installed locally (`docs/lea/ENV_STATUS.md`). Do not start Paper G.
 See [`docs/next_agent_lea_handoff_2026-08-17.md`](next_agent_lea_handoff_2026-08-17.md)
 and [`.cursor/skills/lea/SKILL.md`](../.cursor/skills/lea/SKILL.md).

@@ -63,6 +63,13 @@ Aggregator imports them. Label: **proved-not-verified**.
 - `DiamondInterval.poset_not_determine_interval`
 - `SurgeryMiss.surgery_miss_pair_eq`
 
+## Wave 2 SafeVerify (2026-08-17)
+
+Append. Receipt: `docs/lea/VERIFY_RECEIPT_2026-08-17.md`.
+
+- verified: `kappa_cheap_not_function`, `bag_not_unique`, `kappa_relabel_natural`, `affine_escapes_kirchhoff`, `poset_not_determine_interval`, `surgery_miss_pair_eq`
+- proved-not-verified: `kappa_screen_hits_suite` (`native_decide` disallowed)
+
 ## Off-limits
 
 - Paper 0 / `Complex.log 0`
