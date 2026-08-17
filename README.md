@@ -15,6 +15,8 @@ This repository tracks a research program around a recurring pattern:
 
 > **Picking this up on a Modal machine?** Start with [docs/next_agent_modal_handoff.md](docs/next_agent_modal_handoff.md) — it covers all three experiments, the rate-distortion "Newton" test to run next, and the parallel Modal commands.
 
+> **Continuing the SIC / delete–repair close-out?** Start with [docs/next_agent_lea_handoff_2026-08-17.md](docs/next_agent_lea_handoff_2026-08-17.md). Papers A–F are banked. Next method is Lea, not a new letter.
+
 > **Public atlas deploys?** See [docs/railway-autodeploy.md](docs/railway-autodeploy.md) for the Railway production service, GitHub Actions fallback, and autodeploy diagnostics.
 
 The first synthesis is in [notes/geometric_convergence_research_synthesis.md](notes/geometric_convergence_research_synthesis.md). The working question:

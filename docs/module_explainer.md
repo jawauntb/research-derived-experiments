@@ -21,6 +21,8 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `formal/ontology-hs/` | Haskell typed ontology gate (Arc 2B) |
 | `formal/relative-identifiability/` | Dependency-free Lean 4 proofs for observational quotient factorization, obstruction, and experiment-family refinement |
 | `formal/structural-intelligence/` | Dependency-free Lean 4 cores for the SIC family, including `DeleteRepair.lean`, `Compiler/SquaringSeparation.lean`, and `EmlZeroIdentity.lean` |
+| `docs/lea/` | Seed instructions / memory / blueprint for a Lea project `Lea.SicDynamics` (not a Lake package) |
+| `.cursor/skills/lea/` | Repo skill for standing up Lea and banking proved vs verified Lean |
 | `sites/` | Public static sites (atlas, Inquiry landing, Envelope Guard) |
 | `apps/inquiry-black-box/` | Local-first Inquiry product monorepo (Bun/Electron/MV3) |
 | `coherence-testbench/` | Separate EEG/eyetrack Phase-0 GO/KILL project |
@@ -50,6 +52,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | Public agent benchmark package | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) |
 | Concern-gated retrieval theory and next experiments | [concern_gated_retrieval_research_program.md](concern_gated_retrieval_research_program.md) + [next-agent handoff](next_agent_concern_gated_retrieval_handoff_2026-07-23.md) |
 | Modal operator handoff | [next_agent_modal_handoff.md](next_agent_modal_handoff.md) |
+| Continue A–F formalization with Lea | [next_agent_lea_handoff_2026-08-17.md](next_agent_lea_handoff_2026-08-17.md) + [Lea skill](../.cursor/skills/lea/SKILL.md) + [docs/lea/](lea/README.md) |
 | Deploy atlas / Inquiry site | [railway-autodeploy.md](railway-autodeploy.md) |
 | Inquiry product work | `apps/inquiry-black-box/README.md` + `AGENTS.md` |
 | Coherence Phase-0 | `coherence-testbench/README.md` + `POST_MORTEM.md` |
@@ -156,6 +159,8 @@ environment.
 | [causally_grounded_agents_release_schema.md](causally_grounded_agents_release_schema.md) (+ `.json`) | Shared release schema |
 | [causally_grounded_agents_next_gap.md](causally_grounded_agents_next_gap.md) | Suite C transfer gaps |
 | [concern_gated_retrieval_research_program.md](concern_gated_retrieval_research_program.md) | Canonical two-flashlight intuition, mechanism decomposition, split generic/concern claim ladder, staged COGR-E2, safety gates, and live-agent advancement program |
+| [next_agent_lea_handoff_2026-08-17.md](next_agent_lea_handoff_2026-08-17.md) | After Papers A–F: Lea install, proved≠verified, P0/P1 lemma lanes, parallelization contract |
+| [lea/README.md](lea/README.md) | Seed files to copy into a Lea `.lea/` project (`instructions`, `memory`, `blueprint`) |
 | [next_agent_concern_gated_retrieval_handoff_2026-07-23.md](next_agent_concern_gated_retrieval_handoff_2026-07-23.md) | Pointer-first continuation contract for premise/calibration work, staged concern recovery and learned geometry, separate L1/L2 gates, and live-agent validation |
 | [harness_research/README.md](harness_research/README.md) | Staged grounded-harness portfolio with deterministic replay, transport, counterfactual, and functional-unlearning fixtures |
 | [next_agent_grounded_harness_experiments_handoff_2026-07-20.md](next_agent_grounded_harness_experiments_handoff_2026-07-20.md) | Post-fixture execution handoff: shared live-evaluation contract, ordered D2–D4 experiments, six safe parallel lanes, pilot gates, kill conditions, and release definition |
@@ -170,6 +175,7 @@ environment.
 | [paper_readiness.md](paper_readiness.md) | Paper readiness tracking |
 | [discovery_regime_audit.md](discovery_regime_audit.md) | Regime audit ledger |
 | [next_agent_modal_handoff.md](next_agent_modal_handoff.md) | Modal handoff |
+| [next_agent_lea_handoff_2026-08-17.md](next_agent_lea_handoff_2026-08-17.md) | SIC close-out continuation: Lea, proved≠verified, parallel lemma lanes |
 | [next_agent_evidence_infra_peer_status_2026-07-15.md](next_agent_evidence_infra_peer_status_2026-07-15.md) | Post-tranche peer status after U2–U7 (#365–#371): counts, hot files, deferred Phase 5, safe parallel work |
 | [next_agent_evidence_infra_coordination_2026-07-14.md](next_agent_evidence_infra_coordination_2026-07-14.md) | Live merge table for the six evidence-infra PRs |
 | [next_agent_evidence_infrastructure_remaining_handoff_2026-07-14.md](next_agent_evidence_infrastructure_remaining_handoff_2026-07-14.md) | Historical six-PR landing plan (execution state superseded by peer-status doc after #371) |
@@ -523,7 +529,7 @@ exhaustive counterexample search, and replayable MIDAS regression.
 | `papers/delete_repair_disanalogy/` | Paper D: shared cartoon is not a shared theorem; 196 diamonds, four intervals (`paper.md`); companion instrument `delete_repair_disanalogy` |
 | `papers/delete_repair_surgery/` | Paper E: taxonomy is not a one-shot agent rule; unused symmetry ≠ leftover privilege (`paper.md`); companion instrument `delete_repair_surgery` |
 | `papers/delete_repair_kappa/` | Paper F: the written function is Theorem 4 plus a total order (`paper.md`); companion instrument `delete_repair_kappa` |
-| `papers/sic_dynamics/` | Close-out: A–F laid out; Possibility 5 is the house; not a better LLM (`paper.md`) |
+| `papers/sic_dynamics/` | Close-out: A–F laid out; Possibility 5 is the house; not a better LLM; next method is Lea (`paper.md`) |
 | `papers/eml_access_geometry/` | Process-split synthesis: expressivity ≠ access, access is process-relative; LLM/SIC translation without a better-model claim |
 | `papers/sufficient_antecedents/` | Companion paper (Theorem SA-1): taxonomy of SIC-C-c positive resolutions — each of the four known identifiability escapes (linear ICA, sparse-linear ICA, iVAE, interventional CRL) is one way of populating Theorem 4's Markov-screen antecedent via local separation + cross-`u` coherence (`paper.md`, `paper.pdf`); companion instrument `antecedent_taxonomy_pair` |
 | `papers/structural_intelligence_covering_learnability/` | Companion paper (SIC-C-c covering meta-theorem): conditional closure of SIC-C-c under the polynomial-ε-covering hypothesis on `H`, composed from Theorem 6-core (ε-covering reduction, pure-core `refinement_preserves_screen`) and Theorem 5-rate (quantitative bound). Machine-checked as `StructuralIntelligenceMathlib.sicc_covering_meta` / `sicc_covering_poly` with zero new axioms. Isolates why linear ICA, sparse-linear ICA, iVAE, interventional CRL satisfy SIC-C-c and why Locatello 2019's fully-unsupervised nonlinear ICA does not (`paper.md`); companion instrument `sicc_covering_meta_pair` |
@@ -1127,7 +1133,7 @@ Notable bundles:
 - `papers/delete_repair_disanalogy/` — Paper D: poset does not determine Minkowski interval; PE quotient still fails
 - `papers/delete_repair_surgery/` — Paper E: name-blind one-shot rule dies on unused symmetry
 - `papers/delete_repair_kappa/` — Paper F: written κ is SIC, not a new master object
-- `papers/sic_dynamics/` — close-out paper, A–F in one place
+- `papers/sic_dynamics/` — close-out paper, A–F in one place; next method is Lea
 - `papers/eml_access_geometry/` — process-split synthesis and LLM/SIC translation
 - Synthesis: `metaphysics_synthesis`, `metric_stack_synthesis`, literature audits/reviews
 - Review methods: `unified_citation_grounded_review` (framework, ontology, executable reviewer, and alpha-research operating system)

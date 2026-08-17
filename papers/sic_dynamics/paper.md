@@ -454,7 +454,26 @@ Until then the honest title is the one on this page.
 
 ---
 
-## 13. Provenance
+## 13. Next method: Lea, not a new letter
+
+The remaining work is machine-checking the Python-only load-bearing
+bits. The tool is Lea (VIDA-NYU): a Lean 4 agent backbone that
+keeps proved (the file elaborates) distinct from verified
+(SafeVerify kernel replay, per-declaration match, axiom
+whitelist).
+
+That is a method, not Possibility 1 returning. Do not import
+Mathlib into the mathlib-free cores. Do not fight `Complex.log 0`.
+Do not re-prove Path A/B or CommonSuffScreen.
+
+Continuation contract:
+`docs/next_agent_lea_handoff_2026-08-17.md`.
+Skill: `.cursor/skills/lea/SKILL.md`.
+Project seed: `docs/lea/`.
+
+---
+
+## 14. Provenance
 
 Human director: Jawaun Brown.
 
@@ -470,7 +489,8 @@ Banked packages: `squaring_separation`, `delete_the_absolute`,
 
 Lean: `DeleteRepair.lean`, `EmlZeroIdentity.lean`,
 `Compiler/SquaringSeparation.lean`. No Mathlib in those
-cores. Zero `sorry`.
+cores. Zero `sorry`. Paper F itself is still Python; Lea is
+the next check, not a new object.
 
 Reproduce Paper F:
 

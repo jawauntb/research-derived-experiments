@@ -377,6 +377,11 @@ held-out 6/7; `surgery_killed`).
 Paper F is `experiments/delete_repair_kappa/`: κ_cheap is not
 a function; κ_screen hits 11/11 and is Theorem 4 plus a total
 order; verdict `calculus_is_sic`.
+The close-out is `papers/sic_dynamics/`. The next licensed
+method is Lea (proved ≠ verified), not a new letter: see
+[`docs/next_agent_lea_handoff_2026-08-17.md`](next_agent_lea_handoff_2026-08-17.md)
+and [`.cursor/skills/lea/SKILL.md`](../.cursor/skills/lea/SKILL.md).
+Project seed: [`docs/lea/`](lea/README.md).
 
 The weakness paper also carries a theory-only companion,
 `papers/weakness_invariance_neurips/pac_bayes_weakness_sketch.md`. It derives a
@@ -1734,6 +1739,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 | [harness_research/README.md](harness_research/README.md) | Shared contract and dependency order for the grounded-harness research portfolio |
 | [publication_sharing_map.md](publication_sharing_map.md) | What to share publicly |
 | [next_agent_modal_handoff.md](next_agent_modal_handoff.md) | Modal operator handoff |
+| [next_agent_lea_handoff_2026-08-17.md](next_agent_lea_handoff_2026-08-17.md) | After A–F: Lea formalization contract, proved≠verified, parallel lemma lanes |
 | [next_agent_evidence_infrastructure_remaining_handoff_2026-07-14.md](next_agent_evidence_infrastructure_remaining_handoff_2026-07-14.md) | Audited recovery and dependency order for the remaining evidence-infrastructure work |
 | [railway-autodeploy.md](railway-autodeploy.md) | Site deploy diagnostics |
 | [discovery_regime_audit.md](discovery_regime_audit.md) | Regime audit ledger |
