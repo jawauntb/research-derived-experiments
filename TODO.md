@@ -13,7 +13,8 @@
 
 - [x] Leaf-labeled census through `k=5` (`2^{k+1} C_k` = 3238).
 - [x] Exact same-size functional split `exp(x)` vs `e-ln(x)`.
-- [ ] US-4′: does truncated fiber mass predict Gibbs recovery?
+- [x] US-4′ Gibbs half: truncated fiber mass is not shortest depth (`k=3` ratio 2.016).
+- [ ] US-4′ gradient half: does master-formula GD still track `Φ`?
 - [ ] Do not import OpenAI 2026 writeups as verified theorems.
 
 ## Obstruction-Aware Admission (2026-07-27)
@@ -118,7 +119,8 @@
 - [x] Disclose the run-1 closed-form amendment (`28.79` unnormalised → `28.28` with `Z_Mul/Z_Sq`).
 - [x] Write `Compiler/SquaringSeparation.lean` for Lea (finite trees, zero analysis).
 - [x] Kernel-check `Compiler/SquaringSeparation.lean` on Lean 4.31 (`lake build`, zero `sorry`); keep Paper 0 (`Complex.log 0`) off this path.
-- [ ] Estimate the EML-native fiber spectrum (no 1-D invariant). This is where US-4′ lives or dies.
+- [x] Estimate the EML-native fiber spectrum (no 1-D invariant) through `k=5` and test Gibbs-vs-shortest.
+- [ ] Master-formula gradient recovery (the remaining half of US-4′).
 - [ ] Verify Stachowiak 2026 (arXiv:2604.23893) and the program-note packaging of Kolmogorov invariance against primary text.
 
 ## Now

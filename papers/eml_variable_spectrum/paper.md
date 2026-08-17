@@ -63,4 +63,5 @@ agreeing at `x=2`; the all-ones pair failing `e-1` / `exp(e)`.
 
 **Next test.** Ask whether truncated fiber mass, not shortest depth,
 predicts which variable-`x` terms are recovered under a Gibbs sampler.
-That is US-4′. It is not this paper.
+That is the Gibbs half of US-4′ (`experiments/eml_us4_prime/`).
+Master-formula gradient recovery remains open.

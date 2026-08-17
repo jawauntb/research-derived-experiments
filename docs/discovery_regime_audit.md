@@ -153,7 +153,55 @@ Results:
 Residual content:
 
 - Old regime: degree / shortest depth as the access key.
-- New: fiber spectrum of functions; US-4′ still the next test.
+- New: fiber spectrum of functions; Gibbs-vs-shortest is the next test.
+
+## EML US-4′ / Gibbs vs shortest depth
+
+Question: on the truncated variable-`x` EML language, does shortest
+depth determine Gibbs access, or does truncated fiber mass?
+
+Current regime:
+
+- Artifact types: leaf-labeled EML trees; numerical fibers; Gibbs
+  masses `Φ/Z` under `π(t)∝4^{-|t|}`.
+- Operations: exact finite sums over the `k≤5` census (3238 trees).
+- Gates/verifiers: six fatal US4P gates; gradient recovery cannot pass.
+- Known limitations: grid clustering; Gibbs base 4 is a modelling
+  choice; extra shells are crumbs at this bound.
+
+Action class:
+
+- Frame diagnosis: the Sq extra-shell story is not the EML mechanism
+  at `k≤5`.
+- Why: size-class order is intact (0 inversions); extra-shell factor
+  `1.0078`; the split is min-shell multiplicity of an exact identity.
+
+Experiment:
+
+- Manifest/report paths: `experiments/eml_us4_prime/`.
+- Positive targets: `eml(a,eml(eml(a,1),1))=0` for `a∈{1,x}`; `k=3`
+  finite `Φ` ratio `≥ 2`.
+- Negative controls: inherited labeled Catalan counts; finite-fiber
+  restriction; singleton constant `eml(1,eml(1,eml(1,1)))`.
+- Stress tests: extra-shell factor must stay `< 1.05` or the mechanism
+  claim changes.
+
+Gate:
+
+- Acceptance: all six fatal gates pass.
+- Withheld: master-formula gradient recovery; Sq extra-shell transfer;
+  function identity from the grid except the zero identity.
+
+Results:
+
+- Accepted: `k=3` ratio `2.015625`; zero identity; 0 size-class
+  inversions; max extra-shell factor `1.0078125`.
+- Key metrics: fat min-shell count 2 vs thin 1.
+
+Residual content:
+
+- Old regime: shortest depth, or extra shells, as the access key.
+- New: min-shell multiplicity. Gradient recovery is still the next test.
 
 ## Obstruction-Aware Admission V0
 
