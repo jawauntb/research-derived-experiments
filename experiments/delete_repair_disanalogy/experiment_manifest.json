@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "delete_repair_disanalogy",
+  "hypothesis": "On the integer Minkowski diamond fibre, the causal poset does not determine s²(e1,e2), while it does determine concurrency of {e1,e2}. The PE privilege-quotient still fails first_bit. If s² is unique on that fibre, or q_perm represents first_bit, reopen Possibility 6 on this harness.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "exact_diamond_fibre",
+      "description": "Only embeddings whose causal poset is exactly the diamond are kept. Extra relations reject the world."
+    },
+    {
+      "control_id": "concurrency_is_the_lamport_task",
+      "description": "The Lamport task is concurrency of the incomparable pair, not a metric."
+    },
+    {
+      "control_id": "pe_cell_is_disclosed_prior",
+      "description": "The first_bit/q_perm cell is the Paper A/B fact, not new enumeration."
+    },
+    {
+      "control_id": "kill_does_not_fail_ci",
+      "description": "An identification_reopened verdict is a valid passing run."
+    }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/delete_repair_disanalogy/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "DIS_ENUMERATION",
+      "criterion": "At least two diamond embeddings exist on the registered grid."
+    },
+    {
+      "gate_id": "DIS_GRID",
+      "criterion": "The grid is {0,1,2,3}² (16 points)."
+    },
+    {
+      "gate_id": "DIS_PE_TYPED",
+      "criterion": "q_stab0 represents first_bit. If this fails, the PE instrument is broken."
+    },
+    {
+      "gate_id": "DIS_RANKING_RECORDED",
+      "criterion": "The verdict is disanalogy_holds or identification_reopened."
+    },
+    {
+      "gate_id": "DIS_CLAIM_BOUNDARY",
+      "criterion": "The run does not claim a functor, real Lorentz physics, or Paper E/F."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/delete_repair_disanalogy/results/delete_repair_disanalogy_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/delete_repair_disanalogy/preregistration.json",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/delete_repair_disanalogy/paper.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

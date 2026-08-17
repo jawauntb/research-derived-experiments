@@ -139,10 +139,8 @@ restated a control.
 **Still missing, therefore withheld**
 
 - Neural bootstrap (Odrzywołek's actual search).
-- Paper C (connection beyond `List Int`).
-- Paper D (a transfer that should fail across Lorentz / Lamport /
-  PE).
-- Paper E (typed assumption-surgery for agents). Not licensed.
+- Paper E (typed assumption-surgery for agents). Licensed by
+  letters B–D and still the wrong next move as text nomination.
 - Paper F (universal `κ`). Untested.
 - Valence / concern. Not in `eml`.
 - A better LLM. Not shipped.
@@ -171,7 +169,7 @@ closes the `sq` gap without named macros.
 
 ## Next best test
 
-Paper C only. Show cell 3 is not idle Kirchhoff packaging. Do not
-start Paper E. Do not train a net as a substitute. Do not reopen
-DR/DCR text nomination. If the next experiment cannot kill the
-preferred story, do not run it.
+B–D are banked. Do not start Paper E as text nomination. Do not
+train a net as a substitute. Do not reopen DR/DCR. Possibility 5
+(SIC's dynamics) is the conservative live reading. If the next
+experiment cannot kill the preferred story, do not run it.

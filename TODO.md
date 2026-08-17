@@ -8,7 +8,8 @@
 - [x] Variable-`x` EML fiber spectrum without a 1-D invariant.
 - [x] Paper B swap-cell discriminator on the `{0,1}^4` harness.
 - [x] Paper C: connection beyond `List Int` (`Aff(1, Z/3)` 4-cycle).
-- [ ] Assumption-surgery agent benchmark (Paper E; licensed only after B–D).
+- [x] Paper D: shared-diagram disanalogy (196 diamonds; four `s²` values).
+- [ ] Assumption-surgery agent benchmark (Paper E; licensed after B–D, still the wrong next move as text nomination).
 - [ ] Do not import OpenAI 2026 writeups as verified theorems.
 
 ## Variable-`x` EML spectrum (2026-08-17)
@@ -21,7 +22,8 @@
 - [x] US-4′ frozen-leaf half: extra basins 43 vs 28 (`phi_holds`). Exact 2-vs-1 stays the control.
 - [x] Paper B swap cell: typed repairs are not interchangeable (`taxonomy_holds`). Not new enumeration.
 - [x] Paper C: Aff(1, Z/3) 4-cycle escapes Kirchhoff (`cell3_holds`). Not Lorentz.
-- [ ] Paper D: a transfer that should fail across Lorentz / Lamport / PE. Do not start Paper E.
+- [x] Paper D: a transfer that should fail across Lorentz / Lamport / PE (`disanalogy_holds`).
+- [ ] Do not start Paper E as text nomination.
 - [ ] Do not import OpenAI 2026 writeups as verified theorems.
 
 ## Obstruction-Aware Admission (2026-07-27)

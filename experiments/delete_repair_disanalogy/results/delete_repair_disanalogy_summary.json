@@ -1,0 +1,142 @@
+{
+  "experiment_id": "delete_repair_disanalogy",
+  "gates": {
+    "DIS_CLAIM_BOUNDARY": true,
+    "DIS_ENUMERATION": true,
+    "DIS_GRID": true,
+    "DIS_PE_TYPED": true,
+    "DIS_RANKING_RECORDED": true
+  },
+  "lorentz_lamport": {
+    "concurrency_constant": true,
+    "distinct_s2": [
+      -8,
+      -4,
+      -3,
+      -1
+    ],
+    "n_by_s2": {
+      "-1": 128,
+      "-3": 32,
+      "-4": 32,
+      "-8": 4
+    },
+    "n_diamond": 196,
+    "n_distinct_s2": 4,
+    "n_grid_points": 16,
+    "n_injections": 43680,
+    "witnesses": [
+      {
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            0
+          ]
+        ],
+        "s2_e1_e2": -1
+      },
+      {
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            1
+          ]
+        ],
+        "s2_e1_e2": -3
+      },
+      {
+        "points": [
+          [
+            0,
+            0
+          ],
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            2
+          ],
+          [
+            3,
+            1
+          ]
+        ],
+        "s2_e1_e2": -4
+      },
+      {
+        "points": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "s2_e1_e2": -8
+      }
+    ]
+  },
+  "pe": {
+    "crossed_representable": false,
+    "crossed_screen": "q_perm",
+    "source": "delete_the_absolute first_bit/q_perm cell",
+    "typed_representable": true
+  },
+  "process_disclosure": "Exact integer Minkowski diamond fibre plus the Paper A/B first_bit/q_perm cell.  Not a functor, not real Lorentz physics, not Paper E/F.",
+  "producing_agent": {
+    "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+    "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+  },
+  "ranking": {
+    "pe_quotient_fails": true,
+    "pe_typed_works": true,
+    "poset_does_not_fix_metric": true,
+    "poset_fixes_concurrency": true,
+    "rule": "Disanalogy holds iff the diamond poset fibre has at least two s\u00b2(e1,e2) values, concurrency of {e1,e2} stays true, and the PE privilege-quotient fails. Unique s\u00b2, or q_perm representing first_bit, reopens identification.",
+    "verdict": "disanalogy_holds"
+  },
+  "run_id": "delete_repair_disanalogy_2026_08_17",
+  "status": "pass",
+  "withheld": [
+    "A functor unifying Lorentz, Lamport, and positional encodings",
+    "Real Lorentz physics / continuum boosts",
+    "Paper E agent benchmark",
+    "Universal calculus (Paper F)"
+  ]
+}

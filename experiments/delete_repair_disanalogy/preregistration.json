@@ -1,0 +1,87 @@
+{
+  "experiment_id": "delete_repair_disanalogy",
+  "schema_version": "1.0",
+  "run_id": "delete_repair_disanalogy_2026_08_17",
+  "producing_agent": {
+    "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+    "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+  },
+  "hypothesis": "The shared cartoon is not a shared theorem. On the diamond fibre, the causal poset does not fix s²(e1,e2). Quotienting positions still fails first_bit. Unique s², or a working PE quotient, reopens Possibility 6.",
+  "primary_metric": "ranking.verdict",
+  "decision": "Accept disanalogy_holds only if the diamond fibre has at least two s² values, concurrency of {e1,e2} is constant, and q_perm fails first_bit. Otherwise identification_reopened. A reopen is a valid passing run.",
+  "gates": {
+    "DIS_ENUMERATION": "At least two diamond embeddings.",
+    "DIS_GRID": "16-point grid.",
+    "DIS_PE_TYPED": "q_stab0 represents first_bit.",
+    "DIS_RANKING_RECORDED": "Verdict is disanalogy_holds or identification_reopened.",
+    "DIS_CLAIM_BOUNDARY": "No functor, no real Lorentz physics, no Paper E/F."
+  },
+  "kill_criteria": {
+    "DIS_ENUMERATION": "Kill the instrument if fewer than two diamonds exist.",
+    "DIS_GRID": "Kill the instrument if the grid is not 16 points.",
+    "DIS_PE_TYPED": "Kill the instrument if the Paper A typed PE fact regresses.",
+    "DIS_RANKING_RECORDED": "Kill the instrument if the verdict is missing.",
+    "DIS_CLAIM_BOUNDARY": "Kill the instrument if it claims a unifying functor.",
+    "possibility_6": "Reopen identification if s² is unique on the diamond fibre or q_perm represents first_bit."
+  },
+  "audit_card": {
+    "target_object": "Transfer of causal poset vs Minkowski interval vs position-quotient across three toys.",
+    "decision": "Accept or reject: Possibility 6 (shared theorem) dies on this harness. Paper A §4 predicted the failures.",
+    "representation": "Integer (t,x) on {0,1,2,3}²; causal order Δt>0 and s²≥0; PE world {0,1}^4.",
+    "data_clock": "None. Exhaustive injections. No sampling.",
+    "material_assumptions": [
+      "Causal order is the discrete Minkowski future cone, not a continuum boost.",
+      "The diamond is the shared cartoon of two incomparable intermediates.",
+      "The PE cell is Paper A/B, disclosed as prior.",
+      "A functor would make s² constant on the poset fibre."
+    ],
+    "fatal_gates": [
+      "DIS_ENUMERATION",
+      "DIS_GRID",
+      "DIS_PE_TYPED",
+      "DIS_RANKING_RECORDED",
+      "DIS_CLAIM_BOUNDARY"
+    ],
+    "decisive_controls": [
+      "exact_diamond_fibre",
+      "concurrency_is_the_lamport_task",
+      "pe_cell_is_disclosed_prior",
+      "kill_does_not_fail_ci"
+    ],
+    "evidence_paths": [
+      "experiments/delete_repair_disanalogy/results/delete_repair_disanalogy_summary.json",
+      "experiments/delete_repair_disanalogy/preregistration.json",
+      "tests/test_delete_repair_disanalogy.py"
+    ]
+  },
+  "mathematical_claim": {
+    "objects": {
+      "Event": "pair (t,x) in {0,1,2,3}²",
+      "s2": "Δt² − Δx²",
+      "Causal": "Δt > 0 and s2 ≥ 0",
+      "Diamond": "poset e0≺e1,e2,e3 and e1,e2≺e3, e1 incomparable e2",
+      "Y_metric": "s2(e1,e2)",
+      "Y_concurrent": "not causal(e1,e2) and not causal(e2,e1)"
+    },
+    "types_domains_units": "Coordinates are dimensionless integers. s2 is an integer. Counts are dimensionless.",
+    "exact_claim": "There exist at least two diamond embeddings with different s2(e1,e2). Y_concurrent is constant on the diamond fibre. Y_metric is not.",
+    "quantifiers": "Universal over the 43680 injections for the census. Existential for distinct s2.",
+    "assumptions": "Discrete Minkowski future cone. Injective placements. Exact diamond, not a refinement.",
+    "identification_conditions": "At least two diamonds must exist or the instrument is empty.",
+    "derivation_dependencies": "Paper A §4 table. Paper B PE cell. Not continuum Lorentz group.",
+    "coordinate_invariance": "Global translation of the grid is a gauge; the grid is bounded so translations are only partial. The distinct-s2 fact is about the fibre, not a chosen origin.",
+    "edge_limiting_null_cases": "If every diamond has the same s2, identification is reopened. If the fibre is empty, the instrument is broken."
+  },
+  "controls": [
+    "exact_diamond_fibre",
+    "concurrency_is_the_lamport_task",
+    "pe_cell_is_disclosed_prior",
+    "kill_does_not_fail_ci"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": "none",
+    "sampling": "Exhaustive P(16,4) injections. No sampling."
+  },
+  "claim_boundary": "Accepted only as: the shared cartoon is not a shared theorem on this harness. Not a functor. Not real Lorentz physics. Not Paper E/F. Not a better LLM."
+}

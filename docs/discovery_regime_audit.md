@@ -438,7 +438,52 @@ Results:
 Residual content:
 
 - Old regime: cell 3 is Kirchhoff.
-- New: cell 3 is path-ordered composition. Paper D still unlicensed.
+- New: cell 3 is path-ordered composition. Paper D is now banked.
+
+## Paper D shared-diagram disanalogy
+
+Question: is the shared cartoon of relativity, Lamport clocks, and
+positional encodings a shared theorem?
+
+Current regime:
+
+- Artifact types: integer Minkowski placements of four labeled
+  events; Paper A/B `first_bit` / `q_perm` cell.
+- Operations: exhaustive `P(16,4)` injections; exact diamond
+  filter; interval census.
+- Gates/verifiers: five DIS instrument gates;
+  `identification_reopened` is a valid passing run.
+- Known limitations: discrete cone, not continuum Lorentz; PE
+  cell is disclosed prior.
+
+Action class:
+
+- Frame diagnosis: happens-before is not `ds²`.
+- Why: the same poset fibre carries four intervals.
+
+Experiment:
+
+- Manifest/report paths: `experiments/delete_repair_disanalogy/`.
+- Positive targets: concurrency constant on the diamond; typed PE
+  restore.
+- Negative controls: unique `s²` would reopen identification.
+- Stress tests: exact diamond, not a refinement.
+
+Gate:
+
+- Acceptance: instrument gates pass, then apply the fibre rule.
+- Unique `s²` or working PE quotient reopens Possibility 6.
+
+Results:
+
+- Accepted instrument: 196 diamonds; 43,680 injections.
+- Ranking: `s² ∈ {-1,-3,-4,-8}`; verdict `disanalogy_holds`.
+- Key metrics: counts 128 / 32 / 32 / 4.
+
+Residual content:
+
+- Old regime: one theorem, three costumes.
+- New: three objects. Paper E still unlicensed as text nomination.
 
 ## Obstruction-Aware Admission V0
 
