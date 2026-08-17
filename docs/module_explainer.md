@@ -10,17 +10,17 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 
 | Path | Responsibility |
 |---|---|
-| `experiments/` | 94 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
+| `experiments/` | 95 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
 | `papers/` | Paper sources (`paper.md`), figures, shareable PDFs |
 | `scripts/` | 138 Python ops modules: quality, contracts, provenance, PDF/figure builders, summarizers |
-| `tests/` | 169 root test files collected together by pytest (`unittest`-style and pytest-native) |
+| `tests/` | 170 root test files collected together by pytest (`unittest`-style and pytest-native) |
 | `docs/` | Design docs, verification, handoffs, plans, reviews, solutions |
 | `docs/primers/backlogs/` | Six article-specific, source-anchored research TODOs derived from the primer PDFs |
 | `notes/` | Program-level research synthesis |
 | `references/` | Public source list; local-only full texts (gitignored subdirs) |
 | `formal/ontology-hs/` | Haskell typed ontology gate (Arc 2B) |
 | `formal/relative-identifiability/` | Dependency-free Lean 4 proofs for observational quotient factorization, obstruction, and experiment-family refinement |
-| `formal/structural-intelligence/` | Dependency-free Lean 4 cores for the SIC family, including `DeleteRepair.lean` |
+| `formal/structural-intelligence/` | Dependency-free Lean 4 cores for the SIC family, including `DeleteRepair.lean` and `Compiler/SquaringSeparation.lean` |
 | `sites/` | Public static sites (atlas, Inquiry landing, Envelope Guard) |
 | `apps/inquiry-black-box/` | Local-first Inquiry product monorepo (Bun/Electron/MV3) |
 | `coherence-testbench/` | Separate EEG/eyetrack Phase-0 GO/KILL project |
@@ -91,6 +91,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_future_commitment_quotient.py` | Exact partition refinement, conjugacy invariance, delayed witnesses, malformed-schedule and family-local gate rejection, hash-bound G5 calibration, strict-JSON 768-row receipt reproduction, and PDF smoke verification |
 | `test_relative_identifiability.py` | Construction failures, exact factorization/obstruction certificates, strict and redundant nested-family refinement, minimum-family ties, MIDAS contract integrity, replayable public receipts, and all 32,768 target/family cases across 512 binary observation tables |
 | `test_obstruction_aware_admission.py` | Exact-versus-independent continuation cost, the minimum greedy counterexample, typed recovery/terminal/budget decisions, fail-closed certificates, all-hidden-world recovery, and deterministic reduced-run receipts |
+| `test_squaring_separation.py` | Catalan/DP agreement, n=4 Gibbs masses, amended shortest-witness bound, complete Sq-shell interval, circuit degree cap, conservative expressivity through degree 16, US-4′ withheld |
 | `test_obstruction_aware_admission_pdf.py` | Parseability, page/size floor, exact benchmark numbers, scope language, terminal-obstruction wording, and references for the rendered admission paper |
 | `test_information_limited_discovery.py` | Local-versus-terminal obstruction scope, target-aware experiment choice, lucky-guess and abstention controls, fail-closed certificate mutations, every hidden world in three matched coarse/rich pairs, public receipt replay, and 2,048 direct-factorization finite cases |
 | `test_information_limited_discovery_pdf.py` | Deterministic ReportLab build smoke, Poppler parse, page floor, result/scope/reference text presence, and isolated output path |
@@ -137,8 +138,8 @@ environment.
 |---|---|
 | [system_design.md](system_design.md) | End-to-end design & operating model |
 | [module_explainer.md](module_explainer.md) | This catalog |
-| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 94 research packages; `experiments/common` excluded) |
-| `experiment_contract_registry.json` | Authoritative 65-package coverage partition: 17 structured roots + 48 time-bounded legacy exceptions with frozen digest |
+| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 95 research packages; `experiments/common` excluded) |
+| `experiment_contract_registry.json` | Authoritative 95-package coverage partition: 47 structured roots + 48 time-bounded legacy exceptions with frozen digest |
 | `program_evidence_registry.json` | 12 canonical evidence records with stable IDs, states, artifact refs, and claim links |
 | `claim_registry.json` | 12 canonical claim records with tiers, states, source refs, and bidirectional evidence links |
 | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) | Benchmark umbrella |
@@ -182,9 +183,9 @@ environment.
 
 **Legend:** **P** = `PROVENANCE.md`, **B** = `BENCHMARK_CARD.md`, **R** = `README.md`, **res** = committed `results/`.
 
-**Verification reconciliation:** 94 research packages on disk plus one shared
+**Verification reconciliation:** 95 research packages on disk plus one shared
 support package, `experiments/common`. `gen_provenance.py` intentionally excludes
-the support package and derives 94 cards/index rows; `gen_provenance.py --check`
+the support package and derives 95 cards/index rows; `gen_provenance.py --check`
 fails if any generated card, either verification index, or the site mirror drifts.
 The structured registries currently contain 12 claims and 12 evidence records.
 
@@ -208,6 +209,7 @@ Universal dispatcher: `python scripts/regen.py <name>`.
 | `interventional_crl_learnability` | R res | Instrument 11 (SIC-C-c fourth class: interventional causal representation learning, Ahuja 2022). Per-environment FastICA + intervention-shift alignment; environment-split strictly beats pooled control | `core.py`, `experiment.py` |
 | `concern_fisher_pair` | R res | Companion instrument for *Concern as Fiber Geometry*: exact Fisher-matrix + holonomy witness of Theorems CG-1, CG-2 on the 4-bit Boolean world. 4/4 gates to 1e-12 (Fisher) and 1e-3 (holonomy) | `core.py`, `experiment.py` |
 | `compiler_tomography_pair` | R res | Companion instrument for *Compiler Tomography*: MDL recovery-rate + Boltzmann-ecology monotone-reward witness of Theorems CT-1, CT-2. 4/4 gates | `core.py`, `experiment.py` |
+| `squaring_separation` | R res | Companion instrument for *EML as a Universal Substrate*: exact DP + Gibbs fiber-mass witness of the `x^(2^n)` four-seam split (expressivity ≠ tree size ≠ circuit size ≠ learnability). Six gates; n=4 headline `7.8e-12` vs `4.0e-3`, `log₂` ratio 28.92 against amended bound 28.28; one Catalan shell of 9,694,845 vs 27 Sq shells. US-4′ untested | `core.py`, `experiment.py` |
 | `antecedent_taxonomy_pair` | R res | Companion instrument for *Sufficient Antecedents*: exact refinement check for Theorem SA-1 on the four canonical antecedents. 4/4 gates | `core.py`, `experiment.py` |
 | `sicc_covering_meta_pair` | R res | Companion instrument for *Covering Learnability and the SIC-C-c Meta-Theorem*: exact inclusion-exclusion coupon-collector witness of the meta-theorem `n = c · K · log(K/δ)` on eps-cover sizes `K ∈ {8, 16, 32, 64, 128, 256}` with `δ = 0.05`. Fitted `c_fitted(K)` stable across `K` (span 6.06% of mean, gate 20%); approaches 1 from below with `K`. 4/4 gates | `core.py`, `experiment.py` |
 | `sica_finite_derivation_pair` | R res | Companion instrument for *Structural Intelligence Foundations*: exact rational-arithmetic witness that the LR-vector `q` + uniform-on-fibre kernel `K` realise SIC-A on the 4-bit Boolean world with Laplace-smoothed pmf (T1 characterisation biconditional; fibration structure biconditional; fibre normalisation to bit-exact 1; LR partition bit-exact = reference MSS partition). 4/4 gates | `core.py`, `experiment.py` |
@@ -491,6 +493,7 @@ exhaustive counterexample search, and replayable MIDAS regression.
 | `papers/structural_intelligence/` | Umbrella manuscript for the Structural Observatory: stochastic-fibration master object (Theorems 1, 2, 4, 5, 6, 7 + Proposition 3), SIC-A/B/C-a/C-b/C-c honest split with C-c positively resolved for four inductive-bias classes (linear ICA, sparse-linear ICA, iVAE, interventional CRL), eleven instruments (seven exact + four Monte Carlo), the ten-construct program, and the Core⊂Shell conscious/reliable-agent architecture (`paper.md`, `paper.pdf`, README) |
 | `papers/concern_as_fiber_geometry/` | Companion paper (Theorems CG-1, CG-2): exponential-family Fisher metric on the fiber + concern-holonomy characterisation of exactness (`paper.md`, `paper.pdf`); companion instrument `concern_fisher_pair` |
 | `papers/compiler_tomography/` | Companion paper (Theorems CT-1, CT-2): MDL identifiability of the shared compiler + Boltzmann ecology monotone-reward dynamics (`paper.md`, `paper.pdf`); companion instrument `compiler_tomography_pair` |
+| `papers/eml_universal_substrate/` | Contact paper: Odrzywołek EML as an instance of the SIC master object; four-seam separation on `x^(2^n)`; Gibbs fiber-mass account of access (`paper.md`); companion instrument `squaring_separation`; Lean core `Compiler/SquaringSeparation.lean` |
 | `papers/sufficient_antecedents/` | Companion paper (Theorem SA-1): taxonomy of SIC-C-c positive resolutions — each of the four known identifiability escapes (linear ICA, sparse-linear ICA, iVAE, interventional CRL) is one way of populating Theorem 4's Markov-screen antecedent via local separation + cross-`u` coherence (`paper.md`, `paper.pdf`); companion instrument `antecedent_taxonomy_pair` |
 | `papers/structural_intelligence_covering_learnability/` | Companion paper (SIC-C-c covering meta-theorem): conditional closure of SIC-C-c under the polynomial-ε-covering hypothesis on `H`, composed from Theorem 6-core (ε-covering reduction, pure-core `refinement_preserves_screen`) and Theorem 5-rate (quantitative bound). Machine-checked as `StructuralIntelligenceMathlib.sicc_covering_meta` / `sicc_covering_poly` with zero new axioms. Isolates why linear ICA, sparse-linear ICA, iVAE, interventional CRL satisfy SIC-C-c and why Locatello 2019's fully-unsupervised nonlinear ICA does not (`paper.md`); companion instrument `sicc_covering_meta_pair` |
 | `papers/structural_intelligence_foundations/` | Companion paper (SIC-A derived, finite discrete positive-support case): reduces the master fibration `(q, K)` from a posit to a theorem by composing Theorem 1 (LR-vector as `q`) + Proposition 3 (`Coarsen ⊣ Refine`) with the uniform-on-fibre kernel + Theorem CS-2 (coarsest-CSS). Machine-checked as `StructuralIntelligenceMathlib.sic_a_finite_discrete` (no new axioms; `HalmosSavage_minimality_h_extension` inherited only through the coarsestness corollary). General topological / measure-theoretic case remains open (`paper.md`); companion instrument `sica_finite_derivation_pair` |
@@ -936,7 +939,7 @@ Raw outputs stay under `artifacts/` until summarized.
 | `gen_provenance.py` | Validate registries, resolve structured primary-run bindings from the contract registry, regenerate all experiment `PROVENANCE.md` files + `docs/verification.{md,json}` + site mirror; `--check` compares expected bytes without writing; legacy packages still use labeled heuristic extraction | In: 65 experiment dirs + claim/evidence/contract registries; excludes `experiments/common` |
 | `validate_evidence_registry.py` | Validate canonical evidence IDs, gate statuses, artifact refs, and supersession shape | `docs/program_evidence_registry.json` |
 | `validate_claim_registry.py` | Validate exact claim shape/tiers/states and bidirectional claim↔evidence edges | Reads `docs/claim_registry.json` + `docs/program_evidence_registry.json`; never writes either |
-| `validate_experiment_manifest.py` | Enforce the authoritative package-contract registry (65 = 17 structured + 48 legacy), then discover and dependency-free validate every v1 experiment-package contract; every registered run `manifest_path` must be an `experiment_manifest.json` inside its publication package and validate as v1 by content; run records may declare `preregistration_digest` + `preregistration_path` (SHA-256 of a tracked pre-reg file, content-verified) and `producing_agent` (`identity` + `session_ref`); when the registry sets `preregistration_policy.required_after_run_date`, any run whose `run_id` ends with a date on or after the cutoff must supply all three | Reads `docs/experiment_contract_registry.json` and `experiments/**/experiment_manifest.json`; portable contracts in `schemas/experiment_contract_registry.schema.json` and `schemas/experiment_manifest.schema.json` |
+| `validate_experiment_manifest.py` | Enforce the authoritative package-contract registry (93 = 45 structured + 48 legacy), then discover and dependency-free validate every v1 experiment-package contract; every registered run `manifest_path` must be an `experiment_manifest.json` inside its publication package and validate as v1 by content; run records may declare `preregistration_digest` + `preregistration_path` (SHA-256 of a tracked pre-reg file, content-verified) and `producing_agent` (`identity` + `session_ref`); when the registry sets `preregistration_policy.required_after_run_date`, any run whose `run_id` ends with a date on or after the cutoff must supply all three | Reads `docs/experiment_contract_registry.json` and `experiments/**/experiment_manifest.json`; portable contracts in `schemas/experiment_contract_registry.schema.json` and `schemas/experiment_manifest.schema.json` |
 | `validate_gate_verdict.py` | Discover per-gate verdicts, require registered claim IDs/canonical tiers/statuses, and resolve evidence paths | Reads `experiments/*/results/gate_verdicts/*.json` + `docs/claim_registry.json` |
 | `validate_public_artifact_envelopes.py` | Validate declared public digest sidecars against tracked public bytes and embedded raw-source receipts | Reads manifest `envelope_path` entries and `*.envelope.json`; portable contract in `schemas/public_artifact_envelope.schema.json` |
 | `check_primer_metadata.py` | Require matching titles across all six primer HTML `<title>` values and PDF metadata | Needs `pdfinfo` (`poppler-utils` in CI) |
@@ -1125,7 +1128,19 @@ Python bridge: `experiments/viable_computational_bodies/haskell_gate.py`.
 cd formal/ontology-hs && cabal test all && cabal run ontology-check
 ```
 
-### 5.4 `formal/relative-identifiability/`
+### 5.4 `formal/structural-intelligence/`
+
+| Path | Role |
+|---|---|
+| `StructuralIntelligence/Compiler/SquaringSeparation.lean` | Zero-analysis US-2/US-3 core: Mul/Sq trees, `size+1=2·degree`, `sq^n(x)` size `n+1`, expand preserves degree, sharing circuits have max degree `≤ 2^k` |
+| `StructuralIntelligence.lean` | Root import and `#print axioms` for every named headline, including `squaring_separation` |
+| `lakefile.toml` / `lean-toolchain` | Dependency-free Lean 4.31 library |
+
+```bash
+cd formal/structural-intelligence && lake build
+```
+
+### 5.4b `formal/relative-identifiability/`
 
 | Path | Role |
 |---|---|

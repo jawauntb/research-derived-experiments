@@ -305,13 +305,8 @@ class ExperimentContractRegistryTests(unittest.TestCase):
         packages = cast(list[dict[str, object]], registry["packages"])
         modes = [record["coverage_mode"] for record in packages]
 
-<<<<<<< HEAD
-        self.assertEqual(len(modes), 94)
-        self.assertEqual(modes.count("structured_manifest"), 46)
-=======
-        self.assertEqual(len(modes), 93)
-        self.assertEqual(modes.count("structured_manifest"), 45)
->>>>>>> ff468d0 (feat(sic): exact x^(2^n) squaring-separation instrument)
+        self.assertEqual(len(modes), 95)
+        self.assertEqual(modes.count("structured_manifest"), 47)
         self.assertEqual(modes.count("legacy_exception"), 48)
         self.assertEqual(warnings, [])
 
@@ -963,11 +958,7 @@ class ExperimentContractRegistryTests(unittest.TestCase):
                     "[experiment-contract] PASS historical-inspection",
                     stdout.getvalue(),
                 )
-<<<<<<< HEAD
-                self.assertIn("94 packages at 2026-07-14", stdout.getvalue())
-=======
-                self.assertIn("93 packages at 2026-07-14", stdout.getvalue())
->>>>>>> ff468d0 (feat(sic): exact x^(2^n) squaring-separation instrument)
+                self.assertIn("95 packages at 2026-07-14", stdout.getvalue())
 
 
 if __name__ == "__main__":

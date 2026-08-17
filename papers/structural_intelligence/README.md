@@ -11,6 +11,7 @@ agent architecture.
 - Formal development: [`notes/structural_intelligence_conjecture.md`](../../notes/structural_intelligence_conjecture.md)
 - Source synthesis: [`notes/latent_structures_meta_framework.md`](../../notes/latent_structures_meta_framework.md)
 - Interactive demo: [`sites/structural_observatory`](../../sites/structural_observatory) — live at https://structural-observatory-production.up.railway.app
+- External laboratory: [`../eml_universal_substrate/`](../eml_universal_substrate/) — Odrzywołek EML as an instance of the master object; `x^(2^n)` four-seam split
 
 Status: conjecture + three exact executable instruments. The instruments
 establish dissociations on solvable cases; the general conjecture, the
