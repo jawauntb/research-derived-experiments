@@ -89,7 +89,7 @@ preserves the registered cycles.
 
 ## Lean status
 
-**Proved, not verified.** `Aff13.lean` (`affine_escapes_kirchhoff`).
+**Verified.** `Aff13.lean` (`affine_escapes_kirchhoff`). Receipt: `docs/lea/VERIFY_RECEIPT_2026-08-17.md`.
 Not Lorentz.
 
 ## Next best test
