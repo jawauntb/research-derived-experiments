@@ -100,7 +100,7 @@ order-sensitive task factors through the bag.
 
 ## Lean status
 
-**Proved, not verified.** `DiamondInterval.lean`
+**Verified.** `DiamondInterval.lean`
 (`poset_not_determine_interval`). Two registered witnesses, not
 the 196-count. Not continuum physics.
 

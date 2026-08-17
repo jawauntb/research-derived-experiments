@@ -122,7 +122,7 @@ not try repairs and still hits a larger held-out suite.
 
 ## Lean status
 
-**Proved, not verified.** `SurgeryMiss.lean` (`surgery_miss_pair_eq`).
+**Verified.** `SurgeryMiss.lean` (`surgery_miss_pair_eq`). Receipt: `docs/lea/VERIFY_RECEIPT_2026-08-17.md`.
 The cheap signature was not refit.
 
 ## Next best test

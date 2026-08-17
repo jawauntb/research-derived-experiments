@@ -457,19 +457,19 @@ Until then the honest title is the one on this page.
 ## 13. Lean status (Wave 2 banked)
 
 P0/P1 nodes are **proved** (mathlib-free, zero `sorry`, in the
-`formal/structural-intelligence/` aggregator) and **not verified**
-(SafeVerify has not been run on these files). A green `lake build`
-is not an audit.
+`formal/structural-intelligence/` aggregator). SafeVerify was run on
+2026-08-17 (`docs/lea/VERIFY_RECEIPT_2026-08-17.md`). A green
+`lake build` is not an audit.
 
 | Node | File | Label |
 |---|---|---|
-| `kappa_cheap_not_function` | `KappaCheap.lean` | proved / not verified |
-| `kappa_screen_hits_suite` | `KappaScreen.lean` | proved / not verified |
-| `bag_not_unique` | `KappaUnique.lean` | proved / not verified |
-| `kappa_relabel_natural` | `KappaRelabel.lean` | proved / not verified |
-| `affine_escapes_kirchhoff` | `Aff13.lean` | proved / not verified |
-| `poset_not_determine_interval` | `DiamondInterval.lean` | proved / not verified |
-| `surgery_miss_pair_eq` | `SurgeryMiss.lean` | proved / not verified |
+| `kappa_cheap_not_function` | `KappaCheap.lean` | verified |
+| `kappa_screen_hits_suite` | `KappaScreen.lean` | proved / not verified (`native_decide`) |
+| `bag_not_unique` | `KappaUnique.lean` | verified |
+| `kappa_relabel_natural` | `KappaRelabel.lean` | verified |
+| `affine_escapes_kirchhoff` | `Aff13.lean` | verified |
+| `poset_not_determine_interval` | `DiamondInterval.lean` | verified |
+| `surgery_miss_pair_eq` | `SurgeryMiss.lean` | verified |
 
 Still Python: empirical `Φ` ratios, GD 8/8, extras 43/28, the
 n=4 representability matrix, Paper B `swap_typed_wins`.
@@ -499,7 +499,7 @@ Lean: `DeleteRepair.lean`, `EmlZeroIdentity.lean`,
 `KappaCheap.lean`, `KappaScreen.lean`, `KappaUnique.lean`,
 `KappaRelabel.lean`, `Aff13.lean`, `DiamondInterval.lean`,
 `SurgeryMiss.lean`. No Mathlib in those cores. Zero `sorry`.
-Wave 2 headlines are **proved, not verified**.
+Wave 2 headlines: six **verified**, `kappa_screen_hits_suite` **proved-not-verified** (`native_decide`). See `docs/lea/VERIFY_RECEIPT_2026-08-17.md`.
 
 Reproduce Paper F:
 
