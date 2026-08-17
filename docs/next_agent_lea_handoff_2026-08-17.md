@@ -386,7 +386,7 @@ If Lea is not up yet: agents may still write **mathlib-free** Lean by hand in `f
 - **Cite, don’t rebuild.** Path A/B and CommonSuffScreen are done.
 - **Isolated worktrees from `origin/main`.** Never use `/workspace` if it is dirty or on an old branch. Never check out `main` in a second worktree — `/tmp/us4-search` already holds `main` and breaks local `gh pr merge` checkout. GitHub squash still works.
 - **Branch names:** `cursor/<descriptive-name>-7bdd`.
-- **PRs:** `ManagePullRequest` with `branch_name` and `base_branch=main`. Create draft, mark ready, then `gh pr merge N --squash`.
+- **PRs:** Create draft only while the check is running. When `lake lean` is green, mark ready and `gh pr merge N --squash` immediately. Do not wait for sibling lanes or Wave 3. Exception: do not merge PR 464.
 - **Do not** let later commits overwrite earlier ones on the same PR; rewrite if the history is messy.
 - Empty leftover dirs under `experiments/` break `discover_experiment_packages`.
 - Frozen historical test string `"N packages at 2026-07-14"` **tracks current N** (105). Do not add a package without bumping it in the same commit.

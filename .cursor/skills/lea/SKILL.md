@@ -132,7 +132,7 @@ You may edit the Lean file by hand and hand it back. The ledger records who wrot
 
 ## Parallelization
 
-One lemma, one Lean file, one agent, one worktree from `origin/main`. See the Wave 2 table in the handoff. Do not let two agents edit the same file.
+One lemma, one Lean file, one agent, one worktree from `origin/main`. See the Wave 2 table in the handoff. Do not let two agents edit the same file. When `lake lean` is green, mark the PR ready and squash-merge it. Do not wait for the other lanes or for Wave 3 INT. INT only banks aggregator imports, paper labels, and docs after files are already on `main`.
 
 ## Quality bar
 

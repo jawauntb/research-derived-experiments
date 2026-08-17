@@ -1,0 +1,39 @@
+---
+description: Merge finished work to main as soon as its check passes. Do not stockpile draft PRs.
+alwaysApply: true
+---
+
+# Merge on complete
+
+You are allowed and required to land finished work on `main` as soon as
+**this task's check** is green. Do not wait for sibling lanes, a later
+integration agent, or a batch of draft PRs.
+
+## Required loop
+
+1. Own one branch / one worktree / one concern.
+2. Run the check (`lake lean` for a Lean file, `python3 scripts/run_quality_checks.py` for Python).
+3. Open a PR vs `main`. Draft only while the check is still running.
+4. When the check passes: `gh pr ready N` then `gh pr merge N --squash`.
+   If required CI is still pending, `gh pr merge N --squash --auto`.
+5. Do not leave a green PR sitting as draft.
+
+`/tmp/us4-search` already holds `main`. Use GitHub squash merge. Do not
+check out `main` in a second local worktree.
+
+## Do not merge
+
+- PR **464** (old Copernicus / auto-merge rule)
+- A PR whose check failed, or that still has `sorry` / secrets / a new
+  scientific letter this tranche did not ask for
+- Force-push to `main`
+
+## Examples
+
+```text
+# ✅ GOOD — lane file elaborates, squash it now
+gh pr ready 495 && gh pr merge 495 --squash
+
+# ❌ BAD — "Wave 3 will merge these later"
+# leave #492 #493 #494 #495 as drafts
+```

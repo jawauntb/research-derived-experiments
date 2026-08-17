@@ -30,7 +30,8 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `artifacts/` | Gitignored raw run outputs (never commit) |
 | `README.md` | Human entrypoint |
 | `TODO.md` | Active research ledger |
-| `AGENTS.md` | Agent/contributor rules (incl. doc sync) |
+| `AGENTS.md` | Agent/contributor rules (doc sync + merge-on-complete) |
+| `.cursor/rules/` | Always-on Cursor rules (`scientific-discovery-loop`, `merge-on-complete`) |
 | `pyproject.toml` | Python ≥3.12 project metadata; locked root `quality` dependency group; explicit CPU-only PyTorch index; Ruff and ty configuration; experiment/Modal runtime dependencies remain call-site specific |
 | `uv.lock` | Cross-platform lock for the root `quality` dependency group, including CPU-only Torch resolution |
 
