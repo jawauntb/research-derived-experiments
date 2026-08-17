@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "eml_us4_prime",
+  "hypothesis": "On the truncated variable-x EML language, Gibbs access is fiber mass, not shortest depth. Same-min-size finite fibers can differ by a factor of 2. Master-formula gradient recovery is withheld.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "inherited_labeled_catalan_counts",
+      "description": "Tree counts must still equal 2^{k+1} C_k. Independent of Φ."
+    },
+    {
+      "control_id": "exact_zero_identity",
+      "description": "eml(a, eml(eml(a,1),1)) = 0 for a in {1,x} on the registered grid. This is algebraic, not a rounded collision."
+    },
+    {
+      "control_id": "finite_fiber_restriction",
+      "description": "The headline split uses only fibers with no undefined grid slot."
+    },
+    {
+      "control_id": "gradient_withheld",
+      "description": "The run must not claim master-formula gradient recovery."
+    }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/eml_us4_prime/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "US4P_ENUMERATION_INHERITED",
+      "criterion": "Counts match 2^{k+1} C_k and total 3238."
+    },
+    {
+      "gate_id": "US4P_ZERO_IDENTITY",
+      "criterion": "The two registered zero trees evaluate to 0 on the grid."
+    },
+    {
+      "gate_id": "US4P_SAME_MINSIZE_SPLIT",
+      "criterion": "k=3 finite Φ_max/Φ_min ≥ 2."
+    },
+    {
+      "gate_id": "US4P_SHORTEST_DOES_NOT_DETERMINE_P",
+      "criterion": "The fat k=3 fiber has more min-shell inhabitants than the thin one."
+    },
+    {
+      "gate_id": "US4P_GRID_DISCLOSED",
+      "criterion": "Summary records the grid caveat and the exact zero identity."
+    },
+    {
+      "gate_id": "US4P_GRADIENT_WITHHELD",
+      "criterion": "Gradient recovery is flagged untested."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/eml_us4_prime/results/eml_us4_prime_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/eml_us4_prime/preregistration.json",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/eml_us4_prime/paper.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

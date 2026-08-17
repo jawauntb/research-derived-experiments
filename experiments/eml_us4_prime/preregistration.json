@@ -1,0 +1,88 @@
+{
+  "experiment_id": "eml_us4_prime",
+  "schema_version": "1.0",
+  "run_id": "eml_us4_prime_2026_08_17",
+  "producing_agent": {
+    "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+    "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+  },
+  "hypothesis": "On the truncated variable-x EML language (k≤5, π(t)∝4^{-|t|}), Gibbs access P(z)=Φ_z/Z is not a function of shortest depth. Same-min-size finite fibers can differ in mass by a factor of at least 2 because of min-shell multiplicity. Extra shells and master-formula gradient recovery are not claimed.",
+  "primary_metric": "gates.US4P_SAME_MINSIZE_SPLIT",
+  "decision": "Accept the EML-native Gibbs-vs-shortest split if and only if the registered k=3 finite class has Φ_max/Φ_min ≥ 2 and the zero identity holds. Do not promote gradient recovery. Do not claim the Sq extra-shell mechanism transferred.",
+  "gates": {
+    "US4P_ENUMERATION_INHERITED": "Tree counts still equal 2^{k+1} C_k and total 3238.",
+    "US4P_ZERO_IDENTITY": "eml(1,eml(eml(1,1),1)) and eml(x,eml(eml(x,1),1)) evaluate to 0 on the registered grid.",
+    "US4P_SAME_MINSIZE_SPLIT": "Among fully-finite fibers with min_internal=3, max Φ / min Φ ≥ 2.",
+    "US4P_SHORTEST_DOES_NOT_DETERMINE_P": "The fat k=3 fiber has a strictly larger min-shell count than the thin k=3 fiber.",
+    "US4P_GRID_DISCLOSED": "The summary records the grid-clustering caveat and that the zero fiber is an exact identity.",
+    "US4P_GRADIENT_WITHHELD": "The run flags master-formula gradient recovery untested."
+  },
+  "kill_criteria": {
+    "US4P_ENUMERATION_INHERITED": "Kill if any k in 0..5 has a count other than 2^{k+1} C_k.",
+    "US4P_ZERO_IDENTITY": "Kill if either registered zero tree is not identically 0 on the grid.",
+    "US4P_SAME_MINSIZE_SPLIT": "Kill if the k=3 finite Φ ratio is below 2.",
+    "US4P_SHORTEST_DOES_NOT_DETERMINE_P": "Kill if the k=3 fat and thin fibers have the same min-shell count.",
+    "US4P_GRID_DISCLOSED": "Kill if the disclosure string is missing.",
+    "US4P_GRADIENT_WITHHELD": "Kill if the run claims gradient recovery tested or passed."
+  },
+  "audit_card": {
+    "target_object": "Numerical fibers of the leaf-labeled EML grammar S → 1 | x | eml(S,S) through 5 internal nodes, under the Gibbs prior π(t)∝4^{-|t|}.",
+    "decision": "Accept or reject: same-min-size Gibbs mass split on the truncated language; gradient recovery remains untested; extra-shell transfer from the monomial toy is not claimed.",
+    "representation": "Enumerated VarTree census; 10-decimal quantization of the 6-point positive grid for fiber ids; exact real eval for the zero identity.",
+    "data_clock": "None. Closed finite language fragment. Φ and Z are exact finite sums, not samples.",
+    "material_assumptions": [
+      "The language and grid are those of experiments/eml_variable_spectrum.",
+      "Gibbs base 4 is a modelling choice inherited from the monomial toy, not a canonical temperature.",
+      "Rounded grid tuples cluster functions; only the zero identity is treated as algebraic.",
+      "Shortest-only Q assigns one min-shell unit per fiber; P sums every inhabitant."
+    ],
+    "fatal_gates": [
+      "US4P_ENUMERATION_INHERITED",
+      "US4P_ZERO_IDENTITY",
+      "US4P_SAME_MINSIZE_SPLIT",
+      "US4P_SHORTEST_DOES_NOT_DETERMINE_P",
+      "US4P_GRID_DISCLOSED",
+      "US4P_GRADIENT_WITHHELD"
+    ],
+    "decisive_controls": [
+      "inherited_labeled_catalan_counts",
+      "exact_zero_identity_on_two_labels",
+      "k3_finite_phi_ratio",
+      "min_shell_multiplicity_not_shortest_depth",
+      "gradient_cannot_pass"
+    ],
+    "evidence_paths": [
+      "experiments/eml_us4_prime/results/eml_us4_prime_summary.json",
+      "experiments/eml_us4_prime/preregistration.json",
+      "tests/test_eml_us4_prime.py"
+    ]
+  },
+  "mathematical_claim": {
+    "objects": {
+      "Tree": "full binary EML trees; leaves in {1,x}",
+      "Fiber": "level set of the 10-decimal 6-point grid tuple",
+      "Phi": "sum_t 4^{-(2 k(t)+1)} over trees in the fiber",
+      "Q_short": "n_min_shell(z) * 4^{-(2 min_k(z)+1)}"
+    },
+    "types_domains_units": "Masses are dimensionless probabilities after dividing by the language partition function Z. Support is the finite k≤5 fragment.",
+    "exact_claim": "There exist two fully-finite fibers with min_internal=3 whose Φ ratio is at least 2. eml(a,eml(eml(a,1),1))=0 for a in {1,x} on the registered grid. Shortest depth does not determine Φ. Gradient recovery is not a claim.",
+    "quantifiers": "Existential for the k=3 split and the zero identity. Universal for labeled Catalan counts on k=0..5.",
+    "assumptions": "Real eml; overflow/domain failures are undefined and excluded from the finite-fiber split; Gibbs base 4.",
+    "identification_conditions": "The zero witness uses exact eval, not rounded fiber ids. The split uses finite (no-undef) fibers only.",
+    "derivation_dependencies": "Odrzywołek arXiv:2603.21852 for eml. The variable-x enumerator for the language. No 1-D invariant is assumed.",
+    "coordinate_invariance": "Pretty-print is a gauge. The grid is a registered representation. The zero identity is algebraic in a.",
+    "edge_limiting_null_cases": "If every k=3 finite fiber were a singleton, the split would die. Extra shells at k=5 are recorded and are not the claimed mechanism."
+  },
+  "controls": [
+    "inherited_labeled_catalan_counts",
+    "exact_zero_identity",
+    "finite_fiber_restriction",
+    "gradient_withheld"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": null,
+    "sampling": "exhaustive leaf-labeled trees with k<=5 internal nodes. Exact Φ/Z. No Monte Carlo."
+  },
+  "claim_boundary": "Accepted only as: on this truncated language, Gibbs mass is not a function of shortest depth, and the zero function has two size-3 formulas. Not gradient recovery. Not the Sq extra-shell transfer. Not function identity from the grid except the exact zero identity."
+}
