@@ -85,6 +85,24 @@ remaining Structural-Intelligence companion papers.
   rate `N ≥ c · N_ε · ln(N_ε / ε_rel)` needs real logs and is out
   of scope (see *What is not formalized*).
 
+### Squaring separation (US-2 / US-3 core) — `StructuralIntelligence/Compiler/SquaringSeparation.lean`
+
+- `MulTree` / `SqTree` — full binary multiplication trees, and the
+  same language with a definable unary `sq`.
+- `MulTree.size_succ_eq_two_mul_degree` — `size + 1 = 2 * degree`.
+- `SqTree.sqTower_size` / `sqTower_degree` — `sq^n(x)` has size
+  `n+1` and degree `2^n`.
+- `SqTree.expand_degree` — expanding `sq(t) = t × t` preserves
+  degree (conservative extension of denotations).
+- `circuitMaxDegree_le_pow2` — a sharing circuit of `k` steps has
+  max degree `≤ 2^k`.
+- `StructuralIntelligence.Compiler.SquaringSeparation.squaring_separation`
+  — combined headline: same degree `2^n`, Mul size `2^{n+1}-1`,
+  Sq size `n+1`, circuit size `n`.  Depends on **no axioms**.
+
+  Catalan counts and Gibbs fiber masses are the Python instrument
+  `experiments/squaring_separation`, not this file.
+
 ### Compiler-Tomography CT-1 core — `StructuralIntelligence/CompilerTomography.lean`
 
 - `StructuralIntelligence.IsIdentifiable` — a deterministic-support

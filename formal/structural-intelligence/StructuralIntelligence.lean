@@ -5,6 +5,7 @@ import StructuralIntelligence.CouponCollector
 import StructuralIntelligence.CommonSuffScreen
 import StructuralIntelligence.Refinement
 import StructuralIntelligence.CompilerTomography
+import StructuralIntelligence.Compiler.SquaringSeparation
 import StructuralIntelligence.CausalSemantics
 import StructuralIntelligence.Antecedents
 import StructuralIntelligence.AbstractionFrontier
@@ -48,6 +49,9 @@ remaining Structural-Intelligence companion papers:
     and `q₂ : X → Z₂` refines `q₁` (functionally, via
     `q₁ = r ∘ q₂`), then `q₂` is also a common sufficient screen —
     the ε-cover inherits the factorisation by composition.
+*   `StructuralIntelligence.Compiler.SquaringSeparation.squaring_separation`
+    — US-2/US-3 kernel: `x^(2^n)` has Mul-tree size `2^{n+1}-1`,
+    Sq-tower size `n+1`, and sharing-circuit size `n`.
 *   `StructuralIntelligence.identifiability_implies_unique_by_witness`
     — CT-1 core: if every wrong parameter `θ ≠ θ*` is refuted by
     the data set `D`, then `θ*` is the unique parameter consistent
@@ -117,6 +121,9 @@ and are documented as future work in the package `README.md`.
 #print axioms StructuralIntelligence.commonSuffScreen_eq_jointTaskQuotient_iff
 #print axioms StructuralIntelligence.refinement_transitive
 #print axioms StructuralIntelligence.refinement_preserves_screen
+#print axioms StructuralIntelligence.Compiler.SquaringSeparation.squaring_separation
+#print axioms StructuralIntelligence.Compiler.SquaringSeparation.conservative_extension
+#print axioms StructuralIntelligence.Compiler.SquaringSeparation.circuit_pow2_needs_n_steps
 #print axioms StructuralIntelligence.identifiability_implies_unique_by_witness
 #print axioms StructuralIntelligence.identifiability_isolates_theta_star
 #print axioms StructuralIntelligence.psi_equiv_preserves_under_context
