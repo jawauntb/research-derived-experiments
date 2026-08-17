@@ -1117,6 +1117,35 @@
       ]
     },
     {
+      "package": "delete_repair_kappa",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/delete_repair_kappa/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "delete_repair_kappa_2026_08_17",
+      "runs": [
+        {
+          "run_id": "delete_repair_kappa_2026_08_17",
+          "publication_package": "delete_repair_kappa",
+          "runtime_package": "delete_repair_kappa",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/delete_repair_kappa/experiment_manifest.json",
+          "report_paths": [
+            "experiments/delete_repair_kappa/results/delete_repair_kappa_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/delete_repair_kappa/preregistration.json",
+          "preregistration_digest": "1250998194a1da2e15b5c7f5a1685bff217290342fe6c0e0821e31a8a714ce84",
+          "producing_agent": {
+            "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+            "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+          }
+        }
+      ]
+    },
+    {
       "package": "delete_repair_surgery",
       "coverage_mode": "structured_manifest",
       "manifest_path": "experiments/delete_repair_surgery/experiment_manifest.json",

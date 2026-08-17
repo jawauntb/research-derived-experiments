@@ -274,7 +274,7 @@ no-go / holonomy / noncommutativity core and two exact instruments
 (`delete_the_absolute`, `eml_fiber_spectrum`). It does not replace
 RR-1/RR-2 or claim a universal law. US-4′ is now process-split
 (Gibbs / known-tree GD / unknown-tree GD / frozen-leaf rewrite).
-Papers B–E are banked; Paper F stays withheld.
+Papers B–F are banked. The written κ is SIC, not a new master object.
 
 The variable-`x` EML note (`papers/eml_variable_spectrum/`) banks a
 leaf-labeled census with no degree key.
@@ -374,6 +374,9 @@ determine the interval.
 Paper E is `experiments/delete_repair_surgery/`: name-blind
 one-shot rule dies on unused symmetry (`pair_eq` on `q_id`;
 held-out 6/7; `surgery_killed`).
+Paper F is `experiments/delete_repair_kappa/`: κ_cheap is not
+a function; κ_screen hits 11/11 and is Theorem 4 plus a total
+order; verdict `calculus_is_sic`.
 
 The weakness paper also carries a theory-only companion,
 `papers/weakness_invariance_neurips/pac_bayes_weakness_sketch.md`. It derives a
@@ -1696,7 +1699,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 - **No universal research dependency specification.** The root quality gate has a complete locked dependency group, but experiment and Modal runtimes still rely on command-specific `uvx` sets or explicit Modal images.
 - **Machine-specific paths** in docs/handoffs (Doppler scope, local archives).
 - **Result fidelity depends on summarization discipline.** Gitignored JSON vs committed Markdown can drift.
-- **Structured-contract coverage is early but fail-closed.** All 104 research packages are partitioned in `docs/experiment_contract_registry.json` (56 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction. Public-artifact digest envelopes cover the E5 confirmatory JSON and E4 appendix. Clean-clone CPU reproduction is allowlisted for `bayesian_voi`, `grounded_statecharts`, `information_limited_discovery`, `mathematical_claims`, `relative_identifiability`, and `seed_bootstrap_calibration`.
+- **Structured-contract coverage is early but fail-closed.** All 105 research packages are partitioned in `docs/experiment_contract_registry.json` (57 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction. Public-artifact digest envelopes cover the E5 confirmatory JSON and E4 appendix. Clean-clone CPU reproduction is allowlisted for `bayesian_voi`, `grounded_statecharts`, `information_limited_discovery`, `mathematical_claims`, `relative_identifiability`, and `seed_bootstrap_calibration`.
 - **Paper-primary experiments** may have no committed `results/*.md`; evidence lives in the paper + local artifacts.
 - **Coherence / Inquiry / Cabal / site tests** are outside the root Python quality gate.
 - **Scientific claims are gate-bound.** Fixture smokes do not settle the program thesis.

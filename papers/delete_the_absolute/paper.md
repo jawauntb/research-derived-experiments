@@ -9,7 +9,7 @@ Human author and research director
 Experiment code, Lean core, and manuscript under direction and review
 
 **Date:** August 17, 2026
-**Status:** Lean core kernel-checked (`formal/structural-intelligence/StructuralIntelligence/DeleteRepair.lean`, Lean 4.31, no Mathlib, zero `sorry`). Finite symmetry-matching instrument **banked** at `experiments/delete_the_absolute/` (7/7 preregistered gates; exact `n=4` enumeration, no SGD). Paper B swap cell **banked** at `experiments/delete_repair_swap/` (`taxonomy_holds` on this harness; pairing of A's matrix, not new enumeration). This manuscript still does **not** test Possibility 1. Companion constant-grammar EML census **banked** at `experiments/eml_fiber_spectrum/` (197 Catalan trees through `k=6`; size is not a denotation invariant). Paper E is now banked as a typed one-shot miss (`surgery_killed`). Papers F, Paper 0, and any universal calculus remain **withheld**. This is not a victory lap.
+**Status:** Lean core kernel-checked (`formal/structural-intelligence/StructuralIntelligence/DeleteRepair.lean`, Lean 4.31, no Mathlib, zero `sorry`). Finite symmetry-matching instrument **banked** at `experiments/delete_the_absolute/` (7/7 preregistered gates; exact `n=4` enumeration, no SGD). Paper B swap cell **banked** at `experiments/delete_repair_swap/` (`taxonomy_holds` on this harness; pairing of A's matrix, not new enumeration). This manuscript still does **not** test Possibility 1. Companion constant-grammar EML census **banked** at `experiments/eml_fiber_spectrum/` (197 Catalan trees through `k=6`; size is not a denotation invariant). Papers E–F are banked: the one-shot rule dies, and the written κ is SIC (`calculus_is_sic`). Paper 0 and any claim of a new master object remain **withheld**. This is not a victory lap.
 
 ---
 
@@ -762,9 +762,12 @@ Possibility 5 is the conservative live option: we are doing SIC.
 to minimal repairs, natural in the world, computable on finite
 instances, and stable under relabelling.
 
-**Status.** **UNTESTED.** RR-1 is not this function. The Lean
-core is not this function. The `n=4` matrix is not this
-function. Paper F is where this lives or dies (§9).
+**Status.** **TESTED on the registered menu.** RR-1 is not this
+function. The Lean core is not this function. The cheap
+five-field signature is not this function. The written
+`κ_screen` is Theorem 4 plus a total order. Paper F banks
+`calculus_is_sic`. Possibility 1 as a *new* master object is
+dead on this harness.
 
 **Kill.** A finite family of typed failures on which no
 structure-preserving map from signature to lift exists; or two
@@ -885,7 +888,7 @@ the previous letter's kill criteria. Three other objects are
 | **C** | Connection beyond `List Int` (graph 1-forms, chart transport) | B shows cell 3 is not idle Kirchhoff-packaging | banked (`papers/delete_repair_connection/`; `cell3_holds`; Aff(1, Z/3) escapes sum-b; not Lorentz) |
 | **D** | Shared-diagram disanalogy: a transfer that *should* fail across Lorentz / Lamport / PE | B does not collapse to one arrow | banked (`papers/delete_repair_disanalogy/`; `disanalogy_holds`; 196 diamonds, four `s²` values; not a functor) |
 | **E** | Assumption-surgery benchmark for agents (typed delete/repair, not text nomination) | B–D survive; DR/DCR stay closed | banked (`papers/delete_repair_surgery/`; `surgery_killed`; unused symmetry ≠ leftover privilege; not an LLM) |
-| **F** | Universal calculus (Possibility 1) | B–E survive; `κ` is specified before it is fitted | **untested, withheld** |
+| **F** | Universal calculus (Possibility 1) | B–E survive; `κ` is specified before it is fitted | banked (`papers/delete_repair_kappa/`; `calculus_is_sic`; the written function is Theorem 4 plus a total order) |
 
 **Withheld, not sequenced.**
 
@@ -1063,10 +1066,10 @@ companion notes, not this manuscript's claim.
 
 ### Next best test
 
-A–E are banked. Paper E killed the one-shot agent rule on
-unused symmetry. Do not start Paper F. Possibility 5 (SIC's
-dynamics) remains the conservative live reading. Do not reopen
-DCR nomination. Do not turn E into an LLM leaderboard.
+A–F are banked. The written κ is SIC, not a new master object.
+Possibility 5 is the close. Do not reopen DCR nomination. Do
+not turn this into an LLM leaderboard. Do not fit a fancier
+cheap signature to erase the collision.
 
 ---
 

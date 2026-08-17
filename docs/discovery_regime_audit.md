@@ -530,7 +530,56 @@ Results:
 Residual content:
 
 - Old regime: diagnose the cell, apply the matching repair.
-- New: cells are a reading of a menu. Paper F stays withheld.
+- New: cells are a reading of a menu. Paper F writes the function.
+
+## Paper F write κ
+
+Question: is there a function from typed failure signatures
+to minimal repairs, and is it a new master object?
+
+Current regime:
+
+- Artifact types: Paper E suite; cheap five-field signatures;
+  menu-relative representability; Path A/B pairs.
+- Operations: specified maps, not fitted; coarsest-by-fibres
+  then name; 0↔3 relabel.
+- Gates/verifiers: six KAP instrument gates;
+  `calculus_is_sic` is a valid passing run.
+- Known limitations: κ_screen looks at the menu; suite is
+  authored; enlarging the menu can erase the cheap collision.
+
+Action class:
+
+- Frame diagnosis: the written function is Theorem 4 plus a
+  total order.
+- Why: four `q_id` cases share a cheap signature and split
+  gold; κ_screen hits 11/11; `bag` has five representing
+  screens; Path A/B disagree.
+
+Experiment:
+
+- Manifest/report paths: `experiments/delete_repair_kappa/`.
+- Positive targets: κ_screen exact; relabel natural.
+- Negative controls: cheap collision; uniqueness failure.
+- Stress tests: `pair_eq` must stay noop under κ_screen.
+
+Gate:
+
+- Acceptance: maps specified first; then apply the ranking
+  rule.
+- A cheap function would reopen Possibility 1 as non-SIC.
+
+Results:
+
+- Accepted instrument: 11 cases; one cheap collision.
+- Ranking: screen 11/11; verdict `calculus_is_sic`.
+- Key metrics: `bag` 5 representing screens; chosen `q_perm`.
+
+Residual content:
+
+- Old regime: a new calculus above SIC.
+- New: Possibility 5 is the close. Close-out paper at
+  `papers/sic_dynamics/`.
 
 ## Obstruction-Aware Admission V0
 

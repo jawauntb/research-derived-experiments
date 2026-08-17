@@ -1,0 +1,95 @@
+{
+  "experiment_id": "delete_repair_kappa",
+  "schema_version": "1.0",
+  "run_id": "delete_repair_kappa_2026_08_17",
+  "producing_agent": {
+    "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+    "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+  },
+  "hypothesis": "A cheap five-field signature is not a function to gold. A menu-relative coarsest-representing map is a function, is natural under 0↔3 relabelling, and is Theorem 4 plus a total order. Uniqueness without that tie-break fails. Possibility 1 as a new master object dies; the written function is SIC.",
+  "primary_metric": "ranking.verdict",
+  "decision": "Accept calculus_is_sic if κ_cheap is not a function, κ_screen matches gold on every registered case, uniqueness fails without the tie-break, and Path A/B disagree. Accept calculus_holds if the cheap signature is already a function. Accept no_function if κ_screen misses. Any of those three is a valid passing run.",
+  "gates": {
+    "KAP_SPECIFIED": "The three maps are written in the module before evaluate_benchmark runs.",
+    "KAP_ENUMERATION": "The registered suite has 11 cases.",
+    "KAP_SCREEN_DEFINED": "κ_screen never returns broken.",
+    "KAP_RELABEL": "first_bit/last_bit under swap of positions 0 and 3 is natural.",
+    "KAP_RANKING_RECORDED": "Verdict is calculus_is_sic, calculus_holds, or no_function.",
+    "KAP_CLAIM_BOUNDARY": "No new master object, no LLM, no text nomination."
+  },
+  "kill_criteria": {
+    "KAP_SPECIFIED": "Kill the instrument if κ is fitted after seeing gold.",
+    "KAP_ENUMERATION": "Kill the instrument if the suite is not the Paper E suite.",
+    "KAP_SCREEN_DEFINED": "Kill the instrument if a case has no representing screen and no connection action.",
+    "KAP_RELABEL": "Kill the instrument if the disclosed relabel fails.",
+    "KAP_RANKING_RECORDED": "Kill the instrument if the verdict is missing.",
+    "KAP_CLAIM_BOUNDARY": "Kill the instrument if it claims a new master object.",
+    "possibility_1_new_calculus": "Kill the new-calculus reading if κ_cheap collides and κ_screen is Theorem 4 plus a tie-break.",
+    "possibility_1_no_function": "Reopen a cheap calculus if κ_cheap is a function on this suite."
+  },
+  "audit_card": {
+    "target_object": "Three specified maps: κ_cheap, κ_screen, κ_unique. Decision: is Possibility 1 a new calculus, SIC's screen, or nonexistent?",
+    "decision": "Accept calculus_is_sic only when the cheap map is not a function and the working map is menu-relative Theorem 4.",
+    "representation": "Paper E suite on {0,1}^4 plus Aff(1, Z/3) cycles. Fibre counts and representability. Path A/B on Nat×Nat.",
+    "data_clock": "None. Finite enumeration. No sampling. No LLM. Maps specified before the run.",
+    "material_assumptions": [
+      "κ must be written before gold is inspected for fitting.",
+      "The cheap signature is the Paper E five-field record.",
+      "κ_screen may look at the menu. That is disclosed, not hidden.",
+      "Coarsest means fewest fibres, then lexicographic screen id.",
+      "Path A/B is the schedule form of uniqueness, already Lean-checked."
+    ],
+    "fatal_gates": [
+      "KAP_SPECIFIED",
+      "KAP_ENUMERATION",
+      "KAP_SCREEN_DEFINED",
+      "KAP_RELABEL",
+      "KAP_RANKING_RECORDED",
+      "KAP_CLAIM_BOUNDARY"
+    ],
+    "decisive_controls": [
+      "specified_before_fit",
+      "cheap_collision_is_the_no_function_witness",
+      "screen_map_disclosed_as_theorem_4",
+      "tie_break_is_named",
+      "relabel_0_3",
+      "kill_does_not_fail_ci"
+    ],
+    "evidence_paths": [
+      "experiments/delete_repair_kappa/results/delete_repair_kappa_summary.json",
+      "experiments/delete_repair_kappa/preregistration.json",
+      "tests/test_delete_repair_kappa.py"
+    ]
+  },
+  "mathematical_claim": {
+    "objects": {
+      "Signature": "five-field cheap record",
+      "kappa_cheap": "Signature → {restore, quotient, transport, noop}",
+      "kappa_screen": "(Y, q, Menu, edges) → action × chosen screen",
+      "Representability": "Y constant on screen fibres",
+      "Coarsest": "argmin (n(r), name) over representing r in Menu"
+    },
+    "types_domains_units": "X = {0,1}^4. Fibre counts are dimensionless integers. Actions are a four-element set. Holonomy is Aff(1, Z/3). Path A/B lives on Nat×Nat.",
+    "exact_claim": "There exist two registered cases with equal cheap signatures and unequal gold. For every registered case, kappa_screen's action equals empirical gold. There exists a case with more than one representing menu screen. There exist p,q with pathA(p)=pathA(q) and pathB(p)≠pathB(q).",
+    "quantifiers": "Universal over the 11 registered cases for kappa_screen. Existential for the cheap collision, the non-unique representing set, and the Path A/B pair.",
+    "assumptions": "Menu is {q_id, q_rot, q_perm, q_stab0, q_stab_last}. Connection gold ignores the PE screen. Tie-break is fewest fibres then name. No sampling.",
+    "identification_conditions": "kappa_screen is identified as Theorem 4 plus that total order. It is not identified as a new primitive.",
+    "derivation_dependencies": "Paper A representability iff G_M ⊆ G_Y. Paper E gold and decide. Lean repair_paths_disagree. CommonSuffScreen / Theorem 4. Not a new logical primitive.",
+    "coordinate_invariance": "Swap of positions 0 and 3 sends first_bit to last_bit and q_stab0 to q_stab_last. kappa_screen is required to commute with that relabel on the registered pairs.",
+    "edge_limiting_null_cases": "If the cheap signature does not collide, calculus_holds. If kappa_screen misses, no_function. If the menu is enlarged so pair_eq becomes quotientable, the cheap collision may disappear; that is a menu change."
+  },
+  "controls": [
+    "specified_before_fit",
+    "cheap_collision_is_the_no_function_witness",
+    "screen_map_disclosed_as_theorem_4",
+    "tie_break_is_named",
+    "relabel_0_3",
+    "kill_does_not_fail_ci"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": "none",
+    "sampling": "Finite {0,1}^4 enumeration, Paper E suite, Path A/B pair. No sampling."
+  },
+  "claim_boundary": "Accepted only as: the written function is SIC's screen plus a total order. Not a new master object. Not text nomination. Not an LLM. Not a better language model."
+}

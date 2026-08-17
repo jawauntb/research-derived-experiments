@@ -10,6 +10,7 @@
 - [x] Paper C: connection beyond `List Int` (`Aff(1, Z/3)` 4-cycle).
 - [x] Paper D: shared-diagram disanalogy (196 diamonds; four `s²` values).
 - [x] Paper E: name-blind one-shot surgery dies on unused symmetry (`pair_eq` / `q_id`; 6/7 held-out; `surgery_killed`).
+- [x] Paper F: write κ. Cheap map is not a function; screen map is Theorem 4 plus a total order (`calculus_is_sic`).
 - [ ] Do not import OpenAI 2026 writeups as verified theorems.
 
 ## Variable-`x` EML spectrum (2026-08-17)
@@ -24,7 +25,8 @@
 - [x] Paper C: Aff(1, Z/3) 4-cycle escapes Kirchhoff (`cell3_holds`). Not Lorentz.
 - [x] Paper D: a transfer that should fail across Lorentz / Lamport / PE (`disanalogy_holds`).
 - [x] Paper E: typed surgery, not text nomination (`surgery_killed` on unused symmetry).
-- [ ] Do not start Paper F. Do not reopen DR/DCR. Do not turn E into an LLM leaderboard.
+- [x] Paper F: specified κ; verdict `calculus_is_sic`. Close-out at `papers/sic_dynamics/`.
+- [ ] Do not reopen DR/DCR. Do not turn this into an LLM leaderboard. Do not fit a fancier cheap signature.
 - [ ] Do not import OpenAI 2026 writeups as verified theorems.
 
 ## Obstruction-Aware Admission (2026-07-27)

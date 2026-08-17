@@ -1,0 +1,317 @@
+{
+  "cases": [
+    {
+      "case_id": "first_bit_q_perm",
+      "cheap": "restore",
+      "cheap_hit": true,
+      "chosen_screen": "q_stab0",
+      "gold": "restore",
+      "n_representing": 2,
+      "screen": "restore",
+      "screen_hit": true,
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": true,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "construction",
+      "task_id": "first_bit"
+    },
+    {
+      "case_id": "bag_q_id",
+      "cheap": "quotient",
+      "cheap_hit": true,
+      "chosen_screen": "q_perm",
+      "gold": "quotient",
+      "n_representing": 5,
+      "screen": "quotient",
+      "screen_hit": true,
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "construction",
+      "task_id": "bag"
+    },
+    {
+      "case_id": "bag_q_perm",
+      "cheap": "noop",
+      "cheap_hit": true,
+      "chosen_screen": "q_perm",
+      "gold": "noop",
+      "n_representing": 5,
+      "screen": "noop",
+      "screen_hit": true,
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "construction",
+      "task_id": "bag"
+    },
+    {
+      "case_id": "bag_q_perm_affine_a",
+      "cheap": "transport",
+      "cheap_hit": true,
+      "chosen_screen": "",
+      "gold": "transport",
+      "n_representing": 0,
+      "screen": "transport",
+      "screen_hit": true,
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": true,
+        "mixes": false,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "construction",
+      "task_id": "bag"
+    },
+    {
+      "case_id": "last_bit_q_perm",
+      "cheap": "restore",
+      "cheap_hit": true,
+      "chosen_screen": "q_stab_last",
+      "gold": "restore",
+      "n_representing": 2,
+      "screen": "restore",
+      "screen_hit": true,
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": true,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "last_bit"
+    },
+    {
+      "case_id": "last_bit_q_id",
+      "cheap": "quotient",
+      "cheap_hit": true,
+      "chosen_screen": "q_stab_last",
+      "gold": "quotient",
+      "n_representing": 2,
+      "screen": "quotient",
+      "screen_hit": true,
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "last_bit"
+    },
+    {
+      "case_id": "parity_q_id",
+      "cheap": "quotient",
+      "cheap_hit": true,
+      "chosen_screen": "q_perm",
+      "gold": "quotient",
+      "n_representing": 5,
+      "screen": "quotient",
+      "screen_hit": true,
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "parity"
+    },
+    {
+      "case_id": "identity_q_id",
+      "cheap": "noop",
+      "cheap_hit": true,
+      "chosen_screen": "q_id",
+      "gold": "noop",
+      "n_representing": 1,
+      "screen": "noop",
+      "screen_hit": true,
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": false
+      },
+      "split": "held_out",
+      "task_id": "identity"
+    },
+    {
+      "case_id": "pair_eq_q_perm",
+      "cheap": "restore",
+      "cheap_hit": true,
+      "chosen_screen": "q_id",
+      "gold": "restore",
+      "n_representing": 1,
+      "screen": "restore",
+      "screen_hit": true,
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": true,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "pair_eq"
+    },
+    {
+      "case_id": "pair_eq_q_id",
+      "cheap": "quotient",
+      "cheap_hit": false,
+      "chosen_screen": "q_id",
+      "gold": "noop",
+      "n_representing": 1,
+      "screen": "noop",
+      "screen_hit": true,
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "pair_eq"
+    },
+    {
+      "case_id": "bag_q_perm_affine_c",
+      "cheap": "transport",
+      "cheap_hit": true,
+      "chosen_screen": "",
+      "gold": "transport",
+      "n_representing": 0,
+      "screen": "transport",
+      "screen_hit": true,
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": true,
+        "mixes": false,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "bag"
+    }
+  ],
+  "collisions": [
+    {
+      "case_ids": [
+        "bag_q_id",
+        "last_bit_q_id",
+        "parity_q_id",
+        "pair_eq_q_id"
+      ],
+      "golds": [
+        "noop",
+        "quotient"
+      ],
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      }
+    }
+  ],
+  "experiment_id": "delete_repair_kappa",
+  "gates": {
+    "KAP_CLAIM_BOUNDARY": true,
+    "KAP_ENUMERATION": true,
+    "KAP_RANKING_RECORDED": true,
+    "KAP_RELABEL": true,
+    "KAP_SCREEN_DEFINED": true,
+    "KAP_SPECIFIED": true
+  },
+  "kappa_specification": {
+    "kappa_cheap": "decide(Signature): mismatch\u2192transport; mixes\u2192restore; symmetry and n_fibres=n_worlds\u2192quotient; else noop.",
+    "kappa_screen": "Kirchhoff mismatch\u2192transport; else coarsest representing menu screen by fibre count then name; restore/quotient/noop from that choice.  Theorem 4 plus a total order.",
+    "kappa_unique": "The representing set is a singleton.  Killed by multiple representing screens or by Path A/B disagreement.",
+    "tie_break": "fewest fibres, then lexicographic screen id"
+  },
+  "process_disclosure": "\u03ba is specified before the run: cheap signature, menu-relative coarsest representing screen, uniqueness-without-tie-break.  Not fitted.  Not an LLM.  Not a new master object if the working map is Theorem 4 plus a total order.",
+  "producing_agent": {
+    "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+    "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+  },
+  "ranking": {
+    "cheap_is_function": false,
+    "max_representing": 5,
+    "n_cheap_collisions": 1,
+    "noncommute": true,
+    "pair_eq_screen_is_noop": true,
+    "relabel_natural": true,
+    "rule": "calculus_is_sic iff \u03ba_cheap is not a function, \u03ba_screen matches gold on every registered case, uniqueness fails without the tie-break, and Path A/B still disagree.  calculus_holds if the cheap signature is already a function.  no_function if \u03ba_screen misses.",
+    "screen_exact": true,
+    "screen_hits": 11,
+    "screen_n": 11,
+    "uniqueness_fails": true,
+    "verdict": "calculus_is_sic"
+  },
+  "relabels": [
+    {
+      "image_choice": "q_stab_last",
+      "image_screen": "q_perm",
+      "image_task": "last_bit",
+      "natural": true,
+      "source_choice": "q_stab0",
+      "source_screen": "q_perm",
+      "source_task": "first_bit"
+    },
+    {
+      "image_choice": "q_stab_last",
+      "image_screen": "q_id",
+      "image_task": "last_bit",
+      "natural": true,
+      "source_choice": "q_stab0",
+      "source_screen": "q_id",
+      "source_task": "first_bit"
+    },
+    {
+      "image_choice": "q_stab0",
+      "image_screen": "q_perm",
+      "image_task": "first_bit",
+      "natural": true,
+      "source_choice": "q_stab_last",
+      "source_screen": "q_perm",
+      "source_task": "last_bit"
+    }
+  ],
+  "run_id": "delete_repair_kappa_2026_08_17",
+  "status": "pass",
+  "withheld": [
+    "A new master object above SIC",
+    "Text nomination / DR / DCR",
+    "LLM agent eval",
+    "A better language model",
+    "Valence / concern"
+  ]
+}
