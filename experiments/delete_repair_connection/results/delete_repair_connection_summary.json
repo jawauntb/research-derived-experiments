@@ -1,0 +1,163 @@
+{
+  "cycles": [
+    {
+      "edges": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "flat": true,
+      "holonomy": [
+        1,
+        0
+      ],
+      "kirchhoff_prediction": [
+        1,
+        0
+      ],
+      "matches_kirchhoff": true,
+      "name": "kirchhoff_flat",
+      "sum_b": 0
+    },
+    {
+      "edges": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "flat": false,
+      "holonomy": [
+        1,
+        1
+      ],
+      "kirchhoff_prediction": [
+        1,
+        1
+      ],
+      "matches_kirchhoff": true,
+      "name": "kirchhoff_curved",
+      "sum_b": 1
+    },
+    {
+      "edges": [
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "flat": false,
+      "holonomy": [
+        2,
+        0
+      ],
+      "kirchhoff_prediction": [
+        1,
+        0
+      ],
+      "matches_kirchhoff": false,
+      "name": "affine_sum0_not_flat",
+      "sum_b": 0
+    },
+    {
+      "edges": [
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "flat": true,
+      "holonomy": [
+        1,
+        0
+      ],
+      "kirchhoff_prediction": [
+        1,
+        2
+      ],
+      "matches_kirchhoff": false,
+      "name": "affine_flat_sum2",
+      "sum_b": 2
+    }
+  ],
+  "experiment_id": "delete_repair_connection",
+  "gates": {
+    "CONN_CLAIM_BOUNDARY": true,
+    "CONN_ENUMERATION": true,
+    "CONN_GROUP_LAWS": true,
+    "CONN_KIRCHHOFF_CONTROL": true,
+    "CONN_RANKING_RECORDED": true
+  },
+  "process_disclosure": "Exact Aff(1, Z/3) path-ordered transport on a 4-cycle.  Not integer Kirchhoff, not Lorentz, not CG-2, not Paper F.",
+  "producing_agent": {
+    "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+    "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+  },
+  "ranking": {
+    "affine_escapes_kirchhoff": true,
+    "kirchhoff_control_holds": true,
+    "order_matters": true,
+    "raw_comparison_fails": true,
+    "rule": "Cell 3 is real iff additive cycles still match Kirchhoff, at least one affine cycle escapes that prediction, composition is non-commutative, raw comparison fails on a flat affine section, and transported comparison works.",
+    "transport_comparison_works": true,
+    "verdict": "cell3_holds"
+  },
+  "run_id": "delete_repair_connection_2026_08_17",
+  "status": "pass",
+  "withheld": [
+    "Lorentz geometry",
+    "Concern holonomy (CG-2)",
+    "Paper D Lorentz/Lamport/PE transfer",
+    "Paper E agent benchmark",
+    "Universal calculus (Paper F)"
+  ]
+}

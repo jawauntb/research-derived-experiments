@@ -396,6 +396,50 @@ Residual content:
 - Old regime: one ladder / match `G_M` to `G_Y`.
 - New: two arrows on this harness. Papers C–F still unlicensed.
 
+## Paper C connection beyond Kirchhoff
+
+Question: is cell 3 idle integer cycle-sum packaging, or does
+path-ordered transport in a non-additive group do work Kirchhoff
+cannot?
+
+Current regime:
+
+- Artifact types: `Aff(1, Z/3)` edges on a 4-cycle.
+- Operations: exhaustive 6-element group laws; path-ordered
+  composition; Kirchhoff prediction `(1, sum b)`.
+- Gates/verifiers: five CONN instrument gates; `cell3_idle` is a
+  valid passing run.
+- Known limitations: finite affine group, not Lorentz, not CG-2.
+
+Action class:
+
+- Frame diagnosis: Paper A's `List Int` fact is the `a=1` slice.
+- Why: a scale `a=2` makes sum-of-shifts the wrong invariant.
+
+Experiment:
+
+- Manifest/report paths: `experiments/delete_repair_connection/`.
+- Positive targets: affine A (`sum b=0`, holonomy `(2,0)`); affine
+  B (`sum b=2`, holonomy identity).
+- Negative controls: additive flat and curved cycles.
+- Stress tests: non-commuting pair; raw vs transported comparison.
+
+Gate:
+
+- Acceptance: instrument gates pass, then apply the escape rule.
+- Every affine cycle matching Kirchhoff idles cell 3.
+
+Results:
+
+- Accepted instrument: 6-element group; additive control holds.
+- Ranking: both affine cycles escape; verdict `cell3_holds`.
+- Key metrics: not Lorentz; not CG-2.
+
+Residual content:
+
+- Old regime: cell 3 is Kirchhoff.
+- New: cell 3 is path-ordered composition. Paper D still unlicensed.
+
 ## Obstruction-Aware Admission V0
 
 Question: can a finite bounded agent choose the next permitted experiment by

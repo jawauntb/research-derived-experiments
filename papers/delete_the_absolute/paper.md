@@ -882,7 +882,7 @@ the previous letter's kill criteria. Three other objects are
 |---|---|---|---|
 | **A** | Taxonomy + honesty ledger + Lean core + `n=4` regression | none; this document | Lean banked; instrument banked as regression |
 | **B** | Swap-cell instrument: EML-shaped restore vs relativity-shaped delete, same harness | A does not get to claim discrimination until the swap cell exists | banked (`papers/delete_repair_swap/`; `taxonomy_holds`; pairing of A's matrix, not new enumeration) |
-| **C** | Connection beyond `List Int` (graph 1-forms, chart transport) | B shows cell 3 is not idle Kirchhoff-packaging | not started |
+| **C** | Connection beyond `List Int` (graph 1-forms, chart transport) | B shows cell 3 is not idle Kirchhoff-packaging | banked (`papers/delete_repair_connection/`; `cell3_holds`; Aff(1, Z/3) escapes sum-b; not Lorentz) |
 | **D** | Shared-diagram disanalogy: a transfer that *should* fail across Lorentz / Lamport / PE | B does not collapse to one arrow | not started |
 | **E** | Assumption-surgery benchmark for agents (typed delete/repair, not text nomination) | B–D survive; DR/DCR stay closed | not started |
 | **F** | Universal calculus (Possibility 1) | B–E survive; `κ` is specified before it is fitted | **untested, withheld** |

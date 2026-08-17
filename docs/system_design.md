@@ -365,6 +365,9 @@ transfer at this bound (7 vs 7).
 Frozen-leaf rewrite is `experiments/eml_us4_discrete/` and reopens a
 `Φ` gap on extra basins (43 vs 28).
 The Paper B swap cell is `experiments/delete_repair_swap/`.
+Paper C is `experiments/delete_repair_connection/`: Aff(1, Z/3)
+4-cycles escape integer Kirchhoff while additive cycles remain the
+control.
 
 The weakness paper also carries a theory-only companion,
 `papers/weakness_invariance_neurips/pac_bayes_weakness_sketch.md`. It derives a
@@ -1687,7 +1690,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 - **No universal research dependency specification.** The root quality gate has a complete locked dependency group, but experiment and Modal runtimes still rely on command-specific `uvx` sets or explicit Modal images.
 - **Machine-specific paths** in docs/handoffs (Doppler scope, local archives).
 - **Result fidelity depends on summarization discipline.** Gitignored JSON vs committed Markdown can drift.
-- **Structured-contract coverage is early but fail-closed.** All 101 research packages are partitioned in `docs/experiment_contract_registry.json` (53 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction. Public-artifact digest envelopes cover the E5 confirmatory JSON and E4 appendix. Clean-clone CPU reproduction is allowlisted for `bayesian_voi`, `grounded_statecharts`, `information_limited_discovery`, `mathematical_claims`, `relative_identifiability`, and `seed_bootstrap_calibration`.
+- **Structured-contract coverage is early but fail-closed.** All 102 research packages are partitioned in `docs/experiment_contract_registry.json` (54 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction. Public-artifact digest envelopes cover the E5 confirmatory JSON and E4 appendix. Clean-clone CPU reproduction is allowlisted for `bayesian_voi`, `grounded_statecharts`, `information_limited_discovery`, `mathematical_claims`, `relative_identifiability`, and `seed_bootstrap_calibration`.
 - **Paper-primary experiments** may have no committed `results/*.md`; evidence lives in the paper + local artifacts.
 - **Coherence / Inquiry / Cabal / site tests** are outside the root Python quality gate.
 - **Scientific claims are gate-bound.** Fixture smokes do not settle the program thesis.
