@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "eml_variable_spectrum",
+  "hypothesis": "The leaf-labeled EML grammar S → 1 | x | eml(S,S) has no 1-D integer invariant like degree. Exhaustive enumeration through 5 internal nodes matches 2^{k+1} C_k and exhibits same-size trees that disagree as functions. US-4′ is withheld.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "labeled_catalan_enumeration",
+      "description": "Tree counts by internal-node number must equal 2^{k+1} C_k. This is independent of evaluation."
+    },
+    {
+      "control_id": "real_domain_and_undefined",
+      "description": "Evaluation uses real exp/log. Nonpositive right-hand arguments and overflow are undefined."
+    },
+    {
+      "control_id": "grid_disclosure",
+      "description": "The 6-point positive grid is a registered representation. Agreement on it is not function identity."
+    },
+    {
+      "control_id": "us4_prime_withheld",
+      "description": "The run must not claim that fiber mass predicts gradient recovery."
+    }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/eml_variable_spectrum/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "EVS_ENUMERATION_COMPLETE",
+      "criterion": "Counts match 2^{k+1} C_k for k=0..5."
+    },
+    {
+      "gate_id": "EVS_SIZE_NOT_FUNCTION",
+      "criterion": "eml(x,1) and eml(1,x) disagree at x=2 with the closed forms exp(x) and e-ln(x)."
+    },
+    {
+      "gate_id": "EVS_CONSTANT_EMBEDDING",
+      "criterion": "All-ones size-2 trees recover e-1 vs exp(e) and are constant in x."
+    },
+    {
+      "gate_id": "EVS_GRID_DISCLOSED",
+      "criterion": "Summary records the finite-grid caveat."
+    },
+    {
+      "gate_id": "EVS_US4_PRIME_WITHHELD",
+      "criterion": "US-4′ is flagged untested."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/eml_variable_spectrum/results/eml_variable_spectrum_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/eml_variable_spectrum/preregistration.json",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/eml_variable_spectrum/paper.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

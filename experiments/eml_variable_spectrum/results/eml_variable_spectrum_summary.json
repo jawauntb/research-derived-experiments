@@ -1,0 +1,106 @@
+{
+  "citations": [
+    "Odrzywo\u0142ek, A. (2026). All elementary functions from a single binary operator. arXiv:2603.21852."
+  ],
+  "constant_embedding_witness": {
+    "constant_in_x": true,
+    "exact_witness": true,
+    "left": {
+      "pretty": "eml(1,eml(1,1))",
+      "value": 1.718281828459045
+    },
+    "right": {
+      "pretty": "eml(eml(1,1),1)",
+      "value": 15.154262241479262
+    }
+  },
+  "expected_counts_by_size": {
+    "0": 2,
+    "1": 4,
+    "2": 16,
+    "3": 80,
+    "4": 448,
+    "5": 2688
+  },
+  "experiment_id": "eml_variable_spectrum",
+  "gates": {
+    "EVS_CONSTANT_EMBEDDING": true,
+    "EVS_ENUMERATION_COMPLETE": true,
+    "EVS_GRID_DISCLOSED": true,
+    "EVS_SIZE_NOT_FUNCTION": true,
+    "EVS_US4_PRIME_WITHHELD": true
+  },
+  "grid_disclosure": "Agreement of two trees on a finite positive grid is not identity of functions.  Spectrum counts are computational.  The size-1 witness uses exact closed forms exp(x) vs e-ln(x), which already disagree at x=2.",
+  "n_trees": 3238,
+  "producing_agent": {
+    "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+    "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+  },
+  "registered": {
+    "count_formula": "2^{k+1} C_k",
+    "grid": [
+      0.25,
+      0.5,
+      1.0,
+      2.0,
+      2.718281828459045,
+      4.0
+    ],
+    "leaf_labels": [
+      "1",
+      "x"
+    ],
+    "max_internal": 5,
+    "round_digits": 10
+  },
+  "run_id": "eml_variable_spectrum_2026_08_17",
+  "size_not_function_witness": {
+    "exact_witness": true,
+    "grid_disagrees": true,
+    "left": {
+      "at_2": 7.38905609893065,
+      "closed_form": "exp(x)",
+      "pretty": "eml(x,1)"
+    },
+    "n_internal": 1,
+    "n_nodes": 3,
+    "right": {
+      "at_2": 2.0251346478990997,
+      "closed_form": "e-ln(x)",
+      "pretty": "eml(1,x)"
+    }
+  },
+  "spectrum": {
+    "distinct_fibers_by_size": {
+      "0": 2,
+      "1": 4,
+      "2": 16,
+      "3": 78,
+      "4": 412,
+      "5": 2293
+    },
+    "max_fiber_size": 12,
+    "n_all_undefined": 280,
+    "n_cross_size_fibers": 14,
+    "n_numerical_fibers": 2789,
+    "n_partial_undefined": 1438,
+    "size_is_function_invariant": false
+  },
+  "status": "pass",
+  "tree_counts_by_size": {
+    "0": 2,
+    "1": 4,
+    "2": 16,
+    "3": 80,
+    "4": 448,
+    "5": 2688
+  },
+  "untested": {
+    "US-4_prime": "US-4\u2032 (fiber free energy predicts gradient recovery on EML master formulas) is untested.  This package is a first variable-x census, not that claim."
+  },
+  "withheld": [
+    "US-4\u2032",
+    "Identity of functions from finite-grid agreement",
+    "A 1-D complete invariant of EML denotations"
+  ]
+}
