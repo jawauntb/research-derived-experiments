@@ -18,10 +18,9 @@ A green `lake build` is not this receipt.
 | `poset_not_determine_interval` | `DiamondInterval.lean` | **passed** | none |
 | `surgery_miss_pair_eq` | `SurgeryMiss.lean` | **passed** | `propext` |
 
-`KappaScreen` stays **proved-not-verified**. The headline and the five
-`fiberCount_*` lemmas use `native_decide`, which SafeVerify disallows.
-Do not relabel it verified. Do not rewrite the cheap signature. Do not
-start Paper G.
+`KappaScreen` was **proved-not-verified** on the first pass (`native_decide`).
+A later pass replaced `native_decide` with kernel `decide` (high
+`maxRecDepth`) and SafeVerify **passed**. Do not start Paper G.
 
 Relabel/Surgery targets needed a brace-aware `sorry` split because several
 theorem *types* contain `{ action := ... }`; Lea's first-`:=` splitter
@@ -29,3 +28,15 @@ broke those two files. The proofs themselves were not edited.
 
 Still Python: empirical Φ ratios, GD 8/8, extras 43/28, `dta_n4_representable_iff`,
 `swap_typed_wins`.
+
+## Wave 4 + KappaScreen kernel decide (same day, later)
+
+| Node | File | SafeVerify | Axioms |
+|---|---|---|---|
+| `kappa_screen_hits_suite` | `KappaScreen.lean` | **passed** (kernel `decide`) | `propext` |
+| `dta_n4_representable_iff` | `DtaN4.lean` | **passed** | none |
+| `swap_typed_wins` | `SwapTyped.lean` | **passed** | `propext` |
+
+Haskell independently computed the 16-cell n=4 matrix (representability
+equals `G_q ⊆ G_Y` on every registered cell) and the Paper B swap cell
+before the Lean files were written.
