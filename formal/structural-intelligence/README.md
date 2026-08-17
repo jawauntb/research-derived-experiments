@@ -98,7 +98,10 @@ remaining Structural-Intelligence companion papers.
   max degree `≤ 2^k`.
 - `StructuralIntelligence.Compiler.SquaringSeparation.squaring_separation`
   — combined headline: same degree `2^n`, Mul size `2^{n+1}-1`,
-  Sq size `n+1`, circuit size `n`.  Depends on **no axioms**.
+  Sq size `n+1`, circuit size `n`.  Uses `propext, Quot.sound`
+  (via `omega` / list lemmas).  The necessity half
+  `circuit_pow2_needs_n_steps` additionally uses `Classical.choice`.
+  Kernel-checked on Lean 4.31; zero `sorry`.
 
   Catalan counts and Gibbs fiber masses are the Python instrument
   `experiments/squaring_separation`, not this file.
@@ -461,8 +464,11 @@ headlines depend on **no axioms**.  `pareto_contains_css_when_zero_sufficiency`
 uses `[propext, Quot.sound]` (via `omega` closing the impossible
 `Fin 2` index case).  `independent_lifts_compose` (RR-2 form) uses
 `[propext, Classical.choice, Quot.sound]` (via `by_cases` on
-`captures r I`).  A full clean build (post-toolchain-download) takes
-~3 seconds.
+`captures r I`).  The squaring-separation headline
+`squaring_separation` uses `[propext, Quot.sound]`;
+`circuit_pow2_needs_n_steps` uses the standard
+`propext, Classical.choice, Quot.sound` triple.  A full clean build
+(post-toolchain-download) takes ~3 seconds.
 
 ## Files
 
@@ -518,6 +524,7 @@ uses `[propext, Quot.sound]` (via `omega` closing the impossible
   `bayesPosterior`, `boltzmannUpdate`, and the AA-2 core headline
   `bayes_equals_boltzmann_with_reward_as_likelihood` (plus the
   function-level `bayesPosterior_eq_boltzmannUpdate`).
+<<<<<<< HEAD
 - `StructuralIntelligence/DeleteRepair.lean` — delete–obstruction–
   repair core: `Act` / `IsInvariant` / `FactorsThrough`,
   `prefixSum` / `sumInt`, `ExactRepair`, `pathA` / `pathB`, and the
@@ -525,6 +532,12 @@ uses `[propext, Quot.sound]` (via `omega` closing the impossible
   `cycle_integrates_iff_sum_zero`,
   `potentials_unique_up_to_translation`,
   `repair_splits_disagreement`, `repair_paths_disagree`.
+=======
+- `StructuralIntelligence/Compiler/SquaringSeparation.lean` —
+  Mul/Sq trees, expand-preserves-degree, and the US-2/US-3 headlines
+  `tree_size_separation`, `circuit_size_of_pow2`,
+  `conservative_extension`, `squaring_separation`.
+>>>>>>> b9ca7ef (formal(lean): kernel-check SquaringSeparation on Lean 4.31)
 
 ## Provenance
 

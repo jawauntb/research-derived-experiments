@@ -25,6 +25,12 @@ namespace StructuralIntelligence
 namespace Compiler
 namespace SquaringSeparation
 
+theorem two_mul_pow (n : Nat) : 2 * 2 ^ n = 2 ^ (n + 1) := by
+  rw [Nat.pow_succ, Nat.mul_comm (2 ^ n)]
+
+theorem two_pow_add (n : Nat) : 2 ^ n + 2 ^ n = 2 ^ (n + 1) := by
+  rw [← Nat.two_mul, two_mul_pow]
+
 /-! ## Multiplication trees -/
 
 inductive MulTree where
@@ -55,11 +61,6 @@ theorem size_succ_eq_two_mul_degree : ∀ t : MulTree, t.size + 1 = 2 * t.degree
       simp [size, degree]
       omega
 
-theorem two_mul_pow : ∀ n : Nat, 2 * 2 ^ n = 2 ^ (n + 1)
-  | 0 => rfl
-  | n + 1 => by
-      rw [Nat.pow_succ, Nat.pow_succ, Nat.mul_assoc]
-
 theorem size_of_pow2_degree (n : Nat) (t : MulTree)
     (h : t.degree = 2 ^ n) : t.size + 1 = 2 ^ (n + 1) := by
   have ht := size_succ_eq_two_mul_degree t
@@ -69,11 +70,6 @@ theorem size_of_pow2_degree (n : Nat) (t : MulTree)
 def pow2Tree : Nat → MulTree
   | 0 => leaf
   | n + 1 => mul (pow2Tree n) (pow2Tree n)
-
-theorem two_pow_add : ∀ n : Nat, 2 ^ n + 2 ^ n = 2 ^ (n + 1)
-  | 0 => rfl
-  | n + 1 => by
-      rw [Nat.pow_succ, Nat.pow_succ, Nat.mul_add]
 
 theorem pow2Tree_degree : ∀ n : Nat, (pow2Tree n).degree = 2 ^ n
   | 0 => rfl
@@ -119,7 +115,7 @@ theorem sqTower_degree : ∀ n : Nat, (sqTower n).degree = 2 ^ n
   | 0 => rfl
   | n + 1 => by
       simp [sqTower, degree, sqTower_degree n]
-      exact MulTree.two_pow_add n
+      exact two_pow_add n
 
 /-- Expanding the definable macro `sq(t) = t × t` recovers a mul-tree. -/
 def expand : SqTree → MulTree
@@ -142,10 +138,9 @@ theorem size_le_expand_size : ∀ t : SqTree, t.size ≤ (expand t).size
       exact Nat.add_le_add (size_le_expand_size l) (size_le_expand_size r)
   | sq t => by
       have h := size_le_expand_size t
-      simp [size, expand, MulTree.size]
-      have : t.size ≤ (expand t).size + (expand t).size :=
-        Nat.le_trans h (Nat.le_add_right _ _)
-      exact Nat.succ_le_succ this
+      -- `simp` would cancel the trailing `+ 1` and leave a mismatched goal.
+      simp only [size, expand, MulTree.size]
+      omega
 
 end SqTree
 
@@ -186,13 +181,15 @@ theorem applyStep_le_two_max (ds : List Nat) (s : CircStep) :
       simp [applyStep]
       have hsum : ds.getD i 0 + ds.getD j 0 ≤ listMax ds + listMax ds :=
         Nat.add_le_add hi hj
-      have htwo : listMax ds + listMax ds = 2 * listMax ds := by
-        rw [Nat.two_mul]
+      have htwo : listMax ds + listMax ds = 2 * listMax ds := (Nat.two_mul _).symm
       exact htwo ▸ hsum
   | sq i =>
       have hi := getD_le_listMax ds i
       simp [applyStep]
-      exact Nat.mul_le_mul_left 2 hi
+      have hmul : ds.getD i 0 * 2 ≤ listMax ds * 2 :=
+        Nat.mul_le_mul_right 2 hi
+      have hcomm : listMax ds * 2 = 2 * listMax ds := Nat.mul_comm _ _
+      exact hcomm ▸ hmul
 
 theorem listMax_append_singleton :
     ∀ (ds : List Nat) (x : Nat), listMax (ds ++ [x]) = Nat.max (listMax ds) x
@@ -200,8 +197,7 @@ theorem listMax_append_singleton :
       simp [listMax]
   | y :: ys, x => by
       have ih := listMax_append_singleton ys x
-      simp [listMax, ih]
-      exact (Nat.max_assoc y (listMax ys) x).symm
+      simp [listMax, ih, Nat.max_assoc]
 
 theorem listMax_append_le_two (ds : List Nat) (x : Nat)
     (hx : x ≤ 2 * listMax ds) :
@@ -226,83 +222,38 @@ theorem degreesFrom_max_le (ds : List Nat) :
       listMax (degreesFrom ds steps) ≤ listMax ds * 2 ^ steps.length
   | [] => by
       simp [degreesFrom]
-      exact Nat.le_mul_of_pos_right (listMax ds) (by decide : (0 : Nat) < 1)
   | s :: rest => by
       have hnew : applyStep ds s ≤ 2 * listMax ds := applyStep_le_two_max ds s
       have hmax : listMax (ds ++ [applyStep ds s]) ≤ 2 * listMax ds :=
         listMax_append_le_two ds _ hnew
       have ih := degreesFrom_max_le (ds ++ [applyStep ds s]) rest
       simp [degreesFrom]
-      have hcalc :
+      have h1 :
           listMax (degreesFrom (ds ++ [applyStep ds s]) rest)
-            ≤ listMax ds * 2 ^ (rest.length + 1) := by
-        have h1 :
-            listMax (degreesFrom (ds ++ [applyStep ds s]) rest)
-              ≤ listMax (ds ++ [applyStep ds s]) * 2 ^ rest.length := ih
-        have h2 :
-            listMax (ds ++ [applyStep ds s]) * 2 ^ rest.length
-              ≤ (2 * listMax ds) * 2 ^ rest.length :=
-          Nat.mul_le_mul_right (2 ^ rest.length) hmax
-        have h3 : (2 * listMax ds) * 2 ^ rest.length
-            = listMax ds * 2 ^ (rest.length + 1) := by
-          rw [Nat.pow_succ, Nat.mul_comm (2 ^ rest.length) 2]
-          ac_rfl
-        exact Nat.le_trans (Nat.le_trans h1 h2) (Nat.le_of_eq h3)
-      exact hcalc
+            ≤ listMax (ds ++ [applyStep ds s]) * 2 ^ rest.length := ih
+      have h2 :
+          listMax (ds ++ [applyStep ds s]) * 2 ^ rest.length
+            ≤ (2 * listMax ds) * 2 ^ rest.length :=
+        Nat.mul_le_mul_right (2 ^ rest.length) hmax
+      have h3 : (2 * listMax ds) * 2 ^ rest.length
+          = listMax ds * 2 ^ (rest.length + 1) := by
+        rw [Nat.pow_succ, Nat.mul_comm (2 ^ rest.length) 2]
+        ac_rfl
+      exact Nat.le_trans (Nat.le_trans h1 h2) (Nat.le_of_eq h3)
 
 theorem listMax_singleton_one : listMax [1] = 1 := rfl
 
 theorem circuitMaxDegree_le_pow2 (steps : List CircStep) :
     circuitMaxDegree steps ≤ 2 ^ steps.length := by
   have h := degreesFrom_max_le [1] steps
-  simp [circuitMaxDegree, circuitDegrees, listMax_singleton_one] at h
-  exact h
+  simpa [circuitMaxDegree, circuitDegrees, listMax_singleton_one] using h
 
-theorem pow2_mono : ∀ {n m : Nat}, n ≤ m → 2 ^ n ≤ 2 ^ m
-  | n, m, h => by
-      obtain ⟨k, hk⟩ := Nat.exists_eq_add_of_le h
-      subst hk
-      induction k with
-      | zero => simp
-      | succ k ih =>
-          rw [Nat.add_succ, Nat.pow_succ]
-          exact Nat.le_trans ih (Nat.le_mul_of_pos_left (2 ^ (n + k))
-            (by decide : (0 : Nat) < 2))
-
-theorem pow2_le_pow2_imp_le {n m : Nat} (h : 2 ^ n ≤ 2 ^ m) : n ≤ m := by
-  revert h
-  revert m
-  induction n with
-  | zero =>
-      intro m _; exact Nat.zero_le m
-  | succ n ih =>
-      intro m
-      cases m with
-      | zero =>
-          intro h
-          have h2 : 2 ≤ 2 ^ (n + 1) := by
-            induction n with
-            | zero => decide
-            | succ k ihk =>
-                rw [Nat.pow_succ]
-                exact Nat.le_trans ihk
-                  (Nat.le_mul_of_pos_left (2 ^ (k + 1))
-                    (by decide : (0 : Nat) < 2))
-          exact (Nat.not_succ_le_self 1 (Nat.le_trans h2 h)).elim
-      | succ m =>
-          intro h
-          have hn : 2 ^ (n + 1) = 2 * 2 ^ n := Nat.pow_succ 2 n
-          have hm : 2 ^ (m + 1) = 2 * 2 ^ m := Nat.pow_succ 2 m
-          have hhalf : 2 ^ n ≤ 2 ^ m := by
-            have : 2 * 2 ^ n ≤ 2 * 2 ^ m := by
-              rw [← hn, ← hm]; exact h
-            exact Nat.le_of_mul_le_mul_left this (by decide : (0 : Nat) < 2)
-          exact Nat.succ_le_succ (ih hhalf)
+theorem pow2_le_pow2_imp_le {n m : Nat} (h : 2 ^ n ≤ 2 ^ m) : n ≤ m :=
+  (Nat.pow_le_pow_iff_right (by decide : (1 : Nat) < 2)).mp h
 
 theorem circuit_pow2_needs_n_steps (steps : List CircStep) (n : Nat)
-    (h : 2 ^ n ≤ circuitMaxDegree steps) : n ≤ steps.length := by
-  have hmax := circuitMaxDegree_le_pow2 steps
-  exact pow2_le_pow2_imp_le (Nat.le_trans h hmax)
+    (h : 2 ^ n ≤ circuitMaxDegree steps) : n ≤ steps.length :=
+  pow2_le_pow2_imp_le (Nat.le_trans h (circuitMaxDegree_le_pow2 steps))
 
 def repeatedSquaring : Nat → List CircStep
   | 0 => []
@@ -319,8 +270,9 @@ theorem degreesFrom_length (ds : List Nat) :
   | [] => by simp [degreesFrom]
   | s :: rest => by
       have ih := degreesFrom_length (ds ++ [applyStep ds s]) rest
-      simp [degreesFrom] at ih
-      simp [degreesFrom, ih]
+      have hds : (ds ++ [applyStep ds s]).length = ds.length + 1 := by simp
+      simp [degreesFrom]
+      rw [ih, hds]
       omega
 
 theorem degreesFrom_append (ds : List Nat) :
@@ -335,13 +287,6 @@ theorem circuitDegrees_append (xs ys : List CircStep) :
     circuitDegrees (xs ++ ys) = degreesFrom (circuitDegrees xs) ys :=
   degreesFrom_append [1] xs ys
 
-theorem getD_append_singleton_length :
-    ∀ (ds : List Nat) (x : Nat), (ds ++ [x]).getD ds.length 0 = x
-  | [], x => by simp
-  | _y :: ys, x => by
-      have ih := getD_append_singleton_length ys x
-      simp [ih]
-
 theorem repeatedSquaring_reaches :
     ∀ n : Nat, (circuitDegrees (repeatedSquaring n)).getD n 0 = 2 ^ n
   | 0 => by
@@ -350,10 +295,15 @@ theorem repeatedSquaring_reaches :
       have ih := repeatedSquaring_reaches n
       have hlen : (circuitDegrees (repeatedSquaring n)).length = n + 1 := by
         simp [circuitDegrees, degreesFrom_length, repeatedSquaring_length]
+        omega
       have hnew :
           applyStep (circuitDegrees (repeatedSquaring n)) (CircStep.sq n)
             = 2 ^ (n + 1) := by
-        simp [applyStep, ih, MulTree.two_mul_pow]
+        simp [applyStep]
+        have ih' :
+            (circuitDegrees (repeatedSquaring n))[n]?.getD 0 = 2 ^ n := by
+          simpa using ih
+        rw [ih', Nat.mul_comm, two_mul_pow]
       simp [repeatedSquaring, circuitDegrees_append]
       have hdeg :
           degreesFrom (circuitDegrees (repeatedSquaring n)) [CircStep.sq n]
@@ -361,10 +311,25 @@ theorem repeatedSquaring_reaches :
               ++ [applyStep (circuitDegrees (repeatedSquaring n)) (CircStep.sq n)] :=
         rfl
       rw [hdeg]
-      have hget := getD_append_singleton_length
-        (circuitDegrees (repeatedSquaring n))
-        (applyStep (circuitDegrees (repeatedSquaring n)) (CircStep.sq n))
-      simpa [hlen, hnew] using hget
+      have hget :
+          (circuitDegrees (repeatedSquaring n)
+              ++ [applyStep (circuitDegrees (repeatedSquaring n))
+                (CircStep.sq n)])[n + 1]?.getD 0
+            = applyStep (circuitDegrees (repeatedSquaring n)) (CircStep.sq n) := by
+        calc
+          (circuitDegrees (repeatedSquaring n)
+              ++ [applyStep (circuitDegrees (repeatedSquaring n))
+                (CircStep.sq n)])[n + 1]?.getD 0
+              = (circuitDegrees (repeatedSquaring n)
+                  ++ [applyStep (circuitDegrees (repeatedSquaring n))
+                    (CircStep.sq n)])[(circuitDegrees (repeatedSquaring n)).length]?.getD 0 := by
+                rw [hlen]
+          _ = (some (applyStep (circuitDegrees (repeatedSquaring n))
+                (CircStep.sq n))).getD 0 := by
+                rw [List.getElem?_concat_length]
+          _ = applyStep (circuitDegrees (repeatedSquaring n)) (CircStep.sq n) :=
+                rfl
+      rw [hget, hnew]
 
 /-! ## Headlines -/
 
