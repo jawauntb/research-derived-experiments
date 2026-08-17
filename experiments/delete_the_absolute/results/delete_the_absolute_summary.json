@@ -1,0 +1,641 @@
+{
+  "claim_boundary": "Finite exact witness on n=4 binary sequences and the listed groups/tasks.  Does not prove the general theorem for arbitrary n, groups, or Y.  Does not claim Shannon entropy, a connection form, special relativity, or any neural/SGD implication.  DTA_OVERREPAIR_COST is a leftover-privilege counting cost, not an obstruction.",
+  "experiment_id": "delete_the_absolute",
+  "fiber_counts": {
+    "q_id": 16,
+    "q_perm": 5,
+    "q_rot": 6,
+    "q_stab0": 8
+  },
+  "gate_table": [
+    {
+      "detail": "7 mismatch cells; 0 violations",
+      "gate_id": "DTA_NOGO",
+      "passed": true
+    },
+    {
+      "detail": "9 inclusion cells; 0 violations",
+      "gate_id": "DTA_SAFE",
+      "passed": true
+    },
+    {
+      "detail": "q_id fibers=16 vs q_perm fibers=5",
+      "gate_id": "DTA_OVERREPAIR_COST",
+      "passed": true
+    },
+    {
+      "detail": "q_stab0 representable for first_bit; q_perm and q_rot are not; G_rot \u2229 G_first = {e}",
+      "gate_id": "DTA_MINIMAL_SAFE",
+      "passed": true
+    },
+    {
+      "detail": "3 mixed q_perm fibers on first_bit; r=first_bit splits every leftover disagreement",
+      "gate_id": "DTA_REPAIR_DEBT",
+      "passed": true
+    },
+    {
+      "detail": "Path A agrees and Path B disagrees on a finite pair",
+      "gate_id": "DTA_NONCOMMUTE",
+      "passed": true
+    },
+    {
+      "detail": "4-cycle closes iff step sum is 0; potentials unique up to a constant",
+      "gate_id": "DTA_POSITIONAL_HOLONOMY",
+      "passed": true
+    }
+  ],
+  "gates": {
+    "DTA_MINIMAL_SAFE": true,
+    "DTA_NOGO": true,
+    "DTA_NONCOMMUTE": true,
+    "DTA_OVERREPAIR_COST": true,
+    "DTA_POSITIONAL_HOLONOMY": true,
+    "DTA_REPAIR_DEBT": true,
+    "DTA_SAFE": true
+  },
+  "group_sizes": {
+    "G_bag": 24,
+    "G_first_bit": 6,
+    "G_id": 1,
+    "G_identity": 1,
+    "G_necklace": 8,
+    "G_perm": 24,
+    "G_rot": 4,
+    "G_stab0": 6
+  },
+  "inclusion_matrix": {
+    "q_id": {
+      "bag": true,
+      "first_bit": true,
+      "identity": true,
+      "necklace": true
+    },
+    "q_perm": {
+      "bag": true,
+      "first_bit": false,
+      "identity": false,
+      "necklace": false
+    },
+    "q_rot": {
+      "bag": true,
+      "first_bit": false,
+      "identity": false,
+      "necklace": true
+    },
+    "q_stab0": {
+      "bag": true,
+      "first_bit": true,
+      "identity": false,
+      "necklace": false
+    }
+  },
+  "minimal_safe": {
+    "G_rot_cap_G_first": [
+      [
+        0,
+        1,
+        2,
+        3
+      ]
+    ],
+    "intersection_is_identity": true,
+    "q_perm_representable_first_bit": false,
+    "q_rot_representable_first_bit": false,
+    "q_stab0_representable_first_bit": true
+  },
+  "n": 4,
+  "nogo": {
+    "n_mismatch_cells": 7,
+    "violations": []
+  },
+  "noncommute": {
+    "pair_witness": {
+      "agree_on_path_a": true,
+      "disagree_on_path_b": true,
+      "p": [
+        0,
+        1
+      ],
+      "path_a_p": [
+        0,
+        1
+      ],
+      "path_a_q": [
+        0,
+        1
+      ],
+      "path_b_p": 1,
+      "path_b_q": 0,
+      "q": [
+        1,
+        1
+      ]
+    },
+    "sequence_witness": {
+      "agree_on_path_a": true,
+      "disagree_on_path_b": true,
+      "path_a_x": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "path_a_xp": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "path_b_x": 0,
+      "path_b_xp": -1,
+      "x": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "xp": [
+        1,
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "overrepair_popcount": {
+    "q_id_fibers": 16,
+    "q_perm_fibers": 5,
+    "q_rot_fibers": 6,
+    "strictly_more_id_than_perm": true
+  },
+  "positional_holonomy": {
+    "nonzero_sum": 3,
+    "nonzero_sum_closes": false,
+    "nonzero_sum_cycle": [
+      1,
+      1,
+      1,
+      0
+    ],
+    "nonzero_sum_prefix": [
+      0,
+      1,
+      2,
+      3,
+      3
+    ],
+    "uniqueness_constant": -5,
+    "uniqueness_constant_nonzero_cycle": -5,
+    "uniqueness_holds_on_nonzero_sum": true,
+    "uniqueness_holds_on_zero_sum": true,
+    "uniqueness_p0": 0,
+    "uniqueness_q0": 5,
+    "zero_sum": 0,
+    "zero_sum_closes": true,
+    "zero_sum_cycle": [
+      1,
+      -1,
+      2,
+      -2
+    ],
+    "zero_sum_prefix": [
+      0,
+      1,
+      0,
+      2,
+      0
+    ]
+  },
+  "producing_agent": {
+    "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+    "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+  },
+  "repair_debt": {
+    "constant_r_is_not_exact_repair": true,
+    "mixed_fiber_witness": {
+      "disagreeing_pair": [
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          0,
+          0
+        ]
+      ],
+      "members": [
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0
+        ]
+      ],
+      "q_value": [
+        0,
+        0,
+        0,
+        1
+      ],
+      "r_splits_pair": true,
+      "y_values": [
+        0,
+        1
+      ]
+    },
+    "n_mixed_fibers": 3,
+    "r_first_bit_is_exact_repair": true,
+    "split_property_holds": true
+  },
+  "representability_matrix": {
+    "q_id": {
+      "bag": true,
+      "first_bit": true,
+      "identity": true,
+      "necklace": true
+    },
+    "q_perm": {
+      "bag": true,
+      "first_bit": false,
+      "identity": false,
+      "necklace": false
+    },
+    "q_rot": {
+      "bag": true,
+      "first_bit": false,
+      "identity": false,
+      "necklace": true
+    }
+  },
+  "run_id": "delete_the_absolute_2026_08_17",
+  "safe": {
+    "n_safe_cells": 9,
+    "violations": []
+  },
+  "status": "pass",
+  "task_symmetries": {
+    "bag": [
+      [
+        0,
+        1,
+        2,
+        3
+      ],
+      [
+        0,
+        1,
+        3,
+        2
+      ],
+      [
+        0,
+        2,
+        1,
+        3
+      ],
+      [
+        0,
+        2,
+        3,
+        1
+      ],
+      [
+        0,
+        3,
+        1,
+        2
+      ],
+      [
+        0,
+        3,
+        2,
+        1
+      ],
+      [
+        1,
+        0,
+        2,
+        3
+      ],
+      [
+        1,
+        0,
+        3,
+        2
+      ],
+      [
+        1,
+        2,
+        0,
+        3
+      ],
+      [
+        1,
+        2,
+        3,
+        0
+      ],
+      [
+        1,
+        3,
+        0,
+        2
+      ],
+      [
+        1,
+        3,
+        2,
+        0
+      ],
+      [
+        2,
+        0,
+        1,
+        3
+      ],
+      [
+        2,
+        0,
+        3,
+        1
+      ],
+      [
+        2,
+        1,
+        0,
+        3
+      ],
+      [
+        2,
+        1,
+        3,
+        0
+      ],
+      [
+        2,
+        3,
+        0,
+        1
+      ],
+      [
+        2,
+        3,
+        1,
+        0
+      ],
+      [
+        3,
+        0,
+        1,
+        2
+      ],
+      [
+        3,
+        0,
+        2,
+        1
+      ],
+      [
+        3,
+        1,
+        0,
+        2
+      ],
+      [
+        3,
+        1,
+        2,
+        0
+      ],
+      [
+        3,
+        2,
+        0,
+        1
+      ],
+      [
+        3,
+        2,
+        1,
+        0
+      ]
+    ],
+    "first_bit": [
+      [
+        0,
+        1,
+        2,
+        3
+      ],
+      [
+        0,
+        1,
+        3,
+        2
+      ],
+      [
+        0,
+        2,
+        1,
+        3
+      ],
+      [
+        0,
+        2,
+        3,
+        1
+      ],
+      [
+        0,
+        3,
+        1,
+        2
+      ],
+      [
+        0,
+        3,
+        2,
+        1
+      ]
+    ],
+    "identity": [
+      [
+        0,
+        1,
+        2,
+        3
+      ]
+    ],
+    "necklace": [
+      [
+        0,
+        1,
+        2,
+        3
+      ],
+      [
+        0,
+        3,
+        2,
+        1
+      ],
+      [
+        1,
+        0,
+        3,
+        2
+      ],
+      [
+        1,
+        2,
+        3,
+        0
+      ],
+      [
+        2,
+        1,
+        0,
+        3
+      ],
+      [
+        2,
+        3,
+        0,
+        1
+      ],
+      [
+        3,
+        0,
+        1,
+        2
+      ],
+      [
+        3,
+        2,
+        1,
+        0
+      ]
+    ]
+  },
+  "world_size": 16,
+  "worlds": [
+    [
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      1,
+      1
+    ],
+    [
+      0,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0,
+      1
+    ],
+    [
+      0,
+      1,
+      1,
+      0
+    ],
+    [
+      0,
+      1,
+      1,
+      1
+    ],
+    [
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      0,
+      1
+    ],
+    [
+      1,
+      0,
+      1,
+      0
+    ],
+    [
+      1,
+      0,
+      1,
+      1
+    ],
+    [
+      1,
+      1,
+      0,
+      0
+    ],
+    [
+      1,
+      1,
+      0,
+      1
+    ],
+    [
+      1,
+      1,
+      1,
+      0
+    ],
+    [
+      1,
+      1,
+      1,
+      1
+    ]
+  ]
+}

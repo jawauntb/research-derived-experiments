@@ -1,0 +1,87 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "delete_the_absolute",
+  "hypothesis": "On X = {0,1}^4 with orbit-canonical screens q_G, exact representability of a task Y occurs iff model symmetry is contained in target symmetry (G_M ⊆ G_Y). Under-repair makes Y unrepresentable. Over-repair remains representable but has strictly more fibres (16 vs 5 on popcount). Exact repair must split mixed fibres. Delete-then-default and relative-then-drop disagree. A 4-cycle of integer steps closes iff the steps sum to 0, and two potentials differ by a constant.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "no_randomness_finite_enumeration",
+      "description": "No PRNG, SGD, or neural training. Every gate is a deterministic finite enumeration or an integer identity on the 16-point cube and two declared 4-cycles."
+    },
+    {
+      "control_id": "g-y-enumerated-inside-s4",
+      "description": "G_Y is computed as {g in S_4 : Y(g x) = Y(x) for all 16 x}, not assumed from a closed form except as a regression target."
+    },
+    {
+      "control_id": "representability-is-fibre-constancy",
+      "description": "Y is representable from q iff Y is constant on every q-fibre. For orbit-canonical q_G this is checked against G ⊆ G_Y on the 4×4 grid."
+    },
+    {
+      "control_id": "q-perm-equals-popcount-partition",
+      "description": "The sorted-tuple map q_perm and the popcount histogram induce the same five fibres; asserted in tests."
+    },
+    {
+      "control_id": "constant-r-negative-control",
+      "description": "A constant dummy repair is not an ExactRepair of q_perm for first_bit; the split gate fails closed if this negative control is accepted."
+    },
+    {
+      "control_id": "lean-pair-and-sequence-witnesses",
+      "description": "DTA_NONCOMMUTE requires both a sequence pair that agrees on Path A and disagrees on Path B and the Lean (0,1)/(1,1) pair regression."
+    },
+    {
+      "control_id": "zero-and-nonzero-holonomy-cycles",
+      "description": "Holonomy is checked on a declared zero-sum 4-cycle and a declared nonzero-sum 4-cycle, plus potential uniqueness up to a constant on both."
+    }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/delete_the_absolute/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "DTA_NOGO",
+      "criterion": "Every (model, task) with G_M notsubseteq G_Y is unrepresentable: Y is not constant on q_M-fibres."
+    },
+    {
+      "gate_id": "DTA_SAFE",
+      "criterion": "Every (model, task) with G_M ⊆ G_Y is representable: Y is constant on q_M-fibres."
+    },
+    {
+      "gate_id": "DTA_OVERREPAIR_COST",
+      "criterion": "On popcount, q_id has 16 fibres and q_perm has 5 fibres, and 16 > 5 (leftover privilege, not a no-go)."
+    },
+    {
+      "gate_id": "DTA_MINIMAL_SAFE",
+      "criterion": "For first_bit, the Stab(0) orbit map is representable, q_perm is not, and G_rot ∩ G_first = {e} so q_rot is not representable."
+    },
+    {
+      "gate_id": "DTA_REPAIR_DEBT",
+      "criterion": "At least one q_perm fibre mixes first-bit values; r = first_bit is an ExactRepair and splits every leftover disagreement; a constant r is not."
+    },
+    {
+      "gate_id": "DTA_NONCOMMUTE",
+      "criterion": "There exist two states that agree on Path A (drop index 0, write 0) and disagree on Path B (remember x[1]-x[0], drop absolute), including the Lean pair (0,1) vs (1,1)."
+    },
+    {
+      "gate_id": "DTA_POSITIONAL_HOLONOMY",
+      "criterion": "A 4-cycle of Int steps closes iff the steps sum to 0 (zero-sum cycle closes; nonzero-sum cycle does not); two potentials for the same steps differ by a constant."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/delete_the_absolute/results/delete_the_absolute_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/delete_the_absolute/preregistration.json",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}
