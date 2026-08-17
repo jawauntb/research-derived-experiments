@@ -1132,7 +1132,7 @@ cd formal/ontology-hs && cabal test all && cabal run ontology-check
 
 | Path | Role |
 |---|---|
-| `StructuralIntelligence/Compiler/SquaringSeparation.lean` | Zero-analysis US-2/US-3 core: Mul/Sq trees, `size+1=2·degree`, `sq^n(x)` size `n+1`, expand preserves degree, sharing circuits have max degree `≤ 2^k` |
+| `StructuralIntelligence/Compiler/SquaringSeparation.lean` | Zero-analysis US-2/US-3 core, kernel-checked on Lean 4.31: Mul/Sq trees, `size+1=2·degree`, `sq^n(x)` size `n+1`, expand preserves degree, sharing circuits have max degree `≤ 2^k` |
 | `StructuralIntelligence.lean` | Root import and `#print axioms` for every named headline, including `squaring_separation` |
 | `lakefile.toml` / `lean-toolchain` | Dependency-free Lean 4.31 library |
 

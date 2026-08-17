@@ -9,7 +9,7 @@ Human author and research director
 Experiment code, Lean core, and manuscript production under direction and review
 
 **Date:** August 17, 2026
-**Status:** four seams proved on a finite toy (US-1 through US-4); six gates passing on real numbers; Lean core of the tree/circuit separation ready for kernel check. US-4′ (fiber free energy predicts EML gradient recovery) is **untested**. Companion to *The Structural Intelligence Conjecture* (`papers/structural_intelligence/paper.md`). External laboratory: Odrzywołek, *All elementary functions from a single binary operator*, arXiv:2603.21852.
+**Status:** four seams proved on a finite toy (US-1 through US-4); six gates passing on real numbers; Lean US-2/US-3 core kernel-checked on Lean 4.31 (`lake build`, zero `sorry`). US-4′ (fiber free energy predicts EML gradient recovery) is **untested**. Companion to *The Structural Intelligence Conjecture* (`papers/structural_intelligence/paper.md`). External laboratory: Odrzywołek, *All elementary functions from a single binary operator*, arXiv:2603.21852.
 
 ---
 
@@ -308,10 +308,9 @@ fiber mass.
 ## 10. Sequencing
 
 Paper 0 (EML in Lean) fights `Complex.log 0`. This paper's separation
-theorem does not. Hand
-`Compiler/SquaringSeparation.lean` to Lea now: structural induction
-on finite trees, zero analysis, kernel-checked headline while Paper 0
-is blocked.
+theorem does not. `Compiler/SquaringSeparation.lean` is kernel-checked
+on Lean 4.31: structural induction on finite trees, zero analysis,
+zero `sorry`. Paper 0 remains blocked on totalization.
 
 The open problem this paper exposes: estimate the EML-native fiber
 spectrum without a 1-D invariant. That is the first hard piece of the

@@ -325,7 +325,8 @@ object and banks an exact four-seam split on `x^(2^n)`: same
 denotations, exponential tree-size gap, `Θ(n)` circuit size, and a
 Gibbs fiber-mass gap (`7.8e-12` vs `4.0e-3` at `n=4`). The companion
 instrument is `experiments/squaring_separation/`; the Lean core is
-`formal/structural-intelligence/StructuralIntelligence/Compiler/SquaringSeparation.lean`.
+`formal/structural-intelligence/StructuralIntelligence/Compiler/SquaringSeparation.lean`
+(kernel-checked on Lean 4.31, zero `sorry`).
 EML-native fiber spectra and US-4′ (gradient recovery) remain withheld.
 
 The weakness paper also carries a theory-only companion,

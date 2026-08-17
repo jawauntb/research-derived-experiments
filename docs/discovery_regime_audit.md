@@ -96,8 +96,8 @@ Gate:
 Results:
 
 - Accepted artifacts: n=4 masses `7.845646e-12` vs `3.997773e-3`,
-  `log₂` ratio 28.9247, bound 28.2797; Lean core of tree/circuit
-  separation.
+  `log₂` ratio 28.9247, bound 28.2797; Lean US-2/US-3 core
+  kernel-checked on Lean 4.31 (`lake build`, zero `sorry`).
 - Rejected or withheld artifacts: shortest length as governor; run-1
   unnormalised bound 28.79 (amended, not used).
 - Key metrics: six gates pass; US-4′ flagged untested.
