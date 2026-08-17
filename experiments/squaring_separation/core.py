@@ -52,7 +52,7 @@ from __future__ import annotations
 
 import math
 from dataclasses import asdict, dataclass
-from typing import Literal
+from typing import Literal, TypedDict
 
 N_VALUES: tuple[int, ...] = (1, 2, 3, 4)
 GIBBS_BASE: int = 4
@@ -66,7 +66,16 @@ Z_SQ: float = (3.0 - math.sqrt(5.0)) / 2.0
 RUN1_UNNORMALISED_N4_BOUND: float = 2.0 * 26.0 - math.log2(9694845)
 # 52 - log2(C_15) = 28.7917...
 
-AMENDMENT: dict[str, object] = {
+class AmendmentPayload(TypedDict):
+    run: int
+    gate_id: str
+    wrong_closed_form: str
+    wrong_n4_value: float
+    corrected_closed_form: str
+    reason: str
+
+
+AMENDMENT: AmendmentPayload = {
     "run": 1,
     "gate_id": "SS_FIBER_MASS_EXCEEDS_SHORTEST_BOUND",
     "wrong_closed_form": (
@@ -346,7 +355,33 @@ def evaluate_gates(rows: tuple[FiberRow, ...]) -> dict[str, bool]:
     }
 
 
-def evaluate_benchmark() -> dict[str, object]:
+class HeadlinePayload(TypedDict):
+    p_mul: float
+    p_sq: float
+    log2_ratio: float
+    shortest_bound: float
+    mul_fiber_count: int
+    sq_shell_count: int
+
+
+class BenchmarkPayload(TypedDict):
+    status: Literal["pass", "fail"]
+    experiment_id: str
+    run_id: str
+    n_values: list[int]
+    gibbs_base: int
+    z_mul: float
+    z_sq: float
+    headline_n: int
+    headline: HeadlinePayload
+    rows: list[dict[str, object]]
+    gates: dict[str, bool]
+    amendment: AmendmentPayload
+    untested: dict[str, str]
+    citations_pending_verification: list[str]
+
+
+def evaluate_benchmark() -> BenchmarkPayload:
     rows = tuple(evaluate_row(n) for n in N_VALUES)
     gates = evaluate_gates(rows)
     headline = next(row for row in rows if row.n == HEADLINE_N)

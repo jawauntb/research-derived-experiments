@@ -11,6 +11,7 @@ from experiments.eml_fiber_spectrum.core import (
     eval_closed,
     evaluate_benchmark,
     parse_eml,
+    require_finite,
 )
 
 
@@ -39,12 +40,20 @@ class EmlFiberSpectrumTest(unittest.TestCase):
         self.assertEqual(right.n_internal, 2)
         self.assertEqual(left.n_nodes, 5)
         self.assertNotEqual(eval_closed(left), eval_closed(right))
-        self.assertAlmostEqual(eval_closed(left), math.e - 1, places=12)
-        self.assertAlmostEqual(eval_closed(right), math.exp(math.e), places=10)
+        self.assertAlmostEqual(require_finite(eval_closed(left), left.pretty()), math.e - 1, places=12)
+        self.assertAlmostEqual(
+            require_finite(eval_closed(right), right.pretty()),
+            math.exp(math.e),
+            places=10,
+        )
 
     def test_hand_identities(self) -> None:
         self.assertEqual(eval_closed(EmlTree()), 1.0)
-        self.assertAlmostEqual(eval_closed(parse_eml("eml(1,1)")), math.e, places=12)
+        self.assertAlmostEqual(
+            require_finite(eval_closed(parse_eml("eml(1,1)")), "eml(1,1)"),
+            math.e,
+            places=12,
+        )
 
     def test_enumeration_is_exactly_the_catalan_family(self) -> None:
         by_size = enumerate_trees(MAX_INTERNAL)

@@ -40,7 +40,7 @@ from __future__ import annotations
 import math
 from collections import defaultdict
 from dataclasses import dataclass
-from typing import Sequence
+from typing import Literal, Sequence, TypedDict
 
 EXPERIMENT_ID = "eml_fiber_spectrum"
 RUN_ID = "eml_fiber_spectrum_2026_08_17"
@@ -287,8 +287,163 @@ CROSS_SIZE_WITNESSES: tuple[tuple[str, str, float], ...] = (
 )
 
 
-def check_sanity_trees(rel_tol: float = 1e-12) -> list[dict[str, object]]:
-    rows: list[dict[str, object]] = []
+class Point2(TypedDict):
+    x: float
+    y: float
+
+
+class ProducingAgent(TypedDict):
+    identity: str
+    session_ref: str
+
+
+class RegisteredConfig(TypedDict):
+    max_internal: int
+    round_digits: int
+    witness_point: Point2
+    test_grid: list[Point2]
+    gibbs_base: int
+    size_convention: str
+
+
+class SanityRow(TypedDict):
+    name: str
+    pretty: str
+    n_internal: int
+    expected: float
+    observed: float | None
+    ok: bool
+
+
+class OperatorRow(TypedDict):
+    x: float
+    y: float
+    expected: float
+    observed: float
+    ok: bool
+
+
+class WitnessSide(TypedDict):
+    pretty: str
+    closed: float | None
+    at_point: float | None
+
+
+class SizeWitness(TypedDict):
+    n_internal: int
+    point: Point2
+    left: WitnessSide
+    right: WitnessSide
+    algebra: str
+    exact_witness: bool
+
+
+class CrossSizeSide(TypedDict):
+    pretty: str
+    n_internal: int
+    closed: float | None
+
+
+class CrossSizeWitness(TypedDict):
+    expected: float
+    left: CrossSizeSide
+    right: CrossSizeSide
+    ok: bool
+
+
+class ClosedFiberRow(TypedDict):
+    fiber_id: str
+    n_trees: int
+    sizes: list[int]
+    n_sizes: int
+    mean_value: float
+    spread: float
+    well_resolved: bool
+    truncated_phi: float
+    example_trees: list[str]
+
+
+class SuspectCross(TypedDict):
+    fiber_id: str
+    sizes: list[int]
+    n_trees: int
+    mean_value: float
+    spread: float
+
+
+class OptionalGate(TypedDict):
+    status: Literal["pass", "withheld"]
+    observed: bool
+    n_well_resolved_cross_fibers: int
+    n_exact_witnesses: int
+
+
+class ClosedSpectrum(TypedDict):
+    n_finite: int
+    n_undefined: int
+    n_numerical_fibers: int
+    max_fiber_size: int
+    distinct_fibers_by_size: dict[str, int]
+    size_is_denotation_invariant: bool
+    n_well_resolved_cross_size_fibers: int
+    suspect_cross_size_fibers: list[SuspectCross]
+    largest_fibers: list[ClosedFiberRow]
+
+
+class ProbeSpectrum(TypedDict):
+    representation: str
+    n_finite_on_grid: int
+    n_undefined_on_grid: int
+    n_numerical_fibers: int
+    max_fiber_size: int
+    n_cross_size_fibers: int
+    cross_size_status: Literal["withheld", "observed_computational"]
+
+
+class TruncatedGibbs(TypedDict):
+    base: int
+    size_convention: str
+    Z_hat: float
+    note: str
+
+
+class BenchmarkPayload(TypedDict):
+    status: Literal["pass", "fail"]
+    experiment_id: str
+    run_id: str
+    producing_agent: ProducingAgent
+    claim_tier_spectrum: str
+    claim_tier_size_witness: str
+    registered: RegisteredConfig
+    tree_counts_by_size: dict[str, int]
+    catalan_by_size: dict[str, int]
+    n_trees: int
+    closed_spectrum: ClosedSpectrum
+    probe_spectrum: ProbeSpectrum
+    truncated_gibbs: TruncatedGibbs
+    sanity: list[SanityRow]
+    operator_grid: list[OperatorRow]
+    size_not_denotation_witness: SizeWitness
+    cross_size_witnesses: list[CrossSizeWitness]
+    gates: dict[str, bool]
+    optional_gates: dict[str, OptionalGate]
+    grid_collision_disclosed: bool
+    grid_collision_disclosure: str
+    untested: dict[str, str]
+    citations: list[str]
+    citations_pending_verification: list[str]
+
+
+def require_finite(value: float | None, label: str) -> float:
+    """Unwrap a closed evaluation that the caller already proved is defined."""
+
+    if value is None:
+        raise ValueError(f"undefined EML evaluation: {label}")
+    return value
+
+
+def check_sanity_trees(rel_tol: float = 1e-12) -> list[SanityRow]:
+    rows: list[SanityRow] = []
     for name, pretty, expected in SANITY_TREES:
         tree = parse_eml(pretty)
         observed = eval_closed(tree)
@@ -306,8 +461,8 @@ def check_sanity_trees(rel_tol: float = 1e-12) -> list[dict[str, object]]:
     return rows
 
 
-def check_operator_grid() -> list[dict[str, object]]:
-    rows: list[dict[str, object]] = []
+def check_operator_grid() -> list[OperatorRow]:
+    rows: list[OperatorRow] = []
     for x_val, y_val in TEST_GRID:
         expected = math.exp(x_val) - math.log(y_val)
         observed = eml(x_val, y_val)
@@ -323,7 +478,7 @@ def check_operator_grid() -> list[dict[str, object]]:
     return rows
 
 
-def _size_not_denotation_witness() -> dict[str, object]:
+def _size_not_denotation_witness() -> SizeWitness:
     left = parse_eml(SIZE_NOT_DENOTATION_LEFT)
     right = parse_eml(SIZE_NOT_DENOTATION_RIGHT)
     left_val = eval_closed(left)
@@ -349,8 +504,8 @@ def _size_not_denotation_witness() -> dict[str, object]:
     }
 
 
-def _cross_size_witnesses() -> list[dict[str, object]]:
-    rows: list[dict[str, object]] = []
+def _cross_size_witnesses() -> list[CrossSizeWitness]:
+    rows: list[CrossSizeWitness] = []
     for left_pretty, right_pretty, expected in CROSS_SIZE_WITNESSES:
         left = parse_eml(left_pretty)
         right = parse_eml(right_pretty)
@@ -407,8 +562,8 @@ def _group_probe(
 
 def _closed_fiber_rows(
     grouped: dict[str, list[tuple[int, EmlTree, float]]],
-) -> list[dict[str, object]]:
-    rows: list[dict[str, object]] = []
+) -> list[ClosedFiberRow]:
+    rows: list[ClosedFiberRow] = []
     for fiber_id, members in grouped.items():
         values = [value for _n, _tree, value in members]
         sizes = sorted({n_internal for n_internal, _tree, _value in members})
@@ -427,19 +582,19 @@ def _closed_fiber_rows(
                 "example_trees": [tree.pretty() for _n, tree, _value in members[:3]],
             }
         )
-    rows.sort(key=lambda row: (-int(row["n_trees"]), str(row["fiber_id"])))
+    rows.sort(key=lambda row: (-row["n_trees"], row["fiber_id"]))
     return rows
 
 
 def evaluate_gates(
     *,
     tree_counts: dict[int, int],
-    size_witness: dict[str, object],
-    cross_witnesses: Sequence[dict[str, object]],
-    closed_rows: Sequence[dict[str, object]],
+    size_witness: SizeWitness,
+    cross_witnesses: Sequence[CrossSizeWitness],
+    closed_rows: Sequence[ClosedFiberRow],
     sanity_ok: bool,
     operator_ok: bool,
-) -> tuple[dict[str, bool], dict[str, object]]:
+) -> tuple[dict[str, bool], dict[str, OptionalGate]]:
     enumeration_complete = all(
         tree_counts[n_internal] == catalan(n_internal) for n_internal in range(MAX_INTERNAL + 1)
     ) and sum(tree_counts.values()) == sum(catalan(n) for n in range(MAX_INTERNAL + 1))
@@ -447,7 +602,7 @@ def evaluate_gates(
         n_internal >= 2
         and tree_counts[n_internal] >= 2
         for n_internal in tree_counts
-    ) and bool(size_witness["exact_witness"])
+    ) and size_witness["exact_witness"]
     # Same-size trees in different fibers: the size-2 witness, plus any
     # size whose finite closed values are not a singleton.
     required = {
@@ -459,31 +614,20 @@ def evaluate_gates(
     well_resolved_cross = [
         row
         for row in closed_rows
-        if bool(row["well_resolved"]) and int(row["n_sizes"]) > 1
+        if row["well_resolved"] and row["n_sizes"] > 1
     ]
-    exact_cross = all(bool(row["ok"]) for row in cross_witnesses) and bool(cross_witnesses)
-    if exact_cross and well_resolved_cross:
-        optional = {
-            "EFS_CROSS_SIZE_COLLISION": {
-                "status": "pass",
-                "observed": True,
-                "n_well_resolved_cross_fibers": len(well_resolved_cross),
-                "n_exact_witnesses": sum(1 for row in cross_witnesses if row["ok"]),
-            }
-        }
-    else:
-        optional = {
-            "EFS_CROSS_SIZE_COLLISION": {
-                "status": "withheld",
-                "observed": False,
-                "n_well_resolved_cross_fibers": len(well_resolved_cross),
-                "n_exact_witnesses": sum(1 for row in cross_witnesses if row["ok"]),
-            }
-        }
-    return required, optional
+    exact_cross = all(row["ok"] for row in cross_witnesses) and bool(cross_witnesses)
+    n_exact = sum(1 for row in cross_witnesses if row["ok"])
+    optional_gate: OptionalGate = {
+        "status": "pass" if exact_cross and well_resolved_cross else "withheld",
+        "observed": bool(exact_cross and well_resolved_cross),
+        "n_well_resolved_cross_fibers": len(well_resolved_cross),
+        "n_exact_witnesses": n_exact,
+    }
+    return required, {"EFS_CROSS_SIZE_COLLISION": optional_gate}
 
 
-def evaluate_benchmark() -> dict[str, object]:
+def evaluate_benchmark() -> BenchmarkPayload:
     by_size = enumerate_trees(MAX_INTERNAL)
     tree_counts = {n_internal: len(trees) for n_internal, trees in by_size.items()}
     n_trees = sum(tree_counts.values())
@@ -511,9 +655,9 @@ def evaluate_benchmark() -> dict[str, object]:
         count <= 1 for count in distinct_closed_by_size.values()
     )
     well_resolved_cross = [
-        row for row in closed_rows if row["well_resolved"] and int(row["n_sizes"]) > 1
+        row for row in closed_rows if row["well_resolved"] and row["n_sizes"] > 1
     ]
-    suspect_cross = [
+    suspect_cross: list[SuspectCross] = [
         {
             "fiber_id": row["fiber_id"],
             "sizes": row["sizes"],
@@ -522,7 +666,7 @@ def evaluate_benchmark() -> dict[str, object]:
             "spread": row["spread"],
         }
         for row in closed_rows
-        if (not row["well_resolved"]) and int(row["n_sizes"]) > 1
+        if (not row["well_resolved"]) and row["n_sizes"] > 1
     ]
     probe_cross = [
         fiber_id
@@ -534,8 +678,8 @@ def evaluate_benchmark() -> dict[str, object]:
     operator_grid = check_operator_grid()
     size_witness = _size_not_denotation_witness()
     cross_witnesses = _cross_size_witnesses()
-    sanity_ok = all(bool(row["ok"]) for row in sanity)
-    operator_ok = all(bool(row["ok"]) for row in operator_grid)
+    sanity_ok = all(row["ok"] for row in sanity)
+    operator_ok = all(row["ok"] for row in operator_grid)
 
     required, optional = evaluate_gates(
         tree_counts=tree_counts,
