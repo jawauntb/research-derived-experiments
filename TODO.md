@@ -104,6 +104,16 @@
   - [x] Registry-level `preregistration_policy.required_after_run_date` cutoff (currently `2026-08-01`) that promotes prereg-digest + prereg-path + producing_agent from optional to required for any run whose `run_id` ends with a date suffix on or after the cutoff.
   - [ ] Backfill prereg-digest, prereg-path, and producing_agent for the six existing pre-cutoff runs.
 
+## EML universal substrate (2026-08-17)
+
+- [x] Read Odrzywołek 2026 as an instance of the SIC master object, not an adjacent curiosity.
+- [x] Bank the `x^(2^n)` four-seam split (expressivity ≠ tree ≠ circuit ≠ Gibbs access) with an exact instrument.
+- [x] Disclose the run-1 closed-form amendment (`28.79` unnormalised → `28.28` with `Z_Mul/Z_Sq`).
+- [x] Write `Compiler/SquaringSeparation.lean` for Lea (finite trees, zero analysis).
+- [x] Kernel-check `Compiler/SquaringSeparation.lean` on Lean 4.31 (`lake build`, zero `sorry`); keep Paper 0 (`Complex.log 0`) off this path.
+- [ ] Estimate the EML-native fiber spectrum (no 1-D invariant). This is where US-4′ lives or dies.
+- [ ] Verify Stachowiak 2026 (arXiv:2604.23893) and the program-note packaging of Kolmogorov invariance against primary text.
+
 ## Now
 
 - [x] Checkpoint the positive-family frontier pause state and exact next replication commands.

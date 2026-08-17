@@ -54,6 +54,63 @@ Residual content:
 - New: three-way taxonomy; noncommutativity; constant-EML spectrum
   without a degree invariant.
 
+## EML Universal Substrate / Squaring Separation
+
+Question: is Odrzywołek's EML calculus adjacent to SIC, or an instance of
+the master object, and what actually governs access once completeness
+(fiber inhabitation) is granted?
+
+Current regime:
+
+- Artifact types: Mul/Sq expression trees, sharing circuits, monomial
+  degree, Catalan shells, Gibbs fiber masses `Φ/Z`.
+- Operations: structural induction; exact integer DP on `(size, degree)`;
+  closed-form generating functions at `x=1/4`.
+- Gates/verifiers: six noncompensatory gates in
+  `experiments/squaring_separation/preregistration.json`.
+- Known limitations: degree is a 1-D invariant the EML-native spectrum
+  does not have; Gibbs base 4 is a modelling choice; US-4′ untested.
+
+Action class:
+
+- Frame diagnosis: completeness ≠ access; invariance is a DAG fact.
+- Why: the calculator paper already ran Outcome A (basins exist, blind
+  recovery collapses) and stopped at inhabitation.
+
+Experiment:
+
+- Manifest/report paths:
+  `experiments/squaring_separation/{preregistration.json,experiment_manifest.json,results/squaring_separation_summary.json}`.
+- Positive targets: US-1..US-4 on `x^(2^n)` for `n∈{1,2,3,4}`.
+- Negative controls: Catalan identity, complete Sq-shell interval,
+  circuit degree cap on alternative DAGs, amended `Φ/Z` bound.
+- Stress tests: n=4 headline against the closed-form bound 28.28.
+
+Gate:
+
+- Acceptance rule: all six gates pass; n=4 `log₂` ratio ≥ 28.28;
+  9,694,845 vs 27 shells.
+- Withheld/rejected rule: US-4′ (EML gradient recovery); any valence
+  claim; Kolmogorov invariance for formulas.
+
+Results:
+
+- Accepted artifacts: n=4 masses `7.845646e-12` vs `3.997773e-3`,
+  `log₂` ratio 28.9247, bound 28.2797; Lean US-2/US-3 core
+  kernel-checked on Lean 4.31 (`lake build`, zero `sorry`).
+- Rejected or withheld artifacts: shortest length as governor; run-1
+  unnormalised bound 28.79 (amended, not used).
+- Key metrics: six gates pass; US-4′ flagged untested.
+
+Residual content:
+
+- Explained by old regime: denotational quotient; Bayes-sufficient
+  task quotients; Odrzywołek completeness.
+- New content outside old regime: four-seam split with an exponential
+  witness at each seam; fiber-mass account of access.
+- Retractions or supersessions: "in principle description complexity
+  is invariant" is withdrawn as a statement about formula search.
+
 ## Obstruction-Aware Admission V0
 
 Question: can a finite bounded agent choose the next permitted experiment by
