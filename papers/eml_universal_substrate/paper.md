@@ -251,11 +251,12 @@ measured 28.92 exceeds both; the amendment is a criterion identity,
 not a result-dependent relaxation. It is in this section and in
 `experiments/squaring_separation/core.py` (`AMENDMENT`).
 
-**US-4′ is untested.** The conjecture that fiber free energy predicts
-gradient recovery on EML master formulas is the first genuinely hard
-piece of the EML-native story. EML denotations have no 1-D invariant
-like degree, so the spectrum cannot be DP'd. Estimating it is where
-the conjecture either earns its keep or dies usefully.
+**US-4′ is split.** The Gibbs-sampler half is now
+`experiments/eml_us4_prime/`: on the truncated variable-`x` language,
+shortest depth does not determine `Φ` (k=3 finite ratio 2.016 from
+min-shell multiplicity of the exact zero identity). Extra shells add
+less than 1% mass, so the Sq-toy shell story does not transfer at
+`k≤5`. Master-formula gradient recovery remains untested.
 
 **Citations pending verification.** (1) Stachowiak 2026,
 arXiv:2604.23893, algebraic structure of EML — listed from secondary

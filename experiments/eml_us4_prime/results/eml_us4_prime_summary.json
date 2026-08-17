@@ -1,0 +1,68 @@
+{
+  "citations": [
+    "Odrzywo\u0142ek, A. (2026). All elementary functions from a single binary operator. arXiv:2603.21852."
+  ],
+  "experiment_id": "eml_us4_prime",
+  "extra_shell_note": "At k\u22645, extra shells add less than 1% mass to the fattest finite fiber. The Sq-toy extra-shell mechanism does not transfer at this bound. The mass split is min-shell multiplicity.",
+  "gates": {
+    "US4P_ENUMERATION_INHERITED": true,
+    "US4P_GRADIENT_WITHHELD": true,
+    "US4P_GRID_DISCLOSED": true,
+    "US4P_SAME_MINSIZE_SPLIT": true,
+    "US4P_SHORTEST_DOES_NOT_DETERMINE_P": true,
+    "US4P_ZERO_IDENTITY": true
+  },
+  "grid_disclosure": "Rounded 6-point tuples are a clustering, not identity of functions. The zero fiber is an exact algebraic identity, not a grid collision: eml(a, eml(eml(a,1),1)) = 0 for a in {1,x}.",
+  "headline_split": {
+    "fat_example": "eml(1,eml(eml(1,1),1))",
+    "fat_n_min_shell": 2,
+    "fat_phi": 0.00012302398681640625,
+    "min_internal": 3,
+    "ratio": 2.015625,
+    "thin_example": "eml(1,eml(eml(x,x),x))",
+    "thin_n_min_shell": 1,
+    "thin_phi": 6.103515625e-05
+  },
+  "language_z": 0.585357666015625,
+  "max_extra_shell_factor": 1.0078125,
+  "n_finite_fibers": 1428,
+  "n_same_minsize_splits": 3,
+  "n_size_class_inversions": 0,
+  "n_trees": 3238,
+  "producing_agent": {
+    "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+    "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+  },
+  "registered": {
+    "count_formula": "2^{k+1} C_k",
+    "gibbs_base": 4,
+    "grid": [
+      0.25,
+      0.5,
+      1.0,
+      2.0,
+      2.718281828459045,
+      4.0
+    ],
+    "headline_min_internal": 3,
+    "max_extra_shell_factor": 1.05,
+    "max_internal": 5,
+    "min_split_ratio": 2.0
+  },
+  "run_id": "eml_us4_prime_2026_08_17",
+  "status": "pass",
+  "untested": {
+    "gradient_recovery": "Master-formula gradient recovery (Odrzywo\u0142ek Outcome A) is untested. This package asks whether truncated Gibbs mass, not shortest depth, governs sampler access on the enumerated language."
+  },
+  "withheld": [
+    "Master-formula gradient recovery",
+    "Sq-toy extra-shell transfer at k\u22645",
+    "Identity of functions from the grid except the exact zero identity"
+  ],
+  "zero_witness": {
+    "exact_zero": true,
+    "left": "eml(1,eml(eml(1,1),1))",
+    "n_internal": 3,
+    "right": "eml(x,eml(eml(x,1),1))"
+  }
+}
