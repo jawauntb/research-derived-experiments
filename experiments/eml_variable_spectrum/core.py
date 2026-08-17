@@ -33,6 +33,7 @@ import math
 from collections import defaultdict
 from dataclasses import dataclass
 from itertools import product
+from typing import Literal, TypedDict
 
 EXPERIMENT_ID = "eml_variable_spectrum"
 RUN_ID = "eml_variable_spectrum_2026_08_17"
@@ -187,6 +188,83 @@ def enumerate_trees(max_internal: int = MAX_INTERNAL) -> dict[int, tuple[VarTree
     return memo
 
 
+class ProducingAgent(TypedDict):
+    identity: str
+    session_ref: str
+
+
+class RegisteredConfig(TypedDict):
+    max_internal: int
+    leaf_labels: list[str]
+    grid: list[float]
+    round_digits: int
+    count_formula: str
+
+
+class WitnessSide(TypedDict):
+    pretty: str
+    closed_form: str
+    at_2: float | None
+
+
+class SizeWitness(TypedDict):
+    n_internal: int
+    n_nodes: int
+    left: WitnessSide
+    right: WitnessSide
+    grid_disagrees: bool
+    exact_witness: bool
+
+
+class ConstantSide(TypedDict):
+    pretty: str
+    value: float | None
+
+
+class ConstantWitness(TypedDict):
+    left: ConstantSide
+    right: ConstantSide
+    constant_in_x: bool
+    exact_witness: bool
+
+
+class SpectrumPayload(TypedDict):
+    n_numerical_fibers: int
+    max_fiber_size: int
+    n_all_undefined: int
+    n_partial_undefined: int
+    n_cross_size_fibers: int
+    distinct_fibers_by_size: dict[str, int]
+    size_is_function_invariant: bool
+
+
+class BenchmarkPayload(TypedDict):
+    status: Literal["pass", "fail"]
+    experiment_id: str
+    run_id: str
+    producing_agent: ProducingAgent
+    registered: RegisteredConfig
+    tree_counts_by_size: dict[str, int]
+    expected_counts_by_size: dict[str, int]
+    n_trees: int
+    spectrum: SpectrumPayload
+    size_not_function_witness: SizeWitness
+    constant_embedding_witness: ConstantWitness
+    gates: dict[str, bool]
+    grid_disclosure: str
+    untested: dict[str, str]
+    withheld: list[str]
+    citations: list[str]
+
+
+def require_finite(value: float | None, label: str) -> float:
+    """Unwrap a grid evaluation that the caller already proved is defined."""
+
+    if value is None:
+        raise ValueError(f"undefined variable-EML evaluation: {label}")
+    return value
+
+
 def numerical_fiber_id(values: tuple[float | None, ...], ndigits: int = ROUND_DIGITS) -> str:
     parts: list[str] = []
     for value in values:
@@ -197,7 +275,7 @@ def numerical_fiber_id(values: tuple[float | None, ...], ndigits: int = ROUND_DI
     return "F:" + ",".join(parts)
 
 
-def _size_not_function_witness() -> dict[str, object]:
+def _size_not_function_witness() -> SizeWitness:
     left = parse_var(WITNESS_LEFT)
     right = parse_var(WITNESS_RIGHT)
     left_grid = eval_grid(left)
@@ -223,7 +301,7 @@ def _size_not_function_witness() -> dict[str, object]:
     }
 
 
-def _constant_embedding_witness() -> dict[str, object]:
+def _constant_embedding_witness() -> ConstantWitness:
     left = parse_var("eml(1,eml(1,1))")
     right = parse_var("eml(eml(1,1),1)")
     # All-ones trees are constant in x; evaluate at 1.
@@ -250,7 +328,7 @@ def _constant_embedding_witness() -> dict[str, object]:
     }
 
 
-def evaluate_benchmark() -> dict[str, object]:
+def evaluate_benchmark() -> BenchmarkPayload:
     by_size = enumerate_trees(MAX_INTERNAL)
     tree_counts = {n_internal: len(trees) for n_internal, trees in by_size.items()}
     n_trees = sum(tree_counts.values())
@@ -288,8 +366,8 @@ def evaluate_benchmark() -> dict[str, object]:
     )
     required = {
         "EVS_ENUMERATION_COMPLETE": enumeration_complete,
-        "EVS_SIZE_NOT_FUNCTION": bool(size_witness["exact_witness"]),
-        "EVS_CONSTANT_EMBEDDING": bool(constant_witness["exact_witness"]),
+        "EVS_SIZE_NOT_FUNCTION": size_witness["exact_witness"],
+        "EVS_CONSTANT_EMBEDDING": constant_witness["exact_witness"],
         "EVS_GRID_DISCLOSED": True,
         "EVS_US4_PRIME_WITHHELD": True,
     }

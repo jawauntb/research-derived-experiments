@@ -11,6 +11,7 @@ from experiments.eml_variable_spectrum.core import (
     evaluate_benchmark,
     labeled_count,
     parse_var,
+    require_finite,
 )
 
 
@@ -39,19 +40,29 @@ class EmlVariableSpectrumTest(unittest.TestCase):
         right = parse_var("eml(1,x)")
         self.assertEqual(left.n_internal, 1)
         self.assertEqual(right.n_internal, 1)
-        self.assertAlmostEqual(eval_at(left, 2.0), math.exp(2.0), places=12)
-        self.assertAlmostEqual(eval_at(right, 2.0), math.e - math.log(2.0), places=12)
-        self.assertNotAlmostEqual(eval_at(left, 2.0), eval_at(right, 2.0), places=8)
-        self.assertAlmostEqual(eval_at(left, 1.0), math.e, places=12)
-        self.assertAlmostEqual(eval_at(right, 1.0), math.e, places=12)
+        left_at_2 = require_finite(eval_at(left, 2.0), "eml(x,1)@2")
+        right_at_2 = require_finite(eval_at(right, 2.0), "eml(1,x)@2")
+        self.assertAlmostEqual(left_at_2, math.exp(2.0), places=12)
+        self.assertAlmostEqual(right_at_2, math.e - math.log(2.0), places=12)
+        self.assertNotAlmostEqual(left_at_2, right_at_2, places=8)
+        self.assertAlmostEqual(require_finite(eval_at(left, 1.0), "eml(x,1)@1"), math.e, places=12)
+        self.assertAlmostEqual(require_finite(eval_at(right, 1.0), "eml(1,x)@1"), math.e, places=12)
 
     def test_constant_embedding_recovers_the_size_two_split(self) -> None:
         left = parse_var("eml(1,eml(1,1))")
         right = parse_var("eml(eml(1,1),1)")
         self.assertTrue(left.all_ones())
         self.assertTrue(right.all_ones())
-        self.assertAlmostEqual(eval_at(left, 0.5), math.e - 1.0, places=12)
-        self.assertAlmostEqual(eval_at(right, 4.0), math.exp(math.e), places=10)
+        self.assertAlmostEqual(
+            require_finite(eval_at(left, 0.5), left.pretty()),
+            math.e - 1.0,
+            places=12,
+        )
+        self.assertAlmostEqual(
+            require_finite(eval_at(right, 4.0), right.pretty()),
+            math.exp(math.e),
+            places=10,
+        )
 
     def test_enumeration_matches_the_recurrence(self) -> None:
         by_size = enumerate_trees(MAX_INTERNAL)
