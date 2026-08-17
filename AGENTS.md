@@ -51,4 +51,6 @@ python scripts/gen_provenance.py
 - Human README: `README.md`
 - Verification index: `docs/verification.md`
 - Modal handoff: `docs/next_agent_modal_handoff.md`
+- SIC / Lea continuation: `docs/next_agent_lea_handoff_2026-08-17.md`
+- Lea skill: `.cursor/skills/lea/SKILL.md`
 - Active ledger: `TODO.md`

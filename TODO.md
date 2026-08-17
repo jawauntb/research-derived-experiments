@@ -1,5 +1,16 @@
 # Research TODO
 
+## Lea formalization (2026-08-17)
+
+- [x] Close Papers A–F. Possibility 5 is the house (`papers/sic_dynamics/paper.md`).
+- [x] Write the continuation contract (`docs/next_agent_lea_handoff_2026-08-17.md`).
+- [x] Write the Lea skill (`.cursor/skills/lea/SKILL.md`) and project seed (`docs/lea/`).
+- [ ] Install Lea (Docker on a laptop, or local `./install.sh`). Needs one model key.
+- [ ] Copy `docs/lea/*` into Lea project `sic-dynamics` / `Lea.SicDynamics`.
+- [ ] Prove P0/P1 blueprint nodes in parallel (one file per agent). SafeVerify when built.
+- [ ] Bank Lean; label papers proved / verified / still Python.
+- [ ] Do not start a new scientific letter. Do not fight `Complex.log 0`.
+
 ## Delete the absolute (2026-08-17)
 
 - [x] Kernel-check `DeleteRepair.lean` (no-go, cycle integration, repair split, noncommute).
