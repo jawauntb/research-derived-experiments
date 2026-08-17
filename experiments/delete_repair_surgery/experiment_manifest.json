@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "delete_repair_surgery",
+  "hypothesis": "A name-blind one-shot rule compiled from the three-cell taxonomy is not a complete agent decision procedure. Empirical gold is menu-relative representability. If every held-out row matches, surgery_holds. A miss is surgery_killed. Either verdict passes CI.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "name_blind_signature",
+      "description": "decide() reads only Signature. Task and screen names are withheld from the policy."
+    },
+    {
+      "control_id": "empirical_gold_not_intended_cell",
+      "description": "Gold is which menu action repairs, not which taxonomy cell we intended when writing the row."
+    },
+    {
+      "control_id": "construction_disclosed_not_the_kill",
+      "description": "Construction rows are the authoring toys. They cannot save a held-out miss."
+    },
+    {
+      "control_id": "held_out_includes_unused_symmetry",
+      "description": "pair_eq + q_id has a nontrivial symmetry and no cheaper registered screen."
+    },
+    {
+      "control_id": "kill_does_not_fail_ci",
+      "description": "A surgery_killed verdict is a valid passing run."
+    }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/delete_repair_surgery/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "SUR_ENUMERATION",
+      "criterion": "At least four construction rows and four held-out rows."
+    },
+    {
+      "gate_id": "SUR_MENU",
+      "criterion": "The repair menu has at least three screens."
+    },
+    {
+      "gate_id": "SUR_GOLD_DEFINED",
+      "criterion": "No case has gold broken."
+    },
+    {
+      "gate_id": "SUR_NAME_BLIND",
+      "criterion": "The policy input is only the five Signature fields."
+    },
+    {
+      "gate_id": "SUR_HELD_OUT_CONNECTION",
+      "criterion": "The held-out affine cycle mismatches Kirchhoff."
+    },
+    {
+      "gate_id": "SUR_RANKING_RECORDED",
+      "criterion": "The verdict is surgery_holds or surgery_killed."
+    },
+    {
+      "gate_id": "SUR_CLAIM_BOUNDARY",
+      "criterion": "The run does not claim text nomination, an LLM eval, or Paper F."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/delete_repair_surgery/results/delete_repair_surgery_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/delete_repair_surgery/preregistration.json",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/delete_repair_surgery/paper.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

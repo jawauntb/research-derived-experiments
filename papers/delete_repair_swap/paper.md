@@ -110,6 +110,5 @@ for both typed cells.
 
 ## Next best test
 
-Paper C, and only Paper C: show that cell 3 is not idle Kirchhoff
-packaging. Do not start Paper E. Do not reopen DR/DCR. Do not
-treat this swap as a universal calculus.
+C–E are now banked. Do not start Paper F. Do not reopen DR/DCR.
+Do not treat this swap as a universal calculus.

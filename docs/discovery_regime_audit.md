@@ -483,7 +483,54 @@ Results:
 Residual content:
 
 - Old regime: one theorem, three costumes.
-- New: three objects. Paper E still unlicensed as text nomination.
+- New: three objects. Paper E is now the typed agent test.
+
+## Paper E typed assumption-surgery
+
+Question: is the three-cell taxonomy a name-blind one-shot
+agent rule, or is gold menu-relative representability?
+
+Current regime:
+
+- Artifact types: `{0,1}^4` screens plus Aff(1, Z/3) 4-cycles.
+- Operations: finite fibre counts; Kirchhoff mismatch; a
+  five-field signature; no LLM.
+- Gates/verifiers: seven SUR instrument gates;
+  `surgery_killed` is a valid passing run.
+- Known limitations: menu is five screens; `last_bit` is a
+  disclosed relabel of `first_bit`.
+
+Action class:
+
+- Frame diagnosis: unused symmetry is not leftover privilege.
+- Why: `pair_eq` on `q_id` has a symmetry and no cheaper
+  registered screen.
+
+Experiment:
+
+- Manifest/report paths: `experiments/delete_repair_surgery/`.
+- Positive targets: construction 4/4; held-out connection
+  escapes Kirchhoff.
+- Negative controls: a miss still passes CI.
+- Stress tests: `identity` must not be blindly quotiented;
+  `pair_eq` on `q_id` is the grain.
+
+Gate:
+
+- Acceptance: instrument gates pass, then apply exact held-out
+  match.
+- Any held-out miss kills the one-shot-rule claim.
+
+Results:
+
+- Accepted instrument: 11 cases; gold defined on all.
+- Ranking: held-out 6/7; verdict `surgery_killed`.
+- Key metrics: grain miss is policy `quotient` vs gold `noop`.
+
+Residual content:
+
+- Old regime: diagnose the cell, apply the matching repair.
+- New: cells are a reading of a menu. Paper F stays withheld.
 
 ## Obstruction-Aware Admission V0
 

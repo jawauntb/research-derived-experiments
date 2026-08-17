@@ -1,0 +1,222 @@
+{
+  "cases": [
+    {
+      "case_id": "first_bit_q_perm",
+      "gold": "restore",
+      "hit": true,
+      "policy": "restore",
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": true,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "construction",
+      "task_id": "first_bit"
+    },
+    {
+      "case_id": "bag_q_id",
+      "gold": "quotient",
+      "hit": true,
+      "policy": "quotient",
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "construction",
+      "task_id": "bag"
+    },
+    {
+      "case_id": "bag_q_perm",
+      "gold": "noop",
+      "hit": true,
+      "policy": "noop",
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "construction",
+      "task_id": "bag"
+    },
+    {
+      "case_id": "bag_q_perm_affine_a",
+      "gold": "transport",
+      "hit": true,
+      "policy": "transport",
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": true,
+        "mixes": false,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "construction",
+      "task_id": "bag"
+    },
+    {
+      "case_id": "last_bit_q_perm",
+      "gold": "restore",
+      "hit": true,
+      "policy": "restore",
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": true,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "last_bit"
+    },
+    {
+      "case_id": "last_bit_q_id",
+      "gold": "quotient",
+      "hit": true,
+      "policy": "quotient",
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "last_bit"
+    },
+    {
+      "case_id": "parity_q_id",
+      "gold": "quotient",
+      "hit": true,
+      "policy": "quotient",
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "parity"
+    },
+    {
+      "case_id": "identity_q_id",
+      "gold": "noop",
+      "hit": true,
+      "policy": "noop",
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": false
+      },
+      "split": "held_out",
+      "task_id": "identity"
+    },
+    {
+      "case_id": "pair_eq_q_perm",
+      "gold": "restore",
+      "hit": true,
+      "policy": "restore",
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": true,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "pair_eq"
+    },
+    {
+      "case_id": "pair_eq_q_id",
+      "gold": "noop",
+      "hit": false,
+      "policy": "quotient",
+      "screen_id": "q_id",
+      "signature": {
+        "connection_mismatch": false,
+        "mixes": false,
+        "n_fibres": 16,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "pair_eq"
+    },
+    {
+      "case_id": "bag_q_perm_affine_c",
+      "gold": "transport",
+      "hit": true,
+      "policy": "transport",
+      "screen_id": "q_perm",
+      "signature": {
+        "connection_mismatch": true,
+        "mixes": false,
+        "n_fibres": 5,
+        "n_worlds": 16,
+        "y_has_nontrivial_symmetry": true
+      },
+      "split": "held_out",
+      "task_id": "bag"
+    }
+  ],
+  "experiment_id": "delete_repair_surgery",
+  "gates": {
+    "SUR_CLAIM_BOUNDARY": true,
+    "SUR_ENUMERATION": true,
+    "SUR_GOLD_DEFINED": true,
+    "SUR_HELD_OUT_CONNECTION": true,
+    "SUR_MENU": true,
+    "SUR_NAME_BLIND": true,
+    "SUR_RANKING_RECORDED": true
+  },
+  "menu": [
+    "q_id",
+    "q_rot",
+    "q_perm",
+    "q_stab0",
+    "q_stab_last"
+  ],
+  "process_disclosure": "Name-blind one-shot signature rule on a finite menu.  Gold is empirical representability / Kirchhoff mismatch.  Not text nomination, not an LLM, not Paper F.",
+  "producing_agent": {
+    "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+    "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+  },
+  "ranking": {
+    "best_constant_held_out": "restore",
+    "best_constant_held_out_hits": 2,
+    "construction_hits": 4,
+    "construction_n": 4,
+    "held_out_exact": false,
+    "held_out_hits": 6,
+    "held_out_n": 7,
+    "pair_eq_id_is_the_grain_miss": true,
+    "rule": "surgery_holds iff the name-blind signature rule matches empirical gold on every held-out row.  Construction rows are disclosed authoring toys and do not save a miss.",
+    "verdict": "surgery_killed"
+  },
+  "run_id": "delete_repair_surgery_2026_08_17",
+  "status": "pass",
+  "withheld": [
+    "Text nomination / DR / DCR",
+    "LLM agent eval",
+    "Universal calculus (Paper F)",
+    "A better language model"
+  ]
+}
