@@ -68,7 +68,8 @@ Aggregator imports them. Label: **proved-not-verified**.
 Append. Receipt: `docs/lea/VERIFY_RECEIPT_2026-08-17.md`.
 
 - verified: `kappa_cheap_not_function`, `bag_not_unique`, `kappa_relabel_natural`, `affine_escapes_kirchhoff`, `poset_not_determine_interval`, `surgery_miss_pair_eq`
-- proved-not-verified: `kappa_screen_hits_suite` (`native_decide` disallowed)
+- later verified: `kappa_screen_hits_suite` (kernel `decide`, no `native_decide`)
+- verified: `dta_n4_representable_iff`, `swap_typed_wins`
 
 ## Off-limits
 

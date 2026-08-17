@@ -112,3 +112,7 @@ for both typed cells.
 
 C–F are now banked. The written κ is SIC. Do not reopen DR/DCR.
 Do not treat this swap as a universal calculus.
+
+## Lean status
+
+**Verified.** `SwapTyped.lean` (`swap_typed_wins`). Receipt: `docs/lea/VERIFY_RECEIPT_2026-08-17.md`.

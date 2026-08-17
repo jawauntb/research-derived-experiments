@@ -562,7 +562,9 @@ uses `[propext, Quot.sound]` (via `omega` closing the impossible
   `eml_zero_identity_one`, `eml_zero_identity_x`.
 - `StructuralIntelligence/KappaCheap.lean` — Paper F
   `kappa_cheap_not_function`.  **Proved, not verified.**
-- `StructuralIntelligence/KappaScreen.lean` — Paper F
+- `StructuralIntelligence/KappaScreen.lean` — Paper F (`kappa_screen_hits_suite`, verified)
+- `StructuralIntelligence/DtaN4.lean` — n=4 representability iff inclusion
+- `StructuralIntelligence/SwapTyped.lean` — Paper B swap cell
   `kappa_screen_hits_suite`.  Cites CommonSuffScreen.  **Proved, not verified.**
 - `StructuralIntelligence/KappaUnique.lean` — Paper F
   `bag_not_unique`.  **Proved, not verified.**
