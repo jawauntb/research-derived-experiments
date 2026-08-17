@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "eml_fiber_spectrum",
+  "hypothesis": "Closed EML trees have no 1-D size complete invariant of denotation. Exhaustive n_internal≤6 enumeration is Catalan-complete. Two equal-size trees disagree at a registered point. Numerical fiber counts are computational (grid/rounding agreement is not function identity). US-4′ is withheld. Cross-size collision is recorded if found, otherwise withheld for that gate only.",
+  "claim_tier": "descriptive",
+  "controls": [
+    {
+      "control_id": "catalan_count_equals_enumerated_trees_per_k",
+      "description": "For each registered k in 0..6, the enumerated tree count must equal Catalan C_k. This is the completeness check, not a sample."
+    },
+    {
+      "control_id": "size_2_closed_values_disagree_at_witness_point",
+      "description": "The two size-2 trees eml(1,eml(1,1)) and eml(eml(1,1),1) must evaluate to e-1 and exp(e). A single-point disagreement is a witness, not a collision."
+    },
+    {
+      "control_id": "hand_trees_match_closed_forms",
+      "description": "eml(1,1)=e, leaf=1, eml(1,eml(eml(1,1),1))=0, and the registered identity-1 tree equals 1."
+    },
+    {
+      "control_id": "operator_grid_matches_exp_minus_log",
+      "description": "On the registered (x,y) grid with y>0, eml(x,y) equals exp(x)-ln(y) exactly in float."
+    },
+    {
+      "control_id": "grid_agreement_disclosed_as_not_identity",
+      "description": "The summary must record that finite-grid or rounded agreement is not function identity."
+    },
+    {
+      "control_id": "us4_prime_explicitly_untested",
+      "description": "The summary must flag US-4′ untested. Truncated Gibbs mass is not that claim."
+    },
+    {
+      "control_id": "cross_size_uses_well_resolved_or_exact_identities_only",
+      "description": "Optional cross-size credit requires a well-resolved fiber or a registered algebraic identity. Extreme-magnitude float collisions do not count."
+    }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/eml_fiber_spectrum/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "EFS_SIZE_NOT_DENOTATION",
+      "criterion": "Two equal-size trees have different closed eval at the registered point (1,1). Registered pair: eml(1,eml(1,1)) versus eml(eml(1,1),1)."
+    },
+    {
+      "gate_id": "EFS_ENUMERATION_COMPLETE",
+      "criterion": "Tree count at each k in 0..6 equals Catalan C_k."
+    },
+    {
+      "gate_id": "EFS_GRID_COLLISION_DISCLOSED",
+      "criterion": "Summary records that grid or rounding agreement is not function identity."
+    },
+    {
+      "gate_id": "EFS_US4_PRIME_WITHHELD",
+      "criterion": "Summary explicitly flags US-4′ untested."
+    },
+    {
+      "gate_id": "EFS_CROSS_SIZE_COLLISION",
+      "criterion": "Optional. Pass if a well-resolved or exact cross-size identity is observed; otherwise status=withheld. Never fails the package."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/eml_fiber_spectrum/results/eml_fiber_spectrum_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/eml_fiber_spectrum/preregistration.json",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

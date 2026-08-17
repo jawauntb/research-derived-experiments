@@ -1,0 +1,472 @@
+{
+  "catalan_by_size": {
+    "0": 1,
+    "1": 1,
+    "2": 2,
+    "3": 5,
+    "4": 14,
+    "5": 42,
+    "6": 132
+  },
+  "citations": [
+    "Odrzywo\u0142ek, A. (2026). All elementary functions from a single binary operator. arXiv:2603.21852."
+  ],
+  "citations_pending_verification": [
+    "Stachowiak 2026 arXiv:2604.23893 (algebraic structure of EML; primary text not checked here)"
+  ],
+  "claim_tier_size_witness": "exact_witness",
+  "claim_tier_spectrum": "computational",
+  "closed_spectrum": {
+    "distinct_fibers_by_size": {
+      "0": 1,
+      "1": 1,
+      "2": 2,
+      "3": 5,
+      "4": 11,
+      "5": 29,
+      "6": 77
+    },
+    "largest_fibers": [
+      {
+        "example_trees": [
+          "eml(1,eml(1,1))",
+          "eml(1,eml(1,eml(1,eml(eml(1,eml(1,1)),1))))",
+          "eml(1,eml(1,eml(eml(1,eml(eml(1,1),1)),1)))"
+        ],
+        "fiber_id": "F:1.7182818285",
+        "mean_value": 1.718281828459045,
+        "n_sizes": 2,
+        "n_trees": 8,
+        "sizes": [
+          2,
+          6
+        ],
+        "spread": 2.220446049250313e-16,
+        "truncated_phi": 0.000976666808128357,
+        "well_resolved": true
+      },
+      {
+        "example_trees": [
+          "eml(eml(1,1),1)",
+          "eml(1,eml(eml(1,eml(eml(eml(1,1),1),1)),1))",
+          "eml(eml(1,1),eml(1,eml(eml(1,eml(1,1)),1)))"
+        ],
+        "fiber_id": "F:15.1542622415",
+        "mean_value": 15.154262241479262,
+        "n_sizes": 2,
+        "n_trees": 8,
+        "sizes": [
+          2,
+          6
+        ],
+        "spread": 0.0,
+        "truncated_phi": 0.000976666808128357,
+        "well_resolved": true
+      },
+      {
+        "example_trees": [
+          "1",
+          "eml(1,eml(eml(1,eml(1,1)),1))",
+          "eml(eml(1,eml(eml(1,1),1)),1)"
+        ],
+        "fiber_id": "F:1.0000000000",
+        "mean_value": 1.0,
+        "n_sizes": 3,
+        "n_trees": 6,
+        "sizes": [
+          0,
+          4,
+          6
+        ],
+        "spread": 0.0,
+        "truncated_phi": 0.25000767409801483,
+        "well_resolved": true
+      },
+      {
+        "example_trees": [
+          "eml(1,1)",
+          "eml(1,eml(1,eml(eml(1,eml(1,1)),1)))",
+          "eml(1,eml(eml(1,eml(eml(1,1),1)),1))"
+        ],
+        "fiber_id": "F:2.7182818285",
+        "mean_value": 2.718281828459045,
+        "n_sizes": 2,
+        "n_trees": 5,
+        "sizes": [
+          1,
+          5
+        ],
+        "spread": 0.0,
+        "truncated_phi": 0.015625953674316406,
+        "well_resolved": true
+      },
+      {
+        "example_trees": [
+          "eml(1,eml(eml(1,1),1))",
+          "eml(eml(1,1),eml(eml(eml(1,1),1),1))",
+          "eml(eml(1,eml(eml(1,1),1)),eml(1,1))"
+        ],
+        "fiber_id": "F:0.0000000000",
+        "mean_value": 0.0,
+        "n_sizes": 2,
+        "n_trees": 3,
+        "sizes": [
+          3,
+          5
+        ],
+        "spread": 0.0,
+        "truncated_phi": 6.151199340820312e-05,
+        "well_resolved": true
+      },
+      {
+        "example_trees": [
+          "eml(eml(1,eml(eml(eml(1,1),1),1)),1)",
+          "eml(eml(1,eml(eml(eml(1,1),1),eml(1,1))),1)"
+        ],
+        "fiber_id": "F:0.0000039730",
+        "mean_value": 3.973034959367421e-06,
+        "n_sizes": 2,
+        "n_trees": 2,
+        "sizes": [
+          5,
+          6
+        ],
+        "spread": 1.041621596681102e-12,
+        "truncated_phi": 2.5331974029541016e-07,
+        "well_resolved": false
+      },
+      {
+        "example_trees": [
+          "eml(eml(eml(eml(1,eml(1,1)),1),1),1)",
+          "eml(eml(eml(eml(1,eml(1,1)),1),1),eml(1,1))"
+        ],
+        "fiber_id": "F:3453653541377796470397025254973445762671493021849556165376621143687394746902015133797080438064912257054268563914752.0000000000",
+        "mean_value": 3.4536535413777965e+114,
+        "n_sizes": 2,
+        "n_trees": 2,
+        "sizes": [
+          5,
+          6
+        ],
+        "spread": 0.0,
+        "truncated_phi": 2.5331974029541016e-07,
+        "well_resolved": false
+      },
+      {
+        "example_trees": [
+          "eml(eml(1,eml(eml(eml(1,1),1),1)),eml(1,1))"
+        ],
+        "fiber_id": "F:-0.9999960270",
+        "mean_value": -0.9999960269655614,
+        "n_sizes": 1,
+        "n_trees": 1,
+        "sizes": [
+          6
+        ],
+        "spread": 0.0,
+        "truncated_phi": 1.4901161193847656e-08,
+        "well_resolved": true
+      }
+    ],
+    "max_fiber_size": 8,
+    "n_finite": 145,
+    "n_numerical_fibers": 118,
+    "n_undefined": 52,
+    "n_well_resolved_cross_size_fibers": 5,
+    "size_is_denotation_invariant": false,
+    "suspect_cross_size_fibers": [
+      {
+        "fiber_id": "F:0.0000039730",
+        "mean_value": 3.973034959367421e-06,
+        "n_trees": 2,
+        "sizes": [
+          5,
+          6
+        ],
+        "spread": 1.041621596681102e-12
+      },
+      {
+        "fiber_id": "F:3453653541377796470397025254973445762671493021849556165376621143687394746902015133797080438064912257054268563914752.0000000000",
+        "mean_value": 3.4536535413777965e+114,
+        "n_trees": 2,
+        "sizes": [
+          5,
+          6
+        ],
+        "spread": 0.0
+      }
+    ]
+  },
+  "cross_size_witnesses": [
+    {
+      "expected": 1.0,
+      "left": {
+        "closed": 1.0,
+        "n_internal": 0,
+        "pretty": "1"
+      },
+      "ok": true,
+      "right": {
+        "closed": 1.0,
+        "n_internal": 4,
+        "pretty": "eml(1,eml(eml(1,eml(1,1)),1))"
+      }
+    },
+    {
+      "expected": 2.718281828459045,
+      "left": {
+        "closed": 2.718281828459045,
+        "n_internal": 1,
+        "pretty": "eml(1,1)"
+      },
+      "ok": true,
+      "right": {
+        "closed": 2.718281828459045,
+        "n_internal": 5,
+        "pretty": "eml(1,eml(1,eml(eml(1,eml(1,1)),1)))"
+      }
+    },
+    {
+      "expected": 0.0,
+      "left": {
+        "closed": 0.0,
+        "n_internal": 3,
+        "pretty": "eml(1,eml(eml(1,1),1))"
+      },
+      "ok": true,
+      "right": {
+        "closed": 0.0,
+        "n_internal": 5,
+        "pretty": "eml(eml(1,1),eml(eml(eml(1,1),1),1))"
+      }
+    },
+    {
+      "expected": 1.718281828459045,
+      "left": {
+        "closed": 1.718281828459045,
+        "n_internal": 2,
+        "pretty": "eml(1,eml(1,1))"
+      },
+      "ok": true,
+      "right": {
+        "closed": 1.718281828459045,
+        "n_internal": 6,
+        "pretty": "eml(1,eml(1,eml(1,eml(eml(1,eml(1,1)),1))))"
+      }
+    },
+    {
+      "expected": 15.154262241479262,
+      "left": {
+        "closed": 15.154262241479262,
+        "n_internal": 2,
+        "pretty": "eml(eml(1,1),1)"
+      },
+      "ok": true,
+      "right": {
+        "closed": 15.154262241479262,
+        "n_internal": 6,
+        "pretty": "eml(eml(1,1),eml(1,eml(eml(1,eml(1,1)),1)))"
+      }
+    }
+  ],
+  "experiment_id": "eml_fiber_spectrum",
+  "gates": {
+    "EFS_ENUMERATION_COMPLETE": true,
+    "EFS_GRID_COLLISION_DISCLOSED": true,
+    "EFS_SIZE_NOT_DENOTATION": true,
+    "EFS_US4_PRIME_WITHHELD": true
+  },
+  "grid_collision_disclosed": true,
+  "grid_collision_disclosure": "Agreement on a finite probe grid is not identity of functions. Two different elementary functions can collide on the grid, and two different reals can collide after rounding or at extreme magnitude.  Spectrum counts are computational.  A same-size disagreement at a single registered point is a witness, not a collision.",
+  "n_trees": 197,
+  "operator_grid": [
+    {
+      "expected": 1.0,
+      "observed": 1.0,
+      "ok": true,
+      "x": 0.0,
+      "y": 1.0
+    },
+    {
+      "expected": 2.718281828459045,
+      "observed": 2.718281828459045,
+      "ok": true,
+      "x": 1.0,
+      "y": 1.0
+    },
+    {
+      "expected": 2.0251346478990997,
+      "observed": 2.0251346478990997,
+      "ok": true,
+      "x": 1.0,
+      "y": 2.0
+    },
+    {
+      "expected": 2.3418684512600736,
+      "observed": 2.3418684512600736,
+      "ok": true,
+      "x": 0.5,
+      "y": 0.5
+    },
+    {
+      "expected": 0.36787944117144233,
+      "observed": 0.36787944117144233,
+      "ok": true,
+      "x": -1.0,
+      "y": 1.0
+    },
+    {
+      "expected": 6.38905609893065,
+      "observed": 6.38905609893065,
+      "ok": true,
+      "x": 2.0,
+      "y": 2.718281828459045
+    }
+  ],
+  "optional_gates": {
+    "EFS_CROSS_SIZE_COLLISION": {
+      "n_exact_witnesses": 5,
+      "n_well_resolved_cross_fibers": 5,
+      "observed": true,
+      "status": "pass"
+    }
+  },
+  "probe_spectrum": {
+    "cross_size_status": "withheld",
+    "max_fiber_size": 1,
+    "n_cross_size_fibers": 0,
+    "n_finite_on_grid": 125,
+    "n_numerical_fibers": 125,
+    "n_undefined_on_grid": 72,
+    "representation": "leaf_chirality_probe: left leaves := x, right leaves := y; size-0 tree stays 1.  Not the variable-leaf EML grammar."
+  },
+  "producing_agent": {
+    "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+    "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+  },
+  "registered": {
+    "gibbs_base": 4,
+    "max_internal": 6,
+    "round_digits": 10,
+    "size_convention": "n_internal = number of eml nodes; n_nodes = 2*n_internal+1",
+    "test_grid": [
+      {
+        "x": 0.0,
+        "y": 1.0
+      },
+      {
+        "x": 1.0,
+        "y": 1.0
+      },
+      {
+        "x": 1.0,
+        "y": 2.0
+      },
+      {
+        "x": 0.5,
+        "y": 0.5
+      },
+      {
+        "x": -1.0,
+        "y": 1.0
+      },
+      {
+        "x": 2.0,
+        "y": 2.718281828459045
+      }
+    ],
+    "witness_point": {
+      "x": 1.0,
+      "y": 1.0
+    }
+  },
+  "run_id": "eml_fiber_spectrum_2026_08_17",
+  "sanity": [
+    {
+      "expected": 1.0,
+      "n_internal": 0,
+      "name": "leaf",
+      "observed": 1.0,
+      "ok": true,
+      "pretty": "1"
+    },
+    {
+      "expected": 2.718281828459045,
+      "n_internal": 1,
+      "name": "eml_1_1_is_e",
+      "observed": 2.718281828459045,
+      "ok": true,
+      "pretty": "eml(1,1)"
+    },
+    {
+      "expected": 1.718281828459045,
+      "n_internal": 2,
+      "name": "eml_1_e_is_e_minus_1",
+      "observed": 1.718281828459045,
+      "ok": true,
+      "pretty": "eml(1,eml(1,1))"
+    },
+    {
+      "expected": 15.154262241479262,
+      "n_internal": 2,
+      "name": "eml_e_1_is_exp_e",
+      "observed": 15.154262241479262,
+      "ok": true,
+      "pretty": "eml(eml(1,1),1)"
+    },
+    {
+      "expected": 0.0,
+      "n_internal": 3,
+      "name": "ln_1_is_zero",
+      "observed": 0.0,
+      "ok": true,
+      "pretty": "eml(1,eml(eml(1,1),1))"
+    },
+    {
+      "expected": 1.0,
+      "n_internal": 4,
+      "name": "closed_identity_one",
+      "observed": 1.0,
+      "ok": true,
+      "pretty": "eml(1,eml(eml(1,eml(1,1)),1))"
+    }
+  ],
+  "size_not_denotation_witness": {
+    "algebra": "eml(1,e)=e-1 versus eml(e,1)=exp(e)",
+    "exact_witness": true,
+    "left": {
+      "at_point": 1.718281828459045,
+      "closed": 1.718281828459045,
+      "pretty": "eml(1,eml(1,1))"
+    },
+    "n_internal": 2,
+    "point": {
+      "x": 1.0,
+      "y": 1.0
+    },
+    "right": {
+      "at_point": 15.154262241479262,
+      "closed": 15.154262241479262,
+      "pretty": "eml(eml(1,1),1)"
+    }
+  },
+  "status": "pass",
+  "tree_counts_by_size": {
+    "0": 1,
+    "1": 1,
+    "2": 2,
+    "3": 5,
+    "4": 14,
+    "5": 42,
+    "6": 132
+  },
+  "truncated_gibbs": {
+    "Z_hat": 0.2679486870765686,
+    "base": 4,
+    "note": "Truncated language mass over the registered census. Not a fiber-free-energy claim. US-4' withheld.",
+    "size_convention": "n_nodes = 2*n_internal+1"
+  },
+  "untested": {
+    "US-4_prime": "US-4\u2032 (fiber free energy predicts gradient recovery on EML master formulas) is untested.  This package is a first numerical-spectrum instrument, not that claim."
+  }
+}
