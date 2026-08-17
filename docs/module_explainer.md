@@ -10,7 +10,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 
 | Path | Responsibility |
 |---|---|
-| `experiments/` | 99 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
+| `experiments/` | 101 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
 | `papers/` | Paper sources (`paper.md`), figures, shareable PDFs |
 | `scripts/` | 138 Python ops modules: quality, contracts, provenance, PDF/figure builders, summarizers |
 | `tests/` | 174 root test files collected together by pytest (`unittest`-style and pytest-native) |
@@ -112,6 +112,8 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_eml_us4_prime.py` | Inherited labeled Catalan counts, exact zero identity, k=3 Φ ratio ≥ 2, extra-shell factor < 1.05, gradient recovery withheld |
 | `test_eml_us4_gradient.py` | Registered size-3 targets, master-formula GD not Gibbs, perturbed-correct sanity, preregistered ranking rule, deterministic replay |
 | `test_eml_us4_search.py` | All 80 size-3 skeletons, exact 2-vs-1 control, unknown-skeleton GD ranking, not-a-Gibbs-sampler disclosure |
+| `test_eml_us4_discrete.py` | Frozen-leaf greedy rewrite, extra-basin ranking 43 vs 28, exact terminals only |
+| `test_delete_repair_swap.py` | Paper B swap cell: typed vs crossed repairs, kill does not fail CI |
 
 ```bash
 python3 scripts/run_quality_checks.py
@@ -142,8 +144,8 @@ environment.
 |---|---|
 | [system_design.md](system_design.md) | End-to-end design & operating model |
 | [module_explainer.md](module_explainer.md) | This catalog |
-| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 99 research packages; `experiments/common` excluded) |
-| `experiment_contract_registry.json` | Authoritative 99-package coverage partition: 51 structured roots + 48 time-bounded legacy exceptions with frozen digest |
+| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 101 research packages; `experiments/common` excluded) |
+| `experiment_contract_registry.json` | Authoritative 101-package coverage partition: 53 structured roots + 48 time-bounded legacy exceptions with frozen digest |
 | `program_evidence_registry.json` | 12 canonical evidence records with stable IDs, states, artifact refs, and claim links |
 | `claim_registry.json` | 12 canonical claim records with tiers, states, source refs, and bidirectional evidence links |
 | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) | Benchmark umbrella |
@@ -187,9 +189,9 @@ environment.
 
 **Legend:** **P** = `PROVENANCE.md`, **B** = `BENCHMARK_CARD.md`, **R** = `README.md`, **res** = committed `results/`.
 
-**Verification reconciliation:** 99 research packages on disk plus one shared
+**Verification reconciliation:** 101 research packages on disk plus one shared
 support package, `experiments/common`. `gen_provenance.py` intentionally excludes
-the support package and derives 99 cards/index rows; `gen_provenance.py --check`
+the support package and derives 101 cards/index rows; `gen_provenance.py --check`
 fails if any generated card, either verification index, or the site mirror drifts.
 The structured registries currently contain 12 claims and 12 evidence records.
 
@@ -242,6 +244,8 @@ Universal dispatcher: `python scripts/regen.py <name>`.
 | `eml_us4_prime` | P R res | Gibbs-vs-shortest on that language: k=3 finite Φ ratio 2.016 via min-shell multiplicity of the exact zero identity. Extra shells < 1% mass. Master-formula gradient recovery withheld | `core.py`, `experiment.py` |
 | `eml_us4_gradient` | P R res | US-4′ gradient half: matching-skeleton GD on the same min-size pair. Zero 8/8 vs singleton 6/8. Not a Gibbs sampler. Not Odrzywołek's neural bootstrap | `core.py`, `experiment.py` |
 | `eml_us4_search` | P R res | Unknown-skeleton GD on all 80 size-3 trees. Exact control 2 vs 1. GD 7 vs 7; verdict `min_size_governs`. Φ does not transfer when the tree is unknown | `core.py`, `experiment.py` |
+| `eml_us4_discrete` | P R res | Frozen-leaf flip/swap greedy search. Exact control 2 vs 1. Extra basins 43 vs 28; verdict `phi_holds`. Unknown-GD tie was a retune artifact | `core.py`, `experiment.py` |
+| `delete_repair_swap` | P R res | Paper B swap cell on the Paper A harness. Typed repairs work; crossed over-repair fails; under-quotient cheaper. Verdict `taxonomy_holds`. Not new enumeration | `core.py`, `experiment.py` |
 
 #### 3.1.1 `symbolic_weakness` modules
 
@@ -505,10 +509,13 @@ exhaustive counterexample search, and replayable MIDAS regression.
 | `papers/eml_us4_prime/` | Gibbs-vs-shortest on the truncated variable-`x` language; min-shell multiplicity of the exact zero identity; extra-shell transfer and gradient recovery withheld (`paper.md`); companion instrument `eml_us4_prime` |
 | `papers/eml_us4_gradient/` | Lowest-bound master-formula GD analogue; zero 8/8 vs singleton 6/8; not a Gibbs sampler; neural bootstrap withheld (`paper.md`); companion instrument `eml_us4_gradient` |
 | `papers/eml_us4_search/` | Unknown-skeleton GD rejects Φ-transfer at k=3 (7 vs 7); exact 2-vs-1 remains the Gibbs control (`paper.md`); companion instrument `eml_us4_search` |
+| `papers/eml_us4_discrete/` | Frozen-leaf rewrite restores a Φ extra-basin gap (43 vs 28); unknown-GD remains a different process (`paper.md`); companion instrument `eml_us4_discrete` |
+| `papers/delete_repair_swap/` | Paper B swap-cell discriminator; taxonomy holds on the Paper A harness; not new enumeration (`paper.md`); companion instrument `delete_repair_swap` |
+| `papers/eml_access_geometry/` | Process-split synthesis: expressivity ≠ access, access is process-relative; LLM/SIC translation without a better-model claim |
 | `papers/sufficient_antecedents/` | Companion paper (Theorem SA-1): taxonomy of SIC-C-c positive resolutions — each of the four known identifiability escapes (linear ICA, sparse-linear ICA, iVAE, interventional CRL) is one way of populating Theorem 4's Markov-screen antecedent via local separation + cross-`u` coherence (`paper.md`, `paper.pdf`); companion instrument `antecedent_taxonomy_pair` |
 | `papers/structural_intelligence_covering_learnability/` | Companion paper (SIC-C-c covering meta-theorem): conditional closure of SIC-C-c under the polynomial-ε-covering hypothesis on `H`, composed from Theorem 6-core (ε-covering reduction, pure-core `refinement_preserves_screen`) and Theorem 5-rate (quantitative bound). Machine-checked as `StructuralIntelligenceMathlib.sicc_covering_meta` / `sicc_covering_poly` with zero new axioms. Isolates why linear ICA, sparse-linear ICA, iVAE, interventional CRL satisfy SIC-C-c and why Locatello 2019's fully-unsupervised nonlinear ICA does not (`paper.md`); companion instrument `sicc_covering_meta_pair` |
 | `papers/structural_intelligence_foundations/` | Companion paper (SIC-A derived, finite discrete positive-support case): reduces the master fibration `(q, K)` from a posit to a theorem by composing Theorem 1 (LR-vector as `q`) + Proposition 3 (`Coarsen ⊣ Refine`) with the uniform-on-fibre kernel + Theorem CS-2 (coarsest-CSS). Machine-checked as `StructuralIntelligenceMathlib.sic_a_finite_discrete` (no new axioms; `HalmosSavage_minimality_h_extension` inherited only through the coarsestness corollary). General topological / measure-theoretic case remains open (`paper.md`); companion instrument `sica_finite_derivation_pair` |
-| `papers/delete_the_absolute/` | Master-calculus paper: delete–obstruction–repair operator; over/under-invariance taxonomy; Lean core `DeleteRepair.lean`; instruments `delete_the_absolute` and `eml_fiber_spectrum`. US-4′ and any universal cross-domain law withheld |
+| `papers/delete_the_absolute/` | Master-calculus paper: delete–obstruction–repair operator; over/under-invariance taxonomy; Lean core `DeleteRepair.lean`; instruments `delete_the_absolute` and `eml_fiber_spectrum`. Paper B swap cell now banked; Papers C–F and any universal cross-domain law withheld |
 
 Run:
 
@@ -1101,6 +1108,9 @@ Notable bundles:
 - `papers/eml_us4_prime/` — Gibbs mass is not shortest depth on the truncated variable-`x` language; extra-shell transfer and gradient recovery withheld
 - `papers/eml_us4_gradient/` — matching-skeleton GD ranks the fat zero target above the same-min-size singleton (8/8 vs 6/8); not Odrzywołek's neural bootstrap
 - `papers/eml_us4_search/` — unknown-skeleton GD ties 7 vs 7; Φ does not transfer when the tree is unknown
+- `papers/eml_us4_discrete/` — frozen-leaf extras 43 vs 28; Φ ranks this process
+- `papers/delete_repair_swap/` — Paper B: opposite repairs are not interchangeable
+- `papers/eml_access_geometry/` — process-split synthesis and LLM/SIC translation
 - Synthesis: `metaphysics_synthesis`, `metric_stack_synthesis`, literature audits/reviews
 - Review methods: `unified_citation_grounded_review` (framework, ontology, executable reviewer, and alpha-research operating system)
 - Benchmark framing: `causally_grounded_agents_benchmark`, `weakness_invariance_neurips`

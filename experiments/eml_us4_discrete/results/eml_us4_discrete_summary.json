@@ -1,0 +1,606 @@
+{
+  "citations": [
+    "Odrzywo\u0142ek, A. (2026). All elementary functions from a single binary operator. arXiv:2603.21852."
+  ],
+  "experiment_id": "eml_us4_discrete",
+  "gates": {
+    "US4D_CLAIM_BOUNDARY": true,
+    "US4D_ENUMERATION": true,
+    "US4D_EXACT_CONTROL": true,
+    "US4D_FROZEN_LEAVES": true,
+    "US4D_NOT_GD": true,
+    "US4D_RANKING_RECORDED": true
+  },
+  "process_disclosure": "Search is greedy rewrite on frozen-leaf size-3 trees (flip one leaf or swap one internal pair).  Not GD, not a Gibbs sampler, and not Odrzywo\u0142ek's neural bootstrap.",
+  "producing_agent": {
+    "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+    "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+  },
+  "ranking": {
+    "rule": "Compare n_extra_basins: non-exact starts from which greedy frozen-leaf rewrite reaches the target. Exact 2-vs-1 is the control, not the claim.",
+    "thin_basins": 29,
+    "thin_extra": 28,
+    "verdict": "phi_holds",
+    "zero_basins": 45,
+    "zero_extra": 43
+  },
+  "registered": {
+    "moves": [
+      "flip_one_leaf",
+      "swap_one_internal"
+    ],
+    "n_skeletons": 80,
+    "search_k": 3,
+    "thin_formulas": [
+      "eml(1,eml(1,eml(1,1)))"
+    ],
+    "zero_formulas": [
+      "eml(1,eml(eml(1,1),1))",
+      "eml(x,eml(eml(x,1),1))"
+    ]
+  },
+  "run_id": "eml_us4_discrete_2026_08_17",
+  "searches": [
+    {
+      "exact_formulas": [
+        "eml(1,eml(eml(1,1),1))",
+        "eml(x,eml(eml(x,1),1))"
+      ],
+      "extra_end_counts": {
+        "eml(1,eml(eml(1,1),1))": 26,
+        "eml(x,eml(eml(x,1),1))": 17
+      },
+      "n_basins": 45,
+      "n_exact": 2,
+      "n_extra_basins": 43,
+      "rows": [
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(1,eml(1,1)))",
+          "steps": 1
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(1,eml(1,x)))",
+          "steps": 2
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(1,eml(x,x)))",
+          "steps": 3
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(x,eml(1,1)))",
+          "steps": 2
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(x,eml(1,x)))",
+          "steps": 3
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(eml(1,1),1))",
+          "steps": 0
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(eml(1,1),x))",
+          "steps": 1
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(eml(1,x),1))",
+          "steps": 1
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(eml(1,x),x))",
+          "steps": 2
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(eml(x,1),1))",
+          "steps": 1
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(eml(x,1),x))",
+          "steps": 2
+        },
+        {
+          "end": "eml(x,eml(eml(x,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(eml(x,x),1))",
+          "steps": 2
+        },
+        {
+          "end": "eml(x,eml(eml(x,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(eml(x,x),x))",
+          "steps": 3
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(x,eml(1,eml(1,1)))",
+          "steps": 2
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(x,eml(1,eml(1,x)))",
+          "steps": 3
+        },
+        {
+          "end": "eml(x,eml(eml(x,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(x,eml(1,eml(x,1)))",
+          "steps": 1
+        },
+        {
+          "end": "eml(x,eml(eml(x,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(x,eml(1,eml(x,x)))",
+          "steps": 2
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(x,eml(x,eml(1,1)))",
+          "steps": 3
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(x,eml(x,eml(1,x)))",
+          "steps": 4
+        },
+        {
+          "end": "eml(x,eml(eml(x,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(x,eml(x,eml(x,1)))",
+          "steps": 2
+        },
+        {
+          "end": "eml(x,eml(eml(x,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(x,eml(x,eml(x,x)))",
+          "steps": 3
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(x,eml(eml(1,1),1))",
+          "steps": 1
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(x,eml(eml(1,1),x))",
+          "steps": 2
+        },
+        {
+          "end": "eml(x,eml(eml(x,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(x,eml(eml(1,x),1))",
+          "steps": 1
+        },
+        {
+          "end": "eml(x,eml(eml(x,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(x,eml(eml(1,x),x))",
+          "steps": 2
+        },
+        {
+          "end": "eml(x,eml(eml(x,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(x,eml(eml(x,1),1))",
+          "steps": 0
+        },
+        {
+          "end": "eml(x,eml(eml(x,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(x,eml(eml(x,1),x))",
+          "steps": 1
+        },
+        {
+          "end": "eml(x,eml(eml(x,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(x,eml(eml(x,x),1))",
+          "steps": 1
+        },
+        {
+          "end": "eml(x,eml(eml(x,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(x,eml(eml(x,x),x))",
+          "steps": 2
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(1,eml(1,1)),1)",
+          "steps": 2
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(1,eml(1,x)),1)",
+          "steps": 3
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(x,eml(1,1)),1)",
+          "steps": 3
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(x,eml(1,x)),1)",
+          "steps": 4
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(eml(1,1),1),1)",
+          "steps": 1
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(eml(1,1),x),1)",
+          "steps": 2
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(eml(1,1),x),x)",
+          "steps": 3
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(eml(1,x),1),1)",
+          "steps": 2
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(eml(1,x),x),1)",
+          "steps": 3
+        },
+        {
+          "end": "eml(x,eml(eml(x,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(eml(1,x),x),x)",
+          "steps": 3
+        },
+        {
+          "end": "eml(x,eml(eml(x,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(eml(x,1),1),x)",
+          "steps": 1
+        },
+        {
+          "end": "eml(1,eml(eml(1,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(eml(x,1),x),1)",
+          "steps": 3
+        },
+        {
+          "end": "eml(x,eml(eml(x,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(eml(x,1),x),x)",
+          "steps": 2
+        },
+        {
+          "end": "eml(x,eml(eml(x,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(eml(x,x),1),x)",
+          "steps": 2
+        },
+        {
+          "end": "eml(x,eml(eml(x,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(eml(x,x),x),1)",
+          "steps": 4
+        },
+        {
+          "end": "eml(x,eml(eml(x,1),1))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(eml(x,x),x),x)",
+          "steps": 3
+        }
+      ],
+      "target": "zero",
+      "terminals": [
+        "eml(1,eml(eml(1,1),1))",
+        "eml(x,eml(eml(x,1),1))"
+      ]
+    },
+    {
+      "exact_formulas": [
+        "eml(1,eml(1,eml(1,1)))"
+      ],
+      "extra_end_counts": {
+        "eml(1,eml(1,eml(1,1)))": 28
+      },
+      "n_basins": 29,
+      "n_exact": 1,
+      "n_extra_basins": 28,
+      "rows": [
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(1,eml(1,1)))",
+          "steps": 0
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(1,eml(1,x)))",
+          "steps": 1
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(1,eml(x,1)))",
+          "steps": 1
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(1,eml(x,x)))",
+          "steps": 2
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(x,eml(1,1)))",
+          "steps": 1
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(x,eml(1,x)))",
+          "steps": 2
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(eml(1,1),1))",
+          "steps": 1
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(eml(1,1),x))",
+          "steps": 2
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(eml(1,x),1))",
+          "steps": 2
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(eml(1,x),x))",
+          "steps": 3
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(eml(x,1),1))",
+          "steps": 2
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(1,eml(eml(x,x),1))",
+          "steps": 3
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(x,eml(1,eml(1,1)))",
+          "steps": 1
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(x,eml(1,eml(1,x)))",
+          "steps": 2
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(x,eml(x,eml(1,1)))",
+          "steps": 2
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(x,eml(x,eml(1,x)))",
+          "steps": 3
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(x,eml(eml(1,1),1))",
+          "steps": 2
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(x,eml(eml(1,1),x))",
+          "steps": 3
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(x,eml(eml(1,x),x))",
+          "steps": 4
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(1,eml(1,1)),1)",
+          "steps": 1
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(1,eml(1,x)),1)",
+          "steps": 2
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(x,eml(1,1)),1)",
+          "steps": 2
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(x,eml(1,x)),1)",
+          "steps": 3
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(eml(1,1),1),1)",
+          "steps": 2
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(eml(1,1),x),1)",
+          "steps": 3
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(eml(1,1),x),x)",
+          "steps": 4
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(eml(1,x),1),1)",
+          "steps": 3
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(eml(1,x),x),1)",
+          "steps": 4
+        },
+        {
+          "end": "eml(1,eml(1,eml(1,1)))",
+          "final_mse": 0.0,
+          "hit": true,
+          "start": "eml(eml(eml(1,x),x),x)",
+          "steps": 5
+        }
+      ],
+      "target": "thin",
+      "terminals": [
+        "eml(1,eml(1,eml(1,1)))"
+      ]
+    }
+  ],
+  "status": "pass",
+  "withheld": [
+    "Odrzywo\u0142ek neural bootstrap",
+    "Gibbs-sampler tautology",
+    "Weight-tuning GD as this claim"
+  ]
+}

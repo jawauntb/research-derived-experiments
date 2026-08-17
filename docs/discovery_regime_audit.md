@@ -303,6 +303,99 @@ Residual content:
 - New: process-split. Gibbs and known-tree GD feel `Φ`. Unknown-tree
   GD does not, at this bound.
 
+## US-4′ frozen-leaf half
+
+Question: if `1`-leaves cannot be retuned, does greedy rewrite reopen
+a `Φ` gap that unknown-skeleton GD closed?
+
+Current regime:
+
+- Artifact types: all 80 size-3 variable-`x` trees; frozen leaves
+  in `{1,x}`.
+- Operations: flip one leaf or swap one internal pair; greedy
+  descent from every start.
+- Gates/verifiers: six fatal US4D gates.
+- Known limitations: greedy, not BFS; short walks; not the neural
+  bootstrap.
+
+Action class:
+
+- Frame diagnosis: the GD tie was a retune artifact, not the last
+  word on access.
+- Why: ranking on exact 2-vs-1 would fake a win; extras are the
+  claim.
+
+Experiment:
+
+- Manifest/report paths: `experiments/eml_us4_discrete/`.
+- Positive targets: same zero / singleton pair.
+- Negative controls: exact 2-vs-1 must hold; extras, not totals.
+- Stress tests: extras must terminate on exact formulas.
+
+Gate:
+
+- Acceptance: all fatal gates pass, then apply the extra-basin rule.
+- Equal extras reject the transfer.
+
+Results:
+
+- Accepted instrument: 80 trees; exact 2 vs 1; frozen leaves.
+- Ranking: extras 43 vs 28, terminals exact, verdict `phi_holds`.
+- Key metrics: 26 extras to the all-ones zero, 17 to the `x` zero,
+  28 to the singleton. Ratio 1.54, not the Gibbs 2.016.
+
+Residual content:
+
+- Old regime: unknown-tree search never feels `Φ`.
+- New: process-split continues. Frozen-leaf rewrite feels `Φ`.
+  Unknown-tree GD still does not.
+
+## Paper B swap cell
+
+Question: are over-invariance restore and under-invariance quotient
+interchangeable on the Paper A harness?
+
+Current regime:
+
+- Artifact types: `{0,1}^4`, screens `q_id` / `q_stab0` / `q_perm`,
+  tasks `first_bit` and `bag`.
+- Operations: exact representability and fibre counts.
+- Gates/verifiers: six SWAP instrument gates; taxonomy kill is a
+  valid passing run.
+- Known limitations: pairing of Paper A facts, not a new census.
+
+Action class:
+
+- Frame diagnosis: Paper A could not claim discrimination.
+- Why: Possibility 3 survives a 4×4 matrix until opposite repairs
+  are swapped.
+
+Experiment:
+
+- Manifest/report paths: `experiments/delete_repair_swap/`.
+- Positive targets: typed restore for `first_bit`; typed quotient
+  for `bag`.
+- Negative controls: crossed `q_perm` on `first_bit`; leftover
+  privilege on `bag`.
+- Stress tests: no single minimal-safe screen.
+
+Gate:
+
+- Acceptance: instrument gates pass, then apply the swap rule.
+- Crossed success or one minimal-safe screen kills the taxonomy.
+
+Results:
+
+- Accepted instrument: 16 worlds; typed cells represent.
+- Ranking: crossed over-repair fails; under-quotient 5 vs 16;
+  verdict `taxonomy_holds`.
+- Key metrics: this is a discriminator contract, not new bits.
+
+Residual content:
+
+- Old regime: one ladder / match `G_M` to `G_Y`.
+- New: two arrows on this harness. Papers C–F still unlicensed.
+
 ## Obstruction-Aware Admission V0
 
 Question: can a finite bounded agent choose the next permitted experiment by

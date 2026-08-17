@@ -6,7 +6,9 @@
 - [x] Finite symmetry-matching instrument on `{0,1}^4` (7/7 gates).
 - [x] Constant-grammar EML spectrum enumerator through `k=6` (US-4′ withheld).
 - [x] Variable-`x` EML fiber spectrum without a 1-D invariant.
-- [ ] Assumption-surgery agent benchmark (Paper E).
+- [x] Paper B swap-cell discriminator on the `{0,1}^4` harness.
+- [ ] Paper C: connection beyond `List Int` (licensed only after B).
+- [ ] Assumption-surgery agent benchmark (Paper E; licensed only after B–D).
 - [ ] Do not import OpenAI 2026 writeups as verified theorems.
 
 ## Variable-`x` EML spectrum (2026-08-17)
@@ -16,6 +18,9 @@
 - [x] US-4′ Gibbs half: truncated fiber mass is not shortest depth (`k=3` ratio 2.016).
 - [x] US-4′ gradient half: matching-skeleton GD ranks zero 8/8 vs singleton 6/8 (`phi_holds` at this bound; not the neural bootstrap).
 - [x] US-4′ unknown-skeleton half: all 80 size-3 trees, GD 7 vs 7 (`min_size_governs`). Φ does not transfer when the tree is unknown.
+- [x] US-4′ frozen-leaf half: extra basins 43 vs 28 (`phi_holds`). Exact 2-vs-1 stays the control.
+- [x] Paper B swap cell: typed repairs are not interchangeable (`taxonomy_holds`). Not new enumeration.
+- [ ] Paper C: connection beyond `List Int`. Do not start Paper E.
 - [ ] Do not import OpenAI 2026 writeups as verified theorems.
 
 ## Obstruction-Aware Admission (2026-07-27)

@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "eml_us4_discrete",
+  "hypothesis": "On the registered size-3 EML pair, greedy frozen-leaf rewrite from every size-3 start recovers the fat zero target from more non-exact starts than the thin singleton. Equal extra-basin counts reject Φ-predicts-frozen-leaf-search at this bound.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "exact_multiplicity",
+      "description": "Unweighted exact hits must stay 2 vs 1. That is the Gibbs control, not the headline."
+    },
+    {
+      "control_id": "rank_extras_not_totals",
+      "description": "Ranking uses n_extra_basins. Ranking on total basins would fake phi_holds whenever extras are 0 vs 0."
+    },
+    {
+      "control_id": "full_size_three_census",
+      "description": "Every labeled size-3 tree is a start, not only the known matching formulas."
+    },
+    {
+      "control_id": "frozen_leaves",
+      "description": "Leaves stay 1 or x. The process cannot retune constants."
+    },
+    {
+      "control_id": "not_gd_or_gibbs",
+      "description": "The process is greedy rewrite, not GD and not a Gibbs draw from the census."
+    }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/eml_us4_discrete/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "US4D_ENUMERATION",
+      "criterion": "The size-3 census has 80 trees."
+    },
+    {
+      "gate_id": "US4D_EXACT_CONTROL",
+      "criterion": "Exact unweighted hits are 2 for zero and 1 for thin."
+    },
+    {
+      "gate_id": "US4D_FROZEN_LEAVES",
+      "criterion": "The run discloses that leaves stay 1 or x."
+    },
+    {
+      "gate_id": "US4D_NOT_GD",
+      "criterion": "The run discloses that recovery is not GD and not a Gibbs sampler."
+    },
+    {
+      "gate_id": "US4D_RANKING_RECORDED",
+      "criterion": "The ranking is recorded from extra basins, not from exact 2-vs-1."
+    },
+    {
+      "gate_id": "US4D_CLAIM_BOUNDARY",
+      "criterion": "The run does not claim the neural bootstrap."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/eml_us4_discrete/results/eml_us4_discrete_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/eml_us4_discrete/preregistration.json",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/eml_us4_discrete/paper.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}
