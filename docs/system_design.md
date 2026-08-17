@@ -1740,6 +1740,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 | [publication_sharing_map.md](publication_sharing_map.md) | What to share publicly |
 | [next_agent_modal_handoff.md](next_agent_modal_handoff.md) | Modal operator handoff |
 | [next_agent_lea_handoff_2026-08-17.md](next_agent_lea_handoff_2026-08-17.md) | After A–F: Lea formalization contract, proved≠verified, parallel lemma lanes |
+| [lea/ENV_STATUS.md](lea/ENV_STATUS.md) | Local Lea install receipt: `/verify` available, `sic-dynamics` seeded |
 | [next_agent_evidence_infrastructure_remaining_handoff_2026-07-14.md](next_agent_evidence_infrastructure_remaining_handoff_2026-07-14.md) | Audited recovery and dependency order for the remaining evidence-infrastructure work |
 | [railway-autodeploy.md](railway-autodeploy.md) | Site deploy diagnostics |
 | [discovery_regime_audit.md](discovery_regime_audit.md) | Regime audit ledger |

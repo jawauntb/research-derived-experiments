@@ -53,7 +53,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | Public agent benchmark package | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) |
 | Concern-gated retrieval theory and next experiments | [concern_gated_retrieval_research_program.md](concern_gated_retrieval_research_program.md) + [next-agent handoff](next_agent_concern_gated_retrieval_handoff_2026-07-23.md) |
 | Modal operator handoff | [next_agent_modal_handoff.md](next_agent_modal_handoff.md) |
-| Continue A–F formalization with Lea | [next_agent_lea_handoff_2026-08-17.md](next_agent_lea_handoff_2026-08-17.md) + [Lea skill](../.cursor/skills/lea/SKILL.md) + [docs/lea/](lea/README.md) |
+| Continue A–F formalization with Lea | [next_agent_lea_handoff_2026-08-17.md](next_agent_lea_handoff_2026-08-17.md) + [Lea skill](../.cursor/skills/lea/SKILL.md) + [docs/lea/](lea/README.md) + [ENV status](lea/ENV_STATUS.md) |
 | Deploy atlas / Inquiry site | [railway-autodeploy.md](railway-autodeploy.md) |
 | Inquiry product work | `apps/inquiry-black-box/README.md` + `AGENTS.md` |
 | Coherence Phase-0 | `coherence-testbench/README.md` + `POST_MORTEM.md` |
