@@ -350,6 +350,60 @@ family-specific axiom is added).
   `Σ_θ μ(θ) · lik(θ)` to obtain a probability distribution is
   routine once real division is available (Mathlib).
 
+### Delete–repair core — `StructuralIntelligence/DeleteRepair.lean`
+
+The algebraic core of the delete–obstruction–repair argument: an
+invariant screen cannot reconstruct a non-invariant target; relative
+steps integrate on a path and close on a cycle iff they sum to zero;
+two discrete integrals of the same step field differ by a constant;
+exact repair must split leftover fibre disagreement; and the two
+repair schedules (delete-then-default vs relative-then-drop) disagree
+on a finite witness.
+
+- `StructuralIntelligence.DeleteRepair.over_invariance_nogo` — if
+  `q` is `act`-invariant and `target` is a postcomposition of `q`,
+  then `target` is `act`-invariant.
+- `StructuralIntelligence.DeleteRepair.symmetry_mismatch_nogo` —
+  **headline.**  Contrapositive: an invariant screen cannot factor a
+  target that moves under the action.  This is the group-action
+  packaging of the `CommonSuffScreen` contrapositive, not a new
+  logical primitive.  Depends on **no axioms**.
+- `StructuralIntelligence.DeleteRepair.invariant_orbits_factor` —
+  if `target` is invariant and every `q`-fibre is an orbit, then
+  `target` factors through `q`.
+- `StructuralIntelligence.DeleteRepair.identity_always_factors` —
+  the identity screen always factors; leftover privilege is not a
+  no-go.
+- `StructuralIntelligence.DeleteRepair.path_integrates` — prefix
+  potential after `i+1` steps is the potential after `i` plus the
+  `i`-th relative step.
+- `StructuralIntelligence.DeleteRepair.cycle_integrates_iff_sum_zero`
+  — **headline.**  `prefixSum rs rs.length = 0` iff `sumInt rs = 0`.
+  Uses `[propext]` (via `rw` of the prefix-sum identity through
+  `↔`).  No custom axioms.
+- `StructuralIntelligence.DeleteRepair.potentials_unique_up_to_translation`
+  — **headline.**  Two discrete integrals of the same step field on
+  `{0,…,n}` differ by the constant `p 0 - q 0`.  Uses `[propext]`.
+  No custom axioms.
+- `StructuralIntelligence.DeleteRepair.repair_splits_disagreement`
+  — **headline.**  Exact repair of `qD` by `r` forces any leftover
+  `target`-disagreement on a `qD`-fibre to be an `r`-disagreement.
+  The counting form `|r`-values on the fibre` ≥ `|Y`-values on the
+  fibre` is the discrete `H(R | q_D) ≥ H(Y | q_D)`; we bank the
+  split, not Shannon entropy (no reals).  Depends on **no axioms**.
+- `StructuralIntelligence.DeleteRepair.repair_paths_disagree` —
+  **headline.**  Finite witness that delete-then-default (`pathA`)
+  and relative-then-drop (`pathB`) disagree: `(0,1)` and `(1,1)`
+  share a Path-A image but not a Path-B image.  This is
+  "position then pool ≠ pool then position", not a relativity
+  theorem.  Depends on **no axioms**.
+
+  Not claimed: Shannon entropy inequalities, a measure-theoretic
+  connection form, or any identification of the finite witness with
+  special relativity.  The optional
+  `integrates_implies_closed_walk_zero` lemma was skipped; the
+  cycle-sum characterisation already records closed-walk vanishing.
+
 ## Design constraints
 
 The `formal/relative-identifiability/` sister project runs on the
@@ -446,6 +500,13 @@ uses `[propext, Quot.sound]` (via `omega` closing the impossible
   `bayesPosterior`, `boltzmannUpdate`, and the AA-2 core headline
   `bayes_equals_boltzmann_with_reward_as_likelihood` (plus the
   function-level `bayesPosterior_eq_boltzmannUpdate`).
+- `StructuralIntelligence/DeleteRepair.lean` — delete–obstruction–
+  repair core: `Act` / `IsInvariant` / `FactorsThrough`,
+  `prefixSum` / `sumInt`, `ExactRepair`, `pathA` / `pathB`, and the
+  headlines `symmetry_mismatch_nogo`,
+  `cycle_integrates_iff_sum_zero`,
+  `potentials_unique_up_to_translation`,
+  `repair_splits_disagreement`, `repair_paths_disagree`.
 
 ## Provenance
 
