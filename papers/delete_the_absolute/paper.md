@@ -9,7 +9,7 @@ Human author and research director
 Experiment code, Lean core, and manuscript under direction and review
 
 **Date:** August 17, 2026
-**Status:** Lean core kernel-checked (`formal/structural-intelligence/StructuralIntelligence/DeleteRepair.lean`, Lean 4.31, no Mathlib, zero `sorry`). Finite symmetry-matching instrument **banked** at `experiments/delete_the_absolute/` (7/7 preregistered gates; exact `n=4` enumeration, no SGD). That run is a Lean regression plus a leftover-privilege fibre count. It does **not** promote the taxonomy to a discriminator and it does **not** test Possibility 1. Companion constant-grammar EML census **banked** at `experiments/eml_fiber_spectrum/` (197 Catalan trees through `k=6`; size is not a denotation invariant). US-4′, variable-`x` EML, and the universal-calculus claim are **withheld**. This is not a victory lap.
+**Status:** Lean core kernel-checked (`formal/structural-intelligence/StructuralIntelligence/DeleteRepair.lean`, Lean 4.31, no Mathlib, zero `sorry`). Finite symmetry-matching instrument **banked** at `experiments/delete_the_absolute/` (7/7 preregistered gates; exact `n=4` enumeration, no SGD). Paper B swap cell **banked** at `experiments/delete_repair_swap/` (`taxonomy_holds` on this harness; pairing of A's matrix, not new enumeration). This manuscript still does **not** test Possibility 1. Companion constant-grammar EML census **banked** at `experiments/eml_fiber_spectrum/` (197 Catalan trees through `k=6`; size is not a denotation invariant). Papers C–F, Paper 0, and any universal calculus remain **withheld**. This is not a victory lap.
 
 ---
 
