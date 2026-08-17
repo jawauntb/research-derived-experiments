@@ -1,0 +1,80 @@
+{
+  "experiment_id": "squaring_separation",
+  "schema_version": "1.0",
+  "hypothesis": "For the monomial z_n = x^(2^n) over Mul = {x, ×} and Sq = {x, ×, sq} with sq(y)=y·y definable, the four seams separate exactly: (US-1) both languages realise every positive degree; (US-2) every Mul-tree of degree 2^n has size 2^{n+1}-1 while a Sq-tower has size n+1; (US-3) sharing-circuit size is n in both bases; (US-4) under the Gibbs prior π(t)∝4^{-|t|}, language-normalised fiber mass satisfies log2(P_Sq/P_Mul) ≥ 2·(2^{n+1}-n-2)+log2(Z_Mul/Z_Sq)-log2(C_{2^n-1}), and at n=4 the Sq fiber occupies 27 size shells against one Catalan shell of 9694845 Mul-trees.",
+  "primary_metric": "headline.log2_ratio",
+  "target_object": "The monomial x^(2^n) as a denotation class (degree) in two expression languages.",
+  "decision": "Accept the four-seam separation on this toy if and only if all six noncompensatory gates pass. Do not promote US-4′ (EML gradient recovery).",
+  "representation_and_data_clock": "Finite expression trees and sharing DAGs. Degree is the denotation. No sampling clock; exact integer DP plus closed-form partition functions.",
+  "material_assumptions": [
+    "Denotation is monomial degree; × adds degrees and sq doubles degree.",
+    "Tree size is node count; circuit size is the number of mul/sq steps after the leaf x.",
+    "Gibbs prior is π(t) ∝ 4^{-|t|} with language-level partition functions Z_Mul=2-√3 and Z_Sq=(3-√5)/2.",
+    "sq is a definable macro, so the extension is conservative on denotations."
+  ],
+  "fatal_gates": [
+    "SS_EXPRESSIVITY_CONSERVATIVE_EXTENSION",
+    "SS_TREE_SIZE_EXACT",
+    "SS_CATALAN_SINGLE_SHELL",
+    "SS_CIRCUIT_SIZE_THETA_N",
+    "SS_FIBER_MASS_EXCEEDS_SHORTEST_BOUND",
+    "SS_SHELL_OCCUPANCY"
+  ],
+  "decisive_controls": [
+    "mul_fiber_count_equals_catalan",
+    "sq_shells_are_the_complete_interval",
+    "circuit_max_degree_le_pow2_on_tower_and_alternatives",
+    "shortest_bound_includes_Z_ratio"
+  ],
+  "gates": {
+    "SS_EXPRESSIVITY_CONSERVATIVE_EXTENSION": "Every degree in 1..16 is realised by at least one Mul-tree and one Sq-tree.",
+    "SS_TREE_SIZE_EXACT": "For each n in {1,2,3,4}, Mul size is 2^{n+1}-1 and the Sq-tower size is n+1.",
+    "SS_CATALAN_SINGLE_SHELL": "The Mul fiber of degree 2^n is exactly C_{2^n-1} trees on a single size shell.",
+    "SS_CIRCUIT_SIZE_THETA_N": "Repeated squaring reaches degree 2^n in n steps, and max degree after k steps is ≤ 2^k on the tower and two alternative circuits.",
+    "SS_FIBER_MASS_EXCEEDS_SHORTEST_BOUND": "For every registered n, log2(P_Sq/P_Mul) is at least the amended shortest-witness bound; at n=4 the ratio is at least 28.28.",
+    "SS_SHELL_OCCUPANCY": "The Sq fiber occupies every size from n+1 through 2^{n+1}-1 (27 shells at n=4)."
+  },
+  "amendment_after_run_1": {
+    "gate_id": "SS_FIBER_MASS_EXCEEDS_SHORTEST_BOUND",
+    "wrong_closed_form": "2*(2^{n+1}-n-2) - log2(C_{2^n-1})  (= 28.79 at n=4)",
+    "corrected_closed_form": "2*(2^{n+1}-n-2) + log2(Z_Mul/Z_Sq) - log2(C_{2^n-1})  (= 28.28 at n=4)",
+    "reason": "Run 1 used unnormalised Φ as if it were discovery probability. The Gibbs probability is Φ/Z."
+  },
+  "metrics": [
+    "p_mul",
+    "p_sq",
+    "log2_ratio",
+    "shortest_bound",
+    "mul_fiber_count",
+    "sq_shell_count"
+  ],
+  "n_values": [1, 2, 3, 4],
+  "gibbs_base": 4,
+  "controls": [
+    "mul_fiber_count_equals_catalan",
+    "sq_shells_are_the_complete_interval",
+    "circuit_max_degree_le_pow2_on_tower_and_alternatives",
+    "shortest_bound_includes_Z_ratio"
+  ],
+  "withheld": [
+    "US-4_prime_EML_gradient_recovery",
+    "EML_native_fiber_spectrum",
+    "Kolmogorov_invariance_as_a_tree_fact"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": null,
+    "sampling": "none; exact integer DP and closed-form generating functions.",
+    "raw_data": false
+  },
+  "mathematical_claim_card": {
+    "objects": "MulTree, SqTree, degree : Tree → ℕ≥1, size : Tree → ℕ≥1, CircStep DAGs, Catalan numbers, Gibbs masses Φ,Z.",
+    "types_domains_units": "Degree is a dimensionless exponent. Size is node count. Circuit size is step count. Masses are dimensionless probabilities after /Z.",
+    "claim_and_quantifiers": "∀ n ∈ ℕ, every Mul-tree of degree 2^n has size 2^{n+1}-1; ∃ Sq-tree of degree 2^n and size n+1; ∀ sharing circuits, max degree after k steps ≤ 2^k, hence ≥ n steps are necessary for degree 2^n; for n∈{1,2,3,4} the Gibbs ratio meets the shortest-witness bound.",
+    "assumptions": "No cancellation in the multiplicative monoid; sq is definable as y×y; Gibbs base 4 is a modelling choice, not a derived constant.",
+    "derivation_dependencies": "Structural induction on trees; Catalan enumeration of full binary trees; generating-function solutions of A=x+xA^2 and A=x+xA+xA^2.",
+    "invariance": "Degree is basis-invariant. Tree size is not. Circuit size is sharing-invariant across the two bases.",
+    "edge_cases": "n=0 is the leaf x (size 1 both sides). Even sizes appear only after sq is added.",
+    "executable_checks": "DP counts match Catalan; closed-form Z evaluated at 1/4; n=4 headline 7.8e-12 vs 4.0e-3."
+  }
+}

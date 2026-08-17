@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "squaring_separation",
+  "hypothesis": "For z_n = x^(2^n) over Mul={x,×} and Sq={x,×,sq} with sq definable, expressivity is shared, tree size drops from 2^{n+1}-1 to n+1, circuit size is n in both bases, and Gibbs fiber mass under π(t)∝4^{-|t|} satisfies the amended shortest-witness bound, with a single Catalan shell of 9694845 versus 27 Sq shells at n=4.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "mul_fiber_count_equals_catalan",
+      "description": "Independent DP of Mul-trees must match C_{2^n-1} on the unique size shell 2^{n+1}-1."
+    },
+    {
+      "control_id": "sq_shells_are_the_complete_interval",
+      "description": "Occupied Sq sizes must be exactly {n+1,...,2^{n+1}-1}, not a sparse subset that could fake a mass gap."
+    },
+    {
+      "control_id": "circuit_max_degree_le_pow2_on_tower_and_alternatives",
+      "description": "The 2^k degree cap is checked on repeated squaring and on left-associated and self-mul circuits."
+    },
+    {
+      "control_id": "shortest_bound_includes_z_ratio",
+      "description": "The fiber-mass gate uses Φ/Z, not raw Φ. The run-1 unnormalised bound is recorded and is not the criterion."
+    }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/squaring_separation/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "SS_EXPRESSIVITY_CONSERVATIVE_EXTENSION",
+      "criterion": "Every degree in 1..16 is realised by at least one Mul-tree and one Sq-tree."
+    },
+    {
+      "gate_id": "SS_TREE_SIZE_EXACT",
+      "criterion": "For each n in {1,2,3,4}, Mul size is 2^{n+1}-1 and the Sq-tower size is n+1."
+    },
+    {
+      "gate_id": "SS_CATALAN_SINGLE_SHELL",
+      "criterion": "The Mul fiber of degree 2^n is exactly C_{2^n-1} trees on a single size shell."
+    },
+    {
+      "gate_id": "SS_CIRCUIT_SIZE_THETA_N",
+      "criterion": "Repeated squaring reaches degree 2^n in n steps; max degree after k steps is ≤ 2^k on the tower and two alternative circuits."
+    },
+    {
+      "gate_id": "SS_FIBER_MASS_EXCEEDS_SHORTEST_BOUND",
+      "criterion": "For every registered n, log2(P_Sq/P_Mul) is at least the amended shortest-witness bound; at n=4 the ratio is at least 28.28."
+    },
+    {
+      "gate_id": "SS_SHELL_OCCUPANCY",
+      "criterion": "The Sq fiber occupies every size from n+1 through 2^{n+1}-1 (27 shells at n=4)."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/squaring_separation/results/squaring_separation_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/squaring_separation/preregistration.json",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/eml_universal_substrate/paper.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

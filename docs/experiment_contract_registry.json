@@ -2420,6 +2420,35 @@
       ]
     },
     {
+      "package": "squaring_separation",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/squaring_separation/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "squaring_separation_2026_08_17",
+      "runs": [
+        {
+          "run_id": "squaring_separation_2026_08_17",
+          "publication_package": "squaring_separation",
+          "runtime_package": "squaring_separation",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/squaring_separation/experiment_manifest.json",
+          "report_paths": [
+            "experiments/squaring_separation/results/squaring_separation_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/squaring_separation/preregistration.json",
+          "preregistration_digest": "c38b7123213415fca94dfc65ee14fd91362e76b521c4fa281007334cf651b6bf",
+          "producing_agent": {
+            "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+            "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+          }
+        }
+      ]
+    },
+    {
       "package": "state_dependent_concern",
       "coverage_mode": "legacy_exception",
       "legacy_exception": {
