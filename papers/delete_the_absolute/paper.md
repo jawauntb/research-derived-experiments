@@ -9,7 +9,7 @@ Human author and research director
 Experiment code, Lean core, and manuscript under direction and review
 
 **Date:** August 17, 2026
-**Status:** Lean core kernel-checked (`formal/structural-intelligence/StructuralIntelligence/DeleteRepair.lean`, Lean 4.31, no Mathlib, zero `sorry`). Finite symmetry-matching instrument **banked** at `experiments/delete_the_absolute/` (7/7 preregistered gates; exact `n=4` enumeration, no SGD). That run is a Lean regression plus a leftover-privilege fibre count. It does **not** promote the taxonomy to a discriminator and it does **not** test Possibility 1. US-4′ and the universal-calculus claim are **withheld**. This is not a victory lap.
+**Status:** Lean core kernel-checked (`formal/structural-intelligence/StructuralIntelligence/DeleteRepair.lean`, Lean 4.31, no Mathlib, zero `sorry`). Finite symmetry-matching instrument **banked** at `experiments/delete_the_absolute/` (7/7 preregistered gates; exact `n=4` enumeration, no SGD). That run is a Lean regression plus a leftover-privilege fibre count. It does **not** promote the taxonomy to a discriminator and it does **not** test Possibility 1. Companion constant-grammar EML census **banked** at `experiments/eml_fiber_spectrum/` (197 Catalan trees through `k=6`; size is not a denotation invariant). US-4′, variable-`x` EML, and the universal-calculus claim are **withheld**. This is not a victory lap.
 
 ---
 
@@ -638,11 +638,12 @@ the constant `p(0)-q(0)`.
 
 It does not show a universal calculus. It does not find Einstein's
 deletion. It does not identify Lorentz geometry with Lamport or
-with positional encodings. It does not speak to US-4′ or to an
-EML-native fiber spectrum. It does not contain a swap cell that
-applies an over-invariance repair to an under-invariance toy and
-conversely. It does not beat the eight-row catalog at anything
-the catalog was not already able to name.
+with positional encodings. It does not speak to US-4′. The
+constant-grammar EML census is a companion instrument, not this
+run's result. It does not contain a swap cell that applies an
+over-invariance repair to an under-invariance toy and conversely.
+It does not beat the eight-row catalog at anything the catalog
+was not already able to name.
 
 An adversarial reading, which we adopt: **7/7 is the expected
 result if Lean is correctly transported to Python.** A fail would
@@ -679,8 +680,8 @@ Until that swap cell exists, the dual-instance claim is a
 reading.
 
 Do not reopen DCR nomination to fill the gap. Do not train a
-network. Do not treat `experiments/eml_fiber_spectrum/` (if it
-appears on another slice of this branch) as this paper's result.
+network. Do not treat `experiments/eml_fiber_spectrum/` as this
+paper's discriminator. That package is a constant-grammar census.
 US-4′ stays withheld.
 
 ---
@@ -696,10 +697,16 @@ not invent the file) reads that result as SIC's master object
 from the calculator side and separates expressivity from tree
 size, circuit size, and Gibbs fiber mass on an `x^(2^n)` toy.
 US-4′ — the claim that fiber free energy predicts EML gradient
-recovery — is **untested**. The EML-native spectrum, which has
-no 1-D degree invariant and cannot be DP'd, is **withheld**.
-Paper 0 (Lean totalisation of `Complex.log`) is a different
-obstruction and is also withheld.
+recovery — is **untested**. The constant-grammar census is now
+banked: 197 trees through 6 internal nodes (`C_0+⋯+C_6`); 145
+finite closed values in 118 numerical fibers; 52 undefined
+(nonpositive right-hand side or overflow); exact size-2 split
+`e-1` versus `exp(e)`; five well-resolved exact cross-size
+identities (optional gate, not fatal). That is a computational
+spectrum of *constants*, not a 1-D invariant and not a
+variable-`x` access law. Variable-`x` EML and US-4′ remain
+**withheld**. Paper 0 (Lean totalisation of `Complex.log`) is a
+different obstruction and is also withheld.
 
 What Paper A needs from that laboratory is one typed sentence.
 
@@ -886,9 +893,9 @@ the previous letter's kill criteria. Three other objects are
   different obstruction. Not a delete–repair theorem.
 - **US-4′** (fiber free energy predicts EML gradient recovery).
   Untested. Not this paper's claim.
-- **EML-native spectrum** (no 1-D degree invariant; cannot be
-  DP'd). The first hard access estimate. Withheld until an
-  estimator exists and is committed as its own paper.
+- **Variable-`x` EML spectrum** (no 1-D degree invariant; cannot
+  be DP'd). The constant-grammar census exists; the free-`x`
+  access estimate does not. Withheld.
 
 No letter after A is authorised by A's existence. A without B
 is a reading plus a kernel check plus a Python regression.
@@ -921,6 +928,8 @@ physics / distributed systems / attention.
   re-run as `DTA_NONCOMMUTE`.
 - Leftover privilege as a fibre-count cost on popcount
   (16 vs 5), `DTA_OVERREPAIR_COST`.
+- Constant-grammar EML census through `k=6`: Catalan-complete;
+  size is not a denotation invariant. Computational, not US-4′.
 - The negative claim that RR-1/RR-2 are not `κ`.
 - The negative claim that DR/DCR did not find Einstein's
   deletion automatically.
@@ -930,7 +939,7 @@ physics / distributed systems / attention.
 **Withheld.**
 
 - Possibility 1 (`κ`).
-- US-4′ and the EML-native spectrum.
+- US-4′ and the variable-`x` EML spectrum.
 - Paper 0.
 - Any assertion that the taxonomy *discriminates* EML from
   relativity until the swap cell exists.

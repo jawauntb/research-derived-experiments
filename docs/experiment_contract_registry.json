@@ -1059,6 +1059,35 @@
       ]
     },
     {
+      "package": "delete_the_absolute",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/delete_the_absolute/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "delete_the_absolute_2026_08_17",
+      "runs": [
+        {
+          "run_id": "delete_the_absolute_2026_08_17",
+          "publication_package": "delete_the_absolute",
+          "runtime_package": "delete_the_absolute",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/delete_the_absolute/experiment_manifest.json",
+          "report_paths": [
+            "experiments/delete_the_absolute/results/delete_the_absolute_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/delete_the_absolute/preregistration.json",
+          "preregistration_digest": "4f35ce44b1e3bba384781269dcf36dd168a31c0cba838080a00afc3dc46a1137",
+          "producing_agent": {
+            "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+            "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+          }
+        }
+      ]
+    },
+    {
       "package": "deletion_repair",
       "coverage_mode": "structured_manifest",
       "manifest_path": "experiments/deletion_repair/experiment_manifest.json",
@@ -1272,6 +1301,35 @@
           "producing_agent": {
             "identity": "Claude Code (Opus 4.7)",
             "session_ref": "dr6h-no-proxy-target 2026-07-27"
+          }
+        }
+      ]
+    },
+    {
+      "package": "eml_fiber_spectrum",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/eml_fiber_spectrum/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "eml_fiber_spectrum_2026_08_17",
+      "runs": [
+        {
+          "run_id": "eml_fiber_spectrum_2026_08_17",
+          "publication_package": "eml_fiber_spectrum",
+          "runtime_package": "eml_fiber_spectrum",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/eml_fiber_spectrum/experiment_manifest.json",
+          "report_paths": [
+            "experiments/eml_fiber_spectrum/results/eml_fiber_spectrum_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/eml_fiber_spectrum/preregistration.json",
+          "preregistration_digest": "1efdd31bb53e05ba71d6280a13128bb1c5150bfb16152dd551644f55e1b93a34",
+          "producing_agent": {
+            "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+            "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
           }
         }
       ]

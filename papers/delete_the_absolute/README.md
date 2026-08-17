@@ -5,6 +5,7 @@ Adversarial master paper for the delete–obstruction–repair claim.
 - Manuscript: [`paper.md`](paper.md)
 - Lean core: [`formal/structural-intelligence/StructuralIntelligence/DeleteRepair.lean`](../../formal/structural-intelligence/StructuralIntelligence/DeleteRepair.lean)
 - Finite instrument: [`experiments/delete_the_absolute/`](../../experiments/delete_the_absolute/) (7/7 gates; `n=4` Lean regression, not a taxonomy promotion)
+- Companion census: [`experiments/eml_fiber_spectrum/`](../../experiments/eml_fiber_spectrum/) (constant grammar through `k=6`; US-4′ withheld)
 
 **Status.** Lean core kernel-checked (Lean 4.31, no Mathlib, zero `sorry`). Finite symmetry-matching instrument banked. US-4′ and the universal-calculus claim (Possibility 1) are withheld.
 

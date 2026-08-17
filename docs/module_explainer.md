@@ -10,16 +10,17 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 
 | Path | Responsibility |
 |---|---|
-| `experiments/` | 66 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
+| `experiments/` | 94 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
 | `papers/` | Paper sources (`paper.md`), figures, shareable PDFs |
 | `scripts/` | 138 Python ops modules: quality, contracts, provenance, PDF/figure builders, summarizers |
-| `tests/` | 143 root test files collected together by pytest (`unittest`-style and pytest-native) |
+| `tests/` | 169 root test files collected together by pytest (`unittest`-style and pytest-native) |
 | `docs/` | Design docs, verification, handoffs, plans, reviews, solutions |
 | `docs/primers/backlogs/` | Six article-specific, source-anchored research TODOs derived from the primer PDFs |
 | `notes/` | Program-level research synthesis |
 | `references/` | Public source list; local-only full texts (gitignored subdirs) |
 | `formal/ontology-hs/` | Haskell typed ontology gate (Arc 2B) |
 | `formal/relative-identifiability/` | Dependency-free Lean 4 proofs for observational quotient factorization, obstruction, and experiment-family refinement |
+| `formal/structural-intelligence/` | Dependency-free Lean 4 cores for the SIC family, including `DeleteRepair.lean` |
 | `sites/` | Public static sites (atlas, Inquiry landing, Envelope Guard) |
 | `apps/inquiry-black-box/` | Local-first Inquiry product monorepo (Bun/Electron/MV3) |
 | `coherence-testbench/` | Separate EEG/eyetrack Phase-0 GO/KILL project |
@@ -104,6 +105,8 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_build_primer_residuals_pdf.py` | Required six-article residual source sections plus reproducible ReportLab PDF build |
 | `test_build_unified_review_superset_pdf.py` | Required four-part review synthesis, fatal-gate semantics, and deterministic ReportLab PDF build |
 | `test_cogr_wave0_pdf.py` | Wave 0 PDF builder smoke test: skips if `papers/concern_gated_retrieval_wave0/paper.md` does not yet exist (upstream report-draft has not run) or if `reportlab` is unavailable; otherwise builds into a `tmp_path` (never touches the committed PDF or the Metaphysics archive), and asserts the output starts with `%PDF`, exists, is at least 30 KB, and matches the mirrored `papers/pdf/` copy byte-for-byte. |
+| `test_delete_the_absolute.py` | Sixteen-point cube, group sizes, 4×4 representability matrix, leftover-privilege fibre counts, exact repair split, Path A/B noncommute, cycle holonomy |
+| `test_eml_fiber_spectrum.py` | Catalan census through k=6, size-2 denotation split, hand identities, US-4′ withheld |
 
 ```bash
 python3 scripts/run_quality_checks.py
@@ -134,7 +137,7 @@ environment.
 |---|---|
 | [system_design.md](system_design.md) | End-to-end design & operating model |
 | [module_explainer.md](module_explainer.md) | This catalog |
-| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 65 research packages; `experiments/common` excluded) |
+| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 94 research packages; `experiments/common` excluded) |
 | `experiment_contract_registry.json` | Authoritative 65-package coverage partition: 17 structured roots + 48 time-bounded legacy exceptions with frozen digest |
 | `program_evidence_registry.json` | 12 canonical evidence records with stable IDs, states, artifact refs, and claim links |
 | `claim_registry.json` | 12 canonical claim records with tiers, states, source refs, and bidirectional evidence links |
@@ -179,9 +182,9 @@ environment.
 
 **Legend:** **P** = `PROVENANCE.md`, **B** = `BENCHMARK_CARD.md`, **R** = `README.md`, **res** = committed `results/`.
 
-**Verification reconciliation:** 65 research packages on disk plus one shared
+**Verification reconciliation:** 94 research packages on disk plus one shared
 support package, `experiments/common`. `gen_provenance.py` intentionally excludes
-the support package and derives 65 cards/index rows; `gen_provenance.py --check`
+the support package and derives 94 cards/index rows; `gen_provenance.py --check`
 fails if any generated card, either verification index, or the site mirror drifts.
 The structured registries currently contain 12 claims and 12 evidence records.
 
@@ -227,6 +230,8 @@ Universal dispatcher: `python scripts/regen.py <name>`.
 | `passive_to_active` | P R res | Action coupling makes paraphrase geometry causally load-bearing | `modal_passive_to_active.py`, `modal_replication_sweep.py` |
 | `passive_active_phase_map` | P R res | Registered local coupling sweep: bifurcation not supported; controlled path dependence passed | `core.py`, `preregistration.md`, `experiment_manifest.json` |
 | `commitment_surface` | P R res | Commitment-first reframe: severe tests E1–E4 discriminating compatibility-augmented training + patch-CE against weakness readout on both synthetic MLP modular addition and external Pythia LoRA | See §3.1.5 |
+| `delete_the_absolute` | P R res | Exact `{0,1}^4` symmetry-matching regression of `DeleteRepair.lean`: representable iff `G_M ⊆ G_Y`; leftover privilege is 16 vs 5 fibres, not a no-go; Path A/B disagree; cycle holonomy. 7/7 gates. Not a universal calculus | `core.py`, `experiment.py` |
+| `eml_fiber_spectrum` | P R res | Constant-grammar EML census through 6 internal nodes (Catalan 197). Size is not a denotation invariant (`e-1` vs `exp(e)`). US-4′ and variable-`x` withheld | `core.py`, `experiment.py` |
 
 #### 3.1.1 `symbolic_weakness` modules
 
@@ -489,6 +494,7 @@ exhaustive counterexample search, and replayable MIDAS regression.
 | `papers/sufficient_antecedents/` | Companion paper (Theorem SA-1): taxonomy of SIC-C-c positive resolutions — each of the four known identifiability escapes (linear ICA, sparse-linear ICA, iVAE, interventional CRL) is one way of populating Theorem 4's Markov-screen antecedent via local separation + cross-`u` coherence (`paper.md`, `paper.pdf`); companion instrument `antecedent_taxonomy_pair` |
 | `papers/structural_intelligence_covering_learnability/` | Companion paper (SIC-C-c covering meta-theorem): conditional closure of SIC-C-c under the polynomial-ε-covering hypothesis on `H`, composed from Theorem 6-core (ε-covering reduction, pure-core `refinement_preserves_screen`) and Theorem 5-rate (quantitative bound). Machine-checked as `StructuralIntelligenceMathlib.sicc_covering_meta` / `sicc_covering_poly` with zero new axioms. Isolates why linear ICA, sparse-linear ICA, iVAE, interventional CRL satisfy SIC-C-c and why Locatello 2019's fully-unsupervised nonlinear ICA does not (`paper.md`); companion instrument `sicc_covering_meta_pair` |
 | `papers/structural_intelligence_foundations/` | Companion paper (SIC-A derived, finite discrete positive-support case): reduces the master fibration `(q, K)` from a posit to a theorem by composing Theorem 1 (LR-vector as `q`) + Proposition 3 (`Coarsen ⊣ Refine`) with the uniform-on-fibre kernel + Theorem CS-2 (coarsest-CSS). Machine-checked as `StructuralIntelligenceMathlib.sic_a_finite_discrete` (no new axioms; `HalmosSavage_minimality_h_extension` inherited only through the coarsestness corollary). General topological / measure-theoretic case remains open (`paper.md`); companion instrument `sica_finite_derivation_pair` |
+| `papers/delete_the_absolute/` | Master-calculus paper: delete–obstruction–repair operator; over/under-invariance taxonomy; Lean core `DeleteRepair.lean`; instruments `delete_the_absolute` and `eml_fiber_spectrum`. US-4′ and any universal cross-domain law withheld |
 
 Run:
 

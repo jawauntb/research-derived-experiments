@@ -1,5 +1,14 @@
 # Research TODO
 
+## Delete the absolute (2026-08-17)
+
+- [x] Kernel-check `DeleteRepair.lean` (no-go, cycle integration, repair split, noncommute).
+- [x] Finite symmetry-matching instrument on `{0,1}^4` (7/7 gates).
+- [x] Constant-grammar EML spectrum enumerator through `k=6` (US-4′ withheld).
+- [ ] Variable-`x` EML fiber spectrum without a 1-D invariant.
+- [ ] Assumption-surgery agent benchmark (Paper E).
+- [ ] Do not import OpenAI 2026 writeups as verified theorems.
+
 ## Obstruction-Aware Admission (2026-07-27)
 
 - [x] Freeze the exact finite target-identification recurrence, typed outcomes,
