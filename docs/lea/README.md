@@ -15,3 +15,4 @@ Do not treat this folder as a Lake package. Banked Lean still lands under
 
 How to run Lea: [`.cursor/skills/lea/SKILL.md`](../../.cursor/skills/lea/SKILL.md).
 What to prove and what not to: [`docs/next_agent_lea_handoff_2026-08-17.md`](../next_agent_lea_handoff_2026-08-17.md).
+Local install receipt: [`ENV_STATUS.md`](ENV_STATUS.md).
