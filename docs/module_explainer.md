@@ -20,7 +20,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `references/` | Public source list; local-only full texts (gitignored subdirs) |
 | `formal/ontology-hs/` | Haskell typed ontology gate (Arc 2B) |
 | `formal/relative-identifiability/` | Dependency-free Lean 4 proofs for observational quotient factorization, obstruction, and experiment-family refinement |
-| `formal/structural-intelligence/` | Dependency-free Lean 4 cores for the SIC family, including `DeleteRepair.lean` and `Compiler/SquaringSeparation.lean` |
+| `formal/structural-intelligence/` | Dependency-free Lean 4 cores for the SIC family, including `DeleteRepair.lean`, `Compiler/SquaringSeparation.lean`, and `EmlZeroIdentity.lean` |
 | `sites/` | Public static sites (atlas, Inquiry landing, Envelope Guard) |
 | `apps/inquiry-black-box/` | Local-first Inquiry product monorepo (Bun/Electron/MV3) |
 | `coherence-testbench/` | Separate EEG/eyetrack Phase-0 GO/KILL project |
@@ -497,8 +497,8 @@ exhaustive counterexample search, and replayable MIDAS regression.
 | `papers/structural_intelligence/` | Umbrella manuscript for the Structural Observatory: stochastic-fibration master object (Theorems 1, 2, 4, 5, 6, 7 + Proposition 3), SIC-A/B/C-a/C-b/C-c honest split with C-c positively resolved for four inductive-bias classes (linear ICA, sparse-linear ICA, iVAE, interventional CRL), eleven instruments (seven exact + four Monte Carlo), the ten-construct program, and the Core⊂Shell conscious/reliable-agent architecture (`paper.md`, `paper.pdf`, README) |
 | `papers/concern_as_fiber_geometry/` | Companion paper (Theorems CG-1, CG-2): exponential-family Fisher metric on the fiber + concern-holonomy characterisation of exactness (`paper.md`, `paper.pdf`); companion instrument `concern_fisher_pair` |
 | `papers/compiler_tomography/` | Companion paper (Theorems CT-1, CT-2): MDL identifiability of the shared compiler + Boltzmann ecology monotone-reward dynamics (`paper.md`, `paper.pdf`); companion instrument `compiler_tomography_pair` |
-| `papers/eml_universal_substrate/` | Contact paper: Odrzywołek EML as an instance of the SIC master object; four-seam separation on `x^(2^n)`; Gibbs fiber-mass account of access (`paper.md`); companion instrument `squaring_separation`; Lean core `Compiler/SquaringSeparation.lean` |
-| `papers/eml_us4_prime/` | Gibbs-vs-shortest on the truncated variable-`x` language; min-shell multiplicity of the exact zero identity; extra-shell transfer and gradient recovery withheld (`paper.md`); companion instrument `eml_us4_prime` |
+| `papers/eml_universal_substrate/` | Contact paper: Odrzywołek EML as an instance of the SIC master object; four-seam separation on `x^(2^n)`; Gibbs fiber-mass account of access (`paper.md`); companion instrument `squaring_separation`; Lean cores `Compiler/SquaringSeparation.lean` and `EmlZeroIdentity.lean` |
+| `papers/eml_us4_prime/` | Gibbs-vs-shortest on the truncated variable-`x` language; min-shell multiplicity of the exact zero identity; extra-shell transfer and gradient recovery withheld (`paper.md`); companion instrument `eml_us4_prime`; Lean core `EmlZeroIdentity.lean` |
 | `papers/sufficient_antecedents/` | Companion paper (Theorem SA-1): taxonomy of SIC-C-c positive resolutions — each of the four known identifiability escapes (linear ICA, sparse-linear ICA, iVAE, interventional CRL) is one way of populating Theorem 4's Markov-screen antecedent via local separation + cross-`u` coherence (`paper.md`, `paper.pdf`); companion instrument `antecedent_taxonomy_pair` |
 | `papers/structural_intelligence_covering_learnability/` | Companion paper (SIC-C-c covering meta-theorem): conditional closure of SIC-C-c under the polynomial-ε-covering hypothesis on `H`, composed from Theorem 6-core (ε-covering reduction, pure-core `refinement_preserves_screen`) and Theorem 5-rate (quantitative bound). Machine-checked as `StructuralIntelligenceMathlib.sicc_covering_meta` / `sicc_covering_poly` with zero new axioms. Isolates why linear ICA, sparse-linear ICA, iVAE, interventional CRL satisfy SIC-C-c and why Locatello 2019's fully-unsupervised nonlinear ICA does not (`paper.md`); companion instrument `sicc_covering_meta_pair` |
 | `papers/structural_intelligence_foundations/` | Companion paper (SIC-A derived, finite discrete positive-support case): reduces the master fibration `(q, K)` from a posit to a theorem by composing Theorem 1 (LR-vector as `q`) + Proposition 3 (`Coarsen ⊣ Refine`) with the uniform-on-fibre kernel + Theorem CS-2 (coarsest-CSS). Machine-checked as `StructuralIntelligenceMathlib.sic_a_finite_discrete` (no new axioms; `HalmosSavage_minimality_h_extension` inherited only through the coarsestness corollary). General topological / measure-theoretic case remains open (`paper.md`); companion instrument `sica_finite_derivation_pair` |
@@ -1140,7 +1140,8 @@ cd formal/ontology-hs && cabal test all && cabal run ontology-check
 | Path | Role |
 |---|---|
 | `StructuralIntelligence/Compiler/SquaringSeparation.lean` | Zero-analysis US-2/US-3 core, kernel-checked on Lean 4.31: Mul/Sq trees, `size+1=2·degree`, `sq^n(x)` size `n+1`, expand preserves degree, sharing circuits have max degree `≤ 2^k` |
-| `StructuralIntelligence.lean` | Root import and `#print axioms` for every named headline, including `squaring_separation` |
+| `StructuralIntelligence/EmlZeroIdentity.lean` | EML zero witness `eml(a, eml(eml(a,1),1)) = 0` from `eml(a,b):=exp(a)-ln(b)` and explicit exp/ln cancellation; no Mathlib, no `Real`/`Float`, no `sorry` |
+| `StructuralIntelligence.lean` | Root import and `#print axioms` for every named headline, including `squaring_separation` and `eml_zero_identity` |
 | `lakefile.toml` / `lean-toolchain` | Dependency-free Lean 4.31 library |
 
 ```bash

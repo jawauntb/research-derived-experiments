@@ -336,6 +336,11 @@ Gibbs fiber-mass gap (`7.8e-12` vs `4.0e-3` at `n=4`). The companion
 instrument is `experiments/squaring_separation/`; the Lean core is
 `formal/structural-intelligence/StructuralIntelligence/Compiler/SquaringSeparation.lean`
 (kernel-checked on Lean 4.31, zero `sorry`).
+The registered zero witness `eml(a, eml(eml(a,1),1)) = 0` is
+kernel-checked in
+`formal/structural-intelligence/StructuralIntelligence/EmlZeroIdentity.lean`
+from `eml(a,b):=exp(a)-ln(b)` plus exp/ln cancellation (no Mathlib,
+no `Real`/`Float`, no `Complex.log`).
 The EML-native Gibbs-vs-shortest split is now in
 `experiments/eml_us4_prime/`. Master-formula gradient recovery remains
 withheld.
