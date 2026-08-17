@@ -1,0 +1,83 @@
+{
+  "experiment_id": "eml_variable_spectrum",
+  "schema_version": "1.0",
+  "run_id": "eml_variable_spectrum_2026_08_17",
+  "producing_agent": {
+    "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+    "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+  },
+  "hypothesis": "The leaf-labeled EML grammar S → 1 | x | eml(S,S) has no 1-D integer invariant like degree. Exhaustive enumeration through 5 internal nodes matches 2^{k+1} C_k. Two equal-size trees disagree as functions on a registered positive grid. US-4′ is not tested.",
+  "primary_metric": "gates.EVS_SIZE_NOT_FUNCTION",
+  "decision": "Accept the variable-x census if and only if labeled Catalan counts match and the registered size-1 pair disagrees at x=2. Do not promote US-4′. Finite-grid agreement is not function identity.",
+  "gates": {
+    "EVS_ENUMERATION_COMPLETE": "The number of trees with k internal nodes equals 2^{k+1} C_k for each k in {0,...,5}.",
+    "EVS_SIZE_NOT_FUNCTION": "eml(x,1)=exp(x) and eml(1,x)=e-ln(x) are both 1-internal and disagree at x=2.",
+    "EVS_CONSTANT_EMBEDDING": "The all-ones trees eml(1,eml(1,1)) and eml(eml(1,1),1) are constant in x and recover e-1 vs exp(e).",
+    "EVS_GRID_DISCLOSED": "The summary records that finite-grid agreement is not function identity.",
+    "EVS_US4_PRIME_WITHHELD": "The summary flags US-4′ untested."
+  },
+  "kill_criteria": {
+    "EVS_ENUMERATION_COMPLETE": "Kill if any k in 0..5 has a count other than 2^{k+1} C_k.",
+    "EVS_SIZE_NOT_FUNCTION": "Kill if eml(x,1) and eml(1,x) agree at x=2 or fail their closed forms.",
+    "EVS_CONSTANT_EMBEDDING": "Kill if the all-ones size-2 pair fails e-1 vs exp(e) or depends on x.",
+    "EVS_GRID_DISCLOSED": "Kill if the disclosure string is missing.",
+    "EVS_US4_PRIME_WITHHELD": "Kill if the run claims US-4′ tested or passed."
+  },
+  "audit_card": {
+    "target_object": "Full binary EML trees with each leaf labeled 1 or x, evaluated as real functions of x>0.",
+    "decision": "Accept or reject: labeled Catalan census through k=5; size is not a function invariant; US-4′ remains untested.",
+    "representation": "Dataclass trees; real eval; 10-decimal quantization of the 6-point positive grid for spectrum counts only.",
+    "data_clock": "None. Closed finite language fragment, no sampling.",
+    "material_assumptions": [
+      "Leaf alphabet is {1,x}, so the constant grammar embeds.",
+      "The grid is positive; nonpositive x is out of the registered domain.",
+      "Rounded grid tuples are a computational clustering, not identity of functions.",
+      "No 1-D complete invariant is assumed or constructed."
+    ],
+    "fatal_gates": [
+      "EVS_ENUMERATION_COMPLETE",
+      "EVS_SIZE_NOT_FUNCTION",
+      "EVS_CONSTANT_EMBEDDING",
+      "EVS_GRID_DISCLOSED",
+      "EVS_US4_PRIME_WITHHELD"
+    ],
+    "decisive_controls": [
+      "labeled_catalan_count",
+      "closed_form_size_1_witness_at_x_2",
+      "all_ones_constant_embedding",
+      "us4_prime_cannot_pass"
+    ],
+    "evidence_paths": [
+      "experiments/eml_variable_spectrum/results/eml_variable_spectrum_summary.json",
+      "experiments/eml_variable_spectrum/preregistration.json",
+      "tests/test_eml_variable_spectrum.py"
+    ]
+  },
+  "mathematical_claim": {
+    "objects": {
+      "Tree": "full binary trees; leaves in {1,x}; internal node denotes eml",
+      "eml": "eml(a,b)=exp(a)-ln(b) on {b>0}",
+      "count": "2^{k+1} C_k trees with k internal nodes"
+    },
+    "types_domains_units": "Evaluations are real or undefined. No units. Support is x in the registered positive grid.",
+    "exact_claim": "There exist two 1-internal trees whose values at x=2 differ (e^2 vs e-ln(2)). For each k in 0..5 the enumerated count equals 2^{k+1} C_k. The all-ones size-2 pair recovers e-1 vs exp(e). US-4′ is not a claim of this package.",
+    "quantifiers": "Existential for the size-1 witness; universal for labeled Catalan counts on the registered bound.",
+    "assumptions": "Real evaluation; overflow/domain failures are undefined; rounding is not used for the size witness.",
+    "identification_conditions": "The size witness uses closed forms, not rounded fiber ids.",
+    "derivation_dependencies": "Odrzywołek arXiv:2603.21852 for the operator. No degree-like invariant is assumed.",
+    "coordinate_invariance": "Pretty-print is a gauge. The grid is a registered representation, not the denotation.",
+    "edge_limiting_null_cases": "k=0 is {1,x}. At x=1, eml(x,1) and eml(1,x) both equal e; the witness uses x=2. All-ones trees are constant in x."
+  },
+  "controls": [
+    "labeled_catalan_enumeration",
+    "real_domain_and_undefined",
+    "grid_disclosure",
+    "us4_prime_withheld"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": null,
+    "sampling": "exhaustive leaf-labeled trees with k<=5 internal nodes (3238 trees). Real eval on a 6-point positive grid."
+  },
+  "claim_boundary": "Accepted only as a leaf-labeled census through k=5 plus an exact same-size functional disagreement. Not US-4′. Not identity of functions. Not a 1-D invariant. Not the constant-only grammar."
+}

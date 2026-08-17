@@ -5,8 +5,15 @@
 - [x] Kernel-check `DeleteRepair.lean` (no-go, cycle integration, repair split, noncommute).
 - [x] Finite symmetry-matching instrument on `{0,1}^4` (7/7 gates).
 - [x] Constant-grammar EML spectrum enumerator through `k=6` (US-4′ withheld).
-- [ ] Variable-`x` EML fiber spectrum without a 1-D invariant.
+- [x] Variable-`x` EML fiber spectrum without a 1-D invariant.
 - [ ] Assumption-surgery agent benchmark (Paper E).
+- [ ] Do not import OpenAI 2026 writeups as verified theorems.
+
+## Variable-`x` EML spectrum (2026-08-17)
+
+- [x] Leaf-labeled census through `k=5` (`2^{k+1} C_k` = 3238).
+- [x] Exact same-size functional split `exp(x)` vs `e-ln(x)`.
+- [ ] US-4′: does truncated fiber mass predict Gibbs recovery?
 - [ ] Do not import OpenAI 2026 writeups as verified theorems.
 
 ## Obstruction-Aware Admission (2026-07-27)

@@ -111,6 +111,50 @@ Residual content:
 - Retractions or supersessions: "in principle description complexity
   is invariant" is withdrawn as a statement about formula search.
 
+## Variable-`x` EML spectrum
+
+Question: does leaf-labeled EML admit a 1-D degree-like invariant so
+the fiber can be DP'd, or is size already not a function invariant?
+
+Current regime:
+
+- Artifact types: full binary trees with leaves in `{1,x}`; real
+  `eml`; 6-point positive grid.
+- Operations: exhaustive labeled Catalan enumeration through `k=5`.
+- Gates/verifiers: five fatal EVS gates; US-4′ cannot pass.
+- Known limitations: grid is not function identity; spectrum counts
+  are computational; constant-only census is a different package.
+
+Action class:
+
+- Frame diagnosis: the monomial toy had degree; EML does not.
+- Why: `eml(x,1)` and `eml(1,x)` are the same size and different
+  functions.
+
+Experiment:
+
+- Manifest/report paths: `experiments/eml_variable_spectrum/`.
+- Positive targets: counts `2^{k+1} C_k`; closed-form split at `x=2`;
+  all-ones embedding of `e-1` vs `exp(e)`.
+- Negative controls: agreement at `x=1` is expected and not a witness.
+- Stress tests: 14 computational cross-size fibers, not identities.
+
+Gate:
+
+- Acceptance: all five fatal gates pass.
+- Withheld: US-4′; 1-D complete invariant; function identity.
+
+Results:
+
+- Accepted: 3238 trees; 2789 numerical fibers; size-1 split banked.
+- Key metrics: max fiber 12; 280 all-undefined; distinct-by-`k`
+  `2,4,16,78,412,2293`.
+
+Residual content:
+
+- Old regime: degree / shortest depth as the access key.
+- New: fiber spectrum of functions; US-4′ still the next test.
+
 ## Obstruction-Aware Admission V0
 
 Question: can a finite bounded agent choose the next permitted experiment by

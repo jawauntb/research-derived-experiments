@@ -10,10 +10,10 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 
 | Path | Responsibility |
 |---|---|
-| `experiments/` | 95 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
+| `experiments/` | 96 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
 | `papers/` | Paper sources (`paper.md`), figures, shareable PDFs |
 | `scripts/` | 138 Python ops modules: quality, contracts, provenance, PDF/figure builders, summarizers |
-| `tests/` | 170 root test files collected together by pytest (`unittest`-style and pytest-native) |
+| `tests/` | 171 root test files collected together by pytest (`unittest`-style and pytest-native) |
 | `docs/` | Design docs, verification, handoffs, plans, reviews, solutions |
 | `docs/primers/backlogs/` | Six article-specific, source-anchored research TODOs derived from the primer PDFs |
 | `notes/` | Program-level research synthesis |
@@ -108,6 +108,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_cogr_wave0_pdf.py` | Wave 0 PDF builder smoke test: skips if `papers/concern_gated_retrieval_wave0/paper.md` does not yet exist (upstream report-draft has not run) or if `reportlab` is unavailable; otherwise builds into a `tmp_path` (never touches the committed PDF or the Metaphysics archive), and asserts the output starts with `%PDF`, exists, is at least 30 KB, and matches the mirrored `papers/pdf/` copy byte-for-byte. |
 | `test_delete_the_absolute.py` | Sixteen-point cube, group sizes, 4×4 representability matrix, leftover-privilege fibre counts, exact repair split, Path A/B noncommute, cycle holonomy |
 | `test_eml_fiber_spectrum.py` | Catalan census through k=6, size-2 denotation split, hand identities, US-4′ withheld |
+| `test_eml_variable_spectrum.py` | Labeled Catalan counts through k=5, size-1 functional split, constant embedding, US-4′ withheld |
 
 ```bash
 python3 scripts/run_quality_checks.py
@@ -138,8 +139,8 @@ environment.
 |---|---|
 | [system_design.md](system_design.md) | End-to-end design & operating model |
 | [module_explainer.md](module_explainer.md) | This catalog |
-| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 95 research packages; `experiments/common` excluded) |
-| `experiment_contract_registry.json` | Authoritative 95-package coverage partition: 47 structured roots + 48 time-bounded legacy exceptions with frozen digest |
+| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 96 research packages; `experiments/common` excluded) |
+| `experiment_contract_registry.json` | Authoritative 96-package coverage partition: 48 structured roots + 48 time-bounded legacy exceptions with frozen digest |
 | `program_evidence_registry.json` | 12 canonical evidence records with stable IDs, states, artifact refs, and claim links |
 | `claim_registry.json` | 12 canonical claim records with tiers, states, source refs, and bidirectional evidence links |
 | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) | Benchmark umbrella |
@@ -183,9 +184,9 @@ environment.
 
 **Legend:** **P** = `PROVENANCE.md`, **B** = `BENCHMARK_CARD.md`, **R** = `README.md`, **res** = committed `results/`.
 
-**Verification reconciliation:** 95 research packages on disk plus one shared
+**Verification reconciliation:** 96 research packages on disk plus one shared
 support package, `experiments/common`. `gen_provenance.py` intentionally excludes
-the support package and derives 95 cards/index rows; `gen_provenance.py --check`
+the support package and derives 96 cards/index rows; `gen_provenance.py --check`
 fails if any generated card, either verification index, or the site mirror drifts.
 The structured registries currently contain 12 claims and 12 evidence records.
 
@@ -234,6 +235,7 @@ Universal dispatcher: `python scripts/regen.py <name>`.
 | `commitment_surface` | P R res | Commitment-first reframe: severe tests E1–E4 discriminating compatibility-augmented training + patch-CE against weakness readout on both synthetic MLP modular addition and external Pythia LoRA | See §3.1.5 |
 | `delete_the_absolute` | P R res | Exact `{0,1}^4` symmetry-matching regression of `DeleteRepair.lean`: representable iff `G_M ⊆ G_Y`; leftover privilege is 16 vs 5 fibres, not a no-go; Path A/B disagree; cycle holonomy. 7/7 gates. Not a universal calculus | `core.py`, `experiment.py` |
 | `eml_fiber_spectrum` | P R res | Constant-grammar EML census through 6 internal nodes (Catalan 197). Size is not a denotation invariant (`e-1` vs `exp(e)`). US-4′ and variable-`x` withheld | `core.py`, `experiment.py` |
+| `eml_variable_spectrum` | P R res | Leaf-labeled EML `S → 1 \| x \| eml(S,S)` through 5 internal nodes (`2^{k+1} C_k` = 3238). Size is not a function invariant (`exp(x)` vs `e-ln(x)`). US-4′ withheld | `core.py`, `experiment.py` |
 
 #### 3.1.1 `symbolic_weakness` modules
 
@@ -1086,6 +1088,7 @@ Notable bundles:
 - `papers/relative_identifiability/` — calibrated theorem note and prior-art map for the obstruction/factorization benchmark; Markdown is the publication artifact
 - `papers/information_limited_discovery/` — calibrated counterexample-first benchmark paper, prior-art ledger, and rendered PDF; Relative Identifiability remains its standard mathematical kernel
 - `papers/obstruction_aware_admission/` — exact finite control paper, prior-art/contradiction ledger, minimum greedy counterexample, three figures, and rendered PDF; optimal decision-tree mathematics is explicitly treated as prior art
+- `papers/eml_variable_spectrum/` — leaf-labeled EML census: no degree key; size is not a function invariant; US-4′ withheld
 - Synthesis: `metaphysics_synthesis`, `metric_stack_synthesis`, literature audits/reviews
 - Review methods: `unified_citation_grounded_review` (framework, ontology, executable reviewer, and alpha-research operating system)
 - Benchmark framing: `causally_grounded_agents_benchmark`, `weakness_invariance_neurips`
