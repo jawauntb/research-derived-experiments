@@ -1335,6 +1335,35 @@
       ]
     },
     {
+      "package": "eml_us4_prime",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/eml_us4_prime/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "eml_us4_prime_2026_08_17",
+      "runs": [
+        {
+          "run_id": "eml_us4_prime_2026_08_17",
+          "publication_package": "eml_us4_prime",
+          "runtime_package": "eml_us4_prime",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/eml_us4_prime/experiment_manifest.json",
+          "report_paths": [
+            "experiments/eml_us4_prime/results/eml_us4_prime_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/eml_us4_prime/preregistration.json",
+          "preregistration_digest": "78c602e27d09d63cd32b0bd1aa94739229d3526592ac1c5ae505c03fde25685d",
+          "producing_agent": {
+            "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+            "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+          }
+        }
+      ]
+    },
+    {
       "package": "eml_variable_spectrum",
       "coverage_mode": "structured_manifest",
       "manifest_path": "experiments/eml_variable_spectrum/experiment_manifest.json",

@@ -10,10 +10,10 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 
 | Path | Responsibility |
 |---|---|
-| `experiments/` | 96 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
+| `experiments/` | 97 research packages plus `common/` shared analysis utilities; harnesses, Modal sweeps, committed `results/`, generated `PROVENANCE.md` |
 | `papers/` | Paper sources (`paper.md`), figures, shareable PDFs |
 | `scripts/` | 138 Python ops modules: quality, contracts, provenance, PDF/figure builders, summarizers |
-| `tests/` | 171 root test files collected together by pytest (`unittest`-style and pytest-native) |
+| `tests/` | 172 root test files collected together by pytest (`unittest`-style and pytest-native) |
 | `docs/` | Design docs, verification, handoffs, plans, reviews, solutions |
 | `docs/primers/backlogs/` | Six article-specific, source-anchored research TODOs derived from the primer PDFs |
 | `notes/` | Program-level research synthesis |
@@ -109,6 +109,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_delete_the_absolute.py` | Sixteen-point cube, group sizes, 4×4 representability matrix, leftover-privilege fibre counts, exact repair split, Path A/B noncommute, cycle holonomy |
 | `test_eml_fiber_spectrum.py` | Catalan census through k=6, size-2 denotation split, hand identities, US-4′ withheld |
 | `test_eml_variable_spectrum.py` | Labeled Catalan counts through k=5, size-1 functional split, constant embedding, US-4′ withheld |
+| `test_eml_us4_prime.py` | Inherited labeled Catalan counts, exact zero identity, k=3 Φ ratio ≥ 2, extra-shell factor < 1.05, gradient recovery withheld |
 
 ```bash
 python3 scripts/run_quality_checks.py
@@ -139,8 +140,8 @@ environment.
 |---|---|
 | [system_design.md](system_design.md) | End-to-end design & operating model |
 | [module_explainer.md](module_explainer.md) | This catalog |
-| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 96 research packages; `experiments/common` excluded) |
-| `experiment_contract_registry.json` | Authoritative 96-package coverage partition: 48 structured roots + 48 time-bounded legacy exceptions with frozen digest |
+| [verification.md](verification.md) / `verification.json` | Provenance index (auto-generated from all 97 research packages; `experiments/common` excluded) |
+| `experiment_contract_registry.json` | Authoritative 97-package coverage partition: 49 structured roots + 48 time-bounded legacy exceptions with frozen digest |
 | `program_evidence_registry.json` | 12 canonical evidence records with stable IDs, states, artifact refs, and claim links |
 | `claim_registry.json` | 12 canonical claim records with tiers, states, source refs, and bidirectional evidence links |
 | [causally_grounded_agents_benchmark.md](causally_grounded_agents_benchmark.md) | Benchmark umbrella |
@@ -184,9 +185,9 @@ environment.
 
 **Legend:** **P** = `PROVENANCE.md`, **B** = `BENCHMARK_CARD.md`, **R** = `README.md`, **res** = committed `results/`.
 
-**Verification reconciliation:** 96 research packages on disk plus one shared
+**Verification reconciliation:** 97 research packages on disk plus one shared
 support package, `experiments/common`. `gen_provenance.py` intentionally excludes
-the support package and derives 96 cards/index rows; `gen_provenance.py --check`
+the support package and derives 97 cards/index rows; `gen_provenance.py --check`
 fails if any generated card, either verification index, or the site mirror drifts.
 The structured registries currently contain 12 claims and 12 evidence records.
 
@@ -236,6 +237,7 @@ Universal dispatcher: `python scripts/regen.py <name>`.
 | `delete_the_absolute` | P R res | Exact `{0,1}^4` symmetry-matching regression of `DeleteRepair.lean`: representable iff `G_M ⊆ G_Y`; leftover privilege is 16 vs 5 fibres, not a no-go; Path A/B disagree; cycle holonomy. 7/7 gates. Not a universal calculus | `core.py`, `experiment.py` |
 | `eml_fiber_spectrum` | P R res | Constant-grammar EML census through 6 internal nodes (Catalan 197). Size is not a denotation invariant (`e-1` vs `exp(e)`). US-4′ and variable-`x` withheld | `core.py`, `experiment.py` |
 | `eml_variable_spectrum` | P R res | Leaf-labeled EML `S → 1 \| x \| eml(S,S)` through 5 internal nodes (`2^{k+1} C_k` = 3238). Size is not a function invariant (`exp(x)` vs `e-ln(x)`). US-4′ withheld | `core.py`, `experiment.py` |
+| `eml_us4_prime` | P R res | Gibbs-vs-shortest on that language: k=3 finite Φ ratio 2.016 via min-shell multiplicity of the exact zero identity. Extra shells < 1% mass. Master-formula gradient recovery withheld | `core.py`, `experiment.py` |
 
 #### 3.1.1 `symbolic_weakness` modules
 
@@ -496,6 +498,7 @@ exhaustive counterexample search, and replayable MIDAS regression.
 | `papers/concern_as_fiber_geometry/` | Companion paper (Theorems CG-1, CG-2): exponential-family Fisher metric on the fiber + concern-holonomy characterisation of exactness (`paper.md`, `paper.pdf`); companion instrument `concern_fisher_pair` |
 | `papers/compiler_tomography/` | Companion paper (Theorems CT-1, CT-2): MDL identifiability of the shared compiler + Boltzmann ecology monotone-reward dynamics (`paper.md`, `paper.pdf`); companion instrument `compiler_tomography_pair` |
 | `papers/eml_universal_substrate/` | Contact paper: Odrzywołek EML as an instance of the SIC master object; four-seam separation on `x^(2^n)`; Gibbs fiber-mass account of access (`paper.md`); companion instrument `squaring_separation`; Lean core `Compiler/SquaringSeparation.lean` |
+| `papers/eml_us4_prime/` | Gibbs-vs-shortest on the truncated variable-`x` language; min-shell multiplicity of the exact zero identity; extra-shell transfer and gradient recovery withheld (`paper.md`); companion instrument `eml_us4_prime` |
 | `papers/sufficient_antecedents/` | Companion paper (Theorem SA-1): taxonomy of SIC-C-c positive resolutions — each of the four known identifiability escapes (linear ICA, sparse-linear ICA, iVAE, interventional CRL) is one way of populating Theorem 4's Markov-screen antecedent via local separation + cross-`u` coherence (`paper.md`, `paper.pdf`); companion instrument `antecedent_taxonomy_pair` |
 | `papers/structural_intelligence_covering_learnability/` | Companion paper (SIC-C-c covering meta-theorem): conditional closure of SIC-C-c under the polynomial-ε-covering hypothesis on `H`, composed from Theorem 6-core (ε-covering reduction, pure-core `refinement_preserves_screen`) and Theorem 5-rate (quantitative bound). Machine-checked as `StructuralIntelligenceMathlib.sicc_covering_meta` / `sicc_covering_poly` with zero new axioms. Isolates why linear ICA, sparse-linear ICA, iVAE, interventional CRL satisfy SIC-C-c and why Locatello 2019's fully-unsupervised nonlinear ICA does not (`paper.md`); companion instrument `sicc_covering_meta_pair` |
 | `papers/structural_intelligence_foundations/` | Companion paper (SIC-A derived, finite discrete positive-support case): reduces the master fibration `(q, K)` from a posit to a theorem by composing Theorem 1 (LR-vector as `q`) + Proposition 3 (`Coarsen ⊣ Refine`) with the uniform-on-fibre kernel + Theorem CS-2 (coarsest-CSS). Machine-checked as `StructuralIntelligenceMathlib.sic_a_finite_discrete` (no new axioms; `HalmosSavage_minimality_h_extension` inherited only through the coarsestness corollary). General topological / measure-theoretic case remains open (`paper.md`); companion instrument `sica_finite_derivation_pair` |
@@ -1089,6 +1092,7 @@ Notable bundles:
 - `papers/information_limited_discovery/` — calibrated counterexample-first benchmark paper, prior-art ledger, and rendered PDF; Relative Identifiability remains its standard mathematical kernel
 - `papers/obstruction_aware_admission/` — exact finite control paper, prior-art/contradiction ledger, minimum greedy counterexample, three figures, and rendered PDF; optimal decision-tree mathematics is explicitly treated as prior art
 - `papers/eml_variable_spectrum/` — leaf-labeled EML census: no degree key; size is not a function invariant; US-4′ withheld
+- `papers/eml_us4_prime/` — Gibbs mass is not shortest depth on the truncated variable-`x` language; extra-shell transfer and gradient recovery withheld
 - Synthesis: `metaphysics_synthesis`, `metric_stack_synthesis`, literature audits/reviews
 - Review methods: `unified_citation_grounded_review` (framework, ontology, executable reviewer, and alpha-research operating system)
 - Benchmark framing: `causally_grounded_agents_benchmark`, `weakness_invariance_neurips`
