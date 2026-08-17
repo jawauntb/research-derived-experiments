@@ -15,6 +15,7 @@
 - [x] Exact same-size functional split `exp(x)` vs `e-ln(x)`.
 - [x] US-4′ Gibbs half: truncated fiber mass is not shortest depth (`k=3` ratio 2.016).
 - [x] US-4′ gradient half: matching-skeleton GD ranks zero 8/8 vs singleton 6/8 (`phi_holds` at this bound; not the neural bootstrap).
+- [x] US-4′ unknown-skeleton half: all 80 size-3 trees, GD 7 vs 7 (`min_size_governs`). Φ does not transfer when the tree is unknown.
 - [ ] Do not import OpenAI 2026 writeups as verified theorems.
 
 ## Obstruction-Aware Admission (2026-07-27)

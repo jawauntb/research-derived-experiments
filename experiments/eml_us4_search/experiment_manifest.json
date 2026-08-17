@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "eml_us4_search",
+  "hypothesis": "On the registered size-3 EML pair, blind GD over every size-3 skeleton still recovers the fat zero target from more skeletons than the thin singleton. If the skeleton counts are equal, reject Φ-predicts-unknown-skeleton-GD at this bound.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "exact_multiplicity",
+      "description": "Unweighted exact hits must stay 2 vs 1. That is the Gibbs control, not the headline."
+    },
+    {
+      "control_id": "full_size_three_census",
+      "description": "Every labeled size-3 tree is tried, not only the known matching formulas."
+    },
+    {
+      "control_id": "perturbed_correct_optimizer",
+      "description": "GD from a small perturbation of the all-ones weights on the true zero skeleton must succeed, or withhold."
+    },
+    {
+      "control_id": "not_gibbs_sampler",
+      "description": "The process is GD on skeletons, not a Gibbs draw from the census."
+    }
+  ],
+  "seeds": [0, 1, 2, 3],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/eml_us4_search/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "US4S_ENUMERATION",
+      "criterion": "The size-3 census has 80 trees and both targets have min_internal=3."
+    },
+    {
+      "gate_id": "US4S_EXACT_CONTROL",
+      "criterion": "Exact unweighted hits are 2 for zero and 1 for thin."
+    },
+    {
+      "gate_id": "US4S_PROCESS_IS_NOT_GIBBS",
+      "criterion": "The run discloses that recovery is GD on every skeleton."
+    },
+    {
+      "gate_id": "US4S_NOT_MATCHING_ONLY",
+      "criterion": "Wrong skeletons are included."
+    },
+    {
+      "gate_id": "US4S_PERTURBED_CORRECT",
+      "criterion": "At least one perturbed-correct trial on the true zero skeleton succeeds."
+    },
+    {
+      "gate_id": "US4S_RANKING_RECORDED",
+      "criterion": "The ranking is recorded and is not withheld_optimizer."
+    },
+    {
+      "gate_id": "US4S_CLAIM_BOUNDARY",
+      "criterion": "The run does not claim the neural bootstrap."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/eml_us4_search/results/eml_us4_search_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/eml_us4_search/preregistration.json",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/eml_us4_search/paper.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

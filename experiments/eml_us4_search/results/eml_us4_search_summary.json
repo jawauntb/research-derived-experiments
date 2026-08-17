@@ -1,0 +1,236 @@
+{
+  "citations": [
+    "Odrzywo\u0142ek, A. (2026). All elementary functions from a single binary operator. arXiv:2603.21852."
+  ],
+  "experiment_id": "eml_us4_search",
+  "gates": {
+    "US4S_CLAIM_BOUNDARY": true,
+    "US4S_ENUMERATION": true,
+    "US4S_EXACT_CONTROL": true,
+    "US4S_NOT_MATCHING_ONLY": true,
+    "US4S_PERTURBED_CORRECT": true,
+    "US4S_PROCESS_IS_NOT_GIBBS": true,
+    "US4S_RANKING_RECORDED": true
+  },
+  "process_disclosure": "Recovery is blind GD on every size-3 skeleton in the variable-x grammar, including wrong trees.  It is not a Gibbs sampler, not matching-skeleton-only, and not Odrzywo\u0142ek's neural bootstrap.",
+  "producing_agent": {
+    "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+    "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+  },
+  "ranking": {
+    "rule": "Compare n_gd_skeletons over all size-3 trees.  A skeleton counts if any of the registered blind seeds recovers the target.  Perturbed-correct on the true zero skeleton must succeed or withhold.  Exact unweighted 2-vs-1 is the control.",
+    "thin_extra": 6,
+    "thin_gd": 7,
+    "verdict": "min_size_governs",
+    "zero_extra": 6,
+    "zero_gd": 7
+  },
+  "registered": {
+    "n_skeletons": 80,
+    "search_k": 3,
+    "seeds": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "success_mse": 1e-06,
+    "thin_formulas": [
+      "eml(1,eml(1,eml(1,1)))"
+    ],
+    "zero_formulas": [
+      "eml(1,eml(eml(1,1),1))",
+      "eml(x,eml(eml(x,1),1))"
+    ]
+  },
+  "run_id": "eml_us4_search_2026_08_17",
+  "searches": [
+    {
+      "exact_formulas": [
+        "eml(1,eml(eml(1,1),1))",
+        "eml(x,eml(eml(x,1),1))"
+      ],
+      "extra_skeletons": [
+        "eml(1,eml(1,eml(1,1)))",
+        "eml(1,eml(eml(1,1),x))",
+        "eml(eml(1,1),eml(1,1))",
+        "eml(eml(1,eml(1,1)),1)",
+        "eml(eml(1,eml(1,x)),1)",
+        "eml(eml(eml(1,1),1),1)"
+      ],
+      "hits": [
+        {
+          "best_mse": 3.805489023537404e-08,
+          "exact": false,
+          "n_success": 4,
+          "n_trials": 4,
+          "n_weights": 4,
+          "pretty": "eml(1,eml(1,eml(1,1)))"
+        },
+        {
+          "best_mse": 3.4626271149038962e-09,
+          "exact": true,
+          "n_success": 4,
+          "n_trials": 4,
+          "n_weights": 4,
+          "pretty": "eml(1,eml(eml(1,1),1))"
+        },
+        {
+          "best_mse": 3.4599741012973477e-09,
+          "exact": false,
+          "n_success": 1,
+          "n_trials": 4,
+          "n_weights": 3,
+          "pretty": "eml(1,eml(eml(1,1),x))"
+        },
+        {
+          "best_mse": 4.424221157486971e-06,
+          "exact": true,
+          "n_success": 0,
+          "n_trials": 4,
+          "n_weights": 2,
+          "pretty": "eml(x,eml(eml(x,1),1))"
+        },
+        {
+          "best_mse": 4.143683669554682e-08,
+          "exact": false,
+          "n_success": 4,
+          "n_trials": 4,
+          "n_weights": 4,
+          "pretty": "eml(eml(1,1),eml(1,1))"
+        },
+        {
+          "best_mse": 1.4433529981254194e-10,
+          "exact": false,
+          "n_success": 4,
+          "n_trials": 4,
+          "n_weights": 4,
+          "pretty": "eml(eml(1,eml(1,1)),1)"
+        },
+        {
+          "best_mse": 4.250306747906325e-10,
+          "exact": false,
+          "n_success": 2,
+          "n_trials": 4,
+          "n_weights": 3,
+          "pretty": "eml(eml(1,eml(1,x)),1)"
+        },
+        {
+          "best_mse": 6.254338203594549e-08,
+          "exact": false,
+          "n_success": 3,
+          "n_trials": 4,
+          "n_weights": 4,
+          "pretty": "eml(eml(eml(1,1),1),1)"
+        }
+      ],
+      "n_exact": 2,
+      "n_extra_skeletons": 6,
+      "n_gd_skeletons": 7,
+      "target": "zero"
+    },
+    {
+      "exact_formulas": [
+        "eml(1,eml(1,eml(1,1)))"
+      ],
+      "extra_skeletons": [
+        "eml(1,eml(eml(1,1),1))",
+        "eml(1,eml(eml(1,1),x))",
+        "eml(x,eml(eml(x,1),1))",
+        "eml(eml(1,1),eml(1,1))",
+        "eml(eml(1,eml(1,1)),1)",
+        "eml(eml(eml(1,1),1),1)"
+      ],
+      "hits": [
+        {
+          "best_mse": 1.6737584995670948e-07,
+          "exact": true,
+          "n_success": 4,
+          "n_trials": 4,
+          "n_weights": 4,
+          "pretty": "eml(1,eml(1,eml(1,1)))"
+        },
+        {
+          "best_mse": 4.3324915046333484e-07,
+          "exact": false,
+          "n_success": 4,
+          "n_trials": 4,
+          "n_weights": 4,
+          "pretty": "eml(1,eml(eml(1,1),1))"
+        },
+        {
+          "best_mse": 4.341237662416558e-07,
+          "exact": false,
+          "n_success": 1,
+          "n_trials": 4,
+          "n_weights": 3,
+          "pretty": "eml(1,eml(eml(1,1),x))"
+        },
+        {
+          "best_mse": 2.5225089146937796e-07,
+          "exact": false,
+          "n_success": 4,
+          "n_trials": 4,
+          "n_weights": 2,
+          "pretty": "eml(x,eml(eml(x,1),1))"
+        },
+        {
+          "best_mse": 3.6475614770538075e-08,
+          "exact": false,
+          "n_success": 4,
+          "n_trials": 4,
+          "n_weights": 4,
+          "pretty": "eml(eml(1,1),eml(1,1))"
+        },
+        {
+          "best_mse": 1.0023744703093405e-08,
+          "exact": false,
+          "n_success": 4,
+          "n_trials": 4,
+          "n_weights": 4,
+          "pretty": "eml(eml(1,eml(1,1)),1)"
+        },
+        {
+          "best_mse": 2.6449297334730423e-08,
+          "exact": false,
+          "n_success": 3,
+          "n_trials": 4,
+          "n_weights": 4,
+          "pretty": "eml(eml(eml(1,1),1),1)"
+        }
+      ],
+      "n_exact": 1,
+      "n_extra_skeletons": 6,
+      "n_gd_skeletons": 7,
+      "target": "thin"
+    }
+  ],
+  "status": "pass",
+  "targets": [
+    {
+      "exact_formulas": [
+        "eml(1,eml(eml(1,1),1))",
+        "eml(x,eml(eml(x,1),1))"
+      ],
+      "is_zero": true,
+      "n_internal": 3,
+      "name": "zero",
+      "pretty": "eml(1,eml(eml(1,1),1))"
+    },
+    {
+      "exact_formulas": [
+        "eml(1,eml(1,eml(1,1)))"
+      ],
+      "is_zero": false,
+      "n_internal": 3,
+      "name": "thin",
+      "pretty": "eml(1,eml(1,eml(1,1)))"
+    }
+  ],
+  "withheld": [
+    "Odrzywo\u0142ek neural bootstrap",
+    "Gibbs-sampler tautology",
+    "Matching-skeleton-only recovery as the unknown-skeleton claim",
+    "Identity of functions from the grid except the exact zero target"
+  ]
+}

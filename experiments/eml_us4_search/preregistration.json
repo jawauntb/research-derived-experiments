@@ -1,0 +1,89 @@
+{
+  "experiment_id": "eml_us4_search",
+  "schema_version": "1.0",
+  "run_id": "eml_us4_search_2026_08_17",
+  "producing_agent": {
+    "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+    "session_ref": "bc-01a00d99-d2d8-7c5e-a8d0-d0090dfd7bdd"
+  },
+  "hypothesis": "If access is fiber mass, blind GD over every size-3 skeleton should recover the fat zero target from more skeletons than the thin singleton. Equal skeleton counts reject that transfer at this bound.",
+  "primary_metric": "ranking.verdict",
+  "decision": "Accept phi_holds only if perturbed-correct succeeds and zero_gd > thin_gd. Equal counts reject Φ-predicts-unknown-skeleton-GD (min_size_governs). thin > zero kills it. Optimizer failure withholds.",
+  "gates": {
+    "US4S_ENUMERATION": "80 size-3 trees; both targets have min_internal=3.",
+    "US4S_EXACT_CONTROL": "Unweighted exact hits are 2 vs 1.",
+    "US4S_PROCESS_IS_NOT_GIBBS": "Recovery is GD on every skeleton, not a Gibbs sampler.",
+    "US4S_NOT_MATCHING_ONLY": "Wrong skeletons are included.",
+    "US4S_PERTURBED_CORRECT": "At least one perturbed-correct trial on the true zero skeleton succeeds.",
+    "US4S_RANKING_RECORDED": "The ranking is recorded and is not withheld_optimizer.",
+    "US4S_CLAIM_BOUNDARY": "The run does not claim the neural bootstrap."
+  },
+  "kill_criteria": {
+    "US4S_ENUMERATION": "Kill if the size-3 count is not 80.",
+    "US4S_EXACT_CONTROL": "Kill if exact unweighted hits are not 2 vs 1.",
+    "US4S_PROCESS_IS_NOT_GIBBS": "Kill if the process is a Gibbs sampler.",
+    "US4S_NOT_MATCHING_ONLY": "Kill if only matching skeletons are tried.",
+    "US4S_PERTURBED_CORRECT": "Withhold if perturbed-correct is 0/4.",
+    "US4S_RANKING_RECORDED": "Kill if the verdict is missing.",
+    "US4S_CLAIM_BOUNDARY": "Kill if the run claims the neural bootstrap."
+  },
+  "audit_card": {
+    "target_object": "Blind GD recovery of two registered size-3 EML functions from every labeled size-3 skeleton.",
+    "decision": "Accept or reject: Φ still ranks unknown-skeleton GD. Matching-skeleton GD is a different process and is not reopened here.",
+    "representation": "All 80 VarTrees with 3 internal nodes; TEST_GRID from eml_variable_spectrum; same descend() as eml_us4_gradient.",
+    "data_clock": "None. Closed finite language fragment. Four registered seeds.",
+    "material_assumptions": [
+      "The targets are the US-4′ zero identity and the same-size singleton.",
+      "Exact unweighted 2-vs-1 is multiplicity, not the unknown-skeleton claim.",
+      "A Gibbs sampler of the same trees would recover Φ by definition and is forbidden.",
+      "Matching-skeleton GD is already banked and is not this test."
+    ],
+    "fatal_gates": [
+      "US4S_ENUMERATION",
+      "US4S_EXACT_CONTROL",
+      "US4S_PROCESS_IS_NOT_GIBBS",
+      "US4S_NOT_MATCHING_ONLY",
+      "US4S_PERTURBED_CORRECT",
+      "US4S_RANKING_RECORDED",
+      "US4S_CLAIM_BOUNDARY"
+    ],
+    "decisive_controls": [
+      "exact_multiplicity",
+      "full_size_three_census",
+      "perturbed_correct_optimizer",
+      "not_gibbs_sampler"
+    ],
+    "evidence_paths": [
+      "experiments/eml_us4_search/results/eml_us4_search_summary.json",
+      "experiments/eml_us4_search/preregistration.json",
+      "tests/test_eml_us4_search.py"
+    ]
+  },
+  "mathematical_claim": {
+    "objects": {
+      "Skeleton": "any size-3 EML tree in the variable-x grammar",
+      "Recovery": "MSE < 1e-6 after the registered GD on that skeleton",
+      "n_gd_skeletons": "number of skeletons with at least one successful blind seed"
+    },
+    "types_domains_units": "Counts are dimensionless. Loss is MSE on the six-point grid.",
+    "exact_claim": "The banked ranking is the preregistered comparison of n_gd_skeletons. Exact unweighted hits remain 2 vs 1 and are not the claim.",
+    "quantifiers": "Universal over the 80 size-3 trees and the registered seed list.",
+    "assumptions": "Real eml; 1-leaves learnable; x-leaves frozen; same optimizer as eml_us4_gradient.",
+    "identification_conditions": "Perturbed-correct must succeed or the ranking is withheld.",
+    "derivation_dependencies": "Odrzywołek arXiv:2603.21852. US-4′ Gibbs and matching-skeleton halves for the targets.",
+    "coordinate_invariance": "Pretty-print is a gauge. The grid is a registered representation.",
+    "edge_limiting_null_cases": "Equal n_gd_skeletons rejects the unknown-skeleton transfer. thin > zero kills it."
+  },
+  "controls": [
+    "exact_multiplicity",
+    "full_size_three_census",
+    "perturbed_correct_optimizer",
+    "not_gibbs_sampler"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": "registered list 0..3",
+    "sampling": "Exhaustive size-3 skeletons. No tree sampling."
+  },
+  "claim_boundary": "Accepted only as the preregistered ranking of unknown-skeleton GD. Not a Gibbs tautology. Not matching-skeleton GD. Not the neural bootstrap. Not a general architecture law."
+}

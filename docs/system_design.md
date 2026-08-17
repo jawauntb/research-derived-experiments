@@ -288,6 +288,10 @@ Odrzywołek's neural bootstrap.
 The algebraic zero rewrite is kernel-checked in
 `formal/structural-intelligence/StructuralIntelligence/EmlZeroIdentity.lean`
 (no Mathlib, no `Complex.log`, zero `sorry`).
+The unknown-skeleton half (`papers/eml_us4_search/`) rejects the
+transfer: blind GD on all 80 size-3 trees recovers both targets from
+7 skeletons. Matching-skeleton GD and Gibbs multiplicity stay banked
+as different processes.
 
 One directory per paper or synthesis topic, usually mirroring an experiment name.
 Common layout: `paper.md`, optional `preregistration.md` / `runbook.md`, figures,
@@ -347,6 +351,8 @@ The EML-native Gibbs-vs-shortest split is now in
 `experiments/eml_us4_gradient/`: hand-derived GD on the size-3 master
 skeleton, not a Gibbs sampler. Registered ranking: zero 8/8 vs
 singleton 6/8 (`phi_holds` at this bound; two-seed margin).
+Unknown-skeleton GD is `experiments/eml_us4_search/` and rejects the
+transfer at this bound (7 vs 7).
 
 The weakness paper also carries a theory-only companion,
 `papers/weakness_invariance_neurips/pac_bayes_weakness_sketch.md`. It derives a
@@ -1669,7 +1675,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 - **No universal research dependency specification.** The root quality gate has a complete locked dependency group, but experiment and Modal runtimes still rely on command-specific `uvx` sets or explicit Modal images.
 - **Machine-specific paths** in docs/handoffs (Doppler scope, local archives).
 - **Result fidelity depends on summarization discipline.** Gitignored JSON vs committed Markdown can drift.
-- **Structured-contract coverage is early but fail-closed.** All 98 research packages are partitioned in `docs/experiment_contract_registry.json` (50 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction. Public-artifact digest envelopes cover the E5 confirmatory JSON and E4 appendix. Clean-clone CPU reproduction is allowlisted for `bayesian_voi`, `grounded_statecharts`, `information_limited_discovery`, `mathematical_claims`, `relative_identifiability`, and `seed_bootstrap_calibration`.
+- **Structured-contract coverage is early but fail-closed.** All 99 research packages are partitioned in `docs/experiment_contract_registry.json` (51 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction. Public-artifact digest envelopes cover the E5 confirmatory JSON and E4 appendix. Clean-clone CPU reproduction is allowlisted for `bayesian_voi`, `grounded_statecharts`, `information_limited_discovery`, `mathematical_claims`, `relative_identifiability`, and `seed_bootstrap_calibration`.
 - **Paper-primary experiments** may have no committed `results/*.md`; evidence lives in the paper + local artifacts.
 - **Coherence / Inquiry / Cabal / site tests** are outside the root Python quality gate.
 - **Scientific claims are gate-bound.** Fixture smokes do not settle the program thesis.
