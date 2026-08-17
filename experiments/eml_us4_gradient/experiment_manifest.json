@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "eml_us4_gradient",
+  "hypothesis": "On two registered min-internal=3 EML targets that differ in truncated Gibbs mass Φ, master-formula GD recovery rates differ if fiber mass governs access. Equal rates reject Φ-predicts-GD at this bound. The process is GD on a master formula, not a Gibbs sampler.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "same_min_internal_3",
+      "description": "Both headline skeletons have three internal nodes and four learnable 1-leaves. Min-size cannot rank them."
+    },
+    {
+      "control_id": "exact_zero_vs_nonzero_singleton",
+      "description": "The fat target is the algebraic zero identity. The singleton is the nonzero constant e-ln(e-1)."
+    },
+    {
+      "control_id": "not_gibbs_tree_sampler",
+      "description": "Search is hand-derived GD on a known size-3 master skeleton, not a draw from the census."
+    },
+    {
+      "control_id": "perturbed_correct_optimizer_sanity",
+      "description": "Near-true all-ones weights on the zero skeleton must recover MSE < 1e-6 or the claim is withheld."
+    },
+    {
+      "control_id": "preregistered_two_sided_ranking",
+      "description": "The ranking rule is frozen before blind counts. Equal rates reject Φ-predicts-GD. Do not dress a null as a win."
+    },
+    {
+      "control_id": "local_cpu_analogue_not_neural_bootstrap",
+      "description": "The run must not claim Odrzywołek's neural bootstrap."
+    }
+  ],
+  "seeds": [0, 1, 2, 3, 4, 5, 6, 7],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/eml_us4_gradient/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "US4G_TARGETS_REGISTERED",
+      "criterion": "Both headline trees have min_internal 3; zero is 0 on the grid; singleton is not 0; the x-zero identity also holds."
+    },
+    {
+      "gate_id": "US4G_PROCESS_IS_NOT_GIBBS_SAMPLER",
+      "criterion": "The summary states GD on a master formula, not tree sampling."
+    },
+    {
+      "gate_id": "US4G_DETERMINISTIC",
+      "criterion": "Replaying the registered seeds yields the same success counts."
+    },
+    {
+      "gate_id": "US4G_RANKING",
+      "criterion": "The preregistered two-sided rule is applied and recorded. It is not chosen from the counts."
+    },
+    {
+      "gate_id": "US4G_CLAIM_BOUNDARY",
+      "criterion": "The run does not claim Odrzywołek's neural bootstrap."
+    },
+    {
+      "gate_id": "US4G_PERTURBED_CORRECT",
+      "criterion": "At least one near-true init on the zero skeleton recovers MSE < 1e-6. Failure withholds, and does not reject Φ."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/eml_us4_gradient/results/eml_us4_gradient_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/eml_us4_gradient/preregistration.json",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/eml_us4_gradient/paper.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

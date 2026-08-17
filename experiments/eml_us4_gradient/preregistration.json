@@ -1,0 +1,126 @@
+{
+  "experiment_id": "eml_us4_gradient",
+  "schema_version": "1.0",
+  "run_id": "eml_us4_gradient_2026_08_17",
+  "producing_agent": {
+    "identity": "Cursor Grok 4.6 (cloud agent, under J. Brown direction)",
+    "session_ref": "bc-b0dc5f4f-3e49-560f-bd25-5809a86ca2c1"
+  },
+  "hypothesis": "On the variable-x EML language, two min-internal=3 targets with different truncated Gibbs mass Φ have different master-formula gradient-recovery success if fiber mass governs access. Equal recovery means min-size still governs and Φ-predicts-GD dies at this bound. Singleton beating zero kills Φ-predicts-GD. This is a local-CPU analogue, not Odrzywołek's neural bootstrap, and not a Gibbs sampler of the census.",
+  "primary_metric": "ranking.claim",
+  "decision": "Apply the ranking rule below after the run, never before. Do not retune seeds, inits, steps, or the success threshold after seeing counts. If perturbed-correct fails, withhold (do not reject). If blind counts are equal, reject Φ-predicts-GD and record min-size-still-governs. Do not dress a null as a win.",
+  "registered_targets": {
+    "zero_fat": {
+      "formulas": ["eml(1,eml(eml(1,1),1))", "eml(x,eml(eml(x,1),1))"],
+      "min_internal": 3,
+      "value": "identically 0",
+      "phi_rank": "higher (two size-3 formulas)"
+    },
+    "singleton_thin": {
+      "formulas": ["eml(1,eml(1,eml(1,1)))"],
+      "min_internal": 3,
+      "value": "constant e-ln(e-1)",
+      "phi_rank": "lower (one size-3 formula)"
+    }
+  },
+  "process": {
+    "name": "master_formula_gd",
+    "not": "Gibbs sampling of the same trees",
+    "master": "The registered size-3 skeleton of each all-ones target. Every 1-leaf is a learnable positive real w_i; every x-leaf stays x. Headline comparison uses the two all-ones skeletons so both have four weights.",
+    "loss": "MSE of eml-eval versus the target grid values on TEST_GRID from experiments.eml_variable_spectrum.core: (0.25, 0.5, 1, 2, e, 4).",
+    "init": "Blind: log-uniform in (0.1, 3.0) from random.Random(seed). Perturbed-correct: w_i = exp(U(-0.1, 0.1)) about the true all-ones constants, seeds 10000+s.",
+    "optimizer": "Hand-derived reverse-mode gradients through eml(a,b)=exp(a)-ln(b). Unconstrained log-weights θ=log(w). Deterministic GD with backtracking. 200 steps, initial lr 0.15, θ clipped to [log(1e-4), log(50)].",
+    "success": "final MSE < 1e-6",
+    "seeds": [0, 1, 2, 3, 4, 5, 6, 7],
+    "n_inits": 8,
+    "ranking_margin": 1
+  },
+  "gates": {
+    "US4G_TARGETS_REGISTERED": "Both headline skeletons have min_internal 3. The two zero formulas evaluate to 0 on the grid. The singleton is not 0.",
+    "US4G_PROCESS_IS_NOT_GIBBS_SAMPLER": "The summary states that recovery is GD on a master formula, not tree sampling.",
+    "US4G_DETERMINISTIC": "The same seeds replay to the same success counts.",
+    "US4G_RANKING": "The decision rule below is applied after the run and recorded. It is not chosen from the counts.",
+    "US4G_CLAIM_BOUNDARY": "The run does not claim this is Odrzywołek's neural bootstrap.",
+    "US4G_PERTURBED_CORRECT": "Starting near the true all-ones constants of the known zero skeleton recovers the zero target (at least one of eight perturbed seeds). If this fails, the optimizer is broken: withhold, do not reject."
+  },
+  "ranking_rule": {
+    "when": "AFTER the run. Written before any blind success count is computed.",
+    "margin": "≥1 extra success on the same 8-init budget",
+    "if_zero_gt_singleton_plus_margin": "Φ-ranking holds at this bound (claim supported).",
+    "if_equal": "Withhold/reject Φ-predicts-GD. Record min-size-still-governs. Claim rejected.",
+    "if_singleton_gt_zero": "Kill Φ-predicts-GD. Claim rejected.",
+    "if_perturbed_correct_fails": "Withhold the claim. Do not reject. Do not mark a pass for Φ."
+  },
+  "kill_criteria": {
+    "US4G_TARGETS_REGISTERED": "Kill the instrument if either headline tree is not size 3, if zero is not 0, or if the singleton is 0.",
+    "US4G_PROCESS_IS_NOT_GIBBS_SAMPLER": "Kill if the run samples trees or claims a Gibbs recovery.",
+    "US4G_DETERMINISTIC": "Kill if a replay changes a success count.",
+    "US4G_RANKING": "Kill if the verdict is chosen by peeking or the rule is rewritten after counts exist.",
+    "US4G_CLAIM_BOUNDARY": "Kill if the run claims the neural bootstrap.",
+    "US4G_PERTURBED_CORRECT": "If this fails, withhold (optimizer broken). Do not treat that as evidence against Φ."
+  },
+  "audit_card": {
+    "target_object": "Master-formula gradient recovery of two registered min-internal=3 EML functions that differ in truncated Gibbs mass Φ.",
+    "decision": "Support, reject, or withhold: Φ predicts GD success at this lowest bound. Equal rates reject Φ-predicts-GD. Perturbed-correct failure withholds.",
+    "representation": "Size-3 VarTree skeletons from experiments.eml_variable_spectrum.core; 1-leaves are positive weights; x-leaves stay x; MSE on the registered 6-point positive grid.",
+    "data_clock": "None. Closed local-CPU probe. No sampling of the census. Seeds are the only randomness and are registered.",
+    "material_assumptions": [
+      "Matching-skeleton GD is a lowest-bound analogue of master-formula recovery, not Odrzywołek's neural bootstrap.",
+      "The two all-ones skeletons are the headline pair so weight dimension is matched (4 vs 4). The x-zero identity is a target check, not an extra init budget.",
+      "Log-uniform (0.1, 3.0) inits and MSE < 1e-6 are registered, not tuned after seeing ranks.",
+      "Gibbs sampling the same trees would be tautological and is forbidden.",
+      "Grid agreement is not function identity except the exact zero identity."
+    ],
+    "fatal_gates": [
+      "US4G_TARGETS_REGISTERED",
+      "US4G_PROCESS_IS_NOT_GIBBS_SAMPLER",
+      "US4G_DETERMINISTIC",
+      "US4G_RANKING",
+      "US4G_CLAIM_BOUNDARY",
+      "US4G_PERTURBED_CORRECT"
+    ],
+    "decisive_controls": [
+      "same_min_internal_3",
+      "exact_zero_vs_nonzero_singleton",
+      "not_gibbs_tree_sampler",
+      "perturbed_correct_optimizer_sanity",
+      "preregistered_two_sided_ranking",
+      "local_cpu_analogue_not_neural_bootstrap"
+    ],
+    "evidence_paths": [
+      "experiments/eml_us4_gradient/results/eml_us4_gradient_summary.json",
+      "experiments/eml_us4_gradient/preregistration.json",
+      "tests/test_eml_us4_gradient.py"
+    ]
+  },
+  "mathematical_claim": {
+    "objects": {
+      "Master": "size-3 EML skeleton; 1-leaves are weights w_i>0; x-leaves are the free variable",
+      "Loss": "mean_x (eval(master; w, x) - target(x))^2 on the registered grid",
+      "Success": "final Loss < 1e-6",
+      "Phi": "truncated Gibbs mass from the companion census; used only as the hypothesized ranker, not as a sampler"
+    },
+    "types_domains_units": "Weights are dimensionless positive reals. Loss is dimensionless MSE. Success is a Boolean. Support is the registered grid.",
+    "exact_claim": "If fiber mass governs this GD process, the zero target (higher Φ) has a strictly higher success count than the singleton (lower Φ) by at least one of eight registered inits. Equal counts reject that implication at this bound. The claim is not a theorem about Odrzywołek's bootstrap.",
+    "quantifiers": "Existential for the two registered targets. Universal for replay of the registered seeds.",
+    "assumptions": "Real eml; positive weights; matching skeletons; registered init and budget; no tree search.",
+    "identification_conditions": "Perturbed-correct must succeed or the optimizer is unidentified and the claim is withheld. Ranking uses only the two all-ones four-weight skeletons.",
+    "derivation_dependencies": "Odrzywołek arXiv:2603.21852 for eml. experiments.eml_variable_spectrum.core for parse/eval/grid. The Gibbs-half split (eml_us4_prime) motivates the target pair but is not executed here.",
+    "coordinate_invariance": "Pretty-print is a gauge. Log-weight coordinates are an optimizer gauge; success is on w=exp(θ).",
+    "edge_limiting_null_cases": "If both rates are 8/8 or 0/8, the ranking is equal and Φ-predicts-GD is rejected at this bound. If perturbed-correct is 0/8, withhold."
+  },
+  "controls": [
+    "same_min_internal_3",
+    "exact_zero_vs_nonzero_singleton",
+    "not_gibbs_tree_sampler",
+    "perturbed_correct_optimizer_sanity",
+    "preregistered_two_sided_ranking",
+    "local_cpu_analogue_not_neural_bootstrap"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": 0,
+    "sampling": "No tree sampling. 8 registered blind inits per target, log-uniform in (0.1, 3.0). Deterministic analytic GD."
+  },
+  "claim_boundary": "At most a local-CPU matching-skeleton GD ranking of two registered size-3 targets. Not Odrzywołek's neural bootstrap. Not a Gibbs-sampler result. Not function identity from the grid except the exact zero identity. Not a claim that Φ governs every optimizer."
+}
