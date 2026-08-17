@@ -15,6 +15,10 @@ from experiments.delete_repair_disanalogy.core import (
 from experiments.delete_the_absolute.core import all_worlds, is_representable
 
 
+def as_events(points: list[list[int]]) -> tuple[tuple[int, int], ...]:
+    return tuple((int(event[0]), int(event[1])) for event in points)
+
+
 class DeleteRepairDisanalogyTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -51,8 +55,8 @@ class DeleteRepairDisanalogyTest(unittest.TestCase):
         self.assertTrue(lorentz["concurrency_constant"])
         first, second = lorentz["witnesses"][0], lorentz["witnesses"][1]
         self.assertNotEqual(first["s2_e1_e2"], second["s2_e1_e2"])
-        a = tuple(tuple(event) for event in first["points"])
-        b = tuple(tuple(event) for event in second["points"])
+        a = as_events(first["points"])
+        b = as_events(second["points"])
         self.assertEqual(poset_of(a), DIAMOND)
         self.assertEqual(poset_of(b), DIAMOND)
         self.assertEqual(interval(a[1], a[2]), first["s2_e1_e2"])
