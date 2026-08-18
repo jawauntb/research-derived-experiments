@@ -1,0 +1,71 @@
+{
+  "episodes": [
+    {
+      "access_changed": true,
+      "episode_id": "sq_x4",
+      "macro": "sq",
+      "mass_base": 5,
+      "mass_ext": 14,
+      "matches_registered_mins": true,
+      "min_size_base": 7,
+      "min_size_ext": 3,
+      "n_trees_base": 9,
+      "n_trees_ext": 89,
+      "outside_fact": true,
+      "round_trip_identity": true,
+      "screens_all_invariant": true,
+      "shared_universe_ok": true,
+      "size_bound": 7,
+      "target_exponent": 4
+    },
+    {
+      "access_changed": true,
+      "episode_id": "cube_x3",
+      "macro": "cube",
+      "mass_base": 2,
+      "mass_ext": 3,
+      "matches_registered_mins": true,
+      "min_size_base": 5,
+      "min_size_ext": 2,
+      "n_trees_base": 4,
+      "n_trees_ext": 17,
+      "outside_fact": true,
+      "round_trip_identity": true,
+      "screens_all_invariant": true,
+      "shared_universe_ok": true,
+      "size_bound": 5,
+      "target_exponent": 3
+    }
+  ],
+  "experiment_id": "delete_repair_generators",
+  "gates": {
+    "GEN_CLAIM_BOUNDARY": true,
+    "GEN_RANKING_RECORDED": true,
+    "GEN_REGISTERED_MINS": true,
+    "GEN_ROUND_TRIPS": true,
+    "GEN_SHARED_UNIVERSES": true,
+    "GEN_SPECIFIED": true,
+    "GEN_TWO_EPISODES": true
+  },
+  "process_disclosure": "Two generator episodes, each exhaustively enumerated to its registered size bound, each audited against the same (q, K) and access ledgers as door 2.  Predictions registered before the run.  No sampling, no LLM.",
+  "producing_agent": {
+    "identity": "Claude Fable 5 (Cursor agent, under J. Brown direction)",
+    "session_ref": "4adbd42d-0e99-41df-b0be-7d9d5b7e3caa"
+  },
+  "ranking": {
+    "all_registered_mins_match": true,
+    "n_episodes": 2,
+    "n_outside_facts": 2,
+    "rule": "border_consolidated iff every episode is an outside fact (screens invariant, access changed, round trip identity).  border_sharpened iff exactly one episode reduces.  inconclusive otherwise.",
+    "verdict": "border_consolidated"
+  },
+  "run_id": "delete_repair_generators_2026_08_18",
+  "status": "pass",
+  "withheld": [
+    "A kill of Possibility 5's representability reading",
+    "A new master object above SIC",
+    "Continuum claims",
+    "LLM agent eval",
+    "A better language model"
+  ]
+}
