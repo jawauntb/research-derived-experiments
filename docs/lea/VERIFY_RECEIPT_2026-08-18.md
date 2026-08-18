@@ -32,10 +32,15 @@ Same method (4.29 scratch, sorry-targets at matching module paths,
 | `sections_spec_indistinguishable`, `section_swap`, `four_sections_distinct`, `four_sections_one_shadow` | `KleisliSection.lean` | **passed** | none / `propext` / none / none |
 | `levelCells_zero_distortion`, `zero_distortion_cell_in_level`, `no_coarser_on_witness` | `DialZero.lean` | **passed** | `propext` / `propext` / none |
 
-Still open in Lean: the silent-substitution general lemmas
-(`ChebyshevTilt`: `rearrange`, `tilt_pointwise`, `tilt_monotone`) are
-running through Lea; the registered witness half of
-`SilentSubstitution.lean` is drafted and waits on them.
+| `rearrange`, `tilt_pointwise` (Lea-proved), `tilt_monotone`, `monitor_constant`, `silent_substitution_witness` | `SilentSubstitution.lean` | **passed** | `propext, Quot.sound` for the Chebyshev chain; none for the invisibility lemma and the witness |
+
+The two algebraic lemmas were proved by an autonomous Lea run
+(session `8b9108d5-45b5-4729-8cfd-c4b402528938`; the run itself was
+cut down by an adapter restart after writing them — the file
+survived, the lemmas were ported verbatim, and the list-level
+Chebyshev induction was assembled on top). With this row the
+silent-substitution kernel (essay §24 item 1) is fully verified; no
+Lean work remains open from Waves 5–6.
 
 Statement hygiene held by construction: no structure literals in any
 theorem statement (the Wave 2 splitter workaround was not needed), all

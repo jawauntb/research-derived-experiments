@@ -125,7 +125,13 @@ verified twice), `MeaningVsCompany` (§7 incomparability sting),
 `WeakestAdequate` (review item 1: D13 counterexample + disclosed-order
 repair), `KleisliSection` (categorical read at its earned grade),
 `DialZero` (Theorem B D = 0 clause) — all **SafeVerify-passed**, same
-receipt. Pending: `SilentSubstitution` general lemmas (with Lea).
+receipt.
+
+Wave 6b (2026-08-18): `SilentSubstitution` — the essay's P10 kernel,
+complete and **SafeVerify-passed**: `tilt_monotone` (Theorem D finite
+core; `rearrange`/`tilt_pointwise` beneath it Lea-proved),
+`monitor_constant` and the opposed-reward witness axiom-free. No Lean
+work remains open from Waves 5–6.
 
 ### A2. Mathlib-free cores (`formal/structural-intelligence/`) — lean-proved
 

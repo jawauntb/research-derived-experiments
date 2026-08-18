@@ -81,11 +81,15 @@ actually have — has a fixed endpoint to be measured against.
 
 ## Lean status
 
-The kernel is also machine-checked in Lean (Wave 6,
-`SilentSubstitution.lean`, landing separately). Pending receipt:
-until the SafeVerify kernel-replay receipt lands in `docs/lea/`,
-every claim in this package stays labeled **python-enumerated**, per
-the repo's two-state rule (proved ≠ verified).
+**Verified.** `SilentSubstitution.lean` (Wave 6b): the general
+Chebyshev kernel `tilt_monotone` (any finite region, any monotone
+tilt — Theorem D's finite core), the invisibility lemma
+`monitor_constant` (axiom-free), and the registered opposed-reward
+witness (axiom-free) — SafeVerify kernel replay passed
+(`docs/lea/VERIFY_RECEIPT_2026-08-18.md`). The two algebraic lemmas
+`rearrange` and `tilt_pointwise` were proved by an autonomous Lea
+run and ported verbatim; the list-level induction was assembled on
+top of them. Axioms of the kernel: `propext, Quot.sound`.
 
 ## Claim boundary
 
