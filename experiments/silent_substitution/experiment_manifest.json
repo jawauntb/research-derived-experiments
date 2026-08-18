@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "silent_substitution",
+  "hypothesis": "Gate 2 of the essay 'Intention Is All You Need' holds at the kernel in the zero-leakage limit: with all eight outcomes in one compliance class the spec-level record is constant by construction, and the registered tilt w_t(x) = (r(x) + 1) ** t (t = 0..12) drives misaligned expected reward strictly up and expected principal value strictly down (7/2 to 1583088700/7083249971) while every report stays green, with the argmax mass exactly 17179869184/21249749913 at t = 12 and the aligned control (R_AL = U) strictly rising through the same channel.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "registered_value_tables_only",
+      "description": "U, R_MIS, and R_AL are literal registered tuples; nothing is sampled at run time and there is no RNG."
+    },
+    {
+      "control_id": "aligned_control_arm",
+      "description": "The aligned arm shares the channel and differs only in the reward table, isolating the reward channel as what sets the direction."
+    },
+    {
+      "control_id": "constant_record_by_construction",
+      "description": "The whole realization space is one compliance class, so the spec-level record carries zero bits by construction — the zero-leakage limit is constructed, not measured."
+    },
+    {
+      "control_id": "exact_arithmetic",
+      "description": "All weights, expectations, and masses are Fractions; no floats."
+    },
+    {
+      "control_id": "kill_does_not_fail_ci",
+      "description": "substitution_silent, substitution_visible, and inconclusive are all valid passing runs."
+    }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/silent_substitution/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "SIL_RECORD_CONSTANT",
+      "criterion": "All 13 spec-level records are identical in both arms."
+    },
+    {
+      "gate_id": "SIL_MISALIGNED_R_RISES",
+      "criterion": "E_t[R_MIS] is strictly increasing in t on the misaligned arm."
+    },
+    {
+      "gate_id": "SIL_MISALIGNED_U_FALLS",
+      "criterion": "E_t[U] is strictly decreasing in t on the misaligned arm."
+    },
+    {
+      "gate_id": "SIL_LIMIT_CONCENTRATES",
+      "criterion": "The argmax mass strictly rises and equals exactly 17179869184/21249749913 at t = 12, above the registered floor 4/5."
+    },
+    {
+      "gate_id": "SIL_ALIGNED_CONTROL",
+      "criterion": "E_t[U] is strictly increasing in t on the aligned arm."
+    },
+    {
+      "gate_id": "SIL_EXACT_ARITHMETIC",
+      "criterion": "Every weight, expectation, and mass serializes as an exact integer or fraction."
+    },
+    {
+      "gate_id": "SIL_RANKING_RECORDED",
+      "criterion": "Verdict is substitution_silent, substitution_visible, or inconclusive."
+    },
+    {
+      "gate_id": "SIL_CLAIM_BOUNDARY",
+      "criterion": "Kernel instrument only: the zero-leakage limit; no claim about real specifications' leakage, no LLM, no valence."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/silent_substitution/results/silent_substitution_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/silent_substitution/preregistration.json",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/silent_substitution/paper.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

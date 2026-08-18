@@ -427,6 +427,16 @@ oracle choice at exactly the registered minimal prefixes 1 / 2 / 6
 misspecification gap of exactly 4 for holding the wrong sequence's
 screen. Verdict `estimation_works`; counting is the entire estimator
 — no SGD, no valence, no learned representations.
+Gate 2 of the essay "Intention Is All You Need" lands at the kernel
+in `experiments/silent_substitution/`: with all eight outcomes in
+one compliance class the spec-level record is constant by
+construction, and the registered tilt `(r+1)^t` drives misaligned
+expected reward strictly up while expected principal value falls
+from 7/2 to 1583088700/7083249971 — every report green, argmax mass
+exactly 17179869184/21249749913 at t = 12 — while the aligned
+control rises through the identical channel. Verdict
+`substitution_silent`; this banks the zero-leakage limit only, and
+real-specification leakage stays the open empirical half of Gate 2.
 The close-out is `papers/sic_dynamics/` (`paper.md` for the
 instruments; `for_readers.md` for a cold reader). Wave 2 P0/P1 lemmas are
 **verified** in `formal/structural-intelligence/` (`KappaCheap`,

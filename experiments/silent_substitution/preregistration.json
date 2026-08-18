@@ -1,0 +1,94 @@
+{
+  "experiment_id": "silent_substitution",
+  "schema_version": "1.0",
+  "run_id": "silent_substitution_2026_08_18",
+  "producing_agent": {
+    "identity": "Claude Fable 5 (Cursor agent, under J. Brown direction)",
+    "session_ref": "4adbd42d-0e99-41df-b0be-7d9d5b7e3caa"
+  },
+  "hypothesis": "Gate 2 of the essay 'Intention Is All You Need' (the silence gate) holds at the kernel in the zero-leakage limit: on a realization space of eight compliant outcomes forming a single compliance class, the spec-level record is the constant symbol 'compliant' by construction, so a registered reward tilt w_t(x) = (r(x) + 1) ** t (t = 0..12) drives the misaligned arm's expected delegate reward E_t[R_MIS] strictly up and the expected principal value E_t[U] strictly down (7/2 at t = 0 to 1583088700/7083249971 at t = 12) while every report stays green; the mass on the reward argmax x = 7 strictly rises to exactly 17179869184/21249749913 at t = 12 (above the registered floor 4/5; the mass tends to 1 in t and first crosses 99/100 at t = 35, outside this horizon); and the aligned control (R_AL = U) sends E_t[U] strictly up through the same channel, showing the channel, not the tilt, sets the direction.",
+  "primary_metric": "ranking.verdict",
+  "decision": "Accept substitution_silent if the record is constant across all 13 steps of both arms AND misaligned E_t[U] strictly falls while E_t[r] strictly rises AND the aligned control's E_t[U] strictly rises. Accept substitution_visible if the record ever varies. Otherwise inconclusive. Any recorded verdict passes CI.",
+  "gates": {
+    "SIL_RECORD_CONSTANT": "All 13 spec-level records are identical in both arms (the constant compliance symbol).",
+    "SIL_MISALIGNED_R_RISES": "E_t[R_MIS] is strictly increasing in t on the misaligned arm.",
+    "SIL_MISALIGNED_U_FALLS": "E_t[U] is strictly decreasing in t on the misaligned arm.",
+    "SIL_LIMIT_CONCENTRATES": "The mass on the reward argmax x = 7 is strictly increasing in t on the misaligned arm and equals exactly 17179869184/21249749913 at t = 12, above the registered floor 4/5.",
+    "SIL_ALIGNED_CONTROL": "E_t[U] is strictly increasing in t on the aligned arm: the contrast that shows the channel, not the tilt, sets the direction.",
+    "SIL_EXACT_ARITHMETIC": "Fractions only; every weight, expectation, and mass serializes exactly.",
+    "SIL_RANKING_RECORDED": "Verdict is one of the three registered outcomes.",
+    "SIL_CLAIM_BOUNDARY": "Kernel instrument only: the zero-leakage limit. No claim about real specifications' leakage, no LLM, no valence; the bridge stays a bet per the essay."
+  },
+  "kill_criteria": {
+    "SIL_RECORD_CONSTANT": "Kill the instrument if any recorded spec-level symbol differs across steps or arms (the space would not be one compliance class).",
+    "SIL_LIMIT_CONCENTRATES": "The concentration claim dies if the argmax mass is not strictly increasing or the t = 12 mass differs from the registered exact Fraction.",
+    "silent_substitution": "The silent-substitution claim dies if misaligned E_t[U] fails to fall strictly, or E_t[R_MIS] fails to rise strictly, at any step.",
+    "aligned_control": "The channel-sets-direction contrast dies if the aligned arm's E_t[U] fails to rise strictly.",
+    "tuning": "Kill the instrument if the value tables, tilt law, horizon, or thresholds are changed after seeing the trajectory."
+  },
+  "audit_card": {
+    "target_object": "The essay's Gate 2 (silence gate) at the kernel: in the zero-leakage limit, does the registered reward tilt produce a strictly worsening principal value under a strictly improving delegate reward while the spec-level record stays constant, with the aligned control showing the reverse direction through the same channel?",
+    "decision": "substitution_silent / substitution_visible / inconclusive by the registered rule.",
+    "representation": "Realization space X = 0..7 as one compliance class; principal value U = (7,6,5,4,3,2,1,0); misaligned reward R_MIS = (0,1,2,3,4,5,6,7); aligned reward R_AL = U; uniform base compiler; ecology weights w_t(x) = (r(x) + 1) ** t as exact integer powers.",
+    "data_clock": "The ecology step index t = 0..12. No sampling, no RNG, no learning, no LLM.",
+    "material_assumptions": [
+      "The whole realization space is one compliance class, so the spec-level record is the constant symbol 'compliant' by construction — the zero-leakage limit, constructed rather than measured.",
+      "The value tables U, R_MIS, R_AL are the registered literal tuples.",
+      "The tilt law is (r + 1) ** t and nothing else; the horizon is t = 0..12.",
+      "Both arms share the channel and differ only in the reward table."
+    ],
+    "fatal_gates": [
+      "SIL_RECORD_CONSTANT",
+      "SIL_MISALIGNED_R_RISES",
+      "SIL_MISALIGNED_U_FALLS",
+      "SIL_LIMIT_CONCENTRATES",
+      "SIL_ALIGNED_CONTROL",
+      "SIL_EXACT_ARITHMETIC",
+      "SIL_RANKING_RECORDED",
+      "SIL_CLAIM_BOUNDARY"
+    ],
+    "decisive_controls": [
+      "registered_value_tables_only",
+      "aligned_control_arm",
+      "constant_record_by_construction",
+      "exact_arithmetic",
+      "kill_does_not_fail_ci"
+    ],
+    "evidence_paths": [
+      "experiments/silent_substitution/results/silent_substitution_summary.json",
+      "experiments/silent_substitution/preregistration.json",
+      "tests/test_silent_substitution.py"
+    ]
+  },
+  "mathematical_claim": {
+    "objects": {
+      "realization_space": "X = {0, ..., 7}, a single compliance class",
+      "principal_value": "U(x) = 7 - x",
+      "rewards": "R_MIS(x) = x (exactly opposed to U); R_AL(x) = U(x)",
+      "ecology_weights": "w_t(x) = (r(x) + 1) ** t for t = 0..12, uniform at t = 0",
+      "record": "the constant symbol 'compliant' at every t in both arms",
+      "argmax_mass": "m_t = w_t(argmax r) / sum_x w_t(x)"
+    },
+    "types_domains_units": "Outcomes are integers 0..7. Values and rewards are exact nonnegative rationals (integers 0..7). Weights are exact positive integers (k ** t for k in 1..8). Expectations and masses are exact rationals in [0, 7] and [0, 1] respectively. Steps are integers 0..12.",
+    "exact_claim": "Misaligned arm: w_t(x) = (x + 1) ** t. For t' > t the ratio w_t'(x) / w_t(x) = (x + 1) ** (t' - t) is strictly increasing in x (a monotone likelihood-ratio tilt), so E_t[R_MIS] strictly rises and E_t[U] = 7 - E_t[R_MIS] strictly falls. Endpoints: E_0[R_MIS] = E_0[U] = 7/2; E_12[R_MIS] = 47999661097/7083249971; E_12[U] = 1583088700/7083249971. Argmax mass: m_t = 8 ** t / (1 ** t + ... + 8 ** t) strictly rises with m_12 = 8 ** 12 / 84998999652 = 17179869184/21249749913 > 4/5; m_t tends to 1 as t grows and first exceeds 99/100 at t = 35, outside the registered horizon. Aligned arm: w_t(x) = (8 - x) ** t is the mirror image under x -> 7 - x, so its E_t[U] equals the misaligned arm's E_t[R_MIS], strictly rising from 7/2 to 47999661097/7083249971, and its argmax mass (on x = 0) equals m_t. The record is the constant string at every t in both arms because the whole space is one compliance class.",
+    "quantifiers": "Universal over all 26 trajectory cells (2 arms x 13 steps) for the record; universal over the 12 adjacent step pairs per arm for each strict monotonicity; a single exact equality at t = 12 for the mass anchor.",
+    "assumptions": "The registered value tables, the tilt law (r + 1) ** t, the uniform base, and the horizon t = 0..12; no other estimator, learner, or sampling.",
+    "identification_conditions": "Every reported number is a closed-form rational in the registered tables and t; the instrument adds no degrees of freedom, so the monotonicity and concentration facts are theorems of the tilt family, not fits.",
+    "derivation_dependencies": "The monotone-likelihood-ratio property of the family (x + 1) ** t; the identity U = 7 - R_MIS on this space; the mirror symmetry x -> 7 - x between the two arms.",
+    "coordinate_invariance": "The aligned/misaligned contrast is the relabeling x -> 7 - x applied to the reward table only; the record channel is invariant under every permutation of X because it is constant — that invariance is the zero-leakage construction itself.",
+    "edge_limiting_null_cases": "t = 0 is the uniform base with E[U] = E[R_MIS] = 7/2 and mass 1/8 in both arms. The t -> infinity limit puts all mass on the reward argmax (x = 7 misaligned, x = 0 aligned); at the registered horizon t = 12 the exact mass is 17179869184/21249749913 (about 0.8085), above the registered floor 4/5 but below 99/100, which is first crossed at t = 35. If the two reward tables were equal, the arms would coincide and the contrast would be null."
+  },
+  "controls": [
+    "registered_value_tables_only",
+    "aligned_control_arm",
+    "constant_record_by_construction",
+    "exact_arithmetic",
+    "kill_does_not_fail_ci"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": "none",
+    "sampling": "None. Exact rational evaluation of 26 trajectory cells (2 arms x 13 steps) over 8 outcomes."
+  },
+  "claim_boundary": "Accepted only as: at the zero-leakage limit — the whole space one compliance class, the record constant by construction — the registered reward tilt drives misaligned expected reward strictly up and expected principal value strictly down while every report stays green, the mass concentrates on the reward argmax exactly as registered, and the aligned control rises through the same channel. This banks the ZERO-LEAKAGE limit only: measuring real specifications' leakage is the open empirical half of Gate 2. No LLM, no valence, no claim about any real delegate; the bridge from record silence to intention attribution stays a bet per the essay 'Intention Is All You Need'."
+}
