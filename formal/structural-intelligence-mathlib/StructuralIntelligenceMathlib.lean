@@ -3,6 +3,7 @@ import StructuralIntelligenceMathlib.AG1Survival
 import StructuralIntelligenceMathlib.CT2MonotoneReward
 import StructuralIntelligenceMathlib.Theorem1MinimalSufficiency
 import StructuralIntelligenceMathlib.Theorem2RateDistortion
+import StructuralIntelligenceMathlib.ShannonFano
 import StructuralIntelligenceMathlib.Proposition3Adjunction
 import StructuralIntelligenceMathlib.CG1FisherMatrix
 import StructuralIntelligenceMathlib.CG2Holonomy
@@ -60,9 +61,9 @@ deferred:
   proved.  The `D = 0` converse
   (`Shannon1959_converse_D_zero`) is proved (zero Hamming forces
   a diagonal kernel).  The `0 < D` converse
-  (`Shannon1959_converse_uniform_hamming`) remains axiomatised —
-  Mathlib does not yet expose the Lagrangian / KKT infrastructure
-  needed to close it internally.  Cited: Shannon 1959.
+  (`Shannon1959_converse_uniform_hamming`) is proved by Fano plus
+  Jensen on binary entropy plus monotonicity of Mathlib's
+  `qaryEntropy n` on `[0, 1 - 1/n]` — not KKT.  Cited: Shannon 1959.
 
 * `StructuralIntelligenceMathlib.R_C_unit`,
   `StructuralIntelligenceMathlib.C_R_counit`, and
@@ -154,6 +155,7 @@ lane stay fast while this project takes on the real-analysis work.
 #print axioms StructuralIntelligenceMathlib.symChannel_mutualInfo_closed_form
 #print axioms StructuralIntelligenceMathlib.symChannel_expected_hamming
 #print axioms StructuralIntelligenceMathlib.Shannon1959_converse_D_zero
+#print axioms StructuralIntelligenceMathlib.Shannon1959_converse_uniform_hamming
 #print axioms StructuralIntelligenceMathlib.R_D_uniform_hamming
 #print axioms StructuralIntelligenceMathlib.R_C_unit
 #print axioms StructuralIntelligenceMathlib.C_R_counit

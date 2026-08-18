@@ -181,5 +181,6 @@ Append. Driven by "Intention Is All You Need" v3 and its review.
 - ICA file is the signed-permutation class on two coordinates, not
   Theorem 7.
 - Halmos–Savage `h`-extension is a mathlib theorem (choose-packaging).
-  Shannon converse at `D = 0` is a mathlib theorem; `0 < D` stays
-  the Shannon 1959 axiom.
+  Shannon converse at `D = 0` is a mathlib theorem; `0 < D` is
+  Fano + Jensen + `qaryEntropy` in `ShannonFano.lean` (Wave 10).
+  No project-local axiom remains in the mathlib package.

@@ -69,7 +69,7 @@ From `.cursor/skills/lea/SKILL.md`, `docs/lea/instructions.md`, `docs/lea/memory
 | RR-1 | Eight canonical failure rows each admit a repairing lift on a toy | `papers/representation_repair_calculus/paper.md` RR-1 | lean-verified (Wave 7, SafeVerify 2026-08-18) | `RepairTable.lean` (+ RR-2) | done | P0 |
 | RR-1-unique | Repairing lifts are unique / exist on a continuum | `papers/representation_repair_calculus/paper.md` RR-1 | prose-only | eight-row table is Lean (`rr1_table_well_defined`); uniqueness withheld | analytic-open | P0 |
 | CT-1-MDL | Full MDL consistency under identifiability (probabilistic) | `papers/compiler_tomography/paper.md` CT-1 | prose-only | combinatorial core only | needs-mathlib | P0 |
-| T2-converse | Shannon 1959 KKT converse for uniform-Hamming RD | mathlib package axiom | `D = 0` proved (`Shannon1959_converse_D_zero`); `0 < D` still axiomatized | `Shannon1959_converse_uniform_hamming` (axiom for `0 < D`) | needs-mathlib | P0 |
+| T2-converse | Shannon 1959 converse for uniform-Hamming RD | mathlib package | lean-proved (Wave 10; Fano + Jensen + `qaryEntropy`; not KKT; not SafeVerify) | `ShannonFano.lean` `Shannon1959_converse_uniform_hamming` | done (finite uniform Hamming) | P0 |
 | T1-HS-pack | Halmos–Savage minimality `h`-extension packaging | mathlib package | lean-proved (Wave 9; mathlib package, not SafeVerify) | `HalmosSavage_minimality_h_extension` is a theorem; no project-local axiom | done (finite discrete) | P0 |
 | TA-1-naked | Naked cocycle ↔ gluing without injectivity hypothesis | `papers/theory_atlas/paper.md` | prose-only | Lean needs injectivity | analytic-open | P0 |
 | US-4-law | Gibbs fiber mass is the access law for EML search generally | `papers/eml_universal_substrate/paper.md` US-4 | prose-only | — | analytic-open / not-a-theorem | P0 |
@@ -147,8 +147,8 @@ Wave 9 (2026-08-18): `IdentImpossibility` (`no_transcript_map_hits_both`),
 `T4FiniteCI` (`css_implies_fiber_constant`), `WeaknessP1`
 (`coverage_increases`), `IcaSignedPerm` (`ica_class_fin2`) —
 **SafeVerify-passed** (receipt §Wave 9). Halmos–Savage packaging is
-a mathlib theorem (not SafeVerify). Shannon `D = 0` converse is a
-mathlib theorem; `0 < D` stays an axiom.
+a mathlib theorem (not SafeVerify). Both Shannon converses are
+mathlib theorems (Wave 10: `ShannonFano.lean`; not SafeVerify).
 
 ### A2. Mathlib-free cores (`formal/structural-intelligence/`) — lean-proved
 
@@ -170,8 +170,8 @@ Paper A five finite facts (`DeleteRepair.*`); Theorem 4 core
 ### A3. Mathlib companion (`formal/structural-intelligence-mathlib/`) — lean-proved
 
 T1 (`exists_minimal_sufficient_finite_discrete`, no project-local
-axiom after Wave 9), T2 (`R_D_uniform_hamming`, `D = 0` proved,
-`0 < D` axiom), P3 (`proposition3_adjunction`),
+axiom), T2 (`R_D_uniform_hamming`, both converses proved; no
+project-local axiom), P3 (`proposition3_adjunction`),
 T5-rate (`theorem5_rate_bound`), AG-1 (`ag1_*`), CT-2
 (`ct2_boltzmann_raises_expected_reward`), CG-1/CG-2 (`cg1_*`, `cg2_*`),
 AA-1 (`aa1_*`), SIC-A finite (`sic_a_finite_discrete`), SIC-C-c
@@ -190,9 +190,10 @@ conditional (`sicc_covering_meta`, `sicc_covering_poly`).
 1. **Finite P0 leftovers and the P1 toys are closed.** Waves 7–9
    are SafeVerify-verified. `CONC-EST` traces stay Python. IDENT
    model scores stay Python.
-2. **Remaining axiom:** `Shannon1959_converse_uniform_hamming` for
-   `0 < D` (KKT / Lagrangian). `D = 0` is proved.
-   Halmos–Savage packaging is a theorem.
+2. **No remaining project-local axiom** in the mathlib package.
+   Halmos–Savage packaging and the Shannon `0 < D` converse are
+   theorems (`{propext, Classical.choice, Quot.sound}`). Mathlib
+   stays **proved-not-verified**.
 3. **Still open, do not fake:** measure-theoretic T4, CT-1 MDL,
    classical T7 ICA, unconditional SIC-C-c, TA-2-cover, RR-1-unique,
    WI-PB, SIC-A on general spaces.
