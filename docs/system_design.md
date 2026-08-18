@@ -419,14 +419,16 @@ Wave 5 Lean banks the doors (`MenuBlind`, `GeneratorBorder`,
 `docs/lea/VERIFY_RECEIPT_2026-08-18.md`, review resolutions in
 `docs/intention_essay_v3_corrections.md`, standing queue in
 `docs/lea/theorem_backlog.md`.
-Wave 7 (PRs #523–#525) clears the finite backlog leftovers:
-`EmlCatalan.lean` kernel-checks both EML censuses (Catalan `C_0..C_6`,
-197 trees; `2^(k+1)·C_k` for `k = 0..5`, 3238 trees) and the size-2
-symbolic split via a registered `Nat` model of the `ExpLn` fragment;
-`RepairTable.lean` kernel-checks RR-1's eight-row lift table at exact
-registered sizes; `ObstructionTaxonomy.lean` kernel-checks TA-2's
-discrete taxonomy with general classifier↔conditions equivalences.
-`CONC-EST` remains python-enumerated by receipt quarantine.
+Wave 7 (PRs #523–#525, banked in #526) clears the finite backlog
+leftovers besides concern estimation: `EmlCatalan.lean` kernel-checks
+both EML censuses (Catalan `C_0..C_6`, 197 trees; `2^(k+1)·C_k` for
+`k = 0..5`, 3238 trees) and the size-2 symbolic split;
+`RepairTable.lean` kernel-checks RR-1's eight-row lift table;
+`ObstructionTaxonomy.lean` kernel-checks TA-2's discrete taxonomy
+with general classifier↔conditions equivalences. All three
+elaborate. They are **proved, not verified** until a SafeVerify
+receipt exists. Do not call `lake lean` “verified.” `CONC-EST`
+remains python-enumerated by receipt quarantine.
 That instrument is `experiments/delete_repair_concern_estimation/`:
 concern is estimated by registered frequency counting on three
 literal 24-draw task sequences, and the plug-in choice recovers the

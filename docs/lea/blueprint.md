@@ -119,3 +119,42 @@ iff `G_q ⊆ G_Y`. Finite biconditional only; do not claim general `n`.
 
 On the Paper B swap cell, typed restore/quotient succeed and the crossed
 over-repair fails. Opposite repairs are not interchangeable.
+
+## emlFib_counts
+- kind: theorem
+- uses:
+
+Constant-grammar EML trees with `k` internal nodes equal Catalan `C_k`
+for `k = 0..6` (197 trees). Exhaustive census, not a generating-function
+proof.
+
+## emlVar_counts
+- kind: theorem
+- uses: emlFib_counts
+
+Variable-grammar EML trees with `k` internal nodes equal `2^{k+1} C_k`
+for `k = 0..5` (3238 trees).
+
+## eml_pair_diff
+- kind: theorem
+- uses:
+
+The two size-2 constant trees are distinct terms whose `ExpLn`
+denotations rewrite to `e−1` and `e^e`; the registered Nat model
+separates them. Size is not a denotation invariant.
+
+## rr1_table_well_defined
+- kind: theorem
+- uses:
+
+Each of the eight registered RR-1 toys has a broken rep that misses
+the invariant, a lift that captures it, and a minimal added-component
+set. Uniqueness and continuum lifts are withheld.
+
+## ta2_taxonomy_classifies
+- kind: theorem
+- uses:
+
+Rank/support trichotomy is exhaustive and mutually exclusive, and the
+three registered chart worlds classify as glue / boundary /
+missing-latent. Enlargement-existence is withheld.

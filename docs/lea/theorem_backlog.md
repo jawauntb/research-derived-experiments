@@ -12,7 +12,7 @@
 
 | Axis | Count (distinct claim rows below) |
 |---|---|
-| **Status** | prose-only **28** · python-enumerated **12** · lean-proved **≈55 headlines** (plus **~308** named `theorem`/`lemma` decls in-tree) · lean-verified **9** SafeVerify headlines (Wave 5's three files pending receipt) |
+| **Status** | prose-only **26** · python-enumerated **7** · lean-proved **≈60 headlines** (plus Wave 7 `EmlCatalan` / `RepairTable` / `ObstructionTaxonomy`, proved-not-verified) · lean-verified **Wave 2–6 headlines** (receipts 2026-08-17 / 2026-08-18) |
 | **Formalizability** | finite-decidable **≈70** · needs-mathlib **≈25** · analytic-open **11** · not-a-theorem/empirical **14** |
 | **Priority** | P0 **≈35** · P1 **≈40** · P2 **≈25** |
 | **Do-not-reprove** | **8** named cores + Paper 0 / Mathlib-into-cores bans |
@@ -65,14 +65,16 @@ From `.cursor/skills/lea/SKILL.md`, `docs/lea/instructions.md`, `docs/lea/memory
 | T4-prob | Measure-theoretic Theorem 4: tasks CI given common latent screen | `papers/structural_intelligence/paper.md` §2.4 | prose-only | algebraic core only | needs-mathlib | P0 |
 | T7-ICA | Classical linear-ICA unmixing identifiable up to perm/sign | `papers/structural_intelligence/paper.md` Thm 7 | prose-only | — | needs-mathlib | P0 |
 | TA-2 | Cocycle failure rank/support classifies obstruction type | `papers/theory_atlas/paper.md` TA-2 | discrete core lean-proved (Wave 7) | `ObstructionTaxonomy.lean` (+ TA-1 halves) | done (discrete); enlargement analytic-open | P0 |
+| TA-2-cover | Smallest enlarged alphabet closing the cocycle (universal-cover analogue) | `papers/theory_atlas/paper.md` TA-2 | prose-only | discrete taxonomy is Lean (`ta2_taxonomy_classifies`); enlargement withheld | analytic-open | P0 |
 | RR-1 | Eight canonical failure rows each admit a repairing lift on a toy | `papers/representation_repair_calculus/paper.md` RR-1 | lean-proved (Wave 7) | `RepairTable.lean` (+ RR-2) | done | P0 |
+| RR-1-unique | Repairing lifts are unique / exist on a continuum | `papers/representation_repair_calculus/paper.md` RR-1 | prose-only | eight-row table is Lean (`rr1_table_well_defined`); uniqueness withheld | analytic-open | P0 |
 | CT-1-MDL | Full MDL consistency under identifiability (probabilistic) | `papers/compiler_tomography/paper.md` CT-1 | prose-only | combinatorial core only | needs-mathlib | P0 |
 | T2-converse | Shannon 1959 KKT converse for uniform-Hamming RD | mathlib package axiom | prose-only (axiomatized) | `Shannon1959_converse_uniform_hamming` (axiom) | needs-mathlib | P0 |
 | T1-HS-pack | Halmos–Savage minimality `h`-extension packaging | mathlib package axiom | prose-only (axiomatized) | `HalmosSavage_minimality_h_extension` (axiom) | needs-mathlib | P0 |
 | TA-1-naked | Naked cocycle ↔ gluing without injectivity hypothesis | `papers/theory_atlas/paper.md` | prose-only | Lean needs injectivity | analytic-open | P0 |
 | US-4-law | Gibbs fiber mass is the access law for EML search generally | `papers/eml_universal_substrate/paper.md` US-4 | prose-only | — | analytic-open / not-a-theorem | P0 |
 
-### B. Python-enumerated · P0 (Wave 6 candidates — finite, mathlib-free)
+### B. Python-enumerated · P0 (finite leftovers after Wave 7)
 
 | id | claim (≤20 words) | source path | status | formalizability | priority |
 |---|---|---|---|---|---|
@@ -133,6 +135,12 @@ core; `rearrange`/`tilt_pointwise` beneath it Lea-proved),
 `monitor_constant` and the opposed-reward witness axiom-free. No Lean
 work remains open from Waves 5–6.
 
+Wave 7 (2026-08-18): `EmlCatalan` (`emlFib_counts`, `emlVar_counts`,
+`eml_pair_diff`), `RepairTable` (`rr1_table_well_defined`),
+`ObstructionTaxonomy` (`ta2_taxonomy_classifies`) — **lean-proved,
+not verified**. Files landed in #523–#525; aggregator bank is this
+INT. Do not call `lake lean` “verified.”
+
 ### A2. Mathlib-free cores (`formal/structural-intelligence/`) — lean-proved
 
 Paper A five finite facts (`DeleteRepair.*`); Theorem 4 core
@@ -145,7 +153,8 @@ Paper A five finite facts (`DeleteRepair.*`); Theorem 4 core
 (`AutocatalyticArtwork`); US-2/3 (`Compiler/SquaringSeparation`,
 **do not re-prove**); EML zero identity (`EmlZeroIdentity`,
 **do not re-prove**); Wave 5 door files (`MenuBlind`,
-`GeneratorBorder`, `ConcernChoice`).
+`GeneratorBorder`, `ConcernChoice`); Wave 7 finite leftovers
+(`EmlCatalan`, `RepairTable`, `ObstructionTaxonomy`).
 
 ### A3. Mathlib companion (`formal/structural-intelligence-mathlib/`) — lean-proved
 
@@ -166,14 +175,13 @@ conditional (`sicc_covering_meta`, `sicc_covering_poly`).
 
 ## Suggested Lea wave order (operational)
 
-1. **Bank Wave 5** — aggregator imports, SafeVerify receipts, paper
-   labels. (In progress 2026-08-18.)
-2. **Wave 7 (landed 2026-08-18, PRs #523–#525):** EML Catalan censuses
-   (`EML-fib-Ck`, `EML-var-Ck`, `EML-pair-diff` → `EmlCatalan.lean`),
-   RR-1 eight-row table (`RepairTable.lean`), TA-2 discrete taxonomy
-   (`ObstructionTaxonomy.lean`).  `CONC-EST` stays python-enumerated:
-   the 2026-08-18 receipt quarantines the estimator's sequence traces
-   as Python, and no kernel-decidable core has been carved out yet.
+1. **SafeVerify Wave 7** — replay `EmlCatalan`, `RepairTable`,
+   `ObstructionTaxonomy` on the 4.29 scratch; then relabel
+   proved → verified. Do not call the current bank verified.
+2. **Wave 8, last finite leftover:** `CONC-EST` plug-in frequency
+   estimator at registered prefixes 1 / 2 / 6. Sequence traces stay
+   Python per the 2026-08-18 receipt until a kernel-decidable core
+   is carved out.
 3. **Axiom discharge (mathlib lane):** replace or isolate
    `HalmosSavage_minimality_h_extension` and
    `Shannon1959_converse_uniform_hamming`.

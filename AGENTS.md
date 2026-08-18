@@ -33,6 +33,9 @@ for sibling lanes, or defer landing to a later integration agent.
    This repo does not have GitHub auto-merge; squash immediately.
 4. Use GitHub squash merge. Do not check out `main` in a second local
    worktree (`/tmp/us4-search` already holds it).
+5. If a sibling session dies or is abandoned, inspect its worktree,
+   commit leftover complete work, and squash-merge if the check is
+   green. Do not leave a dirty tree as "someone else's job."
 
 Do **not** merge PR **464**. Do not merge a failed check, secrets, or a
 new scientific letter this tranche did not ask for. Do not force-push
