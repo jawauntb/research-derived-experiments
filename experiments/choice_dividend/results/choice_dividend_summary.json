@@ -1,0 +1,252 @@
+{
+  "experiment_id": "choice_dividend",
+  "gates": {
+    "DIV_CLAIM_BOUNDARY": true,
+    "DIV_EXACT_ARITHMETIC": true,
+    "DIV_FLAT_ZERO": true,
+    "DIV_RANKING_RECORDED": true,
+    "DIV_SINGLETON_ZERO": true,
+    "DIV_WIDE_POSITIVE": true
+  },
+  "process_disclosure": "Five registered tasks on the sixteen worlds {0,1}^4: two singletons ({5} and {12}, U(x) = x), two wide-varying regions (the eight even worlds with U(x) = x; the eleven popcount >= 2 worlds with U(x) = popcount(x) * 4 - (x % 3)), and one wide-flat region (the eight odd worlds, U constant 5).  The choice dividend is max U over the region minus the uniform expectation, exact Fractions throughout.  The best-of-k sweep scans each region in registered ascending order.  The expected dividends (0, 0, 7, 73/11, 0) were registered before the run.  No RNG, no floats, no learner, no LLM.",
+  "producing_agent": {
+    "identity": "Claude Fable 5 (Cursor agent, under J. Brown direction)",
+    "session_ref": "4adbd42d-0e99-41df-b0be-7d9d5b7e3caa"
+  },
+  "ranking": {
+    "dividends": {
+      "even_worlds": "7",
+      "odd_flat": "0",
+      "popcount_ge2": "73/11",
+      "singleton_12": "0",
+      "singleton_5": "0"
+    },
+    "flat_zero": true,
+    "n_tasks": 5,
+    "rule": "dividend_confirmed iff all three gate families hold (singletons: dividend 0 and every gain 0; flat: dividend 0, gains <= 0, final gain 0; wide-varying: dividend > 0 matching the registered value, gains weakly increasing, final gain exactly the dividend).  dividend_refuted iff any zero-case shows a positive dividend or a wide curve fails to reach its dividend.  inconclusive otherwise.",
+    "singleton_zero": true,
+    "verdict": "dividend_confirmed",
+    "wide_positive": true
+  },
+  "run_id": "choice_dividend_2026_08_18",
+  "status": "pass",
+  "tasks": [
+    {
+      "best_value": "5",
+      "dividend": "0",
+      "dividend_matches_registered": true,
+      "expected_dividend": "0",
+      "family": "singleton",
+      "final_gain_equals_dividend": true,
+      "gain_final": "0",
+      "gain_first": "0",
+      "gains": [
+        "0"
+      ],
+      "gains_weakly_increasing": true,
+      "region": [
+        5
+      ],
+      "region_size": 1,
+      "task_id": "singleton_5",
+      "uniform_expectation": "5",
+      "value_rule": "U(x) = x",
+      "values": [
+        "5"
+      ]
+    },
+    {
+      "best_value": "12",
+      "dividend": "0",
+      "dividend_matches_registered": true,
+      "expected_dividend": "0",
+      "family": "singleton",
+      "final_gain_equals_dividend": true,
+      "gain_final": "0",
+      "gain_first": "0",
+      "gains": [
+        "0"
+      ],
+      "gains_weakly_increasing": true,
+      "region": [
+        12
+      ],
+      "region_size": 1,
+      "task_id": "singleton_12",
+      "uniform_expectation": "12",
+      "value_rule": "U(x) = x",
+      "values": [
+        "12"
+      ]
+    },
+    {
+      "best_value": "14",
+      "dividend": "7",
+      "dividend_matches_registered": true,
+      "expected_dividend": "7",
+      "family": "wide_varying",
+      "final_gain_equals_dividend": true,
+      "gain_final": "7",
+      "gain_first": "-7",
+      "gains": [
+        "-7",
+        "-5",
+        "-3",
+        "-1",
+        "1",
+        "3",
+        "5",
+        "7"
+      ],
+      "gains_weakly_increasing": true,
+      "region": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ],
+      "region_size": 8,
+      "task_id": "even_worlds",
+      "uniform_expectation": "7",
+      "value_rule": "U(x) = x",
+      "values": [
+        "0",
+        "2",
+        "4",
+        "6",
+        "8",
+        "10",
+        "12",
+        "14"
+      ]
+    },
+    {
+      "best_value": "16",
+      "dividend": "73/11",
+      "dividend_matches_registered": true,
+      "expected_dividend": "73/11",
+      "family": "wide_varying",
+      "final_gain_equals_dividend": true,
+      "gain_final": "73/11",
+      "gain_first": "-15/11",
+      "gains": [
+        "-15/11",
+        "-15/11",
+        "-15/11",
+        "18/11",
+        "18/11",
+        "18/11",
+        "18/11",
+        "18/11",
+        "18/11",
+        "18/11",
+        "73/11"
+      ],
+      "gains_weakly_increasing": true,
+      "region": [
+        3,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "region_size": 11,
+      "task_id": "popcount_ge2",
+      "uniform_expectation": "103/11",
+      "value_rule": "U(x) = popcount(x) * 4 - (x % 3)",
+      "values": [
+        "8",
+        "6",
+        "8",
+        "11",
+        "8",
+        "7",
+        "10",
+        "8",
+        "11",
+        "10",
+        "16"
+      ]
+    },
+    {
+      "best_value": "5",
+      "dividend": "0",
+      "dividend_matches_registered": true,
+      "expected_dividend": "0",
+      "family": "wide_flat",
+      "final_gain_equals_dividend": true,
+      "gain_final": "0",
+      "gain_first": "0",
+      "gains": [
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      "gains_weakly_increasing": true,
+      "region": [
+        1,
+        3,
+        5,
+        7,
+        9,
+        11,
+        13,
+        15
+      ],
+      "region_size": 8,
+      "task_id": "odd_flat",
+      "uniform_expectation": "5",
+      "value_rule": "U(x) = 5",
+      "values": [
+        "5",
+        "5",
+        "5",
+        "5",
+        "5",
+        "5",
+        "5",
+        "5"
+      ]
+    }
+  ],
+  "withheld": [
+    "Valence, agency, consciousness, phenomenology",
+    "The learner half of Gate 1 (real capability sweeps on real models) \u2014 explicitly not run here",
+    "Any region or value rule other than the five registered tasks",
+    "LLM agent eval",
+    "A better language model"
+  ],
+  "worlds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ]
+}
