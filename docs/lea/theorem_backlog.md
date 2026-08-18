@@ -91,7 +91,8 @@ From `.cursor/skills/lea/SKILL.md`, `docs/lea/instructions.md`, `docs/lea/memory
 |---|---|---|---|---|
 | WI-P1 | Group-completed coverage increases with weakness | `weakness_invariance_neurips` Prop 1 | lean-verified (Wave 9, `WeaknessP1.coverage_increases`; registered `{id, flip}` toy) | done (toy); general `G` open |
 | WI-mix | Overlapping-mixture prior mass increases with weakness | `pac_bayes_weakness_sketch.md` | lean-verified (Wave 11, `WeaknessMixture.mixture_prior_mass_increases`) | done (toy) |
-| WI-PB | PAC-Bayes–kl inequality for that prior | same §2.1 | prose-only (mass kernel is Lean) | needs-mathlib |
+| WI-PB-cert | Compatibility-indexed KL certificate `−log P(h) ≤ log |H_{≥k}| − log π_k` | same §2.1 | lean-proved-not-verified (Wave 12, `WeaknessPACBayes.weakness_kl_certificate`) | done (certificate) |
+| WI-PB | Langford–Seeger–Maurer PAC-Bayes–kl inequality | same §2.1 | prose-only (cited as `hLSM`; not discharged) | needs-mathlib |
 | CWW-1..3 | Concern-weighted Bennett weakness | `concern_weighted_weakness` | prose-only | needs-mathlib |
 | GFT-1..5 | Gauge-fixed concern transport ladder | `gauge_fixed_concern_transport` | prose-only | needs-mathlib |
 | FCQ-1..4 | Future-commitment completeness / gauge / Markov / bound | `future_commitment_quotient` | prose-only | needs-mathlib |
@@ -154,6 +155,10 @@ mathlib theorems (Wave 10: `ShannonFano.lean`; not SafeVerify).
 Wave 11 (2026-08-18): `WeaknessMixture` (`mixture_prior_mass_increases`)
 — **SafeVerify-passed** (receipt §Wave 11). PAC-Bayes-kl stays out.
 
+Wave 12 (2026-08-18): `WeaknessPACBayes` (`weakness_kl_certificate`,
+`lsm_plug_certificate`, `weakness_lsm_bound`) — **proved-not-verified**
+(receipt §Wave 12). LSM inequality stays a hypothesis.
+
 ### A2. Mathlib-free cores (`formal/structural-intelligence/`) — lean-proved
 
 Paper A five finite facts (`DeleteRepair.*`); Theorem 4 core
@@ -179,7 +184,8 @@ project-local axiom), P3 (`proposition3_adjunction`),
 T5-rate (`theorem5_rate_bound`), AG-1 (`ag1_*`), CT-2
 (`ct2_boltzmann_raises_expected_reward`), CG-1/CG-2 (`cg1_*`, `cg2_*`),
 AA-1 (`aa1_*`), SIC-A finite (`sic_a_finite_discrete`), SIC-C-c
-conditional (`sicc_covering_meta`, `sicc_covering_poly`).
+conditional (`sicc_covering_meta`, `sicc_covering_poly`), WI-PB
+certificate (`weakness_kl_certificate`; LSM stays a hypothesis).
 
 ### A4. Relative identifiability (`formal/relative-identifiability/`)
 
@@ -200,7 +206,7 @@ conditional (`sicc_covering_meta`, `sicc_covering_poly`).
    stays **proved-not-verified**.
 3. **Still open, do not fake:** measure-theoretic T4, CT-1 MDL,
    classical T7 ICA, unconditional SIC-C-c, TA-2-cover, RR-1-unique,
-   WI-PB (the kl inequality; the mixture-mass kernel is Lean),
+   WI-PB (the LSM kl inequality; the certificate is Lean),
    SIC-A on general spaces.
 4. **Never:** empirical Φ/GD/extras; Paper 0; re-proving the banned
    cores; noisy-draw CONC-EST without a preregistration.

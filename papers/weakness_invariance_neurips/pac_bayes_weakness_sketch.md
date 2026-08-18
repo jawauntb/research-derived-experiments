@@ -3,8 +3,13 @@
 Status: analytic sketch, not an empirical PAC-Bayes result.
 The finite prior-mass half on the registered `{id, flip}` toy is
 Lean-verified as `StructuralIntelligence.WeaknessMixture.mixture_prior_mass_increases`
-(Wave 11, SafeVerify 2026-08-18). The Langford–Seeger–Maurer
-PAC-Bayes-kl inequality is still prose-only.
+(Wave 11, SafeVerify 2026-08-18). The compatibility-indexed KL
+certificate is Lean-proved as
+`StructuralIntelligenceMathlib.weakness_kl_certificate` (Wave 12,
+proved-not-verified). The Langford–Seeger–Maurer PAC-Bayes-kl
+inequality is still prose-only: it is the `hLSM` hypothesis of
+`weakness_lsm_bound`, cited (Langford & Seeger 2001; Seeger 2002;
+Maurer 2004), not discharged.
 
 ## Current frame
 
@@ -230,16 +235,18 @@ Kill the proposed explanatory bridge if any of the following occurs:
 
 ## Claim boundary and next best test
 
-Current claim strength: **analytic, conditional**. The derivation proves that
-symmetry compatibility can lower a finite PAC-Bayes complexity certificate
-through smaller prior-supported classes. It does not show that the repository's
-existing weakness scores already produce tighter numerical bounds, that neural
-weakness reduces parameter-space KL, or that PAC-Bayes explains the observed OOD
-results.
+Current claim strength: **analytic, conditional**. The Lean certificate
+shows that an overlapping mixture can lower a finite KL penalty through
+smaller prior-supported classes. It does not prove Langford–Seeger–Maurer,
+does not show that the repository's existing weakness scores already
+produce tighter numerical bounds, that neural weakness reduces
+parameter-space KL, or that PAC-Bayes explains the observed OOD results.
 
-The next best test is the fully enumerated symbolic tournament above. It is
-CPU-only, exposes every class cardinality exactly, and can kill the bridge before
-any neural perturbation study is attempted.
+The remaining formal leftover on this sketch is the LSM inequality
+itself; leave it. The next empirical test is the fully enumerated
+symbolic tournament above. It is CPU-only, exposes every class
+cardinality exactly, and can kill the bridge before any neural
+perturbation study is attempted. Other P0 leftovers stay analytic-open.
 
 ## References
 

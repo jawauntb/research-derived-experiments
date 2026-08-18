@@ -1228,7 +1228,7 @@ cd formal/ontology-hs && cabal test all && cabal run ontology-check
 | `StructuralIntelligence/IdentImpossibility.lean` | Wave 9: IDENT passive bound — **verified** (SafeVerify 2026-08-18, receipt §Wave 9). Model scores stay Python |
 | `StructuralIntelligence/T4FiniteCI.lean` | Wave 9: finite fiber-CI reading of Theorem 4 — **verified**. Cites CSS; measure-theoretic T4 stays open |
 | `StructuralIntelligence/WeaknessP1.lean` | Wave 9: WI Proposition 1 on `{id, flip}` — **verified**. PAC-Bayes-kl stays out |
-| `StructuralIntelligence/WeaknessMixture.lean` | Wave 11: overlapping-mixture prior mass increases with weakness — **verified**. Not PAC-Bayes-kl |
+| `StructuralIntelligence/WeaknessMixture.lean` | Wave 11: overlapping-mixture prior mass increases with weakness — **verified**. Not PAC-Bayes-kl. Replayed after Wave 12: still SAFEVERIFY_PASSED |
 | `StructuralIntelligence/IcaSignedPerm.lean` | Wave 9: signed-permutation class on two coordinates — **verified**. Not Theorem 7 |
 | `StructuralIntelligence.lean` | Root import and `#print axioms` for every named headline, including `squaring_separation`, `eml_zero_identity`, and the Wave 7–11 headlines |
 | `lakefile.toml` / `lean-toolchain` | Dependency-free Lean 4.31 library |
@@ -1243,8 +1243,10 @@ Mathlib companion (separate Lake project; not imported by the
 mathlib-free cores). Wave 9 discharges `HalmosSavage_minimality_h_extension`
 and proves the Shannon converse at distortion `0`. Wave 10 adds
 `ShannonFano.lean` and proves the `0 < D` converse (Fano + Jensen +
-`qaryEntropy`; not KKT). No project-local axiom remains. Mathlib
-stays proved-not-verified.
+`qaryEntropy`; not KKT). Wave 12 adds `WeaknessPACBayes.lean`: the
+compatibility-indexed KL certificate and the LSM plug-in implication
+(Langford–Seeger–Maurer cited, not proved). No project-local axiom
+remains. Mathlib stays proved-not-verified.
 
 ```bash
 cd formal/structural-intelligence-mathlib && lake build

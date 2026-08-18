@@ -200,6 +200,14 @@ group-completed deployment set. Misaligned `G` stays out.
 Overlapping mixture `P = ∑ π_k U_k` on the same toy: exact mass
 increases with weakness. PAC-Bayes-kl stays out.
 
+## weakness_kl_certificate
+- kind: theorem
+- uses: mixture_prior_mass_increases
+
+Compatibility-indexed KL certificate
+`−log P(h) ≤ log |H_{≥k}| − log π_k` for the overlapping mixture.
+Mathlib lane. Langford–Seeger–Maurer stays a citation / hypothesis.
+
 ## ica_class_fin2
 - kind: theorem
 - uses:

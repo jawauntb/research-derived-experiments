@@ -17,7 +17,7 @@ that the pure-core project cannot see.
 | Project                                | Depends on          | Theorems                                                                                 |
 | -------------------------------------- | ------------------- | ---------------------------------------------------------------------------------------- |
 | `formal/structural-intelligence/`      | Lean 4 core only    | Algebraic cores: Theorems 4, 5-union-bound, 5-pigeonhole, 6-refinement, CT-1, CS-1/2, SA-1, AF-1/2, AG-2, TA-1, RR-2, AA-2 |
-| `formal/structural-intelligence-mathlib/` (this)  | Lean 4 + mathlib    | Real-analytic: Theorem 5 quantitative rate, AG-1 survival bound, CT-2 monotone-reward core, Theorem 1 (Halmos–Savage minimal sufficient statistic), Theorem 2 (Shannon rate–distortion, uniform-Hamming closed form), Proposition 3 (Coarsen ⊣ Refine adjunction), Theorem CG-1 (Fisher information = covariance of sufficient statistic), Theorem CG-2 (concern holonomy = enclosed signed area), Theorem AA-1 (Bayes-mixture predictive log-likelihood lower bound), **SIC-A derived in the finite discrete positive-support case**, **SIC-C-c covering meta-theorem (conditional)** |
+| `formal/structural-intelligence-mathlib/` (this)  | Lean 4 + mathlib    | Real-analytic: Theorem 5 quantitative rate, AG-1 survival bound, CT-2 monotone-reward core, Theorem 1 (Halmos–Savage minimal sufficient statistic), Theorem 2 (Shannon rate–distortion, uniform-Hamming closed form), Proposition 3 (Coarsen ⊣ Refine adjunction), Theorem CG-1 (Fisher information = covariance of sufficient statistic), Theorem CG-2 (concern holonomy = enclosed signed area), Theorem AA-1 (Bayes-mixture predictive log-likelihood lower bound), **SIC-A derived in the finite discrete positive-support case**, **SIC-C-c covering meta-theorem (conditional)**, **WI compatibility-indexed KL certificate (LSM cited, not proved)** |
 
 Keeping the two projects separate lets the fast Lean CI job stay fast
 (around three seconds) while this project takes on the multi-minute
@@ -232,6 +232,27 @@ mathlib build in an isolated CI lane.
 
 * `StructuralIntelligenceMathlib.R_D_uniform_hamming` — the full
   Shannon 1959 statement (both directions).  No project-local axiom.
+
+### WI PAC-Bayes certificate — `StructuralIntelligenceMathlib/WeaknessPACBayes.lean`
+
+Honesty.  Proves the algebraic KL certificate from
+`papers/weakness_invariance_neurips/pac_bayes_weakness_sketch.md`.
+The Langford–Seeger–Maurer PAC-Bayes-kl inequality is **cited, not
+proved** (Langford & Seeger, CMU-CS-01-102, 2001; Seeger, *JMLR*
+3:233–269, 2002; Maurer, arXiv:cs/0411099, 2004).
+
+* `StructuralIntelligenceMathlib.weakness_kl_certificate` —
+  for a deterministic posterior `δ_h` and any `k ≤ W(h)` with
+  `π_k > 0`, `−log P(h) ≤ log |H_{≥k}| − log π_k`.
+* `StructuralIntelligenceMathlib.lsm_plug_certificate` — if the
+  LSM numbers hold at `(klEmp, KL, m, extra)`, the certificate
+  substitutes.  Not a proof of LSM.
+* `StructuralIntelligenceMathlib.weakness_lsm_bound` — the
+  certificate plugged into the LSM shape; `hLSM` is the citation
+  and is not discharged.
+
+`#print axioms` ⊆ `{propext, Classical.choice, Quot.sound}`.
+No project-local axiom.  **Proved-not-verified.**
 
 ### Proposition 3 (Coarsen ⊣ Refine adjunction) — `StructuralIntelligenceMathlib/Proposition3Adjunction.lean`
 
@@ -530,9 +551,11 @@ introduce **zero** additional project-local axioms.
 No first-wave headline uses a project-local `axiom`.  Wave 9
 discharged Halmos–Savage packaging; Wave 10 discharged the Shannon
 `0 < D` converse (`ShannonFano.lean`, Fano + Jensen + `qaryEntropy`
-monotonicity; not KKT).  Both remain **proved-not-verified**
-(SafeVerify is the mathlib-free 4.29 lane).  `#print axioms` on
-`R_D_uniform_hamming` is `{propext, Classical.choice, Quot.sound}`.
+monotonicity; not KKT).  Wave 12 adds the WI KL certificate
+(`WeaknessPACBayes.lean`); LSM stays a hypothesis.  All remain
+**proved-not-verified** (SafeVerify is the mathlib-free 4.29 lane).
+`#print axioms` on `R_D_uniform_hamming` and
+`weakness_kl_certificate` is `{propext, Classical.choice, Quot.sound}`.
 
 The CT-2 wrapper is stated with `Z > 0` as a hypothesis rather than
 deducing it from the shape of `p` and `r`.  A cleaner version would
