@@ -52,6 +52,15 @@ Lean banking of these headlines through the Lea pipeline, and a
 registered instrument design for *learned* concern before any such
 run.
 
+## Lean status
+
+**Verified.** The cube episode is kernel-enumerated beside the sq
+replay in `GeneratorBorder.lean` (4 vs 17 trees, min 5 vs 2, mass
+2 vs 3; `generator_border_cube` uses **no axioms**), SafeVerify
+passed (`docs/lea/VERIFY_RECEIPT_2026-08-18.md`). The Lean kernel
+caught a prose transcription error the Python tests never asserted:
+the extended cube universe has 17 trees, not 9.
+
 ## Provenance
 
 `python3 experiments/delete_repair_generators/experiment.py`;

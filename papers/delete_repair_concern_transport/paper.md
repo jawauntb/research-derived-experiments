@@ -58,6 +58,14 @@ menus or this cost rule, an LLM, a new master object, Paper G.
 menu (`transport_fails`) — none observed. Equal boundaries
 (`boundary_menu_stable`) — excluded by the exact arithmetic.
 
+## Lean status
+
+**Verified.** `ConcernChoice.lean` (Wave 5) carries the transport
+half: `boundary_ext` exact at k = 14 (ε = 7/27) over the seven-screen
+menu, `mirrored_dual_ext` for reversal naturality, and
+`boundary_menu_relative` — SafeVerify passed
+(`docs/lea/VERIFY_RECEIPT_2026-08-18.md`).
+
 ## Next best test
 
 The runnable enumerations licensed by the close-out's three doors are

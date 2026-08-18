@@ -82,6 +82,15 @@ Door 1 is closed at this bound. The remaining licensed doors are the
 (q, K)-reduction audit (door 2) and concern (door 3), which are
 separate instruments.
 
+## Lean status
+
+**Verified.** `MenuBlind.lean` (Wave 5): the flips
+(`gold_flip_pair_eq`, `gold_flip_pair23`), the categorical kill
+(`menu_blind_kappa_impossible`), base-menu agreement with Wave 2 gold
+(`base_gold_consistent`), and flip-row exactness — kernel `decide`,
+axioms at most `propext`, SafeVerify kernel replay passed
+(`docs/lea/VERIFY_RECEIPT_2026-08-18.md`).
+
 ## Provenance
 
 `python3 experiments/delete_repair_menu_blind/experiment.py`;

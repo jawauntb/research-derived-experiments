@@ -411,6 +411,14 @@ is menu-stable, and the `bag`/`pair_eq` boundary is menu-relative
 enumerations licensed by the close-out's three doors are exhausted;
 remaining follow-ups are Lean banking via Lea and a registered
 instrument design for learned concern.
+Wave 5 Lean banks the doors (`MenuBlind`, `GeneratorBorder`,
+`ConcernChoice`) and Wave 6 banks the intention-essay cores
+(`CrossingUnique` — proved by an autonomous Lea run — plus
+`MeaningVsCompany`, `WeakestAdequate` (the essay's D13 repaired),
+`KleisliSection`, `DialZero`), all SafeVerify-passed; receipts in
+`docs/lea/VERIFY_RECEIPT_2026-08-18.md`, review resolutions in
+`docs/intention_essay_v3_corrections.md`, standing queue in
+`docs/lea/theorem_backlog.md`.
 That instrument is `experiments/delete_repair_concern_estimation/`:
 concern is estimated by registered frequency counting on three
 literal 24-draw task sequences, and the plug-in choice recovers the

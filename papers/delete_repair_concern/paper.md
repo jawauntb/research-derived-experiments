@@ -82,6 +82,16 @@ master object. Paper G.
 concerns collapse to one choice (concern_idle) — the registered rule
 did not. A naturality failure on the mirrored pair — none observed.
 
+## Lean status
+
+**Verified.** `ConcernChoice.lean` (Wave 5): the six registered
+choices, the sum-gap 21, and `boundary_base` exact at k = 22
+(ε = 11/27) on the full grid — kernel `decide`, integer-scaled exact
+arithmetic, SafeVerify passed
+(`docs/lea/VERIFY_RECEIPT_2026-08-18.md`). The dial's tie point is
+additionally pinned unique by `CrossingUnique.crossing_unique`,
+proved by an autonomous Lea run and verified twice.
+
 ## Next best test
 
 If this opens a program, the next severe test is concern *transport*:
