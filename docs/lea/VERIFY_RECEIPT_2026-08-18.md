@@ -156,3 +156,19 @@ The argument is Fano's inequality plus Jensen on `binEntropy` plus
 monotonicity of `qaryEntropy n` on `[0, 1 - 1/n]`. It is not a KKT
 argument. Combined with Wave 9's `D = 0` case, the mathlib package
 has **zero** project-local axioms.
+
+## Wave 11 (2026-08-18): WI overlapping-mixture prior
+
+Same method as Waves 7–9 (4.29 scratch at
+`/tmp/sv429/formal/structural-intelligence`, sorry-target via
+`gen_target.py`, `safe_verify -v target.olean submission.olean
+--disallow-partial`, `--tstack=262144`). Replay script:
+`/tmp/sv429/replay11.sh`. Log: `/tmp/sv429/verdicts11/WeaknessMixture_sv.log`.
+
+| file | verdict | headline axioms |
+|---|---|---|
+| `WeaknessMixture.lean` | **SAFEVERIFY_PASSED** (17 submission decls) | `mixture_prior_mass_increases`, `shortcut_mass`, `invariant_mass`, certificates: axiom-free |
+
+Cites `WeaknessP1.weakness`. Does not re-prove `coverage_increases`.
+Does not prove PAC-Bayes-kl or OOD transport. No `Classical.choice`,
+no `sorryAx`, no `native_decide`.

@@ -1,6 +1,10 @@
 # A Finite PAC-Bayes Bridge for Weakness
 
 Status: analytic sketch, not an empirical PAC-Bayes result.
+The finite prior-mass half on the registered `{id, flip}` toy is
+Lean-verified as `StructuralIntelligence.WeaknessMixture.mixture_prior_mass_increases`
+(Wave 11, SafeVerify 2026-08-18). The Langford–Seeger–Maurer
+PAC-Bayes-kl inequality is still prose-only.
 
 ## Current frame
 

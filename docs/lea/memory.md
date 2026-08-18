@@ -184,3 +184,13 @@ Append. Driven by "Intention Is All You Need" v3 and its review.
   Shannon converse at `D = 0` is a mathlib theorem; `0 < D` is
   Fano + Jensen + `qaryEntropy` in `ShannonFano.lean` (Wave 10).
   No project-local axiom remains in the mathlib package.
+
+## Wave 11 banked and verified (2026-08-18)
+
+- `WeaknessMixture.lean` (`mixture_prior_mass_increases`)
+  SAFEVERIFY_PASSED in the 4.29 scratch; 17 declarations;
+  axiom-free. Replay script: `/tmp/sv429/replay11.sh`.
+- Overlapping mixture `π_1 = π_2 = 1/2` on `{shortcut, invariant}`:
+  exact masses `1/4` and `3/4`; mass increases with weakness;
+  one-component certificates hold. Designed into the prior.
+- PAC-Bayes-kl and OOD stay out.

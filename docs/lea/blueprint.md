@@ -191,8 +191,14 @@ open.
 
 WI Proposition 1 on `{id, flip}` / `{p0, p1}`: the candidate that
 transports more group elements covers strictly more of the
-group-completed deployment set. PAC-Bayes and misaligned `G` stay
-out.
+group-completed deployment set. Misaligned `G` stays out.
+
+## mixture_prior_mass_increases
+- kind: theorem
+- uses: coverage_increases
+
+Overlapping mixture `P = ∑ π_k U_k` on the same toy: exact mass
+increases with weakness. PAC-Bayes-kl stays out.
 
 ## ica_class_fin2
 - kind: theorem

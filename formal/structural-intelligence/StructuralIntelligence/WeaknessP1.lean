@@ -14,7 +14,8 @@ restricted to `p0`.  A candidate *transports* `g` when it sends
 the trained point to the true label of `g · p0`.  The shortcut
 transports only `id` and covers `{p0}`.  The invariant transports
 both actions and covers `{p0, p1}`.  Misaligned / too-small /
-too-large `G` stays out.  PAC-Bayes (WI-PB) stays out.
+too-large `G` stays out.  The overlapping-mixture prior mass
+is `WeaknessMixture.lean` (Wave 11).  PAC-Bayes-kl stays out.
 
 No Mathlib.  No `native_decide`.  Kernel `decide` only.
 

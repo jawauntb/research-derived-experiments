@@ -40,6 +40,7 @@ import StructuralIntelligence.ConcernEst
 import StructuralIntelligence.IdentImpossibility
 import StructuralIntelligence.T4FiniteCI
 import StructuralIntelligence.WeaknessP1
+import StructuralIntelligence.WeaknessMixture
 import StructuralIntelligence.IcaSignedPerm
 
 /-!
@@ -241,8 +242,12 @@ remaining Structural-Intelligence companion papers:
     measure-theoretic CI stays open.
 *   `StructuralIntelligence.WeaknessP1.coverage_increases`
     — Wave 9 WI-P1 toy: the candidate that transports more of
-    `{id, flip}` covers strictly more of `{p0, p1}`.  PAC-Bayes
-    and misaligned `G` stay out.
+    `{id, flip}` covers strictly more of `{p0, p1}`.  Misaligned
+    `G` stays out.
+*   `StructuralIntelligence.WeaknessMixture.mixture_prior_mass_increases`
+    — Wave 11 WI overlapping-mixture prior: on the same toy, exact
+    mixture mass is `1/4` vs `3/4` and increases with weakness.
+    PAC-Bayes-kl and OOD stay out.
 *   `StructuralIntelligence.IcaSignedPerm.ica_class_fin2`
     — Wave 9 ICA class on two coordinates: the four signed
     permutations are legal leftovers; a dense mixture is not.
@@ -338,4 +343,5 @@ and are documented as future work in the package `README.md`.
 #print axioms StructuralIntelligence.T4FiniteCI.css_implies_fiber_constant
 #print axioms StructuralIntelligence.T4FiniteCI.registered_fiber_constant
 #print axioms StructuralIntelligence.WeaknessP1.coverage_increases
+#print axioms StructuralIntelligence.WeaknessMixture.mixture_prior_mass_increases
 #print axioms StructuralIntelligence.IcaSignedPerm.ica_class_fin2
