@@ -1227,9 +1227,10 @@ cd formal/ontology-hs && cabal test all && cabal run ontology-check
 | `StructuralIntelligence/ConcernEst.lean` | Wave 8: CONC-EST plug-in estimator at prefixes 1/2/6 — **verified** (SafeVerify 2026-08-18, receipt §Wave 8). Traces stay Python |
 | `StructuralIntelligence/IdentImpossibility.lean` | Wave 9: IDENT passive bound — **verified** (SafeVerify 2026-08-18, receipt §Wave 9). Model scores stay Python |
 | `StructuralIntelligence/T4FiniteCI.lean` | Wave 9: finite fiber-CI reading of Theorem 4 — **verified**. Cites CSS; measure-theoretic T4 stays open |
-| `StructuralIntelligence/WeaknessP1.lean` | Wave 9: WI Proposition 1 on `{id, flip}` — **verified**. PAC-Bayes stays out |
+| `StructuralIntelligence/WeaknessP1.lean` | Wave 9: WI Proposition 1 on `{id, flip}` — **verified**. PAC-Bayes-kl stays out |
+| `StructuralIntelligence/WeaknessMixture.lean` | Wave 11: overlapping-mixture prior mass increases with weakness — **verified**. Not PAC-Bayes-kl |
 | `StructuralIntelligence/IcaSignedPerm.lean` | Wave 9: signed-permutation class on two coordinates — **verified**. Not Theorem 7 |
-| `StructuralIntelligence.lean` | Root import and `#print axioms` for every named headline, including `squaring_separation`, `eml_zero_identity`, and the Wave 7–9 headlines |
+| `StructuralIntelligence.lean` | Root import and `#print axioms` for every named headline, including `squaring_separation`, `eml_zero_identity`, and the Wave 7–11 headlines |
 | `lakefile.toml` / `lean-toolchain` | Dependency-free Lean 4.31 library |
 
 ```bash

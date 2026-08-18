@@ -443,6 +443,9 @@ four **SafeVerify-passed** (same 4.29 scratch; receipt §Wave 9).
 The mathlib lane proves the Halmos–Savage packaging step and both
 Shannon converses (`D = 0` and `0 < D` via Fano in `ShannonFano.lean`);
 no project-local axiom remains. Mathlib stays proved-not-verified.
+Wave 11 (`WeaknessMixture.lean`) banks the overlapping-mixture prior
+mass on the WI `{id, flip}` toy — **SafeVerify-passed** (receipt
+§Wave 11). PAC-Bayes-kl stays out.
 Measure-theoretic T4, CT-1 MDL, classical ICA, and unconditional
 SIC-C-c stay open.
 That instrument is `experiments/delete_repair_concern_estimation/`:

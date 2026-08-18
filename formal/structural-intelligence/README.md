@@ -583,6 +583,9 @@ uses `[propext, Quot.sound]` (via `omega` closing the impossible
   Theorem 4 (`css_implies_fiber_constant`).  Cites CSS.  **Verified.**
 - `StructuralIntelligence/WeaknessP1.lean` — WI-P1 toy
   (`coverage_increases`).  **Verified.**
+- `StructuralIntelligence/WeaknessMixture.lean` — overlapping-
+  mixture prior mass on the same toy
+  (`mixture_prior_mass_increases`).  **Verified.**  Not PAC-Bayes-kl.
 - `StructuralIntelligence/IcaSignedPerm.lean` — Fin-2 signed-
   permutation class (`ica_class_fin2`).  Not Theorem 7.  **Verified.**
 
