@@ -1,0 +1,93 @@
+{
+  "experiment_id": "delete_repair_reduction",
+  "schema_version": "1.0",
+  "run_id": "delete_repair_reduction_2026_08_18",
+  "producing_agent": {
+    "identity": "Claude Fable 5 (Cursor agent, under J. Brown direction)",
+    "session_ref": "4adbd42d-0e99-41df-b0be-7d9d5b7e3caa"
+  },
+  "hypothesis": "There is a delete-repair fact outside (q, K) at this bound: the squaring-macro episode changes min formula size and fibre mass while every registered screen partition on the shared universe is unchanged and the round trip is the identity. The fact lives on the generator set — the process coordinate the close-out already banked as process-relative — so Possibility 5's dynamics reading is bounded, not killed: representability facts move (q, K); generator-episode access facts do not.",
+  "primary_metric": "ranking.verdict",
+  "decision": "Accept outside_fact_found if the shared universe embeds, all three registered screens are extensionally identical across grammars on it, the delete/re-adjoin round trip is the identity on the access table, and min size or mass differs between grammars. Accept all_reduce if a registered screen moves and the access change tracks it. Otherwise inconclusive. Any recorded verdict passes CI.",
+  "gates": {
+    "RED_SPECIFIED": "Everything specified in the module before enumeration.",
+    "RED_ENUMERATION": "Exhaustive to size 7; extension strictly larger.",
+    "RED_SHARED_UNIVERSE": "Base trees are a subset of extended trees.",
+    "RED_TARGETS_INHABITED": "x^2 and x^4 reachable in both grammars.",
+    "RED_SCREEN_TABLE_RECORDED": "q_den, q_size, q_depth invariance rows recorded.",
+    "RED_ROUND_TRIP": "Delete then re-adjoin restores the access table.",
+    "RED_RANKING_RECORDED": "Verdict is one of the three registered outcomes.",
+    "RED_CLAIM_BOUNDARY": "No representability-reading kill, no continuum, no LLM."
+  },
+  "kill_criteria": {
+    "RED_SPECIFIED": "Kill the instrument if screens or targets are chosen after seeing the tables.",
+    "RED_SHARED_UNIVERSE": "Kill the instrument if the embedding fails; comparisons would be off-object.",
+    "banked_numbers": "Kill the instrument if min sizes disagree with US-2/US-3 (7 and 3 at n=2).",
+    "possibility_5_dynamics": "The unrestricted 'every delete-repair fact is (q, K) motion' reading dies if outside_fact_found; the representability reading is untouched by construction.",
+    "all_reduce": "The outside-fact claim dies if any registered screen partition differs across grammars on the shared universe."
+  },
+  "audit_card": {
+    "target_object": "The door-2 question from the close-out: a delete-repair fact that cannot be written as a movement of (q, K).",
+    "decision": "outside_fact_found / all_reduce / inconclusive by the registered rule.",
+    "representation": "All trees to size 7 over {x, ×} (9 trees) and {x, ×, sq} (89 trees); exponent semantics; screens q_den, q_size, q_depth; targets x^2, x^4.",
+    "data_clock": "None. Exhaustive enumeration, no sampling, no LLM.",
+    "material_assumptions": [
+      "The episode is the banked US-2/US-3 squaring separation replayed as delete-obstruction-repair.",
+      "(q, K) data means the registered screen partitions restricted to the shared universe.",
+      "Access observables are min formula size and fibre mass at the registered bound.",
+      "The registered screens are q_den (exponent), q_size (node count), q_depth."
+    ],
+    "fatal_gates": [
+      "RED_SPECIFIED",
+      "RED_ENUMERATION",
+      "RED_SHARED_UNIVERSE",
+      "RED_TARGETS_INHABITED",
+      "RED_SCREEN_TABLE_RECORDED",
+      "RED_ROUND_TRIP",
+      "RED_RANKING_RECORDED",
+      "RED_CLAIM_BOUNDARY"
+    ],
+    "decisive_controls": [
+      "specified_before_run",
+      "shared_universe_embedding",
+      "banked_numbers_replayed",
+      "round_trip_identity",
+      "kill_does_not_fail_ci"
+    ],
+    "evidence_paths": [
+      "experiments/delete_repair_reduction/results/delete_repair_reduction_summary.json",
+      "experiments/delete_repair_reduction/preregistration.json",
+      "tests/test_delete_repair_reduction.py"
+    ]
+  },
+  "mathematical_claim": {
+    "objects": {
+      "T_base": "trees over {x, ×} with ≤ 7 nodes (9 trees)",
+      "T_ext": "trees over {x, ×, sq} with ≤ 7 nodes (89 trees)",
+      "den": "T → ℕ, exponent semantics (x ↦ 1, mul ↦ +, sq ↦ ×2)",
+      "screens": "q_den, q_size, q_depth as partitions of the shared universe",
+      "access": "min size and tree count per target exponent per grammar"
+    },
+    "types_domains_units": "Sizes and depths are node counts (dimensionless integers). Exponents are naturals. Partitions are set-partitions of T_base.",
+    "exact_claim": "T_base ⊆ T_ext. The q_den, q_size, and q_depth partitions of T_base computed inside either grammar are identical. min size of den⁻¹(4) is 7 in T_base and 3 in T_ext; |den⁻¹(4)| at the bound is 5 vs 14. Deleting sq then re-adjoining it restores the T_ext access table exactly. Hence min size is not a function of the registered (q, K) data.",
+    "quantifiers": "Universal over the three registered screens for invariance and over all enumerated trees for the censuses. Existential for the access separation.",
+    "assumptions": "Size bound 7; node-count size measure; exponent semantics. No sampling.",
+    "identification_conditions": "The outside fact is identified as generator-set (process) motion, consistent with the banked access-is-process-relative split. It is not identified as a new master object.",
+    "derivation_dependencies": "US-2/US-3 squaring separation (formula 2^(n+1)-1 vs tower n+1 vs circuit n). The separation step is the same two-point argument as door 1: one (q, K) input, two required access outputs.",
+    "coordinate_invariance": "Screen partitions are label-free (defined by den, size, depth); the embedding is the identity map on shared trees, so no relabel gauge is involved.",
+    "edge_limiting_null_cases": "If the embedding failed the instrument dies. If a screen partition differed the verdict is all_reduce. At size bounds below 3 the ext advantage vanishes (sq(sq(x)) needs 3 nodes); the bound 7 is the smallest where both x^4 witnesses exist."
+  },
+  "controls": [
+    "specified_before_run",
+    "shared_universe_embedding",
+    "banked_numbers_replayed",
+    "round_trip_identity",
+    "kill_does_not_fail_ci"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": "none",
+    "sampling": "Exhaustive enumeration of 9 + 89 trees. No sampling."
+  },
+  "claim_boundary": "Accepted only as: at this bound, the squaring episode is a delete-repair fact whose observable is invariant under all registered (q, K) motions and changes with the generator set. Possibility 5's dynamics reading is thereby bounded to representability facts, exactly where the close-out's process-relative split already put the border. Not a kill of the representability reading. Not continuum. Not an LLM. Not Paper G."
+}
