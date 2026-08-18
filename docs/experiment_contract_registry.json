@@ -1204,6 +1204,35 @@
       ]
     },
     {
+      "package": "dial_nestedness",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/dial_nestedness/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "dial_nestedness_2026_08_18",
+      "runs": [
+        {
+          "run_id": "dial_nestedness_2026_08_18",
+          "publication_package": "dial_nestedness",
+          "runtime_package": "dial_nestedness",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/dial_nestedness/experiment_manifest.json",
+          "report_paths": [
+            "experiments/dial_nestedness/results/dial_nestedness_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/dial_nestedness/preregistration.json",
+          "preregistration_digest": "13576b7c2b7fc667d81632122c780626e256cbcb582643a1625be2629bafd57d",
+          "producing_agent": {
+            "identity": "Claude Fable 5 (Cursor agent, under J. Brown direction)",
+            "session_ref": "4adbd42d-0e99-41df-b0be-7d9d5b7e3caa"
+          }
+        }
+      ]
+    },
+    {
       "package": "delete_repair_concern_transport",
       "coverage_mode": "structured_manifest",
       "manifest_path": "experiments/delete_repair_concern_transport/experiment_manifest.json",

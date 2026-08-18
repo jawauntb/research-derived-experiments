@@ -1,0 +1,361 @@
+{
+  "budget_rows": [
+    {
+      "budget": "0",
+      "n_optimizers": 1,
+      "optimal_rate": 5,
+      "optimizers": [
+        [
+          [
+            0
+          ],
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ]
+      ]
+    },
+    {
+      "budget": "1/4",
+      "n_optimizers": 3,
+      "optimal_rate": 3,
+      "optimizers": [
+        [
+          [
+            0,
+            1
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        [
+          [
+            0
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ]
+      ]
+    },
+    {
+      "budget": "1/2",
+      "n_optimizers": 2,
+      "optimal_rate": 2,
+      "optimizers": [
+        [
+          [
+            0,
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          [
+            2,
+            3,
+            4
+          ]
+        ]
+      ]
+    },
+    {
+      "budget": "3/4",
+      "n_optimizers": 8,
+      "optimal_rate": 2,
+      "optimizers": [
+        [
+          [
+            0,
+            1,
+            2,
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        [
+          [
+            0,
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        [
+          [
+            0,
+            1,
+            3
+          ],
+          [
+            2,
+            4
+          ]
+        ],
+        [
+          [
+            0,
+            1
+          ],
+          [
+            2,
+            3,
+            4
+          ]
+        ],
+        [
+          [
+            0,
+            2,
+            3
+          ],
+          [
+            1,
+            4
+          ]
+        ],
+        [
+          [
+            0,
+            2
+          ],
+          [
+            1,
+            3,
+            4
+          ]
+        ],
+        [
+          [
+            0,
+            3
+          ],
+          [
+            1,
+            2,
+            4
+          ]
+        ],
+        [
+          [
+            0
+          ],
+          [
+            1,
+            2,
+            3,
+            4
+          ]
+        ]
+      ]
+    },
+    {
+      "budget": "1",
+      "n_optimizers": 1,
+      "optimal_rate": 1,
+      "optimizers": [
+        [
+          [
+            0,
+            1,
+            2,
+            3,
+            4
+          ]
+        ]
+      ]
+    }
+  ],
+  "budgets": [
+    "0",
+    "1/4",
+    "1/2",
+    "3/4",
+    "1"
+  ],
+  "experiment_id": "dial_nestedness",
+  "gates": {
+    "NEST_CHAIN_RECORDED": true,
+    "NEST_CLAIM_BOUNDARY": true,
+    "NEST_D0_IS_LEVELS": true,
+    "NEST_ENUMERATION_COMPLETE": true,
+    "NEST_EXACT_ARITHMETIC": true,
+    "NEST_RANKING_RECORDED": true,
+    "NEST_RATE_MONOTONE": true,
+    "NEST_SPECIFIED": true
+  },
+  "process_disclosure": "All 52 partitions of a five-point world, enumerated via restricted-growth strings.  Task-relative distortion is the worst-case within-cell task-law gap, exact Fractions.  Budgets, predictions, and the verdict rule are registered before evaluation.  No sampling, no LLM.",
+  "producing_agent": {
+    "identity": "Claude Fable 5 (Cursor agent, under J. Brown direction)",
+    "session_ref": "4adbd42d-0e99-41df-b0be-7d9d5b7e3caa"
+  },
+  "ranking": {
+    "all_nested": false,
+    "chain": [
+      [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3,
+          4
+        ]
+      ],
+      [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3,
+          4
+        ]
+      ],
+      [
+        [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
+      ]
+    ],
+    "chain_exists": true,
+    "d0_unique_level_partition": true,
+    "n_partitions": 52,
+    "nest_witness": {
+      "budget_coarse": "1/2",
+      "budget_fine": "1/4",
+      "coarse_optimizer": [
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "fine_optimizer": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          4
+        ]
+      ]
+    },
+    "rate_monotone": true,
+    "rates": [
+      5,
+      3,
+      2,
+      2,
+      1
+    ],
+    "rates_match_registered": true,
+    "rule": "nestedness_fails_generally iff the optimal rate is weakly decreasing in the budget while some optimizer at a finer budget fails to refine some optimizer at the next coarser budget.  nestedness_holds_here iff every adjacent optimizer pair nests.  inconclusive otherwise.  chain_exists is recorded separately: a chosen chain may nest even when all-optimizer nesting fails \u2014 nesting is a selection fact.",
+    "verdict": "nestedness_fails_generally"
+  },
+  "run_id": "dial_nestedness_2026_08_18",
+  "status": "pass",
+  "task_law": [
+    "0",
+    "1/4",
+    "1/2",
+    "3/4",
+    "1"
+  ],
+  "withheld": [
+    "Any claim about continuous or general rate-distortion optima",
+    "Any expected-distortion (average-case) variant",
+    "A rescue of the essay's 'cells coarsen' wording",
+    "LLM agent eval",
+    "A new master object"
+  ]
+}
