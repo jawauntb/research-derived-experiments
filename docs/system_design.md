@@ -397,6 +397,11 @@ concern-free Paper F tie-break by exact gaps (max 21/2), restore
 reversal-naturality where the name tie-break failed, and show an
 exact `bag`/`pair_eq` phase boundary at ε = 11/27. Verdict
 `concern_does_work`; concern is a weight vector, not valence.
+Door 2's consolidation is `experiments/delete_repair_generators/`:
+the cube macro (`x^3`, bound 5) replicates the outside-fact shape
+(min 5 vs 2, mass 2 vs 3, screens invariant, round trip identity)
+beside an exact sq replay anchor, with min sizes registered before
+enumeration. Verdict `border_consolidated`.
 The close-out is `papers/sic_dynamics/` (`paper.md` for the
 instruments; `for_readers.md` for a cold reader). Wave 2 P0/P1 lemmas are
 **verified** in `formal/structural-intelligence/` (`KappaCheap`,

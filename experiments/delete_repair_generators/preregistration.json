@@ -1,0 +1,83 @@
+{
+  "experiment_id": "delete_repair_generators",
+  "schema_version": "1.0",
+  "run_id": "delete_repair_generators_2026_08_18",
+  "producing_agent": {
+    "identity": "Claude Fable 5 (Cursor agent, under J. Brown direction)",
+    "session_ref": "4adbd42d-0e99-41df-b0be-7d9d5b7e3caa"
+  },
+  "hypothesis": "Generator episodes form a border, not a one-off: the cube macro shows the same two-ledger shape as the banked sq episode — screens invariant on the shared universe, access changed, round trip identity — with min sizes predicted in advance (5 vs 2 for x^3 at bound 5; the sq replay must give 7 vs 3 for x^4 at bound 7).",
+  "primary_metric": "ranking.verdict",
+  "decision": "Accept border_consolidated if both episodes are outside facts. Accept border_sharpened if exactly one reduces to screen motion. Otherwise inconclusive. Any recorded verdict passes CI.",
+  "gates": {
+    "GEN_SPECIFIED": "Episode table with predictions written before enumeration.",
+    "GEN_TWO_EPISODES": "Two distinct macros (sq, cube).",
+    "GEN_SHARED_UNIVERSES": "Base trees embed in extended trees, both episodes.",
+    "GEN_REGISTERED_MINS": "Observed min sizes equal predictions, both episodes.",
+    "GEN_ROUND_TRIPS": "Delete then re-adjoin restores the access table, both episodes.",
+    "GEN_RANKING_RECORDED": "Verdict is one of the three registered outcomes.",
+    "GEN_CLAIM_BOUNDARY": "No representability kill, no continuum, no LLM."
+  },
+  "kill_criteria": {
+    "GEN_REGISTERED_MINS": "Kill the instrument if a predicted min size is wrong; the predictions are the point.",
+    "sq_anchor": "Kill the instrument if the sq replay disagrees with door 2's banked numbers.",
+    "border_claim": "The border claim dies if the cube episode's access change tracks a moving screen (border_sharpened) or if screens and access both freeze (inconclusive)."
+  },
+  "audit_card": {
+    "target_object": "Door 2's registered next test: a second generator episode through the same two ledgers.",
+    "decision": "border_consolidated / border_sharpened / inconclusive by the registered rule.",
+    "representation": "Trees to bound 7 over {x, ×, sq} (multiplier 2) and to bound 5 over {x, ×, cube} (multiplier 3); exponent semantics; screens q_den, q_size, q_depth; targets x^4 and x^3.",
+    "data_clock": "None. Exhaustive enumeration, no sampling, no LLM.",
+    "material_assumptions": [
+      "Node-count size measure; mul-only formulas need 2k−1 nodes for x^k.",
+      "The sq episode is a replay anchor, not new evidence.",
+      "The registered screens are the door-2 three."
+    ],
+    "fatal_gates": [
+      "GEN_SPECIFIED",
+      "GEN_TWO_EPISODES",
+      "GEN_SHARED_UNIVERSES",
+      "GEN_REGISTERED_MINS",
+      "GEN_ROUND_TRIPS",
+      "GEN_RANKING_RECORDED",
+      "GEN_CLAIM_BOUNDARY"
+    ],
+    "decisive_controls": [
+      "predictions_registered",
+      "sq_replay_anchor",
+      "distinct_macros",
+      "kill_does_not_fail_ci"
+    ],
+    "evidence_paths": [
+      "experiments/delete_repair_generators/results/delete_repair_generators_summary.json",
+      "experiments/delete_repair_generators/preregistration.json",
+      "tests/test_delete_repair_generators.py"
+    ]
+  },
+  "mathematical_claim": {
+    "objects": {
+      "episode": "(macro m with exponent multiplier, size bound S, target k, predicted mins)",
+      "ledgers": "screen partitions on the shared universe vs (min size, mass) per grammar"
+    },
+    "types_domains_units": "Sizes are node counts. Exponents are naturals. cube multiplies the exponent by 3; sq by 2.",
+    "exact_claim": "For cube at bound 5, target x^3: min size 5 (base, = 2·3−1) vs 2 (cube(x)); mass 2 vs 3; q_den/q_size/q_depth partitions of the 4 shared trees identical; round trip identity. For sq at bound 7, target x^4: exactly the door-2 numbers (7 vs 3, 5 vs 14).",
+    "quantifiers": "Universal over both episodes and all enumerated trees; existential for each access separation.",
+    "assumptions": "Registered bounds and targets; no other macros.",
+    "identification_conditions": "The consolidated border is identified as: generator-set motion carries access facts; screen motion carries representability facts. Two instances of the same two-point separation.",
+    "derivation_dependencies": "Door 2 (delete_repair_reduction). US-2/US-3. The mul-only min-size formula 2k−1 (every leaf is x, L leaves give exponent L and size 2L−1).",
+    "coordinate_invariance": "Screens are label-free functions of the tree; the embedding is the identity on shared trees.",
+    "edge_limiting_null_cases": "Bound 5 is the smallest where both x^3 witnesses exist for cube. If a predicted min were wrong the instrument dies rather than reinterpreting."
+  },
+  "controls": [
+    "predictions_registered",
+    "sq_replay_anchor",
+    "distinct_macros",
+    "kill_does_not_fail_ci"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": "none",
+    "sampling": "Exhaustive enumeration (9+89 trees at bound 7; 4+9 trees at bound 5). No sampling."
+  },
+  "claim_boundary": "Accepted only as: two generator episodes, same border — access facts move with the generator set while all registered (q, K) data is invariant. Not a kill of the representability reading. Not continuum. Not an LLM. Not Paper G."
+}

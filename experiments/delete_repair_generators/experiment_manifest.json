@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "delete_repair_generators",
+  "hypothesis": "The door-2 outside fact is a border, not a squaring quirk: a second definable macro (cube, tripling the exponent, target x^3 at bound 5) produces the same shape — access changes (min size 5 vs 2, mass 2 vs 3) while all registered screen partitions on the shared universe are invariant and the delete/re-adjoin round trip is the identity — alongside an exact replay of the banked sq episode (7 vs 3, 5 vs 14).",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "predictions_registered",
+      "description": "Both episodes' min sizes are written in the EPISODES table before enumeration; a mismatch fails the GEN_REGISTERED_MINS gate."
+    },
+    {
+      "control_id": "sq_replay_anchor",
+      "description": "The sq episode must reproduce door 2's banked numbers exactly, anchoring the new instrument to the old one."
+    },
+    {
+      "control_id": "distinct_macros",
+      "description": "The two episodes use different macros with different multipliers and different targets."
+    },
+    {
+      "control_id": "kill_does_not_fail_ci",
+      "description": "border_consolidated, border_sharpened, and inconclusive are all valid passing runs."
+    }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/delete_repair_generators/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "GEN_SPECIFIED",
+      "criterion": "Episodes, bounds, targets, and predictions specified before the run."
+    },
+    {
+      "gate_id": "GEN_TWO_EPISODES",
+      "criterion": "Exactly two episodes with distinct macros."
+    },
+    {
+      "gate_id": "GEN_SHARED_UNIVERSES",
+      "criterion": "Base trees embed in extended trees for both episodes."
+    },
+    {
+      "gate_id": "GEN_REGISTERED_MINS",
+      "criterion": "Observed min sizes equal the registered predictions for both episodes."
+    },
+    {
+      "gate_id": "GEN_ROUND_TRIPS",
+      "criterion": "Delete then re-adjoin is the identity on the access table for both episodes."
+    },
+    {
+      "gate_id": "GEN_RANKING_RECORDED",
+      "criterion": "Verdict is border_consolidated, border_sharpened, or inconclusive."
+    },
+    {
+      "gate_id": "GEN_CLAIM_BOUNDARY",
+      "criterion": "No representability-reading kill, no continuum, no LLM, no new master object."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/delete_repair_generators/results/delete_repair_generators_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/delete_repair_generators/preregistration.json",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/delete_repair_generators/paper.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}
