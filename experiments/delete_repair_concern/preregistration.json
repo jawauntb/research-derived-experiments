@@ -1,0 +1,95 @@
+{
+  "experiment_id": "delete_repair_concern",
+  "schema_version": "1.0",
+  "run_id": "delete_repair_concern_2026_08_18",
+  "producing_agent": {
+    "identity": "Claude Fable 5 (Cursor agent, under J. Brown direction)",
+    "session_ref": "4adbd42d-0e99-41df-b0be-7d9d5b7e3caa"
+  },
+  "hypothesis": "Theorem 4 is silent between bag's five representing screens; Paper F broke the tie by name and door 1 showed that tie-break is not relabel-natural. A registered concern weighting gives the choice a reason: distinct concerns select distinct screens, the concern-free choice is strictly costly somewhere, the mirrored pair is reversal-natural, and the bag/pair_eq dial has an exact threshold at 11/27. This opens the close-out's third job (care which matter) at the lowest bound, as weights and nothing more.",
+  "primary_metric": "ranking.verdict",
+  "decision": "Accept concern_does_work if at least three distinct screens are selected across the six registered concerns, the mirrored pair is reversal-natural, and the unweighted choice is strictly beaten with an exact recorded gap. Accept concern_idle if every concern selects one screen. Otherwise inconclusive. Any recorded verdict passes CI.",
+  "gates": {
+    "CON_SPECIFIED": "Cost rule, family, concerns, verdict rule written before the run.",
+    "CON_REPRESENTING_SET": "bag's representing set is the banked five screens.",
+    "CON_COST_MATRIX_RECORDED": "Full 5x6 matrix recorded.",
+    "CON_CONCERNS_REGISTERED": "Exactly six registered concern vectors.",
+    "CON_EXACT_ARITHMETIC": "Fractions only.",
+    "CON_REVERSAL": "Mirrored pair chooses dual screens; reversal is an involution.",
+    "CON_BOUNDARY": "Sweep matches the exact 11/27 threshold; tie kept by fewest fibres.",
+    "CON_RANKING_RECORDED": "Verdict is one of the three registered outcomes.",
+    "CON_CLAIM_BOUNDARY": "No valence/agency/consciousness/learned-concern/LLM claim."
+  },
+  "kill_criteria": {
+    "CON_SPECIFIED": "Kill the instrument if weights or costs are tuned after seeing choices.",
+    "CON_REPRESENTING_SET": "Kill the instrument if the representing set disagrees with Paper F.",
+    "delta_bag_anchor": "Kill the instrument if all-mass-on-bag fails to reproduce q_perm.",
+    "concern_decoration": "The concern-is-decoration reading dies if distinct concerns force distinct screens with exact positive gaps.",
+    "concern_idle": "The concern-does-work claim dies if all registered concerns collapse to one screen.",
+    "naturality": "The coordinate-free reading dies if the mirrored pair is not reversal-dual."
+  },
+  "audit_card": {
+    "target_object": "The door-3 question: does a concern coordinate do real work on the choice Theorem 4 leaves open?",
+    "decision": "concern_does_work / concern_idle / inconclusive by the registered rule.",
+    "representation": "bag's five representing screens on {0,1}^4; six-task family (bag, first_bit, last_bit, parity, pair_eq, identity); registered two-case cost; six registered rational concern vectors; 55-point epsilon sweep.",
+    "data_clock": "None. Exact finite computation, no sampling, no learning, no LLM.",
+    "material_assumptions": [
+      "Concern is a registered weight vector, not an estimated or learned quantity.",
+      "Cost is fibre count on represent, 2*n_worlds on miss; disclosed before the run.",
+      "Tie-break inside kappa_concern is Paper F's order (fewest fibres, then name).",
+      "Reversal (3,2,1,0) is the disclosed relabel; bag and parity are reversal-invariant."
+    ],
+    "fatal_gates": [
+      "CON_SPECIFIED",
+      "CON_REPRESENTING_SET",
+      "CON_COST_MATRIX_RECORDED",
+      "CON_CONCERNS_REGISTERED",
+      "CON_EXACT_ARITHMETIC",
+      "CON_REVERSAL",
+      "CON_BOUNDARY",
+      "CON_RANKING_RECORDED",
+      "CON_CLAIM_BOUNDARY"
+    ],
+    "decisive_controls": [
+      "registered_weights_only",
+      "registered_cost_rule",
+      "exact_arithmetic",
+      "delta_bag_recovers_paper_f",
+      "kill_does_not_fail_ci"
+    ],
+    "evidence_paths": [
+      "experiments/delete_repair_concern/results/delete_repair_concern_summary.json",
+      "experiments/delete_repair_concern/preregistration.json",
+      "tests/test_delete_repair_concern.py"
+    ]
+  },
+  "mathematical_claim": {
+    "objects": {
+      "R_bag": "{q_perm(5), q_rot(6), q_stab0(8), q_stab_last(8), q_id(16)} with fibre counts",
+      "cost": "(screen, task) -> Fraction: fibres on represent, 32 on miss",
+      "kappa_concern": "concern w -> argmin_r sum_t w(t) cost(t|r), Paper F tie-break",
+      "boundary": "epsilon* on w = (1-eps) bag + eps pair_eq"
+    },
+    "types_domains_units": "Weights and costs are exact rationals. Fibre counts are integers. n_worlds = 16, miss penalty 32.",
+    "exact_claim": "delta_bag -> q_perm; bag+first_bit -> q_stab0 with gap 21/2 over q_perm; bag+last_bit -> q_stab_last (dual); bag+pair_eq -> q_id with gap 5/2; uniform-six -> q_id with gap 7. cost(q_perm | w_eps) = 5 + 27 eps and cost(q_id) = 16 cross at eps* = 11/27; below or at the tie q_perm (fewest fibres), above q_id.",
+    "quantifiers": "Universal over the six registered concerns and the 55 sweep points. Existential for the strict gaps.",
+    "assumptions": "Registered cost rule and family; no other tasks or screens.",
+    "identification_conditions": "kappa_concern is identified as expected-cost argmin over Theorem 4's survivors — a decision layer on top of the sufficient screen, not a replacement for it and not a new master object.",
+    "derivation_dependencies": "Paper F representing set and tie-break; Paper A representability (G_M subset of G_Y); door 1's tie-naturality failure motivates the reason-giving layer.",
+    "coordinate_invariance": "Reversal swaps first_bit/last_bit and q_stab0/q_stab_last while fixing bag, parity, q_perm, q_rot, q_id; kappa_concern must commute on the mirrored pair. Verified; the involution property of the relabel is also checked on all worlds.",
+    "edge_limiting_null_cases": "At eps = 0 the instrument reproduces Paper F exactly. At eps = 1 (all mass off bag) the choice is whatever serves pair_eq, q_id. If all concerns collapsed to one screen the verdict is concern_idle and door 3 closes at this bound."
+  },
+  "controls": [
+    "registered_weights_only",
+    "registered_cost_rule",
+    "exact_arithmetic",
+    "delta_bag_recovers_paper_f",
+    "kill_does_not_fail_ci"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": "none",
+    "sampling": "None. Exact rational evaluation of 6 concerns x 5 screens plus a 55-point sweep."
+  },
+  "claim_boundary": "Accepted only as: on this menu with this registered cost, the screen worth holding is a function of the registered task weighting; the concern-free tie-break is strictly costly under registered concerns; the choice layer is reversal-natural where the name tie-break was not. Concern is a weight vector. Not valence, not agency, not consciousness, not learned, not an LLM, not a new master object, not Paper G."
+}

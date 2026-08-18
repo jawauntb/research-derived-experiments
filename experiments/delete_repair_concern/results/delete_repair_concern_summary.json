@@ -1,0 +1,587 @@
+{
+  "boundary_sweep": [
+    {
+      "chosen_screen": "q_perm",
+      "epsilon": "0"
+    },
+    {
+      "chosen_screen": "q_perm",
+      "epsilon": "1/54"
+    },
+    {
+      "chosen_screen": "q_perm",
+      "epsilon": "1/27"
+    },
+    {
+      "chosen_screen": "q_perm",
+      "epsilon": "1/18"
+    },
+    {
+      "chosen_screen": "q_perm",
+      "epsilon": "2/27"
+    },
+    {
+      "chosen_screen": "q_perm",
+      "epsilon": "5/54"
+    },
+    {
+      "chosen_screen": "q_perm",
+      "epsilon": "1/9"
+    },
+    {
+      "chosen_screen": "q_perm",
+      "epsilon": "7/54"
+    },
+    {
+      "chosen_screen": "q_perm",
+      "epsilon": "4/27"
+    },
+    {
+      "chosen_screen": "q_perm",
+      "epsilon": "1/6"
+    },
+    {
+      "chosen_screen": "q_perm",
+      "epsilon": "5/27"
+    },
+    {
+      "chosen_screen": "q_perm",
+      "epsilon": "11/54"
+    },
+    {
+      "chosen_screen": "q_perm",
+      "epsilon": "2/9"
+    },
+    {
+      "chosen_screen": "q_perm",
+      "epsilon": "13/54"
+    },
+    {
+      "chosen_screen": "q_perm",
+      "epsilon": "7/27"
+    },
+    {
+      "chosen_screen": "q_perm",
+      "epsilon": "5/18"
+    },
+    {
+      "chosen_screen": "q_perm",
+      "epsilon": "8/27"
+    },
+    {
+      "chosen_screen": "q_perm",
+      "epsilon": "17/54"
+    },
+    {
+      "chosen_screen": "q_perm",
+      "epsilon": "1/3"
+    },
+    {
+      "chosen_screen": "q_perm",
+      "epsilon": "19/54"
+    },
+    {
+      "chosen_screen": "q_perm",
+      "epsilon": "10/27"
+    },
+    {
+      "chosen_screen": "q_perm",
+      "epsilon": "7/18"
+    },
+    {
+      "chosen_screen": "q_perm",
+      "epsilon": "11/27"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "23/54"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "4/9"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "25/54"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "13/27"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "1/2"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "14/27"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "29/54"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "5/9"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "31/54"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "16/27"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "11/18"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "17/27"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "35/54"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "2/3"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "37/54"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "19/27"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "13/18"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "20/27"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "41/54"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "7/9"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "43/54"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "22/27"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "5/6"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "23/27"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "47/54"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "8/9"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "49/54"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "25/27"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "17/18"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "26/27"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "53/54"
+    },
+    {
+      "chosen_screen": "q_id",
+      "epsilon": "1"
+    }
+  ],
+  "concerns": [
+    {
+      "beats_unweighted_choice": false,
+      "chosen_screen": "q_perm",
+      "concern_id": "delta_bag",
+      "expected_costs": {
+        "q_id": "16",
+        "q_perm": "5",
+        "q_rot": "6",
+        "q_stab0": "8",
+        "q_stab_last": "8"
+      },
+      "gap_vs_unweighted": "0",
+      "weights": {
+        "bag": "1"
+      }
+    },
+    {
+      "beats_unweighted_choice": true,
+      "chosen_screen": "q_stab0",
+      "concern_id": "bag_first",
+      "expected_costs": {
+        "q_id": "16",
+        "q_perm": "37/2",
+        "q_rot": "19",
+        "q_stab0": "8",
+        "q_stab_last": "20"
+      },
+      "gap_vs_unweighted": "21/2",
+      "weights": {
+        "bag": "1/2",
+        "first_bit": "1/2"
+      }
+    },
+    {
+      "beats_unweighted_choice": true,
+      "chosen_screen": "q_stab_last",
+      "concern_id": "bag_last",
+      "expected_costs": {
+        "q_id": "16",
+        "q_perm": "37/2",
+        "q_rot": "19",
+        "q_stab0": "20",
+        "q_stab_last": "8"
+      },
+      "gap_vs_unweighted": "21/2",
+      "weights": {
+        "bag": "1/2",
+        "last_bit": "1/2"
+      }
+    },
+    {
+      "beats_unweighted_choice": true,
+      "chosen_screen": "q_id",
+      "concern_id": "bag_pair_eq",
+      "expected_costs": {
+        "q_id": "16",
+        "q_perm": "37/2",
+        "q_rot": "19",
+        "q_stab0": "20",
+        "q_stab_last": "20"
+      },
+      "gap_vs_unweighted": "5/2",
+      "weights": {
+        "bag": "1/2",
+        "pair_eq": "1/2"
+      }
+    },
+    {
+      "beats_unweighted_choice": false,
+      "chosen_screen": "q_perm",
+      "concern_id": "bag_parity",
+      "expected_costs": {
+        "q_id": "16",
+        "q_perm": "5",
+        "q_rot": "6",
+        "q_stab0": "8",
+        "q_stab_last": "8"
+      },
+      "gap_vs_unweighted": "0",
+      "weights": {
+        "bag": "1/2",
+        "parity": "1/2"
+      }
+    },
+    {
+      "beats_unweighted_choice": true,
+      "chosen_screen": "q_id",
+      "concern_id": "all_six",
+      "expected_costs": {
+        "q_id": "16",
+        "q_perm": "23",
+        "q_rot": "70/3",
+        "q_stab0": "20",
+        "q_stab_last": "20"
+      },
+      "gap_vs_unweighted": "7",
+      "weights": {
+        "bag": "1/6",
+        "first_bit": "1/6",
+        "identity": "1/6",
+        "last_bit": "1/6",
+        "pair_eq": "1/6",
+        "parity": "1/6"
+      }
+    }
+  ],
+  "cost_matrix": [
+    {
+      "cost": "5",
+      "represents": true,
+      "screen_id": "q_perm",
+      "task_id": "bag"
+    },
+    {
+      "cost": "32",
+      "represents": false,
+      "screen_id": "q_perm",
+      "task_id": "first_bit"
+    },
+    {
+      "cost": "32",
+      "represents": false,
+      "screen_id": "q_perm",
+      "task_id": "last_bit"
+    },
+    {
+      "cost": "5",
+      "represents": true,
+      "screen_id": "q_perm",
+      "task_id": "parity"
+    },
+    {
+      "cost": "32",
+      "represents": false,
+      "screen_id": "q_perm",
+      "task_id": "pair_eq"
+    },
+    {
+      "cost": "32",
+      "represents": false,
+      "screen_id": "q_perm",
+      "task_id": "identity"
+    },
+    {
+      "cost": "6",
+      "represents": true,
+      "screen_id": "q_rot",
+      "task_id": "bag"
+    },
+    {
+      "cost": "32",
+      "represents": false,
+      "screen_id": "q_rot",
+      "task_id": "first_bit"
+    },
+    {
+      "cost": "32",
+      "represents": false,
+      "screen_id": "q_rot",
+      "task_id": "last_bit"
+    },
+    {
+      "cost": "6",
+      "represents": true,
+      "screen_id": "q_rot",
+      "task_id": "parity"
+    },
+    {
+      "cost": "32",
+      "represents": false,
+      "screen_id": "q_rot",
+      "task_id": "pair_eq"
+    },
+    {
+      "cost": "32",
+      "represents": false,
+      "screen_id": "q_rot",
+      "task_id": "identity"
+    },
+    {
+      "cost": "8",
+      "represents": true,
+      "screen_id": "q_stab0",
+      "task_id": "bag"
+    },
+    {
+      "cost": "8",
+      "represents": true,
+      "screen_id": "q_stab0",
+      "task_id": "first_bit"
+    },
+    {
+      "cost": "32",
+      "represents": false,
+      "screen_id": "q_stab0",
+      "task_id": "last_bit"
+    },
+    {
+      "cost": "8",
+      "represents": true,
+      "screen_id": "q_stab0",
+      "task_id": "parity"
+    },
+    {
+      "cost": "32",
+      "represents": false,
+      "screen_id": "q_stab0",
+      "task_id": "pair_eq"
+    },
+    {
+      "cost": "32",
+      "represents": false,
+      "screen_id": "q_stab0",
+      "task_id": "identity"
+    },
+    {
+      "cost": "8",
+      "represents": true,
+      "screen_id": "q_stab_last",
+      "task_id": "bag"
+    },
+    {
+      "cost": "32",
+      "represents": false,
+      "screen_id": "q_stab_last",
+      "task_id": "first_bit"
+    },
+    {
+      "cost": "8",
+      "represents": true,
+      "screen_id": "q_stab_last",
+      "task_id": "last_bit"
+    },
+    {
+      "cost": "8",
+      "represents": true,
+      "screen_id": "q_stab_last",
+      "task_id": "parity"
+    },
+    {
+      "cost": "32",
+      "represents": false,
+      "screen_id": "q_stab_last",
+      "task_id": "pair_eq"
+    },
+    {
+      "cost": "32",
+      "represents": false,
+      "screen_id": "q_stab_last",
+      "task_id": "identity"
+    },
+    {
+      "cost": "16",
+      "represents": true,
+      "screen_id": "q_id",
+      "task_id": "bag"
+    },
+    {
+      "cost": "16",
+      "represents": true,
+      "screen_id": "q_id",
+      "task_id": "first_bit"
+    },
+    {
+      "cost": "16",
+      "represents": true,
+      "screen_id": "q_id",
+      "task_id": "last_bit"
+    },
+    {
+      "cost": "16",
+      "represents": true,
+      "screen_id": "q_id",
+      "task_id": "parity"
+    },
+    {
+      "cost": "16",
+      "represents": true,
+      "screen_id": "q_id",
+      "task_id": "pair_eq"
+    },
+    {
+      "cost": "16",
+      "represents": true,
+      "screen_id": "q_id",
+      "task_id": "identity"
+    }
+  ],
+  "experiment_id": "delete_repair_concern",
+  "gates": {
+    "CON_BOUNDARY": true,
+    "CON_CLAIM_BOUNDARY": true,
+    "CON_CONCERNS_REGISTERED": true,
+    "CON_COST_MATRIX_RECORDED": true,
+    "CON_EXACT_ARITHMETIC": true,
+    "CON_RANKING_RECORDED": true,
+    "CON_REPRESENTING_SET": true,
+    "CON_REVERSAL": true,
+    "CON_SPECIFIED": true
+  },
+  "naturality": [
+    {
+      "image_choice": "q_stab_last",
+      "image_concern": "bag_last",
+      "natural": true,
+      "source_choice": "q_stab0",
+      "source_concern": "bag_first"
+    },
+    {
+      "image_choice": "q_stab0",
+      "image_concern": "bag_first",
+      "natural": true,
+      "source_choice": "q_stab_last",
+      "source_concern": "bag_last"
+    }
+  ],
+  "process_disclosure": "Concern is a registered rational weight vector over six tasks.  Cost is a registered two-case rule (fibre count on represent, 2\u00b7n_worlds on miss).  \u03ba_concern is exact argmin with Paper F's tie-break.  No sampling, no learning, no valence claim.",
+  "producing_agent": {
+    "identity": "Claude Fable 5 (Cursor agent, under J. Brown direction)",
+    "session_ref": "4adbd42d-0e99-41df-b0be-7d9d5b7e3caa"
+  },
+  "ranking": {
+    "distinct_choices": [
+      "q_id",
+      "q_perm",
+      "q_stab0",
+      "q_stab_last"
+    ],
+    "max_gap": "21/2",
+    "n_distinct_choices": 4,
+    "phase_boundary_confirmed": true,
+    "phase_boundary_exact": "11/27",
+    "representing_set": [
+      "q_perm",
+      "q_rot",
+      "q_stab0",
+      "q_stab_last",
+      "q_id"
+    ],
+    "reversal_natural": true,
+    "rule": "concern_does_work iff the registered concern set selects at least three distinct screens from bag's representing set, the mirrored concern pair is reversal-natural, and the unweighted Paper F choice is strictly beaten somewhere (exact gap recorded).  concern_idle iff every concern selects one screen.  inconclusive otherwise.",
+    "unweighted_choice": "q_perm",
+    "unweighted_strictly_beaten": true,
+    "verdict": "concern_does_work"
+  },
+  "run_id": "delete_repair_concern_2026_08_18",
+  "status": "pass",
+  "task_family": [
+    "bag",
+    "first_bit",
+    "last_bit",
+    "parity",
+    "pair_eq",
+    "identity"
+  ],
+  "withheld": [
+    "Valence, agency, consciousness, phenomenology",
+    "Learned or inferred concern (weights are registered inputs)",
+    "A new master object above SIC",
+    "LLM agent eval",
+    "A better language model"
+  ]
+}

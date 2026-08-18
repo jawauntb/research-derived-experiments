@@ -1088,6 +1088,35 @@
       ]
     },
     {
+      "package": "delete_repair_concern",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/delete_repair_concern/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "delete_repair_concern_2026_08_18",
+      "runs": [
+        {
+          "run_id": "delete_repair_concern_2026_08_18",
+          "publication_package": "delete_repair_concern",
+          "runtime_package": "delete_repair_concern",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/delete_repair_concern/experiment_manifest.json",
+          "report_paths": [
+            "experiments/delete_repair_concern/results/delete_repair_concern_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/delete_repair_concern/preregistration.json",
+          "preregistration_digest": "a5e5d720442d8cdc05f14495bbda60631a4a399727a448af90a6dea9447f2c78",
+          "producing_agent": {
+            "identity": "Claude Fable 5 (Cursor agent, under J. Brown direction)",
+            "session_ref": "4adbd42d-0e99-41df-b0be-7d9d5b7e3caa"
+          }
+        }
+      ]
+    },
+    {
       "package": "delete_repair_disanalogy",
       "coverage_mode": "structured_manifest",
       "manifest_path": "experiments/delete_repair_disanalogy/experiment_manifest.json",

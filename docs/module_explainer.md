@@ -124,6 +124,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_delete_repair_kappa.py` | Paper F: cheap κ is not a function; screen κ hits 11/11; uniqueness fails; `calculus_is_sic` |
 | `test_delete_repair_menu_blind.py` | Door 1: gold flips between menus; cheap collision is menu-relative; screen 34/34; tie-break not relabel-natural |
 | `test_delete_repair_reduction.py` | Door 2: squaring episode changes access (7 vs 3, 5 vs 14) while all screens are invariant; round trip identity |
+| `test_delete_repair_concern.py` | Door 3: six concerns pick four screens; unweighted choice beaten by 21/2; reversal-natural; boundary 11/27 |
 
 ```bash
 python3 scripts/run_quality_checks.py
@@ -265,6 +266,7 @@ Universal dispatcher: `python scripts/regen.py <name>`.
 | `delete_repair_kappa` | P R res | Paper F: κ_cheap collides; κ_screen 11/11; bag has 5 representing screens. Verdict `calculus_is_sic` | `core.py`, `experiment.py` |
 | `delete_repair_menu_blind` | P R res | Door 1: 17 cases × 2 menus; gold flips on `pair_eq`/`pair23`; cheap collision 1→0 across menus; κ_screen 34/34. Verdict `menu_blind_dead` | `core.py`, `experiment.py` |
 | `delete_repair_reduction` | P R res | Door 2: 9 vs 89 trees to size 7; screens `q_den`/`q_size`/`q_depth` invariant on the shared universe; min size 7 vs 3, mass 5 vs 14; round trip identity. Verdict `outside_fact_found` | `core.py`, `experiment.py` |
+| `delete_repair_concern` | P R res | Door 3: registered concern weights over six tasks pick four distinct screens from `bag`'s representing set; exact gaps (max 21/2); reversal-natural; phase boundary 11/27. Verdict `concern_does_work` | `core.py`, `experiment.py` |
 
 #### 3.1.1 `symbolic_weakness` modules
 
@@ -536,6 +538,7 @@ exhaustive counterexample search, and replayable MIDAS regression.
 | `papers/delete_repair_kappa/` | Paper F: the written function is Theorem 4 plus a total order (`paper.md`); companion instrument `delete_repair_kappa` |
 | `papers/delete_repair_menu_blind/` | Door 1: gold is menu-relative, so no menu-blind κ of any width; tie-break not relabel-natural on ties (`paper.md`); companion instrument `delete_repair_menu_blind` |
 | `papers/delete_repair_reduction/` | Door 2: the squaring episode is a delete–repair fact outside (q, K); it moves the generator set; Possibility 5 bounded to representability facts (`paper.md`); companion instrument `delete_repair_reduction` |
+| `papers/delete_repair_concern/` | Door 3: concern weights pick the screen among Theorem 4's survivors; concern-free tie-break strictly costly; reversal-naturality restored; boundary 11/27 (`paper.md`); companion instrument `delete_repair_concern` |
 | `papers/sic_dynamics/` | Close-out: A–F laid out; Possibility 5 is the house; not a better LLM; next method is Lea (`paper.md`). Cold-reader English: `for_readers.md` |
 | `papers/eml_access_geometry/` | Process-split synthesis: expressivity ≠ access, access is process-relative; LLM/SIC translation without a better-model claim |
 | `papers/sufficient_antecedents/` | Companion paper (Theorem SA-1): taxonomy of SIC-C-c positive resolutions — each of the four known identifiability escapes (linear ICA, sparse-linear ICA, iVAE, interventional CRL) is one way of populating Theorem 4's Markov-screen antecedent via local separation + cross-`u` coherence (`paper.md`, `paper.pdf`); companion instrument `antecedent_taxonomy_pair` |
@@ -1142,6 +1145,7 @@ Notable bundles:
 - `papers/delete_repair_kappa/` — Paper F: written κ is SIC, not a new master object
 - `papers/delete_repair_menu_blind/` — Door 1: gold is menu-relative; no menu-blind κ
 - `papers/delete_repair_reduction/` — Door 2: generator episodes carry access facts outside (q, K)
+- `papers/delete_repair_concern/` — Door 3: concern picks the screen; the third job opens at the lowest bound
 - `papers/sic_dynamics/` — close-out paper, A–F in one place; `for_readers.md` for a cold reader; next method is Lea
 - `papers/eml_access_geometry/` — process-split synthesis and LLM/SIC translation
 - Synthesis: `metaphysics_synthesis`, `metric_stack_synthesis`, literature audits/reviews
