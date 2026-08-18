@@ -1,6 +1,6 @@
 ---
 name: lea
-description: Use Lea (VIDA-NYU Lean 4 agent backbone) to formalize already-specified claims. Use when asked to prove, formalize, kernel-check, SafeVerify, or machine-check Lean theorems; when standing up LeaChat/LeaOverleaf; or when banking proved vs verified files into this repo. Do not use for new scientific letters, Paper 0 / Complex.log 0, or importing Mathlib into mathlib-free cores.
+description: Use Lea (VIDA-NYU Lean 4 agent backbone) for ALL theorem proving in this repo — required, not optional. Trigger whenever a theorem-level claim is added, changed, or promoted; whenever asked to prove, formalize, kernel-check, SafeVerify, or machine-check Lean theorems; when standing up LeaChat/LeaOverleaf; or when banking proved vs verified files. Repo law lives in AGENTS.md "Theorem proving with Lea (required)". Do not use for new scientific letters, Paper 0 / Complex.log 0, or importing Mathlib into mathlib-free cores.
 ---
 
 # Lea
@@ -38,10 +38,13 @@ When SafeVerify was skipped (`./install.sh --target ui --skip-verify`), `/verify
 
 ## When to use / when not to
 
-**Use Lea when:**
+**Use Lea when (required, per AGENTS.md):**
 
+- Any theorem-level claim is added, materially changed, or promoted —
+  proving it through this pipeline is repo law, not a choice.
 - A claim is already specified (objects, quantifiers, kill criteria).
-- The claim is theorem-level and still Python-only or only cited.
+- The claim is theorem-level and still Python-only or only cited
+  (backlog: `docs/lea/theorem_backlog.md`).
 - You can put it on a blueprint node with `uses:` edges.
 
 **Do not use Lea to:**
@@ -52,6 +55,32 @@ When SafeVerify was skipped (`./install.sh --target ui --skip-verify`), `/verify
 - Import Mathlib into `formal/structural-intelligence/` cores (`DeleteRepair.lean`, `EmlZeroIdentity.lean`, `Compiler/SquaringSeparation.lean`).
 - Fit a cheaper signature so Paper E’s `pair_eq` miss disappears.
 - Start a new scientific letter.
+
+## Local runbook (this machine, facts as of 2026-08-18)
+
+- Install: `~/.local/src/Lea` (local `./install.sh --target ui`, not Docker).
+- **Headless adapter** (all you need for proving):
+  `cd ~/.local/src/Lea/apps/lea-standalone/adapter && set -a && source ../../../.env && set +a && ./.venv/bin/python run_api.py`
+  → `http://127.0.0.1:8001` (`/api/health`, `/api/projects`).
+- **Known fixture trap:** if startup dies with `config/lea.local.toml is
+  missing`, restore it: `cp config/lea.local.example.toml config/lea.local.toml`
+  in `apps/lea-standalone/`. Cleanup scripts delete it.
+- **Known breakage (harmless for proving):** the Vite web UI can crash on
+  `@rollup/rollup-darwin-arm64` (npm optional-deps bug) and `start-dev.sh`
+  then tears the adapter down with it. Use the headless adapter instead;
+  repair the UI separately with a clean `npm i` if you need it.
+- Model keys: Doppler project `cofounder`, config `dev` → append into the
+  gitignored root `.env` (`doppler run … -- sh -c 'printf … >> .env'`).
+  Never print values; never commit `.env`, SQLite, or `apps/lea-standalone/data/`.
+- SafeVerify binary: `prover/third_party/SafeVerify/.lake/build/bin/safe_verify`,
+  toolchain `leanprover/lean4:v4.29.0` (workspace pin matches). The repo's
+  formal package pins 4.31 — rebuild files in a 4.29 scratch copy with
+  matching `StructuralIntelligence/<File>.lean` paths before replaying.
+- **Statement hygiene for SafeVerify:** its sorry-target splitter cuts at
+  the first `:=`, so theorem *statements* must not contain
+  `{ field := … }` structure literals — assert projections instead. Also
+  quantify over explicit lists (`∀ x ∈ [...]`), not bare inductive types.
+- Project: slug `sic-dynamics`, namespace `Lea.SicDynamics`.
 
 ## Install
 

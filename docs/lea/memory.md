@@ -71,6 +71,38 @@ Append. Receipt: `docs/lea/VERIFY_RECEIPT_2026-08-17.md`.
 - later verified: `kappa_screen_hits_suite` (kernel `decide`, no `native_decide`)
 - verified: `dta_n4_representable_iff`, `swap_typed_wins`
 
+## Wave 5 (2026-08-18) — the three doors in Lean
+
+Append. Kernel `decide` only, axioms ≤ {propext}; several
+GeneratorBorder headlines use no axioms at all.
+
+- `MenuBlind.gold_flip_pair_eq` / `gold_flip_pair23` — gold is
+  menu-relative (noop → quotient).
+- `MenuBlind.menu_blind_kappa_impossible` — two-point kill of every
+  menu-blind κ.
+- `MenuBlind.base_gold_consistent` — menu-parameterized gold equals
+  Wave 2 gold on the base menu (30 combos).
+- `GeneratorBorder.*` — sq episode (9 vs 89 trees, min 7 vs 3, mass
+  5 vs 14) and cube episode (4 vs 17 trees, min 5 vs 2, mass 2 vs 3);
+  base embeds in ext; `min_size_not_shared_function`.
+- `ConcernChoice.*` — six concern choices (four distinct screens,
+  mirrored duals), sum-gap 21 over the concern-free choice,
+  `boundary_base` k = 22 (ε = 11/27), `boundary_ext` k = 14
+  (ε = 7/27): the concern boundary is menu-relative.
+- Lean caught a transcription error the Python tests never asserted:
+  the cube-episode extended universe has **17** trees at bound 5, not
+  9. Enumerate in the kernel; do not trust prose counts.
+
+## Runbook facts (2026-08-18)
+
+- Adapter-only start beats `start-dev.sh`: the web UI's rollup
+  optional-dep bug tears the adapter down with it.
+- `config/lea.local.toml` gets deleted by cleanup scripts; restore
+  from the example before assuming deeper breakage.
+- SafeVerify target splitter cuts at the first `:=` — no structure
+  literals in theorem statements; Relabel/Surgery needed the same
+  workaround in Wave 2.
+
 ## Off-limits
 
 - Paper 0 / `Complex.log 0`
