@@ -383,6 +383,13 @@ menu-blind κ of any width is correct across menus; the cheap
 collision is menu-relative (1 bucket base, 0 extended, 17/17
 there); κ_screen is exact on all 34 rows; the name tie-break is
 not relabel-natural on ties. Verdict `menu_blind_dead`.
+Door 2 is `experiments/delete_repair_reduction/`: the squaring
+episode (delete `sq`, formula tax, re-adjoin) changes access
+(min size 7 vs 3, mass 5 vs 14 at size bound 7) while `q_den` /
+`q_size` / `q_depth` are extensionally invariant on the shared
+universe and the round trip is the identity, so the fact lives on
+the generator set, not (q, K). Verdict `outside_fact_found`;
+Possibility 5 bounded to representability facts.
 The close-out is `papers/sic_dynamics/` (`paper.md` for the
 instruments; `for_readers.md` for a cold reader). Wave 2 P0/P1 lemmas are
 **verified** in `formal/structural-intelligence/` (`KappaCheap`,

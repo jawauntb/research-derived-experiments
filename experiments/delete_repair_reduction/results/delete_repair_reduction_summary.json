@@ -1,0 +1,104 @@
+{
+  "censuses": [
+    {
+      "grammar": "base",
+      "mass_by_target": {
+        "2": 1,
+        "4": 5
+      },
+      "min_size_by_target": {
+        "2": 3,
+        "4": 7
+      },
+      "n_exponents": 4,
+      "n_trees": 9
+    },
+    {
+      "grammar": "ext",
+      "mass_by_target": {
+        "2": 2,
+        "4": 14
+      },
+      "min_size_by_target": {
+        "2": 2,
+        "4": 3
+      },
+      "n_exponents": 18,
+      "n_trees": 89
+    }
+  ],
+  "experiment_id": "delete_repair_reduction",
+  "gates": {
+    "RED_CLAIM_BOUNDARY": true,
+    "RED_ENUMERATION": true,
+    "RED_RANKING_RECORDED": true,
+    "RED_ROUND_TRIP": true,
+    "RED_SCREEN_TABLE_RECORDED": true,
+    "RED_SHARED_UNIVERSE": true,
+    "RED_SPECIFIED": true,
+    "RED_TARGETS_INHABITED": true
+  },
+  "process_disclosure": "Exhaustive tree enumeration to a registered size bound over {x, \u00d7} and {x, \u00d7, sq}.  Screens, targets, and the verdict rule are specified before the run.  No sampling, no LLM.  The episode under audit is the banked US-2/US-3 squaring separation, replayed as a delete\u2013obstruction\u2013repair loop.",
+  "producing_agent": {
+    "identity": "Claude Fable 5 (Cursor agent, under J. Brown direction)",
+    "session_ref": "4adbd42d-0e99-41df-b0be-7d9d5b7e3caa"
+  },
+  "ranking": {
+    "access_changed": true,
+    "mass_x4_base": 5,
+    "mass_x4_ext": 14,
+    "min_size_x4_base": 7,
+    "min_size_x4_ext": 3,
+    "round_trip_identity": true,
+    "rule": "outside_fact_found iff the shared universe embeds, every registered screen partition is identical across grammars on it, the delete/re-adjoin round trip is the identity on the access table, and an access observable differs.  all_reduce iff a registered screen moves and the access change tracks it.  inconclusive otherwise.",
+    "screens_all_invariant": true,
+    "separation": "Two grammars, identical (q, K) data on the shared universe (all 3 registered screens), different access observables (min size 7 vs 3, mass 5 vs 14 at the bound).  Min size is not a function of the (q, K) data: one input, two required outputs.",
+    "shared_universe_ok": true,
+    "verdict": "outside_fact_found"
+  },
+  "round_trip": [
+    {
+      "min_size_x4": 3,
+      "stage": "ext_before_delete"
+    },
+    {
+      "min_size_x4": 7,
+      "stage": "base_after_delete"
+    },
+    {
+      "min_size_x4": 3,
+      "stage": "ext_after_repair"
+    }
+  ],
+  "run_id": "delete_repair_reduction_2026_08_18",
+  "screen_invariance": [
+    {
+      "identical": true,
+      "n_cells_base_view": 4,
+      "n_cells_ext_view": 4,
+      "screen_id": "q_den"
+    },
+    {
+      "identical": true,
+      "n_cells_base_view": 4,
+      "n_cells_ext_view": 4,
+      "screen_id": "q_size"
+    },
+    {
+      "identical": true,
+      "n_cells_base_view": 4,
+      "n_cells_ext_view": 4,
+      "screen_id": "q_depth"
+    }
+  ],
+  "size_bound": 7,
+  "status": "pass",
+  "withheld": [
+    "A new master object above SIC",
+    "A kill of Possibility 5's representability reading",
+    "Continuum claims / real spacetime",
+    "LLM agent eval",
+    "A better language model",
+    "Valence / concern (door 3 is a separate instrument)"
+  ]
+}
