@@ -1,0 +1,124 @@
+{
+  "boundaries": [
+    {
+      "boundary_exact": "11/27",
+      "choice_above": "q_id",
+      "choice_below": "q_perm",
+      "confirmed": true,
+      "menu": "base",
+      "n_candidates": 5
+    },
+    {
+      "boundary_exact": "7/27",
+      "choice_above": "q_pair01",
+      "choice_below": "q_perm",
+      "confirmed": true,
+      "menu": "ext",
+      "n_candidates": 7
+    }
+  ],
+  "concerns": [
+    {
+      "chosen_screen": "q_perm",
+      "concern_id": "delta_bag",
+      "menu": "base"
+    },
+    {
+      "chosen_screen": "q_stab0",
+      "concern_id": "bag_first",
+      "menu": "base"
+    },
+    {
+      "chosen_screen": "q_stab_last",
+      "concern_id": "bag_last",
+      "menu": "base"
+    },
+    {
+      "chosen_screen": "q_id",
+      "concern_id": "bag_pair_eq",
+      "menu": "base"
+    },
+    {
+      "chosen_screen": "q_perm",
+      "concern_id": "delta_bag",
+      "menu": "ext"
+    },
+    {
+      "chosen_screen": "q_stab0",
+      "concern_id": "bag_first",
+      "menu": "ext"
+    },
+    {
+      "chosen_screen": "q_stab_last",
+      "concern_id": "bag_last",
+      "menu": "ext"
+    },
+    {
+      "chosen_screen": "q_pair01",
+      "concern_id": "bag_pair_eq",
+      "menu": "ext"
+    }
+  ],
+  "experiment_id": "delete_repair_concern_transport",
+  "gates": {
+    "CT_BOUNDARIES_CONFIRMED": true,
+    "CT_CANDIDATE_SETS": true,
+    "CT_CLAIM_BOUNDARY": true,
+    "CT_DELTA_ANCHOR": true,
+    "CT_RANKING_RECORDED": true,
+    "CT_REVERSAL": true,
+    "CT_SPECIFIED": true
+  },
+  "naturality": [
+    {
+      "image_choice": "q_stab_last",
+      "menu": "base",
+      "natural": true,
+      "source_choice": "q_stab0"
+    },
+    {
+      "image_choice": "q_stab_last",
+      "menu": "ext",
+      "natural": true,
+      "source_choice": "q_stab0"
+    }
+  ],
+  "process_disclosure": "Door 3's registered cost rule run through door 1's two menus with exact rational arithmetic.  Boundaries predicted before the run (11/27 base, 7/27 extended).  No sampling, no learning, no LLM.",
+  "producing_agent": {
+    "identity": "Claude Fable 5 (Cursor agent, under J. Brown direction)",
+    "session_ref": "4adbd42d-0e99-41df-b0be-7d9d5b7e3caa"
+  },
+  "ranking": {
+    "base_boundary": "11/27",
+    "base_candidates": [
+      "q_perm",
+      "q_rot",
+      "q_stab0",
+      "q_stab_last",
+      "q_id"
+    ],
+    "boundary_menu_relative": true,
+    "ext_boundary": "7/27",
+    "ext_candidates": [
+      "q_perm",
+      "q_rot",
+      "q_stab0",
+      "q_stab_last",
+      "q_pair01",
+      "q_pair23",
+      "q_id"
+    ],
+    "reversal_natural_both_menus": true,
+    "rule": "transport_fails if reversal naturality breaks under either menu.  transport_holds_boundary_moves if naturality holds, both registered boundaries are confirmed by the sweep, and they differ.  boundary_menu_stable if they are equal.  inconclusive otherwise.",
+    "verdict": "transport_holds_boundary_moves"
+  },
+  "run_id": "delete_repair_concern_transport_2026_08_18",
+  "status": "pass",
+  "withheld": [
+    "Valence, agency, consciousness, phenomenology",
+    "Learned or inferred concern",
+    "A new master object above SIC",
+    "LLM agent eval",
+    "A better language model"
+  ]
+}

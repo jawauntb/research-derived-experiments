@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "delete_repair_concern_transport",
+  "hypothesis": "Door 3's concern choice transports across the reversal relabel under both of door 1's menus, and its bag/pair_eq phase boundary is menu-relative: 11/27 on the base menu (crossing to q_id) and 7/27 on the extended menu (crossing to q_pair01), because the pair screens make pair_eq cheap to serve. The pure-bag anchor (q_perm) is menu-stable.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "boundaries_predicted",
+      "description": "Both crossing points (11/27 and 7/27) and both post-crossing choices are registered in the module before the sweep."
+    },
+    {
+      "control_id": "door3_anchor",
+      "description": "The base-menu boundary must reproduce door 3's banked 11/27 with independent menu-parameterized machinery."
+    },
+    {
+      "control_id": "delta_bag_menu_stable",
+      "description": "All mass on bag must choose q_perm under both menus."
+    },
+    {
+      "control_id": "exact_arithmetic",
+      "description": "Fractions only; the sweep grid is k/54 with ties resolved by the disclosed order."
+    },
+    {
+      "control_id": "kill_does_not_fail_ci",
+      "description": "All four registered verdicts are valid passing runs."
+    }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/delete_repair_concern_transport/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "CT_SPECIFIED",
+      "criterion": "Cost rule, concerns, menus, predicted boundaries specified before the run."
+    },
+    {
+      "gate_id": "CT_CANDIDATE_SETS",
+      "criterion": "bag's representing set has 5 screens under the base menu and 7 under the extended menu."
+    },
+    {
+      "gate_id": "CT_DELTA_ANCHOR",
+      "criterion": "Pure-bag concern chooses q_perm under both menus."
+    },
+    {
+      "gate_id": "CT_BOUNDARIES_CONFIRMED",
+      "criterion": "The 55-point sweeps match the exact predicted boundaries under both menus."
+    },
+    {
+      "gate_id": "CT_REVERSAL",
+      "criterion": "The mirrored concern pair chooses reversal-dual screens under both menus."
+    },
+    {
+      "gate_id": "CT_RANKING_RECORDED",
+      "criterion": "Verdict is transport_holds_boundary_moves, boundary_menu_stable, transport_fails, or inconclusive."
+    },
+    {
+      "gate_id": "CT_CLAIM_BOUNDARY",
+      "criterion": "No valence, learned concern, LLM, or master-object claim."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/delete_repair_concern_transport/results/delete_repair_concern_transport_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/delete_repair_concern_transport/preregistration.json",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/delete_repair_concern_transport/paper.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}
