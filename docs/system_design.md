@@ -446,6 +446,10 @@ no project-local axiom remains. Mathlib stays proved-not-verified.
 Wave 11 (`WeaknessMixture.lean`) banks the overlapping-mixture prior
 mass on the WI `{id, flip}` toy — **SafeVerify-passed** (receipt
 §Wave 11). PAC-Bayes-kl stays out.
+Wave 12 (`WeaknessPACBayes.lean`) banks the compatibility-indexed
+KL certificate and the LSM plug-in implication; the Langford–
+Seeger–Maurer inequality is cited, not proved. Mathlib stays
+proved-not-verified (receipt §Wave 12).
 Measure-theoretic T4, CT-1 MDL, classical ICA, and unconditional
 SIC-C-c stay open.
 That instrument is `experiments/delete_repair_concern_estimation/`:
@@ -492,12 +496,13 @@ See [`docs/next_agent_lea_handoff_2026-08-17.md`](next_agent_lea_handoff_2026-08
 and [`.cursor/skills/lea/SKILL.md`](../.cursor/skills/lea/SKILL.md).
 
 The weakness paper also carries a theory-only companion,
-`papers/weakness_invariance_neurips/pac_bayes_weakness_sketch.md`. It derives a
-finite, prior-dependent compatibility-class KL certificate and keeps that
-analytic claim separate from empirical and neural PAC-Bayes evidence. Its next
-gate is an exact CPU enumeration on predeclared domains of size at most seven
-(maximum ambient class \(7^7\)) under aligned and wrong groups; no existing OOD
-result is relabeled by the derivation.
+`papers/weakness_invariance_neurips/pac_bayes_weakness_sketch.md`. The
+finite prior-mass toy is Lean-verified (`WeaknessMixture`); the
+compatibility-class KL certificate is Lean-proved in the mathlib
+companion (`WeaknessPACBayes`, proved-not-verified). The
+Langford–Seeger–Maurer kl inequality stays a citation. No existing
+OOD result is relabeled. The remaining empirical gate is an exact
+CPU enumeration on predeclared domains of size at most seven.
 
 ### 3.3 Scripts (`scripts/`)
 

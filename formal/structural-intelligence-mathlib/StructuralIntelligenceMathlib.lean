@@ -10,6 +10,7 @@ import StructuralIntelligenceMathlib.CG2Holonomy
 import StructuralIntelligenceMathlib.AA1MonotoneCompetence
 import StructuralIntelligenceMathlib.SICA_FiniteExistence
 import StructuralIntelligenceMathlib.SICC_CoveringMeta
+import StructuralIntelligenceMathlib.WeaknessPACBayes
 
 /-!
 # Structural Intelligence — Mathlib companion project
@@ -174,3 +175,6 @@ lane stay fast while this project takes on the real-analysis work.
 #print axioms StructuralIntelligenceMathlib.sic_a_finite_discrete_coarsest
 #print axioms StructuralIntelligenceMathlib.sicc_covering_meta
 #print axioms StructuralIntelligenceMathlib.sicc_covering_poly
+#print axioms StructuralIntelligenceMathlib.weakness_kl_certificate
+#print axioms StructuralIntelligenceMathlib.lsm_plug_certificate
+#print axioms StructuralIntelligenceMathlib.weakness_lsm_bound

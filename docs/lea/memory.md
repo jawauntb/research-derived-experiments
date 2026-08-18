@@ -194,3 +194,14 @@ Append. Driven by "Intention Is All You Need" v3 and its review.
   exact masses `1/4` and `3/4`; mass increases with weakness;
   one-component certificates hold. Designed into the prior.
 - PAC-Bayes-kl and OOD stay out.
+
+## Wave 12 banked, not verified (2026-08-18)
+
+- `WeaknessPACBayes.lean` (`weakness_kl_certificate`,
+  `lsm_plug_certificate`, `weakness_lsm_bound`) elaborates;
+  `#print axioms` ⊆ `{propext, Classical.choice, Quot.sound}`.
+  No project-local axiom. Label: **proved-not-verified**.
+- Langford–Seeger–Maurer is cited as the `hLSM` hypothesis.
+  Do not axiom it. Do not label the file "we proved PAC-Bayes."
+- Wave 11 kill still green: `lake build StructuralIntelligence`,
+  SafeVerify on `WeaknessMixture`, no headline states PAC-Bayes-kl.

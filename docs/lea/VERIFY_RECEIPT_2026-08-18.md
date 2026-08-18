@@ -172,3 +172,22 @@ Same method as Waves 7–9 (4.29 scratch at
 Cites `WeaknessP1.weakness`. Does not re-prove `coverage_increases`.
 Does not prove PAC-Bayes-kl or OOD transport. No `Classical.choice`,
 no `sorryAx`, no `native_decide`.
+
+Replayed 2026-08-18 after Wave 12: `lake build StructuralIntelligence`
+green; `mixture_prior_mass_increases` axiom-free; `replay11.sh`
+**SAFEVERIFY_PASSED** (17 decls). Headlines still withhold PAC-Bayes-kl.
+
+## Wave 12 (2026-08-18): WI PAC-Bayes certificate
+
+Mathlib lane only. Not SafeVerify — `Classical.choice` is outside
+the whitelist. Check: `lake build StructuralIntelligenceMathlib`
+in `formal/structural-intelligence-mathlib/` (Lean 4.32.2).
+
+| file | verdict | headline axioms |
+|---|---|---|
+| `WeaknessPACBayes.lean` | **proved-not-verified** | `weakness_kl_certificate`, `lsm_plug_certificate`, `weakness_lsm_bound`: `{propext, Classical.choice, Quot.sound}` — no project-local axiom |
+
+Cited: Langford & Seeger, CMU-CS-01-102 (2001); Seeger, *JMLR*
+3:233–269 (2002); Maurer, arXiv:cs/0411099 (2004). The LSM
+inequality is the `hLSM` hypothesis of `weakness_lsm_bound`; it is
+not proved and not axiomatized. No `sorry`, no `native_decide`.
