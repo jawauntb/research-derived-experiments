@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "delete_repair_concern",
+  "hypothesis": "A registered concern weighting over a finite task family does real work in choosing among bag's five representing screens: distinct concerns force distinct screens (four of five appear), the concern-free Paper F tie-break is strictly suboptimal under registered concerns with exact rational gaps, the mirrored concern pair is reversal-natural, and the bag/pair_eq family has an exact phase boundary at epsilon = 11/27.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "registered_weights_only",
+      "description": "Concern vectors are registered rational inputs; nothing is learned, sampled, or inferred."
+    },
+    {
+      "control_id": "registered_cost_rule",
+      "description": "cost(t|r) = n_fibres(r) if r represents t else 2*n_worlds, written before the run."
+    },
+    {
+      "control_id": "exact_arithmetic",
+      "description": "All expected costs, gaps, and the phase boundary are Fractions; no floats."
+    },
+    {
+      "control_id": "delta_bag_recovers_paper_f",
+      "description": "All mass on bag must reproduce the Paper F tie-break choice q_perm, anchoring the instrument to the banked baseline."
+    },
+    {
+      "control_id": "kill_does_not_fail_ci",
+      "description": "concern_does_work, concern_idle, and inconclusive are all valid passing runs."
+    }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/delete_repair_concern/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "CON_SPECIFIED",
+      "criterion": "Cost rule, task family, concern set, and verdict rule specified before the run."
+    },
+    {
+      "gate_id": "CON_REPRESENTING_SET",
+      "criterion": "bag's representing set is all five menu screens, as banked in Paper F."
+    },
+    {
+      "gate_id": "CON_COST_MATRIX_RECORDED",
+      "criterion": "The full 5x6 screen-by-task cost matrix is recorded."
+    },
+    {
+      "gate_id": "CON_CONCERNS_REGISTERED",
+      "criterion": "Exactly the six registered concern vectors are evaluated."
+    },
+    {
+      "gate_id": "CON_EXACT_ARITHMETIC",
+      "criterion": "Gaps serialize as exact integers or fractions."
+    },
+    {
+      "gate_id": "CON_REVERSAL",
+      "criterion": "The mirrored concern pair chooses reversal-dual screens and the reversal is an involution on worlds."
+    },
+    {
+      "gate_id": "CON_BOUNDARY",
+      "criterion": "The 55-point epsilon sweep matches the exact boundary 11/27 with the tie kept by fewest fibres."
+    },
+    {
+      "gate_id": "CON_RANKING_RECORDED",
+      "criterion": "Verdict is concern_does_work, concern_idle, or inconclusive."
+    },
+    {
+      "gate_id": "CON_CLAIM_BOUNDARY",
+      "criterion": "No valence, agency, consciousness, learned concern, LLM, or master-object claim."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/delete_repair_concern/results/delete_repair_concern_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/delete_repair_concern/preregistration.json",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/delete_repair_concern/paper.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

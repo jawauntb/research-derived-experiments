@@ -390,6 +390,13 @@ episode (delete `sq`, formula tax, re-adjoin) changes access
 universe and the round trip is the identity, so the fact lives on
 the generator set, not (q, K). Verdict `outside_fact_found`;
 Possibility 5 bounded to representability facts.
+Door 3 is `experiments/delete_repair_concern/`: registered
+rational concern weights over six tasks select four distinct
+screens from `bag`'s five-screen representing set, beat the
+concern-free Paper F tie-break by exact gaps (max 21/2), restore
+reversal-naturality where the name tie-break failed, and show an
+exact `bag`/`pair_eq` phase boundary at ε = 11/27. Verdict
+`concern_does_work`; concern is a weight vector, not valence.
 The close-out is `papers/sic_dynamics/` (`paper.md` for the
 instruments; `for_readers.md` for a cold reader). Wave 2 P0/P1 lemmas are
 **verified** in `formal/structural-intelligence/` (`KappaCheap`,
