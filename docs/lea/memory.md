@@ -93,6 +93,32 @@ GeneratorBorder headlines use no axioms at all.
   the cube-episode extended universe has **17** trees at bound 5, not
   9. Enumerate in the kernel; do not trust prose counts.
 
+## Wave 6 (2026-08-18) — essay-driven files, all SafeVerify-passed
+
+Append. Driven by "Intention Is All You Need" v3 and its review.
+
+- `CrossingUnique.crossing_unique` — proved by an **autonomous Lea
+  run** (52 s, decide + omega), verified via Lea `/verify` AND the
+  4.29 replay. First fully Lea-proved node in the repo.
+- `MeaningVsCompany.*` — meaning quotient vs co-occurrence quotient
+  incomparable on the registered six-message world; instantiates
+  `CausalSemantics.PsiEquiv`; three headlines axiom-free.
+- `WeakestAdequate.*` — the essay's D13 "largest region" does not
+  exist (kernel counterexample); repair = maximal region under a
+  **disclosed completion order** (greedy is order-dependent — the
+  κ_screen tie-break lesson recurring).
+- `KleisliSection.*` — sections of a quotient are spec-level
+  indistinguishable; section space closed under fiberwise swaps;
+  2×2 witness has exactly 4 sections, one shadow.
+- `DialZero.*` — level-set partition has zero task-distortion, every
+  zero-distortion encoder refines it, no two-cell partition works on
+  the witness. Theorem B's "cells coarsen" wording is withdrawn per
+  review; safe claim = optimal rate falls.
+- Lea ops: default `max_turns = 20` is too small for multi-theorem
+  proof-engineering runs — raised to 80 in `config/lea.local.toml`.
+  The adapter must run under launchd (`com.lea.adapter`), not under
+  an agent shell; shells here reap child processes between commands.
+
 ## Runbook facts (2026-08-18)
 
 - Adapter-only start beats `start-dev.sh`: the web UI's rollup

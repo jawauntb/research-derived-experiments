@@ -88,6 +88,15 @@ outside fact of the same shape would consolidate the border, and an
 episode whose access change tracks a screen would sharpen it the
 other way. Door 3 (concern) is a separate instrument.
 
+## Lean status
+
+**Verified.** `GeneratorBorder.lean` (Wave 5): both episodes
+enumerated in the kernel (9 vs 89 trees, min 7 vs 3, mass 5 vs 14),
+`base_subset_ext7`, and the two-point separation
+`min_size_not_shared_function` — several headlines depend on **no
+axioms at all**; SafeVerify kernel replay passed
+(`docs/lea/VERIFY_RECEIPT_2026-08-18.md`).
+
 ## Provenance
 
 `python3 experiments/delete_repair_reduction/experiment.py`;

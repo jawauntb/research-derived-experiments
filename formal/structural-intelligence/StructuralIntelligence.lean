@@ -24,6 +24,14 @@ import StructuralIntelligence.DiamondInterval
 import StructuralIntelligence.SurgeryMiss
 import StructuralIntelligence.DtaN4
 import StructuralIntelligence.SwapTyped
+import StructuralIntelligence.MenuBlind
+import StructuralIntelligence.GeneratorBorder
+import StructuralIntelligence.ConcernChoice
+import StructuralIntelligence.CrossingUnique
+import StructuralIntelligence.MeaningVsCompany
+import StructuralIntelligence.WeakestAdequate
+import StructuralIntelligence.KleisliSection
+import StructuralIntelligence.DialZero
 
 /-!
 # Structural Intelligence — Lean 4 formalisation
@@ -129,6 +137,54 @@ remaining Structural-Intelligence companion papers:
     — Paper D: two diamond embeddings, same poset, different `s²`.
 *   `StructuralIntelligence.SurgeryMiss.surgery_miss_pair_eq`
     — Paper E: cheap `decide` says quotient on `pair_eq`/`q_id`; gold is noop.
+*   `StructuralIntelligence.MenuBlind.menu_blind_kappa_impossible`
+    — Door 1: gold flips between the base and extended menus on
+    `pair_eq`/`q_id`, so no function of (task, screen, edges) matches
+    gold under both.  With `gold_flip_pair_eq`, `gold_flip_pair23`,
+    `base_gold_consistent`, `screen_exact_on_flip_rows`.
+*   `StructuralIntelligence.GeneratorBorder.generator_border_sq`,
+    `StructuralIntelligence.GeneratorBorder.generator_border_cube`
+    — Door 2: exhaustive kernel enumerations of both generator
+    episodes (9 vs 89 trees at bound 7, 4 vs 17 at bound 5); min
+    formula size moves (7 vs 3, 5 vs 2) while denotation/size/depth
+    are grammar-free; `min_size_not_shared_function` is the two-point
+    separation.
+*   `StructuralIntelligence.ConcernChoice.boundary_base`,
+    `StructuralIntelligence.ConcernChoice.boundary_ext`
+    — Door 3: the six registered concern choices (four distinct
+    screens, mirrored duals), the strict sum-gap 21 over the
+    concern-free choice, and both dials exact on the k/54 grid:
+    base crosses at k = 22 (ε = 11/27), extended at k = 14
+    (ε = 7/27) — the concern boundary is menu-relative.
+*   `StructuralIntelligence.CrossingUnique.crossing_unique`
+    — the door-3 dial has exactly one tie point on the registered
+    grid (k = 22).  Proved by an autonomous Lea run and ported
+    verbatim; verified twice (Lea `/verify` and the 4.29 replay).
+*   `StructuralIntelligence.MeaningVsCompany.*` — the §7 sting of
+    the intention essay on the registered six-message world: the
+    meaning quotient (Ψ-classes, instantiating `CausalSemantics`)
+    and the co-occurrence quotient are incomparable partitions —
+    `neither_partition_refines_the_other`, with the transported
+    forms `company_does_not_refine_meaning` and
+    `meaning_does_not_refine_company`.
+*   `StructuralIntelligence.WeakestAdequate.*` — review item 1 on
+    the intention essay's D13: `no_largest_adequate` (no adequate
+    region contains all adequate regions; general, not enumeration),
+    `maximal_not_unique`, and the constructive repair
+    `greedy_repair_works` / `greedy_depends_on_order` — selection
+    needs a disclosed order, the κ_screen lesson transported.
+*   `StructuralIntelligence.KleisliSection.*` — the categorical
+    reading at its earned grade: sections of a quotient are
+    specification-level indistinguishable
+    (`sections_spec_indistinguishable`), the section space is closed
+    under fiberwise replacement (`section_swap`), and the registered
+    2×2 witness carries exactly four sections with one shadow.
+*   `StructuralIntelligence.DialZero.*` — Theorem B's D = 0 clause:
+    the level-set partition of the task law has zero task-distortion
+    (`levelCells_zero_distortion`), every zero-distortion encoder
+    refines it (`zero_distortion_cell_in_level`), and on the
+    registered witness no two-cell partition qualifies
+    (`no_coarser_on_witness`).
 
 Everything is proven in pure Lean 4 core (no `Mathlib`).  The analytic
 step `(1 - 1/(cM))^N ≤ exp(-N/(cM))` and the resulting
@@ -185,3 +241,20 @@ and are documented as future work in the package `README.md`.
 #print axioms StructuralIntelligence.Aff13.affine_escapes_kirchhoff
 #print axioms StructuralIntelligence.DiamondInterval.poset_not_determine_interval
 #print axioms StructuralIntelligence.SurgeryMiss.surgery_miss_pair_eq
+#print axioms StructuralIntelligence.MenuBlind.menu_blind_kappa_impossible
+#print axioms StructuralIntelligence.MenuBlind.gold_flip_pair_eq
+#print axioms StructuralIntelligence.GeneratorBorder.generator_border_sq
+#print axioms StructuralIntelligence.GeneratorBorder.generator_border_cube
+#print axioms StructuralIntelligence.GeneratorBorder.min_size_not_shared_function
+#print axioms StructuralIntelligence.ConcernChoice.boundary_base
+#print axioms StructuralIntelligence.ConcernChoice.boundary_ext
+#print axioms StructuralIntelligence.ConcernChoice.mirrored_dual_ext
+#print axioms StructuralIntelligence.CrossingUnique.crossing_unique
+#print axioms StructuralIntelligence.MeaningVsCompany.neither_partition_refines_the_other
+#print axioms StructuralIntelligence.MeaningVsCompany.company_does_not_refine_meaning
+#print axioms StructuralIntelligence.WeakestAdequate.no_largest_adequate
+#print axioms StructuralIntelligence.WeakestAdequate.greedy_depends_on_order
+#print axioms StructuralIntelligence.KleisliSection.sections_spec_indistinguishable
+#print axioms StructuralIntelligence.KleisliSection.section_swap
+#print axioms StructuralIntelligence.DialZero.zero_distortion_cell_in_level
+#print axioms StructuralIntelligence.DialZero.no_coarser_on_witness
