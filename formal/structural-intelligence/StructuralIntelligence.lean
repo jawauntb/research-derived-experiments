@@ -37,6 +37,10 @@ import StructuralIntelligence.EmlCatalan
 import StructuralIntelligence.RepairTable
 import StructuralIntelligence.ObstructionTaxonomy
 import StructuralIntelligence.ConcernEst
+import StructuralIntelligence.IdentImpossibility
+import StructuralIntelligence.T4FiniteCI
+import StructuralIntelligence.WeaknessP1
+import StructuralIntelligence.IcaSignedPerm
 
 /-!
 # Structural Intelligence — Lean 4 formalisation
@@ -226,6 +230,23 @@ remaining Structural-Intelligence companion papers:
     the oracle choice at the registered prefixes 1 / 2 / 6, those
     steps are minimal, and the misspecification expected-cost gap
     is exactly 4.  The 24-row traces stay Python.
+*   `StructuralIntelligence.IdentImpossibility.no_transcript_map_hits_both`
+    — Wave 9 IDENT core: a map from the passive record cannot name
+    two distinct hypotheses that share that record; on a `Nodup`
+    constant-record list the hit count is ≤ 1 (`hits_le_one`).
+*   `StructuralIntelligence.T4FiniteCI.css_implies_fiber_constant`
+    — Wave 9 finite CI reading of Theorem 4: CSS implies every
+    task is fiber-constant on every finite list.  Cites
+    `commonSuffScreen_refines`; does not re-prove it.  General
+    measure-theoretic CI stays open.
+*   `StructuralIntelligence.WeaknessP1.coverage_increases`
+    — Wave 9 WI-P1 toy: the candidate that transports more of
+    `{id, flip}` covers strictly more of `{p0, p1}`.  PAC-Bayes
+    and misaligned `G` stay out.
+*   `StructuralIntelligence.IcaSignedPerm.ica_class_fin2`
+    — Wave 9 ICA class on two coordinates: the four signed
+    permutations are legal leftovers; a dense mixture is not.
+    This is not Theorem 7.
 
 Everything is proven in pure Lean 4 core (no `Mathlib`).  The analytic
 step `(1 - 1/(cM))^N ≤ exp(-N/(cM))` and the resulting
@@ -311,3 +332,10 @@ and are documented as future work in the package `README.md`.
 #print axioms StructuralIntelligence.ObstructionTaxonomy.classify_conditions
 #print axioms StructuralIntelligence.ConcernEst.conc_est_registered_steps
 #print axioms StructuralIntelligence.ConcernEst.misspec_expected_gap
+#print axioms StructuralIntelligence.IdentImpossibility.no_transcript_map_hits_both
+#print axioms StructuralIntelligence.IdentImpossibility.registered_no_passive_map
+#print axioms StructuralIntelligence.IdentImpossibility.registered_hits_le_one
+#print axioms StructuralIntelligence.T4FiniteCI.css_implies_fiber_constant
+#print axioms StructuralIntelligence.T4FiniteCI.registered_fiber_constant
+#print axioms StructuralIntelligence.WeaknessP1.coverage_increases
+#print axioms StructuralIntelligence.IcaSignedPerm.ica_class_fin2

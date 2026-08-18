@@ -51,6 +51,8 @@ Intervention \(g\) **separates** \(S\) when outcomes \(\{R(h,g):h\in S\}\) are n
 
 **Proof sketch.** Any two members of \(S\) induce identical passive transcripts. A deterministic map returns one answer on that transcript and is therefore wrong on at least one world. A randomized map has minimax accuracy at most \(1/m\) against an adversary choosing the true member of \(S\). □
 
+The combinatorial core is Lean (`formal/structural-intelligence/StructuralIntelligence/IdentImpossibility.lean`, SafeVerify 2026-08-18): a transcript map cannot hit two distinct hypotheses that share a record, and on a duplicate-free constant-record list the hit count is at most one. Model scores stay Python.
+
 **Active sufficiency.** IDENT v1 generates only items with at least one one-step identifying separator, so failure is not caused by an impossible task.
 
 ## 3. Benchmark

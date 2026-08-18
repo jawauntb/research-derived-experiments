@@ -167,3 +167,19 @@ Append. Driven by "Intention Is All You Need" v3 and its review.
 - Cites door 3; does not re-prove it. Prefix-sum serving cost is
   n times plug-in expected cost, so the argmin is door 3's `pick`.
 - 24-row traces stay Python. Misspec expected gap 4 = sum-gap 8 / 2.
+
+## Wave 9 banked and verified (2026-08-18)
+
+- `IdentImpossibility.lean`, `T4FiniteCI.lean`, `WeaknessP1.lean`,
+  `IcaSignedPerm.lean` all SAFEVERIFY_PASSED in the 4.29 scratch.
+  Replay script: `/tmp/sv429/replay9.sh`.
+- IDENT core is the two-point transcript map; `hits_le_one` is the
+  `1/m` counting form. Model scores stay Python.
+- T4 finite CI cites `commonSuffScreen_refines`. Measure-theoretic
+  CI stays open.
+- WI-P1 is the `{id, flip}` transport toy. PAC-Bayes stays out.
+- ICA file is the signed-permutation class on two coordinates, not
+  Theorem 7.
+- Halmos–Savage `h`-extension is a mathlib theorem (choose-packaging).
+  Shannon converse at `D = 0` is a mathlib theorem; `0 < D` stays
+  the Shannon 1959 axiom.

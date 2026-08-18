@@ -82,13 +82,13 @@ paper. That version requires the full Halmos–Savage 1949 machinery
 (regular conditional distributions on a standard Borel space, plus a
 minimal sufficient σ-algebra that respects the P-null completion), and
 Mathlib does not yet expose that infrastructure. The pure Halmos–Savage
-minimality step is also axiomatised in Theorem 1's Lean file as
-`HalmosSavage_minimality_h_extension` — a classical-choice packaging of
+minimality packaging step is now a theorem in Theorem 1's Lean file
+(`HalmosSavage_minimality_h_extension`) — a classical-choice packaging of
 the "extend a partial function defined on the image of an arbitrary
 sufficient `T'` to a total function on `Θ → ℝ`" step, with an inline
-citation to Halmos & Savage 1949. That axiom is honestly listed in the
-Mathlib project's README (*Axiom footprint — honest accounting*
-section) and inherited unchanged by the derivation in this paper.
+citation to Halmos & Savage 1949. The derivation in this paper inherits
+that theorem; no project-local axiom remains on the finite discrete
+path.
 
 ---
 
@@ -166,9 +166,9 @@ Both halves — the LR-factoring characterisation and the sufficiency of
 the LR-vector — are proved in
 `StructuralIntelligenceMathlib/Theorem1MinimalSufficiency.lean` under
 strict positivity, without any auxiliary axiom. The minimality half
-uses one packaged axiom
+is the proved packaging lemma
 (`HalmosSavage_minimality_h_extension`) whose mathematical content is a
-classical-choice extension step; the axiom carries an inline citation
+classical-choice extension step; the lemma carries an inline citation
 to Halmos & Savage (1949), *Ann. Math. Statist.* 20, 225–241,
 Theorem 2.
 
@@ -458,12 +458,10 @@ The programme's honest split becomes:
   version of Proposition 3 for measurable Markov kernels. None of
   these are in Mathlib v4.32.2. This paper does not close the gap
   but does not widen it either.
-- **`HalmosSavage_minimality_h_extension` axiom.** Theorem 1's Lean
-  file uses one project-local axiom to package the classical-choice
-  extension step for the minimality half. This paper inherits that
-  axiom unchanged — no new axioms are introduced. Any tightening of
-  Theorem 1 (a fully sorry-free Halmos–Savage minimality proof) would
-  immediately tighten this paper's derivation.
+- **`HalmosSavage_minimality_h_extension` is a theorem.** Theorem 1's
+  Lean file now proves the classical-choice packaging step for the
+  minimality half. This paper inherits that theorem — no project-local
+  axiom remains on the finite discrete path.
 - **Sub-family minimality (`Τ ⊊ Θ`).** The Lean statement in this
   paper's file gives minimality for `Τ = Θ`. For a strict sub-family
   `Τ ⊊ Θ`, the LR-vector against all of `Θ` is sufficient but not

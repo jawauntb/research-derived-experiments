@@ -434,6 +434,16 @@ frequency counting recovers the oracle choice at prefixes 1 / 2 / 6,
 those steps are minimal, and the misspecification expected-cost gap
 is 4. **SafeVerify-passed** (same 4.29 scratch; axioms ⊆ {propext};
 receipt §Wave 8). The 24-row traces stay Python.
+Wave 9 banks the remaining closable Lean leftovers:
+`IdentImpossibility.lean` (IDENT §2.4 passive bound),
+`T4FiniteCI.lean` (finite fiber-CI reading of Theorem 4; cites CSS),
+`WeaknessP1.lean` (WI Proposition 1 on `{id, flip}`), and
+`IcaSignedPerm.lean` (signed-permutation class, not Theorem 7). All
+four **SafeVerify-passed** (same 4.29 scratch; receipt §Wave 9).
+The mathlib lane proves the Halmos–Savage packaging step and the
+Shannon converse at `D = 0`; the `0 < D` converse stays axiomatised.
+Measure-theoretic T4, CT-1 MDL, classical ICA, and unconditional
+SIC-C-c stay open.
 That instrument is `experiments/delete_repair_concern_estimation/`:
 concern is estimated by registered frequency counting on three
 literal 24-draw task sequences, and the plug-in choice recovers the

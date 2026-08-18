@@ -321,7 +321,160 @@ theorem symChannel_mutualInfo_closed_form
   rw [h_cond]
   ring
 
-/-- **Shannon 1959 converse (axiomatised).**
+/-- Binary entropy vanishes at `0` (Mathlib `log 0 = 0`). -/
+lemma binaryEntropy_zero : binaryEntropy 0 = 0 := by
+  unfold binaryEntropy
+  simp [Real.log_zero, Real.log_one]
+
+/-- A point mass on `Fin n` has entropy `0`. -/
+lemma entropy_dirac (n : ℕ) (x : Fin n) :
+    entropy n (fun y => if y = x then (1 : ℝ) else 0) = 0 := by
+  classical
+  unfold entropy
+  have hterm : ∀ y : Fin n,
+      (if y = x then (1 : ℝ) else 0)
+        * Real.log (if y = x then (1 : ℝ) else 0) = 0 := by
+    intro y
+    split_ifs with hy
+    · simp [Real.log_one]
+    · simp [Real.log_zero]
+  simp [hterm]
+
+/-- Uniform on `Fin n` has entropy `log n`. -/
+lemma entropy_uniform (n : ℕ) (hn : 2 ≤ n) :
+    entropy n (uniformDist n) = Real.log (n : ℝ) := by
+  classical
+  have hnne : (n : ℝ) ≠ 0 := n_ne_zero hn
+  unfold entropy uniformDist
+  have h_term : ∀ i : Fin n,
+      ((1 : ℝ) / n) * Real.log ((1 : ℝ) / n) = (1 / n) * (- Real.log n) := by
+    intro i
+    rw [Real.log_div (by norm_num : (1 : ℝ) ≠ 0) hnne]
+    simp [Real.log_one]
+  rw [Finset.sum_congr rfl (fun i _ => h_term i)]
+  rw [← Finset.sum_mul, Finset.sum_const, Finset.card_univ, Fintype.card_fin]
+  have h_smul_n : (n : ℕ) • ((1 : ℝ) / n) = 1 := by
+    rw [nsmul_eq_mul]; field_simp
+  rw [h_smul_n]
+  ring
+
+/-- Hamming distortion is `{0,1}`-valued, hence nonnegative. -/
+lemma hammingDistortion_nonneg (n : ℕ) (x y : Fin n) :
+    0 ≤ hammingDistortion n x y := by
+  unfold hammingDistortion
+  split_ifs <;> norm_num
+
+/-- **Shannon 1959 converse at distortion `0` (proved).**
+
+    Expected Hamming `≤ 0` plus a stochastic nonnegative kernel forces
+    every row to be a point mass on the diagonal.  Conditional entropy
+    vanishes, the receiver marginal stays uniform, and
+    `I(X; X̂) = log n`, which is the closed form at `D = 0`.
+    The `0 < D` converse remains the Shannon 1959 axiom below. -/
+theorem Shannon1959_converse_D_zero
+    (n : ℕ) (hn : 2 ≤ n)
+    (K : Fin n → Fin n → ℝ)
+    (hK_nonneg : ∀ x y, 0 ≤ K x y)
+    (hK_stoch : ∀ x, ∑ y, K x y = 1)
+    (hK_dist : expectedDistortion n (uniformDist n) K (hammingDistortion n) ≤ 0) :
+    Real.log (n : ℝ) - binaryEntropy 0 - (0 : ℝ) * Real.log ((n : ℝ) - 1)
+      ≤ mutualInfo n (uniformDist n) K := by
+  classical
+  have hnpos : (0 : ℝ) < n := n_pos hn
+  -- Each summand of expected distortion is nonnegative, and the
+  -- total is ≤ 0, so every off-diagonal mass is zero.
+  have hterm_nonneg :
+      ∀ x y, 0 ≤ uniformDist n x * K x y * hammingDistortion n x y := by
+    intro x y
+    have : 0 ≤ uniformDist n x := by
+      unfold uniformDist; exact div_nonneg (by norm_num) (le_of_lt hnpos)
+    exact mul_nonneg (mul_nonneg this (hK_nonneg x y)) (hammingDistortion_nonneg n x y)
+  have hinner_nonneg : ∀ x, 0 ≤ ∑ y, K x y * hammingDistortion n x y := by
+    intro x
+    exact Finset.sum_nonneg fun y _ =>
+      mul_nonneg (hK_nonneg x y) (hammingDistortion_nonneg n x y)
+  have houter_nonneg : 0 ≤ expectedDistortion n (uniformDist n) K (hammingDistortion n) := by
+    unfold expectedDistortion uniformDist
+    exact Finset.sum_nonneg fun x _ =>
+      mul_nonneg (div_nonneg (by norm_num) (le_of_lt hnpos)) (hinner_nonneg x)
+  have hdist0 :
+      expectedDistortion n (uniformDist n) K (hammingDistortion n) = 0 :=
+    le_antisymm hK_dist houter_nonneg
+  have hrow0 : ∀ x, ∑ y, K x y * hammingDistortion n x y = 0 := by
+    intro x
+    have hxpos : (0 : ℝ) < uniformDist n x := by
+      unfold uniformDist; exact div_pos (by norm_num) hnpos
+    -- ∑_x μ(x) * inner(x) = 0 and each product ≥ 0 ⇒ each inner = 0.
+    have hsum : ∑ x, uniformDist n x * ∑ y, K x y * hammingDistortion n x y = 0 := by
+      simpa [expectedDistortion] using hdist0
+    have hprod_nonneg : ∀ x ∈ Finset.univ,
+        0 ≤ uniformDist n x * ∑ y, K x y * hammingDistortion n x y :=
+      fun x _ => mul_nonneg (le_of_lt (by
+        unfold uniformDist; exact div_pos (by norm_num : (0 : ℝ) < 1) hnpos))
+        (hinner_nonneg x)
+    have hprod0 :=
+      (Finset.sum_eq_zero_iff_of_nonneg hprod_nonneg).1 hsum x (Finset.mem_univ x)
+    exact (mul_eq_zero.mp hprod0).resolve_left (ne_of_gt hxpos)
+  have hoff : ∀ x y, x ≠ y → K x y = 0 := by
+    intro x y hxy
+    have : ∑ z, K x z * hammingDistortion n x z = 0 := hrow0 x
+    have hterm_nn : ∀ z ∈ Finset.univ, 0 ≤ K x z * hammingDistortion n x z :=
+      fun z _ => mul_nonneg (hK_nonneg x z) (hammingDistortion_nonneg n x z)
+    have hz := (Finset.sum_eq_zero_iff_of_nonneg hterm_nn).1 this y (Finset.mem_univ y)
+    have hd : hammingDistortion n x y = 1 := by
+      unfold hammingDistortion; simp [hxy]
+    have : K x y * 1 = 0 := by simpa [hd] using hz
+    simpa using this
+  have hdiag : ∀ x, K x x = 1 := by
+    intro x
+    have hsplit :
+        ∑ y, K x y = K x x + ∑ y ∈ Finset.univ.erase x, K x y := by
+      rw [← Finset.add_sum_erase _ _ (Finset.mem_univ x)]
+    have herase : ∑ y ∈ Finset.univ.erase x, K x y = 0 := by
+      refine Finset.sum_eq_zero ?_
+      intro y hy
+      exact hoff x y (Ne.symm (Finset.ne_of_mem_erase hy))
+    have : ∑ y, K x y = K x x := by
+      rw [hsplit, herase, add_zero]
+    rw [← this]
+    exact hK_stoch x
+  have hrow_dirac : ∀ x, (fun y => K x y) = (fun y => if y = x then (1 : ℝ) else 0) := by
+    intro x
+    funext y
+    by_cases hyx : y = x
+    · rw [hyx, if_pos rfl]
+      exact hdiag x
+    · rw [if_neg hyx]
+      exact hoff x y (Ne.symm hyx)
+  have hcond0 : condEntropy n (uniformDist n) K = 0 := by
+    unfold condEntropy
+    have : ∀ x, entropy n (K x) = 0 := by
+      intro x
+      have := hrow_dirac x
+      simpa [this] using entropy_dirac n x
+    simp [this, uniformDist]
+  have hmarg : marginal n (uniformDist n) K = uniformDist n := by
+    funext y
+    unfold marginal uniformDist
+    have : ∑ x, ((1 : ℝ) / n) * K x y = (1 / n) * ∑ x, K x y := by
+      rw [Finset.mul_sum]
+    -- ∑_x K x y = K y y = 1, since off-diagonal incoming is 0.
+    have hcol : ∑ x, K x y = 1 := by
+      have hsplit :
+          ∑ x, K x y = K y y + ∑ x ∈ Finset.univ.erase y, K x y := by
+        rw [← Finset.add_sum_erase _ _ (Finset.mem_univ y)]
+      have herase : ∑ x ∈ Finset.univ.erase y, K x y = 0 := by
+        refine Finset.sum_eq_zero ?_
+        intro x hx
+        exact hoff x y (Finset.ne_of_mem_erase hx)
+      rw [hsplit, herase, add_zero, hdiag y]
+    rw [this, hcol, mul_one]
+  have hI : mutualInfo n (uniformDist n) K = Real.log (n : ℝ) := by
+    unfold mutualInfo
+    rw [hmarg, hcond0, entropy_uniform n hn, sub_zero]
+  rw [hI, binaryEntropy_zero, zero_mul, sub_zero, sub_zero]
+
+/-- **Shannon 1959 converse (axiomatised for `0 < D`).**
 
     The converse half of Shannon's rate–distortion theorem for the
     uniform source and Hamming distortion: no test channel `K`

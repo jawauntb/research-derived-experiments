@@ -476,10 +476,14 @@ P0/P1 nodes are **proved** (mathlib-free, zero `sorry`, in the
 | `rr1_table_well_defined` | `RepairTable.lean` | verified |
 | `ta2_taxonomy_classifies` | `ObstructionTaxonomy.lean` | verified |
 | `conc_est_registered_steps` | `ConcernEst.lean` | verified |
+| `no_transcript_map_hits_both` | `IdentImpossibility.lean` | verified |
+| `css_implies_fiber_constant` | `T4FiniteCI.lean` | verified |
+| `coverage_increases` | `WeaknessP1.lean` | verified |
+| `ica_class_fin2` | `IcaSignedPerm.lean` | verified |
 
 Still Python: empirical `Φ` ratios, GD 8/8, extras 43/28, and the
 `CONC-EST` 24-row choice traces. Wave 7–8 files are
-SafeVerify-verified (2026-08-18 receipt, axioms ⊆ {propext}).
+SafeVerify-verified (2026-08-18 receipt, axioms ⊆ {propext, Quot.sound}).
 The n=4 representability matrix and Paper B `swap_typed_wins` are now Lean.
 
 Lea is installed locally (`docs/lea/ENV_STATUS.md`). `/verify` is
@@ -514,6 +518,9 @@ Wave 7: `EmlCatalan.lean`, `RepairTable.lean`,
 `ObstructionTaxonomy.lean` are **verified**.
 Wave 8: `ConcernEst.lean` (`conc_est_registered_steps`) is
 **verified**. The 24-row estimator traces stay Python.
+Wave 9: `IdentImpossibility.lean`, `T4FiniteCI.lean`,
+`WeaknessP1.lean`, `IcaSignedPerm.lean` are **verified**.
+IDENT model scores stay Python. `IcaSignedPerm` is not Theorem 7.
 
 Reproduce Paper F:
 

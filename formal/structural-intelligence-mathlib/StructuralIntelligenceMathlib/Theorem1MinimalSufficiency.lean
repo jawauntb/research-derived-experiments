@@ -196,34 +196,52 @@ theorem likelihoodRatioVector_sufficient
   have := mul_right_cancel₀ hne_x_r this
   linarith
 
-/-- **Halmos–Savage minimality-extension axiom.**
+/-- **Halmos–Savage minimality-extension (proved).**
 
     Given an arbitrary sufficient statistic `T' : α → γ` for `P` with
     all `P θ` strictly positive on a finite `α`, and the LR-vector
-    `T* = likelihoodRatioVector P θ₀`, one can construct a function
-    `h : γ → (Θ → ℝ)` such that `T* x = h (T' x)` for every `x`.
+    `T* = likelihoodRatioVector P θ₀`, there is `h : γ → (Θ → ℝ)`
+    with `T* x = h (T' x)` for every `x`.
 
-    The mathematical content is a corollary of
-    `IsSufficient_iff_likelihood_ratio_factors`: if `T'` is
-    sufficient, then for any two parameters the likelihood ratio
-    depends on `x` only through `T' x`, and in particular the whole
-    LR-vector is a function of `T' x`.  Formalising the packaging of
-    "extend the partial function defined on the image of `T'` to a
-    total function on `γ`" requires a routine `Classical.choose`
-    machinery over a `Fintype`; we axiomatise the packaging step
-    here (a genuine finite-combinatorial fact — no analytical
-    content).
+    This is the packaging corollary of
+    `IsSufficient_iff_likelihood_ratio_factors`: sufficiency of `T'`
+    makes every pairwise likelihood ratio — hence the whole LR-vector
+    — a function of `T' x`.  Off the image of `T'` we send `h` to 0.
+    The argument uses the same `Classical.choose` representative
+    already used in the forward direction of the characterisation;
+    there is no remaining custom axiom.
 
     Reference: Halmos & Savage (1949), Application of the
     Radon-Nikodym theorem to the theory of sufficient statistics,
     Ann. Math. Statist. 20, 225-241, Theorem 2. -/
-axiom HalmosSavage_minimality_h_extension
+theorem HalmosSavage_minimality_h_extension
     {Θ α γ : Type*} [Fintype Θ] [Fintype α]
     (P : Θ → α → ℝ) (θ₀ : Θ)
     (hpos : ∀ θ x, 0 < P θ x)
     (T' : α → γ) (hT'_suff : IsSufficient P T') :
     ∃ h : γ → (Θ → ℝ),
-      ∀ x, likelihoodRatioVector P θ₀ x = h (T' x)
+      ∀ x, likelihoodRatioVector P θ₀ x = h (T' x) := by
+  classical
+  let h : γ → (Θ → ℝ) := fun t =>
+    if hx : ∃ x, T' x = t then
+      likelihoodRatioVector P θ₀ (Classical.choose hx)
+    else
+      fun _ => 0
+  refine ⟨h, ?_⟩
+  intro x
+  have hex : ∃ x', T' x' = T' x := ⟨x, rfl⟩
+  have hf : h (T' x) = likelihoodRatioVector P θ₀ (Classical.choose hex) := by
+    simp only [h, dif_pos hex]
+  have hT_rep : T' (Classical.choose hex) = T' x := Classical.choose_spec hex
+  apply funext
+  intro θ
+  have hcross := hT'_suff θ θ₀ (Classical.choose hex) x hT_rep
+  have hp0x : (0 : ℝ) < P θ₀ x := hpos θ₀ x
+  have hp0r : (0 : ℝ) < P θ₀ (Classical.choose hex) := hpos θ₀ _
+  rw [hf]
+  unfold likelihoodRatioVector
+  field_simp
+  linarith [hcross]
 
 /-- **Halmos–Savage existence theorem (finite discrete, positive
     support).**
@@ -231,9 +249,9 @@ axiom HalmosSavage_minimality_h_extension
     A minimal sufficient statistic exists.  Explicit witness: the
     likelihood-ratio vector against a fixed pivot `θ₀`.
 
-    Sufficiency is proved in `likelihoodRatioVector_sufficient`;
-    minimality follows from the axiomatised extension lemma
-    `HalmosSavage_minimality_h_extension`. -/
+    Sufficiency is `likelihoodRatioVector_sufficient`; minimality is
+    the proved extension lemma `HalmosSavage_minimality_h_extension`.
+    No project-local axiom remains. -/
 theorem exists_minimal_sufficient_finite_discrete
     {Θ α : Type*} [Fintype Θ] [Fintype α]
     (P : Θ → α → ℝ) (θ₀ : Θ)

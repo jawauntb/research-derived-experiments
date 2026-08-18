@@ -118,3 +118,26 @@ Python. No `Classical.choice`, no `sorryAx`, no `native_decide`.
 
 Lane: #529 (`ConcernEst.lean`). This INT banks the aggregator and
 derives the labels from this receipt.
+
+## Wave 9 (2026-08-18): IDENT / finite T4 / WI-P1 / ICA class
+
+Same method (4.29 scratch at `/tmp/sv429/formal/structural-intelligence`,
+sorry-target via `gen_target.py`, `safe_verify -v target.olean
+submission.olean --disallow-partial`, `--tstack=262144`). Replay
+script: `/tmp/sv429/replay9.sh`. Logs: `/tmp/sv429/verdicts9/`.
+
+| file | verdict | headline axioms |
+|---|---|---|
+| `IdentImpossibility.lean` | **SAFEVERIFY_PASSED** (114 submission decls) | `no_transcript_map_hits_both`, `registered_no_passive_map`: axiom-free; `registered_hits_le_one`: `propext, Quot.sound` |
+| `T4FiniteCI.lean` | **SAFEVERIFY_PASSED** (68 decls) | `css_implies_fiber_constant`, `registered_fiber_constant`: axiom-free; `secondBit_not_fiber_constant`: `propext` |
+| `WeaknessP1.lean` | **SAFEVERIFY_PASSED** (69 decls) | `coverage_increases` and the four count lemmas: axiom-free |
+| `IcaSignedPerm.lean` | **SAFEVERIFY_PASSED** (71 decls) | `ica_class_fin2`, `swap_swaps`, `sign0_flips_first`: axiom-free |
+
+Cites `commonSuffScreen_refines` in `T4FiniteCI`; does not re-prove
+Theorem 4, Path A/B, or US-2/3. IDENT model scores stay Python.
+`IcaSignedPerm` is the leftover class, not Theorem 7. No
+`Classical.choice`, no `sorryAx`, no `native_decide`.
+
+The mathlib Halmos–Savage packaging theorem and the Shannon `D = 0`
+converse live in `formal/structural-intelligence-mathlib/` and are
+**proved-not-verified** (SafeVerify is the 4.29 mathlib-free lane).
