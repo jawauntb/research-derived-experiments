@@ -48,15 +48,19 @@ deferred:
   is proved in full; the LR vector is proved sufficient; and the
   final "extend a partial function on the LR image to a total map"
   packaging step (`HalmosSavage_minimality_h_extension`) is
-  axiomatised with an explicit citation to Halmos & Savage 1949.
+  **proved** (same `Classical.choose` packaging as the forward
+  direction of the characterisation; no project-local axiom).
+  Cited: Halmos & Savage 1949.
 
 * `StructuralIntelligenceMathlib.symChannel_mutualInfo_closed_form`
   and `StructuralIntelligenceMathlib.R_D_uniform_hamming` —
   **Theorem 2 (Shannon rate–distortion, uniform-Hamming closed
   form)**: the achievability half (symmetric error-`D` channel
   attains `I(X; X̂) = log n - h_binary(D) - D · log(n − 1)`) is
-  proved.  The converse
-  (`Shannon1959_converse_uniform_hamming`) is axiomatised —
+  proved.  The `D = 0` converse
+  (`Shannon1959_converse_D_zero`) is proved (zero Hamming forces
+  a diagonal kernel).  The `0 < D` converse
+  (`Shannon1959_converse_uniform_hamming`) remains axiomatised —
   Mathlib does not yet expose the Lagrangian / KKT infrastructure
   needed to close it internally.  Cited: Shannon 1959.
 
@@ -109,8 +113,8 @@ deferred:
   fibre `K`) to *derive* the master fibration `(q, K)` — reducing SIC-A
   from a posit to a theorem in the finite discrete positive-support
   case.  Coarsestness is inherited from T1's minimality
-  (`HalmosSavage_minimality_h_extension` remains the sole packaging
-  axiom; no new axioms).
+  (`HalmosSavage_minimality_h_extension` is now a theorem; no
+  project-local axiom remains on this path).
 
 * `StructuralIntelligenceMathlib.sicc_covering_meta` and
   `StructuralIntelligenceMathlib.sicc_covering_poly` —
@@ -146,8 +150,10 @@ lane stay fast while this project takes on the real-analysis work.
 #print axioms StructuralIntelligenceMathlib.IsSufficient_iff_likelihood_ratio_factors
 #print axioms StructuralIntelligenceMathlib.likelihoodRatioVector_sufficient
 #print axioms StructuralIntelligenceMathlib.exists_minimal_sufficient_finite_discrete
+#print axioms StructuralIntelligenceMathlib.HalmosSavage_minimality_h_extension
 #print axioms StructuralIntelligenceMathlib.symChannel_mutualInfo_closed_form
 #print axioms StructuralIntelligenceMathlib.symChannel_expected_hamming
+#print axioms StructuralIntelligenceMathlib.Shannon1959_converse_D_zero
 #print axioms StructuralIntelligenceMathlib.R_D_uniform_hamming
 #print axioms StructuralIntelligenceMathlib.R_C_unit
 #print axioms StructuralIntelligenceMathlib.C_R_counit

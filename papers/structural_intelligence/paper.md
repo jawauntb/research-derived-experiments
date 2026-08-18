@@ -1004,11 +1004,12 @@ at any resolution `ε`. The residual content is:
   ~10–15&thinsp;min CI with cache): T5-rate (quantitative
   `N ≥ c·M·log(M/ε) ⇒ M·exp(−N/(c·M)) ≤ ε`), T1
   (Halmos–Savage minimal sufficient statistic — sufficiency-iff-LR-factors
-  proved in full, the classical-choice packaging step
-  is a single explicitly-cited project axiom `HalmosSavage_minimality_h_extension`
-  pointing to Halmos & Savage 1949 Theorem 2), T2 (Shannon R–D closed
+  and the classical-choice packaging step
+  `HalmosSavage_minimality_h_extension` are theorems, citing Halmos
+  & Savage 1949 Theorem 2; no project-local axiom), T2 (Shannon R–D closed
   form for uniform-Hamming — achievability proved in full, the
-  KKT-on-simplex converse is a single explicitly-cited project axiom
+  `D = 0` converse proved, the `0 < D` KKT-on-simplex converse remaining
+  a single explicitly-cited project axiom
   `Shannon1959_converse_uniform_hamming` pointing to Shannon 1959
   Theorem 3), Proposition 3 (Coarsen ⊣ Refine adjunction with both
   triangle identities, fully proved, no axioms), AG-1 (Bernoulli
@@ -1017,9 +1018,10 @@ at any resolution `ε`. The residual content is:
   (Fisher information matrix = Cov[T] in exponential families), CG-2
   (concern-form holonomy = ε·A via discrete Green's theorem), AA-1
   (Bayes-mixture log-likelihood monotone under refinement). Entry-point
-  files run `#print axioms` on every headline so the two citation
-  axioms are visible in the compile log and cannot be silently
-  expanded. Twenty-nine of thirty-two headline theorems depend only on
+  files run `#print axioms` on every headline so the remaining
+  Shannon `0 < D` converse axiom is visible in the compile log and
+  cannot be silently expanded. The Halmos–Savage packaging step is
+  no longer a project axiom. Headline theorems otherwise depend only on
   the mathlib-standard axiom set `[propext, Classical.choice, Quot.sound]`.
   This closes the "prose-only" gap flagged in the original v1 of this
   paper; the seven instruments in §4 remain the *numerical* half of

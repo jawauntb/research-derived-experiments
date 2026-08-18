@@ -576,6 +576,15 @@ uses `[propext, Quot.sound]` (via `omega` closing the impossible
   `poset_not_determine_interval`.  **Proved, not verified.**
 - `StructuralIntelligence/SurgeryMiss.lean` — Paper E
   `surgery_miss_pair_eq`.  **Proved, not verified.**
+- `StructuralIntelligence/IdentImpossibility.lean` — IDENT §2.4
+  `no_transcript_map_hits_both` / `hits_le_one`.  **Verified**
+  (SafeVerify 2026-08-18, receipt §Wave 9).
+- `StructuralIntelligence/T4FiniteCI.lean` — finite CI reading of
+  Theorem 4 (`css_implies_fiber_constant`).  Cites CSS.  **Verified.**
+- `StructuralIntelligence/WeaknessP1.lean` — WI-P1 toy
+  (`coverage_increases`).  **Verified.**
+- `StructuralIntelligence/IcaSignedPerm.lean` — Fin-2 signed-
+  permutation class (`ica_class_fin2`).  Not Theorem 7.  **Verified.**
 
 ## Provenance
 

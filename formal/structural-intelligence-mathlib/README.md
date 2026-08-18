@@ -173,10 +173,10 @@ mathlib build in an isolated CI lane.
   minimal sufficient statistic.  Sufficiency is proved from scratch;
   the *minimality* half — "extend the partial function defined on
   the image of an arbitrary sufficient `T'` to a total function on
-  `Θ → ℝ`" — is packaged into the single axiom
+  `Θ → ℝ`" — is the proved lemma
   `StructuralIntelligenceMathlib.HalmosSavage_minimality_h_extension`
   with an inline citation to Halmos & Savage (1949), *Ann. Math.
-  Statist.* 20, 225–241, Theorem 2.
+  Statist.* 20, 225–241, Theorem 2.  No project-local axiom.
 
 ### Theorem 2 (Shannon rate–distortion, uniform-Hamming) — `StructuralIntelligenceMathlib/Theorem2RateDistortion.lean`
 
@@ -219,10 +219,14 @@ mathlib build in an isolated CI lane.
 
   Fully proved.
 
+* `StructuralIntelligenceMathlib.Shannon1959_converse_D_zero` —
+  the converse at distortion `0`, proved: expected Hamming `≤ 0`
+  forces a diagonal kernel, so `I = log n`.
+
 * `StructuralIntelligenceMathlib.R_D_uniform_hamming` — the full
-  Shannon 1959 statement (both directions).  The **converse** — no
-  channel of distortion `≤ D` achieves strictly smaller mutual
-  information — is packaged into the axiom
+  Shannon 1959 statement (both directions).  The **`0 < D` converse**
+  — no channel of distortion `≤ D` achieves strictly smaller mutual
+  information — remains the axiom
   `StructuralIntelligenceMathlib.Shannon1959_converse_uniform_hamming`.
   Its full proof requires a Lagrangian / KKT argument on the simplex
   of transition matrices, infrastructure that Mathlib does not
@@ -433,8 +437,8 @@ positive-support case by composing already-verified components.
   among common sufficient statistics — every other sufficient `T'`
   refines it.  Direct call to
   `exists_minimal_sufficient_finite_discrete`, so it *inherits*
-  `HalmosSavage_minimality_h_extension` (the Halmos–Savage 1949
-  packaging axiom).  No new axiom introduced here.
+  `HalmosSavage_minimality_h_extension` (now a theorem).  No
+  project-local axiom introduced here.
 
 ### SIC-C-c covering meta-theorem (conditional) — `StructuralIntelligenceMathlib/SICC_CoveringMeta.lean`
 
@@ -514,9 +518,9 @@ sample-form and refinement-monotonicity corollaries — introduce
 **zero** additional project-local axioms.  The third-wave headline
 `sic_a_finite_discrete` (SIC-A derived in the finite discrete
 positive-support case, `SICA_FiniteExistence.lean`) also introduces
-**zero** additional project-local axioms; only its coarsestness
-corollary `sic_a_finite_discrete_coarsest` inherits
-`HalmosSavage_minimality_h_extension` transitively from Theorem 1.
+**zero** additional project-local axioms; its coarsestness
+corollary `sic_a_finite_discrete_coarsest` uses
+`HalmosSavage_minimality_h_extension` as a theorem.
 The fourth-wave headlines `sicc_covering_meta` and
 `sicc_covering_poly` (SIC-C-c covering meta-theorem,
 `SICC_CoveringMeta.lean`) close the SIC-C-c conjecture *conditionally*
@@ -524,28 +528,18 @@ by composing Theorem 5-rate (this project) with Theorem 6's
 ε-covering reduction (pure-core `refinement_preserves_screen`); both
 introduce **zero** additional project-local axioms.
 
-Two theorems from the first wave make honest use of an additional
-**project-local `axiom`** each, with an inline citation:
-
-* `StructuralIntelligenceMathlib.HalmosSavage_minimality_h_extension`
-  — packaging step needed by
-  `exists_minimal_sufficient_finite_discrete`.  All of the
-  mathematical content (LR vector is sufficient; LR vector determines
-  every sufficient statistic up to a function; iff-characterisation
-  of sufficiency by LR-factoring) is proved in the file.  The axiom
-  captures only the classical-choice extension of the partial
-  function on the image of `T'` to a total function on `Θ → ℝ`.
-  Reference: Halmos & Savage (1949), *Ann. Math. Statist.* 20,
-  225–241, Theorem 2.
+One first-wave headline still uses a **project-local `axiom`**, with
+an inline citation.  The Halmos–Savage packaging step is now a
+theorem (Wave 9).
 
 * `StructuralIntelligenceMathlib.Shannon1959_converse_uniform_hamming`
-  — the converse half of Shannon's rate-distortion theorem for
+  — the `0 < D` converse half of Shannon's rate-distortion theorem for
   uniform source with Hamming distortion.  Achievability — the
   symmetric error-`D` channel realises `log n − h_binary(D) − D · log(n−1)`
-  — is proved in full.  The converse (no other channel achieves
-  smaller mutual information) requires a Lagrangian / KKT argument on
-  the simplex of transition matrices; Mathlib does not yet expose the
-  optimisation-on-a-simplex infrastructure this would need.
+  — is proved in full.  The `D = 0` converse is
+  `Shannon1959_converse_D_zero`.  The remaining converse requires a
+  Lagrangian / KKT argument on the simplex of transition matrices;
+  Mathlib does not yet expose that infrastructure.
   Reference: C. E. Shannon (1959), *Coding theorems for a discrete
   source with a fidelity criterion*, IRE Nat. Conv. Rec., pt. 4,
   142–163, Theorem 3.

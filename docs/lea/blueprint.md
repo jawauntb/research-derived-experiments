@@ -168,11 +168,35 @@ oracle choice at the registered prefixes 1 / 2 / 6, those steps are
 minimal, and the misspecification expected-cost gap is 4. The 24-row
 traces stay Python.
 
-## conc_est_registered_steps
+## no_transcript_map_hits_both
 - kind: theorem
 - uses:
 
-On door 3's menu and cost, plug-in frequency counting recovers the
-oracle choice at the registered prefixes 1 / 2 / 6, those steps are
-minimal, and the misspecification expected-cost gap is 4. The 24-row
-traces stay Python.
+IDENT §2.4: a function of a shared passive record cannot recover two
+distinct live hypotheses. On a duplicate-free constant-record class
+the hit count is at most one. Frontier eval stays Python.
+
+## css_implies_fiber_constant
+- kind: theorem
+- uses: commonSuffScreen_refines
+
+Finite counting reading of Theorem 4: a common sufficient screen
+makes every task fiber-constant on every finite list. Cites the
+algebraic core; does not re-prove it. Measure-theoretic CI stays
+open.
+
+## coverage_increases
+- kind: theorem
+- uses:
+
+WI Proposition 1 on `{id, flip}` / `{p0, p1}`: the candidate that
+transports more group elements covers strictly more of the
+group-completed deployment set. PAC-Bayes and misaligned `G` stay
+out.
+
+## ica_class_fin2
+- kind: theorem
+- uses:
+
+Signed-permutation leftovers on two coordinates. Not classical
+linear ICA / Theorem 7. Amari scores stay Python.

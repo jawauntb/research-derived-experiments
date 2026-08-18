@@ -20,7 +20,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `references/` | Public source list; local-only full texts (gitignored subdirs) |
 | `formal/ontology-hs/` | Haskell typed ontology gate (Arc 2B) |
 | `formal/relative-identifiability/` | Dependency-free Lean 4 proofs for observational quotient factorization, obstruction, and experiment-family refinement |
-| `formal/structural-intelligence/` | Dependency-free Lean 4 cores for the SIC family, including `DeleteRepair.lean`, `Compiler/SquaringSeparation.lean`, `EmlZeroIdentity.lean`, Wave 2 + Wave 4 `KappaCheap` / `KappaScreen` / `KappaUnique` / `KappaRelabel` / `Aff13` / `DiamondInterval` / `SurgeryMiss` / `DtaN4` / `SwapTyped` (verified), Wave 5 door files `MenuBlind` / `GeneratorBorder` / `ConcernChoice` (verified), Wave 6 essay-driven files `CrossingUnique` (Lea-proved) / `MeaningVsCompany` / `WeakestAdequate` / `KleisliSection` / `DialZero` / `SilentSubstitution` (verified; receipt: `docs/lea/VERIFY_RECEIPT_2026-08-18.md`), Wave 7 `EmlCatalan` / `RepairTable` / `ObstructionTaxonomy` (verified; receipt §Wave 7), and Wave 8 `ConcernEst` (verified; receipt §Wave 8) |
+| `formal/structural-intelligence/` | Dependency-free Lean 4 cores for the SIC family, including `DeleteRepair.lean`, `Compiler/SquaringSeparation.lean`, `EmlZeroIdentity.lean`, Wave 2 + Wave 4 `KappaCheap` / `KappaScreen` / `KappaUnique` / `KappaRelabel` / `Aff13` / `DiamondInterval` / `SurgeryMiss` / `DtaN4` / `SwapTyped` (verified), Wave 5 door files `MenuBlind` / `GeneratorBorder` / `ConcernChoice` (verified), Wave 6 essay-driven files `CrossingUnique` (Lea-proved) / `MeaningVsCompany` / `WeakestAdequate` / `KleisliSection` / `DialZero` / `SilentSubstitution` (verified; receipt: `docs/lea/VERIFY_RECEIPT_2026-08-18.md`), Wave 7 `EmlCatalan` / `RepairTable` / `ObstructionTaxonomy` (verified; receipt §Wave 7), Wave 8 `ConcernEst` (verified; receipt §Wave 8), and Wave 9 `IdentImpossibility` / `T4FiniteCI` / `WeaknessP1` / `IcaSignedPerm` (verified; receipt §Wave 9) |
 | `docs/lea/` | Seed instructions / memory / blueprint for a Lea project `Lea.SicDynamics` (not a Lake package), verify receipts, and the standing [theorem backlog](lea/theorem_backlog.md) |
 | `.cursor/skills/lea/` | Repo skill for standing up Lea and banking proved vs verified Lean |
 | `sites/` | Public static sites (atlas, Inquiry landing, Envelope Guard) |
@@ -562,7 +562,7 @@ exhaustive counterexample search, and replayable MIDAS regression.
 | `papers/eml_access_geometry/` | Process-split synthesis: expressivity ≠ access, access is process-relative; LLM/SIC translation without a better-model claim |
 | `papers/sufficient_antecedents/` | Companion paper (Theorem SA-1): taxonomy of SIC-C-c positive resolutions — each of the four known identifiability escapes (linear ICA, sparse-linear ICA, iVAE, interventional CRL) is one way of populating Theorem 4's Markov-screen antecedent via local separation + cross-`u` coherence (`paper.md`, `paper.pdf`); companion instrument `antecedent_taxonomy_pair` |
 | `papers/structural_intelligence_covering_learnability/` | Companion paper (SIC-C-c covering meta-theorem): conditional closure of SIC-C-c under the polynomial-ε-covering hypothesis on `H`, composed from Theorem 6-core (ε-covering reduction, pure-core `refinement_preserves_screen`) and Theorem 5-rate (quantitative bound). Machine-checked as `StructuralIntelligenceMathlib.sicc_covering_meta` / `sicc_covering_poly` with zero new axioms. Isolates why linear ICA, sparse-linear ICA, iVAE, interventional CRL satisfy SIC-C-c and why Locatello 2019's fully-unsupervised nonlinear ICA does not (`paper.md`); companion instrument `sicc_covering_meta_pair` |
-| `papers/structural_intelligence_foundations/` | Companion paper (SIC-A derived, finite discrete positive-support case): reduces the master fibration `(q, K)` from a posit to a theorem by composing Theorem 1 (LR-vector as `q`) + Proposition 3 (`Coarsen ⊣ Refine`) with the uniform-on-fibre kernel + Theorem CS-2 (coarsest-CSS). Machine-checked as `StructuralIntelligenceMathlib.sic_a_finite_discrete` (no new axioms; `HalmosSavage_minimality_h_extension` inherited only through the coarsestness corollary). General topological / measure-theoretic case remains open (`paper.md`); companion instrument `sica_finite_derivation_pair` |
+| `papers/structural_intelligence_foundations/` | Companion paper (SIC-A derived, finite discrete positive-support case): reduces the master fibration `(q, K)` from a posit to a theorem by composing Theorem 1 (LR-vector as `q`) + Proposition 3 (`Coarsen ⊣ Refine`) with the uniform-on-fibre kernel + Theorem CS-2 (coarsest-CSS). Machine-checked as `StructuralIntelligenceMathlib.sic_a_finite_discrete` (no project-local axioms after Wave 9; `HalmosSavage_minimality_h_extension` is a theorem). General topological / measure-theoretic case remains open (`paper.md`); companion instrument `sica_finite_derivation_pair` |
 | `papers/delete_the_absolute/` | Master-calculus paper: delete–obstruction–repair operator; over/under-invariance taxonomy; Lean core `DeleteRepair.lean`; instruments `delete_the_absolute` and `eml_fiber_spectrum`. Papers B–F banked; the written κ is SIC |
 
 Run:
@@ -1225,11 +1225,26 @@ cd formal/ontology-hs && cabal test all && cabal run ontology-check
 | `StructuralIntelligence/RepairTable.lean` | Wave 7: RR-1 eight-row lift table on registered toys — **verified** (SafeVerify 2026-08-18, receipt §Wave 7) |
 | `StructuralIntelligence/ObstructionTaxonomy.lean` | Wave 7: TA-2 discrete rank/support trichotomy — **verified** (SafeVerify 2026-08-18, receipt §Wave 7) |
 | `StructuralIntelligence/ConcernEst.lean` | Wave 8: CONC-EST plug-in estimator at prefixes 1/2/6 — **verified** (SafeVerify 2026-08-18, receipt §Wave 8). Traces stay Python |
-| `StructuralIntelligence.lean` | Root import and `#print axioms` for every named headline, including `squaring_separation`, `eml_zero_identity`, and the Wave 7–8 headlines |
+| `StructuralIntelligence/IdentImpossibility.lean` | Wave 9: IDENT passive bound — **verified** (SafeVerify 2026-08-18, receipt §Wave 9). Model scores stay Python |
+| `StructuralIntelligence/T4FiniteCI.lean` | Wave 9: finite fiber-CI reading of Theorem 4 — **verified**. Cites CSS; measure-theoretic T4 stays open |
+| `StructuralIntelligence/WeaknessP1.lean` | Wave 9: WI Proposition 1 on `{id, flip}` — **verified**. PAC-Bayes stays out |
+| `StructuralIntelligence/IcaSignedPerm.lean` | Wave 9: signed-permutation class on two coordinates — **verified**. Not Theorem 7 |
+| `StructuralIntelligence.lean` | Root import and `#print axioms` for every named headline, including `squaring_separation`, `eml_zero_identity`, and the Wave 7–9 headlines |
 | `lakefile.toml` / `lean-toolchain` | Dependency-free Lean 4.31 library |
 
 ```bash
 cd formal/structural-intelligence && lake build
+```
+
+### 5.4c `formal/structural-intelligence-mathlib/`
+
+Mathlib companion (separate Lake project; not imported by the
+mathlib-free cores). Wave 9 discharges `HalmosSavage_minimality_h_extension`
+and proves the Shannon converse at distortion `0`. The `0 < D`
+Shannon converse remains an axiom.
+
+```bash
+cd formal/structural-intelligence-mathlib && lake build
 ```
 
 ### 5.4b `formal/relative-identifiability/`

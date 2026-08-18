@@ -12,7 +12,7 @@
 
 | Axis | Count (distinct claim rows below) |
 |---|---|
-| **Status** | prose-only **26** · python-enumerated **7** · lean-proved **≈60 headlines** · lean-verified **Wave 2–7 headlines** (receipts 2026-08-17 / 2026-08-18, incl. §Wave 7: `EmlCatalan` / `RepairTable` / `ObstructionTaxonomy`) |
+| **Status** | prose-only **23** · python-enumerated **7** · lean-proved **≈64 headlines** · lean-verified **Wave 2–9 headlines** (receipts 2026-08-17 / 2026-08-18, incl. §Wave 9: `IdentImpossibility` / `T4FiniteCI` / `WeaknessP1` / `IcaSignedPerm`) |
 | **Formalizability** | finite-decidable **≈70** · needs-mathlib **≈25** · analytic-open **11** · not-a-theorem/empirical **14** |
 | **Priority** | P0 **≈35** · P1 **≈40** · P2 **≈25** |
 | **Do-not-reprove** | **8** named cores + Paper 0 / Mathlib-into-cores bans |
@@ -62,15 +62,15 @@ From `.cursor/skills/lea/SKILL.md`, `docs/lea/instructions.md`, `docs/lea/memory
 |---|---|---|---|---|---|---|
 | SIC-A-gen | Master fibration `(q,K)` exists on general topological/measure spaces | `papers/structural_intelligence_foundations/paper.md` | prose-only | — (finite case: `sic_a_finite_discrete`) | analytic-open | P0 |
 | SIC-Cc-uncond | Unconditional poly-in-`d_Z` learnability without covering hypothesis | `papers/structural_intelligence/paper.md` §2.5c | prose-only | — (conditional: `sicc_covering_meta`) | analytic-open | P0 |
-| T4-prob | Measure-theoretic Theorem 4: tasks CI given common latent screen | `papers/structural_intelligence/paper.md` §2.4 | prose-only | algebraic core only | needs-mathlib | P0 |
-| T7-ICA | Classical linear-ICA unmixing identifiable up to perm/sign | `papers/structural_intelligence/paper.md` Thm 7 | prose-only | — | needs-mathlib | P0 |
+| T4-prob | Measure-theoretic Theorem 4: tasks CI given common latent screen | `papers/structural_intelligence/paper.md` §2.4 | prose-only (finite CI is Lean) | algebraic core + `T4FiniteCI.css_implies_fiber_constant` (Wave 9, verified). General probability-space CI stays needs-mathlib | needs-mathlib | P0 |
+| T7-ICA | Classical linear-ICA unmixing identifiable up to perm/sign | `papers/structural_intelligence/paper.md` Thm 7 | prose-only (class algebra is Lean) | `IcaSignedPerm.ica_class_fin2` is the Fin-2 leftover class, **not** Theorem 7 | needs-mathlib | P0 |
 | TA-2 | Cocycle failure rank/support classifies obstruction type | `papers/theory_atlas/paper.md` TA-2 | discrete core lean-verified (Wave 7, SafeVerify 2026-08-18) | `ObstructionTaxonomy.lean` (+ TA-1 halves) | done (discrete); enlargement analytic-open | P0 |
 | TA-2-cover | Smallest enlarged alphabet closing the cocycle (universal-cover analogue) | `papers/theory_atlas/paper.md` TA-2 | prose-only | discrete taxonomy is Lean (`ta2_taxonomy_classifies`); enlargement withheld | analytic-open | P0 |
 | RR-1 | Eight canonical failure rows each admit a repairing lift on a toy | `papers/representation_repair_calculus/paper.md` RR-1 | lean-verified (Wave 7, SafeVerify 2026-08-18) | `RepairTable.lean` (+ RR-2) | done | P0 |
 | RR-1-unique | Repairing lifts are unique / exist on a continuum | `papers/representation_repair_calculus/paper.md` RR-1 | prose-only | eight-row table is Lean (`rr1_table_well_defined`); uniqueness withheld | analytic-open | P0 |
 | CT-1-MDL | Full MDL consistency under identifiability (probabilistic) | `papers/compiler_tomography/paper.md` CT-1 | prose-only | combinatorial core only | needs-mathlib | P0 |
-| T2-converse | Shannon 1959 KKT converse for uniform-Hamming RD | mathlib package axiom | prose-only (axiomatized) | `Shannon1959_converse_uniform_hamming` (axiom) | needs-mathlib | P0 |
-| T1-HS-pack | Halmos–Savage minimality `h`-extension packaging | mathlib package axiom | prose-only (axiomatized) | `HalmosSavage_minimality_h_extension` (axiom) | needs-mathlib | P0 |
+| T2-converse | Shannon 1959 KKT converse for uniform-Hamming RD | mathlib package axiom | `D = 0` proved (`Shannon1959_converse_D_zero`); `0 < D` still axiomatized | `Shannon1959_converse_uniform_hamming` (axiom for `0 < D`) | needs-mathlib | P0 |
+| T1-HS-pack | Halmos–Savage minimality `h`-extension packaging | mathlib package | lean-proved (Wave 9; mathlib package, not SafeVerify) | `HalmosSavage_minimality_h_extension` is a theorem; no project-local axiom | done (finite discrete) | P0 |
 | TA-1-naked | Naked cocycle ↔ gluing without injectivity hypothesis | `papers/theory_atlas/paper.md` | prose-only | Lean needs injectivity | analytic-open | P0 |
 | US-4-law | Gibbs fiber mass is the access law for EML search generally | `papers/eml_universal_substrate/paper.md` US-4 | prose-only | — | analytic-open / not-a-theorem | P0 |
 
@@ -89,13 +89,13 @@ From `.cursor/skills/lea/SKILL.md`, `docs/lea/instructions.md`, `docs/lea/memory
 
 | id | claim | source | status | formalizability |
 |---|---|---|---|---|
-| WI-P1 | Group-completed coverage increases with weakness | `weakness_invariance_neurips` Prop 1 | prose-only | finite-decidable (toy) |
+| WI-P1 | Group-completed coverage increases with weakness | `weakness_invariance_neurips` Prop 1 | lean-verified (Wave 9, `WeaknessP1.coverage_increases`; registered `{id, flip}` toy) | done (toy); general `G` open |
 | WI-PB | PAC-Bayes–kl bridge for overlapping mixture prior | same §2.1 | prose-only | needs-mathlib |
 | CWW-1..3 | Concern-weighted Bennett weakness | `concern_weighted_weakness` | prose-only | needs-mathlib |
 | GFT-1..5 | Gauge-fixed concern transport ladder | `gauge_fixed_concern_transport` | prose-only | needs-mathlib |
 | FCQ-1..4 | Future-commitment completeness / gauge / Markov / bound | `future_commitment_quotient` | prose-only | needs-mathlib |
 | DR5 / DR7-1 / DR7-2 | Realisation-spectrum; soundness–completeness gap; Spencer collapse | `dr5_*`, `dr7_*` papers | prose-only | analytic-open |
-| IDENT-bench | Passive transcript cannot beat 1/m on held-out nonconstant label | `papers/ident/paper.md` | prose-only | finite-decidable |
+| IDENT-bench | Passive transcript cannot beat 1/m on held-out nonconstant label | `papers/ident/paper.md` | lean-verified (Wave 9, `IdentImpossibility.no_transcript_map_hits_both` / `hits_le_one`) | done (combinatorial core); model scores stay Python |
 
 ### D. P2 (nice-to-have)
 
@@ -143,6 +143,13 @@ Wave 7 (2026-08-18): `EmlCatalan` (`emlFib_counts`, `emlVar_counts`,
 Wave 8 (2026-08-18): `ConcernEst` (`conc_est_registered_steps`) —
 **SafeVerify-passed** (receipt §Wave 8). 24-row traces stay Python.
 
+Wave 9 (2026-08-18): `IdentImpossibility` (`no_transcript_map_hits_both`),
+`T4FiniteCI` (`css_implies_fiber_constant`), `WeaknessP1`
+(`coverage_increases`), `IcaSignedPerm` (`ica_class_fin2`) —
+**SafeVerify-passed** (receipt §Wave 9). Halmos–Savage packaging is
+a mathlib theorem (not SafeVerify). Shannon `D = 0` converse is a
+mathlib theorem; `0 < D` stays an axiom.
+
 ### A2. Mathlib-free cores (`formal/structural-intelligence/`) — lean-proved
 
 Paper A five finite facts (`DeleteRepair.*`); Theorem 4 core
@@ -157,12 +164,14 @@ Paper A five finite facts (`DeleteRepair.*`); Theorem 4 core
 **do not re-prove**); Wave 5 door files (`MenuBlind`,
 `GeneratorBorder`, `ConcernChoice`); Wave 7 finite leftovers
 (`EmlCatalan`, `RepairTable`, `ObstructionTaxonomy`); Wave 8
-(`ConcernEst`).
+(`ConcernEst`); Wave 9 (`IdentImpossibility`, `T4FiniteCI`,
+`WeaknessP1`, `IcaSignedPerm`).
 
 ### A3. Mathlib companion (`formal/structural-intelligence-mathlib/`) — lean-proved
 
-T1 (`exists_minimal_sufficient_finite_discrete`, 1 axiom), T2
-(`R_D_uniform_hamming`, 1 axiom), P3 (`proposition3_adjunction`),
+T1 (`exists_minimal_sufficient_finite_discrete`, no project-local
+axiom after Wave 9), T2 (`R_D_uniform_hamming`, `D = 0` proved,
+`0 < D` axiom), P3 (`proposition3_adjunction`),
 T5-rate (`theorem5_rate_bound`), AG-1 (`ag1_*`), CT-2
 (`ct2_boltzmann_raises_expected_reward`), CG-1/CG-2 (`cg1_*`, `cg2_*`),
 AA-1 (`aa1_*`), SIC-A finite (`sic_a_finite_discrete`), SIC-C-c
@@ -178,12 +187,14 @@ conditional (`sicc_covering_meta`, `sicc_covering_poly`).
 
 ## Suggested Lea wave order (operational)
 
-1. **Finite P0 leftovers are closed.** Waves 7–8 are
-   SafeVerify-verified. `CONC-EST` traces stay Python.
-2. **Axiom discharge (mathlib lane):** replace or isolate
-   `HalmosSavage_minimality_h_extension` and
-   `Shannon1959_converse_uniform_hamming`.
-3. **Mathlib analytics:** T4 probabilistic, CT-1 MDL, T7 ICA,
-   unconditional SIC-C-c (likely reframe as covering necessity).
+1. **Finite P0 leftovers and the P1 toys are closed.** Waves 7–9
+   are SafeVerify-verified. `CONC-EST` traces stay Python. IDENT
+   model scores stay Python.
+2. **Remaining axiom:** `Shannon1959_converse_uniform_hamming` for
+   `0 < D` (KKT / Lagrangian). `D = 0` is proved.
+   Halmos–Savage packaging is a theorem.
+3. **Still open, do not fake:** measure-theoretic T4, CT-1 MDL,
+   classical T7 ICA, unconditional SIC-C-c, TA-2-cover, RR-1-unique,
+   WI-PB, SIC-A on general spaces.
 4. **Never:** empirical Φ/GD/extras; Paper 0; re-proving the banned
-   cores.
+   cores; noisy-draw CONC-EST without a preregistration.

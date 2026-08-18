@@ -40,15 +40,15 @@ instance for `Θ → ℝ` inside the proof (`Classical.decEq _`); the
 resulting `Z` has both `Fintype` and `DecidableEq` witnesses that we
 package into the existential.
 
-**Axioms.**  This file introduces **zero new axioms**.  The only
-project-local axiom in the transitive closure is
-`HalmosSavage_minimality_h_extension` (Halmos & Savage 1949, packaging
-step); it enters only through the coarsestness corollary
-`sic_a_finite_discrete_coarsest`, which uses Theorem 1's minimality.
-The pure-existence theorem `sic_a_finite_discrete` uses only the
-sufficiency half of Theorem 1 plus finite-sum bookkeeping — its axiom
-footprint is the standard `propext`, `Classical.choice`, `Quot.sound`
-inherited from Mathlib.
+**Axioms.**  This file introduces **zero new axioms**.  The Halmos–
+Savage packaging step `HalmosSavage_minimality_h_extension` is now a
+theorem (Wave 9); it enters the coarsestness corollary
+`sic_a_finite_discrete_coarsest` only as ordinary Mathlib-scale
+`Classical.choice` via `Classical.choose`.  The pure-existence
+theorem `sic_a_finite_discrete` uses only the sufficiency half of
+Theorem 1 plus finite-sum bookkeeping — its axiom footprint is the
+standard `propext`, `Classical.choice`, `Quot.sound` inherited from
+Mathlib.
 
 **What stays open.**  The general topological / measure-theoretic case
 requires regular conditional distributions on standard Borel spaces
