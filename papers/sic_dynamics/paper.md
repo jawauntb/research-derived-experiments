@@ -472,13 +472,13 @@ P0/P1 nodes are **proved** (mathlib-free, zero `sorry`, in the
 | `surgery_miss_pair_eq` | `SurgeryMiss.lean` | verified |
 | `dta_n4_representable_iff` | `DtaN4.lean` | verified |
 | `swap_typed_wins` | `SwapTyped.lean` | verified |
-| `emlFib_counts` / `emlVar_counts` / `eml_pair_diff` | `EmlCatalan.lean` | proved, not verified |
-| `rr1_table_well_defined` | `RepairTable.lean` | proved, not verified |
-| `ta2_taxonomy_classifies` | `ObstructionTaxonomy.lean` | proved, not verified |
+| `emlFib_counts` / `emlVar_counts` / `eml_pair_diff` | `EmlCatalan.lean` | verified |
+| `rr1_table_well_defined` | `RepairTable.lean` | verified |
+| `ta2_taxonomy_classifies` | `ObstructionTaxonomy.lean` | verified |
 
 Still Python: empirical `Φ` ratios, GD 8/8, extras 43/28, and the
-`CONC-EST` frequency-estimator traces. Wave 7 files elaborate; they
-are not SafeVerify receipts.
+`CONC-EST` frequency-estimator traces. Wave 7 files are
+SafeVerify-verified (2026-08-18 receipt §Wave 7, axioms ⊆ {propext}).
 The n=4 representability matrix and Paper B `swap_typed_wins` are now Lean.
 
 Lea is installed locally (`docs/lea/ENV_STATUS.md`). `/verify` is

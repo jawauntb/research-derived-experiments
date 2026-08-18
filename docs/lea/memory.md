@@ -143,3 +143,18 @@ Append. Driven by "Intention Is All You Need" v3 and its review.
 - DR/DCR text nomination
 - OpenAI 2026 as theorems
 - Neural bootstrap
+
+## Wave 7 banked and verified (2026-08-18, second session)
+
+- `EmlCatalan.lean` (EML-fib-Ck / EML-var-Ck / EML-pair-diff),
+  `RepairTable.lean` (RR-1), `ObstructionTaxonomy.lean` (TA-2 discrete)
+  all SAFEVERIFY_PASSED in the 4.29 scratch; axioms <= {propext}.
+- New replay fact: deep kernel folds (3238-tree census) overflow the
+  4.29 default thread stack; `lean --tstack=262144` fixes it. The
+  replay script is `/tmp/sv429/replay7.sh`.
+- `Nat.choose` does not kernel-reduce; use a structural Pascal
+  `binom` when a census needs `decide`.
+- Kernel catch of the wave: drafted variable-census total 4306 was
+  wrong; `decide` refuted it; correct is 3238 = sum 2^(k+1)C_k, k<=5.
+- Lane model note: primary-model lanes died on usage limits; Composer
+  lanes (#523, #524) built both files green on the first try.

@@ -425,9 +425,10 @@ both EML censuses (Catalan `C_0..C_6`, 197 trees; `2^(k+1)·C_k` for
 `k = 0..5`, 3238 trees) and the size-2 symbolic split;
 `RepairTable.lean` kernel-checks RR-1's eight-row lift table;
 `ObstructionTaxonomy.lean` kernel-checks TA-2's discrete taxonomy
-with general classifier↔conditions equivalences. All three
-elaborate. They are **proved, not verified** until a SafeVerify
-receipt exists. Do not call `lake lean` “verified.” `CONC-EST`
+with general classifier↔conditions equivalences. All three are
+**SafeVerify-verified** (4.29 replay, 2026-08-18; the EmlCatalan
+enumeration needs `--tstack=262144`; axioms ⊆ {propext}) — receipt
+§Wave 7 in `docs/lea/VERIFY_RECEIPT_2026-08-18.md`. `CONC-EST`
 remains python-enumerated by receipt quarantine.
 That instrument is `experiments/delete_repair_concern_estimation/`:
 concern is estimated by registered frequency counting on three
