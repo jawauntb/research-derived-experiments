@@ -56,15 +56,13 @@ not look at the menu. An LLM. Paper 0. Valence.
 
 ## Lean status
 
-**Mixed.** `KappaCheap.lean` (`kappa_cheap_not_function`),
-`KappaUnique.lean` (`bag_not_unique`), and `KappaRelabel.lean`
-(`kappa_relabel_natural`) are **verified**. `KappaScreen.lean`
-(`kappa_screen_hits_suite`) is **proved-not-verified** because it
-uses `native_decide`. Python suite remains the empirical receipt.
+**Verified.** `KappaCheap.lean`, `KappaScreen.lean` (kernel `decide`,
+no `native_decide`), `KappaUnique.lean`, `KappaRelabel.lean`.
+Python suite remains the empirical receipt.
 Receipt: `docs/lea/VERIFY_RECEIPT_2026-08-17.md`.
 
 ## Next best test
 
 Stop. Possibility 5 is the close. Do not fit a fancier cheap
 signature to erase the collision. Do not reopen DR/DCR.
-`KappaScreen` is the remaining verify gap (`native_decide`). Do not start Paper G.
+Do not start Paper G.

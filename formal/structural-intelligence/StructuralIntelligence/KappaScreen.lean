@@ -27,8 +27,8 @@ Paper F rule, in this order:
 Lexicographic ids (Python `min(tied)` on names):
 `q_id < q_perm < q_rot < q_stab0 < q_stab_last`.
 
-Status: **proved-not-verified**.  The file elaborates with no `sorry`.
-SafeVerify was not run from this lane.
+Status: **verified** after replacing `native_decide` with kernel `decide`
+(high `maxRecDepth`).  No `sorry`.  No Mathlib.
 -/
 
 namespace StructuralIntelligence
@@ -355,13 +355,16 @@ def suite : List RegisteredRow :=
 
 theorem suite_length : suite.length = 11 := rfl
 
+set_option maxRecDepth 100000
+set_option maxHeartbeats 400000
+
 /-! ## Fibre-count lemmas (kernel-friendly stepping stones) -/
 
-theorem fiberCount_q_id : fiberCount .q_id = 16 := by native_decide
-theorem fiberCount_q_perm : fiberCount .q_perm = 5 := by native_decide
-theorem fiberCount_q_rot : fiberCount .q_rot = 6 := by native_decide
-theorem fiberCount_q_stab0 : fiberCount .q_stab0 = 8 := by native_decide
-theorem fiberCount_q_stab_last : fiberCount .q_stab_last = 8 := by native_decide
+theorem fiberCount_q_id : fiberCount .q_id = 16 := by decide
+theorem fiberCount_q_perm : fiberCount .q_perm = 5 := by decide
+theorem fiberCount_q_rot : fiberCount .q_rot = 6 := by decide
+theorem fiberCount_q_stab0 : fiberCount .q_stab0 = 8 := by decide
+theorem fiberCount_q_stab_last : fiberCount .q_stab_last = 8 := by decide
 
 /-! ## Headline: κ_screen hits the suite -/
 
@@ -374,7 +377,7 @@ theorem kappa_screen_hits_suite :
       (kappaScreen row.task row.screen row.edges).action =
         gold row.task row.screen row.edges ∧
       (kappaScreen row.task row.screen row.edges).chosen = row.expectedChosen := by
-  native_decide
+  decide
 
 #print axioms kappa_screen_hits_suite
 #print axioms represents_of_isCommonSuffScreen

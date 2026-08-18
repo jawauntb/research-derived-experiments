@@ -464,15 +464,17 @@ P0/P1 nodes are **proved** (mathlib-free, zero `sorry`, in the
 | Node | File | Label |
 |---|---|---|
 | `kappa_cheap_not_function` | `KappaCheap.lean` | verified |
-| `kappa_screen_hits_suite` | `KappaScreen.lean` | proved / not verified (`native_decide`) |
+| `kappa_screen_hits_suite` | `KappaScreen.lean` | verified |
 | `bag_not_unique` | `KappaUnique.lean` | verified |
 | `kappa_relabel_natural` | `KappaRelabel.lean` | verified |
 | `affine_escapes_kirchhoff` | `Aff13.lean` | verified |
 | `poset_not_determine_interval` | `DiamondInterval.lean` | verified |
 | `surgery_miss_pair_eq` | `SurgeryMiss.lean` | verified |
+| `dta_n4_representable_iff` | `DtaN4.lean` | verified |
+| `swap_typed_wins` | `SwapTyped.lean` | verified |
 
-Still Python: empirical `Φ` ratios, GD 8/8, extras 43/28, the
-n=4 representability matrix, Paper B `swap_typed_wins`.
+Still Python: empirical `Φ` ratios, GD 8/8, extras 43/28.
+The n=4 representability matrix and Paper B `swap_typed_wins` are now Lean.
 
 Lea is installed locally (`docs/lea/ENV_STATUS.md`). `/verify` is
 available there. Do not import Mathlib into the mathlib-free cores.
@@ -499,7 +501,9 @@ Lean: `DeleteRepair.lean`, `EmlZeroIdentity.lean`,
 `KappaCheap.lean`, `KappaScreen.lean`, `KappaUnique.lean`,
 `KappaRelabel.lean`, `Aff13.lean`, `DiamondInterval.lean`,
 `SurgeryMiss.lean`. No Mathlib in those cores. Zero `sorry`.
-Wave 2 headlines: six **verified**, `kappa_screen_hits_suite` **proved-not-verified** (`native_decide`). See `docs/lea/VERIFY_RECEIPT_2026-08-17.md`.
+Wave 2 headlines are **verified**, including `kappa_screen_hits_suite`.
+Wave 4: `dta_n4_representable_iff` and `swap_typed_wins` are **verified**.
+See `docs/lea/VERIFY_RECEIPT_2026-08-17.md`.
 
 Reproduce Paper F:
 

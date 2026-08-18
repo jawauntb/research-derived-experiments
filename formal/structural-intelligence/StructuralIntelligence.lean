@@ -22,6 +22,8 @@ import StructuralIntelligence.KappaRelabel
 import StructuralIntelligence.Aff13
 import StructuralIntelligence.DiamondInterval
 import StructuralIntelligence.SurgeryMiss
+import StructuralIntelligence.DtaN4
+import StructuralIntelligence.SwapTyped
 
 /-!
 # Structural Intelligence — Lean 4 formalisation
@@ -176,6 +178,8 @@ and are documented as future work in the package `README.md`.
 #print axioms StructuralIntelligence.EmlZeroIdentity.ExpLn.eml_zero_identity_x
 #print axioms StructuralIntelligence.KappaCheap.kappa_cheap_not_function
 #print axioms StructuralIntelligence.KappaScreen.kappa_screen_hits_suite
+#print axioms StructuralIntelligence.DtaN4.dta_n4_representable_iff
+#print axioms StructuralIntelligence.SwapTyped.swap_typed_wins
 #print axioms StructuralIntelligence.KappaUnique.bag_not_unique
 #print axioms StructuralIntelligence.KappaRelabel.kappa_relabel_natural
 #print axioms StructuralIntelligence.Aff13.affine_escapes_kirchhoff
