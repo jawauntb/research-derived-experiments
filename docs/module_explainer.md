@@ -20,8 +20,8 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `references/` | Public source list; local-only full texts (gitignored subdirs) |
 | `formal/ontology-hs/` | Haskell typed ontology gate (Arc 2B) |
 | `formal/relative-identifiability/` | Dependency-free Lean 4 proofs for observational quotient factorization, obstruction, and experiment-family refinement |
-| `formal/structural-intelligence/` | Dependency-free Lean 4 cores for the SIC family, including `DeleteRepair.lean`, `Compiler/SquaringSeparation.lean`, `EmlZeroIdentity.lean`, and Wave 2 + Wave 4 `KappaCheap` / `KappaScreen` / `KappaUnique` / `KappaRelabel` / `Aff13` / `DiamondInterval` / `SurgeryMiss` / `DtaN4` / `SwapTyped` (verified) |
-| `docs/lea/` | Seed instructions / memory / blueprint for a Lea project `Lea.SicDynamics` (not a Lake package) |
+| `formal/structural-intelligence/` | Dependency-free Lean 4 cores for the SIC family, including `DeleteRepair.lean`, `Compiler/SquaringSeparation.lean`, `EmlZeroIdentity.lean`, Wave 2 + Wave 4 `KappaCheap` / `KappaScreen` / `KappaUnique` / `KappaRelabel` / `Aff13` / `DiamondInterval` / `SurgeryMiss` / `DtaN4` / `SwapTyped` (verified), and Wave 5 door files `MenuBlind` / `GeneratorBorder` / `ConcernChoice` (receipt: `docs/lea/VERIFY_RECEIPT_2026-08-18.md`) |
+| `docs/lea/` | Seed instructions / memory / blueprint for a Lea project `Lea.SicDynamics` (not a Lake package), verify receipts, and the standing [theorem backlog](lea/theorem_backlog.md) |
 | `.cursor/skills/lea/` | Repo skill for standing up Lea and banking proved vs verified Lean |
 | `sites/` | Public static sites (atlas, Inquiry landing, Envelope Guard) |
 | `apps/inquiry-black-box/` | Local-first Inquiry product monorepo (Bun/Electron/MV3) |
@@ -54,6 +54,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | Concern-gated retrieval theory and next experiments | [concern_gated_retrieval_research_program.md](concern_gated_retrieval_research_program.md) + [next-agent handoff](next_agent_concern_gated_retrieval_handoff_2026-07-23.md) |
 | Modal operator handoff | [next_agent_modal_handoff.md](next_agent_modal_handoff.md) |
 | Continue A–F formalization with Lea | [next_agent_lea_handoff_2026-08-17.md](next_agent_lea_handoff_2026-08-17.md) + [Lea skill](../.cursor/skills/lea/SKILL.md) + [docs/lea/](lea/README.md) + [ENV status](lea/ENV_STATUS.md) |
+| Prove a theorem (required pipeline + what's left) | `AGENTS.md` "Theorem proving with Lea" + [theorem backlog](lea/theorem_backlog.md) + verify receipts in `docs/lea/` |
 | Deploy atlas / Inquiry site | [railway-autodeploy.md](railway-autodeploy.md) |
 | Inquiry product work | `apps/inquiry-black-box/README.md` + `AGENTS.md` |
 | Coherence Phase-0 | `coherence-testbench/README.md` + `POST_MORTEM.md` |
@@ -127,6 +128,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_delete_repair_concern.py` | Door 3: six concerns pick four screens; unweighted choice beaten by 21/2; reversal-natural; boundary 11/27 |
 | `test_delete_repair_generators.py` | Door 2 consolidation: cube episode (5 vs 2, 2 vs 3) beside the sq replay anchor; both outside facts |
 | `test_delete_repair_concern_transport.py` | Door 3 consolidation: reversal-natural under both menus; boundary 11/27 vs 7/27; pair_eq choice flips q_id→q_pair01 |
+| `test_delete_repair_concern_estimation.py` | Door 3 estimator: plug-in counting converges at registered steps 1/2/6; oracle anchors q_perm/q_stab0/q_id; misspec gap 4; deterministic replay |
 
 ```bash
 python3 scripts/run_quality_checks.py
@@ -271,6 +273,7 @@ Universal dispatcher: `python scripts/regen.py <name>`.
 | `delete_repair_concern` | P R res | Door 3: registered concern weights over six tasks pick four distinct screens from `bag`'s representing set; exact gaps (max 21/2); reversal-natural; phase boundary 11/27. Verdict `concern_does_work` | `core.py`, `experiment.py` |
 | `delete_repair_generators` | P R res | Door 2 consolidation: cube episode (`x^3`, bound 5: min 5 vs 2, mass 2 vs 3) beside the sq replay anchor; predictions registered first; both outside facts. Verdict `border_consolidated` | `core.py`, `experiment.py` |
 | `delete_repair_concern_transport` | P R res | Door 3 consolidation: concern choice is reversal-natural under both menus; boundary menu-relative (11/27 base → `q_id`; 7/27 ext → `q_pair01`); pure-`bag` anchor menu-stable. Verdict `transport_holds_boundary_moves` | `core.py`, `experiment.py` |
+| `delete_repair_concern_estimation` | P R res | Door 3 estimator: registered frequency counting on three literal 24-draw sequences recovers oracle choices at registered steps 1/2/6 (11/27 boundary forces step 6); misspec gap exactly 4. Verdict `estimation_works` | `core.py`, `experiment.py` |
 
 #### 3.1.1 `symbolic_weakness` modules
 
@@ -545,6 +548,7 @@ exhaustive counterexample search, and replayable MIDAS regression.
 | `papers/delete_repair_concern/` | Door 3: concern weights pick the screen among Theorem 4's survivors; concern-free tie-break strictly costly; reversal-naturality restored; boundary 11/27 (`paper.md`); companion instrument `delete_repair_concern` |
 | `papers/delete_repair_generators/` | Door 2 consolidation: the generator border replicates on the cube macro with registered predictions (`paper.md`); companion instrument `delete_repair_generators` |
 | `papers/delete_repair_concern_transport/` | Door 3 consolidation: the concern boundary is menu-relative (11/27 vs 7/27) while the symmetry layer transports (`paper.md`); companion instrument `delete_repair_concern_transport` |
+| `papers/delete_repair_concern_estimation/` | Door 3 follow-up: registered frequency counting is a sufficient concern estimator at this bound — steps 1/2/6 confirmed, misspec gap 4 (`paper.md`); companion instrument `delete_repair_concern_estimation` |
 | `papers/sic_dynamics/` | Close-out: A–F laid out; Possibility 5 is the house; not a better LLM; next method is Lea (`paper.md`). Cold-reader English: `for_readers.md` |
 | `papers/eml_access_geometry/` | Process-split synthesis: expressivity ≠ access, access is process-relative; LLM/SIC translation without a better-model claim |
 | `papers/sufficient_antecedents/` | Companion paper (Theorem SA-1): taxonomy of SIC-C-c positive resolutions — each of the four known identifiability escapes (linear ICA, sparse-linear ICA, iVAE, interventional CRL) is one way of populating Theorem 4's Markov-screen antecedent via local separation + cross-`u` coherence (`paper.md`, `paper.pdf`); companion instrument `antecedent_taxonomy_pair` |
@@ -1154,6 +1158,7 @@ Notable bundles:
 - `papers/delete_repair_concern/` — Door 3: concern picks the screen; the third job opens at the lowest bound
 - `papers/delete_repair_generators/` — Door 2 consolidation: the generator border replicates on a second macro
 - `papers/delete_repair_concern_transport/` — Door 3 consolidation: the concern boundary moves with the menu; the symmetry layer transports
+- `papers/delete_repair_concern_estimation/` — Door 3 follow-up: registered estimation; counting is enough at this bound
 - `papers/sic_dynamics/` — close-out paper, A–F in one place; `for_readers.md` for a cold reader; next method is Lea
 - `papers/eml_access_geometry/` — process-split synthesis and LLM/SIC translation
 - Synthesis: `metaphysics_synthesis`, `metric_stack_synthesis`, literature audits/reviews
