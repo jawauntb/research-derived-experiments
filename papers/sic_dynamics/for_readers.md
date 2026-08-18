@@ -200,11 +200,10 @@ the function we could write, on the menu we registered, is the
 sufficient screen plus a sort — and that the function which refuses
 to look at the menu fails to be a function.
 
-The algebraic cores are machine-checked. Six of those headlines pass
-an independent kernel replay. The menu-search lemma still uses a
-native decision procedure the auditor rejects, so that one stays
-proved and not verified. The counts — the 2.016, the 8/8, the 7/7,
-the 43 against 28, the 6/7, the 11/11 — are still Python.
+The algebraic cores are machine-checked, and every headline lemma —
+including the menu search, the n=4 matrix, and the swap — passes an
+independent kernel replay. The process counts — the 2.016, the 8 in
+8, the 7 and 7, the 43 against 28 — are still Python.
 
 ## What would change the conclusion
 
