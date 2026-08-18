@@ -131,6 +131,7 @@ Update both when the codebase changes meaningfully (see root `AGENTS.md`).
 | `test_delete_repair_concern_estimation.py` | Door 3 estimator: plug-in counting converges at registered steps 1/2/6; oracle anchors q_perm/q_stab0/q_id; misspec gap 4; deterministic replay |
 | `test_silent_substitution.py` | Gate 2 silence gate: record constant across both arms; misaligned E[r] rises / E[U] falls (7/2 → 1583088700/7083249971); t = 12 argmax mass exactly 17179869184/21249749913; aligned control rises; deterministic replay |
 | `test_choice_dividend.py` | Gate 1 dividend gate: dividends exactly 0/0/7/(73/11)/0 across the five registered tasks; gain curves weakly increasing with endpoint = dividend; negative gain(1) recorded on wide tasks; deterministic replay |
+| `test_dial_nestedness.py` | Review item 2: Bell(5)=52 partitions; rates 5/3/2/2/1 fall; all-optimizer nesting fails with witness; a chosen chain nests |
 
 ```bash
 python3 scripts/run_quality_checks.py
@@ -278,6 +279,7 @@ Universal dispatcher: `python scripts/regen.py <name>`.
 | `delete_repair_concern_estimation` | P R res | Door 3 estimator: registered frequency counting on three literal 24-draw sequences recovers oracle choices at registered steps 1/2/6 (11/27 boundary forces step 6); misspec gap exactly 4. Verdict `estimation_works` | `core.py`, `experiment.py` |
 | `silent_substitution` | P R res | Gate 2 of "Intention Is All You Need" at the kernel (zero-leakage limit): eight outcomes in one compliance class, record constant by construction; tilt `(r+1)^t` sends misaligned E[U] 7/2 → 1583088700/7083249971 while E[r] rises; t = 12 argmax mass exactly 17179869184/21249749913; aligned control rises. Verdict `substitution_silent` | `core.py`, `experiment.py` |
 | `choice_dividend` | P R res | Gate 1 of "Intention Is All You Need" at the kernel (P11/D12): five registered tasks on {0,1}^4; dividends exactly 0/0/7/(73/11)/0 — zero on singletons and the wide-flat region, positive iff the region is wide and varying; best-of-k curves weakly increasing with endpoint = dividend. Verdict `dividend_confirmed` | `core.py`, `experiment.py` |
+| `dial_nestedness` | P R res | Review item 2 on the intention essay: all 52 partitions of a five-point world under task-relative worst-case distortion; rates 5/3/2/2/1 fall; D=0 optimum uniquely the level partition; all-optimizer nesting fails (witness), a chosen chain nests. Verdict `nestedness_fails_generally` | `core.py`, `experiment.py` |
 
 #### 3.1.1 `symbolic_weakness` modules
 
@@ -555,6 +557,7 @@ exhaustive counterexample search, and replayable MIDAS regression.
 | `papers/delete_repair_concern_estimation/` | Door 3 follow-up: registered frequency counting is a sufficient concern estimator at this bound — steps 1/2/6 confirmed, misspec gap 4 (`paper.md`); companion instrument `delete_repair_concern_estimation` |
 | `papers/silent_substitution/` | Gate 2 at the kernel: every report is green — the zero-leakage limit exact; record constant while misaligned value falls and the aligned control rises; real leakage stays the open empirical half (`paper.md`); companion instrument `silent_substitution` |
 | `papers/choice_dividend/` | Gate 1 at the kernel: intelligence pays only on slack — dividends exactly 0/0/7/(73/11)/0, sweep endpoint = dividend on every task; the learner half of Gate 1 stays open (`paper.md`); companion instrument `choice_dividend` |
+| `papers/dial_nestedness/` | Review item 2 settled: the dial's optimal rate falls (5/3/2/2/1) but its cells need not nest — nesting is a selection fact (`paper.md`); companion instrument `dial_nestedness` |
 | `papers/sic_dynamics/` | Close-out: A–F laid out; Possibility 5 is the house; not a better LLM; next method is Lea (`paper.md`). Cold-reader English: `for_readers.md` |
 | `papers/eml_access_geometry/` | Process-split synthesis: expressivity ≠ access, access is process-relative; LLM/SIC translation without a better-model claim |
 | `papers/sufficient_antecedents/` | Companion paper (Theorem SA-1): taxonomy of SIC-C-c positive resolutions — each of the four known identifiability escapes (linear ICA, sparse-linear ICA, iVAE, interventional CRL) is one way of populating Theorem 4's Markov-screen antecedent via local separation + cross-`u` coherence (`paper.md`, `paper.pdf`); companion instrument `antecedent_taxonomy_pair` |
@@ -1167,6 +1170,7 @@ Notable bundles:
 - `papers/delete_repair_concern_estimation/` — Door 3 follow-up: registered estimation; counting is enough at this bound
 - `papers/silent_substitution/` — Gate 2 at the kernel: every report is green; the zero-leakage limit banked exactly
 - `papers/choice_dividend/` — Gate 1 at the kernel: intelligence pays only on slack; dividends banked exactly
+- `papers/dial_nestedness/` — review item 2: the rate falls, the cells need not nest; nesting is a selection fact
 - `papers/sic_dynamics/` — close-out paper, A–F in one place; `for_readers.md` for a cold reader; next method is Lea
 - `papers/eml_access_geometry/` — process-split synthesis and LLM/SIC translation
 - Synthesis: `metaphysics_synthesis`, `metric_stack_synthesis`, literature audits/reviews

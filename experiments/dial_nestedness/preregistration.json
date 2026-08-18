@@ -1,0 +1,89 @@
+{
+  "experiment_id": "dial_nestedness",
+  "schema_version": "1.0",
+  "run_id": "dial_nestedness_2026_08_18",
+  "producing_agent": {
+    "identity": "Claude Fable 5 (Cursor agent, under J. Brown direction)",
+    "session_ref": "4adbd42d-0e99-41df-b0be-7d9d5b7e3caa"
+  },
+  "hypothesis": "Review item 2 on 'Intention Is All You Need' v3: Theorem B's 'as D grows the cells coarsen' implies nested optima that rate-distortion does not guarantee. Registered predictions: rates (5, 3, 2, 2, 1) on the budget grid (0, 1/4, 1/2, 3/4, 1); D=0 optimum uniquely the level-set partition; all-optimizer nesting FAILS (registered witness shape: a {01}{23}{4}-type optimizer at 1/4 does not refine a {012}{34}-type optimizer at 1/2); a chosen chain of optimizers exists that does nest. The exported wording is only: the optimal rate falls.",
+  "primary_metric": "ranking.verdict",
+  "decision": "Accept nestedness_fails_generally if the rate vector is weakly decreasing and some adjacent optimizer pair fails refinement. Accept nestedness_holds_here if every adjacent optimizer pair nests. Otherwise inconclusive. chain_exists is recorded separately in every case. Any recorded verdict passes CI.",
+  "gates": {
+    "NEST_SPECIFIED": "World, law, budgets, predictions, verdict rule in core.py before evaluation.",
+    "NEST_ENUMERATION_COMPLETE": "Exactly Bell(5) = 52 partitions.",
+    "NEST_EXACT_ARITHMETIC": "Fractions only.",
+    "NEST_RATE_MONOTONE": "Optimal rate weakly decreasing (feasible sets nest).",
+    "NEST_D0_IS_LEVELS": "D=0 optimizer set is exactly the level partition (matches DialZero.lean).",
+    "NEST_CHAIN_RECORDED": "all_nested and chain_exists recorded with witnesses.",
+    "NEST_RANKING_RECORDED": "Verdict is one of the three registered outcomes.",
+    "NEST_CLAIM_BOUNDARY": "One registered world; worst-case distortion; no continuous claim."
+  },
+  "kill_criteria": {
+    "NEST_ENUMERATION_COMPLETE": "Kill the instrument if the enumeration is not exactly 52.",
+    "NEST_RATE_MONOTONE": "Kill the instrument if rates rise anywhere: that would contradict feasible-set nesting and mean the optimizer search is wrong.",
+    "essay_wording": "The essay's 'cells coarsen' stays withdrawn if all_nested is false; it is reinstated at this bound only if nestedness_holds_here.",
+    "registered_rates": "If observed rates differ from (5, 3, 2, 2, 1), record the observed vector and flag the discrepancy — the enumeration is authoritative over the registration."
+  },
+  "audit_card": {
+    "target_object": "Whether rate-distortion optima nest along the budget on the registered world — the formal content behind Theorem B's withdrawn wording.",
+    "decision": "nestedness_fails_generally / nestedness_holds_here / inconclusive by the registered rule.",
+    "representation": "Five worlds, task law (0, 1/4, 1/2, 3/4, 1), worst-case within-cell law gap as distortion, rate = cell count, all 52 partitions.",
+    "data_clock": "None. Exhaustive enumeration, exact rationals, no sampling, no LLM.",
+    "material_assumptions": [
+      "Distortion is the worst-case within-cell task-law gap (the essay's adequacy/weakness reading), not expected distortion.",
+      "Rate is the number of cells.",
+      "The budget grid is the registered five points.",
+      "Refinement is cellwise containment."
+    ],
+    "fatal_gates": [
+      "NEST_SPECIFIED",
+      "NEST_ENUMERATION_COMPLETE",
+      "NEST_EXACT_ARITHMETIC",
+      "NEST_RATE_MONOTONE",
+      "NEST_D0_IS_LEVELS",
+      "NEST_CHAIN_RECORDED",
+      "NEST_RANKING_RECORDED",
+      "NEST_CLAIM_BOUNDARY"
+    ],
+    "decisive_controls": [
+      "exhaustive_enumeration",
+      "predictions_registered",
+      "exact_arithmetic",
+      "kill_does_not_fail_ci"
+    ],
+    "evidence_paths": [
+      "experiments/dial_nestedness/results/dial_nestedness_summary.json",
+      "experiments/dial_nestedness/preregistration.json",
+      "tests/test_dial_nestedness.py"
+    ]
+  },
+  "mathematical_claim": {
+    "objects": {
+      "partitions": "all 52 partitions of {0..4}",
+      "distortion": "max over cells of (max law - min law) within the cell",
+      "R(D)": "min cell count among partitions with distortion <= D",
+      "refines": "every cell of the finer sits inside a cell of the coarser"
+    },
+    "types_domains_units": "Laws and budgets are exact rationals in [0,1]; rates are integers 1..5.",
+    "exact_claim": "R over the grid (0, 1/4, 1/2, 3/4, 1) equals (5, 3, 2, 2, 1). The D=0 optimizer set is exactly {level partition}. There exist optimizers P at D=1/4 and Q at D=1/2 with not refines(P, Q). There exists a selection of one optimizer per budget forming a refinement chain.",
+    "quantifiers": "Universal over all 52 partitions for each R(D); existential for the nesting failure witness and for the chain.",
+    "assumptions": "Registered world, law, grid, worst-case distortion, cell-count rate.",
+    "identification_conditions": "The result is identified as a property of this registered instance; the general exported claim is only rate monotonicity, which follows from feasible-set nesting.",
+    "derivation_dependencies": "DialZero.lean (the D=0 clause, kernel-checked); the essay's Theorem B discussion; review item 2 in docs/intention_essay_v3_corrections.md.",
+    "coordinate_invariance": "The world is a labeled chain; the law is strictly monotone, so relabeling is not quotiented here — no invariance claim is made.",
+    "edge_limiting_null_cases": "At D >= 1 the single-cell partition is optimal (rate 1). If the law had ties, D=0 optima would coarsen accordingly (covered generally by DialZero.lean, not re-run here)."
+  },
+  "controls": [
+    "exhaustive_enumeration",
+    "predictions_registered",
+    "exact_arithmetic",
+    "kill_does_not_fail_ci"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": "none",
+    "sampling": "None. 52 partitions, five budgets, exact rationals."
+  },
+  "claim_boundary": "Accepted only as: on this registered world, the optimal rate falls (5, 3, 2, 2, 1), the D=0 optimum is the level partition, all-optimizer nesting fails with an explicit witness, and a nested chain exists as a selection. The essay's 'cells coarsen' wording stays withdrawn; the exported general slogan is 'the optimal description rate falls as the budget grows'. Not a continuous claim. Not average-case. Not an LLM."
+}

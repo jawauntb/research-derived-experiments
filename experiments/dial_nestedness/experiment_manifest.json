@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "dial_nestedness",
+  "hypothesis": "On the registered five-point world with task-relative worst-case distortion, the optimal description rate is weakly decreasing in the budget (5, 3, 2, 2, 1 on the registered grid), the D=0 optimum is uniquely the level-set partition, but all-optimizer nesting fails between adjacent budgets — the essay's 'cells coarsen' wording stays withdrawn — while a chosen chain of optimizers does nest, making nesting a selection fact rather than an automatic one.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "exhaustive_enumeration",
+      "description": "All 52 partitions of the five-point set are enumerated via restricted-growth strings; no search heuristics."
+    },
+    {
+      "control_id": "predictions_registered",
+      "description": "The rate vector, the all_nested verdict, and the witness shape are registered in core.py before evaluation."
+    },
+    {
+      "control_id": "exact_arithmetic",
+      "description": "Task laws, budgets, and distortions are Fractions; no floats."
+    },
+    {
+      "control_id": "kill_does_not_fail_ci",
+      "description": "nestedness_fails_generally, nestedness_holds_here, and inconclusive are all valid passing runs."
+    }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/dial_nestedness/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "NEST_SPECIFIED",
+      "criterion": "World, law, budgets, predictions, and verdict rule specified before the run."
+    },
+    {
+      "gate_id": "NEST_ENUMERATION_COMPLETE",
+      "criterion": "Exactly 52 partitions enumerated (Bell(5))."
+    },
+    {
+      "gate_id": "NEST_EXACT_ARITHMETIC",
+      "criterion": "All task-law values are exact Fractions."
+    },
+    {
+      "gate_id": "NEST_RATE_MONOTONE",
+      "criterion": "The optimal rate is weakly decreasing along the budget grid."
+    },
+    {
+      "gate_id": "NEST_D0_IS_LEVELS",
+      "criterion": "At D=0 the unique optimizer is the level-set partition."
+    },
+    {
+      "gate_id": "NEST_CHAIN_RECORDED",
+      "criterion": "Both all_nested and chain_exists are recorded with witnesses."
+    },
+    {
+      "gate_id": "NEST_RANKING_RECORDED",
+      "criterion": "Verdict is nestedness_fails_generally, nestedness_holds_here, or inconclusive."
+    },
+    {
+      "gate_id": "NEST_CLAIM_BOUNDARY",
+      "criterion": "One registered world, worst-case cell distortion; no continuous or average-case claim; no rescue of the withdrawn wording."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/dial_nestedness/results/dial_nestedness_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/dial_nestedness/preregistration.json",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/dial_nestedness/paper.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

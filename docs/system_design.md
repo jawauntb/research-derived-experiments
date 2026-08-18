@@ -446,6 +446,12 @@ climbs weakly from a recorded negative gain(1) to exactly the
 dividend at full capability. Verdict `dividend_confirmed`; this is
 the kernel arithmetic only, and the learner half of Gate 1 — real
 capability sweeps on real models — stays open.
+Review item 2's instrument is `experiments/dial_nestedness/`: all 52
+partitions of a registered five-point world show the optimal rate
+falling (5/3/2/2/1) while all-optimizer nesting fails with an
+explicit witness and a chosen chain still nests — nesting is a
+selection fact, so the essay's "cells coarsen" wording stays
+withdrawn. Verdict `nestedness_fails_generally`.
 The close-out is `papers/sic_dynamics/` (`paper.md` for the
 instruments; `for_readers.md` for a cold reader). Wave 2 P0/P1 lemmas are
 **verified** in `formal/structural-intelligence/` (`KappaCheap`,
