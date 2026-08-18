@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "choice_dividend",
+  "hypothesis": "Gate 1 of the essay 'Intention Is All You Need' holds at the kernel: the choice dividend (D12: best compliant value minus the uniform-compiler expectation) is 0 on both registered singleton tasks and on the wide-flat task, and exactly 7 and 73/11 on the two wide-varying tasks, with the registered ascending-scan best-of-k gain curve weakly increasing and ending exactly at the dividend — intelligence pays only on slack.",
+  "claim_tier": "theoretical",
+  "controls": [
+    {
+      "control_id": "registered_task_table_only",
+      "description": "The five tasks (regions and value rules) are the registered literal table; nothing is sampled at run time and there is no RNG."
+    },
+    {
+      "control_id": "singleton_and_flat_null_cases",
+      "description": "Two singleton tasks and one wide-flat task pin the zero-dividend cases: no slack by arity and no slack by constancy."
+    },
+    {
+      "control_id": "registered_scan_order",
+      "description": "The best-of-k sweep scans each region in registered ascending order; gain(1) is deterministic first-element and may be negative, which is recorded."
+    },
+    {
+      "control_id": "exact_arithmetic",
+      "description": "All values, expectations, dividends, and gains are Fractions; no floats."
+    },
+    {
+      "control_id": "kill_does_not_fail_ci",
+      "description": "dividend_confirmed, dividend_refuted, and inconclusive are all valid passing runs."
+    }
+  ],
+  "seeds": [0],
+  "runtime": {
+    "execution_class": "local_cpu",
+    "command": ["python3", "experiments/choice_dividend/experiment.py"],
+    "estimated_minutes": 1,
+    "max_cost_usd": 0
+  },
+  "dependencies": [],
+  "gates": [
+    {
+      "gate_id": "DIV_SINGLETON_ZERO",
+      "criterion": "Both singleton tasks: dividend = 0 and every gain(k) = 0."
+    },
+    {
+      "gate_id": "DIV_FLAT_ZERO",
+      "criterion": "Flat task: dividend = 0, all gains <= 0, gain(region size) = 0."
+    },
+    {
+      "gate_id": "DIV_WIDE_POSITIVE",
+      "criterion": "Both varying tasks: dividend > 0 matching the registered exact value (7 and 73/11), gain(k) weakly increasing, gain(region size) = dividend exactly."
+    },
+    {
+      "gate_id": "DIV_EXACT_ARITHMETIC",
+      "criterion": "Every value, expectation, dividend, and gain serializes as an exact integer or fraction."
+    },
+    {
+      "gate_id": "DIV_RANKING_RECORDED",
+      "criterion": "Verdict is dividend_confirmed, dividend_refuted, or inconclusive."
+    },
+    {
+      "gate_id": "DIV_CLAIM_BOUNDARY",
+      "criterion": "Kernel arithmetic of P11/D12 only; the learner half of Gate 1 stays open and unclaimed."
+    }
+  ],
+  "artifacts": [
+    {
+      "kind": "summary",
+      "path": "experiments/choice_dividend/results/choice_dividend_summary.json",
+      "public": true
+    },
+    {
+      "kind": "other",
+      "path": "experiments/choice_dividend/preregistration.json",
+      "public": true
+    },
+    {
+      "kind": "paper",
+      "path": "papers/choice_dividend/paper.md",
+      "public": true
+    }
+  ],
+  "status": "accepted"
+}

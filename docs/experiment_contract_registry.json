@@ -1175,6 +1175,35 @@
       ]
     },
     {
+      "package": "choice_dividend",
+      "coverage_mode": "structured_manifest",
+      "manifest_path": "experiments/choice_dividend/experiment_manifest.json",
+      "run_coverage": "complete",
+      "primary_run_id": "choice_dividend_2026_08_18",
+      "runs": [
+        {
+          "run_id": "choice_dividend_2026_08_18",
+          "publication_package": "choice_dividend",
+          "runtime_package": "choice_dividend",
+          "provenance_mode": "structured_manifest",
+          "integrity_state": "valid",
+          "manifest_path": "experiments/choice_dividend/experiment_manifest.json",
+          "report_paths": [
+            "experiments/choice_dividend/results/choice_dividend_summary.json"
+          ],
+          "claim_ids": [],
+          "evidence_ids": [],
+          "gate_verdict_paths": [],
+          "preregistration_path": "experiments/choice_dividend/preregistration.json",
+          "preregistration_digest": "2087e6bd3c1f4658aa6fcfcd729b15556ccfb269faca04800dddf43c04ca79d6",
+          "producing_agent": {
+            "identity": "Claude Fable 5 (Cursor agent, under J. Brown direction)",
+            "session_ref": "4adbd42d-0e99-41df-b0be-7d9d5b7e3caa"
+          }
+        }
+      ]
+    },
+    {
       "package": "delete_repair_concern_transport",
       "coverage_mode": "structured_manifest",
       "manifest_path": "experiments/delete_repair_concern_transport/experiment_manifest.json",

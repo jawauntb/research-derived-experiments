@@ -437,6 +437,15 @@ exactly 17179869184/21249749913 at t = 12 — while the aligned
 control rises through the identical channel. Verdict
 `substitution_silent`; this banks the zero-leakage limit only, and
 real-specification leakage stays the open empirical half of Gate 2.
+Gate 1 of the same essay lands in `experiments/choice_dividend/`:
+on five registered tasks over {0,1}^4 the choice dividend (P11/D12
+— best compliant value minus the uniform expectation) is exactly 0
+on both singletons and on the wide-flat region, exactly 7 and 73/11
+on the two wide-varying regions, and the registered best-of-k sweep
+climbs weakly from a recorded negative gain(1) to exactly the
+dividend at full capability. Verdict `dividend_confirmed`; this is
+the kernel arithmetic only, and the learner half of Gate 1 — real
+capability sweeps on real models — stays open.
 The close-out is `papers/sic_dynamics/` (`paper.md` for the
 instruments; `for_readers.md` for a cold reader). Wave 2 P0/P1 lemmas are
 **verified** in `formal/structural-intelligence/` (`KappaCheap`,

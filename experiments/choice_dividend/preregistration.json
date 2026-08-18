@@ -1,0 +1,87 @@
+{
+  "experiment_id": "choice_dividend",
+  "schema_version": "1.0",
+  "run_id": "choice_dividend_2026_08_18",
+  "producing_agent": {
+    "identity": "Claude Fable 5 (Cursor agent, under J. Brown direction)",
+    "session_ref": "4adbd42d-0e99-41df-b0be-7d9d5b7e3caa"
+  },
+  "hypothesis": "Gate 1 of the essay 'Intention Is All You Need' (the dividend gate) holds at the kernel: on the sixteen worlds {0,1}^4 the choice dividend of a task (D12: best compliant value minus the uniform-compiler expectation over the region) is zero exactly where compliance leaves no slack and positive exactly where the region is wide and the value varies on it. Registered predictions: singleton regions {5} and {12} with U(x) = x have dividend 0 with every best-of-k gain 0; the wide-flat task (all odd worlds, U constant 5) has dividend 0 with all gains <= 0 closing at 0; the wide-varying tasks have dividend exactly 7 (all even worlds, U(x) = x) and exactly 73/11 (popcount >= 2 worlds, U(x) = popcount(x) * 4 - (x % 3)) with weakly increasing gain curves ending exactly at the dividend. gain(1) under the registered ascending scan is deterministic first-element and may be negative (-7 and -15/11 on the wide tasks); the registered claim is about the curve's endpoint and monotonicity, not gain(1) >= 0.",
+  "primary_metric": "ranking.verdict",
+  "decision": "Accept dividend_confirmed if all three gate families hold (DIV_SINGLETON_ZERO, DIV_FLAT_ZERO, DIV_WIDE_POSITIVE). Accept dividend_refuted if any zero-case shows a positive dividend or a wide curve fails to reach its dividend. Otherwise inconclusive. Any recorded verdict passes CI.",
+  "gates": {
+    "DIV_SINGLETON_ZERO": "Both singleton tasks: dividend = 0 and every gain(k) = 0.",
+    "DIV_FLAT_ZERO": "Flat task: dividend = 0, all gains <= 0, gain(region size) = 0.",
+    "DIV_WIDE_POSITIVE": "Both varying tasks: dividend > 0 matching the registered exact value (7 and 73/11), gain(k) weakly increasing in k, gain(region size) = dividend exactly.",
+    "DIV_EXACT_ARITHMETIC": "Fractions only; every value, expectation, dividend, and gain serializes exactly.",
+    "DIV_RANKING_RECORDED": "Verdict is one of the three registered outcomes.",
+    "DIV_CLAIM_BOUNDARY": "Kernel arithmetic of P11/D12 only; the learner half of Gate 1 — real capability sweeps on real models — is explicitly NOT run here and stays open."
+  },
+  "kill_criteria": {
+    "DIV_SINGLETON_ZERO": "The no-slack claim dies if a singleton task shows a nonzero dividend or any nonzero gain.",
+    "DIV_FLAT_ZERO": "The flat-value claim dies if the odd-flat task shows a nonzero dividend or a positive gain.",
+    "DIV_WIDE_POSITIVE": "The slack-pays claim dies if a wide-varying dividend is not exactly the registered value, the gain curve is not weakly increasing, or the endpoint misses the dividend.",
+    "tuning": "Kill the instrument if regions, value rules, scan order, or expected dividends are changed after seeing the curves."
+  },
+  "audit_card": {
+    "target_object": "The essay's Gate 1 (dividend gate) at the kernel: is the choice dividend zero exactly on no-slack tasks (singleton or value-flat regions) and positive exactly on wide varying regions, with the best-of-k capability sweep reaching the dividend at full capability?",
+    "decision": "dividend_confirmed / dividend_refuted / inconclusive by the registered rule.",
+    "representation": "Worlds {0,1}^4 encoded 0..15. A task is a registered compliant region in ascending order plus a registered value rule mapping worlds to Fractions. Dividend per D12: max U over the region minus the uniform expectation. Best-of-k selector: max U among the first k elements of the registered scan.",
+    "data_clock": "The capability index k = 1..|region| of the registered ascending scan. No sampling, no RNG, no learning, no LLM.",
+    "material_assumptions": [
+      "The five tasks are the registered literal table: {5} and {12} with U(x) = x; even worlds with U(x) = x; popcount >= 2 worlds with U(x) = popcount(x) * 4 - (x % 3); odd worlds with U constant 5.",
+      "The compiler baseline is uniform over the compliant region.",
+      "The selector is best-of-k under the registered ascending scan and nothing else.",
+      "Expected dividends (0, 0, 7, 73/11, 0) were derived before the run."
+    ],
+    "fatal_gates": [
+      "DIV_SINGLETON_ZERO",
+      "DIV_FLAT_ZERO",
+      "DIV_WIDE_POSITIVE",
+      "DIV_EXACT_ARITHMETIC",
+      "DIV_RANKING_RECORDED",
+      "DIV_CLAIM_BOUNDARY"
+    ],
+    "decisive_controls": [
+      "registered_task_table_only",
+      "singleton_and_flat_null_cases",
+      "registered_scan_order",
+      "exact_arithmetic",
+      "kill_does_not_fail_ci"
+    ],
+    "evidence_paths": [
+      "experiments/choice_dividend/results/choice_dividend_summary.json",
+      "experiments/choice_dividend/preregistration.json",
+      "tests/test_choice_dividend.py"
+    ]
+  },
+  "mathematical_claim": {
+    "objects": {
+      "worlds": "W = {0, ..., 15}, the encodings of {0,1}^4",
+      "task": "a pair (R, U) of a nonempty region R subset of W in ascending order and a value function U: R -> Q",
+      "dividend": "D12: div(R, U) = max_{x in R} U(x) - (1/|R|) * sum_{x in R} U(x)",
+      "gain_curve": "gain(k) = max of U over the first k elements of the ascending scan, minus the uniform expectation, for k = 1..|R|"
+    },
+    "types_domains_units": "Worlds are integers 0..15. Values, expectations, dividends, and gains are exact rationals. Region sizes are 1, 8, 11, and 8. Capability indices k are integers 1..|R|.",
+    "exact_claim": "Singletons: |R| = 1 forces max = mean, so div = 0 and gain(1) = 0; this holds for {5} (U = 5) and {12} (U = 12). Even worlds, U(x) = x: mean = (0+2+...+14)/8 = 7, max = 14, div = 7; the ascending scan gives gains (-7, -5, -3, -1, 1, 3, 5, 7), weakly increasing with endpoint 7. Popcount >= 2 worlds (3,5,6,7,9,10,11,12,13,14,15), U(x) = popcount(x)*4 - (x % 3) with values (8,6,8,11,8,7,10,8,11,10,16): mean = 103/11, max = 16 at x = 15, div = 73/11; gains are (-15/11 x3, 18/11 x7, 73/11), weakly increasing with endpoint 73/11. Odd worlds, U constant 5: max = mean = 5, div = 0, every gain 0. In general div(R, U) = 0 iff U is constant on R (which |R| = 1 forces), and the ascending-scan gain curve is weakly increasing with gain(|R|) = div because the prefix maximum is monotone and reaches the region maximum at k = |R|.",
+    "quantifiers": "Universal over the five registered tasks and over every capability index k within each task (1 + 1 + 8 + 11 + 8 = 29 gain cells). Existential witnesses for negative first gains: gain(1) = -7 on even_worlds and -15/11 on popcount_ge2.",
+    "assumptions": "The registered task table, the uniform compiler baseline, and the ascending-scan best-of-k selector; no other selector, region, or value rule.",
+    "identification_conditions": "Every reported number is a closed-form rational in the registered table; the instrument adds no degrees of freedom, so the zero/positive dichotomy and the curve facts are theorems of D12, not fits.",
+    "derivation_dependencies": "D12 (the dividend definition) and P11 / Theorem-B framing from the essay 'Intention Is All You Need': choice pays exactly the dividend, and the dividend is positive iff compliance leaves value-varying slack.",
+    "coordinate_invariance": "The dividend is invariant under any permutation of the region (max and mean are symmetric); the gain curve is scan-order-dependent by construction, which is why the scan order is registered.",
+    "edge_limiting_null_cases": "Singleton regions are the degenerate no-slack limit (max = mean by arity). The flat task is the wide no-slack limit (max = mean by constancy). gain(1) is deterministic first-element and negative whenever the scan's first value sits below the mean (-7 and -15/11 here); the registered claim constrains the endpoint and monotonicity, not gain(1). A region of size 0 is excluded by construction. The k = |R| endpoint equals the dividend identically — the sweep's last cell is D12 evaluated by scan; recording both is the internal consistency check."
+  },
+  "controls": [
+    "registered_task_table_only",
+    "singleton_and_flat_null_cases",
+    "registered_scan_order",
+    "exact_arithmetic",
+    "kill_does_not_fail_ci"
+  ],
+  "compute": {
+    "execution_class": "local_cpu",
+    "random_seed": "none",
+    "sampling": "None. Exact rational evaluation of five registered tasks (29 best-of-k cells) on sixteen worlds."
+  },
+  "claim_boundary": "Accepted only as: on the five registered tasks over {0,1}^4, the choice dividend of D12 is exactly 0 on both singletons and on the flat wide region, exactly 7 and 73/11 on the two varying wide regions, and the registered best-of-k sweep is weakly increasing with endpoint exactly the dividend. This is the kernel arithmetic of P11/D12 with the Theorem-B framing: intelligence pays only on slack. The learner half of Gate 1 — real capability sweeps on real models — is explicitly NOT run here and stays open. No LLM, no valence, no claim about any real delegate."
+}
