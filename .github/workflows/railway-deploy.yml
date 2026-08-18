@@ -37,13 +37,18 @@ jobs:
             service_id: 7f247461-7ddc-4cb6-8d85-6966b1dce6d0
             working_directory: sites/envelope_guard
     env:
-      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      # Workspace-scoped account token (RAILWAY_API_TOKEN), not a
+      # single-project RAILWAY_TOKEN: the matrix deploys three projects
+      # with explicit --project flags, which a project token cannot
+      # authorize. The old project-scoped secret only covered the atlas,
+      # which is why the other two jobs failed Unauthorized (2026-08-18).
+      RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
       - name: Confirm Railway token is configured
-        run: test -n "$RAILWAY_TOKEN"
+        run: test -n "$RAILWAY_API_TOKEN"
 
       - name: Deploy to Railway
         working-directory: ${{ matrix.working_directory }}

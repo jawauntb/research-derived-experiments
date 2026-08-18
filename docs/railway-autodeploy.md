@@ -50,7 +50,12 @@ linkage, this repo also has a GitHub Actions fallback:
 
 - Workflow: `.github/workflows/railway-deploy.yml`
 - Trigger: every push to `main`, plus manual `workflow_dispatch`
-- Secret: repository Actions secret `RAILWAY_TOKEN`
+- Secret: repository Actions secret `RAILWAY_API_TOKEN` — a
+  workspace-scoped account token ("Jawaun Brown's Projects"), rotated
+  2026-08-18. It must be an account/workspace token, not a
+  single-project `RAILWAY_TOKEN`: the deploy matrix passes explicit
+  `--project` flags for three different projects, which a project
+  token cannot authorize (the 2026-08-18 failure mode).
 - Token scope: Railway project token for the production environment
 
 This means future merges to `main` deploy through GitHub Actions even if Railway's
