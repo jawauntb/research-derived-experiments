@@ -501,8 +501,12 @@ finite prior-mass toy is Lean-verified (`WeaknessMixture`); the
 compatibility-class KL certificate is Lean-proved in the mathlib
 companion (`WeaknessPACBayes`, proved-not-verified). The
 Langford–Seeger–Maurer kl inequality stays a citation. No existing
-OOD result is relabeled. The remaining empirical gate is an exact
-CPU enumeration on predeclared domains of size at most seven.
+OOD result is relabeled. The predeclared `|X|≤7` enumeration is
+banked in `experiments/pac_bayes_weakness_enum/` with verdict
+`finite_iid_holds_ood_or_weight_killed`: the mass formula and cyclic
+`|H_eq|=7` hold, the m=8 aligned-truth plug-in is non-vacuous
+(0.666–0.762), and parity kills a uniform OOD-from-certificate
+reading. Neural PAC-Bayes stays out.
 
 ### 3.3 Scripts (`scripts/`)
 
@@ -795,7 +799,7 @@ can run the identical wrapper before opening a PR.
 
 | Arc / track | Core packages | Claim shape |
 |---|---|---|
-| **Weakness → OOD** | `weakness_vs_simplicity`, `symbolic_weakness`, `rotation_weakness`, `learned_symmetry`, `grid_cell_weakness`, `structure_compatible_generalization` | Structure-/symmetry-compatible hypothesis weakness predicts OOD where simplicity/MDL/flatness do not |
+| **Weakness → OOD** | `weakness_vs_simplicity`, `symbolic_weakness`, `rotation_weakness`, `learned_symmetry`, `grid_cell_weakness`, `structure_compatible_generalization`, `pac_bayes_weakness_enum` | Structure-/symmetry-compatible hypothesis weakness predicts OOD where simplicity/MDL/flatness do not; the finite PAC-Bayes certificate is exact on `|X|≤7` and does not uniformly explain OOD |
 | **Concept / activation geometry** | `concept_geometry`, `activation_geometry`, `paraphrase_weakness`, `passive_to_active`, `constraint_swap_causal_geometry` | Bridge geometry in embeddings and hidden states; test when geometry becomes causally load-bearing and preserve scoped counterexamples when behavior succeeds without the registered geometry |
 | **Information-limited discovery / relative identifiability / admission** | `future_commitment_quotient`, `relative_identifiability`, `information_limited_discovery`, `ident`, `obstruction_aware_admission`; proof package `formal/relative-identifiability` | Separate coordinate realizations from exact future constraints; emit target-relative local or terminal obstruction certificates; isolate prediction from identification with exact separators; distinguish structural impossibility from budget infeasibility; and choose the next finite experiment by minimum worst-case continuation cost |
 | **Primer-derived calibration** | `mathematical_claims`, `bayesian_voi`, `ident`, `seed_bootstrap_calibration`, `passive_active_phase_map`; shared `experiments/common/causal_use.py` | Make theorem assumptions executable; separate value of information from error; calibrate seed/bootstrap policies; distinguish smooth crossover from bifurcation/path dependence; measure causal use across commitment surfaces; isolate prediction-vs-identification with exact separators (`ident`) |
@@ -1817,7 +1821,7 @@ cd coherence-testbench && python3 scripts/run_phase0.py --smoke
 - **No universal research dependency specification.** The root quality gate has a complete locked dependency group, but experiment and Modal runtimes still rely on command-specific `uvx` sets or explicit Modal images.
 - **Machine-specific paths** in docs/handoffs (Doppler scope, local archives).
 - **Result fidelity depends on summarization discipline.** Gitignored JSON vs committed Markdown can drift.
-- **Structured-contract coverage is early but fail-closed.** All 105 research packages are partitioned in `docs/experiment_contract_registry.json` (57 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction. Public-artifact digest envelopes cover the E5 confirmatory JSON and E4 appendix. Clean-clone CPU reproduction is allowlisted for `bayesian_voi`, `grounded_statecharts`, `information_limited_discovery`, `mathematical_claims`, `relative_identifiability`, and `seed_bootstrap_calibration`.
+- **Structured-contract coverage is early but fail-closed.** All 115 research packages are partitioned in `docs/experiment_contract_registry.json` (67 structured roots + 48 bounded legacy exceptions). Only one gate currently has a committed verdict file. Structured provenance cards consume the package primary run; legacy packages still use labeled heuristic extraction. Public-artifact digest envelopes cover the E5 confirmatory JSON and E4 appendix. Clean-clone CPU reproduction is allowlisted for `bayesian_voi`, `grounded_statecharts`, `information_limited_discovery`, `mathematical_claims`, `relative_identifiability`, and `seed_bootstrap_calibration`.
 - **Paper-primary experiments** may have no committed `results/*.md`; evidence lives in the paper + local artifacts.
 - **Coherence / Inquiry / Cabal / site tests** are outside the root Python quality gate.
 - **Scientific claims are gate-bound.** Fixture smokes do not settle the program thesis.

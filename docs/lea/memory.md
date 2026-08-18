@@ -205,3 +205,10 @@ Append. Driven by "Intention Is All You Need" v3 and its review.
   Do not axiom it. Do not label the file "we proved PAC-Bayes."
 - Wave 11 kill still green: `lake build StructuralIntelligence`,
   SafeVerify on `WeaknessMixture`, no headline states PAC-Bayes-kl.
+
+## Finite PAC-Bayes enum banked (2026-08-18)
+
+- `experiments/pac_bayes_weakness_enum/`: exact `H=Y^X` on cyclic/dihedral
+  n=7 and parity/color n=6. Mass formula and cyclic `|H_eq|=7` hold.
+  m=8 aligned-truth bounds 0.666–0.762. Parity kills uniform
+  OOD-from-certificate. LSM and neural stay out. Label: Python.

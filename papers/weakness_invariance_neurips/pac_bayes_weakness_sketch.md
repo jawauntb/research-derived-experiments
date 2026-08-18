@@ -243,10 +243,27 @@ produce tighter numerical bounds, that neural weakness reduces
 parameter-space KL, or that PAC-Bayes explains the observed OOD results.
 
 The remaining formal leftover on this sketch is the LSM inequality
-itself; leave it. The next empirical test is the fully enumerated
-symbolic tournament above. It is CPU-only, exposes every class
-cardinality exactly, and can kill the bridge before any neural
-perturbation study is attempted. Other P0 leftovers stay analytic-open.
+itself; leave it. The predeclared `|X|≤7` tournament is now a
+committed CPU receipt
+(`experiments/pac_bayes_weakness_enum/`, 2026-08-18):
+
+- `|H|=n^n` and the mixture-mass formula hold on all four families.
+- Cyclic identity-`ρ` `|H_eq|=7`. Repository `H_{≥7}` on `C_7` is 49
+  (affine maps over `𝔽_7`), strictly larger than `|Y|^r`.
+- The m=8 aligned-truth LSM plug-in is non-vacuous (bounds 0.666 on
+  cyclic/dihedral, 0.762 on parity, 0.760 on color).
+- `π` does not flip the aligned truth-vs-shortcut KL sign.
+- The uniform 1/4 group hyperprior is not a pure monotone transform
+  of `W_aligned` on every seed.
+- **Parity kills** a uniform OOD-from-certificate reading:
+  aligned `W(truth)=W(shortcut)=2`, and wrong-group `C_6` gives the
+  shortcut a tighter KL (6.28) than the aligned truth (6.75) while
+  OOD risk is 1 vs 0. Cyclic/dihedral keep the aligned ranking
+  (KL≈4.05 vs 15.6–16.3; OOD 0 vs 1).
+- Neural / stochastic PAC-Bayes stays withheld.
+
+Verdict: `finite_iid_holds_ood_or_weight_killed`. Other P0 leftovers
+stay analytic-open.
 
 ## References
 

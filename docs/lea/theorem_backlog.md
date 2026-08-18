@@ -93,6 +93,7 @@ From `.cursor/skills/lea/SKILL.md`, `docs/lea/instructions.md`, `docs/lea/memory
 | WI-mix | Overlapping-mixture prior mass increases with weakness | `pac_bayes_weakness_sketch.md` | lean-verified (Wave 11, `WeaknessMixture.mixture_prior_mass_increases`) | done (toy) |
 | WI-PB-cert | Compatibility-indexed KL certificate `−log P(h) ≤ log |H_{≥k}| − log π_k` | same §2.1 | lean-proved-not-verified (Wave 12, `WeaknessPACBayes.weakness_kl_certificate`) | done (certificate) |
 | WI-PB | Langford–Seeger–Maurer PAC-Bayes–kl inequality | same §2.1 | prose-only (cited as `hLSM`; not discharged) | needs-mathlib |
+| WI-PB-enum | Predeclared `|X|≤7` exact `H=Y^X` tournament | same severe-experiment section | python-enumerated (2026-08-18, `pac_bayes_weakness_enum`; verdict `finite_iid_holds_ood_or_weight_killed`) | done (finite lane) |
 | CWW-1..3 | Concern-weighted Bennett weakness | `concern_weighted_weakness` | prose-only | needs-mathlib |
 | GFT-1..5 | Gauge-fixed concern transport ladder | `gauge_fixed_concern_transport` | prose-only | needs-mathlib |
 | FCQ-1..4 | Future-commitment completeness / gauge / Markov / bound | `future_commitment_quotient` | prose-only | needs-mathlib |
