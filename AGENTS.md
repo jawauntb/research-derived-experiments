@@ -61,6 +61,44 @@ new scientific letter this tranche did not ask for. Do not force-push
 - Pair analytic review with proportionate executable checks such as symbolic identities, dimensional checks, limiting cases, toy counterexamples, or numerical agreement. Simulation and empirical fit are sanity checks, not substitutes for a proof when the claim is theorem-level.
 - A failed or unknown mathematical prerequisite blocks the mathematical claim and every downstream claim that depends on it. Preserve valid subclaims and rejected derivations; do not waive or average away the failure.
 
+## Theorem proving with Lea (required)
+
+Every theorem-level claim — new, materially changed, or promoted from a
+Python enumeration — **must** be proved in Lean 4 and kernel-audited
+through the local Lea pipeline before any paper, doc, or summary labels
+it stronger than "python-enumerated". Empirical process results (seed
+counts, Φ ratios, GD tallies) are exempt and stay labeled Python.
+Backlog and status live in `docs/lea/theorem_backlog.md`.
+
+1. **Two states, never collapsed.** *Proved* = `lake build` green, zero
+   `sorry`. *Verified* = SafeVerify kernel replay passed with axioms ⊆
+   `{propext}`. A green build or UI badge is never "verified". Receipts
+   go in `docs/lea/VERIFY_RECEIPT_<date>.md`; labels in papers/docs are
+   derived from the latest receipt, never stored ahead of it.
+2. **No `native_decide`, ever** — SafeVerify rejects it. The house move
+   is kernel `decide` with raised `set_option maxRecDepth` /
+   `maxHeartbeats`. No Mathlib in the mathlib-free cores under
+   `formal/structural-intelligence/`.
+3. **Statement hygiene.** No `{ field := … }` structure literals inside
+   theorem *statements* (SafeVerify's sorry-target splitter breaks on
+   the embedded `:=`); assert projections instead. Quantify over
+   explicit lists (`∀ x ∈ [...]`) rather than bare inductives so kernel
+   `decide` applies without Fintype instances.
+4. **Runbook.** Lea lives at `~/.local/src/Lea`; the headless adapter is
+   `apps/lea-standalone/adapter/.venv/bin/python run_api.py` (serves
+   `http://127.0.0.1:8001`; source the root `.env` first). If startup
+   fails: restore `apps/lea-standalone/config/lea.local.toml` from the
+   example file. Model keys come from Doppler (`cofounder`/`dev`) into
+   the gitignored `.env` — never commit keys, SQLite, or
+   `apps/lea-standalone/data/`. SafeVerify binary:
+   `prover/third_party/SafeVerify/.lake/build/bin/safe_verify` (Lean
+   4.29 both sides; rebuild files in a 4.29 scratch when the repo pin
+   differs). Full method: `.cursor/skills/lea/SKILL.md`.
+5. **Waves.** One lemma file, one lane, one PR, squash on green build;
+   the INT PR banks aggregator imports, labels, docs; the receipt PR
+   banks SafeVerify verdicts. A lane may not relabel its own work
+   verified.
+
 ## Start-here pointers
 
 - System design: `docs/system_design.md`
